@@ -34,8 +34,8 @@
 #include "blink.hxx"    // pBlink
 #include "redlnitr.hxx" // SwRedlineItr
 #include "porfly.hxx"   // SwFlyCntPortion
-#include <porrst.hxx>       // SwHangingPortion
-#include <pormulti.hxx>     // SwMultiPortion
+#include <porrst.hxx>   // SwHangingPortion
+#include <pormulti.hxx> // SwMultiPortion
 #include <breakit.hxx>
 #include <unicode/uchar.h>
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -52,8 +52,8 @@
 #include <i18npool/mslangid.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
-#include <docary.hxx>       // SwRedlineTbl
-#include <redline.hxx>      // SwRedline
+#include <docary.hxx>   // SwRedlineTbl
+#include <redline.hxx>  // SwRedline
 #include <section.hxx>
 #include <switerator.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -94,7 +94,7 @@ sal_Bool isTransparentChar ( xub_Unicode cCh )
 }
 
 /*************************************************************************
- *                 lcl_IsLigature
+ * lcl_IsLigature
  *
  * Checks if cCh + cNectCh builds a ligature (used for Kashidas)
  *************************************************************************/
@@ -106,7 +106,7 @@ sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
 }
 
 /*************************************************************************
- *                 lcl_ConnectToPrev
+ * lcl_ConnectToPrev
  *
  * Checks if cCh is connectable to cPrevCh (used for Kashidas)
  *************************************************************************/
@@ -124,7 +124,7 @@ sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
 }
 
 /*************************************************************************
- *                 lcl_HasStrongLTR
+ * lcl_HasStrongLTR
  *************************************************************************/
  bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
  {
@@ -140,7 +140,7 @@ sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
  }
 
 /*************************************************************************
- *                 SwLineLayout::~SwLineLayout()
+ * SwLineLayout::~SwLineLayout()
  *
  * class SwLineLayout: Das Layout einer einzelnen Zeile. Dazu
  * gehoeren vor allen Dingen die Dimension, die Anzahl der
@@ -160,10 +160,6 @@ SwLineLayout::~SwLineLayout()
     delete pLLSpaceAdd;
     delete pKanaComp;
 }
-
-/*************************************************************************
- *                virtual SwLineLayout::Insert()
- *************************************************************************/
 
 SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
 {
@@ -190,10 +186,6 @@ SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
     return pPortion->SwLinePortion::Insert( pIns );
 }
 
-/*************************************************************************
- *                virtual SwLineLayout::Append()
- *************************************************************************/
-
 SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
 {
     // Erster Attributwechsel, Masse und Laengen
@@ -203,10 +195,6 @@ SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
     // mit Skope aufrufen, sonst Rekursion !
     return pPortion->SwLinePortion::Append( pIns );
 }
-
-/*************************************************************************
- *                virtual SwLineLayout::Format()
- *************************************************************************/
 
 // fuer die Sonderbehandlung bei leeren Zeilen
 
@@ -222,7 +210,7 @@ sal_Bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                    SwLineLayout::CalcLeftMargin()
+ * SwLineLayout::CalcLeftMargin()
  *
  * Wir sammeln alle FlyPortions am Anfang der Zeile zu einer MarginPortion.
  *************************************************************************/
@@ -266,10 +254,6 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
     return pLeft;
 }
 
-/*************************************************************************
- *                    SwLineLayout::InitSpaceAdd()
- *************************************************************************/
-
 void SwLineLayout::InitSpaceAdd()
 {
     if ( !pLLSpaceAdd )
@@ -277,10 +261,6 @@ void SwLineLayout::InitSpaceAdd()
     else
         SetLLSpaceAdd( 0, 0 );
 }
-
-/*************************************************************************
- *                    SwLineLayout::CreateSpaceAdd()
- *************************************************************************/
 
 void SwLineLayout::CreateSpaceAdd( const long nInit )
 {
@@ -309,7 +289,7 @@ bool lcl_HasOnlyBlanks( const XubString& rTxt, xub_StrLen nStt, xub_StrLen nEnd 
 }
 
 /*************************************************************************
- *                    SwLineLayout::CalcLine()
+ * SwLineLayout::CalcLine()
  *
  * Aus FormatLine() ausgelagert.
  *************************************************************************/
@@ -617,10 +597,6 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
     }
 }
 
-/*************************************************************************
- *                      class SwCharRange
- *************************************************************************/
-
 SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
 {
     if(0 != rRange.nLen ) {
@@ -641,28 +617,23 @@ SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
     return *this;
 }
 
-/*************************************************************************
- *                      SwScriptInfo::SwScriptInfo()
- *************************************************************************/
 SwScriptInfo::SwScriptInfo() :
     nInvalidityPos( 0 ),
     nDefaultDir( 0 )
 {
 };
 
-/*************************************************************************
- *                      SwScriptInfo::~SwScriptInfo()
- *************************************************************************/
 SwScriptInfo::~SwScriptInfo()
 {
 }
 
 /*************************************************************************
- *                     SwScriptInfo::WhichFont()
+ * SwScriptInfo::WhichFont()
  *
  * Converts i18n Script Type (LATIN, ASIAN, COMPLEX, WEAK) to
  * Sw Script Types (SW_LATIN, SW_CJK, SW_CTL), used to identify the font
- *************************************************************************/
+*************************************************************************/
+
 sal_uInt8 SwScriptInfo::WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
 {
     OSL_ENSURE( pTxt || pSI,"How should I determine the script type?" );
@@ -686,7 +657,7 @@ sal_uInt8 SwScriptInfo::WhichFont( xub_StrLen nIdx, const String* pTxt, const Sw
 }
 
 /*************************************************************************
- *                      SwScriptInfo::InitScriptInfo()
+ * SwScriptInfo::InitScriptInfo()
  *
  * searches for script changes in rTxt and stores them
  *************************************************************************/
@@ -1317,7 +1288,7 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
 
 
 /*************************************************************************
- *                        SwScriptInfo::NextScriptChg(..)
+ * SwScriptInfo::NextScriptChg(..)
  * returns the position of the next character which belongs to another script
  * than the character of the actual (input) position.
  * If there's no script change until the end of the paragraph, it will return
@@ -1340,7 +1311,7 @@ xub_StrLen SwScriptInfo::NextScriptChg( const xub_StrLen nPos )  const
 }
 
 /*************************************************************************
- *                        SwScriptInfo::ScriptType(..)
+ * SwScriptInfo::ScriptType(..)
  * returns the script of the character at the input position
  *************************************************************************/
 
@@ -1385,7 +1356,7 @@ sal_uInt8 SwScriptInfo::DirType( const xub_StrLen nPos ) const
 }
 
 /*************************************************************************
- *                        SwScriptInfo::MaskHiddenRanges(..)
+ * SwScriptInfo::MaskHiddenRanges(..)
  * Takes a string and replaced the hidden ranges with cChar.
  **************************************************************************/
 
@@ -1425,7 +1396,7 @@ sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rT
 }
 
 /*************************************************************************
- *                        SwScriptInfo::DeleteHiddenRanges(..)
+ * SwScriptInfo::DeleteHiddenRanges(..)
  * Takes a SwTxtNode and deletes the hidden ranges from the node.
  **************************************************************************/
 
@@ -1448,7 +1419,7 @@ void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
 }
 
 /*************************************************************************
- *                        SwScriptInfo::GetBoundsOfHiddenRange(..)
+ * SwScriptInfo::GetBoundsOfHiddenRange(..)
  * static version
  **************************************************************************/
 
@@ -1536,7 +1507,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nP
 }
 
 /*************************************************************************
- *                        SwScriptInfo::GetBoundsOfHiddenRange(..)
+ * SwScriptInfo::GetBoundsOfHiddenRange(..)
  * non-static version
  **************************************************************************/
 
@@ -1574,10 +1545,6 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( xub_StrLen nPos, xub_StrLen& rnStartP
     return CountHiddenChg() > 0;
 }
 
-/*************************************************************************
- *                        SwScriptInfo::IsInHiddenRange()
- **************************************************************************/
-
 bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos )
 {
     xub_StrLen nStartPos;
@@ -1589,7 +1556,7 @@ bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos )
 
 #ifdef DBG_UTIL
 /*************************************************************************
- *                        SwScriptInfo::CompType(..)
+ * SwScriptInfo::CompType(..)
  * returns the type of the compressed character
  *************************************************************************/
 
@@ -1611,7 +1578,7 @@ sal_uInt8 SwScriptInfo::CompType( const xub_StrLen nPos ) const
 #endif
 
 /*************************************************************************
- *                      SwScriptInfo::HasKana()
+ * SwScriptInfo::HasKana()
  * returns, if there are compressable kanas or specials
  * betwenn nStart and nEnd
  *************************************************************************/
@@ -1635,10 +1602,6 @@ sal_uInt16 SwScriptInfo::HasKana( xub_StrLen nStart, const xub_StrLen nLen ) con
 
     return USHRT_MAX;
 }
-
-/*************************************************************************
- *                      SwScriptInfo::Compress()
- *************************************************************************/
 
 long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
                              const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
@@ -1753,7 +1716,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
 }
 
 /*************************************************************************
- *                      SwScriptInfo::KashidaJustify()
+ * SwScriptInfo::KashidaJustify()
  *************************************************************************/
 
 // Note on calling KashidaJustify():
@@ -1845,7 +1808,7 @@ sal_uInt16 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
 }
 
 /*************************************************************************
- *                      SwScriptInfo::IsArabicText()
+ * SwScriptInfo::IsArabicText()
  *
  * Checks if the current text is 'Arabic' text. Note that only the first
  * character has to be checked because a ctl portion only contains one
@@ -1887,10 +1850,6 @@ bool SwScriptInfo::IsArabicText( const rtl::OUString& rTxt, sal_Int32 nStt, sal_
     return false;
 }
 
-/*************************************************************************
- *                      SwScriptInfo::IsKashidaValid()
- *************************************************************************/
-
 sal_Bool SwScriptInfo::IsKashidaValid ( xub_StrLen nKashPos ) const
 {
     for ( size_t i = 0; i < aKashidaInvalid.size(); ++i )
@@ -1900,10 +1859,6 @@ sal_Bool SwScriptInfo::IsKashidaValid ( xub_StrLen nKashPos ) const
     }
     return true;
 }
-
-/*************************************************************************
- *                      SwScriptInfo::ClearKashidaInvalid()
- *************************************************************************/
 
 void SwScriptInfo::ClearKashidaInvalid ( xub_StrLen nKashPos )
 {
@@ -1918,13 +1873,14 @@ void SwScriptInfo::ClearKashidaInvalid ( xub_StrLen nKashPos )
 }
 
 /*************************************************************************
- *                      SwScriptInfo::MarkOrClearKashidaInvalid()
- *************************************************************************/
-// bMark == true:
-// marks the first valid kashida in the given text range as invalid
-
-// bMark == false:
-// clears all kashida invalid flags in the given text range
+ * SwScriptInfo::MarkOrClearKashidaInvalid()
+ *
+ * bMark == true:
+ * marks the first valid kashida in the given text range as invalid
+ *
+ * bMark == false:
+ * clears all kashida invalid flags in the given text range
+*************************************************************************/
 
 bool SwScriptInfo::MarkOrClearKashidaInvalid ( xub_StrLen nStt, xub_StrLen nLen, bool bMark, xub_StrLen nMarkCount )
 {
@@ -1971,9 +1927,10 @@ void SwScriptInfo::MarkKashidaInvalid ( xub_StrLen nKashPos )
 }
 
 /*************************************************************************
- *                      SwScriptInfo::GetKashidaPositions()
- *************************************************************************/
-// retrieve the kashida positions in the given text range
+ * SwScriptInfo::GetKashidaPositions()
+ * retrieve the kashida positions in the given text range
+*************************************************************************/
+
 sal_uInt16 SwScriptInfo::GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
                                            xub_StrLen* pKashidaPosition )
 {
@@ -2009,9 +1966,9 @@ void SwScriptInfo::SetNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
 }
 
 /*************************************************************************
- *                      SwScriptInfo::IsKashidaLine()
- *************************************************************************/
-// determines if the line uses kashida justification
+ * SwScriptInfo::IsKashidaLine()
+ * determines if the line uses kashida justification
+*************************************************************************/
 
 bool SwScriptInfo::IsKashidaLine ( xub_StrLen nCharIdx ) const
 {
@@ -2022,9 +1979,6 @@ bool SwScriptInfo::IsKashidaLine ( xub_StrLen nCharIdx ) const
     }
    return true;
 }
-/*************************************************************************
- *                      SwScriptInfo::ClearKashidaLine()
- *************************************************************************/
 
 void SwScriptInfo::ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
 {
@@ -2043,8 +1997,10 @@ void SwScriptInfo::ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
 
 /*************************************************************************
  *                      SwScriptInfo::MarkKashidasInvalid()
- *************************************************************************/
-// mark the given character indices as invalid kashida positions
+ *
+ * mark the given character indices as invalid kashida positions
+************************************************************************/
+
 bool SwScriptInfo::MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen* pKashidaPositions )
 {
    OSL_ENSURE( pKashidaPositions && nCnt > 0, "Where are kashidas?" );
@@ -2070,10 +2026,6 @@ bool SwScriptInfo::MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen* pKashidaPo
    }
    return true;
 }
-
-/*************************************************************************
- *                      SwScriptInfo::ThaiJustify()
- *************************************************************************/
 
 sal_Int32 SwScriptInfo::ThaiJustify( const rtl::OUString& rTxt, sal_Int32* pKernArray,
                                   sal_Int32* pScrArray, sal_Int32 nStt,
@@ -2113,10 +2065,6 @@ sal_Int32 SwScriptInfo::ThaiJustify( const rtl::OUString& rTxt, sal_Int32* pKern
     return nCnt;
 }
 
-/*************************************************************************
- *                      SwScriptInfo::GetScriptInfo()
- *************************************************************************/
-
 SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
                                            sal_Bool bAllowInvalid )
 {
@@ -2137,9 +2085,6 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
     return pScriptInfo;
 }
 
-/*************************************************************************
- *                      SwParaPortion::SwParaPortion()
- *************************************************************************/
 SwParaPortion::SwParaPortion()
 {
     FormatReset();
@@ -2147,16 +2092,10 @@ SwParaPortion::SwParaPortion()
     SetWhichPor( POR_PARA );
 }
 
-/*************************************************************************
- *                      SwParaPortion::~SwParaPortion()
- *************************************************************************/
 SwParaPortion::~SwParaPortion()
 {
 }
 
-/*************************************************************************
- *                      SwParaPortion::GetParLen()
- *************************************************************************/
 xub_StrLen SwParaPortion::GetParLen() const
 {
     xub_StrLen nLen = 0;
@@ -2168,10 +2107,6 @@ xub_StrLen SwParaPortion::GetParLen() const
     }
     return nLen;
 }
-
-/*************************************************************************
- *                      SwParaPortion::FindDropPortion()
- *************************************************************************/
 
 const SwDropPortion *SwParaPortion::FindDropPortion() const
 {
@@ -2189,10 +2124,6 @@ const SwDropPortion *SwParaPortion::FindDropPortion() const
     }
     return NULL;
 }
-
-/*************************************************************************
- *                      SwLineLayout::Init()
- *************************************************************************/
 
 void SwLineLayout::Init( SwLinePortion* pNextPortion )
 {
@@ -2256,7 +2187,7 @@ SwTwips SwTxtFrm::HangingMargin() const
 
 
 /*************************************************************************
- *                      SwScriptInfo::CalcHiddenRanges()
+ * SwScriptInfo::CalcHiddenRanges()
  *
  * Returns a MultiSection indicating the hidden ranges.
  *************************************************************************/
