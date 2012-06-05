@@ -143,20 +143,20 @@ namespace {
             uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
             dumpXShapes(xShapes, xmlWriter);
         }
-        else if(xServiceInfo->supportsService("com.sun.star.drawing.FillStyle"))
+        else if(xServiceInfo->supportsService("com.sun.star.drawing.FillProperties"))
         {
-            uno::Any anotherAny = xPropSet->getPropertyValue("FillStyle");
-            drawing::FillStyle eFillStyle;
-            if( anotherAny >>= eFillStyle)
-                    dumpFillStyleAsAttribute(eFillStyle, xmlWriter);
-        }
-        else if(xServiceInfo->supportsService("com.sun.star.util.Color"))
-        {
-            uno::Any anotherAny = xPropSet->getPropertyValue("FillColor");
-            sal_Int32 aColor;
-            if(anotherAny >>= aColor)
             {
-                dumpFillColorAsAttribute(aColor, xmlWriter);
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillStyle");
+                drawing::FillStyle eFillStyle;
+                if(anotherAny >>= eFillStyle)
+                    dumpFillStyleAsAttribute(eFillStyle, xmlWriter);
+            }
+
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillColor");
+                sal_Int32 aColor;
+                if(anotherAny >>= aColor)
+                    dumpFillColorAsAttribute(aColor, xmlWriter);
             }
         }
 
