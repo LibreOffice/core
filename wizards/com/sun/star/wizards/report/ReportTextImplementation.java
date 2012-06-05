@@ -241,7 +241,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 }
                 catch (UnknownHiddenControlException exception)
                 {
-		    sorting = "";
+                    sorting = "";
                 }
                 String sRecordFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "RecordFieldNames", sMsg);
                 if (xNamedForm.hasByName("QueryName"))
