@@ -1,5 +1,0 @@
-# simple05
-TEST|Simple 5|QUICKWORD|a_simple05
-ENTER_STRING_AT_LOCATION|108|20|
-ENTER_STRING_AT_LOCATION|19|20|document uses 
-SLEEP|5

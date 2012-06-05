@@ -1,8 +1,0 @@
-# 
-# Spreadsheet percentage value precision
-# 
-TEST||MINICALC|c_cellpercentvalue
-MINICALC_ENTER_CELL|0|0|120%\n
-SLEEP|3
-MINICALC_ENTER_CELL|0|1|10%\n
-SLEEP|5

@@ -1,5 +1,0 @@
-# 
-# Spreadsheet - test multi Boolean entry no change.
-# 
-TEST||MINICALC|c_multi_boolean
-SLEEP|5

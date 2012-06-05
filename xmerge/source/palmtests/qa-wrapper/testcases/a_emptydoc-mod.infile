@@ -1,9 +1,0 @@
-#testing modification to an empty document conversion 
-# 
-TEST||QUICKWORD|a_emptydoc-mod
-ENTER_STRING_AT_LOCATION|108|20|New line of text added\n
-ENTER_STRING_AT_LOCATION|108|40|This is 108, 40\n
-ENTER_STRING_AT_LOCATION|150|208|This is 150, 208\n
-ENTER_STRING_AT_LOCATION|150|308|This is 150, 308\n
-
-SLEEP|10
