@@ -129,7 +129,7 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix
         {
             bHasCell = true;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList, false, nRepeatedRows
+                                                      rLName, xAttrList, false, static_cast<SCROW>(nRepeatedRows)
                                                       //this
                                                       );
         }
@@ -139,7 +139,7 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix
         {
             bHasCell = true;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList, true, nRepeatedRows
+                                                      rLName, xAttrList, true, static_cast<SCROW>(nRepeatedRows)
                                                       //this
                                                       );
         }

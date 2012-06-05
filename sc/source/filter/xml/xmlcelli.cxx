@@ -110,8 +110,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     pCellRangeSource(NULL),
     fValue(0.0),
     nMergedRows(1),
-    nMergedCols(1),
     nRepeatedRows(nTempRepeatedRows),
+    nMergedCols(1),
     nCellsRepeated(1),
     rXMLImport((ScXMLImport&)rImport),
     eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
@@ -151,22 +151,22 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS:
                 bIsMerged = true;
-                nMergedRows = sValue.toInt32();
+                nMergedRows = static_cast<SCROW>(sValue.toInt32());
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS:
                 bIsMerged = true;
-                nMergedCols = sValue.toInt32();
+                nMergedCols = static_cast<SCCOL>(sValue.toInt32());
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS:
                 bIsMatrix = true;
-                nMatrixCols = sValue.toInt32();
+                nMatrixCols = static_cast<SCCOL>(sValue.toInt32());
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS:
                 bIsMatrix = true;
-                nMatrixRows = sValue.toInt32();
+                nMatrixRows = static_cast<SCROW>(sValue.toInt32());
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
-                nCellsRepeated = std::max( sValue.toInt32(), (sal_Int32) 1 );
+                nCellsRepeated = static_cast<SCCOL>(std::max( sValue.toInt32(), (sal_Int32) 1 ));
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
                 nCellType = GetScImport().GetCellType(sValue);
@@ -402,8 +402,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             }
             OSL_ENSURE(bHasSubTable, "it should be a subtable");
             pContext = new ScXMLTableContext( rXMLImport , nPrefix,
-                                                        rLName, xAttrList,
-                                                        true, nMergedCols);
+                            rLName, xAttrList, true, static_cast<sal_Int32>(nMergedCols) );
             nMergedCols = 1;
             bIsMerged = false;
         }
@@ -541,8 +540,8 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
     ScUnoConversion::FillApiAddress( aCellAddress, aScCellAddress );
     if (CellExists(aCellAddress) && pContentValidationName && !pContentValidationName->isEmpty())
     {
-        sal_Int32 nBottom = aCellAddress.Row + nRepeatedRows - 1;
-        sal_Int32 nRight = aCellAddress.Column + nCellsRepeated - 1;
+        sal_Int32 nBottom = aCellAddress.Row + static_cast<sal_Int32>(nRepeatedRows) - 1;
+        sal_Int32 nRight = aCellAddress.Column + static_cast<sal_Int32>(nCellsRepeated) - 1;
         if (nBottom > MAXROW)
             nBottom = MAXROW;
         if (nRight > MAXCOL)
@@ -771,7 +770,6 @@ void ScXMLTableRowCellContext::EndElement()
             UniReference< XMLTextImportHelper > aTextImport = rXMLImport.GetTextImport();
             if (aTextImport->GetCursor().is())
             {
-                //aTextImport->GetCursor()->gotoEnd(false);
                 if( aTextImport->GetCursor()->goLeft( 1, true ) )
                 {
                     aTextImport->GetText()->insertString(
@@ -791,7 +789,7 @@ void ScXMLTableRowCellContext::EndElement()
         if (xCellRange.is())
         {
             if (bIsMerged)
-                DoMerge(aScCellPos, static_cast<SCCOL>(nMergedCols - 1), static_cast<SCROW>(nMergedRows - 1));
+                DoMerge(aScCellPos, nMergedCols - 1, nMergedRows - 1);
             if ( !pOUFormula )
             {
                 ::boost::optional< rtl::OUString > pOUText;
@@ -817,14 +815,14 @@ void ScXMLTableRowCellContext::EndElement()
                     mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = false;
 
-                for (sal_Int32 i = 0; i < nCellsRepeated; ++i)
+                for (SCCOL i = 0; i < nCellsRepeated; ++i)
                 {
                     aScCurrentPos.SetCol( aScCurrentPos.Col() + i );
                     if (i > 0)
                         rTables.AddColumn(false);
                     if (!bIsEmpty)
                     {
-                        for (sal_Int32 j = 0; j < nRepeatedRows; ++j)
+                        for (SCROW j = 0; j < nRepeatedRows; ++j)
                         {
                             aScCurrentPos.SetRow( aScCurrentPos.Row() + j );
                             if( (aScCurrentPos.Col() == 0) && (j > 0) )
@@ -1057,8 +1055,7 @@ void ScXMLTableRowCellContext::EndElement()
                             if (nMatrixCols > 0 && nMatrixRows > 0)
                             {
                                 rTables.AddMatrixRange(
-                                        aScCellPos.Col(),
-                                        aScCellPos.Row(),
+                                        aScCellPos.Col(), aScCellPos.Row(),
                                         aScCellPos.Col() + nMatrixCols - 1,
                                         aScCellPos.Row() + nMatrixRows - 1,
                                         pOUFormula->first, pOUFormula->second, eGrammar);
