@@ -3555,7 +3555,7 @@ if test "$cross_compiling" = "yes"; then
         fi
     done
 
-    for V in OUTDIR LO_PATH SOLARINC SOLARLIB WORKDIR; do
+    for V in OUTDIR SOLARINC SOLARLIB WORKDIR; do
         VV='$'$V
         VV=`eval "echo $VV"`
         VV=`echo $VV | sed -e 's,/CONF-FOR-BUILD,,g'`
@@ -3564,6 +3564,10 @@ if test "$cross_compiling" = "yes"; then
             echo "$line" >>build-config
         fi
     done
+
+    line=`echo "LO_PATH_FOR_BUILD=$PATH" | sed -e 's,/CONF-FOR-BUILD,,g'`
+    echo "$line" >>build-config
+
     )
     test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
     test -f config_build.mk || AC_MSG_ERROR([A file called config_build.mk was supposed to have been copied here, but it isn't found])
