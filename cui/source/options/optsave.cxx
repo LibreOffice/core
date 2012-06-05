@@ -657,7 +657,6 @@ IMPL_LINK_NOARG(SfxSaveTabPage, ODFVersionHdl_Impl)
     }
 
     aODFWarningFI.Show( bShown );
-    aODFWarningFT.Show( bShown );
 
     return 0;
 }
