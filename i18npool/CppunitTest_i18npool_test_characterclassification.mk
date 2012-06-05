@@ -26,43 +26,29 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,i18npool))
+$(eval $(call gb_CppunitTest_CppunitTest,i18npool_test_characterclassification))
 
-$(eval $(call gb_Module_add_targets,i18npool,\
-	CustomTarget_breakiterator \
-	CustomTarget_collator \
-	CustomTarget_indexentry \
-	CustomTarget_localedata \
-	CustomTarget_textconversion \
-	Library_collator_data \
-	Library_dict_ja \
-	Library_dict_zh \
-	Library_i18nisolang1 \
-	Library_i18npool \
-	Library_i18nsearch \
-	Library_index_data \
-	Library_localedata_en \
-	Library_localedata_es \
-	Library_localedata_euro \
-	Library_localedata_others \
-	Library_textconv_dict \
-	Package_inc \
-	Package_xml \
+$(eval $(call gb_CppunitTest_use_api,i18npool_test_characterclassification,\
+	udkapi \
+	offapi \
 ))
 
-ifneq ($(CROSS_COMPILING),YES)
-$(eval $(call gb_Module_add_targets,i18npool,\
-	Executable_gencoll_rule \
-	Executable_genconv_dict \
-	Executable_gendict \
-	Executable_genindex_data \
-	Executable_saxparser \
+$(eval $(call gb_CppunitTest_use_libraries,i18npool_test_characterclassification,\
+	cppu \
+	cppuhelper \
+	sal \
+	unotest \
+    $(gb_STDLIBS) \
 ))
-endif
 
-$(eval $(call gb_Module_add_check_targets,i18npool,\
-	CppunitTest_i18npool_test_breakiterator \
-	CppunitTest_i18npool_test_characterclassification \
+$(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_characterclassification,\
+    i18npool/qa/cppunit/test_characterclassification \
+))
+
+$(eval $(call gb_CppunitTest_use_ure,i18npool_test_characterclassification))
+
+$(eval $(call gb_CppunitTest_use_components,i18npool_test_characterclassification,\
+	i18npool/util/i18npool \
 ))
 
 # vim: set noet sw=4 ts=4:
