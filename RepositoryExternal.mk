@@ -272,8 +272,8 @@ endif # SYSTEM_HUNSPELL
 
 ifeq ($(SYSTEM_BOOST),YES)
 
-# No need of libboostdatetime at all
 define gb_LinkTarget__use_boostdatetime
+$(call gb_LinkTarget_add_libs,$(1),-lboost_date_time)
 endef
 
 else # !SYSTEM_BOOST
