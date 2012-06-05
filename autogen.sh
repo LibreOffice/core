@@ -111,10 +111,10 @@ for my $arg (@cmdline_args) {
         my $config = "distro-configs/$1.conf";
         if (! -f $config) {
             invalid_distro ($config, $1);
-            } else {
-                push @args, read_args ($config);
-            }
         } else {
+            push @args, read_args ($config);
+        }
+    } else {
         push @args, $arg;
     }
 }
