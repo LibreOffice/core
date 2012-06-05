@@ -443,18 +443,25 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         aPropSet.getProperty( xNumRule, PROP_NumberingRules );
         OSL_ENSURE( xNumRule.is(), "can't get Numbering rules");
 
-        if( xNumRule.is() )
+        try
         {
-            if( !rioBulletMap.empty() )
+            if( xNumRule.is() )
             {
-                // fix default bullet size to be 100%
-                if( rioBulletMap.find( PROP_BulletRelSize ) == rioBulletMap.end() )
-                    rioBulletMap[ PROP_BulletRelSize ] <<= static_cast< sal_Int16 >( 100 );
-                Sequence< PropertyValue > aBulletPropSeq = rioBulletMap.makePropertyValueSequence();
-                xNumRule->replaceByIndex( getLevel(), makeAny( aBulletPropSeq ) );
-            }
+                if( !rioBulletMap.empty() )
+                {
+                    // fix default bullet size to be 100%
+                    if( rioBulletMap.find( PROP_BulletRelSize ) == rioBulletMap.end() )
+                        rioBulletMap[ PROP_BulletRelSize ] <<= static_cast< sal_Int16 >( 100 );
+                    Sequence< PropertyValue > aBulletPropSeq = rioBulletMap.makePropertyValueSequence();
+                    xNumRule->replaceByIndex( getLevel(), makeAny( aBulletPropSeq ) );
+                }
 
-            aPropSet.setProperty( PROP_NumberingRules, xNumRule );
+                aPropSet.setProperty( PROP_NumberingRules, xNumRule );
+            }
+        }
+        catch (const Exception &)
+        {
+            // Don't warn for now, expected to fail for Writer.
         }
     }
     if ( noParaLeftMargin )
