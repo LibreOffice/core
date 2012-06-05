@@ -1,0 +1,55 @@
+// -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+
+// Copyright 2012 LibreOffice contributors.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+#ifndef org_libreoffice_touch_XDocumentRenderCallback_idl
+#define org_libreoffice_touch_XDocumentRenderCallback_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module org { module libreoffice { module touch {
+
+interface XDocument;
+
+interface XDocumentRenderCallback: com::sun::star::uno::XInterface
+{
+
+    // Return false from any of the callbacks if the render result isn't
+    // wanted after all and the rendering should stop
+
+    // pageWidth and pageHeight are in [1..squareSide] where squareSide is
+    // the side of the render target square implied by the size of the
+    // buffer passed to render().
+
+    // This always called at the start of rendering one page
+
+    boolean start( [in] long pageWidth,
+                   [in] long pageHeight );
+
+  // Called with unspecified frequency during the rendering, possibly
+  // even not at all, but the intent is to call this with "reasonable"
+  // frquency if the rendering takes a "long" time. Maybe around ten
+  // times a second?
+
+  // There is no guarantee in which order the bitmap is being rendered
+
+  // fraction is in [0..1] and is an approximation of unknown exactness
+  // If the rendering code doesn't even bother guessing, it can pass
+  // zero all the time. The fraction in subsequent calls never
+  // decreases.
+
+  boolean progress( [in] float fraction );
+
+  // There is no callback when the rendering finishes; render() just
+  // returns.
+};
+
+}; }; };
+
+#endif
+
+// vim:set shiftwidth=4 softtabstop=4 expandtab:

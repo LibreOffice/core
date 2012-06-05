@@ -385,6 +385,14 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     xsltfilter \
 ))
 
+ifneq (,$(filter ANDROID IOS,$(OS)))
+
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+	libotouch \
+))
+
+endif
+
 ifeq ($(filter MACOSX WNT,$(OS)),)
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \

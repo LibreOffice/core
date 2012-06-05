@@ -1,0 +1,25 @@
+// -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+
+// Copyright 2012 LibreOffice contributors.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+#ifndef org_libreoffice_touch_Document_idl
+#define org_libreoffice_touch_Document_idl
+
+#include <org/libreoffice/touch/XDocument.idl>
+
+module org { module libreoffice { module touch {
+
+service Document:
+    XDocument {
+        create( [in] string uri );
+    };
+
+}; }; };
+
+#endif
+
+// vim:set shiftwidth=4 softtabstop=4 expandtab:

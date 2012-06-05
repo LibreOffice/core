@@ -1,0 +1,20 @@
+Library that provides API used by LO-based apps on touch devices
+
+This is all very much a work in progress and the design can change radically
+at any moment. The name "touch" for this module and the library name
+"libotouch" are not fixed and might change if somebody comes up with niftier
+names.
+
+This module will contain an UNO API to be called either from Java (for
+Android), or directly (iOS). (Or, on iOS, possibly through some thin
+Objective-C layer to hide the UNO.)
+
+The API will provide a mechanism to render "tiles" of a document at some
+requested zoom level. Initially for viewer style apps, but the work should
+ideally be open-ended to potentially be a base for editing apps, too.
+
+For starters, concentrating on text ("Writer") documents as they are
+easiest. With spreadsheets come the added complexity of the cell grid being
+potentially unbounded and no clear "page" area. With presentations come the
+animation complications, and possibly LO-based viewer apps for presentations
+will be done in a totally different fashion.

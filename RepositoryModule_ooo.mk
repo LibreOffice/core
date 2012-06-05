@@ -133,6 +133,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     testtools \
     toolkit \
     tools \
+	touch \
 	$(if $(filter TRANSLATIONS,$(BUILD_TYPE)),\
 		translations \
 	) \
