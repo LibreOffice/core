@@ -271,20 +271,26 @@ namespace cmis
 
             if ( rProp.Name == "IsDocument" )
             {
-                if ( getObject()->getBaseType( ) == "cmis:document" )
-                    xRow->appendBoolean( rProp, true );
+                if ( getObject( ).get( ) )
+                    xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:document" );
+                else if ( m_pObjectType.get( ) )
+                    xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:document" );
                 else
                     xRow->appendVoid( rProp );
             }
             else if ( rProp.Name == "IsFolder" )
             {
-                sal_Bool bFolder = getObject()->getBaseType( ) == "cmis:folder";
-                xRow->appendBoolean( rProp, bFolder );
+                if ( getObject( ).get( ) )
+                    xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:folder" );
+                else if ( m_pObjectType.get( ) )
+                    xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:folder" );
+                else
+                    xRow->appendVoid( rProp );
             }
             else if ( rProp.Name == "Title" )
             {
                 rtl::OUString sTitle;
-                if ( getObject() )
+                if ( getObject().get() )
                     sTitle = rtl::OUString::createFromAscii( getObject()->getName().c_str( ) );
                 else if ( m_pObjectProps.size() > 0 )
                 {
@@ -308,7 +314,7 @@ namespace cmis
 
                     // Get the last segment
                     sal_Int32 nPos = sPath.lastIndexOf( '/' );
-                    if ( nPos > 0 )
+                    if ( nPos >= 0 )
                         sTitle = sPath.copy( nPos + 1 );
                 }
 
@@ -320,13 +326,18 @@ namespace cmis
             else if ( rProp.Name == "TitleOnServer" )
             {
                 string path;
-                vector< string > paths = getObject( )->getPaths( );
-                if ( paths.size( ) > 0 )
-                    path = paths.front( );
-                else
-                    path = getObject()->getName( );
+                if ( getObject().get( ) )
+                {
+                    vector< string > paths = getObject( )->getPaths( );
+                    if ( paths.size( ) > 0 )
+                        path = paths.front( );
+                    else
+                        path = getObject()->getName( );
 
-                xRow->appendString( rProp, rtl::OUString::createFromAscii( path.c_str() ) );
+                    xRow->appendString( rProp, rtl::OUString::createFromAscii( path.c_str() ) );
+                }
+                else
+                    xRow->appendVoid( rProp );
             }
             else if ( rProp.Name == "IsReadOnly" )
             {
