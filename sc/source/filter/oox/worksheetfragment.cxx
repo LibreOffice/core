@@ -332,10 +332,10 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
         break;
 
         case XLS_TOKEN( oleObjects ):
-            if( nElement == XLS_TOKEN( oleObject ) ) importOleObject( rAttribs );
+            if( nElement == XLS_TOKEN( oleObject ) && aMceState.empty() ) importOleObject( rAttribs );
         break;
         case XLS_TOKEN( controls ):
-            if( nElement == XLS_TOKEN( control ) ) importControl( rAttribs );
+            if( nElement == XLS_TOKEN( control ) && aMceState.empty() ) importControl( rAttribs );
         break;
     }
     return 0;

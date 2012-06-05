@@ -41,7 +41,7 @@ namespace core {
 
 class OOX_DLLPUBLIC FragmentHandler2 : public FragmentHandler, public ContextHandler2Helper
 {
-private:
+protected:
     enum MCE_STATE
     {
         MCE_UNUSED,
@@ -50,7 +50,6 @@ private:
     };
     ::std::vector<MCE_STATE>           aMceState;
 
-private:
     bool                prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs );
 
 
