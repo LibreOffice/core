@@ -196,7 +196,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)mouseDown:    (NSEvent*)i_pEvent;
+-(void)mouseDown:    (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -204,7 +204,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)mouseDragged: (NSEvent*)i_pEvent;
+-(void)mouseDragged: (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -212,7 +212,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)mouseUp:      (NSEvent*)i_pEvent;
+-(void)mouseUp:      (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -220,7 +220,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)rightMouseDown:    (NSEvent*)i_pEvent;
+-(void)rightMouseDown:    (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -228,7 +228,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)rightMouseDragged: (NSEvent*)i_pEvent;
+-(void)rightMouseDragged: (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -236,7 +236,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)rightMouseUp:      (NSEvent*)i_pEvent;
+-(void)rightMouseUp:      (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -244,7 +244,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)otherMouseDown:    (NSEvent*)i_pEvent;
+-(void)otherMouseDown:    (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -252,7 +252,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)otherMouseDragged: (NSEvent*)i_pEvent;
+-(void)otherMouseDragged: (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -260,7 +260,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)otherMouseUp:      (NSEvent*)i_pEvent;
+-(void)otherMouseUp:      (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -268,7 +268,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)mouseEntered: (NSEvent*)i_pEvent;
+-(void)mouseEntered: (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
@@ -276,7 +276,7 @@ struct FakeEventRecord : public EventRecord
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
 }
 
--(void)mouseExited:  (NSEvent*)i_pEvent;
+-(void)mouseExited:  (NSEvent*)i_pEvent
 {
     (void) i_pEvent; // unused
     FakeEventRecord aRec;
