@@ -575,16 +575,6 @@ WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Referen
 
 void BaseContainerControl::impl_paint ( sal_Int32 /*nX*/, sal_Int32 /*nY*/, const Reference< XGraphics > & /*rGraphics*/ )
 {
-/*
-    if (rGraphics.is())
-    {
-        for ( size_t n = maControlInfoList.size(); n; )
-        {
-            ControlInfo* pSearchControl = maControlInfoList[ --n ];
-            pSearchControl->xControl->paint ( nX, nY, rGraphics ) ;
-        }
-    }
-*/
 }
 
 //____________________________________________________________________________________________________________

@@ -4569,33 +4569,4 @@ bool produceType(RegistryKey& rTypeKey, bool bIsExtraType,
     return ret;
 }
 
-//*************************************************************************
-// scopedName
-//*************************************************************************
-/*
-OString scopedName(const OString& scope, const OString& type,
-                   sal_Bool bNoNameSpace)
-{
-    sal_Int32 nPos = type.lastIndexOf( '/' );
-    if (nPos == -1)
-        return type;
-
-    OStringBuffer tmpBuf(type.getLength()*2);
-    nPos = 0;
-    do
-    {
-        tmpBuf.append("::");
-        OString token(type.getToken(0, '/', nPos));
-        if (nPos != -1)
-            tmpBuf.append(translateUnoToCppIndentifier(
-                              token, "module", ITM_KEYWORDSONLY));
-        else
-            tmpBuf.append(translateUnoToCppIndentifier(
-                              token, "interface", ITM_KEYWORDSONLY));
-    } while( nPos != -1 );
-
-    return tmpBuf.makeStringAndClear();
-}
-*/
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

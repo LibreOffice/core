@@ -41,20 +41,12 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-/*
-//for WeakImplHelper1
-#include <cppuhelper/implbase1.hxx>
-*/
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
 class ShapeFactory;
-
-//-----------------------------------------------------------------------------
-/**
-*/
 
 class PlottingPositionHelper
 {

@@ -80,18 +80,6 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if ( xResult->next() ) // there can be only one table with this name
         {
-//          Reference<XStatement> xStmt = m_xConnection->createStatement();
-//          if ( xStmt.is() )
-//          {
-//              Reference< XResultSet > xPrivRes = xStmt->executeQuery();
-//              Reference< XRow > xPrivRow(xPrivRes,UNO_QUERY);
-//              while ( xPrivRes.is() && xPrivRes->next() )
-//              {
-//                  if ( xPrivRow->getString(1) )
-//                  {
-//                  }
-//              }
-//          }
             sal_Int32 nPrivileges = Privilege::DROP         |
                                     Privilege::REFERENCE    |
                                     Privilege::ALTER        |

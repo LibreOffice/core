@@ -305,13 +305,6 @@ Context_Docu::SetupStateMachine()
 
     // constants for use in the table:
     const INT16 ght = goto_EoHtml;
-/*
-    const INT16 gxc = goto_EoXmlConst;
-    const INT16 glb = goto_EoXmlLink_TagBegin;
-    const INT16 gle = goto_EoXmlLink_TagEnd;
-    const INT16 gfb = goto_EoXmlFormat_TagBegin;
-    const INT16 gfe = goto_EoXmlFormat_TagEnd;
-*/
     const INT16 err = finError;
     const INT16 faw = finAnyWord;
 //  const INT16 fig = finIgnore;

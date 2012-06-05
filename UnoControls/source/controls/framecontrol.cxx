@@ -426,28 +426,6 @@ IPropertyArrayHelper& FrameControl::getInfoHelper()
 
     return *pInfo ;
 }
-/*
-//--------------------------------------------------------------------------------------------------
-// start OConnectionPointContainerHelper
-//--------------------------------------------------------------------------------------------------
-Uik* FrameControl::getConnectionPointUiks ( sal_Int32* pCount ) const
-{
-    static Uik szUiks[] =
-    {
-        ((XEventListener*)NULL)->getSmartUik  (),
-        ::getCppuType((const Reference< XPropertyChangeListener >*)0),
-        ::getCppuType((const Reference< XVetoableChangeListener >*)0),
-        ::getCppuType((const Reference< XPropertiesChangeListener >*)0)
-    } ;
-
-    *pCount = 4 ;
-
-    return szUiks ;
-}
-//--------------------------------------------------------------------------------------------------
-// end OConnectionPointContainerHelper
-//--------------------------------------------------------------------------------------------------
-*/
 
 //____________________________________________________________________________________________________________
 //  OPropertySetHelper

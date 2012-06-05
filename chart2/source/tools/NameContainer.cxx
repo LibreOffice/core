@@ -29,10 +29,6 @@
 
 #include "NameContainer.hxx"
 
-/*
-//SvXMLUnitConverter
-#include <xmloff/xmluconv.hxx>
-*/
 #include <com/sun/star/uno/Any.hxx>
 
 using namespace ::com::sun::star;

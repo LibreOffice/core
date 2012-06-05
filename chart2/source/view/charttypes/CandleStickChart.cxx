@@ -87,21 +87,6 @@ LegendSymbolStyle CandleStickChart::getLegendSymbolStyle()
     return LegendSymbolStyle_LINE;
 }
 
-//-----------------------------------------------------------------
-// lang::XServiceInfo
-//-----------------------------------------------------------------
-/*
-APPHELPER_XSERVICEINFO_IMPL(CandleStickChart,CHART2_VIEW_CANDLESTICKCHART_SERVICE_IMPLEMENTATION_NAME)
-
-    uno::Sequence< rtl::OUString > CandleStickChart
-::getSupportedServiceNames_Static()
-{
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = CHART2_VIEW_CANDLESTICKCHART_SERVICE_NAME;
-    return aSNS;
-}
-*/
-
 drawing::Direction3D CandleStickChart::getPreferredDiagramAspectRatio() const
 {
     return drawing::Direction3D(-1,-1,-1);

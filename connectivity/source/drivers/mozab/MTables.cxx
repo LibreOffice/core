@@ -56,16 +56,11 @@ using namespace dbtools;
 sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aSchema;
-    // sal_Int32 nLen = _rName.indexOf('.');
-    // aSchema = _rName.copy(0,nLen);
-    // aName    = _rName.copy(nLen+1);
     aSchema = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
     aName = _rName;
 
     Sequence< ::rtl::OUString > aTypes(1);
     aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
-    //  aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-    //  aTypes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYSTEMTABLE"));
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 
