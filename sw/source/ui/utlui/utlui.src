@@ -323,7 +323,7 @@ Image IMG_VIEWLAYOUT_AUTOMATIC
 {
     ImageBitmap = Bitmap
     {
-        File = "twopages_10x22.png" ;
+        File = "twopages_10x24.png" ;
     };
     MaskColor = IMAGE_MASK_COLOR;
 };
@@ -331,7 +331,7 @@ Image IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE
 {
     ImageBitmap = Bitmap
     {
-        File = "twopages_a_10x22.png" ;
+        File = "twopages_a_10x24.png" ;
     };
     MaskColor = IMAGE_MASK_COLOR;
 };
@@ -357,7 +357,7 @@ Image IMG_VIEWLAYOUT_SINGLECOLUMN
 {
     ImageBitmap = Bitmap
     {
-        File = "emptypage_10x22.png" ;
+        File = "emptypage_10x14.png" ;
     };
     MaskColor = IMAGE_MASK_COLOR;
 };
@@ -365,7 +365,7 @@ Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
 {
     ImageBitmap = Bitmap
     {
-        File = "emptypage_a_10x22.png" ;
+        File = "emptypage_a_10x14.png" ;
     };
     MaskColor = IMAGE_MASK_COLOR;
 };
