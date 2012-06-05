@@ -433,6 +433,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
 
         ::rtl::OUString sURL( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInStream = rMedium.GetInputStream();
+        rtl::OUString aFilterName;
 
         // stream exists => deep detection (with preselection ... if possible)
         if (xInStream.is())
@@ -454,6 +455,13 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
 
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
             sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, sal_True); // lDescriptor is used as In/Out param ... dont use aDescriptor.getAsConstPropertyValueList() directly!
+
+            for (sal_Int32 i = 0; i < lDescriptor.getLength(); ++i)
+            {
+                if (lDescriptor[i].Name == "FilterName")
+                    // Type detection picked a preferred filter for this format.
+                    aFilterName = lDescriptor[i].Value.get<rtl::OUString>();
+            }
         }
         // no stream exists => try flat detection without preselection as fallback
         else
@@ -461,16 +469,25 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
 
         if (!sTypeName.isEmpty())
         {
-            // detect filter by given type
-            // In case of this matcher is bound to a particular document type:
-            // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
-            // The DocumentService property is only a preselection, and all preselections are considered as optional!
-            // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lQuery(1);
-            lQuery[0].Name = ::rtl::OUString("Name");
-            lQuery[0].Value <<= sTypeName;
+            const SfxFilter* pFilter = NULL;
+            if (!aFilterName.isEmpty())
+                // Type detection returned a suitable filter for this.  Use it.
+                pFilter = SfxFilter::GetFilterByName(aFilterName);
 
-            const SfxFilter* pFilter = GetFilterForProps(lQuery, nMust, nDont);
+            if (!pFilter)
+            {
+                // detect filter by given type
+                // In case of this matcher is bound to a particular document type:
+                // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
+                // The DocumentService property is only a preselection, and all preselections are considered as optional!
+                // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
+                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lQuery(1);
+                lQuery[0].Name = ::rtl::OUString("Name");
+                lQuery[0].Value <<= sTypeName;
+
+                pFilter = GetFilterForProps(lQuery, nMust, nDont);
+            }
+
             if (pFilter)
             {
                 *ppFilter = pFilter;
