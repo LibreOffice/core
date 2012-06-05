@@ -547,7 +547,6 @@ Module gid_Module_Root_Files_6
 	gid_File_Basic_Tutorials,
 	gid_File_Extra_Cfgsrv,
 	gid_File_Extra_Cfgsrv_Bitmap_Unx,
-	gid_File_Extra_Symbols,
 	gid_File_Extra_Common_Inc,
 	gid_File_Extra_Common_Pl,
 	gid_File_Extra_Edit_Asp,

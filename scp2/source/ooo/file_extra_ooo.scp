@@ -337,12 +337,6 @@ File gid_File_Extra_Show_Pl
     Name = "show.pl";
 End
 
-File gid_File_Extra_Symbols
-    Dir = gid_Dir_Config_Symbol;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "symbols.zip";
-End
-
 File gid_File_Extra_Tplpresntimpr_Lang
     Dir = gid_Dir_Template_Presnt;
     TXT_FILE_BODY;
