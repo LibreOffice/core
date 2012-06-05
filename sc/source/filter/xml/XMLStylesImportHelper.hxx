@@ -32,8 +32,6 @@
 #include "rangelst.hxx"
 #include "simplerangelist.hxx"
 #include <rtl/ustring.hxx>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
 
 #include <set>
 #include <vector>
@@ -179,7 +177,7 @@ public:
     void SetAttributes(rtl::OUString* pStyleName,
         rtl::OUString* pCurrency, const sal_Int16 nCellType);
     void AddRange(const ScRange& rRange);
-    void AddCell(const com::sun::star::table::CellAddress& rAddress);
+    void AddCell(const ScAddress& rAddress);
     void InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc); // a row is inserted before nRow
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc); // a col is inserted before nCol
     void EndTable();

@@ -496,10 +496,9 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
     }
 }
 
-void ScMyStylesImportHelper::AddCell(const com::sun::star::table::CellAddress& rAddress)
+void ScMyStylesImportHelper::AddCell(const ScAddress& rAddress)
 {
-    ScAddress aScAddress( static_cast<SCCOL>(rAddress.Column), static_cast<SCROW>(rAddress.Row), rAddress.Sheet );
-    ScRange aScRange( aScAddress, aScAddress );
+    ScRange aScRange( rAddress, rAddress );
     AddRange(aScRange);
 }
 

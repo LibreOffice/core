@@ -86,7 +86,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
 
     void SetContentValidation(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet);
     void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange,
-                                                const com::sun::star::table::CellAddress& aCellAddress);
+                                                const ScAddress& aCellAddress);
     void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
 
     void LockSolarMutex();
@@ -115,9 +115,9 @@ public:
     inline void SetString(const rtl::OUString& rOUTempText) { pOUTextContent.reset(rOUTempText); }
     void SetCursorOnTextImport(const rtl::OUString& rOUTempText);
 
-    void SetAnnotation(const ::com::sun::star::table::CellAddress& rPosition );
-    void SetDetectiveObj( const ::com::sun::star::table::CellAddress& rPosition );
-    void SetCellRangeSource( const ::com::sun::star::table::CellAddress& rPosition );
+    void SetAnnotation( const ScAddress& rPosition );
+    void SetDetectiveObj( const ScAddress& rPosition );
+    void SetCellRangeSource( const ScAddress& rPosition );
 
     virtual void EndElement();
 };
