@@ -25,15 +25,16 @@
 # instead of those above.
 
 $(eval $(call gb_CustomTarget_CustomTarget,testtools/uno_test))
-UNO_EXE := $(OUTDIR)/bin/uno
 
 # this target is phony to run it every time
 .PHONY : $(call gb_CustomTarget_get_target,testtools/uno_test)
 
-$(call gb_CustomTarget_get_target,testtools/uno_test) : $(call gb_Rdb_get_target,uno_services) \
-	$(UNO_EXE) \
-	$(call gb_InternalUnoApi_get_target,bridgetest)
-	$(call gb_Helper_abbreviate_dirs, $(UNO_EXE) \
+$(call gb_CustomTarget_get_target,testtools/uno_test) : \
+		$(call gb_Rdb_get_target,uno_services) \
+		$(call gb_Executable_get_target_for_build,uno) \
+		$(call gb_InternalUnoApi_get_target,bridgetest)
+	$(call gb_Helper_abbreviate_dirs,\
+		$(call gb_Executable_get_target_for_build,uno) \
 		-ro $(OUTDIR)/xml/uno_services.rdb \
 		-ro $(OUTDIR)/bin/udkapi.rdb \
 		-ro $(WORKDIR)/UnoApiTarget/bridgetest.rdb \

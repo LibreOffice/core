@@ -26,44 +26,37 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,testtools/bridgetest))
 
-workdir_SERVER := $(call gb_CustomTarget_get_workdir,testtools/bridgetest)
-UNO_EXE := $(OUTDIR)/bin/uno
+testtools_BRIDGEDIR := $(call gb_CustomTarget_get_workdir,testtools/bridgetest)
 
 ifeq ($(OS),WNT)
-BATCH_SUFFIX := .bat
-GIVE_EXEC_RIGHTS=@echo
+testtools_BATCHSUFFIX := .bat
 else
-BATCH_SUFFIX :=
-GIVE_EXEC_RIGHTS=chmod +x
+testtools_BATCHSUFFIX :=
 endif
 
-bridgetest_TARGET := $(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) \
-	$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX)
+$(call gb_CustomTarget_get_target,testtools/bridgetest) : \
+	$(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) \
+	$(testtools_BRIDGEDIR)/bridgetest_client$(testtools_BATCHSUFFIX) \
+	$(if $(SOLAR_JAVA),\
+		$(testtools_BRIDGEDIR)/bridgetest_javaserver$(testtools_BATCHSUFFIX) \
+		$(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX))
 
-ifneq ($(SOLAR_JAVA),)
-bridgetest_TARGET := $(bridgetest_TARGET) \
-	$(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) \
-	$(workdir_SERVER)/bridgetest_inprocess_java$(BATCH_SUFFIX)
-endif
-
-$(call gb_CustomTarget_get_target,testtools/bridgetest) : $(bridgetest_TARGET)
-
-$(workdir_SERVER)/bridgetest_server$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
+$(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		echo "$(UNO_EXE)" \
+		echo "$(call gb_Executable_get_target_for_build,uno)" \
 		"-ro $(OUTDIR)/xml/uno_services.rdb" \
 		"-ro $(OUTDIR)/bin/udkapi.rdb" \
 		"-ro $(WORKDIR)/UnoApiTarget/bridgetest.rdb" \
 		"-s com.sun.star.test.bridge.CppTestObject" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
 		"--singleaccept" > $@)
-	$(GIVE_EXEC_RIGHTS) $@
+	$(if $(filter-out WNT,$(OS)),chmod +x $@)
 
 
 testtools_MY_CLASSPATH := $(OUTDIR)/bin/ridl.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/java_uno.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/jurt.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/juh.jar
 
-$(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
+$(testtools_BRIDGEDIR)/bridgetest_javaserver$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo "java" \
@@ -71,14 +64,14 @@ $(workdir_SERVER)/bridgetest_javaserver$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
 		"com.sun.star.comp.bridge.TestComponentMain" \
 		\""uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test"\" \
 		"singleaccept"> $@)
-	$(GIVE_EXEC_RIGHTS) $@
+	$(if $(filter-out WNT,$(OS)),chmod +x $@)
 
-$(workdir_SERVER)/bridgetest_inprocess_java$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
+$(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo "JAVA_HOME=$(JAVA_HOME)" \
 		"LD_LIBRARY_PATH=$(OUTDIR)/lib" \
-		"$(UNO_EXE)" \
+		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-ro $(OUTDIR)/xml/ure/services.rdb" \
 		"-ro $(OUTDIR)/xml/uno_services.rdb" \
 		"-ro $(OUTDIR)/bin/udkapi.rdb" \
@@ -88,12 +81,12 @@ $(workdir_SERVER)/bridgetest_inprocess_java$(BATCH_SUFFIX) :| $(workdir_SERVER)/
 		"-env:URE_INTERNAL_LIB_DIR=file://$(OUTDIR)/lib" \
 		"-- com.sun.star.test.bridge.JavaTestObject noCurrentContext" \
 		> $@)
-	$(GIVE_EXEC_RIGHTS) $@
+	$(if $(filter-out WNT,$(OS)),chmod +x $@)
 
-$(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
+$(testtools_BRIDGEDIR)/bridgetest_client$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		echo "$(UNO_EXE)" \
+		echo "$(call gb_Executable_get_target_for_build,uno)" \
 		"-ro $(OUTDIR)/xml/ure/services.rdb" \
 		"-ro $(OUTDIR)/xml/uno_services.rdb" \
 		"-ro $(OUTDIR)/bin/udkapi.rdb" \
@@ -101,6 +94,6 @@ $(workdir_SERVER)/bridgetest_client$(BATCH_SUFFIX) :| $(workdir_SERVER)/.dir
 		"-s com.sun.star.test.bridge.BridgeTest --" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
 		> $@)
-	$(GIVE_EXEC_RIGHTS) $@
+	$(if $(filter-out WNT,$(OS)),chmod +x $@)
 
 # vim: set noet sw=4 ts=4:
