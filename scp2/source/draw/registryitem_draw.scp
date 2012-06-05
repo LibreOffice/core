@@ -505,7 +505,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_std_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "soffice.StarDrawTemplate.6";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -584,7 +584,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_sxd_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "soffice.StarDrawDocument.6";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -727,7 +727,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odg_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "LibreOffice.DrawDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -955,7 +955,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_otg_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "LibreOffice.DrawTemplate.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";

@@ -35,22 +35,21 @@ Module gid_Module_Optional_Winexplorerext
     ParentID = gid_Module_Optional;
     Dirs = (gid_Dir_Shlxthdl);
     Files = (gid_File_Lib_Shlxthdl,
-			 gid_File_Lib_Shlxthdl64,
-			 gid_File_Lib_OOoFilt,
-			 gid_File_Lib_OOoFilt64,
+             gid_File_Lib_OOoFilt,
+             gid_File_Lib_PropertyHdl,
              gid_File_Lib_Shlxtmsi,
-             gid_File_Lib_Reg64,
              gid_File_Tmp_Userinstall_Winexplorerext_Inf);    
 End
 
-Module gid_Module_Optional_Winexplorerext_PropertyHdl
-	ParentID = gid_Module_Optional_Winexplorerext;
-	Name = "gid_Module_Optional_Winexplorerext_PropertyHdl";
-	Description = "gid_Module_Optional_Winexplorerext_PropertyHdl";
-	Sortkey = "1210";
-	Default = YES;
-	Styles = (HIDDEN_ROOT);
+Module gid_Module_Optional_Winexplorerext_x64
+    ParentID = gid_Module_Optional_Winexplorerext;
+    Name = "gid_Module_Optional_Winexplorerext_x64";
+    Description = "gid_Module_Optional_Winexplorerext_x64";
+    Sortkey = "1210";
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Shlxthdl);
-	Files = (gid_File_Lib_PropertyHdl,
-			 gid_File_Lib_PropertyHdl64);
+    Files = (gid_File_Lib_Shlxthdl64,
+             gid_File_Lib_OOoFilt64,
+             gid_File_Lib_PropertyHdl64);
 End

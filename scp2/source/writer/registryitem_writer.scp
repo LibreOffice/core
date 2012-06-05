@@ -592,7 +592,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_stw_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "soffice.StarWriterTemplate.6";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -655,7 +655,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_sxg_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "soffice.StarWriterGlobalDocument.6";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -734,7 +734,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_sxw_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "soffice.StarWriterDocument.6";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -883,7 +883,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odt_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "LibreOffice.WriterDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -1128,7 +1128,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_ott_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "LibreOffice.WriterTemplate.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -1280,7 +1280,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odm_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "LibreOffice.WriterGlobalDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -1474,7 +1474,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_oth_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "LibreOffice.WriterWebTemplate.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";

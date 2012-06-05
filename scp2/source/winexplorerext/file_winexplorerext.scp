@@ -59,7 +59,7 @@ File gid_File_Lib_Shlxthdl
 End
 
 #ifdef BUILD_X64
-	File gid_File_Lib_Shlxthdl64
+    File gid_File_Lib_Shlxthdl64
     LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
@@ -74,15 +74,17 @@ File gid_File_Lib_PropertyHdl
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "propertyhdl.dll";
+    ComponentCondition = "VersionNT >= 600";
+
 End
 
 #ifdef BUILD_X64
-	File gid_File_Lib_PropertyHdl64
+    File gid_File_Lib_PropertyHdl64
     LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "propertyhdl_x64.dll";
-    ComponentCondition = "VersionNT64";
+    ComponentCondition = "VersionNT64 >= 600";
 End
 
 #endif
@@ -93,11 +95,3 @@ File gid_File_Lib_Shlxtmsi
     Dir = SCP2_OOO_BIN_DIR;
     Name = "shlxtmsi.dll";
 End
-
-File gid_File_Lib_Reg64
-    LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "reg64msi.dll";
-End
-
