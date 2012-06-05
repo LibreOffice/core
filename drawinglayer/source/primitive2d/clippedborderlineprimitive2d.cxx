@@ -33,7 +33,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        basegfx::B2DPolyPolygon ClippedBorderLinePrimitive2D::getClipPolygon( ) const
+        basegfx::B2DPolyPolygon ClippedBorderLinePrimitive2D::getClipPolygon(
+            geometry::ViewInformation2D const&) const
         {
             basegfx::B2DPolyPolygon aPolyPolygon;
             aPolyPolygon.append( maIntersection );
