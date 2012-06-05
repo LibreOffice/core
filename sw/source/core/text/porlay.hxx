@@ -45,7 +45,7 @@ class SvStream;
 class SwTxtFormatter;
 
 /*************************************************************************
- *                      class SwCharRange
+ * class SwCharRange
  *************************************************************************/
 
 class SwCharRange
@@ -72,12 +72,12 @@ public:
 };
 
 /*************************************************************************
- *                      class SwRepaint
+ * class SwRepaint
  *************************************************************************/
 
 // SwRepaint is a document-global SwRect
 // nOfst states from where in the first line should be painted
-// nRightOfst gives teh right margin
+// nRightOfst gives the right margin
 class SwRepaint : public SwRect
 {
     SwTwips nOfst;
@@ -94,7 +94,7 @@ public:
 };
 
 /*************************************************************************
- *                      class SwLineLayout
+ * class SwLineLayout
  *************************************************************************/
 
 class SwLineLayout : public SwTxtPortion
@@ -117,7 +117,7 @@ private:
     sal_Bool bContent   : 1; // Text for line numbering
     sal_Bool bRedline   : 1; // The Redlining
     sal_Bool bForcedLeftMargin : 1; // Left adjustment moved by the Fly
-    sal_Bool bHanging : 1; // contents a hanging portion in the margin
+    sal_Bool bHanging : 1; // Contains a hanging portion in the margin
     sal_Bool bUnderscore : 1;
 
     SwTwips _GetHangingMargin() const;
@@ -270,7 +270,7 @@ class SwParaPortion : public SwLineLayout
     // Fraction aZoom;
     long nDelta;
 
-    // If a SwTxtFrma is locked, no changes occur to the formatting data (under
+    // If a SwTxtFrm is locked, no changes occur to the formatting data (under
     // pLine) (compare with Orphans)
     sal_Bool bFlys          : 1; // Overlapping Flys?
     sal_Bool bPrep          : 1; // PREP_*
@@ -280,8 +280,8 @@ class SwParaPortion : public SwLineLayout
     sal_Bool bFollowField   : 1; // We have a bit of field left for the Follow
 
     sal_Bool bFixLineHeight : 1; // Fixed line height
-    sal_Bool bFtnNum    : 1; // contents a footnotenumberportion
-    sal_Bool bMargin    : 1; // contents a hanging punctuation in the margin
+    sal_Bool bFtnNum    : 1; // contains a footnotenumberportion
+    sal_Bool bMargin    : 1; // contains a hanging punctuation in the margin
 
     sal_Bool bFlag00    : 1;
     sal_Bool bFlag11    : 1;
@@ -372,7 +372,7 @@ public:
 };
 
 /*************************************************************************
- *                      Inline-Implementierungen
+ * Inline implementations
  *************************************************************************/
 
 inline void SwLineLayout::ResetFlags()
@@ -408,7 +408,7 @@ inline void SwParaPortion::FormatReset()
 }
 
 #ifdef UNX
-// The terniary expression is too much for the C30
+// The ternary expression is too much for the C30
 inline SwLinePortion *SwLineLayout::GetFirstPortion() const
 {
     SwLinePortion *pTmp = pPortion;
