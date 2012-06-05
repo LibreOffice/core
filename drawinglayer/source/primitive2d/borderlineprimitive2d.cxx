@@ -41,9 +41,45 @@
 
 namespace drawinglayer
 {
+    // fdo#49438: heuristic pseudo hack
+    static bool lcl_UseHairline(double const fW,
+            basegfx::B2DPoint const& rStart, basegfx::B2DPoint const& rEnd,
+            geometry::ViewInformation2D const& rViewInformation)
+    {
+        basegfx::B2DTuple scale;
+        basegfx::B2DTuple translation;
+        double fRotation;
+        double fShear;
+        rViewInformation.getObjectToViewTransformation().decompose(
+                scale, translation, fRotation, fShear);
+        double const fScale(
+            (rEnd.getX() - rStart.getX() > rEnd.getY() - rStart.getY())
+                ? scale.getY() : scale.getX());
+        return (fW * fScale < 0.51);
+    }
+
+    static double lcl_GetCorrectedWidth(double const fW,
+            basegfx::B2DPoint const& rStart, basegfx::B2DPoint const& rEnd,
+            geometry::ViewInformation2D const& rViewInformation)
+    {
+        return (lcl_UseHairline(fW, rStart, rEnd, rViewInformation)) ? 0.0 : fW;
+    }
+
     namespace primitive2d
     {
-        basegfx::B2DPolyPolygon BorderLinePrimitive2D::getClipPolygon( ) const
+        double BorderLinePrimitive2D::getWidth(
+            geometry::ViewInformation2D const& rViewInformation) const
+        {
+            return lcl_GetCorrectedWidth(mfLeftWidth, getStart(), getEnd(),
+                        rViewInformation)
+                 + lcl_GetCorrectedWidth(mfDistance, getStart(), getEnd(),
+                         rViewInformation)
+                 + lcl_GetCorrectedWidth(mfRightWidth, getStart(), getEnd(),
+                         rViewInformation);
+        }
+
+        basegfx::B2DPolyPolygon BorderLinePrimitive2D::getClipPolygon(
+            geometry::ViewInformation2D const& rViewInformation) const
         {
             basegfx::B2DPolygon clipPolygon;
 
@@ -53,8 +89,8 @@ namespace drawinglayer
             const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
 
             // Get the points
-            const basegfx::B2DVector aLeftOff(aPerpendicular * (-0.5 * (getWidth())));
-            const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (getWidth())));
+            const basegfx::B2DVector aLeftOff(aPerpendicular * (-0.5 * (getWidth(rViewInformation))));
+            const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (getWidth(rViewInformation))));
 
             const basegfx::B2DVector aSLVector( aLeftOff - ( getExtendLeftStart() * aVector ) );
             clipPolygon.append( basegfx::B2DPoint( getStart() + aSLVector * 2.0 ) );
@@ -84,16 +120,17 @@ namespace drawinglayer
             if(!getStart().equal(getEnd()) && ( isInsideUsed() || isOutsideUsed() ) )
             {
                 // get data and vectors
-                const double fWidth(getWidth());
+                const double fWidth(getWidth(rViewInformation));
                 basegfx::B2DVector aVector(getEnd() - getStart());
                 aVector.normalize();
                 const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
 
-                const basegfx::B2DPolyPolygon& aClipRegion = getClipPolygon( );
+                const basegfx::B2DPolyPolygon& aClipRegion =
+                    getClipPolygon(rViewInformation);
 
                 if(isOutsideUsed() && isInsideUsed())
                 {
-                    const double fExt = getWidth( );  // Extend a lot: it'll be clipped after
+                    const double fExt = getWidth(rViewInformation);  // Extend a lot: it'll be clipped after
 
                     // both used, double line definition. Create left and right offset
                     xRetval.realloc(2);
@@ -103,12 +140,13 @@ namespace drawinglayer
 
                     {
                         // create geometry for left
-                        const basegfx::B2DVector aLeftOff(aPerpendicular * (0.5 * (getCorrectedLeftWidth() - fWidth + 1)));
+                        const basegfx::B2DVector aLeftOff(aPerpendicular * (0.5 * (lcl_GetCorrectedWidth(mfLeftWidth, getStart(), getEnd(), rViewInformation) - fWidth + 1)));
                         const basegfx::B2DPoint aTmpStart(getStart() + aLeftOff - ( fExt * aVector));
                         const basegfx::B2DPoint aTmpEnd(getEnd() + aLeftOff + ( fExt * aVector));
                         basegfx::B2DPolygon aLeft;
 
-                        if(leftIsHairline())
+                        if (lcl_UseHairline(mfLeftWidth, getStart(), getEnd(),
+                                    rViewInformation))
                         {
                             // create hairline primitive
                             aLeft.append(aTmpStart);
@@ -132,7 +170,7 @@ namespace drawinglayer
                             // with the correct LineWidth, but this leads to problems when no AA
                             // is available and fat line special case reductions between 0.5 < x < 2.5 line widths
                             // are executed due to the FilledPolygon-do-not-paint-their-bottom-and-right-lines.
-                            const basegfx::B2DVector aLineWidthOffset((getCorrectedLeftWidth() * 0.5) * aPerpendicular);
+                            const basegfx::B2DVector aLineWidthOffset((lcl_GetCorrectedWidth(mfLeftWidth, getStart(), getEnd(), rViewInformation) * 0.5) * aPerpendicular);
 
                             aLeft.append(aTmpStart + aLineWidthOffset);
                             aLeft.append(aTmpEnd + aLineWidthOffset);
@@ -153,12 +191,13 @@ namespace drawinglayer
 
                     {
                         // create geometry for right
-                        const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (fWidth - getCorrectedRightWidth() + 1)));
+                        const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (fWidth - lcl_GetCorrectedWidth(mfRightWidth, getStart(), getEnd(), rViewInformation) + 1)));
                         const basegfx::B2DPoint aTmpStart(getStart() + aRightOff - ( fExt * aVector));
                         const basegfx::B2DPoint aTmpEnd(getEnd() + aRightOff + ( fExt * aVector));
                         basegfx::B2DPolygon aRight;
 
-                        if(rightIsHairline())
+                        if (lcl_UseHairline(mfRightWidth, getStart(), getEnd(),
+                                    rViewInformation))
                         {
                             // create hairline primitive
                             aRight.append(aTmpStart);
@@ -179,7 +218,7 @@ namespace drawinglayer
                         else
                         {
                             // create filled polygon primitive
-                            const basegfx::B2DVector aLineWidthOffset((getCorrectedRightWidth() * 0.5) * aPerpendicular);
+                            const basegfx::B2DVector aLineWidthOffset((lcl_GetCorrectedWidth(mfRightWidth, getStart(), getEnd(), rViewInformation) * 0.5) * aPerpendicular);
 
                             aRight.append(aTmpStart + aLineWidthOffset);
                             aRight.append(aTmpEnd + aLineWidthOffset);
@@ -215,22 +254,24 @@ namespace drawinglayer
                 {
                     // single line, create geometry
                     basegfx::B2DPolygon aPolygon;
-                    const double fExt = getWidth( );  // Extend a lot: it'll be clipped after
+                    const double fExt = getWidth(rViewInformation);  // Extend a lot: it'll be clipped after
                     const basegfx::B2DPoint aTmpStart(getStart() - (fExt * aVector));
                     const basegfx::B2DPoint aTmpEnd(getEnd() + (fExt * aVector));
                     xRetval.realloc(1);
 
                     // Get which is the line to show
-                    bool bIsHairline = leftIsHairline();
                     bool bIsSolidline = isSolidLine();
-                    double nWidth = getCorrectedLeftWidth();
+                    double nWidth = getLeftWidth();
                     basegfx::BColor aColor = getRGBColorLeft();
                     if ( basegfx::fTools::equal( 0.0, mfLeftWidth ) )
                     {
-                        bIsHairline = rightIsHairline();
-                        nWidth = getCorrectedRightWidth();
+                        nWidth = getRightWidth();
                         aColor = getRGBColorRight();
                     }
+                    bool const bIsHairline = lcl_UseHairline(
+                            nWidth, getStart(), getEnd(), rViewInformation);
+                    nWidth = lcl_GetCorrectedWidth(nWidth,
+                                getStart(), getEnd(), rViewInformation);
 
                     if(bIsHairline && bIsSolidline)
                     {
