@@ -583,7 +583,7 @@ sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
         we have to encode all '?' signs. Otherwhise e.g. "??-" will be translated
         to "~" ...
      */
-    static ::rtl::OUString PATTERN_ISO8601("\?\?\?\?-\?\?-\?\?*\0");
+    static ::rtl::OUString PATTERN_ISO8601("\?\?\?\?-\?\?-\?\?*");
     WildCard aISOPattern(PATTERN_ISO8601);
 
     sal_Bool bValidAdmin = aISOPattern.Matches(sAdminTime);
