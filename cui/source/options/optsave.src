@@ -157,6 +157,7 @@ TabPage RID_SFXPAGE_SAVE
         {
             < "1.0/1.1" ;  2 ; > ;
             < "1.2" ;      4 ;  > ;
+            < "1.2 Extended (compat mode)"; 8 ; > ;
             < "1.2 Extended (recommended)"; 0x7fffffff ; > ;
         };
     };

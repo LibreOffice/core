@@ -39,7 +39,7 @@ using namespace ::xmloff::token;
 #define PLMAP_12(name,prefix,token,type,context) \
         MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_012)
 #define PLMAP_EX(name,prefix,token,type,context) \
-        MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_LATEST)
+        MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_012_EXT_COMPAT)
 #define HFMAP(name,prefix,token,type,context) \
         MAP(name,prefix,token,type|XML_TYPE_PROP_HEADER_FOOTER,context, SvtSaveOptions::ODFVER_010)
 

@@ -150,6 +150,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         switch( getDefaultVersion() )
         {
         case SvtSaveOptions::ODFVER_LATEST: pVersion = "1.2"; break;
+        case SvtSaveOptions::ODFVER_012_EXT_COMPAT: pVersion = "1.2"; break;
         case SvtSaveOptions::ODFVER_012: pVersion = "1.2"; break;
         case SvtSaveOptions::ODFVER_011: pVersion = "1.1"; break;
         case SvtSaveOptions::ODFVER_010: break;
