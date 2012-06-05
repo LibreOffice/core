@@ -51,6 +51,8 @@
  *----------------------------------------------------------------------
  */
 
+#include <sal/types.h> // just for SAL_DLLPUBLIC_EXPORT
+
 #define XP_UNIX 1
 
 #include <stdio.h>
@@ -365,7 +367,7 @@ Private_GetJavaClass(void)
  *  - Netscape uses the return value to identify when an object instance
  *    of this plugin should be created.
  */
-char *
+SAL_DLLPUBLIC_EXPORT char *
 NP_GetMIMEDescription(void)
 {
     return (char *)NPP_GetMIMEDescription();
@@ -377,7 +379,7 @@ NP_GetMIMEDescription(void)
  *  - Interfaces with plugin to get values for predefined variables
  *    that the navigator needs.
  */
-NPError
+SAL_DLLPUBLIC_EXPORT NPError
 NP_GetValue(void* future, NPPVariable variable, void *value)
 {
     return NPP_GetValue(future, variable, value);
@@ -400,7 +402,7 @@ NP_GetValue(void* future, NPPVariable variable, void *value)
  *        library will use this function table to call the plugin.
  *
  */
-NPError
+SAL_DLLPUBLIC_EXPORT NPError
 NP_Initialize(NPNetscapeFuncs* nsTable, NPPluginFuncs* pluginFuncs)
 {
     NPError err = NPERR_NO_ERROR;
@@ -496,7 +498,7 @@ NP_Initialize(NPNetscapeFuncs* nsTable, NPPluginFuncs* pluginFuncs)
  *    the last object of this kind has been destroyed.
  *
  */
-void
+SAL_DLLPUBLIC_EXPORT void
 NP_Shutdown(void)
 {
     PLUGINDEBUGSTR("NP_Shutdown");
