@@ -83,35 +83,8 @@ namespace drawinglayer
             unsigned                                        mbCreateOutside : 1;
 
             /// local helpers
-            double getCorrectedLeftWidth() const
-            {
-                return mfLeftWidth <= 0.1 ? 0.0 : mfLeftWidth;
-            }
-
-            double getCorrectedDistance() const
-            {
-                return mfDistance <= 0.1 ? 0.0 : mfDistance;
-            }
-
-            double getCorrectedRightWidth() const
-            {
-                return mfRightWidth <= 0.1 ? 0.0 : mfRightWidth;
-            }
-
-            double getWidth() const
-            {
-                return getCorrectedLeftWidth() + getCorrectedDistance() + getCorrectedRightWidth();
-            }
-
-            bool leftIsHairline() const
-            {
-                return 0 < mfLeftWidth && mfLeftWidth <= 0.1;
-            }
-
-            bool rightIsHairline() const
-            {
-                return 0 < mfRightWidth && mfRightWidth <= 0.1;
-            }
+            double getWidth(
+                    const geometry::ViewInformation2D& rViewInformation) const;
 
             bool isSolidLine() const
             {
@@ -129,7 +102,8 @@ namespace drawinglayer
             }
 
         protected:
-            virtual basegfx::B2DPolyPolygon getClipPolygon( ) const;
+            virtual basegfx::B2DPolyPolygon getClipPolygon(
+                    const geometry::ViewInformation2D& rViewInformation) const;
 
             /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;

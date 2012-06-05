@@ -49,7 +49,8 @@ namespace drawinglayer
             const basegfx::B2DPolygon maIntersection;
 
         protected:
-            virtual basegfx::B2DPolyPolygon getClipPolygon( ) const;
+            virtual basegfx::B2DPolyPolygon getClipPolygon(
+                    const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             /// constructor
