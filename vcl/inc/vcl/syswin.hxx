@@ -271,6 +271,9 @@ public:
     void            SetScreenNumber( unsigned int nNewScreen );
 
     void            SetApplicationID( const rtl::OUString &rApplicationID );
+
+    void SetCloseHdl(const Link& rLink);
+    const Link& GetCloseHdl() const;
 };
 
 #endif // _SV_SYSWIN_HXX

@@ -53,6 +53,7 @@ class ScPreviewShell: public SfxViewShell
 friend class ScPreview; // allow access to AdjustPosSizePixel
     ScDocShell*     pDocShell;
 
+    SystemWindow*   mpFrameWindow;
     ScPreview*      pPreview;               // Ausgabe-Fenster
     ScrollBar*      pHorScroll;
     ScrollBar*      pVerScroll;
@@ -69,7 +70,9 @@ friend class ScPreview; // allow access to AdjustPosSizePixel
 private:
     void            Construct( Window* pParent );
     DECL_LINK(ScrollHandler, ScrollBar* );
+    DECL_LINK(CloseHdl, SystemWindow*);
     void            DoScroll( sal_uInt16 nMode );
+    void ExitPreview();
 
 protected:
     virtual void    Activate(sal_Bool bMDI);

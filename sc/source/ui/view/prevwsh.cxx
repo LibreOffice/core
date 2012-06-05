@@ -111,6 +111,22 @@ SFX_IMPL_NAMED_VIEWFACTORY( ScPreviewShell, "PrintPreview" )
 
 void ScPreviewShell::Construct( Window* pParent )
 {
+    // Find the top-most window, and set the close window handler to intercept
+    // the window close event.
+    Window* pWin = pParent;
+    while (true)
+    {
+        if (pWin->GetParent())
+            pWin = pWin->GetParent();
+        else
+            break;
+    }
+
+    pWin = pWin->GetWindow(WINDOW_CLIENT);
+    mpFrameWindow = dynamic_cast<SystemWindow*>(pWin);
+    if (mpFrameWindow)
+        mpFrameWindow->SetCloseHdl(LINK(this, ScPreviewShell, CloseHdl));
+
     eZoom = SVX_ZOOM_WHOLEPAGE;
 
     pCorner = new ScrollBarBox( pParent, WB_SIZEABLE );
@@ -145,6 +161,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell( pViewFrame, SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() ),
+    mpFrameWindow(NULL),
     nSourceDesignMode( SC_FORCEMODE_NONE ),
     pAccessibilityBroadcaster( NULL )
 {
@@ -174,6 +191,9 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 
 ScPreviewShell::~ScPreviewShell()
 {
+    if (mpFrameWindow)
+        mpFrameWindow->SetCloseHdl(Link()); // Remove close handler.
+
     // #108333#; notify Accessibility that Shell is dying and before destroy all
     BroadcastAccessibility( SfxSimpleHint( SFX_HINT_DYING ) );
     DELETEZ(pAccessibilityBroadcaster);
@@ -502,6 +522,12 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
     return 0;
 }
 
+IMPL_LINK (ScPreviewShell, CloseHdl, SystemWindow*, EMPTYARG)
+{
+    ExitPreview();
+    return 0;
+}
+
 sal_Bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
 {
     sal_Bool bDone = false;
@@ -769,7 +795,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             //  -> always switch this frame back to normal view
             //  (ScTabViewShell ctor reads stored view data)
 
-            GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_ASYNCHRON );
+            ExitPreview();
             break;
         case SID_CURSORPAGEUP:
         case SID_CURSORPAGEDOWN:
@@ -1165,6 +1191,11 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
         pPreview->SetXOffset( aCurPos.X() );
     }
 
+}
+
+void ScPreviewShell::ExitPreview()
+{
+    GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL0, SFX_CALLMODE_ASYNCHRON);
 }
 
 void ScPreviewShell::AddAccessibilityObject( SfxListener& rObject )
