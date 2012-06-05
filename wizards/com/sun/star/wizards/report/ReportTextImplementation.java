@@ -57,6 +57,7 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.document.OfficeDocument;
+import com.sun.star.wizards.document.FormHandler.UnknownHiddenControlException;
 import com.sun.star.wizards.ui.UIConsts;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -233,7 +234,15 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 String sCommandType = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, PropertyNames.COMMAND_TYPE, sMsg);
                 String sGroupFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "GroupFieldNames", sMsg);
                 String sFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "FieldNames", sMsg);
-                final String sorting = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "Sorting", sMsg);
+                String sorting;
+                try
+                {
+                    sorting = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "Sorting", sMsg);
+                }
+                catch (UnknownHiddenControlException exception)
+                {
+		    sorting = "";
+                }
                 String sRecordFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "RecordFieldNames", sMsg);
                 if (xNamedForm.hasByName("QueryName"))
                 {
