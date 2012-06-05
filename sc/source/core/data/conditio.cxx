@@ -33,6 +33,8 @@
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
 
+#include <com/sun/star/sheet/ConditionOperator2.hpp>
+
 #include "conditio.hxx"
 #include "cell.hxx"
 #include "document.hxx"
@@ -1202,6 +1204,49 @@ ScFormatEntry* ScConditionEntry::Clone(ScDocument* pDoc) const
     return new ScConditionEntry(pDoc, *this);
 }
 
+ScConditionMode ScConditionEntry::GetModeFromApi(sal_Int32 nOperation)
+{
+    ScConditionMode eMode = SC_COND_NONE;
+    switch (nOperation)
+    {
+        case com::sun::star::sheet::ConditionOperator2::EQUAL:
+            eMode = SC_COND_EQUAL;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::LESS:
+            eMode = SC_COND_LESS;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::GREATER:
+            eMode = SC_COND_GREATER;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::LESS_EQUAL:
+            eMode = SC_COND_EQLESS;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::GREATER_EQUAL:
+            eMode = SC_COND_EQGREATER;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::NOT_EQUAL:
+            eMode = SC_COND_NOTEQUAL;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::BETWEEN:
+            eMode = SC_COND_BETWEEN;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::NOT_BETWEEN:
+            eMode = SC_COND_NOTBETWEEN;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::FORMULA:
+            eMode = SC_COND_DIRECT;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::DUPLICATE:
+            eMode = SC_COND_DUPLICATE;
+            break;
+        case com::sun::star::sheet::ConditionOperator2::NOT_DUPLICATE:
+            eMode = SC_COND_NOTDUPLICATE;
+            break;
+        default:
+            break;
+    }
+    return eMode;
+}
 //------------------------------------------------------------------------
 
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,

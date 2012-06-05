@@ -203,6 +203,8 @@ public:
 
     virtual ScFormatEntry* Clone(ScDocument* pDoc = NULL) const;
 
+    static ScConditionMode GetModeFromApi(sal_Int32 nOperator);
+
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
     ScDocument*     GetDocument() const     { return mpDoc; }

@@ -54,12 +54,15 @@
 #include "themebuffer.hxx"
 
 #include "colorscale.hxx"
+#include "conditio.hxx"
 #include "document.hxx"
 #include "convuno.hxx"
 #include "docfunc.hxx"
 #include "markdata.hxx"
 #include "docpool.hxx"
 #include "scitems.hxx"
+#include "tokenarray.hxx"
+#include "tokenuno.hxx"
 
 namespace oox {
 namespace xls {
@@ -379,9 +382,10 @@ void CondFormatRuleModel::setBiff12TextType( sal_Int32 nOperator )
 
 // ============================================================================
 
-CondFormatRule::CondFormatRule( const CondFormat& rCondFormat ) :
+CondFormatRule::CondFormatRule( const CondFormat& rCondFormat, ScConditionalFormat* pFormat ) :
     WorksheetHelper( rCondFormat ),
-    mrCondFormat( rCondFormat )
+    mrCondFormat( rCondFormat ),
+    mpFormat(pFormat)
 {
 }
 
@@ -611,7 +615,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
     }
 }
 
-void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >& rxEntries )
+void CondFormatRule::finalizeImport()
 {
     sal_Int32 eOperator = ::com::sun::star::sheet::ConditionOperator2::NONE;
 
@@ -781,107 +785,43 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
             eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
     }
 
-    if( rxEntries.is() && (eOperator != ::com::sun::star::sheet::ConditionOperator2::NONE) && !maModel.maFormulas.empty() )
+    CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
+    ScAddress aPos;
+    ScUnoConversion::FillScAddress( aPos, aBaseAddr );
+    if( (eOperator != ::com::sun::star::sheet::ConditionOperator2::NONE) && !maModel.maFormulas.empty() )
     {
-        ::std::vector< PropertyValue > aProps;
-        // create condition properties
-        lclAppendProperty( aProps, CREATE_OUSTRING( "Operator" ), eOperator );
-        lclAppendProperty( aProps, CREATE_OUSTRING( "Formula1" ), maModel.maFormulas[ 0 ] );
-        if( maModel.maFormulas.size() >= 2 )
-            lclAppendProperty( aProps, CREATE_OUSTRING( "Formula2" ), maModel.maFormulas[ 1 ] );
+        ScDocument& rDoc = getScDocument();
+        boost::scoped_ptr<ScTokenArray> pTokenArray2;
+        if( maModel.maFormulas.size() >= 2)
+        {
+            pTokenArray2.reset(new ScTokenArray());
+            ScTokenConversion::ConvertToTokenArray( rDoc, *pTokenArray2.get(), maModel.maFormulas[ 1 ] );
+        }
 
-        // style name for the formatting attributes
+        ScTokenArray aTokenArray;
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
-        if( !aStyleName.isEmpty() )
-            lclAppendProperty( aProps, CREATE_OUSTRING( "StyleName" ), aStyleName );
-
-        // append the new rule
-        try
-        {
-            rxEntries->addNew( ContainerHelper::vectorToSequence( aProps ) );
-        }
-        catch( Exception& )
-        {
-        }
+        ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, maModel.maFormulas[ 0 ] );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry(ScCondFormatEntry::GetModeFromApi(eOperator),
+                                            &aTokenArray, pTokenArray2.get(), &rDoc, aPos, aStyleName);
+        mpFormat->AddEntry(pNewEntry);
     }
     else if( mpColor )
     {
         ScDocument& rDoc = getScDocument();
         ScColorScaleFormat* pFormatEntry = new ScColorScaleFormat(&rDoc);
 
-        const ApiCellRangeList& rRanges = mrCondFormat.getRanges();
-        ScRange aRange;
-        ScUnoConversion::FillScRange(aRange, *rRanges.begin());
+        mpFormat->AddEntry(pFormatEntry);
 
-        ScConditionalFormat* pFormat = rDoc.GetCondFormat( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
-        if(!pFormat)
-        {
-            pFormat = new ScConditionalFormat(0, &rDoc);
-            pFormat->AddEntry(pFormatEntry);
-            rDoc.AddCondFormat(pFormat, aRange.aStart.Tab());
-        }
-        else
-            pFormat->AddEntry(pFormatEntry);
-
-
-        sal_Int32 nIndex = pFormat->GetKey();
-
-        ScRangeList aList;
-        // apply attributes to cells
-        //
-        for( ApiCellRangeList::const_iterator itr = rRanges.begin(); itr != rRanges.end(); ++itr)
-        {
-            ScUnoConversion::FillScRange(aRange, *itr);
-            ScPatternAttr aPattern( rDoc.GetPool() );
-            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-            ScMarkData aMarkData;
-            aMarkData.SetMarkArea(aRange);
-            rDoc.ApplySelectionPattern( aPattern , aMarkData);
-
-            aList.Append(aRange);
-        }
-        if(aList.size())
-            mpColor->AddEntries( pFormatEntry, &rDoc, aList.front()->aStart );
-        else
-            mpColor->AddEntries( pFormatEntry, &rDoc, ScAddress() );
-        pFormat->AddRange(aList);
+        mpColor->AddEntries( pFormatEntry, &rDoc, aPos );
     }
     else if (mpDataBar)
     {
-        ScRangeList aList;
-
         ScDocument& rDoc = getScDocument();
         ScDataBarFormat* pFormatEntry = new ScDataBarFormat(&rDoc);
-        const ApiCellRangeList& rRanges = mrCondFormat.getRanges();
-        ScRange aRange;
-        ScUnoConversion::FillScRange(aRange, *rRanges.begin());
 
-        ScConditionalFormat* pFormat = rDoc.GetCondFormat( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
-        if(!pFormat)
-        {
-            pFormat = new ScConditionalFormat(0, &rDoc);
-            sal_Int32 nKey = rDoc.AddCondFormat(pFormat, aRange.aStart.Tab());
-            pFormat->SetKey(nKey);
-        }
+        mpFormat->AddEntry(pFormatEntry);
+        mpDataBar->SetData( pFormatEntry, &rDoc, aPos );
 
-        pFormat->AddEntry(pFormatEntry);
-        sal_Int32 nIndex = pFormat->GetKey();
-        // apply attributes to cells
-        //
-        for( ApiCellRangeList::const_iterator itr = rRanges.begin(); itr != rRanges.end(); ++itr)
-        {
-            ScUnoConversion::FillScRange(aRange, *itr);
-            ScPatternAttr aPattern( rDoc.GetPool() );
-            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-            ScMarkData aMarkData;
-            aMarkData.SetMarkArea(aRange);
-            rDoc.ApplySelectionPattern( aPattern , aMarkData);
-
-            aList.Append(aRange);
-        }
-        mpDataBar->SetData( pFormatEntry, &rDoc, aList.front()->aStart );
-
-        pFormat->AddRange(aList);
     }
 }
 
@@ -911,7 +851,8 @@ CondFormatModel::CondFormatModel() :
 // ============================================================================
 
 CondFormat::CondFormat( const WorksheetHelper& rHelper ) :
-    WorksheetHelper( rHelper )
+    WorksheetHelper( rHelper ),
+    mpFormat(NULL)
 {
 }
 
@@ -919,6 +860,7 @@ void CondFormat::importConditionalFormatting( const AttributeList& rAttribs )
 {
     getAddressConverter().convertToCellRangeList( maModel.maRanges, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), true );
     maModel.mbPivot = rAttribs.getBool( XML_pivot, false );
+    mpFormat = new ScConditionalFormat(0, &getScDocument());
 }
 
 CondFormatRuleRef CondFormat::importCfRule( const AttributeList& rAttribs )
@@ -946,23 +888,29 @@ void CondFormat::importCfRule( SequenceInputStream& rStrm )
 
 void CondFormat::finalizeImport()
 {
-    try
+    ScDocument& rDoc = getScDocument();
+    maRules.forEachMem( &CondFormatRule::finalizeImport );
+    sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, maModel.maRanges.getBaseAddress().Sheet);
+
+    ScRangeList aList;
+    for( ApiCellRangeList::const_iterator itr = maModel.maRanges.begin(); itr != maModel.maRanges.end(); ++itr)
     {
-        Reference< XSheetCellRanges > xRanges( getCellRangeList( maModel.maRanges ), UNO_SET_THROW );
-        PropertySet aPropSet( xRanges );
-        Reference< XSheetConditionalEntries > xEntries( aPropSet.getAnyProperty( PROP_ConditionalFormat ), UNO_QUERY_THROW );
-        // maRules is sorted by rule priority
-        maRules.forEachMem( &CondFormatRule::finalizeImport, ::boost::cref( xEntries ) );
-        aPropSet.setProperty( PROP_ConditionalFormat, xEntries );
+        ScRange aRange;
+        ScUnoConversion::FillScRange(aRange, *itr);
+        ScPatternAttr aPattern( rDoc.GetPool() );
+        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
+        ScMarkData aMarkData;
+        aMarkData.SetMarkArea(aRange);
+        rDoc.ApplySelectionPattern( aPattern , aMarkData);
+
+        aList.Append(aRange);
     }
-    catch( Exception& )
-    {
-    }
+    mpFormat->AddRange(aList);
 }
 
 CondFormatRuleRef CondFormat::createRule()
 {
-    return CondFormatRuleRef( new CondFormatRule( *this ) );
+    return CondFormatRuleRef( new CondFormatRule( *this, mpFormat ) );
 }
 
 void CondFormat::insertRule( CondFormatRuleRef xRule )

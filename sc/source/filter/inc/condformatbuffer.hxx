@@ -41,6 +41,7 @@ namespace com { namespace sun { namespace star {
 class ScColorScaleFormat;
 class ScDataBarFormat;
 struct ScDataBarFormatData;
+class ScConditionalFormat;
 
 namespace oox {
 namespace xls {
@@ -144,7 +145,7 @@ private:
 class CondFormatRule : public WorksheetHelper
 {
 public:
-    explicit            CondFormatRule( const CondFormat& rCondFormat );
+    explicit            CondFormatRule( const CondFormat& rCondFormat, ScConditionalFormat* pFormat );
 
     /** Imports rule settings from the cfRule element. */
     void                importCfRule( const AttributeList& rAttribs );
@@ -155,8 +156,7 @@ public:
     void                importCfRule( SequenceInputStream& rStrm );
 
     /** Creates a conditional formatting rule in the Calc document. */
-    void                finalizeImport(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetConditionalEntries >& rxEntries );
+    void                finalizeImport();
 
     /** Returns the priority of this rule. */
     inline sal_Int32    getPriority() const { return maModel.mnPriority; }
@@ -167,6 +167,7 @@ public:
 private:
     const CondFormat&   mrCondFormat;
     CondFormatRuleModel maModel;
+    ScConditionalFormat* mpFormat;
     boost::scoped_ptr<ColorScaleRule> mpColor;
     boost::scoped_ptr<DataBarRule> mpDataBar;
 };
@@ -217,6 +218,7 @@ private:
 
     CondFormatModel     maModel;            /// Model of this conditional formatting.
     CondFormatRuleMap   maRules;            /// Maps formatting rules by priority.
+    ScConditionalFormat* mpFormat;
 };
 
 typedef ::boost::shared_ptr< CondFormat > CondFormatRef;
