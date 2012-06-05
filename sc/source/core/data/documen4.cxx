@@ -778,12 +778,6 @@ void ScDocument::ConditionalChanged( sal_uLong nKey, SCTAB nTab )
     }
 }
 
-void ScDocument::SetCondFormList(ScConditionalFormatList* pNew, SCTAB nTab)
-{
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetCondFormList(pNew);
-}
-
 //------------------------------------------------------------------------
 
 bool ScDocument::HasDetectiveOperations() const

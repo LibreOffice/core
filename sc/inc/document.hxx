@@ -1207,7 +1207,6 @@ public:
     SC_DLLPUBLIC const ScValidationData*    GetValidationEntry( sal_uLong nIndex ) const;
 
     SC_DLLPUBLIC ScConditionalFormatList* GetCondFormList( SCTAB nTab ) const;
-    void            SetCondFormList(ScConditionalFormatList* pNew, SCTAB nTab);
 
     SC_DLLPUBLIC const ScColorFormatList* GetColorScaleList(SCTAB nTab) const;
     SC_DLLPUBLIC ScColorFormatList* GetColorScaleList(SCTAB nTab);

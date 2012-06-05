@@ -801,7 +801,6 @@ public:
 
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;
-    void SetCondFormList(ScConditionalFormatList* pNew);
 
     sal_uLong          AddCondFormat( const ScConditionalFormat& rNew );
     sal_uLong          AddColorFormat( ScColorFormat* pNew );

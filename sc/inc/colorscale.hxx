@@ -238,8 +238,7 @@ private:
     typedef boost::ptr_vector<ScColorFormat> ColorFormatContainer;
     ColorFormatContainer maColorScaleFormats;
 public:
-    ScColorFormatList() {};
-    ScColorFormatList(ScDocument* pDoc, const ScColorFormatList& rList);
+    ScColorFormatList() {}
     ScColorFormatList(const ScColorFormatList& rList);
 
     typedef ColorFormatContainer::iterator iterator;

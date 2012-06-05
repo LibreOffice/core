@@ -269,10 +269,9 @@ private:
     boost::ptr_set<ScConditionalFormat> maConditionalFormats;
     typedef boost::ptr_set<ScConditionalFormat> ConditionalFormatContainer;
 public:
-        ScConditionalFormatList() {}
-        ScConditionalFormatList(const ScConditionalFormatList& rList);
-        ScConditionalFormatList(ScDocument* pNewDoc, const ScConditionalFormatList& rList);
-        ~ScConditionalFormatList() {}
+    ScConditionalFormatList() {}
+    ScConditionalFormatList(const ScConditionalFormatList& rList);
+    ~ScConditionalFormatList() {}
 
     void    InsertNew( ScConditionalFormat* pNew )
                 { maConditionalFormats.insert(pNew); }

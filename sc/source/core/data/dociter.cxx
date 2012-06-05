@@ -2205,11 +2205,6 @@ const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCRO
 
 // ============================================================================
 
-ScDocRowHeightUpdater::TabRanges::TabRanges() :
-    mnTab(0), mpRanges(new ScFlatBoolRowSegments)
-{
-}
-
 ScDocRowHeightUpdater::TabRanges::TabRanges(SCTAB nTab) :
     mnTab(nTab), mpRanges(new ScFlatBoolRowSegments)
 {

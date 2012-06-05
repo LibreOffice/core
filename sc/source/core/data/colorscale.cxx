@@ -870,14 +870,6 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
 //-----------------------------------------------------------------
 
-ScColorFormatList::ScColorFormatList(ScDocument* pDoc, const ScColorFormatList& rList)
-{
-    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
-    {
-        maColorScaleFormats.push_back(itr->Clone(pDoc));
-    }
-}
-
 void ScColorFormatList::AddFormat( ScColorFormat* pFormat )
 {
     maColorScaleFormats.push_back( pFormat );

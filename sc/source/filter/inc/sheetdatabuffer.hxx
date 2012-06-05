@@ -96,17 +96,6 @@ class CellBlock : public WorksheetHelper
 public:
     explicit            CellBlock( const WorksheetHelper& rHelper, const ValueRange& rColSpan, sal_Int32 nRow );
 
-    /** Returns true, if the own colspan contains the passed column. */
-    bool                contains( sal_Int32 nCol ) const;
-
-    /** Returns the specified cell from the last row in the cell buffer array. */
-    ::com::sun::star::uno::Any& getCellAny( sal_Int32 nCol );
-    /** Inserts a rich-string into the cell block. */
-    void                insertRichString(
-                            const ::com::sun::star::table::CellAddress& rAddress,
-                            const RichStringRef& rxString,
-                            const Font* pFirstPortionFont );
-
     /** Writes all buffered cells into the Calc sheet. */
     void                finalizeImport();
 

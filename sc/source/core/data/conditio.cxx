@@ -1621,17 +1621,6 @@ ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& 
     //!     sortierte Eintraege aus rList schneller einfuegen ???
 }
 
-ScConditionalFormatList::ScConditionalFormatList(ScDocument* pNewDoc,
-                                                const ScConditionalFormatList& rList)
-{
-    //  fuer neues Dokument - echte Kopie mit neuen Tokens!
-
-    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
-        InsertNew( itr->Clone(pNewDoc) );
-
-    //!     sortierte Eintraege aus rList schneller einfuegen ???
-}
-
 bool ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) const
 {
     // fuer Ref-Undo - interne Variablen werden nicht verglichen

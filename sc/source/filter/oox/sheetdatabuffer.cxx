@@ -137,26 +137,6 @@ CellBlock::CellBlock( const WorksheetHelper& rHelper, const ValueRange& rColSpan
     mpCurrCellRow = maCellArray[ 0 ].getArray();
 }
 
-bool CellBlock::contains( sal_Int32 nCol ) const
-{
-    return (maRange.StartColumn <= nCol) && (nCol <= maRange.EndColumn);
-}
-
-void CellBlock::insertRichString( const CellAddress& rAddress, const RichStringRef& rxString, const Font* pFirstPortionFont )
-{
-    maRichStrings.push_back( RichStringCell( rAddress, rxString, pFirstPortionFont ) );
-}
-
-Any& CellBlock::getCellAny( sal_Int32 nCol )
-{
-    OSL_ENSURE( contains( nCol ), "CellBlock::getCellAny - invalid column" );
-    // fill cells before passed column with empty strings (the placeholder for empty cells)
-    sal_Int32 nIndex = nCol - maRange.StartColumn;
-    fillUnusedCells( nIndex );
-    mnFirstFreeIndex = nIndex + 1;
-    return mpCurrCellRow[ nIndex ];
-}
-
 void CellBlock::finalizeImport()
 {
     // fill last cells in last row with empty strings (placeholder for empty cells)

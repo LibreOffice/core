@@ -168,11 +168,6 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     return *this;
 }
 
-SCTAB ScDBData::GetTable() const
-{
-    return nTable;
-}
-
 bool ScDBData::operator== (const ScDBData& rData) const
 {
     //  Daten, die nicht in den Params sind
@@ -665,20 +660,6 @@ public:
     bool operator() (const ScDBData& r) const
     {
         return r.GetUpperName() == mrName;
-    }
-};
-
-class FindFilterDBByTable : public unary_function<ScDBData, bool>
-{
-    SCTAB mnTab;
-public:
-    FindFilterDBByTable(SCTAB nTab) : mnTab(nTab) {}
-    bool operator() (const ScDBData& r) const
-    {
-        if (r.GetTable() != mnTab)
-            return false;
-
-        return (r.HasAutoFilter() || r.HasQueryParam());
     }
 };
 

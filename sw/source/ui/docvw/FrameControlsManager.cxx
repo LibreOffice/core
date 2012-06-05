@@ -72,11 +72,6 @@ SwFrameControlPtr SwFrameControlsManager::GetControl( FrameControlType eType, co
     return SwFrameControlPtr();
 }
 
-void SwFrameControlsManager::AddControl( FrameControlType eType, SwFrameControlPtr pControl )
-{
-    m_aControls[eType].insert(make_pair(pControl->GetFrame(), pControl));
-}
-
 void SwFrameControlsManager::RemoveControls( const SwFrm* pFrm )
 {
     map< FrameControlType, SwFrameControlPtrMap >::iterator pIt = m_aControls.begin();

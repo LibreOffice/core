@@ -2036,11 +2036,6 @@ const ScColorFormatList* ScTable::GetColorFormatList() const
     return mpColorFormatList.get();
 }
 
-void ScTable::SetCondFormList( ScConditionalFormatList* pNew )
-{
-    mpCondFormatList.reset( pNew );
-}
-
 ScConditionalFormatList* ScTable::GetCondFormList()
 {
     if(!mpCondFormatList)

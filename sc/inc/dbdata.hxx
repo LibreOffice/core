@@ -96,7 +96,6 @@ public:
 
     bool        operator== (const ScDBData& rData) const;
 
-    SCTAB       GetTable() const;
     const ::rtl::OUString& GetName() const { return aName; }
     const ::rtl::OUString& GetUpperName() const { return aUpper; }
     void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
