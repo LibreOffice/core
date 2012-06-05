@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #if !defined(SOLARIS) && !defined(AIX)
 #include <tools/prex.h>
 #include <X11/XKBlib.h>
@@ -50,19 +49,8 @@
 #define SunXK_Cut       0x1005FF75
 #endif
 
-#ifdef SOLARIS
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <sys/kbio.h>
-#include <sys/kbd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <deflt.h>
-#include <unistd.h>
-#include <stdlib.h>
-#endif
-
 #include <string.h>
+#include <rtl/ustring.hxx>
 
 namespace vcl_sal {
 
@@ -74,7 +62,7 @@ namespace vcl_sal {
 
     struct KeyboardReplacements
     {
-        const char*                     pKeyboardName;
+        const char*                     pLangName;
         const KeysymNameReplacement*    pReplacements;
         int                             nReplacements;
     };
@@ -340,243 +328,45 @@ namespace vcl_sal {
 
     static const struct KeyboardReplacements aKeyboards[] =
     {
-#ifdef SOLARIS
-        { "Germany5", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
-        { "Germany4", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
-        { "France5",  aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
-        { "France6",  aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
-        { "France_x86", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
-        { "Italy5", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
-        { "Italy5-Hobo", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
-        { "Italy4", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
-        { "Italy6", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
-        { "Italy_x86", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
-        { "Netherland4", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
-        { "Netherland5", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
-        { "Netherland5-Hobo", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
-        { "Netherland6", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
-        { "Netherland_x86", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
-        { "Norway5", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
-        { "Norway5-Hobo", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
-        { "Norway4", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
-        { "Norway6", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
-        { "Norway_x86", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
-        { "Portugal5", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
-        { "Portugal5-Hobo", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
-        { "Portugal4", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
-        { "Portugal6", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
-        { "Portugal_x86", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
-        { "Spain5", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
-        { "Spain5-Hobo", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
-        { "Spain4", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
-        { "Spain6", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
-        { "Spain_x86", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
-        { "Sweden5", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
-        { "Sweden5-Hobo", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
-        { "Sweden4", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
-        { "Sweden6", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
-        { "Sweden_x86", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
-#endif
-        { "U.S. English", aImplReplacements_English, SAL_N_ELEMENTS(aImplReplacements_English) },
-        { "United Kingdom", aImplReplacements_English, SAL_N_ELEMENTS(aImplReplacements_English) },
-        // Germany, German
-        { "German", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
-        { "France", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
-        { "French", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
-        // Italy, Italian
-        { "Ital", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
-        // Norway, Norwegian
-        { "Norw", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
-        // Portugal, Portuguese
-        { "Portu", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
-        { "Spain", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
-        { "Spanish", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
-        // Sweden, Swedish
-        { "Swed", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
-        { "Netherland", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
-        { "Dutch", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
-        // Turkish, Turkey
-        { "Turk", aImplReplacements_Turkish, SAL_N_ELEMENTS(aImplReplacements_Turkish) },
-        // Russian, Russia
-        { "Russia", aImplReplacements_Russian, SAL_N_ELEMENTS(aImplReplacements_Russian) },
-        { "English", aImplReplacements_English, SAL_N_ELEMENTS(aImplReplacements_English) }
+        { "de", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
+        { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
+        { "fr", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
+        { "it", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
+        { "nl", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
+        { "no", aImplReplacements_Norwegian, SAL_N_ELEMENTS(aImplReplacements_Norwegian) },
+        { "pt", aImplReplacements_Portuguese, SAL_N_ELEMENTS(aImplReplacements_Portuguese) },
+        { "ru", aImplReplacements_Russian, SAL_N_ELEMENTS(aImplReplacements_Russian) },
+        { "sv", aImplReplacements_Swedish, SAL_N_ELEMENTS(aImplReplacements_Swedish) },
+        { "tr", aImplReplacements_Turkish, SAL_N_ELEMENTS(aImplReplacements_Turkish) },
     };
 
-    rtl::OUString getKeysymReplacementName( const char* pKeyboard, KeySym nSymbol )
+    // translate keycodes, used within the displayed menu shortcuts
+    rtl::OUString getKeysymReplacementName( rtl::OUString pLang, KeySym nSymbol )
     {
         for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
         {
-            if( ! strncasecmp( pKeyboard, aKeyboards[n].pKeyboardName, strlen( aKeyboards[n].pKeyboardName ) ) )
+            if( pLang.equalsAscii( aKeyboards[n].pLangName ) )
             {
                 const struct KeysymNameReplacement* pRepl = aKeyboards[n].pReplacements;
                 for( int m = aKeyboards[n].nReplacements ; m ; )
                 {
                     if( nSymbol == pRepl[--m].aSymbol )
-                        return String( pRepl[m].pName, RTL_TEXTENCODING_UTF8 );
+                        return rtl::OUString( pRepl[m].pName, strlen(pRepl[m].pName), RTL_TEXTENCODING_UTF8 );
                 }
             }
         }
+
         // try english fallbacks
         const struct KeysymNameReplacement* pRepl = aImplReplacements_English;
         for( int m = SAL_N_ELEMENTS(aImplReplacements_English); m ; )
         {
             if( nSymbol == pRepl[--m].aSymbol )
-                return String( pRepl[m].pName, RTL_TEXTENCODING_UTF8 );
+                return rtl::OUString( pRepl[m].pName, strlen(pRepl[m].pName), RTL_TEXTENCODING_UTF8 );
         }
+
         return rtl::OUString();
     }
 
 }
-
-#ifdef SOLARIS
-typedef struct {
-    int         n_layout;
-    const char* p_description;
-} keyboard_layout;
-
-static const keyboard_layout type0_layout[] =
-{
-    { 0, "US4" },
-    { -1, NULL }
-};
-
-static const keyboard_layout type3_layout[] =
-{
-    { 0, "US3" },
-    { -1, NULL }
-};
-
-static const keyboard_layout type4_layout[] =
-{
-    { 0,  "US4" },
-    { 1,  "US4" },
-    { 2,  "FranceBelg4" },
-    { 3,  "Canada4" },
-    { 4,  "Denmark4" },
-    { 5,  "Germany4" },
-    { 6,  "Italy4" },
-    { 7,  "Netherland4" },
-    { 8,  "Norway4" },
-    { 9,  "Portugal4" },
-    { 10, "SpainLatAm4" },
-    { 11, "SwedenFin4" },
-    { 12, "Switzer_Fr4" },
-    { 13, "Switzer_Ge4" },
-    { 14, "UK4" },
-    { 16, "Korea4" },
-    { 17, "Taiwan4" },
-    { 19, "US101A_PC" },
-    { 19, "US101A_Sun" },
-    { 32, "Japan4" },
-    { 33, "US5" },
-    { 34, "US_UNIX5" },
-    { 35, "France5" },
-    { 36, "Denmark5" },
-    { 37, "Germany5" },
-    { 38, "Italy5" },
-    { 39, "Netherland5" },
-    { 40, "Norway5" },
-    { 41, "Portugal5" },
-    { 42, "Spain5" },
-    { 43, "Sweden5" },
-    { 44, "Switzer_Fr5" },
-    { 45, "Switzer_Ge5" },
-    { 46, "UK5" },
-    { 47, "Korea5" },
-    { 48, "Taiwan5" },
-    { 49, "Japan5" },
-    { 50, "Canada_Fr5" },
-    { 51, "Hungary5" },
-    { 52, "Poland5" },
-    { 53, "Czech5" },
-    { 54, "Russia5" },
-    { 55, "Latvia5" },
-    { 56, "Turkey5" },
-    { 57, "Greece5" },
-    { 58, "Estonia5" },
-    { 59, "Lithuania5" },
-    { 63, "Canada_Fr5_TBITS5" },
-    { 80, "US5_Hobo" },
-    { 81, "US_UNIX5_Hobo" },
-    { 82, "France5_Hobo" },
-    { 83, "Denmark5_Hobo" },
-    { 84, "Germany5_Hobo" },
-    { 85, "Italy5_Hobo" },
-    { 86, "Netherland5_Hobo" },
-    { 87, "Norway5_Hobo" },
-    { 88, "Portugal5_Hobo" },
-    { 89, "Spain5_Hobo" },
-    { 90, "Sweden5_Hobo" },
-    { 91, "Switzer_Fr5_Hobo" },
-    { 92, "Switzer_Ge5_Hobo" },
-    { 93, "UK5_Hobo" },
-    { 94, "Korea5_Hobo" },
-    { 95, "Taiwan5_Hobo" },
-    { 96, "Japan5_Hobo" },
-    { 97, "Canada_Fr5_Hobo" },
-    { -1, NULL }
-};
-
-static const keyboard_layout type101_layout[] =
-{
-    {  0, "US101A_x86" },
-    {  1, "US101A_x86" },
-    { 34, "J3100_x86" },
-    { 35, "France_x86" },
-    { 36, "Denmark_x86" },
-    { 37, "Germany_x86" },
-    { 38, "Italy_x86" },
-    { 39, "Netherland_x86" },
-    { 40, "Norway_x86" },
-    { 41, "Portugal_x86" },
-    { 42, "Spain_x86" },
-    { 43, "Sweden_x86" },
-    { 44, "Switzer_Fr_x86" },
-    { 45, "Switzer_Ge_x86" },
-    { 46, "UK_x86" },
-    { 47, "Korea_x86" },
-    { 48, "Taiwan_x86" },
-    { 49, "Japan_x86" },
-    { 50, "Canada_Fr2_x86" },
-    { 51, "Hungary_x86" },
-    { 52, "Poland_x86" },
-    { 53, "Czech_x86" },
-    { 54, "Russia_x86" },
-    { 55, "Latvia_x86" },
-    { 56, "Turkey_x86" },
-    { 57, "Greece_x86" },
-    { 59, "Lithuania_x86" },
-    { 1001, "MS_US101A_x86" },
-    { -1, NULL }
-};
-
-static const keyboard_layout type6_layout[] =
-{
-    { 0,  "US6" },
-    { 6,  "Denmark6" },
-    { 7,  "Finnish6" },
-    { 8,  "France6" },
-    { 9,  "Germany6" },
-    { 14, "Italy6" },
-    { 15, "Japan6" },
-    { 16, "Korea6" },
-    { 18, "Netherland6" },
-    { 19, "Norway6" },
-    { 22, "Portugal6" },
-    { 25, "Spain6" },
-    { 26, "Sweden6" },
-    { 27, "Switzer_Fr6" },
-    { 28, "Switzer_Ge6" },
-    { 30, "Taiwan6" },
-    { 32, "UK6" },
-    { 33, "US6" },
-    { -1, NULL }
-};
-#endif
-
-
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

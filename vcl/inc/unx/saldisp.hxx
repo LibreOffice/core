@@ -474,6 +474,15 @@ namespace vcl_sal {
 }
 
 
+
+// get foreign key names
+namespace vcl_sal {
+    rtl::OUString getKeysymReplacementName(
+        rtl::OUString pLang,
+        KeySym nSymbol );
+}
+
+
 #endif // _SV_SALDISP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
