@@ -291,6 +291,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                     bexecute = getRecordParser().executeCommand(nCommandType); //sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, sFieldNameList, true);
                     if (bexecute)
                     {
+                        DBMetaData.CommandObject oCommand = getRecordParser().getQueryByName(sQueryName);
                         bexecute = getRecordParser().getFields(sFieldNameList, true);
                         if (bexecute && getRecordParser().hasEscapeProcessing(oCommand.getPropertySet()))
                         {
