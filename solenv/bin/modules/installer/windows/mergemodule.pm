@@ -235,7 +235,7 @@ sub merge_mergemodules_into_msi_database
 
                 # Determining name of cabinet file in installation set
                 my $cabfilename = $mergemodule->{'Cabfilename'};
-                installer::packagelist::resolve_packagevariables(\$cabfilename, $allvariables, 0);
+                if ( $cabfilename ) { installer::packagelist::resolve_packagevariables(\$cabfilename, $allvariables, 0); }
 
                 # Analyzing styles
                 # Flag REMOVE_FILE_TABLE is required for msvc9 Merge-Module, because otherwise msidb.exe
@@ -317,7 +317,7 @@ sub merge_mergemodules_into_msi_database
                 $installer::globals::mergemodules{$mergegid} = \%onemergemodulehash;
 
                 # Collecting all cab files, to copy them into installation set
-                $installer::globals::copy_msm_files{$cabfilename} = $onemergemodulehash{'cabinetfile'};
+                if ( $cabfilename ) { $installer::globals::copy_msm_files{$cabfilename} = $onemergemodulehash{'cabinetfile'}; }
 
                 chdir($from);
             }
