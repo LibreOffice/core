@@ -70,6 +70,7 @@ er      extras\source\gallery\accessories\Elements\Bullets2          nmake   -  
 er      extras\source\gallery\accessories-nonfree                       nmake   -       all     er_gaccenf NULL
 er	extras\source\misc_config				nmake	-	all	er_mcnf NULL
 er	extras\source\palettes					nmake	-	all	er_palet NULL
+er	extras\source\symbols					nmake	-	all	er_symb NULL
 er      extras\source\templates\layout                          nmake   -       all     er_tlal NULL
 er      extras\source\templates\presnt\lang                     nmake   -       all     er_tprel NULL
 er      extras\source\templates\wizard\agenda\lang              nmake   -       all     er_twagl NULL
