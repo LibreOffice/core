@@ -73,10 +73,6 @@ public:
 };
 MSHORT FormatLevel::nLevel = 0;
 
-/*************************************************************************
- *                          ValidateTxt/Frm()
- *************************************************************************/
-
 void ValidateTxt( SwFrm *pFrm )     // Friend of frame
 {
     if ( ( ! pFrm->IsVertical() &&
@@ -121,12 +117,11 @@ void SwTxtFrm::ValidateFrm()
 }
 
 /*************************************************************************
- *                          ValidateBodyFrm()
- *************************************************************************/
-
-// After a RemoveFtn the BodyFrm and all Frms contained within it, need to be
-// recalculated, so that the DeadLine is right.
-// First we search outwards, on the way back we calculate everything.
+ * ValidateBodyFrm()
+ * After a RemoveFtn the BodyFrm and all Frms contained within it, need to be
+ * recalculated, so that the DeadLine is right.
+ * First we search outwards, on the way back we calculate everything.
+*************************************************************************/
 
 void _ValidateBodyFrm( SwFrm *pFrm )
 {
@@ -159,10 +154,6 @@ void SwTxtFrm::ValidateBodyFrm()
     UNDO_SWAP( this )
 }
 
-/*************************************************************************
- *                      SwTxtFrm::FindBodyFrm()
- *************************************************************************/
-
 sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
 {
     SWAP_IF_NOT_SWAPPED( this )
@@ -191,10 +182,6 @@ sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
     return sal_False;
 }
 
-/*************************************************************************
- *                      SwTxtFrm::FindBodyFrm()
- *************************************************************************/
-
 const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
 {
     if ( IsInDocBody() )
@@ -206,10 +193,6 @@ const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
     }
     return 0;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::CalcFollow()
- *************************************************************************/
 
 sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
 {
@@ -375,10 +358,6 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
     return sal_False;
 }
 
-/*************************************************************************
- *                      SwTxtFrm::AdjustFrm()
- *************************************************************************/
-
 void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 {
     if( IsUndersized() )
@@ -535,15 +514,13 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 
 /*************************************************************************
  *                      SwTxtFrm::AdjustFollow()
- *************************************************************************/
-
-/* AdjustFollow expects the following situtation:
+ * AdjustFollow expects the following situtation:
  * The SwTxtIter points to the lower end of the Master, the Offset is set in
  * the Follow.
  * nOffset holds the Offset in the text string, from which the Master closes
  * and the Follow starts.
  * If it's 0, the FollowFrame is deleted.
- */
+ *************************************************************************/
 
 void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
                              const xub_StrLen nOffset, const xub_StrLen nEnd,
@@ -600,10 +577,6 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
             rLine.SetOnceMore( sal_True );
     }
 }
-
-/*************************************************************************
- *                      SwTxtFrm::JoinFrm()
- *************************************************************************/
 
 SwCntntFrm *SwTxtFrm::JoinFrm()
 {
@@ -675,10 +648,6 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
     delete pFoll;
     return pNxt;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::SplitFrm()
- *************************************************************************/
 
 SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 {
@@ -759,11 +728,6 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     return pNew;
 }
 
-
-/*************************************************************************
- *                      virtual SwTxtFrm::SetOfst()
- *************************************************************************/
-
 void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
 {
     // We do not need to invalidate out Follow.
@@ -780,10 +744,6 @@ void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
     }
     InvalidateSize();
 }
-
-/*************************************************************************
- *                      SwTxtFrm::CalcPreps
- *************************************************************************/
 
 sal_Bool SwTxtFrm::CalcPreps()
 {
@@ -965,12 +925,11 @@ sal_Bool SwTxtFrm::CalcPreps()
     return bRet;
 }
 
-
 /*************************************************************************
- *                      SwTxtFrm::FormatAdjust()
+ * SwTxtFrm::FormatAdjust()
+ * We rewire the footnotes and the character bound objects
  *************************************************************************/
 
-// We rewire the footnotes and the character bound objects
 #define CHG_OFFSET( pFrm, nNew )\
     {\
         if( pFrm->GetOfst() < nNew )\
@@ -1143,11 +1102,10 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 }
 
 /*************************************************************************
- *                      SwTxtFrm::FormatLine()
- *************************************************************************/
-
-// bPrev is set whether Reformat.Start() was called because of Prev().
-// Else, wo don't know whether we can limit the repaint or not.
+ * SwTxtFrm::FormatLine()
+ * bPrev is set whether Reformat.Start() was called because of Prev().
+ * Else, wo don't know whether we can limit the repaint or not.
+*************************************************************************/
 
 sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 {
@@ -1284,10 +1242,6 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 
     return 0 != *(pPara->GetDelta());
 }
-
-/*************************************************************************
- *                      SwTxtFrm::_Format()
- *************************************************************************/
 
 void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                         const sal_Bool bAdjust )
@@ -1611,10 +1565,6 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     }
 }
 
-/*************************************************************************
- *                      SwTxtFrm::Format()
- *************************************************************************/
-
 void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 {
     OSL_ENSURE( ! IsVertical() || IsSwapped(),
@@ -1677,11 +1627,6 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     }
 }
 
-/*************************************************************************
- *                      SwTxtFrm::_Format()
- *************************************************************************/
-
-
 void SwTxtFrm::_Format( SwParaPortion *pPara )
 {
     const xub_StrLen nStrLen = GetTxt().Len();
@@ -1742,13 +1687,10 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::Format()
- *************************************************************************/
-
-/*
+ * SwTxtFrm::Format()
  * We calculate the text frame's size and send a notification.
  * Shrink() or Grow() to adjust the frame's size to the changed required space.
- */
+ *************************************************************************/
 
 void SwTxtFrm::Format( const SwBorderAttrs * )
 {
@@ -1913,7 +1855,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::FormatQuick()
+ * SwTxtFrm::FormatQuick()
  *
  * bForceQuickFormat is set if GetFormatted() has been called during the
  * painting process. Actually I cannot imagine a situation which requires

@@ -46,9 +46,9 @@
 #include <viewimp.hxx>  // SwViewImp
 #include <viewopt.hxx>  // SwViewOption
 #include <frmtool.hxx>  // DrawGraphic
-#include <txtfrm.hxx>       // SwTxtFrm
-#include <itrpaint.hxx>     // SwTxtPainter
-#include <txtpaint.hxx>     // SwSaveClip
+#include <txtfrm.hxx>   // SwTxtFrm
+#include <itrpaint.hxx> // SwTxtPainter
+#include <txtpaint.hxx> // SwSaveClip
 #include <txtcache.hxx> // SwTxtLineAccess
 #include <flyfrm.hxx>   // SwFlyFrm
 #include <redlnitr.hxx> // SwRedlineItr
@@ -62,7 +62,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLineNumberAccess.hxx>
 
-//
 // variable moved to class <numfunc:GetDefBulletConfig>
 //extern const sal_Char sBulletFntName[];
 namespace numfunc
@@ -193,10 +192,6 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
             pTmpFrm->Frm().Right() + REDLINE_DISTANCE;
     }
 }
-
-/*************************************************************************
- * SwExtraPainter::PaintExtra()
- **************************************************************************/
 
 void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed )
 {
@@ -421,10 +416,6 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
     }
 }
 
-/*************************************************************************
- *                      SwTxtFrm::Paint()
- *************************************************************************/
-
 SwRect SwTxtFrm::Paint()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -467,10 +458,6 @@ SwRect SwTxtFrm::Paint()
 
     return aRet;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::Paint()
- *************************************************************************/
 
 sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
 {
@@ -591,10 +578,6 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
         return sal_True;
     return sal_False;
 }
-
-/*************************************************************************
- *                      SwTxtFrm::Paint()
- *************************************************************************/
 
 void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
