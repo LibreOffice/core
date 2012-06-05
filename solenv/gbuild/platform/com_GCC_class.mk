@@ -20,6 +20,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+ifeq ($(gb_FULLDEPS),$(true))
+gb_ccx_dep_generation_options=-MMD -MT $(1) -MP -MF $(4)_
+gb_cxx_dep_copy=&& 	mv $(4)_ $(4)
+else
+gb_ccx_dep_generation_options=
+gb_cxx_dep_copy=
+endif
+
 # AsmObject class
 
 gb_AsmObject_get_source = $(1)/$(2).s
@@ -54,11 +62,11 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4)_ \
+		$(gb_ccx_dep_generation_options) \
 		-I$(dir $(3)) \
-		$(INCLUDE) && \
-	mv $(4)_ $(4))
+		$(INCLUDE) \
+	    $(gb_ccx_dep_copy) \
+		)
 endef
 
 # CxxObject class
@@ -75,11 +83,11 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(1) \
-		-MP -MF $(4)_ \
+	    $(gb_ccx_dep_generation_options) \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE) && \
-	mv $(4)_ $(4))
+		$(INCLUDE_STL) $(INCLUDE) \
+	    $(gb_ccx_dep_copy) \
+		)
 endef
 
 define gb_SrsPartTarget__command_dep
