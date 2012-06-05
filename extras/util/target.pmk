@@ -160,9 +160,6 @@ SAMPLES_TEXTS_TARGET            = samtext
 SAMPLES_CHAPTERS_TARGET         = samchapters
 SAMPLES_HOMEPAGE_TARGET         = samhomepage
 
-
-SYMBOLS_ALL_TARGET              = symbols
-
 TEMPLATE_ROOT_TARGET            = tplroot
 TEMPLATE_EDUCATE_WRITER_TARGET  = tpleduwrit
 TEMPLATE_EDUCATE_IMPRESS_TARGET = tpleduimpr
