@@ -604,7 +604,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
 
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
 
-    if( bReadOnly || bWrongPageKind || (nCurrentODFVersion != SvtSaveOptions::ODFVER_LATEST) )
+    if( bReadOnly || bWrongPageKind || (nCurrentODFVersion <= SvtSaveOptions::ODFVER_012) )
         rSet.DisableItem( SID_INSERT_POSTIT );
 
     rSet.Put(SfxBoolItem(SID_SHOW_POSTIT, mbShowAnnotations));

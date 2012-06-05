@@ -2266,7 +2266,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if (sType.equals(sTextFieldStart))
             {
                 /* As of now, textmarks are a proposed extension to the OpenDocument standard. */
-                if ( GetExport().getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+                if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                 {
                     Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                     if (xBookmark.is())
@@ -2328,7 +2328,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sTextFieldEnd))
             {
-                if ( GetExport().getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+                if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                 {
                     GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
                     GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_END, sal_False);
@@ -2357,7 +2357,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sTextFieldStartEnd))
             {
-                if ( GetExport().getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+                if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                 {
                     Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                     if (xBookmark.is())

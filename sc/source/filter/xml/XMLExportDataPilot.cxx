@@ -444,7 +444,7 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
 
     sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
     const OUString* pLayoutName = NULL;
-    if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+    if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         // Export display names only for 1.2 extended or later.
         pLayoutName = pDim->GetSubtotalName();
 
@@ -476,7 +476,7 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rtl::OUString((*i)->GetName()));
 
-            if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+            if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
             {
                 // Export display names only for ODF 1.2 extended or later.
                 const OUString* pLayoutName = (*i)->GetLayoutName();
@@ -685,7 +685,7 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
 void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
 {
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, rtl::OUString(pDim->GetName()));
-    if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+    if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
     {
         // Export display names only for ODF 1.2 extended or later.
         const OUString* pLayoutName = pDim->GetLayoutName();
@@ -817,7 +817,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
         // grand total elements.
 
         const OUString* pGrandTotalName = pDPSave->GetGrandTotalName();
-        if (pGrandTotalName && rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+        if (pGrandTotalName && rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         {
             // Use the new data-pilot-grand-total element.
             if (bRowGrand && bColumnGrand)
@@ -836,7 +836,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
         {
             const ScSheetSourceDesc* pSheetSource = (*pDPs)[i]->GetSheetDesc();
 
-            if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+            if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
             {
                 if (pSheetSource->HasRangeName())
                     rExport.AddAttribute(

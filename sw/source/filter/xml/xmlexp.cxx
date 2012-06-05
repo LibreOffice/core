@@ -155,7 +155,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( (getExportFlags() & (EXPORT_FONTDECLS|EXPORT_STYLES|
                              EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
-        if( getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+        if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
         {
             _GetNamespaceMap().Add(
                 GetXMLToken(XML_NP_OFFICE_EXT),
