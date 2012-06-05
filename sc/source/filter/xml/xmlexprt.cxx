@@ -3819,7 +3819,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
     ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(nTab);
     if(pCondFormatList)
     {
-        if(pCondFormatList && pCondFormatList->size())
+        if(pCondFormatList && !pCondFormatList->size())
             return;
 
         SvXMLElementExport aElementCondFormats(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, true, true);
