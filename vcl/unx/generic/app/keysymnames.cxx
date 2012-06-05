@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-#if !defined(SOLARIS) && !defined(AIX)
-#include <tools/prex.h>
-#include <X11/XKBlib.h>
-#include <tools/postx.h>
-#endif
-
 #include <unx/saldisp.hxx>
 #include <X11/keysym.h>
 #include <sal/macros.h>
