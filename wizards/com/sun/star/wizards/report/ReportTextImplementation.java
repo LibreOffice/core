@@ -279,7 +279,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                         {
                             getRecordParser().Command = (String) oCommand.getPropertySet().getPropertyValue(PropertyNames.COMMAND);
                             getRecordParser().getSQLQueryComposer().m_xQueryAnalyzer.setQuery(getRecordParser().Command);
-                            getRecordParser().getSQLQueryComposer().prependSortingCriteria();
                             getRecordParser().Command = getRecordParser().getSQLQueryComposer().getQuery();
                         }
                         else
@@ -293,6 +292,12 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                     if (bexecute)
                     {
                         bexecute = getRecordParser().getFields(sFieldNameList, true);
+                        if (bexecute && getRecordParser().hasEscapeProcessing(oCommand.getPropertySet()))
+                        {
+                            getRecordParser().getSQLQueryComposer().prependSortingCriteria();
+                            getRecordParser().Command = getRecordParser().getSQLQueryComposer().getQuery();
+                            bexecute = getRecordParser().executeCommand(nCommandType);
+                        }
                     }
                     return bexecute;
                 }
