@@ -39,6 +39,7 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -63,6 +64,7 @@ public:
     void testN652364();
     void testN760764();
     void testN764005();
+    void testSmartart();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -80,6 +82,7 @@ public:
     CPPUNIT_TEST(testN652364);
     CPPUNIT_TEST(testN760764);
     CPPUNIT_TEST(testN764005);
+    CPPUNIT_TEST(testSmartart);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -441,6 +444,32 @@ void Test::testN764005()
     sal_Bool bValue = sal_True;
     xPropertySet->getPropertyValue("Opaque") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(sal_False, bValue);
+}
+
+void Test::testSmartart()
+{
+    load("smartart.docx");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
+
+    uno::Reference<container::XIndexAccess> xGroup(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xGroup->getCount()); // 3 rectangles and an arrow in the group
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(1), uno::UNO_QUERY);
+    sal_Int32 nValue(0);
+    xPropertySet->getPropertyValue("FillColor") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), nValue); // If fill color is right, theme import is OK
+
+    uno::Reference<text::XTextRange> xTextRange(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sample"), xTextRange->getString()); // Shape has text
+
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextRange->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPropertySet->getPropertyValue("ParaAdjust") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), nValue); // Paragraph properties are imported
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
