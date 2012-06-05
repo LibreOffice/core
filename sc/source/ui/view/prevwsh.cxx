@@ -114,7 +114,7 @@ void ScPreviewShell::Construct( Window* pParent )
     // Find the top-most window, and set the close window handler to intercept
     // the window close event.
     Window* pWin = pParent;
-    while (true)
+    while (!pWin->IsSystemWindow())
     {
         if (pWin->GetParent())
             pWin = pWin->GetParent();
@@ -122,7 +122,6 @@ void ScPreviewShell::Construct( Window* pParent )
             break;
     }
 
-    pWin = pWin->GetWindow(WINDOW_CLIENT);
     mpFrameWindow = dynamic_cast<SystemWindow*>(pWin);
     if (mpFrameWindow)
         mpFrameWindow->SetCloseHdl(LINK(this, ScPreviewShell, CloseHdl));
