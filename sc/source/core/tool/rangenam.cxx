@@ -55,12 +55,6 @@ using ::rtl::OUString;
 // ScRangeData
 //========================================================================
 
-// Interner ctor fuer das Suchen nach einem Index
-
-ScRangeData::ScRangeData( sal_uInt16 n )
-           : pCode( NULL ), nIndex( n ), bModified( false ), mnMaxRow(-1), mnMaxCol(-1)
-{}
-
 ScRangeData::ScRangeData( ScDocument* pDok,
                           const rtl::OUString& rName,
                           const String& rSymbol,
@@ -595,32 +589,6 @@ sal_uInt32 ScRangeData::GetUnoType() const
     if ( HasType(RT_ROWHEADER) ) nUnoType |= com::sun::star::sheet::NamedRangeFlag::ROW_HEADER;
     return nUnoType;
 }
-
-void ScRangeData::ReplaceRangeNamesInUse( const IndexMap& rMap )
-{
-    bool bCompile = false;
-    for ( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
-    {
-        if ( p->GetOpCode() == ocName )
-        {
-            const sal_uInt16 nOldIndex = p->GetIndex();
-            IndexMap::const_iterator itr = rMap.find(nOldIndex);
-            const sal_uInt16 nNewIndex = itr == rMap.end() ? nOldIndex : itr->second;
-            if ( nOldIndex != nNewIndex )
-            {
-                p->SetIndex( nNewIndex );
-                bCompile = true;
-            }
-        }
-    }
-    if ( bCompile )
-    {
-        ScCompiler aComp( pDoc, aPos, *pCode);
-        aComp.SetGrammar(pDoc->GetGrammar());
-        aComp.CompileTokenArray();
-    }
-}
-
 
 void ScRangeData::ValidateTabRefs()
 {

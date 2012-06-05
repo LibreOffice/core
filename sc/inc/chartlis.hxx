@@ -95,7 +95,6 @@ public:
     ~ScChartListener();
 
     const rtl::OUString& GetName() const;
-    void SetName(const rtl::OUString& rName);
 
     void            SetUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                             const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );

@@ -28,7 +28,6 @@ ScAddInDocs::Insert(ScAddInDocs const*, unsigned short, unsigned short)
 ScAddInDocs::Insert(ScDocument* const&, unsigned short&)
 ScAddInDocs::Insert(ScDocument* const*, unsigned short)
 ScAddInDocs::Remove(ScDocument* const&, unsigned short)
-ScChartListener::SetName(rtl::OUString const&)
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
 ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
 ScCompressedArray<int, unsigned short>::GetEntryCount() const
@@ -40,7 +39,6 @@ ScCompressedArray<int, unsigned short>::ScCompressedArray(int, unsigned short co
 ScCompressedArray<int, unsigned short>::SetValue(int, unsigned short const&)
 ScCsvControl::ScCsvControl(Window*, ScCsvLayoutData const&, long)
 ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void**, std::__cxx1998::vector<void*, std::allocator<void*> > >, std::__debug::vector<void*, std::allocator<void*> > >, ScDBData>)
-ScDPLabelData::ScDPLabelData(rtl::OUString const&, short, bool)
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
 ScHTMLColOffset::Insert(unsigned long const&, unsigned short&)
 ScHTMLColOffset::Insert(unsigned long const*, unsigned short)
@@ -56,8 +54,6 @@ ScRTFColTwips::Remove(unsigned long const&, unsigned short)
 ScRTFColTwips_SAR::Replace(unsigned long const&, unsigned short)
 ScRTFColTwips_SAR::Replace(unsigned long const*, unsigned short, unsigned short)
 ScRTFColTwips_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned long const&, void*), void*)
-ScRangeData::ReplaceRangeNamesInUse(std::__debug::map<unsigned short, unsigned short, std::less<unsigned short>, std::allocator<std::pair<unsigned short const, unsigned short> > > const&)
-ScRangeData::ScRangeData(unsigned short)
 ScSimpleRangeList::Range::contains(ScSimpleRangeList::Range const&) const
 ScTable::ReplaceRangeNamesInUse(short, int, short, int, std::__debug::map<unsigned short, unsigned short, std::less<unsigned short>, std::allocator<std::pair<unsigned short const, unsigned short> > > const&)
 ScTypedStrData::GetValue() const

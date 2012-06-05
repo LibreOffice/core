@@ -103,19 +103,6 @@ ScDPLabelData::ScDPLabelData() :
 {
 }
 
-ScDPLabelData::ScDPLabelData(const rtl::OUString& rName, SCCOL nCol, bool bIsValue) :
-    maName( rName ),
-    mnCol( nCol ),
-    mnOriginalDim(-1),
-    mnFuncMask( PIVOT_FUNC_NONE ),
-    mnUsedHier( 0 ),
-    mnFlags( 0 ),
-    mbShowAll( false ),
-    mbIsValue( bIsValue ),
-    mbDataLayout(false)
-{
-}
-
 OUString ScDPLabelData::getDisplayName() const
 {
     if (!maLayoutName.isEmpty())

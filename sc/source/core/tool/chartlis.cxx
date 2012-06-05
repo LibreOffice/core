@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <vcl/svapp.hxx>
 
 #include "chartlis.hxx"
@@ -198,11 +195,6 @@ ScChartListener::~ScChartListener()
 const rtl::OUString& ScChartListener::GetName() const
 {
     return maName;
-}
-
-void ScChartListener::SetName(const rtl::OUString& rName)
-{
-    maName = rName;
 }
 
 void ScChartListener::SetUno(

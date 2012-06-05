@@ -86,8 +86,6 @@ private:
     SCROW           mnMaxRow;
     SCCOL           mnMaxCol;
 
-    ScRangeData( sal_uInt16 nIndex );
-
     void CompileRangeData( const String& rSymbol, bool bSetError );
 
 public:

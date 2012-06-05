@@ -163,7 +163,6 @@ struct ScDPLabelData
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
 
     ScDPLabelData();
-    explicit ScDPLabelData(const rtl::OUString& rName, SCCOL nCol, bool bIsValue);
 
     /**
      * return the name that should be displayed in the dp dialogs i.e. when
