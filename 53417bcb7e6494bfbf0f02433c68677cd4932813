@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACX///+I\u003d",
+        "filename": "pyuno/CustomTarget_python_shell.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-06-05T09:42:46Z",
+      "side": 1,
+      "message": "these variables are only used once, so could just be in-lined",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///+Q\u003d",
+        "filename": "pyuno/CustomTarget_python_shell.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-06-05T09:42:46Z",
+      "side": 1,
+      "message": "please prefix all defined variables with the name of the module they are defined in, e.g. pyuno_PYTHON_SHELL_VERSION, to prevent collisions",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///+M\u003d",
+        "filename": "pyuno/CustomTarget_python_shell.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-06-05T09:42:46Z",
+      "side": 1,
+      "message": "this variables is only used once, so could just be in-lined",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///+E\u003d",
+        "filename": "pyuno/Executable_python.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-06-05T09:42:46Z",
+      "side": 1,
+      "message": "try this (but not a big improvement):\n-I$(call gb_CustomTarget_get_workdir,pyuno/pyversion)\n\nerr wait actually the gb_Executable_use_custom_headers should put it on the include path, are you sure that doesn\u0027t work?",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///+A\u003d",
+        "filename": "pyuno/Library_pythonloader.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-06-05T09:42:46Z",
+      "side": 1,
+      "message": "there should be no need to add PYTHON_CFLAGS here, it should be done by gb_Library_use_externals, i.e. in RepositoryExternals.mk",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///98\u003d",
+        "filename": "pyuno/Library_pyuno.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-06-05T09:42:46Z",
+      "side": 1,
+      "message": "there should be no need to add PYTHON_CFLAGS here, it should be done by gb_Library_use_externals, i.e. in RepositoryExternals.mk",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///94\u003d",
+        "filename": "pyuno/Library_pyuno.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-06-05T09:42:46Z",
+      "side": 1,
+      "message": "looks unnecessary to me",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACX///90\u003d",
+        "filename": "pyuno/Library_pyuno_wrapper.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-06-05T09:42:46Z",
+      "side": 1,
+      "message": "this looks rather weird to me, i wonder if there is a good reason for it, but it shouldn\u0027t hurt to leave it in",
+      "revId": "53417bcb7e6494bfbf0f02433c68677cd4932813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
