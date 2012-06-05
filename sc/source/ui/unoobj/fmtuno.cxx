@@ -102,29 +102,6 @@ sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
     return eOper;
 }
 
-ScConditionMode lcl_ConditionOperatorToModeNew( sal_Int32 eOper )
-{
-    ScConditionMode eMode = SC_COND_NONE;
-    switch (eOper)
-    {
-        case sheet::ConditionOperator2::EQUAL:          eMode = SC_COND_EQUAL;      break;
-        case sheet::ConditionOperator2::LESS:           eMode = SC_COND_LESS;       break;
-        case sheet::ConditionOperator2::GREATER:        eMode = SC_COND_GREATER;    break;
-        case sheet::ConditionOperator2::LESS_EQUAL:     eMode = SC_COND_EQLESS;     break;
-        case sheet::ConditionOperator2::GREATER_EQUAL:  eMode = SC_COND_EQGREATER;  break;
-        case sheet::ConditionOperator2::NOT_EQUAL:      eMode = SC_COND_NOTEQUAL;   break;
-        case sheet::ConditionOperator2::BETWEEN:        eMode = SC_COND_BETWEEN;    break;
-        case sheet::ConditionOperator2::NOT_BETWEEN:    eMode = SC_COND_NOTBETWEEN; break;
-        case sheet::ConditionOperator2::FORMULA:        eMode = SC_COND_DIRECT;     break;
-        case sheet::ConditionOperator2::DUPLICATE:      eMode = SC_COND_DUPLICATE;  break;
-        default:
-        {
-            // added to avoid warnings
-        }
-    }
-    return eMode;
-}
-
 sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMode )
 {
     sheet::ConditionOperator eOper = sheet::ConditionOperator_NONE;
@@ -307,7 +284,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         if ( rProp.Name == SC_UNONAME_OPERATOR )
         {
             sal_Int32 eOper = ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
-            aEntry.meMode = lcl_ConditionOperatorToModeNew( eOper );
+            aEntry.meMode = ScConditionEntry::GetModeFromApi( eOper );
         }
         else if ( rProp.Name == SC_UNONAME_FORMULA1 )
         {
@@ -586,7 +563,7 @@ void SAL_CALL ScTableConditionalEntry::setConditionOperator( sal_Int32 nOperator
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    aData.meMode = lcl_ConditionOperatorToModeNew( nOperator );
+    aData.meMode = ScConditionEntry::GetModeFromApi( nOperator );
 }
 
 rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula1() throw(uno::RuntimeException)
@@ -784,7 +761,7 @@ void SAL_CALL ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    nMode = sal::static_int_cast<sal_uInt16>( lcl_ConditionOperatorToModeNew( nOperator ) );
+    nMode = sal::static_int_cast<sal_uInt16>( ScConditionEntry::GetModeFromApi( nOperator ) );
 }
 
 rtl::OUString SAL_CALL ScTableValidationObj::getFormula1() throw(uno::RuntimeException)
