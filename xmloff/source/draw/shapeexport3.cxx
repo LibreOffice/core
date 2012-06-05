@@ -263,7 +263,7 @@ void XMLShapeExport::ImpExport3DShape(
                     aViewBox.GetExportString());
 
                 // prepare svx:d element export
-                SdXMLImExSvgDElement aSvgDElement(aViewBox);
+                SdXMLImExSvgDElement aSvgDElement(aViewBox, GetExport());
                 pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
                 pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
 

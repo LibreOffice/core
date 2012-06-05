@@ -31,6 +31,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/xmlexp.hxx>
+#include <xmloff/xmlimp.hxx>
 #include <tools/gen.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -1469,10 +1471,17 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-SdXMLImExSvgDElement::SdXMLImExSvgDElement(const SdXMLImExViewBox& rViewBox)
+SdXMLImExSvgDElement::SdXMLImExSvgDElement(const SdXMLImExViewBox& rViewBox,
+                                           const SvXMLExport&      rExport)
 :   mrViewBox( rViewBox ),
     mbIsClosed( false ),
     mbIsCurve( false ),
+    // fdo#47406 - handle writing svg:d path slightly different for
+    // old odf versions and ODF1.2 compat mode - since ~all the legacy
+    // ODF ecosystem interprets relative svg:d paths incorrectly,
+    // write out absolute paths in those cases.
+    mbRelative( rExport.getDefaultVersion() >= SvtSaveOptions::ODFVER_012 &&
+                rExport.getDefaultVersion() != SvtSaveOptions::ODFVER_012_EXT_COMPAT ),
     mnLastX( 0L ),
     mnLastY( 0L ),
     maPoly()
@@ -1535,7 +1544,7 @@ void SdXMLImExSvgDElement::AddPolygon(
     drawing::FlagSequence* pFlags,
     const awt::Point& rObjectPos,
     const awt::Size& rObjectSize,
-    bool bClosed, bool bRelative)
+    bool bClosed)
 {
     // Leaving the export stuff for the while, should eventually also
     // consolidated with basegfx svg support
@@ -1722,7 +1731,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                             if(bPrevPointIsSymmetric)
                                             {
                                                 // write a shorthand/smooth quadratic curveto entry (T)
-                                                if(bRelative)
+                                                if(mbRelative)
                                                 {
                                                     if(aLastCommand != sal_Unicode('t'))
                                                         aNewString += OUString(sal_Unicode('t'));
@@ -1752,7 +1761,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     mrViewBox, bScale, bTranslate);
 
                                                 // write a quadratic curveto entry (Q)
-                                                if(bRelative)
+                                                if(mbRelative)
                                                 {
                                                     if(aLastCommand != sal_Unicode('q'))
                                                         aNewString += OUString(sal_Unicode('q'));
@@ -1814,7 +1823,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                             if(bPrevPointIsSmooth)
                                             {
                                                 // write a shorthand/smooth quadratic curveto entry (T)
-                                                if(bRelative)
+                                                if(mbRelative)
                                                 {
                                                     if(aLastCommand != sal_Unicode('t'))
                                                         aNewString += rtl::OUString(static_cast<sal_Unicode>('t'));
@@ -1844,7 +1853,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                     mrViewBox, bScale, bTranslate);
 
                                                 // write a quadratic curveto entry (Q)
-                                                if(bRelative)
+                                                if(mbRelative)
                                                 {
                                                     if(aLastCommand != sal_Unicode('q'))
                                                         aNewString += rtl::OUString(static_cast<sal_Unicode>('q'));
@@ -1903,7 +1912,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                         if(bPrevPointIsSymmetric)
                                         {
                                             // write a shorthand/smooth curveto entry (S)
-                                            if(bRelative)
+                                            if(mbRelative)
                                             {
                                                 if(aLastCommand != sal_Unicode('s'))
                                                     aNewString += rtl::OUString(static_cast<sal_Unicode>('s'));
@@ -1937,7 +1946,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                                 mrViewBox, bScale, bTranslate);
 
                                             // write a curveto entry (C)
-                                            if(bRelative)
+                                            if(mbRelative)
                                             {
                                                 if(aLastCommand != sal_Unicode('c'))
                                                     aNewString += rtl::OUString(static_cast<sal_Unicode>('c'));
@@ -1993,7 +2002,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                         // write as normal point
                         if(mnLastX == nX)
                         {
-                            if(bRelative)
+                            if(mbRelative)
                             {
                                 if(aLastCommand != sal_Unicode('v'))
                                     aNewString += rtl::OUString(static_cast<sal_Unicode>('v'));
@@ -2014,7 +2023,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                         }
                         else if(mnLastY == nY)
                         {
-                            if(bRelative)
+                            if(mbRelative)
                             {
                                 if(aLastCommand != sal_Unicode('h'))
                                     aNewString += rtl::OUString(static_cast<sal_Unicode>('h'));
@@ -2035,7 +2044,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                         }
                         else
                         {
-                            if(bRelative)
+                            if(mbRelative)
                             {
                                 if(aLastCommand != sal_Unicode('l'))
                                     aNewString += rtl::OUString(static_cast<sal_Unicode>('l'));
@@ -2060,7 +2069,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                     else
                     {
                         // write as start point
-                        if(bRelative)
+                        if(mbRelative)
                         {
                             aNewString += rtl::OUString(static_cast<sal_Unicode>('m'));
 
@@ -2099,7 +2108,7 @@ void SdXMLImExSvgDElement::AddPolygon(
         // close path if closed poly
         if(bClosed)
         {
-            if(bRelative)
+            if(mbRelative)
                 aNewString += rtl::OUString(static_cast<sal_Unicode>('z'));
             else
                 aNewString += rtl::OUString(static_cast<sal_Unicode>('Z'));
@@ -2126,6 +2135,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
     mrViewBox( rViewBox ),
     mbIsClosed( false ),
     mbIsCurve( false ),
+    mbRelative( true ),
     mnLastX( 0L ),
     mnLastY( 0L ),
     maPoly()

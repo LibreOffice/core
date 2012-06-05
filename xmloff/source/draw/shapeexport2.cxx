@@ -999,7 +999,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                 if(pOuterSequence && pOuterFlags)
                 {
                     // prepare svx:d element export
-                    SdXMLImExSvgDElement aSvgDElement(aViewBox);
+                    SdXMLImExSvgDElement aSvgDElement(aViewBox, GetExport());
 
                     for(sal_Int32 a(0L); a < nOuterCnt; a++)
                     {
@@ -1066,7 +1066,7 @@ void XMLShapeExport::ImpExportPolygonShape(
                     if(pOuterSequence)
                     {
                         // prepare svx:d element export
-                        SdXMLImExSvgDElement aSvgDElement(aViewBox);
+                        SdXMLImExSvgDElement aSvgDElement(aViewBox, GetExport());
 
                         for(sal_Int32 a(0L); a < nOuterCnt; a++)
                         {
@@ -1432,7 +1432,7 @@ void XMLShapeExport::ImpExportConnectorShape(
                 awt::Point aPoint( 0, 0 );
                 awt::Size aSize( 1, 1 );
                 SdXMLImExViewBox aViewBox( 0, 0, 1, 1 );
-                SdXMLImExSvgDElement aSvgDElement(aViewBox);
+                SdXMLImExSvgDElement aSvgDElement(aViewBox, GetExport());
 
                 for(sal_Int32 a(0L); a < nOuterCnt; a++)
                 {

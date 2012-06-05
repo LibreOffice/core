@@ -36,7 +36,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <tools/mapunit.hxx>
-#include <xmloff/xmlimp.hxx>
 
 #include <vector>
 
@@ -46,6 +45,8 @@
 struct ImpSdXMLExpTransObj2DBase;
 struct ImpSdXMLExpTransObj3DBase;
 class SvXMLUnitConverter;
+class SvXMLImport;
+class SvXMLExport;
 
 namespace basegfx
 {
@@ -160,14 +161,14 @@ class SdXMLImExSvgDElement
     const SdXMLImExViewBox&         mrViewBox;
     bool                            mbIsClosed;
     bool                            mbIsCurve;
-
+    bool                            mbRelative;
     sal_Int32                       mnLastX;
     sal_Int32                       mnLastY;
 
     com::sun::star::drawing::PolyPolygonBezierCoords maPoly;
 
 public:
-    SdXMLImExSvgDElement(const SdXMLImExViewBox& rViewBox);
+    SdXMLImExSvgDElement(const SdXMLImExViewBox& rViewBox, const SvXMLExport& rExport);
     SdXMLImExSvgDElement(const rtl::OUString& rNew,
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
@@ -179,7 +180,7 @@ public:
         com::sun::star::drawing::FlagSequence* pFlags,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
-        bool bClosed = false, bool bRelative = true);
+        bool bClosed = false);
 
     const rtl::OUString& GetExportString() const { return msString; }
     bool IsClosed() const { return mbIsClosed; }

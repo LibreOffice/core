@@ -253,7 +253,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             // Pathdata
             pOuterSequence = aBezier.Coordinates.getArray();
             drawing::FlagSequence*  pOuterFlags = aBezier.Flags.getArray();
-            SdXMLImExSvgDElement aSvgDElement(aViewBox);
+            SdXMLImExSvgDElement aSvgDElement(aViewBox, rExport);
 
             for (a = 0; a < nOuterCnt; a++)
             {

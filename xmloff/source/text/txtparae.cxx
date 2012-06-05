@@ -3019,7 +3019,7 @@ void XMLTextParagraphExport::exportContour(
         if(pOuterSequence)
         {
             // prepare svx:d element export
-            SdXMLImExSvgDElement aSvgDElement( aViewBox );
+            SdXMLImExSvgDElement aSvgDElement( aViewBox, GetExport() );
 
             for(sal_Int32 a(0L); a < nOuterCnt; a++)
             {
