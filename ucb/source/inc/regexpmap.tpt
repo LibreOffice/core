@@ -74,10 +74,6 @@ public:
 	typedef RegexpMapImpl< Val > MapImpl;
 	typedef typename List< Val >::iterator ListIterator;
 
-	// Solaris needs these for the ctor...
-
-	inline RegexpMapIterImpl();
-
 	inline RegexpMapIterImpl(MapImpl * pTheMap, int nTheList,
 							 ListIterator aTheIndex);
 
@@ -96,6 +92,8 @@ public:
 	RegexpMapEntry< Val > & get();
 
 private:
+    RegexpMapIterImpl(); // not implemented
+
 	mutable RegexpMapEntry< Val > m_aEntry;
 	typename List< Val >::iterator m_aIndex;
 	RegexpMapImpl< Val > * m_pMap;
@@ -106,14 +104,6 @@ private:
 };
 
 }
-
-template< typename Val >
-inline RegexpMapIterImpl< Val >::RegexpMapIterImpl():
-	m_aEntry(rtl::OUString(), 0),
-	m_pMap(0),
-	m_nList(-1),
-	m_bEntrySet(false)
-{}
 
 template< typename Val >
 inline RegexpMapIterImpl< Val >::RegexpMapIterImpl(MapImpl * pTheMap,
