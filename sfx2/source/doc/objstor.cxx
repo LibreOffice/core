@@ -370,12 +370,12 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     {
                     }
 
-                    if ( !aSaveOpt.IsUseSHA1InODF12() )
+                    if ( !aSaveOpt.IsUseSHA1InODF12() && nDefVersion != SvtSaveOptions::ODFVER_012_EXT_COMPAT )
                     {
                         aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
                         aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
                     }
-                    if ( !aSaveOpt.IsUseBlowfishInODF12() )
+                    if ( !aSaveOpt.IsUseBlowfishInODF12() && nDefVersion != SvtSaveOptions::ODFVER_012_EXT_COMPAT )
                         aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
                 }
 
