@@ -91,6 +91,11 @@ namespace {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, aColor);
     }
 
+    void XShapeDumper::dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, aTransparence);
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -151,12 +156,17 @@ namespace {
                 if(anotherAny >>= eFillStyle)
                     dumpFillStyleAsAttribute(eFillStyle, xmlWriter);
             }
-
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("FillColor");
                 sal_Int32 aColor;
                 if(anotherAny >>= aColor)
                     dumpFillColorAsAttribute(aColor, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparence");
+                sal_Int32 aTransparence;
+                if(anotherAny >>= aTransparence)
+                    dumpFillColorAsAttribute(aTransparence, xmlWriter);
             }
         }
 
