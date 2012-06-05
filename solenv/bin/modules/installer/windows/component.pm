@@ -192,7 +192,6 @@ sub get_registry_component_directory
 
 ##############################################################
 # Returning the attributes for a file component.
-# Always 8 in this first try?
 ##############################################################
 
 sub get_file_component_attributes
@@ -244,10 +243,10 @@ sub get_file_component_attributes
         $attributes = 4;    # Files in shellnew dir and in non advertised startmenu entries must have user registry key as KeyPath
     }
 
-    # Adding 256, if this is a 64 bit installation set.
-    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $attributes = $attributes + 256; }
+    # Setting msidbComponentAttributes64bit, if this is a 64 bit installation set.
+    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $attributes |= 256; }
 
-    return $attributes
+    return $attributes;
 }
 
 ##############################################################
@@ -264,12 +263,16 @@ sub get_registry_component_attributes
 
     $attributes = 4;
 
-    # Adding 256, if this is a 64 bit installation set.
-    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $attributes = $attributes + 256; }
+    # Setting msidbComponentAttributes64bit, if this is a 64 bit installation set.
+    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $attributes |= 256; }
 
-    if ( exists($installer::globals::dontdeletecomponents{$componentname}) ) { $attributes = $attributes + 16; }
+    # Setting msidbComponentAttributes64bit for 64 bit shell extension in 32 bit installer, too
+    if ( $componentname =~ m/winexplorerext_x64/ ) { $attributes |= 256; }
 
-    return $attributes
+    # Setting msidbComponentAttributesPermanent
+    if ( exists($installer::globals::dontdeletecomponents{$componentname}) ) { $attributes |= 16; }
+
+    return $attributes;
 }
 
 ##############################################################

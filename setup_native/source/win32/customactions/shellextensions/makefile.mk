@@ -48,7 +48,6 @@ CDEFS+=-Dnot_used_define_to_disable_pch
 UWINAPILIB=
 
 SLOFILES = \
-    $(SLO)$/shellextensions.obj \
     $(SLO)$/startmenuicon.obj \
     $(SLO)$/upgrade.obj \
     $(SLO)$/iconcache.obj \

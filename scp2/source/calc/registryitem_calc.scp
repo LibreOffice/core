@@ -533,7 +533,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_stc_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "soffice.StarCalcTemplate.6";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -585,7 +585,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_sxc_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "soffice.StarCalcDocument.6";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -727,7 +727,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_ods_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "LibreOffice.CalcDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
@@ -955,7 +955,7 @@ End
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_ots_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "LibreOffice.CalcTemplate.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
