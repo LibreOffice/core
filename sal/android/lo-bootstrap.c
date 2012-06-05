@@ -1906,6 +1906,29 @@ Java_org_libreoffice_android_Bootstrap_twiddle_1BGR_1to_1RGBA(JNIEnv* env,
 }
 
 __attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_force_1full_1alpha(JNIEnv* env,
+                                                          jobject clazz,
+                                                          jbyteArray array,
+                                                          jint offset,
+                                                          jint size)
+{
+    void *a = (*env)->GetPrimitiveArrayCritical(env, array, NULL);
+    jbyte *p = ((jbyte *) a) + offset;
+
+    int i;
+
+    (void) clazz;
+
+    for (i = 0; i < size; i += 4) {
+        p[3] = 0xFF;
+        p += 4;
+    }
+
+    (*env)->ReleasePrimitiveArrayCritical(env, array, a, 0);
+}
+
+__attribute__ ((visibility("default")))
 JavaVM *
 lo_get_javavm(void)
 {

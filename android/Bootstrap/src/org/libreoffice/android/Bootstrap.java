@@ -116,6 +116,8 @@ public class Bootstrap extends NativeActivity
     // documentation sucks.
     public static native void twiddle_BGR_to_RGBA(byte[] source, int offset, int width, int height, ByteBuffer destination);
 
+    public static native void force_full_alpha(byte[] source, int offset, int size);
+
     // This setup() method is called 1) in apps that use *this* class as their activity from onCreate(),
     // and 2) should be called from other kinds of LO code using apps.
     public static void setup(Activity activity)

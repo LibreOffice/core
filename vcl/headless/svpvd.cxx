@@ -80,9 +80,13 @@ sal_Bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 #else
             case 16: nFormat = Format::SIXTEEN_BIT_LSB_TC_MASK; break;
 #endif
-            case 0:
             case 24: nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
             case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK; break;
+#if defined(ANDROID) || defined(IOS)
+            case 0:  nFormat = Format::THIRTYTWO_BIT_TC_MASK; break;
+#else
+            case 0:  nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
+#endif
         }
         m_aDevice = aDevPal.empty()
                     ? createBitmapDevice( aDevSize, false, nFormat )

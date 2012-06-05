@@ -150,18 +150,21 @@ public class DocumentLoader
             Log.i(TAG, "  " + t.getTypeName());
     }
 
-    static void dumpBytes(String imageName, byte[] image)
+    static void dumpBytes(String name, byte[] bytes, int offset)
     {
-        if (image == null) {
-            Log.i(TAG, imageName + " is null");
+        if (bytes == null) {
+            Log.i(TAG, name + " is null");
             return;
         }
-        Log.i(TAG, imageName + " is " + image.length + " bytes");
+        Log.i(TAG, name + ":");
 
-        for (int i = 0; i < Math.min(image.length, 160); i += 16) {
+        if (offset != 0)
+            Log.i(TAG, "  (offset " + offset + ")");
+
+        for (int i = offset; i < Math.min(bytes.length, offset+160); i += 16) {
             String s = "";
-            for (int j = i; j < Math.min(image.length, i+16); j++)
-                s = s + String.format(" %02x", image[j]);
+            for (int j = i; j < Math.min(bytes.length, i+16); j++)
+                s = s + String.format(" %02x", bytes[j]);
 
             Log.i(TAG, s);
         }
@@ -185,8 +188,8 @@ public class DocumentLoader
             Bootstrap.dlopen("libswdlo.so");
             Bootstrap.dlopen("libswlo.so");
             
-            Log.i(TAG, "Sleeping NOW");
-            Thread.sleep(20000);
+            // Log.i(TAG, "Sleeping NOW");
+            // Thread.sleep(20000);
 
             XComponentContext xContext = null;
 
@@ -225,113 +228,137 @@ public class DocumentLoader
 
             Log.i(TAG, "xCompLoader is" + (xCompLoader!=null ? " not" : "") + " null");
 
-            // Load the wanted document(s)
-            String[] inputs = input.split(":");
-            for (int i = 0; i < inputs.length; i++) {
-                PropertyValue loadProps[] = new PropertyValue[3];
-                loadProps[0] = new PropertyValue();
-                loadProps[0].Name = "Hidden";
-                loadProps[0].Value = new Boolean(true);
-                loadProps[1] = new PropertyValue();
-                loadProps[1].Name = "ReadOnly";
-                loadProps[1].Value = new Boolean(true);
-                loadProps[2] = new PropertyValue();
-                loadProps[2].Name = "Preview";
-                loadProps[2].Value = new Boolean(true);
+            // Load the wanted document
 
-                String sUrl = "file://" + inputs[i];
+            PropertyValue loadProps[] = new PropertyValue[3];
+            loadProps[0] = new PropertyValue();
+            loadProps[0].Name = "Hidden";
+            loadProps[0].Value = new Boolean(true);
+            loadProps[1] = new PropertyValue();
+            loadProps[1].Name = "ReadOnly";
+            loadProps[1].Value = new Boolean(true);
+            loadProps[2] = new PropertyValue();
+            loadProps[2].Name = "Preview";
+            loadProps[2].Value = new Boolean(true);
 
-                Log.i(TAG, "Attempting to load " + sUrl);
+            String sUrl = "file://" + input;
 
-                Object oDoc =
-                    xCompLoader.loadComponentFromURL
-                    (sUrl, "_blank", 0, loadProps);
+            Log.i(TAG, "Attempting to load " + sUrl);
 
-                dumpUNOObject("oDoc", oDoc);
+            Object oDoc =
+                xCompLoader.loadComponentFromURL
+                (sUrl, "_blank", 0, loadProps);
 
-                Object toolkit = xMCF.createInstanceWithContext
-                    ("com.sun.star.awt.Toolkit", xContext);
+            dumpUNOObject("oDoc", oDoc);
 
-                dumpUNOObject("toolkit", toolkit);
+            Object toolkit = xMCF.createInstanceWithContext
+                ("com.sun.star.awt.Toolkit", xContext);
 
-                XToolkit xToolkit = (XToolkit)
-                    UnoRuntime.queryInterface(XToolkit.class, toolkit);
+            dumpUNOObject("toolkit", toolkit);
 
-                XDevice device = xToolkit.createScreenCompatibleDevice(1024, 1024);
+            XToolkit xToolkit = (XToolkit)
+                UnoRuntime.queryInterface(XToolkit.class, toolkit);
 
-                dumpUNOObject("device", device);
+            XDevice device = xToolkit.createScreenCompatibleDevice(1024, 1024);
 
-                // I guess the XRenderable thing might be what we want to use,
-                // having the code pretend it is printing?
+            dumpUNOObject("device", device);
 
-                XRenderable renderBabe = (XRenderable)
-                    UnoRuntime.queryInterface(XRenderable.class, oDoc);
+            XRenderable renderBabe = (XRenderable)
+                UnoRuntime.queryInterface(XRenderable.class, oDoc);
 
-                PropertyValue renderProps[] =
-                    new PropertyValue[3];
-                renderProps[0] = new PropertyValue();
-                renderProps[0].Name = "IsPrinter";
-                renderProps[0].Value = new Boolean(true);
-                renderProps[1] = new PropertyValue();
-                renderProps[1].Name = "RenderDevice";
-                renderProps[1].Value = device;
-                renderProps[2] = new PropertyValue();
-                renderProps[2].Name = "View";
-                renderProps[2].Value = new MyXController();
+            PropertyValue renderProps[] =
+                new PropertyValue[3];
+            renderProps[0] = new PropertyValue();
+            renderProps[0].Name = "IsPrinter";
+            renderProps[0].Value = new Boolean(true);
+            renderProps[1] = new PropertyValue();
+            renderProps[1].Name = "RenderDevice";
+            renderProps[1].Value = device;
+            renderProps[2] = new PropertyValue();
+            renderProps[2].Name = "View";
+            renderProps[2].Value = new MyXController();
 
-                Log.i(TAG, "getRendererCount: " + renderBabe.getRendererCount(oDoc, renderProps));
+            Log.i(TAG, "getRendererCount: " + renderBabe.getRendererCount(oDoc, renderProps));
 
-                renderBabe.render(0, oDoc, renderProps);
+            renderBabe.render(0, oDoc, renderProps);
 
-                XBitmap bitmap = device.createBitmap(0, 0, 1024, 1024);
+            XBitmap bitmap = device.createBitmap(0, 0, 1024, 1024);
 
-                byte[] image = bitmap.getDIB();
+            byte[] image = bitmap.getDIB();
 
-                dumpBytes("image", image);
+            dumpBytes("image", image, 0);
 
-                byte[] mask = bitmap.getMaskDIB();
-
-                dumpBytes("mask", mask);
-
-                if (image[0] != 'B' || image[1] != 'M') {
-                    Log.e(TAG, "getDIB() didn't return a BMP file");
-                    return;
-                }
-
-                ByteBuffer imagebb = ByteBuffer.wrap(image);
-                imagebb.order(ByteOrder.LITTLE_ENDIAN);
-
-                if (imagebb.getInt(0x0e) != 40) {
-                    Log.e(TAG, "getDIB() didn't return a DIB with BITMAPINFOHEADER");
-                    return;
-                }
-
-                if (imagebb.getShort(0x1c) != 24) {
-                    Log.e(TAG, "getDIB() didn't return a 24 bpp DIB");
-                    return;
-                }
-
-                if (imagebb.getInt(0x1e) != 0) {
-                    Log.e(TAG, "getDIB() didn't return a BI_RGB DIB");
-                    return;
-                }
-
-                int width = imagebb.getInt(0x12);
-                int height = imagebb.getInt(0x16);
-
-                ByteBuffer argb = ByteBuffer.allocateDirect(width * height * 4);
-
-                Bootstrap.twiddle_BGR_to_RGBA(image, imagebb.getInt(0x0a), width, height, argb);
-
-                ImageView imageView = new GestureImageView(this);
-
-                Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                bm.copyPixelsFromBuffer(argb);
-
-                imageView.setImageBitmap(bm);
-
-                setContentView(imageView);
+            if (image[0] != 'B' || image[1] != 'M') {
+                Log.wtf(TAG, "getDIB() didn't return a BMP file");
+                return;
             }
+
+            ByteBuffer imagebb = ByteBuffer.wrap(image);
+            imagebb.order(ByteOrder.LITTLE_ENDIAN);
+
+            if (imagebb.getInt(0x0e) != 40) {
+                Log.wtf(TAG, "getDIB() didn't return a DIB with BITMAPINFOHEADER");
+                return;
+            }
+
+            if (imagebb.getShort(0x1c) != 32) {
+                Log.wtf(TAG, "getDIB() didn't return a 32 bpp DIB");
+                return;
+            }
+
+            if (imagebb.getInt(0x1e) != 3) {
+                Log.wtf(TAG, "getDIB() didn't return a BI_BITFIELDS DIB");
+                return;
+            }
+
+            int offset = imagebb.getInt(0x0a);
+            int width = imagebb.getInt(0x12);
+            int height = imagebb.getInt(0x16);
+
+            Log.i(TAG, String.format("offset: %d (%x), width: %d, height: %d", offset, offset, width, height));
+
+            Bootstrap.force_full_alpha(image, offset, width * height * 4);
+
+            Log.i(TAG, "after force_full_alpha:");
+            dumpBytes("image", image, 0);
+
+            for (int i = offset;  i < offset + width * height * 4; i++) {
+                if (image[i] != -1) {
+                    int o = offset + (((i-offset) - 4) / 4) * 4;
+                    dumpBytes("First non-ones bytes", image, o);
+                    o += 160;
+                    dumpBytes("...", image, o);
+                    o += 160;
+                    dumpBytes("...", image, o);
+                    o += 160;
+                    dumpBytes("...", image, o);
+                    break;
+                }
+            }
+
+            ImageView imageView = new GestureImageView(this);
+            imageView.setScaleY(-1);
+
+            Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            imagebb.position(offset);
+
+            // Thanks to Android bug 32588, the above is not enough to get the
+            // below copyPixelsFromBuffer() to start copying at offset, it
+            // will (as of Android 4.0.3) copy from position zero anyway. So
+            // instead have to shift (compact) the bloody buffer.
+            imagebb.compact();
+
+            // I don't understand what the compact() documentation says about
+            // the new position; so explicitly put it at zero, in case
+            // runnning on an Android where copyPixelsFromBuffer() *does* take
+            // the position into account.
+            imagebb.position(0);
+
+            bm.copyPixelsFromBuffer(imagebb);
+
+            imageView.setImageBitmap(bm);
+
+            setContentView(imageView);
         }
         catch (Exception e) {
             e.printStackTrace(System.err);

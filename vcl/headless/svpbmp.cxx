@@ -59,6 +59,7 @@ bool SvpSalBitmap::Create( const Size& rSize,
         case 16: nFormat = Format::SIXTEEN_BIT_LSB_TC_MASK; break;
 #endif
         case 24: nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
+        // FIXME: Should this for Android be THIRTYTWO_BIT_TC_MASK_ARGB?
         case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK; break;
     }
     B2IVector aSize( rSize.Width(), rSize.Height() );
