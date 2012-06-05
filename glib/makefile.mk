@@ -164,7 +164,7 @@ OUT2LIB+=gobject/gobject-2.0.lib
 OUT2LIB+=gthread/gthread-2.0.lib
 
 .IF "$(OS)"=="WNT"
-OUT2INC+=build$/win32$/dirent.h
+OUT2INC+=build$/win32$/dirent/dirent.h
 .ENDIF
 OUT2INC+=build$/win32$/make.msc
 OUT2INC+=build$/win32$/module.defs
