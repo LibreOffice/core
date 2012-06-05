@@ -57,6 +57,7 @@ public:
     TaskPaneList*   mpTaskPaneList;
     Size            maMaxOutSize;
     rtl::OUString   maRepresentedURL;
+    Link maCloseHdl;
 };
 
 SystemWindow::ImplData::ImplData()
@@ -1032,6 +1033,16 @@ void SystemWindow::SetScreenNumber(unsigned int nDisplayScreen)
 void SystemWindow::SetApplicationID(const rtl::OUString &rApplicationID)
 {
     mpWindowImpl->mpFrame->SetApplicationID( rApplicationID );
+}
+
+void SystemWindow::SetCloseHdl(const Link& rLink)
+{
+    mpImplData->maCloseHdl = rLink;
+}
+
+const Link& SystemWindow::GetCloseHdl() const
+{
+    return mpImplData->maCloseHdl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

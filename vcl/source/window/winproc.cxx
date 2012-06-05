@@ -1953,19 +1953,31 @@ void ImplHandleClose( Window* pWindow )
     if ( pSVData->maWinData.mpTrackWin )
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL | ENDTRACK_KEY );
 
-    if( ! bWasPopup )
+    if (bWasPopup)
+        return;
+
+    Window *pWin = pWindow->ImplGetWindow();
+    SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(pWin);
+    if (pSysWin)
     {
-        Window *pWin = pWindow->ImplGetWindow();
-        // check whether close is allowed
-        if ( !pWin->IsEnabled() || !pWin->IsInputEnabled() || pWin->IsInModalMode() )
-            Sound::Beep( SOUND_DISABLE, pWin );
-        else
+        // See if the custom close handler is set.
+        const Link& rLink = pSysWin->GetCloseHdl();
+        if (rLink.IsSet())
         {
-            DelayedCloseEvent* pEv = new DelayedCloseEvent;
-            pEv->pWindow = pWin;
-            pWin->ImplAddDel( &pEv->aDelData );
-            Application::PostUserEvent( Link( pEv, DelayedCloseEventLink ) );
+            rLink.Call(pSysWin);
+            return;
         }
+    }
+
+    // check whether close is allowed
+    if ( !pWin->IsEnabled() || !pWin->IsInputEnabled() || pWin->IsInModalMode() )
+        Sound::Beep( SOUND_DISABLE, pWin );
+    else
+    {
+        DelayedCloseEvent* pEv = new DelayedCloseEvent;
+        pEv->pWindow = pWin;
+        pWin->ImplAddDel( &pEv->aDelData );
+        Application::PostUserEvent( Link( pEv, DelayedCloseEventLink ) );
     }
 }
 
