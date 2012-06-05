@@ -4,13 +4,13 @@ Globals
     {
         variables
         {
-            UREPACKAGEVERSION 3.6.0
+            UREPACKAGEVERSION 3.6.98
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 3.4
-            UNIXBASISROOTNAME libreoffice3.6
-            SERVICETAG_PRODUCTNAME LibreOffice 3.6
-            SERVICETAG_PRODUCTVERSION 3.6
-            SERVICETAG_PARENTNAME LibreOffice 3.6
+            UNIXBASISROOTNAME libreoffice3.7
+            SERVICETAG_PRODUCTNAME LibreOffice 3.7
+            SERVICETAG_PRODUCTVERSION 3.7
+            SERVICETAG_PARENTNAME LibreOffice 3.7
             SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
             SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
             HIDELICENSEDIALOG 1
@@ -47,17 +47,17 @@ LibreOffice
         variables
         {
             PRODUCTNAME LibreOffice
-            PRODUCTVERSION 3.6
+            PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha1
+            SHORT_PRODUCTEXTENSION alpha0
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-            BRANDPACKAGEVERSION 3.6
+            BRANDPACKAGEVERSION 3.7
             USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.6.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX alpha1+
-            BASEPRODUCTVERSION 3.6
+            ABOUTBOXPRODUCTVERSION 3.7.0
+            ABOUTBOXPRODUCTVERSIONSUFFIX alpha0+
+            BASEPRODUCTVERSION 3.7
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
@@ -65,7 +65,7 @@ LibreOffice
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.6.0
+            PACKAGEVERSION 3.6.98
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -99,18 +99,18 @@ LibreOffice_Dev
         variables
         {
             PRODUCTNAME LOdev
-            PRODUCTVERSION 3.6
+            PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha1
-            UNIXBASISROOTNAME lodev3.6
+            SHORT_PRODUCTEXTENSION alpha0
+            UNIXBASISROOTNAME lodev3.7
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-            BRANDPACKAGEVERSION 3.6
+            BRANDPACKAGEVERSION 3.7
             USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.6.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX alpha1+
-            BASEPRODUCTVERSION 3.6
+            ABOUTBOXPRODUCTVERSION 3.7.0
+            ABOUTBOXPRODUCTVERSIONSUFFIX alpha0+
+            BASEPRODUCTVERSION 3.7
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
@@ -123,7 +123,7 @@ LibreOffice_Dev
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.6.0
+            PACKAGEVERSION 3.6.98
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -160,13 +160,13 @@ URE
         variables
         {
             PRODUCTNAME URE
-            PRODUCTVERSION 3.6
-            PACKAGEVERSION 3.6
+            PRODUCTVERSION 3.7
+            PACKAGEVERSION 3.7
             PACKAGEREVISION 1
             PRODUCTEXTENSION
-            BRANDPACKAGEVERSION 3.6
+            BRANDPACKAGEVERSION 3.7
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha1
+            SHORT_PRODUCTEXTENSION alpha0
             LICENSENAME LGPL
             NOVERSIONINDIRNAME 1
             PCPFILENAME ure.pcp
@@ -195,14 +195,14 @@ LibreOffice_SDK
         variables
         {
             PRODUCTNAME LibreOffice
-            PRODUCTVERSION 3.6
+            PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha1
+            SHORT_PRODUCTEXTENSION alpha0
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
-            BRANDPACKAGEVERSION 3.6
-            PACKAGEVERSION 3.6.0
+            BRANDPACKAGEVERSION 3.7
+            PACKAGEVERSION 3.6.98
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
             DMG_VOLUMEEXTENSION SDK
@@ -236,15 +236,15 @@ LibreOffice_Dev_SDK
         variables
         {
             PRODUCTNAME LOdev
-            PRODUCTVERSION 3.6
+            PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha1
-            UNIXBASISROOTNAME lodev3.6
+            SHORT_PRODUCTEXTENSION alpha0
+            UNIXBASISROOTNAME lodev3.7
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
-            BRANDPACKAGEVERSION 3.6
-            PACKAGEVERSION 3.6.0
+            BRANDPACKAGEVERSION 3.7
+            PACKAGEVERSION 3.6.98
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
@@ -283,14 +283,14 @@ LibreOffice_Test
         variables
         {
             PRODUCTNAME LibreOffice
-            PRODUCTVERSION 3.6
+            PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha1
+            SHORT_PRODUCTEXTENSION alpha0
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
-            BRANDPACKAGEVERSION 3.6
-            PACKAGEVERSION 3.6.0
+            BRANDPACKAGEVERSION 3.7
+            PACKAGEVERSION 3.6.98
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
             DMG_VOLUMEEXTENSION TEST
@@ -324,15 +324,15 @@ LibreOffice_Dev_Test
         variables
         {
             PRODUCTNAME LOdev
-            PRODUCTVERSION 3.6
+            PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha1
-            UNIXBASISROOTNAME lodev3.6
+            SHORT_PRODUCTEXTENSION alpha0
+            UNIXBASISROOTNAME lodev3.7
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
-            BRANDPACKAGEVERSION 3.6
-            PACKAGEVERSION 3.6.0
+            BRANDPACKAGEVERSION 3.7
+            PACKAGEVERSION 3.6.98
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
@@ -370,17 +370,17 @@ OxygenOffice
         variables
         {
             PRODUCTNAME OxygenOffice
-            PRODUCTVERSION 3.6
+            PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION  alpha1
+            SHORT_PRODUCTEXTENSION  alpha0
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-            BRANDPACKAGEVERSION 3.6
+            BRANDPACKAGEVERSION 3.7
             USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.6.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX alpha1+
-            BASEPRODUCTVERSION 3.6
+            ABOUTBOXPRODUCTVERSION 3.7.0
+            ABOUTBOXPRODUCTVERSIONSUFFIX alpha0+
+            BASEPRODUCTVERSION 3.7
             PCPFILENAME openoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
@@ -388,7 +388,7 @@ OxygenOffice
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.6.0
+            PACKAGEVERSION 3.6.98
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             SERVICESPROJEKT 1
