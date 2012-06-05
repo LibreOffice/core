@@ -41,8 +41,8 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
-const long nImageWidthSingle = 22;
-const long nImageWidthAuto = 22;
+const long nImageWidthSingle = 14;
+const long nImageWidthAuto = 24;
 const long nImageWidthBook = 22;
 const long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
 const long nImageHeight = 10;
