@@ -196,8 +196,9 @@ int getFlatTypeRank(const rtl::OUString& rType)
             return n - i - 1;
     }
 
-    // Not ranked.  Treat them equally.
-    return -1;
+    // Not ranked.  Treat them equally.  Unranked filters have higher priority
+    // than the ranked internal ones since they may be external filters.
+    return n;
 }
 
 /**
