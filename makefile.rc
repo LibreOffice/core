@@ -61,6 +61,9 @@ distclean .PHONY: clean
 clean .PHONY:
 	-rm -rf */$(INPATH)
 	-rm -rf solver/*/$(INPATH)
+.IF "$(ADDITIONAL_REPOSITORIES)"!=""
+	-rm -rf $(foreach,f,$(ADDITIONAL_REPOSITORIES) $f/*/$(INPATH))
+.ENDIF
 .IF "$(BUILD_DMAKE)"!="NO"
 	-echo cleaning up dmake...
 	-$(GNUMAKE) -C dmake clean
