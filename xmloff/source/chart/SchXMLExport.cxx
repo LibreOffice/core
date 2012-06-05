@@ -3119,7 +3119,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
     const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
 
     /// Dont export X ErrorBars for older ODF versions.
-    if ( !bYError && nCurrentVersion != SvtSaveOptions::ODFVER_LATEST )
+    if ( !bYError && nCurrentVersion <= SvtSaveOptions::ODFVER_012 )
         return;
 
     if (xSeriesProp.is())
@@ -3168,7 +3168,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                 for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
                          aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
                 {
-                    if ( nCurrentVersion == SvtSaveOptions::ODFVER_LATEST )
+                    if ( nCurrentVersion > SvtSaveOptions::ODFVER_012 )
                     {
                         rtl::OUString aRole, aRange;
                         Reference< beans::XPropertySet > xSeqProp( *aIt, uno::UNO_QUERY_THROW );
