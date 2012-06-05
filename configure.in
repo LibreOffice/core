@@ -7289,6 +7289,9 @@ if test "$with_system_boost" = "yes"; then
     fi
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
+
+    AX_BOOST_BASE
+    AX_BOOST_DATE_TIME
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"

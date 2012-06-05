@@ -273,7 +273,19 @@ endif # SYSTEM_HUNSPELL
 ifeq ($(SYSTEM_BOOST),YES)
 
 define gb_LinkTarget__use_boostdatetime
-$(call gb_LinkTarget_add_libs,$(1),-lboost_date_time)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(BOOST_CPPFLAGS) \
+)
+
+$(call gb_LinkTarget_add_ldflags,$(1),\
+	$(BOOST_LDFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(BOOST_DATE_TIME_LIB) \
+)
+
 endef
 
 else # !SYSTEM_BOOST
