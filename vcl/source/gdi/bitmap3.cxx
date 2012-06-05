@@ -2221,7 +2221,8 @@ bool Bitmap::ImplScaleLanczos( const double& rScaleX, const double& rScaleY )
 
     // Do horizontal filtering
     double aScale = nNewWidth / (double) nWidth;
-    double aScaledRadius = aSupport / aScale;
+    double aScaledRadius = (aScale <= 1.0) ? aSupport / aScale : aSupport;
+
     int aNumberOfContributions  = (int) ( 2 * aScaledRadius + 1 );
 
     double* pWeights = new double[ nNewWidth*aNumberOfContributions ];
@@ -2248,7 +2249,8 @@ bool Bitmap::ImplScaleLanczos( const double& rScaleX, const double& rScaleY )
 
     // Do vertical filtering
     aScale = nNewHeight / (double) nHeight;
-    aScaledRadius = aSupport / aScale;
+    aScaledRadius = (aScale <= 1.0) ? aSupport / aScale : aSupport;
+
     aNumberOfContributions  = (int) ( 2 * aScaledRadius + 1 );
 
     pWeights = new double[ nNewHeight*aNumberOfContributions ];
@@ -2281,35 +2283,57 @@ void Bitmap::ImplCalculateContributions( const int aSourceSize, const int aDesti
                                          int* pCount )
 {
     const double aScale = aDestinationSize / (double) aSourceSize;
-    const double aScaledRadius = aSupport / aScale;
-    const double aFilterFactor = aScale;
+    const double aScaledRadius = (aScale <= 1.0) ? aSupport / aScale : aSupport;
+    const double aFilterFactor = (aScale <= 1.0) ? aScale : 1.0;
 
     double aWeight, aCenter;
     int aIndex, aLeft, aRight;
+    int aPixelIndex, aCurrentCount;
 
-    for ( int i = 0; i < aDestinationSize; i++ ) {
+    for ( int i = 0; i < aDestinationSize; i++ )
+    {
         aIndex = i * aNumberOfContributions;
-        pCount[i] = 0;
-        aCenter = ((double)i) / aScale;
+        aCurrentCount = 0;
+        aCenter = i / aScale;
 
-        aLeft = (int)((aCenter + 0.5) - aScaledRadius);
-        aRight = (int)(aLeft + 2 * aScaledRadius);
+        aLeft = (int) ((aCenter + 0.5) - aScaledRadius );
+        aRight = (int) ( aLeft + 2 * aScaledRadius );
 
-        for ( int j = aLeft; j<= aRight; j++ ) {
-            if ( j < 0 || j >= aSourceSize ) {
-                continue;
-            }
-
+        for ( int j = aLeft; j <= aRight; j++ )
+        {
             aWeight = ImplLanczosKernel( (aCenter - j) * aFilterFactor, aSupport );
-            if (aWeight == 0.0) {
+
+            if (aWeight == 0.0)
+            {
                 continue;
             }
 
-            int currentCount = pCount[ i ];
-            pWeights[ aIndex + currentCount ] = aWeight;
-            pPixels[ aIndex + currentCount ] = j;
-            pCount[ i ]++;
+            // Mirror edges
+            if (j < 0)
+            {
+                aPixelIndex = -j;
+            }
+            else if ( j >= aSourceSize )
+            {
+                aPixelIndex = (aSourceSize - j) + aSourceSize - 1;
+            }
+            else
+            {
+                aPixelIndex = j;
+            }
+
+            // Edge case for small bitmaps
+            if ( aPixelIndex < 0 || aPixelIndex >= aSourceSize )
+            {
+                aWeight = 0.0;
+            }
+
+            pWeights[ aIndex + aCurrentCount ] = aWeight;
+            pPixels[ aIndex + aCurrentCount ] = aPixelIndex;
+
+            aCurrentCount++;
         }
+        pCount[ i ] = aCurrentCount;
     }
 }
 
