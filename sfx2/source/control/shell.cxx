@@ -79,7 +79,7 @@ using namespace com::sun::star;
 struct SfxShell_Impl: public SfxBroadcaster
 {
     String                   aObjectName;   // Name of Sbx-Objects
-    SfxItemArray_Impl        aItems;        // Data exchange on Item level
+    SfxItemPtrMap            aItems;        // Data exchange on Item level
     SfxViewShell*            pViewSh;       // SfxViewShell if Shell is
                                             // ViewFrame/ViewShell/SubShell list
     SfxViewFrame*            pFrame;        // Frame, if  <UI-active>
@@ -305,9 +305,9 @@ const SfxPoolItem* SfxShell::GetItem
 */
 
 {
-    for ( sal_uInt16 nPos = 0; nPos < pImp->aItems.Count(); ++nPos )
-        if ( pImp->aItems.GetObject(nPos)->Which() == nSlotId )
-            return pImp->aItems.GetObject(nPos);
+    SfxItemPtrMap::iterator it = pImp->aItems.find( nSlotId );
+    if( it != pImp->aItems.end() )
+        return it->second;
     return 0;
 }
 
@@ -340,40 +340,39 @@ void SfxShell::PutItem
                 "items with Which-Ids aren't allowed here" );
 
     // MSC made a mess here of WNT/W95, beware of changes
-    const SfxPoolItem *pItem = rItem.Clone();
-    SfxPoolItemHint aItemHint( (SfxPoolItem*) pItem );
+    SfxPoolItem *pItem = rItem.Clone();
+    SfxPoolItemHint aItemHint( pItem );
     const sal_uInt16 nWhich = rItem.Which();
-    SfxPoolItem **ppLoopItem = (SfxPoolItem**) pImp->aItems.GetData();
-    sal_uInt16 nPos;
-    for ( nPos = 0; nPos < pImp->aItems.Count(); ++nPos, ++ppLoopItem )
+
+    SfxItemPtrMap::iterator it = pImp->aItems.find( nWhich );
+    if( it != pImp->aItems.end() )
     {
-        if ( (*ppLoopItem)->Which() == nWhich )
+        SfxPoolItem *pLoopItem = it->second;
+        // Replace Item
+        delete pLoopItem;
+        it->second = pItem;
+
+        // if active, notify Bindings
+        SfxDispatcher *pDispat = GetDispatcher();
+        if ( pDispat )
         {
-            // Replace Item
-            delete *ppLoopItem;
-            pImp->aItems.Remove(nPos);
-            pImp->aItems.Insert( (SfxPoolItemPtr) pItem, nPos );
-
-            // if active, notify Bindings
-            SfxDispatcher *pDispat = GetDispatcher();
-            if ( pDispat )
+            SfxBindings* pBindings = pDispat->GetBindings();
+            pBindings->Broadcast( aItemHint );
+            sal_uInt16 nSlotId = nWhich; //pItem->GetSlotId();
+            SfxStateCache* pCache = pBindings->GetStateCache( nSlotId );
+            if ( pCache )
             {
-                SfxBindings* pBindings = pDispat->GetBindings();
-                pBindings->Broadcast( aItemHint );
-                sal_uInt16 nSlotId = nWhich; //pItem->GetSlotId();
-                SfxStateCache* pCache = pBindings->GetStateCache( nSlotId );
-                if ( pCache )
-                {
-                    pCache->SetState( SFX_ITEM_AVAILABLE, pItem->Clone(), sal_True );
-                    pCache->SetCachedState( sal_True );
-                }
+                pCache->SetState( SFX_ITEM_AVAILABLE, pItem->Clone(), sal_True );
+                pCache->SetCachedState( sal_True );
             }
-            return;
         }
+        return;
     }
-
-    Broadcast( aItemHint );
-    pImp->aItems.Insert((SfxPoolItemPtr)pItem, nPos );
+    else
+    {
+        Broadcast( aItemHint );
+        pImp->aItems[ pItem->Which() ] = pItem;
+    }
 }
 
 //--------------------------------------------------------------------

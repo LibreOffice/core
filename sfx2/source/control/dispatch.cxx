@@ -76,7 +76,6 @@ DBG_NAME(SfxDispatcherFillState)
 
 typedef boost::ptr_vector<SfxRequest> SfxRequestPtrArray;
 
-SV_IMPL_PTRARR( SfxItemPtrArray, SfxPoolItemPtr );
 DECL_PTRSTACK(SfxShellStack_Impl, SfxShell*, 8, 4 );
 
 struct SfxToDo_Impl
