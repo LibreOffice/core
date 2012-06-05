@@ -640,7 +640,7 @@ void BackingWindow::layoutButton(
 
 void BackingWindow::Paint( const Rectangle& )
 {
-    Wallpaper aBack( GetSettings().GetStyleSettings().GetWorkspaceGradient() );
+    Wallpaper aBack( GetSettings().GetStyleSettings().GetWorkspaceColor() );
     Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
     Rectangle aBmpRect(maControlRect);
     aBmpRect.Left()   -= nShadowLeft;
