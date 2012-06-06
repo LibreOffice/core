@@ -134,10 +134,11 @@ void RegexpMapIterImpl< Val >::setEntry() const
 //============================================================================
 template< typename Val >
 RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap,
-											bool bBegin):
-	m_aEntry(rtl::OUString(), 0),
-	m_pMap(pTheMap),
-	m_bEntrySet(false)
+											bool bBegin)
+    : m_aEntry(rtl::OUString(), 0)
+    , m_aIndex(pTheMap->m_aList[Regexp::KIND_DOMAIN].end())
+    , m_pMap(pTheMap)
+    , m_bEntrySet(false)
 {
 	if (bBegin)
 	{
@@ -148,7 +149,6 @@ RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap,
 	else
 	{
 		m_nList = Regexp::KIND_DOMAIN;
-		m_aIndex = m_pMap->m_aList[Regexp::KIND_DOMAIN].end();
 	}
 }
 
