@@ -2208,7 +2208,6 @@ sal_Bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
-//-----------------------------------------------------------------------------------
 bool Bitmap::ImplScaleLanczos( const double& rScaleX, const double& rScaleY )
 {
     const Size  aSizePix( GetSizePixel() );
@@ -2232,7 +2231,7 @@ bool Bitmap::ImplScaleLanczos( const double& rScaleX, const double& rScaleY )
     ImplCalculateContributions( nWidth, nNewWidth, aSupport, aNumberOfContributions, pWeights, pPixels, pCount );
 
     BitmapReadAccess* pReadAcc = AcquireReadAccess();
-    Bitmap aNewBitmap( Size( nNewWidth, nHeight ), GetBitCount(), &pReadAcc->GetPalette() );
+    Bitmap aNewBitmap( Size( nNewWidth, nHeight ), 24);
     bool bResult = ImplHorizontalConvolution( aNewBitmap, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
 
     // Cleanup
@@ -2260,7 +2259,7 @@ bool Bitmap::ImplScaleLanczos( const double& rScaleX, const double& rScaleY )
     ImplCalculateContributions(nHeight, nNewHeight, aSupport, aNumberOfContributions, pWeights, pPixels, pCount );
 
     pReadAcc = AcquireReadAccess();
-    aNewBitmap = Bitmap( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
+    aNewBitmap = Bitmap( Size( nNewWidth, nNewHeight ), 24);
     bResult = ImplVerticalConvolution( aNewBitmap, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
 
     // Cleanup
