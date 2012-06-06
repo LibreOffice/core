@@ -45,17 +45,36 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
     handleChild(pParent, reader);
 
     //Set radiobutton groups when everything has been imported
-    for (std::vector<RadioButtonGroupMap>::iterator aI = m_aGroups.begin(),
-         aEnd = m_aGroups.end(); aI != aEnd; ++aI)
+    for (std::vector<RadioButtonGroupMap>::iterator aI = m_aGroupMaps.begin(),
+         aEnd = m_aGroupMaps.end(); aI != aEnd; ++aI)
     {
         RadioButton *pOne = static_cast<RadioButton*>(get_by_name(aI->m_sID));
-        RadioButton *pOther = static_cast<RadioButton*>(get_by_name(aI->m_sGroup));
+        RadioButton *pOther = static_cast<RadioButton*>(get_by_name(aI->m_sValue));
         SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of radiobutton group");
         if (pOne && pOther)
             pOne->group(*pOther);
     }
     //drop maps now
-    std::vector<RadioButtonGroupMap>().swap(m_aGroups);
+    std::vector<RadioButtonGroupMap>().swap(m_aGroupMaps);
+
+    //Set ComboBox models when everything has been imported
+    for (std::vector<ComboBoxModelMap>::iterator aI = m_aModelMaps.begin(),
+         aEnd = m_aModelMaps.end(); aI != aEnd; ++aI)
+    {
+        ListBox *pTarget = static_cast<ListBox*>(get_by_name(aI->m_sID));
+        ListStore *pStore = static_cast<ListStore*>(get_model_by_name(aI->m_sValue));
+        SAL_WARN_IF(!pTarget || !pStore, "vcl", "missing elements of combobox/liststore");
+        if (pTarget && pStore)
+            mungemodel(*pTarget, *pStore);
+    }
+    //drop maps now
+    std::vector<ComboBoxModelMap>().swap(m_aModelMaps);
+    for (std::vector<ModelAndId>::iterator aI = m_aModels.begin(),
+         aEnd = m_aModels.end(); aI != aEnd; ++aI)
+    {
+        delete aI->m_pModel;
+    }
+    std::vector<ModelAndId>().swap(m_aModels);
 
     //auto-show (really necessary ?, maybe drop it when complete)
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
@@ -138,7 +157,19 @@ bool VclBuilder::extractGroup(const rtl::OString &id, stringmap &rMap)
     VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("group")));
     if (aFind != rMap.end())
     {
-        m_aGroups.push_back(RadioButtonGroupMap(id, aFind->second));
+        m_aGroupMaps.push_back(RadioButtonGroupMap(id, aFind->second));
+        rMap.erase(aFind);
+        return true;
+    }
+    return false;
+}
+
+bool VclBuilder::extractModel(const rtl::OString &id, stringmap &rMap)
+{
+    VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("model")));
+    if (aFind != rMap.end())
+    {
+        m_aModelMaps.push_back(ComboBoxModelMap(id, aFind->second));
         rMap.erase(aFind);
         return true;
     }
@@ -182,7 +213,10 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
         pWindow = new MetricField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBox")))
+    {
+        extractModel(id, rMap);
         pWindow = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
@@ -348,6 +382,45 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
     }
 }
 
+void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID)
+{
+    m_aModels.push_back(ModelAndId(rID, new ListStore));
+
+    int nLevel = 1;
+
+    while(1)
+    {
+        xmlreader::Span name;
+        int nsId;
+
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            ++nLevel;
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("col")))
+            {
+                reader.nextItem(
+                    xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+                rtl::OString sValue(name.begin, name.length);
+                m_aModels.back().m_pModel->m_aEntries.push_back(sValue);
+            }
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+}
+
 Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 {
     rtl::OString sClass;
@@ -369,6 +442,12 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             sID = rtl::OString(name.begin, name.length);
         }
 
+    }
+
+    if (sClass.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkListStore")))
+    {
+        handleListStore(reader, sID);
+        return NULL;
     }
 
     int nLevel = 1;
@@ -540,6 +619,18 @@ Window *VclBuilder::get_by_name(rtl::OString sID)
     return NULL;
 }
 
+VclBuilder::ListStore *VclBuilder::get_model_by_name(rtl::OString sID)
+{
+    for (std::vector<ModelAndId>::iterator aI = m_aModels.begin(),
+         aEnd = m_aModels.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_sID.equals(sID))
+            return aI->m_pModel;
+    }
+
+    return NULL;
+}
+
 void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
 {
 #if 1
@@ -607,6 +698,15 @@ bool VclBuilder::replace(rtl::OString sID, Window &rReplacement)
     }
     fprintf(stderr, "no sign of %s\n", sID.getStr());
     return false;
+}
+
+void VclBuilder::mungemodel(ListBox &rTarget, ListStore &rStore)
+{
+    for (std::vector<rtl::OString>::iterator aI = rStore.m_aEntries.begin(), aEnd = rStore.m_aEntries.end();
+        aI != aEnd; ++aI)
+    {
+        rTarget.InsertEntry(rtl::OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

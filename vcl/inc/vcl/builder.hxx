@@ -34,6 +34,8 @@
 #include <map>
 #include <vector>
 
+class ListBox;
+
 class VCL_DLLPUBLIC VclBuilder
 {
 private:
@@ -52,17 +54,41 @@ private:
     };
     std::vector<WinAndId> m_aChildren;
 
-    struct RadioButtonGroupMap
+    struct ListStore
+    {
+        std::vector<rtl::OString> m_aEntries;
+    };
+
+    struct ModelAndId
     {
         rtl::OString m_sID;
-        rtl::OString m_sGroup;
-        RadioButtonGroupMap(const rtl::OString &rId, const rtl::OString &rGroup)
+        ListStore *m_pModel;
+        ModelAndId(const rtl::OString &rId, ListStore *pListStore)
             : m_sID(rId)
-            , m_sGroup(rGroup)
+            , m_pModel(pListStore)
         {
         }
     };
-    std::vector<RadioButtonGroupMap> m_aGroups;
+    std::vector<ModelAndId> m_aModels;
+
+    struct StringPair
+    {
+        rtl::OString m_sID;
+        rtl::OString m_sValue;
+        StringPair(const rtl::OString &rId, const rtl::OString &rValue)
+            : m_sID(rId)
+            , m_sValue(rValue)
+        {
+        }
+    };
+
+    typedef StringPair RadioButtonGroupMap;
+    std::vector<RadioButtonGroupMap> m_aGroupMaps;
+
+    typedef StringPair ComboBoxModelMap;
+    std::vector<ComboBoxModelMap> m_aModelMaps;
+    ListStore *get_model_by_name(rtl::OString sID);
+    static void mungemodel(ListBox &rTarget, ListStore &rStore);
 
     rtl::OString m_sID;
     Window *m_pParent;
@@ -82,12 +108,15 @@ private:
     Window *insertObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rVec);
     Window *makeObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rVec);
     bool extractGroup(const rtl::OString &id, stringmap &rVec);
+    bool extractModel(const rtl::OString &id, stringmap &rVec);
 
     void handleChild(Window *pParent, xmlreader::XmlReader &reader);
     Window* handleObject(Window *pParent, xmlreader::XmlReader &reader);
     void handlePacking(Window *pCurrent, xmlreader::XmlReader &reader);
     void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
     void collectProperty(xmlreader::XmlReader &reader, stringmap &rVec);
+
+    void handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID);
 
     //Helpers to retrofit all the existing code the the builder
     static void swapGuts(Window &rOrig, Window &rReplacement);
