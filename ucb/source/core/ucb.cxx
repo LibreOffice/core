@@ -399,7 +399,7 @@ UniversalContentBroker::registerContentProvider(
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    ProviderMap_Impl::iterator aIt(m_aProviders.end());
+    ProviderMap_Impl::iterator aIt;
     try
     {
         aIt = m_aProviders.find(Scheme);
@@ -445,7 +445,7 @@ void SAL_CALL UniversalContentBroker::deregisterContentProvider(
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    ProviderMap_Impl::iterator aMapIt(m_aProviders.end());
+    ProviderMap_Impl::iterator aMapIt;
     try
     {
         aMapIt = m_aProviders.find(Scheme);
