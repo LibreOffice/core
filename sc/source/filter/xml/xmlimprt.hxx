@@ -159,12 +159,20 @@ enum ScXMLCondFormatsTokens
 enum ScXMLCondFormatTokens
 {
     XML_TOK_CONDFORMAT_COLORSCALE,
-    XML_TOK_CONDFORMAT_DATABAR
+    XML_TOK_CONDFORMAT_DATABAR,
+    XML_TOK_CONDFORMAT_CONDITION
 };
 
 enum ScXMLCondFormatAttrTokens
 {
     XML_TOK_CONDFORMAT_TARGET_RANGE
+};
+
+enum ScXMLConditionAttrTokens
+{
+    XML_TOK_CONDITION_VALUE,
+    XML_TOK_CONDITION_APPLY_STYLE_NAME,
+    XML_TOK_CONDITION_BASE_CELL_ADDRESS
 };
 
 enum ScXMLColorScaleFormatTokens
@@ -769,6 +777,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pCondFormatsTokenMap;
     SvXMLTokenMap           *pCondFormatTokenMap;
     SvXMLTokenMap           *pCondFormatAttrMap;
+    SvXMLTokenMap           *pConditionAttrMap;
     SvXMLTokenMap           *pColorScaleTokenMap;
     SvXMLTokenMap           *pColorScaleEntryAttrTokenMap;
     SvXMLTokenMap           *pDataBarTokenMap;
@@ -863,6 +872,7 @@ class ScXMLImport: public SvXMLImport
     bool                    bSelfImportingXMLSet;
     bool                    bLatinDefaultStyle;     // latin-only number format in default style?
     bool                    bFromWrapper;           // called from ScDocShell / ScXMLImportWrapper?
+    bool mbHasNewCondFormatData;
 
 
 protected:
@@ -930,6 +940,7 @@ public:
     const SvXMLTokenMap& GetCondFormatsTokenMap();
     const SvXMLTokenMap& GetCondFormatTokenMap();
     const SvXMLTokenMap& GetCondFormatAttrMap();
+    const SvXMLTokenMap& GetConditionAttrMap();
     const SvXMLTokenMap& GetColorScaleTokenMap();
     const SvXMLTokenMap& GetColorScaleEntryAttrMap();
     const SvXMLTokenMap& GetDataBarTokenMap();
@@ -1043,6 +1054,9 @@ public:
         const rtl::OUString& rCurrency);
 
     void ProgressBarIncrement(bool bEditCell, sal_Int32 nInc = 1);
+
+    void SetNewCondFormatData() { mbHasNewCondFormatData = true; }
+    bool HasNewCondFormatData() { return mbHasNewCondFormatData; }
 
 private:
     void AddStyleRange(const com::sun::star::table::CellRangeAddress& rCellRange);
