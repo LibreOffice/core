@@ -176,20 +176,6 @@ void OXUndoEnvironment::Clear(const Accessor& /*_r*/)
 {
     OUndoEnvLock aLock(*this);
 
-#if OSL_DEBUG_LEVEL > 0
-    // TODO: LLA->OJ please describe what you are doing in this code fragment.
-    PropertySetInfoCache::iterator aIter = m_pImpl->m_aPropertySetCache.begin();
-    PropertySetInfoCache::iterator aEnd = m_pImpl->m_aPropertySetCache.end();
-    int ndbg_len = m_pImpl->m_aPropertySetCache.size();
-    ndbg_len = ndbg_len;
-    for (int idbg_ = 0; aIter != aEnd; ++aIter,++idbg_)
-    {
-        uno::Reference<beans::XPropertySet> xProp(aIter->first,uno::UNO_QUERY);
-        xProp->getPropertySetInfo();
-        int nlen = aIter->second.aProperties.size();
-        nlen = nlen;
-    }
-#endif
     m_pImpl->m_aPropertySetCache.clear();
 
     sal_uInt16 nCount = m_pImpl->m_rModel.GetPageCount();
@@ -267,10 +253,6 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
 
     // no Undo for transient and readonly props.
     // let's see if we know something about the set
-#if OSL_DEBUG_LEVEL > 0
-    int nlen = m_pImpl->m_aPropertySetCache.size();
-    nlen = nlen;
-#endif
     PropertySetInfoCache::iterator objectPos = m_pImpl->m_aPropertySetCache.find(xSet);
     if (objectPos == m_pImpl->m_aPropertySetCache.end())
     {
