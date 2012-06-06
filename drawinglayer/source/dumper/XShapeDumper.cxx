@@ -102,6 +102,45 @@ namespace {
             rtl::OUStringToOString(aTranspGradName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    void XShapeDumper::dumpFillTransparenceGradientAsElement(awt::Gradient aTranspGrad, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillTransparenceGradient" ));
+
+        switch(aTranspGrad.Style)   //enum GradientStyle
+        {
+            case awt::GradientStyle_LINEAR:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "LINEAR");
+                break;
+            case awt::GradientStyle_AXIAL:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "AXIAL");
+                break;
+            case awt::GradientStyle_RADIAL:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RADIAL");
+                break;
+            case awt::GradientStyle_ELLIPTICAL:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "ELLIPTICAL");
+                break;
+            case awt::GradientStyle_SQUARE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "SQUARE");
+                break;
+            case awt::GradientStyle_RECT:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECT");
+                break;
+            default:
+                break;
+        }
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startColor"), "%" SAL_PRIdINT32, (sal_Int32) aTranspGrad.StartColor);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endColor"), "%" SAL_PRIdINT32, (sal_Int32) aTranspGrad.EndColor);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, (sal_Int32) aTranspGrad.Angle);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("border"), "%" SAL_PRIdINT32, (sal_Int32) aTranspGrad.Border);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("xOffset"), "%" SAL_PRIdINT32, (sal_Int32) aTranspGrad.XOffset);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("yOffset"), "%" SAL_PRIdINT32, (sal_Int32) aTranspGrad.YOffset);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startIntensity"), "%" SAL_PRIdINT32, (sal_Int32) aTranspGrad.StartIntensity);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endIntensity"), "%" SAL_PRIdINT32, (sal_Int32) aTranspGrad.EndIntensity);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stepCount"), "%" SAL_PRIdINT32, (sal_Int32) aTranspGrad.StepCount);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -179,6 +218,12 @@ namespace {
                 rtl::OUString aTranspGradName;
                 if(anotherAny >>= aTranspGradName)
                     dumpFillTransparenceGradientNameAsAttribute(aTranspGradName, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparenceGradient");
+                awt::Gradient aTranspGrad;
+                if(anotherAny >>= aTranspGrad)
+                    dumpFillTransparenceGradientAsElement(aTranspGrad, xmlWriter);
             }
         }
 
