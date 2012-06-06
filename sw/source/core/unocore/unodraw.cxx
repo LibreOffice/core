@@ -1174,7 +1174,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                 else if(RES_OPAQUE == pEntry->nWID)
                 {
                     SvxShape* pSvxShape = GetSvxShape();
-                    SAL_WARN_IF(pSvxShape, "sw.uno", "No SvxShape found!");
+                    SAL_WARN_IF(!pSvxShape, "sw.uno", "No SvxShape found!");
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
@@ -1220,14 +1220,14 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                                 //To prevent this the connection between format and attribute has to be broken before.
                                 const SwPosition *pPos = aAnchor.GetCntntAnchor();
                                 SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-                                SAL_WARN_IF( pTxtNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
+                                SAL_WARN_IF( !pTxtNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
                                 const xub_StrLen nIdx = pPos->nContent.GetIndex();
                                 SwTxtAttr * const pHnt =
                                     pTxtNode->GetTxtAttrForCharAt(
                                         nIdx, RES_TXTATR_FLYCNT );
-                                SAL_WARN_IF( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+                                SAL_WARN_IF( !pHnt || pHnt->Which() != RES_TXTATR_FLYCNT,
                                             "sw.uno", "Missing FlyInCnt-Hint." );
-                                SAL_WARN_IF( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFmt,
+                                SAL_WARN_IF( !pHnt || pHnt->GetFlyCnt().GetFrmFmt() != pFmt,
                                             "sw.uno", "Wrong TxtFlyCnt-Hint." );
                                 const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt())
                                     .SetFlyFmt();
@@ -1237,7 +1237,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                                     RES_TXTATR_FLYCNT, nIdx );
                                 //create a new one
                                 SwTxtNode *pNd = pInternalPam->GetNode()->GetTxtNode();
-                                SAL_WARN_IF( pNd, "sw.uno", "Cursor not at TxtNode." );
+                                SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TxtNode." );
                                 SwFmtFlyCnt aFmt( pFmt );
                                 pNd->InsertItem(aFmt, pInternalPam->GetPoint()
                                         ->nContent.GetIndex(), 0 );
@@ -1322,14 +1322,14 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             //To prevent this the connection between format and attribute has to be broken before.
                             const SwPosition *pPos = rOldAnchor.GetCntntAnchor();
                             SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-                            SAL_WARN_IF( pTxtNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
+                            SAL_WARN_IF( !pTxtNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
                             const xub_StrLen nIdx = pPos->nContent.GetIndex();
                             SwTxtAttr * const pHnt =
                                 pTxtNode->GetTxtAttrForCharAt(
                                     nIdx, RES_TXTATR_FLYCNT );
-                            SAL_WARN_IF( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+                            SAL_WARN_IF( !pHnt || pHnt->Which() != RES_TXTATR_FLYCNT,
                                         "sw.uno", "Missing FlyInCnt-Hint." );
-                            SAL_WARN_IF( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFlyFmt,
+                            SAL_WARN_IF( !pHnt || pHnt->GetFlyCnt().GetFrmFmt() != pFlyFmt,
                                         "sw.uno", "Wrong TxtFlyCnt-Hint." );
                             const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt())
                                 .SetFlyFmt();
@@ -1365,7 +1365,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             {
                                 //the RES_TXTATR_FLYCNT needs to be added now
                                 SwTxtNode *pNd = aPam.GetNode()->GetTxtNode();
-                                SAL_WARN_IF( pNd, "sw.uno", "Crsr is not in a TxtNode." );
+                                SAL_WARN_IF( !pNd, "sw.uno", "Crsr is not in a TxtNode." );
                                 SwFmtFlyCnt aFmt( pFlyFmt );
                                 pNd->InsertItem(aFmt,
                                     aPam.GetPoint()->nContent.GetIndex(), 0 );
