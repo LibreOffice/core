@@ -60,6 +60,8 @@
 //_______________________________________________
 // namespace
 
+class SystemWindow;
+
 namespace framework{
 
 //-----------------------------------------------
@@ -134,6 +136,8 @@ class CloseDispatcher : public css::lang::XTypeProvider
         //---------------------------------------
         /** @short  holded alive for internaly asynchronous operations! */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
+
+        SystemWindow* m_pSysWindow;
 
     //-------------------------------------------
     // native interface

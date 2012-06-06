@@ -53,11 +53,14 @@
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include "vcl/syswin.hxx"
 #include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
 
 //_______________________________________________
 // namespace
+
+using namespace com::sun::star;
 
 namespace framework{
 
@@ -96,8 +99,19 @@ CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::lang::XMultiSer
     , m_xSMGR            (xSMGR                                           )
     , m_aAsyncCallback   (LINK( this, CloseDispatcher, impl_asyncCallback))
     , m_lStatusListener  (m_aLock.getShareableOslMutex()                  )
+    , m_pSysWindow(NULL)
 {
-    m_xCloseFrame = CloseDispatcher::static_impl_searchRightTargetFrame(xFrame, sTarget);
+    uno::Reference<frame::XFrame> xTarget = static_impl_searchRightTargetFrame(xFrame, sTarget);
+    m_xCloseFrame = xTarget;
+
+    // Try to retrieve the system window instance of the closing frame.
+    uno::Reference<awt::XWindow> xWindow = xTarget->getContainerWindow();
+    if (xWindow.is())
+    {
+        Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+        if (pWindow->IsSystemWindow())
+            m_pSysWindow = dynamic_cast<SystemWindow*>(pWindow);
+    }
 }
 
 //-----------------------------------------------
@@ -208,6 +222,13 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
             xListener,
             css::frame::DispatchResultState::FAILURE,
             css::uno::Any());
+        return;
+    }
+
+    if (m_pSysWindow && m_pSysWindow->GetCloseHdl().IsSet())
+    {
+        // The closing frame has its own close handler.  Call it instead.
+        m_pSysWindow->GetCloseHdl().Call(m_pSysWindow);
         return;
     }
 
