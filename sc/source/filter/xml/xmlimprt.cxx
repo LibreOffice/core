@@ -618,6 +618,7 @@ const SvXMLTokenMap& ScXMLImport::GetCondFormatTokenMap()
         {
             { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, XML_TOK_CONDFORMAT_COLORSCALE },
             { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, XML_TOK_CONDFORMAT_DATABAR },
+            { XML_NAMESPACE_CALC_EXT, XML_CONDITION, XML_TOK_CONDFORMAT_CONDITION },
             XML_TOKEN_MAP_END
         };
 
@@ -641,6 +642,24 @@ const SvXMLTokenMap& ScXMLImport::GetCondFormatAttrMap()
     }
 
     return *pCondFormatAttrMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetConditionAttrMap()
+{
+    if( !pConditionAttrMap )
+    {
+        static SvXMLTokenMapEntry aConditionAttrTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_CONDITION_VALUE },
+            { XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, XML_TOK_CONDITION_APPLY_STYLE_NAME },
+            { XML_NAMESPACE_CALC_EXT, XML_BASE_CELL_ADDRESS, XML_TOK_CONDITION_BASE_CELL_ADDRESS },
+            XML_TOKEN_MAP_END
+        };
+
+        pConditionAttrMap = new SvXMLTokenMap( aConditionAttrTokenMap );
+    }
+
+    return *pConditionAttrMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetColorScaleTokenMap()
@@ -1853,6 +1872,7 @@ ScXMLImport::ScXMLImport(
     pCondFormatsTokenMap( 0 ),
     pCondFormatTokenMap( 0 ),
     pCondFormatAttrMap( 0 ),
+    pConditionAttrMap( 0 ),
     pColorScaleTokenMap( 0 ),
     pColorScaleEntryAttrTokenMap( 0 ),
     pDataBarTokenMap( 0 ),
@@ -1934,7 +1954,8 @@ ScXMLImport::ScXMLImport(
     bNullDateSetted(false),
     bSelfImportingXMLSet(false),
     bLatinDefaultStyle(false),
-    bFromWrapper(false)
+    bFromWrapper(false),
+    mbHasNewCondFormatData(false)
 {
     pStylesImportHelper = new ScMyStylesImportHelper(*this);
 
@@ -1988,6 +2009,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pCondFormatsTokenMap;
     delete pCondFormatTokenMap;
     delete pCondFormatAttrMap;
+    delete pConditionAttrMap;
     delete pColorScaleTokenMap;
     delete pColorScaleEntryAttrTokenMap;
     delete pDataBarTokenMap;

@@ -164,6 +164,8 @@ public:
                             const ::rtl::OUString& rAttribute,
                             sal_Int32 nStartIndex );
 
+    static rtl::OUString getExpression(const sal_Unicode*& rpcString, const sal_Unicode* pcEnd, sal_Unicode cEndChar );
+
 private:
                         ScXMLConditionHelper();
                         ~ScXMLConditionHelper();

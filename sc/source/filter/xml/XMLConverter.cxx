@@ -546,19 +546,6 @@ void lclSkipExpression( const sal_Unicode*& rpcString, const sal_Unicode* pcEnd,
     @param cEndChar
         The termination character following the expression.
   */
-OUString lclGetExpression( const sal_Unicode*& rpcString, const sal_Unicode* pcEnd, sal_Unicode cEndChar )
-{
-    OUString aExp;
-    const sal_Unicode* pcExpStart = rpcString;
-    lclSkipExpression( rpcString, pcEnd, cEndChar );
-    if( rpcString < pcEnd )
-    {
-        aExp = OUString( pcExpStart, static_cast< sal_Int32 >( rpcString - pcExpStart ) ).trim();
-        ++rpcString;
-    }
-    return aExp;
-}
-
 /** Tries to skip an empty pair of parentheses (which may contain whitespace
     characters).
 
@@ -634,7 +621,7 @@ void ScXMLConditionHelper::parseCondition(
                 // format is <condition>(<expression>)
                 if( (pcString < pcEnd) && (*pcString == '(') )
                 {
-                    rParseResult.maOperand1 = lclGetExpression( ++pcString, pcEnd, ')' );
+                    rParseResult.maOperand1 = getExpression( ++pcString, pcEnd, ')' );
                     if( !rParseResult.maOperand1.isEmpty() )
                         rParseResult.meToken = pCondInfo->meToken;
                 }
@@ -644,10 +631,10 @@ void ScXMLConditionHelper::parseCondition(
                 // format is <condition>(<expression1>,<expression2>)
                 if( (pcString < pcEnd) && (*pcString == '(') )
                 {
-                    rParseResult.maOperand1 = lclGetExpression( ++pcString, pcEnd, ',' );
+                    rParseResult.maOperand1 = getExpression( ++pcString, pcEnd, ',' );
                     if( !rParseResult.maOperand1.isEmpty() )
                     {
-                        rParseResult.maOperand2 = lclGetExpression( pcString, pcEnd, ')' );
+                        rParseResult.maOperand2 = getExpression( pcString, pcEnd, ')' );
                         if( !rParseResult.maOperand2.isEmpty() )
                             rParseResult.meToken = pCondInfo->meToken;
                     }
@@ -656,6 +643,19 @@ void ScXMLConditionHelper::parseCondition(
         }
         rParseResult.mnEndIndex = static_cast< sal_Int32 >( pcString - pcBegin );
     }
+}
+
+OUString ScXMLConditionHelper::getExpression( const sal_Unicode*& rpcString, const sal_Unicode* pcEnd, sal_Unicode cEndChar )
+{
+    OUString aExp;
+    const sal_Unicode* pcExpStart = rpcString;
+    lclSkipExpression( rpcString, pcEnd, cEndChar );
+    if( rpcString < pcEnd )
+    {
+        aExp = OUString( pcExpStart, static_cast< sal_Int32 >( rpcString - pcExpStart ) ).trim();
+        ++rpcString;
+    }
+    return aExp;
 }
 
 // ============================================================================

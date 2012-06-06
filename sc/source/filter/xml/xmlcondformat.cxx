@@ -41,12 +41,14 @@
 #include "scitems.hxx"
 #include "patattr.hxx"
 #include "svl/intitem.hxx"
+#include "XMLConverter.hxx"
 
 
 ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    GetScImport().SetNewCondFormatData();
     GetScImport().GetDocument()->SetCondFormList(new ScConditionalFormatList(), GetScImport().GetTables().GetCurrentSheet());
 }
 
@@ -115,6 +117,9 @@ SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt1
     SvXMLImportContext* pContext = NULL;
     switch (nToken)
     {
+        case XML_TOK_CONDFORMAT_CONDITION:
+            pContext = new ScXMLCondContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
+            break;
         case XML_TOK_CONDFORMAT_COLORSCALE:
             pContext = new ScXMLColorScaleFormatContext( GetScImport(), nPrefix, rLocalName, mpFormat );
             break;
@@ -280,6 +285,132 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
 
 void ScXMLDataBarFormatContext::EndElement()
 {
+}
+
+namespace {
+
+void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::OUString& rExpr1, rtl::OUString& rExpr2)
+{
+    if(rValue.indexOf("unique") == 0)
+    {
+        eMode = SC_COND_NOTDUPLICATE;
+    }
+    else if(rValue.indexOf("duplicate") == 0)
+    {
+        eMode = SC_COND_DUPLICATE;
+    }
+    else if(rValue.indexOf("between") == 0)
+    {
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 7;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ',');
+        rExpr2 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+        eMode = SC_COND_BETWEEN;
+    }
+    else if(rValue.indexOf("not-between") == 0)
+    {
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 12;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ',');
+        rExpr2 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+        eMode = SC_COND_NOTBETWEEN;
+    }
+    else if(rValue.indexOf("<=") == 0)
+    {
+        rExpr1 = rValue.copy(2);
+        eMode = SC_COND_EQLESS;
+    }
+    else if(rValue.indexOf(">=") == 0)
+    {
+        rExpr1 = rValue.copy(2);
+        eMode = SC_COND_EQGREATER;
+    }
+    else if(rValue.indexOf("!=") == 0)
+    {
+        rExpr1 = rValue.copy(2);
+        eMode = SC_COND_NOTEQUAL;
+    }
+    else if(rValue.indexOf("<") == 0)
+    {
+        rExpr1 = rValue.copy(1);
+        eMode = SC_COND_LESS;
+    }
+    else if(rValue.indexOf("=") == 0)
+    {
+        rExpr1 = rValue.copy(1);
+        eMode = SC_COND_EQUAL;
+    }
+    else if(rValue.indexOf(">") == 0)
+    {
+        rExpr1 = rValue.copy(1);
+        eMode = SC_COND_GREATER;
+    }
+    else if(rValue.indexOf("formula-is") == 0)
+    {
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 11;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ',');
+        eMode = SC_COND_DIRECT;
+    }
+    else
+        eMode = SC_COND_NONE;
+}
+
+}
+
+ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+                        const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScConditionalFormat* pFormat ):
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    rtl::OUString sExpression;
+    rtl::OUString sStyle;
+    rtl::OUString sAddress;
+
+    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetConditionAttrMap();
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    {
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        rtl::OUString aLocalName;
+        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                    sAttrName, &aLocalName ));
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+
+        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        {
+            case XML_TOK_CONDITION_VALUE:
+                sExpression = sValue;
+                break;
+            case XML_TOK_CONDITION_APPLY_STYLE_NAME:
+                sStyle = sValue;
+            case XML_TOK_CONDITION_BASE_CELL_ADDRESS:
+                sAddress = sValue;
+            default:
+                break;
+        }
+    }
+
+    rtl::OUString aExpr1;
+    rtl::OUString aExpr2;
+    ScConditionMode eMode;
+    GetConditionData(sExpression, eMode, aExpr1, aExpr2);
+    ScAddress aPos;
+    sal_Int32 nIndex = 0;
+    ScRangeStringConverter::GetAddressFromString(aPos, sAddress, GetScImport().GetDocument(), formula::FormulaGrammar::CONV_ODF, nIndex);
+
+    ScCondFormatEntry* pFormatEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, GetScImport().GetDocument(), aPos, sStyle,
+                                                        rtl::OUString(), rtl::OUString(), formula::FormulaGrammar::GRAM_ODFF, formula::FormulaGrammar::GRAM_ODFF);
+
+    pFormat->AddEntry(pFormatEntry);
+}
+
+void ScXMLCondContext::EndElement()
+{
+
 }
 
 namespace {

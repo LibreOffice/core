@@ -521,7 +521,7 @@ void XMLTableStyleContext::FillPropertySet(
             sal_Int32 nNumFmt = GetNumberFormat();
             if (nNumFmt >= 0)
                 AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumFmt));
-            if (!bConditionalFormatCreated && (aMaps.size() > 0))
+            if (!GetScImport().HasNewCondFormatData() && !bConditionalFormatCreated && (!aMaps.empty()))
             {
                 aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONDXML)));
                 std::vector<ScXMLMapContent>::iterator aItr(aMaps.begin());

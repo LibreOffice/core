@@ -169,17 +169,18 @@ public:
     virtual void EndElement();
 };
 
-class ScXMLConditionContext : public SvXMLImportContext
+class ScXMLCondContext : public SvXMLImportContext
 {
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
-    ScXMLConditionContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScConditionalFormat* pFormat);
 
-    virtual ~ScXMLConditionContext() {}
+    virtual ~ScXMLCondContext() {}
 
     virtual void EndElement();
 };
