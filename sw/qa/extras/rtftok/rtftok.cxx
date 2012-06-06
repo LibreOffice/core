@@ -94,6 +94,7 @@ public:
     void testFdo49692();
     void testFdo45190();
     void testFdo50539();
+    void testFdo50665();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -131,6 +132,7 @@ public:
     CPPUNIT_TEST(testFdo49692);
     CPPUNIT_TEST(testFdo45190);
     CPPUNIT_TEST(testFdo50539);
+    CPPUNIT_TEST(testFdo50665);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -759,6 +761,24 @@ void Test::testFdo50539()
     // \chcbpat with zero argument should mean the auto (-1) color, not a default color (black)
     xPropertySet->getPropertyValue("CharBackColor") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), nValue);
+}
+
+void Test::testFdo50665()
+{
+    load("fdo50665.rtf");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum(xRunEnumAccess->createEnumeration());
+
+    // Access the second run, which is a textfield
+    xRunEnum->nextElement();
+    uno::Reference<beans::XPropertySet> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    OUString aValue;
+    xRun->getPropertyValue("CharFontName") >>= aValue;
+    // This used to be the default, as character properties were ignored.
+    CPPUNIT_ASSERT_EQUAL(OUString("Book Antiqua"), aValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
