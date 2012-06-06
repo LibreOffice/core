@@ -629,6 +629,7 @@ public:
     sal_Bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }
 
     void            DrawEntry( sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False, bool bLayout = false );
+    virtual void take_properties(Window &rOther);
 };
 
 // -----------

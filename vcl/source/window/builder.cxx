@@ -707,6 +707,8 @@ void VclBuilder::mungemodel(ListBox &rTarget, ListStore &rStore)
     {
         rTarget.InsertEntry(rtl::OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
     }
+    if (!rStore.m_aEntries.empty())
+        rTarget.SelectEntryPos(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
