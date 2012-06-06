@@ -114,6 +114,7 @@ public:
     void testBugFixesXLS();
     void testBugFixesXLSX();
     void testBrokenQuotesCSV();
+    void testRepeatedColumnsODS();
 
     //change this test file only in excel and not in calc
     void testSharedFormulaXLSX();
@@ -141,6 +142,7 @@ public:
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
+    CPPUNIT_TEST(testRepeatedColumnsODS);
 #if 0
     CPPUNIT_TEST(testBrokenQuotesCSV);
 #endif
@@ -671,6 +673,20 @@ void ScFiltersTest::testBugFixesXLSX()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xlsx", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testRepeatedColumnsODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, 0);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    rtl::OUString aCSVFileName;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0);
+
     xDocSh->DoClose();
 }
 
