@@ -13,3 +13,5 @@
 #define BTN_SELECT_DRAWS            5
 
 #define TEMPLATE_VIEW               6
+
+#define IMG_ONLINE_REPOSITORY       100

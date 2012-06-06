@@ -15,6 +15,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 
+class SfxOrganizeMgr;
+
 class SfxTemplateManagerDlg : public ModalDialog
 {
 public:
@@ -38,6 +40,8 @@ private:
     PushButton aButtonDraws;
 
     ThumbnailView maView;
+
+    SfxOrganizeMgr *mpMgr;
 };
 
 #endif // TEMPLATEDLG_HXX

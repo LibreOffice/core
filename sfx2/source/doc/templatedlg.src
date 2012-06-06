@@ -17,7 +17,7 @@ ModalDialog DLG_TEMPLATE_MANAGER
     SVLook = TRUE;
     Moveable = TRUE;
     Closeable = TRUE;
-    Size = MAP_APPFONT ( 270 , 165 );
+    Size = MAP_APPFONT ( 270 , 190 );
     Text [en-US] = "Template Manager";
 
     PushButton BTN_SELECT_ALL
@@ -64,7 +64,15 @@ ModalDialog DLG_TEMPLATE_MANAGER
     Control TEMPLATE_VIEW
     {
         Pos = MAP_APPFONT(5,30);
-        Size = MAP_APPFONT(50,260);
+        Size = MAP_APPFONT(260,150);
         TabStop = TRUE;
+    };
+
+    Image IMG_ONLINE_REPOSITORY
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "signet.png";
+        };
     };
 };
