@@ -1054,7 +1054,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
         throw uno::RuntimeException();
 
     // open temporary file for reading
-    uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+    uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
             ucb::SimpleFileAccess::create( comphelper::ComponentContext(m_xFactory).getUNOContext() ) );
 
     uno::Reference< io::XInputStream > xTempInStream = xTempAccess->openFileRead( m_aTempURL );
