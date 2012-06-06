@@ -286,6 +286,11 @@ public class SQLQueryComposer
 
     public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery)
     {
+        return setQueryCommand(_xParentWindow, _bincludeGrouping, _baddAliasFieldNames, addQuery, false);
+    }
+
+    public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery, boolean prependSortingCriteria)
+    {
         try
         {
             bincludeGrouping = _bincludeGrouping;
@@ -309,7 +314,14 @@ public class SQLQueryComposer
                     m_queryComposer.setStructuredHavingClause(CurDBMetaData.GroupByFilterConditions);
                 }
             }
-            appendSortingcriteria(_baddAliasFieldNames);
+            if (prependSortingCriteria)
+            {
+                prependSortingCriteria(_baddAliasFieldNames);
+            }
+            else
+            {
+                appendSortingcriteria(_baddAliasFieldNames);
+            }
 
             return true;
         }
