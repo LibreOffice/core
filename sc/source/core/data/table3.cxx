@@ -1521,11 +1521,12 @@ bool ScTable::ValidQuery(
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
 
-    //---------------------------------------------------------------
-
     SCSIZE nEntryCount = rParam.GetEntryCount();
-    std::vector<bool> aPassed(nEntryCount, false);
-    std::vector<bool> aTestEqual(nEntryCount, false);
+
+    typedef std::pair<bool,bool> ResultType;
+    static std::vector<ResultType> aResults;
+    if (aResults.size() < nEntryCount)
+        aResults.resize(nEntryCount);
 
     long    nPos = -1;
     QueryEvaluator aEval(*pDocument, *this, rParam, pbTestEqualCondition);
@@ -1581,34 +1582,32 @@ bool ScTable::ValidQuery(
         if (nPos == -1)
         {
             nPos++;
-            aPassed[nPos] = aRes.first;
-            aTestEqual[nPos] = aRes.second;
+            aResults[nPos] = aRes;
         }
         else
         {
             if (rEntry.eConnect == SC_AND)
             {
-                aPassed[nPos] = aPassed[nPos] && aRes.first;
-                aTestEqual[nPos] = aTestEqual[nPos] && aRes.second;
+                aResults[nPos].first = aResults[nPos].first && aRes.first;
+                aResults[nPos].second = aResults[nPos].second && aRes.second;
             }
             else
             {
                 nPos++;
-                aPassed[nPos] = aRes.first;
-                aTestEqual[nPos] = aRes.second;
+                aResults[nPos] = aRes;
             }
         }
     }
 
     for ( long j=1; j <= nPos; j++ )
     {
-        aPassed[0] = aPassed[0] || aPassed[j];
-        aTestEqual[0] = aTestEqual[0] || aTestEqual[j];
+        aResults[0].first = aResults[0].first || aResults[j].first;
+        aResults[0].second = aResults[0].second || aResults[j].second;
     }
 
-    bool bRet = aPassed[0];
+    bool bRet = aResults[0].first;
     if ( pbTestEqualCondition )
-        *pbTestEqualCondition = aTestEqual[0];
+        *pbTestEqualCondition = aResults[0].second;
 
     return bRet;
 }
