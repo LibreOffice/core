@@ -52,6 +52,7 @@ private:
     void dumpFillTransparenceGradientAsElement(com::sun::star::awt::Gradient aTranspGrad, xmlTextWriterPtr xmlWriter);
     void dumpFillGradientNameAsAttribute(rtl::OUString aGradName, xmlTextWriterPtr xmlWriter);
     void dumpFillGradientAsElement(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
+    void dumpFillHatchNameAsAttribute(rtl::OUString aHatchName, xmlTextWriterPtr xmlWriter);
 
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
     void dumpSizeAsAttribute(const com::sun::star::awt::Size& rSize, xmlTextWriterPtr xmlWriter);

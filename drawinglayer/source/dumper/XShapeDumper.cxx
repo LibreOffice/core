@@ -148,7 +148,7 @@ namespace {
 
     void XShapeDumper::dumpFillGradientNameAsAttribute(rtl::OUString aGradName, xmlTextWriterPtr xmlWriter)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparenceGradientName"), "%s",
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillGradientName"), "%s",
             rtl::OUStringToOString(aGradName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
@@ -157,6 +157,12 @@ namespace {
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillGradient" ));
         dumpGradientProperty(aGradient, xmlWriter);
         xmlTextWriterEndElement( xmlWriter );
+    }
+
+    void XShapeDumper::dumpFillHatchNameAsAttribute(rtl::OUString aHatchName, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillHatchName"), "%s",
+            rtl::OUStringToOString(aHatchName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
@@ -254,6 +260,12 @@ namespace {
                 awt::Gradient aGradient;
                 if(anotherAny >>= aGradient)
                     dumpFillGradientAsElement(aGradient, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillHatchName");
+                rtl::OUString aHatchName;
+                if(anotherAny >>= aHatchName)
+                    dumpFillGradientNameAsAttribute(aHatchName, xmlWriter);
             }
         }
 
