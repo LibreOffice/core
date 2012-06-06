@@ -95,6 +95,10 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
         return (aCellPos.Column <= MAXCOL && aCellPos.Row <= MAXROW);
     }
 
+    void DoNumberFormatTextWork( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
+                                 const ::boost::optional< rtl::OUString >& pOUText );
+    void DoNumberFormatOtherWork( const ScAddress& rScCurrentPos );
+
 public:
 
     ScXMLTableRowCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx,

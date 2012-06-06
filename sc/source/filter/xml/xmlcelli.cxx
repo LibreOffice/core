@@ -282,7 +282,8 @@ namespace {
 
 bool scCellExists( const ScAddress& rCellPos )
 {
-    return( rCellPos.Col() <= MAXCOL && rCellPos.Row() <= MAXROW );
+    return( rCellPos.Col() >= 0 && rCellPos.Row() >= 0 &&
+            rCellPos.Col() <= MAXCOL && rCellPos.Row() <= MAXROW );
 }
 
 }
@@ -759,6 +760,80 @@ rtl::OUString getOutputString(ScDocument* pDoc, const ScAddress& aCellPos)
     return aVal;
 }
 
+} // anon namespace
+
+void ScXMLTableRowCellContext::DoNumberFormatTextWork( const ScAddress& rScCurrentPos,
+    const SCCOL nCurrentCol, const ::boost::optional< rtl::OUString >& pOUText )
+{
+    bool bDoIncrement = true;
+    if( rXMLImport.GetTables().IsPartOfMatrix(rScCurrentPos.Col(), rScCurrentPos.Row()) )
+    {
+        LockSolarMutex();
+        ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rScCurrentPos );
+        bDoIncrement = ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA );
+        if ( bDoIncrement )
+        {
+            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+            if (pOUTextValue && !pOUTextValue->isEmpty())
+                pFCell->SetHybridString( *pOUTextValue );
+            else if (pOUTextContent && !pOUTextContent->isEmpty())
+                pFCell->SetHybridString( *pOUTextContent );
+            else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
+                pFCell->SetHybridString( *pOUText );
+            else
+                bDoIncrement = false;
+        }
+    }
+    else
+    {
+        LockSolarMutex();
+        ScBaseCell* pNewCell = NULL;
+        ScDocument* pDoc = rXMLImport.GetDocument();
+        if (pOUTextValue && !pOUTextValue->isEmpty())
+            pNewCell = ScBaseCell::CreateTextCell( *pOUTextValue, pDoc );
+        else if (pOUTextContent && !pOUTextContent->isEmpty())
+            pNewCell = ScBaseCell::CreateTextCell( *pOUTextContent, pDoc );
+        else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
+            pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
+
+        bDoIncrement = pNewCell != NULL;
+        if ( bDoIncrement )
+            pDoc->PutCell( rScCurrentPos, pNewCell );
+    }
+    // #i56027# This is about setting simple text, not edit cells,
+    // so ProgressBarIncrement must be called with bEditCell = FALSE.
+    // Formatted text that is put into the cell by the child context
+    // is handled below (bIsEmpty is true then).
+    if (bDoIncrement || bHasTextImport)
+        rXMLImport.ProgressBarIncrement(false);
+}
+
+void ScXMLTableRowCellContext::DoNumberFormatOtherWork( const ScAddress& rScCurrentPos )
+{
+    if( rXMLImport.GetTables().IsPartOfMatrix(rScCurrentPos.Col(), rScCurrentPos.Row()) )
+    {
+        LockSolarMutex();
+        ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rScCurrentPos );
+        if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+            static_cast<ScFormulaCell*>(pCell)->SetHybridDouble( fValue );
+    }
+    else
+    {
+        LockSolarMutex();
+
+        // #i62435# Initialize the value cell's script type
+        // if the default style's number format is latin-only.
+        // If the cell uses a different format, the script type
+        // will be reset when the style is applied.
+
+        ScBaseCell* pNewCell = new ScValueCell(fValue);
+        if ( rXMLImport.IsLatinDefaultStyle() )
+            pNewCell->SetScriptType( SCRIPTTYPE_LATIN );
+        rXMLImport.GetDocument()->PutCell(
+            rScCurrentPos.Col(), rScCurrentPos.Row(),
+            rScCurrentPos.Tab(), pNewCell );
+    }
+    rXMLImport.ProgressBarIncrement(false);
 }
 
 void ScXMLTableRowCellContext::EndElement()
@@ -838,47 +913,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     {
                                         case util::NumberFormat::TEXT:
                                         {
-                                            bool bDoIncrement = true;
-                                            if( rTables.IsPartOfMatrix(aScCurrentPos.Col(), aScCurrentPos.Row()) )
-                                            {
-                                                LockSolarMutex();
-                                                ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScCurrentPos );
-                                                bDoIncrement = ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA );
-                                                if ( bDoIncrement )
-                                                {
-                                                    ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                                                    if (pOUTextValue && !pOUTextValue->isEmpty())
-                                                        pFCell->SetHybridString( *pOUTextValue );
-                                                    else if (pOUTextContent && !pOUTextContent->isEmpty())
-                                                        pFCell->SetHybridString( *pOUTextContent );
-                                                    else if ( i > 0 && pOUText && !pOUText->isEmpty() )
-                                                        pFCell->SetHybridString( *pOUText );
-                                                    else
-                                                        bDoIncrement = false;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                LockSolarMutex();
-                                                ScBaseCell* pNewCell = NULL;
-                                                ScDocument* pDoc = rXMLImport.GetDocument();
-                                                if (pOUTextValue && !pOUTextValue->isEmpty())
-                                                    pNewCell = ScBaseCell::CreateTextCell( *pOUTextValue, pDoc );
-                                                else if (pOUTextContent && !pOUTextContent->isEmpty())
-                                                    pNewCell = ScBaseCell::CreateTextCell( *pOUTextContent, pDoc );
-                                                else if ( i > 0 && pOUText && !pOUText->isEmpty() )
-                                                    pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
-
-                                                bDoIncrement = pNewCell != NULL;
-                                                if ( bDoIncrement )
-                                                    pDoc->PutCell( aScCurrentPos, pNewCell );
-                                            }
-                                            // #i56027# This is about setting simple text, not edit cells,
-                                            // so ProgressBarIncrement must be called with bEditCell = FALSE.
-                                            // Formatted text that is put into the cell by the child context
-                                            // is handled below (bIsEmpty is true then).
-                                            if (bDoIncrement || bHasTextImport)
-                                                rXMLImport.ProgressBarIncrement(false);
+                                            DoNumberFormatTextWork( aScCurrentPos, i, pOUText );
                                         }
                                         break;
                                         case util::NumberFormat::NUMBER:
@@ -888,30 +923,7 @@ void ScXMLTableRowCellContext::EndElement()
                                         case util::NumberFormat::DATETIME:
                                         case util::NumberFormat::LOGICAL:
                                         {
-                                            if( rTables.IsPartOfMatrix(aScCurrentPos.Col(), aScCurrentPos.Row()) )
-                                            {
-                                                LockSolarMutex();
-                                                ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScCurrentPos );
-                                                if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-                                                    static_cast<ScFormulaCell*>(pCell)->SetHybridDouble( fValue );
-                                            }
-                                            else
-                                            {
-                                                LockSolarMutex();
-
-                                                // #i62435# Initialize the value cell's script type
-                                                // if the default style's number format is latin-only.
-                                                // If the cell uses a different format, the script type
-                                                // will be reset when the style is applied.
-
-                                                ScBaseCell* pNewCell = new ScValueCell(fValue);
-                                                if ( rXMLImport.IsLatinDefaultStyle() )
-                                                    pNewCell->SetScriptType( SCRIPTTYPE_LATIN );
-                                                rXMLImport.GetDocument()->PutCell(
-                                                    aScCurrentPos.Col(), aScCurrentPos.Row(),
-                                                    aScCurrentPos.Tab(), pNewCell );
-                                            }
-                                            rXMLImport.ProgressBarIncrement(false);
+                                            DoNumberFormatOtherWork( aScCurrentPos );
                                         }
                                         break;
                                         default:
