@@ -337,13 +337,6 @@ File gid_File_Extra_Show_Pl
     Name = "show.pl";
 End
 
-File gid_File_Extra_Tplpresntimpr_Lang
-    Dir = gid_Dir_Template_Presnt;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplpresntimpr,zip);
-End
-
 File gid_File_Extra_Tpllayoutimpr
     Dir = gid_Dir_Template_Common_Layout;
     ARCHIVE_TXT_FILE_BODY;
