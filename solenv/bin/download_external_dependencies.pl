@@ -150,7 +150,7 @@ sub ProcessLastBlock ()
     # Ignore the block if the selector does not match.
     if ( ! EvaluateExpression(SubstituteVariables($LocalEnvironment->{'selector'})))
     {
-        printf("ignoring %s because its prerequisites are not fullfilled\n", GetValue('name'));
+        printf("ignoring %s because its prerequisites are not fulfilled\n", GetValue('name'));
     }
     else
     {
@@ -243,17 +243,23 @@ sub SubstituteVariables ($)
 
     Evaluate the $expression of an "if" statement to either 0 or 1.  It can
     be a single term (see EvaluateTerm for a description), or several terms
-    separated by either all ||s or &&s.  Mixing || and && is not supported
-    and will result in an error.
+    separated by either all ||s or &&s.  A term can also be an expression
+    enclosed in parantheses.
 
 =cut
 sub EvaluateExpression ($)
 {
     my $expression = shift;
 
+    # Evaluate sub expressions enclosed in parantheses.
+    while ($expression =~ /^(.*)\(([^\(\)]+)\)(.*)$/)
+    {
+        $expression = $1 . (EvaluateExpression($2) ? " true " : " false ") . $3;
+    }
+
     if ($expression =~ /&&/ && $expression =~ /\|\|/)
     {
-        die "selctor can contain either && or || but not both at the same time";
+        die "expression can contain either && or || but not both at the same time";
     }
     elsif ($expression =~ /&&/)
     {
@@ -275,8 +281,6 @@ sub EvaluateExpression ($)
     {
         return EvaluateTerm($expression);
     }
-    print $expression."\n";
-    return 1;
 }
 
 
@@ -294,12 +298,13 @@ sub EvaluateTerm ($)
 {
     my $term = shift;
 
-    if ($term =~ /^\s*([a-zA-Z_0-9]+)\s*(=|!=)\s*(.*)\s*$/)
+    if ($term =~ /^\s*([a-zA-Z_0-9]+)\s*(==|!=)\s*(.*)\s*$/)
     {
         my ($variable_name, $operator, $given_value) = ($1,$2,$3);
         my $variable_value = $ENV{$variable_name};
+        $variable_value = "" if ! defined $variable_value;
 
-        if ($operator eq "=")
+        if ($operator eq "==")
         {
             return $variable_value eq $given_value;
         }
@@ -315,6 +320,10 @@ sub EvaluateTerm ($)
     elsif ($term =~ /^\s*true\s*$/i)
     {
         return 1;
+    }
+    elsif ($term =~ /^\s*false\s*$/i)
+    {
+        return 0;
     }
     else
     {
