@@ -226,6 +226,21 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const rtl::OString &rIn, sal_Char c
 */
 COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const rtl::OUString &rIn, sal_Unicode cTok);
 
+/** Reverse an OUString
+
+  @param    rIn     the input OUString
+  @return   the reversed input
+*/
+COMPHELPER_DLLPUBLIC rtl::OUString reverseString(const rtl::OUString &rStr);
+
+/** Reverse an OString
+
+  @param    rIn     the input OString
+  @return   the reversed input
+*/
+COMPHELPER_DLLPUBLIC rtl::OString reverseString(const rtl::OString &rStr);
+
+
 namespace detail
 {
     template<typename B> B& truncateToLength(B& rBuffer, sal_Int32 nLen)

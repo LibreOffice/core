@@ -2557,8 +2557,7 @@ void SvtFileDialog::implArrangeControls()
 sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilter )
 {
     String aEmpty;
-    String aReversePath( rPath );
-    aReversePath.Reverse();
+    String aReversePath = comphelper::string::reverseString(rPath);
     sal_uInt16 nQuestionMarkPos = rPath.Search( '?' );
 
     if ( nQuestionMarkPos != STRING_NOTFOUND )
@@ -2607,12 +2606,12 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilt
             // cut off filter
             rFilter = aReversePath;
             rFilter.Erase( nPathTokenPos );
-            rFilter.Reverse();
+            rFilter = comphelper::string::reverseString(rFilter);
 
             // determine folder
             rPath = aReversePath;
             rPath.Erase( 0, nPathTokenPos );
-            rPath.Reverse();
+            rPath = comphelper::string::reverseString(rPath);
         }
         else
         {

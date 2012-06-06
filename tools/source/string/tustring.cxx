@@ -155,30 +155,6 @@ xub_StrLen STRING::SearchAndReplace( STRCODE c, STRCODE cRep, xub_StrLen nIndex 
 
 // -----------------------------------------------------------------------
 
-STRING& STRING::Reverse()
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    if ( !mpData->mnLen )
-        return *this;
-
-    // Daten kopieren, wenn noetig
-    ImplCopyData();
-
-    // Reverse
-    sal_Int32 nCount = mpData->mnLen / 2;
-    for ( sal_Int32 i = 0; i < nCount; ++i )
-    {
-        STRCODE cTemp = mpData->maStr[i];
-        mpData->maStr[i] = mpData->maStr[mpData->mnLen-i-1];
-        mpData->maStr[mpData->mnLen-i-1] = cTemp;
-    }
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
 STRING& STRING::Insert( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen,
                         xub_StrLen nIndex )
 {

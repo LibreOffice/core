@@ -52,6 +52,7 @@
 
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -3122,8 +3123,7 @@ RTLFUNC(StrReverse)
         return;
     }
 
-    String aStr = pSbxVariable->GetString();
-    aStr.Reverse();
+    rtl::OUString aStr = comphelper::string::reverseString(pSbxVariable->GetString());
     rPar.Get(0)->PutString( aStr );
 }
 
