@@ -188,6 +188,14 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
+    void XShapeDumper::dumpFillBackgroundAsAttribute(sal_Bool aBackground, xmlTextWriterPtr xmlWriter)
+    {
+        if(aBackground)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "false");
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -295,6 +303,12 @@ namespace {
                 drawing::Hatch aHatch;
                 if(anotherAny >>= aHatch)
                     dumpFillHatchAsElement(aHatch, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillBackground");
+                sal_Bool bFillBackground;
+                if(anotherAny >>= bFillBackground)
+                    dumpFillBackgroundAsAttribute(bFillBackground, xmlWriter);
             }
         }
 
