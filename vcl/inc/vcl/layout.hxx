@@ -190,16 +190,38 @@ protected:
     }
 };
 
+enum VclButtonBoxStyle
+{
+    VCL_BUTTONBOX_DEFAULT_STYLE,
+    VCL_BUTTONBOX_SPREAD,
+    VCL_BUTTONBOX_EDGE,
+    VCL_BUTTONBOX_START,
+    VCL_BUTTONBOX_END,
+    VCL_BUTTONBOX_CENTER
+};
+
 class VCL_DLLPUBLIC VclButtonBox : public VclBox
 {
 public:
     VclButtonBox(Window *pParent, int nSpacing)
         : VclBox(pParent, true, nSpacing)
+        , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
     {
     }
+    void set_layout(VclButtonBoxStyle eStyle)
+    {
+        m_eLayoutStyle = eStyle;
+    }
+    VclButtonBoxStyle get_layout() const
+    {
+        return m_eLayoutStyle;
+    }
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
+private:
+    VclButtonBoxStyle m_eLayoutStyle;
 };
 
 class VCL_DLLPUBLIC VclVButtonBox : public VclButtonBox

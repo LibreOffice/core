@@ -264,6 +264,31 @@ Size VclButtonBox::calculateRequisition() const
     return aSize;
 }
 
+bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("layout-style")))
+    {
+        VclButtonBoxStyle eStyle = VCL_BUTTONBOX_DEFAULT_STYLE;
+        if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("start")))
+            eStyle = VCL_BUTTONBOX_START;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("spread")))
+            eStyle = VCL_BUTTONBOX_SPREAD;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("edge")))
+            eStyle = VCL_BUTTONBOX_EDGE;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("start")))
+            eStyle = VCL_BUTTONBOX_START;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("end")))
+            eStyle = VCL_BUTTONBOX_END;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("center")))
+            eStyle = VCL_BUTTONBOX_CENTER;
+        else
+            fprintf(stderr, "unknown layout style %s\n", rValue.getStr());
+        set_layout(eStyle);
+    }
+    else
+        return VclBox::set_property(rKey, rValue);
+    return true;
+}
 
 void VclButtonBox::setAllocation(const Size &rAllocation)
 {
@@ -289,8 +314,20 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
 
     Point aPos(0, 0);
     long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
-    setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension
-        - getPrimaryDimension(aRequisition));
+
+    //To-Do, other layout styles
+    switch (m_eLayoutStyle)
+    {
+        case VCL_BUTTONBOX_START:
+            break;
+        default:
+            fprintf(stderr, "todo unimplemented layout style\n");
+        case VCL_BUTTONBOX_DEFAULT_STYLE:
+        case VCL_BUTTONBOX_END:
+            setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension
+                - getPrimaryDimension(aRequisition));
+            break;
+    }
 
     for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
@@ -506,7 +543,7 @@ bool VclGrid::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("n-rows")))
         /*nothing to do*/;
     else
-        return Window::set_property(rKey, rValue);
+        return VclContainer::set_property(rKey, rValue);
     return true;
 }
 
@@ -641,7 +678,7 @@ bool VclAlignment::set_property(const rtl::OString &rKey, const rtl::OString &rV
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("yscale")))
         m_fYScale = rValue.toFloat();
     else
-        return Window::set_property(rKey, rValue);
+        return VclBin::set_property(rKey, rValue);
     return true;
 }
 
