@@ -1813,10 +1813,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                                         x, y, w, h );
 
     // ----------------- TROUGH
-    gtk_paint_flat_box( m_pWindow->style, gdkDrawable,
+    // Pass coordinates of draw rect: window(0,0) -> widget(bottom-right) (coords relative to widget)
+    gtk_paint_flat_box(m_pWindow->style, gdkDrawable,
                         GTK_STATE_NORMAL, GTK_SHADOW_NONE, gdkRect,
-                        m_pWindow, "base", x, y,
-                        w, h );
+                        m_pWindow, "base", x-pixmapRect.Left(),y-pixmapRect.Top(),x+pixmapRect.Right(),y+pixmapRect.Bottom());
+
     gtk_paint_box( style, gdkDrawable, GTK_STATE_ACTIVE, GTK_SHADOW_IN,
                    gdkRect, GTK_WIDGET(scrollbarWidget), "trough",
                    x, y,
@@ -2178,6 +2179,13 @@ sal_Bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart
     pixmap = NWGetPixmapFromScreen( pixmapRect );
     if ( !pixmap )
         return( sal_False );
+
+    // First render background
+    gtk_paint_flat_box(m_pWindow->style,pixmap,GTK_STATE_NORMAL,GTK_SHADOW_NONE,NULL,m_pWindow,"base",
+            -pixmapRect.Left(),
+            -pixmapRect.Top(),
+            pixmapRect.Right(),
+            pixmapRect.Bottom() );
 
     upBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
     downBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
@@ -2547,7 +2555,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
     paintRect.height = pixmapRect.GetHeight();
 
     gtk_paint_flat_box( m_pWindow->style, pixmap, GTK_STATE_NORMAL,
-                        GTK_SHADOW_NONE, &paintRect, m_pWindow, "base", 0, 0, -1, -1);
+                        GTK_SHADOW_NONE, &paintRect, m_pWindow, "base",
+                        -rControlRectangle.Left(),
+                        -rControlRectangle.Top(),
+                        pixmapRect.GetWidth()+rControlRectangle.Left(),
+                        pixmapRect.GetHeight()+rControlRectangle.Top());
 
     NWSetWidgetState( gWidgetData[m_nXScreen].gNotebookWidget, nState, stateType );
 
@@ -2563,8 +2575,18 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
             break;
 
         case CTRL_TAB_ITEM:
+        {
             stateType = ( nState & CTRL_STATE_SELECTED ) ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE;
 
+            // First draw the background
+            gtk_paint_flat_box(gWidgetData[m_nXScreen].gNotebookWidget->style, pixmap,
+                                   GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, m_pWindow, "base",
+                                   -rControlRectangle.Left(),
+                                   -rControlRectangle.Top(),
+                                   pixmapRect.GetWidth()+rControlRectangle.Left(),
+                                   pixmapRect.GetHeight()+rControlRectangle.Top());
+
+            // Now the tab itself
             if( nState & CTRL_STATE_ROLLOVER )
                 g_object_set_data(G_OBJECT(pixmap),tabPrelitDataName,(gpointer)TRUE);
 
@@ -2580,6 +2602,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
                     "base", 0, (pixmapRect.GetHeight() - 1), pixmapRect.GetWidth(), 1 );
             }
             break;
+        }
 
         default:
             break;
@@ -3236,6 +3259,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKProgress(
     GdkDrawable* const &pixDrawable = GDK_DRAWABLE( pixmap );
 
     // paint background
+    gtk_paint_flat_box(gWidgetData[m_nXScreen].gProgressBar->style, pixDrawable,
+                           GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, m_pWindow, "base",
+                           -rControlRectangle.Left(),-rControlRectangle.Top(),
+                           rControlRectangle.Left()+w,rControlRectangle.Top()+h);
+
     gtk_paint_flat_box( gWidgetData[m_nXScreen].gProgressBar->style,
                         pixDrawable,
                         GTK_STATE_NORMAL,
