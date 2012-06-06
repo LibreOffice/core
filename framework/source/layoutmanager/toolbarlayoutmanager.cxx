@@ -3938,7 +3938,7 @@ throw (uno::RuntimeException)
 
                 // user closes a toolbar =>
                 // context sensitive toolbar: only destroy toolbar and store state.
-                // context sensitive toolbar: make it invisible, store state and destroy it.
+                // non context sensitive toolbar: make it invisible, store state and destroy it.
                 if ( !pIter->m_bContextSensitive )
                     pIter->m_bVisible = sal_False;
 
@@ -3954,6 +3954,14 @@ throw (uno::RuntimeException)
     {
         implts_writeWindowStateData( aUIElement );
         destroyToolbar( aName );
+
+        ReadGuard aReadLock( m_aLock );
+        bool bLayoutDirty = m_bLayoutDirty;
+        ILayoutNotifications* pParentLayouter( m_pParentLayouter );
+        aWriteLock.unlock();
+
+        if ( bLayoutDirty && pParentLayouter )
+            pParentLayouter->requestLayout( ILayoutNotifications::HINT_TOOLBARSPACE_HAS_CHANGED );
     }
 }
 
