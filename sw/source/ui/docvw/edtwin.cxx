@@ -272,36 +272,31 @@ public:
 
 struct QuickHelpData
 {
-    std::vector<String> *pHelpStrings;
+    std::vector<String> m_aHelpStrings;
     sal_uInt16* pAttrs;
     CommandExtTextInputData* pCETID;
     sal_uLong nTipId;
     sal_uInt16 nLen, nCurArrPos;
     sal_Bool bClear : 1, bChkInsBlank : 1, bIsTip : 1, bIsAutoText : 1;
 
-    QuickHelpData() : pAttrs( 0 ), pCETID( 0 )
-    {
-        pHelpStrings = new std::vector<String>;
-        ClearCntnt();
-    }
-    ~QuickHelpData() { delete pHelpStrings; }
+    QuickHelpData() : pAttrs( 0 ), pCETID( 0 ) { ClearCntnt(); }
 
     void Move( QuickHelpData& rCpy );
     void ClearCntnt();
     void Start( SwWrtShell& rSh, sal_uInt16 nWrdLen );
     void Stop( SwWrtShell& rSh );
 
-    sal_Bool HasCntnt() const { return !pHelpStrings->empty() && 0 != nLen; }
+    sal_Bool HasCntnt() const { return !m_aHelpStrings.empty() && 0 != nLen; }
 
     void Inc( sal_Bool bEndLess )
     {
-        if( ++nCurArrPos >= pHelpStrings->size() )
+        if( ++nCurArrPos >= m_aHelpStrings.size() )
             nCurArrPos = (bEndLess && !bIsAutoText ) ? 0 : nCurArrPos-1;
     }
     void Dec( sal_Bool bEndLess )
     {
         if( 0 == nCurArrPos-- )
-            nCurArrPos = (bEndLess && !bIsAutoText ) ?  pHelpStrings->size()-1 : 0;
+            nCurArrPos = (bEndLess && !bIsAutoText ) ? m_aHelpStrings.size()-1 : 0;
     }
     void FillStrArr( SwWrtShell& rSh, const String& rWord );
     void SortAndFilter();
@@ -2475,7 +2470,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 // replace the word or abbreviation with the auto text
                 rSh.StartUndo( UNDO_START );
 
-                String sFnd( (*aTmpQHD.pHelpStrings)[ aTmpQHD.nCurArrPos ] );
+                String sFnd( aTmpQHD.m_aHelpStrings[ aTmpQHD.nCurArrPos ] );
                 if( aTmpQHD.bIsAutoText )
                 {
                     SwGlossaryList* pList = ::GetGlossaryList();
@@ -5471,8 +5466,8 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::Create
 
 void QuickHelpData::Move( QuickHelpData& rCpy )
 {
-    pHelpStrings->clear();
-    std::swap( pHelpStrings, rCpy.pHelpStrings );
+    m_aHelpStrings.clear();
+    m_aHelpStrings.swap( rCpy.m_aHelpStrings );
 
     bClear = rCpy.bClear;
     nLen = rCpy.nLen;
@@ -5495,7 +5490,7 @@ void QuickHelpData::ClearCntnt()
     nLen = nCurArrPos = 0;
     bClear = bChkInsBlank = sal_False;
     nTipId = 0;
-    pHelpStrings->clear();
+    m_aHelpStrings.clear();
     bIsTip = sal_True;
     bIsAutoText = sal_True;
     delete pCETID, pCETID = 0;
@@ -5524,12 +5519,12 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
                     rSh.GetCharRect().Pos() )));
         aPt.Y() -= 3;
         nTipId = Help::ShowTip( &rWin, Rectangle( aPt, Size( 1, 1 )),
-                        (*pHelpStrings)[ nCurArrPos ],
+                        m_aHelpStrings[ nCurArrPos ],
                         QUICKHELP_LEFT | QUICKHELP_BOTTOM );
     }
     else
     {
-        String sStr( (*pHelpStrings)[ nCurArrPos ] );
+        String sStr( m_aHelpStrings[ nCurArrPos ] );
         sStr.Erase( 0, nLen );
         sal_uInt16 nL = sStr.Len();
         pAttrs = new sal_uInt16[ nL ];
@@ -5609,17 +5604,17 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
                 == sWordLower )
             {
                 if ( aWordCase == CASE_LOWER )
-                    pHelpStrings->push_back( rCC.lowercase( rStr ) );
+                    m_aHelpStrings.push_back( rCC.lowercase( rStr ) );
                 else if ( aWordCase == CASE_SENTENCE )
                 {
                     String sTmp = rCC.lowercase( rStr );
                     sTmp.SetChar( 0, rStr.GetChar(0) );
-                    pHelpStrings->push_back( sTmp );
+                    m_aHelpStrings.push_back( sTmp );
                 }
                 else if ( aWordCase == CASE_UPPER )
-                    pHelpStrings->push_back( rCC.uppercase( rStr ) );
+                    m_aHelpStrings.push_back( rCC.uppercase( rStr ) );
                 else // CASE_OTHER - use retrieved capitalization
-                    pHelpStrings->push_back( rStr );
+                    m_aHelpStrings.push_back( rStr );
             }
         }
         // Data for second loop iteration
@@ -5640,17 +5635,17 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
             if ( rStr.Len() > rWord.Len() )
             {
                 if ( aWordCase == CASE_LOWER )
-                    pHelpStrings->push_back( rCC.lowercase( rStr ) );
+                    m_aHelpStrings.push_back( rCC.lowercase( rStr ) );
                 else if ( aWordCase == CASE_SENTENCE )
                 {
                     String sTmp = rCC.lowercase( rStr );
                     sTmp.SetChar( 0, rStr.GetChar(0) );
-                    pHelpStrings->push_back( sTmp );
+                    m_aHelpStrings.push_back( sTmp );
                 }
                 else if ( aWordCase == CASE_UPPER )
-                    pHelpStrings->push_back( rCC.uppercase( rStr ) );
+                    m_aHelpStrings.push_back( rCC.uppercase( rStr ) );
                 else // CASE_OTHER - use retrieved capitalization
-                    pHelpStrings->push_back( rStr );
+                    m_aHelpStrings.push_back( rStr );
             }
         }
     }
@@ -5679,14 +5674,14 @@ struct EqualIgnoreCaseAscii
 // TODO - implement an i18n aware sort
 void QuickHelpData::SortAndFilter()
 {
-    std::sort( pHelpStrings->begin(),
-               pHelpStrings->end(),
+    std::sort( m_aHelpStrings.begin(),
+               m_aHelpStrings.end(),
                CompareIgnoreCaseAscii() );
 
-    std::vector<String>::iterator it = std::unique( pHelpStrings->begin(),
-                                                    pHelpStrings->end(),
+    std::vector<String>::iterator it = std::unique( m_aHelpStrings.begin(),
+                                                    m_aHelpStrings.end(),
                                                     EqualIgnoreCaseAscii() );
-    pHelpStrings->erase( it, pHelpStrings->end() );
+    m_aHelpStrings.erase( it, m_aHelpStrings.end() );
 
     nCurArrPos = 0;
 }
@@ -5700,10 +5695,10 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
     if( pACfg->IsAutoTextTip() )
     {
         SwGlossaryList* pList = ::GetGlossaryList();
-        pList->HasLongName( rWord, pQuickHlpData->pHelpStrings );
+        pList->HasLongName( rWord, &pQuickHlpData->m_aHelpStrings );
     }
 
-    if( !pQuickHlpData->pHelpStrings->empty() )
+    if( !pQuickHlpData->m_aHelpStrings.empty() )
     {
         pQuickHlpData->bIsTip = sal_True;
         pQuickHlpData->bIsAutoText = sal_True;
@@ -5719,7 +5714,7 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
     }
 
 
-    if( !pQuickHlpData->pHelpStrings->empty() )
+    if( !pQuickHlpData->m_aHelpStrings.empty() )
     {
         pQuickHlpData->SortAndFilter();
         pQuickHlpData->Start( rSh, rWord.Len() );
