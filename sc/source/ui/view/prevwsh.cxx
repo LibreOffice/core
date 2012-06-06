@@ -842,6 +842,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
             case SID_SAVEDOC:
             case SID_SAVEASDOC:
             case SID_MAIL_SENDDOC:
+            case SID_VIEW_DATA_SOURCE_BROWSER:
                 rSet.DisableItem(nWhich);
                 break;
             case SID_PREVIEW_PREVIOUS:
