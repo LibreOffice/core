@@ -99,6 +99,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bAddExtLeading(false),
     bIsFormatting(false),
     bFormatted(false),
+    bInSelection(false),
     bIsInUndo(false),
     bUpdate(true),
     bUndoEnabled(true),
