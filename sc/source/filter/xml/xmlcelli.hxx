@@ -60,10 +60,6 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
     ScMyImpCellRangeSource* pCellRangeSource;
     double      fValue;
-    //~ sal_Int32   nMergedRows, nMergedCols;
-    //~ sal_Int32   nMatrixRows, nMatrixCols;
-    //~ sal_Int32   nRepeatedRows;
-    //~ sal_Int32   nCellsRepeated;
     SCROW       nMergedRows, nMatrixRows, nRepeatedRows;
     SCCOL       nMergedCols, nMatrixCols, nCellsRepeated;
     ScXMLImport& rXMLImport;
