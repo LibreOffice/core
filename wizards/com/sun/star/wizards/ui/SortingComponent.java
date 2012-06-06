@@ -258,13 +258,10 @@ public class SortingComponent
             ArrayList<String> SortDescriptions = new ArrayList<String>();
             for (int i = 0; i <= MaxSortIndex; i++)
             {
-                if (!((Boolean) CurUnoDialog.getControlProperty("lstSort" + (i + 1), PropertyNames.READ_ONLY)))
-                {
-                    CurFieldName = xSortListBox[i].getSelectedItem();
-                    SortDescriptions.add(CurFieldName);
-                    iCurState = ((Short) CurUnoDialog.getControlProperty("optAscend" + Integer.toString(i + 1), PropertyNames.PROPERTY_STATE)).shortValue();
-                    SortFieldNames.add(new String[]{CurFieldName,iCurState == 1 ? PropertyNames.ASC :"DESC" });
-                }
+		CurFieldName = xSortListBox[i].getSelectedItem();
+		SortDescriptions.add(CurFieldName);
+		iCurState = ((Short) CurUnoDialog.getControlProperty("optAscend" + Integer.toString(i + 1), PropertyNames.PROPERTY_STATE)).shortValue();
+		SortFieldNames.add(new String[]{CurFieldName,iCurState == 1 ? PropertyNames.ASC :"DESC" });
             }
             // When searching for a duplicate entry we can neglect whether the entries are to be sorted ascending or descending
             // TODO for the future we should deliver a messagebox when two different sorting modes have been applied to one field
