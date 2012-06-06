@@ -188,8 +188,8 @@ private:
     inline void              SetKind( sal_uInt16 n );
 public:
     inline sal_uLong             AddRef( sal_uLong n = 1 ) const;
-private:
     inline sal_uLong             ReleaseRef( sal_uLong n = 1 ) const;
+private:
     SVL_DLLPRIVATE long      Delete_Impl(void*);
 
 #if 0

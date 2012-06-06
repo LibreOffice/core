@@ -421,12 +421,12 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
             const ScPatternAttr* pPat2 = GetPattern(nCol2, nRow);
             if (pPat1 != pPat2)
             {
-                //maybe the content is the same
-                if (!(*pPat1 == *pPat2))
-                {
-                    SetPattern(nCol1, nRow, *pPat2, sal_True);
-                    SetPattern(nCol2, nRow, *pPat1, sal_True);
-                }
+                //Add Reference to avoid pPat1 to be deleted by merge same cell attributes for adjacent cells
+                if( IsPooledItem( pPat1 ) ) pPat1->AddRef();
+                SetPattern(nCol1, nRow, *pPat2, sal_True);
+                SetPattern(nCol2, nRow, *pPat1, sal_True);
+                if( IsPooledItem( pPat1 ) ) pPat1->ReleaseRef();
+
             }
         }
     }
@@ -443,12 +443,11 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
             const ScPatternAttr* pPat2 = GetPattern(nCol, nRow2);
             if (pPat1 != pPat2)
             {
-                //maybe the content is the same
-                if (!(*pPat1 == *pPat2))
-                {
-                    SetPattern(nCol, nRow1, *pPat2, sal_True);
-                    SetPattern(nCol, nRow2, *pPat1, sal_True);
-                }
+                //Add Reference to avoid pPat1 to be deleted by merge same cell attributes for adjacent cells
+                if( IsPooledItem( pPat1 ) ) pPat1->AddRef();
+                SetPattern(nCol, nRow1, *pPat2, sal_True);
+                SetPattern(nCol, nRow2, *pPat1, sal_True);
+                if( IsPooledItem( pPat1 ) ) pPat1->ReleaseRef();
             }
         }
     }
