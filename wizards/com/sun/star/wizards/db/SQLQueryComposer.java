@@ -155,11 +155,16 @@ public class SQLQueryComposer
 
     public void prependSortingCriteria() throws SQLException
     {
+        prependSortingCriteria(false);
+    }
+
+    public void prependSortingCriteria(boolean _baddAliasFieldNames) throws SQLException
+    {
         XIndexAccess xColumnIndexAccess = m_xQueryAnalyzer.getOrderColumns();
         m_queryComposer.setOrder("");
         for (int i = 0; i < CurDBMetaData.getSortFieldNames().length; i++)
         {
-            appendSortingCriterion(i, false);
+            appendSortingCriterion(i, _baddAliasFieldNames);
         }
         for (int i = 0; i < xColumnIndexAccess.getCount(); i++)
         {
