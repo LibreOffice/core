@@ -2152,7 +2152,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
             ( pExecuteInfo->xLayoutManager.is() ) &&
             ( pExecuteInfo->xWindow.is() ))
         {
-            // Use docking window close to close the toolbar. The layout manager is
+            // Use docking window close to close the toolbar. The toolbar layout manager is
             // listener and will react correctly according to the context sensitive
             // flag of our toolbar.
             Window* pWin = VCLUnoHelper::GetWindow( pExecuteInfo->xWindow );
