@@ -48,6 +48,7 @@ private:
     void dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
     void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter);
     void dumpFillTransparenceGradientNameAsAttribute(rtl::OUString aTranspGradName, xmlTextWriterPtr xmlWriter);
+    void dumpGradientProperty(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
     void dumpFillTransparenceGradientAsElement(com::sun::star::awt::Gradient aTranspGrad, xmlTextWriterPtr xmlWriter);
 
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
