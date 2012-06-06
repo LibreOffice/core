@@ -1087,6 +1087,17 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
 {
     Point aStart( rStart ), aStop( rStop );
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
+    Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? (Window*) mpOutDev: NULL;
+    if(pWin)
+    {
+        ControlPart nPart = ( bVertical ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ );
+        bool nativeSupported = pWin->IsNativeControlSupported( CTRL_FIXEDLINE, nPart );
+        ImplControlValue    aValue;
+        ControlState        nState = 0;
+        Rectangle aRect(rStart,rStop);
+        if(nativeSupported && pWin->DrawNativeControl(CTRL_FIXEDLINE,nPart,aRect,nState,aValue,rtl::OUString()))
+            return;
+    }
 
     mpOutDev->Push( PUSH_LINECOLOR );
     if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )

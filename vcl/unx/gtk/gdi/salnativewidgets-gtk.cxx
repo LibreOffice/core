@@ -635,6 +635,11 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
             if(nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA)
                 return true;
             break;
+
+        case CTRL_FIXEDLINE:
+            if(nPart == PART_SEPARATOR_VERT || nPart == PART_SEPARATOR_HORZ)
+                return true;
+            break;
     }
 
     return false;
@@ -921,6 +926,10 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     {
         returnVal = NWPaintGTKWindowBackground( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
+    else if( nType == CTRL_FIXEDLINE )
+    {
+        returnVal = NWPaintGTKFixedLine( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+    }
 
     if(nType==CTRL_FRAME)
     {
@@ -1187,6 +1196,22 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 /************************************************************************
  * Individual control drawing functions
  ************************************************************************/
+sal_Bool GtkSalGraphics::NWPaintGTKFixedLine(
+            GdkDrawable* gdkDrawable,
+            ControlType, ControlPart nPart,
+            const Rectangle& rControlRectangle,
+            const clipList&,
+            ControlState, const ImplControlValue&,
+            const OUString& )
+{
+    if(nPart == PART_SEPARATOR_HORZ)
+        gtk_paint_hline(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,NULL,m_pWindow,"hseparator",rControlRectangle.Left(),rControlRectangle.Right(),rControlRectangle.Top());
+    else
+        gtk_paint_vline(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,NULL,m_pWindow,"vseparator",rControlRectangle.Top(),rControlRectangle.Bottom(),rControlRectangle.Left());
+
+    return true;
+}
+
 sal_Bool GtkSalGraphics::NWPaintGTKFrame(
             GdkDrawable* gdkDrawable,
             ControlType, ControlPart,
