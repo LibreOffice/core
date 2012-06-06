@@ -762,8 +762,8 @@ rtl::OUString getOutputString(ScDocument* pDoc, const ScAddress& aCellPos)
 
 } // anon namespace
 
-void ScXMLTableRowCellContext::DoNumberFormatTextWork( const ScAddress& rScCurrentPos,
-    const SCCOL nCurrentCol, const ::boost::optional< rtl::OUString >& pOUText )
+void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rScCurrentPos,
+        const SCCOL nCurrentCol, const ::boost::optional< rtl::OUString >& pOUText )
 {
     bool bDoIncrement = true;
     if( rXMLImport.GetTables().IsPartOfMatrix(rScCurrentPos.Col(), rScCurrentPos.Row()) )
@@ -808,7 +808,7 @@ void ScXMLTableRowCellContext::DoNumberFormatTextWork( const ScAddress& rScCurre
         rXMLImport.ProgressBarIncrement(false);
 }
 
-void ScXMLTableRowCellContext::DoNumberFormatOtherWork( const ScAddress& rScCurrentPos )
+void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rScCurrentPos )
 {
     if( rXMLImport.GetTables().IsPartOfMatrix(rScCurrentPos.Col(), rScCurrentPos.Row()) )
     {
@@ -834,6 +834,90 @@ void ScXMLTableRowCellContext::DoNumberFormatOtherWork( const ScAddress& rScCurr
             rScCurrentPos.Tab(), pNewCell );
     }
     rXMLImport.ProgressBarIncrement(false);
+}
+
+void ScXMLTableRowCellContext::AddCellsToTable( const ScAddress& rScCellPos,
+        const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rScCurrentPos )
+{
+    ScMyTables& rTables = rXMLImport.GetTables();
+    bool bWasEmpty = bIsEmpty;
+    for (SCCOL i = 0; i < nCellsRepeated; ++i)
+    {
+        rScCurrentPos.SetCol( rScCellPos.Col() + i );
+        if (i > 0)
+            rTables.AddColumn(false);
+        if (!bIsEmpty)
+        {
+            for (SCROW j = 0; j < nRepeatedRows; ++j)
+            {
+                rScCurrentPos.SetRow( rScCellPos.Row() + j );
+                if( (rScCurrentPos.Col() == 0) && (j > 0) )
+                {
+                    rTables.AddRow();
+                    rTables.AddColumn(false);
+                }
+                if( scCellExists(rScCurrentPos) )
+                {
+                    if(  ( !(bIsCovered) || lcl_IsEmptyOrNote(rXMLImport.GetDocument(), rScCurrentPos) )  )
+                    {
+                        switch (nCellType)
+                        {
+                            case util::NumberFormat::TEXT:
+                            {
+                                AddTextCellToDoc( rScCurrentPos, i, pOUText );
+                            }
+                            break;
+                            case util::NumberFormat::NUMBER:
+                            case util::NumberFormat::PERCENT:
+                            case util::NumberFormat::CURRENCY:
+                            case util::NumberFormat::TIME:
+                            case util::NumberFormat::DATETIME:
+                            case util::NumberFormat::LOGICAL:
+                            {
+                                AddNumberCellToDoc( rScCurrentPos );
+                            }
+                            break;
+                            default:
+                            {
+                                OSL_FAIL("no cell type given");
+                            }
+                            break;
+                        }
+                    }
+
+                    SetAnnotation( rScCurrentPos );
+                    SetDetectiveObj( rScCurrentPos );
+                    SetCellRangeSource( rScCurrentPos );
+                }
+                else
+                {
+                    if (!bWasEmpty || mxAnnotationData.get())
+                    {
+                        if (rScCurrentPos.Row() > MAXROW)
+                            rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_ROW_OVERFLOW);
+                        else
+                            rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_COLUMN_OVERFLOW);
+                    }
+                }
+            }
+        }
+        else
+        {
+            // #i56027# If the child context put formatted text into the cell,
+            // bIsEmpty is true and ProgressBarIncrement has to be called
+            // with bEditCell = TRUE.
+            if (bHasTextImport)
+                rXMLImport.ProgressBarIncrement(true);
+            if ((i == 0) && (rScCellPos.Col() == 0))
+            {
+                for (sal_Int32 j = 1; j < nRepeatedRows; ++j)
+                {
+                    rTables.AddRow();
+                    rTables.AddColumn(false);
+                }
+            }
+        }
+    }
 }
 
 void ScXMLTableRowCellContext::EndElement()
@@ -883,88 +967,14 @@ void ScXMLTableRowCellContext::EndElement()
                     if (!pOUTextContent && !pOUText && !pOUTextValue)
                             bIsEmpty = true;
                 }
-                bool bWasEmpty = bIsEmpty;
 
                 ScAddress aScCurrentPos( aScCellPos );
                 if ((pContentValidationName && !pContentValidationName->isEmpty()) ||
                     mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = false;
 
-                for (SCCOL i = 0; i < nCellsRepeated; ++i)
-                {
-                    aScCurrentPos.SetCol( aScCellPos.Col() + i );
-                    if (i > 0)
-                        rTables.AddColumn(false);
-                    if (!bIsEmpty)
-                    {
-                        for (SCROW j = 0; j < nRepeatedRows; ++j)
-                        {
-                            aScCurrentPos.SetRow( aScCellPos.Row() + j );
-                            if( (aScCurrentPos.Col() == 0) && (j > 0) )
-                            {
-                                rTables.AddRow();
-                                rTables.AddColumn(false);
-                            }
-                            if( scCellExists(aScCurrentPos) )
-                            {
-                                if(  ( !(bIsCovered) || lcl_IsEmptyOrNote(rXMLImport.GetDocument(), aScCurrentPos) )  )
-                                {
-                                    switch (nCellType)
-                                    {
-                                        case util::NumberFormat::TEXT:
-                                        {
-                                            DoNumberFormatTextWork( aScCurrentPos, i, pOUText );
-                                        }
-                                        break;
-                                        case util::NumberFormat::NUMBER:
-                                        case util::NumberFormat::PERCENT:
-                                        case util::NumberFormat::CURRENCY:
-                                        case util::NumberFormat::TIME:
-                                        case util::NumberFormat::DATETIME:
-                                        case util::NumberFormat::LOGICAL:
-                                        {
-                                            DoNumberFormatOtherWork( aScCurrentPos );
-                                        }
-                                        break;
-                                        default:
-                                        {
-                                            OSL_FAIL("no cell type given");
-                                        }
-                                        break;
-                                    }
-                                }
+                AddCellsToTable( aScCellPos, pOUText, aScCurrentPos );
 
-                                SetAnnotation( aScCurrentPos );
-                                SetDetectiveObj( aScCurrentPos );
-                                SetCellRangeSource( aScCurrentPos );
-                            }
-                            else
-                            {
-                                if (!bWasEmpty || mxAnnotationData.get())
-                                {
-                                    if (aScCurrentPos.Row() > MAXROW)
-                                        rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_ROW_OVERFLOW);
-                                    else
-                                        rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_COLUMN_OVERFLOW);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // #i56027# If the child context put formatted text into the cell,
-                        // bIsEmpty is true and ProgressBarIncrement has to be called
-                        // with bEditCell = TRUE.
-                        if (bHasTextImport)
-                            rXMLImport.ProgressBarIncrement(true);
-                        if ((i == 0) && (aScCellPos.Col() == 0))
-                            for (sal_Int32 j = 1; j < nRepeatedRows; ++j)
-                            {
-                                rTables.AddRow();
-                                rTables.AddColumn(false);
-                            }
-                    }
-                }
                 if (nCellsRepeated > 1 || nRepeatedRows > 1)
                 {
                     SetCellProperties(xCellRange, aScCellPos); // set now only the validation for the complete range with the given cell as start cell
