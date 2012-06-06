@@ -817,14 +817,14 @@ void ScXMLTableRowCellContext::EndElement()
 
                 for (SCCOL i = 0; i < nCellsRepeated; ++i)
                 {
-                    aScCurrentPos.SetCol( aScCurrentPos.Col() + i );
+                    aScCurrentPos.SetCol( aScCellPos.Col() + i );
                     if (i > 0)
                         rTables.AddColumn(false);
                     if (!bIsEmpty)
                     {
                         for (SCROW j = 0; j < nRepeatedRows; ++j)
                         {
-                            aScCurrentPos.SetRow( aScCurrentPos.Row() + j );
+                            aScCurrentPos.SetRow( aScCellPos.Row() + j );
                             if( (aScCurrentPos.Col() == 0) && (j > 0) )
                             {
                                 rTables.AddRow();
