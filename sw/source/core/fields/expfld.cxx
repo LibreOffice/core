@@ -607,7 +607,7 @@ sal_uInt16 SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
             pNd->GetNodes().IsDocNodes() )
         {
             _SeqFldLstElem* pNew = new _SeqFldLstElem(
-                    pNd->GetExpandTxt( 0, (*pF->GetTxtFld()->GetStart()) + 1 ),
+                    pNd->GetExpandTxt( 0, USHRT_MAX ),
                     ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
             rList.InsertSort( pNew );
         }
