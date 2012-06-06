@@ -60,10 +60,18 @@ struct ScQueryParamBase
     void FillInExcelSyntax(const rtl::OUString& aCellStr, SCSIZE nIndex);
 
 protected:
+    typedef boost::ptr_vector<ScQueryEntry> EntriesType;
+
+public:
+    typedef EntriesType::const_iterator const_iterator;
+
+    const_iterator begin() const;
+    const_iterator end() const;
+
+protected:
     ScQueryParamBase();
     ScQueryParamBase(const ScQueryParamBase& r);
 
-    typedef boost::ptr_vector<ScQueryEntry> EntriesType;
     EntriesType maEntries;
 };
 

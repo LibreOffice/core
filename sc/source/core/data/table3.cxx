@@ -1530,14 +1530,14 @@ bool ScTable::ValidQuery(
 
     long    nPos = -1;
     QueryEvaluator aEval(*pDocument, *this, rParam, pbTestEqualCondition);
-
-    for (size_t i = 0; i < nEntryCount && rParam.GetEntry(i).bDoQuery; ++i)
+    ScQueryParam::const_iterator it, itBeg = rParam.begin(), itEnd = rParam.end();
+    for (it = itBeg; it != itEnd && it->bDoQuery; ++it)
     {
-        const ScQueryEntry& rEntry = rParam.GetEntry(i);
+        const ScQueryEntry& rEntry = *it;
         SCCOL nCol = static_cast<SCCOL>(rEntry.nField);
 
         // we can only handle one single direct query
-        if ( !pCell || i > 0 )
+        if (!pCell || it != itBeg)
             pCell = GetCell(nCol, nRow);
 
         std::pair<bool,bool> aRes(false, false);

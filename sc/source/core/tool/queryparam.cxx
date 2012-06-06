@@ -57,6 +57,16 @@ struct FindUnused : public std::unary_function<ScQueryEntry, bool>
 
 }
 
+ScQueryParamBase::const_iterator ScQueryParamBase::begin() const
+{
+    return maEntries.begin();
+}
+
+ScQueryParamBase::const_iterator ScQueryParamBase::end() const
+{
+    return maEntries.end();
+}
+
 ScQueryParamBase::ScQueryParamBase() :
     bHasHeader(true),
     bByRow(true),
