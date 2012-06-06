@@ -511,8 +511,10 @@ SwDoc::~SwDoc()
 
     // Release the BaseLinks
     {
-        for( sal_uInt16 n = pLinkMgr->GetServers().Count(); n; )
-            pLinkMgr->GetServers()[ --n ]->Closed();
+       ::sfx2::SvLinkSources aTemp(pLinkMgr->GetServers());
+       for( ::sfx2::SvLinkSources::const_iterator it = aTemp.begin();
+            it != aTemp.end(); ++it )
+            (*it)->Closed();
 
         if( pLinkMgr->GetLinks().Count() )
             pLinkMgr->Remove( 0, pLinkMgr->GetLinks().Count() );

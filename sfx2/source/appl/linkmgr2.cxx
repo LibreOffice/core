@@ -387,19 +387,16 @@ SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 sal_Bool LinkManager::InsertServer( SvLinkSource* pObj )
 {
     // no duplicate inserts
-    if( !pObj || USHRT_MAX != aServerTbl.GetPos( pObj ) )
+    if( !pObj )
         return sal_False;
 
-    aServerTbl.Insert( pObj, aServerTbl.Count() );
-    return sal_True;
+    return aServerTbl.insert( pObj ).second;
 }
 
 
 void LinkManager::RemoveServer( SvLinkSource* pObj )
 {
-    sal_uInt16 nPos = aServerTbl.GetPos( pObj );
-    if( USHRT_MAX != nPos )
-        aServerTbl.Remove( nPos, 1 );
+    aServerTbl.erase( pObj );
 }
 
 

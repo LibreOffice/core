@@ -35,6 +35,7 @@
 #include <svl/svarray.hxx>
 
 #include <vector>
+#include <set>
 
 class SfxObjectShell;
 class Graphic;
@@ -59,8 +60,7 @@ class SvBaseLinkRef;
 typedef SvBaseLinkRef* SvBaseLinkRefPtr;
 SV_DECL_PTRARR( SvBaseLinks, SvBaseLinkRefPtr, 1 )
 
-typedef SvLinkSource* SvLinkSourcePtr;
-SV_DECL_PTRARR( SvLinkSources, SvLinkSourcePtr, 1 )
+typedef std::set<SvLinkSource*> SvLinkSources;
 
 class SFX2_DLLPUBLIC LinkManager
 {
@@ -162,9 +162,7 @@ public:
     const SvLinkSources& GetServers() const { return aServerTbl; }
     // Link register/delete
     sal_Bool        InsertServer( SvLinkSource* rObj );
-    void        RemoveServer( SvLinkSource* rObj );
-    void        RemoveServer( sal_uInt16 nPos, sal_uInt16 nCnt = 1 )
-                {   aServerTbl.Remove( nPos, nCnt ); }
+    void            RemoveServer( SvLinkSource* rObj );
 
     // A transfer is aborted, so cancel all download media
     // (for the time beeing this is only of interest for the FileLinks!)

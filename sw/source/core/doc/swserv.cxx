@@ -327,9 +327,10 @@ SwDataChanged::~SwDataChanged()
     {
         const ::sfx2::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
 
-        for( sal_uInt16 nCnt = rServers.Count(); nCnt; )
+        ::sfx2::SvLinkSources aTemp(rServers);
+        for( ::sfx2::SvLinkSources::const_iterator it = aTemp.begin(); it != aTemp.end(); ++it )
         {
-            ::sfx2::SvLinkSourceRef refObj( rServers[ --nCnt ] );
+            ::sfx2::SvLinkSourceRef refObj( *it );
             // Any one else interested in the Object?
             if( refObj->HasDataLinks() && refObj->ISA( SwServerObject ))
             {
@@ -344,9 +345,7 @@ SwDataChanged::~SwDataChanged()
             if( !refObj->HasDataLinks() )
             {
                 // Then remove from the list
-                // Object is not destroyed, if it still is there!
-                if( nCnt < rServers.Count() && &refObj == rServers[ nCnt ] )
-                    pDoc->GetLinkManager().RemoveServer( nCnt, 1 );
+                pDoc->GetLinkManager().RemoveServer( *it );
             }
         }
     }
