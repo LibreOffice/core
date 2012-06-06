@@ -206,16 +206,15 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         com.sun.star.container.XNameContainer xNamedForm = oFormHandler.insertFormbyName(SOREPORTFORMNAME);
         XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, xNamedForm);
         oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND_TYPE, Integer.toString(CurDBMetaData.getCommandType()));
+        oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, QUERYNAME, CurDBMetaData.getCommandName());
         if (CurDBMetaData.getCommandType() == CommandType.QUERY)
         {
-            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, QUERYNAME, CurDBMetaData.getCommandName());
             oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND, "");
             //DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(CurDBMetaData.getCommandName());
             //oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, COMMAND, CurDBMetaData.Command);
         }
         else
         {
-            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, QUERYNAME, "");
             oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND, CurDBMetaData.Command);
         }
         oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "GroupFieldNames", JavaTools.ArraytoString(CurDBMetaData.GroupFieldNames));
