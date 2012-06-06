@@ -152,6 +152,13 @@ namespace {
             rtl::OUStringToOString(aGradName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    void XShapeDumper::dumpFillGradientAsElement(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillGradient" ));
+        dumpGradientProperty(aGradient, xmlWriter);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -241,6 +248,12 @@ namespace {
                 rtl::OUString aGradName;
                 if(anotherAny >>= aGradName)
                     dumpFillGradientNameAsAttribute(aGradName, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillGradient");
+                awt::Gradient aGradient;
+                if(anotherAny >>= aGradient)
+                    dumpFillGradientAsElement(aGradient, xmlWriter);
             }
         }
 
