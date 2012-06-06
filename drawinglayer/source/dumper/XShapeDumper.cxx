@@ -165,6 +165,29 @@ namespace {
             rtl::OUStringToOString(aHatchName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    void XShapeDumper::dumpFillHatchAsElement(drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillHatch" ));
+        switch(aHatch.Style)
+        {
+            case drawing::HatchStyle_SINGLE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "SINGLE");
+                break;
+            case drawing::HatchStyle_DOUBLE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "DOUBLE");
+                break;
+            case drawing::HatchStyle_TRIPLE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "TRIPLE");
+                break;
+            default:
+                break;
+        }
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("color"), "%" SAL_PRIdINT32, (sal_Int32) aHatch.Color);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, (sal_Int32) aHatch.Distance);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, (sal_Int32) aHatch.Angle);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -266,6 +289,12 @@ namespace {
                 rtl::OUString aHatchName;
                 if(anotherAny >>= aHatchName)
                     dumpFillGradientNameAsAttribute(aHatchName, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillHatch");
+                drawing::Hatch aHatch;
+                if(anotherAny >>= aHatch)
+                    dumpFillHatchAsElement(aHatch, xmlWriter);
             }
         }
 
