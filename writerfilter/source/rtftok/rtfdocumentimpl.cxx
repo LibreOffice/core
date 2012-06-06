@@ -846,12 +846,15 @@ bool RTFFrame::inFrame()
         || nY > 0;
 }
 
-void RTFDocumentImpl::singleChar(sal_uInt8 nValue)
+void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
 {
     sal_uInt8 sValue[] = { nValue };
     if (!m_pCurrentBuffer)
     {
         Mapper().startCharacterGroup();
+        // Should we send run properties?
+        if (bRunProps)
+            runProps();
         Mapper().text(sValue, 1);
         Mapper().endCharacterGroup();
     }
@@ -1561,7 +1564,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 OUString aStr("PAGE");
                 singleChar(0x13);
                 text(aStr);
-                singleChar(0x14);
+                singleChar(0x14, true);
                 singleChar(0x15);
             }
             break;
