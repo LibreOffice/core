@@ -37,7 +37,15 @@ $(eval $(call gb_Jar_use_jars,sdbc_hsqldb,\
 ))
 endif
 
+$(eval $(call gb_Jar_set_jarclasspath,sdbc_hsqldb,\
+	hsqldb.jar \
+	$(HSQLDB_JAR) \
+	.. \
+))
+
 $(eval $(call gb_Jar_set_packageroot,sdbc_hsqldb,com))
+
+$(eval $(call gb_Jar_add_packagedir,sdbc_hsqldb,org))
 
 $(eval $(call gb_Jar_add_sourcefiles,sdbc_hsqldb,\
 	connectivity/com/sun/star/sdbcx/comp/hsqldb/FileSystemRuntimeException \
