@@ -6426,6 +6426,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
             break;
             case 0x46A :            // One byte tag then JPEG (= JFIF) data
             case 0x6E0 :            // One byte tag then PNG data
+            case 0x6E2 :            // One byte tag then JPEG in CMYK color space
             case 0x7A8 :
                 nSkip += 1;         // One byte tag then DIB data
             break;
@@ -6461,6 +6462,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
             case 0x542 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".pct" ) ) ); break;
             case 0x46a : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".jpg" ) ) ); break;
             case 0x6e0 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".png" ) ) ); break;
+            case 0x6e2 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".jpg" ) ) ); break;
             case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".bmp" ) ) ); break;
         }
 
