@@ -26,9 +26,9 @@
  *
  ************************************************************************/
 
-#include "thumbv_itm.hxx"
-#include "thumbv_acc.hxx"
+#include "thumbnailviewacc.hxx"
 
+#include <svtools/thumbnailviewitem.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

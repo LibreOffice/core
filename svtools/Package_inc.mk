@@ -162,6 +162,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/texteng.hxx,svtools/te
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/textview.hxx,svtools/textview.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/textwindowpeer.hxx,svtools/textwindowpeer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/thumbnailview.hxx,svtools/thumbnailview.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/thumbnailviewitem.hxx,svtools/thumbnailviewitem.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolbarmenu.hxx,svtools/toolbarmenu.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolboxcontroller.hxx,svtools/toolboxcontroller.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/decklayouter.hxx,svtools/toolpanel/decklayouter.hxx))

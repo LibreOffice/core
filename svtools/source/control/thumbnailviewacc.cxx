@@ -26,11 +26,11 @@
  *
  ************************************************************************/
 
-#include "thumbv_acc.hxx"
-#include "thumbv_itm.hxx"
+#include "thumbnailviewacc.hxx"
 
 #include <comphelper/servicehelper.hxx>
 #include <svtools/thumbnailview.hxx>
+#include <svtools/thumbnailviewitem.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 

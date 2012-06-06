@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef THUMBV_ITM_HXX
-#define THUMBV_ITM_HXX
+#ifndef THUMBNAILVIEWITEM_HXX
+#define THUMBNAILVIEWITEM_HXX
 
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
@@ -55,6 +55,6 @@ struct ThumbnailViewItem
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
-#endif // THUMBV_ITM_HXX
+#endif // THUMBNAILVIEWITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

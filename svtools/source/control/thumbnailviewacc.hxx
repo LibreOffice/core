@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef THUMBV_ACC_HXX
-#define THUMBV_ACC_HXX
+#ifndef THUMBNAILVIEWACC_HXX
+#define THUMBNAILVIEWACC_HXX
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -248,6 +248,6 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
 };
 
-#endif // THUMBV_ACC_HXX
+#endif // THUMBNAILVIEWACC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,9 +8,9 @@
  */
 
 #include <svtools/thumbnailview.hxx>
+#include <svtools/thumbnailviewitem.hxx>
 
-#include "thumbv_itm.hxx"
-#include "thumbv_acc.hxx"
+#include "thumbnailviewacc.hxx"
 
 #include <rtl/ustring.hxx>
 #include <vcl/decoview.hxx>
