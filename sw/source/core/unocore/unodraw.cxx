@@ -1360,18 +1360,29 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             aSet.Put( aNewAnchor );
                             pFmt->SetFmtAttr(aSet);
                             bSetAttr = false;
-                            if( text::TextContentAnchorType_AS_CHARACTER == eNewAnchor &&
-                                (FLY_AS_CHAR != eOldAnchorId))
+                        }
+                        if( text::TextContentAnchorType_AS_CHARACTER == eNewAnchor &&
+                            (FLY_AS_CHAR != eOldAnchorId))
+                        {
+                            SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
+                            if( pDoc->GetCurrentLayout() )
                             {
-                                //the RES_TXTATR_FLYCNT needs to be added now
-                                SwTxtNode *pNd = aPam.GetNode()->GetTxtNode();
-                                SAL_WARN_IF( !pNd, "sw.uno", "Crsr is not in a TxtNode." );
-                                SwFmtFlyCnt aFmt( pFlyFmt );
-                                pNd->InsertItem(aFmt,
-                                    aPam.GetPoint()->nContent.GetIndex(), 0 );
-                                //aPam.GetPoint()->nContent--;
-
+                                SwCrsrMoveState aState( MV_SETONLYTEXT );
+                                Point aTmp( pObj->GetSnapRect().TopLeft() );
+                                pDoc->GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
                             }
+                            else
+                            {
+                                //without access to the layout the last node of the body will be used as anchor position
+                                aPam.Move( fnMoveBackward, fnGoDoc );
+                            }
+                            //the RES_TXTATR_FLYCNT needs to be added now
+                            SwTxtNode *pNd = aPam.GetNode()->GetTxtNode();
+                            SAL_WARN_IF( !pNd, "sw.uno", "Crsr is not in a TxtNode." );
+                            SwFmtFlyCnt aFmt( pFlyFmt );
+                            pNd->InsertItem(aFmt,
+                                aPam.GetPoint()->nContent.GetIndex(), 0 );
+                            //aPam.GetPoint()->nContent--;
                         }
                         if( bSetAttr )
                             pFmt->SetFmtAttr(aSet);
