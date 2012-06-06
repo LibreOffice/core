@@ -17,6 +17,7 @@ ModalDialog DLG_TEMPLATE_MANAGER
     SVLook = TRUE;
     Moveable = TRUE;
     Closeable = TRUE;
+    Hide = TRUE;
     Size = MAP_APPFONT ( 270 , 190 );
     Text [en-US] = "Template Manager";
 
