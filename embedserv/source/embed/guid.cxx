@@ -173,39 +173,6 @@
     return ::rtl::OUString();
 }
 
-/*
-::rtl::OUString getCurTypeNameFromGUID_Impl( const uno::Reference< lang::XMultiServiceFactory > xFactory, GUID* guid )
-{
-    ::rtl::OUString aResult;
-
-    const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.document.FilterFactory" ) );
-    uno::Reference < container::XNameAccess > xFilters = uno::Reference < io::XOutputStream > (
-    xFactory->createInstance ( aServiceName ),
-    uno::UNO_QUERY );
-
-    if ( xFilters.is() )
-    {
-        ::rtl::OUString aFilterName = getFilterNameFromGUID_Impl( guid );
-        if ( aFilterName.getLength() )
-        {
-            uno::Any aAnyProp = xFilters->getByName( aFilterName );
-            uno::Sequence< beans::PropertyValue > aProperties;
-            if ( aAnyProp >>= aProperties ) )
-            {
-                for ( sal_Int32 nInd = 0; nInd < aProperties.getLength; nInd++ )
-                if ( aProperties[nInd].Name == "UIName" )
-                {
-                    aProperties[nInd].Value >>= aResult;
-                    break;
-                }
-            }
-    }
-    }
-
-    return aResult;
-}
-*/
-
 // Fix strange warnings about some
 // ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
 // warning C4505: 'xxx' : unreferenced local function has been removed

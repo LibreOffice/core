@@ -30,9 +30,6 @@
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/compbase_ex.hxx>
-/*
-__DEF_COMPIMPLHELPER_EX( 3 )
-*/
 
 namespace cppu
 {

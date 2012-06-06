@@ -285,24 +285,12 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
         {
             wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
             if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL )
-//              || ERROR_SUCCESS != RegSetValueExA(hkey, "Extension", 0, REG_SZ,
-//                 (const BYTE *)aFileExt[ind], strlen( aFileExt[ind] ) )
               || ERROR_SUCCESS != RegSetValueExA(hkey, "CLSID", 0, REG_SZ,
                  (const BYTE *)aClassID, strlen(aClassID)) )
                     aResult = FALSE;
 
             if( hkey )
                 RegCloseKey(hkey),hkey= NULL;
-
-/*
-            wsprintfA( aSubKey, "%s%s", aPrefix, aFileExt[ind] );
-            if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL )
-              || ERROR_SUCCESS != RegSetValueExA(hkey, "Content Type", 0, REG_SZ,
-                 (const BYTE *)aMimeType[ind], strlen( aMimeType[ind] ) ) )
-                    aResult = FALSE;
-            if( hkey )
-                RegCloseKey(hkey),hkey= NULL;
-*/
         }
     }
 

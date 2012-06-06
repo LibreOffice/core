@@ -80,15 +80,6 @@ void CacheUpdateListener::startListening()
 
     css::uno::Reference< css::util::XChangesListener > xThis(static_cast< css::util::XChangesListener* >(this), css::uno::UNO_QUERY_THROW);
     xNotifier->addChangesListener(xThis);
-
-/*
-    css::uno::Reference< css::container::XContainer > xNotifier(xConfigAccess, css::uno::UNO_QUERY);
-    if (!xNotifier.is())
-        return;
-
-    css::uno::Reference< css::container::XContainerListener > xThis(static_cast< css::container::XContainerListener* >(this), css::uno::UNO_QUERY);
-    xNotifier->addContainerListener(xThis);
-*/
 }
 
 
@@ -106,15 +97,6 @@ void CacheUpdateListener::stopListening()
 
     css::uno::Reference< css::util::XChangesListener > xThis(static_cast< css::util::XChangesListener* >(this), css::uno::UNO_QUERY);
     xNotifier->removeChangesListener(xThis);
-
-/*
-    css::uno::Reference< css::container::XContainer > xNotifier(xConfigAccess, css::uno::UNO_QUERY);
-    if (!xNotifier.is())
-        return;
-
-    css::uno::Reference< css::container::XContainerListener > xThis(static_cast< css::container::XContainerListener* >(this), css::uno::UNO_QUERY);
-    xNotifier->removeContainerListener(xThis);
-*/
 }
 
 

@@ -85,22 +85,6 @@ void OMySQLCatalog::refreshViews()
     Sequence< ::rtl::OUString > aTypes(1);
     aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
 
-/*
-    sal_Bool bSupportsViews = sal_False;
-    try
-    {
-        Reference<XResultSet> xRes = m_xMetaData->getTableTypes();
-        Reference<XRow> xRow(xRes,UNO_QUERY);
-        while ( !bSupportsViews && xRow.is() && xRes->next() )
-        {
-            ::rtl::OUString sTableType( xRow->getString( 1 ) );
-            bSupportsViews = sTableType.equalsIgnoreAsciiCase( aTypes[0] );
-        }
-    }
-    catch(const SQLException&)
-    {
-    }
-*/
     // let's simply assume the server is new enough to support views. Current drivers
     // as of this writing might not return the proper information in getTableTypes, so
     // don't rely on it.

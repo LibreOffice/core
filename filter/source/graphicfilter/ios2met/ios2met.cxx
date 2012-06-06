@@ -421,14 +421,6 @@ public:
 
 sal_Bool OS2METReader::Callback(sal_uInt16 /*nPercent*/)
 {
-/*
-    if (pCallback!=NULL) {
-        if (((*pCallback)(pCallerData,nPercent))==sal_True) {
-            pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
-            return sal_True;
-        }
-    }
-*/
     return sal_False;
 }
 

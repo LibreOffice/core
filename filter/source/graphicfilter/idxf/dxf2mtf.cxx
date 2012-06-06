@@ -87,8 +87,6 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(const char * sLineType)
         aDXFLineInfo.eStyle = LINE_DASH;
         for (i=0; i < (pLT->nDashCount); i++) {
             x = pLT->fDash[i] * pDXF->getGlobalLineTypeScale();
-// ####
-            // x = (sal_Int32) rTransform.TransLineWidth( pLT->fDash[i] * pDXF->getGlobalLineTypeScale() );
             if ( x >= 0.0 ) {
                 if ( aDXFLineInfo.nDotCount == 0 ) {
                     aDXFLineInfo.nDotCount ++;
@@ -119,16 +117,6 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(const char * sLineType)
 
         }
     }
-
-#if 0
-    if (aDXFLineInfo.DashCount > 0 && aDXFLineInfo.DashLen == 0.0)
-        aDXFLineInfo.DashLen ( 1 );
-    if (aDXFLineInfo.DotCount > 0 && aDXFLineInfo.DotLen() == 0.0)
-        aDXFLineInfo.SetDotLen( 1 );
-    if (aDXFLineInfo.GetDashCount > 0 || aDXFLineInfo.GetDotCount > 0)
-        if (aDXFLineInfo.GetDistance() == 0)
-            aDXFLineInfo.SetDistance( 1 );
-#endif
 
     return aDXFLineInfo;
 }
@@ -242,19 +230,6 @@ void DXF2GDIMetaFile::DrawLineEntity(const DXFLineEntity & rE, const DXFTransfor
         aDXFLineInfo=GetEntityDXFLineInfo(rE);
         LineInfo aLineInfo;
         aLineInfo = rTransform.Transform(aDXFLineInfo);
-
-#if 0
-        printf("%f\n", rTransform.TransLineWidth(1000.0));
-
-        // LINE_NONE = 0, LINE_SOLID = 1, LINE_DASH = 2, LineStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-        aLineInfo.SetStyle( LINE_DASH );
-        aLineInfo.SetWidth( 300 );
-        aLineInfo.SetDashCount( 2 );
-        aLineInfo.SetDashLen( 100 );
-        aLineInfo.SetDotCount( 1 );
-        aLineInfo.SetDotLen( 0 );
-        aLineInfo.SetDistance( 500 );
-#endif
 
         pVirDev->DrawLine(aP0,aP1,aLineInfo);
         if (rE.fThickness!=0) {
@@ -591,8 +566,6 @@ void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const
                 pVirDev->DrawPolygon( aPoly );
             else
                 pVirDev->DrawPolyLine( aPoly );
-                // ####
-                //pVirDev->DrawPolyLine( aPoly, aDXFLineInfo );
         }
     }
 }
@@ -636,46 +609,6 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
                         }
                         break;
                         case 2 :
-                        {
-/*
-                            double frx,fry,fA1,fdA,fAng;
-                            sal_uInt16 nPoints,i;
-                            DXFVector aC;
-                            Point aPS,aPE;
-                            fA1=((DXFEdgeTypeCircularArc*)pEdge)->fStartAngle;
-                            fdA=((DXFEdgeTypeCircularArc*)pEdge)->fEndAngle - fA1;
-                            while ( fdA >= 360.0 )
-                                fdA -= 360.0;
-                            while ( fdA <= 0 )
-                                fdA += 360.0;
-                            rTransform.Transform(((DXFEdgeTypeCircularArc*)pEdge)->aCenter, aC);
-                            if ( fdA > 5.0 && rTransform.TransCircleToEllipse(((DXFEdgeTypeCircularArc*)pEdge)->fRadius,frx,fry ) == sal_True )
-                            {
-                                DXFVector aVS(cos(fA1/180.0*3.14159265359),sin(fA1/180.0*3.14159265359),0.0);
-                                aVS*=((DXFEdgeTypeCircularArc*)pEdge)->fRadius;
-                                aVS+=((DXFEdgeTypeCircularArc*)pEdge)->aCenter;
-                                DXFVector aVE(cos((fA1+fdA)/180.0*3.14159265359),sin((fA1+fdA)/180.0*3.14159265359),0.0);
-                                aVE*=((DXFEdgeTypeCircularArc*)pEdge)->fRadius;
-                                aVE+=((DXFEdgeTypeCircularArc*)pEdge)->aCenter;
-                                if ( rTransform.Mirror() == sal_True )
-                                {
-                                    rTransform.Transform(aVS,aPS);
-                                    rTransform.Transform(aVE,aPE);
-                                }
-                                else
-                                {
-                                    rTransform.Transform(aVS,aPE);
-                                    rTransform.Transform(aVE,aPS);
-                                }
-                                pVirDev->DrawArc(
-                                    Rectangle((long)(aC.fx-frx+0.5),(long)(aC.fy-fry+0.5),
-                                              (long)(aC.fx+frx+0.5),(long)(aC.fy+fry+0.5)),
-                                    aPS,aPE
-                                );
-                            }
-*/
-                        }
-                        break;
                         case 3 :
                         case 4 :
                         break;
@@ -900,14 +833,10 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
                 fScale = 0;  // -Wall added this...
             }
             else {
-//              if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
                     if (fWidth>fHeight)
                         fScale=10000.0/fWidth;
                     else
                         fScale=10000.0/fHeight;
-//              }
-//              else
-//                  fScale=1.0;
                 aTransform=DXFTransform(fScale,-fScale,fScale,
                                         DXFVector(-pDXF->aBoundingBox.fMinX*fScale,
                                                    pDXF->aBoundingBox.fMaxY*fScale,
@@ -920,14 +849,10 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
     else {
         fHeight=pVPort->fHeight;
         fWidth=fHeight*pVPort->fAspectRatio;
-//      if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
             if (fWidth>fHeight)
                 fScale=10000.0/fWidth;
             else
                 fScale=10000.0/fHeight;
-//      }
-//      else
-//          fScale=1.0;
         aTransform=DXFTransform(
             DXFTransform(pVPort->aDirection,pVPort->aTarget),
             DXFTransform(
