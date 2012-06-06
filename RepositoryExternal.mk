@@ -945,6 +945,21 @@ endef
 
 else # !SYSTEM_LCMS2
 
+ifeq ($(OS),ANDROID)
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	lcms2 \
+))
+
+define gb_LinkTarget__use_lcms2
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	lcms2 \
+)
+
+endef
+
+else
+
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	lcms2 \
 ))
@@ -956,6 +971,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 endef
 
+endif # ANDROID
 endif # SYSTEM_LCMS2
 
 

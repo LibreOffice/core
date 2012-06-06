@@ -77,7 +77,7 @@ CONFIGURE_FLAGS += \
     --prefix=/@.__________________________________________________$(EXTRPATH)
 .END
 
-.IF "$(OS)" == "IOS"
+.IF "$(OS)" == "IOS" || "$(OS)" == "ANDROID" 
 CONFIGURE_ACTION += --disable-shared
 .ENDIF
 
@@ -89,7 +89,7 @@ OUT2INC+=include$/lcms2*.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/liblcms2.*.dylib
-.ELIF "$(OS)"=="IOS"
+.ELIF "$(OS)"=="IOS" || "$(OS)" == "ANDROID" 
 OUT2LIB+=src$/.libs$/liblcms2.a
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
