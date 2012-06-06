@@ -163,6 +163,7 @@ interface TablePrintPreview
     SID_SAVEDOC         [ StateMethod = GetState; Export = FALSE; ]
     SID_SAVEASDOC       [ StateMethod = GetState; Export = FALSE; ]
     SID_MAIL_SENDDOC    [ StateMethod = GetState; Export = FALSE; ]
+    SID_VIEW_DATA_SOURCE_BROWSER [ StateMethod = GetState; Export = FALSE; ]
 }
 
 
