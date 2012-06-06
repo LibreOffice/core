@@ -42,6 +42,7 @@ dummy:
 .ELSE
 
 MINGW_DLLS:= \
+    $(MINGW_BOOST_DATE_TIME_DLL) \
     $(MINGW_CAIRO_DLL) \
     $(MINGW_CRYPTO_DLL) \
     $(MINGW_CURL_DLL) \

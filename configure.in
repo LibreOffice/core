@@ -7331,6 +7331,11 @@ if test "$with_system_boost" = "yes"; then
     fi
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
+
+    AX_BOOST_BASE
+    AX_BOOST_DATE_TIME
+    mingw_boost_date_time_dll=`echo $BOOST_DATE_TIME_LIB | sed -e 's/^-l//' -e 's/\.dll$//'`
+    libo_MINGW_CHECK_DLL([BOOST_DATE_TIME], [$mingw_boost_date_time_dll])
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"
@@ -7338,6 +7343,7 @@ else
     HAVE_BOOST_UNORDERED_MAP=TRUE
 fi
 AC_SUBST([HAVE_BOOST_UNORDERED_MAP])
+AC_SUBST([MINGW_BOOST_DATE_TIME_DLL])
 AC_SUBST(SYSTEM_BOOST)
 
 dnl ===================================================================
