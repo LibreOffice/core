@@ -612,6 +612,10 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
                 aPropSet.setProperty(PROP_Opaque, sal_False);
             }
+            else if( maTypeModel.maPosition == "static" || maTypeModel.maPosition.isEmpty())
+            { // static position (the default) means anchored inline
+                aPropSet.setProperty(PROP_AnchorType, makeAny(text::TextContentAnchorType_AS_CHARACTER));
+            }
             if ( maTypeModel.maPositionVerticalRelative == "page" )
             {
                 aPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
