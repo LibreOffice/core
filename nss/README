@@ -1,8 +1,8 @@
-Containes the security libraries which are also part of [[moz]]. However nss is meant to be more current.
+Contains the security libraries which are also part of [[moz]]. However nss is meant to be more current.
 
 == Relation between nss, moz, moz_prebuilt ==
 
-nss containes the security libraries which are also part of moz. However nss is
+nss contains the security libraries which are also part of moz. However nss is
 meant to be more current, that is it to be updated more often. This should be
 easier than doing this with moz.
 
@@ -45,7 +45,7 @@ ooo/moz/zipped/makefile.mk
 sun/moz_prebuilt/zipped/makefile.mk
 
 See also
-http://www.mozilla.org/projects/security/pki/nss/tech-notes/tn6.html
+[http://www.mozilla.org/projects/security/pki/nss/tech-notes/tn6.html]
 
 
 == Windows builds of nss ==
@@ -53,11 +53,10 @@ http://www.mozilla.org/projects/security/pki/nss/tech-notes/tn6.html
 To build mozilla on windows you'll need the mozilla build tools
 
 Build requirements containing the link to the build tools:
-https://developer.mozilla.org/en/Windows_Build_Prerequisites#ss2.2
+[https://developer.mozilla.org/en/Windows_Build_Prerequisites#ss2.2]
 
 The direct link:
-
-http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/MozillaBuildSetup-1.3.exe
+[http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/MozillaBuildSetup-1.3.exe]
 
 
 == libsqlite3 ==
@@ -75,5 +74,5 @@ used by tools of the build environment. Using the sqlite from NSS breaks the
 tools if they use system libraries which are linked with the system
 sqlite. Therefore we deliver it into lib/sqlite on unix systems.
 
-See also issue
-http://qa.openoffice.org/issues/show_bug.cgi?id=106132
+See also issue:
+[https://issues.apache.org/ooo/show_bug.cgi?id=106132]
