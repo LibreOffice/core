@@ -683,9 +683,15 @@ void ScFiltersTest::testRepeatedColumnsODS()
 
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    rtl::OUString aCSVFileName;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns.")), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 0);
+    //text
+    rtl::OUString aCSVFileName1;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns1.")), aCSVFileName1);
+    testFile(aCSVFileName1, pDoc, 0);
+
+    //numbers
+    rtl::OUString aCSVFileName2;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns2.")), aCSVFileName2);
+    testFile(aCSVFileName2, pDoc, 1);
 
     xDocSh->DoClose();
 }
