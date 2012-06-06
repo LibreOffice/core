@@ -540,6 +540,11 @@ sal_uInt16 ImplEntryList::FindFirstSelectable( sal_uInt16 nPos, bool bForward /*
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
+void ImplEntryList::take_properties(ImplEntryList &rOther)
+{
+    maEntries.swap(rOther.maEntries);
+}
+
 // =======================================================================
 
 ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
@@ -585,6 +590,14 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
 
     ImplInitSettings( sal_True, sal_True, sal_True );
     ImplCalcMetrics();
+}
+
+void ImplListBoxWindow::take_properties(Window &rOther)
+{
+    ImplListBoxWindow &rOtherListBoxWindow = static_cast<ImplListBoxWindow&>(rOther);
+    mpEntryList->take_properties(*rOtherListBoxWindow.mpEntryList);
+
+    Control::take_properties(rOther);
 }
 
 // -----------------------------------------------------------------------
@@ -2249,6 +2262,14 @@ ImplListBox::ImplListBox( Window* pParent, WinBits nWinStyle ) :
     maLBWindow.SetScrollHdl( LINK( this, ImplListBox, LBWindowScrolled ) );
     maLBWindow.SetMRUChangedHdl( LINK( this, ImplListBox, MRUChanged ) );
     maLBWindow.Show();
+}
+
+void ImplListBox::take_properties(Window &rOther)
+{
+    Control::take_properties(rOther);
+
+    ImplListBox &rOtherListBoxWindow = static_cast<ImplListBox&>(rOther);
+    maLBWindow.take_properties(rOtherListBoxWindow.maLBWindow);
 }
 
 // -----------------------------------------------------------------------

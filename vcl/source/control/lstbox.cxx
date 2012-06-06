@@ -91,13 +91,12 @@ void ListBox::take_properties(Window &rOther)
 
     Control::take_properties(rOther);
 
-    fprintf(stderr, "ListBox::take_properties\n");
     ListBox &rOtherListBox = static_cast<ListBox&>(rOther);
     mnDDHeight = rOtherListBox.mnDDHeight;
     mnSaveValue = rOtherListBox.mnSaveValue;
     mbDDAutoSize = rOtherListBox.mbDDAutoSize;
     mnLineCount = rOtherListBox.mnLineCount;
-    fprintf(stderr, "ListBox::take_properties %p %d\n", this, IsVisible());
+    mpImplLB->take_properties(*rOtherListBox.mpImplLB);
 }
 
 // -----------------------------------------------------------------------
