@@ -514,6 +514,10 @@ public:
 
     void abortJob();
 
+    // applications (well, sw) depend on a page request with "IsLastPage" = true
+    // to free resources, else they (well, sw) will crash eventually
+    void triggerAppToFreeResources();
+
     bool isShowDialogs() const;
     bool isDirectPrint() const;
 

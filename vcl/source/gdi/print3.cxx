@@ -499,6 +499,9 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                 pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ),
                                        makeAny( sal_True ) );
             }
+            // applications (well, sw) depend on a page request with "IsLastPage" = true
+            // to free resources, else they (well, sw) will crash eventually
+            i_pController->triggerAppToFreeResources();
         }
         catch( std::bad_alloc& )
         {
@@ -1242,9 +1245,8 @@ void PrinterController::jobFinished( view::PrintableState )
 {
 }
 
-void PrinterController::abortJob()
+void PrinterController::triggerAppToFreeResources()
 {
-    setJobState( view::PrintableState_JOB_ABORTED );
     // applications (well, sw) depend on a page request with "IsLastPage" = true
     // to free resources, else they (well, sw) will crash eventually
     setLastPage( sal_True );
@@ -1252,6 +1254,13 @@ void PrinterController::abortJob()
     mpImplData->mpProgress = NULL;
     GDIMetaFile aMtf;
     getPageFile( 0, aMtf, false );
+}
+
+void PrinterController::abortJob()
+{
+    setJobState( view::PrintableState_JOB_ABORTED );
+
+    triggerAppToFreeResources();
 }
 
 void PrinterController::setLastPage( sal_Bool i_bLastPage )

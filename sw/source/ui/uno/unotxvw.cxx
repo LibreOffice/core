@@ -940,11 +940,22 @@ void SwXTextView::NotifySelChanged()
     DBG_ASSERT( m_pView, "view is missing" );
 
     // destroy temporary document with selected text that is used
-    // in PDF export of (multi-)selections.
+    // in PDF export of (multi-)selections and on print of (multi-)selections
     if (m_pView && m_pView->GetTmpSelectionDoc().Is())
     {
-        m_pView->GetTmpSelectionDoc()->DoClose();
-        m_pView->GetTmpSelectionDoc() = 0;
+        // do not destroy the temporary document, if an action is pending
+        bool bActionPending = false;
+        {
+            SfxObjectShellLock& xDocSh = m_pView->GetTmpSelectionDoc();
+            SwDoc* pDoc = static_cast< SwDocShell* >(&xDocSh)->GetDoc();
+            SwView* pView = pDoc ? pDoc->GetDocShell()->GetView() : 0;
+            bActionPending = pView ? pView->GetWrtShell().ActionPend() : false;
+        }
+        if ( !bActionPending )
+        {
+            m_pView->GetTmpSelectionDoc()->DoClose();
+            m_pView->GetTmpSelectionDoc() = 0;
+        }
     }
 
     uno::Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
