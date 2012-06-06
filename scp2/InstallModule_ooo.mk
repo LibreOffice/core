@@ -48,6 +48,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_OPENGL \
 	ENABLE_XMLSEC \
 	MERGELIBS \
+	SYSTEM_BOOST \
 	SYSTEM_CAIRO \
 	SYSTEM_CLUCENE \
 	SYSTEM_CURL \
@@ -90,6 +91,7 @@ $(eval $(call gb_InstallModule_define_value_if_set,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
+	MINGW_BOOST_DATE_TIME_DLL \
 	MINGW_CAIRO_DLL \
 	MINGW_CRYPTO_DLL \
 	MINGW_CURL_DLL \

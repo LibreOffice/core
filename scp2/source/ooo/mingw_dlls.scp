@@ -223,6 +223,12 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_Liblcms2, MINGW_LCMS2_DLL )
 #endif
 #endif
 
+#if defined SYSTEM_BOOST
+#if defined NEEDS_MINGW_BOOST_DATE_TIME_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libboost_date_time, MINGW_BOOST_DATE_TIME_DLL )
+#endif
+#endif
+
 #if defined(MINGW_GCCDLL)
 
 File gid_Brand_File_Lib_Mingw_GccS
