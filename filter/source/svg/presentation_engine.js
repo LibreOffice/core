@@ -390,6 +390,463 @@ function indexSetPageSlide( nIndex )
  * @licstart
  *
  * The following is the license notice for the part of JavaScript code of this
+ * page included between the '@dojostart' and the '@dojoend' notes.
+ */
+
+/*****  **********************************************************************
+ *
+ *  The "New" BSD License:
+ *  **********************
+ *  Copyright (c) 2005-2012, The Dojo Foundation
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *    * Redistributions of source code must retain the above copyright notice,
+ *      this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright notice,
+ *      this list of conditions and the following disclaimer in the documentation
+ *      and/or other materials provided with the distribution.
+ *    * Neither the name of the Dojo Foundation nor the names of its contributors
+ *      may be used to endorse or promote products derived from this software
+ *      without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ *  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ *  DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ *  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ *  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ *  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ *  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ ****************************************************************************/
+
+
+/*****
+ * @licend
+ *
+ * The above is the license notice for the part of JavaScript code of this
+ * page included between the '@dojostart' and the '@dojoend' notes.
+ */
+
+
+
+/*****
+ * @dojostart
+ *
+ *  The following code is a derivative work of some part of the dojox.gfx library.
+ *  @source http://svn.dojotoolkit.org/src/dojox/trunk/gfx/arc.js
+ */
+
+
+function degToRad( degree )
+{
+    return (Math.PI * degree / 180);
+}
+
+function radToDeg( radiant )
+{
+    return (180 * radiant / Math.PI);
+}
+
+
+var PathTools = new Object();
+
+
+PathTools.unitArcAsBezier = function( alpha )
+{
+    // summary: return a start point, 1st and 2nd control points, and an end point of
+    //		a an arc, which is reflected on the x axis
+    // alpha: Number
+    //		angle in radians, the arc will be 2 * angle size
+    var cosa  = Math.cos(alpha);
+    var sina  = Math.sin(alpha);
+    var p2 = {x: cosa + (4 / 3) * (1 - cosa), y: sina - (4 / 3) * cosa * (1 - cosa) / sina};
+
+    return {	// Object
+        s:  {x: cosa, y: -sina},
+        c1: {x: p2.x, y: -p2.y},
+        c2: p2,
+        e:  {x: cosa, y: sina}
+    };
+};
+
+PathTools.arcAsBezier = function( last, rx, ry, xRotg, large, sweep, x, y )
+{
+    // summary: calculates an arc as a series of Bezier curves
+    //	given the last point and a standard set of SVG arc parameters,
+    //	it returns an array of arrays of parameters to form a series of
+    //	absolute Bezier curves.
+    // last: Object
+    //		a point-like object as a start of the arc
+    // rx: Number
+    //		a horizontal radius for the virtual ellipse
+    // ry: Number
+    //		a vertical radius for the virtual ellipse
+    // xRotg: Number
+    //		a rotation of an x axis of the virtual ellipse in degrees
+    // large: Boolean
+    //		which part of the ellipse will be used (the larger arc if true)
+    // sweep: Boolean
+    //		direction of the arc (CW if true)
+    // x: Number
+    //		the x coordinate of the end point of the arc
+    // y: Number
+    //		the y coordinate of the end point of the arc
+
+    // constants
+    var twoPI = 2 * Math.PI, pi4 = Math.PI / 4, pi8 = Math.PI / 8,
+        pi48 = pi4 + pi8, curvePI4 = PathTools.unitArcAsBezier(pi8);
+
+    // calculate parameters
+    large = Boolean(large);
+    sweep = Boolean(sweep);
+
+    var xRot = degToRad( xRotg );
+    var rx2 = rx * rx, ry2 = ry * ry;
+    var m = document.documentElement.createSVGMatrix();
+    m = m.rotate(-xRotg);
+    var p = document.documentElement.createSVGPoint();
+    p.x =  (last.x - x) / 2; p.y = (last.y - y) / 2;
+    var pa = p.matrixTransform( m );
+
+    var pax2 = pa.x * pa.x, pay2 = pa.y * pa.y;
+    var c1 = Math.sqrt((rx2 * ry2 - rx2 * pay2 - ry2 * pax2) / (rx2 * pay2 + ry2 * pax2));
+
+    if( isNaN(c1) ) { c1 = 0; }
+
+    var	ca = {
+        x:  c1 * rx * pa.y / ry,
+        y: -c1 * ry * pa.x / rx
+    };
+
+    if( large == sweep )
+    {
+        ca = {x: -ca.x, y: -ca.y};
+    }
+
+    // the center
+    m = document.documentElement.createSVGMatrix();
+    m = m.translate( (last.x + x) / 2, (last.y + y) / 2 ).rotate( xRotg );
+    p.x = ca.x; p.y = ca.y;
+    var c = p.matrixTransform( m );
+
+    // calculate the elliptic transformation
+    m = document.documentElement.createSVGMatrix();
+    var elliptic_transform = m.translate( c.x, c.y ).rotate( xRotg ).scaleNonUniform( rx, ry );
+
+    // start, end, and size of our arc
+    var inversed = elliptic_transform.inverse();
+    p.x = last.x; p.y = last.y;
+    var sp = p.matrixTransform( inversed );
+    p.x = x; p.y = y;
+    var ep = p.matrixTransform( inversed );
+    var startAngle = Math.atan2(sp.y, sp.x);
+    var endAngle   = Math.atan2(ep.y, ep.x);
+    var theta = startAngle - endAngle;	// size of our arc in radians
+
+    if( sweep ) { theta = -theta; }
+    if( theta < 0 )
+    {
+        theta += twoPI;
+    }
+    else if( theta > twoPI )
+    {
+        theta -= twoPI;
+    }
+
+    // draw curve chunks
+    var alpha = pi8, curve = curvePI4;
+    var step  = sweep ? alpha : -alpha;
+    var result = [];
+
+    var aPathElement = document.createElementNS( NSS['svg'], 'path' );
+
+    for(var angle = theta; angle > 0; angle -= pi4)
+    {
+        if( angle < pi48 )
+        {
+            alpha = angle / 2;
+            curve = PathTools.unitArcAsBezier(alpha);
+            step  = sweep ? alpha : -alpha;
+            angle = 0;	// stop the loop
+        }
+        var c2, e;
+        var M = elliptic_transform.rotate( radToDeg( startAngle + step ) );
+
+        if( sweep )
+        {
+            p.x = curve.c1.x; p.y = curve.c1.y;
+            c1 = p.matrixTransform( M );
+            p.x = curve.c2.x; p.y = curve.c2.y;
+            c2 = p.matrixTransform( M );
+            p.x = curve.e.x; p.y = curve.e.y;
+            e = p.matrixTransform( M );
+        }
+        else
+        {
+            p.x = curve.c2.x; p.y = curve.c2.y;
+            c1 = p.matrixTransform( M );
+            p.x = curve.c1.x; p.y = curve.c1.y;
+            c2 = p.matrixTransform( M );
+            p.x = curve.s.x; p.y = curve.s.y;
+            e = p.matrixTransform( M );
+        }
+
+        // draw the curve
+        var aCubicBezierSeg = aPathElement.createSVGPathSegCurvetoCubicAbs( e.x, e.y, c1.x, c1.y, c2.x, c2.y );
+        result.push( aCubicBezierSeg );
+
+        startAngle += 2 * step;
+    }
+    return result;	// Array
+};
+
+
+
+/*****
+ * @dojoend
+ *
+ *  The above code is a derivative work of some part of the dojox.gfx library.
+ *  @source http://svn.dojotoolkit.org/src/dojox/trunk/gfx/arc.js
+ */
+
+
+
+
+/** normalizePath
+ *
+ *  @param sPath
+ *      A string representing a svg <path> element list of commands.
+ *  @return {String}
+ *      A string representing the same svg <path> passed as input defined by
+ *      using only the following commands: M, L, Q, C.
+ */
+PathTools.normalizePath = function( sPath )
+{
+    var PATHSEG_CLOSEPATH = 1;
+    var PATHSEG_MOVETO_ABS = 2;
+    var PATHSEG_MOVETO_REL = 3;
+    var PATHSEG_LINETO_ABS = 4;
+    var PATHSEG_LINETO_REL = 5;
+    var PATHSEG_CURVETO_CUBIC_ABS = 6;
+    var PATHSEG_CURVETO_CUBIC_REL = 7;
+    var PATHSEG_CURVETO_QUADRATIC_ABS = 8;
+    var PATHSEG_CURVETO_QUADRATIC_REL = 9;
+    var PATHSEG_ARC_ABS = 10;
+    var PATHSEG_ARC_REL = 11;
+    var PATHSEG_LINETO_HORIZONTAL_ABS = 12;
+    var PATHSEG_LINETO_HORIZONTAL_REL = 13;
+    var PATHSEG_LINETO_VERTICAL_ABS = 14;
+    var PATHSEG_LINETO_VERTICAL_REL = 15;
+    var PATHSEG_CURVETO_CUBIC_SMOOTH_ABS = 16;
+    var PATHSEG_CURVETO_CUBIC_SMOOTH_REL = 17;
+    var PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS = 18;
+    var PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL = 19;
+
+    var aPath = document.createElementNS( NSS['svg'], 'path' );
+    aPath.setAttribute( 'd', sPath );
+    var aPathSegList = aPath.pathSegList;
+    if( !aPathSegList )
+    {
+        log( 'normalizePath: no path segment list supported, abort.' );
+        return '';
+    }
+    var nSize = aPathSegList.numberOfItems;
+
+    var aPreviousPathSeg = null;
+    var nCurrentX = 0;
+    var nCurrentY = 0;
+    var nInitialX = 0;
+    var nInitialY = 0;
+    var aPathSeg = null;
+    var aAbsPathSeg = null;
+
+    var i;
+    for( i = 0; i < nSize; ++i )
+    {
+
+        aPathSeg = aPathSegList.getItem( i );
+        switch( aPathSeg.pathSegType )
+        {
+            case PATHSEG_CLOSEPATH:
+                aAbsPathSeg = aPath.createSVGPathSegLinetoAbs( nInitialX, nInitialY );
+                aPathSegList.replaceItem( aAbsPathSeg, i );
+                break;
+            case PATHSEG_MOVETO_ABS:
+                nInitialX = aPathSeg.x;
+                nInitialY = aPathSeg.y;
+                break;
+            case PATHSEG_MOVETO_REL:
+                nCurrentX += aPathSeg.x;
+                nCurrentY += aPathSeg.y;
+                aAbsPathSeg = aPath.createSVGPathSegMovetoAbs( nCurrentX, nCurrentY );
+                aPathSegList.replaceItem( aAbsPathSeg, i );
+                nInitialX = nCurrentX;
+                nInitialY = nCurrentY;
+                break;
+            case PATHSEG_LINETO_ABS:
+                break;
+            case PATHSEG_LINETO_REL:
+                nCurrentX += aPathSeg.x;
+                nCurrentY += aPathSeg.y;
+                aAbsPathSeg = aPath.createSVGPathSegLinetoAbs( nCurrentX, nCurrentY );
+                aPathSegList.replaceItem( aAbsPathSeg, i );
+                break;
+            case PATHSEG_CURVETO_CUBIC_ABS:
+                break;
+            case PATHSEG_CURVETO_CUBIC_REL:
+                var nX1 = nCurrentX + aPathSeg.x1;
+                var nY1 = nCurrentY + aPathSeg.y1;
+                var nX2 = nCurrentX + aPathSeg.x2;
+                var nY2 = nCurrentY + aPathSeg.y2;
+                var nX = nCurrentX + aPathSeg.x;
+                var nY = nCurrentY + aPathSeg.y;
+                aAbsPathSeg = aPath.createSVGPathSegCurvetoCubicAbs( nX, nY, nX1, nY1, nX2, nY2 );
+                aPathSegList.replaceItem( aAbsPathSeg, i );
+                break;
+            case PATHSEG_CURVETO_QUADRATIC_ABS:
+                break;
+            case PATHSEG_CURVETO_QUADRATIC_REL:
+                nX1 = nCurrentX + aPathSeg.x1;
+                nY1 = nCurrentY + aPathSeg.y1;
+                nX = nCurrentX + aPathSeg.x;
+                nY = nCurrentY + aPathSeg.y;
+                aAbsPathSeg = aPath.createSVGPathSegCurvetoQuadraticAbs( nX, nY, nX1, nY1 );
+                aPathSegList.replaceItem( aAbsPathSeg, i );
+                break;
+            case PATHSEG_ARC_REL:
+                aPathSeg.x += nCurrentX;
+                aPathSeg.y += nCurrentY;
+            case PATHSEG_ARC_ABS:
+                var aCubicBezierSegList
+                    = PathTools.arcAsBezier( { x: nCurrentX, y: nCurrentY },
+                                             aPathSeg.r1, aPathSeg.r2,
+                                             aPathSeg.angle,
+                                             aPathSeg.largeArcFlag,
+                                             aPathSeg.sweepFlag,
+                                             aPathSeg.x, aPathSeg.y );
+                var nLength = aCubicBezierSegList.length;
+                if( nLength > 0 )
+                {
+                    var k;
+                    for( k = 0; k < nLength; ++k )
+                    {
+                        aPathSegList.insertItemBefore( aCubicBezierSegList[k], i );
+                        i += 1;
+                    }
+                    aPathSegList.removeItem( i );
+                    i -= 1;
+                    nSize += ( nLength - 1 );
+                }
+                break;
+            case PATHSEG_LINETO_HORIZONTAL_REL:
+                aPathSeg.x += nCurrentX;
+            // fall through intended
+            case PATHSEG_LINETO_HORIZONTAL_ABS:
+                aAbsPathSeg = aPath.createSVGPathSegLinetoAbs( aPathSeg.x, nCurrentY );
+                aPathSegList.replaceItem( aAbsPathSeg, i );
+                break;
+            case PATHSEG_LINETO_VERTICAL_REL:
+                aPathSeg.y += nCurrentY;
+            // fall through intended
+            case PATHSEG_LINETO_VERTICAL_ABS:
+                aAbsPathSeg = aPath.createSVGPathSegLinetoAbs( nCurrentX, aPathSeg.y );
+                aPathSegList.replaceItem( aAbsPathSeg, i );
+                break;
+            case PATHSEG_CURVETO_CUBIC_SMOOTH_REL:
+                aPathSeg.x += nCurrentX;
+                aPathSeg.y += nCurrentY;
+                aPathSeg.x2 += nCurrentX;
+                aPathSeg.y2 += nCurrentY;
+            // fall through intended
+            case PATHSEG_CURVETO_CUBIC_SMOOTH_ABS:
+                if( aPreviousPathSeg.pathSegType == PATHSEG_CURVETO_CUBIC_ABS )
+                {
+                    nX1 = 2*nCurrentX - aPreviousPathSeg.x2;
+                    nY1 = 2*nCurrentY - aPreviousPathSeg.y2;
+                }
+                else
+                {
+                    nX1 = nCurrentX;
+                    nY1 = nCurrentY;
+                }
+                aAbsPathSeg = aPath.createSVGPathSegCurvetoCubicAbs( aPathSeg.x, aPathSeg.y,
+                                                                     nX1, nY1,
+                                                                     aPathSeg.x2, aPathSeg.y2 );
+                aPathSegList.replaceItem( aAbsPathSeg, i );
+                break;
+            case PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL:
+                aPathSeg.x += nCurrentX;
+                aPathSeg.y += nCurrentY;
+            // fall through intended
+            case PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS:
+                if( aPreviousPathSeg.pathSegType == PATHSEG_CURVETO_QUADRATIC_ABS )
+                {
+                    nX1 = 2*nCurrentX - aPreviousPathSeg.x1;
+                    nY1 = 2*nCurrentY - aPreviousPathSeg.y1;
+                }
+                else
+                {
+                    nX1 = nCurrentX;
+                    nY1 = nCurrentY;
+                }
+                aAbsPathSeg = aPath.createSVGPathSegCurvetoQuadraticAbs( aPathSeg.x, aPathSeg.y, nX1, nY1 );
+                aPathSegList.replaceItem( aAbsPathSeg, i );
+                break;
+            default:
+                log( 'normalizePath: unknown path segment, index: ' + String(i) );
+        }
+        aPreviousPathSeg = aPathSegList.getItem( i );
+        nCurrentX = aPreviousPathSeg.x;
+        nCurrentY = aPreviousPathSeg.y;
+    }
+    return aPath.getAttribute( 'd' );
+};
+
+
+/** createPathFromEllipse
+ *
+ *  @param nCX
+ *      The ellipse center x coordinate.
+ *  @param nCY
+ *      The ellipse center y coordinate.
+ *  @param nXRay
+ *      The ellipse x-ray.
+ *  @param nYRay
+ *      The ellipse y-ray.
+ *  @return {String}
+ *      A string representing a list of path commands that approximate
+ *      the ellipse.
+ */
+PathTools.createPathFromEllipse = function( nCX, nCY, nXRay, nYRay )
+{
+    var V1X = nCX, V1Y = nCY - nYRay;
+    var V2X = nCX + nXRay, V2Y = nCY;
+    var V3X = nCX, V3Y = nCY + nYRay;
+    var V4X = nCX - nXRay, V4Y = nCY;
+
+    var sPathData = 'M ' + V1X + ' ' + V1Y +
+                    ' A ' + nXRay + ' ' + nYRay + ' 0 0 1 ' + V2X + ' ' + V2Y +
+                    ' A ' + nXRay + ' ' + nYRay + ' 0 0 1 ' + V3X + ' ' + V3Y +
+                    ' A ' + nXRay + ' ' + nYRay + ' 0 0 1 ' + V4X + ' ' + V4Y +
+                    ' A ' + nXRay + ' ' + nYRay + ' 0 0 1 ' + V1X + ' ' + V1Y;
+
+    sPathData = PathTools.normalizePath( sPathData );
+    return sPathData;
+};
+
+
+
+
+/*****
+ * @licstart
+ *
+ * The following is the license notice for the part of JavaScript code of this
  * page included between the '@stdlibstart' and the '@stdlibend' notes.
  */
 
@@ -627,6 +1084,7 @@ window.onload = init;
 var aOOOElemMetaSlides = 'ooo:meta_slides';
 var aOOOElemMetaSlide = 'ooo:meta_slide';
 var aOOOElemTextField = 'ooo:text_field';
+var aPresentationClipPathId = 'presentation_clip_path';
 
 // ooo attributes
 var aOOOAttrNumberOfSlides = 'number-of-slides';
@@ -651,6 +1109,7 @@ var aOOOAttrDateTimeFormat = 'date-time-format';
 var aOOOAttrTextAdjust = 'text-adjust';
 
 // element class names
+var aClipPathGroupClassName = 'ClipPathGroup';
 var aPageClassName = 'Page';
 var aSlideNumberClassName = 'Slide_Number';
 var aDateTimeClassName = 'Date/Time';
@@ -1030,6 +1489,15 @@ function MetaDocument()
     this.nStartSlideNumber = parseInt( aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrStartSlideNumber ) ) || 0;
     // - the numbering type used in the presentation, default type is arabic.
     this.sPageNumberingType = aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberingType ) || 'arabic';
+
+    // The <defs> element used for wrapping <clipPath>.
+    this.aClipPathGroup = getElementByClassName( ROOT_NODE, aClipPathGroupClassName );
+    assert( this.aClipPathGroup, 'MetaDocument: the clip path group element is not valid.');
+
+    // The <clipPath> element used to clip all slides.
+    this.aPresentationClipPath = document.getElementById( aPresentationClipPathId );
+    assert( this.aPresentationClipPath,
+            'MetaDocument: the presentation clip path element element is not valid.');
 
     // The collections for handling properties of each slide, svg elements
     // related to master pages and content and properties of text fields.
@@ -3145,6 +3613,250 @@ HSLColor.interpolate = function( aFrom, aTo, nT, bCCW )
 
 
 
+/**********************************************************************************************
+ *      SVGMatrix extensions
+ **********************************************************************************************/
+
+SVGIdentityMatrix = document.documentElement.createSVGMatrix();
+
+SVGMatrix.prototype.setToIdentity = function()
+{
+    this.a = this.d = 1;
+    this.b = this.c = this.d = this.e = 0;
+};
+
+SVGMatrix.prototype.setToRotationAroundPoint = function( nX, nY, nAngle )
+{
+    nAngle = degToRad( nAngle );
+    var nSin = Math.sin( nAngle );
+    var nCos = Math.cos( nAngle );
+
+    this.a = nCos; this.c = -nSin; this.e = nX * (1 - nCos) + nY * nSin;
+    this.b = nSin; this.d =  nCos; this.f = nY * (1 - nCos) - nX * nSin;
+};
+
+
+
+/**********************************************************************************************
+ *      SVGPath extensions
+ **********************************************************************************************/
+
+SVGPathElement.prototype.appendPath = function( aPath )
+{
+    var sPathData = this.getAttribute( 'd' );
+    sPathData += ( ' ' + aPath.getAttribute( 'd' ) );
+    this.setAttribute( 'd', sPathData );
+};
+
+/** SVGPathElement.matrixTransform
+ *  Apply the transformation defined by the passed matrix to the referenced
+ *  svg <path> element.
+ *  After the transformation 'this' element is modified in order to reference
+ *  the transformed path.
+ *
+ *  @param aSVGMatrix
+ *      An SVGMatrix instance.
+ */
+SVGPathElement.prototype.matrixTransform = function( aSVGMatrix )
+{
+    var aPathSegList = this.pathSegList;
+    var nLength = aPathSegList.numberOfItems;
+    var i;
+    for( i = 0; i < nLength; ++i )
+    {
+        aPathSegList.getItem( i ).matrixTransform( aSVGMatrix );
+    }
+};
+
+/** SVGPathElement.changeOrientation
+ *  Invert the path orientation by inverting the path command list.
+ *
+ */
+SVGPathElement.prototype.changeOrientation = function()
+{
+    var aPathSegList = this.pathSegList;
+    var nLength = aPathSegList.numberOfItems;
+    if( nLength == 0 ) return;
+
+    var nCurrentX = 0;
+    var nCurrentY = 0;
+
+    var aPathSeg = aPathSegList.getItem( 0 );
+    if( aPathSeg.pathSegTypeAsLetter == 'M' )
+    {
+        nCurrentX = aPathSeg.x;
+        nCurrentY = aPathSeg.y;
+        aPathSegList.removeItem( 0 );
+        --nLength;
+    }
+
+    var i;
+    for( i = 0; i < nLength; ++i )
+    {
+        aPathSeg = aPathSegList.getItem( i );
+        var aPoint = aPathSeg.changeOrientation( nCurrentX, nCurrentY );
+        nCurrentX = aPoint.x;
+        nCurrentY = aPoint.y;
+    }
+
+
+    for( i = nLength - 2; i >= 0; --i )
+    {
+        aPathSeg = aPathSegList.removeItem( i );
+        aPathSegList.appendItem( aPathSeg );
+    }
+
+    var aMovePathSeg = this.createSVGPathSegMovetoAbs( nCurrentX, nCurrentY );
+    aPathSegList.insertItemBefore( aMovePathSeg, 0 );
+
+}
+
+/** matrixTransform and changeOrientation
+ *  We implement these methods for each path segment type still present
+ *  after the path normalization (M, L, Q, C).
+ *
+ *  Note: Opera doesn't have any SVGPathSeg* class and rises an error.
+ *  We exploit this fact for providing a different implementation.
+ */
+try
+{   // Firefox, Google Chrome, Internet Explorer, Safari.
+
+    SVGPathSegMovetoAbs.prototype.matrixTransform = function( aSVGMatrix )
+    {
+        SVGPathMatrixTransform( this, aSVGMatrix );
+    };
+
+    SVGPathSegLinetoAbs.prototype.matrixTransform = function( aSVGMatrix )
+    {
+        SVGPathMatrixTransform( this, aSVGMatrix );
+    };
+
+    SVGPathSegCurvetoQuadraticAbs.prototype.matrixTransform = function( aSVGMatrix )
+    {
+        SVGPathMatrixTransform( this, aSVGMatrix );
+        var nX = this.x1;
+        this.x1 = aSVGMatrix.a * nX + aSVGMatrix.c * this.y1 + aSVGMatrix.e;
+        this.y1 = aSVGMatrix.b * nX + aSVGMatrix.d * this.y1 + aSVGMatrix.f;
+    };
+
+    SVGPathSegCurvetoCubicAbs.prototype.matrixTransform = function( aSVGMatrix )
+    {
+        SVGPathMatrixTransform( this, aSVGMatrix );
+        var nX = this.x1;
+        this.x1 = aSVGMatrix.a * nX + aSVGMatrix.c * this.y1 + aSVGMatrix.e;
+        this.y1 = aSVGMatrix.b * nX + aSVGMatrix.d * this.y1 + aSVGMatrix.f;
+        nX = this.x2;
+        this.x2 = aSVGMatrix.a * nX + aSVGMatrix.c * this.y2 + aSVGMatrix.e;
+        this.y2 = aSVGMatrix.b * nX + aSVGMatrix.d * this.y2 + aSVGMatrix.f;
+    };
+
+
+    SVGPathSegMovetoAbs.prototype.changeOrientation = function( nCurrentX, nCurrentY )
+    {
+        var aPoint = { x: this.x, y: this.y };
+        this.x = nCurrentX;
+        this.y = nCurrentY;
+        return aPoint;
+    };
+
+    SVGPathSegLinetoAbs.prototype.changeOrientation = function( nCurrentX, nCurrentY )
+    {
+        var aPoint = { x: this.x, y: this.y };
+        this.x = nCurrentX;
+        this.y = nCurrentY;
+        return aPoint;
+    };
+
+    SVGPathSegCurvetoQuadraticAbs.prototype.changeOrientation = function( nCurrentX, nCurrentY )
+    {
+        var aPoint = { x: this.x, y: this.y };
+        this.x = nCurrentX;
+        this.y = nCurrentY;
+        return aPoint;
+    };
+
+    SVGPathSegCurvetoCubicAbs.prototype.changeOrientation = function( nCurrentX, nCurrentY )
+    {
+        var aPoint = { x: this.x, y: this.y };
+        this.x = nCurrentX;
+        this.y = nCurrentY;
+        var nX = this.x1;
+        this.x1 = this.x2;
+        this.x2 = nX;
+        var nY = this.y1;
+        this.y1 = this.y2;
+        this.y2 = nY;
+        return aPoint;
+    };
+
+}
+catch( e )
+{   // Opera
+
+    if( e.name == 'ReferenceError' )
+    {
+        SVGPathSeg.prototype.matrixTransform = function( aSVGMatrix )
+        {
+            var nX;
+            switch( this.pathSegTypeAsLetter )
+            {
+                case 'C':
+                    nX = this.x2;
+                    this.x2 = aSVGMatrix.a * nX + aSVGMatrix.c * this.y2 + aSVGMatrix.e;
+                    this.y2 = aSVGMatrix.b * nX + aSVGMatrix.d * this.y2 + aSVGMatrix.f;
+                // fall through intended
+                case 'Q':
+                    nX = this.x1;
+                    this.x1 = aSVGMatrix.a * nX + aSVGMatrix.c * this.y1 + aSVGMatrix.e;
+                    this.y1 = aSVGMatrix.b * nX + aSVGMatrix.d * this.y1 + aSVGMatrix.f;
+                // fall through intended
+                case 'M':
+                case 'L':
+                    SVGPathMatrixTransform( this, aSVGMatrix );
+                    break;
+                default:
+                    log( 'SVGPathSeg.matrixTransform: unexpected path segment type: '
+                             + this.pathSegTypeAsLetter );
+            }
+        };
+
+        SVGPathSeg.prototype.changeOrientation = function( nCurrentX, nCurrentY )
+        {
+            switch( this.pathSegTypeAsLetter )
+            {
+                case 'C':
+                    var nX = this.x1;
+                    this.x1 = this.x2;
+                    this.x2 = nX;
+                    var nY = this.y1;
+                    this.y1 = this.y2;
+                    this.y2 = nY;
+                // fall through intended
+                case 'M':
+                case 'L':
+                case 'Q':
+                    var aPoint = { x: this.x, y: this.y };
+                    this.x = nCurrentX;
+                    this.y = nCurrentY;
+                    return aPoint;
+                default:
+                    log( 'SVGPathSeg.changeOrientation: unexpected path segment type: '
+                             + this.pathSegTypeAsLetter );
+                    return null;
+            }
+        }
+    }
+    else throw e;
+}
+
+function SVGPathMatrixTransform( aPath, aSVGMatrix )
+{
+    var nX = aPath.x;
+    aPath.x = aSVGMatrix.a * nX + aSVGMatrix.c * aPath.y + aSVGMatrix.e;
+    aPath.y = aSVGMatrix.b * nX + aSVGMatrix.d * aPath.y + aSVGMatrix.f;
+}
+
+
 
 /**********************************************************************************************
  *      AnimationNode Class Hierarchy
@@ -3431,36 +4143,75 @@ aTransitionClassOutMap = ['invalid', 'clip polypolygon', 'special'];
 
 // Transition Types
 BARWIPE_TRANSITION          = 1;
-PUSHWIPE_TRANSITION         = 2; // 35
-SLIDEWIPE_TRANSITION        = 3; // 36
-FADE_TRANSITION             = 4; // 37
+BOXWIPE_TRANSITION          = 2;
+FOURBOXWIPE_TRANSITION      = 3;
+ELLIPSEWIPE_TRANSITION      = 4; // 17
+CLOCKWIPE_TRANSITION        = 5; // 22
+PINWHEELWIPE_TRANSITION     = 6  // 23
+PUSHWIPE_TRANSITION         = 7; // 35
+SLIDEWIPE_TRANSITION        = 8; // 36
+FADE_TRANSITION             = 9; // 37
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
+    'boxWipe'           : BOXWIPE_TRANSITION,
+    'fourBoxWipe'       : FOURBOXWIPE_TRANSITION,
+    'ellipseWipe'       : ELLIPSEWIPE_TRANSITION,
+    'clockWipe'         : CLOCKWIPE_TRANSITION,
+    'pinWheelWipe'      : PINWHEELWIPE_TRANSITION,
     'pushWipe'          : PUSHWIPE_TRANSITION,
     'slideWipe'         : SLIDEWIPE_TRANSITION,
     'fade'              : FADE_TRANSITION
 };
 
-aTransitionTypeOutMap = [ '', 'barWipe', 'pushWipe', 'slideWipe', 'fade' ];
+aTransitionTypeOutMap = [ '', 'barWipe', 'boxWipe', 'fourBoxWipe', 'ellipseWipe',
+                          'clockWipe', 'pinWheelWipe', 'pushWipe', 'slideWipe',
+                          'fade' ];
 
 
 // Transition Subtypes
 DEFAULT_TRANS_SUBTYPE               = 0;
 LEFTTORIGHT_TRANS_SUBTYPE           = 1;
 TOPTOBOTTOM_TRANS_SUBTYPE           = 2;
-FROMLEFT_TRANS_SUBTYPE              = 3; // 97
-FROMTOP_TRANS_SUBTYPE               = 4;
-FROMRIGHT_TRANS_SUBTYPE             = 5;
-FROMBOTTOM_TRANS_SUBTYPE            = 6
-CROSSFADE_TRANS_SUBTYPE             = 7;
-FADETOCOLOR_TRANS_SUBTYPE           = 8;
-FADEFROMCOLOR_TRANS_SUBTYPE         = 9;
-FADEOVERCOLOR_TRANS_SUBTYPE         = 10; // 104
+CORNERSIN_TRANS_SUBTYPE             = 3; // 11
+CORNERSOUT_TRANS_SUBTYPE            = 4;
+VERTICAL_TRANS_SUBTYPE              = 5;
+HORIZONTAL_TRANS_SUBTYPE            = 6; // 14
+CIRCLE_TRANS_SUBTYPE                = 7; // 27
+CLOCKWISETWELVE_TRANS_SUBTYPE       = 8; // 33
+CLOCKWISETHREE_TRANS_SUBTYPE        = 9;
+CLOCKWISESIX_TRANS_SUBTYPE          = 10;
+CLOCKWISENINE_TRANS_SUBTYPE         = 11;
+TWOBLADEVERTICAL_TRANS_SUBTYPE      = 12;
+TWOBLADEHORIZONTAL_TRANS_SUBTYPE    = 13;
+FOURBLADE_TRANS_SUBTYPE             = 14; // 39
+FROMLEFT_TRANS_SUBTYPE              = 15; // 97
+FROMTOP_TRANS_SUBTYPE               = 16;
+FROMRIGHT_TRANS_SUBTYPE             = 17;
+FROMBOTTOM_TRANS_SUBTYPE            = 18;
+CROSSFADE_TRANS_SUBTYPE             = 19;
+FADETOCOLOR_TRANS_SUBTYPE           = 20;
+FADEFROMCOLOR_TRANS_SUBTYPE         = 21;
+FADEOVERCOLOR_TRANS_SUBTYPE         = 22;
+THREEBLADE_TRANS_SUBTYPE            = 23;
+EIGHTBLADE_TRANS_SUBTYPE            = 24;
+ONEBLADE_TRANS_SUBTYPE              = 25; // 107
 
 aTransitionSubtypeInMap = {
     'leftToRight'       : LEFTTORIGHT_TRANS_SUBTYPE,
     'topToBottom'       : TOPTOBOTTOM_TRANS_SUBTYPE,
+    'cornersIn'         : CORNERSIN_TRANS_SUBTYPE,
+    'cornersOut'        : CORNERSOUT_TRANS_SUBTYPE,
+    'vertical'          : VERTICAL_TRANS_SUBTYPE,
+    'horizontal'        : HORIZONTAL_TRANS_SUBTYPE,
+    'circle'            : CIRCLE_TRANS_SUBTYPE,
+    'clockwiseTwelve'   : CLOCKWISETWELVE_TRANS_SUBTYPE,
+    'clockwiseThree'    : CLOCKWISETHREE_TRANS_SUBTYPE,
+    'clockwiseSix'      : CLOCKWISESIX_TRANS_SUBTYPE,
+    'clockwiseNine'     : CLOCKWISENINE_TRANS_SUBTYPE,
+    'twoBladeVertical'  : TWOBLADEVERTICAL_TRANS_SUBTYPE,
+    'twoBladeHorizontal': TWOBLADEHORIZONTAL_TRANS_SUBTYPE,
+    'fourBlade'         : FOURBLADE_TRANS_SUBTYPE,
     'fromLeft'          : FROMLEFT_TRANS_SUBTYPE,
     'fromTop'           : FROMTOP_TRANS_SUBTYPE,
     'fromRight'         : FROMRIGHT_TRANS_SUBTYPE,
@@ -3468,12 +4219,19 @@ aTransitionSubtypeInMap = {
     'crossfade'         : CROSSFADE_TRANS_SUBTYPE,
     'fadeToColor'       : FADETOCOLOR_TRANS_SUBTYPE,
     'fadeFromColor'     : FADEFROMCOLOR_TRANS_SUBTYPE,
-    'fadeOverColor'     : FADEOVERCOLOR_TRANS_SUBTYPE
+    'fadeOverColor'     : FADEOVERCOLOR_TRANS_SUBTYPE,
+    'threeBlade'        : THREEBLADE_TRANS_SUBTYPE,
+    'eightBlade'        : EIGHTBLADE_TRANS_SUBTYPE,
+    'oneBlade'          : ONEBLADE_TRANS_SUBTYPE
 };
 
-aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'fromLeft',
-                             'fromTop', 'fromRight', 'fromBottom', 'crossfade',
-                             'fadeToColor', 'fadeFromColor', 'fadeOverColor' ];
+aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn',
+                             'cornersOut', 'vertical', 'horizontal', 'circle',
+                             'clockwiseTwelve', 'clockwiseThree', 'clockwiseSix',
+                             'clockwiseNine', 'twoBladeVertical', 'twoBladeHorizontal',
+                             'fourBlade', 'fromLeft', 'fromTop', 'fromRight',
+                             'fromBottom', 'crossfade', 'fadeToColor', 'fadeFromColor',
+                             'fadeOverColor', 'threeBlade', 'eightBlade', 'oneBlade' ];
 
 
 // Transition Modes
@@ -3546,6 +4304,119 @@ aTransitionInfoTable[BARWIPE_TRANSITION][TOPTOBOTTOM_TRANS_SUBTYPE] =
     'reverseMethod' : REVERSEMETHOD_FLIP_Y,
     'outInvertsSweep' : false,
     'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[FOURBOXWIPE_TRANSITION] = {};
+aTransitionInfoTable[FOURBOXWIPE_TRANSITION][CORNERSIN_TRANS_SUBTYPE] =
+aTransitionInfoTable[FOURBOXWIPE_TRANSITION][CORNERSOUT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[ELLIPSEWIPE_TRANSITION] = {};
+aTransitionInfoTable[ELLIPSEWIPE_TRANSITION][CIRCLE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : true
+};
+aTransitionInfoTable[ELLIPSEWIPE_TRANSITION][HORIZONTAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[ELLIPSEWIPE_TRANSITION][VERTICAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[CLOCKWIPE_TRANSITION] = {};
+aTransitionInfoTable[CLOCKWIPE_TRANSITION][CLOCKWISETWELVE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[CLOCKWIPE_TRANSITION][CLOCKWISETHREE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[CLOCKWIPE_TRANSITION][CLOCKWISESIX_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[CLOCKWIPE_TRANSITION][CLOCKWISENINE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 270.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[PINWHEELWIPE_TRANSITION] = {};
+aTransitionInfoTable[PINWHEELWIPE_TRANSITION][ONEBLADE_TRANS_SUBTYPE] =
+aTransitionInfoTable[PINWHEELWIPE_TRANSITION][TWOBLADEVERTICAL_TRANS_SUBTYPE] =
+aTransitionInfoTable[PINWHEELWIPE_TRANSITION][THREEBLADE_TRANS_SUBTYPE] =
+aTransitionInfoTable[PINWHEELWIPE_TRANSITION][FOURBLADE_TRANS_SUBTYPE] =
+aTransitionInfoTable[PINWHEELWIPE_TRANSITION][EIGHTBLADE_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : true
+};
+aTransitionInfoTable[PINWHEELWIPE_TRANSITION][TWOBLADEHORIZONTAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : true
 };
 
 aTransitionInfoTable[PUSHWIPE_TRANSITION] = {};
@@ -6369,6 +7240,540 @@ MovingSlideChange.prototype.performOut = function( nT )
 
 
 // ------------------------------------------------------------------------------------------ //
+/** Class ClippedSlideChange
+ *  This class performs a slide transition where the entering slide wipes
+ *  the leaving one out. The wipe effect is achieved by clipping the entering
+ *  slide with a parametric path.
+ *
+ *  @param aLeavingSlide
+ *      An object of type AnimatedSlide handling the leaving slide.
+ *  @param aEnteringSlide
+ *      An object of type AnimatedSlide handling the entering slide.
+ *  @param aParametricPolyPolygon
+ *      An object handling a <path> element that depends on a parameter.
+ *  @param aTransitionInfo
+ *      The set of parameters defining the slide transition to be performed.
+ *  @param bIsDirectionForward
+ *      The direction the slide transition has to be performed.
+ */
+function ClippedSlideChange( aLeavingSlide, aEnteringSlide, aParametricPolyPolygon,
+                             aTransitionInfo, bIsDirectionForward )
+{
+    ClippedSlideChange.superclass.constructor.call( this, aLeavingSlide, aEnteringSlide );
+
+    var bIsModeIn = true;
+    this.aClippingFunctor= new ClippingFunctor( aParametricPolyPolygon, aTransitionInfo,
+                                                bIsDirectionForward, bIsModeIn );
+}
+extend( ClippedSlideChange, SlideChangeBase );
+
+/** start
+ *  This method notifies to the slides involved in the transition the attributes
+ *  appended to the slide elements for performing the animation.
+ *  Moreover it sets the entering slide in the initial state and makes the slide
+ *  visible.
+ */
+ClippedSlideChange.prototype.start = function()
+{
+    ClippedSlideChange.superclass.start.call( this );
+    this.aEnteringSlide.notifyUsedAttribute( 'clip-path' );;
+    this.performIn( 0 );
+    this.aEnteringSlide.show();
+};
+
+/** performIn
+ *  This method set the position of the entering slide according to the passed
+ *  time value.
+ *
+ *  @param nT
+ *      The time parameter.
+ */
+ClippedSlideChange.prototype.performIn = function( nT )
+{
+    var nWidth = this.aEnteringSlide.getWidth();
+    var nHeight = this.aEnteringSlide.getHeight();
+    var aPolyPolygonElement = this.aClippingFunctor.perform( nT, nWidth, nHeight );
+    this.aEnteringSlide.setClipPath( aPolyPolygonElement );
+};
+
+ClippedSlideChange.prototype.performOut = function( nT )
+{
+    // empty body
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class ClippingFunctor
+ *  This class is responsible for computing the <path> used for clipping
+ *  the entering slide in a polypolygon clipping slide transition or the
+ *  animated shape in a transition filter effect.
+ *
+ *  @param aParametricPolyPolygon
+ *      An object that handle a <path> element defined in the [0,1]x[0,1]
+ *      unit square and that depends on a parameter.
+ *  @param aTransitionInfo
+ *      The set of parameters defining the slide transition to be performed.
+ *  @param bIsDirectionForward
+ *      The direction the slide transition has to be performed.
+ *  @param bIsModeIn
+ *      The direction the filter effect has to be performed
+ */
+function ClippingFunctor( aParametricPolyPolygon, aTransitionInfo,
+                          bIsDirectionForward, bIsModeIn)
+{
+    this.aParametricPolyPolygon = aParametricPolyPolygon;
+    this.aStaticTransformation = null;
+    this.bForwardParameterSweep = true;
+    this.bSubtractPolygon = false;
+    this.bScaleIsotropically = aTransitionInfo.scaleIsotropically;
+    this.bFlip = false;
+
+    assert( this.aParametricPolyPolygon,
+            'ClippingFunctor: parametric polygon is not valid' );
+
+    if( aTransitionInfo.rotationAngle != 0.0 ||
+        aTransitionInfo.scaleX != 1.0 ||  aTransitionInfo.scaleY != 1.0 )
+    {
+        // note: operations must be defined in reverse order.
+        this.aStaticTransformation = SVGIdentityMatrix.translate( 0.5, 0.5 );
+        if( aTransitionInfo.scaleX != 1.0 ||  aTransitionInfo.scaleY != 1.0 )
+            this.aStaticTransformation
+                = this.aStaticTransformation.scaleNonUniform( aTransitionInfo.scaleX,
+                                                              aTransitionInfo.scaleY );
+        if( aTransitionInfo.rotationAngle != 0.0 )
+            this.aStaticTransformation
+                = this.aStaticTransformation.rotate( aTransitionInfo.rotationAngle );
+        this.aStaticTransformation = this.aStaticTransformation.translate( -0.5, -0.5 );
+    }
+    else
+    {
+        this.aStaticTransformation = document.documentElement.createSVGMatrix();
+    }
+
+    if( !bIsDirectionForward )
+    {
+        var aMatrix = null;
+        switch( aTransitionInfo.reverseMethod )
+        {
+            default:
+                log( 'ClippingFunctor: unexpected reverse method.' )
+                break;
+            case REVERSEMETHOD_IGNORE:
+                break;
+            case REVERSEMETHOD_INVERT_SWEEP:
+                this.bForwardParameterSweep = !this.bForwardParameterSweep;
+                break;
+            case REVERSEMETHOD_SUBTRACT_POLYGON:
+                this.bSubtractPolygon = !this.bSubtractPolygon;
+                break;
+            case REVERSEMETHOD_SUBTRACT_AND_INVERT:
+                this.bForwardParameterSweep = !this.bForwardParameterSweep;
+                this.bSubtractPolygon = !this.bSubtractPolygon;
+                break;
+            case REVERSEMETHOD_ROTATE_180:
+                aMatrix = document.documentElement.createSVGMatrix();
+                aMatrix.setToRotationAroundPoint( 0.5, 0.5, 180 );
+                this.aStaticTransformation = aMatrix.multiply( this.aStaticTransformation );
+                break;
+            case REVERSEMETHOD_FLIP_X:
+                aMatrix = document.documentElement.createSVGMatrix();
+                // |-1  0  1 |
+                // | 0  1  0 |
+                aMatrix.a = -1; aMatrix.e = 1.0;
+                this.aStaticTransformation = aMatrix.multiply( this.aStaticTransformation );
+                this.bFlip = true;
+                break;
+            case REVERSEMETHOD_FLIP_Y:
+                aMatrix = document.documentElement.createSVGMatrix();
+                // | 1  0  0 |
+                // | 0 -1  1 |
+                aMatrix.d = -1; aMatrix.f = 1.0;
+                this.aStaticTransformation = aMatrix.multiply( this.aStaticTransformation );
+                this.bFlip = true;
+                break;
+        }
+    }
+
+    if( !bIsModeIn )
+    {
+        if( aTransitionInfo.outInvertsSweep )
+        {
+            this.bForwardParameterSweep = !this.bForwardParameterSweep;
+        }
+        else
+        {
+            this.bSubtractPolygon = !this.bSubtractPolygon;
+        }
+    }
+}
+
+/** perform
+ *
+ *  @param nT
+ *      A parameter in [0,1] representing normalized time.
+ *  @param nWidth
+ *      The width of the bounding box of the slide/shape to be clipped.
+ *  @param nHeight
+ *      The height of the bounding box of the slide/shape to be clipped.
+ *  @return {SVGPathElement}
+ *      A svg <path> element representing the path to be used for the clipping
+ *      operation.
+ */
+ClippingFunctor.prototype.perform = function( nT, nWidth, nHeight )
+{
+    var aClipPoly = this.aParametricPolyPolygon.perform( this.bForwardParameterSweep ? nT : (1 - nT) );
+
+    if( this.bFlip )
+        aClipPoly.changeOrientation();
+
+    if( this.bSubtractPolygon )
+    {
+
+    }
+
+    var aMatrix;
+    if( this.bScaleIsotropically )
+    {
+        var nScaleFactor = Math.max( nWidth, nHeight );
+        // translate( scale( aStaticTransformation() ) )
+        // note: operations must be defined in reverse order.
+        aMatrix = SVGIdentityMatrix.translate( -( nScaleFactor - nWidth ) / 2.0,
+                                                  -( nScaleFactor - nHeight ) / 2.0 );
+        aMatrix = aMatrix.scale( nScaleFactor );
+        aMatrix = aMatrix.multiply( this.aStaticTransformation );
+    }
+    else
+    {
+        aMatrix = SVGIdentityMatrix.scaleNonUniform( nWidth, nHeight );
+        aMatrix = aMatrix.multiply( this.aStaticTransformation );
+    }
+
+    aClipPoly.matrixTransform( aMatrix );
+
+    return aClipPoly;
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** createClipPolyPolygon
+ *
+ *  @param nType
+ *      An enumerator representing the transition type.
+ *  @param nSubtype
+ *      An enumerator representing the transition subtype.
+ *  @return
+ *      An object that handles a parametric <path> element.
+ */
+function createClipPolyPolygon( nType, nSubtype )
+{
+    switch( nType )
+    {
+        default:
+            log( 'createClipPolyPolygon: unknown transition type: ' + nType );
+            return null;
+        case BARWIPE_TRANSITION:
+            return new BarWipePath( 1 );
+        case FOURBOXWIPE_TRANSITION:
+            return new FourBoxWipePath( nSubtype === CORNERSOUT_TRANS_SUBTYPE );
+        case ELLIPSEWIPE_TRANSITION:
+            return new EllipseWipePath( nSubtype );
+        case PINWHEELWIPE_TRANSITION:
+            var nBlades;
+            switch( nSubtype )
+            {
+                case ONEBLADE_TRANS_SUBTYPE:
+                    nBlades = 1;
+                    break;
+                case DEFAULT_TRANS_SUBTYPE:
+                case TWOBLADEVERTICAL_TRANS_SUBTYPE:
+                    nBlades = 2;
+                    break;
+                case TWOBLADEHORIZONTAL_TRANS_SUBTYPE:
+                    nBlades = 2;
+                    break;
+                case THREEBLADE_TRANS_SUBTYPE:
+                    nBlades = 3;
+                    break;
+                case FOURBLADE_TRANS_SUBTYPE:
+                    nBlades = 4;
+                    break;
+                case EIGHTBLADE_TRANS_SUBTYPE:
+                    nBlades = 8;
+                    break;
+                default:
+                    log( 'createClipPolyPolygon: unknown subtype: ' + nSubtype );
+                    return null;
+            }
+            return new PinWheelWipePath( nBlades );
+    }
+}
+
+
+
+// ------------------------------------------------------------------------------------------ //
+function createUnitSquarePath()
+{
+    var aPath = document.createElementNS( NSS['svg'], 'path' );
+    var sD = 'M 0 0 L 1 0 L 1 1 L 0 1 L 0 0';
+    aPath.setAttribute( 'd', sD );
+    return aPath;
+}
+
+function pruneScaleValue( nVal )
+{
+    if( nVal < 0.0 )
+        return (nVal < -0.00001 ? nVal : -0.00001);
+    else
+        return (nVal > 0.00001 ? nVal : 0.00001);
+}
+
+// ------------------------------------------------------------------------------------------ //
+/** Class BarWipePath
+ *  This class handles a <path> element that defines a unit square and
+ *  transforms it accordingly to a parameter in the [0,1] range for performing
+ *  a left to right barWipe transition.
+ *
+ *  @param nBars
+ *     The number of bars to be generated.
+ */
+function BarWipePath( nBars /* nBars > 1: blinds effect */ )
+{
+    this.nBars = nBars;
+    if( this.nBars === undefined || this.nBars < 1 )
+        this.nBars = 1;
+    this.aBasePath = createUnitSquarePath();
+}
+
+/** perform
+ *
+ *  @param nT
+ *      A parameter in [0,1] representing the width of the generated bars.
+ *  @return {SVGPathElement}
+ *      A svg <path> element representing a multi-bars.
+ */
+BarWipePath.prototype.perform = function( nT )
+{
+
+    var aMatrix = SVGIdentityMatrix.scaleNonUniform( pruneScaleValue( nT / this.nBars ), 1.0 );
+
+    var aPolyPath = this.aBasePath.cloneNode( true );
+    aPolyPath.matrixTransform( aMatrix );
+
+    if( this.nBars > 1 )
+    {
+        var i;
+        var aTransform;
+        var aPath;
+        for( i = this.nBars - 1; i > 0; --i )
+        {
+            aTransform = SVGIdentityMatrix.translate( i / this.nBars, 0.0 );
+            aTransform = aTransform.multiply( aMatrix );
+            aPath = this.aBasePath.cloneNode( true );
+            aPath.matrixTransform( aTransform );
+            aPolyPath.appendPath( aPath );
+        }
+    }
+    return aPolyPath;
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class FourBoxWipePath
+ *  This class handles a path made up by four squares and is utilized for
+ *  performing fourBoxWipe transitions.
+ *
+ *  @param bCornersOut
+ *      If true the transition subtype is cornersOut else is cornersIn.
+ */
+function FourBoxWipePath( bCornersOut )
+{
+    this.bCornersOut = bCornersOut;
+    this.aBasePath = createUnitSquarePath();
+}
+
+FourBoxWipePath.prototype.perform = function( nT )
+{
+    var aMatrix;
+    var d = pruneScaleValue( nT / 2.0 );
+
+    if( this.bCornersOut )
+    {
+        aMatrix = SVGIdentityMatrix.translate( -0.25, -0.25 ).scale( d ).translate( -0.5, -0.5 );
+    }
+    else
+    {
+        aMatrix = SVGIdentityMatrix.translate( -0.5, -0.5 ).scale( d );
+    }
+
+
+    var aTransform = aMatrix;
+    // top left
+    var aSquare = this.aBasePath.cloneNode( true );
+    aSquare.matrixTransform( aTransform );
+    var aPolyPath = aSquare;
+    // bottom left, flip on x-axis:
+    aMatrix = SVGIdentityMatrix.flipY();
+    aTransform = aMatrix.multiply( aTransform );
+    aSquare = this.aBasePath.cloneNode( true );
+    aSquare.matrixTransform( aTransform );
+    aSquare.changeOrientation();
+    aPolyPath.appendPath( aSquare );
+    // bottom right, flip on y-axis:
+    aMatrix = SVGIdentityMatrix.flipX();
+    aTransform = aMatrix.multiply( aTransform );
+    aSquare = this.aBasePath.cloneNode( true );
+    aSquare.matrixTransform( aTransform );
+    aPolyPath.appendPath( aSquare );
+    // top right, flip on x-axis:
+    aMatrix = SVGIdentityMatrix.flipY();
+    aTransform = aMatrix.multiply( aTransform );
+    aSquare = this.aBasePath.cloneNode( true );
+    aSquare.matrixTransform( aTransform );
+    aSquare.changeOrientation();
+    aPolyPath.appendPath( aSquare );
+
+    aMatrix = SVGIdentityMatrix.translate( 0.5, 0.5 );
+    aPolyPath.matrixTransform( aMatrix );
+
+    return aPolyPath;
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class EllipseWipePath
+ *  This class handles a parametric ellipse represented by a path made up of
+ *  cubic Bezier curve segments that helps in performing the ellipseWipe
+ *  transition.
+ *
+ *  @param eSubtype
+ *      The transition subtype.
+ */
+function EllipseWipePath( eSubtype )
+{
+    this.eSubtype = eSubtype;
+
+    var sPathData;
+
+    switch( eSubtype )
+    {
+        case DEFAULT_TRANS_SUBTYPE:
+        case CIRCLE_TRANS_SUBTYPE:
+            // precomputed circle( 0.5, 0.5, SQRT2 / 2 )
+            sPathData = 'M 0.5 -0.207107 ' +
+                        'C 0.687536 -0.207107 0.867392 -0.132608 1 0 ' +
+                        'C 1.13261 0.132608 1.20711 0.312464 1.20711 0.5 ' +
+                        'C 1.20711 0.687536 1.13261 0.867392 1 1 ' +
+                        'C 0.867392 1.13261 0.687536 1.20711 0.5 1.20711 ' +
+                        'C 0.312464 1.20711 0.132608 1.13261 0 1 ' +
+                        'C -0.132608 0.867392 -0.207107 0.687536 -0.207107 0.5 ' +
+                        'C -0.207107 0.312464 -0.132608 0.132608 0 0 ' +
+                        'C 0.132608 -0.132608 0.312464 -0.207107 0.5 -0.207107';
+            break;
+        case VERTICAL_TRANS_SUBTYPE:
+            sPathData = '';
+            break;
+        case HORIZONTAL_TRANS_SUBTYPE:
+            sPathData = '';
+            break;
+        default:
+            log( 'EllipseWipePath: unknown subtype: ' + eSubtype );
+    }
+
+    this.aBasePath = document.createElementNS( NSS['svg'], 'path' );
+    this.aBasePath.setAttribute( 'd', sPathData );
+}
+
+EllipseWipePath.prototype.perform = function( nT )
+{
+
+    var aTransform = SVGIdentityMatrix.translate( 0.5, 0.5 ).scale( nT ).translate( -0.5, -0.5 );
+    var aEllipse = this.aBasePath.cloneNode( true );
+    aEllipse.matrixTransform( aTransform );
+
+    return aEllipse;
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class PinWheelWipePath
+ *  This class handles a parametric poly-path that is used for performing
+ *  a spinWheelWipe transition.
+ *
+ *  @param nBlades
+ *      Number of blades generated by the transition.
+ */
+function PinWheelWipePath( nBlades )
+{
+    this.nBlades = nBlades;
+    if( !this.nBlades || this.nBlades < 1 )
+        this.nBlades = 1;
+}
+
+PinWheelWipePath.calcCenteredClock = function( nT, nE )
+{
+    var nMAX_EDGE = 2;
+
+    var aTransform = SVGIdentityMatrix.rotate( nT * 360 );
+
+    var aPoint = document.documentElement.createSVGPoint();
+    aPoint.y = -nMAX_EDGE;
+    aPoint = aPoint.matrixTransform( aTransform );
+
+    var sPathData = 'M ' + aPoint.x + ' ' + aPoint.y + ' ';
+    if( nT >= 0.875 )
+        // L -e -e
+        sPathData += 'L ' + '-' + nE + ' -' + nE + ' ';
+    if( nT >= 0.625 )
+        // L -e e
+        sPathData += 'L ' + '-' + nE + ' ' + nE + ' ';
+    if( nT >= 0.375 )
+        // L e e
+        sPathData += 'L ' + nE + ' ' + nE + ' ';
+     if( nT >= 0.125 )
+        // L e -e
+        sPathData += 'L ' + nE + ' -' + nE + ' ';
+
+    // L 0 -e
+    sPathData += 'L 0 -' + nE + ' ';
+    sPathData += 'L 0 0 ';
+    // Z
+    sPathData += 'L '  + aPoint.x + ' ' + aPoint.y;
+
+    var aPath = document.createElementNS( NSS['svg'], 'path' );
+    aPath.setAttribute( 'd', sPathData );
+    return aPath;
+};
+
+PinWheelWipePath.prototype.perform = function( nT )
+{
+    var aBasePath = PinWheelWipePath.calcCenteredClock( nT / this.nBlades,
+                                                        2.0 /* max edge when rotating */  );
+
+    var aPolyPath = aBasePath.cloneNode( true );
+    var aPath;
+    var aRotation;
+    var i;
+    for( i = this.nBlades - 1; i > 0; --i )
+    {
+        aRotation = SVGIdentityMatrix.rotate( (i * 360) / this.nBlades );
+        aPath = aBasePath.cloneNode( true );
+        aPath.matrixTransform( aRotation );
+        aPolyPath.appendPath( aPath );
+    }
+
+    var aTransform = SVGIdentityMatrix.translate( 0.5, 0.5 ).scale( 0.5 );
+    aPolyPath.matrixTransform( aTransform );
+
+    return aPolyPath;
+};
+
+
+// ------------------------------------------------------------------------------------------ //
 /** Class AnimatedSlide
  *  This class handle a slide element during a slide transition.
  *
@@ -6384,8 +7789,13 @@ function AnimatedSlide( aMetaSlide )
 
     this.aMetaSlide = aMetaSlide;
     this.aSlideElement = this.aMetaSlide.slideElement;
+    this.sSlideId =  this.aMetaSlide.slideId;
 
     this.aUsedAttributeSet = new Array();
+
+    this.aClipPathElement = null;
+    this.aClipPathContent = null;
+    this.bIsClipped = false;
 }
 
 /** show
@@ -6413,7 +7823,15 @@ AnimatedSlide.prototype.hide = function()
  */
 AnimatedSlide.prototype.notifyUsedAttribute = function( sName )
 {
-    this.aUsedAttributeSet.push( sName );
+    if( sName == 'clip-path' )
+    {
+        this.initClipPath();
+        this.bIsClipped = true;
+    }
+    else
+    {
+        this.aUsedAttributeSet.push( sName );
+    }
 };
 
 /** reset
@@ -6422,6 +7840,12 @@ AnimatedSlide.prototype.notifyUsedAttribute = function( sName )
  */
 AnimatedSlide.prototype.reset = function()
 {
+    if( this.bIsClipped )
+    {
+        this.cleanClipPath();
+        this.bIsClipped = false;
+    }
+
     var i;
     for( i = 0; i < this.aUsedAttributeSet.length; ++i )
     {
@@ -6429,6 +7853,55 @@ AnimatedSlide.prototype.reset = function()
         this.aSlideElement.removeAttribute( sAttrName );
     }
     this.aUsedAttributeSet = new Array();
+};
+
+/** initClipPath
+ *  Create a new clip path element and append it to the clip path def group.
+ *  Moreover the created <clipPath> element is referenced by the handled slide
+ *  element.
+ */
+AnimatedSlide.prototype.initClipPath = function()
+{
+    // We create the clip path element.
+    this.aClipPathElement = document.createElementNS( NSS['svg'], 'clipPath' );
+
+    var sId = 'clip-path-' + this.sSlideId;
+    this.aClipPathElement.setAttribute( 'id', sId );
+    //this.aClipPathElement.setAttribute( 'clipPathUnits', 'userSpaceOnUse' );
+
+    // We create and append a placeholder content.
+    this.aClipPathContent = document.createElementNS( NSS['svg'], 'path' );
+    var sPathData = 'M 0 0 h ' + WIDTH + ' v ' + HEIGHT + ' h -' + WIDTH + ' z';
+    this.aClipPathContent.setAttribute( 'd', sPathData );
+    this.aClipPathElement.appendChild( this.aClipPathContent );
+
+    // We insert it into the svg document.
+    var aClipPathGroup = theMetaDoc.aClipPathGroup;
+    aClipPathGroup.appendChild( this.aClipPathElement );
+
+    // Finally we set the reference to the created clip path.
+    // We set it on the parent element because a slide element already
+    // owns a clip path attribute.
+    var sRef = 'url(#' + sId + ')';
+    this.aSlideElement.parentNode.setAttribute( 'clip-path', sRef );
+};
+
+/** cleanClipPath
+ *  Removes the related <clipPath> element from the <defs> group,
+ *  and remove the 'clip-path' attribute from the slide element.
+ *
+ */
+AnimatedSlide.prototype.cleanClipPath = function()
+{
+    this.aSlideElement.parentNode.removeAttribute( 'clip-path' );
+
+    if( this.aClipPathElement )
+    {
+        var aClipPathGroup = theMetaDoc.aClipPathGroup;
+        aClipPathGroup.removeChild( this.aClipPathElement );
+        this.aClipPathElement = null;
+        this.aClipPathContent = null;
+    }
 };
 
 /** insertBefore
@@ -6459,7 +7932,7 @@ AnimatedSlide.prototype.appendElement = function( aElement )
     }
 };
 
-/** appendElement
+/** removeElement
  *  Remove an svg element.
  *
  *  @param aElement
@@ -6517,6 +7990,25 @@ AnimatedSlide.prototype.translate = function( nDx, nDy )
     this.aSlideElement.setAttribute( 'transform', sTransformAttr );
 };
 
+/** setClipPath
+ *  Replace the current content of the <clipPath> element with the one
+ *  passed through the parameter.
+ *
+ *  @param aClipPathContent
+ *      A <g> element representing a <path> element used for clipping.
+ */
+AnimatedSlide.prototype.setClipPath = function( aClipPathContent )
+{
+    // Earlier we used to replace the current <path> element with the passed one,
+    // anyway that does not work in IE9, so we replace the 'd' attribute, only.
+    if( this.aClipPathContent )
+    {
+//        this.aClipPathElement.replaceChild( aClipPathContent, this.aClipPathContent );
+//        this.aClipPathContent = aClipPathContent;
+        var sPathData = aClipPathContent.getAttribute( 'd' );
+        this.aClipPathContent.setAttribute( 'd', sPathData );
+    }
+};
 
 
 // ------------------------------------------------------------------------------------------ //
@@ -7009,7 +8501,10 @@ SlideTransition.prototype.createSlideTransition = function( aLeavingSlide, aEnte
             return null;
 
         case TRANSITION_CLIP_POLYPOLYGON:
-            return null;
+            var aParametricPolyPolygon
+                    = createClipPolyPolygon( this.eTransitionType, this.eTransitionSubType );
+            return new ClippedSlideChange( aLeavingSlide, aEnteringSlide, aParametricPolyPolygon,
+                                           aTransitionInfo, this.isDirectionForward() );
 
         case TRANSITION_SPECIAL:
             switch( this.eTransitionType )
@@ -7136,12 +8631,6 @@ SlideTransition.prototype.parseElement = function()
     if( sDirectionAttr == 'reverse' )
         this.bReverseDirection = true;
 
-    // mode attribute:
-    this.eTransitionMode = TRANSITION_MODE_IN;
-    var sModeAttr = aAnimElem.getAttribute( 'mode' );
-    if( sModeAttr === 'out' )
-        this.eTransitionMode = TRANSITION_MODE_OUT;
-
     // fade color
     this.sFadeColor = null;
     if( this.eTransitionType == FADE_TRANSITION &&
@@ -7202,9 +8691,9 @@ SlideTransition.prototype.getFadeColor = function()
     return this.sFadeColor;
 };
 
-SlideTransition.prototype.getReverseDirection = function()
+SlideTransition.prototype.isDirectionForward = function()
 {
-    return this.bReverseDirection;
+    return !this.bReverseDirection;
 };
 
 SlideTransition.prototype.getDuration = function()
@@ -7228,7 +8717,7 @@ SlideTransition.prototype.info = function()
     sInfo += ';  subtype: ' + aTransitionSubtypeOutMap[ this.getTransitionSubType() ];
 
     // transition direction
-    if( this.getReverseDirection() )
+    if( !this.isDirectionForward() )
         sInfo += ';  direction: reverse';
 
     // transition mode
@@ -9155,8 +10644,6 @@ SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
         // clear all queues
         this.dispose();
 
-        this.notifySlideStart( nSlideIndex );
-
         theMetaDoc.getCurrentSlide().aSlideAnimationsHandler.start();
         this.update();
     }
@@ -9228,6 +10715,8 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
         }
     }
 
+    this.notifySlideStart( nNewSlide );
+
     if( this.isEnabled() && !bSkipSlideTransition  )
     {
         // create slide transition and add to activity queue
@@ -9279,7 +10768,7 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
 SlideShow.prototype.update = function()
 {
     this.aTimer.holdTimer();
-    var suspendHandle = ROOT_NODE.suspendRedraw( PREFERRED_FRAME_RATE * 1000 );
+    //var suspendHandle = ROOT_NODE.suspendRedraw( PREFERRED_FRAME_RATE * 1000 );
 
     // process queues
     this.aTimerEventQueue.process();
@@ -9289,8 +10778,8 @@ SlideShow.prototype.update = function()
 
     this.aActivityQueue.processDequeued();
 
-    ROOT_NODE.unsuspendRedraw(suspendHandle);
-    ROOT_NODE.forceRedraw();
+    //ROOT_NODE.unsuspendRedraw(suspendHandle);
+    //ROOT_NODE.forceRedraw();
     this.aTimer.releaseTimer();
 
     var bActivitiesLeft = ( ! this.aActivityQueue.isEmpty() );

@@ -748,6 +748,7 @@ sal_Bool SVGFilter::implExportDocument()
 
     // Create a ClipPath element that will be used for cutting bitmaps and other elements that could exceed the page margins.
     {
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "ClipPathGroup" ) );
         SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
         {
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", msClipPathId );
