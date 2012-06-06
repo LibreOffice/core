@@ -441,16 +441,10 @@
 
 <!-- SORT -->
 <xsl:template match="sort" >
-  <!-- sorting disabled due to #i70462#
 	<xsl:apply-templates><xsl:sort select="descendant::paragraph"/></xsl:apply-templates>
-	//-->
-	<xsl:apply-templates />
 </xsl:template>
 <xsl:template match="sort" mode="embedded">
-<!-- sorting disabled due to #i70462#
 	<xsl:apply-templates><xsl:sort select="descendant::paragraph"/></xsl:apply-templates>
-	//-->
-	<xsl:apply-templates />
 </xsl:template>
 
 <!-- SWITCH -->
