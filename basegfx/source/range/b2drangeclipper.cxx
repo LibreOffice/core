@@ -329,11 +329,10 @@ namespace basegfx
                 // unconditionally
                 append(aIntersectionPoint);
 
-                const bool isSweepLineEnteringRect(
-                    rEvent.getEdgeType() == SweepLineEvent::STARTING_EDGE);
                 if( isFinishingEdge )
                 {
-                    if( isSweepLineEnteringRect )
+                    // isSweepLineEnteringRect ?
+                    if( rEvent.getEdgeType() == SweepLineEvent::STARTING_EDGE)
                         handleFinalOwnRightEdge(rActiveEdge);
                     else
                         handleFinalOwnLeftEdge(rActiveEdge,
