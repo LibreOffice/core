@@ -1461,18 +1461,6 @@ void ThumbnailView::DoubleClick()
     maDoubleClickHdl.Call( this );
 }
 
-void ThumbnailView::UserDraw( const UserDrawEvent& )
-{
-}
-
-void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos )
-{
-    ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->maImage  = rImage;
-    ImplInsertItem( pItem, nPos );
-}
-
 void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const rtl::OUString& rText, size_t nPos )
 {
@@ -1480,22 +1468,6 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     pItem->mnId     = nItemId;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
-    ImplInsertItem( pItem, nPos );
-}
-
-void ThumbnailView::InsertItem( sal_uInt16 nItemId,
-                                const rtl::OUString& rText, size_t nPos )
-{
-    ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->maText   = rText;
-    ImplInsertItem( pItem, nPos );
-}
-
-void ThumbnailView::InsertItem( sal_uInt16 nItemId, size_t nPos )
-{
-    ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
-    pItem->mnId     = nItemId;
     ImplInsertItem( pItem, nPos );
 }
 

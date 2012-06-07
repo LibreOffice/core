@@ -192,17 +192,9 @@ public:
 
     virtual void DoubleClick();
 
-    void InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                     size_t nPos = THUMBNAILVIEW_APPEND );
-
     void InsertItem( sal_uInt16 nItemId,
                      const Image& rImage, const rtl::OUString &rStr,
                      size_t nPos = THUMBNAILVIEW_APPEND );
-
-    void InsertItem( sal_uInt16 nItemId,
-                     const rtl::OUString &rText, size_t nPosPEND );
-
-    void InsertItem( sal_uInt16 nItemId, size_t nPos = THUMBNAILVIEW_APPEND );
 
     void RemoveItem( sal_uInt16 nItemId );
 
@@ -320,8 +312,6 @@ protected:
     virtual void StateChanged( StateChangedType nStateChange );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
-
-    virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
     virtual bool StartDrag( const CommandEvent& rCEvt, Region& rRegion );
 
