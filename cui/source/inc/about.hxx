@@ -71,11 +71,11 @@ private:
     void StyleControls();
     void LayoutControls();
     void LayoutButtons(sal_Int32 aContentWidth, sal_Int32 aDialogBorder,
-                       sal_Int32 aShadowWidth, Point aDescriptionPos,
+                       Point aDescriptionPos,
                        sal_Int32 aDescriptionTextHeight,
                        sal_Int32 aVersionDescriptionSpacing, Point& aButtonPos,
-                       Size& aButtonSize);
-    void MoveControl(Control& rControl, sal_Int32 X);
+                       Size& aButtonSize, sal_Int32& aButtonsWidth );
+    void MoveControl(Control& rControl, sal_Int32 X, sal_Int32 Y);
     rtl::OUString GetBuildId();
     rtl::OUString GetVersionString();
     rtl::OUString GetCopyrightString();

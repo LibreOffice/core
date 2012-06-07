@@ -63,8 +63,8 @@ using namespace ::com::sun::star;
 enum AboutDialogButton
 {
     CREDITS_BUTTON,
-    WEBSITE_BUTTON,
-    LICENSE_BUTTON
+    LICENSE_BUTTON,
+    WEBSITE_BUTTON
 };
 
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
@@ -103,13 +103,13 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     // Allow the button to be identifiable once they are clicked
     aCreditsButton.SetData( (void*)CREDITS_BUTTON );
-    aWebsiteButton.SetData( (void*)WEBSITE_BUTTON );
     aLicenseButton.SetData( (void*)LICENSE_BUTTON );
+    aWebsiteButton.SetData( (void*)WEBSITE_BUTTON );
 
     // Connect all handlers
     aCreditsButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
-    aWebsiteButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
     aLicenseButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
+    aWebsiteButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
 
     aCancelButton.SetClickHdl( LINK( this, AboutDialog, CancelHdl ) );
 
@@ -127,10 +127,10 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
     AboutDialogButton* pDialogButton = (AboutDialogButton*)pButton->GetData();
     if ( pDialogButton ==  (AboutDialogButton*)CREDITS_BUTTON )
         sURL = m_aCreditsLinkStr;
-    else if ( pDialogButton == (AboutDialogButton*)WEBSITE_BUTTON )
-        sURL = m_aWebsiteLinkStr;
     else if ( pDialogButton == (AboutDialogButton*)LICENSE_BUTTON)
         sURL = m_aLicenseLinkStr;
+    else if ( pDialogButton == (AboutDialogButton*)WEBSITE_BUTTON )
+        sURL = m_aWebsiteLinkStr;
 
     // If the URL is empty, don't do anything
     if ( sURL.isEmpty() )
@@ -195,26 +195,24 @@ void AboutDialog::LayoutControls()
     // Obtain an appropriate text width from the size of the screen
     sal_Int32 aIdealTextWidth = aScreenRect.GetWidth() / 2.4;
 
-    sal_Int32 aDialogBorder = 6;
-    sal_Int32 aContentWidth = aIdealTextWidth + aDialogBorder * 2;
-    sal_Int32 aShadowWidth = aContentWidth * 0.02;
-    sal_Int32 aDialogWidth = aContentWidth + aShadowWidth * 2;
+    sal_Int32 aDialogBorder = 12;
+    sal_Int32 aDialogWidth = aIdealTextWidth + aDialogBorder * 2;
 
     // Render and Position Logo
     vcl::RenderGraphicRasterizer aRasterizerLogo = Application::LoadBrandSVG("flat_logo");
     float aLogoWidthHeightRatio = (float)aRasterizerLogo.GetDefaultSizePixel().Width() /
                                (float)aRasterizerLogo.GetDefaultSizePixel().Height();
 
-    Size aLogoSize( aContentWidth * 0.6, (aContentWidth * 0.6) / aLogoWidthHeightRatio );
-    Point aLogoPos( aShadowWidth + ( aContentWidth - aLogoSize.Width() ) / 2,
-                    aShadowWidth + aDialogBorder );
+    Size aLogoSize( aDialogWidth * 0.6, (aDialogWidth * 0.6) / aLogoWidthHeightRatio );
+    Point aLogoPos( ( aDialogWidth - aLogoSize.Width() ) / 2,
+                    aDialogBorder );
     aLogoBitmap = aRasterizerLogo.Rasterize( aLogoSize );
     aLogoImage.SetImage( Image( aLogoBitmap ) );
     aLogoImage.SetPosSizePixel( aLogoPos, aLogoSize );
 
     // Position version text
     sal_Int32 aLogoVersionSpacing = aLogoSize.Height() * 0.15;
-    Point aVersionPos( aShadowWidth + aDialogBorder,
+    Point aVersionPos( aDialogBorder,
                        aLogoPos.Y() + aLogoSize.Height() + aLogoVersionSpacing );
     Size aVersionSize = aVersionText.CalcMinimumSize();
     aVersionSize.Width() = aIdealTextWidth;
@@ -222,7 +220,7 @@ void AboutDialog::LayoutControls()
 
     // Position description text
     sal_Int32 aVersionDescriptionSpacing = aLogoSize.Height() * 0.45;
-    Point aDescriptionPos( aShadowWidth + aDialogBorder, aVersionPos.Y() + aVersionSize.Height() + aVersionDescriptionSpacing );
+    Point aDescriptionPos( aDialogBorder, aVersionPos.Y() + aVersionSize.Height() + aVersionDescriptionSpacing );
     Size aDescriptionSize = aDescriptionText.GetSizePixel();
     aDescriptionSize.Width() = aIdealTextWidth;
     aDescriptionText.SetPosSizePixel( aDescriptionPos, aDescriptionSize );
@@ -230,7 +228,7 @@ void AboutDialog::LayoutControls()
     aDescriptionText.SetSizePixel( aDescriptionSize );
 
     // Layout copyright text
-    Point aCopyrightPos( aShadowWidth + aDialogBorder, aDescriptionPos.Y() + aDescriptionText.GetSizePixel().Height() + aVersionDescriptionSpacing );
+    Point aCopyrightPos( aDialogBorder, aDescriptionPos.Y() + aDescriptionText.GetSizePixel().Height() + aVersionDescriptionSpacing );
     Size aCopyrightSize = aCopyrightText.GetSizePixel();
     aCopyrightSize.Width() = aIdealTextWidth;
     aCopyrightText.SetPosSizePixel( aCopyrightPos, aCopyrightSize );
@@ -246,9 +244,10 @@ void AboutDialog::LayoutControls()
     // Layout Buttons
     Size aButtonSize;
     Point aButtonPos;
-    LayoutButtons( aContentWidth, aDialogBorder, aShadowWidth, aCopyrightPos,
+    sal_Int32 aButtonsWidth = 0;
+    LayoutButtons( aDialogWidth, aDialogBorder, aCopyrightPos,
                    aCopyrightText.GetSizePixel().Height() + 1,
-                   aVersionDescriptionSpacing, aButtonPos, aButtonSize );
+                   aVersionDescriptionSpacing, aButtonPos, aButtonSize, aButtonsWidth );
 
 
 
@@ -259,36 +258,59 @@ void AboutDialog::LayoutControls()
     Size aBackgroundSize( aDialogWidth, aDialogWidth / aBackgroundWidthHeightRatio );
 
     // Make sure the dialog is tall enough
-    sal_Int32 aBottomY = aButtonPos.Y() + aButtonSize.Height() + aDialogBorder + aShadowWidth;
+    sal_Int32 aBottomY = aButtonPos.Y() + aButtonSize.Height() + aDialogBorder;
     // If not, make the dialog taller (and to maintain the aspect ratio of the background also wider)
+    if (aButtonsWidth > 0)
+    {
+        aBackgroundSize.Width() += aButtonsWidth;
+        aBackgroundSize.Height() = aBackgroundSize.Width() / aBackgroundWidthHeightRatio;
+    }
+
     if (aBottomY > aBackgroundSize.Height())
+    {
         aBackgroundSize.Width() = aBottomY * aBackgroundWidthHeightRatio;
         aBackgroundSize.Height() = aBottomY;
+    }
+
+    // Not pretty, but better than having the buttons in the center of the dialog.
+    if (aBottomY < aBackgroundSize.Height())
+    {
+        sal_Int32 aHeightDifference = aBackgroundSize.Height() - aBottomY;
+
+        MoveControl(aVersionText, 0, aHeightDifference * 0.25);
+        MoveControl(aDescriptionText, 0, aHeightDifference * 0.5 );
+        MoveControl(aCopyrightText, 0, aHeightDifference * 0.75 );
+        MoveControl(aCopyrightTextShadow, 0, aHeightDifference * 0.75 );
+        MoveControl(aCreditsButton, 0, aHeightDifference);
+        MoveControl(aLicenseButton, 0, aHeightDifference);
+        MoveControl(aWebsiteButton, 0, aHeightDifference);
+        MoveControl(aCancelButton, 0, aHeightDifference);
+    }
 
     // If needed, adjust all control position to the new width
     if (aBackgroundSize.Width() != aDialogWidth)
     {
         sal_Int32 aWidthDifference = aBackgroundSize.Width() - aDialogWidth;
 
-        MoveControl(aLogoImage, aWidthDifference / 2);
-        MoveControl(aVersionText, aWidthDifference / 2);
-        MoveControl(aDescriptionText, aWidthDifference / 2);
-        MoveControl(aCreditsButton, aWidthDifference / 2);
-        MoveControl(aWebsiteButton, aWidthDifference / 2);
-        MoveControl(aLicenseButton, aWidthDifference / 2);
-        MoveControl(aCopyrightText, aWidthDifference / 2);
-        MoveControl(aCopyrightTextShadow, aWidthDifference / 2);
+        MoveControl(aLogoImage, aWidthDifference / 2, 0);
+        MoveControl(aVersionText, aWidthDifference / 2, 0);
+        MoveControl(aDescriptionText, aWidthDifference / 2, 0);
+        MoveControl(aCopyrightText, aWidthDifference / 2, 0);
+        MoveControl(aCopyrightTextShadow, aWidthDifference / 2, 0);
+        if (aButtonsWidth <= 0)
+            MoveControl(aCancelButton, aWidthDifference, 0);
     }
+
 
     // Render Background and set final dialog size
     aBackgroundBitmap = aRasterizerBackground.Rasterize( aBackgroundSize );
     SetOutputSizePixel( aBackgroundSize );
 }
 
-void AboutDialog::LayoutButtons(sal_Int32 aContentWidth, sal_Int32 aDialogBorder,
-                                 sal_Int32 aShadowWidth, Point aCopyrightPos,
-                                 sal_Int32 aCopyrightTextHeight, sal_Int32 aVersionDescriptionSpacing,
-                                 Point& aButtonPos, Size& aButtonSize)
+void AboutDialog::LayoutButtons(sal_Int32 aDialogWidth, sal_Int32 aDialogBorder,
+                                Point aCopyrightPos, sal_Int32 aCopyrightTextHeight,
+                                sal_Int32 aVersionDescriptionSpacing, Point& aButtonPos,
+                                Size& aButtonSize, sal_Int32& aButtonsWidth )
 {
     // Position credits button
     sal_Int32 aButtonVPadding = 5;
@@ -317,10 +339,14 @@ void AboutDialog::LayoutButtons(sal_Int32 aContentWidth, sal_Int32 aDialogBorder
     aWebsiteButton.SetSizePixel( aButtonSize );
     aCancelButton.SetSizePixel( aButtonSize );
 
-    sal_Int32 aButtonSpacing = (aContentWidth - ( aDialogBorder * 2 ) - ( aButtonSize.Width() * 4 ) - ( aAdjacentButtonSpacing * 2) );
-    if (aButtonSpacing < 1)
-        aButtonSpacing = 6;
-    aButtonPos.X() = aShadowWidth + aDialogBorder;
+    sal_Int32 aButtonSpacing = aDialogWidth - ( aDialogBorder * 2 ) - ( aButtonSize.Width() * 4 ) - ( aAdjacentButtonSpacing * 2);
+    if (aButtonSpacing < aAdjacentButtonSpacing)
+    {
+        aButtonsWidth = aAdjacentButtonSpacing - aButtonSpacing;
+        aButtonSpacing = aAdjacentButtonSpacing;
+    }
+
+    aButtonPos.X() = aDialogBorder;
     aButtonPos.Y() = aCopyrightPos.Y() + aCopyrightTextHeight + aVersionDescriptionSpacing;
 
     aCreditsButton.SetPosPixel( aButtonPos );
@@ -337,10 +363,11 @@ void AboutDialog::LayoutButtons(sal_Int32 aContentWidth, sal_Int32 aDialogBorder
 
 }
 
-void AboutDialog::MoveControl(Control& rControl, sal_Int32 X)
+void AboutDialog::MoveControl(Control& rControl, sal_Int32 X, sal_Int32 Y)
 {
     Point aControlPos = rControl.GetPosPixel();
     aControlPos.X() += X;
+    aControlPos.Y() += Y;
     rControl.SetPosPixel(aControlPos);
 }
 
