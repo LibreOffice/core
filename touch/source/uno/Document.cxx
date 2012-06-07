@@ -9,6 +9,7 @@
 
 // NOTE: Work in progress, most likely makes little sense
 
+#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -40,9 +41,14 @@ private:
     uno::Reference< uno::XComponentContext > m_rContext;
     uno::Reference< lang::XComponent > m_xComponent;
     uno::Reference< frame::XController > m_xController;
+    uno::Reference< awt::XDevice > m_xDevice;
     uno::Reference< view::XRenderable > m_xRenderable;
 
     beans::PropertyValues m_aRenderProps;
+
+    // XRenderable.getRendererCount() and .render() need an XController in the
+    // properties, at least in the test Java code it seemed that a totally
+    // dummy one works, so try that here, too.
 
     typedef ::cppu::WeakImplHelper1< frame::XController > MyXController_Base;
 
@@ -160,9 +166,9 @@ protected:
 
             uno::Reference< awt::XToolkit > toolkit( m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.Toolkit", m_rContext ), uno::UNO_QUERY_THROW );
 
-            uno::Reference< awt::XDevice > device( toolkit->createScreenCompatibleDevice( 1024, 1024 ) );
+            m_xDevice = toolkit->createScreenCompatibleDevice( 1024, 1024 );
 
-            m_xRenderable = uno::Reference< view::XRenderable >(m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.view.Renderable", m_rContext ), uno::UNO_QUERY_THROW );
+            m_xRenderable = uno::Reference< view::XRenderable >( m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.view.Renderable", m_rContext ), uno::UNO_QUERY_THROW );
 
             m_xController = new MyXController();
 
@@ -170,7 +176,7 @@ protected:
             m_aRenderProps[0].Name = "IsPrinter";
             m_aRenderProps[0].Value <<= sal_Bool(true);
             m_aRenderProps[1].Name = "RenderDevice";
-            m_aRenderProps[1].Value <<= device;
+            m_aRenderProps[1].Value <<= m_xDevice;
             m_aRenderProps[2].Name = "View";
             m_aRenderProps[2].Value <<= m_xController;
         }
@@ -197,13 +203,20 @@ protected:
             sal_Int32 y )
         throw ( lang::IllegalArgumentException, uno::RuntimeException)
     {
+        uno::Any selection;
+
         (void) buffer;
         (void) bufferSize;
         (void) listener;
-        (void) pageNo;
         (void) zoomLevel;
         (void) x;
-        (void) y ;
+        (void) y;
+
+        selection <<= m_xComponent;
+
+        m_xRenderable->render( pageNo, selection, m_aRenderProps );
+
+        uno::Reference< awt::XBitmap> bitmap( m_xDevice->createBitmap( 0, 0, 1024, 1024 ) );
     }
 
 };

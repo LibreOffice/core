@@ -25,7 +25,6 @@ $(eval $(call gb_InternalUnoApi_set_include,touch,\
 
 $(eval $(call gb_InternalUnoApi_add_idlfiles,touch,touch/idl/org/libreoffice/touch,\
 	Document \
-	DocumentRenderCallback \
 	XDocument \
 	XDocumentRenderCallback \
 ))
