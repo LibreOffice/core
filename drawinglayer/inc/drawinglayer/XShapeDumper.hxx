@@ -68,6 +68,7 @@ private:
     void dumpFillBitmapRectanglePointAsAttribute(com::sun::star::drawing::RectanglePoint eBitmapRectanglePoint, xmlTextWriterPtr xmlWriter);
     void dumpFillBitmapLogicalSizeAsAttribute(sal_Bool aBitmapLogicalSize, xmlTextWriterPtr xmlWriter);
     void dumpFillBitmapSizeXAsAttribute(sal_Int32 aBitmapSizeX, xmlTextWriterPtr xmlWriter);
+    void dumpFillBitmapSizeYAsAttribute(sal_Int32 aBitmapSizeY, xmlTextWriterPtr xmlWriter);
 
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
     void dumpSizeAsAttribute(const com::sun::star::awt::Size& rSize, xmlTextWriterPtr xmlWriter);

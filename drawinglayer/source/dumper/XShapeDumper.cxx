@@ -289,6 +289,11 @@ namespace {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapSizeX"), "%" SAL_PRIdINT32, aBitmapSizeX);
     }
 
+    void XShapeDumper::dumpFillBitmapSizeYAsAttribute(sal_Int32 aBitmapSizeY, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapSizeY"), "%" SAL_PRIdINT32, aBitmapSizeY);
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -463,6 +468,12 @@ namespace {
                 sal_Int32 aBitmapSizeX;
                 if(anotherAny >>= aBitmapSizeX)
                     dumpFillBitmapSizeXAsAttribute(aBitmapSizeX, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapSizeY");
+                sal_Int32 aBitmapSizeY;
+                if(anotherAny >>= aBitmapSizeY)
+                    dumpFillBitmapSizeYAsAttribute(aBitmapSizeY, xmlWriter);
             }
         }
 
