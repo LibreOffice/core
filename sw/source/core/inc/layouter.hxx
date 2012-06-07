@@ -50,7 +50,6 @@ class SwAnchoredObject;
 #include <vector>
 class SwFrm;
 // --> #i65250#
-#include <swtypes.hxx>
 #include <boost/unordered_map.hpp>
 class SwFlowFrm;
 class SwLayoutFrm;

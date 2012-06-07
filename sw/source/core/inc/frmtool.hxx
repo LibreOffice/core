@@ -158,7 +158,6 @@ protected:
     sal_Bool     bHadFollow;
     sal_Bool     bInvaKeep;
     sal_Bool     bValidSize;
-protected:
     // #i49383#
     bool mbFrmDeleted;
 

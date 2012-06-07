@@ -87,7 +87,6 @@ public:
     basegfx::B2DRange getOuterBound() const;
     basegfx::B2DRange getInnerBound() const;
 
-public:
     TYPEINFO();
 
     SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly);
