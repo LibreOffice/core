@@ -284,6 +284,11 @@ namespace {
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapLogicalSize"), "%s", "false");
     }
 
+    void XShapeDumper::dumpFillBitmapSizeXAsAttribute(sal_Int32 aBitmapSizeX, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapSizeX"), "%" SAL_PRIdINT32, aBitmapSizeX);
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -452,6 +457,12 @@ namespace {
                 sal_Bool bBitmapLogicalSize;
                 if(anotherAny >>= bBitmapLogicalSize)
                     dumpFillBitmapLogicalSizeAsAttribute(bBitmapLogicalSize, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapSizeX");
+                sal_Int32 aBitmapSizeX;
+                if(anotherAny >>= aBitmapSizeX)
+                    dumpFillBitmapSizeXAsAttribute(aBitmapSizeX, xmlWriter);
             }
         }
 
