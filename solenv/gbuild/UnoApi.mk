@@ -33,8 +33,8 @@ $(call gb_UnoApi_get_clean_target,%) :
 define gb_UnoApi_UnoApi
 $(call gb_UnoApiTarget_UnoApiTarget,$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
-$(call gb_Package_Package,$(1)_idl,$(SRCDIR))
-$(call gb_Package_Package,$(1)_inc,$(call gb_UnoApiHeadersTarget_get_dir,$(1)))
+$(call gb_Package_Package_internal,$(1)_idl,$(SRCDIR))
+$(call gb_Package_Package_internal,$(1)_inc,$(call gb_UnoApiHeadersTarget_get_dir,$(1)))
 
 $(call gb_UnoApiTarget_set_root,$(1),UCR)
 

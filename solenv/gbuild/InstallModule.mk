@@ -40,7 +40,7 @@ $(call gb_InstallModule_get_clean_target,%) :
 
 define gb_InstallModule_InstallModule
 $(call gb_InstallModuleTarget_InstallModuleTarget,$(1))
-$(call gb_Package_Package,$(1)_par,$(call gb_InstallModuleTarget_get_workdir,$(1)))
+$(call gb_Package_Package_internal,$(1)_par,$(call gb_InstallModuleTarget_get_workdir,$(1)))
 
 $(call gb_InstallModule_get_target,$(1)) : $(call gb_InstallModuleTarget_get_target,$(1))
 $(call gb_InstallModule_get_target,$(1)) : $(call gb_Package_get_target,$(1)_par)
