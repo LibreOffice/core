@@ -26,7 +26,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Configuration" oor:package="org.openoffice.ucb">
+<oor:component-data oor:name="Configuration" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="ContentProviders">
     <node oor:name="Local" oor:op="replace">
       <node oor:name="SecondaryKeys">
@@ -209,7 +209,7 @@
               </prop>
             </node>
             <!-- We want the Provider to be the final fallback provider -->
-            <node oor:name="Provider999" oor:op="replace" module="gio">
+            <node oor:name="Provider999" oor:op="replace" install:module="gio">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.GIOContentProvider</value>
               </prop>
