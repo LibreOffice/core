@@ -50,8 +50,13 @@ namespace basebmp { namespace Format
     static const sal_Int32 SIXTEEN_BIT_MSB_TC_MASK      = (sal_Int32)0x0C;
     static const sal_Int32 TWENTYFOUR_BIT_TC_MASK       = (sal_Int32)0x0D;
     static const sal_Int32 THIRTYTWO_BIT_TC_MASK        = (sal_Int32)0x0E;
+    // The order of the channels code letters indicates the order of the
+    // channel bytes in memory, I think
+    static const sal_Int32 THIRTYTWO_BIT_TC_MASK_BGRA   = THIRTYTWO_BIT_TC_MASK;
     static const sal_Int32 THIRTYTWO_BIT_TC_MASK_ARGB   = (sal_Int32)0x0F;
-    static const sal_Int32 MAX                          = (sal_Int32)0x0F;
+    static const sal_Int32 THIRTYTWO_BIT_TC_MASK_ABGR   = (sal_Int32)0x10;
+    static const sal_Int32 THIRTYTWO_BIT_TC_MASK_RGBA   = (sal_Int32)0x11;
+    static const sal_Int32 MAX                          = (sal_Int32)0x11;
 } }
 
 #endif /* INCLUDED_BASEBMP_SCANLINEFORMATS_HXX */

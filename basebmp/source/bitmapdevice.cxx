@@ -1862,9 +1862,11 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
         16, // SIXTEEN_BIT_LSB_TC_MASK
         16, // SIXTEEN_BIT_MSB_TC_MASK
         24, // TWENTYFOUR_BIT_TC_MASK
-        32, // THIRTYTWO_BIT_TC_MASK
+        32, // THIRTYTWO_BIT_TC_MASK_BGRA
         32, // THIRTYTWO_BIT_TC_MASK_ARGB
-    };
+        32, // THIRTYTWO_BIT_TC_MASK_ABGR
+        32, // THIRTYTWO_BIT_TC_MASK_RGBA
+   };
 
     sal_Int32  nScanlineStride(0);
 
@@ -2004,13 +2006,23 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
         // ----------------------------------------------------------------------
         // thirtytwo bit formats
 
-        case Format::THIRTYTWO_BIT_TC_MASK:
-            return createRenderer<PixelFormatTraits_RGB32_888,StdMasks>(
+        case Format::THIRTYTWO_BIT_TC_MASK_BGRA:
+            return createRenderer<PixelFormatTraits_BGRX32_8888,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
         case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
-            return createRenderer<PixelFormatTraits_BGR32_888,StdMasks>(
+            return createRenderer<PixelFormatTraits_XRGB32_8888,StdMasks>(
+                aBounds, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal, rDamage );
+
+        case Format::THIRTYTWO_BIT_TC_MASK_ABGR:
+            return createRenderer<PixelFormatTraits_XBGR32_8888,StdMasks>(
+                aBounds, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal, rDamage );
+
+        case Format::THIRTYTWO_BIT_TC_MASK_RGBA:
+            return createRenderer<PixelFormatTraits_RGBX32_8888,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
     }

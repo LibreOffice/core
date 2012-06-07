@@ -231,6 +231,23 @@ template< typename     PixelType,
 
 //-----------------------------------------------------------------------------
 
+// Hopefully this is an understandable plaintext explanation that matches
+// reality...
+
+// BASEBMP_TRUECOLORMASK_LSB_SWAP means that on a big-endian platform, a pixel
+// value when viewed as an integer (16 or 32 bits) has to be byte-swapped for
+// the channels to match the masks. Or equivalently (I think), on a big-endian
+// platform, the masks need to be byte-swapped to be correct.
+
+// I.e. on a litte-endian platform the masks work as such.
+
+// BASEBMP_TRUECOLORMASK_MSB_SWAP means the opposite. The masks work as such
+// on big-endian platforms, on little-endian platforms the pixel needs to be
+// byte-swapped for the masks to work.
+
+// So in a sense these two names are "backward". It sounds to me as if
+// BASEBMP_TRUECOLORMASK_LSB_SWAP would mean "when on LSB, swap" ;)
+
 #ifdef OSL_LITENDIAN
 # define BASEBMP_TRUECOLORMASK_LSB_SWAP false
 # define BASEBMP_TRUECOLORMASK_MSB_SWAP true
@@ -265,25 +282,56 @@ typedef PixelFormatTraitsTemplate_RGBMask<
 BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_RGB16_565_LSB::getter_type,
                                   PixelFormatTraits_RGB16_565_LSB::setter_type);
 
-// 32bpp endian-sensitive RGB
-typedef PixelFormatTraitsTemplate_RGBMask<
-    sal_uInt32,
-    0xFF0000,
-    0x00FF00,
-    0x0000FF,
-    BASEBMP_TRUECOLORMASK_LSB_SWAP >            PixelFormatTraits_RGB32_888;
-BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_RGB32_888::getter_type,
-                                  PixelFormatTraits_RGB32_888::setter_type);
 
-// 32bpp endian-sensitive BGR
+// 32bpp formats
+
+// The intent is that the order of channel names in the names of the 32bpp
+// format typedefs below correspond to the order of the channel bytes in
+// memory, if I understand correctly.... I think the point with the below
+// formats is that the channel byte order in memory is the same regardless of
+// platform byte order.
+
+// This one used to be called PixelFormatTraits_RGB32_888.
+
 typedef PixelFormatTraitsTemplate_RGBMask<
     sal_uInt32,
-    0xFF0000,
-    0x00FF00,
-    0x0000FF,
-    BASEBMP_TRUECOLORMASK_MSB_SWAP >            PixelFormatTraits_BGR32_888;
-BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGR32_888::getter_type,
-                                  PixelFormatTraits_BGR32_888::setter_type);
+    0x00FF0000,
+    0x0000FF00,
+    0x000000FF,
+    BASEBMP_TRUECOLORMASK_LSB_SWAP >            PixelFormatTraits_BGRX32_8888;
+BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGRX32_8888::getter_type,
+                                  PixelFormatTraits_BGRX32_8888::setter_type);
+
+// This one used to be called PixelFormatTraits_BGR32_888.
+
+typedef PixelFormatTraitsTemplate_RGBMask<
+    sal_uInt32,
+    0x00FF0000,
+    0x0000FF00,
+    0x000000FF,
+    BASEBMP_TRUECOLORMASK_MSB_SWAP >            PixelFormatTraits_XRGB32_8888;
+BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_XRGB32_8888::getter_type,
+                                  PixelFormatTraits_XRGB32_8888::setter_type);
+
+// The following two ones were added for Android needs and for completeness
+
+typedef PixelFormatTraitsTemplate_RGBMask<
+    sal_uInt32,
+    0xFF000000,
+    0x00FF0000,
+    0x0000FF00,
+    BASEBMP_TRUECOLORMASK_LSB_SWAP >            PixelFormatTraits_XBGR32_8888;
+BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_XBGR32_8888::getter_type,
+                                  PixelFormatTraits_XBGR32_8888::setter_type);
+
+typedef PixelFormatTraitsTemplate_RGBMask<
+    sal_uInt32,
+    0xFF000000,
+    0x00FF0000,
+    0x0000FF00,
+    BASEBMP_TRUECOLORMASK_MSB_SWAP >            PixelFormatTraits_RGBX32_8888;
+BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_RGBX32_8888::getter_type,
+                                  PixelFormatTraits_RGBX32_8888::setter_type);
 
 } // namespace basebmp
 
