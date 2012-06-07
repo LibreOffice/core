@@ -34,6 +34,8 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
 #include <window.h>
 
 VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
@@ -178,6 +180,26 @@ bool VclBuilder::extractModel(const rtl::OString &id, stringmap &rMap)
 
 Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const rtl::OString &id, stringmap &rMap)
 {
+    if (!m_aParentTypes.empty() && m_aParentTypes.top().equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
+    {
+        //We have to add a page
+        TabControl *pTabControl = static_cast<TabControl*>(pParent);
+        TabPage* pPage = new TabPage(pTabControl);
+        m_aChildren.push_back(WinAndId(rtl::OString(), pPage));
+
+        //And give the page one container as a child to make it a layout enabled
+        //tab page
+        VclBin* pContainer = new VclBin(pPage);
+        m_aChildren.push_back(WinAndId(rtl::OString(), pContainer));
+        pParent = pContainer;
+
+        //keep it simple and make pageid == position
+        sal_uInt16 nNewPageId = pTabControl->GetPageCount()+1;
+        pTabControl->InsertPage(nNewPageId, rtl::OUString());
+        pTabControl->SetTabPage(nNewPageId, pPage);
+        pTabControl->SetCurPageId(nNewPageId);
+    }
+
     Window *pWindow = NULL;
     if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDialog")))
         pWindow = new Dialog(pParent, WB_SIZEMOVE|WB_3DLOOK|WB_CLOSEABLE);
@@ -220,12 +242,16 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
-        pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK );
+        pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
+        pWindow = new TabControl(pParent, WB_STDTABCONTROL|WB_3DLOOK);
     else
         fprintf(stderr, "TO-DO, implement %s\n", name.getStr());
     if (pWindow)
     {
         fprintf(stderr, "for %s, created %p child of %p (%p/%p/%p)\n", name.getStr(), pWindow, pParent, pWindow->mpWindowImpl->mpParent, pWindow->mpWindowImpl->mpRealParent, pWindow->mpWindowImpl->mpBorderWindow);
+        m_aChildren.push_back(WinAndId(id, pWindow));
+        m_aParentTypes.push(name);
     }
     return pWindow;
 }
@@ -246,8 +272,6 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
         pCurrentChild = makeObject(pParent, rClass, rID, rMap);
         if (!pCurrentChild)
             fprintf(stderr, "missing object!\n");
-        else
-            m_aChildren.push_back(WinAndId(rID, pCurrentChild));
     }
 
     if (pCurrentChild)
@@ -309,16 +333,69 @@ void VclBuilder::reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition)
     rWindow.reorderWithinParent(nNewPosition);
 }
 
-void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
+void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
 {
     int nLevel = 1;
-
-    Window *pCurrentChild = NULL;
-
+    stringmap aProperties;
     while(1)
     {
         xmlreader::Span name;
         int nsId;
+
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            ++nLevel;
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                collectProperty(reader, aProperties);
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+            --nLevel;
+
+        if (!nLevel)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+    }
+
+    VclBuilder::stringmap::iterator aFind = aProperties.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("label")));
+    if (aFind != aProperties.end())
+    {
+        TabControl *pTabControl = static_cast<TabControl*>(pParent);
+        pTabControl->SetPageText(pTabControl->GetCurPageId(), rtl::OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
+    }
+}
+
+void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
+{
+    Window *pCurrentChild = NULL;
+
+    xmlreader::Span name;
+    int nsId;
+    rtl::OString sType;
+
+    while (reader.nextAttribute(&nsId, &name))
+    {
+        if (name.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+        {
+            name = reader.getAttributeValue(false);
+            sType = rtl::OString(name.begin, name.length);
+        }
+    }
+
+    if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("tab")))
+    {
+        handleTabChild(pParent, reader);
+        return;
+    }
+
+    int nLevel = 1;
+    while(1)
+    {
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
 
@@ -330,35 +407,50 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
                 if (pCurrentChild)
                 {
-                    rtl::OString sPosition(RTL_CONSTASCII_STRINGPARAM("position"));
-                    std::vector<Window*> aChilds;
-                    for (Window* pChild = pCurrentChild->GetWindow(WINDOW_FIRSTCHILD); pChild;
-                        pChild = pChild->GetWindow(WINDOW_NEXT))
+                    //Select the first page if its a notebook
+                    if (m_aParentTypes.top().equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
                     {
-                        aChilds.push_back(pChild);
-                    }
+                        TabControl *pTabControl = static_cast<TabControl*>(pCurrentChild);
+                        pTabControl->SetCurPageId(1);
 
-                    for (size_t i = 0; i < aChilds.size(); ++i)
-                    {
-                        sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
-                        if (nPosition == 0xFFFF)
-                            continue;
-                        reorderWithinParent(*aChilds[i], nPosition);
+                        //To-Do add reorder capability to the TabControl
                     }
+                    else
+                    {
+                        //To-Do make reorder a virtual in Window, move this foo
+                        //there and see above
+
+                        rtl::OString sPosition(RTL_CONSTASCII_STRINGPARAM("position"));
+                        std::vector<Window*> aChilds;
+                        for (Window* pChild = pCurrentChild->GetWindow(WINDOW_FIRSTCHILD); pChild;
+                            pChild = pChild->GetWindow(WINDOW_NEXT))
+                        {
+                            aChilds.push_back(pChild);
+                        }
+
+                        for (size_t i = 0; i < aChilds.size(); ++i)
+                        {
+                            sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
+                            if (nPosition == 0xFFFF)
+                                continue;
+                            reorderWithinParent(*aChilds[i], nPosition);
+                        }
 
 #if TODO
 //sort by ltr ttb
-                    rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
-                    rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
-                    for (size_t i = 0; i < aChilds.size(); ++i)
-                    {
-                        sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
-                        if (nPosition == 0xFFFF)
-                            continue;
-                        reorderWithinParent(*aChilds[i], nPosition);
-                    }
+                        rtl::OString sLeftAttach(RTL_CONSTASCII_STRINGPARAM("left-attach"));
+                        rtl::OString sTopAttach(RTL_CONSTASCII_STRINGPARAM("top-attach"));
+                        for (size_t i = 0; i < aChilds.size(); ++i)
+                        {
+                            sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition, 0xFFFF);
+                            if (nPosition == 0xFFFF)
+                                continue;
+                            reorderWithinParent(*aChilds[i], nPosition);
+                        }
 #endif
+                    }
 
+                    m_aParentTypes.pop();
                 }
             }
             else if (name.equals(RTL_CONSTASCII_STRINGPARAM("packing")))
@@ -370,9 +462,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
         }
 
         if (res == xmlreader::XmlReader::RESULT_END)
-        {
             --nLevel;
-        }
 
         if (!nLevel)
             break;

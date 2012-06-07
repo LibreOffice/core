@@ -32,6 +32,7 @@
 #include <vcl/window.hxx>
 #include <xmlreader/xmlreader.hxx>
 #include <map>
+#include <stack>
 #include <vector>
 
 class ListBox;
@@ -90,6 +91,8 @@ private:
     ListStore *get_model_by_name(rtl::OString sID);
     static void mungemodel(ListBox &rTarget, ListStore &rStore);
 
+    std::stack<rtl::OString> m_aParentTypes;
+
     rtl::OString m_sID;
     Window *m_pParent;
 public:
@@ -117,6 +120,7 @@ private:
     void collectProperty(xmlreader::XmlReader &reader, stringmap &rVec);
 
     void handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID);
+    void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
 
     //Helpers to retrofit all the existing code the the builder
     static void swapGuts(Window &rOrig, Window &rReplacement);

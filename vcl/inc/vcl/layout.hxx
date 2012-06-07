@@ -375,6 +375,8 @@ public:
     VclBin(Window *pParent) : VclContainer(pParent) {}
     Window *get_child();
     const Window *get_child() const;
+    virtual Size calculateRequisition() const;
+    virtual void setAllocation(const Size &rAllocation);
 };
 
 class VCL_DLLPUBLIC VclFrame : public VclBin

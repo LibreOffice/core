@@ -571,6 +571,21 @@ Window *VclBin::get_child()
     return const_cast<Window*>(const_cast<const VclBin*>(this)->get_child());
 }
 
+Size VclBin::calculateRequisition() const
+{
+    const Window *pChild = get_child();
+    if (pChild && pChild->IsVisible())
+        return pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+    return Size(0, 0);
+}
+
+void VclBin::setAllocation(const Size &rAllocation)
+{
+    Window *pChild = get_child();
+    if (pChild && pChild->IsVisible())
+        pChild->SetPosSizePixel(Point(0, 0), rAllocation);
+}
+
 //To-Do, hook a DecorationView into VclFrame ?
 
 Size VclFrame::calculateRequisition() const
