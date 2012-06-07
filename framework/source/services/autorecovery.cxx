@@ -1331,11 +1331,11 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             css::uno::Reference< css::util::XChangesBatch > xFlush(xCFG, css::uno::UNO_QUERY_THROW);
             xFlush->commitChanges();
 
-            #ifdef TRIGGER_FULL_DISC_CHECK
+#ifdef TRIGGER_FULL_DISC_CHECK
             throw css::uno::Exception();
-            #endif
-
+#else  // TRIGGER_FULL_DISC_CHECK
             nRetry = 0;
+#endif // TRIGGER_FULL_DISC_CHECK
         }
         catch(const css::uno::Exception&)
         {
@@ -2363,12 +2363,13 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
         {
             xDocRecover->storeToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
 
-            #ifdef TRIGGER_FULL_DISC_CHECK
+#ifdef TRIGGER_FULL_DISC_CHECK
             throw css::uno::Exception();
-            #endif
+#else  // TRIGGER_FULL_DISC_CHECK
 
             bError = sal_False;
             nRetry = 0;
+#endif // TRIGGER_FULL_DISC_CHECK
         }
         catch(const css::uno::Exception&)
         {
@@ -3454,10 +3455,9 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
 //-----------------------------------------------
 sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 {
-    #ifdef SIMULATE_FULL_DISC
+#ifdef SIMULATE_FULL_DISC
     return sal_False;
-    #endif
-
+#else  // SIMULATE_FULL_DISC
     // In case an error occures and we are not able to retrieve the needed information
     // it's better to "disable" the feature ShowErrorOnFullDisc !
     // Otherwhise we start a confusing process of error handling ...
@@ -3478,6 +3478,7 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 
     sal_uInt64 nFreeMB = (nFreeSpace/1048576);
     return (nFreeMB >= (sal_uInt64)nRequiredSpace);
+#endif // SIMULATE_FULL_DISC
 }
 
 //-----------------------------------------------

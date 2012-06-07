@@ -255,7 +255,7 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
       return 0;
 
     /* .. now in $HOME */
-#endif
+#endif // LINUX
     sprintf(lnkFileName, "%s/.mozilla/plugins/libnpsoplugin%s", getenv("HOME"), SAL_DLLEXTENSION);
 #ifdef LINUX
     ssize_t len = readlink(lnkFileName, realFileName, NPP_PATH_MAX-1);
@@ -267,18 +267,17 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
     realFileName[len] = '\0';
 
     if (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin" SAL_DLLEXTENSION)))
-#else
+#else  // LINUX
     if ((0 > readlink(lnkFileName, realFileName, NPP_PATH_MAX)) ||
         (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin" SAL_DLLEXTENSION))))
-#endif
+#endif // LINUX
     {
         *realFileName = 0;
         return -1;
     }
     *pTempZero = 0;
     return 0;
-#endif
-#ifdef WNT
+#elif defined WNT // UNIX
     static char realFileName[NPP_PATH_MAX] = {0};
     *aResult = realFileName;
     HKEY hKey;
@@ -316,7 +315,7 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
     *pTempZero = 0;
     debug_fprintf(NSP_LOG_APPEND, "realFileName is %s\n", realFileName);
     return 0;
-#endif
+#endif // UNIX
 }
 
 // Return the install dir path of staroffice, return value like "/home/build/staroffice"

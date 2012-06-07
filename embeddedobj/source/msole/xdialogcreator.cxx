@@ -288,15 +288,14 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     else
         throw ucb::CommandAbortedException();
 
-#else
-    throw lang::NoSupportException(); // TODO:
-#endif
-
     OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!\n" );
     if ( !aObjectInfo.Object.is() )
         throw uno::RuntimeException();
 
     return aObjectInfo;
+#else
+    throw lang::NoSupportException(); // TODO:
+#endif
 }
 
 //-------------------------------------------------------------------------
@@ -312,7 +311,6 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
     embed::InsertedObjectInfo aObjectInfo;
 
 #ifdef WNT
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No parent storage is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -341,15 +339,15 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
     aObjectInfo.Object = xResult;
 
     // TODO/LATER: in case of iconifie object the icon should be stored in aObjectInfo
-#else
-    throw lang::NoSupportException(); // TODO:
-#endif
 
     OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!\n" );
     if ( !aObjectInfo.Object.is() )
         throw uno::RuntimeException();
 
     return aObjectInfo;
+#else
+    throw lang::NoSupportException(); // TODO:
+#endif
 }
 
 //-------------------------------------------------------------------------
