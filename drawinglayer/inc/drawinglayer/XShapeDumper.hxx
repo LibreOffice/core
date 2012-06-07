@@ -72,6 +72,7 @@ private:
     void dumpFillBitmapSizeYAsAttribute(sal_Int32 aBitmapSizeY, xmlTextWriterPtr xmlWriter);
     void dumpFillBitmapModeAsAttribute(com::sun::star::drawing::BitmapMode eBitmapMode, xmlTextWriterPtr xmlWriter);
     void dumpFillBitmapStretchAsAttribute(sal_Bool bBitmapStretch, xmlTextWriterPtr xmlWriter);
+    void dumpFillBitmapTileAsAttribute(sal_Bool bBitmapTile, xmlTextWriterPtr xmlWriter);
 
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
     void dumpSizeAsAttribute(const com::sun::star::awt::Size& rSize, xmlTextWriterPtr xmlWriter);

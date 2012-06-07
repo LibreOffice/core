@@ -320,6 +320,14 @@ namespace {
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapStretch"), "%s", "false");
     }
 
+    void XShapeDumper::dumpFillBitmapTileAsAttribute(sal_Bool bBitmapTile, xmlTextWriterPtr xmlWriter)
+    {
+        if(bBitmapTile)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "false");
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -512,6 +520,12 @@ namespace {
                 sal_Bool bBitmapStretch;
                 if(anotherAny >>= bBitmapStretch)
                     dumpFillBitmapStretchAsAttribute(bBitmapStretch, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapTile");
+                sal_Bool bBitmapTile;
+                if(anotherAny >>= bBitmapTile)
+                    dumpFillBitmapTileAsAttribute(bBitmapTile, xmlWriter);
             }
         }
 
