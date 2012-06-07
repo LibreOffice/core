@@ -37,7 +37,7 @@ ModalDialog RID_SVXDLG_POSTIT
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 198 , 134 ) ;
-    Text [ en-US ] = "Note" ;
+    Text [ en-US ] = "Comment" ;
     Moveable = TRUE ;
     FixedText FT_LASTEDITLABEL
     {
@@ -122,11 +122,11 @@ ModalDialog RID_SVXDLG_POSTIT
      // lokale Strings
     String STR_NOTIZ_EDIT
     {
-        Text [ en-US ] = "Edit Note" ;
+        Text [ en-US ] = "Edit Comment" ;
     };
     String STR_NOTIZ_INSERT
     {
-        Text [ en-US ] = "Insert note" ;
+        Text [ en-US ] = "Insert Comment" ;
     };
 };
  // ********************************************************************** EOF
