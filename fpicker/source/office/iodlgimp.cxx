@@ -122,8 +122,6 @@ SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 // SvtFileDialogFilterList_Impl
 //*****************************************************************************
 
-SV_IMPL_PTRARR( SvtFileDialogFilterList_Impl, SvtFileDialogFilter_Impl* );
-
 //=============================================================================
 //= SvtFileDialogURLSelector
 //=============================================================================
@@ -375,15 +373,15 @@ void SvtExpFileDlg_Impl::InitFilterList( )
     ClearFilterList( );
 
     // reinit it
-    sal_uInt16 nPos = _pFilter->Count();
+    sal_uInt16 nPos = _pFilter->size();
 
     // search for the first entry which is no group separator
-    while ( nPos-- && _pFilter->GetObject( nPos ) && _pFilter->GetObject( nPos )->isGroupSeparator() )
+    while ( nPos-- && (*_pFilter)[ nPos ].isGroupSeparator() )
         ;
 
     // add all following entries
     while ( (sal_Int16)nPos >= 0 )
-        InsertFilterListEntry( _pFilter->GetObject( nPos-- ) );
+        InsertFilterListEntry( &(*_pFilter)[ nPos-- ] );
 }
 
 //-----------------------------------------------------------------------------

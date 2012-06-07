@@ -393,7 +393,7 @@ throw(  SAXException, RuntimeException )
                 }
 
                 if ( m_pImages )
-                    m_pImages->pImageItemList->Insert( pItem, m_pImages->pImageItemList->Count() );
+                    m_pImages->pImageItemList->push_back( pItem );
             }
             break;
 
@@ -765,8 +765,8 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     ImageItemListDescriptor* pImageItemList = pImageList->pImageItemList;
     if ( pImageItemList )
     {
-        for ( sal_uInt16 i = 0; i < pImageItemList->Count(); i++ )
-            WriteImage( (*pImageItemList)[i] );
+        for ( sal_uInt16 i = 0; i < pImageItemList->size(); i++ )
+            WriteImage( &(*pImageItemList)[i] );
     }
 
     m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_IMAGES )) );

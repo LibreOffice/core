@@ -65,8 +65,7 @@ struct ExternalImageItemDescriptor
     String  aURL;                       // a URL to an external bitmap
 };
 
-typedef ImageItemDescriptor* ImageItemDescriptorPtr;
-SV_DECL_PTRARR_DEL( ImageItemListDescriptor, ImageItemDescriptorPtr, 10 )
+typedef boost::ptr_vector<ImageItemDescriptor> ImageItemListDescriptor;
 
 typedef boost::ptr_vector<ExternalImageItemDescriptor> ExternalImageItemListDescriptor;
 

@@ -61,8 +61,6 @@ using namespace ::com::sun::star::io;
 namespace framework
 {
 
-SV_IMPL_PTRARR( ImageItemListDescriptor, ImageItemDescriptorPtr );
-
 static Reference< XParser > GetSaxParser(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )

@@ -37,9 +37,8 @@
 #include <vcl/timer.hxx>
 #include <vcl/group.hxx>
 
-#include "svl/svarray.hxx"
-
 #include <vector>
+#include <boost/ptr_container/ptr_deque.hpp>
 
 class Accelerator;
 class CheckBox;
@@ -76,7 +75,7 @@ public:
     sal_Bool            isGroupSeparator() const    { return 0 == m_aType.Len(); }
 };
 
-SV_DECL_PTRARR_DEL( SvtFileDialogFilterList_Impl, SvtFileDialogFilter_Impl*, 3 )
+typedef boost::ptr_deque<SvtFileDialogFilter_Impl> SvtFileDialogFilterList_Impl;
 
 enum SvtFileDlgMode
 {

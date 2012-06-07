@@ -507,12 +507,12 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
                 ( !aUserImageListInfo.pImageList->empty() ))
             {
                 ImageListItemDescriptor* pList = &aUserImageListInfo.pImageList->front();
-                sal_Int32 nCount = pList->pImageItemList->Count();
+                sal_Int32 nCount = pList->pImageItemList->size();
                 std::vector< OUString > aUserImagesVector;
                 aUserImagesVector.reserve(nCount);
                 for ( sal_uInt16 i=0; i < nCount; i++ )
                 {
-                    const ImageItemDescriptor* pItem = pList->pImageItemList->GetObject(i);
+                    const ImageItemDescriptor* pItem = &(*pList->pImageItemList)[i];
                     aUserImagesVector.push_back( pItem->aCommandURL );
                 }
 
@@ -589,7 +589,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
 
                 pItem->nIndex = i;
                 pItem->aCommandURL = pImageList->GetImageName( i );
-                pList->pImageItemList->Insert( pItem, pList->pImageItemList->Count() );
+                pList->pImageItemList->push_back( pItem );
             }
 
             pList->aURL = String::CreateFromAscii("Bitmaps/");
