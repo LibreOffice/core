@@ -35,6 +35,7 @@
 #include <svl/lstner.hxx>
 #include <svl/svarray.hxx>
 #include "global.hxx"       // ScImportParam
+#include <boost/ptr_container/ptr_vector.hpp>
 
 
 namespace com { namespace sun { namespace star { namespace frame {
@@ -45,8 +46,8 @@ class ScTabViewShell;
 
 
 typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XStatusListener >* XStatusListenerPtr;
-SV_DECL_PTRARR_DEL( XStatusListenerArr_Impl, XStatusListenerPtr, 4 )
+            ::com::sun::star::frame::XStatusListener > XStatusListenerRef;
+typedef boost::ptr_vector<XStatusListenerRef> XStatusListenerArr_Impl;
 
 
 class ScDispatchProviderInterceptor : public cppu::WeakImplHelper2<

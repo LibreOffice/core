@@ -50,10 +50,6 @@ const char* cURLDocDataSource = ".uno:DataSourceBrowser/DocumentDataSource";
 
 //------------------------------------------------------------------------
 
-SV_IMPL_PTRARR( XStatusListenerArr_Impl, XStatusListenerPtr );
-
-//------------------------------------------------------------------------
-
 uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxViewShell* pViewShell )
 {
     if ( pViewShell )
@@ -307,7 +303,7 @@ void SAL_CALL ScDispatch::addStatusListener(
     {
         uno::Reference<frame::XStatusListener>* pObj =
                 new uno::Reference<frame::XStatusListener>( xListener );
-        aDataSourceListeners.Insert( pObj, aDataSourceListeners.Count() );
+        aDataSourceListeners.push_back( pObj );
 
         if (!bListeningToView)
         {
@@ -336,18 +332,18 @@ void SAL_CALL ScDispatch::removeStatusListener(
 
     if ( !aURL.Complete.compareToAscii(cURLDocDataSource) )
     {
-        sal_uInt16 nCount = aDataSourceListeners.Count();
+        sal_uInt16 nCount = aDataSourceListeners.size();
         for ( sal_uInt16 n=nCount; n--; )
         {
-            uno::Reference<frame::XStatusListener> *pObj = aDataSourceListeners[n];
-            if ( *pObj == xListener )
+            uno::Reference<frame::XStatusListener>& rObj = aDataSourceListeners[n];
+            if ( rObj == xListener )
             {
-                aDataSourceListeners.DeleteAndDestroy( n );
+                aDataSourceListeners.erase( aDataSourceListeners.begin() + n );
                 break;
             }
         }
 
-        if ( aDataSourceListeners.Count() == 0 && pViewShell )
+        if ( aDataSourceListeners.empty() && pViewShell )
         {
             uno::Reference<view::XSelectionSupplier> xSupplier(lcl_GetSelectionSupplier( pViewShell ));
             if ( xSupplier.is() )
@@ -384,8 +380,8 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
 
             lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
 
-            for ( sal_uInt16 n=0; n<aDataSourceListeners.Count(); n++ )
-                (*aDataSourceListeners[n])->statusChanged( aEvent );
+            for ( sal_uInt16 n=0; n<aDataSourceListeners.size(); n++ )
+                aDataSourceListeners[n]->statusChanged( aEvent );
 
             aLastImport = aNewImport;
         }
@@ -403,8 +399,8 @@ void SAL_CALL ScDispatch::disposing( const ::com::sun::star::lang::EventObject& 
 
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( sal_uInt16 n=0; n<aDataSourceListeners.Count(); n++ )
-        (*aDataSourceListeners[n])->disposing( aEvent );
+    for ( sal_uInt16 n=0; n<aDataSourceListeners.size(); n++ )
+        aDataSourceListeners[n]->disposing( aEvent );
 
     pViewShell = NULL;
 }
