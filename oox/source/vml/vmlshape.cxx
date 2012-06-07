@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -171,7 +172,8 @@ void lclSetXShapeRect( const Reference< XShape >& rxShape, const Rectangle& rSha
 // ============================================================================
 
 ShapeTypeModel::ShapeTypeModel():
-    mbAutoHeight( sal_False )
+    mbAutoHeight( sal_False ),
+    mbVisible( sal_True )
 {
 }
 
@@ -361,7 +363,12 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 PropertySet aShapeProp( xShape );
                 if( aShapeProp.hasProperty( PROP_Name ) )
                     aShapeProp.setProperty( PROP_Name, getShapeName() );
-
+                Reference< XControlShape > xControlShape( xShape, UNO_QUERY );
+                if ( xControlShape.is() && !getTypeModel().mbVisible )
+                {
+                    PropertySet aControlShapeProp( xControlShape->getControl() );
+                    aControlShapeProp.setProperty( PROP_EnableVisible, makeAny( sal_False ) );
+                }
                 /*  Notify the drawing that a new shape has been inserted. For
                     convenience, pass the rectangle that contains position and
                     size of the shape. */

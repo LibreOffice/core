@@ -347,6 +347,8 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-left" ) ) )   mrTypeModel.maMarginLeft = aValue;
             else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "margin-top" ) ) )    mrTypeModel.maMarginTop = aValue;
             else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "mso-fit-shape-to-text" ) ) )          mrTypeModel.mbAutoHeight = sal_True;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "visibility" ) ) )
+                mrTypeModel.mbVisible = !aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hidden") );
         }
     }
 }
