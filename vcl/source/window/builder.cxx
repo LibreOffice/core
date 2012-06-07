@@ -245,6 +245,8 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
         pWindow = new TabControl(pParent, WB_STDTABCONTROL|WB_3DLOOK);
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDrawingArea")))
+        pWindow = new Window(pParent);
     else
         fprintf(stderr, "TO-DO, implement %s\n", name.getStr());
     if (pWindow)
@@ -620,11 +622,11 @@ void VclBuilder::handlePacking(Window *pCurrent, xmlreader::XmlReader &reader)
 void VclBuilder::applyPackingProperty(Window *pCurrent,
     xmlreader::XmlReader &reader)
 {
-    xmlreader::Span name;
-    int nsId;
-
     if (!pCurrent)
         return;
+
+    xmlreader::Span name;
+    int nsId;
 
     while (reader.nextAttribute(&nsId, &name))
     {
