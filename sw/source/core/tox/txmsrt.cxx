@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 /*--------------------------------------------------------------------
-    Beschreibung: Strings initialisieren
+  Initialize strings
  --------------------------------------------------------------------*/
 
 sal_uInt16 SwTOXSortTabBase::nOpt = 0;
@@ -140,7 +140,7 @@ String SwTOXInternational::GetFollowingText( sal_Bool bMorePages ) const
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  SortierElement fuer Verzeichniseintraege
+  SortElement for TOX entries
  --------------------------------------------------------------------*/
 
 
@@ -170,11 +170,11 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
         case TOX_SORT_CONTENT:
         case TOX_SORT_PARA:
         case TOX_SORT_TABLE:
-            // falls sie in Sonderbereichen stehen, sollte man die
-            // Position im Body besorgen
+            // If they are in a special areas, we should get the position at the
+            // body
             if( nPos < pNd->GetNodes().GetEndOfExtras().GetIndex() )
             {
-                // dann die "Anker" (Body) Position holen.
+                // Then get the 'anchor' (body) position
                 Point aPt;
                 const SwCntntFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
                 if( pFrm )
@@ -226,8 +226,8 @@ sal_Bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
 
         if( bRet )
         {
-            // beide Pointer vorhanden -> vergleiche Text
-            // beide Pointer nicht vorhanden -> vergleiche AlternativText
+            // Both pointers exist -> compare text
+            // else -> compare AlternativeText
             const xub_StrLen *pEnd  = pTxtMark->GetEnd(),
                                 *pEndCmp = rCmp.pTxtMark->GetEnd();
 
@@ -282,8 +282,8 @@ sal_Bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
                         String sOtherTxtReading;
                         rCmp.GetTxt( sOtherTxt, sOtherTxtReading );
 
-                        // beide Pointer vorhanden -> vergleiche Text
-                        // beide Pointer nicht vorhanden -> vergleiche AlternativText
+                        // Both pointers exist -> compare text
+                        // else -> compare AlternativeText
                         if( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) )
                             pTOXIntl->IsEqual( sMyTxt, sMyTxtReading, GetLocale(),
                                                sOtherTxt, sOtherTxtReading, rCmp.GetLocale() );
@@ -303,7 +303,7 @@ sal_Bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: sortierter Stichworteintrag
+   Sorted keyword entry
  --------------------------------------------------------------------*/
 
 
@@ -320,7 +320,7 @@ SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
 }
 
 //
-// Stichworte vergleichen. Bezieht sich nur auf den Text
+// Compare keywords. Only relates to the text.
 //
 
 
@@ -328,11 +328,11 @@ sal_Bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 {
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
 
-    // In Abhaengigkeit von den Optionen Grosskleinschreibung beachten
+    // Respect case taking dependencies into account
     if(GetLevel() != rCmp.GetLevel() || nKeyLevel != rCmp.nKeyLevel)
         return sal_False;
 
-    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
 
     String sMyTxt;
     String sMyTxtReading;
@@ -345,7 +345,7 @@ sal_Bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
     sal_Bool bRet = pTOXIntl->IsEqual( sMyTxt, sMyTxtReading, GetLocale(),
                                    sOtherTxt, sOtherTxtReading, rCmp.GetLocale() );
 
-    // Wenn nicht zusammengefasst wird muss die Pos aus gewertet werden
+    // If we don't summarize we need to evaluate the Pos
     if(bRet && !(GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY))
         bRet = nPos == rCmp.nPos;
 
@@ -353,13 +353,13 @@ sal_Bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 }
 
 //
-// kleiner haengt nur vom Text ab
+// operator, only depends on the text
 
 sal_Bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 {
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
 
-    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
 
     String sMyTxt;
     String sMyTxtReading;
@@ -373,7 +373,7 @@ sal_Bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
                 pTOXIntl->IsLess( sMyTxt, sMyTxtReading, GetLocale(),
                                   sOtherTxt, sOtherTxtReading, rCmp.GetLocale() );
 
-    // Wenn nicht zusammengefasst wird muss die Pos aus gewertet werden
+    // If we don't summarize we need to evaluate the Pos
     if( !bRet && !(GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY) )
     {
         bRet = pTOXIntl->IsEqual( sMyTxt, sMyTxtReading, GetLocale(),
@@ -385,11 +385,11 @@ sal_Bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 }
 
 //
-// Das Stichwort selbst
+// The keyword itself
 
 void SwTOXIndex::GetText_Impl( String& rTxt, String& rTxtReading ) const
 {
-    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
     const SwTOXMark& rTOXMark = pTxtMark->GetTOXMark();
     switch(nKeyLevel)
     {
@@ -447,7 +447,7 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) 
 
 sal_uInt16 SwTOXIndex::GetLevel() const
 {
-    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
 
     sal_uInt16 nForm = FORM_PRIMARY_KEY;
 
@@ -462,7 +462,7 @@ sal_uInt16 SwTOXIndex::GetLevel() const
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Schluessel und Trennzeichen
+  Key and separator
  --------------------------------------------------------------------*/
 
 
@@ -522,7 +522,7 @@ void SwTOXCustom::GetText_Impl( String& rTxt, String &rTxtReading ) const
 
 
 /*--------------------------------------------------------------------
-     Beschreibung: sortierter Inhaltsverz. Eintrag
+   Sorts the TOX entries
  --------------------------------------------------------------------*/
 
 
@@ -533,8 +533,7 @@ SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
 }
 
 
-//  Der Text des Inhalts
-//
+// The content's text
 
 void SwTOXContent::GetText_Impl( String& rTxt, String& rTxtReading ) const
 {
@@ -567,7 +566,7 @@ void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 
 }
 
 //
-// Die Ebene fuer Anzeige
+// The level for displaying it
 //
 
 
@@ -577,13 +576,10 @@ sal_uInt16 SwTOXContent::GetLevel() const
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Verzeichnis aus Absaetzen zusammengesammelt
+   TOX assembled from paragraphs
+   Watch out for OLE/graphics when sorting!
+   The position must not come from the document, but from the "anchor"!
  --------------------------------------------------------------------*/
-
-// bei Sortierung von OLE/Grafiken aufpassen !!!
-// Die Position darf nicht die im Dokument,
-// sondern muss die vom "Henkel" sein  !!
-
 
 SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, sal_uInt16 nLevel )
     : SwTOXSortTabBase( TOX_SORT_PARA, &rNd, 0, 0 ),
@@ -615,13 +611,13 @@ void SwTOXPara::GetText_Impl( String& rTxt, String& ) const
     case nsSwTOXElement::TOX_GRAPHIC:
     case nsSwTOXElement::TOX_FRAME:
         {
-            // suche das FlyFormat, dort steht der Object/Grafik-Name
+            // Find the FlyFormat; the object/graphic name is there
             SwFrmFmt* pFly = pNd->GetFlyFmt();
             if( pFly )
                 rTxt = pFly->GetName();
             else
             {
-                OSL_ENSURE( !this, "Grafik/Object ohne Namen" );
+                OSL_ENSURE( !this, "Graphic/object without name" );
                 sal_uInt16 nId = nsSwTOXElement::TOX_OLE == eType
                                 ? STR_OBJECT_DEFNAME
                                 : nsSwTOXElement::TOX_GRAPHIC == eType
@@ -662,7 +658,7 @@ sal_uInt16 SwTOXPara::GetLevel() const
 
     if( nsSwTOXElement::TOX_OUTLINELEVEL == eType && pNd->GetTxtNode() )
     {
-        const int nTmp = ((SwTxtNode*)pNd)->GetAttrOutlineLevel();//#outline level,zhaojianwei????
+        const int nTmp = ((SwTxtNode*)pNd)->GetAttrOutlineLevel();
         if(nTmp != 0 )
             nRet = static_cast<sal_uInt16>(nTmp);
     }
@@ -695,7 +691,7 @@ String SwTOXPara::GetURL() const
     case nsSwTOXElement::TOX_GRAPHIC:
     case nsSwTOXElement::TOX_FRAME:
         {
-            // suche das FlyFormat, dort steht der Object/Grafik-Name
+            // Find the FlyFormat; the object/graphic name is there
             SwFrmFmt* pFly = pNd->GetFlyFmt();
             if( pFly )
             {
@@ -720,7 +716,7 @@ String SwTOXPara::GetURL() const
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Tabelle
+  Table
  --------------------------------------------------------------------*/
 
 
@@ -740,7 +736,7 @@ void SwTOXTable::GetText_Impl( String& rTxt, String& ) const
     }
     else
     {
-        OSL_ENSURE( !this, "Wo ist meine Tabelle geblieben?" );
+        OSL_ENSURE( !this, "Where's my table?" );
         rTxt = SW_RESSTR( STR_TABLE_DEFNAME );
     }
 }

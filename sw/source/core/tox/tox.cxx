@@ -155,7 +155,7 @@ SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
     return aRet;
 }
 /*--------------------------------------------------------------------
-     Beschreibung:  Verzeichnis-Markierungen D/Ctor
+     TOX dtor and ctor
  --------------------------------------------------------------------*/
 
 
@@ -211,7 +211,7 @@ void SwTOXMark::RegisterToTOXType( SwTOXType& rMark )
 
 int SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "Attributes are not the same" );
     return GetRegisteredIn() == ((SwTOXMark&)rAttr).GetRegisteredIn();
 }
 
@@ -246,7 +246,7 @@ String SwTOXMark::GetText() const
     else if( pTxtAttr && pTxtAttr->GetpTxtNd() )
     {
         xub_StrLen* pEndIdx = pTxtAttr->GetEnd();
-        OSL_ENSURE( pEndIdx, "TOXMark ohne Mark!!");
+        OSL_ENSURE( pEndIdx, "TOXMark without mark!");
         if( pEndIdx )
         {
             const xub_StrLen nStt = *pTxtAttr->GetStart();
@@ -269,7 +269,7 @@ void SwTOXMark::InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Typen von Verzeichnissen verwalten
+  Manage types of TOX
  --------------------------------------------------------------------*/
 
 SwTOXType::SwTOXType( TOXTypes eTyp, const String& rName )
@@ -288,7 +288,7 @@ SwTOXType::SwTOXType(const SwTOXType& rCopy)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Formen bearbeiten
+    Edit forms
   --------------------------------------------------------------------*/
 
 SwForm::SwForm( TOXTypes eTyp ) // #i21237#
@@ -300,10 +300,10 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     bGenerateTabPos = sal_False;
     bIsRelTabPos = sal_True;
 
-    // Inhaltsverzeichnis hat entsprechend Anzahl Headlines + Ueberschrift
-    // Benutzer hat 10 Ebenen + Ueberschrift
-    // Stichwort hat 3 Ebenen + Ueberschrift + Trenner
-    // indexes of tables, objects illustrations and authorities consist of a heading and one level
+    // The table of contents has a certain number of headlines + headings
+    // The user has 10 levels + headings
+    // Keyword has 3 levels + headings Ueberschrift + seperator
+    // Indexes of tables, object illustrations and authorities consist of a heading and one level
 
     sal_uInt16 nPoolId;
     switch( eType )
@@ -316,7 +316,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     case TOX_TABLES       : nPoolId = STR_POOLCOLL_TOX_TABLESH; break;
     case TOX_AUTHORITIES  : nPoolId = STR_POOLCOLL_TOX_AUTHORITIESH;    break;
     default:
-        OSL_ENSURE( !this, "ungueltiger TOXTyp");
+        OSL_ENSURE( !this, "invalid TOXTyp");
         return ;
     }
 
@@ -371,7 +371,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         }
     }
     else
-        for( sal_uInt16 i = 1; i < GetFormMax(); ++i, ++nPoolId )    // Nr 0 ist der Titel
+        for( sal_uInt16 i = 1; i < GetFormMax(); ++i, ++nPoolId )    // Number 0 is the title
         {
             if(TOX_AUTHORITIES == eType)
                 SetPattern(i, lcl_GetAuthPattern(i));
@@ -510,7 +510,7 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
     }
 }
 /*--------------------------------------------------------------------
-     Beschreibung: Ctor TOXBase
+  Ctor TOXBase
  --------------------------------------------------------------------*/
 
 
@@ -597,7 +597,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Verzeichnisspezifische Funktionen
+  TOX specific functions
  --------------------------------------------------------------------*/
 
 SwTOXBase::~SwTOXBase()
@@ -703,7 +703,7 @@ String SwFormToken::GetString() const
     else if(TOKEN_CHAPTER_INFO == eTokenType)
     {
         sRet += String::CreateFromInt32( nChapterFormat );
-//add maximum permetted level
+        // add maximum permitted level
         sRet += ',';
         sRet += String::CreateFromInt32( nOutlineLevel );
     }
@@ -723,7 +723,7 @@ String SwFormToken::GetString() const
     else if(TOKEN_ENTRY_NO == eTokenType)
     {
         sRet += String::CreateFromInt32( nChapterFormat );
-//add maximum permitted level
+        // add maximum permitted level
         sRet += ',';
         sRet += String::CreateFromInt32( nOutlineLevel );
     }
