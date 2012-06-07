@@ -1223,17 +1223,9 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
     sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, UNIT_POINT );
     if( nHeight > 0 )
     {
-        /*  Get all rows that have custom height inside the passed row model.
-            If the model has the custom height flag set, all its rows have
-            custom height, otherwise get all rows specified in the class member
-            maManualRowHeights that are inside the passed row model. */
-        ValueRangeVector aManualRows;
-        aManualRows.push_back( rRowRange );
-        for( ValueRangeVector::const_iterator aIt = aManualRows.begin(), aEnd = aManualRows.end(); aIt != aEnd; ++aIt )
-        {
-            PropertySet aPropSet( getRows( *aIt ) );
-            aPropSet.setProperty( PROP_Height, nHeight );
-        }
+        /* always import the row height, ensures better layout */
+        PropertySet aPropSet( getRows( *aIt ) );
+        aPropSet.setProperty( PROP_Height, nHeight );
     }
 
     // hidden rows: TODO: #108683# hide rows later?
