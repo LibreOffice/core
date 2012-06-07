@@ -535,7 +535,7 @@ bool VclGrid::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("row-spacing")))
         set_row_spacing(rValue.toInt32());
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("column-spacing")))
-        set_row_spacing(rValue.toInt32());
+        set_column_spacing(rValue.toInt32());
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("row-homogeneous")))
         set_row_homogeneous(toBool(rValue));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("column-homogeneous")))
