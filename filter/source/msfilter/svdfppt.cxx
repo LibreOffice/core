@@ -7336,12 +7336,8 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         if ( eFillStyle != XFILL_NONE )
         {
             sal_Int16 nFillTransparence( ( (const XFillTransparenceItem&)pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
-            if ( nFillTransparence != 100 )
-            {
-                nFillTransparence *= 100;
-                static const rtl::OUString sFillTransparence( String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ) );
-                xPropSet->setPropertyValue( sFillTransparence, Any( nFillTransparence ) );
-            }
+            static const rtl::OUString sFillTransparence( String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ) );
+            xPropSet->setPropertyValue( sFillTransparence, Any( nFillTransparence ) );
         }
     }
     catch( const Exception& )
