@@ -301,6 +301,8 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
     m_aAsyncUpdateControllersTimer.SetTimeoutHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
+
+    SvtMiscOptions().AddListenerLink( LINK( this, ToolBarManager, MiscOptionsChanged ) );
 }
 
 ToolBarManager::~ToolBarManager()
@@ -350,6 +352,8 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetCommandHdl( aEmpty );
 
     m_pToolBar = 0;
+
+    SvtMiscOptions().RemoveListenerLink( LINK( this, ToolBarManager, MiscOptionsChanged ) );
 }
 
 ToolBox* ToolBarManager::GetToolBar() const
@@ -2125,6 +2129,12 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
     }
 
     return 1;
+}
+
+IMPL_LINK_NOARG(ToolBarManager, MiscOptionsChanged)
+{
+    CheckAndUpdateImages();
+    return 0;
 }
 
 IMPL_LINK_NOARG(ToolBarManager, AsyncUpdateControllersHdl)

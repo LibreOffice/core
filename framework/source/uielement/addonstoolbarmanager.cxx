@@ -219,6 +219,9 @@ void AddonsToolBarManager::RefreshImages()
             );
         }
     }
+    m_pToolBar->SetToolboxButtonSize( bBigImages ? TOOLBOX_BUTTONSIZE_LARGE : TOOLBOX_BUTTONSIZE_SMALL );
+    ::Size aSize = m_pToolBar->CalcWindowSizePixel();
+    m_pToolBar->SetOutputSizePixel( aSize );
 }
 
 void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue > >& rAddonToolbar )
