@@ -40,6 +40,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace framework
 {
@@ -86,8 +87,7 @@ struct ImageListItemDescriptor
     String                      aHighContrastMaskURL;   // an URL to an optional high contrast bitmap as a mask
 };
 
-typedef ImageListItemDescriptor* ImageListItemDescriptorPtr;
-SV_DECL_PTRARR_DEL( ImageListDescriptor, ImageListItemDescriptorPtr, 10 )
+typedef boost::ptr_vector<ImageListItemDescriptor> ImageListDescriptor;
 
 struct ImageListsDescriptor
 {

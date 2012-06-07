@@ -545,7 +545,7 @@ throw(  SAXException, RuntimeException )
                 if ( m_pImages )
                 {
                     if ( m_aImageList.pImageList )
-                        m_aImageList.pImageList->Insert( m_pImages, m_aImageList.pImageList->Count() );
+                        m_aImageList.pImageList->push_back( m_pImages );
                     m_pImages = NULL;
                 }
                 m_bImagesStartFound = sal_False;
@@ -681,9 +681,9 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     {
         ImageListDescriptor* pImageList = m_aImageListsItems.pImageList;
 
-        for ( sal_uInt16 i = 0; i < m_aImageListsItems.pImageList->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < m_aImageListsItems.pImageList->size(); i++ )
         {
-            const ImageListItemDescriptor* pImageItems = (*pImageList)[i];
+            const ImageListItemDescriptor* pImageItems = &(*pImageList)[i];
             WriteImageList( pImageItems );
         }
     }

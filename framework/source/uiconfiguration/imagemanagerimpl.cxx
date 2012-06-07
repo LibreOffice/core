@@ -504,9 +504,9 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
                                              xInputStream,
                                              aUserImageListInfo );
             if (( aUserImageListInfo.pImageList != 0 ) &&
-                ( aUserImageListInfo.pImageList->Count() > 0 ))
+                ( !aUserImageListInfo.pImageList->empty() ))
             {
-                ImageListItemDescriptor* pList = aUserImageListInfo.pImageList->GetObject(0);
+                ImageListItemDescriptor* pList = &aUserImageListInfo.pImageList->front();
                 sal_Int32 nCount = pList->pImageItemList->Count();
                 std::vector< OUString > aUserImagesVector;
                 aUserImagesVector.reserve(nCount);
@@ -580,7 +580,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
             aUserImageListInfo.pImageList = new ImageListDescriptor;
 
             ImageListItemDescriptor* pList = new ImageListItemDescriptor;
-            aUserImageListInfo.pImageList->Insert( pList, 0 );
+            aUserImageListInfo.pImageList->push_back( pList );
 
             pList->pImageItemList = new ImageItemListDescriptor;
             for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
