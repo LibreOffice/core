@@ -66,9 +66,10 @@ public:
         floating-point value.
 
         @param rValue  The VML percentage value. This is a floating-point value
-            with optional following '%' sign. If the '%' sign is missing, the
+            with optional following '%' or 'f' sign. If the sign is missing, the
             floating point value will be returned unmodified. If the '%' sign
-            is present, the value will be divided by 100.
+            is present, the value will be divided by 100. If the 'f' sign is present,
+            the value will be divided by 65536.
      */
     static double       decodePercent(
                             const ::rtl::OUString& rValue,

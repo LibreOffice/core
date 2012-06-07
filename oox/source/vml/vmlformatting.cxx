@@ -107,6 +107,9 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     if( (nEndPos + 1 == rValue.getLength()) && (rValue[ nEndPos ] == '%') )
         return fValue / 100.0;
 
+    if( (nEndPos + 1 == rValue.getLength()) && (rValue[ nEndPos ] == 'f') )
+        return fValue / 65536.0;
+
     OSL_FAIL( "ConversionHelper::decodePercent - unknown measure unit" );
     return fDefValue;
 }
