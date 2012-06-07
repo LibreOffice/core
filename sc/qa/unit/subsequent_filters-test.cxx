@@ -114,6 +114,7 @@ public:
     void testBugFixesXLS();
     void testBugFixesXLSX();
     void testBrokenQuotesCSV();
+    void testMergedCellsODS();
     void testRepeatedColumnsODS();
 
     //change this test file only in excel and not in calc
@@ -142,6 +143,7 @@ public:
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
+    CPPUNIT_TEST(testMergedCellsODS);
     CPPUNIT_TEST(testRepeatedColumnsODS);
 #if 0
     CPPUNIT_TEST(testBrokenQuotesCSV);
@@ -673,6 +675,58 @@ void ScFiltersTest::testBugFixesXLSX()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xlsx", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+    xDocSh->DoClose();
+}
+
+namespace {
+
+void checkMergedCells( ScDocument* pDoc, const ScAddress& rStartAddress,
+                       const ScAddress& rExpectedEndAddress )
+{
+    SCCOL nActualEndCol = rStartAddress.Col();
+    SCROW nActualEndRow = rStartAddress.Row();
+    pDoc->ExtendMerge( rStartAddress.Col(), rStartAddress.Row(),
+                       nActualEndCol, nActualEndRow, rStartAddress.Tab(), false );
+    rtl::OString sTab = rtl::OString::valueOf( static_cast<sal_Int32>(rStartAddress.Tab() + 1) );
+    rtl::OString sExpectedEndCol = rtl::OString::valueOf( static_cast<sal_Int32>(rExpectedEndAddress.Col()) );
+    rtl::OString sExpectedEndRow = rtl::OString::valueOf( static_cast<sal_Int32>(rExpectedEndAddress.Row()) );
+    rtl::OString sActualEndCol = rtl::OString::valueOf( static_cast<sal_Int32>(nActualEndCol) );
+    rtl::OString sActualEndRow = rtl::OString::valueOf( static_cast<sal_Int32>(nActualEndRow) );
+    rtl::OString msg = "Merged cells are not correctly imported on sheet" + sTab + "\n" +
+                       "  Expected EndCol, EndRow: " + sExpectedEndCol + ", " + sExpectedEndRow + "\n" +
+                       "  Actual EndCol, EndRow: " + sActualEndCol + ", " + sActualEndRow;
+    CPPUNIT_ASSERT_MESSAGE( msg.pData->buffer,
+                            nActualEndCol == rExpectedEndAddress.Col() &&
+                            nActualEndRow == rExpectedEndAddress.Row() );
+}
+
+}
+
+void ScFiltersTest::testMergedCellsODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("merged."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, 0);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    //check sheet1 content
+    rtl::OUString aCSVFileName1;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("merged1.")), aCSVFileName1);
+    testFile(aCSVFileName1, pDoc, 0);
+
+    //check sheet1 merged cells
+    checkMergedCells( pDoc, ScAddress( 0, 0, 0 ),  ScAddress( 5, 11, 0 ) );
+    checkMergedCells( pDoc, ScAddress( 7, 2, 0 ),  ScAddress( 9, 12, 0 ) );
+    checkMergedCells( pDoc, ScAddress( 3, 15, 0 ),  ScAddress( 7, 23, 0 ) );
+
+    //check sheet2 content
+    rtl::OUString aCSVFileName2;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("merged2.")), aCSVFileName2);
+    testFile(aCSVFileName2, pDoc, 1);
+
+    //check sheet2 merged cells
+    checkMergedCells( pDoc, ScAddress( 4, 3, 1 ),  ScAddress( 6, 15, 1 ) );
+
     xDocSh->DoClose();
 }
 
