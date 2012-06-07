@@ -476,22 +476,6 @@ void BiffDrawingObjectBase::convertFillProperties( ShapePropertyMap& rPropMap, c
     aFillProps.pushToPropMap( rPropMap, getBaseFilter().getGraphicHelper() );
 }
 
-void BiffDrawingObjectBase::implReadObjBiff3( BiffInputStream& /*rStrm*/, sal_uInt16 /*nMacroSize*/ )
-{
-}
-
-void BiffDrawingObjectBase::implReadObjBiff4( BiffInputStream& /*rStrm*/, sal_uInt16 /*nMacroSize*/ )
-{
-}
-
-void BiffDrawingObjectBase::implReadObjBiff5( BiffInputStream& /*rStrm*/, sal_uInt16 /*nNameLen*/, sal_uInt16 /*nMacroSize*/ )
-{
-}
-
-void BiffDrawingObjectBase::implReadObjBiff8SubRec( BiffInputStream& /*rStrm*/, sal_uInt16 /*nSubRecId*/, sal_uInt16 /*nSubRecSize*/ )
-{
-}
-
 // ============================================================================
 // BIFF drawing page
 // ============================================================================

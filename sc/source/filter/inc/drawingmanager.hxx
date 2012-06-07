@@ -147,15 +147,6 @@ protected:
     /** Converts the passed fill formatting to the passed property map. */
     void                convertFillProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, const BiffObjFillModel& rFillModel ) const;
 
-    /** Derived classes read the contents of the a BIFF3 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff3( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Derived classes read the contents of the a BIFF4 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Derived classes read the contents of the a BIFF5 OBJ record from the passed stream. */
-    virtual void        implReadObjBiff5( BiffInputStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize );
-    /** Derived classes read the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
-    virtual void        implReadObjBiff8SubRec( BiffInputStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize );
-
     /** Derived classes create the corresponding XShape and insert it into the passed container. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         implConvertAndInsert( BiffDrawingBase& rDrawing,
