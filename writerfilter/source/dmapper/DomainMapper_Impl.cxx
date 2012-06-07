@@ -2014,7 +2014,7 @@ bool lcl_FindInCommand(
 //                    {
                             //todo: entries can only be included completely
 //                    }
-//                  \n Builds a table of contents or a range of entries, sucah as “1-9”, in a table of contents without page numbers
+//                  \n Builds a table of contents or a range of entries, sucah as ?-9? in a table of contents without page numbers
 //                    if( lcl_FindInCommand( rCommand, 'n', sValue ))
 //                    {
                         //todo: what does the description mean?
@@ -2721,7 +2721,7 @@ void DomainMapper_Impl::handleToc
 //                    {
                             //todo: entries can only be included completely
 //                    }
-//                  \n Builds a table of contents or a range of entries, sucah as “1-9”, in a table of contents without page numbers
+//                  \n Builds a table of contents or a range of entries, sucah as ?-9? in a table of contents without page numbers
 //                    if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
 //                    {
                         //todo: what does the description mean?
@@ -2731,9 +2731,14 @@ void DomainMapper_Impl::handleToc
     {
         bFromOutline = true;
         UniString sParam( sValue );
-        xub_StrLen nIndex = 0;
-        sParam.GetToken( 0, '-', nIndex );
-        nMaxLevel = sal_Int16( sParam.Copy( nIndex ).ToInt32( ) );
+        if (!sParam.Len())
+            nMaxLevel = WW_OUTLINE_MAX;
+        else
+        {
+            xub_StrLen nIndex = 0;
+            sParam.GetToken( 0, '-', nIndex );
+            nMaxLevel = sal_Int16( sParam.Copy( nIndex ).ToInt32( ) );
+        }
     }
 //                  \p Defines the separator between the table entry and its page number
     if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
