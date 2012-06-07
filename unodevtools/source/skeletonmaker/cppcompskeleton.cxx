@@ -165,7 +165,7 @@ void generateCompHelperDefinition(std::ostream & o,
     short i=0;
     while (iter != services.end())
     {
-        o << "    s[" << i++ << "] = ::rtl::OUString("
+        o << "    s[" << i++ << "] = ::rtl::OUString(\""
           << (*iter).replace('/','.') << "\");\n";
         ++iter;
     }
