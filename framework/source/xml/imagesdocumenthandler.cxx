@@ -512,7 +512,7 @@ throw(  SAXException, RuntimeException )
                 }
 
                 if ( m_pExternalImages )
-                    m_pExternalImages->Insert( pItem, m_pExternalImages->Count() );
+                    m_pExternalImages->push_back( pItem );
                 else
                     delete pItem;
             }
@@ -800,9 +800,9 @@ void OWriteImagesDocumentHandler::WriteExternalImageList( const ExternalImageIte
     m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EXTERNALIMAGES )), m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
 
-    for ( sal_uInt16 i = 0; i < pExternalImageList->Count(); i++ )
+    for ( sal_uInt16 i = 0; i < pExternalImageList->size(); i++ )
     {
-        ExternalImageItemDescriptor* pItem = (*pExternalImageList)[i];
+        const ExternalImageItemDescriptor* pItem = &(*pExternalImageList)[i];
         WriteExternalImage( pItem );
     }
 

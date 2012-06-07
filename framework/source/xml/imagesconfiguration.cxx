@@ -62,7 +62,6 @@ namespace framework
 {
 
 SV_IMPL_PTRARR( ImageItemListDescriptor, ImageItemDescriptorPtr );
-SV_IMPL_PTRARR( ExternalImageItemListDescriptor, ExternalImageItemDescriptorPtr );
 
 static Reference< XParser > GetSaxParser(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory

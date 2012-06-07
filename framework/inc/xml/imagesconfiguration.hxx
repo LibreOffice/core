@@ -68,8 +68,7 @@ struct ExternalImageItemDescriptor
 typedef ImageItemDescriptor* ImageItemDescriptorPtr;
 SV_DECL_PTRARR_DEL( ImageItemListDescriptor, ImageItemDescriptorPtr, 10 )
 
-typedef ExternalImageItemDescriptor* ExternalImageItemDescriptorPtr;
-SV_DECL_PTRARR_DEL( ExternalImageItemListDescriptor, ExternalImageItemDescriptorPtr, 10 )
+typedef boost::ptr_vector<ExternalImageItemDescriptor> ExternalImageItemListDescriptor;
 
 struct ImageListItemDescriptor
 {
