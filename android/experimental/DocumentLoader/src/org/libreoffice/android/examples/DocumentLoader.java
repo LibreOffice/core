@@ -188,8 +188,8 @@ public class DocumentLoader
             Bootstrap.dlopen("libswdlo.so");
             Bootstrap.dlopen("libswlo.so");
             
-            // Log.i(TAG, "Sleeping NOW");
-            // Thread.sleep(20000);
+            Log.i(TAG, "Sleeping NOW");
+            Thread.sleep(20000);
 
             XComponentContext xContext = null;
 
@@ -308,6 +308,13 @@ public class DocumentLoader
 
             if (imagebb.getInt(0x1e) != 3) {
                 Log.wtf(TAG, "getDIB() didn't return a BI_BITFIELDS DIB");
+                return;
+            }
+
+            if (imagebb.getInt(0x36) != 0x000000ff |
+                imagebb.getInt(0x3a) != 0x0000ff00 ||
+                imagebb.getInt(0x3e) != 0x00ff0000) {
+                Log.wtf(TAG, "getDIB() didn't return DIB in RGBX format");
                 return;
             }
 
