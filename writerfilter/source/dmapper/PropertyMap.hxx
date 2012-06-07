@@ -374,6 +374,7 @@ typedef boost::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
   -----------------------------------------------------------------------*/
 
 #define WW_OUTLINE_MAX  sal_Int16( 9 )
+#define WW_OUTLINE_MIN  sal_Int16( 0 )
 
 class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 

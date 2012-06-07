@@ -1878,12 +1878,17 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPPropRMark
     case NS_sprm::LN_POutLvl:
         {
+            sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
             if( m_pImpl->IsStyleSheetImport() )
             {
-                sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
 
                 StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
                 pStyleSheetPropertyMap->SetOutlineLevel( nLvl );
+            }
+            else
+            {
+                nLvl = nLvl >= WW_OUTLINE_MIN && nLvl < WW_OUTLINE_MAX? nLvl+1 : 0; //0 means no outline level set on
+                rContext->Insert(PROP_OUTLINE_LEVEL, true, uno::makeAny ( nLvl ));
             }
         }
         break;  // sprmPOutLvl

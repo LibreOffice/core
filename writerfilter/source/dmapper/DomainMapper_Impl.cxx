@@ -1957,7 +1957,6 @@ bool lcl_FindInCommand(
 }
 
 
-
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
 {
     PropertyMapPtr pTopContext = GetTopContext();
@@ -2549,7 +2548,7 @@ void DomainMapper_Impl::handleToc
 //                    {
                             //todo: entries can only be included completely
 //                    }
-//                  \n Builds a table of contents or a range of entries, sucah as �1-9�, in a table of contents without page numbers
+//                  \n Builds a table of contents or a range of entries, such as 1-9 in a table of contents without page numbers
 //                    if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
 //                    {
                         //todo: what does the description mean?
@@ -2558,9 +2557,14 @@ void DomainMapper_Impl::handleToc
     if( lcl_FindInCommand( pContext->GetCommand(), 'o', sValue ))
     {
         bFromOutline = true;
-        sal_Int32 nIndex = 0;
-        sValue.getToken( 0, '-', nIndex );
-        nMaxLevel = static_cast<sal_Int16>(nIndex != -1 ? sValue.copy(nIndex).toInt32() : 0);
+        if (sValue.isEmpty())
+            nMaxLevel = WW_OUTLINE_MAX;
+        else
+        {
+            sal_Int32 nIndex = 0;
+            sValue.getToken( 0, '-', nIndex );
+            nMaxLevel = static_cast<sal_Int16>(nIndex != -1 ? sValue.copy(nIndex).toInt32() : 0);
+        }
     }
 //                  \p Defines the separator between the table entry and its page number
     if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
