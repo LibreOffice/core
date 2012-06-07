@@ -357,21 +357,5 @@ void SAL_CALL XUnbufferedStream::closeInput(  )
         throw( NotConnectedException, IOException, RuntimeException)
 {
 }
-/*
-void SAL_CALL XUnbufferedStream::seek( sal_Int64 location )
-        throw( IllegalArgumentException, IOException, RuntimeException)
-{
-}
-sal_Int64 SAL_CALL XUnbufferedStream::getPosition(  )
-        throw(IOException, RuntimeException)
-{
-    return mnMyCurrent;
-}
-sal_Int64 SAL_CALL XUnbufferedStream::getLength(  )
-        throw(IOException, RuntimeException)
-{
-    return mnZipSize;
-}
-*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

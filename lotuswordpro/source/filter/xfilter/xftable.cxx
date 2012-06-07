@@ -178,12 +178,6 @@ sal_Int32   XFTable::GetRowCount()
     }
 
     return rowMax;
-/*
-    if( m_aRows.size()<1 )
-        return 0;
-    std::map<sal_Int32,XFRow*>::iterator it = m_aRows.end();
-    it--;
-    return it->first;*/
 }
 
 XFRow*  XFTable::GetRow(sal_Int32 row)

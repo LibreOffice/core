@@ -75,52 +75,6 @@ LwpSdwFileLoader::LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphic
 LwpSdwFileLoader::~LwpSdwFileLoader(void)
 {
 }
-/*
-void LwpSdwFileLoader::LoadObjectList(void)
-{
-    unsigned char BinSignature[2];
-    m_pStream->Read(BinSignature,2);
-
-    if (BinSignature[0] == 'S' && BinSignature[1] == 'M')
-    {
-        unsigned short nVersion;
-        m_pStream->Read(&nVersion,2);
-
-        m_pStream->Seek(0);
-        if (nVersion<0x0102)
-        {
-            assert(false);
-        }
-        if (nVersion>=0x0102)
-        {
-            LwpSdwGroupLoaderV0102 sdwGroupLoader(m_pStream, m_pGraphicObj, m_pOutputStream);
-            sdwGroupLoader.LoadDrawGroupObject();
-        }
-    }
-}
-void LwpSdwFileLoader::RegisterStyle()
-{
-    unsigned char BinSignature[2];
-    m_pStream->Read(BinSignature,2);
-
-    if (BinSignature[0] == 'S' && BinSignature[1] == 'M')
-    {
-        unsigned short nVersion;
-        m_pStream->Read(&nVersion,2);
-
-        m_pStream->Seek(0);
-        if (nVersion<0x0102)
-        {
-            assert(false);
-        }
-        if (nVersion>=0x0102)
-        {
-            LwpSdwGroupLoaderV0102 sdwGroupLoader(m_pStream, m_pGraphicObj, m_pOutputStream);
-            sdwGroupLoader.RegisterGroupStyle();
-        }
-    }
-}
-*/
 // add by  ,03/25/2005
 /**
  * @descr   entry of lwp-drawing objects.

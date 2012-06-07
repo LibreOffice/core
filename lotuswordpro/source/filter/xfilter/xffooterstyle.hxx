@@ -79,44 +79,6 @@ public:
         if( top != -1 )
             m_aMargin.SetTop(top);
     }
-/*
-    void SetHeight(float height)
-    {
-        m_fHeight = height;
-    }
-
-    void    SetDynamicSpace(sal_Bool dynamic)
-    {
-        m_bDynamicSpace = dynamic;
-    }
-    virtual void    ToXml(IXFStream *pStrm)
-    {
-        IXFAttrList *pAttrList = pStrm->GetAttrList();
-        pAttrList->Clear();
-
-        pStrm->StartElement( A2OUSTR("style:footer-style") );
-
-        if(m_fHeight!=-1)
-        {
-            pAttrList->AddAttribute( A2OUSTR("svg:height"), FloatToOUString(m_fHeight) + A2OUSTR("cm") );
-        }
-
-        m_aMargin.ToXml(pStrm);
-        if( m_bDynamicSpace )
-            pAttrList->AddAttribute( A2OUSTR("style:dynamic-spacing"), A2OUSTR("true") );
-        else
-            pAttrList->AddAttribute( A2OUSTR("style:dynamic-spacing"), A2OUSTR("false") );
-        pStrm->StartElement( A2OUSTR("style:properties") );
-        pStrm->EndElement( A2OUSTR("style:properties") );
-
-        pStrm->EndElement( A2OUSTR("style:footer-style") );
-    }
-
-private:
-    XFMargins   m_aMargin;
-    sal_Bool    m_bDynamicSpace;
-    float m_fHeight;
-    */
 };
 
 #endif

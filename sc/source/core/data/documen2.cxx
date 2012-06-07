@@ -586,10 +586,6 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
 
 void ScDocument::DeleteNumberFormat( const sal_uInt32* /* pDelKeys */, sal_uInt32 /* nCount */ )
 {
-/*
-    for (sal_uLong i = 0; i < nCount; i++)
-        xPoolHelper->GetFormTable()->DeleteEntry(pDelKeys[i]);
-*/
 }
 
 void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,

@@ -233,18 +233,6 @@ ERRTYPE RscArray::GetValueEle
     else
         pNode = NULL;
 
-/*
-    if( pNode )
-    {
-        if( pNode->aInst.pClass->IsDefault( pNode->aInst ) )
-        {
-            GetSuperClass()->Destroy( pNode->aInst );
-            GetSuperClass()->Create( &pNode->aInst, rInst );
-            pNode->aInst.pClass->SetToDefault( pNode->aInst );
-        }
-    }
-    else
-*/
     if( !pNode )
     {
         pNode = new RscInstNode( sal_uInt32(lValue) );

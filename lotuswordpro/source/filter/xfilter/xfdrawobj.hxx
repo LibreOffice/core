@@ -129,23 +129,7 @@ inline void XFDrawObject::SetTextStyleName(rtl::OUString style)
 {
     m_strTextStyle = style;
 }
-/*
-inline void XFDrawObject::SetPosition(double x, double y, double width, double height)
-{
-    SetX(x);
-    SetY(y);
-    SetWidth(width);
-    SetHeight(height);
-}
 
-inline void XFDrawObject::SetPosition(XFRect rect)
-{
-    SetX(rect.GetX());
-    SetY(rect.GetY());
-    SetWidth(rect.GetWidth());
-    SetHeight(rect.GetHeight());
-}
-*/
 inline void XFDrawObject::SetRotate(double degree, XFPoint aRotatePoint)
 {
     m_nFlag |= XFDRAWOBJECT_FLAG_ROTATE;

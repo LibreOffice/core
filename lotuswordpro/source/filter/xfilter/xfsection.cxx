@@ -103,31 +103,4 @@ void    XFSection::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("text:section") );
 
 }
-/*
-void XFSection::ToXmlHeader(IXFStream *pStrm)
-{
-    assert(m_strSectionName.getLength() > 0 );
-
-    IXFAttrList     *pAttrList = pStrm->GetAttrList();
-
-    pAttrList->Clear();
-    rtl::OUString style = GetStyleName();
-    if( style.getLength() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), style);
-    //section name
-    if( m_strSectionName.getLength() )
-        pAttrList->AddAttribute( A2OUSTR("text:name"), m_strSectionName);
-    if( m_bProtected )
-        pAttrList->AddAttribute( A2OUSTR("text:protected"), A2OUSTR("true") );
-    if( m_bHiden )
-        pAttrList->AddAttribute( A2OUSTR("text:display"), A2OUSTR("none") );
-
-    pStrm->StartElement( A2OUSTR("text:section") );
-}
-
-void XFSection::ToXmlTail(IXFStream *pStrm)
-{
-    pStrm->EndElement( A2OUSTR("text:section") );
-}
-*/
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

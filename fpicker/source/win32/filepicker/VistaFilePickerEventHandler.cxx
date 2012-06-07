@@ -216,15 +216,6 @@ void lcl_updateVersionListDirectly(IFileDialog* pDialog)
     const ::rtl::OUString sURL = lcl_getURLFromShellItem2(iItem);
     if (sURL.getLength() < 1)
         return;
-/*
-    INetURLObject aURL(sURL);
-    if (aURL.GetProtocol() != INET_PROT_FILE)
-        return;
-
-    ::rtl::OUString sMain = aURL.GetMainURL(INetURLObject::NO_DECODE);
-    if ( ! ::utl::UCBContentHelper::IsDocument(sURL))
-        return;
-*/
     try
     {
         css::uno::Reference< css::embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(sURL, css::embed::ElementModes::READ);
@@ -250,7 +241,6 @@ void lcl_updateVersionListDirectly(IFileDialog* pDialog)
 STDMETHODIMP VistaFilePickerEventHandler::OnSelectionChange(IFileDialog* /*pDialog*/)
 {
     impl_sendEvent(E_FILE_SELECTION_CHANGED, 0);
-    //lcl_updateVersionListDirectly(pDialog);
     return S_OK;
 }
 

@@ -248,15 +248,6 @@ private:
 
     OLocale()
         : pData(rtl_locale_getDefault()) {}
-/*
-    OLocale( const OLocale & obj)
-        : pData(obj.pData) {}
-
-    OLocale & operator = ( const OLocale & obj)
-        { pData = obj.pData;
-          return *this;
-        }
-*/
 };
 
 }

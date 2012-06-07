@@ -60,8 +60,6 @@
 #include "lwpfilehdr.hxx"
 #include "lwpglobalmgr.hxx"
 
-//std::map<sal_uInt16,LwpEditorAttr*> LwpDocData::m_EditorAttrMap;
-
 LwpDocData::LwpDocData(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     :LwpObject(objHdr, pStrm)//m_pEditorAttrList(0)
 {}
@@ -340,42 +338,5 @@ void LwpDocData::Parse(IXFStream *pOutputStream)
     xfMeta.SetEditTime(TimeToOUString(m_nTotalEditTime));
     xfMeta.ToXml(pOutputStream);
 }
-/*
-OUString LwpDocData::GetEditorName(sal_uInt8 nID)
-{
-    std::map<sal_uInt16,LwpEditorAttr*>::iterator iter;
-    iter = m_EditorAttrMap.find(nID);
-    if (iter != m_EditorAttrMap.end())
-        return iter->second->cName.str();
-    return A2OUSTR("");
-}
-
-XFColor LwpDocData::GetHighLightColor(sal_uInt8 nID)
-{
-    std::map<sal_uInt16,LwpEditorAttr*>::iterator iter;
-
-    iter = m_EditorAttrMap.find(nID);
-    if (iter != m_EditorAttrMap.end())
-    {
-        LwpColor aLwpColor = iter->second->cHiLiteColor;
-        XFColor aColor(aLwpColor.GetRed(),aLwpColor.GetGreen(),aLwpColor.GetBlue());
-        return aColor;
-    }
-    else
-    {
-        XFColor aColor(255,255,0);//yellow
-        return aColor;
-    }
-}
-void LwpDocData::Reset()
-{
-    std::map<sal_uInt16,LwpEditorAttr*>::iterator iter;
-    for (iter =m_EditorAttrMap.begin();iter != m_EditorAttrMap.end(); iter++)
-    {
-        delete iter->second;
-        iter->second = NULL;
-    }
-    m_EditorAttrMap.clear();
-}*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -89,15 +89,6 @@ public:
         throw(com::sun::star::i18n::MultipleCharsOutputException,
                 com::sun::star::uno::RuntimeException) ;
 
-/*
-    virtual void SAL_CALL createCascadeInstance( const com::sun::star::uno::Sequence< rtl::OUString >& modNamelist,
-        const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException) ;
-    virtual rtl::OUString SAL_CALL folding_reverse( const rtl::OUString& inStr, sal_Int32 startPos,
-        sal_Int32 nCount ) throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL transliterateMatch( const rtl::OUString& content, sal_Int32 pos1, sal_Int32 nCount1,
-        const rtl::OUString& pattern, sal_Int32 pos2, sal_Int32 nCount2 )
-        throw(com::sun::star::uno::RuntimeException);
-*/
     virtual sal_Bool SAL_CALL equals( const rtl::OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
         sal_Int32& nMatch1, const rtl::OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
         throw(com::sun::star::uno::RuntimeException);

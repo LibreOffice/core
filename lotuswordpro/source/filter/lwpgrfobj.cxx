@@ -115,12 +115,6 @@ void LwpGraphicObject::Read()
         m_pObjStrm->QuickRead(m_sDataFormat,strsize);
         m_sDataFormat[strsize] = '\0';
     }
-/*
-    if (m_sDataFormat!=(unsigned char*)(".lch"))
-    {
-        return;
-    }
-*/
     sal_uInt32 nServerContextSize = m_pObjStrm->QuickReaduInt32();
     unsigned char *pServerContext = NULL;
     if (nServerContextSize > 0)

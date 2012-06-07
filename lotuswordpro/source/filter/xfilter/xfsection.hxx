@@ -82,12 +82,7 @@ public:
      * @descr   Output section obejct.
      */
     virtual void    ToXml(IXFStream *pStrm);
-/*
-private:
-    void ToXmlHeader(IXFStream *pStrm);
 
-    void ToXmlTail(IXFStream *pStrm);
-*/
 private:
     rtl::OUString   m_strSectionName;
     sal_Bool    m_bProtected;

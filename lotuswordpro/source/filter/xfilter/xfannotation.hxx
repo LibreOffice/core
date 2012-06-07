@@ -71,14 +71,11 @@ public:
 
     void SetAuthor(rtl::OUString author);
 
-    //void  Add(IXFContent *pContent);
-
     virtual void    ToXml(IXFStream *pStrm);
 
 private:
     rtl::OUString   m_strDate;
     rtl::OUString   m_strAuthor;
-    //XFContentContainer    m_aContents;
 };
 
 inline void XFAnnotation::SetDate(rtl::OUString date)
@@ -90,12 +87,7 @@ inline void XFAnnotation::SetAuthor(rtl::OUString author)
 {
     m_strAuthor = author;
 }
-/*
-inline void XFAnnotation::Add(IXFContent *pContent)
-{
-    m_aContents.Add(pContent);
-}
-*/
+
 inline void XFAnnotation::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
@@ -107,7 +99,6 @@ inline void XFAnnotation::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("office:author"), m_strAuthor);
     pStrm->StartElement( A2OUSTR("office:annotation") );
 
-    //m_aContents.ToXml(pStrm);
     XFContentContainer::ToXml(pStrm);
 
     pStrm->EndElement( A2OUSTR("office:annotation") );

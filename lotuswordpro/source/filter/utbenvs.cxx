@@ -57,20 +57,6 @@
 #include <assert.h>
 namespace OpenStormBento
 {
-/*
- * useless in SODC
-void    LtcUtBenValueStream::GetAmountLeft(sal_uLong * pAmtLeft)
-{
-    if (cCurrentPosition >= m_ulValueLength)
-    {
-        *pAmtLeft = 0;
-    }
-    else
-    {
-        *pAmtLeft = m_ulValueLength - cCurrentPosition;
-    }
-}
-*/
 /**
 *   Value stream read function
 *   @date   07/05/2004

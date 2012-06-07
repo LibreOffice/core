@@ -69,12 +69,6 @@
 #include "lwpobjid.hxx"
 #include "lwpstory.hxx"
 #include "tools/gen.hxx"
-/*
-#include <so3/svstor.hxx>
-#include <so3/outplace.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/factory.hxx>
-*/
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/objsh.hxx>

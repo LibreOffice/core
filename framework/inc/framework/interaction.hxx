@@ -107,36 +107,6 @@ public:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations );
 };
 
-/*-************************************************************************************************************//**
-    @short          special request for interaction
-    @descr          User must decide between a preselected and another detected filter.
-                    It capsulate communication with any interaction handler and supports an easy
-                    access on interaction results for user of these class.
-
-    @implements     XInteractionRequest
-
-    @base           WeakImplHelper1
-
-    @devstatus      ready to use
-    @threadsafe     no (used on once position only!)
-*//*-*************************************************************************************************************/
-/*
-class RequestAmbigousFilter_Impl;
-class RequestAmbigousFilter             // seems to be unused currently
-{
-    RequestAmbigousFilter_Impl* pImp;
-
-    // c++ interface
-public:
-    RequestAmbigousFilter( const ::rtl::OUString& sURL,
-                            const ::rtl::OUString& sSelectedFilter ,
-                            const ::rtl::OUString& sDetectedFilter );
-    ~RequestAmbigousFilter();
-    sal_Bool        isAbort  () const;
-    ::rtl::OUString getFilter() const;
-    com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
-};
- */
 
 }       //  namespace framework
 
