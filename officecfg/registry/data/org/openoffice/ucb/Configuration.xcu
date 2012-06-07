@@ -26,7 +26,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Configuration" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data oor:name="Configuration" oor:package="org.openoffice.ucb" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="ContentProviders">
     <node oor:name="Local" oor:op="replace">
       <node oor:name="SecondaryKeys">
@@ -54,7 +54,7 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider3" oor:op="replace">
+            <node oor:name="Provider3" oor:op="replace" install:module="neon">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -65,7 +65,7 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider4" oor:op="replace">
+            <node oor:name="Provider4" oor:op="replace" install:module="neon">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -98,7 +98,7 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider7" oor:op="replace">
+            <node oor:name="Provider7" oor:op="replace" install:module="neon">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -153,7 +153,7 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider12" oor:op="replace">
+            <node oor:name="Provider12" oor:op="replace" install:module="neon">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -164,7 +164,7 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider13" oor:op="replace">
+            <node oor:name="Provider13" oor:op="replace" install:module="neon">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -186,7 +186,7 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider42" oor:op="replace">
+            <node oor:name="Provider42" oor:op="replace" install:module="win">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.ODMAContentProvider</value>
               </prop>

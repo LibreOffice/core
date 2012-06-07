@@ -316,7 +316,8 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Inet-wnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-wnt.xcu \
-    $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
+    $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu \
+    $(MY_MOD)/org/openoffice/ucb/Configuration-win.xcu
         # Inet-wnt.xcu must come after Inet.xcu
 MY_DRIVERS += ado
 .ELIF "$(GUIBASE)" == "cocoatouch"
@@ -327,6 +328,9 @@ MY_DRIVERS += ado
 # ?
 .ELSE
 ERROR : unknown-GUIBASE
+.END
+.IF "$(DISABLE_NEON)" != "TRUE"
+MY_FILES_main += $(MY_MOD)/org/openoffice/ucb/Configuration-neon.xcu
 .END
 .IF "$(ENABLE_EVOAB2)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-evoab2.xcu
