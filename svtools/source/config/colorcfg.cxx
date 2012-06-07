@@ -412,12 +412,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 {
     static const sal_Int32 aAutoColors[] =
     {
-        0, // DOCCOLOR
+        COL_WHITE, // DOCCOLOR
         0xc0c0c0, // DOCBOUNDARIES
         0x808080, // APPBACKGROUND
         0xc0c0c0, // OBJECTBOUNDARIES
         0xc0c0c0, // TABLEBOUNDARIES
-        0, // FONTCOLOR
+        COL_BLACK, // FONTCOLOR
         0xcc, // LINKS
         0x80, // LINKSVISITED
         0xff0000, // SPELL
@@ -462,16 +462,8 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
     Color aRet;
     switch(eEntry)
     {
-        case DOCCOLOR :
-            aRet = Application::GetSettings().GetStyleSettings().GetWindowColor();
-            break;
-
         case APPBACKGROUND :
             aRet = Application::GetSettings().GetStyleSettings().GetWorkspaceColor();
-            break;
-
-        case FONTCOLOR :
-            aRet = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
             break;
 
         case LINKS :
