@@ -100,6 +100,8 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     void AddNumberCellToDoc   ( const ScAddress& rScCurrentPos );
     void AddCellsToTable      ( const ScAddress& rScCellPos,
                                 const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rScCurrentPos );
+    void AddFormulaCell       ( const ScAddress& rScCellPos,
+                                const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange );
 
 public:
 
