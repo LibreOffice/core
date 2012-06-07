@@ -32,6 +32,7 @@
 #include <svl/svarray.hxx>
 #include <vcl/timer.hxx>
 #include <tools/string.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 
 #include <com/sun/star/sheet/XVolatileResult.hpp>
@@ -41,7 +42,7 @@
 
 //class XResultListenerRef;
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >* XResultListenerPtr;
-SV_DECL_PTRARR_DEL( XResultListenerArr_Impl, XResultListenerPtr, 4 );
+typedef boost::ptr_vector<XResultListenerPtr> XResultListenerArr_Impl;
 
 
 class ScAddInResult : public cppu::WeakImplHelper1<
