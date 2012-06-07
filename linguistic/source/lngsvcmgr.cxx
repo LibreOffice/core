@@ -1414,9 +1414,10 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if (0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ))
     {
-        // don't used cached data here (force re-evaluation in order to have downloaded dictionaries
-        // already found without the need to restart the office
-        clearSvcInfoArray(pAvailGrammarSvcs);  pAvailGrammarSvcs = 0;
+        // don't clear cache as it makes start with some extentions so slow it looks
+        // like a freeze (a restart is needed anyway after grammar checker installation),
+        // see https://issues.apache.org/ooo/show_bug.cgi?id=116409
+        //clearSvcInfoArray(pAvailGrammarSvcs);  pAvailGrammarSvcs = 0;
         GetAvailableGrammarSvcs_Impl();
         pInfoArray = pAvailGrammarSvcs;
     }
