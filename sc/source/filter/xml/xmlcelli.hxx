@@ -98,15 +98,16 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     bool ContextIsEmpty() const;
     bool CellsAreRepeated() const;
 
-    void AddTextCellToDoc     ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
-                                const ::boost::optional< rtl::OUString >& pOUText );
-    void AddNumberCellToDoc   ( const ScAddress& rScCurrentPos );
-    void AddCellsToTable      ( const ScAddress& rScCellPos,
-                                const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rScCurrentPos );
-    void AddNonFormulaCells   ( const ScAddress& rScCellPos,
-                                const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange );
-    void AddFormulaCell       ( const ScAddress& rScCellPos,
-                                const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange );
+    void AddTextCellToDoc           ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
+                                      const ::boost::optional< rtl::OUString >& pOUText );
+    void AddNumberCellToDoc         ( const ScAddress& rScCurrentPos );
+    void AddCellsToTable            ( const ScAddress& rScCellPos,
+                                      const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rScCurrentPos );
+    void AddNonFormulaCells         ( const ScAddress& rScCellPos,
+                                      const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange );
+    void AddNonMatrixFormulaCell    ( const ScAddress& rScCurrentPos );
+    void AddFormulaCell             ( const ScAddress& rScCellPos,
+                                      const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange );
 
 public:
 
