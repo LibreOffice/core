@@ -1341,9 +1341,9 @@ void SAL_CALL ScDataPilotTableObj::addModifyListener( const uno::Reference<util:
     SolarMutexGuard aGuard;
 
     uno::Reference<util::XModifyListener> *pObj = new uno::Reference<util::XModifyListener>( aListener );
-    aModifyListeners.Insert( pObj, aModifyListeners.Count() );
+    aModifyListeners.push_back( pObj );
 
-    if ( aModifyListeners.Count() == 1 )
+    if ( aModifyListeners.size() == 1 )
     {
         acquire();  // don't lose this object (one ref for all listeners)
     }
@@ -1356,15 +1356,15 @@ void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<ut
 
     acquire();      // in case the listeners have the last ref - released below
 
-    sal_uInt16 nCount = aModifyListeners.Count();
+    sal_uInt16 nCount = aModifyListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XModifyListener> *pObj = aModifyListeners[n];
-        if ( *pObj == aListener )
+        uno::Reference<util::XModifyListener>& rObj = aModifyListeners[n];
+        if ( rObj == aListener )
         {
-            aModifyListeners.DeleteAndDestroy( n );
+            aModifyListeners.erase( aModifyListeners.begin() + n );
 
-            if ( aModifyListeners.Count() == 0 )
+            if ( aModifyListeners.empty() )
             {
                 release();      // release the ref for the listeners
             }
@@ -1412,8 +1412,8 @@ void ScDataPilotTableObj::Refreshed_Impl()
     // the EventObject holds a Ref to this object until after the listener calls
 
     ScDocument* pDoc = GetDocShell()->GetDocument();
-    for ( sal_uInt16 n=0; n<aModifyListeners.Count(); n++ )
-        pDoc->AddUnoListenerCall( *aModifyListeners[n], aEvent );
+    for ( sal_uInt16 n=0; n<aModifyListeners.size(); n++ )
+        pDoc->AddUnoListenerCall( aModifyListeners[n], aEvent );
 }
 
 // ============================================================================

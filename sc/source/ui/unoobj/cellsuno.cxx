@@ -885,7 +885,6 @@ SC_SIMPLE_SERVICE_INFO( ScTableRowObj, "ScTableRowObj", "com.sun.star.table.Tabl
 
 //------------------------------------------------------------------------
 
-SV_IMPL_PTRARR( XModifyListenerArr_Impl, XModifyListenerPtr );
 SV_IMPL_PTRARR( ScNamedEntryArr_Impl, ScNamedEntryPtr );
 
 //------------------------------------------------------------------------
@@ -1601,7 +1600,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             RefChanged();
 
             // any change of the range address is broadcast to value (modify) listeners
-            if ( aValueListeners.Count() )
+            if ( !aValueListeners.empty() )
                 bGotDataChangedHint = sal_True;
 
             if ( pUndoRanges )
@@ -1618,16 +1617,16 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             ForgetCurrentAttrs();
             pDocShell = NULL;           // invalid
 
-            if ( aValueListeners.Count() != 0 )
+            if ( !aValueListeners.empty() )
             {
                 //  dispose listeners
 
                 lang::EventObject aEvent;
                 aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-                for ( sal_uInt16 n=0; n<aValueListeners.Count(); n++ )
-                    (*aValueListeners[n])->disposing( aEvent );
+                for ( sal_uInt16 n=0; n<aValueListeners.size(); n++ )
+                    aValueListeners[n]->disposing( aEvent );
 
-                aValueListeners.DeleteAndDestroy( 0, aValueListeners.Count() );
+                aValueListeners.clear();
 
                 //  The listeners can't have the last ref to this, as it's still held
                 //  by the DocShell.
@@ -1654,8 +1653,8 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 // the EventObject holds a Ref to this object until after the listener calls
 
                 ScDocument* pDoc = pDocShell->GetDocument();
-                for ( sal_uInt16 n=0; n<aValueListeners.Count(); n++ )
-                    pDoc->AddUnoListenerCall( *aValueListeners[n], aEvent );
+                for ( sal_uInt16 n=0; n<aValueListeners.size(); n++ )
+                    pDoc->AddUnoListenerCall( aValueListeners[n], aEvent );
 
                 bGotDataChangedHint = false;
             }
@@ -1665,7 +1664,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             // broadcast from DoHardRecalc - set bGotDataChangedHint
             // (SFX_HINT_DATACHANGED follows separately)
 
-            if ( aValueListeners.Count() )
+            if ( !aValueListeners.empty() )
                 bGotDataChangedHint = sal_True;
         }
     }
@@ -1679,7 +1678,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             aRanges = rUndoHint.GetRanges();
 
             RefChanged();
-            if ( aValueListeners.Count() )
+            if ( !aValueListeners.empty() )
                 bGotDataChangedHint = sal_True;     // need to broadcast the undo, too
         }
     }
@@ -1689,7 +1688,7 @@ void ScCellRangesBase::RefChanged()
 {
     //! adjust XChartDataChangeEventListener
 
-    if ( pValueListener && aValueListeners.Count() != 0 )
+    if ( pValueListener && !aValueListeners.empty() )
     {
         pValueListener->EndListeningAll();
 
@@ -3412,9 +3411,9 @@ void SAL_CALL ScCellRangesBase::addModifyListener( const uno::Reference<util::XM
 
     uno::Reference<util::XModifyListener> *pObj =
             new uno::Reference<util::XModifyListener>( aListener );
-    aValueListeners.Insert( pObj, aValueListeners.Count() );
+    aValueListeners.push_back( pObj );
 
-    if ( aValueListeners.Count() == 1 )
+    if ( aValueListeners.size() == 1 )
     {
         if (!pValueListener)
             pValueListener = new ScLinkListener( LINK( this, ScCellRangesBase, ValueListenerHdl ) );
@@ -3437,15 +3436,15 @@ void SAL_CALL ScCellRangesBase::removeModifyListener( const uno::Reference<util:
 
     acquire();      // in case the listeners have the last ref - released below
 
-    sal_uInt16 nCount = aValueListeners.Count();
+    sal_uInt16 nCount = aValueListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XModifyListener> *pObj = aValueListeners[n];
-        if ( *pObj == aListener )
+        uno::Reference<util::XModifyListener>& rObj = aValueListeners[n];
+        if ( rObj == aListener )
         {
-            aValueListeners.DeleteAndDestroy( n );
+            aValueListeners.erase( aValueListeners.begin() + n );
 
-            if ( aValueListeners.Count() == 0 )
+            if ( aValueListeners.empty() )
             {
                 if (pValueListener)
                     pValueListener->EndListeningAll();

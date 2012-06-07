@@ -2512,7 +2512,7 @@ ScChart2DataSequence::~ScChart2DataSequence()
 
 void ScChart2DataSequence::RefChanged()
 {
-    if( m_pValueListener && m_aValueListeners.Count() != 0 )
+    if( m_pValueListener && !m_aValueListeners.empty() )
     {
         m_pValueListener->EndListeningAll();
 
@@ -2773,7 +2773,7 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
     RefChanged();
 
     // any change of the range address is broadcast to value (modify) listeners
-    if ( m_aValueListeners.Count() )
+    if ( !m_aValueListeners.empty() )
         m_bGotDataChangedHint = true;
 }
 
@@ -2854,8 +2854,8 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
                 if( m_pDocument )
                 {
-                    for ( sal_uInt16 n=0; n<m_aValueListeners.Count(); n++ )
-                        m_pDocument->AddUnoListenerCall( *m_aValueListeners[n], aEvent );
+                    for ( sal_uInt16 n=0; n<m_aValueListeners.size(); n++ )
+                        m_pDocument->AddUnoListenerCall( m_aValueListeners[n], aEvent );
                 }
 
                 m_bGotDataChangedHint = false;
@@ -2866,7 +2866,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             // broadcast from DoHardRecalc - set m_bGotDataChangedHint
             // (SFX_HINT_DATACHANGED follows separately)
 
-            if ( m_aValueListeners.Count() )
+            if ( !m_aValueListeners.empty() )
                 m_bGotDataChangedHint = true;
         }
     }
@@ -3405,9 +3405,9 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
     ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens);
     uno::Reference<util::XModifyListener> *pObj =
             new uno::Reference<util::XModifyListener>( aListener );
-    m_aValueListeners.Insert( pObj, m_aValueListeners.Count() );
+    m_aValueListeners.push_back( pObj );
 
-    if ( m_aValueListeners.Count() == 1 )
+    if ( m_aValueListeners.size() == 1 )
     {
         if (!m_pValueListener)
             m_pValueListener = new ScLinkListener( LINK( this, ScChart2DataSequence, ValueListenerHdl ) );
@@ -3446,15 +3446,15 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
 
     acquire();      // in case the listeners have the last ref - released below
 
-    sal_uInt16 nCount = m_aValueListeners.Count();
+    sal_uInt16 nCount = m_aValueListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XModifyListener> *pObj = m_aValueListeners[n];
-        if ( *pObj == aListener )
+        uno::Reference<util::XModifyListener>& rObj = m_aValueListeners[n];
+        if ( rObj == aListener )
         {
-            m_aValueListeners.DeleteAndDestroy( n );
+            m_aValueListeners.erase( m_aValueListeners.begin() + n );
 
-            if ( m_aValueListeners.Count() == 0 )
+            if ( m_aValueListeners.empty() )
             {
                 if (m_pValueListener)
                     m_pValueListener->EndListeningAll();

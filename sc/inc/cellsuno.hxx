@@ -98,6 +98,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #ifndef __SGI_STL_VECTOR
 #include <vector>
@@ -128,8 +129,8 @@ public:
 };
 
 typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XModifyListener >* XModifyListenerPtr;
-SV_DECL_PTRARR_DEL( XModifyListenerArr_Impl, XModifyListenerPtr, 4 )
+            ::com::sun::star::util::XModifyListener > XModifyListenerRef;
+typedef boost::ptr_vector<XModifyListenerRef> XModifyListenerArr_Impl;
 
 class ScNamedEntry;
 typedef ScNamedEntry* ScNamedEntryPtr;
