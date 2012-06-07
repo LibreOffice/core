@@ -115,6 +115,7 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
     pos_ = static_cast< char * >(fileAddress_);
     end_ = pos_ + fileSize_;
     state_ = STATE_CONTENT;
+    firstAttribute_ = true;
 }
 
 XmlReader::~XmlReader() {
