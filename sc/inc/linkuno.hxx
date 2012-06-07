@@ -54,15 +54,15 @@
 #include "externalrefmgr.hxx"
 
 #include <boost/unordered_map.hpp>
-#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScAreaLink;
 class ScDocShell;
 class ScTableLink;
 
 typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XRefreshListener >* XRefreshListenerPtr;
-SV_DECL_PTRARR_DEL( XRefreshListenerArr_Impl, XRefreshListenerPtr, 4 )
+            ::com::sun::star::util::XRefreshListener > XRefreshListenerRef;
+typedef boost::ptr_vector<XRefreshListenerRef> XRefreshListenerArr_Impl;
 
 
 

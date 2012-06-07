@@ -76,8 +76,6 @@ const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
 
 //------------------------------------------------------------------------
 
-SV_IMPL_PTRARR( XRefreshListenerArr_Impl, XRefreshListenerPtr );
-
 SC_SIMPLE_SERVICE_INFO( ScAreaLinkObj, "ScAreaLinkObj", "com.sun.star.sheet.CellAreaLink" )
 SC_SIMPLE_SERVICE_INFO( ScAreaLinksObj, "ScAreaLinksObj", "com.sun.star.sheet.CellAreaLinks" )
 SC_SIMPLE_SERVICE_INFO( ScDDELinkObj, "ScDDELinkObj", "com.sun.star.sheet.DDELink" )
@@ -170,10 +168,10 @@ void SAL_CALL ScSheetLinkObj::addRefreshListener(
     SolarMutexGuard aGuard;
     uno::Reference<util::XRefreshListener>* pObj =
             new uno::Reference<util::XRefreshListener>( xListener );
-    aRefreshListeners.Insert( pObj, aRefreshListeners.Count() );
+    aRefreshListeners.push_back( pObj );
 
     //  hold one additional ref to keep this object alive as long as there are listeners
-    if ( aRefreshListeners.Count() == 1 )
+    if ( aRefreshListeners.size() == 1 )
         acquire();
 }
 
@@ -182,14 +180,14 @@ void SAL_CALL ScSheetLinkObj::removeRefreshListener(
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aRefreshListeners.Count();
+    sal_uInt16 nCount = aRefreshListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XRefreshListener>* pObj = aRefreshListeners[n];
-        if ( *pObj == xListener )
+        uno::Reference<util::XRefreshListener>& rObj = aRefreshListeners[n];
+        if ( rObj == xListener )
         {
-            aRefreshListeners.DeleteAndDestroy( n );
-            if ( aRefreshListeners.Count() == 0 )
+            aRefreshListeners.erase( aRefreshListeners.begin() + n );
+            if ( aRefreshListeners.empty() )
                 release();                          // release ref for listeners
             break;
         }
@@ -200,8 +198,8 @@ void ScSheetLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source.set((cppu::OWeakObject*)this);
-    for ( sal_uInt16 n=0; n<aRefreshListeners.Count(); n++ )
-        (*aRefreshListeners[n])->refreshed( aEvent );
+    for ( sal_uInt16 n=0; n<aRefreshListeners.size(); n++ )
+        aRefreshListeners[n]->refreshed( aEvent );
 }
 
 void ScSheetLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
@@ -720,10 +718,10 @@ void SAL_CALL ScAreaLinkObj::addRefreshListener(
     SolarMutexGuard aGuard;
     uno::Reference<util::XRefreshListener>* pObj =
             new uno::Reference<util::XRefreshListener>( xListener );
-    aRefreshListeners.Insert( pObj, aRefreshListeners.Count() );
+    aRefreshListeners.push_back( pObj );
 
     //  hold one additional ref to keep this object alive as long as there are listeners
-    if ( aRefreshListeners.Count() == 1 )
+    if ( aRefreshListeners.size() == 1 )
         acquire();
 }
 
@@ -732,14 +730,14 @@ void SAL_CALL ScAreaLinkObj::removeRefreshListener(
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aRefreshListeners.Count();
+    sal_uInt16 nCount = aRefreshListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XRefreshListener>* pObj = aRefreshListeners[n];
-        if ( *pObj == xListener )
+        uno::Reference<util::XRefreshListener>& rObj = aRefreshListeners[n];
+        if ( rObj == xListener )
         {
-            aRefreshListeners.DeleteAndDestroy( n );
-            if ( aRefreshListeners.Count() == 0 )
+            aRefreshListeners.erase( aRefreshListeners.begin() + n );
+            if ( aRefreshListeners.empty() )
                 release();                          // release ref for listeners
             break;
         }
@@ -750,8 +748,8 @@ void ScAreaLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source.set((cppu::OWeakObject*)this);
-    for ( sal_uInt16 n=0; n<aRefreshListeners.Count(); n++ )
-        (*aRefreshListeners[n])->refreshed( aEvent );
+    for ( sal_uInt16 n=0; n<aRefreshListeners.size(); n++ )
+        aRefreshListeners[n]->refreshed( aEvent );
 }
 
 // XPropertySet
@@ -1161,10 +1159,10 @@ void SAL_CALL ScDDELinkObj::addRefreshListener(
     SolarMutexGuard aGuard;
     uno::Reference<util::XRefreshListener>* pObj =
             new uno::Reference<util::XRefreshListener>( xListener );
-    aRefreshListeners.Insert( pObj, aRefreshListeners.Count() );
+    aRefreshListeners.push_back( pObj );
 
     //  hold one additional ref to keep this object alive as long as there are listeners
-    if ( aRefreshListeners.Count() == 1 )
+    if ( aRefreshListeners.size() == 1 )
         acquire();
 }
 
@@ -1173,14 +1171,14 @@ void SAL_CALL ScDDELinkObj::removeRefreshListener(
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aRefreshListeners.Count();
+    sal_uInt16 nCount = aRefreshListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XRefreshListener>* pObj = aRefreshListeners[n];
-        if ( *pObj == xListener )
+        uno::Reference<util::XRefreshListener>& rObj = aRefreshListeners[n];
+        if ( rObj == xListener )
         {
-            aRefreshListeners.DeleteAndDestroy( n );
-            if ( aRefreshListeners.Count() == 0 )
+            aRefreshListeners.erase( aRefreshListeners.begin() + n );
+            if ( aRefreshListeners.empty() )
                 release();                          // release ref for listeners
             break;
         }
@@ -1262,8 +1260,8 @@ void ScDDELinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source.set((cppu::OWeakObject*)this);
-    for ( sal_uInt16 n=0; n<aRefreshListeners.Count(); n++ )
-        (*aRefreshListeners[n])->refreshed( aEvent );
+    for ( sal_uInt16 n=0; n<aRefreshListeners.size(); n++ )
+        aRefreshListeners[n]->refreshed( aEvent );
 }
 
 //------------------------------------------------------------------------
