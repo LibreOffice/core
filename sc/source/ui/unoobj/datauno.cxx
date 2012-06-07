@@ -66,8 +66,6 @@
 
 using namespace com::sun::star;
 
-SV_IMPL_PTRARR( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr );
-
 //------------------------------------------------------------------------
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
@@ -1992,10 +1990,10 @@ void SAL_CALL ScDatabaseRangeObj::addRefreshListener(
     SolarMutexGuard aGuard;
     uno::Reference<util::XRefreshListener>* pObj =
             new uno::Reference<util::XRefreshListener>( xListener );
-    aRefreshListeners.Insert( pObj, aRefreshListeners.Count() );
+    aRefreshListeners.push_back( pObj );
 
     //  hold one additional ref to keep this object alive as long as there are listeners
-    if ( aRefreshListeners.Count() == 1 )
+    if ( aRefreshListeners.size() == 1 )
         acquire();
 }
 
@@ -2004,14 +2002,14 @@ void SAL_CALL ScDatabaseRangeObj::removeRefreshListener(
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = aRefreshListeners.Count();
+    sal_uInt16 nCount = aRefreshListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XRefreshListener>* pObj = aRefreshListeners[n];
-        if ( *pObj == xListener )
+        uno::Reference<util::XRefreshListener>& rObj = aRefreshListeners[n];
+        if ( rObj == xListener )
         {
-            aRefreshListeners.DeleteAndDestroy( n );
-            if ( aRefreshListeners.Count() == 0 )
+            aRefreshListeners.erase( aRefreshListeners.begin() + n );
+            if ( aRefreshListeners.empty() )
                 release();                          // release ref for listeners
             break;
         }
@@ -2022,8 +2020,8 @@ void ScDatabaseRangeObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source = (cppu::OWeakObject*)this;
-    for ( sal_uInt16 n=0; n<aRefreshListeners.Count(); n++ )
-        (*aRefreshListeners[n])->refreshed( aEvent );
+    for ( sal_uInt16 n=0; n<aRefreshListeners.size(); n++ )
+        aRefreshListeners[n]->refreshed( aEvent );
 }
 
 // XCellRangeSource

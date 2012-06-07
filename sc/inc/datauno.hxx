@@ -59,6 +59,7 @@
 #include <cppuhelper/implbase6.hxx>
 #include "svl/itemprop.hxx"
 #include "svl/lstner.hxx"
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScDBData;
 class ScDocShell;
@@ -70,8 +71,8 @@ class ScDataPilotDescriptorBase;
 struct ScSortParam;
 
 typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XRefreshListener >* XDBRefreshListenerPtr;
-SV_DECL_PTRARR_DEL( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr, 4 )
+            ::com::sun::star::util::XRefreshListener > XDBRefreshListenerRef;
+typedef boost::ptr_vector<XDBRefreshListenerRef> XDBRefreshListenerArr_Impl;
 
 class ScDataUnoConversion
 {
