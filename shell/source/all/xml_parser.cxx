@@ -27,8 +27,8 @@
  ************************************************************************/
 
 
-#include "internal/xml_parser.hxx"
-#include "internal/i_xml_parser_event_handler.hxx"
+#include <internal/xml_parser.hxx>
+#include <internal/i_xml_parser_event_handler.hxx>
 
 #include <assert.h>
 
