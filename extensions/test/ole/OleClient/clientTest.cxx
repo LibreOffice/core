@@ -116,7 +116,6 @@ bool doParameterTest(const Reference<XInvocation> & inv)
     Sequence<Any> seqOut;
 
     Any arArgs[2];
-    Any arValue[2];
     Any arArgs1[4];
 
     NamedArgument arg1(OUString(L"val1"), makeAny((sal_Int32) 123));

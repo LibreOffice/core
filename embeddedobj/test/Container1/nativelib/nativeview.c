@@ -76,7 +76,14 @@ JNIEXPORT jlong JNICALL Java_embeddedobj_test_NativeView_getNativeWindow
     JAWT                          awt     ;
     JAWT_DrawingSurface*          ds      ;
     JAWT_DrawingSurfaceInfo*      dsi     ;
+#ifdef WNT
     JAWT_Win32DrawingSurfaceInfo* dsi_win ;
+#else
+    // FIXME: Where is dsi_x11 defined?
+    // Added below because I'm guessing this test breaks
+    //
+    // JAWT_X11DrawingSurfaceInfo*dsi_x11 ;
+#endif
     jlong                         drawable;
 
     /* Get the AWT */

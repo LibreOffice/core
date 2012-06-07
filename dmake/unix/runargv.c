@@ -844,8 +844,6 @@ int pqid;
 PUBLIC void
 Clean_up_processes()
 {
-    int ret;
-
     if( _procs != NIL(PR) )
     {
       register int i;
@@ -853,6 +851,7 @@ Clean_up_processes()
         if( _procs[i].pr_valid )
         {
         #if !defined(USE_CREATEPROCESS)
+	    int ret;
             if( (ret = kill(_procs[i].pr_pid, SIGTERM)) )
             {
                 fprintf(stderr, "Killing of pid %d from pq[%d] failed with: %s - %d ret: %d\n",

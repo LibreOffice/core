@@ -181,7 +181,6 @@ int pid;
 int status;
 {
    register int i;
-   register PR *pp;
    char     *dir;
 
    for( i=0; i<Max_proc; i++ )

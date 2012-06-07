@@ -31,8 +31,6 @@ dstrlwr(entry, target)
 char *entry;
 char *target;
 {
-   char *p;
-
    if (STOBOOL(DcacheRespCase))
       return;
 

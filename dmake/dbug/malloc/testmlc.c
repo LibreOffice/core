@@ -44,10 +44,6 @@ char **argv;
     int cnt;            /* number of allocated objects */
     int nm = 0;         /* number of mallocs */
     int nre = 0;            /* number of reallocs */
-    int nal;            /* number of allocated objects */
-    int nfre;           /* number of free list objects */
-    long alm;           /* memory in allocated objects */
-    long frem;          /* memory in free list */
     long startsize;         /* size at loop start */
     long endsize;           /* size at loop exit */
     long maxiter = 0;       /* real max # iterations */

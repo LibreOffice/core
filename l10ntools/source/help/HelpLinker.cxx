@@ -642,8 +642,11 @@ void HelpLinker::link() throw( HelpProcessingException )
             const std::string &additionalFileKey = enumer->first;
 
             fs::path fsAdditionalFileName( additionalFileName, fs::native );
-                std::string aNativeStr = fsAdditionalFileName.native_file_string();
-            HCDBG(const char* pStr = aNativeStr.c_str(); std::cerr << pStr << std::endl);
+            HCDBG({
+                    std::string aNativeStr = fsAdditionalFileName.native_file_string();
+                    const char* pStr = aNativeStr.c_str();
+                    std::cerr << pStr << std::endl;
+            });
 
             fs::path fsTargetName( indexDirParentName / additionalFileKey );
 
