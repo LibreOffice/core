@@ -240,6 +240,42 @@ namespace {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapOffsetY"), "%" SAL_PRIdINT32, aBitmapOffsetY);
     }
 
+    void XShapeDumper::dumpFillBitmapRectanglePointAsAttribute(drawing::RectanglePoint eBitmapRectanglePoint, xmlTextWriterPtr xmlWriter)
+    {
+        switch(eBitmapRectanglePoint)
+        {
+            case drawing::RectanglePoint_LEFT_TOP:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "LEFT_TOP");
+                break;
+            case drawing::RectanglePoint_MIDDLE_TOP:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "MIDDLE_TOP");
+                break;
+            case drawing::RectanglePoint_RIGHT_TOP:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "RIGHT_TOP");
+                break;
+            case drawing::RectanglePoint_LEFT_MIDDLE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "LEFT_MIDDLE");
+                break;
+            case drawing::RectanglePoint_MIDDLE_MIDDLE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "MIDDLE_MIDDLE");
+                break;
+            case drawing::RectanglePoint_RIGHT_MIDDLE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "RIGHT_MIDDLE");
+                break;
+            case drawing::RectanglePoint_LEFT_BOTTOM:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "LEFT_BOTTOM");
+                break;
+            case drawing::RectanglePoint_MIDDLE_BOTTOM:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "MIDDLE_BOTTOM");
+                break;
+            case drawing::RectanglePoint_RIGHT_BOTTOM:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "RIGHT_BOTTOM");
+                break;
+            default:
+                break;
+        }
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -396,6 +432,12 @@ namespace {
                 sal_Int32 aBitmapOffsetY;
                 if(anotherAny >>= aBitmapOffsetY)
                     dumpFillBitmapOffsetYAsAttribute(aBitmapOffsetY, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapRectanglePoint");
+                drawing::RectanglePoint eBitmapRectanglePoint;
+                if(anotherAny >>= eBitmapRectanglePoint)
+                    dumpFillBitmapRectanglePointAsAttribute(eBitmapRectanglePoint, xmlWriter);
             }
         }
 

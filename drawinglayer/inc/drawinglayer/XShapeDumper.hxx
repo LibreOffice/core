@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/drawing/RectanglePoint.hpp>
 
 #ifndef ChartViewDumper_hxx
 #define ChartViewDumper_hxx
@@ -64,6 +65,7 @@ private:
     void dumpFillBitmapPositionOffsetYAsAttribute(sal_Int32 aBitmapPositionOffsetY, xmlTextWriterPtr xmlWriter);
     void dumpFillBitmapOffsetXAsAttribute(sal_Int32 aBitmapOffsetX, xmlTextWriterPtr xmlWriter);
     void dumpFillBitmapOffsetYAsAttribute(sal_Int32 aBitmapOffsetY, xmlTextWriterPtr xmlWriter);
+    void dumpFillBitmapRectanglePointAsAttribute(com::sun::star::drawing::RectanglePoint eBitmapRectanglePoint, xmlTextWriterPtr xmlWriter);
 
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
     void dumpSizeAsAttribute(const com::sun::star::awt::Size& rSize, xmlTextWriterPtr xmlWriter);
