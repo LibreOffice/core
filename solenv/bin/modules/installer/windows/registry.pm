@@ -375,10 +375,8 @@ sub create_registry_table
         my $onelanguage = ${$languagesarrayref}[$m];
 
         my @registrytable = ();
-        my @reg64table = ();
 
         installer::windows::idtglobal::write_idt_header(\@registrytable, "registry");
-        installer::windows::idtglobal::write_idt_header(\@reg64table, "reg64");
 
         for ( my $i = 0; $i <= $#{$registryref}; $i++ )
         {
@@ -397,7 +395,6 @@ sub create_registry_table
             $registry{'Key'} = get_registry_key($oneregistry, $allvariableshashref);
             $registry{'Name'} = get_registry_name($oneregistry, $allvariableshashref);
             $registry{'Value'} = get_registry_value($oneregistry, $allvariableshashref);
-            $registry{'Val64'} = get_registry_val64($oneregistry, $allvariableshashref);
             $registry{'Component_'} = get_registry_component($oneregistry, $allvariableshashref);
 
             # Collecting all components
@@ -432,11 +429,7 @@ sub create_registry_table
             my $oneline = $registry{'Registry'} . "\t" . $registry{'Root'} . "\t" . $registry{'Key'} . "\t"
                         . $registry{'Name'} . "\t" . $registry{'Value'} . "\t" . $registry{'Component_'} . "\n";
 
-            my $oneline64 = $registry{'Registry'} . "\t" . $registry{'Root'} . "\t" . $registry{'Key'} . "\t"
-                        . $registry{'Name'} . "\t" . $registry{'Val64'} . "\t" . $registry{'Component_'} . "\n";
-
-            if ( ! ( $style =~ /\bX64_ONLY\b/ )) { push(@registrytable, $oneline); }    # standard registry table for 32 Bit
-            if (( $style =~ /\bX64\b/ ) || ( $style =~ /\bX64_ONLY\b/ )) { push(@reg64table , $oneline64); }
+            push(@registrytable, $oneline);
         }
 
         # If there are added user registry keys for files collected in
@@ -452,11 +445,6 @@ sub create_registry_table
         my $registrytablename = $basedir . $installer::globals::separator . "Registry.idt" . "." . $onelanguage;
         installer::files::save_file($registrytablename ,\@registrytable);
         my $infoline = "Created idt file: $registrytablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-
-        $registrytablename = $basedir . $installer::globals::separator . "Reg64.idt" . "." . $onelanguage;
-        installer::files::save_file($registrytablename ,\@reg64table );
-        $infoline = "Created idt file: $registrytablename\n";
         push(@installer::globals::logfileinfo, $infoline);
     }
 }
