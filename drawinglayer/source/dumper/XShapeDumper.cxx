@@ -214,6 +214,12 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
+    void XShapeDumper::dumpFillBitmapURLAsAttribute(rtl::OUString sBitmapURL, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapURL"), "%s",
+            rtl::OUStringToOString(sBitmapURL, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -340,6 +346,12 @@ namespace {
                 uno::Reference<awt::XBitmap> xBitmap(xShape, uno::UNO_QUERY);
                 if(anotherAny >>= xBitmap)
                     dumpFillBitmapAsElement(xBitmap, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapURL");
+                rtl::OUString sBitmapURL;
+                if(anotherAny >>= sBitmapURL)
+                    dumpFillBitmapURLAsAttribute(sBitmapURL, xmlWriter);
             }
         }
 
