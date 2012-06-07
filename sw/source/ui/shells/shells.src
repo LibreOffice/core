@@ -66,10 +66,6 @@ String STR_NO_ADDRESSBOOK
 {
         Text [ en-US ] = "An Address Book does not exist" ;
 };
-String STR_NOTIZ_INSERT
-{
-        Text [ en-US ] = "Insert Note" ;
-};
 String STR_REDLINE_COMMENT
 {
         Text [ en-US ] = "Comment: " ;
