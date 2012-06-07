@@ -112,7 +112,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     nMergedRows(1),
     nRepeatedRows(nTempRepeatedRows),
     nMergedCols(1),
-    nCellsRepeated(1),
+    nColsRepeated(1),
     rXMLImport((ScXMLImport&)rImport),
     eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
     nCellType(util::NumberFormat::TEXT),
@@ -166,7 +166,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 nMatrixRows = static_cast<SCROW>(sValue.toInt32());
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
-                nCellsRepeated = static_cast<SCCOL>(std::max( sValue.toInt32(), (sal_Int32) 1 ));
+                nColsRepeated = static_cast<SCCOL>(std::max( sValue.toInt32(), (sal_Int32) 1 ));
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
                 nCellType = GetScImport().GetCellType(sValue);
@@ -542,7 +542,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
     if (CellExists(aCellAddress) && pContentValidationName && !pContentValidationName->isEmpty())
     {
         sal_Int32 nBottom = aCellAddress.Row + static_cast<sal_Int32>(nRepeatedRows) - 1;
-        sal_Int32 nRight = aCellAddress.Column + static_cast<sal_Int32>(nCellsRepeated) - 1;
+        sal_Int32 nRight = aCellAddress.Column + static_cast<sal_Int32>(nColsRepeated) - 1;
         if (nBottom > MAXROW)
             nBottom = MAXROW;
         if (nRight > MAXCOL)
@@ -841,7 +841,7 @@ void ScXMLTableRowCellContext::AddCellsToTable( const ScAddress& rScCellPos,
 {
     ScMyTables& rTables = rXMLImport.GetTables();
     bool bWasEmpty = bIsEmpty;
-    for (SCCOL i = 0; i < nCellsRepeated; ++i)
+    for (SCCOL i = 0; i < nColsRepeated; ++i)
     {
         rScCurrentPos.SetCol( rScCellPos.Col() + i );
         if (i > 0)
@@ -936,7 +936,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rScCellPos, cons
         if (xCell.is())
         {
             SetCellProperties(xCell); // set now only the validation
-            OSL_ENSURE(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
+            OSL_ENSURE(((nColsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
             rXMLImport.GetStylesImportHelper()->AddCell(rScCellPos);
             if (!bIsMatrix)
             {
@@ -1026,16 +1026,27 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rScCellPos, cons
     }
 }
 
+bool ScXMLTableRowCellContext::ContextIsEmpty() const
+{
+    return !( (pContentValidationName && !pContentValidationName->isEmpty()) ||
+              mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource );
+}
+
+bool ScXMLTableRowCellContext::CellsAreRepeated() const
+{
+    return ( (nColsRepeated > 1) || (nRepeatedRows > 1) );
+}
+
 void ScXMLTableRowCellContext::EndElement()
 {
-    if (!bHasSubTable)
+    if( !bHasSubTable )
     {
-        if (bHasTextImport && rXMLImport.GetRemoveLastChar())
+        if( bHasTextImport && rXMLImport.GetRemoveLastChar() )
         {
             UniReference< XMLTextImportHelper > aTextImport = rXMLImport.GetTextImport();
-            if (aTextImport->GetCursor().is())
+            if( aTextImport->GetCursor().is() )
             {
-                if( aTextImport->GetCursor()->goLeft( 1, true ) )
+                if( aTextImport->GetCursor()->goLeft(1, true) )
                 {
                     aTextImport->GetText()->insertString(
                         aTextImport->GetCursorAsRange(), rtl::OUString(),
@@ -1047,49 +1058,47 @@ void ScXMLTableRowCellContext::EndElement()
         ScMyTables& rTables = rXMLImport.GetTables();
 
         ScAddress aScCellPos = rTables.GetRealScCellPos();
-        if (aScCellPos.Col() > 0 && nRepeatedRows > 1)
+        if( aScCellPos.Col() > 0 && nRepeatedRows > 1 )
             aScCellPos.SetRow( aScCellPos.Row() - (nRepeatedRows - 1) );
 
         uno::Reference<table::XCellRange> xCellRange(rTables.GetCurrentXCellRange());
-        if (xCellRange.is())
+        if( xCellRange.is() )
         {
-            if (bIsMerged)
-                DoMerge(aScCellPos, nMergedCols - 1, nMergedRows - 1);
-            if ( !pOUFormula )
+            if( bIsMerged )
+                DoMerge( aScCellPos, nMergedCols - 1, nMergedRows - 1 );
+            if( !pOUFormula )
             {
                 ::boost::optional< rtl::OUString > pOUText;
 
-                if(nCellType == util::NumberFormat::TEXT)
+                if( nCellType == util::NumberFormat::TEXT )
                 {
-                    if (xLockable.is())
+                    if( xLockable.is() )
                         xLockable->removeActionLock();
 
                     // #i61702# The formatted text content of xBaseCell / xLockable is invalidated,
                     // so it can't be used after calling removeActionLock (getString always uses the document).
 
-                    if (scCellExists(aScCellPos) && ((nCellsRepeated > 1) || (nRepeatedRows > 1)))
+                    if( scCellExists(aScCellPos) && CellsAreRepeated() )
                         pOUText.reset( getOutputString(rXMLImport.GetDocument(), aScCellPos) );
 
-                    if (!pOUTextContent && !pOUText && !pOUTextValue)
+                    if( !pOUTextContent && !pOUText && !pOUTextValue )
                             bIsEmpty = true;
                 }
 
                 ScAddress aScCurrentPos( aScCellPos );
-                if ((pContentValidationName && !pContentValidationName->isEmpty()) ||
-                    mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
+                if( !ContextIsEmpty() )
                     bIsEmpty = false;
 
                 AddCellsToTable( aScCellPos, pOUText, aScCurrentPos );
 
-                if (nCellsRepeated > 1 || nRepeatedRows > 1)
+                if( CellsAreRepeated() )
                 {
                     SetCellProperties(xCellRange, aScCellPos); // set now only the validation for the complete range with the given cell as start cell
                     SCCOL nStartCol( aScCellPos.Col() < MAXCOL ? aScCellPos.Col() : MAXCOL );
                     SCROW nStartRow( aScCellPos.Row() < MAXROW ? aScCellPos.Row() : MAXROW );
-                    SCCOL nEndCol( aScCellPos.Col() + nCellsRepeated - 1 < MAXCOL ? aScCellPos.Col() + nCellsRepeated - 1 : MAXCOL );
+                    SCCOL nEndCol( aScCellPos.Col() + nColsRepeated - 1 < MAXCOL ? aScCellPos.Col() + nColsRepeated - 1 : MAXCOL );
                     SCROW nEndRow( aScCellPos.Row() + nRepeatedRows - 1 < MAXROW ? aScCellPos.Row() + nRepeatedRows - 1 : MAXROW );
-                    ScRange aScRange( nStartCol, nStartRow, aScCellPos.Tab(),
-                        nEndCol, nEndRow, aScCellPos.Tab() );
+                    ScRange aScRange( nStartCol, nStartRow, aScCellPos.Tab(), nEndCol, nEndRow, aScCellPos.Tab() );
                     rXMLImport.GetStylesImportHelper()->AddRange(aScRange);
                 }
                 else if( scCellExists(aScCellPos) )
@@ -1101,8 +1110,7 @@ void ScXMLTableRowCellContext::EndElement()
             else // if ( pOUFormula )
             {
                 AddFormulaCell( aScCellPos, xCellRange );
-
-            } // if ( pOUFormula )
+            }
         }
         UnlockSolarMutex();
     }
@@ -1110,7 +1118,7 @@ void ScXMLTableRowCellContext::EndElement()
     bHasSubTable = false;
     nMergedCols = 1;
     nMergedRows = 1;
-    nCellsRepeated = 1;
+    nColsRepeated = 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

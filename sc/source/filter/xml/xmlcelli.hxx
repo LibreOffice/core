@@ -61,7 +61,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     ScMyImpCellRangeSource* pCellRangeSource;
     double      fValue;
     SCROW       nMergedRows, nMatrixRows, nRepeatedRows;
-    SCCOL       nMergedCols, nMatrixCols, nCellsRepeated;
+    SCCOL       nMergedCols, nMatrixCols, nColsRepeated;
     ScXMLImport& rXMLImport;
     formula::FormulaGrammar::Grammar  eGrammar;
     sal_Int16   nCellType;
@@ -94,6 +94,9 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     {
         return (aCellPos.Column <= MAXCOL && aCellPos.Row <= MAXROW);
     }
+
+    bool ContextIsEmpty() const;
+    bool CellsAreRepeated() const;
 
     void AddTextCellToDoc     ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
                                 const ::boost::optional< rtl::OUString >& pOUText );
