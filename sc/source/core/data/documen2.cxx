@@ -584,10 +584,6 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
     }
 }
 
-void ScDocument::DeleteNumberFormat( const sal_uInt32* /* pDelKeys */, sal_uInt32 /* nCount */ )
-{
-}
-
 void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                           ScBaseCell* pCell, sal_uLong nFormatIndex, bool bForceTab )
 {

@@ -425,10 +425,6 @@ void ScTabViewShell::UpdateNumberFormatter(
         for ( sal_uInt16 i=0; i<nDelCount; i++ )
             rInfoItem.GetNumberFormatter()->DeleteEntry( pDelArr[i] );
     }
-
-    // sollte besser UpdateNumberFormats() heissen ?
-    pDoc->DeleteNumberFormat( rInfoItem.GetDelArray(),
-                              rInfoItem.GetDelCount() );
 }
 
 

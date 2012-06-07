@@ -1266,7 +1266,6 @@ public:
                                     bool bPutToPool = false );
     SC_DLLPUBLIC void           SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr,
                                     bool bPutToPool = false );
-    void            DeleteNumberFormat( const sal_uInt32* pDelKeys, sal_uInt32 nCount );
 
     void            AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     sal_uInt16 nFormatNo, const ScMarkData& rMark );
