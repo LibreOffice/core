@@ -363,6 +363,7 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName == "flip" )       mrTypeModel.maFlip = aValue;
             else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "visibility" ) ) )
                 mrTypeModel.mbVisible = !aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hidden") );
+            else if( aName == "mso-wrap-style" ) mrTypeModel.maWrapStyle = aValue;
         }
     }
 }

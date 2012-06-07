@@ -426,6 +426,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
     }
 
+    if (xShape.is() && maTypeModel.maWrapStyle == "none")
+        PropertySet(xShape).setAnyProperty(PROP_AnchorType, makeAny(text::TextContentAnchorType_AS_CHARACTER));
+
     return xShape;
 }
 
