@@ -65,6 +65,7 @@ public:
     void testN760764();
     void testN764005();
     void testSmartart();
+    void testN764745();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testN760764);
     CPPUNIT_TEST(testN764005);
     CPPUNIT_TEST(testSmartart);
+    CPPUNIT_TEST(testN764745);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -470,6 +472,23 @@ void Test::testSmartart()
     xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPropertySet->getPropertyValue("ParaAdjust") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), nValue); // Paragraph properties are imported
+}
+
+void Test::testN764745()
+{
+    load( "n764745-alignment.docx" );
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    // The paragraph is right-aligned and the picture does not explicitly specify position,
+    // so check it's anchored as character and in the right side of the document.
+    text::TextContentAnchorType anchorType;
+    xPropertySet->getPropertyValue("AnchorType") >>= anchorType;
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, anchorType);
+    awt::Point pos;
+    xPropertySet->getPropertyValue("AnchorPosition") >>= pos;
+    // not sure how to find out the document width, but in my test the anchor x is >12000
+    CPPUNIT_ASSERT( pos.X > 10000 );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
