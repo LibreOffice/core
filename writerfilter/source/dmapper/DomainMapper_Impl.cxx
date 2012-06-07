@@ -3109,7 +3109,33 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_SECTION      : break;
                     case FIELD_SECTIONPAGES : break;
-                    case FIELD_SEQ          : break;
+                    case FIELD_SEQ          :
+                    {
+                        // command looks like: " SEQ Table \* ARABIC "
+                        ::rtl::OUString sCmd(pContext->GetCommand());
+                        // find the sequence name, e.g. "SEQ"
+                        ::rtl::OUString sSeqName = lcl_FindQuotedText(sCmd, "SEQ ", '\\');
+                        sSeqName = sSeqName.trim();
+
+                        // create a sequence field master using the sequence name
+                        uno::Reference< beans::XPropertySet > xMaster = FindOrCreateFieldMaster(
+                                    "com.sun.star.text.FieldMaster.SetExpression",
+                                    sSeqName);
+
+                        xMaster->setPropertyValue(
+                            rPropNameSupplier.GetName(PROP_SUB_TYPE),
+                            uno::makeAny(text::SetVariableType::SEQUENCE));
+
+                        // apply the numbering type
+                        xFieldProperties->setPropertyValue(
+                            rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                            uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
+
+                        // attach the master to the field
+                        uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
+                        xDependentField->attachTextFieldMaster( xMaster );
+                    }
+                    break;
                     case FIELD_SET          : break;
                     case FIELD_SKIPIF       : break;
                     case FIELD_STYLEREF     : break;
