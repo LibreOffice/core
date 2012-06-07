@@ -5530,14 +5530,9 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
             }
         }
     }
-    ScDocShell* pDocSh= excel::GetDocShellFromRange( mxRange );
 
     FillCmd eCmd = FILL_AUTO;
     FillDateCmd eDateCmd = FILL_DAY;
-
-#ifdef VBA_OOBUILD_HACK
-    double fEndValue =  MAXDOUBLE;
-#endif
 
     if ( Type.hasValue() )
     {
@@ -5581,6 +5576,8 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
         }
     }
 #ifdef VBA_OOBUILD_HACK
+    double fEndValue =  MAXDOUBLE;
+    ScDocShell* pDocSh = excel::GetDocShellFromRange( mxRange );
     pDocSh->GetDocFunc().FillAuto( aSourceRange, NULL, eDir, eCmd, eDateCmd,
                                    nCount, fStep, fEndValue, sal_True, sal_True );
 #endif

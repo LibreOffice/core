@@ -46,10 +46,12 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>
@@ -172,9 +174,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             Reference< XURLTransformer > xTrans;
             try
             {
-                xTrans.set( m_xServiceFactory->createInstance(
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+                xTrans.set( URLTransformer::create(::comphelper::ComponentContext(m_xServiceFactory).getUNOContext()) );
                 m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
                 if ( m_xConfigData.is() )
                 {

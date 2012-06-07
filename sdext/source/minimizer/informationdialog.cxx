@@ -36,6 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 #include "com/sun/star/util/URL.hpp"
+#include "com/sun/star/util/URLTransformer.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
 
 #define DIALOG_WIDTH    240
@@ -300,21 +301,17 @@ void InformationDialog::InitDialog()
     rtl::OUString aTitle;
     if ( !maSaveAsURL.isEmpty() )
     {
-        Reference< XURLTransformer > xURLTransformer( mxMSF->getServiceManager()->createInstanceWithContext(
-                OUString( "com.sun.star.util.URLTransformer"  ), mxMSF ), UNO_QUERY );
-        if ( xURLTransformer.is() )
-        {
-            util::URL aURL, aPresentationURL;
-            aURL.Complete = maSaveAsURL;
-            xURLTransformer->parseSmart( aURL, rtl::OUString() );
+        Reference< XURLTransformer > xURLTransformer( URLTransformer::create(mxMSF) );
+        util::URL aURL, aPresentationURL;
+        aURL.Complete = maSaveAsURL;
+        xURLTransformer->parseSmart( aURL, rtl::OUString() );
 
-            const OUString sFileProtocol( "file:///"  );
-            aPresentationURL.Complete = sFileProtocol.concat( aURL.Name );
-            aTitle = xURLTransformer->getPresentation( aPresentationURL, sal_False );
+        const OUString sFileProtocol( "file:///" );
+        aPresentationURL.Complete = sFileProtocol.concat( aURL.Name );
+        aTitle = xURLTransformer->getPresentation( aPresentationURL, sal_False );
 
-            if ( aTitle.match( sFileProtocol, 0 ) )
-                aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), rtl::OUString() );
-        }
+        if ( aTitle.match( sFileProtocol, 0 ) )
+            aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), rtl::OUString() );
     }
 
     OUString aInfoString( getString( eInfoString ) );

@@ -46,12 +46,14 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -559,41 +561,38 @@ SbError SbiStream::Open
         Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
         if( xSMgr.is() )
         {
-            Reference< XSimpleFileAccess >
-                xSFI( xSMgr->createInstance( ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
-            if( xSFI.is() )
+            Reference< XSimpleFileAccess2 >
+                xSFI( SimpleFileAccess::create( comphelper::ComponentContext(xSMgr).getUNOContext() ) );
+            try
             {
-                try
-                {
 
-                // #??? For write access delete file if it already exists (not for appending)
-                if( (nStrmMode & STREAM_WRITE) != 0 && !IsAppend() && !IsBinary() &&
-                    xSFI->exists( aNameStr ) && !xSFI->isFolder( aNameStr ) )
-                {
-                    xSFI->kill( aNameStr );
-                }
+            // #??? For write access delete file if it already exists (not for appending)
+            if( (nStrmMode & STREAM_WRITE) != 0 && !IsAppend() && !IsBinary() &&
+                xSFI->exists( aNameStr ) && !xSFI->isFolder( aNameStr ) )
+            {
+                xSFI->kill( aNameStr );
+            }
 
-                if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
-                {
-                    Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
-                    pStrm = new UCBStream( xIS );
-                }
-                else if( nStrmMode & STREAM_WRITE )
-                {
-                    Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
-                    pStrm = new UCBStream( xIS );
-                }
-                else //if( nStrmMode & STREAM_READ )
-                {
-                    Reference< XInputStream > xIS = xSFI->openFileRead( aNameStr );
-                    pStrm = new UCBStream( xIS );
-                }
+            if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
+            {
+                Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
+                pStrm = new UCBStream( xIS );
+            }
+            else if( nStrmMode & STREAM_WRITE )
+            {
+                Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
+                pStrm = new UCBStream( xIS );
+            }
+            else //if( nStrmMode & STREAM_READ )
+            {
+                Reference< XInputStream > xIS = xSFI->openFileRead( aNameStr );
+                pStrm = new UCBStream( xIS );
+            }
 
-                }
-                catch(const Exception & )
-                {
-                    nError = ERRCODE_IO_GENERAL;
-                }
+            }
+            catch(const Exception & )
+            {
+                nError = ERRCODE_IO_GENERAL;
             }
         }
     }

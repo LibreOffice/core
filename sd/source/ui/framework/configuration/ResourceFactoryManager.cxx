@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <boost/bind.hpp>
 #include <algorithm>
@@ -51,11 +52,8 @@ ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManag
       mxURLTransformer()
 {
     // Create the URL transformer.
-    Reference<lang::XMultiServiceFactory> xServiceManager (
-        ::comphelper::getProcessServiceFactory());
-    mxURLTransformer = Reference<util::XURLTransformer>(
-        xServiceManager->createInstance("com.sun.star.util.URLTransformer"),
-        UNO_QUERY);
+    Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    mxURLTransformer = util::URLTransformer::create(xContext);
 }
 
 

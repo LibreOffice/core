@@ -21,10 +21,10 @@
 # instead of those above.
 
 ifeq ($(gb_FULLDEPS),$(true))
-gb_ccx_dep_generation_options=-MMD -MT $(1) -MP -MF $(4)_
-gb_cxx_dep_copy=&& 	mv $(4)_ $(4)
+gb_cxx_dep_generation_options=-MMD -MT $(1) -MP -MF $(4)_
+gb_cxx_dep_copy=&& mv $(4)_ $(4)
 else
-gb_ccx_dep_generation_options=
+gb_cxx_dep_generation_options=
 gb_cxx_dep_copy=
 endif
 
@@ -62,10 +62,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		$(gb_ccx_dep_generation_options) \
+		$(gb_cxx_dep_generation_options) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
-	    $(gb_ccx_dep_copy) \
+	    $(gb_cxx_dep_copy) \
 		)
 endef
 
@@ -83,10 +83,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
-	    $(gb_ccx_dep_generation_options) \
+	    $(gb_cxx_dep_generation_options) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE) \
-	    $(gb_ccx_dep_copy) \
+	    $(gb_cxx_dep_copy) \
 		)
 endef
 

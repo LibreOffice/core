@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-/*
-#include <tools/datetime.hxx>
-*/
 #include <osl/diagnose.h>
 #include <rtl/crc.h>
 

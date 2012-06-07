@@ -50,6 +50,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include "com/sun/star/util/URLTransformer.hpp"
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -1186,42 +1187,35 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
                              sal_Bool bExistsRecoveryData)
 {
     static ::rtl::OUString SERVICENAME_RECOVERYUI("com.sun.star.comp.svx.RecoveryUI");
-    static ::rtl::OUString SERVICENAME_URLPARSER("com.sun.star.util.URLTransformer");
     static ::rtl::OUString COMMAND_EMERGENCYSAVE("vnd.sun.star.autorecovery:/doEmergencySave");
     static ::rtl::OUString COMMAND_RECOVERY("vnd.sun.star.autorecovery:/doAutoRecovery");
     static ::rtl::OUString COMMAND_CRASHREPORT("vnd.sun.star.autorecovery:/doCrashReport");
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
-    css::uno::Reference< css::frame::XSynchronousDispatch > xRecoveryUI(
+    Reference< css::frame::XSynchronousDispatch > xRecoveryUI(
         xSMGR->createInstance(SERVICENAME_RECOVERYUI),
         css::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::util::XURLTransformer > xURLParser(
-        xSMGR->createInstance(SERVICENAME_URLPARSER),
-        css::uno::UNO_QUERY_THROW);
+    Reference< css::util::XURLTransformer > xURLParser(
+        css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
     css::util::URL aURL;
     if (bEmergencySave)
         aURL.Complete = COMMAND_EMERGENCYSAVE;
+    else if (bExistsRecoveryData)
+        aURL.Complete = COMMAND_RECOVERY;
+    else if (bCrashed && Desktop::isCrashReporterEnabled() )
+        aURL.Complete = COMMAND_CRASHREPORT;
     else
-    {
-        if (bExistsRecoveryData)
-            aURL.Complete = COMMAND_RECOVERY;
-        else
-        if (bCrashed && Desktop::isCrashReporterEnabled() )
-            aURL.Complete = COMMAND_CRASHREPORT;
-    }
+        return false;
 
+    xURLParser->parseStrict(aURL);
+
+    css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
     sal_Bool bRet = sal_False;
-    if ( !aURL.Complete.isEmpty() )
-    {
-        xURLParser->parseStrict(aURL);
-
-        css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
-        aRet >>= bRet;
-    }
-    return bRet;
+    aRet >>= bRet;
+    return !bEmergencySave || bRet;
 }
 
 /*
@@ -1675,40 +1669,8 @@ int Desktop::Main()
                 (!Application::AnyInput( VCL_INPUT_APPEVENT )                          ))
             {
                  RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
-                 Reference< XFrame > xDesktopFrame( xDesktop, UNO_QUERY );
-                 if (xDesktopFrame.is())
-                 {
-                   SetSplashScreenProgress(60);
-                   Reference< XFrame > xBackingFrame;
-                   Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
-
-                   xBackingFrame = xDesktopFrame->findFrame(OUString( "_blank" ), 0);
-                   if (xBackingFrame.is())
-                       xContainerWindow = xBackingFrame->getContainerWindow();
-                   if (xContainerWindow.is())
-                   {
-                       SetDocumentExtendedStyle(xContainerWindow);
-                       SetSplashScreenProgress(75);
-                       Sequence< Any > lArgs(1);
-                       lArgs[0] <<= xContainerWindow;
-
-                       Reference< XController > xBackingComp(
-                           xSMgr->createInstanceWithArguments(OUString( "com.sun.star.frame.StartModule" ), lArgs), UNO_QUERY);
-                        if (xBackingComp.is())
-                        {
-                            Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
-                            // Attention: You MUST(!) call setComponent() before you call attachFrame().
-                            // Because the backing component set the property "IsBackingMode" of the frame
-                            // to true inside attachFrame(). But setComponent() reset this state everytimes ...
-                            xBackingFrame->setComponent(xBackingWin, xBackingComp);
-                            SetSplashScreenProgress(100);
-                            xBackingComp->attachFrame(xBackingFrame);
-                            CloseSplashScreen();
-                            xContainerWindow->setVisible(sal_True);
-                        }
-                    }
-                }
-                RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create BackingComponent" );
+                 ShowBackingComponent(this);
+                 RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create BackingComponent" );
             }
         }
     }
@@ -2356,7 +2318,7 @@ void Desktop::OpenClients()
     // check if a document has been recovered - if there is one of if a document was loaded by cmdline, no default document
     // should be created
     Reference < XComponent > xFirst;
-    sal_Bool bLoaded = sal_False;
+    bool bRecovery = false;
 
     const CommandLineArgs& rArgs = GetCommandLineArgs();
     SvtInternalOptions  aInternalOptions;
@@ -2459,9 +2421,7 @@ void Desktop::OpenClients()
                     ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.AutoRecovery") ),
                     ::com::sun::star::uno::UNO_QUERY_THROW );
 
-            Reference< XURLTransformer > xParser(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.util.URLTransformer") ),
-                    ::com::sun::star::uno::UNO_QUERY_THROW );
+            Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
             css::util::URL aCmd;
             aCmd.Complete = ::rtl::OUString("vnd.sun.star.autorecovery:/disableRecovery");
@@ -2485,7 +2445,6 @@ void Desktop::OpenClients()
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
 
         if ( !getenv ("OOO_DISABLE_RECOVERY") &&
-            ( ! bLoaded ) &&
             (
                 ( bExistsRecoveryData ) || // => crash with files    => recovery
                 ( bCrashed            )    // => crash without files => error report
@@ -2494,22 +2453,10 @@ void Desktop::OpenClients()
         {
             try
             {
-                impl_callRecoveryUI(
+                bRecovery = impl_callRecoveryUI(
                     sal_False          , // false => force recovery instead of emergency save
                     bCrashed           ,
                     bExistsRecoveryData);
-                /* TODO we cant be shure, that at least one document could be recovered here successfully
-                    So we set bLoaded=sal_True to supress opening of the default document.
-                    But we should make it more safe. Otherwhise we have an office without an UI ...
-                    ...
-                    May be we can check the desktop if some documents are existing there.
-                 */
-                Reference< XFramesSupplier > xTasksSupplier(
-                        ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.Desktop") ),
-                        ::com::sun::star::uno::UNO_QUERY_THROW );
-                Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY_THROW );
-                if ( xList->hasElements() )
-                    bLoaded = sal_True;
             }
             catch(const css::uno::Exception& e)
             {
@@ -2541,16 +2488,13 @@ void Desktop::OpenClients()
             OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
 
-        if (
-            ( ! bLoaded            ) &&
-            (   bExistsSessionData )
-           )
+        if ( bExistsSessionData )
         {
             // session management
             try
             {
                 Reference< XSessionManagerListener > r(xSessionListener, UNO_QUERY_THROW);
-                bLoaded = r->doRestore();
+                r->doRestore();
             }
             catch(const com::sun::star::uno::Exception& e)
             {
@@ -2588,8 +2532,6 @@ void Desktop::OpenClients()
          ( !aRequest.aPrintToList.empty() && !aRequest.aPrinterName.isEmpty() ) ||
          !aRequest.aConversionList.empty() )
     {
-        bLoaded = sal_True;
-
         if ( rArgs.HasModuleParam() )
         {
             SvtModuleOptions    aOpt;
@@ -2638,6 +2580,12 @@ void Desktop::OpenClients()
     if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || Application::AnyInput( VCL_INPUT_APPEVENT ) )
         // soffice was started as tray icon ...
         return;
+
+    if ( bRecovery )
+    {
+        ShowBackingComponent(0);
+    }
+    else
     {
         OpenDefault();
     }
@@ -2886,9 +2834,9 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         // The user will try it again, in case nothing happens .-)
         try
         {
-            css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+            Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
-            com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >
+            Reference< css::frame::XDispatchProvider >
                 xDesktop( xSMGR->createInstance( OUString("com.sun.star.frame.Desktop") ),
                 ::com::sun::star::uno::UNO_QUERY );
 
@@ -2896,7 +2844,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             if ( ! xDesktop.is())
                 return;
 
-            css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(rtl::OUString("com.sun.star.util.URLTransformer")), css::uno::UNO_QUERY_THROW);
+            Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
             css::util::URL aCommand;
             if( rAppEvent.GetData() == ::rtl::OUString("PREFERENCES") )
                 aCommand.Complete = rtl::OUString( ".uno:OptionsTreeDialog"  );
@@ -3014,6 +2962,58 @@ void Desktop::DoFirstRunInitializations()
     catch(const ::com::sun::star::uno::Exception&)
     {
         OSL_FAIL( "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
+    }
+}
+
+void Desktop::ShowBackingComponent(Desktop * progress)
+{
+    Reference< XMultiServiceFactory > xSMgr(
+        comphelper::getProcessServiceFactory(), UNO_SET_THROW);
+    Reference< XFrame > xDesktopFrame(
+        xSMgr->createInstance("com.sun.star.frame.Desktop"), UNO_QUERY);
+    if (xDesktopFrame.is())
+    {
+        if (progress != 0)
+        {
+            progress->SetSplashScreenProgress(60);
+        }
+        Reference< XFrame > xBackingFrame;
+        Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+
+        xBackingFrame = xDesktopFrame->findFrame(OUString( "_blank" ), 0);
+        if (xBackingFrame.is())
+            xContainerWindow = xBackingFrame->getContainerWindow();
+        if (xContainerWindow.is())
+        {
+            SetDocumentExtendedStyle(xContainerWindow);
+            if (progress != 0)
+            {
+                progress->SetSplashScreenProgress(75);
+            }
+            Sequence< Any > lArgs(1);
+            lArgs[0] <<= xContainerWindow;
+
+            Reference< XController > xBackingComp(
+                xSMgr->createInstanceWithArguments(OUString( "com.sun.star.frame.StartModule" ), lArgs), UNO_QUERY);
+            if (xBackingComp.is())
+            {
+                Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
+                // Attention: You MUST(!) call setComponent() before you call attachFrame().
+                // Because the backing component set the property "IsBackingMode" of the frame
+                // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+                xBackingFrame->setComponent(xBackingWin, xBackingComp);
+                if (progress != 0)
+                {
+                    progress->SetSplashScreenProgress(100);
+                }
+                xBackingComp->attachFrame(xBackingFrame);
+                if (progress != 0)
+                {
+                    progress->CloseSplashScreen();
+                }
+                xContainerWindow->setVisible(sal_True);
+            }
+        }
     }
 }
 

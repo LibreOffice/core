@@ -197,7 +197,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     String ST_POSTIT
     {
-        Text [ en-US ] = "Note" ;
+        Text [ en-US ] = "Comment" ;
     };
     String ST_SRCH_REP
     {
@@ -282,7 +282,7 @@ String STR_IMGBTN_MARK_DOWN
 };
 String STR_IMGBTN_POSTIT_DOWN
 {
-    Text [ en-US ] = "Next Note" ;
+    Text [ en-US ] = "Next Comment" ;
 };
 String STR_IMGBTN_SRCH_REP_DOWN
 {
@@ -354,7 +354,7 @@ String STR_IMGBTN_MARK_UP
 };
 String STR_IMGBTN_POSTIT_UP
 {
-    Text [ en-US ] = "Previous Note" ;
+    Text [ en-US ] = "Previous Comment" ;
 };
 String STR_IMGBTN_SRCH_REP_UP
 {

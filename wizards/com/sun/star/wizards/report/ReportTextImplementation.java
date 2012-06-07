@@ -264,7 +264,8 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 }
                 getRecordParser().setRecordFieldNames(sNewList);
                 getRecordParser().GroupFieldNames = JavaTools.ArrayoutofString(sGroupFieldNames, PropertyNames.SEMI_COLON);
-                getRecordParser().setCommandType(Integer.valueOf(sCommandType).intValue());
+                int nOrigCommandType = Integer.valueOf(sCommandType).intValue();
+                getRecordParser().setCommandType(nOrigCommandType);
 
                 sMsgQueryCreationImpossible = JavaTools.replaceSubString(sMsgQueryCreationImpossible, getRecordParser().Command, "<STATEMENT>");
                 bgetConnection = getRecordParser().getConnection(_properties);
@@ -278,8 +279,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                         if (getRecordParser().hasEscapeProcessing(oCommand.getPropertySet()))
                         {
                             getRecordParser().Command = (String) oCommand.getPropertySet().getPropertyValue(PropertyNames.COMMAND);
-                            getRecordParser().getSQLQueryComposer().m_xQueryAnalyzer.setQuery(getRecordParser().Command);
-                            getRecordParser().Command = getRecordParser().getSQLQueryComposer().getQuery();
                         }
                         else
                         {
@@ -291,14 +290,24 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                     bexecute = getRecordParser().executeCommand(nCommandType); //sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, sFieldNameList, true);
                     if (bexecute)
                     {
-                        DBMetaData.CommandObject oCommand = getRecordParser().getQueryByName(sQueryName);
                         bexecute = getRecordParser().getFields(sFieldNameList, true);
-                        if (bexecute && getRecordParser().hasEscapeProcessing(oCommand.getPropertySet()))
+
+                        boolean addSort = true;
+                        if ( (nOrigCommandType == CommandType.QUERY) && !sQueryName.equals(PropertyNames.EMPTY_STRING) )
                         {
-                            getRecordParser().getSQLQueryComposer().prependSortingCriteria();
-                            getRecordParser().Command = getRecordParser().getSQLQueryComposer().getQuery();
-                            bexecute = getRecordParser().executeCommand(nCommandType);
+                            DBMetaData.CommandObject oCommand = getRecordParser().getQueryByName(sQueryName);
+                            if (!getRecordParser().hasEscapeProcessing(oCommand.getPropertySet()))
+                                addSort = false;
                         }
+                        if ( !(addSort && bexecute) )
+                        {
+                            return bexecute;
+                        }
+                        getRecordParser().getSQLQueryComposer().m_xQueryAnalyzer.setQuery(getRecordParser().Command);
+                        getRecordParser().getSQLQueryComposer().prependSortingCriteria();
+                        getRecordParser().Command = getRecordParser().getSQLQueryComposer().getQuery();
+
+                        bexecute = getRecordParser().executeCommand(nCommandType);
                     }
                     return bexecute;
                 }

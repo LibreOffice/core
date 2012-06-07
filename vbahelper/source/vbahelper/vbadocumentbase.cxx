@@ -34,6 +34,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -141,11 +142,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
         uno::Reference< frame::XDispatchProvider > xDispatchProvider( xController->getFrame(), uno::UNO_QUERY_THROW );
 
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-        uno::Reference< util::XURLTransformer > xURLTransformer(
-                        xServiceManager->createInstanceWithContext(
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ),
-                            mxContext ),
-                        uno::UNO_QUERY_THROW );
+        uno::Reference< util::XURLTransformer > xURLTransformer( util::URLTransformer::create(mxContext) );
 
         util::URL aURL;
         aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CloseDoc" ) );

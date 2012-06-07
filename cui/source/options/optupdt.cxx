@@ -34,6 +34,7 @@
 #include "optupdt.hrc"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -42,6 +43,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
@@ -362,8 +364,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
         xNameAccess->getByName(UNISTRING("URL")) >>= aURL.Complete;
 
         uno::Reference < util::XURLTransformer > xTransformer(
-            xFactory->createInstance(  UNISTRING( "com.sun.star.util.URLTransformer" ) ),
-            uno::UNO_QUERY_THROW );
+            util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
 
         xTransformer->parseStrict(aURL);
 

@@ -40,7 +40,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -448,8 +450,7 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XURLTransformer > xParser(
-                xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                css::uno::UNO_QUERY_THROW);
+                css::util::URLTransformer::create( ::comphelper::ComponentContext(xSMGR).getUNOContext() ) );
 
     // SAFE -> ----------------------------------
     aLock.reset();

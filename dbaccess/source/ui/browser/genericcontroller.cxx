@@ -37,6 +37,7 @@
 #include <osl/diagnose.h>
 #include "dbustrings.hrc"
 #include <vcl/stdtext.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -46,6 +47,7 @@
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include "UITools.hxx"
 #include "commontypes.hxx"
@@ -206,7 +208,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 
     try
     {
-        m_xUrlTransformer = Reference< XURLTransformer > (_rM->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY);
+        m_xUrlTransformer = URLTransformer::create(comphelper::ComponentContext(_rM).getUNOContext());
     }
     catch(Exception&)
     {

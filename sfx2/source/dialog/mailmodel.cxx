@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
@@ -72,6 +73,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/useroptions.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -570,20 +572,15 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             css::util::URL aPrepareURL;
             css::uno::Reference< css::frame::XDispatch > xPrepareDispatch;
             css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
-            css::uno::Reference< css::util::XURLTransformer > xURLTransformer(
-                        xSMGR->createInstance( rtl::OUString( "com.sun.star.util.URLTransformer" )),
-                        css::uno::UNO_QUERY );
+            css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( ::comphelper::ComponentContext(xSMGR).getUNOContext() ) );
             if( !bSendAsPDF )
             {
                 try
                 {
                     // check if the document needs to be prepared for sending as mail (embedding of links, removal of invisible content)
 
-                    if ( xURLTransformer.is() )
-                    {
-                        aPrepareURL.Complete = rtl::OUString( ".uno:PrepareMailExport" );
-                        xURLTransformer->parseStrict( aPrepareURL );
-                    }
+                    aPrepareURL.Complete = rtl::OUString( ".uno:PrepareMailExport" );
+                    xURLTransformer->parseStrict( aPrepareURL );
 
                     if ( xDispatchProvider.is() )
                     {
@@ -651,11 +648,8 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         css::util::URL aURL;
                         // #i30432# notify that export is finished - the Writer may want to restore removed content
-                        if ( xURLTransformer.is() )
-                        {
-                            aURL.Complete = rtl::OUString( ".uno:MailExportFinished" );
-                            xURLTransformer->parseStrict( aURL );
-                        }
+                        aURL.Complete = rtl::OUString( ".uno:MailExportFinished" );
+                        xURLTransformer->parseStrict( aURL );
 
                         if ( xDispatchProvider.is() )
                         {

@@ -32,7 +32,8 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
@@ -52,6 +53,7 @@
 
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -481,10 +483,9 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
         {
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(
-                    m_pImpl->m_xFactory->createInstance(
-                        ::rtl::OUString( "com.sun.star.ucb.SimpleFileAccess"  ) ),
-                    uno::UNO_QUERY_THROW );
+                uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
+                    ucb::SimpleFileAccess::create(
+                        comphelper::ComponentContext(m_pImpl->m_xFactory).getUNOContext() ) );
                 xResult = xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
             }
             else
@@ -1472,10 +1473,9 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
         {
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(
-                    m_pImpl->m_xFactory->createInstance(
-                        ::rtl::OUString( "com.sun.star.ucb.SimpleFileAccess"  ) ),
-                    uno::UNO_QUERY_THROW );
+                uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
+                    ucb::SimpleFileAccess::create(
+                        comphelper::ComponentContext(m_pImpl->m_xFactory).getUNOContext() ) );
                 uno::Reference< io::XStream > xStream =
                     xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
 

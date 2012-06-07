@@ -83,14 +83,6 @@ PCXReader::~PCXReader()
 
 sal_Bool PCXReader::Callback( sal_uInt16 /*nPercent*/ )
 {
-/*
-    if (pCallback!=NULL) {
-        if (((*pCallback)(pCallerData,nPercent))==sal_True) {
-            nStatus = sal_False;
-            return sal_True;
-        }
-    }
-*/
     return sal_False;
 }
 

@@ -248,19 +248,15 @@ xContext( xContext_ )
 
 sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArguments ) throw (uno::RuntimeException)
 {
-      uno::Sequence<uno::Any> aUcbInitSequence(2);
+    uno::Sequence<uno::Any> aUcbInitSequence(2);
     aUcbInitSequence[0] <<= rtl::OUString("Local");
     aUcbInitSequence[1] <<= rtl::OUString("Office");
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
     if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
             rtl::OUString arg=aArguments[0];
 
-            uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
-            xFactory->createInstanceWithContext(
-                ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess"),
-                xContext), uno::UNO_QUERY_THROW );
+            uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
             rtl_uString *dir=NULL;
             osl_getProcessWorkingDir(&dir);

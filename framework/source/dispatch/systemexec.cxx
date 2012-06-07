@@ -39,6 +39,7 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -48,6 +49,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
+#include <comphelper/componentcontext.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -182,9 +184,8 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
 
     try
     {
-        css::uno::Reference< css::util::XStringSubstitution > xPathSubst(
-            xFactory->createInstance(SERVICENAME_SUBSTITUTEPATHVARIABLES),
-            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::ComponentContext(xFactory).getUNOContext() );
+        css::uno::Reference< css::util::XStringSubstitution > xPathSubst( css::util::PathSubstitution::create(xContext) );
 
         ::rtl::OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, sal_True); // sal_True force an exception if unknown variables exists !
 

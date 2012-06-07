@@ -31,6 +31,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -44,6 +45,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
 #include "itemholder1.hxx"
@@ -282,16 +284,10 @@ struct FactoryInfo
         {
             if ( !xSubstVars.is() )
             {
+                css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::ComponentContext(xSMgr).getUNOContext() );
                 xSubstVars
                     = css::uno::Reference< css::util::XStringSubstitution >(
-                        xSMgr->createInstance(
-                            ::rtl::OUString( "com.sun.star.util.PathSubstitution"  ) ),
-                            css::uno::UNO_QUERY );
-                if ( !xSubstVars.is() )
-                    throw css::uno::RuntimeException(
-                        ::rtl::OUString( "Cannot instanciate service "
-                                "com.sun.star.util.PathSubstitution"  ),
-                        css::uno::Reference< css::uno::XInterface >() );
+                        css::util::PathSubstitution::create(xContext) );
             }
             return xSubstVars;
         }

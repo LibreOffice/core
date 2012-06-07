@@ -36,6 +36,7 @@
 #include <svtools/javacontext.hxx>
 #include <svl/itempool.hxx>
 #include <tools/urlobj.hxx>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -108,7 +109,7 @@ SfxUnoControllerItem::SfxUnoControllerItem( SfxControllerItem *pItem, SfxBinding
     DBG_ASSERT( !pCtrlItem || !pCtrlItem->IsBound(), "ControllerItem is incorrect!" );
 
     aCommand.Complete = rCmd;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
+    Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aCommand );
     pBindings->RegisterUnoController_Impl( this );
 }
@@ -464,7 +465,7 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
         rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(".uno:"));
         aTmp.append(pUnoName);
         aDispatchURL.Complete = ::rtl::OStringToOUString(aTmp.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
+        Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aDispatchURL );
     }
 

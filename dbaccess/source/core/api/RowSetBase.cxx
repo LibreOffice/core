@@ -268,8 +268,6 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         aCacheEnd = m_pCache->getEnd();
         aCurrentRow = m_aCurrentRow;
         ORowSetCacheMap::iterator aCacheIter = m_aCurrentRow.getIter();
-        sal_Int32 n = aCacheIter->first;
-        n = n;
         ORowSetCacheIterator_Helper aHelper = aCacheIter->second;
         ORowSetMatrix::iterator k = aHelper.aIterator;
         for (; k != m_pCache->getEnd(); ++k)

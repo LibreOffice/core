@@ -232,7 +232,7 @@ bool Impl_calcSafeParams( double&           t1,
         {
             // calc intersection of convex hull segment with
             // one of the horizontal bounds lines
-            const double r_x( p1.x - p0.x );
+            // to optimize a bit, r_x is calculated only in else case
             const double r_y( p1.y - p0.y );
 
             if( tolZero(r_y) )
@@ -252,6 +252,7 @@ bool Impl_calcSafeParams( double&           t1,
             {
                 // check against lower and higher bounds
                 // =====================================
+                const double r_x( p1.x - p0.x );
 
                 // calc intersection with horizontal dMin line
                 const double currTLow( (lowerYBound - p0.y) * r_x / r_y + p0.x );

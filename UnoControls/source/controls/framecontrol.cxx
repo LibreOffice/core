@@ -37,10 +37,12 @@
 //  includes of other projects
 //______________________________________________________________________________________________________________
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 
@@ -497,20 +499,19 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
         //  option
         //xFrame->setName( "WhatYouWant" );
 
-        Reference< XURLTransformer >  xTrans ( impl_getMultiServiceFactory()->createInstance ( "com.sun.star.util.URLTransformer" ), UNO_QUERY ) ;
-        if(xTrans.is())
+        Reference< XURLTransformer >  xTrans (
+               URLTransformer::create(
+                   ::comphelper::ComponentContext( impl_getMultiServiceFactory() ).getUNOContext() ) );
+        // load file
+        URL aURL ;
+
+        aURL.Complete = rURL ;
+        xTrans->parseStrict( aURL ) ;
+
+        Reference< XDispatch >  xDisp = xDSP->queryDispatch ( aURL, OUString (), FrameSearchFlag::SELF ) ;
+        if (xDisp.is())
         {
-            // load file
-            URL aURL ;
-
-            aURL.Complete = rURL ;
-            xTrans->parseStrict( aURL ) ;
-
-            Reference< XDispatch >  xDisp = xDSP->queryDispatch ( aURL, OUString (), FrameSearchFlag::SELF ) ;
-            if (xDisp.is())
-            {
-                xDisp->dispatch ( aURL, rArguments ) ;
-            }
+            xDisp->dispatch ( aURL, rArguments ) ;
         }
     }
 

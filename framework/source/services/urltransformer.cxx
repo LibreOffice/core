@@ -93,7 +93,7 @@ URLTransformer::~URLTransformer()
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   URLTransformer                      ,
                                         OWeakObject                         ,
-                                        SERVICENAME_URLTRANSFORMER          ,
+                                        DECLARE_ASCII("com.sun.star.util.URLTransformer"),
                                         IMPLEMENTATIONNAME_URLTRANSFORMER
                                     )
 

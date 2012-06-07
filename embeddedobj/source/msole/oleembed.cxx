@@ -44,13 +44,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <rtl/logfile.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -736,10 +738,8 @@ namespace
 
             xNativeTempFile = uno::Reference<beans::XPropertySet>();
 
-            uno::Reference<ucb::XSimpleFileAccess> xSimpleFileAccess(
-                xFactory->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
-                    uno::UNO_QUERY_THROW);
+            uno::Reference < ucb::XSimpleFileAccess2 > xSimpleFileAccess(
+                    ucb::SimpleFileAccess::create( comphelper::ComponentContext(xFactory).getUNOContext() ) );
 
             xSimpleFileAccess->setReadOnly(sUrl, sal_True);
         }

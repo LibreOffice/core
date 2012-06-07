@@ -563,7 +563,6 @@ namespace basegfx
                             {
                                 rCandidate.getBezierSegment(b, aCubicB);
                                 aCubicB.testAndSolveTrivialBezier();
-                                const bool bEdgeBIsCurve(aCubicB.isBezier());
                                 const B2DRange aRangeB(aCubicB.getRange());
 
                                 // only overlapping segments need to be tested
@@ -575,6 +574,7 @@ namespace basegfx
                                     bOverlap = aRangeA.overlapsMore(aRangeB);
                                 if( bOverlap)
                                 {
+                                    const bool bEdgeBIsCurve(aCubicB.isBezier());
                                     if(bEdgeAIsCurve && bEdgeBIsCurve)
                                     {
                                         // test for bezier-bezier cuts
@@ -816,7 +816,6 @@ namespace basegfx
                             {
                                 rCandidateB.getBezierSegment(b, aCubicB);
                                 aCubicB.testAndSolveTrivialBezier();
-                                const bool bEdgeBIsCurve(aCubicB.isBezier());
                                 const B2DRange aRangeB(aCubicB.getRange());
 
                                 // consecutive segments touch of course
@@ -827,6 +826,7 @@ namespace basegfx
                                     bOverlap = aRangeA.overlapsMore(aRangeB);
                                 if( bOverlap)
                                 {
+                                    const bool bEdgeBIsCurve(aCubicB.isBezier());
                                     if(bEdgeAIsCurve && bEdgeBIsCurve)
                                     {
                                         // test for bezier-bezier cuts

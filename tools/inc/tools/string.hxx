@@ -247,7 +247,6 @@ public:
 
     UniString&          EraseLeadingChars( sal_Unicode c = ' ' );
     UniString&          EraseTrailingChars( sal_Unicode c = ' ' );
-    UniString&          Reverse();
 
     UniString&          ToLowerAscii();
     UniString&          ToUpperAscii();

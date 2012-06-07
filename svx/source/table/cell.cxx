@@ -33,6 +33,8 @@
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 
+#include <comphelper/string.hxx>
+
 #include <cppuhelper/typeprovider.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
@@ -1664,8 +1666,7 @@ static OUString getCellName( sal_Int32 nCol, sal_Int32 nRow )
         }
         aStr += static_cast<sal_Unicode>( 'A' +
                 static_cast<sal_uInt16>(nCol));
-        aStr.Reverse();
-        aBuf.append( aStr);
+        aBuf.append(comphelper::string::reverseString(aStr));
     }
     aBuf.append( OUString::valueOf(nRow+1) );
     return aBuf.makeStringAndClear();

@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 #include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -171,11 +172,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
         if ( !xServiceManager.is() )
             return;
 
-        uno::Reference<util::XURLTransformer> xParser( xServiceManager->createInstanceWithContext(
-            rtl::OUString(  "com.sun.star.util.URLTransformer"  ), xContext),
-            uno::UNO_QUERY_THROW );
-        if (!xParser.is())
-            return;
+        uno::Reference<util::XURLTransformer> xParser( util::URLTransformer::create(xContext) );
         xParser->parseStrict (url);
     }
     catch (const uno::Exception&)

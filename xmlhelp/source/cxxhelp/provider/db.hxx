@@ -34,7 +34,7 @@
 #include <berkeleydb/db.h>
 #endif
 
-#include "com/sun/star/ucb/XSimpleFileAccess.hpp"
+#include "com/sun/star/ucb/XSimpleFileAccess2.hpp"
 
 #include <boost/unordered_map.hpp>
 #include <rtl/string.hxx>
@@ -120,7 +120,7 @@ namespace berkeleydbproxy {
         rtl::OUString       m_aFileURL;
         StringToDataMap*    m_pStringToDataMap;
         StringToValPosMap*  m_pStringToValPosMap;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess >
+        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess2 >
                             m_xSFA;
 
         com::sun::star::uno::Sequence< sal_Int8 >
@@ -136,7 +136,7 @@ namespace berkeleydbproxy {
         //SimpleFileAccess requires file URLs as arguments. Passing file path may work but fails
         //for example when using long file paths on Windows, which start with "\\?\"
         DBHelp( const rtl::OUString& rFileURL,
-            com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess > xSFA )
+            com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess2 > xSFA )
                 : m_aFileURL( rFileURL )
                 , m_pStringToDataMap( NULL )
                 , m_pStringToValPosMap( NULL )

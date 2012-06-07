@@ -42,6 +42,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XMenuExtended.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -52,6 +53,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/componentcontext.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -87,7 +89,7 @@ PopupMenuControllerBase::PopupMenuControllerBase( const Reference< XMultiService
     m_xServiceManager( xServiceManager )
 {
     if ( m_xServiceManager.is() )
-        m_xURLTransformer.set( m_xServiceManager->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),UNO_QUERY );
+        m_xURLTransformer.set( util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() ) );
 }
 
 PopupMenuControllerBase::~PopupMenuControllerBase()

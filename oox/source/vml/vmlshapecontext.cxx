@@ -361,6 +361,9 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName == "mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = sal_True;
             else if( aName == "rotation" )       mrTypeModel.maRotation = aValue;
             else if( aName == "flip" )       mrTypeModel.maFlip = aValue;
+            else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "visibility" ) ) )
+                mrTypeModel.mbVisible = !aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hidden") );
+            else if( aName == "mso-wrap-style" ) mrTypeModel.maWrapStyle = aValue;
         }
     }
 }

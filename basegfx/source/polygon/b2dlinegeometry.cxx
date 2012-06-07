@@ -619,7 +619,6 @@ namespace basegfx
             if(nPointCount)
             {
                 B2DPolyPolygon aRetval;
-                const bool bEventuallyCreateLineJoin(B2DLINEJOIN_NONE != eJoin);
                 const bool bIsClosed(aCandidate.isClosed());
                 const sal_uInt32 nEdgeCount(bIsClosed ? nPointCount : nPointCount - 1);
 
@@ -628,6 +627,7 @@ namespace basegfx
                     B2DCubicBezier aEdge;
                     B2DCubicBezier aPrev;
 
+                    const bool bEventuallyCreateLineJoin(B2DLINEJOIN_NONE != eJoin);
                     // prepare edge
                     aEdge.setStartPoint(aCandidate.getB2DPoint(0));
 

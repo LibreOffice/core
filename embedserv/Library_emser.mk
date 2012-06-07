@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_api,emser,\
 ))
 
 $(eval $(call gb_Library_use_libraries,emser,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	gdi32 \

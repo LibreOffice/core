@@ -359,14 +359,6 @@ void PictReader::SetFillColor( const Color& rColor )
 
 sal_Bool PictReader::Callback(sal_uInt16 /*nPercent*/)
 {
-/*
-    if (pCallback!=NULL) {
-        if (((*pCallback)(pCallerData,nPercent))==sal_True) {
-            pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
-            return sal_True;
-        }
-    }
-*/
     return sal_False;
 }
 

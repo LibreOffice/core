@@ -41,6 +41,7 @@
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/interaction.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -67,6 +68,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -245,12 +247,9 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     XSLTFilter::rel2abs(const OUString& s)
     {
 
+        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::ComponentContext(m_rServiceFactory).getUNOContext() );
         css::uno::Reference<XStringSubstitution>
-                subs(
-                        m_rServiceFactory->createInstance(
-                                OUString(
-                                         "com.sun.star.util.PathSubstitution" )),
-                        UNO_QUERY);
+                subs(css::util::PathSubstitution::create(xContext));
         OUString aWorkingDir(subs->getSubstituteVariableValue(OUString( "$(progurl)")));
         INetURLObject aObj(aWorkingDir);
         aObj.setFinalSlash();

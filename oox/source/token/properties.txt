@@ -10,6 +10,7 @@ AdjustmentValues
 Address
 Align
 AnchorPosition
+AnchorType
 ApplyFormDesignMode
 AreaLinks
 ArrangeOrder

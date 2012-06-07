@@ -74,10 +74,18 @@ public:
 	typedef RegexpMapImpl< Val > MapImpl;
 	typedef typename List< Val >::iterator ListIterator;
 
+	// Solaris needs these for the ctor...
+
+	inline RegexpMapIterImpl();
+
 	inline RegexpMapIterImpl(MapImpl * pTheMap, int nTheList,
 							 ListIterator aTheIndex);
 
 	RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap, bool bBegin);
+
+	RegexpMapIterImpl(RegexpMapIterImpl const & rOther);
+
+	RegexpMapIterImpl & operator =(RegexpMapIterImpl const & rOther);
 
 	bool operator ==(RegexpMapIterImpl const & rOther) const;
 
@@ -92,8 +100,6 @@ public:
 	RegexpMapEntry< Val > & get();
 
 private:
-    RegexpMapIterImpl(); // not implemented
-
 	mutable RegexpMapEntry< Val > m_aEntry;
 	typename List< Val >::iterator m_aIndex;
 	RegexpMapImpl< Val > * m_pMap;
@@ -104,6 +110,14 @@ private:
 };
 
 }
+
+template< typename Val >
+inline RegexpMapIterImpl< Val >::RegexpMapIterImpl():
+	m_aEntry(rtl::OUString(), 0),
+	m_pMap(0),
+	m_nList(-1),
+	m_bEntrySet(false)
+{}
 
 template< typename Val >
 inline RegexpMapIterImpl< Val >::RegexpMapIterImpl(MapImpl * pTheMap,
@@ -154,12 +168,41 @@ RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap,
 
 //============================================================================
 template< typename Val >
+RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapIterImpl const & rOther):
+    m_aEntry(rOther.m_aEntry), m_pMap(rOther.m_pMap), m_nList(rOther.m_nList),
+    m_bEntrySet(rOther.m_bEntrySet)
+{
+    if (m_nList != -1)
+        m_aIndex = rOther.m_aIndex;
+}
+
+//============================================================================
+template< typename Val >
+RegexpMapIterImpl< Val > & RegexpMapIterImpl< Val >::operator =(
+    RegexpMapIterImpl const & rOther)
+{
+    if (this != &rOther)
+    {
+        m_aEntry = rOther.m_aEntry;
+        m_pMap = rOther.m_pMap;
+        m_nList = rOther.m_nList;
+        m_bEntrySet = rOther.m_bEntrySet;
+        if (m_nList == -1)
+            m_aIndex = typename List< Val >::iterator();
+        else
+            m_aIndex = rOther.m_aIndex;
+    }
+    return *this;
+}
+
+//============================================================================
+template< typename Val >
 bool RegexpMapIterImpl< Val >::operator ==(RegexpMapIterImpl const & rOther)
 	const
 {
 	return m_pMap == rOther.m_pMap
 		   && m_nList == rOther.m_nList
-		   && m_aIndex == rOther.m_aIndex;
+		   && (m_nList == -1 || m_aIndex == rOther.m_aIndex);
 }
 
 //============================================================================

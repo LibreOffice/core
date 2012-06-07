@@ -34,6 +34,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
@@ -41,6 +42,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
@@ -545,10 +547,9 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUSt
         {
             if( m_rContext.GetServiceFactory().is() ) try
             {
+                uno::Reference< uno::XComponentContext > xContext( comphelper::ComponentContext(m_rContext.GetServiceFactory()).getUNOContext() );
                 const_cast< XMLSettingsExportHelper* >(this)->mxStringSubsitution =
-                    uno::Reference< util::XStringSubstitution >::query(
-                        m_rContext.GetServiceFactory()->
-                            createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSubstitution" ) ) ) );
+                    util::PathSubstitution::create(xContext);
             }
             catch( uno::Exception& )
             {

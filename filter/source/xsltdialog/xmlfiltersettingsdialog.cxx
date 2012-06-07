@@ -613,10 +613,6 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
         aValues[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) );
         aValues[0].Value <<= pFilterEntry->maInterfaceName;
-/*
-        aValues[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
-        aValues[i++].Value <<= pFilterEntry->maDocType;
-*/
         aValues[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ClipboardFormat" ) );
         OUString aDocType;
         if( !pFilterEntry->maDocType.match( sDocTypePrefix ) )
@@ -1190,12 +1186,6 @@ void XMLFilterSettingsDialog::initFilterList()
 
                             for( nValue2 = 0; nValue2 < nValueCount2; nValue2++, pValues2++ )
                             {
-/*
-                                if ( pValues2->Name == "MediaType" )
-                                {
-                                    pValues2->Value >>= pTempFilter->maDocType;
-                                } else
-*/
                                 if ( pValues2->Name == "ClipboardFormat" )
                                 {
                                     OUString aDocType;
@@ -1653,14 +1643,6 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
     Sequence< OUString > aUserData(8);
 
     aUserData[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" ) );
-    /*
-    const application_info_impl* pInfo = getApplicationInfo( maDocumentService );
-    if( pInfo )
-    {
-        aUserData[2] = pInfo->maXMLImporter;
-        aUserData[3] = pInfo->maXMLExporter;
-    }
-    */
     aUserData[1] = maXSLTTransformerImpl;
     aUserData[2] = maImportService;
     aUserData[3] = maExportService;

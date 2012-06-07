@@ -101,6 +101,8 @@ class RegexpMapIter: public RegexpMapConstIter< Val >
     friend class RegexpMap< Val >; // to access ctor
 
 public:
+    RegexpMapIter() {}
+
     RegexpMapIter & operator ++();
 
     RegexpMapIter operator ++(int);

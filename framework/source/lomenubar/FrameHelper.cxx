@@ -56,6 +56,7 @@
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
@@ -260,7 +261,7 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
     : m_xStatusListener(new MenuItemStatusListener(this))
     , m_pDispatchRegistry(new framework::lomenubar::DispatchRegistry(m_xStatusListener))
     , m_xMSF(rServiceManager)
-    , m_xTrans(m_xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer" ))), UNO_QUERY)
+    , m_xTrans(util::URLTransformer::create(m_xMSF))
     , m_xMM(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))),UNO_QUERY)
     , m_xPCF(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.PopupMenuControllerFactory"))), UNO_QUERY)
     , m_xFrame(xFrame)

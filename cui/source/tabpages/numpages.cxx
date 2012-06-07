@@ -3007,7 +3007,12 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
 int  SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
+    {
+        if(aDistBorderMF.IsEnabled())
+            DistanceHdl_Impl(&aDistBorderMF);
+        DistanceHdl_Impl(&aIndentMF);
         FillItemSet(*_pSet);
+    }
     return sal_True;
 }
 

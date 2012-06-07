@@ -47,6 +47,10 @@
 
 #include <cppuhelper/implbase3.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
+
 enum FilterType
 {
     FILTER_IMPORT,
@@ -61,7 +65,7 @@ class FilterDetect : public cppu::WeakImplHelper3 <com::sun::star::document::XEx
                      com::sun::star::lang::XServiceInfo>
 {
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
     ::rtl::OUString msFilterName;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > msUserData;
@@ -74,8 +78,8 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
-    FilterDetect( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-        : mxMSF( rxMSF ) {}
+    FilterDetect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+        : mxContext( rxContext ) {}
 
     virtual ~FilterDetect() {}
 
@@ -110,7 +114,7 @@ sal_Bool SAL_CALL FilterDetect_supportsService( const ::rtl::OUString& ServiceNa
     throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL FilterDetect_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
+SAL_CALL FilterDetect_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext)
     throw ( ::com::sun::star::uno::Exception );
 
 #endif

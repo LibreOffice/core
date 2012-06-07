@@ -84,6 +84,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XSearchable.hpp>
 #include <com/sun/star/util/XSearchDescriptor.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -170,8 +171,7 @@ using namespace ::comphelper;
 #define KEY_UI_NAME             DEFINE_CONST_OUSTRING("ooSetupFactoryUIName")
 
 #define PARSE_URL( aURL ) \
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( \
-            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY ); \
+    Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) ); \
     xTrans->parseStrict( aURL )
 
 //.........................................................................

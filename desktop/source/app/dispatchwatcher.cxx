@@ -51,6 +51,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -284,7 +285,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
             Reference < XDispatch >         xDispatcher ;
             Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
-            Reference < XURLTransformer >   xParser     ( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), ::com::sun::star::uno::UNO_QUERY );
+            Reference < XURLTransformer >   xParser     ( URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
             if( xParser.is() == sal_True )
                 xParser->parseStrict( aURL );
@@ -314,7 +315,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
             Reference < XDispatch >         xDispatcher ;
             Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
-            Reference < XURLTransformer >   xParser     ( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), ::com::sun::star::uno::UNO_QUERY );
+            Reference < XURLTransformer >   xParser     ( URLTransformer::create(::comphelper::getProcessComponentContext()) );
 
             if( xParser.is() == sal_True )
                 xParser->parseStrict( aURL );

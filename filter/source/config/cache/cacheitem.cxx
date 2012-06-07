@@ -335,26 +335,6 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
             }
         }
         break;
-/*
-        case css::uno::TypeClass_CHAR :
-        case css::uno::TypeClass_VOID :
-        case css::uno::TypeClass_TYPE :
-        case css::uno::TypeClass_ENUM :
-        case css::uno::TypeClass_TYPEDEF :
-        case css::uno::TypeClass_UNION :
-        case css::uno::TypeClass_EXCEPTION :
-        case css::uno::TypeClass_ARRAY :
-        case css::uno::TypeClass_INTERFACE :
-        case css::uno::TypeClass_SERVICE :
-        case css::uno::TypeClass_MODULE :
-        case css::uno::TypeClass_INTERFACE_METHOD :
-        case css::uno::TypeClass_INTERFACE_ATTRIBUTE :
-        case css::uno::TypeClass_UNKNOWN :
-        case css::uno::TypeClass_PROPERTY :
-        case css::uno::TypeClass_CONSTANT :
-        case css::uno::TypeClass_CONSTANTS :
-        case css::uno::TypeClass_SINGLETON :
-*/
         default: break;
     }
 

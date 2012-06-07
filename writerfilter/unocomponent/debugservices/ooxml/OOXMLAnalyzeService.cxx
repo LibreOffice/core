@@ -38,7 +38,8 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <ucbhelper/contentbroker.hxx>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <osl/process.h>
 #include <rtl/string.hxx>
 #include <boost/unordered_set.hpp>
@@ -87,14 +88,9 @@ class URLLister
 
 public:
     URLLister(uno::Reference<com::sun::star::uno::XComponentContext> xContext,
-              uno::Reference<lang::XMultiComponentFactory> xFactory,
               rtl::OUString absFileUrl)
     {
-        uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess
-            (xFactory->createInstanceWithContext
-             (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                              ("com.sun.star.ucb.SimpleFileAccess")),
-              xContext), uno::UNO_QUERY_THROW);
+        uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
         xInputStream = xFileAccess->openFileRead(absFileUrl) ;
 
         mLF = rtl::OUString("\n");
@@ -174,7 +170,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
         rtl::OUString absFileUrlUrls;
         osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrlUrls.pData);
 
-        URLLister aLister(xContext, xFactory, absFileUrlUrls);
+        URLLister aLister(xContext, absFileUrlUrls);
 
         fprintf(stdout, "<analyze>\n");
 
@@ -184,11 +180,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
         while (!aURL.isEmpty())
         {
-            uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess
-                (xFactory->createInstanceWithContext
-                 (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                  ("com.sun.star.ucb.SimpleFileAccess")),
-                  xContext), uno::UNO_QUERY_THROW );
+            uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
             rtl::OString aStr;
             aURL.convertToString(&aStr, RTL_TEXTENCODING_ASCII_US,

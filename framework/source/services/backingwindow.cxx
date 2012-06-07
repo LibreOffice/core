@@ -65,6 +65,7 @@
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 #include "com/sun/star/util/XStringWidth.hpp"
+#include <com/sun/star/util/URLTransformer.hpp>
 
 
 using namespace ::com::sun::star::beans;
@@ -1004,34 +1005,30 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
     aDispatchURL.Complete = i_rURL;
 
     Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer") ),
-        com::sun::star::uno::UNO_QUERY );
-    if ( xURLTransformer.is() )
+        com::sun::star::util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
+    try
     {
-        try
+        // clean up the URL
+        xURLTransformer->parseStrict( aDispatchURL );
+        // get a Dispatch for the URL and target
+        Reference< XDispatch > xDispatch(
+            xProvider->queryDispatch( aDispatchURL, rTarget, 0 )
+            );
+        // dispatch the URL
+        if ( xDispatch.is() )
         {
-            // clean up the URL
-            xURLTransformer->parseStrict( aDispatchURL );
-            // get a Dispatch for the URL and target
-            Reference< XDispatch > xDispatch(
-                xProvider->queryDispatch( aDispatchURL, rTarget, 0 )
-                );
-            // dispatch the URL
-            if ( xDispatch.is() )
-            {
-                ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
-                sal_uLong nEventId = 0;
-                if( ! Application::PostUserEvent( nEventId, Link( NULL, implDispatchDelayed ), pDisp ) )
-                    delete pDisp; // event could not be posted for unknown reason, at least don't leak
-            }
+            ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
+            sal_uLong nEventId = 0;
+            if( ! Application::PostUserEvent( nEventId, Link( NULL, implDispatchDelayed ), pDisp ) )
+                delete pDisp; // event could not be posted for unknown reason, at least don't leak
         }
-        catch (const com::sun::star::uno::RuntimeException&)
-        {
-            throw;
-        }
-        catch (const com::sun::star::uno::Exception&)
-        {
-        }
+    }
+    catch (const com::sun::star::uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (const com::sun::star::uno::Exception&)
+    {
     }
 }
 

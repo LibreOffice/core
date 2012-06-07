@@ -54,32 +54,14 @@ void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
     if ( index != -1 )
         shortfilename = filename.copy(index+1);
 
-    o << "/*************************************************************************\n"
-        " *\n"
-        " * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.\n"
-        " * \n"
-        " * Copyright 2000, 2010 Oracle and/or its affiliates.\n"
-        " *\n"
-        " * OpenOffice.org - a multi-platform office productivity suite\n"
-        " *\n"
-        " * This file is part of OpenOffice.org.\n"
-        " *\n"
-        " * OpenOffice.org is free software: you can redistribute it and/or modify\n"
-        " * it under the terms of the GNU Lesser General Public License version 3\n"
-        " * only, as published by the Free Software Foundation.\n"
-        " *\n"
-        " * OpenOffice.org is distributed in the hope that it will be useful,\n"
-        " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-        " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-        " * GNU Lesser General Public License version 3 for more details\n"
-        " * (a copy is included in the LICENSE file that accompanied this code).\n"
-        " *\n"
-        " * You should have received a copy of the GNU Lesser General Public License\n"
-        " * version 3 along with OpenOffice.org.  If not, see\n"
-        " * <http://www.openoffice.org/license.html>\n"
-        " * for a copy of the LGPLv3 License.\n"
-        " *\n"
-        " ************************************************************************/\n\n";
+    o << "/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */\n"
+         "/*\n"
+         " * Copyright 2012 LibreOffice contributors.\n"
+         " *\n"
+         " * This Source Code Form is subject to the terms of the Mozilla Public\n"
+         " * License, v. 2.0. If a copy of the MPL was not distributed with this\n"
+         " * file, You can obtain one at http://mozilla.org/MPL/2.0/.\n"
+         " */\n\n";
 }
 
 bool getOutputStream(ProgramOptions const & options,

@@ -30,7 +30,7 @@
 #define _SD_HTMLEX_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <vcl/gdimtf.hxx>
 #include <svl/itemset.hxx>
 #include "resltn.hxx"       // enum PublishingResolution
@@ -186,7 +186,7 @@ class HtmlExport
     bool    CreateImageNumberFile();
 
     bool    checkForExistingFiles();
-    bool    checkFileExists( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xFileAccess, String const & aFileName );
+    bool    checkFileExists( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess, String const & aFileName );
 
     String getDocumentTitle();
     bool    SavePresentation();

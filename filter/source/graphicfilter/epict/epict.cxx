@@ -2306,25 +2306,6 @@ GraphicExport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterC
     if (rGraphic.GetType()==GRAPHIC_GDIMETAFILE)
     {
         GDIMetaFile aScaledMtf( rGraphic.GetGDIMetaFile() );
-
-/*
-        MapMode     aMap72( MAP_INCH );
-        Fraction    aDPIFrac( 1, 72 );
-        Size        aOldSize = aScaledMtf.GetPrefSize();
-
-        aMap72.SetScaleX( aDPIFrac );
-        aMap72.SetScaleY( aDPIFrac );
-
-        Size aNewSize = OutputDevice::LogicToLogic( aOldSize,
-                                                    aScaledMtf.GetPrefMapMode(),
-                                                    aMap72 );
-
-        aScaledMtf.Scale( Fraction( aNewSize.Width(), aOldSize.Width() ),
-                          Fraction( aNewSize.Height(), aOldSize.Height() ) );
-        aScaledMtf.SetPrefMapMode( aMap72 );
-        aScaledMtf.SetPrefSize( aNewSize );
-*/
-
         return aPictWriter.WritePict( aScaledMtf, rStream, pFilterConfigItem );
     }
     else

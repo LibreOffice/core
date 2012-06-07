@@ -32,6 +32,7 @@
 
 #include <com/sun/star/util/URL.hpp>
 
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <tools/urlobj.hxx>
 #include <svl/macitem.hxx>
@@ -239,12 +240,7 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                     SfxViewFrame::GetFirst( pDoc ) :
                     SfxViewFrame::Current();
 
-                ::com::sun::star::uno::Reference
-                    < ::com::sun::star::util::XURLTransformer > xTrans(
-                        ::comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString(
-                                "com.sun.star.util.URLTransformer" ) ),
-                        UNO_QUERY );
+                ::com::sun::star::uno::Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::com::sun::star::util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
 
                 ::com::sun::star::util::URL aURL;
                 aURL.Complete = aScript;

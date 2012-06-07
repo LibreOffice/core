@@ -32,6 +32,7 @@
 #include "tools/SdGlobalResourceContainer.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
 
@@ -597,11 +598,8 @@ void ResourceId::ParseResourceURL (void)
     if ( ! xURLTransformer.is())
     {
         // Create the URL transformer.
-        Reference<lang::XMultiServiceFactory> xServiceManager (
-            ::comphelper::getProcessServiceFactory());
-        xURLTransformer = Reference<util::XURLTransformer>(
-            xServiceManager->createInstance("com.sun.star.util.URLTransformer"),
-            UNO_QUERY);
+        Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+        xURLTransformer = Reference<util::XURLTransformer>(util::URLTransformer::create(xContext));
         mxURLTransformerWeak = xURLTransformer;
         SdGlobalResourceContainer::Instance().AddResource(
             Reference<XInterface>(xURLTransformer,UNO_QUERY));

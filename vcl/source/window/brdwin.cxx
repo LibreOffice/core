@@ -1098,7 +1098,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     {
         // FIXME: this is currently only on aqua, check with other
         // platforms
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects )
+        if( ImplGetSVData()->maNWFData.mbNoFocusRects && !( nBorderStyle & WINDOW_BORDER_NWF ) )
         {
             // for native widget drawing we must find out what
             // control this border belongs to

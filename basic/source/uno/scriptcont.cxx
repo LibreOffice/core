@@ -34,7 +34,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -580,13 +580,13 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
     const ::rtl::OUString& aName, const uno::Reference< embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     OUString aDummyLocation;
-    Reference< XSimpleFileAccess > xDummySFA;
+    Reference< XSimpleFileAccess2 > xDummySFA;
     return implStorePasswordLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA, xHandler );
 }
 
 sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const ::rtl::OUString& aName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                        const ::rtl::OUString& aTargetURL, const Reference< XSimpleFileAccess > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
+                        const ::rtl::OUString& aTargetURL, const Reference< XSimpleFileAccess2 > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     bool bExport = !aTargetURL.isEmpty();
 
@@ -719,7 +719,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
     {
         try
         {
-            Reference< XSimpleFileAccess > xSFI = mxSFI;
+            Reference< XSimpleFileAccess2 > xSFI = mxSFI;
             if( xToUseSFI.is() )
                 xSFI = xToUseSFI;
 
@@ -1200,7 +1200,7 @@ Reference< XInterface > SAL_CALL SfxScriptLibraryContainer::Create
 // Ctor
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XMultiServiceFactory >& xMSF,
-                                    const Reference< XSimpleFileAccess >& xSFI )
+                                    const Reference< XSimpleFileAccess2 >& xSFI )
     : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xMSF, xSFI )
     , mbLoadedSource( sal_False )
     , mbLoadedBinary( sal_False )
@@ -1209,7 +1209,7 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
 
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XMultiServiceFactory >& xMSF,
-                                    const Reference< XSimpleFileAccess >& xSFI,
+                                    const Reference< XSimpleFileAccess2 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     sal_Bool ReadOnly )

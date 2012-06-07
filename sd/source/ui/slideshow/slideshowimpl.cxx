@@ -39,6 +39,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -2847,10 +2848,9 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
     try
     {
         uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
+        uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
-        uno::Reference< util::XURLTransformer > xParser(
-            xFac->createInstance( "com.sun.star.util.URLTransformer" ),
-                uno::UNO_QUERY_THROW);
+        uno::Reference< util::XURLTransformer > xParser(util::URLTransformer::create(xContext));
         util::URL aURL;
         aURL.Complete = "vnd.sun.star.autorecovery:/setAutoSaveState";
         xParser->parseStrict(aURL);

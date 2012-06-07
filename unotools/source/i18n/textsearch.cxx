@@ -28,6 +28,7 @@
 
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/TextSearch.hpp>
 #include <com/sun/star/util/SearchFlags.hdl>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <unotools/charclass.hxx>
@@ -123,10 +124,8 @@ Reference<XTextSearch> TextSearch::getXTextSearch( const SearchOptions& rPara )
 
     try
     {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        rCache.xTextSearch.set( xMSF->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        rCache.xTextSearch.set( ::TextSearch::create(xContext) );
         rCache.xTextSearch->setOptions( rPara );
         rCache.Options = rPara;
     }

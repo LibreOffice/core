@@ -176,11 +176,6 @@ checkForUpdates(
                     // ignore
                 }
 
-/*
-                o_rUpdateInfo.Sources.push_back( DownloadSource(true,
-                    UNISTRING("http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=solarissparcwjre&lang=en-US&version=2.2.1") ) );
-*/
-
                 sal_Int32 i, imax = xNodeList->getLength();
                 for( i = 0; i < imax; ++i )
                 {

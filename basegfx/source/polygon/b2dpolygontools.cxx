@@ -3066,10 +3066,10 @@ namespace basegfx
             }
 
             const bool bHasWidth(!fTools::equalZero(fWaveWidth));
-            const bool bHasHeight(!fTools::equalZero(fWaveHeight));
 
             if(bHasWidth)
             {
+                const bool bHasHeight(!fTools::equalZero(fWaveHeight));
                 if(bHasHeight)
                 {
                     // width and height, create waveline. First subdivide to reduce input to line segments

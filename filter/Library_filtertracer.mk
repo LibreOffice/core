@@ -31,6 +31,7 @@ $(eval $(call gb_Library_set_include,filtertracer,\
 $(eval $(call gb_Library_use_libraries,filtertracer,\
 	utl \
 	tl \
+	comphelper \
 	cppuhelper \
 	cppu \
 	sal \

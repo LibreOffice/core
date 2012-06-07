@@ -61,6 +61,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -78,6 +79,7 @@
 
 //_______________________________________________
 // other includes
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -2777,7 +2779,7 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
     ::rtl::OUStringBuffer sUniqueName;
     if (!rInfo.OrgURL.isEmpty())
     {
-        css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
+        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
         css::util::URL aURL;
         aURL.Complete = rInfo.OrgURL;
         xParser->parseStrict(aURL);

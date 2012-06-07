@@ -38,6 +38,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 
 #include <rtl/ustrbuf.hxx>
@@ -1147,11 +1148,7 @@ void StringResourcePersistenceImpl::storeToURL( const ::rtl::OUString& URL,
     bool bUsedForStore = false;
     bool bStoreAll = true;
 
-    Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
-    Reference< ucb::XSimpleFileAccess > xFileAccess;
-    xFileAccess = Reference< ucb::XSimpleFileAccess >( xMCF->createInstanceWithContext
-        ( ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess"),
-            m_xContext ), UNO_QUERY );
+    Reference< ucb::XSimpleFileAccess2 > xFileAccess = ucb::SimpleFileAccess::create(m_xContext);
     if( xFileAccess.is() && Handler.is() )
         xFileAccess->setInteractionHandler( Handler );
 
@@ -1162,7 +1159,7 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
 (
     const ::rtl::OUString& Location,
     const ::rtl::OUString& aNameBase,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xFileAccess
+    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess
 )
     throw (Exception, RuntimeException)
 {
@@ -1188,7 +1185,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 (
     const ::rtl::OUString& Location,
     const ::rtl::OUString& aNameBase,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xFileAccess
+    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess
 )
     throw (Exception, RuntimeException)
 {
@@ -1215,7 +1212,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
     const ::rtl::OUString& Location,
     const ::rtl::OUString& aNameBase,
     const ::rtl::OUString& aComment,
-    const Reference< ucb::XSimpleFileAccess >& xFileAccess,
+    const Reference< ucb::XSimpleFileAccess2 >& xFileAccess,
     bool bUsedForStore,
     bool bStoreAll,
     bool bKillAll
@@ -2891,7 +2888,7 @@ void StringResourceWithLocationImpl::store()
     if( !m_bModified && !bStoreAll )
         return;
 
-    Reference< ucb::XSimpleFileAccess > xFileAccess = getFileAccess();
+    Reference< ucb::XSimpleFileAccess2 > xFileAccess = getFileAccess();
     implStoreAtLocation( m_aLocation, m_aNameBase, m_aComment,
         xFileAccess, bUsedForStore, bStoreAll );
     m_bModified = false;
@@ -2977,7 +2974,7 @@ void StringResourceWithLocationImpl::setURL( const ::rtl::OUString& URL )
 // Scan locale properties files
 void StringResourceWithLocationImpl::implScanLocales( void )
 {
-    const Reference< ucb::XSimpleFileAccess > xFileAccess = getFileAccess();
+    const Reference< ucb::XSimpleFileAccess2 > xFileAccess = getFileAccess();
     if( xFileAccess.is() && xFileAccess->isFolder( m_aLocation ) )
     {
         Sequence< ::rtl::OUString > aContentSeq = xFileAccess->getFolderContents( m_aLocation, false );
@@ -2990,7 +2987,7 @@ bool StringResourceWithLocationImpl::implLoadLocale( LocaleItem* pLocaleItem )
 {
     bool bSuccess = false;
 
-    const Reference< ucb::XSimpleFileAccess > xFileAccess = getFileAccess();
+    const Reference< ucb::XSimpleFileAccess2 > xFileAccess = getFileAccess();
     if( xFileAccess.is() )
     {
         ::rtl::OUString aCompleteFileName =
@@ -3013,15 +3010,13 @@ bool StringResourceWithLocationImpl::implLoadLocale( LocaleItem* pLocaleItem )
     return bSuccess;
 }
 
-const Reference< ucb::XSimpleFileAccess > StringResourceWithLocationImpl::getFileAccess( void )
+const Reference< ucb::XSimpleFileAccess2 > StringResourceWithLocationImpl::getFileAccess( void )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
     if( !m_xSFI.is() )
     {
-        Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
-        m_xSFI = Reference< ucb::XSimpleFileAccess >( xMCF->createInstanceWithContext
-            ( ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess"), m_xContext ), UNO_QUERY );
+        m_xSFI = ucb::SimpleFileAccess::create(m_xContext);
 
         if( m_xSFI.is() && m_xInteractionHandler.is() )
             m_xSFI->setInteractionHandler( m_xInteractionHandler );

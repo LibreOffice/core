@@ -29,8 +29,10 @@
 #include "urltransformer.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/util/URLTransformer.hpp>
 /** === end UNO includes === **/
 #include <tools/debug.hxx>
+#include <comphelper/componentcontext.hxx>
 
 //........................................................................
 namespace frm
@@ -60,12 +62,7 @@ namespace frm
         {
             if ( m_xORB.is() )
             {
-                m_xTransformer = m_xTransformer.query(
-                    m_xORB->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) )
-                    )
-                );
-                DBG_ASSERT( m_xTransformer.is(), "UrlTransformer::getStrictURL: couldn't get an URL transformer!" );
+                m_xTransformer.set(URLTransformer::create(comphelper::ComponentContext(m_xORB).getUNOContext()));
             }
 
             m_bTriedToCreateTransformer = true;

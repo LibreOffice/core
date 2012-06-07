@@ -90,12 +90,6 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
     }
     if( ! bFound )
         return 0;
-/*
-    {
-        osl::MutexGuard aGuard( m_aUserEventMutex );
-        m_aUserEventIDs.pop_front();
-    }
-*/
 
     MediatorMessage* pMessage;
     CommandAtoms nCommand;

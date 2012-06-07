@@ -67,6 +67,7 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -75,6 +76,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/unohlp.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/imageitm.hxx>
@@ -262,9 +264,9 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
                                                     m_xServiceManager->createInstance( SERVICENAME_TOOLBARCONTROLLERFACTORY ),
                                                 UNO_QUERY );
 
-        m_xURLTransformer.set( m_xServiceManager->createInstance(
-                                                                SERVICENAME_URLTRANSFORMER),
-                                                             UNO_QUERY );
+        m_xURLTransformer.set(
+             URLTransformer::create(
+                 ::comphelper::ComponentContext(m_xServiceManager).getUNOContext()) );
     }
 
     m_pToolBar->SetSelectHdl( LINK( this, ToolBarManager, Select) );

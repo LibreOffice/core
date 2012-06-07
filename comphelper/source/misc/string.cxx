@@ -438,6 +438,32 @@ rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen)
     return string_alloc<rtl_String, sal_Char>(nLen);
 }
 
+namespace
+{
+    template <typename T, typename O> T tmpl_reverseString(const T &rIn)
+    {
+        if (rIn.isEmpty())
+            return rIn;
+
+        sal_Int32 i = rIn.getLength();
+        O sBuf(i);
+        while (i)
+            sBuf.append(rIn[--i]);
+        return sBuf.makeStringAndClear();
+    }
+}
+
+rtl::OUString reverseString(const rtl::OUString &rStr)
+{
+    return tmpl_reverseString<rtl::OUString, rtl::OUStringBuffer>(rStr);
+}
+
+rtl::OString reverseString(const rtl::OString &rStr)
+{
+    return tmpl_reverseString<rtl::OString, rtl::OStringBuffer>(rStr);
+}
+
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -175,17 +175,6 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 
 void PCDReader::MayCallback(sal_uLong /*nPercent*/)
 {
-/*
-    if ( nPercent >= nLastPercent + 3 )
-    {
-        nLastPercent=nPercent;
-        if ( pCallback != NULL && nPercent <= 100 && bStatus == sal_True )
-        {
-            if ( ( (*pCallback)( pCallerData, (sal_uInt16)nPercent ) ) == sal_True )
-                bStatus = sal_False;
-        }
-    }
-*/
 }
 
 // -------------------------------------------------------------------------------------------

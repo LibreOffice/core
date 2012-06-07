@@ -1,0 +1,61 @@
+--- misc/boost_1_44_0/boost/algorithm/string/detail/find_format_store.hpp	2010-07-10 22:29:03.000000000 +0200
++++ misc/build/boost_1_44_0/boost/algorithm/string/detail/find_format_store.hpp	2012-06-06 23:13:26.000000000 +0200
+@@ -71,7 +71,7 @@
+             };
+ 
+             template<typename InputT, typename FindResultT>
+-            bool check_find_result(InputT& Input, FindResultT& FindResult)
++            bool check_find_result(InputT&, FindResultT& FindResult)
+             {
+                 typedef BOOST_STRING_TYPENAME 
+                     range_const_iterator<InputT>::type input_iterator_type; 
+--- misc/boost_1_44_0/boost/date_time/dst_rules.hpp	2008-02-27 21:00:24.000000000 +0100
++++ misc/build/boost_1_44_0/boost/date_time/dst_rules.hpp	2012-06-06 23:11:03.000000000 +0200
+@@ -371,7 +371,7 @@
+         return is_not_in_dst;
+       }
+ 
+-      static bool is_dst_boundary_day(date_type d)
++      static bool is_dst_boundary_day(date_type)
+       {
+         return false;
+       }
+--- misc/boost_1_44_0/boost/date_time/gregorian_calendar.ipp	2010-01-10 20:17:23.000000000 +0100
++++ misc/build/boost_1_44_0/boost/date_time/gregorian_calendar.ipp	2012-06-06 22:27:07.000000000 +0200
+@@ -47,7 +47,7 @@
+       return week;
+     }
+ 
+-    if ((week == 53)) {
++    if (week == 53) {
+       if((day==6) ||(day == 5 && is_leap_year(ymd.year))) {
+         return week; //under these circumstances week == 53.
+       } else {
+--- misc/boost_1_44_0/boost/date_time/period_formatter.hpp	2008-02-27 21:00:24.000000000 +0100
++++ misc/build/boost_1_44_0/boost/date_time/period_formatter.hpp	2012-06-06 23:12:48.000000000 +0200
+@@ -114,10 +114,10 @@
+     {
+       m_range_option = option;
+     }
+-    void delimiter_strings(const string_type& separator,
+-                           const string_type& start_delim,
+-                           const string_type& open_end_delim,
+-                           const string_type& closed_end_delim)
++    void delimiter_strings(const string_type&,
++                           const string_type&,
++                           const string_type&,
++                           const string_type&)
+     {
+       m_period_separator;
+       m_period_start_delimeter;
+--- misc/boost_1_44_0/boost/token_functions.hpp	2010-06-12 14:06:28.000000000 +0200
++++ misc/build/boost_1_44_0/boost/token_functions.hpp	2012-06-06 23:12:27.000000000 +0200
+@@ -285,7 +285,7 @@
+   template <>
+   struct assign_or_plus_equal<std::input_iterator_tag> {
+     template<class Iterator, class Token>
+-    static void assign(Iterator b, Iterator e, Token &t) { }
++    static void assign(Iterator, Iterator, Token &) { }
+     template<class Token, class Value> 
+     static void plus_equal(Token &t, const Value &v) {
+       t += v;

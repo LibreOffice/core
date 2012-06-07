@@ -74,20 +74,6 @@ namespace connectivity {
 }
 
 // -------------------------------------------------------------------------
-/*
-MQuery::MQuery()
-{
-    OSL_TRACE( "IN MQuery::MQuery()" );
-
-   construct();
-#if OSL_DEBUG_LEVEL > 0
-    m_oThreadID = osl_getThreadIdentifier(NULL);
-#endif
-
-    OSL_TRACE( "\tOUT MQuery::MQuery()" );
-}
-*/
-// -------------------------------------------------------------------------
 MQuery::MQuery( const OColumnAlias& _ca )
     :m_rColumnAlias( _ca )
 {

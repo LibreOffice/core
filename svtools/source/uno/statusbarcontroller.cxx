@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -39,6 +40,7 @@
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
 #include <toolkit/unohlp.hxx>
+#include <comphelper/componentcontext.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
@@ -92,10 +94,7 @@ Reference< XURLTransformer > StatusbarController::getURLTransformer() const
     SolarMutexGuard aSolarMutexGuard;
     if ( !m_xURLTransformer.is() && m_xServiceManager.is() )
     {
-        m_xURLTransformer = Reference< XURLTransformer >(
-                                m_xServiceManager->createInstance(
-                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                UNO_QUERY );
+        m_xURLTransformer = com::sun::star::util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() );
     }
 
     return m_xURLTransformer;

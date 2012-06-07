@@ -155,11 +155,16 @@ public class SQLQueryComposer
 
     public void prependSortingCriteria() throws SQLException
     {
+        prependSortingCriteria(false);
+    }
+
+    public void prependSortingCriteria(boolean _baddAliasFieldNames) throws SQLException
+    {
         XIndexAccess xColumnIndexAccess = m_xQueryAnalyzer.getOrderColumns();
         m_queryComposer.setOrder("");
         for (int i = 0; i < CurDBMetaData.getSortFieldNames().length; i++)
         {
-            appendSortingCriterion(i, false);
+            appendSortingCriterion(i, _baddAliasFieldNames);
         }
         for (int i = 0; i < xColumnIndexAccess.getCount(); i++)
         {
@@ -241,7 +246,6 @@ public class SQLQueryComposer
         {
             for (int m = 0; m < _filterconditions[n].length; m++)
             {
-            //	_filterconditions[n][m].Name = getComposedAliasFieldName(_filterconditions[n][m].Name);
                 final String aliasName = getComposedAliasFieldName(_filterconditions[n][m].Name);
                 if ( columns.hasByName(aliasName))
                     _filterconditions[n][m].Name = aliasName;
@@ -282,6 +286,11 @@ public class SQLQueryComposer
 
     public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery)
     {
+        return setQueryCommand(_xParentWindow, _bincludeGrouping, _baddAliasFieldNames, addQuery, false);
+    }
+
+    public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery, boolean prependSortingCriteria)
+    {
         try
         {
             bincludeGrouping = _bincludeGrouping;
@@ -305,7 +314,14 @@ public class SQLQueryComposer
                     m_queryComposer.setStructuredHavingClause(CurDBMetaData.GroupByFilterConditions);
                 }
             }
-            appendSortingcriteria(_baddAliasFieldNames);
+            if (prependSortingCriteria)
+            {
+                prependSortingCriteria(_baddAliasFieldNames);
+            }
+            else
+            {
+                appendSortingcriteria(_baddAliasFieldNames);
+            }
 
             return true;
         }

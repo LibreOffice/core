@@ -30,6 +30,7 @@
 #include "CommandDispatch.hxx"
 #include "CommonFunctors.hxx"
 #include "macros.hxx"
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -155,14 +156,9 @@ void CommandDispatch::fireStatusEventForURL(
     aURL.Complete = rURL;
     if( !m_xURLTransformer.is())
     {
-        m_xURLTransformer.set(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-                C2U( "com.sun.star.util.URLTransformer" ),
-                m_xContext ),
-            uno::UNO_QUERY );
+        m_xURLTransformer.set( util::URLTransformer::create(m_xContext) );
     }
-    if( m_xURLTransformer.is())
-        m_xURLTransformer->parseStrict( aURL );
+    m_xURLTransformer->parseStrict( aURL );
 
     frame::FeatureStateEvent aEventToSend(
         static_cast< cppu::OWeakObject* >( this ), // Source

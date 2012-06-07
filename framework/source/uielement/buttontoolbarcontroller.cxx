@@ -38,6 +38,7 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -52,6 +53,7 @@
 
 #include <rtl/uri.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
@@ -244,9 +246,7 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             if ( !m_xURLTransformer.is() )
             {
-                m_xURLTransformer = uno::Reference< util::XURLTransformer >(
-                    m_xServiceManager->createInstance( rtl::OUString( "com.sun.star.util.URLTransformer" )),
-                    uno::UNO_QUERY_THROW );
+                m_xURLTransformer = util::URLTransformer::create( ::comphelper::ComponentContext(m_xServiceManager).getUNOContext() );
             }
 
             xFrame          = m_xFrame;

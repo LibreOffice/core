@@ -27,9 +27,10 @@
  ************************************************************************/
 
 
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include "selfterminatefilestream.hxx"
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
@@ -45,9 +46,8 @@ OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< lang::
     // IMPORTANT: The implementation is based on idea that m_xFileAccess, m_xInputStream and m_xSeekable are always set
     // otherwise an exception is thrown in constructor
 
-    m_xFileAccess.set( xOwnFactory->createInstance (
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
-                       uno::UNO_QUERY_THROW );
+    m_xFileAccess.set( ucb::SimpleFileAccess::create(
+                comphelper::ComponentContext(xOwnFactory).getUNOContext() ) );
 
     m_xInputStream.set( m_xFileAccess->openFileRead( aURL ), uno::UNO_SET_THROW );
     m_xSeekable.set( m_xInputStream, uno::UNO_QUERY_THROW );

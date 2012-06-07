@@ -31,6 +31,8 @@
 #include <com/sun/star/embed/UseBackupException.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -5954,10 +5956,9 @@ void SAL_CALL OStorage::attachToURL( const ::rtl::OUString& sURL,
     if ( !m_pImpl->m_pSwitchStream )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-    uno::Reference < ucb::XSimpleFileAccess > xAccess(
-            m_pImpl->m_xFactory->createInstance (
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ),
-            uno::UNO_QUERY_THROW );
+    uno::Reference < ucb::XSimpleFileAccess2 > xAccess(
+        ucb::SimpleFileAccess::create(
+            comphelper::ComponentContext(m_pImpl->m_xFactory).getUNOContext() ) );
 
     try
     {

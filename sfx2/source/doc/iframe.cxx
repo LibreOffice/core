@@ -33,8 +33,10 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
@@ -154,7 +156,7 @@ throw( uno::RuntimeException )
 
         util::URL aTargetURL;
         aTargetURL.Complete = ::rtl::OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-        uno::Reference < util::XURLTransformer > xTrans( mxFact->createInstance( "com.sun.star.util.URLTransformer"), uno::UNO_QUERY );
+        uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::ComponentContext(mxFact).getUNOContext() ) );
         xTrans->parseStrict( aTargetURL );
 
         uno::Sequence < beans::PropertyValue > aProps(2);

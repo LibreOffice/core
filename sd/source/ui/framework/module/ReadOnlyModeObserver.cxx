@@ -31,6 +31,7 @@
 
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -66,16 +67,8 @@ ReadOnlyModeObserver::ReadOnlyModeObserver (
 {
     // Create a URL object for the slot name.
     maSlotNameURL.Complete = ".uno:EditDoc";
-    uno::Reference<lang::XMultiServiceFactory> xServiceManager (
-        ::comphelper::getProcessServiceFactory());
-    if (xServiceManager.is())
-    {
-        Reference<util::XURLTransformer> xTransformer(xServiceManager->createInstance(
-            "com.sun.star.util.URLTransformer"),
-            UNO_QUERY);
-        if (xTransformer.is())
-            xTransformer->parseStrict(maSlotNameURL);
-    }
+    Reference<util::XURLTransformer> xTransformer(util::URLTransformer::create(::comphelper::getProcessComponentContext()));
+    xTransformer->parseStrict(maSlotNameURL);
 
     if ( ! ConnectToDispatch())
     {

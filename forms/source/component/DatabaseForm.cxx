@@ -60,9 +60,11 @@
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -2239,10 +2241,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     if (!xFrame.is())
         return;
 
-    Reference<XURLTransformer>
-        xTransformer(m_xServiceFactory->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer") ) ), UNO_QUERY);
-    DBG_ASSERT(xTransformer.is(), "ODatabaseForm::submit_impl : could not create an URL transformer !");
+    Reference<XURLTransformer> xTransformer(URLTransformer::create(comphelper::ComponentContext(m_xServiceFactory).getUNOContext()));
 
     // URL encoding
     if( eSubmitEncoding == FormSubmitEncoding_URL )

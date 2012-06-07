@@ -61,6 +61,7 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -194,11 +195,7 @@ PresenterController::PresenterController (
     // Create a URLTransformer.
     if (xFactory.is())
     {
-        mxUrlTransformer = Reference<util::XURLTransformer>(
-            xFactory->createInstanceWithContext(
-                A2S("com.sun.star.util.URLTransformer"),
-                mxComponentContext),
-            UNO_QUERY);
+        mxUrlTransformer = Reference<util::XURLTransformer>(util::URLTransformer::create(mxComponentContext));
     }
 }
 

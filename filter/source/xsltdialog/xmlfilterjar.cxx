@@ -135,14 +135,6 @@ static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleSe
     }
 }
 
-/*
-static void addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile, const OUString& rName ) throw( Exception )
-{
-    Reference< XInputStream > xInput(  new utl::OSeekableInputStreamWrapper( new SvFileStream(rSourceFile, STREAM_READ ), true ) );
-    _addFile( xRootFolder, xFactory, xInput, rName );
-}
-*/
-
 void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( Exception )
 {
     if( !rSourceFile.isEmpty() &&

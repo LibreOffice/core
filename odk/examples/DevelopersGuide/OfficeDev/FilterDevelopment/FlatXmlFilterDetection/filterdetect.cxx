@@ -35,7 +35,6 @@
 
 #include "filterdetect.hxx"
 #include <osl/diagnose.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -54,7 +53,9 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
@@ -97,9 +98,8 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     if (!xInStream.is())
     {
         // open the stream if it was not suplied by the framework
-        Reference< XSimpleFileAccess > xSFI(mxMSF->createInstance(
-            OUString("com.sun.star.ucb.SimpleFileAccess")), UNO_QUERY);
-        if (sURL.getLength() > 0 && xSFI.is())
+        Reference< XSimpleFileAccess2 > xSFI(SimpleFileAccess::create(mxContext));
+        if (sURL.getLength() > 0)
         {
             try
             {
@@ -231,10 +231,10 @@ Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
 #undef SERVICE_NAME1
 #undef SERVICE_NAME2
 
-Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XComponentContext > & rContext)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new FilterDetect( rSMgr );
+    return (cppu::OWeakObject*) new FilterDetect( rContext );
 }
 
 // XServiceInfo

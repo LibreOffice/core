@@ -42,11 +42,13 @@
 #include <osl/process.h>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 //_______________________________________________
 // include interfaces
 
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
 //_______________________________________________
@@ -160,9 +162,10 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 
     try
     {
-              css::uno::Reference< css::util::XStringSubstitution > xSubst           (  xSMGR->createInstance(SERVICENAME_SUBSTITUTEPATHVARIABLES), css::uno::UNO_QUERY_THROW);
-        const ::sal_Bool                                            bSubstRequired   = sal_True;
-        const ::rtl::OUString                                       sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
+        css::uno::Reference< css::uno::XComponentContext >    xContext( comphelper::ComponentContext(xSMGR).getUNOContext() );
+        css::uno::Reference< css::util::XStringSubstitution > xSubst(  css::util::PathSubstitution::create(xContext) );
+        const ::sal_Bool                                      bSubstRequired   = sal_True;
+        const ::rtl::OUString                                 sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
 
         return sCompleteCommand;
     }

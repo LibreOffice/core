@@ -50,6 +50,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -88,6 +89,7 @@
 #include <svtools/sfxecode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
@@ -288,7 +290,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
 
     // parse it - because some following code require that
     m_aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
     xParser->parseStrict(m_aURL);
 
     // BTW: Split URL and JumpMark ...
@@ -1260,7 +1262,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     css::util::URL aCmd;
     aCmd.Complete = ::rtl::OUString(".uno:JumpToMark");
 
-    css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(m_xSMGR).getUNOContext()));
     xParser->parseStrict(aCmd);
 
     css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch(aCmd, SPECIALTARGET_SELF, 0);

@@ -191,6 +191,8 @@ class Desktop : public Application
         /// does initializations which are necessary for the first run of the office
         void                    DoFirstRunInitializations();
 
+        static void             ShowBackingComponent(Desktop * progress);
+
         static sal_Bool         SaveTasks();
 
         static void             retrieveCrashReporterState();

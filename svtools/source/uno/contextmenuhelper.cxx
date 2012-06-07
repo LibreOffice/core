@@ -40,6 +40,7 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <osl/conditn.hxx>
@@ -341,35 +342,28 @@ ContextMenuHelper::dispatchCommand(
 {
     if ( !m_xURLTransformer.is() )
     {
-        m_xURLTransformer = uno::Reference< util::XURLTransformer >(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.util.URLTransformer" ))),
-            uno::UNO_QUERY );
+        m_xURLTransformer = util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
     }
 
     util::URL aTargetURL;
-    uno::Reference< frame::XDispatch > xDispatch;
-    if ( m_xURLTransformer.is() )
-    {
-        aTargetURL.Complete = aCommandURL;
-        m_xURLTransformer->parseStrict( aTargetURL );
+    aTargetURL.Complete = aCommandURL;
+    m_xURLTransformer->parseStrict( aTargetURL );
 
-        uno::Reference< frame::XDispatchProvider > xDispatchProvider(
-            rFrame, uno::UNO_QUERY );
-        if ( xDispatchProvider.is() )
+    uno::Reference< frame::XDispatch > xDispatch;
+    uno::Reference< frame::XDispatchProvider > xDispatchProvider(
+        rFrame, uno::UNO_QUERY );
+    if ( xDispatchProvider.is() )
+    {
+        try
         {
-            try
-            {
-                xDispatch = xDispatchProvider->queryDispatch( aTargetURL, m_aSelf, 0 );
-            }
-            catch ( uno::RuntimeException& )
-            {
-                throw;
-            }
-            catch ( uno::Exception& )
-            {
-            }
+            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, m_aSelf, 0 );
+        }
+        catch ( uno::RuntimeException& )
+        {
+            throw;
+        }
+        catch ( uno::Exception& )
+        {
         }
     }
 
@@ -594,11 +588,7 @@ ContextMenuHelper::completeMenuProperties(
 
         if ( !m_xURLTransformer.is() )
         {
-            m_xURLTransformer = uno::Reference< util::XURLTransformer >(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.util.URLTransformer" ))),
-                uno::UNO_QUERY );
+            m_xURLTransformer = util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
         }
 
         for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )

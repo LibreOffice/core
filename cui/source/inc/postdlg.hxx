@@ -75,7 +75,7 @@ public:
 
     void                ShowLastAuthor(const String& rAuthor, const String& rDate);
     inline void         DontChangeAuthor()  { aAuthorBtn.Enable(sal_False); }
-    inline void         HideAuthor()        { aAuthorBtn.Hide(); }
+    inline void         HideAuthor()        { aAuthorFT.Hide(); aAuthorBtn.Hide(); }
     inline void         SetReadonlyPostIt(sal_Bool bDisable)
                             {
                                 aOKBtn.Enable( !bDisable );

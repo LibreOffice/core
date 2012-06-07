@@ -51,6 +51,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/task/JobExecutor.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
@@ -86,6 +87,7 @@
 
 #include <toolkit/unohlp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>
 
@@ -2338,7 +2340,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
 
     css::util::URL aURL;
     aURL.Complete = DECLARE_ASCII(".uno:CloseFrame");
-    css::uno::Reference< css::util::XURLTransformer > xParser(xFactory->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::ComponentContext(xFactory).getUNOContext()));
     xParser->parseStrict(aURL);
 
     css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL, SPECIALTARGET_SELF, 0);

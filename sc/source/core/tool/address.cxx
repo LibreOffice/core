@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
+#include <comphelper/string.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 
@@ -2016,8 +2017,7 @@ void ScColToAlpha( rtl::OUStringBuffer& rBuf, SCCOL nCol )
         }
         aStr += static_cast<sal_Unicode>( 'A' +
                 static_cast<sal_uInt16>(nCol));
-        aStr.Reverse();
-        rBuf.append( aStr);
+        rBuf.append(comphelper::string::reverseString(aStr));
     }
 }
 

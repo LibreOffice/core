@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
-#include "com/sun/star/ucb/XSimpleFileAccess.hpp"
+#include "com/sun/star/ucb/XSimpleFileAccess2.hpp"
 
 // Forward declaration
 
@@ -293,7 +293,7 @@ namespace chelp {
         osl::Mutex                                                                     m_aMutex;
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >       m_xContext;
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiComponentFactory > m_xSMgr;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess >       m_xSFA;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess2 >      m_xSFA;
 
         sal_Bool m_bShowBasic;
         int    m_nErrorDocLength;
@@ -436,7 +436,7 @@ namespace chelp {
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess >    m_xSFA;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess2 >   m_xSFA;
         Databases&                                                                  m_rDatabases;
 
         IteratorState                                                               m_eState;

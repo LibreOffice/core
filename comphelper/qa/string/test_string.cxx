@@ -53,7 +53,7 @@ public:
     void testTokenCount();
     void testDecimalStringToNumber();
     void testIsdigitAsciiString();
-    void testIndexOfL();
+    void testReverseString();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testNatural);
@@ -65,6 +65,7 @@ public:
     CPPUNIT_TEST(testTokenCount);
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST(testIsdigitAsciiString);
+    CPPUNIT_TEST(testReverseString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -394,6 +395,14 @@ void TestString::testTokenCount()
 
     nOut = ::comphelper::string::getTokenCount(rtl::OString(), 'X');
     CPPUNIT_ASSERT(nOut == 0);
+}
+
+void TestString::testReverseString()
+{
+    ::rtl::OString aIn("ABC");
+    ::rtl::OString aOut = ::comphelper::string::reverseString(aIn);
+
+    CPPUNIT_ASSERT(aOut == "CBA");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);

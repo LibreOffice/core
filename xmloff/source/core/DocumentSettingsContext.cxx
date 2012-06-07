@@ -31,6 +31,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -39,6 +40,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <list>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -716,17 +718,13 @@ void XMLConfigItemContext::ManipulateConfigItem()
     {
         if( GetImport().getServiceFactory().is() ) try
         {
-            uno::Reference< util::XStringSubstitution > xStringSubsitution(
-                GetImport().getServiceFactory()->
-                    createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSubstitution" ) ) ), uno::UNO_QUERY );
+            uno::Reference< uno::XComponentContext > xContext( comphelper::ComponentContext(GetImport().getServiceFactory()).getUNOContext() );
+            uno::Reference< util::XStringSubstitution > xStringSubsitution( util::PathSubstitution::create(xContext) );
 
-            if( xStringSubsitution.is() )
-            {
-                rtl::OUString aURL;
-                mrAny >>= aURL;
-                aURL = xStringSubsitution->substituteVariables( aURL, sal_False );
-                mrAny <<= aURL;
-            }
+            rtl::OUString aURL;
+            mrAny >>= aURL;
+            aURL = xStringSubsitution->substituteVariables( aURL, sal_False );
+            mrAny <<= aURL;
         }
         catch( uno::Exception& )
         {

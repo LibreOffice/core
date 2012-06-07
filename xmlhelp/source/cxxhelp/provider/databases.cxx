@@ -52,6 +52,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
@@ -181,9 +182,7 @@ Databases::Databases( sal_Bool showBasic,
 
     setInstallPath( instPath );
 
-    m_xSFA = Reference< ucb::XSimpleFileAccess >(
-        m_xSMgr->createInstanceWithContext( rtl::OUString( "com.sun.star.ucb.SimpleFileAccess" ),
-        m_xContext ), UNO_QUERY_THROW );
+    m_xSFA = ucb::SimpleFileAccess::create(m_xContext);
 }
 
 Databases::~Databases()
@@ -1449,10 +1448,7 @@ void ExtensionIteratorBase::init()
             Reference< XInterface >() );
     }
 
-    Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
-    m_xSFA = Reference< ucb::XSimpleFileAccess >(
-        xSMgr->createInstanceWithContext( rtl::OUString( "com.sun.star.ucb.SimpleFileAccess" ),
-        m_xContext ), UNO_QUERY_THROW );
+    m_xSFA = ucb::SimpleFileAccess::create(m_xContext);
 
     m_bUserPackagesLoaded = false;
     m_bSharedPackagesLoaded = false;

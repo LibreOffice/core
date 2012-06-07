@@ -345,10 +345,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
   printf("C\n");
             rtl::OUString arg=aArguments[0];
 
-            uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
-            xFactory->createInstanceWithContext(
-                ::rtl::OUString("com.sun.star.ucb.SimpleFileAccess"),
-                xContext), uno::UNO_QUERY_THROW );
+            uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
             rtl_uString *dir=NULL;
             osl_getProcessWorkingDir(&dir);

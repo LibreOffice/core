@@ -39,6 +39,7 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -296,27 +297,22 @@ void ShutdownIcon::OpenURL( const ::rtl::OUString& aURL, const ::rtl::OUString& 
             com::sun::star::util::URL aDispatchURL;
             aDispatchURL.Complete = aURL;
 
-            Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
-                ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.util.URLTransformer") ),
-                com::sun::star::uno::UNO_QUERY );
-            if ( xURLTransformer.is() )
+            Reference< util::XURLTransformer > xURLTransformer( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+            try
             {
-                try
-                {
-                    Reference< com::sun::star::frame::XDispatch > xDispatch;
+                Reference< com::sun::star::frame::XDispatch > xDispatch;
 
-                    xURLTransformer->parseStrict( aDispatchURL );
-                    xDispatch = xDispatchProvider->queryDispatch( aDispatchURL, rTarget, 0 );
-                    if ( xDispatch.is() )
-                        xDispatch->dispatch( aDispatchURL, aArgs );
-                }
-                catch ( com::sun::star::uno::RuntimeException& )
-                {
-                    throw;
-                }
-                catch ( com::sun::star::uno::Exception& )
-                {
-                }
+                xURLTransformer->parseStrict( aDispatchURL );
+                xDispatch = xDispatchProvider->queryDispatch( aDispatchURL, rTarget, 0 );
+                if ( xDispatch.is() )
+                    xDispatch->dispatch( aDispatchURL, aArgs );
+            }
+            catch ( com::sun::star::uno::RuntimeException& )
+            {
+                throw;
+            }
+            catch ( com::sun::star::uno::Exception& )
+            {
             }
         }
     }
@@ -347,7 +343,7 @@ void ShutdownIcon::FromTemplate()
 
         URL aTargetURL;
         aTargetURL.Complete = OUString( "slot:5500"  );
-        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString("com.sun.star.util.URLTransformer")), UNO_QUERY );
+        Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aTargetURL );
 
         Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );

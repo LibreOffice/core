@@ -45,7 +45,8 @@
 #include <l10ntools/compilehelp.hxx>
 #include <l10ntools/HelpIndexer.hxx>
 #endif
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
@@ -115,8 +116,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void revokeEntryFromDb(OUString const & url);
     bool activateEntry(OUString const & url);
 
-    Reference< ucb::XSimpleFileAccess > getFileAccess( void );
-    Reference< ucb::XSimpleFileAccess > m_xSFA;
+    Reference< ucb::XSimpleFileAccess2 > getFileAccess( void );
+    Reference< ucb::XSimpleFileAccess2 > m_xSFA;
 
     const Reference<deployment::XPackageTypeInfo> m_xHelpTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
@@ -402,7 +403,7 @@ void BackendImpl::implProcessHelp(
                 const OUString sHelpFolder = createFolder(OUString(), xCmdEnv);
                 data.dataUrl = sHelpFolder;
 
-                Reference< ucb::XSimpleFileAccess > xSFA = getFileAccess();
+                Reference< ucb::XSimpleFileAccess2 > xSFA = getFileAccess();
                 rtl::OUString aHelpURL = xPackage->getURL();
                 rtl::OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl( aHelpURL );
                 rtl::OUString aName = xPackage->getName();
@@ -585,7 +586,7 @@ void BackendImpl::implProcessHelp(
 void BackendImpl::implCollectXhpFiles( const rtl::OUString& aDir,
     std::vector< rtl::OUString >& o_rXhpFileVector )
 {
-    Reference< ucb::XSimpleFileAccess > xSFA = getFileAccess();
+    Reference< ucb::XSimpleFileAccess2 > xSFA = getFileAccess();
 
     // Scan xhp files recursively
     Sequence< rtl::OUString > aSeq = xSFA->getFolderContents( aDir, true );
@@ -611,17 +612,14 @@ void BackendImpl::implCollectXhpFiles( const rtl::OUString& aDir,
     }
 }
 
-Reference< ucb::XSimpleFileAccess > BackendImpl::getFileAccess( void )
+Reference< ucb::XSimpleFileAccess2 > BackendImpl::getFileAccess( void )
 {
     if( !m_xSFA.is() )
     {
         Reference<XComponentContext> const & xContext = getComponentContext();
         if( xContext.is() )
         {
-            m_xSFA = Reference< ucb::XSimpleFileAccess >(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    rtl::OUString("com.sun.star.ucb.SimpleFileAccess" ),
-                    xContext ), UNO_QUERY );
+            m_xSFA = ucb::SimpleFileAccess::create(xContext);
         }
         if( !m_xSFA.is() )
         {
