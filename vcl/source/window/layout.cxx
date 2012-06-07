@@ -514,9 +514,19 @@ void VclGrid::setAllocation(const Size& rAllocation)
             Window *pChild = A[x][y];
             if (pChild)
             {
+                Size aChildSize(0, 0);
+
                 sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
+                for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+                    aChildSize.Width() += aWidths[x+nSpanX];
+                aChildSize.Width() += get_column_spacing()*(nWidth-1);
+
                 sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
-                pChild->SetPosSizePixel(aPosition, Size(aWidths[x]*nWidth, aHeights[y]*nHeight));
+                for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                    aChildSize.Height() += aHeights[y+nSpanY];
+                aChildSize.Height() += get_row_spacing()*(nHeight-1);
+
+                pChild->SetPosSizePixel(aPosition, aChildSize);
             }
             aPosition.Y() += aHeights[y] + get_row_spacing();
         }
