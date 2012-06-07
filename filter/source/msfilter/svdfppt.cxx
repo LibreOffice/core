@@ -451,10 +451,7 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
     return rIn;
 }
 
-SV_DECL_PTRARR_DEL( PptFontEntityAtomList, PptFontEntityAtom*, 16 )
-SV_IMPL_PTRARR( PptFontEntityAtomList, PptFontEntityAtom* );
-
-class PptFontCollection: public PptFontEntityAtomList {
+class PptFontCollection: public boost::ptr_vector<PptFontEntityAtom> {
 };
 
 SvStream& operator>>( SvStream& rIn, PptUserEditAtom& rAtom )
@@ -576,8 +573,8 @@ sal_Bool SdrEscherImport::SeekToShape( SvStream& /*rSt*/, void* /*pClientData*/,
 PptFontEntityAtom* SdrEscherImport::GetFontEnityAtom( sal_uInt32 nNum ) const
 {
     PptFontEntityAtom* pRetValue = NULL;
-    if ( pFonts && ( nNum < pFonts->Count() ) )
-        pRetValue = (*pFonts)[ (sal_uInt16)nNum ];
+    if ( pFonts && ( nNum < pFonts->size() ) )
+        pRetValue = &(*pFonts)[ (sal_uInt16)nNum ];
     return pRetValue;
 }
 
@@ -2153,7 +2150,7 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 {
                     pFont->eCharSet = RTL_TEXTENCODING_SYMBOL;
                 };
-                pFonts->C40_INSERT( PptFontEntityAtom, pFont, nCount2++ );
+                pFonts->insert( pFonts->begin() + nCount2++, pFont );
             }
             delete pVDev;
         }
