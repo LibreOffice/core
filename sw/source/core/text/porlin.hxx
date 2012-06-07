@@ -69,6 +69,7 @@ class SwPortionHandler;
  *                      class SwLinePortion
  *************************************************************************/
 
+/// Base class for anything that can be part of a line in the Writer layout.
 class SwLinePortion: public SwPosSize
 {
 protected:

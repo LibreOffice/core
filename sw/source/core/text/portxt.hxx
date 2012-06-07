@@ -42,6 +42,7 @@ class SwTxtGuess;
  *                      class SwTxtPortion
  *************************************************************************/
 
+/// This portion represents a part of the paragraph string.
 class SwTxtPortion : public SwLinePortion
 {
     void BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess );

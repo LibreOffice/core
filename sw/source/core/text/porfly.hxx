@@ -58,6 +58,7 @@ public:
  *                class SwFlyCntPortion
  *************************************************************************/
 
+/// This portion represents an as-character anchored fly (shape, frame, etc.)
 class SwFlyCntPortion : public SwLinePortion
 {
     void *pContact; // bDraw ? DrawContact : FlyInCntFrm
