@@ -116,7 +116,10 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
         case basebmp::Format::SIXTEEN_BIT_LSB_TC_MASK:
         case basebmp::Format::SIXTEEN_BIT_MSB_TC_MASK:
         case basebmp::Format::TWENTYFOUR_BIT_TC_MASK:
-        case basebmp::Format::THIRTYTWO_BIT_TC_MASK:
+        case basebmp::Format::THIRTYTWO_BIT_TC_MASK_BGRA:
+        case basebmp::Format::THIRTYTWO_BIT_TC_MASK_ARGB:
+        case basebmp::Format::THIRTYTWO_BIT_TC_MASK_ABGR:
+        case basebmp::Format::THIRTYTWO_BIT_TC_MASK_RGBA:
             m_eTextFmt = basebmp::Format::EIGHT_BIT_GREY;
             break;
         default:

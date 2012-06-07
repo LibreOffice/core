@@ -59,8 +59,11 @@ bool SvpSalBitmap::Create( const Size& rSize,
         case 16: nFormat = Format::SIXTEEN_BIT_LSB_TC_MASK; break;
 #endif
         case 24: nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
-        // FIXME: Should this for Android be THIRTYTWO_BIT_TC_MASK_ARGB?
+#if defined(ANDROID) || defined(IOS)
+        case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK_RGBA; break;
+#else
         case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK; break;
+#endif
     }
     B2IVector aSize( rSize.Width(), rSize.Height() );
     if( aSize.getX() == 0 )
@@ -199,13 +202,40 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
                 nBitCount = 24;
                 pBuf->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
                 break;
-            case Format::THIRTYTWO_BIT_TC_MASK:
+            case Format::THIRTYTWO_BIT_TC_MASK_BGRA:
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0x0000ff, 0x00ff00, 0xff0000 );
+                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000 );
 #else
-                pBuf->maColorMask = ColorMask( 0xff0000, 0x00ff00, 0x0000ff );
+                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
+#endif
+                break;
+            case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
+                nBitCount = 32;
+                pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
+#ifdef OSL_BIGENDIAN
+                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
+#else
+                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000 );
+#endif
+                break;
+            case Format::THIRTYTWO_BIT_TC_MASK_ABGR:
+                nBitCount = 32;
+                pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
+#ifdef OSL_BIGENDIAN
+                pBuf->maColorMask = ColorMask( 0x000000ff, 0x0000ff00, 0x00ff0000 );
+#else
+                pBuf->maColorMask = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00 );
+#endif
+                break;
+            case Format::THIRTYTWO_BIT_TC_MASK_RGBA:
+                nBitCount = 32;
+                pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
+#ifdef OSL_BIGENDIAN
+                pBuf->maColorMask = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00 );
+#else
+                pBuf->maColorMask = ColorMask( 0x000000ff, 0x0000ff00, 0x00ff0000 );
 #endif
                 break;
 

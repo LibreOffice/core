@@ -279,7 +279,10 @@ sal_uInt32 SvpElement::getBitCountFromScanlineFormat( sal_Int32 nFormat )
         case Format::TWENTYFOUR_BIT_TC_MASK:
             nBitCount = 24;
             break;
-        case Format::THIRTYTWO_BIT_TC_MASK:
+        case Format::THIRTYTWO_BIT_TC_MASK_BGRA:
+        case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
+        case Format::THIRTYTWO_BIT_TC_MASK_ABGR:
+        case Format::THIRTYTWO_BIT_TC_MASK_RGBA:
             nBitCount = 32;
             break;
         default:
