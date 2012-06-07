@@ -793,7 +793,7 @@ AC_ARG_ENABLE(tdeab,
         [Disable the TDE address book support.]),
 ,
     if test "$enable_tde" = "yes"; then
-        enable_tdeab=yes;
+        enable_tdeab=yes
     fi
 )
 
@@ -808,7 +808,7 @@ AC_ARG_ENABLE(kdeab,
         [Disable the KDE3 address book support.]),
 ,
     if test "$enable_kde" = "yes"; then
-        enable_kdeab=yes;
+        enable_kdeab=yes
     fi
 )
 
@@ -2343,9 +2343,9 @@ COMPATH=`dirname "$CC"`
 if test "$COMPATH" = "."; then
     AC_PATH_PROGS(COMPATH, $CC)
     dnl double square bracket to get single because of M4 quote...
-    COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`;
+    COMPATH=`echo $COMPATH | $SED "s@/[[^/:]]*\\\$@@"`
 fi
-COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
+COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`
 
 dnl ===================================================================
 dnl  Test the Solaris compiler version
@@ -2443,7 +2443,7 @@ if test "$_os" = "Darwin"; then
     else
         AC_MSG_ERROR([$MACOSX_SDK_PATH not found])
     fi
-    FRAMEWORKSHOME="$MACOSX_SDK_PATH/System/Library/Frameworks";
+    FRAMEWORKSHOME="$MACOSX_SDK_PATH/System/Library/Frameworks"
     MACOSX_DEPLOYMENT_TARGET="$with_macosx_version_min_required"
 
     case "$with_macosx_version_min_required" in
@@ -2763,14 +2763,14 @@ if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
         AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
         if test -z "$with_cl_home"; then
-            vctest=`./oowintool --msvc-productdir`;
+            vctest=`./oowintool --msvc-productdir`
             if test "$CL_X64" = ""; then
                 if test -x "$vctest/bin/cl.exe"; then
-                    with_cl_home=$vctest;
+                    with_cl_home=$vctest
                 fi
             else
                 if test -x "$vctest/bin/amd64/cl.exe"; then
-                    with_cl_home=$vctest;
+                    with_cl_home=$vctest
                 fi
             fi
         else
@@ -3045,7 +3045,7 @@ darwin*)
         RTL_ARCH=ARM_EABI
         GUIBASE=cocoatouch
         OUTPATH=unxiosr
-        OS=IOS;
+        OS=IOS
         ;;
     powerpc*)
         CPU=P
@@ -3878,7 +3878,7 @@ if test -z "$GNUMAKE"; then
 fi
 
 AC_MSG_CHECKING([the GNU make version])
-_make_version=`$GNUMAKE --version | grep GNU | $GREP -v GPL | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
+_make_version=`$GNUMAKE --version | grep GNU | $GREP -v GPL | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
 _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 if test "$_make_longver" -ge "038200"; then
     AC_MSG_RESULT([$GNUMAKE $_make_version])
@@ -3957,7 +3957,7 @@ rm -rf $TESTGMAKEFILEFUNC
 AC_SUBST(HAVE_GNUMAKE_FILE_FUNC)
 AC_SUBST(GNUMAKE)
 
-_make_ver_check=`$GNUMAKE --version | grep LibreOffice`;
+_make_ver_check=`$GNUMAKE --version | grep LibreOffice`
 STALE_MAKE=
 make_warning=
 if test "$_make_ver_check" = ""; then
@@ -4124,7 +4124,7 @@ if test "$build_os" = "cygwin"; then
         MIDL_PATH="$with_cl_home/../Common7/Tools/Bin"
     fi
     if test -z "$MIDL_PATH"; then
-        vstest=`./oowintool --msvs-productdir`;
+        vstest=`./oowintool --msvs-productdir`
         if test -x "$vstest/Common7/Tools/Bin/midl.exe"; then
             MIDL_PATH="$vstest/Common7/Tools/Bin"
         fi
@@ -4153,7 +4153,7 @@ if test "$build_os" = "cygwin"; then
     if test -x "$with_csc_path/csc.exe"; then
         CSC_PATH="$with_csc_path"
     else
-       csctest=`./oowintool --csc-compilerdir`;
+       csctest=`./oowintool --csc-compilerdir`
        if test -x "$csctest/csc.exe"; then
            CSC_PATH="$csctest"
        fi
@@ -4987,7 +4987,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which memory allocator to use])
 if test "$with_alloc" = "system"; then
     AC_MSG_RESULT([system])
-    ALLOC="SYS_ALLOC";
+    ALLOC="SYS_ALLOC"
     AC_CHECK_FUNCS([malloc realloc calloc free])
 fi
 if test "$with_alloc" = "tcmalloc"; then
@@ -4997,7 +4997,7 @@ if test "$with_alloc" = "tcmalloc"; then
     fi
     AC_CHECK_LIB([tcmalloc], [malloc], [:],
         [AC_MSG_ERROR(tcmalloc not found or functional. Install the Google Profiling Tools)], [])
-    ALLOC="TCMALLOC";
+    ALLOC="TCMALLOC"
 fi
 if test "$with_alloc" = "jemalloc"; then
     if test "$_os" != "FreeBSD" -o "$_os" != "NetBSD"; then
@@ -5006,11 +5006,11 @@ if test "$with_alloc" = "jemalloc"; then
         CFLAGS="$CFLAGS -pthread"
         AC_CHECK_LIB([jemalloc], [malloc], [:],
             [AC_MSG_ERROR(jemalloc not found or functional. Install the jemalloc allocator.)], [])
-        ALLOC="JEMALLOC";
+        ALLOC="JEMALLOC"
         CFLAGS=$save_CFLAGS
     else
         AC_MSG_RESULT([system])
-        ALLOC="SYS_ALLOC";
+        ALLOC="SYS_ALLOC"
         AC_CHECK_FUNCS([malloc realloc calloc free])
     fi
 fi
@@ -5175,7 +5175,7 @@ if test "$SOLAR_JAVA" != ""; then
         elif test `$JAVAINTERPRETER --version 2>&1 | $GREP -c "GNU libgcj"` -gt 0; then
             JDK=gcj
             AC_MSG_RESULT([checked (gcj)])
-            _gij_version=`$JAVAINTERPRETER --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
+            _gij_version=`$JAVAINTERPRETER --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
             _gij_longver=`echo $_gij_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
         elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | $GREP -c "BEA"` -gt 0; then
@@ -5603,10 +5603,10 @@ if test "$SOLAR_JAVA" != ""; then
                 JAVALIB="-L$JAVA_HOME/$LIB64 -L$JRE_BASE_DIR -L$JRE_BASE_DIR/classic -L$JRE_BASE_DIR/native_thread"
                 ;;
             [Bb][Ee][Aa]*)
-                JAVA_TOOLKIT="jrockit";
+                JAVA_TOOLKIT="jrockit"
                 ;;
             *)
-                JAVA_TOOLKIT="client";
+                JAVA_TOOLKIT="client"
                 ;;
             esac
             ;;
@@ -6697,7 +6697,7 @@ internal)
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     # Embedded Python dies without Home set
     if test "$HOME" = ""; then
-        export HOME="";
+        export HOME=""
     fi
     # bz2 tarball and bzip2 is not standard
     if test -z "$BZIP2"; then
@@ -8572,7 +8572,7 @@ if test -z "$BISON"; then
     AC_MSG_ERROR([no bison found in \$PATH, install it])
 else
     AC_MSG_CHECKING([the bison version])
-    _bison_version=`$BISON --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
+    _bison_version=`$BISON --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
     _bison_longver=`echo $_bison_version | $AWK -F. '{ print \$1*1000+\$2}'`
     # Accept newer than 1.875 or older(equal) than 1.75
     if test "$_bison_longver" -ge 1875 -o "$_bison_longver" -le 1075; then
@@ -11236,11 +11236,11 @@ else
 fi
 # check that the list is valid
 for lang in $WITH_LANG; do
-    test "$lang" = "ALL" && continue;
+    test "$lang" = "ALL" && continue
     # need to check for the exact string, so add space before and after the list of all languages
     for vl in $ALL_LANGS; do
         if test "$vl" = "$lang"; then
-           break;
+           break
         fi
     done
     if test "$vl" != "$lang"; then
@@ -11707,7 +11707,7 @@ fi
 GMAKE_MODULE_PARALLELISM="$BUILD_MAX_JOBS"
 if test "$no_parallelism_make" = "YES"; then
     if test -z "$with_num_cpus"; then
-        GMAKE_PARALLELISM="1";
+        GMAKE_PARALLELISM="1"
         if test $GMAKE_MODULE_PARALLELISM -gt 1; then
             AC_MSG_WARN([gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this.])
             if test -z "$with_num_cpus"; then
@@ -11716,7 +11716,7 @@ if test "$no_parallelism_make" = "YES"; then
             GMAKE_MODULE_PARALLELISM="1"
         fi
     else
-        GMAKE_PARALLELISM="$BUILD_NCPUS";
+        GMAKE_PARALLELISM="$BUILD_NCPUS"
         echo "make 3.81 is prone to crashes with parallelism > 1. Since --with-num-cpus was explicitly given, it is honored, but do not complain when make segfault on you." >> warn
     fi
 fi
@@ -11739,15 +11739,15 @@ AC_SUBST(COMPATH)
 
 if test "$build_os" = "cygwin"; then
     if test "$DISABLE_ACTIVEX" = "YES"; then
-        ATL_LIB="$WINDOWS_SDK_HOME/lib"; # Doesn't exist for VSE
-        ATL_INCLUDE="$WINDOWS_SDK_HOME/include".$ds."atl";
-        MFC_LIB="$WINDOWS_SDK_HOME/lib"; # Doesn't exist for VSE
-        MFC_INCLUDE="$WINDOWS_SDK_HOME/include/mfc";
+        ATL_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
+        ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
+        MFC_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
+        MFC_INCLUDE="$WINDOWS_SDK_HOME/include/mfc"
     else
-        ATL_LIB="$COMPATH/atlmfc/lib";
-        ATL_INCLUDE="$COMPATH/atlmfc/include";
-        MFC_LIB="$COMPATH/atlmfc/lib";
-        MFC_INCLUDE="$WINDOWS_SDK_HOME/include/mfc";
+        ATL_LIB="$COMPATH/atlmfc/lib"
+        ATL_INCLUDE="$COMPATH/atlmfc/include"
+        MFC_LIB="$COMPATH/atlmfc/lib"
+        MFC_INCLUDE="$WINDOWS_SDK_HOME/include/mfc"
     fi
     if test "$CL_X64" = "YES"; then
         ATL_LIB="$ATL_LIB/amd64"
@@ -11860,7 +11860,7 @@ fi
 
 AC_SUBST(LO_PATH)
 
-# make sure config.guess is +x; we execute config.guess, so it has to be so;
+# make sure config.guess is +x; we execute config.guess, so it has to be so
 chmod +x ./config.guess
 
 dnl Setting up the post_download check script
