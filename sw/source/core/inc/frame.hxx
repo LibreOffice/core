@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SW_FRAME_HXX
 #define SW_FRAME_HXX
 
@@ -366,8 +367,10 @@ protected:
     // painted if <bCompletePaint> is sal_True.
     sal_Bool bCompletePaint : 1;
     sal_Bool bRetouche      : 1; // frame is responsible for retouching
+
 public:
     sal_Bool bUnUsed2       : 1;
+
 protected:
     sal_Bool bInfInvalid    : 1;  // InfoFlags are invalid
     sal_Bool bInfBody       : 1;  // Frm is in document body

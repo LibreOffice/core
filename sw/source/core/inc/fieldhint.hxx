@@ -34,6 +34,7 @@
 class SwFieldHint : public SfxHint
 {
     SwPaM* pPaM;
+
 public:
     SwFieldHint( SwPaM* p )
         : pPaM(p)

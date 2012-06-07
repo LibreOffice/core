@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _IFINISHEDTHREADLISTENER_HXX
 #define _IFINISHEDTHREADLISTENER_HXX
 
@@ -39,16 +40,14 @@
 */
 class IFinishedThreadListener
 {
-    public:
-
+public:
         inline virtual ~IFinishedThreadListener()
         {
         };
 
         virtual void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID ) = 0;
 
-    protected:
-
+protected:
         inline IFinishedThreadListener()
         {
         };

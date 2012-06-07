@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _FNTCACHE_HXX
 #define _FNTCACHE_HXX
 
@@ -37,7 +38,7 @@ class Printer;
 class OutputDevice;
 class FontMetric;
 class SwFntObj;
-class SwDrawTextInfo;   // DrawText
+class SwDrawTextInfo;
 class ViewShell;
 class SwSubFont;
 class MapMode;
@@ -45,7 +46,6 @@ class MapMode;
 class SwFntCache : public SwCache
 {
 public:
-
     inline SwFntCache() : SwCache(50
 #ifdef DBG_UTIL
     , rtl::OString(RTL_CONSTASCII_STRINGPARAM("Global Font-Cache pFntCache"))

@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _LAYCACHE_HXX
 #define _LAYCACHE_HXX
 
@@ -48,11 +49,11 @@ class SvStream;
  * during the Read(..) function the lock count will set to $8000.
  *
  **************************************************************************/
-
 class SwLayoutCache
 {
     SwLayCacheImpl *pImpl;
     sal_uInt16 nLockCount;
+
 public:
     SwLayoutCache() : pImpl( NULL ), nLockCount( 0 ) {}
     ~SwLayoutCache();
@@ -74,7 +75,6 @@ public:
     sal_Bool CompareLayout( const SwDoc& rDoc ) const;
 #endif
 };
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

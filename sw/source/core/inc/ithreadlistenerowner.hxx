@@ -25,11 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _ITHREADLISTENEROWNER_HXX
 #define _ITHREADLISTENEROWNER_HXX
 
 #include <ifinishedthreadlistener.hxx>
-
 #include <boost/weak_ptr.hpp>
 
 /** interface class of the owner of a thread listener
@@ -40,18 +40,15 @@
 */
 class IThreadListenerOwner
 {
-    public:
-
+public:
         inline virtual ~IThreadListenerOwner()
         {
         };
 
         virtual boost::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef() = 0;
-
         virtual void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID ) = 0;
 
-    protected:
-
+protected:
         inline IThreadListenerOwner()
         {
         };

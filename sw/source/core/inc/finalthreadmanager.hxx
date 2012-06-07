@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _FINALTHREADMANAGER_HXX
 #define _FINALTHREADMANAGER_HXX
 
@@ -35,10 +36,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/util/XJobManager.hpp"
 #include "com/sun/star/frame/XTerminateListener2.hpp"
-
-
 #include <osl/mutex.hxx>
-
 #include <list>
 
 class CancelJobsThread;
@@ -55,7 +53,6 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _crea
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context );
 
 } // closing service helper namespace
-
 
 class FinalThreadManager : public ::cppu::WeakImplHelper3< com::sun::star::lang::XServiceInfo,
                                                            com::sun::star::util::XJobManager,
