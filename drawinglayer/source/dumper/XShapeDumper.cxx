@@ -96,10 +96,10 @@ namespace {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparence"), "%" SAL_PRIdINT32, aTransparence);
     }
 
-    void XShapeDumper::dumpFillTransparenceGradientNameAsAttribute(rtl::OUString aTranspGradName, xmlTextWriterPtr xmlWriter)
+    void XShapeDumper::dumpFillTransparenceGradientNameAsAttribute(rtl::OUString sTranspGradName, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparenceGradientName"), "%s",
-            rtl::OUStringToOString(aTranspGradName, RTL_TEXTENCODING_UTF8).getStr());
+            rtl::OUStringToOString(sTranspGradName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     //because there's more awt::Gradient properties to dump
@@ -146,10 +146,10 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
-    void XShapeDumper::dumpFillGradientNameAsAttribute(rtl::OUString aGradName, xmlTextWriterPtr xmlWriter)
+    void XShapeDumper::dumpFillGradientNameAsAttribute(rtl::OUString sGradName, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillGradientName"), "%s",
-            rtl::OUStringToOString(aGradName, RTL_TEXTENCODING_UTF8).getStr());
+            rtl::OUStringToOString(sGradName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     void XShapeDumper::dumpFillGradientAsElement(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
@@ -159,10 +159,10 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
-    void XShapeDumper::dumpFillHatchNameAsAttribute(rtl::OUString aHatchName, xmlTextWriterPtr xmlWriter)
+    void XShapeDumper::dumpFillHatchNameAsAttribute(rtl::OUString sHatchName, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillHatchName"), "%s",
-            rtl::OUStringToOString(aHatchName, RTL_TEXTENCODING_UTF8).getStr());
+            rtl::OUStringToOString(sHatchName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     void XShapeDumper::dumpFillHatchAsElement(drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter)
@@ -196,6 +196,24 @@ namespace {
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "false");
     }
 
+    void XShapeDumper::dumpFillBitmapNameAsAttribute(rtl::OUString sBitmapName, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillGradientName"), "%s",
+            rtl::OUStringToOString(sBitmapName, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    void XShapeDumper::dumpFillBitmapAsElement(uno::Reference<awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillBitmap" ));
+        if (xBitmap.is())
+        {
+            awt::Size const aSize = xBitmap->getSize();
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aSize.Width);
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aSize.Height);
+        }
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -210,7 +228,8 @@ namespace {
 
     void XShapeDumper::dumpShapeDescriptorAsAttribute( uno::Reference< drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter )
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s", rtl::OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
+            rtl::OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
     }
 
     void XShapeDumper::dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter)
@@ -270,9 +289,9 @@ namespace {
             }
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparenceGradientName");
-                rtl::OUString aTranspGradName;
-                if(anotherAny >>= aTranspGradName)
-                    dumpFillTransparenceGradientNameAsAttribute(aTranspGradName, xmlWriter);
+                rtl::OUString sTranspGradName;
+                if(anotherAny >>= sTranspGradName)
+                    dumpFillTransparenceGradientNameAsAttribute(sTranspGradName, xmlWriter);
             }
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparenceGradient");
@@ -282,9 +301,9 @@ namespace {
             }
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("FillGradientName");
-                rtl::OUString aGradName;
-                if(anotherAny >>= aGradName)
-                    dumpFillGradientNameAsAttribute(aGradName, xmlWriter);
+                rtl::OUString sGradName;
+                if(anotherAny >>= sGradName)
+                    dumpFillGradientNameAsAttribute(sGradName, xmlWriter);
             }
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("FillGradient");
@@ -294,9 +313,9 @@ namespace {
             }
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("FillHatchName");
-                rtl::OUString aHatchName;
-                if(anotherAny >>= aHatchName)
-                    dumpFillGradientNameAsAttribute(aHatchName, xmlWriter);
+                rtl::OUString sHatchName;
+                if(anotherAny >>= sHatchName)
+                    dumpFillGradientNameAsAttribute(sHatchName, xmlWriter);
             }
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("FillHatch");
@@ -309,6 +328,18 @@ namespace {
                 sal_Bool bFillBackground;
                 if(anotherAny >>= bFillBackground)
                     dumpFillBackgroundAsAttribute(bFillBackground, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapName");
+                rtl::OUString sBitmapName;
+                if(anotherAny >>= sBitmapName)
+                    dumpFillGradientNameAsAttribute(sBitmapName, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmap");
+                uno::Reference<awt::XBitmap> xBitmap(xShape, uno::UNO_QUERY);
+                if(anotherAny >>= xBitmap)
+                    dumpFillBitmapAsElement(xBitmap, xmlWriter);
             }
         }
 
