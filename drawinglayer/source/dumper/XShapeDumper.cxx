@@ -188,9 +188,9 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
-    void XShapeDumper::dumpFillBackgroundAsAttribute(sal_Bool aBackground, xmlTextWriterPtr xmlWriter)
+    void XShapeDumper::dumpFillBackgroundAsAttribute(sal_Bool bBackground, xmlTextWriterPtr xmlWriter)
     {
-        if(aBackground)
+        if(bBackground)
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "true");
         else
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "false");
@@ -274,6 +274,14 @@ namespace {
             default:
                 break;
         }
+    }
+
+    void XShapeDumper::dumpFillBitmapLogicalSizeAsAttribute(sal_Bool bBitmapLogicalSize, xmlTextWriterPtr xmlWriter)
+    {
+        if(bBitmapLogicalSize)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapLogicalSize"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapLogicalSize"), "%s", "false");
     }
 
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
@@ -438,6 +446,12 @@ namespace {
                 drawing::RectanglePoint eBitmapRectanglePoint;
                 if(anotherAny >>= eBitmapRectanglePoint)
                     dumpFillBitmapRectanglePointAsAttribute(eBitmapRectanglePoint, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapLogicalSize");
+                sal_Bool bBitmapLogicalSize;
+                if(anotherAny >>= bBitmapLogicalSize)
+                    dumpFillBitmapLogicalSizeAsAttribute(bBitmapLogicalSize, xmlWriter);
             }
         }
 
