@@ -85,6 +85,7 @@ struct ShapeTypeModel
     ::rtl::OUString     maFlip;                 ///< Flip type of the shape (can be "x" or "y").
     sal_Bool            mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)
     sal_Bool            mbVisible;              /// Visible or Hidden
+    ::rtl::OUString     maWrapStyle;            /// Wrapping mode for text.
 
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
