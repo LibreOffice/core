@@ -215,10 +215,11 @@ Control RID_COND_ENTRY
         DropDown = TRUE;
         DDExtraWidth = TRUE;
     };
-    Button BTN_OPTIONS
+    PushButton BTN_OPTIONS
     {
-	Pos = MAP_APPFONT( 120 , 62 );
+	Pos = MAP_APPFONT( 120, 62 );
 	Size = MAP_APPFONT( 60, 14 );
+	Text [ en-US ] = "More options ...";
     };
 };
 
