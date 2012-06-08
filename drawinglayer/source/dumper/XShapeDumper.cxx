@@ -394,6 +394,11 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineTransparence"), "%" SAL_PRIdINT32, aLineTransparence);
 	}
 
+    void XShapeDumper::dumpLineWidthAsAttribute(sal_Int32 aLineWidth, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineWidth"), "%" SAL_PRIdINT32, aLineWidth);
+	}
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -626,6 +631,12 @@ namespace {
 				sal_Int32 aLineTransparence;
 				if(anotherAny >>= aLineTransparence)
 					dumpLineTransparenceAsAttribute(aLineTransparence, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("LineWidth");
+				sal_Int32 aLineWidth;
+				if(anotherAny >>= aLineWidth)
+					dumpLineWidthAsAttribute(aLineWidth, xmlWriter);
 			}
         }
 
