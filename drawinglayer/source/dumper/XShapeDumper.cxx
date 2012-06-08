@@ -399,6 +399,30 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineWidth"), "%" SAL_PRIdINT32, aLineWidth);
 	}
 
+    void XShapeDumper::dumpLineJointAsAttribute(drawing::LineJoint eLineJoint, xmlTextWriterPtr xmlWriter)
+	{
+		switch(eLineJoint)
+		{
+			case drawing::LineJoint_NONE:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "NONE");
+				break;
+			case drawing::LineJoint_MIDDLE:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MIDDLE");
+				break;
+			case drawing::LineJoint_BEVEL:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "BEVEL");
+				break;
+			case drawing::LineJoint_MITER:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MITER");
+				break;
+			case drawing::LineJoint_ROUND:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "ROUND");
+				break;
+			default:
+				break;
+		}
+	}
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -637,6 +661,12 @@ namespace {
 				sal_Int32 aLineWidth;
 				if(anotherAny >>= aLineWidth)
 					dumpLineWidthAsAttribute(aLineWidth, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("LineJoint");
+				drawing::LineJoint eLineJoint;
+				if(anotherAny >>= eLineJoint)
+					dumpLineJointAsAttribute(eLineJoint, xmlWriter);
 			}
         }
 
