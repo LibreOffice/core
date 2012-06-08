@@ -1582,10 +1582,8 @@ AC_ARG_WITH(gxx_include_path,
 ,)
 
 AC_ARG_WITH(help,
-    AS_HELP_STRING([--with-help],
-        [Enable the build of help.
-
-         To build without help, use --without-help.]))
+    AS_HELP_STRING([--without-help],
+        [Disable the build of help.]))
 
 AC_ARG_WITH(java,
     AS_HELP_STRING([--with-java],
