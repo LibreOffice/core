@@ -384,6 +384,11 @@ namespace {
             rtl::OUStringToOString(sLineDashName, RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    void XShapeDumper::dumpLineColorAsAttribute(sal_Int32 aLineColor, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineColor"), "%" SAL_PRIdINT32, aLineColor);
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -604,6 +609,12 @@ namespace {
                 rtl::OUString sLineDashName;
                 if(anotherAny >>= sLineDashName)
                     dumpLineDashNameAsAttribute(sLineDashName, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineColor");
+                sal_Int32 aLineColor;
+                if(anotherAny >>= aLineColor)
+                    dumpLineColorAsAttribute(aLineColor, xmlWriter);
             }
         }
 
