@@ -65,8 +65,11 @@ namespace DOM
 {
     void pushContext(Context& io_rContext)
     {
-        io_rContext.maNamespaces.push_back(
-            io_rContext.maNamespaces.back());
+        // Explicitly use a temp. variable.
+        // Windows/VC++ seems to mess up if .back() is directly passed as
+        // parameter. i.e. Don't use push_back( .back() );
+        Context::NamespaceVectorType::value_type aVal = io_rContext.maNamespaces.back();
+        io_rContext.maNamespaces.push_back( aVal );
     }
 
     void popContext(Context& io_rContext)
