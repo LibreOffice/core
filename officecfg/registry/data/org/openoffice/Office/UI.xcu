@@ -36,7 +36,7 @@
                         <value xml:lang="en-US">Text documents</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">HTML (StarWriter);MS WinWord 2.x (W4W);MS WinWord 6.0;MS Word 95;MS Word 95 Vorlage;MS Word 97;MS Word 97 Vorlage;StarOffice XML (Writer);StarWriter 3.0;StarWriter 3.0 Vorlage/Template;StarWriter 4.0;StarWriter 4.0 Vorlage/Template;StarWriter 5.0;StarWriter 5.0 Vorlage/Template;writer_StarOffice_XML_Writer_Template;Text;WordPerfect;writer8;writer8_template;LotusWordPro</value>
+                                                <value oor:separator=";">AportisDoc Palm DB;HTML (StarWriter);LotusWordPro;MS Word 2003 XML;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 97;MS Word 97 Vorlage;MS_Works;Office Open XML Text;Office Open XML Text Template;OpenDocument Text Flat XML;PocketWord File;Rich Text Format;StarOffice XML (Writer);StarWriter 1.0;StarWriter 2.0;StarWriter 3.0;StarWriter 3.0 Vorlage/Template;StarWriter 4.0;StarWriter 4.0 Vorlage/Template;StarWriter 4.0/GlobalDocument;StarWriter 5.0;StarWriter 5.0 Vorlage/Template;StarWriter 5.0/GlobalDocument;StarWriter DOS;StarWriter/Web 4.0 Vorlage/Template;StarWriter/Web 5.0 Vorlage/Template;Text;WordPerfect;WordPerfect;writer_MIZI_Hwp_97;writer_StarOffice_XML_Writer_Template;writer8;writer8_template;writerglobal8;writerweb8_writer_template</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
@@ -45,7 +45,7 @@
                         <value xml:lang="en-US">Spreadsheets</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">StarCalc 1.0;StarCalc 3.0;StarCalc 4.0;StarCalc 5.0;StarCalc 3.0 Vorlage/Template;StarCalc 4.0 Vorlage/Template;StarCalc 5.0 Vorlage/Template;MS Excel 97;MS Excel 97 Vorlage/Template;MS Excel 95;MS Excel 5.0/95;MS Excel 4.0;MS Excel 95 Vorlage/Template;;MS Excel 4.0 Vorlage/Template;StarOffice XML (Calc);calc_StarOffice_XML_Calc_Template;Text - txt - csv (StarCalc);calc8;calc8_template</value>
+                                                <value oor:separator=";">Calc MS Excel 2007 Binary;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;calc_StarOffice_XML_Calc_Template;calc8;calc8_template;chart8;DIF;Lotus;MiniCalc (Palm);MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;OpenDocument Spreadsheet Flat XML;Pocket Excel;Quattro Pro 6.0;StarCalc 1.0;StarCalc 3.0;StarCalc 3.0 Vorlage/Template;StarCalc 4.0;StarCalc 4.0 Vorlage/Template;StarCalc 5.0;StarCalc 5.0 Vorlage/Template;StarChart 3.0;StarChart 4.0;StarChart 5.0;StarOffice XML (Calc);StarOffice XML (Chart);Text - txt - csv (StarCalc)</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
@@ -54,7 +54,7 @@
                         <value xml:lang="en-US">Presentations</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;MS PowerPoint 97;MS PowerPoint 97 Vorlage;StarImpress 4.0;StarImpress 4.0 Vorlage;StarImpress 5.0;StarImpress 5.0 (packed);StarImpress 5.0 Vorlage;StarOffice XML (Impress);impress8;impress8_template</value>
+                                                <value oor:separator=";">Impress MS PowerPoint 2007 XML;Impress MS PowerPoint 2007 XML AutoPlay;Impress MS PowerPoint 2007 XML Template;impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;impress8;impress8_template;MS PowerPoint 97;MS PowerPoint 97 AutoPlay;MS PowerPoint 97 Vorlage;OpenDocument Presentation Flat XML;StarImpress 4.0;StarImpress 4.0 Vorlage;StarImpress 5.0;StarImpress 5.0 (packed);StarImpress 5.0 Vorlage</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
