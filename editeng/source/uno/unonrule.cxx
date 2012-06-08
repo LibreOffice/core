@@ -286,18 +286,9 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
             sal_Int16 nSet = sal_Int16();
             aVal >>= nSet;
 
-            switch(nSet)
+            // There is no reason to limit numbering types.
+            if ( nSet>=0 )
             {
-            case SVX_NUM_BITMAP:
-            case SVX_NUM_CHAR_SPECIAL:
-            case SVX_NUM_ROMAN_UPPER:
-            case SVX_NUM_ROMAN_LOWER:
-            case SVX_NUM_CHARS_UPPER_LETTER:
-            case SVX_NUM_CHARS_LOWER_LETTER:
-            case SVX_NUM_ARABIC:
-            case SVX_NUM_NUMBER_NONE:
-            case SVX_NUM_CHARS_UPPER_LETTER_N:
-            case SVX_NUM_CHARS_LOWER_LETTER_N:
                 aFmt.SetNumberingType(nSet);
                 continue;
             }
