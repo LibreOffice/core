@@ -379,6 +379,14 @@
 #define HID_AAI_FUNC_OCT2HEX                                    "SC_HID_AAI_FUNC_OCT2HEX"
 #define HID_AAI_FUNC_CONVERT                                    "SC_HID_AAI_FUNC_CONVERT"
 #define HID_AAI_FUNC_FACTDOUBLE                                 "SC_HID_AAI_FUNC_FACTDOUBLE"
+#define HID_AAI_FUNC_IMTAN                                      "SC_HID_AAI_FUNC_IMTAN"
+#define HID_AAI_FUNC_IMSEC                                      "SC_HID_AAI_FUNC_IMSEC"
+#define HID_AAI_FUNC_IMCSC                                      "SC_HID_AAI_FUNC_IMCSC"
+#define HID_AAI_FUNC_IMCOT                                      "SC_HID_AAI_FUNC_IMCOT"
+#define HID_AAI_FUNC_IMSINH                                     "SC_HID_AAI_FUNC_IMSINH"
+#define HID_AAI_FUNC_IMCOSH                                     "SC_HID_AAI_FUNC_IMCOSH"
+#define HID_AAI_FUNC_IMSECH                                     "SC_HID_AAI_FUNC_IMSECH"
+#define HID_AAI_FUNC_IMCSCH                                     "SC_HID_AAI_FUNC_IMCSCH"
 
 // DateFunc Addin Functions (max.20) -----------------------------------------
 #define HID_DAI_FUNC_DAYSINMONTH                                "SC_HID_DAI_FUNC_DAYSINMONTH"

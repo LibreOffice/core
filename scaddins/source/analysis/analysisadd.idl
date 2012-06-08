@@ -328,6 +328,38 @@ module addin
         string getImsqrt( [in] string Num )
             raises( com::sun::star::lang::IllegalArgumentException );
 
+        /// imtan.
+        string getImtan( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imsec.
+        string getImsec( [in] string Num)
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imcsc.
+        string getImcsc( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imcot.
+        string getImcot( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imsinh.
+        string getImsinh( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imcosh.
+        string getImcosh( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imsech.
+        string getImsech( [in] string Num)
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imcsch.
+        string getImcsch( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
         /// complex.
         string getComplex( [in] double Real, [in] double Imaginary, [in] any Suffix )
             raises( com::sun::star::lang::IllegalArgumentException );
