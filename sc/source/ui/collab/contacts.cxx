@@ -32,6 +32,7 @@
 #include "collab.hxx"
 #include "contacts.hrc"
 #include "scresid.hxx"
+#include <svtools/filter.hxx>
 #include <tubes/manager.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/contact-list.hxx>
@@ -88,6 +89,20 @@ public:
             AccountContactPairV::iterator it;
             for( it = aPairs.begin(); it != aPairs.end(); it++ )
             {
+                Image aImage;
+                GFile *pAvatarFile = tp_contact_get_avatar_file( it->second );
+                if( pAvatarFile )
+                {
+                    const rtl::OUString sAvatarFileUrl = fromUTF8( g_file_get_path ( pAvatarFile ) );
+                    Graphic aGraphic;
+                    if( GRFILTER_OK == GraphicFilter::LoadGraphic( sAvatarFileUrl, rtl::OUString(""), aGraphic ) )
+                    {
+                        BitmapEx aBitmap = aGraphic.GetBitmapEx();
+                        double fScale = 30.0 / aBitmap.GetSizePixel().Height();
+                        aBitmap.Scale( fScale, fScale );
+                        aImage = Image( aBitmap );
+                    }
+                }
                 fprintf( stderr, "'%s' => '%s' '%s'\n",
                          tp_account_get_display_name( it->first ),
                          tp_contact_get_alias( it->second ),
@@ -98,7 +113,7 @@ public:
                 aEntry.append( sal_Unicode( '\t' ) );
                 aEntry.append( fromUTF8 ( tp_contact_get_identifier( it->second ) ) );
                 aEntry.append( sal_Unicode( '\t' ) );
-                SvLBoxEntry* pEntry = maList.InsertEntry( aEntry.makeStringAndClear() );
+                SvLBoxEntry* pEntry = maList.InsertEntry( aEntry.makeStringAndClear(), aImage, aImage );
                 // FIXME: ref the TpContact ...
                 pEntry->SetUserData( it->second );
             }
