@@ -428,6 +428,9 @@ ObjectRepresentation::~ObjectRepresentation()
 
 ObjectRepresentation& ObjectRepresentation::operator=( const ObjectRepresentation& rPresentation )
 {
+    // Check for self-assignment
+    if (this == &rPresentation)
+        return *this;
     mxObject = rPresentation.mxObject;
     delete mpMtf, ( mpMtf = rPresentation.mpMtf ? new GDIMetaFile( *rPresentation.mpMtf ) : NULL );
 
