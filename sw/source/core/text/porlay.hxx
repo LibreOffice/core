@@ -93,10 +93,8 @@ public:
     void   SetRightOfst( const SwTwips nNew ) { nRightOfst = nNew; }
 };
 
-/*************************************************************************
- * class SwLineLayout
- *************************************************************************/
 
+/// Collection of SwLinePortion instances, representing one line of text.
 class SwLineLayout : public SwTxtPortion
 {
 private:
@@ -260,6 +258,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwLineLayout)
 };
 
+/// Collection of SwLineLayout instances, represents the paragraph text in Writer layout.
 class SwParaPortion : public SwLineLayout
 {
     // Area that needs repainting
