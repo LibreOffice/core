@@ -527,7 +527,7 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage
         if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,sal_True,&pItem)==SFX_ITEM_SET)
         {
 
-            UpdateNumberFormatter( pDoc,(const SvxNumberInfoItem&)*pItem);
+            UpdateNumberFormatter((const SvxNumberInfoItem&)*pItem);
         }
 
         ApplyAttributes( pOutSet, pOldSet );

@@ -413,7 +413,6 @@ void ScTabViewShell::MakeNumberInfoItem( ScDocument*         pDoc,
 //------------------------------------------------------------------
 
 void ScTabViewShell::UpdateNumberFormatter(
-                        ScDocument*              pDoc,
                         const SvxNumberInfoItem& rInfoItem )
 {
     const sal_uInt32 nDelCount = rInfoItem.GetDelCount();

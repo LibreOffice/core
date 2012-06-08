@@ -403,8 +403,7 @@ public:
                                       ScViewData*            pViewData,
                                       SvxNumberInfoItem**    ppItem );
 
-    void    UpdateNumberFormatter   ( ScDocument*               pDoc,
-                                      const SvxNumberInfoItem&  rInfoItem );
+    void    UpdateNumberFormatter   ( const SvxNumberInfoItem&  rInfoItem );
 
     void    ExecuteCellFormatDlg    ( SfxRequest& rReq, sal_uInt16 nTabPage = 0xffff );
 

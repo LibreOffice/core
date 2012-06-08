@@ -853,7 +853,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                         if ( SFX_STYLE_FAMILY_PARA == eFam )
                         {
-                            pTabViewShell->UpdateNumberFormatter( pDoc,
+                            pTabViewShell->UpdateNumberFormatter(
                                 (const SvxNumberInfoItem&)
                                     *(pDocSh->GetItem(SID_ATTR_NUMBERFORMAT_INFO)) );
 
