@@ -46,6 +46,16 @@ TextParagraph::~TextParagraph()
 {
 }
 
+void lcl_getBulletclr(Color& bulletClr,
+                      const TextRunVector& rRuns)
+{
+    // color of closest text in runs
+    if (rRuns.begin() != rRuns.end() && ((*rRuns.begin())->getTextCharacterProperties()).maCharColor.isUsed())
+    {
+        bulletClr = ((*rRuns.begin())->getTextCharacterProperties()).maCharColor;
+    }
+}
+
 void TextParagraph::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > &xText,
@@ -101,6 +111,15 @@ void TextParagraph::insertAt(
             pTextParagraphStyle->pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_False, fCharacterSize );
             fCharacterSize = pTextParagraphStyle->getCharHeightPoints( 18 );
         }
+
+        // bullet color inherits from closest text
+        if (maProperties.getBulletList().maBulletColorPtr && !(maProperties.getBulletList().maBulletColorPtr)->isUsed())
+        {
+            Color bulletClr;
+            lcl_getBulletclr(bulletClr, maRuns);
+            (maProperties.getBulletList().maBulletColorPtr)->assignIfUsed(bulletClr);
+        }
+
         maProperties.pushToPropSet( rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
 
         // empty paragraphs do not have bullets in ppt

@@ -90,6 +90,7 @@ public:
     sal_Int16                           getLevel( ) const { return mnLevel; }
     PropertyMap&                        getTextParagraphPropertyMap() { return maTextParagraphPropertyMap; }
     BulletList&                         getBulletList() { return maBulletList; }
+    const BulletList&                   getBulletList() const { return maBulletList; }
     TextCharacterProperties&            getTextCharacterProperties() { return maTextCharacterProperties; }
     const TextCharacterProperties&      getTextCharacterProperties() const { return maTextCharacterProperties; }
 
