@@ -107,8 +107,11 @@ public:
     void DeleteAndDestroy(SvLinkSource_Entry_Impl* p)
     {
         iterator it = std::find(begin(), end(), p);
-        if( it != end() )
+        if (it != end())
+        {
             erase(it);
+            delete p;
+        }
     }
 
     ~SvLinkSource_Array_Impl()
