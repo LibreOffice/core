@@ -109,6 +109,11 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maLbColMin( this, ScResId( LB_COL) ),
     maLbColMiddle( this, ScResId( LB_COL) ),
     maLbColMax( this, ScResId( LB_COL) ),
+    maLbDataBarMinType( this, ScResId( LB_TYPE_COL_SCALE ) ),
+    maLbDataBarMaxType( this, ScResId( LB_TYPE_COL_SCALE ) ),
+    maEdDataBarMin( this, ScResId( ED_COL_SCALE ) ),
+    maEdDataBarMax( this, ScResId( ED_COL_SCALE ) ),
+    maBtOptions( this, ScResId( BTN_OPTIONS ) ),
     mpDoc(pDoc)
 {
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
@@ -260,13 +265,16 @@ void ScCondFrmtEntry::Init()
     Point aPointLb = maLbEntryTypeMiddle.GetPosPixel();
     Point aPointEd = maEdMiddle.GetPosPixel();
     Point aPointCol = maLbColMiddle.GetPosPixel();
+    Point aPointEdDataBar = maEdDataBarMin.GetPosPixel();
     const long nMovePos = 150;
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
     aPointCol.X() += nMovePos;
+    aPointEdDataBar.X() += 1.5*nMovePos;
     maLbEntryTypeMiddle.SetPosPixel(aPointLb);
     maEdMiddle.SetPosPixel(aPointEd);
     maLbColMiddle.SetPosPixel(aPointCol);
+    maEdDataBarMin.SetPosPixel(aPointEdDataBar);
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
     aPointCol.X() += nMovePos;
@@ -485,6 +493,11 @@ void ScCondFrmtEntry::SetColorScaleType()
 void ScCondFrmtEntry::HideDataBarElements()
 {
     maLbColorFormat.Hide();
+    maLbDataBarMinType.Hide();
+    maLbDataBarMaxType.Hide();
+    maEdDataBarMin.Hide();
+    maEdDataBarMax.Hide();
+    maBtOptions.Hide();
 }
 
 void ScCondFrmtEntry::SetDataBarType()
@@ -493,6 +506,11 @@ void ScCondFrmtEntry::SetDataBarType()
     HideCondElements();
     HideColorScaleElements();
     maLbColorFormat.Show();
+    maLbDataBarMinType.Show();
+    maLbDataBarMaxType.Show();
+    maEdDataBarMin.Show();
+    maEdDataBarMax.Show();
+    maBtOptions.Show();
 }
 
 void ScCondFrmtEntry::Select()
@@ -730,6 +748,13 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, StyleSelectHdl)
 	maWdPreview.Init( rSet );
     }
 
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScCondFrmtEntry, OptionBtnHdl )
+{
+    ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this);
+    pDlg->Execute();
     return 0;
 }
 
