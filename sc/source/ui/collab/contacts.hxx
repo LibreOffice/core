@@ -28,10 +28,6 @@
 
 #include "sal/config.h"
 
-#include <vector>
-#include "collab.hxx"
-#include <tubes/conference.hxx>
-
 class TeleManager;
 namespace tubes {
     void createContacts( const TeleManager &rContacts );

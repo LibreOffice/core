@@ -29,13 +29,10 @@
 #include "sal/config.h"
 
 #include <vector>
-#include "collab.hxx"
 #include "contacts.hrc"
 #include "scresid.hxx"
 #include <svtools/filter.hxx>
 #include <tubes/manager.hxx>
-#include <tubes/conference.hxx>
-#include <tubes/contact-list.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
 #include <svx/simptabl.hxx>
