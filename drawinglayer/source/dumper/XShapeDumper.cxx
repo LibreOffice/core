@@ -328,6 +328,28 @@ namespace {
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "false");
     }
 
+    // ----------------------------------------
+    // ---------- LineProperties.idl ----------
+    // ----------------------------------------
+
+    void XShapeDumper::dumpLineStyleAsAttribute(drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter)
+    {
+        switch(eLineStyle)
+        {
+            case drawing::LineStyle_NONE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStyle"), "%s", "NONE");
+                break;
+            case drawing::LineStyle_SOLID:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStyle"), "%s", "SOLID");
+                break;
+            case drawing::LineStyle_DASH:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStyle"), "%s", "DASH");
+                break;
+            default:
+                break;
+        }
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -526,6 +548,16 @@ namespace {
                 sal_Bool bBitmapTile;
                 if(anotherAny >>= bBitmapTile)
                     dumpFillBitmapTileAsAttribute(bBitmapTile, xmlWriter);
+            }
+        }
+
+        else if(xServiceInfo->supportsService("com.sun.star.drawing.LineProperties"))
+        {
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineStyle");
+                drawing::LineStyle eLineStyle;
+                if(anotherAny >>= eLineStyle)
+                    dumpLineStyleAsAttribute(eLineStyle, xmlWriter);
             }
         }
 
