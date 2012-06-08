@@ -27,8 +27,8 @@
 
 #please make generic modifications to unxgcc.mk or linux.mk
 gb_COMPILERDEFAULTOPTFLAGS := -O2
-gb_CXXFLAGS += -fsigned-char -fno-omit-frame-pointer
-gb_CFLAGS += -fsigned-char -fno-omit-frame-pointer
+gb_CXXFLAGS += -fno-omit-frame-pointer
+gb_CFLAGS += -fno-omit-frame-pointer
 
 include $(GBUILDDIR)/platform/linux.mk
 
