@@ -26,7 +26,6 @@
 # instead of those above.
 
 include $(SRCDIR)/writerfilter/debug_setup.mk
-include $(SRCDIR)/writerfilter/source/generated.mk
 
 $(eval $(call gb_Library_Library,writerfilter))
 
@@ -166,7 +165,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,writerfilter,\
 	CustomTarget/writerfilter/source/resources \
-    $(patsubst %,CustomTarget/writerfilter/source/OOXMLFactory_%,$(WRITERFILTER_OOXMLNAMESPACES)) \
+    $(patsubst %,CustomTarget/writerfilter/source/OOXMLFactory_%,$(writerfilter_OOXMLNAMESPACES)) \
     CustomTarget/writerfilter/source/OOXMLFactory_generated \
     CustomTarget/writerfilter/source/OOXMLFactory_values \
     CustomTarget/writerfilter/source/sprmcodetostr \
