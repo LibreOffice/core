@@ -28,8 +28,7 @@
 #please make generic modifications to unxgcc.mk or linux.mk
 gb_CPUDEFS += -DPPC
 gb_COMPILERDEFAULTOPTFLAGS := -O2
-gb_CXXFLAGS += -mminimal-toc -fsigned-char
-gb_CFLAGS += -fsigned-char
+gb_CXXFLAGS += -mminimal-toc
 
 include $(GBUILDDIR)/platform/linux.mk
 
