@@ -104,10 +104,6 @@ AddonsToolBarManager::AddonsToolBarManager( const Reference< XMultiServiceFactor
                                 ToolBar* pToolBar ) :
     ToolBarManager( rServiceManager, rFrame, rResourceName, pToolBar )
 {
-    // Configuration data is retrieved from non-writable configuration layer. Therefor we
-    // must disable some menu entries.
-    m_bCanBeCustomized = sal_False;
-
     m_pToolBar->SetMenuType( TOOLBOX_MENUTYPE_CLIPPEDITEMS );
     m_pToolBar->SetSelectHdl( LINK( this, AddonsToolBarManager, Select) );
     m_pToolBar->SetActivateHdl( LINK( this, AddonsToolBarManager, Activate) );
