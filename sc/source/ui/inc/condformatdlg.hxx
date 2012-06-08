@@ -44,6 +44,7 @@ class ScDocument;
 class ScConditionalFormat;
 class ScFormatEntry;
 class ScConditionalFormat;
+struct ScDataBarFormatData;
 
 enum ScCondFormatEntryType
 {
@@ -97,7 +98,9 @@ private:
     ListBox maLbDataBarMaxType;
     Edit maEdDataBarMin;
     Edit maEdDataBarMax;
-    Button maBtOptions;
+    PushButton maBtOptions;
+
+    boost::scoped_ptr<ScDataBarFormatData> mpDataBarData;
 
     //
     void SwitchToType(ScCondFormatEntryType eType);
@@ -121,10 +124,12 @@ private:
     DECL_LINK( TypeListHdl, void*);
     DECL_LINK( ColFormatTypeHdl, void*);
     DECL_LINK( StyleSelectHdl, void* );
+    DECL_LINK( OptionBtnHdl, void* );
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc );
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry );
+    virtual ~ScCondFrmtEntry();
 
     virtual long Notify( NotifyEvent& rNEvt );
 

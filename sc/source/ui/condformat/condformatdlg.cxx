@@ -36,6 +36,7 @@
 #include <svl/intitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
+#include <vcl/msgbox.hxx>
 
 #include "anyrefdg.hxx"
 #include "document.hxx"
@@ -44,6 +45,7 @@
 #include "tabvwsh.hxx"
 #include "conditio.hxx"
 #include "colorscale.hxx"
+#include "colorformat.hxx"
 
 #include <rtl/math.hxx>
 
@@ -164,6 +166,11 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
     maLbColMin( this, ScResId( LB_COL) ),
     maLbColMiddle( this, ScResId( LB_COL) ),
     maLbColMax( this, ScResId( LB_COL) ),
+    maLbDataBarMinType( this, ScResId( LB_TYPE_COL_SCALE ) ),
+    maLbDataBarMaxType( this, ScResId( LB_TYPE_COL_SCALE ) ),
+    maEdDataBarMin( this, ScResId( ED_COL_SCALE ) ),
+    maEdDataBarMax( this, ScResId( ED_COL_SCALE ) ),
+    maBtOptions( this, ScResId( BTN_OPTIONS ) ),
     mpDoc(pDoc)
 {
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
@@ -240,6 +247,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
     else if( pFormatEntry && pFormatEntry->GetType() == condformat::DATABAR )
     {
 	const ScDataBarFormat* pEntry = static_cast<const ScDataBarFormat*>(pFormatEntry);
+	mpDataBarData.reset(new ScDataBarFormatData(*pEntry->GetDataBarData()));
 	maLbType.SelectEntryPos(0);
 	maLbColorFormat.SelectEntryPos(2);
 	SetDataBarType();
@@ -248,6 +256,10 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
     SwitchToType(COLLAPSED);
     SetHeight();
+}
+
+ScCondFrmtEntry::~ScCondFrmtEntry()
+{
 }
 
 void ScCondFrmtEntry::Init()
@@ -266,15 +278,18 @@ void ScCondFrmtEntry::Init()
     Point aPointEd = maEdMiddle.GetPosPixel();
     Point aPointCol = maLbColMiddle.GetPosPixel();
     Point aPointEdDataBar = maEdDataBarMin.GetPosPixel();
+    Point aPointLbDataBar = maLbDataBarMaxType.GetPosPixel();
     const long nMovePos = 150;
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
     aPointCol.X() += nMovePos;
     aPointEdDataBar.X() += 1.5*nMovePos;
+    aPointLbDataBar.X() += 1.5*nMovePos;
     maLbEntryTypeMiddle.SetPosPixel(aPointLb);
     maEdMiddle.SetPosPixel(aPointEd);
     maLbColMiddle.SetPosPixel(aPointCol);
     maEdDataBarMin.SetPosPixel(aPointEdDataBar);
+    maLbDataBarMaxType.SetPosPixel(aPointLbDataBar);
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
     aPointCol.X() += nMovePos;
@@ -319,6 +334,14 @@ void ScCondFrmtEntry::Init()
         maLbColMiddle.SetUpdateMode( sal_True );
         maLbColMax.SetUpdateMode( sal_True );
     }
+
+    maBtOptions.SetClickHdl( LINK( this, ScCondFrmtEntry, OptionBtnHdl ) );
+
+    mpDataBarData.reset(new ScDataBarFormatData());
+    mpDataBarData->mpUpperLimit.reset(new ScColorScaleEntry());
+    mpDataBarData->mpLowerLimit.reset(new ScColorScaleEntry());
+    mpDataBarData->mpLowerLimit->SetMin(true);
+    mpDataBarData->mpUpperLimit->SetMax(true);
 }
 
 namespace {
@@ -445,7 +468,7 @@ void ScCondFrmtEntry::SetHeight()
 		aSize.Height() = 200;
 		break;
 	    case DATABAR:
-		aSize.Height() = 120;
+		aSize.Height() = 200;
 		break;
 	    default:
 		break;
@@ -637,7 +660,7 @@ ScFormatEntry* ScCondFrmtEntry::createColorscaleEntry() const
 ScFormatEntry* ScCondFrmtEntry::createDatabarEntry() const
 {
     ScDataBarFormat* pDataBar = new ScDataBarFormat(mpDoc);
-    pDataBar->SetDataBarData(new ScDataBarFormatData());
+    pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData.get()));
     return pDataBar;
 }
 
@@ -753,8 +776,12 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, StyleSelectHdl)
 
 IMPL_LINK_NOARG( ScCondFrmtEntry, OptionBtnHdl )
 {
-    ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this);
-    pDlg->Execute();
+    ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this, *mpDataBarData);
+    if( pDlg->Execute() == RET_OK)
+    {
+	std::cout << "Ok" << std::endl;
+	mpDataBarData.reset(pDlg->GetData());
+    }
     return 0;
 }
 

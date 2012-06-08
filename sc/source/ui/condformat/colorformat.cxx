@@ -33,6 +33,7 @@
 
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
+#include <vcl/msgbox.hxx>
 
 ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow):
     ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
@@ -66,7 +67,7 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow):
 
 namespace {
 
-void SetType(ScColorScaleEntry* pEntry, ListBox& aLstBox)
+void SetType(const ScColorScaleEntry* pEntry, ListBox& aLstBox)
 {
     if(pEntry->GetMin())
         aLstBox.SelectEntryPos(0);
@@ -82,6 +83,37 @@ void SetType(ScColorScaleEntry* pEntry, ListBox& aLstBox)
         aLstBox.SelectEntryPos(4);
 }
 
+void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry )
+{
+    double nVal = 0;
+    switch(rLstBox.GetSelectEntryPos())
+    {
+        case 0:
+            pEntry->SetMin(true);
+            break;
+        case 1:
+            pEntry->SetMax(true);
+            break;
+        case 2:
+            pEntry->SetPercentile(true);
+            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pEntry->SetValue(nVal);
+            break;
+        case 3:
+            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pEntry->SetPercent(true);
+            pEntry->SetValue(nVal);
+            break;
+        case 4:
+            //FIXME
+            break;
+        case 5:
+            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pEntry->SetValue(nVal);
+            break;
+    }
+}
+
 void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
 {
     if(pEntry->HasFormula())
@@ -92,6 +124,53 @@ void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
         aEdit.Disable();
 }
 
+}
+
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData):
+    ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
+    maBtnOk( this, ScResId( BTN_OK ) ),
+    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
+    maFlBarColors( this, ScResId( FL_BAR_COLORS ) ),
+    maFlAxes( this, ScResId( FL_AXIS ) ),
+    maFlValues( this, ScResId( FL_VALUES ) ),
+    maFtMin( this, ScResId( FT_MINIMUM ) ),
+    maFtMax( this, ScResId( FT_MAXIMUM ) ),
+    maFtPositive( this, ScResId( FT_POSITIVE ) ),
+    maFtNegative( this, ScResId( FT_NEGATIVE ) ),
+    maFtPosition( this, ScResId( FT_POSITION ) ),
+    maFtAxisColor( this, ScResId( FT_COLOR_AXIS ) ),
+    maLbPos( this, ScResId( LB_POS ) ),
+    maLbNeg( this, ScResId( LB_NEG ) ),
+    maLbAxisCol( this, ScResId( LB_COL_AXIS ) ),
+    maLbTypeMin( this, ScResId( LB_TYPE ) ),
+    maLbTypeMax( this, ScResId( LB_TYPE ) ),
+    maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
+    maEdMin( this, ScResId( ED_MIN ) ),
+    maEdMax( this, ScResId( ED_MAX ) )
+{
+    Init();
+    FreeResource();
+
+    maLbPos.SelectEntry( rData.maPositiveColor );
+    if(rData.mpNegativeColor)
+        maLbNeg.SelectEntry( *rData.mpNegativeColor );
+
+    switch (rData.meAxisPosition)
+    {
+        case databar::NONE:
+            maLbAxisPos.SelectEntryPos(2);
+            break;
+        case databar::AUTOMATIC:
+            maLbAxisPos.SelectEntryPos(0);
+            break;
+        case databar::MIDDLE:
+            maLbAxisPos.SelectEntryPos(1);
+            break;
+    }
+    ::SetType(rData.mpLowerLimit.get(), maLbTypeMin);
+    ::SetType(rData.mpUpperLimit.get(), maLbTypeMax);
+    SetValue(rData.mpLowerLimit.get(), maEdMin);
+    SetValue(rData.mpUpperLimit.get(), maEdMax);
 }
 
 ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDataBarFormat* pFormat):
@@ -188,6 +267,43 @@ void ScDataBarSettingsDlg::Init()
     maLbTypeMax.SetPosPixel(aPoint);
 }
 
+namespace {
+
+void GetAxesPosition(ScDataBarFormatData* pData, const ListBox& rLbox)
+{
+    switch(rLbox.GetSelectEntryPos())
+    {
+        case 0:
+            pData->meAxisPosition = databar::AUTOMATIC;
+            break;
+        case 1:
+            pData->meAxisPosition = databar::MIDDLE;
+            break;
+        case 2:
+            pData->meAxisPosition = databar::NONE;
+            break;
+    }
+}
+
+
+}
+
+ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
+{
+    ScDataBarFormatData* pData = new ScDataBarFormatData();
+    pData->maPositiveColor = maLbPos.GetSelectEntryColor();
+    pData->mpNegativeColor.reset(new Color(maLbNeg.GetSelectEntryColor()));
+    pData->mbGradient = true; //FIXME
+    pData->mpUpperLimit.reset(new ScColorScaleEntry());
+    pData->mpLowerLimit.reset(new ScColorScaleEntry());
+
+    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get());
+    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get());
+    GetAxesPosition(pData, maLbAxisPos);
+
+    return pData;
+}
+
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 {
     //check that min < max
@@ -216,7 +332,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
     }
     else
     {
-        Close();
+        EndDialog(RET_OK);
     }
     return 0;
 }

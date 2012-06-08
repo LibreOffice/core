@@ -33,11 +33,7 @@
 #include "anyrefdg.hxx"
 
 class ScDataBarFormat;
-
-class ScColorScaleSettingsDlg : public ModalDialog
-{
-
-};
+struct ScDataBarFormatData;
 
 class ScDataBarSettingsDlg : public ModalDialog
 {
@@ -72,7 +68,10 @@ private:
 
 public:
     ScDataBarSettingsDlg(Window* pParent);
+    ScDataBarSettingsDlg(Window* pParent, const ScDataBarFormatData& rData);
     ScDataBarSettingsDlg(Window* pParent, ScDataBarFormat* pFormat);
+
+    ScDataBarFormatData* GetData();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
