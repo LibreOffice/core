@@ -985,7 +985,7 @@ long TextEngine::ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex
     TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );
 
     sal_uInt16 nTextPortionStart = 0;
-    sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( nIndex, nTextPortionStart, bDoPreferPortionStart );
+    size_t nTextPortion = pParaPortion->GetTextPortions().FindPortion( nIndex, nTextPortionStart, bDoPreferPortionStart );
 
     DBG_ASSERT( ( nTextPortion >= pLine->GetStartPortion() ) && ( nTextPortion <= pLine->GetEndPortion() ), "GetXPos: Portion not in current line! " );
 
@@ -1697,11 +1697,10 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uLong nPara )
 
     if ( bLineBreak == sal_True )
     {
-        // -2: Die neue ist bereits eingefuegt.
-        #ifdef DBG_UTIL
-        TextLine* pLastLine = pTEParaPortion->GetLines().GetObject( pTEParaPortion->GetLines().Count()-2 );
-        DBG_ASSERT( pLastLine, "Weicher Umbruch, keine Zeile ?!" );
-        #endif
+        // -2: The new one is already inserted.
+        OSL_ENSURE(
+            pTEParaPortion->GetLines()[pTEParaPortion->GetLines().size()-2],
+            "Soft Break, no Line?!");
         sal_uInt16 nPos = (sal_uInt16) pTEParaPortion->GetTextPortions().size() - 1 ;
         pTmpLine->SetStartPortion( nPos );
         pTmpLine->SetEndPortion( nPos );
@@ -1857,7 +1856,9 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
             break;
         }
     }
-    DBG_ASSERT( nP < pTEParaPortion->GetTextPortions().Count() || pTEParaPortion->GetTextPortions().empty(), "Nichts zum loeschen: CreateTextPortions" );
+    OSL_ENSURE(nP < pTEParaPortion->GetTextPortions().size()
+            || pTEParaPortion->GetTextPortions().empty(),
+            "Nothing to delete: CreateTextPortions");
     if ( nInvPortion && ( nPortionStart+pTEParaPortion->GetTextPortions()[nInvPortion]->GetLen() > nStartPos ) )
     {
         // lieber eine davor...
@@ -1883,14 +1884,14 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
             pTEParaPortion->GetTextPortions().push_back( pNew );
         }
     }
-    DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "No Portions?!" );
+    OSL_ENSURE(pTEParaPortion->GetTextPortions().size(), "No Portions?!");
 }
 
 void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short nNewChars )
 {
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-    DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "Keine Portions!" );
-    DBG_ASSERT( nNewChars, "RecalcTextPortion mit Diff == 0" );
+    OSL_ENSURE(pTEParaPortion->GetTextPortions().size(), "no Portions!");
+    OSL_ENSURE(nNewChars, "RecalcTextPortion with Diff == 0");
 
     TextNode* const pNode = pTEParaPortion->GetNode();
     if ( nNewChars > 0 )
@@ -1971,7 +1972,8 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
             DBG_ASSERT( pTP->GetLen() > (-nNewChars), "Portion zu klein zum schrumpfen!" );
             pTP->GetLen() = pTP->GetLen() + nNewChars;
         }
-        DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "RecalcTextPortions: Keine mehr da!" );
+        OSL_ENSURE( pTEParaPortion->GetTextPortions().size(),
+                "RecalcTextPortions: none are left!" );
     }
 }
 
@@ -2036,7 +2038,8 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                     nIndex = pLine->GetStart();
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
-                        DBG_ASSERT( pPortion->GetTextPortions().Count(), "Zeile ohne Textportion im Paint!" );
+                        OSL_ENSURE(pPortion->GetTextPortions().size(),
+                                "Line without Textportion in Paint!");
                         TETextPortion* pTextPortion = pPortion->GetTextPortions()[ y ];
                         DBG_ASSERT( pTextPortion, "NULL-Pointer im Portioniterator in UpdateViews" );
 
@@ -2295,7 +2298,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     // ---------------------------------------------------------------
     // Ab hier alle Zeilen durchformatieren...
     // ---------------------------------------------------------------
-    sal_uInt16 nDelFromLine = 0xFFFF;
+    size_t nDelFromLine = std::numeric_limits<size_t>::max();
     sal_Bool bLineBreak = sal_False;
 
     sal_uInt16 nIndex = pLine->GetStart();
@@ -2384,7 +2387,8 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
         {
             bEOL = sal_True;
             pLine->SetEnd( nPortionEnd );
-            DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "Keine TextPortions?" );
+            OSL_ENSURE(pTEParaPortion->GetTextPortions().size(),
+                    "No TextPortions?");
             pLine->SetEndPortion( (sal_uInt16)pTEParaPortion->GetTextPortions().size() - 1 );
         }
 
@@ -2511,12 +2515,16 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
         }
     }   // while ( Index < Len )
 
-    if ( nDelFromLine != 0xFFFF )
+    if (nDelFromLine != std::numeric_limits<size_t>::max())
+    {
         for( TextLines::iterator it = pTEParaPortion->GetLines().begin() + nDelFromLine;
              it != pTEParaPortion->GetLines().end(); ++it )
+        {
             delete *it;
+        }
         pTEParaPortion->GetLines().erase( pTEParaPortion->GetLines().begin() + nDelFromLine,
                                           pTEParaPortion->GetLines().end() );
+    }
 
     DBG_ASSERT( pTEParaPortion->GetLines().size(), "Keine Zeile nach CreateLines!" );
 

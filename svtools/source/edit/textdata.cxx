@@ -194,9 +194,9 @@ sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, sal_Bool bInclEnd )
         }
     }
 
-    // Dann sollte es am Ende der letzten Zeile sein!
-    DBG_ASSERT( nChar == maLines[ maLines.Count() - 1 ]->GetEnd(), "Index voll daneben!" );
-    DBG_ASSERT( !bInclEnd, "Zeile nicht gefunden: FindLine" );
+    // Then it should be at the end of the last line
+    OSL_ENSURE(nChar == maLines[maLines.size() - 1]->GetEnd(), "wrong Index");
+    OSL_ENSURE(!bInclEnd, "Line not found: FindLine");
     return ( maLines.size() - 1 );
 }
 
