@@ -123,32 +123,54 @@ WinInetBackend::WinInetBackend()
                 GetProcAddress( hWinInetDll.module, "InternetQueryOptionA" ) );
         if (lpfnInternetQueryOption)
         {
-            LPINTERNET_PROXY_INFO lpi = NULL;
-
-            // query for the neccessary space
-            DWORD dwLength = 0;
-            lpfnInternetQueryOption(
+            // Some Windows versions would fail the InternetQueryOption call
+            // with ERROR_OUTOFMEMORY when the initial dwLength were zero (and
+            // are apparently fine with the initial sizeof (INTERNET_PROXY_INFO)
+            // and need no reallocation), while other versions fail with
+            // ERROR_INSUFFICIENT_BUFFER upon that initial dwLength and need a
+            // reallocation:
+            INTERNET_PROXY_INFO pi;
+            LPINTERNET_PROXY_INFO lpi = &pi;
+            DWORD dwLength = sizeof (INTERNET_PROXY_INFO);
+            BOOL ok = lpfnInternetQueryOption(
                 NULL,
                 INTERNET_OPTION_PROXY,
                 (LPVOID)lpi,
                 &dwLength );
-
-            // allocate sufficient space on the heap
-            // insufficient space on the heap results
-            // in a stack overflow exception, we assume
-            // this never happens, because of the relatively
-            // small amount of memory we need
-            // alloca is nice because it is fast and we don't
-            // have to free the allocated memory, it will be
-            // automatically done
-            lpi = reinterpret_cast< LPINTERNET_PROXY_INFO >(
-                alloca( dwLength ) );
-
-            lpfnInternetQueryOption(
-                NULL,
-                INTERNET_OPTION_PROXY,
-                (LPVOID)lpi,
-                &dwLength );
+            if (!ok)
+            {
+                DWORD err = GetLastError();
+                if (err = ERROR_INSUFFICIENT_BUFFER)
+                {
+                    // allocate sufficient space on the heap
+                    // insufficient space on the heap results
+                    // in a stack overflow exception, we assume
+                    // this never happens, because of the relatively
+                    // small amount of memory we need
+                    // alloca is nice because it is fast and we don't
+                    // have to free the allocated memory, it will be
+                    // automatically done
+                    lpi = reinterpret_cast< LPINTERNET_PROXY_INFO >(
+                        alloca( dwLength ) );
+                    ok = lpfnInternetQueryOption(
+                        NULL,
+                        INTERNET_OPTION_PROXY,
+                        (LPVOID)lpi,
+                        &dwLength );
+                    if (!ok)
+                    {
+                        err = GetLastError();
+                    }
+                }
+                if (!ok)
+                {
+                    SAL_WARN(
+                        "shell",
+                        "InternetQueryOption INTERNET_OPTION_PROXY"
+                            " GetLastError=" << err);
+                    return;
+                }
+            }
 
             // if a proxy is disabled, InternetQueryOption returns
             // an empty proxy list, so we don't have to check if
