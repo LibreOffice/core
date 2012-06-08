@@ -56,6 +56,7 @@
 #include "vcl/gdimtf.hxx"
 #include "vcl/pdfextoutdevdata.hxx"
 #include "vcl/lazydelete.hxx"
+#include "vcl/virdev.hxx"
 
 // declare system types in sysdata.hxx
 #include "svsys.h"

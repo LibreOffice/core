@@ -39,7 +39,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/sound.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/spin.h>
 #include <vcl/toolbox.hxx>
 #include <vcl/bitmap.hxx>
@@ -1541,7 +1540,6 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 
     // initialize variables
     ImplGetWindowImpl()->mbToolBox         = sal_True;
-    mpBtnDev          = NULL;
     mpFloatSizeAry    = NULL;
     mpData                = new ImplToolBoxPrivateData;
     mpFloatWin        = NULL;

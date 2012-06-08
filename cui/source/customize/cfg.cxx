@@ -34,6 +34,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/virdev.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxdlg.hxx>

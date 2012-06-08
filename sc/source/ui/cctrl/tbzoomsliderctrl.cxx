@@ -28,6 +28,7 @@
 #include "tbzoomsliderctrl.hxx"
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
 #include <svl/itemset.hxx>

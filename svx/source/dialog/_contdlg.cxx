@@ -60,6 +60,7 @@
 #include <svx/svdopath.hxx>
 #include "svx/dlgutil.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include "dlgunit.hxx"
 
 SFX_IMPL_FLOATINGWINDOW( SvxContourDlgChildWindow, SID_CONTOUR_DLG );

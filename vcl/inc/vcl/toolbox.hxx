@@ -34,7 +34,6 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/virdev.hxx>
 
 class UserDrawEvent;
 
@@ -176,7 +175,6 @@ class VCL_DLLPUBLIC ToolBox : public DockingWindow
 
 private:
     ImplToolBoxPrivateData*     mpData;
-    VirtualDevice*              mpBtnDev; // TODO: remove unused member
     ImplToolSizeArray*  mpFloatSizeAry;
     XubString           maCvtStr;
     XubString           maNextToolBoxStr;
