@@ -1,0 +1,14 @@
+--- misc/libvisio-0.0.17/src/lib/VSDXContentCollector.cpp	2012-05-31 15:14:42.000000000 +0200
++++ misc/build/libvisio-0.0.17/src/lib/VSDXContentCollector.cpp	2012-06-09 00:08:24.139051461 +0200
+@@ -2059,7 +2059,11 @@
+ 
+ void libvisio::VSDXContentCollector::_convertDataToString(WPXString &result, const WPXBinaryData &data, TextFormat format)
+ {
++  if (!data.size())
++    return;
+   WPXInputStream *pStream = const_cast<WPXInputStream *>(data.getDataStream());
++  if (!pStream)
++    return;
+   if (format == VSD_TEXT_ANSI)
+   {
+     while (!pStream->atEOS())
