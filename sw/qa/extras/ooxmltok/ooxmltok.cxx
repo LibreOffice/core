@@ -263,9 +263,11 @@ void Test::testN705956_1()
     load( "n705956-1.docx" );
 /*
 Get the first image in the document and check it's the one image in the document.
+It should be also anchored inline (as character).
 image = ThisComponent.DrawPage.getByIndex(0)
 graphic = image.Graphic
 xray graphic.Size
+xray image.AnchorType
 */
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
@@ -279,6 +281,9 @@ xray graphic.Size
     uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(120), bitmap->getSize().Width );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(106), bitmap->getSize().Height );
+    text::TextContentAnchorType anchorType;
+    imageProperties->getPropertyValue( "AnchorType" ) >>= anchorType;
+    CPPUNIT_ASSERT_EQUAL( text::TextContentAnchorType_AS_CHARACTER, anchorType );
 }
 
 void Test::testN705956_2()
