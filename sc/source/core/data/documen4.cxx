@@ -738,9 +738,6 @@ void ScDocument::ConditionalChanged( sal_uLong nKey, SCTAB nTab )
     ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
     if ( nKey && pCondFormList && !bIsClip && !bIsUndo )        // nKey==0 -> noop
     {
-        ScConditionalFormat* pForm = pCondFormList->GetFormat( nKey );
-        if (pForm)
-            pForm->InvalidateArea();
     }
 }
 

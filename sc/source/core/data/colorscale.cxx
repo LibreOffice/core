@@ -31,6 +31,16 @@
 #include "cell.hxx"
 #include "fillinfo.hxx"
 
+ScColorScaleEntry::ScColorScaleEntry():
+    mnVal(0),
+    mpCell(NULL),
+    mbMin(false),
+    mbMax(false),
+    mbPercent(false),
+    mbPercentile(false)
+{
+}
+
 ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol):
     mnVal(nVal),
     maColor(rCol),
@@ -113,6 +123,11 @@ double ScColorScaleEntry::GetValue() const
     return mnVal;
 }
 
+void ScColorScaleEntry::SetValue(double nValue)
+{
+    mnVal = nValue;
+}
+
 void ScColorScaleEntry::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo )
 {
     if(mpCell)
@@ -133,6 +148,11 @@ void ScColorScaleEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
 const Color& ScColorScaleEntry::GetColor() const
 {
     return maColor;
+}
+
+void ScColorScaleEntry::SetColor(const Color& rColor)
+{
+    maColor = rColor;
 }
 
 ScColorFormat::ScColorFormat(ScDocument* pDoc):
@@ -583,6 +603,11 @@ ScColorScaleFormat::iterator ScColorScaleFormat::end()
 ScColorScaleFormat::const_iterator ScColorScaleFormat::end() const
 {
     return maColorScales.end();
+}
+
+size_t ScColorScaleFormat::size() const
+{
+    return maColorScales.size();
 }
 
 ScDataBarFormat::ScDataBarFormat(ScDocument* pDoc):

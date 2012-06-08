@@ -207,6 +207,14 @@ Control RID_COND_ENTRY
 	Text [ en-US ] = "Example";
 	Border = TRUE;
     };
+    ListBox LB_COL
+    {
+	Pos = MAP_APPFONT( 5, 62 );
+	Size = MAP_APPFONT( 40, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
+        DDExtraWidth = TRUE;
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

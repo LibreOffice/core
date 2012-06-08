@@ -34,6 +34,8 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <svx/xtable.hxx>
+#include <svx/drawitem.hxx>
 
 #include "anyrefdg.hxx"
 #include "document.hxx"
@@ -41,10 +43,46 @@
 #include "stlpool.hxx"
 #include "tabvwsh.hxx"
 #include "conditio.hxx"
+#include "colorscale.hxx"
+
+#include <rtl/math.hxx>
 
 #include "globstr.hrc"
 
 #include <iostream>
+
+namespace {
+
+void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ColorListBox& rLbCol )
+{
+    if(rEntry.GetMin())
+	rLbType.SelectEntryPos(0);
+    else if(rEntry.GetMax())
+	rLbType.SelectEntryPos(1);
+    else if(rEntry.GetPercentile())
+    {
+	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+	rLbType.SelectEntryPos(2);
+    }
+    else if(rEntry.GetPercent())
+    {
+	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+	rLbType.SelectEntryPos(4);
+    }
+    else if(rEntry.HasFormula())
+    {
+	rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+	rLbType.SelectEntryPos(5);
+    }
+    else
+    {
+	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+	rLbType.SelectEntryPos(3);
+    }
+    rLbCol.SelectEntry(rEntry.GetColor());
+}
+
+}
 
 ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
@@ -68,6 +106,9 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maEdMin( this, ScResId( ED_COL_SCALE ) ),
     maEdMiddle( this, ScResId( ED_COL_SCALE ) ),
     maEdMax( this, ScResId( ED_COL_SCALE ) ),
+    maLbColMin( this, ScResId( LB_COL) ),
+    maLbColMiddle( this, ScResId( LB_COL) ),
+    maLbColMax( this, ScResId( LB_COL) ),
     mpDoc(pDoc)
 {
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
@@ -78,7 +119,6 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maEdVal2.Hide();
 
     maLbStyle.SetSeparatorPos(0);
-    maLbStyle.SelectEntryPos(1);
 
     //disable entries for color formats
     maLbColorFormat.SelectEntryPos(0);
@@ -87,6 +127,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maLbEntryTypeMax.SelectEntryPos(1);
 
     Init();
+    maLbStyle.SelectEntryPos(1);
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
     SwitchToType(COLLAPSED);
     SetHeight();
@@ -115,10 +156,14 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
     maEdMin( this, ScResId( ED_COL_SCALE ) ),
     maEdMiddle( this, ScResId( ED_COL_SCALE ) ),
     maEdMax( this, ScResId( ED_COL_SCALE ) ),
+    maLbColMin( this, ScResId( LB_COL) ),
+    maLbColMiddle( this, ScResId( LB_COL) ),
+    maLbColMax( this, ScResId( LB_COL) ),
     mpDoc(pDoc)
 {
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     FreeResource();
+    Init();
 
     if(pFormatEntry && pFormatEntry->GetType() == condformat::CONDITION)
     {
@@ -165,13 +210,39 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
 	    case SC_COND_NONE:
 		break;
 	}
+	SwitchToType(CONDITION);
+	SetCondType();
+    }
+    else if( pFormatEntry && pFormatEntry->GetType() == condformat::COLORSCALE )
+    {
+	const ScColorScaleFormat* pEntry = static_cast<const ScColorScaleFormat*>(pFormatEntry);
+	maLbType.SelectEntryPos(0);
+	if(pEntry->size() == 2)
+	    maLbColorFormat.SelectEntryPos(0);
+	else
+	    maLbColorFormat.SelectEntryPos(1);
+	SetColorScaleType();
+	ScColorScaleFormat::const_iterator itr = pEntry->begin();
+	SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin);
+	if(pEntry->size() == 3)
+	{
+	    ++itr;
+	    SetColorScaleEntryTypes(*itr, maLbEntryTypeMiddle, maEdMiddle, maLbColMiddle);
+	}
+	++itr;
+	SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax);
+    }
+    else if( pFormatEntry && pFormatEntry->GetType() == condformat::DATABAR )
+    {
+	const ScDataBarFormat* pEntry = static_cast<const ScDataBarFormat*>(pFormatEntry);
+	maLbType.SelectEntryPos(0);
+	maLbColorFormat.SelectEntryPos(2);
+	SetDataBarType();
     }
 
-    Init();
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
     SwitchToType(COLLAPSED);
     SetHeight();
-    SetCondType();
 }
 
 void ScCondFrmtEntry::Init()
@@ -188,15 +259,58 @@ void ScCondFrmtEntry::Init()
 
     Point aPointLb = maLbEntryTypeMiddle.GetPosPixel();
     Point aPointEd = maEdMiddle.GetPosPixel();
+    Point aPointCol = maLbColMiddle.GetPosPixel();
     const long nMovePos = 150;
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
+    aPointCol.X() += nMovePos;
     maLbEntryTypeMiddle.SetPosPixel(aPointLb);
     maEdMiddle.SetPosPixel(aPointEd);
+    maLbColMiddle.SetPosPixel(aPointCol);
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
+    aPointCol.X() += nMovePos;
     maLbEntryTypeMax.SetPosPixel(aPointLb);
     maEdMax.SetPosPixel(aPointEd);
+    maLbColMax.SetPosPixel(aPointCol);
+
+    SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
+    const SfxPoolItem*  pItem       = NULL;
+    XColorListRef       pColorTable;
+
+    DBG_ASSERT( pDocSh, "DocShell not found!" );
+
+    if ( pDocSh )
+    {
+        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem != NULL )
+            pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
+    }
+    if ( pColorTable.is() )
+    {
+        // filling the line color box
+        maLbColMin.SetUpdateMode( false );
+	maLbColMiddle.SetUpdateMode( false );
+        maLbColMax.SetUpdateMode( false );
+
+        for ( long i = 0; i < pColorTable->Count(); ++i )
+        {
+            XColorEntry* pEntry = pColorTable->GetColor(i);
+            maLbColMin.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            maLbColMiddle.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            maLbColMax.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+
+            if(pEntry->GetColor() == Color(COL_LIGHTRED))
+                maLbColMin.SelectEntryPos(i);
+            if(pEntry->GetColor() == Color(COL_GREEN))
+                maLbColMiddle.SelectEntryPos(i);
+            if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
+                maLbColMax.SelectEntryPos(i);
+        }
+        maLbColMin.SetUpdateMode( sal_True );
+        maLbColMiddle.SetUpdateMode( sal_True );
+        maLbColMax.SetUpdateMode( sal_True );
+    }
 }
 
 namespace {
@@ -304,6 +418,9 @@ void ScCondFrmtEntry::HideColorScaleElements()
     maEdMin.Hide();
     maEdMiddle.Hide();
     maEdMax.Hide();
+    maLbColMin.Hide();
+    maLbColMiddle.Hide();
+    maLbColMax.Hide();
 }
 
 void ScCondFrmtEntry::SetHeight()
@@ -314,15 +431,12 @@ void ScCondFrmtEntry::SetHeight()
 	switch (meType)
 	{
 	    case CONDITION:
-		std::cout << "CONDITION: set height 120" << std::endl;
 		aSize.Height() = 120;
 		break;
 	    case COLORSCALE:
-		std::cout << "set height 200" << std::endl;
 		aSize.Height() = 200;
 		break;
 	    case DATABAR:
-		std::cout << "DATABAR: set height 120" << std::endl;
 		aSize.Height() = 120;
 		break;
 	    default:
@@ -332,7 +446,6 @@ void ScCondFrmtEntry::SetHeight()
     }
     else
     {
-	std::cout << "set height 40" << std::endl;
 	Size aSize = GetSizePixel();
 	aSize.Height() = 40;
 	SetSizePixel(aSize);
@@ -350,6 +463,7 @@ void ScCondFrmtEntry::SetColorScaleType()
 	maLbEntryTypeMiddle.Hide();
 	maLbColScale2.Show();
 	maLbColScale3.Hide();
+	maLbColMiddle.Hide();
     }
     else
     {
@@ -357,11 +471,14 @@ void ScCondFrmtEntry::SetColorScaleType()
 	maLbEntryTypeMiddle.Show();
 	maLbColScale2.Hide();
 	maLbColScale3.Show();
+	maLbColMiddle.Show();
     }
     maLbEntryTypeMin.Show();
     maLbEntryTypeMax.Show();
     maEdMin.Show();
     maEdMax.Show();
+    maLbColMin.Show();
+    maLbColMax.Show();
     SwitchToType(COLORSCALE);
 }
 
@@ -397,6 +514,132 @@ void ScCondFrmtEntry::Deselect()
 bool ScCondFrmtEntry::IsSelected() const
 {
     return mbActive;
+}
+
+ScFormatEntry* ScCondFrmtEntry::createConditionEntry() const
+{
+    ScConditionMode eMode;
+    rtl::OUString aExpr2;
+    switch(maLbCondType.GetSelectEntryPos())
+    {
+	case 0:
+	    eMode = SC_COND_EQUAL;
+	    break;
+	case 1:
+	    eMode = SC_COND_LESS;
+	    break;
+	case 2:
+	    eMode = SC_COND_GREATER;
+	    break;
+	case 3:
+	    eMode = SC_COND_EQLESS;
+	    break;
+	case 4:
+	    eMode = SC_COND_EQGREATER;
+	    break;
+	case 5:
+	    eMode = SC_COND_NOTEQUAL;
+	    break;
+	case 6:
+	    aExpr2 = maEdVal1.GetText();
+	    eMode = SC_COND_BETWEEN;
+	    if(aExpr2.isEmpty())
+		return NULL;
+	    break;
+	case 7:
+	    eMode = SC_COND_NOTBETWEEN;
+	    aExpr2 = maEdVal1.GetText();
+	    if(aExpr2.isEmpty())
+		return NULL;
+	    break;
+	case 8:
+	    eMode = SC_COND_DUPLICATE;
+	    break;
+	case 9:
+	    eMode = SC_COND_NOTDUPLICATE;
+	    break;
+	default:
+	    break;
+    }
+
+    rtl::OUString aExpr1 = maEdVal1.GetText();
+
+    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
+
+    return pEntry;
+}
+
+namespace {
+
+ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListBox& rColor, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos )
+{
+    ScColorScaleEntry* pEntry = new ScColorScaleEntry();
+    double nVal = rtl::math::stringToDouble(rValue.GetText(), '.', ',');
+    switch(rType.GetSelectEntryPos())
+    {
+	case 0:
+	    pEntry->SetMin(true);
+	    break;
+	case 1:
+	    pEntry->SetMax(true);
+	    break;
+	case 2:
+	    pEntry->SetPercentile(true);
+	    pEntry->SetValue(nVal);
+	    break;
+	case 3:
+	    pEntry->SetValue(nVal);
+	    break;
+	case 4:
+	    pEntry->SetPercent(true);
+	    pEntry->SetValue(nVal);
+	    break;
+	case 5:
+	    pEntry->SetFormula(rValue.GetText(), pDoc, rPos);
+	    break;
+    }
+
+    Color aColor = rColor.GetSelectEntryColor();
+    pEntry->SetColor(aColor);
+    return pEntry;
+}
+
+}
+
+ScFormatEntry* ScCondFrmtEntry::createColorscaleEntry() const
+{
+    ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mpDoc);
+    pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMin, maLbColMin, maEdMin, mpDoc, maPos));
+    if(maLbColorFormat.GetSelectEntryPos() == 1)
+	pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMiddle, maLbColMiddle, maEdMiddle, mpDoc, maPos));
+    pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMax, maLbColMax, maEdMax, mpDoc, maPos));
+    return pColorScale;
+}
+
+ScFormatEntry* ScCondFrmtEntry::createDatabarEntry() const
+{
+    ScDataBarFormat* pDataBar = new ScDataBarFormat(mpDoc);
+    pDataBar->SetDataBarData(new ScDataBarFormatData());
+    return pDataBar;
+}
+
+ScFormatEntry* ScCondFrmtEntry::GetEntry() const
+{
+    switch(meType)
+    {
+	case CONDITION:
+	    return createConditionEntry();
+	    break;
+	case COLORSCALE:
+	    return createColorscaleEntry();
+	    break;
+	case DATABAR:
+	    return createDatabarEntry();
+	    break;
+	default:
+	    break;
+    }
+    return NULL;
 }
 
 IMPL_LINK_NOARG(ScCondFrmtEntry, TypeListHdl)
@@ -504,12 +747,14 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
     FreeResource();
 }
 
-ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc, ScConditionalFormat* pFormat):
+ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRanges, const ScAddress& rPos):
     Control(pParent, rResId),
     mbHasScrollBar(false),
     mpScrollBar(new ScrollBar(this, WB_VERT )),
     mnTopIndex(0),
-    mpDoc(pDoc)
+    mpDoc(pDoc),
+    maPos(rPos),
+    maRanges(rRanges)
 {
     mpScrollBar->SetScrollHdl( LINK( this, ScCondFormatList, ScrollHdl ) );
     mpScrollBar->EnableDrag();
@@ -527,6 +772,24 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
     FreeResource();
 }
 
+ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
+{
+    if(maEntries.empty())
+	return NULL;
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(0, mpDoc);
+    for(EntryContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+	ScFormatEntry* pEntry = itr->GetEntry();
+	if(pEntry)
+	    pFormat->AddEntry(pEntry);
+    }
+
+    pFormat->AddRange(maRanges);
+
+    return pFormat;
+}
+
 void ScCondFormatList::RecalcAll()
 {
     sal_Int32 nTotalHeight = 0;
@@ -542,15 +805,12 @@ void ScCondFormatList::RecalcAll()
 	mbHasScrollBar = true;
 	mpScrollBar->SetPosSizePixel(Point(aCtrlSize.Width() -nSrcBarSize, 0),
 					Size(nSrcBarSize, aCtrlSize.Height()) );
-	std::cout << "Need ScrollBar" << std::endl;
 	mpScrollBar->SetRangeMax(nTotalHeight);
 	mpScrollBar->SetVisibleSize(aCtrlSize.Height());
 	mpScrollBar->Show();
     }
     else
     {
-	std::cout << "Don't need ScrollBar" << std::endl;
-
 	mbHasScrollBar = false;
 	mpScrollBar->Hide();
     }
@@ -579,15 +839,16 @@ void ScCondFormatList::DoScroll(long nDelta)
     mpScrollBar->SetPosPixel(aNewPoint);
 }
 
-ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, ScConditionalFormat* pFormat, const ScRangeList& rRange):
+ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange, const ScAddress& rPos):
     ModalDialog(pParent, ScResId( RID_SCDLG_CONDFORMAT )),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
     maBtnRemove( this, ScResId( BTN_REMOVE ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
-    maCondFormList( this, ScResId( CTRL_LIST ), pDoc ),
+    maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, maPos ),
     mpDoc(pDoc),
-    mpFormat(pFormat)
+    mpFormat(pFormat),
+    maPos(rPos)
 {
 
     rtl::OUStringBuffer aTitle( GetText() );
@@ -599,6 +860,11 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, ScConditiona
     maBtnAdd.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, AddBtnHdl ) );
     maBtnRemove.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, RemoveBtnHdl ) );
     FreeResource();
+}
+
+ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
+{
+    return maCondFormList.GetConditionalFormat();
 }
 
 IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )

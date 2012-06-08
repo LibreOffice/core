@@ -142,6 +142,8 @@ class AbstractScColRowLabelDlg_Impl : public AbstractScColRowLabelDlg  //add for
 class AbstractScCondFormatDlg_Impl : public AbstractScCondFormatDlg
 {
     DECL_ABSTDLG_BASE(AbstractScCondFormatDlg_Impl, ScCondFormatDlg)
+
+    virtual ScConditionalFormat* GetConditionalFormat();
 };
 
 class AbstractScDataBarSettingsDlg_Impl : public AbstractScDataBarSettingsDlg
@@ -427,8 +429,8 @@ public:
 
     virtual VclAbstractDialog * CreateScSortWarningDlg( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId );
 
-    virtual AbstractScCondFormatDlg* CreateScCondFormatDlg(Window* pParent, ScDocument* pDoc, ScConditionalFormat* pFormat,
-                                                                const ScRangeList& rRange, int nId ); //add for ScDataBarSettingsDlg
+    virtual AbstractScCondFormatDlg* CreateScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+                                                                const ScRangeList& rRange, const ScAddress& rPos, int nId ); //add for ScDataBarSettingsDlg
 
     virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent ,int nId ); //add for ScDataBarSettingsDlg
 

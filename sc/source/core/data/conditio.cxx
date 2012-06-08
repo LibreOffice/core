@@ -1309,14 +1309,12 @@ ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
 
 ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument) :
     pDoc( pDocument ),
-    pAreas( NULL ),
     nKey( nNewKey )
 {
 }
 
 ScConditionalFormat::ScConditionalFormat(const ScConditionalFormat& r) :
     pDoc( r.pDoc ),
-    pAreas( NULL ),
     nKey( r.nKey ),
     maRanges( r.maRanges )
 {
@@ -1377,7 +1375,6 @@ void ScConditionalFormat::AddEntry( ScFormatEntry* pNew )
 
 ScConditionalFormat::~ScConditionalFormat()
 {
-    delete pAreas;
 }
 
 const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
@@ -1572,12 +1569,6 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
     */
 }
 
-void ScConditionalFormat::InvalidateArea()
-{
-    delete pAreas;
-    pAreas = NULL;
-}
-
 void ScConditionalFormat::CompileAll()
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
@@ -1598,9 +1589,6 @@ void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
     maRanges.UpdateReference( eUpdateRefMode, pDoc, rRange, nDx, nDy, nDz );
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
         itr->UpdateReference(eUpdateRefMode, rRange, nDx, nDy, nDz);
-
-    delete pAreas;      // aus dem AttrArray kommt beim Einfuegen/Loeschen kein Aufruf
-    pAreas = NULL;
 }
 
 void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew)
@@ -1649,9 +1637,6 @@ void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
         itr->UpdateMoveTab( nOldPos, nNewPos );
-
-    delete pAreas;      // aus dem AttrArray kommt beim Einfuegen/Loeschen kein Aufruf
-    pAreas = NULL;
 }
 
 void ScConditionalFormat::SourceChanged( const ScAddress& rAddr )

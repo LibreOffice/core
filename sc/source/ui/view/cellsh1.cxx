@@ -98,6 +98,7 @@
 #include "docsh.hxx"
 #include "cliputil.hxx"
 #include "markdata.hxx"
+#include "docpool.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx"
@@ -2055,12 +2056,31 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScRangeList aRangeList;
-                GetViewData()->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
+                ScViewData* pViewData = GetViewData();
+                pViewData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
                 ScDocument* pDoc = GetViewData()->GetDocument();
 
-                AbstractScCondFormatDlg* pDlg = pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, RID_SCDLG_CONDFORMAT );
+                ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
+                AbstractScCondFormatDlg* pDlg = NULL;
+                const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
+                if(pCondFormat)
+                {
+                    pDlg = pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, pCondFormat->GetRange(), aPos, RID_SCDLG_CONDFORMAT );
+                }
+                else
+                {
+                    pDlg = pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aPos, RID_SCDLG_CONDFORMAT );
+                }
                 OSL_ENSURE(pDlg, "Dialog create fail!");
-                pDlg->Execute();
+                if(pDlg->Execute() == RET_OK)
+                {
+                    ScConditionalFormat* pFormat = pDlg->GetConditionalFormat();
+                    sal_uLong nIndex = pDoc->AddCondFormat(pFormat, pViewData->GetTabNo());
+
+                    ScPatternAttr aPattern( pDoc->GetPool() );
+                    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
+                    pDoc->ApplySelectionPattern( aPattern , pViewData->GetMarkData() );
+                }
                 delete pDlg;
             }
             break;
