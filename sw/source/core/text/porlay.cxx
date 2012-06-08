@@ -439,7 +439,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                         if( Height() < nPosHeight )
                         {
                             // Height is set to 0 when Init() is called.
-                            if (bIgnoreBlanksAndTabsForLineHeightCalculation)
+                            if (bIgnoreBlanksAndTabsForLineHeightCalculation && pPos->GetWhichPor() == POR_FLYCNT)
                                 // Compat flag set: take the line height, if it's larger.
                                 Height(std::max(nPosHeight, nLineHeight));
                             else
