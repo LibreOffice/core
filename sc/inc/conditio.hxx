@@ -255,7 +255,6 @@ protected:
 class SC_DLLPUBLIC ScConditionalFormat
 {
     ScDocument*         pDoc;
-    ScRangeList*        pAreas;             // area for Paint
     sal_uInt32          nKey;               // Index in attributes
 
     typedef boost::ptr_vector<ScFormatEntry> CondFormatContainer;
@@ -296,7 +295,6 @@ public:
     bool            EqualEntries( const ScConditionalFormat& r ) const;
 
     void            DoRepaint( const ScRange* pModified );
-    void            InvalidateArea();
 
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!

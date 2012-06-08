@@ -55,12 +55,15 @@ private:
     bool mbPercentile;
 public:
     ScColorScaleEntry(double nVal, const Color& rCol);
+    ScColorScaleEntry();
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
     ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
     ~ScColorScaleEntry();
 
     const Color& GetColor() const;
+    void SetColor(const Color&);
     double GetValue() const;
+    void SetValue(double nValue);
     void SetFormula(const rtl::OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
     void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo);
     void UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -208,6 +211,8 @@ public:
     const_iterator begin() const;
     iterator end();
     const_iterator end() const;
+
+    size_t size() const;
 };
 
 class SC_DLLPUBLIC ScDataBarFormat : public ScColorFormat

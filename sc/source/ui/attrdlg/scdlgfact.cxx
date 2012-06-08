@@ -455,6 +455,12 @@ sal_uLong   AbstractScLinkedAreaDlg_Impl::GetRefresh()
 }
 
 
+ScConditionalFormat* AbstractScCondFormatDlg_Impl::GetConditionalFormat()
+{
+    return pDlg->GetConditionalFormat();
+}
+
+
 
 
 long AbstractScMetricInputDlg_Impl::GetInputValue( FieldUnit eUnit ) const
@@ -770,14 +776,14 @@ VclAbstractDialog * ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window
 }
 
 
-AbstractScCondFormatDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatDlg(Window* pParent, ScDocument* pDoc, ScConditionalFormat* pFormat,
-                                                                            const ScRangeList& rRange, int nId)
+AbstractScCondFormatDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+                                                                            const ScRangeList& rRange, const ScAddress& rPos, int nId)
 {
     ScCondFormatDlg* pDlg = NULL;
     switch( nId )
     {
         case RID_SCDLG_CONDFORMAT:
-            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange );
+            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos );
             break;
         default:
             break;

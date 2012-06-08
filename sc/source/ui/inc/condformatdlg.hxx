@@ -33,6 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <svx/fntctrl.hxx>
+#include <svtools/ctrlbox.hxx>
 
 #include "rangelst.hxx"
 
@@ -87,6 +88,10 @@ private:
     Edit maEdMiddle;
     Edit maEdMax;
 
+    ColorListBox maLbColMin;
+    ColorListBox maLbColMiddle;
+    ColorListBox maLbColMax;
+
     //data bar ui elements
     //
     //
@@ -101,7 +106,12 @@ private:
     void SetHeight();
     void Init();
 
+    ScFormatEntry* createConditionEntry() const;
+    ScFormatEntry* createColorscaleEntry() const;
+    ScFormatEntry* createDatabarEntry() const;
+
     ScDocument* mpDoc;
+    ScAddress maPos;
 
     DECL_LINK( TypeListHdl, void*);
     DECL_LINK( ColFormatTypeHdl, void*);
@@ -117,6 +127,8 @@ public:
     void Deselect();
 
     bool IsSelected() const;
+
+    ScFormatEntry* GetEntry() const;
 };
 
 class ScCondFormatList : public Control
@@ -130,12 +142,16 @@ private:
     long mnTopIndex;
 
     ScDocument* mpDoc;
+    ScAddress maPos;
+    ScRangeList maRanges;
 
     void RecalcAll();
     void DoScroll(long nDiff);
 public:
     ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc );
-    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, ScConditionalFormat* pFormat);
+    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRanges, const ScAddress& rPos);
+
+    ScConditionalFormat* GetConditionalFormat() const;
 
     DECL_LINK( AddBtnHdl, void* );
     DECL_LINK( RemoveBtnHdl, void* );
@@ -155,11 +171,13 @@ private:
     ScCondFormatList maCondFormList;
 
     ScDocument* mpDoc;
-    ScConditionalFormat* mpFormat;
+    const ScConditionalFormat* mpFormat;
+    ScAddress maPos;
 
 public:
-    ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, ScConditionalFormat* pFormat, const ScRangeList& rRange);
+    ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange, const ScAddress& rPos);
 
+    ScConditionalFormat* GetConditionalFormat() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
