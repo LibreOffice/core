@@ -330,6 +330,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         }
         else
         {
+            KSHORT nLineHeight = Height();
             Init( GetPortion() );
             SwLinePortion *pPos = pPortion;
             SwLinePortion *pLast = this;
@@ -436,7 +437,15 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     else if( !pPos->IsFlyPortion() )
                     {
                         if( Height() < nPosHeight )
-                            Height( nPosHeight );
+                        {
+                            // Height is set to 0 when Init() is called.
+                            if (bIgnoreBlanksAndTabsForLineHeightCalculation)
+                                // Compat flag set: take the line height, if it's larger.
+                                Height(std::max(nPosHeight, nLineHeight));
+                            else
+                                // Just care about the portion height.
+                                Height(nPosHeight);
+                        }
                         if( pPos->IsFlyCntPortion() || ( pPos->IsMultiPortion()
                             && ((SwMultiPortion*)pPos)->HasFlyInCntnt() ) )
                             rLine.SetFlyInCntBase();
