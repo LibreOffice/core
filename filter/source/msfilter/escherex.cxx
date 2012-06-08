@@ -967,6 +967,15 @@ void EscherPropertyContainer::CreateLineProperties(
     }
     AddOpt( ESCHER_Prop_lineJoinStyle, eLineJoin );
 
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+        aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineTransparence" ) ), sal_True ) )
+    {
+        sal_Int16 nTransparency = 0;
+        if ( aAny >>= nTransparency )
+            AddOpt( ESCHER_Prop_lineOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
+    }
+
+
     if ( bEdge == sal_False )
     {
         AddOpt( ESCHER_Prop_fFillOK, 0x1001 );
