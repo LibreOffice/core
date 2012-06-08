@@ -577,7 +577,8 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
     // prevent double submit
     String sShellNm;
     sal_Bool bFnd = sal_False;
-    for( sal_uInt16 n = pAppData_Impl->pDocTopics->Count(); n; )
+    for (size_t n = pAppData_Impl->pDocTopics->size(); n;)
+    {
         if( (*pAppData_Impl->pDocTopics)[ --n ]->pSh == pSh )
         {
             // If the document is untitled, is still a new Topic is created!
@@ -590,10 +591,10 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
             if( sShellNm == sNm.ToLowerAscii() )
                 return ;
         }
+    }
 
     const SfxDdeDocTopic_Impl* pTopic = new SfxDdeDocTopic_Impl( pSh );
-    pAppData_Impl->pDocTopics->Insert( pTopic,
-                                       pAppData_Impl->pDocTopics->Count() );
+    pAppData_Impl->pDocTopics->push_back(pTopic);
     pAppData_Impl->pDdeService->AddTopic( *pTopic );
 }
 #endif
@@ -606,13 +607,16 @@ void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
         return;
 
     SfxDdeDocTopic_Impl* pTopic;
-    for( sal_uInt16 n = pAppData_Impl->pDocTopics->size(); n; )
-        if( ( pTopic = (*pAppData_Impl->pDocTopics)[ --n ])->pSh == pSh )
+    for (size_t n = pAppData_Impl->pDocTopics->size(); n; )
+    {
+        pTopic = (*pAppData_Impl->pDocTopics)[ --n ];
+        if (pTopic->pSh == pSh)
         {
             pAppData_Impl->pDdeService->RemoveTopic( *pTopic );
             delete pTopic;
             pAppData_Impl->pDocTopics->erase( pAppData_Impl->pDocTopics->begin() + n );
         }
+    }
 }
 
 const DdeService* SfxApplication::GetDdeService() const
