@@ -2880,6 +2880,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             pPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::Paragraph );
 
         long nParaHeight = pPortion->GetHeight();
+        sal_uInt16 nIndex = 0;
         if ( pPortion->IsVisible() && (
                 ( !IsVertical() && ( ( aStartPos.Y() + nParaHeight ) > aClipRec.Top() ) ) ||
                 ( IsVertical() && ( ( aStartPos.X() - nParaHeight ) < aClipRec.Right() ) ) ) )
@@ -2891,6 +2892,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             sal_uInt16 nLines = pPortion->GetLines().Count();
             sal_uInt16 nLastLine = nLines-1;
 
+            // #108052#
+            bool bEndOfParagraphWritten(false);
+
             if ( !IsVertical() )
                 aStartPos.Y() += pPortion->GetFirstLineOffset();
             else
@@ -2901,9 +2905,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             const SvxLineSpacingItem& rLSItem = ((const SvxLineSpacingItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
             sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
                                 ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
+            bool bPaintBullet (false);
+
             for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
             {
                 pLine = pPortion->GetLines()[nLine];
+                nIndex = pLine->GetStart();
                 DBG_ASSERT( pLine, "NULL-Pointer in the line iterator in UpdateViews" );
                 aTmpPos = aStartPos;
                 if ( !IsVertical() )
@@ -2926,7 +2933,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                 if ( ( !IsVertical() && ( aStartPos.Y() > aClipRec.Top() ) )
                     || ( IsVertical() && aStartPos.X() < aClipRec.Right() ) )
                 {
-                    bool bPaintBullet (false);
+                    bPaintBullet = false;
 
                     // Why not just also call when stripping portions? This will give the correct values
                     // and needs no position corrections in OutlinerEditEng::DrawingText which tries to call
@@ -2945,36 +2952,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     // --------------------------------------------------
                     // Over the Portions of the line ...
                     // --------------------------------------------------
-                    sal_uInt16 nIndex = pLine->GetStart();
                     bool bParsingFields = false;
                     ::std::vector< sal_Int32 >::iterator itSubLines;
-
-                    // #i108052# When stripping a callback for empty paragraphs is needed. This
-                    // was somehow lost/removed/killed by making the TextPortions with empty
-                    // paragraph to type PORTIONKIND_TAB instead of PORTIONKIND_TEXT. Adding here
-
-					// since I could not find out who and why this has
-					// changed.
-                    // #i118881#: Do not include the empty paragraph
-                    // after a bullet.  Otherwise the wrong paragraph
-                    // indices will eventually find their way into
-                    // metafiles and break the association between
-                    // paragraphs and Impress animations.
-					if(!bPaintBullet && bStripOnly && pLine->GetStartPortion() == pLine->GetEndPortion())
-                    {
-                        const Color aOverlineColor(pOutDev->GetOverlineColor());
-                        const Color aTextLineColor(pOutDev->GetTextLineColor());
-
-                        GetEditEnginePtr()->DrawingText(
-                            aTmpPos, String(), 0, 0, 0,
-                            aTmpFont, n, nIndex, 0,
-                            0,
-                            0,
-                            false, true, false, // support for EOL/EOP TEXT comments
-                            0,
-                            aOverlineColor,
-                            aTextLineColor);
-                    }
 
                     for ( sal_uInt16 nPortion = pLine->GetStartPortion(); nPortion <= pLine->GetEndPortion(); nPortion++ )
                     {
@@ -3330,6 +3309,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         &aLocale,
                                         aOverlineColor,
                                         aTextLineColor);
+
+                                    // #108052# remember that EOP is written already for this ParaPortion
+                                    if(bEndOfParagraph)
+                                    {
+                                        bEndOfParagraphWritten = true;
+                                    }
                                 }
                                 else
                                 {
@@ -3607,6 +3592,27 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     aStartPos.Y() += nUL;
                 else
                     aStartPos.X() -= nUL;
+            }
+
+            // #108052# Safer way for #i108052# and #i118881#: If for the current ParaPortion
+            // EOP is not written, do it now. This will be safer than before. It has shown
+            // that the reason for #i108052# was fixed/removed again, so this is a try to fix
+            // the number of paragraphs (and counting empty ones) now independent from the
+            // changes in EditEngine behaviour.
+            if(!bEndOfParagraphWritten && !bPaintBullet && bStripOnly)
+            {
+                const Color aOverlineColor(pOutDev->GetOverlineColor());
+                const Color aTextLineColor(pOutDev->GetTextLineColor());
+
+                GetEditEnginePtr()->DrawingText(
+                    aTmpPos, String(), 0, 0, 0,
+                    aTmpFont, n, nIndex, 0,
+                    0,
+                    0,
+                    false, true, false, // support for EOL/EOP TEXT comments
+                    0,
+                    aOverlineColor,
+                    aTextLineColor);
             }
         }
         else
