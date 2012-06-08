@@ -1772,10 +1772,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             ((StyleTreeListBox_Impl*)pTreeBox)->
                 SetDropHdl(LINK(this, SfxCommonTemplateDialog_Impl,  DropHdl));
             pTreeBox->SetIndent(10);
-            SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-            SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
-            if (pDocShell)
-                SaveFactoryStyleFilter( pDocShell, HIERARCHICAL_FILTER_INDEX );
             FillTreeBox();
             SelectStyle(aSelectEntry);
             pTreeBox->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
@@ -2263,9 +2259,6 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
 
 {
     pDlgWindow->FreeResource();
-    SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-    pCurObjShell = pViewFrame->GetObjectShell();
-    sal_uInt16 nSavedFilter = static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) );
     Initialize();
 
     m_aActionTbL.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxLSelect));
@@ -2277,12 +2270,6 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     aFont.SetWeight( WEIGHT_NORMAL );
     aFilterLb.SetFont( aFont );
     m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
-    if( nSavedFilter == HIERARCHICAL_FILTER_INDEX )
-    {
-        bHierarchical = sal_False; // Force content refresh
-        aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
-        FilterSelectHdl(&aFilterLb);
-    }
 }
 
 // ------------------------------------------------------------------------
