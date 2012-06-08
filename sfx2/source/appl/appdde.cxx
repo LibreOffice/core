@@ -593,7 +593,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
         }
     }
 
-    const SfxDdeDocTopic_Impl* pTopic = new SfxDdeDocTopic_Impl( pSh );
+    SfxDdeDocTopic_Impl *const pTopic = new SfxDdeDocTopic_Impl(pSh);
     pAppData_Impl->pDocTopics->push_back(pTopic);
     pAppData_Impl->pDdeService->AddTopic( *pTopic );
 }
@@ -606,10 +606,9 @@ void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
     if( !pAppData_Impl->pDocTopics )
         return;
 
-    SfxDdeDocTopic_Impl* pTopic;
     for (size_t n = pAppData_Impl->pDocTopics->size(); n; )
     {
-        pTopic = (*pAppData_Impl->pDocTopics)[ --n ];
+        SfxDdeDocTopic_Impl *const pTopic = (*pAppData_Impl->pDocTopics)[ --n ];
         if (pTopic->pSh == pSh)
         {
             pAppData_Impl->pDdeService->RemoveTopic( *pTopic );
