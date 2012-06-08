@@ -28,15 +28,16 @@
 
 #include "sal/config.h"
 
+#include <boost/signals2.hpp>
 #include <vector>
 
 #include "cell.hxx"
+#include "contacts.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
-#include "collab.hxx"
-#include "contacts.hxx"
 #include <tubes/manager.hxx>
 #include <tubes/conference.hxx>
+#include <tubes/contact-list.hxx>
 
 // new file send/recv fun ...
 #include <com/sun/star/uno/Sequence.hxx>
@@ -257,7 +258,6 @@ public:
 class ScDocFuncRecv
 {
     boost::shared_ptr<ScDocFuncDirect>  mpChain;
-    boost::shared_ptr<ScCollaboration>  mpCollab;
 
 protected:
     ScDocFuncRecv() {}
@@ -270,12 +270,7 @@ public:
     }
     virtual ~ScDocFuncRecv() {}
 
-    void SetCollaboration( boost::shared_ptr<ScCollaboration>& pCollab )
-    {
-        mpCollab = pCollab;
-    }
-
-    void packetReceived( TeleConference* pConference, const rtl::OString & );
+    void packetReceived( TeleConference*, TelePacket &rPacket );
 
     virtual void fileReceived( const rtl::OUString &rStr );
     virtual void RecvMessage( const rtl::OString &rString )
@@ -315,9 +310,10 @@ public:
     }
 };
 
-void ScDocFuncRecv::packetReceived( TeleConference*, const rtl::OString &rStr)
+void ScDocFuncRecv::packetReceived( TeleConference*, TelePacket &rPacket )
 {
-    RecvMessage( rStr);
+    rtl::OString aString( rPacket.getData(), rPacket.getSize() );
+    RecvMessage( aString );
 }
 
 void ScDocFuncRecv::fileReceived( const rtl::OUString &rStr )
@@ -418,16 +414,27 @@ class ScDocFuncDemo : public ScDocFuncRecv
     }
 };
 
+extern "C"
+{
+    static void file_sent_cb( bool aSuccess, void* /* pUserData */ )
+    {
+        fprintf( stderr, "File send %s\n", aSuccess ? "success" : "failed" );
+    }
+}
+
 class ScDocFuncSend : public ScDocFunc
 {
     boost::shared_ptr<ScDocFuncRecv>    mpDirect;
-    boost::shared_ptr<ScCollaboration>  mpCollab;
+    TeleManager                         *mpManager;
 
     void SendMessage( ScChangeOpWriter &rOp )
     {
         fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
-        if (mpCollab)
-            mpCollab->sendPacket( rOp.toString());
+        if (mpManager)
+        {
+            TelePacket aPacket( "sender", rOp.toString().getStr(), rOp.toString().getLength() );
+            mpManager->sendPacket( aPacket );
+        }
         else // local demo mode
             mpDirect->RecvMessage( rOp.toString() );
     }
@@ -457,8 +464,8 @@ class ScDocFuncSend : public ScDocFunc
         fprintf( stderr, "Temp file is '%s'\n",
                  rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-        if ( mpCollab )
-            mpCollab->sendFile( aFileURL );
+        if (mpManager)
+            mpManager->sendFile( aFileURL, file_sent_cb, NULL );
         else
             mpDirect->fileReceived( aFileURL );
 
@@ -470,15 +477,16 @@ public:
     // we don't need the rDocSh hack/pointer
     ScDocFuncSend( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncRecv> pDirect )
             : ScDocFunc( rDocSh ),
-            mpDirect( pDirect )
+            mpDirect( pDirect ),
+            mpManager( NULL )
     {
         fprintf( stderr, "Sender created !\n" );
     }
     virtual ~ScDocFuncSend() {}
 
-    void SetCollaboration( boost::shared_ptr<ScCollaboration>& pCollab )
+    void SetCollaboration( bool bIsMaster )
     {
-        mpCollab = pCollab;
+        mpManager = TeleManager::get( !bIsMaster );
     }
 
     virtual void EnterListAction( sal_uInt16 nNameResId )
@@ -625,27 +633,41 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
         boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *this ) );
         boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
         ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
-        boost::shared_ptr<ScCollaboration> pCollab( new ScCollaboration );
-        pCollab->sigPacketReceived.connect(
-                boost::bind( &ScDocFuncRecv::packetReceived, pReceiver, _1, _2 ));
-        pCollab->sigFileReceived.connect(
-                boost::bind( &ScDocFuncRecv::fileReceived, pReceiver, _1));
+        TeleManager *pManager = TeleManager::get( !bIsMaster );
         bool bOk = true;
-        bOk = bOk && pCollab->initManager(!bIsMaster);
+
+        pManager->sigPacketReceived.connect(
+                boost::bind( &ScDocFuncRecv::packetReceived, pReceiver.get(), _1, _2 ));
+        pManager->sigFileReceived.connect(
+                boost::bind( &ScDocFuncRecv::fileReceived, pReceiver.get(), _1 ));
+
+        bOk = bOk && pManager->connect();
+        pManager->prepareAccountManager();
+
         if (bIsMaster)
         {
-            bOk = bOk && pCollab->initAccountContact();
-            bOk = bOk && pCollab->startCollaboration();
+            ContactList* pContactList = pManager->getContactList();
+            AccountContactPairV aVec( pContactList->getContacts());
+
+            fprintf( stderr, "%u contacts\n", (int) aVec.size() );
+            if (aVec.empty())
+                bOk = false;
+            else
+            {
+                /* TODO: select a pair, for now just take the first */
+                TpAccount* pAccount = aVec[0].first;
+                TpContact* pContact = aVec[0].second;
+                fprintf( stderr, "picked %s\n", tp_contact_get_identifier( pContact ) );
+                bOk = bOk && pManager->startBuddySession( pAccount, pContact );
+            }
         }
         if (bOk)
         {
-            pReceiver->SetCollaboration( pCollab);
-            pSender->SetCollaboration( pCollab);
+            pSender->SetCollaboration( bIsMaster );
         }
         else
         {
             fprintf( stderr, "Could not start collaboration.\n");
-            // pCollab shared_ptr will be destructed
         }
         return pSender;
     }

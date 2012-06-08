@@ -49,12 +49,7 @@ $(eval $(call gb_Library_add_linked_libs,sc,\
 ))
 
 $(eval $(call gb_Library_add_cxxflags,sc,\
-	$$(TELEPATHY_CFLAGS) \
 	-DENABLE_TELEPATHY \
-))
-
-$(eval $(call gb_Library_add_libs,sc,\
-	$$(TELEPATHY_LIBS) \
 ))
 
 $(eval $(call gb_Library_use_externals,sc,\
@@ -62,7 +57,6 @@ $(eval $(call gb_Library_use_externals,sc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
-	sc/source/ui/collab/collab \
 	sc/source/ui/collab/contacts \
 	sc/source/ui/collab/sendfunc \
 ))
