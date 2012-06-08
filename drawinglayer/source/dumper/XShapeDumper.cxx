@@ -423,6 +423,12 @@ namespace {
 		}
 	}
 
+    void XShapeDumper::dumpLineStartNameAsAttribute(rtl::OUString sLineStartName, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartName"), "%s",
+		rtl::OUStringToOString(sLineStartName, RTL_TEXTENCODING_UTF8).getStr());
+	}
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -667,6 +673,12 @@ namespace {
 				drawing::LineJoint eLineJoint;
 				if(anotherAny >>= eLineJoint)
 					dumpLineJointAsAttribute(eLineJoint, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("LineStartName");
+				rtl::OUString sLineStartName;
+				if(anotherAny >>= sLineStartName)
+					dumpLineStartNameAsAttribute(sLineStartName, xmlWriter);
 			}
         }
 
