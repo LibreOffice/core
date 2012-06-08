@@ -93,7 +93,12 @@ private:
     ColorListBox maLbColMax;
 
     //data bar ui elements
-    //
+    ListBox maLbDataBarMinType;
+    ListBox maLbDataBarMaxType;
+    Edit maEdDataBarMin;
+    Edit maEdDataBarMax;
+    Button maBtOptions;
+
     //
     void SwitchToType(ScCondFormatEntryType eType);
     void SetCondType();
