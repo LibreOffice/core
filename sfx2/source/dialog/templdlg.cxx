@@ -427,16 +427,7 @@ void SfxTemplateDialogWrapper::SetParagraphFamily()
 }
 
 //=========================================================================
-class ExpandedEntries : public std::vector<StringPtr>
-{
-public:
-    ~ExpandedEntries()
-    {
-        for(const_iterator it = begin(); it != end(); ++it)
-            delete *it;
-    }
-
-};
+typedef std::vector<rtl::OUString> ExpandedEntries_t;
 
 /*  [Description]
 
@@ -471,7 +462,7 @@ public:
         using SvLBox::GetParent;
     const String&   GetParent() const { return aParent; }
     const String&   GetStyle() const { return aStyle; }
-    void            MakeExpanded_Impl(ExpandedEntries& rEntries) const;
+    void            MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;
 
     virtual PopupMenu* CreateContextMenu( void );
 };
@@ -479,15 +470,14 @@ public:
 //-------------------------------------------------------------------------
 
 
-void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries& rEntries) const
+void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries_t& rEntries) const
 {
     SvLBoxEntry *pEntry;
     for(pEntry=(SvLBoxEntry*)FirstVisible();pEntry;pEntry=(SvLBoxEntry*)NextVisible(pEntry))
     {
         if(IsExpanded(pEntry))
         {
-            StringPtr pString=new String(GetEntryText(pEntry));
-            rEntries.push_back(pString);
+            rEntries.push_back(GetEntryText(pEntry));
         }
     }
 }
@@ -734,13 +724,14 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
 //-------------------------------------------------------------------------
 
 
-inline sal_Bool IsExpanded_Impl( const ExpandedEntries& rEntries,
-                             const String &rStr)
+inline sal_Bool IsExpanded_Impl( const ExpandedEntries_t& rEntries,
+                             const rtl::OUString &rStr)
 {
-    sal_uInt16 nCount=rEntries.size();
-    for(sal_uInt16 n=0;n<nCount;n++)
-        if(*rEntries[n]==rStr)
+    for (size_t n = 0; n < rEntries.size(); ++n)
+    {
+        if (rEntries[n] == rStr)
             return sal_True;
+    }
     return sal_False;
 }
 
@@ -748,7 +739,7 @@ inline sal_Bool IsExpanded_Impl( const ExpandedEntries& rEntries,
 
 SvLBoxEntry* FillBox_Impl(SvTreeListBox *pBox,
                                  StyleTree_Impl* pEntry,
-                                 const ExpandedEntries& rEntries,
+                                 const ExpandedEntries_t& rEntries,
                                  SvLBoxEntry* pParent = 0)
 {
     SvLBoxEntry* pNewEntry = pBox->InsertEntry(pEntry->aName, pParent);
@@ -1203,7 +1194,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
             pStyle = pStyleSheetPool->Next();
         }
         MakeTree_Impl(aArr);
-        ExpandedEntries aEntries;
+        ExpandedEntries_t aEntries;
         if(pTreeBox)
             ((const StyleTreeListBox_Impl *)pTreeBox)->
                 MakeExpanded_Impl( aEntries);
