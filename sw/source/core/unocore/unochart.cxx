@@ -2460,6 +2460,29 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             else {
                 OSL_FAIL( "table missing" );
             }
+
+            //#i119653# The bug is crashed for an exception thrown by
+            //SwCharDataSequence::setModified() because
+            //the SwCharDataSequence object has been disposed.
+            //
+            //Actually, the former design of SwClient will disconnect itself
+            //from the notification list in its destructor.
+            //
+            //But the SwCharDataSeqence won't be destructed but disposed in code
+            //(the data member SwChartDataSequence::bDisposed will be set to
+            //TRUE), the relationship between client and modification is not
+            //released.
+            //
+            //So any notification from modify object will lead to said
+            //exception threw out.  Recorrect the logic of code in
+            //SwChartDataSequence::Dispose(), release the relationship
+            //here...
+            SwModify* pLclRegisteredIn = GetRegisteredInNonConst();
+            if (pLclRegisteredIn && pLclRegisteredIn->GetDepends())
+            {
+                pLclRegisteredIn->Remove(this);
+                pTblCrsr = NULL;
+            }
         }
 
         // require listeners to release references to this object
