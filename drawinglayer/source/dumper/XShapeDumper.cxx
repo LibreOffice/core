@@ -350,6 +350,34 @@ namespace {
         }
     }
 
+    void XShapeDumper::dumpLineDashAsElement(drawing::LineDash aLineDash, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineDash" ));
+        switch(aLineDash.Style)
+        {
+            case drawing::DashStyle_RECT:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECT");
+                break;
+            case drawing::DashStyle_ROUND:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "ROUND");
+                break;
+            case drawing::DashStyle_RECTRELATIVE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECTRELATIVE");
+                break;
+            case drawing::DashStyle_ROUNDRELATIVE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "ROUNDRELATIVE");
+                break;
+            default:
+                break;
+        }
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dots"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.Dots);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dotLen"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.DotLen);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashes"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.Dashes);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashLen"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.DashLen);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.Distance);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -558,6 +586,12 @@ namespace {
                 drawing::LineStyle eLineStyle;
                 if(anotherAny >>= eLineStyle)
                     dumpLineStyleAsAttribute(eLineStyle, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineDash");
+                drawing::LineDash aLineDash;
+                if(anotherAny >>= aLineDash)
+                    dumpLineDashAsElement(aLineDash, xmlWriter);
             }
         }
 
