@@ -595,9 +595,9 @@ AC_ARG_ENABLE(pch,
 )
 
 AC_ARG_ENABLE(mozilla,
-    AS_HELP_STRING([--disable-mozilla],
-        [LibreOffice usually includes a strangely hacked up Mozilla binary for your
-         platform, to build without this version, use this option.])
+    AS_HELP_STRING([--enable-mozilla],
+        [LibreOffice can include a strangely hacked up Mozilla binary for your
+         platform, to build with this version, use this option.])
 )
 
 AC_ARG_ENABLE(epm,
@@ -3609,6 +3609,21 @@ UPD="`echo AC_PACKAGE_VERSION | sed "s/\.//"`0"
 SOURCEVERSION="OOO$UPD"
 AC_SUBST(UPD)
 AC_SUBST(SOURCEVERSION)
+
+dnl ===================================================================
+dnl Set the WITH_MOZILLA variable.
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to enable build of Mozilla])
+if test "$enable_mozilla" = "yes"; then
+    AC_MSG_RESULT([yes])
+    WITH_MOZILLA=YES
+else
+    AC_MSG_RESULT([no])
+    WITH_MOZILLA=NO
+    enable_mozilla=no
+fi
+AC_SUBST(WITH_MOZILLA)
 
 dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.
@@ -7424,16 +7439,6 @@ else
     SYSTEM_ODBC_HEADERS=NO
 fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
-
-AC_MSG_CHECKING([whether to enable build of Mozilla])
-if test "$enable_mozilla" = "no"; then
-    AC_MSG_RESULT([no])
-    WITH_MOZILLA=NO
-else
-    AC_MSG_RESULT([yes])
-    WITH_MOZILLA=YES
-fi
-AC_SUBST(WITH_MOZILLA)
 
 AC_MSG_CHECKING([whether to build Mozilla addressbook connectivity])
 if test "$enable_mozilla" = "no"; then
