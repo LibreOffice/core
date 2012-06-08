@@ -241,7 +241,6 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_bUpdateControllers( sal_False ),
     m_bImageOrientationRegistered( sal_False ),
     m_bImageMirrored( sal_False ),
-    m_bCanBeCustomized( !SvtMiscOptions().DisableUICustomization() ),
     m_lImageRotation( 0 ),
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
@@ -472,7 +471,7 @@ void ToolBarManager::UpdateControllers()
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::UpdateControllers" );
 
-    if( !m_bCanBeCustomized )
+    if( SvtMiscOptions().DisableUICustomization() )
     {
         Any a;
         Reference< XLayoutManager > xLayoutManager;
@@ -1774,9 +1773,8 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
         else
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, sal_False );
 
-        if ( !m_bCanBeCustomized )
+        if ( SvtMiscOptions().DisableUICustomization() )
         {
-            // Non-configurable toolbars should disable configuration menu items
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, sal_False );
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, sal_False );
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, sal_False );
