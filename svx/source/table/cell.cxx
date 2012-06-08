@@ -305,6 +305,16 @@ namespace sdr
                 sdr::table::SdrTableObj& rObj = (sdr::table::SdrTableObj&)GetSdrObject();
                 if( rObj.IsVerticalWriting() != bVertical )
                     rObj.SetVerticalWriting(bVertical);
+
+                // Set a cell vertical property
+                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+                if( pParaObj == 0 )
+                    pParaObj = mxCell->GetOutlinerParaObject();
+                if(pParaObj)
+                {
+                    pParaObj->SetVertical(bVertical);
+                }
+
             }
 
             // call parent

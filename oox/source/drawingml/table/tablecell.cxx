@@ -32,6 +32,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -350,6 +351,11 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     // TODO: phClr?
     aFillProperties.pushToPropMap( aPropMap, rFilterBase.getGraphicHelper() );
     PropertySet( xPropSet ).setProperties( aPropMap );
+
+    if ( getVertToken() == XML_eaVert )
+    {
+        xPropSet->setPropertyValue("TextWritingMode", Any(com::sun::star::text::WritingMode_TB_RL));
+    }
 
     getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
 }
