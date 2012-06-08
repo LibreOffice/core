@@ -921,8 +921,6 @@ void SheetDataBuffer::finalizeMergedRange( const CellRangeAddress& rRange )
                 Reference< XText > xText( xTopLeft, UNO_QUERY );
                 bTextWrap = xText.is() && (xText->getString().indexOf( '\x0A' ) >= 0);
             }
-            if( bTextWrap )
-                setManualRowHeight( rRange.StartRow );
         }
     }
     catch( Exception& )

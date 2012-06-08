@@ -335,8 +335,6 @@ public:
         @descr  Row default formatting is converted directly, other settings
         are cached and converted in the finalizeImport() call. */
     void                setRowModel( const RowModel& rModel );
-    /** Specifies that the passed row needs to set its height manually. */
-    void                setManualRowHeight( sal_Int32 nRow );
 
     /** Initial conversion before importing the worksheet. */
     void                initializeWorksheetImport();
@@ -394,7 +392,6 @@ private:
     RowModelRangeMap    maRowModels;        /// Ranges of rows sorted by first row index.
     HyperlinkModelList  maHyperlinks;       /// Cell ranges containing hyperlinks.
     ValidationModelList maValidations;      /// Cell ranges containing data validation settings.
-    ValueRangeSet       maManualRowHeights; /// Rows that need manual height independent from own settings.
     SheetDataBuffer     maSheetData;        /// Buffer for cell contents and cell formatting.
     CondFormatBuffer    maCondFormats;      /// Buffer for conditional formatting.
     CommentsBuffer      maComments;         /// Buffer for all cell comments in this sheet.
@@ -930,11 +927,6 @@ void WorksheetGlobals::setRowModel( const RowModel& rModel )
     lclUpdateProgressBar( mxRowProgress, maUsedArea, nRow );
 }
 
-void WorksheetGlobals::setManualRowHeight( sal_Int32 nRow )
-{
-    maManualRowHeights.insert( nRow );
-}
-
 void WorksheetGlobals::initializeWorksheetImport()
 {
     // set default cell style for unused cells
@@ -1223,20 +1215,9 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
     sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, UNIT_POINT );
     if( nHeight > 0 )
     {
-        /*  Get all rows that have custom height inside the passed row model.
-            If the model has the custom height flag set, all its rows have
-            custom height, otherwise get all rows specified in the class member
-            maManualRowHeights that are inside the passed row model. */
-        ValueRangeVector aManualRows;
-        if( rModel.mbCustomHeight )
-            aManualRows.push_back( rRowRange );
-        else
-            aManualRows = maManualRowHeights.getIntersection( rRowRange );
-        for( ValueRangeVector::const_iterator aIt = aManualRows.begin(), aEnd = aManualRows.end(); aIt != aEnd; ++aIt )
-        {
-            PropertySet aPropSet( getRows( *aIt ) );
-            aPropSet.setProperty( PROP_Height, nHeight );
-        }
+        /* always import the row height, ensures better layout */
+        PropertySet aPropSet( getRows( rRowRange ) );
+        aPropSet.setProperty( PROP_Height, nHeight );
     }
 
     // hidden rows: TODO: #108683# hide rows later?
@@ -1643,11 +1624,6 @@ void WorksheetHelper::setDefaultRowSettings( double fHeight, bool bCustomHeight,
 void WorksheetHelper::setRowModel( const RowModel& rModel )
 {
     mrSheetGlob.setRowModel( rModel );
-}
-
-void WorksheetHelper::setManualRowHeight( sal_Int32 nRow )
-{
-    mrSheetGlob.setManualRowHeight( nRow );
 }
 
 void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue ) const
