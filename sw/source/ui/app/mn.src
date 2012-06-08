@@ -1307,30 +1307,6 @@ String MN_OLE_POPUPMENU
     Text [ en-US ] = "Object" ;
 };
 
-#define MN_OLE_EXPORT \
-    MenuItem\
-    {\
-        Text [ en-US ] = "Export..." ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MenuItem\
-                {\
-                    Identifier = FN_EXPORT_OLE_AS_PDF ;\
-                    HelpID = CMD_FN_EXPORT_OLE_AS_PDF ; \
-                    Text [ en-US ] = "Export as P~DF..." ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = FN_EXPORT_OLE_AS_GRAPHIC ;\
-                    HelpID = CMD_FN_EXPORT_OLE_AS_GRAPHIC ; \
-                    Text [ en-US ] = "Export as JPG..." ; \
-                };\
-            };\
-        };\
-    };
-
 Menu MN_OLE_POPUPMENU
 {
     ItemList =
@@ -1346,9 +1322,6 @@ Menu MN_OLE_POPUPMENU
             HelpId = CMD_FN_FORMAT_FRAME_DLG ;
             Text [ en-US ] = "Object..." ;
         };
-        SEPARATOR ;
-        MN_OLE_EXPORT
-        SEPARATOR ;
         MN_FRM_CAPTION_ITEM
     };
 };
