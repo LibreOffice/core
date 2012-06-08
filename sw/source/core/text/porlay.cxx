@@ -340,8 +340,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
             // portion spanning to the end or the next fixed portion
             while( pPos )
             {
-                OSL_ENSURE( POR_LIN != pPos->GetWhichPor(),
-                        "SwLineLayout::CalcLine: don't use SwLinePortions !" );
+                SAL_WARN_IF( POR_LIN == pPos->GetWhichPor(),
+                        "sw.core", "SwLineLayout::CalcLine: don't use SwLinePortions !" );
 
                 // Null portions are eliminated. They can form if two FlyFrms
                 // overlap.
@@ -386,8 +386,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 KSHORT nPosHeight = pPos->Height();
                 KSHORT nPosAscent = pPos->GetAscent();
 
-                OSL_ENSURE( nPosHeight >= nPosAscent,
-                        "SwLineLayout::CalcLine: bad ascent or height" );
+                SAL_WARN_IF( nPosHeight < nPosAscent,
+                        "sw.core", "SwLineLayout::CalcLine: bad ascent or height" );
 
                 if( pPos->IsHangingPortion() )
                 {
@@ -547,7 +547,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     // Robust:
     if( nLineWidth < Width() )
         Width( nLineWidth );
-    OSL_ENSURE( nLineWidth >= Width(), "SwLineLayout::CalcLine: line is bursting" );
+    SAL_WARN_IF( nLineWidth < Width(), "sw.core", "SwLineLayout::CalcLine: line is bursting" );
     SetDummy( bTmpDummy );
     SetRedline( rLine.GetRedln() &&
         rLine.GetRedln()->CheckLine( rLine.GetStart(), rLine.GetEnd() ) );
@@ -643,7 +643,7 @@ SwScriptInfo::~SwScriptInfo()
 
 sal_uInt8 SwScriptInfo::WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
 {
-    OSL_ENSURE( pTxt || pSI,"How should I determine the script type?" );
+    SAL_WARN_IF( !pTxt && !pSI, "sw.core", "How should I determine the script type?" );
     sal_uInt16 nScript;
 
     // First we try to use our SwScriptInfo
@@ -737,7 +737,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // if change position = 0 we do not use any data from the arrays
         // because by deleting all characters of the first group at the beginning
         // of a paragraph nScript is set to a wrong value
-        OSL_ENSURE( CountScriptChg(), "Where're my changes of script?" );
+        SAL_WARN_IF( !CountScriptChg(), "sw.core", "Where're my changes of script?" );
         while( nCnt < CountScriptChg() )
         {
             if ( nChg > GetScriptChg( nCnt ) )
@@ -845,9 +845,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
         nScript = (sal_uInt8)GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
 
-        OSL_ENSURE( i18n::ScriptType::LATIN == nScript ||
-                i18n::ScriptType::ASIAN == nScript ||
-                i18n::ScriptType::COMPLEX == nScript, "Wrong default language" );
+        SAL_WARN_IF( i18n::ScriptType::LATIN != nScript &&
+                i18n::ScriptType::ASIAN != nScript &&
+                i18n::ScriptType::COMPLEX != nScript, "sw.core", "Wrong default language" );
 
         nChg = nEnd;
 
@@ -870,9 +870,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
     while ( nChg < rTxt.Len() || ( aScriptChanges.empty() && !rTxt.Len() ) )
     {
-        OSL_ENSURE( i18n::ScriptType::WEAK != nScript,
-                "Inserting WEAK into SwScriptInfo structure" );
-        OSL_ENSURE( STRING_LEN != nChg, "65K? Strange length of script section" );
+        SAL_WARN_IF( i18n::ScriptType::WEAK == nScript,
+                "sw.core", "Inserting WEAK into SwScriptInfo structure" );
+        SAL_WARN_IF( STRING_LEN == nChg, "sw.core", "65K? Strange length of script section" );
 
         xub_StrLen nSearchStt = nChg;
         nChg = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );
@@ -1045,7 +1045,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                              ( isHahChar ( cCh ) && nIdx == nWordLen - 1))  // Hah (dual joining) only at end of word
                         {
 
-                            OSL_ENSURE( 0 != cPrevCh, "No previous character" );
+                            SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
                             // check if character is connectable to previous character,
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
@@ -1065,7 +1065,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                               isGafChar ( cCh ) )
                               && nIdx == nWordLen - 1))  // only at end of word
                         {
-                            OSL_ENSURE( 0 != cPrevCh, "No previous character" );
+                            SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
                             // check if character is connectable to previous character,
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
@@ -1085,7 +1085,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                             xub_Unicode cNextCh = rWord.GetChar( nIdx + 1 );
                             if ( isRehChar ( cNextCh ) || isYehChar ( cNextCh ))
                            {
-                                OSL_ENSURE( 0 != cPrevCh, "No previous character" );
+                                SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
                                 // check if character is connectable to previous character,
                                 if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                                 {
@@ -1107,7 +1107,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                                 isFehChar ( cCh ) )   // Feh (dual joining)
                                 && nIdx == nWordLen - 1))  // only at end of word
                         {
-                            OSL_ENSURE( 0 != cPrevCh, "No previous character" );
+                            SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
                             // check if character is connectable to previous character,
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
@@ -1127,7 +1127,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                              ( 0x60C <= cCh && 0x6FE >= cCh // all others
                               && nIdx == nWordLen - 1))   // only at end of word
                         {
-                            OSL_ENSURE( 0 != cPrevCh, "No previous character" );
+                            SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
                             // check if character is connectable to previous character,
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
@@ -1175,7 +1175,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         }
         nTmpKashidaPos = nCurrKashidaPos;
     }
-    OSL_ENSURE( ! bWrongKash, "Kashida array contains wrong data" );
+    SAL_WARN_IF( bWrongKash, "sw.core", "Kashida array contains wrong data" );
 #endif
 
     // remove invalid entries from direction information arrays
@@ -1223,8 +1223,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 const xub_StrLen nStartPosOfGroup = nScriptIdx ? GetScriptChg( nScriptIdx - 1 ) : 0;
                 const sal_uInt8 nScriptTypeOfGroup = GetScriptType( nScriptIdx );
 
-                OSL_ENSURE( nStartPosOfGroup <= nStart && GetScriptChg( nScriptIdx ) > nStart,
-                        "Script override with CTL font trouble" );
+                SAL_WARN_IF( nStartPosOfGroup > nStart || GetScriptChg( nScriptIdx ) <= nStart,
+                        "sw.core", "Script override with CTL font trouble" );
 
                 // Check if we have to insert a new script change at
                 // position nStart. If nStartPosOfGroup < nStart,
@@ -1253,9 +1253,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 xub_StrLen nLastPos = 0;
                 for (std::vector<ScriptChangeInfo>::const_iterator i2 = aScriptChanges.begin(); i2 < aScriptChanges.end(); ++i2)
                 {
-                    OSL_ENSURE( nLastTyp != i2->type &&
-                            nLastPos < i2->position,
-                            "Heavy InitScriptType() confusion" );
+                    SAL_WARN_IF( nLastTyp == i2->type ||
+                            nLastPos >= i2->position,
+                            "sw.core", "Heavy InitScriptType() confusion" );
                     nLastPos = i2->position;
                     nLastTyp = i2->type;
                 }
@@ -1371,7 +1371,7 @@ sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rT
                                        const xub_StrLen nStt, const xub_StrLen nEnd,
                                        const xub_Unicode cChar )
 {
-    OSL_ENSURE( rNode.GetTxt().Len() == rText.Len(), "MaskHiddenRanges, string len mismatch" );
+    SAL_WARN_IF( rNode.GetTxt().Len() != rText.Len(), "sw.core", "MaskHiddenRanges, string len mismatch" );
 
     PositionList aList;
     xub_StrLen nHiddenStart;
@@ -1614,8 +1614,8 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
                              const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                              Point* pPoint ) const
 {
-    OSL_ENSURE( nCompress, "Compression without compression?!" );
-    OSL_ENSURE( nLen, "Compression without text?!" );
+    SAL_WARN_IF( !nCompress, "sw.core", "Compression without compression?!" );
+    SAL_WARN_IF( !nLen, "sw.core", "Compression without text?!" );
     sal_uInt16 nCompCount = CountCompChg();
 
     // In asian typography, there are full width and half width characters.
@@ -1650,7 +1650,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
     {
         sal_uInt16 nType = GetCompType( nCompIdx );
 #ifdef DBG_UTIL
-        OSL_ENSURE( nType == CompType( nIdx ), "Gimme the right type!" );
+        SAL_WARN_IF( nType != CompType( nIdx ), "sw.core", "Gimme the right type!" );
 #endif
         nCompLen = nCompLen + nIdx;
         if( nCompLen > nLen )
@@ -1665,7 +1665,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
         {
             while( nIdx < nCompLen )
             {
-                OSL_ENSURE( SwScriptInfo::NONE != nType, "None compression?!" );
+                SAL_WARN_IF( SwScriptInfo::NONE == nType, "sw.core", "None compression?!" );
 
                 // nLast is width of current character
                 nLast -= pKernArray[ nI ];
@@ -1737,7 +1737,7 @@ sal_uInt16 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
                                     xub_StrLen nLen,
                                     long nSpaceAdd ) const
 {
-    OSL_ENSURE( nLen, "Kashida justification without text?!" );
+    SAL_WARN_IF( !nLen, "sw.core", "Kashida justification without text?!" );
 
     if( !IsKashidaLine(nStt))
         return STRING_LEN;
@@ -2010,7 +2010,7 @@ void SwScriptInfo::ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
 
 bool SwScriptInfo::MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen* pKashidaPositions )
 {
-   OSL_ENSURE( pKashidaPositions && nCnt > 0, "Where are kashidas?" );
+   SAL_WARN_IF( !pKashidaPositions || nCnt == 0, "sw.core", "Where are kashidas?" );
 
    sal_uInt16 nCntKash = 0;
    xub_StrLen nKashidaPosIdx = 0;
@@ -2039,7 +2039,7 @@ sal_Int32 SwScriptInfo::ThaiJustify( const rtl::OUString& rTxt, sal_Int32* pKern
                                   sal_Int32 nLen, sal_Int32 nNumberOfBlanks,
                                   long nSpaceAdd )
 {
-    OSL_ENSURE( nStt + nLen <= rTxt.getLength(), "String in ThaiJustify too small" );
+    SAL_WARN_IF( nStt + nLen > rTxt.getLength(), "sw.core", "String in ThaiJustify too small" );
 
     SwTwips nNumOfTwipsToDistribute = nSpaceAdd * nNumberOfBlanks /
                                       SPACING_PRECISION_FACTOR;
@@ -2175,7 +2175,7 @@ SwTwips SwLineLayout::_GetHangingMargin() const
 
 SwTwips SwTxtFrm::HangingMargin() const
 {
-    OSL_ENSURE( HasPara(), "Don't call me without a paraportion" );
+    SAL_WARN_IF( !HasPara(), "sw.core", "Don't call me without a paraportion" );
     if( !GetPara()->IsMargin() )
         return 0;
     const SwLineLayout* pLine = GetPara();

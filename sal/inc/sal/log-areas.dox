@@ -46,8 +46,10 @@ certain functionality.
 
 @section Writer
 
+@li @c sw.core - Writer core
 @li @c sw.rtf - .rtf export filter
 @li @c sw.uno - Writer UNO interfaces
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
 
 */
+/* vim:set ft=cpp shiftwidth=4 softtabstop=4 expandtab: */
