@@ -74,7 +74,7 @@ protected:
 
 /** Definition of BitmapDevice interface
 
-    Use the createBitmapDevice() factory method to create instances.
+    Use the createBitmapDevice() function to create instances.
 
     Implementation note: the clip mask and bitmap parameter instances
     of BitmapDevice that are passed to individual BitmapDevice
@@ -658,13 +658,13 @@ private:
     boost::scoped_ptr< ImplBitmapDevice > mpImpl;
 };
 
-/** Factory method to create a BitmapDevice for given scanline format
+/** Function to create a BitmapDevice for given scanline format
  */
 BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                                             bool                      bTopDown,
                                                             sal_Int32                 nScanlineFormat );
 
-/** Factory method to create a BitmapDevice for given scanline format
+/** Function to create a BitmapDevice for given scanline format
     with the given palette
 
     Note: the provided palette must have sufficient size, to satisfy
@@ -676,7 +676,7 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVe
                                                             sal_Int32                        nScanlineFormat,
                                                             const PaletteMemorySharedVector& rPalette );
 
-/** Factory method to create a BitmapDevice for given scanline format
+/** Function to create a BitmapDevice for given scanline format
     from the given piece of raw memory and palette
 
     Note: the provided memory must have sufficient size, to store the
@@ -689,7 +689,7 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVe
                                                             const PaletteMemorySharedVector& rPalette );
 
 
-/** Factory method to retrieve a subsetted BitmapDevice to the same
+/** Function to retrieve a subsetted BitmapDevice to the same
     memory.
 
     This method creates a second bitmap device instance, which renders
@@ -700,7 +700,7 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVe
 BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr& rProto,
                                                             const basegfx::B2IBox&       rSubset );
 
-/** Factory method to clone a BitmapDevice from a given prototype.
+/** Function to clone a BitmapDevice from a given prototype.
 
     All attributes (like scanline format and top-down state) are
     copied, only the size can be varied. Note that the prototype's
