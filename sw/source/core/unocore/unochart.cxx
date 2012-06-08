@@ -1655,6 +1655,7 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
         {
             SwChartDataSequence *pDataSeq = 0;
             sal_Bool bNowEmpty = sal_False;
+            sal_Bool bSeqDisposed = sal_False;
 
             // check if weak reference is still valid...
 //            uno::Reference< chart2::data::XDataSequence > xRef( uno::Reference< chart2::data::XDataSequence>(*aIt), uno::UNO_QUERY );
@@ -1666,10 +1667,19 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
                 pDataSeq = static_cast< SwChartDataSequence * >( xRef.get() );
                 if (pDataSeq)
                 {
+                    try
+                    {
 #if OSL_DEBUG_LEVEL > 1
                     OUString aRangeStr( pDataSeq->getSourceRangeRepresentation() );
 #endif
                     bNowEmpty = pDataSeq->DeleteBox( rBox );
+                    }
+                    catch (lang::DisposedException&)
+                    {
+                        bNowEmpty = sal_True;
+                        bSeqDisposed = sal_True;
+                    }
+
                     if (bNowEmpty)
                         aDelIt = aIt;
                 }
@@ -1679,7 +1689,7 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
             if (bNowEmpty)
             {
                 rSet.erase( aDelIt );
-                if (pDataSeq)
+                if (pDataSeq && !bSeqDisposed)
                     pDataSeq->dispose();    // the current way to tell chart that sth. got removed
             }
         }
@@ -2636,6 +2646,9 @@ void SAL_CALL SwChartDataSequence::removeEventListener(
 
 sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
 {
+    if (bDisposed)
+        throw lang::DisposedException();
+
 #if OSL_DEBUG_LEVEL > 1
     String aBoxName( rBox.GetName() );
 #endif
