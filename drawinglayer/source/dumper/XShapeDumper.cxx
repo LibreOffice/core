@@ -378,6 +378,12 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
+    void XShapeDumper::dumpLineDashNameAsAttribute(rtl::OUString sLineDashName, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineDashName"), "%s",
+            rtl::OUStringToOString(sLineDashName, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -592,6 +598,12 @@ namespace {
                 drawing::LineDash aLineDash;
                 if(anotherAny >>= aLineDash)
                     dumpLineDashAsElement(aLineDash, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineDashName");
+                rtl::OUString sLineDashName;
+                if(anotherAny >>= sLineDashName)
+                    dumpLineDashNameAsAttribute(sLineDashName, xmlWriter);
             }
         }
 
