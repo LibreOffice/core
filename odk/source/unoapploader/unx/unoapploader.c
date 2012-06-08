@@ -148,15 +148,13 @@ int main( int argc, char *argv[] )
             libpath = NULL;
             for (;;) {
                 size_t m;
-                char * test = realloc(libpath, n);
-                if (test == NULL) {
+                libpath = realloc(libpath, n);
+                if (libpath == NULL) {
                     fprintf(
                         stderr,
                         "Error: out of memory reading unoinfo output!\n");
-                    free(libpath);
                     exit(EXIT_FAILURE);
                 }
-                libpath = test;
                 m = fread(libpath + old, 1, n - old - 1, f);
                 if (m != n - old - 1) {
                     if (ferror(f)) {
