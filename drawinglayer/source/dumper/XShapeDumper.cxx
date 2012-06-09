@@ -527,6 +527,11 @@ namespace {
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "false");
 	}
 
+    void XShapeDumper::dumpLineEndWidthAsAttribute(sal_Int32 aLineEndWidth, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndWidth"), "%" SAL_PRIdINT32, aLineEndWidth);
+	}
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -814,7 +819,12 @@ namespace {
 				if(anotherAny >>= bLineEndCenter)
 					dumpLineEndCenterAsAttribute(bLineEndCenter, xmlWriter);
 			}
-
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("LineEndWidth");
+				sal_Int32 aLineEndWidth;
+				if(anotherAny >>= aLineEndWidth)
+					dumpLineEndWidthAsAttribute(aLineEndWidth, xmlWriter);
+			}
         }
 
         #if DEBUG_DUMPER
