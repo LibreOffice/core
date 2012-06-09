@@ -2336,6 +2336,39 @@ Size ToolBox::ImplGetOptimalFloatingSize( FloatingSizeMode eMode )
     return aCurrentSize;
 }
 
+namespace
+{
+static void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
+{
+    bool bLastSep( false );
+    std::vector< ImplToolItem >::iterator it;
+    for ( it = rItems.begin(); it != rItems.end(); ++it )
+    {
+        if ( it->meType == TOOLBOXITEM_SEPARATOR )
+        {
+            it->mbVisible = sal_False;
+            if ( !bLastSep )
+            {
+                // check if any visible items have to appear behind it
+                std::vector< ImplToolItem >::iterator temp_it;
+                for ( temp_it = it+1; temp_it != rItems.end(); ++temp_it )
+                {
+                    if ( (temp_it->meType == TOOLBOXITEM_SEPARATOR) ||
+                         ((temp_it->meType == TOOLBOXITEM_BUTTON) &&
+                          temp_it->mbVisible) )
+                    {
+                        it->mbVisible = sal_True;
+                        break;
+                    }
+                }
+            }
+            bLastSep = true;
+        }
+        else if ( it->mbVisible )
+            bLastSep = false;
+    }
+}
+}
 
 void ToolBox::ImplFormat( sal_Bool bResize )
 {
@@ -2355,10 +2388,8 @@ void ToolBox::ImplFormat( sal_Bool bResize )
     long            nMax;   // width of layoutarea in pixels
     sal_uInt16          nFormatLine;
     sal_Bool            bMustFullPaint;
-    sal_Bool            bLastSep;
 
     std::vector< ImplToolItem >::iterator   it;
-    std::vector< ImplToolItem >::iterator   temp_it;
 
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
     sal_Bool bIsInPopupMode = ImplIsInPopupMode();
@@ -2517,7 +2548,6 @@ void ToolBox::ImplFormat( sal_Bool bResize )
         long nX = nLeft;    // top-left offset
         long nY = nTop;
         nFormatLine = 1;
-        bLastSep    = sal_True;
 
         // save old scroll rectangles and reset them
         Rectangle aOldLowerRect = maLowerRect;
@@ -2552,6 +2582,8 @@ void ToolBox::ImplFormat( sal_Bool bResize )
         // do we have any toolbox items at all ?
         if ( !mpData->m_aItems.empty() || IsMenuEnabled() )
         {
+            lcl_hideDoubleSeparators( mpData->m_aItems );
+
             // compute line breaks and visible lines give the current window width (nMax)
             // the break indicators will be stored within each item (it->mbBreak)
             mnCurLines = ImplCalcBreaks( nMax, NULL, mbHorz );
@@ -2648,31 +2680,6 @@ void ToolBox::ImplFormat( sal_Bool bResize )
             it = mpData->m_aItems.begin();
             while ( it != mpData->m_aItems.end() )
             {
-                // hide double separators
-                if ( it->meType == TOOLBOXITEM_SEPARATOR )
-                {
-                    it->mbVisible = sal_False;
-                    if ( !bLastSep )
-                    {
-                        // check if any visible items have to appear behind it
-                        temp_it = it+1;
-                        while ( temp_it != mpData->m_aItems.end() )
-                        {
-                            if ( (temp_it->meType == TOOLBOXITEM_SEPARATOR) ||
-                                 ((temp_it->meType == TOOLBOXITEM_BUTTON) &&
-                                  temp_it->mbVisible) )
-                            {
-                                it->mbVisible = sal_True;
-                                break;
-                            }
-                            ++temp_it;
-                        }
-                    }
-                    bLastSep = sal_True;
-                }
-                else if ( it->mbVisible )
-                    bLastSep = sal_False;
-
                 it->mbShowWindow = sal_False;
 
                 // check for line break and advance nX/nY accordingly
