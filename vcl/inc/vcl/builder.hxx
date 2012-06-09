@@ -91,8 +91,6 @@ private:
     ListStore *get_model_by_name(rtl::OString sID);
     static void mungemodel(ListBox &rTarget, ListStore &rStore);
 
-    std::stack<rtl::OString> m_aParentTypes;
-
     rtl::OString m_sID;
     Window *m_pParent;
 public:

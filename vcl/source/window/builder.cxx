@@ -180,7 +180,7 @@ bool VclBuilder::extractModel(const rtl::OString &id, stringmap &rMap)
 
 Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const rtl::OString &id, stringmap &rMap)
 {
-    if (!m_aParentTypes.empty() && m_aParentTypes.top().equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
+    if (pParent && pParent->GetType() == WINDOW_TABCONTROL)
     {
         //We have to add a page
         TabControl *pTabControl = static_cast<TabControl*>(pParent);
@@ -282,7 +282,6 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
 
     if (pCurrentChild)
     {
-        m_aParentTypes.push(rClass);
         for (stringmap::iterator aI = rMap.begin(), aEnd = rMap.end(); aI != aEnd; ++aI)
         {
             const rtl::OString &rKey = aI->first;
@@ -415,7 +414,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                 if (pCurrentChild)
                 {
                     //Select the first page if its a notebook
-                    if (!m_aParentTypes.empty() && m_aParentTypes.top().equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
+                    if (pCurrentChild->GetType() == WINDOW_TABCONTROL)
                     {
                         TabControl *pTabControl = static_cast<TabControl*>(pCurrentChild);
                         pTabControl->SetCurPageId(1);
@@ -456,9 +455,6 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                         }
 #endif
                     }
-
-                    if (!m_aParentTypes.empty())
-                        m_aParentTypes.pop();
                 }
             }
             else if (name.equals(RTL_CONSTASCII_STRINGPARAM("packing")))
