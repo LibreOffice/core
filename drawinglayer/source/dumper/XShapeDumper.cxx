@@ -622,6 +622,35 @@ namespace {
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "false");
 	}
 
+    void XShapeDumper::dumpTextContourFrameAsAttribute(sal_Bool bTextContourFrame, xmlTextWriterPtr xmlWriter)
+	{
+		if(bTextContourFrame)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "false");
+	}
+
+    void XShapeDumper::dumpTextFitToSizeAsAttribute(drawing::TextFitToSizeType eTextFitToSize, xmlTextWriterPtr xmlWriter)
+	{
+		switch(eTextFitToSize)
+		{
+			case drawing::TextFitToSizeType_NONE:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "NONE");
+				break;
+			case drawing::TextFitToSizeType_PROPORTIONAL:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "PROPORTIONAL");
+				break;
+			case drawing::TextFitToSizeType_ALLLINES:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "ALLLINES");
+				break;
+			case drawing::TextFitToSizeType_AUTOFIT:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "AUTOFIT");
+				break;
+			default:
+				break;
+		}
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -693,6 +722,18 @@ namespace {
 				sal_Bool bTextAutoGrowWidth;
 				if(anotherAny >>= bTextAutoGrowWidth)
 					dumpTextAutoGrowWidthAsAttribute(bTextAutoGrowWidth, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextContourFrame");
+				sal_Bool bTextContourFrame;
+				if(anotherAny >>= bTextContourFrame)
+					dumpTextContourFrameAsAttribute(bTextContourFrame, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextFitToSize");
+				drawing::TextFitToSizeType eTextFitToSize;
+				if(anotherAny >>= eTextFitToSize)
+					dumpTextFitToSizeAsAttribute(eTextFitToSize, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
