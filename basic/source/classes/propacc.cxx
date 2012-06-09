@@ -59,12 +59,17 @@ int CDECL SbCompare_PropertyValues_Impl( const void *arg1, const void *arg2 )
    return ((PropertyValue*)arg1)->Name.compareTo( ((PropertyValue*)arg2)->Name );
 }
 
-extern "C" int CDECL SbCompare_UString_PropertyValue_Impl( const void *arg1, const void *arg2 )
+struct SbCompare_UString_PropertyValue_Impl
 {
-    const ::rtl::OUString *pArg1 = (::rtl::OUString*) arg1;
-    const PropertyValue **pArg2 = (const PropertyValue**) arg2;
-    return pArg1->compareTo( (*pArg2)->Name );
-}
+   bool operator() ( const ::rtl::OUString& lhs, PropertyValue* const & rhs )
+   {
+      return lhs.compareTo( rhs->Name );
+   }
+   bool operator() ( PropertyValue* const & lhs, const ::rtl::OUString& rhs )
+   {
+      return !rhs.compareTo( lhs->Name );
+   }
+};
 
 int CDECL SbCompare_Properties_Impl( const void *arg1, const void *arg2 )
 {
@@ -90,8 +95,8 @@ SbPropertyValues::~SbPropertyValues()
 {
     _xInfo = Reference< XPropertySetInfo >();
 
-    for ( sal_uInt16 n = 0; n < _aPropVals.Count(); ++n )
-        delete _aPropVals.GetObject( n );
+    for ( sal_uInt16 n = 0; n < _aPropVals.size(); ++n )
+        delete _aPropVals[ n ];
 }
 
 //----------------------------------------------------------------------------
@@ -111,12 +116,10 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( 
 
 sal_Int32 SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
 {
-    PropertyValue **ppPV;
-    ppPV = (PropertyValue **)
-            bsearch( &rPropName, _aPropVals.GetData(), _aPropVals.Count(),
-                      sizeof( PropertyValue* ),
-                      SbCompare_UString_PropertyValue_Impl );
-    return ppPV ? ppPV - _aPropVals.GetData() : USHRT_MAX;
+    SbPropertyValueArr_Impl::const_iterator it = std::lower_bound(
+          _aPropVals.begin(), _aPropVals.end(), rPropName,
+          SbCompare_UString_PropertyValue_Impl() );
+    return it != _aPropVals.end() ? it - _aPropVals.begin() : USHRT_MAX;
 }
 
 //----------------------------------------------------------------------------
@@ -131,8 +134,8 @@ void SbPropertyValues::setPropertyValue(
                     ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nIndex = GetIndex_Impl( aPropertyName );
-    PropertyValue *pPropVal = _aPropVals.GetObject(
-        sal::static_int_cast< sal_uInt16 >(nIndex));
+    PropertyValue *pPropVal = _aPropVals[
+        sal::static_int_cast< sal_uInt16 >(nIndex)];
     pPropVal->Value = aValue;
 }
 
@@ -146,8 +149,8 @@ Any SbPropertyValues::getPropertyValue(
 {
     sal_Int32 nIndex = GetIndex_Impl( aPropertyName );
     if ( nIndex != USHRT_MAX )
-        return _aPropVals.GetObject(
-            sal::static_int_cast< sal_uInt16 >(nIndex))->Value;
+        return _aPropVals[
+            sal::static_int_cast< sal_uInt16 >(nIndex)]->Value;
     return Any();
 }
 
@@ -195,9 +198,9 @@ void SbPropertyValues::removeVetoableChangeListener(
 
 Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException)
 {
-    Sequence<PropertyValue> aRet( _aPropVals.Count());
-    for ( sal_uInt16 n = 0; n < _aPropVals.Count(); ++n )
-        aRet.getArray()[n] = *_aPropVals.GetObject(n);
+    Sequence<PropertyValue> aRet( _aPropVals.size() );
+    for ( sal_uInt16 n = 0; n < _aPropVals.size(); ++n )
+        aRet.getArray()[n] = *_aPropVals[n];
     return aRet;
 }
 
@@ -210,14 +213,14 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
                      ::com::sun::star::lang::WrappedTargetException,
                      ::com::sun::star::uno::RuntimeException)
 {
-    if ( _aPropVals.Count() )
+    if ( !_aPropVals.empty() )
         throw PropertyExistException();
 
     const PropertyValue *pPropVals = rPropertyValues.getConstArray();
     for ( sal_Int16 n = 0; n < rPropertyValues.getLength(); ++n )
     {
         PropertyValue *pPropVal = new PropertyValue(pPropVals[n]);
-        _aPropVals.Insert( pPropVal, n );
+        _aPropVals.push_back( pPropVal );
     }
 }
 
@@ -262,11 +265,11 @@ sal_Bool PropertySetInfoImpl::hasPropertyByName(const ::rtl::OUString& Name) thr
 
 SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
 {
-    aImpl._aProps.realloc( rPropVals.Count() );
-    for ( sal_uInt16 n = 0; n < rPropVals.Count(); ++n )
+    aImpl._aProps.realloc( rPropVals.size() );
+    for ( sal_uInt16 n = 0; n < rPropVals.size(); ++n )
     {
         Property &rProp = aImpl._aProps.getArray()[n];
-        const PropertyValue &rPropVal = *rPropVals.GetObject(n);
+        const PropertyValue &rPropVal = *rPropVals[n];
         rProp.Name = rPropVal.Name;
         rProp.Handle = rPropVal.Handle;
         rProp.Type = getCppuVoidType();

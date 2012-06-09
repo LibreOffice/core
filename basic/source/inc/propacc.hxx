@@ -28,7 +28,6 @@
 #ifndef _SFX_PROPBAG_HXX
 #define _SFX_PROPBAG_HXX
 
-#include <svl/svarray.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -36,9 +35,9 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <vector>
 
-typedef ::com::sun::star::beans::PropertyValue* SbPropertyValuePtr;
-SV_DECL_PTRARR( SbPropertyValueArr_Impl, SbPropertyValuePtr, 4 )
+typedef std::vector< ::com::sun::star::beans::PropertyValue* > SbPropertyValueArr_Impl;
 
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertySet,
                                  ::com::sun::star::beans::XPropertyAccess > SbPropertyValuesHelper;
