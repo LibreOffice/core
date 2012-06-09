@@ -437,25 +437,10 @@ namespace {
 
     void XShapeDumper::dumpPolyPolygonBezierCoords(drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter)
     {
-        uno::Sequence<uno::Sequence< awt::Point > > pointSequenceSequence = aPolyPolygonBezierCoords.Coordinates;
-        sal_Int32 nPointsSequence = pointSequenceSequence.getLength();
-        for (sal_Int32 i = 0; i < nPointsSequence; ++i)
-        {
-            uno::Sequence< awt::Point > pointSequence = pointSequenceSequence[i];
-            sal_Int32 nPoints = pointSequence.getLength();
+        // dumps first field - Coordinates
+        dumpPointSequenceSequence(aPolyPolygonBezierCoords.Coordinates, xmlWriter);
 
-            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "pointSequence" ));
-
-            for(sal_Int32 j = 0; j < nPoints; ++j)
-            {
-                xmlTextWriterStartElement(xmlWriter, BAD_CAST( "point" ));
-                xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, pointSequence[j].X);
-                xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionY"), "%" SAL_PRIdINT32, pointSequence[j].Y);
-                xmlTextWriterEndElement( xmlWriter );
-            }
-            xmlTextWriterEndElement( xmlWriter );
-        }
-
+        // dumps second field - Flags
         uno::Sequence<uno::Sequence< drawing::PolygonFlags > > polygonFlagsSequenceSequence = aPolyPolygonBezierCoords.Flags;
         sal_Int32 nFlagsSequence = polygonFlagsSequenceSequence.getLength();
         for (sal_Int32 i = 0; i < nFlagsSequence; ++i)
