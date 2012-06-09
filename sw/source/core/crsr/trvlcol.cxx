@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <layfrm.hxx>

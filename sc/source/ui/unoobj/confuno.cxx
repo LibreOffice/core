@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "confuno.hxx"
 #include "unonames.hxx"
 #include "scdll.hxx"

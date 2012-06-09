@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <AnnotationMenuButton.hxx>
 
 #include <annotation.hrc>

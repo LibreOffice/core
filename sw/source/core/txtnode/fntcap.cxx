@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/svxfont.hxx>

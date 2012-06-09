@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>

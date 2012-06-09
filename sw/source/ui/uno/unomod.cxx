@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <swtypes.hxx>
 #include <osl/diagnose.h>
 #include <unomod.hxx>

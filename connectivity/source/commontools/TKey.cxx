@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "connectivity/TKey.hxx"
 #include "connectivity/TKeyColumns.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>

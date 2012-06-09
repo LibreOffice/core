@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "sortparam.hxx"
 #include "global.hxx"
 #include "address.hxx"

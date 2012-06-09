@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "dbastrings.hrc"
 #include "FilteredContainer.hxx"
 #include "RefreshListener.hxx"

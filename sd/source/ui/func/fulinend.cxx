@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "fulinend.hxx"
 #include <svx/xtable.hxx>
 #include <svx/svxdlg.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sfx2/docfile.hxx>
 #include <svl/inethist.hxx>
 #include <fmtinfmt.hxx>

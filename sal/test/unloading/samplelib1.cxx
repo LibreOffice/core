@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sal/types.h>
 #include <osl/time.h>
 #include <rtl/ustring.hxx>

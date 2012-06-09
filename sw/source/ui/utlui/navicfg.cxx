@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <swtypes.hxx>  // fuer Pathfinder
 #include <navicfg.hxx>
 #include <swcont.hxx>

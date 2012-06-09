@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "fuolbull.hxx"
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>

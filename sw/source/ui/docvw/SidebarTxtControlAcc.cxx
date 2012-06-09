@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <SidebarTxtControlAcc.hxx>
 
 #include <SidebarTxtControl.hxx>

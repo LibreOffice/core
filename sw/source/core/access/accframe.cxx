@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <hintids.hxx>
 #include <editeng/brshitem.hxx>
 #include <flyfrm.hxx>

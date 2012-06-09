@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <osl/diagnose.h>
 #include <unotools/charclass.hxx>
 #include <swtypes.hxx>

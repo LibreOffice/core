@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "ndtxt.hxx"
 #include "flyfrm.hxx"
 #include "paratr.hxx"

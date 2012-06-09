@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-
 #include <svl/srchitem.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svxids.hrc>

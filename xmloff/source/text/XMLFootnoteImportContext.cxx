@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "XMLFootnoteImportContext.hxx"
 
 #include <rtl/ustring.hxx>

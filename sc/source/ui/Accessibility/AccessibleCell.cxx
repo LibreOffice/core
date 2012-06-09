@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "AccessibleCell.hxx"
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>

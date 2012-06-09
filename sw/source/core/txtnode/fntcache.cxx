@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
 #include <vcl/lineinfo.hxx>

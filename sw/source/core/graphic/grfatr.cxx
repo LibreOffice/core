@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>

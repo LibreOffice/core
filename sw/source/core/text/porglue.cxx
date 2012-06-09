@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "swrect.hxx"
 #include "paratr.hxx"   // pTabStop, ADJ*
 #include "viewopt.hxx"  // SwViewOptions

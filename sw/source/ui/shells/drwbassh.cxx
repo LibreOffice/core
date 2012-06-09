@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/shl.hxx>
 #include <hintids.hxx>
 #include <helpid.h>

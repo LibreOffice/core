@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <stdexcept>
 #include <osl/diagnose.h>
 #include "FilterContainer.hxx"

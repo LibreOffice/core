@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 

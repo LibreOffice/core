@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
 #include "DragSourceContext.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "futxtatt.hxx"
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>

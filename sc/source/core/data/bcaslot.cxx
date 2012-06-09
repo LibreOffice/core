@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <sfx2/objsh.hxx>
 #include <svl/listener.hxx>
 #include <svl/listeneriter.hxx>

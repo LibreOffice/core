@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "scitems.hxx"
 #include <svl/srchitem.hxx>
 #include <vcl/svapp.hxx>

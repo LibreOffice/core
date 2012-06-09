@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <AnchorOverlayObject.hxx>
 #include <SidebarWindowsConsts.hxx>
 

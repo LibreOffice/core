@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>

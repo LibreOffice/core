@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include "listenercalls.hxx"

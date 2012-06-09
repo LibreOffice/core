@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sal/macros.h>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlerror.hxx>

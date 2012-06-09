@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "imoptdlg.hxx"
 #include "scresid.hxx"
 #include "imoptdlg.hrc"

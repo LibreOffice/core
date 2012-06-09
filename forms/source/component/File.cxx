@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "File.hxx"
 
 #include <com/sun/star/form/FormComponentType.hpp>

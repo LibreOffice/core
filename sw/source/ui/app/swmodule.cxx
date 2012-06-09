@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <swerror.h>
 #include <vcl/wrkwin.hxx>

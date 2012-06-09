@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "unotools/accessiblerelationsethelper.hxx"
 #include <vector>
 #include <comphelper/sequence.hxx>

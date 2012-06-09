@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <viewopt.hxx>  // SwViewOptions
 #include <SwPortionHandler.hxx>
 #include <inftxt.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <accselectionhelper.hxx>
 

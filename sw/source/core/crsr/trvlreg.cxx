@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <swcrsr.hxx>

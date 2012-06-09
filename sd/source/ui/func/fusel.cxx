@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "fusel.hxx"
 #include <basic/sbstar.hxx>
 #include <svx/svdpagv.hxx>

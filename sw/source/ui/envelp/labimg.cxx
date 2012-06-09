@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/stream.hxx>
 #include <tools/resid.hxx>
 #include <com/sun/star/uno/Any.hxx>

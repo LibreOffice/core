@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "BarChart.hxx"
 #include "ShapeFactory.hxx"
 #include "CommonConverters.hxx"

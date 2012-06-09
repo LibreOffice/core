@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/childwin.hxx>

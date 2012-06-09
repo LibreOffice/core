@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <unotools/tempfile.hxx>
 #include <svl/urihelper.hxx>

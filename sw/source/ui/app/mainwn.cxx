@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <mdiexp.hxx>
 #include <tools/shl.hxx>
 #include <svl/svstdarr.hxx>

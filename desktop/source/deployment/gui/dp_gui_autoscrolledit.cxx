@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "svtools/svmedit2.hxx"
 #include "svl/lstner.hxx"
 #include "svtools/xtextedt.hxx"

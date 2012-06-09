@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <chrlohdl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>

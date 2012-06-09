@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <unocrsr.hxx>
 #include <doc.hxx>
 #include <swtable.hxx>

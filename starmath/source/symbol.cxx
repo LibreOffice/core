@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <osl/mutex.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>

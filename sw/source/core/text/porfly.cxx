@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "dcontact.hxx" // SwDrawContact
 #include "dflyobj.hxx"  // SwVirtFlyDrawObj
 #include "pam.hxx"      // SwPosition

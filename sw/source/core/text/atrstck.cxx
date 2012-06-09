@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <atrhndl.hxx>
 #include <svl/itemiter.hxx>
 #include <vcl/outdev.hxx>

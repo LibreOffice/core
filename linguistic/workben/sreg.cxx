@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <rtl/string.hxx>
 

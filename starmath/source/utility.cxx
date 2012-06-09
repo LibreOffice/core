@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sfx2/app.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/string.hxx>

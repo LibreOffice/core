@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <pam.hxx>              // fuer SwPam
 #include <doc.hxx>
 #include <ndtxt.hxx>            // class SwTxtNode

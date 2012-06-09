@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "dlgedfac.hxx"
 #include "dlgedobj.hxx"
 #include <dlgeddef.hxx>

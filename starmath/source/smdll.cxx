@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sot/factory.hxx>
 #include <svx/svxids.hrc>
 #include <svx/modctrl.hxx>

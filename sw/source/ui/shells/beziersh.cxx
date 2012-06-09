@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "cmdid.h"
 #include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>

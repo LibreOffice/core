@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <unotools/textsearch.hxx>
 
 #include "chgviset.hxx"

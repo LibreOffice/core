@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/resmgr.hxx>
 #include <svl/urihelper.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "swtypes.hxx"
 #include <vcl/outdev.hxx>
 #include <svtools/imaprect.hxx>

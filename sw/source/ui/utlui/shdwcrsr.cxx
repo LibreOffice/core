@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <vcl/window.hxx>
 

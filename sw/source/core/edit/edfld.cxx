@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <unotools/charclass.hxx>
 #include <editsh.hxx>
 #include <fldbas.hxx>

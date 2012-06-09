@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "XMLIndexIllustrationSourceContext.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "XMLIndexTemplateContext.hxx"

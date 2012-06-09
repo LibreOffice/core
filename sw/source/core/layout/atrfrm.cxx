@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

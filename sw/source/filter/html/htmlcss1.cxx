@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "hintids.hxx"
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>

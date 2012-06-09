@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "action.hxx"
 #include "smdll.hxx"
 #include "document.hxx"

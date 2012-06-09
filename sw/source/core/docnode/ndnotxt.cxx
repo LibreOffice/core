@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <tools/poly.hxx>
 #include <svl/stritem.hxx>

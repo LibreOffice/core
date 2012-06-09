@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <toolkit/awt/vclxcontainer.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

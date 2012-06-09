@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <tools/debug.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>

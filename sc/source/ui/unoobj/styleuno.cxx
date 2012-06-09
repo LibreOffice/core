@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "scitems.hxx"
 #include <editeng/memberids.hrc>
 #include <svx/algitem.hxx>

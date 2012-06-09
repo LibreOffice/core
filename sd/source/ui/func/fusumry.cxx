@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "fusumry.hxx"
 #include <editeng/eeitem.hxx>
 #include <svx/svdotext.hxx>

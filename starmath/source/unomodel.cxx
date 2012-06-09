@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <osl/mutex.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "unotools/accessiblestatesethelper.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/servicehelper.hxx>

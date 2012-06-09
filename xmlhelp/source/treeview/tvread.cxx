@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <string.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <ftninfo.hxx>

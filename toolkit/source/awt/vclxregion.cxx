@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <toolkit/awt/vclxregion.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

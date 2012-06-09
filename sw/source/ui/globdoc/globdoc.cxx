@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <sot/clsids.hxx>
 #include <unotools/moduleoptions.hxx>
 

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "scitems.hxx"
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>

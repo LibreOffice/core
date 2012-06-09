@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "java/lang/Class.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <com/sun/star/uno/Exception.hpp>

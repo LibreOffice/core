@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "AreaChart.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <lspachdl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <swtypes.hxx>
 #include <labelcfg.hxx>
 #include <labimp.hxx>

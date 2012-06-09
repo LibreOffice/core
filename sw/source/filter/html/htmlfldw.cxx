@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <tools/string.hxx>
 #include <svtools/htmlkywd.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <crsrsh.hxx>
 #include <viscrs.hxx>
 #include <callnk.hxx>

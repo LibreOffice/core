@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <swacorr.hxx>
 #include <swblocks.hxx>
 #include "SwXMLTextBlocks.hxx"

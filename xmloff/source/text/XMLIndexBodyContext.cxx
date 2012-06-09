@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "XMLIndexBodyContext.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>

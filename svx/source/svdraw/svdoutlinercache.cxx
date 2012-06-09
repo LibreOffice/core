@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "svdoutlinercache.hxx"
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

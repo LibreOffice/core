@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "connectivity/dbconversion.hxx"
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/script/XTypeConverter.hpp>

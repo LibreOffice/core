@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "drdefuno.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"

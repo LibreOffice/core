@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svl/itemset.hxx>
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>

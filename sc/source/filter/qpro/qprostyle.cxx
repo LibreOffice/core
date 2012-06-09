@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sal/config.h>
 #include <stdio.h>
 #include <sfx2/docfile.hxx>

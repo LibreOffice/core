@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/poly.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>

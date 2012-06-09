@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>

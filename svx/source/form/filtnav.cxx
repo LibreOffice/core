@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "filtnav.hxx"
 #include "fmexch.hxx"
 #include "fmhelp.hrc"

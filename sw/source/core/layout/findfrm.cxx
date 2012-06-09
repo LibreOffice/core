@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"

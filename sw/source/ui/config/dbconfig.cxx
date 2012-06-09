@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <dbconfig.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>

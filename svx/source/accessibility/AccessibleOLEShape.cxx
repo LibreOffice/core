@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svx/AccessibleOLEShape.hxx>
 
 #include <svx/ShapeTypeHandler.hxx>

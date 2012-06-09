@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/print.hxx>

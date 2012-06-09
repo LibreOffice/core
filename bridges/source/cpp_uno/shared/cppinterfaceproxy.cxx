@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "bridges/cpp_uno/shared/cppinterfaceproxy.hxx"
 
 #include "guardedarray.hxx"

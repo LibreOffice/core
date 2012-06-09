@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/fmglob.hxx>

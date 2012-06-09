@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>

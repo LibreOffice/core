@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <string>
 #include <comphelper/string.hxx>
 #include <svl/eitem.hxx>

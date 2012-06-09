@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <svl/intitem.hxx>

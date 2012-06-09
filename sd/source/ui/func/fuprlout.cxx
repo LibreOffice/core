@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "fuprlout.hxx"
 #include <vcl/wrkwin.hxx>
 #include <sfx2/dispatch.hxx>

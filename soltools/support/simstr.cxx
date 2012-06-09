@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <simstr.hxx>
 
 #include <string.h>  // strlen(), memcpy(), memset()

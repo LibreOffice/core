@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <editeng/AccessibleComponentBase.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

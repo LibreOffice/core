@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "cmdid.h"
 #include "hintids.hxx"
 #include <editeng/sizeitem.hxx>

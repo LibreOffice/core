@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hdl>

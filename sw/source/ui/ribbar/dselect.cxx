@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sfx2/bindings.hxx>
 #include "view.hxx"
 #include "edtwin.hxx"

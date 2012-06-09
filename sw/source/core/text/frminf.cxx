@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <pam.hxx>          // GetSpaces
 #include <frminf.hxx>       // SwTxtFrminfo
 #include <itrtxt.hxx>       // SwTxtMargin

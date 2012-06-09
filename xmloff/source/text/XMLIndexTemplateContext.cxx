@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "XMLIndexTemplateContext.hxx"
 #include "XMLIndexSimpleEntryContext.hxx"
 #include "XMLIndexSpanEntryContext.hxx"

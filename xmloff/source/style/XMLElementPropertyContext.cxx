@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "XMLElementPropertyContext.hxx"
 
 using ::rtl::OUString;

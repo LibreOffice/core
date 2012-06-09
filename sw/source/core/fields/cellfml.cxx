@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <float.h>
 #include <hintids.hxx>
 #include <hints.hxx>

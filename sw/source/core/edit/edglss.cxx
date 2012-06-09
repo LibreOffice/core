@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <osl/endian.h>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>

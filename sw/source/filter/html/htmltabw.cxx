@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/htmlout.hxx>

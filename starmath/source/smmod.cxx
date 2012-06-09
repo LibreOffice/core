@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/globname.hxx>
 #include <vcl/status.hxx>
 #include <sfx2/msg.hxx>

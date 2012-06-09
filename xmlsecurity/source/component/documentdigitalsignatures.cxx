@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <documentdigitalsignatures.hxx>
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
 #include <xmlsecurity/certificateviewer.hxx>

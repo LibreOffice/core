@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "XMLIndexTOCContext.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

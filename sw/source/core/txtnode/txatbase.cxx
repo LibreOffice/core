@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svl/itempool.hxx>
 #include <txatbase.hxx>
 #include <fmtfld.hxx>

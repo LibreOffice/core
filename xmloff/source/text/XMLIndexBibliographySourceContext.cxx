@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "XMLIndexBibliographySourceContext.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>

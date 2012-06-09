@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>

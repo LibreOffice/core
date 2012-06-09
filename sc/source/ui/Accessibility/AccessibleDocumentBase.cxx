@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "AccessibleDocumentBase.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "reftokenhelper.hxx"
 #include "document.hxx"
 #include "rangeutl.hxx"

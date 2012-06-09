@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <vcl/outdev.hxx>
 #include <SwPortionHandler.hxx>
 

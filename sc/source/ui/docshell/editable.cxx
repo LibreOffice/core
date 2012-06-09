@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "editable.hxx"
 #include "document.hxx"
 #include "viewfunc.hxx"

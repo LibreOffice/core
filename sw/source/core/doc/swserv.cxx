@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sot/storage.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <com/sun/star/uno/Sequence.h>

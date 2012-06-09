@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "accessibility/extended/AccessibleGridControlTable.hxx"
 #include "accessibility/extended/AccessibleGridControlTableCell.hxx"
 #include <svtools/accessibletable.hxx>

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <hintids.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdview.hxx>

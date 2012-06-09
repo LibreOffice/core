@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "dlgedview.hxx"
 #include "dlged.hxx"
 #include <dlgedpage.hxx>

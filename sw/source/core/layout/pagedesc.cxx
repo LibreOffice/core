@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <hintids.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/ulspitem.hxx>

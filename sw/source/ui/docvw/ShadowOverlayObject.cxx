@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <ShadowOverlayObject.hxx>
 
 #include <view.hxx>

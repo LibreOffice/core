@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "dbase/DCatalog.hxx"
 #include "dbase/DConnection.hxx"
 #include "dbase/DTables.hxx"

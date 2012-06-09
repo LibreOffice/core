@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <unodefaults.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unoprov.hxx>

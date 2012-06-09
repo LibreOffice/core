@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "sdundo.hxx"
 
 TYPEINIT1(SdUndoAction, SfxUndoAction);

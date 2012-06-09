@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <ftnidx.hxx>
 #include <rootfrm.hxx>
 #include <txtftn.hxx>

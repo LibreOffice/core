@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "fuvect.hxx"
 #include <tools/poly.hxx>
 #include <svx/svdograf.hxx>

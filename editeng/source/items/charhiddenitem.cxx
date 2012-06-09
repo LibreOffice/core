@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>

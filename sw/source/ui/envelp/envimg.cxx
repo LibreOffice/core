@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <tools/stream.hxx>

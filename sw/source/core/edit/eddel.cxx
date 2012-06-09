@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>

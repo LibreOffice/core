@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/macros.hxx>

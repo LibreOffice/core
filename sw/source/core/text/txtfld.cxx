@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "hintids.hxx"
 #include <fmtfld.hxx>
 #include <txtfld.hxx>

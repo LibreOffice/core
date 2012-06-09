@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "Filter.hxx"
 #include "FormComponent.hxx"
 #include "frm_module.hxx"

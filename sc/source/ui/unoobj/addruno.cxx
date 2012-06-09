@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 

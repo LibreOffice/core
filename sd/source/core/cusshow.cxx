@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include "sdiocmpt.hxx"

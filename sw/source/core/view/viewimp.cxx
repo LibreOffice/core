@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "crsrsh.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"

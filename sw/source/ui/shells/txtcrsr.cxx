@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <basic/sbxvar.hxx>

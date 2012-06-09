@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <bookmrk.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentUndoRedo.hxx>

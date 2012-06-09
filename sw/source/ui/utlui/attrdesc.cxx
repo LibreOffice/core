@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/itemtype.hxx>

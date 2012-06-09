@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "global.hxx"
 #include "scresid.hxx"
 #include "impex.hxx"

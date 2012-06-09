@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "calc/CCatalog.hxx"
 #include "calc/CConnection.hxx"
 #include "calc/CTables.hxx"

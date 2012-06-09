@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <editeng/memberids.hrc>
 #include <hintids.hxx>
 #include <svx/unomid.hxx>

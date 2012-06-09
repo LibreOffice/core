@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "browserids.hxx"
 #include "brwctrlr.hxx"
 #include "brwview.hxx"

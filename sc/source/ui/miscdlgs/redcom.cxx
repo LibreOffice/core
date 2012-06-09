@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <vcl/msgbox.hxx>
 #include <unotools/localedatawrapper.hxx>
 

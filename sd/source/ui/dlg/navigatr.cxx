@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <sfx2/imgmgr.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <editeng/brkitem.hxx>
 #include <tools/stream.hxx>

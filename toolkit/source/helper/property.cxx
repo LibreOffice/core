@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <osl/mutex.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/shl.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdotext.hxx>

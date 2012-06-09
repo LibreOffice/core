@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <txtatr.hxx>

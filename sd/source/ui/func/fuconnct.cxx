@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "fuconnct.hxx"
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>

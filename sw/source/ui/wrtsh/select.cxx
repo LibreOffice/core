@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <limits.h>
 #include <hintids.hxx>
 #include <sfx2/bindings.hxx>

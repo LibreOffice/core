@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

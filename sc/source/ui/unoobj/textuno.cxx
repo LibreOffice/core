@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <svx/svdpool.hxx>

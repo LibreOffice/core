@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "fuparagr.hxx"
 #include <editeng/eeitem.hxx>
 #include <vcl/msgbox.hxx>

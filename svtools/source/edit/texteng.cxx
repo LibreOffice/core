@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/stream.hxx>
 
 #include <svtools/texteng.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "winmtf.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

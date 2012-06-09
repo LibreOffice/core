@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>

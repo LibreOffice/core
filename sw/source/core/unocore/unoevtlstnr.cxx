@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <unoevtlstnr.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

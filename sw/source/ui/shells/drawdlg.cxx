@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svx/svxids.hrc>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>

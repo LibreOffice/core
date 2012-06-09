@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>

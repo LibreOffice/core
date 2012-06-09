@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "ChartView.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 #include "NumberFormatterWrapper.hxx"

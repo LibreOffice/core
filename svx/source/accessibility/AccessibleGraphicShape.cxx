@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svx/AccessibleGraphicShape.hxx>
 
 #include <svx/ShapeTypeHandler.hxx>

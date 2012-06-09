@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <hintids.hxx>
 #include <vcl/settings.hxx>
 #include <svx/ruler.hxx>

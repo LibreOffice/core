@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/date.hxx>
 #include <basic/sbxvar.hxx>
 #include <osl/process.h>

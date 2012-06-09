@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <tools/bigint.hxx>

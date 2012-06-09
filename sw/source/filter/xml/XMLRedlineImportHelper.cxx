@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "XMLRedlineImportHelper.hxx"
 #include <unotextcursor.hxx>
 #include <unotextrange.hxx>

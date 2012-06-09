@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>

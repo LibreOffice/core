@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <popbox.hxx>

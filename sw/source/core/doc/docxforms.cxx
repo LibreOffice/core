@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <com/sun/star/uno/Reference.hxx>

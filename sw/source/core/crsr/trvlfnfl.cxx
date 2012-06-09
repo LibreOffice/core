@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <crsrsh.hxx>

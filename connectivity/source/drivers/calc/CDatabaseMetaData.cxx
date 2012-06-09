@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "calc/CDatabaseMetaData.hxx"
 #include "calc/CConnection.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>

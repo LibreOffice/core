@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/resid.hxx>
 #include <tools/stream.hxx>
 #include <tools/shl.hxx>

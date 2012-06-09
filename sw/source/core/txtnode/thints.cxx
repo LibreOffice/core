@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <sot/factory.hxx>
 #include <editeng/xmlcnitm.hxx>

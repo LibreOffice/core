@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <comphelper/processfactory.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/svapp.hxx>

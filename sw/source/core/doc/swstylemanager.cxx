@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "swstylemanager.hxx"
 #include <boost/unordered_map.hpp>
 #include <svl/stylepool.hxx>

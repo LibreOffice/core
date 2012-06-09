@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <docary.hxx>
 #include <vcl/window.hxx>
 #include "redline.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "hintids.hxx"
 #include <svl/itemiter.hxx>
 #include <editeng/lrspitem.hxx>

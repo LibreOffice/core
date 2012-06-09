@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "AccessibilityHints.hxx"
 
 using namespace ::com::sun::star;

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "ximpstyl.hxx"
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include "xmloff/xmlnmspe.hxx"

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "global.hxx"
 #include "document.hxx"
 #include "filter.hxx"

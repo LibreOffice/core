@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "dp_misc.h"
 #include "dp_version.hxx"
 #include "dp_interact.h"

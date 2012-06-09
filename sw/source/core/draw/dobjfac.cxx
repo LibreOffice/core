@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <dpage.hxx>
 #include <dobjfac.hxx>
 #include <dflyobj.hxx>

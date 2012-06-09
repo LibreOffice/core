@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <MarkManager.hxx>
 #include <bookmrk.hxx>
 #include <boost/bind.hpp>

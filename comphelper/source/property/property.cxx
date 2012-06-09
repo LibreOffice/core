@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>

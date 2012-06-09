@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <sot/clsids.hxx>
 #include <tools/stream.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "AccessibleDocument.hxx"
 #include "AccessibleSpreadsheet.hxx"
 #include "tabvwsh.hxx"

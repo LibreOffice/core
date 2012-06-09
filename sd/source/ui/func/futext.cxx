@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "futext.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/editerr.hxx>

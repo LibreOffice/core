@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <editeng/AccessibleContextBase.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

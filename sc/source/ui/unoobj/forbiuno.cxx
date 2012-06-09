@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include "forbiuno.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>

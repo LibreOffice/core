@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "xmlstyle.hxx"
 #include "xmlexprt.hxx"
 #include "xmlimprt.hxx"

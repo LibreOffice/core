@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "dp_update.hxx"
 #include "dp_version.hxx"
 #include "dp_identifier.hxx"

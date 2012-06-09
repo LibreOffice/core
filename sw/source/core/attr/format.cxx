@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>          // fuer RES_..
 #include <frame.hxx>            // fuer AttrCache
 #include <format.hxx>

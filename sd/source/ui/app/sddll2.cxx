@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <editeng/editdata.hxx>
 #include "eetext.hxx"
 #include <svx/svxids.hrc>

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <svl/smplhint.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>

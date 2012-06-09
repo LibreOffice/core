@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <svtools/svtools.hrc>
 #include <tools/resid.hxx>
 #include <com/sun/star/task/XInteractionContinuation.hpp>

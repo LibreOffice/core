@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/debug.hxx>
 #include <set>
 #include "xmloff/xmlnmspe.hxx"

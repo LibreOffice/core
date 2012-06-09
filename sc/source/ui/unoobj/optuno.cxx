@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <svl/itemprop.hxx>
 
 #include <com/sun/star/util/Date.hpp>

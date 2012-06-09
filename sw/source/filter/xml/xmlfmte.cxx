@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/attrlist.hxx>

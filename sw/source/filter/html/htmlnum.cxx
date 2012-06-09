@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/style/NumberingType.hpp>
 #include <hintids.hxx>
 #include <svtools/htmltokn.h>

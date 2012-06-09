@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <docufld.hxx>
 #include <unofldmid.h>
 #include <comcore.hrc>

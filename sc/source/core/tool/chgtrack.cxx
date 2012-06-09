@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/shl.hxx>        // SHL_CALC
 #include <tools/rtti.hxx>
 #include <svl/zforlist.hxx>

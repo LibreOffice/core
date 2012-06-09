@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/scripttypeitem.hxx>

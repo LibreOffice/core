@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include<osl/module.hxx>
 #include <osl/time.h>
 #include <rtl/ustring.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/adjitem.hxx>

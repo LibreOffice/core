@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <boost/scoped_ptr.hpp>
 
 #include "com/sun/star/frame/XComponentLoader.hpp"

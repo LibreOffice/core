@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-
 #include "expbase.hxx"
 #include "document.hxx"
 #include "editutil.hxx"

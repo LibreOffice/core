@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <svl/smplhint.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>

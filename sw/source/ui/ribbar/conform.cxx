@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svx/fmglob.hxx>
 #include <svx/svdview.hxx>
 #include <svx/fmshell.hxx>

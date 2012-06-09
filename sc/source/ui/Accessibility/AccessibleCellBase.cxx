@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "AccessibleCellBase.hxx"
 #include "attrib.hxx"
 #include "scitems.hxx"

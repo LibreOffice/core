@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <viewsh.hxx>
 #include "swfntcch.hxx"
 #include "fmtcol.hxx"

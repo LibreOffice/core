@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "xmlstyli.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

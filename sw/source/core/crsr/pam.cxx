@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <editeng/protitem.hxx>
 #include <cntfrm.hxx>

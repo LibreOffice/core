@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "flat/ECatalog.hxx"
 
 #include "flat/EConnection.hxx"

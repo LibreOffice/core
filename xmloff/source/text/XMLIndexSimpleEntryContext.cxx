@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "XMLIndexSimpleEntryContext.hxx"
 #include "XMLIndexTemplateContext.hxx"
 #include <xmloff/xmlictxt.hxx>

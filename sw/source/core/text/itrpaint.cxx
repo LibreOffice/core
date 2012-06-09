@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "hintids.hxx"
 #include "flyfrm.hxx"     // SwFlyInCntFrm
 #include "viewopt.hxx"  // SwViewOptions

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>

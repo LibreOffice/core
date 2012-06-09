@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/stream.hxx>
 #include <svx/grfcrop.hxx>
 #include <editeng/itemtype.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <doc.hxx>
 #include <frame.hxx>        // SwChapterFieldType::ChangeExpansion()

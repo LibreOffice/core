@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svx/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 

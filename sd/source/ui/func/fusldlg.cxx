@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "fusldlg.hxx"
 #include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>

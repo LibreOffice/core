@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sfx2/bindings.hxx>
 #include <svx/svxids.hrc>
 #include <svx/grafctrl.hxx>

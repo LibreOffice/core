@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "ndtxt.hxx"        // GetNode()
 #include "pam.hxx"          // SwPosition
 #include "frmtool.hxx"

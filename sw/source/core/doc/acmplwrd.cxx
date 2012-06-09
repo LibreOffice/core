@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <hintids.hxx>

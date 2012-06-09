@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "crsrsh.hxx"
 #include "ndtxt.hxx"
 #include <docary.hxx>

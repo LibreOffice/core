@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>

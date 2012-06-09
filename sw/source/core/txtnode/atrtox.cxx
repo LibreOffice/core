@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <doc.hxx>
 #include <txttxmrk.hxx>
 #include <swfont.hxx>

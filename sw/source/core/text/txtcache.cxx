@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-
 #include "txtcache.hxx"
 #include "txtfrm.hxx"
 #include "porlay.hxx"

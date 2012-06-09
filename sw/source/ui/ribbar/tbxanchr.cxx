@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <string>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>

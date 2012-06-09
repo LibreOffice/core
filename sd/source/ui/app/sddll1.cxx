@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <unotools/moduleoptions.hxx>
 #include "sddll.hxx"
 #include "diactrl.hxx"

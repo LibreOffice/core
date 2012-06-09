@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <rtl/logfile.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>

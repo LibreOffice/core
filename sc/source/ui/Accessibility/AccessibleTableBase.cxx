@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "AccessibleTableBase.hxx"
 #include "miscuno.hxx"
 #include "document.hxx"

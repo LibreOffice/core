@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdopath.hxx>

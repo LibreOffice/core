@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <SidebarWinAcc.hxx>
 
 #include <SidebarWin.hxx>

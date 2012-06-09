@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/weak.hxx>

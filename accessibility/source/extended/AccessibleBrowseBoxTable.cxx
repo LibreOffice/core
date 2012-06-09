@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "accessibility/extended/AccessibleBrowseBoxTable.hxx"
 #include <svtools/accessibletableprovider.hxx>
 

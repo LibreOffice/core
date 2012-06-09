@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "FixedText.hxx"
 #include "services.hxx"
 #include "property.hrc"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sfx2/bindings.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/sdtacitm.hxx>

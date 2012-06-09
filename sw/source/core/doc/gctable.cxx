@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>
 #include <tblrwcl.hxx>

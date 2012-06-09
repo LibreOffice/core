@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <toolkit/unohlp.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <tools/debug.hxx>
 #include "impastpl.hxx"

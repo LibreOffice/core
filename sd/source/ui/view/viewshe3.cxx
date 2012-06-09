@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "ViewShell.hxx"
 #include "GraphicViewShell.hxx"
 #include "GraphicViewShellBase.hxx"

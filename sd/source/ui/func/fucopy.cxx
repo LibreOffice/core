@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "fucopy.hxx"
 #include <sfx2/progress.hxx>
 #include <svx/svxids.hrc>

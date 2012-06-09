@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "callform.hxx"
 #include "global.hxx"
 #include <tools/urlobj.hxx>

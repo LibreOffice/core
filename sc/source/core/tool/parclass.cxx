@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "parclass.hxx"
 #include "token.hxx"
 #include "global.hxx"

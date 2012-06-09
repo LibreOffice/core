@@ -26,8 +26,6 @@
  *
 ************************************************************************/
 
-
-
 #include "StorageBridgeFactory.hxx"
 
 #include "StorageBridge.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "drawdoc.hxx"
 #include "unoaprms.hxx"
 #include "anminfo.hxx"

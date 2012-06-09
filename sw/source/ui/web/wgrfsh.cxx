@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <sfx2/msg.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/app.hxx>

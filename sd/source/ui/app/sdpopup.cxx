@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <editeng/eeitem.hxx>
 
 #include <editeng/editeng.hxx>

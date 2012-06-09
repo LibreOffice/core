@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include "doc.hxx"
 #include "editsh.hxx"
 #include "swtable.hxx"

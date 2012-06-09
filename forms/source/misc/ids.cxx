@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "ids.hxx"
 
 IMPLEMENT_IMPLEMENTATIONID_HELPER(frm, OImplementationIds)

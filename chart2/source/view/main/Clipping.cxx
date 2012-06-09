@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "Clipping.hxx"
 #include "CommonConverters.hxx"
 #include "BaseGFXHelper.hxx"

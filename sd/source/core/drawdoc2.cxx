@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <vcl/wrkwin.hxx>

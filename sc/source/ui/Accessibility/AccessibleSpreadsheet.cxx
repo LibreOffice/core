@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "AccessibleSpreadsheet.hxx"
 #include "AccessibilityHints.hxx"
 #include "AccessibleCell.hxx"

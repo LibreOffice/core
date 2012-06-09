@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "VSeriesPlotter.hxx"
 #include "ShapeFactory.hxx"
 #include "chartview/ExplicitValueProvider.hxx"

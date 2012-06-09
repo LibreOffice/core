@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "flat/EDatabaseMetaData.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "ChartRenderer.hxx"
 #include "servicenames.hxx"
 #include "chartview/ExplicitValueProvider.hxx"

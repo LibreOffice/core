@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>

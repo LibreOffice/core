@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
 #include <svl/itemiter.hxx>

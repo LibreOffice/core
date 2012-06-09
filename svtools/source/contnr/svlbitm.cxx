@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <svtools/svlbox.hxx>
 #include <svtools/svlbitm.hxx>
 #include <vcl/svapp.hxx>
