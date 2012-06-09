@@ -506,6 +506,14 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
+    void XShapeDumper::dumpLineStartCenterAsAttribute(sal_Bool bLineStartCenter, xmlTextWriterPtr xmlWriter)
+	{
+		if(bLineStartCenter)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "false");
+	}
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -774,6 +782,12 @@ namespace {
 				drawing::PolyPolygonBezierCoords aLineEnd;
 				if(anotherAny >>= aLineEnd)
 					dumpLineEndAsElement(aLineEnd, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("LineStartCenter");
+				sal_Bool bLineStartCenter;
+				if(anotherAny >>= bLineStartCenter)
+					dumpLineStartCenterAsAttribute(bLineStartCenter, xmlWriter);
 			}
 
         }
