@@ -572,6 +572,29 @@ namespace {
 		}
 	}
 
+    void XShapeDumper::dumpPointSequenceSequence(drawing::PointSequenceSequence aPointSequenceSequence, xmlTextWriterPtr xmlWriter)
+    {
+        // LibreOffice proudly presents - The Sequenception
+        uno::Sequence<uno::Sequence< awt::Point > > pointSequenceSequence = aPointSequenceSequence;
+        sal_Int32 nPointsSequence = pointSequenceSequence.getLength();
+        for (sal_Int32 i = 0; i < nPointsSequence; ++i)
+        {
+            uno::Sequence< awt::Point > pointSequence = pointSequenceSequence[i];
+            sal_Int32 nPoints = pointSequence.getLength();
+
+            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "pointSequence" ));
+
+            for(sal_Int32 j = 0; j < nPoints; ++j)
+            {
+                xmlTextWriterStartElement(xmlWriter, BAD_CAST( "point" ));
+                xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, pointSequence[j].X);
+                xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionY"), "%" SAL_PRIdINT32, pointSequence[j].Y);
+                xmlTextWriterEndElement( xmlWriter );
+            }
+            xmlTextWriterEndElement( xmlWriter );
+        }
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
