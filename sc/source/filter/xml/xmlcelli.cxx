@@ -559,7 +559,7 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
             ScValidationData aScValidationData(
                 validationTypeToMode(aValidation.aValidationType),
                 conditionOpToMode(aValidation.aOperator),
-                aValidation.sFormula1, aValidation.sFormula2, pDoc, rScRange.aStart,
+                aValidation.sFormula1, aValidation.sFormula2, pDoc, ScAddress(),
                 aValidation.sFormulaNmsp1, aValidation.sFormulaNmsp2,
                 aValidation.eGrammar1, aValidation.eGrammar2
             );
