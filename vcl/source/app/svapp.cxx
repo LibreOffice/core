@@ -256,12 +256,6 @@ void Application::UserEvent( sal_uLong, void* )
 
 // -----------------------------------------------------------------------
 
-void Application::ShowStatusText( const XubString& )
-{
-}
-
-// -----------------------------------------------------------------------
-
 void Application::ActivateExtHelp()
 {
 }
@@ -269,12 +263,6 @@ void Application::ActivateExtHelp()
 // -----------------------------------------------------------------------
 
 void Application::DeactivateExtHelp()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void Application::HideStatusText()
 {
 }
 

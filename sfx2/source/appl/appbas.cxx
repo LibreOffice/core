@@ -250,12 +250,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 
         case SID_STATUSBARTEXT:
         {
-            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, sal_False);
-            String aText = pStringItem->GetValue();
-            if ( aText.Len() )
-                GetpApp()->ShowStatusText( aText );
-            else
-                GetpApp()->HideStatusText();
             break;
         }
 

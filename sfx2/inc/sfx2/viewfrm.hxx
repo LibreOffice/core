@@ -157,9 +157,6 @@ public:
                                 const ::com::sun::star::uno::Any & rValue );
     virtual ::sfx2::SvLinkSource*   DdeCreateLinkSource( const String& rItem );
 
-    void                    ShowStatusText( const String& rText );
-    void                    HideStatusText();
-
     void                    UpdateTitle();
 
     static void ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );

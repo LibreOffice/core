@@ -200,7 +200,6 @@ class FrameControlApplication
 {
 public:
     virtual void        Main();
-    virtual void        ShowStatusText( const XubString& rText );
 
 public:
                         FrameControlApplication()       {}
@@ -306,12 +305,6 @@ void FrameControlApplication::Main()
     Execute();
 
     deinit();
-}
-
-//--------------------------------------------------------------------------------------------------
-void FrameControlApplication::ShowStatusText( const XubString& rStatus )
-{
-    Application::GetAppWindow()->SetText( rStatus );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

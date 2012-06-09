@@ -1589,16 +1589,6 @@ SfxProgress* SfxViewFrame::GetProgress() const
 }
 
 //--------------------------------------------------------------------
-void SfxViewFrame::ShowStatusText( const String& /*rText*/)
-{
-}
-
-//--------------------------------------------------------------------
-void SfxViewFrame::HideStatusText()
-{
-}
-
-//--------------------------------------------------------------------
 void SfxViewFrame::DoAdjustPosSizePixel //! divide on Inner.../Outer...
 (
     SfxViewShell*   pSh,

@@ -417,8 +417,6 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             pUserMarker = 0L;
         }
 
-        rView.GetViewFrame()->ShowStatusText(
-                                        SW_RESSTR(STR_CHAIN_OK+nChainable));
         SetPointer( eStyle );
         return;
     }
@@ -3452,8 +3450,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     if ( IsChainMode() )
     {
         UpdatePointer( aDocPt, rMEvt.GetModifier() );
-        if ( rMEvt.IsLeaveWindow() )
-            rView.GetViewFrame()->HideStatusText();
         return;
     }
 
@@ -5439,8 +5435,6 @@ void SwEditWin::SetChainMode( sal_Bool bOn )
     }
 
     bChainMode = bOn;
-    if ( !bChainMode )
-        rView.GetViewFrame()->HideStatusText();
 
     static sal_uInt16 aInva[] =
     {

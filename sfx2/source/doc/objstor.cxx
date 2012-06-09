@@ -580,9 +580,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 {
     ModifyBlocker_Impl aBlock( this );
 
-    if ( SFX_CREATE_MODE_EMBEDDED != eCreateMode )
-        GetpApp()->ShowStatusText( SfxResId(STR_DOC_LOADING) );
-
     pMedium = pMed;
     pMedium->CanDisposeStorage_Impl( sal_True );
 
@@ -805,8 +802,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if ( SFX_CREATE_MODE_EMBEDDED != eCreateMode )
         {
-            GetpApp()->HideStatusText();
-
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pAsTempItem, SfxBoolItem, SID_TEMPLATE, sal_False);
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPreviewItem, SfxBoolItem, SID_PREVIEW, sal_False);
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False);
@@ -829,8 +824,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if (bReconnectDde)
             ReconnectDdeLinks(*this);
     }
-    else
-        GetpApp()->HideStatusText();
 
     return bOk;
 }

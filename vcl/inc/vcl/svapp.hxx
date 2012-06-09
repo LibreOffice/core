@@ -177,9 +177,6 @@ public:
     virtual void                ActivateExtHelp();
     virtual void                DeactivateExtHelp();
 
-    virtual void                ShowStatusText( const XubString& rText );
-    virtual void                HideStatusText();
-
     virtual void                FocusChanged();
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 

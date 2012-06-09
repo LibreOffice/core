@@ -68,7 +68,6 @@ struct SfxProgress_Impl
     sal_Bool                    bWaitMode;
     sal_Bool                    bAllowRescheduling;
     sal_Bool                    bRunning;
-    sal_Bool                    bIsStatusText;
 
     SfxProgress*            pActiveProgress;
     SfxObjectShellRef       xObjSh;
@@ -157,7 +156,6 @@ SfxProgress::SfxProgress
     pImp->nMax = nRange;
     pImp->bLocked = sal_False;
     pImp->bWaitMode = bWait;
-    pImp->bIsStatusText = sal_False;
     pImp->nCreate = Get10ThSec();
     pImp->nNextReschedule = pImp->nCreate;
     DBG( DbgOutf( "SfxProgress: created for '%s' at %luds",
@@ -188,9 +186,6 @@ SfxProgress::~SfxProgress()
     Stop();
     if ( pImp->xStatusInd.is() )
         pImp->xStatusInd->end();
-
-    if( pImp->bIsStatusText == sal_True )
-        GetpApp()->HideStatusText( );
     delete pImp;
 }
 
@@ -256,7 +251,6 @@ long TimeOut_Impl( void*, void* pArgV )
     Timer *pArg = (Timer*)pArgV;
     if( Time::GetSystemTicks() - nLastTime > 3000 )
     {
-        GetpApp()->HideStatusText();
         nLastTime = 0;
         delete pArg;
     }
