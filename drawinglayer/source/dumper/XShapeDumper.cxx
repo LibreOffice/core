@@ -519,6 +519,14 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartWidth"), "%" SAL_PRIdINT32, aLineStartWidth);
 	}
 
+    void XShapeDumper::dumpLineEndCenterAsAttribute(sal_Bool bLineEndCenter, xmlTextWriterPtr xmlWriter)
+	{
+		if(bLineEndCenter)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "false");
+	}
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -799,6 +807,12 @@ namespace {
 				sal_Int32 aLineStartWidth;
 				if(anotherAny >>= aLineStartWidth)
 					dumpLineStartWidthAsAttribute(aLineStartWidth, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("LineEndCenter");
+				sal_Bool bLineEndCenter;
+				if(anotherAny >>= bLineEndCenter)
+					dumpLineEndCenterAsAttribute(bLineEndCenter, xmlWriter);
 			}
 
         }
