@@ -689,8 +689,6 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                                     bColumns, nLevel, nEntry, sal_True ) );
     }
 
-//! HideCursor();
-
     pDoc->IncSizeRecalcLevel( nTab );
 
     pDoc->InitializeNoteCaptions(nTab);
@@ -736,11 +734,7 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
 
-//! ShowCursor();
     rDocShell.SetDocumentModified();
-
-//! if (bPaint)
-//!     UpdateScrollBars();
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
@@ -782,8 +776,6 @@ sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                                     bColumns, nLevel, nEntry, false ) );
     }
 
-//! HideCursor();
-
     pDoc->IncSizeRecalcLevel( nTab );
 
     pDoc->InitializeNoteCaptions(nTab);
@@ -805,11 +797,7 @@ sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
     if (bPaint)
         lcl_PaintWidthHeight( rDocShell, nTab, bColumns, nStart, nEnd );
 
-//! ShowCursor();
     rDocShell.SetDocumentModified();
-
-//! if (bPaint)
-//!     UpdateScrollBars();
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 

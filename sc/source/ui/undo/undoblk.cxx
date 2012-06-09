@@ -735,11 +735,6 @@ void ScUndoDeleteMulti::Redo()
 
     DoChange();
 
-//! Markierung loeschen, derzeit unnoetig (s.o.)
-//! ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-//! if (pViewShell)
-//!     DoneBlockMode();
-
     EndRedo();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }

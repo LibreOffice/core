@@ -354,12 +354,6 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
 
     com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1>
                                         xSpeller = LinguMgr::GetSpellChecker();
-    //! if (...)  // thesaurus not available
-    //! {
-    //!     ErrorMessage(STR_EXPORT_ASCII_WARNING);
-    //!     delete pEditSel;
-    //!     return;
-    //! }
 
     pThesaurusEngine = new ScEditEngineDefaulter( pDoc->GetEnginePool() );
     pThesaurusEngine->SetEditTextObjectPool( pDoc->GetEditPool() );
