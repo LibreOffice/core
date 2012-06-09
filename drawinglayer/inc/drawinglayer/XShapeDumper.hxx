@@ -45,6 +45,8 @@
 #include <com/sun/star/drawing/PolygonKind.hpp>
 
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 
 #ifndef ChartViewDumper_hxx
 #define ChartViewDumper_hxx
@@ -116,6 +118,8 @@ private:
     void dumpTextAutoGrowWidthAsAttribute(sal_Bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter);
     void dumpTextContourFrameAsAttribute(sal_Bool bTextContourFrame, xmlTextWriterPtr xmlWriter);
     void dumpTextFitToSizeAsAttribute(com::sun::star::drawing::TextFitToSizeType eTextFitToSize, xmlTextWriterPtr xmlWriter);
+    void dumpTextHorizontalAdjustAsAttribute(com::sun::star::drawing::TextHorizontalAdjust eTextHorizontalAdjust, xmlTextWriterPtr xmlWriter);
+    void dumpTextVerticalAdjustAsAttribute(com::sun::star::drawing::TextVerticalAdjust eTextVerticalAdjust, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);

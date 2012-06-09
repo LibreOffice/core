@@ -651,6 +651,48 @@ namespace {
 		}
 	}
 
+    void XShapeDumper::dumpTextHorizontalAdjustAsAttribute(drawing::TextHorizontalAdjust eTextHorizontalAdjust, xmlTextWriterPtr xmlWriter)
+	{
+		switch(eTextHorizontalAdjust)
+		{
+			case drawing::TextHorizontalAdjust_LEFT:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "LEFT");
+				break;
+			case drawing::TextHorizontalAdjust_CENTER:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "CENTER");
+				break;
+			case drawing::TextHorizontalAdjust_RIGHT:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "RIGHT");
+				break;
+			case drawing::TextHorizontalAdjust_BLOCK:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "BLOCK");
+				break;
+			default:
+				break;
+		}
+	}
+
+    void XShapeDumper::dumpTextVerticalAdjustAsAttribute(drawing::TextVerticalAdjust eTextVerticalAdjust, xmlTextWriterPtr xmlWriter)
+	{
+		switch(eTextVerticalAdjust)
+		{
+			case drawing::TextVerticalAdjust_TOP:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "TOP");
+				break;
+			case drawing::TextVerticalAdjust_CENTER:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "CENTER");
+				break;
+			case drawing::TextVerticalAdjust_BOTTOM:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BOTTOM");
+				break;
+			case drawing::TextVerticalAdjust_BLOCK:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BLOCK");
+				break;
+			default:
+				break;
+		}
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -734,6 +776,18 @@ namespace {
 				drawing::TextFitToSizeType eTextFitToSize;
 				if(anotherAny >>= eTextFitToSize)
 					dumpTextFitToSizeAsAttribute(eTextFitToSize, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextHorizontalAdjust");
+				drawing::TextHorizontalAdjust eTextHorizontalAdjust;
+				if(anotherAny >>= eTextHorizontalAdjust)
+					dumpTextHorizontalAdjustAsAttribute(eTextHorizontalAdjust, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextVerticalAdjust");
+				drawing::TextVerticalAdjust eTextVerticalAdjust;
+				if(anotherAny >>= eTextVerticalAdjust)
+					dumpTextVerticalAdjustAsAttribute(eTextVerticalAdjust, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
