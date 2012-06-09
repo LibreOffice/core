@@ -82,10 +82,8 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
 
     void DoMerge(const ScAddress& rScCellPos, const SCCOL nCols, const SCROW nRows);
 
-    void SetContentValidation(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet);
-    void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange,
-                                                const ScAddress& aCellAddress);
-    void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
+    void SetContentValidation( const ScRange& rScRange );
+    void SetContentValidation( const ScAddress& rScCellPos );
 
     void LockSolarMutex();
     void UnlockSolarMutex();

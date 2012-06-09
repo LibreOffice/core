@@ -40,6 +40,10 @@
 #include "sheetdata.hxx"
 #include "docsh.hxx"
 #include "cellform.hxx"
+#include "validat.hxx"
+#include "patattr.hxx"
+#include "scitems.hxx"
+#include "docpool.hxx"
 
 #include "XMLTableShapeImportHelper.hxx"
 #include "XMLTextPContext.hxx"
@@ -52,6 +56,7 @@
 #include "scerrors.hxx"
 #include "editutil.hxx"
 #include "cell.hxx"
+
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -85,10 +90,15 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 
+#include <com/sun/star/sheet/ValidationType.hpp>
+#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
+#include <com/sun/star/sheet/ConditionOperator.hpp>
+
 #include <rtl/ustrbuf.hxx>
 #include <tools/date.hxx>
 #include <i18npool/lang.h>
 #include <comphelper/extract.hxx>
+#include <tools/string.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -483,49 +493,108 @@ void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScAddress, const SCCOL
     }
 }
 
-void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet)
-{
-    if (pContentValidationName)
-    {
-        ScMyImportValidation aValidation;
-        aValidation.eGrammar1 = aValidation.eGrammar2 = GetScImport().GetDocument()->GetStorageGrammar();
-        if (rXMLImport.GetValidation(*pContentValidationName, aValidation))
-        {
-            uno::Reference<beans::XPropertySet> xPropertySet(xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML))), uno::UNO_QUERY);
-            if (xPropertySet.is())
-            {
-                if (!aValidation.sErrorMessage.isEmpty())
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)), uno::makeAny(aValidation.sErrorMessage));
-                if (!aValidation.sErrorTitle.isEmpty())
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)), uno::makeAny(aValidation.sErrorTitle));
-                if (!aValidation.sImputMessage.isEmpty())
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)), uno::makeAny(aValidation.sImputMessage));
-                if (!aValidation.sImputTitle.isEmpty())
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)), uno::makeAny(aValidation.sImputTitle));
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)), uno::makeAny(aValidation.bShowErrorMessage));
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)), uno::makeAny(aValidation.bShowImputMessage));
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)), uno::makeAny(aValidation.aValidationType));
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)), uno::makeAny(aValidation.bIgnoreBlanks));
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWLIST)), uno::makeAny(aValidation.nShowList));
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)), uno::makeAny(aValidation.aAlertStyle));
-                uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
-                if (xCondition.is())
-                {
-                    xCondition->setFormula1(aValidation.sFormula1);
-                    xCondition->setFormula2(aValidation.sFormula2);
-                    xCondition->setOperator(aValidation.aOperator);
-                    // source position must be set as string, because it may
-                    // refer to a sheet that hasn't been loaded yet.
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR)), uno::makeAny(aValidation.sBaseCellAddress));
-                    // Transport grammar and formula namespace
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULANMSP1)), uno::makeAny(aValidation.sFormulaNmsp1));
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULANMSP2)), uno::makeAny(aValidation.sFormulaNmsp2));
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR1)), uno::makeAny(static_cast<sal_Int32>(aValidation.eGrammar1)));
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR2)), uno::makeAny(static_cast<sal_Int32>(aValidation.eGrammar2)));
-                }
-            }
-            xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML)), uno::makeAny(xPropertySet));
+namespace {
 
+ScValidationMode validationTypeToMode( const sheet::ValidationType eVType )
+{
+    ScValidationMode eMode;
+    switch( eVType )
+    {
+        case sheet::ValidationType_WHOLE:               eMode = SC_VALID_WHOLE;     break;
+        case sheet::ValidationType_DECIMAL:             eMode = SC_VALID_DECIMAL;   break;
+        case sheet::ValidationType_DATE:                eMode = SC_VALID_DATE;      break;
+        case sheet::ValidationType_TIME:                eMode = SC_VALID_TIME;      break;
+        case sheet::ValidationType_TEXT_LEN:            eMode = SC_VALID_TEXTLEN;   break;
+        case sheet::ValidationType_LIST:                eMode = SC_VALID_LIST;      break;
+        case sheet::ValidationType_CUSTOM:              eMode = SC_VALID_CUSTOM;    break;
+        default:                                        eMode = SC_VALID_ANY;       break;
+    }
+    return eMode;
+}
+
+ScValidErrorStyle validAlertToValidError( const sheet::ValidationAlertStyle eVAlertStyle )
+{
+    ScValidErrorStyle eVErrStyle;
+    switch( eVAlertStyle )
+    {
+        case sheet::ValidationAlertStyle_STOP:          eVErrStyle = SC_VALERR_STOP;      break;
+        case sheet::ValidationAlertStyle_WARNING:       eVErrStyle = SC_VALERR_WARNING;   break;
+        case sheet::ValidationAlertStyle_MACRO:         eVErrStyle = SC_VALERR_MACRO;     break;
+        default:                                        eVErrStyle = SC_VALERR_INFO;      break;
+        //should INFO be the default?  seems to be the most unobtrusive choice.
+    }
+    return eVErrStyle;
+}
+
+ScConditionMode conditionOpToMode( const sheet::ConditionOperator eOp )
+{
+    ScConditionMode eMode;
+    switch( eOp )
+    {
+        case sheet::ConditionOperator_EQUAL:            eMode = SC_COND_EQUAL;      break;
+        case sheet::ConditionOperator_NOT_EQUAL:        eMode = SC_COND_NOTEQUAL;   break;
+        case sheet::ConditionOperator_GREATER:          eMode = SC_COND_GREATER;    break;
+        case sheet::ConditionOperator_GREATER_EQUAL:    eMode = SC_COND_EQGREATER;  break;
+        case sheet::ConditionOperator_LESS:             eMode = SC_COND_LESS;       break;
+        case sheet::ConditionOperator_LESS_EQUAL:       eMode = SC_COND_EQLESS;     break;
+        case sheet::ConditionOperator_BETWEEN:          eMode = SC_COND_BETWEEN;    break;
+        case sheet::ConditionOperator_NOT_BETWEEN:      eMode = SC_COND_NOTBETWEEN; break;
+        case sheet::ConditionOperator_FORMULA:          eMode = SC_COND_DIRECT;     break;
+        default:                                        eMode = SC_COND_NONE;       break;
+    }
+    return eMode;
+}
+
+}
+
+void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
+{
+    if( pContentValidationName && !pContentValidationName->isEmpty() )
+    {
+        ScDocument* pDoc = rXMLImport.GetDocument();
+        ScMyImportValidation aValidation;
+        aValidation.eGrammar1 = aValidation.eGrammar2 = pDoc->GetStorageGrammar();
+        if( rXMLImport.GetValidation(*pContentValidationName, aValidation) )
+        {
+            ScValidationData aScValidationData(
+                validationTypeToMode(aValidation.aValidationType),
+                conditionOpToMode(aValidation.aOperator),
+                aValidation.sFormula1, aValidation.sFormula2, pDoc, rScRange.aStart,
+                aValidation.sFormulaNmsp1, aValidation.sFormulaNmsp2,
+                aValidation.eGrammar1, aValidation.eGrammar2
+            );
+
+            aScValidationData.SetIgnoreBlank( aValidation.bIgnoreBlanks );
+            aScValidationData.SetListType( aValidation.nShowList );
+
+            // set strings for error / input even if disabled (and disable afterwards)
+            aScValidationData.SetInput( aValidation.sImputTitle, aValidation.sImputMessage );
+            if( !aValidation.bShowImputMessage )
+                aScValidationData.ResetInput();
+            aScValidationData.SetError( aValidation.sErrorTitle, aValidation.sErrorMessage, validAlertToValidError(aValidation.aAlertStyle) );
+            if( !aValidation.bShowErrorMessage )
+                aScValidationData.ResetError();
+
+            if( !aValidation.sBaseCellAddress.isEmpty() )
+                aScValidationData.SetSrcString( aValidation.sBaseCellAddress );
+
+            sal_uLong nIndex = pDoc->AddValidationEntry( aScValidationData );
+
+            ScPatternAttr aPattern( pDoc->GetPool() );
+            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
+            if( rScRange.aStart == rScRange.aEnd )  //for a single cell
+            {
+                pDoc->ApplyPattern( rScRange.aStart.Col(), rScRange.aStart.Row(),
+                                    rScRange.aStart.Tab(), aPattern );
+            }
+            else  //for repeating cells
+            {
+                pDoc->ApplyPatternAreaTab( rScRange.aStart.Col(), rScRange.aStart.Row(),
+                                       rScRange.aEnd.Col(), rScRange.aEnd.Row(),
+                                       rScRange.aStart.Tab(), aPattern );
+            }
+
+            // is the below still needed?
             // For now, any sheet with validity is blocked from stream-copying.
             // Later, the validation names could be stored along with the style names.
             ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetImport().GetModel())->GetSheetSaveData();
@@ -534,34 +603,9 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
     }
 }
 
-void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCellRange>& xCellRange,
-                                                const ScAddress& aScCellAddress)
+void ScXMLTableRowCellContext::SetContentValidation( const ScAddress& rScCellPos )
 {
-    com::sun::star::table::CellAddress aCellAddress;
-    ScUnoConversion::FillApiAddress( aCellAddress, aScCellAddress );
-    if (CellExists(aCellAddress) && pContentValidationName && !pContentValidationName->isEmpty())
-    {
-        sal_Int32 nBottom = aCellAddress.Row + static_cast<sal_Int32>(nRepeatedRows) - 1;
-        sal_Int32 nRight = aCellAddress.Column + static_cast<sal_Int32>(nColsRepeated) - 1;
-        if (nBottom > MAXROW)
-            nBottom = MAXROW;
-        if (nRight > MAXCOL)
-            nRight = MAXCOL;
-        uno::Reference <beans::XPropertySet> xProperties (xCellRange->getCellRangeByPosition(aCellAddress.Column, aCellAddress.Row,
-                                                            nRight, nBottom), uno::UNO_QUERY);
-        if (xProperties.is())
-            SetContentValidation(xProperties);
-    }
-}
-
-void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCell>& xCell)
-{
-    if (pContentValidationName && !pContentValidationName->isEmpty())
-    {
-        uno::Reference <beans::XPropertySet> xProperties (xCell, uno::UNO_QUERY);
-        if (xProperties.is())
-            SetContentValidation(xProperties);
-    }
+    SetContentValidation( ScRange(rScCellPos, rScCellPos) );
 }
 
 void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
@@ -958,18 +1002,18 @@ void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rScCellPos, 
 
     if( CellsAreRepeated() )
     {
-        SetCellProperties(xCellRange, rScCellPos); // set now only the validation for the complete range with the given cell as start cell
         SCCOL nStartCol( rScCellPos.Col() < MAXCOL ? rScCellPos.Col() : MAXCOL );
         SCROW nStartRow( rScCellPos.Row() < MAXROW ? rScCellPos.Row() : MAXROW );
         SCCOL nEndCol( rScCellPos.Col() + nColsRepeated - 1 < MAXCOL ? rScCellPos.Col() + nColsRepeated - 1 : MAXCOL );
         SCROW nEndRow( rScCellPos.Row() + nRepeatedRows - 1 < MAXROW ? rScCellPos.Row() + nRepeatedRows - 1 : MAXROW );
         ScRange aScRange( nStartCol, nStartRow, rScCellPos.Tab(), nEndCol, nEndRow, rScCellPos.Tab() );
-        rXMLImport.GetStylesImportHelper()->AddRange(aScRange);
+        SetContentValidation( aScRange );
+        rXMLImport.GetStylesImportHelper()->AddRange( aScRange );
     }
     else if( scCellExists(rScCellPos) )
     {
         rXMLImport.GetStylesImportHelper()->AddCell(rScCellPos);
-        SetCellProperties(xCellRange, rScCellPos);
+        SetContentValidation( rScCellPos );
     }
 }
 
@@ -1051,7 +1095,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rScCellPos, cons
         }
         if( xCell.is() )
         {
-            SetCellProperties(xCell); // set now only the validation
+            SetContentValidation( rScCellPos );
             OSL_ENSURE(((nColsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
             rXMLImport.GetStylesImportHelper()->AddCell(rScCellPos);
             if (!bIsMatrix)
