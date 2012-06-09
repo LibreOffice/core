@@ -765,18 +765,19 @@ struct ValDataTestParams
     ScAddress aPosition;
     String aErrorTitle, aErrorMessage;
     ScValidErrorStyle eErrorStyle;
+    sal_uLong nExpectedIndex;
 
     ValDataTestParams( ScValidationMode eMode, ScConditionMode eOp,
                        String aExpr1, String aExpr2, ScDocument* pDoc,
                        ScAddress aPos, String aETitle, String aEMsg,
-                       ScValidErrorStyle eEStyle ):
+                       ScValidErrorStyle eEStyle, sal_uLong nIndex ):
                             eValMode(eMode), eCondOp(eOp), aStrVal1(aExpr1),
                             aStrVal2(aExpr2), pDocument(pDoc), aPosition(aPos),
                             aErrorTitle(aETitle), aErrorMessage(aEMsg),
-                            eErrorStyle(eEStyle) { };
+                            eErrorStyle(eEStyle), nExpectedIndex(nIndex) { };
 };
 
-void checkValiditationEntries( ValDataTestParams& rVDTParams )
+void checkValiditationEntries( const ValDataTestParams& rVDTParams )
 {
     ScDocument* pDoc = rVDTParams.pDocument;
 
@@ -792,23 +793,19 @@ void checkValiditationEntries( ValDataTestParams& rVDTParams )
     aValData.SetError( rVDTParams.aErrorTitle, rVDTParams.aErrorMessage, rVDTParams.eErrorStyle );
     aValData.SetSrcString( EMPTY_STRING );
 
-    SCCOL nCol( rVDTParams.aPosition.Col() );
-    SCROW nRow( rVDTParams.aPosition.Row() );
-    SCTAB nTab( rVDTParams.aPosition.Tab() );
     //get actual data validation entry from document
-    const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>( pDoc->GetAttr(nCol, nRow, nTab, ATTR_VALIDDATA) );
-    const ScValidationData* pValDataTest = pDoc->GetValidationEntry( pItem->GetValue() );
+    const ScValidationData* pValDataTest = pDoc->GetValidationEntry( rVDTParams.nExpectedIndex );
 
-    rtl::OString sCol( rtl::OString::valueOf(static_cast<sal_Int32>(nCol)) );
-    rtl::OString sRow( rtl::OString::valueOf(static_cast<sal_Int32>(nRow)) );
-    rtl::OString sTab( rtl::OString::valueOf(static_cast<sal_Int32>(nTab)) );
-    rtl::OString msg( "Data Validation Entry with base-cell-address(Col,Row,Tab): (" +
+    rtl::OString sCol( rtl::OString::valueOf(static_cast<sal_Int32>(rVDTParams.aPosition.Col())) );
+    rtl::OString sRow( rtl::OString::valueOf(static_cast<sal_Int32>(rVDTParams.aPosition.Row())) );
+    rtl::OString sTab( rtl::OString::valueOf(static_cast<sal_Int32>(rVDTParams.aPosition.Tab())) );
+    rtl::OString msg( "Data Validation Entry with base-cell-address: (" +
                        sCol + "," + sRow + "," + sTab + ") was not imported correctly." );
     //check if expected and actual data validation entries are equal
     CPPUNIT_ASSERT_MESSAGE( msg.pData->buffer, pValDataTest && aValData.EqualEntries(*pValDataTest) );
 }
 
-void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, const ScDocument* pDoc )
+bool checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, const ScDocument* pDoc, rtl::OString& sMsg )
 {
     SCCOL nBCol( rValBaseAddr.Col() );
     SCTAB nBRow( rValBaseAddr.Row() );
@@ -817,6 +814,13 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
     const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(nBCol, nBRow, nTab, ATTR_VALIDDATA) );
     const ScValidationData* pValData = pDoc->GetValidationEntry( pItem->GetValue() );
 
+    rtl::OString sCol, sRow;
+    rtl::OString sBCol = rtl::OString::valueOf(static_cast<sal_Int32>(nBCol));
+    rtl::OString sBRow = rtl::OString::valueOf(static_cast<sal_Int32>(nBRow));
+    rtl::OString sTab = rtl::OString::valueOf(static_cast<sal_Int32>(nTab));
+    sMsg += "\nThe following cells failed to reference the data validation entry with base-cell-address: (" +
+            sBCol + "," + sBRow + "," + sTab + ")\n";
+    bool bPassed = true;
     //check that each cell in the expected range is associated with the data validation entry
     for(SCCOL i = rRange.aStart.Col(); i <= rRange.aEnd.Col(); ++i)
     {
@@ -825,17 +829,26 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
             const SfxUInt32Item* pItemTest = static_cast<const SfxUInt32Item*>( pDoc->GetAttr(i, j, nTab, ATTR_VALIDDATA) );
             const ScValidationData* pValDataTest = pDoc->GetValidationEntry( pItemTest->GetValue() );
 
-            rtl::OString sCol( rtl::OString::valueOf(static_cast<sal_Int32>(i)) );
-            rtl::OString sRow( rtl::OString::valueOf(static_cast<sal_Int32>(j)) );
-            rtl::OString sTab( rtl::OString::valueOf(static_cast<sal_Int32>(nTab)) );
-            rtl::OString sBCol( rtl::OString::valueOf(static_cast<sal_Int32>(nBCol)) );
-            rtl::OString sBRow( rtl::OString::valueOf(static_cast<sal_Int32>(nBRow)) );
-            rtl::OString msg( "Cell at (" + sCol + "," + sRow + "," + sTab + ") does not reference " +
-                              "Data Validation Entry with base-cell-address: (" +
-                              sBCol + "," + sBRow + "," + sTab + ")." );
-            CPPUNIT_ASSERT_MESSAGE( msg.pData->buffer, pValDataTest && pValData->GetKey() == pValDataTest->GetKey() );
+            sCol = rtl::OString::valueOf(static_cast<sal_Int32>(i));
+            sRow = rtl::OString::valueOf(static_cast<sal_Int32>(j));
+            if(!(pValDataTest && pValData->GetKey() == pValDataTest->GetKey()))
+            {
+                bPassed = false;
+                rtl::OString sEntryKey = rtl::OString::valueOf(static_cast<sal_Int32>(pValData->GetKey()));
+                sMsg += "(" + sCol + "," + sRow + "," + sTab + "), expected key: " + sEntryKey + ", actual key: ";
+                if(pValDataTest)
+                {
+                    rtl::OString sTestKey = rtl::OString::valueOf(static_cast<sal_Int32>(pValDataTest->GetKey()));
+                    sMsg += sTestKey;
+                }
+                else sMsg += "none";
+                sMsg += "\n";
+            }
         }
     }
+    if(bPassed) sMsg += "None failed.\n";
+    sMsg += "\n";
+    return bPassed;
 }
 
 }
@@ -855,14 +868,14 @@ void ScFiltersTest::testDataValidityODS()
         SC_VALID_DECIMAL, SC_COND_GREATER, String("3.14"), EMPTY_STRING, pDoc,
         aValBaseAddr1, String("Too small"),
         String("The number you are trying to enter is not greater than 3.14! Are you sure you want to enter it anyway?"),
-        SC_VALERR_WARNING
+        SC_VALERR_WARNING, 1
     );
     //sheet2's expected Data Validation Entry values
     ValDataTestParams aVDTParams2(
         SC_VALID_WHOLE, SC_COND_BETWEEN, String("1"), String("10"), pDoc,
         ScAddress(2,3,1), String("Error sheet 2"),
         String("Must be a whole number between 1 and 10."),
-        SC_VALERR_STOP
+        SC_VALERR_STOP, 2
     );
     //check each sheet's Data Validation Entries
     checkValiditationEntries( aVDTParams1 );
@@ -873,8 +886,10 @@ void ScFiltersTest::testDataValidityODS()
     ScRange aRange2( 2,3,1, 6,7,1 ); //sheet2
 
     //check each sheet's cells for data validity
-    checkCellValidity( aValBaseAddr1, aRange1, pDoc );
-    checkCellValidity( aValBaseAddr2, aRange2, pDoc );
+    rtl::OString sMsg;
+    bool bPassed1 = checkCellValidity( aValBaseAddr1, aRange1, pDoc, sMsg );
+    bool bPassed2 = checkCellValidity( aValBaseAddr2, aRange2, pDoc, sMsg );
+    CPPUNIT_ASSERT_MESSAGE( sMsg.pData->buffer, bPassed1 && bPassed2 );
 
     //check each sheet's content
     rtl::OUString aCSVFileName1;
