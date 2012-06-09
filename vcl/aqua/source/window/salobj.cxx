@@ -212,10 +212,4 @@ const SystemEnvData* AquaSalObject::GetSystemData() const
     return &maSysData;
 }
 
-// -----------------------------------------------------------------------
-
-void AquaSalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

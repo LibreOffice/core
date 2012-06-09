@@ -222,8 +222,4 @@ void GtkSalObject::SetForwardKey( sal_Bool bEnable )
         gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
 }
 
-void GtkSalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

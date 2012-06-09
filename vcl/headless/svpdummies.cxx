@@ -51,7 +51,6 @@ void SvpSalObject::EndSetClipRegion() {}
 void SvpSalObject::SetPosSize( long, long, long, long ) {}
 void SvpSalObject::Show( sal_Bool ) {}
 const SystemEnvData* SvpSalObject::GetSystemData() const { return &m_aSystemChildData; }
-void SvpSalObject::InterceptChildWindowKeyDown( sal_Bool ) {}
 
 // SalI18NImeStatus
 SvpImeStatus::~SvpImeStatus() {}

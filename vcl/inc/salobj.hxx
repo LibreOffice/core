@@ -76,8 +76,6 @@ public:
 
     virtual const SystemEnvData*    GetSystemData() const = 0;
 
-    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept ) = 0;
-
     void                    SetCallback( void* pInst, SALOBJECTPROC pProc )
     { m_pInst = pInst; m_pCallback = pProc; }
     long                    CallCallback( sal_uInt16 nEvent, const void* pEvent )

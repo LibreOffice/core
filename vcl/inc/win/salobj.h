@@ -46,7 +46,6 @@ public:
     RGNDATA*                mpStdClipRgnData;       // Cache Standard-ClipRegion-Data
     RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect
     sal_Bool                mbFirstClipRect;        // Flag for first cliprect to insert
-    sal_Bool                mbInterceptChildWindowKeyDown; // Intercept the KeyDown event sent to system child window
     WinSalObject*               mpNextObject;           // pointer to next object
 
 
@@ -63,7 +62,6 @@ public:
     virtual void                    Enable( sal_Bool nEnable );
     virtual void                    GrabFocus();
     virtual const SystemEnvData*    GetSystemData() const;
-    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
 };
 
 #endif // _SV_SALOBJ_H

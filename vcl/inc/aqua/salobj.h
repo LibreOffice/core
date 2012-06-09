@@ -77,7 +77,6 @@ public:
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
     virtual void                    Show( sal_Bool bVisible );
     virtual const SystemEnvData*    GetSystemData() const;
-    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
 };
 
 #endif // _SV_SALOBJ_H

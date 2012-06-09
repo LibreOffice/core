@@ -55,8 +55,6 @@ public:
     virtual void                    Show( sal_Bool bVisible );
 
     virtual const SystemEnvData*    GetSystemData() const;
-
-    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
 };
 
 class SvpImeStatus : public SalI18NImeStatus

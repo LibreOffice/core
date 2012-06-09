@@ -207,10 +207,4 @@ const SystemEnvData* IosSalObject::GetSystemData() const
     return &maSysData;
 }
 
-// -----------------------------------------------------------------------
-
-void IosSalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

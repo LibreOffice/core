@@ -65,8 +65,6 @@ public:
     virtual void                                    SetForwardKey( sal_Bool bEnable );
 
     virtual const SystemEnvData*    GetSystemData() const;
-
-    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
 };
 
 #endif // _SV_SALOBJ_H
