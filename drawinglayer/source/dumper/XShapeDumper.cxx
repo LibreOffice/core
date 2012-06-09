@@ -580,6 +580,13 @@ namespace {
         }
     }
 
+    void XShapeDumper::dumpPolyPolygonAsElement(drawing::PointSequenceSequence aPolyPolygon, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PolyPolygon" ));
+        dumpPointSequenceSequence(aPolyPolygon, xmlWriter);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -882,6 +889,12 @@ namespace {
 				drawing::PolygonKind ePolygonKind;
 				if(anotherAny >>= ePolygonKind)
 					dumpPolygonKindAsAttribute(ePolygonKind, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("PolyPolygon");
+				drawing::PointSequenceSequence aPolyPolygon;
+				if(anotherAny >>= aPolyPolygon)
+					dumpPolyPolygonAsElement(aPolyPolygon, xmlWriter);
 			}
         }
 

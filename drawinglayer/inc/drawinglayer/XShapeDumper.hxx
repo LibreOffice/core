@@ -105,6 +105,7 @@ private:
 
     // PolyPolygonDescriptor.idl
     void dumpPolygonKindAsAttribute(com::sun::star::drawing::PolygonKind ePolygonKind, xmlTextWriterPtr xmlWriter);
+    void dumpPolyPolygonAsElement(com::sun::star::drawing::PointSequenceSequence aPolyPolygon, xmlTextWriterPtr xmlWriter);
 
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
     void dumpSizeAsAttribute(const com::sun::star::awt::Size& rSize, xmlTextWriterPtr xmlWriter);
