@@ -1762,4 +1762,16 @@ size_t ScConditionalFormatList::size() const
     return maConditionalFormats.size();
 }
 
+void ScConditionalFormatList::erase( sal_uLong nIndex )
+{
+    for( iterator itr = begin(); itr != end(); ++itr )
+    {
+        if( itr->GetKey() == nIndex )
+        {
+            maConditionalFormats.erase(itr);
+            break;
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

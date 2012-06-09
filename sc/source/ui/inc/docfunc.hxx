@@ -52,6 +52,7 @@ class ScTokenArray;
 struct ScTabOpParam;
 class ScTableProtection;
 struct ScCellMergeOption;
+class ScConditionalFormat;
 
 // ---------------------------------------------------------------------------
 
@@ -202,6 +203,12 @@ public:
                                             const String& rOptions, const String& rSource,
                                             const ScRange& rDestRange, sal_uLong nRefresh,
                                             sal_Bool bFitBlock, sal_Bool bApi );
+
+    /**
+     * @param nOldIndex If 0 don't delete an old format
+     * @param pFormat if NULL only delete an old format
+     */
+    virtual void ReplaceConditionalFormat( sal_uLong nOldIndex, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges );
 };
 
 class ScDocFuncDirect : public ScDocFunc

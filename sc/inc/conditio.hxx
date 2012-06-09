@@ -349,6 +349,8 @@ public:
     SC_DLLPUBLIC const_iterator end() const;
 
     size_t size() const;
+
+    void erase(sal_uLong nIndex);
 };
 
 #endif

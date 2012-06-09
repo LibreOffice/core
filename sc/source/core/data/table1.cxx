@@ -2016,6 +2016,11 @@ sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
     return nMax + 1;
 }
 
+void ScTable::DeleteConditionalFormat( sal_uLong nIndex )
+{
+    mpCondFormatList->erase(nIndex);
+}
+
 void ScTable::SetCondFormList( ScConditionalFormatList* pNew )
 {
     mpCondFormatList.reset( pNew );

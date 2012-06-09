@@ -733,12 +733,10 @@ void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SC
         maTabs[nTab]->FindConditionalFormat( nKey, rRanges );
 }
 
-void ScDocument::ConditionalChanged( sal_uLong nKey, SCTAB nTab )
+void ScDocument::DeleteConditionalFormat(sal_uLong nOldIndex, SCTAB nTab)
 {
-    ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
-    if ( nKey && pCondFormList && !bIsClip && !bIsUndo )        // nKey==0 -> noop
-    {
-    }
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->DeleteConditionalFormat(nOldIndex);
 }
 
 //------------------------------------------------------------------------

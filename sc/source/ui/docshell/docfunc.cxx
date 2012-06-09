@@ -5058,7 +5058,27 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     return sal_True;
 }
 
+void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges )
+{
+    ScDocShellModificator aModificator(rDocShell);
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if(nOldFormat)
+    {
+	pDoc->DeleteConditionalFormat(nOldFormat, nTab);
+    }
+    if(pFormat)
+    {
+	sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
 
+	ScPatternAttr aPattern( pDoc->GetPool() );
+	aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
+	ScMarkData aMarkData;
+	aMarkData.MarkFromRangeList(rRanges, true);
+	pDoc->ApplySelectionPattern( aPattern , aMarkData );
+    }
+    aModificator.SetDocumentModified();
+    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

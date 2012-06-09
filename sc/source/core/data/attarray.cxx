@@ -144,14 +144,6 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, bool bAlloc )
                 aAdrEnd  .SetRow( pData[i].nRow );
                 pDocument->InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
             }
-            // conditional format or deleted?
-            if ( &pPattern->GetItem(ATTR_CONDITIONAL) != &pOldPattern->GetItem(ATTR_CONDITIONAL) )
-            {
-                pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                pOldPattern->GetItem(ATTR_CONDITIONAL)).GetValue(), nTab );
-                pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                pPattern->GetItem(ATTR_CONDITIONAL)).GetValue(), nTab );
-            }
             pDocPool->Remove(*pOldPattern);
         }
         delete[] pData;
@@ -369,13 +361,6 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                     aAdrStart.SetRow( Max(nStartRow,ns) );
                     aAdrEnd  .SetRow( Min(nEndRow,pData[nx].nRow) );
                     pDocument->InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
-                }
-                if ( &rNewSet.Get(ATTR_CONDITIONAL) != &rOldSet.Get(ATTR_CONDITIONAL) )
-                {
-                    pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                    rOldSet.Get(ATTR_CONDITIONAL)).GetValue(), nTab );
-                    pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                    rNewSet.Get(ATTR_CONDITIONAL)).GetValue(), nTab );
                 }
                 ns = pData[nx].nRow + 1;
                 nx++;
@@ -771,16 +756,6 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                         aAdrStart.SetRow( nPos ? pData[nPos-1].nRow+1 : 0 );
                         aAdrEnd  .SetRow( pData[nPos].nRow );
                         pDocument->InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
-                    }
-
-                    // Reset conditional formats or delete ?
-
-                    if ( &rNewSet.Get(ATTR_CONDITIONAL) != &rOldSet.Get(ATTR_CONDITIONAL) )
-                    {
-                        pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                        rOldSet.Get(ATTR_CONDITIONAL)).GetValue(), nTab );
-                        pDocument->ConditionalChanged( ((const SfxUInt32Item&)
-                                        rNewSet.Get(ATTR_CONDITIONAL)).GetValue(), nTab );
                     }
 
                     pDocument->GetPool()->Remove(*pData[nPos].pPattern);
