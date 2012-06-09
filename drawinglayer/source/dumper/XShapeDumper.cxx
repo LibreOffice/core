@@ -390,44 +390,107 @@ namespace {
     }
 
     void XShapeDumper::dumpLineTransparenceAsAttribute(sal_Int32 aLineTransparence, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineTransparence"), "%" SAL_PRIdINT32, aLineTransparence);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineTransparence"), "%" SAL_PRIdINT32, aLineTransparence);
+    }
 
     void XShapeDumper::dumpLineWidthAsAttribute(sal_Int32 aLineWidth, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineWidth"), "%" SAL_PRIdINT32, aLineWidth);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineWidth"), "%" SAL_PRIdINT32, aLineWidth);
+    }
 
     void XShapeDumper::dumpLineJointAsAttribute(drawing::LineJoint eLineJoint, xmlTextWriterPtr xmlWriter)
-	{
-		switch(eLineJoint)
-		{
-			case drawing::LineJoint_NONE:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "NONE");
-				break;
-			case drawing::LineJoint_MIDDLE:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MIDDLE");
-				break;
-			case drawing::LineJoint_BEVEL:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "BEVEL");
-				break;
-			case drawing::LineJoint_MITER:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MITER");
-				break;
-			case drawing::LineJoint_ROUND:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "ROUND");
-				break;
-			default:
-				break;
-		}
-	}
+    {
+        switch(eLineJoint)
+        {
+            case drawing::LineJoint_NONE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "NONE");
+                break;
+            case drawing::LineJoint_MIDDLE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MIDDLE");
+                break;
+            case drawing::LineJoint_BEVEL:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "BEVEL");
+                break;
+            case drawing::LineJoint_MITER:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MITER");
+                break;
+            case drawing::LineJoint_ROUND:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "ROUND");
+                break;
+            default:
+                break;
+        }
+    }
 
     void XShapeDumper::dumpLineStartNameAsAttribute(rtl::OUString sLineStartName, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartName"), "%s",
-		rtl::OUStringToOString(sLineStartName, RTL_TEXTENCODING_UTF8).getStr());
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartName"), "%s",
+        rtl::OUStringToOString(sLineStartName, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    void XShapeDumper::dumpLineEndNameAsAttribute(rtl::OUString sLineEndName, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndName"), "%s",
+        rtl::OUStringToOString(sLineEndName, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    void XShapeDumper::dumpPolyPolygonBezierCoords(drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter)
+    {
+        uno::Sequence<uno::Sequence< awt::Point > > pointSequenceSequence = aPolyPolygonBezierCoords.Coordinates;
+        sal_Int32 nPointsSequence = pointSequenceSequence.getLength();
+        for (sal_Int32 i = 0; i < nPointsSequence; ++i)
+        {
+            uno::Sequence< awt::Point > pointSequence = pointSequenceSequence[i];
+            sal_Int32 nPoints = pointSequence.getLength();
+
+            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "pointSequence" ));
+
+            for(sal_Int32 j = 0; j < nPoints; ++j)
+            {
+                xmlTextWriterStartElement(xmlWriter, BAD_CAST( "point" ));
+                xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, pointSequence[j].X);
+                xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionY"), "%" SAL_PRIdINT32, pointSequence[j].Y);
+                xmlTextWriterEndElement( xmlWriter );
+            }
+            xmlTextWriterEndElement( xmlWriter );
+        }
+
+        uno::Sequence<uno::Sequence< drawing::PolygonFlags > > polygonFlagsSequenceSequence = aPolyPolygonBezierCoords.Flags;
+        sal_Int32 nFlagsSequence = polygonFlagsSequenceSequence.getLength();
+        for (sal_Int32 i = 0; i < nFlagsSequence; ++i)
+        {
+            uno::Sequence< drawing::PolygonFlags > polygonFlagsSequence = polygonFlagsSequenceSequence[i];
+            sal_Int32 nFlags = polygonFlagsSequence.getLength();
+
+            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "flagsSequence" ));
+
+            for (sal_Int32 j = 0; j < nFlags; ++j)
+            {
+                xmlTextWriterStartElement(xmlWriter, BAD_CAST( "polygonFlags" ));
+                switch(polygonFlagsSequence[j])
+                {
+                    case drawing::PolygonFlags_NORMAL:
+                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "NORMAL");
+                        break;
+                    case drawing::PolygonFlags_SMOOTH:
+                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SMOOTH");
+                        break;
+                    case drawing::PolygonFlags_CONTROL:
+                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "CONTROL");
+                        break;
+                    case drawing::PolygonFlags_SYMMETRIC:
+                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SYMMETRIC");
+                        break;
+                    default:
+                        break;
+                }
+                xmlTextWriterEndElement( xmlWriter );
+            }
+            xmlTextWriterEndElement( xmlWriter );
+        }
+
+    }
 
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
@@ -657,29 +720,36 @@ namespace {
                     dumpLineColorAsAttribute(aLineColor, xmlWriter);
             }
             {
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineTransparence");
-				sal_Int32 aLineTransparence;
-				if(anotherAny >>= aLineTransparence)
-					dumpLineTransparenceAsAttribute(aLineTransparence, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineWidth");
-				sal_Int32 aLineWidth;
-				if(anotherAny >>= aLineWidth)
-					dumpLineWidthAsAttribute(aLineWidth, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineJoint");
-				drawing::LineJoint eLineJoint;
-				if(anotherAny >>= eLineJoint)
-					dumpLineJointAsAttribute(eLineJoint, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineStartName");
-				rtl::OUString sLineStartName;
-				if(anotherAny >>= sLineStartName)
-					dumpLineStartNameAsAttribute(sLineStartName, xmlWriter);
-			}
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineTransparence");
+                sal_Int32 aLineTransparence;
+                if(anotherAny >>= aLineTransparence)
+                    dumpLineTransparenceAsAttribute(aLineTransparence, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineWidth");
+                sal_Int32 aLineWidth;
+                if(anotherAny >>= aLineWidth)
+                    dumpLineWidthAsAttribute(aLineWidth, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineJoint");
+                drawing::LineJoint eLineJoint;
+                if(anotherAny >>= eLineJoint)
+                    dumpLineJointAsAttribute(eLineJoint, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineStartName");
+                rtl::OUString sLineStartName;
+                if(anotherAny >>= sLineStartName)
+                    dumpLineStartNameAsAttribute(sLineStartName, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineEndName");
+                rtl::OUString sLineEndName;
+                if(anotherAny >>= sLineEndName)
+                    dumpLineEndNameAsAttribute(sLineEndName, xmlWriter);
+            }
+
         }
 
         #if DEBUG_DUMPER
