@@ -1952,10 +1952,6 @@ PlaceholderShape.prototype.init = function()
     var aTextFieldElement = getElementByClassName( this.masterPage.backgroundObjects, this.className );
     if( aTextFieldElement )
     {
-        var sVisibility = aTextFieldElement.getAttribute( 'visibility' );
-        if( sVisibility == 'hidden' )
-            return;
-
         var aPlaceholderElement = getElementByClassName( aTextFieldElement, 'PlaceholderText' );
         if( aPlaceholderElement )
         {
@@ -2131,7 +2127,8 @@ MasterPageView.prototype.createElement = function()
         // (because the slide number of two slide is always different).
         if( aPlaceholderShapeSet[aSlideNumberClassName] &&
             aPlaceholderShapeSet[aSlideNumberClassName].isValid() &&
-            this.aMetaSlide.nIsPageNumberVisible )
+            this.aMetaSlide.nIsPageNumberVisible &&
+            aTextFieldContentProviderSet[aSlideNumberClassName] )
         {
             this.aSlideNumberFieldHandler =
             new SlideNumberFieldHandler( aPlaceholderShapeSet[aSlideNumberClassName],
@@ -2188,7 +2185,8 @@ function( sClassName, aPlaceholderShapeSet, aTextFieldContentProviderSet,
 {
     var aTextFieldHandler = null;
     if( aPlaceholderShapeSet[sClassName] &&
-        aPlaceholderShapeSet[sClassName].isValid() )
+        aPlaceholderShapeSet[sClassName].isValid()
+        && aTextFieldContentProviderSet[sClassName] )
     {
         var sTextFieldContentProviderId = aTextFieldContentProviderSet[sClassName].sId;
         // We create only one single TextFieldHandler object (and so one only
