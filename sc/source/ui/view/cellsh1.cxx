@@ -2056,11 +2056,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScRangeList aRangeList;
-                ScViewData* pViewData = GetViewData();
-                pViewData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
+                ScViewData* pData = GetViewData();
+                pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
                 ScDocument* pDoc = GetViewData()->GetDocument();
 
-                ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
+                ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
                 AbstractScCondFormatDlg* pDlg = NULL;
                 const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
                 if(pCondFormat)
@@ -2075,11 +2075,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if(pDlg->Execute() == RET_OK)
                 {
                     ScConditionalFormat* pFormat = pDlg->GetConditionalFormat();
-                    sal_uLong nIndex = pDoc->AddCondFormat(pFormat, pViewData->GetTabNo());
-
-                    ScPatternAttr aPattern( pDoc->GetPool() );
-                    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-                    pDoc->ApplySelectionPattern( aPattern , pViewData->GetMarkData() );
+                    sal_uLong nOldIndex = 0;
+                    if(pCondFormat)
+                        nOldIndex = pCondFormat->GetKey();
+                    pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat( nOldIndex, pFormat, pData->GetTabNo(), pFormat->GetRange() );
                 }
                 delete pDlg;
             }

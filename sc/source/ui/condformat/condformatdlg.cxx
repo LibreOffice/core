@@ -84,6 +84,34 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
     rLbCol.SelectEntry(rEntry.GetColor());
 }
 
+void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit )
+{
+    if(rEntry.GetMin())
+	rLbType.SelectEntryPos(0);
+    else if(rEntry.GetMax())
+	rLbType.SelectEntryPos(1);
+    else if(rEntry.GetPercentile())
+    {
+	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+	rLbType.SelectEntryPos(2);
+    }
+    else if(rEntry.GetPercent())
+    {
+	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+	rLbType.SelectEntryPos(4);
+    }
+    else if(rEntry.HasFormula())
+    {
+	rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+	rLbType.SelectEntryPos(5);
+    }
+    else
+    {
+	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+	rLbType.SelectEntryPos(3);
+    }
+}
+
 }
 
 ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
@@ -132,6 +160,11 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maLbEntryTypeMin.SelectEntryPos(0);
     maLbEntryTypeMiddle.SelectEntryPos(2);
     maLbEntryTypeMax.SelectEntryPos(1);
+    maLbDataBarMinType.SelectEntryPos(0);
+    maLbDataBarMaxType.SelectEntryPos(1);
+    maEdMiddle.SetText(rtl::OUString::valueOf(50));
+    maEdDataBarMin.Disable();
+    maEdDataBarMax.Disable();
 
     Init();
     maLbStyle.SelectEntryPos(1);
@@ -250,6 +283,9 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
 	mpDataBarData.reset(new ScDataBarFormatData(*pEntry->GetDataBarData()));
 	maLbType.SelectEntryPos(0);
 	maLbColorFormat.SelectEntryPos(2);
+	SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
+	SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
+	DataBarTypeSelectHdl(NULL);
 	SetDataBarType();
     }
 
@@ -288,7 +324,7 @@ void ScCondFrmtEntry::Init()
     maLbEntryTypeMiddle.SetPosPixel(aPointLb);
     maEdMiddle.SetPosPixel(aPointEd);
     maLbColMiddle.SetPosPixel(aPointCol);
-    maEdDataBarMin.SetPosPixel(aPointEdDataBar);
+    maEdDataBarMax.SetPosPixel(aPointEdDataBar);
     maLbDataBarMaxType.SetPosPixel(aPointLbDataBar);
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
@@ -336,12 +372,15 @@ void ScCondFrmtEntry::Init()
     }
 
     maBtOptions.SetClickHdl( LINK( this, ScCondFrmtEntry, OptionBtnHdl ) );
+    maLbDataBarMinType.SetSelectHdl( LINK( this, ScCondFrmtEntry, DataBarTypeSelectHdl ) );
+    maLbDataBarMaxType.SetSelectHdl( LINK( this, ScCondFrmtEntry, DataBarTypeSelectHdl ) );
 
     mpDataBarData.reset(new ScDataBarFormatData());
     mpDataBarData->mpUpperLimit.reset(new ScColorScaleEntry());
     mpDataBarData->mpLowerLimit.reset(new ScColorScaleEntry());
     mpDataBarData->mpLowerLimit->SetMin(true);
     mpDataBarData->mpUpperLimit->SetMax(true);
+    mpDataBarData->maPositiveColor = COL_LIGHTBLUE;
 }
 
 namespace {
@@ -373,10 +412,20 @@ rtl::OUString getExpression(sal_Int32 nIndex)
 	    return rtl::OUString("<");
 	case 2:
 	    return rtl::OUString(">");
+	case 3:
+	    return rtl::OUString("<=");
+	case 4:
+	    return rtl::OUString(">=");
 	case 5:
 	    return rtl::OUString("!=");
-	default:
-	    return rtl::OUString("not yet supported");
+	case 6:
+	    return rtl::OUString("between");
+	case 7:
+	    return rtl::OUString("not between");
+	case 8:
+	    return rtl::OUString("duplicate");
+	case 9:
+	    return rtl::OUString("unique");
     }
     return rtl::OUString();
 }
@@ -401,7 +450,8 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
 		maLbType.Hide();
 		rtl::OUStringBuffer maCondText(getTextForType(meType));
 		maCondText.append(rtl::OUString(" "));
-		maCondText.append(getExpression(maLbCondType.GetSelectEntryPos()));
+		if(meType == CONDITION)
+		    maCondText.append(getExpression(maLbCondType.GetSelectEntryPos()));
 		maFtCondition.SetText(maCondText.makeStringAndClear());
 		maFtCondition.Show();
 	    }
@@ -612,9 +662,8 @@ ScFormatEntry* ScCondFrmtEntry::createConditionEntry() const
 
 namespace {
 
-ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListBox& rColor, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos )
+void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos )
 {
-    ScColorScaleEntry* pEntry = new ScColorScaleEntry();
     double nVal = rtl::math::stringToDouble(rValue.GetText(), '.', ',');
     switch(rType.GetSelectEntryPos())
     {
@@ -639,7 +688,13 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
 	    pEntry->SetFormula(rValue.GetText(), pDoc, rPos);
 	    break;
     }
+}
 
+ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListBox& rColor, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos )
+{
+    ScColorScaleEntry* pEntry = new ScColorScaleEntry();
+
+    SetColorScaleEntry( pEntry, rType, rValue, pDoc, rPos );
     Color aColor = rColor.GetSelectEntryColor();
     pEntry->SetColor(aColor);
     return pEntry;
@@ -774,13 +829,33 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, StyleSelectHdl)
     return 0;
 }
 
+IMPL_LINK_NOARG( ScCondFrmtEntry, DataBarTypeSelectHdl )
+{
+    sal_Int32 nSelectPos = maLbDataBarMinType.GetSelectEntryPos();
+    if(nSelectPos == 0 || nSelectPos == 1)
+	maEdDataBarMin.Disable();
+    else
+	maEdDataBarMin.Enable();
+
+    nSelectPos = maLbDataBarMaxType.GetSelectEntryPos();
+    if(nSelectPos == 0 || nSelectPos == 1)
+	maEdDataBarMax.Disable();
+    else
+	maEdDataBarMax.Enable();
+
+    return 0;
+}
+
 IMPL_LINK_NOARG( ScCondFrmtEntry, OptionBtnHdl )
 {
+    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), maLbDataBarMinType, maEdDataBarMin, mpDoc, maPos);
+    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), maLbDataBarMaxType, maEdDataBarMax, mpDoc, maPos);
     ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this, *mpDataBarData);
     if( pDlg->Execute() == RET_OK)
     {
-	std::cout << "Ok" << std::endl;
 	mpDataBarData.reset(pDlg->GetData());
+	SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
+	SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
     }
     return 0;
 }

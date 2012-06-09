@@ -125,6 +125,7 @@ private:
     DECL_LINK( ColFormatTypeHdl, void*);
     DECL_LINK( StyleSelectHdl, void* );
     DECL_LINK( OptionBtnHdl, void* );
+    DECL_LINK( DataBarTypeSelectHdl, void* );
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc );

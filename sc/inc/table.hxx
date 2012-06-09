@@ -797,6 +797,8 @@ public:
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;
 
+    void DeleteConditionalFormat(sal_uLong nOldIndex);
+
     sal_uLong          AddCondFormat( ScConditionalFormat* pNew );
 
 private:
