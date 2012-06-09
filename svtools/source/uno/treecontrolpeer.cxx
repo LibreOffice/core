@@ -1634,7 +1634,7 @@ UnoTreeListItem::~UnoTreeListItem()
 
 sal_uInt16 UnoTreeListItem::IsA()
 {
-    return 0;
+    return SV_ITEM_ID_LBOXSTRING;
 }
 
 // --------------------------------------------------------------------
