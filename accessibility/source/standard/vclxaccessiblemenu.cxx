@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <accessibility/standard/vclxaccessiblemenu.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

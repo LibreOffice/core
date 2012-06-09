@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
-
 #include <com/sun/star/linguistic2/XLinguServiceManager.hdl>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

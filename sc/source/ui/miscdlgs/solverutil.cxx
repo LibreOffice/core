@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-//------------------------------------------------------------------
-
 #include "solverutil.hxx"
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>

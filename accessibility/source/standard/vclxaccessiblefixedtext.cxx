@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <accessibility/standard/vclxaccessiblefixedtext.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>

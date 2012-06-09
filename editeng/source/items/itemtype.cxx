@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
 #include <vcl/outdev.hxx>
 #include <editeng/editrids.hrc>
 #include <unotools/intlwrapper.hxx>

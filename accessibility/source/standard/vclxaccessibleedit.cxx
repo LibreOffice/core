@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <accessibility/standard/vclxaccessibleedit.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>

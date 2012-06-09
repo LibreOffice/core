@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>

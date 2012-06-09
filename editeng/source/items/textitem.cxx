@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>

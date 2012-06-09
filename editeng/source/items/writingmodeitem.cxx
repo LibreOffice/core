@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
-
-
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>

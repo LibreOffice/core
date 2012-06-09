@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
 #include <svtools/colorcfg.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <svtools/headbar.hxx>

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <accessibility/standard/vclxaccessiblefixedhyperlink.hxx>
 
 using namespace ::com::sun::star;

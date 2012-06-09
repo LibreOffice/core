@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-//------------------------------------------------------------------------
-
 #include <editeng/editeng.hxx>  // EditEngine::IsSimpleCharInput
 #include <editeng/outlobj.hxx>
 #include <svx/svdobj.hxx>

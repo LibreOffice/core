@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

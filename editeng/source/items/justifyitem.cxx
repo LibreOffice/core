@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
-
 #include "editeng/justifyitem.hxx"
 #include "editeng/memberids.hrc"
 #include "editeng/editrids.hrc"

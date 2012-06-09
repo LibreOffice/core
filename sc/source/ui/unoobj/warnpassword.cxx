@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// ============================================================================
 #include "warnpassword.hxx"
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>

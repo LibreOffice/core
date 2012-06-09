@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <comphelper/accessibletexthelper.hxx>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>

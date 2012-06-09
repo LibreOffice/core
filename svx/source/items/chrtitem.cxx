@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
 #include <tools/stream.hxx>
 #include <basic/sbxvar.hxx>
 #if defined UNX && !defined LINUX

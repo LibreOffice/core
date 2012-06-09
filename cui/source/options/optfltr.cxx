@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
 #include "optfltr.hxx"

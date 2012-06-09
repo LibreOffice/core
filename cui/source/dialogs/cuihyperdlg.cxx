@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
 #include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
 #include "cuihyperdlg.hxx"

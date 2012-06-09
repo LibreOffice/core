@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <accessibility/standard/vclxaccessibletoolbox.hxx>
 #include <accessibility/standard/vclxaccessibletoolboxitem.hxx>
 #include <toolkit/helper/convert.hxx>

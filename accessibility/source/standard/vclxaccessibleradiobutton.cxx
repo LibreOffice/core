@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <accessibility/standard/vclxaccessibleradiobutton.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>

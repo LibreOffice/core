@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/plugin/PluginDescription.hpp>
 #include <com/sun/star/plugin/PluginManager.hpp>

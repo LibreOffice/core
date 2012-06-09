@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <accessibility/standard/accessiblemenubasecomponent.hxx>
 #include <accessibility/standard/vclxaccessiblemenu.hxx>
 #include <accessibility/standard/vclxaccessiblemenuitem.hxx>

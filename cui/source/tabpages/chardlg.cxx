@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
 #include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>

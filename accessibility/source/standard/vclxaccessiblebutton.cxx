@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <accessibility/standard/vclxaccessiblebutton.hxx>
 #include <accessibility/helper/accresmgr.hxx>
 #include <accessibility/helper/accessiblestrings.hrc>

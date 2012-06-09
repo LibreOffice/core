@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
-
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
