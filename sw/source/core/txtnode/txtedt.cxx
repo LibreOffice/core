@@ -1939,7 +1939,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                 nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
             }
 
-            nTmpChars = pBreakIt->getGraphemeCount(aNumString);
+            nTmpChars += pBreakIt->getGraphemeCount(aNumString);
         }
         else if ( HasBullet() )
         {
