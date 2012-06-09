@@ -76,6 +76,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocGreaterEqual:
         case ocAnd:
         case ocOr:
+        case ocXor:
         case ocNot:
         case ocTrue:
         case ocFalse:

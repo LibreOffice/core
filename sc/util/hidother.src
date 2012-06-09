@@ -160,6 +160,7 @@ hidspecial HID_FUNC_WAHR         { HelpID = HID_FUNC_WAHR; };
 hidspecial HID_FUNC_WENN         { HelpID = HID_FUNC_WENN; };
 hidspecial HID_FUNC_ODER         { HelpID = HID_FUNC_ODER; };
 hidspecial HID_FUNC_UND      { HelpID = HID_FUNC_UND; };
+hidspecial HID_FUNC_XOR      { HelpID = HID_FUNC_XOR; };
 hidspecial HID_FUNC_ABS      { HelpID = HID_FUNC_ABS; };
 hidspecial HID_FUNC_POTENZ       { HelpID = HID_FUNC_POTENZ; };
 hidspecial HID_FUNC_ANZAHLLEEREZELLEN        { HelpID = HID_FUNC_ANZAHLLEEREZELLEN; };

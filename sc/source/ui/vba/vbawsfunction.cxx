@@ -201,7 +201,7 @@ ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< 
     if( (eOpCode == ocIsEmpty) || (eOpCode == ocIsString) || (eOpCode == ocIsNonString) || (eOpCode == ocIsLogical) ||
         (eOpCode == ocIsRef) || (eOpCode == ocIsValue) || (eOpCode == ocIsFormula) || (eOpCode == ocIsNA) ||
         (eOpCode == ocIsErr) || (eOpCode == ocIsError) || (eOpCode == ocIsEven) || (eOpCode == ocIsOdd) ||
-        (eOpCode == ocAnd) || (eOpCode == ocOr) || (eOpCode == ocNot) || (eOpCode == ocTrue) || (eOpCode == ocFalse) )
+        (eOpCode == ocAnd) || (eOpCode == ocOr) || (eOpCode == ocXor) || (eOpCode == ocNot) || (eOpCode == ocTrue) || (eOpCode == ocFalse) )
     {
         if( aRet.has< AnySeqSeq >() )
         {

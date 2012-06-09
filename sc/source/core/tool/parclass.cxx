@@ -191,6 +191,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocVarP,            {{ Reference                                            }, true }},
     { ocVarPA,           {{ Reference                                            }, true }},
     { ocVLookup,         {{ Value, Reference, Value, Value                       }, false }},
+    { ocXor,             {{ Reference                                            }, true }},
     { ocZTest,           {{ Reference, Value, Value                              }, false }},
     // Excel doubts:
     // ocT: Excel says (and handles) Reference, error? This means no position

@@ -89,6 +89,7 @@ enum OpCodeEnum
         ocGreaterEqual      = SC_OPCODE_GREATER_EQUAL,
         ocAnd               = SC_OPCODE_AND,
         ocOr                = SC_OPCODE_OR,
+        ocXor               = SC_OPCODE_XOR,
         ocIntersect         = SC_OPCODE_INTERSECT,
         ocUnion             = SC_OPCODE_UNION,
         ocRange             = SC_OPCODE_RANGE,

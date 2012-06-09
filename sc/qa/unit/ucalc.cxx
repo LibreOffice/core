@@ -3276,6 +3276,7 @@ void Test::testFunctionLists()
         "NOT",
         "OR",
         "TRUE",
+        "XOR",
         0
     };
 
