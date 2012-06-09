@@ -318,9 +318,6 @@ COMPHELPER_DLLPUBLIC inline rtl::OUStringBuffer& padToLength(
     return detail::padToLength(rBuffer, nLength, cFill);
 }
 
-COMPHELPER_DLLPUBLIC rtl::OUString removeTrailingChars(
-    const rtl::OUString& rStr, sal_Unicode cChar);
-
 /** Convert a sequence of strings to a single comma separated string.
 
     Note that no escaping of commas or anything fancy is done.

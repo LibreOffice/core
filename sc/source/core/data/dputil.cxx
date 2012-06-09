@@ -85,7 +85,7 @@ bool ScDPUtil::isDuplicateDimension(const rtl::OUString& rName)
 
 rtl::OUString ScDPUtil::getSourceDimensionName(const rtl::OUString& rName)
 {
-    return comphelper::string::removeTrailingChars(rName, sal_Unicode('*'));
+    return comphelper::string::stripEnd(rName, '*');
 }
 
 rtl::OUString ScDPUtil::createDuplicateDimensionName(const rtl::OUString& rOriginal, size_t nDupCount)
