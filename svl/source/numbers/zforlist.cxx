@@ -185,7 +185,6 @@ namespace
 
 }
 sal_uInt16 SvNumberFormatter::nSystemCurrencyPosition = 0;
-SV_IMPL_PTRARR( NfCurrencyTable, NfCurrencyEntry* );
 
 // Whether BankSymbol (not CurrencySymbol!) is always at the end (1 $;-1 $) or
 // language dependent.
@@ -3064,7 +3063,7 @@ const NfCurrencyEntry* SvNumberFormatter::MatchSystemCurrency()
 {
     // MUST call GetTheCurrencyTable() before accessing nSystemCurrencyPosition
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
-    return nSystemCurrencyPosition ? rTable[nSystemCurrencyPosition] : NULL;
+    return nSystemCurrencyPosition ? &rTable[nSystemCurrencyPosition] : NULL;
 }
 
 
@@ -3074,20 +3073,19 @@ const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
     if ( eLang == LANGUAGE_SYSTEM )
     {
         const NfCurrencyEntry* pCurr = MatchSystemCurrency();
-        return pCurr ? *pCurr : *(GetTheCurrencyTable()[0]);
+        return pCurr ? *pCurr : GetTheCurrencyTable()[0];
     }
     else
     {
         eLang = MsLangId::getRealLanguage( eLang );
         const NfCurrencyTable& rTable = GetTheCurrencyTable();
-        sal_uInt16 nCount = rTable.Count();
-        const NfCurrencyEntryPtr* ppData = rTable.GetData();
-        for ( sal_uInt16 j = 0; j < nCount; j++, ppData++ )
+        sal_uInt16 nCount = rTable.size();
+        for ( sal_uInt16 j = 0; j < nCount; j++ )
         {
-            if ( (*ppData)->GetLanguage() == eLang )
-                return **ppData;
+            if ( rTable[j].GetLanguage() == eLang )
+                return rTable[j];
         }
-        return *(rTable[0]);
+        return rTable[0];
     }
 }
 
@@ -3098,13 +3096,12 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(
 {
     eLang = MsLangId::getRealLanguage( eLang );
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
-    sal_uInt16 nCount = rTable.Count();
-    const NfCurrencyEntryPtr* ppData = rTable.GetData();
-    for ( sal_uInt16 j = 0; j < nCount; j++, ppData++ )
+    sal_uInt16 nCount = rTable.size();
+    for ( sal_uInt16 j = 0; j < nCount; j++ )
     {
-        if ( (*ppData)->GetLanguage() == eLang &&
-                (*ppData)->GetBankSymbol() == rAbbrev )
-            return *ppData;
+        if ( rTable[j].GetLanguage() == eLang &&
+                rTable[j].GetBankSymbol() == rAbbrev )
+            return &rTable[j];
     }
     return NULL;
 }
@@ -3117,13 +3114,12 @@ const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry(
     if (!bCurrencyTableInitialized)
         GetTheCurrencyTable();      // just for initialization
     const NfCurrencyTable& rTable = theLegacyOnlyCurrencyTable::get();
-    sal_uInt16 nCount = rTable.Count();
-    const NfCurrencyEntryPtr* ppData = rTable.GetData();
-    for ( sal_uInt16 j = 0; j < nCount; j++, ppData++ )
+    sal_uInt16 nCount = rTable.size();
+    for ( sal_uInt16 j = 0; j < nCount; j++ )
     {
-        if ( (*ppData)->GetSymbol() == rSymbol &&
-                (*ppData)->GetBankSymbol() == rAbbrev )
-            return *ppData;
+        if ( rTable[j].GetSymbol() == rSymbol &&
+                rTable[j].GetBankSymbol() == rAbbrev )
+            return &rTable[j];
     }
     return NULL;
 }
@@ -3148,13 +3144,12 @@ void SvNumberFormatter::SetDefaultSystemCurrency( const String& rAbbrev, Languag
     if ( eLang == LANGUAGE_SYSTEM )
         eLang = SvtSysLocale().GetLanguage();
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
-    sal_uInt16 nCount = rTable.Count();
-    const NfCurrencyEntryPtr* ppData = rTable.GetData();
+    sal_uInt16 nCount = rTable.size();
     if ( rAbbrev.Len() )
     {
-        for ( sal_uInt16 j = 0; j < nCount; j++, ppData++ )
+        for ( sal_uInt16 j = 0; j < nCount; j++ )
         {
-            if ( (*ppData)->GetLanguage() == eLang && (*ppData)->GetBankSymbol() == rAbbrev )
+            if ( rTable[j].GetLanguage() == eLang && rTable[j].GetBankSymbol() == rAbbrev )
             {
                 nSystemCurrencyPosition = j;
                 return ;
@@ -3163,9 +3158,9 @@ void SvNumberFormatter::SetDefaultSystemCurrency( const String& rAbbrev, Languag
     }
     else
     {
-        for ( sal_uInt16 j = 0; j < nCount; j++, ppData++ )
+        for ( sal_uInt16 j = 0; j < nCount; j++ )
         {
-            if ( (*ppData)->GetLanguage() == eLang )
+            if ( rTable[j].GetLanguage() == eLang )
             {
                 nSystemCurrencyPosition = j;
                 return ;
@@ -3382,23 +3377,22 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
         eExtLang = LANGUAGE_DONTKNOW;
     const NfCurrencyEntry* pFoundEntry = NULL;
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
-    sal_uInt16 nCount = rTable.Count();
+    sal_uInt16 nCount = rTable.size();
     bool bCont = true;
 
     // first try with given extension language/country
     if ( nExtLen )
     {
-        const NfCurrencyEntryPtr* ppData = rTable.GetData();
-        for ( sal_uInt16 j = 0; j < nCount && bCont; j++, ppData++ )
+        for ( sal_uInt16 j = 0; j < nCount && bCont; j++ )
         {
-            LanguageType eLang = (*ppData)->GetLanguage();
+            LanguageType eLang = rTable[j].GetLanguage();
             if ( eLang == eExtLang ||
                     ((eExtLang == LANGUAGE_DONTKNOW) &&
                     (eLang == LANGUAGE_SYSTEM))
                 )
             {
                 bCont = ImpLookupCurrencyEntryLoopBody( pFoundEntry, bFoundBank,
-                    *ppData, j, rSymbol );
+                    &rTable[j], j, rSymbol );
             }
         }
     }
@@ -3410,17 +3404,16 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
     if ( !bOnlyStringLanguage )
     {
         // now try the language/country of the number format
-        const NfCurrencyEntryPtr* ppData = rTable.GetData();
-        for ( sal_uInt16 j = 0; j < nCount && bCont; j++, ppData++ )
+        for ( sal_uInt16 j = 0; j < nCount && bCont; j++ )
         {
-            LanguageType eLang = (*ppData)->GetLanguage();
+            LanguageType eLang = rTable[j].GetLanguage();
             if ( eLang == eFormatLanguage ||
                     ((eFormatLanguage == LANGUAGE_DONTKNOW) &&
                     (eLang == LANGUAGE_SYSTEM))
                 )
             {
                 bCont = ImpLookupCurrencyEntryLoopBody( pFoundEntry, bFoundBank,
-                    *ppData, j, rSymbol );
+                    &rTable[j], j, rSymbol );
             }
         }
 
@@ -3432,11 +3425,10 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
     // then try without language/country if no extension specified
     if ( !nExtLen )
     {
-        const NfCurrencyEntryPtr* ppData = rTable.GetData();
-        for ( sal_uInt16 j = 0; j < nCount && bCont; j++, ppData++ )
+        for ( sal_uInt16 j = 0; j < nCount && bCont; j++ )
         {
             bCont = ImpLookupCurrencyEntryLoopBody( pFoundEntry, bFoundBank,
-                *ppData, j, rSymbol );
+                &rTable[j], j, rSymbol );
         }
     }
 
@@ -3553,11 +3545,11 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         aConfiguredCurrencyAbbrev, eConfiguredCurrencyLanguage );
     sal_uInt16 nSecondarySystemCurrencyPosition = 0;
     sal_uInt16 nMatchingSystemCurrencyPosition = 0;
-    NfCurrencyEntryPtr pEntry;
+    NfCurrencyEntry* pEntry;
 
     // first entry is SYSTEM
     pEntry = new NfCurrencyEntry( *pLocaleData, LANGUAGE_SYSTEM );
-    theCurrencyTable::get().Insert( pEntry, 0 );
+    theCurrencyTable::get().insert( theCurrencyTable::get().begin(), pEntry );
     sal_uInt16 nCurrencyPos = 1;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
@@ -3594,7 +3586,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         if (LocaleDataWrapper::areChecksEnabled())
             lcl_CheckCurrencySymbolPosition( *pEntry );
 
-        rCurrencyTable.Insert( pEntry, nCurrencyPos++ );
+        rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
         if ( !nSystemCurrencyPosition && (aConfiguredCurrencyAbbrev.Len() ?
                 pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev &&
                 pEntry->GetLanguage() == eConfiguredCurrencyLanguage : false) )
@@ -3612,19 +3604,18 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                 if (pCurrencies[nCurrency].LegacyOnly)
                 {
                     pEntry = new NfCurrencyEntry( pCurrencies[nCurrency], *pLocaleData, eLang );
-                    rLegacyOnlyCurrencyTable.Insert( pEntry, nLegacyOnlyCurrencyPos++ );
+                    rLegacyOnlyCurrencyTable.insert( rLegacyOnlyCurrencyTable.begin() + nLegacyOnlyCurrencyPos++, pEntry );
                 }
                 else if ( nCurrency != nDefault )
                 {
                     pEntry = new NfCurrencyEntry( pCurrencies[nCurrency], *pLocaleData, eLang );
                     // no dupes
                     bool bInsert = true;
-                    NfCurrencyEntry const * const * pData = rCurrencyTable.GetData();
-                    sal_uInt16 n = rCurrencyTable.Count();
-                    pData++;        // skip first SYSTEM entry
+                    sal_uInt16 n = rCurrencyTable.size();
+                    sal_uInt16 aCurrencyIndex = 1; // skip first SYSTEM entry
                     for ( sal_uInt16 j=1; j<n; j++ )
                     {
-                        if ( *(*pData++) == *pEntry )
+                        if ( rCurrencyTable[aCurrencyIndex++] == *pEntry )
                         {
                             bInsert = false;
                             break;  // for
@@ -3634,7 +3625,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                         delete pEntry;
                     else
                     {
-                        rCurrencyTable.Insert( pEntry, nCurrencyPos++ );
+                        rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
                         if ( !nSecondarySystemCurrencyPosition &&
                                 (aConfiguredCurrencyAbbrev.Len() ?
                                 pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :

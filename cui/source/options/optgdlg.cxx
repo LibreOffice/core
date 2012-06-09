@@ -1356,11 +1356,11 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aCurrencyLB.InsertEntry( aDefaultCurr );
     // all currencies
     String aTwoSpace( RTL_CONSTASCII_USTRINGPARAM( "  " ) );
-    sal_uInt16 nCurrCount = rCurrTab.Count();
+    sal_uInt16 nCurrCount = rCurrTab.size();
     // first entry is SYSTEM, skip it
     for ( sal_uInt16 j=1; j < nCurrCount; ++j )
     {
-        const NfCurrencyEntry* pCurr = rCurrTab[j];
+        const NfCurrencyEntry* pCurr = &rCurrTab[j];
         String aStr_( pCurr->GetBankSymbol() );
         aStr_ += aTwoSpace;
         aStr_ += pCurr->GetSymbol();

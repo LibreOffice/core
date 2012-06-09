@@ -31,7 +31,6 @@
 #include "svl/svldllapi.h"
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
-#include <svl/svarray.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/NumberFormatCode.hpp>
@@ -42,6 +41,7 @@
 
 #include <map>
 #include <set>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class Date;
 class SvStream;
@@ -316,8 +316,7 @@ public:
     static  sal_Char    GetEuroSymbol( rtl_TextEncoding eTextEncoding );
 };
 
-typedef NfCurrencyEntry* NfCurrencyEntryPtr;
-SV_DECL_PTRARR_DEL( NfCurrencyTable, NfCurrencyEntryPtr, 128 )
+typedef boost::ptr_vector<NfCurrencyEntry> NfCurrencyTable;
 
 typedef String* WSStringPtr;
 class SVL_DLLPUBLIC NfWSStringsDtor : public std::vector<WSStringPtr>
