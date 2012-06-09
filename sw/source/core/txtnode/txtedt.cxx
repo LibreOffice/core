@@ -1892,7 +1892,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                 nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(aScanner.GetWord());
             }
 
-            nTmpChars = pBreakIt->getGraphemeCount(aNumString);
+            nTmpChars += pBreakIt->getGraphemeCount(aNumString);
         }
         else if ( HasBullet() )
         {
