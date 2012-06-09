@@ -43,6 +43,7 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/borderline.hxx>
 #include <dbdata.hxx>
+#include "validat.hxx"
 
 #define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
@@ -116,6 +117,7 @@ public:
     void testBrokenQuotesCSV();
     void testMergedCellsODS();
     void testRepeatedColumnsODS();
+    void testDataValidityODS();
 
     //change this test file only in excel and not in calc
     void testSharedFormulaXLSX();
@@ -145,6 +147,7 @@ public:
     CPPUNIT_TEST(testBugFixesXLSX);
     CPPUNIT_TEST(testMergedCellsODS);
     CPPUNIT_TEST(testRepeatedColumnsODS);
+    CPPUNIT_TEST(testDataValidityODS);
 #if 0
     CPPUNIT_TEST(testBrokenQuotesCSV);
 #endif
@@ -745,6 +748,141 @@ void ScFiltersTest::testRepeatedColumnsODS()
     //numbers
     rtl::OUString aCSVFileName2;
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns2.")), aCSVFileName2);
+    testFile(aCSVFileName2, pDoc, 1);
+
+    xDocSh->DoClose();
+}
+
+namespace {
+
+//for cleaner passing of parameters
+struct ValDataTestParams
+{
+    ScValidationMode eValMode;
+    ScConditionMode eCondOp;
+    String aStrVal1, aStrVal2;
+    ScDocument* pDocument;
+    ScAddress aPosition;
+    String aErrorTitle, aErrorMessage;
+    ScValidErrorStyle eErrorStyle;
+
+    ValDataTestParams( ScValidationMode eMode, ScConditionMode eOp,
+                       String aExpr1, String aExpr2, ScDocument* pDoc,
+                       ScAddress aPos, String aETitle, String aEMsg,
+                       ScValidErrorStyle eEStyle ):
+                            eValMode(eMode), eCondOp(eOp), aStrVal1(aExpr1),
+                            aStrVal2(aExpr2), pDocument(pDoc), aPosition(aPos),
+                            aErrorTitle(aETitle), aErrorMessage(aEMsg),
+                            eErrorStyle(eEStyle) { };
+};
+
+void checkValiditationEntries( ValDataTestParams& rVDTParams )
+{
+    ScDocument* pDoc = rVDTParams.pDocument;
+
+    //create expected data validation entry
+    ScValidationData aValData(
+        rVDTParams.eValMode, rVDTParams.eCondOp, rVDTParams.aStrVal1,
+        rVDTParams.aStrVal2, pDoc, rVDTParams.aPosition, EMPTY_STRING,
+        EMPTY_STRING, pDoc->GetStorageGrammar(), pDoc->GetStorageGrammar()
+    );
+    aValData.SetIgnoreBlank( true );
+    aValData.SetListType( 1 );
+    aValData.ResetInput();
+    aValData.SetError( rVDTParams.aErrorTitle, rVDTParams.aErrorMessage, rVDTParams.eErrorStyle );
+    aValData.SetSrcString( EMPTY_STRING );
+
+    SCCOL nCol( rVDTParams.aPosition.Col() );
+    SCROW nRow( rVDTParams.aPosition.Row() );
+    SCTAB nTab( rVDTParams.aPosition.Tab() );
+    //get actual data validation entry from document
+    const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>( pDoc->GetAttr(nCol, nRow, nTab, ATTR_VALIDDATA) );
+    const ScValidationData* pValDataTest = pDoc->GetValidationEntry( pItem->GetValue() );
+
+    rtl::OString sCol( rtl::OString::valueOf(static_cast<sal_Int32>(nCol)) );
+    rtl::OString sRow( rtl::OString::valueOf(static_cast<sal_Int32>(nRow)) );
+    rtl::OString sTab( rtl::OString::valueOf(static_cast<sal_Int32>(nTab)) );
+    rtl::OString msg( "Data Validation Entry with base-cell-address(Col,Row,Tab): (" +
+                       sCol + "," + sRow + "," + sTab + ") was not imported correctly." );
+    //check if expected and actual data validation entries are equal
+    CPPUNIT_ASSERT_MESSAGE( msg.pData->buffer, pValDataTest && aValData.EqualEntries(*pValDataTest) );
+}
+
+void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, const ScDocument* pDoc )
+{
+    SCCOL nBCol( rValBaseAddr.Col() );
+    SCTAB nBRow( rValBaseAddr.Row() );
+    SCTAB nTab( rValBaseAddr.Tab() );
+    //get from the document the data validation entry we are checking against
+    const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(nBCol, nBRow, nTab, ATTR_VALIDDATA) );
+    const ScValidationData* pValData = pDoc->GetValidationEntry( pItem->GetValue() );
+
+    //check that each cell in the expected range is associated with the data validation entry
+    for(SCCOL i = rRange.aStart.Col(); i <= rRange.aEnd.Col(); ++i)
+    {
+        for(SCROW j = rRange.aStart.Row(); j <= rRange.aEnd.Row(); ++j)
+        {
+            const SfxUInt32Item* pItemTest = static_cast<const SfxUInt32Item*>( pDoc->GetAttr(i, j, nTab, ATTR_VALIDDATA) );
+            const ScValidationData* pValDataTest = pDoc->GetValidationEntry( pItemTest->GetValue() );
+
+            rtl::OString sCol( rtl::OString::valueOf(static_cast<sal_Int32>(i)) );
+            rtl::OString sRow( rtl::OString::valueOf(static_cast<sal_Int32>(j)) );
+            rtl::OString sTab( rtl::OString::valueOf(static_cast<sal_Int32>(nTab)) );
+            rtl::OString sBCol( rtl::OString::valueOf(static_cast<sal_Int32>(nBCol)) );
+            rtl::OString sBRow( rtl::OString::valueOf(static_cast<sal_Int32>(nBRow)) );
+            rtl::OString msg( "Cell at (" + sCol + "," + sRow + "," + sTab + ") does not reference " +
+                              "Data Validation Entry with base-cell-address: (" +
+                              sBCol + "," + sBRow + "," + sTab + ")." );
+            CPPUNIT_ASSERT_MESSAGE( msg.pData->buffer, pValDataTest && pValData->GetKey() == pValDataTest->GetKey() );
+        }
+    }
+}
+
+}
+
+void ScFiltersTest::testDataValidityODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("dataValidity."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, 0);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    ScAddress aValBaseAddr1( 2,6,0 ); //sheet1
+    ScAddress aValBaseAddr2( 2,3,1 ); //sheet2
+
+    //sheet1's expected Data Validation Entry values
+    ValDataTestParams aVDTParams1(
+        SC_VALID_DECIMAL, SC_COND_GREATER, String("3.14"), EMPTY_STRING, pDoc,
+        aValBaseAddr1, String("Too small"),
+        String("The number you are trying to enter is not greater than 3.14! Are you sure you want to enter it anyway?"),
+        SC_VALERR_WARNING
+    );
+    //sheet2's expected Data Validation Entry values
+    ValDataTestParams aVDTParams2(
+        SC_VALID_WHOLE, SC_COND_BETWEEN, String("1"), String("10"), pDoc,
+        ScAddress(2,3,1), String("Error sheet 2"),
+        String("Must be a whole number between 1 and 10."),
+        SC_VALERR_STOP
+    );
+    //check each sheet's Data Validation Entries
+    checkValiditationEntries( aVDTParams1 );
+    checkValiditationEntries( aVDTParams2 );
+
+    //expected ranges to be associated with data validity
+    ScRange aRange1( 2,2,0, 2,6,0 ); //sheet1
+    ScRange aRange2( 2,3,1, 6,7,1 ); //sheet2
+
+    //check each sheet's cells for data validity
+    checkCellValidity( aValBaseAddr1, aRange1, pDoc );
+    checkCellValidity( aValBaseAddr2, aRange2, pDoc );
+
+    //check each sheet's content
+    rtl::OUString aCSVFileName1;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dataValidity1.")), aCSVFileName1);
+    testFile(aCSVFileName1, pDoc, 0);
+
+    rtl::OUString aCSVFileName2;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dataValidity2.")), aCSVFileName2);
     testFile(aCSVFileName2, pDoc, 1);
 
     xDocSh->DoClose();
