@@ -606,6 +606,22 @@ namespace {
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "false");
 	}
 
+    void XShapeDumper::dumpTextAutoGrowHeightAsAttribute(sal_Bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter)
+	{
+		if(bTextAutoGrowHeight)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "false");
+	}
+
+    void XShapeDumper::dumpTextAutoGrowWidthAsAttribute(sal_Bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter)
+	{
+		if(bTextAutoGrowWidth)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "false");
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -665,6 +681,18 @@ namespace {
 				sal_Bool bIsNumbering;
 				if(anotherAny >>= bIsNumbering)
 					dumpIsNumberingAsAttribute(bIsNumbering, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowHeight");
+				sal_Bool bTextAutoGrowHeight;
+				if(anotherAny >>= bTextAutoGrowHeight)
+					dumpTextAutoGrowHeightAsAttribute(bTextAutoGrowHeight, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowWidth");
+				sal_Bool bTextAutoGrowWidth;
+				if(anotherAny >>= bTextAutoGrowWidth)
+					dumpTextAutoGrowWidthAsAttribute(bTextAutoGrowWidth, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
