@@ -79,10 +79,8 @@ GlueEscDirLB::GlueEscDirLB( Window* pParent, const Reference< XFrame >& rFrame )
 {
     String aStr; aStr += sal_Unicode('X');
     Size aXSize( GetTextWidth( aStr ), GetTextHeight() );
-    //SetPosPixel( Point( aSize.Width(), 0 ) );
     SetSizePixel( Size( aXSize.Width() * 12, aXSize.Height() * 10 ) );
     Fill();
-    //SelectEntryPos( 0 );
     Show();
 }
 
@@ -118,10 +116,6 @@ void GlueEscDirLB::Select()
                                     ".uno:GlueEscapeDirection",
                                     aArgs );
     }
-/*
-    SfxViewFrame::Current()->GetDispatcher()->Execute( SID_GLUE_ESCDIR, SFX_CALLMODE_ASYNCHRON |
-                                                       SFX_CALLMODE_RECORD, &aItem, (void*) NULL, 0L );
-*/
 }
 
 /*************************************************************************

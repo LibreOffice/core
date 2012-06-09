@@ -297,11 +297,6 @@ void TitledControl::SetEnabledState(bool bFlag)
     }
     else
     {
-/*
-        GetParentNode()->GetControlContainer().SetExpansionState (
-            this,
-            ControlContainer::ES_EXPAND);
-*/
         Enable();
     }
 

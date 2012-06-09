@@ -33,42 +33,6 @@
 #include <sdresid.hxx>
 #include <sfx2/tbxctrl.hxx>
 
-//------------------------------------------------------------------------
-
-/*
-class SdPopupWindowTbx : public SfxPopupWindow
-{
-private:
-    SfxToolBoxManager   aTbx;
-    SdResId             aSdResIdWin;
-    SdResId             aSdResIdTbx;
-    WindowAlign         eTbxAlign;
-    Link                aSelectLink;
-
-    DECL_LINK( TbxSelectHdl, ToolBox * );
-
-public:
-    SdPopupWindowTbx( sal_uInt16 nId, WindowAlign eAlign,
-                      SdResId aRIdWin, SdResId aRIdTbx, SfxBindings& rBindings );
-    ~SdPopupWindowTbx();
-
-    virtual SfxPopupWindow* Clone() const;
-
-    virtual void PopupModeEnd();
-
-    void         StartSelection() { aTbx.GetToolBox().StartSelection(); }
-    void         Update();
-
-private:
-
-    // Adapt the toolbox to whether CTL is active or not.  If CTL is not
-    //    active then all toolbox items that describe CTL specific shapes are
-    //    deleted from it and its size is re-calculated.
-    void AdaptToCTL (void);
-};
-*/
-//------------------------------------------------------------------------
-
 class SdTbxControl : public SfxToolBoxControl
 {
 private:

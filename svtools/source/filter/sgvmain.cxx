@@ -165,7 +165,6 @@ void DtHdOverSeek(SvStream& rInp)
     sal_uLong FPos=rInp.Tell();
     FPos+=(sal_uLong)DtHdSize;
     rInp.Seek(FPos);
-//    rInp.seekg(rInp.tellg()+(sal_uLong)DtHdSize);
 }
 
 
@@ -236,7 +235,6 @@ SvStream& operator>>(SvStream& rInp, PolyType& rPoly)
     SWAPOBJK (rPoly);
     SWAPLINE (rPoly.L);
     SWAPAREA (rPoly.F);
-    // rPoly.EckP=OSL_SWAPDWORD(rPoly.EckP);
 #endif
     return rInp;
 }
@@ -247,7 +245,6 @@ SvStream& operator>>(SvStream& rInp, SplnType& rSpln)
     SWAPOBJK (rSpln);
     SWAPLINE (rSpln.L);
     SWAPAREA (rSpln.F);
-    // rSpln.EckP=OSL_SWAPDWORD(rSpln.EckP);
 #endif
     return rInp;
 }
@@ -278,8 +275,6 @@ SvStream& operator>>(SvStream& rInp, TextType& rText)
     rText.DrehWink=OSL_SWAPWORD(rText.DrehWink);
     rText.BoxSlant=OSL_SWAPWORD(rText.BoxSlant);
     rText.BufSize =OSL_SWAPWORD(rText.BufSize );
-    //rText.Buf     =OSL_SWAPDWORD (rText.Buf     );
-    //rText.Ext     =OSL_SWAPDWORD (rText.Ext     );
     SWAPPOINT(rText.FitSize);
     rText.FitBreit=OSL_SWAPWORD(rText.FitBreit);
 #endif
@@ -378,31 +373,6 @@ void SetLine(ObjLineType& rLine, OutputDevice& rOut)
 
 void SetArea(ObjAreaType& rArea, OutputDevice& rOut)
 {
-/*
-    BrushStyle aStyle=BRUSH_SOLID;
-    switch(rArea.FMuster & 0x00FF) {
-        case  0: aStyle=BRUSH_NULL;      break;
-        case  1: aStyle=BRUSH_SOLID;     break;
-        case  2: case  4: case  6: case  8:
-        case 10: case 12: case 14: case 16:
-        case 43: case 45:                   aStyle=BRUSH_VERT;      break;
-        case  3: case  5: case  7: case  9:
-        case 11: case 13: case 15: case 17:
-        case 42: case 44:                   aStyle=BRUSH_HORZ;      break;
-        case 18: case 20: case 22: case 24:
-        case 26: case 28: case 30: case 32:
-        case 46: case 48:                   aStyle=BRUSH_UPDIAG;    break;
-        case 19: case 21: case 23: case 25:
-        case 27: case 29: case 31: case 33:
-        case 47: case 49:                   aStyle=BRUSH_DOWNDIAG;  break;
-        case 34: case 35: case 36: case 37: aStyle=BRUSH_CROSS;     break;
-        case 38: case 39: case 40: case 41: aStyle=BRUSH_DIAGCROSS; break;
-        default: aStyle=BRUSH_DIAGCROSS; break;
-    }
-    Brush aBrush(Sgv2SvFarbe(rArea.FFarbe,rArea.FBFarbe,rArea.FIntens),aStyle);
-    aBrush.SetTransparent((rArea.FMuster & 0x80) !=0L);
-    SetBrush(aBrush,rOut);
-*/
     if( 0 == ( rArea.FMuster & 0x00FF ) )
         rOut.SetFillColor();
     else
@@ -416,7 +386,6 @@ void SetArea(ObjAreaType& rArea, OutputDevice& rOut)
 *************************************************************************/
 void ObjkType::Draw(OutputDevice&)
 {
-//    ShowSDObjk(*this);
 }
 
 void Obj0Type::Draw(OutputDevice&) {}
@@ -517,13 +486,6 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
                     b=Int1+sal_Int16((sal_Int32(Int2-Int1)*sal_Int32(i)) /sal_Int32(MaxR));
                     if (b!=b0) {
                         SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
-                        //if (i0>200 || (Col1 & $80)!=0 || (Col2 & $80)!=0) {
-                        //  then begin { Fallunterscheidung fuer etwas bessere Performance }
-                        //    s2:=i0-i+2;
-                        //    SetPenSize(s2);
-                        //    s2:=s2 div 2;
-                        //    Circle(cx,cy,i0-s2,i0-s2);{}
-                        //  else
                         rOut.DrawEllipse(Rectangle(cx-i0,cy-i0,cx+i0,cy+i0));
                         i0=i; b0=b;
                     }
@@ -1025,49 +987,5 @@ sal_Bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath
     delete pSgfFonts;
     return(bRet);
 }
-
-/*
-Bitmap Dither(sal_uInt8 Intens)
-{
-    Bitmap aBmp;
-    BmpInfoHeader Info;
-
-
-const dmatrix: array[0..7,0..7] of byte =
-        ((  0, 48, 12, 60,  3, 51, 15, 63 ),
-         ( 32, 16, 44, 28, 35, 19, 47, 31 ),
-         (  8, 56,  4, 52, 11, 59,  7, 55 ),
-         ( 40, 24, 36, 20, 43, 27, 39, 23 ),
-         (  2, 50, 14, 62,  1, 49, 13, 61 ),
-         ( 34, 18, 46, 30, 33, 17, 45, 29 ),
-         ( 10, 58,  6, 54,  9, 57,  5, 53 ),
-         ( 42, 26, 38, 22, 41, 25, 37, 21 ));
-
-
-    cmatrix: array[0..7,0..7] of byte;
-    dmatrixn,dmatrixi: array[0..7] of byte;
-
-
-procedure SetColorIntens(col0,col1,bal: integer);
-var cmatrix0: array[0..63] of byte absolute cmatrix;
-    dmatrix0: array[0..63] of byte absolute dmatrix;
-    n,i: integer;
-    b,bit: byte;
-begin
-if col0=col1 then bal:=0;
-if bal<=32 then
-  begin
-  plotcolor0:=col0 and $1F; plotcolor1:=col1 and $1F;
-  plotbal:=bal;
-  end
-else
-  begin
-  plotcolor0:=col1 and $1F; plotcolor1:=col0 and $1F;
-  plotbal:=64-bal;
-  end;
-for n:=0 to 63 do
- if plotbal<=dmatrix0[n] then cmatrix0[n]:=col0 else cmatrix0[n]:=col1;
-end;
-*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

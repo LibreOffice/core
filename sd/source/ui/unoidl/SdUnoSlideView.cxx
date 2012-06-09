@@ -241,45 +241,6 @@ Sequence< OUString > SAL_CALL SdUnoSlideView::getSupportedServiceNames(  ) throw
     return aSeq;
 }
 
-
-/*
-void SdUnoSlideView::FillPropertyTable (
-    ::std::vector< ::com::sun::star::beans::Property>& )
-{
-}
-
-
-
-
-sal_Bool SAL_CALL SdUnoSlideView::convertFastPropertyValue(
-    ::com::sun::star::uno::Any & ,
-    ::com::sun::star::uno::Any & ,
-    sal_Int32 ,
-    const ::com::sun::star::uno::Any&  )
-    throw (::com::sun::star::lang::IllegalArgumentException)
-{
-    return sal_False;
-}
-
-
-
-
-void SAL_CALL SdUnoSlideView::setFastPropertyValue_NoBroadcast(
-    sal_Int32 ,
-    const ::com::sun::star::uno::Any&  )
-    throw (::com::sun::star::uno::Exception)
-{
-}
-
-
-
-
-void SAL_CALL SdUnoSlideView::getFastPropertyValue( ::com::sun::star::uno::Any&, sal_Int32  ) const
-{
-}
-
-*/
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -116,10 +116,6 @@ void SdPagesField::Modify()
     SfxToolBoxControl::Dispatch( ::uno::Reference< ::frame::XDispatchProvider >( m_xFrame->getController(), ::uno::UNO_QUERY ),
                                  ".uno:PagesPerRow",
                                  aArgs );
-/*
-    rBindings.GetDispatcher()->Execute(
-        SID_PAGES_PER_ROW, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L, 0L );
-*/
 }
 
 /*************************************************************************

@@ -64,10 +64,6 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-/*
-#include <svtools/unoiface.hxx>
-#include <tools/urlobj.hxx>
-*/
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>

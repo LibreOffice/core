@@ -1355,16 +1355,6 @@ sal_uLong UCBStorageStream::Read( void * pData, sal_uLong nSize )
 
 sal_uLong UCBStorageStream::Write( const void* pData, sal_uLong nSize )
 {
-/*
-    // mba: does occur in writer !
-    if ( pImp->m_bCommited )
-    {
-        OSL_FAIL("Writing while commit is in progress!" );
-        return 0;
-    }
-*/
-    // pImp->m_bModified = sal_True;
-    //return pImp->m_pStream->Write( pData, nSize );
     return pImp->PutData( pData, nSize );
 }
 
@@ -1389,15 +1379,6 @@ void UCBStorageStream::Flush()
 
 sal_Bool UCBStorageStream::SetSize( sal_uLong nNewSize )
 {
-/*
-    if ( pImp->m_bCommited )
-    {
-        OSL_FAIL("Changing stream size while commit is in progress!" );
-        return sal_False;
-    }
-*/
-    // pImp->m_bModified = sal_True;
-    //return pImp->m_pStream->SetStreamSize( nNewSize );
     pImp->SetSize( nNewSize );
     return !pImp->GetError();
 }

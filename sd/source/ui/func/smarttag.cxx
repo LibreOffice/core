@@ -458,22 +458,6 @@ bool SmartHdl::isMarkable() const
     return false;
 }
 
-// ====================================================================
-
-/*
-SmartProxyHdl::SmartProxyHdl( const SmartTagReference& xTag, SdrHdl* pProxyHdl )
-: SmartHdl( xTag, pProxyHdl->GetPos(), pProxyHdl->GetKind() )
-, mpProxyHdl( pProxyHdl )
-{
-}
-
-// --------------------------------------------------------------------
-
-SmartProxyHdl::~SmartProxyHdl()
-{
-    delete mpProxyHdl;
-}
-*/
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

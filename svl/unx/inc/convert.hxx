@@ -46,14 +46,6 @@ public:
     static void     Swap( Rectangle & rRect )
                     { Swap( rRect.Top() ); Swap( rRect.Bottom() );
                       Swap( rRect.Left() ); Swap( rRect.Right() ); }
-/*
-    static USHORT   AnsiFloatSize() const { return 6; }
-    static float    AnsiToFloat( void * pAnsiFloat )
-                    { return 0; }
-    static USHORT   AnsiDoubleSize() const { return 12; }
-    static double   AnsiToDouble( void * pAnsiDouble )
-                    { return 0; }
-*/
 };
 
 #endif // _CONVERT_HXX

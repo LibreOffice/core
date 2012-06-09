@@ -363,9 +363,6 @@ void StorageItem::remove( const ::rtl::OUString& aURL, const ::rtl::OUString& aN
     Sequence< ::rtl::OUString > sendSeq(1);
 
     sendSeq[0] = createIndex( forIndex );
-    // sendSeq[0]  = ::rtl::OUString("Store/Passwordstorage['");
-    // sendSeq[0] += createIndex( forIndex );
-    // sendSeq[0] += ::rtl::OUString("']");
 
     ConfigItem::ClearNodeElements( ::rtl::OUString("Store"), sendSeq );
 }

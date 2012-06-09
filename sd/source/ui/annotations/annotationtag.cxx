@@ -248,12 +248,6 @@ void AnnotationHdl::CreateB2dIAObject()
                                 const sal_uInt32 nBlinkTime = sal::static_int_cast<sal_uInt32>(rStyleSettings.GetCursorBlinkTime());
 
                                 pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 );
-/*
-                                    (sal_uInt16)(aBitmapEx.GetSizePixel().Width() - 1) >> 1,
-                                    (sal_uInt16)(aBitmapEx.GetSizePixel().Height() - 1) >> 1,
-                                    (sal_uInt16)(aBitmapEx2.GetSizePixel().Width() - 1) >> 1,
-                                    (sal_uInt16)(aBitmapEx2.GetSizePixel().Height() - 1) >> 1);
-*/
                             }
                             else
                             {

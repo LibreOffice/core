@@ -35,15 +35,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 
-/*
-enum PrintType
-{
-    PT_DRAWING,
-    PT_NOTES,
-    PT_HANDOUT,
-    PT_OUTLINE
-};
-*/
 class SdModule;
 class SdPrintOptions : public SfxTabPage
 {

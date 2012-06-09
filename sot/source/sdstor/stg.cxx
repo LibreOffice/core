@@ -556,11 +556,6 @@ void Storage::FillInfoList( SvStorageInfoList* pList ) const
 BaseStorage* Storage::OpenUCBStorage( const String& rName, StreamMode m, sal_Bool bDirect )
 {
     OSL_FAIL("Not supported!");
-/*
-    BaseStorage* pStorage = new Storage( pIo, NULL, m );
-    SetError( ERRCODE_IO_NOTSUPPORTED );
-    return pStorage;
- */
     return OpenStorage( rName, m, bDirect );
 }
 
@@ -717,14 +712,6 @@ sal_Bool Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String&
     StgDirEntry* pElem = pIo->pTOC->Find( *pEntry, rElem );
     if( pElem )
     {
-        /*
-        this lines are misterious !!! MM
-        if( !pElem->IsContained( pDest->pEntry ) )
-        {
-            SetError( SVSTREAM_ACCESS_DENIED );
-            return sal_False;
-        }
-        */
         if( pElem->aEntry.GetType() == STG_STORAGE )
         {
             // copy the entire storage
@@ -789,13 +776,6 @@ sal_Bool Storage::CopyTo( BaseStorage* pDest ) const
         return sal_False;
     }
     Storage* pThis = (Storage*) this;
-    /*
-    if( !pThis->pEntry->IsContained( pDest->pEntry ) )
-    {
-        SetError( SVSTREAM_ACCESS_DENIED );
-        return sal_False;
-    }
-    */
     pDest->SetClassId( GetClassId() );
     pDest->SetDirty();
     SvStorageInfoList aList;

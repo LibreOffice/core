@@ -1300,11 +1300,6 @@ void SAL_CALL NestedRegistryImpl::close(  )
     {
         m_defaultReg->close();
     }
-/*
-    throw InvalidRegistryException(
-            OUString("the 'close' method is not specified for a nested registry"),
-            Reference< XInterface >() );
-*/
 }
 
 //*************************************************************************
