@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// System - Includes -----------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/svxenum.hxx>
@@ -79,8 +77,6 @@
 #include "scabstdlg.hxx"
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
-
-// INCLUDE ---------------------------------------------------------------
 
 #include "cell.hxx"
 #include "column.hxx"

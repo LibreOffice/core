@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-// System - Includes -----------------------------------------------------
-
-
-
-
 #include "scitems.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -41,8 +35,6 @@
 #include <svl/smplhint.hxx>
 
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
-
-// INCLUDE ---------------------------------------------------------------
 
 #include "docsh.hxx"
 #include "global.hxx"

@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
 #include "XMLTableSourceContext.hxx"
 #include "xmlimprt.hxx"
 #include "document.hxx"

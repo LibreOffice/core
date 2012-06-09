@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
 #include "XMLTableShapesContext.hxx"
 #include "XMLTableShapeImportHelper.hxx"
 #include "xmlimprt.hxx"

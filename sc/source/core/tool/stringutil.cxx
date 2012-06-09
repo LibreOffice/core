@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// System - Includes -----------------------------------------------------
-
 #include "stringutil.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/math.hxx"

@@ -37,8 +37,6 @@
 #pragma optimize ("", off)
 #endif
 
-// INCLUDE ---------------------------------------------------------------
-
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <sfx2/app.hxx>

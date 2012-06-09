@@ -54,7 +54,6 @@
 #include <basic/basmgr.hxx>
 #include <sfx2/app.hxx>
 
-// INCLUDE ---------------------------------------------------------------
 #include "drwlayer.hxx"
 #include "stlpool.hxx"
 #include "docsh.hxx"

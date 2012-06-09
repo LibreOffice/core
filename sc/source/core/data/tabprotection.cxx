@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "tabprotection.hxx"
 #include "svl/PasswordHelper.hxx"
 #include <comphelper/docpasswordhelper.hxx>

@@ -34,7 +34,6 @@
 
 using namespace ::com::sun::star;
 
-// INCLUDE ---------------------------------------------------------------
 #include <math.h>       // prevent conflict between exception and std::exception
 
 #include "scitems.hxx"

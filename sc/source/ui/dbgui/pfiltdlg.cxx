@@ -33,8 +33,6 @@
 
 #include <vcl/waitobj.hxx>
 
-// INCLUDE ---------------------------------------------------------------
-
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "uiitems.hxx"

@@ -40,8 +40,6 @@
 #pragma optimize("",off)
 #endif
 
-// INCLUDE ---------------------------------------------------------------
-
 #include <sfx2/objsh.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>

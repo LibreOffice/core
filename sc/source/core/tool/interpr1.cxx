@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>

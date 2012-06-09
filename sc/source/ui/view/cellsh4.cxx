@@ -35,8 +35,6 @@
 #pragma optimize ("", off)
 #endif
 
-// INCLUDE ---------------------------------------------------------------
-
 #include <sfx2/request.hxx>
 
 #include "cellsh.hxx"

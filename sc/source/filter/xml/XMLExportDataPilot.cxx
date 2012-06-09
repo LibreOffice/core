@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// INCLUDE ---------------------------------------------------------------
 #include "XMLExportDataPilot.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include "scitems.hxx"
 #include <editeng/langitem.hxx>

@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
-
-
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/text/XText.hpp>

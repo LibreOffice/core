@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// System - Includes -----------------------------------------------------
-
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include "swdll.hxx"

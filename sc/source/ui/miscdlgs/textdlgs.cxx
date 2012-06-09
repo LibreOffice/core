@@ -31,10 +31,6 @@
 
 //      ohne precompiled Headers uebersetzen !!!
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <svx/svxids.hrc>
 
 #include <editeng/flstitem.hxx>

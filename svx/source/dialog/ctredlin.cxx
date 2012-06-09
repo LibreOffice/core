@@ -26,15 +26,13 @@
  *
  ************************************************************************/
 
-
-// System - Includes ---------------------------------------------------------
 #include <vcl/svapp.hxx>
 #include <tools/shl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <svtools/txtcmp.hxx>
 #include <unotools/charclass.hxx>
-// INCLUDE -------------------------------------------------------------------
+
 #include <editeng/unolingu.hxx>
 #include <svx/dialmgr.hxx>
 #include "ctredlin.hrc"

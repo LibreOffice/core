@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-// INCLUDE ---------------------------------------------------------------
-
-
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 

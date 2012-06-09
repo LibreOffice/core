@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
 #include "XMLCalculationSettingsContext.hxx"
 #include "xmlimprt.hxx"
 #include "unonames.hxx"

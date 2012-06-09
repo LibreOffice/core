@@ -31,8 +31,6 @@
 #pragma optimize("",off)
 #endif
 
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
 #include <editeng/wghtitem.hxx>

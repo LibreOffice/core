@@ -153,11 +153,6 @@
 #define _SVX_SPLDLG_HXX
 #define _SVX_THESDLG_HXX
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <svx/svdmodel.hxx>
 #include <svl/smplhint.hxx>
 

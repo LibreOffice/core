@@ -28,10 +28,6 @@
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>

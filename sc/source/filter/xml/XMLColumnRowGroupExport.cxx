@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
 #include "XMLColumnRowGroupExport.hxx"
 #include "xmlexprt.hxx"
 #include <xmloff/nmspmap.hxx>

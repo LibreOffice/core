@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// System - Includes -----------------------------------------------------
-
 #include <rtl/ustring.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>

@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
 #include "XMLExportIterator.hxx"
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/sheet/XCellAddressable.hpp>

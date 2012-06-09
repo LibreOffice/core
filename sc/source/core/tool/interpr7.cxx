@@ -26,9 +26,6 @@
  * instead of those above.
  */
 
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "interpre.hxx"
 
 // TODO: Add new methods for ScInterpreter here.

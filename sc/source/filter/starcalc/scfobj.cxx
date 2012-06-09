@@ -35,8 +35,6 @@
 
 using namespace com::sun::star;
 
-// INCLUDE ---------------------------------------------------------------
-
 #include <unotools/moduleoptions.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>

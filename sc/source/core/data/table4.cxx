@@ -26,17 +26,10 @@
  *
  ************************************************************************/
 
-
-// System - Includes -----------------------------------------------------
-
-
-
 #ifdef _MSC_VER
 #pragma optimize("",off)
                                         // sonst Absturz Win beim Fuellen
 #endif
-
-// INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>

@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------
-
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>

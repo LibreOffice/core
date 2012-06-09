@@ -128,8 +128,6 @@
 #define _SVX_STDDLG_HXX
 #define _SVX_THESDLG_HXX
 
-// INCLUDE -------------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <svx/dbexch.hrc>
 #include <svx/svdetc.hxx>

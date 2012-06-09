@@ -115,8 +115,6 @@
 
 ////////////////////// Ende der SVDRAW-Modifikationen /////////////////////
 
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>

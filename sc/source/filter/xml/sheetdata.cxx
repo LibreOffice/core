@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <rtl/ustring.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlaustp.hxx>

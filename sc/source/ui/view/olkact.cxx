@@ -177,8 +177,6 @@
 #define _SVX_SPLDLG_HXX
 #define _SVX_THESDLG_HXX
 
-// INCLUDE ---------------------------------------------------------------
-
 #include <sfx2/childwin.hxx>
 #include <sfx2/objsh.hxx>
 

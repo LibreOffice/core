@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// System - Includes -----------------------------------------------------
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 

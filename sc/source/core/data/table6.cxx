@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #include <unotools/textsearch.hxx>
