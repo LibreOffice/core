@@ -231,7 +231,7 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
 
     sal_uLong nLength;
     const unsigned char* pBuffer = mrServerFont.GetTable( pTagName, &nLength );
-#ifdef VERBOSE_DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf(stderr,"IcuGetTable(\"%s\") => %p\n", pTagName, pBuffer);
     int mnHeight = mrServerFont.GetFontSelData().mnHeight;
     const char* pName = mrServerFont.GetFontFileName()->getStr();

@@ -1617,7 +1617,7 @@ Sequence<css::beans::PropertyValue> SAL_CALL
 {
     ThrowIfDisposed();
 
-#ifdef VERBOSE
+#if OSL_DEBUG_LEVEL > 1
     OSL_TRACE("PresenterAccessible::AccessibleParagraph::getCharacterAttributes at %x,%d returns empty set\r",
         this,nIndex);
     for (sal_Int32 nAttributeIndex(0),nAttributeCount(rRequestedAttributes.getLength());
