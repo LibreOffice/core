@@ -1352,6 +1352,150 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     };
 
+    Resource ANALYSIS_Imtan
+    {
+        String 1    // description Imtan
+        {
+            Text [ en-US ] = "Returns the tangent of a complex number";
+        };
+
+        String 2 // name of parameter 1         Imtan
+        {
+            Text [ en-US ] = "Complex number";
+        };
+
+        String 3 // description of parameter 1  Imtan
+        {
+            Text [ en-US ] = "A complex number";
+        };
+    };
+
+    Resource ANALYSIS_Imsec
+    {
+        String 1    // description Imsec
+        {
+            Text [ en-US ] = "Returns the secant of a complex number";
+        };
+
+        String 2 // name of parameter 1         Imsec
+        {
+            Text [ en-US ] = "Complex number";
+        };
+
+        String 3 // description of parameter 1  Imsec
+        {
+            Text [ en-US ] = "A complex number";
+        };
+    };
+
+    Resource ANALYSIS_Imcsc
+    {
+        String 1    // description Imcsc
+        {
+            Text [ en-US ] = "Returns the cosecant of a complex number";
+        };
+
+        String 2 // name of parameter 1         Imcsc
+        {
+            Text [ en-US ] = "Complex number";
+        };
+
+        String 3 // description of parameter 1  Imcsc
+        {
+            Text [ en-US ] = "A complex number";
+        };
+    };
+
+    Resource ANALYSIS_Imcot
+    {
+        String 1    // description Imcot
+        {
+            Text [ en-US ] = "Returns the cotangent of a complex number";
+        };
+
+        String 2 // name of parameter 1         Imcot
+        {
+            Text [ en-US ] = "Complex number";
+        };
+
+        String 3 // description of parameter 1  Imcot
+        {
+            Text [ en-US ] = "A complex number";
+        };
+    };
+
+    Resource ANALYSIS_Imsinh
+    {
+        String 1    // description Imsinh
+        {
+            Text [ en-US ] = "Returns the hyperbolic sine of a complex number";
+        };
+
+        String 2 // name of parameter 1         Imsinh
+        {
+            Text [ en-US ] = "Complex number";
+        };
+
+        String 3 // description of parameter 1  Imsinh
+        {
+            Text [ en-US ] = "A complex number";
+        };
+    };
+
+    Resource ANALYSIS_Imcosh
+    {
+        String 1    // description Imcosh
+        {
+            Text [ en-US ] = "Returns the hyperbolic cosine of a complex number";
+        };
+
+        String 2 // name of parameter 1         Imcosh
+        {
+            Text [ en-US ] = "Complex number";
+        };
+
+        String 3 // description of parameter 1  Imcosh
+        {
+            Text [ en-US ] = "A complex number";
+        };
+    };
+
+    Resource ANALYSIS_Imsech
+    {
+        String 1    // description Imsech
+        {
+            Text [ en-US ] = "Returns the hyperbolic secant of a complex number";
+        };
+
+        String 2 // name of parameter 1         Imsech
+        {
+            Text [ en-US ] = "Complex number";
+        };
+
+        String 3 // description of parameter 1  Imsech
+        {
+            Text [ en-US ] = "A complex number";
+        };
+    };
+
+    Resource ANALYSIS_Imcsch
+    {
+        String 1    // description Imcsch
+        {
+            Text [ en-US ] = "Returns the hyperbolic cosecant of a complex number";
+        };
+
+        String 2 // name of parameter 1         Imcsch
+        {
+            Text [ en-US ] = "Complex number";
+        };
+
+        String 3 // description of parameter 1  Imcsch
+        {
+            Text [ en-US ] = "A complex number";
+        };
+    };
+
     Resource ANALYSIS_Complex
     {
         String 1    // description Complex

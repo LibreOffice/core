@@ -465,6 +465,46 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
         Text [ en-US ] = "IMSQRT";
     };
 
+    String ANALYSIS_FUNCNAME_Imtan
+    {
+        Text [ en-US ] = "IMTAN";
+    };
+
+    String ANALYSIS_FUNCNAME_Imsec
+    {
+        Text [ en-US ] = "IMSEC";
+    };
+
+    String ANALYSIS_FUNCNAME_Imcsc
+    {
+        Text [ en-US ] = "IMCSC";
+    };
+
+    String ANALYSIS_FUNCNAME_Imcot
+    {
+        Text [ en-US ] = "IMCOT";
+    };
+
+    String ANALYSIS_FUNCNAME_Imsinh
+    {
+        Text [ en-US ] = "IMSINH";
+    };
+
+    String ANALYSIS_FUNCNAME_Imcosh
+    {
+        Text [ en-US ] = "IMCOSH";
+    };
+
+    String ANALYSIS_FUNCNAME_Imsech
+    {
+        Text [ en-US ] = "IMSECH";
+    };
+
+    String ANALYSIS_FUNCNAME_Imcsch
+    {
+        Text [ en-US ] = "IMCSCH";
+    };
+
     String ANALYSIS_FUNCNAME_Complex
     {
         Text [ en-US ] = "COMPLEX";

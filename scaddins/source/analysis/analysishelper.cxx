@@ -108,6 +108,14 @@ const FuncDataBase pFuncDatas[] =
     FUNCDATA( Imsub,            UNIQUE,     STDPAR,     2,          FDCat_Tech ),
     FUNCDATA( Imsqrt,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
     FUNCDATA( Imsum,            UNIQUE,     INTPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imtan,            UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imsec,            UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imcsc,            UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imcot,            UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imsinh,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imcosh,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imsech,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
+    FUNCDATA( Imcsch,           UNIQUE,     STDPAR,     1,          FDCat_Tech ),
     FUNCDATA( Complex,          UNIQUE,     STDPAR,     3,          FDCat_Tech ),
     FUNCDATA( Convert,          DOUBLE,     STDPAR,     3,          FDCat_Tech ),
     FUNCDATA( Amordegrc,        UNIQUE,     INTPAR,     7,          FDCat_Finance ),
@@ -1861,15 +1869,9 @@ void Complex::Sqrt( void )
 }
 
 
-inline sal_Bool SinOverflow( double f )
-{
-    return fabs( f ) >= 134217728;
-}
-
-
 void Complex::Sin( void ) THROWDEF_RTE_IAE
 {
-    if( SinOverflow( r ) )
+    if( !::rtl::math::isValidArcArg( r ) )
         THROW_IAE;
 
     if( i )
@@ -1887,7 +1889,7 @@ void Complex::Sin( void ) THROWDEF_RTE_IAE
 
 void Complex::Cos( void ) THROWDEF_RTE_IAE
 {
-    if( SinOverflow( r ) )
+	if( !::rtl::math::isValidArcArg( r ) )
         THROW_IAE;
 
     if( i )
@@ -1961,6 +1963,160 @@ void Complex::Log2( void ) THROWDEF_RTE_IAE
 }
 
 
+void Complex::Tan(void) THROWDEF_RTE_IAE
+{
+    if ( i )
+    {
+        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
+            THROW_IAE;
+        double fScale =1.0 / ( cos( 2.0 * r ) + cosh( 2.0 * i ));
+        r = sin( 2.0 * r ) * fScale;
+        i = sinh( 2.0 * i ) * fScale;
+    }
+    else
+    {
+        if( !::rtl::math::isValidArcArg( r ) )
+            THROW_IAE;
+        r = tan( r );
+    }
+}
+
+
+void Complex::Sec( void ) THROWDEF_RTE_IAE
+{
+    if( i )
+    {
+        if( !::rtl::math::isValidArcArg( 2 * r ) )
+            THROW_IAE;
+        double fScale = 1.0 / (cosh( 2.0 * i) + cos ( 2.0 * r));
+        double  r_;
+        r_ = 2.0 * cos( r ) * cosh( i ) * fScale;
+        i = 2.0 * sin( r ) * sinh( i ) * fScale;
+        r = r_;
+    }
+    else
+    {
+        if( !::rtl::math::isValidArcArg( r ) )
+            THROW_IAE;
+        r = 1.0 / cos( r );
+    }
+}
+
+
+void Complex::Csc( void ) THROWDEF_RTE_IAE
+{
+    if( i )
+    {
+        if( !::rtl::math::isValidArcArg( 2 * r ) )
+            THROW_IAE;
+        double fScale = 1.0 / (cosh( 2.0 * i) - cos ( 2.0 * r));
+        double  r_;
+        r_ = 2.0 * sin( r ) * cosh( i ) * fScale;
+        i = -2.0 * cos( r ) * sinh( i ) * fScale;
+        r = r_;
+    }
+    else
+    {
+        if( !::rtl::math::isValidArcArg( r ) )
+            THROW_IAE;
+        r = 1.0 / sin( r );
+    }
+}
+
+
+void Complex::Cot(void) THROWDEF_RTE_IAE
+{
+    if ( i )
+    {
+        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
+            THROW_IAE;
+        double fScale =1.0 / ( cosh( 2.0 * i ) - cos( 2.0 * r ) );
+        r = sin( 2.0 * r ) * fScale;
+        i = - ( sinh( 2.0 * i ) * fScale );
+    }
+    else
+    {
+        if( !::rtl::math::isValidArcArg( r ) )
+            THROW_IAE;
+        r = 1.0 / tan( r );
+    }
+}
+
+
+void Complex::Sinh( void ) THROWDEF_RTE_IAE
+{
+    if( !::rtl::math::isValidArcArg( r ) )
+        THROW_IAE;
+
+    if( i )
+    {
+        double	r_;
+        r_ = sinh( r ) * cos( i );
+		i = cosh( r ) * sin( i );
+		r = r_;
+	}
+	else
+		r = sinh( r );
+}
+
+
+void Complex::Cosh( void ) THROWDEF_RTE_IAE
+{
+    if( !::rtl::math::isValidArcArg( r ) )
+        THROW_IAE;
+
+    if( i )
+    {
+        double	r_;
+        r_ = cosh( r ) * cos( i );
+		i = sinh( r ) * sin( i );
+		r = r_;
+	}
+	else
+		r = cosh( r );
+}
+
+
+void Complex::Sech(void) THROWDEF_RTE_IAE
+{
+    if ( i )
+    {
+        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
+            THROW_IAE;
+        double fScale =1.0 / ( cosh( 2.0 * r ) + cos( 2.0 * i ));
+        double r_;
+        r_ = 2.0 * cosh( 2.0 * r ) * cos( i ) * fScale;
+        i = - (2.0 * sinh( 2.0 * r ) * sin( i ) * fScale );
+        r = r_ ;
+    }
+    else
+    {
+        if( !::rtl::math::isValidArcArg( r ) )
+            THROW_IAE;
+        r = 1.0 / cosh( r );
+    }
+}
+
+
+void Complex::Csch(void) THROWDEF_RTE_IAE
+{
+    if ( i )
+    {
+        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
+            THROW_IAE;
+        double fScale =1.0 / ( cosh( 2.0 * r ) - cos( 2.0 * i ));
+        double r_;
+        r_ = 2.0 * sinh( 2.0 * r ) * cos( i ) * fScale;
+        i = - ( 2.0 * cosh( 2.0 * r ) * sin( i ) * fScale );
+        r = r_ ;
+    }
+    else
+    {
+        if( !::rtl::math::isValidArcArg( r ) )
+            THROW_IAE;
+        r = 1.0 / sinh( r );
+    }
+}
 
 
 ComplexList::~ComplexList()
