@@ -532,6 +532,46 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndWidth"), "%" SAL_PRIdINT32, aLineEndWidth);
 	}
 
+    // -----------------------------------------------
+    // ---------- PolyPolygonDescriptor.idl ----------
+    // -----------------------------------------------
+
+    void XShapeDumper::dumpPolygonKindAsAttribute(drawing::PolygonKind ePolygonKind, xmlTextWriterPtr xmlWriter)
+	{
+		switch(ePolygonKind)
+		{
+			case drawing::PolygonKind_LINE:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "LINE");
+				break;
+			case drawing::PolygonKind_POLY:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "POLY");
+				break;
+			case drawing::PolygonKind_PLIN:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PLIN");
+				break;
+			case drawing::PolygonKind_PATHLINE:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHLINE");
+				break;
+			case drawing::PolygonKind_PATHFILL:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHFILL");
+				break;
+			case drawing::PolygonKind_FREELINE:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREELINE");
+				break;
+			case drawing::PolygonKind_FREEFILL:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREEFILL");
+				break;
+			case drawing::PolygonKind_PATHPOLY:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPOLY");
+				break;
+			case drawing::PolygonKind_PATHPLIN:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPLIN");
+				break;
+			default:
+				break;
+		}
+	}
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -824,6 +864,16 @@ namespace {
 				sal_Int32 aLineEndWidth;
 				if(anotherAny >>= aLineEndWidth)
 					dumpLineEndWidthAsAttribute(aLineEndWidth, xmlWriter);
+			}
+        }
+
+        else if(xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonDescriptor"))
+        {
+            {
+				uno::Any anotherAny = xPropSet->getPropertyValue("PolygonKind");
+				drawing::PolygonKind ePolygonKind;
+				if(anotherAny >>= ePolygonKind)
+					dumpPolygonKindAsAttribute(ePolygonKind, xmlWriter);
 			}
         }
 
