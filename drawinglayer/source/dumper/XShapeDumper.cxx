@@ -514,6 +514,11 @@ namespace {
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "false");
 	}
 
+    void XShapeDumper::dumpLineStartWidthAsAttribute(sal_Int32 aLineStartWidth, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartWidth"), "%" SAL_PRIdINT32, aLineStartWidth);
+	}
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -788,6 +793,12 @@ namespace {
 				sal_Bool bLineStartCenter;
 				if(anotherAny >>= bLineStartCenter)
 					dumpLineStartCenterAsAttribute(bLineStartCenter, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("LineStartWidth");
+				sal_Int32 aLineStartWidth;
+				if(anotherAny >>= aLineStartWidth)
+					dumpLineStartWidthAsAttribute(aLineStartWidth, xmlWriter);
 			}
 
         }
