@@ -395,7 +395,7 @@ function indexSetPageSlide( nIndex )
 
 /*****  **********************************************************************
  *
- *  The "New" BSD License:
+ *  The 'New' BSD License:
  *  **********************
  *  Copyright (c) 2005-2012, The Dojo Foundation
  *  All rights reserved.
@@ -412,7 +412,7 @@ function indexSetPageSlide( nIndex )
  *      may be used to endorse or promote products derived from this software
  *      without specific prior written permission.
  *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND
  *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  *  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  *  DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
@@ -1669,8 +1669,8 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     if( this.bHasTransition )
     {
         this.aTransitionHandler = new SlideTransition( this.getSlideAnimationsRoot(), this.slideId );
-        if( this.aTransitionHandler.isValid() )
-            log( this.aTransitionHandler.info() );
+        //if( this.aTransitionHandler.isValid() )
+        //    log( this.aTransitionHandler.info() );
     }
 
     // We initialize the SlideAnimationsHandler object
@@ -1952,6 +1952,10 @@ PlaceholderShape.prototype.init = function()
     var aTextFieldElement = getElementByClassName( this.masterPage.backgroundObjects, this.className );
     if( aTextFieldElement )
     {
+        var sVisibility = aTextFieldElement.getAttribute( 'visibility' );
+        if( sVisibility == 'hidden' )
+            return;
+
         var aPlaceholderElement = getElementByClassName( aTextFieldElement, 'PlaceholderText' );
         if( aPlaceholderElement )
         {
@@ -3641,6 +3645,25 @@ SVGMatrix.prototype.setToRotationAroundPoint = function( nX, nY, nAngle )
  *      SVGPath extensions
  **********************************************************************************************/
 
+/** SVGPathElement.prependPath
+ *  Merge the two path together by inserting the passed path before this one.
+ *
+ *  @param aPath
+ *      An object of type SVGPathElement to be prepended.
+ */
+SVGPathElement.prototype.prependPath = function( aPath )
+{
+    var sPathData = aPath.getAttribute( 'd' );
+    sPathData += ( ' ' + this.getAttribute( 'd' ) );
+    this.setAttribute( 'd', sPathData );
+};
+
+/** SVGPathElement.appendPath
+ *  Merge the two path together by inserting the passed path after this one.
+ *
+ *  @param aPath
+ *      An object of type SVGPathElement to be appended.
+ */
 SVGPathElement.prototype.appendPath = function( aPath )
 {
     var sPathData = this.getAttribute( 'd' );
@@ -6590,15 +6613,11 @@ AnimationTransitionFilterNode.prototype.createActivity = function()
 {
     var aActivityParamSet = this.fillActivityParams();
 
-    var aAnimation = createPropertyAnimation( 'opacity',
-                                              this.getAnimatedElement(),
-                                              this.aNodeContext.aSlideWidth,
-                                              this.aNodeContext.aSlideHeight );
-
-    var eDirection = this.getTransitionMode() ? FORWARD : BACKWARD;
-
-    return new SimpleActivity( aActivityParamSet, aAnimation, eDirection );
-
+    return createShapeTransition( aActivityParamSet,
+                                  this.getAnimatedElement(),
+                                  this.aNodeContext.aSlideWidth,
+                                  this.aNodeContext.aSlideHeight,
+                                  this );
 };
 
 AnimationTransitionFilterNode.prototype.parseElement = function()
@@ -6863,6 +6882,152 @@ function createPropertyAnimation( sAttrName, aAnimatedElement, nWidth, nHeight )
 
 
 // ------------------------------------------------------------------------------------------ //
+/** createShapeTransition
+ *
+ *  @param aActivityParamSet
+ *     The set of property for the activity to be created.
+ *  @param aAnimatedElement
+ *      The element to be animated.
+ *  @param nSlideWidth
+ *      The width of a slide.
+ *  @param nSlideHeight
+ *      The height of a slide.
+ *  @param aAnimatedTransitionFilterNode
+ *      An instance of the AnimationFilterNode that invoked this function.
+ *  @return {SimpleActivity}
+ *      A simple activity handling a shape transition.
+ */
+function createShapeTransition( aActivityParamSet, aAnimatedElement,
+                                nSlideWidth, nSlideHeight,
+                                aAnimatedTransitionFilterNode )
+{
+    if( !aAnimatedTransitionFilterNode )
+    {
+        log( 'createShapeTransition: the animated transition filter node is not valid.' );
+        return null;
+    }
+    var eTransitionType = aAnimatedTransitionFilterNode.getTransitionType();
+    var eTransitionSubType = aAnimatedTransitionFilterNode.getTransitionSubType();
+    var bDirectionForward = ! aAnimatedTransitionFilterNode.getReverseDirection();
+    var bModeIn = ( aAnimatedTransitionFilterNode.getTransitionMode() == FORWARD );
+
+    var aTransitionInfo = aTransitionInfoTable[eTransitionType][eTransitionSubType];
+    var eTransitionClass = aTransitionInfo['class'];
+
+    switch( eTransitionClass )
+    {
+        default:
+        case TRANSITION_INVALID:
+            log( 'createShapeTransition: transition class: TRANSITION_INVALID' );
+            return null;
+
+        case TRANSITION_CLIP_POLYPOLYGON:
+            var aParametricPolyPolygon
+                = createClipPolyPolygon( eTransitionType, eTransitionSubType );
+            var aClippingAnimation
+                = new ClippingAnimation( aParametricPolyPolygon, aTransitionInfo,
+                                         bDirectionForward, bModeIn );
+            return new SimpleActivity( aActivityParamSet, aClippingAnimation, true );
+
+        case TRANSITION_SPECIAL:
+            switch( eTransitionType )
+            {
+                // no special transition filter provided
+                // we map everything to crossfade
+                default:
+                    var aAnimation
+                        = createPropertyAnimation( 'opacity',
+                                                   aAnimatedElement,
+                                                   nSlideWidth,
+                                                   nSlideHeight );
+                    return new SimpleActivity( aActivityParamSet, aAnimation, bModeIn );
+            }
+    }
+
+}
+
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class ClippingAnimation
+ *  This class performs a shape transition where the effect is achieved by
+ *  clipping the shape to be animated with a parametric path.
+ *
+ *  @param aParametricPolyPolygon
+ *      An object handling a <path> element that depends on a parameter.
+ *  @param aTransitionInfo
+ *      The set of parameters defining the shape transition to be performed.
+ *  @param bDirectionForward
+ *      The direction the shape transition has to be performed.
+ *  @param bModeIn
+ *      If true the element to be animated becomes more visible as the transition
+ *      progress else it becomes less visible.
+ */
+function ClippingAnimation( aParametricPolyPolygon, aTransitionInfo,
+                            bDirectionForward, bModeIn )
+{
+    this.aClippingFunctor = new ClippingFunctor( aParametricPolyPolygon,
+                                                 aTransitionInfo,
+                                                 bDirectionForward, bModeIn );
+    this.bAnimationStarted = false;
+}
+
+/** start
+ *  This method notifies to the element involved in the transition that
+ *  the animation is starting and creates the <clipPath> element used for
+ *  the transition.
+ *
+ *  @param aAnimatableElement
+ *      The element to be animated.
+ */
+ClippingAnimation.prototype.start = function( aAnimatableElement )
+{
+    assert( aAnimatableElement,
+            'ClippingAnimation.start: animatable element is not valid' );
+    this.aAnimatableElement = aAnimatableElement;
+    this.aAnimatableElement.initClipPath();
+    this.aAnimatableElement.notifyAnimationStart();
+
+    if( !this.bAnimationStarted )
+        this.bAnimationStarted = true;
+
+};
+
+/** end
+ *  The transition clean up is performed here.
+ */
+ClippingAnimation.prototype.end = function()
+{
+    if( this.bAnimationStarted )
+    {
+        this.aAnimatableElement.cleanClipPath();
+        this.bAnimationStarted = false;
+    }
+};
+
+/** perform
+ *  This method set the position of the element to be animated according to
+ *  the passed  time value.
+ *
+ *  @param nValue
+ *      The time parameter.
+ */
+ClippingAnimation.prototype.perform = function( nValue )
+{
+    var nWidth = this.aAnimatableElement.aClippingBBox.width;
+    var nHeight = this.aAnimatableElement.aClippingBBox.height;
+    var aPolyPolygonElement = this.aClippingFunctor.perform( nValue, nWidth, nHeight );
+    this.aAnimatableElement.setClipPath( aPolyPolygonElement );
+};
+
+ClippingAnimation.prototype.getUnderlyingValue = function()
+{
+    return 0.0;
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
 function GenericAnimation( aGetValueFunc, aSetValueFunc, aGetModifier, aSetModifier )
 {
     assert( aGetValueFunc && aSetValueFunc,
@@ -6968,7 +7133,7 @@ SlideChangeBase.prototype.start = function()
         return;
 };
 
-/** start
+/** end
  *  The transition clean up is performed here.
  */
 SlideChangeBase.prototype.end = function()
@@ -7408,6 +7573,11 @@ function ClippingFunctor( aParametricPolyPolygon, aTransitionInfo,
     }
 }
 
+// This path is used when the direction is the reverse one and
+// the reverse method type is the subtraction type.
+ClippingFunctor.aBoundingPath = document.createElementNS( NSS['svg'], 'path' );
+ClippingFunctor.aBoundingPath.setAttribute( 'd', 'M -1 -1 L 2 -1 L 2 2 L -1 2 L -1 -1' );
+
 /** perform
  *
  *  @param nT
@@ -7429,7 +7599,8 @@ ClippingFunctor.prototype.perform = function( nT, nWidth, nHeight )
 
     if( this.bSubtractPolygon )
     {
-
+        aClipPoly.changeOrientation();
+        aClipPoly.prependPath( ClippingFunctor.aBoundingPath );
     }
 
     var aMatrix;
@@ -7635,7 +7806,11 @@ FourBoxWipePath.prototype.perform = function( nT )
     aSquare.changeOrientation();
     aPolyPath.appendPath( aSquare );
 
+    // Remind: operations are applied in inverse order
     aMatrix = SVGIdentityMatrix.translate( 0.5, 0.5 );
+    // We enlarge a bit the clip path so we avoid that in reverse direction
+    // some thin line of the border stroke is visible.
+    aMatrix = aMatrix.scale( 1.1 );
     aPolyPath.matrixTransform( aMatrix );
 
     return aPolyPath;
@@ -7656,32 +7831,16 @@ function EllipseWipePath( eSubtype )
 {
     this.eSubtype = eSubtype;
 
-    var sPathData;
-
-    switch( eSubtype )
-    {
-        case DEFAULT_TRANS_SUBTYPE:
-        case CIRCLE_TRANS_SUBTYPE:
-            // precomputed circle( 0.5, 0.5, SQRT2 / 2 )
-            sPathData = 'M 0.5 -0.207107 ' +
-                        'C 0.687536 -0.207107 0.867392 -0.132608 1 0 ' +
-                        'C 1.13261 0.132608 1.20711 0.312464 1.20711 0.5 ' +
-                        'C 1.20711 0.687536 1.13261 0.867392 1 1 ' +
-                        'C 0.867392 1.13261 0.687536 1.20711 0.5 1.20711 ' +
-                        'C 0.312464 1.20711 0.132608 1.13261 0 1 ' +
-                        'C -0.132608 0.867392 -0.207107 0.687536 -0.207107 0.5 ' +
-                        'C -0.207107 0.312464 -0.132608 0.132608 0 0 ' +
-                        'C 0.132608 -0.132608 0.312464 -0.207107 0.5 -0.207107';
-            break;
-        case VERTICAL_TRANS_SUBTYPE:
-            sPathData = '';
-            break;
-        case HORIZONTAL_TRANS_SUBTYPE:
-            sPathData = '';
-            break;
-        default:
-            log( 'EllipseWipePath: unknown subtype: ' + eSubtype );
-    }
+    // precomputed circle( 0.5, 0.5, SQRT2 / 2 )
+    var sPathData = 'M 0.5 -0.207107 ' +
+                    'C 0.687536 -0.207107 0.867392 -0.132608 1 0 ' +
+                    'C 1.13261 0.132608 1.20711 0.312464 1.20711 0.5 ' +
+                    'C 1.20711 0.687536 1.13261 0.867392 1 1 ' +
+                    'C 0.867392 1.13261 0.687536 1.20711 0.5 1.20711 ' +
+                    'C 0.312464 1.20711 0.132608 1.13261 0 1 ' +
+                    'C -0.132608 0.867392 -0.207107 0.687536 -0.207107 0.5 ' +
+                    'C -0.207107 0.312464 -0.132608 0.132608 0 0 ' +
+                    'C 0.132608 -0.132608 0.312464 -0.207107 0.5 -0.207107';
 
     this.aBasePath = document.createElementNS( NSS['svg'], 'path' );
     this.aBasePath.setAttribute( 'd', sPathData );
@@ -7867,7 +8026,7 @@ AnimatedSlide.prototype.initClipPath = function()
 
     var sId = 'clip-path-' + this.sSlideId;
     this.aClipPathElement.setAttribute( 'id', sId );
-    //this.aClipPathElement.setAttribute( 'clipPathUnits', 'userSpaceOnUse' );
+    this.aClipPathElement.setAttribute( 'clipPathUnits', 'userSpaceOnUse' );
 
     // We create and append a placeholder content.
     this.aClipPathContent = document.createElementNS( NSS['svg'], 'path' );
@@ -8021,6 +8180,7 @@ function AnimatedElement( aElement )
 
     this.aActiveElement = aElement;
     this.initElement();
+    this.sElementId = this.aActiveElement.getAttribute( 'id' );
 
     this.aBaseBBox = this.aActiveElement.getBBox();
     this.nBaseCenterX = this.aBaseBBox.x + this.aBaseBBox.width / 2;
@@ -8029,6 +8189,9 @@ function AnimatedElement( aElement )
     this.nCenterY = this.nBaseCenterY;
     this.nScaleFactorX = 1.0;
     this.nScaleFactorY = 1.0;
+
+    this.aClipPathElement = null;
+    this.aClipPathContent = null;
 
     this.aPreviousElement = null;
     this.aElementArray = new Array();
@@ -8048,6 +8211,58 @@ AnimatedElement.prototype.initElement = function()
 {
     // add a transform attribute of type matrix
     this.aActiveElement.setAttribute( 'transform', makeMatrixString( 1, 0, 0, 1, 0, 0 ) );
+};
+
+/** initClipPath
+ *  Create a new clip path element and append it to the clip path def group.
+ *  Moreover the created <clipPath> element is referenced by the handled
+ *  animated element.
+ *
+ */
+AnimatedElement.prototype.initClipPath = function()
+{
+    // We create the clip path element.
+    this.aClipPathElement = document.createElementNS( NSS['svg'], 'clipPath' );
+
+    var sId = 'clip-path-' + this.sElementId;
+    this.aClipPathElement.setAttribute( 'id', sId );
+    this.aClipPathElement.setAttribute( 'clipPathUnits', 'userSpaceOnUse' );
+
+    // We create and append a placeholder content.
+    this.aClipPathContent = document.createElementNS( NSS['svg'], 'path' );
+    this.aClippingBBox = this.getBBoxWithStroke();
+    var nWidth = this.aClippingBBox.width;
+    var nHeight = this.aClippingBBox.height;
+    var sPathData = 'M ' + this.aClippingBBox.x + ' ' + this.aClippingBBox.y +
+                    ' h ' + nWidth + ' v ' + nHeight + ' h -' + nWidth + ' z';
+    this.aClipPathContent.setAttribute( 'd', sPathData );
+    this.aClipPathElement.appendChild( this.aClipPathContent );
+
+    // We insert it into the svg document.
+    var aClipPathGroup = theMetaDoc.aClipPathGroup;
+    aClipPathGroup.appendChild( this.aClipPathElement );
+
+    // Finally we set the reference to the created clip path.
+    var sRef = 'url(#' + sId + ')';
+    this.aActiveElement.setAttribute( 'clip-path', sRef );
+};
+
+/** cleanClipPath
+ *  Removes the related <clipPath> element from the <defs> group,
+ *  and remove the 'clip-path' attribute from the animated element.
+ *
+ */
+AnimatedElement.prototype.cleanClipPath = function()
+{
+    this.aActiveElement.removeAttribute( 'clip-path' );
+
+    if( this.aClipPathElement )
+    {
+        var aClipPathGroup = theMetaDoc.aClipPathGroup;
+        aClipPathGroup.removeChild( this.aClipPathElement );
+        this.aClipPathElement = null;
+        this.aClipPathContent = null;
+    }
 };
 
 AnimatedElement.prototype.getId = function()
@@ -8172,6 +8387,76 @@ AnimatedElement.prototype.getBBox = function()
 {
     return this.aActiveElement.parentNode.getBBox();
 };
+
+AnimatedElement.prototype.getBBoxWithStroke = function()
+{
+    var aBBox = this.aActiveElement.parentNode.getBBox();
+
+    var aChildrenSet = this.aActiveElement.childNodes;
+
+    var sStroke, sStrokeWidth;
+    var nStrokeWidth = 0;
+    var i;
+    for( i = 0; i < aChildrenSet.length; ++i )
+    {
+        if( ! aChildrenSet[i].getAttribute  )
+            continue;
+
+        sStroke = aChildrenSet[i].getAttribute( 'stroke' );
+        if( sStroke && sStroke != 'none' )
+        {
+            sStrokeWidth = aChildrenSet[i].getAttribute( 'stroke-width' );
+            var nSW = parseFloat( sStrokeWidth );
+            if( nSW > nStrokeWidth )
+                nStrokeWidth = nSW;
+        }
+    }
+
+    if( nStrokeWidth == 0 )
+    {
+        sStrokeWidth = ROOT_NODE.getAttribute( 'stroke-width' );
+        nStrokeWidth = parseFloat( sStrokeWidth );
+    }
+    if( nStrokeWidth != 0 )
+    {
+        // It is hard to clip properly the stroke so we try to enlarge
+        // the resulting bounding box even more.
+        nStrokeWidth *= 1.1;
+        var nHalfStrokeWidth = nStrokeWidth / 2;
+        var nDoubleStrokeWidth = nStrokeWidth * 2;
+
+        // Note: IE10 don't let modify the values of a element BBox.
+        var aEBBox = document.documentElement.createSVGRect();
+        aEBBox.x = aBBox.x - nHalfStrokeWidth;
+        aEBBox.y = aBBox.y - nHalfStrokeWidth;
+        aEBBox.width = aBBox.width + nDoubleStrokeWidth;
+        aEBBox.height = aBBox.height + nDoubleStrokeWidth;
+        aBBox = aEBBox;
+    }
+    return aBBox;
+};
+
+/** setClipPath
+ *  Replace the current content of the <clipPath> element with the one
+ *  passed through the parameter.
+ *
+ *  @param aClipPathContent
+ *      A <g> element representing a <path> element used for clipping.
+ */
+AnimatedElement.prototype.setClipPath = function( aClipPathContent )
+{
+    if( this.aClipPathContent )
+    {
+        // We need to translate the clip path to the top left corner of
+        // the element bounding box.
+        var aTranslation = SVGIdentityMatrix.translate( this.aClippingBBox.x,
+                                                        this.aClippingBBox.y);
+        aClipPathContent.matrixTransform( aTranslation );
+        var sPathData = aClipPathContent.getAttribute( 'd' );
+        this.aClipPathContent.setAttribute( 'd', sPathData );
+    }
+};
+
 
 AnimatedElement.prototype.getX = function()
 {
