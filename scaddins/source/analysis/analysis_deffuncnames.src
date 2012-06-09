@@ -813,6 +813,78 @@ Resource RID_ANALYSIS_DEFFUNCTION_NAMES
         };
     };
 
+    StringArray ANALYSIS_DEFFUNCNAME_Imtan
+    {
+        ItemList =
+        {
+            < "IMTAN"; >;
+            < "IMTAN"; >;
+        };
+    };
+
+    StringArray ANALYSIS_DEFFUNCNAME_Imsec
+    {
+        ItemList =
+        {
+            < "IMSEC"; >;
+            < "IMSEC"; >;
+        };
+    };
+
+    StringArray ANALYSIS_DEFFUNCNAME_Imcsc
+    {
+        ItemList =
+        {
+            < "IMCSC"; >;
+            < "IMCSC"; >;
+        };
+    };
+
+    StringArray ANALYSIS_DEFFUNCNAME_Imcot
+    {
+        ItemList =
+        {
+            < "IMCOT"; >;
+            < "IMCOT"; >;
+        };
+    };
+
+    StringArray ANALYSIS_DEFFUNCNAME_Imsinh
+    {
+        ItemList =
+        {
+            < "IMSINH"; >;
+            < "IMSINH"; >;
+        };
+    };
+
+    StringArray ANALYSIS_DEFFUNCNAME_Imcosh
+    {
+        ItemList =
+        {
+            < "IMCOSH"; >;
+            < "IMCOSH"; >;
+        };
+    };
+
+    StringArray ANALYSIS_DEFFUNCNAME_Imsech
+    {
+        ItemList =
+        {
+            < "IMSECH"; >;
+            < "IMSECH"; >;
+        };
+    };
+
+    StringArray ANALYSIS_DEFFUNCNAME_Imcsch
+    {
+        ItemList =
+        {
+            < "IMCSCH"; >;
+            < "IMCSCH"; >;
+        };
+    };
+
     StringArray ANALYSIS_DEFFUNCNAME_Complex
     {
         ItemList =

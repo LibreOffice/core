@@ -462,7 +462,7 @@ class Complex
     sal_Unicode             c;
 
 public:
-    inline                  Complex( double fReal, double fImag = 0.0, sal_Char cC = '\0' );
+    inline                  Complex( double fReal, double fImag = 0.0, sal_Unicode cC = '\0' );
                             Complex( const STRING& rComplexAsString ) THROWDEF_RTE_IAE;
 
     inline static sal_Bool  IsImagUnit( sal_Unicode c );
@@ -490,6 +490,15 @@ public:
     inline void             Mult( const Complex& rMult );
     inline void             Sub( const Complex& rMult );
     inline void             Add( const Complex& rAdd );
+    void                    Tan( void ) THROWDEF_RTE_IAE;
+    void                    Sec( void ) THROWDEF_RTE_IAE;
+    void                    Csc( void ) THROWDEF_RTE_IAE;
+    void                    Cot( void ) THROWDEF_RTE_IAE;
+    void                    Sinh( void ) THROWDEF_RTE_IAE;
+    void                    Cosh( void ) THROWDEF_RTE_IAE;
+    void                    Sech( void ) THROWDEF_RTE_IAE;
+    void                    Csch( void ) THROWDEF_RTE_IAE;
+
 };
 
 
@@ -807,7 +816,7 @@ inline const FuncData* FuncDataList::Get( sal_uInt32 n ) const
 }
 
 
-inline Complex::Complex( double fReal, double fImag, sal_Char cC ) :
+inline Complex::Complex( double fReal, double fImag, sal_Unicode cC ) :
         r( fReal ), i( fImag ), c( cC )
 {
 }

@@ -95,6 +95,14 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "IMSUB", "IMSUB", false, "com.sun.star.sheet.addin.Analysis.getImsub", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSUB" },
     { "IMSUM", "IMSUM", false, "com.sun.star.sheet.addin.Analysis.getImsum", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSUM" },
     { "IMSQRT", "IMSQRT", false, "com.sun.star.sheet.addin.Analysis.getImsqrt", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSQRT" },
+    { "IMTAN", "IMTAN", false, "com.sun.star.sheet.addin.Analysis.getImtan", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMTAN" },
+    { "IMSEC", "IMSEC", false, "com.sun.star.sheet.addin.Analysis.getImsec", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSEC" },
+    { "IMCSC", "IMCSC", false, "com.sun.star.sheet.addin.Analysis.getImcsc", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMCSC" },
+    { "IMCOT", "IMCOT", false, "com.sun.star.sheet.addin.Analysis.getImcot", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMCOT" },
+    { "IMSINH", "IMSINH", false, "com.sun.star.sheet.addin.Analysis.getImsinh", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSINH" },
+    { "IMCOSH", "IMCOSH", false, "com.sun.star.sheet.addin.Analysis.getImcosh", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMCOSH" },
+    { "IMSECH", "IMSECH", false, "com.sun.star.sheet.addin.Analysis.getImsech", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSECH" },
+    { "IMCSCH", "IMCSCH", false, "com.sun.star.sheet.addin.Analysis.getImcsch", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMCSCH" },
     { "COMPLEX", "COMPLEX", false, "com.sun.star.sheet.addin.Analysis.getComplex", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOMPLEX" },
     { "CONVERT", "CONVERT_ADD", false, "com.sun.star.sheet.addin.Analysis.getConvert", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCONVERT" },
     { "AMORDEGRC", "AMORDEGRC", false, "com.sun.star.sheet.addin.Analysis.getAmordegrc", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORDEGRC" },
@@ -134,6 +142,7 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "COUPPCD", "COUPPCD", false, "com.sun.star.sheet.addin.Analysis.getCouppcd", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPPCD" },
     { "COUPNUM", "COUPNUM", false, "com.sun.star.sheet.addin.Analysis.getCoupnum", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNUM" },
     { "FVSCHEDULE", "FVSCHEDULE", false, "com.sun.star.sheet.addin.Analysis.getFvschedule", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFVSCHEDULE" },
+
 };
 
 const ScCompiler::AddInMap* ScCompiler::GetAddInMap()

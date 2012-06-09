@@ -1215,6 +1215,86 @@ STRING SAL_CALL AnalysisAddIn::getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE
 }
 
 
+STRING SAL_CALL AnalysisAddIn::getImtan( const STRING& aNum ) THROWDEF_RTE_IAE
+{
+    Complex     z( aNum );
+
+    z.Tan();
+
+    return z.GetString();
+}
+
+
+STRING SAL_CALL AnalysisAddIn::getImsec( const STRING& aNum ) THROWDEF_RTE_IAE
+{
+    Complex     z( aNum );
+
+    z.Sec();
+
+    return z.GetString();
+}
+
+
+STRING SAL_CALL AnalysisAddIn::getImcsc( const STRING& aNum ) THROWDEF_RTE_IAE
+{
+    Complex     z( aNum );
+
+    z.Csc();
+
+    return z.GetString();
+}
+
+
+STRING SAL_CALL AnalysisAddIn::getImcot( const STRING& aNum ) THROWDEF_RTE_IAE
+{
+    Complex     z( aNum );
+
+    z.Cot();
+
+    return z.GetString();
+}
+
+
+STRING SAL_CALL AnalysisAddIn::getImsinh( const STRING& aNum ) THROWDEF_RTE_IAE
+{
+    Complex     z( aNum );
+
+    z.Sinh();
+
+    return z.GetString();
+}
+
+
+STRING SAL_CALL AnalysisAddIn::getImcosh( const STRING& aNum ) THROWDEF_RTE_IAE
+{
+    Complex     z( aNum );
+
+    z.Cosh();
+
+    return z.GetString();
+}
+
+
+STRING SAL_CALL AnalysisAddIn::getImsech( const STRING& aNum ) THROWDEF_RTE_IAE
+{
+    Complex     z( aNum );
+
+    z.Sech();
+
+    return z.GetString();
+}
+
+
+STRING SAL_CALL AnalysisAddIn::getImcsch( const STRING& aNum ) THROWDEF_RTE_IAE
+{
+    Complex     z( aNum );
+
+    z.Csch();
+
+    return z.GetString();
+}
+
+
 STRING SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const ANY& rSuff ) THROWDEF_RTE_IAE
 {
     sal_Bool    bi;

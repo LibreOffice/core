@@ -193,6 +193,14 @@ public:
     virtual STRING SAL_CALL     getImsum( constREFXPS& xOpt, const SEQSEQ( STRING )& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
 
     virtual STRING SAL_CALL     getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImtan( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImsec( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImcsc( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImcot( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImsinh( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImcosh( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImsech( const STRING& aNum ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImcsch( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getComplex( double fReal, double fImaginary, const ANY& rSuffix ) THROWDEF_RTE_IAE;
 
     virtual double SAL_CALL     getConvert( double fVal, const STRING& aFromUnit, const STRING& aToUnit ) THROWDEF_RTE_IAE;
