@@ -108,6 +108,10 @@ private:
     void dumpPolyPolygonAsElement(com::sun::star::drawing::PointSequenceSequence aPolyPolygon, xmlTextWriterPtr xmlWriter);
     void dumpGeometryAsElement(com::sun::star::drawing::PointSequenceSequence aGeometry, xmlTextWriterPtr xmlWriter);
 
+    // TextProperties.idl
+    void dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWriter);
+
+    // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
     void dumpSizeAsAttribute(const com::sun::star::awt::Size& rSize, xmlTextWriterPtr xmlWriter);
     void dumpShapeDescriptorAsAttribute( com::sun::star::uno::Reference< com::sun::star::drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter );

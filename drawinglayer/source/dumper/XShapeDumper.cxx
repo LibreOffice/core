@@ -594,6 +594,22 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
+    // ----------------------------------------
+    // ---------- TextProperties.idl ----------
+    // ----------------------------------------
+
+    void XShapeDumper::dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWriter)
+	{
+		if(bIsNumbering)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "false");
+	}
+
+    // --------------------------------
+    // ---------- XShape.idl ----------
+    // --------------------------------
+
     void XShapeDumper::dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
@@ -641,6 +657,15 @@ namespace {
             rtl::OUString aText = xText->getString();
             if(!aText.isEmpty())
                 xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
+        }
+        else if(xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
+        {
+            {
+				uno::Any anotherAny = xPropSet->getPropertyValue("IsNumbering");
+				sal_Bool bIsNumbering;
+				if(anotherAny >>= bIsNumbering)
+					dumpIsNumberingAsAttribute(bIsNumbering, xmlWriter);
+			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
         {
