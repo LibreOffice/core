@@ -812,7 +812,7 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rScCurrentPos,
     bool bDoIncrement = true;
     if( rXMLImport.GetTables().IsPartOfMatrix(rScCurrentPos.Col(), rScCurrentPos.Row()) )
     {
-        LockSolarMutex();
+        LockSolarMutex(); //is this still needed?
         ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rScCurrentPos );
         bDoIncrement = ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA );
         if ( bDoIncrement )
@@ -830,7 +830,7 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rScCurrentPos,
     }
     else
     {
-        LockSolarMutex();
+        LockSolarMutex();  //is this still needed?
         ScBaseCell* pNewCell = NULL;
         ScDocument* pDoc = rXMLImport.GetDocument();
         if (pOUTextValue && !pOUTextValue->isEmpty())
@@ -856,14 +856,14 @@ void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rScCurrentPo
 {
     if( rXMLImport.GetTables().IsPartOfMatrix(rScCurrentPos.Col(), rScCurrentPos.Row()) )
     {
-        LockSolarMutex();
+        LockSolarMutex();  //is this still needed?
         ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rScCurrentPos );
         if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
             static_cast<ScFormulaCell*>(pCell)->SetHybridDouble( fValue );
     }
     else
     {
-        LockSolarMutex();
+        LockSolarMutex();  //is this still needed?
 
         // #i62435# Initialize the value cell's script type
         // if the default style's number format is latin-only.
@@ -975,13 +975,13 @@ bool ScXMLTableRowCellContext::CellsAreRepeated() const
     return ( (nColsRepeated > 1) || (nRepeatedRows > 1) );
 }
 
-void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rScCellPos, const uno::Reference<table::XCellRange>& xCellRange )
+void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rScCellPos )
 {
     ::boost::optional< rtl::OUString > pOUText;
 
     if( nCellType == util::NumberFormat::TEXT )
     {
-        if( xLockable.is() )
+        if( xLockable.is() )  //is this still needed?
             xLockable->removeActionLock();
 
         // #i61702# The formatted text content of xBaseCell / xLockable is invalidated,
@@ -1019,7 +1019,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rScCellPos, 
 
 void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rScCellPos )
 {
-    LockSolarMutex();
+    LockSolarMutex();  //is this still needed
 
     ScDocument* pDoc = rXMLImport.GetDocument();
 
@@ -1080,42 +1080,30 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rScCell
     }
 }
 
-void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rScCellPos, const uno::Reference<table::XCellRange>& xCellRange )
+void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rScCellPos )
 {
     if( scCellExists(rScCellPos) )
     {
-        uno::Reference <table::XCell> xCell;
-        try
+        SetContentValidation( rScCellPos );
+        OSL_ENSURE(((nColsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
+        rXMLImport.GetStylesImportHelper()->AddCell(rScCellPos);
+        if (!bIsMatrix)
+            AddNonMatrixFormulaCell( rScCellPos );
+        else
         {
-            xCell.set(xCellRange->getCellByPosition(rScCellPos.Col() , rScCellPos.Row()));
-        }
-        catch (lang::IndexOutOfBoundsException&)
-        {
-            OSL_FAIL("It seems here are to many columns or rows");
-        }
-        if( xCell.is() )
-        {
-            SetContentValidation( rScCellPos );
-            OSL_ENSURE(((nColsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
-            rXMLImport.GetStylesImportHelper()->AddCell(rScCellPos);
-            if (!bIsMatrix)
-                AddNonMatrixFormulaCell( rScCellPos );
-            else
+            if (nMatrixCols > 0 && nMatrixRows > 0)
             {
-                if (nMatrixCols > 0 && nMatrixRows > 0)
-                {
-                    rXMLImport.GetTables().AddMatrixRange(
-                            rScCellPos.Col(), rScCellPos.Row(),
-                            rScCellPos.Col() + nMatrixCols - 1,
-                            rScCellPos.Row() + nMatrixRows - 1,
-                            pOUFormula->first, pOUFormula->second, eGrammar);
-                }
+                rXMLImport.GetTables().AddMatrixRange(
+                        rScCellPos.Col(), rScCellPos.Row(),
+                        rScCellPos.Col() + nMatrixCols - 1,
+                        rScCellPos.Row() + nMatrixRows - 1,
+                        pOUFormula->first, pOUFormula->second, eGrammar);
             }
-            SetAnnotation( rScCellPos );
-            SetDetectiveObj( rScCellPos );
-            SetCellRangeSource( rScCellPos );
-            rXMLImport.ProgressBarIncrement(false);
         }
+        SetAnnotation( rScCellPos );
+        SetDetectiveObj( rScCellPos );
+        SetCellRangeSource( rScCellPos );
+        rXMLImport.ProgressBarIncrement(false);
     }
     else
     {
@@ -1147,18 +1135,14 @@ void ScXMLTableRowCellContext::EndElement()
         ScAddress aScCellPos = rXMLImport.GetTables().GetRealScCellPos();
         if( aScCellPos.Col() > 0 && nRepeatedRows > 1 )
             aScCellPos.SetRow( aScCellPos.Row() - (nRepeatedRows - 1) );
+        if( bIsMerged )
+            DoMerge( aScCellPos, nMergedCols - 1, nMergedRows - 1 );
+        if( !pOUFormula )
+            AddNonFormulaCells( aScCellPos );
+        else // if ( pOUFormula )
+            AddFormulaCell( aScCellPos );
 
-        uno::Reference<table::XCellRange> xCellRange( rXMLImport.GetTables().GetCurrentXCellRange() );
-        if( xCellRange.is() )
-        {
-            if( bIsMerged )
-                DoMerge( aScCellPos, nMergedCols - 1, nMergedRows - 1 );
-            if( !pOUFormula )
-                AddNonFormulaCells( aScCellPos, xCellRange );
-            else // if ( pOUFormula )
-                AddFormulaCell( aScCellPos, xCellRange );
-        }
-        UnlockSolarMutex();
+        UnlockSolarMutex(); //is this still needed?
     }
     bIsMerged = false;
     bHasSubTable = false;
