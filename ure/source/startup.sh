@@ -42,7 +42,7 @@ if [ -x "${epath}/javaldx" ] ; then
         sd_platform=`uname -s`
         case $sd_platform in
           AIX)
-            LIBPAT=${jpath}${LIBPATH:+:${LIBPATH}}
+            LIBPATH=${jpath}${LIBPATH:+:${LIBPATH}}
             export LIBPATH
             ;;
           *)
