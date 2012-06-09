@@ -2340,7 +2340,7 @@ namespace
 {
 static void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
 {
-    bool bLastSep( false );
+    bool bLastSep( true );
     std::vector< ImplToolItem >::iterator it;
     for ( it = rItems.begin(); it != rItems.end(); ++it )
     {
