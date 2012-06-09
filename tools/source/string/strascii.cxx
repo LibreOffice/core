@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// =======================================================================
-
 #ifdef DBG_UTIL
 
 static sal_Bool ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, sal_Int32 nLen )
