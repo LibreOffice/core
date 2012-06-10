@@ -30,7 +30,7 @@
 #include <stdio.h>
 
 //
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>

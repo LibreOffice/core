@@ -29,7 +29,7 @@
 #ifndef _SV_KEYCODES_HXX
 #define _SV_KEYCODES_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #undef DELETE
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>

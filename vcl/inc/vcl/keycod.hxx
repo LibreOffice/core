@@ -30,7 +30,7 @@
 #define _SV_KEYCODE_HXX
 
 #include <tools/string.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/resid.hxx>
 #include <vcl/keycodes.hxx>

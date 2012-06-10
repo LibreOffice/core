@@ -30,7 +30,7 @@
 #define _SV_IMPBMP_HXX
 
 #include <tools/gen.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 // ---------------
 // - ImpBitmap -

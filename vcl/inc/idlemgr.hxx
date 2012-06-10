@@ -29,7 +29,7 @@
 #ifndef _SV_IDLEMGR_HXX
 #define _SV_IDLEMGR_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/timer.hxx>
 #include <vector>
 

@@ -28,7 +28,7 @@
 #ifndef _SV_GENERIC_INST_H
 #define _SV_GENERIC_INST_H
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <osl/thread.hxx>
 #include <vclpluginapi.h>
 #include <vcl/solarmutex.hxx>

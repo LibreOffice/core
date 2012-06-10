@@ -29,7 +29,7 @@
 #ifndef _SV_JOBSET_HXX
 #define _SV_JOBSET_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
 

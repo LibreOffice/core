@@ -43,7 +43,6 @@
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
 #include <tools/errcode.hxx>
-#include <vcl/sv.h>
 #include <global.hxx>
 #include <tools/color.hxx>
 #include <i18npool/lang.h>

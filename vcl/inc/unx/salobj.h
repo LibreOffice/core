@@ -29,7 +29,7 @@
 #ifndef _SV_SALOBJ_H
 #define _SV_SALOBJ_H
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/sysdata.hxx>
 
 #include <vclpluginapi.h>

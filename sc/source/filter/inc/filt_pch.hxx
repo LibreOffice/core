@@ -56,7 +56,6 @@
 #include <tools/link.hxx>
 #include <tools/time.hxx>
 #include <svl/svarray.hxx>
-#include <vcl/sv.h>
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>

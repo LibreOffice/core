@@ -29,7 +29,7 @@
 #ifndef _SV_SPINFLD_HXX
 #define _SV_SPINFLD_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/timer.hxx>

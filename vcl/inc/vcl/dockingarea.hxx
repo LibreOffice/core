@@ -29,7 +29,7 @@
 #ifndef _SV_DOCKINGAREA_HXX
 #define _SV_DOCKINGAREA_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/window.hxx>
 
 // ------------------------------------------

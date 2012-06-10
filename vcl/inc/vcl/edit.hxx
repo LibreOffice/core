@@ -29,7 +29,7 @@
 #ifndef _SV_EDIT_HXX
 #define _SV_EDIT_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/ctrl.hxx>

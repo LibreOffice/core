@@ -29,7 +29,7 @@
 #ifndef _SV_SYMBOL_HXX
 #define _SV_SYMBOL_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 // ----------------
 // - Symbol-Types -

@@ -30,7 +30,7 @@
 #ifndef _SV_X11SYS_H
 #define _SV_X11SYS_H
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <generic/gensys.h>

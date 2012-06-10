@@ -29,7 +29,7 @@
 #ifndef _SV_BRDWIN_HXX
 #define _SV_BRDWIN_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/window.hxx>
 
 class ImplBorderWindowView;

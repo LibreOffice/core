@@ -29,7 +29,7 @@
 #ifndef _SV_PRNTYPES_HXX
 #define _SV_PRNTYPES_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <i18nutil/paper.hxx>
 
 // ---------------

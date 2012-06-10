@@ -29,7 +29,7 @@
 #ifndef _SV_ACCMGR_HXX
 #define _SV_ACCMGR_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vector>
 
 class Accelerator;

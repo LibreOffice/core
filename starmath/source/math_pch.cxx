@@ -51,7 +51,6 @@
 #include <sot/sotref.hxx>
 #include <tools/globname.hxx>
 #include <sot/factory.hxx>
-#include <vcl/sv.h>
 #include <basic/sbxdef.hxx>
 #include <tools/time.hxx>
 #include <tools/gen.hxx>

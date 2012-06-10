@@ -34,7 +34,7 @@
 #include "com/sun/star/ui/dialogs/XFilePicker2.hpp"
 #include "com/sun/star/ui/dialogs/XFolderPicker.hpp"
 
-#include "vcl/sv.h"
+#include "tools/solar.h"
 #include "vcl/displayconnectiondispatch.hxx"
 #include "vcl/dllapi.h"
 

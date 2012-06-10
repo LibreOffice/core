@@ -29,7 +29,7 @@
 #ifndef _SV_BUTTON_HXX
 #define _SV_BUTTON_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
 #include <vcl/symbol.hxx>

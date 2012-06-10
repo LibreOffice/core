@@ -29,7 +29,7 @@
 #ifndef _SV_SALMENU_HXX
 #define _SV_SALMENU_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include "vcl/dllapi.h"
 #include <vcl/menu.hxx>
 #include <vcl/keycod.hxx>

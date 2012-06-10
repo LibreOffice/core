@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
 #include <vcl/svapp.hxx>

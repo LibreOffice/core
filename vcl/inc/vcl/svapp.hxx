@@ -37,7 +37,7 @@
 #include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/apptypes.hxx>
 #include <vcl/settings.hxx>

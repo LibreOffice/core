@@ -29,7 +29,7 @@
 #ifndef _SV_ACCEL_H
 #define _SV_ACCEL_H
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #ifndef _SV_KEYCOD_HXX
 #include <vcl/keycod.hxx>
 #endif

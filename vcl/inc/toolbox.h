@@ -31,7 +31,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/controllayout.hxx>

@@ -29,7 +29,7 @@
 #ifndef _SV_SETTINGS_HXX
 #define _SV_SETTINGS_HXX
 
-#include "vcl/sv.h"
+#include "tools/solar.h"
 #include "vcl/dllapi.h"
 #include "tools/color.hxx"
 #include "vcl/font.hxx"

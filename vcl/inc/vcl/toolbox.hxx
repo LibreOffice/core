@@ -29,7 +29,7 @@
 #ifndef _SV_TOOLBOX_HXX
 #define _SV_TOOLBOX_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>

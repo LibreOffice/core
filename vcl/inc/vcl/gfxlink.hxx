@@ -30,7 +30,7 @@
 #define _SV_GFXLINK_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/mapmod.hxx>
 #include <tools/stream.hxx>
 

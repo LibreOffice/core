@@ -29,7 +29,7 @@
 #ifndef _VCL_POINTR_HXX
 #define _VCL_POINTR_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/ptrstyle.hxx>
 

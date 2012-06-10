@@ -29,7 +29,7 @@
 #ifndef _VCL_APPTYPES_HXX
 #define _VCL_APPTYPES_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/rtti.hxx>
 

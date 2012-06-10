@@ -29,7 +29,7 @@
 #ifndef _SV_PRINT_H
 #define _SV_PRINT_H
 
-#include "vcl/sv.h"
+#include "tools/solar.h"
 #include "vcl/dllapi.h"
 
 #include "rtl/ustring.hxx"

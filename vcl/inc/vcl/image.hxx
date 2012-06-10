@@ -32,7 +32,7 @@
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
 #include <tools/resid.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/bitmapex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 

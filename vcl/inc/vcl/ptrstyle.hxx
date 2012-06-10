@@ -29,7 +29,7 @@
 #ifndef _VCL_PTRSTYLE_HXX
 #define _VCL_PTRSTYLE_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 // -----------------
 // - Pointer-Types -

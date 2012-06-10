@@ -31,7 +31,7 @@
 
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 class SalGraphics;
 class SalFrame;

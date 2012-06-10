@@ -31,7 +31,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>

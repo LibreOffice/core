@@ -29,7 +29,7 @@
 #ifndef _SV_OUTDATA_HXX
 #define _SV_OUTDATA_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <tools/color.hxx>
 #include <vcl/salgtype.hxx>
 

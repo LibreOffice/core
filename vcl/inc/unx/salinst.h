@@ -30,7 +30,7 @@
 #ifndef _SV_SALINST_H
 #define _SV_SALINST_H
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <osl/thread.hxx>
 #include <vclpluginapi.h>
 #include <salinst.hxx>

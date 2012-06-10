@@ -29,7 +29,7 @@
 #ifndef _SV_FIXBRD_HXX
 #define _SV_FIXBRD_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/decoview.hxx>
 #include <vcl/ctrl.hxx>

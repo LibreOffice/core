@@ -29,7 +29,7 @@
 #ifndef _SV_SYSCHILD_HXX
 #define _SV_SYSCHILD_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 

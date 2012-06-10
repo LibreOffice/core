@@ -30,7 +30,7 @@
 #define _VCL_CMDEVT_HXX
 
 #include <tools/gen.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/keycod.hxx>
 #include <vcl/font.hxx>

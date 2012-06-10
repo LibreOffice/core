@@ -29,7 +29,7 @@
 #ifndef _VCL_INPUTCTX_HXX
 #define _VCL_INPUTCTX_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 

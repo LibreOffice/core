@@ -29,7 +29,7 @@
 #ifndef _SV_ACCEL_HXX
 #define _SV_ACCEL_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <tools/resid.hxx>

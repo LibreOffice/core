@@ -29,7 +29,7 @@
 #ifndef _SV_GROUP_HXX
 #define _SV_GROUP_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 

@@ -29,7 +29,7 @@
 #ifndef _SV_SALOBJ_HXX
 #define _SV_SALOBJ_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
 #include <salwtype.hxx>

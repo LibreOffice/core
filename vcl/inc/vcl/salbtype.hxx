@@ -36,7 +36,7 @@
 #include <vcl/salgtype.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 // ----------

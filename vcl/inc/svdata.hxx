@@ -41,7 +41,7 @@
 #include "tools/debug.hxx"
 
 #include "vcl/vclevent.hxx"
-#include "vcl/sv.h"
+#include "tools/solar.h"
 #include "vcl/svapp.hxx"
 #include "vcl/dllapi.h"
 

@@ -30,7 +30,7 @@
 #define _VCL_STDTEXT_HXX
 
 #include <tools/string.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 class Window;

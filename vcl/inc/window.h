@@ -30,7 +30,7 @@
 #define _SV_WINDOW_H
 
 #include <vector>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/outdev.hxx>
 #include <vcl/timer.hxx>
 #ifndef _SV_INPUTCTX_HXX

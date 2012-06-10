@@ -29,7 +29,7 @@
 #ifndef _SV_SALTIMER_HXX
 #define _SV_SALTIMER_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <salwtype.hxx>
 

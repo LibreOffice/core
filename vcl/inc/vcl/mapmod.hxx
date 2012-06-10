@@ -31,7 +31,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/resid.hxx>
 #include <tools/mapunit.hxx>

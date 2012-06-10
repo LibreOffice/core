@@ -31,7 +31,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/button.hxx>

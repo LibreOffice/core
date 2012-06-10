@@ -29,7 +29,7 @@
 #ifndef _SV_SALPTYPE_HXX
 #define _SV_SALPTYPE_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 // --------------------
 // - SalJobSetupFlags -

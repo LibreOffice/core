@@ -29,7 +29,7 @@
 #ifndef _SV_SNDSTYLE_HXX
 #define _SV_SNDSTYLE_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 // ---------------
 // - Sound-Types -

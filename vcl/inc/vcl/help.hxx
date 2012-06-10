@@ -30,7 +30,7 @@
 #define _SV_HELP_HXX
 
 #include <tools/string.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 class Point;

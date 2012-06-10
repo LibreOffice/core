@@ -31,7 +31,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
 

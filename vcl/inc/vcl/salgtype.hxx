@@ -29,7 +29,7 @@
 #ifndef _SV_SALGTYPE_HXX
 #define _SV_SALGTYPE_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 // ------------
 // - SalColor -

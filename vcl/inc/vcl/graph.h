@@ -31,7 +31,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/string.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 // ---------------
 // - GraphicType -

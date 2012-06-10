@@ -29,7 +29,7 @@
 #ifndef _SV_SALFRAME_HXX
 #define _SV_SALFRAME_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 #ifdef __cplusplus

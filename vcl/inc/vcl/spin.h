@@ -29,7 +29,7 @@
 #ifndef _SV_SPIN_H
 #define _SV_SPIN_H
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 class Rectangle;
 class OutputDevice;

@@ -29,7 +29,7 @@
 #ifndef _VCL_GTKOBJECT_HXX
 #define _VCL_GTKOBJECT_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/sysdata.hxx>
 #include <salobj.hxx>
 #include <unx/gtk/gtkframe.hxx>

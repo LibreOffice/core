@@ -38,7 +38,6 @@
 #include <tools/rtti.hxx>
 #include <string.h>
 #include <tools/contnr.hxx>
-#include <vcl/sv.h>
 #include <tools/ref.hxx>
 #include <tools/link.hxx>
 #include <i18npool/lang.h>

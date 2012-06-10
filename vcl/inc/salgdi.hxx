@@ -29,7 +29,7 @@
 #ifndef _SV_SALGDI_HXX
 #define _SV_SALGDI_HXX
 
-#include "vcl/sv.h"
+#include "tools/solar.h"
 #include "vcl/dllapi.h"
 #include "vcl/salgtype.hxx"
 #include "osl/thread.hxx"

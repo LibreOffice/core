@@ -29,7 +29,7 @@
 #ifndef _SV_JOBSET_H
 #define _SV_JOBSET_H
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/prntypes.hxx>
 #include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>

@@ -30,7 +30,7 @@
 #define _SV_CTRL_HXX
 
 #include <tools/link.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <vcl/salnativewidgets.hxx>

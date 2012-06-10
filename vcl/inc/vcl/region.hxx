@@ -30,7 +30,7 @@
 #define _SV_REGION_HXX
 
 #include <tools/gen.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>

@@ -31,7 +31,7 @@
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <tools/gen.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 // -=-= X-Lib forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #ifndef _SVUNX_H

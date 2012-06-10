@@ -31,7 +31,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/rc.hxx>
 #include <tools/color.hxx>

@@ -29,7 +29,7 @@
 #ifndef _SV_INTROWIN_HXX
 #define _SV_INTROWIN_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/bitmapex.hxx>

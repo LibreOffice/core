@@ -29,7 +29,7 @@
 #ifndef _SV_MENU_HXX
 #define _SV_MENU_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/rc.hxx>
 #include <tools/resid.hxx>

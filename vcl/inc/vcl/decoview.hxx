@@ -29,7 +29,7 @@
 #ifndef _SV_DECOVIEW_HXX
 #define _SV_DECOVIEW_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/symbol.hxx>
 

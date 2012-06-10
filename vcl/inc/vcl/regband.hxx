@@ -29,7 +29,7 @@
 #ifndef _SV_REGBAND_HXX
 #define _SV_REGBAND_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <tools/poly.hxx>
 
 /* =======================================================================

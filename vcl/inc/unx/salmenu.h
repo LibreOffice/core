@@ -29,7 +29,7 @@
 #ifndef _SV_SALMENU_H
 #define _SV_SALMENU_H
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/salmenu.hxx>
 

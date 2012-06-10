@@ -29,7 +29,7 @@
 #ifndef _SV_BMPACC_HXX
 #define _SV_BMPACC_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>

@@ -29,7 +29,7 @@
 #ifndef _SV_DBGGUI_HXX
 #define _SV_DBGGUI_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 
 // ------------
 // - DBG_UITL -

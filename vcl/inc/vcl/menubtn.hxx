@@ -29,7 +29,7 @@
 #ifndef _SV_MENUBTN_HXX
 #define _SV_MENUBTN_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/button.hxx>
 

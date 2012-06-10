@@ -29,7 +29,7 @@
 #ifndef _SV_EVENT_HXX
 #define _SV_EVENT_HXX
 
-#include <vcl/sv.h>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
 #include <vcl/keycod.hxx>
