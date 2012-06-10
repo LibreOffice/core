@@ -355,13 +355,11 @@ protected:
     Timer maTimer;
     ValueItemList mItemList;
     SfxOrganizeMgr *mpMgr;
-    ThumbnailViewItem* mpNoneItem;
     ScrollBar* mpScrBar;
     Rectangle maNoneItemRect;
     Rectangle maItemListRect;
     long mnItemWidth;
     long mnItemHeight;
-    long mnTextOffset;
     long mnVisLines;
     long mnLines;
     long mnUserItemWidth;

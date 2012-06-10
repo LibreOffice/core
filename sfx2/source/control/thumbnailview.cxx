@@ -185,7 +185,6 @@ ThumbnailView::~ThumbnailView()
 
     delete mpMgr;
     delete mpScrBar;
-    delete mpNoneItem;
 
     ImplDeleteItems();
 }
@@ -193,11 +192,9 @@ ThumbnailView::~ThumbnailView()
 void ThumbnailView::ImplInit()
 {
     mpMgr = new SfxOrganizeMgr(NULL,NULL);
-    mpNoneItem          = NULL;
     mpScrBar            = NULL;
     mnItemWidth         = 0;
     mnItemHeight        = 0;
-    mnTextOffset        = 0;
     mnVisLines          = 0;
     mnLines             = 0;
     mnUserItemWidth     = 0;
@@ -310,78 +307,47 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
 {
     WinBits nStyle = GetStyle();
 
-    if ( pItem == mpNoneItem )
-        pItem->maText = GetText();
-
     if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
     {
-        if ( pItem == mpNoneItem )
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+        if ( IsColor() )
+            maVirDev.SetFillColor( maColor );
+        else if ( nStyle & WB_MENUSTYLEVALUESET )
+            maVirDev.SetFillColor( rStyleSettings.GetMenuColor() );
+        else if ( IsEnabled() )
+            maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
+        else
+            maVirDev.SetFillColor( rStyleSettings.GetFaceColor() );
+
+        maVirDev.DrawRect( aRect );
+
+        // Draw thumbnail
+        Size    aImageSize = pItem->maImage.GetSizePixel();
+        Size    aRectSize = aRect.GetSize();
+        Point   aPos( aRect.Left(), aRect.Top() );
+        aPos.X() += (aRectSize.Width()-aImageSize.Width())/2;
+        aPos.Y() += (aRectSize.Height()-aImageSize.Height())/2;
+
+        sal_uInt16  nImageStyle  = 0;
+        if( !IsEnabled() )
+            nImageStyle  |= IMAGE_DRAW_DISABLE;
+
+        if ( (aImageSize.Width()  > aRectSize.Width()) ||
+             (aImageSize.Height() > aRectSize.Height()) )
         {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            maVirDev.SetFont( GetFont() );
-            maVirDev.SetTextColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor() );
-            maVirDev.SetTextFillColor();
-            maVirDev.SetFillColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor() );
-            maVirDev.DrawRect( aRect );
-            Point   aTxtPos( aRect.Left()+2, aRect.Top() );
-            long    nTxtWidth = GetTextWidth( pItem->maText );
-            if ( nStyle & WB_RADIOSEL )
-            {
-                aTxtPos.X() += 4;
-                aTxtPos.Y() += 4;
-            }
-            if ( (aTxtPos.X()+nTxtWidth) > aRect.Right() )
-            {
-                maVirDev.SetClipRegion( Region( aRect ) );
-                maVirDev.DrawText( aTxtPos, pItem->maText );
-                maVirDev.SetClipRegion();
-            }
-            else
-                maVirDev.DrawText( aTxtPos, pItem->maText );
+            maVirDev.SetClipRegion( Region( aRect ) );
+            maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle);
+            maVirDev.SetClipRegion();
         }
         else
-        {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
 
-            if ( IsColor() )
-                maVirDev.SetFillColor( maColor );
-            else if ( nStyle & WB_MENUSTYLEVALUESET )
-                maVirDev.SetFillColor( rStyleSettings.GetMenuColor() );
-            else if ( IsEnabled() )
-                maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
-            else
-                maVirDev.SetFillColor( rStyleSettings.GetFaceColor() );
+        // Draw centered text below thumbnail
+        aPos.Y() += 5 + aImageSize.Height();
+        aPos.X() = aRect.Left() + (aRectSize.Width() - maVirDev.GetTextWidth(pItem->maText))/2;
 
-            maVirDev.DrawRect( aRect );
-
-            // Draw thumbnail
-            Size    aImageSize = pItem->maImage.GetSizePixel();
-            Size    aRectSize = aRect.GetSize();
-            Point   aPos( aRect.Left(), aRect.Top() );
-            aPos.X() += (aRectSize.Width()-aImageSize.Width())/2;
-            aPos.Y() += (aRectSize.Height()-aImageSize.Height())/2;
-
-            sal_uInt16  nImageStyle  = 0;
-            if( !IsEnabled() )
-                nImageStyle  |= IMAGE_DRAW_DISABLE;
-
-            if ( (aImageSize.Width()  > aRectSize.Width()) ||
-                 (aImageSize.Height() > aRectSize.Height()) )
-            {
-                maVirDev.SetClipRegion( Region( aRect ) );
-                maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle);
-                maVirDev.SetClipRegion();
-            }
-            else
-                maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
-
-            // Draw centered text below thumbnail
-            aPos.Y() += 5 + aImageSize.Height();
-            aPos.X() = aRect.Left() + (aRectSize.Width() - maVirDev.GetTextWidth(pItem->maText))/2;
-
-            maVirDev.DrawText(aPos,pItem->maText);
-
-        }
+        maVirDev.DrawText(aPos,pItem->maText);
     }
 }
 
@@ -395,8 +361,8 @@ void ThumbnailView::Format()
     Size        aWinSize = GetOutputSizePixel();
     size_t      nItemCount = mItemList.size();
     WinBits     nStyle = GetStyle();
-    long        nNoneHeight;
-    long        nNoneSpace;
+    long        nNoneHeight = 0;
+    long        nNoneSpace = 0;
     ScrollBar*  pDelScrBar = NULL;
 
     // consider the scrolling
@@ -410,17 +376,6 @@ void ThumbnailView::Format()
             pDelScrBar = mpScrBar;
             mpScrBar = NULL;
         }
-    }
-
-    mnTextOffset = 0;
-
-    nNoneHeight = 0;
-    nNoneSpace = 0;
-
-    if ( mpNoneItem )
-    {
-        delete mpNoneItem;
-        mpNoneItem = NULL;
     }
 
     // calculate ScrollBar width
@@ -668,11 +623,6 @@ void ThumbnailView::DrawSelectedItem( const sal_uInt16 nItemId, const bool bFocu
         pItem = mItemList[ nPos ];
         aRect = ImplGetItemRect( nPos );
     }
-    else if ( mpNoneItem )
-    {
-        pItem = mpNoneItem;
-        aRect = maNoneItemRect;
-    }
     else if ( bFocus && (pItem = ImplGetFirstItem()) )
     {
         aRect = ImplGetItemRect( 0 );
@@ -813,27 +763,15 @@ void ThumbnailView::ImplHideSelect( sal_uInt16 nItemId )
     Rectangle aRect;
 
     const size_t nItemPos = GetItemPos( nItemId );
-    if ( nItemPos != THUMBNAILVIEW_ITEM_NOTFOUND )
+    if ( nItemPos != THUMBNAILVIEW_ITEM_NOTFOUND && mItemList[nItemPos]->mbVisible )
     {
-        if ( !mItemList[nItemPos]->mbVisible )
-        {
-            return;
-        }
         aRect = ImplGetItemRect(nItemPos);
-    }
-    else
-    {
-        if ( !mpNoneItem )
-        {
-            return;
-        }
-        aRect = maNoneItemRect;
-    }
 
-    HideFocus();
-    const Point aPos  = aRect.TopLeft();
-    const Size  aSize = aRect.GetSize();
-    DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
+        HideFocus();
+        const Point aPos  = aRect.TopLeft();
+        const Size  aSize = aRect.GetSize();
+        DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
+    }
 }
 
 void ThumbnailView::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
@@ -927,11 +865,6 @@ size_t ThumbnailView::ImplGetItem( const Point& rPos, bool bMove ) const
         return THUMBNAILVIEW_ITEM_NOTFOUND;
     }
 
-    if ( mpNoneItem && maNoneItemRect.IsInside( rPos ) )
-    {
-        return THUMBNAILVIEW_ITEM_NONEITEM;
-    }
-
     if ( maItemListRect.IsInside( rPos ) )
     {
         const int xc = rPos.X()-maItemListRect.Left();
@@ -966,10 +899,7 @@ size_t ThumbnailView::ImplGetItem( const Point& rPos, bool bMove ) const
 
 ThumbnailViewItem* ThumbnailView::ImplGetItem( size_t nPos )
 {
-    if ( nPos == THUMBNAILVIEW_ITEM_NONEITEM )
-        return mpNoneItem;
-    else
-        return ( nPos < mItemList.size() ) ? mItemList[nPos] : NULL;
+    return ( nPos < mItemList.size() ) ? mItemList[nPos] : NULL;
 }
 
 ThumbnailViewItem* ThumbnailView::ImplGetFirstItem()
@@ -1173,15 +1103,14 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
     }
 
     --nLastItem;
-    const size_t nCurPos = mnSelItemId ? GetItemPos( mnSelItemId )
-                                       : mpNoneItem ? THUMBNAILVIEW_ITEM_NONEITEM : 0;
+    const size_t nCurPos = mnSelItemId ? GetItemPos( mnSelItemId ) : 0;
     size_t nItemPos = THUMBNAILVIEW_ITEM_NOTFOUND;
     size_t nVStep = mnCols;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_HOME:
-            nItemPos = mpNoneItem ? THUMBNAILVIEW_ITEM_NONEITEM : 0;
+            nItemPos = 0;
             break;
 
         case KEY_END:
@@ -1195,25 +1124,13 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
                 {
                     nItemPos = nCurPos-1;
                 }
-                else if (mpNoneItem)
-                {
-                    nItemPos = THUMBNAILVIEW_ITEM_NONEITEM;
-                }
             }
             break;
 
         case KEY_RIGHT:
             if (nCurPos < nLastItem)
-            {
-                if (nCurPos == THUMBNAILVIEW_ITEM_NONEITEM)
-                {
-                    nItemPos = 0;
-                }
-                else
-                {
-                    nItemPos = nCurPos+1;
-                }
-            }
+                nItemPos = nCurPos+1;
+
             break;
 
         case KEY_PAGEUP:
@@ -1240,10 +1157,6 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
                 {
                     // Go up of a whole page
                     nItemPos = nCurPos-nVStep;
-                }
-                else if (mpNoneItem)
-                {
-                    nItemPos = THUMBNAILVIEW_ITEM_NONEITEM;
                 }
                 else if (nCurPos > mnCols)
                 {
@@ -1416,11 +1329,6 @@ void ThumbnailView::StateChanged( StateChangedType nType )
     }
     else if ( nType == STATE_CHANGE_TEXT )
     {
-        if ( mpNoneItem && !mbFormat && IsReallyVisible() && IsUpdateMode() )
-        {
-            DrawItem( mpNoneItem, maNoneItemRect );
-            Invalidate( maNoneItemRect );
-        }
     }
     else if ( (nType == STATE_CHANGE_ZOOM) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
@@ -1756,11 +1664,9 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
             // focus event (select)
             const size_t nPos = GetItemPos( mnSelItemId );
 
-            ThumbnailViewItem* pItem;
+            ThumbnailViewItem* pItem = NULL;
             if( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
                 pItem = mItemList[nPos];
-            else
-                pItem = mpNoneItem;
 
             ThumbnailViewAcc* pItemAcc = NULL;
             if (pItem != NULL)
