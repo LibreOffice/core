@@ -868,6 +868,17 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("zOrder"), "%" SAL_PRIdINT32, aZOrder);
 	}
 
+    void XShapeDumper::dumpLayerIDAsAttribute(sal_Int32 aLayerID, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerID"), "%" SAL_PRIdINT32, aLayerID);
+	}
+
+    void XShapeDumper::dumpLayerNameAsAttribute(rtl::OUString sLayerName, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerName"), "%s",
+		rtl::OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -1370,6 +1381,18 @@ namespace {
 				sal_Int32 aZOrder;
 				if(anotherAny >>= aZOrder)
 					dumpZOrderAsAttribute(aZOrder, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("LayerID");
+				sal_Int32 aLayerID;
+				if(anotherAny >>= aLayerID)
+					dumpLayerIDAsAttribute(aLayerID, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("LayerName");
+				rtl::OUString sLayerName;
+				if(anotherAny >>= sLayerName)
+					dumpLayerNameAsAttribute(sLayerName, xmlWriter);
 			}
         }
 
