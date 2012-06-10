@@ -26,7 +26,6 @@
 
 #include "gstcommon.hxx"
 #include <glib.h>
-#include <glib/gatomic.h>
 
 // necessary for mixed environments with GStreamer-0.10 and GLib versions < 2.8
 #ifndef G_GNUC_NULL_TERMINATED
