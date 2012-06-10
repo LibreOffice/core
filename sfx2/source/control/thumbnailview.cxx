@@ -1191,13 +1191,6 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
                 }
             }
             break;
-
-        case KEY_RETURN:
-            if (GetStyle() & WB_NO_DIRECTSELECT)
-            {
-                Select();
-                break;
-            }
             // intentional fall-through
         default:
             Control::KeyInput( rKEvt );
@@ -1220,11 +1213,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
         if ( nItemId != mnSelItemId )
         {
             SelectItem( nItemId );
-            if (!(GetStyle() & WB_NO_DIRECTSELECT))
-            {
-                // select only if WB_NO_DIRECTSELECT is not set
-                Select();
-            }
+            Select();
         }
     }
 }

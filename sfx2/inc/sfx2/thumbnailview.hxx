@@ -68,13 +68,9 @@ class ThumbnailViewItemAcc;
                         lines have to be specified with SetLineCount() if this
                         flag is set.
     WB_BORDER           A border will be drawn around the window.
-    WB_NOPOINTERFOCUS   The focus won't be gathered, if the control was pressed by
-                        the mouse.
     WB_TABSTOP          It is possible to jump into the ValueSet with the tab key.
     WB_NOTABSTOP        It is not possible to jump into the ValueSet with the
                         tab key.
-    WB_NO_DIRECTSELECT  Cursor travelling doesn't call select immediately. To
-                        execute the selection <RETURN> has to be pressed.
     --------------------------------------------------------------------------
 
     The number of columns must be either set with SetColCount() or
@@ -156,7 +152,6 @@ class ThumbnailViewItemAcc;
 
 #define WB_RADIOSEL             ((WinBits)0x00008000)
 #define WB_FLATVALUESET         ((WinBits)0x02000000)
-#define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #define WB_MENUSTYLEVALUESET    ((WinBits)0x08000000)
 
 #define THUMBNAILVIEW_APPEND         ((sal_uInt16)-1)
