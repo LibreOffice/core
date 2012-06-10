@@ -876,7 +876,7 @@ namespace {
     void XShapeDumper::dumpLayerNameAsAttribute(rtl::OUString sLayerName, xmlTextWriterPtr xmlWriter)
 	{
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerName"), "%s",
-		rtl::OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
+		    rtl::OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
 	}
 
     void XShapeDumper::dumpVisibleAsAttribute(sal_Bool bVisible, xmlTextWriterPtr xmlWriter)
@@ -893,6 +893,20 @@ namespace {
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "true");
 		else
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "false");
+	}
+
+    void XShapeDumper::dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWriter)
+	{
+		if(bMoveProtect)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "false");
+	}
+
+    void XShapeDumper::dumpNameAsAttribute(rtl::OUString sName, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+		    rtl::OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
 	}
 
     // --------------------------------
@@ -1421,6 +1435,18 @@ namespace {
 				sal_Bool bPrintable;
 				if(anotherAny >>= bPrintable)
 					dumpPrintableAsAttribute(bPrintable, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("MoveProtect");
+				sal_Bool bMoveProtect;
+				if(anotherAny >>= bMoveProtect)
+					dumpMoveProtectAsAttribute(bMoveProtect, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("Name");
+				rtl::OUString sName;
+				if(anotherAny >>= sName)
+					dumpNameAsAttribute(sName, xmlWriter);
 			}
         }
 
