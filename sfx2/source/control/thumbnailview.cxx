@@ -395,7 +395,6 @@ void ThumbnailView::Format()
     Size        aWinSize = GetOutputSizePixel();
     size_t      nItemCount = mItemList.size();
     WinBits     nStyle = GetStyle();
-    long        nTxtHeight = GetTextHeight();
     long        nNoneHeight;
     long        nNoneSpace;
     ScrollBar*  pDelScrBar = NULL;
@@ -413,20 +412,7 @@ void ThumbnailView::Format()
         }
     }
 
-    // consider size, if NameField does exist
-    if ( nStyle & WB_NAMEFIELD )
-    {
-        mnTextOffset = aWinSize.Height()-nTxtHeight-NAME_OFFSET;
-        aWinSize.Height() -= nTxtHeight+NAME_OFFSET;
-
-        if ( !(nStyle & WB_FLATVALUESET) )
-        {
-            mnTextOffset -= NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
-            aWinSize.Height() -= NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
-        }
-    }
-    else
-        mnTextOffset = 0;
+    mnTextOffset = 0;
 
     nNoneHeight = 0;
     nNoneSpace = 0;
@@ -654,32 +640,6 @@ void ThumbnailView::Format()
     delete pDelScrBar;
 }
 
-void ThumbnailView::DrawItemText( const rtl::OUString& rText )
-{
-    if ( !(GetStyle() & WB_NAMEFIELD) )
-        return;
-
-    Size    aWinSize = GetOutputSizePixel();
-    long    nTxtWidth = GetTextWidth( rText );
-    long    nTxtOffset = mnTextOffset;
-
-    // delete rectangle and show text
-    if ( GetStyle() & WB_FLATVALUESET )
-    {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        SetLineColor();
-        SetFillColor( rStyleSettings.GetFaceColor() );
-        DrawRect( Rectangle( Point( 0, nTxtOffset ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
-        SetTextColor( rStyleSettings.GetButtonTextColor() );
-    }
-    else
-    {
-        nTxtOffset += NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
-        Erase( Rectangle( Point( 0, nTxtOffset ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
-    }
-    DrawText( Point( (aWinSize.Width()-nTxtWidth) / 2, nTxtOffset+(NAME_OFFSET/2) ), rText );
-}
-
 void ThumbnailView::ImplDrawSelect()
 {
     if ( !IsReallyVisible() )
@@ -689,11 +649,7 @@ void ThumbnailView::ImplDrawSelect()
     const bool bDrawSel = !( (mbNoSelection && !mbHighlight) || (!mbDrawSelection && mbHighlight) );
 
     if ( !bFocus && !bDrawSel )
-    {
-        rtl::OUString aEmptyStr;
-        DrawItemText( aEmptyStr );
         return;
-    }
 
     DrawSelectedItem( mnSelItemId, bFocus, bDrawSel );
     if (mbHighlight)
@@ -849,8 +805,6 @@ void ThumbnailView::DrawSelectedItem( const sal_uInt16 nItemId, const bool bFocu
             if ( bFocus )
                 ShowFocus( aRect2 );
         }
-
-        DrawItemText( pItem->maText );
     }
 }
 
@@ -929,29 +883,6 @@ void ThumbnailView::ImplDraw()
     }
     else
         DrawOutDev( aDefPos, aSize, aDefPos, aSize, maVirDev );
-
-    // draw parting line to the Namefield
-    if ( GetStyle() & WB_NAMEFIELD )
-    {
-        if ( !(GetStyle() & WB_FLATVALUESET) )
-        {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            Size aWinSize = GetOutputSizePixel();
-            Point aPos1( NAME_LINE_OFF_X, mnTextOffset+NAME_LINE_OFF_Y );
-            Point aPos2( aWinSize.Width()-(NAME_LINE_OFF_X*2), mnTextOffset+NAME_LINE_OFF_Y );
-            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-            {
-                SetLineColor( rStyleSettings.GetShadowColor() );
-                DrawLine( aPos1, aPos2 );
-                aPos1.Y()++;
-                aPos2.Y()++;
-                SetLineColor( rStyleSettings.GetLightColor() );
-            }
-            else
-                SetLineColor( rStyleSettings.GetWindowTextColor() );
-            DrawLine( aPos1, aPos2 );
-        }
-    }
 
     ImplDrawSelect();
 }
@@ -1954,9 +1885,6 @@ void ThumbnailView::SetItemText( sal_uInt16 nItemId, const rtl::OUString& rText 
 
         if ( mbHighlight )
             nTempId = mnHighItemId;
-
-        if ( nTempId == nItemId )
-            DrawItemText( pItem->maText );
     }
 
     if (ImplHasAccessibleListeners())
@@ -2079,20 +2007,11 @@ Size ThumbnailView::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesi
     }
 
     Size        aSize( rItemSize.Width()*nCalcCols, rItemSize.Height()*nCalcLines );
-    WinBits     nStyle = GetStyle();
-    long        nTxtHeight = GetTextHeight();
 
     if ( mnSpacing )
     {
         aSize.Width()  += mnSpacing*(nCalcCols-1);
         aSize.Height() += mnSpacing*(nCalcLines-1);
-    }
-
-    if ( nStyle & WB_NAMEFIELD )
-    {
-        aSize.Height() += nTxtHeight + NAME_OFFSET;
-        if ( !(nStyle & WB_FLATVALUESET) )
-            aSize.Height() += NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
     }
 
     // sum possible ScrollBar width

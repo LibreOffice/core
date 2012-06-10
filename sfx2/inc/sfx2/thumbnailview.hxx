@@ -64,8 +64,6 @@ class ThumbnailViewItemAcc;
                         and also WB_DOUBLEBORDER is set and as color
                         COL_WINDOWWORKSPACE is specified.
     WB_FLATVALUESET     Flat Look.
-    WB_NAMEFIELD        There is a namefield, where the name of an item will be
-                        shown.
     WB_VSCROLL          A scroolbar will be always shown. The visible number of
                         lines have to be specified with SetLineCount() if this
                         flag is set.
@@ -157,7 +155,6 @@ class ThumbnailViewItemAcc;
 /* ThumbnailView types */
 
 #define WB_RADIOSEL             ((WinBits)0x00008000)
-#define WB_NAMEFIELD            ((WinBits)0x00040000)
 #define WB_FLATVALUESET         ((WinBits)0x02000000)
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #define WB_MENUSTYLEVALUESET    ((WinBits)0x08000000)
@@ -318,8 +315,6 @@ protected:
     // Drawing item related functions, override them to make your own custom ones.
 
     virtual void DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect);
-
-    virtual void DrawItemText (const rtl::OUString &rStr );
 
     virtual void DrawSelectedItem (const sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
 
