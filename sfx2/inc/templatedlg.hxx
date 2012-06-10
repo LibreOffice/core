@@ -10,7 +10,7 @@
 #ifndef TEMPLATEDLG_HXX
 #define TEMPLATEDLG_HXX
 
-#include <svtools/thumbnailview.hxx>
+#include <sfx2/thumbnailview.hxx>
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>

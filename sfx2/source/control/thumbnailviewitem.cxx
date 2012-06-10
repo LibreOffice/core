@@ -28,7 +28,7 @@
 
 #include "thumbnailviewacc.hxx"
 
-#include <svtools/thumbnailviewitem.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

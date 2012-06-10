@@ -29,8 +29,8 @@
 #include "thumbnailviewacc.hxx"
 
 #include <comphelper/servicehelper.hxx>
-#include <svtools/thumbnailview.hxx>
-#include <svtools/thumbnailviewitem.hxx>
+#include <sfx2/thumbnailview.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 

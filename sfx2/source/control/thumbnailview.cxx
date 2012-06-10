@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svtools/thumbnailview.hxx>
-#include <svtools/thumbnailviewitem.hxx>
+#include <sfx2/thumbnailview.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
 
 #include "thumbnailviewacc.hxx"
 
