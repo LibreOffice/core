@@ -192,6 +192,12 @@ TabPage OFA_TP_MISC
         Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Enable experimental (unstable) features";
     };
+    CheckBox CB_MACRORECORDER
+    {
+        Pos = MAP_APPFONT( COL1, ROW15 );
+        Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ en-US ] = "Enable macro recording (limited)";
+    };
 };
 
  //****************************************************************************

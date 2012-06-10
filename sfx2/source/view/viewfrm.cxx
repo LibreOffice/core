@@ -3003,7 +3003,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 {
                     SvtMiscOptions aMiscOptions;
                     const char* pName = GetObjectShell()->GetFactory().GetShortName();
-                    if ( !aMiscOptions.IsExperimentalMode() ||
+                    if ( !aMiscOptions.IsMacroRecorderMode() ||
                          ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
                     {
                         rSet.DisableItem( nWhich );
@@ -3029,7 +3029,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 {
                     SvtMiscOptions aMiscOptions;
                     const char* pName = GetObjectShell()->GetFactory().GetShortName();
-                    if ( !aMiscOptions.IsExperimentalMode() ||
+                    if ( !aMiscOptions.IsMacroRecorderMode() ||
                          ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
                     {
                         rSet.DisableItem( nWhich );

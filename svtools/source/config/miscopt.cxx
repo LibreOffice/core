@@ -74,6 +74,8 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_ALWAYSALLOWSAVE      9
 #define PROPERTYNAME_EXPERIMENTALMODE       ASCII_STR("ExperimentalMode")
 #define PROPERTYHANDLE_EXPERIMENTALMODE     10
+#define PROPERTYNAME_MACRORECORDERMODE       ASCII_STR("MacroRecorderMode")
+#define PROPERTYHANDLE_MACRORECORDERMODE    11
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 
@@ -99,6 +101,7 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bDisableUICustomization;
     sal_Bool    m_bAlwaysAllowSave;
     sal_Bool    m_bExperimentalMode;
+    sal_Bool    m_bMacroRecorderMode;
 
     public:
 
@@ -178,6 +181,12 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         inline sal_Bool IsExperimentalMode() const
         { return m_bExperimentalMode; }
+
+        inline void SetMacroRecorderMode( sal_Bool bSet )
+        { m_bMacroRecorderMode = bSet; SetModified(); }
+
+        inline sal_Bool IsMacroRecorderMode() const
+        { return m_bMacroRecorderMode; }
 
         inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
@@ -287,6 +296,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsShowLinkWarningDialogRO( sal_False )
     , m_bAlwaysAllowSave( sal_False )
     , m_bExperimentalMode( sal_False )
+    , m_bMacroRecorderMode( sal_False )
 
 {
     // Use our static list of configuration keys to get his values.
@@ -407,6 +417,12 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bExperimentalMode) )
                     OSL_FAIL("Wrong type of \"Misc\\ExperimentalMode\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_MACRORECORDERMODE :
+            {
+                if( !(seqValues[nProperty] >>= m_bMacroRecorderMode) )
+                    OSL_FAIL("Wrong type of \"Misc\\MacroRecorderMode\"!" );
                 break;
             }
         }
@@ -700,6 +716,11 @@ void SvtMiscOptions_Impl::Commit()
                 seqValues[nProperty] <<= m_bExperimentalMode;
                 break;
             }
+            case PROPERTYHANDLE_MACRORECORDERMODE :
+            {
+                seqValues[nProperty] <<= m_bMacroRecorderMode;
+                break;
+            }
         }
     }
     // Set properties in configuration.
@@ -724,7 +745,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         PROPERTYNAME_SHOWLINKWARNINGDIALOG,
         PROPERTYNAME_DISABLEUICUSTOMIZATION,
         PROPERTYNAME_ALWAYSALLOWSAVE,
-        PROPERTYNAME_EXPERIMENTALMODE
+        PROPERTYNAME_EXPERIMENTALMODE,
+        PROPERTYNAME_MACRORECORDERMODE
     };
 
     // Initialize return sequence with these list ...
@@ -913,6 +935,16 @@ void SvtMiscOptions::SetExperimentalMode( sal_Bool bSet )
 sal_Bool SvtMiscOptions::IsExperimentalMode() const
 {
     return m_pDataContainer->IsExperimentalMode();
+}
+
+void SvtMiscOptions::SetMacroRecorderMode( sal_Bool bSet )
+{
+    m_pDataContainer->SetMacroRecorderMode( bSet );
+}
+
+sal_Bool SvtMiscOptions::IsMacroRecorderMode() const
+{
+    return m_pDataContainer->IsMacroRecorderMode();
 }
 
 namespace

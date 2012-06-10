@@ -73,6 +73,7 @@ private:
     String              aStrDateInfo;
 
     CheckBox            aExperimentalCB;
+    CheckBox            aMacroRecorderCB;
 
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
