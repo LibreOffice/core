@@ -31,6 +31,7 @@
 // include ---------------------------------------------------------------
 
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/group.hxx>
@@ -41,7 +42,6 @@
 #include <vcl/field.hxx>
 #include <editeng/numdef.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <svl/svarray.hxx>
 
 // -----------------------------------------------------------------------
 class SvxNumRule;
@@ -68,8 +68,7 @@ struct SvxNumSettings_Impl
         {}
 };
 
-typedef SvxNumSettings_Impl* SvxNumSettings_ImplPtr;
-SV_DECL_PTRARR_DEL(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr,8)
+typedef boost::ptr_vector<SvxNumSettings_Impl> SvxNumSettingsArr_Impl;
 
 
 //------------------------------------------------

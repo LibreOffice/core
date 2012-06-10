@@ -89,8 +89,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::style;
 using rtl::OUString;
 
-SV_IMPL_PTRARR(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr);
-
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
@@ -119,10 +117,10 @@ Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
     return xRet;
 }
 
-SvxNumSettings_ImplPtr lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
+SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
     const PropertyValue* pValues = rLevelProps.getConstArray();
-    SvxNumSettings_ImplPtr pNew = new SvxNumSettings_Impl;
+    SvxNumSettings_Impl* pNew = new SvxNumSettings_Impl;
     for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
     {
         if ( pValues[j].Name == cNumberingType )
@@ -238,8 +236,8 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
             const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
             for(sal_Int32 i = 0; i < nLength; i++)
             {
-                SvxNumSettings_ImplPtr pNew = lcl_CreateNumSettingsPtr(pValuesArr[i]);
-                aNumSettingsArr.Insert(pNew, aNumSettingsArr.Count());
+                SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(pValuesArr[i]);
+                aNumSettingsArr.push_back(pNew);
             }
         }
         catch(Exception&)
@@ -255,7 +253,6 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
     delete pActNum;
     delete pExamplesVS;
     delete pSaveNum;
-    aNumSettingsArr.DeleteAndDestroy(0, aNumSettingsArr.Count());
 }
 
 SfxTabPage*  SvxSingleNumPickTabPage::Create( Window* pParent,
@@ -352,10 +349,10 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
         bPreset = sal_False;
         bModified = sal_True;
         sal_uInt16 nIdx = pExamplesVS->GetSelectItemId() - 1;
-        DBG_ASSERT(aNumSettingsArr.Count() > nIdx, "wrong index");
-        if(aNumSettingsArr.Count() <= nIdx)
+        DBG_ASSERT(aNumSettingsArr.size() > nIdx, "wrong index");
+        if(aNumSettingsArr.size() <= nIdx)
             return 0;
-        SvxNumSettings_ImplPtr _pSet = aNumSettingsArr.GetObject(nIdx);
+        SvxNumSettings_Impl* _pSet = &aNumSettingsArr[nIdx];
         sal_Int16 eNewType = _pSet->nNumberType;
         const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix.getStr()[0] : 0;
         const sal_Unicode cLocalSuffix = !_pSet->sSuffix.isEmpty() ? _pSet->sSuffix.getStr()[0] : 0;
@@ -606,8 +603,8 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
                     Any aValueAny = xLevel->getByIndex(nLevel);
                     Sequence<PropertyValue> aLevelProps;
                     aValueAny >>= aLevelProps;
-                    SvxNumSettings_ImplPtr pNew = lcl_CreateNumSettingsPtr(aLevelProps);
-                    rItemArr.Insert( pNew, rItemArr.Count() );
+                    SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(aLevelProps);
+                    rItemArr.push_back( pNew );
                 }
             }
         }
@@ -725,11 +722,11 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
         SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[pExamplesVS->GetSelectItemId() - 1];
 
         Font& rActBulletFont = lcl_GetDefaultBulletFont();
-        SvxNumSettings_ImplPtr pLevelSettings = 0;
+        SvxNumSettings_Impl* pLevelSettings = 0;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
-            if(rItemArr.Count() > i)
-                pLevelSettings = rItemArr[i];
+            if(rItemArr.size() > i)
+                pLevelSettings = &rItemArr[i];
             if(!pLevelSettings)
                 break;
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
