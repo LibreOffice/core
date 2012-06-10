@@ -32,8 +32,6 @@
 #include <string.h>
 #include <ctype.h>
 
-SV_IMPL_PTRARR(SbiSymbols,SbiSymDef*)
-
 // All symbol names are laid down int the symbol-pool's stringpool, so that
 // all symbols are handled in the same case. On saving the code-image, the
 // global stringpool with the respective symbols is also saved.
@@ -118,35 +116,33 @@ SbiSymDef* SbiSymPool::First()
 
 SbiSymDef* SbiSymPool::Next()
 {
-    if( ++nCur >= aData.Count() )
+    if( ++nCur >= aData.size() )
         return NULL;
     else
-        return aData.GetObject( nCur );
+        return aData[ nCur ];
 }
 
 
 SbiSymDef* SbiSymPool::AddSym( const String& rName )
 {
     SbiSymDef* p = new SbiSymDef( rName );
-    p->nPos    = aData.Count();
+    p->nPos    = aData.size();
     p->nId     = rStrings.Add( rName );
     p->nProcId = nProcId;
     p->pIn     = this;
-    const SbiSymDef* q = p;
-    aData.Insert( q, q->nPos );
+    aData.insert( aData.begin() + p->nPos, p );
     return p;
 }
 
 SbiProcDef* SbiSymPool::AddProc( const String& rName )
 {
     SbiProcDef* p = new SbiProcDef( pParser, rName );
-    p->nPos    = aData.Count();
+    p->nPos    = aData.size();
     p->nId     = rStrings.Add( rName );
     // procs are always local
     p->nProcId = 0;
     p->pIn     = this;
-    const SbiSymDef* q = p;
-    aData.Insert( q, q->nPos );
+    aData.insert( aData.begin() + p->nPos, p );
     return p;
 }
 
@@ -165,7 +161,7 @@ void SbiSymPool::Add( SbiSymDef* pDef )
             return;
         }
 
-        pDef->nPos = aData.Count();
+        pDef->nPos = aData.size();
         if( !pDef->nId )
         {
             // A unique name must be created in the string pool
@@ -183,18 +179,17 @@ void SbiSymPool::Add( SbiSymDef* pDef )
         if( !pDef->GetProcDef() )
             pDef->nProcId = nProcId;
         pDef->pIn = this;
-        const SbiSymDef* q = pDef;
-        aData.Insert( q, q->nPos );
+        aData.insert( aData.begin() + pDef->nPos, pDef );
     }
 }
 
 
 SbiSymDef* SbiSymPool::Find( const String& rName ) const
 {
-    sal_uInt16 nCount = aData.Count();
+    sal_uInt16 nCount = aData.size();
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        SbiSymDef* p = aData.GetObject( nCount - i - 1 );
+        SbiSymDef* p = aData[ nCount - i - 1 ];
         if( ( !p->nProcId || ( p->nProcId == nProcId ) )
          && ( p->aName.EqualsIgnoreCaseAscii( rName ) ) )
             return p;
@@ -208,9 +203,9 @@ SbiSymDef* SbiSymPool::Find( const String& rName ) const
 
 SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
 {
-    for( sal_uInt16 i = 0; i < aData.Count(); i++ )
+    for( sal_uInt16 i = 0; i < aData.size(); i++ )
     {
-        SbiSymDef* p = aData.GetObject( i );
+        SbiSymDef* p = aData[ i ];
         if( p->nId == n && ( !p->nProcId || ( p->nProcId == nProcId ) ) )
             return p;
     }
@@ -224,10 +219,10 @@ SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
 
 SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
 {
-    if( n >= aData.Count() )
+    if( n >= aData.size() )
         return NULL;
     else
-        return aData.GetObject( n );
+        return aData[ n ];
 }
 
 sal_uInt32 SbiSymPool::Define( const String& rName )
@@ -255,9 +250,9 @@ sal_uInt32 SbiSymPool::Reference( const String& rName )
 
 void SbiSymPool::CheckRefs()
 {
-    for( sal_uInt16 i = 0; i < aData.Count(); i++ )
+    for( sal_uInt16 i = 0; i < aData.size(); i++ )
     {
-        SbiSymDef* p = aData.GetObject( i );
+        SbiSymDef* p = aData[ i ];
         if( !p->IsDefined() )
             pParser->Error( SbERR_UNDEF_LABEL, p->GetName() );
     }
@@ -449,8 +444,7 @@ void SbiProcDef::Match( SbiProcDef* pOld )
     if( !pIn && pOld->pIn )
     {
         // Replace old entry with the new one
-        SbiSymDef** pData = (SbiSymDef**) pOld->pIn->aData.GetData();
-        pData[ pOld->nPos ] = this;
+        pOld->pIn->aData[ pOld->nPos ] = this;
         nPos = pOld->nPos;
         nId  = pOld->nId;
         pIn  = pOld->pIn;
@@ -509,5 +503,12 @@ SbiConstDef* SbiConstDef::GetConstDef()
 {
     return this;
 }
+
+SbiSymbols::~SbiSymbols()
+{
+    for( const_iterator it = begin(); it != end(); ++it )
+        delete *it;
+};
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

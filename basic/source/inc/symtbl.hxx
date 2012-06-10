@@ -29,6 +29,8 @@
 #ifndef _SYMTBL_HXX
 #define _SYMTBL_HXX
 
+#include <vector>
+
 class SbiConstDef;
 class SbiParser;
 class SbiProcDef;
@@ -57,7 +59,11 @@ public:
 };
 
 
-SV_DECL_PTRARR_DEL(SbiSymbols,SbiSymDef*,5)
+class SbiSymbols : public std::vector<SbiSymDef*>
+{
+public:
+    ~SbiSymbols();
+};
 
 class SbiSymPool {
     friend class SbiSymDef;
@@ -76,7 +82,7 @@ public:
 
     void   SetParent( SbiSymPool* p )   { pParent = p;      }
     void   SetProcId( short n )         { nProcId = n;      }
-    sal_uInt16 GetSize() const              { return aData.Count(); }
+    sal_uInt16 GetSize() const              { return aData.size(); }
     SbiSymScope GetScope() const        { return eScope;    }
     void   SetScope( SbiSymScope s )    { eScope = s;       }
     SbiParser* GetParser()              { return pParser;   }
