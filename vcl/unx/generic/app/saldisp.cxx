@@ -66,9 +66,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 
 #include <tools/postx.h>
 
-#include <svtools/langhelp.hxx>
 #include <vcl/svapp.hxx>
-
 #include <unx/salunx.h>
 #include <sal/types.h>
 #include "unx/i18n_im.hxx"
