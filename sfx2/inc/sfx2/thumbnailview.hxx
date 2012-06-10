@@ -58,11 +58,6 @@ class ThumbnailViewItemAcc;
 
     WinBits
 
-    WB_RADIOSEL         If set the selection will be drawn like an
-                        ImageRadioButton. This does only make sense if the image
-                        is at least 8 pixel smaller on each side than the item
-                        and also WB_DOUBLEBORDER is set and as color
-                        COL_WINDOWWORKSPACE is specified.
     WB_VSCROLL          A scroolbar will be always shown. The visible number of
                         lines have to be specified with SetLineCount() if this
                         flag is set.
@@ -147,8 +142,6 @@ class ThumbnailViewItemAcc;
 *************************************************************************/
 
 /* ThumbnailView types */
-
-#define WB_RADIOSEL             ((WinBits)0x00008000)
 
 #define THUMBNAILVIEW_APPEND         ((sal_uInt16)-1)
 #define THUMBNAILVIEW_ITEM_NOTFOUND  ((sal_uInt16)-1)

@@ -301,8 +301,6 @@ void ThumbnailView::ImplInitScrollBar()
 
 void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
 {
-    WinBits nStyle = GetStyle();
-
     if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -657,86 +655,24 @@ void ThumbnailView::DrawSelectedItem( const sal_uInt16 nItemId, const bool bFocu
         }
 
         // specify selection output
-        WinBits nStyle = GetStyle();
-        if ( nStyle & WB_RADIOSEL )
+        aRect.Left()    += 4;
+        aRect.Top()     += 4;
+        aRect.Right()   -= 4;
+        aRect.Bottom()  -= 4;
+
+        if ( bDrawSel )
         {
-            aRect.Left()    += 3;
-            aRect.Top()     += 3;
-            aRect.Right()   -= 3;
-            aRect.Bottom()  -= 3;
-
-            if ( bFocus )
-                ShowFocus( aRect );
-
+            SetLineColor( aDoubleColor );
             aRect.Left()++;
             aRect.Top()++;
             aRect.Right()--;
             aRect.Bottom()--;
-
-            if ( bDrawSel )
-            {
-                SetLineColor( aDoubleColor );
-                aRect.Left()++;
-                aRect.Top()++;
-                aRect.Right()--;
-                aRect.Bottom()--;
-                DrawRect( aRect );
-                aRect.Left()++;
-                aRect.Top()++;
-                aRect.Right()--;
-                aRect.Bottom()--;
-                DrawRect( aRect );
-            }
-        }
-        else
-        {
-            if ( bDrawSel )
-            {
-                SetLineColor( mbBlackSel ? Color( COL_BLACK ) : aDoubleColor );
-                DrawRect( aRect );
-            }
-            if ( mbDoubleSel )
-            {
-                aRect.Left()++;
-                aRect.Top()++;
-                aRect.Right()--;
-                aRect.Bottom()--;
-                if ( bDrawSel )
-                    DrawRect( aRect );
-            }
+            DrawRect( aRect );
             aRect.Left()++;
             aRect.Top()++;
             aRect.Right()--;
             aRect.Bottom()--;
-            Rectangle aRect2 = aRect;
-            aRect.Left()++;
-            aRect.Top()++;
-            aRect.Right()--;
-            aRect.Bottom()--;
-            if ( bDrawSel )
-                DrawRect( aRect );
-            if ( mbDoubleSel )
-            {
-                aRect.Left()++;
-                aRect.Top()++;
-                aRect.Right()--;
-                aRect.Bottom()--;
-                if ( bDrawSel )
-                    DrawRect( aRect );
-            }
-
-            if ( bDrawSel )
-            {
-                SetLineColor( mbBlackSel ? Color( COL_WHITE ) : aSingleColor );
-            }
-            else
-            {
-                SetLineColor( Color( COL_LIGHTGRAY ) );
-            }
-            DrawRect( aRect2 );
-
-            if ( bFocus )
-                ShowFocus( aRect2 );
+            DrawRect( aRect );
         }
     }
 }
