@@ -28,7 +28,7 @@ else
 fi
 export EXEEXT
 
-mkdir -p "$SOLARENV/$OUTPATH/bin"
+mkdir -p "$SOLARENV/$INPATH/bin"
 
 #make sure build.pl is executable 
 
@@ -45,13 +45,13 @@ fi
 # ------------------------------------------------------------------------------
 # Build dmake
 
-if test -n "$DMAKE_URL" -a  ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
+if test -n "$DMAKE_URL" -a  ! -x "$SOLARENV/$INPATH/bin/dmake$EXEEXT"; then
 
     # Assume that the dmake archive has been downloaded by fetch_tarballs.sh
     # Determine the name of the downloaded file.
     dmake_package_name=`echo $DMAKE_URL | sed "s/^\(.*\/\)//"`
 
-    tmp_build_dir="$SOLARENV/$OUTPATH/misc/build/"
+    tmp_build_dir="$SOLARENV/$INPATH/misc/build/"
     echo "making and entering $tmp_build_dir"
     # Clean up any residues from a previous and unsuccessful build.
     rm -rf "$tmp_build_dir"
@@ -120,9 +120,9 @@ if test -n "$DMAKE_URL" -a  ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
 
 
     # Deploy the dmake executable to solenv
-    cp -f "$tmp_build_dir/$dmake_directory_name/dmake$EXEEXT" "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT" || exit
+    cp -f "$tmp_build_dir/$dmake_directory_name/dmake$EXEEXT" "$SOLARENV/$INPATH/bin/dmake$EXEEXT" || exit
     echo ""
-    echo "dmake successfully built and copied to $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
+    echo "dmake successfully built and copied to $SOLARENV/$INPATH/bin/dmake$EXEEXT"
     echo ""
 
     # Clean up.  Note that this is skipped when one of the exits is executed above.
@@ -134,19 +134,19 @@ elif test "$IS_SYSTEM_DMAKE" = "YES"; then
     echo "dmake is located in search path"
     echo ""
 
-elif test -n "$DMAKE_PATH" -a -x "$DMAKE_PATH" -a  ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
+elif test -n "$DMAKE_PATH" -a -x "$DMAKE_PATH" -a  ! -x "$SOLARENV/$INPATH/bin/dmake$EXEEXT"; then
 
-    cp -f "$DMAKE_PATH" "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT" || exit
+    cp -f "$DMAKE_PATH" "$SOLARENV/$INPATH/bin/dmake$EXEEXT" || exit
 
     echo ""
-    echo "dmake copied to $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
+    echo "dmake copied to $SOLARENV/$INPATH/bin/dmake$EXEEXT"
     echo ""
 
 else
 
-    if test -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
+    if test -x "$SOLARENV/$INPATH/bin/dmake$EXEEXT"; then
         echo ""
-        echo "dmake present in $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
+        echo "dmake present in $SOLARENV/$INPATH/bin/dmake$EXEEXT"
     fi
     
 fi
