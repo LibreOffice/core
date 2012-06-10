@@ -130,15 +130,6 @@ namespace dbaui
                     Window* _pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory);
 
-    /** return a vector which contains all key columns for the @see com::sun::star::sdbc::KeyType _nKeyType
-        @param  _rxTable                the table which must be a @see com::sun::star::sdbcx::XColumnsSupplier
-        @param  _nKeyType               @see com::sun::star::sdbc::KeyType
-    */
-
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> >
-        getKeyColumns(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxKeys,
-                        sal_Int32 _nKeyType);
-
     /** fills a map and a vector with localized type names
         @param  _rxConnection   the connection to acces the metadata
         @param  _rsTypeNames    a list of localized type names seperated with ';'

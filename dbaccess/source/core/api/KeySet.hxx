@@ -110,18 +110,6 @@ namespace dbaccess
 
         sal_Bool m_bRowCountFinal;
 
-        /**
-            getComposedTableName return the composed table name for the query
-            @param _sCatalog    the catalogname may be empty
-            @param _sSchema     the schemaname may be empty
-            @param _sTable      the tablename
-
-            @return the composed name
-        */
-        ::rtl::OUString getComposedTableName( const ::rtl::OUString& _sCatalog,
-                                              const ::rtl::OUString& _sSchema,
-                                              const ::rtl::OUString& _sTable);
-
         /** copies the values from the insert row into the key row
         *
         * \param _rInsertRow the row which was inserted

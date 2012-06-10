@@ -1667,39 +1667,6 @@ sal_Bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
     return bDeleted;
 }
 
-::rtl::OUString OKeySet::getComposedTableName(const ::rtl::OUString& _sCatalog,
-                                              const ::rtl::OUString& _sSchema,
-                                              const ::rtl::OUString& _sTable)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getComposedTableName" );
-    ::rtl::OUString aComposedName;
-    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-
-    if( xMetaData.is() && xMetaData->supportsTableCorrelationNames() )
-    {
-        aComposedName = ::dbtools::composeTableName( xMetaData, _sCatalog, _sSchema, _sTable, sal_False, ::dbtools::eInDataManipulation );
-        // first we have to check if the composed tablename is in the select clause or if an alias is used
-        Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
-        Reference<XNameAccess> xSelectTables = xTabSup->getTables();
-        OSL_ENSURE(xSelectTables.is(),"No Select tables!");
-        if(xSelectTables.is())
-        {
-            if(!xSelectTables->hasByName(aComposedName))
-            { // the composed name isn't used in the select clause so we have to find out which name is used instead
-                ::rtl::OUString sCatalog,sSchema,sTable;
-                ::dbtools::qualifiedNameComponents(xMetaData,m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
-                aComposedName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
-            }
-            else
-                aComposedName = ::dbtools::composeTableNameForSelect( m_xConnection, _sCatalog, _sSchema, _sTable );
-        }
-    }
-    else
-        aComposedName = ::dbtools::composeTableNameForSelect( m_xConnection, _sCatalog, _sSchema, _sTable );
-
-    return aComposedName;
-}
-
 namespace dbaccess
 {
 

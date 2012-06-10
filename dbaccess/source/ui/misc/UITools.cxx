@@ -306,32 +306,6 @@ void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< 
 }
 
 // -----------------------------------------------------------------------------
-::std::vector< Reference<XNameAccess> > getKeyColumns(const Reference<XIndexAccess >& _rxKeys,
-                                                      sal_Int32 _nKeyType)
-{
-    // use keys and indexes for excat postioning
-    // first the keys
-    ::std::vector< Reference<XNameAccess> > vRet;
-    if(_rxKeys.is())
-    {
-        Reference<XPropertySet> xProp;
-        for(sal_Int32 i=0;i< _rxKeys->getCount();++i)
-        {
-            _rxKeys->getByIndex(i) >>= xProp;
-            sal_Int32 nKeyType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-            if(_nKeyType == nKeyType)
-            {
-                Reference<XColumnsSupplier> xKeyColsSup(xProp,UNO_QUERY);
-                OSL_ENSURE(xKeyColsSup.is(),"Columnsupplier is null!");
-                vRet.push_back(xKeyColsSup->getColumns());
-            }
-        }
-    }
-
-    return vRet;
-}
-// -----------------------------------------------------------------------------
 
 TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,

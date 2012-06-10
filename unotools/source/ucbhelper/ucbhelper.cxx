@@ -244,34 +244,6 @@ bool utl::UCBContentHelper::Kill(rtl::OUString const & url) {
 }
 
 bool utl::UCBContentHelper::MakeFolder(
-    rtl::OUString const & url, bool exclusive)
-{
-    INetURLObject o(url);
-    SAL_WARN_IF(o.HasError(), "unotools", "Invalid URL \"" << url << '"');
-    rtl::OUString title(
-        o.getName(
-            INetURLObject::LAST_SEGMENT, true,
-            INetURLObject::DECODE_WITH_CHARSET));
-    o.removeSegment();
-    ucbhelper::Content parent;
-    ucbhelper::Content res;
-    return
-        ucbhelper::Content::create(
-            o.GetMainURL(INetURLObject::NO_DECODE),
-            new ucbhelper::CommandEnvironment(
-                css::uno::Reference<css::task::XInteractionHandler>(
-                    (css::uno::Reference<css::lang::XMultiServiceFactory>(
-                        comphelper::getProcessServiceFactory(),
-                        css::uno::UNO_SET_THROW)->
-                     createInstance(
-                         rtl::OUString( "com.sun.star.uui.InteractionHandler"))),
-                    css::uno::UNO_QUERY_THROW),
-                css::uno::Reference<css::ucb::XProgressHandler>()),
-            parent)
-        && MakeFolder(parent, title, res, exclusive);
-}
-
-bool utl::UCBContentHelper::MakeFolder(
     ucbhelper::Content & parent, rtl::OUString const & title,
     ucbhelper::Content & result, bool exclusive)
 {

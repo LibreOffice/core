@@ -56,9 +56,6 @@ UNOTOOLS_DLLPUBLIC com::sun::star::uno::Any GetProperty(
     rtl::OUString const & url, rtl::OUString const & property);
 
 UNOTOOLS_DLLPUBLIC bool MakeFolder(
-    rtl::OUString const & url, bool exclusive = false);
-
-UNOTOOLS_DLLPUBLIC bool MakeFolder(
     ucbhelper::Content & parent, rtl::OUString const & title,
     ucbhelper::Content & result, bool exclusive = false);
 

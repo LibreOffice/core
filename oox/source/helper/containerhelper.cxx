@@ -92,16 +92,6 @@ void ValueRangeSet::insert( const ValueRange& rRange )
     }
 }
 
-ValueRangeVector ValueRangeSet::getIntersection( const ValueRange& rRange ) const
-{
-    ValueRangeVector aRanges;
-    // find the range that contains nFirst or the first range that follows nFirst
-    ValueRangeVector::const_iterator aIt = ::std::lower_bound( maRanges.begin(), maRanges.end(), rRange, ValueRangeComp() );
-    for( ValueRangeVector::const_iterator aEnd = maRanges.end(); (aIt != aEnd) && (aIt->mnFirst <= rRange.mnLast); ++aIt )
-        aRanges.push_back( ValueRange( ::std::max( aIt->mnFirst, rRange.mnFirst ), ::std::min( aIt->mnLast, rRange.mnLast ) ) );
-    return aRanges;
-}
-
 // ============================================================================
 
 Reference< XIndexContainer > ContainerHelper::createIndexContainer( const Reference< XComponentContext >& rxContext )

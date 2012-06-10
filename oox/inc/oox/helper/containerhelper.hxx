@@ -86,8 +86,6 @@ public:
 
     /** Returns the ordered list of all value ranges. */
     inline const ValueRangeVector& getRanges() const { return maRanges; }
-    /** Returns an intersection of the range list and the passed range. */
-    ValueRangeVector    getIntersection( const ValueRange& rRange ) const;
 
 private:
     ValueRangeVector    maRanges;
