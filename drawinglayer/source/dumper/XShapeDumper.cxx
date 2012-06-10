@@ -723,6 +723,16 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameWidth"), "%" SAL_PRIdINT32, aTextMaximumFrameWidth);
 	}
 
+    void XShapeDumper::dumpTextMinimumFrameHeightAsAttribute(sal_Int32 aTextMinimumFrameHeight, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameHeight"), "%" SAL_PRIdINT32, aTextMinimumFrameHeight);
+	}
+
+    void XShapeDumper::dumpTextMinimumFrameWidthAsAttribute(sal_Int32 aTextMinimumFrameWidth, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameWidth"), "%" SAL_PRIdINT32, aTextMinimumFrameWidth);
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -854,6 +864,18 @@ namespace {
 				sal_Int32 aTextMaximumFrameWidth;
 				if(anotherAny >>= aTextMaximumFrameWidth)
 					dumpTextMaximumFrameWidthAsAttribute(aTextMaximumFrameWidth, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameHeight");
+				sal_Int32 aTextMinimumFrameHeight;
+				if(anotherAny >>= aTextMinimumFrameHeight)
+					dumpTextMinimumFrameHeightAsAttribute(aTextMinimumFrameHeight, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameWidth");
+				sal_Int32 aTextMinimumFrameWidth;
+				if(anotherAny >>= aTextMinimumFrameWidth)
+					dumpTextMinimumFrameWidthAsAttribute(aTextMinimumFrameWidth, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
