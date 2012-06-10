@@ -733,6 +733,16 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameWidth"), "%" SAL_PRIdINT32, aTextMinimumFrameWidth);
 	}
 
+    void XShapeDumper::dumpTextAnimationAmountAsAttribute(sal_Int32 aTextAnimationAmount, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationAmount"), "%" SAL_PRIdINT32, aTextAnimationAmount);
+	}
+
+    void XShapeDumper::dumpTextAnimationCountAsAttribute(sal_Int32 aTextAnimationCount, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationCount"), "%" SAL_PRIdINT32, aTextAnimationCount);
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -876,6 +886,18 @@ namespace {
 				sal_Int32 aTextMinimumFrameWidth;
 				if(anotherAny >>= aTextMinimumFrameWidth)
 					dumpTextMinimumFrameWidthAsAttribute(aTextMinimumFrameWidth, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationAmount");
+				sal_Int32 aTextAnimationAmount;
+				if(anotherAny >>= aTextAnimationAmount)
+					dumpTextAnimationAmountAsAttribute(aTextAnimationAmount, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationCount");
+				sal_Int32 aTextAnimationCount;
+				if(anotherAny >>= aTextAnimationCount)
+					dumpTextAnimationCountAsAttribute(aTextAnimationCount, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
