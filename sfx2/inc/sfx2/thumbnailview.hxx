@@ -63,11 +63,9 @@ class ThumbnailViewItemAcc;
                         is at least 8 pixel smaller on each side than the item
                         and also WB_DOUBLEBORDER is set and as color
                         COL_WINDOWWORKSPACE is specified.
-    WB_FLATVALUESET     Flat Look.
     WB_VSCROLL          A scroolbar will be always shown. The visible number of
                         lines have to be specified with SetLineCount() if this
                         flag is set.
-    WB_BORDER           A border will be drawn around the window.
     WB_TABSTOP          It is possible to jump into the ValueSet with the tab key.
     WB_NOTABSTOP        It is not possible to jump into the ValueSet with the
                         tab key.
@@ -151,8 +149,6 @@ class ThumbnailViewItemAcc;
 /* ThumbnailView types */
 
 #define WB_RADIOSEL             ((WinBits)0x00008000)
-#define WB_FLATVALUESET         ((WinBits)0x02000000)
-#define WB_MENUSTYLEVALUESET    ((WinBits)0x08000000)
 
 #define THUMBNAILVIEW_APPEND         ((sal_uInt16)-1)
 #define THUMBNAILVIEW_ITEM_NOTFOUND  ((sal_uInt16)-1)

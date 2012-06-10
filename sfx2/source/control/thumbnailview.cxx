@@ -275,10 +275,6 @@ void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
         Color aColor;
         if ( IsControlBackground() )
             aColor = GetControlBackground();
-        else if ( GetStyle() & WB_MENUSTYLEVALUESET )
-            aColor = rStyleSettings.GetMenuColor();
-        else if ( IsEnabled() && (GetStyle() & WB_FLATVALUESET) )
-            aColor = rStyleSettings.GetWindowColor();
         else
             aColor = rStyleSettings.GetFaceColor();
         SetBackground( aColor );
@@ -313,8 +309,6 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
 
         if ( IsColor() )
             maVirDev.SetFillColor( maColor );
-        else if ( nStyle & WB_MENUSTYLEVALUESET )
-            maVirDev.SetFillColor( rStyleSettings.GetMenuColor() );
         else if ( IsEnabled() )
             maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
         else
@@ -664,18 +658,7 @@ void ThumbnailView::DrawSelectedItem( const sal_uInt16 nItemId, const bool bFocu
 
         // specify selection output
         WinBits nStyle = GetStyle();
-        if ( nStyle & WB_MENUSTYLEVALUESET )
-        {
-            if ( bFocus )
-                ShowFocus( aRect );
-
-            if ( bDrawSel )
-            {
-                SetLineColor( mbBlackSel ? Color( COL_BLACK ) : aDoubleColor );
-                DrawRect( aRect );
-            }
-        }
-        else if ( nStyle & WB_RADIOSEL )
+        if ( nStyle & WB_RADIOSEL )
         {
             aRect.Left()    += 3;
             aRect.Top()     += 3;
@@ -986,16 +969,10 @@ void ThumbnailView::ImplTracking( const Point& rPos, bool bRepeat )
     ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rPos ) );
     if ( pItem )
     {
-        if( GetStyle() & WB_MENUSTYLEVALUESET )
-            mbHighlight = true;
-
         ImplHighlightItem( pItem->mnId );
     }
     else
     {
-        if( GetStyle() & WB_MENUSTYLEVALUESET )
-            mbHighlight = true;
-
         ImplHighlightItem( mnSelItemId, false );
     }
 }
@@ -1013,7 +990,7 @@ void ThumbnailView::ImplEndTracking( const Point& rPos, bool bCancel )
     if ( pItem )
     {
         SelectItem( pItem->mnId );
-        if ( !mbSelection && !(GetStyle() & WB_NOPOINTERFOCUS) )
+        if ( !mbSelection )
             GrabFocus();
         mbHighlight = false;
         mbSelection = false;
@@ -1077,7 +1054,7 @@ void ThumbnailView::MouseButtonUp( const MouseEvent& rMEvt )
 void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
 {
     // because of SelectionMode
-    if ( mbSelection || (GetStyle() & WB_MENUSTYLEVALUESET) )
+    if ( mbSelection )
         ImplTracking( rMEvt.GetPosPixel(), false );
     Control::MouseMove( rMEvt );
 }
@@ -1233,16 +1210,6 @@ void ThumbnailView::Command( const CommandEvent& rCEvt )
 
 void ThumbnailView::Paint( const Rectangle& )
 {
-    if ( GetStyle() & WB_FLATVALUESET )
-    {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        SetLineColor();
-        SetFillColor( rStyleSettings.GetFaceColor() );
-        long nOffY = maVirDev.GetOutputSizePixel().Height();
-        Size aWinSize = GetOutputSizePixel();
-        DrawRect( Rectangle( Point( 0, nOffY ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
-    }
-
     ImplDraw();
 }
 
