@@ -65,6 +65,7 @@
 #define ROW12                   (ROW11+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
 #define ROW13                   (ROW12+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 #define ROW14                   (ROW13+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE+6)
+#define ROW15                   (ROW14+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
 
 #define DIFF(v1,v2)                     (v2-v1)
 #define OFFS_TEXTBOX_FIXEDTEXT(base)    (base+(RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
@@ -112,6 +113,8 @@
 #define LB_HELPFORMAT               16
 #define FT_EXPERIMENTAL             17
 #define CB_EXPERIMENTAL             18
+#define FT_MACRORECORDER            19
+#define CB_MACRORECORDER            20
 
 //#define FL_FILEDLG                 20
 //#define CB_FILEDLG                 21

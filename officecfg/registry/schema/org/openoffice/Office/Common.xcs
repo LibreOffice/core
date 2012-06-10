@@ -6647,6 +6647,16 @@
         </info>
         <value>false</value>
       </prop>
+      <prop
+          oor:name="MacroRecorderMode" oor:type="xs:boolean"
+          oor:nillable="false">
+        <info>
+          <author>cornouws</author>
+          <desc>Determins if the limited, and awkward code producing
+          macro recorder should be enabled in the user interface.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="SymbolSet" oor:type="xs:short" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
         <info>
