@@ -801,6 +801,32 @@ namespace {
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "false");
 	}
 
+    void XShapeDumper::dumpTextAnimationStopInsideAsAttribute(sal_Bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter)
+	{
+		if(bTextAnimationStopInside)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "false");
+	}
+
+    void XShapeDumper::dumpTextWritingModeAsAttribute(text::WritingMode eTextWritingMode, xmlTextWriterPtr xmlWriter)
+	{
+		switch(eTextWritingMode)
+		{
+			case text::WritingMode_LR_TB:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "LR_TB");
+				break;
+			case text::WritingMode_RL_TB:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "RL_TB");
+				break;
+			case text::WritingMode_TB_RL:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "TB_RL");
+				break;
+			default:
+				break;
+		}
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -980,6 +1006,18 @@ namespace {
 				sal_Bool bTextAnimationStartInside;
 				if(anotherAny >>= bTextAnimationStartInside)
 					dumpTextAnimationStartInsideAsAttribute(bTextAnimationStartInside, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStopInside");
+				sal_Bool bTextAnimationStopInside;
+				if(anotherAny >>= bTextAnimationStopInside)
+					dumpTextAnimationStopInsideAsAttribute(bTextAnimationStopInside, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextWritingMode");
+				text::WritingMode eTextWritingMode;
+				if(anotherAny >>= eTextWritingMode)
+					dumpTextWritingModeAsAttribute(eTextWritingMode, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))

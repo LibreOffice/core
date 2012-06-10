@@ -49,6 +49,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 
 #ifndef ChartViewDumper_hxx
 #define ChartViewDumper_hxx
@@ -136,6 +137,8 @@ private:
     void dumpTextAnimationDirectionAsAttribute(com::sun::star::drawing::TextAnimationDirection eTextAnimationDirection, xmlTextWriterPtr xmlWriter);
     void dumpTextAnimationKindAsAttribute(com::sun::star::drawing::TextAnimationKind eTextAnimationKind, xmlTextWriterPtr xmlWriter);
     void dumpTextAnimationStartInsideAsAttribute(sal_Bool bTextAnimationStartInside, xmlTextWriterPtr xmlWriter);
+    void dumpTextAnimationStopInsideAsAttribute(sal_Bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter);
+    void dumpTextWritingModeAsAttribute(com::sun::star::text::WritingMode eWritingMode, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
