@@ -50,7 +50,12 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
+#include <sfx2/DocumentMetadataAccess.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/documentconstants.hxx>
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
@@ -394,9 +399,9 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
         // TODO/LATER: do not do it for embedded links
+        OUString aName;
         if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
         {
-            OUString aName;
             if ( pMedium && pMedium->GetItemSet() )
             {
                 const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
@@ -424,6 +429,38 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         xInfoSet->setPropertyValue( "SourceStorage", uno::Any( xStorage ) );
 
         sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+
+        if (!bStylesOnly && bOasis)
+        {
+            // RDF metadata: ODF >= 1.2
+            try
+            {
+                ::comphelper::ComponentContext aContext( xServiceFactory );
+                const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
+                    xModel, uno::UNO_QUERY_THROW );
+                const uno::Reference< rdf::XURI > xBaseURI(
+                    ::sfx2::createBaseURI( aContext.getUNOContext(), xStorage, aBaseURL, aName ) );
+                const uno::Reference< task::XInteractionHandler > xHandler(
+                    pObjSh->GetMedium()->GetInteractionHandler() );
+                xDMA->loadMetadataFromStorage( xStorage, xBaseURI, xHandler );
+            }
+            catch (lang::WrappedTargetException & e)
+            {
+                ucb::InteractiveAugmentedIOException iaioe;
+                if ( e.TargetException >>= iaioe )
+                {
+                    nError = SCERR_IMPORT_UNKNOWN;
+                }
+                else
+                {
+                    nError = SCWARN_IMPORT_FEATURES_LOST;
+                }
+            }
+            catch (uno::Exception &)
+            {
+                nError = SCWARN_IMPORT_FEATURES_LOST;
+            }
+        }
 
         // #i103539#: always read meta.xml for generator
         sal_uInt32 nMetaRetval(0);
@@ -827,6 +864,31 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         ScMySharedData* pSharedData = NULL;
 
         sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+
+        // RDF metadata: ODF >= 1.2
+        if ( !bStylesOnly && bOasis )
+        {
+            const uno::Reference< beans::XPropertySet > xPropSet( xStorage, uno::UNO_QUERY_THROW );
+            try
+            {
+                ::rtl::OUString aVersion;
+                if (( xPropSet->getPropertyValue(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Version"))) >>= aVersion )
+                    && !aVersion.equals(ODFVER_010_TEXT)
+                    && !aVersion.equals(ODFVER_011_TEXT) )
+                {
+                    const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
+                        xModel, uno::UNO_QUERY_THROW );
+                    xDMA->storeMetadataToStorage( xStorage );
+                }
+            }
+            catch (beans::UnknownPropertyException &)
+            {
+            }
+            catch (uno::Exception &)
+            {
+            }
+        }
 
         // meta export
         if (!bStylesOnly && !bMetaRet)
