@@ -693,6 +693,16 @@ namespace {
 		}
 	}
 
+    void XShapeDumper::dumpTextLeftDistanceAsAttribute(sal_Int32 aTextLeftDistance, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLeftDistance"), "%" SAL_PRIdINT32, aTextLeftDistance);
+	}
+
+    void XShapeDumper::dumpTextRightDistanceAsAttribute(sal_Int32 aTextRightDistance, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textRightDistance"), "%" SAL_PRIdINT32, aTextRightDistance);
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -788,6 +798,18 @@ namespace {
 				drawing::TextVerticalAdjust eTextVerticalAdjust;
 				if(anotherAny >>= eTextVerticalAdjust)
 					dumpTextVerticalAdjustAsAttribute(eTextVerticalAdjust, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextLeftDistance");
+				sal_Int32 aTextLeftDistance;
+				if(anotherAny >>= aTextLeftDistance)
+					dumpTextLeftDistanceAsAttribute(aTextLeftDistance, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextRightDistance");
+				sal_Int32 aTextRightDistance;
+				if(anotherAny >>= aTextRightDistance)
+					dumpTextRightDistanceAsAttribute(aTextRightDistance, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))

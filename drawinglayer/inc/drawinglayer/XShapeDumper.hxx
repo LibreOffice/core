@@ -120,6 +120,8 @@ private:
     void dumpTextFitToSizeAsAttribute(com::sun::star::drawing::TextFitToSizeType eTextFitToSize, xmlTextWriterPtr xmlWriter);
     void dumpTextHorizontalAdjustAsAttribute(com::sun::star::drawing::TextHorizontalAdjust eTextHorizontalAdjust, xmlTextWriterPtr xmlWriter);
     void dumpTextVerticalAdjustAsAttribute(com::sun::star::drawing::TextVerticalAdjust eTextVerticalAdjust, xmlTextWriterPtr xmlWriter);
+    void dumpTextLeftDistanceAsAttribute(sal_Int32 aTextLeftDistance, xmlTextWriterPtr xmlWriter);
+    void dumpTextRightDistanceAsAttribute(sal_Int32 aTextRightDistance, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
