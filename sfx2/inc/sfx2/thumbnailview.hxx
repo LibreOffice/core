@@ -66,12 +66,6 @@ class ThumbnailViewItemAcc;
     WB_FLATVALUESET     Flat Look.
     WB_NAMEFIELD        There is a namefield, where the name of an item will be
                         shown.
-    WB_NONEFIELD        There is a NoSelection field which can be selected if
-                        0 is passed along with SelectItem. Respectively
-                        GetSelectItemId() returns 0 if this field or nothing
-                        is selected. This field shows the text which is specified
-                        by SetText() respectively no one, if no text was set. With
-                        SetNoSelection() the selection can be disabled.
     WB_VSCROLL          A scroolbar will be always shown. The visible number of
                         lines have to be specified with SetLineCount() if this
                         flag is set.
@@ -164,7 +158,6 @@ class ThumbnailViewItemAcc;
 
 #define WB_RADIOSEL             ((WinBits)0x00008000)
 #define WB_NAMEFIELD            ((WinBits)0x00040000)
-#define WB_NONEFIELD            ((WinBits)0x00080000)
 #define WB_FLATVALUESET         ((WinBits)0x02000000)
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #define WB_MENUSTYLEVALUESET    ((WinBits)0x08000000)

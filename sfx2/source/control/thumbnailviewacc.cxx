@@ -142,8 +142,6 @@ sal_Int32 SAL_CALL ThumbnailViewAcc::getAccessibleChildCount()
     ThrowIfDisposed();
 
     sal_Int32 nCount = mpParent->ImplGetVisibleItemCount();
-    if (HasNoneField())
-        nCount += 1;
     return nCount;
 }
 
@@ -600,31 +598,12 @@ void SAL_CALL ThumbnailViewAcc::disposing (void)
 
 sal_uInt16 ThumbnailViewAcc::getItemCount (void) const
 {
-    sal_uInt16 nCount = mpParent->ImplGetVisibleItemCount();
-    // When the None-Item is visible then increase the number of items by
-    // one.
-    if (HasNoneField())
-        nCount += 1;
-    return nCount;
+    return mpParent->ImplGetVisibleItemCount();
 }
 
 ThumbnailViewItem* ThumbnailViewAcc::getItem (sal_uInt16 nIndex) const
 {
-    ThumbnailViewItem* pItem = NULL;
-
-    if (HasNoneField())
-    {
-        if (nIndex == 0)
-            // When present the first item is the then allways visible none field.
-            pItem = mpParent->ImplGetItem (THUMBNAILVIEW_ITEM_NONEITEM);
-        else
-            // Shift down the index to compensate for the none field.
-            nIndex -= 1;
-    }
-    if (pItem == NULL)
-        pItem = mpParent->ImplGetVisibleItem (static_cast<sal_uInt16>(nIndex));
-
-    return pItem;
+    return mpParent->ImplGetVisibleItem (static_cast<sal_uInt16>(nIndex));
 }
 
 void ThumbnailViewAcc::ThrowIfDisposed (void)
@@ -641,14 +620,6 @@ void ThumbnailViewAcc::ThrowIfDisposed (void)
     {
         DBG_ASSERT (mpParent!=NULL, "ValueSetAcc not disposed but mpParent == NULL");
     }
-}
-
-
-
-bool ThumbnailViewAcc::HasNoneField (void) const
-{
-    DBG_ASSERT (mpParent!=NULL, "ThumbnailViewAcc::HasNoneField called with mpParent==NULL");
-    return ((mpParent->GetStyle() & WB_NONEFIELD) != 0);
 }
 
 ThumbnailViewItemAcc::ThumbnailViewItemAcc( ThumbnailViewItem* pParent, bool bIsTransientChildrenDisabled ) :

@@ -173,14 +173,6 @@ private:
     */
     void ThrowIfDisposed (void)
         throw (::com::sun::star::lang::DisposedException);
-
-    /** Check whether the value set has a 'none' field, i.e. a field (button)
-        that deselects any items (selects none of them).
-        @return
-            Returns <true/> if there is a 'none' field and <false/> it it is
-            missing.
-    */
-    bool HasNoneField (void) const;
 };
 
 class ThumbnailViewItemAcc : public ::cppu::WeakImplHelper5< ::com::sun::star::accessibility::XAccessible,

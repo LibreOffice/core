@@ -396,7 +396,6 @@ void ThumbnailView::Format()
     size_t      nItemCount = mItemList.size();
     WinBits     nStyle = GetStyle();
     long        nTxtHeight = GetTextHeight();
-    long        nOff = 0;
     long        nNoneHeight;
     long        nNoneSpace;
     ScrollBar*  pDelScrBar = NULL;
@@ -429,24 +428,13 @@ void ThumbnailView::Format()
     else
         mnTextOffset = 0;
 
-    // consider offset and size, if NoneField does exist
-    if ( nStyle & WB_NONEFIELD )
-    {
-        nNoneHeight = nTxtHeight+nOff;
-        nNoneSpace = mnSpacing;
-        if ( nStyle & WB_RADIOSEL )
-            nNoneHeight += 8;
-    }
-    else
-    {
-        nNoneHeight = 0;
-        nNoneSpace = 0;
+    nNoneHeight = 0;
+    nNoneSpace = 0;
 
-        if ( mpNoneItem )
-        {
-            delete mpNoneItem;
-            mpNoneItem = NULL;
-        }
+    if ( mpNoneItem )
+    {
+        delete mpNoneItem;
+        mpNoneItem = NULL;
     }
 
     // calculate ScrollBar width
@@ -532,15 +520,6 @@ void ThumbnailView::Format()
     {
         mbHasVisibleItems = false;
 
-        if ( nStyle & WB_NONEFIELD )
-        {
-            if ( mpNoneItem )
-            {
-                mpNoneItem->mbVisible = false;
-                mpNoneItem->maText = GetText();
-            }
-        }
-
         for ( size_t i = 0; i < nItemCount; i++ )
         {
             mItemList[i]->mbVisible = false;
@@ -592,24 +571,6 @@ void ThumbnailView::Format()
         maVirDev.SetLineColor();
         long x = nStartX;
         long y = nStartY;
-
-        // create NoSelection field and show it
-        if ( nStyle & WB_NONEFIELD )
-        {
-            if ( !mpNoneItem )
-                mpNoneItem = new ThumbnailViewItem( *this );
-
-            mpNoneItem->mnId            = 0;
-            mpNoneItem->mbVisible       = true;
-            maNoneItemRect.Left()       = x;
-            maNoneItemRect.Top()        = y;
-            maNoneItemRect.Right()      = maNoneItemRect.Left()+aWinSize.Width()-x-1;
-            maNoneItemRect.Bottom()     = y+nNoneHeight-1;
-
-            DrawItem( mpNoneItem, maNoneItemRect );
-
-            y += nNoneHeight+nNoneSpace;
-        }
 
         // draw items
         sal_uLong nFirstItem = mnFirstLine * mnCols;
@@ -673,12 +634,7 @@ void ThumbnailView::Format()
         {
             Point   aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, 0 );
             Size    aSize( nScrBarWidth-SCRBAR_OFFSET, aWinSize.Height() );
-            // If a none field is visible, then we center the scrollbar
-            if ( nStyle & WB_NONEFIELD )
-            {
-                aPos.Y() = nStartY+nNoneHeight+1;
-                aSize.Height() = ((mnItemHeight+mnSpacing)*mnVisLines)-2-mnSpacing;
-            }
+
             mpScrBar->SetPosSizePixel( aPos, aSize );
             mpScrBar->SetRangeMax( mnLines );
             mpScrBar->SetVisibleSize( mnVisLines );
@@ -2125,7 +2081,6 @@ Size ThumbnailView::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesi
     Size        aSize( rItemSize.Width()*nCalcCols, rItemSize.Height()*nCalcLines );
     WinBits     nStyle = GetStyle();
     long        nTxtHeight = GetTextHeight();
-    long        n = 0;
 
     if ( mnSpacing )
     {
@@ -2138,13 +2093,6 @@ Size ThumbnailView::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesi
         aSize.Height() += nTxtHeight + NAME_OFFSET;
         if ( !(nStyle & WB_FLATVALUESET) )
             aSize.Height() += NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
-    }
-
-    if ( nStyle & WB_NONEFIELD )
-    {
-        aSize.Height() += nTxtHeight + n + mnSpacing;
-        if ( nStyle & WB_RADIOSEL )
-            aSize.Height() += 8;
     }
 
     // sum possible ScrollBar width
