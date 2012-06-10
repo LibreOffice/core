@@ -40,6 +40,7 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
 #include <sfx2/minarray.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #define SVX_CFGGROUP_FUNCTION 1
 #define SVX_CFGFUNCTION_SLOT  2
@@ -87,8 +88,7 @@ struct SvxGroupInfo_Impl
     }
 };
 
-typedef SvxGroupInfo_Impl* SvxGroupInfoPtr;
-SV_DECL_PTRARR_DEL(SvxGroupInfoArr_Impl, SvxGroupInfoPtr, 5)
+typedef boost::ptr_vector<SvxGroupInfo_Impl> SvxGroupInfoArr_Impl;
 
 class ImageProvider
 {

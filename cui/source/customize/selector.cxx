@@ -76,8 +76,6 @@ using namespace ::com::sun::star::container;
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 
-SV_IMPL_PTRARR(SvxGroupInfoArr_Impl, SvxGroupInfoPtr);
-
 /*
  * The implementations of SvxConfigFunctionListBox_Impl and
  * SvxConfigGroupListBox_Impl are copied from sfx2/source/dialog/cfg.cxx
@@ -140,14 +138,7 @@ IMPL_LINK_NOARG(SvxConfigFunctionListBox_Impl, TimerHdl)
 
 void SvxConfigFunctionListBox_Impl::ClearAll()
 {
-    sal_uInt16 nCount = aArr.Count();
-    for ( sal_uInt16 i=0; i<nCount; ++i )
-    {
-        SvxGroupInfo_Impl *pData = aArr[i];
-        delete pData;
-    }
-
-    aArr.Remove( 0, nCount );
+    aArr.clear();
     Clear();
 }
 
@@ -236,14 +227,7 @@ SvxConfigGroupListBox_Impl::~SvxConfigGroupListBox_Impl()
 
 void SvxConfigGroupListBox_Impl::ClearAll()
 {
-    sal_uInt16 nCount = aArr.Count();
-    for ( sal_uInt16 i=0; i<nCount; ++i )
-    {
-        SvxGroupInfo_Impl *pData = aArr[i];
-        delete pData;
-    }
-
-    aArr.Remove( 0, nCount );
+    aArr.clear();
     Clear();
 }
 
@@ -376,7 +360,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                 SvxGroupInfo_Impl* pInfo =
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, theChild );
                 pNewEntry->SetUserData( pInfo );
-                aArr.Insert( pInfo, aArr.Count() );
+                aArr.push_back( pInfo );
 
                 if ( _bCheapChildrenOnDemand )
                 {
@@ -524,7 +508,7 @@ void SvxConfigGroupListBox_Impl::Init()
 
                 SvxGroupInfo_Impl *pInfo =
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_FUNCTION, gids[i] );
-                aArr.Insert( pInfo, aArr.Count() );
+                aArr.push_back( pInfo );
 
                 pEntry->SetUserData( pInfo );
             }
@@ -564,7 +548,7 @@ void SvxConfigGroupListBox_Impl::Init()
                 SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
                 pNewEntry->SetUserData( pInfo );
                 pNewEntry->EnableChildrenOnDemand( sal_True );
-                aArr.Insert( pInfo, aArr.Count() );
+                aArr.push_back( pInfo );
             }
             else
             {
@@ -772,8 +756,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     SvxGroupInfo_Impl *_pGroupInfo = new SvxGroupInfo_Impl(
                         SVX_CFGFUNCTION_SLOT, 123, aCmdURL, ::rtl::OUString() );
 
-                    pFunctionListBox->aArr.Insert(
-                        _pGroupInfo, pFunctionListBox->aArr.Count() );
+                    pFunctionListBox->aArr.push_back( _pGroupInfo );
 
                     pFuncEntry->SetUserData( _pGroupInfo );
                 }
@@ -832,8 +815,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 
                             pNewEntry->SetUserData( _pGroupInfo );
 
-                            pFunctionListBox->aArr.Insert(
-                                _pGroupInfo, pFunctionListBox->aArr.Count() );
+                            pFunctionListBox->aArr.push_back( _pGroupInfo );
 
                         }
                     }
