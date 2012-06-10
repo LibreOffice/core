@@ -743,6 +743,32 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationCount"), "%" SAL_PRIdINT32, aTextAnimationCount);
 	}
 
+    void XShapeDumper::dumpTextAnimationDelayAsAttribute(sal_Int32 aTextAnimationDelay, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationDelay"), "%" SAL_PRIdINT32, aTextAnimationDelay);
+	}
+
+    void XShapeDumper::dumpTextAnimationDirectionAsAttribute(drawing::TextAnimationDirection eTextAnimationDirection, xmlTextWriterPtr xmlWriter)
+	{
+		switch(eTextAnimationDirection)
+		{
+			case drawing::TextAnimationDirection_LEFT:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "LEFT");
+				break;
+			case drawing::TextAnimationDirection_RIGHT:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "RIGHT");
+				break;
+			case drawing::TextAnimationDirection_UP:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "UP");
+				break;
+			case drawing::TextAnimationDirection_DOWN:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "DOWN");
+				break;
+			default:
+				break;
+		}
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -898,6 +924,18 @@ namespace {
 				sal_Int32 aTextAnimationCount;
 				if(anotherAny >>= aTextAnimationCount)
 					dumpTextAnimationCountAsAttribute(aTextAnimationCount, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationDelay");
+				sal_Int32 aTextAnimationDelay;
+				if(anotherAny >>= aTextAnimationDelay)
+					dumpTextAnimationDelayAsAttribute(aTextAnimationDelay, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationDirection");
+				drawing::TextAnimationDirection eTextAnimationDirection;
+				if(anotherAny >>= eTextAnimationDirection)
+					dumpTextAnimationDirectionAsAttribute(eTextAnimationDirection, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
