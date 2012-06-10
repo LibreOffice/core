@@ -10,10 +10,10 @@
 #ifndef TEMPLATEDLG_HXX
 #define TEMPLATEDLG_HXX
 
-#include <sfx2/thumbnailview.hxx>
-
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
+
+class ThumbnailView;
 
 class SfxTemplateManagerDlg : public ModalDialog
 {
@@ -37,7 +37,7 @@ private:
     PushButton aButtonSheets;
     PushButton aButtonDraws;
 
-    ThumbnailView maView;
+    ThumbnailView *maView;
 };
 
 #endif // TEMPLATEDLG_HXX
