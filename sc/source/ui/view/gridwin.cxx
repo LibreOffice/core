@@ -1228,7 +1228,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         long nMaxText = 0;
 
         //  default entries
-        static const sal_uInt16 nDefIDs[] = { SCSTR_ALLFILTER, SCSTR_TOP10FILTER, SCSTR_STDFILTER, SCSTR_FILTER_EMPTY, SCSTR_FILTER_NOTEMPTY };
+        static const sal_uInt16 nDefIDs[] = { SCSTR_TOP10FILTER, SCSTR_STDFILTER, SCSTR_FILTER_EMPTY, SCSTR_FILTER_NOTEMPTY };
         const size_t nDefCount = SAL_N_ELEMENTS(nDefIDs);
         for (i=0; i<nDefCount; i++)
         {
