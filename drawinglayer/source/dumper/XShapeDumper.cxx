@@ -909,6 +909,14 @@ namespace {
 		    rtl::OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
 	}
 
+    void XShapeDumper::dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter)
+	{
+		if(bSizeProtect)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "false");
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -1447,6 +1455,12 @@ namespace {
 				rtl::OUString sName;
 				if(anotherAny >>= sName)
 					dumpNameAsAttribute(sName, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("SizeProtect");
+				sal_Bool bSizeProtect;
+				if(anotherAny >>= bSizeProtect)
+					dumpSizeProtectAsAttribute(bSizeProtect, xmlWriter);
 			}
         }
 

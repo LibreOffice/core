@@ -155,6 +155,7 @@ private:
     void dumpPrintableAsAttribute(sal_Bool bPrintable, xmlTextWriterPtr xmlWriter);
     void dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWriter);
     void dumpNameAsAttribute(rtl::OUString sName, xmlTextWriterPtr xmlWriter);
+    void dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
