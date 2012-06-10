@@ -879,6 +879,22 @@ namespace {
 		rtl::OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
 	}
 
+    void XShapeDumper::dumpVisibleAsAttribute(sal_Bool bVisible, xmlTextWriterPtr xmlWriter)
+	{
+		if(bVisible)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "false");
+	}
+
+    void XShapeDumper::dumpPrintableAsAttribute(sal_Bool bPrintable, xmlTextWriterPtr xmlWriter)
+	{
+		if(bPrintable)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "false");
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -1393,6 +1409,18 @@ namespace {
 				rtl::OUString sLayerName;
 				if(anotherAny >>= sLayerName)
 					dumpLayerNameAsAttribute(sLayerName, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("Visible");
+				sal_Bool bVisible;
+				if(anotherAny >>= bVisible)
+					dumpVisibleAsAttribute(bVisible, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("Printable");
+				sal_Bool bPrintable;
+				if(anotherAny >>= bPrintable)
+					dumpPrintableAsAttribute(bPrintable, xmlWriter);
 			}
         }
 
