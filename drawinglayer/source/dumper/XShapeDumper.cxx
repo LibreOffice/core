@@ -827,6 +827,18 @@ namespace {
 		}
 	}
 
+    // ----------------------------------------
+    // ---------- TextProperties.idl ----------
+    // ----------------------------------------
+
+    void XShapeDumper::dumpShadowAsAttribute(sal_Bool bShadow, xmlTextWriterPtr xmlWriter)
+	{
+		if(bShadow)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "false");
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -1286,6 +1298,16 @@ namespace {
 				drawing::PointSequenceSequence aGeometry;
 				if(anotherAny >>= aGeometry)
 					dumpGeometryAsElement(aGeometry, xmlWriter);
+			}
+        }
+
+        else if(xServiceInfo->supportsService("com.sun.star.drawing.ShadowProperties"))
+        {
+            {
+				uno::Any anotherAny = xPropSet->getPropertyValue("Shadow");
+				sal_Bool bShadow;
+				if(anotherAny >>= bShadow)
+					dumpShadowAsAttribute(bShadow, xmlWriter);
 			}
         }
 
