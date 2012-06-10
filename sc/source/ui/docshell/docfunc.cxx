@@ -5075,7 +5075,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
 	ScMarkData aMarkData;
 	aMarkData.MarkFromRangeList(rRanges, true);
 	pDoc->ApplySelectionPattern( aPattern , aMarkData );
-	size_t n = rRanges.size()
+	size_t n = rRanges.size();
 	for(size_t i = 0; i < n; ++i)
 	    pFormat->DoRepaint(rRanges[i]);
     }

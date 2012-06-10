@@ -217,6 +217,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
 	maLbStyle.SelectEntry(aStyleName);
 	ScConditionMode eMode = pEntry->GetOperation();
 	maLbType.SelectEntryPos(1);
+	maEdVal1.SetText(pEntry->GetExpression(maPos, 0));
 	switch(eMode)
 	{
 	    case SC_COND_EQUAL:
@@ -238,9 +239,11 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
 		maLbCondType.SelectEntryPos(5);
 		break;
 	    case SC_COND_BETWEEN:
+		maEdVal2.SetText(pEntry->GetExpression(maPos, 1));
 		maLbCondType.SelectEntryPos(6);
 		break;
 	    case SC_COND_NOTBETWEEN:
+		maEdVal2.SetText(pEntry->GetExpression(maPos, 1));
 		maLbCondType.SelectEntryPos(7);
 		break;
 	    case SC_COND_DUPLICATE:
@@ -374,6 +377,7 @@ void ScCondFrmtEntry::Init()
     maBtOptions.SetClickHdl( LINK( this, ScCondFrmtEntry, OptionBtnHdl ) );
     maLbDataBarMinType.SetSelectHdl( LINK( this, ScCondFrmtEntry, DataBarTypeSelectHdl ) );
     maLbDataBarMaxType.SetSelectHdl( LINK( this, ScCondFrmtEntry, DataBarTypeSelectHdl ) );
+    maLbCondType.SetSelectHdl( LINK( this, ScCondFrmtEntry, ConditionTypeSelectHdl ) );
 
     mpDataBarData.reset(new ScDataBarFormatData());
     mpDataBarData->mpUpperLimit.reset(new ScColorScaleEntry());
@@ -860,6 +864,23 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, OptionBtnHdl )
     return 0;
 }
 
+IMPL_LINK_NOARG( ScCondFrmtEntry, ConditionTypeSelectHdl )
+{
+    if(maLbCondType.GetSelectEntryPos() == 6 || maLbCondType.GetSelectEntryPos() == 7)
+    {
+	std::cout << "OldSize: " << maEdVal1.GetSizePixel().Width() << " " << maEdVal1.GetSizePixel().Height() << std::endl;
+	maEdVal1.SetSizePixel(maEdVal2.GetSizePixel());
+	maEdVal2.Show();
+    }
+    else
+    {
+	maEdVal2.Hide();
+	Size aSize(193, 30);
+	maEdVal1.SetSizePixel(aSize);
+    }
+    return 0;
+}
+
 ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc):
     Control(pParent, rResId),
     mbHasScrollBar(false),
@@ -981,7 +1002,7 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     rtl::OUStringBuffer aTitle( GetText() );
     aTitle.append(rtl::OUString(" "));
     rtl::OUString aRangeString;
-    rRange.Format(aRangeString, 0, pDoc);
+    rRange.Format(aRangeString, SCA_VALID, pDoc, pDoc->GetAddressConvention());
     aTitle.append(aRangeString);
     SetText(aTitle.makeStringAndClear());
     maBtnAdd.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, AddBtnHdl ) );
