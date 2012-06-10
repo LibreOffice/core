@@ -27,7 +27,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
       maView(new ThumbnailView(this,SfxResId(TEMPLATE_VIEW)))
 {
-    maView->SetStyle(WB_TABSTOP);
+    maView->SetStyle(WB_TABSTOP | WB_VSCROLL);
     maView->SetColCount(MAX_COLUMN_COUNT);
     maView->SetLineCount(MAX_LINE_COUNT);
 
