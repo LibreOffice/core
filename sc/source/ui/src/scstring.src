@@ -178,7 +178,7 @@ String SCSTR_ALL
 
 String SCSTR_STDFILTER
 {
-    Text [ en-US ] = "Standard Filter..." ;
+    Text [ en-US ] = "~Standard Filter..." ;
 };
 
 String SCSTR_TOP10FILTER
@@ -588,7 +588,7 @@ String STR_REPLCELLSWARN
 
 String SCSTR_ALLFILTER
 {
-    Text [ en-US ] = "All";
+    Text [ en-US ] = "~All";
 };
 
 String STR_ACC_CSVRULER_NAME
