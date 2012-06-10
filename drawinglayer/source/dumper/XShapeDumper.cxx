@@ -859,6 +859,15 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowYDistance"), "%" SAL_PRIdINT32, aShadowYDistance);
 	}
 
+    // -------------------------------
+    // ---------- Shape.idl ----------
+    // -------------------------------
+
+    void XShapeDumper::dumpZOrderAsAttribute(sal_Int32 aZOrder, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("zOrder"), "%" SAL_PRIdINT32, aZOrder);
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -1352,6 +1361,15 @@ namespace {
 				sal_Int32 aShadowYDistance;
 				if(anotherAny >>= aShadowYDistance)
 					dumpShadowYDistanceAsAttribute(aShadowYDistance, xmlWriter);
+			}
+        }
+        else if(xServiceInfo->supportsService("com.sun.star.drawing.Shape"))
+        {
+            {
+				uno::Any anotherAny = xPropSet->getPropertyValue("ZOrder");
+				sal_Int32 aZOrder;
+				if(anotherAny >>= aZOrder)
+					dumpZOrderAsAttribute(aZOrder, xmlWriter);
 			}
         }
 
