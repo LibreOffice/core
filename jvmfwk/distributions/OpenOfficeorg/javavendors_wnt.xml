@@ -23,11 +23,11 @@
 <javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
- <updated>2011-01-07</updated>
+ <updated>2012-10-06</updated>
 
  <vendorInfos>
   <vendor name="Oracle Corporation">
-    <minVersion>1.7.0</minVersion>
+    <minVersion>1.6.0</minVersion>
   </vendor>
   <vendor name="Sun Microsystems Inc.">
     <minVersion>1.5.0</minVersion>
