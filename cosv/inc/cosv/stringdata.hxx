@@ -26,7 +26,7 @@
 
 
 #include <cosv/str_types.hxx>
-
+#include <cstring>
 
 
 namespace csv

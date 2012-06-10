@@ -233,14 +233,14 @@ public:
     /** Returns true, if the object accossiated to the passed key exists. */
     inline bool         has( key_type nKey ) const
                         {
-                            typename map_type::const_iterator aIt = find( nKey );
+                            typename map_type::const_iterator aIt = this->find( nKey );
                             return (aIt != this->end()) && aIt->second.is();
                         }
 
     /** Returns a reference to the object accossiated to the passed key, or 0 on error. */
     inline ref_type     get( key_type nKey ) const
                         {
-                            typename map_type::const_iterator aIt = find( nKey );
+                            typename map_type::const_iterator aIt = this->find( nKey );
                             if( aIt != this->end() ) return aIt->second;
                             return ref_type();
                         }

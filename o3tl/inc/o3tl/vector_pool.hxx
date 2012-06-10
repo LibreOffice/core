@@ -60,7 +60,7 @@ namespace o3tl
                 }
                 else
                 {
-                    push_back(value_type(rCopy));
+                    this->push_back(value_type(rCopy));
                     return this->size()-1;
                 }
             }

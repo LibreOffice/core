@@ -363,7 +363,7 @@ A ScCompressedArray<A,D>::GetLastUnequalAccess( A nStart, const D& rCompare )
 template< typename A, typename D >
 unsigned long ScSummableCompressedArray<A,D>::SumValues( A nStart, A nEnd ) const
 {
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     unsigned long nSum = SumValuesContinuation( nStart, nEnd, nIndex);
     if (nEnd > this->nMaxAccess)
         nSum += this->pData[this->nCount-1].aValue * (nEnd - this->nMaxAccess);
@@ -425,17 +425,17 @@ void ScBitMaskCompressedArray<A,D>::AndValue( A nStart, A nEnd,
     if (nStart > nEnd)
         return;
 
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     do
     {
         if ((this->pData[nIndex].aValue & rValueToAnd) != this->pData[nIndex].aValue)
         {
             A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
             A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-            SetValue( nS, nE, this->pData[nIndex].aValue & rValueToAnd);
+            this->SetValue( nS, nE, this->pData[nIndex].aValue & rValueToAnd);
             if (nE >= nEnd)
                 break;  // while
-            nIndex = Search( nE + 1);
+            nIndex = this->Search( nE + 1);
         }
         else if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
@@ -452,17 +452,17 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
     if (nStart > nEnd)
         return;
 
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     do
     {
         if ((this->pData[nIndex].aValue | rValueToOr) != this->pData[nIndex].aValue)
         {
             A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
             A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-            SetValue( nS, nE, this->pData[nIndex].aValue | rValueToOr);
+            this->SetValue( nS, nE, this->pData[nIndex].aValue | rValueToOr);
             if (nE >= nEnd)
                 break;  // while
-            nIndex = Search( nE + 1);
+            nIndex = this->Search( nE + 1);
         }
         else if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
@@ -487,7 +487,7 @@ void ScBitMaskCompressedArray<A,D>::CopyFromAnded(
         nRegionEnd -= nSourceDy;
         if (nRegionEnd > nEnd)
             nRegionEnd = nEnd;
-        SetValue( j, nRegionEnd, rValue & rValueToAnd);
+        this->SetValue( j, nRegionEnd, rValue & rValueToAnd);
         j = nRegionEnd;
     }
 }
@@ -508,7 +508,7 @@ void ScBitMaskCompressedArray<A,D>::CopyFromOred(
         nRegionEnd -= nSourceDy;
         if (nRegionEnd > nEnd)
             nRegionEnd = nEnd;
-        SetValue( j, nRegionEnd, rValue | rValueToOr);
+        this->SetValue( j, nRegionEnd, rValue | rValueToOr);
         j = nRegionEnd;
     }
 }
@@ -519,7 +519,7 @@ A ScBitMaskCompressedArray<A,D>::GetBitStateStart( A nEnd,
         const D& rBitMask, const D& rMaskedCompare ) const
 {
     A nStart = ::std::numeric_limits<A>::max();
-    size_t nIndex = Search( nEnd);
+    size_t nIndex = this->Search( nEnd);
     while ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
     {
         if (nIndex > 0)
@@ -542,7 +542,7 @@ A ScBitMaskCompressedArray<A,D>::GetBitStateEnd( A nStart,
         const D& rBitMask, const D& rMaskedCompare ) const
 {
     A nEnd = ::std::numeric_limits<A>::max();
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     while (nIndex < this->nCount && (this->pData[nIndex].aValue & rBitMask) ==
             rMaskedCompare)
     {
@@ -557,7 +557,7 @@ template< typename A, typename D >
 A ScBitMaskCompressedArray<A,D>::GetFirstForCondition( A nStart, A nEnd,
         const D& rBitMask, const D& rMaskedCompare ) const
 {
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     do
     {
         if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
@@ -577,7 +577,7 @@ template< typename A, typename D >
 A ScBitMaskCompressedArray<A,D>::GetLastForCondition( A nStart, A nEnd,
         const D& rBitMask, const D& rMaskedCompare ) const
 {
-    size_t nIndex = Search( nEnd);
+    size_t nIndex = this->Search( nEnd);
     while (1)
     {
         if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
@@ -601,7 +601,7 @@ A ScBitMaskCompressedArray<A,D>::CountForCondition( A nStart, A nEnd,
         const D& rBitMask, const D& rMaskedCompare ) const
 {
     A nRet = 0;
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     do
     {
         if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
@@ -624,7 +624,7 @@ size_t ScBitMaskCompressedArray<A,D>::FillArrayForCondition( A nStart, A nEnd,
         A * pArray, size_t nArraySize ) const
 {
     size_t nUsed = 0;
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     while (nIndex < this->nCount && nUsed < nArraySize)
     {
         if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
@@ -646,7 +646,7 @@ template< typename A, typename D >
 bool ScBitMaskCompressedArray<A,D>::HasCondition( A nStart, A nEnd,
         const D& rBitMask, const D& rMaskedCompare ) const
 {
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     do
     {
         if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
@@ -664,7 +664,7 @@ A ScBitMaskCompressedArray<A,D>::CountForAnyBitCondition( A nStart, A nEnd,
         const D& rBitMask ) const
 {
     A nRet = 0;
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     do
     {
         if ((this->pData[nIndex].aValue & rBitMask) != 0)
@@ -718,7 +718,7 @@ unsigned long ScBitMaskCompressedArray<A,D>::SumCoupledArrayForCondition(
 {
     unsigned long nSum = 0;
     A nS = nStart;
-    size_t nIndex1 = Search( nStart);
+    size_t nIndex1 = this->Search( nStart);
     size_t nIndex2 = rArray.Search( nStart);
     do
     {
@@ -752,7 +752,7 @@ unsigned long ScBitMaskCompressedArray<A,D>::SumScaledCoupledArrayForCondition(
 {
     unsigned long nSum = 0;
     A nS = nStart;
-    size_t nIndex1 = Search( nStart);
+    size_t nIndex1 = this->Search( nStart);
     size_t nIndex2 = rArray.Search( nStart);
     do
     {
