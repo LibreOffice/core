@@ -629,6 +629,8 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         if ( IsProtected() )
             for (i = nCol1; i <= nCol2; i++)
                 pTable->aCol[i].RemoveProtected(nRow1, nRow2);
+
+        pTable->mpCondFormatList.reset(new ScConditionalFormatList(pTable->pDocument, *mpCondFormatList));
     }
 }
 
@@ -663,8 +665,16 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
             {
                 ScConditionalFormat* pFormat = pOldCondFormatList->GetFormat(nId);
                 ScConditionalFormat* pNewFormat = pFormat->Clone(pDocument);
-                pNewFormat->SetKey(mpCondFormatList->size()+1);
+                pNewFormat->SetKey(0);
                 //not in list => create entries in both maps and new format
+                sal_uLong nMax = 0;
+                for(ScConditionalFormatList::const_iterator itr = mpCondFormatList->begin();
+                                        itr != mpCondFormatList->end(); ++itr)
+                {
+                    if(itr->GetKey() > nMax)
+                        nMax = itr->GetKey();
+                }
+                pNewFormat->SetKey(nMax + 1);
                 mpCondFormatList->InsertNew(pNewFormat);
                 sal_Int32 nNewId = pNewFormat->GetKey();
                 aOldIdToNewId.insert( std::pair<sal_Int32, sal_Int32>( nId, nNewId ) );
@@ -680,6 +690,9 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     {
         sal_uInt32 nNewKey = aOldIdToNewId.find(itr->first)->second;
         ScConditionalFormat* pFormat = mpCondFormatList->GetFormat( nNewKey );
+        if(!pFormat)
+            continue;
+
         pFormat->UpdateReference(URM_MOVE, ScRange(nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab),
                 nDx, nDy, pTable->nTab - nTab);
         pFormat->AddRange(itr->second);
