@@ -57,6 +57,7 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",
+        "/bin/jrockit/jvm.dll",
         // The 64-bit JRE has the jvm in bin/server
         "/bin/server/jvm.dll"
 #elif defined MACOSX && defined X86_64
@@ -65,7 +66,8 @@ char const* const* SunInfo::getRuntimePaths(int * size)
 #elif defined UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
-        "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so"
+        "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so",
+        "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so"
 #endif
     };
     *size = SAL_N_ELEMENTS(ar);
