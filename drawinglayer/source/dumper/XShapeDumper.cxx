@@ -713,6 +713,16 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLowerDistance"), "%" SAL_PRIdINT32, aTextLowerDistance);
 	}
 
+    void XShapeDumper::dumpTextMaximumFrameHeightAsAttribute(sal_Int32 aTextMaximumFrameHeight, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameHeight"), "%" SAL_PRIdINT32, aTextMaximumFrameHeight);
+	}
+
+    void XShapeDumper::dumpTextMaximumFrameWidthAsAttribute(sal_Int32 aTextMaximumFrameWidth, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameWidth"), "%" SAL_PRIdINT32, aTextMaximumFrameWidth);
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -832,6 +842,18 @@ namespace {
 				sal_Int32 aTextLowerDistance;
 				if(anotherAny >>= aTextLowerDistance)
 					dumpTextLowerDistanceAsAttribute(aTextLowerDistance, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameHeight");
+				sal_Int32 aTextMaximumFrameHeight;
+				if(anotherAny >>= aTextMaximumFrameHeight)
+					dumpTextMaximumFrameHeightAsAttribute(aTextMaximumFrameHeight, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameWidth");
+				sal_Int32 aTextMaximumFrameWidth;
+				if(anotherAny >>= aTextMaximumFrameWidth)
+					dumpTextMaximumFrameWidthAsAttribute(aTextMaximumFrameWidth, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
