@@ -72,13 +72,13 @@ using ::rtl::OUString;
 
 extern void InterpolateFixedBitmap( FixedBitmap * pBitmap );
 
-// Kennung fuer die Config Datei mit den Html Einstellungen
+//ID for the config-data with the HTML-settings
 const sal_uInt16 nMagic = (sal_uInt16)0x1977;
 
-// Key fuer die soffice.ini
+// Key for the soffice.ini
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
-// Die Help Ids der einzelnen Seiten
+// The Help-IDs of the pages
 const char* aPageHelpIds[NOOFPAGES] =
 {
     HID_SD_HTMLEXPORT_PAGE1,
@@ -89,9 +89,7 @@ const char* aPageHelpIds[NOOFPAGES] =
     HID_SD_HTMLEXPORT_PAGE6
 };
 
-// *********************************************************************
-// Diese Klasse enthaelt alle Einstellungen des Html-Export Autopiloten
-// *********************************************************************
+// This class has all the settings for the HTML-export autopilot
 class SdPublishingDesign
 {
 public:
@@ -146,9 +144,7 @@ public:
     friend SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign);
 };
 
-// =====================================================================
-// Default Einstellungen erzeugen
-// =====================================================================
+// load Default-settings
 SdPublishingDesign::SdPublishingDesign()
 {
     m_eMode = PUBLISH_HTML;
@@ -157,7 +153,7 @@ SdPublishingDesign::SdPublishingDesign()
 
     m_eFormat = FORMAT_PNG;
 
-    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
+    String  aFilterConfigPath( "Office.Common/Filter/Graphic/Export/JPG" );
     FilterConfigItem aFilterConfigItem( aFilterConfigPath );
     sal_Int32 nCompression = aFilterConfigItem.ReadInt32( OUString( KEY_QUALITY ), 75 );
     m_aCompression = UniString::CreateFromInt32( nCompression );
@@ -194,9 +190,7 @@ SdPublishingDesign::SdPublishingDesign()
     m_bHiddenSlides  = sal_False;
 }
 
-// =====================================================================
-// Vergleicht die Member ohne den Namen zu beachten
-// =====================================================================
+// Compares the values without paying attention to the name
 int SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
 {
     return
@@ -258,9 +252,7 @@ int SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
     );
 }
 
-// =====================================================================
-// Dieses Design aus Stream laden
-// =====================================================================
+// Load the design from the stream
 SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
 {
     SdIOCompat aIO(rIn, STREAM_READ);
@@ -314,12 +306,10 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     return rIn;
 }
 
-// =====================================================================
-// Dieses Design in Stream speichern
-// =====================================================================
+// Set the design to the stream
 SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
 {
-    // Letzter Parameter ist die aktuelle Versionsnummer des Codes
+    // The last parameter is the versionnumber of the code
     SdIOCompat aIO(rOut, STREAM_WRITE, 0);
 
     // Name
@@ -368,9 +358,7 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
     return rOut;
 }
 
-// *********************************************************************
-// Dialog zur eingabe eines Namens fuer ein Design
-// *********************************************************************
+// Dialog for the entry of the name of the design
 class SdDesignNameDlg : public ModalDialog
 {
 private:
@@ -385,13 +373,8 @@ public:
     DECL_LINK(ModifyHdl, void *);
 };
 
-// *********************************************************************
-// SdPublishingDlg Methoden
-// *********************************************************************
+// SdPublishingDlg Methods
 
-// =====================================================================
-// Konstruktor des Dialogs
-// =====================================================================
 SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 :   ModalDialog(pWindow, SdResId( DLG_PUBLISHING ))
 ,   mpButtonSet( new ButtonSet() )
@@ -491,22 +474,15 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     aNextPageButton.GrabFocus();
 }
 
-// =====================================================================
-// Destruktor
-// =====================================================================
 SdPublishingDlg::~SdPublishingDlg()
 {
     RemovePages();
 }
 
-// =====================================================================
-// Dialog Controls erzeugen und in die Seiten des Assistenten einbinden
-// =====================================================================
+// Generate dialog controls and embed them in the pages
 void SdPublishingDlg::CreatePages()
 {
     // Page 1
-    aAssistentFunc.InsertControl(1,
-        pPage1_Bmp = new FixedBitmap(this,SdResId(PAGE1_BMP)));
     aAssistentFunc.InsertControl(1,
         pPage1_Titel = new FixedLine(this,SdResId(PAGE1_TITEL)));
     aAssistentFunc.InsertControl(1,
@@ -522,8 +498,6 @@ void SdPublishingDlg::CreatePages()
 
 
     // Page 2
-    aAssistentFunc.InsertControl(2,
-        pPage2_Bmp = new FixedBitmap(this,SdResId(PAGE2_BMP)));
     aAssistentFunc.InsertControl(2,
         pPage2_Titel = new FixedLine(this,SdResId(PAGE2_TITEL )));
     aAssistentFunc.InsertControl(2,
@@ -586,8 +560,6 @@ void SdPublishingDlg::CreatePages()
 
     // Page 3
     aAssistentFunc.InsertControl(3,
-        pPage3_Bmp = new FixedBitmap(this,SdResId(PAGE3_BMP)));
-    aAssistentFunc.InsertControl(3,
         pPage3_Titel1 = new FixedLine(this,SdResId(PAGE3_TITEL_1)));
     aAssistentFunc.InsertControl(3,
         pPage3_Png = new RadioButton(this,SdResId(PAGE3_PNG)));
@@ -616,9 +588,7 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(3,
         pPage3_HiddenSlides = new CheckBox(this,SdResId(PAGE3_HIDDEN_SLIDES)));
 
-    // Seite 4
-    aAssistentFunc.InsertControl(4,
-        pPage4_Bmp = new FixedBitmap(this,SdResId(PAGE4_BMP)));
+    // Page 4
     aAssistentFunc.InsertControl(4,
         pPage4_Titel1 = new FixedLine(this,SdResId(PAGE4_TITEL_1)));
     aAssistentFunc.InsertControl(4,
@@ -641,9 +611,7 @@ void SdPublishingDlg::CreatePages()
         aAssistentFunc.InsertControl(4,
             pPage4_Download = new CheckBox(this,SdResId(PAGE4_DOWNLOAD)));
 
-    // Seite 5
-    aAssistentFunc.InsertControl(5,
-        pPage5_Bmp = new FixedBitmap(this,SdResId(PAGE5_BMP)));
+    // Page 5
     aAssistentFunc.InsertControl(5,
         pPage5_Titel = new FixedLine(this,SdResId(PAGE5_TITEL)));
     aAssistentFunc.InsertControl(5,
@@ -651,9 +619,7 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(5,
         pPage5_Buttons = new ValueSet(this,SdResId(PAGE5_BUTTONS)));
 
-    // Seite 6
-    aAssistentFunc.InsertControl(6,
-        pPage6_Bmp = new FixedBitmap(this,SdResId(PAGE6_BMP)));
+    // Page 6
     aAssistentFunc.InsertControl(6,
         pPage6_Titel = new FixedLine(this,SdResId(PAGE6_TITEL)));
     aAssistentFunc.InsertControl(6,
@@ -675,27 +641,15 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(6,
         pPage6_Preview = new SdHtmlAttrPreview(this,SdResId(PAGE6_PREVIEW)));
 
-    InterpolateFixedBitmap(pPage1_Bmp);
-
-    InterpolateFixedBitmap(pPage2_Bmp);
     InterpolateFixedBitmap(pPage2_Standard_FB);
     InterpolateFixedBitmap(pPage2_Frames_FB);
     InterpolateFixedBitmap(pPage2_Kiosk_FB);
     InterpolateFixedBitmap(pPage2_WebCast_FB);
-
-    InterpolateFixedBitmap(pPage3_Bmp);
-    InterpolateFixedBitmap(pPage4_Bmp);
-
-    InterpolateFixedBitmap(pPage5_Bmp);
-    InterpolateFixedBitmap(pPage6_Bmp);
 }
 
-// =====================================================================
-// Dialog Controls wieder entfernen
-// =====================================================================
+// Delete the controls of the dialog
 void SdPublishingDlg::RemovePages()
 {
-    delete pPage1_Bmp;
     delete pPage1_Titel;
     delete pPage1_NewDesign;
     delete pPage1_OldDesign;
@@ -703,7 +657,6 @@ void SdPublishingDlg::RemovePages()
     delete pPage1_DelDesign;
     delete pPage1_Desc;
 
-    delete pPage2_Bmp;
     delete pPage2_Titel;
     delete pPage2_Standard;
     delete pPage2_Frames;
@@ -737,7 +690,6 @@ void SdPublishingDlg::RemovePages()
     delete pPage2_Duration;
     delete pPage2_Endless;
 
-    delete pPage3_Bmp;
     delete pPage3_Titel1;
     delete pPage3_Png;
     delete pPage3_Gif;
@@ -753,7 +705,6 @@ void SdPublishingDlg::RemovePages()
     delete pPage3_SldSound;
     delete pPage3_HiddenSlides;
 
-    delete pPage4_Bmp;
     delete pPage4_Titel1;
     delete pPage4_Author_txt;
     delete pPage4_Author;
@@ -766,12 +717,10 @@ void SdPublishingDlg::RemovePages()
     if(m_bImpress)
         delete pPage4_Download;
 
-    delete pPage5_Bmp;
     delete pPage5_Titel;
     delete pPage5_TextOnly;
     delete pPage5_Buttons;
 
-    delete pPage6_Bmp;
     delete pPage6_Titel;
     delete pPage6_Default;
     delete pPage6_User;
@@ -784,9 +733,7 @@ void SdPublishingDlg::RemovePages()
     delete pPage6_Preview;
 }
 
-// =====================================================================
-// Dialog mit defaultwerten initialisieren
-// =====================================================================
+// Initialize dialog with default-values
 void SdPublishingDlg::SetDefaults()
 {
     SdPublishingDesign aDefault;
@@ -797,9 +744,7 @@ void SdPublishingDlg::SetDefaults()
     UpdatePage();
 }
 
-// =====================================================================
-// Das SfxItemSet mit den Einstellungen des Dialogs fuettern
-// =====================================================================
+// Feed the SfxItemSet with the settings of the dialog
 void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 {
     std::vector< PropertyValue > aProps;
@@ -961,9 +906,6 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
         aProps.push_back( aValue );
     }
 
-    // Seite 6
-
-
     rParams.realloc( aProps.size() );
     PropertyValue* pParams = rParams.getArray();
 
@@ -973,14 +915,12 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     }
 }
 
-// =====================================================================
-// Clickhandler fuer die Radiobuttons zur Designauswahl
-// =====================================================================
+// Clickhandler for the radiobuttons of the design-selection
 IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 {
     if(pButton == pPage1_NewDesign)
     {
-        pPage1_NewDesign->Check(sal_True); // wegen DesignDeleteHdl
+        pPage1_NewDesign->Check(sal_True); // because of DesignDeleteHdl
         pPage1_OldDesign->Check(sal_False);
         pPage1_Designs->Disable();
         pPage1_DelDesign->Disable();
@@ -1000,7 +940,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 
         sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
         m_pDesign = &m_aDesignList[nPos];
-        DBG_ASSERT(m_pDesign, "Kein Design? Das darf nicht sein! (CL)");
+        DBG_ASSERT(m_pDesign, "No Design? That's not allowed (CL)");
 
         if(m_pDesign)
             SetDesign(m_pDesign);
@@ -1009,14 +949,12 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
     return 0;
 }
 
-// =====================================================================
-// Clickhandler fuer die auswahl eines Designs
-// =====================================================================
+// Clickhandler for the choise of one design
 IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl)
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
     m_pDesign = &m_aDesignList[nPos];
-    DBG_ASSERT(m_pDesign, "Kein Design? Das darf nicht sein! (CL)");
+    DBG_ASSERT(m_pDesign, "No Design? That's not allowed (CL)");
 
     if(m_pDesign)
         SetDesign(m_pDesign);
@@ -1026,16 +964,14 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl)
     return 0;
 }
 
-// =====================================================================
-// Clickhandler fuer das loeschen eines Designs
-// =====================================================================
+// Clickhandler for the delete of one design
 IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl)
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
 
     boost::ptr_vector<SdPublishingDesign>::iterator iter = m_aDesignList.begin()+nPos;
 
-    DBG_ASSERT(iter != m_aDesignList.end(), "Kein Design? Das darf nicht sein! (CL)");
+    DBG_ASSERT(iter != m_aDesignList.end(), "No Design? That's not allowed (CL)");
 
     pPage1_Designs->RemoveEntry(nPos);
 
@@ -1051,9 +987,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl)
     return 0;
 }
 
-// =====================================================================
-// Clickhandler fuer das �ndern des Servertyps
-// =====================================================================
+// Clickhandler for the other servertypess
 IMPL_LINK( SdPublishingDlg, WebServerHdl, RadioButton *, pButton )
 {
     sal_Bool bASP = pButton == pPage2_ASP;
@@ -1065,9 +999,7 @@ IMPL_LINK( SdPublishingDlg, WebServerHdl, RadioButton *, pButton )
     return 0;
 }
 
-// =====================================================================
-// Clickhandler fuer die Radiobuttons der Auswahl des Grafikformates
-// =====================================================================
+// Clickhandler for the Radiobuttons of the graphicformat choice
 IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
 {
     pPage3_Png->Check( pButton == pPage3_Png );
@@ -1077,9 +1009,7 @@ IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
     return 0;
 }
 
-// =====================================================================
-// Clickhandler fuer die Radiobuttons Stanrard/Frames
-// =====================================================================
+// Clickhandler for the Radiobuttons Standard/Frames
 IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl)
 {
     UpdatePage();
@@ -1087,9 +1017,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl)
     return 0;
 }
 
-// =====================================================================
-// Clickhandler fuer die CheckBox der Titelseite
-// =====================================================================
+// Clickhandler for the Checkbox of the Title page
 IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl)
 {
     if(pPage2_Content->IsChecked())
@@ -1111,9 +1039,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl)
     return 0;
 }
 
-// =====================================================================
-// Clickhandler fuer die Radiobuttons Aufloesung
-// =====================================================================
+// Clickhandler for the Resolution Radiobuttons
 IMPL_LINK( SdPublishingDlg, ResolutionHdl, RadioButton *, pButton )
 {
     pPage3_Resolution_1->Check(pButton == pPage3_Resolution_1);
@@ -1123,19 +1049,15 @@ IMPL_LINK( SdPublishingDlg, ResolutionHdl, RadioButton *, pButton )
     return 0;
 }
 
-// =====================================================================
-// Clickhandler fuer das ValueSet mit den Bitmap Schaltflaechen
-// =====================================================================
+// Clickhandler for the ValueSet with the bitmap-buttons
 IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl)
 {
-    // wird eine Bitmap Schaltflaeche gewaehlt, TexOnly ausschalten
+    // if one bitmap-button is chosen, then disable TextOnly
     pPage5_TextOnly->Check(sal_False);
     return 0;
 }
 
-// =====================================================================
-// Das SfxItemSet mit den Einstellungen des Dialogs fuettern
-// =====================================================================
+// Fill the SfxItemSet with the settings of the dialog
 IMPL_LINK( SdPublishingDlg, ColorHdl, PushButton *, pButton)
 {
     SvColorDialog aDlg(this);
@@ -1184,12 +1106,10 @@ IMPL_LINK_NOARG(SdPublishingDlg, SlideChgHdl)
     return 0;
 }
 
-// =====================================================================
-// Clickhandler fuer den Ok Button
-// =====================================================================
+// Clickhandler for the Ok Button
 IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 {
-    //Ende
+    //End
     SdPublishingDesign* pDesign = new SdPublishingDesign();
     GetDesign(pDesign);
 
@@ -1197,7 +1117,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 
     if(pPage1_OldDesign->IsChecked() && m_pDesign)
     {
-        // aenderungen??
+        // are there changes?
         if(!(*pDesign == *m_pDesign))
             bSave = sal_True;
     }
@@ -1262,9 +1182,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
     return 0;
 }
 
-// =====================================================================
-// Refresh des Dialogs beim wechsel der Seite
-// =====================================================================
+// Refresh the dialogs when changing from pages
 void SdPublishingDlg::ChangePage()
 {
     int nPage = aAssistentFunc.GetCurrentPage();
@@ -1433,9 +1351,7 @@ void SdPublishingDlg::LoadPreviewButtons()
     }
 }
 
-// =====================================================================
-// Clickhandler fuer den Weiter Button
-// =====================================================================
+// Clickhandler for the Forward Button
 IMPL_LINK_NOARG(SdPublishingDlg, NextPageHdl)
 {
     aAssistentFunc.NextPage();
@@ -1443,9 +1359,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, NextPageHdl)
     return 0;
 }
 
-// =====================================================================
-// Setzt die Controlls im Dialog gemaess den Einstellungen im Design
-// =====================================================================
+// Sets the Controlls in the dialog to the settings in the design
 void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
 {
     if(!pDesign)
@@ -1525,9 +1439,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
     UpdatePage();
 }
 
-// =====================================================================
-// Uebertraegt den Status der Dialog Controlls in das Design
-// =====================================================================
+// Transfer the status of the Design Dialog Controls
 void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
 {
     if(!pDesign)
@@ -1586,9 +1498,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_bEndless = pPage2_Endless->IsChecked();
 }
 
-// =====================================================================
-// Clickhandler fuer den Zurueck Button
-// =====================================================================
+// Clickhandler for the back Button
 IMPL_LINK_NOARG(SdPublishingDlg, LastPageHdl)
 {
     aAssistentFunc.PreviousPage();
@@ -1596,9 +1506,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, LastPageHdl)
     return 0;
 }
 
-// =====================================================================
-// Designs laden
-// =====================================================================
+// Load Designs
 sal_Bool SdPublishingDlg::Load()
 {
     m_bDesignListDirty = sal_False;
@@ -1651,9 +1559,7 @@ sal_Bool SdPublishingDlg::Load()
     return( pStream->GetError() == SVSTREAM_OK );
 }
 
-// =====================================================================
-// Designs speichern
-// =====================================================================
+// Save Designs
 sal_Bool SdPublishingDlg::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
@@ -1669,7 +1575,7 @@ sal_Bool SdPublishingDlg::Save()
     sal_uInt16 aCheck = nMagic;
     *pStream << aCheck;
 
-    // damit SdIOCompat vor dem Stream destruiert wird
+    // Destroys the SdIOCompat before the Stream is being destributed
     {
         SdIOCompat aIO(*pStream, STREAM_WRITE, 0);
 
@@ -1688,9 +1594,7 @@ sal_Bool SdPublishingDlg::Save()
     return( aMedium.GetError() == 0 );
 }
 
-// *********************************************************************
-// SdDesignNameDlg Methoden
-// *********************************************************************
+// SdDesignNameDlg Methods
 SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const String& aName):
                 ModalDialog             (pWindow, SdResId( DLG_DESIGNNAME )),
                 m_aEdit                 (this, SdResId(EDT_NAME)),

@@ -26,7 +26,6 @@
  ************************************************************************/
 
 
-#define PAGE1_BMP           1
 #define PAGE1_TITEL         2
 #define PAGE1_NEW_DESIGN    3
 #define PAGE1_OLD_DESIGN    4
@@ -36,7 +35,6 @@
 
 //////////////////////////////
 
-#define PAGE2_BMP           20
 #define PAGE2_TITEL         21
 #define PAGE2_STANDARD      22
 #define PAGE2_FRAMES        23
@@ -72,7 +70,6 @@
 
 //////////////////////////////
 
-#define PAGE3_BMP           50
 #define PAGE3_TITEL_1       51
 #define PAGE3_PNG           51
 #define PAGE3_GIF           52
@@ -90,7 +87,6 @@
 
 //////////////////////////////
 
-#define PAGE4_BMP           65
 #define PAGE4_TITEL_1       66
 #define PAGE4_AUTHOR_TXT    67
 #define PAGE4_AUTHOR        68
@@ -105,7 +101,6 @@
 
 //////////////////////////////
 
-#define PAGE5_BMP           80
 #define PAGE5_TITEL         81
 #define PAGE5_TEXTONLY      82
 #define PAGE5_BUTTONS       83
@@ -115,7 +110,6 @@
 
 //////////////////////////////
 
-#define PAGE6_BMP           100
 #define PAGE6_TITEL         101
 #define PAGE6_DEFAULT       102
 #define PAGE6_USER          103

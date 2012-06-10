@@ -67,7 +67,6 @@ class SdPublishingDlg : public ModalDialog
 {
 private:
     // page 1 controls
-    FixedBitmap*    pPage1_Bmp;
     FixedLine*      pPage1_Titel;
     RadioButton*    pPage1_NewDesign;
     RadioButton*    pPage1_OldDesign;
@@ -76,7 +75,6 @@ private:
     FixedText*      pPage1_Desc;
 
     // page 2 controls
-    FixedBitmap*    pPage2_Bmp;
     FixedLine*      pPage2_Titel;
     RadioButton*    pPage2_Standard;
     RadioButton*    pPage2_Frames;
@@ -109,7 +107,6 @@ private:
     CheckBox*       pPage2_Endless;
 
     // page 3 controls
-    FixedBitmap*    pPage3_Bmp;
     FixedLine*      pPage3_Titel1;
     RadioButton*    pPage3_Png;
     RadioButton*    pPage3_Gif;
@@ -126,7 +123,6 @@ private:
     CheckBox*       pPage3_HiddenSlides;
     // page 4 controls
 
-    FixedBitmap*    pPage4_Bmp;
     FixedLine*      pPage4_Titel1;
     FixedText*      pPage4_Author_txt;
     Edit*           pPage4_Author;
@@ -140,14 +136,12 @@ private:
 
     // page 5 controls
 
-    FixedBitmap*    pPage5_Bmp;
     FixedLine*      pPage5_Titel;
     CheckBox*       pPage5_TextOnly;
     ValueSet*       pPage5_Buttons;
 
     // page 6 controls
 
-    FixedBitmap*    pPage6_Bmp;
     FixedLine*      pPage6_Titel;
     RadioButton*    pPage6_Default;
     RadioButton*    pPage6_User;
