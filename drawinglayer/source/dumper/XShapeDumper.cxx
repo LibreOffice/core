@@ -917,6 +917,13 @@ namespace {
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "false");
 	}
 
+    void XShapeDumper::dumpHomogenMatrixLine3(drawing::HomogenMatrixLine3 aLine, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column1"), "%f", aLine.Column1);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column2"), "%f", aLine.Column2);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column3"), "%f", aLine.Column3);
+    }
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------

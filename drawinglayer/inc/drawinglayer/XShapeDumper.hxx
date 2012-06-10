@@ -51,6 +51,8 @@
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 
+#include <com/sun/star/drawing/HomogenMatrixLine3.hpp>
+
 #ifndef ChartViewDumper_hxx
 #define ChartViewDumper_hxx
 
@@ -156,6 +158,7 @@ private:
     void dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWriter);
     void dumpNameAsAttribute(rtl::OUString sName, xmlTextWriterPtr xmlWriter);
     void dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter);
+    void dumpHomogenMatrixLine3(com::sun::star::drawing::HomogenMatrixLine3 aLine, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
