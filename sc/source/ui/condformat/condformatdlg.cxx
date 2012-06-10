@@ -636,14 +636,14 @@ ScFormatEntry* ScCondFrmtEntry::createConditionEntry() const
 	    eMode = SC_COND_NOTEQUAL;
 	    break;
 	case 6:
-	    aExpr2 = maEdVal1.GetText();
+	    aExpr2 = maEdVal2.GetText();
 	    eMode = SC_COND_BETWEEN;
 	    if(aExpr2.isEmpty())
 		return NULL;
 	    break;
 	case 7:
 	    eMode = SC_COND_NOTBETWEEN;
-	    aExpr2 = maEdVal1.GetText();
+	    aExpr2 = maEdVal2.GetText();
 	    if(aExpr2.isEmpty())
 		return NULL;
 	    break;
