@@ -827,9 +827,9 @@ namespace {
 		}
 	}
 
-    // ----------------------------------------
-    // ---------- TextProperties.idl ----------
-    // ----------------------------------------
+    // ------------------------------------------
+    // ---------- ShadowProperties.idl ----------
+    // ------------------------------------------
 
     void XShapeDumper::dumpShadowAsAttribute(sal_Bool bShadow, xmlTextWriterPtr xmlWriter)
 	{
@@ -837,6 +837,16 @@ namespace {
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "true");
 		else
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "false");
+	}
+
+    void XShapeDumper::dumpShadowColorAsAttribute(sal_Int32 aShadowColor, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowColor"), "%" SAL_PRIdINT32, aShadowColor);
+	}
+
+    void XShapeDumper::dumpShadowTransparenceAsAttribute(sal_Int32 aShadowTransparence, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowTransparence"), "%" SAL_PRIdINT32, aShadowTransparence);
 	}
 
     // --------------------------------
@@ -1308,6 +1318,18 @@ namespace {
 				sal_Bool bShadow;
 				if(anotherAny >>= bShadow)
 					dumpShadowAsAttribute(bShadow, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("ShadowColor");
+				sal_Int32 aShadowColor;
+				if(anotherAny >>= aShadowColor)
+					dumpShadowColorAsAttribute(aShadowColor, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("ShadowTransparence");
+				sal_Int32 aShadowTransparence;
+				if(anotherAny >>= aShadowTransparence)
+					dumpShadowTransparenceAsAttribute(aShadowTransparence, xmlWriter);
 			}
         }
 
