@@ -431,6 +431,8 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
                     pDirectory = NULL;
                 }
             }
+
+            rtl_freeMemory(szFileMask);  // #119939#, memory leak
         }
     }
 
