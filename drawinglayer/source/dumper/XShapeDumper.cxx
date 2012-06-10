@@ -769,6 +769,38 @@ namespace {
 		}
 	}
 
+    void XShapeDumper::dumpTextAnimationKindAsAttribute(drawing::TextAnimationKind eTextAnimationKind, xmlTextWriterPtr xmlWriter)
+	{
+		switch(eTextAnimationKind)
+		{
+			case drawing::TextAnimationKind_NONE:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "NONE");
+				break;
+			case drawing::TextAnimationKind_BLINK:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "BLINK");
+				break;
+			case drawing::TextAnimationKind_SCROLL:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SCROLL");
+				break;
+			case drawing::TextAnimationKind_ALTERNATE:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "ALTERNATE");
+				break;
+			case drawing::TextAnimationKind_SLIDE:
+				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SLIDE");
+				break;
+			default:
+				break;
+		}
+	}
+
+    void XShapeDumper::dumpTextAnimationStartInsideAsAttribute(sal_Bool bTextAnimationStartInside, xmlTextWriterPtr xmlWriter)
+	{
+		if(bTextAnimationStartInside)
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "true");
+		else
+			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "false");
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -936,6 +968,18 @@ namespace {
 				drawing::TextAnimationDirection eTextAnimationDirection;
 				if(anotherAny >>= eTextAnimationDirection)
 					dumpTextAnimationDirectionAsAttribute(eTextAnimationDirection, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationKind");
+				drawing::TextAnimationKind eTextAnimationKind;
+				if(anotherAny >>= eTextAnimationKind)
+					dumpTextAnimationKindAsAttribute(eTextAnimationKind, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStartInside");
+				sal_Bool bTextAnimationStartInside;
+				if(anotherAny >>= bTextAnimationStartInside)
+					dumpTextAnimationStartInsideAsAttribute(bTextAnimationStartInside, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
