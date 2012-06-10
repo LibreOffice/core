@@ -132,7 +132,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/edit \
     vcl/source/control/field2 \
     vcl/source/control/field \
-    vcl/source/control/fixbrd \
     vcl/source/control/fixed \
     vcl/source/control/group \
     vcl/source/control/ilstbox \

@@ -8749,7 +8749,6 @@ sal_uInt16 Window::GetAccessibleRole() const
             case WINDOW_TREELISTBOX: nRole = accessibility::AccessibleRole::TREE; break;
 
             case WINDOW_FIXEDTEXT: nRole = accessibility::AccessibleRole::LABEL; break;
-            case WINDOW_FIXEDBORDER:
             case WINDOW_FIXEDLINE: nRole = accessibility::AccessibleRole::SEPARATOR; break;
             case WINDOW_FIXEDBITMAP:
             case WINDOW_FIXEDIMAGE: nRole = accessibility::AccessibleRole::ICON; break;
