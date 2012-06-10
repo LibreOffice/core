@@ -262,7 +262,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     }
     return lStyles;
 }
-SV_IMPL_PTRARR(SfxGroupInfoArr_Impl, SfxGroupInfoPtr);
+
 SfxConfigFunctionListBox_Impl::SfxConfigFunctionListBox_Impl( Window* pParent, const ResId& rResId)
     : SvTreeListBox( pParent, rResId )
     , pCurEntry( 0 )
@@ -303,10 +303,10 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
     possibly existing MacroInfo.
 */
 {
-    sal_uInt16 nCount = aArr.Count();
+    sal_uInt16 nCount = aArr.size();
     for ( sal_uInt16 i=0; i<nCount; ++i )
     {
-        SfxGroupInfo_Impl *pData = aArr[i];
+        SfxGroupInfo_Impl *pData = &aArr[i];
 
         if ( pData->nKind == SFX_CFGFUNCTION_SCRIPT )
         {
@@ -314,8 +314,7 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
             delete pScriptURI;
         }
 
-        if  (   pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER
-            )
+        if ( pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER )
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
             if (xi != NULL)
@@ -323,11 +322,9 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
                 xi->release();
             }
         }
-
-        delete pData;
     }
 
-    aArr.Remove( 0, nCount );
+    aArr.clear();
     Clear();
 }
 
@@ -433,12 +430,11 @@ SfxConfigGroupListBox_Impl::~SfxConfigGroupListBox_Impl()
 
 void SfxConfigGroupListBox_Impl::ClearAll()
 {
-    sal_uInt16 nCount = aArr.Count();
+    sal_uInt16 nCount = aArr.size();
     for ( sal_uInt16 i=0; i<nCount; ++i )
     {
-        SfxGroupInfo_Impl *pData = aArr[i];
-        if  (   pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER
-            )
+        SfxGroupInfo_Impl *pData = &aArr[i];
+        if (pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER)
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
             if (xi != NULL)
@@ -446,10 +442,9 @@ void SfxConfigGroupListBox_Impl::ClearAll()
                 xi->release();
             }
         }
-        delete pData;
     }
 
-    aArr.Remove( 0, nCount );
+    aArr.clear();
     Clear();
 }
 
@@ -635,7 +630,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
             SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
             pNewEntry->EnableChildrenOnDemand( sal_True );
-            aArr.Insert( pInfo, aArr.Count() );
+            aArr.push_back( pInfo );
         }
         else
         {
@@ -709,7 +704,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                             SetCollapsedEntryBmp( pNewEntry, aImage );
 
                             pNewEntry->SetUserData( pInfo );
-                            aArr.Insert( pInfo, aArr.Count() );
+                            aArr.push_back( pInfo );
 
                             if ( children[n]->hasChildNodes() )
                             {
@@ -741,7 +736,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
         String sStyle( pImp->m_aStrGroupStyles );
         SvLBoxEntry *pEntry = InsertEntry( sStyle, 0 );
         SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
-        aArr.Insert( pInfo, aArr.Count() );
+        aArr.push_back( pInfo );
         pEntry->SetUserData( pInfo );
         pEntry->EnableChildrenOnDemand( sal_True );
     }
@@ -969,8 +964,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                                 pGrpInfo->sLabel = children[n]->getName();
                                 pNewEntry->SetUserData( pGrpInfo );
 
-                                pFunctionListBox->aArr.Insert(
-                                    pGrpInfo, pFunctionListBox->aArr.Count() );
+                                pFunctionListBox->aArr.push_back( pGrpInfo );
 
                             }
                         }
@@ -997,7 +991,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                     SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(*pIt);
                     SvLBoxEntry* pFuncEntry = pFunctionListBox->InsertEntry( pStyle->sLabel, NULL );
                     SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, pStyle );
-                    pFunctionListBox->aArr.Insert( pGrpInfo, pFunctionListBox->aArr.Count() );
+                    pFunctionListBox->aArr.push_back( pGrpInfo );
                     pGrpInfo->sCommand = pStyle->sCommand;
                     pGrpInfo->sLabel = pStyle->sLabel;
                     pFuncEntry->SetUserData( pGrpInfo );
@@ -1121,7 +1115,7 @@ void SfxConfigGroupListBox_Impl::RequestingChildren( SvLBoxEntry *pEntry )
                                 SetCollapsedEntryBmp(pNewEntry, aImage );
 
                                 pNewEntry->SetUserData( pGrpInfo );
-                                aArr.Insert( pGrpInfo, aArr.Count() );
+                                aArr.push_back( pGrpInfo );
 
                                 if ( children[n]->hasChildNodes() )
                                 {
@@ -1161,7 +1155,7 @@ void SfxConfigGroupListBox_Impl::RequestingChildren( SvLBoxEntry *pEntry )
                     SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(*pIt);
                     SvLBoxEntry* pStyleEntry = InsertEntry( pFamily->sLabel, pEntry );
                     SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, pFamily );
-                    aArr.Insert( pGrpInfo, aArr.Count() );
+                    aArr.push_back( pGrpInfo );
                     pStyleEntry->SetUserData( pGrpInfo );
                     pStyleEntry->EnableChildrenOnDemand( sal_False );
                 }

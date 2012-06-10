@@ -29,6 +29,7 @@
 #define _CFGUTIL_HXX
 
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>
 
@@ -115,8 +116,7 @@ struct CuiMacroInfo
 {
 };
 
-typedef SfxGroupInfo_Impl* SfxGroupInfoPtr;
-SV_DECL_PTRARR_DEL(SfxGroupInfoArr_Impl, SfxGroupInfoPtr, 5)
+typedef boost::ptr_vector<SfxGroupInfo_Impl> SfxGroupInfoArr_Impl;
 
 class SfxConfigFunctionListBox_Impl : public SvTreeListBox
 {
