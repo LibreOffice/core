@@ -111,8 +111,6 @@ using ::rtl::OUString;
 
 #include <sal/config.h>
 
-SV_IMPL_PTRARR( SfxFilterPtrArr, SfxFilterPtr )
-
 // -----------------------------------------------------------------------
 
 void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )

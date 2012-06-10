@@ -32,7 +32,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/field.hxx>
-#include <svl/svarray.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -69,8 +68,7 @@ public:
     virtual void    Modify();
 };
 
-typedef SfxFilter* SfxFilterPtr;
-SV_DECL_PTRARR( SfxFilterPtrArr, SfxFilterPtr, 0 )
+typedef std::vector<SfxFilter*> SfxFilterPtrArr;
 
 // class SvxProxyTabPage -------------------------------------------------
 
