@@ -849,6 +849,16 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowTransparence"), "%" SAL_PRIdINT32, aShadowTransparence);
 	}
 
+    void XShapeDumper::dumpShadowXDistanceAsAttribute(sal_Int32 aShadowXDistance, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowXDistance"), "%" SAL_PRIdINT32, aShadowXDistance);
+	}
+
+    void XShapeDumper::dumpShadowYDistanceAsAttribute(sal_Int32 aShadowYDistance, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowYDistance"), "%" SAL_PRIdINT32, aShadowYDistance);
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -1330,6 +1340,18 @@ namespace {
 				sal_Int32 aShadowTransparence;
 				if(anotherAny >>= aShadowTransparence)
 					dumpShadowTransparenceAsAttribute(aShadowTransparence, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("ShadowXDistance");
+				sal_Int32 aShadowXDistance;
+				if(anotherAny >>= aShadowXDistance)
+					dumpShadowXDistanceAsAttribute(aShadowXDistance, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("ShadowYDistance");
+				sal_Int32 aShadowYDistance;
+				if(anotherAny >>= aShadowYDistance)
+					dumpShadowYDistanceAsAttribute(aShadowYDistance, xmlWriter);
 			}
         }
 
