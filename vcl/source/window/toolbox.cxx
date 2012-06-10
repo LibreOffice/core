@@ -2351,8 +2351,7 @@ static void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
                 std::vector< ImplToolItem >::iterator temp_it;
                 for ( temp_it = it+1; temp_it != rItems.end(); ++temp_it )
                 {
-                    if ( (temp_it->meType == TOOLBOXITEM_SEPARATOR) ||
-                         ((temp_it->meType == TOOLBOXITEM_BUTTON) &&
+                    if ( ((temp_it->meType == TOOLBOXITEM_BUTTON) &&
                           temp_it->mbVisible) )
                     {
                         it->mbVisible = sal_True;
