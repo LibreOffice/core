@@ -727,14 +727,19 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
     {
         String aStr = GetString();
 
+        SvtSysLocale aSysLocale;
+        const CharClass& rCharClass = aSysLocale.GetCharClass();
+
         if( pFmt->EqualsIgnoreCaseAscii( VBAFORMAT_LOWERCASE ) )
         {
-            rRes = aStr.ToLowerAscii();
+            rCharClass.toLower( aStr );
+            rRes = aStr;
             return;
         }
         if( pFmt->EqualsIgnoreCaseAscii( VBAFORMAT_UPPERCASE ) )
         {
-            rRes = aStr.ToUpperAscii();
+            rCharClass.toUpper( aStr );
+            rRes = aStr;
             return;
         }
 
