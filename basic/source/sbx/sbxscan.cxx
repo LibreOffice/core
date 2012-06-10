@@ -702,14 +702,17 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
     {
         OUString aStr = GetOUString();
 
+        SvtSysLocale aSysLocale;
+        const CharClass& rCharClass = aSysLocale.GetCharClass();
+
         if( pFmt->equalsIgnoreAsciiCase( VBAFORMAT_LOWERCASE ) )
         {
-            rRes = aStr.toAsciiLowerCase();
+            rRes = rCharClass.lowercase( aStr );
             return;
         }
         if( pFmt->equalsIgnoreAsciiCase( VBAFORMAT_UPPERCASE ) )
         {
-            rRes = aStr.toAsciiUpperCase();
+            rRes = rCharClass.uppercase( aStr );
             return;
         }
 
