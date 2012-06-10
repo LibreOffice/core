@@ -25,7 +25,7 @@ class HelpEvent;
 class KeyEvent;
 class DataChangedEvent;
 class ScrollBar;
-
+class SfxOrganizeMgr;
 struct ThumbnailViewItem;
 typedef ::std::vector< ThumbnailViewItem* > ValueItemList;
 
@@ -191,6 +191,9 @@ public:
     virtual void Select();
 
     virtual void DoubleClick();
+
+    // Fill view with template thumbnails
+    void Populate ();
 
     void InsertItem( sal_uInt16 nItemId,
                      const Image& rImage, const rtl::OUString &rStr,
@@ -363,6 +366,7 @@ protected:
     VirtualDevice maVirDev;
     Timer maTimer;
     ValueItemList mItemList;
+    SfxOrganizeMgr *mpMgr;
     ThumbnailViewItem* mpNoneItem;
     ScrollBar* mpScrBar;
     Rectangle maNoneItemRect;

@@ -9,18 +9,28 @@
 
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
+#include <sfx2/doctempl.hxx>
 
+#include "orgmgr.hxx"
 #include "thumbnailviewacc.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
+#include <vcl/pngread.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
 
 enum
 {
@@ -33,6 +43,118 @@ enum
     SCRBAR_OFFSET = 1,
     SCROLL_OFFSET = 4
 };
+
+Image lcl_fetchThumbnail (const rtl::OUString &msURL)
+{
+    using namespace ::com::sun::star;
+    using namespace ::com::sun::star::uno;
+
+    // Load the thumbnail from a template document.
+    uno::Reference<io::XInputStream> xIStream;
+
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager (
+        ::comphelper::getProcessServiceFactory());
+    if (xServiceManager.is())
+    {
+        try
+        {
+            uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
+                xServiceManager->createInstance( "com.sun.star.embed.StorageFactory"),
+                uno::UNO_QUERY);
+
+            if (xStorageFactory.is())
+            {
+                uno::Sequence<uno::Any> aArgs (2);
+                aArgs[0] <<= msURL;
+                aArgs[1] <<= embed::ElementModes::READ;
+                uno::Reference<embed::XStorage> xDocStorage (
+                    xStorageFactory->createInstanceWithArguments(aArgs),
+                    uno::UNO_QUERY);
+
+                try
+                {
+                    if (xDocStorage.is())
+                    {
+                        uno::Reference<embed::XStorage> xStorage (
+                            xDocStorage->openStorageElement(
+                                "Thumbnails",
+                                embed::ElementModes::READ));
+                        if (xStorage.is())
+                        {
+                            uno::Reference<io::XStream> xThumbnailCopy (
+                                xStorage->cloneStreamElement("thumbnail.png"));
+                            if (xThumbnailCopy.is())
+                                xIStream = xThumbnailCopy->getInputStream();
+                        }
+                    }
+                }
+                catch (const uno::Exception& rException)
+                {
+                    OSL_TRACE (
+                        "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
+                        ::rtl::OUStringToOString(msURL,
+                            RTL_TEXTENCODING_UTF8).getStr(),
+                        ::rtl::OUStringToOString(rException.Message,
+                            RTL_TEXTENCODING_UTF8).getStr());
+                }
+
+                try
+                {
+                    // An (older) implementation had a bug - The storage
+                    // name was "Thumbnail" instead of "Thumbnails".  The
+                    // old name is still used as fallback but this code can
+                    // be removed soon.
+                    if ( ! xIStream.is())
+                    {
+                        uno::Reference<embed::XStorage> xStorage (
+                            xDocStorage->openStorageElement( "Thumbnail",
+                                embed::ElementModes::READ));
+                        if (xStorage.is())
+                        {
+                            uno::Reference<io::XStream> xThumbnailCopy (
+                                xStorage->cloneStreamElement("thumbnail.png"));
+                            if (xThumbnailCopy.is())
+                                xIStream = xThumbnailCopy->getInputStream();
+                        }
+                    }
+                }
+                catch (const uno::Exception& rException)
+                {
+                    OSL_TRACE (
+                        "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
+                        ::rtl::OUStringToOString(msURL,
+                            RTL_TEXTENCODING_UTF8).getStr(),
+                        ::rtl::OUStringToOString(rException.Message,
+                            RTL_TEXTENCODING_UTF8).getStr());
+                }
+            }
+        }
+        catch (const uno::Exception& rException)
+        {
+            OSL_TRACE (
+                "caught exception while trying to access tuhmbnail of %s: %s",
+                ::rtl::OUStringToOString(msURL,
+                    RTL_TEXTENCODING_UTF8).getStr(),
+                ::rtl::OUStringToOString(rException.Message,
+                    RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
+
+    // Extract the image from the stream.
+    BitmapEx aThumbnail;
+    if (xIStream.is())
+    {
+        ::std::auto_ptr<SvStream> pStream (
+            ::utl::UcbStreamHelper::CreateStream (xIStream));
+        ::vcl::PNGReader aReader (*pStream);
+        aThumbnail = aReader.Read ();
+    }
+
+    // Note that the preview is returned without scaling it to the desired
+    // width.  This gives the caller the chance to take advantage of a
+    // possibly larger resolution then was asked for.
+    return aThumbnail;
+}
 
 ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : Control( pParent, nWinStyle ),
@@ -61,6 +183,7 @@ ThumbnailView::~ThumbnailView()
     if (xComponent.is())
         xComponent->dispose ();
 
+    delete mpMgr;
     delete mpScrBar;
     delete mpNoneItem;
 
@@ -69,6 +192,7 @@ ThumbnailView::~ThumbnailView()
 
 void ThumbnailView::ImplInit()
 {
+    mpMgr = new SfxOrganizeMgr(NULL,NULL);
     mpNoneItem          = NULL;
     mpScrBar            = NULL;
     mnItemWidth         = 0;
@@ -1459,6 +1583,25 @@ void ThumbnailView::Select()
 void ThumbnailView::DoubleClick()
 {
     maDoubleClickHdl.Call( this );
+}
+
+void ThumbnailView::Populate ()
+{
+    const SfxDocumentTemplates* pTemplates = mpMgr->GetTemplates();
+
+    sal_uInt16 nCount = pTemplates->GetRegionCount();
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+    {
+        rtl::OUString aRegionName(pTemplates->GetFullRegionName(i));
+
+        sal_uInt16 nEntries = pTemplates->GetCount(i);
+
+        for ( sal_uInt16 j = 0; j < nEntries; ++j)
+        {
+            Image aImg = lcl_fetchThumbnail(pTemplates->GetPath(i,j));
+            InsertItem(i*100+j,aImg,pTemplates->GetName(i,j));
+        }
+    }
 }
 
 void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage,
