@@ -703,6 +703,16 @@ namespace {
 		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textRightDistance"), "%" SAL_PRIdINT32, aTextRightDistance);
 	}
 
+    void XShapeDumper::dumpTextUpperDistanceAsAttribute(sal_Int32 aTextUpperDistance, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textUpperDistance"), "%" SAL_PRIdINT32, aTextUpperDistance);
+	}
+
+    void XShapeDumper::dumpTextLowerDistanceAsAttribute(sal_Int32 aTextLowerDistance, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLowerDistance"), "%" SAL_PRIdINT32, aTextLowerDistance);
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -810,6 +820,18 @@ namespace {
 				sal_Int32 aTextRightDistance;
 				if(anotherAny >>= aTextRightDistance)
 					dumpTextRightDistanceAsAttribute(aTextRightDistance, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextUpperDistance");
+				sal_Int32 aTextUpperDistance;
+				if(anotherAny >>= aTextUpperDistance)
+					dumpTextUpperDistanceAsAttribute(aTextUpperDistance, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("TextLowerDistance");
+				sal_Int32 aTextLowerDistance;
+				if(anotherAny >>= aTextLowerDistance)
+					dumpTextLowerDistanceAsAttribute(aTextLowerDistance, xmlWriter);
 			}
         }
         else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
