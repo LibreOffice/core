@@ -56,7 +56,6 @@ class ListBox;
 class VCL_DLLPUBLIC TabControl : public Control
 {
 private:
-    void*               mpDummyPtr; // FIXME: remove before integration
     ImplTabCtrlData*    mpTabCtrlData;
     long                mnLastWidth;
     long                mnLastHeight;
