@@ -444,6 +444,8 @@ namespace writerfilter {
                 /// If we need to emit a CR at the end of substream.
                 bool m_bNeedCr;
                 bool m_bNeedPar;
+                /// If set, an empty paragraph will be added at the end of the document.
+                bool m_bNeedFinalPar;
                 /// The list table and list override table combined.
                 RTFSprms m_aListTableSprms;
                 /// The settings table attributes.
