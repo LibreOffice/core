@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if test -z "${SRC_ROOT}"; then
-    eval $(sed -e s/\'/\'\\\\\'\'/g -e 's/=\(.\+\)/='\''\1'\'/ ./config_host.mk)
+    source ./config_host.mk.source
 fi
 if test -z "${SOLARENV}"; then
     echo "distro-install-clean-up: No environment set!"
