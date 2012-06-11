@@ -278,6 +278,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bNeedPap(true),
     m_bNeedCr(false),
     m_bNeedPar(true),
+    m_bNeedFinalPar(false),
     m_aListTableSprms(),
     m_aSettingsTableSprms(),
     m_xStorage(),
@@ -505,6 +506,12 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer
     if (m_bNeedPar)
         dispatchSymbol(RTF_PAR);
+    // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
+    if (m_bNeedFinalPar && bFinal)
+    {
+        dispatchFlag(RTF_PARD);
+        dispatchSymbol(RTF_PAR);
+    }
     while (m_nHeaderFooterPositions.size())
     {
         std::pair<Id, sal_uInt32> aPair = m_nHeaderFooterPositions.front();
@@ -655,6 +662,10 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     }
     else
         pStream = m_pBinaryData.get();
+
+    if (!pStream->Tell())
+        // No destination text? Then we'll get it later.
+        return 0;
 
     // Store, and get its URL.
     pStream->Seek(0);
@@ -1498,6 +1509,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 m_bWasInFrame = m_aStates.top().aFrame.inFrame();
                 if (!m_bWasInFrame)
                     m_bNeedPar = false;
+                m_bNeedFinalPar = false;
             }
             break;
         case RTF_SECT:
@@ -1602,6 +1614,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 
                 tableBreak();
                 m_bNeedPap = true;
+                m_bNeedFinalPar = true;
                 m_aTableBuffer.clear();
                 m_aStates.top().nCells = 0;
                 m_aStates.top().aTableCellsSprms.clear();
@@ -3552,6 +3565,8 @@ int RTFDocumentImpl::popState()
         if (aState.nFieldStatus == FIELD_INSTRUCTION)
             singleChar(0x15);
     }
+    else if (m_aStates.size() && m_aStates.top().nDestinationState == DESTINATION_PICT)
+        m_aStates.top().aPicture = aState.aPicture;
     else if (bPopShapeProperties)
     {
         m_aStates.top().aShape = aShape;
