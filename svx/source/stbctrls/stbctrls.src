@@ -135,39 +135,9 @@ Menu RID_SVXMNU_ZOOM
     {
         MenuItem
         {
-            Identifier = ZOOM_200 ;
-            HelpId = HID_MNU_ZOOM_200 ;
-            Text = "200%" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_150 ;
-            HelpId = HID_MNU_ZOOM_150 ;
-            Text = "150%" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_100 ;
-            HelpId = HID_MNU_ZOOM_100 ;
-            Text = "100%" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_75 ;
-            HelpId = HID_MNU_ZOOM_75 ;
-            text = "75%" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_50 ;
-            HelpId = HID_MNU_ZOOM_50 ;
-            Text = "50%" ;
-        };
-        MenuItem
-        {
-            Identifier = ZOOM_OPTIMAL ;
-            HelpId = HID_MNU_ZOOM_OPTIMAL ;
-            Text [ en-US ] = "Optimal" ;
+            Identifier = ZOOM_WHOLE_PAGE ;
+            HelpId = HID_MNU_ZOOM_WHOLE_PAGE ;
+            Text [ en-US ] = "Entire Page" ;
         };
         MenuItem
         {
@@ -177,9 +147,39 @@ Menu RID_SVXMNU_ZOOM
         };
         MenuItem
         {
-            Identifier = ZOOM_WHOLE_PAGE ;
-            HelpId = HID_MNU_ZOOM_WHOLE_PAGE ;
-            Text [ en-US ] = "Entire Page" ;
+            Identifier = ZOOM_OPTIMAL ;
+            HelpId = HID_MNU_ZOOM_OPTIMAL ;
+            Text [ en-US ] = "Optimal" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_50 ;
+            HelpId = HID_MNU_ZOOM_50 ;
+            Text = "50%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_75 ;
+            HelpId = HID_MNU_ZOOM_75 ;
+            text = "75%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_100 ;
+            HelpId = HID_MNU_ZOOM_100 ;
+            Text = "100%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_150 ;
+            HelpId = HID_MNU_ZOOM_150 ;
+            Text = "150%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_200 ;
+            HelpId = HID_MNU_ZOOM_200 ;
+            Text = "200%" ;
         };
     };
 };

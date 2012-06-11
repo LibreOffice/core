@@ -856,9 +856,7 @@
 #define SID_ZOOM_OUT                        (SID_SVX_START +  97)
 #define SID_ZOOM_IN                         (SID_SVX_START +  98)
 #define SID_SIZE_REAL                       (SID_SVX_START +  99)
-#define SID_ZOOM_100_PERCENT                (SID_SIZE_REAL)
 #define SID_SIZE_PAGE                       (SID_SVX_START + 100)
-#define SID_ZOOM_PAGE                       (SID_SIZE_PAGE)
 #define SID_SHOW_BROWSER                    (SID_SVX_START + 163)
 #define SID_GALLERY_BG_BRUSH                (SID_SVX_START + 279)
 #define SID_SEARCH_OPTIONS                  (SID_SVX_START + 281)
@@ -981,6 +979,18 @@
 #define SID_LANGUAGEID                      (SID_SFX_START+1407)
 #define SID_COUNTRYID                       (SID_SFX_START+1408)
 #define SID_SUBSTPATHVARS                   (SID_SFX_START+1409)
+
+//-----------------------------------------------------------------------
+
+#define SID_ZOOM_OPTIMAL                    (SID_SIZE_OPTIMAL)
+#define SID_ZOOM_ENTIRE_PAGE                (SID_SIZE_PAGE)
+#define SID_ZOOM_PAGE_WIDTH                 (SID_SVX_START + 1420)
+#define SID_ZOOM_50_PERCENT                 (SID_SVX_START + 1421)
+#define SID_ZOOM_75_PERCENT                 (SID_SVX_START + 1422)
+#define SID_ZOOM_100_PERCENT                (SID_SIZE_REAL)
+#define SID_ZOOM_150_PERCENT                (SID_SVX_START + 1423)
+#define SID_ZOOM_200_PERCENT                (SID_SVX_START + 1424)
+
 
 //-----------------------------------------------------------------------
 

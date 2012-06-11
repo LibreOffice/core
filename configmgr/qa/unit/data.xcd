@@ -1787,7 +1787,7 @@
       </node>
       <node oor:name=".uno:Zoom100Percent" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Zoom 100%</value>
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">100%</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1803,7 +1803,7 @@
       </node>
       <node oor:name=".uno:ZoomPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Zoom Page</value>
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Entire Page</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2660,7 +2660,7 @@
       </node>
       <node oor:name=".uno:ZoomPageWidth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Zoom Page Width</value>
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Page Width</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

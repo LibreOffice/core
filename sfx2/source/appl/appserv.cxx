@@ -124,6 +124,7 @@
 #include <sfx2/dialogs.hrc>
 #include "sorgitm.hxx"
 #include "sfx2/sfxhelp.hxx"
+#include <sfx2/zoomitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -601,6 +602,51 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
 
+        case SID_ZOOM_50_PERCENT:
+        case SID_ZOOM_75_PERCENT:
+        case SID_ZOOM_100_PERCENT:
+        case SID_ZOOM_150_PERCENT:
+        case SID_ZOOM_200_PERCENT:
+        case SID_ZOOM_OPTIMAL:
+        case SID_ZOOM_ENTIRE_PAGE:
+        case SID_ZOOM_PAGE_WIDTH:
+        {
+            // make sure aZoom is initialized with a proper value if SetType
+            // doesn't work
+            SvxZoomItem aZoom( SVX_ZOOM_PERCENT, 100 );
+
+            switch (rReq.GetSlot())
+            {
+                case SID_ZOOM_50_PERCENT:
+                    aZoom.SetValue(50);
+                    break;
+                case SID_ZOOM_75_PERCENT:
+                    aZoom.SetValue(75);
+                    break;
+                case SID_ZOOM_100_PERCENT:
+                    aZoom.SetValue(100);
+                    break;
+                case SID_ZOOM_150_PERCENT:
+                    aZoom.SetValue(150);
+                    break;
+                case SID_ZOOM_200_PERCENT:
+                    aZoom.SetValue(200);
+                    break;
+                case SID_ZOOM_OPTIMAL:
+                    aZoom.SetType( SVX_ZOOM_OPTIMAL );
+                    break;
+                case SID_ZOOM_ENTIRE_PAGE:
+                    aZoom.SetType( SVX_ZOOM_WHOLEPAGE );
+                    break;
+                case SID_ZOOM_PAGE_WIDTH:
+                    aZoom.SetType( SVX_ZOOM_PAGEWIDTH );
+                    break;
+            }
+
+            SfxViewFrame::Current()->GetDispatcher()->Execute(SID_ATTR_ZOOM, SFX_CALLMODE_ASYNCHRON, &aZoom, 0L);
+
+            break;
+        }
         case SID_AVAILABLE_TOOLBARS:
         {
             SfxStringItem const * pToolbarName = static_cast< SfxStringItem const *>(

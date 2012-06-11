@@ -127,7 +127,20 @@
       <menu:menuitem menu:id=".uno:TaskPane"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
-      <menu:menuitem menu:id=".uno:Zoom"/>
+      <menu:menu menu:id=".uno:Zoom">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:ZoomPage"/>
+          <menu:menuitem menu:id=".uno:ZoomPageWidth"/>
+          <menu:menuitem menu:id=".uno:ZoomOptimal"/>
+          <menu:menuitem menu:id=".uno:Zoom50Percent"/>
+          <menu:menuitem menu:id=".uno:Zoom75Percent"/>
+          <menu:menuitem menu:id=".uno:Zoom100Percent"/>
+          <menu:menuitem menu:id=".uno:Zoom150Percent"/>
+          <menu:menuitem menu:id=".uno:Zoom200Percent"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:Zoom"/>
+        </menu:menupopup>
+      </menu:menu>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:InsertMenu">
