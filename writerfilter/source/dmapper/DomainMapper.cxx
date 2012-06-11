@@ -3491,6 +3491,9 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
 void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t ref)
 {
     m_pImpl->appendTableManager( );
+    // Appending a TableManager resets its TableHandler, so we need to append
+    // that as well, or tables won't be imported properly in headers/footers.
+    m_pImpl->appendTableHandler( );
     m_pImpl->getTableManager().startLevel();
 
     //import of page header/footer
