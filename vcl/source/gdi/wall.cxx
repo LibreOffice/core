@@ -437,7 +437,7 @@ Gradient Wallpaper::ImplGetApplicationGradient() const
 {
     Gradient g;
     g.SetAngle( 900 );
-    g.SetStyle( GRADIENT_LINEAR );
+    g.SetStyle( GradientStyle_LINEAR );
     g.SetStartColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     // no 'extreme' gradient when high contrast
     if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )

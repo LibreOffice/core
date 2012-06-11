@@ -35,18 +35,6 @@
 
 #include <vcl/vclenum.hxx>
 
-// ------------------
-// - Gradient-Types -
-// ------------------
-
-/*
-#ifndef ENUM_GRADIENTSTYLE_DECLARED
-#define ENUM_GRADIENTSTYLE_DECLARED
-enum GradientStyle { GRADIENT_LINEAR, GRADIENT_AXIAL, GRADIENT_RADIAL,
-                     GRADIENT_ELLIPTICAL, GRADIENT_SQUARE, GRADIENT_RECT };
-#endif
-*/
-
 // ----------------
 // - Impl_Gradient -
 // ----------------

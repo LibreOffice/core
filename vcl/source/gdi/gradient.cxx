@@ -42,7 +42,7 @@ Impl_Gradient::Impl_Gradient() :
     maEndColor( COL_WHITE )
 {
     mnRefCount          = 1;
-    meStyle             = GRADIENT_LINEAR;
+    meStyle             = GradientStyle_LINEAR;
     mnAngle             = 0;
     mnBorder            = 0;
     mnOfsX              = 50;
@@ -238,7 +238,7 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
     Rectangle aRect( rRect );
     sal_uInt16 nAngle = GetAngle() % 3600;
 
-    if( GetStyle() == GRADIENT_LINEAR || GetStyle() == GRADIENT_AXIAL )
+    if( GetStyle() == GradientStyle_LINEAR || GetStyle() == GradientStyle_AXIAL )
     {
         aRect.Left()--;
         aRect.Top()--;
@@ -264,7 +264,7 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
     }
     else
     {
-        if( GetStyle() == GRADIENT_SQUARE || GetStyle() == GRADIENT_RECT )
+        if( GetStyle() == GradientStyle_SQUARE || GetStyle() == GradientStyle_RECT )
         {
             const double    fAngle = nAngle * F_PI1800;
             const double    fWidth = aRect.GetWidth();
@@ -283,19 +283,19 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
 
         Size aSize( aRect.GetSize() );
 
-        if( GetStyle() == GRADIENT_RADIAL )
+        if( GetStyle() == GradientStyle_RADIAL )
         {
             // Radien-Berechnung fuer Kreis
             aSize.Width() = (long)(0.5 + sqrt((double)aSize.Width()*(double)aSize.Width() + (double)aSize.Height()*(double)aSize.Height()));
             aSize.Height() = aSize.Width();
         }
-        else if( GetStyle() == GRADIENT_ELLIPTICAL )
+        else if( GetStyle() == GradientStyle_ELLIPTICAL )
         {
             // Radien-Berechnung fuer Ellipse
             aSize.Width() = (long)( 0.5 + (double) aSize.Width()  * 1.4142 );
             aSize.Height() = (long)( 0.5 + (double) aSize.Height() * 1.4142 );
         }
-        else if( GetStyle() == GRADIENT_SQUARE )
+        else if( GetStyle() == GradientStyle_SQUARE )
         {
             if ( aSize.Width() > aSize.Height() )
                 aSize.Height() = aSize.Width();

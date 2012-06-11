@@ -67,30 +67,16 @@ enum ExtDateFieldFormat { XTDATEF_SYSTEM_SHORT, XTDATEF_SYSTEM_SHORT_YY, XTDATEF
 
 // ------------------------------------------------------------
 
-// to avoid conflicts with enum's declared otherwise
-#define GRADIENT_LINEAR             GradientStyle_LINEAR
-#define GRADIENT_AXIAL              GradientStyle_AXIAL
-#define GRADIENT_RADIAL             GradientStyle_RADIAL
-#define GRADIENT_ELLIPTICAL         GradientStyle_ELLIPTICAL
-#define GRADIENT_SQUARE             GradientStyle_SQUARE
-#define GRADIENT_RECT               GradientStyle_RECT
-#define GRADIENT_FORCE_EQUAL_SIZE   GradientStyle_FORCE_EQUAL_SIZE
-
-#ifndef ENUM_GRADIENTSTYLE_DECLARED
-#define ENUM_GRADIENTSTYLE_DECLARED
-
 enum GradientStyle
 {
-    GRADIENT_LINEAR = 0,
-    GRADIENT_AXIAL = 1,
-    GRADIENT_RADIAL = 2,
-    GRADIENT_ELLIPTICAL = 3,
-    GRADIENT_SQUARE = 4,
-    GRADIENT_RECT = 5,
+    GradientStyle_LINEAR = 0,
+    GradientStyle_AXIAL = 1,
+    GradientStyle_RADIAL = 2,
+    GradientStyle_ELLIPTICAL = 3,
+    GradientStyle_SQUARE = 4,
+    GradientStyle_RECT = 5,
     GradientStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
-
-#endif
 
 // ------------------------------------------------------------
 

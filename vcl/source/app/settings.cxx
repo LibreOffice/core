@@ -428,7 +428,7 @@ void ImplStyleData::SetStandardStyles()
     mbHideDisabledMenuItems     = sal_False;
     mnAcceleratorsInContextMenus    = sal_True;
 
-    Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
+    Gradient aGrad( GradientStyle_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
     maWorkspaceGradient = Wallpaper( aGrad );
 }
 

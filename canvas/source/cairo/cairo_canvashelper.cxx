@@ -711,10 +711,6 @@ namespace cairocanvas
         const ::canvas::ParametricPolyPolygon::Values aValues = rPolygon.getValues();
         double x0, x1, y0, y1, cx, cy, r0, r1;
 
-// undef macros from vclenum.hxx which conflicts with GradientType enum values
-#undef GRADIENT_LINEAR
-#undef GRADIENT_ELLIPTICAL
-
         switch( aValues.meType )
         {
             case ::canvas::ParametricPolyPolygon::GRADIENT_LINEAR:

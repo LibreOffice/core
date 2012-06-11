@@ -142,14 +142,14 @@ void SidebarTxtControl::Paint( const Rectangle& rRect)
              HasFocus() )
         {
             DrawGradient( Rectangle( Point(0,0), PixelToLogic(GetSizePixel()) ),
-                          Gradient( GRADIENT_LINEAR,
+                          Gradient( GradientStyle_LINEAR,
                                     mrSidebarWin.ColorDark(),
                                     mrSidebarWin.ColorDark() ) );
         }
         else
         {
             DrawGradient( Rectangle( Point(0,0), PixelToLogic(GetSizePixel()) ),
-                          Gradient( GRADIENT_LINEAR,
+                          Gradient( GradientStyle_LINEAR,
                                     mrSidebarWin.ColorLight(),
                                     mrSidebarWin.ColorDark()));
         }

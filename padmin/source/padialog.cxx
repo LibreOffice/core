@@ -501,7 +501,7 @@ void SpaPrinterController::printPage( int ) const
     Color aLightGreen( 0, 0xff, 0 );
     Color aDarkGreen( 0, 0x40, 0 );
 
-    Gradient aGradient( GRADIENT_LINEAR, aBlack, aWhite );
+    Gradient aGradient( GradientStyle_LINEAR, aBlack, aWhite );
     aGradient.SetAngle( 900 );
     pPrinter->DrawGradient( Rectangle( Point( 1000, 5500 ),
                                         Size( aPaperSize.Width() - 2000,

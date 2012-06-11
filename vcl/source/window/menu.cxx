@@ -2954,7 +2954,7 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
         Rectangle aRect( Point( 0, 0 ), Point( aLogoSz.Width()-1, aOutSz.Height() ) );
         if ( pWin->GetColorCount() >= 256 )
         {
-            Gradient aGrad( GRADIENT_LINEAR, pLogo->aStartColor, pLogo->aEndColor );
+            Gradient aGrad( GradientStyle_LINEAR, pLogo->aStartColor, pLogo->aEndColor );
             aGrad.SetAngle( 1800 );
             aGrad.SetBorder( 15 );
             pWin->DrawGradient( aRect, aGrad );
