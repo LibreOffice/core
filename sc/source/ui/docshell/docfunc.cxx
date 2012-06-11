@@ -5064,7 +5064,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     ScDocument* pDoc = rDocShell.GetDocument();
     if(nOldFormat)
     {
-	pDoc->DeleteConditionalFormat(nOldFormat, nTab);
+        pDoc->DeleteConditionalFormat(nOldFormat, nTab);
     }
     if(pFormat)
     {
