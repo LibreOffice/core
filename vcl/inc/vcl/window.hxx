@@ -329,7 +329,8 @@ typedef sal_uInt16 StateChangedType;
 #define DLGWINDOW_NEXT                  1
 #define DLGWINDOW_FIRST                 2
 
-enum WindowSizeType {
+enum WindowSizeType
+{
     WINDOWSIZE_MINIMUM,
     WINDOWSIZE_PREFERRED,
     WINDOWSIZE_MAXIMUM
@@ -1117,6 +1118,50 @@ public:
      * akin to gtk_widget_get_preferred_size
      */
     Size get_preferred_size() const;
+
+    /*
+     * Gets the value of the "halign" property.
+     */
+    VclAlign get_halign() const;
+
+    /*
+     * Sets the horizontal alignment of widget. See the "halign" property.
+     */
+    void set_halign(VclAlign eAlign);
+
+    /*
+     * Gets the value of the "valign" property.
+     */
+    VclAlign get_valign() const;
+
+    /*
+     * Sets the horizontal alignment of widget. See the "valign" property.
+     */
+    void set_valign(VclAlign eAlign);
+
+    /*
+     * Gets whether the widget would like to use any available extra horizontal
+     * space.
+     */
+    bool get_hexpand() const;
+
+    /*
+     * Sets whether the widget would like to use any available extra horizontal
+     * space.
+     */
+    void set_hexpand(bool bExpand);
+
+    /*
+     * Gets whether the widget would like to use any available extra vertical
+     * space.
+     */
+    bool get_vexpand() const;
+
+    /*
+     * Sets whether the widget would like to use any available extra vertical
+     * space.
+     */
+    void set_vexpand(bool bExpand);
 
     /*
      * Sets a widget property

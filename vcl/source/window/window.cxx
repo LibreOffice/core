@@ -710,6 +710,11 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbDisableAccessibleLabeledByRelation = sal_False; // sal_True: do not set LabeledBy relation on accessible objects
     mpWindowImpl->mbHelpTextDynamic = sal_False;          // sal_True: append help id in HELP_DEBUG case
     mpWindowImpl->mbFakeFocusSet = sal_False; // sal_True: pretend as if the window has focus.
+    mpWindowImpl->mbHexpand = false;
+    mpWindowImpl->mbVexpand = false;
+    mpWindowImpl->meHalign = VCL_ALIGN_FILL;
+    mpWindowImpl->meValign = VCL_ALIGN_FILL;
+
 
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // sal_True: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
@@ -9799,6 +9804,11 @@ void Window::take_properties(Window &rOther)
     mpWindowImpl->mbHelpTextDynamic = pWindowImpl->mbHelpTextDynamic;
     mpWindowImpl->mbFakeFocusSet = pWindowImpl->mbFakeFocusSet;
     mpWindowImpl->mbInterceptChildWindowKeyDown = pWindowImpl->mbInterceptChildWindowKeyDown;
+    mpWindowImpl->mbHexpand = pWindowImpl->mbHexpand;
+    mpWindowImpl->mbVexpand = pWindowImpl->mbVexpand;
+    mpWindowImpl->meHalign = pWindowImpl->meHalign;
+    mpWindowImpl->meValign = pWindowImpl->meValign;
+
 
     std::swap(m_aWidgetProperties, rOther.m_aWidgetProperties);
 
@@ -9809,6 +9819,24 @@ void Window::take_properties(Window &rOther)
 
     if (bHasBorderWindow && bOtherHasBorderWindow)
         mpWindowImpl->mpBorderWindow->take_properties(*pWindowImpl->mpBorderWindow);
+}
+
+namespace
+{
+    VclAlign toAlign(const rtl::OString &rValue)
+    {
+        VclAlign eRet = VCL_ALIGN_FILL;
+
+        if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("fill")))
+            eRet = VCL_ALIGN_FILL;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("start")))
+            eRet = VCL_ALIGN_START;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("end")))
+            eRet = VCL_ALIGN_END;
+        else if (rValue.equalsL(RTL_CONSTASCII_STRINGPARAM("center")))
+            eRet = VCL_ALIGN_CENTER;
+        return eRet;
+    }
 }
 
 bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
@@ -9863,12 +9891,60 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         set_height_request(rValue.toInt32());
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width-request")))
         set_width_request(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("hexpand")))
+        set_hexpand(toBool(rValue));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("vexpand")))
+        set_vexpand(toBool(rValue));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("halign")))
+        set_halign(toAlign(rValue));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("valign")))
+        set_valign(toAlign(rValue));
     else
     {
         fprintf(stderr, "unhandled property %s\n", rKey.getStr());
         return false;
     }
     return true;
+}
+
+VclAlign Window::get_halign() const
+{
+    return mpWindowImpl->meHalign;
+}
+
+void Window::set_halign(VclAlign eAlign)
+{
+    mpWindowImpl->meHalign = eAlign;
+}
+
+VclAlign Window::get_valign() const
+{
+    return mpWindowImpl->meValign;
+}
+
+void Window::set_valign(VclAlign eAlign)
+{
+    mpWindowImpl->meValign = eAlign;
+}
+
+bool Window::get_hexpand() const
+{
+    return mpWindowImpl->mbHexpand;
+}
+
+void Window::set_hexpand(bool bExpand)
+{
+    mpWindowImpl->mbHexpand = bExpand;
+}
+
+bool Window::get_vexpand() const
+{
+    return mpWindowImpl->mbVexpand;
+}
+
+void Window::set_vexpand(bool bExpand)
+{
+    mpWindowImpl->mbVexpand = bExpand;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

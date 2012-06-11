@@ -315,7 +315,9 @@ public:
     sal_uInt16              mnDlgCtrlFlags;
     sal_uInt16              mnLockCount;
     AlwaysInputMode     meAlwaysInputMode;
-    sal_Bool                mbFrame:1,
+    VclAlign            meHalign;
+    VclAlign            meValign;
+    sal_uInt8           mbFrame:1,
                         mbBorderWin:1,
                         mbOverlapWin:1,
                         mbSysWin:1,
@@ -388,7 +390,9 @@ public:
                         mbDisableAccessibleLabelForRelation:1,
                         mbDisableAccessibleLabeledByRelation:1,
                         mbHelpTextDynamic:1,
-                        mbFakeFocusSet:1;
+                        mbFakeFocusSet:1,
+                        mbHexpand:1,
+                        mbVexpand:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };

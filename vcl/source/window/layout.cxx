@@ -259,8 +259,6 @@ Size VclButtonBox::calculateRequisition() const
     long nSecondaryDimension = getSecondaryDimension(aSize);
     setSecondaryDimension(aSize, nSecondaryDimension);
 
-    fprintf(stderr, "button box asked for %ld %ld\n", aSize.Width(), aSize.Height());
-
     return aSize;
 }
 
@@ -292,8 +290,6 @@ bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rV
 
 void VclButtonBox::setAllocation(const Size &rAllocation)
 {
-    fprintf(stderr, "button box got %ld %ld\n", rAllocation.Width(), rAllocation.Height());
-
     sal_uInt16 nVisibleChildren = 0;
     for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
@@ -506,7 +502,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
     rtl::OString sWidth(RTL_CONSTASCII_STRINGPARAM("width"));
     rtl::OString sHeight(RTL_CONSTASCII_STRINGPARAM("height"));
 
-    Point aPosition(0, 0);
+    Point aAllocPos(0, 0);
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
@@ -514,24 +510,77 @@ void VclGrid::setAllocation(const Size& rAllocation)
             Window *pChild = A[x][y];
             if (pChild)
             {
-                Size aChildSize(0, 0);
+                Size aChildAlloc(0, 0);
 
                 sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
                 for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
-                    aChildSize.Width() += aWidths[x+nSpanX];
-                aChildSize.Width() += get_column_spacing()*(nWidth-1);
+                    aChildAlloc.Width() += aWidths[x+nSpanX];
+                aChildAlloc.Width() += get_column_spacing()*(nWidth-1);
 
                 sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
                 for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
-                    aChildSize.Height() += aHeights[y+nSpanY];
-                aChildSize.Height() += get_row_spacing()*(nHeight-1);
+                    aChildAlloc.Height() += aHeights[y+nSpanY];
+                aChildAlloc.Height() += get_row_spacing()*(nHeight-1);
 
-                pChild->SetPosSizePixel(aPosition, aChildSize);
+                Point aChildPos(aAllocPos);
+                Size aChildSize(aChildAlloc);
+
+                VclAlign eHalign = pChild->get_halign();
+                VclAlign eValign = pChild->get_valign();
+
+                Size aChildPreferredSize;
+
+                if (eHalign != VCL_ALIGN_FILL || eValign != VCL_ALIGN_FILL)
+                    aChildPreferredSize = pChild->GetOptimalSize(WINDOWSIZE_PREFERRED);
+
+                switch (eHalign)
+                {
+                    case VCL_ALIGN_FILL:
+                        break;
+                    case VCL_ALIGN_START:
+                        if (aChildPreferredSize.Width() < aChildAlloc.Width())
+                            aChildSize.Width() = aChildPreferredSize.Width();
+                        break;
+                    case VCL_ALIGN_END:
+                        if (aChildPreferredSize.Width() < aChildAlloc.Width())
+                            aChildSize.Width() = aChildPreferredSize.Width();
+                        aChildPos.X() += aChildAlloc.Width();
+                        aChildPos.X() -= aChildSize.Width();
+                        break;
+                    case VCL_ALIGN_CENTER:
+                        if (aChildPreferredSize.Width() < aChildSize.Width())
+                            aChildSize.Width() = aChildPreferredSize.Width();
+                        aChildPos.X() += (aChildAlloc.Width() - aChildSize.Width()) / 2;
+                        break;
+                }
+
+                switch (eValign)
+                {
+                    case VCL_ALIGN_FILL:
+                        break;
+                    case VCL_ALIGN_START:
+                        if (aChildPreferredSize.Height() < aChildAlloc.Height())
+                            aChildSize.Height() = aChildPreferredSize.Height();
+                        break;
+                    case VCL_ALIGN_END:
+                        if (aChildPreferredSize.Height() < aChildAlloc.Height())
+                            aChildSize.Height() = aChildPreferredSize.Height();
+                        aChildPos.Y() += aChildAlloc.Height();
+                        aChildPos.Y() -= aChildSize.Height();
+                        break;
+                    case VCL_ALIGN_CENTER:
+                        if (aChildPreferredSize.Height() < aChildSize.Height())
+                            aChildSize.Height() = aChildPreferredSize.Height();
+                        aChildPos.Y() += (aChildAlloc.Height() - aChildSize.Height()) / 2;
+                        break;
+                }
+
+                pChild->SetPosSizePixel(aChildPos, aChildSize);
             }
-            aPosition.Y() += aHeights[y] + get_row_spacing();
+            aAllocPos.Y() += aHeights[y] + get_row_spacing();
         }
-        aPosition.X() += aWidths[x] + get_column_spacing();
-        aPosition.Y() = 0;
+        aAllocPos.X() += aWidths[x] + get_column_spacing();
+        aAllocPos.Y() = 0;
     }
 }
 
