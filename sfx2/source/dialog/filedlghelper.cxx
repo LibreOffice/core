@@ -100,8 +100,10 @@
 #include "filedlgimpl.hxx"
 #include <helpid.hrc>
 #include <sfxlocal.hrc>
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 #ifdef UNX
+#include <errno.h>
 #include <sys/stat.h>
 #endif
 
@@ -1663,7 +1665,7 @@ void FileDialogHelper_Impl::verifyPath()
     }
     INetURLObject url(maPath);
     if (url.GetProtocol() != INET_PROT_FILE
-        || url.getName(0, true, INetURLObject::DECODE_WITH_CHARSET) != "tmp")
+        || !(url.getName(0, true, INetURLObject::DECODE_WITH_CHARSET)).equalsAscii("tmp"))
     {
         return;
     }
