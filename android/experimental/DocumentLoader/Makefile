@@ -80,6 +80,7 @@ copy-stuff:
 		   juhx \
 		   jvmaccessgcc3 \
 		   jvmfwk \
+		   libotouchlo \
 		   lo-bootstrap \
 		   localebe1.uno \
 		   localedata_en \

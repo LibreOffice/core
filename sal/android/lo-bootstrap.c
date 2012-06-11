@@ -1907,11 +1907,11 @@ Java_org_libreoffice_android_Bootstrap_twiddle_1BGR_1to_1RGBA(JNIEnv* env,
 
 __attribute__ ((visibility("default")))
 void
-Java_org_libreoffice_android_Bootstrap_force_1full_1alpha(JNIEnv* env,
-                                                          jobject clazz,
-                                                          jbyteArray array,
-                                                          jint offset,
-                                                          jint size)
+Java_org_libreoffice_android_Bootstrap_force_1full_1alpha_1array(JNIEnv* env,
+                                                                 jobject clazz,
+                                                                 jbyteArray array,
+                                                                 jint offset,
+                                                                 jint length)
 {
     void *a = (*env)->GetPrimitiveArrayCritical(env, array, NULL);
     jbyte *p = ((jbyte *) a) + offset;
@@ -1920,12 +1920,40 @@ Java_org_libreoffice_android_Bootstrap_force_1full_1alpha(JNIEnv* env,
 
     (void) clazz;
 
-    for (i = 0; i < size; i += 4) {
+    for (i = 0; i < length; i += 4) {
         p[3] = 0xFF;
         p += 4;
     }
 
     (*env)->ReleasePrimitiveArrayCritical(env, array, a, 0);
+}
+
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_force_1full_1alpha_1bb(JNIEnv* env,
+                                                              jobject clazz,
+                                                              jobject buffer,
+                                                              jint offset,
+                                                              jint length)
+{
+    jbyte *p = (*env)->GetDirectBufferAddress(env, buffer) + offset;
+
+    int i;
+
+    (void) clazz;
+
+    for (i = 0; i < length; i += 4) {
+        p[3] = 0xFF;
+        p += 4;
+    }
+}
+
+__attribute__ ((visibility("default")))
+jlong
+Java_org_libreoffice_android_Bootstrap_address_1of_1direct_1byte_1buffer(JNIEnv *env,
+                                                                         jobject bbuffer)
+{
+    return (jlong) (intptr_t) (*env)->GetDirectBufferAddress(env, bbuffer);
 }
 
 __attribute__ ((visibility("default")))

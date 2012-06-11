@@ -116,7 +116,13 @@ public class Bootstrap extends NativeActivity
     // documentation sucks.
     public static native void twiddle_BGR_to_RGBA(byte[] source, int offset, int width, int height, ByteBuffer destination);
 
-    public static native void force_full_alpha(byte[] source, int offset, int size);
+    public static native void force_full_alpha_array(byte[] array, int offset, int length);
+
+    public static native void force_full_alpha_bb(ByteBuffer buffer, int offset, int length);
+
+    public static native long new_byte_buffer_wrapper(ByteBuffer bbuffer);
+
+    public static native void delete_byte_buffer_wrapper(long bbw);
 
     // This setup() method is called 1) in apps that use *this* class as their activity from onCreate(),
     // and 2) should be called from other kinds of LO code using apps.
@@ -282,6 +288,8 @@ public class Bootstrap extends NativeActivity
     // time by the package manager.
     static {
         System.loadLibrary("lo-bootstrap");
+        System.loadLibrary("gnustl_shared");
+        System.loadLibrary("libotouchlo");
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

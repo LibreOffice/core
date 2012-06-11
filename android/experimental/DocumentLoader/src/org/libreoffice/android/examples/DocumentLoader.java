@@ -39,7 +39,7 @@ import com.polites.android.GestureImageView;
 import com.sun.star.awt.XBitmap;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XDevice;
-import com.sun.star.awt.XToolkit;
+import com.sun.star.awt.XToolkit2;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XController;
@@ -170,6 +170,26 @@ public class DocumentLoader
         }
     }
 
+    static void dumpBytes(String name, ByteBuffer bytes, int offset)
+    {
+        if (bytes == null) {
+            Log.i(TAG, name + " is null");
+            return;
+        }
+        Log.i(TAG, name + ":");
+
+        if (offset != 0)
+            Log.i(TAG, "  (offset " + offset + ")");
+
+        for (int i = offset; i < Math.min(bytes.limit(), offset+160); i += 16) {
+            String s = "";
+            for (int j = i; j < Math.min(bytes.limit(), i+16); j++)
+                s = s + String.format(" %02x", bytes.get(j));
+
+            Log.i(TAG, s);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -256,10 +276,12 @@ public class DocumentLoader
 
             dumpUNOObject("toolkit", toolkit);
 
-            XToolkit xToolkit = (XToolkit)
-                UnoRuntime.queryInterface(XToolkit.class, toolkit);
+            XToolkit2 xToolkit = (XToolkit2)
+                UnoRuntime.queryInterface(XToolkit2.class, toolkit);
 
-            XDevice device = xToolkit.createScreenCompatibleDevice(1024, 1024);
+            ByteBuffer bb = ByteBuffer.allocateDirect(1024*1024*4);
+            long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
+            XDevice device = xToolkit.createScreenCompatibleDeviceUsingBuffer(1024, 1024, wrapped_bb);
 
             dumpUNOObject("device", device);
 
@@ -282,86 +304,17 @@ public class DocumentLoader
 
             renderBabe.render(0, oDoc, renderProps);
 
-            XBitmap bitmap = device.createBitmap(0, 0, 1024, 1024);
-
-            byte[] image = bitmap.getDIB();
-
-            dumpBytes("image", image, 0);
-
-            if (image[0] != 'B' || image[1] != 'M') {
-                Log.wtf(TAG, "getDIB() didn't return a BMP file");
-                return;
-            }
-
-            ByteBuffer imagebb = ByteBuffer.wrap(image);
-            imagebb.order(ByteOrder.LITTLE_ENDIAN);
-
-            if (imagebb.getInt(0x0e) != 40) {
-                Log.wtf(TAG, "getDIB() didn't return a DIB with BITMAPINFOHEADER");
-                return;
-            }
-
-            if (imagebb.getShort(0x1c) != 32) {
-                Log.wtf(TAG, "getDIB() didn't return a 32 bpp DIB");
-                return;
-            }
-
-            if (imagebb.getInt(0x1e) != 3) {
-                Log.wtf(TAG, "getDIB() didn't return a BI_BITFIELDS DIB");
-                return;
-            }
-
-            if (imagebb.getInt(0x36) != 0x000000ff |
-                imagebb.getInt(0x3a) != 0x0000ff00 ||
-                imagebb.getInt(0x3e) != 0x00ff0000) {
-                Log.wtf(TAG, "getDIB() didn't return DIB in RGBX format");
-                return;
-            }
-
-            int offset = imagebb.getInt(0x0a);
-            int width = imagebb.getInt(0x12);
-            int height = imagebb.getInt(0x16);
-
-            Log.i(TAG, String.format("offset: %d (%x), width: %d, height: %d", offset, offset, width, height));
-
-            Bootstrap.force_full_alpha(image, offset, width * height * 4);
-
+            Log.i(TAG, "Rendered:");
+            dumpBytes("bb", bb, 0);
+            Bootstrap.force_full_alpha_bb(bb, 0, 1024 * 1024 * 4);
             Log.i(TAG, "after force_full_alpha:");
-            dumpBytes("image", image, 0);
-
-            for (int i = offset;  i < offset + width * height * 4; i++) {
-                if (image[i] != -1) {
-                    int o = offset + (((i-offset) - 4) / 4) * 4;
-                    dumpBytes("First non-ones bytes", image, o);
-                    o += 160;
-                    dumpBytes("...", image, o);
-                    o += 160;
-                    dumpBytes("...", image, o);
-                    o += 160;
-                    dumpBytes("...", image, o);
-                    break;
-                }
-            }
+            dumpBytes("bb", bb, 0);
 
             ImageView imageView = new GestureImageView(this);
             imageView.setScaleY(-1);
 
-            Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            imagebb.position(offset);
-
-            // Thanks to Android bug 32588, the above is not enough to get the
-            // below copyPixelsFromBuffer() to start copying at offset, it
-            // will (as of Android 4.0.3) copy from position zero anyway. So
-            // instead have to shift (compact) the bloody buffer.
-            imagebb.compact();
-
-            // I don't understand what the compact() documentation says about
-            // the new position; so explicitly put it at zero, in case
-            // runnning on an Android where copyPixelsFromBuffer() *does* take
-            // the position into account.
-            imagebb.position(0);
-
-            bm.copyPixelsFromBuffer(imagebb);
+            Bitmap bm = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
+            bm.copyPixelsFromBuffer(bb);
 
             imageView.setImageBitmap(bm);
 
