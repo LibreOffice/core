@@ -45,7 +45,6 @@ struct ThumbnailViewItem
     bool mbVisible;
     Image maImage;
     rtl::OUString maText;
-    void* mpData;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
     ThumbnailViewItem ( ThumbnailView& rParent );

@@ -224,10 +224,6 @@ public:
 
     Image GetItemImage( sal_uInt16 nItemId ) const;
 
-    void SetItemData( sal_uInt16 nItemId, void* pData );
-
-    void* GetItemData( sal_uInt16 nItemId ) const;
-
     void SetItemText( sal_uInt16 nItemId, const rtl::OUString &rStr );
 
     rtl::OUString GetItemText( sal_uInt16 nItemId ) const;

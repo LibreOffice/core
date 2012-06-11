@@ -37,7 +37,6 @@ ThumbnailViewItem::ThumbnailViewItem( ThumbnailView& rParent )
     : mrParent(rParent)
     , mnId(0)
     , mbVisible(true)
-    , mpData(NULL)
     , mpxAcc(NULL)
 {
 }

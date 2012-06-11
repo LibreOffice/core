@@ -1630,36 +1630,6 @@ Image ThumbnailView::GetItemImage( sal_uInt16 nItemId ) const
         return Image();
 }
 
-void ThumbnailView::SetItemData( sal_uInt16 nItemId, void* pData )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == THUMBNAILVIEW_ITEM_NOTFOUND )
-        return;
-
-    ThumbnailViewItem* pItem = mItemList[nPos];
-    pItem->mpData = pData;
-
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
-    {
-        const Rectangle aRect = ImplGetItemRect(nPos);
-        DrawItem( pItem, aRect );
-        Invalidate( aRect );
-    }
-    else
-        mbFormat = true;
-}
-
-void* ThumbnailView::GetItemData( sal_uInt16 nItemId ) const
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
-        return mItemList[nPos]->mpData;
-    else
-        return NULL;
-}
-
 void ThumbnailView::SetItemText( sal_uInt16 nItemId, const rtl::OUString& rText )
 {
     size_t nPos = GetItemPos( nItemId );
