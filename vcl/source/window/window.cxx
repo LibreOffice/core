@@ -484,7 +484,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
         aStyleSettings.SetWorkspaceGradient( Wallpaper( Color( COL_BLACK ) ) );
     else
     {
-        Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
+        Gradient aGrad( GradientStyle_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
         aStyleSettings.SetWorkspaceGradient( Wallpaper( aGrad ) );
     }
 

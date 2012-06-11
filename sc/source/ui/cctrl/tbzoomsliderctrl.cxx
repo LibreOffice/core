@@ -470,7 +470,7 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
 
     Gradient g;
     g.SetAngle( 0 );
-    g.SetStyle( GRADIENT_LINEAR );
+    g.SetStyle( GradientStyle_LINEAR );
 
     g.SetStartColor( aStartColor );
     g.SetEndColor( aEndColor );

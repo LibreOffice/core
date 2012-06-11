@@ -835,7 +835,7 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, con
     if(pOldDataBarInfo->mbGradient)
     {
         pDev->SetLineColor(pOldDataBarInfo->maColor);
-        Gradient aGradient(GRADIENT_LINEAR, pOldDataBarInfo->maColor, COL_TRANSPARENT);
+        Gradient aGradient(GradientStyle_LINEAR, pOldDataBarInfo->maColor, COL_TRANSPARENT);
 
         if(pOldDataBarInfo->mnLength < 0)
             aGradient.SetAngle(2700);

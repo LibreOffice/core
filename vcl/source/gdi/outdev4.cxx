@@ -185,7 +185,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     long        nBorder = (long)rGradient.GetBorder() * aRect.GetHeight() / 100;
 
     // Rand berechnen und Rechteck neu setzen fuer linearen Farbverlauf
-    bool bLinear = (rGradient.GetStyle() == GRADIENT_LINEAR);
+    bool bLinear = (rGradient.GetStyle() == GradientStyle_LINEAR);
     if ( bLinear )
     {
         aRect.Top() += nBorder;
@@ -529,7 +529,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
             break;
 
-        if( rGradient.GetStyle() == GRADIENT_RADIAL || rGradient.GetStyle() == GRADIENT_ELLIPTICAL )
+        if( rGradient.GetStyle() == GradientStyle_RADIAL || rGradient.GetStyle() == GradientStyle_ELLIPTICAL )
             aPoly = Polygon( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
         else
             aPoly = Polygon( aRect );
@@ -727,7 +727,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
             if ( !aGradient.GetSteps() )
                 aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
-            if( aGradient.GetStyle() == GRADIENT_LINEAR || aGradient.GetStyle() == GRADIENT_AXIAL )
+            if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
                 ImplDrawLinearGradient( aRect, aGradient, sal_False, NULL );
             else
                 ImplDrawComplexGradient( aRect, aGradient, sal_False, NULL );
@@ -892,7 +892,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                         if ( !aGradient.GetSteps() )
                             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
-                        if( aGradient.GetStyle() == GRADIENT_LINEAR || aGradient.GetStyle() == GRADIENT_AXIAL )
+                        if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
                             ImplDrawLinearGradient( aRect, aGradient, sal_False, &aClipPolyPoly );
                         else
                             ImplDrawComplexGradient( aRect, aGradient, sal_False, &aClipPolyPoly );
@@ -1001,7 +1001,7 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
         if ( !aGradient.GetSteps() )
             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
-        if( aGradient.GetStyle() == GRADIENT_LINEAR || aGradient.GetStyle() == GRADIENT_AXIAL )
+        if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
             ImplDrawLinearGradient( aRect, aGradient, sal_True, NULL );
         else
             ImplDrawComplexGradient( aRect, aGradient, sal_True, NULL );

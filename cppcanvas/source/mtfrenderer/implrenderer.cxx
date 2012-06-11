@@ -634,7 +634,7 @@ namespace cppcanvas
                     uno::Sequence< uno::Sequence < double > > aColors(2);
                     uno::Sequence< double > aStops(2);
 
-                    if( rGradient.GetStyle() == GRADIENT_AXIAL )
+                    if( rGradient.GetStyle() == GradientStyle_AXIAL )
                     {
                         aStops.realloc(3);
                         aColors.realloc(3);
@@ -671,7 +671,7 @@ namespace cppcanvas
                     rtl::OUString aGradientService;
                     switch( rGradient.GetStyle() )
                     {
-                        case GRADIENT_LINEAR:
+                        case GradientStyle_LINEAR:
                             basegfx::tools::createLinearODFGradientInfo(aGradInfo,
                                                                         aBounds,
                                                                         nSteps,
@@ -683,7 +683,7 @@ namespace cppcanvas
                             aGradientService = "LinearGradient";
                             break;
 
-                        case GRADIENT_AXIAL:
+                        case GradientStyle_AXIAL:
                         {
                             // Adapt the border so that it is suitable
                             // for the axial gradient.  An axial
@@ -717,7 +717,7 @@ namespace cppcanvas
                             break;
                         }
 
-                        case GRADIENT_RADIAL:
+                        case GradientStyle_RADIAL:
                             basegfx::tools::createRadialODFGradientInfo(aGradInfo,
                                                                         aBounds,
                                                                         aOffset,
@@ -726,7 +726,7 @@ namespace cppcanvas
                             aGradientService = "EllipticalGradient";
                             break;
 
-                        case GRADIENT_ELLIPTICAL:
+                        case GradientStyle_ELLIPTICAL:
                             basegfx::tools::createEllipticalODFGradientInfo(aGradInfo,
                                                                             aBounds,
                                                                             aOffset,
@@ -736,7 +736,7 @@ namespace cppcanvas
                             aGradientService = "EllipticalGradient";
                             break;
 
-                        case GRADIENT_SQUARE:
+                        case GradientStyle_SQUARE:
                             basegfx::tools::createSquareODFGradientInfo(aGradInfo,
                                                                         aBounds,
                                                                         aOffset,
@@ -746,7 +746,7 @@ namespace cppcanvas
                             aGradientService = "RectangularGradient";
                             break;
 
-                        case GRADIENT_RECT:
+                        case GradientStyle_RECT:
                             basegfx::tools::createRectangularODFGradientInfo(aGradInfo,
                                                                              aBounds,
                                                                              aOffset,

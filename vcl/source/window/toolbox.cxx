@@ -408,7 +408,7 @@ void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapp
 
     Gradient g;
     g.SetAngle( pThis->mbHorz ? 0 : 900 );
-    g.SetStyle( GRADIENT_LINEAR );
+    g.SetStyle( GradientStyle_LINEAR );
 
     g.SetStartColor( startCol );
     g.SetEndColor( endCol );

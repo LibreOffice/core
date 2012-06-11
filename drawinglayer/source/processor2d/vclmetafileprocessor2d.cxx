@@ -340,32 +340,32 @@ namespace drawinglayer
             {
                 default : // attribute::GRADIENTSTYLE_LINEAR :
                 {
-                    o_rVCLGradient.SetStyle(GRADIENT_LINEAR);
+                    o_rVCLGradient.SetStyle(GradientStyle_LINEAR);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_AXIAL :
                 {
-                    o_rVCLGradient.SetStyle(GRADIENT_AXIAL);
+                    o_rVCLGradient.SetStyle(GradientStyle_AXIAL);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RADIAL :
                 {
-                    o_rVCLGradient.SetStyle(GRADIENT_RADIAL);
+                    o_rVCLGradient.SetStyle(GradientStyle_RADIAL);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_ELLIPTICAL :
                 {
-                    o_rVCLGradient.SetStyle(GRADIENT_ELLIPTICAL);
+                    o_rVCLGradient.SetStyle(GradientStyle_ELLIPTICAL);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_SQUARE :
                 {
-                    o_rVCLGradient.SetStyle(GRADIENT_SQUARE);
+                    o_rVCLGradient.SetStyle(GradientStyle_SQUARE);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RECT :
                 {
-                    o_rVCLGradient.SetStyle(GRADIENT_RECT);
+                    o_rVCLGradient.SetStyle(GradientStyle_RECT);
                     break;
                 }
             }
@@ -1542,16 +1542,16 @@ namespace drawinglayer
 
                         switch(aVCLGradient.GetStyle())
                         {
-                            default : // GRADIENT_LINEAR:
-                            case GRADIENT_AXIAL:
+                            default : // GradientStyle_LINEAR:
+                            case GradientStyle_AXIAL:
                                 eGrad = SvtGraphicFill::gradientLinear;
                                 break;
-                            case GRADIENT_RADIAL:
-                            case GRADIENT_ELLIPTICAL:
+                            case GradientStyle_RADIAL:
+                            case GradientStyle_ELLIPTICAL:
                                 eGrad = SvtGraphicFill::gradientRadial;
                                 break;
-                            case GRADIENT_SQUARE:
-                            case GRADIENT_RECT:
+                            case GradientStyle_SQUARE:
+                            case GradientStyle_RECT:
                                 eGrad = SvtGraphicFill::gradientRectangular;
                                 break;
                         }
@@ -1828,7 +1828,7 @@ namespace drawinglayer
                                 const sal_uInt8 nTransPercentVcl((sal_uInt8)basegfx::fround(rUniTransparenceCandidate.getTransparence() * 255.0));
                                 const Color aTransColor(nTransPercentVcl, nTransPercentVcl, nTransPercentVcl);
 
-                                aVCLGradient.SetStyle(GRADIENT_LINEAR);
+                                aVCLGradient.SetStyle(GradientStyle_LINEAR);
                                 aVCLGradient.SetStartColor(aTransColor);
                                 aVCLGradient.SetEndColor(aTransColor);
                                 aVCLGradient.SetAngle(0);
