@@ -28,6 +28,14 @@ $(eval $(call gb_Library_add_exception_objects,libotouch,\
 	touch/source/generic/libotouch \
 ))
 
+ifeq ($(OS),ANDROID)
+
+$(eval $(call gb_Library_add_exception_objects,libotouch,\
+	touch/source/android/android \
+))
+
+endif
+
 ifeq ($(OS),IOS)
 
 $(eval $(call gb_Library_add_objcxx_objects,libotouch,\
