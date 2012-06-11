@@ -1586,12 +1586,14 @@ bool ScConditionalFormat::MarkUsedExternalReferences() const
 
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
 {
-    //  fuer Ref-Undo - echte Kopie mit neuen Tokens!
-
     for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
         InsertNew( itr->Clone() );
+}
 
-    //!     sortierte Eintraege aus rList schneller einfuegen ???
+ScConditionalFormatList::ScConditionalFormatList(ScDocument* pDoc, const ScConditionalFormatList& rList)
+{
+    for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
+        InsertNew( itr->Clone(pDoc) );
 }
 
 bool ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) const

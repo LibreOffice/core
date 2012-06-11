@@ -712,6 +712,12 @@ ScConditionalFormatList* ScDocument::GetCondFormList(SCTAB nTab) const
     return NULL;
 }
 
+void ScDocument::SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab )
+{
+    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->SetCondFormList(pList);
+}
+
 
 const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
 {

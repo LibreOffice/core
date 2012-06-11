@@ -1201,6 +1201,8 @@ public:
     SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab );
     void            ConditionalChanged( sal_uLong nKey, SCTAB nTab );
 
+    void SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab );
+
     SC_DLLPUBLIC sal_uLong          AddValidationEntry( const ScValidationData& rNew );
 
     SC_DLLPUBLIC const ScValidationData*    GetValidationEntry( sal_uLong nIndex ) const;
