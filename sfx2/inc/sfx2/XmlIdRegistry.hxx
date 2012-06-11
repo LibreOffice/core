@@ -47,13 +47,8 @@ namespace sfx2 {
 /** is i_rIdref a valid NCName ? */
 bool SFX2_DLLPUBLIC isValidNCName(::rtl::OUString const & i_rIdref);
 
-extern inline bool
-isValidXmlId(::rtl::OUString const & i_rStreamName,
-    ::rtl::OUString const & i_rIdref)
-{
-    return isValidNCName(i_rIdref) && ( i_rStreamName == "content.xml" || i_rStreamName == "styles.xml" );
-}
-
+bool SFX2_DLLPUBLIC isValidXmlId(::rtl::OUString const & i_rStreamName,
+    ::rtl::OUString const & i_rIdref);
 
 // XML ID handling ---------------------------------------------------
 

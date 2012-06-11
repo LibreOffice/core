@@ -116,6 +116,13 @@ static bool isStylesFile (::rtl::OUString const & i_rPath)
     return i_rPath == s_styles;
 }
 
+bool isValidXmlId(::rtl::OUString const & i_rStreamName,
+    ::rtl::OUString const & i_rIdref)
+{
+    return isValidNCName(i_rIdref)
+        && (isContentFile(i_rStreamName) || isStylesFile(i_rStreamName));
+}
+
 static bool isReservedFile(::rtl::OUString const & i_rPath)
 {
     return isContentFile(i_rPath) || isStylesFile(i_rPath) || i_rPath == s_meta || i_rPath == s_settings;
