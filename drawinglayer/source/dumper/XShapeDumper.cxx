@@ -941,6 +941,17 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
+    void XShapeDumper::dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("navigationOrder"), "%" SAL_PRIdINT32, aNavigationOrder);
+	}
+
+    void XShapeDumper::dumpHyperlinkAsAttribute(rtl::OUString sHyperlink, xmlTextWriterPtr xmlWriter)
+	{
+		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("hyperlink"), "%s",
+			rtl::OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
+	}
+
     // --------------------------------
     // ---------- XShape.idl ----------
     // --------------------------------
@@ -1491,6 +1502,18 @@ namespace {
 				drawing::HomogenMatrix3 aTransformation;
 				if(anotherAny >>= aTransformation)
 					dumpTransformationAsElement(aTransformation, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("NavigationOrder");
+				sal_Int32 aNavigationOrder;
+				if(anotherAny >>= aNavigationOrder)
+					dumpNavigationOrderAsAttribute(aNavigationOrder, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("Hyperlink");
+				rtl::OUString sHyperlink;
+				if(anotherAny >>= sHyperlink)
+					dumpHyperlinkAsAttribute(sHyperlink, xmlWriter);
 			}
         }
 

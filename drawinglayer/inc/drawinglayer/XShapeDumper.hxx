@@ -161,6 +161,8 @@ private:
     void dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter);
     void dumpHomogenMatrixLine3(com::sun::star::drawing::HomogenMatrixLine3 aLine, xmlTextWriterPtr xmlWriter);
     void dumpTransformationAsElement(com::sun::star::drawing::HomogenMatrix3 aTransformation, xmlTextWriterPtr xmlWriter);
+    void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
+    void dumpHyperlinkAsAttribute(rtl::OUString sHyperlink, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
