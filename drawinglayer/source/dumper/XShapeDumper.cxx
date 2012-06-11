@@ -917,11 +917,28 @@ namespace {
 			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "false");
 	}
 
-    void XShapeDumper::dumpHomogenMatrixLine3(drawing::HomogenMatrixLine3 aLine, xmlTextWriterPtr xmlWriter)
+    void XShapeDumper::dumpHomogenMatrixLine3(drawing::HomogenMatrixLine3 aHomogenMatrixLine3, xmlTextWriterPtr xmlWriter)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column1"), "%f", aLine.Column1);
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column2"), "%f", aLine.Column2);
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column3"), "%f", aLine.Column3);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column1"), "%f", aHomogenMatrixLine3.Column1);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column2"), "%f", aHomogenMatrixLine3.Column2);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column3"), "%f", aHomogenMatrixLine3.Column3);
+    }
+
+    void XShapeDumper::dumpTransformationAsElement(drawing::HomogenMatrix3 aTransformation, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Transformation" ));
+        {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line1" ));
+        dumpHomogenMatrixLine3(aTransformation.Line1, xmlWriter);
+        xmlTextWriterEndElement( xmlWriter );
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line2" ));
+        dumpHomogenMatrixLine3(aTransformation.Line2, xmlWriter);
+        xmlTextWriterEndElement( xmlWriter );
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line3" ));
+        dumpHomogenMatrixLine3(aTransformation.Line3, xmlWriter);
+        xmlTextWriterEndElement( xmlWriter );
+        }
+        xmlTextWriterEndElement( xmlWriter );
     }
 
     // --------------------------------
@@ -1468,6 +1485,12 @@ namespace {
 				sal_Bool bSizeProtect;
 				if(anotherAny >>= bSizeProtect)
 					dumpSizeProtectAsAttribute(bSizeProtect, xmlWriter);
+			}
+			{
+				uno::Any anotherAny = xPropSet->getPropertyValue("Transformation");
+				drawing::HomogenMatrix3 aTransformation;
+				if(anotherAny >>= aTransformation)
+					dumpTransformationAsElement(aTransformation, xmlWriter);
 			}
         }
 
