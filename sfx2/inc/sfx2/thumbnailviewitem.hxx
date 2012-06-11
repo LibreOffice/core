@@ -43,6 +43,7 @@ struct ThumbnailViewItem
     ThumbnailView &mrParent;
     sal_uInt16 mnId;
     bool mbVisible;
+    bool mbSelected;
     Image maImage;
     rtl::OUString maText;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;

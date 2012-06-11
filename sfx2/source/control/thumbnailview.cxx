@@ -1285,10 +1285,24 @@ void ThumbnailView::Populate ()
 
         sal_uInt16 nEntries = pTemplates->GetCount(i);
 
-        for ( sal_uInt16 j = 0; j < nEntries; ++j)
+        if (nEntries)
         {
-            Image aImg = lcl_fetchThumbnail(pTemplates->GetPath(i,j),128,128);
-            InsertItem(i*100+j,aImg,pTemplates->GetName(i,j));
+            /// Preview first 2 thumbnails for folder
+            Image aImg = lcl_fetchThumbnail(pTemplates->GetPath(i,0),96,96);
+
+            if ( nEntries > 2 )
+            {
+                Color aWhite(COL_WHITE);
+                BitmapEx aResult = lcl_fetchThumbnail(pTemplates->GetPath(i,1),96,96).GetBitmapEx();
+                BitmapEx aBmp = aImg.GetBitmapEx();
+                aResult.Expand(20,20,&aWhite,sal_True);
+                aResult.CopyPixel(Rectangle(24,24,106,106),Rectangle(0,0,96,96),&aBmp);
+
+                aImg = aResult;
+
+            }
+
+            InsertItem(i,aImg,aRegionName);
         }
     }
 }
