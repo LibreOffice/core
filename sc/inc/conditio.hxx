@@ -354,6 +354,13 @@ public:
     void erase(sal_uLong nIndex);
 };
 
+// see http://www.boost.org/doc/libs/1_49_0/libs/ptr_container/doc/tutorial.html#cloneability
+//for MSVC we need:
+inline ScFormatEntry* new_clone( const ScFormatEntry& rFormat )
+{
+    return rFormat.Clone();
+}
+
 #endif
 
 
