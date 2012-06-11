@@ -2162,7 +2162,8 @@ namespace svt { namespace table
         if ( i_lastRow == ROW_INVALID )
             aInvalidateRect.Bottom() = m_pDataWindow->GetOutputSizePixel().Height();
 
-        m_pDataWindow->Invalidate( aInvalidateRect );
+        m_pDataWindow->Invalidate( aInvalidateRect,
+            m_pDataWindow->GetControlBackground().GetTransparency() ? INVALIDATE_TRANSPARENT : 0 );
     }
 
     //------------------------------------------------------------------------------
