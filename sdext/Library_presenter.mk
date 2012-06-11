@@ -35,7 +35,7 @@ $(eval $(call gb_Library_use_api,PresenterScreen,\
 ))
 
 $(eval $(call gb_Library_add_defs,PresenterScreen,\
-    -DPRESENTER_IMPL_IDENTIFIER=\"com.sun.PresenterScreen-$(PLATFORMID)\" \
+    -DPRESENTER_IMPL_IDENTIFIER=\"com.sun.PresenterScreen-$(sdext_PLATFORM)\" \
 ))
 
 $(eval $(call gb_Library_use_libraries,PresenterScreen,\
