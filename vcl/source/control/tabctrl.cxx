@@ -2161,6 +2161,9 @@ Size TabControl::GetOptimalSize(WindowSizeType eType) const
         Size aOptimalSize(aOptimalPageSize);
         aOptimalSize.Height() += aOptimalTabSize.Height();
 
+        aOptimalSize.Width() += TAB_OFFSET * 2;
+        aOptimalSize.Height() += TAB_OFFSET * 2;
+
         return aOptimalSize;
     }
     }
