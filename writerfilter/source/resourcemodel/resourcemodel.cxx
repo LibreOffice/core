@@ -209,8 +209,6 @@ void WW8TableManager::endParagraphGroup()
     TableManager<string, TablePropsRef_t>::endParagraphGroup();
 }
 
-WW8TableManager gTableManager;
-
 /* WW8StreamHandler */
 
 WW8StreamHandler::WW8StreamHandler()
@@ -218,12 +216,14 @@ WW8StreamHandler::WW8StreamHandler()
 {
     output.closeGroup();
     output.addItem("<stream>");
-    gTableManager.startLevel();
+    mpTableManager = new WW8TableManager;
+    mpTableManager->startLevel();
 }
 
 WW8StreamHandler::~WW8StreamHandler()
 {
-    gTableManager.endLevel();
+    mpTableManager->endLevel();
+    delete mpTableManager;
 
     output.closeGroup();
     output.addItem("</stream>");
@@ -244,13 +244,13 @@ void WW8StreamHandler::startParagraphGroup()
     output.openGroup();
     output.addItem("<paragraph-group>");
 
-    gTableManager.startParagraphGroup();
-    gTableManager.handle(gInfo);
+    mpTableManager->startParagraphGroup();
+    mpTableManager->handle(gInfo);
 }
 
 void WW8StreamHandler::endParagraphGroup()
 {
-    gTableManager.endParagraphGroup();
+    mpTableManager->endParagraphGroup();
 
     output.addItem("</paragraph-group>");
     output.closeGroup();
@@ -316,7 +316,7 @@ void WW8StreamHandler::text(const sal_uInt8 * data, size_t len)
 
     output.addItem(tmpStr);
 
-    gTableManager.text(data, len);
+    mpTableManager->text(data, len);
 }
 
 void WW8StreamHandler::utext(const sal_uInt8 * data, size_t len)
@@ -357,26 +357,26 @@ void WW8StreamHandler::utext(const sal_uInt8 * data, size_t len)
 
     output.addItem(tmpStr);
 
-    gTableManager.utext(data, len);
+    mpTableManager->utext(data, len);
 
     mnUTextCount++;
 }
 
 void WW8StreamHandler::props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
-    WW8PropertiesHandler aHandler;
+    WW8PropertiesHandler aHandler(mpTableManager);
 
     output.addItem("<properties type=\"" + ref->getType() + "\">");
     ref->resolve(aHandler);
 
-    //gTableManager.props(ref);
+    //mpTableManager->props(ref);
 
     output.addItem("</properties>");
 }
 
 void WW8StreamHandler::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 {
-    WW8TableHandler aHandler;
+    WW8TableHandler aHandler(mpTableManager);
 
     output.addItem("<table id=\"" + (*QNameToString::Instance())(name)
                    + "\">");
@@ -399,11 +399,11 @@ void WW8StreamHandler::substream(Id name,
     output.addItem("<substream name=\"" + (*QNameToString::Instance())(name)
                    + "\">");
 
-    gTableManager.startLevel();
+    mpTableManager->startLevel();
 
     ref->resolve(*this);
 
-    gTableManager.endLevel();
+    mpTableManager->endLevel();
 
     output.addItem("</substream>");
 }
@@ -525,7 +525,7 @@ void WW8PropertiesHandler::sprm(Sprm & sprm_)
         output.addItem("</stream>");
     }
 
-    gTableManager.sprm(sprm_);
+    mpTableManager->sprm(sprm_);
 
     output.addItem("</sprm>");
 }
@@ -535,7 +535,7 @@ void WW8TableHandler::entry(int /*pos*/,
 {
     output.addItem("<tableentry>");
 
-    WW8PropertiesHandler aHandler;
+    WW8PropertiesHandler aHandler(mpTableManager);
 
     try
     {

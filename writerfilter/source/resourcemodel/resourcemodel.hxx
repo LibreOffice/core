@@ -28,9 +28,11 @@
 #include <resourcemodel/WW8ResourceModel.hxx>
 
 namespace writerfilter {
+class WW8TableManager;
 class WW8StreamHandler : public Stream
 {
     int mnUTextCount;
+    WW8TableManager* mpTableManager;
 
 public:
     WW8StreamHandler();
@@ -62,9 +64,11 @@ class WW8PropertiesHandler : public Properties
     typedef boost::shared_ptr<Sprm> SprmSharedPointer_t;
     typedef vector<SprmSharedPointer_t> SprmPointers_t;
     SprmPointers_t sprms;
+    WW8TableManager* mpTableManager;
 
 public:
-    WW8PropertiesHandler()
+    WW8PropertiesHandler(WW8TableManager* pTableManager)
+        : mpTableManager(pTableManager)
     {
     }
 
@@ -96,8 +100,11 @@ public:
 
 class WW8TableHandler : public Table
 {
+    WW8TableManager* mpTableManager;
+
 public:
-    WW8TableHandler()
+    WW8TableHandler(WW8TableManager* pTableManager)
+        : mpTableManager(pTableManager)
     {
     }
 
