@@ -152,8 +152,6 @@ void WW8TableManager::endParagraphGroup()
     TableManager<string, TablePropsPointer_t>::endParagraphGroup();
 }
 
-WW8TableManager gTableManager;
-
 
 //-------- WW8TableReference -----------------------------------
 
