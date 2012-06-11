@@ -3022,11 +3022,20 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     }
                                 }
                             }
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "CharHeight" ), sal_True ) )
+                            {
+                                float fCharHeight = 0.0;
+                                if ( aAny >>= fCharHeight )
+                                {
+                                    sal_Int32 nTextSize = static_cast< sal_Int32 > ( fCharHeight * 65536 );
+                                    AddOpt(ESCHER_Prop_gtextSize, nTextSize);
+                                }
+                            }
                             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "CharKerning" ), sal_True ) )
                             {
                                 sal_Int16 nCharKerning = sal_Int16();
                                 if ( aAny >>= nCharKerning )
-                            {
+                                {
                                     nTextPathFlags |= 0x10000000;
                                     if ( nCharKerning )
                                         nTextPathFlags |= 0x1000;
