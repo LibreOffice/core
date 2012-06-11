@@ -620,6 +620,10 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     else
         pStream = m_pBinaryData.get();
 
+    if (!pStream->Tell())
+        // No destination text? Then we'll get it later.
+        return 0;
+
     // Store, and get its URL.
     pStream->Seek(0);
     uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(pStream));
@@ -3529,6 +3533,8 @@ int RTFDocumentImpl::popState()
         if (aState.nFieldStatus == FIELD_INSTRUCTION)
             singleChar(0x15);
     }
+    else if (m_aStates.size() && m_aStates.top().nDestinationState == DESTINATION_PICT)
+        m_aStates.top().aPicture = aState.aPicture;
     else if (bPopShapeProperties)
     {
         m_aStates.top().aShape = aShape;
