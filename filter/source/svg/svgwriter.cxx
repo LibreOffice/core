@@ -896,7 +896,10 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                     if( bCont )
                     {
                         // #118796# do NOT access pDXArray, it may be zero (!)
-                        nX = aPos.X() + pDX[ nCurPos - 1 ];
+                        sal_Int32 nWidth = pDX[ nCurPos - 1 ];
+                        if ( bApplyMapping )
+                            nWidth = ImplMap( nWidth );
+                        nX = aPos.X() + nWidth;
                     }
                 }
             }
@@ -972,7 +975,13 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
             {
                 Point                                       aPt;
                 Size                                        aSz;
-                ::rtl::OUString                             aImageData( (sal_Char*) aOStm.GetData(), aOStm.Tell(), RTL_TEXTENCODING_ASCII_US );
+
+                // #119735# Do not copy the stream data to a ::rtl::OUString any longer, this is not needed and
+                // (of course) throws many exceptions with the used RTL_TEXTENCODING_ASCII_US. Keeping that line
+                // to show what I'm talking about
+                // ::rtl::OUString aImageData( (sal_Char*) aOStm.GetData(), aOStm.Tell(), RTL_TEXTENCODING_ASCII_US );
+                const sal_Char* pImageData = (sal_Char*)aOStm.GetData();
+                const sal_uInt32 nImageDataLength = aOStm.Tell();
                 REF( NMSP_SAX::XExtendedDocumentHandler )   xExtDocHandler( mrExport.GetDocHandler(), NMSP_UNO::UNO_QUERY );
 
                 if( bApplyMapping )
@@ -1023,13 +1032,15 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 
                     xExtDocHandler->unknown( aString );
 
-                    const sal_uInt32 nQuadCount = aImageData.getLength() / 3;
-                    const sal_uInt32 nRest = aImageData.getLength() % 3;
+                    // #119735#
+                    const sal_uInt32 nQuadCount = nImageDataLength / 3;
+                    const sal_uInt32 nRest = nImageDataLength % 3;
 
                     if( nQuadCount || nRest )
                     {
                         sal_Int32           nBufLen = ( ( nQuadCount + ( nRest ? 1 : 0 ) ) << 2 );
-                        const sal_Unicode*  pSrc = (const sal_Unicode*) aImageData;
+                        const sal_Char* pSrc = pImageData;
+
                         sal_Unicode*        pBuffer = new sal_Unicode[ nBufLen * sizeof( sal_Unicode ) ];
                         sal_Unicode*        pTmpDst = pBuffer;
 
@@ -1856,3 +1867,104 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
     ImplReleaseContext();
     mpVDev->Pop();
 }
+
+// -------------
+// - SVGWriter -
+// -------------
+
+SVGWriter::SVGWriter( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr ) :
+    mxFact( rxMgr )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+SVGWriter::~SVGWriter()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+
+ANY SAL_CALL SVGWriter::queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException )
+{
+    const ANY aRet( NMSP_CPPU::queryInterface( rType, static_cast< NMSP_SVG::XSVGWriter* >( this ) ) );
+
+    return( aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ) );
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SVGWriter::acquire() throw()
+{
+    OWeakObject::acquire();
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SVGWriter::release() throw()
+{
+    OWeakObject::release();
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SVGWriter::write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler,
+                                const SEQ( sal_Int8 )& rMtfSeq ) throw( NMSP_UNO::RuntimeException )
+{
+    SvMemoryStream  aMemStm( (char*) rMtfSeq.getConstArray(), rMtfSeq.getLength(), STREAM_READ );
+    GDIMetaFile     aMtf;
+
+    aMemStm.SetCompressMode( COMPRESSMODE_FULL );
+    aMemStm >> aMtf;
+
+    const REF( NMSP_SAX::XDocumentHandler ) xDocumentHandler( rxDocHandler );
+    const Sequence< PropertyValue > aFilterData;
+
+    SVGExport* pWriter = new SVGExport( mxFact, xDocumentHandler, aFilterData );
+
+    pWriter->writeMtf( aMtf );
+    delete pWriter;
+}
+
+// -----------------------------------------------------------------------------
+
+#define SVG_WRITER_SERVICE_NAME         "com.sun.star.svg.SVGWriter"
+#define SVG_WRITER_IMPLEMENTATION_NAME  "com.sun.star.comp.Draw.SVGWriter"
+
+rtl::OUString SVGWriter_getImplementationName()
+    throw (RuntimeException)
+{
+    return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( SVG_WRITER_IMPLEMENTATION_NAME ) );
+}
+
+// -----------------------------------------------------------------------------
+
+Sequence< sal_Int8 > SAL_CALL SVGWriter_getImplementationId()
+    throw(RuntimeException)
+{
+    static const ::cppu::OImplementationId aId;
+
+    return( aId.getImplementationId() );
+}
+
+// -----------------------------------------------------------------------------
+
+Sequence< rtl::OUString > SAL_CALL SVGWriter_getSupportedServiceNames()
+    throw (RuntimeException)
+{
+    Sequence< rtl::OUString > aRet( 1 );
+
+    aRet.getArray()[ 0 ] = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( SVG_WRITER_SERVICE_NAME ) );
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------------
+
+Reference< XInterface > SAL_CALL SVGWriter_createInstance( const Reference< XMultiServiceFactory > & rSMgr )
+    throw( Exception )
+{
+    return( static_cast< cppu::OWeakObject* >( new SVGWriter( rSMgr ) ) );
+}
+

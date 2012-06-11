@@ -65,6 +65,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/svg/XSVGWriter.hpp>
 
 // -----------------------------------------------------------------------------
 
@@ -166,7 +167,7 @@ struct SVGShapeDescriptor
 // -------------------
 
 class SVGAttributeWriter;
-class SvXMLExport;
+class SVGExport;
 class GDIMetaFile;
 
 class SVGActionWriter
@@ -232,5 +233,48 @@ public:
                                            sal_uInt32 nWriteFlags,
                                            const ::rtl::OUString* pElementId = NULL );
 };
+
+class SVGWriter : public NMSP_CPPU::OWeakObject, NMSP_SVG::XSVGWriter
+{
+private:
+
+    REF( NMSP_LANG::XMultiServiceFactory )  mxFact;
+
+                                            SVGWriter();
+
+public:
+
+                                            SVGWriter( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
+    virtual                                 ~SVGWriter();
+
+    // XInterface
+    virtual NMSP_UNO::Any SAL_CALL          queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException );
+    virtual void SAL_CALL                   acquire() throw();
+    virtual void SAL_CALL                   release() throw();
+
+    // XSVGWriter
+    virtual void SAL_CALL                   write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler,
+                                                   const SEQ( sal_Int8 )& rMtfSeq ) throw( NMSP_UNO::RuntimeException );
+};
+
+::rtl::OUString SVGWriter_getImplementationName ()
+    throw ( ::com::sun::star::uno::RuntimeException );
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SAL_CALL SVGWriter_supportsService( const ::rtl::OUString& ServiceName )
+    throw ( ::com::sun::star::uno::RuntimeException );
+
+// -----------------------------------------------------------------------------
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SVGWriter_getSupportedServiceNames(  )
+    throw ( ::com::sun::star::uno::RuntimeException );
+
+// -----------------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    SAL_CALL SVGWriter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
+        throw ( ::com::sun::star::uno::Exception );
+
 
 #endif

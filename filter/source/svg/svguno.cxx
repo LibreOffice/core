@@ -32,6 +32,7 @@
 
 #include <svgfilter.hxx>
 #include <svgdialog.hxx>
+#include <svgwriter.hxx>
 
 using ::rtl::OUString;
 using namespace ::cppu;
@@ -73,7 +74,13 @@ extern "C"
                     OUString::createFromAscii( pImplName ),
                     SVGDialog_createInstance, SVGDialog_getSupportedServiceNames() ) );
             }
-
+            else if( aImplName.equals( SVGWriter_getImplementationName() ) )
+            {
+                xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
+                    reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                    OUString::createFromAscii( pImplName ),
+                    SVGWriter_createInstance, SVGWriter_getSupportedServiceNames() ) );
+            }
             if (xFactory.is())
             {
                 xFactory->acquire();

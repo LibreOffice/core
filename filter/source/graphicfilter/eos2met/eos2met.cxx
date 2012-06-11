@@ -2590,18 +2590,6 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
 extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {   METWriter aMETWriter;
 
-    if ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
-        return aMETWriter.WriteMET( rGraphic.GetGDIMetaFile(), rStream, pFilterConfigItem );
-    else
-    {
-        Bitmap aBmp=rGraphic.GetBitmap();
-        GDIMetaFile aMTF;
-        VirtualDevice aVirDev;
-
-        aMTF.Record(&aVirDev);
-        aVirDev.DrawBitmap(Point(),aBmp);
-        aMTF.Stop();
-        aMTF.SetPrefSize(aBmp.GetSizePixel());
-        return aMETWriter.WriteMET( aMTF, rStream, pFilterConfigItem );
-    }
+    // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+    return aMETWriter.WriteMET( rGraphic.GetGDIMetaFile(), rStream, pFilterConfigItem );
 }

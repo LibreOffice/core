@@ -2291,41 +2291,9 @@ extern "C" sal_Bool __LOADONCALLAPI GraphicExport(SvStream & rStream, Graphic & 
 {
     PictWriter      aPictWriter;
 
-    if (rGraphic.GetType()==GRAPHIC_GDIMETAFILE)
-    {
-        GDIMetaFile aScaledMtf( rGraphic.GetGDIMetaFile() );
+    // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+    GDIMetaFile aScaledMtf( rGraphic.GetGDIMetaFile() );
 
-/*
-        MapMode     aMap72( MAP_INCH );
-        Fraction    aDPIFrac( 1, 72 );
-        Size        aOldSize = aScaledMtf.GetPrefSize();
-
-        aMap72.SetScaleX( aDPIFrac );
-        aMap72.SetScaleY( aDPIFrac );
-
-        Size aNewSize = OutputDevice::LogicToLogic( aOldSize,
-                                                    aScaledMtf.GetPrefMapMode(),
-                                                    aMap72 );
-
-        aScaledMtf.Scale( Fraction( aNewSize.Width(), aOldSize.Width() ),
-                          Fraction( aNewSize.Height(), aOldSize.Height() ) );
-        aScaledMtf.SetPrefMapMode( aMap72 );
-        aScaledMtf.SetPrefSize( aNewSize );
-*/
-
-        return aPictWriter.WritePict( aScaledMtf, rStream, pFilterConfigItem );
-    }
-    else
-    {
-        Bitmap aBmp=rGraphic.GetBitmap();
-        GDIMetaFile aMTF;
-        VirtualDevice aVirDev;
-
-        aMTF.Record(&aVirDev);
-        aVirDev.DrawBitmap(Point(),aBmp);
-        aMTF.Stop();
-        aMTF.SetPrefSize(aBmp.GetSizePixel());
-        return aPictWriter.WritePict( aMTF, rStream, pFilterConfigItem );
-    }
+    return aPictWriter.WritePict( aScaledMtf, rStream, pFilterConfigItem );
 }
 

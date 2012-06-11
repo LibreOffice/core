@@ -27,4 +27,7 @@
   <implementation name="com.sun.star.comp.Draw.SVGFilter">
     <service name="com.sun.star.document.SVGFilter"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Draw.SVGWriter">
+    <service name="com.sun.star.svg.SVGWriter"/>
+  </implementation>
 </component>
