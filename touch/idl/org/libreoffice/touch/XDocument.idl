@@ -37,10 +37,11 @@ interface XDocument: com::sun::star::uno::XInterface
     // on Android version and/or hardware? TBD. Will the same format be useful
     // also for iOS? TBD.
 
-    // buffer must have an exact number of bytes for a square with each side a
-    // power-of-two number of pixels, At this API level buffer is represented
-    // as the address of its bytes as a 64-bit integer, i.e. on Android it
-    // must be a "direct" ByteBuffer for that to be meaningful.
+    // At this API level buffer is represented as the address of its bytes as
+    // a 64-bit integer, i.e. on Android it must be a "direct" ByteBuffer for
+    // that to be meaningful.
+
+    // width and height must be powers of two
 
     // listener gets a "reasonable" number of callbacks during the rendering
     // if it takes "significantly" long, and can inerrupt the rendering.
@@ -56,7 +57,8 @@ interface XDocument: com::sun::star::uno::XInterface
     // Or should we just go OpenGL ES and render into a texture?
 
     void render( [in] hyper buffer,
-                 [in] long bufferSize,
+                 [in] long width,
+                 [in] long height,
                  [in] XDocumentRenderCallback listener,
                  [in] long pageNo,
                  [in] long zoomLevel,
