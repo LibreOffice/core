@@ -162,7 +162,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maLbEntryTypeMax.SelectEntryPos(1);
     maLbDataBarMinType.SelectEntryPos(0);
     maLbDataBarMaxType.SelectEntryPos(1);
-    maEdMiddle.SetText(rtl::OUString::valueOf(50));
+    maEdMiddle.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
     maEdDataBarMin.Disable();
     maEdDataBarMax.Disable();
 
