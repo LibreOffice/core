@@ -192,7 +192,6 @@ public:
     virtual ~ServerFont();
 
     const ::rtl::OString* GetFontFileName() const;
-    int                 GetFontFaceNumber() const;
     bool                TestFont() const;
     FT_Face             GetFtFace() const;
     int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }

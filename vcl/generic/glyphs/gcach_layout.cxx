@@ -35,10 +35,6 @@
 #include <vcl/svapp.hxx>
 
 #include <sal/alloca.h>
-
-#if OSL_DEBUG_LEVEL > 1
-#include <cstdio>
-#endif
 #include <rtl/instance.hxx>
 
 namespace { struct SimpleLayoutEngine : public rtl::Static< ServerFontLayoutEngine, SimpleLayoutEngine > {}; }
@@ -231,12 +227,11 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
 
     sal_uLong nLength;
     const unsigned char* pBuffer = mrServerFont.GetTable( pTagName, &nLength );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr,"IcuGetTable(\"%s\") => %p\n", pTagName, pBuffer);
-    int mnHeight = mrServerFont.GetFontSelData().mnHeight;
-    const char* pName = mrServerFont.GetFontFileName()->getStr();
-    fprintf(stderr,"font( h=%d, \"%s\" )\n", mnHeight, pName );
-#endif
+    SAL_INFO("vcl", "IcuGetTable(\"" << pTagName << "\") => " << pBuffer);
+    SAL_INFO(
+        "vcl",
+        "font( h=" << mrServerFont.GetFontSelData().mnHeight << ", \""
+        << mrServerFont.GetFontFileName()->getStr() << "\" )");
     return (const void*)pBuffer;
 }
 
@@ -336,17 +331,10 @@ void IcuFontFromServerFont::getGlyphAdvance( LEGlyphID nGlyphIndex,
 // -----------------------------------------------------------------------
 
 le_bool IcuFontFromServerFont::getGlyphPoint( LEGlyphID,
-    le_int32
-#if OSL_DEBUG_LEVEL > 1
-pointNumber
-#endif
-    ,
-    LEPoint& ) const
+    le_int32 pointNumber, LEPoint& ) const
 {
     //TODO: replace dummy implementation
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr,"getGlyphPoint(%d)\n", pointNumber );
-#endif
+    SAL_INFO("vcl", "getGlyphPoint(" << pointNumber << ")");
     return false;
 }
 

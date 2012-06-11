@@ -913,7 +913,10 @@ boost::shared_ptr<ImplFontOptions> ServerFont::GetFontOptions() const
     return mpFontOptions;
 }
 
-// -----------------------------------------------------------------------
+const ::rtl::OString* ServerFont::GetFontFileName() const
+{
+    return mpFontInfo->GetFontFileName();
+}
 
 bool ServerFont::TestFont() const
 {
