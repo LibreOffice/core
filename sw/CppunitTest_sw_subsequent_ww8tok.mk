@@ -39,7 +39,18 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ww8tok, \
     sal \
     test \
     unotest \
+    sw \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_ww8tok,\
+    libxml2 \
+))
+
+$(eval $(call gb_CppunitTest_set_include,sw_subsequent_ww8tok,\
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,sw_subsequent_ww8tok,\

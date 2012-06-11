@@ -36,6 +36,14 @@
 
 #include <vcl/svapp.hxx>
 
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <doc.hxx>
+#include <rootfrm.hxx>
+
+#include <libxml/xmlwriter.h>
+#include <libxml/xpath.h>
+
 using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringBuffer;
@@ -48,6 +56,7 @@ public:
     void testN750255();
     void testN652364();
     void testN757118();
+    void testN757905();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -56,6 +65,7 @@ public:
     CPPUNIT_TEST(testN750255);
     CPPUNIT_TEST(testN652364);
     CPPUNIT_TEST(testN757118);
+    CPPUNIT_TEST(testN757905);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -206,6 +216,43 @@ xray ThisComponent.DrawPage.getByIndex(0).BoundRect
     // compare, allow for < 5 differences because of rounding errors
     CPPUNIT_ASSERT( abs( boundRect1.Width - boundRect3.Width ) < 5 );
     CPPUNIT_ASSERT( abs( boundRect2.Width - boundRect4.Width ) < 5 );
+}
+
+void Test::testN757905()
+{
+    // The problem was that the paragraph had only a single fly
+    // (as-character-anchored), and the height of that was smallar than the
+    // paragraph height. When in Word-compat mode, we should take the max of
+    // the two, not just the height of the fly.
+
+    // create xml writer
+    xmlBufferPtr pXmlBuffer = xmlBufferCreate();
+    xmlTextWriterPtr pXmlWriter = xmlNewTextWriterMemory(pXmlBuffer, 0);
+    xmlTextWriterStartDocument(pXmlWriter, NULL, NULL, NULL);
+
+    // create dump
+    load("n757905.doc");
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    SwRootFrm* pLayout = pDoc->GetCurrentLayout();
+    pLayout->dumpAsXml(pXmlWriter);
+
+    // delete xml writer
+    xmlTextWriterEndDocument(pXmlWriter);
+    xmlFreeTextWriter(pXmlWriter);
+
+    // parse the dump
+    xmlDocPtr pXmlDoc = xmlParseMemory((const char*)xmlBufferContent(pXmlBuffer), xmlBufferLength(pXmlBuffer));;
+    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
+    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST("/root/page/body/txt/infos/bounds"), pXmlXpathCtx);
+    xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString aHeight = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST("height")));
+    CPPUNIT_ASSERT(sal_Int32(31) < aHeight.toInt32());
+
+    // delete dump
+    xmlFreeDoc(pXmlDoc);
+    xmlBufferFree(pXmlBuffer);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
