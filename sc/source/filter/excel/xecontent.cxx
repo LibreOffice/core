@@ -972,10 +972,6 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
             {
                 if(pFormatEntry->GetType() == condformat::CONDITION)
                     maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), nIndex ) );
-                else if(pFormatEntry->GetType() == condformat::COLORSCALE)
-                    ;
-                else if(pFormatEntry->GetType() == condformat::DATABAR)
-                    ;
             }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
