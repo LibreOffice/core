@@ -59,28 +59,28 @@ namespace {
 void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ColorListBox& rLbCol )
 {
     if(rEntry.GetMin())
-	rLbType.SelectEntryPos(0);
+        rLbType.SelectEntryPos(0);
     else if(rEntry.GetMax())
-	rLbType.SelectEntryPos(1);
+        rLbType.SelectEntryPos(1);
     else if(rEntry.GetPercentile())
     {
-	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-	rLbType.SelectEntryPos(2);
+        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+        rLbType.SelectEntryPos(2);
     }
     else if(rEntry.GetPercent())
     {
-	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-	rLbType.SelectEntryPos(4);
+        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+        rLbType.SelectEntryPos(4);
     }
     else if(rEntry.HasFormula())
     {
-	rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
-	rLbType.SelectEntryPos(5);
+        rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+        rLbType.SelectEntryPos(5);
     }
     else
     {
-	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-	rLbType.SelectEntryPos(3);
+        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+        rLbType.SelectEntryPos(3);
     }
     rLbCol.SelectEntry(rEntry.GetColor());
 }
@@ -88,28 +88,28 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
 void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit )
 {
     if(rEntry.GetMin())
-	rLbType.SelectEntryPos(0);
+        rLbType.SelectEntryPos(0);
     else if(rEntry.GetMax())
-	rLbType.SelectEntryPos(1);
+        rLbType.SelectEntryPos(1);
     else if(rEntry.GetPercentile())
     {
-	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-	rLbType.SelectEntryPos(2);
+        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+        rLbType.SelectEntryPos(2);
     }
     else if(rEntry.GetPercent())
     {
-	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-	rLbType.SelectEntryPos(4);
+        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+        rLbType.SelectEntryPos(4);
     }
     else if(rEntry.HasFormula())
     {
-	rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
-	rLbType.SelectEntryPos(5);
+        rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+        rLbType.SelectEntryPos(5);
     }
     else
     {
-	rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-	rLbType.SelectEntryPos(3);
+        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+        rLbType.SelectEntryPos(3);
     }
 }
 
@@ -213,84 +213,84 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
 
     if(pFormatEntry && pFormatEntry->GetType() == condformat::CONDITION)
     {
-	const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
-	rtl::OUString aStyleName = pEntry->GetStyle();
-	maLbStyle.SelectEntry(aStyleName);
-	ScConditionMode eMode = pEntry->GetOperation();
-	maLbType.SelectEntryPos(1);
-	maEdVal1.SetText(pEntry->GetExpression(maPos, 0));
-	switch(eMode)
-	{
-	    case SC_COND_EQUAL:
-		maLbCondType.SelectEntryPos(0);
-		break;
-	    case SC_COND_LESS:
-		maLbCondType.SelectEntryPos(1);
-		break;
-	    case SC_COND_GREATER:
-		maLbCondType.SelectEntryPos(2);
-		break;
-	    case SC_COND_EQLESS:
-		maLbCondType.SelectEntryPos(3);
-		break;
-	    case SC_COND_EQGREATER:
-		maLbCondType.SelectEntryPos(4);
-		break;
-	    case SC_COND_NOTEQUAL:
-		maLbCondType.SelectEntryPos(5);
-		break;
-	    case SC_COND_BETWEEN:
-		maEdVal2.SetText(pEntry->GetExpression(maPos, 1));
-		maLbCondType.SelectEntryPos(6);
-		break;
-	    case SC_COND_NOTBETWEEN:
-		maEdVal2.SetText(pEntry->GetExpression(maPos, 1));
-		maLbCondType.SelectEntryPos(7);
-		break;
-	    case SC_COND_DUPLICATE:
-		maLbCondType.SelectEntryPos(8);
-		break;
-	    case SC_COND_NOTDUPLICATE:
-		maLbCondType.SelectEntryPos(9);
-		break;
-	    case SC_COND_DIRECT:
-		maLbType.SelectEntryPos(2);
-		break;
-	    case SC_COND_NONE:
-		break;
-	}
-	SwitchToType(CONDITION);
-	SetCondType();
+        const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
+        rtl::OUString aStyleName = pEntry->GetStyle();
+        maLbStyle.SelectEntry(aStyleName);
+        ScConditionMode eMode = pEntry->GetOperation();
+        maLbType.SelectEntryPos(1);
+        maEdVal1.SetText(pEntry->GetExpression(maPos, 0));
+        switch(eMode)
+        {
+            case SC_COND_EQUAL:
+                maLbCondType.SelectEntryPos(0);
+                break;
+            case SC_COND_LESS:
+                maLbCondType.SelectEntryPos(1);
+                break;
+            case SC_COND_GREATER:
+                maLbCondType.SelectEntryPos(2);
+                break;
+            case SC_COND_EQLESS:
+                maLbCondType.SelectEntryPos(3);
+                break;
+            case SC_COND_EQGREATER:
+                maLbCondType.SelectEntryPos(4);
+                break;
+            case SC_COND_NOTEQUAL:
+                maLbCondType.SelectEntryPos(5);
+                break;
+            case SC_COND_BETWEEN:
+                maEdVal2.SetText(pEntry->GetExpression(maPos, 1));
+                maLbCondType.SelectEntryPos(6);
+                break;
+            case SC_COND_NOTBETWEEN:
+                maEdVal2.SetText(pEntry->GetExpression(maPos, 1));
+                maLbCondType.SelectEntryPos(7);
+                break;
+            case SC_COND_DUPLICATE:
+                maLbCondType.SelectEntryPos(8);
+                break;
+            case SC_COND_NOTDUPLICATE:
+                maLbCondType.SelectEntryPos(9);
+                break;
+            case SC_COND_DIRECT:
+                maLbType.SelectEntryPos(2);
+                break;
+            case SC_COND_NONE:
+                break;
+        }
+        SwitchToType(CONDITION);
+        SetCondType();
     }
     else if( pFormatEntry && pFormatEntry->GetType() == condformat::COLORSCALE )
     {
-	const ScColorScaleFormat* pEntry = static_cast<const ScColorScaleFormat*>(pFormatEntry);
-	maLbType.SelectEntryPos(0);
-	if(pEntry->size() == 2)
-	    maLbColorFormat.SelectEntryPos(0);
-	else
-	    maLbColorFormat.SelectEntryPos(1);
-	SetColorScaleType();
-	ScColorScaleFormat::const_iterator itr = pEntry->begin();
-	SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin);
-	if(pEntry->size() == 3)
-	{
-	    ++itr;
-	    SetColorScaleEntryTypes(*itr, maLbEntryTypeMiddle, maEdMiddle, maLbColMiddle);
-	}
-	++itr;
-	SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax);
+        const ScColorScaleFormat* pEntry = static_cast<const ScColorScaleFormat*>(pFormatEntry);
+        maLbType.SelectEntryPos(0);
+        if(pEntry->size() == 2)
+            maLbColorFormat.SelectEntryPos(0);
+        else
+            maLbColorFormat.SelectEntryPos(1);
+        SetColorScaleType();
+        ScColorScaleFormat::const_iterator itr = pEntry->begin();
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin);
+        if(pEntry->size() == 3)
+        {
+            ++itr;
+            SetColorScaleEntryTypes(*itr, maLbEntryTypeMiddle, maEdMiddle, maLbColMiddle);
+        }
+        ++itr;
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax);
     }
     else if( pFormatEntry && pFormatEntry->GetType() == condformat::DATABAR )
     {
-	const ScDataBarFormat* pEntry = static_cast<const ScDataBarFormat*>(pFormatEntry);
-	mpDataBarData.reset(new ScDataBarFormatData(*pEntry->GetDataBarData()));
-	maLbType.SelectEntryPos(0);
-	maLbColorFormat.SelectEntryPos(2);
-	SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
-	SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
-	DataBarTypeSelectHdl(NULL);
-	SetDataBarType();
+        const ScDataBarFormat* pEntry = static_cast<const ScDataBarFormat*>(pFormatEntry);
+        mpDataBarData.reset(new ScDataBarFormatData(*pEntry->GetDataBarData()));
+        maLbType.SelectEntryPos(0);
+        maLbColorFormat.SelectEntryPos(2);
+        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
+        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
+        DataBarTypeSelectHdl(NULL);
+        SetDataBarType();
     }
 
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
@@ -309,7 +309,7 @@ void ScCondFrmtEntry::Init()
     SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
     for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
     {
-	rtl::OUString aName = pStyle->GetName();
+        rtl::OUString aName = pStyle->GetName();
         maLbStyle.InsertEntry( aName );
     }
     maLbStyle.SetSelectHdl( LINK( this, ScCondFrmtEntry, StyleSelectHdl ) );
@@ -353,7 +353,7 @@ void ScCondFrmtEntry::Init()
     {
         // filling the line color box
         maLbColMin.SetUpdateMode( false );
-	maLbColMiddle.SetUpdateMode( false );
+        maLbColMiddle.SetUpdateMode( false );
         maLbColMax.SetUpdateMode( false );
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
@@ -394,14 +394,14 @@ rtl::OUString getTextForType(ScCondFormatEntryType eType)
 {
     switch(eType)
     {
-	case CONDITION:
-	    return rtl::OUString("Cell value");
-	case COLORSCALE:
-	    return rtl::OUString("Color scale");
-	case DATABAR:
-	    return rtl::OUString("Data Bar");
-	default:
-	    break;
+        case CONDITION:
+            return rtl::OUString("Cell value");
+        case COLORSCALE:
+            return rtl::OUString("Color scale");
+        case DATABAR:
+            return rtl::OUString("Data Bar");
+        default:
+            break;
     }
 
     return rtl::OUString("");
@@ -411,26 +411,26 @@ rtl::OUString getExpression(sal_Int32 nIndex)
 {
     switch(nIndex)
     {
-	case 0:
-	    return rtl::OUString("=");
-	case 1:
-	    return rtl::OUString("<");
-	case 2:
-	    return rtl::OUString(">");
-	case 3:
-	    return rtl::OUString("<=");
-	case 4:
-	    return rtl::OUString(">=");
-	case 5:
-	    return rtl::OUString("!=");
-	case 6:
-	    return rtl::OUString("between");
-	case 7:
-	    return rtl::OUString("not between");
-	case 8:
-	    return rtl::OUString("duplicate");
-	case 9:
-	    return rtl::OUString("unique");
+        case 0:
+            return rtl::OUString("=");
+        case 1:
+            return rtl::OUString("<");
+        case 2:
+            return rtl::OUString(">");
+        case 3:
+            return rtl::OUString("<=");
+        case 4:
+            return rtl::OUString(">=");
+        case 5:
+            return rtl::OUString("!=");
+        case 6:
+            return rtl::OUString("between");
+        case 7:
+            return rtl::OUString("not between");
+        case 8:
+            return rtl::OUString("duplicate");
+        case 9:
+            return rtl::OUString("unique");
     }
     return rtl::OUString();
 }
@@ -441,7 +441,7 @@ long ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
     {
-	ImplCallEventListenersAndHandler( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, maClickHdl, this );
+        ImplCallEventListenersAndHandler( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, maClickHdl, this );
     }
     return Control::Notify(rNEvt);
 }
@@ -450,23 +450,23 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
 {
     switch(eType)
     {
-	case COLLAPSED:
-	    {
-		maLbType.Hide();
-		rtl::OUStringBuffer maCondText(getTextForType(meType));
-		maCondText.append(rtl::OUString(" "));
-		if(meType == CONDITION)
-		    maCondText.append(getExpression(maLbCondType.GetSelectEntryPos()));
-		maFtCondition.SetText(maCondText.makeStringAndClear());
-		maFtCondition.Show();
-	    }
-	    break;
-	default:
-	    meType = eType;
-	    maLbType.Show();
-	    maFtCondition.SetText(rtl::OUString(""));
-	    maFtCondition.Hide();
-	    break;
+        case COLLAPSED:
+            {
+                maLbType.Hide();
+                rtl::OUStringBuffer maCondText(getTextForType(meType));
+                maCondText.append(rtl::OUString(" "));
+                if(meType == CONDITION)
+                    maCondText.append(getExpression(maLbCondType.GetSelectEntryPos()));
+                maFtCondition.SetText(maCondText.makeStringAndClear());
+                maFtCondition.Show();
+            }
+            break;
+        default:
+            meType = eType;
+            maLbType.Show();
+            maFtCondition.SetText(rtl::OUString(""));
+            maFtCondition.Hide();
+            break;
     }
 }
 
@@ -513,28 +513,28 @@ void ScCondFrmtEntry::SetHeight()
 {
     if(mbActive)
     {
-	Size aSize = GetSizePixel();
-	switch (meType)
-	{
-	    case CONDITION:
-		aSize.Height() = 120;
-		break;
-	    case COLORSCALE:
-		aSize.Height() = 200;
-		break;
-	    case DATABAR:
-		aSize.Height() = 200;
-		break;
-	    default:
-		break;
-	}
-	SetSizePixel(aSize);
+        Size aSize = GetSizePixel();
+        switch (meType)
+        {
+            case CONDITION:
+                aSize.Height() = 120;
+                break;
+            case COLORSCALE:
+                aSize.Height() = 200;
+                break;
+            case DATABAR:
+                aSize.Height() = 200;
+                break;
+            default:
+                break;
+        }
+        SetSizePixel(aSize);
     }
     else
     {
-	Size aSize = GetSizePixel();
-	aSize.Height() = 40;
-	SetSizePixel(aSize);
+        Size aSize = GetSizePixel();
+        aSize.Height() = 40;
+        SetSizePixel(aSize);
     }
 }
 
@@ -545,19 +545,19 @@ void ScCondFrmtEntry::SetColorScaleType()
     maLbColorFormat.Show();
     if(maLbColorFormat.GetSelectEntryPos() == 0)
     {
-	maEdMiddle.Hide();
-	maLbEntryTypeMiddle.Hide();
-	maLbColScale2.Show();
-	maLbColScale3.Hide();
-	maLbColMiddle.Hide();
+        maEdMiddle.Hide();
+        maLbEntryTypeMiddle.Hide();
+        maLbColScale2.Show();
+        maLbColScale3.Hide();
+        maLbColMiddle.Hide();
     }
     else
     {
-	maEdMiddle.Show();
-	maLbEntryTypeMiddle.Show();
-	maLbColScale2.Hide();
-	maLbColScale3.Show();
-	maLbColMiddle.Show();
+        maEdMiddle.Show();
+        maLbEntryTypeMiddle.Show();
+        maLbColScale2.Hide();
+        maLbColScale3.Show();
+        maLbColMiddle.Show();
     }
     maLbEntryTypeMin.Show();
     maLbEntryTypeMax.Show();
@@ -618,45 +618,45 @@ ScFormatEntry* ScCondFrmtEntry::createConditionEntry() const
     rtl::OUString aExpr2;
     switch(maLbCondType.GetSelectEntryPos())
     {
-	case 0:
-	    eMode = SC_COND_EQUAL;
-	    break;
-	case 1:
-	    eMode = SC_COND_LESS;
-	    break;
-	case 2:
-	    eMode = SC_COND_GREATER;
-	    break;
-	case 3:
-	    eMode = SC_COND_EQLESS;
-	    break;
-	case 4:
-	    eMode = SC_COND_EQGREATER;
-	    break;
-	case 5:
-	    eMode = SC_COND_NOTEQUAL;
-	    break;
-	case 6:
-	    aExpr2 = maEdVal2.GetText();
-	    eMode = SC_COND_BETWEEN;
-	    if(aExpr2.isEmpty())
-		return NULL;
-	    break;
-	case 7:
-	    eMode = SC_COND_NOTBETWEEN;
-	    aExpr2 = maEdVal2.GetText();
-	    if(aExpr2.isEmpty())
-		return NULL;
-	    break;
-	case 8:
-	    eMode = SC_COND_DUPLICATE;
-	    break;
-	case 9:
-	    eMode = SC_COND_NOTDUPLICATE;
-	    break;
-	default:
-        assert(false); // this cannot happen
-        return NULL;
+        case 0:
+            eMode = SC_COND_EQUAL;
+            break;
+        case 1:
+            eMode = SC_COND_LESS;
+            break;
+        case 2:
+            eMode = SC_COND_GREATER;
+            break;
+        case 3:
+            eMode = SC_COND_EQLESS;
+            break;
+        case 4:
+            eMode = SC_COND_EQGREATER;
+            break;
+        case 5:
+            eMode = SC_COND_NOTEQUAL;
+            break;
+        case 6:
+            aExpr2 = maEdVal2.GetText();
+            eMode = SC_COND_BETWEEN;
+            if(aExpr2.isEmpty())
+                return NULL;
+            break;
+        case 7:
+            eMode = SC_COND_NOTBETWEEN;
+            aExpr2 = maEdVal2.GetText();
+            if(aExpr2.isEmpty())
+                return NULL;
+            break;
+        case 8:
+            eMode = SC_COND_DUPLICATE;
+            break;
+        case 9:
+            eMode = SC_COND_NOTDUPLICATE;
+            break;
+        default:
+            assert(false); // this cannot happen
+            return NULL;
     }
 
     rtl::OUString aExpr1 = maEdVal1.GetText();
@@ -673,26 +673,26 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
     double nVal = rtl::math::stringToDouble(rValue.GetText(), '.', ',');
     switch(rType.GetSelectEntryPos())
     {
-	case 0:
-	    pEntry->SetMin(true);
-	    break;
-	case 1:
-	    pEntry->SetMax(true);
-	    break;
-	case 2:
-	    pEntry->SetPercentile(true);
-	    pEntry->SetValue(nVal);
-	    break;
-	case 3:
-	    pEntry->SetValue(nVal);
-	    break;
-	case 4:
-	    pEntry->SetPercent(true);
-	    pEntry->SetValue(nVal);
-	    break;
-	case 5:
-	    pEntry->SetFormula(rValue.GetText(), pDoc, rPos);
-	    break;
+        case 0:
+            pEntry->SetMin(true);
+            break;
+        case 1:
+            pEntry->SetMax(true);
+            break;
+        case 2:
+            pEntry->SetPercentile(true);
+            pEntry->SetValue(nVal);
+            break;
+        case 3:
+            pEntry->SetValue(nVal);
+            break;
+        case 4:
+            pEntry->SetPercent(true);
+            pEntry->SetValue(nVal);
+            break;
+        case 5:
+            pEntry->SetFormula(rValue.GetText(), pDoc, rPos);
+            break;
     }
 }
 
@@ -713,7 +713,7 @@ ScFormatEntry* ScCondFrmtEntry::createColorscaleEntry() const
     ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mpDoc);
     pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMin, maLbColMin, maEdMin, mpDoc, maPos));
     if(maLbColorFormat.GetSelectEntryPos() == 1)
-	pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMiddle, maLbColMiddle, maEdMiddle, mpDoc, maPos));
+        pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMiddle, maLbColMiddle, maEdMiddle, mpDoc, maPos));
     pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMax, maLbColMax, maEdMax, mpDoc, maPos));
     return pColorScale;
 }
@@ -729,17 +729,17 @@ ScFormatEntry* ScCondFrmtEntry::GetEntry() const
 {
     switch(meType)
     {
-	case CONDITION:
-	    return createConditionEntry();
-	    break;
-	case COLORSCALE:
-	    return createColorscaleEntry();
-	    break;
-	case DATABAR:
-	    return createDatabarEntry();
-	    break;
-	default:
-	    break;
+        case CONDITION:
+            return createConditionEntry();
+            break;
+        case COLORSCALE:
+            return createColorscaleEntry();
+            break;
+        case DATABAR:
+            return createDatabarEntry();
+            break;
+        default:
+            break;
     }
     return NULL;
 }
@@ -749,20 +749,20 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, TypeListHdl)
     sal_Int32 nPos = maLbType.GetSelectEntryPos();
     switch(nPos)
     {
-	case 1:
-	    SetCondType();
-	    break;
-	case 0:
-	    if(maLbColorFormat.GetSelectEntryPos() < 2)
-		SetColorScaleType();
-	    else
-		SetDataBarType();
-	    break;
-	case 2:
-	    SetCondType();
-	    break;
-	default:
-	    break;
+        case 1:
+            SetCondType();
+            break;
+        case 0:
+            if(maLbColorFormat.GetSelectEntryPos() < 2)
+                SetColorScaleType();
+            else
+                SetDataBarType();
+            break;
+        case 2:
+            SetCondType();
+            break;
+        default:
+            break;
     }
     SetHeight();
     return 0;
@@ -772,11 +772,11 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, ColFormatTypeHdl)
 {
     if(maLbColorFormat.GetSelectEntryPos() < 2)
     {
-	SetColorScaleType();
+        SetColorScaleType();
     }
     else
     {
-	SetDataBarType();
+        SetDataBarType();
     }
 
     SetHeight();
@@ -788,48 +788,48 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, StyleSelectHdl)
 {
     if(maLbStyle.GetSelectEntryPos() == 0)
     {
-	// call new style dialog
-	SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA );
-	SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+        // call new style dialog
+        SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA );
+        SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
 
-	// unlock the dispatcher so SID_STYLE_NEW can be executed
-	// (SetDispatcherLock would affect all Calc documents)
-	ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-	SfxDispatcher* pDisp = pViewShell->GetDispatcher();
-	sal_Bool bLocked = pDisp->IsLocked();
-	if (bLocked)
-	    pDisp->Lock(false);
+        // unlock the dispatcher so SID_STYLE_NEW can be executed
+        // (SetDispatcherLock would affect all Calc documents)
+        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+        SfxDispatcher* pDisp = pViewShell->GetDispatcher();
+        sal_Bool bLocked = pDisp->IsLocked();
+        if (bLocked)
+            pDisp->Lock(false);
 
-	// Execute the "new style" slot, complete with undo and all necessary updates.
-	// The return value (SfxUInt16Item) is ignored, look for new styles instead.
-	pDisp->Execute( SID_STYLE_NEW, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
-		&aFamilyItem,
-		&aRefItem,
-		0L );
+        // Execute the "new style" slot, complete with undo and all necessary updates.
+        // The return value (SfxUInt16Item) is ignored, look for new styles instead.
+        pDisp->Execute( SID_STYLE_NEW, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
+                &aFamilyItem,
+                &aRefItem,
+                0L );
 
-	if (bLocked)
-	    pDisp->Lock(sal_True);
+        if (bLocked)
+            pDisp->Lock(sal_True);
 
-	// Find the new style and add it into the style list boxes
-	rtl::OUString aNewStyle;
-	SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
-	for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
-	{
-	    rtl::OUString aName = pStyle->GetName();
-	    if ( maLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
-	    {
-		maLbStyle.InsertEntry(aName);
-		maLbStyle.SelectEntry(aName);
-	    }
-	}
+        // Find the new style and add it into the style list boxes
+        rtl::OUString aNewStyle;
+        SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+        for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
+        {
+            rtl::OUString aName = pStyle->GetName();
+            if ( maLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
+            {
+                maLbStyle.InsertEntry(aName);
+                maLbStyle.SelectEntry(aName);
+            }
+        }
     }
 
     rtl::OUString aStyleName = maLbStyle.GetSelectEntry();
     SfxStyleSheetBase* pStyleSheet = mpDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
     if(pStyleSheet)
     {
-	const SfxItemSet& rSet = pStyleSheet->GetItemSet();
-	maWdPreview.Init( rSet );
+        const SfxItemSet& rSet = pStyleSheet->GetItemSet();
+        maWdPreview.Init( rSet );
     }
 
     return 0;
@@ -839,15 +839,15 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, DataBarTypeSelectHdl )
 {
     sal_Int32 nSelectPos = maLbDataBarMinType.GetSelectEntryPos();
     if(nSelectPos == 0 || nSelectPos == 1)
-	maEdDataBarMin.Disable();
+        maEdDataBarMin.Disable();
     else
-	maEdDataBarMin.Enable();
+        maEdDataBarMin.Enable();
 
     nSelectPos = maLbDataBarMaxType.GetSelectEntryPos();
     if(nSelectPos == 0 || nSelectPos == 1)
-	maEdDataBarMax.Disable();
+        maEdDataBarMax.Disable();
     else
-	maEdDataBarMax.Enable();
+        maEdDataBarMax.Enable();
 
     return 0;
 }
@@ -859,9 +859,9 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, OptionBtnHdl )
     ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this, *mpDataBarData);
     if( pDlg->Execute() == RET_OK)
     {
-	mpDataBarData.reset(pDlg->GetData());
-	SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
-	SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
+        mpDataBarData.reset(pDlg->GetData());
+        SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
+        SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
     }
     return 0;
 }
@@ -870,15 +870,15 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, ConditionTypeSelectHdl )
 {
     if(maLbCondType.GetSelectEntryPos() == 6 || maLbCondType.GetSelectEntryPos() == 7)
     {
-	std::cout << "OldSize: " << maEdVal1.GetSizePixel().Width() << " " << maEdVal1.GetSizePixel().Height() << std::endl;
-	maEdVal1.SetSizePixel(maEdVal2.GetSizePixel());
-	maEdVal2.Show();
+        std::cout << "OldSize: " << maEdVal1.GetSizePixel().Width() << " " << maEdVal1.GetSizePixel().Height() << std::endl;
+        maEdVal1.SetSizePixel(maEdVal2.GetSizePixel());
+        maEdVal2.Show();
     }
     else
     {
-	maEdVal2.Hide();
-	Size aSize(193, 30);
-	maEdVal1.SetSizePixel(aSize);
+        maEdVal2.Hide();
+        Size aSize(193, 30);
+        maEdVal1.SetSizePixel(aSize);
     }
     return 0;
 }
@@ -911,11 +911,11 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
 
     if(pFormat)
     {
-	size_t nCount = pFormat->size();
-	for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
-	{
-	    maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, pFormat->GetEntry(nIndex)));
-	}
+        size_t nCount = pFormat->size();
+        for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, pFormat->GetEntry(nIndex)));
+        }
     }
 
     RecalcAll();
@@ -925,14 +925,14 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
 ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
 {
     if(maEntries.empty())
-	return NULL;
+        return NULL;
 
     ScConditionalFormat* pFormat = new ScConditionalFormat(0, mpDoc);
     for(EntryContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-	ScFormatEntry* pEntry = itr->GetEntry();
-	if(pEntry)
-	    pFormat->AddEntry(pEntry);
+        ScFormatEntry* pEntry = itr->GetEntry();
+        if(pEntry)
+            pFormat->AddEntry(pEntry);
     }
 
     pFormat->AddRange(maRanges);
@@ -945,38 +945,38 @@ void ScCondFormatList::RecalcAll()
     sal_Int32 nTotalHeight = 0;
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-	nTotalHeight += itr->GetSizePixel().Height();
+        nTotalHeight += itr->GetSizePixel().Height();
     }
 
     Size aCtrlSize = GetOutputSize();
     long nSrcBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if(nTotalHeight > GetSizePixel().Height())
     {
-	mbHasScrollBar = true;
-	mpScrollBar->SetPosSizePixel(Point(aCtrlSize.Width() -nSrcBarSize, 0),
-					Size(nSrcBarSize, aCtrlSize.Height()) );
-	mpScrollBar->SetRangeMax(nTotalHeight);
-	mpScrollBar->SetVisibleSize(aCtrlSize.Height());
-	mpScrollBar->Show();
+        mbHasScrollBar = true;
+        mpScrollBar->SetPosSizePixel(Point(aCtrlSize.Width() -nSrcBarSize, 0),
+                Size(nSrcBarSize, aCtrlSize.Height()) );
+        mpScrollBar->SetRangeMax(nTotalHeight);
+        mpScrollBar->SetVisibleSize(aCtrlSize.Height());
+        mpScrollBar->Show();
     }
     else
     {
-	mbHasScrollBar = false;
-	mpScrollBar->Hide();
+        mbHasScrollBar = false;
+        mpScrollBar->Hide();
     }
 
     Point aPoint(0,0);
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-	itr->SetPosPixel(aPoint);
-	Size aSize = itr->GetSizePixel();
-	if(mbHasScrollBar)
-	    aSize.Width() = aCtrlSize.Width() - nSrcBarSize;
-	else
-	    aSize.Width() = aCtrlSize.Width();
-	itr->SetSizePixel(aSize);
+        itr->SetPosPixel(aPoint);
+        Size aSize = itr->GetSizePixel();
+        if(mbHasScrollBar)
+            aSize.Width() = aCtrlSize.Width() - nSrcBarSize;
+        else
+            aSize.Width() = aCtrlSize.Width();
+        itr->SetSizePixel(aSize);
 
-	aPoint.Y() += itr->GetSizePixel().Height();
+        aPoint.Y() += itr->GetSizePixel().Height();
     }
 }
 
@@ -1028,11 +1028,11 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl )
 {
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-	if(itr->IsSelected())
-	{
-	    maEntries.erase(itr);
-	    break;
-	}
+        if(itr->IsSelected())
+        {
+            maEntries.erase(itr);
+            break;
+        }
     }
     RecalcAll();
     return 0;
@@ -1042,7 +1042,7 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
 {
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-	itr->Deselect();
+        itr->Deselect();
     }
     pEntry->Select();
     RecalcAll();

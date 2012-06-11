@@ -50,23 +50,23 @@ ModalDialog RID_SCDLG_CONDFORMAT
     };
     PushButton BTN_ADD
     {
-	Pos = MAP_APPFONT( 5, 155 );
-	Size = MAP_APPFONT( 40, 14 );
-	Text [ en-US ] = "Add";
-	TabStop = TRUE;
+        Pos = MAP_APPFONT( 5, 155 );
+        Size = MAP_APPFONT( 40, 14 );
+        Text [ en-US ] = "Add";
+        TabStop = TRUE;
     };
     PushButton BTN_REMOVE
     {
-	Pos = MAP_APPFONT( 50, 155 );
-	Size = MAP_APPFONT( 40, 14 );
-	Text [ en-US ] = "Remove";
-	TabStop = TRUE;
+        Pos = MAP_APPFONT( 50, 155 );
+        Size = MAP_APPFONT( 40, 14 );
+        Text [ en-US ] = "Remove";
+        TabStop = TRUE;
     };
     Control CTRL_LIST
     {
-	Pos = MAP_APPFONT( 5, 20 );
-	Size = MAP_APPFONT( 190, 120 );
-	Border = TRUE;
+        Pos = MAP_APPFONT( 5, 20 );
+        Size = MAP_APPFONT( 190, 120 );
+        Border = TRUE;
     };
 };
 
@@ -78,148 +78,148 @@ Control RID_COND_ENTRY
 
     FixedText FT_COND_NR
     {
-	Pos = MAP_APPFONT( 2, 2 );
-	Size = MAP_APPFONT( 30, 10 );
-	Text [ en-US ] = "Condition";
+        Pos = MAP_APPFONT( 2, 2 );
+        Size = MAP_APPFONT( 30, 10 );
+        Text [ en-US ] = "Condition";
     };
 
     FixedText FT_CONDITION
     {
-	Pos = MAP_APPFONT( 40, 2 );
-	Size = MAP_APPFONT( 90, 10 );
+        Pos = MAP_APPFONT( 40, 2 );
+        Size = MAP_APPFONT( 90, 10 );
     };
 
     ListBox LB_TYPE
     {
-	Pos = MAP_APPFONT( 5, 15 );
-	Size = MAP_APPFONT( 40, 40 );
-	Border = TRUE;
-	DropDown = TRUE;
-	StringList [ en-US ] =
-	{
-	    "All Cells";
-	    "Cell value is";
-	    "Formula is";
-	};
+        Pos = MAP_APPFONT( 5, 15 );
+        Size = MAP_APPFONT( 40, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "All Cells";
+            "Cell value is";
+            "Formula is";
+        };
     };
     ListBox LB_CELLIS_TYPE
     {
-	Pos = MAP_APPFONT( 50, 15 );
-	Size = MAP_APPFONT( 30, 40 );
-	Border = TRUE;
-	DropDown = TRUE;
-	StringList [ en-US ] =
-	{
-	    "equal to";
-	    "less than";
-	    "greater than";
-	    "less than or equal to";
-	    "greater than or equal to";
-	    "not equal to";
-	    "between";
-	    "not between";
-	    "duplicate";
-	    "not duplicate";
-	};
+        Pos = MAP_APPFONT( 50, 15 );
+        Size = MAP_APPFONT( 30, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "equal to";
+            "less than";
+            "greater than";
+            "less than or equal to";
+            "greater than or equal to";
+            "not equal to";
+            "between";
+            "not between";
+            "duplicate";
+            "not duplicate";
+        };
     };
     FixedText FT_STYLE
     {
-	Pos = MAP_APPFONT( 10, 32 );
-	Size = MAP_APPFONT( 35, 14 );
-	Text [ en-US ] = "Apply Style";
+        Pos = MAP_APPFONT( 10, 32 );
+        Size = MAP_APPFONT( 35, 14 );
+        Text [ en-US ] = "Apply Style";
     };
     Edit ED_VAL1
     {
-	Pos = MAP_APPFONT( 90, 15 );
-	Size = MAP_APPFONT( 70, 12 );
-	Border = TRUE;
+        Pos = MAP_APPFONT( 90, 15 );
+        Size = MAP_APPFONT( 70, 12 );
+        Border = TRUE;
     };
     Edit ED_VAL2
     {
-	Pos = MAP_APPFONT( 130, 15 );
-	Size = MAP_APPFONT( 30, 12 );
-	Border = TRUE;
+        Pos = MAP_APPFONT( 130, 15 );
+        Size = MAP_APPFONT( 30, 12 );
+        Border = TRUE;
     };
     ListBox LB_STYLE
     {
-	Pos = MAP_APPFONT( 50, 32 );
-	Size = MAP_APPFONT( 30, 40 );
-	Border = TRUE;
-	DropDown = TRUE;
-	StringList [ en-US ] =
-	{
-	    "New Style...";
-	};
+        Pos = MAP_APPFONT( 50, 32 );
+        Size = MAP_APPFONT( 30, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "New Style...";
+        };
     };
     ListBox LB_COLOR_FORMAT
     {
-	Pos = MAP_APPFONT( 50, 15 );
-	Size = MAP_APPFONT( 60, 40);
-	Border = TRUE;
-	DropDown = TRUE;
-	StringList [ en-US ] =
-	{
-	    "Color Scale (2 Entries)";
-	    "Color Scale (3 Entries)";
-	    "Data Bar";
-	};
+        Pos = MAP_APPFONT( 50, 15 );
+        Size = MAP_APPFONT( 60, 40);
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "Color Scale (2 Entries)";
+            "Color Scale (3 Entries)";
+            "Data Bar";
+        };
     };
     ListBox LB_COL_SCALE2
     {
-	Pos = MAP_APPFONT( 120, 15 );
-	Size = MAP_APPFONT( 60, 40 );
-	Border = TRUE;
-	DropDown = TRUE;
+        Pos = MAP_APPFONT( 120, 15 );
+        Size = MAP_APPFONT( 60, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
     };
     ListBox LB_COL_SCALE3
     {
-	Pos = MAP_APPFONT( 120, 15 );
-	Size = MAP_APPFONT( 60, 40 );
-	Border = TRUE;
-	DropDown = TRUE;
+        Pos = MAP_APPFONT( 120, 15 );
+        Size = MAP_APPFONT( 60, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
     };
     ListBox LB_TYPE_COL_SCALE
     {
-	Pos = MAP_APPFONT( 5, 32 );
-	Size = MAP_APPFONT( 40, 40 );
-	Border = TRUE;
-	DropDown = TRUE;
-	StringList [ en-US ] =
-	{
-	    "Min";
-	    "Max";
-	    "Percentile";
-	    "Value";
-	    "Percent";
-	    "Formula";
-	};
+        Pos = MAP_APPFONT( 5, 32 );
+        Size = MAP_APPFONT( 40, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "Min";
+            "Max";
+            "Percentile";
+            "Value";
+            "Percent";
+            "Formula";
+        };
     };
     Edit ED_COL_SCALE
     {
-	Pos = MAP_APPFONT( 5, 48 );
-	Size = MAP_APPFONT( 40, 12 );
-	Border = TRUE;
+        Pos = MAP_APPFONT( 5, 48 );
+        Size = MAP_APPFONT( 40, 12 );
+        Border = TRUE;
     };
     Window WD_PREVIEW
     {
-	Pos = MAP_APPFONT( 90, 32 );
-	Size = MAP_APPFONT( 40, 14 );
-	Text [ en-US ] = "Example";
-	Border = TRUE;
+        Pos = MAP_APPFONT( 90, 32 );
+        Size = MAP_APPFONT( 40, 14 );
+        Text [ en-US ] = "Example";
+        Border = TRUE;
     };
     ListBox LB_COL
     {
-	Pos = MAP_APPFONT( 5, 62 );
-	Size = MAP_APPFONT( 40, 40 );
+        Pos = MAP_APPFONT( 5, 62 );
+        Size = MAP_APPFONT( 40, 40 );
         Border = TRUE;
         DropDown = TRUE;
         DDExtraWidth = TRUE;
     };
     PushButton BTN_OPTIONS
     {
-	Pos = MAP_APPFONT( 120, 62 );
-	Size = MAP_APPFONT( 60, 14 );
-	Text [ en-US ] = "More options ...";
+        Pos = MAP_APPFONT( 120, 62 );
+        Size = MAP_APPFONT( 60, 14 );
+        Text [ en-US ] = "More options ...";
     };
 };
 
