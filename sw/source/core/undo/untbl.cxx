@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include <vector>
+
+#include <boost/shared_ptr.hpp>
+
 #include <UndoTable.hxx>
 #include <UndoRedline.hxx>
 #include <UndoDelete.hxx>
@@ -82,7 +86,7 @@
 
 extern void ClearFEShellTabCols();
 
-typedef boost::ptr_vector<SfxItemSet> SfxItemSets;
+typedef std::vector<boost::shared_ptr<SfxItemSet> > SfxItemSets;
 
 class SwUndoSaveSections : public boost::ptr_vector<SwUndoSaveSection> {
 public:
@@ -900,8 +904,8 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
     if( USHRT_MAX == nRet )
     {
         // Create copy of ItemSet
-        SfxItemSet* pSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
-            bIsLine ? aTableLineSetRange : aTableBoxSetRange );
+        boost::shared_ptr<SfxItemSet> pSet( new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
+            bIsLine ? aTableLineSetRange : aTableBoxSetRange ) );
         pSet->Put( pFmt->GetAttrSet() );
         // When a formula is set, never save the value. It possibly must be
         // recalculated.
@@ -1088,7 +1092,7 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
             pFmt = pDoc->MakeTableLineFmt();
         else
             pFmt = pDoc->MakeTableBoxFmt();
-        pFmt->SetFmtAttr( aSets[ nFmtPos ] );
+        pFmt->SetFmtAttr( *aSets[ nFmtPos ] );
         aFrmFmts.Replace( pFmt, nFmtPos );
     }
 
@@ -1178,7 +1182,7 @@ void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableLineFmt();
-        pFmt->SetFmtAttr( rSTbl.aSets[ nItemSet ] );
+        pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
         rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
     }
     SwTableLine* pNew = new SwTableLine( pFmt, 1, &rParent );
@@ -1270,7 +1274,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
                 SwCntntNode* pCNd = rNds[ n ]->GetCntntNode();
                 if( pCNd )
                 {
-                    SfxItemSet* pSet = &(*Ptrs.pCntntAttrs)[ nSet++ ];
+                    boost::shared_ptr<SfxItemSet> pSet( (*Ptrs.pCntntAttrs)[ nSet++ ] );
                     if( pSet )
                     {
                         sal_uInt16 *pRstAttr = aSave_BoxCntntSet;
@@ -1309,11 +1313,11 @@ void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
             SwCntntNode* pCNd = pDoc->GetNodes()[ n ]->GetCntntNode();
             if( pCNd )
             {
-                SfxItemSet* pSet = 0;
+                boost::shared_ptr<SfxItemSet> pSet;
                 if( pCNd->HasSwAttrSet() )
                 {
-                    pSet = new SfxItemSet( pDoc->GetAttrPool(),
-                                            aSave_BoxCntntSet );
+                    pSet.reset( new SfxItemSet( pDoc->GetAttrPool(),
+                                            aSave_BoxCntntSet ) );
                     pSet->Put( *pCNd->GetpSwAttrSet() );
                 }
 
@@ -1332,7 +1336,7 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableBoxFmt();
-        pFmt->SetFmtAttr( rSTbl.aSets[ nItemSet ] );
+        pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
         rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
     }
 
