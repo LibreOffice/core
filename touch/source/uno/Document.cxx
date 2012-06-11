@@ -11,7 +11,7 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/awt/XToolkit2.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -40,11 +40,8 @@ private:
     OUString m_sURI;
     uno::Reference< uno::XComponentContext > m_rContext;
     uno::Reference< lang::XComponent > m_xComponent;
+    uno::Reference< awt::XToolkit2 > m_xToolkit;
     uno::Reference< frame::XController > m_xController;
-    uno::Reference< awt::XDevice > m_xDevice;
-    uno::Reference< view::XRenderable > m_xRenderable;
-
-    beans::PropertyValues m_aRenderProps;
 
     // XRenderable.getRendererCount() and .render() need an XController in the
     // properties, at least in the test Java code it seemed that a totally
@@ -137,6 +134,7 @@ protected:
     {
     }
 
+public:
     // XInitialization
     virtual void SAL_CALL
     initialize( const uno::Sequence< uno::Any >& arguments )
@@ -164,21 +162,9 @@ protected:
 
             m_xComponent = componentLoader->loadComponentFromURL( m_sURI, "_blank", 0, loadProps );
 
-            uno::Reference< awt::XToolkit > toolkit( m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.Toolkit", m_rContext ), uno::UNO_QUERY_THROW );
-
-            m_xDevice = toolkit->createScreenCompatibleDevice( 1024, 1024 );
-
-            m_xRenderable = uno::Reference< view::XRenderable >( m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.view.Renderable", m_rContext ), uno::UNO_QUERY_THROW );
+            m_xToolkit = uno::Reference< awt::XToolkit2 >(  m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.Toolkit2", m_rContext ), uno::UNO_QUERY_THROW );
 
             m_xController = new MyXController();
-
-            m_aRenderProps.realloc( 3 );
-            m_aRenderProps[0].Name = "IsPrinter";
-            m_aRenderProps[0].Value <<= sal_Bool(true);
-            m_aRenderProps[1].Name = "RenderDevice";
-            m_aRenderProps[1].Value <<= m_xDevice;
-            m_aRenderProps[2].Name = "View";
-            m_aRenderProps[2].Value <<= m_xController;
         }
     }
 
@@ -190,12 +176,30 @@ protected:
         uno::Any selection;
         selection <<= m_xComponent;
 
-        return m_xRenderable->getRendererCount( selection, m_aRenderProps );
+        uno::Reference< awt::XDevice > device;
+        uno::Reference< view::XRenderable > renderable;
+
+        beans::PropertyValues renderProps;
+
+        device = m_xToolkit->createScreenCompatibleDevice( 128, 128 );
+
+        renderable = uno::Reference< view::XRenderable >( m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.view.Renderable", m_rContext ), uno::UNO_QUERY_THROW );
+
+        renderProps.realloc( 3 );
+        renderProps[0].Name = "IsPrinter";
+        renderProps[0].Value <<= sal_Bool(true);
+        renderProps[1].Name = "RenderDevice";
+        renderProps[1].Value <<= device;
+        renderProps[2].Name = "View";
+        renderProps[2].Value <<= m_xController;
+
+        return renderable->getRendererCount( selection, renderProps );
     }
 
     virtual void SAL_CALL
     render( sal_Int64 buffer,
-            sal_Int32 bufferSize,
+            sal_Int32 width,
+            sal_Int32 height,
             const uno::Reference< XDocumentRenderCallback >& listener,
             sal_Int32 pageNo,
             sal_Int32 zoomLevel,
@@ -203,20 +207,30 @@ protected:
             sal_Int32 y )
         throw ( lang::IllegalArgumentException, uno::RuntimeException)
     {
-        uno::Any selection;
-
-        (void) buffer;
-        (void) bufferSize;
         (void) listener;
         (void) zoomLevel;
         (void) x;
         (void) y;
 
+        uno::Any selection;
+
         selection <<= m_xComponent;
 
-        m_xRenderable->render( pageNo, selection, m_aRenderProps );
+        uno::Reference< awt::XDevice > device( m_xToolkit->createScreenCompatibleDeviceUsingBuffer( width, height, buffer ) );
 
-        uno::Reference< awt::XBitmap> bitmap( m_xDevice->createBitmap( 0, 0, 1024, 1024 ) );
+        beans::PropertyValues renderProps;
+
+        renderProps.realloc( 3 );
+        renderProps[0].Name = "IsPrinter";
+        renderProps[0].Value <<= sal_Bool(true);
+        renderProps[1].Name = "RenderDevice";
+        renderProps[1].Value <<= device;
+        renderProps[2].Name = "View";
+        renderProps[2].Value <<= m_xController;
+
+        uno::Reference< view::XRenderable > renderable( m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.view.Renderable", m_rContext ), uno::UNO_QUERY_THROW );
+
+        renderable->render( pageNo, selection, renderProps );
     }
 
 };
