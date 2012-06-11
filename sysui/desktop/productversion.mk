@@ -57,7 +57,9 @@ ICONVERSION = $(PRODUCTVERSIONSHORT:s/.//g)
 # the default values get replaced by make_installer.pl at (core0x) packaging time;
 # another wrapper name can be forced by --with-unix-wrapper configure option
 # which is need by other distributors, see http://www.openoffice.org/issues/show_bug.cgi?id=75366
-UNIXWRAPPERNAME *= '$${{UNIXPRODUCTNAME}}$${{BRANDPACKAGEVERSION}}'
+.IF "$(UNIXWRAPPERNAME)" == ""
+UNIXWRAPPERNAME = '$${{UNIXPRODUCTNAME}}$${{BRANDPACKAGEVERSION}}'
+.ENDIF
 
 PRODUCTNAME.libreoffice = LibreOffice
 PRODUCTVERSION.libreoffice = $(PRODUCTVERSION)
