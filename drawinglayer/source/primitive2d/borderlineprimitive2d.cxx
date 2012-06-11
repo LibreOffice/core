@@ -89,8 +89,11 @@ namespace drawinglayer
             const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
 
             // Get the points
-            const basegfx::B2DVector aLeftOff(aPerpendicular * (-0.5 * (getWidth(rViewInformation))));
-            const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (getWidth(rViewInformation))));
+            const double fWidth(getWidth(rViewInformation));
+            const basegfx::B2DVector aLeftOff(
+                    aPerpendicular * (-0.5 * std::max(fWidth, 1.0)));
+            const basegfx::B2DVector aRightOff(
+                    aPerpendicular * (0.5 * std::max(fWidth, 1.0)));
 
             const basegfx::B2DVector aSLVector( aLeftOff - ( getExtendLeftStart() * aVector ) );
             clipPolygon.append( basegfx::B2DPoint( getStart() + aSLVector * 2.0 ) );
