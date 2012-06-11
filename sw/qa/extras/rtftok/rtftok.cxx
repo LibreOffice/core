@@ -28,6 +28,7 @@
 #include "../swmodeltestbase.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -95,6 +96,7 @@ public:
     void testFdo45190();
     void testFdo50539();
     void testFdo50665();
+    void testFdo49659();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -133,6 +135,7 @@ public:
     CPPUNIT_TEST(testFdo45190);
     CPPUNIT_TEST(testFdo50539);
     CPPUNIT_TEST(testFdo50665);
+    CPPUNIT_TEST(testFdo49659);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -779,6 +782,26 @@ void Test::testFdo50665()
     xRun->getPropertyValue("CharFontName") >>= aValue;
     // This used to be the default, as character properties were ignored.
     CPPUNIT_ASSERT_EQUAL(OUString("Book Antiqua"), aValue);
+}
+
+void Test::testFdo49659()
+{
+    load("fdo49659.rtf");
+
+    // Both tables were ignored: 1) was in the header, 2) was ignored due to missing empty par at the end of the doc
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+
+    // The graphic was also empty
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphic;
+    xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+    sal_Int8 nValue = 0;
+    xGraphic->getPropertyValue("GraphicType") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL, nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
