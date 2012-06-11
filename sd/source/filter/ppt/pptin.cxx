@@ -559,7 +559,7 @@ sal_Bool ImplSdPPTImport::Import()
     // create master pages:
     ///////////////////////////////////////////////////////////
     SfxProgress* pStbMgr = new SfxProgress( pDocShell, String( SdResId( STR_POWERPOINT_IMPORT ) ),
-            pMasterPages->Count() + pSlidePages->Count() + pNotePages->Count() );
+            pMasterPages->size() + pSlidePages->size() + pNotePages->size() );
 
     sal_uInt32 nImportedPages = 0;
     {
@@ -722,7 +722,7 @@ sal_Bool ImplSdPPTImport::Import()
         // importing master page objects           //
         /////////////////////////////////////////////
         PptSlidePersistList* pList = GetPageList( eAktPageKind );
-        PptSlidePersistEntry* pPersist = ( pList && ( nAktPageNum < pList->Count() ) )
+        PptSlidePersistEntry* pPersist = ( pList && ( nAktPageNum < pList->size() ) )
                                                     ? (*pList)[ nAktPageNum ] : NULL;
         if ( pPersist )
         {
@@ -904,7 +904,7 @@ sal_Bool ImplSdPPTImport::Import()
                     sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
                     pPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nMasterNum));
                     PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-                    if ( pPageList && nMasterNum < pPageList->Count() )
+                    if ( pPageList && nMasterNum < pPageList->size() )
                         pMasterPersist = (*pPageList)[ nMasterNum ];
                     pPage->SetLayoutName(((SdPage&)pPage->TRG_GetMasterPage()).GetLayoutName());
                 }
@@ -984,7 +984,7 @@ sal_Bool ImplSdPPTImport::Import()
                     {
                         pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-                        if ( pPageList && nNotesMasterNum < pPageList->Count() )
+                        if ( pPageList && nNotesMasterNum < pPageList->size() )
                             pMasterPersist2 = (*pPageList)[ nNotesMasterNum ];
                         pNotesPage->SetLayoutName( ((SdPage&)pNotesPage->TRG_GetMasterPage()).GetLayoutName() );
                     }
@@ -1394,7 +1394,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
 {
     sal_uInt32 i;
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
-    if ( ( !pList ) || ( pList->Count() <= nAktPageNum ) )
+    if ( ( !pList ) || ( pList->size() <= nAktPageNum ) )
         return;
     PptSlidePersistEntry& rSlidePersist = *(*pList)[ nAktPageNum ];
     HeaderFooterEntry* pHFE = rSlidePersist.pHeaderFooterEntry;
@@ -1496,7 +1496,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
     if ( pPage->GetPageKind() == PK_STANDARD )
     {
         PptSlidePersistList* pPersistList = GetPageList( eAktPageKind );
-        PptSlidePersistEntry* pActualSlidePersist = ( pPersistList && ( nAktPageNum < pPersistList->Count() ) )
+        PptSlidePersistEntry* pActualSlidePersist = ( pPersistList && ( nAktPageNum < pPersistList->size() ) )
                                                         ? (*pPersistList)[ nAktPageNum ] : NULL;
 
         if ( pActualSlidePersist && ( eAktPageKind == PPT_SLIDEPAGE ) )
@@ -1802,7 +1802,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                     {
                         sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
                         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-                        if ( pPageList && ( nMasterNum < pPageList->Count() ) )
+                        if ( pPageList && ( nMasterNum < pPageList->size() ) )
                         {
                             PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
                             if ( pE )

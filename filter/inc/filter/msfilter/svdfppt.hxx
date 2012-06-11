@@ -30,7 +30,6 @@
 #define _SVDFPPT_HXX
 
 #include <tools/solar.h>
-#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
@@ -351,7 +350,15 @@ public:
     sal_uInt32          GetSlideId() const { return aPersistAtom.nSlideId; }
 };
 
-SV_DECL_PTRARR_DEL(_PptSlidePersistList,PptSlidePersistEntry*,16)
+class _PptSlidePersistList : public std::vector<PptSlidePersistEntry*>
+{
+public:
+    ~_PptSlidePersistList()
+    {
+        for( const_iterator it = begin(); it != end(); ++it )
+            delete *it;
+    }
+};
 
 #define PPTSLIDEPERSIST_ENTRY_NOTFOUND 0xFFFF
 
