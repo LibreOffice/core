@@ -24,4 +24,7 @@
     <service name="com.sun.star.document.ExportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Draw.SVGWriter">
+    <service name="com.sun.star.svg.SVGWriter"/>
+  </implementation>
 </component>
