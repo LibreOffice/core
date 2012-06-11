@@ -85,7 +85,7 @@ public:
 namespace databar
 {
 
-enum ScAxisPostion
+enum SC_DLLPUBLIC ScAxisPostion
 {
     NONE,
     AUTOMATIC,
@@ -94,7 +94,7 @@ enum ScAxisPostion
 
 }
 
-struct ScDataBarFormatData
+struct SC_DLLPUBLIC ScDataBarFormatData
 {
     ScDataBarFormatData():
         mbGradient(true),
