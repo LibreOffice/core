@@ -216,9 +216,9 @@ DomainMapper_Impl::DomainMapper_Impl(
 
     //todo: does it make sense to set the body text as static text interface?
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert( m_xBodyText, uno::UNO_QUERY );
-    TableDataHandler_t::Pointer_t pTableHandler
+    m_pTableHandler.reset
         (new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this));
-    getTableManager( ).setHandler(pTableHandler);
+    getTableManager( ).setHandler(m_pTableHandler);
 
     getTableManager( ).startLevel();
     m_bUsingEnhancedFields = lcl_IsUsingEnhancedFields( uno::Reference< lang::XMultiServiceFactory >( m_xComponentContext->getServiceManager(), uno::UNO_QUERY ) );
