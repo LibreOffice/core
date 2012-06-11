@@ -63,6 +63,7 @@ NULLDEV:=/dev/null
 
 # iz29609 helpmacro to check if file exists
 IFEXIST:=if [ -f 
+IFDIREXIST:=if [ -d
 IFNOTEXIST:= if ! test -f
 THEN:= ] ; then
 FI:= ; fi
