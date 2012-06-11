@@ -135,7 +135,8 @@ void doTestCode()
     aContext.DocumentInfo.Title = OUString( "PDF export test document"  );
     aContext.DocumentInfo.Producer = OUString( "VCL"  );
 
-    PDFWriter aWriter( aContext );
+    com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > xEnc;
+    PDFWriter aWriter( aContext, xEnc );
     aWriter.NewPage( 595, 842 );
     aWriter.BeginStructureElement( PDFWriter::Document );
     // set duration of 3 sec for first page
@@ -180,7 +181,7 @@ void doTestCode()
     aWriter.SetActualText( String( RTL_CONSTASCII_USTRINGPARAM( "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now." ) ) );
     aWriter.SetAlternateText( String( RTL_CONSTASCII_USTRINGPARAM( "This paragraph contains some lengthy nonsense to test structural element emission of PDFWriter." ) ) );
     aWriter.EndStructureElement();
-    sal_Int32 nLongPara = aWriter.BeginStructureElement( PDFWriter::Paragraph );
+    aWriter.BeginStructureElement( PDFWriter::Paragraph );
     aWriter.SetStructureAttribute( PDFWriter::WritingMode, PDFWriter::LrTb );
     aWriter.DrawText( Rectangle( Point( 4500, 19000 ), Size( 12000, 1000 ) ),
                       String( RTL_CONSTASCII_USTRINGPARAM( "This paragraph is nothing special either but ends on the next page structurewise" ) ),
@@ -216,13 +217,19 @@ void doTestCode()
     sal_Int32 nFirstDest = aWriter.CreateDest( aTargetRect );
     // enable structure
     aWriter.EndStructureElement();
+
     // add something to the long paragraph as an afterthought
+    /* PDFWriter::aWriter.GetCurrentStructureElement removed as an unusedcode.easy item:
+    http://cgit.freedesktop.org/libreoffice/core/commit/?id=09279fe3dad24ab58121e4f0a9564d252b64d81a
+
     sal_Int32 nSaveStruct = aWriter.GetCurrentStructureElement();
     aWriter.SetCurrentStructureElement( nLongPara );
     aWriter.DrawText( Rectangle( Point( 4500,4500 ),  Size( 12000, 1000 ) ),
                       String( RTL_CONSTASCII_USTRINGPARAM( "Add something to the longish paragraph above." ) ),
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     aWriter.SetCurrentStructureElement( nSaveStruct );
+    */
+
     aWriter.EndStructureElement();
     aWriter.EndStructureElement();
     aWriter.BeginStructureElement( PDFWriter::Figure );
@@ -288,6 +295,11 @@ void doTestCode()
     aTranspRect = Rectangle( Point( 1500, 16500 ), Size( 4800, 3000 ) );
     aWriter.SetFillColor( Color( COL_LIGHTRED ) );
     aWriter.DrawRect( aTranspRect );
+
+    /*
+    EndTransparencyGroup( const Rectangle& rBoundRect, const Bitmap& rAlphaMask ) is removed as an unusedcode.easy item:
+    http://cgit.freedesktop.org/libreoffice/core/commit/?id=581e7d7057afa87036d84e42c0e0a8a7368e20c7
+
     aWriter.BeginTransparencyGroup();
     aWriter.SetFillColor( Color( COL_LIGHTGREEN ) );
     aWriter.DrawEllipse( aTranspRect );
@@ -296,6 +308,7 @@ void doTestCode()
                       String( RTL_CONSTASCII_USTRINGPARAM( "Some transparent text" ) ),
                       TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     aWriter.EndTransparencyGroup( aTranspRect, aTransMask );
+    */
 
     Bitmap aImageBmp( Size( 256, 256 ), 24 );
     pAcc = aImageBmp.AcquireWriteAccess();
@@ -333,6 +346,10 @@ void doTestCode()
     aWall.SetStyle( WALLPAPER_TILE );
     aWriter.DrawWallpaper( Rectangle( Point( 4400, 4200 ), Size( 10200, 6300 ) ), aWall );
 
+    /*
+    BeginPattern/EndPattern is removed as an unusedcode.easy item:
+    http://cgit.freedesktop.org/libreoffice/core/commit/?id=581e7d7057afa87036d84e42c0e0a8a7368e20c7
+
     aWriter.Push( PUSH_ALL );
     aWriter.BeginPattern(Rectangle(Point(0,0),Size(2000,1000)));
     aWriter.SetFillColor( Color( COL_RED ) );
@@ -350,6 +367,7 @@ void doTestCode()
     aWriter.SetFillColor();
     aWriter.SetLineColor( Color( COL_LIGHTBLUE ) );
     aWriter.DrawRect( aPolyRect );
+    */
 
     aWriter.NewPage( 595, 842 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
