@@ -354,25 +354,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aObjName, aRect );
             SdrPageView* pPV = mpView->GetSdrPageView();
 
-            if(pOleObj)
-            {
-                // #119287#
-                SdrModel* pModel = mpView ? mpView->GetModel() : 0;
-                SfxStyleSheetBasePool* pSfxStyleSheetBasePool = pModel ? pModel->GetStyleSheetPool() : 0;
-                SfxStyleSheet* pSheet = pSfxStyleSheetBasePool ? dynamic_cast< SfxStyleSheet* >(pSfxStyleSheetBasePool->Find(String(SdResId(STR_POOLSHEET_OBJNOLINENOFILL)), SD_STYLE_FAMILY_GRAPHICS)) : 0;
-
-                if(pSheet)
-                {
-                    pOleObj->SetStyleSheet(pSheet, false);
-                }
-                else
-                {
-                    pOleObj->SetMergedItem(XFillStyleItem(XFILL_NONE));
-                    pOleObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
-                    OSL_ENSURE(false, "Style Sheet for OLE not found (!)");
-                }
-            }
-
             // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
             if( pPickObj )
             {

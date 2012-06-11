@@ -208,6 +208,7 @@ protected:
     sal_uIntPtr           nProgressOfs;   // -Handler
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
     SfxStyleSheet*  pDefaultStyleSheet;
+    SfxStyleSheet* mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj; // #119287#
     sfx2::LinkManager* pLinkManager;   // LinkManager
     Container*      pUndoStack;
     Container*      pRedoStack;
@@ -399,6 +400,10 @@ public:
     // Model eingefuegt wird und kein StyleSheet gesetzt hat.
     SfxStyleSheet*       GetDefaultStyleSheet() const             { return pDefaultStyleSheet; }
     void                 SetDefaultStyleSheet(SfxStyleSheet* pDefSS) { pDefaultStyleSheet = pDefSS; }
+
+    // #119287# default StyleSheet for SdrGrafObj and SdrOle2Obj
+    SfxStyleSheet* GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj() const { return mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj; }
+    void SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(SfxStyleSheet* pDefSS) { mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj = pDefSS; }
 
     sfx2::LinkManager*      GetLinkManager()                         { return pLinkManager; }
     void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { pLinkManager = pLinkMgr; }

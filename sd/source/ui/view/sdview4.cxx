@@ -223,25 +223,6 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 bIsPresTarget = pP->IsPresObj(pPickObj);
         }
 
-        if(pNewGrafObj)
-        {
-            // #119287#
-            SdrModel* pModel = pPV->GetView().GetModel();
-            SfxStyleSheetBasePool* pSfxStyleSheetBasePool = pModel ? pModel->GetStyleSheetPool() : 0;
-            SfxStyleSheet* pSheet = pSfxStyleSheetBasePool ? dynamic_cast< SfxStyleSheet* >(pSfxStyleSheetBasePool->Find(String(SdResId(STR_POOLSHEET_OBJNOLINENOFILL)), SD_STYLE_FAMILY_GRAPHICS)) : 0;
-
-            if(pSheet)
-            {
-                pNewGrafObj->SetStyleSheet(pSheet, false);
-            }
-            else
-            {
-                pNewGrafObj->SetMergedItem(XFillStyleItem(XFILL_NONE));
-                pNewGrafObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
-                OSL_ENSURE(false, "Style Sheet for GraphicObject not found (!)");
-            }
-        }
-
         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && !bIsPresTarget )
         {
             // replace object

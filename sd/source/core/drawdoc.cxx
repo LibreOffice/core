@@ -645,6 +645,9 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     String aName( SdResId(STR_STANDARD_STYLESHEET_NAME));
     SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_GRAPHICS)));
 
+    // #119287# Set default StyleSheet for SdrGrafObj and SdrOle2Obj
+    SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(String( SdResId(STR_POOLSHEET_OBJNOLINENOFILL)), SD_STYLE_FAMILY_GRAPHICS)));
+
     // Draw-Outliner und  Dokument Outliner initialisieren,
     // aber nicht den globalen Outliner, den der ist ja nicht
     // dokumentspezifisch wie StyleSheetPool und StyleRequestHandler
