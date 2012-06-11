@@ -63,6 +63,11 @@
 #include "postmac.h"
 #endif
 
+#ifdef ANDROID
+#include <sal/ByteBufferWrapper.hxx>
+using org::libreoffice::touch::ByteBufferWrapper;
+#endif
+
 #ifdef IOS
 #include "premac.h"
 #include <UIKit/UIKit.h>
@@ -468,7 +473,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 // contructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ):
     cppu::WeakComponentImplHelper7<
-    ::com::sun::star::awt::XToolkit,
+    ::com::sun::star::awt::XToolkit2,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::awt::XSystemChildFactory,
     ::com::sun::star::awt::XMessageBoxFactory,
@@ -562,6 +567,11 @@ void SAL_CALL VCLXToolkit::disposing()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
 {
+    return createScreenCompatibleDeviceUsingBuffer( Width, Height, 0 );
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int64 addressOfMemoryBufferForSharedArrayWrapper ) throw(::com::sun::star::uno::RuntimeException)
+{
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > xRef;
@@ -570,7 +580,15 @@ void SAL_CALL VCLXToolkit::disposing()
     SolarMutexGuard aSolarGuard;
 
     VirtualDevice* pV = new VirtualDevice;
-    pV->SetOutputSizePixel( Size( Width, Height ) );
+    if ( addressOfMemoryBufferForSharedArrayWrapper != 0 ) {
+#if defined(ANDROID)
+        ByteBufferWrapper *bbw = (ByteBufferWrapper *) (intptr_t) addressOfMemoryBufferForSharedArrayWrapper;
+        pV->SetOutputSizePixelAndBuffer( Size( Width, Height ), basebmp::RawMemorySharedArray( bbw->pointer(), *bbw ));
+        OSL_FAIL( "rendering to a pre-allocated buffer not done yet for this OS" );
+#endif
+    } else {
+        pV->SetOutputSizePixel( Size( Width, Height ) );
+    }
     pVDev->SetVirtualDevice( pV );
 
     xRef = pVDev;

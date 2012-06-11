@@ -31,6 +31,7 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <basebmp/bitmapdevice.hxx>
 
 class SalGraphics;
 
@@ -49,8 +50,11 @@ public:                     // public for Sal Implementation
     virtual SalGraphics*            GetGraphics() = 0;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
-                            // Set new size, without saving the old contents
-    virtual sal_Bool                    SetSize( long nNewDX, long nNewDY ) = 0;
+    // Set new size, without saving the old contents
+    virtual sal_Bool                SetSize( long nNewDX, long nNewDY ) = 0;
+
+    // Set new size using a buffer at the given address
+    virtual sal_Bool                SetSizeUsingBuffer( long nNewDX, long nNewDY, const basebmp::RawMemorySharedArray &pBuffer ) = 0;
 
     /// Get actual VDev size in pixel
     virtual void                    GetSize( long& rWidth, long& rHeight ) = 0;

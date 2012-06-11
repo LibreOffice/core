@@ -57,6 +57,11 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
 
 sal_Bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
+    return SetSizeUsingBuffer( nNewDX, nNewDY, basebmp::RawMemorySharedArray() );
+}
+
+sal_Bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY, const basebmp::RawMemorySharedArray &pBuffer )
+{
     B2IVector aDevSize( nNewDX, nNewDY );
     if( aDevSize.getX() == 0 )
         aDevSize.setX( 1 );
@@ -89,7 +94,10 @@ sal_Bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 #endif
         }
         m_aDevice = aDevPal.empty()
-                    ? createBitmapDevice( aDevSize, false, nFormat )
+                    ? ( pBuffer
+                        ? createBitmapDevice( aDevSize, false, nFormat, pBuffer, PaletteMemorySharedVector() )
+                        : createBitmapDevice( aDevSize, false, nFormat )
+                       )
                     : createBitmapDevice( aDevSize, false, nFormat, PaletteMemorySharedVector( new std::vector< basebmp::Color >(aDevPal) ) );
 
         // update device in existing graphics

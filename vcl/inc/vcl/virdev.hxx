@@ -32,6 +32,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
+#include <basebmp/bitmapdevice.hxx>
 
 // -----------------
 // - VirtualDevice -
@@ -56,7 +57,8 @@ private:
     sal_uInt8               meRefDevMode;
 
     SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
-    SAL_DLLPRIVATE sal_Bool ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase );
+    SAL_DLLPRIVATE sal_Bool InnerImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase, const basebmp::RawMemorySharedArray &pBuffer );
+    SAL_DLLPRIVATE sal_Bool ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase, const basebmp::RawMemorySharedArray &pBuffer );
 
     // Copy assignment is forbidden and not implemented.
     VirtualDevice (const VirtualDevice &);
@@ -104,6 +106,7 @@ public:
     virtual             ~VirtualDevice();
 
     sal_Bool                SetOutputSizePixel( const Size& rNewSize, sal_Bool bErase = sal_True );
+    sal_Bool                SetOutputSizePixelAndBuffer( const Size& rNewSize, const basebmp::RawMemorySharedArray &pBuffer );
     sal_Bool                SetOutputSize( const Size& rNewSize, sal_Bool bErase = sal_True )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }
 

@@ -53,7 +53,8 @@ public:
     virtual SalGraphics*    GetGraphics();
     virtual void            ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual sal_Bool            SetSize( long nNewDX, long nNewDY );
+    virtual sal_Bool        SetSize( long nNewDX, long nNewDY );
+    virtual sal_Bool        SetSizeUsingBuffer( long nNewDX, long nNewDY, const basebmp::RawMemorySharedArray &pBuffer );
     virtual void            GetSize( long& rWidth, long& rHeight );
 };
 

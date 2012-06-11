@@ -210,10 +210,10 @@ VirtualDevice::~VirtualDevice()
 
 // -----------------------------------------------------------------------
 
-sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase )
+sal_Bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
     SAL_INFO( "vcl.gdi",
-            "VirtualDevice::ImplSetOutputSizePixel( " << rNewSize.Width() << ", "
+            "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
             << rNewSize.Height() << ", " << bErase << " )" );
 
     if ( !mpVirDev )
@@ -222,6 +222,8 @@ sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool b
     {
         if ( bErase )
             Erase();
+        // Yeah, so trying to re-use a VirtualDevice but this time using a
+        // pre-allocated buffer won't work. Big deal.
         return sal_True;
     }
 
@@ -236,7 +238,10 @@ sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool b
 
     if ( bErase )
     {
-        bRet = mpVirDev->SetSize( nNewWidth, nNewHeight );
+        if ( pBuffer )
+            bRet = mpVirDev->SetSizeUsingBuffer( nNewWidth, nNewHeight, pBuffer );
+        else
+            bRet = mpVirDev->SetSize( nNewWidth, nNewHeight );
 
         if ( bRet )
         {
@@ -323,9 +328,9 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-sal_Bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, sal_Bool bErase )
+sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
-    if( ImplSetOutputSizePixel(rNewSize, bErase) )
+    if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
     {
         if( mnAlphaDepth != -1 )
         {
@@ -339,7 +344,7 @@ sal_Bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, sal_Bool bEras
             if( !mpAlphaVDev )
             {
                 mpAlphaVDev = new VirtualDevice( *this, mnAlphaDepth );
-                mpAlphaVDev->ImplSetOutputSizePixel(rNewSize, bErase);
+                mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, basebmp::RawMemorySharedArray() );
             }
 
             // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
@@ -356,6 +361,16 @@ sal_Bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, sal_Bool bEras
     }
 
     return sal_False;
+}
+
+sal_Bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, sal_Bool bErase )
+{
+    return ImplSetOutputSizePixel( rNewSize, bErase, basebmp::RawMemorySharedArray() );
+}
+
+sal_Bool VirtualDevice::SetOutputSizePixelAndBuffer( const Size& rNewSize, const basebmp::RawMemorySharedArray &pBuffer )
+{
+    return ImplSetOutputSizePixel( rNewSize, sal_True, pBuffer);
 }
 
 // -----------------------------------------------------------------------

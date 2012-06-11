@@ -31,7 +31,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XSystemChildFactory.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/awt/XToolkit2.hpp>
 #include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
@@ -80,7 +80,7 @@ protected:
 
 class VCLXToolkit : public VCLXToolkit_Impl,
                     public cppu::WeakComponentImplHelper7<
-                    ::com::sun::star::awt::XToolkit,
+                    ::com::sun::star::awt::XToolkit2,
                     ::com::sun::star::lang::XServiceInfo,
                     ::com::sun::star::awt::XSystemChildFactory,
                     ::com::sun::star::awt::XMessageBoxFactory,
@@ -128,12 +128,17 @@ public:
     VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
     ~VCLXToolkit();
 
+    // ::com::sun::star::awt::XToolkit2
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >      SAL_CALL createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int64 addressOfMemoryBufferForSharedArrayWrapper ) throw
+(::com::sun::star::uno::RuntimeException);
+
     // ::com::sun::star::awt::XToolkit
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Rectangle                                        SAL_CALL getWorkArea(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  SAL_CALL createWindow( const ::com::sun::star::awt::WindowDescriptor& Descriptor ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > > SAL_CALL createWindows( const ::com::sun::star::uno::Sequence< ::com::sun::star::awt::WindowDescriptor >& Descriptors ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >      SAL_CALL createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >      SAL_CALL createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw
+(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >      SAL_CALL createRegion(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XSystemChildFactory
