@@ -51,6 +51,7 @@
 
 #include "globstr.hrc"
 
+#include <cassert>
 #include <iostream>
 
 namespace {
@@ -654,7 +655,8 @@ ScFormatEntry* ScCondFrmtEntry::createConditionEntry() const
 	    eMode = SC_COND_NOTDUPLICATE;
 	    break;
 	default:
-	    break;
+        assert(false); // this cannot happen
+        return NULL;
     }
 
     rtl::OUString aExpr1 = maEdVal1.GetText();
