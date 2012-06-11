@@ -44,7 +44,7 @@ enum
     SCROLL_OFFSET = 4
 };
 
-Image lcl_fetchThumbnail (const rtl::OUString &msURL)
+Image lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -149,6 +149,8 @@ Image lcl_fetchThumbnail (const rtl::OUString &msURL)
         ::vcl::PNGReader aReader (*pStream);
         aThumbnail = aReader.Read ();
     }
+
+    aThumbnail.Scale(Size(width,height));
 
     // Note that the preview is returned without scaling it to the desired
     // width.  This gives the caller the chance to take advantage of a
@@ -1285,7 +1287,7 @@ void ThumbnailView::Populate ()
 
         for ( sal_uInt16 j = 0; j < nEntries; ++j)
         {
-            Image aImg = lcl_fetchThumbnail(pTemplates->GetPath(i,j));
+            Image aImg = lcl_fetchThumbnail(pTemplates->GetPath(i,j),128,128);
             InsertItem(i*100+j,aImg,pTemplates->GetName(i,j));
         }
     }
