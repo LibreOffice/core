@@ -1815,6 +1815,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XTimeField \
 	XToggleButton \
 	XToolkit \
+	XToolkit2 \
 	XTopWindow \
 	XTopWindow2 \
 	XTopWindowListener \
