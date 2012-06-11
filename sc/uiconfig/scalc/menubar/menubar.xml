@@ -261,8 +261,6 @@
             <menu:menuitem menu:id=".uno:AutoFormat"/>
             <menu:menu menu:id=".uno:ConditionalFormatMenu">
 	          <menu:menupopup>
-	            <menu:menuitem menu:id="uno:DataBarDialog"/>
-	            <menu:menuitem menu:id="uno:ColorScaleDialog"/>
 	            <menu:menuitem menu:id="uno:ConditionalFormatDialog"/>
 	          </menu:menupopup>
 	        </menu:menu>
