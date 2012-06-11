@@ -2275,23 +2275,10 @@ GraphicExport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterC
 {
     PictWriter      aPictWriter;
 
-    if (rGraphic.GetType()==GRAPHIC_GDIMETAFILE)
-    {
-        GDIMetaFile aScaledMtf( rGraphic.GetGDIMetaFile() );
-        return aPictWriter.WritePict( aScaledMtf, rStream, pFilterConfigItem );
-    }
-    else
-    {
-        Bitmap aBmp=rGraphic.GetBitmap();
-        GDIMetaFile aMTF;
-        VirtualDevice aVirDev;
+    // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+    GDIMetaFile aScaledMtf( rGraphic.GetGDIMetaFile() );
 
-        aMTF.Record(&aVirDev);
-        aVirDev.DrawBitmap(Point(),aBmp);
-        aMTF.Stop();
-        aMTF.SetPrefSize(aBmp.GetSizePixel());
-        return aPictWriter.WritePict( aMTF, rStream, pFilterConfigItem );
-    }
+    return aPictWriter.WritePict( aScaledMtf, rStream, pFilterConfigItem );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

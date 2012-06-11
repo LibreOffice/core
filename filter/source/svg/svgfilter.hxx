@@ -119,6 +119,8 @@ public:
     sal_Bool IsUseNativeTextDecoration() const;
     sal_Bool IsUseOpacity() const;
 
+    void writeMtf( const GDIMetaFile& rMtf );
+
 protected:
 
     virtual void            _ExportStyles( sal_Bool /* bUsed */ ) {}

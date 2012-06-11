@@ -2942,18 +2942,8 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                 }
                 if ( !bIsWMF )
                 {
-                    GDIMetaFile aMtf;
-                    if ( pGraphic->GetType() != GRAPHIC_BITMAP )
-                        aMtf = pObj->GetGraphic()->GetGDIMetaFile();
-                    else
-                    {
-                        VirtualDevice aVirDev;
-                        aMtf.Record( &aVirDev );
-                        pGraphic->Draw( &aVirDev, Point(),  pGraphic->GetPrefSize() );
-                        aMtf.Stop();
-                        aMtf.SetPrefSize( pGraphic->GetPrefSize() );
-                        aMtf.SetPrefMapMode( pGraphic->GetPrefMapMode() );
-                    }
+                    // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                    GDIMetaFile aMtf(pObj->GetGraphic()->GetGDIMetaFile());
                     SvMemoryStream aDestStrm( 65535, 65535 );
                     ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
                     const uno::Sequence<sal_Int8> aSeq(

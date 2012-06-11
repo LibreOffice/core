@@ -1902,69 +1902,30 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 sal_Int32 nVersion = aConfigItem.ReadInt32( "Version", 0 ) ;
                 if ( nVersion )
                     rOStm.SetVersion( nVersion );
-                GDIMetaFile aMTF;
 
-                if ( eType != GRAPHIC_BITMAP )
-                    aMTF = aGraphic.GetGDIMetaFile();
-                else
-                {
-                    VirtualDevice aVirDev;
+                // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                GDIMetaFile aMTF(aGraphic.GetGDIMetaFile());
 
-                    aMTF.Record( &aVirDev );
-                    aGraphic.Draw( &aVirDev, Point(), aGraphic.GetPrefSize() );
-                    aMTF.Stop();
-                    aMTF.SetPrefSize( aGraphic.GetPrefSize() );
-                    aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
-                }
                 aMTF.Write( rOStm );
+
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
             else if ( aFilterName.EqualsIgnoreCaseAscii( EXP_WMF ) )
             {
-                if( eType == GRAPHIC_GDIMETAFILE )
-                {
-                    if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
-                        nStatus = GRFILTER_FORMATERROR;
-                }
-                else
-                {
-                    Bitmap          aBmp( aGraphic.GetBitmap() );
-                    GDIMetaFile     aMTF;
-                    VirtualDevice   aVirDev;
+                // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
+                    nStatus = GRFILTER_FORMATERROR;
 
-                    aMTF.Record( &aVirDev );
-                    aVirDev.DrawBitmap( Point(), aBmp );
-                    aMTF.Stop();
-                    aMTF.SetPrefSize( aBmp.GetSizePixel() );
-
-                    if( !ConvertGDIMetaFileToWMF( aMTF, rOStm, &aConfigItem ) )
-                        nStatus = GRFILTER_FORMATERROR;
-                }
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
             else if ( aFilterName.EqualsIgnoreCaseAscii( EXP_EMF ) )
             {
-                if( eType == GRAPHIC_GDIMETAFILE )
-                {
-                    if ( !ConvertGDIMetaFileToEMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
-                        nStatus = GRFILTER_FORMATERROR;
-                }
-                else
-                {
-                    Bitmap          aBmp( aGraphic.GetBitmap() );
-                    GDIMetaFile     aMTF;
-                    VirtualDevice   aVirDev;
+                // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+                if ( !ConvertGDIMetaFileToEMF( aGraphic.GetGDIMetaFile(), rOStm, &aConfigItem ) )
+                    nStatus = GRFILTER_FORMATERROR;
 
-                    aMTF.Record( &aVirDev );
-                    aVirDev.DrawBitmap( Point(), aBmp );
-                    aMTF.Stop();
-                    aMTF.SetPrefSize( aBmp.GetSizePixel() );
-
-                    if( !ConvertGDIMetaFileToEMF( aMTF, rOStm, &aConfigItem ) )
-                        nStatus = GRFILTER_FORMATERROR;
-                }
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
@@ -2080,6 +2041,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
 
                                     SvMemoryStream aMemStm( 65535, 65535 );
 
+                                    // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
                                     ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
 
                                     xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(

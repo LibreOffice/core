@@ -21,7 +21,7 @@
 #define SVGWRITER_HXX
 
 #include <stack>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
@@ -58,6 +58,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/svg/XSVGWriter.hpp>
 
 
 // -----------------------------------------------------------------------------
@@ -68,6 +69,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::svg;
+using namespace ::com::sun::star::xml::sax;
 
 // -----------------------------------------------------------------------------
 
@@ -152,6 +155,7 @@ struct SVGShapeDescriptor
 
 
 class SVGAttributeWriter;
+class SVGExport;
 class GDIMetaFile;
 
 
@@ -398,6 +402,22 @@ public:
                                            const OUString* pElementId = NULL,
                                            const Reference< XShape >* pXShape = NULL,
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
+};
+
+class SVGWriter : public cppu::WeakImplHelper1< XSVGWriter >
+{
+private:
+    Reference< XComponentContext >      mxContext;
+
+    SVGWriter();
+
+public:
+    explicit SVGWriter( const Reference< XComponentContext >& rxCtx );
+    virtual ~SVGWriter();
+
+    // XSVGWriter
+    virtual void SAL_CALL write( const Reference<XDocumentHandler>& rxDocHandler,
+        const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException );
 };
 
 #endif

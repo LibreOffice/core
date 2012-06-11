@@ -2343,4 +2343,46 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
     return ( bFieldProcessed ? 0 : maOldFieldHdl.Call( pInfo ) );
 }
 
+// -----------------------------------------------------------------------------
+
+void SVGExport::writeMtf( const GDIMetaFile& rMtf )
+{
+    const Size aSize( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_MM ) );
+    rtl::OUString aAttr;
+    Reference< XExtendedDocumentHandler> xExtDocHandler( GetDocHandler(), UNO_QUERY );
+
+    if( xExtDocHandler.is() )
+        xExtDocHandler->unknown( SVG_DTD_STRING );
+
+    aAttr = rtl::OUString::valueOf( aSize.Width() );
+    aAttr += "mm";
+    AddAttribute( XML_NAMESPACE_NONE, "width", aAttr );
+
+    aAttr = rtl::OUString::valueOf( aSize.Height() );
+    aAttr += "mm";
+    AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
+
+    aAttr = "0 0 ";
+    aAttr += rtl::OUString::valueOf( aSize.Width() * 100L );
+    aAttr += " ";
+    aAttr += rtl::OUString::valueOf( aSize.Height() * 100L );
+    AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
+
+    {
+        SvXMLElementExport  aSVG( *this, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
+
+        std::vector< ObjectRepresentation > aObjects;
+
+        aObjects.push_back( ObjectRepresentation( Reference< XInterface >(), rMtf ) );
+        SVGFontExport aSVGFontExport( *this, aObjects );
+
+        Point aPoint100thmm( OutputDevice::LogicToLogic( rMtf.GetPrefMapMode().GetOrigin(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
+        Size  aSize100thmm( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
+
+        SVGActionWriter aWriter( *this, aSVGFontExport );
+        aWriter.WriteMetaFile( aPoint100thmm, aSize100thmm, rMtf,
+            SVGWRITER_WRITE_FILL | SVGWRITER_WRITE_TEXT, NULL );
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

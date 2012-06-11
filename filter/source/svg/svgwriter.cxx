@@ -2679,7 +2679,10 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                         if( bCont )
                         {
                             // #118796# do NOT access pDXArray, it may be zero (!)
-                            nX = aPos.X() + pDX[ nCurPos - 1 ];
+                            sal_Int32 nDXWidth = pDX[ nCurPos - 1 ];
+                            if ( bApplyMapping )
+                                nDXWidth = ImplMap( nDXWidth );
+                            nX = aPos.X() + nDXWidth;
                         }
                     }
                 }
@@ -3726,6 +3729,39 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 
     ImplReleaseContext();
     mpVDev->Pop();
+}
+
+// -------------
+// - SVGWriter -
+// -------------
+
+SVGWriter::SVGWriter( const Reference< XComponentContext >& rxCtx )
+    : mxContext(rxCtx)
+{
+}
+
+// -----------------------------------------------------------------------------
+
+SVGWriter::~SVGWriter()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
+                                const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException )
+{
+    SvMemoryStream  aMemStm( (char*) rMtfSeq.getConstArray(), rMtfSeq.getLength(), STREAM_READ );
+    GDIMetaFile     aMtf;
+
+    aMemStm >> aMtf;
+
+    const Reference< XDocumentHandler > xDocumentHandler( rxDocHandler );
+    const Sequence< PropertyValue > aFilterData;
+
+    SVGExport* pWriter = new SVGExport( mxContext, xDocumentHandler, aFilterData );
+    pWriter->writeMtf( aMtf );
+    delete pWriter;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

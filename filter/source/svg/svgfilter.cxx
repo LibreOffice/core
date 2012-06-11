@@ -43,6 +43,7 @@
 #include <osl/mutex.hxx>
 
 #include "svgfilter.hxx"
+#include "svgwriter.hxx"
 
 using namespace ::com::sun::star;
 
@@ -306,14 +307,23 @@ OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor )
 
 // -----------------------------------------------------------------------------
 
+#define SVG_FILTER_IMPL_NAME "com.sun.star.comp.Draw.SVGFilter"
+#define SVG_WRITER_IMPL_NAME "com.sun.star.comp.Draw.SVGWriter"
+
 namespace sdecl = comphelper::service_decl;
- sdecl::class_<SVGFilter> serviceImpl;
+ sdecl::class_<SVGFilter> serviceFilterImpl;
  const sdecl::ServiceDecl svgFilter(
-     serviceImpl,
-     "com.sun.star.comp.Draw.SVGFilter",
+     serviceFilterImpl,
+     SVG_FILTER_IMPL_NAME,
      "com.sun.star.document.ImportFilter;"
      "com.sun.star.document.ExportFilter;"
      "com.sun.star.document.ExtendedTypeDetection" );
+
+ sdecl::class_<SVGWriter> serviceWriterImpl;
+ const sdecl::ServiceDecl svgWriter(
+     serviceWriterImpl,
+     SVG_WRITER_IMPL_NAME,
+     "com.sun.star.svg.SVGWriter" );
 
 // The C shared lib entry points
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL svgfilter_component_getFactory(
@@ -321,8 +331,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL svgfilter_component_getFactory(
     ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
     ::com::sun::star::registry::XRegistryKey* pRegistryKey )
 {
-    return component_getFactoryHelper( pImplName, pServiceManager,
-        pRegistryKey, svgFilter );
+    if ( rtl_str_compare (pImplName, SVG_FILTER_IMPL_NAME) == 0 )
+    {
+        return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, svgFilter );
+    }
+    else if ( rtl_str_compare (pImplName, SVG_WRITER_IMPL_NAME) == 0 )
+    {
+        return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, svgWriter );
+    }
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

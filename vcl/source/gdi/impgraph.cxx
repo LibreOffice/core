@@ -595,6 +595,40 @@ Animation ImpGraphic::ImplGetAnimation() const
 
 const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
 {
+    if (GRAPHIC_BITMAP == meType && !maMetaFile.GetActionSize())
+    {
+        // #i119735#
+        // Use the local maMetaFile as container for a metafile-representation
+        // of the bitmap graphic. This will be done only once, thus be buffered.
+        // I checked all usages of maMetaFile, it is only used when type is not
+        // GRAPHIC_BITMAP. In operator= it will get copied, thus buffering will
+        // survive copying (change this if not wanted)
+        ImpGraphic* pThat = const_cast< ImpGraphic* >(this);
+
+        if(maSvgData.get() && !maEx)
+        {
+            // use maEx as local buffer for rendered svg
+            pThat->maEx = maSvgData->getReplacement();
+        }
+
+        VirtualDevice aVirDev;
+        const Size aSizePixel(maEx.GetSizePixel());
+
+        pThat->maMetaFile.Record(&aVirDev);
+
+        if(maEx.IsTransparent())
+        {
+            aVirDev.DrawBitmapEx(Point(), maEx);
+        }
+        else
+        {
+            aVirDev.DrawBitmap(Point(), maEx.GetBitmap());
+        }
+
+        pThat->maMetaFile.Stop();
+        pThat->maMetaFile.SetPrefSize(aSizePixel);
+    }
+
     return maMetaFile;
 }
 
