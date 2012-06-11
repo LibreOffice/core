@@ -34,6 +34,7 @@
 #include <vcl/helper.hxx>
 #include <sal/macros.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
 
 #include <svtools/sampletext.hxx>
@@ -1710,8 +1711,7 @@ void FontSizeBox::Modify()
 
     if ( bRelativeMode )
     {
-        XubString aStr = GetText();
-        aStr.EraseLeadingChars();
+        XubString aStr = comphelper::string::stripStart(GetText(), ' ');
 
         sal_Bool bNewMode = bRelative;
         sal_Bool bOldPtRelMode = bPtRelative;
@@ -1876,8 +1876,7 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
     if ( bRelativeMode )
     {
         Selection aSelection = GetSelection();
-        XubString  aStr = GetText();
-        aStr.EraseLeadingChars();
+        XubString aStr = comphelper::string::stripStart(GetText(), ' ');
 
         if ( bNewRelative )
         {

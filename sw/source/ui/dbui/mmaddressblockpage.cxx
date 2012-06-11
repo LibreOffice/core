@@ -1684,8 +1684,7 @@ String AddressMultiLineEdit::GetAddress()
     sal_uLong  nParaCount = pTextEngine->GetParagraphCount();
     for(sal_uLong nPara = nParaCount; nPara; --nPara)
     {
-        String sPara = pTextEngine->GetText( nPara - 1);
-        sPara.EraseTrailingChars(' ');
+        String sPara = comphelper::string::stripEnd(pTextEngine->GetText(nPara - 1), ' ');
         //don't add empty trailing paragraphs
         if(sRet.Len() || sPara.Len())
         {

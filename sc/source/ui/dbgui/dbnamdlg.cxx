@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "reffact.hxx"
@@ -454,11 +455,8 @@ IMPL_LINK_NOARG_INLINE_END(ScDbNameDlg, CancelBtnHdl)
 
 IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 {
-    String  aNewName = aEdName.GetText();
+    String  aNewName = comphelper::string::strip(aEdName.GetText(), ' ');
     String  aNewArea = aEdAssign.GetText();
-
-    aNewName.EraseLeadingChars( ' ' );
-    aNewName.EraseTrailingChars( ' ' );
 
     if ( aNewName.Len() > 0 && aNewArea.Len() > 0 )
     {

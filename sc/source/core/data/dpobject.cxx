@@ -1316,7 +1316,8 @@ bool lcl_IsAtStart( const String& rList, const String& rSearch, sal_Int32& rMatc
                     }
 
                     aDequoted = rList.Copy( nStartPos, nNameEnd - nStartPos );
-                    aDequoted.EraseTrailingChars( ' ' );        // spaces before the closing bracket or semicolon
+                    // spaces before the closing bracket or semicolon
+                    aDequoted = comphelper::string::stripEnd(aDequoted, ' ');
                     nQuoteEnd = nClosePos + 1;
                     bParsed = true;
                 }
@@ -1488,7 +1489,7 @@ bool ScDPObject::ParseFilters( ScDPGetPivotDataField& rTarget,
                 {
                     aSpecField = aFieldNames[nField];
                     aRemaining.Erase( 0, sal::static_int_cast<xub_StrLen>(nMatched) );
-                    aRemaining.EraseLeadingChars( ' ' );
+                    aRemaining = comphelper::string::stripStart(aRemaining, ' ');
 
                     // field name has to be followed by item name in brackets
                     if ( aRemaining.GetChar(0) == '[' )
@@ -1561,7 +1562,8 @@ bool ScDPObject::ParseFilters( ScDPGetPivotDataField& rTarget,
         if ( !bUsed )
             bError = true;
 
-        aRemaining.EraseLeadingChars( ' ' );        // remove any number of spaces between entries
+        // remove any number of spaces between entries
+        aRemaining = comphelper::string::stripStart(aRemaining, ' ');
     }
 
     if ( !bError && !bHasData && aDataNames.size() == 1 )

@@ -139,7 +139,7 @@ String ODsnTypeCollection::getPrefix(const ::rtl::OUString& _sURL) const
                 sRet = aIter->Copy(0,sURL.Match(*aIter));
             else
                 sRet = sURL.Copy(0,aIter->Match(sURL));
-            sRet.EraseTrailingChars('*');
+            sRet = comphelper::string::stripEnd(sRet, '*');
             sOldPattern = *aIter;
         }
     }
@@ -205,7 +205,7 @@ String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUStrin
     if ( !sURL.Len() && sFallbackURL.Len() )
         sURL = sFallbackURL;
 
-    sURL.EraseTrailingChars('*');
+    sURL = comphelper::string::stripEnd(sURL, '*');
     return sURL;
 }
 // -----------------------------------------------------------------------------
@@ -344,8 +344,7 @@ ODsnTypeCollection::TypeIterator ODsnTypeCollection::end() const
 //-------------------------------------------------------------------------
 DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
 {
-    String sDsn(_rDsn);
-    sDsn.EraseTrailingChars('*');
+    String sDsn(comphelper::string::stripEnd(_rDsn, '*'));
     sal_uInt16 nSeparator = sDsn.Search((sal_Unicode)':');
     if (STRING_NOTFOUND == nSeparator)
     {

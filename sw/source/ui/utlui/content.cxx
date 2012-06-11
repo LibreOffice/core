@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <svl/svstdarr.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
@@ -510,8 +511,8 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     nMemberCount--;
                 else
                 {
-                    String aEntry(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i));
-                    aEntry.EraseLeadingChars();
+                    String aEntry(comphelper::string::stripStart(
+                        pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i), ' '));
                     SwNavigationPI::CleanEntry( aEntry );
                     SwOutlineContent* pCnt = new SwOutlineContent(this, aEntry, i, nLevel,
                                                         pWrtShell->IsOutlineMovable( i ), nPos );

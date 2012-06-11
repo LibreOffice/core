@@ -46,6 +46,7 @@
 #include <com/sun/star/util/XFlushable.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #define HHC editeng::HangulHanjaConversion
 #define LINE_CNT        static_cast< sal_uInt16 >(2)
@@ -1201,9 +1202,8 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl)
     {
-        String  aName( m_aDictNameED.GetText() );
+        String  aName(comphelper::string::stripEnd(m_aDictNameED.GetText(), ' '));
 
-        aName.EraseTrailingChars();
         m_bEntered = aName.Len() > 0;
         if( m_bEntered )
             m_aDictNameED.SetText( aName );     // do this in case of trailing chars have been deleted
@@ -1214,9 +1214,8 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, ModifyHdl)
     {
-        String  aName( m_aDictNameED.GetText() );
+        String aName(comphelper::string::stripEnd(m_aDictNameED.GetText(), ' '));
 
-        aName.EraseTrailingChars();
         m_aOkBtn.Enable( aName.Len() > 0 );
 
         return 0;
@@ -1247,10 +1246,7 @@ namespace svx
     bool HangulHanjaNewDictDialog::GetName( String& _rRetName ) const
     {
         if( m_bEntered )
-        {
-            _rRetName = m_aDictNameED.GetText();
-            _rRetName.EraseTrailingChars();
-        }
+            _rRetName = comphelper::string::stripEnd(m_aDictNameED.GetText(), ' ');
 
         return m_bEntered;
     }
@@ -1548,8 +1544,7 @@ namespace svx
     IMPL_LINK_NOARG(HangulHanjaEditDictDialog, OriginalModifyHdl)
     {
         m_bModifiedOriginal = true;
-        m_aOriginal = m_aOriginalLB.GetText();
-        m_aOriginal.EraseTrailingChars();
+        m_aOriginal = comphelper::string::stripEnd(m_aOriginalLB.GetText(), ' ');
 
         UpdateSuggestions();
         UpdateButtonStates();

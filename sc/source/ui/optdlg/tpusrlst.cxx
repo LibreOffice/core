@@ -324,15 +324,12 @@ void ScTpUserLists::MakeListStr( String& rListStr )
 
     for(xub_StrLen i=0;i<nToken;i++)
     {
-        String aString=rListStr.GetToken(i,LF);
-        aString.EraseLeadingChars(' ');
-        aString.EraseTrailingChars(' ');
+        rtl::OUString aString = comphelper::string::strip(rListStr.GetToken(i, LF), ' ');
         aStr+=aString;
         aStr+=cDelimiter;
     }
 
-    aStr.EraseLeadingChars( cDelimiter );
-    aStr.EraseTrailingChars( cDelimiter );
+    aStr = comphelper::string::strip(aStr, cDelimiter);
     xub_StrLen nLen = aStr.Len();
 
     rListStr.Erase();

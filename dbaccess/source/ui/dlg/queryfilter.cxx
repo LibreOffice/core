@@ -487,7 +487,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     _rItem.Value >>= aCondition;
     String aStr = aCondition.getStr();
     ::Replace_SQL_PlaceHolder(aStr);
-    aStr.EraseTrailingChars();
+    aStr = comphelper::string::stripEnd(aStr, ' ');
 
     Reference< XPropertySet > xColumn = getColumn( _rItem.Name );
 
@@ -525,7 +525,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
             aStr.Erase(0,11);
             break;
     }
-    aStr.EraseLeadingChars();
+    aStr = comphelper::string::stripStart(aStr, ' ');
 
     // to make sure that we only set first three
     ListBox* pColumnListControl =  NULL;

@@ -30,6 +30,7 @@
 
 #include <string.h>
 #include <float.h>
+#include <comphelper/string.hxx>
 #include <tools/datetime.hxx>
 #include <svl/svarray.hxx>
 #include <vcl/svapp.hxx>
@@ -1014,8 +1015,7 @@ _HashStr::_HashStr( const String& rName, const String& rText,
 void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
                     String& rRet, sal_uInt16* pPos )
 {
-    rRet = rName;
-    rRet.EraseLeadingChars().EraseTrailingChars();
+    rRet = comphelper::string::strip(rName, ' ');
     SwHash* pFnd = Find( rRet, ppTbl, nSize, pPos );
     if( pFnd )
         rRet = ((_HashStr*)pFnd)->aSetStr;

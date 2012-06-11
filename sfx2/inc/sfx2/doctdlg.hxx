@@ -28,6 +28,7 @@
 #ifndef _SFXDOCTDLG_HXX
 #define _SFXDOCTDLG_HXX
 
+#include <comphelper/string.hxx>
 #include <sfx2/doctempl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
@@ -73,7 +74,7 @@ public:
     ~SfxDocumentTemplateDlg();
 
     String GetTemplateName() const
-    { return aNameEd.GetText().EraseLeadingChars(); }
+    { return comphelper::string::stripStart(aNameEd.GetText(), ' '); }
     sal_uInt16 GetRegion() const { return aRegionLb.GetSelectEntryPos(); }
     String GetRegionName() const { return aRegionLb.GetSelectEntry(); }
 };

@@ -95,8 +95,6 @@ struct _Capper
 #define DBG_OUTF(x)
 #endif
 
-#define TRIM(s) s.EraseLeadingChars().EraseTrailingChars()
-
 //------------------------------------------------------------------------
 
 #if defined(DBG_UTIL) && defined(WNT)

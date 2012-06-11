@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-
+#include <comphelper/string.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -571,8 +571,7 @@ void EditRTFParser::ReadField()
         if ( aFldInst.CompareIgnoreCaseToAscii( aHyperLinkMarker, aHyperLinkMarker.Len() ) == COMPARE_EQUAL )
         {
             aFldInst.Erase( 0, aHyperLinkMarker.Len() );
-            aFldInst.EraseLeadingChars();
-            aFldInst.EraseTrailingChars();
+            aFldInst = comphelper::string::strip(aFldInst, ' ');
             aFldInst.Erase( 0, 1 ); // "
             aFldInst.Erase( aFldInst.Len()-1, 1 );  // "
 

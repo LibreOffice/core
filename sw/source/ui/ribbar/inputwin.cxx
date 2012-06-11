@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/gen.hxx>
 #include <sfx2/imgmgr.hxx>
@@ -393,8 +394,7 @@ void  SwInputWindow::ApplyFormula()
 
     // Formel soll immer mit einem "=" beginnen, hier
     // also wieder entfernen
-    String sEdit( aEdit.GetText() );
-    sEdit.EraseLeadingChars().EraseTrailingChars();
+    String sEdit(comphelper::string::strip(aEdit.GetText(), ' '));
     if( sEdit.Len() && '=' == sEdit.GetChar( 0 ) )
         sEdit.Erase( 0, 1 );
     SfxStringItem aParam(FN_EDIT_FORMULA, sEdit);

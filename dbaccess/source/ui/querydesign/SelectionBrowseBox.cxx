@@ -1098,9 +1098,8 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     break;
 
                 sal_uInt16  nIdx = sal_uInt16(nRow - BROW_CRIT1_ROW);
-                String aText = m_pTextCell->GetText();
+                String aText = comphelper::string::stripStart(m_pTextCell->GetText(), ' ');
 
-                aText.EraseLeadingChars();
                 ::rtl::OUString aCrit;
                 if(aText.Len())
                 {

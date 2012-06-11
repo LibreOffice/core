@@ -972,12 +972,12 @@ sal_Bool CreateFromAddress_Impl( String& rFrom )
     {
         if ( aFirstName.Len() )
         {
-            rFrom = TRIM( aFirstName );
+            rFrom = comphelper::string::strip(aFirstName, ' ');
 
             if ( aName.Len() )
                 rFrom += ' ';
         }
-        rFrom += TRIM( aName );
+        rFrom += comphelper::string::strip(aName, ' ');
         // remove illegal characters
         rFrom = comphelper::string::remove(rFrom, '<');
         rFrom = comphelper::string::remove(rFrom, '>');
@@ -993,7 +993,7 @@ sal_Bool CreateFromAddress_Impl( String& rFrom )
     {
         if ( rFrom.Len() )
             rFrom += ' ';
-        ( ( rFrom += '<' ) += TRIM( aEmailName ) ) += '>';
+        ( ( rFrom += '<' ) += comphelper::string::strip(aEmailName, ' ') ) += '>';
     }
     else
         rFrom.Erase();

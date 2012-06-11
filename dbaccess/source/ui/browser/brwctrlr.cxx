@@ -76,6 +76,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>
@@ -2565,7 +2566,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
 
         pContext->arrFields.push_back(xCurrentColumn);
     }
-    sFieldList.EraseTrailingChars(';');
+    sFieldList = comphelper::string::stripEnd(sFieldList, ';');
 
     pContext->xCursor.set(getRowSet(),UNO_QUERY);
     pContext->strUsedFields = sFieldList;

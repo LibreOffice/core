@@ -1985,7 +1985,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, String& rOutStr
             GetFormatter().GetNumDecimalSep().GetChar(0), true );
     if (rOutString.GetChar(0) == '-' &&
         comphelper::string::getTokenCount(rOutString, '0') == rOutString.Len())
-        rOutString.EraseLeadingChars('-');            // nicht -0
+        rOutString = comphelper::string::stripStart(rOutString, '-');            // nicht -0
 
     ImpTransliterate( rOutString, NumFor[0].GetNatNum() );
 }
@@ -2784,11 +2784,11 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
 
     String sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                 rtl_math_StringFormat_F, int(nCntPost), '.'));
-    sSecStr.EraseLeadingChars('0');
-    sSecStr.EraseLeadingChars('.');
+    sSecStr = comphelper::string::stripStart(sSecStr, '0');
+    sSecStr = comphelper::string::stripStart(sSecStr, '.');
     if ( bInputLine )
     {
-        sSecStr.EraseTrailingChars('0');
+        sSecStr = comphelper::string::stripEnd(sSecStr, '0');
         if ( sSecStr.Len() < xub_StrLen(rInfo.nCntPost) )
             sSecStr.Expand( xub_StrLen(rInfo.nCntPost), '0' );
         ImpTransliterate( sSecStr, NumFor[nIx].GetNatNum() );
@@ -3501,11 +3501,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     sal_uLong nSeconds = (sal_uLong)floor( fTime );
     String sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                 rtl_math_StringFormat_F, int(nCntPost), '.'));
-    sSecStr.EraseLeadingChars('0');
-    sSecStr.EraseLeadingChars('.');
+    sSecStr = comphelper::string::stripStart(sSecStr, '0');
+    sSecStr = comphelper::string::stripStart(sSecStr, '.');
     if ( bInputLine )
     {
-        sSecStr.EraseTrailingChars('0');
+        sSecStr = comphelper::string::stripEnd(sSecStr, '0');
         if ( sSecStr.Len() < xub_StrLen(rInfo.nCntPost) )
             sSecStr.Expand( xub_StrLen(rInfo.nCntPost), '0' );
         ImpTransliterate( sSecStr, NumFor[nIx].GetNatNum() );
@@ -3849,7 +3849,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             else
                 sStr = ::rtl::math::doubleToUString( fNumber,
                         rtl_math_StringFormat_F, rInfo.nCntPost, '.' );
-            sStr.EraseLeadingChars('0');        // fuehrende Nullen weg
+            sStr = comphelper::string::stripStart(sStr, '0');        // fuehrende Nullen weg
         }
         else if (fNumber == 0.0)            // Null
         {
@@ -3860,7 +3860,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         {
             sStr = ::rtl::math::doubleToUString( fNumber,
                     rtl_math_StringFormat_F, 0, '.');
-            sStr.EraseLeadingChars('0');        // fuehrende Nullen weg
+            sStr = comphelper::string::stripStart(sStr, '0');        // fuehrende Nullen weg
         }
         xub_StrLen nPoint = sStr.Search( '.' );
         if ( nPoint != STRING_NOTFOUND )
@@ -3951,7 +3951,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                 {
                     String sNum;
                     ImpGetOutputStandard(fNumber, sNum);
-                    sNum.EraseLeadingChars('-');
+                    sNum = comphelper::string::stripStart(sNum, '-');
                     sStr.Insert(sNum, k);
                 }
                 break;
@@ -4117,7 +4117,7 @@ bool SvNumberformat::ImpNumberFillWithThousands(
             {
                 String sNum;
                 ImpGetOutputStandard(rNumber, sNum);
-                sNum.EraseLeadingChars('-');
+                sNum = comphelper::string::stripStart(sNum, '-');
                 sStr.Insert(sNum, k);
             }
             break;
@@ -4235,7 +4235,7 @@ bool SvNumberformat::ImpNumberFill( String& sStr,       // number string
             {
                 String sNum;
                 ImpGetOutputStandard(rNumber, sNum);
-                sNum.EraseLeadingChars('-');    // Vorzeichen weg!!
+                sNum = comphelper::string::stripStart(sNum, '-');    // Vorzeichen weg!!
                 sStr.Insert(sNum, k);
             }
             break;

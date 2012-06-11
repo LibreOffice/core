@@ -31,6 +31,7 @@
 #include <connectivity/dbtools.hxx>
 #include <tools/tenccvt.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/string.hxx>
 #include "dbu_misc.hrc"
 #include "dbustrings.hrc"
 #include <sfx2/sfxhtml.hxx>
@@ -396,9 +397,10 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
                 String aFontName;
                 xub_StrLen nPos = 0;
                 while( nPos != STRING_NOTFOUND )
-                {   // Fontliste, VCL: Semikolon als Separator, HTML: Komma
+                {
+                    // Fontliste, VCL: Semikolon als Separator, HTML: Komma
                     String aFName = rFace.GetToken( 0, ',', nPos );
-                    aFName.EraseTrailingChars().EraseLeadingChars();
+                    aFName = comphelper::string::strip(aFName, ' ');
                     if( aFontName.Len() )
                         aFontName += ';';
                     aFontName += aFName;
@@ -486,15 +488,13 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
             case HTML_TABLEDATA_OFF:
             case HTML_TABLEHEADER_OFF:
                 {
-                    aColumnName.EraseLeadingChars();
-                    aColumnName.EraseTrailingChars();
+                    aColumnName = comphelper::string::strip(aColumnName, ' ' );
                     if (!aColumnName.Len() || m_bAppendFirstLine )
                         aColumnName = String(ModuleRes(STR_COLUMN_NAME));
                     else if ( m_sCurrent.Len() )
                         aColumnName = m_sCurrent;
 
-                    aColumnName.EraseLeadingChars();
-                    aColumnName.EraseTrailingChars();
+                    aColumnName = comphelper::string::strip(aColumnName, ' ');
                     CreateDefaultColumn(aColumnName);
                     aColumnName.Erase();
                     m_sCurrent.Erase();
@@ -510,8 +510,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                 break;
             case HTML_TITLE_OFF:
             case HTML_CAPTION_OFF:
-                aTableName.EraseLeadingChars();
-                aTableName.EraseTrailingChars();
+                aTableName = comphelper::string::strip(aTableName, ' ');
                 if(!aTableName.Len())
                     aTableName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTableName)));
                 else
@@ -539,8 +538,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
     if ( m_sCurrent.Len() )
         aColumnName = m_sCurrent;
-    aColumnName.EraseLeadingChars();
-    aColumnName.EraseTrailingChars();
+    aColumnName = comphelper::string::strip(aColumnName, ' ');
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
 

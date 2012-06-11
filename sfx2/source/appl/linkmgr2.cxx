@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sfx2/objsh.hxx>
@@ -404,14 +405,25 @@ void MakeLnkName( String& rName, const String* pType, const String& rFile,
                     const String& rLink, const String* pFilter )
 {
     if( pType )
-        (rName = *pType).EraseLeadingChars().EraseTrailingChars() += cTokenSeperator;
+    {
+        rName = comphelper::string::strip(*pType, ' ');
+        rName += cTokenSeperator;
+    }
     else if( rName.Len() )
         rName.Erase();
 
-    ((rName += rFile).EraseLeadingChars().EraseTrailingChars() +=
-        cTokenSeperator ).EraseLeadingChars().EraseTrailingChars() += rLink;
+    rName += rFile;
+
+    rName = comphelper::string::strip(rName, ' ');
+    rName += cTokenSeperator;
+    rName = comphelper::string::strip(rName, ' ');
+    rName += rLink;
     if( pFilter )
-        ((rName += cTokenSeperator ) += *pFilter).EraseLeadingChars().EraseTrailingChars();
+    {
+        rName += cTokenSeperator;
+        rName += *pFilter;
+        rName = comphelper::string::strip(rName, ' ');
+    }
 }
 
 void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)

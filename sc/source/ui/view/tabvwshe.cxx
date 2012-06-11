@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
 #include "scitems.hxx"
@@ -122,7 +123,7 @@ String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
                 while (  (nAt = aStrSelection.Search( '\t' )) != STRING_NOTFOUND )
                     aStrSelection.SetChar( nAt, ' ' );
 
-                aStrSelection.EraseTrailingChars( ' ' );
+                aStrSelection = comphelper::string::stripEnd(aStrSelection, ' ');
             }
         }
     }

@@ -2107,7 +2107,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
                                         *rAttr.GetEnd() - *rAttr.GetStart() ) );
 
                         sTxt = comphelper::string::remove(sTxt, 0x0a);
-                        sTxt.EraseLeadingChars().EraseTrailingChars();
+                        sTxt = comphelper::string::strip(sTxt, ' ');
 
                         if( sTxt.Len() )
                             aCmpPos = aPos;

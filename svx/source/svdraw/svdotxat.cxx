@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-
+#include <comphelper/string.hxx>
 #include <svl/style.hxx>
 #include <svx/svdotext.hxx>
 #include "svx/svditext.hxx"
@@ -282,7 +282,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             String aFam = pName->Copy(0, pName->Len() - 6);
 
             aFam.Erase(0,1);
-            aFam.EraseTrailingChars();
+            aFam = comphelper::string::stripEnd(aFam, ' ');
 
             sal_uInt16 nFam = (sal_uInt16)aFam.ToInt32();
 

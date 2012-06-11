@@ -28,6 +28,7 @@
 
 
 #include "scitems.hxx"
+#include <comphelper/string.hxx>
 #include <tools/shl.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/aeitem.hxx>
@@ -776,10 +777,9 @@ SfxItemPresentation lcl_HFPresentation
         pItem = aIter.NextItem();
     }
 
-    rText.EraseTrailingChars();
-    rText.EraseTrailingChars( '+' );
-    rText.EraseTrailingChars();
-
+    rText = comphelper::string::stripEnd(rText, ' ');
+    rText = comphelper::string::stripEnd(rText, '+');
+    rText = comphelper::string::stripEnd(rText, ' ');
     return ePresentation;
 }
 

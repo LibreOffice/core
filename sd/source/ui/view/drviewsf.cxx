@@ -30,7 +30,7 @@
 #include "DrawViewShell.hxx"
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
 #include <svx/globl3d.hxx>
 #include <svx/hlnkitem.hxx>
@@ -116,8 +116,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                 // use selected text as name for urls
                 String sReturn = pOLV->GetSelected();
                 sReturn.Erase(255);
-                sReturn.EraseTrailingChars();
-                aHLinkItem.SetName(sReturn);
+                aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
             }
         }
         else

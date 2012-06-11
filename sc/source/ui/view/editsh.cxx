@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-
+#include <comphelper/string.hxx>
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -692,8 +692,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                         // use selected text as name for urls
                         String sReturn = pActiveView->GetSelected();
                         sReturn.Erase(255);
-                        sReturn.EraseTrailingChars();
-                        aHLinkItem.SetName(sReturn);
+                        aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
                     }
                     rSet.Put(aHLinkItem);
                 }

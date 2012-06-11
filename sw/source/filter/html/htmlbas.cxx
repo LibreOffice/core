@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <hintids.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/sfx.hrc>
 #include <svl/svstdarr.hxx>
@@ -203,7 +204,7 @@ void SwHTMLParser::AddScriptSource()
             {
                 aBasicLib =
                     aToken.Copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_library) - 1 );
-                aBasicLib.EraseLeadingChars().EraseTrailingChars();
+                aBasicLib = comphelper::string::strip(aBasicLib, ' ');
             }
         }
 
@@ -214,7 +215,7 @@ void SwHTMLParser::AddScriptSource()
             {
                 aBasicModule =
                     aToken.Copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_module) - 1 );
-                aBasicModule.EraseLeadingChars().EraseTrailingChars();
+                aBasicModule = comphelper::string::strip(aBasicModule, ' ');
             }
         }
 

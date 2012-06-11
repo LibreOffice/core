@@ -57,6 +57,7 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <i18npool/lang.h>
@@ -2976,8 +2977,7 @@ sal_Bool DbFilterField::commitControl()
     if (m_aText != aText)
     {
         // check the text with the SQL-Parser
-        String aNewText(aText);
-        aNewText.EraseTrailingChars();
+        String aNewText(comphelper::string::stripEnd(aText, ' '));
         if (aNewText.Len() != 0)
         {
             ::rtl::OUString aErrorMsg;

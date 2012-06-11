@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/adrparse.hxx>
@@ -505,8 +506,7 @@ void SvxHyperlinkInternetTp::SetOnlineMode( sal_Bool /*bEnable*/ )
     // State of target-button in subject to the current url-string
     // ( Can't display any targets in an document, if there is no
     //   valid url to a document )
-    String aStrCurrentTarget( maCbbTarget.GetText() );
-    aStrCurrentTarget.EraseTrailingChars();
+    String aStrCurrentTarget(comphelper::string::stripEnd(maCbbTarget.GetText(), ' '));
 
     if( aStrCurrentTarget == aEmptyStr                ||
         aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPScheme )  ||

@@ -28,7 +28,7 @@
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-
+#include <comphelper/string.hxx>
 #include "scitems.hxx"
 
 #include <editeng/adjitem.hxx>
@@ -409,8 +409,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
                 // use selected text as name for urls
                 String sReturn = pOutView->GetSelected();
                 sReturn.Erase(255);
-                sReturn.EraseTrailingChars();
-                aHLinkItem.SetName(sReturn);
+                aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
             }
         }
         rSet.Put(aHLinkItem);

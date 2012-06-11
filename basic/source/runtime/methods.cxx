@@ -1188,9 +1188,8 @@ RTLFUNC(LTrim)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        String aStr( rPar.Get(1)->GetString() );
-        aStr.EraseLeadingChars();
-        rPar.Get(0)->PutString( aStr );
+        rtl::OUString aStr(comphelper::string::stripStart(rPar.Get(1)->GetString(), ' '));
+        rPar.Get(0)->PutString(aStr);
     }
 }
 
@@ -1438,9 +1437,8 @@ RTLFUNC(RTrim)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        String aStr( rPar.Get(1)->GetString() );
-        aStr.EraseTrailingChars();
-        rPar.Get(0)->PutString( aStr );
+        rtl::OUString aStr(comphelper::string::stripEnd(rPar.Get(1)->GetString(), ' '));
+        rPar.Get(0)->PutString(aStr);
     }
 }
 

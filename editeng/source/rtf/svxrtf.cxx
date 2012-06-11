@@ -812,9 +812,9 @@ void SvxRTFParser::ClearAttrStack()
 String& SvxRTFParser::DelCharAtEnd( String& rStr, const sal_Unicode cDel )
 {
     if( rStr.Len() && ' ' == rStr.GetChar( 0 ))
-        rStr.EraseLeadingChars();
+        rStr = comphelper::string::stripStart(rStr, ' ');
     if( rStr.Len() && ' ' == rStr.GetChar( rStr.Len()-1 ))
-        rStr.EraseTrailingChars();
+        rStr = comphelper::string::stripEnd(rStr, ' ');
     if( rStr.Len() && cDel == rStr.GetChar( rStr.Len()-1 ))
         rStr.Erase( rStr.Len()-1 );
     return rStr;

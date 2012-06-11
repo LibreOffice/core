@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <comphelper/string.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/editeng.hxx>
@@ -515,8 +514,7 @@ bool Outliner::ImpConvertEdtToOut( sal_uInt32 nPara,EditView* pView)
         }
 
         sal_uInt16 nPos = nHeadingNumberStart ? nHeadingNumberStart : nNumberingNumberStart;
-        String aLevel = aName.Copy( nPos );
-        aLevel.EraseLeadingChars( ' ' );
+        String aLevel = comphelper::string::stripStart(aName.Copy(nPos), ' ');
         nTabs = sal::static_int_cast< sal_uInt16 >(aLevel.ToInt32());
         if( nTabs )
             nTabs--; // Level 0 = "heading 1"

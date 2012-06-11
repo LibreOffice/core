@@ -30,6 +30,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <i18npool/mslangid.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -940,8 +941,7 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
                     {
                         String sSel(pOLV->GetSelected());
                         sSel.Erase(255);
-                        sSel.EraseTrailingChars();
-                        aHLinkItem.SetName(sSel);
+                        aHLinkItem.SetName(comphelper::string::stripEnd(sSel, ' '));
                     }
 
                     sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());

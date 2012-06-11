@@ -124,7 +124,7 @@
 #include <app.hrc>
 
 #include <comphelper/processfactory.hxx>
-
+#include <comphelper/string.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
 #include <langhelper.hxx>
@@ -966,8 +966,7 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
                     {
                         String sSel(pOLV->GetSelected());
                         sSel.Erase(255);
-                        sSel.EraseTrailingChars();
-                        aHLinkItem.SetName(sSel);
+                        aHLinkItem.SetName(comphelper::string::stripEnd(sSel, ' '));
                     }
 
                     sal_uInt16 nHtmlMode = ::GetHtmlMode(rView.GetDocShell());

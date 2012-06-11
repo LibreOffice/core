@@ -55,6 +55,7 @@
 #include "jumpmatrix.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <stdlib.h>
 #include <string.h>
@@ -2887,10 +2888,9 @@ void ScInterpreter::ScN()
 }
 
 void ScInterpreter::ScTrim()
-{   // Doesn't only trim but writes out twice!
-    String aVal( GetString() );
-    aVal.EraseLeadingChars();
-    aVal.EraseTrailingChars();
+{
+    // Doesn't only trim but writes out twice!
+    String aVal = comphelper::string::strip(GetString(), ' ');
     String aStr;
     register const sal_Unicode* p = aVal.GetBuffer();
     register const sal_Unicode* const pEnd = p + aVal.Len();

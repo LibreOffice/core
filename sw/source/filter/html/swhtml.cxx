@@ -1963,8 +1963,7 @@ void SwHTMLParser::NextToken( int nToken )
                 ' ' == aToken.GetChar( aToken.Len()-3 ) )
             {
                 String aComment( aToken.Copy( 3, aToken.Len()-5 ) );
-                aComment.EraseLeadingChars().EraseTrailingChars();
-                InsertComment( aComment );
+                InsertComment(comphelper::string::strip(aComment, ' '));
             }
             else
             {
@@ -3709,7 +3708,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         while( nStrPos!=STRING_NOTFOUND )
         {
             String aFName = aFace.GetToken( 0, ',', nStrPos );
-            aFName.EraseTrailingChars().EraseLeadingChars();
+            aFName = comphelper::string::strip(aFName, ' ');
             if( aFName.Len() )
             {
                 if( !bFound && pFList )

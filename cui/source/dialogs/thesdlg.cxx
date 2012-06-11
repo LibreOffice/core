@@ -50,6 +50,7 @@
 #include <unotools/lingucfg.hxx>
 #include <i18npool/mslangid.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <osl/file.hxx>
 
 #include <stack>
@@ -309,8 +310,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL SvxThesaurusDi
     {
         // try again without trailing '.' chars. It may be a word at the
         // end of a sentence and not an abbreviation...
-        String aTxt( rTerm );
-        aTxt.EraseTrailingChars( '.' );
+        String aTxt(comphelper::string::stripEnd(rTerm, '.'));
         aMeanings = xThesaurus->queryMeanings( aTxt, rLocale, rProperties );
         if (aMeanings.getLength())
         {

@@ -30,6 +30,7 @@
 #define NAVIPI_CXX
 
 #include <string>
+#include <comphelper/string.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/filter.hxx>
@@ -1238,7 +1239,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 && (!sContentFileName.Len() || sContentFileName != sFileName ))
             {
                 nRet = rEvt.mnAction;
-                sFileName.EraseTrailingChars( char(0) );
+                sFileName = comphelper::string::stripEnd(sFileName, 0);
                 sContentFileName = sFileName;
                 if(pxObjectShell)
                 {

@@ -1572,9 +1572,10 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
                     String aFontName;
                     xub_StrLen nPos = 0;
                     while( nPos != STRING_NOTFOUND )
-                    {   // Fontliste, VCL: Semikolon als Separator, HTML: Komma
+                    {
+                        // Fontliste, VCL: Semikolon als Separator, HTML: Komma
                         String aFName = rFace.GetToken( 0, ',', nPos );
-                        aFName.EraseTrailingChars().EraseLeadingChars();
+                        aFName = comphelper::string::strip(aFName, ' ');
                         if( aFontName.Len() )
                             aFontName += ';';
                         aFontName += aFName;

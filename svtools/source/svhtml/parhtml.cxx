@@ -153,8 +153,7 @@ sal_uInt32 HTMLOption::GetNumber() const
                  nToken<HTML_OPTION_CONTEXT_END) ||
                 nToken==HTML_O_VALUE,
         "GetNumber: Option not numerical" );
-    String aTmp( aValue );
-    aTmp.EraseLeadingChars();
+    String aTmp(comphelper::string::stripStart(aValue, ' '));
     sal_Int32 nTmp = aTmp.ToInt32();
     return nTmp >= 0 ? (sal_uInt32)nTmp : 0;
 }
@@ -164,8 +163,7 @@ sal_Int32 HTMLOption::GetSNumber() const
     DBG_ASSERT( (nToken>=HTML_OPTION_NUMBER_START && nToken<HTML_OPTION_NUMBER_END) ||
                 (nToken>=HTML_OPTION_CONTEXT_START && nToken<HTML_OPTION_CONTEXT_END),
         "GetSNumber: Option not numerical" );
-    String aTmp( aValue );
-    aTmp.EraseLeadingChars();
+    String aTmp(comphelper::string::stripStart(aValue, ' '));
     return aTmp.ToInt32();
 }
 

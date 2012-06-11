@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <svl/eitem.hxx>
@@ -362,7 +363,7 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 */
 
 {
-    aBuf = pEdit->GetText().EraseLeadingChars();
+    aBuf = comphelper::string::stripStart(pEdit->GetText(), ' ');
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
@@ -379,7 +380,7 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 */
 
 {
-    const String aStr( pEdit->GetText().EraseLeadingChars() );
+    const String aStr(comphelper::string::stripStart(pEdit->GetText(), ' '));
     pEdit->SetText( aStr );
     // Update the Listbox of the base template if possible
     if ( aStr != aBuf )
@@ -579,7 +580,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
         if ( aNameEd.HasFocus() )
             LoseFocusHdl( &aNameEd );
 
-        if ( !pStyle->SetName( aNameEd.GetText().EraseLeadingChars() ) )
+        if (!pStyle->SetName(comphelper::string::stripStart(aNameEd.GetText(), ' ')))
         {
             InfoBox aBox( this, SfxResId( MSG_TABPAGE_INVALIDNAME ) );
             aBox.Execute();

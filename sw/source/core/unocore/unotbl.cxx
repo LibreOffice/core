@@ -104,6 +104,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <switerator.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -915,8 +916,8 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
         sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
         if(USHRT_MAX == nNdPos)
             lcl_setString( *this, OUString(), sal_True );
-        String sFml(rFormula);
-        if( sFml.EraseLeadingChars().Len() && '=' == sFml.GetChar( 0 ) )
+        String sFml(comphelper::string::stripStart(rFormula, ' '));
+        if( sFml.Len() && '=' == sFml.GetChar( 0 ) )
                     sFml.Erase( 0, 1 );
         SwTblBoxFormula aFml( sFml );
         SwDoc* pMyDoc = GetDoc();

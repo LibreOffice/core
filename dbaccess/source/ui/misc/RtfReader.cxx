@@ -47,6 +47,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/string.hxx>
 #include <tools/color.hxx>
 #include "WExtendPages.hxx"
 #include "moduledbu.hxx"
@@ -301,8 +302,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 break;
             case RTF_CELL:
                 {
-                    aColumnName.EraseLeadingChars();
-                    aColumnName.EraseTrailingChars();
+                    aColumnName = comphelper::string::strip(aColumnName, ' ');
                     if (!aColumnName.Len() || m_bAppendFirstLine )
                         aColumnName = String(ModuleRes(STR_COLUMN_NAME));
 

@@ -72,8 +72,7 @@ String lcl_CheckFileName( const String& rNewFilePath,
             sRet += cChar;
         }
     }
-    sRet.EraseLeadingChars();
-    sRet.EraseTrailingChars();
+    sRet = comphelper::string::strip(sRet, ' ');
 
     sal_Bool bOk = sal_False;
     if( sRet.Len() )

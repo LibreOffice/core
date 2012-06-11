@@ -127,8 +127,7 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
 
 IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 {
-    String sDict = aNameEdit.GetText();
-    sDict.EraseTrailingChars();
+    String sDict = comphelper::string::stripEnd(aNameEdit.GetText(), ' ');
     // add extension for personal dictionaries
     sDict.AppendAscii(".dic");
 

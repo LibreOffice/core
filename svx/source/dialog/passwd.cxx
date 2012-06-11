@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -73,9 +74,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl)
 {
     if ( !bEmpty )
     {
-        String aPasswd = aRepeatPasswdED.GetText();
-        aPasswd.EraseLeadingChars().EraseTrailingChars();
-
+        String aPasswd = comphelper::string::strip(aRepeatPasswdED.GetText(), ' ');
         if ( !aPasswd.Len() && aOKBtn.IsEnabled() )
             aOKBtn.Disable();
         else if ( aPasswd.Len() && !aOKBtn.IsEnabled() )

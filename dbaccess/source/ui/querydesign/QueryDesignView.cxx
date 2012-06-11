@@ -957,8 +957,7 @@ namespace
             }
 
             {
-                String sTemp(aWorkStr);
-                sTemp.EraseTrailingChars( ',' );
+                String sTemp(comphelper::string::stripEnd(aWorkStr, ','));
                 aWorkStr = sTemp;
             }
 
@@ -2260,7 +2259,7 @@ namespace
                         {
                             aInfo->SetFunctionType(nFunctionType|FKT_AGGREGATE);
                             String aCol(aColumns);
-                            aInfo->SetFunction(aCol.GetToken(0,'(').EraseTrailingChars(' '));
+                            aInfo->SetFunction(comphelper::string::stripEnd(aCol.GetToken(0,'('), ' '));
                         }
                         else
                             aInfo->SetFunctionType(nFunctionType|FKT_OTHER);

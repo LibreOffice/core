@@ -68,6 +68,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 
 #include <sfx2/sfx.hrc>
 #include "dinfdlg.hrc"
@@ -193,9 +194,8 @@ String ConvertDateTime_Impl( const String& rName,
      String aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
      aStr += rWrapper.getTime( aT, sal_True, sal_False );
-     String aAuthor = rName;
-     aAuthor.EraseLeadingChars();
-     if ( aAuthor.Len() )
+     rtl::OUString aAuthor = comphelper::string::stripStart(rName, ' ');
+     if (!aAuthor.isEmpty())
      {
         aStr += pDelim;
         aStr += aAuthor;

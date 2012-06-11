@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 
@@ -244,11 +245,8 @@ String  ParaWin::GetActiveArgName()
 
 void ParaWin::SetArgument(sal_uInt16 no, const String& aString)
 {
-    if(no<aParaArray.size())
-    {
-        aParaArray[no] = aString;
-        aParaArray[no].EraseLeadingChars();
-    }
+    if (no < aParaArray.size())
+        aParaArray[no] = comphelper::string::stripStart(aString, ' ');
 }
 
 void ParaWin::DelParaArray()

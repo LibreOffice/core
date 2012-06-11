@@ -127,7 +127,7 @@ void SearchDialog::SaveConfig()
         sUserData += m_aSearchEdit.GetEntry(i);
         sUserData += '\t';
     }
-    sUserData.EraseTrailingChars( '\t' );
+    sUserData = comphelper::string::stripStart(sUserData, '\t');
     sUserData += ';';
     sUserData += String::CreateFromInt32( m_aWholeWordsBox.IsChecked() ? 1 : 0 );
     sUserData += ';';

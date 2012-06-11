@@ -3743,10 +3743,8 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 
     ScTokenArray aArr;
     pArr = &aArr;
-    aFormula = rFormula;
+    aFormula = comphelper::string::strip(rFormula, ' ');
 
-    aFormula.EraseLeadingChars();
-    aFormula.EraseTrailingChars();
     nSrcPos = 0;
     bCorrected = false;
     if ( bAutoCorrect )

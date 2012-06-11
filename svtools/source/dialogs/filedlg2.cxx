@@ -81,7 +81,7 @@ KbdListBox::PreNotify( NotifyEvent& rNEvt )
             for ( sal_uInt16 i = 1; i < nEntries; i++ )
             {
                 UniString aEntry = GetEntry ( (i + nCurrentPos) % nEntries );
-                aEntry.EraseLeadingChars( ' ' );
+                aEntry = comphelper::string::stripStart(aEntry, ' ');
                 aEntry.ToUpperAscii();
                 UniString aCompare( cCharCode );
                 aCompare.ToUpperAscii();
@@ -266,8 +266,8 @@ IMPL_LINK( ImpPathDialog, SelectHdl, ListBox *, p )
         // isolate the pure name of the entry
         // removing trainling stuff and leading spaces
         UniString aEntry( pDirList->GetSelectEntry() );
+        aEntry = comphelper::string::stripStart(aEntry, ' ');
 
-        aEntry.EraseLeadingChars( ' ' );
         sal_uInt16 nPos = aEntry.Search( '/' );
         aEntry.Erase( nPos );
 
@@ -360,7 +360,7 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
     // removing trainling stuff and leading spaces
     UniString aEntry( pBox->GetSelectEntry() );
 
-    aEntry.EraseLeadingChars( ' ' );
+    aEntry = comphelper::string::stripStart(aEntry, ' ');
     sal_uInt16 nPos = aEntry.Search( '/' );
     aEntry.Erase( nPos );
 

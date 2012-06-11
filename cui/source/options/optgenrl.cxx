@@ -44,7 +44,7 @@
 #include <svx/strarray.hxx>
 #include <svx/svxids.hrc> // SID_FIELD_GRABFOCUS
 
-#define TRIM(s) s.EraseLeadingChars().EraseTrailingChars()
+#define TRIM(s) comphelper::string::strip(s, ' ')
 
 // struct GeneralTabPage_Impl --------------------------------------------
 
@@ -346,8 +346,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
         String aTxt = pEdit->GetText();
         sal_Unicode cChar = ( aTxt.Len() > 0 ) ? aTxt.GetChar(0) : ' ';
         aShortStr.SetChar( nPos, cChar );
-        aShortStr.EraseTrailingChars();
-        aShortName.SetText( aShortStr );
+        aShortName.SetText(comphelper::string::stripEnd(aShortStr, ' '));
     }
     return 0;
 }

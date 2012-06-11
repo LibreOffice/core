@@ -57,7 +57,7 @@
 #include <com/sun/star/text/XTextEmbeddedObject.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
-
+#include <comphelper/string.hxx>
 #include <frmui.hrc>
 #include <cption.hrc>
 #include <SwStyleNameMapper.hxx>
@@ -296,11 +296,7 @@ void SwCaptionDialog::Apply()
     if ( aName == sNone )
         aOpt.SetCategory( aEmptyStr );
     else
-    {
-        aName.EraseLeadingChars( ' ' );
-        aName.EraseTrailingChars( ' ' );
-        aOpt.SetCategory( aName );
-    }
+        aOpt.SetCategory(comphelper::string::strip(aName, ' '));
     aOpt.SetNumType( (sal_uInt16)(sal_uIntPtr)aFormatBox.GetEntryData( aFormatBox.GetSelectEntryPos() ) );
     aOpt.SetSeparator( aSepEdit.IsEnabled() ? aSepEdit.GetText() : String() );
     aOpt.SetNumSeparator( aNumberingSeparatorED.GetText() );

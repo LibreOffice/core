@@ -39,6 +39,7 @@
 #include <editeng/langitem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
@@ -272,8 +273,7 @@ SwCalc::SwCalc( SwDoc& rD )
         pLclData = new LocaleDataWrapper( xMSF, aLocale );
     }
 
-    sCurrSym = pLclData->getCurrSymbol();
-    sCurrSym.EraseLeadingChars().EraseTrailingChars();
+    sCurrSym = comphelper::string::strip(pLclData->getCurrSymbol(), ' ');
     sCurrSym  = pCharClass->lowercase( sCurrSym );
 
 static sal_Char const

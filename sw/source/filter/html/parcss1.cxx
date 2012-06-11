@@ -1261,8 +1261,7 @@ sal_Bool CSS1Expression::GetURL( String& rURL  ) const
     if( aValue.Len() > 5 )
     {
         rURL = aValue.Copy( 4, aValue.Len()-5 );
-        rURL.EraseTrailingChars();
-        rURL.EraseLeadingChars();
+        rURL = comphelper::string::strip(rURL, ' ');
         bRet = sal_True;
     }
 

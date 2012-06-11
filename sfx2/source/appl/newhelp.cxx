@@ -1073,7 +1073,7 @@ void SearchTabPage_Impl::RememberSearchText( const String& rSearchText )
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
 {
-    String aSearchText = TRIM( aSearchED.GetText() );
+    String aSearchText = comphelper::string::strip(aSearchED.GetText(), ' ');
     if ( aSearchText.Len() > 0 )
     {
         EnterWait();
@@ -1126,7 +1126,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl)
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
 {
-    String aSearchText = TRIM( aSearchED.GetText() );
+    String aSearchText = comphelper::string::strip(aSearchED.GetText(), ' ');
     aSearchBtn.Enable( aSearchText.Len() > 0 );
     return 0;
 }
@@ -3163,7 +3163,7 @@ void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
         }
 
         // When the SearchPage opens the help doc, then select all words, which are equal to its text
-        String sSearchText = TRIM( pIndexWin->GetSearchText() );
+        String sSearchText = comphelper::string::strip(pIndexWin->GetSearchText(), ' ');
         if ( sSearchText.Len() > 0 )
             pTextWin->SelectSearchText( sSearchText, pIndexWin->IsFullWordSearch() );
 

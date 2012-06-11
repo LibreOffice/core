@@ -2562,8 +2562,8 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
         }
     }
 
-    strFieldList.EraseTrailingChars(';');
-    sFieldDisplayNames.EraseTrailingChars(';');
+    strFieldList = comphelper::string::stripEnd(strFieldList, ';');
+    sFieldDisplayNames = comphelper::string::stripEnd(sFieldDisplayNames, ';');
 
     if (pfmscContextInfo->arrFields.empty())
     {

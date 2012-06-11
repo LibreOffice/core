@@ -28,6 +28,7 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/sfx.hrc>
@@ -3005,7 +3006,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
             sRel = aURL.Copy( nPos+1 );
             aURL.Erase( nPos );
         }
-        aURL.EraseLeadingChars().EraseTrailingChars();
+        aURL = comphelper::string::strip(aURL, ' ');
 
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();

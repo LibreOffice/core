@@ -31,7 +31,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-
+#include <comphelper/string.hxx>
 #include "rangeseq.hxx"
 #include "document.hxx"
 #include "dociter.hxx"
@@ -474,7 +474,7 @@ sal_Bool ScByteSequenceToString::GetString( String& rString, const uno::Any& rAn
     {
         rString = String( (const sal_Char*)aSeq.getConstArray(),
                             (xub_StrLen)aSeq.getLength(), nEncoding );
-        rString.EraseTrailingChars( (sal_Unicode) 0 );
+        rString = comphelper::string::stripEnd(rString, 0);
         return sal_True;
     }
     return false;

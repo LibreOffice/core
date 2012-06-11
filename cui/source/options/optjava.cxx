@@ -53,7 +53,6 @@
 // define ----------------------------------------------------------------
 
 #define CLASSPATH_DELIMITER SAL_PATHSEPARATOR
-#define STRIM( s )          s.EraseLeadingChars().EraseTrailingChars()
 #define BUTTON_BORDER       2
 #define RESET_TIMEOUT       300
 
@@ -745,8 +744,8 @@ SvxJavaParameterDlg::~SvxJavaParameterDlg()
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 {
-    String sParam = STRIM( m_aParameterEdit.GetText() );
-    m_aAssignBtn.Enable( sParam.Len() > 0 );
+    rtl::OUString sParam = comphelper::string::strip(m_aParameterEdit.GetText(), ' ');
+    m_aAssignBtn.Enable(!sParam.isEmpty());
 
     return 0;
 }
@@ -755,8 +754,8 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
 {
-    String sParam = STRIM( m_aParameterEdit.GetText() );
-    if ( sParam.Len() > 0 )
+    rtl::OUString sParam = comphelper::string::strip(m_aParameterEdit.GetText(), ' ');
+    if (!sParam.isEmpty())
     {
         sal_uInt16 nPos = m_aAssignedList.GetEntryPos( sParam );
         if ( LISTBOX_ENTRY_NOTFOUND == nPos )

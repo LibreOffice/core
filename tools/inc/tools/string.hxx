@@ -245,9 +245,6 @@ public:
     UniString&          Fill( xub_StrLen nCount, sal_Unicode cFillChar = ' ' );
     UniString&          Expand( xub_StrLen nCount, sal_Unicode cExpandChar = ' ' );
 
-    UniString&          EraseLeadingChars( sal_Unicode c = ' ' );
-    UniString&          EraseTrailingChars( sal_Unicode c = ' ' );
-
     UniString&          ToLowerAscii();
     UniString&          ToUpperAscii();
 

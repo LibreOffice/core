@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <comphelper/string.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <svl/zforlist.hxx>
@@ -1764,7 +1765,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         // #i43959# For scientific numbers, "#" in the integer part forces a digit,
         // so it has to be removed if nLeading is 0 (".00E+0", not "#.00E+0").
 
-        aNumStr.EraseLeadingChars( (sal_Unicode)'#' );
+        aNumStr = comphelper::string::stripStart(aNumStr, '#');
     }
 
     if ( nEmbeddedCount )

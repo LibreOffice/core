@@ -3401,7 +3401,7 @@ QueryFolderNameDialog::QueryFolderNameDialog
 IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl)
 {
     // trim the strings
-    aNameEdit.SetText( aNameEdit.GetText().EraseLeadingChars().EraseTrailingChars() );
+    aNameEdit.SetText(comphelper::string::strip(aNameEdit.GetText(), ' '));
     EndDialog( RET_OK );
     return 1;
 }
@@ -3410,8 +3410,7 @@ IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl)
 IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl)
 {
     // trim the strings
-    String aName = aNameEdit.GetText();
-    aName.EraseLeadingChars().EraseTrailingChars();
+    String aName = comphelper::string::strip(aNameEdit.GetText(), ' ');
     if ( aName.Len() )
     {
         if ( !aOKBtn.IsEnabled() )

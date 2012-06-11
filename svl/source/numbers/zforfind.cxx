@@ -1132,8 +1132,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                         else if (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' ')
                         {
                             // Trailing blanks in input.
-                            String aStr( sStrArray[nNext]);
-                            aStr.EraseTrailingChars(' ');
+                            String aStr(comphelper::string::stripEnd(sStrArray[nNext], ' '));
                             // Expand again in case of pattern "M. D. " and
                             // input "M. D.  ", maybe fetched far, but..
                             aStr.Expand( rPat.getLength() - nPat, ' ');
@@ -1206,8 +1205,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, xub_S
                     {
                         // The same ugly trailing blanks check as in
                         // IsAcceptedDatePattern().
-                        String aStr( sStrArray[nNext]);
-                        aStr.EraseTrailingChars(' ');
+                        String aStr(comphelper::string::stripEnd(sStrArray[nNext], ' '));
                         aStr.Expand( rPat.getLength() - nPat, ' ');
                         bOk = (rPat.indexOf( aStr, nPat) == nPat);
                     }
@@ -2543,9 +2541,8 @@ bool ImpSvNumberInputScan::IsNumberFormatMain(
         {
             // Here we may change the original, we don't need it anymore.
             // This saves copies and ToUpper() in GetLogical() and is faster.
+            sStrArray[0] = comphelper::string::strip(sStrArray[0], ' ');
             String& rStrArray = sStrArray[0];
-            rStrArray.EraseTrailingChars( ' ' );
-            rStrArray.EraseLeadingChars( ' ' );
             nLogical = GetLogical( rStrArray );
             if ( nLogical )
             {

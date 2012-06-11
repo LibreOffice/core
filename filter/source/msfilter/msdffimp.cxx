@@ -3961,14 +3961,14 @@ rtl::OUString SvxMSDffManager::MSDFFReadZString(SvStream& rIn,
     if (!nLen)
         return rtl::OUString();
 
-    String sBuf;
+    rtl::OUString sBuf;
 
     if( bUniCode )
         sBuf = read_uInt16s_ToOUString(rIn, nLen/2);
     else
         sBuf = read_uInt8s_ToOUString(rIn, nLen, RTL_TEXTENCODING_MS_1252);
 
-    return sBuf.EraseTrailingChars( 0 );
+    return comphelper::string::stripEnd(sBuf, 0);
 }
 
 static Size lcl_GetPrefSize(const Graphic& rGraf, MapMode aWanted)

@@ -63,6 +63,7 @@
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star::beans;
@@ -3116,7 +3117,7 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK_NOARG(AddConditionDialog, ResultHdl)
     {
-        String sCondition = m_aConditionED.GetText().EraseLeadingChars().EraseTrailingChars();
+        String sCondition = comphelper::string::strip(m_aConditionED.GetText(), ' ');
         String sResult;
         if ( sCondition.Len() > 0 )
         {

@@ -71,9 +71,10 @@
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <unotools/securityoptions.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
@@ -1658,8 +1659,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
     if( rKV.GetKey().CompareIgnoreCaseToAscii( "refresh" ) == COMPARE_EQUAL && rKV.GetValue().Len() )
     {
         sal_uInt32 nTime = aValue.GetToken(  0, ';' ).ToInt32() ;
-        String aURL = aValue.GetToken( 1, ';' );
-        aURL.EraseTrailingChars().EraseLeadingChars();
+        String aURL = comphelper::string::strip(aValue.GetToken( 1, ';' ), ' ');
         uno::Reference<document::XDocumentProperties> xDocProps(
             pDoc->getDocProperties());
         if( aURL.Copy(0, 4).CompareIgnoreCaseToAscii( "url=" ) == COMPARE_EQUAL )

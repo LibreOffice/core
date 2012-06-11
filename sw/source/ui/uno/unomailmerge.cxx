@@ -37,6 +37,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/text/MailMergeType.hpp>
@@ -787,8 +788,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
             String::CreateFromAscii( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
-    String aExtension( pSfxFlt->GetDefaultExtension() );
-    aExtension.EraseLeadingChars( '*' );
+    String aExtension(comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(), '*'));
     TempFile aTempFile( C2U("SwMM"), &aExtension );
     aTmpFileName = aTempFile.GetName();
 

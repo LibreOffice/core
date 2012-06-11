@@ -634,7 +634,7 @@ IMAGE_SETEVENT:
     }
 
     // Image-Map setzen
-    aMap.EraseTrailingChars();
+    aMap = comphelper::string::stripEnd(aMap, ' ');
     if( aMap.Len() )
     {
         // Da wir nur lokale Image-Maps kennen nehmen wireinfach alles

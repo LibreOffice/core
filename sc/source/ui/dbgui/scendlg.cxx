@@ -32,6 +32,7 @@
 
 
 #include "scitems.hxx"
+#include <comphelper/string.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 #include <sfx2/objsh.hxx>
@@ -209,12 +210,10 @@ void ScNewScenarioDlg::SetScenarioData( const rtl::OUString& rName, const rtl::O
 
 IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 {
-    String      aName   ( aEdName.GetText() );
+    String      aName = comphelper::string::strip(aEdName.GetText(), ' ');
     ScDocument* pDoc    = ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData()->GetDocument();
 
-    aName.EraseLeadingChars( ' ' );
-    aName.EraseTrailingChars( ' ' );
     aEdName.SetText( aName );
 
     if ( !pDoc->ValidTabName( aName ) )

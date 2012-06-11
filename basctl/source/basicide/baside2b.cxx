@@ -126,9 +126,8 @@ void lcl_SeparateNameAndIndex( const String& rVName, String& rVar, String& rInde
         {
             rIndex = rVar.Copy( nIndexStart+1, nIndexEnd-nIndexStart-1 );
             rVar.Erase( nIndexStart );
-            rVar.EraseTrailingChars();
-            rIndex.EraseLeadingChars();
-            rIndex.EraseTrailingChars();
+            rVar = comphelper::string::stripEnd(rVar, ' ');
+            rIndex = comphelper::string::strip(rIndex, ' ');
         }
     }
 
@@ -1948,8 +1947,7 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
             if( !pItem->mpObject && (pItem->mpArray == NULL || pItem->nDimLevel == pItem->nDimCount) )
             {
                 aEditingRes = SvHeaderTabListBox::GetEntryText( pEntry, ITEM_ID_VALUE-1 );
-                aEditingRes.EraseLeadingChars();
-                aEditingRes.EraseTrailingChars();
+                aEditingRes = comphelper::string::strip(aEditingRes, ' ');
                 bEdit = sal_True;
             }
         }
@@ -1966,9 +1964,7 @@ sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
     String aVName( pItem->maName );
 
-    String aResult = rNewText;
-    aResult.EraseLeadingChars();
-    aResult.EraseTrailingChars();
+    String aResult = comphelper::string::strip(rNewText, ' ');
 
     sal_uInt16 nResultLen = aResult.Len();
     sal_Unicode cFirst = aResult.GetChar( 0 );

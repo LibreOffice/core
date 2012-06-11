@@ -731,8 +731,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
             if( pCrsr->GetNext() == pCrsr )
             {
                 // einfach Selection -> Text ueberpruefen
-                String sTxt( GetSelTxt() );
-                sTxt.EraseTrailingChars();
+                String sTxt(comphelper::string::stripEnd(GetSelTxt(), ' '));
                 if( sTxt == rStr )
                     bDelTxt = bInsTxt = sal_False;
             }
@@ -787,7 +786,7 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                                     *rAttr.GetEnd() - *rAttr.GetStart() ) );
 
                 sTxt = comphelper::string::remove(sTxt, 0x0a);
-                sTxt.EraseLeadingChars().EraseTrailingChars();
+                sTxt = comphelper::string::strip(sTxt, ' ');
 
                 if( sTxt.Len() )
                 {

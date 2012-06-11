@@ -34,6 +34,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -182,10 +183,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
             String sExt;
             if ( pFilter )
-            {
-                sExt = pFilter->GetDefaultExtension();
-                sExt.EraseLeadingChars( '*' );
-            }
+                sExt = ::comphelper::string::stripStart(pFilter->GetDefaultExtension(), '*');
             else
                 sExt = String::CreateFromAscii(".rpt");
 

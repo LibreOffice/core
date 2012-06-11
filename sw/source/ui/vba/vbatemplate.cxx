@@ -29,10 +29,10 @@
 #include <vbahelper/vbahelper.hxx>
 #include "wordvbahelper.hxx"
 #include "vbaautotextentry.hxx"
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XAutoTextContainer.hpp>
-#include <tools/urlobj.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 
 using namespace ::ooo::vba;
@@ -51,9 +51,7 @@ String lcl_CheckGroupName( const String& rGroupName )
             sRet += cChar;
         }
     }
-    sRet.EraseLeadingChars();
-    sRet.EraseTrailingChars();
-    return sRet;
+    return comphelper::string::strip(sRet, ' ');
 }
 
 

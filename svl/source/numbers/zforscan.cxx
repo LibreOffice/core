@@ -28,6 +28,7 @@
 
 
 #include <stdlib.h>
+#include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/charclass.hxx>
@@ -487,8 +488,7 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
         if (nPos > 0)
         {
             sStr.Erase(0, nPos);
-            sStr.EraseLeadingChars();
-            sStr.EraseTrailingChars();
+            sStr = comphelper::string::strip(sStr, ' ');
             if (bConvertMode)
             {
                 pFormatter->ChangeIntl(eNewLnge);
@@ -498,8 +498,7 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
             else
                 sStr.Insert(rColorWord,0);
             sString.Erase(0, nPos);
-            sString.EraseLeadingChars();
-            sString.EraseTrailingChars();
+            sString = comphelper::string::strip(sString, ' ');
 
             if ( CharClass::isAsciiNumeric( sString ) )
             {

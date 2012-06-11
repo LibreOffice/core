@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <comphelper/string.hxx>
 #include <tools/string.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
@@ -447,8 +448,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         else if (pFldTyp->GetName() != "HTML_OFF")
             return rWrt;
 
-        String rTxt( pFld->GetPar2() );
-        rTxt.EraseLeadingChars().EraseTrailingChars();
+        String rTxt(comphelper::string::strip(pFld->GetPar2(), ' '));
         rWrt.Strm() << '<';
         if( !bOn )
             rWrt.Strm() << '/';
@@ -485,8 +485,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
                  '>' == rComment.GetChar(rComment.Len()-1) &&
                  rComment.Copy(0,5).EqualsIgnoreCaseAscii("HTML:") )
         {
-            String sComment( rComment.Copy(5) );
-            sComment.EraseLeadingChars();
+            String sComment(comphelper::string::stripStart(rComment.Copy(5), ' '));
             if( '<' == sComment.GetChar(0) )
             {
                 sComment = convertLineEnd(sComment, GetSystemLineEnd());

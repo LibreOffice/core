@@ -30,7 +30,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
+#include <comphelper/string.hxx>
 #include <tools/shl.hxx>
 #include <swtypes.hxx>
 #include <helpid.h>
@@ -753,11 +753,7 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
         if(aName == sNone)
             pOpt->SetCategory(aEmptyStr);
         else
-        {
-            aName.EraseLeadingChars (' ');
-            aName.EraseTrailingChars(' ');
-            pOpt->SetCategory(aName);
-        }
+            pOpt->SetCategory(comphelper::string::strip(aName, ' '));
         pOpt->SetNumType((sal_uInt16)(sal_uLong)aFormatBox.GetEntryData(aFormatBox.GetSelectEntryPos()));
         pOpt->SetCaption(aTextEdit.IsEnabled() ? aTextEdit.GetText() : aEmptyStr );
         pOpt->SetPos(aPosBox.GetSelectEntryPos());

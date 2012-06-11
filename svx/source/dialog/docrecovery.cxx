@@ -35,9 +35,10 @@
 #include "docrecovery.hrc"
 
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/configurationhelper.hxx>
+#include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/xtextedt.hxx>
 #include <tools/urlobj.hxx>
@@ -1522,7 +1523,7 @@ sal_Bool BrokenRecoveryDialog::isExecutionNeeded()
 //===============================================
 IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
 {
-    String sPhysicalPath = m_aSaveDirED.GetText().EraseLeadingChars().EraseTrailingChars();
+    String sPhysicalPath = comphelper::string::strip(m_aSaveDirED.GetText(), ' ');
     rtl::OUString sURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPhysicalPath, sURL );
     m_sSavePath = sURL;

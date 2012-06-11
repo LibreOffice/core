@@ -68,6 +68,7 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/dbtools.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -574,10 +575,9 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 
             for ( size_t i=0; i<2; ++i )
             {
-                sPurePostfix = aPostfix[i];
-                sPurePostfix.EraseLeadingChars(' ');
-                sPurePostfix.EraseLeadingChars('(');
-                sPurePostfix.EraseTrailingChars(')');
+                sPurePostfix = comphelper::string::stripStart(aPostfix[i], ' ');
+                sPurePostfix = comphelper::string::stripStart(sPurePostfix, '(');
+                sPurePostfix = comphelper::string::stripEnd(sPurePostfix, ')');
                 sRealName = sFieldName;
                 sRealName += '_';
                 sRealName += sPurePostfix;

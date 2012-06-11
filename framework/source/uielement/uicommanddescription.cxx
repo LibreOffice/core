@@ -57,6 +57,7 @@
 
 #include <vcl/mnemonic.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -324,7 +325,7 @@ void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, 
     rStr.SearchAndReplaceAllAscii(
         "%PRODUCTNAME", utl::ConfigManager::getProductName() );
     rCmdInfo.aLabel       = ::rtl::OUString( rStr );
-    rStr.EraseTrailingChars( '.' ); // Remove "..." from string
+    rStr = comphelper::string::stripEnd(rStr, '.'); // Remove "..." from string
     rCmdInfo.aCommandName = ::rtl::OUString( MnemonicGenerator::EraseAllMnemonicChars( rStr ));
     rCmdInfo.bCommandNameCreated = sal_True;
 }

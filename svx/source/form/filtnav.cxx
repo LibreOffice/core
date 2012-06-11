@@ -44,9 +44,9 @@
 /** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
-#include <svx/fmtools.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -59,6 +59,7 @@
 #include <sfx2/request.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/fmshell.hxx>
+#include <svx/fmtools.hxx>
 #include <svx/svxids.hrc>
 #include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
@@ -1233,9 +1234,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUStrin
     DBG_ASSERT(((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem),
                     "FmFilterNavigator::EditedEntry() wrong entry");
 
-    UniString aText(rNewText);
-    aText.EraseTrailingChars();
-    aText.EraseLeadingChars();
+    UniString aText(comphelper::string::strip(rNewText, ' '));
     if (aText.Len() == 0)
     {
         // deleting the entry asynchron

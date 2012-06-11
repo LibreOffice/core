@@ -1582,7 +1582,7 @@ String  SwView::GetSelectionTextParam( sal_Bool bCompleteWrds,
 
     GetWrtShell().GetSelectedText( sReturn );
     if( bEraseTrail )
-        sReturn.EraseTrailingChars();
+        sReturn = comphelper::string::stripEnd(sReturn, ' ');
     return sReturn;
 }
 

@@ -30,7 +30,7 @@
 
 #define _SW_FRMVALID_HXX
 #include <hintids.hxx>
-
+#include <comphelper/string.hxx>
 #include <svl/globalnameitem.hxx>
 #include <svl/ownlist.hxx>
 #include <sfx2/frmdescr.hxx>
@@ -850,8 +850,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     {
                         String sReturn = rSh.GetSelTxt();
                         sReturn.Erase(255);
-                        sReturn.EraseTrailingChars();
-                        aHLinkItem.SetName(sReturn);
+                        aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
                     }
 
                     aHLinkItem.SetInsertMode((SvxLinkInsertMode)(aHLinkItem.GetInsertMode() |

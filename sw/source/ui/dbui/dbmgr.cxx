@@ -102,8 +102,9 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/mail/MailAttachment.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <mailmergehelper.hxx>
 #include <maildispatcher.hxx>
 #include <svtools/htmlcfg.hxx>
@@ -1012,8 +1013,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             sLeading = aEntry.GetBase();
                         aEntry.removeSegment();
                         sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
-                        String sExt( pStoreToFilter->GetDefaultExtension() );
-                        sExt.EraseLeadingChars('*');
+                        String sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
                         aTempFile = std::auto_ptr< utl::TempFile >(
                                 new utl::TempFile(sLeading,&sExt,&sPath ));
                         if( bAsSingleFile )

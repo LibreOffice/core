@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <svtools/filedlg.hxx>
 #include <vcl/msgbox.hxx>
 #include "logindlg.hxx"
@@ -214,10 +215,8 @@ void LoginDialog::EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled )
 IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl)
 {
     // trim the strings
-    aNameED.SetText( aNameED.GetText().EraseLeadingChars().
-        EraseTrailingChars() );
-    aPasswordED.SetText( aPasswordED.GetText().EraseLeadingChars().
-        EraseTrailingChars() );
+    aNameED.SetText(comphelper::string::strip(aNameED.GetText(), ' '));
+    aPasswordED.SetText(comphelper::string::strip(aPasswordED.GetText(), ' '));
     EndDialog( RET_OK );
     return 1;
 }

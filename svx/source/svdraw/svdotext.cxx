@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <comphelper/string.hxx>
 #include <svx/svdotext.hxx>
 #include "svx/svditext.hxx"
 #include <svx/svdpagv.hxx>  // for the request in Paint to see whether
@@ -998,8 +999,7 @@ void SdrTextObj::TakeObjNameSingul(XubString& rName) const
     if(pOutlinerParaObject && eTextKind != OBJ_OUTLINETEXT)
     {
         // shouldn't currently cause any problems at OUTLINETEXT
-        XubString aStr2(pOutlinerParaObject->GetTextObject().GetText(0));
-        aStr2.EraseLeadingChars();
+        XubString aStr2(comphelper::string::stripStart(pOutlinerParaObject->GetTextObject().GetText(0), ' '));
 
         // avoid non expanded text portions in object name
         // (second condition is new)

@@ -36,6 +36,7 @@
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include "xmlstrings.hrc"
 #include "xmlEnums.hxx"
@@ -601,8 +602,7 @@ void ODBExport::exportConnectionData()
             {
                 SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
                 {
-                    String sType = m_aTypeCollection.getPrefix(sValue);
-                    sType.EraseTrailingChars(':');
+                    String sType = comphelper::string::stripEnd(m_aTypeCollection.getPrefix(sValue), ':');
                     AddAttribute(XML_NAMESPACE_DB,XML_TYPE,sType);
                     AddAttribute(XML_NAMESPACE_DB,XML_HOSTNAME,sHostName);
                     if ( nPort != -1 )

@@ -1315,8 +1315,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
                 SfxItemSet aBoxSet( pCurShell->GetAttrPool(),
                                 RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
 
-                String sFml( rData.sPar2 );
-                if( sFml.EraseLeadingChars().Len() &&
+                String sFml(comphelper::string::stripStart(rData.sPar2, ' '));
+                if( sFml.Len() &&
                     '=' == sFml.GetChar( 0 ) )
                     sFml.Erase( 0, 1 );
 

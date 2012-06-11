@@ -136,8 +136,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     if( !rName.Len() )
         return RTFFLD_UNKNOWN;
 
-    String sNm( rName );
-    sNm = sNm.EraseLeadingChars().GetToken(0, ' ');
+    String sNm(comphelper::string::stripStart(rName, ' ').getToken(0, ' '));
     OSL_ENSURE( sNm.Len(), "Feldname hat keine Laenge!" );
     if( !sNm.Len() )
         return RTFFLD_UNKNOWN;
@@ -208,9 +207,9 @@ public:
 };
 
 RtfFieldSwitch::RtfFieldSwitch( const String& rParam )
-    : sParam( rParam ), nCurPos( 0  )
+    : nCurPos( 0  )
 {
-    sParam.EraseTrailingChars().EraseLeadingChars();
+    sParam = comphelper::string::strip(rParam, ' ');
 }
 
 sal_Unicode RtfFieldSwitch::GetSwitch( String& rParam )
@@ -239,7 +238,7 @@ sal_Unicode RtfFieldSwitch::GetSwitch( String& rParam )
 
     sParam.Erase( 0, nCurPos + nOffset );
     rParam = sParam.GetToken( 0, c );
-    sParam.Erase( 0, rParam.Len() + nOffset ).EraseLeadingChars();
+    sParam = comphelper::string::stripStart(sParam.Erase(0, rParam.Len() + nOffset), ' ');
     if( '\\' == c )
         rParam = comphelper::string::stripEnd(rParam, ' ');
     nCurPos = 0;
@@ -869,7 +868,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     default:
         {
             // keines von den bekannten Feldern, also eine neues UserField
-            aSaveStr.EraseLeadingChars().EraseTrailingChars();
+            aSaveStr = comphelper::string::strip(aSaveStr, ' ');
             SwUserFieldType aTmp( pDoc, aSaveStr );
             SwUserField aUFld( (SwUserFieldType*)pDoc->InsertFldType( aTmp ));
             aUFld.ChangeFormat( UF_STRING );

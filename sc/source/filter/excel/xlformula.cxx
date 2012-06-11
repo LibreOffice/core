@@ -677,7 +677,7 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
         {
             String aToken( aString.GetToken( 0, cStringSep, nStringIx ) );
             if( bTrimLeadingSpaces )
-                aToken.EraseLeadingChars( ' ' );
+                aToken = comphelper::string::stripStart(aToken, ' ');
             if( nToken > 0 )
                 rScTokArr.AddOpCode( ocSep );
             rScTokArr.AddString( aToken );

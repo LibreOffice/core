@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include "hintids.hxx"
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/whiter.hxx>
@@ -1217,7 +1218,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         while( nStrPos != STRING_NOTFOUND )
         {
             String aName = rName.GetToken( 0, ';', nStrPos );
-            aName.EraseTrailingChars().EraseLeadingChars();
+            aName = comphelper::string::strip(aName, ' ');
             if( !aName.Len() )
                 continue;
 
