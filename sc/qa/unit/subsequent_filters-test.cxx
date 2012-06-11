@@ -101,6 +101,8 @@ public:
     void testRangeNameXLSX();
     void testFunctionsODS();
     void testDatabaseRangesODS();
+    void testDatabaseRangesXLS();
+    void testDatabaseRangesXLSX();
     void testFormatsODS();
     void testFormatsXLS();
     void testFormatsXLSX();
@@ -127,6 +129,8 @@ public:
     CPPUNIT_TEST(testRangeNameXLSX);
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
+    CPPUNIT_TEST(testDatabaseRangesXLS);
+    CPPUNIT_TEST(testDatabaseRangesXLSX);
     CPPUNIT_TEST(testFormatsODS);
     CPPUNIT_TEST(testFormatsXLS);
     CPPUNIT_TEST(testFormatsXLSX);
@@ -318,13 +322,10 @@ void ScFiltersTest::testFunctionsODS()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testDatabaseRangesODS()
-{
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("database."));
-    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
-    xDocSh->DoHardRecalc(true);
+namespace {
 
-    ScDocument* pDoc = xDocSh->GetDocument();
+void testDBRanges_Impl(ScDocument* pDoc, sal_Int32 nFormat)
+{
     ScDBCollection* pDBCollection = pDoc->GetDBCollection();
     CPPUNIT_ASSERT_MESSAGE("no database collection", pDBCollection);
 
@@ -343,15 +344,59 @@ void ScFiltersTest::testDatabaseRangesODS()
     CPPUNIT_ASSERT_MESSAGE("Sheet1: row 4-5 should be hidden", bHidden && nRow1 == 4 && nRow2 == 5);
     bHidden = pDoc->RowHidden(6, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("Sheet1: row 6-end should be visible", !bHidden && nRow1 == 6 && nRow2 == MAXROW);
+    if(nFormat == ODS) //excel doesn't support named db ranges
+    {
+        double aValue;
+        pDoc->GetValue(0,10,1, aValue);
+        rtl::OUString aString;
+        CPPUNIT_ASSERT_MESSAGE("Sheet2: A11: formula result is incorrect", aValue == 4);
+        pDoc->GetValue(1, 10, 1, aValue);
+        CPPUNIT_ASSERT_MESSAGE("Sheet2: B11: formula result is incorrect", aValue == 2);
+    }
     double aValue;
-    pDoc->GetValue(0,10,1, aValue);
+    pDoc->GetValue(3,10,1, aValue);
     rtl::OUString aString;
-    pDoc->GetFormula(0,10,1,aString);
-    rtl::OString aOString;
-    aOString = rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
-    CPPUNIT_ASSERT_MESSAGE("Sheet2: A11: formula result is incorrect", aValue == 4);
-    pDoc->GetValue(1, 10, 1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("Sheet2: B11: formula result is incorrect", aValue == 2);
+    CPPUNIT_ASSERT_MESSAGE("Sheet2: D11: formula result is incorrect", aValue == 4);
+    pDoc->GetValue(4, 10, 1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("Sheet2: E11: formula result is incorrect", aValue == 2);
+
+}
+
+}
+
+void ScFiltersTest::testDatabaseRangesODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("database."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 0);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    testDBRanges_Impl(pDoc, ODS);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDatabaseRangesXLS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("database."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 1);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    testDBRanges_Impl(pDoc, XLS);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDatabaseRangesXLSX()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("database."));
+    ScDocShellRef xDocSh = loadDoc(aFileNameBase, 2);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    testDBRanges_Impl(pDoc, XLSX);
     xDocSh->DoClose();
 }
 
