@@ -306,6 +306,7 @@ private:
 
     // TableManagers are stacked: one for each stream to avoid any confusion
     std::stack< boost::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
+    TableDataHandler_t::Pointer_t m_pTableHandler;
 
     //each context needs a stack of currently used attributes
     FIB                     m_aFIB;
@@ -549,6 +550,12 @@ public:
         boost::shared_ptr< DomainMapperTableManager > pMngr(
                 new DomainMapperTableManager( m_eDocumentType == DOCUMENT_OOXML || m_eDocumentType == DOCUMENT_RTF, m_eDocumentType == DOCUMENT_RTF ) );
         m_aTableManagers.push( pMngr );
+    }
+
+    void appendTableHandler( )
+    {
+        if (m_pTableHandler.get())
+            m_aTableManagers.top()->setHandler(m_pTableHandler);
     }
 
     void popTableManager( )
