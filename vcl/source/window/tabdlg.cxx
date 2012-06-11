@@ -231,8 +231,13 @@ TabDialog::TabDialog( Window* pParent, const ResId& rResId ) :
 {
     ImplInitTabDialogData();
     rResId.SetRT( RSC_TABDIALOG );
-    ImplInit( pParent, ImplInitRes( rResId ) );
-    ImplLoadRes( rResId );
+    init(pParent, rResId);
+}
+
+TabDialog::TabDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription ) :
+    Dialog(pParent, rID, rUIXMLDescription, WINDOW_TABDIALOG)
+{
+    ImplInitTabDialogData();
 }
 
 // -----------------------------------------------------------------------

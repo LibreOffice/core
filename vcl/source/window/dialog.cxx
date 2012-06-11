@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
+
 #include <tools/debug.hxx>
 
 #include <tools/rc.h>
@@ -470,6 +474,55 @@ Dialog::Dialog( WindowType nType ) :
     ImplInitDialogData();
 }
 
+#define BASEPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIConfig"))
+#define RELPATH_SHARE_LAYER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice.cfg"))
+#define SERVICENAME_PATHSETTINGS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings"))
+
+rtl::OUString getUIRootDir()
+{
+    namespace css = ::com::sun::star;
+
+    /*to-do, check if user config has an override before using shared one, etc*/
+    css::uno::Reference< css::beans::XPropertySet > xPathSettings(
+        ::comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_PATHSETTINGS),
+                css::uno::UNO_QUERY_THROW);
+
+    ::rtl::OUString sShareLayer;
+    xPathSettings->getPropertyValue(BASEPATH_SHARE_LAYER) >>= sShareLayer;
+
+    // "UIConfig" is a "multi path" ... use first part only here!
+    sal_Int32 nPos = sShareLayer.indexOf(';');
+    if (nPos > 0)
+        sShareLayer = sShareLayer.copy(0, nPos);
+
+    // Note: May be an user uses URLs without a final slash! Check it ...
+    nPos = sShareLayer.lastIndexOf('/');
+    if (nPos != sShareLayer.getLength()-1)
+        sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+
+    sShareLayer += RELPATH_SHARE_LAYER; // folder
+    sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    /*to-do, can we merge all this foo with existing soffice.cfg finding code, etc*/
+    return sShareLayer;
+}
+
+Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription)
+    : SystemWindow( WINDOW_DIALOG )
+{
+    ImplInitDialogData();
+    ImplInit(pParent, WB_SIZEMOVE|WB_3DLOOK|WB_CLOSEABLE);
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir() + rUIXMLDescription, rID);
+}
+
+Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType)
+    : SystemWindow( nType )
+{
+    ImplInitDialogData();
+    ImplInit(pParent, WB_SIZEMOVE|WB_3DLOOK|WB_CLOSEABLE);
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir() + rUIXMLDescription, rID);
+}
+
+
 // -----------------------------------------------------------------------
 
 Dialog::Dialog( Window* pParent, WinBits nStyle ) :
@@ -477,6 +530,47 @@ Dialog::Dialog( Window* pParent, WinBits nStyle ) :
 {
     ImplInitDialogData();
     ImplInit( pParent, nStyle );
+}
+
+// -----------------------------------------------------------------------
+
+Dialog::Dialog( Window* pParent, const ResId& rResId ) :
+    SystemWindow( WINDOW_DIALOG )
+{
+    ImplInitDialogData();
+    rResId.SetRT( RSC_DIALOG );
+    init(pParent, rResId);
+}
+
+WinBits Dialog::init(Window *pParent, const ResId& rResId)
+{
+    WinBits nStyle = ImplInitRes( rResId );
+
+    ImplInit( pParent, nStyle );
+
+    sal_Int32 nUIid = static_cast<sal_Int32>(rResId.GetId());
+    rtl::OUString sPath = rtl::OUStringBuffer(getUIRootDir()).
+        append(rResId.GetResMgr()->getPrefixName()).
+        append("/ui/").
+        append(nUIid).
+        appendAscii(".ui").
+        makeStringAndClear();
+    fprintf(stderr, "path %s id %d\n", rtl::OUStringToOString(sPath, RTL_TEXTENCODING_UTF8).getStr(), nUIid);
+
+    osl::File aUIFile(sPath);
+    osl::File::RC error = aUIFile.open(osl_File_OpenFlag_Read);
+    if (error == osl::File::E_None)
+    {
+        //good, use the preferred GtkBuilder xml
+        m_pUIBuilder = new VclBuilder(this, sPath, rtl::OString::valueOf(nUIid));
+    }
+    else
+    {
+        //fallback to using the binary resource file
+        ImplLoadRes( rResId );
+    }
+
+    return nStyle;
 }
 
 // -----------------------------------------------------------------------
@@ -1187,12 +1281,16 @@ ModelessDialog::ModelessDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_MODELESSDIALOG )
 {
     rResId.SetRT( RSC_MODELESSDIALOG );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
+
+    WinBits nStyle = init( pParent, rResId );
 
     if ( !(nStyle & WB_HIDE) )
         Show();
+}
+
+ModelessDialog::ModelessDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription ) :
+    Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG)
+{
 }
 
 // =======================================================================
@@ -1209,8 +1307,12 @@ ModalDialog::ModalDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_MODALDIALOG )
 {
     rResId.SetRT( RSC_MODALDIALOG );
-    ImplInit( pParent, ImplInitRes( rResId ) );
-    ImplLoadRes( rResId );
+    init( pParent, rResId );
+}
+
+ModalDialog::ModalDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription ) :
+    Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODALDIALOG)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

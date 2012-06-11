@@ -67,10 +67,12 @@ private:
 
     DECL_DLLPRIVATE_LINK( ImplAsyncCloseHdl, void* );
     DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, void* );
+
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDialogRes( const ResId& rResId );
+    SAL_DLLPRIVATE WinBits init(Window *pParent, const ResId& rResId);
 
     VclBuilder              *m_pUIBuilder;
 
@@ -80,10 +82,13 @@ public:
 
 protected:
                     Dialog( WindowType nType );
+                    Dialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
 public:
                     Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
+                    Dialog( Window* pParent, const ResId& rResId );
+                    Dialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
     virtual         ~Dialog();
 
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -151,6 +156,7 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
 
 public:
                     ModelessDialog( Window* pParent, const ResId& rResId );
+                    ModelessDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
 };
 
 // ---------------
@@ -161,6 +167,7 @@ class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:
                     ModalDialog( Window* pParent, WinBits nStyle = WB_STDMODAL );
+                    ModalDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
                     ModalDialog( Window* pParent, const ResId& rResId );
 
 private:
