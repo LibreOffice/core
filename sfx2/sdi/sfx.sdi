@@ -6084,33 +6084,6 @@ SfxBoolItem SourceView SID_SOURCEVIEW
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem StatusBar SID_STATUSBARTEXT
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem StatusBarVisible SID_TOGGLESTATUSBAR
 
 [

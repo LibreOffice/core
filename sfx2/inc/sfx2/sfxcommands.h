@@ -257,8 +257,6 @@
 #define CMD_SID_SHOWPOPUPS                          ".uno:ShowPopups"
 #define CMD_SID_BASICIDE_SHOWSBX                    ".uno:ShowSbx"
 #define CMD_SID_SOURCEVIEW                          ".uno:SourceView"
-#define CMD_SID_STATUSBARTEXT                       ".uno:StatusBar"
-#define CMD_SID_TOGGLESTATUSBAR                     ".uno:StatusBarVisible"
 #define CMD_SID_BASICIDE_STAT_DATE                  ".uno:StatusGetDate"
 #define CMD_SID_BASICIDE_STAT_POS                   ".uno:StatusGetPosition"
 #define CMD_SID_BASICIDE_STAT_TITLE                 ".uno:StatusGetTitle"

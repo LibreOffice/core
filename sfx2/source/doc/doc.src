@@ -229,10 +229,6 @@ String RID_STR_WARNSTYLEOVERWRITE
 {
     Text [ en-US ] = "Should the \"$(ARG1)\" Style be replaced?" ;
 };
-String STR_DOC_LOADING
-{
-    Text [ en-US ] = "Loading Document" ;
-};
 Resource RID_DLSTATUS
 {
     String INET_NAME_RESOLVE_START

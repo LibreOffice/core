@@ -248,11 +248,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_STATUSBARTEXT:
-        {
-            break;
-        }
-
         case SID_OFFICE_PRIVATE_USE:
         case SID_OFFICE_COMMERCIAL_USE:
         {

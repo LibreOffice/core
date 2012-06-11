@@ -486,7 +486,6 @@
 #define SID_RESTOREWIN                      (SID_SFX_START + 635)
 
 #define SID_CAPTION                         (SID_SFX_START + 641)
-#define SID_STATUSBARTEXT                   (SID_SFX_START + 642)
 
 // id for thesaurs entry in context menu
 #define SID_THES                            (SID_SFX_START + 698)

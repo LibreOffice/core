@@ -101,7 +101,6 @@
 #define RID_STR_WARNSTYLEOVERWRITE          (RID_SFX_DOC_START+ 54)
 #define RID_DLSTATUS                        (RID_SFX_DOC_START+ 55)
 
-#define STR_DOC_LOADING                     (RID_SFX_DOC_START+ 57)
 #define MSG_OPEN_READONLY                   (RID_SFX_DOC_START+ 58)
 
 #define RID_OFFICEFILTER                    (RID_SFX_DOC_START+ 59)
