@@ -746,7 +746,7 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
 
 FormulaToken* FormulaTokenArray::AddString( const sal_Unicode* pStr )
 {
-    return AddString( String( pStr ) );
+    return AddString( rtl::OUString( pStr ) );
 }
 
 FormulaToken* FormulaTokenArray::AddString( const String& rStr )
@@ -761,7 +761,7 @@ FormulaToken* FormulaTokenArray::AddDouble( double fVal )
 
 FormulaToken* FormulaTokenArray::AddExternal( const sal_Unicode* pStr )
 {
-    return AddExternal( String( pStr ) );
+    return AddExternal( rtl::OUString( pStr ) );
 }
 
 FormulaToken* FormulaTokenArray::AddExternal( const String& rStr,

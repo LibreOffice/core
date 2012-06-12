@@ -1071,8 +1071,8 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
         }
         else
         {
-            String aTmp( p );
-            long n = aTmp.ToInt32() - 1;
+            rtl::OUString aTmp( p );
+            long n = aTmp.toInt32() - 1;
             while (CharClass::isAsciiDigit( *p ))
                 p++;
             if( n < 0 || n > MAXROW )

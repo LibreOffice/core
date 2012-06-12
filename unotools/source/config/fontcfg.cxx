@@ -296,15 +296,15 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
 
     String aFallBackJapaneseLocalized( RTL_CONSTASCII_USTRINGPARAM( "MS UI Gothic;" ) );
     aFallBackJapaneseLocalized += String( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE1 ) );
-    aFallBackJapaneseLocalized += String( aMSPGothic );
+    aFallBackJapaneseLocalized += OUString( aMSPGothic );
     aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackJapaneseLocalized += String( aMSGothic );
+    aFallBackJapaneseLocalized += OUString( aMSGothic );
     aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackJapaneseLocalized += String( aTLPGothic );
+    aFallBackJapaneseLocalized += OUString( aTLPGothic );
     aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackJapaneseLocalized += String( aLXGothic );
+    aFallBackJapaneseLocalized += OUString( aLXGothic );
     aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackJapaneseLocalized += String( aKochiGothic );
+    aFallBackJapaneseLocalized += OUString( aKochiGothic );
     aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
     aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE2 ) );
     static const OUString aFallBackJapanese( aFallBackJapaneseLocalized );
@@ -318,9 +318,9 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
     // we need localized names for korean fonts
     static sal_Unicode const aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0 };
     static sal_Unicode const aBaekmukGulim[] = { 0xBC31, 0xBC35, 0xAD74, 0xB9BC, 0 };
-    String aFallBackKoreanLocalized( aSunGulim );
+    rtl::OUString aFallBackKoreanLocalized( aSunGulim );
     aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackKoreanLocalized += String( aBaekmukGulim );
+    aFallBackKoreanLocalized += rtl::OUString( aBaekmukGulim );
     aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
     aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_KOREAN ) );
     static const OUString aFallBackKorean( aFallBackKoreanLocalized );

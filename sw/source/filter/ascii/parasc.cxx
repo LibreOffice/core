@@ -315,7 +315,7 @@ sal_uLong SwASCIIParser::ReadChars()
         if( pStt >= pEnd )
         {
             if( pLastStt != pStt )
-                InsertText( String( pLastStt ));
+                InsertText( rtl::OUString( pLastStt ));
 
             // Read a new block
             sal_uLong lGCount;
@@ -438,7 +438,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         *pStt++ = 0;
                         if( nLineLen )
                         {
-                            InsertText( String( pLastStt ));
+                            InsertText( rtl::OUString( pLastStt ));
                         }
                         pDoc->SplitNode( *pPam->GetPoint(), false );
                         pDoc->InsertPoolItem( *pPam, SvxFmtBreakItem(
@@ -472,7 +472,7 @@ sal_uLong SwASCIIParser::ReadChars()
             {
                 sal_Unicode c = *pStt;
                 *pStt = 0;
-                InsertText( String( pLastStt ));
+                InsertText( rtl::OUString( pLastStt ));
                 pDoc->SplitNode( *pPam->GetPoint(), false );
                 pLastStt = pStt;
                 nLineLen = 0;
@@ -484,7 +484,7 @@ sal_uLong SwASCIIParser::ReadChars()
         else if( bSplitNode )
         {
             // We found a CR/LF, thus save the text
-            InsertText( String( pLastStt ));
+            InsertText( rtl::OUString( pLastStt ));
             pDoc->SplitNode( *pPam->GetPoint(), false );
             pLastStt = pStt;
             nLineLen = 0;

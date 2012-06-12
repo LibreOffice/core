@@ -70,7 +70,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
     sal_Bool        bSyntErrWarn = false;
     sal_Bool        bOverflowWarn = false;
 
-    String&     rData = aDifParser.aData;
+    rtl::OUString   aData = aDifParser.aData;
     sal_Bool        bData = false;
 
     rIn.Seek( 0 );
@@ -83,7 +83,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
         aPrgrsBar.Progress();
 
-        bData = rData.Len() > 0;
+        bData = !aData.isEmpty();
 
         switch( eTopic )
         {
@@ -92,7 +92,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                 if( aDifParser.nVector != 0 || aDifParser.nVal != 1 )
                     bSyntErrWarn = sal_True;
                 if( bData )
-                    pDoc->RenameTab( nBaseTab, rData );
+                    pDoc->RenameTab( nBaseTab, aData );
             }
                 break;
             case T_VECTORS:
@@ -164,14 +164,14 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                     if( ValidCol(nColCnt) && ValidRow(nRowCnt) )
                     {
                         ScBaseCell*     pCell;
-                        if( DifParser::IsV( rData.GetBuffer() ) )
+                        if( DifParser::IsV( aData.getStr() ) )
                         {
                             pCell = new ScValueCell( aDifParser.fVal );
                             if( !bPlain )
                                 aAttrCache.SetNumFormat( nColCnt, nRowCnt,
                                     aDifParser.nNumFormat );
                         }
-                        else if( rData == pKeyTRUE || rData == pKeyFALSE )
+                        else if( aData == pKeyTRUE || aData == pKeyFALSE )
                         {
                             pCell = new ScValueCell( aDifParser.fVal );
                             if( bPlain )
@@ -180,12 +180,12 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                                 aAttrCache.SetNumFormat( nColCnt, nRowCnt,
                                     aDifParser.nNumFormat );
                         }
-                        else if( rData == pKeyNA || rData == pKeyERROR  )
-                            pCell = new ScStringCell( rData );
+                        else if( aData == pKeyNA || aData == pKeyERROR  )
+                            pCell = new ScStringCell( aData );
                         else
                         {
                             String aTmp( RTL_CONSTASCII_USTRINGPARAM( "#IND: " ));
-                            aTmp += rData;
+                            aTmp += aData;
                             aTmp += sal_Unicode('?');
                             pCell = new ScStringCell( aTmp );
                         }
@@ -203,10 +203,10 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
                     if( ValidCol(nColCnt) && ValidRow(nRowCnt) )
                     {
-                        if( rData.Len() > 0 )
+                        if (!aData.isEmpty())
                         {
                             pDoc->PutCell( nColCnt, nRowCnt, nBaseTab,
-                                ScBaseCell::CreateTextCell( rData, pDoc ), true );
+                                ScBaseCell::CreateTextCell( aData, pDoc ), true );
                         }
                     }
                     else
@@ -434,7 +434,7 @@ DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
     else
     {   // ...und zur Strafe mit'm Numberformatter...
         OSL_ENSURE( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
-        String aTestVal( pPossibleNumericData );
+        rtl::OUString aTestVal( pPossibleNumericData );
         sal_uInt32 nFormat = 0;
         double fTmpVal;
         if( pNumFormatter->IsNumberFormat( aTestVal, nFormat, fTmpVal ) )

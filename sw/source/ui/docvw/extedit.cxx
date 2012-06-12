@@ -122,7 +122,7 @@ void EditWithExternalTool(GraphicObject *pGraphicObject, SwWrtShell *rSh)
     GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilter(rGF.GetExportFormatNumber(fExt));
     String aFilter(rGF.GetExportFormatShortName(nFilter));
-    String sPath(tempFileName.getStr());
+    String sPath(tempFileName);
 
     // Write the Graphic to the file now
     XOutBitmap::WriteGraphic(pGraphic, sPath, aFilter,

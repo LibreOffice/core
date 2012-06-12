@@ -361,7 +361,7 @@ String SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
             rStrm.SeekRel( 2 );
         // create string from character array
         aBuffer.push_back( 0 );
-        aValue = String( &aBuffer.front() );
+        aValue = rtl::OUString( &aBuffer.front() );
     }
     return aValue;
 }

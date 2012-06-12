@@ -1673,10 +1673,10 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
             MetaTextLineAction* pAct = (MetaTextLineAction*) pAction;
             // measure a test string to get ascend and descent right
             static const sal_Unicode pStr[] = { 0xc4, 0x67, 0 };
-            String aStr( pStr );
+            rtl::OUString aStr( pStr );
 
             Rectangle aRect;
-            aMapVDev.GetTextBoundRect( aRect, aStr, 0, 0, aStr.Len(), 0, NULL );
+            aMapVDev.GetTextBoundRect( aRect, aStr, 0, 0, aStr.getLength(), 0, NULL );
             Point aPt( pAct->GetStartPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
             aRect.Right() = aRect.Left() + pAct->GetWidth();

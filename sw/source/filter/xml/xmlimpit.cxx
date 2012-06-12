@@ -773,7 +773,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 break;
 
                 case MID_GRAPHIC_FILTER:
-                    pBrush->SetGraphicFilter( rValue.getStr() );
+                    pBrush->SetGraphicFilter( rValue );
                     bOk = sal_True;
                     break;
                 }

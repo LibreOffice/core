@@ -3494,7 +3494,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     const sal_Unicode* p = aRef[j].GetBuffer();
                     while ( *p && CharClass::isAsciiNumeric( *p ) )
                         aStr2 += *p++;
-                    aRef[j] = String( p );
+                    aRef[j] = rtl::OUString( p );
                     aRef[j] += aStr2;
                     if ( bColons || aRef[j] != aOld )
                     {
@@ -3561,7 +3561,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // Short cut for references when reading ODF to speedup things.
     if (mnPredetectedReference)
     {
-        String aStr( cSymbol);
+        rtl::OUString aStr( cSymbol);
         if (!IsPredetectedReference( aStr) && !IsExternalNamedRange( aStr))
         {
             /* TODO: it would be nice to generate a #REF! error here, which
@@ -3571,7 +3571,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
              * information if not ODFF (in that case it was already handled).
              * */
             ScRawToken aToken;
-            aToken.SetString( aStr.GetBuffer() );
+            aToken.SetString( aStr.getStr() );
             aToken.NewOpCode( ocBad );
             pRawToken = aToken.Clone();
         }
@@ -3625,7 +3625,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     do
     {
         mbRewind = false;
-        const String aOrg( cSymbol );
+        const rtl::OUString aOrg( cSymbol );
 
         if (bAsciiNonAlnum)
         {

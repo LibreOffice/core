@@ -2350,7 +2350,7 @@ public:
                                   const PDFWriterImpl::BuiltinFont&,
                                   long nPixelPerEM, int nOrientation );
 
-    void            SetText( const String& rText )  { maOrigText = rText; }
+    void            SetText( const rtl::OUString& rText )  { maOrigText = rText; }
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    InitFont() const;
     virtual void    DrawText( SalGraphics& ) const;

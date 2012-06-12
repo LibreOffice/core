@@ -1751,16 +1751,16 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     switch( ch )
                     {
                         case 'X':
-                            nCol = static_cast<SCCOL>(String( p ).ToInt32()) + nStartCol - 1;
+                            nCol = static_cast<SCCOL>(rtl::OUString(p).toInt32()) + nStartCol - 1;
                             break;
                         case 'Y':
-                            nRow = String( p ).ToInt32() + nStartRow - 1;
+                            nRow = rtl::OUString(p).toInt32() + nStartRow - 1;
                             break;
                         case 'C':
-                            nRefCol = static_cast<SCCOL>(String( p ).ToInt32()) + nStartCol - 1;
+                            nRefCol = static_cast<SCCOL>(rtl::OUString(p).toInt32()) + nStartCol - 1;
                             break;
                         case 'R':
-                            nRefRow = String( p ).ToInt32() + nStartRow - 1;
+                            nRefRow = rtl::OUString(p).toInt32() + nStartRow - 1;
                             break;
                         case 'K':
                         {
@@ -1871,10 +1871,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     switch( ch )
                     {
                         case 'X':
-                            nCol = static_cast<SCCOL>(String( p ).ToInt32()) + nStartCol - 1;
+                            nCol = static_cast<SCCOL>(rtl::OUString(p).toInt32()) + nStartCol - 1;
                             break;
                         case 'Y':
-                            nRow = String( p ).ToInt32() + nStartRow - 1;
+                            nRow = rtl::OUString(p).toInt32() + nStartRow - 1;
                             break;
                         case 'P' :
                             if ( bData )
@@ -1913,16 +1913,11 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
             {
                 if ( bData && *p == ';' && *(p+1) == 'P' )
                 {
-                    String aCode( p+2 );
+                    rtl::OUString aCode( p+2 );
                     // unescape doubled semicolons
-                    xub_StrLen nPos = 0;
-                    String aSemicolon( RTL_CONSTASCII_USTRINGPARAM(";;"));
-                    while ( (nPos = aCode.Search( aSemicolon, nPos )) != STRING_NOTFOUND )
-                        aCode.Erase( nPos++, 1 );
+                    aCode = aCode.replaceAll(";;", ";");
                     // get rid of Xcl escape characters
-                    nPos = 0;
-                    while ( (nPos = aCode.Search( sal_Unicode(0x1b), nPos )) != STRING_NOTFOUND )
-                        aCode.Erase( nPos, 1 );
+                    aCode = aCode.replaceAll(rtl::OUString(static_cast<sal_Unicode>(0x1b)), rtl::OUString());
                     xub_StrLen nCheckPos;
                     short nType;
                     sal_uInt32 nKey;

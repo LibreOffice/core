@@ -227,7 +227,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
     String      sPath;
     sal_Unicode aPathBuffer[nMaxPathSize];
     if ( SystemPath::GetUserTemplateLocation( aPathBuffer, nMaxPathSize ))
-        sPath = String( aPathBuffer );
+        sPath = rtl::OUString( aPathBuffer );
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPath, sURL );
 
     ::rtl::OUString aUserTemplateURL( sURL );

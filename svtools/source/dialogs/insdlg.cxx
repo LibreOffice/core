@@ -193,7 +193,7 @@ void SvObjectServerList::FillInsertObjects()
                         {
                             if( !Get( aClassName ) )
                                 // noch nicht eingetragen
-                                aObjectServerList.push_back( SvObjectServer( aClassName, String( aUIName.getStr() ) ) );
+                                aObjectServerList.push_back( SvObjectServer( aClassName, aUIName ) );
                         }
                     }
                 }

@@ -375,7 +375,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         {
             // #n382718# (and #n261623#) Convert smb notation to '\\'
             aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
-            aFileName = String( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
+            aFileName = rtl::OUString( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
             aFileName.SearchAndReplaceAll( '/', '\\' );
         }
 

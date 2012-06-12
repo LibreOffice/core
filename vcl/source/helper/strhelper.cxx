@@ -167,8 +167,7 @@ String GetCommandLineToken( int nToken, const String& rLine )
 
     *pLeap = 0;
 
-    String aRet( pBuffer );
-    return aRet;
+    return rtl::OUString(pBuffer);
 }
 
 rtl::OString GetCommandLineToken(int nToken, const rtl::OString& rLine)
@@ -324,8 +323,7 @@ String WhitespaceToSpace( const String& rLine, sal_Bool bProtect )
     if( *pLeap == ' ' )
         *pLeap = 0;
 
-    String aRet( *pBuffer == ' ' ? pBuffer+1 : pBuffer );
-    return aRet;
+    return rtl::OUString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
 rtl::OString WhitespaceToSpace(const rtl::OString& rLine, sal_Bool bProtect)

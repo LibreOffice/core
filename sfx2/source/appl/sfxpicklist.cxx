@@ -330,7 +330,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         sal_uInt16 nPos=aFilter.Search('|');
         if( nPos != STRING_NOTFOUND )
         {
-            String aOptions(aFilter.Copy( nPos ).GetBuffer()+1);
+            rtl::OUString aOptions(aFilter.Copy(nPos).GetBuffer()+1);
             aFilter.Erase( nPos );
             aReq.AppendItem( SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions));
         }

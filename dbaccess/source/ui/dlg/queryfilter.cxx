@@ -485,7 +485,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     DBG_CHKTHIS(DlgFilterCrit,NULL);
     ::rtl::OUString aCondition;
     _rItem.Value >>= aCondition;
-    String aStr = aCondition.getStr();
+    String aStr = aCondition;
     ::Replace_SQL_PlaceHolder(aStr);
     aStr = comphelper::string::stripEnd(aStr, ' ');
 

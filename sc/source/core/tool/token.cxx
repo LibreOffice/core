@@ -364,9 +364,9 @@ FormulaToken* ScRawToken::CreateToken() const
             return new FormulaDoubleToken( nValue );
         case svString :
             if (eOp == ocPush)
-                return new FormulaStringToken( String( cStr ) );
+                return new FormulaStringToken( rtl::OUString( cStr ) );
             else
-                return new FormulaStringOpToken( eOp, String( cStr ) );
+                return new FormulaStringOpToken( eOp, rtl::OUString( cStr ) );
         case svSingleRef :
             if (eOp == ocPush)
                 return new ScSingleRefToken( aRef.Ref1 );
@@ -384,23 +384,23 @@ FormulaToken* ScRawToken::CreateToken() const
             return new FormulaIndexToken( eOp, name.nIndex, name.bGlobal);
         case svExternalSingleRef:
             {
-                String aTabName(extref.cTabName);
+                rtl::OUString aTabName(extref.cTabName);
                 return new ScExternalSingleRefToken(extref.nFileId, aTabName, extref.aRef.Ref1);
             }
         case svExternalDoubleRef:
             {
-                String aTabName(extref.cTabName);
+                rtl::OUString aTabName(extref.cTabName);
                 return new ScExternalDoubleRefToken(extref.nFileId, aTabName, extref.aRef);
             }
         case svExternalName:
             {
-                String aName(extname.cName);
+                rtl::OUString aName(extname.cName);
                 return new ScExternalNameToken( extname.nFileId, aName );
             }
         case svJump :
             return new FormulaJumpToken( eOp, (short*) nJump );
         case svExternal :
-            return new FormulaExternalToken( eOp, sbyte.cByte, String( cStr+1 ) );
+            return new FormulaExternalToken( eOp, sbyte.cByte, rtl::OUString( cStr+1 ) );
         case svFAP :
             return new FormulaFAPToken( eOp, sbyte.cByte, NULL );
         case svMissing :

@@ -153,7 +153,7 @@ static SbxVariable* Operand
     {
         // A number could be scanned in directly!
         sal_uInt16 nLen;
-        if( !refVar->Scan( XubString( p ), &nLen ) )
+        if( !refVar->Scan( rtl::OUString( p ), &nLen ) )
             refVar.Clear();
         else
             p += nLen;

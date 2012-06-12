@@ -480,12 +480,9 @@ String SbiImage::GetString( short nId ) const
             }
         }
         else
-        {
-            String aStr( pStr );
-            return aStr;
-        }
+            return rtl::OUString(pStr);
     }
-    return String();
+    return rtl::OUString();
 }
 
 const SbxObject* SbiImage::FindType (String aTypeName) const

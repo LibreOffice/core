@@ -2665,7 +2665,7 @@ sal_uInt16 VCLXMultiPage::insertTab( TabPage* pPage, rtl::OUString& sTitle )
 {
     TabControl *pTabControl = getTabControl();
     sal_uInt16 id = sal::static_int_cast< sal_uInt16 >( mTabId++ );
-    pTabControl->InsertPage( id, sTitle.getStr(), TAB_APPEND );
+    pTabControl->InsertPage( id, sTitle, TAB_APPEND );
     pTabControl->SetTabPage( id, pPage );
     return id;
 }
@@ -2711,15 +2711,15 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< bea
     if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
         throw lang::IndexOutOfBoundsException();
 
-    for ( int i = 0; i < Properties.getLength(); i++ )
+    for (sal_Int32 i = 0; i < Properties.getLength(); ++i)
     {
         const rtl::OUString &name = Properties[i].Name;
         const uno::Any &value = Properties[i].Value;
 
-        if ( name  == rtl::OUString( "Title" ) )
+        if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")))
         {
             rtl::OUString title = value.get<rtl::OUString>();
-            pTabControl->SetPageText( sal::static_int_cast< sal_uInt16 >( ID ), title.getStr() );
+            pTabControl->SetPageText( sal::static_int_cast< sal_uInt16 >( ID ), title );
         }
     }
 }

@@ -350,7 +350,6 @@ void ODbaseIndexDialog::Init()
 
     ::std::vector< String > aUsedIndexes;
 
-    String aExt;
     const ::rtl::OUString *pBegin = aFolderContent.getConstArray();
     const ::rtl::OUString *pEnd   = pBegin + aFolderContent.getLength();
     aURL.SetSmartProtocol(INET_PROT_FILE);
@@ -359,12 +358,12 @@ void ODbaseIndexDialog::Init()
         rtl::OUString aName;
         ::utl::LocalFileHelper::ConvertURLToPhysicalName(pBegin->getStr(),aName);
         aURL.SetSmartURL(aName);
-        aExt = aURL.getExtension();
-        if(aExt == aIndexExt.getStr())
+        rtl::OUString aExt = aURL.getExtension();
+        if (aExt == aIndexExt)
         {
             m_aFreeIndexList.push_back( OTableIndex(aURL.getName()) );
         }
-        else if(aExt == aTableExt.getStr())
+        else if (aExt == aTableExt)
         {
             m_aTableInfoList.push_back( OTableInfo(aURL.getName()) );
             OTableInfo& rTabInfo = m_aTableInfoList.back();

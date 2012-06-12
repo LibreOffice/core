@@ -535,7 +535,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString languag
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
     String winTitle( GetText() );
-    winTitle.SearchAndReplace( String::CreateFromAscii( "%MACROLANG" ), language.pData->buffer );
+    winTitle.SearchAndReplace( String::CreateFromAscii( "%MACROLANG" ), m_sLanguage );
     SetText( winTitle );
 
     aScriptsBox.SetSelectHdl( LINK( this, SvxScriptOrgDialog, ScriptSelectHdl ) );

@@ -315,12 +315,12 @@ void ImpSvMEdit::ImpSetScrollBarRanges()
 
 void ImpSvMEdit::ImpInitScrollBars()
 {
-    static const sal_Unicode sampleText[] = { 'x', '\0' };
+    static const sal_Unicode sampleChar = { 'x' };
     if ( mpHScrollBar || mpVScrollBar )
     {
         ImpSetScrollBarRanges();
         Size aCharBox;
-        aCharBox.Width() = mpTextWindow->GetTextWidth( sampleText );
+        aCharBox.Width() = mpTextWindow->GetTextWidth( rtl::OUString(sampleChar) );
         aCharBox.Height() = mpTextWindow->GetTextHeight();
         Size aOutSz = mpTextWindow->GetOutputSizePixel();
         if ( mpHScrollBar )
@@ -673,11 +673,11 @@ Size ImpSvMEdit::CalcMinimumSize() const
 
 Size ImpSvMEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
-    static const sal_Unicode sampleText[] = { 'X', '\0' };
+    static const sal_Unicode sampleChar = 'X';
 
     Size aSz;
     Size aCharSz;
-    aCharSz.Width() = mpTextWindow->GetTextWidth( sampleText );
+    aCharSz.Width() = mpTextWindow->GetTextWidth( rtl::OUString(sampleChar) );
     aCharSz.Height() = mpTextWindow->GetTextHeight();
 
     if ( nLines )
@@ -700,9 +700,9 @@ Size ImpSvMEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
 void ImpSvMEdit::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
-    static const sal_Unicode sampleText[] = { 'x', '\0' };
+    static const sal_Unicode sampleChar = { 'x' };
     Size aOutSz = mpTextWindow->GetOutputSizePixel();
-    Size aCharSz( mpTextWindow->GetTextWidth( sampleText ), mpTextWindow->GetTextHeight() );
+    Size aCharSz( mpTextWindow->GetTextWidth( rtl::OUString(sampleChar) ), mpTextWindow->GetTextHeight() );
     rnCols = (sal_uInt16) (aOutSz.Width()/aCharSz.Width());
     rnLines = (sal_uInt16) (aOutSz.Height()/aCharSz.Height());
 }

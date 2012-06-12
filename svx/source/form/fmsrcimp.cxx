@@ -999,7 +999,7 @@ void FmSearchEngine::SearchNextImpl()
         if (!m_bWildcard)
         {   // da natuerlich in allen anderen Faellen auch * und ? im Suchstring erlaubt sind, aber nicht als WildCards zaehlen
             // sollen, muss ich normieren
-            UniString aTmp(strSearchExpression.getStr());
+            UniString aTmp(strSearchExpression);
             static const UniString s_sStar = UniString::CreateFromAscii("\\*");
             static const UniString s_sQuotation = UniString::CreateFromAscii("\\?");
             aTmp.SearchAndReplaceAll('*', s_sStar);

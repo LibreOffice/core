@@ -1857,7 +1857,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     }
                     ::rtl::OUString aName;
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= aName;
-                    String sObject(aName.getStr());
+                    String sObject(aName);
 
                     sTitle.SearchAndReplace('#',sObject);
                     aReturn.sTitle = sTitle;
@@ -2873,7 +2873,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
     SvLBoxEntry* pContainer = getEntryFromContainer(xNames);
     if ( pContainer )
     { // a query or table has been removed
-        String aName = ::comphelper::getString(_rEvent.Accessor).getStr();
+        String aName = ::comphelper::getString(_rEvent.Accessor);
 
         if ( isCurrentlyDisplayedChanged( aName, pContainer) )
         {   // the element displayed currently has been replaced
@@ -2924,7 +2924,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
     SvLBoxEntry* pContainer = getEntryFromContainer(xNames);
     if ( pContainer )
     {    // a table or query as been replaced
-        String aName = ::comphelper::getString(_rEvent.Accessor).getStr();
+        String aName = ::comphelper::getString(_rEvent.Accessor);
 
         if ( isCurrentlyDisplayedChanged( aName, pContainer) )
         {   // the element displayed currently has been replaced

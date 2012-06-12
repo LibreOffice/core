@@ -1070,8 +1070,7 @@ void SvXMLNumFmtElementContext::EndElement()
     {
         case XML_TOK_STYLE_TEXT:
             if ( rParent.HasLongDoW() &&
-                    rParent.GetLocaleData().getLongDateDayOfWeekSep() ==
-                        String( aContent.getStr() ) )
+                 aContent.toString().equals(rParent.GetLocaleData().getLongDateDayOfWeekSep()) )
             {
                 //  skip separator constant after long day of week
                 //  (NF_KEY_NNNN contains the separator)

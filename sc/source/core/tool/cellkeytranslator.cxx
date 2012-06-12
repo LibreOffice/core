@@ -234,7 +234,7 @@ void ScCellKeywordTranslator::addToMap(const String& rKey, const sal_Char* pName
 void ScCellKeywordTranslator::addToMap(const TransItem* pItems, const Locale& rLocale)
 {
     for (sal_uInt16 i = 0; pItems[i].from != NULL; ++i)
-        addToMap(String(pItems[i].from), pItems[i].to, rLocale, pItems[i].func);
+        addToMap(rtl::OUString(pItems[i].from), pItems[i].to, rLocale, pItems[i].func);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

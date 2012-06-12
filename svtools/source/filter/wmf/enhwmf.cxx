@@ -1095,7 +1095,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         *pWMF >> nChar;
                         lfFaceName[ i ] = nChar;
                     }
-                    aLogFont.alfFaceName = UniString( lfFaceName );
+                    aLogFont.alfFaceName = rtl::OUString( lfFaceName );
                     pOut->CreateObject( nIndex, GDI_FONT, new WinMtfFontStyle( aLogFont ) );
                 }
             }

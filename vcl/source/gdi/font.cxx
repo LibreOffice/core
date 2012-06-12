@@ -376,7 +376,7 @@ void Font::SetAlign( FontAlign eAlign )
 
 // -----------------------------------------------------------------------
 
-void Font::SetName( const String& rFamilyName )
+void Font::SetName( const rtl::OUString& rFamilyName )
 {
     DBG_CHKTHIS( Font, NULL );
 

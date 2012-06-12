@@ -971,7 +971,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             {
                 ::rtl::OUString sValue;
                 _rValue >>= sValue;
-                _rSet.Put(SfxStringItem(_nId, sValue.getStr()));
+                _rSet.Put(SfxStringItem(_nId, sValue));
             }
             else {
                 OSL_FAIL(

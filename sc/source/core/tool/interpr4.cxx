@@ -1898,7 +1898,7 @@ void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushStringBuffer" );
     if ( pString )
-        PushString( String( pString ) );
+        PushString( rtl::OUString(pString) );
     else
         PushString( EMPTY_STRING );
 }

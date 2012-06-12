@@ -504,11 +504,11 @@ String OFlatTable::getEntry()
         }
         xDir->beforeFirst(); // move back to before first record
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_ASSERT(0);
     }
-    return sURL.getStr();
+    return sURL;
 }
 // -------------------------------------------------------------------------
 void OFlatTable::refreshColumns()
