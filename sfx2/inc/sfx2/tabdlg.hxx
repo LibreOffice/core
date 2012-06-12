@@ -65,17 +65,17 @@ friend class SfxTabDialogController;
 
     SfxViewFrame*   pFrame;
 
-    VclVBox vbox;
-    VclVBox content_area;
-    TabControl aTabCtrl;
+    VclVBox *m_pVBox;
+    VclVBox *m_pContentArea;
+    TabControl *m_pTabCtrl;
 
-    VclHButtonBox action_area;
-    OKButton aOKBtn;
-    PushButton* pUserBtn;
-    CancelButton aCancelBtn;
-    HelpButton aHelpBtn;
-    PushButton aResetBtn;
-    PushButton aBaseFmtBtn;
+    VclHButtonBox *m_pActionArea;
+    OKButton *m_pOKBtn;
+    PushButton* m_pUserBtn;
+    CancelButton* m_pCancelBtn;
+    HelpButton* m_pHelpBtn;
+    PushButton* m_pResetBtn;
+    PushButton* m_pBaseFmtBtn;
 
     const SfxItemSet*   pSet;
     SfxItemSet*         pOutSet;
@@ -93,7 +93,7 @@ friend class SfxTabDialogController;
     DECL_DLLPRIVATE_LINK(BaseFmtHdl, void *);
     DECL_DLLPRIVATE_LINK(UserHdl, void *);
     DECL_DLLPRIVATE_LINK(CancelHdl, void *);
-    SAL_DLLPRIVATE void Init_Impl(sal_Bool, const String *);
+    SAL_DLLPRIVATE void Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, const ResId& rResId );
 
 protected:
     virtual short               Ok();
@@ -158,7 +158,7 @@ public:
 
     void                SetCurPageId( sal_uInt16 nId ) { nAppPageId = nId; }
     sal_uInt16              GetCurPageId() const
-                            { return aTabCtrl.GetCurPageId(); }
+                            { return m_pTabCtrl->GetCurPageId(); }
     void                ShowPage( sal_uInt16 nId );
 
     // may provide local slots converted by Map
@@ -167,15 +167,15 @@ public:
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
     sal_Bool IsFormat() const { return bFmt; }
 
-    const OKButton&     GetOKButton() const { return aOKBtn; }
-    OKButton&           GetOKButton() { return aOKBtn; }
-    const CancelButton& GetCancelButton() const { return aCancelBtn; }
-    CancelButton&       GetCancelButton() { return aCancelBtn; }
-    const HelpButton&   GetHelpButton() const { return aHelpBtn; }
-    HelpButton&         GetHelpButton() { return aHelpBtn; }
+    const OKButton&     GetOKButton() const { return *m_pOKBtn; }
+    OKButton&           GetOKButton() { return *m_pOKBtn; }
+    const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
+    CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
+    const HelpButton&   GetHelpButton() const { return *m_pHelpBtn; }
+    HelpButton&         GetHelpButton() { return *m_pHelpBtn; }
 
-    const PushButton*   GetUserButton() const { return pUserBtn; }
-    PushButton*         GetUserButton() { return pUserBtn; }
+    const PushButton*   GetUserButton() const { return m_pUserBtn; }
+    PushButton*         GetUserButton() { return m_pUserBtn; }
     void                RemoveResetButton();
 
     short               Execute();

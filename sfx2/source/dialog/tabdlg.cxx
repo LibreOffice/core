@@ -137,10 +137,10 @@ void SfxTabDialogController::StateChanged( sal_uInt16 /*nSID*/, SfxItemState /*e
     {
         pSet = pDialog->pSet = pSetItem->GetItemSet().Clone();
         sal_Bool bDialogStarted = sal_False;
-        for ( sal_uInt16 n=0; n<pDialog->aTabCtrl.GetPageCount(); n++ )
+        for ( sal_uInt16 n=0; n<pDialog->m_pTabCtrl->GetPageCount(); n++ )
         {
-            sal_uInt16 nPageId = pDialog->aTabCtrl.GetPageId( n );
-            SfxTabPage* pTabPage = dynamic_cast<SfxTabPage*> (pDialog->aTabCtrl.GetTabPage( nPageId ));
+            sal_uInt16 nPageId = pDialog->m_pTabCtrl->GetPageId( n );
+            SfxTabPage* pTabPage = dynamic_cast<SfxTabPage*> (pDialog->m_pTabCtrl->GetTabPage( nPageId ));
             if ( pTabPage )
             {
                 pTabPage->Reset( pSetItem->GetItemSet() );
@@ -384,19 +384,8 @@ void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
 }
 
 #define INI_LIST(ItemSetPtr) \
-      vbox(this, false, 7) \
-    , content_area(&vbox) \
-    , aTabCtrl(&content_area, ResId(ID_TABCONTROL,*rResId.GetResMgr())) \
-    , action_area(&vbox) \
-    , aOKBtn(&action_area) \
-    , pUserBtn(pUserButtonText? new PushButton(&action_area): 0) \
-    , aCancelBtn(&action_area) \
-    , aHelpBtn(&action_area) \
-    , aResetBtn(&action_area) \
-    , aBaseFmtBtn(&action_area) \
-    , pSet(ItemSetPtr) \
+      pSet(ItemSetPtr) \
     , pOutSet(0) \
-    , pImpl(new TabDlg_Impl( (sal_uInt8)aTabCtrl.GetPageCount() )) \
     , pRanges(0) \
     , nResId(rResId.GetId()) \
     , nAppPageId(USHRT_MAX) \
@@ -428,7 +417,7 @@ SfxTabDialog::SfxTabDialog
     , pFrame(pViewFrame)
     , INI_LIST(pItemSet)
 {
-    Init_Impl( bFmt, pUserButtonText );
+    Init_Impl( bFmt, pUserButtonText, rResId );
 }
 
 // -----------------------------------------------------------------------
@@ -454,7 +443,7 @@ SfxTabDialog::SfxTabDialog
     , pFrame(0)
     , INI_LIST(pItemSet)
 {
-    Init_Impl( bFmt, pUserButtonText );
+    Init_Impl( bFmt, pUserButtonText, rResId );
     DBG_WARNING( "Please use the Construtor with the ViewFrame" );
 }
 
@@ -492,15 +481,25 @@ SfxTabDialog::~SfxTabDialog()
     delete pImpl->pApplyButton;
     delete pImpl->pData;
     delete pImpl;
-    delete pUserBtn;
     delete pOutSet;
     delete pExampleSet;
     delete [] pRanges;
+
+    delete m_pBaseFmtBtn;
+    delete m_pResetBtn;
+    delete m_pHelpBtn;
+    delete m_pCancelBtn;
+    delete m_pUserBtn;
+    delete m_pOKBtn;
+    delete m_pActionArea;
+    delete m_pTabCtrl;
+    delete m_pContentArea;
+    delete m_pVBox;
 }
 
 // -----------------------------------------------------------------------
 
-void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
+void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, const ResId& rResId )
 
 /*  [Description]
 
@@ -508,56 +507,68 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
 */
 
 {
+    m_pVBox = new VclVBox(this, false, 7);
+    m_pContentArea = new VclVBox(m_pVBox);
+    m_pTabCtrl = new TabControl(m_pContentArea, ResId(ID_TABCONTROL, *rResId.GetResMgr()));
+    m_pActionArea = new VclHButtonBox(m_pVBox);
+    m_pOKBtn = new OKButton(m_pActionArea);
+    m_pUserBtn = pUserButtonText ? new PushButton(m_pActionArea) : 0;
+    m_pCancelBtn = new CancelButton(m_pActionArea);
+    m_pHelpBtn = new HelpButton(m_pActionArea);
+    m_pResetBtn = new PushButton(m_pActionArea);
+    m_pBaseFmtBtn = new PushButton(m_pActionArea);
+    pImpl = new TabDlg_Impl(m_pTabCtrl->GetPageCount());
+
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
     rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
 
-    vbox.setChildProperty(sFill, true);
+    m_pVBox->setChildProperty(sFill, true);
 
-    action_area.setChildProperty(sFill, true);
+    m_pActionArea->setChildProperty(sFill, true);
 
-    content_area.setChildProperty(sFill, true);
-    content_area.setChildProperty(sExpand, true);
+    m_pContentArea->setChildProperty(sFill, true);
+    m_pContentArea->setChildProperty(sExpand, true);
 
-    aTabCtrl.setChildProperty(sFill, true);
-    aTabCtrl.setChildProperty(sExpand, true);
+    m_pTabCtrl->setChildProperty(sFill, true);
+    m_pTabCtrl->setChildProperty(sExpand, true);
 
-    aOKBtn.SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
-    aCancelBtn.SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );
-    aResetBtn.SetClickHdl( LINK( this, SfxTabDialog, ResetHdl ) );
-    aResetBtn.SetText( SfxResId( STR_RESET ).toString() );
-    aTabCtrl.SetActivatePageHdl(
+    m_pOKBtn->SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
+    m_pCancelBtn->SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );
+    m_pResetBtn->SetClickHdl( LINK( this, SfxTabDialog, ResetHdl ) );
+    m_pResetBtn->SetText( SfxResId( STR_RESET ).toString() );
+    m_pTabCtrl->SetActivatePageHdl(
             LINK( this, SfxTabDialog, ActivatePageHdl ) );
-    aTabCtrl.SetDeactivatePageHdl(
+    m_pTabCtrl->SetDeactivatePageHdl(
             LINK( this, SfxTabDialog, DeactivatePageHdl ) );
-    aTabCtrl.Show();
-    aOKBtn.Show();
-    aCancelBtn.Show();
-    aHelpBtn.Show();
-    aResetBtn.Show();
-    aResetBtn.SetHelpId( HID_TABDLG_RESET_BTN );
+    m_pTabCtrl->Show();
+    m_pOKBtn->Show();
+    m_pCancelBtn->Show();
+    m_pHelpBtn->Show();
+    m_pResetBtn->Show();
+    m_pResetBtn->SetHelpId( HID_TABDLG_RESET_BTN );
 
-    if ( pUserBtn )
+    if ( m_pUserBtn )
     {
-        pUserBtn->SetText( *pUserButtonText );
-        pUserBtn->SetClickHdl( LINK( this, SfxTabDialog, UserHdl ) );
-        pUserBtn->Show();
+        m_pUserBtn->SetText( *pUserButtonText );
+        m_pUserBtn->SetClickHdl( LINK( this, SfxTabDialog, UserHdl ) );
+        m_pUserBtn->Show();
     }
 
     /* TODO: Check what is up with bFmt/bFmtFlag. Comment below suggests a
              different behavior than implemented!! */
     if ( bFmtFlag )
     {
-        aBaseFmtBtn.SetText( SfxResId( STR_STANDARD_SHORTCUT ).toString() );
-        aBaseFmtBtn.SetClickHdl( LINK( this, SfxTabDialog, BaseFmtHdl ) );
-        aBaseFmtBtn.SetHelpId( HID_TABDLG_STANDARD_BTN );
+        m_pBaseFmtBtn->SetText( SfxResId( STR_STANDARD_SHORTCUT ).toString() );
+        m_pBaseFmtBtn->SetClickHdl( LINK( this, SfxTabDialog, BaseFmtHdl ) );
+        m_pBaseFmtBtn->SetHelpId( HID_TABDLG_STANDARD_BTN );
 
         // bFmt = temporary Flag passed on in the Constructor(),
         // if bFmt == 2, then also sal_True,
         // additional suppression of the standard button,
         // after the Initializing set to sal_True again
         if ( bFmtFlag != 2 )
-            aBaseFmtBtn.Show();
+            m_pBaseFmtBtn->Show();
         else
             bFmtFlag = sal_True;
     }
@@ -568,17 +579,17 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
         pOutSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
     }
 
-    aOKBtn.SetAccessibleRelationMemberOf( &aOKBtn );
-    aCancelBtn.SetAccessibleRelationMemberOf( &aCancelBtn );
-    aHelpBtn.SetAccessibleRelationMemberOf( &aHelpBtn );
-    aResetBtn.SetAccessibleRelationMemberOf( &aResetBtn );
+    m_pOKBtn->SetAccessibleRelationMemberOf( m_pOKBtn );
+    m_pCancelBtn->SetAccessibleRelationMemberOf( m_pCancelBtn );
+    m_pHelpBtn->SetAccessibleRelationMemberOf( m_pHelpBtn );
+    m_pResetBtn->SetAccessibleRelationMemberOf( m_pResetBtn );
 }
 
 // -----------------------------------------------------------------------
 
 void SfxTabDialog::RemoveResetButton()
 {
-    aResetBtn.Hide();
+    m_pResetBtn->Hide();
     pImpl->bHideResetBtn = sal_True;
 }
 
@@ -586,7 +597,7 @@ void SfxTabDialog::RemoveResetButton()
 
 short SfxTabDialog::Execute()
 {
-    if ( !aTabCtrl.GetPageCount() )
+    if ( !m_pTabCtrl->GetPageCount() )
         return RET_CANCEL;
     Start_Impl();
     return TabDialog::Execute();
@@ -596,7 +607,7 @@ short SfxTabDialog::Execute()
 
 void SfxTabDialog::StartExecuteModal( const Link& rEndDialogHdl )
 {
-    if ( !aTabCtrl.GetPageCount() )
+    if ( !m_pTabCtrl->GetPageCount() )
         return;
     Start_Impl();
     TabDialog::StartExecuteModal( rEndDialogHdl );
@@ -635,8 +646,8 @@ void SfxTabDialog::EnableApplyButton(sal_Bool bEnable)
     {
         pImpl->pApplyButton = new PushButton( this );
         // in the z-order, the apply button should be behind the ok button, thus appearing at the right side of it
-        pImpl->pApplyButton->SetZOrder(&aOKBtn, WINDOW_ZORDER_BEHIND);
-        pImpl->pApplyButton->SetText( SfxResId( STR_APPLY ).toString() );
+        pImpl->pApplyButton->SetZOrder(m_pOKBtn, WINDOW_ZORDER_BEHIND);
+        pImpl->pApplyButton->SetText(SfxResId( STR_APPLY ).toString());
         pImpl->pApplyButton->Show();
 
         pImpl->pApplyButton->SetHelpId( HID_TABDLG_APPLY_BTN );
@@ -667,20 +678,20 @@ void SfxTabDialog::Start_Impl()
     //exist to get overall optimal size for dialog
     if (isLayoutEnabled())
     {
-        for ( sal_uInt16 n=0; n < aTabCtrl.GetPageCount(); ++n)
+        for ( sal_uInt16 n=0; n < m_pTabCtrl->GetPageCount(); ++n)
         {
-            sal_uInt16 nPageId = aTabCtrl.GetPageId(n);
-            TabPage* pTabPage = aTabCtrl.GetTabPage(nPageId);
+            sal_uInt16 nPageId = m_pTabCtrl->GetPageId(n);
+            TabPage* pTabPage = m_pTabCtrl->GetTabPage(nPageId);
             if (!pTabPage)
             {
-                aTabCtrl.SetCurPageId(nPageId);
-                ActivatePageHdl(&aTabCtrl);
+                m_pTabCtrl->SetCurPageId(nPageId);
+                ActivatePageHdl(m_pTabCtrl);
             }
         }
     }
 
-    DBG_ASSERT( pImpl->pData->Count() == aTabCtrl.GetPageCount(), "not all pages registered" );
-    sal_uInt16 nActPage = aTabCtrl.GetPageId( 0 );
+    DBG_ASSERT( pImpl->pData->Count() == m_pTabCtrl->GetPageCount(), "not all pages registered" );
+    sal_uInt16 nActPage = m_pTabCtrl->GetPageId( 0 );
 
     // load old settings, when exists
     SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
@@ -700,14 +711,14 @@ void SfxTabDialog::Start_Impl()
                 nActPage = nAutoTabPageId;
         }
 
-        if ( TAB_PAGE_NOTFOUND == aTabCtrl.GetPagePos( nActPage ) )
-            nActPage = aTabCtrl.GetPageId( 0 );
+        if ( TAB_PAGE_NOTFOUND == m_pTabCtrl->GetPagePos( nActPage ) )
+            nActPage = m_pTabCtrl->GetPageId( 0 );
     }
-    else if ( USHRT_MAX != nAppPageId && TAB_PAGE_NOTFOUND != aTabCtrl.GetPagePos( nAppPageId ) )
+    else if ( USHRT_MAX != nAppPageId && TAB_PAGE_NOTFOUND != m_pTabCtrl->GetPagePos( nAppPageId ) )
         nActPage = nAppPageId;
 
-    aTabCtrl.SetCurPageId( nActPage );
-    ActivatePageHdl( &aTabCtrl );
+    m_pTabCtrl->SetCurPageId( nActPage );
+    ActivatePageHdl( m_pTabCtrl );
 }
 
 void SfxTabDialog::AddTabPage( sal_uInt16 nId, sal_Bool bItemsOnDemand )
@@ -771,9 +782,9 @@ void SfxTabDialog::AddTabPage
     sal_uInt16 nPos
 )
 {
-    DBG_ASSERT( TAB_PAGE_NOTFOUND == aTabCtrl.GetPagePos( nId ),
+    DBG_ASSERT( TAB_PAGE_NOTFOUND == m_pTabCtrl->GetPagePos( nId ),
                 "Double Page-Ids in the Tabpage" );
-    aTabCtrl.InsertPage( nId, rRiderText, nPos );
+    m_pTabCtrl->InsertPage( nId, rRiderText, nPos );
     pImpl->pData->Append(
         new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
 }
@@ -798,9 +809,9 @@ void SfxTabDialog::AddTabPage
     sal_uInt16 nPos
 )
 {
-    DBG_ASSERT( TAB_PAGE_NOTFOUND == aTabCtrl.GetPagePos( nId ),
+    DBG_ASSERT( TAB_PAGE_NOTFOUND == m_pTabCtrl->GetPagePos( nId ),
                 "Duplicate Page-Ids in the Tabpage" );
-    aTabCtrl.InsertPage( nId, rRiderBitmap, nPos );
+    m_pTabCtrl->InsertPage( nId, rRiderBitmap, nPos );
     pImpl->pData->Append(
         new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
 }
@@ -817,7 +828,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
 
 {
     sal_uInt16 nPos = 0;
-    aTabCtrl.RemovePage( nId );
+    m_pTabCtrl->RemovePage( nId );
     Data_Impl* pDataObject = Find( *pImpl->pData, nId, &nPos );
 
     if ( pDataObject )
@@ -1048,8 +1059,8 @@ IMPL_LINK_NOARG(SfxTabDialog, OkHdl)
 
 bool SfxTabDialog::PrepareLeaveCurrentPage()
 {
-    sal_uInt16 const nId = aTabCtrl.GetCurPageId();
-    SfxTabPage* pPage = dynamic_cast<SfxTabPage*> (aTabCtrl.GetTabPage( nId ));
+    sal_uInt16 const nId = m_pTabCtrl->GetCurPageId();
+    SfxTabPage* pPage = dynamic_cast<SfxTabPage*> (m_pTabCtrl->GetTabPage( nId ));
     bool bEnd = !pPage;
 
     if ( pPage )
@@ -1118,7 +1129,7 @@ IMPL_LINK_NOARG(SfxTabDialog, ResetHdl)
 */
 
 {
-    const sal_uInt16 nId = aTabCtrl.GetCurPageId();
+    const sal_uInt16 nId = m_pTabCtrl->GetCurPageId();
     Data_Impl* pDataObject = Find( *pImpl->pData, nId );
     DBG_ASSERT( pDataObject, "Id not known" );
 
@@ -1145,7 +1156,7 @@ IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl)
 */
 
 {
-    const sal_uInt16 nId = aTabCtrl.GetCurPageId();
+    const sal_uInt16 nId = m_pTabCtrl->GetCurPageId();
     Data_Impl* pDataObject = Find( *pImpl->pData, nId );
     DBG_ASSERT( pDataObject, "Id not known" );
     bFmt = 2;
@@ -1289,7 +1300,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     if ( pExampleSet )
         pTabPage->ActivatePage( *pExampleSet );
     sal_Bool bReadOnly = pTabPage->IsReadOnly();
-    ( bReadOnly || pImpl->bHideResetBtn ) ? aResetBtn.Hide() : aResetBtn.Show();
+    ( bReadOnly || pImpl->bHideResetBtn ) ? m_pResetBtn->Hide() : m_pResetBtn->Show();
     return 0;
 }
 
@@ -1389,8 +1400,8 @@ void SfxTabDialog::ShowPage( sal_uInt16 nId )
 */
 
 {
-    aTabCtrl.SetCurPageId( nId );
-    ActivatePageHdl( &aTabCtrl );
+    m_pTabCtrl->SetCurPageId( nId );
+    ActivatePageHdl( m_pTabCtrl );
 }
 
 // -----------------------------------------------------------------------
