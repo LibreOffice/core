@@ -68,8 +68,6 @@ public:
     virtual void    Modify();
 };
 
-typedef std::vector<SfxFilter*> SfxFilterPtrArr;
-
 // class SvxProxyTabPage -------------------------------------------------
 
 class SvxProxyTabPage : public SfxTabPage
