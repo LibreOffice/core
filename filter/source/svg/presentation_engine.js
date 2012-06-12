@@ -3375,6 +3375,13 @@ RGBColor.prototype.clone = function()
     return new RGBColor( this.nRed, this.nGreen, this.nBlue );
 };
 
+RGBColor.prototype.equal = function( aRGBColor )
+{
+    return ( this.nRed == aRGBColor.nRed ) &&
+           ( this.nGreen == aRGBColor.nGreen ) &&
+           ( this.nBlue == aRGBColor.nBlue );
+};
+
 RGBColor.prototype.add = function( aRGBColor )
 {
     this.nRed += aRGBColor.nRed;
@@ -3486,6 +3493,13 @@ function HSLColor( nHue, nSaturation, nLuminance )
 HSLColor.prototype.clone = function()
 {
     return new HSLColor( this.nHue, this.nSaturation, this.nLuminance );
+};
+
+HSLColor.prototype.equal = function( aHSLColor )
+{
+    return ( this.nHue == aHSLColor.nHue ) &&
+           ( this.nSaturation += aHSLColor.nSaturation ) &&
+           ( this.nLuminance += aHSLColor.nLuminance );
 };
 
 HSLColor.prototype.add = function( aHSLColor )
@@ -3990,11 +4004,11 @@ aPresetIdInMap = {};
 
 
 // Restart Modes
-RESTART_MODE_DEFAULT            = 0;
-RESTART_MODE_INHERIT            = 0;
-RESTART_MODE_ALWAYS             = 1;
-RESTART_MODE_WHEN_NOT_ACTIVE    = 2;
-RESTART_MODE_NEVER              = 3;
+var RESTART_MODE_DEFAULT            = 0;
+var RESTART_MODE_INHERIT            = 0;
+var RESTART_MODE_ALWAYS             = 1;
+var RESTART_MODE_WHEN_NOT_ACTIVE    = 2;
+var RESTART_MODE_NEVER              = 3;
 
 aRestartModeInMap = {
     'inherit'       : RESTART_MODE_DEFAULT,
@@ -4168,7 +4182,7 @@ BOXWIPE_TRANSITION          = 2;
 FOURBOXWIPE_TRANSITION      = 3;
 ELLIPSEWIPE_TRANSITION      = 4; // 17
 CLOCKWIPE_TRANSITION        = 5; // 22
-PINWHEELWIPE_TRANSITION     = 6  // 23
+PINWHEELWIPE_TRANSITION     = 6;  // 23
 PUSHWIPE_TRANSITION         = 7; // 35
 SLIDEWIPE_TRANSITION        = 8; // 36
 FADE_TRANSITION             = 9; // 37
@@ -9613,6 +9627,11 @@ var aOperatorSetMap = new Array();
 // number operators
 aOperatorSetMap[ NUMBER_PROPERTY ] = new Object();
 
+aOperatorSetMap[ NUMBER_PROPERTY ].equal = function( a, b )
+{
+    return ( a === b );
+};
+
 aOperatorSetMap[ NUMBER_PROPERTY ].add = function( a, b )
 {
     return ( a + b );
@@ -9625,6 +9644,11 @@ aOperatorSetMap[ NUMBER_PROPERTY ].scale = function( k, v )
 
 // color operators
 aOperatorSetMap[ COLOR_PROPERTY ] = new Object();
+
+aOperatorSetMap[ COLOR_PROPERTY ].equal = function( a, b )
+{
+    return a.equal( b );
+};
 
 aOperatorSetMap[ COLOR_PROPERTY ].add = function( a, b )
 {
@@ -10318,11 +10342,15 @@ function FromToByActivityTemplate( BaseType ) // template parameter
         this.aBy = aByValue;
         this.aStartValue = null;
         this.aEndValue = null;
+        this.aPreviousValue = null;
+        this.aStartInterpolationValue = null;
         this.aAnimation = aAnimation;
         this.aInterpolator = aInterpolator;
+        this.equal = aOperatorSet.equal;
         this.add = aOperatorSet.add;
         this.scale = aOperatorSet.scale;
         this.bDynamicStartValue = false;
+        this.nIteration = 0;
         this.bCumulative = bAccumulate;
 
         this.initAnimatedElement();
@@ -10378,6 +10406,9 @@ function FromToByActivityTemplate( BaseType ) // template parameter
         }
         else
         {
+            this.aStartValue = aAnimationStartValue;
+            this.aStartInterpolationValue = this.aStartValue;
+
             // By or To animation. According to SMIL spec,
             // the To value takes precedence over the By
             // value, if both are specified
@@ -10390,6 +10421,7 @@ function FromToByActivityTemplate( BaseType ) // template parameter
                 // the to animation interpolates between
                 // the _running_ underlying value and the to value (as the end value)
                 this.bDynamicStartValue = true;
+                this.aPreviousValue = this.aStartValue;
                 this.aEndValue = this.aTo;
             }
             else if( this.aBy )
@@ -10420,18 +10452,61 @@ function FromToByActivityTemplate( BaseType ) // template parameter
             return;
         }
 
-        var aValue = this.bDynamicStartValue ? this.aAnimation.getUnderlyingValue()
-                                             : this.aStartValue;
 
-        aValue = this.aInterpolator( aValue, this.aEndValue, nModifiedTime );
+        // According to SMIL 3.0 spec 'to' animation if no other (lower priority)
+        // animations are active or frozen then a simple interpolation is performed.
+        // That is, the start interpolation value is constant while the animation
+        // is running, and is equal to the underlying value retrieved when
+        // the animation start.
+        // However if another animation is manipulating the underlying value,
+        // the 'to' animation will initially add to the effect of the lower priority
+        // animation, and increasingly dominate it as it nears the end of the
+        // simple duration, eventually overriding it completely.
+        // That is, each time the underlying value is changed between two
+        // computations of the animation function the new underlying value is used
+        // as start value for the interpolation.
+        // See:
+        // http://www.w3.org/TR/SMIL3/smil-animation.html#animationNS-ToAnimation
+        // (Figure 6 - Effect of Additive to animation example)
+        // Moreover when a 'to' animation is repeated, at each new iteration
+        // the start interpolation value is reset to the underlying value
+        // of the animated property when the animation started,
+        // as it is shown in the example provided by the SMIL 3.0 spec.
+        // This is exactly as Firefox performs SVG 'to' animations.
+        if( this.bDynamicStartValue )
+        {
+            if( this.nIteration != nRepeatCount )
+            {
+                this.nIteration = nRepeatCount;
+                this.aStartInterpolationValue =  this.aStartValue;
+            }
+            else
+            {
+                var aActualValue = this.aAnimation.getUnderlyingValue();
+                if( !this.equal( aActualValue, this.aPreviousValue ) )
+                    this.aStartInterpolationValue = aActualValue;
+            }
+        }
 
-        if( this.bCumulative )
+        var aValue = this.aInterpolator( this.aStartInterpolationValue,
+                                         this.aEndValue, nModifiedTime );
+
+        // According to the SMIL spec:
+        // Because 'to' animation is defined in terms of absolute values of
+        // the target attribute, cumulative animation is not defined.
+        if( this.bCumulative && !this.bDynamicStartValue )
         {
             // aValue = this.aEndValue * nRepeatCount + aValue;
             aValue = this.add( this.scale( nRepeatCount, this.aEndValue ), aValue );
         }
 
         this.aAnimation.perform( aValue );
+
+        if( this.bDynamicStartValue )
+        {
+            this.aPreviousValue = this.aAnimation.getUnderlyingValue();
+        }
+
     };
 
     FromToByActivity.prototype.performEnd = function()
