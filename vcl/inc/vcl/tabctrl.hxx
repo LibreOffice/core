@@ -192,6 +192,9 @@ public:
 
     // returns the rectangle of the tab for page nPageId
     Rectangle GetTabBounds( sal_uInt16 nPageId ) const;
+
+    // rename nOldId to nNewId);
+    void ReassignPageId(sal_uInt16 nOldId, sal_uInt16 nNewId);
 };
 
 #endif  // _SV_TABCTRL_HXX

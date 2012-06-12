@@ -183,21 +183,31 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     if (pParent && pParent->GetType() == WINDOW_TABCONTROL)
     {
         //We have to add a page
+
+        //make default pageid == -position. Partitioning the
+        //id space into negative numbers for auto-generated
+        //ids and positive numbers for the handleTabChild
+        //derived ids
         TabControl *pTabControl = static_cast<TabControl*>(pParent);
-        TabPage* pPage = new TabPage(pTabControl);
-        m_aChildren.push_back(WinAndId(rtl::OString(), pPage));
-
-        //And give the page one container as a child to make it a layout enabled
-        //tab page
-        VclBin* pContainer = new VclBin(pPage);
-        m_aChildren.push_back(WinAndId(rtl::OString(), pContainer));
-        pParent = pContainer;
-
-        //keep it simple and make pageid == position
-        sal_uInt16 nNewPageId = pTabControl->GetPageCount()+1;
+        sal_uInt16 nNewPageId = -(pTabControl->GetPageCount()+1);
         pTabControl->InsertPage(nNewPageId, rtl::OUString());
-        pTabControl->SetTabPage(nNewPageId, pPage);
         pTabControl->SetCurPageId(nNewPageId);
+
+        bool bIsPlaceHolder = name.isEmpty();
+
+        if (!bIsPlaceHolder)
+        {
+            TabPage* pPage = new TabPage(pTabControl);
+            m_aChildren.push_back(WinAndId(rtl::OString(), pPage));
+
+            //And give the page one container as a child to make it a layout enabled
+            //tab page
+            VclBin* pContainer = new VclBin(pPage);
+            m_aChildren.push_back(WinAndId(rtl::OString(), pContainer));
+            pParent = pContainer;
+
+            pTabControl->SetTabPage(nNewPageId, pPage);
+        }
     }
 
     Window *pWindow = NULL;
@@ -341,6 +351,8 @@ void VclBuilder::reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition)
 
 void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
 {
+    rtl::OString sID;
+
     int nLevel = 1;
     stringmap aProperties;
     while(1)
@@ -356,6 +368,17 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
             ++nLevel;
             if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
                 collectProperty(reader, aProperties);
+            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
+            {
+                while (reader.nextAttribute(&nsId, &name))
+                {
+                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
+                    {
+                        name = reader.getAttributeValue(false);
+                        sID = rtl::OString(name.begin, name.length);
+                    }
+                }
+            }
         }
 
         if (res == xmlreader::XmlReader::RESULT_END)
@@ -371,7 +394,26 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
     TabControl *pTabControl = static_cast<TabControl*>(pParent);
     VclBuilder::stringmap::iterator aFind = aProperties.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("label")));
     if (aFind != aProperties.end())
+    {
         pTabControl->SetPageText(pTabControl->GetCurPageId(), rtl::OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
+
+        sal_Int32 nID = 0;
+        //To make it easier to retro fit pre-builder dialog code we take the
+        //notebook child id (falling back to notebook label id) and if its a
+        //positive number use that as the page id so existing code can find the
+        //right tabpage by id
+        TabPage *pPage = pTabControl->GetTabPage(pTabControl->GetCurPageId());
+        if (pPage)
+        {
+            VclBin *pContainer = static_cast<VclBin*>(pPage->GetWindow(WINDOW_FIRSTCHILD));
+            Window *pChild = pContainer->get_child();
+            nID = pChild ? get_by_window(pChild).toInt32() : 0;
+        }
+        if (nID == 0)
+            nID = sID.toInt32();
+        if (nID > 0)
+            pTabControl->ReassignPageId(pTabControl->GetCurPageId(), nID);
+    }
     else
         pTabControl->RemovePage(pTabControl->GetCurPageId());
 }
@@ -411,13 +453,15 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
             {
                 pCurrentChild = handleObject(pParent, reader);
 
-                if (pCurrentChild)
+                bool bObjectInserted = pCurrentChild && pParent != pCurrentChild;
+
+                if (bObjectInserted)
                 {
                     //Select the first page if its a notebook
                     if (pCurrentChild->GetType() == WINDOW_TABCONTROL)
                     {
                         TabControl *pTabControl = static_cast<TabControl*>(pCurrentChild);
-                        pTabControl->SetCurPageId(1);
+                        pTabControl->SetCurPageId(pTabControl->GetPageId(0));
 
                         //To-Do add reorder capability to the TabControl
                     }
@@ -713,6 +757,18 @@ Window *VclBuilder::get_by_name(rtl::OString sID)
     return NULL;
 }
 
+rtl::OString VclBuilder::get_by_window(const Window *pWindow)
+{
+    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
+         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_pWindow == pWindow)
+            return aI->m_sID;
+    }
+
+    return rtl::OString();
+}
+
 VclBuilder::ListStore *VclBuilder::get_model_by_name(rtl::OString sID)
 {
     for (std::vector<ModelAndId>::iterator aI = m_aModels.begin(),
@@ -728,13 +784,7 @@ VclBuilder::ListStore *VclBuilder::get_model_by_name(rtl::OString sID)
 void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
 {
 #if 1
-    if (rOrig.mpWindowImpl->mpBorderWindow)
-        fprintf(stderr, "problem one\n");
-
     sal_uInt16 nPosition = getPositionWithinParent(rOrig);
-
-    if (rReplacement.mpWindowImpl->mpBorderWindow)
-        fprintf(stderr, "problem two\n");
 
     rReplacement.take_properties(rOrig);
 
