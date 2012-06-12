@@ -116,7 +116,8 @@ void PDFIProcessor::setPageNum( sal_Int32 nPages )
 
 void PDFIProcessor::pushState()
 {
-    m_aGCStack.push_back( m_aGCStack.back() );
+    GraphicsContextStack::value_type const a(m_aGCStack.back());
+    m_aGCStack.push_back(a);
 }
 
 void PDFIProcessor::popState()
