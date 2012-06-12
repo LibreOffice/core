@@ -1038,19 +1038,6 @@ void VCLXWindow::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::Ru
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-/*
-        if ( bVisible )
-        {
-            // #57167# TopWindows mit unsichtbaren Parent anzeigen...
-            ::com::sun::star::uno::Any aTest = queryInterface( ::getCppuType(  (const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow >*)  0 ) );
-            if ( aTest.hasValue() )
-            {
-                Window* pParent = pWindow->GetWindow( WINDOW_PARENTOVERLAP );
-                if ( pParent && !pParent->IsReallyVisible() )
-                    pWindow->SetParent( pWindow->GetWindow( WINDOW_FRAME ) );
-            }
-        }
-*/
         mpImpl->setDirectVisible( bVisible );
         pWindow->Show( bVisible &&  mpImpl->isEnableVisible() );
     }

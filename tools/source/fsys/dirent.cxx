@@ -1770,12 +1770,6 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-/*
-    FileStat aSourceStat(*this);
-    if ( !aSourceStat.IsKind(FSYS_KIND_FILE) )
-        return FSYS_ERR_NOTAFILE;
-*/
-
     DirEntry aDest(rNewName);
     FileStat aDestStat(rNewName);
     if ( aDestStat.IsKind(FSYS_KIND_DIR ) )

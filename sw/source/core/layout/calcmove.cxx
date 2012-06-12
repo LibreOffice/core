@@ -731,10 +731,6 @@ void SwPageFrm::MakeAll()
                     if ( nWidth < pSh->GetBrowseWidth() )
                         nWidth = pSh->GetBrowseWidth();
                     nWidth += + 2 * aBorder.Width();
-/*
-                    long nWidth = GetUpper() ? ((SwRootFrm*)GetUpper())->GetBrowseWidth() + 2 * aBorder.Width() : 0;
-                    if ( nWidth < pSh->VisArea().Width() )
-                        nWidth = pSh->VisArea().Width(); */
 
                     nWidth = Max( nWidth, 2L * aBorder.Width() + 4L*MM50 );
                     Frm().Width( nWidth );
@@ -1066,17 +1062,6 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 nUpper=0;
                 nLower=0;
             }
-//            // in balanced columned section frames we do not want the
-//            // common border
-//            sal_Bool bCommonBorder = sal_True;
-//            if ( IsInSct() && GetUpper()->IsColBodyFrm() )
-//            {
-//                const SwSectionFrm* pSct = FindSctFrm();
-//                bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
-//            }
-//            SwTwips nLower = bCommonBorder ?
-//                             rAttrs.GetBottomLine( this ) :
-//                             rAttrs.CalcBottomLine();
 
             (Prt().*fnRect->fnSetPosY)( (!bVert || bReverse) ? nUpper : nLower);
             nUpper += nLower;

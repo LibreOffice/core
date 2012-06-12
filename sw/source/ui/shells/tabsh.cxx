@@ -82,16 +82,6 @@
 #include <tblsel.hxx>
 
 #include <dialog.hrc>
-
-//!!! new: insert table
-/*
-#include <svx/htmlmode.hxx>
-#include <modcfg.hxx>
-#include <tblafmt.hxx>
-#include <instable.hxx>
-*/
-//!!!
-
 #include <popup.hrc>
 #include <shells.hrc>
 #include <cmdid.h>

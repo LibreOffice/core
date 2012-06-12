@@ -406,13 +406,6 @@ void ContentProvider::fillDocumentProperties(const ::rtl::Reference<ContentPrope
     if(odm == ODM_SUCCESS)
         _rProp->m_sKeywords = ::rtl::OStringToOUString(rtl::OString(lpszDocInfo),RTL_TEXTENCODING_ASCII_US);
 
-/*
-    odm = NODMGetDocInfo(   getHandle(),
-                                    const_cast<sal_Char*>(_rProp->m_sDocumentId.getStr()),
-                                    ODM_URL,
-                                    lpszDocInfo,
-                                    ODM_DOCID_MAX);
-*/
     delete [] lpszDocInfo;
 }
 // -----------------------------------------------------------------------------

@@ -387,7 +387,6 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 
 static sal_Int32                            nVCLToolkitInstanceCount = 0;
 static sal_Bool                                 bInitedByVCLToolkit = sal_False;
-//static cppu::OInterfaceContainerHelper *  pToolkits = 0;
 
 static osl::Mutex & getInitMutex()
 {
@@ -456,20 +455,6 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
         catch( com::sun::star::uno::Exception & )
         {
         }
-        /*
-        if( pToolkits )
-        {
-            cppu::OInterfaceIteratorHelper aIt( *pToolkits );
-            ::com::sun::star::uno::XInterface * pI;
-            while( pI = aIt.next() )
-                ((::com::sun::star::lang::XComponent *)pI)->dispose();
-
-            // delete toolkit container
-            osl::Guard< osl::Mutex > aGuard( getInitMutex() );
-            delete pToolkits;
-            pToolkits = 0;
-        }
-        */
         DeInitVCL();
     }
     else
@@ -508,15 +493,6 @@ VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::st
         // setup execute thread
         CreateMainLoopThread( ToolkitWorkerFunction, new ToolkitThreadData( rSMgr, this ) );
         getInitCondition().wait();
-        /*
-        if( bInitedByVCLToolkit )
-        {
-            // insert in disposing list
-            if( !pToolkits )
-                pToolkits = new cppu::OInterfaceContainerHelper( getInitMutex() );
-            pToolkits->addInterface( (::com::sun::star::lang::XComponent *)this );
-        }
-        */
     }
 }
 
@@ -562,16 +538,6 @@ void SAL_CALL VCLXToolkit::disposing()
     m_aTopWindowListeners.disposeAndClear(aEvent);
     m_aKeyHandlers.disposeAndClear(aEvent);
     m_aFocusListeners.disposeAndClear(aEvent);
-
-/*
-    osl::Guard< osl::Mutex > aGuard( getInitMutex() );
-    // insert in disposing list
-    if( pToolkits )
-    {
-        // remove from the disposing list
-        pToolkits->removeInterface( (::com::sun::star::lang::XComponent *)this );
-    }
-*/
 }
 
 
@@ -895,15 +861,6 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new TabDialog( pParent, nWinBits );
             break;
             case WINDOW_TABPAGE:
-                /*
-                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCaseAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("tabpagemodel") ) )
-                {
-                    pNewWindow = new TabControl( pParent, nWinBits );
-                    *ppNewComp = new VCLXTabPageContainer;
-                }
-                else
-                */
                 {
                     pNewWindow = new TabPage( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPage;

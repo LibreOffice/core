@@ -122,28 +122,6 @@ enum EViewType
 
 class UNOTOOLS_DLLPUBLIC SvtViewOptions: public utl::detail::Options
 {
-    /*
-    #ifdef TF_OLDVIEW
-    public:
-        void                                                                        GetPosition     (       sal_Int32&                                                                  nX              ,
-                                                                                                            sal_Int32&                                                                  nY              ) const;
-        void                                                                        SetPosition     (       sal_Int32                                                                   nX              ,
-                                                                                                            sal_Int32                                                                   nY              );
-        void                                                                        GetSize         (       sal_Int32&                                                                  nWidth          ,
-                                                                                                            sal_Int32&                                                                  nHeight         ) const;
-        void                                                                        SetSize         (       sal_Int32                                                                   nWidth          ,
-                                                                                                            sal_Int32                                                                   nHeight         );
-        ::rtl::OUString                                                             GetUserData     (                                                                                                   ) const;
-        void                                                                        SetUserData     ( const ::rtl::OUString&                                                            sData           );
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString >                   SeperateUserData( const ::rtl::OUString&                                                            sData           ,
-                                                                                                            sal_Unicode                                                                 cSeperator=';'  );
-        static ::rtl::OUString                                                      GenerateUserData( const ::com::sun::star::uno::Sequence< ::rtl::OUString >&                         seqData         ,
-                                                                                                            sal_Unicode                                                                 cSeperator=';'  );
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   GetAnyData      (                                                                                                   ) const;
-        void                                                                        SetAnyData      ( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&  lData           );
-    #endif
-    */
-
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -273,13 +251,7 @@ class UNOTOOLS_DLLPUBLIC SvtViewOptions: public utl::detail::Options
 
             @onerror    In the non-product version, an assertion is made. In a product version, errors are silently ignored.
         *//*-*****************************************************************************************************/
-/*
-#ifdef TF_OLDVIEW
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetUserData( sal_Bool bMakeItDifferent ) const;
-#else
-*/
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetUserData(                                                                                     ) const;
-//#endif
         void                                                                   SetUserData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lData );
 
         /*-****************************************************************************************************//**

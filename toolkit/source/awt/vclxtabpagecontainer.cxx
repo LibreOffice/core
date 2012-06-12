@@ -85,19 +85,6 @@ void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY ) throw(Run
     }
 
     VCLXWindow::draw( nX, nY );
-/*
-    if ( pWindow )
-    {
-        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
-        if ( !pDev )
-            pDev = pWindow->GetParent();
-
-        Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
-        Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
-
-        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
-    }
-*/
 }
 
 ::com::sun::star::awt::DeviceInfo VCLXTabPageContainer::getInfo() throw(RuntimeException)
@@ -177,7 +164,6 @@ void VCLXTabPageContainer::ProcessWindowEvent( const VclWindowEvent& _rVclWindow
         {
             case VCLEVENT_TABPAGE_ACTIVATE:
             {
-//                allocateArea( maAllocation );
                 sal_uLong page = (sal_uLong)_rVclWindowEvent.GetData();
                 awt::tab::TabPageActivatedEvent aEvent(NULL,page);
                 m_aTabPageListeners.tabPageActivated(aEvent);

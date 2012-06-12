@@ -348,15 +348,6 @@ namespace
         if ( _rSel.Min > _rSel.Max )
             ::std::swap( _rSel.Min, _rSel.Max );
     }
-
-/*
-    static bool lcl_intersect( const awt::Selection& _rLHS, const awt::Selection& _rRHS )
-    {
-        OSL_PRECOND( _rLHS.Min <= _rLHS.Max, "lcl_intersect: LHS to be normalized!" );
-        OSL_PRECOND( _rRHS.Min <= _rRHS.Max, "lcl_intersect: RHS to be normalized!" );
-        return !( ( _rLHS.Max < _rRHS.Min ) || ( _rLHS.Min > _rRHS.Max ) );
-    }
-*/
 }
 
 void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUString& rNewText ) throw(uno::RuntimeException)

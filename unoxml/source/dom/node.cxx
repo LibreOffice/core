@@ -861,10 +861,6 @@ namespace DOM
 
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
-/*
-        Reference< XNode > aNode = removeChild(oldChild);
-        appendChild(newChild);
-*/
         ::rtl::Reference<CNode> const pOldNode(
                 CNode::GetImplementation(xOldChild));
         ::rtl::Reference<CNode> const pNewNode(

@@ -282,17 +282,6 @@ void SwFlyInCntFrm::MakeAll()
         if ( !bValidSize )
         {
             bValidPrtArea = sal_False;
-/*
-            // This is also done in the Format function, so I think
-            // this code is not necessary anymore:
-            long nOldWidth = aFrm.Width();
-            const Size aRelSize( CalcRel( rFrmSz ) );
-            aFrm.Width( aRelSize.Width() );
-
-            if ( aFrm.Width() > nOldWidth )
-                //Damit sich der Inhalt anpasst
-                aFrm.Height( aRelSize.Height() );
-*/
         }
 
         if ( !bValidPrtArea )

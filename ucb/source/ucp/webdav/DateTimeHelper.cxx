@@ -117,28 +117,6 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
     return false;
 }
 
-/*
-sal_Int32 DateTimeHelper::convertDayToInt (const OUString& day)
-{
-    if (day.compareToAscii ("Sun") == 0)
-        return 0;
-    else if (day.compareToAscii ("Mon") == 0)
-        return 1;
-    else if (day.compareToAscii ("Tue") == 0)
-        return 2;
-    else if (day.compareToAscii ("Wed") == 0)
-        return 3;
-    else if (day.compareToAscii ("Thu") == 0)
-        return 4;
-    else if (day.compareToAscii ("Fri") == 0)
-        return 5;
-    else if (day.compareToAscii ("Sat") == 0)
-        return 6;
-    else
-        return -1;
-}
-*/
-
 sal_Int32 DateTimeHelper::convertMonthToInt (const OUString& month)
 {
     if (month.compareToAscii ("Jan") == 0)
