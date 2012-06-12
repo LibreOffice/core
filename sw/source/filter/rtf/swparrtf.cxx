@@ -3589,7 +3589,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
             // wurde an der Position ein Escapement aufgespannt, so entferne
             // das jetzt. Fussnoten sind bei uns immer hochgestellt.
-            SvxRTFItemStackTypePtr pTmp = aSaveStack.empty() ? 0 : aSaveStack.back();
+            SvxRTFItemStackType* pTmp = aSaveStack.empty() ? 0 : aSaveStack.back();
             if( pTmp && pTmp->GetSttNodeIdx() ==
                 pPam->GetPoint()->nNode.GetIndex() &&
                 pTmp->GetSttCnt() == nPos )

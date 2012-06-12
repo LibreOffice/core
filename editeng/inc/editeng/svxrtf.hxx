@@ -39,6 +39,7 @@
 #include <utility>
 #include <vector>
 #include "boost/ptr_container/ptr_map.hpp"
+#include "boost/ptr_container/ptr_vector.hpp"
 
 class Font;
 class Color;
@@ -46,7 +47,7 @@ class Graphic;
 class DateTime;
 struct SvxRTFStyleType;
 class SvxRTFItemStackType;
-class SvxRTFItemStackList;
+class SvxRTFItemStackList : public boost::ptr_vector<SvxRTFItemStackType> {};
 
 namespace com { namespace sun { namespace star {
     namespace document {
@@ -88,12 +89,10 @@ typedef Color* ColorPtr;
 typedef std::deque< ColorPtr > SvxRTFColorTbl;
 typedef boost::ptr_map<short, Font> SvxRTFFontTbl;
 typedef boost::ptr_map<sal_uInt16, SvxRTFStyleType> SvxRTFStyleTbl;
-typedef SvxRTFItemStackType* SvxRTFItemStackTypePtr;
-SV_DECL_PTRARR_DEL( SvxRTFItemStackList, SvxRTFItemStackTypePtr, 1 )
 
-// SvxRTFItemStack can't be "std::stack< SvxRTFItemStackTypePtr >" type, because
+// SvxRTFItemStack can't be "std::stack< SvxRTFItemStackType* >" type, because
 // the methods are using operator[] in sw/source/filter/rtf/rtftbl.cxx file
-typedef std::deque< SvxRTFItemStackTypePtr > SvxRTFItemStack;
+typedef std::deque< SvxRTFItemStackType* > SvxRTFItemStack;
 
 // own helper classes for the RTF Parser
 struct SvxRTFStyleType
@@ -262,7 +261,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     void ClearStyleTbl();
     void ClearAttrStack();
 
-    SvxRTFItemStackTypePtr _GetAttrSet( int bCopyAttr=sal_False );  // Create new ItemStackType:s
+    SvxRTFItemStackType* _GetAttrSet( int bCopyAttr=sal_False );  // Create new ItemStackType:s
     void _ClearStyleAttr( SvxRTFItemStackType& rStkType );
 
     // Sets all the attributes that are different from the current
@@ -413,7 +412,6 @@ public:
 class EDITENG_DLLPUBLIC SvxRTFItemStackType
 {
     friend class SvxRTFParser;
-    friend class SvxRTFItemStackList;
 
     SfxItemSet  aAttrSet;
     SvxNodeIdx  *pSttNd, *pEndNd;
@@ -423,14 +421,14 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
 
     SvxRTFItemStackType( SfxItemPool&, const sal_uInt16* pWhichRange,
                             const SvxPosition& );
-    ~SvxRTFItemStackType();
 
-    void Add( SvxRTFItemStackTypePtr );
+    void Add( SvxRTFItemStackType* );
     void Compress( const SvxRTFParser& );
 
 public:
     SvxRTFItemStackType( const SvxRTFItemStackType&, const SvxPosition&,
                         int bCopyAttr = sal_False );
+    ~SvxRTFItemStackType();
     //cmc, I'm very suspicios about SetStartPos, it doesn't change
     //its children's starting position, and the implementation looks
     //bad, consider this deprecated.
@@ -469,7 +467,7 @@ inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 
 inline SfxItemSet& SvxRTFParser::GetAttrSet()
 {
-    SvxRTFItemStackTypePtr pTmp;
+    SvxRTFItemStackType* pTmp;
     if( bNewGroup || 0 == ( pTmp = aAttrStack.empty() ? 0 : aAttrStack.back()) )
         pTmp = _GetAttrSet();
     return pTmp->aAttrSet;

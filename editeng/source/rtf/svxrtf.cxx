@@ -50,8 +50,6 @@
 using namespace ::com::sun::star;
 
 
-SV_IMPL_PTRARR( SvxRTFItemStackList, SvxRTFItemStackType* )
-
 CharSet lcl_GetDefaultTextEncodingForRTF()
 {
 
@@ -224,11 +222,11 @@ INSINGLECHAR:
         {
             InsertText();
             // all collected Attributes are set
-            for( sal_uInt16 n = aAttrSetList.Count(); n; )
+            for( sal_uInt16 n = aAttrSetList.size(); n; )
             {
-                SvxRTFItemStackType* pStkSet = aAttrSetList[--n];
+                SvxRTFItemStackType* pStkSet = &aAttrSetList[--n];
                 SetAttrSet( *pStkSet );
-                aAttrSetList.DeleteAndDestroy( n );
+                aAttrSetList.pop_back();
             }
         }
         break;
@@ -1005,8 +1003,8 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                                 // Last off the stack, thus cache it until the next text was
                                 // read. (Span no attributes!)
 
-                                aAttrSetList.Insert( pOld, aAttrSetList.Count() );
-                                aAttrSetList.Insert( pNew, aAttrSetList.Count() );
+                                aAttrSetList.push_back( pOld );
+                                aAttrSetList.push_back( pNew );
                             }
                             pOld = 0;   // Do not delete pOld
                             break;
@@ -1035,7 +1033,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     pAkt->Add( pOld );
                     // split up and create new entry, because it make no sense
                     // to create a "so long" depend list. Bug 95010
-                    if( bCrsrBack && 50 < pAkt->pChildList->Count() )
+                    if( bCrsrBack && 50 < pAkt->pChildList->size() )
                     {
                         // at the beginning of a paragraph? Move back one position
                         MovePos( sal_True );
@@ -1057,7 +1055,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 else
                     // Last off the stack, thus cache it until the next text was
                     // read. (Span no attributes!)
-                    aAttrSetList.Insert( pOld, aAttrSetList.Count() );
+                    aAttrSetList.push_back( pOld );
 
                 pOld = 0;
             }
@@ -1081,11 +1079,11 @@ void SvxRTFParser::SetAllAttrOfStk()        // end all Attr. and set it into doc
     while( !aAttrStack.empty() )
         AttrGroupEnd();
 
-    for( sal_uInt16 n = aAttrSetList.Count(); n; )
+    for( sal_uInt16 n = aAttrSetList.size(); n; )
     {
-        SvxRTFItemStackType* pStkSet = aAttrSetList[--n];
+        SvxRTFItemStackType* pStkSet = &aAttrSetList[--n];
         SetAttrSet( *pStkSet );
-        aAttrSetList.DeleteAndDestroy( n );
+        aAttrSetList.pop_back();
     }
 }
 
@@ -1103,8 +1101,8 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
 
     // then process all the children
     if( rSet.pChildList )
-        for( sal_uInt16 n = 0; n < rSet.pChildList->Count(); ++n )
-            SetAttrSet( *(*rSet.pChildList)[ n ] );
+        for( sal_uInt16 n = 0; n < rSet.pChildList->size(); ++n )
+            SetAttrSet( (*rSet.pChildList)[ n ] );
 }
 
     // Has no Text been inserted yet? (SttPos from the top Stack entry!)
@@ -1205,8 +1203,8 @@ SvxRTFItemStackType::~SvxRTFItemStackType()
 void SvxRTFItemStackType::Add( SvxRTFItemStackType* pIns )
 {
     if( !pChildList )
-         pChildList = new SvxRTFItemStackList( 4 );
-    pChildList->Insert( pIns, pChildList->Count() );
+         pChildList = new SvxRTFItemStackList();
+    pChildList->push_back( pIns );
 }
 
 void SvxRTFItemStackType::SetStartPos( const SvxPosition& rPos )
@@ -1239,10 +1237,10 @@ void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
     }
 
     //And the same for all the children
-    sal_uInt16 nCount = pChildList ? pChildList->Count() : 0;
+    sal_uInt16 nCount = pChildList ? pChildList->size() : 0;
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        SvxRTFItemStackType* pStk = (*pChildList)[i];
+        SvxRTFItemStackType* pStk = &(*pChildList)[i];
         pStk->MoveFullNode(rOldNode, rNewNode);
     }
 }
@@ -1257,7 +1255,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
     DBG_ASSERT( pChildList, "There is no child list" );
 
     sal_uInt16 n;
-    SvxRTFItemStackType* pTmp = (*pChildList)[0];
+    SvxRTFItemStackType* pTmp = &(*pChildList)[0];
 
     if( !pTmp->aAttrSet.Count() ||
         pSttNd->GetIdx() != pTmp->pSttNd->GetIdx() ||
@@ -1268,9 +1266,9 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
     xub_StrLen nLastCnt = pTmp->nEndCnt;
 
     SfxItemSet aMrgSet( pTmp->aAttrSet );
-    for( n = 1; n < pChildList->Count(); ++n )
+    for( n = 1; n < pChildList->size(); ++n )
     {
-        pTmp = (*pChildList)[n];
+        pTmp = &(*pChildList)[n];
         if( pTmp->pChildList )
             pTmp->Compress( rParser );
 
@@ -1280,8 +1278,8 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
             : ( pTmp->nSttCnt != nLastCnt ||
                 pLastNd->GetIdx() != pTmp->pSttNd->GetIdx() ))
         {
-            while( ++n < pChildList->Count() )
-                if( (pTmp = (*pChildList)[n])->pChildList )
+            while( ++n < pChildList->size() )
+                if( (pTmp = &(*pChildList)[n])->pChildList )
                     pTmp->Compress( rParser );
             return;
         }
@@ -1319,20 +1317,19 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
     // It can be merged
     aAttrSet.Put( aMrgSet );
 
-    for( n = 0; n < pChildList->Count(); ++n )
+    for( n = 0; n < pChildList->size(); ++n )
     {
-        pTmp = (*pChildList)[n];
+        pTmp = &(*pChildList)[n];
         pTmp->aAttrSet.Differentiate( aMrgSet );
 
         if( !pTmp->pChildList && !pTmp->aAttrSet.Count() && !pTmp->nStyleNo )
         {
-            pChildList->Remove( n );
-            delete pTmp;
+            pChildList->erase( pChildList->begin() + n );
             --n;
             continue;
         }
     }
-    if( !pChildList->Count() )
+    if( pChildList->empty() )
     {
         delete pChildList;
         pChildList = 0;
