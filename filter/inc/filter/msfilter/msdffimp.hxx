@@ -43,6 +43,7 @@
 #include <filter/msfilter/msfilterdllapi.h>
 #include <sot/storage.hxx>
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class Graphic;
 class SvStream;
@@ -177,8 +178,6 @@ public:
 
 #define COL_DEFAULT RGB_COLORDATA( 0xFA, 0xFB, 0xFC )
 
-typedef SvxMSDffBLIPInfo*  SvxMSDffBLIPInfo_Ptr;
-
 typedef SvxMSDffShapeInfo* SvxMSDffShapeInfo_Ptr;
 
 typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
@@ -186,7 +185,7 @@ typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 #define SVEXT_PERSIST_STREAM "\002OlePres000"
 
 // nach der Reihenfolge des Auftretens sortiert werden:
-SV_DECL_PTRARR_DEL(SvxMSDffBLIPInfos,   SvxMSDffBLIPInfo_Ptr,   16)
+typedef boost::ptr_vector<SvxMSDffBLIPInfo> SvxMSDffBLIPInfos;
 
 class SvxMSDffShapeOrders : public std::vector<SvxMSDffShapeOrder*>
 {

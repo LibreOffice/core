@@ -5718,8 +5718,6 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
 //  Hilfs Deklarationen
 //---------------------------------------------------------------------------
 
-SV_IMPL_PTRARR(         SvxMSDffBLIPInfos,      SvxMSDffBLIPInfo_Ptr    );
-
 SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeInfos,     SvxMSDffShapeInfo_Ptr   );
 
 SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeTxBxSort,  SvxMSDffShapeOrder*  );
@@ -6105,8 +6103,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                     nBLIPCount++;
 
                 // Jetzt die Infos fuer spaetere Zugriffe speichern
-                pBLIPInfos->Insert( new SvxMSDffBLIPInfo( nInst, nBLIPPos, nBLIPLen ),
-                                                          pBLIPInfos->Count() );
+                pBLIPInfos->push_back( new SvxMSDffBLIPInfo( nInst, nBLIPPos, nBLIPLen ) );
             }
         }
         rSt.SeekRel( nLength );
@@ -6446,7 +6443,7 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
         if ( !bOk )
         {
             sal_uInt16 nIdx = sal_uInt16( nIdx_ );
-            if( !nIdx || (pBLIPInfos->Count() < nIdx) ) return sal_False;
+            if( !nIdx || (pBLIPInfos->size() < nIdx) ) return sal_False;
 
             // eventuell alte(s) Errorflag(s) loeschen
             if( rStCtrl.GetError() )
@@ -6460,7 +6457,7 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
             sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
 
             // passende Info-Struct aus unserem Pointer Array nehmen
-            SvxMSDffBLIPInfo& rInfo = *(*pBLIPInfos)[ nIdx-1 ];
+            SvxMSDffBLIPInfo& rInfo = (*pBLIPInfos)[ nIdx-1 ];
 
             // das BLIP Atom im Daten Stream anspringen
             pStData->Seek( rInfo.nFilePos );
