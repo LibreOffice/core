@@ -101,11 +101,6 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:GridMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Gr~id</value>
-                </prop>
-            </node>
             <node oor:name=".uno:ColumnHeaderFooter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Column Header/Footer</value>
@@ -256,17 +251,6 @@
             <!-- U will find corresponding icons in default_images/res/commandimagelist. -->
             <!-- The name has no .uno: prefix but lc_ or lch_ or sc_ or sch_ -->
 
-            <node oor:name=".uno:EditShapeMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Shape Arrange</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:EditControlMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Control</value>
-                </prop>
-            </node>
 
             <!--
             <node oor:name=".uno:EditSectionMenu" oor:op="replace">
@@ -276,77 +260,6 @@
             </node>
 -->
 
-            <node oor:name=".uno:AlignmentMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Alignment</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:ResizeMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Resize</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:SectionAlignmentMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Section alignment</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:ReportControlMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Report Controls</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:ShapesMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Shapes</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:BasicShapesMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Basic Shapes</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:SymbolShapesMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Symbol Shapes</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:ArrowShapesMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Arrow Shapes</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:FlowChartShapesMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">FlowChart Shapes</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:CalloutShapesMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Callout Shapes</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:StarShapesMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Star Shapes</value>
-                </prop>
-            </node>
-
-            <node oor:name=".uno:SectionShrinkMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Section</value>
-                </prop>
-            </node>
             <node oor:name=".uno:SectionShrink" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Shrink</value>
@@ -371,7 +284,6 @@
                     <value>1</value>
                 </prop>
             </node>
-
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:ExportReportTo" oor:op="replace">
@@ -392,6 +304,81 @@
             <node oor:name=".uno:ArrangeMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">A~rrange</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:GridMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Gr~id</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:EditShapeMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Shape Arrange</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:EditControlMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Control</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:AlignmentMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Alignment</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ResizeMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Resize</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SectionAlignmentMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Section alignment</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ReportControlMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Report Controls</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ShapesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Shapes</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:BasicShapesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Basic Shapes</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SymbolShapesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Symbol Shapes</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ArrowShapesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Arrow Shapes</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:FlowChartShapesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">FlowChart Shapes</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CalloutShapesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Callout Shapes</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:StarShapesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Star Shapes</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SectionShrinkMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Section</value>
                 </prop>
             </node>
         </node>
