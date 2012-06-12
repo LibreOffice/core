@@ -1773,7 +1773,7 @@ ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const String& rDo
                             const String& rSrc, const ScRange& rDest )
 {
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    sal_uInt16 nCount = pLinkManager->GetLinks().Count();
+    sal_uInt16 nCount = pLinkManager->GetLinks().size();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];

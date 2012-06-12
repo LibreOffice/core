@@ -378,8 +378,8 @@ ScDocument::~ScDocument()
         for( ::sfx2::SvLinkSources::const_iterator it = aTemp.begin(); it != aTemp.end(); ++it )
             (*it)->Closed();
 
-        if ( pLinkManager->GetLinks().Count() )
-            pLinkManager->Remove( 0, pLinkManager->GetLinks().Count() );
+        if ( pLinkManager->GetLinks().size() )
+            pLinkManager->Remove( 0, pLinkManager->GetLinks().size() );
     }
 
     mxFormulaParserPool.reset();

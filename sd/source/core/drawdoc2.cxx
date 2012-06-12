@@ -891,7 +891,7 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
 
 sal_uLong SdDrawDocument::GetLinkCount()
 {
-    return ( pLinkManager->GetLinks().Count() );
+    return pLinkManager->GetLinks().size();
 }
 
 /*************************************************************************

@@ -516,8 +516,8 @@ SwDoc::~SwDoc()
             it != aTemp.end(); ++it )
             (*it)->Closed();
 
-        if( pLinkMgr->GetLinks().Count() )
-            pLinkMgr->Remove( 0, pLinkMgr->GetLinks().Count() );
+        if( !pLinkMgr->GetLinks().empty() )
+            pLinkMgr->Remove( 0, pLinkMgr->GetLinks().size() );
     }
 
     // The ChapterNumbers/Numbers need to be deleted before the Templates
@@ -928,7 +928,7 @@ void SwDoc::UpdateLinks( sal_Bool bUI )
     if ( GetDocShell()) {
         sal_uInt16 nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
         if( (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
-            GetLinkManager().GetLinks().Count() &&
+            !GetLinkManager().GetLinks().empty() &&
             SFX_CREATE_MODE_INTERNAL !=
                         ( eMode = GetDocShell()->GetCreateMode()) &&
             SFX_CREATE_MODE_ORGANIZER != eMode &&

@@ -616,7 +616,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 {
     const SwNode* pNd;
     const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
-    for( sal_uInt16 n = rLnks.Count(); n; )
+    for( sal_uInt16 n = rLnks.size(); n; )
     {
         ::sfx2::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
         if( pBLnk && !pBLnk->IsVisible() &&
@@ -1132,7 +1132,7 @@ void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
     }
     const ::sfx2::SvBaseLink* pOwnLink( &(rSectNd.GetSection().GetBaseLink() ) );
     const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
-    for ( sal_uInt16 n = rLnks.Count(); n > 0; )
+    for ( sal_uInt16 n = rLnks.size(); n > 0; )
     {
         SwIntrnlSectRefLink* pSectLnk = dynamic_cast<SwIntrnlSectRefLink*>(&(*rLnks[ --n ]));
         if ( pSectLnk && pSectLnk != pOwnLink &&
@@ -1143,9 +1143,9 @@ void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
             pSectLnk->GetSectNode()->GetSection().BreakLink();
 
             // for robustness, because link is removed from the link manager
-            if ( n > rLnks.Count() )
+            if ( n > rLnks.size() )
             {
-                n = rLnks.Count();
+                n = rLnks.size();
             }
         }
     }
@@ -1165,7 +1165,7 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     aValue <<= ::rtl::OUString( sName );                        // beliebiger Name
 
     const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
-    for( sal_uInt16 n = rLnks.Count(); n; )
+    for( sal_uInt16 n = rLnks.size(); n; )
     {
         ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
         if( pLnk && pLnk != &rUpdLnk &&
@@ -1184,7 +1184,7 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
                 // ggfs. neu den Link-Pointer wieder suchen, damit nicht einer
                 // ausgelassen oder doppelt gerufen wird.
-                if( n >= rLnks.Count() && 0 != ( n = rLnks.Count() ))
+                if( n >= rLnks.size() && 0 != ( n = rLnks.size() ))
                     --n;
 
                 if( n && pLnk != &(*rLnks[ n ]) )

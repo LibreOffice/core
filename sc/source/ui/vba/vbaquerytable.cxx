@@ -67,7 +67,7 @@ ScVbaQueryTable::Refresh( const ::com::sun::star::uno::Any& /*aBackgroundQuery*/
     //Get link info
     sfx2::LinkManager *pLinkMng = m_pDocument->GetLinkManager();
     const ::sfx2::SvBaseLinks &rLinks = pLinkMng->GetLinks();
-    sal_uInt16 nCount = rLinks.Count();
+    sal_uInt16 nCount = rLinks.size();
 
     for (sal_uInt16 i=0; i<nCount; i++)
     {

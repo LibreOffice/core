@@ -248,7 +248,7 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 SwServerObject::ServerModes eSave = eType;
 if( !pChkLnk )
     ((SwServerObject*)this)->eType = NONE_SERVER;
-        for( sal_uInt16 n = rLnks.Count(); n; )
+        for( sal_uInt16 n = rLnks.size(); n; )
         {
             const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&

@@ -2240,7 +2240,7 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
         throw RuntimeException();
     SwDoc* pDoc = pDocShell->GetDoc();
       sfx2::LinkManager& rLnkMan = pDoc->GetLinkManager();
-    if( rLnkMan.GetLinks().Count() )
+    if( !rLnkMan.GetLinks().empty() )
     {
         UnoActionContext aAction(pDoc);
         rLnkMan.UpdateAllLinks( sal_False, sal_False, sal_True );

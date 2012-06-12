@@ -4984,7 +4984,7 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     //  remove them first (file format specifies only one link definition
     //  for a cell)
 
-    sal_uInt16 nLinkCount = pLinkManager->GetLinks().Count();
+    sal_uInt16 nLinkCount = pLinkManager->GetLinks().size();
     sal_uInt16 nRemoved = 0;
     sal_uInt16 nLinkPos = 0;
     while (nLinkPos<nLinkCount)
@@ -5009,7 +5009,7 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
                         pOldArea->GetSource(), pOldArea->GetDestArea(), pOldArea->GetRefreshDelay() ) );
             }
             pLinkManager->Remove( pBase );
-            nLinkCount = pLinkManager->GetLinks().Count();
+            nLinkCount = pLinkManager->GetLinks().size();
             ++nRemoved;
         }
         else

@@ -2478,7 +2478,7 @@ bool SwDoc::LinksUpdated() const
 // embedded alle lokalen Links (Bereiche/Grafiken)
 ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
 {
-    for( sal_uInt16 n = 0; n < rLinks.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rLinks.size(); ++n )
     {
         ::sfx2::SvBaseLink* pLnk = &(*rLinks[ n ]);
         if( pLnk &&
@@ -2504,7 +2504,7 @@ bool SwDoc::EmbedAllLinks()
     sal_Bool bRet = sal_False;
     sfx2::LinkManager& rLnkMgr = GetLinkManager();
     const ::sfx2::SvBaseLinks& rLinks = rLnkMgr.GetLinks();
-    if( rLinks.Count() )
+    if( !rLinks.empty() )
     {
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 

@@ -385,7 +385,7 @@ void ScDocShell::UpdateLinks()
 
     // nicht mehr benutzte Links raus
 
-    sal_uInt16 nCount = pLinkManager->GetLinks().Count();
+    sal_uInt16 nCount = pLinkManager->GetLinks().size();
     for (sal_uInt16 k=nCount; k>0; )
     {
         --k;
@@ -450,7 +450,7 @@ sal_Bool ScDocShell::ReloadTabLinks()
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
 
     sal_Bool bAny = false;
-    sal_uInt16 nCount = pLinkManager->GetLinks().Count();
+    sal_uInt16 nCount = pLinkManager->GetLinks().size();
     for (sal_uInt16 i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];

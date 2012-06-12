@@ -992,7 +992,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
         const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         SwGrfNode* pGrfNd;
         String sFileNm;
-        for( sal_uInt16 n = rLnks.Count(); n; )
+        for( sal_uInt16 n = rLnks.size(); n; )
         {
             ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&

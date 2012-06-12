@@ -81,7 +81,7 @@ void SwView::GetState(SfxItemSet &rSet)
         switch(nWhich)
         {
             case FN_EDIT_LINK_DLG:
-                if( !pWrtShell->GetLinkManager().GetLinks().Count() )
+                if( pWrtShell->GetLinkManager().GetLinks().empty() )
                     rSet.DisableItem(nWhich);
                 else if( pWrtShell->IsSelFrmMode() &&
                             pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))

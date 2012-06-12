@@ -113,7 +113,7 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
     {
         size_t nPos = 0;
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nLinkCount = rLinks.Count();
+        sal_uInt16 nLinkCount = rLinks.size();
         for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
@@ -134,7 +134,7 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
 
 ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScAreaLinkSaver& rSaver )
 {
-    sal_uInt16 nLinkCount = rLinks.Count();
+    sal_uInt16 nLinkCount = rLinks.size();
     for (sal_uInt16 i=0; i<nLinkCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
@@ -179,7 +179,7 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nLinkCount = rLinks.Count();
+        sal_uInt16 nLinkCount = rLinks.size();
         for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];

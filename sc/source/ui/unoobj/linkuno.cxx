@@ -122,7 +122,7 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
     if (pDocShell)
     {
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
-        sal_uInt16 nCount = pLinkManager->GetLinks().Count();
+        sal_uInt16 nCount = pLinkManager->GetLinks().size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
@@ -596,7 +596,7 @@ ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, sal_uInt16 nPos )
     if (pDocShell)
     {
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
-        sal_uInt16 nTotalCount = pLinkManager->GetLinks().Count();
+        sal_uInt16 nTotalCount = pLinkManager->GetLinks().size();
         sal_uInt16 nAreaCount = 0;
         for (sal_uInt16 i=0; i<nTotalCount; i++)
         {
@@ -1014,7 +1014,7 @@ sal_Int32 SAL_CALL ScAreaLinksObj::getCount() throw(uno::RuntimeException)
     if (pDocShell)
     {
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
-        sal_uInt16 nTotalCount = pLinkManager->GetLinks().Count();
+        sal_uInt16 nTotalCount = pLinkManager->GetLinks().size();
         for (sal_uInt16 i=0; i<nTotalCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];

@@ -2230,7 +2230,7 @@ void ScInterpreter::ScStyle()
 ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
                                 const String& rA, const String& rT, const String& rI, sal_uInt8 nM )
 {
-    sal_uInt16 nCount = pLinkMgr->GetLinks().Count();
+    sal_uInt16 nCount = pLinkMgr->GetLinks().size();
     for (sal_uInt16 i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
@@ -2301,7 +2301,7 @@ void ScInterpreter::ScDde()
         {
             pLink = new ScDdeLink( pDok, aAppl, aTopic, aItem, nMode );
             pLinkMgr->InsertDDELink( pLink, aAppl, aTopic, aItem );
-            if ( pLinkMgr->GetLinks().Count() == 1 )                    // erster ?
+            if ( pLinkMgr->GetLinks().size() == 1 )                    // erster ?
             {
                 SfxBindings* pBindings = pDok->GetViewBindings();
                 if (pBindings)

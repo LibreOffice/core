@@ -465,7 +465,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 
             case SID_LINKS:
                 {
-                    if (GetViewData()->GetDocument()->GetLinkManager()->GetLinks().Count() == 0 )
+                    if (GetViewData()->GetDocument()->GetLinkManager()->GetLinks().empty())
                         rSet.DisableItem( SID_LINKS );
                 }
                 break;

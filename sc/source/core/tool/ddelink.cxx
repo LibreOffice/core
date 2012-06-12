@@ -238,7 +238,7 @@ void ScDdeLink::ListenersGone()
     sfx2::LinkManager* pLinkMgr = pDoc->GetLinkManager();
     pLinkMgr->Remove( this);        // deletes this
 
-    if ( !pLinkMgr->GetLinks().Count() )            // letzten geloescht ?
+    if ( pLinkMgr->GetLinks().empty() )            // letzten geloescht ?
     {
         SfxBindings* pBindings = pStackDoc->GetViewBindings();      // don't use member pDoc!
         if (pBindings)

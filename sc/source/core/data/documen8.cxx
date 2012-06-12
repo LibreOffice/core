@@ -908,7 +908,7 @@ bool ScDocument::IdleCheckLinks()           // true = demnaechst wieder versuche
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
@@ -934,7 +934,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     bool bExport40 = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 );
 
     const ::sfx2::SvBaseLinks& rLinks = GetLinkManager()->GetLinks();
-    sal_uInt16 nCount = rLinks.Count();
+    sal_uInt16 nCount = rLinks.size();
 
     //  erstmal zaehlen...
 
@@ -987,7 +987,7 @@ bool ScDocument::HasDdeLinks() const
     if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
                 return true;
@@ -1015,7 +1015,7 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    sal_uInt16 nCount = rLinks.Count();
+    sal_uInt16 nCount = rLinks.size();
 
     bool bAny = false;
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -1069,7 +1069,7 @@ void ScDocument::UpdateDdeLinks(Window* pWin)
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         sal_uInt16 i;
 
         //  falls das Updaten laenger dauert, erstmal alle Werte
@@ -1128,7 +1128,7 @@ bool ScDocument::UpdateDdeLink( const rtl::OUString& rAppl, const rtl::OUString&
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
@@ -1154,7 +1154,7 @@ void ScDocument::DisconnectDdeLinks()
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
@@ -1177,7 +1177,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
     else if (GetLinkManager())              // Links direkt kopieren
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
@@ -1198,7 +1198,7 @@ sal_uInt16 ScDocument::GetDdeLinkCount() const
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
                 ++nDdeCount;
@@ -1222,7 +1222,7 @@ ScDdeLink* lclGetDdeLink(
     if( pLinkManager )
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         if( pnDdePos ) *pnDdePos = 0;
         for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
         {
@@ -1249,7 +1249,7 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, sal_uInt16 nDde
     if( pLinkManager )
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         sal_uInt16 nDdeIndex = 0;       // counts only the DDE links
         for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
         {
@@ -1345,7 +1345,7 @@ bool ScDocument::HasAreaLinks() const
     if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScAreaLink))
                 return true;
@@ -1359,7 +1359,7 @@ void ScDocument::UpdateAreaLinks()
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
@@ -1375,7 +1375,7 @@ void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         sal_uInt16 nPos = 0;
-        while ( nPos < rLinks.Count() )
+        while ( nPos < rLinks.size() )
         {
             const ::sfx2::SvBaseLink* pBase = *rLinks[nPos];
             if ( pBase->ISA(ScAreaLink) &&
@@ -1395,7 +1395,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
         bool bAnyUpdate = false;
 
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.Count();
+        sal_uInt16 nCount = rLinks.size();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
@@ -1446,7 +1446,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                         {
                             // remove the first link, exit the inner loop, don't increment nFirstIndex
                             pLinkManager->Remove( pFirst );
-                            nCount = rLinks.Count();
+                            nCount = rLinks.size();
                             bFound = true;
                         }
                     }

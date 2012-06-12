@@ -625,7 +625,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                 SwView&  rTempView = GetView();
                 rSh.EnterStdMode();
-                if( rSh.GetLinkManager().GetLinks().Count() )
+                if( !rSh.GetLinkManager().GetLinks().empty() )
                 {
                     rSh.StartAllAction();
                     rSh.GetLinkManager().UpdateAllLinks( sal_False, sal_True, sal_True );
@@ -1121,7 +1121,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
         case FN_UPDATE_ALL_LINKS:
             {
-                if( rSh.GetLinkManager().GetLinks().Count() )
+                if( !rSh.GetLinkManager().GetLinks().empty() )
                 {
                     sal_Bool bUpdateGrf = sal_False, bCallErrHdl = sal_False;
                     rSh.EnterStdMode();
@@ -1749,7 +1749,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem( nWhich );
                 break;
             case FN_UPDATE_ALL_LINKS:
-                if ( !rSh.GetLinkManager().GetLinks().Count() )
+                if ( rSh.GetLinkManager().GetLinks().empty() )
                     rSet.DisableItem(nWhich);
                 break;
             case FN_XFORMS_DESIGN_MODE:

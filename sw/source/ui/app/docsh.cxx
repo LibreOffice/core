@@ -1061,7 +1061,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
             const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
             sal_Bool bRet = sal_False;
-            if( rLnks.Count() )
+            if( !rLnks.empty() )
                 bRet = sal_True;
             else
             {

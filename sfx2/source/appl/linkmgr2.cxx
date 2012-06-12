@@ -74,8 +74,6 @@ public:
 };
 
 
-SV_IMPL_PTRARR( SvBaseLinks, SvBaseLinkRefPtr )
-
 LinkManager::LinkManager(SfxObjectShell* p)
     : pPersist( p )
 {
@@ -84,15 +82,15 @@ LinkManager::LinkManager(SfxObjectShell* p)
 
 LinkManager::~LinkManager()
 {
-    SvBaseLinkRef** ppRef = (SvBaseLinkRef**)aLinkTbl.GetData();
-    for( sal_uInt16 n = aLinkTbl.Count(); n; --n, ++ppRef )
+    for( sal_uInt16 n = 0; n < aLinkTbl.size(); ++n)
     {
-        if( (*ppRef)->Is() )
+        SvBaseLinkRef* pTmp = aLinkTbl[ n ];
+        if( pTmp->Is() )
         {
-            (*(*ppRef))->Disconnect();
-            (*(*ppRef))->SetLinkManager( NULL );
+            (*pTmp)->Disconnect();
+            (*pTmp)->SetLinkManager( NULL );
         }
-        delete *ppRef;
+        delete pTmp;
     }
 }
 
@@ -121,48 +119,49 @@ void LinkManager::Remove( SvBaseLink *pLink )
 {
     // No duplicate links inserted
     int bFound = sal_False;
-    SvBaseLinkRef** ppRef = (SvBaseLinkRef**)aLinkTbl.GetData();
-    for( sal_uInt16 n = aLinkTbl.Count(); n; --n, ++ppRef )
+    for( sal_uInt16 n = 0; n < aLinkTbl.size(); )
     {
-        if( pLink == *(*ppRef) )
+        SvBaseLinkRef* pTmp = aLinkTbl[ n ];
+        if( pLink == *pTmp )
         {
-            (*(*ppRef))->Disconnect();
-            (*(*ppRef))->SetLinkManager( NULL );
-            (*(*ppRef)).Clear();
+            (*pTmp)->Disconnect();
+            (*pTmp)->SetLinkManager( NULL );
+            (*pTmp).Clear();
             bFound = sal_True;
         }
 
-        // Remove emty ones if they exist
-        if( !(*ppRef)->Is() )
+        // Remove empty ones if they exist
+        if( !pTmp->Is() )
         {
-            delete *ppRef;
-            aLinkTbl.Remove( aLinkTbl.Count() - n, 1 );
+            delete pTmp;
+            aLinkTbl.erase( aLinkTbl.begin() + n );
             if( bFound )
                 return ;
-            --ppRef;
         }
+        else
+            ++n;
     }
 }
 
 
 void LinkManager::Remove( sal_uInt16 nPos, sal_uInt16 nCnt )
 {
-    if( nCnt && nPos < aLinkTbl.Count() )
+    if( nCnt && nPos < aLinkTbl.size() )
     {
-        if( nPos + nCnt > aLinkTbl.Count() )
-            nCnt = aLinkTbl.Count() - nPos;
+        if( nPos + nCnt > aLinkTbl.size() )
+            nCnt = aLinkTbl.size() - nPos;
 
-        SvBaseLinkRef** ppRef = (SvBaseLinkRef**)aLinkTbl.GetData() + nPos;
-        for( sal_uInt16 n = nCnt; n; --n, ++ppRef )
+        for( sal_uInt16 n = nPos; n < nPos + nCnt; ++n)
         {
-            if( (*ppRef)->Is() )
+            SvBaseLinkRef* pTmp = aLinkTbl[ n ];
+            if( pTmp->Is() )
             {
-                (*(*ppRef))->Disconnect();
-                (*(*ppRef))->SetLinkManager( NULL );
+                (*pTmp)->Disconnect();
+                (*pTmp)->SetLinkManager( NULL );
             }
-            delete *ppRef;
+            delete pTmp;
         }
-        aLinkTbl.Remove( nPos, nCnt );
+        aLinkTbl.erase( aLinkTbl.begin() + nPos, aLinkTbl.begin() + nPos + nCnt );
     }
 }
 
@@ -170,11 +169,14 @@ void LinkManager::Remove( sal_uInt16 nPos, sal_uInt16 nCnt )
 sal_Bool LinkManager::Insert( SvBaseLink* pLink )
 {
   // No duplicate links inserted
-    for( sal_uInt16 n = 0; n < aLinkTbl.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aLinkTbl.size(); ++n )
     {
         SvBaseLinkRef* pTmp = aLinkTbl[ n ];
         if( !pTmp->Is() )
-            aLinkTbl.DeleteAndDestroy( n-- );
+        {
+            delete pTmp;
+            aLinkTbl.erase( aLinkTbl.begin() + n-- );
+        }
 
         if( pLink == *pTmp )
             return sal_False;
@@ -182,7 +184,7 @@ sal_Bool LinkManager::Insert( SvBaseLink* pLink )
 
     SvBaseLinkRef* pTmp = new SvBaseLinkRef( pLink );
     pLink->SetLinkManager( this );
-    aLinkTbl.Insert( pTmp, aLinkTbl.Count() );
+    aLinkTbl.push_back( pTmp );
     return sal_True;
 }
 
@@ -321,7 +323,7 @@ void LinkManager::UpdateAllLinks(
     // links in ... no contact between them!
     SvPtrarr aTmpArr( 255 );
     sal_uInt16 n;
-    for( n = 0; n < aLinkTbl.Count(); ++n )
+    for( n = 0; n < aLinkTbl.size(); ++n )
     {
         SvBaseLink* pLink = *aLinkTbl[ n ];
         if( !pLink )
@@ -338,7 +340,7 @@ void LinkManager::UpdateAllLinks(
 
         // search first in the array after the entry
         sal_uInt16 nFndPos = USHRT_MAX;
-        for( sal_uInt16 i = 0; i < aLinkTbl.Count(); ++i )
+        for( sal_uInt16 i = 0; i < aLinkTbl.size(); ++i )
             if( pLink == *aLinkTbl[ i ] )
             {
                 nFndPos = i;
@@ -433,7 +435,7 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = GetLinks();
-    sal_uInt16 n = rLinks.Count();
+    sal_uInt16 n = rLinks.size();
 
     for (sal_uInt16 i = 0; i < n; ++i)
     {
@@ -527,7 +529,7 @@ void LinkManager::CancelTransfers()
     sfx2::SvBaseLink* pLnk;
 
     const sfx2::SvBaseLinks& rLnks = GetLinks();
-    for( sal_uInt16 n = rLnks.Count(); n; )
+    for( sal_uInt16 n = rLnks.size(); n; )
         if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
             0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )

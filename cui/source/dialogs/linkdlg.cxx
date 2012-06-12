@@ -283,7 +283,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
             SvBaseLinkRef xLink = aLnkArr[ n ];
 
             // first look for the entry in the array
-            for( sal_uInt16 i = 0; i < pLinkMgr->GetLinks().Count(); ++i )
+            for( sal_uInt16 i = 0; i < pLinkMgr->GetLinks().size(); ++i )
                 if( &xLink == *pLinkMgr->GetLinks()[ i ] )
                 {
                     xLink->SetUseCache( sal_False );
@@ -513,7 +513,7 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
         // anymore, fill the list completely new. Otherwise only the
         // edited link needs to be refreshed.
         sal_Bool bLinkFnd = sal_False;
-        for( sal_uInt16 n = pLinkMgr->GetLinks().Count(); n;  )
+        for( sal_uInt16 n = pLinkMgr->GetLinks().size(); n;  )
             if( _pLink == &(*pLinkMgr->GetLinks()[ --n ]) )
             {
                 bLinkFnd = sal_True;
@@ -575,12 +575,12 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
     if( pLinkMgr )
     {
         SvBaseLinks& rLnks = (SvBaseLinks&)pLinkMgr->GetLinks();
-        for( sal_uInt16 n = 0; n < rLnks.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rLnks.size(); ++n )
         {
             SvBaseLinkRef* pLinkRef = rLnks[ n ];
             if( !pLinkRef->Is() )
             {
-                rLnks.Remove( n, 1 );
+                rLnks.erase( rLnks.begin() + n );
                 --n;
                 continue;
             }
@@ -588,7 +588,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
                 InsertEntry( **pLinkRef );
         }
 
-        if( rLnks.Count() )
+        if( !rLnks.empty() )
         {
             SvLBoxEntry* pEntry = Links().GetEntry( 0 );
             Links().SetCurEntry( pEntry );
@@ -673,7 +673,7 @@ void SvBaseLinksDlg::SetActLink( SvBaseLink * pLink )
     {
         const SvBaseLinks& rLnks = pLinkMgr->GetLinks();
         sal_uInt16 nSelect = 0;
-        for( sal_uInt16 n = 0; n < rLnks.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rLnks.size(); ++n )
         {
             SvBaseLinkRef* pLinkRef = rLnks[ n ];
             // #109573# only visible links have been inserted into the TreeListBox,

@@ -7753,7 +7753,7 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
             //! Update nur fuer die betroffene Tabelle???
 
             sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-            sal_uInt16 nCount = pLinkManager->GetLinks().Count();
+            sal_uInt16 nCount = pLinkManager->GetLinks().size();
             for ( sal_uInt16 i=0; i<nCount; i++ )
             {
                 ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];

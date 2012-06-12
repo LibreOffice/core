@@ -399,9 +399,9 @@ SdDrawDocument::~SdDrawDocument()
     if (pLinkManager)
     {
         // BaseLinks freigeben
-        if ( pLinkManager->GetLinks().Count() )
+        if ( !pLinkManager->GetLinks().empty() )
         {
-            pLinkManager->Remove( 0, pLinkManager->GetLinks().Count() );
+            pLinkManager->Remove( 0, pLinkManager->GetLinks().size() );
         }
 
         delete pLinkManager;
@@ -714,7 +714,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 /** updates all links, only links in this document should by resolved */
 void SdDrawDocument::UpdateAllLinks()
 {
-    if ( !pDocLockedInsertingLinks && pLinkManager && pLinkManager->GetLinks().Count() )
+    if ( !pDocLockedInsertingLinks && pLinkManager && !pLinkManager->GetLinks().empty() )
     {
         pDocLockedInsertingLinks = this; // lock inserting links. only links in this document should by resolved
 

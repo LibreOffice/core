@@ -32,7 +32,6 @@
 #include "sfx2/dllapi.h"
 #include <sfx2/linksrc.hxx>
 #include <tools/string.hxx>
-#include <svl/svarray.hxx>
 
 #include <vector>
 #include <set>
@@ -57,8 +56,7 @@ namespace sfx2
 class SvBaseLink;
 class SvBaseLinkRef;
 
-typedef SvBaseLinkRef* SvBaseLinkRefPtr;
-SV_DECL_PTRARR( SvBaseLinks, SvBaseLinkRefPtr, 1 )
+typedef std::vector<SvBaseLinkRef*> SvBaseLinks;
 
 typedef std::set<SvLinkSource*> SvLinkSources;
 
