@@ -486,8 +486,9 @@ void DomainMapperTableManager::endOfRowAction()
 
         sal_Int16 nSum = 0;
         sal_uInt32 nPos = 0;
+        sal_uInt32 nSizeTableGrid = pTableGrid->size();
         // Ignoring the i=0 case means we assume that the width of the last cell matches the table width
-        for (int i = m_nCell; i > 1; i--)
+        for (sal_uInt32 i = m_nCell; i > 1 && nSizeTableGrid >= i; i--)
         {
             nSum += (*pTableGrid.get())[pTableGrid->size() - i]; // Size of the current cell
             pSeparators[nPos].Position = nSum * nFullWidthRelative / nFullWidth; // Relative position
