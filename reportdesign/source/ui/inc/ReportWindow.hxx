@@ -33,7 +33,7 @@
 #include "StartMarker.hxx"
 #include <svtools/ruler.hxx>
 #include <svx/svdedtv.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 
 #include <vector>
 #include <boost/shared_ptr.hpp>

@@ -81,7 +81,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>

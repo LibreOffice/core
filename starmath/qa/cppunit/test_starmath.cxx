@@ -55,7 +55,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 
 SO2_DECL_REF(SmDocShell)
 SO2_IMPL_REF(SmDocShell)

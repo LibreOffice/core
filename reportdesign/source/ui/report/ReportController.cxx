@@ -116,7 +116,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/sizeitem.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <editeng/brshitem.hxx>
 #include <svx/flagsdef.hxx>

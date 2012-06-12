@@ -46,7 +46,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshcol.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <com/sun/star/drawing/DrawViewMode.hpp>
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>

@@ -30,7 +30,7 @@
 #define SC_APPOPTIO_HXX
 
 #include <vcl/field.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <unotools/configitem.hxx>
 #include "scdllapi.h"
 #include "scmod.hxx"

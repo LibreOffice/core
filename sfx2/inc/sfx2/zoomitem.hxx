@@ -29,8 +29,8 @@
 #define _SVX_ZOOMITEM_HXX
 
 #include <svl/intitem.hxx>
-#include <svx/svxids.hrc>
-#include "svx/svxdllapi.h"
+#include <sfx2/sfxsids.hrc>
+#include "sfx2/dllapi.h"
 
 //-------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ enum SvxZoomType
 
 //-------------------------------------------------------------------------
 
-class SVX_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
+class SFX2_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
 {
     sal_uInt16                  nValueSet;  // erlaubte Werte (siehe #defines unten)
     SvxZoomType             eType;

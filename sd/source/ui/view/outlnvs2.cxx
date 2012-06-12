@@ -37,7 +37,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/msgbox.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>

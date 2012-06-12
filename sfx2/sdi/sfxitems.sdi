@@ -88,3 +88,10 @@
     item SfxScriptOrganizer SfxScriptOrganizerItem;
     item String     SvxClipboardFmtItem;    //! Dummy
 
+    struct SvxZoom
+    {
+        UINT16 Value         MID_VALUE;
+        INT16 ValueSet       MID_VALUESET;
+        INT16 Type           MID_TYPE;
+    };
+    item SvxZoom SvxZoomItem;

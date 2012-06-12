@@ -31,7 +31,8 @@
 #include <tools/string.hxx>
 #include <tools/color.hxx>
 
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
+#include <svx/svxids.hrc>
 #include "swdllapi.h"
 #include "authratr.hxx"
 

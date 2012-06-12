@@ -35,7 +35,7 @@
 #include <svx/dialogs.hrc>
 
 #include "svx/zoomctrl.hxx"
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include "stbctrls.h"
 #include <svx/dialmgr.hxx>
 

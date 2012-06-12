@@ -36,7 +36,8 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/editstat.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>

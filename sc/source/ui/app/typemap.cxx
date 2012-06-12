@@ -43,7 +43,7 @@
 #include <svx/postattr.hxx>
 #include <editeng/postitem.hxx>
 #include <sfx2/tplpitem.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/fhgtitem.hxx>

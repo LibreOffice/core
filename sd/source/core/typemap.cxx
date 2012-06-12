@@ -56,7 +56,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/algitem.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/grafctrl.hxx>

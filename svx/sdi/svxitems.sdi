@@ -599,14 +599,6 @@ struct SvxProtect
 };
 item SvxProtect SvxProtectItem;
 
-struct SvxZoom
-{
-    UINT16 Value         MID_VALUE;
-    INT16 ValueSet       MID_VALUESET;
-    INT16 Type           MID_TYPE;
-};
-item SvxZoom SvxZoomItem;
-
 struct SvxRulerObject
 {
     INT32   StartX  MID_START_X;

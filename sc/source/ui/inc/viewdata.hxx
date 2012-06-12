@@ -28,7 +28,7 @@
 #ifndef SC_VIEWDATA_HXX
 #define SC_VIEWDATA_HXX
 
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include "scdllapi.h"
 #include "viewopti.hxx"
 

@@ -64,7 +64,7 @@
 #include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/svdedtv.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>

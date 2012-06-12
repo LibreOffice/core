@@ -31,7 +31,7 @@
 #include <svx/zoomsliderctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <svx/svxids.hrc>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <svx/zoomslideritem.hxx>
 
 #include <vcl/svapp.hxx>

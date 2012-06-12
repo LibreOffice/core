@@ -158,7 +158,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/items/SmartTagItem \
     svx/source/items/svxerr \
     svx/source/items/viewlayoutitem \
-    svx/source/items/zoomitem \
     svx/source/items/zoomslideritem \
     svx/source/mnuctrls/clipboardctl \
     svx/source/mnuctrls/fntctl \

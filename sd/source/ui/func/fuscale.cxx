@@ -45,7 +45,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/zoom_def.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxdlg.hxx>
 

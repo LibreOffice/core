@@ -39,7 +39,7 @@
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/rulritem.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/hlnkitem.hxx>

@@ -80,7 +80,7 @@
 #include <svx/svdopage.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ruler.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <svtools/tabbar.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -34,7 +34,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <editeng/editdata.hxx>
 #include <basic/sberrors.hxx>
 #include <vcl/msgbox.hxx>

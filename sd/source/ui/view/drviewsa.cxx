@@ -35,7 +35,7 @@
 #endif
 #include <svx/svdlayer.hxx>
 #ifndef _SVX_ZOOMITEM
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #endif
 #include <svx/svdpagv.hxx>
 #include <svl/ptitem.hxx>

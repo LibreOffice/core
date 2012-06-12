@@ -41,7 +41,7 @@
 // OD 19.02.2003 #107369# - method <SwAlignRect(..)>
 #include <frmtool.hxx>
 // OD 24.09.2003 #i19975#
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <printdata.hxx>
 
 #include <IDocumentDeviceAccess.hxx>

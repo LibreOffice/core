@@ -135,7 +135,7 @@
 #include <svl/undo.hxx>
 #include <vcl/seleng.hxx>
 #include <rsc/rscsfx.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <vcl/scrbar.hxx>
 #include <viewutil.hxx>
 #include <vcl/svapp.hxx>

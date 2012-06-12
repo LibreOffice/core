@@ -34,7 +34,7 @@ class ScrollBar;
 #include "address.hxx"
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 
 #include "shellids.hxx"
 

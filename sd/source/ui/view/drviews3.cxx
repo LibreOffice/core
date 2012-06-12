@@ -38,7 +38,7 @@
 #include <svx/ruler.hxx>
 #include <editeng/numitem.hxx>
 #include <svx/rulritem.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>

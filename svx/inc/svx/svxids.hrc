@@ -82,10 +82,8 @@
 #define MID_RIGHT_MARGIN        0x47
 #define MID_ROW_DIRECTION       0x48
 #define MID_SIZE                0x4a
-#define MID_TYPE                0x4c
-#define MID_UPPER               0x4d
-#define MID_USExxx              0x4e
-#define MID_VALUESET            0x4f
+#define MID_UPPER               0x4b
+#define MID_USExxx              0x4c
 
 #define MID_ADR_CITY            0x50
 #define MID_ADR_COMPANY         0x51
@@ -411,8 +409,6 @@
 // --------------------------------------------------------------------------
 // Svx-Id's
 // --------------------------------------------------------------------------
-
-#define SID_ATTR_ZOOM                                   ( SID_SVX_START + 0 )
 
 #define SID_ATTR_BORDER_INNER                           ( SID_SVX_START + 23 )
 

@@ -44,7 +44,7 @@
 #include <svl/zforlist.hxx>
 #include <unotxdoc.hxx>
 #include <cmdid.h>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <unomod.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>

@@ -580,16 +580,6 @@ item SvxLongULSpace SvxLongULSpaceItem;
 
 //-------------------------------------------------------------------------
 
-struct SvxZoom
-{
-    INT32           Type        MID_TYPE;
-    UINT16          ValueSet    MID_VALUESET;
-    INT32           Percent     MID_PERCENT;
-};
-item SvxZoom SvxZoomItem;
-
-//-------------------------------------------------------------------------
-
 item SbxObject SvxTabStopItem;
 
 

@@ -125,7 +125,8 @@
 #include <sfx2/msg.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
+#include <svx/svxids.hrc>
 #include <svl/slstitm.hxx>
 
 #define SFX_TYPEMAP

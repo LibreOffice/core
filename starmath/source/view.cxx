@@ -62,7 +62,7 @@
 #include <svx/dialogs.hrc>
 #include <editeng/editeng.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>

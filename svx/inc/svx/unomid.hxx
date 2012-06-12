@@ -65,9 +65,6 @@
 #define MID_HORJUST_HORJUST     0
 #define MID_HORJUST_ADJUST      1
 
-// SvxZoomItem
-#define MID_VALUE               2
-
 // SvxObjectItem
 #define MID_START_X             1
 #define MID_START_Y             2

@@ -32,7 +32,7 @@
 #include <vcl/status.hxx>
 #include <sfx2/app.hxx>
 #include <svl/stritem.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 
 #include "swtypes.hxx"
 #include "zoomctrl.hxx"

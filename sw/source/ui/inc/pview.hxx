@@ -33,7 +33,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include "swdllapi.h"
 #include "shellid.hxx"
 

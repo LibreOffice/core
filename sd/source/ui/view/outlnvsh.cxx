@@ -39,7 +39,7 @@
 #include <sfx2/objface.hxx>
 #include <sot/exchange.hxx>
 #include <svx/ruler.hxx>
-#include <svx/zoomitem.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <sfx2/shell.hxx>
