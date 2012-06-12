@@ -107,7 +107,7 @@ WindowsCustomAction gid_Customaction_sdqsmsidll
 	Source = "sdqsmsi.dll";
 	Target = "ShutDownQuickstarter";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "IsOfficeRunning");
+	Assignment1 = ("InstallExecuteSequence", "", "CCPSearch");
 End
 
 WindowsCustomAction gid_Customaction_qslnkmsidll
@@ -319,34 +319,6 @@ WindowsCustomAction gid_Customaction_Patch_Shutdownquickstarter
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "DestinationFolder", "Next", "DoAction", "ShutDownQuickstarter", "1", "0");
 	Assignment2 = ("InstallExecuteSequence", "", "IsolateComponents");
-End
-
-WindowsCustomAction gid_Customaction_Patch_Isofficerunning
-	Name = "IsOfficeRunning";
-	Typ = "321";
-	Source = "patchmsi.dll";
-	Target = "IsOfficeRunning";
-	Inbinarytable = 1;
-	Assignment1 = ("ControlEvent", "ReadyToInstall", "InstallNow", "DoAction", "IsOfficeRunning", "1", "1");
-	Assignment2 = ("InstallExecuteSequence", "VersionNT < 600", "RunningOffice");
-End
-
-WindowsCustomAction gid_Customaction_Full_Isofficerunning
-	Name = "IsOfficeRunning";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "IsOfficeRunning";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "VersionNT < 600 Or Not PATCH", "RunningOffice");
-End
-
-WindowsCustomAction gid_Customaction_Langpack_Isofficerunning
-	Name = "IsOfficeRunning";
-	Typ = "65";
-	Source = "lngpckinsthlp.dll";
-	Target = "IsOfficeRunning";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "PATCH And VersionNT < 600", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_CheckPatchList

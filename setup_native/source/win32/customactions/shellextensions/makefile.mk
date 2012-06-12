@@ -61,7 +61,6 @@ SLOFILES = \
     $(SLO)$/registerextensions.obj \
     $(SLO)$/copyeditiondata.obj \
     $(SLO)$/vistaspecial.obj \
-    $(SLO)$/checkrunningoffice.obj \
     $(SLO)$/checkpatches.obj \
     $(SLO)$/copyextensiondata.obj
 

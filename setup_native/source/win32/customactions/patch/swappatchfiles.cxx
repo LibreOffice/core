@@ -576,46 +576,6 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
     return ERROR_SUCCESS;
 }
 
-extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
-{
-    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-    std::_tstring   sResourceDir = sInstDir + TEXT("program\\resource\\");
-    std::_tstring   sPattern = sResourceDir + TEXT("vcl*.res");
-
-    WIN32_FIND_DATA aFindFileData;
-    HANDLE  hFind = FindFirstFile( sPattern.c_str(), &aFindFileData );
-
-    if ( IsValidHandle(hFind) )
-    {
-        BOOL    fSuccess = false;
-        bool    fRenameSucceeded;
-
-        do
-        {
-            std::_tstring   sResourceFile = sResourceDir + aFindFileData.cFileName;
-            std::_tstring   sIntermediate = sResourceFile + TEXT(".tmp");
-
-            fRenameSucceeded = MoveFileExA( sResourceFile.c_str(), sIntermediate.c_str(), MOVEFILE_REPLACE_EXISTING );
-            if ( fRenameSucceeded )
-            {
-                MoveFileExA( sIntermediate.c_str(), sResourceFile.c_str(), 0 );
-                fSuccess = FindNextFile( hFind, &aFindFileData );
-            }
-        } while ( fSuccess && fRenameSucceeded );
-
-        if ( !fRenameSucceeded )
-        {
-            MsiSetProperty(handle, TEXT("OFFICERUNS"), TEXT("1"));
-            SetMsiErrorCode( MSI_ERROR_OFFICE_IS_RUNNING );
-        }
-
-        FindClose( hFind );
-    }
-
-
-    return ERROR_SUCCESS;
-}
-
 extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
 {
 
