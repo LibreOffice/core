@@ -170,9 +170,6 @@ FREEBL=freebl3
 FREEBL=freebl3
 .ENDIF # "$(OS)" == "SOLARIS" 
 
-
-#On Linux/Unix sqlite is delivered to $(SOLARLIBDIR)/sqlite/libsqlite3.so
-#See readme.txt  in module nss
 NSS_MODULE_RUNTIME_LIST:= \
     $(FREEBL) \
     nspr4 \
@@ -184,8 +181,15 @@ NSS_MODULE_RUNTIME_LIST:= \
     plds4 \
     smime3 \
     softokn3 \
-    sqlite/sqlite3 \
     ssl3
+
+# On Linux/Unix sqlite is delivered to $(SOLARLIBDIR)/sqlite/libsqlite3.so (see
+# nss/README) and for Mac OS X >= 10.6 the system lib is used instead (see
+# nss/makefile.mk):
+.IF "$(OS)" == "MACOSX" && "$(MAC_OS_X_VERSION_MIN_REQUIRED)" >= "1060"
+.ELSE
+NSS_MODULE_RUNTIME_LIST += sqlite/sqlite3
+.END
 
 # Remove the nss libs build in moz and those build in the nss module
 $(MISC)$/replace_old_nss_libs : $(MISC)$/unpacked_$(TARGET)_lib \

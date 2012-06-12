@@ -63,8 +63,13 @@ NSS_MODULE_RUNTIME_LIST:= \
     plds4 \
     smime3 \
     softokn3 \
-    sqlite/sqlite3 \
     ssl3
+
+# For Mac OS X >= 10.6 the system lib is used instead (see nss/makefile.mk):
+.IF "$(OS)" == "MACOSX" && "$(MAC_OS_X_VERSION_MIN_REQUIRED)" >= "1060"
+.ELSE
+NSS_MODULE_RUNTIME_LIST += sqlite/sqlite3
+.END
 
 BIN_RUNTIMELIST= \
     xpcom \

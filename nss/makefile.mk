@@ -106,6 +106,18 @@ BUILD_ACTION+=FREEBL_NO_DEPEND=1
 BUILD_ACTION+=NS_USE_GCC=1
 .ENDIF
 
+# Otherwise, LibreOffice.app/Contents/MacOS/python -c 'import uno' fails to
+# dlopen LibreOffice.app/Contents/MacOS/libpyuno.dylib (at
+# pyuno/source/module/pyuno_dlopenwrapper.c:73) with dlerror "Symbol not found:
+# _sqlite3_wal_checkpoint; Referenced from: /System/Library/Frameworks/
+# CoreServices.framework/Versions/A/Frameworks/CFNetwork.framework/Versions/A/
+# CFNetwork; Expected in: [...]/LibreOffice.app/Contents/MacOS/libsqlite3.dylib;
+# in /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/
+# CFNetwork.framework/Versions/A/CFNetwork":
+.IF "$(OS)" == "MACOSX" && "$(MAC_OS_X_VERSION_MIN_REQUIRED)" >= "1060"
+BUILD_ACTION += NSS_USE_SYSTEM_SQLITE=1
+.END
+
 .ENDIF			# "$(GUI)"=="UNX"
 
 
