@@ -669,7 +669,6 @@ static const FunctionData saFuncTableBiff5[] =
     { 0,                        "DATESTRING",           352,    352,    1,  1,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
     { 0,                        "NUMBERSTRING",         353,    353,    2,  2,  V, { VR }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOXML spec
     { "ROMAN",                  "ROMAN",                354,    354,    1,  2,  V, { VR }, 0 },
-    { "XOR",                    "XOR",                  355,    355,    1,  MX, V, { RX }, 0 },
 
     // *** EuroTool add-in ***
 

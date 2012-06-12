@@ -2687,7 +2687,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns TRUE if one argument is TRUE, but not both." ;
+            Text [ en-US ] = "Returns TRUE if an odd number of arguments evaluates to TRUE." ;
         };
         ExtraData =
         {

@@ -403,7 +403,7 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     EXC_FUNCENTRY_ODF( ocNoName,        1,  MX, 0,  "SKEWP" ),
     EXC_FUNCENTRY_ODF( ocUnichar,       1,  1,  0,  "UNICHAR" ),
     EXC_FUNCENTRY_ODF( ocUnicode,       1,  1,  0,  "UNICODE" ),
-    EXC_FUNCENTRY_ODF( ocNoName,        1,  MX, 0,  "XOR" )
+    EXC_FUNCENTRY_ODF( ocXor,           1,  MX, 0,  "XOR" )
 };
 
 #undef EXC_FUNCENTRY_ODF
