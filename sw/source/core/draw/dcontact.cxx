@@ -1320,6 +1320,13 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             // get instance <SwAnchoredDrawObject> only once
             const SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<const SwAnchoredDrawObject*>( GetAnchoredObj( &rObj ) );
+
+            /* protect against NULL pointer dereferencing */
+            if(!pAnchoredDrawObj)
+            {
+                break;
+            }
+
             // OD 2004-04-06 #i26791# - adjust positioning and alignment attributes,
             // if positioning of drawing object isn't in progress.
             // #i53320# - no adjust of positioning attributes,
@@ -1432,8 +1439,11 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     // of as-character anchored object
                     if ( bAnchoredAsChar )
                     {
-                        const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
-                            ->AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
+                        SwFrm* pAnchorFrm = const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)->AnchorFrm();
+                        if(pAnchorFrm)
+                        {
+                            pAnchorFrm->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
+                        }
                     }
                 }
             }
