@@ -2343,19 +2343,20 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTable
             {
                 bIsObjectLayoutInTableCell = false;
                 OSL_ENSURE( nLayoutInTableCell == 0xFFFFFFFF,
-                        "no explicit object attribute layout in table cell excepted." );
+                        "no explicit object attribute layout in table cell expected." );
             }
             break;
             case 0x2000: // version 9 aka Microsoft Word 2000
             case 0x4000: // version 10 aka Microsoft Word 2002
             case 0x6000: // version 11 aka Microsoft Word 2003
             case 0x8000: // version 12 aka Microsoft Word 2007
+            case 0xC000: // version 14 aka Microsoft Word 2010
             {
                 // #i98037#
                 // adjustment of conditions needed after deeper analysis of
                 // certain test cases.
                 if ( nLayoutInTableCell == 0xFFFFFFFF || // no explicit attribute value given
-                     nLayoutInTableCell & 0x80008000 ||
+                     nLayoutInTableCell == 0x80008000 ||
                      ( nLayoutInTableCell & 0x02000000 &&
                        !(nLayoutInTableCell & 0x80000000 ) ) )
                 {
