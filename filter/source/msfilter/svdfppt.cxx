@@ -7412,7 +7412,9 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
                 {
                     Color aLineColor( ((XLineColorItem&)pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
                     aBorderLine.Color = aLineColor.GetColor();
-                    aBorderLine.LineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
+                    // Avoid width = 0, the min value should be 1.
+                    sal_Int32 nLineWidth = std::max(sal_Int32(1), ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4);
+                    aBorderLine.LineWidth = static_cast< sal_Int16 >( nLineWidth );
                     aBorderLine.LineStyle = eLineStyle == XLINE_SOLID ? table::BorderLineStyle::SOLID : table::BorderLineStyle::DASHED;
                 }
                 break;
