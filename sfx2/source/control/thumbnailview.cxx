@@ -1288,15 +1288,21 @@ void ThumbnailView::Populate ()
         if (nEntries)
         {
             /// Preview first 2 thumbnails for folder
-            Image aImg = lcl_fetchThumbnail(pTemplates->GetPath(i,0),96,96);
+            Image aImg = lcl_fetchThumbnail(pTemplates->GetPath(i,0),128,128);
 
             if ( nEntries > 2 )
             {
                 Color aWhite(COL_WHITE);
-                BitmapEx aResult = lcl_fetchThumbnail(pTemplates->GetPath(i,1),96,96).GetBitmapEx();
-                BitmapEx aBmp = aImg.GetBitmapEx();
-                aResult.Expand(20,20,&aWhite,sal_True);
-                aResult.CopyPixel(Rectangle(24,24,106,106),Rectangle(0,0,96,96),&aBmp);
+                BitmapEx aBmp = lcl_fetchThumbnail(pTemplates->GetPath(i,1),128,128).GetBitmapEx();
+                BitmapEx aResult = aBmp;
+
+                aResult.Erase(aWhite);
+                aBmp.Scale(Size(128,128));
+                aResult.CopyPixel(Rectangle(32,4,128,100),Rectangle(0,0,96,96),&aBmp);
+
+                aBmp = aImg.GetBitmapEx();
+                aBmp.Scale(Size(96,96));
+                aResult.CopyPixel(Rectangle(10,22,106,118), Rectangle(0,0,96,96),&aBmp);
 
                 aImg = aResult;
 
