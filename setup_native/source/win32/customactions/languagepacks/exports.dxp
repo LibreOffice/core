@@ -1,6 +1,5 @@
 SetProductInstallationPath
 RegisterLanguagePack
 GetUserInstallMode    
-IsOfficeRunning
 RegisterExtensions
 
