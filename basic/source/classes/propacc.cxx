@@ -34,6 +34,7 @@
 #include <sbunoobj.hxx>
 
 using com::sun::star::uno::Reference;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -114,12 +115,18 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( 
 
 //-------------------------------------------------------------------------
 
-sal_Int32 SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
+size_t SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
 {
     SbPropertyValueArr_Impl::const_iterator it = std::lower_bound(
           _aPropVals.begin(), _aPropVals.end(), rPropName,
           SbCompare_UString_PropertyValue_Impl() );
-    return it != _aPropVals.end() ? it - _aPropVals.begin() : USHRT_MAX;
+    if (it == _aPropVals.end())
+    {
+        throw beans::UnknownPropertyException(
+                "Property not found: " + rPropName,
+                const_cast<SbPropertyValues&>(*this));
+    }
+    return it - _aPropVals.begin();
 }
 
 //----------------------------------------------------------------------------
@@ -133,9 +140,8 @@ void SbPropertyValues::setPropertyValue(
                     ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException)
 {
-    sal_Int32 nIndex = GetIndex_Impl( aPropertyName );
-    PropertyValue *pPropVal = _aPropVals[
-        sal::static_int_cast< sal_uInt16 >(nIndex)];
+    size_t const nIndex = GetIndex_Impl( aPropertyName );
+    PropertyValue *const pPropVal = _aPropVals[nIndex];
     pPropVal->Value = aValue;
 }
 
@@ -147,11 +153,8 @@ Any SbPropertyValues::getPropertyValue(
                     ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException)
 {
-    sal_Int32 nIndex = GetIndex_Impl( aPropertyName );
-    if ( nIndex != USHRT_MAX )
-        return _aPropVals[
-            sal::static_int_cast< sal_uInt16 >(nIndex)]->Value;
-    return Any();
+    size_t const nIndex = GetIndex_Impl( aPropertyName );
+    return _aPropVals[nIndex]->Value;
 }
 
 //----------------------------------------------------------------------------

@@ -51,7 +51,7 @@ class SbPropertyValues:     public SbPropertyValuesHelper
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > _xInfo;
 
 private:
-    sal_Int32                   GetIndex_Impl( const ::rtl::OUString &rPropName ) const;
+    size_t GetIndex_Impl( const ::rtl::OUString &rPropName ) const;
 
 public:
                             SbPropertyValues();
