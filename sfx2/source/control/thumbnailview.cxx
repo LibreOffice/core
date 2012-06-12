@@ -307,6 +307,12 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
+        Point aPos = aRect.TopLeft();
+        const Size  aSize = aRect.GetSize();
+        DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
+
+        Control::SetFillColor();
+
         if ( IsColor() )
             maVirDev.SetFillColor( maColor );
         else if ( IsEnabled() )
@@ -316,12 +322,35 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
 
         maVirDev.DrawRect( aRect );
 
+        if ( pItem->mbSelected )
+        {
+            Rectangle aSelRect = aRect;
+            Color aDoubleColor( rStyleSettings.GetHighlightColor() );
+
+            // specify selection output
+            aSelRect.Left()    += 4;
+            aSelRect.Top()     += 4;
+            aSelRect.Right()   -= 4;
+            aSelRect.Bottom()  -= 4;
+
+            SetLineColor( aDoubleColor );
+            aSelRect.Left()++;
+            aSelRect.Top()++;
+            aSelRect.Right()--;
+            aSelRect.Bottom()--;
+            DrawRect( aSelRect );
+            aSelRect.Left()++;
+            aSelRect.Top()++;
+            aSelRect.Right()--;
+            aSelRect.Bottom()--;
+            DrawRect( aSelRect );
+        }
+
         // Draw thumbnail
         Size    aImageSize = pItem->maImage.GetSizePixel();
         Size    aRectSize = aRect.GetSize();
-        Point   aPos( aRect.Left(), aRect.Top() );
-        aPos.X() += (aRectSize.Width()-aImageSize.Width())/2;
-        aPos.Y() += (aRectSize.Height()-aImageSize.Height())/2;
+        aPos.X() = aRect.Left() + (aRectSize.Width()-aImageSize.Width())/2;
+        aPos.Y() = aRect.Top() + (aRectSize.Height()-aImageSize.Height())/2;
 
         sal_uInt16  nImageStyle  = 0;
         if( !IsEnabled() )
@@ -947,33 +976,31 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() )
     {
         ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
-        if ( mbSelection )
+
+        if (pItem)
         {
-            mbHighlight = true;
-            if ( pItem )
+            if ( mbSelection )
             {
+                mbHighlight = true;
                 mnHighItemId = mnSelItemId;
                 ImplHighlightItem( pItem->mnId );
             }
+            else
+            {
+                if ( !rMEvt.IsMod2() )
+                {
+                    if ( rMEvt.GetClicks() == 1 )
+                    {
+                        pItem->mbSelected = !pItem->mbSelected;
+                        DrawItem(pItem,GetItemRect(pItem->mnId));
+                        //StartTracking( STARTTRACK_SCROLLREPEAT );
+                    }
+                    else if ( rMEvt.GetClicks() == 2 )
+                        DoubleClick();
+                }
+            }
 
             return;
-        }
-        else
-        {
-            if ( pItem && !rMEvt.IsMod2() )
-            {
-                if ( rMEvt.GetClicks() == 1 )
-                {
-                    mbHighlight  = true;
-                    mnHighItemId = mnSelItemId;
-                    ImplHighlightItem( pItem->mnId );
-                    StartTracking( STARTTRACK_SCROLLREPEAT );
-                }
-                else if ( rMEvt.GetClicks() == 2 )
-                    DoubleClick();
-
-                return;
-            }
         }
     }
 
