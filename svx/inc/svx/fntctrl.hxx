@@ -75,7 +75,6 @@ public:
     void                ResetColor();
     void                SetBackColor( const Color& rColor );
     void                UseResourceText( sal_Bool bUse = sal_True );
-    void                SetDrawBaseLine( sal_Bool bSet = sal_True );
     void                Paint( const Rectangle& );
 
     sal_Bool            IsTwoLines() const;

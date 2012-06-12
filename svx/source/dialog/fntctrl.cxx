@@ -166,7 +166,6 @@ class FontPrevWin_Impl
     sal_Bool                        bSelection      : 1,
                                     bGetSelection   : 1,
                                     bUseResText     : 1,
-                                    bDrawBaseLine   : 1,
                                     bPreviewBackgroundToCharacter : 1,
                                     bTwoLines       : 1,
                                     bUseFontNameAsText : 1,
@@ -183,7 +182,7 @@ public:
         pColor( NULL ), pBackColor( 0 ), nAscent( 0 ),
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( sal_False ), bGetSelection( sal_False ), bUseResText( sal_False ),
-        bDrawBaseLine( sal_True ), bPreviewBackgroundToCharacter( sal_False ), bTwoLines( sal_False ),
+        bPreviewBackgroundToCharacter( sal_False ), bTwoLines( sal_False ),
         bUseFontNameAsText( sal_False ), bTextInited( sal_False )
     {
         SvtLanguageOptions aLanguageOptions;
@@ -632,13 +631,6 @@ void SvxFontPrevWindow::UseResourceText( sal_Bool bUse )
 
 // -----------------------------------------------------------------------
 
-void SvxFontPrevWindow::SetDrawBaseLine( sal_Bool bSet )
-{
-    pImpl->bDrawBaseLine = bSet;
-}
-
-// -----------------------------------------------------------------------
-
 void SvxFontPrevWindow::Paint( const Rectangle& )
 {
     Printer* pPrinter = pImpl->pPrinter;
@@ -785,11 +777,8 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             nResultWidth += nTextWidth;
 
             long _nX = (aLogSize.Width() - nResultWidth) / 2;
-            if ( pImpl->bDrawBaseLine )
-            {
-                DrawLine( Point( 0,  nY ), Point( _nX, nY ) );
-                DrawLine( Point( _nX + nResultWidth, nY ), Point( aLogSize.Width(), nY ) );
-            }
+            DrawLine( Point( 0,  nY ), Point( _nX, nY ) );
+            DrawLine( Point( _nX + nResultWidth, nY ), Point( aLogSize.Width(), nY ) );
 
             long nSmallAscent = pImpl->nAscent;
             long nOffset = (nStdAscent - nSmallAscent ) / 2;
@@ -821,11 +810,8 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             Color aLineCol = GetLineColor();
 
             SetLineColor( rFont.GetColor() );
-            if ( pImpl->bDrawBaseLine )
-            {
-                DrawLine( Point( 0,  nY ), Point( nX, nY ) );
-                DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
-            }
+            DrawLine( Point( 0,  nY ), Point( nX, nY ) );
+            DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
             SetLineColor( aLineCol );
 
             Point aTmpPoint( nX, nY );
