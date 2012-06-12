@@ -49,8 +49,7 @@ CDEFS+=-Dnot_used_define_to_disable_pch
 UWINAPILIB=
 
 SLOFILES =	$(SLO)$/lngpckinsthelper.obj \
-            $(SLO)$/respintest.obj \
-            $(SLO)$/checkrunningofficelanguagepack.obj
+            $(SLO)$/respintest.obj
 
 STDSHL+=	\
     $(ADVAPI32LIB) \
