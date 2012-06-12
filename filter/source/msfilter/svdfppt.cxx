@@ -7612,8 +7612,9 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
                 {
                     Color aLineColor( ((XLineColorItem&)pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
                     aBorderLine.Color = aLineColor.GetColor();
-                    aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
-                    aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
+                    // Avoid width = 0, the min value should be 1.
+                    aBorderLine.OuterLineWidth = std::max( static_cast< sal_Int16 >( 1 ), static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4) );
+                    aBorderLine.InnerLineWidth = std::max( static_cast< sal_Int16 >( 1 ), static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4) );
                     aBorderLine.LineDistance = 0;
                 }
                 break;
