@@ -1,6 +1,18 @@
 --- misc/libvisio-0.0.17/src/lib/VSDXContentCollector.cpp	2012-05-31 15:14:42.000000000 +0200
 +++ misc/build/libvisio-0.0.17/src/lib/VSDXContentCollector.cpp	2012-06-09 00:08:24.139051461 +0200
-@@ -2059,7 +2059,11 @@
+@@ -1429,7 +1429,10 @@ void libvisio::VSDXContentCollector::collectNURBSTo(unsigned /* id */, unsigned
+ 
+   // Fill in end knots
+   while (knotVector.size() < (controlPoints.size() + degree + 2))
+-    knotVector.push_back(knotVector.back());
++  {
++    double tmpBack = knotVector.back();
++    knotVector.push_back(tmpBack);
++  }
+ 
+   // Convert control points to static co-ordinates
+   for (std::vector<std::pair<double, double> >::iterator it = controlPoints.begin();
+@@ -2059,7 +2062,11 @@
  
  void libvisio::VSDXContentCollector::_convertDataToString(WPXString &result, const WPXBinaryData &data, TextFormat format)
  {
