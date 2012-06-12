@@ -62,13 +62,13 @@ int CDECL SbCompare_PropertyValues_Impl( const void *arg1, const void *arg2 )
 
 struct SbCompare_UString_PropertyValue_Impl
 {
-   bool operator() ( const ::rtl::OUString& lhs, PropertyValue* const & rhs )
+   bool operator() (const ::rtl::OUString& lhs, PropertyValue const & rhs)
    {
-      return lhs.compareTo(rhs->Name) < 0;
+      return lhs.compareTo(rhs.Name) < 0;
    }
-   bool operator() ( PropertyValue* const & lhs, const ::rtl::OUString& rhs )
+   bool operator() (PropertyValue const & lhs, const ::rtl::OUString& rhs)
    {
-      return lhs->Name.compareTo(rhs) < 0;
+      return lhs.Name.compareTo(rhs) < 0;
    }
 };
 
@@ -95,9 +95,6 @@ SbPropertyValues::SbPropertyValues()
 SbPropertyValues::~SbPropertyValues()
 {
     m_xInfo = Reference< XPropertySetInfo >();
-
-    for ( sal_uInt16 n = 0; n < m_aPropVals.size(); ++n )
-        delete m_aPropVals[ n ];
 }
 
 //----------------------------------------------------------------------------
@@ -141,8 +138,8 @@ void SbPropertyValues::setPropertyValue(
                     ::com::sun::star::uno::RuntimeException)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
-    PropertyValue *const pPropVal = m_aPropVals[nIndex];
-    pPropVal->Value = aValue;
+    PropertyValue & rPropVal = m_aPropVals[nIndex];
+    rPropVal.Value = aValue;
 }
 
 //----------------------------------------------------------------------------
@@ -154,7 +151,7 @@ Any SbPropertyValues::getPropertyValue(
                     ::com::sun::star::uno::RuntimeException)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
-    return m_aPropVals[nIndex]->Value;
+    return m_aPropVals[nIndex].Value;
 }
 
 //----------------------------------------------------------------------------
@@ -202,8 +199,8 @@ void SbPropertyValues::removeVetoableChangeListener(
 Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException)
 {
     Sequence<PropertyValue> aRet( m_aPropVals.size() );
-    for ( sal_uInt16 n = 0; n < m_aPropVals.size(); ++n )
-        aRet.getArray()[n] = *m_aPropVals[n];
+    for (size_t n = 0; n < m_aPropVals.size(); ++n)
+        aRet.getArray()[n] = m_aPropVals[n];
     return aRet;
 }
 
@@ -220,7 +217,7 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
         throw PropertyExistException();
 
     const PropertyValue *pPropVals = rPropertyValues.getConstArray();
-    for ( sal_Int16 n = 0; n < rPropertyValues.getLength(); ++n )
+    for (sal_Int32 n = 0; n < rPropertyValues.getLength(); ++n)
     {
         PropertyValue *pPropVal = new PropertyValue(pPropVals[n]);
         m_aPropVals.push_back( pPropVal );
@@ -272,7 +269,7 @@ SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
     for ( sal_uInt16 n = 0; n < rPropVals.size(); ++n )
     {
         Property &rProp = aImpl._aProps.getArray()[n];
-        const PropertyValue &rPropVal = *rPropVals[n];
+        const PropertyValue &rPropVal = rPropVals[n];
         rProp.Name = rPropVal.Name;
         rProp.Handle = rPropVal.Handle;
         rProp.Type = getCppuVoidType();

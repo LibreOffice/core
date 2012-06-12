@@ -35,9 +35,10 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
-typedef std::vector< ::com::sun::star::beans::PropertyValue* > SbPropertyValueArr_Impl;
+typedef ::boost::ptr_vector< ::com::sun::star::beans::PropertyValue >
+    SbPropertyValueArr_Impl;
 
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertySet,
                                  ::com::sun::star::beans::XPropertyAccess > SbPropertyValuesHelper;
