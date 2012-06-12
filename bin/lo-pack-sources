@@ -399,7 +399,7 @@ unless ( -d "$source_dir" ) {
 }
 
 # check if it is a valid libreoffice-core directory
-$is_lo_core_dir=1 if (-f "$source_dir/autogen.sh" && -f "$source_dir/set_soenv.in");
+$is_lo_core_dir=1 if (-f "$source_dir/autogen.sh" && -f "$source_dir/config_host.mk.in");
 
 # all tarballs are generated from the libreoffice-core directory
 if (@pieces > 1 && $is_lo_core_dir == 0 ) {
