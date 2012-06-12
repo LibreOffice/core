@@ -24,6 +24,21 @@
 <oor:component-data oor:name="WriterCommands" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="UserInterface">
         <node oor:name="Commands">
+            <node oor:name=".uno:WordCountDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Word Count</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SaveGraphic" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Save Graphics...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ContinueNumbering" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Continue previous numbering</value>
+                </prop>
+            </node>
             <node oor:name=".uno:EditGlossary" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">AutoTe~xt...</value>
@@ -2270,11 +2285,6 @@
                     <value xml:lang="en-US">Inde~xes and Tables</value>
                 </prop>
             </node>
-            <node oor:name=".uno:WordCountDialog" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Word Count</value>
-                </prop>
-            </node>
             <node oor:name=".uno:StylesMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Styl~es</value>
@@ -2293,16 +2303,6 @@
             <node oor:name=".uno:SelectionModeMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Selection Mode</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:SaveGraphic" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Save Graphics...</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:ContinueNumbering" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Continue previous numbering</value>
                 </prop>
             </node>
         </node>
