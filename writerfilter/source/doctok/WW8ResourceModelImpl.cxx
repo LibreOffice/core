@@ -113,46 +113,6 @@ void WW8TableDataHandler::endCell(const string & end)
     output.addItem("</tabledata.cell>");
 }
 
-// ----- WW8TableDataManager -------------------------------
-
-class WW8TableManager :
-    public TableManager<string, TablePropsPointer_t>
-{
-    typedef TableDataHandler<string, TablePropsPointer_t>
-    TableDataHandlerPointer_t;
-
-public:
-    WW8TableManager();
-    virtual ~WW8TableManager() {}
-    virtual void endParagraphGroup();
-    virtual bool sprm(Sprm & rSprm);
-};
-
-WW8TableManager::WW8TableManager()
-{
-    TableDataHandler<string, TablePropsPointer_t>::Pointer_t pHandler(new WW8TableDataHandler());
-    setHandler(pHandler);
-}
-
-bool WW8TableManager::sprm(Sprm & rSprm)
-{
-    TableManager<string, TablePropsPointer_t>::sprm(rSprm);
-    output.setDepth(getTableDepthNew());
-    return true;
-}
-
-void WW8TableManager::endParagraphGroup()
-{
-    string tmpStr = "<tabledepth depth=\"";
-    char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIdINT32, getTableDepthNew());
-    tmpStr += sBuffer;
-    tmpStr += "\"/>";
-    output.addItem(tmpStr);
-    TableManager<string, TablePropsPointer_t>::endParagraphGroup();
-}
-
-
 //-------- WW8TableReference -----------------------------------
 
 void WW8TableReference::resolve(Table & /*rHandler*/)
