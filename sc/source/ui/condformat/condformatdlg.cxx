@@ -709,36 +709,6 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
     return pEntry;
 }
 
-void GetDataBarType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry )
-{
-    double nVal = 0;
-    switch(rLstBox.GetSelectEntryPos())
-    {
-        case 0:
-            pEntry->SetMin(true);
-            break;
-        case 1:
-            pEntry->SetMax(true);
-            break;
-        case 2:
-            pEntry->SetPercentile(true);
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
-            pEntry->SetValue(nVal);
-            break;
-        case 3:
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
-            pEntry->SetPercent(true);
-            pEntry->SetValue(nVal);
-            break;
-        case 4:
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
-            pEntry->SetValue(nVal);
-            break;
-        case 5:
-            break;
-    }
-}
-
 }
 
 ScFormatEntry* ScCondFrmtEntry::createColorscaleEntry() const
