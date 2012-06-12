@@ -1392,11 +1392,6 @@ Reference< XCellRange > WorksheetHelper::getCellRange( const CellRangeAddress& r
     return mrSheetGlob.getCellRange( rRange );
 }
 
-Reference< XSheetCellRanges > WorksheetHelper::getCellRangeList( const ApiCellRangeList& rRanges ) const
-{
-    return mrSheetGlob.getCellRangeList( rRanges );
-}
-
 Reference< XDrawPage > WorksheetHelper::getDrawPage() const
 {
     return mrSheetGlob.getDrawPage();

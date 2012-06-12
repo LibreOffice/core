@@ -216,9 +216,6 @@ public:
     /** Returns the XCellRange interface for the passed cell range address. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
                         getCellRange( const ::com::sun::star::table::CellRangeAddress& rRange ) const;
-    /** Returns the XSheetCellRanges interface for the passed cell range addresses. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetCellRanges >
-                        getCellRangeList( const ApiCellRangeList& rRanges ) const;
 
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
