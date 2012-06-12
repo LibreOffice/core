@@ -441,7 +441,7 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
     pPattern = pDoc->GetPattern(1,1,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_MESSAGE("font should be striked out with a single line", aFont.GetStrikeout() == STRIKEOUT_SINGLE );
-    //test double strikeout only for ods
+    //some tests on sheet2 only for ods
     if (nFormat == ODS)
     {
         pPattern = pDoc->GetPattern(1,2,1);
@@ -450,6 +450,14 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
         pPattern = pDoc->GetPattern(1,3,1);
         pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
         CPPUNIT_ASSERT_MESSAGE("font should be underlined with a dotted line", aFont.GetUnderline() == UNDERLINE_DOTTED);
+        //test case for i53253 where a cell has text with different styles and space between the text.
+        rtl::OUString aTestOUStr;
+        pDoc->GetString(3,0,1, aTestOUStr);
+        rtl::OUString aKnownGoodOUStr("text14 space");
+        rtl::OString aTestOStr(rtl::OUStringToOString(aTestOUStr, RTL_TEXTENCODING_UTF8));
+        rtl::OString aKnownGoodOStr(rtl::OUStringToOString(aKnownGoodOUStr, RTL_TEXTENCODING_UTF8));
+        rtl::OString aMsg("Expected: \"" + aKnownGoodOStr + "\"; Actual: \"" + aTestOStr + "\"");
+        CPPUNIT_ASSERT_MESSAGE( aMsg.pData->buffer, aKnownGoodOUStr.equals(aTestOUStr) );
     }
     pPattern = pDoc->GetPattern(1,4,1);
     Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
