@@ -181,8 +181,6 @@ typedef SvxMSDffBLIPInfo*  SvxMSDffBLIPInfo_Ptr;
 
 typedef SvxMSDffShapeInfo* SvxMSDffShapeInfo_Ptr;
 
-typedef SvxMSDffShapeOrder* SvxMSDffShapeOrder_Ptr;
-
 typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 
 #define SVEXT_PERSIST_STREAM "\002OlePres000"
@@ -190,12 +188,16 @@ typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 // nach der Reihenfolge des Auftretens sortiert werden:
 SV_DECL_PTRARR_DEL(SvxMSDffBLIPInfos,   SvxMSDffBLIPInfo_Ptr,   16)
 
-SV_DECL_PTRARR_DEL(SvxMSDffShapeOrders, SvxMSDffShapeOrder_Ptr, 16)
+class SvxMSDffShapeOrders : public std::vector<SvxMSDffShapeOrder*>
+{
+public:
+    ~SvxMSDffShapeOrders();
+};
 
 // explizit sortiert werden:
 SV_DECL_PTRARR_SORT_DEL_VISIBILITY(SvxMSDffShapeInfos,  SvxMSDffShapeInfo_Ptr,  16, MSFILTER_DLLPUBLIC)
 
-SV_DECL_PTRARR_SORT_VISIBILITY(SvxMSDffShapeTxBxSort,   SvxMSDffShapeOrder_Ptr, 16, MSFILTER_DLLPUBLIC)
+SV_DECL_PTRARR_SORT_VISIBILITY(SvxMSDffShapeTxBxSort,   SvxMSDffShapeOrder*, 16, MSFILTER_DLLPUBLIC)
 
 #define SVXMSDFF_SETTINGS_CROP_BITMAPS      1
 #define SVXMSDFF_SETTINGS_IMPORT_PPT        2

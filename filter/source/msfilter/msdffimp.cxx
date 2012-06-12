@@ -5659,11 +5659,10 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
                                       SwFlyFrmFmt*  pFly,
                                       short         nHdFtSection) const
 {
-    sal_uInt16 nShpCnt = pShapeOrders->Count();
+    sal_uInt16 nShpCnt = pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
     {
-        SvxMSDffShapeOrder& rOrder
-            = *(SvxMSDffShapeOrder*)(pShapeOrders->GetObject( nShapeNum ));
+        SvxMSDffShapeOrder& rOrder = *(*pShapeOrders)[ nShapeNum ];
 
         if( rOrder.nShapeId == nId )
         {
@@ -5681,11 +5680,10 @@ void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
                                             SwFlyFrmFmt* pFly,
                                             SdrObject*   pObject) const
 {
-    sal_uInt16 nShpCnt = pShapeOrders->Count();
+    sal_uInt16 nShpCnt = pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
     {
-        SvxMSDffShapeOrder& rOrder
-            = *(SvxMSDffShapeOrder*)(pShapeOrders->GetObject( nShapeNum ));
+        SvxMSDffShapeOrder& rOrder = *(*pShapeOrders)[ nShapeNum ];
 
         if( rOrder.pObj == pOldObject )
         {
@@ -5699,11 +5697,10 @@ void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
 
 void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
 {
-    sal_uInt16 nShpCnt = pShapeOrders->Count();
+    sal_uInt16 nShpCnt = pShapeOrders->size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
     {
-        SvxMSDffShapeOrder& rOrder
-            = *(SvxMSDffShapeOrder*)(pShapeOrders->GetObject( nShapeNum ));
+        SvxMSDffShapeOrder& rOrder = *(*pShapeOrders)[ nShapeNum ];
 
         if( rOrder.pObj == pObject )
         {
@@ -5723,11 +5720,9 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
 
 SV_IMPL_PTRARR(         SvxMSDffBLIPInfos,      SvxMSDffBLIPInfo_Ptr    );
 
-SV_IMPL_PTRARR(         SvxMSDffShapeOrders,    SvxMSDffShapeOrder_Ptr  );
-
 SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeInfos,     SvxMSDffShapeInfo_Ptr   );
 
-SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeTxBxSort,  SvxMSDffShapeOrder_Ptr  );
+SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeTxBxSort,  SvxMSDffShapeOrder*  );
 
 
 // Liste aller SvxMSDffImportRec fuer eine Gruppe
@@ -6371,8 +6366,7 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
             aInfo.bReplaceByFly = sal_True;
         }
         pShapeInfos->Insert(  new SvxMSDffShapeInfo(  aInfo          ) );
-        pShapeOrders->Insert( new SvxMSDffShapeOrder( aInfo.nShapeId ),
-                              pShapeOrders->Count() );
+        pShapeOrders->push_back( new SvxMSDffShapeOrder( aInfo.nShapeId ) );
     }
 
     // und den Stream wieder korrekt positionieren
@@ -7648,6 +7642,12 @@ SdrObject* SvxMSDffManager::getShapeForId( sal_Int32 nShapeId )
 {
     SvxMSDffShapeIdContainer::iterator aIter( maShapeIdContainer.find(nShapeId) );
     return aIter != maShapeIdContainer.end() ? (*aIter).second : 0;
+}
+
+SvxMSDffShapeOrders::~SvxMSDffShapeOrders()
+{
+    for( const_iterator it = begin(); it != end(); ++it )
+        delete *it;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

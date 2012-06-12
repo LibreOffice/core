@@ -4637,12 +4637,12 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         SvxMSDffShapeTxBxSort aTxBxSort;
 
         // korrekte Z-Order der eingelesen Escher-Objekte sicherstellen
-        sal_uInt16 nShapeCount = pMSDffManager->GetShapeOrders()->Count();
+        sal_uInt16 nShapeCount = pMSDffManager->GetShapeOrders()->size();
 
         for (sal_uInt16 nShapeNum=0; nShapeNum < nShapeCount; nShapeNum++)
         {
-            SvxMSDffShapeOrder *pOrder =
-                pMSDffManager->GetShapeOrders()->GetObject(nShapeNum);
+            const SvxMSDffShapeOrder *pOrder =
+                (*pMSDffManager->GetShapeOrders())[nShapeNum];
             // Pointer in neues Sort-Array einfuegen
             if (pOrder->nTxBxComp && pOrder->pFly)
                 aTxBxSort.Insert(pOrder);
