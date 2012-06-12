@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <cppuhelper/implbase5.hxx>
-#include <svl/svarray.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "bibmod.hxx"
 class BibDataManager;
@@ -57,8 +57,7 @@ public:
                         {}
 };
 
-typedef BibStatusDispatch* BibStatusDispatchPtr;
-SV_DECL_PTRARR_DEL( BibStatusDispatchArr, BibStatusDispatchPtr, 4 )
+typedef boost::ptr_vector<BibStatusDispatch> BibStatusDispatchArr;
 
 class BibFrameController_Impl : public cppu::WeakImplHelper5 <
     ::com::sun::star::lang::XServiceInfo,

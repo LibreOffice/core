@@ -111,8 +111,6 @@ static DispatchInfo SupportedCommandsArray[] =
 
 typedef ::boost::unordered_map< ::rtl::OUString, CacheDispatchInfo, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > CmdToInfoCache;
 
-SV_IMPL_PTRARR( BibStatusDispatchArr, BibStatusDispatchPtr );
-
 const CmdToInfoCache& GetCommandToInfoCache()
 {
     static sal_Bool       bCacheInitialized = sal_False;
@@ -280,7 +278,7 @@ void BibFrameController_Impl::dispose() throw (::com::sun::star::uno::RuntimeExc
     pImp->aLC.disposeAndClear(aObject);
     m_xDatMan = 0;
     pDatMan = 0;
-    aStatusListeners.DeleteAndDestroy( 0, aStatusListeners.Count() );
+    aStatusListeners.clear();
  }
 
 void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (::com::sun::star::uno::RuntimeException)
@@ -465,10 +463,10 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand.EqualsAscii("Bib/autoFilter"))
         {
-            sal_uInt16 nCount = aStatusListeners.Count();
+            sal_uInt16 nCount = aStatusListeners.size();
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-                BibStatusDispatch *pObj = aStatusListeners[n];
+                BibStatusDispatch *pObj = &aStatusListeners[n];
                 if ( pObj->aURL.Path == C2U("Bib/removeFilter") )
                 {
                     FeatureStateEvent  aEvent;
@@ -552,10 +550,10 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 OSL_FAIL( "BibFrameController_Impl::dispatch: caught an exception!" );
             }
 
-            sal_uInt16 nCount = aStatusListeners.Count();
+            sal_uInt16 nCount = aStatusListeners.size();
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-                BibStatusDispatch *pObj = aStatusListeners[n];
+                BibStatusDispatch *pObj = &aStatusListeners[n];
                 if ( pObj->aURL.Path == C2U("Bib/removeFilter") && pDatMan->getParser().is())
                 {
                     FeatureStateEvent  aEvent;
@@ -701,7 +699,7 @@ void BibFrameController_Impl::addStatusListener(
 {
     BibConfig* pConfig = BibModul::GetConfig();
     // create a new Reference and insert into listener array
-    aStatusListeners.Insert( new BibStatusDispatch( aURL, aListener ), aStatusListeners.Count() );
+    aStatusListeners.push_back( new BibStatusDispatch( aURL, aListener ) );
 
     // den ersten Status synchron zusenden
     FeatureStateEvent aEvent;
@@ -835,15 +833,15 @@ void BibFrameController_Impl::removeStatusListener(
     // for checking equality always "cast" to XInterface
     if ( !bDisposing )
     {
-        sal_uInt16 nCount = aStatusListeners.Count();
+        sal_uInt16 nCount = aStatusListeners.size();
         for ( sal_uInt16 n=0; n<nCount; n++ )
         {
-            BibStatusDispatch *pObj = aStatusListeners[n];
+            BibStatusDispatch *pObj = &aStatusListeners[n];
             sal_Bool bFlag=pObj->xListener.is();
             if (!bFlag || (pObj->xListener == aObject &&
                 ( aURL.Complete.isEmpty() || pObj->aURL.Path == aURL.Path  )))
             {
-                aStatusListeners.DeleteAndDestroy( n );
+                aStatusListeners.erase( aStatusListeners.begin() + n );
                 break;
             }
         }
@@ -855,14 +853,14 @@ void BibFrameController_Impl::RemoveFilter()
     rtl::OUString aQuery;
     pDatMan->startQueryWith(aQuery);
 
-    sal_uInt16 nCount = aStatusListeners.Count();
+    sal_uInt16 nCount = aStatusListeners.size();
 
     sal_Bool bRemoveFilter=sal_False;
     sal_Bool bQueryText=sal_False;
 
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        BibStatusDispatch *pObj = aStatusListeners[n];
+        BibStatusDispatch *pObj = &aStatusListeners[n];
         if ( pObj->aURL.Path == C2U("Bib/removeFilter") )
         {
             FeatureStateEvent  aEvent;
@@ -916,13 +914,13 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
     }
 
 
-    sal_uInt16 nCount = aStatusListeners.Count();
+    sal_uInt16 nCount = aStatusListeners.size();
 
     sal_Bool bMenuFilter=sal_False;
     sal_Bool bQueryText=sal_False;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        BibStatusDispatch *pObj = aStatusListeners[n];
+        BibStatusDispatch *pObj = &aStatusListeners[n];
         if(COMPARE_EQUAL == pObj->aURL.Path.compareToAscii("Bib/MenuFilter"))
         {
             FeatureStateEvent  aEvent;
