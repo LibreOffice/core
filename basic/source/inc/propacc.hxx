@@ -47,8 +47,8 @@ typedef ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertySet,
 
 class SbPropertyValues:     public SbPropertyValuesHelper
 {
-    SbPropertyValueArr_Impl _aPropVals;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > _xInfo;
+    SbPropertyValueArr_Impl m_aPropVals;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > m_xInfo;
 
 private:
     size_t GetIndex_Impl( const ::rtl::OUString &rPropName ) const;

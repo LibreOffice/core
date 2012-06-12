@@ -94,10 +94,10 @@ SbPropertyValues::SbPropertyValues()
 
 SbPropertyValues::~SbPropertyValues()
 {
-    _xInfo = Reference< XPropertySetInfo >();
+    m_xInfo = Reference< XPropertySetInfo >();
 
-    for ( sal_uInt16 n = 0; n < _aPropVals.size(); ++n )
-        delete _aPropVals[ n ];
+    for ( sal_uInt16 n = 0; n < m_aPropVals.size(); ++n )
+        delete m_aPropVals[ n ];
 }
 
 //----------------------------------------------------------------------------
@@ -105,12 +105,12 @@ SbPropertyValues::~SbPropertyValues()
 Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( RuntimeException )
 {
     // create on demand?
-    if ( !_xInfo.is() )
+    if (!m_xInfo.is())
     {
-        SbPropertySetInfo *pInfo = new SbPropertySetInfo( _aPropVals );
-        ((SbPropertyValues*)this)->_xInfo = (XPropertySetInfo*)pInfo;
+        SbPropertySetInfo *pInfo = new SbPropertySetInfo( m_aPropVals );
+        m_xInfo.set(pInfo);
     }
-    return _xInfo;
+    return m_xInfo;
 }
 
 //-------------------------------------------------------------------------
@@ -118,15 +118,15 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( 
 size_t SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
 {
     SbPropertyValueArr_Impl::const_iterator it = std::lower_bound(
-          _aPropVals.begin(), _aPropVals.end(), rPropName,
+          m_aPropVals.begin(), m_aPropVals.end(), rPropName,
           SbCompare_UString_PropertyValue_Impl() );
-    if (it == _aPropVals.end())
+    if (it == m_aPropVals.end())
     {
         throw beans::UnknownPropertyException(
                 "Property not found: " + rPropName,
                 const_cast<SbPropertyValues&>(*this));
     }
-    return it - _aPropVals.begin();
+    return it - m_aPropVals.begin();
 }
 
 //----------------------------------------------------------------------------
@@ -141,7 +141,7 @@ void SbPropertyValues::setPropertyValue(
                     ::com::sun::star::uno::RuntimeException)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
-    PropertyValue *const pPropVal = _aPropVals[nIndex];
+    PropertyValue *const pPropVal = m_aPropVals[nIndex];
     pPropVal->Value = aValue;
 }
 
@@ -154,7 +154,7 @@ Any SbPropertyValues::getPropertyValue(
                     ::com::sun::star::uno::RuntimeException)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
-    return _aPropVals[nIndex]->Value;
+    return m_aPropVals[nIndex]->Value;
 }
 
 //----------------------------------------------------------------------------
@@ -201,9 +201,9 @@ void SbPropertyValues::removeVetoableChangeListener(
 
 Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException)
 {
-    Sequence<PropertyValue> aRet( _aPropVals.size() );
-    for ( sal_uInt16 n = 0; n < _aPropVals.size(); ++n )
-        aRet.getArray()[n] = *_aPropVals[n];
+    Sequence<PropertyValue> aRet( m_aPropVals.size() );
+    for ( sal_uInt16 n = 0; n < m_aPropVals.size(); ++n )
+        aRet.getArray()[n] = *m_aPropVals[n];
     return aRet;
 }
 
@@ -216,14 +216,14 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
                      ::com::sun::star::lang::WrappedTargetException,
                      ::com::sun::star::uno::RuntimeException)
 {
-    if ( !_aPropVals.empty() )
+    if ( !m_aPropVals.empty() )
         throw PropertyExistException();
 
     const PropertyValue *pPropVals = rPropertyValues.getConstArray();
     for ( sal_Int16 n = 0; n < rPropertyValues.getLength(); ++n )
     {
         PropertyValue *pPropVal = new PropertyValue(pPropVals[n]);
-        _aPropVals.push_back( pPropVal );
+        m_aPropVals.push_back( pPropVal );
     }
 }
 
