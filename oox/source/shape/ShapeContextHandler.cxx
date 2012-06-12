@@ -280,8 +280,11 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         if ( getContextHandler() == getDrawingShapeContext() )
         {
             mpDrawing->finalizeFragmentImport();
-            if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().takeLastShape() )
+            if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().getFirstShape() )
+            {
                 xResult = pShape->convertAndInsert( xShapes );
+                mpDrawing->getShapes( ).clearShapes( );
+            }
         }
         else if (mxDiagramShapeContext.is())
         {

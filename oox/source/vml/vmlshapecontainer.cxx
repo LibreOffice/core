@@ -118,14 +118,11 @@ const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId, bool bD
    return 0;
 }
 
-const ShapeBase* ShapeContainer::takeLastShape()
+const ShapeBase* ShapeContainer::getFirstShape() const
 {
-    assert( mrDrawing.getType() == VMLDRAWING_WORD );
-    if( maShapes.empty())
-        return NULL;
-    const ShapeBase* ret = maShapes.back().get();
-    maShapes.pop_back();
-    return ret;
+    OSL_ENSURE( mrDrawing.getType() == VMLDRAWING_WORD, "ShapeContainer::getFirstShape - illegal call, Word filter only" );
+    OSL_ENSURE( maShapes.size() == 1, "ShapeContainer::getFirstShape - single shape expected" );
+    return maShapes.get( 0 ).get();
 }
 
 void ShapeContainer::convertAndInsert( const Reference< XShapes >& rxShapes, const ShapeParentAnchor* pParentAnchor ) const
