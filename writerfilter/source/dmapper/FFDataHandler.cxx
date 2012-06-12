@@ -41,7 +41,8 @@ FFDataHandler::FFDataHandler() :
 LoggedProperties(dmapper_logger, "FFDataHandler"),
 m_nCheckboxHeight(0),
 m_bCheckboxAutoHeight(false),
-m_bCheckboxChecked(false)
+m_nCheckboxChecked(-1),
+m_nCheckboxDefault(-1)
 {
 }
 
@@ -77,7 +78,12 @@ bool FFDataHandler::getCheckboxAutoHeight() const
 
 bool FFDataHandler::getCheckboxChecked() const
 {
-    return m_bCheckboxChecked;
+    if (m_nCheckboxChecked != -1)
+        return m_nCheckboxChecked;
+    else if (m_nCheckboxDefault != -1)
+        return m_nCheckboxDefault;
+    else
+        return false;
 }
 
 const rtl::OUString & FFDataHandler::getDropDownResult() const
@@ -126,7 +132,12 @@ void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
         break;
     case NS_ooxml::LN_CT_FFCheckBox_checked:
         {
-            m_bCheckboxChecked = r_Sprm.getValue()->getInt();
+            m_nCheckboxChecked = r_Sprm.getValue()->getInt();
+        }
+        break;
+    case NS_ooxml::LN_CT_FFCheckBox_default:
+        {
+            m_nCheckboxDefault = r_Sprm.getValue()->getInt();
         }
         break;
     case NS_ooxml::LN_CT_FFData_checkBox:
