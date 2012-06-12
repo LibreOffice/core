@@ -49,7 +49,8 @@ namespace comphelper { namespace string {
 /** Allocate a new string containing space for a given number of characters.
 
     The reference count of the new string will be 1. The length of the string
-    will be nLen. This function does not handle out-of-memory conditions.
+    will be nLen. This function throws std::bad_alloc on out-of-memory
+    conditions.
 
     The characters of the capacity are not cleared, and the length is set to
     nLen, unlike the similar method of rtl_uString_new_WithLength which

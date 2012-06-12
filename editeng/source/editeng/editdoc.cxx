@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-
+#include <comphelper/string.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -2037,7 +2037,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
     sal_uLong nLen = GetTextLen();
     size_t nNodes = Count();
     if (nNodes == 0)
-        return String();
+        return rtl::OUString();
 
     rtl::OUString aSep = EditDoc::GetSepStr( eEnd );
     sal_Int32 nSepSize = aSep.getLength();
@@ -2047,10 +2047,11 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
     if ( nLen > 0xFFFb / sizeof(xub_Unicode) )
     {
         OSL_FAIL( "Text too large for String" );
-        return String();
+        return rtl::OUString();
     }
-    xub_Unicode* pStr = new xub_Unicode[nLen+1];
-    xub_Unicode* pCur = pStr;
+
+    rtl_uString* newStr = comphelper::string::rtl_uString_alloc(nLen);
+    xub_Unicode* pCur = newStr->buffer;
     size_t nLastNode = nNodes-1;
     for ( sal_uInt16 nNode = 0; nNode < nNodes; nNode++ )
     {
@@ -2063,10 +2064,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
             pCur += nSepSize;
         }
     }
-    *pCur = '\0';
-    String aASCIIText( pStr );
-    delete[] pStr;
-    return aASCIIText;
+    return rtl::OUString(newStr, SAL_NO_ACQUIRE);
 }
 
 XubString EditDoc::GetParaAsString( sal_uInt16 nNode ) const
