@@ -2429,7 +2429,7 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
         {
             0x2002,0x2002,0x2002,0x2002,0x2002
         };
-        rSz = rRdr.MiserableDropDownFormHack(String(aBlank), xPropSet);
+        rSz = rRdr.MiserableDropDownFormHack(rtl::OUString(aBlank, SAL_N_ELEMENTS(aBlank)), xPropSet);
     }
 
     return sal_True;
