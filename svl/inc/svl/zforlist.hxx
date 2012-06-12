@@ -318,18 +318,7 @@ public:
 
 typedef boost::ptr_vector<NfCurrencyEntry> NfCurrencyTable;
 
-typedef String* WSStringPtr;
-class SVL_DLLPUBLIC NfWSStringsDtor : public std::vector<WSStringPtr>
-{
-public:
-    ~NfWSStringsDtor()
-    {
-        for( const_iterator it = begin(); it != end(); ++it )
-            delete *it;
-    }
-
-};
-
+typedef std::vector< ::rtl::OUString > NfWSStringsDtor;
 
 class SvNumberFormatterRegistry_Impl;
 

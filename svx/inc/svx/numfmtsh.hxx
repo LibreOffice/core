@@ -183,7 +183,8 @@ public:
     void                GetCurrencySymbols(std::vector<rtl::OUString>& rList, bool bFlag );
 
     sal_uInt16          FindCurrencyTableEntry( const String& rFmtString, bool &bTestBanking );
-    bool                IsInTable(sal_uInt16 nPos,bool bTmpBanking,const String &rFmtString);
+    bool                IsInTable(sal_uInt16 nPos, bool bTmpBanking,
+                            ::rtl::OUString const& rFmtString);
 
 private:
     static const double     DEFAULT_NUMVALUE;

@@ -3189,7 +3189,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultSystemCurrencyFormat()
         DBG_ASSERT( aCurrList.size(), "where is the NewCurrency System standard format?!?" );
         // if already loaded or user defined nDefaultSystemCurrencyFormat
         // will be set to the right value
-        PutEntry( *aCurrList[ nDefault ], nCheck, nType,
+        PutEntry( aCurrList[ nDefault ], nCheck, nType,
             nDefaultSystemCurrencyFormat, LANGUAGE_SYSTEM );
         DBG_ASSERT( nCheck == 0, "NewCurrency CheckError" );
         DBG_ASSERT( nDefaultSystemCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND,
@@ -3234,7 +3234,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
                 // if already loaded or user defined nDefaultSystemCurrencyFormat
                 // will be set to the right value
                 short nType;
-                PutEntry( *aCurrList[ nDefault ], nCheck, nType,
+                PutEntry( aCurrList[ nDefault ], nCheck, nType,
                     nDefaultCurrencyFormat, ActLnge );
                 DBG_ASSERT( nCheck == 0, "NewCurrency CheckError" );
                 DBG_ASSERT( nDefaultCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND,
@@ -3671,21 +3671,23 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         rCurr.BuildPositiveFormatString( aPositiveBank, true, *xLocaleData, 1 );
         rCurr.BuildNegativeFormatString( aNegativeBank, true, *xLocaleData, 1 );
 
-        WSStringPtr pFormat1 = new String( aPositiveBank );
-        *pFormat1 += ';';
-        WSStringPtr pFormat2 = new String( *pFormat1 );
+        ::rtl::OUStringBuffer format1(aPositiveBank);
+        format1.append(';');
+        format1.append(aNegativeBank);
+        rStrArr.push_back(format1.makeStringAndClear());
+
+        ::rtl::OUStringBuffer format2(aPositiveBank);
+        format2.append(';');
 
         String aRed( '[' );
         aRed += pFormatScanner->GetRedString();
         aRed += ']';
 
-        *pFormat2 += aRed;
+        format2.append(aRed);
 
-        *pFormat1 += aNegativeBank;
-        *pFormat2 += aNegativeBank;
+        format2.append(aNegativeBank);
+        rStrArr.push_back(format2.makeStringAndClear());
 
-        rStrArr.push_back( pFormat1 );
-        rStrArr.push_back( pFormat2 );
         nDefault = rStrArr.size() - 1;
     }
     else
@@ -3694,7 +3696,6 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         // duplicates if no decimals in currency.
         String aPositive, aNegative, aPositiveNoDec, aNegativeNoDec,
             aPositiveDashed, aNegativeDashed;
-        WSStringPtr pFormat1, pFormat2, pFormat3, pFormat4, pFormat5;
 
         String aRed( '[' );
         aRed += pFormatScanner->GetRedString();
@@ -3702,6 +3703,11 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
 
         rCurr.BuildPositiveFormatString( aPositive, false, *xLocaleData, 1 );
         rCurr.BuildNegativeFormatString( aNegative, false, *xLocaleData, 1 );
+        ::rtl::OUStringBuffer format1;
+        ::rtl::OUStringBuffer format2;
+        ::rtl::OUStringBuffer format3;
+        ::rtl::OUStringBuffer format4;
+        ::rtl::OUStringBuffer format5;
         if ( rCurr.GetDigits() )
         {
             rCurr.BuildPositiveFormatString( aPositiveNoDec, false, *xLocaleData, 0 );
@@ -3709,45 +3715,42 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
             rCurr.BuildPositiveFormatString( aPositiveDashed, false, *xLocaleData, 2 );
             rCurr.BuildNegativeFormatString( aNegativeDashed, false, *xLocaleData, 2 );
 
-            pFormat1 = new String( aPositiveNoDec );
-            *pFormat1 += ';';
-            pFormat3 = new String( *pFormat1 );
-            pFormat5 = new String( aPositiveDashed );
-            *pFormat5 += ';';
+            format1.append(aPositiveNoDec);
+            format1.append(';');
+            format1.append(aNegativeNoDec);
 
-            *pFormat1 += aNegativeNoDec;
+            format3.append(aPositiveNoDec);
+            format3.append(';');
+            format3.append(aRed);
+            format3.append(aNegativeNoDec);
 
-            *pFormat3 += aRed;
-            *pFormat5 += aRed;
-
-            *pFormat3 += aNegativeNoDec;
-            *pFormat5 += aNegativeDashed;
-        }
-        else
-        {
-            pFormat1 = NULL;
-            pFormat3 = NULL;
-            pFormat5 = NULL;
+            format5.append(aPositiveDashed);
+            format5.append(';');
+            format5.append(aRed);
+            format5.append(aNegativeDashed);
         }
 
-        pFormat2 = new String( aPositive );
-        *pFormat2 += ';';
-        pFormat4 = new String( *pFormat2 );
+        format2.append(aPositive);
+        format2.append(';');
+        format2.append(aNegative);
 
-        *pFormat2 += aNegative;
+        format4.append(aPositive);
+        format4.append(';');
+        format4.append(aRed);
+        format4.append(aNegative);
 
-        *pFormat4 += aRed;
-        *pFormat4 += aNegative;
-
-        if ( pFormat1 )
-            rStrArr.push_back( pFormat1 );
-        rStrArr.push_back( pFormat2 );
-        if ( pFormat3 )
-            rStrArr.push_back( pFormat3 );
-        rStrArr.push_back( pFormat4 );
+        if (rCurr.GetDigits()) {
+            rStrArr.push_back(format1.makeStringAndClear());
+        }
+        rStrArr.push_back(format2.makeStringAndClear());
+        if (rCurr.GetDigits()) {
+            rStrArr.push_back(format3.makeStringAndClear());
+        }
+        rStrArr.push_back(format4.makeStringAndClear());
         nDefault = rStrArr.size() - 1;
-        if ( pFormat5 )
-            rStrArr.push_back( pFormat5 );
+        if (rCurr.GetDigits()) {
+            rStrArr.push_back(format5.makeStringAndClear());
+        }
     }
     return nDefault;
 }
