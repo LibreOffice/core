@@ -119,6 +119,7 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
 
 SwChartLockController_Helper::SwChartLockController_Helper( SwDoc *pDocument ) :
     pDoc( pDocument )
+    , bIsLocked( false )
 {
     aUnlockTimer.SetTimeout( 1500 );
     aUnlockTimer.SetTimeoutHdl( LINK( this, SwChartLockController_Helper, DoUnlockAllCharts ));
