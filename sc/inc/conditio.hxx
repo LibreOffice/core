@@ -70,7 +70,7 @@ enum ScConditionMode
 };
 
 class ScConditionalFormat;
-class ScDataBarInfo;
+struct ScDataBarInfo;
 
 namespace condformat
 {
