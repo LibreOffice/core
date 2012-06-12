@@ -80,6 +80,9 @@ sub standardize_summary($)
         my $first_char = lc($1);
         $line =~ s/^./$first_char/;
     }
+    # print does not like 0% or so
+    $line =~ s/%/%%/g;
+    
 
     # FIXME: remove do at the end of line
     #        remove bug numbers
