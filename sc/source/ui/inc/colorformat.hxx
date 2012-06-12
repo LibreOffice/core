@@ -62,7 +62,10 @@ private:
     Edit maEdMin;
     Edit maEdMax;
 
+    rtl::OUString maStrWarnSameValue;
+
     DECL_LINK(OkBtnHdl, void*);
+    DECL_LINK(TypeSelectHdl, void*);
 
     void Init();
 

@@ -242,6 +242,15 @@ void ScColorScaleEntry::SetPercentile(bool bPercentile)
     mbPercentile = bPercentile;
 }
 
+void ScColorScaleEntry::SetHasValue()
+{
+    mbPercentile = false;
+    mbPercent = false;
+    mbMin = false;
+    mbMax = false;
+    mpCell.reset();
+}
+
 namespace {
 
 double getMinValue(const ScRange& rRange, ScDocument* pDoc)

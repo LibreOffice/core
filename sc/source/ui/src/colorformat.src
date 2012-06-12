@@ -136,8 +136,8 @@ ModalDialog RID_SCDLG_DATABAR
         {
             "Minimum";
             "Maximum";
-            "Percent";
             "Percentile";
+            "Percent";
             "Value";
             "Formula";
         };
@@ -168,6 +168,10 @@ ModalDialog RID_SCDLG_DATABAR
         Size = MAP_APPFONT( 40, 12 );
         TabStop = TRUE;
         Border = TRUE;
+    };
+    String STR_WARN_SAME_VALUE
+    {
+        Text [ en-US ] = "Min value must be smaller than max value!";
     };
 };
 

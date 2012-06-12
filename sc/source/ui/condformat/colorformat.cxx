@@ -105,11 +105,11 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry 
             pEntry->SetValue(nVal);
             break;
         case 4:
-            //FIXME
+            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pEntry->SetHasValue();
+            pEntry->SetValue(nVal);
             break;
         case 5:
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
-            pEntry->SetValue(nVal);
             break;
     }
 }
@@ -146,7 +146,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
     maLbTypeMax( this, ScResId( LB_TYPE ) ),
     maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
     maEdMin( this, ScResId( ED_MIN ) ),
-    maEdMax( this, ScResId( ED_MAX ) )
+    maEdMax( this, ScResId( ED_MAX ) ),
+    maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) )
 {
     Init();
     FreeResource();
@@ -171,6 +172,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
     ::SetType(rData.mpUpperLimit.get(), maLbTypeMax);
     SetValue(rData.mpLowerLimit.get(), maEdMin);
     SetValue(rData.mpUpperLimit.get(), maEdMax);
+
+    TypeSelectHdl(NULL);
 }
 
 ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDataBarFormat* pFormat):
@@ -193,7 +196,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDataBarFormat* pFo
     maLbTypeMax( this, ScResId( LB_TYPE ) ),
     maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
     maEdMin( this, ScResId( ED_MIN ) ),
-    maEdMax( this, ScResId( ED_MAX ) )
+    maEdMax( this, ScResId( ED_MAX ) ),
+    maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) )
 {
     Init();
     FreeResource();
@@ -265,6 +269,10 @@ void ScDataBarSettingsDlg::Init()
     Point aPoint = maLbTypeMax.GetPosPixel();
     aPoint.Y() += 50;
     maLbTypeMax.SetPosPixel(aPoint);
+
+    maLbTypeMin.SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
+    maLbTypeMax.SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
+
 }
 
 namespace {
@@ -329,10 +337,46 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
     if(bWarn)
     {
         //show warning message and don't close
+        WarningBox aWarn(this, WB_OK, maStrWarnSameValue );
+        aWarn.Execute();
     }
     else
     {
         EndDialog(RET_OK);
+    }
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
+{
+    sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
+    if( nSelectMin == 0 || nSelectMin == 1)
+        maEdMin.Disable();
+    else
+    {
+        maEdMin.Enable();
+        if(!maEdMin.GetText().Len())
+        {
+            if(nSelectMin == 2 || nSelectMin == 3)
+                maEdMin.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
+            else
+                maEdMin.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(0)));
+        }
+    }
+
+    sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
+    if(nSelectMax == 0 || nSelectMax == 1)
+        maEdMax.Disable();
+    else
+    {
+        maEdMax.Enable();
+        if(!maEdMax.GetText().Len())
+        {
+            if(nSelectMax == 2 || nSelectMax == 3)
+                maEdMax.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
+            else
+                maEdMax.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(0)));
+        }
     }
     return 0;
 }
