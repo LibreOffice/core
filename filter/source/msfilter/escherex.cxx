@@ -1962,8 +1962,12 @@ sal_Int32 GetValueForEnhancedCustomShapeParameter( const com::sun::star::drawing
     {
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
         {
-            nValue = (sal_uInt16)rEquationOrder[ nValue ];
-            nValue |= (sal_uInt32)0x80000000;
+            OSL_ASSERT(nValue < rEquationOrder.size());
+            if ( nValue < rEquationOrder.size() )
+            {
+                nValue = (sal_uInt16)rEquationOrder[ nValue ];
+                nValue |= (sal_uInt32)0x80000000;
+            }
         }
         break;
         case com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL :
