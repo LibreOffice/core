@@ -54,7 +54,11 @@ public:                     // public for Sal Implementation
     virtual sal_Bool                SetSize( long nNewDX, long nNewDY ) = 0;
 
     // Set new size using a buffer at the given address
-    virtual sal_Bool                SetSizeUsingBuffer( long nNewDX, long nNewDY, const basebmp::RawMemorySharedArray &pBuffer ) = 0;
+    virtual sal_Bool                SetSizeUsingBuffer( long nNewDX, long nNewDY, const basebmp::RawMemorySharedArray & /* pBuffer */ )
+    {
+        // Only the headless virtual device has an implementation that uses pBuffer.
+        return SetSize( nNewDX, nNewDY );
+    }
 
     /// Get actual VDev size in pixel
     virtual void                    GetSize( long& rWidth, long& rHeight ) = 0;
