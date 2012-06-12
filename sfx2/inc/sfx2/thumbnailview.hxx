@@ -220,10 +220,6 @@ public:
 
     bool IsNoSelection() const { return mbNoSelection; }
 
-    void SetItemImage( sal_uInt16 nItemId, const Image& rImage );
-
-    Image GetItemImage( sal_uInt16 nItemId ) const;
-
     void SetItemText( sal_uInt16 nItemId, const rtl::OUString &rStr );
 
     rtl::OUString GetItemText( sal_uInt16 nItemId ) const;
@@ -279,8 +275,6 @@ protected:
     virtual void LoseFocus();
 
     virtual void Resize();
-
-    virtual void RequestHelp( const HelpEvent& rHEvt );
 
     virtual void StateChanged( StateChangedType nStateChange );
 

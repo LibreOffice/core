@@ -1184,29 +1184,6 @@ void ThumbnailView::Resize()
     Control::Resize();
 }
 
-void ThumbnailView::RequestHelp( const HelpEvent& rHEvt )
-{
-    if ( (rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON)) == HELPMODE_QUICK )
-    {
-        Point aPos = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
-        size_t nItemPos = ImplGetItem( aPos );
-        if ( nItemPos != THUMBNAILVIEW_ITEM_NOTFOUND )
-        {
-            Rectangle aItemRect = ImplGetItemRect( nItemPos );
-            Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-            aItemRect.Left()   = aPt.X();
-            aItemRect.Top()    = aPt.Y();
-            aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-            aItemRect.Right()  = aPt.X();
-            aItemRect.Bottom() = aPt.Y();
-            Help::ShowQuickHelp( this, aItemRect, GetItemText( ImplGetItem( nItemPos )->mnId ) );
-            return;
-        }
-    }
-
-    Control::RequestHelp( rHEvt );
-}
-
 void ThumbnailView::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
@@ -1618,36 +1595,6 @@ void ThumbnailView::SetNoSelection()
 
     if ( IsReallyVisible() && IsUpdateMode() )
         ImplDraw();
-}
-
-void ThumbnailView::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == THUMBNAILVIEW_ITEM_NOTFOUND )
-        return;
-
-    ThumbnailViewItem* pItem = mItemList[nPos];
-    pItem->maImage = rImage;
-
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
-    {
-        const Rectangle aRect = ImplGetItemRect(nPos);
-        DrawItem( pItem, aRect );
-        Invalidate( aRect );
-    }
-    else
-        mbFormat = true;
-}
-
-Image ThumbnailView::GetItemImage( sal_uInt16 nItemId ) const
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
-        return mItemList[nPos]->maImage;
-    else
-        return Image();
 }
 
 void ThumbnailView::SetItemText( sal_uInt16 nItemId, const rtl::OUString& rText )
