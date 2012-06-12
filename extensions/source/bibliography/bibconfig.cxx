@@ -28,7 +28,6 @@
 
 
 #include <bibconfig.hxx>
-#include <svl/svarray.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -42,10 +41,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 using ::rtl::OUString;
-
-typedef Mapping* MappingPtr;
-SV_DECL_PTRARR_DEL(MappingArray, MappingPtr, 2)
-SV_IMPL_PTRARR(MappingArray, MappingPtr);
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -199,7 +194,7 @@ BibConfig::BibConfig() :
                     pMapping->aColumnPairs[nSetMapping++].sRealColumnName = sTempReal;
                 }
             }
-            pMappingsArr->Insert(pMapping, pMappingsArr->Count());
+            pMappingsArr->push_back(pMapping);
         }
     }
 }
@@ -256,16 +251,16 @@ void    BibConfig::Commit()
     }
     PutProperties(aPropertyNames, aValues);
     ClearNodeSet( C2U(cDataSourceHistory));
-    Sequence< PropertyValue > aNodeValues(pMappingsArr->Count() * 3);
+    Sequence< PropertyValue > aNodeValues(pMappingsArr->size() * 3);
     PropertyValue* pNodeValues = aNodeValues.getArray();
 
     sal_Int32 nIndex = 0;
     OUString sName(C2U("DataSourceName"));
     OUString sTable(C2U("Command"));
     OUString sCommandType(C2U("CommandType"));
-    for(sal_Int32 i = 0; i < pMappingsArr->Count(); i++)
+    for(sal_Int32 i = 0; i < (sal_Int32)pMappingsArr->size(); i++)
     {
-        const Mapping* pMapping = pMappingsArr->GetObject((sal_uInt16)i);
+        const Mapping* pMapping = &(*pMappingsArr)[i];
         OUString sPrefix(C2U(cDataSourceHistory));
         sPrefix += C2U("/_");
         sPrefix += OUString::valueOf(i);
@@ -309,30 +304,30 @@ void    BibConfig::Commit()
 
 const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
 {
-    for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
+    for(sal_uInt16 i = 0; i < pMappingsArr->size(); i++)
     {
-        const Mapping* pMapping = pMappingsArr->GetObject(i);
-        sal_Bool bURLEqual = rDesc.sDataSource.equals(pMapping->sURL);
-        if(rDesc.sTableOrQuery == pMapping->sTableName && bURLEqual)
-            return pMapping;
+        Mapping& rMapping = (*pMappingsArr)[i];
+        sal_Bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
+        if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
+            return &rMapping;
     }
     return 0;
 }
 
 void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapping)
 {
-    for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
+    for(sal_uInt16 i = 0; i < pMappingsArr->size(); i++)
     {
-        const Mapping* pMapping = pMappingsArr->GetObject(i);
-        sal_Bool bURLEqual = rDesc.sDataSource.equals(pMapping->sURL);
-        if(rDesc.sTableOrQuery == pMapping->sTableName && bURLEqual)
+        Mapping& rMapping = (*pMappingsArr)[i];
+        sal_Bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
+        if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
         {
-            pMappingsArr->DeleteAndDestroy(i, 1);
+            pMappingsArr->erase(pMappingsArr->begin()+i);
             break;
         }
     }
     Mapping* pNew = new Mapping(*pSetMapping);
-    pMappingsArr->Insert(pNew, pMappingsArr->Count());
+    pMappingsArr->push_back(pNew);
     SetModified();
 }
 

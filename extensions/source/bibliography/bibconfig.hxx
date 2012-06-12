@@ -30,7 +30,11 @@
 #define _BIBCONFIG_HXX
 
 #include <unotools/configitem.hxx>
-class MappingArray;
+#include <boost/ptr_container/ptr_vector.hpp>
+
+class Mapping;
+typedef boost::ptr_vector<Mapping> MappingArray;
+
 
 //-----------------------------------------------------------------------------
 #define COLUMN_COUNT                31
