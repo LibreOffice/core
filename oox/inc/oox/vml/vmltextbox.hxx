@@ -42,11 +42,11 @@ namespace vml {
 /** Font settings for a text portion in a textbox. */
 struct OOX_DLLPUBLIC TextFontModel
 {
-    OptValue< ::rtl::OUString > moName;     /// Font name.
-    OptValue< ::rtl::OUString > moColor;    /// Font color, HTML encoded, sort of.
-    OptValue< sal_Int32 > monSize;          /// Font size in twips.
-    OptValue< sal_Int32 > monUnderline;     /// Single or double underline.
-    OptValue< sal_Int32 > monEscapement;    /// Subscript or superscript.
+    OptValue< ::rtl::OUString > moName;     ///< Font name.
+    OptValue< ::rtl::OUString > moColor;    ///< Font color, HTML encoded, sort of.
+    OptValue< sal_Int32 > monSize;          ///< Font size in twips.
+    OptValue< sal_Int32 > monUnderline;     ///< Single or double underline.
+    OptValue< sal_Int32 > monEscapement;    ///< Subscript or superscript.
     OptValue< bool >    mobBold;
     OptValue< bool >    mobItalic;
     OptValue< bool >    mobStrikeout;
