@@ -85,7 +85,7 @@ public:
 namespace databar
 {
 
-enum SC_DLLPUBLIC ScAxisPostion
+enum ScAxisPostion
 {
     NONE,
     AUTOMATIC,
