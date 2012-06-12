@@ -5198,6 +5198,103 @@
                     <value xml:lang="en-US">Delete Comment</value>
                 </prop>
             </node>
+            <node oor:name=".uno:AVMediaPlayer" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Media Pla~yer</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>9</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertAVMedia" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Mo~vie and Sound</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ColorSettings" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Color</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>9</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertHardHyphen" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Non-br~eaking hyphen</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertSoftHyphen" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Optional hyphen</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertNonBreakingSpace" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Non-breaking space</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertZWSP" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">No-~width optional break</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertZWNBSP" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">No-width no ~break</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertLRM" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Left-to-right mark</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertRLM" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Right-to-left mark</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ManageLanguage" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Manage Language</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CurrentLanguage" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Current Language</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MoreDictionaries" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">More Dictionaries Online...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ActivateStyleApply" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Set Focus in Combo Box</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MacroOrganizer" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">%PRODUCTNAME Basic Macro Organizer...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">E-mail as ~Microsoft Format...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SendMailDocAsOOo" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">E-mail as ~OpenDocument Format...</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:HelpMenu" oor:op="replace">
@@ -5341,84 +5438,12 @@
                     <value xml:lang="en-US">A~nchor</value>
                 </prop>
             </node>
-            <node oor:name=".uno:AVMediaPlayer" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Media Pla~yer</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>9</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertAVMedia" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Mo~vie and Sound</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
             <node oor:name=".uno:Addons" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Add-Ons</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:ColorSettings" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Color</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>9</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertHardHyphen" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Non-br~eaking hyphen</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertSoftHyphen" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Optional hyphen</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertNonBreakingSpace" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Non-breaking space</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertZWSP" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">No-~width optional break</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertZWNBSP" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">No-width no ~break</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertLRM" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Left-to-right mark</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertRLM" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Right-to-left mark</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:ManageLanguage" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Manage Language</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:CurrentLanguage" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Current Language</value>
                 </prop>
             </node>
             <node oor:name=".uno:SetLanguageSelectionMenu" oor:op="replace">
@@ -5434,31 +5459,6 @@
             <node oor:name=".uno:SetLanguageAllTextMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">For all Text</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:MoreDictionaries" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">More Dictionaries Online...</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:ActivateStyleApply" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Set Focus in Combo Box</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:MacroOrganizer" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">%PRODUCTNAME Basic Macro Organizer...</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">E-mail as ~Microsoft Format...</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:SendMailDocAsOOo" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">E-mail as ~OpenDocument Format...</value>
                 </prop>
             </node>
         </node>
