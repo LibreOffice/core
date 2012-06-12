@@ -196,7 +196,8 @@ DomExport::~DomExport()
 
 void DomExport::pushNamespace()
 {
-    maNamespaces.push_back( maNamespaces.back() );
+    SvXMLNamespaceMap const aMap(maNamespaces.back());
+    maNamespaces.push_back(aMap);
 }
 
 void DomExport::popNamespace()

@@ -412,12 +412,15 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     if (static_cast<sal_uInt16>(io_rLevel) + 1U > rNPList.size()) {
         // new level: need to enlarge
         for (size_t i = rNPList.size();
-                i < static_cast<size_t>(io_rLevel); ++i) {
-            rNPList.push_back(rNPList.back());
+                i < static_cast<size_t>(io_rLevel); ++i)
+        {
+            NumParaList_t::value_type const rule(rNPList.back());
+            rNPList.push_back(rule);
         }
+        NumParaList_t::value_type const rule(rNPList.back());
         rNPList.push_back(xNumRules.is()
             ? ::std::make_pair(i_StyleName, xNumRules)
-            : rNPList.back());
+            : rule);
     } else {
         // old level: no need to enlarge; possibly shrink
         if (xNumRules.is()) {
