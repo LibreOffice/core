@@ -27,6 +27,8 @@
 #include <vcl/svapp.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 
 // ------------------------------------------------------------------------
 
@@ -232,8 +234,11 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     Size  aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
     if ( rFont.lfHeight > 0 )
     {
-        // converting the cell height into a font height
+        // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
+        SolarMutexGuard aGuard;
         VirtualDevice aVDev;
+
+        // converting the cell height into a font height
         aFont.SetSize( aFontSize );
         aVDev.SetFont( aFont );
         FontMetric aMetric( aVDev.GetFontMetric() );
@@ -249,7 +254,10 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 
     if ( !rFont.lfWidth )
     {
+        // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
+        SolarMutexGuard aGuard;
         VirtualDevice aVDev;
+
         aFont.SetSize( aFontSize );
         aVDev.SetFont( aFont );
         FontMetric aMetric( aVDev.GetFontMetric() );
@@ -1500,13 +1508,10 @@ void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRe
 void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry, sal_Bool bRecordPath, sal_Int32 nGfxMode )
 {
     UpdateClipRegion();
-
-    VirtualDevice* pVDev = NULL;
-
     rPosition = ImplMap( rPosition );
-
     sal_Int32 nOldGfxMode = GetGfxMode();
     SetGfxMode( GM_COMPATIBLE );
+
     if ( pDXArry )
     {
         sal_Int32 i, nSum, nLen = rText.Len();
@@ -1600,20 +1605,22 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 
     if( mnTextAlign & ( TA_UPDATECP | TA_RIGHT_CENTER ) )
     {
-        if ( !pVDev )
-            pVDev = new VirtualDevice;
+        // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
+        SolarMutexGuard aGuard;
+        VirtualDevice aVDev;
+
         sal_Int32 nTextWidth;
-        pVDev->SetMapMode( MapMode( MAP_100TH_MM ) );
-        pVDev->SetFont( maFont );
+        aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
+        aVDev.SetFont( maFont );
         if( pDXArry )
         {
             sal_uInt32 nLen = rText.Len();
-            nTextWidth = pVDev->GetTextWidth( rtl::OUString(rText.GetChar( (sal_uInt16)( nLen - 1 ) )) );
+            nTextWidth = aVDev.GetTextWidth( rtl::OUString(rText.GetChar( (sal_uInt16)( nLen - 1 ) )) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
         }
         else
-            nTextWidth = pVDev->GetTextWidth( rText );
+            nTextWidth = aVDev.GetTextWidth( rText );
 
         if( mnTextAlign & TA_UPDATECP )
             rPosition = maActPos;
@@ -1647,21 +1654,20 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         sal_Int32* pDX = pDXArry;
         if ( !pDXArry )
         {
+            // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
             SolarMutexGuard aGuard;
+            VirtualDevice aVDev;
 
             pDX = new sal_Int32[ rText.Len() ];
-            if ( !pVDev )
-                pVDev = new VirtualDevice;
-            pVDev->SetMapMode( MAP_100TH_MM );
-            pVDev->SetFont( maLatestFont );
-            pVDev->GetTextArray( rText, pDX, 0, STRING_LEN );
+            aVDev.SetMapMode( MAP_100TH_MM );
+            aVDev.SetFont( maLatestFont );
+            aVDev.GetTextArray( rText, pDX, 0, STRING_LEN );
         }
         mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, STRING_LEN ) );
         if ( !pDXArry )     // this means we have created our own array
             delete[] pDX;   // which must be deleted
     }
     SetGfxMode( nOldGfxMode );
-    delete pVDev;
 }
 
 //-----------------------------------------------------------------------------------

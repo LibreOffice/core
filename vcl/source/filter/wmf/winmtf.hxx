@@ -27,7 +27,6 @@
 #include <sot/object.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vcl/graph.hxx>
-#include <vcl/virdev.hxx>
 #include <basegfx/tools/b2dclipstate.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bmpacc.hxx>
@@ -847,7 +846,6 @@ class WMFReader : public WinMtf
 {
 private:
 
-    VirtualDevice   aVDev;  // just for the purpose of "IsFontAvailable"
     sal_uInt16      nUnitsPerInch;
     sal_uInt32      nRecSize;
 
