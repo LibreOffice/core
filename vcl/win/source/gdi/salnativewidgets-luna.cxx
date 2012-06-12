@@ -492,6 +492,81 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
 
 // ----
 
+/// Draw an effect under the menubar for better readibility in the non-client area
+static bool impl_drawAeroMenubar( HWND hWnd, HDC hDC, RECT rc )
+{
+    const long GLOW_OFFSET = 5;
+    const long VISIBLE_FRAME = 2;
+    const long TRIANGLE_WIDTH = rc.bottom - rc.top - GLOW_OFFSET - VISIBLE_FRAME;
+    const COLOR16 FINAL_OPACITY = 0x2000;
+
+    // the glow effect gives us a nice fade into the gradient
+    HTHEME hGlowTheme = getThemeHandle( hWnd, L"TextGlow");
+    if ( !hGlowTheme )
+        return sal_False;
+
+    // first clear everything
+    FillRect( hDC, &rc, static_cast< HBRUSH >( GetStockObject( BLACK_BRUSH ) ) );
+
+    // gradient under the menu
+    TRIVERTEX vert[2] = {
+        { rc.left + GLOW_OFFSET + TRIANGLE_WIDTH,  rc.top + GLOW_OFFSET,      0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.right - GLOW_OFFSET - TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
+    };
+    GRADIENT_RECT g_rect[1] = { { 0, 1 } };
+    GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
+
+    // left side of the gradient consists of 2 triangles
+    TRIVERTEX vert_left_1[3] = {
+        { rc.left + GLOW_OFFSET, rc.top + GLOW_OFFSET,                       0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.left + GLOW_OFFSET, rc.bottom - VISIBLE_FRAME,                  0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.left + GLOW_OFFSET + TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
+    };
+    GRADIENT_TRIANGLE g_triangle[1] = { { 0, 1, 2 } };
+    GradientFill( hDC, vert_left_1, 3, g_triangle, 1, GRADIENT_FILL_TRIANGLE );
+
+    TRIVERTEX vert_left_2[3] = {
+        { rc.left + GLOW_OFFSET, rc.top + GLOW_OFFSET,                       0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.left + GLOW_OFFSET + TRIANGLE_WIDTH, rc.top + GLOW_OFFSET,      0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.left + GLOW_OFFSET + TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
+    };
+    GradientFill( hDC, vert_left_2, 3, g_triangle, 1, GRADIENT_FILL_TRIANGLE );
+
+    // right side of the gradient consists of 2 triangles
+    TRIVERTEX vert_right_1[3] = {
+        { rc.right - GLOW_OFFSET, rc.top + GLOW_OFFSET,                       0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.right - GLOW_OFFSET, rc.bottom - VISIBLE_FRAME,                  0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.right - GLOW_OFFSET - TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
+    };
+    GradientFill( hDC, vert_right_1, 3, g_triangle, 1, GRADIENT_FILL_TRIANGLE );
+
+    TRIVERTEX vert_right_2[3] = {
+        { rc.right - GLOW_OFFSET, rc.top + GLOW_OFFSET,                       0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.right - GLOW_OFFSET - TRIANGLE_WIDTH, rc.top + GLOW_OFFSET,      0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.right - GLOW_OFFSET - TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
+    };
+    GradientFill( hDC, vert_right_2, 3, g_triangle, 1, GRADIENT_FILL_TRIANGLE );
+
+    // I have no idea what is the correct name of the contstant
+    // that is represented by '1' below - but that draws the glow
+    // effect
+    // I've found the "TextGlow" theme handle here:
+    //   http://fc01.deviantart.net/fs26/f/2008/154/0/6/Vista_Visual_Style_Classes_by_UkIntel.html
+    // and its rendering here:
+    //   http://deskmodder.de/wiki/index.php/Vista_msstyleImage_900-938
+    // No better documentation on the topic, unfortunately :-(
+    RECT tmp_rc = rc;
+    tmp_rc.bottom += rc.bottom - rc.top; // expand it vertically so that it continues to the window
+    ImplDrawTheme( hGlowTheme, hDC, 1, MBI_NORMAL, tmp_rc, OUString() );
+
+    // make the frame visible, so that it integrates nicely with Aero
+    tmp_rc = rc;
+    tmp_rc.top = rc.bottom - VISIBLE_FRAME;
+    FillRect( hDC, &tmp_rc, static_cast< HBRUSH >( GetStockObject( BLACK_BRUSH ) ) );
+
+    return sal_True;
+}
+
 sal_Bool ImplDrawNativeControl( HWND hWnd, HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
                             ControlPart nPart,
@@ -942,22 +1017,17 @@ sal_Bool ImplDrawNativeControl( HWND hWnd, HDC hDC, HTHEME hTheme, RECT rc,
     {
         if( nPart == PART_ENTIRE_CONTROL )
         {
-            if( ImplGetSVData()->maNWFData.mbTransparentMenubar )
-            {
-                // When the frame is correctly extended to the client area,
-                // Aero just needs us to repaint the affected rectangle in black
-                FillRect( hDC, &rc, static_cast< HBRUSH >( GetStockObject( BLACK_BRUSH ) ) );
+            // Windows Vista or later?  Try drawing to the non-client area...
+            if( ImplGetSVData()->maNWFData.mbTransparentMenubar && impl_drawAeroMenubar( hWnd, hDC, rc ) )
                 return sal_True;
-            }
-            else
+
+            // ...otherwise use the theme
+            if( aValue.getType() == CTRL_MENUBAR )
             {
-                if( aValue.getType() == CTRL_MENUBAR )
-                {
-                    const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
-                    rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
-                }
-                return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
+                const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
+                rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
             }
+            return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
         }
         else if( nPart == PART_MENU_ITEM )
         {
@@ -965,24 +1035,6 @@ sal_Bool ImplDrawNativeControl( HWND hWnd, HDC hDC, HTHEME hTheme, RECT rc,
                 iState = (nState & CTRL_STATE_SELECTED) ? MBI_HOT : MBI_NORMAL;
             else
                 iState = (nState & CTRL_STATE_SELECTED) ? MBI_DISABLEDHOT : MBI_DISABLED;
-
-            // draw the text glow so that the text is better visible
-            if ( ImplGetSVData()->maNWFData.mbTransparentMenubar )
-            {
-                HTHEME hGlowTheme = getThemeHandle( hWnd, L"TextGlow");
-                if ( !hTheme )
-                    return sal_False;
-
-                // I have no idea what is the correct name of the contstant
-                // that is represented by '1' below - but that draws the glow
-                // effect
-                // I've found the "TextGlow" theme handle here:
-                //   http://fc01.deviantart.net/fs26/f/2008/154/0/6/Vista_Visual_Style_Classes_by_UkIntel.html
-                // and its rendering here:
-                //   http://deskmodder.de/wiki/index.php/Vista_msstyleImage_900-938
-                // No better documentation on the topic, unfortunately :-(
-                ImplDrawTheme( hGlowTheme, hDC, 1, MBI_NORMAL, rc, aCaption );
-            }
 
             return ImplDrawTheme( hTheme, hDC, MENU_BARITEM, iState, rc, aCaption );
         }
