@@ -46,8 +46,8 @@
 #include <ftninfo.hxx>
 
 /*
- * Dieses File enthaelt alle Ausgabe-Funktionen des ASCII-Writers;
- * fuer alle Nodes, Attribute, Formate und Chars.
+ * This file contains all output functions of the ASCII-Writer;
+ * For all nodes, attributes, formats and chars.
  */
 
 class SwASC_AttrIter
@@ -82,9 +82,8 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-// kann noch optimiert werden, wenn ausgenutzt wird, dass die TxtAttrs
-// nach der Anfangsposition geordnet sind. Dann muessten
-// allerdings noch 2 Indices gemerkt werden
+// TODO: This can be optimized, if we make use of the fact that the TxtAttrs
+// are sorted by starting position. We would need to remember two indices, however.
         for ( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
@@ -151,7 +150,7 @@ sal_Bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
 
 
 //------------------------
-/* Ausgabe der Nodes */
+// Output of the node
 //------------------------
 
 static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
@@ -210,10 +209,9 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 }
 
 /*
- * lege hier jetzt die Tabellen fuer die ASCII-Funktions-Pointer auf
- * die Ausgabe-Funktionen an.
- * Es sind lokale Strukturen, die nur innerhalb der ASCII-DLL
- * bekannt sein muessen.
+ * Create the table for the ASCII function pointers to the output
+ * functon.
+ * There are local structures that only need to be known to the ASCII DLL.
  */
 
 SwNodeFnTab aASCNodeFnTab = {

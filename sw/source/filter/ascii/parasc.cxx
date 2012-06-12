@@ -45,7 +45,7 @@
 #include <pagedesc.hxx>
 #include <breakit.hxx>
 #include <swerror.h>
-#include <statstr.hrc>          // ResId fuer Statusleiste
+#include <statstr.hrc>          // ResId for the status bar
 #include <mdiexp.hxx>           // ...Percent()
 #include <poolfmt.hxx>
 
@@ -77,17 +77,17 @@ public:
 };
 
 
-// Aufruf fuer die allg. Reader-Schnittstelle
+// Call for the general reader interface
 sal_uLong AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const String & )
 {
     if( !pStrm )
     {
-        OSL_ENSURE( !this, "ASCII-Read ohne Stream" );
+        OSL_ENSURE( !this, "ASCII read without a stream" );
         return ERR_SWG_READ_ERROR;
     }
 
-    // Alle Ueberschriften sind normalerweise ohne Kapitelnummer.
-    // Darum hier explizit abschalten weil das Default jetzt wieder auf AN ist.
+    // All headers normally do not have a chapter number.
+    // We explicitly disable them here, because the default is set back to on.
     if( !bInsertMode )
         Reader::SetNoOutlineNum( rDoc );
 
@@ -145,7 +145,7 @@ SwASCIIParser::~SwASCIIParser()
 }
 
 
-// Aufruf des Parsers
+// Calling the parser
 sal_uLong SwASCIIParser::CallParser()
 {
     rInput.Seek(STREAM_SEEK_TO_END);
@@ -205,12 +205,12 @@ sal_uLong SwASCIIParser::CallParser()
                 {
                     // Using the pool defaults for the font causes significant
                     // trouble for the HTML filter, because it is not able
-                    // to export the pool defaults (or to be more precice:
+                    // to export the pool defaults (or to be more precise:
                     // the HTML filter is not able to detect whether a pool
                     // default has changed or not. Even a comparison with the
                     // HTMLi template does not work, because the defaults are
                     // not copied when a new doc is created. The result of
-                    // comparing pool defaults therfor would be that the
+                    // comparing pool defaults therefor would be that the
                     // defaults are exported always if the have changed for
                     // text documents in general. That's not sensible, as well
                     // as it is not sensible to export them always.
@@ -296,7 +296,7 @@ sal_uLong SwASCIIParser::ReadChars()
         if( currentCharSet == RTL_TEXTENCODING_DONTKNOW )
                 currentCharSet = RTL_TEXTENCODING_ASCII_US;
         hConverter = rtl_createTextToUnicodeConverter( currentCharSet );
-        OSL_ENSURE( hConverter, "no string convert avaiable" );
+        OSL_ENSURE( hConverter, "no string convert available" );
         if (!hConverter)
             return ERROR_SW_READ_BASE;
         bSwapUnicode = false;
@@ -317,12 +317,12 @@ sal_uLong SwASCIIParser::ReadChars()
             if( pLastStt != pStt )
                 InsertText( String( pLastStt ));
 
-            // lese einen neuen Block ein
+            // Read a new block
             sal_uLong lGCount;
             if( SVSTREAM_OK != rInput.GetError() || 0 == (lGCount =
                         rInput.Read( pArr + nArrOffset,
                                      ASC_BUFFLEN - nArrOffset )))
-                break;      // aus der WHILE-Schleife heraus
+                break;      // break from the while loop
 
             /*
             If there was some unconverted bytes on the last cycle then they
@@ -383,7 +383,7 @@ sal_uLong SwASCIIParser::ReadChars()
                     pLastStt = ++pStt;
                 cLastCR = 0;
                 nLineLen = 0;
-                // das letze am Ende nehmen wir nicht
+                // We skip the last one at the end
                 if( !rInput.IsEof() || !(pEnd == pStt ||
                     ( !*pEnd && pEnd == pStt+1 ) ) )
                     pDoc->SplitNode( *pPam->GetPoint(), false );
@@ -400,7 +400,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         *pStt = 0;
                         ++pStt;
 
-                        // das letze am Ende nehmen wir nicht
+                        // We skip the last one at the end
                         if( !rInput.IsEof() || pEnd != pStt )
                             bSplitNode = true;
                     }
@@ -426,7 +426,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         else
                             bChkSplit = true;
 
-                            // das letze am Ende nehmen wir nicht
+                        // We skip the last one at the end
                         if( bChkSplit && ( !rInput.IsEof() || pEnd != pStt ))
                             bSplitNode = true;
                     }
@@ -434,7 +434,7 @@ sal_uLong SwASCIIParser::ReadChars()
 
         case 0x0c:
                     {
-                        // dann mal einen harten Seitenumbruch einfuegen
+                        // Insert a hard page break
                         *pStt++ = 0;
                         if( nLineLen )
                         {
@@ -453,14 +453,14 @@ sal_uLong SwASCIIParser::ReadChars()
                     if( nReadCnt == nFileSize && pStt+1 == pEnd )
                         *pStt = 0;
                     else
-                        *pStt = '#';        // Ersatzdarstellung
+                        *pStt = '#';        // Replacement visualisation
                     break;
 
         case '\t':  break;
 
         default:
             if( ' ' > *pStt )
-                    // Ctrl-Zchn gefunden ersetze durch '#'
+            // Found control char, replace with '#'
                 *pStt = '#';
             break;
         }
@@ -483,8 +483,7 @@ sal_uLong SwASCIIParser::ReadChars()
         }
         else if( bSplitNode )
         {
-            // es wurde ein CR/LF erkannt, also speichere den Text
-
+            // We found a CR/LF, thus save the text
             InsertText( String( pLastStt ));
             pDoc->SplitNode( *pPam->GetPoint(), false );
             pLastStt = pStt;

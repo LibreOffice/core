@@ -34,7 +34,7 @@
 extern SwNodeFnTab aASCNodeFnTab;
 
 
-// der ASC-Writer
+// The ASC writer
 
 class SwASCWriter : public Writer
 {

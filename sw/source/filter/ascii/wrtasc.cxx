@@ -38,7 +38,7 @@
 #include <frmfmt.hxx>
 #include <wrtasc.hxx>
 
-#include <statstr.hrc>          // ResId fuer Statusleiste
+#include <statstr.hrc>          // ResId for status bar
 
 //-----------------------------------------------------------------
 
@@ -98,7 +98,7 @@ sal_uLong SwASCWriter::WriteStream()
 {
     sal_Char cLineEnd[ 3 ];
     sal_Char* pCEnd = cLineEnd;
-    if( bASCII_ParaAsCR )           // falls vorgegeben ist.
+    if( bASCII_ParaAsCR )           // If predefined
         *pCEnd++ = '\015';
     else if( bASCII_ParaAsBlanc )
         *pCEnd++ = ' ';
@@ -127,7 +127,7 @@ sal_uLong SwASCWriter::WriteStream()
     rtl_TextEncoding eOld = Strm().GetStreamCharSet();
     Strm().SetStreamCharSet( GetAsciiOptions().GetCharSet() );
 
-    // gebe alle Bereich des Pams in das ASC-File aus.
+    // Output all areas of the pam into the ASC file
     do {
         sal_Bool bTstFly = sal_True;
         while( pCurPam->GetPoint()->nNode.GetIndex() < pCurPam->GetMark()->nNode.GetIndex() ||
@@ -137,23 +137,22 @@ sal_uLong SwASCWriter::WriteStream()
             SwTxtNode* pNd = pCurPam->GetPoint()->nNode.GetNode().GetTxtNode();
             if( pNd )
             {
-                // sollten nur Rahmen vorhanden sein?
-                // (Moeglich, wenn Rahmen-Selektion ins Clipboard
-                // gestellt wurde)
+                // Should we have frames only?
+                // That's possible, if we put a frame selection into the clipboard
                 if( bTstFly && bWriteAll &&
-                    // keine Laenge
+                    // No length
                     !pNd->GetTxt().Len() &&
-                    // Rahmen vorhanden
+                    // Frame exists
                     pDoc->GetSpzFrmFmts()->Count() &&
-                    // nur ein Node im Array
+                    // Only one node in the array
                     pDoc->GetNodes().GetEndOfExtras().GetIndex() + 3 ==
                     pDoc->GetNodes().GetEndOfContent().GetIndex() &&
-                    // und genau der ist selektiert
+                    // And exactly this one is selected
                     pDoc->GetNodes().GetEndOfContent().GetIndex() - 1 ==
                     pCurPam->GetPoint()->nNode.GetIndex() )
                 {
-                    // dann den Inhalt vom Rahmen ausgeben.
-                    // dieser steht immer an Position 0 !!
+                    // Print the frame's content.
+                    // It is always at position 0!
                     SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[ 0 ];
                     const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
                     if( pIdx )
@@ -162,7 +161,7 @@ sal_uLong SwASCWriter::WriteStream()
                         pCurPam = NewSwPaM( *pDoc, pIdx->GetIndex(),
                                     pIdx->GetNode().EndOfSectionIndex() );
                         pCurPam->Exchange();
-                        continue;       // while-Schleife neu aufsetzen !!
+                        continue;       // reset while loop!
                     }
                 }
                 else
@@ -189,7 +188,7 @@ sal_uLong SwASCWriter::WriteStream()
                     }
                     Out( aASCNodeFnTab, *pNd, *this );
                 }
-                bTstFly = sal_False;        // eimal Testen reicht
+                bTstFly = sal_False;        // Testing once is enough
             }
 
             if( !pCurPam->Move( fnMoveForward, fnGoNode ) )
@@ -197,10 +196,10 @@ sal_uLong SwASCWriter::WriteStream()
 
             if( bShowProgress )
                 ::SetProgressState( pCurPam->GetPoint()->nNode.GetIndex(),
-                                    pDoc->GetDocShell() );   // Wie weit ?
+                                    pDoc->GetDocShell() );   // How far?
 
         }
-    } while( CopyNextPam( &pPam ) );        // bis alle Pam bearbeitet
+    } while( CopyNextPam( &pPam ) ); // Until all pams are processed
 
     Strm().SetStreamCharSet( eOld );
 
