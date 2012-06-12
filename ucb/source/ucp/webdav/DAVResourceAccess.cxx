@@ -1146,6 +1146,21 @@ void DAVResourceAccess::getUserRequestHeaders(
             }
         }
     }
+
+    // Make sure a User-Agent header is always included, as at least
+    // en.wikipedia.org:80 forces back 403 "Scripts should use an informative
+    // User-Agent string with contact information, or they may be IP-blocked
+    // without notice" otherwise:
+    for ( DAVRequestHeaders::iterator i(rRequestHeaders.begin());
+          i != rRequestHeaders.end(); ++i )
+    {
+        if ( i->first.equalsIgnoreAsciiCase( "User-Agent" ) )
+        {
+            return;
+        }
+    }
+    rRequestHeaders.push_back(
+        DAVRequestHeader( "User-Agent", "LibreOffice" ) );
 }
 
 //=========================================================================
