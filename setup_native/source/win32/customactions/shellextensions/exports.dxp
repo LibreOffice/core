@@ -16,6 +16,5 @@ ShowProperties
 copyEditionData
 RenamePrgFolder
 RemovePrgFolder
-IsOfficeRunning
 CheckPatchList
 copyExtensionData
