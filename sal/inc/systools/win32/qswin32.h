@@ -29,9 +29,9 @@
 #ifndef _QSWIN32_H
 #define _QSWIN32_H
 
-#define QUICKSTART_CLASSNAMEA           "SO Listener Class"
-#define QUICKSTART_WINDOWNAMEA          "SO Listener Window"
-#define SHUTDOWN_QUICKSTART_MESSAGEA    "SO KillTray"
+#define QUICKSTART_CLASSNAMEA           "LO Listener Class"
+#define QUICKSTART_WINDOWNAMEA          "LO Listener Window"
+#define SHUTDOWN_QUICKSTART_MESSAGEA    "LO KillTray"
 
 #define QUICKSTART_CLASSNAMEW           L##QUICKSTART_CLASSNAMEA
 #define QUICKSTART_WINDOWNAMEW          L##QUICKSTART_WINDOWNAMEA
