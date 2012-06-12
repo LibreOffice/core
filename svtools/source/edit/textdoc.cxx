@@ -553,7 +553,7 @@ sal_uLong TextDoc::GetTextLen( const xub_Unicode* pSep, const TextSelection* pSe
         }
 
         if ( pSep )
-            nLen += (nEndNode-nStartNode) * String( pSep ).Len();
+            nLen += (nEndNode-nStartNode) * rtl_ustr_getLength(pSep);
     }
 
     return nLen;

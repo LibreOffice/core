@@ -433,8 +433,7 @@ bool SbiScanner::NextSym()
             // from 4.1.1996: buffer full, go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
                 bBufOverflow = true;
-            else if( String( cmp ).Search( ch ) != STRING_NOTFOUND )
-            //else if( strchr( cmp, ch ) )
+            else if( rtl::OUString( cmp ).indexOf( ch ) != -1 )
                 *p++ = ch;
             else
             {
@@ -522,7 +521,7 @@ PrevLineCommentLbl:
     {
         bPrevLineExtentsComment = false;
         aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REM"));
-        sal_Int32 nLen = String( pLine ).Len();
+        sal_Int32 nLen = rtl_ustr_getLength(pLine);
         if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
             bPrevLineExtentsComment = true;
         nCol2 = nCol2 + nLen;
