@@ -1505,8 +1505,12 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     // of as-character anchored object
                     if ( bAnchoredAsChar )
                     {
-                        const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)
-                            ->AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
+                        //-->Modified for i119654,2012.6.8
+                        SwFrm *pAnchorFrame = NULL;
+                        if ( pAnchoredDrawObj && ( pAnchorFrame =
+                                const_cast<SwAnchoredDrawObject*>( pAnchoredDrawObj )->AnchorFrm() ) )
+                            pAnchorFrame->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
+                        //<--
                     }
                     // <--
                 }
