@@ -1733,7 +1733,9 @@ SwTwips SwFlowFrm::GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const
     {
         nUpperSpaceAmountConsideredForPrevFrmAndPageGrid =
             _GetUpperSpaceAmountConsideredForPrevFrm() +
-            _GetUpperSpaceAmountConsideredForPageGrid( CalcUpperSpace( 0L, 0L, false ) );
+            ( rThis.GetUpper()->GetFmt()->GetDoc()->IsSquaredPageMode()
+              ? _GetUpperSpaceAmountConsideredForPageGrid( CalcUpperSpace( 0, 0, false ) )
+              : 0 );
     }
 
     return nUpperSpaceAmountConsideredForPrevFrmAndPageGrid;
