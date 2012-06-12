@@ -2135,17 +2135,18 @@ Size TabControl::GetOptimalSize(WindowSizeType eType) const
     {
         Size aOptimalPageSize(0, 0);
         Size aOptimalTabSize(0, 0);
+        long nTotalTabWidths = 0;
 
         for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
              it != mpTabCtrlData->maItemList.end(); ++it )
         {
+            Size aPageSize;
             const TabPage *pPage = it->mpTabPage;
-            if (!pPage)
-            {
+            if (pPage)
+                aPageSize = pPage->GetOptimalSize(eType);
+            else
                 fprintf(stderr, "nuisance, page not inserted yet :-(\n");
-                continue;
-            }
-            Size aPageSize(pPage->GetOptimalSize(eType));
+
             if (aPageSize.Width() > aOptimalPageSize.Width())
                 aOptimalPageSize.Width() = aPageSize.Width();
             if (aPageSize.Height() > aOptimalPageSize.Height())
@@ -2156,10 +2157,14 @@ Size TabControl::GetOptimalSize(WindowSizeType eType) const
             Size aTabSize = pThis->ImplGetItemSize(pItem, LONG_MAX);
             if (aTabSize.Height() > aOptimalTabSize.Height())
                 aOptimalTabSize.Height() = aTabSize.Height();
+            nTotalTabWidths += aTabSize.Width();
         }
 
         Size aOptimalSize(aOptimalPageSize);
         aOptimalSize.Height() += aOptimalTabSize.Height();
+
+        if (nTotalTabWidths > aOptimalSize.Width())
+            aOptimalSize.Width() = nTotalTabWidths;
 
         aOptimalSize.Width() += TAB_OFFSET * 2;
         aOptimalSize.Height() += TAB_OFFSET * 2;
