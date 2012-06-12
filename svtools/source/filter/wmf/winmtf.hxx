@@ -39,7 +39,6 @@
 #include <tools/table.hxx>
 #include <tools/dynary.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bmpacc.hxx>
@@ -724,8 +723,6 @@ public:
 class WMFReader : public WinMtf
 {
 private:
-
-    VirtualDevice   aVDev;  // just for the purpose of "IsFontAvailable"
     sal_uInt16          nUnitsPerInch;
     sal_uInt32      nRecSize;
 

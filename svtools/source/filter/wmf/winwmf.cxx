@@ -29,6 +29,7 @@
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <osl/endian.h>
+#include <vcl/svapp.hxx>
 
 //====================== MS-Windows-defines ===============================
 
@@ -872,8 +873,9 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                     switch( nEsc )
                                     {
                                         case PRIVATE_ESCAPE_UNICODE :
-                                        {   // we will use text instead of polygons only if we have the correct font
-                                            if ( aVDev.IsFontAvailable( pOut->GetFont().GetName() ) )
+                                        {
+                                            // we will use text instead of polygons only if we have the correct font
+                                            if ( Application::GetDefaultDevice()->IsFontAvailable( pOut->GetFont().GetName() ) )
                                             {
                                                 Point  aPt;
                                                 String aString;
