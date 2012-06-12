@@ -982,18 +982,11 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ThumbnailView::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    // because of SelectionMode
-    if ( rMEvt.IsLeft() && mbSelection )
-        ImplEndTracking( rMEvt.GetPosPixel(), false );
-    else
-        Control::MouseButtonUp( rMEvt );
+    Control::MouseButtonUp( rMEvt );
 }
 
 void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
 {
-    // because of SelectionMode
-    if ( mbSelection )
-        ImplTracking( rMEvt.GetPosPixel(), false );
     Control::MouseMove( rMEvt );
 }
 
