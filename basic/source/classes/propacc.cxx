@@ -63,11 +63,11 @@ struct SbCompare_UString_PropertyValue_Impl
 {
    bool operator() ( const ::rtl::OUString& lhs, PropertyValue* const & rhs )
    {
-      return lhs.compareTo( rhs->Name );
+      return lhs.compareTo(rhs->Name) < 0;
    }
    bool operator() ( PropertyValue* const & lhs, const ::rtl::OUString& rhs )
    {
-      return !rhs.compareTo( lhs->Name );
+      return lhs->Name.compareTo(rhs) < 0;
    }
 };
 
