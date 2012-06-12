@@ -56,6 +56,9 @@
 #include <iostream>
 #include <rtl/oustringostreaminserter.hxx>
 
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <drawinglayer/XShapeDumper.hxx>
+
 namespace {
 
 bool compareFiles( const rtl::OUString& aFileNameOne, const rtl::OUString& aFileNameTwo)
@@ -172,29 +175,24 @@ void SdFiltersTest::test()
     CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
     CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
-    uno::Reference< frame::XModel > xModel = xDocShRef->GetModel();
-    CPPUNIT_ASSERT(xModel.is());
-    uno::Reference< frame::XStorable > xStorable( xModel, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT( xStorable.is());
+    uno::Reference<frame::XModel> xTempModel(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xTempModel.is());
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier (xTempModel, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference< drawing::XDrawPages > xDrawPages = xDrawPagesSupplier->getDrawPages();
+    CPPUNIT_ASSERT(xDrawPages.is());
 
-    uno::Sequence< beans::PropertyValue > aArgs(1);
-    beans::PropertyValue aValue;
-    uno::Any aAny;
-
-    aAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_svg_Export"));
-
-    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
-    aValue.Value = aAny;
-    aValue.State = beans::PropertyState_DIRECT_VALUE;
-
-    aArgs[0] = aValue;
-
-    rtl::OUString aNewSvgURL = m_aSolverRootURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/unittest/sd/test2.svg"));
-
-    xStorable->storeToURL( aNewSvgURL, aArgs );
-
-    compareFiles( getPathFromSrc("/sd/qa/unit/data/svg/test.svg"), getPathFromSolver("/unittest/sd/test2.svg") );
-
+    XShapeDumper xShapeDumper;
+    sal_Int32 nLength = xDrawPages->getCount();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        uno::Reference<drawing::XDrawPage> xDrawPage;
+        uno::Any aAny = xDrawPages->getByIndex(i);
+        aAny >>= xDrawPage;
+        uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY_THROW);
+        rtl::OUString aString = xShapeDumper.dump(xShapes);
+        std::cout << aString << std::endl;
+    }
     xDocShRef->DoClose();
 }
 

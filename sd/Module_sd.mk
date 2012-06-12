@@ -44,6 +44,7 @@ ifneq ($(OS),DRAGONFLY)
 $(eval $(call gb_Module_add_check_targets,sd,\
     CppunitTest_sd_uimpress \
     CppunitTest_sd_filters_test \
+    CppunitTest_sd_regression_test \
 ))
 endif
 
@@ -52,6 +53,4 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     JunitTest_sd_unoapi \
 ))
 
-# Still a problem in line 16
-#    CppunitTest_sd_regression_test \
 # vim: set noet sw=4 ts=4:
