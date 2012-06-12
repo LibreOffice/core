@@ -58,7 +58,7 @@ public:
     // member: checkboxAutoHeight
     bool getCheckboxAutoHeight() const;
 
-    // member: checkboxChecked
+    // member: checkboxChecked or checkboxDefault (if the previous is not set)
     bool getCheckboxChecked() const;
 
     // member: dropDownResult
@@ -79,7 +79,8 @@ private:
     rtl::OUString m_sStatusText;
     sal_uInt32 m_nCheckboxHeight;
     bool m_bCheckboxAutoHeight;
-    bool m_bCheckboxChecked;
+    int m_nCheckboxChecked;
+    int m_nCheckboxDefault;
     rtl::OUString m_sDropDownResult;
     DropDownEntries_t m_DropDownEntries;
     rtl::OUString m_sTextDefault;
