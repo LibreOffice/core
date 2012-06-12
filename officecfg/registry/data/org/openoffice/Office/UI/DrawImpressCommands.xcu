@@ -1709,109 +1709,6 @@
           <value xml:lang="en-US">E-mail as ~OpenDocument Presentation...</value>
         </prop>
       </node>
-    </node>
-    <node oor:name="Popups">
-      <node oor:name=".uno:ModifyMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">~Modify</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:WorkspaceMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">Wor~kspace</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:MirrorMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">~Flip</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:PreviewDisplayQualityMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">Pre~view Mode</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:LayerMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">La~yer</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:GridMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">Gr~id</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ConvertMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">~Convert</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ArrangeMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">~Arrange</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:DisplayQualityMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">~Color/Grayscale</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:SlideShowMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">~Slide Show</value>
-        </prop>
-      </node>
-      <!--node oor:name=".uno:ReviewMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Review</value>
-        </prop>
-      </node-->
-      <node oor:name=".uno:GroupMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">~Group</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:SendMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">Sen~d</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:TemplatesMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">Styl~es</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:SnapLinesMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">~Guides</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:MasterPageMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">~Master</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:MasterLayoutsMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-
-          <value xml:lang="en-US">Master Lay~outs</value>
-        </prop>
-      </node>
       <node oor:name=".uno:MasterLayouts" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
 
@@ -2141,6 +2038,122 @@
           <value>1</value>
         </prop>
       </node>
+    </node>
+    <node oor:name="Popups">
+      <node oor:name=".uno:ModifyMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Modify</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:WorkspaceMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">Wor~kspace</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MirrorMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Flip</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:PreviewDisplayQualityMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">Pre~view Mode</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:LayerMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">La~yer</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:GridMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">Gr~id</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ConvertMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Convert</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ArrangeMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Arrange</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DisplayQualityMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Color/Grayscale</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SlideShowMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Slide Show</value>
+        </prop>
+      </node>
+      <!--node oor:name=".uno:ReviewMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Review</value>
+        </prop>
+      </node-->
+      <node oor:name=".uno:GroupMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Group</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SendMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">Sen~d</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:TemplatesMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">Styl~es</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SnapLinesMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Guides</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MasterPageMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Master</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:MasterLayoutsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">Master Lay~outs</value>
+        </prop>
+      </node>
+
+
+
+
+
+
+
+
+
+
+
+
+
     </node>
   </node>
 </oor:component-data>
