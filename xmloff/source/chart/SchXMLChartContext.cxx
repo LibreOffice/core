@@ -636,7 +636,7 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
     if( !sColTrans.isEmpty() || !sRowTrans.isEmpty() )
     {
         aArgs.realloc( aArgs.getLength() + 1 );
-        aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
+        aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
             ::rtl::OUString( "SequenceMapping" ),
             -1, uno::makeAny( !sColTrans.isEmpty()
                 ? lcl_getNumberSequenceFromString( sColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
@@ -662,7 +662,7 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
         if( !aChartOleObjectName.isEmpty() )
         {
             aArgs.realloc( aArgs.getLength() + 1 );
-            aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
+            aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
                 ::rtl::OUString( "ChartOleObjectName" ),
                 -1, uno::makeAny( aChartOleObjectName ),
                 beans::PropertyState_DIRECT_VALUE );
@@ -674,11 +674,11 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
         xDataProvider->createDataSource( aArgs ));
 
     aArgs.realloc( aArgs.getLength() + 2 );
-    aArgs[ aArgs.getLength() - 2 ] = beans::PropertyValue(
+    aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 2 ] = beans::PropertyValue(
         ::rtl::OUString( "HasCategories" ),
         -1, uno::makeAny( bHasCateories ),
         beans::PropertyState_DIRECT_VALUE );
-    aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
+    aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
         ::rtl::OUString("UseCategoriesAsX"),
         -1, uno::makeAny( sal_False ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
         beans::PropertyState_DIRECT_VALUE );
