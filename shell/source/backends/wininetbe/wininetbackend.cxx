@@ -140,7 +140,7 @@ WinInetBackend::WinInetBackend()
             if (!ok)
             {
                 DWORD err = GetLastError();
-                if (err = ERROR_INSUFFICIENT_BUFFER)
+                if (err == ERROR_INSUFFICIENT_BUFFER)
                 {
                     // allocate sufficient space on the heap
                     // insufficient space on the heap results
