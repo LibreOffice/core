@@ -381,8 +381,8 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
 PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
 {
     PropertyMapPtr pRet;
-    OSL_ENSURE( !m_aPropertyStacks[eId].empty(),
-            "no context of this type available");
+    SAL_WARN_IF( m_aPropertyStacks[eId].empty(), "writerfilter",
+        "no context of type " << eId << " available");
     if(!m_aPropertyStacks[eId].empty())
         pRet = m_aPropertyStacks[eId].top();
     return pRet;
