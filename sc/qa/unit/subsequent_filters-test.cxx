@@ -450,14 +450,20 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
         pPattern = pDoc->GetPattern(1,3,1);
         pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
         CPPUNIT_ASSERT_MESSAGE("font should be underlined with a dotted line", aFont.GetUnderline() == UNDERLINE_DOTTED);
+        //test case for proper import height of first row with styles and text (related to i53253)
+        sal_uInt16 nRowHeight = pDoc->GetRowHeight(0,1);
+        rtl::OString sRowHeight = rtl::OString::valueOf( static_cast<sal_Int32>(nRowHeight) );
+        rtl::OString aMsg1("Expected: 253; Actual: ");
+        aMsg1 += sRowHeight;
+        CPPUNIT_ASSERT_MESSAGE( aMsg1.pData->buffer, nRowHeight == 253 );
         //test case for i53253 where a cell has text with different styles and space between the text.
         rtl::OUString aTestOUStr;
         pDoc->GetString(3,0,1, aTestOUStr);
         rtl::OUString aKnownGoodOUStr("text14 space");
         rtl::OString aTestOStr(rtl::OUStringToOString(aTestOUStr, RTL_TEXTENCODING_UTF8));
         rtl::OString aKnownGoodOStr(rtl::OUStringToOString(aKnownGoodOUStr, RTL_TEXTENCODING_UTF8));
-        rtl::OString aMsg("Expected: \"" + aKnownGoodOStr + "\"; Actual: \"" + aTestOStr + "\"");
-        CPPUNIT_ASSERT_MESSAGE( aMsg.pData->buffer, aKnownGoodOUStr.equals(aTestOUStr) );
+        rtl::OString aMsg2("Expected: \"" + aKnownGoodOStr + "\"; Actual: \"" + aTestOStr + "\"");
+        CPPUNIT_ASSERT_MESSAGE( aMsg2.pData->buffer, aKnownGoodOUStr.equals(aTestOUStr) );
     }
     pPattern = pDoc->GetPattern(1,4,1);
     Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
