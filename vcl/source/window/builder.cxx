@@ -368,12 +368,12 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
             break;
     }
 
+    TabControl *pTabControl = static_cast<TabControl*>(pParent);
     VclBuilder::stringmap::iterator aFind = aProperties.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("label")));
     if (aFind != aProperties.end())
-    {
-        TabControl *pTabControl = static_cast<TabControl*>(pParent);
         pTabControl->SetPageText(pTabControl->GetCurPageId(), rtl::OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
-    }
+    else
+        pTabControl->RemovePage(pTabControl->GetCurPageId());
 }
 
 void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
@@ -407,7 +407,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")) || name.equals(RTL_CONSTASCII_STRINGPARAM("placeholder")))
             {
                 pCurrentChild = handleObject(pParent, reader);
 
