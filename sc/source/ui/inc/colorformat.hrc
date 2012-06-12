@@ -50,4 +50,6 @@
 #define ED_MIN 24
 #define ED_MAX 25
 
+#define STR_WARN_SAME_VALUE 26
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

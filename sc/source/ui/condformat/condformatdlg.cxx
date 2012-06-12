@@ -685,6 +685,7 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
             break;
         case 3:
             pEntry->SetValue(nVal);
+            pEntry->SetHasValue();
             break;
         case 4:
             pEntry->SetPercent(true);
@@ -692,6 +693,8 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
             break;
         case 5:
             pEntry->SetFormula(rValue.GetText(), pDoc, rPos);
+            break;
+        default:
             break;
     }
 }
@@ -704,6 +707,36 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
     Color aColor = rColor.GetSelectEntryColor();
     pEntry->SetColor(aColor);
     return pEntry;
+}
+
+void GetDataBarType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry )
+{
+    double nVal = 0;
+    switch(rLstBox.GetSelectEntryPos())
+    {
+        case 0:
+            pEntry->SetMin(true);
+            break;
+        case 1:
+            pEntry->SetMax(true);
+            break;
+        case 2:
+            pEntry->SetPercentile(true);
+            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pEntry->SetValue(nVal);
+            break;
+        case 3:
+            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pEntry->SetPercent(true);
+            pEntry->SetValue(nVal);
+            break;
+        case 4:
+            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pEntry->SetValue(nVal);
+            break;
+        case 5:
+            break;
+    }
 }
 
 }
@@ -720,6 +753,8 @@ ScFormatEntry* ScCondFrmtEntry::createColorscaleEntry() const
 
 ScFormatEntry* ScCondFrmtEntry::createDatabarEntry() const
 {
+    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), maLbDataBarMinType, maEdDataBarMin, mpDoc, maPos);
+    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), maLbDataBarMaxType, maEdDataBarMax, mpDoc, maPos);
     ScDataBarFormat* pDataBar = new ScDataBarFormat(mpDoc);
     pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData.get()));
     return pDataBar;
@@ -862,6 +897,7 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, OptionBtnHdl )
         mpDataBarData.reset(pDlg->GetData());
         SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
         SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
+        DataBarTypeSelectHdl(NULL);
     }
     return 0;
 }

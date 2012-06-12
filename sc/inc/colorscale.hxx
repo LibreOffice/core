@@ -80,6 +80,8 @@ public:
     void SetMax(bool bMax);
     void SetPercent(bool bPercent);
     void SetPercentile(bool bPercentile);
+
+    void SetHasValue();
 };
 
 namespace databar
