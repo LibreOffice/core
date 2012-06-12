@@ -870,7 +870,6 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, ConditionTypeSelectHdl )
 {
     if(maLbCondType.GetSelectEntryPos() == 6 || maLbCondType.GetSelectEntryPos() == 7)
     {
-        std::cout << "OldSize: " << maEdVal1.GetSizePixel().Width() << " " << maEdVal1.GetSizePixel().Height() << std::endl;
         maEdVal1.SetSizePixel(maEdVal2.GetSizePixel());
         maEdVal2.Show();
     }
