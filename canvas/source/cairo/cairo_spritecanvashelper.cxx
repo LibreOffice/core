@@ -209,7 +209,7 @@ namespace cairocanvas
             return sal_False; // disposed, or otherwise dysfunctional
         }
 
-        OSL_TRACE("SpriteCanvasHelper::updateScreen called");
+        SAL_INFO("canvas.cairo", "SpriteCanvasHelper::updateScreen called");
 
         const ::basegfx::B2ISize& rSize = mpOwningSpriteCanvas->getSizePixel();
 
@@ -233,7 +233,7 @@ namespace cairocanvas
         }
         else
         {
-            OSL_TRACE("SpriteCanvasHelper::updateScreen update ALL");
+            SAL_INFO("canvas.cairo", "SpriteCanvasHelper::updateScreen update ALL");
 
             // background has changed, so we currently have no choice
             // but repaint everything (or caller requested that)
@@ -294,7 +294,7 @@ namespace cairocanvas
                           mpOwningSpriteCanvas->getBufferSurface(),
                           "SpriteCanvasHelper::scrollUpdate(): NULL device pointer " );
 
-        OSL_TRACE("SpriteCanvasHelper::scrollUpdate called");
+        SAL_INFO("canvas.cairo", "SpriteCanvasHelper::scrollUpdate called");
 
         const ::basegfx::B2ISize& rSize = mpOwningSpriteCanvas->getSizePixel();
         const ::basegfx::B2IRange  aOutputBounds( 0,0,
@@ -415,7 +415,7 @@ namespace cairocanvas
                           mpOwningSpriteCanvas->getBufferSurface(),
                           "SpriteCanvasHelper::opaqueUpdate(): NULL device pointer " );
 
-        OSL_TRACE("SpriteCanvasHelper::opaqueUpdate called");
+        SAL_INFO("canvas.cairo", "SpriteCanvasHelper::opaqueUpdate called");
 
         const ::basegfx::B2ISize& rDeviceSize = mpOwningSpriteCanvas->getSizePixel();
 
@@ -457,7 +457,7 @@ namespace cairocanvas
                                             const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
         // TODO
-        OSL_TRACE("SpriteCanvasHelper::genericUpdate called");
+        SAL_INFO("canvas.cairo", "SpriteCanvasHelper::genericUpdate called");
 
         ENSURE_OR_THROW( mpOwningSpriteCanvas &&
                          mpOwningSpriteCanvas->getBufferSurface(),
