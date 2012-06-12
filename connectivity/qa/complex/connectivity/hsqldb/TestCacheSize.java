@@ -1,4 +1,7 @@
-/* Copyright (c) 2001-2004, The HSQL Development Group
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * Copyright (c) 2001-2004, The HSQL Development Group
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
