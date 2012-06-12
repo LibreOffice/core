@@ -1308,7 +1308,7 @@ void ThumbnailView::Populate ()
 
             }
 
-            InsertItem(i,aImg,aRegionName);
+            InsertItem(i+1,aImg,aRegionName);
         }
     }
 }
