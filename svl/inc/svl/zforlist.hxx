@@ -318,8 +318,18 @@ public:
 
 typedef NfCurrencyEntry* NfCurrencyEntryPtr;
 SV_DECL_PTRARR_DEL( NfCurrencyTable, NfCurrencyEntryPtr, 128 )
+
 typedef String* WSStringPtr;
-SV_DECL_PTRARR_DEL_VISIBILITY( NfWSStringsDtor, WSStringPtr, 8, SVL_DLLPUBLIC )
+class SVL_DLLPUBLIC NfWSStringsDtor : public std::vector<WSStringPtr>
+{
+public:
+    ~NfWSStringsDtor()
+    {
+        for( const_iterator it = begin(); it != end(); ++it )
+            delete *it;
+    }
+
+};
 
 
 class SvNumberFormatterRegistry_Impl;

@@ -1026,8 +1026,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
     }
 
     size_t nOldListCount = rList.size();
-    for( size_t i = 0, nPos = nOldListCount;
-         i < static_cast<size_t>(aWSStringsDtor.Count()); ++i )
+    for( size_t i = 0, nPos = nOldListCount; i < aWSStringsDtor.size(); ++i )
     {
         bool bFlag = true;
         String aInsStr(*aWSStringsDtor[i]);
@@ -1792,7 +1791,7 @@ bool SvxNumberFormatShell::IsInTable(sal_uInt16 nPos,bool bTmpBanking,const Stri
                 pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
                                 *pTmpCurrencyEntry, bTmpBanking );
 
-                for(sal_uInt16 i=0;i<aWSStringsDtor.Count();i++)
+                for(sal_uInt16 i=0;i<aWSStringsDtor.size();i++)
                 {
                     if(*aWSStringsDtor[i]==rFmtString)
                     {

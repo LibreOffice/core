@@ -186,7 +186,6 @@ namespace
 }
 sal_uInt16 SvNumberFormatter::nSystemCurrencyPosition = 0;
 SV_IMPL_PTRARR( NfCurrencyTable, NfCurrencyEntry* );
-SV_IMPL_PTRARR( NfWSStringsDtor, String* );
 
 // Whether BankSymbol (not CurrencySymbol!) is always at the end (1 $;-1 $) or
 // language dependent.
@@ -3192,10 +3191,10 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultSystemCurrencyFormat()
         NfWSStringsDtor aCurrList;
         sal_uInt16 nDefault = GetCurrencyFormatStrings( aCurrList,
             GetCurrencyEntry( LANGUAGE_SYSTEM ), false );
-        DBG_ASSERT( aCurrList.Count(), "where is the NewCurrency System standard format?!?" );
+        DBG_ASSERT( aCurrList.size(), "where is the NewCurrency System standard format?!?" );
         // if already loaded or user defined nDefaultSystemCurrencyFormat
         // will be set to the right value
-        PutEntry( *aCurrList.GetObject( nDefault ), nCheck, nType,
+        PutEntry( *aCurrList[ nDefault ], nCheck, nType,
             nDefaultSystemCurrencyFormat, LANGUAGE_SYSTEM );
         DBG_ASSERT( nCheck == 0, "NewCurrency CheckError" );
         DBG_ASSERT( nDefaultSystemCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND,
@@ -3234,13 +3233,13 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
             NfWSStringsDtor aCurrList;
             sal_uInt16 nDefault = GetCurrencyFormatStrings( aCurrList,
                 GetCurrencyEntry( ActLnge ), false );
-            DBG_ASSERT( aCurrList.Count(), "where is the NewCurrency standard format?" );
-            if ( aCurrList.Count() )
+            DBG_ASSERT( aCurrList.size(), "where is the NewCurrency standard format?" );
+            if ( !aCurrList.empty() )
             {
                 // if already loaded or user defined nDefaultSystemCurrencyFormat
                 // will be set to the right value
                 short nType;
-                PutEntry( *aCurrList.GetObject( nDefault ), nCheck, nType,
+                PutEntry( *aCurrList[ nDefault ], nCheck, nType,
                     nDefaultCurrencyFormat, ActLnge );
                 DBG_ASSERT( nCheck == 0, "NewCurrency CheckError" );
                 DBG_ASSERT( nDefaultCurrencyFormat != NUMBERFORMAT_ENTRY_NOT_FOUND,
@@ -3694,9 +3693,9 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         *pFormat1 += aNegativeBank;
         *pFormat2 += aNegativeBank;
 
-        rStrArr.Insert( pFormat1, rStrArr.Count() );
-        rStrArr.Insert( pFormat2, rStrArr.Count() );
-        nDefault = rStrArr.Count() - 1;
+        rStrArr.push_back( pFormat1 );
+        rStrArr.push_back( pFormat2 );
+        nDefault = rStrArr.size() - 1;
     }
     else
     {
@@ -3750,14 +3749,14 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         *pFormat4 += aNegative;
 
         if ( pFormat1 )
-            rStrArr.Insert( pFormat1, rStrArr.Count() );
-        rStrArr.Insert( pFormat2, rStrArr.Count() );
+            rStrArr.push_back( pFormat1 );
+        rStrArr.push_back( pFormat2 );
         if ( pFormat3 )
-            rStrArr.Insert( pFormat3, rStrArr.Count() );
-        rStrArr.Insert( pFormat4, rStrArr.Count() );
-        nDefault = rStrArr.Count() - 1;
+            rStrArr.push_back( pFormat3 );
+        rStrArr.push_back( pFormat4 );
+        nDefault = rStrArr.size() - 1;
         if ( pFormat5 )
-            rStrArr.Insert( pFormat5, rStrArr.Count() );
+            rStrArr.push_back( pFormat5 );
     }
     return nDefault;
 }
