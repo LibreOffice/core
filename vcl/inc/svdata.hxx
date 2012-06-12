@@ -308,6 +308,7 @@ struct ImplSVNWFData
     bool                    mbMenuBarDockingAreaCommonBG:1; // e.g. WinXP default theme
     bool                    mbDockingAreaSeparateTB:1;      // individual toolbar backgrounds
                                                             // instead of one for docking area
+    bool                    mbDockingAreaAvoidTBFrames:1;   //< don't draw frames around the individual toolbars if mbDockingAreaSeparateTB is false
     bool                    mbToolboxDropDownSeparate:1;    // two adjacent buttons for
                                                             // toolbox dropdown buttons
     bool                    mbFlatMenu:1;                   // no popup 3D border

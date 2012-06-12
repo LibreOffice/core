@@ -171,24 +171,27 @@ void DockingAreaWindow::Paint( const Rectangle& )
             DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
 
-            // each toolbar gets a thin border to better recognize its borders on the homogeneous docking area
-            sal_uInt16 nChildren = GetChildCount();
-            for( sal_uInt16 n = 0; n < nChildren; n++ )
+            if( !ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
             {
-                Window* pChild = GetChild( n );
-                if ( pChild->IsVisible() )
+                // each toolbar gets a thin border to better recognize its borders on the homogeneous docking area
+                sal_uInt16 nChildren = GetChildCount();
+                for( sal_uInt16 n = 0; n < nChildren; n++ )
                 {
-                    Point aPos = pChild->GetPosPixel();
-                    Size aSize = pChild->GetSizePixel();
-                    Rectangle aRect( aPos, aSize );
+                    Window* pChild = GetChild( n );
+                    if ( pChild->IsVisible() )
+                    {
+                        Point aPos = pChild->GetPosPixel();
+                        Size aSize = pChild->GetSizePixel();
+                        Rectangle aRect( aPos, aSize );
 
-                    SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
-                    DrawLine( aRect.TopLeft(), aRect.TopRight() );
-                    DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
+                        SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
+                        DrawLine( aRect.TopLeft(), aRect.TopRight() );
+                        DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
 
-                    SetLineColor( GetSettings().GetStyleSettings().GetSeparatorColor() );
-                    DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
-                    DrawLine( aRect.TopRight(), aRect.BottomRight() );
+                        SetLineColor( GetSettings().GetStyleSettings().GetSeparatorColor() );
+                        DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+                        DrawLine( aRect.TopRight(), aRect.BottomRight() );
+                    }
                 }
             }
         }
