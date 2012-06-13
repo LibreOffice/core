@@ -464,6 +464,13 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
         rtl::OString aKnownGoodOStr(rtl::OUStringToOString(aKnownGoodOUStr, RTL_TEXTENCODING_UTF8));
         rtl::OString aMsg2("Expected: \"" + aKnownGoodOStr + "\"; Actual: \"" + aTestOStr + "\"");
         CPPUNIT_ASSERT_MESSAGE( aMsg2.pData->buffer, aKnownGoodOUStr.equals(aTestOUStr) );
+        //test case for cell text with line breaks.
+        pDoc->GetString(3,5,1, aTestOUStr);
+        aKnownGoodOUStr = "Hello,\nCalc!";
+        aTestOStr = rtl::OUStringToOString(aTestOUStr, RTL_TEXTENCODING_UTF8);
+        aKnownGoodOStr = rtl::OUStringToOString(aKnownGoodOUStr, RTL_TEXTENCODING_UTF8);
+        rtl::OString aMsg3("Expected: \"" + aKnownGoodOStr + "\"; Actual: \"" + aTestOStr + "\"");
+        CPPUNIT_ASSERT_MESSAGE( aMsg3.pData->buffer, aKnownGoodOUStr.equals(aTestOUStr) );
     }
     pPattern = pDoc->GetPattern(1,4,1);
     Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
