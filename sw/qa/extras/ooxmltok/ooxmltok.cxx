@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -498,6 +499,12 @@ void Test::testSmartart()
 void Test::testN764745()
 {
     load( "n764745-alignment.docx" );
+/*
+shape = ThisComponent.DrawPage.getByIndex(0)
+xray shape.AnchorType
+xray shape.AnchorPosition.X
+xray ThisComponent.StyleFamilies.PageStyles.Default.Width
+*/
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
@@ -508,8 +515,16 @@ void Test::testN764745()
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, anchorType);
     awt::Point pos;
     xPropertySet->getPropertyValue("AnchorPosition") >>= pos;
-    // not sure how to find out the document width, but in my test the anchor x is >12000
-    CPPUNIT_ASSERT( pos.X > 10000 );
+    uno::Reference<style::XStyleFamiliesSupplier> styleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> styleFamilies = styleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> pageStyles;
+    styleFamilies->getByName("PageStyles") >>= pageStyles;
+    uno::Reference<uno::XInterface> defaultStyle;
+    pageStyles->getByName("Default") >>= defaultStyle;
+    uno::Reference<beans::XPropertySet> styleProperties( defaultStyle, uno::UNO_QUERY );
+    sal_Int32 width;
+    styleProperties->getPropertyValue( "Width" ) >>= width;
+    CPPUNIT_ASSERT( pos.X > width / 2 );
 }
 
 void Test::testN766477()

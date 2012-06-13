@@ -218,3 +218,26 @@ drawPage->getByIndex(0) >>= image;
 uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
 uno::Reference<graphic::XGraphic> graphic;
 imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
+
+
+=== Styles
+
+Styles provide information about many properties of (parts of) the document, for example
+page width:
+
+Basic:
+
+ThisComponent.StyleFamilies.PageStyles.Default.Width
+
+C++:
+
+uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+uno::Reference<style::XStyleFamiliesSupplier> styleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+uno::Reference<container::XNameAccess> styleFamilies = styleFamiliesSupplier->getStyleFamilies();
+uno::Reference<container::XNameAccess> pageStyles;
+styleFamilies->getByName("PageStyles") >>= pageStyles;
+uno::Reference<uno::XInterface> defaultStyle;
+pageStyles->getByName("Default") >>= defaultStyle;
+uno::Reference<beans::XPropertySet> styleProperties( defaultStyle, uno::UNO_QUERY );
+sal_Int32 width;
+styleProperties->getPropertyValue( "Width" ) >>= width;
