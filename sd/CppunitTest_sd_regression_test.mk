@@ -114,6 +114,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_regression_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmloff/util/xo \
     xmlsecurity/util/xsec_fw \
     xmlsecurity/util/xmlsecurity \
 ))

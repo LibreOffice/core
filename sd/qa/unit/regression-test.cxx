@@ -122,6 +122,7 @@ private:
 };
 
 #define PPTX_FORMAT_TYPE 268959811
+#define ODP_FORMAT_TYPE 285212967
 
 struct FileFormat {
     const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
@@ -130,6 +131,7 @@ struct FileFormat {
 // cf. sc/qa/unit/filters-test.cxx and filters/...*.xcu to fill out.
 FileFormat aFileFormats[] = {
     { "pptx" , "Impress MS PowerPoint 2007 XML", "MS PowerPoint 2007 XML", PPTX_FORMAT_TYPE },
+    { "odp" , "impress8", "impress8", ODP_FORMAT_TYPE },
     { 0, 0, 0, 0 }
 };
 
@@ -153,7 +155,7 @@ FileFormat aFileFormats[] = {
         rtl::OUString(), pFmt->nFormatType, nFormat,
         rtl::OUString::createFromAscii( pFmt->pTypeName ),
         0, rtl::OUString(), rtl::OUString(), /* userdata */
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdraw*")) );
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/simpress*")) );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
@@ -171,7 +173,7 @@ FileFormat aFileFormats[] = {
 
 void SdFiltersTest::test()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/a.pptx"));
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/test.odp"));
     CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
     CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
@@ -194,6 +196,8 @@ void SdFiltersTest::test()
         std::cout << aString << std::endl;
     }
     xDocShRef->DoClose();
+
+    CPPUNIT_ASSERT(false);
 }
 
 bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
