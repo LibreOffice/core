@@ -84,6 +84,8 @@ namespace slideshow
             RGBTriple   maRGBTriple;
         };
 
+        sal_Bool operator==( const RGBColor& rLHS, const RGBColor& rRHS );
+        sal_Bool operator!=( const RGBColor& rLHS, const RGBColor& rRHS );
         RGBColor operator+( const RGBColor& rLHS, const RGBColor& rRHS );
         RGBColor operator*( const RGBColor& rLHS, const RGBColor& rRHS );
         RGBColor operator*( double nFactor, const RGBColor& rRHS );

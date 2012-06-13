@@ -167,6 +167,9 @@ public:
           mpFormula( rParms.mpFormula ),
           maStartValue(),
           maEndValue(),
+          maPreviousValue(),
+          maStartInterpolationValue(),
+          mnIteration( 0 ),
           mpAnim( rAnim ),
           maInterpolator( rInterpolator ),
           mbDynamicStartValue( false ),
@@ -220,6 +223,9 @@ public:
         }
         else
         {
+            maStartValue = aAnimationStartValue;
+            maStartInterpolationValue = maStartValue;
+
             // By or To animation. According to SMIL spec,
             // the To value takes precedence over the By
             // value, if both are specified
@@ -232,6 +238,7 @@ public:
                 // the to animation interpolates between
                 // the _running_ underlying value and the to value (as the end value)
                 mbDynamicStartValue = true;
+                maPreviousValue = maStartValue;
                 maEndValue = *maTo;
             }
             else if( maBy )
@@ -255,15 +262,61 @@ public:
     {
         if (this->isDisposed() || !mpAnim)
             return;
-        (*mpAnim)(
-            getPresentationValue(
-                accumulate( maEndValue,
-                            mbCumulative * nRepeatCount, // means: mbCumulative ? nRepeatCount : 0,
-                            maInterpolator( (mbDynamicStartValue
-                                             ? mpAnim->getUnderlyingValue()
-                                             : maStartValue),
-                                            maEndValue,
-                                            nModifiedTime ) ) ) );
+
+        // According to SMIL 3.0 spec 'to' animation if no other (lower priority)
+        // animations are active or frozen then a simple interpolation is performed.
+        // That is, the start interpolation value is constant while the animation
+        // is running, and is equal to the underlying value retrieved when
+        // the animation start.
+        // However if another animation is manipulating the underlying value,
+        // the 'to' animation will initially add to the effect of the lower priority
+        // animation, and increasingly dominate it as it nears the end of the
+        // simple duration, eventually overriding it completely.
+        // That is, each time the underlying value is changed between two
+        // computations of the animation function the new underlying value is used
+        // as start value for the interpolation.
+        // See:
+        // http://www.w3.org/TR/SMIL3/smil-animation.html#animationNS-ToAnimation
+        // (Figure 6 - Effect of Additive to animation example)
+        // Moreover when a 'to' animation is repeated, at each new iteration
+        // the start interpolation value is reset to the underlying value
+        // of the animated property when the animation started,
+        // as it is shown in the example provided by the SMIL 3.0 spec.
+        // This is exactly as Firefox performs SVG 'to' animations.
+        if( mbDynamicStartValue )
+        {
+            if( mnIteration != nRepeatCount )
+            {
+                mnIteration = nRepeatCount;
+                maStartInterpolationValue = maStartValue;
+            }
+            else
+            {
+                ValueType aActualValue = mpAnim->getUnderlyingValue();
+                if( aActualValue != maPreviousValue )
+                    maStartInterpolationValue = aActualValue;
+            }
+        }
+
+        ValueType aValue = maInterpolator( maStartInterpolationValue,
+                                           maEndValue, nModifiedTime );
+
+        // According to the SMIL spec:
+        // Because 'to' animation is defined in terms of absolute values of
+        // the target attribute, cumulative animation is not defined.
+        if( mbCumulative && !mbDynamicStartValue )
+        {
+            // aValue = this.aEndValue * nRepeatCount + aValue;
+            aValue = accumulate( maEndValue, nRepeatCount, aValue );
+        }
+
+        (*mpAnim)( getPresentationValue( aValue ) );
+
+        if( mbDynamicStartValue )
+        {
+            maPreviousValue = mpAnim->getUnderlyingValue();
+        }
+
     }
 
     using BaseType::perform;
@@ -315,6 +368,10 @@ private:
 
     ValueType                               maStartValue;
     ValueType                               maEndValue;
+
+    mutable ValueType                               maPreviousValue;
+    mutable ValueType                               maStartInterpolationValue;
+    mutable sal_uInt32                              mnIteration;
 
     ::boost::shared_ptr< AnimationType >    mpAnim;
     Interpolator< ValueType >               maInterpolator;

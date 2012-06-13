@@ -217,6 +217,19 @@ namespace slideshow
             return maHSLTriple.mnLuminance;
         }
 
+
+        sal_Bool operator==( const HSLColor& rLHS, const HSLColor& rRHS )
+        {
+            return ( rLHS.getHue() == rRHS.getHue() &&
+                     rLHS.getSaturation() == rRHS.getSaturation() &&
+                     rLHS.getLuminance() == rRHS.getLuminance() );
+        }
+
+        sal_Bool operator!=( const HSLColor& rLHS, const HSLColor& rRHS )
+        {
+            return !( rLHS == rRHS );
+        }
+
         HSLColor operator+( const HSLColor& rLHS, const HSLColor& rRHS )
         {
             return HSLColor( rLHS.getHue() + rRHS.getHue(),
@@ -344,6 +357,18 @@ namespace slideshow
                                            colorToInt( getGreen() ),
                                            colorToInt( getBlue() ),
                                            255 );
+        }
+
+        sal_Bool operator==( const RGBColor& rLHS, const RGBColor& rRHS )
+        {
+            return ( rLHS.getRed() == rRHS.getRed() &&
+                     rLHS.getGreen() == rRHS.getGreen() &&
+                     rLHS.getBlue() == rRHS.getBlue() );
+        }
+
+        sal_Bool operator!=( const RGBColor& rLHS, const RGBColor& rRHS )
+        {
+            return !( rLHS == rRHS );
         }
 
         RGBColor operator+( const RGBColor& rLHS, const RGBColor& rRHS )
