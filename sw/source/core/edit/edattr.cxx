@@ -429,6 +429,13 @@ sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
             ASSERT( rTNd.GetNumRule(),
                     "<lcl_IsNoEndTxtAttrAtPos(..)> - no list style found at text node. Serious defect -> please inform OD." );
             const SwNumRule* pNumRule = rTNd.GetNumRule();
+            //Modified for i119959,2012.6.12
+            //Under this scenario,this pointer is null,but on win,it doesn't crash immediately
+            //it exits with exception,and associated memory will have problem which leads to crash problem in
+            //other place in dev env...
+            if ( pNumRule )
+            {
+            //End
             const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(rTNd.GetActualListLevel()) );
             if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
             {
@@ -436,7 +443,13 @@ sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
                     sExp = rNumFmt.GetBulletChar();
                 else
                     sExp = rTNd.GetNumString();
+                }
+            //Modified for i119959,2012.6.12
+            //Under this scenario,this pointer is null,but on win,it doesn't crash immediately
+            //it exits with exception,and associated memory will have problem which leads to crash problem in
+            //other place in dev env...
             }
+            //End
         }
     }
 
