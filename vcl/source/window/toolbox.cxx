@@ -466,24 +466,6 @@ void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapp
         }
     }
 
-    if( pThis->mbHorz )
-    {
-        aTopLineSz.Height() += pThis->mnBorderY;
-        if( pThis->mnCurLines == 1 )
-            aTopLineSz.Height() += pThis->mnBorderY;
-
-        aBottomLineSz.Height() += pThis->mnBorderY;
-    }
-    else
-    {
-        aTopLineSz.Width() += pThis->mnBorderX;
-        if( pThis->mnCurLines == 1 )
-            aTopLineSz.Width() += pThis->mnBorderX;
-
-        aBottomLineSz.Width() += pThis->mnBorderX;
-    }
-
-
     if ( pThis->mnWinStyle & WB_LINESPACING )
     {
         if( pThis->mbHorz )
@@ -866,11 +848,6 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
             ((ToolBox*)pThis)->mbCalc   = sal_True;
         }
     }
-
-    if ( aSize.Width() )
-        aSize.Width() += pThis->mnBorderX*2;
-    if ( aSize.Height() )
-        aSize.Height() += pThis->mnBorderY*2;
 
     return aSize;
 }
@@ -1548,8 +1525,6 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mnMaxItemWidth    = 0;
     mnMaxItemHeight   = 0;
     mnWinHeight       = 0;
-    mnBorderX         = 0;
-    mnBorderY         = 0;
     mnLeftBorder      = 0;
     mnTopBorder       = 0;
     mnRightBorder     = 0;
@@ -2292,8 +2267,8 @@ Size ToolBox::ImplGetOptimalFloatingSize( FloatingSizeMode eMode )
     {
         // try to preserve current width
         long nLineHeight = ( mnWinHeight > mnMaxItemHeight ) ? mnWinHeight : mnMaxItemHeight;
-        int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder + 2*mnBorderX;
-        int nBorderY = 2*TB_BORDER_OFFSET2 + mnTopBorder + mnBottomBorder + 2*mnBorderY;
+        int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder;
+        int nBorderY = 2*TB_BORDER_OFFSET2 + mnTopBorder + mnBottomBorder;
         Size aSz( aCurrentSize );
         long maxX;
         sal_uInt16 nLines = ImplCalcBreaks( aSz.Width()-nBorderX, &maxX, mbHorz );
@@ -2446,7 +2421,6 @@ void ToolBox::ImplFormat( sal_Bool bResize )
         }
 
         // add in all border offsets
-        // inner border as well as custom border (mnBorderX, mnBorderY)
         if ( mnWinStyle & WB_BORDER )
         {
             nLeft       = TB_BORDER_OFFSET1 + mnLeftBorder;
@@ -2460,11 +2434,6 @@ void ToolBox::ImplFormat( sal_Bool bResize )
             nTop        = 0;
             nBottom     = 0;
         }
-
-        nLeft += mnBorderX;
-        nTop  += mnBorderY;
-        nBottom += mnBorderY;
-        nMax  -= mnBorderX*2;
 
         // adjust linesize if docked in single-line mode (i.e. when using a clipped item menu)
         // we have to center all items in the window height
@@ -2504,11 +2473,6 @@ void ToolBox::ImplFormat( sal_Bool bResize )
             nTop        = 0;
             nRight      = 0;
         }
-
-        nLeft += mnBorderX;
-        nRight+= mnBorderX;
-        nTop  += mnBorderY;
-        nMax  -= mnBorderY*2;
 
         // adjust linesize if docked in single-line mode (i.e. when using a clipped item menu)
         // we have to center all items in the window height
@@ -2565,14 +2529,14 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                 maNextToolRect.Left()    = nLeft+nMax;
                 maNextToolRect.Right()   = maNextToolRect.Left()+TB_NEXT_SIZE-1;
                 maNextToolRect.Top()     = nTop;
-                maNextToolRect.Bottom()  = mnDY-mnBottomBorder-mnBorderY-TB_BORDER_OFFSET2-1;
+                maNextToolRect.Bottom()  = mnDY-mnBottomBorder-TB_BORDER_OFFSET2-1;
             }
             else
             {
                 maNextToolRect.Top()     = nTop+nMax;
                 maNextToolRect.Bottom()  = maNextToolRect.Top()+TB_NEXT_SIZE-1;
                 maNextToolRect.Left()    = nLeft;
-                maNextToolRect.Right()   = mnDX-mnRightBorder-mnBorderX-TB_BORDER_OFFSET2-1;
+                maNextToolRect.Right()   = mnDX-mnRightBorder-TB_BORDER_OFFSET2-1;
             }
         }
 
@@ -2607,13 +2571,13 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                         {
                             mpData->maMenubuttonItem.maRect.Right() = mnDX - 2;
                             mpData->maMenubuttonItem.maRect.Top() = nTop;
-                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY-mnBottomBorder-mnBorderY-TB_BORDER_OFFSET2-1;
+                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY-mnBottomBorder-TB_BORDER_OFFSET2-1;
                         }
                         else
                         {
-                            mpData->maMenubuttonItem.maRect.Right() = mnDX - mnRightBorder-mnBorderX-TB_BORDER_OFFSET1-1;
+                            mpData->maMenubuttonItem.maRect.Right() = mnDX - mnRightBorder-TB_BORDER_OFFSET1-1;
                             mpData->maMenubuttonItem.maRect.Top() = nTop;
-                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY-mnBottomBorder-mnBorderY-TB_BORDER_OFFSET2-1;
+                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY-mnBottomBorder-TB_BORDER_OFFSET2-1;
                         }
                         mpData->maMenubuttonItem.maRect.Left() = mpData->maMenubuttonItem.maRect.Right() - mpData->mnMenuButtonWidth;
                     }
@@ -2622,7 +2586,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                         maUpperRect.Left()   = nLeft+nMax+TB_SPIN_OFFSET;
                         maUpperRect.Right()  = maUpperRect.Left()+TB_SPIN_SIZE-1;
                         maUpperRect.Top()    = nTop;
-                        maLowerRect.Bottom() = mnDY-mnBottomBorder-mnBorderY-TB_BORDER_OFFSET2-1;
+                        maLowerRect.Bottom() = mnDY-mnBottomBorder-TB_BORDER_OFFSET2-1;
                         maLowerRect.Left()   = maUpperRect.Left();
                         maLowerRect.Right()  = maUpperRect.Right();
                         maUpperRect.Bottom() = maUpperRect.Top() +
@@ -2638,13 +2602,13 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                         {
                             mpData->maMenubuttonItem.maRect.Bottom() = mnDY - 2;
                             mpData->maMenubuttonItem.maRect.Left() = nLeft;
-                            mpData->maMenubuttonItem.maRect.Right() = mnDX-mnRightBorder-mnBorderX-TB_BORDER_OFFSET2-1;
+                            mpData->maMenubuttonItem.maRect.Right() = mnDX-mnRightBorder-TB_BORDER_OFFSET2-1;
                         }
                         else
                         {
-                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY - mnBottomBorder-mnBorderY-TB_BORDER_OFFSET1-1;
+                            mpData->maMenubuttonItem.maRect.Bottom() = mnDY - mnBottomBorder-TB_BORDER_OFFSET1-1;
                             mpData->maMenubuttonItem.maRect.Left() = nLeft;
-                            mpData->maMenubuttonItem.maRect.Right() = mnDX-mnRightBorder-mnBorderX-TB_BORDER_OFFSET2-1;
+                            mpData->maMenubuttonItem.maRect.Right() = mnDX-mnRightBorder-TB_BORDER_OFFSET2-1;
                         }
                         mpData->maMenubuttonItem.maRect.Top() = mpData->maMenubuttonItem.maRect.Bottom() - mpData->mnMenuButtonWidth;
                     }
@@ -2653,7 +2617,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                         maUpperRect.Top()    = nTop+nMax+TB_SPIN_OFFSET;
                         maUpperRect.Bottom() = maUpperRect.Top()+TB_SPIN_SIZE-1;
                         maUpperRect.Left()   = nLeft;
-                        maLowerRect.Right()  = mnDX-mnRightBorder-mnBorderX-TB_BORDER_OFFSET2-1;
+                        maLowerRect.Right()  = mnDX-mnRightBorder-TB_BORDER_OFFSET2-1;
                         maLowerRect.Top()    = maUpperRect.Top();
                         maLowerRect.Bottom() = maUpperRect.Bottom();
                         maUpperRect.Right()  = maUpperRect.Left() +

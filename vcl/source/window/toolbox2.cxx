@@ -1773,16 +1773,6 @@ rtl::OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetBorder( long nX, long nY )
-{
-    mnBorderX = nX;
-    mnBorderY = nY;
-
-    ImplInvalidate( sal_True, sal_True );
-}
-
-// -----------------------------------------------------------------------
-
 void ToolBox::SetOutStyle( sal_uInt16 nNewStyle )
 {
     // always force flat looking toolbars since NWF

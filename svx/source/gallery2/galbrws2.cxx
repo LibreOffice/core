@@ -331,7 +331,6 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     maViewBox.SetHelpId( TBX_ID_LIST, HID_GALLERY_LISTVIEW );
     maViewBox.SetQuickHelpText( TBX_ID_LIST, GAL_RESSTR(RID_SVXSTR_GALLERY_LISTVIEW) );
 
-    maViewBox.SetBorder( 0, 1 );
     MiscHdl( NULL );
     maViewBox.SetSelectHdl( LINK( this, GalleryBrowser2, SelectTbxHdl ) );
     maViewBox.Show();

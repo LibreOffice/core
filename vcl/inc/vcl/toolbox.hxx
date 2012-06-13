@@ -193,8 +193,6 @@ private:
     long                mnMaxItemWidth;    // max item width
     long                mnMaxItemHeight;   // max item height (for standard items)
     long                mnWinHeight;    // max window height (for window items)
-    long                mnBorderX;      // custom border
-    long                mnBorderY;
     long                mnLeftBorder;   // inner border
     long                mnTopBorder;
     long                mnRightBorder;
@@ -515,10 +513,6 @@ public:
                                          const Rectangle& rInRect );
     void                SetFloatingLines( sal_uInt16 nFloatLines );
     sal_uInt16              GetFloatingLines() const;
-
-    void                SetBorder( long nX, long nY );
-    long                GetBorderX() const { return mnBorderX; }
-    long                GetBorderY() const { return mnBorderY; }
 
     void                SetStyle( WinBits nNewStyle ) { mnWinStyle = nNewStyle; }
     WinBits             GetStyle() const { return mnWinStyle; }
