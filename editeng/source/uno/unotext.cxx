@@ -498,7 +498,7 @@ void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertySimpleEntry* pM
     }
 }
 
-sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxItemPropertySimpleEntry* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL*/ ) throw( uno::RuntimeException )
+sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const SfxItemPropertySimpleEntry* pMap, const uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL*/ )
 {
     switch( pMap->nWID )
     {
