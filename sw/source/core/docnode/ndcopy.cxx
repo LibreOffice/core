@@ -354,11 +354,23 @@ sal_Bool lcl_CopyTblBox( const SwTableBox*& rpBox, void* pPara )
         pNewBox = new SwTableBox( pBoxFmt, nLines, pCT->pInsLine );
     else
     {
+        //Modified for i119955,2012.6.13
+        //Avoid overflow problem...
+        int nIn = rpBox->GetSttIdx() - pCT->nOldTblSttIdx;
+        if ( nIn > 0 )
+        {
+        //End
         SwNodeIndex aNewIdx( *pCT->pTblNd,
                             rpBox->GetSttIdx() - pCT->nOldTblSttIdx );
         ASSERT( aNewIdx.GetNode().IsStartNode(), "Index nicht auf einem StartNode" );
         pNewBox = new SwTableBox( pBoxFmt, aNewIdx, pCT->pInsLine );
         pNewBox->setRowSpan( rpBox->getRowSpan() );
+        //Modified for i119955,2012.6.13
+        }else
+        {
+            return sal_False;
+        }
+        //End
     }
 
     pCT->pInsLine->GetTabBoxes().C40_INSERT( SwTableBox, pNewBox,
