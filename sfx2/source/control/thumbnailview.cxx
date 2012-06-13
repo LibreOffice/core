@@ -322,7 +322,7 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
 
         maVirDev.DrawRect( aRect );
 
-        if ( pItem->mbSelected )
+        if ( pItem->mbSelected || pItem->mbHover )
         {
             Rectangle aSelRect = aRect;
             Color aDoubleColor( rStyleSettings.GetHighlightColor() );
@@ -992,7 +992,10 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     if ( rMEvt.GetClicks() == 1 )
                     {
                         pItem->mbSelected = !pItem->mbSelected;
-                        DrawItem(pItem,GetItemRect(pItem->mnId));
+
+                        if (!pItem->mbHover)
+                            DrawItem(pItem,GetItemRect(pItem->mnId));
+
                         //StartTracking( STARTTRACK_SCROLLREPEAT );
                     }
                     else if ( rMEvt.GetClicks() == 2 )
@@ -1014,6 +1017,32 @@ void ThumbnailView::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
 {
+    ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
+
+    if (pItem)
+    {
+        if (mnHighItemId != pItem->mnId)
+        {
+            size_t nPos = GetItemPos(mnHighItemId);
+
+            if (nPos != THUMBNAILVIEW_ITEM_NOTFOUND)
+            {
+                ThumbnailViewItem *pOld = mItemList[nPos];
+
+                pOld->mbHover = false;
+
+                if (!pOld->mbSelected)
+                    DrawItem(pOld,GetItemRect(pOld->mnId));
+            }
+
+            mnHighItemId = pItem->mnId;
+            pItem->mbHover = true;
+
+            if (!pItem->mbSelected)
+                DrawItem(pItem,GetItemRect(pItem->mnId));
+        }
+    }
+
     Control::MouseMove( rMEvt );
 }
 
@@ -1173,7 +1202,6 @@ void ThumbnailView::Paint( const Rectangle& )
 
 void ThumbnailView::GetFocus()
 {
-    ImplDrawSelect();
     Control::GetFocus();
 
     // Tell the accessible object that we got the focus.
@@ -1184,10 +1212,23 @@ void ThumbnailView::GetFocus()
 
 void ThumbnailView::LoseFocus()
 {
-    if ( mbNoSelection && mnSelItemId )
-        ImplHideSelect( mnSelItemId );
-    else
-        HideFocus();
+    if (mnHighItemId)
+    {
+        size_t nPos = GetItemPos(mnHighItemId);
+
+        if (nPos != THUMBNAILVIEW_ITEM_NOTFOUND)
+        {
+            ThumbnailViewItem *pOld = mItemList[nPos];
+
+            pOld->mbHover = false;
+
+            if (!pOld->mbSelected)
+                DrawItem(pOld,GetItemRect(pOld->mnId));
+        }
+
+        mnHighItemId = 0;
+    }
+
     Control::LoseFocus();
 
     // Tell the accessible object that we lost the focus.

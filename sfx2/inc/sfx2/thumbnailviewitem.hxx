@@ -44,6 +44,7 @@ struct ThumbnailViewItem
     sal_uInt16 mnId;
     bool mbVisible;
     bool mbSelected;
+    bool mbHover;
     Image maImage;
     rtl::OUString maText;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;

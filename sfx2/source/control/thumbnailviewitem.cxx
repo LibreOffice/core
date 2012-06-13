@@ -38,6 +38,7 @@ ThumbnailViewItem::ThumbnailViewItem( ThumbnailView& rParent )
     , mnId(0)
     , mbVisible(true)
     , mbSelected(false)
+    , mbHover(false)
     , mpxAcc(NULL)
 {
 }
