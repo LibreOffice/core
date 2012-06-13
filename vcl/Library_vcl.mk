@@ -317,15 +317,11 @@ $(eval $(call gb_Library_use_external,vcl,cairo))
 
 endif
 
-# GUIBASE specific stuff
-
-ifneq ($(filter headless android,$(GUIBASE)),)
-# even in the case we do not link with basebmp, we still need the headers
-# for some typedefs or enums
 $(eval $(call gb_Library_use_packages,vcl,\
 	basebmp_inc \
 ))
-endif
+
+# GUIBASE specific stuff
 
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
