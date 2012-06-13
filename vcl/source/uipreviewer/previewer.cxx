@@ -78,19 +78,24 @@ int UIPreviewApp::Main()
 
     try
     {
-        VclBuilder aBuilder(NULL, uifiles[0]);
-        Window *pWindow = aBuilder.get_widget_root();
-        Dialog *pDialog = dynamic_cast<Dialog*>(pWindow);
-        if (pDialog)
+        Dialog *pDialog = new Dialog(NULL, WB_STDDIALOG);
+
         {
-            pDialog->SetText(rtl::OUString("LibreOffice ui-previewer"));
-            pDialog->SetStyle(pDialog->GetStyle()|WB_CLOSEABLE);
-            pDialog->Execute();
+            VclBuilder aBuilder(pDialog, uifiles[0]);
+            Dialog *pRealDialog = dynamic_cast<Dialog*>(aBuilder.get_widget_root());
+
+            if (!pRealDialog)
+                pRealDialog = pDialog;
+
+            if (pRealDialog)
+            {
+                pRealDialog->SetText(rtl::OUString("LibreOffice ui-previewer"));
+                pRealDialog->SetStyle(pDialog->GetStyle()|WB_CLOSEABLE);
+                pRealDialog->Execute();
+            }
         }
-        else
-        {
-            fprintf(stderr, "to-do: no toplevel dialog, make one\n");
-        }
+
+        delete pDialog;
     }
     catch (const uno::Exception &e)
     {
