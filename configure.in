@@ -7335,7 +7335,12 @@ if test "$with_system_boost" = "yes"; then
     AX_BOOST_BASE
     AX_BOOST_DATE_TIME
     mingw_boost_date_time_dll=`echo $BOOST_DATE_TIME_LIB | sed -e 's/^-l//' -e 's/\.dll$//'`
-    libo_MINGW_CHECK_DLL([BOOST_DATE_TIME], [$mingw_boost_date_time_dll])
+    libo_MINGW_TRY_DLL([BOOST_DATE_TIME], [$mingw_boost_date_time_dll])
+    if test -z "$MINGW_BOOST_DATE_TIME_DLL"; then
+        # if not found, try again with 'lib' prefix
+        libo_MINGW_CHECK_DLL([BOOST_DATE_TIME],
+                             [lib$mingw_boost_date_time_dll])
+    fi
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"
