@@ -2044,7 +2044,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
     sal_Int32 nSepSize = aSep.getLength();
 
     if ( nSepSize )
-        nLen += nNodes * nSepSize;
+        nLen += (nNodes - 1) * nSepSize;
     if ( nLen > 0xFFFb / sizeof(xub_Unicode) )
     {
         OSL_FAIL( "Text too large for String" );
@@ -2065,8 +2065,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
             pCur += nSepSize;
         }
     }
-    assert(pCur - newStr->buffer <= newStr->length);
-    newStr->length = pCur - newStr->buffer;
+    assert(pCur - newStr->buffer == newStr->length);
     return rtl::OUString(newStr, SAL_NO_ACQUIRE);
 }
 
