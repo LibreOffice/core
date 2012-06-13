@@ -2261,10 +2261,6 @@ sal_Bool Region::IsInside( const Point& rPoint ) const
 
     // PolyPolygon data im Imp structure?
     ((Region*)this)->ImplPolyPolyRegionToBandRegion();
-/*
-    if ( mpImplRegion->mpPolyPoly )
-        return mpImplRegion->mpPolyPoly->IsInside( rPoint );
-*/
 
     // no instance data? -> not inside
     if ( (mpImplRegion == &aImplEmptyRegion) || (mpImplRegion == &aImplNullRegion) )

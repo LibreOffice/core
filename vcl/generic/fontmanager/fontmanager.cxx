@@ -481,19 +481,6 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                                     aPair.kern_x = (int)nKern * 1000 / pImplTTFont->unitsPerEm;
                                     aPair.kern_y = 0;
                                     m_pMetrics->m_aXKernPairs.push_back( aPair );
-
-/*                                  switch( nCoverage & 1 )
-                                    {
-                                        case 1:
-                                            aPair.kern_x = (int)nKern * 1000 / pImplTTFont->unitsPerEm;
-                                            m_pMetrics->m_aXKernPairs.push_back( aPair );
-                                            break;
-                                        case 0:
-                                            aPair.kern_y = (int)nKern * 1000 / pImplTTFont->unitsPerEm;
-                                            m_pMetrics->m_aYKernPairs.push_back( aPair );
-                                            break;
-                                    }
-*/
                                 }
                             }
                         }

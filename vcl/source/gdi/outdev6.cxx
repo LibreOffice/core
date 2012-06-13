@@ -1042,11 +1042,6 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
     const sal_Bool      bOldMap = mbMap;
     sal_Bool            bNeedGradient = sal_True;
 
-/*
-    if ( rWallpaper.IsRect() )
-        aBound = LogicToPixel( rWallpaper.GetRect() );
-    else
-*/
         aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
     mpMetaFile = NULL;

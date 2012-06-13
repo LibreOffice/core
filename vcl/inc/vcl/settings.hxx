@@ -1051,17 +1051,6 @@ public:
     const LocaleDataWrapper&                GetUILocaleDataWrapper() const;
     const vcl::I18nHelper&                  GetLocaleI18nHelper() const;
     const vcl::I18nHelper&                  GetUILocaleI18nHelper() const;
-/*
-    const CollatorWrapper&                  GetCollatorWrapper() const;
-    const CollatorWrapper&                  GetUICollatorWrapper() const;
-    sal_Unicode                             GetMnemonicMatchChar( sal_Unicode c ) const;
-    String                                  GetMatchString( const String& rStr ) const;
-    String                                  GetUIMatchString( const String& rStr ) const;
-    int                                     MatchString( const String& rStr1, xub_StrLen nPos1, xub_StrLen nCount1,
-                                                         const String& rStr2, xub_StrLen nPos2, xub_StrLen nCount2 ) const;
-    int                                     MatchUIString( const String& rStr1, xub_StrLen nPos1, xub_StrLen nCount1,
-                                                           const String& rStr2, xub_StrLen nPos2, xub_StrLen nCount2 ) const;
-*/
 
     void                                    SetSystemUpdate( sal_uLong nUpdate )
                                                 { CopyData(); mpData->mnSystemUpdate = nUpdate; }

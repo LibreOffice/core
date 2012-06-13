@@ -1887,17 +1887,9 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
         xMaster = uno::Reference< beans::XPropertySet >(
                 m_xTextFactory->createInstance(sFieldMasterService), uno::UNO_QUERY_THROW);
         //set the master's name
-//        sal_Int32 nIndex = rtl_str_indexOfStr( pFieldMasterService, "Database" );
-//        if( nIndex < 0 )
             xMaster->setPropertyValue(
                     PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_NAME),
                     uno::makeAny(rFieldMasterName));
-//        else
-//        {
-//            xMaster->setPropertyValue(
-//                    PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_DATA_COLUMN_NAME),
-//                    uno::makeAny(rFieldMasterName));
-//        }
     }
     return xMaster;
 }
@@ -3354,22 +3346,6 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal
         }
         catch( const uno::Exception& )
         {}
-
-
-
-/*
-        { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME
-        { SW_PROP_NAME(UNO_NAME_COUNT_EMPTY_LINES
-        { SW_PROP_NAME(UNO_NAME_COUNT_LINES_IN_FRAMES
-        { SW_PROP_NAME(UNO_NAME_DISTANCE
-        { SW_PROP_NAME(UNO_NAME_IS_ON
-        { SW_PROP_NAME(UNO_NAME_INTERVAL
-        { SW_PROP_NAME(UNO_NAME_SEPARATOR_TEXT
-        { SW_PROP_NAME(UNO_NAME_NUMBER_POSITION
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE
-        { SW_PROP_NAME(UNO_NAME_RESTART_AT_EACH_PAGE
-        { SW_PROP_NAME(UNO_NAME_SEPARATOR_INTERVAL
-*/
     }
     m_bLineNumberingSet = true;
 }

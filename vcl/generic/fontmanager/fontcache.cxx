@@ -59,10 +59,6 @@ using ::rtl::OString;
 using ::rtl::OUStringToOString;
 
 /*
- *  static helpers
- */
-
-/*
  *  FontCache constructor
  */
 

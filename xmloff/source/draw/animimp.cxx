@@ -42,9 +42,6 @@
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
-/*
-#include <xmloff/xmlement.hxx>
-*/
 #include <xmloff/nmspmap.hxx>
 #include "anim.hxx"
 #include "animimp.hxx"

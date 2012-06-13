@@ -222,20 +222,6 @@ public:
     void*   GetData() const { return pData; }
 };
 
-/*
-class VclMouseEvent : public VclWindowEvent
-{
-private:
-    MouseEvent aEvent;
-
-public:
-    VclMouseEvent( Window* pWin, sal_uLong n, const MouseEvent& rEvent ) : VclWindowEvent( pWin, n ), aEvent(rEvent) { ; }
-    TYPEINFO();
-
-    const MouseEvent& GetEvent() const { return aEvent; }
-};
-*/
-
 class VCL_DLLPUBLIC VclMenuEvent : public VclSimpleEvent
 {
 private:

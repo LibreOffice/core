@@ -2044,18 +2044,6 @@ void ImplListBoxWindow::LoseFocus()
 
 // -----------------------------------------------------------------------
 
-/*
-void ImplListBoxWindow::RequestHelp( const HelpEvent& rHEvt )
-{
-    if ( rHEvt.GetMode() & HELPMODE_BALLOON )
-        Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), String() );
-
-    Window::RequestHelp( rHEvt );
-}
-*/
-
-// -----------------------------------------------------------------------
-
 void ImplListBoxWindow::SetTopEntry( sal_uInt16 nTop )
 {
     if( mpEntryList->GetEntryCount() == 0 )
@@ -2590,8 +2578,6 @@ void ImplListBox::StateChanged( StateChangedType nType )
     {
         sal_Bool bUpdate = IsUpdateMode();
         maLBWindow.SetUpdateMode( bUpdate );
-//      mpHScrollBar->SetUpdateMode( bUpdate );
-//      mpVScrollBar->SetUpdateMode( bUpdate );
         if ( bUpdate && IsReallyVisible() )
             ImplCheckScrollBars();
     }
@@ -2634,13 +2620,6 @@ void ImplListBox::StateChanged( StateChangedType nType )
 
 void ImplListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
-//  if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-//       (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-//  {
-//      maLBWindow.SetSettings( GetSettings() );
-//      Resize();
-//  }
-//  else
         Control::DataChanged( rDCEvt );
 }
 

@@ -355,12 +355,6 @@ AquaSalGraphics::AquaSalGraphics()
 
 AquaSalGraphics::~AquaSalGraphics()
 {
-/*
-    if( mnUpdateGraphicsEvent )
-    {
-        Application::RemoveUserEvent( mnUpdateGraphicsEvent );
-    }
-*/
     CGPathRelease( mxClipPath );
     ATSUDisposeStyle( maATSUStyle );
 
