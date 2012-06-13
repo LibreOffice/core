@@ -213,7 +213,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     SfxApplication *pApp = SFX_APP();
     {
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
-        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
         {
             pFact = rFactories[nFactory];
             if ( pFact->nId == nId )
@@ -244,7 +244,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
         if ( pFactories )
         {
             SfxChildWinFactArr_Impl &rFactories = *pFactories;
-            for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+            for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
             {
                 pFact = rFactories[nFactory];
                 if ( pFact->nId == nId )
@@ -428,7 +428,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
         if ( pFactories )
         {
             SfxChildWinFactArr_Impl &rFactories = *pFactories;
-            for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+            for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
             {
                 pFact = rFactories[nFactory];
                 if ( pFact->nId == GetType() )
@@ -459,7 +459,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
     if ( !pCon )
     {
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
-        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
         {
             pFact = rFactories[nFactory];
             if ( pFact->nId == GetType() )

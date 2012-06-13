@@ -57,16 +57,15 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
     if (!pAppData_Impl->pFactArr)
         pAppData_Impl->pFactArr = new SfxChildWinFactArr_Impl;
 
-    for (sal_uInt16 nFactory=0; nFactory<pAppData_Impl->pFactArr->Count(); ++nFactory)
+    for (sal_uInt16 nFactory=0; nFactory<pAppData_Impl->pFactArr->size(); ++nFactory)
     {
         if (pFact->nId ==  (*pAppData_Impl->pFactArr)[nFactory]->nId)
         {
-            pAppData_Impl->pFactArr->Remove( nFactory );
+            pAppData_Impl->pFactArr->erase( pAppData_Impl->pFactArr->begin() + nFactory );
         }
     }
 
-    pAppData_Impl->pFactArr->C40_INSERT(
-        SfxChildWinFactory, pFact, pAppData_Impl->pFactArr->Count() );
+    pAppData_Impl->pFactArr->push_back( pFact );
 }
 
 void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt16 nId,
@@ -80,7 +79,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
         pFactories = pMod->GetChildWinFactories_Impl();
         if ( pFactories )
         {
-            sal_uInt16 nCount = pFactories->Count();
+            sal_uInt16 nCount = pFactories->size();
             for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
             {
                 SfxChildWinFactory *pFac = (*pFactories)[nFactory];
@@ -101,7 +100,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
         DBG_ASSERT( pAppData_Impl->pFactArr, "No Factories!" );
 
         pFactories = pAppData_Impl->pFactArr;
-        sal_uInt16 nCount = pFactories->Count();
+        sal_uInt16 nCount = pFactories->size();
         for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
         {
             SfxChildWinFactory *pFac = (*pFactories)[nFactory];

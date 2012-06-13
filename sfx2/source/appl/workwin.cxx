@@ -2457,7 +2457,7 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
     SfxApplication *pApp = SFX_APP();
     {
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
-        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
         {
             pFact = rFactories[nFactory];
             if ( pFact->nId == pCW->nSaveId )
@@ -2487,7 +2487,7 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
         if ( pFactories )
         {
             SfxChildWinFactArr_Impl &rFactories = *pFactories;
-            for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+            for ( sal_uInt16 nFactory = 0; nFactory < rFactories.size(); ++nFactory )
             {
                 pFact = rFactories[nFactory];
                 if ( pFact->nId == pCW->nSaveId )

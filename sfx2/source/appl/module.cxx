@@ -202,18 +202,17 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
     if (!pImpl->pFactArr)
         pImpl->pFactArr = new SfxChildWinFactArr_Impl;
 
-    for (sal_uInt16 nFactory=0; nFactory<pImpl->pFactArr->Count(); ++nFactory)
+    for (sal_uInt16 nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
     {
         if (pFact->nId ==  (*pImpl->pFactArr)[nFactory]->nId)
         {
-            pImpl->pFactArr->Remove( nFactory );
+            pImpl->pFactArr->erase( pImpl->pFactArr->begin() + nFactory );
             SAL_WARN("sfx2.appl", "ChildWindow registered multiple times!");
             return;
         }
     }
 
-    pImpl->pFactArr->C40_INSERT(
-        SfxChildWinFactory, pFact, pImpl->pFactArr->Count() );
+    pImpl->pFactArr->push_back( pFact );
 }
 
 //-------------------------------------------------------------------------
