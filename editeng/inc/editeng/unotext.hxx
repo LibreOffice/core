@@ -271,7 +271,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public SvxUnoTextRangeBase_Base,
                             private osl::DebugBase<SvxUnoTextRangeBase>
 {
     friend class SvxUnoTextRangeEnumeration;
-    friend class accessibility::AccessibleEditableTextPara;
+    friend class ::accessibility::AccessibleEditableTextPara;
 
 protected:
     SvxEditSource*          mpEditSource;

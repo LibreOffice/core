@@ -32,8 +32,9 @@
 #include "global.hxx"           // ScRange, ScAddress
 #include "rangelst.hxx"         // ScRangeList
 
-#include "formula/grammar.hxx"
-#include "rtl/ref.hxx"
+#include <editeng/unotext.hxx>
+#include <formula/grammar.hxx>
+#include <rtl/ref.hxx>
 #include <tools/link.hxx>
 #include <svl/lstner.hxx>
 #include <svl/listener.hxx>
@@ -100,9 +101,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 class ScDocShell;
 class ScMarkData;
@@ -110,7 +109,6 @@ class ScMemChart;
 class ScPrintRangeSaver;
 class ScAttrRectIterator;
 class ScCellRangeObj;
-class SvxUnoText;
 class ScLinkListener;
 class ScPatternAttr;
 class SvxBoxItem;
