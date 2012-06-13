@@ -33,7 +33,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/svapp.hxx>
 
 SwDashedLine::SwDashedLine( Window* pParent, Color& ( *pColorFn )() ) :
@@ -50,7 +50,7 @@ void SwDashedLine::Paint( const Rectangle& )
 {
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     drawinglayer::processor2d::BaseProcessor2D * pProcessor =
-        sdr::contact::createBaseProcessor2DFromOutputDevice(
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
                     *this, aNewViewInfos );
 
     // Compute the start and end points

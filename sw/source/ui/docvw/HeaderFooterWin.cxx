@@ -61,7 +61,7 @@
 #include <editeng/boxitem.hxx>
 #include <svtools/svtresid.hxx>
 #include <svx/hdft.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/menubtn.hxx>
@@ -380,7 +380,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     drawinglayer::processor2d::BaseProcessor2D * pProcessor =
-        sdr::contact::createBaseProcessor2DFromOutputDevice(
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
                     *this, aNewViewInfos );
 
     // TODO Ghost it all if needed

@@ -158,6 +158,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor2d/helperwrongspellrenderer \
     drawinglayer/source/processor2d/hittestprocessor2d \
     drawinglayer/source/processor2d/linegeometryextractor2d \
+	drawinglayer/source/processor2d/processorfromoutputdevice \
     drawinglayer/source/processor2d/textaspolygonextractor2d \
     drawinglayer/source/processor2d/vclhelperbitmaprender \
     drawinglayer/source/processor2d/vclhelperbitmaptransform \
