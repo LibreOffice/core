@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SW_FLYFRM_HXX
 #define SW_FLYFRM_HXX
 
@@ -46,27 +47,32 @@ class SwFmt;
 
 #include <anchoredobject.hxx>
 
-//Sucht ausgehend von pOldAnch einen Anker fuer Absatzgebundene Rahmen.
-//Wird beim Draggen von Absatzgebundenen Objekten zur Ankeranzeige sowie
-//fuer Ankerwechsel benoetigt.
-//implementiert in layout/flycnt.cxx
+/** search an anchor for paragraph bound frames starting from pOldAnch
+
+    needed for dragging of objects bound to a paragraph for showing an anchor
+    indicator as well as for changing the anchor.
+
+    implemented in layout/flycnt.cxx
+ */
 const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
                               const sal_Bool bBody = sal_False );
 
-// berechnet das Rechteck, in dem das Objekt bewegt bzw. resized werden darf
+/** calculate rectangle in that the object can be moved or rather be resized */
 sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove = sal_True );
 
-//allg. Basisklasse fuer alle Freifliegenden Rahmen
-// #i26791# - inherit also from <SwAnchoredFlyFrm>
+/** general base class for all free-flowing frames
+
+    #i26791# - inherit also from <SwAnchoredFlyFrm>
+*/
 class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 {
-    //darf Locken. Definiert in frmtool.cxx
+    // is allowed to lock, implemented in frmtool.cxx
     friend void AppendObjs   ( const SwSpzFrmFmts *, sal_uLong, SwFrm *, SwPageFrm * );
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 
-    void InitDrawObj( sal_Bool bNotify );   //Wird von den CToren gerufen.
-    void FinitDrawObj();                //Wird vom CTor gerufen.
+    void InitDrawObj( sal_Bool bNotify ); // these to methods are called in the
+    void FinitDrawObj();                  // constructors
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
@@ -77,51 +83,50 @@ class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
     SwVirtFlyDrawObj* CreateNewRef( SwFlyDrawContact* );
 
 protected:
-
-    SwFlyFrm *pPrevLink,        // Vorgaenger/Nachfolger fuer Verkettung mit
-             *pNextLink;        // Textfluss
-
-    // #i26791# - moved to <SwAnchoredObject>
-//    Point aRelPos;   //Die Relative Position zum Master
+    // Predecessor/Successor for chaining with text flow
+    SwFlyFrm *pPrevLink, *pNextLink;
 
 private:
-    sal_Bool bLocked    :1; //Cntnt-gebundene Flys muessen derart blockiert werden
-                        //koennen, dass sie nicht Formatiert werden; :MakeAll
-                        //returnt dann sofort. Dies ist bei Seitenwechseln
-                        //waehrend der Formatierung notwendig.
-                        //Auch wahrend des RootCTors ist dies notwendig da
-                        //sonst der Anker formatiert wird obwohl die Root noch
-                        //nicht korrekt an der Shell haengt und weil sonst
-                        //initial zuviel Formatiert wuerde.
-    sal_Bool bNotifyBack:1; //sal_True wenn am Ende eines MakeAll() der Background
-                        //vom NotifyDTor benachrichtigt werden muss.
+    // It must be possible to block Cntnt-bound flys so that they will be not
+    // formatted; in this case MakeAll() returns immediately. This is necessary
+    // for page changes during formattting. In addition, it is needed during
+    // the constructor call of the root object since otherwise the anchor will
+    // be formatted before the root is anchored correctly to a shell and
+    // because too much would be formatted as a result.
+    sal_Bool bLocked :1;
+    // sal_True if the background of NotifyDTor needs to be notified at the end
+    // of a MakeAll() call.
+    sal_Bool bNotifyBack :1;
+
 protected:
+    // Pos, PrtArea or SSize have been invalidated - they will be evaluated
+    // again immediately because they have to be valid _at all time_.
+    // The invalidation is tracked here so that LayAction knows about it and
+    // can handle it properly. Exceptions prove the rule.
+    sal_Bool bInvalid :1;
 
-    sal_Bool bInvalid :1;   //Pos, PrtArea od. SSize wurden Invalidiert, sie werden
-                        //gleich wieder Validiert, denn sie muessen _immer_
-                        //gueltig sein. Damit in LayAction korrekt gearbeitet
-                        //werden kann muss hier festgehalten werden, dass sie
-                        //invalidiert wurden. Ausnahmen bestaetigen die Regelt!
-    sal_Bool bMinHeight:1;  //sal_True wenn die vom Attribut vorgegebene Hoehe eine
-                        //eine Minimalhoehe ist (der Frm also bei Bedarf
-                        //darueberhinaus wachsen kann).
-    sal_Bool bHeightClipped :1; //sal_True wenn der Fly nicht die Pos/Size anhand der Attrs
-    sal_Bool bWidthClipped  :1; //formatieren konnte, weil z.B. nicht genug Raum vorh.
-                            //war.
-    sal_Bool bFormatHeightOnly  :1; //Damit nach einer Anpassung der Breite
-                                //(CheckClip) nur das Format aufgerufen wird;
-                                //nicht aber die Breite anhand der Attribute
-                                //wieder bestimmt wird.
-    sal_Bool bInCnt         :1; // FLY_AS_CHAR, anchored as character
-    sal_Bool bAtCnt         :1; // FLY_AT_PARA, anchored at paragraph
-    sal_Bool bLayout        :1; // FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
-    sal_Bool bAutoPosition  :1; // FLY_AT_CHAR, anchored at character
-    sal_Bool bNoShrink      :1; // temporary forbud of shrinking to avoid loops
-    sal_Bool bLockDeleteContent :1;           // If the flag is set, the content of the
-                                        // fly frame is not deleted if moved to
-                                        // invisible layer.
+    // sal_True if the proposed height of an attribute is a minimal height
+    // (this means that the frame can grow higher if needed)
+    sal_Bool bMinHeight :1;
+    // sal_True if the fly frame could not format position/size based on its
+    // attributes, e.g. because there was not enough space.
+    sal_Bool bHeightClipped :1;
+    sal_Bool bWidthClipped :1;
+    // If sal_True call only the format after adjusting the width (CheckClip);
+    // but the width will not be re-evaluated based on the attributes.
+    sal_Bool bFormatHeightOnly :1;
 
-    friend class SwNoTxtFrm; // Darf NotifyBackground rufen
+    sal_Bool bInCnt :1;        //< FLY_AS_CHAR, anchored as character
+    sal_Bool bAtCnt :1;        //< FLY_AT_PARA, anchored at paragraph
+    sal_Bool bLayout :1;       //< FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
+    sal_Bool bAutoPosition :1; //< FLY_AT_CHAR, anchored at character
+
+    sal_Bool bNoShrink :1;     //< temporary forbid shrinking to avoid loops
+    // If sal_True, the content of the fly frame will not be deleted when it
+    // is moved to an invisible layer.
+    sal_Bool bLockDeleteContent :1;
+
+    friend class SwNoTxtFrm; // is allowed to call NotifyBackground
 
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     void MakePrtArea( const SwBorderAttrs &rAttrs );
@@ -157,7 +162,7 @@ public:
     TYPEINFO();
 
     virtual ~SwFlyFrm();
-        // erfrage vom Client Informationen
+    // get client information
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
@@ -230,12 +235,13 @@ public:
                      const sal_Bool _bForPaint = sal_False ) const;
 
 
-    //Auf dieser Shell painten (PreView, Print-Flag usw. rekursiv beachten)?.
+    // Paint on this shell (consider PreView, print flag, etc. recursively)?
     static sal_Bool IsPaint( SdrObject *pObj, const ViewShell *pSh );
 
     /** SwFlyFrm::IsBackgroundTransparent
 
-        determines, if background of fly frame has to be drawn transparent
+        determines if background of fly frame has to be drawn transparently
+
         definition found in /core/layout/paintfrm.cxx
 
         @return true, if background color is transparent or a existing background
@@ -245,7 +251,8 @@ public:
 
     /** SwFlyFrm::IsShadowTransparent
 
-        determine, if shadow color of fly frame has to be drawn transparent
+        determine if shadow color of fly frame has to be drawn transparently
+
         definition found in /core/layout/paintfrm.cxx
 
         @return true, if shadow color is transparent.
@@ -267,7 +274,7 @@ public:
 
     virtual const SwRect GetObjRect() const;
 
-    /** method to determine, if a format on the Writer fly frame is possible
+    /** method to determine if a format on the Writer fly frame is possible
 
         #i28701#
         refine 'IsFormatPossible'-conditions of method
@@ -288,3 +295,4 @@ public:
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

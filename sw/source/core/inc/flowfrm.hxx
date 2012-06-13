@@ -25,28 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _FLOWFRM_HXX
 #define _FLOWFRM_HXX
-
-//Der FlowFrm gibt die Funktionalitaet fuer alle Frms vor, die fliessen und
-//die sich aufspalten koennen (wie CntntFrm oder TabFrm).
-//Teile der Funktionalitaet sind im FlowFrm implementiert, andere Teile werden
-//von den spezifischen Frms implementiert.
-//Der FlowFrm ist kein eigenstaender Frm, es kann also auch niemals eine
-//eigenstaendige Instanz vom FlowFrm existieren.
-//Der FlowFrm ist nicht einmal ein echter Frm. Die naheliegende Implementierung
-//waere ein FlowFrm der virtual vom SwFrm abgeleitet ist und direkt auf den
-//eigenen Instanzdaten arbeitet. Abgeleitete Klassen muessten sich
-//vom FlowFrm und (ueber mehrere Basisklassen weil der Klassenbaum sich direkt
-//vom SwFrm zu SwCntntFrm und zum SwLayoutFrm spaltet) virtual vom SwFrm
-//ableiten.
-//Leider entstehen dadurch - neben Problemen mit Compilern und Debuggern -
-//erhebliche zusaetzliche Kosten, die wir uns heutzutage IMHO nicht erlauben
-//koennen.
-//Ich greife deshalb auf eine andere Technik zurueck: Der FlowFrm hat eine
-//Referenz auf den SwFrm - der er genau betrachtet selbst ist - und ist mit
-//diesem befreundet. So kann der FlowFrm anstelle des this-Pointer mit der
-//Referenz auf den SwFrm arbeiten.
 
 class SwPageFrm;
 class SwRect;
@@ -58,10 +39,32 @@ class SwObjectFormatterTxtFrm;
 
 void MakeFrms( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
 
-/// Base class for frames that are allowed at page breaks and shall continue on the next page, e.g. paragraphs, tables.
+/** Base class that provides the general functionalities for frames that are
+    allowed at page breaks (flow) and shall continue on the next page (can be
+    split), e.g. paragraphs (CntntFrm) or tables (TabFrm).
+
+    Some parts of these functionalities are implemented in FlowFrm while the
+    specific ones are done in the corresponding Frm classes. The FlowFrm has to
+    be seen as a base class. As such it is no Frm by itself and thus no direct
+    instances of FlowFrm can exist.
+
+    Actually it is not even a real Frm. The obvious implementation would be a
+    FlowFrm that is virtually inherited from SwFrm and that works with its own
+    member data. Further classes would need to inherit from FlowFrm and (via
+    multiple base classes since the class tree splits exactly at the branch
+    from SwFrm to SwCntntFrm and SwLayoutFrm) also virtually from SwFrm as
+    well. Unfortunately, this leads - besides problems with compilers and
+    debugging programs - to high additional costs, that we IMHO are not able to
+    afford nowadays.
+
+    Hence, we use another technique: A FlowFrm keeps a reference to a SwFrm
+    - which it is actually itself - and they are friends. As a result, the
+    FlowFrm can work with the reference to the SwFrm instead of working with
+    its own this-pointer.
+ */
 class SwFlowFrm
 {
-    //PrepareMake darf Locken/Unlocken (Robustheit)
+    // PrepareMake is allowed to lock/unlock (robustness)
     friend inline void PrepareLock  ( SwFlowFrm * );
     friend inline void PrepareUnlock( SwFlowFrm * );
     friend inline void TableSplitRecalcLock( SwFlowFrm * );
@@ -69,7 +72,7 @@ class SwFlowFrm
     // #i44049#
     friend class SwObjectFormatterTxtFrm;
 
-    //TblSel darf das Follow-Bit zuruecksetzen.
+    // TblSel is allowed to reset the follow-bit
     friend inline void UnsetFollow( SwFlowFrm *pFlow );
 
     friend void MakeFrms( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
@@ -78,13 +81,16 @@ class SwFlowFrm
 
     SwFrm &rThis;
 
-    //Hilfsfunktionen fuer MoveSubTree()
+    // helper methods for MoveSubTree()
     static SwLayoutFrm *CutTree( SwFrm* );
     static sal_Bool   PasteTree( SwFrm *, SwLayoutFrm *, SwFrm *, SwFrm* );
 
-    //Wird fuer das Zusammenspiel von _GetPrevxxx und MoveBwd gebraucht, damit
-    //mehrere Blaetter gleichzeitig uebersprungen werden koennen.
-    //Wird auch vom MoveBwd des TabFrm ausgewertet!
+    /** indicates that a backward move was done over multiple pages
+
+        Needed for the interaction of _GetPrevxxx and MoveBwd so that multiple
+        pages can be skipped at the same time. In addition, it is evaluated by
+        the MoveBwd() method in TabFrm.
+    */
     static sal_Bool bMoveBwdJump;
 
     /** helper method to determine previous frame for calculation of the
@@ -114,43 +120,44 @@ class SwFlowFrm
                                 const SwTwips _nUpperSpaceWithoutGrid ) const;
 
 protected:
-
     SwFlowFrm *m_pFollow;
     SwFlowFrm *m_pPrecede;
 
-    sal_Bool bLockJoin  :1; //Join (und damit deleten) verboten wenn sal_True!
-    sal_Bool bUndersized:1; // wir sind kleiner als gewuenscht
-    sal_Bool bFlyLock   :1; //  Stop positioning of at-character flyframes
+    sal_Bool bLockJoin  :1; // if sal_True than joins (and thus deletes) are prohibited!
+    sal_Bool bUndersized:1; // I am smaller than needed
+    sal_Bool bFlyLock   :1; // stop positioning of at-character flyframes
 
-    //Prueft ob Vorwaertsfluss noch Sinn macht Endloswanderschaften (unterbinden)
+    // checks if forward flow makes sense to prevent infinite moves
     inline sal_Bool IsFwdMoveAllowed();
     // #i44049# - method <CalcCntnt(..)> has to check this property.
     friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
-    sal_Bool IsKeepFwdMoveAllowed();    //Wie oben, Move fuer Keep.
+    sal_Bool IsKeepFwdMoveAllowed();    // like above, forward flow for Keep.
 
-    //Prueft ob ein Obj das Umlauf wuenscht ueberlappt.
-    //eine Null bedeutet, kein Objekt ueberlappt,
-    // 1 heisst, Objekte, die am FlowFrm selbst verankert sind, ueberlappen
-    // 2 heisst, Objekte, die woanders verankert sind, ueberlappen
-    // 3 heistt, beiderlei verankerte Objekte ueberlappen
+    /** method to determine overlapping of an object that requests floating
+
+        0: no overlapping
+        1: objects that are anchored at the FlowFrm overlap
+        2: objects that are anchored somewhere else overlap
+        3: both types of objects overlap
+    */
     sal_uInt8 BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect );
 
     void LockJoin()   { bLockJoin = sal_True;  }
     void UnlockJoin() { bLockJoin = sal_False; }
 
-            sal_Bool CheckMoveFwd( bool& rbMakePage, sal_Bool bKeep, sal_Bool bMovedBwd );
-            sal_Bool MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool bMoveAlways = sal_False );
+    sal_Bool CheckMoveFwd( bool& rbMakePage, sal_Bool bKeep, sal_Bool bMovedBwd );
+    sal_Bool MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool bMoveAlways = sal_False );
+    sal_Bool MoveBwd( sal_Bool &rbReformat );
     virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat )=0;
-            sal_Bool MoveBwd( sal_Bool &rbReformat );
 
 public:
     SwFlowFrm( SwFrm &rFrm );
     virtual ~SwFlowFrm();
 
-    const SwFrm *GetFrm() const            { return &rThis; }
-          SwFrm *GetFrm()                  { return &rThis; }
+    const SwFrm *GetFrm() const { return &rThis; }
+          SwFrm *GetFrm()       { return &rThis; }
 
-    static sal_Bool IsMoveBwdJump()            { return bMoveBwdJump; }
+    static sal_Bool IsMoveBwdJump() { return bMoveBwdJump; }
     static void SetMoveBwdJump( sal_Bool bNew ){ bMoveBwdJump = bNew; }
 
     inline void SetUndersized( const sal_Bool bNew ) { bUndersized = bNew; }
@@ -158,20 +165,18 @@ public:
 
     sal_Bool IsPrevObjMove() const;
 
-    //Die Kette mit minimalen Operationen und Benachrichtigungen unter den
-    //neuen Parent Moven.
+    /** hook tree onto new parent with minimal operations and notifications */
     void MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling = 0 );
 
-           sal_Bool       HasFollow() const    { return m_pFollow ? sal_True : sal_False; }
-           sal_Bool       IsFollow()     const { return 0 != m_pPrecede; }
-    const  SwFlowFrm *GetFollow() const    { return m_pFollow;   }
-           SwFlowFrm *GetFollow()          { return m_pFollow;   }
-           sal_Bool       IsAnFollow( const SwFlowFrm *pFlow ) const;
-           void       SetFollow(SwFlowFrm *const pFollow);
+    sal_Bool HasFollow() const { return m_pFollow ? sal_True : sal_False; }
+    sal_Bool IsFollow() const { return 0 != m_pPrecede; }
+    sal_Bool IsAnFollow( const SwFlowFrm *pFlow ) const;
+    const SwFlowFrm *GetFollow() const { return m_pFollow; }
+          SwFlowFrm *GetFollow()       { return m_pFollow; }
+    void SetFollow(SwFlowFrm *const pFollow);
 
-    const  SwFlowFrm *GetPrecede() const   { return m_pPrecede;   }
-           SwFlowFrm *GetPrecede()         { return m_pPrecede;   }
-
+    const SwFlowFrm *GetPrecede() const { return m_pPrecede; }
+          SwFlowFrm *GetPrecede()       { return m_pPrecede; }
 
     sal_Bool IsJoinLocked() const { return bLockJoin; }
     sal_Bool IsAnyJoinLocked() const { return bLockJoin || HasLockedFollow(); }
@@ -179,7 +184,7 @@ public:
     sal_Bool IsPageBreak( sal_Bool bAct ) const;
     sal_Bool IsColBreak( sal_Bool bAct ) const;
 
-    //Ist ein Keep zu beruecksichtigen (Breaks!)
+    /** method to determine if a Keep needs to be considered (Breaks!) */
     sal_Bool IsKeep( const SwAttrSet& rAttrs, bool bBreakCheck = false ) const;
 
     sal_Bool HasLockedFollow() const;
@@ -188,9 +193,10 @@ public:
 
     /** method to determine the upper space hold by the frame
 
-        #i11860# - add 3rd parameter <_bConsiderGrid> to get
-        the upper space with and without considering the page grid
-        (default value: <sal_True>)
+        #i11860#
+
+        @param _bConsiderGrid
+        optional input parameter - consider the page grid while calculating?
     */
     SwTwips CalcUpperSpace( const SwBorderAttrs *pAttrs = NULL,
                             const SwFrm* pPr = NULL,
@@ -204,8 +210,7 @@ public:
     */
     SwTwips GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const;
 
-    /** calculation of lower space
-    */
+    /** calculation of lower space */
     SwTwips CalcLowerSpace( const SwBorderAttrs* _pAttrs = 0L ) const;
 
     /** calculation of the additional space to be considered, if flow frame
@@ -228,8 +233,8 @@ public:
     void SetFlyLock( sal_Bool bNew ){ bFlyLock = bNew; }
     sal_Bool IsFlyLock() const {    return bFlyLock; }
 
-    //casten einen Frm auf einen FlowFrm - wenns denn einer ist, sonst 0
-    //Diese Methoden muessen fuer neue Ableitungen geaendert werden!
+    // Casting of a Frm into a FlowFrm (if it is one, otherwise 0)
+    // These methods need to be customized in subclasses!
     static       SwFlowFrm *CastFlowFrm( SwFrm *pFrm );
     static const SwFlowFrm *CastFlowFrm( const SwFrm *pFrm );
 };
@@ -238,7 +243,6 @@ inline sal_Bool SwFlowFrm::IsFwdMoveAllowed()
 {
     return rThis.GetIndPrev() != 0;
 }
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
