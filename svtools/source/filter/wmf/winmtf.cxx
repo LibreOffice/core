@@ -31,6 +31,7 @@
 #include <rtl/tencinfo.h>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vos/mutex.hxx>
 
 // ------------------------------------------------------------------------
 
