@@ -67,7 +67,7 @@ ListBox::ListBox( Window* pParent, WinBits nStyle ) : Control( WINDOW_LISTBOX )
 ListBox::ListBox( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_LISTBOX )
 {
-    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
         return;
 
     ImplInitListBoxData();

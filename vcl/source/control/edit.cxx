@@ -203,7 +203,7 @@ Edit::Edit( Window* pParent, WinBits nStyle ) :
 Edit::Edit( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_EDIT )
 {
-    if (Dialog::replace_buildable(pParent, rResId.GetId(), *this))
+    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
         return;
 
     ImplInitEditData();

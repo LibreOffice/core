@@ -356,7 +356,6 @@ void Dialog::ImplInitDialogData()
     mnMousePositioned       = 0;
     m_nBorderWidth          = 0;
     mpDialogImpl            = new DialogImpl;
-    m_pUIBuilder            = NULL;
 
     //To-Do, reuse maResizeTimer
     maLayoutTimer.SetTimeout(50);
@@ -542,12 +541,8 @@ Dialog::Dialog( Window* pParent, const ResId& rResId ) :
     init(pParent, rResId);
 }
 
-WinBits Dialog::init(Window *pParent, const ResId& rResId)
+VclBuilder* VclBuilderContainer::overrideResourceWithUIXML(Window *pWindow, const ResId& rResId)
 {
-    WinBits nStyle = ImplInitRes( rResId );
-
-    ImplInit( pParent, nStyle );
-
     sal_Int32 nUIid = static_cast<sal_Int32>(rResId.GetId());
     rtl::OUString sPath = rtl::OUStringBuffer(getUIRootDir()).
         append(rResId.GetResMgr()->getPrefixName()).
@@ -559,12 +554,21 @@ WinBits Dialog::init(Window *pParent, const ResId& rResId)
 
     osl::File aUIFile(sPath);
     osl::File::RC error = aUIFile.open(osl_File_OpenFlag_Read);
+    //good, use the preferred GtkBuilder xml
     if (error == osl::File::E_None)
-    {
-        //good, use the preferred GtkBuilder xml
-        m_pUIBuilder = new VclBuilder(this, sPath, rtl::OString::valueOf(nUIid));
-    }
-    else
+        return new VclBuilder(pWindow, sPath, rtl::OString::valueOf(nUIid));
+    return NULL;
+}
+
+WinBits Dialog::init(Window *pParent, const ResId& rResId)
+{
+    WinBits nStyle = ImplInitRes( rResId );
+
+    ImplInit( pParent, nStyle );
+
+    m_pUIBuilder = overrideResourceWithUIXML(this, rResId);
+
+    if (!m_pUIBuilder)
     {
         //fallback to using the binary resource file
         ImplLoadRes( rResId );
@@ -1249,14 +1253,21 @@ bool Dialog::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     return true;
 }
 
-bool Dialog::replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacement)
+VclBuilderContainer::VclBuilderContainer()
+    : m_pUIBuilder(NULL)
+{
+}
+
+bool VclBuilderContainer::replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacement)
 {
     if (!pParent)
         return false;
-    if (!pParent->IsDialog())
+
+    VclBuilderContainer *pBuilderContainer = dynamic_cast<VclBuilderContainer*>(pParent);
+    if (!pBuilderContainer)
         return false;
-    Dialog *pDialog = static_cast<Dialog*>(pParent);
-    VclBuilder *pUIBuilder = pDialog->m_pUIBuilder;
+
+    VclBuilder *pUIBuilder = pBuilderContainer->m_pUIBuilder;
     if (!pUIBuilder)
         return false;
     bool bFound = pUIBuilder->replace(rtl::OString::valueOf(nID), rReplacement);
@@ -1265,8 +1276,15 @@ bool Dialog::replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacem
         fprintf(stderr, "%d %p not found, hiding\n", nID, &rReplacement);
         //move "missing" elements into the action area (just to have
         //a known container as an owner) and hide it
-        VclButtonBox* pActionArea = getActionArea(pDialog);
-        rReplacement.ImplInit(pActionArea, 0, NULL);
+        Window* pArbitraryParent;
+        if (pParent->IsDialog())
+        {
+            Dialog *pDialog = static_cast<Dialog*>(pParent);
+            pArbitraryParent = getActionArea(pDialog);
+        }
+        else
+            pArbitraryParent = pParent->GetWindow(WINDOW_FIRSTCHILD);
+        rReplacement.ImplInit(pArbitraryParent, 0, NULL);
         rReplacement.Hide();
     }
     else

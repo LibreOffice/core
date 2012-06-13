@@ -31,6 +31,7 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/builder.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/timer.hxx>
 
@@ -44,7 +45,9 @@
 struct DialogImpl;
 class VclBuilder;
 
-class VCL_DLLPUBLIC Dialog : public SystemWindow
+class VCL_DLLPUBLIC Dialog
+    : public SystemWindow
+    , public VclBuilderContainer
 {
 private:
     Window*         mpDialogParent;
@@ -73,8 +76,6 @@ protected:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDialogRes( const ResId& rResId );
     SAL_DLLPRIVATE WinBits init(Window *pParent, const ResId& rResId);
-
-    VclBuilder              *m_pUIBuilder;
 
 public:
     SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }
@@ -140,8 +141,6 @@ public:
     sal_Bool            IsModalInputMode() const { return mbModalMode; }
 
     void            GrabFocusToFirstControl();
-
-    static bool     replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacement);
 };
 
 // ------------------

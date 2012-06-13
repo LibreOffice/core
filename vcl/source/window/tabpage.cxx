@@ -99,7 +99,13 @@ TabPage::TabPage( Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
 
-    ImplLoadRes( rResId );
+    m_pUIBuilder = overrideResourceWithUIXML(this, rResId);
+
+    if (!m_pUIBuilder)
+    {
+        //fallback to using the binary resource file
+        ImplLoadRes( rResId );
+    }
 
     if ( !(nStyle & WB_HIDE) )
         Show();

@@ -272,11 +272,21 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     return pWindow;
 }
 
+namespace
+{
+    //return true for window types which exist in vcl but are not themselves
+    //represented in the .ui format, i.e. only their children exist.
+    bool isConsideredPseudo(Window *pWindow)
+    {
+        return pWindow->GetType() == WINDOW_TABPAGE;
+    }
+}
+
 Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rMap)
 {
     Window *pCurrentChild = NULL;
 
-    if (!m_sID.isEmpty() && rID.equals(m_sID))
+    if (m_pParent && !isConsideredPseudo(m_pParent) && !m_sID.isEmpty() && rID.equals(m_sID))
     {
         pCurrentChild = m_pParent;
         //toplevels default to resizable

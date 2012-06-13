@@ -127,6 +127,23 @@ private:
     static void reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition);
 };
 
+
+//allows retro fitting existing dialogs/tabpages that load a resource
+//to load a .ui file instead
+
+class ResId;
+
+class VCL_DLLPUBLIC VclBuilderContainer
+{
+protected:
+    VclBuilder *m_pUIBuilder;
+public:
+    VclBuilderContainer();
+    static VclBuilder* overrideResourceWithUIXML(Window *pWindow, const ResId& rResId);
+    static bool replace_buildable(Window *pParent, sal_Int32 nID, Window &rReplacement);
+};
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
