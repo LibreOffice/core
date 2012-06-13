@@ -52,8 +52,8 @@ private:
     MultiLineEdit       aCopyrightTextShadow;
     FixedImage          aLogoImage;
     PushButton          aCreditsButton;
-    PushButton          aWebsiteButton;
     PushButton          aLicenseButton;
+    PushButton          aWebsiteButton;
     CancelButton        aCancelButton;
 
     String aVersionData;
