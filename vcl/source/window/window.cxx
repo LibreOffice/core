@@ -4180,8 +4180,11 @@ Window::Window( Window* pParent, WinBits nStyle )
 // -----------------------------------------------------------------------
 
 Window::Window( Window* pParent, const ResId& rResId )
+    : mpWindowImpl(NULL)
 {
     DBG_CTOR( Window, ImplDbgCheckWindow );
+    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
 
     ImplInitWindowData( WINDOW_WINDOW );
     rResId.SetRT( RSC_WINDOW );
@@ -9674,7 +9677,6 @@ uno::Any Window::getWidgetAnyProperty(const rtl::OString &rString) const
 Size Window::get_preferred_size() const
 {
     Size aRet(mpWindowImpl->mnWidthRequest, mpWindowImpl->mnHeightRequest);
-    fprintf(stderr, "numbers are %d %d\n", aRet.Width(), aRet.Height());
     if (aRet.Width() == -1 || aRet.Height() == -1)
     {
         Size aOptimal = GetOptimalSize(WINDOWSIZE_PREFERRED);
@@ -9688,6 +9690,12 @@ Size Window::get_preferred_size() const
 
 void Window::take_properties(Window &rOther)
 {
+    if (!mpWindowImpl)
+    {
+        ImplInitWindowData(WINDOW_WINDOW);
+        ImplInit(rOther.GetParent(), rOther.GetStyle(), NULL);
+    }
+
     WindowImpl *pWindowImpl = rOther.mpWindowImpl;
     if (!mpWindowImpl->mpRealParent)
         ImplInit(pWindowImpl->mpRealParent, rOther.GetStyle(), NULL);
