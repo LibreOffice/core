@@ -8734,6 +8734,7 @@ sal_uInt16 Window::GetAccessibleRole() const
             case WINDOW_METRICFIELD:
             case WINDOW_CURRENCYFIELD:
             case WINDOW_LONGCURRENCYFIELD:
+            case WINDOW_CALCINPUTLINE:
             case WINDOW_EDIT: nRole = ( GetStyle() & WB_PASSWORD ) ? (accessibility::AccessibleRole::PASSWORD_TEXT) : (accessibility::AccessibleRole::TEXT); break;
 
             case WINDOW_PATTERNBOX:
@@ -8837,6 +8838,7 @@ String Window::GetAccessibleName() const
             case WINDOW_METRICFIELD:
             case WINDOW_CURRENCYFIELD:
             case WINDOW_LONGCURRENCYFIELD:
+            case WINDOW_CALCINPUTLINE:
             case WINDOW_EDIT:
 
             case WINDOW_DATEBOX:

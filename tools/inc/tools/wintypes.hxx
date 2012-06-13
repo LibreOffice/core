@@ -118,7 +118,8 @@ typedef sal_uInt16 WindowType;
 #define WINDOW_LISTBOXWINDOW        (WINDOW_FIRST + 0x4f)
 #define WINDOW_DOCKINGAREA          (WINDOW_FIRST + 0x50)
 #define WINDOW_RULER                (WINDOW_FIRST + 0x51)
-#define WINDOW_LAST                 (WINDOW_RULER)
+#define WINDOW_CALCINPUTLINE        (WINDOW_FIRST + 0x52)
+#define WINDOW_LAST                 (WINDOW_CALCINPUTLINE)
 
 
 // ---------------
