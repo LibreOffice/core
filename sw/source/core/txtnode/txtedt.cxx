@@ -1856,13 +1856,6 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
         return;
     }
 
-    // make a copy of the text
-    String rTextCopy = m_Text.Copy( );
-
-    // mask out the redlined and hidden text with ' '
-    const xub_Unicode cChar(' ');
-    const sal_uInt16 nNumOfMaskedChars = lcl_MaskRedlinesAndHiddenText( *this, rTextCopy, nStt, nEnd, cChar, false );
-
     // expand text into pConversionMap for scanner
     rtl::OUString aExpandText;
     const ModelToViewHelper::ConversionMap* pConversionMap = BuildConversionMap( aExpandText );
@@ -1876,6 +1869,12 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
         OSL_ENSURE(aExpandText.getLength() >= 0, "Node text expansion error: length < 0." );
         return;
     }
+
+    // make a copy of the expanded text for masking redlined/hidden text with ' '
+    String textCopy = aExpandText;
+    const xub_Unicode cChar(' ');
+    const sal_uInt16 nNumOfMaskedChars = lcl_MaskRedlinesAndHiddenText( *this, textCopy, nExpandBegin, nExpandEnd, cChar, false );
+    aExpandText = textCopy;
 
     //do the count
     // all counts exclude hidden paras and hidden+redlined within para
