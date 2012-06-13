@@ -2351,7 +2351,29 @@ sal_Bool SfxObjectShell::InsertFrom( SfxMedium& rMedium )
         aArgs[nEnd-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InsertMode" ) );
         aArgs[nEnd-1].Value <<= (sal_Bool) sal_True;
 
-        return xLoader->filter( aArgs );
+//-> #i119492
+//        return xLoader->filter( aArgs );
+// During loading, some OLE objects like chart will be set modified flag, so needs to reset the flag to false after loading
+        sal_Bool bRtn = xLoader->filter( aArgs );
+        uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        for ( sal_Int32 n = 0; n < aNames.getLength(); n++ )
+        {
+            ::rtl::OUString aName = aNames[n];
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+            if ( xObj.is() )
+            {
+                sal_Int32 nState = xObj->getCurrentState();
+                if ( nState == embed::EmbedStates::LOADED || nState == embed::EmbedStates::RUNNING )    // means that the object is not active
+                {
+                    uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+                    if ( xModifiable.is() )
+                        xModifiable->setModified(sal_False);
+                }
+            }
+        }
+        return bRtn;
+//<- #i119492
         }catch(const uno::Exception&)
         {}
     }
