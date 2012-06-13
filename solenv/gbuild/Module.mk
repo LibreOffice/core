@@ -100,6 +100,7 @@ ifneq ($(filter dev-install build all,$(MAKECMDGOALS)),)
 debugrun :| $(filter dev-install build all,$(MAKECMDGOALS))
 endif
 
+ifneq ($(OS),WNT)
 define gb_Module_BUILDHINT
 
 LibreOffice build successfully finished.
@@ -110,6 +111,15 @@ To run smoketest, issue: $(MAKE) check
 For crosscompiles, please consult README.cross how to install it.
 
 endef
+else
+define gb_Module_BUILDHINT
+
+LibreOffice build succesfully finished.
+
+Please consult instsetoo_native/README on installing it.
+
+endef
+endif
 
 define gb_Module_DEVINSTALLHINT
 
