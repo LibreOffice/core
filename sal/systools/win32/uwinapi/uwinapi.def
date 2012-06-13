@@ -1,0 +1,8 @@
+LIBRARY      "uwinapi.dll"
+
+EXPORTS
+	GetShortPathNameW PRIVATE
+	snprintf
+	snwprintf
+	vsnprintf
+	vsnwprintf
