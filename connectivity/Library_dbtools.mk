@@ -82,6 +82,8 @@ $(eval $(call gb_Library_add_grammars,dbtools,\
 	connectivity/source/parse/sqlbison \
 ))
 
+$(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison) : T_YACCFLAGS := -d -l -pSQLyy -bsql
+
 $(eval $(call gb_Library_add_scanners,dbtools,\
 connectivity/source/parse/sqlflex \
 ))
