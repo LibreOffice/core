@@ -1138,6 +1138,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                     case WINDOW_LONGCURRENCYFIELD:
                     case WINDOW_NUMERICFIELD:
                     case WINDOW_SPINFIELD:
+                    case WINDOW_CALCINPUTLINE:
                         mbNWFBorder = true;
                         aCtrlType = (pCtrl->GetStyle() & WB_SPIN) ? CTRL_SPINBOX : CTRL_EDITBOX;
                         break;
@@ -1271,6 +1272,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
             case WINDOW_LONGCURRENCYFIELD:
             case WINDOW_NUMERICFIELD:
             case WINDOW_SPINFIELD:
+            case WINDOW_CALCINPUTLINE:
                 if( pCtrl->GetStyle() & WB_SPIN )
                     aCtrlType = CTRL_SPINBOX;
                 else

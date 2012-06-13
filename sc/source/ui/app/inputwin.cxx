@@ -118,7 +118,7 @@ ScTextWndBase::ScTextWndBase( Window* pParent,  WinBits nStyle )
 {
     if ( IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
     {
-        SetType( WINDOW_EDIT );
+        SetType( WINDOW_CALCINPUTLINE );
         SetBorderStyle( WINDOW_BORDER_NWF );
     }
 }
