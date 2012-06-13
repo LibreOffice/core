@@ -885,10 +885,6 @@ SC_SIMPLE_SERVICE_INFO( ScTableRowObj, "ScTableRowObj", "com.sun.star.table.Tabl
 
 //------------------------------------------------------------------------
 
-SV_IMPL_PTRARR( ScNamedEntryArr_Impl, ScNamedEntryPtr );
-
-//------------------------------------------------------------------------
-
 //! ScLinkListener in anderes File verschieben !!!
 
 ScLinkListener::~ScLinkListener()
@@ -4348,10 +4344,10 @@ void SAL_CALL ScCellRangesObj::addRangeAddress( const table::CellRangeAddress& r
 
 void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const ScRange& rRange )
 {
-    sal_uInt16 nCount = rNamedEntries.Count();
+    sal_uInt16 nCount = rNamedEntries.size();
     for ( sal_uInt16 n=nCount; n--; )
-        if ( rNamedEntries[n]->GetRange() == rRange )
-            rNamedEntries.DeleteAndDestroy( n );
+        if ( rNamedEntries[n].GetRange() == rRange )
+            rNamedEntries.erase( rNamedEntries.begin() + n );
 }
 
 void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress& rRange )
@@ -4444,10 +4440,10 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
 
 void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const String& rName )
 {
-    sal_uInt16 nCount = rNamedEntries.Count();
+    sal_uInt16 nCount = rNamedEntries.size();
     for ( sal_uInt16 n=nCount; n--; )
-        if ( rNamedEntries[n]->GetName() == rName )
-            rNamedEntries.DeleteAndDestroy( n );
+        if ( rNamedEntries[n].GetName() == rName )
+            rNamedEntries.erase( rNamedEntries.begin() + n );
 }
 
 void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const uno::Any& aElement )
@@ -4471,9 +4467,9 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
             String aNamStr(aName);
             if ( aNamStr.Len() )
             {
-                sal_uInt16 nNamedCount = aNamedEntries.Count();
+                sal_uInt16 nNamedCount = aNamedEntries.size();
                 for (sal_uInt16 n=0; n<nNamedCount; n++)
-                    if ( aNamedEntries[n]->GetName() == aNamStr )
+                    if ( aNamedEntries[n].GetName() == aNamStr )
                         throw container::ElementExistException();
             }
 
@@ -4492,7 +4488,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
                 //  name is not in aNamedEntries (tested above)
 
                 ScNamedEntry* pEntry = new ScNamedEntry( aNamStr, *rAddRanges[ 0 ] );
-                aNamedEntries.Insert( pEntry, aNamedEntries.Count() );
+                aNamedEntries.push_back( pEntry );
             }
         }
     }
@@ -4555,14 +4551,14 @@ sal_Bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
 
     //  named entry in this object?
 
-    if ( rNamedEntries.Count() )
+    if ( !rNamedEntries.empty() )
     {
-        for ( sal_uInt16 n=0; n<rNamedEntries.Count(); n++ )
-            if ( rNamedEntries[n]->GetName() == rName )
+        for ( sal_uInt16 n=0; n<rNamedEntries.size(); n++ )
+            if ( rNamedEntries[n].GetName() == rName )
             {
                 //  test if named entry is contained in rRanges
 
-                const ScRange& rComp = rNamedEntries[n]->GetRange();
+                const ScRange& rComp = rNamedEntries[n].GetRange();
                 ScMarkData aMarkData;
                 aMarkData.MarkFromRangeList( rRanges, false );
                 aMarkData.MarkToMulti();        // needed for IsAllMarked
@@ -4602,14 +4598,14 @@ void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
         //  deselect any ranges (parsed or named entry)
         ScRangeList aDiff;
         sal_Bool bValid = ( aDiff.Parse( aNameStr, pDocSh->GetDocument() ) & SCA_VALID ) != 0;
-        if ( !bValid && aNamedEntries.Count() )
+        if ( !bValid && !aNamedEntries.empty() )
         {
-            sal_uInt16 nCount = aNamedEntries.Count();
+            sal_uInt16 nCount = aNamedEntries.size();
             for (sal_uInt16 n=0; n<nCount && !bValid; n++)
-                if (aNamedEntries[n]->GetName() == aNameStr)
+                if (aNamedEntries[n].GetName() == aNameStr)
                 {
                     aDiff.RemoveAll();
-                    aDiff.Append( aNamedEntries[n]->GetRange() );
+                    aDiff.Append( aNamedEntries[n].GetRange() );
                     bValid = sal_True;
                 }
         }
@@ -4633,7 +4629,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
         }
     }
 
-    if (aNamedEntries.Count())
+    if (!aNamedEntries.empty())
         lcl_RemoveNamedEntry( aNamedEntries, aNameStr );    //  remove named entry
 
     if (!bDone)
@@ -4682,11 +4678,11 @@ uno::Any SAL_CALL ScCellRangesObj::getByName( const rtl::OUString& aName )
 sal_Bool lcl_FindEntryName( const ScNamedEntryArr_Impl& rNamedEntries,
                         const ScRange& rRange, String& rName )
 {
-    sal_uInt16 nCount = rNamedEntries.Count();
+    sal_uInt16 nCount = rNamedEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
-        if (rNamedEntries[i]->GetRange() == rRange)
+        if (rNamedEntries[i].GetRange() == rRange)
         {
-            rName = rNamedEntries[i]->GetName();
+            rName = rNamedEntries[i].GetName();
             return sal_True;
         }
     return false;
@@ -4711,7 +4707,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesObj::getElementNames()
         {
             //  use given name if for exactly this range, otherwise just format
             ScRange aRange = *rRanges[ i ];
-            if ( !aNamedEntries.Count() || !lcl_FindEntryName( aNamedEntries, aRange, aRangeStr ) )
+            if ( aNamedEntries.empty() || !lcl_FindEntryName( aNamedEntries, aRange, aRangeStr ) )
                 aRange.Format( aRangeStr, SCA_VALID | SCA_TAB_3D, pDoc );
             pAry[i] = aRangeStr;
         }

@@ -131,8 +131,7 @@ typedef ::com::sun::star::uno::Reference<
 typedef boost::ptr_vector<XModifyListenerRef> XModifyListenerArr_Impl;
 
 class ScNamedEntry;
-typedef ScNamedEntry* ScNamedEntryPtr;
-SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4 )
+typedef boost::ptr_vector<ScNamedEntry> ScNamedEntryArr_Impl;
 
 
 //  ScCellRangesBase - base class for ScCellRangesObj (with access by index)
