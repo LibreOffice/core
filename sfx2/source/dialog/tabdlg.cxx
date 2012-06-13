@@ -21,6 +21,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <algorithm>
+#include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/viewoptions.hxx>
 
@@ -485,16 +486,24 @@ SfxTabDialog::~SfxTabDialog()
     delete pExampleSet;
     delete [] pRanges;
 
-    delete m_pBaseFmtBtn;
-    delete m_pResetBtn;
-    delete m_pHelpBtn;
-    delete m_pCancelBtn;
-    delete m_pUserBtn;
-    delete m_pOKBtn;
-    delete m_pActionArea;
-    delete m_pTabCtrl;
-    delete m_pContentArea;
-    delete m_pVBox;
+    if (m_bOwnsBaseFmtBtn)
+        delete m_pBaseFmtBtn;
+    if (m_bOwnsResetBtn)
+        delete m_pResetBtn;
+    if (m_bOwnsHelpBtn)
+        delete m_pHelpBtn;
+    if (m_bOwnsCancelBtn)
+        delete m_pCancelBtn;
+    if (m_bOwnsUserBtn)
+        delete m_pUserBtn;
+    if (m_bOwnsOKBtn)
+        delete m_pOKBtn;
+    if (m_bOwnsActionArea)
+        delete m_pActionArea;
+    if (m_bOwnsTabCtrl)
+        delete m_pTabCtrl;
+    if (m_bOwnsVBox)
+        delete m_pVBox;
 }
 
 // -----------------------------------------------------------------------
@@ -507,31 +516,68 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
 */
 
 {
-    m_pVBox = new VclVBox(this, false, 7);
-    m_pContentArea = new VclVBox(m_pVBox);
-    m_pTabCtrl = new TabControl(m_pContentArea, ResId(ID_TABCONTROL, *rResId.GetResMgr()));
-    m_pActionArea = new VclHButtonBox(m_pVBox);
-    m_pOKBtn = new OKButton(m_pActionArea);
-    m_pUserBtn = pUserButtonText ? new PushButton(m_pActionArea) : 0;
-    m_pCancelBtn = new CancelButton(m_pActionArea);
-    m_pHelpBtn = new HelpButton(m_pActionArea);
-    m_pResetBtn = new PushButton(m_pActionArea);
-    m_pBaseFmtBtn = new PushButton(m_pActionArea);
-    pImpl = new TabDlg_Impl(m_pTabCtrl->GetPageCount());
-
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
     rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
 
-    m_pVBox->setChildProperty(sFill, true);
+    fprintf(stderr, "BUILDER is %p\n", m_pUIBuilder);
+    m_pVBox = m_pUIBuilder ? static_cast<VclVBox*>(m_pUIBuilder->get_by_name("dialog-vbox1")) : NULL;
+    m_bOwnsVBox = m_pVBox == NULL;
+    if (m_bOwnsVBox)
+    {
+        m_pVBox = new VclVBox(this, false, 7);
+        m_pVBox->setChildProperty(sFill, true);
+        m_pVBox->setChildProperty(sExpand, true);
+    }
 
-    m_pActionArea->setChildProperty(sFill, true);
+    m_pTabCtrl = m_pUIBuilder ? static_cast<TabControl*>(m_pUIBuilder->get_by_name(SAL_STRINGIFY(ID_TABCONTROL))) : NULL;
+    m_bOwnsTabCtrl = m_pTabCtrl == NULL;
+    if (m_bOwnsTabCtrl)
+    {
+        m_pTabCtrl = new TabControl(m_pVBox, ResId(ID_TABCONTROL, *rResId.GetResMgr()));
+        m_pTabCtrl->setChildProperty(sFill, true);
+        m_pTabCtrl->setChildProperty(sExpand, true);
+    }
 
-    m_pContentArea->setChildProperty(sFill, true);
-    m_pContentArea->setChildProperty(sExpand, true);
+    m_pActionArea = m_pUIBuilder ? static_cast<VclHButtonBox*>(m_pUIBuilder->get_by_name("dialog-action_area1")) : NULL;
+    m_bOwnsActionArea = m_pActionArea == NULL;
+    if (m_bOwnsActionArea)
+    {
+        m_pActionArea = new VclHButtonBox(m_pVBox);
+        m_pActionArea->setChildProperty(sFill, true);
+    }
 
-    m_pTabCtrl->setChildProperty(sFill, true);
-    m_pTabCtrl->setChildProperty(sExpand, true);
+    m_pOKBtn = m_pUIBuilder ? static_cast<OKButton*>(m_pUIBuilder->get_by_name("ok")) : NULL;
+    m_bOwnsOKBtn = m_pOKBtn == NULL;
+    if (m_bOwnsOKBtn)
+        m_pOKBtn = new OKButton(m_pActionArea);
+
+    m_pUserBtn = m_pUIBuilder ? static_cast<PushButton*>(m_pUIBuilder->get_by_name("user")) : NULL;
+    m_bOwnsUserBtn = m_pUserBtn == NULL;
+    if (m_bOwnsUserBtn)
+        m_pUserBtn = pUserButtonText ? new PushButton(m_pActionArea) : 0;
+
+    m_pCancelBtn = m_pUIBuilder ? static_cast<CancelButton*>(m_pUIBuilder->get_by_name("cancel")) : NULL;
+    m_bOwnsCancelBtn = m_pCancelBtn == NULL;
+    if (m_bOwnsCancelBtn)
+        m_pCancelBtn = new CancelButton(m_pActionArea);
+
+    m_pHelpBtn = m_pUIBuilder ? static_cast<HelpButton*>(m_pUIBuilder->get_by_name("help")) : NULL;
+    m_bOwnsHelpBtn = m_pHelpBtn == NULL;
+    if (m_bOwnsHelpBtn)
+        m_pHelpBtn = new HelpButton(m_pActionArea);
+
+    m_pResetBtn = m_pUIBuilder ? static_cast<PushButton*>(m_pUIBuilder->get_by_name("reset")) : NULL;
+    m_bOwnsResetBtn = m_pResetBtn == NULL;
+    if (m_bOwnsResetBtn)
+        m_pResetBtn = new PushButton(m_pActionArea);
+
+    m_pBaseFmtBtn = m_pUIBuilder ? static_cast<PushButton*>(m_pUIBuilder->get_by_name("standard")) : NULL;
+    m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == NULL;
+    if (m_bOwnsBaseFmtBtn)
+        m_pBaseFmtBtn = new PushButton(m_pActionArea);
+
+    pImpl = new TabDlg_Impl(m_pTabCtrl->GetPageCount());
 
     m_pOKBtn->SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
     m_pCancelBtn->SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );

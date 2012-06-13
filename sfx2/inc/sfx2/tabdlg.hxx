@@ -66,7 +66,6 @@ friend class SfxTabDialogController;
     SfxViewFrame*   pFrame;
 
     VclVBox *m_pVBox;
-    VclVBox *m_pContentArea;
     TabControl *m_pTabCtrl;
 
     VclHButtonBox *m_pActionArea;
@@ -76,6 +75,16 @@ friend class SfxTabDialogController;
     HelpButton* m_pHelpBtn;
     PushButton* m_pResetBtn;
     PushButton* m_pBaseFmtBtn;
+
+    bool m_bOwnsVBox;
+    bool m_bOwnsTabCtrl;
+    bool m_bOwnsActionArea;
+    bool m_bOwnsOKBtn;
+    bool m_bOwnsUserBtn;
+    bool m_bOwnsCancelBtn;
+    bool m_bOwnsHelpBtn;
+    bool m_bOwnsResetBtn;
+    bool m_bOwnsBaseFmtBtn;
 
     const SfxItemSet*   pSet;
     SfxItemSet*         pOutSet;
