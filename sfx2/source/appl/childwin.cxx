@@ -49,8 +49,6 @@ static const sal_uInt16 nVersion = 2;
 
 DBG_NAME(SfxChildWindow)
 
-SV_IMPL_PTRARR( SfxChildWinContextArr_Impl, SfxChildWinContextFactory* );
-
 struct SfxChildWindow_Impl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xFrame;
@@ -439,10 +437,9 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
                     if ( !pFact->pArr )
                         break;
 
-                    SfxChildWinContextFactory *pConFact=0;
-                    for ( sal_uInt16 n=0; n<pFact->pArr->Count(); ++n )
+                    for ( sal_uInt16 n=0; n<pFact->pArr->size(); ++n )
                     {
-                        pConFact = (*pFact->pArr)[n];
+                        SfxChildWinContextFactory *pConFact = &(*pFact->pArr)[n];
                         rBindings.ENTERREGISTRATIONS();
                         if ( pConFact->nContextId == nContextId )
                         {
@@ -471,10 +468,9 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
                 if ( !pFact->pArr )
                     break;
 
-                SfxChildWinContextFactory *pConFact=0;
-                for ( sal_uInt16 n=0; n<pFact->pArr->Count(); ++n )
+                for ( sal_uInt16 n=0; n<pFact->pArr->size(); ++n )
                 {
-                    pConFact = (*pFact->pArr)[n];
+                    SfxChildWinContextFactory *pConFact = &(*pFact->pArr)[n];
                     rBindings.ENTERREGISTRATIONS();
                     if ( pConFact->nContextId == nContextId )
                     {

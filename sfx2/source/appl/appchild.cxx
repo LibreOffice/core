@@ -128,7 +128,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
     {
         if ( !pF->pArr )
             pF->pArr = new SfxChildWinContextArr_Impl;
-        pF->pArr->C40_INSERT( SfxChildWinContextFactory, pFact, pF->pArr->Count() );
+        pF->pArr->push_back( pFact );
         return;
     }
 

@@ -36,6 +36,7 @@
 
 #include <sfx2/shell.hxx>
 #include <sfx2/chalign.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SfxWorkWindow;
 class SfxModule;
@@ -43,7 +44,6 @@ class SfxBindings;
 class SfxShell;
 class SfxChildWindow;
 class SfxChildWindowContext;
-class SfxChildWinContextArr_Impl;
 
 #define SFX_CHILDWIN_ZOOMIN          0x01  // Fully retracted Float
 #define SFX_CHILDWIN_SMALL           0x02  // Half retracted Float
@@ -100,7 +100,7 @@ struct SfxChildWinContextFactory
     {}
 };
 
-SV_DECL_PTRARR_DEL( SfxChildWinContextArr_Impl, SfxChildWinContextFactory*, 2 )
+typedef boost::ptr_vector<SfxChildWinContextFactory> SfxChildWinContextArr_Impl;
 
 struct SfxChildWinFactory
 {

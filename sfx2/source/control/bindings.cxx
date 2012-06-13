@@ -337,14 +337,14 @@ void SfxBindings::DeleteControllers_Impl()
 
     if( pImp->pUnoCtrlArr )
     {
-        sal_uInt16 nCtrlCount = pImp->pUnoCtrlArr->Count();
+        sal_uInt16 nCtrlCount = pImp->pUnoCtrlArr->size();
         for ( sal_uInt16 n=nCtrlCount; n>0; n-- )
         {
             SfxUnoControllerItem *pCtrl = (*pImp->pUnoCtrlArr)[n-1];
             pCtrl->ReleaseBindings();
         }
 
-        DBG_ASSERT( !pImp->pUnoCtrlArr->Count(), "Do not remove UnoControllerItems!" );
+        DBG_ASSERT( !pImp->pUnoCtrlArr->size(), "Do not remove UnoControllerItems!" );
         DELETEZ( pImp->pUnoCtrlArr );
     }
 }
@@ -2094,17 +2094,18 @@ void SfxBindings::RegisterUnoController_Impl( SfxUnoControllerItem* pControl )
 {
     if ( !pImp->pUnoCtrlArr )
         pImp->pUnoCtrlArr = new SfxUnoControllerArr_Impl;
-    pImp->pUnoCtrlArr->Insert( pControl, pImp->pUnoCtrlArr->Count() );
+    pImp->pUnoCtrlArr->push_back( pControl );
 }
 
 void SfxBindings::ReleaseUnoController_Impl( SfxUnoControllerItem* pControl )
 {
     if ( pImp->pUnoCtrlArr )
     {
-        sal_uInt16 nPos = pImp->pUnoCtrlArr->GetPos( pControl );
-        if ( nPos != 0xFFFF )
+        SfxUnoControllerArr_Impl::iterator it = std::find(
+            pImp->pUnoCtrlArr->begin(), pImp->pUnoCtrlArr->end(), pControl );
+        if ( it != pImp->pUnoCtrlArr->end() )
         {
-            pImp->pUnoCtrlArr->Remove( nPos );
+            pImp->pUnoCtrlArr->erase( it );
             return;
         }
     }
@@ -2117,7 +2118,7 @@ void SfxBindings::InvalidateUnoControllers_Impl()
 {
     if ( pImp->pUnoCtrlArr )
     {
-        sal_uInt16 nCount = pImp->pUnoCtrlArr->Count();
+        sal_uInt16 nCount = pImp->pUnoCtrlArr->size();
         for ( sal_uInt16 n=nCount; n>0; n-- )
         {
             SfxUnoControllerItem *pCtrl = (*pImp->pUnoCtrlArr)[n-1];

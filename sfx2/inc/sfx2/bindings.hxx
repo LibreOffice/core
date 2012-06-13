@@ -37,6 +37,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
+#include <vector>
 
 //________________________________________________________________________________________________________________
 //  some other includes
@@ -65,8 +66,8 @@ struct SfxFoundCache_Impl;
 class SfxFoundCacheArr_Impl;
 class SfxWorkWindow;
 class SfxUnoControllerItem;
-typedef SfxUnoControllerItem* SfxUnoControllerItemPtr;
-SV_DECL_PTRARR( SfxUnoControllerArr_Impl, SfxUnoControllerItemPtr, 20 )
+
+typedef std::vector<SfxUnoControllerItem*> SfxUnoControllerArr_Impl;
 
 //________________________________________________________________________________________________________________
 //  defines
