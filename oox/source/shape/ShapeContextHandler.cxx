@@ -190,6 +190,11 @@ void SAL_CALL ShapeContextHandler::startFastElement
         createFastChildContext(Element, Attribs);
     }
 
+    // Entering VML block (startFastElement() is called for the outermost tag),
+    // handle possible recursion.
+    if ( getContextHandler() == getDrawingShapeContext() )
+        mpDrawing->getShapes().pushMark();
+
     uno::Reference<XFastContextHandler> xContextHandler(getContextHandler());
 
     if (xContextHandler.is())
@@ -201,6 +206,9 @@ void SAL_CALL ShapeContextHandler::startUnknownElement
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
+    if ( getContextHandler() == getDrawingShapeContext() )
+        mpDrawing->getShapes().pushMark();
+
     uno::Reference<XFastContextHandler> xContextHandler(getContextHandler());
 
     if (xContextHandler.is())
@@ -280,11 +288,11 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         if ( getContextHandler() == getDrawingShapeContext() )
         {
             mpDrawing->finalizeFragmentImport();
-            if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().getFirstShape() )
-            {
+            if( boost::shared_ptr< vml::ShapeBase > pShape = mpDrawing->getShapes().takeLastShape() )
                 xResult = pShape->convertAndInsert( xShapes );
-                mpDrawing->getShapes( ).clearShapes( );
-            }
+            // Only now remove the recursion mark, because getShape() is called in writerfilter
+            // after endFastElement().
+            mpDrawing->getShapes().popMark();
         }
         else if (mxDiagramShapeContext.is())
         {
