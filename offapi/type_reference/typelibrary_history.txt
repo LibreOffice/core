@@ -186,3 +186,6 @@
 01/28/11 (JSC): TaskID=116682
   Update css.awt.UnoControlDialog to reflect the supported XDialog2 interface
   additionally to XDialog
+
+06/11/2012 (JSC): TaskID=119944
+  Update reference type library to 3.4 version
