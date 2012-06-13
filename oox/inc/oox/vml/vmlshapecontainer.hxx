@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include "oox/helper/refmap.hxx"
 #include "oox/helper/refvector.hxx"
+#include <stack>
 
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShapes; }
@@ -92,15 +93,28 @@ public:
     template< typename Functor >
     const ShapeBase*    findShape( const Functor& rFunctor ) const;
 
-    /** Returns the first shape in the collection (Word only). */
-    const ShapeBase*    getFirstShape() const;
+    /**
+      (Word only) Returns the last shape in the collection, if it is after the last
+      mark from pushMark(), and removes it.
+    */
+    boost::shared_ptr< ShapeBase > takeLastShape();
+    /**
+      Adds a recursion mark to the stack. It is possible that a shape contains <w:txbxContent>
+      which contains another shape, and writerfilter needs to know which shape is from the inner
+      ooxml context and which from the outer ooxml context, while it is necessary to keep
+      at least shape types across such blocks. Therefore this function marks beginning
+      of each shape xml block, and takeLastShape() returns only shapes from this block.
+    */
+    void pushMark();
+    /**
+      Removes a recursion mark.
+    */
+    void popMark();
 
     /** Creates and inserts all UNO shapes into the passed container. */
     void                convertAndInsert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = 0 ) const;
-
-    inline void                clearShapes( ) { maShapes.clear( ); }
 
 private:
     typedef RefVector< ShapeType >                  ShapeTypeVector;
@@ -113,6 +127,7 @@ private:
     ShapeVector         maShapes;           ///< All shape definitions.
     ShapeTypeMap        maTypesById;        ///< All shape templates mapped by identifier.
     ShapeMap            maShapesById;       ///< All shape definitions mapped by identifier.
+    std::stack< size_t > markStack;         ///< Recursion marks from pushMark()/popMark().
 };
 
 // ----------------------------------------------------------------------------

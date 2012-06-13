@@ -118,11 +118,26 @@ const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId, bool bD
    return 0;
 }
 
-const ShapeBase* ShapeContainer::getFirstShape() const
+boost::shared_ptr< ShapeBase > ShapeContainer::takeLastShape()
 {
-    OSL_ENSURE( mrDrawing.getType() == VMLDRAWING_WORD, "ShapeContainer::getFirstShape - illegal call, Word filter only" );
-    OSL_ENSURE( maShapes.size() == 1, "ShapeContainer::getFirstShape - single shape expected" );
-    return maShapes.get( 0 ).get();
+    OSL_ENSURE( mrDrawing.getType() == VMLDRAWING_WORD, "ShapeContainer::takeLastShape - illegal call, Word filter only" );
+    assert( !markStack.empty());
+    if( markStack.top() >= maShapes.size())
+        return boost::shared_ptr< ShapeBase >();
+    boost::shared_ptr< ShapeBase > ret = maShapes.back();
+    maShapes.pop_back();
+    return ret;
+}
+
+void ShapeContainer::pushMark()
+{
+    markStack.push( maShapes.size());
+}
+
+void ShapeContainer::popMark()
+{
+    assert( !markStack.empty());
+    markStack.pop();
 }
 
 void ShapeContainer::convertAndInsert( const Reference< XShapes >& rxShapes, const ShapeParentAnchor* pParentAnchor ) const
