@@ -79,7 +79,6 @@ DBG_NAME(SfxObjectFactory)
 struct SfxObjectFactory_Impl
 {
     SfxViewFactoryArr_Impl      aViewFactoryArr;// List of <SfxViewFactory>s
-    SfxFilterArr_Impl           aFilterArr;     // List of <SFxFilter>n
     ResId*                      pNameResId;
     ::rtl::OUString             aServiceName;
     SfxFilterContainer*         pFilterContainer;
@@ -144,9 +143,6 @@ SfxObjectFactory::~SfxObjectFactory()
 {
     DBG_DTOR(SfxObjectFactory, 0);
 
-    const sal_uInt16 nCount = pImpl->aFilterArr.Count();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-        delete pImpl->aFilterArr[i];
     delete pImpl->pNameResId;
     delete pImpl->pFilterContainer;
     delete pImpl;

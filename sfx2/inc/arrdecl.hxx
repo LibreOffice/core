@@ -56,12 +56,10 @@ SV_DECL_PTRARR_DEL( SfxChildWinFactArr_Impl, SfxChildWinFactory*, 2 )
 class SfxModule;
 SV_DECL_PTRARR( SfxModuleArr_Impl, SfxModule*, 2 )
 
-class SfxFilter;
-DECL_PTRARRAY( SfxFilterArr_Impl, SfxFilter*, 4, 4 )
-
 class SfxFrame;
 typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;
 
+class SfxFilter;
 typedef ::std::vector< SfxFilter* > SfxFilterList_Impl;
 
 #endif
