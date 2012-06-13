@@ -30,6 +30,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdmodel.hxx>
+#include <editeng/outlobj.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -3112,6 +3113,12 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nTextPathFlags &=~0x20;
                                 }
                             }
+                        }
+                        if((nTextPathFlags & 0x4000) != 0)  //Is Font work
+                        {
+                            OutlinerParaObject* pOutlinerParaObject = pCustoShape->GetOutlinerParaObject();
+                            if ( pOutlinerParaObject && pOutlinerParaObject->IsVertical() )
+                                nTextPathFlags |= 0x2000;
                         }
                         if ( nTextPathFlags != nTextPathFlagsOrg )
                             AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );
