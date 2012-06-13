@@ -536,13 +536,6 @@ void ToolBox::Select()
 
 // -----------------------------------------------------------------------
 
-void ToolBox::NextToolBox()
-{
-    maNextToolBoxHdl.Call( this );
-}
-
-// -----------------------------------------------------------------------
-
 void ToolBox::Customize( const ToolBoxCustomizeEvent& )
 {
 }

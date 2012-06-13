@@ -177,12 +177,10 @@ private:
     ImplToolBoxPrivateData*     mpData;
     ImplToolSizeArray*  mpFloatSizeAry;
     XubString           maCvtStr;
-    XubString           maNextToolBoxStr;
     ImageList           maImageList;
     Timer               maTimer;
     Rectangle           maUpperRect;
     Rectangle           maLowerRect;
-    Rectangle           maNextToolRect;
     Rectangle           maOutDockRect;
     Rectangle           maInDockRect;
     Rectangle           maPaintRect;
@@ -220,7 +218,6 @@ private:
                         mbCommandDrag:1,
                         mbUpper:1,
                         mbLower:1,
-                        mbNextTool:1,
                         mbIn:1,
                         mbCalc:1,
                         mbFormat:1,
@@ -247,7 +244,6 @@ private:
     Link                maDeactivateHdl;
     Link                maHighlightHdl;
     Link                maSelectHdl;
-    Link                maNextToolBoxHdl;
 
     public:
     using Window::ImplInit;
@@ -261,7 +257,6 @@ private:
     SAL_DLLPRIVATE sal_uInt16          ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool bCalcHorz );
     SAL_DLLPRIVATE void            ImplFormat( sal_Bool bResize = sal_False );
     SAL_DLLPRIVATE void            ImplDrawSpin( sal_Bool bUpperIn, sal_Bool bLowerIn );
-    SAL_DLLPRIVATE void            ImplDrawNext( sal_Bool bIn );
     SAL_DLLPRIVATE void            ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect );
     SAL_DLLPRIVATE void            ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight = 0, sal_Bool bPaint = sal_False, sal_Bool bLayout = sal_False );
     using Window::ImplInvalidate;
@@ -349,7 +344,6 @@ public:
     virtual void        Deactivate();
     virtual void        Highlight();
     virtual void        Select();
-    virtual void        NextToolBox();
     virtual void        Customize( const ToolBoxCustomizeEvent& rCEvt );
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
@@ -422,8 +416,6 @@ public:
 
     // Used to enable/disable scrolling one page at a time for toolbar
     void                SetPageScroll( sal_Bool b );
-
-    const XubString&    GetNextToolBox() const { return maNextToolBoxStr; }
 
     sal_uInt16              GetItemCount() const;
     ToolBoxItemType     GetItemType( sal_uInt16 nPos ) const;
@@ -557,8 +549,6 @@ public:
     const Link&         GetHighlightHdl() const { return maHighlightHdl; }
     void                SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
     const Link&         GetSelectHdl() const { return maSelectHdl; }
-    void                SetNextToolBoxHdl( const Link& rLink ) { maNextToolBoxHdl = rLink; }
-    const Link&         GetNextToolBoxHdl() const { return maNextToolBoxHdl; }
 
     // support for custom menu (eg for configuration)
     // note: this menu will also be used to display currently

@@ -945,8 +945,7 @@ Size ToolBox::ImplCalcFloatSize( ToolBox* pThis, sal_uInt16& rLines )
     Size aSize( pThis->mpFloatSizeAry->mpSize[i].mnWidth,
                 pThis->mpFloatSizeAry->mpSize[i].mnHeight );
     rLines = pThis->mpFloatSizeAry->mpSize[i].mnLines;
-    if ( pThis->maNextToolBoxStr.Len() && pThis->mbScroll )
-        aSize.Width() += TB_NEXT_SIZE-TB_NEXT_OFFSET;
+
     return aSize;
 }
 
@@ -1549,7 +1548,6 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mbCommandDrag     = sal_False;
     mbUpper           = sal_False;
     mbLower           = sal_False;
-    mbNextTool        = sal_False;
     mbIn              = sal_False;
     mbCalc            = sal_True;
     mbFormat          = sal_False;
@@ -2501,7 +2499,6 @@ void ToolBox::ImplFormat( sal_Bool bResize )
 
         maLowerRect = aEmptyRect;
         maUpperRect = aEmptyRect;
-        maNextToolRect = aEmptyRect;
     }
     else
     {
@@ -2513,32 +2510,10 @@ void ToolBox::ImplFormat( sal_Bool bResize )
         // save old scroll rectangles and reset them
         Rectangle aOldLowerRect = maLowerRect;
         Rectangle aOldUpperRect = maUpperRect;
-        Rectangle aOldNextToolRect = maNextToolRect;
         Rectangle aOldMenubuttonRect = mpData->maMenubuttonItem.maRect;
         maUpperRect = aEmptyRect;
         maLowerRect = aEmptyRect;
-        maNextToolRect = aEmptyRect;
         mpData->maMenubuttonItem.maRect = aEmptyRect;
-
-        // additional toolboxes require a toggle button (maNextToolRect)
-        if ( maNextToolBoxStr.Len() && mbScroll )
-        {
-            nMax -= TB_NEXT_SIZE-TB_NEXT_OFFSET;
-            if ( mbHorz )
-            {
-                maNextToolRect.Left()    = nLeft+nMax;
-                maNextToolRect.Right()   = maNextToolRect.Left()+TB_NEXT_SIZE-1;
-                maNextToolRect.Top()     = nTop;
-                maNextToolRect.Bottom()  = mnDY-mnBottomBorder-TB_BORDER_OFFSET2-1;
-            }
-            else
-            {
-                maNextToolRect.Top()     = nTop+nMax;
-                maNextToolRect.Bottom()  = maNextToolRect.Top()+TB_NEXT_SIZE-1;
-                maNextToolRect.Left()    = nLeft;
-                maNextToolRect.Right()   = mnDX-mnRightBorder-TB_BORDER_OFFSET2-1;
-            }
-        }
 
         // do we have any toolbox items at all ?
         if ( !mpData->m_aItems.empty() || IsMenuEnabled() )
@@ -2784,11 +2759,6 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                 {
                     maPaintRect.Union( maUpperRect );
                     maPaintRect.Union( aOldUpperRect );
-                }
-                if ( aOldNextToolRect != maNextToolRect )
-                {
-                    maPaintRect.Union( maNextToolRect );
-                    maPaintRect.Union( aOldNextToolRect );
                 }
                 if ( aOldMenubuttonRect != mpData->maMenubuttonItem.maRect )
                 {
@@ -3152,52 +3122,6 @@ void ToolBox::ImplDrawSpin( sal_Bool bUpperIn, sal_Bool bLowerIn )
 
     ImplDrawSpinButton( this, maUpperRect, maLowerRect,
                         bUpperIn, bLowerIn, bTmpUpper, bTmpLower, !mbHorz );
-}
-
-// -----------------------------------------------------------------------
-
-void ToolBox::ImplDrawNext( sal_Bool bIn )
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    if ( maNextToolRect.IsEmpty() )
-        return;
-
-    DecorationView aDecoView( this );
-
-    // Button malen
-    long    nX      = SMALLBUTTON_OFF_NORMAL_X;
-    long    nY      = SMALLBUTTON_OFF_NORMAL_Y;
-    sal_uInt16  nStyle  = 0;
-    if ( bIn == 1 )
-    {
-        nStyle |= BUTTON_DRAW_PRESSED;
-        nX = SMALLBUTTON_OFF_PRESSED_X;
-        nY = SMALLBUTTON_OFF_PRESSED_Y;
-    }
-    aDecoView.DrawButton( maNextToolRect, nStyle );
-
-    // Inhalt ausgeben
-    sal_Bool    bLeft   = sal_False;
-    sal_Bool    bTop    = sal_False;
-    if ( mbHorz )
-    {
-        bLeft = sal_True;
-        nX += (maNextToolRect.GetWidth()-6)/2-4;
-        nY += (maNextToolRect.GetHeight()-6)/2-6;
-    }
-    else
-    {
-        bTop = sal_True;
-        nY += (maNextToolRect.GetHeight()-6)/2-4;
-        nX += (maNextToolRect.GetWidth()-6)/2-6;
-    }
-
-    nX += maNextToolRect.Left();
-    nY += maNextToolRect.Top();
-    SetLineColor();
-    SetFillColor( COL_LIGHTBLUE );
-    ImplDrawToolArrow( this, nX, nY, sal_True, sal_False, bLeft, bTop, 10 );
 }
 
 // -----------------------------------------------------------------------
@@ -3793,17 +3717,6 @@ sal_Bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat
         return sal_True;
     }
 
-    if ( mbNextTool )
-    {
-        sal_Bool bNewIn = maNextToolRect.IsInside( aMousePos );
-        if ( bNewIn != mbIn )
-        {
-            mbIn = bNewIn;
-            ImplDrawNext( mbIn );
-        }
-        return sal_True;
-    }
-
     return sal_False;
 }
 
@@ -3920,14 +3833,6 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
         mbLower = sal_False;
         mbIn    = sal_False;
         ImplDrawSpin( sal_False, sal_False );
-        return sal_True;
-    }
-    else if ( mbNextTool )
-    {
-        mbNextTool  = sal_False;
-        mbIn        = sal_False;
-        ImplDrawNext( sal_False );
-        NextToolBox();
         return sal_True;
     }
 
@@ -4349,14 +4254,6 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             }
             return;
         }
-        if ( maNextToolRect.IsInside( aMousePos ) )
-        {
-            StartTracking();
-            mbNextTool   = sal_True;
-            mbIn         = sal_True;
-            ImplDrawNext( sal_True );
-            return;
-        }
 
         // Linesizing testen
         if ( (mnWinStyle & TB_WBLINESIZING) == TB_WBLINESIZING )
@@ -4457,9 +4354,6 @@ void ToolBox::Paint( const Rectangle& rPaintRect )
         if ( mnCurLines > mnLines )
             ImplDrawSpin( sal_False, sal_False );
     }
-
-    // draw NextButton
-    ImplDrawNext( sal_False );
 
     // draw buttons
     sal_uInt16 nHighPos;
@@ -4648,26 +4542,6 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                 }
                 return;
             }
-        }
-    }
-    else if ( maNextToolRect.IsInside( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) ) )
-    {
-        if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) )
-        {
-            // get rectangle
-            Rectangle aTempRect = maNextToolRect;
-            Point aPt = OutputToScreenPixel( aTempRect.TopLeft() );
-            aTempRect.Left()   = aPt.X();
-            aTempRect.Top()    = aPt.Y();
-            aPt = OutputToScreenPixel( aTempRect.BottomRight() );
-            aTempRect.Right()  = aPt.X();
-            aTempRect.Bottom() = aPt.Y();
-
-            if ( rHEvt.GetMode() & HELPMODE_BALLOON )
-                Help::ShowBalloon( this, aTempRect.Center(), aTempRect, maNextToolBoxStr );
-            else
-                Help::ShowQuickHelp( this, aTempRect, maNextToolBoxStr );
-            return;
         }
     }
 
