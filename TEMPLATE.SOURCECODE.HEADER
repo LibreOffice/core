@@ -23,6 +23,7 @@ For makefiles:
 
 For XML / .component:
 
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the LibreOffice project.
  *
