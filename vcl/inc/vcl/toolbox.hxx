@@ -176,7 +176,6 @@ class VCL_DLLPUBLIC ToolBox : public DockingWindow
 private:
     ImplToolBoxPrivateData*     mpData;
     ImplToolSizeArray*  mpFloatSizeAry;
-    XubString           maCvtStr;
     ImageList           maImageList;
     Timer               maTimer;
     Rectangle           maUpperRect;
@@ -262,7 +261,7 @@ private:
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( sal_Bool bNewCalc = sal_False, sal_Bool bFullPaint = sal_False );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
-    SAL_DLLPRIVATE const XubString& ImplConvertMenuString( const XubString& rStr );
+    SAL_DLLPRIVATE const rtl::OUString ImplConvertMenuString( const XubString& rStr );
     SAL_DLLPRIVATE sal_Bool            ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat = sal_False );
     SAL_DLLPRIVATE sal_Bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCancel = sal_False );
     SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus = sal_False );

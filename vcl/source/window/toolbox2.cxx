@@ -400,13 +400,13 @@ sal_Bool ImplToolItem::IsClipped() const
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 
-const XubString& ToolBox::ImplConvertMenuString( const XubString& rStr )
+const rtl::OUString ToolBox::ImplConvertMenuString( const XubString& rStr )
 {
-    maCvtStr = rStr;
+    rtl::OUString aCvtStr( rStr );
     if ( mbMenuStrings )
-        maCvtStr = comphelper::string::stripEnd(maCvtStr, '.');
-    maCvtStr = MnemonicGenerator::EraseAllMnemonicChars( maCvtStr );
-    return maCvtStr;
+        aCvtStr = comphelper::string::stripEnd(aCvtStr, '.');
+    aCvtStr = MnemonicGenerator::EraseAllMnemonicChars( aCvtStr );
+    return aCvtStr;
 }
 
 // -----------------------------------------------------------------------
