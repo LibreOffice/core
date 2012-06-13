@@ -35,6 +35,7 @@
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
@@ -66,6 +67,7 @@ public:
     void testN764005();
     void testSmartart();
     void testN764745();
+    void testN766477();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -85,6 +87,7 @@ public:
     CPPUNIT_TEST(testN764005);
     CPPUNIT_TEST(testSmartart);
     CPPUNIT_TEST(testN764745);
+    CPPUNIT_TEST(testN766477);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -494,6 +497,22 @@ void Test::testN764745()
     xPropertySet->getPropertyValue("AnchorPosition") >>= pos;
     // not sure how to find out the document width, but in my test the anchor x is >12000
     CPPUNIT_ASSERT( pos.X > 10000 );
+}
+
+void Test::testN766477()
+{
+    load("n766477.docx");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum(xRunEnumAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XFormField> xFormField(xRun->getPropertyValue("Bookmark"), uno::UNO_QUERY);
+    uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
+    uno::Sequence<OUString> aElementNames(xParameters->getElementNames());
+    // The problem was that the checkbox was not checked.
+    CPPUNIT_ASSERT_EQUAL(OUString("Checkbox_Checked"), aElementNames[0]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
