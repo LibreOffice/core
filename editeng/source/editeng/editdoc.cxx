@@ -2045,11 +2045,6 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
 
     if ( nSepSize )
         nLen += (nNodes - 1) * nSepSize;
-    if ( nLen > 0xFFFb / sizeof(xub_Unicode) )
-    {
-        OSL_FAIL( "Text too large for String" );
-        return rtl::OUString();
-    }
 
     rtl_uString* newStr = comphelper::string::rtl_uString_alloc(nLen);
     xub_Unicode* pCur = newStr->buffer;
