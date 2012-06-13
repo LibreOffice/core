@@ -68,6 +68,7 @@
 #include <tools/shl.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
+#include <cassert>
 #include <limits>
 
 #include <boost/bind.hpp>
@@ -2064,6 +2065,8 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
             pCur += nSepSize;
         }
     }
+    assert(pCur - newStr->buffer <= newStr->length);
+    newStr->length = pCur - newStr->buffer;
     return rtl::OUString(newStr, SAL_NO_ACQUIRE);
 }
 
