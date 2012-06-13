@@ -35,7 +35,7 @@
 #include <rtl/strbuf.hxx>
 
 
-#define DEBUG_DUMPER 0
+#define DEBUG_DUMPER 1
 
 using namespace com::sun::star;
 //class XShapeDumper
@@ -1004,7 +1004,7 @@ namespace {
             if(!aText.isEmpty())
                 xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
         }
-        else if(xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
+        if(xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
         {
             {
 				uno::Any anotherAny = xPropSet->getPropertyValue("IsNumbering");
@@ -1145,12 +1145,12 @@ namespace {
 					dumpTextWritingModeAsAttribute(eTextWritingMode, xmlWriter);
 			}
         }
-        else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+        if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
         {
             uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
             dumpXShapes(xShapes, xmlWriter);
         }
-        else if(xServiceInfo->supportsService("com.sun.star.drawing.FillProperties"))
+        if(xServiceInfo->supportsService("com.sun.star.drawing.FillProperties"))
         {
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("FillStyle");
@@ -1298,7 +1298,7 @@ namespace {
             }
         }
 
-        else if(xServiceInfo->supportsService("com.sun.star.drawing.LineProperties"))
+        if(xServiceInfo->supportsService("com.sun.star.drawing.LineProperties"))
         {
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("LineStyle");
@@ -1392,7 +1392,7 @@ namespace {
 			}
         }
 
-        else if(xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonDescriptor"))
+        if(xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonDescriptor"))
         {
             {
 				uno::Any anotherAny = xPropSet->getPropertyValue("PolygonKind");
@@ -1414,7 +1414,7 @@ namespace {
 			}
         }
 
-        else if(xServiceInfo->supportsService("com.sun.star.drawing.ShadowProperties"))
+        if(xServiceInfo->supportsService("com.sun.star.drawing.ShadowProperties"))
         {
             {
 				uno::Any anotherAny = xPropSet->getPropertyValue("Shadow");
@@ -1447,7 +1447,8 @@ namespace {
 					dumpShadowYDistanceAsAttribute(aShadowYDistance, xmlWriter);
 			}
         }
-        else if(xServiceInfo->supportsService("com.sun.star.drawing.Shape"))
+
+        if(xServiceInfo->supportsService("com.sun.star.drawing.Shape"))
         {
             {
 				uno::Any anotherAny = xPropSet->getPropertyValue("ZOrder");
