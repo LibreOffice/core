@@ -47,6 +47,12 @@ $(eval $(call gb_Library_add_defs,uwinapi,\
 $(eval $(call gb_Library_add_cobjects,uwinapi,\
 	sal/systools/win32/uwinapi/snprintf \
 	sal/systools/win32/uwinapi/snwprintf \
+))
+
+ifeq ($(COM),MSC)
+
+
+$(eval $(call gb_Library_add_cobjects,uwinapi,\
 	sal/systools/win32/uwinapi/legacy \
 ))
 
@@ -54,6 +60,7 @@ $(eval $(call gb_Library_add_ldflags,uwinapi,\
 	/DEF:$(SRCDIR)/sal/systools/win32/uwinapi/uwinapi.def \
 ))
 
+endif
 
 
 # vim: set noet sw=4 ts=4:
