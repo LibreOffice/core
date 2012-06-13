@@ -243,7 +243,7 @@ sub print_summary_in_stat($$$$$$)
 
     # print piece title if not done yet
     if ( defined ${$ppiece_title} ) {
-        print $log, "${$ppiece_title}\n";
+        print $log "${$ppiece_title}\n";
         ${$ppiece_title} = undef;
     }
 
