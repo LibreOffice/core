@@ -914,6 +914,14 @@ struct ImplPPTCharPropSet
 
 struct PPTCharPropSet
 {
+    //when the bullet text has more than two color,next the text following with bullet has been set hyperlink.
+    //now,the bullet color should be set original hyperlink text's color
+    //so  "mbHardHylinkOrigColor" hold the original hyperlink text's color.
+    sal_uInt32  mnHylinkOrigColor;
+    //the bullet text weather has a hyperlink.
+    sal_Bool    mbIsHyperlink;
+    //the hyperlink text weather has a custom color.
+    sal_Bool    mbHardHylinkOrigColor;
 
     sal_uInt32          mnOriginalTextPos;
     sal_uInt32          mnParagraph;

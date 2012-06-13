@@ -4384,11 +4384,17 @@ PPTCharPropSet::PPTCharPropSet( sal_uInt32 nParagraph ) :
     mpFieldItem     ( NULL ),
     pCharSet        ( new ImplPPTCharPropSet )
 {
+    mnHylinkOrigColor = 0;
+    mbIsHyperlink = sal_False;
+    mbHardHylinkOrigColor = sal_False;
     mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = 0;
 }
 
 PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet )
 {
+    mnHylinkOrigColor = rCharPropSet.mnHylinkOrigColor;
+    mbIsHyperlink = rCharPropSet.mbIsHyperlink;
+    mbHardHylinkOrigColor = rCharPropSet.mbHardHylinkOrigColor;
     pCharSet = rCharPropSet.pCharSet;
     pCharSet->mnRefCount++;
 
@@ -4405,6 +4411,10 @@ PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet, sal_uInt32 n
 {
     pCharSet = rCharPropSet.pCharSet;
     pCharSet->mnRefCount++;
+
+    mnHylinkOrigColor = rCharPropSet.mnHylinkOrigColor;
+    mbIsHyperlink = rCharPropSet.mbIsHyperlink;
+    mbHardHylinkOrigColor = rCharPropSet.mbHardHylinkOrigColor;
 
     mnParagraph = nParagraph;
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
@@ -5952,8 +5962,18 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
                     if (!m_PortionList.empty())
                     {
                         PPTPortionObj const& rPortion = m_PortionList.front();
-                        bIsHardAttribute = rPortion.GetAttrib(
-                            PPT_CharAttr_FontColor, nRetValue, nDestinationInstance);
+                        if (rPortion.mbIsHyperlink )
+                        {
+                            if( rPortion.mbHardHylinkOrigColor )
+                                nRetValue = rPortion.mnHylinkOrigColor;
+                            else
+                                nRetValue = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
+                            bIsHardAttribute = sal_True;
+                        }
+                        else
+                        {
+                            bIsHardAttribute = rPortion.GetAttrib( PPT_CharAttr_FontColor, nRetValue, nDestinationInstance );
+                        }
                     }
                     else
                     {
@@ -6891,6 +6911,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                 break;
 
                                                             const SvxURLField* pField = (const SvxURLField*)(*FE)->pField1->GetField();
+
+                                                            pCurrent->mbIsHyperlink=sal_True;
+                                                            pCurrent->mnHylinkOrigColor=pCurrent->pCharSet->mnColor;
+                                                            pCurrent->mbHardHylinkOrigColor= ( ( pCurrent->pCharSet->mnAttrSet >>PPT_CharAttr_FontColor ) & 1)>0;
 
                                                             if ( pCurrent->mpFieldItem )
                                                             {
