@@ -492,70 +492,70 @@ namespace {
     }
 
     void XShapeDumper::dumpLineStartCenterAsAttribute(sal_Bool bLineStartCenter, xmlTextWriterPtr xmlWriter)
-	{
-		if(bLineStartCenter)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "false");
-	}
+    {
+        if(bLineStartCenter)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "false");
+    }
 
     void XShapeDumper::dumpLineStartWidthAsAttribute(sal_Int32 aLineStartWidth, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartWidth"), "%" SAL_PRIdINT32, aLineStartWidth);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartWidth"), "%" SAL_PRIdINT32, aLineStartWidth);
+    }
 
     void XShapeDumper::dumpLineEndCenterAsAttribute(sal_Bool bLineEndCenter, xmlTextWriterPtr xmlWriter)
-	{
-		if(bLineEndCenter)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "false");
-	}
+    {
+        if(bLineEndCenter)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "false");
+    }
 
     void XShapeDumper::dumpLineEndWidthAsAttribute(sal_Int32 aLineEndWidth, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndWidth"), "%" SAL_PRIdINT32, aLineEndWidth);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndWidth"), "%" SAL_PRIdINT32, aLineEndWidth);
+    }
 
     // -----------------------------------------------
     // ---------- PolyPolygonDescriptor.idl ----------
     // -----------------------------------------------
 
     void XShapeDumper::dumpPolygonKindAsAttribute(drawing::PolygonKind ePolygonKind, xmlTextWriterPtr xmlWriter)
-	{
-		switch(ePolygonKind)
-		{
-			case drawing::PolygonKind_LINE:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "LINE");
-				break;
-			case drawing::PolygonKind_POLY:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "POLY");
-				break;
-			case drawing::PolygonKind_PLIN:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PLIN");
-				break;
-			case drawing::PolygonKind_PATHLINE:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHLINE");
-				break;
-			case drawing::PolygonKind_PATHFILL:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHFILL");
-				break;
-			case drawing::PolygonKind_FREELINE:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREELINE");
-				break;
-			case drawing::PolygonKind_FREEFILL:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREEFILL");
-				break;
-			case drawing::PolygonKind_PATHPOLY:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPOLY");
-				break;
-			case drawing::PolygonKind_PATHPLIN:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPLIN");
-				break;
-			default:
-				break;
-		}
-	}
+    {
+        switch(ePolygonKind)
+        {
+            case drawing::PolygonKind_LINE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "LINE");
+                break;
+            case drawing::PolygonKind_POLY:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "POLY");
+                break;
+            case drawing::PolygonKind_PLIN:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PLIN");
+                break;
+            case drawing::PolygonKind_PATHLINE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHLINE");
+                break;
+            case drawing::PolygonKind_PATHFILL:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHFILL");
+                break;
+            case drawing::PolygonKind_FREELINE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREELINE");
+                break;
+            case drawing::PolygonKind_FREEFILL:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREEFILL");
+                break;
+            case drawing::PolygonKind_PATHPOLY:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPOLY");
+                break;
+            case drawing::PolygonKind_PATHPLIN:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPLIN");
+                break;
+            default:
+                break;
+        }
+    }
 
     void XShapeDumper::dumpPointSequenceSequence(drawing::PointSequenceSequence aPointSequenceSequence, xmlTextWriterPtr xmlWriter)
     {
@@ -599,323 +599,323 @@ namespace {
     // ----------------------------------------
 
     void XShapeDumper::dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWriter)
-	{
-		if(bIsNumbering)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "false");
-	}
+    {
+        if(bIsNumbering)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "false");
+    }
 
     void XShapeDumper::dumpTextAutoGrowHeightAsAttribute(sal_Bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter)
-	{
-		if(bTextAutoGrowHeight)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "false");
-	}
+    {
+        if(bTextAutoGrowHeight)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "false");
+    }
 
     void XShapeDumper::dumpTextAutoGrowWidthAsAttribute(sal_Bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter)
-	{
-		if(bTextAutoGrowWidth)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "false");
-	}
+    {
+        if(bTextAutoGrowWidth)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "false");
+    }
 
     void XShapeDumper::dumpTextContourFrameAsAttribute(sal_Bool bTextContourFrame, xmlTextWriterPtr xmlWriter)
-	{
-		if(bTextContourFrame)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "false");
-	}
+    {
+        if(bTextContourFrame)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "false");
+    }
 
     void XShapeDumper::dumpTextFitToSizeAsAttribute(drawing::TextFitToSizeType eTextFitToSize, xmlTextWriterPtr xmlWriter)
-	{
-		switch(eTextFitToSize)
-		{
-			case drawing::TextFitToSizeType_NONE:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "NONE");
-				break;
-			case drawing::TextFitToSizeType_PROPORTIONAL:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "PROPORTIONAL");
-				break;
-			case drawing::TextFitToSizeType_ALLLINES:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "ALLLINES");
-				break;
-			case drawing::TextFitToSizeType_AUTOFIT:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "AUTOFIT");
-				break;
-			default:
-				break;
-		}
-	}
+    {
+        switch(eTextFitToSize)
+        {
+            case drawing::TextFitToSizeType_NONE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "NONE");
+                break;
+            case drawing::TextFitToSizeType_PROPORTIONAL:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "PROPORTIONAL");
+                break;
+            case drawing::TextFitToSizeType_ALLLINES:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "ALLLINES");
+                break;
+            case drawing::TextFitToSizeType_AUTOFIT:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "AUTOFIT");
+                break;
+            default:
+                break;
+        }
+    }
 
     void XShapeDumper::dumpTextHorizontalAdjustAsAttribute(drawing::TextHorizontalAdjust eTextHorizontalAdjust, xmlTextWriterPtr xmlWriter)
-	{
-		switch(eTextHorizontalAdjust)
-		{
-			case drawing::TextHorizontalAdjust_LEFT:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "LEFT");
-				break;
-			case drawing::TextHorizontalAdjust_CENTER:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "CENTER");
-				break;
-			case drawing::TextHorizontalAdjust_RIGHT:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "RIGHT");
-				break;
-			case drawing::TextHorizontalAdjust_BLOCK:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "BLOCK");
-				break;
-			default:
-				break;
-		}
-	}
+    {
+        switch(eTextHorizontalAdjust)
+        {
+            case drawing::TextHorizontalAdjust_LEFT:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "LEFT");
+                break;
+            case drawing::TextHorizontalAdjust_CENTER:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "CENTER");
+                break;
+            case drawing::TextHorizontalAdjust_RIGHT:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "RIGHT");
+                break;
+            case drawing::TextHorizontalAdjust_BLOCK:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "BLOCK");
+                break;
+            default:
+                break;
+        }
+    }
 
     void XShapeDumper::dumpTextVerticalAdjustAsAttribute(drawing::TextVerticalAdjust eTextVerticalAdjust, xmlTextWriterPtr xmlWriter)
-	{
-		switch(eTextVerticalAdjust)
-		{
-			case drawing::TextVerticalAdjust_TOP:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "TOP");
-				break;
-			case drawing::TextVerticalAdjust_CENTER:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "CENTER");
-				break;
-			case drawing::TextVerticalAdjust_BOTTOM:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BOTTOM");
-				break;
-			case drawing::TextVerticalAdjust_BLOCK:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BLOCK");
-				break;
-			default:
-				break;
-		}
-	}
+    {
+        switch(eTextVerticalAdjust)
+        {
+            case drawing::TextVerticalAdjust_TOP:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "TOP");
+                break;
+            case drawing::TextVerticalAdjust_CENTER:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "CENTER");
+                break;
+            case drawing::TextVerticalAdjust_BOTTOM:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BOTTOM");
+                break;
+            case drawing::TextVerticalAdjust_BLOCK:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BLOCK");
+                break;
+            default:
+                break;
+        }
+    }
 
     void XShapeDumper::dumpTextLeftDistanceAsAttribute(sal_Int32 aTextLeftDistance, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLeftDistance"), "%" SAL_PRIdINT32, aTextLeftDistance);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLeftDistance"), "%" SAL_PRIdINT32, aTextLeftDistance);
+    }
 
     void XShapeDumper::dumpTextRightDistanceAsAttribute(sal_Int32 aTextRightDistance, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textRightDistance"), "%" SAL_PRIdINT32, aTextRightDistance);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textRightDistance"), "%" SAL_PRIdINT32, aTextRightDistance);
+    }
 
     void XShapeDumper::dumpTextUpperDistanceAsAttribute(sal_Int32 aTextUpperDistance, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textUpperDistance"), "%" SAL_PRIdINT32, aTextUpperDistance);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textUpperDistance"), "%" SAL_PRIdINT32, aTextUpperDistance);
+    }
 
     void XShapeDumper::dumpTextLowerDistanceAsAttribute(sal_Int32 aTextLowerDistance, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLowerDistance"), "%" SAL_PRIdINT32, aTextLowerDistance);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLowerDistance"), "%" SAL_PRIdINT32, aTextLowerDistance);
+    }
 
     void XShapeDumper::dumpTextMaximumFrameHeightAsAttribute(sal_Int32 aTextMaximumFrameHeight, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameHeight"), "%" SAL_PRIdINT32, aTextMaximumFrameHeight);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameHeight"), "%" SAL_PRIdINT32, aTextMaximumFrameHeight);
+    }
 
     void XShapeDumper::dumpTextMaximumFrameWidthAsAttribute(sal_Int32 aTextMaximumFrameWidth, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameWidth"), "%" SAL_PRIdINT32, aTextMaximumFrameWidth);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameWidth"), "%" SAL_PRIdINT32, aTextMaximumFrameWidth);
+    }
 
     void XShapeDumper::dumpTextMinimumFrameHeightAsAttribute(sal_Int32 aTextMinimumFrameHeight, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameHeight"), "%" SAL_PRIdINT32, aTextMinimumFrameHeight);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameHeight"), "%" SAL_PRIdINT32, aTextMinimumFrameHeight);
+    }
 
     void XShapeDumper::dumpTextMinimumFrameWidthAsAttribute(sal_Int32 aTextMinimumFrameWidth, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameWidth"), "%" SAL_PRIdINT32, aTextMinimumFrameWidth);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameWidth"), "%" SAL_PRIdINT32, aTextMinimumFrameWidth);
+    }
 
     void XShapeDumper::dumpTextAnimationAmountAsAttribute(sal_Int32 aTextAnimationAmount, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationAmount"), "%" SAL_PRIdINT32, aTextAnimationAmount);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationAmount"), "%" SAL_PRIdINT32, aTextAnimationAmount);
+    }
 
     void XShapeDumper::dumpTextAnimationCountAsAttribute(sal_Int32 aTextAnimationCount, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationCount"), "%" SAL_PRIdINT32, aTextAnimationCount);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationCount"), "%" SAL_PRIdINT32, aTextAnimationCount);
+    }
 
     void XShapeDumper::dumpTextAnimationDelayAsAttribute(sal_Int32 aTextAnimationDelay, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationDelay"), "%" SAL_PRIdINT32, aTextAnimationDelay);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationDelay"), "%" SAL_PRIdINT32, aTextAnimationDelay);
+    }
 
     void XShapeDumper::dumpTextAnimationDirectionAsAttribute(drawing::TextAnimationDirection eTextAnimationDirection, xmlTextWriterPtr xmlWriter)
-	{
-		switch(eTextAnimationDirection)
-		{
-			case drawing::TextAnimationDirection_LEFT:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "LEFT");
-				break;
-			case drawing::TextAnimationDirection_RIGHT:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "RIGHT");
-				break;
-			case drawing::TextAnimationDirection_UP:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "UP");
-				break;
-			case drawing::TextAnimationDirection_DOWN:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "DOWN");
-				break;
-			default:
-				break;
-		}
-	}
+    {
+        switch(eTextAnimationDirection)
+        {
+            case drawing::TextAnimationDirection_LEFT:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "LEFT");
+                break;
+            case drawing::TextAnimationDirection_RIGHT:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "RIGHT");
+                break;
+            case drawing::TextAnimationDirection_UP:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "UP");
+                break;
+            case drawing::TextAnimationDirection_DOWN:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "DOWN");
+                break;
+            default:
+                break;
+        }
+    }
 
     void XShapeDumper::dumpTextAnimationKindAsAttribute(drawing::TextAnimationKind eTextAnimationKind, xmlTextWriterPtr xmlWriter)
-	{
-		switch(eTextAnimationKind)
-		{
-			case drawing::TextAnimationKind_NONE:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "NONE");
-				break;
-			case drawing::TextAnimationKind_BLINK:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "BLINK");
-				break;
-			case drawing::TextAnimationKind_SCROLL:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SCROLL");
-				break;
-			case drawing::TextAnimationKind_ALTERNATE:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "ALTERNATE");
-				break;
-			case drawing::TextAnimationKind_SLIDE:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SLIDE");
-				break;
-			default:
-				break;
-		}
-	}
+    {
+        switch(eTextAnimationKind)
+        {
+            case drawing::TextAnimationKind_NONE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "NONE");
+                break;
+            case drawing::TextAnimationKind_BLINK:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "BLINK");
+                break;
+            case drawing::TextAnimationKind_SCROLL:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SCROLL");
+                break;
+            case drawing::TextAnimationKind_ALTERNATE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "ALTERNATE");
+                break;
+            case drawing::TextAnimationKind_SLIDE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SLIDE");
+                break;
+            default:
+                break;
+        }
+    }
 
     void XShapeDumper::dumpTextAnimationStartInsideAsAttribute(sal_Bool bTextAnimationStartInside, xmlTextWriterPtr xmlWriter)
-	{
-		if(bTextAnimationStartInside)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "false");
-	}
+    {
+        if(bTextAnimationStartInside)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "false");
+    }
 
     void XShapeDumper::dumpTextAnimationStopInsideAsAttribute(sal_Bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter)
-	{
-		if(bTextAnimationStopInside)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "false");
-	}
+    {
+        if(bTextAnimationStopInside)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "false");
+    }
 
     void XShapeDumper::dumpTextWritingModeAsAttribute(text::WritingMode eTextWritingMode, xmlTextWriterPtr xmlWriter)
-	{
-		switch(eTextWritingMode)
-		{
-			case text::WritingMode_LR_TB:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "LR_TB");
-				break;
-			case text::WritingMode_RL_TB:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "RL_TB");
-				break;
-			case text::WritingMode_TB_RL:
-				xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "TB_RL");
-				break;
-			default:
-				break;
-		}
-	}
+    {
+        switch(eTextWritingMode)
+        {
+            case text::WritingMode_LR_TB:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "LR_TB");
+                break;
+            case text::WritingMode_RL_TB:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "RL_TB");
+                break;
+            case text::WritingMode_TB_RL:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "TB_RL");
+                break;
+            default:
+                break;
+        }
+    }
 
     // ------------------------------------------
     // ---------- ShadowProperties.idl ----------
     // ------------------------------------------
 
     void XShapeDumper::dumpShadowAsAttribute(sal_Bool bShadow, xmlTextWriterPtr xmlWriter)
-	{
-		if(bShadow)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "false");
-	}
+    {
+        if(bShadow)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "false");
+    }
 
     void XShapeDumper::dumpShadowColorAsAttribute(sal_Int32 aShadowColor, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowColor"), "%" SAL_PRIdINT32, aShadowColor);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowColor"), "%" SAL_PRIdINT32, aShadowColor);
+    }
 
     void XShapeDumper::dumpShadowTransparenceAsAttribute(sal_Int32 aShadowTransparence, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowTransparence"), "%" SAL_PRIdINT32, aShadowTransparence);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowTransparence"), "%" SAL_PRIdINT32, aShadowTransparence);
+    }
 
     void XShapeDumper::dumpShadowXDistanceAsAttribute(sal_Int32 aShadowXDistance, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowXDistance"), "%" SAL_PRIdINT32, aShadowXDistance);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowXDistance"), "%" SAL_PRIdINT32, aShadowXDistance);
+    }
 
     void XShapeDumper::dumpShadowYDistanceAsAttribute(sal_Int32 aShadowYDistance, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowYDistance"), "%" SAL_PRIdINT32, aShadowYDistance);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowYDistance"), "%" SAL_PRIdINT32, aShadowYDistance);
+    }
 
     // -------------------------------
     // ---------- Shape.idl ----------
     // -------------------------------
 
     void XShapeDumper::dumpZOrderAsAttribute(sal_Int32 aZOrder, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("zOrder"), "%" SAL_PRIdINT32, aZOrder);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("zOrder"), "%" SAL_PRIdINT32, aZOrder);
+    }
 
     void XShapeDumper::dumpLayerIDAsAttribute(sal_Int32 aLayerID, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerID"), "%" SAL_PRIdINT32, aLayerID);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerID"), "%" SAL_PRIdINT32, aLayerID);
+    }
 
     void XShapeDumper::dumpLayerNameAsAttribute(rtl::OUString sLayerName, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerName"), "%s",
-		    rtl::OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerName"), "%s",
+            rtl::OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
+    }
 
     void XShapeDumper::dumpVisibleAsAttribute(sal_Bool bVisible, xmlTextWriterPtr xmlWriter)
-	{
-		if(bVisible)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "false");
-	}
+    {
+        if(bVisible)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "false");
+    }
 
     void XShapeDumper::dumpPrintableAsAttribute(sal_Bool bPrintable, xmlTextWriterPtr xmlWriter)
-	{
-		if(bPrintable)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "false");
-	}
+    {
+        if(bPrintable)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "false");
+    }
 
     void XShapeDumper::dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWriter)
-	{
-		if(bMoveProtect)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "false");
-	}
+    {
+        if(bMoveProtect)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "false");
+    }
 
     void XShapeDumper::dumpNameAsAttribute(rtl::OUString sName, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
-		    rtl::OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+            rtl::OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
+    }
 
     void XShapeDumper::dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter)
-	{
-		if(bSizeProtect)
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "true");
-		else
-			xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "false");
-	}
+    {
+        if(bSizeProtect)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "false");
+    }
 
     void XShapeDumper::dumpHomogenMatrixLine3(drawing::HomogenMatrixLine3 aHomogenMatrixLine3, xmlTextWriterPtr xmlWriter)
     {
@@ -942,15 +942,15 @@ namespace {
     }
 
     void XShapeDumper::dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("navigationOrder"), "%" SAL_PRIdINT32, aNavigationOrder);
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("navigationOrder"), "%" SAL_PRIdINT32, aNavigationOrder);
+    }
 
     void XShapeDumper::dumpHyperlinkAsAttribute(rtl::OUString sHyperlink, xmlTextWriterPtr xmlWriter)
-	{
-		xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("hyperlink"), "%s",
-			rtl::OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
-	}
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("hyperlink"), "%s",
+            rtl::OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
+    }
 
     // --------------------------------
     // ---------- XShape.idl ----------
@@ -1007,143 +1007,143 @@ namespace {
         if(xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
         {
             {
-				uno::Any anotherAny = xPropSet->getPropertyValue("IsNumbering");
-				sal_Bool bIsNumbering;
-				if(anotherAny >>= bIsNumbering)
-					dumpIsNumberingAsAttribute(bIsNumbering, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowHeight");
-				sal_Bool bTextAutoGrowHeight;
-				if(anotherAny >>= bTextAutoGrowHeight)
-					dumpTextAutoGrowHeightAsAttribute(bTextAutoGrowHeight, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowWidth");
-				sal_Bool bTextAutoGrowWidth;
-				if(anotherAny >>= bTextAutoGrowWidth)
-					dumpTextAutoGrowWidthAsAttribute(bTextAutoGrowWidth, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextContourFrame");
-				sal_Bool bTextContourFrame;
-				if(anotherAny >>= bTextContourFrame)
-					dumpTextContourFrameAsAttribute(bTextContourFrame, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextFitToSize");
-				drawing::TextFitToSizeType eTextFitToSize;
-				if(anotherAny >>= eTextFitToSize)
-					dumpTextFitToSizeAsAttribute(eTextFitToSize, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextHorizontalAdjust");
-				drawing::TextHorizontalAdjust eTextHorizontalAdjust;
-				if(anotherAny >>= eTextHorizontalAdjust)
-					dumpTextHorizontalAdjustAsAttribute(eTextHorizontalAdjust, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextVerticalAdjust");
-				drawing::TextVerticalAdjust eTextVerticalAdjust;
-				if(anotherAny >>= eTextVerticalAdjust)
-					dumpTextVerticalAdjustAsAttribute(eTextVerticalAdjust, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextLeftDistance");
-				sal_Int32 aTextLeftDistance;
-				if(anotherAny >>= aTextLeftDistance)
-					dumpTextLeftDistanceAsAttribute(aTextLeftDistance, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextRightDistance");
-				sal_Int32 aTextRightDistance;
-				if(anotherAny >>= aTextRightDistance)
-					dumpTextRightDistanceAsAttribute(aTextRightDistance, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextUpperDistance");
-				sal_Int32 aTextUpperDistance;
-				if(anotherAny >>= aTextUpperDistance)
-					dumpTextUpperDistanceAsAttribute(aTextUpperDistance, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextLowerDistance");
-				sal_Int32 aTextLowerDistance;
-				if(anotherAny >>= aTextLowerDistance)
-					dumpTextLowerDistanceAsAttribute(aTextLowerDistance, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameHeight");
-				sal_Int32 aTextMaximumFrameHeight;
-				if(anotherAny >>= aTextMaximumFrameHeight)
-					dumpTextMaximumFrameHeightAsAttribute(aTextMaximumFrameHeight, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameWidth");
-				sal_Int32 aTextMaximumFrameWidth;
-				if(anotherAny >>= aTextMaximumFrameWidth)
-					dumpTextMaximumFrameWidthAsAttribute(aTextMaximumFrameWidth, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameHeight");
-				sal_Int32 aTextMinimumFrameHeight;
-				if(anotherAny >>= aTextMinimumFrameHeight)
-					dumpTextMinimumFrameHeightAsAttribute(aTextMinimumFrameHeight, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameWidth");
-				sal_Int32 aTextMinimumFrameWidth;
-				if(anotherAny >>= aTextMinimumFrameWidth)
-					dumpTextMinimumFrameWidthAsAttribute(aTextMinimumFrameWidth, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationAmount");
-				sal_Int32 aTextAnimationAmount;
-				if(anotherAny >>= aTextAnimationAmount)
-					dumpTextAnimationAmountAsAttribute(aTextAnimationAmount, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationCount");
-				sal_Int32 aTextAnimationCount;
-				if(anotherAny >>= aTextAnimationCount)
-					dumpTextAnimationCountAsAttribute(aTextAnimationCount, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationDelay");
-				sal_Int32 aTextAnimationDelay;
-				if(anotherAny >>= aTextAnimationDelay)
-					dumpTextAnimationDelayAsAttribute(aTextAnimationDelay, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationDirection");
-				drawing::TextAnimationDirection eTextAnimationDirection;
-				if(anotherAny >>= eTextAnimationDirection)
-					dumpTextAnimationDirectionAsAttribute(eTextAnimationDirection, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationKind");
-				drawing::TextAnimationKind eTextAnimationKind;
-				if(anotherAny >>= eTextAnimationKind)
-					dumpTextAnimationKindAsAttribute(eTextAnimationKind, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStartInside");
-				sal_Bool bTextAnimationStartInside;
-				if(anotherAny >>= bTextAnimationStartInside)
-					dumpTextAnimationStartInsideAsAttribute(bTextAnimationStartInside, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStopInside");
-				sal_Bool bTextAnimationStopInside;
-				if(anotherAny >>= bTextAnimationStopInside)
-					dumpTextAnimationStopInsideAsAttribute(bTextAnimationStopInside, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("TextWritingMode");
-				text::WritingMode eTextWritingMode;
-				if(anotherAny >>= eTextWritingMode)
-					dumpTextWritingModeAsAttribute(eTextWritingMode, xmlWriter);
-			}
+                uno::Any anotherAny = xPropSet->getPropertyValue("IsNumbering");
+                sal_Bool bIsNumbering;
+                if(anotherAny >>= bIsNumbering)
+                    dumpIsNumberingAsAttribute(bIsNumbering, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowHeight");
+                sal_Bool bTextAutoGrowHeight;
+                if(anotherAny >>= bTextAutoGrowHeight)
+                    dumpTextAutoGrowHeightAsAttribute(bTextAutoGrowHeight, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowWidth");
+                sal_Bool bTextAutoGrowWidth;
+                if(anotherAny >>= bTextAutoGrowWidth)
+                    dumpTextAutoGrowWidthAsAttribute(bTextAutoGrowWidth, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextContourFrame");
+                sal_Bool bTextContourFrame;
+                if(anotherAny >>= bTextContourFrame)
+                    dumpTextContourFrameAsAttribute(bTextContourFrame, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextFitToSize");
+                drawing::TextFitToSizeType eTextFitToSize;
+                if(anotherAny >>= eTextFitToSize)
+                    dumpTextFitToSizeAsAttribute(eTextFitToSize, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextHorizontalAdjust");
+                drawing::TextHorizontalAdjust eTextHorizontalAdjust;
+                if(anotherAny >>= eTextHorizontalAdjust)
+                    dumpTextHorizontalAdjustAsAttribute(eTextHorizontalAdjust, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextVerticalAdjust");
+                drawing::TextVerticalAdjust eTextVerticalAdjust;
+                if(anotherAny >>= eTextVerticalAdjust)
+                    dumpTextVerticalAdjustAsAttribute(eTextVerticalAdjust, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextLeftDistance");
+                sal_Int32 aTextLeftDistance;
+                if(anotherAny >>= aTextLeftDistance)
+                    dumpTextLeftDistanceAsAttribute(aTextLeftDistance, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextRightDistance");
+                sal_Int32 aTextRightDistance;
+                if(anotherAny >>= aTextRightDistance)
+                    dumpTextRightDistanceAsAttribute(aTextRightDistance, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextUpperDistance");
+                sal_Int32 aTextUpperDistance;
+                if(anotherAny >>= aTextUpperDistance)
+                    dumpTextUpperDistanceAsAttribute(aTextUpperDistance, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextLowerDistance");
+                sal_Int32 aTextLowerDistance;
+                if(anotherAny >>= aTextLowerDistance)
+                    dumpTextLowerDistanceAsAttribute(aTextLowerDistance, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameHeight");
+                sal_Int32 aTextMaximumFrameHeight;
+                if(anotherAny >>= aTextMaximumFrameHeight)
+                    dumpTextMaximumFrameHeightAsAttribute(aTextMaximumFrameHeight, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameWidth");
+                sal_Int32 aTextMaximumFrameWidth;
+                if(anotherAny >>= aTextMaximumFrameWidth)
+                    dumpTextMaximumFrameWidthAsAttribute(aTextMaximumFrameWidth, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameHeight");
+                sal_Int32 aTextMinimumFrameHeight;
+                if(anotherAny >>= aTextMinimumFrameHeight)
+                    dumpTextMinimumFrameHeightAsAttribute(aTextMinimumFrameHeight, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameWidth");
+                sal_Int32 aTextMinimumFrameWidth;
+                if(anotherAny >>= aTextMinimumFrameWidth)
+                    dumpTextMinimumFrameWidthAsAttribute(aTextMinimumFrameWidth, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationAmount");
+                sal_Int32 aTextAnimationAmount;
+                if(anotherAny >>= aTextAnimationAmount)
+                    dumpTextAnimationAmountAsAttribute(aTextAnimationAmount, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationCount");
+                sal_Int32 aTextAnimationCount;
+                if(anotherAny >>= aTextAnimationCount)
+                    dumpTextAnimationCountAsAttribute(aTextAnimationCount, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationDelay");
+                sal_Int32 aTextAnimationDelay;
+                if(anotherAny >>= aTextAnimationDelay)
+                    dumpTextAnimationDelayAsAttribute(aTextAnimationDelay, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationDirection");
+                drawing::TextAnimationDirection eTextAnimationDirection;
+                if(anotherAny >>= eTextAnimationDirection)
+                    dumpTextAnimationDirectionAsAttribute(eTextAnimationDirection, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationKind");
+                drawing::TextAnimationKind eTextAnimationKind;
+                if(anotherAny >>= eTextAnimationKind)
+                    dumpTextAnimationKindAsAttribute(eTextAnimationKind, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStartInside");
+                sal_Bool bTextAnimationStartInside;
+                if(anotherAny >>= bTextAnimationStartInside)
+                    dumpTextAnimationStartInsideAsAttribute(bTextAnimationStartInside, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStopInside");
+                sal_Bool bTextAnimationStopInside;
+                if(anotherAny >>= bTextAnimationStopInside)
+                    dumpTextAnimationStopInsideAsAttribute(bTextAnimationStopInside, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("TextWritingMode");
+                text::WritingMode eTextWritingMode;
+                if(anotherAny >>= eTextWritingMode)
+                    dumpTextWritingModeAsAttribute(eTextWritingMode, xmlWriter);
+            }
         }
         if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
         {
@@ -1355,167 +1355,167 @@ namespace {
                     dumpLineEndNameAsAttribute(sLineEndName, xmlWriter);
             }
             {
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineStart");
-				drawing::PolyPolygonBezierCoords aLineStart;
-				if(anotherAny >>= aLineStart)
-					dumpLineStartAsElement(aLineStart, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineEnd");
-				drawing::PolyPolygonBezierCoords aLineEnd;
-				if(anotherAny >>= aLineEnd)
-					dumpLineEndAsElement(aLineEnd, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineStartCenter");
-				sal_Bool bLineStartCenter;
-				if(anotherAny >>= bLineStartCenter)
-					dumpLineStartCenterAsAttribute(bLineStartCenter, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineStartWidth");
-				sal_Int32 aLineStartWidth;
-				if(anotherAny >>= aLineStartWidth)
-					dumpLineStartWidthAsAttribute(aLineStartWidth, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineEndCenter");
-				sal_Bool bLineEndCenter;
-				if(anotherAny >>= bLineEndCenter)
-					dumpLineEndCenterAsAttribute(bLineEndCenter, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LineEndWidth");
-				sal_Int32 aLineEndWidth;
-				if(anotherAny >>= aLineEndWidth)
-					dumpLineEndWidthAsAttribute(aLineEndWidth, xmlWriter);
-			}
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineStart");
+                drawing::PolyPolygonBezierCoords aLineStart;
+                if(anotherAny >>= aLineStart)
+                    dumpLineStartAsElement(aLineStart, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineEnd");
+                drawing::PolyPolygonBezierCoords aLineEnd;
+                if(anotherAny >>= aLineEnd)
+                    dumpLineEndAsElement(aLineEnd, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineStartCenter");
+                sal_Bool bLineStartCenter;
+                if(anotherAny >>= bLineStartCenter)
+                    dumpLineStartCenterAsAttribute(bLineStartCenter, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineStartWidth");
+                sal_Int32 aLineStartWidth;
+                if(anotherAny >>= aLineStartWidth)
+                    dumpLineStartWidthAsAttribute(aLineStartWidth, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineEndCenter");
+                sal_Bool bLineEndCenter;
+                if(anotherAny >>= bLineEndCenter)
+                    dumpLineEndCenterAsAttribute(bLineEndCenter, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LineEndWidth");
+                sal_Int32 aLineEndWidth;
+                if(anotherAny >>= aLineEndWidth)
+                    dumpLineEndWidthAsAttribute(aLineEndWidth, xmlWriter);
+            }
         }
 
         if(xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonDescriptor"))
         {
             {
-				uno::Any anotherAny = xPropSet->getPropertyValue("PolygonKind");
-				drawing::PolygonKind ePolygonKind;
-				if(anotherAny >>= ePolygonKind)
-					dumpPolygonKindAsAttribute(ePolygonKind, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("PolyPolygon");
-				drawing::PointSequenceSequence aPolyPolygon;
-				if(anotherAny >>= aPolyPolygon)
-					dumpPolyPolygonAsElement(aPolyPolygon, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("Geometry");
-				drawing::PointSequenceSequence aGeometry;
-				if(anotherAny >>= aGeometry)
-					dumpGeometryAsElement(aGeometry, xmlWriter);
-			}
+                uno::Any anotherAny = xPropSet->getPropertyValue("PolygonKind");
+                drawing::PolygonKind ePolygonKind;
+                if(anotherAny >>= ePolygonKind)
+                    dumpPolygonKindAsAttribute(ePolygonKind, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("PolyPolygon");
+                drawing::PointSequenceSequence aPolyPolygon;
+                if(anotherAny >>= aPolyPolygon)
+                    dumpPolyPolygonAsElement(aPolyPolygon, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("Geometry");
+                drawing::PointSequenceSequence aGeometry;
+                if(anotherAny >>= aGeometry)
+                    dumpGeometryAsElement(aGeometry, xmlWriter);
+            }
         }
 
         if(xServiceInfo->supportsService("com.sun.star.drawing.ShadowProperties"))
         {
             {
-				uno::Any anotherAny = xPropSet->getPropertyValue("Shadow");
-				sal_Bool bShadow;
-				if(anotherAny >>= bShadow)
-					dumpShadowAsAttribute(bShadow, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("ShadowColor");
-				sal_Int32 aShadowColor;
-				if(anotherAny >>= aShadowColor)
-					dumpShadowColorAsAttribute(aShadowColor, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("ShadowTransparence");
-				sal_Int32 aShadowTransparence;
-				if(anotherAny >>= aShadowTransparence)
-					dumpShadowTransparenceAsAttribute(aShadowTransparence, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("ShadowXDistance");
-				sal_Int32 aShadowXDistance;
-				if(anotherAny >>= aShadowXDistance)
-					dumpShadowXDistanceAsAttribute(aShadowXDistance, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("ShadowYDistance");
-				sal_Int32 aShadowYDistance;
-				if(anotherAny >>= aShadowYDistance)
-					dumpShadowYDistanceAsAttribute(aShadowYDistance, xmlWriter);
-			}
+                uno::Any anotherAny = xPropSet->getPropertyValue("Shadow");
+                sal_Bool bShadow;
+                if(anotherAny >>= bShadow)
+                    dumpShadowAsAttribute(bShadow, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("ShadowColor");
+                sal_Int32 aShadowColor;
+                if(anotherAny >>= aShadowColor)
+                    dumpShadowColorAsAttribute(aShadowColor, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("ShadowTransparence");
+                sal_Int32 aShadowTransparence;
+                if(anotherAny >>= aShadowTransparence)
+                    dumpShadowTransparenceAsAttribute(aShadowTransparence, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("ShadowXDistance");
+                sal_Int32 aShadowXDistance;
+                if(anotherAny >>= aShadowXDistance)
+                    dumpShadowXDistanceAsAttribute(aShadowXDistance, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("ShadowYDistance");
+                sal_Int32 aShadowYDistance;
+                if(anotherAny >>= aShadowYDistance)
+                    dumpShadowYDistanceAsAttribute(aShadowYDistance, xmlWriter);
+            }
         }
 
         if(xServiceInfo->supportsService("com.sun.star.drawing.Shape"))
         {
             {
-				uno::Any anotherAny = xPropSet->getPropertyValue("ZOrder");
-				sal_Int32 aZOrder;
-				if(anotherAny >>= aZOrder)
-					dumpZOrderAsAttribute(aZOrder, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LayerID");
-				sal_Int32 aLayerID;
-				if(anotherAny >>= aLayerID)
-					dumpLayerIDAsAttribute(aLayerID, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("LayerName");
-				rtl::OUString sLayerName;
-				if(anotherAny >>= sLayerName)
-					dumpLayerNameAsAttribute(sLayerName, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("Visible");
-				sal_Bool bVisible;
-				if(anotherAny >>= bVisible)
-					dumpVisibleAsAttribute(bVisible, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("Printable");
-				sal_Bool bPrintable;
-				if(anotherAny >>= bPrintable)
-					dumpPrintableAsAttribute(bPrintable, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("MoveProtect");
-				sal_Bool bMoveProtect;
-				if(anotherAny >>= bMoveProtect)
-					dumpMoveProtectAsAttribute(bMoveProtect, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("Name");
-				rtl::OUString sName;
-				if(anotherAny >>= sName)
-					dumpNameAsAttribute(sName, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("SizeProtect");
-				sal_Bool bSizeProtect;
-				if(anotherAny >>= bSizeProtect)
-					dumpSizeProtectAsAttribute(bSizeProtect, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("Transformation");
-				drawing::HomogenMatrix3 aTransformation;
-				if(anotherAny >>= aTransformation)
-					dumpTransformationAsElement(aTransformation, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("NavigationOrder");
-				sal_Int32 aNavigationOrder;
-				if(anotherAny >>= aNavigationOrder)
-					dumpNavigationOrderAsAttribute(aNavigationOrder, xmlWriter);
-			}
-			{
-				uno::Any anotherAny = xPropSet->getPropertyValue("Hyperlink");
-				rtl::OUString sHyperlink;
-				if(anotherAny >>= sHyperlink)
-					dumpHyperlinkAsAttribute(sHyperlink, xmlWriter);
-			}
+                uno::Any anotherAny = xPropSet->getPropertyValue("ZOrder");
+                sal_Int32 aZOrder;
+                if(anotherAny >>= aZOrder)
+                    dumpZOrderAsAttribute(aZOrder, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LayerID");
+                sal_Int32 aLayerID;
+                if(anotherAny >>= aLayerID)
+                    dumpLayerIDAsAttribute(aLayerID, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("LayerName");
+                rtl::OUString sLayerName;
+                if(anotherAny >>= sLayerName)
+                    dumpLayerNameAsAttribute(sLayerName, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("Visible");
+                sal_Bool bVisible;
+                if(anotherAny >>= bVisible)
+                    dumpVisibleAsAttribute(bVisible, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("Printable");
+                sal_Bool bPrintable;
+                if(anotherAny >>= bPrintable)
+                    dumpPrintableAsAttribute(bPrintable, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("MoveProtect");
+                sal_Bool bMoveProtect;
+                if(anotherAny >>= bMoveProtect)
+                    dumpMoveProtectAsAttribute(bMoveProtect, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("Name");
+                rtl::OUString sName;
+                if(anotherAny >>= sName)
+                    dumpNameAsAttribute(sName, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("SizeProtect");
+                sal_Bool bSizeProtect;
+                if(anotherAny >>= bSizeProtect)
+                    dumpSizeProtectAsAttribute(bSizeProtect, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("Transformation");
+                drawing::HomogenMatrix3 aTransformation;
+                if(anotherAny >>= aTransformation)
+                    dumpTransformationAsElement(aTransformation, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("NavigationOrder");
+                sal_Int32 aNavigationOrder;
+                if(anotherAny >>= aNavigationOrder)
+                    dumpNavigationOrderAsAttribute(aNavigationOrder, xmlWriter);
+            }
+            {
+                uno::Any anotherAny = xPropSet->getPropertyValue("Hyperlink");
+                rtl::OUString sHyperlink;
+                if(anotherAny >>= sHyperlink)
+                    dumpHyperlinkAsAttribute(sHyperlink, xmlWriter);
+            }
         }
 
         #if DEBUG_DUMPER
