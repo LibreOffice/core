@@ -97,7 +97,8 @@ void ListBox::take_properties(Window &rOther)
     mbDDAutoSize = rOtherListBox.mbDDAutoSize;
     mnLineCount = rOtherListBox.mnLineCount;
     mpImplLB->take_properties(*rOtherListBox.mpImplLB);
-    mpImplWin->take_properties(*rOtherListBox.mpImplWin);
+    if (mpImplWin && rOtherListBox.mpImplWin)
+        mpImplWin->take_properties(*rOtherListBox.mpImplWin);
 }
 
 // -----------------------------------------------------------------------
