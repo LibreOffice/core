@@ -763,6 +763,11 @@
                     <value xml:lang="en-US">Sheet Area Input Field</value>
                 </prop>
             </node>
+            <node oor:name=".uno:Collaborate" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Collaborate...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:UnderlineNone" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Underline: Off</value>

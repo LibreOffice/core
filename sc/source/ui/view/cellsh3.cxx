@@ -52,6 +52,13 @@
 #include "markdata.hxx"
 #include "scabstdlg.hxx"
 
+#ifdef ENABLE_TELEPATHY
+#include <tubes/manager.hxx>
+namespace tubes {
+    void createContacts( const TeleManager &rContacts );
+}
+#endif
+
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 
 using sc::HMMToTwips;
@@ -109,6 +116,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
 
         case SID_ATTR_SIZE://XXX ???
+            break;
+
+        case SID_COLLABORATION:
+#ifdef ENABLE_TELEPATHY
+            tubes::createContacts( TeleManager::get( true ) );
+#endif
             break;
 
         case SID_STATUS_SELMODE:

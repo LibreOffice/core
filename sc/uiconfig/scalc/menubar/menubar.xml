@@ -16,6 +16,8 @@
             <menu:menuitem menu:id=".uno:Reload"/>
             <menu:menuitem menu:id=".uno:VersionDialog"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Collaborate"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ExportTo"/>
             <menu:menuitem menu:id=".uno:ExportToPDF"/>
             <menu:menu menu:id=".uno:SendTo">
