@@ -288,8 +288,8 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
             basegfx::B2DHomMatrix aMatrix;
             if (mpShape->getExtDrawings().size() == 0)
             {
-                xResult = mpShape->getXShape();
                 mpShape->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix );
+                xResult = mpShape->getXShape();
             }
             else
             {
@@ -305,6 +305,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
                 }
                 mpShape.reset((Shape*)0);
             }
+            mxDiagramShapeContext.clear();
         }
         else if (mpShape.get() != NULL)
         {
