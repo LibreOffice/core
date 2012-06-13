@@ -501,6 +501,15 @@ void Test::testN764745()
 
 void Test::testN766477()
 {
+    /*
+     * The problem was that the checkbox was not checked.
+     *
+     * oParas = ThisComponent.Text.createEnumeration
+     * oPara = oParas.nextElement
+     * oRuns = oPara.createEnumeration
+     * oRun = oRuns.nextElement
+     * xray oRun.Bookmark.Parameters.ElementNames(0) 'Checkbox_Checked
+     */
     load("n766477.docx");
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -511,7 +520,6 @@ void Test::testN766477()
     uno::Reference<text::XFormField> xFormField(xRun->getPropertyValue("Bookmark"), uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
     uno::Sequence<OUString> aElementNames(xParameters->getElementNames());
-    // The problem was that the checkbox was not checked.
     CPPUNIT_ASSERT_EQUAL(OUString("Checkbox_Checked"), aElementNames[0]);
 }
 
