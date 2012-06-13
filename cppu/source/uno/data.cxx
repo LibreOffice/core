@@ -366,7 +366,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #define MAX_ALIGNMENT_4
 #endif
 
-#define OFFSET_OF( s, m ) reinterpret_cast< std::size_t >((char *)&((s *)16)->m -16)
+#define OFFSET_OF( s, m ) reinterpret_cast< int >((char *)&((s *)16)->m -16)
 
 #define BINTEST_VERIFY( c ) \
     if (! (c)) { fprintf( stderr, "### binary compatibility test failed: %s [line %d]!!!\n", #c, __LINE__ ); abort(); }
@@ -374,7 +374,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
     if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
 
 #define BINTEST_VERIFYSIZE( s, n ) \
-    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
+    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", (int)sizeof(s), n ); abort(); }
 
 struct C1
 {
