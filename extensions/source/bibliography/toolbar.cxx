@@ -190,8 +190,6 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
     }
 }
 
-SV_IMPL_PTRARR( BibToolBarListenerArr, BibToolBarListenerPtr);
-
 BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     ToolBox(pParent,BibResId(RID_BIB_TOOLBAR)),
     aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
@@ -299,9 +297,9 @@ void BibToolBar::InitListener()
                 pListener=new BibToolBarListener(this,aURL.Complete,nId);
             }
 
-            BibToolBarListenerPtr pxInsert = new Reference<frame::XStatusListener>;
+            BibToolBarListenerRef* pxInsert = new Reference<frame::XStatusListener>;
             (*pxInsert) = pListener;
-            aListenerArr.Insert( pxInsert, aListenerArr.Count() );
+            aListenerArr.push_back( pxInsert );
             xDisp->addStatusListener(uno::Reference< frame::XStatusListener > (pListener),aURL);
         }
     }
@@ -529,9 +527,9 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
 void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
                                             throw( uno::RuntimeException )
 {
-    for(sal_uInt16 i = 0; i < aListenerArr.Count(); i++)
+    for(sal_uInt16 i = 0; i < aListenerArr.size(); i++)
     {
-        BibToolBarListenerPtr pListener = aListenerArr.GetObject(i);
+        BibToolBarListenerRef* pListener = &aListenerArr[i];
         (*pListener)->statusChanged(rEvent);
     }
 }

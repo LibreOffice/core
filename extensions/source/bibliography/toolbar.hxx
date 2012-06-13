@@ -37,9 +37,9 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
-#include <svl/svarray.hxx>
 #include <vcl/timer.hxx>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class BibDataManager;
 class BibToolBar;
@@ -110,8 +110,8 @@ public:
 };
 
 
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>* BibToolBarListenerPtr;
-SV_DECL_PTRARR_DEL( BibToolBarListenerArr, BibToolBarListenerPtr, 4 )
+typedef ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener> BibToolBarListenerRef;
+typedef boost::ptr_vector<BibToolBarListenerRef> BibToolBarListenerArr;
 
 class BibToolBar:   public ToolBox
 {
