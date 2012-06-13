@@ -196,8 +196,6 @@ void SdFiltersTest::test()
         std::cout << aString << std::endl;
     }
     xDocShRef->DoClose();
-
-    CPPUNIT_ASSERT(false);
 }
 
 bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,

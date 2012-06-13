@@ -35,7 +35,7 @@
 #include <rtl/strbuf.hxx>
 
 
-#define DEBUG_DUMPER 1
+#define DEBUG_DUMPER 0
 
 using namespace com::sun::star;
 //class XShapeDumper
@@ -1006,6 +1006,8 @@ namespace {
         }
         if(xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
         {
+            uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+            if(xInfo->hasPropertyByName("IsNumbering"))
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("IsNumbering");
                 sal_Bool bIsNumbering;
@@ -1450,6 +1452,7 @@ namespace {
 
         if(xServiceInfo->supportsService("com.sun.star.drawing.Shape"))
         {
+            uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("ZOrder");
                 sal_Int32 aZOrder;
@@ -1510,6 +1513,7 @@ namespace {
                 if(anotherAny >>= aNavigationOrder)
                     dumpNavigationOrderAsAttribute(aNavigationOrder, xmlWriter);
             }
+            if(xInfo->hasPropertyByName("Hyperlink"))
             {
                 uno::Any anotherAny = xPropSet->getPropertyValue("Hyperlink");
                 rtl::OUString sHyperlink;
