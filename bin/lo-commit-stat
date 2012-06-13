@@ -80,9 +80,6 @@ sub standardize_summary($)
         my $first_char = lc($1);
         $line =~ s/^./$first_char/;
     }
-    # print does not like 0% or so
-    $line =~ s/%/%%/g;
-    
 
     # FIXME: remove do at the end of line
     #        remove bug numbers
@@ -246,7 +243,7 @@ sub print_summary_in_stat($$$$$$)
 
     # print piece title if not done yet
     if ( defined ${$ppiece_title} ) {
-        printf $log "${$ppiece_title}\n";
+        print $log, "${$ppiece_title}\n";
         ${$ppiece_title} = undef;
     }
 
@@ -261,7 +258,7 @@ sub print_summary_in_stat($$$$$$)
         $authors = " [" . join (", ", keys %{$pauthors}) . "]";
     }
 
-    printf $log $prefix . $summary . $bugs . $authors . "\n";
+    print $log $prefix, $summary, $bugs, $authors, "\n";
 }
 
 sub print_stat($$)
@@ -363,7 +360,7 @@ sub print_bugs($$$)
             $authors = " [" . join (", ", keys %{$bugs{$bug}{'author'}}) . "]";
         }
 
-        printf $log "%s %s%s\n", $convert_func->($bug), $summary, $authors;
+        print $log $convert_func->($bug), " ", $summary, $authors, "\n";
     }
 }
 
@@ -381,7 +378,7 @@ sub print_bugnumbers($$)
         }
     }
 
-    printf $log join ("\n", sort { $a cmp $b } keys %bugs) . "\n";
+    print $log join ("\n", sort { $a cmp $b } keys %bugs), "\n";
 }
 
 ########################################################################
