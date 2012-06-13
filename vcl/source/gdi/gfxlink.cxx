@@ -375,6 +375,11 @@ sal_uInt8* ImpSwap::GetData() const
             pData = new sal_uInt8[ mnDataSize ];
             pIStm->Read( pData, mnDataSize );
             sal_Bool bError = ( ERRCODE_NONE != pIStm->GetError() );
+            sal_Size nActReadSize = pIStm->Tell();
+            if (nActReadSize != mnDataSize)
+            {
+                bError = sal_True;
+            }
             delete pIStm;
 
             if( bError )
