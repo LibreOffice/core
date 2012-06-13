@@ -90,8 +90,8 @@ class SfxUnoControllerItem;
 class SvCompatWeakHdl;
 class SystemWindow;
 
-typedef SfxFrame* SfxFramePtr;
-class SfxFrameArr_Impl;
+class SfxFrame;
+typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;
 
 typedef ::std::vector< String* > TargetList;
 
@@ -109,7 +109,6 @@ typedef ::std::vector< String* > TargetList;
 // from their parent frames.
 //==========================================================================
 
-class SfxFrameArr_Impl;
 struct SfxFramePickEntry_Impl;
 class SFX2_DLLPUBLIC SfxFrame
 {

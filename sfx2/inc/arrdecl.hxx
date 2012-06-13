@@ -60,8 +60,7 @@ class SfxFilter;
 DECL_PTRARRAY( SfxFilterArr_Impl, SfxFilter*, 4, 4 )
 
 class SfxFrame;
-typedef SfxFrame* SfxFramePtr;
-SV_DECL_PTRARR( SfxFrameArr_Impl, SfxFramePtr, 4 )
+typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;
 
 typedef ::std::vector< SfxFilter* > SfxFilterList_Impl;
 

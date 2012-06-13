@@ -100,7 +100,7 @@ void SfxFrame::Construct_Impl()
     pImp = new SfxFrame_Impl( this );
     if ( !pFramesArr_Impl )
         pFramesArr_Impl = new SfxFrameArr_Impl;
-    pFramesArr_Impl->Insert( this, pFramesArr_Impl->Count() );
+    pFramesArr_Impl->push_back( this );
 }
 
 //--------------------------------------------------------------------
@@ -110,7 +110,9 @@ SfxFrame::~SfxFrame()
     RemoveTopFrame_Impl( this );
     DELETEZ( pWindow );
 
-    pFramesArr_Impl->Remove( pFramesArr_Impl->GetPos( this ) );
+    SfxFrameArr_Impl::iterator it = std::find( pFramesArr_Impl->begin(), pFramesArr_Impl->end(), this );
+    if ( it != pFramesArr_Impl->end() )
+        pFramesArr_Impl->erase( it );
 
     if ( pParentFrame )
     {
@@ -122,7 +124,7 @@ SfxFrame::~SfxFrame()
 
     if ( pChildArr )
     {
-        DBG_ASSERT( !pChildArr->Count(), "Children are not removed!" );
+        DBG_ASSERT( pChildArr->empty(), "Children are not removed!" );
         delete pChildArr;
     }
 
@@ -195,7 +197,7 @@ sal_Bool SfxFrame::DocIsModified_Impl()
             pImp->pCurrentViewFrame->GetObjectShell()->IsModified() )
         return sal_True;
     for( sal_uInt16 nPos = GetChildFrameCount(); nPos--; )
-        if( pChildArr->GetObject( nPos )->DocIsModified_Impl() )
+        if( (*pChildArr)[ nPos ]->DocIsModified_Impl() )
             return sal_True;
     return sal_False;
 }
@@ -235,7 +237,7 @@ sal_uInt16 SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
         {
             // if this frame has child frames, ask them too
             for( sal_uInt16 nPos = GetChildFrameCount(); nRet == RET_OK && nPos--; )
-                nRet = pChildArr->GetObject( nPos )->PrepareClose_Impl( bUI, bForBrowsing );
+                nRet = (*pChildArr)[ nPos ]->PrepareClose_Impl( bUI, bForBrowsing );
         }
 
         pImp->bPrepClosing = sal_False;
@@ -252,9 +254,9 @@ sal_uInt16 SfxFrame::PrepareClose_Impl( sal_Bool bUI, sal_Bool bForBrowsing )
 
 SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
 {
-    if ( pChildArr && pChildArr->Count() > nPos )
+    if ( pChildArr && pChildArr->size() > nPos )
     {
-        DBG_ASSERT( nPos < pChildArr->Count(), "Wrong Index!");
+        DBG_ASSERT( nPos < pChildArr->size(), "Wrong Index!");
         return (*pChildArr)[nPos];
     }
 
@@ -264,8 +266,9 @@ SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
 void SfxFrame::RemoveChildFrame_Impl( SfxFrame* pFrame )
 {
     DBG_ASSERT( pChildArr, "Unknown Frame!");
-    sal_uInt16 nPos = pChildArr->GetPos(pFrame);
-    pChildArr->Remove( nPos );
+    SfxFrameArr_Impl::iterator it = std::find( pChildArr->begin(), pChildArr->end(), pFrame );
+    if ( it != pChildArr->end() )
+        pChildArr->erase( it );
 };
 
 SfxFrame& SfxFrame::GetTopFrame() const
@@ -288,7 +291,7 @@ void SfxFrame::SetIsClosing_Impl()
 
 sal_uInt16 SfxFrame::GetChildFrameCount() const
 {
-    return pChildArr ? pChildArr->Count() : 0;
+    return pChildArr ? pChildArr->size() : 0;
 }
 
 void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
@@ -384,7 +387,7 @@ void SfxFrame::GetViewData_Impl()
         if ( pChildArr )
         {
             // For Framesets also the data from the ChildViews hace to be processed
-            sal_uInt16 nCount = pChildArr->Count();
+            sal_uInt16 nCount = pChildArr->size();
             for ( sal_uInt16 n=nCount; n>0; n--)
             {
                 SfxFrame* pFrame = (*pChildArr)[n-1];
@@ -484,7 +487,7 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
     SfxViewFrame* pView = GetCurrentViewFrame();
     if( pView && pView->GetViewShell() && pChildArr )
     {
-        sal_uInt16 nCount = pChildArr->Count();
+        sal_uInt16 nCount = pChildArr->size();
         for ( sal_uInt16 n=0; n<nCount; n++)
         {
             SfxFrame* pFrame = (*pChildArr)[n];
@@ -511,13 +514,15 @@ sal_Bool SfxFrame::IsParent( SfxFrame *pFrame ) const
 void SfxFrame::InsertTopFrame_Impl( SfxFrame* pFrame )
 {
     SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
-    rArr.Insert( pFrame, rArr.Count() );
+    rArr.push_back( pFrame );
 }
 
 void SfxFrame::RemoveTopFrame_Impl( SfxFrame* pFrame )
 {
     SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
-    rArr.Remove( rArr.GetPos( pFrame ) );
+    SfxFrameArr_Impl::iterator it = std::find( rArr.begin(), rArr.end(), pFrame );
+    if ( it != rArr.end() )
+        rArr.erase( it );
 }
 
 SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxViewFrame *p )
@@ -686,9 +691,9 @@ SfxFrame* SfxFrameIterator::NextSibling_Impl( SfxFrame& rPrev )
     if ( &rPrev != pFrame )
     {
         SfxFrameArr_Impl& rArr = *rPrev.pParentFrame->pChildArr;
-        sal_uInt16 nPos = rArr.GetPos( &rPrev );
-        if ( nPos+1 < rArr.Count() )
-            pRet = rArr[nPos+1];
+        SfxFrameArr_Impl::iterator it = std::find( rArr.begin(), rArr.end(), &rPrev );
+        if ( it != rArr.end() && (++it) != rArr.end() )
+            pRet = *it;
 
         if ( !pRet && rPrev.pParentFrame->pParentFrame )
             pRet = NextSibling_Impl( *rPrev.pParentFrame );
@@ -928,14 +933,14 @@ SfxFrame* SfxFrame::GetFirst()
 {
     if ( !pFramesArr_Impl )
         return 0;
-    return pFramesArr_Impl->Count() ? pFramesArr_Impl->GetObject(0) : 0;
+    return pFramesArr_Impl->empty() ? 0 : pFramesArr_Impl->front();
 }
 
 SfxFrame* SfxFrame::GetNext( SfxFrame& rFrame )
 {
-    sal_uInt16 nPos = pFramesArr_Impl->GetPos( &rFrame );
-    if ( nPos+1 < pFramesArr_Impl->Count() )
-        return pFramesArr_Impl->GetObject(nPos+1);
+    SfxFrameArr_Impl::iterator it = std::find( pFramesArr_Impl->begin(), pFramesArr_Impl->end(), &rFrame );
+    if ( it != pFramesArr_Impl->end() && (++it) != pFramesArr_Impl->end() )
+        return *it;
     else
         return NULL;
 }
