@@ -43,23 +43,10 @@ typedef SfxPoolItem const** SfxItemArray;
 
 #define USHORT_ARG int
 
-#ifdef MI_HATS_REPARIERT
-#ifndef DBG
-#ifdef DBG_UTILx
-#define DBG(s) s
-#define _pChildCount(THIS)  (  *(sal_uInt16**)SfxPointerServer::GetServer()->GetPointer(THIS) )
-#define _pChildCountCtor    ( (*(sal_uInt16**)SfxPointerServer::GetServer()->CreatePointer(this)) = new sal_uInt16 )
-#define _pChildCountDtor    ( SfxPointerServer::GetServer()->ReleasePointer(this) )
-#else
-#define DBG(s)
-#endif
-#endif
-#else
 #ifdef DBG
 #undef DBG
 #endif
 #define DBG(s)
-#endif
 
 //========================================================================
 
