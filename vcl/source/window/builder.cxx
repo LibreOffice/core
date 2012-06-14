@@ -64,7 +64,7 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
          aEnd = m_aModelMaps.end(); aI != aEnd; ++aI)
     {
         ListBox *pTarget = static_cast<ListBox*>(get_by_name(aI->m_sID));
-        ListStore *pStore = static_cast<ListStore*>(get_model_by_name(aI->m_sValue));
+        ListStore *pStore = get_model_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pStore, "vcl", "missing elements of combobox/liststore");
         if (pTarget && pStore)
             mungemodel(*pTarget, *pStore);
@@ -77,6 +77,20 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
         delete aI->m_pModel;
     }
     std::vector<ModelAndId>().swap(m_aModels);
+
+    //Set SpinButton adjustments when everything has been imported
+    for (std::vector<SpinButtonAdjustmentMap>::iterator aI = m_aAdjustmentMaps.begin(),
+         aEnd = m_aAdjustmentMaps.end(); aI != aEnd; ++aI)
+    {
+        MetricField *pTarget = static_cast<MetricField*>(get_by_name(aI->m_sID));
+        Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
+        SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
+        if (pTarget && pAdjustment)
+            mungeadjustment(*pTarget, *pAdjustment);
+    }
+    //drop maps now
+    std::vector<SpinButtonAdjustmentMap>().swap(m_aAdjustmentMaps);
+    std::vector<AdjustmentAndId>().swap(m_aAdjustments);
 
     //auto-show (really necessary ?, maybe drop it when complete)
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
@@ -166,6 +180,18 @@ bool VclBuilder::extractGroup(const rtl::OString &id, stringmap &rMap)
     return false;
 }
 
+bool VclBuilder::extractAdjustment(const rtl::OString &id, stringmap &rMap)
+{
+    VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("adjustment")));
+    if (aFind != rMap.end())
+    {
+        m_aAdjustmentMaps.push_back(SpinButtonAdjustmentMap(id, aFind->second));
+        rMap.erase(aFind);
+        return true;
+    }
+    return false;
+}
+
 bool VclBuilder::extractModel(const rtl::OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("model")));
@@ -243,7 +269,10 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkCheckButton")))
         pWindow = new CheckBox(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
+    {
+        extractAdjustment(id, rMap);
         pWindow = new MetricField(pParent, WB_RIGHT|WB_SPIN|WB_BORDER|WB_3DLOOK);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBox")))
     {
         extractModel(id, rMap);
@@ -532,6 +561,11 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
     }
 }
 
+void VclBuilder::handleAdjustment(const rtl::OString &rID, stringmap &rProperties)
+{
+    m_aAdjustments.push_back(AdjustmentAndId(rID, rProperties));
+}
+
 void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID)
 {
     m_aModels.push_back(ModelAndId(rID, new ListStore));
@@ -636,6 +670,12 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 
         if (!nLevel)
             break;
+    }
+
+    if (sClass.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkAdjustment")))
+    {
+        handleAdjustment(sID, aProperties);
+        return NULL;
     }
 
     if (!pCurrentChild)
@@ -793,6 +833,18 @@ VclBuilder::ListStore *VclBuilder::get_model_by_name(rtl::OString sID)
     return NULL;
 }
 
+VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(rtl::OString sID)
+{
+    for (std::vector<AdjustmentAndId>::iterator aI = m_aAdjustments.begin(),
+         aEnd = m_aAdjustments.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_sID.equals(sID))
+            return &(aI->m_aAdjustment);
+    }
+
+    return NULL;
+}
+
 void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
 {
 #if 1
@@ -865,6 +917,42 @@ void VclBuilder::mungemodel(ListBox &rTarget, ListStore &rStore)
     }
     if (!rStore.m_aEntries.empty())
         rTarget.SelectEntryPos(0);
+}
+
+void VclBuilder::mungeadjustment(MetricField &rTarget, Adjustment &rAdjustment)
+{
+    int nMul = rtl_math_pow10Exp(1, rTarget.GetDecimalDigits());
+
+    for (stringmap::iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    {
+        const rtl::OString &rKey = aI->first;
+        const rtl::OString &rValue = aI->second;
+
+        if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("upper")))
+        {
+            sal_Int64 nUpper = rValue.toDouble() * nMul;
+            rTarget.SetMax(nUpper);
+            rTarget.SetLast(nUpper);
+        }
+        else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("lower")))
+        {
+            sal_Int64 nLower = rValue.toDouble() * nMul;
+            rTarget.SetMin(nLower);
+            rTarget.SetFirst(nLower);
+        }
+        else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("value")))
+        {
+            sal_Int64 nValue = rValue.toDouble() * nMul;
+            rTarget.SetValue(nValue);
+        }
+        else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("step-increment")))
+        {
+            sal_Int64 nSpinSize = rValue.toDouble() * nMul;
+            rTarget.SetSpinSize(nSpinSize);
+        }
+        else
+            fprintf(stderr, "unhandled property %s\n", rKey.getStr());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
