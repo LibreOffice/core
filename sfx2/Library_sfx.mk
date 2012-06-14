@@ -63,9 +63,11 @@ $(eval $(call gb_Library_add_defs,sfx,\
 endif
 
 $(eval $(call gb_Library_use_libraries,sfx,\
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayer \
     fwe \
     i18nisolang1 \
     sal \

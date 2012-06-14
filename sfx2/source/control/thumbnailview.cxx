@@ -14,7 +14,21 @@
 #include "orgmgr.hxx"
 #include "thumbnailviewacc.hxx"
 
+#include <basegfx/color/bcolortools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <comphelper/processfactory.hxx>
+#include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
+#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/decoview.hxx>
@@ -31,6 +45,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
+using namespace basegfx;
+using namespace basegfx::tools;
+using namespace drawinglayer::attribute;
+using namespace drawinglayer::primitive2d;
 
 enum
 {
@@ -43,6 +61,17 @@ enum
     SCRBAR_OFFSET = 1,
     SCROLL_OFFSET = 4
 };
+
+B2DPolygon lcl_Rect2Polygon (const Rectangle &aRect)
+{
+    B2DPolygon aPolygon;
+    aPolygon.append(B2DPoint(aRect.Left(),aRect.Top()));
+    aPolygon.append(B2DPoint(aRect.Left(),aRect.Bottom()));
+    aPolygon.append(B2DPoint(aRect.Right(),aRect.Bottom()));
+    aPolygon.append(B2DPoint(aRect.Right(),aRect.Top()));
+
+    return aPolygon;
+}
 
 Image lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 {
@@ -305,72 +334,64 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
 {
     if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
     {
+        Primitive2DSequence aSeq(3);
+
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-        Point aPos = aRect.TopLeft();
-        const Size  aSize = aRect.GetSize();
-        DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
-
-        Control::SetFillColor();
-
-        if ( IsColor() )
-            maVirDev.SetFillColor( maColor );
-        else if ( IsEnabled() )
-            maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
-        else
-            maVirDev.SetFillColor( rStyleSettings.GetFaceColor() );
-
-        maVirDev.DrawRect( aRect );
+        // Draw item background
+        BColor aFillColor = maColor.getBColor();
 
         if ( pItem->mbSelected || pItem->mbHover )
-        {
-            Rectangle aSelRect = aRect;
-            Color aDoubleColor( rStyleSettings.GetHighlightColor() );
+            aFillColor = rStyleSettings.GetHighlightColor().getBColor();
 
-            // specify selection output
-            aSelRect.Left()    += 4;
-            aSelRect.Top()     += 4;
-            aSelRect.Right()   -= 4;
-            aSelRect.Bottom()  -= 4;
-
-            SetLineColor( aDoubleColor );
-            aSelRect.Left()++;
-            aSelRect.Top()++;
-            aSelRect.Right()--;
-            aSelRect.Bottom()--;
-            DrawRect( aSelRect );
-            aSelRect.Left()++;
-            aSelRect.Top()++;
-            aSelRect.Right()--;
-            aSelRect.Bottom()--;
-            DrawRect( aSelRect );
-        }
+        aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+                                            B2DPolyPolygon(lcl_Rect2Polygon(aRect)),
+                                            aFillColor));
 
         // Draw thumbnail
-        Size    aImageSize = pItem->maImage.GetSizePixel();
-        Size    aRectSize = aRect.GetSize();
+        Point aPos = aRect.TopLeft();
+        Size aImageSize = pItem->maImage.GetSizePixel();
+        Size aRectSize = aRect.GetSize();
         aPos.X() = aRect.Left() + (aRectSize.Width()-aImageSize.Width())/2;
         aPos.Y() = aRect.Top() + (aRectSize.Height()-aImageSize.Height())/2;
 
-        sal_uInt16  nImageStyle  = 0;
-        if( !IsEnabled() )
-            nImageStyle  |= IMAGE_DRAW_DISABLE;
-
-        if ( (aImageSize.Width()  > aRectSize.Width()) ||
-             (aImageSize.Height() > aRectSize.Height()) )
-        {
-            maVirDev.SetClipRegion( Region( aRect ) );
-            maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle);
-            maVirDev.SetClipRegion();
-        }
-        else
-            maVirDev.DrawImage( aPos, pItem->maImage, nImageStyle );
+        aSeq[1] = Primitive2DReference( new FillBitmapPrimitive2D(
+                                            B2DHomMatrix(),
+                                            FillBitmapAttribute(pItem->maImage.GetBitmapEx(),
+                                                                B2DPoint(aPos.X(),aPos.Y()),
+                                                                B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                                                false)
+                                            ));
 
         // Draw centered text below thumbnail
-        aPos.Y() += 5 + aImageSize.Height();
+        aPos.Y() += 20 + aImageSize.Height();
         aPos.X() = aRect.Left() + (aRectSize.Width() - maVirDev.GetTextWidth(pItem->maText))/2;
 
-        maVirDev.DrawText(aPos,pItem->maText);
+        // Create the text primitive
+        B2DVector aFontSize;
+        FontAttribute aFontAttr = getFontAttributeFromVclFont(
+               aFontSize, GetFont(), false, true );
+
+
+        basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
+                    aFontSize.getX(), aFontSize.getY(),
+                    double( aPos.X() ), double( aPos.Y() ) ) );
+
+        aSeq[2] = Primitive2DReference(
+                    new TextSimplePortionPrimitive2D(aTextMatrix,
+                                                     pItem->maText,0,pItem->maText.getLength(),
+                                                     std::vector< double >( ),
+                                                     aFontAttr,
+                                                     com::sun::star::lang::Locale(),
+                                                     Color(COL_BLACK).getBColor() ) );
+
+        // Create the processor and process the primitives
+        const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+        drawinglayer::processor2d::BaseProcessor2D * pProcessor =
+            drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+                        *this, aNewViewInfos );
+
+        pProcessor->process(aSeq);
     }
 }
 
