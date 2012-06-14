@@ -232,8 +232,6 @@ public:
 
     bool IsColor() const { return maColor.GetTransparency() == 0; }
 
-    void            Format();
-
     void            StartSelection();
 
     void            EndSelection();
@@ -346,7 +344,6 @@ protected:
     sal_uInt16 mnFirstLine;
     sal_uInt16 mnSpacing;
     sal_uInt16 mnFrameStyle;
-    bool mbFormat : 1;
     bool mbHighlight : 1;
     bool mbSelection : 1;
     bool mbNoSelection : 1;
