@@ -187,10 +187,6 @@ public:
 
     Rectangle GetItemRect( sal_uInt16 nItemId ) const;
 
-    void EnableFullItemMode( bool bFullMode = true );
-
-    bool IsFullItemModeEnabled() const { return mbFullMode; }
-
     void SetColCount( sal_uInt16 nNewCols = 1 );
 
     sal_uInt16 GetColCount() const { return mnUserCols; }
@@ -351,7 +347,6 @@ protected:
     bool mbBlackSel : 1;
     bool mbDoubleSel : 1;
     bool mbScroll : 1;
-    bool mbFullMode : 1;
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
     Color maColor;

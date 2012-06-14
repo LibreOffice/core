@@ -246,7 +246,6 @@ void ThumbnailView::ImplInit()
     mbBlackSel          = false;
     mbDoubleSel         = false;
     mbScroll            = false;
-    mbFullMode          = true;
     mbHasVisibleItems   = false;
 
     // #106446#, #106601# force mirroring of virtual device
@@ -1022,20 +1021,8 @@ void ThumbnailView::Paint( const Rectangle& )
         mbDoubleSel = false;
 
         // calculate offsets
-        long nStartX;
-        long nStartY;
-        if ( mbFullMode )
-        {
-            long nAllItemWidth = (mnItemWidth*mnCols)+nColSpace;
-            long nAllItemHeight = (mnItemHeight*mnVisLines)+nNoneHeight+nLineSpace;
-            nStartX = (aWinSize.Width()-nScrBarWidth-nAllItemWidth)/2;
-            nStartY = (aWinSize.Height()-nAllItemHeight)/2;
-        }
-        else
-        {
-            nStartX = 0;
-            nStartY = 0;
-        }
+        long nStartX = 0;
+        long nStartY = 0;
 
         // calculate and draw items
         maVirDev.SetLineColor();
@@ -1051,15 +1038,13 @@ void ThumbnailView::Paint( const Rectangle& )
         maItemListRect.Right() = x + mnCols*(mnItemWidth+mnSpacing) - mnSpacing - 1;
         maItemListRect.Bottom() = y + mnVisLines*(mnItemHeight+mnSpacing) - mnSpacing - 1;
 
-        if ( !mbFullMode )
-        {
-            // If want also draw parts of items in the last line,
-            // then we add one more line if parts of these line are
-            // visible
-            if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
-                nLastItem += mnCols;
-            maItemListRect.Bottom() = aWinSize.Height() - y;
-        }
+        // If want also draw parts of items in the last line,
+        // then we add one more line if parts of these line are
+        // visible
+        if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
+            nLastItem += mnCols;
+        maItemListRect.Bottom() = aWinSize.Height() - y;
+
         for ( size_t i = 0; i < nItemCount; i++ )
         {
             ThumbnailViewItem *const pItem = mItemList[i];
@@ -1395,11 +1380,6 @@ Rectangle ThumbnailView::GetItemRect( sal_uInt16 nItemId ) const
         return ImplGetItemRect( nPos );
 
     return Rectangle();
-}
-
-void ThumbnailView::EnableFullItemMode( bool bFullMode )
-{
-    mbFullMode = bFullMode;
 }
 
 void ThumbnailView::SetColCount( sal_uInt16 nNewCols )
