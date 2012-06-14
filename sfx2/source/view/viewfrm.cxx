@@ -252,7 +252,7 @@ public:
     void InsertViewFrame( SfxViewFrame* pFrame )
     {
         StartListening( *pFrame );
-        C40_INSERT( SfxViewFrame, pFrame, Count() );
+        push_back( pFrame );
     }
     void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
@@ -268,9 +268,9 @@ void SfxViewNotificatedFrameList_Impl::Notify( SfxBroadcaster& rBC, const SfxHin
                 SfxViewFrame* pFrame = (SfxViewFrame*) &rBC;
                 if( pFrame )
                 {
-                    sal_uInt16 nPos = C40_GETPOS( SfxViewFrame, pFrame );
-                    if( nPos != USHRT_MAX )
-                        Remove( nPos );
+                    iterator it = std::find( begin(), end(), pFrame );
+                    if( it != end() )
+                        erase( it );
                 }
                 break;
         }
@@ -1432,9 +1432,8 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
         pDispatcher->Flush();
     }
 
-    SfxViewFrame *pThis = this; // this due to the sick Array syntax
     SfxViewFrameArr_Impl &rViewArr = SFX_APP()->GetViewFrames_Impl();
-    rViewArr.C40_INSERT(SfxViewFrame, pThis, rViewArr.Count() );
+    rViewArr.push_back( this );
 }
 
 SfxViewFrame::SfxViewFrame
@@ -1491,8 +1490,8 @@ SfxViewFrame::~SfxViewFrame()
     // Unregister from the Frame List.
     SfxApplication *pSfxApp = SFX_APP();
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
-    const SfxViewFrame *pThis = this;
-    rFrames.Remove( rFrames.GetPos(pThis) );
+    SfxViewFrameArr_Impl::iterator it = std::find( rFrames.begin(), rFrames.end(), this );
+    rFrames.erase( it );
 
     // Delete Member
     KillDispatcher_Impl();
@@ -1539,9 +1538,9 @@ SfxViewFrame* SfxViewFrame::GetFirst
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
 
     // search for a SfxDocument of the specified type
-    for ( sal_uInt16 nPos = 0; nPos < rFrames.Count(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < rFrames.size(); ++nPos )
     {
-        SfxViewFrame *pFrame = rFrames.GetObject(nPos);
+        SfxViewFrame *pFrame = rFrames[nPos];
         if  (   ( !pDoc || pDoc == pFrame->GetObjectShell() )
             &&  ( !bOnlyIfVisible || pFrame->IsVisible() )
             )
@@ -1565,14 +1564,14 @@ SfxViewFrame* SfxViewFrame::GetNext
 
     // refind the specified predecessor
     sal_uInt16 nPos;
-    for ( nPos = 0; nPos < rFrames.Count(); ++nPos )
-        if ( rFrames.GetObject(nPos) == &rPrev )
+    for ( nPos = 0; nPos < rFrames.size(); ++nPos )
+        if ( rFrames[nPos] == &rPrev )
             break;
 
     // search for a Frame of the specified type
-    for ( ++nPos; nPos < rFrames.Count(); ++nPos )
+    for ( ++nPos; nPos < rFrames.size(); ++nPos )
     {
-        SfxViewFrame *pFrame = rFrames.GetObject(nPos);
+        SfxViewFrame *pFrame = rFrames[nPos];
         if  (   ( !pDoc || pDoc == pFrame->GetObjectShell() )
             &&  ( !bOnlyIfVisible || pFrame->IsVisible() )
             )
@@ -2205,7 +2204,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         return sal_False;
     }
 
-    DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().size(), "Inconsistent view arrays!" );
+    DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().size() == SFX_APP()->GetViewShells_Impl().size(), "Inconsistent view arrays!" );
     return sal_True;
 }
 

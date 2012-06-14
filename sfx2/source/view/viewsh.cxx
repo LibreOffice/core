@@ -1552,9 +1552,9 @@ SfxViewShell* SfxViewShell::GetFirst
             // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
             // these ViewShells shouldn't be accessible anymore
             // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
-            for ( sal_uInt16 n=0; n<rFrames.Count(); ++n )
+            for ( sal_uInt16 n=0; n<rFrames.size(); ++n )
             {
-                SfxViewFrame *pFrame = rFrames.GetObject(n);
+                SfxViewFrame *pFrame = rFrames[n];
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
@@ -1594,9 +1594,9 @@ SfxViewShell* SfxViewShell::GetNext
             // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
             // these ViewShells shouldn't be accessible anymore
             // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
-            for ( sal_uInt16 n=0; n<rFrames.Count(); ++n )
+            for ( sal_uInt16 n=0; n<rFrames.size(); ++n )
             {
-                SfxViewFrame *pFrame = rFrames.GetObject(n);
+                SfxViewFrame *pFrame = rFrames[n];
                 if ( pFrame == pShell->GetViewFrame() )
                 {
                     // only ViewShells with a valid ViewFrame will be returned
@@ -1626,9 +1626,9 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
                 {
                     // avoid access to dangling ViewShells
                     SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
-                    for ( sal_uInt16 n=0; n<rFrames.Count(); ++n )
+                    for ( sal_uInt16 n=0; n<rFrames.size(); ++n )
                     {
-                        SfxViewFrame *frame = rFrames.GetObject(n);
+                        SfxViewFrame *frame = rFrames[n];
                         if ( frame == GetViewFrame() && &rBC == GetObjectShell() )
                         {
                             SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();

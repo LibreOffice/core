@@ -37,7 +37,7 @@ class SfxObjectShell;
 SV_DECL_PTRARR( SfxObjectShellArr_Impl, SfxObjectShell*, 4 )
 
 class SfxViewFrame;
-SV_DECL_PTRARR( SfxViewFrameArr_Impl, SfxViewFrame*, 4 )
+class SfxViewFrameArr_Impl : public std::vector<SfxViewFrame*> {};
 
 class SfxViewShell;
 class SfxViewShellArr_Impl : public std::vector<SfxViewShell*> {};
