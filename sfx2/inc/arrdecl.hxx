@@ -46,7 +46,12 @@ struct SfxTbxCtrlFactory;
 SV_DECL_PTRARR_DEL( SfxTbxCtrlFactArr_Impl, SfxTbxCtrlFactory*, 8 )
 
 struct SfxStbCtrlFactory;
-SV_DECL_PTRARR_DEL( SfxStbCtrlFactArr_Impl, SfxStbCtrlFactory*, 8 )
+class SfxStbCtrlFactArr_Impl : public std::vector<SfxStbCtrlFactory*>
+{
+public:
+    // de-allocates child objects
+    ~SfxStbCtrlFactArr_Impl();
+};
 
 struct SfxMenuCtrlFactory;
 class SfxMenuCtrlFactArr_Impl : public std::vector<SfxMenuCtrlFactory*>

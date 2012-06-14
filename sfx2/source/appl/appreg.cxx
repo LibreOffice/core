@@ -109,7 +109,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
     }
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pAppData_Impl->pStbCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pAppData_Impl->pStbCtrlFac->size(); n++ )
     {
         SfxStbCtrlFactory *pF = (*pAppData_Impl->pStbCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -120,7 +120,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
     }
 #endif
 
-    pAppData_Impl->pStbCtrlFac->C40_INSERT( SfxStbCtrlFactory, pFact, pAppData_Impl->pStbCtrlFac->Count() );
+    pAppData_Impl->pStbCtrlFac->push_back( pFact );
 }
 
 //--------------------------------------------------------------------
