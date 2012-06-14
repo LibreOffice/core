@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -15,8 +16,8 @@
 # Portions created by the Initial Developer are Copyright (C) 2010 the
 # Initial Developer. All Rights Reserved.
 #
-# Major Contributor(s): 
-# 
+# Major Contributor(s):
+#
 # For minor contributions see the git repository.
 #
 # Alternatively, the contents of this file may be used under the terms of

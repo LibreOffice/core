@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -26,3 +27,4 @@ $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/toolbar
 $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/toolbar/standardbar.xml,smath/toolbar/standardbar.xml))
 $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/toolbar/fullscreenbar.xml,smath/toolbar/fullscreenbar.xml))
 
+# vim: set noet sw=4 ts=4:
