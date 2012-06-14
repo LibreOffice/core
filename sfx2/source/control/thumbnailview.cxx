@@ -932,43 +932,10 @@ void ThumbnailView::ImplTracking( const Point& rPos, bool bRepeat )
             }
         }
     }
-
-    ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rPos ) );
-    if ( pItem )
-    {
-        ImplHighlightItem( pItem->mnId );
-    }
-    else
-    {
-        ImplHighlightItem( mnSelItemId, false );
-    }
 }
 
 void ThumbnailView::ImplEndTracking( const Point& rPos, bool bCancel )
 {
-    ThumbnailViewItem* pItem;
-
-    // restore the old status in case of termination
-    if ( bCancel )
-        pItem = NULL;
-    else
-        pItem = ImplGetItem( ImplGetItem( rPos ) );
-
-    if ( pItem )
-    {
-        SelectItem( pItem->mnId );
-        if ( !mbSelection )
-            GrabFocus();
-        mbHighlight = false;
-        mbSelection = false;
-        Select();
-    }
-    else
-    {
-        ImplHighlightItem( mnSelItemId, false );
-        mbHighlight = false;
-        mbSelection = false;
-    }
 }
 
 void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
