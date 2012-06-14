@@ -357,15 +357,30 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #define MAX_ALIGNMENT_4
 #endif
 
-#define OFFSET_OF( s, m ) reinterpret_cast< int >((char *)&((s *)16)->m -16)
+#define OFFSET_OF( s, m ) reinterpret_cast< size_t >((char *)&((s *)16)->m -16)
 
 #define BINTEST_VERIFY( c ) \
-    if (! (c)) { fprintf( stderr, "### binary compatibility test failed: %s [line %d]!!!\n", #c, __LINE__ ); abort(); }
+    if (! (c))      \
+    {               \
+        fprintf( stderr, "### binary compatibility test failed: %s [line %d]!!!\n", #c, __LINE__ ); \
+        abort();    \
+    }
+
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
-    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
+    if (OFFSET_OF(s, m) != static_cast<size_t>(n))  \
+    {                                               \
+        fprintf(stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %" SAL_PRI_SIZET "u!!!\n", \
+            OFFSET_OF(s, m), static_cast<size_t>(n));                    \
+        abort();                                    \
+    }
 
 #define BINTEST_VERIFYSIZE( s, n ) \
-    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", (int)sizeof(s), n ); abort(); }
+    if (sizeof(s) != static_cast<size_t>(n))        \
+    {                                               \
+        fprintf(stderr, "### sizeof(" #s ") = %" SAL_PRI_SIZET "u instead of expected %" SAL_PRI_SIZET "u!!!\n", \
+            sizeof(s), static_cast<size_t>(n));    \
+        abort(); \
+    }
 
 struct C1
 {
