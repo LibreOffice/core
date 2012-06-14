@@ -40,7 +40,7 @@ class SfxViewFrame;
 SV_DECL_PTRARR( SfxViewFrameArr_Impl, SfxViewFrame*, 4 )
 
 class SfxViewShell;
-SV_DECL_PTRARR( SfxViewShellArr_Impl, SfxViewShell*, 4 )
+class SfxViewShellArr_Impl : public std::vector<SfxViewShell*> {};
 
 struct SfxTbxCtrlFactory;
 class SfxTbxCtrlFactArr_Impl : public std::vector<SfxTbxCtrlFactory*>

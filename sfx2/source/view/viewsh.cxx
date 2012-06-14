@@ -1297,9 +1297,8 @@ SfxViewShell::SfxViewShell
     StartListening(*pViewFrame->GetObjectShell());
 
     // Insert into list
-    const SfxViewShell *pThis = this; // due to the sick Array syntax
     SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
-    rViewArr.Insert(pThis, rViewArr.Count() );
+    rViewArr.push_back(this);
 }
 
 //--------------------------------------------------------------------
@@ -1311,7 +1310,8 @@ SfxViewShell::~SfxViewShell()
     // Remove from list
     const SfxViewShell *pThis = this;
     SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
-    rViewArr.Remove( rViewArr.GetPos(pThis) );
+    SfxViewShellArr_Impl::iterator it = std::find( rViewArr.begin(), rViewArr.end(), pThis );
+    rViewArr.erase( it );
 
     if ( pImp->xClipboardListener.is() )
     {
@@ -1544,9 +1544,9 @@ SfxViewShell* SfxViewShell::GetFirst
     // search for a SfxViewShell of the specified type
     SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
     SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
-    for ( sal_uInt16 nPos = 0; nPos < rShells.Count(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < rShells.size(); ++nPos )
     {
-        SfxViewShell *pShell = rShells.GetObject(nPos);
+        SfxViewShell *pShell = rShells[nPos];
         if ( pShell )
         {
             // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
@@ -1582,13 +1582,13 @@ SfxViewShell* SfxViewShell::GetNext
     SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
     SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
     sal_uInt16 nPos;
-    for ( nPos = 0; nPos < rShells.Count(); ++nPos )
-        if ( rShells.GetObject(nPos) == &rPrev )
+    for ( nPos = 0; nPos < rShells.size(); ++nPos )
+        if ( rShells[nPos] == &rPrev )
             break;
 
-    for ( ++nPos; nPos < rShells.Count(); ++nPos )
+    for ( ++nPos; nPos < rShells.size(); ++nPos )
     {
-        SfxViewShell *pShell = rShells.GetObject(nPos);
+        SfxViewShell *pShell = rShells[nPos];
         if ( pShell )
         {
             // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame

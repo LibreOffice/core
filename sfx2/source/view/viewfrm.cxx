@@ -2205,7 +2205,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         return sal_False;
     }
 
-    DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().Count(), "Inconsistent view arrays!" );
+    DBG_ASSERT( SFX_APP()->GetViewFrames_Impl().Count() == SFX_APP()->GetViewShells_Impl().size(), "Inconsistent view arrays!" );
     return sal_True;
 }
 
