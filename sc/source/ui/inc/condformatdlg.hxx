@@ -51,6 +51,7 @@ enum ScCondFormatEntryType
     CONDITION,
     COLORSCALE,
     DATABAR,
+    FORMULA,
     COLLAPSED
 };
 
@@ -107,6 +108,7 @@ private:
     void SetCondType();
     void SetColorScaleType();
     void SetDataBarType();
+    void SetFormulaType();
     void HideCondElements();
     void HideColorScaleElements();
     void HideDataBarElements();
@@ -117,6 +119,7 @@ private:
     ScFormatEntry* createConditionEntry() const;
     ScFormatEntry* createColorscaleEntry() const;
     ScFormatEntry* createDatabarEntry() const;
+    ScFormatEntry* createFormulaEntry() const;
 
     ScDocument* mpDoc;
     ScAddress maPos;
