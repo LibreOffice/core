@@ -32,7 +32,15 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.ViewFlipper;
 
 import com.polites.android.GestureImageView;
 
@@ -59,12 +67,75 @@ import java.nio.ByteOrder;
 import org.libreoffice.android.Bootstrap;
 
 public class DocumentLoader
-    extends Activity {
-
+    extends Activity
+{
     private static String TAG = "DocumentLoader";
 
+    long timingOverhead;
+    Object desktop;
+    XComponentLoader componentLoader;
+    XToolkit2 toolkit;
+    Object doc;
+    int pageCount;
+    XRenderable renderable;
+
+    PropertyValue[] loadProps;
+
+    GestureDetector gestureDetector;
+    ViewFlipper flipper;
+
+    class GestureListener
+        extends GestureDetector.SimpleOnGestureListener
+    {
+        @Override
+        public boolean onFling(MotionEvent event1,
+                               MotionEvent event2,
+                               float velocityX,
+                               float velocityY)
+        {
+            Log.i(TAG, "onFling: " + event1 + " " + event2);
+            if (event1.getX() - event2.getX() > 120) {
+                AnimationSet leftIn = new AnimationSet(true);
+                leftIn.addAnimation(new AlphaAnimation(0.1f, 1.0f));
+                leftIn.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
+                                                           Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                leftIn.setDuration(500);
+                flipper.setInAnimation(leftIn);
+
+                AnimationSet leftOut = new AnimationSet(true);
+                leftOut.addAnimation(new AlphaAnimation(1f, 0.1f));
+                leftOut.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, -1,
+                                                            Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                leftOut.setDuration(500);
+                flipper.setOutAnimation(leftOut);
+
+                flipper.showNext();
+                return true;
+            } else if (event2.getX() - event1.getX() > 120) {
+                AnimationSet rightIn = new AnimationSet(true);
+                rightIn.addAnimation(new AlphaAnimation(0.1f, 1.0f));
+                rightIn.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
+                                                            Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                rightIn.setDuration(500);
+                flipper.setInAnimation(rightIn);
+
+                AnimationSet rightOut = new AnimationSet(true);
+                rightOut.addAnimation(new AlphaAnimation(1f, 0.1f));
+                rightOut.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
+                                                             Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                rightOut.setDuration(500);
+                flipper.setOutAnimation(rightOut);
+
+                flipper.showPrevious();
+                return true;
+            }
+            return false;
+        }
+    }
+
     class MyXController
-        implements XController {
+        implements XController
+    {
 
         XFrame frame;
         XModel model;
@@ -124,6 +195,62 @@ public class DocumentLoader
         public void removeEventListener(XEventListener listener)
         {
             Log.i(TAG, "removeEventListener");
+        }
+    }
+
+    enum PageState { LOADING, READY };
+
+    ByteBuffer renderPage(int number)
+    {
+        ByteBuffer bb;
+
+        bb = ByteBuffer.allocateDirect(1024*1024*4);
+        long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
+        Log.i(TAG, "bb is " + bb);
+        XDevice device = toolkit.createScreenCompatibleDeviceUsingBuffer(1024, 1024, wrapped_bb);
+
+        dumpUNOObject("device", device);
+
+        PropertyValue renderProps[] = new PropertyValue[3];
+        renderProps[0] = new PropertyValue();
+        renderProps[0].Name = "IsPrinter";
+        renderProps[0].Value = new Boolean(true);
+        renderProps[1] = new PropertyValue();
+        renderProps[1].Name = "RenderDevice";
+        renderProps[1].Value = device;
+        renderProps[2] = new PropertyValue();
+        renderProps[2].Name = "View";
+        renderProps[2].Value = new MyXController();
+
+        try {
+            long t0 = System.currentTimeMillis();
+            renderable.render(number, doc, renderProps);
+            long t1 = System.currentTimeMillis();
+            Log.i(TAG, "Rendering page " + number + " took " + ((t1-t0)-timingOverhead) + " ms");
+        }
+        catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.exit(1);
+        }
+
+        Bootstrap.force_full_alpha_bb(bb, 0, 1024 * 1024 * 4);
+
+        return bb;
+    }
+
+    class Page
+    {
+        int number;
+        PageState state = PageState.LOADING;
+        ByteBuffer bb;
+
+        Page(int number)
+        {
+            this.number = number;
+
+            bb = renderPage(number);
+
+            state = PageState.READY;
         }
     }
 
@@ -195,7 +322,12 @@ public class DocumentLoader
     {
         super.onCreate(savedInstanceState);
 
+        gestureDetector = new GestureDetector(this, new GestureListener());
+
         try {
+            long t0 = System.currentTimeMillis();
+            long t1 = System.currentTimeMillis();
+            timingOverhead = t1 - t0;
 
             Bootstrap.setup(this);
 
@@ -211,15 +343,15 @@ public class DocumentLoader
             Log.i(TAG, "Sleeping NOW");
             Thread.sleep(20000);
 
-            XComponentContext xContext = null;
+            XComponentContext context = null;
 
-            xContext = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
+            context = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
 
-            Log.i(TAG, "xContext is" + (xContext!=null ? " not" : "") + " null");
+            Log.i(TAG, "context is" + (context!=null ? " not" : "") + " null");
 
-            XMultiComponentFactory xMCF = xContext.getServiceManager();
+            XMultiComponentFactory mcf = context.getServiceManager();
 
-            Log.i(TAG, "xMCF is" + (xMCF!=null ? " not" : "") + " null");
+            Log.i(TAG, "mcf is" + (mcf!=null ? " not" : "") + " null");
 
             String input = getIntent().getStringExtra("input");
             if (input == null)
@@ -236,15 +368,14 @@ public class DocumentLoader
 
             Bootstrap.initVCL();
 
-            Object oDesktop = xMCF.createInstanceWithContext
-                ("com.sun.star.frame.Desktop", xContext);
+            Object oDesktop = mcf.createInstanceWithContext
+                ("com.sun.star.frame.Desktop", context);
 
             Log.i(TAG, "oDesktop is" + (oDesktop!=null ? " not" : "") + " null");
 
             Bootstrap.initUCBHelper();
 
-            XComponentLoader xCompLoader = (XComponentLoader)
-                UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
+            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
 
             Log.i(TAG, "xCompLoader is" + (xCompLoader!=null ? " not" : "") + " null");
 
@@ -265,65 +396,68 @@ public class DocumentLoader
 
             Log.i(TAG, "Attempting to load " + sUrl);
 
-            Object oDoc =
-                xCompLoader.loadComponentFromURL
-                (sUrl, "_blank", 0, loadProps);
+            t0 = System.currentTimeMillis();
+            doc = xCompLoader.loadComponentFromURL(sUrl, "_blank", 0, loadProps);
+            t1 = System.currentTimeMillis();
+            Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms");
 
-            dumpUNOObject("oDoc", oDoc);
+            dumpUNOObject("doc", doc);
 
-            Object toolkit = xMCF.createInstanceWithContext
-                ("com.sun.star.awt.Toolkit", xContext);
+            Object toolkitService = mcf.createInstanceWithContext
+                ("com.sun.star.awt.Toolkit", context);
 
+            dumpUNOObject("toolkitService", toolkitService);
+
+            toolkit = (XToolkit2) UnoRuntime.queryInterface(XToolkit2.class, toolkitService);
             dumpUNOObject("toolkit", toolkit);
 
-            XToolkit2 xToolkit = (XToolkit2)
-                UnoRuntime.queryInterface(XToolkit2.class, toolkit);
+            renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
 
-            ByteBuffer bb = ByteBuffer.allocateDirect(1024*1024*4);
-            long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
-            XDevice device = xToolkit.createScreenCompatibleDeviceUsingBuffer(1024, 1024, wrapped_bb);
+            ByteBuffer smallbb = ByteBuffer.allocateDirect(128*128*4);
+            long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
+            XDevice smalldevice = toolkit.createScreenCompatibleDeviceUsingBuffer(128, 128, wrapped_smallbb);
 
-            dumpUNOObject("device", device);
-
-            XRenderable renderBabe = (XRenderable)
-                UnoRuntime.queryInterface(XRenderable.class, oDoc);
-
-            PropertyValue renderProps[] =
-                new PropertyValue[3];
+            PropertyValue renderProps[] = new PropertyValue[3];
             renderProps[0] = new PropertyValue();
             renderProps[0].Name = "IsPrinter";
             renderProps[0].Value = new Boolean(true);
             renderProps[1] = new PropertyValue();
             renderProps[1].Name = "RenderDevice";
-            renderProps[1].Value = device;
+            renderProps[1].Value = smalldevice;
             renderProps[2] = new PropertyValue();
             renderProps[2].Name = "View";
             renderProps[2].Value = new MyXController();
 
-            Log.i(TAG, "getRendererCount: " + renderBabe.getRendererCount(oDoc, renderProps));
+            pageCount = renderable.getRendererCount(doc, renderProps);
+            Log.i(TAG, "getRendererCount: " + pageCount);
 
-            renderBabe.render(0, oDoc, renderProps);
+            flipper = new ViewFlipper(this);
 
-            Log.i(TAG, "Rendered:");
-            dumpBytes("bb", bb, 0);
-            Bootstrap.force_full_alpha_bb(bb, 0, 1024 * 1024 * 4);
-            Log.i(TAG, "after force_full_alpha:");
-            dumpBytes("bb", bb, 0);
+            flipper.setScaleY(-1);
 
-            ImageView imageView = new GestureImageView(this);
-            imageView.setScaleY(-1);
+            for (int i = 0; i < pageCount; i++) {
+                ByteBuffer bb = renderPage(i);
+                Bitmap bm = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
+                bm.copyPixelsFromBuffer(bb);
 
-            Bitmap bm = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
-            bm.copyPixelsFromBuffer(bb);
+                ImageView imageView = new ImageView(this);
+                imageView.setImageBitmap(bm);
 
-            imageView.setImageBitmap(bm);
+                flipper.addView(imageView, i, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            }
 
-            setContentView(imageView);
+            setContentView(flipper);
         }
         catch (Exception e) {
             e.printStackTrace(System.err);
             System.exit(1);
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        return gestureDetector.onTouchEvent(event);
     }
 }
 
