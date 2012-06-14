@@ -16,7 +16,6 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/timer.hxx>
 
 class MouseEvent;
@@ -314,7 +313,6 @@ private:
 
 protected:
 
-    VirtualDevice maVirDev;
     Timer maTimer;
     ValueItemList mItemList;
     SfxOrganizeMgr *mpMgr;

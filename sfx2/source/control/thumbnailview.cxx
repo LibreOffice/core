@@ -189,7 +189,6 @@ Image lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 
 ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : Control( pParent, nWinStyle ),
-    maVirDev( *this ),
     maColor( COL_TRANSPARENT )
 {
     ImplInit();
@@ -198,7 +197,6 @@ ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableT
 
 ThumbnailView::ThumbnailView (Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
     : Control( pParent, rResId ),
-    maVirDev( *this ),
     maColor( COL_TRANSPARENT )
 {
     ImplInit();
@@ -247,9 +245,6 @@ void ThumbnailView::ImplInit()
     mbDoubleSel         = false;
     mbScroll            = false;
     mbHasVisibleItems   = false;
-
-    // #106446#, #106601# force mirroring of virtual device
-    maVirDev.EnableRTL( GetParent()->IsRTLEnabled() );
 
     ImplInitSettings( true, true, true );
 }
@@ -363,7 +358,7 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
 
         // Draw centered text below thumbnail
         aPos.Y() += 20 + aImageSize.Height();
-        aPos.X() = aRect.Left() + (aRectSize.Width() - maVirDev.GetTextWidth(pItem->maText))/2;
+        aPos.X() = aRect.Left() + (aRectSize.Width() - GetTextWidth(pItem->maText))/2;
 
         // Create the text primitive
         B2DVector aFontSize;
@@ -890,11 +885,6 @@ void ThumbnailView::Paint( const Rectangle& )
         mnItemHeight = nCalcHeight / mnVisLines;
     }
 
-    // Init VirDev
-    maVirDev.SetSettings( GetSettings() );
-    maVirDev.SetBackground( GetBackground() );
-    maVirDev.SetOutputSizePixel( aWinSize, sal_True );
-
     // nothing is changed in case of too small items
     if ( (mnItemWidth <= 0) ||
          (mnItemHeight <= 2) ||
@@ -938,7 +928,6 @@ void ThumbnailView::Paint( const Rectangle& )
         long nStartY = 0;
 
         // calculate and draw items
-        maVirDev.SetLineColor();
         long x = nStartX;
         long y = nStartY;
 
