@@ -93,7 +93,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
             if (useOffset)
                 offset[i] = startPos + i;
         }
-        return OUString(newStr->buffer, nCount);
+        return OUString( newStr, SAL_NO_ACQUIRE);
 }
 
 sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
