@@ -41,6 +41,8 @@ $(eval $(call gb_Module_add_targets,pyuno,\
 ))
 endif
 
+ifneq ($(SYSTEM_PYTHON),YES)
+
 # zipcore: python.exe on Windows
 # zipcore: pyversion.hxx on Windows
 ifeq ($(OS),WNT)
@@ -53,7 +55,6 @@ endif
 
 
 # zipcore: python.sh on Unix
-ifneq ($(SYSTEM_PYTHON),YES)
 ifeq ($(GUI),UNX)
 $(eval $(call gb_Module_add_targets,pyuno,\
     CustomTarget_python_shell \
@@ -66,21 +67,18 @@ $(eval $(call gb_Module_add_targets,pyuno,\
 ))
 endif
 endif
-endif
 
 # python-zipcore-$(PYVESION) not on MACOSX
 # (OOoPython.framework.zip is already delivered for MACOSX in python module)
-ifneq ($(SYSTEM_PYTHON),YES)
 ifneq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,pyuno,\
     CustomTarget_zipcore \
     Package_zipcore \
 ))
 endif
-endif
+
+endif # SYSTEM_PYTHON
 
 endif # DISABLE_PYTHON
-
-
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
