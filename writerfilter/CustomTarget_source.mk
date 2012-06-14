@@ -149,7 +149,7 @@ $(writerfilter_GEN_ooxml_FactoryValues_hxx) : $(writerfilter_SRC_ooxml_FactoryVa
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(gb_XSLTPROC) $(writerfilter_SRC_ooxml_FactoryValues_xsl) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_GEN_ooxml_FastTokens_hxx) : $(writerfilter_SRC_ooxml_FastTokens_xsl) $(writerfilter_GEN_ooxml_Token_xml)
+$(writerfilter_GEN_ooxml_FastTokens_hxx) : $(writerfilter_SRC_ooxml_FastTokens_xsl) $(writerfilter_GEN_ooxml_Token_xml) | $(writerfilter_WORK)/ooxml/.dir
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(gb_XSLTPROC) $(writerfilter_SRC_ooxml_FastTokens_xsl) $(writerfilter_GEN_ooxml_Token_xml)) > $@
 
@@ -166,7 +166,7 @@ $(writerfilter_GEN_ooxml_Model_processed) : $(writerfilter_GEN_ooxml_Namespacesm
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(gb_XSLTPROC) $(writerfilter_GEN_ooxml_Namespacesmap_xsl) $(writerfilter_SRC_ooxml_Model)) > $@
 
-$(writerfilter_GEN_ooxml_NamespaceIds_hxx) : $(writerfilter_SRC_ooxml_NamespaceIds_xsl) $(writerfilter_GEN_ooxml_Model_processed)
+$(writerfilter_GEN_ooxml_NamespaceIds_hxx) : $(writerfilter_SRC_ooxml_NamespaceIds_xsl) $(writerfilter_GEN_ooxml_Model_processed) | $(writerfilter_WORK)/ooxml/.dir
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(gb_XSLTPROC) $(writerfilter_SRC_ooxml_NamespaceIds_xsl) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
