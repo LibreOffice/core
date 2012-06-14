@@ -12,16 +12,21 @@ import android.view.MenuItem;
 
 public class WriterViewerActivity extends Activity{
 	private String currentDirectoryKey = "CURRENT_DIRECTORY";
-	File file;
+	private String filterModeKey = "FILTER_MODE";
+	File dir;
+	private int filterMode;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		Intent i = new Intent();
-		i = this.getIntent();
+		Intent i = this.getIntent();
 		if( i.hasExtra( currentDirectoryKey ) ){
 			Log.d(currentDirectoryKey, i.getStringExtra( currentDirectoryKey ) );
-			file = new File( i.getStringExtra( currentDirectoryKey ) );
+			dir = new File( i.getStringExtra( currentDirectoryKey ) );
+		}
+		if( i.hasExtra( filterModeKey ) ){
+			//Log.d("FILTER_OC_WRITER", Integer.toString(i.getIntExtra( filterModeKey , FileUtilities.ALL )));
+        	filterMode = i.getIntExtra( filterModeKey , FileUtilities.ALL );
 		}
 		setContentView(R.layout.main);
 	    ActionBar actionBar = getActionBar();
@@ -34,7 +39,8 @@ public class WriterViewerActivity extends Activity{
 	        case android.R.id.home:
 	            // app icon in action bar clicked; go home
 	            Intent intent = new Intent(this, LibreOfficeUIActivity.class);
-	            intent.putExtra(currentDirectoryKey, file );
+	            intent.putExtra(currentDirectoryKey, dir.getAbsolutePath() );
+	    		intent.putExtra( filterModeKey , filterMode );
 	            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	            startActivity(intent);
 	            return true;

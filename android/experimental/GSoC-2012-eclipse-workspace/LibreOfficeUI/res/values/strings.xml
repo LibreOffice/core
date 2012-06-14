@@ -4,5 +4,11 @@
     <string name="hello">Hello World, LibreOfficeUIActivity!</string>
     <string name="app_name">LibreOfficeUI</string>
     <string name="menu_search">Search</string>
+    <string-array name="file_view_modes">
+        <item >EVERYTHING</item>
+        <item >DOCUMENTS</item>
+        <item >SPREADSHEETS</item>
+        <item >PRESENTATIONS</item>
+    </string-array>
 
 </resources>

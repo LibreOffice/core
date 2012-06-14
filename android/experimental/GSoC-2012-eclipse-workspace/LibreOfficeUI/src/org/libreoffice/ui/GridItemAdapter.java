@@ -30,6 +30,12 @@ public class GridItemAdapter extends BaseAdapter{
 		this.currentDirectory = currentDirectory;
 		filePaths = currentDirectory.listFiles();
 	}
+	
+	public GridItemAdapter(Context mContext, File currentDirectory, File[] filteredFiles) {
+		this.mContext = mContext;
+		this.currentDirectory = currentDirectory;
+		filePaths = filteredFiles;
+	}
 
 	public int getCount() {
 		return filePaths.length;
@@ -69,13 +75,13 @@ public class GridItemAdapter extends BaseAdapter{
 			// set image based on selected text
 			ImageView imageView = (ImageView) gridView
 					.findViewById(R.id.grid_item_image);
-			if( filePaths[position].getName().contains(".odt") ){
+			if( filePaths[position].getName().endsWith(".odt") ){
 				imageView.setImageResource(R.drawable.writer);
 			}
-			if( filePaths[position].getName().contains(".ods") ){
+			if( filePaths[position].getName().endsWith(".ods") ){
 				imageView.setImageResource(R.drawable.calc);
 			}
-			if( filePaths[position].getName().contains(".odp") ){
+			if( filePaths[position].getName().endsWith(".odp") ){
 				imageView.setImageResource(R.drawable.impress);
 			}
 			if( filePaths[position].isDirectory() ){//Is a folder

@@ -2,8 +2,11 @@ package org.libreoffice.ui;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
@@ -24,43 +27,68 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LibreOfficeUIActivity extends Activity {
+public class LibreOfficeUIActivity extends Activity implements OnNavigationListener {
     private String tag = "file_manager";
     private File homeDirectory;//make final?
 	private File currentDirectory;
+	private String filter = "";
+	private String[] filters = {"all",".odt",".ods",".odp"};
+	private int filterMode = FileUtilities.ALL;
+	FileFilter fileFilter;
+	FilenameFilter filenameFilter;
 	private String[] fileNames;
 	private File[] filePaths;
 	
 	private String currentDirectoryKey = "CURRENT_DIRECTORY";
+	private String filterModeKey = "FILTER_MODE";
+	
 	GridView gv;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.file_explorer);
-        gv = (GridView)findViewById(R.id.file_explorer_grid_view);
+        setContentView(R.layout.file_grid);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);//This should show current directory if anything
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.file_view_modes,
+                android.R.layout.simple_spinner_dropdown_item);
+        actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
+			
         
-        //Need to sort out how best to maintain application state (directory, basically)
+        homeDirectory  = new File(Environment.getExternalStorageDirectory(),"LibreOffice");
         Intent i = this.getIntent();
         if( i.hasExtra( currentDirectoryKey ) ){
         	//This isn't what I think it is. It's not a full path
         	currentDirectory = new File( i.getStringExtra( currentDirectoryKey ) );
+        }else{
+	        currentDirectory = homeDirectory;
         }
         
-        homeDirectory  = new File(Environment.getExternalStorageDirectory(),"LibreOffice");
-        currentDirectory = homeDirectory;
+        if( i.hasExtra( filterModeKey ) ){
+        	Log.d(filterModeKey+"_GRID_OC" , Integer.toString( i.getIntExtra( filterModeKey, FileUtilities.ALL ) ));
+            filterMode = i.getIntExtra( filterModeKey, FileUtilities.ALL);
+        }
+        if( !currentDirectory.equals( homeDirectory )){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+		//fileFilter = FileUtilities.getFileFilter( filterMode );
+		//filenameFilter = FileUtilities.getFilenameFilter( filterMode );	
+		
         //createDummyFileSystem();
-    	filePaths = new File[ currentDirectory.listFiles().length ];
-    	fileNames = new String[ filePaths.length ];
-    	filePaths = currentDirectory.listFiles();// Need to write a class to order lists of Files
-    	fileNames = currentDirectory.list();// should be based on filePaths -> keep same order
+    	//filePaths = currentDirectory.listFiles( fileFilter );
+    	//order/filter filePaths here
+    	//fileNames = currentDirectory.list( filenameFilter );
 
         // code to make a grid view 
-        GridItemAdapter gridAdapter = new GridItemAdapter(getApplicationContext(), filePaths );
-        gv.setAdapter(gridAdapter);
+    	gv = (GridView)findViewById(R.id.file_explorer_grid_view);
+        //GridItemAdapter gridAdapter = new GridItemAdapter(getApplicationContext(), filePaths );
+        //gv.setAdapter(gridAdapter);
         gv.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                 int position, long id) {
@@ -78,21 +106,30 @@ public class LibreOfficeUIActivity extends Activity {
             		
             }
           });
-        
-        
+        actionBar.setSelectedNavigationItem( filterMode + 1 );//This triggers the listener which modifies the view.
+        //openDirectory( currentDirectory );
     }
     
-    public void openDirectory(File dir){
+    public void openDirectory(File dir ){
     	currentDirectory = dir; 
-    	fileNames = currentDirectory.list();
-    	filePaths = currentDirectory.listFiles();
-    	gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory ) );
+    	Log.d(tag, dir.toString() + " " + homeDirectory.toString());
+        if( !currentDirectory.equals( homeDirectory )){
+            ActionBar actionBar = getActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }else{
+            ActionBar actionBar = getActionBar();
+            actionBar.setDisplayHomeAsUpEnabled( false );
+        }
+    	fileNames = currentDirectory.list( FileUtilities.getFilenameFilter( filterMode ) );
+    	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
+    	gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
     }
     
     public void open(String file){
     	//Should add file to the intent as an extra
     	Intent i = new Intent( this , WriterViewerActivity.class );
-    	i.putExtra( currentDirectoryKey, currentDirectory.getName() );
+    	i.putExtra( currentDirectoryKey , currentDirectory.getAbsolutePath() );
+    	i.putExtra( filterModeKey  , filterMode );
     	startActivity( i );
     }
     
@@ -107,9 +144,9 @@ public class LibreOfficeUIActivity extends Activity {
 	    switch (item.getItemId()) {
 	        case android.R.id.home:
 	            // app icon in action bar clicked; go home
-	            Intent intent = new Intent(this, LibreOfficeUIActivity.class);
+	            //Intent intent = new Intent(this, LibreOfficeUIActivity.class);
 	            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	            startActivity(intent);
+	            //startActivity(intent);
 	            if( !currentDirectory.equals( homeDirectory ) ){
 	            	openDirectory( currentDirectory.getParentFile() );
 	            }
@@ -167,6 +204,9 @@ public class LibreOfficeUIActivity extends Activity {
 				File regularDirectory = new File( currentDirectory , "Folder" );
 				regularDirectory.mkdir();
 				new File( regularDirectory , "yetAnotherDoc.odt" ).createNewFile();
+				File anotherRegularDirectory = new File( regularDirectory , "AnotherFolder" );
+				anotherRegularDirectory.mkdir();
+				new File( anotherRegularDirectory , "yetAnotherDoc2.odt" ).createNewFile();
 				//Should put a folder in at some stage.
 				
 			} catch (IOException e) {
@@ -184,14 +224,14 @@ public class LibreOfficeUIActivity extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
     	// TODO Auto-generated method stub
     	super.onSaveInstanceState(outState);
-    	outState.putString( currentDirectoryKey , currentDirectory.getName() );
+    	outState.putString( currentDirectoryKey , currentDirectory.getAbsolutePath() );
     }
     
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
     	// TODO Auto-generated method stub
     	super.onRestoreInstanceState(savedInstanceState);
-    	currentDirectory = new File( savedInstanceState.getString( currentDirectoryKey ) );
+    	//currentDirectory = new File( savedInstanceState.getString( currentDirectoryKey ) );
     }
     
     @Override
@@ -200,6 +240,12 @@ public class LibreOfficeUIActivity extends Activity {
     	
     	super.onPause();
     }
+     
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		filterMode = itemPosition -1; //bit of a hack, I know. -1 is ALL 0 Docs etc
+		openDirectory( currentDirectory );// Uses filter mode 
+		return true;
+	}
 
 }
 
