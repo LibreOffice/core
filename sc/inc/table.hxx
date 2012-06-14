@@ -479,8 +479,6 @@ public:
     void        SetTabNo(SCTAB nNewTab);
     void        FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                  std::set<sal_uInt16>& rIndexes) const;
-    void        ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                      const ScRangeData::IndexMap& rMap );
     void        Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                         double nStepValue, double nMaxValue, ScProgress* pProgress);

@@ -74,7 +74,6 @@ private:
 public:
     ScDataBarSettingsDlg(Window* pParent);
     ScDataBarSettingsDlg(Window* pParent, const ScDataBarFormatData& rData);
-    ScDataBarSettingsDlg(Window* pParent, ScDataBarFormat* pFormat);
 
     ScDataBarFormatData* GetData();
 };

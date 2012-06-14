@@ -1543,26 +1543,6 @@ void ScFormulaCell::FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const
     lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument->GetRangeName() );
 }
 
-void ScFormulaCell::ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap )
-{
-    for( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
-    {
-        if( p->GetOpCode() == ocName )
-        {
-            sal_uInt16 nIndex = p->GetIndex();
-            ScRangeData::IndexMap::const_iterator itr = rMap.find(nIndex);
-            sal_uInt16 nNewIndex = itr == rMap.end() ? nIndex : itr->second;
-            if ( nIndex != nNewIndex )
-            {
-                p->SetIndex( nNewIndex );
-                bCompile = true;
-            }
-        }
-    }
-    if( bCompile )
-        CompileTokenArray();
-}
-
 bool ScFormulaCell::IsChanged() const
 {
     return bChanged;

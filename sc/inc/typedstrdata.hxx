@@ -52,7 +52,6 @@ public:
 
     bool IsStrData() const;
     SC_DLLPUBLIC const rtl::OUString& GetString() const;
-    double GetValue() const;
     StringType GetStringType() const;
 
     struct LessCaseSensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>

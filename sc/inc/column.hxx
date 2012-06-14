@@ -292,7 +292,6 @@ public:
 
     void        SetTabNo(SCTAB nNewTab);
     void        FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<sal_uInt16>& rIndexes) const;
-    void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScRangeData::IndexMap& rMap );
 
     const SfxPoolItem*      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;

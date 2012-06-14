@@ -111,7 +111,6 @@ namespace drawinglayer
             sal_Int32 getTextUpperDistance() const;
             sal_Int32 getTextRightDistance() const;
             sal_Int32 getTextLowerDistance() const;
-            sal_uInt32 getPropertiesVersion() const;
             SdrTextHorzAdjust getSdrTextHorzAdjust() const;
             SdrTextVertAdjust getSdrTextVertAdjust() const;
 

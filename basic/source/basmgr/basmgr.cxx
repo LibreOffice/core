@@ -685,8 +685,6 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
         if ( rStorage.IsStream( String::CreateFromAscii(szOldManagerStream) ) )
             LoadOldBasicManager( rStorage );
     }
-
-    bBasMgrModified = sal_False;
 }
 
 void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInfo& rInfo )
@@ -824,7 +822,6 @@ BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath, sal_Bool bDocMgr
 
     // Save is only necessary if basic has changed
     xStdLib->SetModified( sal_False );
-    bBasMgrModified = sal_False;
 }
 
 void BasicManager::ImpMgrNotLoaded( const String& rStorageName )
@@ -1063,7 +1060,6 @@ void BasicManager::Init()
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
-    bBasMgrModified = sal_False;
     pLibs = new BasicLibs;
     mpImpl = new BasicManagerImpl();
 }
@@ -1293,7 +1289,6 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const String& rLibName, s
             pLibInfo->GetLib()->SetModified( sal_True ); // Must be saved after Add!
             pLibInfo->SetStorageName( String::CreateFromAscii(szImbedded) ); // Save in BasicManager-Storage
         }
-        bBasMgrModified = sal_True;
     }
     else
     {
@@ -1391,7 +1386,6 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
             }
         }
     }
-    bBasMgrModified = sal_True;
     if ( pLibInfo->GetLib().Is() )
         GetStdLib()->Remove( pLibInfo->GetLib() );
     delete pLibs->Remove( pLibInfo );
@@ -1481,7 +1475,6 @@ sal_Bool BasicManager::SetLibName( sal_uInt16 nLib, const String& rName )
             xStdLib->SetName( rName );
             xStdLib->SetModified( sal_True );
         }
-        bBasMgrModified = sal_True;
         return sal_True;
     }
     return sal_False;
@@ -1615,15 +1608,6 @@ BasicLibInfo* BasicManager::FindLibInfo( StarBASIC* pBasic ) const
     return 0;
 }
 
-
-sal_Bool BasicManager::IsModified() const
-{
-    DBG_CHKTHIS( BasicManager, 0 );
-
-    if ( bBasMgrModified )
-        return sal_True;
-    return IsBasicModified();
-}
 
 sal_Bool BasicManager::IsBasicModified() const
 {

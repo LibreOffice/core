@@ -163,8 +163,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScNamedRangeObj* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XInterface> xObj );
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()

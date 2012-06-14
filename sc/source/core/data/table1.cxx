@@ -1586,16 +1586,6 @@ void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         aCol[i].FindRangeNamesInUse(nRow1, nRow2, rIndexes);
 }
 
-void ScTable::ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1,
-                                    SCCOL nCol2, SCROW nRow2,
-                                    const ScRangeData::IndexMap& rMap )
-{
-    for (SCCOL i = nCol1; i <= nCol2 && (ValidCol(i)); i++)
-    {
-        aCol[i].ReplaceRangeNamesInUse( nRow1, nRow2, rMap );
-    }
-}
-
 void ScTable::ExtendPrintArea( OutputDevice* pDev,
                     SCCOL /* nStartCol */, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow )
 {

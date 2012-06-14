@@ -1197,7 +1197,6 @@ public:
 
     SC_DLLPUBLIC sal_uLong AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab );
     void DeleteConditionalFormat( sal_uLong nIndex, SCTAB nTab );
-    SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, SCTAB nTab, ScRangeList& rRanges );
     SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab );
     void            ConditionalChanged( sal_uLong nKey, SCTAB nTab );
 

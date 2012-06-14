@@ -164,7 +164,6 @@ private:
     void RecalcAll();
     void DoScroll(long nDiff);
 public:
-    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc );
     ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRanges, const ScAddress& rPos);
 
     ScConditionalFormat* GetConditionalFormat() const;

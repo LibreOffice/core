@@ -633,12 +633,6 @@ ScNoteCell::~ScNoteCell()
 
 // ============================================================================
 
-ScValueCell::ScValueCell() :
-    ScBaseCell( CELLTYPE_VALUE ),
-    mfValue( 0.0 )
-{
-}
-
 ScValueCell::ScValueCell( double fValue ) :
     ScBaseCell( CELLTYPE_VALUE ),
     mfValue( fValue )

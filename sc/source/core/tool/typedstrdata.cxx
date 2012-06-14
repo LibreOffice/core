@@ -114,11 +114,6 @@ const rtl::OUString& ScTypedStrData::GetString() const
     return maStrValue;
 }
 
-double ScTypedStrData::GetValue() const
-{
-    return mfValue;
-}
-
 ScTypedStrData::StringType ScTypedStrData::GetStringType() const
 {
     return meStrType;

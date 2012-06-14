@@ -921,20 +921,6 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, ConditionTypeSelectHdl )
     return 0;
 }
 
-ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc):
-    Control(pParent, rResId),
-    mbHasScrollBar(false),
-    mpScrollBar(new ScrollBar(this, WB_VERT )),
-    mnTopIndex(0),
-    mpDoc(pDoc)
-{
-    mpScrollBar->SetScrollHdl( LINK( this, ScCondFormatList, ScrollHdl ) );
-    mpScrollBar->EnableDrag();
-
-    RecalcAll();
-    FreeResource();
-}
-
 ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRanges, const ScAddress& rPos):
     Control(pParent, rResId),
     mbHasScrollBar(false),

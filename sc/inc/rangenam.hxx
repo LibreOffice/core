@@ -154,8 +154,6 @@ public:
 
     void            ValidateTabRefs();
 
-    void            ReplaceRangeNamesInUse( const IndexMap& rMap );
-
     static void     MakeValidName( String& rName );
     SC_DLLPUBLIC static bool        IsNameValid( const String& rName, ScDocument* pDoc );
 

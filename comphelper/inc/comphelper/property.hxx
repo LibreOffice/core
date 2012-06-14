@@ -88,19 +88,6 @@ namespace comphelper
     };
 
 //------------------------------------------------------------------
-/** find property with given name
-
-    @param o_rProp
-    Output parameter receiving the property, if found
-
-    @param i_rPropName
-    Name of the property to find
-
-    @return false, if property was not found
- */
-COMPHELPER_DLLPUBLIC bool findProperty(starbeans::Property& o_rProp, staruno::Sequence<starbeans::Property>& i_seqProps, const ::rtl::OUString& i_rPropName);
-
-//------------------------------------------------------------------
 /// remove the property with the given name from the given sequence
 COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>& seqProps, const ::rtl::OUString& _rPropName);
 

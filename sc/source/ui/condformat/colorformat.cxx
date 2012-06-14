@@ -177,55 +177,6 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
     TypeSelectHdl(NULL);
 }
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDataBarFormat* pFormat):
-    ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
-    maBtnOk( this, ScResId( BTN_OK ) ),
-    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
-    maFlBarColors( this, ScResId( FL_BAR_COLORS ) ),
-    maFlAxes( this, ScResId( FL_AXIS ) ),
-    maFlValues( this, ScResId( FL_VALUES ) ),
-    maFtMin( this, ScResId( FT_MINIMUM ) ),
-    maFtMax( this, ScResId( FT_MAXIMUM ) ),
-    maFtPositive( this, ScResId( FT_POSITIVE ) ),
-    maFtNegative( this, ScResId( FT_NEGATIVE ) ),
-    maFtPosition( this, ScResId( FT_POSITION ) ),
-    maFtAxisColor( this, ScResId( FT_COLOR_AXIS ) ),
-    maLbPos( this, ScResId( LB_POS ) ),
-    maLbNeg( this, ScResId( LB_NEG ) ),
-    maLbAxisCol( this, ScResId( LB_COL_AXIS ) ),
-    maLbTypeMin( this, ScResId( LB_TYPE ) ),
-    maLbTypeMax( this, ScResId( LB_TYPE ) ),
-    maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
-    maEdMin( this, ScResId( ED_MIN ) ),
-    maEdMax( this, ScResId( ED_MAX ) ),
-    maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) )
-{
-    Init();
-    FreeResource();
-
-    const ScDataBarFormatData* pData = pFormat->GetDataBarData();
-    maLbPos.SelectEntry( pData->maPositiveColor );
-    if(pData->mpNegativeColor)
-        maLbNeg.SelectEntry( *pData->mpNegativeColor );
-
-    switch (pData->meAxisPosition)
-    {
-        case databar::NONE:
-            maLbAxisPos.SelectEntryPos(2);
-            break;
-        case databar::AUTOMATIC:
-            maLbAxisPos.SelectEntryPos(0);
-            break;
-        case databar::MIDDLE:
-            maLbAxisPos.SelectEntryPos(1);
-            break;
-    }
-    ::SetType(pData->mpLowerLimit.get(), maLbTypeMin);
-    ::SetType(pData->mpUpperLimit.get(), maLbTypeMax);
-    SetValue(pData->mpLowerLimit.get(), maEdMin);
-    SetValue(pData->mpUpperLimit.get(), maEdMax);
-}
-
 void ScDataBarSettingsDlg::Init()
 {
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();

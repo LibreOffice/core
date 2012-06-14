@@ -482,15 +482,6 @@ const uno::Sequence<sal_Int8>& ScNamedRangeObj::getUnoTunnelId()
     return theScNamedRangeObjUnoTunnelId::get().getSeq();
 }
 
-ScNamedRangeObj* ScNamedRangeObj::getImplementation( const uno::Reference<uno::XInterface> xObj )
-{
-    ScNamedRangeObj* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
-    if (xUT.is())
-        pRet = reinterpret_cast<ScNamedRangeObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
-    return pRet;
-}
-
 //------------------------------------------------------------------------
 
 ScNamedRangesObj::ScNamedRangesObj(ScDocShell* pDocSh) :

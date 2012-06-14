@@ -29,12 +29,6 @@
 
 #include "vbafoundfiles.hxx"
 
-////////////////////////////////VbaFoundFilesEnum//////////////////////////////////////////
-VbaFoundFilesEnum::VbaFoundFilesEnum() : m_nIndex(0)
-{
-
-}
-
 VbaFoundFilesEnum::VbaFoundFilesEnum( css::uno::Sequence<rtl::OUString>& sFileList ) : m_nIndex(0), m_sFileList(sFileList)
 {
 
@@ -43,12 +37,6 @@ VbaFoundFilesEnum::VbaFoundFilesEnum( css::uno::Sequence<rtl::OUString>& sFileLi
 VbaFoundFilesEnum::~VbaFoundFilesEnum()
 {
 
-}
-
-void VbaFoundFilesEnum::SetFileList( css::uno::Sequence<rtl::OUString>& sFileList )
-{
-    m_nIndex = 0;
-    m_sFileList = sFileList;
 }
 
 sal_Int32 SAL_CALL VbaFoundFilesEnum::getCount() throw (css::uno::RuntimeException)

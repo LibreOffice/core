@@ -69,7 +69,6 @@ namespace connectivity
         void setScanner(sal_Bool _bNull=sal_False);
         // rules settings
         void SetRule(sal_Int32 nRule) {m_nRule = nRule;}
-        sal_Int32   GetCurrentRule() const;
         sal_Int32   GetGERRule() const;
         sal_Int32   GetENGRule() const;
         sal_Int32   GetSQLRule() const;

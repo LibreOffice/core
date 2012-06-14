@@ -188,7 +188,7 @@ public:
 #ifdef USE_MEMPOOL
     DECL_FIXEDMEMPOOL_NEWDEL( ScValueCell )
 #endif
-                    ScValueCell();
+
     explicit        ScValueCell( double fValue );
 
 #if OSL_DEBUG_LEVEL > 0
@@ -433,7 +433,6 @@ public:
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
-    void            ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
     bool            IsSubTotal() const                      { return bSubTotal; }
     bool            IsChanged() const;
     void            ResetChanged();

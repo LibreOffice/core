@@ -133,7 +133,6 @@ private:
 
     String              aName;
     String              maStorageName;
-    sal_Bool                bBasMgrModified;
     sal_Bool                mbDocMgr;
 
     BasicManagerImpl*   mpImpl;
@@ -197,7 +196,6 @@ public:
     sal_Bool            RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage );
 
     // Modify-Flag will be reset only during save.
-    sal_Bool            IsModified() const;
     sal_Bool            IsBasicModified() const;
 
     std::vector<BasicError>& GetErrors();

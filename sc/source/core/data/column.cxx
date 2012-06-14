@@ -1856,24 +1856,6 @@ void ScColumn::FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<sal_uInt16
                     ((ScFormulaCell*)maItems[i].pCell)->FindRangeNamesInUse(rIndexes);
 }
 
-void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
-                                     const ScRangeData::IndexMap& rMap )
-{
-    if ( !maItems.empty() )
-        for (SCSIZE i = 0; i < maItems.size(); i++)
-        {
-            if ((maItems[i].nRow >= nRow1) &&
-                (maItems[i].nRow <= nRow2) &&
-                (maItems[i].pCell->GetCellType() == CELLTYPE_FORMULA))
-            {
-                SCROW nRow = maItems[i].nRow;
-                ((ScFormulaCell*)maItems[i].pCell)->ReplaceRangeNamesInUse( rMap );
-                if ( nRow != maItems[i].nRow )
-                    Search( nRow, i );      // Listener geloescht/eingefuegt?
-            }
-        }
-}
-
 void ScColumn::SetDirtyVar()
 {
     for (SCSIZE i=0; i<maItems.size(); i++)

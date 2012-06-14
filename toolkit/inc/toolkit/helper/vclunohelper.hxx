@@ -100,10 +100,6 @@ public:
     // Region
     static Region                                   GetRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion );
 
-
-    // Pointer
-    static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer> CreatePointer();
-
     // Polygon
     static Polygon                                  CreatePolygon( const ::com::sun::star::uno::Sequence< sal_Int32 >& DataX, const ::com::sun::star::uno::Sequence< sal_Int32 >& DataY );
 

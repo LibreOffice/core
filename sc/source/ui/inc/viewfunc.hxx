@@ -188,7 +188,6 @@ public:
     void            SetNumFmtByStr( const String& rCode );
     void            ChangeNumFmtDecimals( sal_Bool bIncrement );
 
-    void            SetConditionalFormat( const ScConditionalFormat& rNew );
     void            SetValidation( const ScValidationData& rNew );
 
     void            ChangeIndent( sal_Bool bIncrement );

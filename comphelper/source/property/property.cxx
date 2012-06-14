@@ -151,25 +151,6 @@ sal_Bool hasProperty(const rtl::OUString& _rName, const Reference<XPropertySet>&
 }
 
 //------------------------------------------------------------------
-bool findProperty(Property&              o_rProp,
-                  Sequence<Property>&    i_seqProps,
-                  const ::rtl::OUString& i_rPropName)
-{
-    const Property* pAry(i_seqProps.getConstArray());
-    const sal_Int32 nLen(i_seqProps.getLength());
-    const Property* pRes(
-        std::find_if(pAry,pAry+nLen,
-                     boost::bind(PropertyStringEqualFunctor(),
-                                 _1,
-                                 boost::cref(i_rPropName))));
-    if( pRes == pAry+nLen )
-        return false;
-
-    o_rProp = *pRes;
-    return true;
-}
-
-//------------------------------------------------------------------
 void RemoveProperty(Sequence<Property>& _rProps, const rtl::OUString& _rPropName)
 {
     sal_Int32 nLen = _rProps.getLength();

@@ -799,7 +799,6 @@ IParseContext::InternationalKeyCode OSQLScanner::getInternationalTokenID(const s
     return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken) ) : IParseContext::KEY_NONE;
 }
 // -------------------------------------------------------------------------
-sal_Int32	OSQLScanner::GetCurrentRule() const { return m_nRule; }
 sal_Int32	OSQLScanner::GetGERRule() const		{ return PREDICATE_GER; }
 sal_Int32	OSQLScanner::GetENGRule() const		{ return PREDICATE_ENG; }
 sal_Int32	OSQLScanner::GetSQLRule() const		{ return SQL; }

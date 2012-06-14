@@ -169,12 +169,6 @@ Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::com::s
     return xWin;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer> VCLUnoHelper::CreatePointer()
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer> xPointer = new VCLXPointer;
-    return xPointer;
-}
-
 OutputDevice* VCLUnoHelper::GetOutputDevice( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>& rxDevice )
 {
     OutputDevice* pOutDev = NULL;

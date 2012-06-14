@@ -230,20 +230,6 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
 
     m_xResultSet = Reference< XResultSet>();
 }
-//--------------------------------------------------------------------
-// setWarning
-// Sets the warning
-//--------------------------------------------------------------------
-
-void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::setWarning " );
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
-    m_aLastWarning = ex;
-}
 
 // -------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)

@@ -119,7 +119,6 @@ namespace connectivity
 
             void reset () throw( ::com::sun::star::sdbc::SQLException);
             void clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
-            void setWarning (const  ::com::sun::star::sdbc::SQLWarning &ex) throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getPrecision ( sal_Int32 sqlType);
 
             void disposeResultSet();

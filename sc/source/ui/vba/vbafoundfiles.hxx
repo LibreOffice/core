@@ -46,11 +46,8 @@ private:
     css::uno::Sequence< rtl::OUString > m_sFileList;
 
 public:
-    VbaFoundFilesEnum();
     VbaFoundFilesEnum( css::uno::Sequence< rtl::OUString >& sFileList );
     ~VbaFoundFilesEnum();
-
-    void SetFileList( css::uno::Sequence< rtl::OUString >& sFileList );
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);

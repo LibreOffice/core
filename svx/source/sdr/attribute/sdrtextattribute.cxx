@@ -436,11 +436,6 @@ namespace drawinglayer
             return mpSdrTextAttribute->getTextLowerDistance();
         }
 
-        sal_uInt32 SdrTextAttribute::getPropertiesVersion() const
-        {
-            return mpSdrTextAttribute->getPropertiesVersion();
-        }
-
         SdrTextHorzAdjust SdrTextAttribute::getSdrTextHorzAdjust() const
         {
             return mpSdrTextAttribute->getSdrTextHorzAdjust();
