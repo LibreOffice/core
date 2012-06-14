@@ -145,8 +145,8 @@ void SdOptionsGeneric::Init() const
 
 SdOptionsGeneric::~SdOptionsGeneric()
 {
-    if( mpCfgItem )
-        delete mpCfgItem;
+    delete mpCfgItem;
+    mpCfgItem = NULL;
 }
 
 // -----------------------------------------------------------------------------
