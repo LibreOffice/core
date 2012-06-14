@@ -34,6 +34,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
+#include <vector>
 
 class UserDrawEvent;
 
@@ -164,6 +165,14 @@ enum FloatingSizeMode { FSMODE_AUTO, FSMODE_FAVOURWIDTH, FSMODE_FAVOURHEIGHT };
 //                       bar) where item's vertical position is locked, e.g.
 //                       toolbox is prevented from centering the items
 enum ToolBoxLayoutMode { TBX_LAYOUT_NORMAL, TBX_LAYOUT_LOCKVERT };
+
+struct ImplToolSize
+{
+    long mnWidth;
+    long mnHeight;
+    sal_uInt16 mnLines;
+};
+
 // -----------
 // - ToolBox -
 // -----------
@@ -175,7 +184,7 @@ class VCL_DLLPUBLIC ToolBox : public DockingWindow
 
 private:
     ImplToolBoxPrivateData*     mpData;
-    ImplToolSizeArray*  mpFloatSizeAry;
+    std::vector<ImplToolSize> maFloatSizes;
     ImageList           maImageList;
     Timer               maTimer;
     Rectangle           maUpperRect;

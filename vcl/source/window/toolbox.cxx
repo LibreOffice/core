@@ -114,25 +114,6 @@ DBG_NAMEEX( Window )
 static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 highlight, sal_Bool bChecked, sal_Bool bEnabled, sal_Bool bIsWindow );
 // -----------------------------------------------------------------------
 
-struct ImplToolSize
-{
-    long            mnWidth;
-    long            mnHeight;
-    sal_uInt16          mnLines;
-};
-
-struct ImplToolSizeArray
-{
-    long          mnLength;
-    long          mnLastEntry;
-    ImplToolSize* mpSize;
-
-    ImplToolSizeArray() { mpSize = NULL; mnLength = 0; mnLastEntry = 0; }
-    ~ImplToolSizeArray() { if( mpSize ) delete [] mpSize; mnLength = 0; }
-};
-
-// -----------------------------------------------------------------------
-
 typedef ::std::vector< ToolBox* > ImplTBList;
 
 class ImplTBDragMgr
@@ -856,7 +837,7 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
 
 void ToolBox::ImplCalcFloatSizes( ToolBox* pThis )
 {
-    if ( pThis->mpFloatSizeAry )
+    if ( !pThis->maFloatSizes.empty() )
         return;
 
     // calculate the minimal size, i.e. where the biggest item just fits
@@ -886,28 +867,24 @@ void ToolBox::ImplCalcFloatSizes( ToolBox* pThis )
     // calc an upper bound for ImplCalcBreaks below
     long upperBoundWidth = nCalcSize * pThis->mpData->m_aItems.size();
 
-    sal_uInt16  i;
     sal_uInt16  nLines;
     sal_uInt16  nCalcLines;
     sal_uInt16  nTempLines;
-    long    nHeight;
     long    nMaxLineWidth;
     nCalcLines = pThis->ImplCalcBreaks( nCalcSize, &nMaxLineWidth, sal_True );
 
-    pThis->mpFloatSizeAry = new ImplToolSizeArray;
-    pThis->mpFloatSizeAry->mpSize = new ImplToolSize[nCalcLines];
-    pThis->mpFloatSizeAry->mnLength = nCalcLines;
+    pThis->maFloatSizes.reserve( nCalcLines );
 
-    memset( pThis->mpFloatSizeAry->mpSize, 0, sizeof( ImplToolSize )*nCalcLines );
-    i = 0;
     nTempLines = nLines = nCalcLines;
     while ( nLines )
     {
-        nHeight = ImplCalcSize( pThis, nTempLines, TB_CALCMODE_FLOAT ).Height();
-        pThis->mpFloatSizeAry->mnLastEntry = i;
-        pThis->mpFloatSizeAry->mpSize[i].mnHeight = nHeight;
-        pThis->mpFloatSizeAry->mpSize[i].mnLines  = nTempLines;
-        pThis->mpFloatSizeAry->mpSize[i].mnWidth = nMaxLineWidth+(TB_BORDER_OFFSET1*2);
+        long nHeight = ImplCalcSize( pThis, nTempLines, TB_CALCMODE_FLOAT ).Height();
+
+        ImplToolSize aSize;
+        aSize.mnWidth  = nMaxLineWidth+(TB_BORDER_OFFSET1*2);
+        aSize.mnHeight = nHeight;
+        aSize.mnLines  = nTempLines;
+        pThis->maFloatSizes.push_back( aSize );
         nLines--;
         if ( nLines )
         {
@@ -920,7 +897,6 @@ void ToolBox::ImplCalcFloatSizes( ToolBox* pThis )
             if ( nTempLines < nLines )
                 nLines = nTempLines;
         }
-        i++;
     }
 }
 
@@ -938,13 +914,15 @@ Size ToolBox::ImplCalcFloatSize( ToolBox* pThis, sal_uInt16& rLines )
     }
 
     sal_uInt16 i = 0;
-    while ( i < pThis->mpFloatSizeAry->mnLastEntry &&
-        rLines < pThis->mpFloatSizeAry->mpSize[i].mnLines )
+    while ( i + 1u < pThis->maFloatSizes.size() &&
+            rLines < pThis->maFloatSizes[i].mnLines )
+    {
         i++;
+    }
 
-    Size aSize( pThis->mpFloatSizeAry->mpSize[i].mnWidth,
-                pThis->mpFloatSizeAry->mpSize[i].mnHeight );
-    rLines = pThis->mpFloatSizeAry->mpSize[i].mnLines;
+    Size aSize( pThis->maFloatSizes[i].mnWidth,
+                pThis->maFloatSizes[i].mnHeight );
+    rLines = pThis->maFloatSizes[i].mnLines;
 
     return aSize;
 }
@@ -956,19 +934,19 @@ void ToolBox::ImplCalcMinMaxFloatSize( ToolBox* pThis, Size& rMinSize, Size& rMa
     ImplCalcFloatSizes( pThis );
 
     sal_uInt16 i = 0;
-    rMinSize = Size( pThis->mpFloatSizeAry->mpSize[i].mnWidth, pThis->mpFloatSizeAry->mpSize[i].mnHeight );
-    rMaxSize = Size( pThis->mpFloatSizeAry->mpSize[i].mnWidth, pThis->mpFloatSizeAry->mpSize[i].mnHeight );
-    while ( ++i <= pThis->mpFloatSizeAry->mnLastEntry )
+    rMinSize = Size( pThis->maFloatSizes[i].mnWidth, pThis->maFloatSizes[i].mnHeight );
+    rMaxSize = Size( pThis->maFloatSizes[i].mnWidth, pThis->maFloatSizes[i].mnHeight );
+    while ( ++i < pThis->maFloatSizes.size() )
     {
-        if( pThis->mpFloatSizeAry->mpSize[i].mnWidth < rMinSize.Width() )
-            rMinSize.Width() = pThis->mpFloatSizeAry->mpSize[i].mnWidth;
-        if( pThis->mpFloatSizeAry->mpSize[i].mnHeight < rMinSize.Height() )
-            rMinSize.Height() = pThis->mpFloatSizeAry->mpSize[i].mnHeight;
+        if( pThis->maFloatSizes[i].mnWidth < rMinSize.Width() )
+            rMinSize.Width() = pThis->maFloatSizes[i].mnWidth;
+        if( pThis->maFloatSizes[i].mnHeight < rMinSize.Height() )
+            rMinSize.Height() = pThis->maFloatSizes[i].mnHeight;
 
-        if( pThis->mpFloatSizeAry->mpSize[i].mnWidth > rMaxSize.Width() )
-            rMaxSize.Width() = pThis->mpFloatSizeAry->mpSize[i].mnWidth;
-        if( pThis->mpFloatSizeAry->mpSize[i].mnHeight > rMaxSize.Height() )
-            rMaxSize.Height() = pThis->mpFloatSizeAry->mpSize[i].mnHeight;
+        if( pThis->maFloatSizes[i].mnWidth > rMaxSize.Width() )
+            rMaxSize.Width() = pThis->maFloatSizes[i].mnWidth;
+        if( pThis->maFloatSizes[i].mnHeight > rMaxSize.Height() )
+            rMaxSize.Height() = pThis->maFloatSizes[i].mnHeight;
     }
 }
 
@@ -1516,7 +1494,6 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 
     // initialize variables
     ImplGetWindowImpl()->mbToolBox         = sal_True;
-    mpFloatSizeAry    = NULL;
     mpData                = new ImplToolBoxPrivateData;
     mpFloatWin        = NULL;
     mnDX              = 0;
@@ -1764,9 +1741,6 @@ ToolBox::~ToolBox()
 
     // delete private data
     delete mpData;
-
-    // delete FloatSizeAry if required
-    delete mpFloatSizeAry;
 
     // remove the lists when there are no more toolbox references to
     // the lists
@@ -2364,12 +2338,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
     sal_Bool bIsInPopupMode = ImplIsInPopupMode();
 
-    // delete FloatSizeAry if required
-    if ( mpFloatSizeAry )
-    {
-        delete mpFloatSizeAry;
-        mpFloatSizeAry = NULL;
-    }
+    maFloatSizes.clear();
 
     // compute border sizes
     ImplCalcBorder( meAlign, mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder, this );
@@ -4976,7 +4945,7 @@ void ToolBox::Resizing( Size& rSize )
         nTemp = nCalcLines;
         Size aTempSize = ImplCalcFloatSize( this, nTemp );
         while ( (aTempSize.Width() > rSize.Width()) &&
-                (nCalcLines <= mpFloatSizeAry->mpSize[0].mnLines) )
+                (nCalcLines <= maFloatSizes[0].mnLines) )
         {
             nCalcLines++;
             nTemp = nCalcLines;
