@@ -219,6 +219,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
         ScConditionMode eMode = pEntry->GetOperation();
         maLbType.SelectEntryPos(1);
         maEdVal1.SetText(pEntry->GetExpression(maPos, 0));
+        SetCondType();
         switch(eMode)
         {
             case SC_COND_EQUAL:
@@ -255,12 +256,11 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
                 break;
             case SC_COND_DIRECT:
                 maLbType.SelectEntryPos(2);
+                SwitchToType(FORMULA);
                 break;
             case SC_COND_NONE:
                 break;
         }
-        SwitchToType(CONDITION);
-        SetCondType();
     }
     else if( pFormatEntry && pFormatEntry->GetType() == condformat::COLORSCALE )
     {
@@ -400,6 +400,8 @@ rtl::OUString getTextForType(ScCondFormatEntryType eType)
             return rtl::OUString("Color scale");
         case DATABAR:
             return rtl::OUString("Data Bar");
+        case FORMULA:
+            return rtl::OUString("Formula is");
         default:
             break;
     }
@@ -517,6 +519,7 @@ void ScCondFrmtEntry::SetHeight()
         switch (meType)
         {
             case CONDITION:
+            case FORMULA:
                 aSize.Height() = 120;
                 break;
             case COLORSCALE:
@@ -589,6 +592,18 @@ void ScCondFrmtEntry::SetDataBarType()
     maEdDataBarMin.Show();
     maEdDataBarMax.Show();
     maBtOptions.Show();
+}
+
+void ScCondFrmtEntry::SetFormulaType()
+{
+    SwitchToType(FORMULA);
+    HideColorScaleElements();
+    HideDataBarElements();
+    maEdVal1.Show();
+    maEdVal2.Hide();
+    maLbCondType.Hide();
+    maLbStyle.Show();
+    maWdPreview.Show();
 }
 
 void ScCondFrmtEntry::Select()
@@ -730,6 +745,18 @@ ScFormatEntry* ScCondFrmtEntry::createDatabarEntry() const
     return pDataBar;
 }
 
+ScFormatEntry* ScCondFrmtEntry::createFormulaEntry() const
+{
+    ScConditionMode eMode = SC_COND_DIRECT;
+    rtl::OUString aFormula = maEdVal1.GetText();
+    if(aFormula.isEmpty())
+        return NULL;
+
+    rtl::OUString aExpr2;
+    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aFormula, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
+    return pEntry;
+}
+
 ScFormatEntry* ScCondFrmtEntry::GetEntry() const
 {
     switch(meType)
@@ -742,6 +769,9 @@ ScFormatEntry* ScCondFrmtEntry::GetEntry() const
             break;
         case DATABAR:
             return createDatabarEntry();
+            break;
+        case FORMULA:
+            return createFormulaEntry();
             break;
         default:
             break;
@@ -764,7 +794,7 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, TypeListHdl)
                 SetDataBarType();
             break;
         case 2:
-            SetCondType();
+            SetFormulaType();
             break;
         default:
             break;
