@@ -1586,6 +1586,9 @@ MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
 MultiListBox::MultiListBox( Window* pParent, const ResId& rResId ) :
     ListBox( WINDOW_MULTILISTBOX )
 {
+    if (VclBuilderContainer::replace_buildable(pParent, rResId.GetId(), *this))
+        return;
+
     rResId.SetRT( RSC_MULTILISTBOX );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
