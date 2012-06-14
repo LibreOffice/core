@@ -122,6 +122,7 @@ void ScXMLTextPContext::AddSpaces(sal_Int32 nSpaceCount)
     sal_Char* pChars = new sal_Char[nSpaceCount];
     memset(pChars, ' ', nSpaceCount);
     pContentBuffer->appendAscii(pChars, nSpaceCount);
+    delete[] pChars;
 }
 
 SvXMLImportContext *ScXMLTextPContext::CreateChildContext( sal_uInt16 nTempPrefix,
