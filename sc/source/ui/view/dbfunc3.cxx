@@ -614,6 +614,11 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
 
         SCTAB nNewTab = nSrcTab+1;
 
+        const bool bDrawUndo = ( bUndo && !pDoc->IsDrawRecording() );
+
+        if( bDrawUndo )
+            pDoc->BeginDrawUndo();
+
         SCTAB i=1;
         while ( !pDoc->InsertTab( nNewTab, lcl_MakePivotTabName( aName, i ) ) && i <= MAXTAB )
             i++;
@@ -629,6 +634,9 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
         SetTabNo( nNewTab, sal_True );
 
         aDestRange = ScRange( 0, 0, nNewTab );
+
+        if( bDrawUndo )
+            pDoc->EndDrawUndo();
     }
 
     ScDPObject* pDPObj = pDoc->GetDPAtCursor(

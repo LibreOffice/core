@@ -712,6 +712,9 @@ public:
     ScDrawLayer*    GetDrawLayer()              { return pDrawLayer; }
     SfxBroadcaster* GetDrawBroadcaster();       // zwecks Header-Vermeidung
     void            BeginDrawUndo();
+    sal_Bool        IsDrawRecording() const;
+    void            EndDrawUndo();//paired with BeginDrawUndo, clear undo object if GetUndoObj is not called.
+                                //Not necessary if GetUndoObj is called, but call EndDrawUndo paired with BeginDrawUndo is recommended
 
     void            BeginUnoRefUndo();
     bool            HasUnoRefUndo() const       { return ( pUnoRefUndoList != NULL ); }
