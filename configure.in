@@ -1949,7 +1949,7 @@ dnl ===================================================================
 dnl Testing for required Perl modules
 dnl ===================================================================
 AC_MSG_CHECKING([for required Perl modules])
-if `$PERL -e 'use Archive::Zip; use LWP::UserAgent; use XML::Parser;'`; then
+if `$PERL -e 'use Archive::Zip; use LWP::UserAgent;'`; then
 	AC_MSG_RESULT([all modules found])
 else
 	AC_MSG_ERROR([Failed to find some modules])
