@@ -1953,7 +1953,7 @@ sal_Int32 GetValueForEnhancedCustomShapeParameter( const com::sun::star::drawing
     sal_Int32 nValue = 0;
     if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
-        double fValue;
+        double fValue(0.0);
         if ( rParameter.Value >>= fValue )
             nValue = (sal_Int32)fValue;
     }
@@ -1983,7 +1983,7 @@ sal_Bool GetValueForEnhancedCustomShapeHandleParameter( sal_Int32& nRetValue, co
     nRetValue = 0;
     if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
-        double fValue;
+        double fValue(0.0);
         if ( rParameter.Value >>= fValue )
             nRetValue = (sal_Int32)fValue;
     }
