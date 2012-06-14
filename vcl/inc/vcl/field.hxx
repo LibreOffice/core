@@ -218,6 +218,8 @@ public:
 
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
+
+    void take_properties(NumericFormatter &rOther);
 };
 
 // -------------------
@@ -278,6 +280,8 @@ public:
 
     void                    SetCustomConvertHdl( const Link& rLink ) { maCustomConvertLink = rLink; }
     const Link&             GetCustomConvertHdl() const { return maCustomConvertLink; }
+
+    void take_properties(MetricFormatter &rOther);
 };
 
 

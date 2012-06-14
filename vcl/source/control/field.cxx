@@ -772,6 +772,23 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
     }
 }
 
+void NumericFormatter::take_properties(NumericFormatter &rOther)
+{
+    mnFieldValue = rOther.mnFieldValue;
+    mnLastValue = rOther.mnLastValue;
+    mnMin = rOther.mnMin;
+    mnMax = rOther.mnMax;
+    mnCorrectedValue = rOther.mnCorrectedValue;
+    mnType = rOther.mnType;
+    mnDecimalDigits = rOther.mnDecimalDigits;
+    mbThousandSep = rOther.mbThousandSep;
+    mbShowTrailingZeros = rOther.mbThousandSep;
+
+    mnSpinSize = rOther.mnSpinSize;
+    mnFirst = rOther.mnFirst;
+    mnLast = rOther.mnLast;
+}
+
 // -----------------------------------------------------------------------
 
 NumericField::NumericField( Window* pParent, WinBits nWinStyle ) :
@@ -1669,6 +1686,15 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void MetricFormatter::take_properties(MetricFormatter &rOtherField)
+{
+    maCustomUnitText = rOtherField.maCustomUnitText;
+    maCurUnitText = rOtherField.maCurUnitText;
+    mnBaseValue = rOtherField.mnBaseValue;
+    meUnit = rOtherField.meUnit;
+    NumericFormatter::take_properties(rOtherField);
+}
+
 void MetricField::take_properties(Window &rOther)
 {
     if (!GetParent())
@@ -1680,10 +1706,7 @@ void MetricField::take_properties(Window &rOther)
     SpinField::take_properties(rOther);
 
     MetricField &rOtherField = static_cast<MetricField&>(rOther);
-    maCustomUnitText = rOtherField.maCustomUnitText;
-    maCurUnitText = rOtherField.maCurUnitText;
-    mnBaseValue = rOtherField.mnBaseValue;
-    meUnit = rOtherField.meUnit;
+    MetricFormatter::take_properties(rOtherField);
 }
 
 bool MetricField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
