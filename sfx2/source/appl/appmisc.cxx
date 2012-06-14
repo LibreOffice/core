@@ -91,7 +91,6 @@ using namespace ::com::sun::star::container;
 SV_IMPL_PTRARR( SfxTbxCtrlFactArr_Impl, SfxTbxCtrlFactory* );
 SV_IMPL_PTRARR( SfxStbCtrlFactArr_Impl, SfxStbCtrlFactory* );
 SV_IMPL_PTRARR( SfxMenuCtrlFactArr_Impl, SfxMenuCtrlFactory* );
-SV_IMPL_PTRARR( SfxModuleArr_Impl, SfxModule* );
 
 //===================================================================
 

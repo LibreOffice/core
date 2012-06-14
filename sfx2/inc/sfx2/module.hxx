@@ -36,6 +36,7 @@
 #include <sal/types.h>
 #include <tools/fldunit.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <vector>
 
 class ImageList;
 
@@ -43,7 +44,8 @@ class SfxBindings;
 class SfxObjectFactory;
 class ModalDialog;
 class SfxObjectFactory;
-class SfxModuleArr_Impl;
+class SfxModule;
+typedef ::std::vector<SfxModule*> SfxModuleArr_Impl;
 class SfxModule_Impl;
 class SfxSlotPool;
 struct SfxChildWinContextFactory;

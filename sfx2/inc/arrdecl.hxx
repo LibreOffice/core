@@ -59,7 +59,7 @@ public:
 };
 
 class SfxModule;
-SV_DECL_PTRARR( SfxModuleArr_Impl, SfxModule*, 2 )
+typedef ::std::vector<SfxModule*> SfxModuleArr_Impl;
 
 class SfxFrame;
 typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;

@@ -144,7 +144,7 @@ void SfxModule::Construct_Impl()
         SfxApplication *pApp = SFX_APP();
         SfxModuleArr_Impl& rArr = GetModules_Impl();
         SfxModule* pPtr = (SfxModule*)this;
-        rArr.C40_INSERT( SfxModule, pPtr, rArr.Count() );
+        rArr.push_back( pPtr );
         pImpl = new SfxModule_Impl;
         pImpl->pSlotPool = new SfxSlotPool( &pApp->GetAppSlotPool_Impl(), pResMgr );
 
@@ -170,11 +170,11 @@ SfxModule::~SfxModule()
             // The module will be destroyed before the Deinitialize,
             // so remove from the array
             SfxModuleArr_Impl& rArr = GetModules_Impl();
-            for( sal_uInt16 nPos = rArr.Count(); nPos--; )
+            for( sal_uInt16 nPos = rArr.size(); nPos--; )
             {
                 if( rArr[ nPos ] == this )
                 {
-                    rArr.Remove( nPos );
+                    rArr.erase( rArr.begin() + nPos );
                     break;
                 }
             }
@@ -331,9 +331,9 @@ void SfxModule::DestroyModules_Impl()
     if ( pModules )
     {
         SfxModuleArr_Impl& rModules = *pModules;
-        for( sal_uInt16 nPos = rModules.Count(); nPos--; )
+        for( sal_uInt16 nPos = rModules.size(); nPos--; )
         {
-            SfxModule* pMod = rModules.GetObject(nPos);
+            SfxModule* pMod = rModules[nPos];
             delete pMod;
         }
         delete pModules, pModules = 0;
