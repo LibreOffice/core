@@ -97,13 +97,13 @@ $(eval $(call gb_RdbTarget_RdbTarget,starmath_qa_cppunit))
 
 $(eval $(call gb_RdbTarget_add_components,starmath_qa_cppunit,\
     framework/util/fwk \
+    i18npool/util/i18npool \
     toolkit/util/tk \
     sfx2/util/sfx \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,starmath_qa_cppunit,\
     configmgr \
-    i18npool \
     mcnttype \
     vcl \
 ))
