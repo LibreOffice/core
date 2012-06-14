@@ -25,8 +25,6 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(SRCDIR)/writerfilter/debug_setup.mk
-
 $(eval $(call gb_Library_Library,writerfilter))
 
 $(eval $(call gb_Library_use_custom_headers,writerfilter,\
@@ -52,7 +50,21 @@ $(eval $(call gb_Library_add_defs,writerfilter,\
 	-DWRITERFILTER_RESOURCEMODEL_DLLIMPLEMENTATION \
 	-DWRITERFILTER_RTFTOK_DLLIMPLEMENTATION \
 	-DWRITERFILTER_WRITERFILTER_DLLIMPLEMENTATION \
-	$(writerfilter_debug_flags) \
+	$(if $(filter-out 0 1,$(gb_DEBUGLEVEL)), \
+		-DDEBUG_DOMAINMAPPER \
+		-DDEBUG_ELEMENT \
+		-DDEBUG_RESOLVE \
+		-DDEBUG_CONTEXT_STACK \
+		-DDEBUG_ATTRIBUTES \
+		-DDEBUG_PROPERTIES \
+		-DDEBUG_CONTEXT_HANDLER \
+		-DDEBUG_IMPORT \
+		-DDEBUG_LOGGING \
+		-DDEBUG_DMAPPER_PROPERTY_MAP \
+		-DDEBUG_DMAPPER_TABLE_HANDLER \
+		-DDEBUG_TABLE \
+		-DDEBUG_DMAPPER_SETTINGS_TABLE \
+	) \
 ))
 
 $(eval $(call gb_Library_use_libraries,writerfilter,\
