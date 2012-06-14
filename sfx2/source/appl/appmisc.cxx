@@ -90,7 +90,6 @@ using namespace ::com::sun::star::container;
 
 SV_IMPL_PTRARR( SfxTbxCtrlFactArr_Impl, SfxTbxCtrlFactory* );
 SV_IMPL_PTRARR( SfxStbCtrlFactArr_Impl, SfxStbCtrlFactory* );
-SV_IMPL_PTRARR( SfxMenuCtrlFactArr_Impl, SfxMenuCtrlFactory* );
 
 //===================================================================
 
@@ -287,4 +286,11 @@ SfxChildWinFactArr_Impl::~SfxChildWinFactArr_Impl()
     for( const_iterator it = begin(); it != end(); ++it )
         delete *it;
 }
+
+SfxMenuCtrlFactArr_Impl::~SfxMenuCtrlFactArr_Impl()
+{
+    for( const_iterator it = begin(); it != end(); ++it )
+        delete *it;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

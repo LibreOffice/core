@@ -134,7 +134,7 @@ void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFacto
     }
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pAppData_Impl->pMenuCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pAppData_Impl->pMenuCtrlFac->size(); n++ )
     {
         SfxMenuCtrlFactory *pF = (*pAppData_Impl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -145,7 +145,7 @@ void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFacto
     }
 #endif
 
-    pAppData_Impl->pMenuCtrlFac->C40_INSERT( SfxMenuCtrlFactory, pFact, pAppData_Impl->pMenuCtrlFac->Count() );
+    pAppData_Impl->pMenuCtrlFac->push_back( pFact );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

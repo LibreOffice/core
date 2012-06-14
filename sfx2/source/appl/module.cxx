@@ -267,7 +267,7 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
         pImpl->pMenuCtrlFac = new SfxMenuCtrlFactArr_Impl;
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pImpl->pMenuCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pImpl->pMenuCtrlFac->size(); n++ )
     {
         SfxMenuCtrlFactory *pF = (*pImpl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -278,7 +278,7 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
     }
 #endif
 
-    pImpl->pMenuCtrlFac->C40_INSERT( SfxMenuCtrlFactory, pFact, pImpl->pMenuCtrlFac->Count() );
+    pImpl->pMenuCtrlFac->push_back( pFact );
 }
 
 //-------------------------------------------------------------------------

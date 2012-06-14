@@ -31,6 +31,7 @@
 #include <svl/svarray.hxx>
 #include <sfx2/minarray.hxx>
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SfxObjectShell;
 SV_DECL_PTRARR( SfxObjectShellArr_Impl, SfxObjectShell*, 4 )
@@ -48,7 +49,12 @@ struct SfxStbCtrlFactory;
 SV_DECL_PTRARR_DEL( SfxStbCtrlFactArr_Impl, SfxStbCtrlFactory*, 8 )
 
 struct SfxMenuCtrlFactory;
-SV_DECL_PTRARR_DEL( SfxMenuCtrlFactArr_Impl, SfxMenuCtrlFactory*, 2 )
+class SfxMenuCtrlFactArr_Impl : public std::vector<SfxMenuCtrlFactory*>
+{
+public:
+    // de-allocates child objects
+    ~SfxMenuCtrlFactArr_Impl();
+};
 
 struct SfxChildWinFactory;
 class SfxChildWinFactArr_Impl : public std::vector<SfxChildWinFactory*>
