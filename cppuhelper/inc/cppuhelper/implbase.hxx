@@ -157,6 +157,12 @@ CPPUHELPER_DLLPUBLIC ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_TH
 
 //==================================================================================================
 
+#if defined _MSC_VER // public -> protected changes mangled names there
+#define CPPUHELPER_DETAIL_IMPLHELPER_PROTECTED public
+#else
+#define CPPUHELPER_DETAIL_IMPLHELPER_PROTECTED protected
+#endif
+
 /** Implementation helper macros
     Not for common use. There are expanded forms of the macro usage in implbaseN.hxx/compbaseN.hxx.
     So there is commonly no need to use these macros. Though, you may need to implement more than
@@ -185,8 +191,9 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelperBase##N \
     : public ::com::sun::star::lang::XTypeProvider \
     , __PUBLIC_IFC##N \
 { \
-protected: \
+CPPUHELPER_DETAIL_IMPLHELPER_PROTECTED: \
     ~ImplHelperBase##N() throw () {} \
+protected: \
     ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW(()) \
     { \
         ClassData & rCD = * static_cast< ClassData * >( &s_aCD ); \
@@ -222,7 +229,7 @@ public: \
         { return this->getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \
         { return this->getClassData( s_aCD ).getImplementationId(); } \
-protected: \
+CPPUHELPER_DETAIL_IMPLHELPER_PROTECTED: \
     ~ImplHelper##N() throw () {} \
 }; \
 template< __CLASS_IFC##N > \
