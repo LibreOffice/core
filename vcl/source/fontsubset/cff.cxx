@@ -2257,6 +2257,8 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         assert( (nGlyphId >= 0) && (nGlyphId < mnCharStrCount));
         // get privdict context matching to the glyph
         const int nFDSelect = getFDSelect( nGlyphId);
+        if( nFDSelect < 0)
+            continue;
         mpCffLocal = &maCffLocal[ nFDSelect];
         // convert the Type2op charstring to its Type1op counterpart
         const int nT2Len = seekIndexData( mnCharStrBase, nGlyphId);
