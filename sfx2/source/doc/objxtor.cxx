@@ -288,7 +288,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
 {
     SfxObjectShell* pDoc = &_rDocShell;
     SfxObjectShellArr_Impl &rArr = SFX_APP()->GetObjectShells_Impl();
-    rArr.C40_INSERT( SfxObjectShell, pDoc, rArr.Count() );
+    rArr.push_back( pDoc );
     bInList = sal_True;
 }
 
@@ -481,10 +481,9 @@ sal_Bool SfxObjectShell::Close()
             // remove from Document list
             SfxApplication *pSfxApp = SFX_APP();
             SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
-            const SfxObjectShell *pThis = this;
-            sal_uInt16 nPos = rDocs.GetPos(pThis);
-            if ( nPos < rDocs.Count() )
-                rDocs.Remove( nPos );
+            SfxObjectShellArr_Impl::iterator it = std::find( rDocs.begin(), rDocs.end(), this );
+            if ( it != rDocs.end() )
+                rDocs.erase( it );
             pImp->bInList = sal_False;
         }
     }
@@ -505,9 +504,9 @@ SfxObjectShell* SfxObjectShell::GetFirst
     SfxObjectShellArr_Impl &rDocs = SFX_APP()->GetObjectShells_Impl();
 
     // seach for a SfxDocument of the specified type
-    for ( sal_uInt16 nPos = 0; nPos < rDocs.Count(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < rDocs.size(); ++nPos )
     {
-        SfxObjectShell* pSh = rDocs.GetObject( nPos );
+        SfxObjectShell* pSh = rDocs[ nPos ];
         if ( bOnlyVisible && pSh->IsPreview() && pSh->IsReadOnly() )
             continue;
 
@@ -533,14 +532,14 @@ SfxObjectShell* SfxObjectShell::GetNext
 
     // refind the specified predecessor
     sal_uInt16 nPos;
-    for ( nPos = 0; nPos < rDocs.Count(); ++nPos )
-        if ( rDocs.GetObject(nPos) == &rPrev )
+    for ( nPos = 0; nPos < rDocs.size(); ++nPos )
+        if ( rDocs[nPos] == &rPrev )
             break;
 
     // search for the next SfxDocument of the specified type
-    for ( ++nPos; nPos < rDocs.Count(); ++nPos )
+    for ( ++nPos; nPos < rDocs.size(); ++nPos )
     {
-        SfxObjectShell* pSh = rDocs.GetObject( nPos );
+        SfxObjectShell* pSh = rDocs[ nPos ];
         if ( bOnlyVisible && pSh->IsPreview() && pSh->IsReadOnly() )
             continue;
 

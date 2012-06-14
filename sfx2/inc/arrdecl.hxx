@@ -28,13 +28,11 @@
 #ifndef _SFX_ARRDECL_HXX
 #define _SFX_ARRDECL_HXX
 
-#include <svl/svarray.hxx>
 #include <sfx2/minarray.hxx>
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class SfxObjectShell;
-SV_DECL_PTRARR( SfxObjectShellArr_Impl, SfxObjectShell*, 4 )
+class SfxObjectShellArr_Impl : public std::vector<SfxObjectShell*> {};
 
 class SfxViewFrame;
 class SfxViewFrameArr_Impl : public std::vector<SfxViewFrame*> {};
