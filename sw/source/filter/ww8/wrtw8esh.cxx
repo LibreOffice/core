@@ -75,6 +75,8 @@
 #include <fmtfollowtextflow.hxx> // #i30669#
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
+#include <flyfrm.hxx>
+#include <pagefrm.hxx>
 #include <fmtcntnt.hxx>
 #include <ndindex.hxx>
 #include <doc.hxx>
@@ -1656,6 +1658,25 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
     }
 }
 
+bool lcl_isInHeader(const SwFrmFmt& rFmt)
+{
+    const SwFlyFrmFmt* pFlyFrmFmt = dynamic_cast<const SwFlyFrmFmt*>(&rFmt);
+    SwFlyFrm* pFlyFrm = const_cast<SwFlyFrm*>(pFlyFrmFmt->GetFrm());
+    SwPageFrm* pPageFrm = pFlyFrm->FindPageFrmOfAnchor();
+    SwFrm* pHeader = pPageFrm->Lower();
+    if (pHeader->GetType() == FRM_HEADER)
+    {
+        const SwFrm* pFrm = pFlyFrm->GetAnchorFrm();
+        while (pFrm)
+        {
+            if (pFrm == pHeader)
+                return true;
+            pFrm = pFrm->GetUpper();
+        }
+    }
+    return false;
+}
+
 sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
     MSO_SPT eShapeType, EscherPropertyContainer& rPropOpt)
 {
@@ -1746,8 +1767,14 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
     WriteBrushAttr(aBrush, rPropOpt);
 
     const SdrObject* pObj = rFmt.FindRealSdrObject();
+
+    // SwWW8ImplReader::Read_GrafLayer() imports these as opaque
+    // unconditionally, so if both are true, don't export the property.
+    bool bIsInHeader = lcl_isInHeader(rFmt);
+    bool bIsThrought = rFmt.GetSurround().GetValue() == SURROUND_THROUGHT;
+
     if( pObj && (pObj->GetLayer() == GetHellLayerId() ||
-        pObj->GetLayer() == GetInvisibleHellId() ))
+        pObj->GetLayer() == GetInvisibleHellId() ) && !(bIsInHeader && bIsThrought))
     {
         rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
     }
