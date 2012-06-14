@@ -1693,6 +1693,8 @@ bool MetricField::set_property(const rtl::OString &rKey, const rtl::OString &rVa
         maCustomUnitText = rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8);
         meUnit = FUNIT_CUSTOM;
     }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("digits")))
+        SetDecimalDigits(rValue.toInt32());
     else
         return SpinField::set_property(rKey, rValue);
     return true;
