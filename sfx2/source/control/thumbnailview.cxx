@@ -398,22 +398,6 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
     return new ThumbnailViewAcc( this, mbIsTransientChildrenDisabled );
 }
 
-void ThumbnailView::ImplHideSelect( sal_uInt16 nItemId )
-{
-    Rectangle aRect;
-
-    const size_t nItemPos = GetItemPos( nItemId );
-    if ( nItemPos != THUMBNAILVIEW_ITEM_NOTFOUND && mItemList[nItemPos]->mbVisible )
-    {
-        aRect = ImplGetItemRect(nItemPos);
-
-        HideFocus();
-        const Point aPos  = aRect.TopLeft();
-        const Size  aSize = aRect.GetSize();
-        DrawOutDev( aPos, aSize, aPos, aSize, maVirDev );
-    }
-}
-
 bool ThumbnailView::ImplScroll( const Point& rPos )
 {
     if ( !mbScroll || !maItemListRect.IsInside(rPos) )

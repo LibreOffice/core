@@ -295,7 +295,6 @@ private:
     SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void         ImplInitScrollBar();
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplHideSelect( sal_uInt16 nItemId );
     SVT_DLLPRIVATE void         ImplDraw();
     using Window::ImplScroll;
     SVT_DLLPRIVATE bool         ImplScroll( const Point& rPos );
