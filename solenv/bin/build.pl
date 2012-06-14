@@ -3554,6 +3554,9 @@ sub is_gnumake_module {
 }
 
 sub check_partial_gnumake_build {
+    # Do not disable the build command for a single module just for education.
+    return;
+
     if(!$build_all_parents && is_gnumake_module(shift)) {
         print "This module has been migrated to GNU make.\n";
         print "You can only use build --all/--since here with build.pl.\n";
