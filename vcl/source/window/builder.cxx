@@ -248,7 +248,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     {
         extractModel(id, rMap);
         ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-        pListBox->SetDropDownLineCount(64); //arbitrary
+        pListBox->SetDropDownLineCount(16); //arbitrary
         pWindow = pListBox;
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkTreeView")))
