@@ -531,6 +531,7 @@ sal_Bool    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
             for ( nInd = 0; nInd < nToDeleteNum; nInd++ )
                 if ( pEntriesToDelete[nInd] )
                     pCaller->GetModel()->Remove( pEntriesToDelete[nInd] );
+            delete[] pEntriesToDelete;
 
             if ( !pCaller->GetModel()->GetChildCount( pGroupToDelete ) )
             {
