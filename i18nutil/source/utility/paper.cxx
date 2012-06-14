@@ -28,14 +28,12 @@
 
 
 #include <osl/diagnose.h>
+#include <officecfg/Setup.hxx>
+#include <officecfg/System.hxx>
 #include <sal/config.h>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 
 #include "i18nutil/paper.hxx"
 
@@ -217,38 +215,7 @@ long PaperInfo::sloppyFitPageDimension(long nDimension)
 
 PaperInfo PaperInfo::getSystemDefaultPaper()
 {
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::uno::Exception;
-#   define CREATE_OUSTRING( ascii ) \
-        rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
-
-    rtl::OUString aLocaleStr;
-
-    Reference< XMultiServiceFactory > xConfigProv;
-    Reference< XNameAccess > xConfigNA;
-    Sequence< Any > aArgs( 1 );
-    try
-    {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        xConfigProv = Reference< XMultiServiceFactory >(
-            xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ),
-            UNO_QUERY_THROW);
-
-        aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.Setup/L10N/" );
-        xConfigNA = Reference< XNameAccess >(xConfigProv->createInstanceWithArguments(
-            CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ), UNO_QUERY_THROW);
-
-        // try user-defined locale setting
-        xConfigNA->getByName( CREATE_OUSTRING( "ooSetupSystemLocale" ) ) >>= aLocaleStr;
-    }
-    catch(const Exception&)
-    {
-    }
+    rtl::OUString aLocaleStr = officecfg::Setup::L10N::ooSetupSystemLocale::get();
 
 #ifdef UNX
     // if set to "use system", get papersize from system
@@ -364,24 +331,12 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     }
 #endif
 
-    try
-    {
-        // if set to "use system", try to get locale from system
-        if (aLocaleStr.isEmpty() && xConfigProv.is())
-        {
-            aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.System/L10N/" );
-            xConfigNA.set( xConfigProv->createInstanceWithArguments(
-                CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ),
-                UNO_QUERY_THROW );
-            xConfigNA->getByName( CREATE_OUSTRING( "Locale" ) ) >>= aLocaleStr;
-        }
-    }
-    catch(const Exception&)
-    {
-    }
+    // if set to "use system", try to get locale from system
+    if (aLocaleStr.isEmpty())
+        aLocaleStr = officecfg::System::L10N::Locale::get();
 
     if (aLocaleStr.isEmpty())
-        aLocaleStr = CREATE_OUSTRING("en-US");
+        aLocaleStr = rtl::OUString::intern(RTL_CONSTASCII_USTRINGPARAM("en-US"));
 
     // convert locale string to locale struct
     ::com::sun::star::lang::Locale aSysLocale;
