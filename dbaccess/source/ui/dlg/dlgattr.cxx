@@ -77,16 +77,6 @@ void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
         }
         break;
 
-        case RID_SVXPAGE_CHAR_STD:
-        {
-        }
-        break;
-
-        case RID_SVXPAGE_ALIGNMENT:
-        {
-        }
-        break;
-
         default:
         break;
     }

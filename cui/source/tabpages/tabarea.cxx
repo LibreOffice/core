@@ -89,7 +89,6 @@ SvxAreaTabDialog::SvxAreaTabDialog
 
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
-//! rBtnCancel.SetText( CUI_RESSTR( RID_SVXSTR_CLOSE ) );
 }
 
 // -----------------------------------------------------------------------
