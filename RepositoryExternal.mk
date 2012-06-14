@@ -1645,7 +1645,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
-    -F $(OUTDIR)/lib -framework OOoPython \
+    -F$(OUTDIR)/lib -framework OOoPython \
 )
 else
 $(call gb_LinkTarget_use_libraries,$(1),\
