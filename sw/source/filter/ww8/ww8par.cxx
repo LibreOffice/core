@@ -795,6 +795,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
         {
             delete pImpRec->pWrapPolygon;
+            pImpRec->pWrapPolygon = NULL;
+
             sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
             rSt >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
             if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
