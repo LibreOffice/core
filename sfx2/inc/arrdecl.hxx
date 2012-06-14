@@ -43,7 +43,12 @@ class SfxViewShell;
 SV_DECL_PTRARR( SfxViewShellArr_Impl, SfxViewShell*, 4 )
 
 struct SfxTbxCtrlFactory;
-SV_DECL_PTRARR_DEL( SfxTbxCtrlFactArr_Impl, SfxTbxCtrlFactory*, 8 )
+class SfxTbxCtrlFactArr_Impl : public std::vector<SfxTbxCtrlFactory*>
+{
+public:
+    // de-allocates child objects
+    ~SfxTbxCtrlFactArr_Impl();
+};
 
 struct SfxStbCtrlFactory;
 class SfxStbCtrlFactArr_Impl : public std::vector<SfxStbCtrlFactory*>

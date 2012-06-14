@@ -84,7 +84,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
     }
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pAppData_Impl->pTbxCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pAppData_Impl->pTbxCtrlFac->size(); n++ )
     {
         SfxTbxCtrlFactory *pF = (*pAppData_Impl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -95,7 +95,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
     }
 #endif
 
-    pAppData_Impl->pTbxCtrlFac->C40_INSERT( SfxTbxCtrlFactory, pFact, pAppData_Impl->pTbxCtrlFac->Count() );
+    pAppData_Impl->pTbxCtrlFac->push_back( pFact );
 }
 
 //--------------------------------------------------------------------

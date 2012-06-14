@@ -88,10 +88,6 @@ using namespace ::com::sun::star::container;
 
 //===================================================================
 
-SV_IMPL_PTRARR( SfxTbxCtrlFactArr_Impl, SfxTbxCtrlFactory* );
-
-//===================================================================
-
 #define SfxApplication
 #include "sfxslots.hxx"
 
@@ -297,4 +293,11 @@ SfxStbCtrlFactArr_Impl::~SfxStbCtrlFactArr_Impl()
     for( const_iterator it = begin(); it != end(); ++it )
         delete *it;
 }
+
+SfxTbxCtrlFactArr_Impl::~SfxTbxCtrlFactArr_Impl()
+{
+    for( const_iterator it = begin(); it != end(); ++it )
+        delete *it;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

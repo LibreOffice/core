@@ -337,7 +337,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
             {
                 SfxTbxCtrlFactArr_Impl &rFactories = *pFactories;
                 sal_uInt16 nFactory;
-                const sal_uInt16 nCount = rFactories.Count();
+                const sal_uInt16 nCount = rFactories.size();
 
                 // search for a factory with the given slot id
                 for( nFactory = 0; nFactory < nCount; ++nFactory )
@@ -364,7 +364,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
 
         SfxTbxCtrlFactArr_Impl &rFactories = pApp->GetTbxCtrlFactories_Impl();
         sal_uInt16 nFactory;
-        const sal_uInt16 nCount = rFactories.Count();
+        const sal_uInt16 nCount = rFactories.size();
 
         for( nFactory = 0; nFactory < nCount; ++nFactory )
             if( (rFactories[nFactory]->nTypeId == aSlotType) && (rFactories[nFactory]->nSlotId == nSlotId) )

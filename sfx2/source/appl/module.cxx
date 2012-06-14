@@ -223,7 +223,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
         pImpl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
 
 #ifdef DBG_UTIL
-    for ( sal_uInt16 n=0; n<pImpl->pTbxCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
     {
         SfxTbxCtrlFactory *pF = (*pImpl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -234,7 +234,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
     }
 #endif
 
-    pImpl->pTbxCtrlFac->C40_INSERT( SfxTbxCtrlFactory, pFact, pImpl->pTbxCtrlFac->Count() );
+    pImpl->pTbxCtrlFac->push_back( pFact );
 }
 
 //-------------------------------------------------------------------------
