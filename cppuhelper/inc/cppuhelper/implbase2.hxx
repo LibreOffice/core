@@ -86,7 +86,9 @@ namespace cppu
         virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
 
+#if !defined _MSC_VER // public -> protected changes mangled names there
     protected:
+#endif
         ~ImplHelper2() throw () {}
     };
     /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and

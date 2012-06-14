@@ -335,7 +335,9 @@ public:
         sal_Bool bVetoable,
         bool bIgnoreRuntimeExceptionsWhileFiring) = 0;
 
+#if !defined _MSC_VER // public -> protected changes mangled names there
 protected:
+#endif
     ~IEventNotificationHook() {}
         // avoid warnings about virtual members and non-virtual dtor
 };
@@ -660,7 +662,11 @@ private:
                 sal_Int32 i_count
             );
 
+#if defined _MSC_VER // public -> protected changes mangled names there
+public:
+#else
 protected:
+#endif
 // Suppress warning about virtual functions but non-virtual destructor:
 #if defined _MSC_VER
 #pragma warning(push)
@@ -705,7 +711,11 @@ private:
     OPropertySetHelper2( const OPropertySetHelper2 & ) SAL_THROW(());
     OPropertySetHelper2 &    operator = ( const OPropertySetHelper2 & ) SAL_THROW(());
 
+#if defined _MSC_VER // public -> protected changes mangled names there
+public:
+#else
 protected:
+#endif
 // Suppress warning about virtual functions but non-virtual destructor:
     /**
        You must call disposing before destruction.

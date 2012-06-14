@@ -49,7 +49,9 @@ public:
      */
     virtual oslInterlockedCount SAL_CALL release() = 0;
 
+#if !defined _MSC_VER // public -> protected changes mangled names there
 protected:
+#endif
     ~IReference() {}
         // avoid warnings about virtual members and non-virtual dtor
 };
