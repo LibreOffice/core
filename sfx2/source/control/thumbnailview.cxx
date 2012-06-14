@@ -731,6 +731,25 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
                 DrawItem(pItem,GetItemRect(pItem->mnId));
         }
     }
+    else
+    {
+        if (mnHighItemId)
+        {
+            size_t nPos = GetItemPos(mnHighItemId);
+
+            if (nPos != THUMBNAILVIEW_ITEM_NOTFOUND)
+            {
+                ThumbnailViewItem *pOld = mItemList[nPos];
+
+                pOld->mbHover = false;
+
+                if (!pOld->mbSelected)
+                    DrawItem(pOld,GetItemRect(pOld->mnId));
+            }
+
+            mnHighItemId = 0;
+        }
+    }
 
     Control::MouseMove( rMEvt );
 }
