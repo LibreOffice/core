@@ -36,6 +36,8 @@ template <class T>
 class Enumeration
 {
 public:
+    virtual ~Enumeration (void) {}
+
     virtual bool HasMoreElements (void) const = 0;
     /** Returns T instead of T& so that it can handle shared pointers.
     */
