@@ -242,7 +242,7 @@ OUString psp::getFontPath()
 
 bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
 {
-    static unsigned char hexDigits[] =
+    static const unsigned char hexDigits[] =
         {
             '0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
@@ -258,10 +258,12 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
     while( bSuccess && ! bEof )
     {
         // read leading bytes
-        bEof = ! rInFile.read( buffer, 6, nRead ) && nRead == 6 ? false : true;
+        bEof = ((0 != rInFile.read( buffer, 6, nRead)) || (nRead != 6));
+        if( bEof )
+            break;
         unsigned int nType = buffer[ 1 ];
         unsigned int nBytesToRead = buffer[2] | buffer[3] << 8 | buffer[4] << 16 | buffer[5] << 24;
-        if( buffer[0] != 0x80 ) // test for pfb m_agic number
+        if( buffer[0] != 0x80 ) // test for pfb magic number
         {
             // this migt be a pfa font already
             if( ! rInFile.read( buffer+6, 9, nRead ) && nRead == 9 &&
