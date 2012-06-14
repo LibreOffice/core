@@ -1292,6 +1292,23 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
                     rtl::OUString aSourceName;
                     rtl::OUString aGivenName;
                     ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xDim );
+                    try
+                    {
+                        uno::Any aValue = xDimProp->getPropertyValue(
+                                rtl::OUString::createFromAscii(SC_UNO_DP_LAYOUTNAME) );
+
+                        if( aValue.hasValue() )
+                        {
+                            OUString strLayoutName;
+
+                            if( aValue >>= strLayoutName )
+                                if ( strLayoutName.getLength() > 0 )
+                                    aGivenName = strLayoutName;
+                        }
+                    }
+                    catch(uno::Exception&)
+                    {
+                    }
                     rDataNames.push_back( aSourceName );
                     rGivenNames.push_back( aGivenName );
 
