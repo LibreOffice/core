@@ -94,11 +94,6 @@ void SfxApplication::Deinitialize()
 #ifndef DISABLE_SCRIPTING
     StarBASIC::Stop();
 
-    // Save BASIC if possible
-    BasicManager* pBasMgr = BasicManagerRepository::getApplicationBasicManager( false );
-    if ( pBasMgr && pBasMgr->IsModified() )
-        SaveBasicManager();
-
     SaveBasicAndDialogContainer();
 #endif
 

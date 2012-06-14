@@ -203,7 +203,6 @@ public:
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetBasicContainer();
     StarBASIC*                  GetBasic();
-    sal_uInt16                  SaveBasicManager() const;
     sal_uInt16                  SaveBasicAndDialogContainer() const;
 
     // misc.
