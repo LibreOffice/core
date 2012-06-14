@@ -51,7 +51,6 @@ BreakIterator_CTL::BreakIterator_CTL() :
     // to improve performance, alloc big enough memory in construct.
     nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
     previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
-    memset(nextCellIndex, 0, cellIndexSize * sizeof(sal_Int32));
 }
 
 /**
