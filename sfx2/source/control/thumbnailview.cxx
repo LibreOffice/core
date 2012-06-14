@@ -724,25 +724,6 @@ void ThumbnailView::ImplHideSelect( sal_uInt16 nItemId )
     }
 }
 
-void ThumbnailView::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
-{
-    if ( mnHighItemId != nItemId )
-    {
-        // remember the old item to delete the previous selection
-        sal_uInt16 nOldItem = mnHighItemId;
-        mnHighItemId = nItemId;
-
-        // don't draw the selection if nothing is selected
-        if ( !bIsSelection && mbNoSelection )
-            mbDrawSelection = false;
-
-        // remove the old selection and draw the new one
-        ImplHideSelect( nOldItem );
-        ImplDrawSelect();
-        mbDrawSelection = true;
-    }
-}
-
 void ThumbnailView::ImplDraw()
 {
     if ( mbFormat )
@@ -946,28 +927,19 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 
         if (pItem)
         {
-            if ( mbSelection )
+            if ( !rMEvt.IsMod2() )
             {
-                mbHighlight = true;
-                mnHighItemId = mnSelItemId;
-                ImplHighlightItem( pItem->mnId );
-            }
-            else
-            {
-                if ( !rMEvt.IsMod2() )
+                if ( rMEvt.GetClicks() == 1 )
                 {
-                    if ( rMEvt.GetClicks() == 1 )
-                    {
-                        pItem->mbSelected = !pItem->mbSelected;
+                    pItem->mbSelected = !pItem->mbSelected;
 
-                        if (!pItem->mbHover)
-                            DrawItem(pItem,GetItemRect(pItem->mnId));
+                    if (!pItem->mbHover)
+                        DrawItem(pItem,GetItemRect(pItem->mnId));
 
-                        //StartTracking( STARTTRACK_SCROLLREPEAT );
-                    }
-                    else if ( rMEvt.GetClicks() == 2 )
-                        DoubleClick();
+                    //StartTracking( STARTTRACK_SCROLLREPEAT );
                 }
+                else if ( rMEvt.GetClicks() == 2 )
+                    DoubleClick();
             }
 
             return;
@@ -1695,7 +1667,6 @@ void ThumbnailView::EndSelection()
         if ( IsTracking() )
             EndTracking( ENDTRACK_CANCEL );
 
-        ImplHighlightItem( mnSelItemId );
         mbHighlight = false;
     }
     mbSelection = false;
