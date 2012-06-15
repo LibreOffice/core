@@ -21,7 +21,6 @@
 
 
 
-#include "precompiled_sfx2.hxx"
 
 #include "ctp_panel.hxx"
 
@@ -37,7 +36,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 /** === end UNO includes === **/
 
-#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 
 //......................................................................................................................
 namespace sd { namespace colortoolpanel
@@ -86,7 +85,7 @@ namespace sd { namespace colortoolpanel
         {
             try
             {
-                ENSURE_OR_THROW( i_rContext.is(), "illegal component context" );
+                OSL_ENSURE( i_rContext.is(), "illegal component context" );
                 Reference< XMultiComponentFactory > xFactory( i_rContext->getServiceManager(), UNO_SET_THROW );
                 Reference< XToolkit > xToolkit( xFactory->createInstanceWithContext(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ),
@@ -104,7 +103,6 @@ namespace sd { namespace colortoolpanel
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
             }
             return NULL;
         }
@@ -179,7 +177,6 @@ namespace sd { namespace colortoolpanel
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -204,7 +201,6 @@ namespace sd { namespace colortoolpanel
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
         }
         m_xWindow.clear();
     }

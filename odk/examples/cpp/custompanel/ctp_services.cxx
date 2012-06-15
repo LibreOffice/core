@@ -21,7 +21,6 @@
 
 
 
-#include "precompiled_sfx2.hxx"
 
 #include "ctp_factory.hxx"
 
@@ -35,19 +34,6 @@ namespace sd { namespace colortoolpanel
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= descriptors for the services implemented in this component
@@ -70,19 +56,13 @@ namespace sd { namespace colortoolpanel
 extern "C"
 {
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
-    {
-        return ::cppu::component_writeInfoHelper( pServiceManager, pRegistryKey, ::sd::colortoolpanel::s_aServiceEntries );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , ::sd::colortoolpanel::s_aServiceEntries );
     }

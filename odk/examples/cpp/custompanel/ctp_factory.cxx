@@ -21,7 +21,7 @@
 
 
 
-#include "precompiled_sfx2.hxx"
+
 
 #include "ctp_factory.hxx"
 #include "ctp_panel.hxx"
