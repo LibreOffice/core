@@ -25,6 +25,7 @@
  * instead of those above.
  */
 
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
 #include <test/bootstrapfixture.hxx>
@@ -72,6 +73,15 @@ protected:
             }
         }
         return aBuf.getLength();
+    }
+
+    /// Get a family of styles, see com.sun.star.style.StyleFamilies for possible values.
+    uno::Reference<container::XNameAccess> getStyles(rtl::OUString aFamily)
+    {
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(aFamily), uno::UNO_QUERY);
+        return xStyleFamily;
     }
 
     uno::Reference<lang::XComponent> mxComponent;

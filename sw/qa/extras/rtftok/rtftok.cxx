@@ -33,7 +33,6 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -144,7 +143,6 @@ private:
     void load(const OUString& rURL);
     /// Get page count.
     int getPages();
-    uno::Reference<container::XNameAccess> getStyles(OUString aFamily);
 };
 
 void Test::load(const OUString& rFilename)
@@ -159,14 +157,6 @@ int Test::getPages()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     return xCursor->getPage();
-}
-
-uno::Reference<container::XNameAccess> Test::getStyles(OUString aFamily)
-{
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName(aFamily), uno::UNO_QUERY);
-    return xPageStyles;
 }
 
 void Test::testFdo45553()
