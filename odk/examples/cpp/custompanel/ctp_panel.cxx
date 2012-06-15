@@ -226,7 +226,7 @@ namespace sd { namespace colortoolpanel
     {
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     Reference< XFrame > SAL_CALL PanelUIElement::getFrame() throw (RuntimeException)
     {
         // TODO
@@ -245,7 +245,7 @@ namespace sd { namespace colortoolpanel
         return UIElementType::TOOLPANEL;
     }
 
-     //------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL PanelUIElement::getRealInterface(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
