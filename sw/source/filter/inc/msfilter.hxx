@@ -37,7 +37,7 @@
 #include "wwstyles.hxx"      //ww::sti
 #include <rtl/textenc.h>     //rtl_TextEncoding
 #include <tools/gen.hxx>     //Size
-#include <tools/datetime.hxx>
+#include <filter/msfilter/util.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <redline.hxx>
 #include <shellio.hxx>
@@ -101,13 +101,6 @@ namespace sw
                 <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         void ImportXE(SwDoc &rDoc, SwPaM &rPaM, const String &rXE);
-
-        /** Convert from DTTM to Writer's DateTime
-
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
-        */
-        DateTime DTTM2DateTime( long lDTTM );
 
         /** Convert from DTTM to Writer's DateTime
 

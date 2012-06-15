@@ -1240,55 +1240,6 @@ void DocxAttributeOutput::Redline( const SwRedlineData* /*pRedline*/ )
     OSL_TRACE( "TODO DocxAttributeOutput::Redline( const SwRedlineData* pRedline )" );
 }
 
-/// Append the number as 2-digit when less than 10.
-static void impl_AppendTwoDigits( OStringBuffer &rBuffer, sal_Int32 nNum )
-{
-    if ( nNum < 0 || nNum > 99 )
-    {
-        rBuffer.append( "00" );
-        return;
-    }
-
-    if ( nNum < 10 )
-        rBuffer.append( '0' );
-
-    rBuffer.append( nNum );
-}
-
-/** Convert DateTime to xsd::dateTime string.
-
-I guess there must be an implementation of this somewhere in OOo, but I failed
-to find it, unfortunately :-(
-*/
-static OString impl_DateTimeToOString( const DateTime& rDateTime )
-{
-    DateTime aInUTC( rDateTime );
-// HACK: this is correct according to the spec, but MSOffice believes everybody lives
-// in UTC+0 when reading it back
-//    aInUTC.ConvertToUTC();
-
-    OStringBuffer aBuffer( 25 );
-    aBuffer.append( sal_Int32( aInUTC.GetYear() ) );
-    aBuffer.append( '-' );
-
-    impl_AppendTwoDigits( aBuffer, aInUTC.GetMonth() );
-    aBuffer.append( '-' );
-
-    impl_AppendTwoDigits( aBuffer, aInUTC.GetDay() );
-    aBuffer.append( 'T' );
-
-    impl_AppendTwoDigits( aBuffer, aInUTC.GetHour() );
-    aBuffer.append( ':' );
-
-    impl_AppendTwoDigits( aBuffer, aInUTC.GetMin() );
-    aBuffer.append( ':' );
-
-    impl_AppendTwoDigits( aBuffer, aInUTC.GetSec() );
-    aBuffer.append( 'Z' ); // we are in UTC
-
-    return aBuffer.makeStringAndClear();
-}
-
 void DocxAttributeOutput::StartRedline( const SwRedlineData* pRedlineData )
 {
     m_pRedlineData = pRedlineData;
@@ -1303,7 +1254,7 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData* pRedlineData )
     const String &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
 
-    OString aDate( impl_DateTimeToOString( pRedlineData->GetTimeStamp() ) );
+    OString aDate( msfilter::util::DateTimeToOString( pRedlineData->GetTimeStamp() ) );
 
     switch ( pRedlineData->GetType() )
     {
@@ -3380,7 +3331,7 @@ void DocxAttributeOutput::WritePostitFields()
         const SwPostItField* f = m_postitFields[ i ];
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
             FSNS( XML_w, XML_author ), rtl::OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSNS( XML_w, XML_date ), impl_DateTimeToOString(f->GetDateTime()).getStr(), FSEND );
+            FSNS( XML_w, XML_date ), msfilter::util::DateTimeToOString(f->GetDateTime()).getStr(), FSEND );
         // Check for the text object existing, it seems that it can be NULL when saving a newly created
         // comment without giving focus back to the main document. As GetTxt() is empty in that case as well,
         // that is probably a bug in the Writer core.

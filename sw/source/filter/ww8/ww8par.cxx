@@ -1509,7 +1509,7 @@ void SwWW8ImplReader::ImportDop()
     if (xDocuProps.is())
     {
         DateTime aLastPrinted(
-            sw::ms::DTTM2DateTime(pWDop->dttmLastPrint));
+            msfilter::util::DTTM2DateTime(pWDop->dttmLastPrint));
        ::util::DateTime uDT(aLastPrinted.Get100Sec(),
             aLastPrinted.GetSec(), aLastPrinted.GetMin(),
             aLastPrinted.GetHour(), aLastPrinted.GetDay(),
@@ -1828,7 +1828,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
             nDateTime = SVBT32ToUInt32(*(SVBT32*)(pExtended+(nIndex*18)));
     }
 
-    DateTime aDate = sw::ms::DTTM2DateTime(nDateTime);
+    DateTime aDate = msfilter::util::DTTM2DateTime(nDateTime);
 
     String sTxt;
     OutlinerParaObject *pOutliner = ImportAsOutliner( sTxt, pRes->nCp2OrIdx,

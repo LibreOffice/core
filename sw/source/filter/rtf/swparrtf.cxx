@@ -1847,12 +1847,12 @@ void SwRTFParser::NextToken( int nToken )
 
     case RTF_REVDTTM:
         if (pRedlineInsert != NULL)
-            pRedlineInsert->aStamp = sw::ms::DTTM2DateTime(nTokenValue);
+            pRedlineInsert->aStamp = msfilter::util::DTTM2DateTime(nTokenValue);
 
         break;
 
     case RTF_REVDTTMDEL:
-        pRedlineDelete->aStamp = sw::ms::DTTM2DateTime(nTokenValue);
+        pRedlineDelete->aStamp = msfilter::util::DTTM2DateTime(nTokenValue);
         break;
 
 

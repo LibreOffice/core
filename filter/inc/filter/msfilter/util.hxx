@@ -30,6 +30,7 @@
 #define INCLUDED_MSFILTER_UTIL_HXX
 
 #include <rtl/textenc.h>
+#include <tools/datetime.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include "filter/msfilter/msfilterdllapi.h"
 
@@ -43,6 +44,21 @@ MSFILTER_DLLPUBLIC rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::s
 
 /// Convert a color in BGR format to RGB.
 MSFILTER_DLLPUBLIC sal_uInt32 BGRToRGB(sal_uInt32 nColour);
+
+/** Convert from DTTM to Writer's DateTime
+
+  @author
+  <a href="mailto:mmaher@openoffice.org">Martin Maher</a
+  */
+MSFILTER_DLLPUBLIC DateTime DTTM2DateTime( long lDTTM );
+
+/** Convert DateTime to xsd::dateTime string.
+
+I guess there must be an implementation of this somewhere in LO, but I failed
+to find it, unfortunately :-(
+*/
+MSFILTER_DLLPUBLIC rtl::OString DateTimeToOString( const DateTime& rDateTime );
+
 }
 }
 

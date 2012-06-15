@@ -728,39 +728,6 @@ namespace sw
             return nDT;
         }
 
-        DateTime DTTM2DateTime( long lDTTM )
-        {
-            /*
-            mint    short   :6  0000003F    minutes (0-59)
-            hr      short   :5  000007C0    hours (0-23)
-            dom     short   :5  0000F800    days of month (1-31)
-            mon     short   :4  000F0000    months (1-12)
-            yr      short   :9  1FF00000    years (1900-2411)-1900
-            wdy     short   :3  E0000000    weekday(Sunday=0
-                                                    Monday=1
-            ( wdy can be ignored )                  Tuesday=2
-                                                    Wednesday=3
-                                                    Thursday=4
-                                                    Friday=5
-                                                    Saturday=6)
-            */
-            DateTime aDateTime(Date( 0 ), Time( 0 ));
-            if( lDTTM )
-            {
-                sal_uInt16 lMin = (sal_uInt16)(lDTTM & 0x0000003F);
-                lDTTM >>= 6;
-                sal_uInt16 lHour= (sal_uInt16)(lDTTM & 0x0000001F);
-                lDTTM >>= 5;
-                sal_uInt16 lDay = (sal_uInt16)(lDTTM & 0x0000001F);
-                lDTTM >>= 5;
-                sal_uInt16 lMon = (sal_uInt16)(lDTTM & 0x0000000F);
-                lDTTM >>= 4;
-                sal_uInt16 lYear= (sal_uInt16)(lDTTM & 0x000001FF) + 1900;
-                aDateTime = DateTime(Date(lDay, lMon, lYear), Time(lHour, lMin));
-            }
-            return aDateTime;
-        }
-
         sal_uLong MSDateTimeFormatToSwFormat(String& rParams,
             SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri,
             sal_uInt16 nDocLang)
