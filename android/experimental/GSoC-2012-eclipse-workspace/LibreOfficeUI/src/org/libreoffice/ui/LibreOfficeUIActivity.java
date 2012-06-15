@@ -59,6 +59,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 			
         
         homeDirectory  = new File(Environment.getExternalStorageDirectory(),"LibreOffice");
+        homeDirectory.mkdirs();
         Intent i = this.getIntent();
         if( i.hasExtra( currentDirectoryKey ) ){
         	//This isn't what I think it is. It's not a full path
