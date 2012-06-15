@@ -1488,6 +1488,16 @@ namespace {
         }
     }
 
+    void XShapeDumper::dumpPolyPolygonBezierDescriptorService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+    {
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("PolygonKind");
+            drawing::PolygonKind ePolygonKind;
+            if(anotherAny >>= ePolygonKind)
+                dumpPolygonKindAsAttribute(ePolygonKind, xmlWriter);
+        }
+    }
+
     void XShapeDumper::dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
@@ -1540,6 +1550,9 @@ namespace {
 
         if(xServiceInfo->supportsService("com.sun.star.drawing.Shape"))
             dumpShapeService(xPropSet, xmlWriter);
+
+        if(xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonBezierDescriptor"))
+            dumpPolyPolygonBezierDescriptorService(xPropSet, xmlWriter);
 
         #if DEBUG_DUMPER
             sal_Int32 nServices = aServiceNames.getLength();
