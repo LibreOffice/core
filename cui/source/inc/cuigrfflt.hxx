@@ -95,6 +95,26 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
 
+// -------------------------
+// - GraphicFilterSmooth -
+// -------------------------
+
+class GraphicFilterSmooth : public GraphicFilterDialog
+{
+private:
+
+    FixedText       maFtRadius;
+    NumericField    maMtrRadius;
+
+public:
+
+    GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius);
+    ~GraphicFilterSmooth();
+
+    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY );
+    double          GetRadius() const { return maMtrRadius.GetValue() / 10.0; }
+};
+
 // -----------------------
 // - GraphicFilterMosaic -
 // -----------------------

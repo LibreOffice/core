@@ -83,26 +83,15 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
 
             case( SID_GRFFILTER_SMOOTH ):
             {
-                if( pShell )
-                    pShell->SetWaitCursor( sal_True );
-
-                if( rGraphic.IsAnimated() )
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if(pFact)
                 {
-                    Animation aAnimation( rGraphic.GetAnimation() );
-
-                    if( aAnimation.Filter( BMP_FILTER_SMOOTH ) )
-                        aGraphic = aAnimation;
+                    AbstractGraphicFilterDialog* aDlg = pFact->CreateGraphicFilterSmooth( pWindow, rGraphic, 0.7, RID_SVX_GRFFILTER_DLG_SEPIA);
+                    DBG_ASSERT(aDlg, "Dialogdiet fail!");
+                    if( aDlg->Execute() == RET_OK )
+                        aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
+                    delete aDlg;
                 }
-                else
-                {
-                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-
-                    if( aBmpEx.Filter( BMP_FILTER_SMOOTH ) )
-                        aGraphic = aBmpEx;
-                }
-
-                if( pShell )
-                    pShell->SetWaitCursor( sal_False );
             }
             break;
 

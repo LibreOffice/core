@@ -49,6 +49,13 @@
 #define DLG_FILTERMOSAIC_CBX_EDGES          5
 
 // ----------------------
+// - DLG_FILTERSMOOTH -
+// ----------------------
+
+#define DLG_FILTERSMOOTH_FT_RADIUS     1
+#define DLG_FILTERSMOOTH_MTR_RADIUS    2
+
+// ----------------------
 // - DLG_FILTERSOLARIZE -
 // ----------------------
 

@@ -1574,18 +1574,23 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPos
     return 0;
 }
 
+AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmooth ( Window* pParent,
+                                            const Graphic& rGraphic, double nRadius, sal_uInt32)
+{
+    GraphicFilterDialog* pDlg = new GraphicFilterSmooth( pParent, rGraphic, nRadius );
+    return new AbstractGraphicFilterDialog_Impl( pDlg );
+}
+
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSolarize (Window* pParent,  //add for GraphicFilterSolarize
-                                            const Graphic& rGraphic,
-                                            sal_uInt8 nGreyThreshold, sal_Bool bInvert, sal_uInt32 )
+                                            const Graphic& rGraphic, sal_uInt8 nGreyThreshold, sal_Bool bInvert, sal_uInt32 )
 {
     GraphicFilterDialog* pDlg = new GraphicFilterSolarize( pParent, rGraphic, nGreyThreshold, bInvert );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (Window* pParent,  //add for GraphicFilterMosaic
-                                            const Graphic& rGraphic,
-                                            sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges,
-                                            sal_uInt32 nResId)
+                                            const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
+                                            sal_Bool bEnhanceEdges, sal_uInt32 nResId)
 {
     GraphicFilterDialog* pDlg=NULL;
     switch ( nResId )

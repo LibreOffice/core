@@ -94,6 +94,7 @@
 #define CMD_SID_GRFFILTER_POSTER                    ".uno:GraphicFilterPoster"
 #define CMD_SID_GRFFILTER_EMBOSS                    ".uno:GraphicFilterRelief"
 #define CMD_SID_GRFFILTER_SEPIA                     ".uno:GraphicFilterSepia"
+#define CMD_SID_GRFFILTER_SMOOTH                    ".uno:GraphicFilterSmooth"
 #define CMD_SID_GRFFILTER_SOLARIZE                  ".uno:GraphicFilterSolarize"
 #define CMD_SID_GRID_USE                            ".uno:GridUse"
 #define CMD_SID_GRID_VISIBLE                        ".uno:GridVisible"

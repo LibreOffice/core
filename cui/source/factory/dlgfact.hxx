@@ -725,18 +725,20 @@ public:
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier);
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,  //add for GraphicFilterEmboss
-                                            const Graphic& rGraphic,
-                                            RECT_POINT eLightSource, sal_uInt32 nResId);
+                                                const Graphic& rGraphic, RECT_POINT eLightSource,
+                                                sal_uInt32 nResId);
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPosterSepia (Window* pParent,  //add for GraphicFilterPoster & GraphicFilterSepia
-                                            const Graphic& rGraphic,
-                                            sal_uInt16 nCount,
-                                            sal_uInt32 nResId);
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (Window* pParent,  //add for GraphicFilterSolarize
-                                            const Graphic& rGraphic,
-                                            sal_uInt8 nGreyThreshold, sal_Bool bInvert, sal_uInt32 nResId);
+                                                const Graphic& rGraphic, sal_uInt16 nCount,
+                                                sal_uInt32 nResId);
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (Window* pParent,  //add for GraphicFilterSolarize
+                                                const Graphic& rGraphic, double nRadius,
+                                                sal_uInt32 nResId);
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (Window* pParent,  //add for GraphicFilterSmooth
+                                                const Graphic& rGraphic, sal_uInt8 nGreyThreshold,
+                                                sal_Bool bInvert, sal_uInt32 nResId);
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (Window* pParent,  //add for GraphicFilterMosaic
-                                            const Graphic& rGraphic,
-                                            sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges, sal_uInt32 nResId);
+                                                const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
+                                                sal_Bool bEnhanceEdges, sal_uInt32 nResId);
     virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( Window* pParent,//add for SvxAreaTabDialog
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,

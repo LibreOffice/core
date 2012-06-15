@@ -245,6 +245,57 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
 }
 
 // ------------------
+// - GraphicFilterSmooth -
+// ------------------
+
+GraphicFilterSmooth::GraphicFilterSmooth( Window* pParent, const Graphic& rGraphic, double nRadius) :
+    GraphicFilterDialog ( pParent, CUI_RES( RID_SVX_GRFFILTER_DLG_SMOOTH ), rGraphic ),
+    maFtRadius   ( this, CUI_RES( DLG_FILTERSMOOTH_FT_RADIUS ) ),
+    maMtrRadius  ( this, CUI_RES( DLG_FILTERSMOOTH_MTR_RADIUS ) )
+{
+    FreeResource();
+
+    maMtrRadius.SetValue( nRadius* 10  );
+    maMtrRadius.SetModifyHdl( GetModifyHdl() );
+    maMtrRadius.GrabFocus();
+}
+
+// -----------------------------------------------------------------------------
+
+GraphicFilterSmooth::~GraphicFilterSmooth()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double /*fScaleX*/, double /*fScaleY*/ )
+{
+    Graphic         aRet;
+    BmpFilterParam  aParam( GetRadius() );
+
+    if( rGraphic.IsAnimated() )
+    {
+        Animation aAnim( rGraphic.GetAnimation() );
+
+        if( aAnim.Filter( BMP_FILTER_SMOOTH, &aParam ) )
+        {
+            aRet = aAnim;
+        }
+    }
+    else
+    {
+        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+
+        if( aBmpEx.Filter( BMP_FILTER_SMOOTH, &aParam ) )
+        {
+            aRet = aBmpEx;
+        }
+    }
+
+    return aRet;
+}
+
+// ------------------
 // - GraphicFilterSolarize -
 // ------------------
 

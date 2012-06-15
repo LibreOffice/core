@@ -444,6 +444,9 @@ public:
                                                 const Graphic& rGraphic,
                                                 sal_uInt16 nCount,
                                                 sal_uInt32 nResId)=0;
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (Window* pParent,  //add for GraphicFilterSmooth
+                                                const Graphic& rGraphic,
+                                                double nRadius, sal_uInt32 nResId)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (Window* pParent,  //add for GraphicFilterSolarize
                                                 const Graphic& rGraphic,
                                                 sal_uInt8 nGreyThreshold, sal_Bool bInvert, sal_uInt32 nResId)=0;
