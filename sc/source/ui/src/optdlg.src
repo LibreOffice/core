@@ -332,6 +332,7 @@ TabPage RID_SCPAGE_COMPATIBILITY
 
     ListBox LB_KEY_BINDINGS
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_COMPATIBILITY:LB_KEY_BINDINGS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 179, 20 ) ;
         Size = MAP_APPFONT ( 75, 46 ) ;
