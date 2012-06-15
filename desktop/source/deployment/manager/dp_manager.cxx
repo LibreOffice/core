@@ -345,7 +345,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         xComponentContext, context );
     Reference<deployment::XPackageManager> xPackageManager( that );
 
-    OUString packages, logFile, stamp;
+    OUString logFile, stamp;
     if ( context == "user" ) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages");
