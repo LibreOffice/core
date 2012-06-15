@@ -156,7 +156,7 @@ XubString SdrUndoGroup::GetComment() const
 {
     XubString aRet(aComment);
     sal_Char aSearchText[] = "%1";
-    String aSearchString(aSearchText, sizeof(aSearchText-1));
+    String aSearchString(aSearchText, sizeof(aSearchText)-1);
 
     aRet.SearchAndReplace(aSearchString, aObjDescription);
 
