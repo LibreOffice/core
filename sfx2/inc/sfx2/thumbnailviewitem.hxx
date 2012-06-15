@@ -30,7 +30,7 @@
 #define THUMBNAILVIEWITEM_HXX
 
 #include <osl/mutex.hxx>
-#include <vcl/image.hxx>
+#include <vcl/bitmapex.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -45,7 +45,8 @@ struct ThumbnailViewItem
     bool mbVisible;
     bool mbSelected;
     bool mbHover;
-    Image maImage;
+    BitmapEx maPreview1;
+    BitmapEx maPreview2;
     rtl::OUString maText;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 

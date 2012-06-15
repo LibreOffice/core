@@ -73,7 +73,7 @@ B2DPolygon lcl_Rect2Polygon (const Rectangle &aRect)
     return aPolygon;
 }
 
-Image lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
+BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -327,7 +327,13 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
 {
     if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
     {
-        Primitive2DSequence aSeq(3);
+        int nCount = 0;
+        int nSeqSize = 3;
+
+        if (!pItem->maPreview2.IsEmpty())
+            ++nSeqSize;
+
+        Primitive2DSequence aSeq(nSeqSize);
 
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -337,21 +343,39 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
         if ( pItem->mbSelected || pItem->mbHover )
             aFillColor = rStyleSettings.GetHighlightColor().getBColor();
 
-        aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+        aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                             B2DPolyPolygon(lcl_Rect2Polygon(aRect)),
                                             aFillColor));
 
         // Draw thumbnail
         Point aPos = aRect.TopLeft();
-        Size aImageSize = pItem->maImage.GetSizePixel();
+        Size aImageSize = pItem->maPreview1.GetSizePixel();
         Size aRectSize = aRect.GetSize();
         aPos.X() = aRect.Left() + (aRectSize.Width()-aImageSize.Width())/2;
         aPos.Y() = aRect.Top() + (aRectSize.Height()-aImageSize.Height())/2;
 
-        aSeq[1] = Primitive2DReference( new FillBitmapPrimitive2D(
-                                            B2DHomMatrix(),
-                                            FillBitmapAttribute(pItem->maImage.GetBitmapEx(),
-                                                                B2DPoint(aPos.X(),aPos.Y()),
+
+        float fScaleX = 1.0f;
+        float fScaleY = 1.0f;
+
+        if (!pItem->maPreview2.IsEmpty())
+        {
+            fScaleX = 0.8;
+            fScaleY = 0.8;
+
+            aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
+                                                createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
+                                                FillBitmapAttribute(pItem->maPreview2,
+                                                                    B2DPoint(35,20),
+                                                                    B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                                                    false)
+                                                ));
+        }
+
+        aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
+                                            createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
+                                            FillBitmapAttribute(pItem->maPreview1,
+                                                                B2DPoint(0,0),
                                                                 B2DVector(aImageSize.Width(),aImageSize.Height()),
                                                                 false)
                                             ));
@@ -370,7 +394,7 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
                     aFontSize.getX(), aFontSize.getY(),
                     double( aPos.X() ), double( aPos.Y() ) ) );
 
-        aSeq[2] = Primitive2DReference(
+        aSeq[nCount++] = Primitive2DReference(
                     new TextSimplePortionPrimitive2D(aTextMatrix,
                                                      pItem->maText,0,pItem->maText.getLength(),
                                                      std::vector< double >( ),
@@ -1130,38 +1154,30 @@ void ThumbnailView::Populate ()
 
         if (nEntries)
         {
+            ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
+            pItem->mnId     = i+1;
+            pItem->maText   = aRegionName;
+
             /// Preview first 2 thumbnails for folder
-            Image aImg = lcl_fetchThumbnail(pTemplates->GetPath(i,0),128,128);
+            pItem->maPreview1 = lcl_fetchThumbnail(pTemplates->GetPath(i,0),128,128);
 
             if ( nEntries > 2 )
-            {
-                Color aWhite(COL_WHITE);
-                BitmapEx aBmp = lcl_fetchThumbnail(pTemplates->GetPath(i,1),128,128).GetBitmapEx();
-                BitmapEx aResult = aBmp;
+                pItem->maPreview2 = lcl_fetchThumbnail(pTemplates->GetPath(i,1),128,128);
 
-                aResult.Erase(aWhite);
-                aBmp.Scale(Size(128,128));
-                aResult.CopyPixel(Rectangle(32,4,128,100),Rectangle(0,0,96,96),&aBmp);
-
-                aBmp = aImg.GetBitmapEx();
-                aBmp.Scale(Size(96,96));
-                aResult.CopyPixel(Rectangle(10,22,106,118), Rectangle(0,0,96,96),&aBmp);
-
-                aImg = aResult;
-
-            }
-
-            InsertItem(i+1,aImg,aRegionName);
+            mItemList.push_back(pItem);
         }
     }
+
+    if ( IsReallyVisible() && IsUpdateMode() )
+        Invalidate();
 }
 
-void ThumbnailView::InsertItem( sal_uInt16 nItemId, const Image& rImage,
+void ThumbnailView::InsertItem( sal_uInt16 nItemId, const BitmapEx& rImage,
                            const rtl::OUString& rText, size_t nPos )
 {
     ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
     pItem->mnId     = nItemId;
-    pItem->maImage  = rImage;
+    pItem->maPreview1 = rImage;
     pItem->maText   = rText;
     ImplInsertItem( pItem, nPos );
 }

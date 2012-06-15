@@ -15,9 +15,9 @@
 #include <vector>
 
 #include <vcl/ctrl.hxx>
-#include <vcl/image.hxx>
 #include <vcl/timer.hxx>
 
+class BitmapEx;
 class MouseEvent;
 class TrackingEvent;
 class HelpEvent;
@@ -169,7 +169,7 @@ public:
     void Populate ();
 
     void InsertItem( sal_uInt16 nItemId,
-                     const Image& rImage, const rtl::OUString &rStr,
+                     const BitmapEx &rImage, const rtl::OUString &rStr,
                      size_t nPos = THUMBNAILVIEW_APPEND );
 
     void RemoveItem( sal_uInt16 nItemId );
