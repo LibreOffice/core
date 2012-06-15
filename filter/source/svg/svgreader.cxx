@@ -709,9 +709,15 @@ struct AnnotatingVisitor
             else
                 xAttrs->AddAttribute( "draw:fill", "none");
 
-            if( rState.meStrokeType != NONE )
+            if( rState.meStrokeType == SOLID )
             {
                 xAttrs->AddAttribute( "draw:stroke", "solid");
+                xAttrs->AddAttribute( "svg:stroke-color", getOdfColor(rState.maStrokeColor));
+            }
+            else if( rState.meStrokeType == DASH )
+            {
+                xAttrs->AddAttribute( "draw:stroke", "dash");
+                xAttrs->AddAttribute( "draw:stroke-dash", "dash"+rtl::OUString::valueOf(mnCurrStateId));
                 xAttrs->AddAttribute( "svg:stroke-color", getOdfColor(rState.maStrokeColor));
             }
             else
@@ -744,28 +750,6 @@ struct AnnotatingVisitor
     void writeStyle(const uno::Reference<xml::dom::XElement>& xElem, const sal_Int32 nTagId)
     {
         SAL_INFO ("svg", "writeStyle xElem " << xElem->getTagName());
-        sal_Int32 nEmulatedStyleId=0;
-        if( maCurrState.maDashArray.size() &&
-            maCurrState.meStrokeType != NONE )
-        {
-            // ODF dashing is severly borked - generate filled shape
-            // instead (further down the road - here, we simply
-            // emulate a filled style with the next id)
-
-            // move all stroke attribs to fill, Clear stroking
-            State aEmulatedStrokeState( maCurrState );
-            aEmulatedStrokeState.meFillType = maCurrState.meStrokeType;
-            aEmulatedStrokeState.mnFillOpacity = maCurrState.mnStrokeOpacity;
-            aEmulatedStrokeState.maFillColor = maCurrState.maStrokeColor;
-            aEmulatedStrokeState.maFillGradient = maCurrState.maStrokeGradient;
-            aEmulatedStrokeState.meFillRule = EVEN_ODD;
-            aEmulatedStrokeState.meStrokeType = NONE;
-
-            if( writeStyle(aEmulatedStrokeState, nTagId) )
-                nEmulatedStyleId = mnCurrStateId;
-            else
-                nEmulatedStyleId = mrStates.find(aEmulatedStrokeState)->mnStyleId;
-        }
 
         sal_Int32 nStyleId=0;
         if( writeStyle(maCurrState, nTagId) )
@@ -776,9 +760,7 @@ struct AnnotatingVisitor
         xElem->setAttribute("internal-style-ref",
                             rtl::OUString::valueOf(
                                 nStyleId)
-                            +"$"
-                            +rtl::OUString::valueOf(
-                                nEmulatedStyleId));
+                            +"$0");
     }
 
     void push()
@@ -1019,12 +1001,18 @@ struct AnnotatingVisitor
             case XML_STROKE_DASHARRAY:
             {
                 if( aValueUtf8 == "none" )
+                {
                     maCurrState.maDashArray.clear();
+                    maCurrState.meStrokeType = SOLID;
+                }
                 else if( aValueUtf8 == "inherit" )
                     maCurrState.maDashArray = maParentStates.back().maDashArray;
                 else
+                {
                     parseDashArray(aValueUtf8.getStr(),
                                    maCurrState.maDashArray);
+                    maCurrState.meStrokeType = DASH;
+                }
                 break;
             }
             case XML_STROKE_OPACITY:
@@ -1666,32 +1654,6 @@ struct ShapeWritingVisitor
                   maCurrState.maCTM.get(1,1),
                   maCurrState.maCTM.get(1,2));
 
-        if( aState.meStrokeType != NONE && aState.maDashArray.size() )
-        {
-            // ODF dashing is severly borked - generate filled polygon instead
-            aPolys.clear();
-            for( sal_uInt32 i=0; i<rPoly.count(); ++i )
-            {
-                aPolys.push_back(
-                    basegfx::tools::stripNeutralPolygons(
-                        basegfx::tools::prepareForPolygonOperation(
-                            basegfx::tools::createAreaGeometry(
-                                rPoly.getB2DPolygon(i),
-                                aState.mnStrokeWidth/2.0,
-                                aState.meLineJoin))));
-                // TODO(F2): line ends
-            }
-
-            sal_Int32 nDummyIndex(0);
-            aStyleId = xElem->getAttribute(
-                "internal-style-ref").getToken(1,'$',nDummyIndex);
-            StateMap::iterator pAlternateState=mrStateMap.find(aStyleId.toInt32());
-            OSL_ASSERT(pAlternateState != mrStateMap.end());
-            aState = pAlternateState->second;
-            OSL_ENSURE( pAlternateState == mrStateMap.end(),
-                        "Doh - where's my alternate style entry?!" );
-        }
-
         // TODO(F2): separate out shear, rotate etc.
         // apply transformation to polygon, to keep draw
         // import in 100th mm
@@ -1773,6 +1735,119 @@ static void writeShapes( StatePool&                                        rStat
 
 } // namespace
 
+struct OfficeStylesWritingVisitor
+{
+    OfficeStylesWritingVisitor( StateMap&                                         rStateMap,
+                                const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler) :
+        mrStateMap(rStateMap),
+        mxDocumentHandler(xDocumentHandler)
+    {}
+    void operator()( const uno::Reference<xml::dom::XElement>& /*xElem*/ )
+    {
+    }
+    void operator()( const uno::Reference<xml::dom::XElement>&      xElem,
+                     const uno::Reference<xml::dom::XNamedNodeMap>& /*xAttributes*/ )
+    {
+        rtl::Reference<SvXMLAttributeList> xAttrs( new SvXMLAttributeList() );
+        uno::Reference<xml::sax::XAttributeList> xUnoAttrs( xAttrs.get() );
+
+        sal_Int32 nDummyIndex(0);
+        rtl::OUString sStyleId(
+            xElem->getAttribute("internal-style-ref").getToken(
+                    0,'$',nDummyIndex));
+        StateMap::iterator pOrigState=mrStateMap.find(
+            sStyleId.toInt32());
+
+        if( pOrigState == mrStateMap.end() )
+            return; // non-exportable element, e.g. linearGradient
+
+        maCurrState = pOrigState->second;
+
+        if( maCurrState.meStrokeType == DASH )
+        {
+            sal_Int32 dots1, dots2;
+            double dots1_length, dots2_length, dash_distance;
+            SvgDashArray2Odf( &dots1, &dots1_length, &dots2, &dots2_length, &dash_distance );
+
+            xAttrs->Clear();
+            xAttrs->AddAttribute( "draw:name", "dash"+sStyleId );
+            xAttrs->AddAttribute( "draw:display-name", "dash"+sStyleId );
+            xAttrs->AddAttribute( "draw:style", "rect" );
+            if ( dots1>0 ) {
+                xAttrs->AddAttribute( "draw:dots1", rtl::OUString::valueOf(dots1) );
+                xAttrs->AddAttribute( "draw:dots1-length", rtl::OUString::valueOf(pt2mm(convLength( rtl::OUString::valueOf(dots1_length), maCurrState, 'h' )))+"mm" );
+            }
+            xAttrs->AddAttribute( "draw:distance", rtl::OUString::valueOf(pt2mm(convLength( rtl::OUString::valueOf(dash_distance), maCurrState, 'h' )))+"mm" );
+            if ( dots2>0 ) {
+                xAttrs->AddAttribute( "draw:dots2", rtl::OUString::valueOf(dots2) );
+                xAttrs->AddAttribute( "draw:dots2-length", rtl::OUString::valueOf(pt2mm(convLength( rtl::OUString::valueOf(dots2_length), maCurrState, 'h' )))+"mm" );
+            }
+
+            mxDocumentHandler->startElement( "draw:stroke-dash", xUnoAttrs);
+            mxDocumentHandler->endElement( "draw:stroke-dash" );
+        }
+    }
+
+    void SvgDashArray2Odf( sal_Int32 *dots1, double *dots1_length, sal_Int32 *dots2, double *dots2_length, double *dash_distance )
+    {
+        *dots1 = 0;
+        *dots1_length = 0;
+        *dots2 = 0;
+        *dots2_length = 0;
+        *dash_distance = 0;
+
+        if( maCurrState.maDashArray.size() == 0 ) {
+            return;
+        }
+
+        double effective_dasharray_size = maCurrState.maDashArray.size();
+        if( maCurrState.maDashArray.size() % 2 == 1 )
+            effective_dasharray_size = maCurrState.maDashArray.size()*2;
+
+        *dash_distance = maCurrState.maDashArray[1%maCurrState.maDashArray.size()];
+        sal_Int32 dist_count = 1;
+        for( int i=3; i<effective_dasharray_size; i+=2 ) {
+            *dash_distance = ((dist_count * *dash_distance) + maCurrState.maDashArray[i%maCurrState.maDashArray.size()])/(dist_count+1);
+            ++dist_count;
+        }
+
+        *dots1 = 1;
+        *dots1_length = maCurrState.maDashArray[0];
+        int i=2;
+        while( ( i<effective_dasharray_size ) && ( maCurrState.maDashArray[i%maCurrState.maDashArray.size()] == *dots1_length ) ) {
+            ++(*dots1);
+            i += 2;
+        }
+        if( i<effective_dasharray_size ) {
+            *dots2 = 1;
+            *dots2_length = maCurrState.maDashArray[i];
+            i+=2;
+            while( ( i<effective_dasharray_size ) && ( maCurrState.maDashArray[i%maCurrState.maDashArray.size()] == *dots2_length ) ) {
+                ++(*dots2);
+                i += 2;
+            }
+        }
+
+        SAL_INFO("svg", "SvgDashArray2Odf " << *dash_distance << " " << *dots1 << " " << *dots1_length << " " << *dots2 << " " << *dots2_length );
+
+        return;
+    }
+
+    void push() {}
+    void pop()  {}
+
+    State                                      maCurrState;
+    StateMap&                                  mrStateMap;
+    uno::Reference<xml::sax::XDocumentHandler> mxDocumentHandler;
+};
+
+static void writeOfficeStyles(  StateMap&                                         rStateMap,
+                                const uno::Reference<xml::dom::XElement>          xElem,
+                                const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl )
+{
+    OfficeStylesWritingVisitor aVisitor( rStateMap, xDocHdl );
+    visitElements( aVisitor, xElem );
+}
 
 #if OSL_DEBUG_LEVEL > 2
 struct DumpingVisitor
@@ -1992,6 +2067,9 @@ sal_Bool SVGReader::parseAndConvert()
 
     xAttrs->Clear();
     m_xDocumentHandler->startElement( "office:styles", xUnoAttrs);
+    writeOfficeStyles( aStateMap,
+                       xDocElem,
+                       m_xDocumentHandler);
     m_xDocumentHandler->endElement( "office:styles" );
 
     ////////////////////////////////////////////////////////////////////

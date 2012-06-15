@@ -143,7 +143,8 @@ enum PaintType
 {
     NONE,
     SOLID,
-    GRADIENT
+    GRADIENT,
+    DASH
 };
 
 enum FillRule
