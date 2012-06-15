@@ -335,6 +335,34 @@ void SwDocTest::testSwScanner()
         pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
         CPPUNIT_ASSERT_MESSAGE("Should be 5", aDocStat.nWord == 5);
     }
+
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=46757
+    {
+        SwDocStat aDocStat;
+
+        const char aString[] = "Lorem ipsum";
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, rtl::OUString(aString));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
+
+        //turn on red-lining
+        m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
+        CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->IsRedlineOn());
+        CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
+
+        //delete everything except the first word
+        aPaM.SetMark(); //set start of selection to current pos
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 5);   //set end of selection to fifth char of current node
+        m_pDoc->DeleteAndJoin(aPaM);    //redline-aware deletion api
+        CPPUNIT_ASSERT_MESSAGE("real underlying text should be the same", pTxtNode->GetTxt().EqualsAscii(aString));
+
+        aDocStat.Reset();
+        pTxtNode->SetWordCountDirty(true);
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //but word-counting the text should only count the non-deleted text
+        CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
+    }
 }
 
 //See https://bugs.freedesktop.org/show_bug.cgi?id=40599
