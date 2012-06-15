@@ -36,9 +36,12 @@
 #include <vector>
 
 class ListBox;
+class MetricField;
 
 class VCL_DLLPUBLIC VclBuilder
 {
+public:
+    typedef std::map<rtl::OString, rtl::OString> stringmap;
 private:
     //todo merge into Windows UniqueID/HelpID ?
     struct WinAndId
@@ -91,6 +94,25 @@ private:
     ListStore *get_model_by_name(rtl::OString sID);
     static void mungemodel(ListBox &rTarget, ListStore &rStore);
 
+    typedef stringmap Adjustment;
+
+    struct AdjustmentAndId
+    {
+        rtl::OString m_sID;
+        Adjustment m_aAdjustment;
+        AdjustmentAndId(const rtl::OString &rId, Adjustment &rAdjustment)
+            : m_sID(rId)
+        {
+            m_aAdjustment.swap(rAdjustment);
+        }
+    };
+    std::vector<AdjustmentAndId> m_aAdjustments;
+
+    typedef StringPair SpinButtonAdjustmentMap;
+    std::vector<SpinButtonAdjustmentMap> m_aAdjustmentMaps;
+    Adjustment *get_adjustment_by_name(rtl::OString sID);
+    static void mungeadjustment(MetricField &rTarget, Adjustment &rAdjustment);
+
     rtl::OString m_sID;
     Window *m_pParent;
 public:
@@ -104,13 +126,12 @@ public:
     //splice replacement into the tree instead of it, without
     //taking ownership of it
     bool replace(rtl::OString sID, Window &rReplacement);
-
-    typedef std::map<rtl::OString, rtl::OString> stringmap;
 private:
     Window *insertObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rVec);
     Window *makeObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rVec);
     bool extractGroup(const rtl::OString &id, stringmap &rVec);
     bool extractModel(const rtl::OString &id, stringmap &rVec);
+    bool extractAdjustment(const rtl::OString &id, stringmap &rVec);
 
     void handleChild(Window *pParent, xmlreader::XmlReader &reader);
     Window* handleObject(Window *pParent, xmlreader::XmlReader &reader);
@@ -119,6 +140,7 @@ private:
     void collectProperty(xmlreader::XmlReader &reader, stringmap &rVec);
 
     void handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID);
+    void handleAdjustment(const rtl::OString &rID, stringmap &rProperties);
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
 
     //Helpers to retrofit all the existing code the the builder
