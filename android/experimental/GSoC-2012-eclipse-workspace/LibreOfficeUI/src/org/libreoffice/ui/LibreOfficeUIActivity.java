@@ -342,8 +342,11 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 				
 				public void onClick(View v) {
 					Log.d("LIST", "click!");
-					
-					open( filePaths[ pos ].getName() );
+					if(filePaths[ pos ].isDirectory() ){
+						openDirectory( filePaths[ pos ] );
+					}else{
+						open( filePaths[ pos ].getName() );
+					}
 				}
 			});
 			
