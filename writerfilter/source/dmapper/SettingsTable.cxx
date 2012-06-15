@@ -76,6 +76,7 @@ struct SettingsTable_Impl
     ::rtl::OUString     m_sSalt;
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
+    bool                m_bEvenAndOddHeaders;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -94,6 +95,7 @@ struct SettingsTable_Impl
     , m_nCryptSpinCount(0)
     , m_bLinkStyles(false)
     , m_nZoomFactor(0)
+    , m_bEvenAndOddHeaders(false)
     {}
 
 };
@@ -165,6 +167,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_linkStyles: // 92663;
     m_pImpl->m_bLinkStyles = nIntValue;
     break;
+    case NS_ooxml::LN_CT_Settings_evenAndOddHeaders:
+    m_pImpl->m_bEvenAndOddHeaders = nIntValue;
+    break;
     case NS_ooxml::LN_CT_Settings_noPunctuationKerning: //  92526;
     m_pImpl->m_bNoPunctuationKerning = nIntValue ? true : false;
     break;
@@ -228,6 +233,11 @@ bool SettingsTable::GetLinkStyles() const
 sal_Int16 SettingsTable::GetZoomFactor() const
 {
     return m_pImpl->m_nZoomFactor;
+}
+
+bool SettingsTable::GetEvenAndOddHeaders() const
+{
+    return m_pImpl->m_bEvenAndOddHeaders;
 }
 
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )

@@ -1271,7 +1271,7 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
                     uno::makeAny(sal_True) );
             // if a left header is available then header are not shared
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-            if( bLeft )
+            if( bLeft && m_pSettingsTable->GetEvenAndOddHeaders())
                 xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_SHARED), uno::makeAny( false ));
 
             //set the interface
@@ -1310,7 +1310,7 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
                     uno::makeAny(sal_True) );
             // if a left header is available then footer is not shared
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-            if( bLeft )
+            if( bLeft && m_pSettingsTable->GetEvenAndOddHeaders())
                 xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_SHARED), uno::makeAny( false ));
             //set the interface
             uno::Reference< text::XText > xFooterText;
