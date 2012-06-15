@@ -548,7 +548,8 @@ void ScCondFrmtEntry::SetColorScaleType()
     {
         maEdMiddle.Hide();
         maLbEntryTypeMiddle.Hide();
-        maLbColScale2.Show();
+        // TODO: enale for 3.7 again with good presets
+        //maLbColScale2.Show();
         maLbColScale3.Hide();
         maLbColMiddle.Hide();
     }
@@ -557,7 +558,8 @@ void ScCondFrmtEntry::SetColorScaleType()
         maEdMiddle.Show();
         maLbEntryTypeMiddle.Show();
         maLbColScale2.Hide();
-        maLbColScale3.Show();
+        // TODO: enale for 3.7 again with good presets
+        // maLbColScale3.Show();
         maLbColMiddle.Show();
     }
     maLbEntryTypeMin.Show();
