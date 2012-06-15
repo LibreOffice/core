@@ -54,7 +54,7 @@
 extern sal_Bool CheckNodesRange( const SwNodeIndex& rStt,
                             const SwNodeIndex& rEnd, sal_Bool bChkSection );
 
-SV_DECL_PTRARR(SwSttNdPtrs,SwStartNode*,2)
+typedef std::vector<SwStartNode*> SwSttNdPtrs;
 
 
 // Funktion zum bestimmen des hoechsten Levels innerhalb des Bereiches
@@ -472,13 +472,13 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
     sal_uLong nInsPos = 0;                  // Cnt fuer das TmpArray
 
     // das Array bildet einen Stack, es werden alle StartOfSelction's gesichert
-    SwSttNdPtrs aSttNdStack( 1 );
+    SwSttNdPtrs aSttNdStack;
 
     // setze den Start-Index
     SwNodeIndex  aIdx( aIndex );
 
     SwStartNode* pStartNode = aIdx.GetNode().pStartOfSection;
-    aSttNdStack.C40_INSERT( SwStartNode, pStartNode, 0 );
+    aSttNdStack.insert( aSttNdStack.begin(), pStartNode );
 
     SwNodeRange aOrigInsPos( aIdx, -1, aIdx );      // Originale Insert Pos
 
@@ -643,7 +643,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                                     SwNormalStartNode );
 
                             nLevel++;           // den Index auf StartNode auf den Stack
-                            aSttNdStack.C40_INSERT( SwStartNode, pTmp, nLevel );
+                            aSttNdStack.insert( aSttNdStack.begin() + nLevel, pTmp );
 
                             // noch den EndNode erzeugen
                             new SwEndNode( aIdx, *pTmp );
@@ -698,7 +698,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     aRg.aEnd--;
 
                     nLevel++;           // den Index auf StartNode auf den Stack
-                    aSttNdStack.C40_INSERT( SwStartNode, pSttNd, nLevel );
+                    aSttNdStack.insert( aSttNdStack.begin() + nLevel, pSttNd );
 
                     // SectionNode muss noch ein paar Indizies ummelden
                     if( pSctNd )
@@ -810,7 +810,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         pSectNd->MakeFrms( &aTmp );
                         bNewFrms = bSaveNewFrms;
                     }
-                    aSttNdStack.Remove( nLevel );   // vom Stack loeschen
+                    aSttNdStack.erase( aSttNdStack.begin() + nLevel );   // vom Stack loeschen
                     nLevel--;
                 }
 
@@ -1102,35 +1102,35 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
     SwNode * pAktNode;
     SwNodeIndex aTmpIdx( aStart, +1 );
     // das Array bildet einen Stack, es werden alle StartOfSelction's gesichert
-    SwSttNdPtrs aSttNdStack( 1 );
+    SwSttNdPtrs aSttNdStack;
     SwStartNode* pTmp = aStart.GetNode().GetStartNode();
-    aSttNdStack.C40_INSERT( SwStartNode, pTmp, 0 );
+    aSttNdStack.push_back( pTmp );
 
     // durchlaufe bis der erste zu aendernde Start-Node gefunden wurde
     // ( Es wird vom eingefuegten EndNode bis nach vorne die Indexe gesetzt )
     for( ;; aTmpIdx++ )
     {
         pAktNode = &aTmpIdx.GetNode();
-        pAktNode->pStartOfSection = aSttNdStack[ aSttNdStack.Count()-1 ];
+        pAktNode->pStartOfSection = aSttNdStack[ aSttNdStack.size()-1 ];
 
         if( pAktNode->GetStartNode() )
         {
             pTmp = (SwStartNode*)pAktNode;
-            aSttNdStack.C40_INSERT( SwStartNode, pTmp, aSttNdStack.Count() );
+            aSttNdStack.push_back( pTmp );
         }
         else if( pAktNode->GetEndNode() )
         {
-            SwStartNode* pSttNd = aSttNdStack[ aSttNdStack.Count() - 1 ];
+            SwStartNode* pSttNd = aSttNdStack[ aSttNdStack.size() - 1 ];
             pSttNd->pEndOfSection = (SwEndNode*)pAktNode;
-            aSttNdStack.Remove( aSttNdStack.Count() - 1 );
-            if( aSttNdStack.Count() )
+            aSttNdStack.pop_back();
+            if( !aSttNdStack.empty() )
                 continue;       // noch genuegend EndNodes auf dem Stack
 
             else if( aTmpIdx < aEnd )   // Uebergewicht an StartNodes
                 // ist das Ende noch nicht erreicht, so hole den Start von
                 // der uebergeordneten Section
             {
-                aSttNdStack.C40_INSERT( SwStartNode, pSttNd->pStartOfSection, 0 );
+                aSttNdStack.insert( aSttNdStack.begin(), pSttNd->pStartOfSection );
             }
             else    // wenn ueber den Bereich hinaus, dann Ende
                 break;
