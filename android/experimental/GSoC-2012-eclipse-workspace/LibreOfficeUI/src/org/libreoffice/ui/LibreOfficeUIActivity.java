@@ -38,8 +38,6 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     private String tag = "file_manager";
     private File homeDirectory;//make final?
 	private File currentDirectory;
-	private String filter = "";
-	private String[] filters = {"all",".odt",".ods",".odp"};
 	private int filterMode = FileUtilities.ALL;
 	private int viewType = 0;
 	FileFilter fileFilter;
@@ -49,8 +47,8 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 	private ActionBar actionBar;
 	private SharedPreferences prefs;
 	
-	private String currentDirectoryKey = "CURRENT_DIRECTORY";
-	private String filterModeKey = "FILTER_MODE";
+	private static final String currentDirectoryKey = "CURRENT_DIRECTORY";
+	private static final String filterModeKey = "FILTER_MODE";
 	public static final String EXPLORER_VIEW_TYPE = "EXPLORER_VIEW_TYPE";
 	public static final String EXPLORER_PREFS = "EXPLORER_PREFS";
 	
@@ -274,6 +272,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     	// TODO Auto-generated method stub
     	super.onSaveInstanceState(outState);
     	outState.putString( currentDirectoryKey , currentDirectory.getAbsolutePath() );
+    	prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
     }
     
     @Override
@@ -285,7 +284,6 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     
     @Override
     protected void onPause() {
-    	// TODO need to save fileSystem state here.
     	
     	super.onPause();
     }
