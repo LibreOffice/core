@@ -214,7 +214,7 @@ XubString SdrUndoGroup::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
     XubString aRet(aComment);
     sal_Char aSearchText[] = "%1";
-    String aSearchString(aSearchText, sizeof(aSearchText-1));
+    String aSearchString(aSearchText, sizeof(aSearchText)-1);
 
     aRet.SearchAndReplace(aSearchString, ImpGetResStr(STR_ObjNameSingulPlural));
 
@@ -245,7 +245,7 @@ void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sa
 {
     rStr = ImpGetResStr(nStrCacheID);
     sal_Char aSearchText[] = "%1";
-    String aSearchString(aSearchText, sizeof(aSearchText-1));
+    String aSearchString(aSearchText, sizeof(aSearchText)-1);
 
     xub_StrLen nPos = rStr.Search(aSearchString);
 
