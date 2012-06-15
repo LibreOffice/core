@@ -47,6 +47,7 @@ public:
     void testFdo38176();
     void testFdo49683();
     void testFdo44174();
+    void testFdo50087();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -54,6 +55,7 @@ public:
     CPPUNIT_TEST(testFdo38176);
     CPPUNIT_TEST(testFdo49683);
     CPPUNIT_TEST(testFdo44174);
+    CPPUNIT_TEST(testFdo50087);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -114,6 +116,17 @@ void Test::testFdo44174()
     OUString aValue;
     xPropertySet->getPropertyValue("PageStyleName") >>= aValue;
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aValue);
+}
+
+void Test::testFdo50087()
+{
+    roundtrip("fdo50087.rtf");
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
+    CPPUNIT_ASSERT_EQUAL(OUString("Title"), xDocumentProperties->getTitle());
+    CPPUNIT_ASSERT_EQUAL(OUString("Subject"), xDocumentProperties->getSubject());
+    CPPUNIT_ASSERT_EQUAL(OUString("First line.\nSecond line."), xDocumentProperties->getDescription());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
