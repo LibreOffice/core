@@ -387,7 +387,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         BitmapEx        aOutBmpEx;
         Point           aOutPt;
         Size            aOutSz;
-        const Size&     rBmpSzPix = rBmpEx.GetSizePixel();
+        const Size      rBmpSzPix = rBmpEx.GetSizePixel();
         const long      nW = rBmpSzPix.Width();
         const long      nH = rBmpSzPix.Height();
         const long      nNewW = aUnrotatedSzPix.Width();
@@ -606,9 +606,8 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         const double fScaleX = fOutWH / fGrfWH;
         const double fScaleY = 1.0;
 
-        const MapMode& rPrefMapMode( rMtf.GetPrefMapMode() );
-        const Size&    rSizePix( pOut->LogicToPixel( aNewSize,
-                                                     rPrefMapMode ) );
+        const MapMode rPrefMapMode( rMtf.GetPrefMapMode() );
+        const Size rSizePix( pOut->LogicToPixel( aNewSize, rPrefMapMode ) );
 
         // taking care of font width default if scaling metafile.
         // #117889# use existing metafile scan, to determine whether
