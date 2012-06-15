@@ -2134,8 +2134,8 @@ Size TabControl::GetOptimalSize(WindowSizeType eType) const
     default:
     {
         Size aOptimalPageSize(0, 0);
-        Size aOptimalTabSize(0, 0);
-        long nTotalTabWidths = 0;
+        long nTabLabelsBottom = 0;
+        long nTotalTabLabelWidths = 0;
 
         for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
              it != mpTabCtrlData->maItemList.end(); ++it )
@@ -2152,19 +2152,19 @@ Size TabControl::GetOptimalSize(WindowSizeType eType) const
             if (aPageSize.Height() > aOptimalPageSize.Height())
                 aOptimalPageSize.Height() = aPageSize.Height();
 
-            ImplTabItem* pItem = const_cast<ImplTabItem*>(&(*it));
+            sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
             TabControl* pThis = const_cast<TabControl*>(this);
-            Size aTabSize = pThis->ImplGetItemSize(pItem, LONG_MAX);
-            if (aTabSize.Height() > aOptimalTabSize.Height())
-                aOptimalTabSize.Height() = aTabSize.Height();
-            nTotalTabWidths += aTabSize.Width();
+            Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aPageSize.Width(), aPageSize.Height());
+            if (aTabRect.Bottom() > nTabLabelsBottom)
+                nTabLabelsBottom = aTabRect.Bottom();
+            nTotalTabLabelWidths += aTabRect.GetWidth();
         }
 
         Size aOptimalSize(aOptimalPageSize);
-        aOptimalSize.Height() += aOptimalTabSize.Height();
+        aOptimalSize.Height() += nTabLabelsBottom;
 
-        if (nTotalTabWidths > aOptimalSize.Width())
-            aOptimalSize.Width() = nTotalTabWidths;
+        if (nTotalTabLabelWidths > aOptimalSize.Width())
+            aOptimalSize.Width() = nTotalTabLabelWidths;
 
         aOptimalSize.Width() += TAB_OFFSET * 2;
         aOptimalSize.Height() += TAB_OFFSET * 2;
