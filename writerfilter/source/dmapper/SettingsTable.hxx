@@ -70,6 +70,8 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public Lo
     /// What's the zoom factor set in percents?
     sal_Int16 GetZoomFactor() const;
 
+    bool GetEvenAndOddHeaders() const;
+
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
 
  private:

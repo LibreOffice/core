@@ -193,7 +193,20 @@ void Test::testN750935()
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
+    // Some page break types were ignores, resulting in less pages.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(5), xCursor->getPage());
+
+    /*
+     * The problem was that the header and footer was not shared.
+     *
+     * xray ThisComponent.StyleFamilies.PageStyles.Default.FooterIsShared
+     */
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    sal_Bool bValue = false;
+    xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
+    xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
 }
 
 void Test::testN757890()
