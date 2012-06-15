@@ -50,6 +50,9 @@
 #define BMP_SCALE_FAST              0x00000001UL
 #define BMP_SCALE_INTERPOLATE       0x00000002UL
 #define BMP_SCALE_LANCZOS           0x00000003UL
+#define BMP_SCALE_BICUBIC           0x00000004UL
+#define BMP_SCALE_BILINEAR          0x00000005UL
+#define BMP_SCALE_BOX               0x00000006UL
 
 // Aliases, try to use these two (or BMP_SCALE_FAST/BMP_SCALE_NONE),
 // use a specific algorithm only if you really need to.
@@ -163,7 +166,7 @@ class VCL_DLLPUBLIC BmpFilterParam
     friend class Animation;
 
 private:
-    BmpFilter   meFilter;
+    BmpFilter       meFilter;
     sal_uLong       mnProgressStart;
     sal_uLong       mnProgressEnd;
 
@@ -216,6 +219,89 @@ public:
             maEmbossAngles.mnAzimuthAngle100 = nEmbossAzimuthAngle100;
             maEmbossAngles.mnElevationAngle100 = nEmbossElevationAngle100;
         }
+};
+
+// --------------------
+// Resample Kernels
+// --------------------
+
+class Kernel
+{
+
+public:
+    Kernel () {}
+    virtual ~Kernel() {}
+
+    virtual double GetWidth() = 0;
+    virtual double Calculate( double x ) = 0;
+};
+
+class Lanczos3Kernel : public Kernel
+{
+
+public:
+    virtual double GetWidth() { return 3.0; }
+    virtual double Calculate (double x)
+    {
+        return (-3.0 <= x && x < 3.0) ? SincFilter(x) * SincFilter( x / 3.0 ) : 0.0;
+    }
+
+    inline double SincFilter(double x)
+    {
+        if (x == 0.0)
+        {
+            return 1.0;
+        }
+        x = x * M_PI;
+        return sin(x) / x;
+    }
+};
+
+class BicubicKernel : public Kernel {
+    virtual double GetWidth() { return 2.0; }
+    virtual double Calculate (double x)
+    {
+        if (x < 0.0)
+        {
+            x = -x;
+        }
+
+        if (x <= 1.0)
+        {
+            return (1.5 * x - 2.5) * x * x + 1.0;
+        }
+        else if (x < 2.0)
+        {
+            return ((-0.5 * x + 2.5) * x - 4) * x + 2;
+        }
+        return 0.0;
+    }
+};
+
+class BilinearKernel : public Kernel {
+    virtual double GetWidth() { return 1.0; }
+    virtual double Calculate (double x)
+    {
+        if (x < 0.0)
+        {
+            x = -x;
+        }
+        if (x < 1.0)
+        {
+            return 1.0-x;
+        }
+        return 0.0;
+    }
+};
+
+class BoxKernel : public Kernel {
+    virtual double GetWidth() { return 0.5; }
+    virtual double Calculate (double x)
+    {
+        if (-0.5 <= x && x < 0.5)
+            return 1.0;
+        return 0.0;
+    }
 };
 
 // ----------
@@ -282,17 +368,14 @@ public:
 
     SAL_DLLPRIVATE sal_Bool                 ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE sal_Bool                 ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE bool                     ImplScaleLanczos( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE bool                     ImplScaleConvolution( const double& rScaleX, const double& rScaleY, Kernel& aKernel);
 
-    SAL_DLLPRIVATE void                     ImplCalculateContributions( const int aSourceSize, const int aDestinationSize,
-                                                const double aSupport, const int aNumberOfContributions,
-                                                double* pWeights, int* pPixels, int* pCount );
-    SAL_DLLPRIVATE bool                     ImplHorizontalConvolution( Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc,
-                                                int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount );
-    SAL_DLLPRIVATE bool                     ImplVerticalConvolution( Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc,
-                                                int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount );
+    SAL_DLLPRIVATE static void              ImplCalculateContributions( const int aSourceSize, const int aDestinationSize,
+                                                int& aNumberOfContributions, double*& pWeights, int*& pPixels, int*& pCount,
+                                                Kernel& aKernel );
 
-    SAL_DLLPRIVATE static double            ImplLanczosKernel( const double aValue, const double aSupport );
+    SAL_DLLPRIVATE bool                     ImplConvolutionPass( Bitmap& aNewBitmap, const int nNewSize, BitmapReadAccess* pReadAcc,
+                                                int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount );
 
     SAL_DLLPRIVATE sal_Bool                 ImplMakeMono( sal_uInt8 cThreshold );
     SAL_DLLPRIVATE sal_Bool                 ImplMakeMonoDither();
@@ -310,7 +393,7 @@ public:
                                            long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
                                            long nColors, long nPixels, long& rIndex );
     SAL_DLLPRIVATE sal_Bool                 ImplConvolute3( const long* pMatrix, long nDivisor,
-                                            const BmpFilterParam* pFilterParam, const Link* pProgress );
+                                                            const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE sal_Bool                 ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE sal_Bool                 ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE sal_Bool                 ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
