@@ -77,6 +77,7 @@
 #include <frmfmt.hxx>
 #include <flyfrm.hxx>
 #include <pagefrm.hxx>
+#include <frmatr.hxx>
 #include <fmtcntnt.hxx>
 #include <ndindex.hxx>
 #include <doc.hxx>
@@ -1763,15 +1764,23 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
         rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     }
 
-    SvxBrushItem aBrush(rWrt.TrueFrameBgBrush(rFmt));
-    WriteBrushAttr(aBrush, rPropOpt);
-
-    const SdrObject* pObj = rFmt.FindRealSdrObject();
-
     // SwWW8ImplReader::Read_GrafLayer() imports these as opaque
     // unconditionally, so if both are true, don't export the property.
     bool bIsInHeader = lcl_isInHeader(rFmt);
     bool bIsThrought = rFmt.GetSurround().GetValue() == SURROUND_THROUGHT;
+
+    if (bIsInHeader)
+    {
+        const SvxBrushItem& rBrush(rFmt.GetBackground());
+        WriteBrushAttr(rBrush, rPropOpt);
+    }
+    else
+    {
+        SvxBrushItem aBrush(rWrt.TrueFrameBgBrush(rFmt));
+        WriteBrushAttr(aBrush, rPropOpt);
+    }
+
+    const SdrObject* pObj = rFmt.FindRealSdrObject();
 
     if( pObj && (pObj->GetLayer() == GetHellLayerId() ||
         pObj->GetLayer() == GetInvisibleHellId() ) && !(bIsInHeader && bIsThrought))
