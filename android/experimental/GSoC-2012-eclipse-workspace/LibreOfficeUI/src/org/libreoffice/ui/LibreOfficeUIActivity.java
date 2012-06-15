@@ -176,9 +176,9 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
         
         MenuItem item = (MenuItem)menu.findItem(R.id.menu_view_toggle);
         if( viewType == GRID_VIEW){
-        	item.setTitle(R.string.grid_view);
-        }else{
         	item.setTitle(R.string.list_view);
+        }else{
+        	item.setTitle(R.string.grid_view);
         }
         return true;
     }
