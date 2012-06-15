@@ -57,7 +57,6 @@
 #include <editeng/editeng.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/e3dundo.hxx>
-#include <svx/dbexch.hrc>
 #include <svx/unomodel.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/metaact.hxx>

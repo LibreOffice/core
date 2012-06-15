@@ -36,7 +36,6 @@
 #include "QTableWindow.hxx"
 #include <vcl/msgbox.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
-#include <svx/dbexch.hrc>
 #include "sqlmessage.hxx"
 #include "UITools.hxx"
 #include <osl/diagnose.h>

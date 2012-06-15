@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "svx/dbexch.hrc"
 #include "svx/fmgridif.hxx"
 #include "fmitems.hxx"
 #include "fmprop.hrc"

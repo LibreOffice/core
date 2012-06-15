@@ -75,7 +75,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <vcl/msgbox.hxx>
-#include <svx/dbexch.hrc>
 #include "dbu_brw.hrc"
 #include "browserids.hxx"
 #include "dbustrings.hrc"
@@ -1459,20 +1458,6 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             nAction = DND_ACTION_COPY;
     }
 
-/*
-    // check formats
-    SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rEvt );
-    if (!xDataObj.Is())
-        return sal_False;
-
-    const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
-    if ((rTypeList.Get(Exchange::RegisterFormatName(String::CreateFromAscii(SBA_DATAEXCHANGE_FORMAT)))) )
-    {
-        bAllow = (GetOptions() & OPT_INSERT) && rEvt.GetColumnId() > 0 && rEvt.GetRow() >= 0;
-        ((BrowserDropEvent&)rEvt).SetAction(DROP_COPY);
-    }
-
-*/
     return (DND_ACTION_NONE != nAction) ? nAction : FmGridControl::AcceptDrop(rEvt);
 }
 

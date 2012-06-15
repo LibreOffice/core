@@ -35,7 +35,6 @@
 
 //------------------------------------------------------------------
 
-#include <svx/dbexch.hrc>
 #include <svx/fmmodel.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>

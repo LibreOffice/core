@@ -32,7 +32,6 @@
 #include <memory> //auto_ptr
 #include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/dbexch.hrc>
 #include <editeng/editview.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/flditem.hxx>

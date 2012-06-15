@@ -124,7 +124,6 @@
 #define _SVX_THESDLG_HXX
 
 #include "scitems.hxx"
-#include <svx/dbexch.hrc>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>

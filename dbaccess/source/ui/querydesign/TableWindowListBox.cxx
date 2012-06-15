@@ -25,7 +25,6 @@
 #include "JoinExchange.hxx"
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <svx/dbexch.hrc>
 #include <vcl/svapp.hxx>
 
 using namespace dbaui;

@@ -19,7 +19,6 @@
 
 #include "JoinExchange.hxx"
 #include <sot/formats.hxx>
-#include <svx/dbexch.hrc>
 #include <cppuhelper/typeprovider.hxx>
 
 namespace dbaui
