@@ -39,7 +39,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/filedlghelper.hxx>
-#include <tools/inetdef.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/cntwids.hrc>
 #include <sfx2/app.hxx>

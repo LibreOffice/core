@@ -86,7 +86,6 @@
 #include <unotools/docinfohelper.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
-#include <tools/inetdef.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>

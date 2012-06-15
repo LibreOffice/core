@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <rtl/ustrbuf.hxx>
-#include <tools/inetdef.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/docinfohelper.hxx>

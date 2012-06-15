@@ -154,7 +154,6 @@
 #include <target.hxx>
 #include <tabvwsh.hxx>
 #include <svl/inethist.hxx>
-#include <svl/inetdef.hxx>
 #include <sfx2/sfxdefs.hxx>
 #include <svtools/compat.hxx>
 #include <svl/inetmsg.hxx>

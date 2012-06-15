@@ -47,7 +47,6 @@
 #include <com/sun/star/document/XCompatWriterDocProperties.hpp>
 
 #include <unotools/configmgr.hxx>
-#include <tools/inetdef.hxx>
 #include <unotools/bootstrap.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>

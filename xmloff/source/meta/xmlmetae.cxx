@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <tools/debug.hxx>
-#include <tools/inetdef.hxx>
 #include <i18npool/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>
 

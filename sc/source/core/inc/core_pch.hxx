@@ -140,7 +140,6 @@
 #include <sfx2/app.hxx>
 #include <svl/inetmsg.hxx>
 #include <svtools/compat.hxx>
-#include <svl/inetdef.hxx>
 #include <svl/inethist.hxx>
 #include <vcl/accel.hxx>
 #include <sfx2/sfxdefs.hxx>

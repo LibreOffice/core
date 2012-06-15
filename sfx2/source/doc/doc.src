@@ -27,8 +27,6 @@
 #include <sfx2/sfx.hrc>
 #include "doc.hrc"
 #define __RSC
-#include <svl/inetdef.hxx>
-
 
  // -----------------------------------------------------------------------
 QueryBox MSG_CONFIRM_FILTER
@@ -228,25 +226,6 @@ String RID_STR_FILTBASIC
 String RID_STR_WARNSTYLEOVERWRITE
 {
     Text [ en-US ] = "Should the \"$(ARG1)\" Style be replaced?" ;
-};
-Resource RID_DLSTATUS
-{
-    String INET_NAME_RESOLVE_START
-    {
-        Text [ en-US ] = "Connection to: $(HOST). Waiting for response..." ;
-    };
-    String INET_CONNECT_START
-    {
-        Text [ en-US ] = "Opening $(TARGET) at $(HOST)" ;
-    };
-    String INET_READ_STATUS
-    {
-        Text [ en-US ] = "Loading: $(TARGET) from $(HOST). Loaded: $(BYTE)" ;
-    };
-    String INET_CONNECTION_CLOSED
-    {
-        Text [ en-US ] = "Disconnected" ;
-    };
 };
 QueryBox MSG_OPEN_READONLY
 {

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#include <svl/inetdef.hxx>
 #include "svtools/htmlkywd.hxx"
 
 #include <rtl/tencinfo.h>
