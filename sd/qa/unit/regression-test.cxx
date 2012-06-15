@@ -119,6 +119,7 @@ public:
 private:
     uno::Reference<document::XFilter> m_xFilter;
     uno::Reference<uno::XInterface> m_xDrawComponent;
+    void testStuff(::sd::DrawDocShellRef xDocShRef);
 };
 
 #define PPTX_FORMAT_TYPE 268959811
@@ -173,7 +174,19 @@ FileFormat aFileFormats[] = {
 
 void SdFiltersTest::test()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/test.odp"));
+    {
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/shapes-test.odp"));
+    testStuff(xDocShRef);
+    }
+    {
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/text-test.odp"));
+    testStuff(xDocShRef);
+    }
+    CPPUNIT_ASSERT(false);
+}
+
+void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef)
+{
     CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
     CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
@@ -197,7 +210,6 @@ void SdFiltersTest::test()
     }
     xDocShRef->DoClose();
 }
-
 bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData)
 {
