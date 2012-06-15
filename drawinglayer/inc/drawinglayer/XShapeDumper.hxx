@@ -171,6 +171,7 @@ private:
 
     // CustomShape.idl
     void dumpCustomShapeEngineAsAttribute(rtl::OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
+    void dumpCustomShapeDataAsAttribute(rtl::OUString sCustomShapeData, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);

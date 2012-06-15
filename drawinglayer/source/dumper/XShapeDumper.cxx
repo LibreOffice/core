@@ -1002,6 +1002,12 @@ namespace {
             rtl::OUStringToOString(sCustomShapeEngine, RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    void XShapeDumper::dumpCustomShapeDataAsAttribute(rtl::OUString sCustomShapeData, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeData"), "%s",
+            rtl::OUStringToOString(sCustomShapeData, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
     // methods dumping whole services
 
     void XShapeDumper::dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
@@ -1547,6 +1553,12 @@ namespace {
             rtl::OUString sCustomShapeEngine;
             if(anotherAny >>= sCustomShapeEngine)
                 dumpCustomShapeEngineAsAttribute(sCustomShapeEngine, xmlWriter);
+        }
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeData");
+            rtl::OUString sCustomShapeData;
+            if(anotherAny >>= sCustomShapeData)
+                dumpCustomShapeDataAsAttribute(sCustomShapeData, xmlWriter);
         }
     }
 
