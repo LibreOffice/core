@@ -4299,11 +4299,18 @@ uno::Any SvxItemPropertySet_getPropertyValue( const SvxItemPropertySet& rPropSet
 
 void SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap, const uno::Any& rVal, SfxItemSet& rSet )
 {
+    uno::Any aVal(rVal);
     if(!pMap || !pMap->nWID)
         return;
 
     bool bDontConvertNegativeValues = ( pMap->nWID == XATTR_FILLBMP_SIZEX || pMap->nWID == XATTR_FILLBMP_SIZEY );
-    rPropSet.setPropertyValue( pMap, rVal, rSet, bDontConvertNegativeValues );
+    if( pMap->nWID == EE_PARA_LRSPACE ) // n#757419 Don't import negative values
+    {
+        sal_Int32 nVal;
+        if( (aVal >>= nVal) && nVal < 0 )
+            aVal <<= ( sal_Int32 ) 0;
+    }
+    rPropSet.setPropertyValue( pMap, aVal, rSet, bDontConvertNegativeValues );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
