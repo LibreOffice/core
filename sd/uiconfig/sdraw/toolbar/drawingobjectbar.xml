@@ -23,21 +23,21 @@
 
 
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:DesignerDialog" toolbar:helpid="5539"/>
+ <toolbar:toolbaritem xlink:href=".uno:DesignerDialog"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="10143"/>
- <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:helpid="10301"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineEndStyle"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineStyle" toolbar:helpid="10169"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineStyle"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LineWidth" toolbar:helpid="10171"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:helpid="10172"/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:helpid="10142"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FillStyle" toolbar:helpid="10164"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="10299"/>
- <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false" toolbar:helpid="10371"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>
+ <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false"/>
 </toolbar:toolbar>

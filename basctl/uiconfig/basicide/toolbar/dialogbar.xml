@@ -23,9 +23,9 @@
 
 
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:LibSelector" />
+ <toolbar:toolbaritem xlink:href=".uno:LibSelector"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ChooseControls" />
-  <toolbar:toolbaritem xlink:href=".uno:ImportDialog" />
-  <toolbar:toolbaritem xlink:href=".uno:ExportDialog" />
+ <toolbar:toolbaritem xlink:href=".uno:ChooseControls"/>
+  <toolbar:toolbaritem xlink:href=".uno:ImportDialog"/>
+  <toolbar:toolbaritem xlink:href=".uno:ExportDialog"/>
 </toolbar:toolbar>

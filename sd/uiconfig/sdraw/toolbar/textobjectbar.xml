@@ -23,40 +23,40 @@
 
 
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:CharFontName" toolbar:helpid="10007"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontHeight" toolbar:helpid="10015"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:helpid="10009"/>
- <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:helpid="10008"/>
- <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:helpid="10014"/>
- <toolbar:toolbaritem xlink:href=".uno:Shadowed" toolbar:helpid="10010"/>
+ <toolbar:toolbaritem xlink:href=".uno:Bold"/>
+ <toolbar:toolbaritem xlink:href=".uno:Italic"/>
+ <toolbar:toolbaritem xlink:href=".uno:Underline"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:helpid="10028"/>
- <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:helpid="10030"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:helpid="10029"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:helpid="10031"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="10950"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="10951"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:helpid="27346"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:helpid="27347"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:helpid="10034"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:helpid="10035"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:helpid="10036"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara1"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara15"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara2"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:helpid="20138"/>
- <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:helpid="helpid:20403"/>
- <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:helpid="helpid:20404"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
+ <toolbar:toolbaritem xlink:href=".uno:Grow"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shrink"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight" toolbar:helpid="10907"/>
- <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom" toolbar:helpid="10908"/>
+ <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:helpid="10296"/>
- <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:helpid="10297"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:helpid="10017"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:visible="false" toolbar:helpid="27019"/>
+ <toolbar:toolbaritem xlink:href=".uno:Color"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:visible="false"/>
 </toolbar:toolbar>

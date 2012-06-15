@@ -23,18 +23,18 @@
 
 
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox" toolbar:helpid="10469"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafMode" toolbar:helpid="10871"/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafMode"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ColorSettings" toolbar:helpid="11016"/>
+ <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafTransparence" toolbar:helpid="10869"/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FlipVertical" toolbar:helpid="20426"/>
- <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal" toolbar:helpid="20425"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlipVertical"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="20458"/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
 </toolbar:toolbar>
