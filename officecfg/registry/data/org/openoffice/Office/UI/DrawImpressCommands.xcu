@@ -1393,6 +1393,11 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ShowRuler" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Ruler</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ShowSlide" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Show Slide</value>
@@ -1531,6 +1536,11 @@
                     <value xml:lang="en-US">Color/Grayscale</value>
                 </prop>
             </node>
+            <node oor:name=".uno:GridMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Grid</value>
+                </prop>
+            </node>
             <node oor:name=".uno:LayerMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Layer</value>
@@ -1569,6 +1579,11 @@
             <node oor:name=".uno:SlideShowMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Slide Show</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SnapLinesMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Guides</value>
                 </prop>
             </node>
             <node oor:name=".uno:TemplatesMenu" oor:op="replace">

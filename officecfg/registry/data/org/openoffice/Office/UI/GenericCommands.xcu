@@ -31,6 +31,11 @@
                     <value>9</value>
                 </prop>
             </node>
+            <node oor:name=".uno:AVMediaToolBox" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Media Player Controls</value>
+                </prop>
+            </node>
             <node oor:name=".uno:About" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">About %PRODUCTNAME</value>
@@ -483,6 +488,14 @@
             <node oor:name=".uno:BackgroundPatternController" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Background Pattern</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Backward" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Send Backward</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1501,6 +1514,9 @@
                 <prop oor:name="ContextLabel" oor:type="xs:string">
                     <value xml:lang="en-US">Columns</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:DeleteComment" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -2510,6 +2526,14 @@
                     <value>9</value>
                 </prop>
             </node>
+            <node oor:name=".uno:Forward" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Bring Forward</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
             <node oor:name=".uno:FrameContent" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Contents</value>
@@ -3085,6 +3109,11 @@
                     <value xml:lang="en-US">Column Break</value>
                 </prop>
             </node>
+            <node oor:name=".uno:InsertColumnDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Columns...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:InsertColumns" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Columns</value>
@@ -3305,6 +3334,11 @@
             <node oor:name=".uno:InsertRLM" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Right-to-left mark</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertRowDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Rows...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertRows" oor:op="replace">
@@ -4322,6 +4356,11 @@
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RenameObject" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Name...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Repaint" oor:op="replace">
@@ -5626,6 +5665,14 @@
             <node oor:name=".uno:ZoomOptimal" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Optimal</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ZoomOut" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Zoom Out</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
