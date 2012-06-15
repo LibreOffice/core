@@ -141,12 +141,11 @@ WW8SttbRgtplc::getEntry(sal_uInt32 nIndex)
 
     sal_uInt32 nOffset = 6;
 
-    while (nIndex > 0)
+    for(; nIndex > 0; --nIndex)
     {
         sal_uInt16 nCount = getU16(nOffset);
 
         nOffset = nOffset + 2 + nCount;
-        ++nIndex;
     }
 
     sal_uInt16 nCount = getU16(nOffset);
