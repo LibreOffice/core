@@ -1019,6 +1019,9 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_FALT:
         case DESTINATION_PARAGRAPHNUMBERING_TEXTAFTER:
         case DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE:
+        case DESTINATION_TITLE:
+        case DESTINATION_SUBJECT:
+        case DESTINATION_DOCCOMM:
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
@@ -1441,6 +1444,15 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_PNTXTB:
             m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE;
+            break;
+        case RTF_TITLE:
+            m_aStates.top().nDestinationState = DESTINATION_TITLE;
+            break;
+        case RTF_SUBJECT:
+            m_aStates.top().nDestinationState = DESTINATION_SUBJECT;
+            break;
+        case RTF_DOCCOMM:
+            m_aStates.top().nDestinationState = DESTINATION_DOCCOMM;
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1
@@ -3301,6 +3313,12 @@ int RTFDocumentImpl::popState()
         m_xDocumentProperties->setKeywords(comphelper::string::convertCommaSeparated(m_aStates.top().aDestinationText.makeStringAndClear()));
     else if (m_aStates.top().nDestinationState == DESTINATION_COMMENT && m_xDocumentProperties.is())
         m_xDocumentProperties->setGenerator(m_aStates.top().aDestinationText.makeStringAndClear());
+    else if (m_aStates.top().nDestinationState == DESTINATION_TITLE && m_xDocumentProperties.is())
+        m_xDocumentProperties->setTitle(m_aStates.top().aDestinationText.makeStringAndClear());
+    else if (m_aStates.top().nDestinationState == DESTINATION_SUBJECT && m_xDocumentProperties.is())
+        m_xDocumentProperties->setSubject(m_aStates.top().aDestinationText.makeStringAndClear());
+    else if (m_aStates.top().nDestinationState == DESTINATION_DOCCOMM && m_xDocumentProperties.is())
+        m_xDocumentProperties->setDescription(m_aStates.top().aDestinationText.makeStringAndClear());
     else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR
             || m_aStates.top().nDestinationState == DESTINATION_COMPANY)
     {
