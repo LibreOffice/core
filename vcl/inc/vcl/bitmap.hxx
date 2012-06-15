@@ -200,7 +200,7 @@ public:
 
     BmpFilterParam( double nRadius, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_SMOOTH ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
-        mnRadius( cSolarGreyThreshold ) {}
+        mnRadius( nRadius ) {}
 
     BmpFilterParam( sal_uInt16 nSepiaPercent, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_SEPIA ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
