@@ -88,12 +88,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     void LockSolarMutex();
     void UnlockSolarMutex();
 
-    bool CellExists(const com::sun::star::table::CellAddress& aCellPos) const
-    {
-        return (aCellPos.Column <= MAXCOL && aCellPos.Row <= MAXROW);
-    }
-
-    bool ContextIsEmpty() const;
+    bool HasSpecialContent() const;
     bool CellsAreRepeated() const;
 
     void AddTextCellToDoc           ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
