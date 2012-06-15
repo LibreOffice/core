@@ -10792,6 +10792,18 @@ else
 fi
 AC_SUBST(SYSTEM_GLIB)
 
+dnl Get system's glib flags and libs.
+dnl The i18npool LanguageTag wrapper uses it for liblangtag.
+
+GLIB_CFLAGS=''
+GLIB_LIBS=''
+if test "$SYSTEM_GLIB" = YES; then
+    PKG_CHECK_MODULES( GLIB, glib-2.0 )
+fi
+AC_SUBST(GLIB_CFLAGS)
+AC_SUBST(GLIB_LIBS)
+
+
 dnl ===================================================================
 dnl Test whether to build gettext runtime (libintl) or rely on the
 dnl system version
