@@ -424,10 +424,33 @@ sub Download (@)
         {
             push @missing, $entry;
         }
+        elsif (defined $md5sum)
+        {
+            # Check that the MD5 sum is still correct.
+            # The datafile may have been updated with a new version of the extension that
+            # still has the same name but a different MD5 sum.
+            my $cur_oxt;
+            if ( ! open($cur_oxt, $candidate))
+            {
+                # Can not read the extension.  Download extension again.
+                push @missing, $entry;
+                unlink($candidate);
+            }
+            binmode($cur_oxt);
+            my $file_md5 = Digest::MD5->new->addfile(*$cur_oxt)->hexdigest;
+            close($cur_oxt);
+            if ($md5sum ne $file_md5)
+            {
+                # MD5 does not match.  Download extension again.
+                print "extension $name has wrong MD5 and will be updated\n";
+                push @missing, $entry;
+                unlink($candidate);
+            }
+        }
     }
     if ($#missing >= 0)
     {
-        printf "downloading %d missing extension%s\n", $#missing+1, $#missing>0 ? "s" : "";
+        printf "downloading/updating %d extension%s\n", $#missing+1, $#missing>0 ? "s" : "";
         if ( ! -d $download_path)
         {
             mkdir File::Spec->catpath($download_path, "tmp")
