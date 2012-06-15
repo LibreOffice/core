@@ -1075,191 +1075,66 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
 
 void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
 {
+    const sal_Char* pText;
+
     switch(eUnit)
     {
-        // Metrisch
-        case MAP_100TH_MM   :
-        {
-            sal_Char aText[] = "/100mm";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_10TH_MM    :
-        {
-            sal_Char aText[] = "/10mm";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_MM         :
-        {
-            sal_Char aText[] = "mm";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_CM         :
-        {
-            sal_Char aText[] = "cm";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
+        // metric units
+        case MAP_100TH_MM   : pText = "/100mm"; break;
+        case MAP_10TH_MM    : pText = "/10mm"; break;
+        case MAP_MM         : pText = "mm"; break;
+        case MAP_CM         : pText = "cm"; break;
 
-        // Inch
-        case MAP_1000TH_INCH:
-        {
-            sal_Char aText[] = "/1000\"";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_100TH_INCH :
-        {
-            sal_Char aText[] = "/100\"";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_10TH_INCH  :
-        {
-            sal_Char aText[] = "/10\"";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_INCH       :
-        {
-            rStr = UniString();
-            rStr += sal_Unicode('"');
-            break;
-        }
-        case MAP_POINT      :
-        {
-            sal_Char aText[] = "pt";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_TWIP       :
-        {
-            sal_Char aText[] = "twip";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
+        // imperial units
+        case MAP_1000TH_INCH: pText = "/1000\""; break;
+        case MAP_100TH_INCH : pText = "/100\""; break;
+        case MAP_10TH_INCH  : pText = "/10\""; break;
+        case MAP_INCH       : pText = "\""; break;
+        case MAP_POINT      : pText = "pt"; break;
+        case MAP_TWIP       : pText = "twip"; break;
 
-        // Sonstiges
-        case MAP_PIXEL      :
-        {
-            sal_Char aText[] = "pixel";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_SYSFONT    :
-        {
-            sal_Char aText[] = "sysfont";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_APPFONT    :
-        {
-            sal_Char aText[] = "appfont";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case MAP_RELATIVE   :
-        {
-            rStr = UniString();
-            rStr += sal_Unicode('%');
-            break;
-        }
-        default: break;
+        // other units
+        case MAP_PIXEL      : pText = "pixel"; break;
+        case MAP_SYSFONT    : pText = "sysfont"; break;
+        case MAP_APPFONT    : pText = "appfont"; break;
+        case MAP_RELATIVE   : pText = "\%"; break;
+
+        default             : pText = ""; break;
     }
+
+    rStr = XubString::CreateFromAscii( pText );
 }
 
 void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
 {
+    const sal_Char* pText;
+
     switch(eUnit)
     {
-        default             :
-        case FUNIT_NONE     :
-        case FUNIT_CUSTOM   :
-        {
-            rStr = UniString();
-            break;
-        }
+        // metric units
+        case FUNIT_100TH_MM : pText = "/100mm"; break;
+        case FUNIT_MM       : pText = "mm"; break;
+        case FUNIT_CM       : pText = "cm"; break;
+        case FUNIT_M        : pText = "m"; break;
+        case FUNIT_KM       : pText = "km"; break;
 
-        // Metrisch
-        case FUNIT_100TH_MM:
-        {
-            sal_Char aText[] = "/100mm";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case FUNIT_MM     :
-        {
-            sal_Char aText[] = "mm";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case FUNIT_CM     :
-        {
-            sal_Char aText[] = "cm";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case FUNIT_M      :
-        {
-            rStr = UniString();
-            rStr += sal_Unicode('m');
-            break;
-        }
-        case FUNIT_KM     :
-        {
-            sal_Char aText[] = "km";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
+        // imperial units
+        case FUNIT_TWIP     : pText = "twip"; break;
+        case FUNIT_POINT    : pText = "pt"; break;
+        case FUNIT_PICA     : pText = "pica"; break;
+        case FUNIT_INCH     : pText = "\""; break;
+        case FUNIT_FOOT     : pText = "ft"; break;
+        case FUNIT_MILE     : pText = "mile(s)"; break;
 
-        // Inch
-        case FUNIT_TWIP   :
-        {
-            sal_Char aText[] = "twip";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case FUNIT_POINT  :
-        {
-            sal_Char aText[] = "pt";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case FUNIT_PICA   :
-        {
-            sal_Char aText[] = "pica";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case FUNIT_INCH   :
-        {
-            rStr = UniString();
-            rStr += sal_Unicode('"');
-            break;
-        }
-        case FUNIT_FOOT   :
-        {
-            sal_Char aText[] = "ft";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
-        case FUNIT_MILE   :
-        {
-            sal_Char aText[] = "mile(s)";
-            rStr = UniString(aText, sizeof(aText-1));
-            break;
-        }
+        // other units
+        case FUNIT_PERCENT: pText = "\%"; break;
 
-        // sonstiges
-        case FUNIT_PERCENT:
-        {
-            rStr = UniString();
-            rStr += sal_Unicode('%');
-            break;
-        }
+//      case FUNIT_NONE     :
+//      case FUNIT_CUSTOM   :
+        default             : pText = ""; break;
     }
+
+    rStr = XubString::CreateFromAscii( pText );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
