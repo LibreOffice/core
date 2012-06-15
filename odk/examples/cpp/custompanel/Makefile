@@ -1,5 +1,5 @@
 #**************************************************************
-#  
+#
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -7,16 +7,16 @@
 #  to you under the Apache License, Version 2.0 (the
 #  "License"); you may not use this file except in compliance
 #  with the License.  You may obtain a copy of the License at
-#  
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-#  
+#
 #  Unless required by applicable law or agreed to in writing,
 #  software distributed under the License is distributed on an
 #  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-#  
+#
 #**************************************************************
 
 # Builds the custom-tool-panel C++ component example of the SDK.
@@ -39,9 +39,7 @@ COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_E
 COMP_UNOPKG_MANIFEST = $(OUT_COMP_GEN)/$(COMP_NAME)/META-INF/manifest.xml
 COMP_MAPFILE = $(OUT_COMP_GEN)/$(COMP_NAME).uno.map
 COMP_COMPONENTS = $(OUT_COMP_GEN)/$(COMP_NAME).components
-COMP_REGISTERFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_register_component.flag
 COMP_TYPEFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_types.flag
-
 
 # Allow deploying the extension when running it
 
@@ -50,11 +48,10 @@ OUT_DEPLOY=$(OUT)/deploy
 
 OUT_COMP_DEPLOY=$(OUT_DEPLOY)/$(COMP_NAME)
 OUT_DEPLOY_DIR=$(subst /,$(PS),$(OUT_COMP_DEPLOY))
-OUT_DEPLOY_URL=$(URLPREFIX)$(subst \\,\,$(OUT_DEPLOY_DIR))
+OUT_DEPLOY_URL=$(URLPREFIX)$(OUT_COMP_DEPLOY)
 ENV_USER_INSTALL=-env:"UserInstallation=$(OUT_DEPLOY_URL)"
 OFFICE_START_OPTIONS=-nologo -nofirststartwizard -norestore -writer
 OXT_DEPLOYEDFLAG=$(OUT_MISC)/cpp_$(COMP_NAME)_deployed_oxt.flag
-
 
 CXXFILES = \
            ctp_factory.cxx \
@@ -147,7 +144,6 @@ $(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) WriterWindowState.xcu CalcW
 	$(SDK_ZIP) -u $@  WriterWindowState.xcu CalcWindowState.xcu DrawWindowState.xcu ImpressWindowState.xcu Factories.xcu panel.png
 	cd $(subst /,$(PS),$(OUT_COMP_GEN)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
-
 CustomToolPanelExample : $(COMP_PACKAGE)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to deploy the example!
@@ -155,7 +151,6 @@ CustomToolPanelExample : $(COMP_PACKAGE)
 	@echo $(MAKE) CustomToolPanelExample.run
 	@echo -
 	@echo --------------------------------------------------------------------------------
-
 
 CustomToolPanelExample.run: $(OXT_DEPLOYEDFLAG)
 	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(OFFICE_START_OPTIONS)  $(ENV_USER_INSTALL)
@@ -167,9 +162,6 @@ $(OXT_DEPLOYEDFLAG) : $(COMP_PACKAGE)
 	$(DEPLOYTOOL) $(COMP_PACKAGE_URL) $(ENV_USER_INSTALL)
 	@echo flagged > $(subst /,$(PS),$@)
 
-
-
-
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
@@ -177,7 +169,6 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_DEPLOY_DIR))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_REGISTERFLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_TYPEFLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OXT_DEPLOYEDFLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMP_NAME).*))
