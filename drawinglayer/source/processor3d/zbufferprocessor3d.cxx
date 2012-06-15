@@ -124,10 +124,10 @@ namespace
                         }
                     }
                 }
-
-                delete pContent;
-                delete pAlpha;
             }
+
+            delete pContent;
+            delete pAlpha;
 
             aRetval = BitmapEx(aContent, aAlpha);
 
