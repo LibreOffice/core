@@ -276,9 +276,9 @@ namespace animcore
                         // FALLTHROUGH intended
                     case animations::AnimationNodeType::AUDIO:
                         // FALLTHROUGH intended
-                    default:
+                    /*default:
                         // ignore this node, no valuable content for now.
-                        break;
+                        break;*/
 
                     case animations::AnimationNodeType::SET:
                     {
@@ -343,9 +343,9 @@ namespace animcore
                         // initially. This is currently the only place
                         // where a shape effect influences shape
                         // attributes outside it's effective duration.
+            sal_Bool bVisible( sal_False );
                         if( xAnimateNode->getAttributeName().equalsIgnoreAsciiCaseAscii("visibility") )
                         {
-                            sal_Bool bVisible( sal_False );
 
                             uno::Any aAny( xAnimateNode->getTo() );
 
@@ -371,22 +371,27 @@ namespace animcore
                                 }
                             }
 
-                            if( bVisible )
+                            /*if( bVisible )
                             {
                                 // target is set to 'visible' at the
                                 // first relevant effect. Thus, target
                                 // must be initially _hidden_, for the
                                 // effect to have visible impact.
-                                mrShapeHash.insert(
+                                */
+                }
+                            // target is set the 'visible' value,
+                            // so we should record the opposite value
+                mrShapeHash.insert(
                                     XShapeHash::value_type(
                                         aTarget,
                                         VectorOfNamedValues(
                                             1,
                                             beans::NamedValue(
-                                                xAnimateNode->getAttributeName(),
-                                                uno::makeAny( sal_False ) ) ) ) );
-                            }
-                        }
+                                                //xAnimateNode->getAttributeName(),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("visibility")),
+                                                uno::makeAny( !bVisible ) ) ) ) );
+                            //}
+                        //}
                     }
                     break;
                 }
