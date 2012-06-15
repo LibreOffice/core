@@ -605,16 +605,20 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
     if( nTestFontCount > MAX_GFBFONT_COUNT )
         nTestFontCount = MAX_GFBFONT_COUNT;
 
+    bool bFound = false;
     for( int i = 0; i < nTestFontCount; ++i )
     {
         const ImplFontData* pFace = pTestFontList->Get( i );
-        if( !HasMissingChars( pFace, rMissingChars ) )
+        bFound = HasMissingChars( pFace, rMissingChars );
+        if( !bFound )
             continue;
         rFontSelData.maSearchName = pFace->maName;
-        return true;
+        break;
     }
 
-    return false;
+    delete pTestFontList;
+
+    return bFound;
 }
 
 // =======================================================================
