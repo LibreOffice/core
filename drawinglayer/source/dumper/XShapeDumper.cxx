@@ -992,7 +992,17 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
-    // dumping services
+    // -------------------------------------
+    // ---------- CustomShape.idl ----------
+    // -------------------------------------
+
+    void XShapeDumper::dumpCustomShapeEngineAsAttribute(rtl::OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeEngine"), "%s",
+            rtl::OUStringToOString(sCustomShapeEngine, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    // methods dumping whole services
 
     void XShapeDumper::dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
     {
@@ -1527,6 +1537,16 @@ namespace {
             drawing::PolyPolygonBezierCoords aGeometry;
             if(anotherAny >>= aGeometry)
                 dumpPolyPolygonBezierCoords(aGeometry, xmlWriter);
+        }
+    }
+
+    void XShapeDumper::dumpCustomShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
+    {
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeEngine");
+            rtl::OUString sCustomShapeEngine;
+            if(anotherAny >>= sCustomShapeEngine)
+                dumpCustomShapeEngineAsAttribute(sCustomShapeEngine, xmlWriter);
         }
     }
 
