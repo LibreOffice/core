@@ -74,11 +74,17 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
         
         homeDirectory  = new File(Environment.getExternalStorageDirectory(),"LibreOffice");
         homeDirectory.mkdirs();
+        currentDirectory = homeDirectory;
         Intent i = this.getIntent();
         if( i.hasExtra( currentDirectoryKey ) ){
         	currentDirectory = new File( i.getStringExtra( currentDirectoryKey ) );
         }else{
-	        currentDirectory = homeDirectory;
+        	if( savedInstanceState != null){
+	        	if( savedInstanceState.getString( currentDirectoryKey ) != null ){
+	        		currentDirectory = new File( 
+	        				savedInstanceState.getString( currentDirectoryKey ) );
+	        	}
+        	}
         }
         
         if( i.hasExtra( filterModeKey ) ){
@@ -88,7 +94,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-    	
+        //createDummyFileSystem();
         createUI();
 	    
     }
@@ -251,6 +257,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 				File regularDirectory = new File( currentDirectory , "Folder" );
 				regularDirectory.mkdir();
 				new File( regularDirectory , "yetAnotherDoc.odt" ).createNewFile();
+				new File( regularDirectory , "some really long file name.ods" ).createNewFile();
 				File anotherRegularDirectory = new File( regularDirectory , "AnotherFolder" );
 				anotherRegularDirectory.mkdir();
 				new File( anotherRegularDirectory , "yetAnotherDoc2.odt" ).createNewFile();
@@ -293,7 +300,8 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 		openDirectory( currentDirectory );// Uses filter mode 
 		return true;
 	}
-	class ListItemAdapter implements ListAdapter{
+	
+class ListItemAdapter implements ListAdapter{
 		private Context mContext;
 		private File[] filePaths;
 		private final long KB = 1024;
