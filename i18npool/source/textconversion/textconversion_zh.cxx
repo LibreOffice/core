@@ -84,7 +84,7 @@ TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos,
     for (sal_Int32 i = 0; i < nLength; i++)
         newStr->buffer[i] =
             getOneCharConversion(aText[nStartPos+i], Data, Index);
-    return OUString( newStr->buffer, nLength);
+    return OUString( newStr, SAL_NO_ACQUIRE);
 }
 
 OUString SAL_CALL
