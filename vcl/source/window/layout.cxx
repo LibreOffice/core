@@ -376,7 +376,50 @@ VclGrid::array_type VclGrid::assembleGrid() const
         A[nLeftAttach][nTopAttach] = pChild;
     }
 
-    return A;
+
+    //see if we have any empty rows/cols
+    sal_Int32 nMaxX = A.shape()[0];
+    sal_Int32 nMaxY = A.shape()[1];
+
+    std::vector<bool> aNonEmptyCols(nMaxX);
+    std::vector<bool> aNonEmptyRows(nMaxY);
+
+    for (sal_Int32 x = 0; x < nMaxX; ++x)
+    {
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
+        {
+            const Window *pChild = A[x][y];
+            if (pChild)
+            {
+                aNonEmptyCols[x] = true;
+                aNonEmptyRows[y] = true;
+            }
+        }
+    }
+
+    sal_Int32 nNonEmptyCols = std::count(aNonEmptyCols.begin(), aNonEmptyCols.end(), true);
+    sal_Int32 nNonEmptyRows = std::count(aNonEmptyRows.begin(), aNonEmptyRows.end(), true);
+
+    //no empty rows or cols
+    if (nNonEmptyCols == nMaxX && nNonEmptyRows == nMaxY)
+        return A;
+
+    //make new grid without empty rows and columns
+    array_type B(boost::extents[nNonEmptyCols][nNonEmptyRows]);
+    for (sal_Int32 x = 0, x2 = 0; x < nMaxX; ++x)
+    {
+        if (aNonEmptyCols[x] == false)
+            continue;
+        for (sal_Int32 y = 0, y2 = 0; y < nMaxY; ++y)
+        {
+            if (aNonEmptyRows[y] == false)
+                continue;
+            B[x2][y2++] = A[x][y];
+        }
+        ++x2;
+    }
+
+    return B;
 }
 
 bool VclGrid::isNullGrid(const array_type &A) const
