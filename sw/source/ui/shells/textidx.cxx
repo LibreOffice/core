@@ -222,7 +222,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         {
             SwTOXMarks aArr;
             rSh.GetCurTOXMarks( aArr );
-            if( !aArr.Count())
+            if( aArr.empty())
                 bEnableEdit = sal_False;
         }
 

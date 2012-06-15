@@ -63,7 +63,7 @@ sal_uInt16 SwTOXMgr::GetTOXMarks()
 
 SwTOXMark* SwTOXMgr::GetTOXMark(sal_uInt16 nId)
 {
-    if(aCurMarks.Count() > 0)
+    if(!aCurMarks.empty())
         return aCurMarks[nId];
     return 0;
 }
@@ -204,7 +204,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
         else
         {
             SwTOXMark aCpy( *pCurTOXMark );
-            aCurMarks.Remove(0, aCurMarks.Count());
+            aCurMarks.clear();
             pSh->DeleteTOXMark(pCurTOXMark);
             aCpy.SetAlternativeText( *rDesc.GetAltStr() );
             pSh->SwEditShell::Insert( aCpy );
@@ -283,7 +283,7 @@ const SwTOXType* SwTOXMgr::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
 
 void SwTOXMgr::SetCurTOXMark(sal_uInt16 nId)
 {
-    pCurTOXMark = (nId < aCurMarks.Count()) ? aCurMarks[nId] : 0;
+    pCurTOXMark = (nId < aCurMarks.size()) ? aCurMarks[nId] : 0;
 }
 
 sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,

@@ -313,7 +313,7 @@ public:
     Description: inlines
  --------------------------------------------------------------------*/
 inline sal_uInt16 SwTOXMgr::GetTOXMarkCount()
-    {   return aCurMarks.Count();   }
+    {   return aCurMarks.size();   }
 
 inline SwTOXMark* SwTOXMgr::GetCurTOXMark()
     {   return pCurTOXMark; }

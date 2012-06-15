@@ -159,10 +159,10 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
             // the attributes are sorted by Start!
             break;
 
-        const SwTOXMark* pTMark = &pHt->GetTOXMark();
-        rArr.Insert( pTMark, rArr.Count() );
+        SwTOXMark* pTMark = (SwTOXMark*) &pHt->GetTOXMark();
+        rArr.push_back( pTMark );
     }
-    return rArr.Count();
+    return rArr.size();
 }
 
 /*--------------------------------------------------------------------
@@ -253,7 +253,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     const SwTOXMark* pTOXMark;
     const SwCntntFrm* pCFrm;
     Point aPt;
-    for( sal_Int32 nMark=0; nMark<aMarks.Count(); nMark++ )
+    for( sal_Int32 nMark=0; nMark<(sal_Int32)aMarks.size(); nMark++ )
     {
         pTOXMark = aMarks[nMark];
         if( pTOXMark != &rCurTOXMark &&

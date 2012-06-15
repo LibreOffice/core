@@ -1188,11 +1188,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 SwTOXMarks aMarks;
                 const SwTOXType* pType = pTOXBase->GetTOXType();
                 SwTOXMark::InsertTOXMarks( aMarks, *pType );
-                uno::Sequence< uno::Reference<text::XDocumentIndexMark> > aXMarks(aMarks.Count());
+                uno::Sequence< uno::Reference<text::XDocumentIndexMark> > aXMarks(aMarks.size());
                 uno::Reference<text::XDocumentIndexMark>* pxMarks = aXMarks.getArray();
-                for(sal_uInt16 i = 0; i < aMarks.Count(); i++)
+                for(sal_uInt16 i = 0; i < aMarks.size(); i++)
                 {
-                     SwTOXMark* pMark = aMarks.GetObject(i);
+                    SwTOXMark* pMark = aMarks[i];
                     pxMarks[i] = SwXDocumentIndexMark::CreateXDocumentIndexMark(
                         *m_pImpl->m_pDoc,
                         *const_cast<SwTOXType*>(pType), *pMark);

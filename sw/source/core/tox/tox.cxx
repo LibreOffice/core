@@ -69,8 +69,6 @@ sal_uInt8 SwForm::nFormChapterMarkLen    = 3;
 sal_uInt8 SwForm::nFormTextLen           = 3;
 sal_uInt8 SwForm::nFormAuthLen           = 5;
 
-SV_IMPL_PTRARR(SwTOXMarks, SwTOXMark*)
-
 TYPEINIT2( SwTOXMark, SfxPoolItem, SwClient );    // fuers rtti
 
 struct PatternIni
@@ -263,7 +261,7 @@ void SwTOXMark::InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType )
     while( pMark )
     {
         if(pMark->GetTxtTOXMark())
-            aMarks.C40_INSERT(SwTOXMark, pMark, aMarks.Count());
+            aMarks.push_back(pMark);
         pMark = aIter.Next();
     }
 }
