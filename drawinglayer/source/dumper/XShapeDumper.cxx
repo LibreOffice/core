@@ -974,6 +974,26 @@ namespace {
             rtl::OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    // -----------------------------------------------------
+    // ---------- PolyPolygonBezierDescriptor.idl ----------
+    // -----------------------------------------------------
+
+    void XShapeDumper::dumpPolyPolygonBezierAsElement(drawing::PolyPolygonBezierCoords aPolyPolygonBezier, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PolyPolygonBezier" ));
+        dumpPolyPolygonBezierCoords(aPolyPolygonBezier, xmlWriter);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
+    void XShapeDumper::dumpGeometryAsElement(drawing::PolyPolygonBezierCoords aGeometry, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Geometry" ));
+        dumpPolyPolygonBezierCoords(aGeometry, xmlWriter);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
+    // dumping services
+
     void XShapeDumper::dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
     {
         uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
@@ -1495,6 +1515,18 @@ namespace {
             drawing::PolygonKind ePolygonKind;
             if(anotherAny >>= ePolygonKind)
                 dumpPolygonKindAsAttribute(ePolygonKind, xmlWriter);
+        }
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("PolyPolygonBezier");
+            drawing::PolyPolygonBezierCoords aPolyPolygonBezier;
+            if(anotherAny >>= aPolyPolygonBezier)
+                dumpPolyPolygonBezierCoords(aPolyPolygonBezier, xmlWriter);
+        }
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("Geometry");
+            drawing::PolyPolygonBezierCoords aGeometry;
+            if(anotherAny >>= aGeometry)
+                dumpPolyPolygonBezierCoords(aGeometry, xmlWriter);
         }
     }
 

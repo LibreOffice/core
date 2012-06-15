@@ -166,7 +166,8 @@ private:
     void dumpHyperlinkAsAttribute(rtl::OUString sHyperlink, xmlTextWriterPtr xmlWriter);
 
     // PolyPolygonBezierDescriptor.idl
-    void dumpPolyPolygonBezierDescriptorService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+    void dumpPolyPolygonBezierAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aPolyPolygonBezier, xmlTextWriterPtr xmlWriter);
+    void dumpGeometryAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aGeometry, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
@@ -182,6 +183,7 @@ private:
     void dumpShadowPropertiesService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
     void dumpPolyPolygonDescriptorService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
     void dumpShapeService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+    void dumpPolyPolygonBezierDescriptorService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
 
 };
 #endif
