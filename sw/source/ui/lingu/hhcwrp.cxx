@@ -26,18 +26,12 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
-
-
 #include <hintids.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swundo.hxx>         // for Undo-Ids
 #include <globals.hrc>
 #include <splargs.hxx>
-
 
 #include <vcl/msgbox.hxx>
 #include <editeng/unolingu.hxx>

@@ -29,10 +29,6 @@
 #ifndef _SW_XDOCUMENT_SETTINGS_HXX
 #define _SW_XDOCUMENT_SETTINGS_HXX
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
-
 #include <comphelper/MasterPropertySet.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include  <com/sun/star/lang/XServiceInfo.hpp>

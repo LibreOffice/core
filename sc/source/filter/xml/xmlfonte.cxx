@@ -26,15 +26,9 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "filt_pch.hxx"
-#endif
-
-
 #include "scitems.hxx"
 
 #include <editeng/eeitem.hxx>
-
 
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include <editeng/fontitem.hxx>
