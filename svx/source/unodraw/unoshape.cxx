@@ -4306,7 +4306,7 @@ void SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, co
     bool bDontConvertNegativeValues = ( pMap->nWID == XATTR_FILLBMP_SIZEX || pMap->nWID == XATTR_FILLBMP_SIZEY );
     if( pMap->nWID == EE_PARA_LRSPACE ) // n#757419 Don't import negative values
     {
-        sal_Int32 nVal;
+        sal_Int32 nVal = sal_Int32();
         if( (aVal >>= nVal) && nVal < 0 )
             aVal <<= ( sal_Int32 ) 0;
     }
