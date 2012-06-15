@@ -4,6 +4,8 @@
     <string name="hello">Hello World, LibreOfficeUIActivity!</string>
     <string name="app_name">LibreOfficeUI</string>
     <string name="menu_search">Search</string>
+    <string name="list_view">List</string>
+    <string name="grid_view">Grid</string>
     <string-array name="file_view_modes">
         <item >EVERYTHING</item>
         <item >DOCUMENTS</item>

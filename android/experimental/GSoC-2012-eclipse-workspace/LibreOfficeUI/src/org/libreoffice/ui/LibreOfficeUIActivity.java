@@ -4,30 +4,35 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LibreOfficeUIActivity extends Activity implements OnNavigationListener {
     private String tag = "file_manager";
@@ -36,21 +41,32 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 	private String filter = "";
 	private String[] filters = {"all",".odt",".ods",".odp"};
 	private int filterMode = FileUtilities.ALL;
+	private int viewType = 0;
 	FileFilter fileFilter;
 	FilenameFilter filenameFilter;
 	private String[] fileNames;
 	private File[] filePaths;
+	private ActionBar actionBar;
+	private SharedPreferences prefs;
 	
 	private String currentDirectoryKey = "CURRENT_DIRECTORY";
 	private String filterModeKey = "FILTER_MODE";
+	public static final String EXPLORER_VIEW_TYPE = "EXPLORER_VIEW_TYPE";
+	public static final String EXPLORER_PREFS = "EXPLORER_PREFS";
+	
+	public static final int GRID_VIEW = 0;
+	public static final int LIST_VIEW = 1;
 	
 	GridView gv;
+	ListView lv;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.file_grid);
-        ActionBar actionBar = getActionBar();
+        prefs = getSharedPreferences(EXPLORER_PREFS, MODE_PRIVATE);
+        viewType = prefs.getInt( EXPLORER_VIEW_TYPE, GRID_VIEW);
+        
+        actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);//This should show current directory if anything
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.file_view_modes,
@@ -62,51 +78,68 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
         homeDirectory.mkdirs();
         Intent i = this.getIntent();
         if( i.hasExtra( currentDirectoryKey ) ){
-        	//This isn't what I think it is. It's not a full path
         	currentDirectory = new File( i.getStringExtra( currentDirectoryKey ) );
         }else{
 	        currentDirectory = homeDirectory;
         }
         
         if( i.hasExtra( filterModeKey ) ){
-        	Log.d(filterModeKey+"_GRID_OC" , Integer.toString( i.getIntExtra( filterModeKey, FileUtilities.ALL ) ));
             filterMode = i.getIntExtra( filterModeKey, FileUtilities.ALL);
         }
         if( !currentDirectory.equals( homeDirectory )){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-		//fileFilter = FileUtilities.getFileFilter( filterMode );
-		//filenameFilter = FileUtilities.getFilenameFilter( filterMode );	
-		
-        //createDummyFileSystem();
-    	//filePaths = currentDirectory.listFiles( fileFilter );
-    	//order/filter filePaths here
-    	//fileNames = currentDirectory.list( filenameFilter );
-
-        // code to make a grid view 
-    	gv = (GridView)findViewById(R.id.file_explorer_grid_view);
-        //GridItemAdapter gridAdapter = new GridItemAdapter(getApplicationContext(), filePaths );
-        //gv.setAdapter(gridAdapter);
-        gv.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                int position, long id) {
-            	File file = filePaths[position];
-            	if(!file.isDirectory()){
-            		open(fileNames[position]);
-            	}else{
-            		/*fileNames = file.list();
-                    filePaths = file.listFiles();
-                    GridItemAdapter gridAdapter = new GridItemAdapter(getApplicationContext(), filePaths );
-                    gv.setAdapter(gridAdapter);*/
-            		file = new File( currentDirectory, file.getName() );
-            		openDirectory( file );
-            	}
-            		
-            }
-          });
-        actionBar.setSelectedNavigationItem( filterMode + 1 );//This triggers the listener which modifies the view.
-        //openDirectory( currentDirectory );
+    	
+        createUI();
+	    
+    }
+    
+    public void createUI(){
+    	if( viewType == GRID_VIEW){
+	        // code to make a grid view
+        	setContentView(R.layout.file_grid);
+	    	gv = (GridView)findViewById(R.id.file_explorer_grid_view);
+        	fileNames = currentDirectory.list( FileUtilities.getFilenameFilter( filterMode ) );
+        	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
+	        gv.setOnItemClickListener(new OnItemClickListener() {
+	            public void onItemClick(AdapterView<?> parent, View view,
+	                int position, long id) {
+	            	File file = filePaths[position];
+	            	if(!file.isDirectory()){
+	            		open(fileNames[position]);
+	            	}else{
+	            		file = new File( currentDirectory, file.getName() );
+	            		openDirectory( file );
+	            	}
+	            		
+	            }
+	          });
+	        gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
+	        actionBar.setSelectedNavigationItem( filterMode + 1 );//This triggers the listener which modifies the view.
+        }else{
+        	setContentView(R.layout.file_list);
+        	lv = (ListView)findViewById( R.id.file_explorer_list_view);
+        	lv.setClickable(true);
+        	fileNames = currentDirectory.list( FileUtilities.getFilenameFilter( filterMode ) );
+        	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
+        	/*lv.setOnItemClickListener(new OnItemClickListener() {
+	            public void onItemClick(AdapterView<?> parent, View view,
+	                int position, long id) {
+	            	Log.d(tag, "click!");
+	            	File file = filePaths[position];
+	            	if(!file.isDirectory()){
+	            		open(fileNames[position]);
+	            	}else{
+	            		file = new File( currentDirectory, file.getName() );
+	            		openDirectory( file );
+	            	}	
+	            }
+	          });*/
+        	lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
+        	actionBar.setSelectedNavigationItem( filterMode + 1 );
+        }
+    	
     }
     
     public void openDirectory(File dir ){
@@ -121,7 +154,11 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
         }
     	fileNames = currentDirectory.list( FileUtilities.getFilenameFilter( filterMode ) );
     	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
-    	gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
+    	if( viewType == GRID_VIEW){
+    		gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
+    	}else{
+    		lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
+    	}
     }
     
     public void open(String file){
@@ -136,24 +173,37 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
+        
+        MenuItem item = (MenuItem)menu.findItem(R.id.menu_view_toggle);
+        if( viewType == GRID_VIEW){
+        	item.setTitle(R.string.grid_view);
+        }else{
+        	item.setTitle(R.string.list_view);
+        }
         return true;
     }
     
     public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	        case android.R.id.home:
-	            // app icon in action bar clicked; go home
-	            //Intent intent = new Intent(this, LibreOfficeUIActivity.class);
-	            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	            //startActivity(intent);
 	            if( !currentDirectory.equals( homeDirectory ) ){
 	            	openDirectory( currentDirectory.getParentFile() );
 	            }
-	            
-	            return true;
+	            break;
+	        case R.id.menu_view_toggle:
+	        	if( viewType == GRID_VIEW){
+	        		viewType = LIST_VIEW;
+	        		item.setTitle(R.string.grid_view);//Button points to next view.
+	        	}else{
+	        		viewType = GRID_VIEW;
+	        		item.setTitle(R.string.list_view);//Button points to next view.
+	        	}
+	        	createUI();
+	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
+	    return true;
 	}
     
     public void createDummyFileSystem(){
@@ -245,6 +295,145 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 		openDirectory( currentDirectory );// Uses filter mode 
 		return true;
 	}
+	class ListItemAdapter implements ListAdapter{
+		private Context mContext;
+		private File[] filePaths;
+		private final long KB = 1024;
+		private final long MB = 1048576;
+		
+		public ListItemAdapter(Context mContext, File[] filePaths) {
+			this.mContext = mContext;
+			this.filePaths = filePaths;
+		}
+		
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return filePaths.length;
+		}
+
+		public Object getItem(int arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public long getItemId(int arg0) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public int getItemViewType(int arg0) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(
+					Context.LAYOUT_INFLATER_SERVICE);
+			
+			View listItem;
+	 
+			if (convertView == null) {
+				listItem = new View(mContext);
+				listItem = inflater.inflate(R.layout.file_list_item, null);
+			} else {
+				listItem = (View) convertView;
+			}
+			final int pos = position;
+			listItem.setClickable(true);
+			listItem.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View v) {
+					Log.d("LIST", "click!");
+					
+					open( filePaths[ pos ].getName() );
+				}
+			});
+			
+			
+			
+			// set value into textview
+			TextView filename = (TextView) listItem.findViewById(R.id.file_list_item_name);
+			filename.setText( filePaths[ position ].getName() );
+			//filename.setClickable(true);
+			
+			TextView fileSize = (TextView) listItem.findViewById(R.id.file_list_item_size);
+			//TODO Give size in KB , MB as appropriate.
+			String size = "0B";
+			long length = filePaths[ position ].length();
+			if( length < KB ){
+				size = Long.toString( length ) + "B";
+			}
+			if( length >= KB && length < MB){
+				size = Long.toString( length/KB ) + "KB";
+			}
+			if( length >= MB){
+				size = Long.toString( length/MB ) + "MB";
+			}
+			fileSize.setText( size );
+			//fileSize.setClickable(true);
+			
+			TextView fileDate = (TextView) listItem.findViewById(R.id.file_list_item_date);
+			SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy hh:ss");
+			Date date = new Date( filePaths[ position ].lastModified() );
+			//TODO format date
+			fileDate.setText( df.format( date ) );
+			
+			// set image based on selected text
+			ImageView imageView = (ImageView) listItem.findViewById(R.id.file_list_item_icon);
+			if( filePaths[position].getName().endsWith(".odt") ){
+				imageView.setImageResource(R.drawable.writer);
+			}
+			if( filePaths[position].getName().endsWith(".ods") ){
+				imageView.setImageResource(R.drawable.calc);
+			}
+			if( filePaths[position].getName().endsWith(".odp") ){
+				imageView.setImageResource(R.drawable.impress);
+			}
+			if( filePaths[position].isDirectory() ){
+				//Eventually have thumbnails of each sub file on a black circle
+				//For now just a folder icon
+				imageView.setImageResource(R.drawable.folder);
+			}
+			//imageView.setClickable(true);
+			return listItem;
+		}
+
+		public int getViewTypeCount() {
+			// TODO Auto-generated method stub
+			return 1;
+		}
+
+		public boolean hasStableIds() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public boolean isEmpty() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public void registerDataSetObserver(DataSetObserver arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void unregisterDataSetObserver(DataSetObserver arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public boolean areAllItemsEnabled() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public boolean isEnabled(int position) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+	}	
 
 }
 
