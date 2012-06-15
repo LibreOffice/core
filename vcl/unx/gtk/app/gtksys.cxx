@@ -245,7 +245,7 @@ Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScreen)
     if (!pScreen)
         return Rectangle();
     gdk_screen_get_monitor_geometry (pScreen, nMonitor, &aRect);
-    return Rectangle (aRect.x, aRect.y, aRect.width, aRect.height);
+    return Rectangle (Point(aRect.x, aRect.y), Size(aRect.width, aRect.height));
 }
 
 Rectangle GtkSalSystem::GetDisplayScreenWorkAreaPosSizePixel (unsigned int nScreen)
