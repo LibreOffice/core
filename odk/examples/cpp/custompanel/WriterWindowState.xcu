@@ -28,10 +28,10 @@
           <value>false</value>
         </prop>
         <prop oor:name="ImageURL" oor:type="xs:string">
-          <value>vnd.sun.star.extension://UPDATED_IDENTIFIER/panel.png</value>
+          <value>vnd.sun.star.extension://org.apache.openoffice.custom-tool-panel/panel.png</value>
         </prop>
         <prop oor:name="HelpURL" oor:type="xs:string">
-          <value>vnd.sun.star.help://UPDATED_IDENTIFIER/colorpanel</value>
+          <value>vnd.sun.star.help://org.apache.openoffice.custom-tool-panel/colorpanel</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolpanel/org.openoffice.example.colorpanel/FF0000" oor:op="replace">
@@ -42,10 +42,10 @@
           <value>false</value>
         </prop>
         <prop oor:name="ImageURL" oor:type="xs:string">
-          <value>vnd.sun.star.extension://UPDATED_IDENTIFIER/panel.png</value>
+          <value>vnd.sun.star.extension://org.apache.openoffice.custom-tool-panel/panel.png</value>
         </prop>
         <prop oor:name="HelpURL" oor:type="xs:string">
-          <value>vnd.sun.star.help://UPDATED_IDENTIFIER/colorpanel</value>
+          <value>vnd.sun.star.help://org.apache.openoffice.custom-tool-panel/colorpanel</value>
         </prop>
       </node>
     </node>

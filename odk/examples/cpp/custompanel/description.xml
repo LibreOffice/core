@@ -21,13 +21,13 @@
     xmlns:d="http://openoffice.org/extensions/description/2006"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
-  <identifier value="UPDATED_IDENTIFIER"/>
+  <identifier value="org.apache.openoffice.custom-tool-panel"/>
   <version value="0.1" />
   <platform value="UPDATED_SUPPORTED_PLATFORM" />
   <display-name>
     <name>Custom Tool Panel Example</name>
   </display-name>
   <dependencies>
-    <OpenOffice.org-minimal-version value="3.3" d:name="OpenOffice.org 3.3"/>
+    <OpenOffice.org-minimal-version value="3.4" d:name="OpenOffice.org 3.4"/>
   </dependencies>
 </description>

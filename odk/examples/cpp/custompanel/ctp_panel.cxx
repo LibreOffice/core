@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 
 //......................................................................................................................
 namespace sd { namespace colortoolpanel
@@ -78,7 +78,7 @@ namespace sd { namespace colortoolpanel
         {
             try
             {
-                ENSURE_OR_THROW( i_rContext.is(), "illegal component context" );
+                OSL_ENSURE( i_rContext.is(), "illegal component context" );
                 Reference< XMultiComponentFactory > xFactory( i_rContext->getServiceManager(), UNO_SET_THROW );
                 Reference< XToolkit2 > xToolkit = Toolkit::create(i_rContext);
 
@@ -93,7 +93,6 @@ namespace sd { namespace colortoolpanel
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION();
             }
             return NULL;
         }
@@ -168,7 +167,6 @@ namespace sd { namespace colortoolpanel
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -193,7 +191,6 @@ namespace sd { namespace colortoolpanel
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
         }
         m_xWindow.clear();
     }
