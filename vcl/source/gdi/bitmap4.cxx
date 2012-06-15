@@ -55,8 +55,20 @@ sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, 
     {
         case( BMP_FILTER_SMOOTH ):
         {
-            const long pSmoothMatrix[] = { 1, 2, 1, 2, 5, 2, 1, 2, 1 };
-            bRet = ImplConvolute3( &pSmoothMatrix[ 0 ], 17, pFilterParam, pProgress );
+            // Blur for positive values of mnRadius
+            if (pFilterParam->mnRadius > 0.0)
+            {
+                bRet = ImplSeparableBlurFilter(pFilterParam->mnRadius);
+            }
+            // Unsharpen Mask for negative values of mnRadius
+            else if (pFilterParam->mnRadius < 0.0)
+            {
+                bRet = ImplSeparableUnsharpenFilter(pFilterParam->mnRadius);
+            }
+            else
+            {
+                bRet = sal_False;
+            }
         }
         break;
 
@@ -1005,5 +1017,195 @@ sal_Bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link*
 
     return bRet;
 }
+
+
+double* MakeBlurKernel(const double radius, int& rows) {
+    int intRadius = (int) radius + 1.0;
+    rows = intRadius * 2 + 1;
+    double* matrix = new double[rows];
+
+    double sigma = radius / 3;
+    double radius2 = radius * radius;
+    int index = 0;
+    for (int row = -intRadius; row <= intRadius; row++)
+    {
+        double distance = row*row;
+        if (distance > radius2) {
+            matrix[index] = 0.0;
+        }else {
+            matrix[index] = exp( -distance / (2.0 * sigma * sigma) ) / sqrt( 2.0 * M_PI * sigma );
+        }
+        index++;
+    }
+    return matrix;
+}
+
+void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContributions,
+                                    double* pBlurVector, double*& pWeights, int*& pPixels, int*& pCount )
+{
+    pWeights = new double[ aSize*aNumberOfContributions ];
+    pPixels = new int[ aSize*aNumberOfContributions ];
+    pCount = new int[ aSize ];
+
+    int aLeft, aRight, aCurrentCount, aPixelIndex;
+    double aWeight;
+
+    for ( int i = 0; i < aSize; i++ )
+    {
+        aLeft = (int)  i - aNumberOfContributions / 2;
+        aRight = (int) i + aNumberOfContributions / 2;
+        aCurrentCount = 0;
+        for ( int j = aLeft; j <= aRight; j++ )
+        {
+            aWeight = pBlurVector[aCurrentCount];
+
+            // Mirror edges
+            if (j < 0)
+            {
+                aPixelIndex = -j;
+            }
+            else if ( j >= aSize )
+            {
+                aPixelIndex = (aSize - j) + aSize - 1;
+            }
+            else
+            {
+                aPixelIndex = j;
+            }
+
+            // Edge case for small bitmaps
+            if ( aPixelIndex < 0 || aPixelIndex >= aSize )
+            {
+                aWeight = 0.0;
+            }
+
+            pWeights[ i*aNumberOfContributions + aCurrentCount ] = aWeight;
+            pPixels[ i*aNumberOfContributions + aCurrentCount ] = aPixelIndex;
+
+            aCurrentCount++;
+        }
+        pCount[ i ] = aCurrentCount;
+    }
+}
+
+// Separable Gaussian Blur
+//
+// Separable Gaussian Blur filter and accepts a blur radius
+// as a parameter so the user can change the strength of the blur.
+// Radius of 1.0 is 3 * standard deviation of gauss function.
+//
+// Separable Blur implementation uses 2x separable 1D convolution
+// to process the image.
+bool Bitmap::ImplSeparableBlurFilter(const double radius)
+{
+    const long  nWidth = GetSizePixel().Width();
+    const long  nHeight = GetSizePixel().Height();
+
+    // Prepare Blur Vector
+    int aNumberOfContributions;
+    double* pBlurVector = MakeBlurKernel(radius, aNumberOfContributions);
+
+    double* pWeights;
+    int* pPixels;
+    int* pCount;
+
+    // Do horizontal filtering
+    ImplBlurContributions( nWidth, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount);
+
+    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+
+    // switch coordinates as convolution pass transposes result
+    Bitmap aNewBitmap( Size( nHeight, nWidth ), 24 );
+
+    bool bResult = ImplConvolutionPass( aNewBitmap, nWidth, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
+
+    // Cleanup
+    ReleaseAccess( pReadAcc );
+    delete[] pWeights;
+    delete[] pPixels;
+    delete[] pCount;
+
+    if ( !bResult )
+        return bResult;
+
+    // Swap current bitmap with new bitmap
+    ImplAssignWithSize( aNewBitmap );
+
+    // Do vertical filtering
+    ImplBlurContributions(nHeight, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount );
+
+    pReadAcc = AcquireReadAccess();
+    aNewBitmap = Bitmap( Size( nWidth, nHeight ), 24 );
+    bResult = ImplConvolutionPass( aNewBitmap, nHeight, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
+
+    // Cleanup
+    ReleaseAccess( pReadAcc );
+    delete[] pWeights;
+    delete[] pCount;
+    delete[] pPixels;
+    delete[] pBlurVector;
+
+    if ( !bResult )
+        return bResult;
+
+    // Swap current bitmap with new bitmap
+    ImplAssignWithSize( aNewBitmap );
+
+    return true;
+}
+
+// Separable Unsharepn Mask filter is actually a substracted blured
+// image from the original image.
+bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
+    const long  nWidth = GetSizePixel().Width();
+    const long  nHeight = GetSizePixel().Height();
+
+    Bitmap aBlur( *this );
+    aBlur.ImplSeparableBlurFilter(-radius);
+
+    // Amount of unsharpening effect on image - currently set to a fixed value
+    double aAmount = 2.0;
+
+    Bitmap aResultBitmap( Size( nWidth, nHeight ), 24);
+
+    BitmapReadAccess* pReadAccBlur = aBlur.AcquireReadAccess();
+    BitmapReadAccess* pReadAcc = AcquireReadAccess();
+    BitmapWriteAccess* pWriteAcc = aResultBitmap.AcquireWriteAccess();
+
+    BitmapColor aColor, aColorBlur;
+
+    // For all pixels in original image substract pixels values from blured image.
+    for( int x = 0; x < nWidth; x++ )
+    {
+        for( int y = 0; y < nHeight; y++ )
+        {
+            aColorBlur = pReadAccBlur->GetPixel( y , x );
+            if( pReadAccBlur->HasPalette() )
+            {
+                 pReadAccBlur->GetPaletteColor( aColorBlur );
+            }
+
+            aColor = pReadAcc->GetPixel( y , x );
+            if( pReadAcc->HasPalette() )
+            {
+                aColor = pReadAcc->GetPaletteColor( aColor );
+            }
+
+            BitmapColor aResultColor(
+                (sal_uInt8) MinMax( aColor.GetRed()   + (aColor.GetRed()   - aColorBlur.GetRed())   * aAmount, 0, 255 ),
+                (sal_uInt8) MinMax( aColor.GetGreen() + (aColor.GetGreen() - aColorBlur.GetGreen()) * aAmount, 0, 255 ),
+                (sal_uInt8) MinMax( aColor.GetBlue()  + (aColor.GetBlue()  - aColorBlur.GetBlue())  * aAmount, 0, 255 ) );
+
+            pWriteAcc->SetPixel( y, x, aResultColor );
+        }
+    }
+
+    ReleaseAccess( pWriteAcc );
+    ReleaseAccess( pReadAcc );
+    ReleaseAccess( pReadAccBlur );
+    ImplAssignWithSize ( aResultBitmap );
+    return true;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

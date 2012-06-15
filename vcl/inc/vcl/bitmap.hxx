@@ -183,6 +183,7 @@ private:
     {
         sal_uInt16  mnSepiaPercent;
         sal_uInt8   mcSolarGreyThreshold;
+        double      mnRadius;
 
         MosaicTileSize maMosaicTileSize;
         EmbossAngles maEmbossAngles;
@@ -196,6 +197,10 @@ public:
     BmpFilterParam( sal_uInt8 cSolarGreyThreshold, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_SOLARIZE ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
         mcSolarGreyThreshold( cSolarGreyThreshold ) {}
+
+    BmpFilterParam( double nRadius, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
+        meFilter( BMP_FILTER_SMOOTH ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
+        mnRadius( cSolarGreyThreshold ) {}
 
     BmpFilterParam( sal_uInt16 nSepiaPercent, sal_uLong nProgressStart = 0, sal_uLong nProgressEnd = 0 ) :
         meFilter( BMP_FILTER_SEPIA ), mnProgressStart( nProgressStart ), mnProgressEnd( nProgressEnd ),
@@ -397,6 +402,10 @@ public:
     SAL_DLLPRIVATE sal_Bool                 ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE sal_Bool                 ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
 
+    SAL_DLLPRIVATE bool                     ImplSeparableBlurFilter( const double aRadius = 0.7 );
+    SAL_DLLPRIVATE bool                     ImplSeparableUnsharpenFilter( const double aRadius = 0.7 );
+    SAL_DLLPRIVATE void                     ImplBlurContributions( const int aSize, const int aNumberOfContributions,
+                                                double* pBlurVector, double*& pWeights, int*& pPixels, int*& pCount );
 public:
 
                             Bitmap();
