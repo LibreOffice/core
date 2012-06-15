@@ -44,8 +44,8 @@ gb_Library_FILENAMES := $(patsubst store:libuno_store%,store:libstore%,$(gb_Libr
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 
 ifeq ($(OS),MACOSX)
-# libpyuno_wrapper.so => pyuno.dyn
-gb_Library_FILENAMES := $(patsubst pyuno_wrapper:libpyuno_wrapper.so,pyuno_wrapper:pyuno.dyn,$(gb_Library_FILENAMES))
+# libpyuno_wrapper.dylib => pyuno.so
+gb_Library_FILENAMES := $(patsubst pyuno_wrapper:libpyuno_wrapper.dylib,pyuno_wrapper:pyuno.so,$(gb_Library_FILENAMES))
 else
 # libpyuno_wrapper.so => pyuno.so
 gb_Library_FILENAMES := $(patsubst pyuno_wrapper:libpyuno_wrapper.so,pyuno_wrapper:pyuno.so,$(gb_Library_FILENAMES))

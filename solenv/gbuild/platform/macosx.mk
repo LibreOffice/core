@@ -236,7 +236,7 @@ $(call gb_Helper_abbreviate_dirs,\
             $(LAYER) $(1) &&) \
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
-		ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
+		ln -sf $(notdir $(1)) $(basename $(1)).jnilib &&) \
 	rm -f $${DYLIB_FILE})
 endef
 
