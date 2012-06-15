@@ -24,3 +24,12 @@
    if (format == VSD_TEXT_ANSI)
    {
      while (!pStream->atEOS())
+@@ -2312,6 +2312,8 @@ void libvisio::VSDXContentCollector::endPages(const std::vector<unsigned> &pageO
+ 
+ void libvisio::VSDXContentCollector::_appendUTF16LE(WPXString &text, WPXInputStream *input)
+ {
++  if (!input)
++    return;
+   while (!input->atEOS())
+   {
+     uint16_t high_surrogate = 0;
