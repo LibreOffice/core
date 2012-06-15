@@ -589,23 +589,27 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     }
 
     // last level fallback, check each font type face one by one
-    const ImplGetDevFontList* pTestFontList = pDevFontList->GetDevFontList();
+    ImplGetDevFontList* pTestFontList = pDevFontList->GetDevFontList();
     // limit the count of fonts to be checked to prevent hangs
     static const int MAX_GFBFONT_COUNT = 600;
     int nTestFontCount = pTestFontList->Count();
     if( nTestFontCount > MAX_GFBFONT_COUNT )
         nTestFontCount = MAX_GFBFONT_COUNT;
 
+    bool bFound = false;
     for( int i = 0; i < nTestFontCount; ++i )
     {
         const PhysicalFontFace* pFace = pTestFontList->Get( i );
-        if( !HasMissingChars( pFace, rMissingChars ) )
+        bFound = HasMissingChars( pFace, rMissingChars );
+        if( !bFound )
             continue;
         rFontSelData.maSearchName = pFace->GetFamilyName();
-        return true;
+        break;
     }
 
-    return false;
+    delete pTestFontList;
+
+    return bFound;
 }
 
 // =======================================================================
