@@ -122,8 +122,8 @@ TabPage TP_VALIDATION_VALUES
             < "less than or equal" ; SC_VALIDDLG_DATA_EQLESS ; > ;
             < "greater than or equal to" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
             < "not equal" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "between" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "not between" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
+            < "valid range" ; SC_VALIDDLG_DATA_VALIDRANGE ; > ;
+            < "invalid range" ; SC_VALIDDLG_DATA_INVALIDRANGE ; > ;
         };
     };
     FixedText FT_MIN
