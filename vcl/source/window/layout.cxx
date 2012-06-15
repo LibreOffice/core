@@ -105,6 +105,8 @@ Size VclBox::calculateRequisition() const
 
 void VclBox::setAllocation(const Size &rAllocation)
 {
+    //SetBackground( Color(0x00, 0xFF, 0x00) );
+
     rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
 
     sal_uInt16 nVisibleChildren = 0, nExpandChildren = 0;
@@ -391,8 +393,13 @@ VclGrid::array_type VclGrid::assembleGrid() const
             const Window *pChild = A[x][y];
             if (pChild)
             {
-                aNonEmptyCols[x] = true;
-                aNonEmptyRows[y] = true;
+                sal_Int32 nWidth = pChild->getWidgetProperty<sal_Int32>(sWidth, 1);
+                for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+                    aNonEmptyCols[x+nSpanX] = true;
+
+                sal_Int32 nHeight = pChild->getWidgetProperty<sal_Int32>(sHeight, 1);
+                for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                    aNonEmptyRows[y+nSpanY] = true;
             }
         }
     }
@@ -505,6 +512,8 @@ Size VclGrid::calculateRequisition() const
 
 void VclGrid::setAllocation(const Size& rAllocation)
 {
+    //SetBackground( Color(0xFF, 0x00, 0x00) );
+
     array_type A = assembleGrid();
 
     if (isNullGrid(A))
@@ -719,6 +728,8 @@ Size VclFrame::calculateRequisition() const
 
 void VclFrame::setAllocation(const Size &rAllocation)
 {
+    //SetBackground( Color(0xFF, 0x00, 0xFF) );
+
     const FrameStyle &rFrameStyle =
         GetSettings().GetStyleSettings().GetFrameStyle();
     Size aAllocation(rAllocation.Width() - rFrameStyle.left - rFrameStyle.right,
@@ -763,6 +774,8 @@ Size VclAlignment::calculateRequisition() const
 
 void VclAlignment::setAllocation(const Size &rAllocation)
 {
+    //SetBackground( Color(0x00, 0x00, 0xFF) );
+
     Window *pChild = get_child();
     if (!pChild || !pChild->IsVisible())
         return;
