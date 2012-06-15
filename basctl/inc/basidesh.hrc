@@ -15,6 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _BASIDESH_HRC
 #define _BASIDESH_HRC
 
@@ -29,10 +30,7 @@
 #ifndef _SVX_NOIDERESIDS
 
 #define RID_BASICIDE_OBJECTBAR          ( RID_BASICIDE_START +  0 )
-#define RID_BASICMENU                   ( RID_BASICIDE_START +  1 )
-#define RID_BASICPLUGINMENU             ( RID_BASICIDE_START +  2 )
 #define RID_EDT_WATCHEDIT               ( RID_BASICIDE_START +  4 )
-#define RID_ICO_MDIWINDOW               ( RID_BASICIDE_START +  5 )
 #define RID_POPUP_BRKDLG                ( RID_BASICIDE_START + 10 )
 #define RID_POPUP_BRKPROPS              ( RID_BASICIDE_START + 11 )
 #define RID_POPUP_TABBAR                ( RID_BASICIDE_START + 12 )
@@ -77,7 +75,6 @@
 #define RID_STR_COMPILEERROR            ( RID_BASICIDE_START + 23 )
 #define RID_STR_STDDIALOGNAME           ( RID_BASICIDE_START + 24 )
 #define RID_STR_STDMACRONAME            ( RID_BASICIDE_START + 25 )
-#define RID_STR_STDJAVAFUNCTIONNAME     ( RID_BASICIDE_START + 26 )
 #define RID_STR_STDMODULENAME           ( RID_BASICIDE_START + 27 )
 #define RID_STR_ALL                     ( RID_BASICIDE_START + 28 )
 #define RID_STR_CLOSE                   ( RID_BASICIDE_START + 29 )
@@ -104,7 +101,6 @@
 #define RID_STR_FILEEXISTS              ( RID_BASICIDE_START + 50 )
 // free
 #define RID_STR_ERROROPENLIB            ( RID_BASICIDE_START + 55 )
-#define RID_STR_STDJAVAMODULENAME       ( RID_BASICIDE_START + 56 )
 #define RID_STR_NEWLIB                  ( RID_BASICIDE_START + 57 )
 #define RID_STR_NEWMOD                  ( RID_BASICIDE_START + 58 )
 #define RID_STR_NEWDLG                  ( RID_BASICIDE_START + 59 )
@@ -162,7 +158,6 @@
 #define RID_STR_USERFORMS               ( RID_BASICIDE_START + 119 )
 #define RID_STR_NORMAL_MODULES          ( RID_BASICIDE_START + 120 )
 #define RID_STR_CLASS_MODULES           ( RID_BASICIDE_START + 121 )
-
 
 #define RID_DLG_GOTOLINE                ( RID_BASICIDE_START + 122 )
 #define RID_FT_LINE                     ( RID_BASICIDE_START + 123 )

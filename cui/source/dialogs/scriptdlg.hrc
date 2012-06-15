@@ -24,6 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _SCRIPTDLG_HRC
 #define _SCRIPTDLG_HRC
 
@@ -46,9 +47,6 @@
 #define IMG_LIB                         3
 #define IMG_MACRO                       5
 #define IMG_DOCUMENT                    7
-
-#define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
-#define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 13)
 
 // NewObjectDialog
 #define FT_NEWLIB                       10

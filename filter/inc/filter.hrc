@@ -35,10 +35,9 @@
 // Help-Ids --------------------------------------------------------------
 
 #define RID_PDF_DIALOG_START        (RID_FILTER_START +   0)
-#define RID_PDF_DIALOG_END          (RID_FILTER_START +  19)
+//      RID_PDF_DIALOG_END          (RID_FILTER_START +  19)
 #define RID_XSLT_DIALOG_START       (RID_FILTER_START +  20)
-#define RID_XSLT_DIALOG_END         (RID_FILTER_START +  69)
-#define RID_PDF_OLD_EXPORT_DLG      (RID_FILTER_START +  70)
+//      RID_XSLT_DIALOG_END         (RID_FILTER_START +  69)
 
 #define DLG_EXPORT_EPCT                 (RID_GOODIES_START+ 0)
 #define DLG_EXPORT_GIF                  (RID_GOODIES_START+ 1)

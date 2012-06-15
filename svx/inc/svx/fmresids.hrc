@@ -70,10 +70,7 @@
 #define RID_SVXIMG_NAVIGATIONBAR                    SID_FM_NAVIGATIONBAR
 
 // Dialog-Id's -----------------------------------------------------------
-#define RID_SVXTBX_FORM                             (RID_FORMS_START + 1)
 #define TBX_FORM                                    (RID_FORMS_START + 2)
-#define RID_SVXDLG_ADD_TABLE                        (RID_FORMS_START + 3)
-#define RID_SVXDLG_TAB_ORDER                        (RID_FORMS_START + 4)
 #define RID_SVXDLG_SETFORM                          (RID_FORMS_START + 5)
 #define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 6)
 #define RID_SVXDLG_ADD_DATAITEM                     (RID_FORMS_START + 12)
@@ -133,11 +130,9 @@
 #define RID_STR_UNDO_CONTAINER_REMOVE               (RID_FORMS_START +  16)
 #define RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE      (RID_FORMS_START +  27)
 #define RID_STR_UNDO_CONTAINER_REPLACE              (RID_FORMS_START +  28)
-#define RID_STR_UNDO_TABORDER                       (RID_FORMS_START +  29)
 #define RID_STR_UNDO_DELETE_LOGICAL                 (RID_FORMS_START +  30)
 #define RID_STR_UNDO_MODEL_REPLACE                  (RID_FORMS_START +  31)
 #define RID_STR_NAVIGATIONBAR                       (RID_FORMS_START +  32)
-#define RID_STR_DEFAULT_CONTROL                     (RID_FORMS_START +  33)
 #define RID_STR_FORM                                (RID_FORMS_START +  36)
 #define RID_STR_FIELDSELECTION                      (RID_FORMS_START +  37)
 #define RID_STR_NO_PROPERTIES                       (RID_FORMS_START +  38)

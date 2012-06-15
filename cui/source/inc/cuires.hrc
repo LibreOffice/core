@@ -24,10 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _CUI_RESID_HRC
 #define _CUI_REDID_HRC
-
-// include ------------------------------------------------------------------
 
 #include <sfx2/sfx.hrc>
 #include <sfx2/dialogs.hrc>
@@ -36,7 +35,7 @@
 
 // Gallery
 #define RID_CUI_GALLERY_START               (RID_SVX_START + 360)
-#define RID_CUI_GALLERY_END                 (RID_SVX_START + 410)
+//      RID_CUI_GALLERY_END                 (RID_SVX_START + 410)
 
 // tab pages
 // used in "dialogs"
@@ -130,10 +129,8 @@
 #define OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE      ( RID_OFA_START + 256 )
 #define RID_OFADLG_OPTIONS_TREE_PAGES   (RID_OFA_START + 116)
 #define RID_OFADLG_OPTIONS_TREE         (RID_OFA_START + 115)
-#define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
 #define RID_RIDER_SLL_SITE              (RID_OFA_START + 100)//?
 #define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)//?
-#define RID_OFADLG_OPTIONS_TREE_HINT    (RID_OFA_START + 118)//?
 
 // options
 #define RID_SVXDLG_WEBCONNECTION_INFO       (RID_SVX_START + 301)
@@ -141,7 +138,6 @@
 #define RID_SVXPAGE_ONLINEUPDATE            (RID_SVX_START + 298)
 #define OFA_TP_MEMORY                   (RID_OFA_START + 250)
 #define RID_SVXPAGE_INET_SECURITY           (RID_SVX_START + 200)
-#define RID_SVXPAGE_INET_SEARCH             (RID_SVX_START + 160)
 #define RID_SVXPAGE_INET_PROXY              (RID_SVX_START + 157)
 #define RID_SVXPAGE_INET_MAIL               (RID_SVX_START + 155)
 #define RID_SVXPAGE_INET_MOZPLUGIN          (RID_SVX_START + 2161)
@@ -212,7 +208,6 @@
 #define RID_SVXDLG_SEARCHATTR               (RID_SVX_START +  22)
 #define RID_SVXDLG_HYPHENATE                (RID_SVX_START +  30)
 #define RID_SVXDLG_THESAURUS                (RID_SVX_START +  31)
-#define RID_SVXDLG_THES_LANGUAGE            (RID_SVX_START +  38)
 #define RID_SVXSTR_HMERR_CHECKINSTALL       (RID_SVX_START +  94)
 
 // hyperlink dialog
@@ -321,7 +316,6 @@
 #define RID_SVXDLG_SEARCHSIMILARITY         (RID_SVX_START +  23)
 
 // customize
-
 #define RID_SVXDLG_CUSTOMIZE                (RID_SVX_START + 291)
 #define RID_SVXPAGE_MENUS                   (RID_SVX_START + 292)
 #define RID_SVXPAGE_KEYBOARD                (RID_SVX_START + 293)
@@ -429,10 +423,6 @@
 #define RID_SVXSTR_EVENT_RIGHTCLICK                         (RID_SVX_START + 1192)
 #define RID_SVXSTR_EVENT_CALCULATE                          (RID_SVX_START + 1193)
 #define RID_SVXSTR_EVENT_CONTENTCHANGED                     (RID_SVX_START + 1194)
-
-#define RID_CUISTR_CONTROLS_CONTINUOUS                      (RID_SVX_START + 1195)
-#define RID_CUISTR_CONTROLS_INVISIBLE                       (RID_SVX_START + 1196)
-#define RID_CUISTR_CONTROLS_INSERTTABLE                     (RID_SVX_START + 1197)
 
 #define RID_SVXDLG_CERTPATH                                 (RID_SVX_START + 1198)
 

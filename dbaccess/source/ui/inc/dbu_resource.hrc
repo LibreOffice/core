@@ -107,7 +107,6 @@
 #define DLG_COLLECTION_VIEW             RID_DIALOG_START + 27
 #define DLG_DATABASE_TYPE_CHANGE        RID_DIALOG_START + 28
 #define DLG_DATABASE_WIZARD             RID_DIALOG_START + 29
-#define RID_EXTENSION_NOT_PRESENT_DLG   RID_DIALOG_START + 30
 #define DLG_TEXT_CONNECTION_SETTINGS    RID_DIALOG_START + 31
 #define DLG_TABLE_FILTER                RID_DIALOG_START + 32
 //========================================================================
@@ -126,7 +125,6 @@
 #define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 11
 #define TAB_WIZ_COPYTABLE               RID_PAGE_START + 12
     // FREE
-// free
 #define PAGE_LDAP                       RID_PAGE_START + 15
 #define TAB_PAGE_USERADMIN              RID_PAGE_START + 16
 #define PAGE_MYSQL_ODBC                 RID_PAGE_START + 17
@@ -137,11 +135,8 @@
 #define PAGE_ADVANCED_SETTINGS_SPECIAL  RID_PAGE_START + 23
 #define PAGE_MYSQL_NATIVE               RID_PAGE_START + 24
     // FREE
-    // FREE
 #define PAGE_ORACLE_JDBC                RID_PAGE_START + 27
 #define PAGE_TABLESUBSCRIPTION          RID_PAGE_START + 28
-    // FREE
-    // FREE
     // FREE
 #define PAGE_MOZILLA                    RID_PAGE_START + 32
 #define PAGE_DS_ORACLE_ADVANCED_SETTINGS RID_PAGE_START + 33
@@ -202,28 +197,6 @@
 #define QUERY_USERADMIN_DELETE_USER     RID_QUERYBOX_START + 12
 #define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
 
-
-
-
-//========================================================================
-// warning boxes
-
-
-//========================================================================
-// toolboxes
-
-#define RID_BRW_TAB_TOOLBOX             RID_TOOLBOX_START +  0
-#define RID_BRW_QRY_TOOLBOX             RID_TOOLBOX_START +  1
-#define RID_QRY_TOOLBOX_SQL             RID_TOOLBOX_START +  2
-#define RID_BRW_QUERYDESIGN_TOOLBOX     RID_TOOLBOX_START +  3
-#define RID_BRW_REALTIONDESIGN_TOOLBOX  RID_TOOLBOX_START +  4
-#define RID_BRW_APPLICATION_TOOLBOX     RID_TOOLBOX_START +  5
-
-//========================================================================
-// bitmaps
-
-// start with   RID_BITMAP_START
-
 //========================================================================
 // images
 
@@ -237,14 +210,9 @@
 #define QUERY_TREE_ICON                 RID_IMAGE_START +  7
 #define DATABASE_TREE_ICON              RID_IMAGE_START +  8
 // free
-// free
-// free
 #define IMG_PKEYICON                    RID_IMAGE_START + 12
 // free
-// free
 #define IMG_DATABASE_CONNECTED          RID_IMAGE_START + 15
-// free
-//  ...
 // free
 #define REPORTFOLDER_TREE_ICON          RID_IMAGE_START + 24
 #define IMG_FORMFOLDER_TREE_L           RID_IMAGE_START + 39
@@ -256,7 +224,6 @@
 #define FORM_TREE_ICON                  RID_IMAGE_START + 51
 #define REPORT_TREE_ICON                RID_IMAGE_START + 52
 // free
-// free
 #define FORMFOLDER_TREE_ICON            RID_IMAGE_START + 55
 
 
@@ -264,17 +231,11 @@
 // image lists
 #define IMG_JOINS                       RID_IMAGELIST_START +  0
 #define IMG_INDEX_DLG_SC                RID_IMAGELIST_START +  1
-// free
 #define IMG_INDEX_DLG_LC                RID_IMAGELIST_START +  3
-// free
 #define IMP_FORM_SC                     RID_IMAGELIST_START +  5
-// free
 #define IMP_FORM_LC                     RID_IMAGELIST_START +  7
-// free
 #define IMP_REPORT_SC                   RID_IMAGELIST_START +  9
-// free
 #define IMP_REPORT_LC                   RID_IMAGELIST_START + 11
-// free
 
 //========================================================================
 // menus
@@ -287,12 +248,10 @@
 #define RID_QUERYCOLPOPUPMENU           RID_MENU_START +  5
 #define RID_QUERYFUNCTION_POPUPMENU     RID_MENU_START +  6
 #define RID_TABLEDESIGNROWPOPUPMENU     RID_MENU_START +  7
-#define RID_BRW_TABLEDESIGN_TOOLBOX     RID_MENU_START +  8
 #define RID_SBA_RTF_PKEYPOPUP           RID_MENU_START +  9
 #define RID_MENU_APP_EDIT               RID_MENU_START + 10
 #define RID_MENU_APP_NEW                RID_MENU_START + 11
 #define RID_MENU_APP_PREVIEW            RID_MENU_START + 12
-#define RID_NEW_FORM                    RID_MENU_START + 13
 #define MENU_BROWSER_DEFAULTCONTEXT     RID_MENU_START + 14
 #define RID_MENU_REFRESH_DATA           RID_MENU_START + 15
 #define RID_MENU_JOINVIEW_CONNECTION    RID_MENU_START + 16
@@ -349,27 +308,18 @@
 #define STR_TABLEDESIGN_NO_PRIM_KEY         RID_STR_GEN_START + 38
     // FREE
 #define RID_STR_EXTENSION_NOT_PRESENT       RID_STR_GEN_START + 40
-#define RID_STR_EXTENSION_NAME              RID_STR_GEN_START + 41
 
 //========================================================================
 // untyped resources
 
-// free
 #define RSC_CHARSETS                    RID_UNTYPED_START +  2
-// free
 #define RSC_QUERY_OBJECT_TYPE           RID_UNTYPED_START +  4
 #define IMG_TABLESUBCRIPTION_SC         RID_UNTYPED_START +  5
-// free
 #define IMG_TABLESUBCRIPTION_LC         RID_UNTYPED_START +  7
-// free
 #define IMG_QUERYADMINISTRATION_SC      RID_UNTYPED_START +  9
-// free
 #define IMG_QUERYADMINISTRATION_LC      RID_UNTYPED_START + 11
-// free
 #define IMG_DOCUMENTLINKS_SC            RID_UNTYPED_START + 13
-// free
 #define IMG_DOCUMENTLINKS_LC            RID_UNTYPED_START + 15
-// free
 
 //========================================================================
 // various

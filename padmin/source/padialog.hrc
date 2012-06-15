@@ -76,47 +76,22 @@
 #define RID_PA_TXT_TESTPAGE_PRINTED 1005
 
 #define RID_ERR_PRINTERNOTREMOVEABLE    1006
-#define RID_ERR_COMMANDCONNECTED      1007
-#define RID_ERR_FILENOTFOUND       1008
 #define RID_ERR_NOWRITE            1009
 #define RID_ERR_NOPRINTER          1013
-#define RID_ERR_FILEOPENREAD       1016
-#define RID_ERR_FILEOPENWRITE      1017
 #define RID_QRY_PRTNAME            1022
-
-#define RID_METRICOPTIONS_DLG      1029
-#define RID_METDLG_BTN_OK             1
-#define RID_METDLG_BTN_CANCEL         2
-#define RID_METDLG_BTN_SELECTION      3
-#define RID_METDLG_BTN_ALL            4
-#define RID_METDLG_BTN_CORRECT        5
-
-#define RID_TXT_REFETCH                 1031
 
 #define RID_BXT_TESTPAGE                1034
 #define RID_BXT_ENVIRONMENT             1035
 
 #define RID_YOU_SURE                    1040
-
 #define RID_ERR_REMOVEDRIVERFAILED          1041
-
 #define RID_BUTTERFLY                   1047
-
-#define RID_COMMAND_TXT_MODIFY              1049
-#define RID_COMMAND_TXT_ADDENTRY            1050
 #define RID_ERR_REMOVESGENPRT               1051
-#define RID_PA_TXT_NOWRITE              1052
-
-
-#define RID_TESTPAGESAVE                1055
-
 
 #define RID_QUERY_REMOVEDRIVER          1058
 #define RID_QUERY_REMOVEPRINTER         1059
 #define RID_QUERY_DRIVERUSED            1062
 #define RID_ERR_REMOVEDEFAULTDRIVER         1063
-
-#define RID_TXT_IMPORTTITLE                      1066
 
 #define RID_TXT_TESTPAGE_MODEL                   1068
 #define RID_TXT_TESTPAGE_QUEUE                   1069

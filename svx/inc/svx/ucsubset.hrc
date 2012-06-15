@@ -31,7 +31,6 @@
 // (see the Unicode spec and TrueType::OS2.ulUnicodeRange description)
 #define RID_SUBSETMAP                   1243
 #define RID_SUBSET_START                (RID_SVX_START + 901)
-#define RID_SUBSET_COUNT                95
 
 #define RID_SUBSETSTR_BASIC_LATIN               (RID_SUBSET_START + 0)
 #define RID_SUBSETSTR_LATIN_1                   (RID_SUBSET_START + 1)
@@ -152,4 +151,5 @@
 #define RID_SUBSETSTR_BOPOMOFO_EXTENDED         (RID_SUBSET_START + 225)
 #define RID_SUBSETSTR_KATAKANA_PHONETIC         (RID_SUBSET_START + 226)
 
-#define RID_SUBSET_END                          (RID_SUBSET_START + 299)
+//      RID_SUBSET_END                          (RID_SUBSET_START + 299)
+

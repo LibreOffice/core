@@ -37,82 +37,66 @@
 #define CREATERESMGR( Name )        ResMgr::CreateResMgr( CREATERESMGR_NAME( Name ) )
 
 #define RID_SFX_START               260
-#define RID_SFX_END                 9999
+//      RID_SFX_END                 9999
 
 #define RID_LIB_START               10000
 #define RID_LIB_END                 19999
 
 #define RID_SVX_START               (RID_LIB_START)
-#define RID_SVX_END                 (RID_LIB_START+499)
+//      RID_SVX_END                 (RID_LIB_START+499)
 
-#define RID_SBASIC_START            (RID_LIB_START+500)
-#define RID_SBASIC_END              (RID_LIB_START+2999)
+// free: 500-2999
 
 #define RID_BASIC_START             (RID_LIB_START+3000)
-#define RID_BASIC_END               (RID_LIB_START+4499)
+//      RID_BASIC_END               (RID_LIB_START+4499)
 
 #define RID_UUI_START               (RID_LIB_START+4500)
-#define RID_UUI_END                 (RID_LIB_START+4599)
+//      RID_UUI_END                 (RID_LIB_START+4599)
 
-#define RID_HELP_START              (RID_LIB_START+4600)
-#define RID_HELP_END                (RID_LIB_START+4799)
-
-#define RID_MAIL_START              (RID_LIB_START+4800)
-#define RID_MAIL_END                (RID_LIB_START+4849)
+// free: 4600-4849
 
 #define RID_BASICIDE_START          (RID_LIB_START+4850)
-#define RID_BASICIDE_END            (RID_LIB_START+4949)
+//      RID_BASICIDE_END            (RID_LIB_START+4949)
 
 #define RID_SVXITEMS_START          (RID_LIB_START+4950)
 #define RID_SVXITEMS_END            (RID_LIB_START+5599)
 
-#define RID_SBA_START               (RID_LIB_START+5600)
-#define RID_SBA_END                 (RID_LIB_START+5649)
-
-#define RID_ISETBRW_START           (RID_LIB_START+5650)
-#define RID_ISETBRW_END             (RID_LIB_START+5699)
+// free: 5600-5699
 
 #define RID_EXTENSIONS_START        (RID_LIB_START+5700)
-#define RID_EXTENSIONS_END          (RID_LIB_START+5799)
+//      RID_EXTENSIONS_END          (RID_LIB_START+5799)
 
 #define RID_EDIT_START              (RID_LIB_START+5800)
 #define RID_EDIT_END                (RID_LIB_START+6369)
 
 #define RID_FPICKER_START           (RID_LIB_START+6370)
-#define RID_FPICKER_END             (RID_LIB_START+6389)
+//      RID_FPICKER_END             (RID_LIB_START+6389)
 
 #define RID_SVTOOLS_START           (RID_LIB_START+6390)
-#define RID_SVTOOLS_END             (RID_LIB_START+6499)
+//      RID_SVTOOLS_END             (RID_LIB_START+6499)
 
-#define RID_INET_START              (RID_LIB_START+6500)
-#define RID_INET_END                (RID_LIB_START+6559)
-
-#define RID_SO2_START               (RID_LIB_START+6560)
-#define RID_SO2_END                 (RID_LIB_START+6599)
-
-#define RID_SI_START                (RID_LIB_START+6600)
-#define RID_SI_END                  (RID_LIB_START+6799)
+// free: 6500-6799
 
 #define RID_DLG_START               (RID_LIB_START+6800)
-#define RID_DLG_END                 (RID_LIB_START+6899)
+//      RID_DLG_END                 (RID_LIB_START+6899)
 
 #define RID_OFA_START               (RID_LIB_START+6900)
-#define RID_OFA_END                 (RID_LIB_START+7399)
+//      RID_OFA_END                 (RID_LIB_START+7399)
 
 #define RID_GOODIES_START           (RID_LIB_START+7400)
-#define RID_GOODIES_END             (RID_LIB_START+7449)
+//      RID_GOODIES_END             (RID_LIB_START+7449)
 
 #define RID_SVL_START               (RID_LIB_START+7450)
-#define RID_SVL_END                 (RID_LIB_START+7899)
+//      RID_SVL_END                 (RID_LIB_START+7899)
 
 #define RID_CHAOS_START             (RID_LIB_START+7900)
-#define RID_CHAOS_END               (RID_LIB_START+7999)
+//      RID_CHAOS_END               (RID_LIB_START+7999)
 
 #define RID_FORMS_START             (RID_LIB_START+8000)
-#define RID_FORMS_END               (RID_LIB_START+8999)
+//      RID_FORMS_END               (RID_LIB_START+8999)
 
 #define RID_FORMLAYER_START         (RID_LIB_START+9000)
-#define RID_FORMLAYER_END           (RID_LIB_START+9199)
+//      RID_FORMLAYER_END           (RID_LIB_START+9199)
 
 #define RID_DBACCESS_START          (RID_LIB_START+9200)
 #define RID_DBACCESS_END            (RID_LIB_START+9699)
@@ -120,11 +104,10 @@
 #define RID_MORE_EXTENSIONS_START   (RID_LIB_START+9700)
 #define RID_MORE_EXTENSIONS_END     (RID_LIB_START+9999)
 
-#define RID_DB_EXTENSIONS_START     (RID_LIB_START+10000)
-#define RID_DB_EXTENSIONS_END       (RID_LIB_START+10199)
+// free: 10000-10199
 
 #define RID_FILTER_START            (RID_LIB_START+10200)
-#define RID_FILTER_END              (RID_LIB_START+10299)
+//      RID_FILTER_END              (RID_LIB_START+10299)
 
 // do *NOT* add more ranges here, RID_LIB_END is (RID_LIB_START + 10000)
 
@@ -132,31 +115,21 @@
 #define RID_APP_END                 31999
 
 #define RID_SW_START                            (20000)
-#define RID_SW_END                              (25999)
+//      RID_SW_END                              (25999)
 
-#define RID_SC_START                            (26000)
-#define RID_SC_END                              (26999)
+// free: 26000-26999
 
 #define RID_SD_START                            (27000)
-#define RID_SD_END                              (27999)
+//      RID_SD_END                              (27999)
 
 #define RID_OBJ_START               (30000)
-#define RID_OBJ_END                 (32767)
-
-#define RID_SIM_START                           (RID_OBJ_START+   0)
-#define RID_SIM_END                             (RID_OBJ_START+ 255)
-
-#define RID_SMA_START                           (RID_OBJ_START+ 256)
-#define RID_SMA_END                             (RID_OBJ_START+ 511)
-
-#define RID_SCH_START                           (RID_OBJ_START+ 512)
-#define RID_SCH_END                             (RID_OBJ_START+ 767)
+//      RID_OBJ_END                 (32767)
 
 #define RID_RPT_START                           (RID_OBJ_START+768)
-#define RID_RPT_END                             (RID_OBJ_START+1000)
+//      RID_RPT_END                             (RID_OBJ_START+1000)
 
 #define RID_FORMULA_START                       (RID_OBJ_START+1001)
-#define RID_FORMULA_END                         (RID_OBJ_START+1200)
+//      RID_FORMULA_END                         (RID_OBJ_START+1200)
 // Help-Ids --------------------------------------------------------------
 
 #define HID_OK_BUTTON               0

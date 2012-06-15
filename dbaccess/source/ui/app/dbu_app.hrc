@@ -31,7 +31,6 @@
 #define RID_STR_NEW_TABLE                   RID_STR_APP_START + 4
 #define RID_STR_NEW_TABLE_AUTO              RID_STR_APP_START + 5
 #define RID_STR_NEW_VIEW                    RID_STR_APP_START + 6
-#define RID_STR_NEW_VIEW_AUTO               RID_STR_APP_START + 7
 #define RID_STR_NEW_QUERY                   RID_STR_APP_START + 8
 #define RID_STR_NEW_QUERY_AUTO              RID_STR_APP_START + 9
 #define STR_QUERY_DELETE_DATASOURCE         RID_STR_APP_START + 10

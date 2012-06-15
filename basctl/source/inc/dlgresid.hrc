@@ -19,8 +19,6 @@
 #ifndef _BASCTL_DLGRESID_HRC
 #define _BASCTL_DLGRESID_HRC
 
-// include     -----------------------------------------------------------
-
 #include <svl/solar.hrc>
 
 // Dialog Control Id's -----------------------------------------------------------
@@ -50,6 +48,7 @@
 #define RID_STR_TRANSLATION_DEFAULT         ( RID_DLG_START +  22 )
 #define RID_STR_CLASS_TREECONTROL           ( RID_DLG_START +  23 )
 #define RID_STR_CLASS_SPINCONTROL           ( RID_DLG_START +  24 )
+
 // Property Browser Headline Id's -----------------------------------------------------------
 
 #define RID_STR_BRWTITLE_PROPERTIES         ( RID_DLG_START +  60 )
@@ -61,7 +60,6 @@
 #define RID_DLG_MANAGE_LANGUAGE             ( RID_DLG_START +  70 )
 #define RID_QRYBOX_LANGUAGE                 ( RID_DLG_START +  71 )
 #define RID_DLG_SETDEF_LANGUAGE             ( RID_DLG_START +  72 )
-#define RID_DLG_ADD_LANGUAGE                ( RID_DLG_START +  73 )
 
 // -----------------------------------------------------------------------
 

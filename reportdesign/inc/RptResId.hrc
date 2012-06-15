@@ -170,7 +170,6 @@
 #define RID_STR_STARTNEWPAGE                (RID_STRING_START + 98)
 #define RID_STR_RESETPAGENUMBER             (RID_STRING_START + 99)
 #define RID_STR_COLUMNHEADERFOOTER_DELETE   (RID_STRING_START + 100)
-#define RID_STR_MINHEIGHTNEWPAGE            (RID_STRING_START + 101)
 #define RID_STR_PRINTWHENGROUPCHANGE        (RID_STRING_START + 102)
 #define RID_STR_REPORTHEADERFOOTER_INSERT   (RID_STRING_START + 103)
 #define RID_STR_REPORTHEADERFOOTER_DELETE   (RID_STRING_START + 104)
@@ -244,7 +243,6 @@
 #define RID_PAGE_BACKGROUND                 ( RID_PAGE_START +  7 )
 #define RID_PAGE_TWOLN                      ( RID_PAGE_START +  8 )
 #define RID_PAGEDIALOG_LINE                 ( RID_PAGE_START +  9 )
-#define RID_PAGE_LINE                       ( RID_PAGE_START + 10 )
 #define RID_PAGE_ALIGNMENT                  ( RID_PAGE_START + 11 )
 
 // -----------------------------------------------------------------------

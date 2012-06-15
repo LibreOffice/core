@@ -40,7 +40,6 @@
 
 #define STR_SEPARATOR               (RC_GLOBALS_BEGIN + 4)
 
-
 #define STR_BASIC_IMPORT            (RC_GLOBALS_BEGIN + 5)
 #define STR_BASIC_BEGIN             (RC_GLOBALS_BEGIN + 6)
 #define STR_BASIC_END               (RC_GLOBALS_BEGIN + 7)
@@ -109,7 +108,6 @@
 #define ERR_CLPBRD_READ             (RC_GLOBALS_BEGIN + 1)
 #define ERR_CLPBRD_WRITE            (RC_GLOBALS_BEGIN + 2)
 #define MSG_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 3)
-
 
 // ACC ---------------------------------------------------------------
 
@@ -196,8 +194,6 @@
 #define DLG_FRM_STD                 (RC_GLOBALS_BEGIN +  36)
 #define DLG_FRM_GRF                 (RC_GLOBALS_BEGIN +  37)
 #define DLG_FRM_OLE                 (RC_GLOBALS_BEGIN +  38)
-
-#define RID_INPUT_TOOLBOX           (RC_GLOBALS_BEGIN +  39)
 
 #define TP_MACRO_ASSIGN             (RC_GLOBALS_BEGIN +  40)
 #define TP_FRM_URL                  (RC_GLOBALS_BEGIN +  42)

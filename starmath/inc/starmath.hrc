@@ -24,6 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _STARMATH_HRC
 #define _STARMATH_HRC
 
@@ -88,7 +89,6 @@
 #define SID_DUMMY                   (SID_SMA_START + 254)
 
 
-//#define RID_OPTIONSDIALOG         (RID_APP_START + 1)
 #define RID_FONTDIALOG              (RID_APP_START + 2)
 #define RID_FONTSIZEDIALOG          (RID_APP_START + 3)
 #define RID_FONTTYPEDIALOG          (RID_APP_START + 4)
@@ -97,45 +97,31 @@
 #define RID_PRINTOPTIONPAGE         (RID_APP_START + 7)
 #define RID_SYMBOLDIALOG            (RID_APP_START + 8)
 #define RID_SYMDEFINEDIALOG         (RID_APP_START + 9)
-#define RID_EXTRAOPTIONPAGE         (RID_APP_START + 10)
 #define RID_PRINTUIOPTIONS          (RID_APP_START + 11)
 
 #define RID_MATH_TOOLBOX            (RID_APP_START + 50)
 
 #define RID_DEFAULTSAVEQUERY        (RID_APP_START + 102)
-#define RID_WRITESYMBOLERROR        (RID_APP_START + 202)
-#define RID_READSYMBOLERROR         (RID_APP_START + 203)
 #define RID_NOMATHTYPEFACEWARNING   (RID_APP_START + 204)
 #define RID_OBJECTNAME              (RID_APP_START + 501)
     // free
 #define RID_UNDOEDITNAME            (RID_APP_START + 503)
 #define RID_UNDOFORMATNAME          (RID_APP_START + 504)
-#define RID_APPICO                  (RID_APP_START + 601)
-#define RID_TMPICO                  (RID_APP_START + 603)
 #define RID_COMMANDMENU             (RID_APP_START + 701)
 #define RID_VIEWMENU                (RID_APP_START + 702)
 #define RID_DISTANCEMENU            (RID_APP_START + 703)
 #define RID_FONTMENU                (RID_APP_START + 704)
-#define RID_STARTUPWINDOW           (RID_APP_START + 800)
 #define RID_TOOLBOXWINDOW           (RID_APP_START + 801)
 #define RID_CMDBOXWINDOW            (RID_APP_START + 802)
 #define RID_FONTREGULAR             (RID_APP_START + 804)
 #define RID_FONTITALIC              (RID_APP_START + 805)
 #define RID_FONTBOLD                (RID_APP_START + 806)
-//#define RID_PRINTOPTION           (RID_APP_START + 807)
 #define RID_DOCUMENTSTR             (RID_APP_START + 808)
 #define RID_SYMBOLFILESSTR          (RID_APP_START + 809)
 #define RID_ALLFILESSTR             (RID_APP_START + 810)
-#define RID_CREATORSTR              (RID_APP_START + 811)
-#define RID_FILESMFTYP              (RID_APP_START + 812)
-#define RID_FILESYMTYP              (RID_APP_START + 813)
-#define RID_SMMENU                  (RID_APP_START + 814)
-#define RID_SMACCEL                 (RID_APP_START + 815)
 #define RID_STATUSBAR               (RID_APP_START + 816)
-#define RID_APPNAMESTR              (RID_APP_START + 817)
 
 #define STR_MATH_DOCUMENT_FULLTYPE_CURRENT  (RID_APP_START + 821)
-#define RID_SMPLUGINMENU                    (RID_APP_START + 822)
 #define STR_STATSTR_READING                 (RID_APP_START + 823)
 #define STR_STATSTR_WRITING                 (RID_APP_START + 824)
 #define STR_CMDBOXWINDOW                    (RID_APP_START + 825)
@@ -179,16 +165,7 @@
 #define RID_ATTRIBUTES_CAT              (RID_APP_START + 1106)
 #define RID_BRACKETS_CAT                (RID_APP_START + 1107)
 #define RID_FORMAT_CAT                  (RID_APP_START + 1108)
-#define RID_UNBINOPS_CAT_HLP            (RID_APP_START + 1109)
-#define RID_RELATIONS_CAT_HLP           (RID_APP_START + 1110)
-#define RID_SETOPEROPERATIONS_CAT_HLP   (RID_APP_START + 1111)
-#define RID_FUNCTIONS_CAT_HLP           (RID_APP_START + 1112)
-#define RID_OPERATORS_CAT_HLP           (RID_APP_START + 1113)
-#define RID_ATTRIBUTES_CAT_HLP          (RID_APP_START + 1114)
-#define RID_BRACKETS_CAT_HLP            (RID_APP_START + 1115)
-#define RID_FORMAT_CAT_HLP              (RID_APP_START + 1116)
 #define RID_MISC_CAT                    (RID_APP_START + 1117)
-#define RID_MISC_CAT_HLP                (RID_APP_START + 1118)
 
 // new resource ID's
 #define RID_PLUSX                   (RID_APP_START + 1201)
@@ -241,8 +218,8 @@
 #define RID_DLARROW                 (RID_APP_START + 1324)
 #define RID_DLRARROW                (RID_APP_START + 1325)
 #define RID_DRARROW                 (RID_APP_START + 1326)
-// Game theory
 
+// Game theory
 #define RID_XPRECEDESY              (RID_APP_START + 1327)
 #define RID_XNOTPRECEDESY           (RID_APP_START + 1328)
 #define RID_XSUCCEEDSY              (RID_APP_START + 1329)
@@ -251,7 +228,6 @@
 #define RID_XSUCCEEDSEQUALY         (RID_APP_START + 1332)
 #define RID_XPRECEDESEQUIVY         (RID_APP_START + 1333)
 #define RID_XSUCCEEDSEQUIVY         (RID_APP_START + 1334)
-
 
 #define RID_XINY                    (RID_APP_START + 1401)
 #define RID_XNOTINY                 (RID_APP_START + 1402)
@@ -416,35 +392,9 @@
 #define RID_MISC_MENU               (RID_APP_START + 2172)
 #define RID_FUNCTIONSOTHER1_MENU    (RID_APP_START + 2173)
 
-#define RID_XPP_LINE        (RID_APP_START + 3000)
-#define RID_XPP_DLINE       (RID_APP_START + 3001)
-#define RID_XPP_SQRT        (RID_APP_START + 3002)
-#define RID_XPP_SQRT2       (RID_APP_START + 3003)
-#define RID_XPP_HAT         (RID_APP_START + 3004)
-#define RID_XPP_TILDE       (RID_APP_START + 3005)
-#define RID_XPP_BAR         (RID_APP_START + 3006)
-#define RID_XPP_VEC         (RID_APP_START + 3007)
-#define RID_XPP_LBRACE      (RID_APP_START + 3008)
-#define RID_XPP_RBRACE      (RID_APP_START + 3009)
-#define RID_XPP_LPARENT     (RID_APP_START + 3010)
-#define RID_XPP_RPARENT     (RID_APP_START + 3011)
-#define RID_XPP_LANGLE      (RID_APP_START + 3012)
-#define RID_XPP_RANGLE      (RID_APP_START + 3013)
-#define RID_XPP_LBRACKET    (RID_APP_START + 3014)
-#define RID_XPP_RBRACKET    (RID_APP_START + 3015)
-#define RID_XPP_LDBRACKET   (RID_APP_START + 3016)
-#define RID_XPP_RDBRACKET   (RID_APP_START + 3017)
-#define RID_XPP_LCEIL       (RID_APP_START + 3018)
-#define RID_XPP_RCEIL       (RID_APP_START + 3019)
-#define RID_XPP_LFLOOR      (RID_APP_START + 3020)
-#define RID_XPP_RFLOOR      (RID_APP_START + 3021)
-#define RID_XPP_OVERBRACE   (RID_APP_START + 3022)
-#define RID_XPP_UNDERBRACE  (RID_APP_START + 3023)
-
 #define RID_LOCALIZED_NAMES             (RID_APP_START + 3101)
 #define RID_UI_SYMBOL_NAMES             (RID_APP_START + 3102)
 #define RID_EXPORT_SYMBOL_NAMES         (RID_APP_START + 3103)
-#define RID_LOCALIZED_SYMBOLSET_NAMES   (RID_APP_START + 3104)
 #define RID_UI_SYMBOLSET_NAMES          (RID_APP_START + 3105)
 #define RID_EXPORT_SYMBOLSET_NAMES      (RID_APP_START + 3106)
 #define RID_FRENCH_50_NAMES             (RID_APP_START + 3107)

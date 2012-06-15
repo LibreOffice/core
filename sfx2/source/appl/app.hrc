@@ -39,7 +39,6 @@
 #define STR_ISMODIFIED                          (RID_SFX_APP_START+11)
 
 #define RID_FULLSCREENTOOLBOX                   (RID_SFX_APP_START+42)
-#define RID_RECORDINGTOOLBOX                    (RID_SFX_APP_START+43)
 #define RID_ENVTOOLBOX                          (RID_SFX_APP_START+44)
 
 #define STR_QUITAPP                             (RID_SFX_APP_START+59)

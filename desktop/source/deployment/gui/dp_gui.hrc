@@ -39,7 +39,6 @@
 #define RID_EM_BTN_HELP                        11
 #define RID_EM_BTN_ADD                         12
 #define RID_EM_BTN_CHECK_UPDATES               13
-#define RID_EM_BTN_OPTIONS                     14
 #define RID_EM_BTN_CANCEL                      15
 #define RID_EM_FT_TYPE_EXTENSIONS              16
 #define RID_EM_CBX_BUNDLED                     17
@@ -120,24 +119,18 @@
 #define RID_DLG_UPDATE_NOINSTALL            20
 #define RID_DLG_UPDATE_NODEPENDENCY         21
 #define RID_DLG_UPDATE_NODEPENDENCY_CUR_VER 22
-#define RID_DLG_UPDATE_NOPERMISSION         23
-#define RID_DLG_UPDATE_NOPERMISSION_VISTA   24
 #define RID_DLG_UPDATE_BROWSERBASED         25
 #define RID_DLG_UPDATE_PUBLISHER_LABEL      26
 #define RID_DLG_UPDATE_PUBLISHER_LINK       27
 #define RID_DLG_UPDATE_RELEASENOTES_LABEL   28
 #define RID_DLG_UPDATE_RELEASENOTES_LINK    29
-#define RID_DLG_UPDATE_NOUPDATE             30
 #define RID_DLG_UPDATE_VERSION              31
 #define RID_DLG_UPDATE_IGNORE               32
 #define RID_DLG_UPDATE_ENABLE               33
 #define RID_DLG_UPDATE_IGNORE_ALL           34
 #define RID_DLG_UPDATE_IGNORED_UPDATE       35
 
-
-
 #define RID_DLG_UPDATEINSTALL                  (RID_DEPLOYMENT_GUI_START + 20)
-#define RID_INFOBOX_UPDATE_SHARED_EXTENSION    (RID_DEPLOYMENT_GUI_START + 21)
 
 #define RID_IMG_WARNING                        (RID_DEPLOYMENT_GUI_START+56)
 #define RID_IMG_LOCKED                         (RID_DEPLOYMENT_GUI_START+58)
@@ -179,7 +172,5 @@
 #define RID_DLG_SHOW_LICENSE                    (RID_DEPLOYMENT_GUI_START+107)
 
 #define RID_DLG_LICENSE                         RID_DEPLOYMENT_LICENSE_START
-
-
 
 #endif

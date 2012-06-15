@@ -19,7 +19,7 @@
 
 #define _BASIDE_POPUPWINDOWTBX
 
-#include "tbxctl.hrc"
+#include <svl/solar.hrc>
 #include <svx/svxids.hrc>
 
 #include "idetemp.hxx"

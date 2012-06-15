@@ -140,9 +140,9 @@
 #define STR_TOOL_PANEL_SHELL                    RID_GLOB_START+116
 
 #define RID_CUSTOMANIMATION_START               RID_GLOB_START+120
-#define RID_CUSTOMANIMATION_END                 RID_GLOB_START+199
+//      RID_CUSTOMANIMATION_END                 RID_GLOB_START+199
 #define RID_ANNOTATIONS_START                   RID_GLOB_START+200
-#define RID_ANNOTATIONS_END                     RID_GLOB_START+220
+//      RID_ANNOTATIONS_END                     RID_GLOB_START+220
 #define STR_UNDO_ANIMATION                      RID_GLOB_START+221
 #define STR_UNDO_SLIDE_PARAMS                   RID_GLOB_START+222
 #define RID_SLIDESHOW_CONTEXTMENU               RID_GLOB_START+223

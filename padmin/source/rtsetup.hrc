@@ -59,7 +59,6 @@
 #define RID_RTS_DEVICE_SPACE_BOX            10
 #define RID_RTS_DEVICE_DEPTH_TXT            11
 #define RID_RTS_DEVICE_DEPTH_BOX            12
-#define RID_RTS_DEVICE_COMPRESS_BOX     13
 
 #define RID_RTS_PAPERPAGE                   4004
 #define RID_RTS_PAPER_PAPER_TXT         1

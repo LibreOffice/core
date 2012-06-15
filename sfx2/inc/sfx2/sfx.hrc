@@ -24,10 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _SFX_HRC
 #define _SFX_HRC
-
-// include ---------------------------------------------------------------
 
 #ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
@@ -120,21 +119,20 @@
 
 #define RID_SFX_APP_START                   (RID_SFX_START +  256)
 #define RID_SFX_MENU_START                  (RID_SFX_START +  768)
-#define RID_SFX_CONFIG_START                (RID_SFX_START + 1536)
+//      RID_SFX_CONFIG_START                (RID_SFX_START + 1536)
 #define RID_SFX_DOC_START                   (RID_SFX_START + 1792)
 #define RID_SFX_DIALOG_START                (RID_SFX_START + 2048)
 #define RID_SFX_BASTYP_START                (RID_SFX_START + 2304)
 #define RID_SFX_EXPLORER_START              (RID_SFX_START + 2816)
 
-#define RID_CNT_START                       (RID_SFX_START + 3072)
+//      RID_CNT_START                       (RID_SFX_START + 3072)
 
 #define RID_SFX_SFXLOCAL_START              (RID_SFX_START + 3082)
 #define RID_SFX_VIEW_START                  (RID_SFX_START + 4096)
-#define RID_SFX_NODES_START                 (RID_SFX_START + 4500)
-#define RID_CNT_START2                      (RID_SFX_NODES_START)
-#define RID_SFX_CHAOSDOC_START              (RID_SFX_START + 5120)
-#define RID_SFX_TPLCOMPONENT_START          (RID_SFX_START + 6800)
-#define RID_SFX_HELPCOMPONENT_START         (RID_SFX_START + 7000)
+//      RID_CNT_START2                      (RID_SFX_START + 4500)
+//      RID_SFX_CHAOSDOC_START              (RID_SFX_START + 5120)
+//      RID_SFX_TPLCOMPONENT_START          (RID_SFX_START + 6800)
+//      RID_SFX_HELPCOMPONENT_START         (RID_SFX_START + 7000)
 
 //--------------------------------------------------------------------
 
@@ -175,31 +173,9 @@
 
 #define MSG_QUERY_LASTVERSION               RID_SFX_START
 
-#define RID_APPFONT                         RID_SFX_START
 #define RID_APPLICATION                     RID_SFX_START
-#define RID_APPWINDOWICON                   RID_SFX_START
 #define RID_DEFAULTIMAGELIST_SC             (RID_SFX_START+15)
-#define RID_DEFAULTIMAGELIST_SM             (RID_SFX_START+16)
 #define RID_DEFAULTIMAGELIST_LC             (RID_SFX_START+17)
-#define RID_DEFAULTIMAGELIST_LM             (RID_SFX_START+18)
-#define RID_STYLEDLG                        (RID_SFX_START+28)
-#define RID_DEFAULTIMAGELIST_SMH            (RID_SFX_START+36)
-#define RID_DEFAULTIMAGELIST_LMH            (RID_SFX_START+38)
-#define RID_IMAGELIST_SCH                   (RID_SFX_START+39)
-#define RID_IMAGELIST_SMH                   (RID_SFX_START+40)
-#define RID_IMAGELIST_LCH                   (RID_SFX_START+41)
-#define RID_IMAGELIST_LMH                   (RID_SFX_START+42)
-#define RID_APPIMAGELIST_SCH                (RID_SFX_START+43)
-#define RID_APPIMAGELIST_SMH                (RID_SFX_START+44)
-#define RID_APPIMAGELIST_LCH                (RID_SFX_START+45)
-#define RID_APPIMAGELIST_LMH                (RID_SFX_START+46)
-#define RID_OFFICEIMAGELIST_SCH             (RID_SFX_START+47)
-#define RID_OFFICEIMAGELIST_SMH             (RID_SFX_START+48)
-#define RID_OFFICEIMAGELIST_LCH             (RID_SFX_START+49)
-#define RID_OFFICEIMAGELIST_LMH             (RID_SFX_START+50)
-#define RID_DEFAULTINTRO                    (RID_SFX_START+0)
-#define RID_DEFAULTINTRO_ADABAS             (RID_SFX_START+1)
-#define RID_DEFAULTINTRO_PORTAL             (RID_SFX_START+2)
 
 #define RID_STYLECATALOG                    (RID_SFX_START+1201)
 
@@ -297,20 +273,15 @@
 #define GID_APP                             GID_APPLICATION
 #define GID_HELP                            GID_APPLICATION
 
-// ------------------------------------------------------------------------
-
-#define RID_SFX_GLOBALS 1000
-
 // =========================================================================
 
 #define RID_OPTIONS_START           (SID_LIB_START +    2000)
-#define RID_OPTIONS_END             (RID_OPTIONS_START + 100)
+//      RID_OPTIONS_END             (RID_OPTIONS_START + 100)
 
 // ResId's ------------------------------------------------------------------
 
 #define RID_SFXPAGE_SAVE            (RID_OPTIONS_START +  0)
 #define RID_SFXPAGE_GENERAL         (RID_OPTIONS_START +  1)
-#define RID_SFXPAGE_SPELL           (RID_OPTIONS_START +  2)
 #define RID_SFXDLG_NEWDICT          (RID_OPTIONS_START +  3)
 #define RID_SFXDLG_EDITDICT         (RID_OPTIONS_START +  4)
 #define RID_SFXQB_DELDICT           (RID_OPTIONS_START +  5)
