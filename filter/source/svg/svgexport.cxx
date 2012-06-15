@@ -940,7 +940,6 @@ sal_Bool SVGFilter::implGenerateMetaData()
                         sal_Bool bPageNumberVisibility                = sal_False;    // default: hidden
                         sal_Bool bDateTimeVisibility                  = sal_True;     // default: visible
                         sal_Bool bFooterVisibility                    = sal_True;     // default: visible
-                        sal_Bool bHeaderVisibility                    = sal_True;     // default: visible
                         sal_Bool bDateTimeFixed                       = sal_True;     // default: fixed
 
                         FixedDateTimeField            aFixedDateTimeField;
