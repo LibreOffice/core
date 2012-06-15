@@ -123,6 +123,7 @@ private:
 
     ScDocument* mpDoc;
     ScAddress maPos;
+    SvNumberFormatter* mpNumberFormatter;
 
     DECL_LINK( TypeListHdl, void*);
     DECL_LINK( ColFormatTypeHdl, void*);

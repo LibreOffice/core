@@ -47,8 +47,6 @@
 #include "colorscale.hxx"
 #include "colorformat.hxx"
 
-#include <rtl/math.hxx>
-
 #include "globstr.hrc"
 
 #include <cassert>
@@ -685,7 +683,10 @@ namespace {
 
 void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos )
 {
-    double nVal = rtl::math::stringToDouble(rValue.GetText(), '.', ',');
+    sal_uInt32 nIndex = 0;
+    double nVal = 0;
+    SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+    pNumberFormatter->IsNumberFormat(rValue.GetText(), nIndex, nVal);
     switch(rType.GetSelectEntryPos())
     {
         case 0:
@@ -1054,7 +1055,9 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 
 IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
 {
-    maEntries.push_back( new ScCondFrmtEntry(this, mpDoc) );
+    ScCondFrmtEntry* pNewEntry = new ScCondFrmtEntry(this, mpDoc);
+    maEntries.push_back( pNewEntry );
+    pNewEntry->Select();
     RecalcAll();
     return 0;
 }

@@ -83,9 +83,10 @@ void SetType(const ScColorScaleEntry* pEntry, ListBox& aLstBox)
         aLstBox.SelectEntryPos(4);
 }
 
-void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry )
+void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter )
 {
     double nVal = 0;
+    sal_uInt32 nIndex = 0;
     switch(rLstBox.GetSelectEntryPos())
     {
         case 0:
@@ -96,16 +97,16 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry 
             break;
         case 2:
             pEntry->SetPercentile(true);
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
         case 3:
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
             pEntry->SetPercent(true);
+            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
         case 4:
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetHasValue();
             pEntry->SetValue(nVal);
             break;
@@ -305,8 +306,8 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
 
-    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get());
-    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get());
+    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get(), mpNumberFormatter);
+    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get(), mpNumberFormatter);
     GetAxesPosition(pData, maLbAxisPos);
 
     return pData;
@@ -327,8 +328,12 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
         {
             rtl::OUString aMinString = maEdMin.GetText();
             rtl::OUString aMaxString = maEdMax.GetText();
-            double nMinValue = rtl::math::stringToDouble(aMinString, '.', ',');
-            double nMaxValue = rtl::math::stringToDouble(aMaxString, '.', ',');
+            double nMinValue = 0;
+            sal_uInt32 nIndex = 0;
+            mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);
+            nIndex = 0;
+            double nMaxValue = 0;
+            mpNumberFormatter->IsNumberFormat(aMaxString, nIndex, nMinValue);
             if(rtl::math::approxEqual(nMinValue, nMaxValue) || nMinValue > nMaxValue)
                 bWarn = true;
         }
