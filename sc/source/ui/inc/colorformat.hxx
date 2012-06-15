@@ -30,6 +30,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <svl/zforlist.hxx>
 #include "anyrefdg.hxx"
 
 class ScDataBarFormat;
@@ -63,6 +64,7 @@ private:
     Edit maEdMax;
 
     rtl::OUString maStrWarnSameValue;
+    SvNumberFormatter* mpNumberFormatter;
 
     DECL_LINK(OkBtnHdl, void*);
     DECL_LINK(TypeSelectHdl, void*);
@@ -70,9 +72,8 @@ private:
     void Init();
 
 public:
-    ScDataBarSettingsDlg(Window* pParent);
-    ScDataBarSettingsDlg(Window* pParent, const ScDataBarFormatData& rData);
-    ScDataBarSettingsDlg(Window* pParent, ScDataBarFormat* pFormat);
+    ScDataBarSettingsDlg(Window* pParent, ScDocument* pDoc);
+    ScDataBarSettingsDlg(Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc);
 
     ScDataBarFormatData* GetData();
 };

@@ -30,12 +30,13 @@
 #include "colorscale.hxx"
 
 #include "colorformat.hrc"
+#include "document.hxx"
 
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow):
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc):
     ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
@@ -55,7 +56,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow):
     maLbTypeMax( this, ScResId( LB_TYPE ) ),
     maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
     maEdMin( this, ScResId( ED_MIN ) ),
-    maEdMax( this, ScResId( ED_MAX ) )
+    maEdMax( this, ScResId( ED_MAX ) ),
+    mpNumberFormatter( pDoc->GetFormatTable() )
 {
     Init();
     FreeResource();
@@ -83,9 +85,10 @@ void SetType(const ScColorScaleEntry* pEntry, ListBox& aLstBox)
         aLstBox.SelectEntryPos(4);
 }
 
-void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry )
+void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter )
 {
     double nVal = 0;
+    sal_uInt32 nIndex = 0;
     switch(rLstBox.GetSelectEntryPos())
     {
         case 0:
@@ -96,16 +99,16 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry 
             break;
         case 2:
             pEntry->SetPercentile(true);
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
         case 3:
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
             pEntry->SetPercent(true);
+            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
         case 4:
-            nVal = rtl::math::stringToDouble(rEd.GetText(), '.', ',');
+            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetHasValue();
             pEntry->SetValue(nVal);
             break;
@@ -126,7 +129,7 @@ void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
 
 }
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData):
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc):
     ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
@@ -147,7 +150,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
     maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
     maEdMin( this, ScResId( ED_MIN ) ),
     maEdMax( this, ScResId( ED_MAX ) ),
-    maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) )
+    maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) ),
+    mpNumberFormatter( pDoc->GetFormatTable() )
 {
     Init();
     FreeResource();
@@ -174,55 +178,6 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
     SetValue(rData.mpUpperLimit.get(), maEdMax);
 
     TypeSelectHdl(NULL);
-}
-
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDataBarFormat* pFormat):
-    ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
-    maBtnOk( this, ScResId( BTN_OK ) ),
-    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
-    maFlBarColors( this, ScResId( FL_BAR_COLORS ) ),
-    maFlAxes( this, ScResId( FL_AXIS ) ),
-    maFlValues( this, ScResId( FL_VALUES ) ),
-    maFtMin( this, ScResId( FT_MINIMUM ) ),
-    maFtMax( this, ScResId( FT_MAXIMUM ) ),
-    maFtPositive( this, ScResId( FT_POSITIVE ) ),
-    maFtNegative( this, ScResId( FT_NEGATIVE ) ),
-    maFtPosition( this, ScResId( FT_POSITION ) ),
-    maFtAxisColor( this, ScResId( FT_COLOR_AXIS ) ),
-    maLbPos( this, ScResId( LB_POS ) ),
-    maLbNeg( this, ScResId( LB_NEG ) ),
-    maLbAxisCol( this, ScResId( LB_COL_AXIS ) ),
-    maLbTypeMin( this, ScResId( LB_TYPE ) ),
-    maLbTypeMax( this, ScResId( LB_TYPE ) ),
-    maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
-    maEdMin( this, ScResId( ED_MIN ) ),
-    maEdMax( this, ScResId( ED_MAX ) ),
-    maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) )
-{
-    Init();
-    FreeResource();
-
-    const ScDataBarFormatData* pData = pFormat->GetDataBarData();
-    maLbPos.SelectEntry( pData->maPositiveColor );
-    if(pData->mpNegativeColor)
-        maLbNeg.SelectEntry( *pData->mpNegativeColor );
-
-    switch (pData->meAxisPosition)
-    {
-        case databar::NONE:
-            maLbAxisPos.SelectEntryPos(2);
-            break;
-        case databar::AUTOMATIC:
-            maLbAxisPos.SelectEntryPos(0);
-            break;
-        case databar::MIDDLE:
-            maLbAxisPos.SelectEntryPos(1);
-            break;
-    }
-    ::SetType(pData->mpLowerLimit.get(), maLbTypeMin);
-    ::SetType(pData->mpUpperLimit.get(), maLbTypeMax);
-    SetValue(pData->mpLowerLimit.get(), maEdMin);
-    SetValue(pData->mpUpperLimit.get(), maEdMax);
 }
 
 void ScDataBarSettingsDlg::Init()
@@ -305,8 +260,8 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
 
-    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get());
-    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get());
+    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get(), mpNumberFormatter);
+    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get(), mpNumberFormatter);
     GetAxesPosition(pData, maLbAxisPos);
 
     return pData;
@@ -327,8 +282,12 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
         {
             rtl::OUString aMinString = maEdMin.GetText();
             rtl::OUString aMaxString = maEdMax.GetText();
-            double nMinValue = rtl::math::stringToDouble(aMinString, '.', ',');
-            double nMaxValue = rtl::math::stringToDouble(aMaxString, '.', ',');
+            double nMinValue = 0;
+            sal_uInt32 nIndex = 0;
+            mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);
+            nIndex = 0;
+            double nMaxValue = 0;
+            mpNumberFormatter->IsNumberFormat(aMaxString, nIndex, nMinValue);
             if(rtl::math::approxEqual(nMinValue, nMaxValue) || nMinValue > nMaxValue)
                 bWarn = true;
         }

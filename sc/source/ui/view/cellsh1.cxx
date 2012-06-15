@@ -2058,7 +2058,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScRangeList aRangeList;
                 ScViewData* pData = GetViewData();
                 pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
-                ScDocument* pDoc = GetViewData()->GetDocument();
+                ScDocument* pDoc = pData->GetDocument();
 
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
                 AbstractScCondFormatDlg* pDlg = NULL;
@@ -2089,7 +2089,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DATABAR );
+                ScDocument* pDoc = GetViewData()->GetDocument();
+                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_DATABAR );
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 pDlg->Execute();
                 delete pDlg;
@@ -2101,7 +2102,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DATABAR );
+                ScDocument* pDoc = GetViewData()->GetDocument();
+                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_DATABAR );
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 if(pDlg->Execute() == RET_OK)
                 {
