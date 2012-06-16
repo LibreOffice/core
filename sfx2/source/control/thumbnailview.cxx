@@ -607,7 +607,7 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     //StartTracking( STARTTRACK_SCROLLREPEAT );
                 }
                 else if ( rMEvt.GetClicks() == 2 )
-                    DoubleClick();
+                    ;
             }
 
             return;
@@ -803,7 +803,6 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
         if ( nItemId != mnSelItemId )
         {
             SelectItem( nItemId );
-            Select();
         }
     }
 }
@@ -1136,16 +1135,6 @@ void ThumbnailView::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void ThumbnailView::Select()
-{
-    maSelectHdl.Call( this );
-}
-
-void ThumbnailView::DoubleClick()
-{
-    maDoubleClickHdl.Call( this );
-}
-
 void ThumbnailView::Populate ()
 {
     const SfxDocumentTemplates* pTemplates = mpMgr->GetTemplates();
@@ -1448,7 +1437,6 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
             ::com::sun::star::uno::Any aOldAny, aNewAny;
             ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
         }
-        maHighlightHdl.Call(this);
     }
 }
 
@@ -1563,7 +1551,6 @@ bool ThumbnailView::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     {
         SelectItem( nSelId );
         Update();
-        Select();
     }
 
     Region aRegion;
@@ -1626,11 +1613,6 @@ long ThumbnailView::GetScrollWidth() const
     }
     else
         return 0;
-}
-
-void ThumbnailView::SetHighlightHdl( const Link& rLink )
-{
-    maHighlightHdl = rLink;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

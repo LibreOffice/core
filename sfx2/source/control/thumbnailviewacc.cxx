@@ -465,7 +465,6 @@ void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int32 nChildIndex )
     if(pItem != NULL)
     {
         mpParent->SelectItem( pItem->mnId );
-        mpParent->Select ();
     }
     else
         throw lang::IndexOutOfBoundsException();

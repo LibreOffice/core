@@ -161,10 +161,6 @@ public:
 
     virtual ~ThumbnailView ();
 
-    virtual void Select();
-
-    virtual void DoubleClick();
-
     // Fill view with template thumbnails
     void Populate ();
 
@@ -236,16 +232,6 @@ public:
                                          sal_uInt16 nCalcLines = 0 );
 
     long            GetScrollWidth() const;
-
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
-
-    void            SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
-
-    const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
-
-    void            SetHighlightHdl( const Link& rLink );
 
 protected:
 
@@ -344,9 +330,6 @@ protected:
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
     Color maColor;
-    Link maDoubleClickHdl;
-    Link maSelectHdl;
-    Link maHighlightHdl;
 };
 
 #endif // THUMBNAILVIEW_HXX
