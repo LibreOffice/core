@@ -35,6 +35,7 @@
 #include "contacts.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
+#include "sendfunc.hxx"
 #include <tubes/manager.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/contact-list.hxx>
@@ -57,18 +58,6 @@ namespace css = ::com::sun::star;
 
 namespace {
 
-rtl::OUString cellToString( ScBaseCell *pCell )
-{
-    (void)pCell; // FIXME: implement me
-    return rtl::OUString();
-}
-
-ScBaseCell *stringToCell( const rtl::OUString &rString )
-{
-    (void)rString; // FIXME: implement me
-    return NULL;
-}
-
 bool isCollabMode( bool& rbMaster )
 {
     const char* pEnv = getenv ("LIBO_TUBES");
@@ -81,234 +70,50 @@ bool isCollabMode( bool& rbMaster )
     return false;
 }
 
+}
 
-// Ye noddy mangling - needs improvement ...
-// method name ';' then arguments ; separated
-class ScChangeOpWriter
+// FIXME: really ScDocFunc should be an abstract base
+ScDocFuncRecv::ScDocFuncRecv( boost::shared_ptr<ScDocFuncDirect>& pChain )
+    : mpChain( pChain )
 {
-  rtl::OUStringBuffer aMessage;
-  void appendSeparator()
-  {
-      aMessage.append( sal_Unicode( ';' ) );
-  }
-public:
+    fprintf( stderr, "Receiver created !\n" );
+}
 
-  ScChangeOpWriter( const char *pName )
-  {
-      aMessage.appendAscii( pName );
-      appendSeparator();
-  }
-
-  void appendString( const rtl::OUString &rStr )
-  {
-      if ( rStr.indexOf( sal_Unicode( '"' ) ) >= 0 ||
-           rStr.indexOf( sal_Unicode( ';' ) ) >= 0 )
-      {
-          String aQuoted( rStr );
-          ScGlobal::AddQuotes( aQuoted, sal_Unicode( '"' ) );
-          aMessage.append( aQuoted );
-      }
-      else
-          aMessage.append( rStr );
-      appendSeparator();
-  }
-
-  void appendAddress( const ScAddress &rPos )
-  {
-      rtl::OUString aStr;
-      rPos.Format( aStr, SCA_VALID );
-      aMessage.append( aStr );
-      appendSeparator();
-  }
-
-  void appendInt( sal_Int32 i )
-  {
-      aMessage.append( i );
-      appendSeparator();
-  }
-
-  void appendBool( sal_Bool b )
-  {
-      aMessage.appendAscii( b ? "true" : "false" );
-      appendSeparator();
-  }
-
-  void appendCell( ScBaseCell *pCell )
-  {
-      appendString( cellToString( pCell ) );
-  }
-
-  rtl::OString toString()
-  {
-      return rtl::OUStringToOString( aMessage.toString(), RTL_TEXTENCODING_UTF8 );
-  }
-};
-
-struct ProtocolError {
-    const char *message;
-};
-
-class ScChangeOpReader {
-    std::vector< rtl::OUString > maArgs;
-
-public:
-
-    ScChangeOpReader( const rtl::OUString &rString)
-    {
-        // will need to handle escaping etc.
-        // Surely someone else wrote this before ! [!?]
-        enum {
-            IN_TEXT, CHECK_QUOTE, FIND_LAST_QUOTE, SKIP_SEMI
-        } eState = CHECK_QUOTE;
-
-        sal_Int32 nStart = 0;
-        for (sal_Int32 n = 0; n < rString.getLength(); n++)
-        {
-            if (rString[n] == '\\')
-            {
-                n++; // skip next char
-                continue;
-            }
-            switch (eState) {
-            case CHECK_QUOTE:
-                if (rString[n] == '"')
-                {
-                    nStart = n + 1;
-                    eState = FIND_LAST_QUOTE;
-                    break;
-                }
-                // else drop through
-            case IN_TEXT:
-                if (rString[n] == ';')
-                {
-                    maArgs.push_back( rString.copy( nStart, n - nStart ) );
-                    nStart = n + 1;
-                    eState = CHECK_QUOTE;
-                }
-                break;
-            case FIND_LAST_QUOTE:
-                if (rString[n] == '"')
-                {
-                    maArgs.push_back( rString.copy( nStart, n - nStart ) );
-                    eState = SKIP_SEMI;
-                    break;
-                }
-                break;
-            case SKIP_SEMI:
-                if (rString[n] == ';')
-                {
-                    nStart = n + 1;
-                    eState = CHECK_QUOTE;
-                }
-                break;
-            }
-        }
-        if ( nStart < rString.getLength())
-            maArgs.push_back( rString.copy( nStart, rString.getLength() - nStart ) );
-
-        for (size_t i = 0; i < maArgs.size(); i++)
-            fprintf( stderr, "arg %d: '%s'\n", (int)i,
-                     rtl::OUStringToOString( maArgs[i], RTL_TEXTENCODING_UTF8).getStr() );
-    }
-    ~ScChangeOpReader() {}
-
-    rtl::OUString getMethod()
-    {
-        return maArgs[0];
-    }
-
-    size_t getArgCount() { return maArgs.size(); }
-
-    rtl::OUString getString( sal_Int32 n )
-    {
-        if (n > 0 && (size_t)n < getArgCount() )
-        {
-            String aUStr( maArgs[ n ] );
-            ScGlobal::EraseQuotes( aUStr );
-            return aUStr;
-        } else
-            return rtl::OUString();
-    }
-
-    ScAddress getAddress( sal_Int32 n )
-    {
-        ScAddress aAddr;
-        rtl::OUString aToken( getString( n ) );
-        aAddr.Parse( aToken );
-        return aAddr;
-    }
-
-    sal_Int32 getInt( sal_Int32 n )
-    {
-        return getString( n ).toInt32();
-    }
-
-    bool getBool( sal_Int32 n )
-    {
-        return getString( n ).equalsIgnoreAsciiCase( "true" );
-    }
-
-    ScBaseCell *getCell( sal_Int32 n )
-    {
-        return stringToCell( getString( n ) );
-    }
-};
-
-
-class ScDocFuncRecv
+void ScDocFuncRecv::RecvMessage( const rtl::OString &rString )
 {
-    boost::shared_ptr<ScDocFuncDirect>  mpChain;
-
-protected:
-    ScDocFuncRecv() {}
-public:
-    // FIXME: really ScDocFunc should be an abstract base
-    ScDocFuncRecv( boost::shared_ptr<ScDocFuncDirect>& pChain )
-        : mpChain( pChain )
-    {
-        fprintf( stderr, "Receiver created !\n" );
-    }
-    virtual ~ScDocFuncRecv() {}
-
-    void packetReceived( TeleConference*, TelePacket &rPacket );
-
-    virtual void fileReceived( const rtl::OUString &rStr );
-    virtual void RecvMessage( const rtl::OString &rString )
-    {
-        try {
-            ScChangeOpReader aReader( rtl::OUString( rString.getStr(),
-                                                     rString.getLength(),
-                                                     RTL_TEXTENCODING_UTF8 ) );
-            // FIXME: have some hash to enumeration mapping here
-            if ( aReader.getMethod() == "setNormalString" )
-                mpChain->SetNormalString( aReader.getAddress( 1 ), aReader.getString( 2 ),
-                                          aReader.getBool( 3 ) );
-            else if ( aReader.getMethod() == "putCell" )
-            {
-                ScBaseCell *pNewCell = aReader.getCell( 2 );
-                if ( pNewCell )
-                    mpChain->PutCell( aReader.getAddress( 1 ), pNewCell, aReader.getBool( 3 ) );
-            }
-            else if ( aReader.getMethod() == "enterListAction" )
-                mpChain->EnterListAction( aReader.getInt( 1 ) );
-            else if ( aReader.getMethod() == "endListAction" )
-                mpChain->EndListAction();
-            else if ( aReader.getMethod() == "showNote" )
-                mpChain->ShowNote( aReader.getAddress( 1 ), aReader.getBool( 2 ) );
-            else if ( aReader.getMethod() == "setNoteText" )
-                mpChain->SetNoteText( aReader.getAddress( 1 ), aReader.getString( 2 ),
+    try {
+        ScChangeOpReader aReader( rtl::OUString( rString.getStr(),
+                                                 rString.getLength(),
+                                                 RTL_TEXTENCODING_UTF8 ) );
+        // FIXME: have some hash to enumeration mapping here
+        if ( aReader.getMethod() == "setNormalString" )
+            mpChain->SetNormalString( aReader.getAddress( 1 ), aReader.getString( 2 ),
                                       aReader.getBool( 3 ) );
-            else if ( aReader.getMethod() == "renameTable" )
-                mpChain->RenameTable( aReader.getInt( 1 ), aReader.getString( 2 ),
-                                      aReader.getBool( 3 ), aReader.getBool( 4 ) );
-            else
-                fprintf( stderr, "Error: unknown message '%s' (%d)\n",
-                         rString.getStr(), (int)aReader.getArgCount() );
-        } catch (const ProtocolError &e) {
-            fprintf( stderr, "Error: protocol twisting '%s'\n", e.message );
+        else if ( aReader.getMethod() == "putCell" )
+        {
+            ScBaseCell *pNewCell = aReader.getCell( 2 );
+            if ( pNewCell )
+                mpChain->PutCell( aReader.getAddress( 1 ), pNewCell, aReader.getBool( 3 ) );
         }
+        else if ( aReader.getMethod() == "enterListAction" )
+            mpChain->EnterListAction( aReader.getInt( 1 ) );
+        else if ( aReader.getMethod() == "endListAction" )
+            mpChain->EndListAction();
+        else if ( aReader.getMethod() == "showNote" )
+            mpChain->ShowNote( aReader.getAddress( 1 ), aReader.getBool( 2 ) );
+        else if ( aReader.getMethod() == "setNoteText" )
+            mpChain->SetNoteText( aReader.getAddress( 1 ), aReader.getString( 2 ),
+                                  aReader.getBool( 3 ) );
+        else if ( aReader.getMethod() == "renameTable" )
+            mpChain->RenameTable( aReader.getInt( 1 ), aReader.getString( 2 ),
+                                  aReader.getBool( 3 ), aReader.getBool( 4 ) );
+        else
+            fprintf( stderr, "Error: unknown message '%s' (%d)\n",
+                     rString.getStr(), (int)aReader.getArgCount() );
+    } catch (const ProtocolError &e) {
+        fprintf( stderr, "Error: protocol twisting '%s'\n", e.message );
     }
-};
+}
 
 void ScDocFuncRecv::packetReceived( TeleConference*, TelePacket &rPacket )
 {
@@ -422,187 +227,178 @@ extern "C"
     }
 }
 
-class ScDocFuncSend : public ScDocFunc
+void ScDocFuncSend::SendMessage( ScChangeOpWriter &rOp )
 {
-    boost::shared_ptr<ScDocFuncRecv>    mpDirect;
-    TeleManager                         *mpManager;
-
-    void SendMessage( ScChangeOpWriter &rOp )
+    fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
+    if (mpManager)
     {
-        fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
-        if (mpManager)
-        {
-            TelePacket aPacket( "sender", rOp.toString().getStr(), rOp.toString().getLength() );
-            mpManager->sendPacket( aPacket );
-        }
-        else // local demo mode
-            mpDirect->RecvMessage( rOp.toString() );
+        TelePacket aPacket( "sender", rOp.toString().getStr(), rOp.toString().getLength() );
+        mpManager->sendPacket( aPacket );
+    }
+    else // local demo mode
+        mpDirect->RecvMessage( rOp.toString() );
+}
+
+void ScDocFuncSend::SendFile( const rtl::OUString &rURL )
+{
+    (void)rURL;
+
+    String aTmpPath = utl::TempFile::CreateTempName();
+    aTmpPath.Append( rtl::OUString( ".ods" ) );
+
+    rtl::OUString aFileURL;
+    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
+
+    ::comphelper::MediaDescriptor aDescriptor;
+    // some issue with hyperlinks:
+    aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= ::rtl::OUString();
+    try {
+        css::uno::Reference< css::document::XDocumentRecovery > xDocRecovery(
+                    rDocShell.GetBaseModel(), css::uno::UNO_QUERY_THROW);
+
+        xDocRecovery->storeToRecoveryFile( aFileURL, aDescriptor.getAsConstPropertyValueList() );
+    } catch (const css::uno::Exception &ex) {
+        fprintf( stderr, "exception foo !\n" );
     }
 
-    void SendFile( const rtl::OUString &rURL )
-    {
-        (void)rURL;
+    fprintf( stderr, "Temp file is '%s'\n",
+             rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-        String aTmpPath = utl::TempFile::CreateTempName();
-        aTmpPath.Append( rtl::OUString( ".ods" ) );
+    if (mpManager)
+        mpManager->sendFile( aFileURL, file_sent_cb, NULL );
+    else
+        mpDirect->fileReceived( aFileURL );
 
-        rtl::OUString aFileURL;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
+    // FIXME: unlink the file after send ...
+}
 
-        ::comphelper::MediaDescriptor aDescriptor;
-        // some issue with hyperlinks:
-        aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= ::rtl::OUString();
-        try {
-            css::uno::Reference< css::document::XDocumentRecovery > xDocRecovery(
-                        rDocShell.GetBaseModel(), css::uno::UNO_QUERY_THROW);
+// FIXME: really ScDocFunc should be an abstract base, so
+// we don't need the rDocSh hack/pointer
+ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncRecv> pDirect )
+        : ScDocFunc( rDocSh ),
+        mpDirect( pDirect ),
+        mpManager( NULL )
+{
+    fprintf( stderr, "Sender created !\n" );
+}
 
-            xDocRecovery->storeToRecoveryFile( aFileURL, aDescriptor.getAsConstPropertyValueList() );
-        } catch (const css::uno::Exception &ex) {
-            fprintf( stderr, "exception foo !\n" );
-        }
+void ScDocFuncSend::SetCollaboration( TeleManager *pManager )
+{
+    mpManager = pManager;
+}
 
-        fprintf( stderr, "Temp file is '%s'\n",
-                 rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+void ScDocFuncSend::EnterListAction( sal_uInt16 nNameResId )
+{
+    // Want to group these operations for the other side ...
+    String aUndo( ScGlobal::GetRscString( nNameResId ) );
+    ScChangeOpWriter aOp( "enterListAction" );
+    aOp.appendInt( nNameResId ); // nasty but translate-able ...
+    SendMessage( aOp );
+}
 
-        if (mpManager)
-            mpManager->sendFile( aFileURL, file_sent_cb, NULL );
-        else
-            mpDirect->fileReceived( aFileURL );
+void ScDocFuncSend::EndListAction()
+{
+    ScChangeOpWriter aOp( "endListAction" );
+    SendMessage( aOp );
+}
 
-        // FIXME: unlink the file after send ...
-    }
+sal_Bool ScDocFuncSend::SetNormalString( const ScAddress& rPos, const String& rText, sal_Bool bApi )
+{
+    ScChangeOpWriter aOp( "setNormalString" );
+    aOp.appendAddress( rPos );
+    aOp.appendString( rText );
+    aOp.appendBool( bApi );
+    SendMessage( aOp );
 
-public:
-    // FIXME: really ScDocFunc should be an abstract base, so
-    // we don't need the rDocSh hack/pointer
-    ScDocFuncSend( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncRecv> pDirect )
-            : ScDocFunc( rDocSh ),
-            mpDirect( pDirect ),
-            mpManager( NULL )
-    {
-        fprintf( stderr, "Sender created !\n" );
-    }
-    virtual ~ScDocFuncSend() {}
+    if ( rtl::OUString( rText ) == "saveme" )
+        SendFile( rText );
 
-    void SetCollaboration( TeleManager *pManager )
-    {
-        mpManager = pManager;
-    }
+    if ( rtl::OUString( rText ) == "contacts" )
+        tubes::createContacts( mpManager );
 
-    virtual void EnterListAction( sal_uInt16 nNameResId )
-    {
-        // Want to group these operations for the other side ...
-        String aUndo( ScGlobal::GetRscString( nNameResId ) );
-        ScChangeOpWriter aOp( "enterListAction" );
-        aOp.appendInt( nNameResId ); // nasty but translate-able ...
-        SendMessage( aOp );
-    }
-    virtual void EndListAction()
-    {
-        ScChangeOpWriter aOp( "endListAction" );
-        SendMessage( aOp );
-    }
+    return true; // needs some code auditing action
+}
 
-    virtual sal_Bool SetNormalString( const ScAddress& rPos, const String& rText, sal_Bool bApi )
-    {
-        ScChangeOpWriter aOp( "setNormalString" );
-        aOp.appendAddress( rPos );
-        aOp.appendString( rText );
-        aOp.appendBool( bApi );
-        SendMessage( aOp );
+sal_Bool ScDocFuncSend::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
+{
+    fprintf( stderr, "put cell '%p' type %d %d\n", pNewCell, pNewCell->GetCellType(), bApi );
+    ScChangeOpWriter aOp( "putCell" );
+    aOp.appendAddress( rPos );
+    aOp.appendCell( pNewCell );
+    aOp.appendBool( bApi );
+    SendMessage( aOp );
+    return true; // needs some code auditing action
+}
 
-        if ( rtl::OUString( rText ) == "saveme" )
-            SendFile( rText );
+sal_Bool ScDocFuncSend::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
+                          sal_Bool bInterpret, sal_Bool bApi )
+{
+    fprintf( stderr, "put data\n" );
+    return ScDocFunc::PutData( rPos, rEngine, bInterpret, bApi );
+}
 
-        if ( rtl::OUString( rText ) == "contacts" )
-            tubes::createContacts( mpManager );
+sal_Bool ScDocFuncSend::SetCellText( const ScAddress& rPos, const String& rText,
+                              sal_Bool bInterpret, sal_Bool bEnglish, sal_Bool bApi,
+                              const String& rFormulaNmsp,
+                              const formula::FormulaGrammar::Grammar eGrammar )
+{
+    fprintf( stderr, "set cell text '%s'\n",
+             rtl::OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ).getStr() );
+    return ScDocFunc::SetCellText( rPos, rText, bInterpret, bEnglish, bApi, rFormulaNmsp, eGrammar );
+}
 
-        return true; // needs some code auditing action
-    }
+bool ScDocFuncSend::ShowNote( const ScAddress& rPos, bool bShow )
+{
+    ScChangeOpWriter aOp( "showNote" );
+    aOp.appendAddress( rPos );
+    aOp.appendBool( bShow );
+    SendMessage( aOp );
+    return true; // needs some code auditing action
+}
 
-    virtual sal_Bool PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
-    {
-        fprintf( stderr, "put cell '%p' type %d %d\n", pNewCell, pNewCell->GetCellType(), bApi );
-        ScChangeOpWriter aOp( "putCell" );
-        aOp.appendAddress( rPos );
-        aOp.appendCell( pNewCell );
-        aOp.appendBool( bApi );
-        SendMessage( aOp );
-        return true; // needs some code auditing action
-    }
+bool ScDocFuncSend::SetNoteText( const ScAddress& rPos, const String& rNoteText, sal_Bool bApi )
+{
+    ScChangeOpWriter aOp( "setNoteText" );
+    aOp.appendAddress( rPos );
+    aOp.appendString( rNoteText );
+    aOp.appendBool( bApi );
+    SendMessage( aOp );
+    return true; // needs some code auditing action
+}
 
-    virtual sal_Bool PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
-                              sal_Bool bInterpret, sal_Bool bApi )
-    {
-        fprintf( stderr, "put data\n" );
-        return ScDocFunc::PutData( rPos, rEngine, bInterpret, bApi );
-    }
+sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const String& rName,
+                              sal_Bool bRecord, sal_Bool bApi )
+{
+    ScChangeOpWriter aOp( "renameTable" );
+    aOp.appendInt( nTab );
+    aOp.appendString( rName );
+    aOp.appendBool( bRecord );
+    aOp.appendBool( bApi );
+    SendMessage( aOp );
+    return true; // needs some code auditing action
+}
 
-    virtual sal_Bool SetCellText( const ScAddress& rPos, const String& rText,
-                                  sal_Bool bInterpret, sal_Bool bEnglish, sal_Bool bApi,
-                                  const String& rFormulaNmsp,
-                                  const formula::FormulaGrammar::Grammar eGrammar )
-    {
-        fprintf( stderr, "set cell text '%s'\n",
-                 rtl::OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return ScDocFunc::SetCellText( rPos, rText, bInterpret, bEnglish, bApi, rFormulaNmsp, eGrammar );
-    }
-
-    virtual bool ShowNote( const ScAddress& rPos, bool bShow = true )
-    {
-        ScChangeOpWriter aOp( "showNote" );
-        aOp.appendAddress( rPos );
-        aOp.appendBool( bShow );
-        SendMessage( aOp );
-        return true; // needs some code auditing action
-    }
-
-    virtual bool SetNoteText( const ScAddress& rPos, const String& rNoteText, sal_Bool bApi )
-    {
-        ScChangeOpWriter aOp( "setNoteText" );
-        aOp.appendAddress( rPos );
-        aOp.appendString( rNoteText );
-        aOp.appendBool( bApi );
-        SendMessage( aOp );
-        return true; // needs some code auditing action
-    }
-
-    virtual sal_Bool RenameTable( SCTAB nTab, const String& rName,
+sal_Bool ScDocFuncSend::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                   sal_Bool bRecord, sal_Bool bApi )
-    {
-        ScChangeOpWriter aOp( "renameTable" );
-        aOp.appendInt( nTab );
-        aOp.appendString( rName );
-        aOp.appendBool( bRecord );
-        aOp.appendBool( bApi );
-        SendMessage( aOp );
-        return true; // needs some code auditing action
-    }
+{
+    fprintf( stderr, "Apply Attributes\n" );
+    return ScDocFunc::ApplyAttributes( rMark, rPattern, bRecord, bApi );
+}
 
-    virtual sal_Bool ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                      sal_Bool bRecord, sal_Bool bApi )
-    {
-        fprintf( stderr, "Apply Attributes\n" );
-        return ScDocFunc::ApplyAttributes( rMark, rPattern, bRecord, bApi );
-    }
+sal_Bool ScDocFuncSend::ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
+                             sal_Bool bRecord, sal_Bool bApi )
+{
+    fprintf( stderr, "Apply Style '%s'\n",
+             rtl::OUStringToOString( rStyleName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    return ScDocFunc::ApplyStyle( rMark, rStyleName, bRecord, bApi );
+}
 
-    virtual sal_Bool ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
-                                 sal_Bool bRecord, sal_Bool bApi )
-    {
-        fprintf( stderr, "Apply Style '%s'\n",
-                 rtl::OUStringToOString( rStyleName, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return ScDocFunc::ApplyStyle( rMark, rStyleName, bRecord, bApi );
-    }
-
-    virtual sal_Bool MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
-                                 sal_Bool bRecord, sal_Bool bApi )
-    {
-        fprintf( stderr, "Merge cells\n" );
-        return ScDocFunc::MergeCells( rOption, bContents, bRecord, bApi );
-    }
-};
-
-} // anonymous namespace
+sal_Bool ScDocFuncSend::MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
+                             sal_Bool bRecord, sal_Bool bApi )
+{
+    fprintf( stderr, "Merge cells\n" );
+    return ScDocFunc::MergeCells( rOption, bContents, bRecord, bApi );
+}
 
 SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
 {
