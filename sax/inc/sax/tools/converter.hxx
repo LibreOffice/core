@@ -29,7 +29,7 @@
 #ifndef _SAX_CONVERTER_HXX
 #define _SAX_CONVERTER_HXX
 
-#include "sax/dllapi.h"
+#include "sax/saxdllapi.h"
 
 #include <sal/types.h>
 
