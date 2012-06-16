@@ -29,6 +29,13 @@
 #include <vcl/layout.hxx>
 #include "window.h"
 
+VclContainer::VclContainer(Window *pParent)
+    : Window(WINDOW_CONTAINER)
+    , m_nBorderWidth(0)
+{
+    ImplInit(pParent, 0, NULL);
+}
+
 Size VclContainer::GetOptimalSize(WindowSizeType eType) const
 {
     if (eType == WINDOWSIZE_MAXIMUM)
@@ -893,7 +900,7 @@ Size getLegacyBestSizeForChildren(const Window &rWindow)
 
 Window* getLegacyNonLayoutParent(Window *pParent)
 {
-    while (pParent && dynamic_cast<const VclContainer*>(pParent))
+    while (pParent && pParent->GetType() == WINDOW_CONTAINER)
     {
         pParent = pParent->GetParent();
     }

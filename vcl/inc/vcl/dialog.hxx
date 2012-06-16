@@ -44,7 +44,7 @@
 // ----------
 struct DialogImpl;
 class VclBuilder;
-class VclBox;
+class VclContainer;
 
 class VCL_DLLPUBLIC Dialog
     : public SystemWindow
@@ -78,7 +78,7 @@ protected:
     SAL_DLLPRIVATE void    ImplDialogRes( const ResId& rResId );
     SAL_DLLPRIVATE WinBits init(Window *pParent, const ResId& rResId);
 
-    SAL_DLLPRIVATE void    setPosSizeOnContainee(Size aSize, VclBox &rBox);
+    SAL_DLLPRIVATE void    setPosSizeOnContainee(Size aSize, VclContainer &rBox);
 public:
     SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }
     SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }

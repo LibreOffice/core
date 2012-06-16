@@ -128,7 +128,7 @@ Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
 {
     Window *pLastChild = pChild;
 
-    if (dynamic_cast<VclContainer*>(pChild))
+    if (pChild->GetType() == WINDOW_CONTAINER)
         pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
     else
         pChild = pChild->GetWindow(WINDOW_NEXT);
@@ -144,7 +144,7 @@ Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
         pChild = pParent->GetWindow(WINDOW_NEXT);
     }
 
-    if (dynamic_cast<VclContainer*>(pChild))
+    if (pChild && pChild->GetType() == WINDOW_CONTAINER)
         pChild = nextLogicalChildOfParent(pTopLevel, pChild);
 
     return pChild;
@@ -154,7 +154,7 @@ Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
 {
     Window *pLastChild = pChild;
 
-    if (dynamic_cast<VclContainer*>(pChild))
+    if (pChild->GetType() == WINDOW_CONTAINER)
         pChild = pChild->GetWindow(WINDOW_LASTCHILD);
     else
         pChild = pChild->GetWindow(WINDOW_PREV);
@@ -170,7 +170,7 @@ Window * prevLogicalChildOfParent(Window *pTopLevel, Window *pChild)
         pChild = pParent->GetWindow(WINDOW_PREV);
     }
 
-    if (dynamic_cast<VclContainer*>(pChild))
+    if (pChild && pChild->GetType() == WINDOW_CONTAINER)
         pChild = prevLogicalChildOfParent(pTopLevel, pChild);
 
     return pChild;
@@ -656,7 +656,7 @@ void Dialog::StateChanged( StateChangedType nType )
             maLayoutTimer.Stop();
 
             //resize dialog to fit requisition on initial show
-            VclBox *pBox = dynamic_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+            VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
 
             const DialogStyle& rDialogStyle =
                 GetSettings().GetStyleSettings().GetDialogStyle();
@@ -1167,7 +1167,8 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 bool Dialog::isLayoutEnabled() const
 {
     //Child is a container => we're layout enabled
-    return dynamic_cast<const VclContainer*>(GetWindow(WINDOW_FIRSTCHILD));
+    const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    return pChild && pChild->GetType() == WINDOW_CONTAINER;
 }
 
 Size Dialog::GetOptimalSize(WindowSizeType eType) const
@@ -1185,7 +1186,7 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
     return Window::CalcWindowSize(aSize);
 }
 
-void Dialog::setPosSizeOnContainee(Size aSize, VclBox &rBox)
+void Dialog::setPosSizeOnContainee(Size aSize, VclContainer &rBox)
 {
     aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
         + 2 * m_nBorderWidth;
@@ -1202,7 +1203,7 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
     fprintf(stderr, "ImplHandleLayoutTimerHdl\n");
 
-    VclBox *pBox = dynamic_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
     if (!pBox)
     {
         fprintf(stderr, "WTF!\n");

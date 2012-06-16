@@ -212,7 +212,8 @@ void TabPage::DeactivatePage()
 bool TabPage::isLayoutEnabled() const
 {
     //Child is a container => we're layout enabled
-    return dynamic_cast<const VclContainer*>(GetWindow(WINDOW_FIRSTCHILD));
+    const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    return pChild && pChild->GetType() == WINDOW_CONTAINER;
 }
 
 Size TabPage::GetOptimalSize(WindowSizeType eType) const

@@ -35,7 +35,7 @@ typedef sal_uInt16 WindowType;
 #define WINDOW_WINDOW               (WINDOW_FIRST + 0x05)
 #define WINDOW_SYSWINDOW            (WINDOW_FIRST + 0x06)
 #define WINDOW_WORKWINDOW           (WINDOW_FIRST + 0x07)
-// #define WINDOW_MDIWINDOW            (WINDOW_FIRST + 0x08)
+#define WINDOW_CONTAINER            (WINDOW_FIRST + 0x08)
 #define WINDOW_FLOATINGWINDOW       (WINDOW_FIRST + 0x09)
 #define WINDOW_DIALOG               (WINDOW_FIRST + 0x0a)
 #define WINDOW_MODELESSDIALOG       (WINDOW_FIRST + 0x0b)
