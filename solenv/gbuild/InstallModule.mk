@@ -45,7 +45,6 @@ $(call gb_Package_Package_internal,$(1)_par,$(call gb_InstallModuleTarget_get_wo
 $(call gb_InstallModule_get_target,$(1)) : $(call gb_InstallModuleTarget_get_target,$(1))
 $(call gb_InstallModule_get_target,$(1)) : $(call gb_Package_get_target,$(1)_par)
 $(call gb_InstallModule_get_target,$(1)) :| $(dir $(call gb_InstallModule_get_target,$(1))).dir
-$(call gb_Package_get_preparation_target,$(1)_par) :| $(call gb_InstallModuleTarget_get_target,$(1))
 $(call gb_InstallModule_get_clean_target,$(1)) : $(call gb_InstallModuleTarget_get_clean_target,$(1))
 $(call gb_InstallModule_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_par)
 
@@ -89,12 +88,12 @@ $(call gb_InstallModuleTarget_use_packages,$(1),$(2))
 endef
 
 define gb_InstallModule__add_scpfile_impl
-$(call gb_Package_add_file,$(1)_par,par/osl/$(2),$(2))
+$(call gb_Package_add_file,$(1)_par,par/osl/$(notdir $(2)),$(2))
 
 endef
 
 define gb_InstallModule__add_scpfile
-$(call gb_InstallModule__add_scpfile_impl,$(1),$(notdir $(call gb_ScpTarget_get_target,$(2))))
+$(call gb_InstallModule__add_scpfile_impl,$(1),$(dir $(2))$(notdir $(call gb_ScpTarget_get_target,$(2))))
 
 endef
 
@@ -123,6 +122,7 @@ endef
 
 define gb_InstallModule_add_localized_scpfiles
 $(call gb_InstallModuleTarget_add_localized_scpfiles,$(1),$(2))
+$(call gb_InstallModule__add_scpfiles,$(1),$(2))
 
 endef
 

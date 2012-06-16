@@ -265,15 +265,17 @@ endef
 
 define gb_InstallModuleTarget__command
 $(call gb_Output_announce,$(2),$(true),INM,3)
-$(foreach scpfile,$(SCP_FILES),$(call gb_Deliver_deliver,$(scpfile),$(3)/$(notdir $(scpfile))) &&) \
-touch $(1)
+$(call gb_Helper_abbreviate_dirs,\
+	rm -f $(1) \
+	$(foreach scpfile,$(SCP_FILES),&& echo $(scpfile) >> $(1)) \
+)
 endef
 
 $(dir $(call gb_InstallModuleTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_InstallModuleTarget_get_target,%) :
-	$(call gb_InstallModuleTarget__command,$@,$*,$(call gb_InstallModuleTarget_get_workdir,$*))
+	$(call gb_InstallModuleTarget__command,$@,$*)
 
 $(call gb_InstallModuleTarget_get_external_target,%) :
 	touch $@
@@ -282,14 +284,12 @@ $(call gb_InstallModuleTarget_get_external_target,%) :
 $(call gb_InstallModuleTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),INM,3)
 	rm -rf \
-		$(call gb_InstallModuleTarget_get_workdir,$*) \
 		$(call gb_InstallModuleTarget_get_target,$*) \
 		$(call gb_InstallModuleTarget_get_external_target,$*)
 
 define gb_InstallModuleTarget_InstallModuleTarget
 $(call gb_InstallModuleTarget_get_target,$(1)) :| \
-	$(call gb_InstallModuleTarget_get_external_target,$(1)) \
-	$(call gb_InstallModuleTarget_get_workdir,$(1))/.dir
+	$(call gb_InstallModuleTarget_get_external_target,$(1))
 $(call gb_InstallModuleTarget_get_external_target,$(1)) :| \
 	$(dir $(call gb_InstallModuleTarget_get_target,$(1))).dir
 
