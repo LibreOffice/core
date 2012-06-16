@@ -1172,9 +1172,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 bool Dialog::isLayoutEnabled() const
 {
     //Child is a container => we're layout enabled
-    bool bRet = dynamic_cast<const VclContainer*>(GetWindow(WINDOW_FIRSTCHILD));
-    fprintf(stderr, "isLayoutEnabled is %d\n", bRet);
-    return bRet;
+    return dynamic_cast<const VclContainer*>(GetWindow(WINDOW_FIRSTCHILD));
 }
 
 Size Dialog::GetOptimalSize(WindowSizeType eType) const
@@ -1184,27 +1182,18 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
 
     Size aSize = GetWindow(WINDOW_FIRSTCHILD)->GetOptimalSize(eType);
 
-    fprintf(stderr, "dialog contents wanted to be %d %d\n", aSize.Width(),
-        aSize.Height());
-
     aSize.Height() += mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
         + 2*m_nBorderWidth;
     aSize.Width() += mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
         + 2*m_nBorderWidth;
 
-    fprintf(stderr, "stage 2 dialog wanted to be %d %d\n", aSize.Width(),
-        aSize.Height());
-
-    aSize = Window::CalcWindowSize(aSize);
-
-    fprintf(stderr, "stage 3 dialog wanted to be %d %d\n", aSize.Width(),
-        aSize.Height());
-
-    return aSize;
+    return Window::CalcWindowSize(aSize);
 }
 
 IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
+    fprintf(stderr, "ImplHandleLayoutTimerHdl\n");
+
     VclBox *pBox = dynamic_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
     if (!pBox)
     {
@@ -1213,18 +1202,10 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
     }
     Size aSize = GetSizePixel();
 
-    fprintf(stderr, "stage 4 dialog claimed to be %d %d\n", aSize.Width(),
-        aSize.Height());
-
     aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
         + 2 * m_nBorderWidth;
     aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
         + 2 * m_nBorderWidth;
-
-    fprintf(stderr, "stage 5 space for contents ends up as %d %d\n", aSize.Width(),
-        aSize.Height());
-    fprintf(stderr, "dialog got given %d %d\n", aSize.Width(),
-        aSize.Height());
 
     Point aPos(mpWindowImpl->mnLeftBorder + m_nBorderWidth,
         mpWindowImpl->mnTopBorder + m_nBorderWidth);

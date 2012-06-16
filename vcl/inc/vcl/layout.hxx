@@ -39,6 +39,8 @@ public:
     virtual Size GetOptimalSize(WindowSizeType eType) const;
     using Window::SetPosSizePixel;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
+    virtual void SetPosPixel(const Point& rAllocPos);
+    virtual void SetSizePixel(const Size& rAllocation);
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
     void set_border_width(int nBorderWidth)
