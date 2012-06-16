@@ -53,6 +53,14 @@ struct ThumbnailViewItem
     ThumbnailViewItem ( ThumbnailView& rParent );
     ~ThumbnailViewItem ();
 
+    bool isSelected () const { return mbSelected; }
+
+    void setSelection (bool state);
+
+    bool isHighlighted () const { return mbHover; }
+
+    void setHighlight (bool state);
+
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };

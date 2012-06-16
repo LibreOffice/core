@@ -340,7 +340,7 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
         // Draw item background
         BColor aFillColor = maColor.getBColor();
 
-        if ( pItem->mbSelected || pItem->mbHover )
+        if ( pItem->isSelected() || pItem->isHighlighted() )
             aFillColor = rStyleSettings.GetHighlightColor().getBColor();
 
         aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
@@ -594,9 +594,9 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if ( rMEvt.GetClicks() == 1 )
                 {
-                    pItem->mbSelected = !pItem->mbSelected;
+                    pItem->setSelection(!pItem->isSelected());
 
-                    if (!pItem->mbHover)
+                    if (!pItem->isHighlighted())
                         DrawItem(pItem,GetItemRect(pItem->mnId));
 
                     //StartTracking( STARTTRACK_SCROLLREPEAT );
@@ -631,16 +631,16 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
             {
                 ThumbnailViewItem *pOld = mItemList[nPos];
 
-                pOld->mbHover = false;
+                pOld->setHighlight(false);
 
-                if (!pOld->mbSelected)
+                if (!pOld->isSelected())
                     DrawItem(pOld,GetItemRect(pOld->mnId));
             }
 
             mnHighItemId = pItem->mnId;
-            pItem->mbHover = true;
+            pItem->setHighlight(true);
 
-            if (!pItem->mbSelected)
+            if (!pItem->isSelected())
                 DrawItem(pItem,GetItemRect(pItem->mnId));
         }
     }
@@ -654,9 +654,9 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
             {
                 ThumbnailViewItem *pOld = mItemList[nPos];
 
-                pOld->mbHover = false;
+                pOld->setHighlight(false);
 
-                if (!pOld->mbSelected)
+                if (!pOld->isSelected())
                     DrawItem(pOld,GetItemRect(pOld->mnId));
             }
 
@@ -1052,9 +1052,9 @@ void ThumbnailView::LoseFocus()
         {
             ThumbnailViewItem *pOld = mItemList[nPos];
 
-            pOld->mbHover = false;
+            pOld->setHighlight(false);
 
-            if (!pOld->mbSelected)
+            if (!pOld->isSelected())
                 DrawItem(pOld,GetItemRect(pOld->mnId));
         }
 

@@ -52,6 +52,16 @@ ThumbnailViewItem::~ThumbnailViewItem()
     }
 }
 
+void ThumbnailViewItem::setSelection (bool state)
+{
+    mbSelected = state;
+}
+
+void ThumbnailViewItem::setHighlight (bool state)
+{
+    mbHover = state;
+}
+
 uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
     if( !mpxAcc )
