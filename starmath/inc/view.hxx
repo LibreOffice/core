@@ -203,7 +203,7 @@ public:
 
 class SmCmdBoxWrapper : public SfxChildWindow
 {
-    SFX_DECL_CHILDWINDOW(SmCmdBoxWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(SmCmdBoxWrapper);
 
 protected:
     SmCmdBoxWrapper(Window          *pParentWindow,

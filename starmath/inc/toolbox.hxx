@@ -77,7 +77,7 @@ public:
 
 class SmToolBoxWrapper : public SfxChildWindow
 {
-    SFX_DECL_CHILDWINDOW(SmToolBoxWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(SmToolBoxWrapper);
 
 protected:
     SmToolBoxWrapper(Window *pParentWindow,

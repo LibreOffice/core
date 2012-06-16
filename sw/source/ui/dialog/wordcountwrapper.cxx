@@ -31,7 +31,7 @@
 #include <wordcountdialog.hrc>
 #include <cmdid.h>
 
-SFX_IMPL_CHILDWINDOW(SwWordCountWrapper, FN_WORDCOUNT_DIALOG)
+SFX_IMPL_CHILDWINDOW_WITHID(SwWordCountWrapper, FN_WORDCOUNT_DIALOG)
 
 SwWordCountWrapper::SwWordCountWrapper(   Window *pParentWindow,
                             sal_uInt16 nId,

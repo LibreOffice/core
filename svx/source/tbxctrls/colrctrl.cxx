@@ -45,7 +45,7 @@
 #include "svx/xexch.hxx"
 #include <vcl/svapp.hxx>
 
-SFX_IMPL_DOCKINGWINDOW( SvxColorChildWindow, SID_COLOR_CONTROL )
+SFX_IMPL_DOCKINGWINDOW_WITHID( SvxColorChildWindow, SID_COLOR_CONTROL )
 
 // ------------------------
 // - SvxColorValueSetData -

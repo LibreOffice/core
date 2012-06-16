@@ -68,7 +68,7 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 
     SvxIMapDlgChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
-    SFX_DECL_CHILDWINDOW( SvxIMapDlgChildWindow );
+    SFX_DECL_CHILDWINDOW_WITHID( SvxIMapDlgChildWindow );
 
     static void UpdateIMapDlg( const Graphic& rGraphic, const ImageMap* pImageMap = NULL,
                                const TargetList* pTargetList = NULL, void* pEditingObj = NULL );

@@ -65,7 +65,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::beans;
 
-SFX_IMPL_CHILDWINDOW(SwSpellDialogChildWindow, FN_SPELL_GRAMMAR_DIALOG)
+SFX_IMPL_CHILDWINDOW_WITHID(SwSpellDialogChildWindow, FN_SPELL_GRAMMAR_DIALOG)
 
 
 #define SPELL_START_BODY        0   // body text area

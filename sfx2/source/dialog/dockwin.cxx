@@ -252,12 +252,6 @@ Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo 
     return pWin;
 }
 
-sal_uInt16 SfxDockingWrapper::GetChildWindowId ()
-{
-    DBG_ASSERT( false, "This method shouldn't be called!" );
-    return 0;
-}
-
 void SfxDockingWrapper::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)
 {
     // pre-register a couple of docking windows

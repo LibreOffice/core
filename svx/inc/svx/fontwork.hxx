@@ -87,7 +87,7 @@ class SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 {
  public:
     SvxFontWorkChildWindow(Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
-    SFX_DECL_CHILDWINDOW(SvxFontWorkChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(SvxFontWorkChildWindow);
 };
 
 /*************************************************************************

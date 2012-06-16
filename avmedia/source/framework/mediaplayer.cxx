@@ -62,7 +62,7 @@ MediaPlayer::~MediaPlayer()
 
 // -----------------------------------------------------------------------------
 
-SFX_IMPL_DOCKINGWINDOW( MediaPlayer, SID_AVMEDIA_PLAYER )
+SFX_IMPL_DOCKINGWINDOW_WITHID( MediaPlayer, SID_AVMEDIA_PLAYER )
 
 // ----------------
 // - MediaFloater -

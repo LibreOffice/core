@@ -929,7 +929,7 @@ void SmCmdBoxWindow::GetFocus()
 /**************************************************************************/
 
 
-SFX_IMPL_DOCKINGWINDOW(SmCmdBoxWrapper, SID_CMDBOXWINDOW);
+SFX_IMPL_DOCKINGWINDOW_WITHID(SmCmdBoxWrapper, SID_CMDBOXWINDOW);
 
 SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, sal_uInt16 nId,
                                  SfxBindings *pBindings,

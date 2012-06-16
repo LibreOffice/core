@@ -37,33 +37,34 @@
     class Class : public SfxChildWindow                                         \
     {                                                                           \
     public:                                                                     \
-        Class( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );               \
+        Class( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );           \
         SFX_DECL_CHILDWINDOW(Class);                                            \
     };
 
+#define DECL_WRAPPER_WITHID(Class) \
+    class Class : public SfxChildWindow                                         \
+    {                                                                           \
+    public:                                                                     \
+        Class( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );           \
+        SFX_DECL_CHILDWINDOW_WITHID(Class);                                     \
+    };
 
 //==================================================================
 
-DECL_WRAPPER(ScNameDlgWrapper)
-DECL_WRAPPER(ScNameDefDlgWrapper)
-DECL_WRAPPER(ScSolverDlgWrapper)
-DECL_WRAPPER(ScOptSolverDlgWrapper)
-DECL_WRAPPER(ScPivotLayoutWrapper)
-DECL_WRAPPER(ScTabOpDlgWrapper)
-DECL_WRAPPER(ScFilterDlgWrapper)
-DECL_WRAPPER(ScSpecialFilterDlgWrapper)
-DECL_WRAPPER(ScDbNameDlgWrapper)
-DECL_WRAPPER(ScConsolidateDlgWrapper)
-DECL_WRAPPER(ScPrintAreasDlgWrapper)
-DECL_WRAPPER(ScColRowNameRangesDlgWrapper)
-DECL_WRAPPER(ScFormulaDlgWrapper)
-DECL_WRAPPER(ScHighlightChgDlgWrapper)
-
-/*!!! dafuer muss der Funktionsautopilot noch umgebaut werden
-DECL_WRAPPER(ScFunctionDlgWrapper)
-DECL_WRAPPER(ScEditFunctionDlgWrapper)
-DECL_WRAPPER(ScArgumentDlgWrapper)
-*/
+DECL_WRAPPER_WITHID(ScNameDlgWrapper)
+DECL_WRAPPER_WITHID(ScNameDefDlgWrapper)
+DECL_WRAPPER_WITHID(ScSolverDlgWrapper)
+DECL_WRAPPER_WITHID(ScOptSolverDlgWrapper)
+DECL_WRAPPER_WITHID(ScPivotLayoutWrapper)
+DECL_WRAPPER_WITHID(ScTabOpDlgWrapper)
+DECL_WRAPPER_WITHID(ScFilterDlgWrapper)
+DECL_WRAPPER_WITHID(ScSpecialFilterDlgWrapper)
+DECL_WRAPPER_WITHID(ScDbNameDlgWrapper)
+DECL_WRAPPER_WITHID(ScConsolidateDlgWrapper)
+DECL_WRAPPER_WITHID(ScPrintAreasDlgWrapper)
+DECL_WRAPPER_WITHID(ScColRowNameRangesDlgWrapper)
+DECL_WRAPPER_WITHID(ScFormulaDlgWrapper)
+DECL_WRAPPER_WITHID(ScHighlightChgDlgWrapper)
 
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
@@ -73,7 +74,7 @@ class ScAcceptChgDlgWrapper: public SfxChildWindow
                                 SfxBindings*,
                                 SfxChildWinInfo* );
 
-        SFX_DECL_CHILDWINDOW(Class);
+        SFX_DECL_CHILDWINDOW_WITHID(Class);
 
         virtual void ReInitDlg();
 };
@@ -86,7 +87,7 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
                                 SfxBindings*,
                                 SfxChildWinInfo* );
 
-        SFX_DECL_CHILDWINDOW(Class);
+        SFX_DECL_CHILDWINDOW_WITHID(Class);
 
         static void     SetDefaultPosSize(Point aPos, Size aSize, sal_Bool bSet=sal_True);
         virtual String  GetRefString();
@@ -107,7 +108,7 @@ class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
     Window * m_pSavedWndParent;
 public:
     ScValidityRefChildWin( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
-    SFX_DECL_CHILDWINDOW(ScValidityRefChildWin);
+    SFX_DECL_CHILDWINDOW_WITHID(ScValidityRefChildWin);
     ~ScValidityRefChildWin();
     bool    LockVisible( bool bLock ){ bool bVis = m_bVisibleLock; m_bVisibleLock = bLock; return bVis; }
     bool    LockFreeWindow( bool bLock ){ bool bFreeWindow = m_bFreeWindowLock; m_bFreeWindowLock = bLock; return bFreeWindow; }

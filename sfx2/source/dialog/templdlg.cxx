@@ -109,7 +109,7 @@ TYPEINIT0(SfxCommonTemplateDialog_Impl);
 TYPEINIT1(SfxTemplateDialog_Impl,SfxCommonTemplateDialog_Impl);
 TYPEINIT1(SfxTemplateCatalog_Impl,SfxCommonTemplateDialog_Impl);
 
-SFX_IMPL_DOCKINGWINDOW(SfxTemplateDialogWrapper, SID_STYLE_DESIGNER)
+SFX_IMPL_DOCKINGWINDOW_WITHID(SfxTemplateDialogWrapper, SID_STYLE_DESIGNER)
 
 //-------------------------------------------------------------------------
 

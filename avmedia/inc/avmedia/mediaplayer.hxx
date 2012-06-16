@@ -56,7 +56,7 @@ public:
                         MediaPlayer( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
                         ~MediaPlayer();
 
-                        SFX_DECL_CHILDWINDOW( MediaPlayer );
+                        SFX_DECL_CHILDWINDOW_WITHID( MediaPlayer );
 };
 
 // ----------------

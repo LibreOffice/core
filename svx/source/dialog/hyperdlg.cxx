@@ -39,7 +39,7 @@
 //#                                                                      #
 //########################################################################
 
-SFX_IMPL_CHILDWINDOW(SvxHlinkDlgWrapper, SID_HYPERLINK_DIALOG)
+SFX_IMPL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper, SID_HYPERLINK_DIALOG)
 
 // -----------------------------------------------------------------------
 

@@ -38,7 +38,7 @@
 
 namespace sd {
 
-SFX_IMPL_DOCKINGWINDOW(AnimationChildWindow, SID_ANIMATION_OBJECTS)
+SFX_IMPL_DOCKINGWINDOW_WITHID(AnimationChildWindow, SID_ANIMATION_OBJECTS)
 
 /*************************************************************************
 |*

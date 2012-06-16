@@ -45,7 +45,7 @@
 #include <fldtdlg.hrc>
 #include "swabstdlg.hxx"
 
-SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
+SFX_IMPL_CHILDWINDOW_WITHID(SwFldDlgWrapper, FN_INSERT_FIELD)
 
 SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, sal_uInt16 nId) :
         SfxChildWindow(pParentWindow, nId),

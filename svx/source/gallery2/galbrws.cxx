@@ -96,7 +96,7 @@ GalleryChildWindow::~GalleryChildWindow()
 
 // -----------------------------------------------------------------------------
 
-SFX_IMPL_DOCKINGWINDOW( GalleryChildWindow, SID_GALLERY )
+SFX_IMPL_DOCKINGWINDOW_WITHID( GalleryChildWindow, SID_GALLERY )
 
 // ------------------
 // - GalleryBrowser -

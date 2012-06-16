@@ -90,7 +90,7 @@
 
 /******************************************************************************/
 
-SFX_IMPL_MODELESSDIALOG( SvxIMapDlgChildWindow, SID_IMAP );
+SFX_IMPL_MODELESSDIALOG_WITHID( SvxIMapDlgChildWindow, SID_IMAP );
 
 // ControllerItem
 

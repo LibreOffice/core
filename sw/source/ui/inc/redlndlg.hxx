@@ -168,7 +168,7 @@ public:
                             SfxBindings*,
                             SfxChildWinInfo*  );
 
-    SFX_DECL_CHILDWINDOW( SwRedlineAcceptChild );
+    SFX_DECL_CHILDWINDOW_WITHID( SwRedlineAcceptChild );
 
     virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
 };

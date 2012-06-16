@@ -362,7 +362,7 @@ IMPL_LINK( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
 
 /**************************************************************************/
 
-SFX_IMPL_FLOATINGWINDOW(SmToolBoxWrapper, SID_TOOLBOXWINDOW);
+SFX_IMPL_FLOATINGWINDOW_WITHID(SmToolBoxWrapper, SID_TOOLBOXWINDOW);
 
 SmToolBoxWrapper::SmToolBoxWrapper(Window *pParentWindow,
                                    sal_uInt16 nId, SfxBindings* pBindings,

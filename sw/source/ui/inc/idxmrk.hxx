@@ -43,7 +43,7 @@ protected:
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo );
 
-    SFX_DECL_CHILDWINDOW(SwInsertIdxMarkWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(SwInsertIdxMarkWrapper);
 
 public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
@@ -58,7 +58,7 @@ protected:
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo );
 
-    SFX_DECL_CHILDWINDOW(SwInsertAuthMarkWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(SwInsertAuthMarkWrapper);
 
 public:
     void    ReInitDlg(SwWrtShell& rWrtShell);

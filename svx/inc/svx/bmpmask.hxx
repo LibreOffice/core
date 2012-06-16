@@ -72,7 +72,7 @@ class SVX_DLLPUBLIC SvxBmpMaskChildWindow : public SfxChildWindow
                                                    sal_uInt16, SfxBindings*,
                                                    SfxChildWinInfo* );
 
-    SFX_DECL_CHILDWINDOW(SvxBmpMaskChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(SvxBmpMaskChildWindow);
 };
 
 /*************************************************************************

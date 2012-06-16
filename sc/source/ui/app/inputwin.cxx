@@ -127,7 +127,7 @@ ScTextWndBase::ScTextWndBase( Window* pParent,  WinBits nStyle )
 //  class ScInputWindowWrapper
 //==================================================================
 
-SFX_IMPL_CHILDWINDOW(ScInputWindowWrapper,FID_INPUTLINE_STATUS)
+SFX_IMPL_CHILDWINDOW_WITHID(ScInputWindowWrapper,FID_INPUTLINE_STATUS)
 
 ScInputWindowWrapper::ScInputWindowWrapper( Window*          pParentP,
                                             sal_uInt16           nId,

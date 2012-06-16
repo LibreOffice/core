@@ -51,7 +51,7 @@ public:
     SvxHlinkDlgWrapper( Window*pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
-    SFX_DECL_CHILDWINDOW(SvxHlinkDlgWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper);
     virtual sal_Bool    QueryClose();
 };
 

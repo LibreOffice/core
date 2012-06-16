@@ -66,7 +66,7 @@
 
 // -------------------------------------------------------------------------
 
-SFX_IMPL_DOCKINGWINDOW( SvxBmpMaskChildWindow, SID_BMPMASK )
+SFX_IMPL_DOCKINGWINDOW_WITHID( SvxBmpMaskChildWindow, SID_BMPMASK )
 
 // -------------------------------------------------------------------------
 

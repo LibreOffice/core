@@ -51,7 +51,7 @@
 
 // -----------------------------------------------------------------------
 
-SFX_IMPL_DOCKINGWINDOW( ScFunctionChildWindow, FID_FUNCTION_BOX )
+SFX_IMPL_DOCKINGWINDOW_WITHID( ScFunctionChildWindow, FID_FUNCTION_BOX )
 
 /*************************************************************************
 #*  Member:     ScFunctionChildWindow

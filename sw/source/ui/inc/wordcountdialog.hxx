@@ -89,7 +89,7 @@ protected:
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo );
 
-    SFX_DECL_CHILDWINDOW(SwWordCountWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(SwWordCountWrapper);
 
 public:
     void    UpdateCounts();

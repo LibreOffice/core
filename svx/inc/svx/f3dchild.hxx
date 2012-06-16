@@ -45,7 +45,7 @@ class SVX_DLLPUBLIC Svx3DChildWindow : public SfxChildWindow
  public:
     Svx3DChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
-    SFX_DECL_CHILDWINDOW(Svx3DChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(Svx3DChildWindow);
 };
 
 #endif      // _SVX_F3DCHILD_HXX

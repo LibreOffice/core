@@ -63,7 +63,7 @@
 #include <vcl/virdev.hxx>
 #include "dlgunit.hxx"
 
-SFX_IMPL_FLOATINGWINDOW( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
+SFX_IMPL_FLOATINGWINDOW_WITHID( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
 
 /******************************************************************************/

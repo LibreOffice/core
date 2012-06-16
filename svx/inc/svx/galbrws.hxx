@@ -51,7 +51,7 @@ public:
                         GalleryChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
                         ~GalleryChildWindow();
 
-                        SFX_DECL_CHILDWINDOW( GalleryChildWindow );
+                        SFX_DECL_CHILDWINDOW_WITHID( GalleryChildWindow );
 };
 
 // ------------------

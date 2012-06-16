@@ -290,11 +290,17 @@ public:
         static  SfxChildWindow* CreateImpl(::Window *pParent, sal_uInt16 nId, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindow (sal_Bool bVisible=sal_False, SfxModule *pMod=NULL, sal_uInt16 nFlags=0); \
-        static  sal_uInt16 GetChildWindowId ();\
         virtual SfxChildWinInfo GetInfo() const
+
+#define SFX_DECL_CHILDWINDOW_WITHID(Class) \
+        SFX_DECL_CHILDWINDOW(Class); \
+        static  sal_uInt16 GetChildWindowId ()\
 
 #define SFX_IMPL_CHILDWINDOW(Class, MyID) \
         SFX_IMPL_POS_CHILDWINDOW(Class, MyID, CHILDWIN_NOPOS)
+
+#define SFX_IMPL_CHILDWINDOW_WITHID(Class, MyID) \
+        SFX_IMPL_POS_CHILDWINDOW_WITHID(Class, MyID, CHILDWIN_NOPOS)
 
 #define SFX_IMPL_POS_CHILDWINDOW(Class, MyID, Pos) \
         SfxChildWindow* Class::CreateImpl( ::Window *pParent, \
@@ -303,8 +309,6 @@ public:
                     SfxChildWindow *pWin = new Class(pParent, nId, pBindings, pInfo);\
                     return pWin; \
                 } \
-        sal_uInt16 Class::GetChildWindowId () \
-		{ return MyID; } \
         void    Class::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)   \
                 {   \
                     SfxChildWinFactory *pFact = new SfxChildWinFactory( \
@@ -314,8 +318,21 @@ public:
                     SfxChildWindow::RegisterChildWindow(pMod, pFact); \
                 }
 
+#define SFX_IMPL_POS_CHILDWINDOW_WITHID(Class, MyID, Pos) \
+        SFX_IMPL_POS_CHILDWINDOW(Class, MyID, Pos) \
+        sal_uInt16 Class::GetChildWindowId () \
+                { return MyID; } \
+
 #define SFX_IMPL_FLOATINGWINDOW(Class, MyID)    \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
+        SfxChildWinInfo Class::GetInfo() const \
+        {                                       \
+            SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
+            ((SfxFloatingWindow*)GetWindow())->FillInfo( aInfo );  \
+            return aInfo; }
+
+#define SFX_IMPL_FLOATINGWINDOW_WITHID(Class, MyID)    \
+        SFX_IMPL_CHILDWINDOW_WITHID(Class, MyID)       \
         SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
@@ -330,8 +347,25 @@ public:
             ((SfxModelessDialog*)GetWindow())->FillInfo( aInfo );  \
             return aInfo; }
 
+#define SFX_IMPL_MODELESSDIALOG_WITHID(Class, MyID)    \
+        SFX_IMPL_CHILDWINDOW_WITHID(Class, MyID)       \
+        SfxChildWinInfo Class::GetInfo() const \
+        {                                       \
+            SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
+            ((SfxModelessDialog*)GetWindow())->FillInfo( aInfo );  \
+            return aInfo; }
+
+
 #define SFX_IMPL_DOCKINGWINDOW(Class, MyID) \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
+        SfxChildWinInfo Class::GetInfo() const \
+        {                                       \
+            SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
+            ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo );  \
+            return aInfo; }
+
+#define SFX_IMPL_DOCKINGWINDOW_WITHID(Class, MyID) \
+        SFX_IMPL_CHILDWINDOW_WITHID(Class, MyID)       \
         SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \

@@ -65,7 +65,7 @@ public:
         SfxChildWinInfo* pInfo);
     ~SwSpellDialogChildWindow();
 
-    SFX_DECL_CHILDWINDOW(SwSpellDialogChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(SwSpellDialogChildWindow);
 
     void    InvalidateSpellDialog();
 

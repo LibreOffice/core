@@ -2420,7 +2420,7 @@ void SvxSearchDialog::SaveToModule_Impl()
 
 // class SvxSearchDialogWrapper ------------------------------------------
 
-SFX_IMPL_CHILDWINDOW(SvxSearchDialogWrapper, SID_SEARCH_DLG);
+SFX_IMPL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper, SID_SEARCH_DLG);
 
 // -----------------------------------------------------------------------
 

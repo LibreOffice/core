@@ -58,7 +58,7 @@ class LeftPaneImpressChildWindow
 public:
     LeftPaneImpressChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
 
-    SFX_DECL_CHILDWINDOW(LeftPaneImpressChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(LeftPaneImpressChildWindow);
 };
 
 
@@ -70,7 +70,7 @@ class LeftPaneDrawChildWindow
 public:
     LeftPaneDrawChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
 
-    SFX_DECL_CHILDWINDOW(LeftPaneDrawChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(LeftPaneDrawChildWindow);
 };
 
 
@@ -89,7 +89,7 @@ public:
         SfxBindings* i_pBindings,
         SfxChildWinInfo* i_pChildWindowInfo );
 
-    SFX_DECL_CHILDWINDOW( ToolPanelChildWindow );
+    SFX_DECL_CHILDWINDOW_WITHID( ToolPanelChildWindow );
 
     // ::sfx2::ITaskPaneToolPanelAccess
     virtual void ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );

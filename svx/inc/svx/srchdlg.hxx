@@ -103,7 +103,7 @@ public:
 
     ~SvxSearchDialogWrapper ();
     SvxSearchDialog *getDialog ();
-    SFX_DECL_CHILDWINDOW(SvxSearchDialogWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper);
 };
 
 // class SvxSearchDialog -------------------------------------------------

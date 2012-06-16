@@ -48,7 +48,7 @@ class SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
 
     SvxContourDlgChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
-    SFX_DECL_CHILDWINDOW( SvxContourDlgChildWindow );
+    SFX_DECL_CHILDWINDOW_WITHID( SvxContourDlgChildWindow );
 };
 
 #ifndef _REDUCED_ContourDlg_HXX_

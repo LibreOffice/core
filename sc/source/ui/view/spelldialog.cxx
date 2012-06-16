@@ -46,7 +46,7 @@
 
 // ============================================================================
 
-SFX_IMPL_CHILDWINDOW( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
+SFX_IMPL_CHILDWINDOW_WITHID( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
 
 ScSpellDialogChildWindow::ScSpellDialogChildWindow( Window* pParentP, sal_uInt16 nId,
         SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :

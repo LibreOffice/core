@@ -65,7 +65,7 @@
 #include <svx/float3d.hxx>
 #include "float3d.hrc"
 
-SFX_IMPL_DOCKINGWINDOW( Svx3DChildWindow, SID_3D_WIN )
+SFX_IMPL_DOCKINGWINDOW_WITHID( Svx3DChildWindow, SID_3D_WIN )
 
 struct Svx3DWinImpl
 {

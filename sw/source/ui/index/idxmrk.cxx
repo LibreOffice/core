@@ -63,7 +63,7 @@
 #include <ndtxt.hxx>
 #include <breakit.hxx>
 
-SFX_IMPL_CHILDWINDOW(SwInsertIdxMarkWrapper, FN_INSERT_IDX_ENTRY_DLG)
+SFX_IMPL_CHILDWINDOW_WITHID(SwInsertIdxMarkWrapper, FN_INSERT_IDX_ENTRY_DLG)
 
 SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
                             sal_uInt16 nId,
@@ -93,7 +93,7 @@ void    SwInsertIdxMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
     pAbstDlg->ReInitDlg(rWrtShell);
 }
 
-SFX_IMPL_CHILDWINDOW(SwInsertAuthMarkWrapper, FN_INSERT_AUTH_ENTRY_DLG)
+SFX_IMPL_CHILDWINDOW_WITHID(SwInsertAuthMarkWrapper, FN_INSERT_AUTH_ENTRY_DLG)
 
 SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   Window *pParentWindow,
                             sal_uInt16 nId,

@@ -56,7 +56,7 @@ public:
     */
     virtual void InvalidateSpellDialog (void);
 
-    SFX_DECL_CHILDWINDOW(SpellDialogChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(SpellDialogChildWindow);
 
 protected:
     /** Iterate over the sentences in all text shapes and stop at the

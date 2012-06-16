@@ -38,7 +38,7 @@ public:
     SwFldDlgWrapper( Window* pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
-    SFX_DECL_CHILDWINDOW(SwFldDlgWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(SwFldDlgWrapper);
 
     virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
     void            ShowPage(sal_uInt16 nPage = 0);

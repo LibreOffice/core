@@ -53,7 +53,7 @@ class ScFunctionChildWindow : public SfxChildWindow
     ScFunctionChildWindow( Window*, sal_uInt16, SfxBindings*,
                             SfxChildWinInfo* );
 
-    SFX_DECL_CHILDWINDOW(ScFunctionChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(ScFunctionChildWindow);
 };
 
 /*************************************************************************

@@ -47,7 +47,7 @@ public:
         SfxBindings*,
         SfxChildWinInfo*);
 
-    SFX_DECL_CHILDWINDOW(AnimationChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(AnimationChildWindow);
 };
 
 } // end of namespace sd

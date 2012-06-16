@@ -53,9 +53,9 @@ using ::com::sun::star::drawing::framework::XConfigurationController;
 using ::com::sun::star::drawing::framework::ResourceActivationMode_ADD;
 using ::com::sun::star::drawing::framework::ResourceActivationMode_REPLACE;
 
-SFX_IMPL_DOCKINGWINDOW(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
-SFX_IMPL_DOCKINGWINDOW(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
-SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_TASKPANE)
+SFX_IMPL_DOCKINGWINDOW_WITHID(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
+SFX_IMPL_DOCKINGWINDOW_WITHID(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
+SFX_IMPL_DOCKINGWINDOW_WITHID( ToolPanelChildWindow, SID_TASKPANE)
 
 //===== PaneChildWindow =======================================================
 

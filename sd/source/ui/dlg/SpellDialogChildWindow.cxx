@@ -35,7 +35,7 @@
 
 namespace sd{
 
-SFX_IMPL_CHILDWINDOW(SpellDialogChildWindow, SID_SPELL_DIALOG)
+SFX_IMPL_CHILDWINDOW_WITHID(SpellDialogChildWindow, SID_SPELL_DIALOG)
 }
 
 #include "ViewShell.hxx"

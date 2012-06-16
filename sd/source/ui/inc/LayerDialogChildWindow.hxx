@@ -47,7 +47,7 @@ public:
         SfxChildWinInfo*);
     virtual ~LayerDialogChildWindow (void);
 
-    SFX_DECL_CHILDWINDOW(LayerDialogChildWindow);
+    SFX_DECL_CHILDWINDOW_WITHID(LayerDialogChildWindow);
 };
 
 } // end of namespace sd

@@ -325,7 +325,7 @@ public:
                                   SfxBindings*      pBindings,
                                   SfxChildWinInfo*  pInfo );
 
-    SFX_DECL_CHILDWINDOW(ScInputWindowWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(ScInputWindowWrapper);
 };
 
 

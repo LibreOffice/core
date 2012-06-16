@@ -36,7 +36,7 @@
 // are included that define ::sd::Window.  The ... macros are not really
 // namespace proof.
 namespace sd {
-SFX_IMPL_DOCKINGWINDOW(LayerDialogChildWindow, SID_LAYER_DIALOG_WIN)
+SFX_IMPL_DOCKINGWINDOW_WITHID(LayerDialogChildWindow, SID_LAYER_DIALOG_WIN)
 }
 
 #include "LayerDialog.hrc"
