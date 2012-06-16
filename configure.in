@@ -3543,8 +3543,8 @@ if test "$cross_compiling" = "yes"; then
     cp config.log ../config.Build.log
     sed -e 's,=\(.*\),="\1",' < config_host.mk > config_host.sh
     . ./config_host.sh
-    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
-             SYSTEM_LIBXSLT; do
+    for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX DISABLE_PYTHON GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
+             PYTHON SYSTEM_LIBXSLT; do
         VV='$'$V
         VV=`eval "echo $VV"`
         if test -n "$VV"; then
@@ -3581,6 +3581,7 @@ else
     CPUNAME_FOR_BUILD="$CPUNAME"
     CPU_FOR_BUILD="$CPU"
     CXX_FOR_BUILD="$CXX"
+    DISABLE_PYTHON_FOR_BUILD="$DISABLE_PYTHON"
     GUIBASE_FOR_BUILD="$GUIBASE"
     GUI_FOR_BUILD="$GUI"
     INPATH_FOR_BUILD="$INPATH"
@@ -3588,6 +3589,7 @@ else
     OS_FOR_BUILD="$OS"
     OUTDIR_FOR_BUILD="$OUTDIR"
     OUTPATH_FOR_BUILD="$OUTPATH"
+    PYTHON_FOR_BUILD="$PYTHON"
     WORKDIR_FOR_BUILD="$WORKDIR"
 fi
 AC_SUBST(COM_FOR_BUILD)
@@ -3601,6 +3603,7 @@ AC_SUBST(CXX_FOR_BUILD)
 AC_SUBST(INPATH_FOR_BUILD)
 AC_SUBST(OUTPATH_FOR_BUILD)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
+AC_SUBST([PYTHON_FOR_BUILD])
 
 AC_SUBST(OUTDIR_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
@@ -6727,6 +6730,14 @@ no)
     AC_MSG_ERROR([Internal configure script error, invalid enable_python value "$enable_python"])
     ;;
 esac
+
+dnl Cross-build of python requires python that is runnable on the build
+dnl platform, because it is used in the build process
+if test "$cross_compiling" = yes; then
+    if test "$DISABLE_PYTHON" = no -a "$SYSTEM_PYTHON" = no -a "$DISABLE_PYTHON_FOR_BUILD" = yes; then
+        AC_MSG_ERROR([Cross-build of python requires python that is runnable on the build platform. You must not use --disable-python for the 'build' config.])
+    fi
+fi
 
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
