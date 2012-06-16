@@ -672,21 +672,16 @@ void Dialog::StateChanged( StateChangedType nType )
 
             Size aSize = get_preferred_size();
 
-            fprintf(stderr, "100 dialog sized to %d %d\n", aSize.Width(),
-                aSize.Height());
-
             Size aMax = GetOptimalSize(WINDOWSIZE_MAXIMUM);
             aSize.Width() = std::min(aMax.Width(), aSize.Width());
             aSize.Height() = std::min(aMax.Height(), aSize.Height());
 
             SetMinOutputSizePixel(aSize);
             SetSizePixel(aSize);
-
-            aSize = GetSizePixel();
+            setPosSizeOnContainee(aSize, *pBox);
 
             fprintf(stderr, "101 dialog sized to %d %d\n", aSize.Width(),
                 aSize.Height());
-
         }
 
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
@@ -1190,6 +1185,19 @@ Size Dialog::GetOptimalSize(WindowSizeType eType) const
     return Window::CalcWindowSize(aSize);
 }
 
+void Dialog::setPosSizeOnContainee(Size aSize, VclBox &rBox)
+{
+    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
+        + 2 * m_nBorderWidth;
+    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
+        + 2 * m_nBorderWidth;
+
+    Point aPos(mpWindowImpl->mnLeftBorder + m_nBorderWidth,
+        mpWindowImpl->mnTopBorder + m_nBorderWidth);
+
+    rBox.SetPosSizePixel(aPos, aSize);
+}
+
 IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
     fprintf(stderr, "ImplHandleLayoutTimerHdl\n");
@@ -1200,17 +1208,7 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
         fprintf(stderr, "WTF!\n");
         return 0;
     }
-    Size aSize = GetSizePixel();
-
-    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
-        + 2 * m_nBorderWidth;
-    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
-        + 2 * m_nBorderWidth;
-
-    Point aPos(mpWindowImpl->mnLeftBorder + m_nBorderWidth,
-        mpWindowImpl->mnTopBorder + m_nBorderWidth);
-
-    pBox->SetPosSizePixel(aPos, aSize);
+    setPosSizeOnContainee(GetSizePixel(), *pBox);
     return 0;
 }
 

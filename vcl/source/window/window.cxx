@@ -4935,6 +4935,7 @@ void Window::StateChanged( StateChangedType eType )
         case STATE_CHANGE_ENABLE:
         case STATE_CHANGE_STATE:
         case STATE_CHANGE_DATA:
+        case STATE_CHANGE_INITSHOW:
             break;
         //stuff that does invalidate the layout
         default:
@@ -9667,14 +9668,16 @@ Selection Window::GetSurroundingTextSelection() const
   return Selection( 0, 0 );
 }
 
-//Poor man's equivalent, when widget wants to renegotiate
-//size, get parent dialog and call resize on it
+//When a widget wants to renegotiate size, get toplevel parent dialog and call
+//resize on it. Maybe better to just find direct parent and if its a container
+//chain it upwards one step at a time until a dialog is found.
 void Window::queue_resize()
 {
     Dialog *pParent = GetParentDialog();
-    if (!pParent)
+    if (!pParent || pParent == this)
         return;
-    pParent->Resize();
+    if (pParent->isLayoutEnabled())
+        pParent->Resize();
 }
 
 void Window::setChildAnyProperty(const rtl::OString &rString, const Any &rValue)
