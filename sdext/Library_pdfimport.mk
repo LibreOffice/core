@@ -46,9 +46,10 @@ $(eval $(call gb_Library_use_libraries,pdfimport,\
 ))
 
 $(eval $(call gb_Library_use_static_libraries,pdfimport,\
-    basegfx_s \
     pdfimport_s \
 ))
+
+$(eval $(call gb_Library_use_library_objects,pdfimport,basegfx))
 
 $(eval $(call gb_Library_use_externals,pdfimport,\
     zlib \
