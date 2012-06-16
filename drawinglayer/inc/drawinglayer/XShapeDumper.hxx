@@ -175,6 +175,7 @@ private:
     void dumpCustomShapeEngineAsAttribute(rtl::OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
     void dumpCustomShapeDataAsAttribute(rtl::OUString sCustomShapeData, xmlTextWriterPtr xmlWriter);
     void dumpCustomShapeGeometryAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aCustomShapeGeometry, xmlTextWriterPtr xmlWriter);
+    void dumpCustomShapeReplacementURLAsAttribute(rtl::OUString sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);

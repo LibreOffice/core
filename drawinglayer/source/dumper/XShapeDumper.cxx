@@ -1046,6 +1046,12 @@ namespace {
         xmlTextWriterEndElement( xmlWriter );
     }
 
+    void XShapeDumper::dumpCustomShapeReplacementURLAsAttribute(rtl::OUString sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeReplacementURL"), "%s",
+            rtl::OUStringToOString(sCustomShapeReplacementURL, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
     // methods dumping whole services
 
     void XShapeDumper::dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
@@ -1603,6 +1609,12 @@ namespace {
             uno::Sequence< beans::PropertyValue> aCustomShapeGeometry;
             if(anotherAny >>= aCustomShapeGeometry)
                 dumpCustomShapeGeometryAsElement(aCustomShapeGeometry, xmlWriter);
+        }
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeReplacementURL");
+            rtl::OUString sCustomShapeReplacementURL;
+            if(anotherAny >>= sCustomShapeReplacementURL)
+                dumpCustomShapeReplacementURLAsAttribute(sCustomShapeReplacementURL, xmlWriter);
         }
     }
 
