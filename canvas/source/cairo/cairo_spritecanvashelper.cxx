@@ -144,7 +144,8 @@ namespace cairocanvas
         mpRedrawManager( NULL ),
         mpOwningSpriteCanvas( NULL ),
         mpCompositingSurface(),
-        maCompositingSurfaceSize()
+        maCompositingSurfaceSize(),
+        mbCompositingSurfaceDirty(true)
     {
     }
 
@@ -222,7 +223,7 @@ namespace cairocanvas
 
         // TODO(P1): Might be worthwile to track areas of background
         // changes, too.
-        if( !bUpdateAll && !io_bSurfaceDirty )
+        if( !bUpdateAll && !io_bSurfaceDirty && !mbCompositingSurfaceDirty )
         {
             // background has not changed, so we're free to optimize
             // repaint to areas where a sprite has changed
@@ -270,6 +271,7 @@ namespace cairocanvas
         // rendering and sprite changing
         mpRedrawManager->clearChangeRecords();
 
+        mbCompositingSurfaceDirty = false;
         io_bSurfaceDirty = false;
 
         // commit to screen
@@ -351,16 +353,33 @@ namespace cairocanvas
             ::basegfx::B2IRange aDestRect( rDestRect );
             aDestRect.intersect( aOutputBounds );
 
-            cairo_save( pCompositingCairo.get() );
-            // scroll content in device back buffer
-            cairo_set_source_surface( pCompositingCairo.get(),
-                                      mpOwningSpriteCanvas->getBufferSurface()->getCairoSurface().get(),
+            ::basegfx::B2ISize aScrollSize( aDestRect.getWidth(), aDestRect.getHeight() );
+            SurfaceSharedPtr pScrollSurface( getTemporarySurface() );
+            CairoSharedPtr pScrollCairo( pScrollSurface->getCairo() );
+
+            cairo_save( pScrollCairo.get() );
+            // scroll the current content of the compositing surface (and,
+            // thus, of the window) in temp. surface
+            cairo_set_source_surface( pScrollCairo.get(),
+                                      pCompositingSurface->getCairoSurface().get(),
                                       aDestPos.getX() - aSourceUpperLeftPos.getX(),
                                       aDestPos.getY() - aSourceUpperLeftPos.getY() );
+            cairo_rectangle( pScrollCairo.get(),
+                    aDestPos.getX(), aDestPos.getY(),
+                    aScrollSize.getX(), aScrollSize.getY() );
+            cairo_clip( pScrollCairo.get() );
+            cairo_set_operator( pScrollCairo.get(), CAIRO_OPERATOR_SOURCE );
+            cairo_paint( pScrollCairo.get() );
+            cairo_restore( pScrollCairo.get() );
+
+            cairo_save( pCompositingCairo.get() );
+            // copy the scrolled area back onto the compositing surface
+            cairo_set_source_surface( pCompositingCairo.get(),
+                                      pScrollSurface->getCairoSurface().get(),
+                                      0, 0 );
             cairo_rectangle( pCompositingCairo.get(),
                              aDestPos.getX(), aDestPos.getY(),
-                             sal::static_int_cast<sal_Int32>(aDestRect.getWidth()),
-                             sal::static_int_cast<sal_Int32>(aDestRect.getHeight()) );
+                             aScrollSize.getX(), aScrollSize.getY() );
             cairo_clip( pCompositingCairo.get() );
             cairo_set_operator( pCompositingCairo.get(), CAIRO_OPERATOR_SOURCE );
             cairo_paint( pCompositingCairo.get() );
@@ -530,14 +549,27 @@ namespace cairocanvas
 
         if( !mpCompositingSurface )
         {
-            mpCompositingSurface =
-                mpOwningSpriteCanvas->getWindowSurface()->getSimilar(
-                    CAIRO_CONTENT_COLOR,
-                    rNeededSize.getX(), rNeededSize.getY() );
+            mpCompositingSurface = createSurface( rNeededSize );
             maCompositingSurfaceSize = rNeededSize;
+            mbCompositingSurfaceDirty = true;
+            mpTemporarySurface.reset();
         }
 
         return mpCompositingSurface;
+    }
+
+    ::cairo::SurfaceSharedPtr SpriteCanvasHelper::getTemporarySurface()
+    {
+        if ( !mpTemporarySurface )
+            mpTemporarySurface = createSurface( maCompositingSurfaceSize );
+        return mpTemporarySurface;
+    }
+
+    ::cairo::SurfaceSharedPtr SpriteCanvasHelper::createSurface( const ::basegfx::B2ISize& rNeededSize ) const
+    {
+        return mpOwningSpriteCanvas->getWindowSurface()->getSimilar(
+                    CAIRO_CONTENT_COLOR,
+                    rNeededSize.getX(), rNeededSize.getY() );
     }
 }
 
