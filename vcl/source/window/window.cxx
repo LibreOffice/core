@@ -4921,10 +4921,27 @@ void Window::UserEvent( sal_uLong, void* )
 
 // -----------------------------------------------------------------------
 
-void Window::StateChanged( StateChangedType )
+void Window::StateChanged( StateChangedType eType )
 {
-    queue_resize();
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+    switch (eType)
+    {
+        //stuff that doesn't invalidate the layout
+        case STATE_CHANGE_CONTROLFOREGROUND:
+        case STATE_CHANGE_CONTROLBACKGROUND:
+        case STATE_CHANGE_TRANSPARENT:
+        case STATE_CHANGE_UPDATEMODE:
+        case STATE_CHANGE_READONLY:
+        case STATE_CHANGE_ENABLE:
+        case STATE_CHANGE_STATE:
+        case STATE_CHANGE_DATA:
+            break;
+        //stuff that does invalidate the layout
+        default:
+            fprintf(stderr, "queue_resize due to %d\n", eType);
+            queue_resize();
+            break;
+    }
 }
 
 // -----------------------------------------------------------------------
