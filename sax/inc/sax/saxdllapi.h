@@ -29,7 +29,7 @@
 #ifndef INCLUDED_SAX_DLLAPI_H
 #define INCLUDED_SAX_DLLAPI_H
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined SAX_DLLIMPLEMENTATION
 #define SAX_DLLPUBLIC SAL_DLLPUBLIC_EXPORT

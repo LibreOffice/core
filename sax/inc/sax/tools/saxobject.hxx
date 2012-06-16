@@ -30,7 +30,7 @@
 #define _SAX_OBJECT_HXX_
 
 #include <sal/types.h>
-#include "sax/dllapi.h"
+#include "sax/saxdllapi.h"
 
 namespace sax
 {

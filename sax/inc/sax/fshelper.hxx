@@ -35,7 +35,6 @@
 #include <stdarg.h>
 #include <boost/shared_ptr.hpp>
 #include <sax/fastattribs.hxx>
-#include "sax/dllapi.h"
 
 #define FSNS(namespc, element) ((namespc << 16) | element)
 const sal_Int32 FSEND = -1; // same as XML_TOKEN_INVALID

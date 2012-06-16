@@ -29,7 +29,6 @@
 #ifndef _SAX_SAXPARSER_HXX_
 #define _SAX_SAXPARSER_HXX_
 
-#include "sax/dllapi.h"
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>

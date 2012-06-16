@@ -41,7 +41,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "sax/dllapi.h"
 #include "sax/fshelper.hxx"
 
 #define SERIALIZER_IMPLEMENTATION_NAME  "com.sun.star.comp.extensions.xml.sax.FastSerializer"

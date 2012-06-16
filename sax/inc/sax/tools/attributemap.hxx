@@ -29,8 +29,6 @@
 #ifndef _SAX_ATTRIBUTEMAP_HXX_
 #define _SAX_ATTRIBUTEMAP_HXX_
 
-#include "sax/dllapi.h"
-
 #include <map>
 #include "sax/tools/tokenmap.hxx"
 

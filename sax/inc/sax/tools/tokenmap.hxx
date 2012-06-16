@@ -31,7 +31,6 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include "sax/dllapi.h"
 #include "sax/tools/saxobject.hxx"
 
 namespace sax
