@@ -32,6 +32,10 @@ gb_InstallScriptTarget_COMMAND := $(PERL) $(gb_InstallScriptTarget_TARGET)
 
 gb_InstallScriptTarget__make_arglist = $(subst $(WHITESPACE),$(COMMA),$(strip $(1)))
 
+define gb_InstallScriptTarget__get_files
+$(notdir $(shell cat $(foreach module,$(1),$(call gb_InstallModule_get_filelist,$(module)))))
+endef
+
 # Pass first arg if make is running in silent mode, second arg otherwise
 define gb_InstallScriptTarget__if_silent
 $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),$(1),$(2))
@@ -42,11 +46,11 @@ $(call gb_Output_announce,$(2),$(true),INS,4)
 $(call gb_Helper_abbreviate_dirs,\
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 		$(call gb_InstallScriptTarget__make_arglist,\
-			$(notdir $(foreach module,$(SCP_MODULE_DIRS),$(wildcard $(module)/*$(SCP_SUFFIX))))) \
+			$(call gb_InstallScriptTarget__get_files,$(SCP_MODULES))) \
 	) && \
 	$(gb_InstallScriptTarget_COMMAND) \
 		$(call gb_InstallScriptTarget__if_silent,-q) \
-		-i $(call gb_InstallScriptTarget__make_arglist,$(SCP_MODULE_DIRS) $(OUTDIR)/par) \
+		-i $(OUTDIR)/par/osl \
 	   	-o $(1) \
 	   	@@$${RESPONSEFILE} && \
 	rm -f $${RESPONSEFILE} \
@@ -70,15 +74,14 @@ $(call gb_InstallScriptTarget_get_clean_target,%) :
 # gb_InstallScriptTarget_InstallScriptTarget(<target>)
 define gb_InstallScriptTarget_InstallScriptTarget
 $(call gb_InstallScriptTarget_get_target,$(1)) :| $(dir $(call gb_InstallScriptTarget_get_target,$(1))).dir
-$(call gb_InstallScriptTarget_get_target,$(1)) : SCP_MODULE_DIRS :=
-$(call gb_InstallScriptTarget_get_target,$(1)) : SCP_SUFFIX := $(suffix $(call gb_ScpTarget_get_target,%))
+$(call gb_InstallScriptTarget_get_target,$(1)) : SCP_MODULES :=
 
 endef
 
 define gb_InstallScriptTarget_use_module
-$(call gb_InstallScriptTarget_get_target,$(1)) : $(call gb_InstallModuleTarget_get_target,$(2))
-$(call gb_InstallScriptTarget_get_clean_target,$(1)) : $(call gb_InstallModuleTarget_get_clean_target,$(2))
-$(call gb_InstallScriptTarget_get_target,$(1)) : SCP_MODULE_DIRS += $(call gb_InstallModuleTarget_get_workdir,$(2))
+$(call gb_InstallScriptTarget_get_target,$(1)) : $(call gb_InstallModule_get_target,$(2))
+$(call gb_InstallScriptTarget_get_clean_target,$(1)) : $(call gb_InstallModule_get_clean_target,$(2))
+$(call gb_InstallScriptTarget_get_target,$(1)) : SCP_MODULES += $(2)
 
 endef
 
