@@ -64,7 +64,6 @@ namespace io_TextInputStream
 // Implementation XTextInputStream
 
 typedef WeakImplHelper3< XTextInputStream, XActiveDataSink, XServiceInfo > TextInputStreamHelper;
-class OCommandEnvironment;
 
 #define INITIAL_UNICODE_BUFFER_CAPACITY     0x100
 #define READ_BYTE_COUNT                     0x100

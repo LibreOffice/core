@@ -46,18 +46,6 @@
 
 #include <expat.h>
 
-namespace lucene
-{
-namespace document
-{
-class Document;
-}
-namespace util
-{
-class Reader;
-}
-}
-
 IndexerPreProcessor::IndexerPreProcessor
     ( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
       const fs::path& idxCaptionStylesheet, const fs::path& idxContentStylesheet )

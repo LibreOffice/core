@@ -115,7 +115,6 @@ using ::svx::PropertyValueProvider;
 using ::svx::IPropertyValueProvider;
 
 class GDIMetaFile;
-class SvStream;
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance( SdrObject* pObject );
 

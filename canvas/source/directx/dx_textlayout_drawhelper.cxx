@@ -62,7 +62,6 @@ using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
-    class DXBitmap;
     TextLayoutDrawHelper::TextLayoutDrawHelper(
         const uno::Reference< rendering::XGraphicDevice >& xGraphicDevice ) :
             mxGraphicDevice(xGraphicDevice)

@@ -84,9 +84,6 @@ using namespace ::com::sun::star::container;
     if( rType == ::getCppuType((const Reference< xint >*)0) ) \
         aAny <<= Reference< xint >(this)
 
-class GDIMetaFile;
-class SvStream;
-
 /***********************************************************************
 * class SvxShapeGroup                                                  *
 ***********************************************************************/

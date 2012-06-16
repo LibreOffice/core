@@ -38,8 +38,6 @@ using namespace ::com::sun::star::lang;
 
 #include <cppuhelper/implbase3.hxx>
 
-class SvXMLAttrContainerItem_Impl;
-
 class PropertySetMergerImpl : public ::cppu::WeakAggImplHelper3< XPropertySet, XPropertyState, XPropertySetInfo >
 {
 private:

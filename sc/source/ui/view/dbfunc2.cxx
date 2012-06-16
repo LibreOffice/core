@@ -43,9 +43,6 @@
 
 //==================================================================
 
-class ScDrawLayer;
-class ScChartCollection;
-
 void ScDBFunc::UpdateCharts( sal_Bool bAllCharts )
 {
     sal_uInt16 nFound = 0;

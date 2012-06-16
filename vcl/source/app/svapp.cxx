@@ -142,10 +142,6 @@ namespace
 }
 
 
-class Reflection;
-
-
-
 extern "C" {
     typedef UnoWrapperBase* (SAL_CALL *FN_TkCreateUnoWrapper)();
 }

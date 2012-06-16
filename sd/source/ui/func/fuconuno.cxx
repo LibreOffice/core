@@ -39,9 +39,6 @@
 
 #include <svx/dialogs.hrc>
 
-class SbModule;
-
-
 #include "app.hrc"
 #include "glob.hrc"
 #include "ViewShell.hxx"

@@ -62,7 +62,6 @@ namespace io_TextOutputStream
 // Implementation XTextOutputStream
 
 typedef WeakImplHelper3< XTextOutputStream, XActiveDataSource, XServiceInfo > TextOutputStreamHelper;
-class OCommandEnvironment;
 
 class OTextOutputStream : public TextOutputStreamHelper
 {

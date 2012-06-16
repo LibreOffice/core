@@ -33,10 +33,6 @@
 #include <comphelper/property.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 
-class SfxItemSet;
-class SfxItemPool;
-class SfxPoolItem;
-
 // .......................................................................
 namespace svt
 {

@@ -29,8 +29,6 @@
 #define _SVTREEBX_CXX
 #include <vcl/svapp.hxx>
 
-class TabBar;
-
 #include <svtools/svlbox.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtreebx.hxx>

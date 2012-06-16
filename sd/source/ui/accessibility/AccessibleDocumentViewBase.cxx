@@ -60,8 +60,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 
-class SfxViewFrame;
-
 namespace accessibility {
 
 //=====  internal  ============================================================

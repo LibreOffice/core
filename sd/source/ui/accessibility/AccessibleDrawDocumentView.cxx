@@ -66,8 +66,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-class SfxViewFrame;
-
 namespace accessibility {
 
 
