@@ -41,10 +41,11 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, Window *pParent)
     , mbSelected(false)
     , mbHover(false)
     , mpxAcc(NULL)
-    , mpSelectBox(new CheckBox(pParent,WB_HIDE))
+    , mpSelectBox(new CheckBox(pParent,WB_HIDE | WB_NOPOINTERFOCUS))
 {
     mpSelectBox->SetPosPixel(Point(0,0));
     mpSelectBox->SetSizePixel(Size(20,20));
+    mpSelectBox->SetClickHdl(LINK(this,ThumbnailViewItem,OnClick));
 }
 
 ThumbnailViewItem::~ThumbnailViewItem()
@@ -86,6 +87,12 @@ uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( b
 void ThumbnailViewItem::setSelectionBoxPos (const Point &pos)
 {
     mpSelectBox->SetPosPixel(pos);
+}
+
+IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )
+{
+    mbSelected = mpSelectBox->GetState() == STATE_CHECK;
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

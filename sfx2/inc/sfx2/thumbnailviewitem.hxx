@@ -71,6 +71,10 @@ struct ThumbnailViewItem
 
 private:
 
+    DECL_LINK (OnClick, CheckBox *);
+
+private:
+
     CheckBox *mpSelectBox;
 };
 
