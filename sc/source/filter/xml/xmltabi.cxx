@@ -151,9 +151,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      const bool bTempIsSubTable,
-                                      const sal_Int32 nSpannedCols) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pExternalRefInfo(NULL),
     nStartOffset(-1),
@@ -163,77 +161,70 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     // get start offset in file (if available)
     nStartOffset = GetScImport().GetByteOffset();
 
-    if (!bTempIsSubTable)
+    ScXMLTabProtectionData aProtectData;
+    rtl::OUString sName;
+    rtl::OUString sStyleName;
+    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        ScXMLTabProtectionData aProtectData;
-        rtl::OUString sName;
-        rtl::OUString sStyleName;
-        sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-        const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
-        for( sal_Int16 i=0; i < nAttrCount; ++i )
-        {
-            const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            rtl::OUString aLocalName;
-            sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                                sAttrName, &aLocalName ));
-            const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        rtl::OUString aLocalName;
+        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName ));
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
-            switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
-            {
-                case XML_TOK_TABLE_NAME:
-                        sName = sValue;
-                    break;
-                case XML_TOK_TABLE_STYLE_NAME:
-                        sStyleName = sValue;
-                    break;
-                case XML_TOK_TABLE_PROTECTED:
-                    aProtectData.mbProtected = IsXMLToken(sValue, XML_TRUE);
+        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        {
+            case XML_TOK_TABLE_NAME:
+                    sName = sValue;
                 break;
-                case XML_TOK_TABLE_PRINT_RANGES:
-                        sPrintRanges = sValue;
-                    break;
-                case XML_TOK_TABLE_PASSWORD:
-                    aProtectData.maPassword = sValue;
+            case XML_TOK_TABLE_STYLE_NAME:
+                    sStyleName = sValue;
                 break;
-                case XML_TOK_TABLE_PASSHASH:
-                    aProtectData.meHash1 = ScPassHashHelper::getHashTypeFromURI(sValue);
+            case XML_TOK_TABLE_PROTECTED:
+                aProtectData.mbProtected = IsXMLToken(sValue, XML_TRUE);
+            break;
+            case XML_TOK_TABLE_PRINT_RANGES:
+                    sPrintRanges = sValue;
                 break;
-                case XML_TOK_TABLE_PASSHASH_2:
-                    aProtectData.meHash2 = ScPassHashHelper::getHashTypeFromURI(sValue);
+            case XML_TOK_TABLE_PASSWORD:
+                aProtectData.maPassword = sValue;
+            break;
+            case XML_TOK_TABLE_PASSHASH:
+                aProtectData.meHash1 = ScPassHashHelper::getHashTypeFromURI(sValue);
+            break;
+            case XML_TOK_TABLE_PASSHASH_2:
+                aProtectData.meHash2 = ScPassHashHelper::getHashTypeFromURI(sValue);
+            break;
+            case XML_TOK_TABLE_PRINT:
+                {
+                    if (IsXMLToken(sValue, XML_FALSE))
+                        bPrintEntireSheet = false;
+                }
                 break;
-                case XML_TOK_TABLE_PRINT:
-                    {
-                        if (IsXMLToken(sValue, XML_FALSE))
-                            bPrintEntireSheet = false;
-                    }
-                    break;
-            }
         }
+    }
 
-        rtl::OUString aExtUrl, aExtTabName;
-        if (lcl_isExternalRefCache(sName, aExtUrl, aExtTabName))
+    rtl::OUString aExtUrl, aExtTabName;
+    if (lcl_isExternalRefCache(sName, aExtUrl, aExtTabName))
+    {
+        // This is an external ref cache table.
+        pExternalRefInfo.reset(new ScXMLExternalTabData);
+        pExternalRefInfo->maFileUrl = aExtUrl;
+        ScDocument* pDoc = GetScImport().GetDocument();
+        if (pDoc)
         {
-            // This is an external ref cache table.
-            pExternalRefInfo.reset(new ScXMLExternalTabData);
-            pExternalRefInfo->maFileUrl = aExtUrl;
-            ScDocument* pDoc = GetScImport().GetDocument();
-            if (pDoc)
-            {
-                ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-                pExternalRefInfo->mnFileId = pRefMgr->getExternalFileId(aExtUrl);
-                pExternalRefInfo->mpCacheTable = pRefMgr->getCacheTable(pExternalRefInfo->mnFileId, aExtTabName, true);
-                pExternalRefInfo->mpCacheTable->setWholeTableCached();
-            }
-        }
-        else
-        {
-            // This is a regular table.
-            GetScImport().GetTables().NewSheet(sName, sStyleName, aProtectData);
+            ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+            pExternalRefInfo->mnFileId = pRefMgr->getExternalFileId(aExtUrl);
+            pExternalRefInfo->mpCacheTable = pRefMgr->getCacheTable(pExternalRefInfo->mnFileId, aExtTabName, true);
+            pExternalRefInfo->mpCacheTable->setWholeTableCached();
         }
     }
     else
     {
-        GetScImport().GetTables().NewTable(nSpannedCols);
+        // This is a regular table.
+        GetScImport().GetTables().NewSheet(sName, sStyleName, aProtectData);
     }
 }
 

@@ -62,9 +62,7 @@ public:
     ScXMLTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const bool bTempIsSubTable = false,
-                        const sal_Int32 nSpannedCols = 0);
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableContext();
 

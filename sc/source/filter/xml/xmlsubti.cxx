@@ -221,7 +221,9 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
         }
     }
 
-    NewTable(1);
+    maTables.push_back(new ScMyTableData(nCurrentSheet));
+    pCurrentTab = & maTables.back();
+    pCurrentTab->SetSpannedCols(1);
 }
 
 void ScMyTables::SetTableStyle(const rtl::OUString& sStyleName)
@@ -368,41 +370,6 @@ void ScMyTables::AddColumn(bool bIsCovered)
         pCurrentTab->SetRealCols(
             nCol + 1, pCurrentTab->GetRealCols(nCol) + pCurrentTab->GetColsPerCol(nCol));
     }
-}
-
-void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
-{
-    maTables.push_back(new ScMyTableData(nCurrentSheet));
-    pCurrentTab = & maTables.back();
-
-    size_t nTables = maTables.size();
-    if (nTables > 1)
-    {
-        ScMyTableData& rFirstTab = maTables.front();
-
-        const sal_Int32 nCol = rFirstTab.GetColumn();
-        const sal_Int32 nColCount = rFirstTab.GetColCount();
-        const sal_Int32 nColsPerCol = rFirstTab.GetColsPerCol(nCol);
-
-        sal_Int32 nSpannedCols = rFirstTab.GetSpannedCols();
-        sal_Int32 nTemp = nSpannedCols - nColCount;
-        sal_Int32 nTemp2 = nCol - nColCount + 1;
-        if ((nTemp > 0) && (nTemp2 == 0))
-            nTempSpannedCols *= nTemp + 1;
-        else
-            if (nColsPerCol > 1)
-                nTempSpannedCols *= nColsPerCol;
-
-        sal_Int32 nToMerge;
-        if (nSpannedCols > nColCount)
-            nToMerge = rFirstTab.GetChangedCols(nCol, nCol + nColsPerCol + nSpannedCols - nColCount);
-        else
-            nToMerge = rFirstTab.GetChangedCols(nCol, nCol + nColsPerCol);
-        if (nToMerge > nCol)
-            nTempSpannedCols += nToMerge;
-    }
-
-    pCurrentTab->SetSpannedCols(nTempSpannedCols);
 }
 
 void ScMyTables::UpdateRowHeights()

@@ -128,7 +128,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     nCellType(util::NumberFormat::TEXT),
     bIsMerged(false),
     bIsMatrix(false),
-    bHasSubTable(false),
     bIsCovered(bTempIsCovered),
     bIsEmpty(true),
     bHasTextImport(false),
@@ -394,23 +393,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
         break;
         case XML_TOK_TABLE_ROW_CELL_TABLE:
         {
-            const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-            rtl::OUString aLocalName;
-            for( sal_Int16 i=0; i < nAttrCount; i++ )
-            {
-                sal_uInt16 nAttrPrefix = rXMLImport.GetNamespaceMap().GetKeyByAttrName(
-                                                    xAttrList->getNameByIndex( i ), &aLocalName );
-                if (    nAttrPrefix == XML_NAMESPACE_TABLE
-                    &&  IsXMLToken(aLocalName, XML_IS_SUB_TABLE))
-                {
-                    bHasSubTable = IsXMLToken(xAttrList->getValueByIndex( i ), XML_TRUE);
-                }
-            }
-            OSL_ENSURE(bHasSubTable, "it should be a subtable");
-            pContext = new ScXMLTableContext( rXMLImport , nPrefix,
-                            rLName, xAttrList, true, static_cast<sal_Int32>(nMergedCols) );
-            nMergedCols = 1;
-            bIsMerged = false;
+            SAL_WARN("sc", "ScXMLTableRowCellContext::CreateChildContext: subtables are not supported");
         }
         break;
         case XML_TOK_TABLE_ROW_CELL_ANNOTATION:
@@ -1101,34 +1084,31 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 
 void ScXMLTableRowCellContext::EndElement()
 {
-    if( !bHasSubTable )
+    if( bHasTextImport && rXMLImport.GetRemoveLastChar() )
     {
-        if( bHasTextImport && rXMLImport.GetRemoveLastChar() )
+        UniReference< XMLTextImportHelper > aTextImport = rXMLImport.GetTextImport();
+        if( aTextImport->GetCursor().is() )
         {
-            UniReference< XMLTextImportHelper > aTextImport = rXMLImport.GetTextImport();
-            if( aTextImport->GetCursor().is() )
+            if( aTextImport->GetCursor()->goLeft(1, true) )
             {
-                if( aTextImport->GetCursor()->goLeft(1, true) )
-                {
-                    aTextImport->GetText()->insertString(
-                        aTextImport->GetCursorAsRange(), rtl::OUString(), true );
-                }
-                aTextImport->ResetCursor();
+                aTextImport->GetText()->insertString(
+                    aTextImport->GetCursorAsRange(), rtl::OUString(), true );
             }
+            aTextImport->ResetCursor();
         }
-
-        ScAddress aCellPos = rXMLImport.GetTables().GetRealScCellPos();
-        if( aCellPos.Col() > 0 && nRepeatedRows > 1 )
-            aCellPos.SetRow( aCellPos.Row() - (nRepeatedRows - 1) );
-        if( bIsMerged )
-            DoMerge( aCellPos, nMergedCols - 1, nMergedRows - 1 );
-        if( !pOUFormula )
-            AddNonFormulaCells( aCellPos );
-        else // if ( pOUFormula )
-            AddFormulaCell( aCellPos );
     }
+
+    ScAddress aCellPos = rXMLImport.GetTables().GetRealScCellPos();
+    if( aCellPos.Col() > 0 && nRepeatedRows > 1 )
+        aCellPos.SetRow( aCellPos.Row() - (nRepeatedRows - 1) );
+    if( bIsMerged )
+        DoMerge( aCellPos, nMergedCols - 1, nMergedRows - 1 );
+    if( !pOUFormula )
+        AddNonFormulaCells( aCellPos );
+    else // if ( pOUFormula )
+        AddFormulaCell( aCellPos );
+
     bIsMerged = false;
-    bHasSubTable = false;
     nMergedCols = 1;
     nMergedRows = 1;
     nColsRepeated = 1;

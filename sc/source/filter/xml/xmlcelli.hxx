@@ -67,7 +67,6 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Int16   nCellType;
     bool        bIsMerged;
     bool        bIsMatrix;
-    bool        bHasSubTable;
     bool        bIsCovered;
     bool        bIsEmpty;
     bool        bHasTextImport;

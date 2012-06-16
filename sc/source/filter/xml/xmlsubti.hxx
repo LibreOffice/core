@@ -155,7 +155,6 @@ public:
     void                                AddRow();
     void                                SetRowStyle(const rtl::OUString& rCellStyleName);
     void                                AddColumn(bool bIsCovered);
-    void                                NewTable(sal_Int32 nTempSpannedCols);
     void                                UpdateRowHeights();
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
     bool                                IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
