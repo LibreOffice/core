@@ -29,18 +29,22 @@
 #include "thumbnailviewacc.hxx"
 
 #include <sfx2/thumbnailviewitem.hxx>
+#include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
-ThumbnailViewItem::ThumbnailViewItem( ThumbnailView& rParent )
-    : mrParent(rParent)
+ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, Window *pParent)
+    : mrParent(rView)
     , mnId(0)
     , mbVisible(true)
     , mbSelected(false)
     , mbHover(false)
     , mpxAcc(NULL)
+    , mpSelectBox(new CheckBox(pParent,WB_HIDE))
 {
+    mpSelectBox->SetPosPixel(Point(0,0));
+    mpSelectBox->SetSizePixel(Size(20,20));
 }
 
 ThumbnailViewItem::~ThumbnailViewItem()
@@ -50,16 +54,25 @@ ThumbnailViewItem::~ThumbnailViewItem()
         static_cast< ThumbnailViewItemAcc* >( mpxAcc->get() )->ParentDestroyed();
         delete mpxAcc;
     }
+
+    delete mpSelectBox;
 }
 
 void ThumbnailViewItem::setSelection (bool state)
 {
     mbSelected = state;
+    mpSelectBox->SetState(state ? STATE_CHECK : STATE_NOCHECK);
+
+    if (!isHighlighted())
+        mpSelectBox->Show(state);
 }
 
 void ThumbnailViewItem::setHighlight (bool state)
 {
     mbHover = state;
+
+    if (!isSelected())
+        mpSelectBox->Show(state);
 }
 
 uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
@@ -68,6 +81,11 @@ uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( b
         mpxAcc = new uno::Reference< accessibility::XAccessible >( new ThumbnailViewItemAcc( this, bIsTransientChildrenDisabled ) );
 
     return *mpxAcc;
+}
+
+void ThumbnailViewItem::setSelectionBoxPos (const Point &pos)
+{
+    mpSelectBox->SetPosPixel(pos);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

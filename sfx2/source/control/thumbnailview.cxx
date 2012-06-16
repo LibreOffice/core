@@ -409,6 +409,11 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
                         *this, aNewViewInfos );
 
         pProcessor->process(aSeq);
+
+        aPos.Y() -= GetTextHeight();
+        aPos.X() = aRect.Left() + 15;
+
+        pItem->setSelectionBoxPos(aPos);
     }
 }
 
@@ -1154,7 +1159,7 @@ void ThumbnailView::Populate ()
 
         if (nEntries)
         {
-            ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
+            ThumbnailViewItem* pItem = new ThumbnailViewItem( *this, this );
             pItem->mnId     = i+1;
             pItem->maText   = aRegionName;
 
@@ -1175,7 +1180,7 @@ void ThumbnailView::Populate ()
 void ThumbnailView::InsertItem( sal_uInt16 nItemId, const BitmapEx& rImage,
                            const rtl::OUString& rText, size_t nPos )
 {
-    ThumbnailViewItem* pItem = new ThumbnailViewItem( *this );
+    ThumbnailViewItem* pItem = new ThumbnailViewItem( *this, this );
     pItem->mnId     = nItemId;
     pItem->maPreview1 = rImage;
     pItem->maText   = rText;

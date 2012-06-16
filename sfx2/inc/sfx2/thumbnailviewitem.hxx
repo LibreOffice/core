@@ -36,6 +36,8 @@
 
 #define THUMBNAILVIEW_ITEM_NONEITEM      0xFFFE
 
+class CheckBox;
+class Window;
 class ThumbnailView;
 
 struct ThumbnailViewItem
@@ -50,7 +52,8 @@ struct ThumbnailViewItem
     rtl::OUString maText;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
-    ThumbnailViewItem ( ThumbnailView& rParent );
+    ThumbnailViewItem (ThumbnailView &rView, Window *pParent);
+
     ~ThumbnailViewItem ();
 
     bool isSelected () const { return mbSelected; }
@@ -63,6 +66,12 @@ struct ThumbnailViewItem
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
+
+    void setSelectionBoxPos (const Point &pos);
+
+private:
+
+    CheckBox *mpSelectBox;
 };
 
 #endif // THUMBNAILVIEWITEM_HXX
