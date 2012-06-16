@@ -229,6 +229,8 @@ public:
 
     long            GetScrollWidth() const;
 
+    void setSelectionMode (bool mode);
+
 protected:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
@@ -324,6 +326,7 @@ protected:
     bool mbScroll : 1;
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
+    bool mbSelectionMode;
     Color maColor;
 };
 

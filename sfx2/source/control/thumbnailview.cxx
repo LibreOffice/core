@@ -244,6 +244,7 @@ void ThumbnailView::ImplInit()
     mbDoubleSel         = false;
     mbScroll            = false;
     mbHasVisibleItems   = false;
+    mbSelectionMode = false;
 
     ImplInitSettings( true, true, true );
 }
@@ -598,12 +599,17 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if ( rMEvt.GetClicks() == 1 )
                 {
-                    pItem->setSelection(!pItem->isSelected());
+                    if (mbSelectionMode)
+                    {
+                        pItem->setSelection(!pItem->isSelected());
 
-                    if (!pItem->isHighlighted())
-                        DrawItem(pItem,GetItemRect(pItem->mnId));
-
-                    //StartTracking( STARTTRACK_SCROLLREPEAT );
+                        if (!pItem->isHighlighted())
+                            DrawItem(pItem,GetItemRect(pItem->mnId));
+                    }
+                    else
+                    {
+                        //StartTracking( STARTTRACK_SCROLLREPEAT );
+                    }
                 }
                 else if ( rMEvt.GetClicks() == 2 )
                     ;
@@ -1599,6 +1605,11 @@ long ThumbnailView::GetScrollWidth() const
     }
     else
         return 0;
+}
+
+void ThumbnailView::setSelectionMode (bool mode)
+{
+    mbSelectionMode = mode;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
