@@ -349,7 +349,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     const sal_Bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
     long nGutter = 0;
 
-    for ( sal_uInt16 i = 0; i < pAttr->GetNumCols(); ++i )
+    for ( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; ++i ) //i118878, value returned by GetNumCols() can't be trusted
     {
         if( !bOrtho )
         {
@@ -426,7 +426,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     {
         long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
         pCol = Lower();
-        for( sal_uInt16 i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i )
+        for( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; pCol = pCol->GetNext(), ++i ) //i118878, value returned by GetNumCols() can't be trusted
         {
             SwTwips nWidth;
             if ( i == pAttr->GetNumCols() - 1 )
