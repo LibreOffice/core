@@ -484,9 +484,9 @@ public:
     }
     virtual ~ScDocFuncSend() {}
 
-    void SetCollaboration( bool bIsMaster )
+    void SetCollaboration( TeleManager *pManager )
     {
-        mpManager = TeleManager::get( !bIsMaster );
+        mpManager = pManager;
     }
 
     virtual void EnterListAction( sal_uInt16 nNameResId )
@@ -515,14 +515,7 @@ public:
             SendFile( rText );
 
         if ( rtl::OUString( rText ) == "contacts" )
-        {
-            // For TeleManager::get() use the same master/slave mode we have
-            // for collaboration, if any. This is a hack anyway so don't care
-            // whether we really are in collab mode or not.
-            bool bIsMaster = false;
-            isCollabMode( bIsMaster );
-            tubes::createContacts( TeleManager::get( bIsMaster ) );
-        }
+            tubes::createContacts( mpManager );
 
         return true; // needs some code auditing action
     }
@@ -663,7 +656,7 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
         }
         if (bOk)
         {
-            pSender->SetCollaboration( bIsMaster );
+            pSender->SetCollaboration( pManager );
         }
         else
         {
