@@ -30,6 +30,8 @@
 
 #include <vector>
 #include "contacts.hrc"
+#include "sendfunc.hxx"
+#include "docsh.hxx"
 #include "scresid.hxx"
 #include <svtools/filter.hxx>
 #include <tubes/manager.hxx>
@@ -45,10 +47,12 @@ class TubeContacts : public ModelessDialog
 {
     FixedLine               maLabel;
     PushButton              maBtnConnect;
+    PushButton              maBtnListen;
     SvxSimpleTableContainer maListContainer;
     SvxSimpleTable          maList;
 
     DECL_LINK( BtnConnectHdl, void * );
+    DECL_LINK( BtnListenHdl, void * );
 
     struct AccountContact
     {
@@ -58,6 +62,22 @@ class TubeContacts : public ModelessDialog
             mpAccount(pAccount), mpContact(pContact) {}
     };
     boost::ptr_vector<AccountContact> maACs;
+
+    void Listen()
+    {
+        ScDocShell *pScDocShell = reinterpret_cast<ScDocShell*> (SfxObjectShell::Current());
+        ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
+        ScDocFuncSend *pSender = reinterpret_cast<ScDocFuncSend*> (pDocFunc);
+        if (!pSender)
+        {
+            delete pDocFunc;
+            boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *pScDocShell ) );
+            boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
+            pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
+            pDocFunc = pSender;
+        }
+        pSender->InitTeleManager( false );
+    }
 
     void StartBuddySession()
     {
@@ -83,10 +103,12 @@ public:
         ModelessDialog( NULL, ScResId( RID_SCDLG_CONTACTS ) ),
         maLabel( this, ScResId( FL_LABEL ) ),
         maBtnConnect( this, ScResId( BTN_CONNECT ) ),
+        maBtnListen( this, ScResId( BTN_LISTEN ) ),
         maListContainer( this, ScResId( CTL_LIST ) ),
         maList( maListContainer )
     {
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
+        maBtnListen.SetClickHdl( LINK( this, TubeContacts, BtnListenHdl ) );
 
         static long aStaticTabs[]=
         {
@@ -156,6 +178,13 @@ public:
 IMPL_LINK_NOARG( TubeContacts, BtnConnectHdl )
 {
     StartBuddySession();
+    Close();
+    return 0;
+}
+
+IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
+{
+    Listen();
     Close();
     return 0;
 }

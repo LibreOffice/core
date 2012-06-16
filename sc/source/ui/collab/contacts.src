@@ -21,9 +21,15 @@ ModelessDialog RID_SCDLG_CONTACTS
     };
     PushButton BTN_CONNECT
     {
-        Pos = MAP_APPFONT( 8 , 200 );
+        Pos = MAP_APPFONT( 70 , 200 );
         Size = MAP_APPFONT( 50 , 10 );
         Text [ en-US ] = "Collaborate";
+    };
+    PushButton BTN_LISTEN
+    {
+        Pos = MAP_APPFONT( 8 , 200 );
+        Size = MAP_APPFONT( 50 , 10 );
+        Text [ en-US ] = "Listen";
     };
     Control CTL_LIST
     {

@@ -3,6 +3,7 @@
 #define FL_LABEL             1
 #define CTL_LIST             2
 #define BTN_CONNECT          3
+#define BTN_LISTEN           4
 
 #define STR_HEADER_ALIAS     20
 #define STR_HEADER_NAME      21
