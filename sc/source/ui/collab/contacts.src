@@ -9,7 +9,7 @@ ModelessDialog RID_SCDLG_CONTACTS
     Hide = FALSE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Size = MAP_APPFONT ( 220 , 200 ) ;
+    Size = MAP_APPFONT ( 220 , 215 ) ;
     OutputSize = TRUE ;
     Text [ en-US ] = "Contacts" ;
 
@@ -18,6 +18,12 @@ ModelessDialog RID_SCDLG_CONTACTS
         Pos = MAP_APPFONT ( 8 , 2 ) ;
         Size = MAP_APPFONT ( 198 , 8 ) ;
         Text [ en-US ] = "Select a contact to collaborate with" ;
+    };
+    PushButton BTN_CONNECT
+    {
+        Pos = MAP_APPFONT( 8 , 200 );
+        Size = MAP_APPFONT( 50 , 10 );
+        Text [ en-US ] = "Collaborate";
     };
     Control CTL_LIST
     {

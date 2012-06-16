@@ -44,16 +44,50 @@ namespace {
 class TubeContacts : public ModelessDialog
 {
     FixedLine               maLabel;
+    PushButton              maBtnConnect;
     SvxSimpleTableContainer maListContainer;
     SvxSimpleTable          maList;
+
+    DECL_LINK( BtnConnectHdl, void * );
+
+    struct AccountContact
+    {
+        TpAccount* mpAccount;
+        TpContact* mpContact;
+        AccountContact( TpAccount* pAccount, TpContact* pContact ):
+            mpAccount(pAccount), mpContact(pContact) {}
+    };
+    boost::ptr_vector<AccountContact> maACs;
+
+    void StartBuddySession()
+    {
+        AccountContact *pAC = NULL;
+        if (maList.FirstSelected())
+            pAC = reinterpret_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
+        if (pAC)
+        {
+            TpAccount* pAccount = pAC->mpAccount;
+            TpContact* pContact = pAC->mpContact;
+            fprintf( stderr, "picked %s\n", tp_contact_get_identifier( pContact ) );
+            // TeleManager has to exist already, false will be ignored:
+            TeleManager *pManager = TeleManager::get( false );
+            if (!pManager->startBuddySession( pAccount, pContact ))
+                fprintf( stderr, "could not start session with %s\n",
+                        tp_contact_get_identifier( pContact ) );
+            pManager->unref();
+        }
+    }
 
 public:
     TubeContacts() :
         ModelessDialog( NULL, ScResId( RID_SCDLG_CONTACTS ) ),
         maLabel( this, ScResId( FL_LABEL ) ),
+        maBtnConnect( this, ScResId( BTN_CONNECT ) ),
         maListContainer( this, ScResId( CTL_LIST ) ),
         maList( maListContainer )
     {
+        maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
+
         static long aStaticTabs[]=
         {
             3 /* count */, 0, 20, 100, 150, 200
@@ -111,12 +145,21 @@ public:
                 aEntry.append( fromUTF8 ( tp_contact_get_identifier( it->second ) ) );
                 aEntry.append( sal_Unicode( '\t' ) );
                 SvLBoxEntry* pEntry = maList.InsertEntry( aEntry.makeStringAndClear(), aImage, aImage );
-                // FIXME: ref the TpContact ...
-                pEntry->SetUserData( it->second );
+                // FIXME: ref the TpAccount, TpContact ...
+                maACs.push_back( new AccountContact( it->first, it->second ) );
+                pEntry->SetUserData( &maACs.back() );
             }
         }
     }
 };
+
+IMPL_LINK_NOARG( TubeContacts, BtnConnectHdl )
+{
+    StartBuddySession();
+    Close();
+    return 0;
+}
+
 } // anonymous namespace
 #endif
 

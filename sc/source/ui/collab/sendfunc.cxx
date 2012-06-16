@@ -627,40 +627,20 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
         boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
         ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
         TeleManager *pManager = TeleManager::get( !bIsMaster );
-        bool bOk = true;
 
         pManager->sigPacketReceived.connect(
                 boost::bind( &ScDocFuncRecv::packetReceived, pReceiver.get(), _1, _2 ));
         pManager->sigFileReceived.connect(
                 boost::bind( &ScDocFuncRecv::fileReceived, pReceiver.get(), _1 ));
 
-        bOk = bOk && pManager->connect();
-        pManager->prepareAccountManager();
-
-        if (bIsMaster)
+        if (pManager->connect())
         {
-            ContactList* pContactList = pManager->getContactList();
-            AccountContactPairV aVec( pContactList->getContacts());
-
-            fprintf( stderr, "%u contacts\n", (int) aVec.size() );
-            if (aVec.empty())
-                bOk = false;
-            else
-            {
-                /* TODO: select a pair, for now just take the first */
-                TpAccount* pAccount = aVec[0].first;
-                TpContact* pContact = aVec[0].second;
-                fprintf( stderr, "picked %s\n", tp_contact_get_identifier( pContact ) );
-                bOk = bOk && pManager->startBuddySession( pAccount, pContact );
-            }
-        }
-        if (bOk)
-        {
+            pManager->prepareAccountManager();
             pSender->SetCollaboration( pManager );
         }
         else
         {
-            fprintf( stderr, "Could not start collaboration.\n");
+            fprintf( stderr, "Could not connect.\n");
         }
         return pSender;
     }
