@@ -35,12 +35,16 @@ $(eval $(call gb_JunitTest_set_defs,starmath_unoapi,\
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/starmath/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_add_jars,starmath_unoapi,\
+$(eval $(call gb_JunitTest_use_jars,starmath_unoapi,\
     $(OUTDIR)/bin/OOoRunner.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \
     $(OUTDIR)/bin/unoil.jar \
     $(OUTDIR)/bin/jurt.jar \
+))
+
+$(eval $(call gb_JunitTest_add_sourcefiles,starmath_unoapi,\
+	starmath/qa/unoapi/Test \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,starmath_unoapi,\

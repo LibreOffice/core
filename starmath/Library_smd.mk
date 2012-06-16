@@ -22,28 +22,19 @@
 
 $(eval $(call gb_Library_Library,smd))
 
-$(eval $(call gb_Library_add_precompiled_header,smd,$(SRCDIR)/starmath/inc/pch/precompiled_starmath))
-
 $(eval $(call gb_Library_set_componentfile,smd,starmath/util/smd))
 
 $(eval $(call gb_Library_set_include,smd,\
-        -I$(SRCDIR)/starmath/inc/pch \
         -I$(SRCDIR)/starmath/inc \
-        -I$(WORKDIR)/Misc/sm/ \
         $$(INCLUDE) \
-        -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,smd,\
-        $$(DEFS) \
-))
-
-$(eval $(call gb_Library_add_api,smd,\
+$(eval $(call gb_Library_use_api,smd,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,smd,\
+$(eval $(call gb_Library_use_libraries,smd,\
         cppu \
         cppuhelper \
         sal \
@@ -54,6 +45,7 @@ $(eval $(call gb_Library_add_linked_libs,smd,\
         tl \
         ucbhelper \
         vcl \
+        $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,smd,\

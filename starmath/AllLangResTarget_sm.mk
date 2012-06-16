@@ -26,22 +26,28 @@ $(eval $(call gb_AllLangResTarget_AllLangResTarget,sm))
 $(eval $(call gb_AllLangResTarget_set_reslocation,sm,starmath))
 
 $(eval $(call gb_AllLangResTarget_add_srs,sm,\
-	starmath/res \
+	sm/res \
 ))
 
-$(eval $(call gb_SrsTarget_SrsTarget,starmath/res))
+$(eval $(call gb_SrsTarget_SrsTarget,sm/res))
 
-$(eval $(call gb_SrsTarget_set_include,starmath/res,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc \
-	-I$(WORKDIR)/inc/starmath \
+$(eval $(call gb_SrsTarget_set_include,sm/res,\
 	-I$(SRCDIR)/starmath/inc \
+	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_SrsTarget_add_files,starmath/res,\
+$(eval $(call gb_SrsTarget_use_packages,sm/res,\
+	editeng_inc \
+	sfx2_inc \
+	svl_inc \
+	svx_globlmn_hrc \
+))
+
+$(eval $(call gb_SrsTarget_add_files,sm/res,\
     starmath/source/smres.src \
     starmath/source/commands.src \
     starmath/source/symbol.src \
+	starmath/source/toolbox.src \
 ))
 
 # vim: set noet sw=4 ts=4:

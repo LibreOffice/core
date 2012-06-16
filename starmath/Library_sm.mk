@@ -24,37 +24,27 @@ $(eval $(call gb_Library_Library,sm))
 
 $(eval $(call gb_Library_add_sdi_headers,sm,starmath/sdi/smslots))
 
-$(eval $(call gb_Library_add_precompiled_header,sm,$(SRCDIR)/starmath/inc/pch/precompiled_starmath))
-
 $(eval $(call gb_Library_set_componentfile,sm,starmath/util/sm))
 
 $(eval $(call gb_Library_set_include,sm,\
-        -I$(SRCDIR)/starmath/inc/pch \
         -I$(SRCDIR)/starmath/inc \
         -I$(WORKDIR)/SdiTarget/starmath/sdi \
-        -I$(WORKDIR)/Misc/starmath/ \
         $$(INCLUDE) \
-        -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_defs,sm,\
-        $$(DEFS) \
-        -DSMDLL \
-        -DSC_INFO_OSVERSION=\"$(OS)\" \
-))
-
-$(eval $(call gb_Library_add_api,sm,\
+$(eval $(call gb_Library_use_api,sm,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,sm,\
+$(eval $(call gb_Library_use_libraries,sm,\
         comphelper \
         cppu \
         cppuhelper \
         editeng \
-        i18npaper \
+        i18nutil \
         msfilter \
+        oox \
         sal \
         sax \
         sfx \
@@ -67,8 +57,8 @@ $(eval $(call gb_Library_add_linked_libs,sm,\
         tl \
         utl \
         vcl \
-	ucbhelper \
-	xo \
+        xo \
+        $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sm,\
@@ -86,10 +76,12 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/mathmlimport \
         starmath/source/mathtype \
         starmath/source/node \
+        starmath/source/ooxmlexport \
+        starmath/source/ooxmlimport \
         starmath/source/parse \
         starmath/source/rect \
         starmath/source/register \
-	starmath/source/smdll \
+        starmath/source/smdll \
         starmath/source/smmod \
         starmath/source/symbol \
         starmath/source/toolbox \
@@ -109,7 +101,6 @@ $(eval $(call gb_SdiTarget_set_include,starmath/sdi/smslots,\
         -I$(SRCDIR)/starmath/inc \
         -I$(SRCDIR)/starmath/sdi \
         $$(INCLUDE) \
-        -I$(OUTDIR)/inc \
 ))
 
 # vim: set noet sw=4 ts=4:
