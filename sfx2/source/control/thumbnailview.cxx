@@ -239,7 +239,6 @@ void ThumbnailView::ImplInit()
     mnFrameStyle        = 0;
     mbHighlight         = false;
     mbSelection         = false;
-    mbNoSelection       = true;
     mbDrawSelection     = true;
     mbBlackSel          = false;
     mbDoubleSel         = false;
@@ -1233,7 +1232,6 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
         mnCurCol        = 0;
         mnHighItemId    = 0;
         mnSelItemId     = 0;
-        mbNoSelection   = true;
     }
 
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1249,7 +1247,6 @@ void ThumbnailView::Clear()
     mnCurCol        = 0;
     mnHighItemId    = 0;
     mnSelItemId     = 0;
-    mbNoSelection   = true;
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
@@ -1345,11 +1342,10 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
             return;
     }
 
-    if ( (mnSelItemId != nItemId) || mbNoSelection )
+    if ( mnSelItemId != nItemId)
     {
         sal_uInt16 nOldItem = mnSelItemId ? mnSelItemId : 1;
         mnSelItemId = nItemId;
-        mbNoSelection = false;
 
         bool bNewOut = IsReallyVisible() && IsUpdateMode();
         bool bNewLine = false;
@@ -1438,16 +1434,6 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
             ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
         }
     }
-}
-
-void ThumbnailView::SetNoSelection()
-{
-    mbNoSelection   = true;
-    mbHighlight     = false;
-    mbSelection     = false;
-
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
 }
 
 void ThumbnailView::SetItemText( sal_uInt16 nItemId, const rtl::OUString& rText )

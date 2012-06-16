@@ -205,11 +205,7 @@ public:
     sal_uInt16 GetSelectItemId() const { return mnSelItemId; }
 
     bool IsItemSelected( sal_uInt16 nItemId ) const
-        { return !mbNoSelection && (nItemId == mnSelItemId); }
-
-    void SetNoSelection();
-
-    bool IsNoSelection() const { return mbNoSelection; }
+        { return nItemId == mnSelItemId; }
 
     void SetItemText( sal_uInt16 nItemId, const rtl::OUString &rStr );
 
@@ -322,7 +318,6 @@ protected:
     sal_uInt16 mnFrameStyle;
     bool mbHighlight : 1;
     bool mbSelection : 1;
-    bool mbNoSelection : 1;
     bool mbDrawSelection : 1;
     bool mbBlackSel : 1;
     bool mbDoubleSel : 1;
