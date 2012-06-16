@@ -2316,7 +2316,7 @@ void Bitmap::ImplCalculateContributions( const int aSourceSize, const int aDesti
             aWeight = aKernel.Calculate( aFilterFactor * ( aCenter - (double) j ) );
 
             // Reduce calculations with ignoring weights of 0.0
-            if (fabs(aWeight < 0.0001))
+            if (fabs(aWeight) < 0.0001)
                 continue;
 
             // Handling on edges
