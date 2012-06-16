@@ -25,14 +25,18 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonPresents(this,SfxResId(BTN_SELECT_PRESENTATIONS)),
       aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
       aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
+      maButtonSelMode(this,SfxResId(BTN_SELECTION_MODE)),
       maView(new ThumbnailView(this,SfxResId(TEMPLATE_VIEW)))
 {
+    maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
+
     maView->SetStyle(WB_TABSTOP | WB_VSCROLL);
     maView->SetColCount(MAX_COLUMN_COUNT);
     maView->SetLineCount(MAX_LINE_COUNT);
 
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
     aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));
+    maButtonSelMode.SetClickHdl(LINK(this,SfxTemplateManagerDlg,OnClickSelectionMode));
 
     maView->Populate();
     maView->Show();
@@ -62,6 +66,12 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewPresentsHdl)
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewDrawsHdl)
 {
+    return 0;
+}
+
+IMPL_LINK (SfxTemplateManagerDlg, OnClickSelectionMode, ImageButton*, pButton)
+{
+    maView->setSelectionMode(pButton->GetState() == STATE_CHECK);
     return 0;
 }
 

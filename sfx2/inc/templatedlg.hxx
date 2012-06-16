@@ -31,11 +31,16 @@ public:
 
 private:
 
+    DECL_LINK(OnClickSelectionMode, ImageButton*);
+
+private:
+
     PushButton aButtonAll;
     PushButton aButtonDocs;
     PushButton aButtonPresents;
     PushButton aButtonSheets;
     PushButton aButtonDraws;
+    ImageButton maButtonSelMode;
 
     ThumbnailView *maView;
 };

@@ -62,6 +62,18 @@ ModalDialog DLG_TEMPLATE_MANAGER
         Text [en-US] = "Drawings";
     };
 
+    ImageButton BTN_SELECTION_MODE
+    {
+        Pos = MAP_APPFONT(265,5);
+        Size = MAP_APPFONT(14,14);
+        TabStop = TRUE;
+
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "signet.png" ; };
+        };
+    };
+
     Control TEMPLATE_VIEW
     {
         Pos = MAP_APPFONT(5,30);
