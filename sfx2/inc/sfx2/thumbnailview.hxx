@@ -274,6 +274,8 @@ private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
 
+    void CalculateItemPositions ();
+
     SVT_DLLPRIVATE void         ImplInit();
     SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void         ImplInitScrollBar();

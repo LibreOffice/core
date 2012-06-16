@@ -409,17 +409,228 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
                         *this, aNewViewInfos );
 
         pProcessor->process(aSeq);
-
-        aPos.Y() -= GetTextHeight();
-        aPos.X() = aRect.Left() + 15;
-
-        pItem->setSelectionBoxPos(aPos);
     }
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ThumbnailView::CreateAccessible()
 {
     return new ThumbnailViewAcc( this, mbIsTransientChildrenDisabled );
+}
+
+void ThumbnailView::CalculateItemPositions ()
+{
+    Size        aWinSize = GetOutputSizePixel();
+    size_t      nItemCount = mItemList.size();
+    WinBits     nStyle = GetStyle();
+    long        nNoneHeight = 0;
+    long        nNoneSpace = 0;
+    ScrollBar*  pDelScrBar = NULL;
+
+    // consider the scrolling
+    if ( nStyle & WB_VSCROLL )
+        ImplInitScrollBar();
+    else
+    {
+        if ( mpScrBar )
+        {
+            // delete ScrollBar not until later, to prevent recursive calls
+            pDelScrBar = mpScrBar;
+            mpScrBar = NULL;
+        }
+    }
+
+    // calculate ScrollBar width
+    long nScrBarWidth = 0;
+    if ( mpScrBar )
+        nScrBarWidth = mpScrBar->GetSizePixel().Width()+SCRBAR_OFFSET;
+
+    // calculate number of columns
+    if ( !mnUserCols )
+    {
+        if ( mnUserItemWidth )
+        {
+            mnCols = (sal_uInt16)((aWinSize.Width()-nScrBarWidth+mnSpacing) / (mnUserItemWidth+mnSpacing));
+            if ( !mnCols )
+                mnCols = 1;
+        }
+        else
+            mnCols = 1;
+    }
+    else
+        mnCols = mnUserCols;
+
+    // calculate number of rows
+    mbScroll = false;
+    // Floor( (M+N-1)/N )==Ceiling( M/N )
+    mnLines = (static_cast<long>(nItemCount)+mnCols-1) / mnCols;
+    if ( !mnLines )
+        mnLines = 1;
+
+    long nCalcHeight = aWinSize.Height()-nNoneHeight;
+    if ( mnUserVisLines )
+        mnVisLines = mnUserVisLines;
+    else if ( mnUserItemHeight )
+    {
+        mnVisLines = (nCalcHeight-nNoneSpace+mnSpacing) / (mnUserItemHeight+mnSpacing);
+        if ( !mnVisLines )
+            mnVisLines = 1;
+    }
+    else
+        mnVisLines = mnLines;
+    if ( mnLines > mnVisLines )
+        mbScroll = true;
+    if ( mnLines <= mnVisLines )
+        mnFirstLine = 0;
+    else
+    {
+        if ( mnFirstLine > (sal_uInt16)(mnLines-mnVisLines) )
+            mnFirstLine = (sal_uInt16)(mnLines-mnVisLines);
+    }
+
+    // calculate item size
+    const long nColSpace  = (mnCols-1)*mnSpacing;
+    const long nLineSpace = ((mnVisLines-1)*mnSpacing)+nNoneSpace;
+    if ( mnUserItemWidth && !mnUserCols )
+    {
+        mnItemWidth = mnUserItemWidth;
+        if ( mnItemWidth > aWinSize.Width()-nScrBarWidth-nColSpace )
+            mnItemWidth = aWinSize.Width()-nScrBarWidth-nColSpace;
+    }
+    else
+        mnItemWidth = (aWinSize.Width()-nScrBarWidth-nColSpace) / mnCols;
+    if ( mnUserItemHeight && !mnUserVisLines )
+    {
+        mnItemHeight = mnUserItemHeight;
+        if ( mnItemHeight > nCalcHeight-nNoneSpace )
+            mnItemHeight = nCalcHeight-nNoneSpace;
+    }
+    else
+    {
+        nCalcHeight -= nLineSpace;
+        mnItemHeight = nCalcHeight / mnVisLines;
+    }
+
+    // nothing is changed in case of too small items
+    if ( (mnItemWidth <= 0) ||
+         (mnItemHeight <= 2) ||
+         !nItemCount )
+    {
+        mbHasVisibleItems = false;
+
+        for ( size_t i = 0; i < nItemCount; i++ )
+        {
+            mItemList[i]->mbVisible = false;
+        }
+
+        if ( mpScrBar )
+            mpScrBar->Hide();
+    }
+    else
+    {
+        mbHasVisibleItems = true;
+
+        // determine Frame-Style
+        mnFrameStyle = FRAME_DRAW_IN;
+
+        // determine selected color and width
+        // if necessary change the colors, to make the selection
+        // better detectable
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        Color aHighColor( rStyleSettings.GetHighlightColor() );
+        if ( ((aHighColor.GetRed() > 0x80) || (aHighColor.GetGreen() > 0x80) ||
+              (aHighColor.GetBlue() > 0x80)) ||
+             ((aHighColor.GetRed() == 0x80) && (aHighColor.GetGreen() == 0x80) &&
+              (aHighColor.GetBlue() == 0x80)) )
+            mbBlackSel = true;
+        else
+            mbBlackSel = false;
+
+        // draw the selection with double width if the items are bigger
+        mbDoubleSel = false;
+
+        // calculate offsets
+        long nStartX = 0;
+        long nStartY = 0;
+
+        // calculate and draw items
+        long x = nStartX;
+        long y = nStartY;
+
+        // draw items
+        sal_uLong nFirstItem = mnFirstLine * mnCols;
+        sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
+
+        maItemListRect.Left() = x;
+        maItemListRect.Top() = y;
+        maItemListRect.Right() = x + mnCols*(mnItemWidth+mnSpacing) - mnSpacing - 1;
+        maItemListRect.Bottom() = y + mnVisLines*(mnItemHeight+mnSpacing) - mnSpacing - 1;
+
+        // If want also draw parts of items in the last line,
+        // then we add one more line if parts of these line are
+        // visible
+        if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
+            nLastItem += mnCols;
+        maItemListRect.Bottom() = aWinSize.Height() - y;
+
+        for ( size_t i = 0; i < nItemCount; i++ )
+        {
+            ThumbnailViewItem *const pItem = mItemList[i];
+
+            if ( (i >= nFirstItem) && (i < nLastItem) )
+            {
+                if( !pItem->mbVisible && ImplHasAccessibleListeners() )
+                {
+                    ::com::sun::star::uno::Any aOldAny, aNewAny;
+
+                    aNewAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
+                }
+
+                pItem->mbVisible = true;
+                pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
+                pItem->calculateItemsPosition();
+
+                if ( !((i+1) % mnCols) )
+                {
+                    x = nStartX;
+                    y += mnItemHeight+mnSpacing;
+                }
+                else
+                    x += mnItemWidth+mnSpacing;
+            }
+            else
+            {
+                if( pItem->mbVisible && ImplHasAccessibleListeners() )
+                {
+                    ::com::sun::star::uno::Any aOldAny, aNewAny;
+
+                    aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
+                }
+
+                pItem->mbVisible = false;
+            }
+        }
+
+        // arrange ScrollBar, set values and show it
+        if ( mpScrBar )
+        {
+            Point   aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, 0 );
+            Size    aSize( nScrBarWidth-SCRBAR_OFFSET, aWinSize.Height() );
+
+            mpScrBar->SetPosSizePixel( aPos, aSize );
+            mpScrBar->SetRangeMax( mnLines );
+            mpScrBar->SetVisibleSize( mnVisLines );
+            mpScrBar->SetThumbPos( (long)mnFirstLine );
+            long nPageSize = mnVisLines;
+            if ( nPageSize < 1 )
+                nPageSize = 1;
+            mpScrBar->SetPageSize( nPageSize );
+        }
+    }
+
+    // delete ScrollBar
+    delete pDelScrBar;
 }
 
 bool ThumbnailView::ImplScroll( const Point& rPos )
@@ -835,216 +1046,45 @@ void ThumbnailView::Paint( const Rectangle& )
 {
     Size        aWinSize = GetOutputSizePixel();
     size_t      nItemCount = mItemList.size();
-    WinBits     nStyle = GetStyle();
-    long        nNoneHeight = 0;
-    long        nNoneSpace = 0;
-    ScrollBar*  pDelScrBar = NULL;
 
-    // consider the scrolling
-    if ( nStyle & WB_VSCROLL )
-        ImplInitScrollBar();
-    else
+    // calculate offsets
+    long nStartX = 0;
+    long nStartY = 0;
+
+    // calculate and draw items
+    long x = nStartX;
+    long y = nStartY;
+
+    // draw items
+    sal_uLong nFirstItem = mnFirstLine * mnCols;
+    sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
+
+    // If want also draw parts of items in the last line,
+    // then we add one more line if parts of these line are
+    // visible
+    if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
+        nLastItem += mnCols;
+
+    for ( size_t i = 0; i < nItemCount; i++ )
     {
-        if ( mpScrBar )
+        ThumbnailViewItem *const pItem = mItemList[i];
+
+        if ( (i >= nFirstItem) && (i < nLastItem) )
         {
-            // delete ScrollBar not until later, to prevent recursive calls
-            pDelScrBar = mpScrBar;
-            mpScrBar = NULL;
-        }
-    }
+            DrawItem( pItem, Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ) );
 
-    // calculate ScrollBar width
-    long nScrBarWidth = 0;
-    if ( mpScrBar )
-        nScrBarWidth = mpScrBar->GetSizePixel().Width()+SCRBAR_OFFSET;
-
-    // calculate number of columns
-    if ( !mnUserCols )
-    {
-        if ( mnUserItemWidth )
-        {
-            mnCols = (sal_uInt16)((aWinSize.Width()-nScrBarWidth+mnSpacing) / (mnUserItemWidth+mnSpacing));
-            if ( !mnCols )
-                mnCols = 1;
-        }
-        else
-            mnCols = 1;
-    }
-    else
-        mnCols = mnUserCols;
-
-    // calculate number of rows
-    mbScroll = false;
-    // Floor( (M+N-1)/N )==Ceiling( M/N )
-    mnLines = (static_cast<long>(nItemCount)+mnCols-1) / mnCols;
-    if ( !mnLines )
-        mnLines = 1;
-
-    long nCalcHeight = aWinSize.Height()-nNoneHeight;
-    if ( mnUserVisLines )
-        mnVisLines = mnUserVisLines;
-    else if ( mnUserItemHeight )
-    {
-        mnVisLines = (nCalcHeight-nNoneSpace+mnSpacing) / (mnUserItemHeight+mnSpacing);
-        if ( !mnVisLines )
-            mnVisLines = 1;
-    }
-    else
-        mnVisLines = mnLines;
-    if ( mnLines > mnVisLines )
-        mbScroll = true;
-    if ( mnLines <= mnVisLines )
-        mnFirstLine = 0;
-    else
-    {
-        if ( mnFirstLine > (sal_uInt16)(mnLines-mnVisLines) )
-            mnFirstLine = (sal_uInt16)(mnLines-mnVisLines);
-    }
-
-    // calculate item size
-    const long nColSpace  = (mnCols-1)*mnSpacing;
-    const long nLineSpace = ((mnVisLines-1)*mnSpacing)+nNoneSpace;
-    if ( mnUserItemWidth && !mnUserCols )
-    {
-        mnItemWidth = mnUserItemWidth;
-        if ( mnItemWidth > aWinSize.Width()-nScrBarWidth-nColSpace )
-            mnItemWidth = aWinSize.Width()-nScrBarWidth-nColSpace;
-    }
-    else
-        mnItemWidth = (aWinSize.Width()-nScrBarWidth-nColSpace) / mnCols;
-    if ( mnUserItemHeight && !mnUserVisLines )
-    {
-        mnItemHeight = mnUserItemHeight;
-        if ( mnItemHeight > nCalcHeight-nNoneSpace )
-            mnItemHeight = nCalcHeight-nNoneSpace;
-    }
-    else
-    {
-        nCalcHeight -= nLineSpace;
-        mnItemHeight = nCalcHeight / mnVisLines;
-    }
-
-    // nothing is changed in case of too small items
-    if ( (mnItemWidth <= 0) ||
-         (mnItemHeight <= 2) ||
-         !nItemCount )
-    {
-        mbHasVisibleItems = false;
-
-        for ( size_t i = 0; i < nItemCount; i++ )
-        {
-            mItemList[i]->mbVisible = false;
-        }
-
-        if ( mpScrBar )
-            mpScrBar->Hide();
-    }
-    else
-    {
-        mbHasVisibleItems = true;
-
-        // determine Frame-Style
-        mnFrameStyle = FRAME_DRAW_IN;
-
-        // determine selected color and width
-        // if necessary change the colors, to make the selection
-        // better detectable
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        Color aHighColor( rStyleSettings.GetHighlightColor() );
-        if ( ((aHighColor.GetRed() > 0x80) || (aHighColor.GetGreen() > 0x80) ||
-              (aHighColor.GetBlue() > 0x80)) ||
-             ((aHighColor.GetRed() == 0x80) && (aHighColor.GetGreen() == 0x80) &&
-              (aHighColor.GetBlue() == 0x80)) )
-            mbBlackSel = true;
-        else
-            mbBlackSel = false;
-
-        // draw the selection with double width if the items are bigger
-        mbDoubleSel = false;
-
-        // calculate offsets
-        long nStartX = 0;
-        long nStartY = 0;
-
-        // calculate and draw items
-        long x = nStartX;
-        long y = nStartY;
-
-        // draw items
-        sal_uLong nFirstItem = mnFirstLine * mnCols;
-        sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
-
-        maItemListRect.Left() = x;
-        maItemListRect.Top() = y;
-        maItemListRect.Right() = x + mnCols*(mnItemWidth+mnSpacing) - mnSpacing - 1;
-        maItemListRect.Bottom() = y + mnVisLines*(mnItemHeight+mnSpacing) - mnSpacing - 1;
-
-        // If want also draw parts of items in the last line,
-        // then we add one more line if parts of these line are
-        // visible
-        if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
-            nLastItem += mnCols;
-        maItemListRect.Bottom() = aWinSize.Height() - y;
-
-        for ( size_t i = 0; i < nItemCount; i++ )
-        {
-            ThumbnailViewItem *const pItem = mItemList[i];
-
-            if ( (i >= nFirstItem) && (i < nLastItem) )
+            if ( !((i+1) % mnCols) )
             {
-                if( !pItem->mbVisible && ImplHasAccessibleListeners() )
-                {
-                    ::com::sun::star::uno::Any aOldAny, aNewAny;
-
-                    aNewAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
-                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
-                }
-
-                pItem->mbVisible = true;
-                DrawItem( pItem, Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ) );
-
-                if ( !((i+1) % mnCols) )
-                {
-                    x = nStartX;
-                    y += mnItemHeight+mnSpacing;
-                }
-                else
-                    x += mnItemWidth+mnSpacing;
+                x = nStartX;
+                y += mnItemHeight+mnSpacing;
             }
             else
-            {
-                if( pItem->mbVisible && ImplHasAccessibleListeners() )
-                {
-                    ::com::sun::star::uno::Any aOldAny, aNewAny;
-
-                    aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
-                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
-                }
-
-                pItem->mbVisible = false;
-            }
-        }
-
-        // arrange ScrollBar, set values and show it
-        if ( mpScrBar )
-        {
-            Point   aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, 0 );
-            Size    aSize( nScrBarWidth-SCRBAR_OFFSET, aWinSize.Height() );
-
-            mpScrBar->SetPosSizePixel( aPos, aSize );
-            mpScrBar->SetRangeMax( mnLines );
-            mpScrBar->SetVisibleSize( mnVisLines );
-            mpScrBar->SetThumbPos( (long)mnFirstLine );
-            long nPageSize = mnVisLines;
-            if ( nPageSize < 1 )
-                nPageSize = 1;
-            mpScrBar->SetPageSize( nPageSize );
-            mpScrBar->Show();
+                x += mnItemWidth+mnSpacing;
         }
     }
 
-    // delete ScrollBar
-    delete pDelScrBar;
+    if ( mpScrBar && mpScrBar->IsVisible() )
+        mpScrBar->Invalidate();
 }
 
 void ThumbnailView::GetFocus()
@@ -1086,6 +1126,8 @@ void ThumbnailView::LoseFocus()
 
 void ThumbnailView::Resize()
 {
+    CalculateItemPositions();
+
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
     Control::Resize();
@@ -1174,6 +1216,8 @@ void ThumbnailView::Populate ()
         }
     }
 
+    CalculateItemPositions();
+
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1201,6 +1245,8 @@ void ThumbnailView::ImplInsertItem( ThumbnailViewItem *const pItem, const size_t
     } else {
         mItemList.push_back( pItem );
     }
+
+    CalculateItemPositions();
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
@@ -1248,6 +1294,8 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
         mnSelItemId     = 0;
     }
 
+    CalculateItemPositions();
+
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
@@ -1261,6 +1309,8 @@ void ThumbnailView::Clear()
     mnCurCol        = 0;
     mnHighItemId    = 0;
     mnSelItemId     = 0;
+
+    CalculateItemPositions();
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
@@ -1310,6 +1360,9 @@ void ThumbnailView::SetColCount( sal_uInt16 nNewCols )
     if ( mnUserCols != nNewCols )
     {
         mnUserCols = nNewCols;
+
+        CalculateItemPositions();
+
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1320,6 +1373,9 @@ void ThumbnailView::SetLineCount( sal_uInt16 nNewLines )
     if ( mnUserVisLines != nNewLines )
     {
         mnUserVisLines = nNewLines;
+
+        CalculateItemPositions();
+
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1330,6 +1386,9 @@ void ThumbnailView::SetItemWidth( long nNewItemWidth )
     if ( mnUserItemWidth != nNewItemWidth )
     {
         mnUserItemWidth = nNewItemWidth;
+
+        CalculateItemPositions();
+
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
@@ -1340,6 +1399,9 @@ void ThumbnailView::SetItemHeight( long nNewItemHeight )
     if ( mnUserItemHeight != nNewItemHeight )
     {
         mnUserItemHeight = nNewItemHeight;
+
+        CalculateItemPositions();
+
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }

@@ -84,9 +84,30 @@ uno::Reference< accessibility::XAccessible > ThumbnailViewItem::GetAccessible( b
     return *mpxAcc;
 }
 
-void ThumbnailViewItem::setSelectionBoxPos (const Point &pos)
+void ThumbnailViewItem::setDrawArea (const Rectangle &area)
 {
-    mpSelectBox->SetPosPixel(pos);
+    maDrawArea = area;
+}
+
+void ThumbnailViewItem::calculateItemsPosition ()
+{
+    Size aRectSize = maDrawArea.GetSize();
+    Size aImageSize = maPreview1.GetSizePixel();
+
+    // Calculate thumbnail position
+    Point aPos = maDrawArea.TopLeft();
+    aPos.X() = maDrawArea.Left() + (aRectSize.Width()-aImageSize.Width())/2;
+    aPos.Y() = maDrawArea.Top() + (aRectSize.Height()-aImageSize.Height())/2;
+
+    // Calculate text position
+    aPos.Y() += 20 + aImageSize.Height();
+    //aPos.X() = aRect.Left() + (aRectSize.Width() - GetTextWidth(pItem->maText))/2;
+
+    // Calculate checkbox position
+    aPos.Y() -= mpSelectBox->GetTextHeight();
+    aPos.X() = maDrawArea.Left() + 15;
+
+    mpSelectBox->SetPosPixel(aPos);
 }
 
 void ThumbnailViewItem::setSelectClickHdl (const Link &link)

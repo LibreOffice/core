@@ -67,7 +67,11 @@ struct ThumbnailViewItem
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
 
-    void setSelectionBoxPos (const Point &pos);
+    void setDrawArea (const Rectangle &area);
+
+    const Rectangle& getDrawArea () const { return maDrawArea; }
+
+    void calculateItemsPosition ();
 
     void setSelectClickHdl (const Link &link);
 
@@ -77,6 +81,7 @@ private:
 
 private:
 
+    Rectangle maDrawArea;
     Link maClickHdl;
     CheckBox *mpSelectBox;
 };
