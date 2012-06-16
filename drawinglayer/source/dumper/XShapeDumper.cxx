@@ -1008,6 +1008,44 @@ namespace {
             rtl::OUStringToOString(sCustomShapeData, RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    void XShapeDumper::dumpCustomShapeGeometryAsElement(uno::Sequence< beans::PropertyValue> aCustomShapeGeometry, xmlTextWriterPtr xmlWriter)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "CustomShapeGeometry" ));
+        sal_Int32 nLength = aCustomShapeGeometry.getLength();
+        for (sal_Int32 i = 0; i < nLength; ++i)
+        {
+            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
+
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+                rtl::OUStringToOString(aCustomShapeGeometry[i].Name, RTL_TEXTENCODING_UTF8).getStr());
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, aCustomShapeGeometry[i].Handle);
+
+            uno::Any aAny = aCustomShapeGeometry[i].Value;
+            rtl::OUString sValue;
+            if(aAny >>= sValue)
+            {
+                xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+                    rtl::OUStringToOString(aCustomShapeGeometry[i].Name, RTL_TEXTENCODING_UTF8).getStr());
+            }
+            switch(aCustomShapeGeometry[i].State)
+            {
+                case beans::PropertyState_DIRECT_VALUE:
+                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
+                    break;
+                case beans::PropertyState_DEFAULT_VALUE:
+                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
+                    break;
+                case beans::PropertyState_AMBIGUOUS_VALUE:
+                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
+                    break;
+                default:
+                    break;
+            }
+            xmlTextWriterEndElement( xmlWriter );
+        }
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
     // methods dumping whole services
 
     void XShapeDumper::dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
@@ -1560,6 +1598,12 @@ namespace {
             if(anotherAny >>= sCustomShapeData)
                 dumpCustomShapeDataAsAttribute(sCustomShapeData, xmlWriter);
         }
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeGeometry");
+            uno::Sequence< beans::PropertyValue> aCustomShapeGeometry;
+            if(anotherAny >>= aCustomShapeGeometry)
+                dumpCustomShapeGeometryAsElement(aCustomShapeGeometry, xmlWriter);
+        }
     }
 
     void XShapeDumper::dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter)
@@ -1617,6 +1661,9 @@ namespace {
 
         if(xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonBezierDescriptor"))
             dumpPolyPolygonBezierDescriptorService(xPropSet, xmlWriter);
+
+        if(xServiceInfo->supportsService("com.sun.star.drawing.CustomShape"))
+            dumpCustomShapeService(xPropSet, xmlWriter);
 
         #if DEBUG_DUMPER
             sal_Int32 nServices = aServiceNames.getLength();

@@ -55,6 +55,8 @@
 #include <com/sun/star/drawing/HomogenMatrixLine3.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 #ifndef ChartViewDumper_hxx
 #define ChartViewDumper_hxx
 
@@ -172,6 +174,7 @@ private:
     // CustomShape.idl
     void dumpCustomShapeEngineAsAttribute(rtl::OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
     void dumpCustomShapeDataAsAttribute(rtl::OUString sCustomShapeData, xmlTextWriterPtr xmlWriter);
+    void dumpCustomShapeGeometryAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aCustomShapeGeometry, xmlTextWriterPtr xmlWriter);
 
     // XShape.idl
     void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
