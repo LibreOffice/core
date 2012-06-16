@@ -166,7 +166,6 @@ struct TabDlg_Impl
                         bHideResetBtn   : 1;
     SfxTabDlgData_Impl* pData;
 
-    PushButton*         pApplyButton;
     SfxTabDialogController* pController;
 
     TabDlg_Impl( sal_uInt8 nCnt ) :
@@ -176,7 +175,6 @@ struct TabDlg_Impl
         bInOK           ( sal_False ),
         bHideResetBtn   ( sal_False ),
         pData           ( new SfxTabDlgData_Impl( nCnt ) ),
-        pApplyButton    ( NULL ),
         pController     ( NULL )
     {}
 };
@@ -479,7 +477,6 @@ SfxTabDialog::~SfxTabDialog()
     }
 
     delete pImpl->pController;
-    delete pImpl->pApplyButton;
     delete pImpl->pData;
     delete pImpl;
     delete pOutSet;
@@ -496,6 +493,8 @@ SfxTabDialog::~SfxTabDialog()
         delete m_pCancelBtn;
     if (m_bOwnsUserBtn)
         delete m_pUserBtn;
+    if (m_bOwnsApplyBtn)
+        delete m_pApplyBtn;
     if (m_bOwnsOKBtn)
         delete m_pOKBtn;
     if (m_bOwnsActionArea)
@@ -552,10 +551,15 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
     if (m_bOwnsOKBtn)
         m_pOKBtn = new OKButton(m_pActionArea);
 
+    m_pApplyBtn = m_pUIBuilder ? static_cast<PushButton*>(m_pUIBuilder->get_by_name("apply")) : NULL;
+    m_bOwnsApplyBtn = m_pApplyBtn == NULL;
+    if (m_bOwnsApplyBtn)
+        m_pApplyBtn = NULL;
+
     m_pUserBtn = m_pUIBuilder ? static_cast<PushButton*>(m_pUIBuilder->get_by_name("user")) : NULL;
     m_bOwnsUserBtn = m_pUserBtn == NULL;
     if (m_bOwnsUserBtn)
-        m_pUserBtn = pUserButtonText ? new PushButton(m_pActionArea) : 0;
+        m_pUserBtn = pUserButtonText ? new PushButton(m_pActionArea) : NULL;
 
     m_pCancelBtn = m_pUIBuilder ? static_cast<CancelButton*>(m_pUIBuilder->get_by_name("cancel")) : NULL;
     m_bOwnsCancelBtn = m_pCancelBtn == NULL;
@@ -674,9 +678,9 @@ void SfxTabDialog::Start( sal_Bool bShow )
 
 void SfxTabDialog::SetApplyHandler(const Link& _rHdl)
 {
-    DBG_ASSERT( pImpl->pApplyButton, "SfxTabDialog::GetApplyHandler: no apply button enabled!" );
-    if ( pImpl->pApplyButton )
-        pImpl->pApplyButton->SetClickHdl( _rHdl );
+    DBG_ASSERT( m_pApplyBtn, "SfxTabDialog::GetApplyHandler: no apply button enabled!" );
+    if ( m_pApplyBtn )
+        m_pApplyBtn->SetClickHdl( _rHdl );
 }
 
 // -----------------------------------------------------------------------
@@ -690,18 +694,18 @@ void SfxTabDialog::EnableApplyButton(sal_Bool bEnable)
     // create or remove the apply button
     if ( bEnable )
     {
-        pImpl->pApplyButton = new PushButton( this );
+        m_pApplyBtn = new PushButton(m_pActionArea);
         // in the z-order, the apply button should be behind the ok button, thus appearing at the right side of it
-        pImpl->pApplyButton->SetZOrder(m_pOKBtn, WINDOW_ZORDER_BEHIND);
-        pImpl->pApplyButton->SetText(SfxResId( STR_APPLY ).toString());
-        pImpl->pApplyButton->Show();
+        m_pApplyBtn->SetZOrder(m_pOKBtn, WINDOW_ZORDER_BEHIND);
+        m_pApplyBtn->SetText(SfxResId( STR_APPLY ).toString());
+        m_pApplyBtn->Show();
 
-        pImpl->pApplyButton->SetHelpId( HID_TABDLG_APPLY_BTN );
+        m_pApplyBtn->SetHelpId( HID_TABDLG_APPLY_BTN );
     }
     else
     {
-        delete pImpl->pApplyButton;
-        pImpl->pApplyButton = NULL;
+        delete m_pApplyBtn;
+        m_pApplyBtn = NULL;
     }
 
     // adjust the layout
@@ -713,7 +717,7 @@ void SfxTabDialog::EnableApplyButton(sal_Bool bEnable)
 
 sal_Bool SfxTabDialog::IsApplyButtonEnabled() const
 {
-    return ( NULL != pImpl->pApplyButton );
+    return ( NULL != m_pApplyBtn );
 }
 
 // -----------------------------------------------------------------------

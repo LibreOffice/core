@@ -70,6 +70,7 @@ friend class SfxTabDialogController;
 
     VclHButtonBox *m_pActionArea;
     OKButton *m_pOKBtn;
+    PushButton* m_pApplyBtn;
     PushButton* m_pUserBtn;
     CancelButton* m_pCancelBtn;
     HelpButton* m_pHelpBtn;
@@ -80,6 +81,7 @@ friend class SfxTabDialogController;
     bool m_bOwnsTabCtrl;
     bool m_bOwnsActionArea;
     bool m_bOwnsOKBtn;
+    bool m_bOwnsApplyBtn;
     bool m_bOwnsUserBtn;
     bool m_bOwnsCancelBtn;
     bool m_bOwnsHelpBtn;
