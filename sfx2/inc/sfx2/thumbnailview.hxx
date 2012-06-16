@@ -295,6 +295,8 @@ private:
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
     DECL_DLLPRIVATE_LINK( ImplTimerHdl, void* );
 
+    DECL_LINK(OnFolderSelected, ThumbnailViewItem*);
+
 protected:
 
     Timer maTimer;

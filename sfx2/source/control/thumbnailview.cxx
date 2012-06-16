@@ -587,6 +587,12 @@ void ThumbnailView::ImplEndTracking( const Point& rPos, bool bCancel )
 {
 }
 
+IMPL_LINK (ThumbnailView, OnFolderSelected, ThumbnailViewItem*, pItem)
+{
+    DrawItem(pItem,GetItemRect(pItem->mnId));
+    return 0;
+}
+
 void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
@@ -1156,6 +1162,7 @@ void ThumbnailView::Populate ()
             ThumbnailViewItem* pItem = new ThumbnailViewItem( *this, this );
             pItem->mnId     = i+1;
             pItem->maText   = aRegionName;
+            pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
 
             /// Preview first 2 thumbnails for folder
             pItem->maPreview1 = lcl_fetchThumbnail(pTemplates->GetPath(i,0),128,128);
@@ -1178,6 +1185,7 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const BitmapEx& rImage,
     pItem->mnId     = nItemId;
     pItem->maPreview1 = rImage;
     pItem->maText   = rText;
+    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
     ImplInsertItem( pItem, nPos );
 }
 

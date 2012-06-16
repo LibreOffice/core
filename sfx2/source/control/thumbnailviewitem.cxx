@@ -89,9 +89,16 @@ void ThumbnailViewItem::setSelectionBoxPos (const Point &pos)
     mpSelectBox->SetPosPixel(pos);
 }
 
+void ThumbnailViewItem::setSelectClickHdl (const Link &link)
+{
+    maClickHdl = link;
+}
+
 IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )
 {
     mbSelected = mpSelectBox->GetState() == STATE_CHECK;
+    mpSelectBox->Invalidate();
+    maClickHdl.Call(this);
     return 0;
 }
 

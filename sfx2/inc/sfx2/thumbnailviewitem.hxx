@@ -69,12 +69,15 @@ struct ThumbnailViewItem
 
     void setSelectionBoxPos (const Point &pos);
 
+    void setSelectClickHdl (const Link &link);
+
 private:
 
     DECL_LINK (OnClick, CheckBox *);
 
 private:
 
+    Link maClickHdl;
     CheckBox *mpSelectBox;
 };
 
