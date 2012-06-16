@@ -638,8 +638,6 @@ public:
 
 void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount)
 {
-    ProgressBarUpdater(*GetProgressBarHelper(), nTableCount, nShapesCount, nCellCount);
-
     if (!GetModel().is())
         return;
 

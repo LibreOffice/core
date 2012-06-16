@@ -2608,7 +2608,7 @@ void BiffFormulaParserImpl::skipMemAreaAddData( BiffInputStream& rStrm )
 
 bool BiffFormulaParserImpl::readNlrSAddrAddData( BiffNlr& orNlr, BiffInputStream& rStrm, bool bRow )
 {
-    bool bIsRow;
+    bool bIsRow = false;
     return readNlrSRangeAddData( orNlr, bIsRow, rStrm ) && (bIsRow == bRow);
 }
 
