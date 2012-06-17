@@ -41,7 +41,8 @@ Module gid_Module_Optional_Pyuno
             gid_Dir_PythonFramework_Versions_ver_lib,
             gid_Dir_PythonFramework_Versions_ver_lib_pythonver,
             gid_Dir_PythonFramework_Versions_ver_lib_pythonver_config,
-            gid_Dir_Py_PythonCore, gid_Dir_Py_PythonCore_Bin,
+            gid_Dir_Py_PythonCore,
+            gid_Dir_Py_PythonCore_Bin,
             gid_Dir_Py_PythonCore_Lib);
     Files = (gid_File_Pyuno,
              gid_File_Lib_Pyuno,

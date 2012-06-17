@@ -26,7 +26,18 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,pyuno/zipcore))
 
+# system python (only mingw)
+ifeq ($(SYSTEM_PYTHON),YES)
+# mingw: MINGW_PYVERSION and MINGW_SYSROOT are defined in configure
+ifeq ($(GUI)$(COM),WNTGCC)
+PYVERSION=$(MINGW_PYVERSION)
+pyuno_PYTHON_LIB_DIR=$(MINGW_SYSROOT)/lib/python$(MINGW_PYTHON_MAJOR_VERSION)
+endif
+else
 include $(OUTDIR)/inc/pyversion.Makefile
+pyuno_PYTHON_LIB_DIR=$(OUTDIR)/lib/python
+endif
+
 pyuno_PYTHON_ARCHIVE_NAME:=python-core-$(PYVERSION).zip
 FIND=find
 GREP=grep
@@ -36,12 +47,12 @@ $(call gb_CustomTarget_get_target,pyuno/zipcore) : \
 
 # capture the files to have them in prerequisite list
 pyuno_zipcore_FINDLIBFILES:=\
-    $(shell $(FIND) $(OUTDIR)/lib/python -type f| $(GREP) -v "\.pyc" | $(GREP) -v "\.py~" | $(GREP) -v .orig | $(GREP) -v _failed)
+    $(shell $(FIND) $(pyuno_PYTHON_LIB_DIR) -type f| $(GREP) -v "\.pyc" | $(GREP) -v "\.py~" | $(GREP) -v .orig | $(GREP) -v _failed)
 
 # create zip archive
 $(call gb_CustomTarget_get_workdir,pyuno/zipcore)/$(pyuno_PYTHON_ARCHIVE_NAME) : $(pyuno_zipcore_FINDLIBFILES) | \
     $(call gb_CustomTarget_get_workdir,pyuno/zipcore)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ZIP,1)
-	cd $(OUTDIR)/lib/python && zip $@ $(shell cd $(OUTDIR)/lib/python && $(FIND) . -type f | $(GREP) -v "\.pyc" | $(GREP) -v "\.py~" | $(GREP) -v .orig | $(GREP) -v _failed)
+	cd $(pyuno_PYTHON_LIB_DIR) && zip $@ $(shell cd $(pyuno_PYTHON_LIB_DIR) && $(FIND) . -type f | $(GREP) -v "\.pyc" | $(GREP) -v "\.py~" | $(GREP) -v .orig | $(GREP) -v _failed)
 
 # vim: set noet sw=4 ts=4:

@@ -138,11 +138,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     wchar_t pythonexe[MAX_PATH];
     wchar_t * pythonexeEnd = tools::buildPath(
         pythonexe, path, pathEnd,
-#ifdef __MINGW32__
-        MY_STRING(L"\\python-core-" MY_PYVERSION L"\\bin\\python.bin"));
-#else
         MY_STRING(L"\\python-core-" MY_PYVERSION L"\\bin\\python.exe"));
-#endif
     if (pythonexeEnd == NULL) {
         exit(EXIT_FAILURE);
     }

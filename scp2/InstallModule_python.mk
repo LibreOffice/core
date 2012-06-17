@@ -40,6 +40,15 @@ else ifeq ($(SYSTEM_PYTHON),YES)
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DSYSTEM_PYTHON \
 ))
+
+# mingw: mix mode copy file from system python to installation set
+ifeq ($(GUI)$(COM),WNTGCC)
+$(eval $(call gb_InstallModule_add_defs,scp2/python,\
+	-DPYVERSION=$(MINGW_PYVERSION) \
+	-DMINGW_SYSTEM_PYTHON \
+))
+endif
+
 else
 include $(OUTDIR)/inc/pyversion.Makefile
 
