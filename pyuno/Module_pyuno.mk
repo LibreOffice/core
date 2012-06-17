@@ -41,7 +41,11 @@ $(eval $(call gb_Module_add_targets,pyuno,\
 ))
 endif
 
-ifneq ($(SYSTEM_PYTHON),YES)
+#
+# Windows: only --enable-python=internal possible
+# mingw: both cases possible: internal && system
+# that why it makes sense to handle the next 3 targets
+# with SYSTEM_PYTHON=YES and SYSTEM_PYTHON=NO
 
 # zipcore: pyuno/python.exe on Windows
 # zipcore: pyversion.hxx on Windows
@@ -52,6 +56,7 @@ $(eval $(call gb_Module_add_targets,pyuno,\
 ))
 endif
 
+ifneq ($(SYSTEM_PYTHON),YES)
 
 # zipcore: python.sh on Unix
 ifeq ($(GUI),UNX)
@@ -70,6 +75,16 @@ endif
 # python-zipcore-$(PYVESION) not on MACOSX
 # (OOoPython.framework.zip is already delivered for MACOSX in python module)
 ifneq ($(OS),MACOSX)
+$(eval $(call gb_Module_add_targets,pyuno,\
+    CustomTarget_zipcore \
+    Package_zipcore \
+))
+endif
+
+else # SYSTEM_PYTHON
+
+# previous two targets has to be executed also with system-python on mingw
+ifeq ($(OS)$(COM),WNTGCC)
 $(eval $(call gb_Module_add_targets,pyuno,\
     CustomTarget_zipcore \
     Package_zipcore \
