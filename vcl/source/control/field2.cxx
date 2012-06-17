@@ -163,10 +163,10 @@ static int ImplIsPatternChar( xub_Unicode cChar, sal_Char cEditMask )
 
     try
     {
-        String aCharStr( cChar );
-        nType = ImplGetCharClass()->getStringType( aCharStr, 0, aCharStr.Len(), Application::GetSettings().GetLocale() );
+        rtl::OUString aCharStr(cChar);
+        nType = ImplGetCharClass()->getStringType( aCharStr, 0, aCharStr.getLength(), Application::GetSettings().GetLocale() );
     }
-    catch ( ::com::sun::star::uno::Exception& )
+    catch (const ::com::sun::star::uno::Exception&)
     {
         SAL_WARN( "vcl.control", "ImplIsPatternChar: Exception caught!" );
         return sal_False;
@@ -213,7 +213,7 @@ static xub_Unicode ImplPatternChar( xub_Unicode cChar, sal_Char cEditMask )
              (cEditMask == EDITMASK_UPPERALPHANUM) ||
              ( cEditMask == EDITMASK_UPPERALLCHAR ) )
         {
-            cChar = ImplGetCharClass()->toUpper( String(cChar),0,1,Application::GetSettings().GetLocale() )[0];
+            cChar = ImplGetCharClass()->toUpper(rtl::OUString(cChar), 0, 1, Application::GetSettings().GetLocale())[0];
         }
         return cChar;
     }

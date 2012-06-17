@@ -102,7 +102,7 @@ private:
     SAL_DLLPRIVATE void        ImplInvalidateOrRepaint( xub_StrLen nStart = 0, xub_StrLen nEnd = STRING_LEN );
     SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode );
     SAL_DLLPRIVATE void        ImplSetText( const XubString& rStr, const Selection* pNewSelection = 0 );
-    SAL_DLLPRIVATE void        ImplInsertText( const XubString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
+    SAL_DLLPRIVATE void        ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
     SAL_DLLPRIVATE String      ImplGetValidString( const String& rString ) const;
     SAL_DLLPRIVATE void        ImplClearBackground( long nXStart, long nXEnd );
     SAL_DLLPRIVATE void        ImplShowCursor( sal_Bool bOnlyIfVisible = sal_True );

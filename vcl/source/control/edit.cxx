@@ -857,7 +857,7 @@ bool Edit::ImplTruncateToMaxLen( rtl::OUString& rStr, sal_uInt32 nSelectionLen )
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_Bool bIsUserInput )
+void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, sal_Bool bIsUserInput )
 {
     Selection aSelection( maSelection );
     aSelection.Justify();
@@ -873,9 +873,9 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
         maText.Erase( (xub_StrLen)aSelection.Max(), 1 );
 
     // take care of input-sequence-checking now
-    if (bIsUserInput && rStr.Len())
+    if (bIsUserInput && !rStr.isEmpty())
     {
-        DBG_ASSERT( rStr.Len() == 1, "unexpected string length. User input is expected to providse 1 char only!" );
+        DBG_ASSERT( rStr.getLength() == 1, "unexpected string length. User input is expected to providse 1 char only!" );
 
         // determine if input-sequence-checking should be applied or not
         //
@@ -920,7 +920,7 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
         }
         //
         uno::Reference < i18n::XBreakIterator > xBI( ImplGetBreakIterator(), UNO_QUERY );
-        bIsInputSequenceChecking = rStr.Len() == 1 &&
+        bIsInputSequenceChecking = rStr.getLength() == 1 &&
                 bCTLFontEnabled &&
                 bCTLSequenceChecking &&
                 aSelection.Min() > 0 && /* first char needs not to be checked */
@@ -930,7 +930,7 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
         uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
         if (bIsInputSequenceChecking && (xISC = ImplGetInputSequenceChecker()).is())
         {
-            sal_Unicode cChar = rStr.GetChar(0);
+            sal_Unicode cChar = rStr[0];
             xub_StrLen nTmpPos = static_cast< xub_StrLen >( aSelection.Min() );
             sal_Int16 nCheckMode = bCTLSequenceCheckingRestricted ?
                     i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
@@ -1826,7 +1826,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     bDone = sal_True;   // Auch bei ReadOnly die Zeichen schlucken.
                     if ( !mbReadOnly )
                     {
-                        ImplInsertText( rKEvt.GetCharCode(), 0, sal_True );
+                        ImplInsertText(rtl::OUString(rKEvt.GetCharCode()), 0, sal_True);
                         if ( maAutocompleteHdl.IsSet() )
                         {
                             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.Len()) )
