@@ -26,24 +26,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_JunitTest_JunitTest,dbaccess_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,dba_ju_unoapi))
 
-$(eval $(call gb_JunitTest_set_defs,dbaccess_unoapi,\
+$(eval $(call gb_JunitTest_set_defs,dba_ju_unoapi,\
     $$(DEFS) \
     -Dorg.openoffice.test.arg.sce=$(SRCDIR)/dbaccess/qa/unoapi/dbaccess.sce \
     -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/dbaccess/qa/unoapi/knownissues.xcl \
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/dbaccess/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,dbaccess_unoapi,\
+$(eval $(call gb_JunitTest_use_jars,dba_ju_unoapi,\
     $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/jurt.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/test.jar \
     $(OUTDIR)/bin/unoil.jar \
-    $(OUTDIR)/bin/jurt.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_classes,dbaccess_unoapi,\
+$(eval $(call gb_JunitTest_add_classes,dba_ju_unoapi,\
     org.openoffice.test.UnoApiTest \
 ))
 
