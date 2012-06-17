@@ -73,6 +73,8 @@ struct ThumbnailViewItem
 
     void calculateItemsPosition ();
 
+    void setSelectionMode (bool mode);
+
     void setSelectClickHdl (const Link &link);
 
 private:
@@ -81,6 +83,7 @@ private:
 
 private:
 
+    bool mbMode;
     Rectangle maDrawArea;
     Link maClickHdl;
     CheckBox *mpSelectBox;

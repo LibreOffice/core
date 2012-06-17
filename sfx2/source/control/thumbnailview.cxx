@@ -1652,6 +1652,12 @@ long ThumbnailView::GetScrollWidth() const
 void ThumbnailView::setSelectionMode (bool mode)
 {
     mbSelectionMode = mode;
+
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        if (mItemList[i]->mbVisible)
+            mItemList[i]->setSelectionMode(mode);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

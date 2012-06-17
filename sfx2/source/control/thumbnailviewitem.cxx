@@ -41,6 +41,7 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, Window *pParent)
     , mbSelected(false)
     , mbHover(false)
     , mpxAcc(NULL)
+    , mbMode(false)
     , mpSelectBox(new CheckBox(pParent,WB_HIDE | WB_NOPOINTERFOCUS))
 {
     mpSelectBox->SetPosPixel(Point(0,0));
@@ -108,6 +109,12 @@ void ThumbnailViewItem::calculateItemsPosition ()
     aPos.X() = maDrawArea.Left() + 15;
 
     mpSelectBox->SetPosPixel(aPos);
+}
+
+void ThumbnailViewItem::setSelectionMode (bool mode)
+{
+    mbMode = mode;
+    mpSelectBox->Show(mode);
 }
 
 void ThumbnailViewItem::setSelectClickHdl (const Link &link)
