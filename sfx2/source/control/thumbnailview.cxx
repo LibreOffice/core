@@ -189,7 +189,7 @@ BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 
 ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : Control( pParent, nWinStyle ),
-    maColor( COL_TRANSPARENT )
+    maColor( pParent->GetBackground().GetColor() )
 {
     ImplInit();
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
@@ -197,7 +197,7 @@ ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableT
 
 ThumbnailView::ThumbnailView (Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
     : Control( pParent, rResId ),
-    maColor( COL_TRANSPARENT )
+    maColor( pParent->GetBackground().GetColor() )
 {
     ImplInit();
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
