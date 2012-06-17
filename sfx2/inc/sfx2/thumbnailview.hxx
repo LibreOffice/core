@@ -265,7 +265,7 @@ protected:
 
     // Drawing item related functions, override them to make your own custom ones.
 
-    virtual void DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect);
+    virtual void DrawItem (ThumbnailViewItem *pItem);
 
 private:
 

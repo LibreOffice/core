@@ -323,8 +323,10 @@ void ThumbnailView::ImplInitScrollBar()
     }
 }
 
-void ThumbnailView::DrawItem (ThumbnailViewItem *pItem, const Rectangle &aRect)
+void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
 {
+    Rectangle aRect = pItem->getDrawArea();
+
     if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
     {
         int nCount = 0;
@@ -800,7 +802,7 @@ void ThumbnailView::ImplEndTracking( const Point& rPos, bool bCancel )
 
 IMPL_LINK (ThumbnailView, OnFolderSelected, ThumbnailViewItem*, pItem)
 {
-    DrawItem(pItem,GetItemRect(pItem->mnId));
+    DrawItem(pItem);
     return 0;
 }
 
@@ -821,7 +823,7 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                         pItem->setSelection(!pItem->isSelected());
 
                         if (!pItem->isHighlighted())
-                            DrawItem(pItem,GetItemRect(pItem->mnId));
+                            DrawItem(pItem);
                     }
                     else
                     {
@@ -861,14 +863,14 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
                 pOld->setHighlight(false);
 
                 if (!pOld->isSelected())
-                    DrawItem(pOld,GetItemRect(pOld->mnId));
+                    DrawItem(pOld);
             }
 
             mnHighItemId = pItem->mnId;
             pItem->setHighlight(true);
 
             if (!pItem->isSelected())
-                DrawItem(pItem,GetItemRect(pItem->mnId));
+                DrawItem(pItem);
         }
     }
     else
@@ -884,7 +886,7 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
                 pOld->setHighlight(false);
 
                 if (!pOld->isSelected())
-                    DrawItem(pOld,GetItemRect(pOld->mnId));
+                    DrawItem(pOld);
             }
 
             mnHighItemId = 0;
@@ -1071,7 +1073,7 @@ void ThumbnailView::Paint( const Rectangle& )
 
         if ( (i >= nFirstItem) && (i < nLastItem) )
         {
-            DrawItem( pItem, Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ) );
+            DrawItem(pItem);
 
             if ( !((i+1) % mnCols) )
             {
@@ -1110,7 +1112,7 @@ void ThumbnailView::LoseFocus()
             pOld->setHighlight(false);
 
             if (!pOld->isSelected())
-                DrawItem(pOld,GetItemRect(pOld->mnId));
+                DrawItem(pOld);
         }
 
         mnHighItemId = 0;
