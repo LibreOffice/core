@@ -349,20 +349,26 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     const sal_Bool bLine = pAttr->GetLineAdj() != COLADJ_NONE;
     const sal_uInt16 nMin = bLine ? sal_uInt16( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
 
-    const sal_Bool bR2L = IsRightToLeft();
-    SwFrm *pCol = bR2L ? GetLastLower() : Lower();
-
     // #i27399#
     // bOrtho means we have to adjust the column frames manually. Otherwise
     // we may use the values returned by CalcColWidth:
     const sal_Bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
     long nGutter = 0;
+    sal_uInt16 real_nb_col = 0;
 
-    for ( sal_uInt16 i = 0; i < pAttr->GetNumCols(); ++i )
+    SwFrm* pColHead = Lower();;
+    SwFrm* pColTail;
+    for ( pColTail = pColHead; pColTail; pColTail = pColTail->GetNext(), real_nb_col += 1 );
+
+    sal_uInt16 i = IsRightToLeft() ? real_nb_col : 0;
+
+    for ( SwFrm* pColCursor = IsRightToLeft() ? pColTail : pColHead;
+          pColCursor;
+          (pColCursor = IsRightToLeft() ? pColCursor->GetPrev() : pColCursor->GetNext()), (i += IsRightToLeft() ? -1 : +1) )
     {
         if( !bOrtho )
         {
-            const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
+            const SwTwips nWidth = (pColCursor == (IsRightToLeft() ? pColTail : pColHead) ) ?
                                    nAvail :
                                    pAttr->CalcColWidth( i, sal_uInt16( (Prt().*fnRect->fnGetWidth)() ) );
 
@@ -370,14 +376,14 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
                                 Size( Prt().Width(), nWidth ) :
                                 Size( nWidth, Prt().Height() );
 
-            pCol->ChgSize( aColSz );
+            pColCursor->ChgSize( aColSz );
 
             // With this, the ColumnBodyFrms from page columns gets adjusted and
             // their bFixHeight flag is set so they won't shrink/grow.
             // Don't use the flag with frame columns because BodyFrms in frame
             // columns can grow/shrink.
             if( IsBodyFrm() )
-                ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
+                ((SwLayoutFrm*)pColCursor)->Lower()->ChgSize( aColSz );
 
             nAvail -= nWidth;
         }
@@ -385,7 +391,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
         if ( bOrtho || bAdjustAttributes )
         {
             const SwColumn *pC = &pAttr->GetColumns()[i];
-            const SwAttrSet* pSet = pCol->GetAttrSet();
+            const SwAttrSet* pSet = pColCursor->GetAttrSet();
             SvxLRSpaceItem aLR( pSet->GetLRSpace() );
 
             //In order to have enough space for the separation lines, we have to
@@ -421,42 +427,44 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
                 aUL.SetUpper( pC->GetUpper());
                 aUL.SetLower( pC->GetLower());
 
-                ((SwLayoutFrm*)pCol)->GetFmt()->SetFmtAttr( aLR );
-                ((SwLayoutFrm*)pCol)->GetFmt()->SetFmtAttr( aUL );
+                ((SwLayoutFrm*)pColCursor)->GetFmt()->SetFmtAttr( aLR );
+                ((SwLayoutFrm*)pColCursor)->GetFmt()->SetFmtAttr( aUL );
             }
 
             nGutter += aLR.GetLeft() + aLR.GetRight();
         }
-
-        pCol = bR2L ? pCol->GetPrev() : pCol->GetNext();
     }
 
     if( bOrtho )
     {
         long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
-        pCol = Lower();
-        for( sal_uInt16 i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i )
+        i = 0;
+        for (SwFrm* pColCursor =  pColHead; pColCursor; pColCursor = pColCursor->GetNext(), i++)
         {
             SwTwips nWidth;
             if ( i == pAttr->GetNumCols() - 1 )
+            {
                 nWidth = nAvail;
+            }
             else
             {
-                SvxLRSpaceItem aLR( pCol->GetAttrSet()->GetLRSpace() );
+                SvxLRSpaceItem aLR( pColCursor->GetAttrSet()->GetLRSpace() );
                 nWidth = nInnerWidth + aLR.GetLeft() + aLR.GetRight();
             }
             if( nWidth < 0 )
+            {
                 nWidth = 0;
-
+            }
             const Size aColSz = bVert ?
                                 Size( Prt().Width(), nWidth ) :
                                 Size( nWidth, Prt().Height() );
 
-            pCol->ChgSize( aColSz );
+            pColCursor->ChgSize( aColSz );
 
             if( IsBodyFrm() )
-                ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
-
+            {
+                ((SwLayoutFrm*)pColCursor)->Lower()->ChgSize( aColSz );
+            }
             nAvail -= nWidth;
         }
     }
