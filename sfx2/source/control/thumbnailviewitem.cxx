@@ -45,7 +45,6 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, Window *pParent)
     , mbMode(false)
     , mpSelectBox(new CheckBox(pParent,WB_HIDE | WB_NOPOINTERFOCUS))
 {
-    mpSelectBox->SetPosPixel(Point(0,0));
     mpSelectBox->SetSizePixel(Size(20,20));
     mpSelectBox->SetClickHdl(LINK(this,ThumbnailViewItem,OnClick));
 }
