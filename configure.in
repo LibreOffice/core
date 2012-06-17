@@ -1,4 +1,4 @@
-dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil -*-
+2dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil -*-
 dnl configure.in serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
@@ -4445,6 +4445,19 @@ fi
 AC_SUBST([VALGRIND_CFLAGS])
 
 dnl ===================================================================
+dnl Set the MinGW sys-root
+dnl ===================================================================
+if test "$WITH_MINGW" = "yes"; then
+    for sysroot in /usr/i686-w64-mingw32/sys-root/mingw; do
+        if test -d "$sysroot"; then
+            MINGW_SYSROOT="$sysroot"
+            break
+        fi
+    done
+fi
+AC_SUBST([MINGW_SYSROOT])
+
+dnl ===================================================================
 dnl Set the MinGW include directories
 dnl ===================================================================
 if test "$WITH_MINGW" = "yes"; then
@@ -6678,17 +6691,24 @@ if test $enable_python = system; then
     else
         dnl How to find out the cross-compilation Python installation path?
         dnl Let's hardocode what we know for different distributions for now...
-
-        for python_sysroot in /usr/i686-w64-mingw32/sys-root/mingw; do
-            for python_version in 2.6; do
-                if test -f ${python_sysroot}/include/python${python_version}/Python.h; then
-                    PYTHON_CFLAGS="-I${python_sysroot}/include/python$python_version"
-                    PYTHON_LIBS="-L${python_sysroot}lib -lpython$python_version $python_libs"
-                    break
-                fi
-            done
-            test -n "$PYTHON_CFLAGS" && break
+        for python_version in 2.6; do
+            if test -f ${MINGW_SYSROOT}/include/python${python_version}/Python.h; then
+                PYTHON_CFLAGS="-I${MINGW_SYSROOT}/include/python$python_version"
+                PYTHON_LIBS="-L${MINGW_SYSROOT}lib -lpython$python_version $python_libs"
+                MINGW_PYTHON_EXE=python.exe
+                libo_MINGW_CHECK_DLL([PYTHON], [libpython$python_version])
+                libo_MINGW_CHECK_DLL([READLINE], [libreadline6])
+                libo_MINGW_CHECK_DLL([TERMCAP], [libtermcap])
+                # could we somehow extract the really mingw python version from
+                # actual distro package?
+                # 2.6.2 currently on OpenSUSE 12.1?
+                # rpm -q mingw32-python => mingw32-python-2.6.2-17.17.noarch
+                MINGW_PYTHON_MAJOR_VERSION="$python_version"
+                MINGW_PYVERSION=$python_version.2
+                break
+            fi
         done
+        test -n "$PYTHON_CFLAGS" && break
     fi
 fi
 
@@ -6742,6 +6762,12 @@ fi
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
+AC_SUBST([MINGW_PYTHON_EXE])
+AC_SUBST([MINGW_PYTHON_DLL])
+AC_SUBST([MINGW_READLINE_DLL])
+AC_SUBST([MINGW_TERMCAP_DLL])
+AC_SUBST(MINGW_PYVERSION)
+AC_SUBST(MINGW_PYTHON_MAJOR_VERSION)
 
 dnl ===================================================================
 dnl Check for system Berkeley db
