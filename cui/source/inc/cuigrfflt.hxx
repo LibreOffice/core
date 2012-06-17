@@ -53,7 +53,7 @@ private:
     {
     private:
 
-        GraphicObject   maGraphic;
+        Graphic   maGraphic;
 
         virtual void    Paint( const Rectangle& rRect );
 

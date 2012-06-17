@@ -59,15 +59,22 @@ void GraphicFilterDialog::PreviewWindow::Paint( const Rectangle& rRect )
 {
     Control::Paint( rRect );
 
-    const Size  aGrfSize( LogicToPixel( maGraphic.GetPrefSize(), maGraphic.GetPrefMapMode() ) );
-    const Size  aOutSize( GetOutputSizePixel() );
-    const Point aGrfPos( ( aOutSize.Width() - aGrfSize.Width() ) >> 1,
-                         ( aOutSize.Height() - aGrfSize.Height() ) >> 1 );
+    const Size  aOutputSize( GetOutputSizePixel() );
 
     if( maGraphic.IsAnimated() )
-        maGraphic.StartAnimation( this , aGrfPos, aGrfSize );
+    {
+        const Size  aGraphicSize( LogicToPixel( maGraphic.GetPrefSize(), maGraphic.GetPrefMapMode() ) );
+        const Point aGraphicPosition( ( aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
+                                      ( aOutputSize.Height() - aGraphicSize.Height() ) >> 1 );
+        maGraphic.StartAnimation( this, aGraphicPosition, aGraphicSize );
+    }
     else
-        maGraphic.Draw( this, aGrfPos, aGrfSize );
+    {
+        const Size  aGraphicSize( maGraphic.GetSizePixel() );
+        const Point aGraphicPosition( ( aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
+                                      ( aOutputSize.Height() - aGraphicSize.Height() ) >> 1 );
+        maGraphic.Draw( this, aGraphicPosition, aGraphicSize );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -110,13 +117,13 @@ GraphicFilterDialog::GraphicFilterDialog( Window* pParent, const ResId& rResId, 
 
         if( fGrfWH < fPreWH )
         {
-            aGrfSize.Width() = (long) ( aPreviewSize.Height() * fGrfWH );
-            aGrfSize.Height()= aPreviewSize.Height();
+            aGrfSize.Width()  = (long) ( aPreviewSize.Height() * fGrfWH );
+            aGrfSize.Height() = aPreviewSize.Height();
         }
         else
         {
-            aGrfSize.Width() = aPreviewSize.Width();
-            aGrfSize.Height()= (long) ( aPreviewSize.Width() / fGrfWH);
+            aGrfSize.Width()  = aPreviewSize.Width();
+            aGrfSize.Height() = (long) ( aPreviewSize.Width() / fGrfWH );
         }
 
         mfScaleX = (double) aGrfSize.Width() / maSizePixel.Width();
