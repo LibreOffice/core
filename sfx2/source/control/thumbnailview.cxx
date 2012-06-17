@@ -1254,26 +1254,6 @@ void ThumbnailView::ImplInsertItem( ThumbnailViewItem *const pItem, const size_t
         Invalidate();
 }
 
-Rectangle ThumbnailView::ImplGetItemRect( size_t nPos ) const
-{
-    const size_t nVisibleBegin = static_cast<size_t>(mnFirstLine)*mnCols;
-    const size_t nVisibleEnd = nVisibleBegin + static_cast<size_t>(mnVisLines)*mnCols;
-
-    // Check if the item is inside the range of the displayed ones,
-    // taking into account that last row could be incomplete
-    if ( nPos<nVisibleBegin || nPos>=nVisibleEnd || nPos>=mItemList.size() )
-        return Rectangle();
-
-    nPos -= nVisibleBegin;
-
-    const size_t row = nPos/mnCols;
-    const size_t col = nPos%mnCols;
-    const long x = maItemListRect.Left()+col*(mnItemWidth+mnSpacing);
-    const long y = maItemListRect.Top()+row*(mnItemHeight+mnSpacing);
-
-    return Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) );
-}
-
 void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
 {
     size_t nPos = GetItemPos( nItemId );
@@ -1345,16 +1325,6 @@ sal_uInt16 ThumbnailView::GetItemId( const Point& rPos ) const
         return GetItemId( nItemPos );
 
     return 0;
-}
-
-Rectangle ThumbnailView::GetItemRect( sal_uInt16 nItemId ) const
-{
-    const size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos!=THUMBNAILVIEW_ITEM_NOTFOUND && mItemList[nPos]->mbVisible )
-        return ImplGetItemRect( nPos );
-
-    return Rectangle();
 }
 
 void ThumbnailView::SetColCount( sal_uInt16 nNewCols )

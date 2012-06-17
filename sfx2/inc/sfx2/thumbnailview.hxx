@@ -180,8 +180,6 @@ public:
 
     sal_uInt16 GetItemId( const Point& rPos ) const;
 
-    Rectangle GetItemRect( sal_uInt16 nItemId ) const;
-
     void SetColCount( sal_uInt16 nNewCols = 1 );
 
     sal_uInt16 GetColCount() const { return mnUserCols; }
@@ -289,7 +287,6 @@ private:
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
     SVT_DLLPRIVATE ThumbnailViewItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
     SVT_DLLPRIVATE void         ImplInsertItem( ThumbnailViewItem *const pItem, const size_t nPos );
-    SVT_DLLPRIVATE Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void            ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );

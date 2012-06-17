@@ -910,7 +910,7 @@ awt::Rectangle SAL_CALL ThumbnailViewItemAcc::getBounds()
 
     if( mpParent )
     {
-        Rectangle   aRect( mpParent->mrParent.GetItemRect(mpParent->mnId) );
+        Rectangle   aRect( mpParent->getDrawArea() );
         Point       aOrigin;
         Rectangle   aParentRect( aOrigin, mpParent->mrParent.GetOutputSizePixel() );
 
@@ -945,7 +945,7 @@ awt::Point SAL_CALL ThumbnailViewItemAcc::getLocationOnScreen()
 
     if( mpParent )
     {
-        const Point aPos = mpParent->mrParent.GetItemRect(mpParent->mnId).TopLeft();
+        const Point aPos = mpParent->getDrawArea().TopLeft();
         const Point aScreenPos( mpParent->mrParent.OutputToAbsoluteScreenPixel( aPos ) );
 
         aRet.X = aScreenPos.X();
