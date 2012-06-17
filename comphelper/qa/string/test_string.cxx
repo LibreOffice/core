@@ -54,6 +54,7 @@ public:
     void testDecimalStringToNumber();
     void testIsdigitAsciiString();
     void testReverseString();
+    void testEqualsString();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testNatural);
@@ -66,6 +67,7 @@ public:
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST(testIsdigitAsciiString);
     CPPUNIT_TEST(testReverseString);
+    CPPUNIT_TEST(testEqualsString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -403,6 +405,17 @@ void TestString::testReverseString()
     ::rtl::OString aOut = ::comphelper::string::reverseString(aIn);
 
     CPPUNIT_ASSERT(aOut == "CBA");
+}
+
+void TestString::testEqualsString()
+{
+    ::rtl::OString aIn("A");
+    CPPUNIT_ASSERT(::comphelper::string::equals(aIn, 'A'));
+    CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'B'));
+    aIn = ::rtl::OString("AA");
+    CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'A'));
+    aIn = ::rtl::OString();
+    CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'A'));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);

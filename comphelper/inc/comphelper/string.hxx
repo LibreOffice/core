@@ -91,6 +91,26 @@ COMPHELPER_DLLPUBLIC rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen);
  */
 COMPHELPER_DLLPUBLIC rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen);
 
+/** Compare an OString to a single char
+
+    @param rIn      The input OString
+    @param c        The character to compare againsg
+
+    @return         true if rIn has one char and its equal to c
+ */
+inline bool equals(const rtl::OString& rIn, sal_Char c)
+{ return rIn.getLength() == 1 && rIn[0] == c; }
+
+/** Compare an OUString to a single char
+
+    @param rIn      The input OUString
+    @param c        The character to compare againsg
+
+    @return         true if rIn has one char and its equal to c
+ */
+inline bool equals(const rtl::OUString& rIn, sal_Unicode c)
+{ return rIn.getLength() == 1 && rIn[0] == c; }
+
 /** Removes all occurrences of a character from within the source string
 
     @deprecated  Use rtl::OString::replaceAll(rtl::OString(c), rtl::OString())
