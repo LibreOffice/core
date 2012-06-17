@@ -24,21 +24,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,python_zipcore,$(call gb_CustomTarget_get_workdir,pyuno/zipcore)))
+$(eval $(call gb_CustomTarget_CustomTarget,pyuno/python_mingw_bin))
 
-# system python
-ifeq ($(SYSTEM_PYTHON),YES)
-# mingw: MINGW_PYVERSION is defined in configure
-ifeq ($(GUI)$(COM),WNTGCC)
-PYVERSION=$(MINGW_PYVERSION)
-endif
-else
-include $(OUTDIR)/inc/pyversion.Makefile
-endif
+python_mingw_bin_SOURCE := $(MINGW_SYSROOT)/bin/python.exe
+python_mingw_bin_TARGET := $(OUTDIR)/bin/python.exe
 
-pyuno_PYTHON_ARCHIVE_NAME:=python-core-$(PYVERSION).zip
+$(call gb_CustomTarget_get_target,pyuno/python_mingw_bin) : $(python_mingw_bin_TARGET)
 
-$(eval $(call gb_Package_add_file,python_zipcore,bin/$(pyuno_PYTHON_ARCHIVE_NAME),$(pyuno_PYTHON_ARCHIVE_NAME)))
-
+$(python_mingw_bin_TARGET) : $(python_mingw_bin_SOURCE)
+	cp $< $@
 
 # vim: set noet sw=4 ts=4:
