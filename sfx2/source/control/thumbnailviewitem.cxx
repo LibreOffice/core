@@ -28,6 +28,7 @@
 
 #include "thumbnailviewacc.hxx"
 
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
@@ -92,6 +93,8 @@ void ThumbnailViewItem::setDrawArea (const Rectangle &area)
 
 void ThumbnailViewItem::calculateItemsPosition ()
 {
+    drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+
     Size aRectSize = maDrawArea.GetSize();
     Size aImageSize = maPreview1.GetSizePixel();
 
@@ -101,11 +104,12 @@ void ThumbnailViewItem::calculateItemsPosition ()
     aPos.Y() = maDrawArea.Top() + (aRectSize.Height()-aImageSize.Height())/2;
 
     // Calculate text position
-    aPos.Y() += 20 + aImageSize.Height();
-    //aPos.X() = aRect.Left() + (aRectSize.Width() - GetTextWidth(pItem->maText))/2;
+    aPos.Y() += aImageSize.Height();
+    aPos.Y() = aPos.Y() + aTextDev.getTextHeight() + (maDrawArea.Bottom() - aPos.Y() - aTextDev.getTextHeight())/2;
+    aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maText,0,maText.getLength()))/2;
 
     // Calculate checkbox position
-    aPos.Y() -= mpSelectBox->GetTextHeight();
+    aPos.Y() -= aTextDev.getTextHeight();
     aPos.X() = maDrawArea.Left() + 15;
 
     mpSelectBox->SetPosPixel(aPos);

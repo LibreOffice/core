@@ -383,7 +383,8 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
                                             ));
 
         // Draw centered text below thumbnail
-        aPos.Y() += 20 + aImageSize.Height();
+        aPos.Y() += aImageSize.Height();
+        aPos.Y() = aPos.Y() + GetTextHeight() + (aRect.Bottom() - aPos.Y() - GetTextHeight())/2;
         aPos.X() = aRect.Left() + (aRectSize.Width() - GetTextWidth(pItem->maText))/2;
 
         // Create the text primitive
