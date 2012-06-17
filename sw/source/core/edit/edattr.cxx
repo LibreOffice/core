@@ -479,13 +479,16 @@ sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
             OSL_ENSURE( rTNd.GetNumRule(),
                     "<lcl_IsNoEndTxtAttrAtPos(..)> - no list style found at text node. Serious defect -> please inform OD." );
             const SwNumRule* pNumRule = rTNd.GetNumRule();
-            const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(rTNd.GetActualListLevel()) );
-            if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
+            if(pNumRule)
             {
-                if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
-                    sExp = rNumFmt.GetBulletChar();
-                else
-                    sExp = rTNd.GetNumString();
+                const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(rTNd.GetActualListLevel()) );
+                if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
+                {
+                    if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
+                        sExp = rNumFmt.GetBulletChar();
+                    else
+                        sExp = rTNd.GetNumString();
+                }
             }
         }
     }
