@@ -29,6 +29,7 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #define _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
+#include <boost/noncopyable.hpp>
 #include <tools/string.hxx>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
@@ -62,7 +63,7 @@ enum MeasurementSystem {
 };
 
 
-class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
+class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
 {
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
@@ -89,11 +90,6 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 
     // dummies, to be implemented or provided by XML locale data
     sal_Unicode                 cCurrZeroChar;
-
-
-                                // not implemented, prevent usage
-                                LocaleDataWrapper( const LocaleDataWrapper& );
-            LocaleDataWrapper&  operator=( const LocaleDataWrapper& );
 
                                 // whenever Locale changes
             void                invalidateData();
