@@ -914,7 +914,7 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
         if(nK > 0)
         {
             // do we still have decimal places?
-            sal_Unicode cDec(rLoc.getNumDecimalSep().GetChar(0));
+            sal_Unicode cDec(rLoc.getNumDecimalSep()[0]);
             aStr.Insert(cDec, nVorKomma);
         }
     }

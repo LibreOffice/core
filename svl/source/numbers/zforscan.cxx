@@ -1224,7 +1224,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType()
                     eNewType = NUMBERFORMAT_TEXT;
                 break;
                 default:
-                    if ( sStrArray[i] == pLoc->getTime100SecSep() )
+                    if (pLoc->getTime100SecSep().equals(sStrArray[i]))
                         bDecSep = true;                     // for SS,0
                     eNewType = NUMBERFORMAT_UNDEFINED;
                 break;
@@ -1273,7 +1273,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType()
                         {
                             if (nCurrPos != STRING_NOTFOUND)
                                 eScannedType = NUMBERFORMAT_UNDEFINED;
-                            else if ( sStrArray[i] != pLoc->getTimeSep() )
+                            else if (!pLoc->getTimeSep().equals(sStrArray[i]))
                                 return nPos;
                         }
                     }
@@ -1292,8 +1292,8 @@ xub_StrLen ImpSvNumberformatScan::ScanType()
                         {
                             if (nCurrPos != STRING_NOTFOUND)
                                 eScannedType = NUMBERFORMAT_UNDEFINED;
-                            else if ( sStrArray[i] != pFormatter->GetDateSep()
-                                   && sStrArray[i] != pLoc->getTimeSep() )
+                            else if ( pFormatter->GetDateSep() != sStrArray[i]
+                                   && !pLoc->getTimeSep().equals(sStrArray[i]) )
                                 return nPos;
                         }
                     }

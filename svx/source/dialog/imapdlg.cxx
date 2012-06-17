@@ -676,7 +676,7 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
+    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
     aStr.Append( DEFINE_CONST_UNICODE( " / " ) );
@@ -693,7 +693,7 @@ IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
+    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
     aStr.Append( DEFINE_CONST_UNICODE( " x " ) );

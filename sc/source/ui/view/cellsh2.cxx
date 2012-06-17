@@ -842,7 +842,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp1, nNumIndex, nVal))
                                     aExpr1 =String( ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), sal_True));
+                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], sal_True));
                                 else
                                     aExpr1 = aTemp1;
                             }
@@ -859,7 +859,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp2, nNumIndex, nVal))
                                     aExpr2 =String( ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), sal_True));
+                                            ScGlobal::pLocaleData->getNumDecimalSep()[0], sal_True));
                                 else
                                     aExpr2 = aTemp2;
                             }

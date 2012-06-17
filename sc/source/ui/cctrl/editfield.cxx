@@ -42,12 +42,12 @@ namespace {
 
 sal_Unicode lclGetDecSep()
 {
-    return ScGlobal::GetpLocaleData()->getNumDecimalSep().GetChar( 0 );
+    return ScGlobal::GetpLocaleData()->getNumDecimalSep()[0];
 }
 
 sal_Unicode lclGetGroupSep()
 {
-    return ScGlobal::GetpLocaleData()->getNumThousandSep().GetChar( 0 );
+    return ScGlobal::GetpLocaleData()->getNumThousandSep()[0];
 }
 
 } // namespace

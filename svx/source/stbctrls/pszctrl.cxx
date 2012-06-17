@@ -76,7 +76,7 @@ String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
     FieldUnit eInUnit = FUNIT_100TH_MM;
 
     String sMetric;
-    const sal_Unicode cSep = Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep().GetChar(0);
+    const sal_Unicode cSep = Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep()[0];
     sal_Int64 nConvVal = MetricField::ConvertValue( nVal * 100, 0L, 0, eInUnit, eOutUnit );
 
     if ( nConvVal < 0 && ( nConvVal / 100 == 0 ) )

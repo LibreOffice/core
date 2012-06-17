@@ -1244,7 +1244,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
                     sText = ::rtl::math::doubleToUString( fVal,
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max,
-                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+                            ScGlobal::pLocaleData->getNumDecimalSep()[0],
                             sal_True );
                 }
                 else

@@ -44,6 +44,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 
+using namespace ::comphelper;
 
 // =======================================================================
 
@@ -126,8 +127,8 @@ static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC) ||
              ((cChar >= '0') && (cChar <= '9')) ||
-             (bThousandSep && (cChar == rLocaleDataWrapper.getNumThousandSep())) ||
-             (cChar == rLocaleDataWrapper.getNumDecimalSep() ) ||
+             (bThousandSep && string::equals(rLocaleDataWrapper.getNumThousandSep(), cChar)) ||
+             (string::equals(rLocaleDataWrapper.getNumDecimalSep(), cChar) ) ||
              (cChar == '-') )
             return sal_False;
         else
@@ -153,7 +154,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
         return sal_False;
 
     // Fuehrende und nachfolgende Leerzeichen entfernen
-    aStr = comphelper::string::strip(aStr, ' ');
+    aStr = string::strip(aStr, ' ');
 
     // Position des Dezimalpunktes suchen
     nDecPos = aStr.Search( rLocaleDataWrapper.getNumDecimalSep() );
@@ -360,7 +361,7 @@ void LongCurrencyFormatter::SetCurrencySymbol( const String& rStr )
 
 String LongCurrencyFormatter::GetCurrencySymbol() const
 {
-    return maCurrencySymbol.Len() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
+    return !maCurrencySymbol.isEmpty() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
 }
 
 // -----------------------------------------------------------------------

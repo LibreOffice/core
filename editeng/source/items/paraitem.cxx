@@ -884,7 +884,7 @@ SvxTabStop::SvxTabStop( const sal_Int32 nPos, const SvxTabAdjust eAdjst,
 void SvxTabStop::fillDecimal() const
 {
     if ( cDfltDecimalChar == m_cDecimal )
-        m_cDecimal = SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0);
+        m_cDecimal = SvtSysLocale().GetLocaleData().getNumDecimalSep()[0];
 }
 // -----------------------------------------------------------------------
 

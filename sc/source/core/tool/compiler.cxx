@@ -1867,7 +1867,7 @@ xub_StrLen ScCompiler::NextSymbol(bool bInArray)
     sal_Unicode cArrayColSep = mxSymbols->getSymbol( ocArrayColSep).GetChar(0);
     sal_Unicode cArrayRowSep = mxSymbols->getSymbol( ocArrayRowSep).GetChar(0);
     sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' :
-            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0));
+            ScGlobal::pLocaleData->getNumDecimalSep()[0]);
 
     // special symbols specific to address convention used
     sal_Unicode cSheetPrefix = pConv->getSpecialSymbol(ScCompiler::Convention::ABS_SHEET_PREFIX);
@@ -2786,7 +2786,7 @@ bool ScCompiler::IsReference( const String& rName )
     // Has to be called before IsValue
     sal_Unicode ch1 = rName.GetChar(0);
     sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' :
-        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0) );
+        ScGlobal::pLocaleData->getNumDecimalSep()[0] );
     if ( ch1 == cDecSep )
         return false;
     // Who was that imbecile introducing '.' as the sheet name separator!?!

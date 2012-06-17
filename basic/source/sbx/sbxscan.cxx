@@ -59,8 +59,8 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
 {
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
-    rcDecimalSep = rData.getNumDecimalSep().GetBuffer()[0];
-    rcThousandSep = rData.getNumThousandSep().GetBuffer()[0];
+    rcDecimalSep = rData.getNumDecimalSep()[0];
+    rcThousandSep = rData.getNumThousandSep()[0];
 }
 
 // scanning a string according to BASIC-conventions
@@ -870,8 +870,8 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 {
                     SvtSysLocale aSysLocale;
                     const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
-                    sal_Unicode cComma = rData.getNumDecimalSep().GetBuffer()[0];
-                    sal_Unicode c1000  = rData.getNumThousandSep().GetBuffer()[0];
+                    sal_Unicode cComma = rData.getNumDecimalSep()[0];
+                    sal_Unicode c1000  = rData.getNumThousandSep()[0];
                     String aCurrencyStrg = rData.getCurrSymbol();
 
                     // initialize the Basic-formater help object:

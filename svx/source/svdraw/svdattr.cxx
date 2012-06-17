@@ -898,7 +898,7 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
         else
         {
             sal_Unicode cDec =
-                pIntlWrapper->getLocaleData()->getNumDecimalSep().GetChar(0);
+                pIntlWrapper->getLocaleData()->getNumDecimalSep()[0];
             rText.Insert(cDec, nLen-2);
 
             if(bNull1)

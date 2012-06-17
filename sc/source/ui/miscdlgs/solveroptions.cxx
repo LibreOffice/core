@@ -105,7 +105,7 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, 
     if ( mbIsDouble )
         sTxt += (String)rtl::math::doubleToUString( mfDoubleValue,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-            ScGlobal::GetpLocaleData()->getNumDecimalSep().GetChar(0), true );
+            ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
     else
         sTxt += String::CreateFromInt32( mnIntValue );
     rDev.SetFont( aFont );
@@ -470,7 +470,7 @@ void ScSolverValueDialog::SetValue( double fValue )
 {
     maEdValue.SetText( rtl::math::doubleToUString( fValue,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-            ScGlobal::GetpLocaleData()->getNumDecimalSep().GetChar(0), true ) );
+            ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true ) );
 }
 
 double ScSolverValueDialog::GetValue() const
@@ -480,8 +480,8 @@ double ScSolverValueDialog::GetValue() const
     const LocaleDataWrapper* pLocaleData = ScGlobal::GetpLocaleData();
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     double fValue = rtl::math::stringToDouble( aInput,
-                            pLocaleData->getNumDecimalSep().GetChar(0),
-                            pLocaleData->getNumThousandSep().GetChar(0),
+                            pLocaleData->getNumDecimalSep()[0],
+                            pLocaleData->getNumThousandSep()[0],
                             &eStatus, NULL );
     return fValue;
 }

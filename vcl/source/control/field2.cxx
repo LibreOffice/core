@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <tools/rc.h>
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
@@ -48,6 +49,7 @@
 #include <unotools/misccfg.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::comphelper;
 
 // =======================================================================
 
@@ -2194,13 +2196,13 @@ static sal_Bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC)   ||
              ((cChar >= '0') && (cChar <= '9')) ||
-             (cChar == rLocaleDataWrapper.getTimeSep()) ||
-             ( ( rLocaleDataWrapper.getTimeAM().Search( cChar ) != STRING_NOTFOUND ) ) ||
-             ( ( rLocaleDataWrapper.getTimePM().Search( cChar ) != STRING_NOTFOUND ) ) ||
+             string::equals(rLocaleDataWrapper.getTimeSep(), cChar) ||
+             (rLocaleDataWrapper.getTimeAM().indexOf(cChar) != -1) ||
+             (rLocaleDataWrapper.getTimePM().indexOf(cChar) != -1) ||
              // Accept AM/PM:
              (cChar == 'a') || (cChar == 'A') || (cChar == 'm') || (cChar == 'M') || (cChar == 'p') || (cChar == 'P') ||
-             ((eFormat == TIMEF_100TH_SEC) && (cChar == rLocaleDataWrapper.getTime100SecSep())) ||
-             ((eFormat == TIMEF_SEC_CS) && (cChar == rLocaleDataWrapper.getTime100SecSep())) ||
+             ((eFormat == TIMEF_100TH_SEC) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
+             ((eFormat == TIMEF_SEC_CS) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
              (bDuration && (cChar == '-')) )
             return sal_False;
         else
@@ -2263,7 +2265,7 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
         return sal_False;
 
     // Nach Separatoren suchen
-    if ( rLocaleDataWrapper.getTimeSep().Len() )
+    if (!rLocaleDataWrapper.getTimeSep().isEmpty())
     {
         XubString aSepStr( RTL_CONSTASCII_USTRINGPARAM( ",.;:/" ) );
         if ( !bDuration )
@@ -2272,12 +2274,12 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
         // Die obigen Zeichen durch das Separatorzeichen ersetzen
         for ( xub_StrLen i = 0; i < aSepStr.Len(); i++ )
         {
-            if ( aSepStr.GetChar( i ) == rLocaleDataWrapper.getTimeSep() )
+            if (string::equals(rLocaleDataWrapper.getTimeSep(), aSepStr.GetChar(i)))
                 continue;
             for ( xub_StrLen j = 0; j < aStr.Len(); j++ )
             {
                 if ( aStr.GetChar( j ) == aSepStr.GetChar( i ) )
-                    aStr.SetChar( j, rLocaleDataWrapper.getTimeSep().GetChar(0) );
+                    aStr.SetChar( j, rLocaleDataWrapper.getTimeSep()[0] );
             }
         }
     }

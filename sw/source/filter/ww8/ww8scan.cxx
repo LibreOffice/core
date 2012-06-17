@@ -5605,7 +5605,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, lid );
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
-    nNumDecimalSep = aLocaleWrapper.getNumDecimalSep().GetChar( 0 );
+    nNumDecimalSep = aLocaleWrapper.getNumDecimalSep()[0];
 }
 
 sal_Unicode WW8Fib::getNumDecimalSep() const

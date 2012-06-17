@@ -268,7 +268,7 @@ SfxItemPresentation SvxDoubleItem::GetPresentation
     if ( pIntlWrapper )
     {
         rText = ::rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4,
-            pIntlWrapper->getLocaleData()->getNumDecimalSep().GetChar(0), true );
+            pIntlWrapper->getLocaleData()->getNumDecimalSep()[0], true );
     }
     else
         rText = GetValueText();

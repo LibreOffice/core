@@ -51,10 +51,10 @@ protected:
     BigInt                  mnMin;
     BigInt                  mnMax;
     BigInt                  mnCorrectedValue;
-    String                  maCurrencySymbol;
-    sal_uInt16                  mnType;
-    sal_uInt16                  mnDecimalDigits;
-    sal_Bool                    mbThousandSep;
+    rtl::OUString           maCurrencySymbol;
+    sal_uInt16              mnType;
+    sal_uInt16              mnDecimalDigits;
+    sal_Bool                mbThousandSep;
 
                             LongCurrencyFormatter();
 public:

@@ -698,7 +698,7 @@ OUString CreateExactSizeText( sal_Int64 nSize )
 
     OUString aSizeStr( ::rtl::math::doubleToUString( fSize,
                 rtl_math_StringFormat_F, nDec,
-                SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0)));
+                SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]) );
     aSizeStr += aUnitStr;
 
     return aSizeStr;

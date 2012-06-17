@@ -579,7 +579,7 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
+    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
     aStr.Append( String::CreateFromAscii( " / " ) );
@@ -596,7 +596,7 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
+    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
     aStr.Append( String::CreateFromAscii( " x " ) );

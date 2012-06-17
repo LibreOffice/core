@@ -467,7 +467,7 @@ String SwCalc::GetStrResult( double nValue, sal_Bool )
     String  aRetStr( ::rtl::math::doubleToUString( nValue,
                 rtl_math_StringFormat_Automatic,
                 nDec,
-                pLclData->getNumDecimalSep().GetChar(0),
+                pLclData->getNumDecimalSep()[0],
                 true ));
 
     return aRetStr;
@@ -916,8 +916,8 @@ if( !nUseOld )
 else
 {
     sal_Unicode ch;
-    sal_Unicode cTSep = pLclData->getNumThousandSep().GetChar(0),
-                cDSep = pLclData->getNumDecimalSep().GetChar(0);
+    sal_Unicode cTSep = pLclData->getNumThousandSep()[0],
+                cDSep = pLclData->getNumDecimalSep()[0];
 
     do {
         if( 0 == ( ch = NextCh( sCommand, nCommandPos ) ) )
@@ -1528,8 +1528,8 @@ lcl_Str2Double( const String& rCommand, xub_StrLen& rCommandPos, double& rVal,
     const sal_Unicode* pEnd;
     rVal = rtl_math_uStringToDouble( rCommand.GetBuffer() + rCommandPos,
             rCommand.GetBuffer() + rCommand.Len(),
-            pLclData->getNumDecimalSep().GetChar(0),
-            pLclData->getNumThousandSep().GetChar(0),
+            pLclData->getNumDecimalSep()[0],
+            pLclData->getNumThousandSep()[0],
             &eStatus, &pEnd );
     rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
 

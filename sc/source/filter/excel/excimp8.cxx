@@ -500,7 +500,7 @@ void XclImpAutoFilterData::CreateFromDouble( rtl::OUString& rStr, double fVal )
 {
     rStr += ::rtl::math::doubleToUString(fVal,
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), true);
+                ScGlobal::pLocaleData->getNumDecimalSep()[0], true);
 }
 
 void XclImpAutoFilterData::SetCellAttribs()

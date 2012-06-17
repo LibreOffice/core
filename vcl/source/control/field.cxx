@@ -48,6 +48,7 @@
 #include <unotools/localedatawrapper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::comphelper;
 
 // -----------------------------------------------------------------------
 
@@ -84,8 +85,8 @@ static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC) ||
              ((cChar >= '0') && (cChar <= '9')) ||
-             (cChar == rLocaleDataWrappper.getNumDecimalSep() ) ||
-             (bThousandSep && (cChar == rLocaleDataWrappper.getNumThousandSep())) ||
+             string::equals(rLocaleDataWrappper.getNumDecimalSep(), cChar) ||
+             (bThousandSep && string::equals(rLocaleDataWrappper.getNumThousandSep(), cChar)) ||
              (cChar == '-') )
             return sal_False;
         else
@@ -111,7 +112,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
         return sal_False;
 
     // Fuehrende und nachfolgende Leerzeichen entfernen
-    aStr = comphelper::string::strip(aStr, ' ');
+    aStr = string::strip(aStr, ' ');
 
     // Position des Dezimalpunktes suchen
     nDecPos = aStr.Search( rLocaleDataWrappper.getNumDecimalSep() );
@@ -1080,7 +1081,7 @@ static FieldUnit ImplStringToMetric(const rtl::OUString &rMetricString)
     {
         // return FieldUnit
         rtl::OUString aStr(rMetricString.toAsciiLowerCase());
-        aStr = comphelper::string::remove(aStr, ' ');
+        aStr = string::remove(aStr, ' ');
         for( FieldUnitStringList::const_iterator it = pList->begin(); it != pList->end(); ++it )
         {
             if ( it->first.Equals( aStr ) )

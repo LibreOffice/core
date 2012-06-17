@@ -778,7 +778,7 @@ sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent 
     if ( ( nFormatType == XML_TOK_STYLES_NUMBER_STYLE ||
            nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
            nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE ) &&
-            (cChar == (cTS = rParent.GetLocaleData().getNumThousandSep().GetChar(0)) ||
+            (cChar == (cTS = rParent.GetLocaleData().getNumThousandSep()[0]) ||
              (cChar == ' ' && cTS == cNBSP)) )
     {
         //  #i22394# Extra occurrences of thousands separator must be quoted, so they

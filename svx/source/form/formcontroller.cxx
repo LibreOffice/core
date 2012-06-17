@@ -3256,7 +3256,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                                                                     ,xFormatter
                                                                     ,xField
                                                                     ,aAppLocale
-                                                                    ,(sal_Char)aLocaleWrapper.getNumDecimalSep().GetChar(0)
+                                                                    ,(sal_Char)aLocaleWrapper.getNumDecimalSep()[0]
                                                                     ,getParseContext());
                                 aRow[(*iter).xText] = sCriteria;
                             }

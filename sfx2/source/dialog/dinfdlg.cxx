@@ -165,7 +165,7 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
     {
         aSizeStr = ::rtl::math::doubleToUString( fSize,
                 rtl_math_StringFormat_F, nDec,
-                rLocaleWrapper.getNumDecimalSep().GetChar(0) );
+                rLocaleWrapper.getNumDecimalSep()[0] );
         aSizeStr += aUnitStr;
 
         aSizeStr += DEFINE_CONST_UNICODE(" (");

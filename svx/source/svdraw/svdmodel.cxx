@@ -1299,7 +1299,7 @@ void SdrModel::TakeMetricStr(long nVal, rtl::OUString& rStr, bool bNoUnitChars, 
             aBuf.insert(0, sal_Unicode('0'));
     }
 
-    sal_Unicode cDec( rLoc.getNumDecimalSep().GetChar(0) );
+    sal_Unicode cDec( rLoc.getNumDecimalSep()[0] );
 
     // insert KommaChar (decimal point character)
     sal_Int32 nVorKomma = aBuf.getLength() - nKomma;
@@ -1369,7 +1369,7 @@ void SdrModel::TakeWinkStr(long nWink, rtl::OUString& rStr, bool bNoDegChar) con
     while(aBuf.getLength() < nAnz)
         aBuf.insert(0, sal_Unicode('0'));
 
-    aBuf.insert(aBuf.getLength()-2, rLoc.getNumDecimalSep().GetChar(0));
+    aBuf.insert(aBuf.getLength()-2, rLoc.getNumDecimalSep()[0]);
 
     if(bNeg)
         aBuf.insert(0, sal_Unicode('-'));
