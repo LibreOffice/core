@@ -794,13 +794,13 @@ AbstractScCondFormatDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatDlg(Win
     return NULL;
 }
 
-AbstractScDataBarSettingsDlg* ScAbstractDialogFactory_Impl::CreateScDataBarSetttingsDlg(Window* pParent, int nId)
+AbstractScDataBarSettingsDlg* ScAbstractDialogFactory_Impl::CreateScDataBarSetttingsDlg(Window* pParent, ScDocument* pDoc, int nId)
 {
     ScDataBarSettingsDlg* pDlg = NULL;
     switch( nId )
     {
         case RID_SCDLG_DATABAR:
-            pDlg = new ScDataBarSettingsDlg( pParent );
+            pDlg = new ScDataBarSettingsDlg( pParent, pDoc );
             break;
         default:
             break;

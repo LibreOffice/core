@@ -30,12 +30,13 @@
 #include "colorscale.hxx"
 
 #include "colorformat.hrc"
+#include "document.hxx"
 
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow):
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc):
     ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
@@ -55,7 +56,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow):
     maLbTypeMax( this, ScResId( LB_TYPE ) ),
     maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
     maEdMin( this, ScResId( ED_MIN ) ),
-    maEdMax( this, ScResId( ED_MAX ) )
+    maEdMax( this, ScResId( ED_MAX ) ),
+    mpNumberFormatter( pDoc->GetFormatTable() )
 {
     Init();
     FreeResource();
@@ -127,7 +129,7 @@ void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
 
 }
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData):
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc):
     ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
@@ -148,7 +150,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
     maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
     maEdMin( this, ScResId( ED_MIN ) ),
     maEdMax( this, ScResId( ED_MAX ) ),
-    maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) )
+    maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) ),
+    mpNumberFormatter( pDoc->GetFormatTable() )
 {
     Init();
     FreeResource();

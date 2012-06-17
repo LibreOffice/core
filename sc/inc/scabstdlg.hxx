@@ -362,7 +362,7 @@ public:
     virtual AbstractScCondFormatDlg* CreateScCondFormatDlg (Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat,
                                                                 const ScRangeList& rList, const ScAddress& rPos, int nId ) = 0; //add for ScCondFormatDlg
 
-    virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent ,int nId ) = 0; //add for ScDataBarSettingsDlg
+    virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent, ScDocument* pDoc, int nId ) = 0; //add for ScDataBarSettingsDlg
 
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ) = 0; //add for ScDataPilotDatabaseDlg
 
