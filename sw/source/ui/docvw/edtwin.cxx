@@ -292,10 +292,7 @@ struct QuickHelpData
     /// Help string is currently displayed.
     bool m_bIsDisplayed;
 
-    sal_uInt16* pAttrs;
-    CommandExtTextInputData* pCETID;
-
-    QuickHelpData() : pAttrs( 0 ), pCETID( 0 ) { ClearCntnt(); }
+    QuickHelpData() { ClearCntnt(); }
 
     void Move( QuickHelpData& rCpy );
     void ClearCntnt();
@@ -5485,14 +5482,6 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
     m_bAppendSpace = rCpy.m_bAppendSpace;
     m_bIsTip = rCpy.m_bIsTip;
     m_bIsAutoText = rCpy.m_bIsAutoText;
-
-    delete pCETID;
-    pCETID = rCpy.pCETID;
-    rCpy.pCETID = 0;
-
-    delete[] pAttrs;
-    pAttrs = rCpy.pAttrs;
-    rCpy.pAttrs = 0;
 }
 
 void QuickHelpData::ClearCntnt()
@@ -5503,18 +5492,10 @@ void QuickHelpData::ClearCntnt()
     m_aHelpStrings.clear();
     m_bIsTip = true;
     m_bIsAutoText = true;
-    delete pCETID, pCETID = 0;
-    delete[] pAttrs, pAttrs = 0;
 }
 
 void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
 {
-    delete pCETID;
-    pCETID = 0;
-
-    delete[] pAttrs;
-    pAttrs = 0;
-
     if( USHRT_MAX != nWrdLen )
     {
         nLen = nWrdLen;
@@ -5537,12 +5518,11 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
         String sStr( m_aHelpStrings[ nCurArrPos ] );
         sStr.Erase( 0, nLen );
         sal_uInt16 nL = sStr.Len();
-        pAttrs = new sal_uInt16[ nL ];
-        for( sal_uInt16 n = nL; n;  )
-            *(pAttrs + --n ) = EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE |
+        const sal_uInt16 nVal = EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE |
                                 EXTTEXTINPUT_ATTR_HIGHLIGHT;
-        pCETID = new CommandExtTextInputData( sStr, pAttrs, nL,
-                                                0, 0, 0, sal_False );
+        const std::vector<sal_uInt16> aAttrs( nL, nVal );
+        CommandExtTextInputData aCETID( sStr, &aAttrs[0], nL,
+                                        0, 0, 0, sal_False );
 
         //fdo#33092. If the current input language is the default
         //language that text would appear in if typed, then don't
@@ -5555,7 +5535,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
         }
 
         rSh.CreateExtTextInput(eInputLanguage);
-        rSh.SetExtTextInputData( *pCETID );
+        rSh.SetExtTextInputData( aCETID );
     }
 }
 
