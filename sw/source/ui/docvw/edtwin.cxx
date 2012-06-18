@@ -301,12 +301,14 @@ struct QuickHelpData
 
     sal_Bool HasCntnt() const { return !m_aHelpStrings.empty() && 0 != nLen; }
 
-    void Inc( sal_Bool bEndLess )
+    /// Next help string.
+    void Next( sal_Bool bEndLess )
     {
         if( ++nCurArrPos >= m_aHelpStrings.size() )
             nCurArrPos = (bEndLess && !m_bIsAutoText ) ? 0 : nCurArrPos-1;
     }
-    void Dec( sal_Bool bEndLess )
+    /// Previous help string.
+    void Previous( sal_Bool bEndLess )
     {
         if( 0 == nCurArrPos-- )
             nCurArrPos = (bEndLess && !m_bIsAutoText ) ? m_aHelpStrings.size()-1 : 0;
@@ -2070,9 +2072,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     {
                         if( aTmpQHD.HasCntnt() && !rSh.HasSelection() )
                         {
-                            // to the next Tip
-                            aTmpQHD.Inc( pACorr && pACorr->GetSwFlags().
-                                                   bAutoCmpltEndless );
+                            // Next auto-complete suggestion
+                            aTmpQHD.Next( pACorr &&
+                                          pACorr->GetSwFlags().bAutoCmpltEndless );
                             eKeyState = KS_NextPrevGlossary;
                         }
                         else if( rSh.GetTableFmt() )
@@ -2093,9 +2095,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
                             !rSh.HasReadonlySel() )
                         {
-                            // to the previous Tip
-                            aTmpQHD.Dec( pACorr && pACorr->GetSwFlags().
-                                                        bAutoCmpltEndless );
+                            // Previous auto-complete suggestion.
+                            aTmpQHD.Previous( pACorr &&
+                                              pACorr->GetSwFlags().bAutoCmpltEndless );
                             eKeyState = KS_NextPrevGlossary;
                         }
                         else if((rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM|
