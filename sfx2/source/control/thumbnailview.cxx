@@ -763,6 +763,52 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
     {
         mnFirstLine = nNewFirstLine;
 
+        // Recalculate item positions
+        Size aWinSize = GetOutputSizePixel();
+        size_t nItemCount = mItemList.size();
+
+        // calculate offsets
+        long nStartX = 0;
+        long nStartY = 0;
+
+        // calculate items
+        long x = nStartX;
+        long y = nStartY;
+
+        // draw items
+        sal_uLong nFirstItem = mnFirstLine * mnCols;
+        sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
+
+        // If want also draw parts of items in the last line,
+        // then we add one more line if parts of these line are
+        // visible
+        if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
+            nLastItem += mnCols;
+
+        for ( size_t i = 0; i < nItemCount; i++ )
+        {
+            ThumbnailViewItem *const pItem = mItemList[i];
+
+            if ( (i >= nFirstItem) && (i < nLastItem) )
+            {
+                pItem->mbVisible = true;
+                pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
+                pItem->calculateItemsPosition();
+
+                if ( !((i+1) % mnCols) )
+                {
+                    x = nStartX;
+                    y += mnItemHeight+mnSpacing;
+                }
+                else
+                    x += mnItemWidth+mnSpacing;
+            }
+            else
+            {
+                pItem->mbVisible = false;
+            }
+        }
+
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
