@@ -15,19 +15,13 @@ public class WriterViewerActivity extends Activity{
 	private String filterModeKey = "FILTER_MODE";
 	File dir;
 	private int filterMode;
+	private Bundle extras;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		Intent i = this.getIntent();
-		if( i.hasExtra( currentDirectoryKey ) ){
-			Log.d(currentDirectoryKey, i.getStringExtra( currentDirectoryKey ) );
-			dir = new File( i.getStringExtra( currentDirectoryKey ) );
-		}
-		if( i.hasExtra( filterModeKey ) ){
-			//Log.d("FILTER_OC_WRITER", Integer.toString(i.getIntExtra( filterModeKey , FileUtilities.ALL )));
-        	filterMode = i.getIntExtra( filterModeKey , FileUtilities.ALL );
-		}
+		extras = getIntent().getExtras();
 		setContentView(R.layout.main);
 	    ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
@@ -39,8 +33,7 @@ public class WriterViewerActivity extends Activity{
 	        case android.R.id.home:
 	            // app icon in action bar clicked; go home
 	            Intent intent = new Intent(this, LibreOfficeUIActivity.class);
-	            intent.putExtra(currentDirectoryKey, dir.getAbsolutePath() );
-	    		intent.putExtra( filterModeKey , filterMode );
+	            intent.putExtras( extras );
 	            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	            startActivity(intent);
 	            return true;

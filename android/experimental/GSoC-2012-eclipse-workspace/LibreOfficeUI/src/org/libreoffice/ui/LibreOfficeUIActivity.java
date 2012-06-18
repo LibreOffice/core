@@ -44,13 +44,13 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 	FilenameFilter filenameFilter;
 	private String[] fileNames;
 	private File[] filePaths;
-	private ActionBar actionBar;
+	//private ActionBar actionBar;
 	private SharedPreferences prefs;
 	
-	private static final String currentDirectoryKey = "CURRENT_DIRECTORY";
-	private static final String filterModeKey = "FILTER_MODE";
-	public static final String EXPLORER_VIEW_TYPE = "EXPLORER_VIEW_TYPE";
-	public static final String EXPLORER_PREFS = "EXPLORER_PREFS";
+	private static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
+	private static final String FILTER_MODE_KEY = "FILTER_MODE";
+	public static final String EXPLORER_VIEW_TYPE_KEY = "EXPLORER_VIEW_TYPE";
+	public static final String EXPLORER_PREFS_KEY = "EXPLORER_PREFS";
 	
 	public static final int GRID_VIEW = 0;
 	public static final int LIST_VIEW = 1;
@@ -60,46 +60,30 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        prefs = getSharedPreferences(EXPLORER_PREFS, MODE_PRIVATE);
-        viewType = prefs.getInt( EXPLORER_VIEW_TYPE, GRID_VIEW);
-        
-        actionBar = getActionBar();
+        Log.d(tag, "onCreate");
+        //Set the "home" - top level - directory.
+        homeDirectory  = new File(Environment.getExternalStorageDirectory(),"LibreOffice");
+        homeDirectory.mkdirs();
+        currentDirectory = homeDirectory;        
+        //Load default settings
+        prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
+        viewType = prefs.getInt( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
+
+    }
+    
+    public void createUI(){
+    	ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);//This should show current directory if anything
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.file_view_modes,
                 android.R.layout.simple_spinner_dropdown_item);
         actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-			
-        
-        homeDirectory  = new File(Environment.getExternalStorageDirectory(),"LibreOffice");
-        homeDirectory.mkdirs();
-        currentDirectory = homeDirectory;
-        Intent i = this.getIntent();
-        if( i.hasExtra( currentDirectoryKey ) ){
-        	currentDirectory = new File( i.getStringExtra( currentDirectoryKey ) );
-        }else{
-        	if( savedInstanceState != null){
-	        	if( savedInstanceState.getString( currentDirectoryKey ) != null ){
-	        		currentDirectory = new File( 
-	        				savedInstanceState.getString( currentDirectoryKey ) );
-	        	}
-        	}
-        }
-        
-        if( i.hasExtra( filterModeKey ) ){
-            filterMode = i.getIntExtra( filterModeKey, FileUtilities.ALL);
-        }
         if( !currentDirectory.equals( homeDirectory )){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        //createDummyFileSystem();
-        createUI();
-	    
-    }
-    
-    public void createUI(){
+        
     	if( viewType == GRID_VIEW){
 	        // code to make a grid view
         	setContentView(R.layout.file_grid);
@@ -148,7 +132,6 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     
     public void openDirectory(File dir ){
     	currentDirectory = dir; 
-    	Log.d(tag, dir.toString() + " " + homeDirectory.toString());
         if( !currentDirectory.equals( homeDirectory )){
             ActionBar actionBar = getActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -166,10 +149,10 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     }
     
     public void open(String file){
-    	//Should add file to the intent as an extra
     	Intent i = new Intent( this , WriterViewerActivity.class );
-    	i.putExtra( currentDirectoryKey , currentDirectory.getAbsolutePath() );
-    	i.putExtra( filterModeKey  , filterMode );
+    	i.putExtra( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
+    	i.putExtra( FILTER_MODE_KEY  , filterMode );
+    	i.putExtra( EXPLORER_VIEW_TYPE_KEY  , viewType );
     	startActivity( i );
     }
     
@@ -278,21 +261,79 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     protected void onSaveInstanceState(Bundle outState) {
     	// TODO Auto-generated method stub
     	super.onSaveInstanceState(outState);
-    	outState.putString( currentDirectoryKey , currentDirectory.getAbsolutePath() );
-    	prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
+    	outState.putString( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
+    	outState.putInt( FILTER_MODE_KEY , filterMode );
+    	outState.putInt( EXPLORER_VIEW_TYPE_KEY , viewType );
+
+    	Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewType) );
+    	//prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
+    	Log.d(tag, "savedInstanceSate");
     }
     
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
     	// TODO Auto-generated method stub
     	super.onRestoreInstanceState(savedInstanceState);
-    	//currentDirectory = new File( savedInstanceState.getString( currentDirectoryKey ) );
+    	if( savedInstanceState.isEmpty() ){
+    		return;
+    	}
+    	currentDirectory = new File( savedInstanceState.getString( CURRENT_DIRECTORY_KEY ) );
+    	filterMode = savedInstanceState.getInt( FILTER_MODE_KEY , FileUtilities.ALL ) ;
+    	viewType = savedInstanceState.getInt( EXPLORER_VIEW_TYPE_KEY , GRID_VIEW );
+    	//openDirectory( currentDirectory );
+    	Log.d(tag, "onRestoreInstanceState");
+    	Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewType) );
     }
     
     @Override
     protected void onPause() {
-    	
+    	//prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
     	super.onPause();
+    	Log.d(tag, "onPause");
+    }
+    
+    @Override
+    protected void onResume() {
+    	// TODO Auto-generated method stub
+    	super.onResume();
+    	Log.d(tag, "onResume");
+    	Intent i = this.getIntent();
+        if( i.hasExtra( CURRENT_DIRECTORY_KEY ) ){
+        	currentDirectory = new File( i.getStringExtra( CURRENT_DIRECTORY_KEY ) );
+        	Log.d(tag, CURRENT_DIRECTORY_KEY);
+        }
+        if( i.hasExtra( FILTER_MODE_KEY ) ){
+            filterMode = i.getIntExtra( FILTER_MODE_KEY, FileUtilities.ALL);
+            Log.d(tag, FILTER_MODE_KEY);
+        }
+        if( i.hasExtra( EXPLORER_VIEW_TYPE_KEY ) ){
+            viewType = i.getIntExtra( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
+            Log.d(tag, EXPLORER_VIEW_TYPE_KEY);
+        }
+    	createUI();
+    	openDirectory( currentDirectory );
+    }
+    
+    @Override
+    protected void onStart() {
+    	// TODO Auto-generated method stub
+    	super.onStart();
+    	Log.d(tag, "onStart");
+    }
+    
+    @Override
+    protected void onStop() {
+    	// TODO Auto-generated method stub
+    	super.onStop();
+    	Log.d(tag, "onStop");
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	// TODO Auto-generated method stub
+    	super.onDestroy();
+    	
+    	Log.d(tag, "onDestroy");
     }
      
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
