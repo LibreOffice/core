@@ -525,9 +525,8 @@ rtl::OUString SessionManagerClient::getExecName()
     osl_getExecutableFile( &aExec.pData );
     osl_getSystemPathFromFileURL( aExec.pData, &aSysExec.pData );
 
-    int nPos = aSysExec.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".bin")) );
-    if( nPos != -1 )
-        aSysExec = aSysExec.copy( 0, nPos );
+    if( aSysExec.endsWith(".bin") )
+        aSysExec = aSysExec.copy( 0, aSysExec.getLength() - RTL_CONSTASCII_LENGTH(".bin") );
     return aSysExec;
 }
 
