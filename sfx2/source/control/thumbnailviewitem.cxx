@@ -119,7 +119,9 @@ void ThumbnailViewItem::calculateItemsPosition ()
 void ThumbnailViewItem::setSelectionMode (bool mode)
 {
     mbMode = mode;
-    mpSelectBox->Show(mode);
+
+    if (!mbHover && !mbSelected)
+        mpSelectBox->Show(mode);
 }
 
 void ThumbnailViewItem::setSelectClickHdl (const Link &link)
