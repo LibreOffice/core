@@ -74,7 +74,7 @@ ScXMLTabProtectionData::ScXMLTabProtectionData() :
 ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     : rImport(rTempImport),
     aFixupOLEs(rTempImport),
-    maCellPos(ScAddress::INITIALIZE_INVALID),
+    maCurrentCellPos(ScAddress::INITIALIZE_INVALID),
     nCurrentColStylePos(0),
     nCurrentDrawPage( -1 ),
     nCurrentXShapes( -1 )
@@ -116,22 +116,22 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
         nCurrentColStylePos = 0;
         sCurrentSheetName = sTableName;
         //reset cols and rows for new sheet, but increment tab
-        maCellPos.SetCol(-1);
-        maCellPos.SetRow(-1);
-        maCellPos.SetTab(maCellPos.Tab() + 1);
+        maCurrentCellPos.SetCol(-1);
+        maCurrentCellPos.SetRow(-1);
+        maCurrentCellPos.SetTab(maCurrentCellPos.Tab() + 1);
 
         maProtectionData = rProtectData;
         ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
 
         // The document contains one sheet when created. So for the first
         // sheet, we only need to set its name.
-        if (maCellPos.Tab() > 0)
+        if (maCurrentCellPos.Tab() > 0)
             pDoc->AppendTabOnLoad(sTableName);
         else
-            pDoc->SetTabNameOnLoad(maCellPos.Tab(), sTableName);
+            pDoc->SetTabNameOnLoad(maCurrentCellPos.Tab(), sTableName);
 
         rImport.SetTableStyle(sStyleName);
-        xCurrentSheet = getCurrentSheet(rImport.GetModel(), maCellPos.Tab());
+        xCurrentSheet = getCurrentSheet(rImport.GetModel(), maCurrentCellPos.Tab());
         if (xCurrentSheet.is())
         {
             // We need to set the current cell range here regardless of
@@ -172,7 +172,7 @@ void ScMyTables::SetTableStyle(const rtl::OUString& sStyleName)
                         pStyle->FillPropertySet(xProperties);
 
                         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
-                        pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, maCellPos.Tab() ) );
+                        pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, maCurrentCellPos.Tab() ) );
                     }
                 }
             }
@@ -182,8 +182,8 @@ void ScMyTables::SetTableStyle(const rtl::OUString& sStyleName)
 
 void ScMyTables::AddRow()
 {
-    maCellPos.SetRow(maCellPos.Row() + 1);
-    maCellPos.SetCol(-1); //reset columns for new row
+    maCurrentCellPos.SetRow(maCurrentCellPos.Row() + 1);
+    maCurrentCellPos.SetCol(-1); //reset columns for new row
 }
 
 void ScMyTables::SetRowStyle(const rtl::OUString& rCellStyleName)
@@ -193,11 +193,11 @@ void ScMyTables::SetRowStyle(const rtl::OUString& rCellStyleName)
 
 void ScMyTables::AddColumn(bool bIsCovered)
 {
-    maCellPos.SetCol( maCellPos.Col() + 1 );
+    maCurrentCellPos.SetCol( maCurrentCellPos.Col() + 1 );
     //here only need to set column style if this is the first row and
     //the cell is not covered.
-    if(maCellPos.Row() == 0 && !bIsCovered)
-        rImport.GetStylesImportHelper()->InsertCol(maCellPos.Col(), maCellPos.Tab(), rImport.GetDocument());
+    if(maCurrentCellPos.Row() == 0 && !bIsCovered)
+        rImport.GetStylesImportHelper()->InsertCol(maCurrentCellPos.Col(), maCurrentCellPos.Tab(), rImport.GetDocument());
 }
 
 void ScMyTables::UpdateRowHeights()
@@ -274,7 +274,7 @@ void ScMyTables::DeleteTable()
         pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
         pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);
         pProtect->setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
-        rImport.GetDocument()->SetTabProtection(maCellPos.Tab(), pProtect.get());
+        rImport.GetDocument()->SetTabProtection(maCurrentCellPos.Tab(), pProtect.get());
     }
 }
 
@@ -286,24 +286,24 @@ void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCell
 
 uno::Reference< drawing::XDrawPage > ScMyTables::GetCurrentXDrawPage()
 {
-    if( (maCellPos.Tab() != nCurrentDrawPage) || !xDrawPage.is() )
+    if( (maCurrentCellPos.Tab() != nCurrentDrawPage) || !xDrawPage.is() )
     {
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier( xCurrentSheet, uno::UNO_QUERY );
         if( xDrawPageSupplier.is() )
             xDrawPage.set(xDrawPageSupplier->getDrawPage());
-        nCurrentDrawPage = sal::static_int_cast<sal_Int16>(maCellPos.Tab());
+        nCurrentDrawPage = sal::static_int_cast<sal_Int16>(maCurrentCellPos.Tab());
     }
     return xDrawPage;
 }
 
 uno::Reference< drawing::XShapes > ScMyTables::GetCurrentXShapes()
 {
-    if( (maCellPos.Tab() != nCurrentXShapes) || !xShapes.is() )
+    if( (maCurrentCellPos.Tab() != nCurrentXShapes) || !xShapes.is() )
     {
         xShapes.set(GetCurrentXDrawPage(), uno::UNO_QUERY);
         rImport.GetShapeImport()->startPage(xShapes);
         rImport.GetShapeImport()->pushGroupForSorting ( xShapes );
-        nCurrentXShapes = sal::static_int_cast<sal_Int16>(maCellPos.Tab());
+        nCurrentXShapes = sal::static_int_cast<sal_Int16>(maCurrentCellPos.Tab());
         return xShapes;
     }
     else
@@ -312,12 +312,12 @@ uno::Reference< drawing::XShapes > ScMyTables::GetCurrentXShapes()
 
 bool ScMyTables::HasDrawPage()
 {
-    return !((maCellPos.Tab() != nCurrentDrawPage) || !xDrawPage.is());
+    return !((maCurrentCellPos.Tab() != nCurrentDrawPage) || !xDrawPage.is());
 }
 
 bool ScMyTables::HasXShapes()
 {
-    return !((maCellPos.Tab() != nCurrentXShapes) || !xShapes.is());
+    return !((maCurrentCellPos.Tab() != nCurrentXShapes) || !xShapes.is());
 }
 
 void ScMyTables::AddOLE(uno::Reference <drawing::XShape>& rShape,
@@ -333,8 +333,8 @@ void ScMyTables::AddMatrixRange(
     OSL_ENSURE(nEndRow >= nStartRow, "wrong row order");
     OSL_ENSURE(nEndColumn >= nStartColumn, "wrong column order");
     ScRange aScRange(
-        nStartColumn, nStartRow, maCellPos.Tab(),
-        nEndColumn, nEndRow, maCellPos.Tab()
+        nStartColumn, nStartRow, maCurrentCellPos.Tab(),
+        nEndColumn, nEndRow, maCurrentCellPos.Tab()
     );
     ScMatrixRange aMRange(aScRange, rFormula, rFormulaNmsp, eGrammar);
     aMatrixRangeList.push_back(aMRange);
@@ -350,7 +350,7 @@ bool ScMyTables::IsPartOfMatrix(const SCCOL nColumn, const SCROW nRow)
         bool bReady(false);
         while(!bReady && aItr != aEndItr)
         {
-            if (maCellPos.Tab() > aItr->aScRange.aStart.Tab())
+            if (maCurrentCellPos.Tab() > aItr->aScRange.aStart.Tab())
             {
                 OSL_FAIL("should never hapen, because the list should be cleared in DeleteTable");
                 aItr = aMatrixRangeList.erase(aItr);

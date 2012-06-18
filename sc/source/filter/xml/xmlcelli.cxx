@@ -299,7 +299,7 @@ bool cellExists( const ScAddress& rCellPos )
 
 void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTempText)
 {
-    ScAddress aCellPos = rXMLImport.GetTables().GetRealScCellPos();
+    ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
     if (cellExists(aCellPos))
     {
         sal_Int32 nCol = static_cast<sal_Int32>( aCellPos.Col() );
@@ -349,7 +349,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             bIsEmpty = false;
             bTextP = true;
 
-            ScAddress aCellPos = rXMLImport.GetTables().GetRealScCellPos();
+            ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
 
             if( ((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) &&
                 !rXMLImport.GetTables().IsPartOfMatrix(aCellPos.Col(), aCellPos.Row()) )
@@ -427,7 +427,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
 
     if (!pContext && !bTextP)
     {
-        ScAddress aCellPos = rXMLImport.GetTables().GetRealScCellPos();
+        ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
         uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
         if (xShapes.is())
         {
@@ -1098,7 +1098,7 @@ void ScXMLTableRowCellContext::EndElement()
         }
     }
 
-    ScAddress aCellPos = rXMLImport.GetTables().GetRealScCellPos();
+    ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
     if( aCellPos.Col() > 0 && nRepeatedRows > 1 )
         aCellPos.SetRow( aCellPos.Row() - (nRepeatedRows - 1) );
     if( bIsMerged )

@@ -241,7 +241,7 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
             break;
         }
     }
-    aDetectiveOp.aPosition =  rImport.GetTables().GetRealScCellPos();
+    aDetectiveOp.aPosition =  rImport.GetTables().GetCurrentCellPos();
 }
 
 ScXMLDetectiveOperationContext::~ScXMLDetectiveOperationContext()

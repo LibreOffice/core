@@ -88,7 +88,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
     ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
     rtl::OUString                       sCurrentSheetName;
-    ScAddress                           maCellPos;
+    ScAddress                           maCurrentCellPos;
     ScXMLTabProtectionData              maProtectionData;
     ScMyMatrixRangeList                 aMatrixRangeList;
     sal_Int32                           nCurrentColStylePos;
@@ -112,13 +112,13 @@ public:
     bool                                IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
                                             { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
-    ScAddress                           GetRealScCellPos() const { return maCellPos; };
+    ScAddress                           GetCurrentCellPos() const { return maCurrentCellPos; };
     void                                AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName);
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
     rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
-    SCTAB                               GetCurrentSheet() const { return (maCellPos.Tab() >= 0) ? maCellPos.Tab() : 0; }
-    SCCOL                               GetCurrentColumn() const { return (maCellPos.Col() >= 0) ? maCellPos.Col() : 0; }
-    SCROW                               GetCurrentRow() const { return (maCellPos.Row() >= 0) ? maCellPos.Row() : 0; }
+    SCTAB                               GetCurrentSheet() const { return (maCurrentCellPos.Tab() >= 0) ? maCurrentCellPos.Tab() : 0; }
+    SCCOL                               GetCurrentColumn() const { return (maCurrentCellPos.Col() >= 0) ? maCurrentCellPos.Col() : 0; }
+    SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
                                         GetCurrentXSheet() const { return xCurrentSheet; }
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
