@@ -1178,7 +1178,7 @@ void SgfFontOne::ReadOne( const rtl::OString& rID, rtl::OString& Dsc )
         i--;
         j++;
     }
-    SVFName=String(Dsc,i+1,j);                       // SV-Fontname rausholen
+    SVFName = rtl::OStringToOUString(Dsc.copy(i+1,j), RTL_TEXTENCODING_IBM_437); // SV-Fontname rausholen
     Dsc = rtl::OStringBuffer(Dsc).remove(i,j).makeStringAndClear();
 
     IFID = (sal_uInt32)rID.toInt32();
