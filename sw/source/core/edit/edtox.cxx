@@ -389,7 +389,7 @@ void SwEditShell::ApplyAutoMark()
             // Leading and trailing blanks are ignored
             if( !aRdLine.isEmpty() && '#' != aRdLine[0] )
             {
-                String sLine( aRdLine, eChrSet );
+                String sLine(rtl::OStringToOUString(aRdLine, eChrSet));
 
                 xub_StrLen nTokenPos = 0;
                 String sToSelect( sLine.GetToken(0, ';', nTokenPos ) );

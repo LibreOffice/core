@@ -559,8 +559,8 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
             const sal_Unicode* pBuf = rUniStr.GetBuffer();
             const rtl_TextEncoding aTextEncodingOrg = aSrcFont.GetCharSet();
             rtl::OString aByteStr(rtl::OUStringToOString(rUniStr, aTextEncodingOrg));
-            String     aUniStr2( aByteStr, aTextEncodingOrg );
-            const sal_Unicode* pConversion = aUniStr2.GetBuffer();  // this is the unicode array after bytestring <-> unistring conversion
+            rtl::OUString aUniStr2(rtl::OStringToOUString(aByteStr, aTextEncodingOrg));
+            const sal_Unicode* pConversion = aUniStr2.getStr();  // this is the unicode array after bytestring <-> unistring conversion
             for ( i = 0; i < nStringLen; i++ )
             {
                 if ( *pBuf++ != *pConversion++ )
@@ -581,8 +581,8 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
                 }
 
                 aByteStr = rtl::OUStringToOString(rUniStr,  aTextEncoding);
-                aUniStr2 = String ( aByteStr, aTextEncoding );
-                pConversion = aUniStr2.GetBuffer(); // this is the unicode array after bytestring <-> unistring conversion
+                aUniStr2 = rtl::OStringToOUString(aByteStr, aTextEncoding);
+                pConversion = aUniStr2.getStr(); // this is the unicode array after bytestring <-> unistring conversion
                 for ( i = 0; i < nStringLen; i++ )
                 {
                     if ( *pBuf++ != *pConversion++ )

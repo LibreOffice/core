@@ -178,7 +178,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 if( *pEqual )
                 {
                     const rtl::OString aSPath( pEqual + 1 );
-                    DirEntry            aSDir( String( aSPath, RTL_TEXTENCODING_ASCII_US ) );
+                    DirEntry            aSDir(rtl::OStringToOUString(aSPath, RTL_TEXTENCODING_ASCII_US));
 
                     m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
                         rtl::OUStringToOString(aSDir.GetFull(), RTL_TEXTENCODING_ASCII_US) ) );
@@ -654,9 +654,9 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
                 // Kein Pfad und Include Datei
                 if( pFNTmp && !pFNTmp->bLoaded )
                 {
-                    UniString aUniFileName( pFNTmp->aFileName, RTL_TEXTENCODING_ASCII_US );
-                    DirEntry aFullName( aUniFileName );
-                    if ( aFullName.Find( UniString( pCL->aPath, RTL_TEXTENCODING_ASCII_US ) ) )
+                    rtl::OUString aUniFileName(rtl::OStringToOUString(pFNTmp->aFileName, RTL_TEXTENCODING_ASCII_US));
+                    DirEntry aFullName(aUniFileName);
+                    if ( aFullName.Find(rtl::OStringToOUString(pCL->aPath, RTL_TEXTENCODING_ASCII_US)) )
                     {
                         pFNTmp->aPathName = rtl::OUStringToOString(
                             aFullName.GetFull(), RTL_TEXTENCODING_ASCII_US);
@@ -704,7 +704,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
             pFName->bLoaded = sal_False; //bei Fehler nicht geladenen
         else
         {
-            String      aTmpName( ::GetTmpFileName(), RTL_TEXTENCODING_ASCII_US );
+            rtl::OUString aTmpName(rtl::OStringToOUString(::GetTmpFileName(), RTL_TEXTENCODING_ASCII_US));
             DirEntry    aTmpPath( aTmpName ), aSrsPath(rtl::OStringToOUString(pFName->aPathName, RTL_TEXTENCODING_ASCII_US));
 
             aTmpPath.ToAbs();
@@ -982,7 +982,7 @@ ERRTYPE RscCompiler::Link()
         rtl::OString aHxx = pCL->aOutputHxx;
         if( aHxx.isEmpty() )
         {
-            UniString aUniOutputCxx( pCL->aOutputCxx, RTL_TEXTENCODING_ASCII_US );
+            rtl::OUString aUniOutputCxx(rtl::OStringToOUString(pCL->aOutputCxx, RTL_TEXTENCODING_ASCII_US));
             aHxx = rtl::OStringBuffer(rtl::OUStringToOString(DirEntry(aUniOutputCxx).GetBase(),
                 RTL_TEXTENCODING_ASCII_US)).append(".hxx").makeStringAndClear();
         }
@@ -1072,9 +1072,9 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
         while( ( aDirIter != rOutputFile.aSysSearchDirs.end() ) && !bFound )
         {
-            const DirEntry  aPath( String( *aDirIter, RTL_TEXTENCODING_ASCII_US ) );
+            const DirEntry  aPath( rtl::OStringToOUString(*aDirIter, RTL_TEXTENCODING_ASCII_US) );
             DirEntry        aRelPath( aPath );
-            DirEntry        aAbsPath( aRelPath += DirEntry( String( *aFileIter, RTL_TEXTENCODING_ASCII_US ) ) );
+            DirEntry        aAbsPath( aRelPath += DirEntry(rtl::OStringToOUString(*aFileIter, RTL_TEXTENCODING_ASCII_US)) );
 
             aAbsPath.ToAbs();
             const FileStat aFS( aAbsPath.GetFull() );
@@ -1114,8 +1114,8 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
                 if( bFound && pSysListFile )
                 {
-                    DirEntry    aSysPath( String( *aDirIter, RTL_TEXTENCODING_ASCII_US ) );
-                    String      aSysPathFull( ( aSysPath += DirEntry( String( *aFileIter, RTL_TEXTENCODING_ASCII_US ) ) ).GetFull() );
+                    DirEntry    aSysPath(rtl::OStringToOUString(*aDirIter, RTL_TEXTENCODING_ASCII_US));
+                    String      aSysPathFull( ( aSysPath += DirEntry( rtl::OStringToOUString( *aFileIter, RTL_TEXTENCODING_ASCII_US ) ) ).GetFull() );
                     OString     aSysPathStr( aSysPathFull.GetBuffer(), aSysPathFull.Len(), RTL_TEXTENCODING_ASCII_US );
 
                     fprintf( pSysListFile, "%s\n", rContext.pCmdLine->substitutePaths( aSysPathStr ).getStr() );

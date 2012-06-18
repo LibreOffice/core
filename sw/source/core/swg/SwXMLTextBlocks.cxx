@@ -568,7 +568,7 @@ rtl::OUString SwXMLTextBlocks::GeneratePackageName ( const String& rShort )
     xub_StrLen nPos = 0;
     sal_Unicode pDelims[] = { '!', '/', ':', '.', '\\', 0 };
     rtl::OString sByte(rtl::OUStringToOString(aRet, RTL_TEXTENCODING_UTF7));
-    aRet = String (sByte, RTL_TEXTENCODING_ASCII_US);
+    aRet = rtl::OStringToOUString(sByte, RTL_TEXTENCODING_ASCII_US);
     while( STRING_NOTFOUND != ( nPos = aRet.SearchChar( pDelims, nPos )))
     {
         aRet.SetChar( nPos, '_' );

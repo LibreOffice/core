@@ -55,11 +55,11 @@ bool Lockfile_execWarning( Lockfile * that )
     // insert values...
     String aMsgText = aBox.GetMessText( );
     aMsgText.SearchAndReplaceAscii(
-        "$u", String( aUser, RTL_TEXTENCODING_ASCII_US) );
+        "$u", rtl::OStringToOUString( aUser, RTL_TEXTENCODING_ASCII_US) );
     aMsgText.SearchAndReplaceAscii(
-        "$h", String( aHost, RTL_TEXTENCODING_ASCII_US) );
+        "$h", rtl::OStringToOUString( aHost, RTL_TEXTENCODING_ASCII_US) );
     aMsgText.SearchAndReplaceAscii(
-        "$t", String( aTime, RTL_TEXTENCODING_ASCII_US) );
+        "$t", rtl::OStringToOUString( aTime, RTL_TEXTENCODING_ASCII_US) );
     aBox.SetMessText(aMsgText);
     // do it
     return aBox.Execute( ) == RET_YES;

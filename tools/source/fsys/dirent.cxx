@@ -915,13 +915,13 @@ sal_Bool DirEntry::First()
         DIR *pDir = opendir(aPathName.getStr());
         if ( pDir )
         {
-                WildCard aWildeKarte( String(CMP_LOWER( aName ), osl_getThreadTextEncoding()) );
+                WildCard aWildeKarte(rtl::OStringToOUString(CMP_LOWER(aName), osl_getThreadTextEncoding()));
                 for ( dirent* pEntry = readdir( pDir );
                           pEntry;
                           pEntry = readdir( pDir ) )
                 {
                         rtl::OString aFound(pEntry->d_name);
-                        if ( aWildeKarte.Matches( String(CMP_LOWER( aFound ), osl_getThreadTextEncoding())))
+                        if (aWildeKarte.Matches(rtl::OStringToOUString(CMP_LOWER(aFound), osl_getThreadTextEncoding())))
                         {
                                 aName = aFound;
                                 closedir( pDir );
@@ -1330,7 +1330,7 @@ DirEntry &DirEntry::operator+=( const DirEntry& rEntry )
 
 String DirEntry::GetAccessDelimiter( FSysPathStyle eFormatter )
 {
-        return String( ACCESSDELIM_C( GetStyle( eFormatter ) ) );
+        return rtl::OUString( ACCESSDELIM_C( GetStyle( eFormatter ) ) );
 }
 
 /*************************************************************************
@@ -1774,7 +1774,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
     FileStat aDestStat(rNewName);
     if ( aDestStat.IsKind(FSYS_KIND_DIR ) )
     {
-        aDest += String(aName, osl_getThreadTextEncoding());
+        aDest += DirEntry(rtl::OStringToOUString(aName, osl_getThreadTextEncoding()));
     }
     if ( aDest.Exists() )
     {

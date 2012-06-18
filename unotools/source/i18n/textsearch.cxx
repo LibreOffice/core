@@ -291,7 +291,7 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
 {
     if( rResult.subRegExpressions > 0 )
     {
-        String sTab( '\t' );
+        rtl::OUString sTab( '\t' );
         sal_Unicode sSrchChrs[] = {'\\', '&', '$', 0};
         String sTmp;
         xub_StrLen nPos = 0;

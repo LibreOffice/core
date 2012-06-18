@@ -84,7 +84,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         if( eOc == ocNoName )
         {
             bAddIn = sal_True;
-            nMerk0 = aPool.Store( eOc, String( t, eSrcChar ) );
+            nMerk0 = aPool.Store(eOc, rtl::OStringToOUString(t, eSrcChar));
 
             aPool << nMerk0;
         }

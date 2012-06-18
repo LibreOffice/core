@@ -1953,7 +1953,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     // the string following '<' has to be a known HTML token.
     // <DIR> is not interpreted as HTML. Otherwise the output of the DOS command "DIR"
     // could be interpreted as HTML.
-    String sTest( sCmp.copy( nStart, nPos-nStart ), RTL_TEXTENCODING_ASCII_US );
+    rtl::OUString sTest(rtl::OStringToOUString(sCmp.copy(nStart, nPos-nStart), RTL_TEXTENCODING_ASCII_US));
     int nTok = GetHTMLToken( sTest );
     if( 0 != nTok && HTML_DIRLIST_ON != nTok )
         return true;

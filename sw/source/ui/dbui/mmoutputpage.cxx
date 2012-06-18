@@ -1250,7 +1250,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 sal_Bool bDone = pInStream->ReadLine( sLine );
                 while ( bDone )
                 {
-                    sBody += rtl::OUString(String(sLine, eEncoding));
+                    sBody += rtl::OStringToOUString(sLine, eEncoding);
                     sBody += rtl::OUString('\n');
                     bDone = pInStream->ReadLine( sLine );
                 }

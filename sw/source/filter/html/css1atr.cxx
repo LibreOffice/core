@@ -1063,7 +1063,7 @@ static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, String& rSelector,
     if( nDeep )
     {
         if( !aToken.isEmpty() )
-            rSelector = String( aToken, RTL_TEXTENCODING_ASCII_US );
+            rSelector = rtl::OStringToOUString(aToken, RTL_TEXTENCODING_ASCII_US);
         else
             rSelector.Erase();
 

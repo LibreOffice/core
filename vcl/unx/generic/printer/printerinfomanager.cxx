@@ -331,7 +331,7 @@ void PrinterInfoManager::initialize()
                 if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")))
                 {
                     aValue = aConfig.ReadKey( aKey );
-                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey( String( aKey.copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
+                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey(rtl::OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
                     if( pKey )
                     {
                         m_aGlobalDefaults.m_aContext.
@@ -539,7 +539,7 @@ void PrinterInfoManager::initialize()
                     if( aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")) && aPrinter.m_aInfo.m_pParser )
                     {
                         aValue = aConfig.ReadKey( aKey );
-                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey( String( aKey.copy( 4 ), RTL_TEXTENCODING_ISO_8859_1 ) );
+                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey(rtl::OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
                         if( pKey )
                         {
                             aPrinter.m_aInfo.m_aContext.

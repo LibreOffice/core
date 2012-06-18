@@ -1099,7 +1099,7 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
                 nTransPos = aLine.indexOf('"');
                 if (nTransPos == -1)
                     nTransPos = aLine.getLength();
-                aValue = String( aLine.copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
+                aValue = rtl::OStringToOUString(aLine.copy(0, nTransPos), RTL_TEXTENCODING_MS_1252);
                 // after the second doublequote can follow a / and a translation
                 if (nTransPos < aLine.getLength() - 2)
                 {
@@ -1116,7 +1116,7 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
             else if(aLine[0] == '^')
             {
                 aLine = aLine.copy(1);
-                aValue = String( aLine, RTL_TEXTENCODING_MS_1252 );
+                aValue = rtl::OStringToOUString(aLine, RTL_TEXTENCODING_MS_1252);
                 eType = eSymbol;
             }
             else
@@ -1129,7 +1129,7 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
                 nTransPos = aLine.indexOf('/');
                 if (nTransPos == -1)
                     nTransPos = aLine.getLength();
-                aValue = String( aLine.copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
+                aValue = rtl::OStringToOUString(aLine.copy(0, nTransPos), RTL_TEXTENCODING_MS_1252);
                 if (nTransPos+1 < aLine.getLength())
                     aValueTranslation = handleTranslation( aLine.copy( nTransPos+1 ), bIsGlobalizedLine );
                 eType = eString;
@@ -1193,7 +1193,7 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
         rtl::OString aLine(*line);
         if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM("*Default")))
         {
-            String aKey( aLine.copy( 8 ), RTL_TEXTENCODING_MS_1252 );
+            String aKey(rtl::OStringToOUString(aLine.copy(8), RTL_TEXTENCODING_MS_1252));
             sal_uInt16 nPos = aKey.Search( ':' );
             if( nPos != STRING_NOTFOUND )
             {
@@ -1942,8 +1942,8 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
             if( pKey )
             {
                 const PPDValue* pValue = NULL;
-                String aOption( aLine.copy( nPos+1 ), RTL_TEXTENCODING_MS_1252 );
-                if( ! aOption.EqualsAscii( "*nil" ) )
+                rtl::OUString aOption(rtl::OStringToOUString(aLine.copy(nPos+1), RTL_TEXTENCODING_MS_1252));
+                if (aOption != "*nil")
                     pValue = pKey->getValue( aOption );
                 m_aCurrentValues[ pKey ] = pValue;
 #ifdef __DEBUG

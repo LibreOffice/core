@@ -1207,7 +1207,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                                     sal_Bool bDone = pInStream->ReadLine( sLine );
                                                     while ( bDone )
                                                     {
-                                                        sBody += String(sLine, eEncoding);
+                                                        sBody += rtl::OStringToOUString(sLine, eEncoding);
                                                         sBody += ::rtl::OUString('\n');
                                                         bDone = pInStream->ReadLine( sLine );
                                                     }

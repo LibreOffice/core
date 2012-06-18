@@ -888,7 +888,7 @@ void SbiIoSystem::CloseAll(void)
 
 void SbiIoSystem::ReadCon(rtl::OString& rIn)
 {
-    String aPromptStr( aPrompt, osl_getThreadTextEncoding() );
+    rtl::OUString aPromptStr(rtl::OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
     SbiInputDialog aDlg( NULL, aPromptStr );
     if( aDlg.Execute() )
         rIn = rtl::OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());

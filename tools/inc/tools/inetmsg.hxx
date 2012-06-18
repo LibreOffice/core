@@ -116,9 +116,9 @@ protected:
         sal_uIntPtr nIndex, rtl_TextEncoding eEncoding) const
     {
         if ( nIndex < m_aHeaderList.size() ) {
-            return UniString( m_aHeaderList[ nIndex ]->GetName(), eEncoding );
+            return rtl::OStringToOUString(m_aHeaderList[ nIndex ]->GetName(), eEncoding);
         } else {
-            return UniString();
+            return rtl::OUString();
         }
     }
 

@@ -468,7 +468,7 @@ String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
         bRet = sal_True;
         ::rtl::OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
         rTempNameBase_Impl = rBaseName;
-        rTempNameBase_Impl += String( '/' );
+        rTempNameBase_Impl += rtl::OUString('/');
 
         TempFile aBase( NULL, sal_True );
         if ( aBase.IsValid() )

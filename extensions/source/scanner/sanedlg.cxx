@@ -832,7 +832,7 @@ void SaneDlg::EstablishStringOption()
     {
         maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
         maOptionDescTxt.Show( sal_True );
-        maStringEdit.SetText( String( aValue, osl_getThreadTextEncoding() ) );
+        maStringEdit.SetText(rtl::OStringToOUString(aValue, osl_getThreadTextEncoding()));
         maStringEdit.Show( sal_True );
     }
 }
@@ -845,7 +845,7 @@ void SaneDlg::EstablishStringRange()
         maStringRangeBox.InsertEntry( String( ppStrings[i], osl_getThreadTextEncoding() ) );
     rtl::OString aValue;
     mrSane.GetOptionValue( mnCurrentOption, aValue );
-    maStringRangeBox.SelectEntry( String( aValue, osl_getThreadTextEncoding() ) );
+    maStringRangeBox.SelectEntry(rtl::OStringToOUString(aValue, osl_getThreadTextEncoding()));
     maStringRangeBox.Show( sal_True );
     maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
     maOptionDescTxt.Show( sal_True );

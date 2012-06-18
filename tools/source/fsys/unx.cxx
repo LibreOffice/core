@@ -237,8 +237,8 @@ String DirEntry::GetVolume() const
     mymnttab &rMnt = mymnt::get();
     return ((buf.st_dev == rMnt.mountdevice ||
                 GetMountEntry(buf.st_dev, &rMnt)) ?
-                    String(rMnt.mountspecial, osl_getThreadTextEncoding()) :
-                    String());
+                    rtl::OStringToOUString(rMnt.mountspecial, osl_getThreadTextEncoding()) :
+                    rtl::OUString());
 }
 
 /*************************************************************************
