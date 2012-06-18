@@ -913,6 +913,7 @@ AC_ARG_WITH(arm-target,
 
 BUILD_TYPE="OOo"
 ADDITIONAL_REPOSITORIES="../ext_libraries"
+SCPDEFS=""
 
 dnl ===================================================================
 dnl Message.
