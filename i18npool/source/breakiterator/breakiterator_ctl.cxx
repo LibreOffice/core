@@ -30,8 +30,6 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <breakiterator_ctl.hxx>
 
-#include <string.h> // for memset
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
