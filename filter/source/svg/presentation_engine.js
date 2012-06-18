@@ -1433,7 +1433,7 @@ var NAVDBG = new DebugPrinter();
 NAVDBG.off();
 
 var ANIMDBG = new DebugPrinter();
-ANIMDBG.off();
+ANIMDBG.on();
 
 var aRegisterEventDebugPrinter = new DebugPrinter();
 aRegisterEventDebugPrinter.off();
@@ -4503,6 +4503,94 @@ aTransitionInfoTable[FADE_TRANSITION][FADEOVERCOLOR_TRANS_SUBTYPE] =
 // ------------------------------------------------------------------------------------------ //
 // Transition tables
 
+function createStateTransitionTable()
+{
+    var aSTT = {}
+    var aTable = null;
+
+    aSTT[RESTART_MODE_NEVER] = {};
+    aSTT[RESTART_MODE_WHEN_NOT_ACTIVE] = {};
+    aSTT[RESTART_MODE_ALWAYS] = {};
+
+    // transition table for restart=NEVER, fill=REMOVE
+    aTable =
+    aSTT[RESTART_MODE_NEVER][FILL_MODE_REMOVE] = {};
+    aTable[INVALID_NODE]        = INVALID_NODE;
+    aTable[UNRESOLVED_NODE]     = RESOLVED_NODE | ENDED_NODE;
+    aTable[RESOLVED_NODE]       = ACTIVE_NODE | ENDED_NODE;
+    aTable[ACTIVE_NODE]         = ENDED_NODE;
+    aTable[FROZEN_NODE]         = INVALID_NODE;  // this state is unreachable here
+    aTable[ENDED_NODE]          = ENDED_NODE;    // this state is a sink here (cannot restart)
+
+// transition table for restart=NEVER, fill=FREEZE
+    aTable =
+    aSTT[RESTART_MODE_NEVER][FILL_MODE_FREEZE] =
+    aSTT[RESTART_MODE_NEVER][FILL_MODE_HOLD] =
+    aSTT[RESTART_MODE_NEVER][FILL_MODE_TRANSITION] = {};
+    aTable[INVALID_NODE]        = INVALID_NODE;
+    aTable[UNRESOLVED_NODE]     = RESOLVED_NODE | ENDED_NODE;
+    aTable[RESOLVED_NODE]       = ACTIVE_NODE | ENDED_NODE;
+    aTable[ACTIVE_NODE]         = FROZEN_NODE | ENDED_NODE;
+    aTable[FROZEN_NODE]         = ENDED_NODE;
+    aTable[ENDED_NODE]          = ENDED_NODE;   // this state is a sink here (cannot restart)
+
+    // transition table for restart=WHEN_NOT_ACTIVE, fill=REMOVE
+    aTable =
+    aSTT[RESTART_MODE_WHEN_NOT_ACTIVE][FILL_MODE_REMOVE] = {};
+    aTable[INVALID_NODE]        = INVALID_NODE;
+    aTable[UNRESOLVED_NODE]     = RESOLVED_NODE | ENDED_NODE;
+    aTable[RESOLVED_NODE]       = ACTIVE_NODE | ENDED_NODE;
+    aTable[ACTIVE_NODE]         = ENDED_NODE;
+    aTable[FROZEN_NODE]         = INVALID_NODE;  // this state is unreachable here
+    aTable[ENDED_NODE]          = RESOLVED_NODE | ACTIVE_NODE | ENDED_NODE;  // restart is possible
+
+    // transition table for restart=WHEN_NOT_ACTIVE, fill=FREEZE
+    aTable =
+    aSTT[RESTART_MODE_WHEN_NOT_ACTIVE][FILL_MODE_FREEZE] =
+    aSTT[RESTART_MODE_WHEN_NOT_ACTIVE][FILL_MODE_HOLD] =
+    aSTT[RESTART_MODE_WHEN_NOT_ACTIVE][FILL_MODE_TRANSITION] = {};
+    aTable[INVALID_NODE]        = INVALID_NODE;
+    aTable[UNRESOLVED_NODE]     = RESOLVED_NODE | ENDED_NODE;
+    aTable[RESOLVED_NODE]       = ACTIVE_NODE | ENDED_NODE;
+    aTable[ACTIVE_NODE]         = FROZEN_NODE | ENDED_NODE;
+    aTable[FROZEN_NODE]         = RESOLVED_NODE | ACTIVE_NODE | ENDED_NODE;  // restart is possible
+    aTable[ENDED_NODE]          = RESOLVED_NODE | ACTIVE_NODE | ENDED_NODE;  // restart is possible
+
+    // transition table for restart=ALWAYS, fill=REMOVE
+    aTable =
+    aSTT[RESTART_MODE_ALWAYS][FILL_MODE_REMOVE] = {};
+    aTable[INVALID_NODE]        = INVALID_NODE;
+    aTable[UNRESOLVED_NODE]     = RESOLVED_NODE | ENDED_NODE;
+    aTable[RESOLVED_NODE]       = ACTIVE_NODE | ENDED_NODE;
+    aTable[ACTIVE_NODE]         = RESOLVED_NODE | ACTIVE_NODE | ENDED_NODE;  // restart is possible
+    aTable[FROZEN_NODE]         = INVALID_NODE;  // this state is unreachable here
+    aTable[ENDED_NODE]          = RESOLVED_NODE | ACTIVE_NODE | ENDED_NODE;  // restart is possible
+
+    // transition table for restart=ALWAYS, fill=FREEZE
+    aTable =
+    aSTT[RESTART_MODE_ALWAYS][FILL_MODE_FREEZE] =
+    aSTT[RESTART_MODE_ALWAYS][FILL_MODE_HOLD] =
+    aSTT[RESTART_MODE_ALWAYS][FILL_MODE_TRANSITION] = {};
+    aTable[INVALID_NODE]        = INVALID_NODE;
+    aTable[UNRESOLVED_NODE]     = RESOLVED_NODE | ENDED_NODE;
+    aTable[RESOLVED_NODE]       = ACTIVE_NODE | ENDED_NODE;
+    aTable[ACTIVE_NODE]         = RESOLVED_NODE | ACTIVE_NODE | FROZEN_NODE | ENDED_NODE;
+    aTable[FROZEN_NODE]         = RESOLVED_NODE | ACTIVE_NODE | ENDED_NODE;  // restart is possible
+    aTable[ENDED_NODE]          = RESOLVED_NODE | ACTIVE_NODE | ENDED_NODE;  // restart is possible
+
+
+    return aSTT;
+}
+
+var aStateTransitionTable = createStateTransitionTable();
+
+
+
+
+
+// ------------------------------------------------------------------------------------------ //
+// Transition tables
+
 // transition table for restart=NEVER, fill=FREEZE
 var aStateTransitionTable_Never_Freeze =
 [
@@ -4543,11 +4631,24 @@ var aTableGuide =
 // ------------------------------------------------------------------------------------------ //
 function getTransitionTable( eRestartMode, eFillMode )
 {
-    var nRestartValue = 0;  // never
+    // If restart mode has not been resolved we use 'never'.
+    // Note: RESTART_MODE_DEFAULT == RESTART_MODE_INHERIT.
+    if( eRestartMode == RESTART_MODE_DEFAULT )
+    {
+        log( 'getTransitionTable: unexpected restart mode: ' + eRestartMode
+                 + '. Used NEVER instead.');
+        eRestartMode = RESTART_MODE_NEVER;
+    }
 
-    var nFillValue = 1;     // frozen
+    // If fill mode has not been resolved we use 'remove'.
+    // Note: FILL_MODE_DEFAULT == FILL_MODE_INHERIT
+    if( eFillMode == FILL_MODE_DEFAULT ||
+        eFillMode == FILL_MODE_AUTO )
+    {
+        eFillMode = FILL_MODE_REMOVE;
+    }
 
-    return aTableGuide[ 3*nFillValue + nRestartValue ];
+    return aStateTransitionTable[eRestartMode][eFillMode];
 }
 
 
@@ -5178,8 +5279,7 @@ BaseNode.prototype.parseElement = function()
             this.eRestartMode = this.getParentNode().getRestartMode();
         else
             // SMIL recommendation document says to set it to 'always'
-            // but we follow the slideshow engine C++ implementation
-            this.eRestartMode = RESTART_MODE_NEVER;
+            this.eRestartMode = RESTART_MODE_ALWAYS;
 
     // resolve accelerate and decelerate attributes
     // from the SMIL recommendation document: if the individual values of the accelerate
@@ -5192,9 +5292,6 @@ BaseNode.prototype.parseElement = function()
         this.nDecelerate = 0.0;
     }
 
-    // TODO: at present we are able to manage only this case
-    this.eFillMode = FILL_MODE_FREEZE;
-    this.eRestartMode = RESTART_MODE_NEVER;
     this.aStateTransTable = getTransitionTable( this.getRestartMode(), this.getFillMode() );
 
     return true;
@@ -5255,6 +5352,9 @@ BaseNode.prototype.resolve = function()
 
 BaseNode.prototype.activate = function()
 {
+//    log( 'restart mode: ' + aRestartModeOutMap[ this.getRestartMode() ] );
+//    log( 'fill mode: ' + aFillModeOutMap[ this.getFillMode() ] );
+
     if( ! this.checkValidNode() )
         return false;
 
@@ -5289,7 +5389,7 @@ BaseNode.prototype.deactivate = function()
         var aStateTrans = new StateTransition( this );
         if( aStateTrans.enter( FROZEN_NODE, true /* FORCE */ ) )
         {
-            this.deactivate_st();
+            this.deactivate_st( FROZEN_NODE );
             aStateTrans.commit();
 
             this.notifyEndListeners();
