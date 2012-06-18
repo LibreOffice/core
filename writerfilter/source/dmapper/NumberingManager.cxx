@@ -136,6 +136,8 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
 
 void ListLevel::SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle )
 {
+    if (!pStyle)
+        return;
     m_pParaStyle = pStyle;
     // AFAICT .docx spec does not identify which numberings or paragraph
     // styles are actually the ones to be used for outlines (chapter numbering),
