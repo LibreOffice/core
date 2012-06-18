@@ -154,13 +154,8 @@ public class FieldColumn
     {
         try
         {
-            m_xColPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _xColumns.getByName(m_sFieldName));
-            ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), m_sFieldName) + 1;
-            m_nFieldType = AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Type"));
-            getTyperelatedFieldData();
-
-             if (!bFormatKeysInitialized)
-             {
+            if (!bFormatKeysInitialized)
+            {
                 final NumberFormatter aNumberFormatter = oCommandMetaData.getNumberFormatter();
 
                 iDateFormatKey = aNumberFormatter.getDateFormatKey();
@@ -170,7 +165,12 @@ public class FieldColumn
                 iTimeFormatKey = aNumberFormatter.getTimeFormatKey();
                 iLogicalFormatKey = aNumberFormatter.getLogicalFormatKey();
                 bFormatKeysInitialized = true;
-             }
+            }
+
+            m_xColPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _xColumns.getByName(m_sFieldName));
+            ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), m_sFieldName) + 1;
+            m_nFieldType = AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Type"));
+            getTyperelatedFieldData();
         }
         catch (Exception e)
         {
