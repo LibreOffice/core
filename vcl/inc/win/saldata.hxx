@@ -149,7 +149,6 @@ public:
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
 inline SalData* GetSalData() { return ImplGetSVData()->mpSalData; }
-inline SalData* GetAppSalData() { return ImplGetAppSVData()->mpSalData; }
 
 // --------------
 // - SalShlData -

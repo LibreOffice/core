@@ -468,7 +468,7 @@ void DeInitSalData()
 void InitSalMain()
 {
     // remember data, copied from WinMain
-    SalData* pData = GetAppSalData();
+    SalData* pData = GetSalData();
     if ( pData )    // Im AppServer NULL
     {
         STARTUPINFO aSI;
