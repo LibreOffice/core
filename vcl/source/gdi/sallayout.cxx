@@ -1166,7 +1166,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     }
 
     // calculate adjusted cluster widths
-    sal_Int32* pNewGlyphWidths = (sal_Int32*)alloca( mnGlyphCount * sizeof(long) );
+    sal_Int32* pNewGlyphWidths = (sal_Int32*)alloca( mnGlyphCount * sizeof(sal_Int32) );
     for( i = 0; i < mnGlyphCount; ++i )
         pNewGlyphWidths[ i ] = 0;
 
