@@ -36,6 +36,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 
 class UIPreviewApp : public Application
@@ -75,6 +76,9 @@ int UIPreviewApp::Main()
     aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
     aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
     ::ucbhelper::ContentBroker::initialize(xSFactory, aArgs);
+
+    // turn on tooltips
+    Help::EnableQuickHelp();
 
     try
     {

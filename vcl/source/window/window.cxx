@@ -9927,6 +9927,10 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         set_halign(toAlign(rValue));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("valign")))
         set_valign(toAlign(rValue));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("tooltip-markup")))
+        SetQuickHelpText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("tooltip-text")))
+        SetQuickHelpText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else
     {
         fprintf(stderr, "unhandled property %s\n", rKey.getStr());
