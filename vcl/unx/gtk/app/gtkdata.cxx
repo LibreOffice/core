@@ -668,6 +668,7 @@ void GtkData::Init()
 
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
+    gdk_error_trap_push();
 
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
