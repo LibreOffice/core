@@ -53,15 +53,16 @@ void TabDialog::ImplPosControls()
     Size        aCtrlSize( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
     long        nDownCtrl = 0;
     long        nOffY = 0;
-    TabControl* pTabControl = NULL;
+    Window*     pTabControl = NULL;
 
     Window* pChild = GetWindow( WINDOW_FIRSTCHILD );
     while ( pChild )
     {
         if ( pChild->IsVisible() && (pChild != mpViewWindow) )
         {
-            if ( pChild->GetType() == WINDOW_TABCONTROL )
-                pTabControl = (TabControl*)pChild;
+            WindowType eChildType = pChild->GetType();
+            if ( eChildType == WINDOW_TABCONTROL || eChildType == WINDOW_CONTAINER )
+                pTabControl = pChild;
             else if ( pTabControl )
             {
                 Size aOptimalSize( pChild->GetOptimalSize( WINDOWSIZE_PREFERRED ) );
@@ -92,7 +93,12 @@ void TabDialog::ImplPosControls()
             nOffY += IMPL_DIALOG_BAR_OFFSET*2 + 2;
 
         Point   aTabOffset( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+nOffY );
+
+        if (pTabControl->GetType() == WINDOW_CONTAINER)
+            pTabControl->SetSizePixel(pTabControl->GetOptimalSize(WINDOWSIZE_PREFERRED));
+
         Size    aTabSize = pTabControl->GetSizePixel();
+
         Size    aDlgSize( aTabSize.Width() + IMPL_DIALOG_OFFSET*2,
                           aTabSize.Height() + IMPL_DIALOG_OFFSET*2 + nOffY );
         long    nBtnEx = 0;
