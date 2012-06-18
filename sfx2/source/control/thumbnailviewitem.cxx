@@ -151,7 +151,8 @@ bool ThumbnailViewItem::isInsideTitle (const Point &pt) const
 
 void ThumbnailViewItem::Paint (const Rectangle &aRect)
 {
-    mpSelectBox->Paint(aRect);
+    if (mbMode || mbHover || mbSelected)
+        mpSelectBox->Paint(aRect);
 }
 
 IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )
