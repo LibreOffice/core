@@ -287,6 +287,29 @@ void ScDocFuncSend::SetCollaboration( TeleManager *pManager )
     mpManager = pManager;
 }
 
+bool ScDocFuncSend::InitTeleManager( bool bIsMaster )
+{
+    if (mpManager)
+    {
+        fprintf( stderr, "TeleManager is already connected.\n" );
+        return true;
+    }
+    TeleManager *pManager = TeleManager::get( !bIsMaster );
+    pManager->sigPacketReceived.connect( boost::bind(
+            &ScDocFuncRecv::packetReceived, mpDirect.get(), _1, _2 ));
+    pManager->sigFileReceived.connect( boost::bind(
+            &ScDocFuncRecv::fileReceived, mpDirect.get(), _1 ));
+
+    if (pManager->connect())
+    {
+        pManager->prepareAccountManager();
+        mpManager = pManager;
+        return true;
+    }
+    fprintf( stderr, "Could not connect.\n" );
+    return false;
+}
+
 void ScDocFuncSend::EnterListAction( sal_uInt16 nNameResId )
 {
     // Want to group these operations for the other side ...
@@ -422,22 +445,7 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
         boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *this ) );
         boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
         ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
-        TeleManager *pManager = TeleManager::get( !bIsMaster );
-
-        pManager->sigPacketReceived.connect(
-                boost::bind( &ScDocFuncRecv::packetReceived, pReceiver.get(), _1, _2 ));
-        pManager->sigFileReceived.connect(
-                boost::bind( &ScDocFuncRecv::fileReceived, pReceiver.get(), _1 ));
-
-        if (pManager->connect())
-        {
-            pManager->prepareAccountManager();
-            pSender->SetCollaboration( pManager );
-        }
-        else
-        {
-            fprintf( stderr, "Could not connect.\n");
-        }
+        pSender->InitTeleManager( bIsMaster );
         return pSender;
     }
     else

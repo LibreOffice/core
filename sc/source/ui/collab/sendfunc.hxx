@@ -238,6 +238,7 @@ public:
     virtual ~ScDocFuncSend() {}
 
     void                SetCollaboration( TeleManager *pManager );
+    bool                InitTeleManager( bool bIsMaster );
 
     virtual void        EnterListAction( sal_uInt16 nNameResId );
     virtual void        EndListAction();
