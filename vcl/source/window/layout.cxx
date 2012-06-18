@@ -49,8 +49,6 @@ Size VclContainer::GetOptimalSize(WindowSizeType eType) const
 
 void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
-    fprintf(stderr, "VclContainer::SetPosSizePixel\n");
-
     Size aAllocation = rAllocation;
     aAllocation.Width() -= m_nBorderWidth*2;
     aAllocation.Height() -= m_nBorderWidth*2;
@@ -69,10 +67,7 @@ void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocati
         Window::SetSizePixel(aAllocation);
 
     if (bSizeChanged)
-    {
-        fprintf(stderr, "VclContainer::setAllocation\n");
         setAllocation(aAllocation);
-    }
 }
 
 void VclContainer::SetPosPixel(const Point& rAllocPos)
@@ -94,7 +89,6 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
     if (aAllocation != GetSizePixel())
     {
         Window::SetSizePixel(aAllocation);
-        fprintf(stderr, "VclContainer::setAllocation\n");
         setAllocation(aAllocation);
     }
 }

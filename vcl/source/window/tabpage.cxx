@@ -213,7 +213,7 @@ bool TabPage::isLayoutEnabled() const
 {
     //Child is a container => we're layout enabled
     const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
-    return pChild && pChild->GetType() == WINDOW_CONTAINER;
+    return pChild && pChild->GetType() == WINDOW_CONTAINER && !pChild->GetWindow(WINDOW_NEXT);
 }
 
 Size TabPage::GetOptimalSize(WindowSizeType eType) const

@@ -679,9 +679,6 @@ void Dialog::StateChanged( StateChangedType nType )
             SetMinOutputSizePixel(aSize);
             SetSizePixel(aSize);
             setPosSizeOnContainee(aSize, *pBox);
-
-            fprintf(stderr, "101 dialog sized to %d %d\n", aSize.Width(),
-                aSize.Height());
         }
 
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
@@ -1166,9 +1163,9 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 
 bool Dialog::isLayoutEnabled() const
 {
-    //Child is a container => we're layout enabled
+    //Single child is a container => we're layout enabled
     const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
-    return pChild && pChild->GetType() == WINDOW_CONTAINER;
+    return pChild && pChild->GetType() == WINDOW_CONTAINER && !pChild->GetWindow(WINDOW_NEXT);
 }
 
 Size Dialog::GetOptimalSize(WindowSizeType eType) const
@@ -1203,12 +1200,14 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 {
     fprintf(stderr, "ImplHandleLayoutTimerHdl\n");
 
-    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
-    if (!pBox)
+    if (!isLayoutEnabled())
     {
-        fprintf(stderr, "WTF!\n");
+        fprintf(stderr, "Dialog has become non-layout because extra children have been added directly to it!\n");
         return 0;
     }
+
+    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+    assert(pBox);
     setPosSizeOnContainee(GetSizePixel(), *pBox);
     return 0;
 }
