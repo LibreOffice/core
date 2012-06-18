@@ -406,6 +406,8 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
                         *this, aNewViewInfos );
 
         pProcessor->process(aSeq);
+
+        pItem->Paint(aRect);
     }
 }
 

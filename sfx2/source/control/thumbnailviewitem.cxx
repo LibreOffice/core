@@ -149,6 +149,11 @@ bool ThumbnailViewItem::isInsideTitle (const Point &pt) const
     return aRect.IsInside(pt);
 }
 
+void ThumbnailViewItem::Paint (const Rectangle &aRect)
+{
+    mpSelectBox->Paint(aRect);
+}
+
 IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )
 {
     mbSelected = mpSelectBox->GetState() == STATE_CHECK;

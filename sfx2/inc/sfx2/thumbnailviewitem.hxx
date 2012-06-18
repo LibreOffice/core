@@ -89,6 +89,8 @@ struct ThumbnailViewItem
 
     bool isInsideTitle (const Point &pt) const;
 
+    void Paint (const Rectangle &aRect);
+
 private:
 
     DECL_LINK (OnClick, CheckBox *);
