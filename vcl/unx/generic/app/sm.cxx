@@ -52,8 +52,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-#define USE_SM_EXTENSION
-
 static IceSalSession* pOneInstance = NULL;
 
 SalSession* X11SalInstance::CreateSalSession()
@@ -125,10 +123,8 @@ class ICEConnectionObserver
     static int nWakeupFiles[2];
     static oslMutex ICEMutex;
     static oslThread ICEThread;
-#ifdef USE_SM_EXTENSION
     static IceIOErrorHandler origIOErrorHandler;
     static IceErrorHandler origErrorHandler;
-#endif
 public:
 
     static void activate();
@@ -149,7 +145,6 @@ oslMutex            ICEConnectionObserver::ICEMutex                 = NULL;
 oslThread           ICEConnectionObserver::ICEThread                = NULL;
 int                 ICEConnectionObserver::nWakeupFiles[2]          = { 0, 0 };
 
-#ifdef USE_SM_EXTENSION
 IceIOErrorHandler ICEConnectionObserver::origIOErrorHandler = NULL;
 IceErrorHandler ICEConnectionObserver::origErrorHandler = NULL;
 
@@ -160,7 +155,6 @@ static void IgnoreIceErrors(IceConn, Bool, int, unsigned long, int, int, IcePoin
 static void IgnoreIceIOErrors(IceConn)
 {
 }
-#endif
 
 // HACK
 bool SessionManagerClient::bDocSaveDone = false;
@@ -334,7 +328,6 @@ void SessionManagerClient::SaveYourselfProc(
             " SmInteractStyleErrors: " << (interact_style == SmInteractStyleErrors) <<
             " SmInteractStyleErrors: " << (interact_style == SmInteractStyleAny));
     BuildSmPropertyList();
-#ifdef USE_SM_EXTENSION
     bDocSaveDone = false;
     /* #i49875# some session managers send a "die" message if the
      * saveDone does not come early enough for their convenience
@@ -351,7 +344,6 @@ void SessionManagerClient::SaveYourselfProc(
     sal_uIntPtr nStateVal = shutdown ? 0xffffffff : 0x0;
     Application::PostUserEvent( STATIC_LINK( (void*)nStateVal, SessionManagerClient, SaveYourselfHdl ) );
     SAL_INFO("vcl.sm", "waiting for save yourself event to be processed" );
-#endif
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownHdl, void*, EMPTYARG )
@@ -426,7 +418,6 @@ void SessionManagerClient::open()
 {
     static SmcCallbacks aCallbacks;
 
-#ifdef USE_SM_EXTENSION
     // this is the way Xt does it, so we can too
     if( ! aSmcConnection && getenv( "SESSION_MANAGER" ) )
     {
@@ -483,7 +474,6 @@ void SessionManagerClient::open()
     }
     else if( ! aSmcConnection )
         SAL_INFO("vcl.sm", "no SESSION_MANAGER");
-#endif
 }
 
 const rtl::OString& SessionManagerClient::getSessionID()
@@ -495,14 +485,12 @@ void SessionManagerClient::close()
 {
     if( aSmcConnection )
     {
-#ifdef USE_SM_EXTENSION
         ICEConnectionObserver::lock();
         SAL_INFO("vcl.sm", "attempting SmcCloseConnection");
         SmcCloseConnection( aSmcConnection, 0, NULL );
         SAL_INFO("vcl.sm", "SmcConnection closed");
         ICEConnectionObserver::unlock();
         ICEConnectionObserver::deactivate();
-#endif
         aSmcConnection = NULL;
     }
 }
@@ -583,7 +571,6 @@ void ICEConnectionObserver::activate()
         nWakeupFiles[0] = nWakeupFiles[1] = 0;
         ICEMutex = osl_createMutex();
         bIsWatching = sal_True;
-#ifdef USE_SM_EXTENSION
         /*
          * Default handlers call exit, we don't care that strongly if something
          * happens to fail
@@ -591,7 +578,6 @@ void ICEConnectionObserver::activate()
         origIOErrorHandler = IceSetIOErrorHandler( IgnoreIceIOErrors );
         origErrorHandler = IceSetErrorHandler( IgnoreIceErrors );
         IceAddConnectionWatch( ICEWatchProc, NULL );
-#endif
     }
 }
 
@@ -601,11 +587,9 @@ void ICEConnectionObserver::deactivate()
     {
         lock();
         bIsWatching = sal_False;
-#ifdef USE_SM_EXTENSION
         IceRemoveConnectionWatch( ICEWatchProc, NULL );
         IceSetErrorHandler( origErrorHandler );
         IceSetIOErrorHandler( origIOErrorHandler );
-#endif
         nConnections = 0;
         if( ICEThread )
         {
@@ -634,7 +618,6 @@ void ICEConnectionObserver::wakeup()
 
 void ICEConnectionWorker( void* )
 {
-#ifdef USE_SM_EXTENSION
     while( osl_scheduleThread(ICEConnectionObserver::ICEThread) && ICEConnectionObserver::nConnections )
     {
         ICEConnectionObserver::lock();
@@ -678,7 +661,6 @@ void ICEConnectionWorker( void* )
         }
         ICEConnectionObserver::unlock();
     }
-#endif
     SAL_INFO("vcl.sm", "shutting donw ICE dispatch thread");
 }
 
@@ -693,7 +675,6 @@ void ICEConnectionObserver::ICEWatchProc(
     // this implicitly means that a call into ICE lib is calling this
     // so the ICEMutex MUST already be locked by the caller
 
-#ifdef USE_SM_EXTENSION
     if( opening )
     {
         int fd = IceConnectionNumber( connection );
@@ -773,7 +754,6 @@ void ICEConnectionObserver::ICEWatchProc(
     }
     SAL_INFO( "vcl.sm", "ICE connection on " << IceConnectionNumber( connection ) << " " << (opening ? "inserted" : "removed"));
     SAL_INFO( "vcl.sm", "Display connection is " << ConnectionNumber( GetGenericData()->GetSalDisplay()->GetDisplay() ) );
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
