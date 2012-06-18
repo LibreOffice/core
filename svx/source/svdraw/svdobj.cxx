@@ -2914,17 +2914,20 @@ void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUn
 }
 
 /** only for internal use! */
-SvxShape* SdrObject::getSvxShape() const
+SvxShape* SdrObject::getSvxShape()
 {
     DBG_TESTSOLARMUTEX();
         // retrieving the impl pointer and subsequently using it is not thread-safe, of course, so it needs to be
         // guarded by the SolarMutex
 
-#if OSL_DEBUG_LEVE > 0
     uno::Reference< uno::XInterface > xShape( maWeakUnoShape );
-    OSL_ENSURE( !( !xShapeGuard.is() && mpSvxShape ),
+#if OSL_DEBUG_LEVE > 0
+    OSL_ENSURE( !( !xShape.is() && mpSvxShape ),
         "SdrObject::getSvxShape: still having IMPL-Pointer to dead object!" );
 #endif
+    //#113608#, make sure mpSvxShape is always synchronized with maWeakUnoShape
+    if ( mpSvxShape && !xShape.is() )
+        mpSvxShape = NULL;
 
     return mpSvxShape;
 }

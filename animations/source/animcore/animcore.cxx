@@ -49,6 +49,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/uuid.h>
@@ -68,6 +69,7 @@ using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::WeakReference;
 using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XWeak;
@@ -307,7 +309,7 @@ private:
     Sequence< NamedValue > maUserData;
 
     // parent interface for XChild interface implementation
-    Reference<XInterface>   mxParent;
+    WeakReference<XInterface>   mxParent;
     AnimationNode*          mpParent;
 
     // attributes for XAnimate
@@ -1141,7 +1143,7 @@ void SAL_CALL AnimationNode::setUserData( const Sequence< NamedValue >& _userdat
 Reference< XInterface > SAL_CALL AnimationNode::getParent() throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    return mxParent;
+    return mxParent.get();
 }
 
 // --------------------------------------------------------------------
@@ -1150,12 +1152,12 @@ Reference< XInterface > SAL_CALL AnimationNode::getParent() throw (RuntimeExcept
 void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    if( Parent != mxParent )
+    if( Parent != mxParent.get() )
     {
         mxParent = Parent;
 
         mpParent = 0;
-        Reference< XUnoTunnel > xTunnel( mxParent, UNO_QUERY );
+        Reference< XUnoTunnel > xTunnel( mxParent.get(), UNO_QUERY );
         if( xTunnel.is() )
             mpParent = reinterpret_cast< AnimationNode* >( sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething( getUnoTunnelId() )));
 
@@ -2067,7 +2069,7 @@ void AnimationNode::fireChangeListener()
     {
         Reference< XInterface > xSource( static_cast<OWeakObject*>(this), UNO_QUERY );
         Sequence< ElementChange > aChanges;
-        const ChangesEvent aEvent( xSource, makeAny( mxParent ), aChanges );
+        const ChangesEvent aEvent( xSource, makeAny( mxParent.get() ), aChanges );
         while( aIterator.hasMoreElements() )
         {
             Reference< XChangesListener > xListener( aIterator.next(), UNO_QUERY );

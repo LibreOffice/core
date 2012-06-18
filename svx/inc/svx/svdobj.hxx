@@ -1127,7 +1127,7 @@ protected:
 private:
     /** only for internal use!
     */
-    SvxShape* getSvxShape() const;
+    SvxShape* getSvxShape();
 
     /** do not use directly, always use getSvxShape() if you have to! */
     SvxShape*   mpSvxShape;
