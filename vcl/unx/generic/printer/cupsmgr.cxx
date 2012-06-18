@@ -52,7 +52,6 @@ struct GetPPDAttribs
     osl::Condition      m_aCondition;
     OString             m_aParameter;
     OString             m_aResult;
-    oslThread           m_aThread;
     int                 m_nRefs;
     bool*               m_pResetRunning;
     osl::Mutex*         m_pSyncMutex;
