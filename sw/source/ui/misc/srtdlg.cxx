@@ -106,7 +106,7 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
         ::GetTblSel( rSh, aSelBoxes );
         _FndPara aPara( aSelBoxes, &aFndBox );
         const SwTable& rTbl = pTblNd->GetTable();
-        ((SwTableLines&)rTbl.GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
+        ForEach_FndLineCopyCol( (SwTableLines&)rTbl.GetTabLines(), &aPara );
     }
     rX = aFndBox.GetLines().size();
     if( !rX )

@@ -221,8 +221,8 @@ struct _FndPara
         : rBoxes(rPara.rBoxes), pFndLine(pFL), pFndBox(rPara.pFndBox) {}
 };
 
-sal_Bool _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara );
-SW_DLLPUBLIC sal_Bool _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara );
+SW_DLLPUBLIC void ForEach_FndLineCopyCol(SwTableLines& rLines, _FndPara* pFndPara );
+
 
 
 #endif  //  _TBLSEL_HXX

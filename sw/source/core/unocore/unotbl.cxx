@@ -495,10 +495,10 @@ const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const 
     {
         const SwTableLines& rLines(bFirst ? rTableLines : pBox->GetTabLines());
         bFirst = false;
-        OSL_ASSERT(rLines.Count() != 0);
-        if (rLines.Count() != 0)
+        OSL_ASSERT(rLines.size() != 0);
+        if (!rLines.empty())
         {
-            const SwTableLine* pLine(rLines[i_bTopLeft ? 0 : rLines.Count() - 1]);
+            const SwTableLine* pLine(i_bTopLeft ? rLines.front() : rLines.back());
             OSL_ASSERT(pLine);
             const SwTableBoxes& rBoxes(pLine->GetTabBoxes());
             OSL_ASSERT(rBoxes.size() != 0);
@@ -564,7 +564,7 @@ SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRow)
 
 void lcl_InspectLines(SwTableLines& rLines, std::vector<String*>& rAllNames)
 {
-    for( sal_uInt16 i = 0; i < rLines.Count(); i++ )
+    for( sal_uInt16 i = 0; i < rLines.size(); i++ )
     {
         SwTableLine* pLine = rLines[i];
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -574,7 +574,7 @@ void lcl_InspectLines(SwTableLines& rLines, std::vector<String*>& rAllNames)
             if(pBox->GetName().Len() && pBox->getRowSpan() > 0 )
                 rAllNames.push_back( new String(pBox->GetName()) );
             SwTableLines& rBoxLines = pBox->GetTabLines();
-            if(rBoxLines.Count())
+            if(!rBoxLines.empty())
             {
                 lcl_InspectLines(rBoxLines, rAllNames);
             }
@@ -1465,8 +1465,8 @@ SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine* pLine)
 {
     SwTableLine* pRet = 0;
     SwTableLines &rLines = pTable->GetTabLines();
-    for(sal_uInt16 i = 0; i < rLines.Count(); i++)
-        if(rLines.GetObject(i) == pLine)
+    for(sal_uInt16 i = 0; i < rLines.size(); i++)
+        if(rLines[i] == pLine)
         {
             pRet = pLine;
             break;
@@ -3145,9 +3145,9 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     SwTableLines &rLines = pTable->GetTabLines();
                     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
-                    for(sal_uInt16 i = 0; i < rLines.Count(); i++)
+                    for(sal_uInt16 i = 0; i < rLines.size(); i++)
                     {
-                        SwTableLine* pLine = rLines.GetObject(i);
+                        SwTableLine* pLine = rLines[i];
                         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
                         for(sal_uInt16 k = 0; k < rBoxes.size(); k++)
                         {
@@ -3316,9 +3316,9 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                     sal_uInt16 nTopDistance = 0;
                     sal_uInt16 nBottomDistance = 0;
 
-                    for(sal_uInt16 i = 0; i < rLines.Count(); i++)
+                    for(sal_uInt16 i = 0; i < rLines.size(); i++)
                     {
-                        const SwTableLine* pLine = rLines.GetObject(i);
+                        const SwTableLine* pLine = rLines[i];
                         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
                         for(sal_uInt16 k = 0; k < rBoxes.size(); k++)
                         {
@@ -3520,7 +3520,7 @@ sal_uInt16 SwXTextTable::getRowCount(void)
         SwTable* pTable = SwTable::FindTable( pFmt );
         if(!pTable->IsTblComplex())
         {
-            nRet = pTable->GetTabLines().Count();
+            nRet = pTable->GetTabLines().size();
         }
     }
     return nRet;
@@ -3537,7 +3537,7 @@ sal_uInt16 SwXTextTable::getColumnCount(void)
         if(!pTable->IsTblComplex())
         {
             SwTableLines& rLines = pTable->GetTabLines();
-            SwTableLine* pLine = rLines.GetObject(0);
+            SwTableLine* pLine = rLines.front();
             nRet = pLine->GetTabBoxes().size();
         }
     }
@@ -4624,7 +4624,7 @@ sal_Int32 SwXTableRows::getCount(void) throw( uno::RuntimeException )
     else
     {
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        nRet = pTable->GetTabLines().Count();
+        nRet = pTable->GetTabLines().size();
     }
     return nRet;
 }
@@ -4640,9 +4640,9 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     else
     {
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        if(pTable->GetTabLines().Count() > nIndex)
+        if( (sal_uInt16)pTable->GetTabLines().size() > nIndex)
         {
-            SwTableLine* pLine = pTable->GetTabLines().GetObject((sal_uInt16)nIndex);
+            SwTableLine* pLine = pTable->GetTabLines()[(sal_uInt16)nIndex];
             SwIterator<SwXTextTableRow,SwFmt> aIter( *pFrmFmt );
             SwXTextTableRow* pXRow = aIter.First();
             while( pXRow )
@@ -4693,7 +4693,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            sal_uInt16 nRowCount = pTable->GetTabLines().Count();
+            sal_uInt16 nRowCount = pTable->GetTabLines().size();
             if (nCount <= 0 || !(0 <= nIndex && nIndex <= nRowCount))
             {
                 uno::RuntimeException aExcept;
@@ -4709,7 +4709,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                 bAppend = sal_True;
                 // am Ende anfuegen, dazu muss der Cursor in die letzte Zeile!
                 SwTableLines& rLines = pTable->GetTabLines();
-                SwTableLine* pLine = rLines.GetObject(rLines.Count() -1);
+                SwTableLine* pLine = rLines.back();
                 SwTableBoxes& rBoxes = pLine->GetTabBoxes();
                 pTLBox = rBoxes.front();
             }
@@ -4844,7 +4844,7 @@ sal_Int32 SwXTableColumns::getCount(void) throw( uno::RuntimeException )
         if(!pTable->IsTblComplex())
         {
             SwTableLines& rLines = pTable->GetTabLines();
-            SwTableLine* pLine = rLines.GetObject(0);
+            SwTableLine* pLine = rLines.front();
             nRet = pLine->GetTabBoxes().size();
         }
     }
@@ -4866,7 +4866,7 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
         if(!pTable->IsTblComplex())
         {
             SwTableLines& rLines = pTable->GetTabLines();
-            SwTableLine* pLine = rLines.GetObject(0);
+            SwTableLine* pLine = rLines.front();
             nCount = pLine->GetTabBoxes().size();
         }
         if(nCount <= nIndex || nIndex < 0)
@@ -4904,7 +4904,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         if(!pTable->IsTblComplex())
         {
             SwTableLines& rLines = pTable->GetTabLines();
-            SwTableLine* pLine = rLines.GetObject(0);
+            SwTableLine* pLine = rLines.front();
             sal_uInt16 nColCount = pLine->GetTabBoxes().size();
             if (nCount <= 0 || !(0 <= nIndex && nIndex <= nColCount))
             {

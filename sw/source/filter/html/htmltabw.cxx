@@ -160,7 +160,7 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
     else
     {
         const SwTableLines& rLines = rBox.GetTabLines();
-        sal_uInt16 nCount = rLines.Count();
+        sal_uInt16 nCount = rLines.size();
         sal_Bool bLeftRight = bLeft || bRight;
         for( sal_uInt16 i=0; !bRet && i<nCount; i++ )
         {
@@ -204,7 +204,7 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     return bRet;
 }
 
-static sal_Bool lcl_TableLine_HasTabBorders( const SwTableLine*& rpLine, void* pPara );
+static sal_Bool lcl_TableLine_HasTabBorders( const SwTableLine* pLine, sal_Bool *pBorders );
 
 static sal_Bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, sal_Bool *pBorders )
 {
@@ -213,8 +213,12 @@ static sal_Bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, sal_Bool *pB
 
     if( !pBox->GetSttNd() )
     {
-        ((SwTableBox *)pBox)->GetTabLines().ForEach(
-                                &lcl_TableLine_HasTabBorders, (void*)pBorders );
+        for( SwTableLines::const_iterator it = pBox->GetTabLines().begin();
+                 it != pBox->GetTabLines().end(); ++it)
+        {
+            if ( lcl_TableLine_HasTabBorders( *it, pBorders ) )
+                break;
+        }
     }
     else
     {
@@ -228,16 +232,15 @@ static sal_Bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, sal_Bool *pB
     return !*pBorders;
 }
 
-static sal_Bool lcl_TableLine_HasTabBorders( const SwTableLine*& rpLine, void* pPara )
+static sal_Bool lcl_TableLine_HasTabBorders( const SwTableLine* pLine, sal_Bool *pBorders )
 {
-    sal_Bool *pBorders = (sal_Bool *)pPara;
     if( *pBorders )
         return sal_False;
 
-    for( SwTableBoxes::const_iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
-             it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
+    for( SwTableBoxes::const_iterator it = pLine->GetTabBoxes().begin();
+             it != pLine->GetTabBoxes().end(); ++it)
     {
-        if ( lcl_TableBox_HasTabBorders( *it, (sal_Bool*)pPara ) )
+        if ( lcl_TableBox_HasTabBorders( *it, pBorders ) )
             break;
     }
     return !*pBorders;

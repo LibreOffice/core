@@ -84,15 +84,15 @@ sal_Bool SwTable::IsTblComplexForChart( const String& rSelection ) const
         pSttBox = (*pLns)[ 0 ]->GetTabBoxes().front();
         while( !pSttBox->GetSttNd() )
             // Until the Content Box!
-            pSttBox = pSttBox->GetTabLines()[ 0 ]->GetTabBoxes().front();
+            pSttBox = pSttBox->GetTabLines().front()->GetTabBoxes().front();
 
-        const SwTableBoxes* pBoxes = &(*pLns)[ pLns->Count()-1 ]->GetTabBoxes();
+        const SwTableBoxes* pBoxes = &pLns->back()->GetTabBoxes();
         pEndBox = pBoxes->back();
         while( !pEndBox->GetSttNd() )
         {
             // Until the Content Box!
             pLns = &pEndBox->GetTabLines();
-            pBoxes = &(*pLns)[ pLns->Count()-1 ]->GetTabBoxes();
+            pBoxes = &pLns->back()->GetTabBoxes();
             pEndBox = pBoxes->back();
         }
     }

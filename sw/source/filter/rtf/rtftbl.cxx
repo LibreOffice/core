@@ -161,7 +161,7 @@ void SwRTFParser::ReadTable( int nToken )
     {
         bReadNewCell = sal_True;
         SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
-        SwTableLine* pLine = rLns[ rLns.Count()-1 ];
+        SwTableLine* pLine = rLns.back();
         // very robust to avoid crashes like bug 127425 + crash reports 118743
         if( pLine )
         {
@@ -278,7 +278,7 @@ void SwRTFParser::ReadTable( int nToken )
                     if( bReadNewCell && aBoxFmts.empty() )
                     {
                         SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
-                        SwTableLine* pLine = rLns[ rLns.Count()-1 ];
+                        SwTableLine* pLine = rLns.back();
                         if (m_nCurrentBox != 0)
                         {
                             --m_nCurrentBox;
@@ -464,7 +464,7 @@ void SwRTFParser::ReadTable( int nToken )
 
         const SwTableLines* pLns = &pTableNode->GetTable().GetTabLines();
 
-        if( 1 == pLns->Count() )
+        if( 1 == pLns->size() )
         {
             if( eAdjust != rHoriz.GetHoriOrient() )
             {
@@ -487,7 +487,7 @@ void SwRTFParser::ReadTable( int nToken )
         }
         else if
             (
-              1 < pLns->Count() &&
+              1 < pLns->size() &&
               (
                 rTblSz.GetWidth() != nTblSz ||
                 rHoriz.GetHoriOrient() != eAdjust ||
@@ -501,10 +501,10 @@ void SwRTFParser::ReadTable( int nToken )
         {
             // Tabelle ab der PaM-Position splitten
             // die vorherige Line!
-            pNewLine = (*pLns)[ pLns->Count() - 2 ];
-            SwTableBox* pBox = pNewLine->GetTabBoxes()[ 0 ];
-            while( ( pLns = &pBox->GetTabLines() )->Count() )
-                pBox = (*pLns)[ 0 ]->GetTabBoxes()[ 0 ];
+            pNewLine = (*pLns)[ pLns->size() - 2 ];
+            SwTableBox* pBox = pNewLine->GetTabBoxes().front();
+            while( ( pLns = &pBox->GetTabLines() )->size() )
+                pBox = pLns->front()->GetTabBoxes().front();
 
             SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
             pDoc->GetNodes().SplitTable( aTmpIdx, HEADLINE_NONE, sal_False );
@@ -524,7 +524,7 @@ void SwRTFParser::ReadTable( int nToken )
         }
 
         pLns = &pTableNode->GetTable().GetTabLines();
-        pNewLine = (*pLns)[ pLns->Count() - 1 ];
+        pNewLine = pLns->back();
 
         // jetzt die Boxen abgleichen
         sal_uInt16 nBoxes = Min( pNewLine->GetTabBoxes().size(), aBoxFmts.size() );
@@ -603,15 +603,15 @@ void SwRTFParser::ReadTable( int nToken )
             SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
 
             if( bReadNewCell )
-                pNewLine = rLns[ rLns.Count()-1 ];
+                pNewLine = rLns.back();
             else
             {
                 pNewLine = new SwTableLine(
-                        (SwTableLineFmt*)rLns[ rLns.Count()-1 ]->GetFrmFmt(),
+                        (SwTableLineFmt*)rLns.back()->GetFrmFmt(),
                         aBoxFmts.size(), 0 );
                 pNewLine->ClaimFrmFmt();
                 pNewLine->GetFrmFmt()->ResetFmtAttr( RES_FRM_SIZE );
-                rLns.C40_INSERT( SwTableLine, pNewLine, rLns.Count() );
+                rLns.push_back( pNewLine );
             }
             bNewTbl = sal_False;
         }
@@ -637,7 +637,7 @@ void SwRTFParser::ReadTable( int nToken )
             }
 
             SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
-            pNewLine = rLns[ rLns.Count()-1 ];
+            pNewLine = rLns.back();
 
             SwFrmFmt* pFmt = pTableNode->GetTable().GetFrmFmt();
             SwFmtFrmSize aSz( pFmt->GetFrmSize() );
@@ -793,7 +793,7 @@ void SwRTFParser::GotoNextBox()
         return;
 
     SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
-    SwTableLine* pLine = rLns[ rLns.Count()-1 ];
+    SwTableLine* pLine = rLns.back();
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     SwTableBox* pBox = rBoxes.back();
 
@@ -847,7 +847,7 @@ void SwRTFParser::NewTblLine()
     pTableNode = (SwTableNode*)pNd;
 
     SwTableLines* pLns = &pTableNode->GetTable().GetTabLines();
-    SwTableLine* pLine = (*pLns)[ pLns->Count()-1 ];
+    SwTableLine* pLine = pLns->back();
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     SwTableBox* pBox = rBoxes.back();
 
@@ -878,7 +878,7 @@ void SwRTFParser::NewTblLine()
     else
         pTableNode->GetTable().AppendRow( pDoc );
 
-    pBox = (*pLns)[ pLns->Count()-1 ]->GetTabBoxes()[0];
+    pBox = pLns->back()->GetTabBoxes().front();
 
     sal_uLong nOldPos = pPam->GetPoint()->nNode.GetIndex();
     pPam->GetPoint()->nNode = *pBox->GetSttNd();
@@ -897,7 +897,7 @@ void SwRTFParser::NewTblLine()
 
         pPam->SetMark();
 
-        pLine = (*pLns)[ pLns->Count()-1 ];
+        pLine = pLns->back();
         pBox = pLine->GetTabBoxes().back();
         pPam->GetPoint()->nNode = *pBox->GetSttNd()->EndOfSectionNode();
         pPam->Move( fnMoveBackward );

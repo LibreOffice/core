@@ -215,9 +215,9 @@ sal_Bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
             const SwTableLines &rLines = (rBox.GetBox())
                                     ? rBox.GetBox()->GetTabLines()
                                     : pPara->rTable.GetTabLines();
-            if (rBox.GetLines().size() == rLines.Count())
+            if (rBox.GetLines().size() == rLines.size())
             {
-                for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
+                for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
                     ::InsertLine( pPara->rLines,
                                   (SwTableLine*)rLines[i] );
             }
@@ -256,7 +256,7 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor, bool bRemoveLine
     _FndBox aFndBox( 0, 0 );
     {
         _FndPara aTmpPara( aBoxes, &aFndBox );
-        ((SwTableLines&)rTable.GetTabLines()).ForEach( &_FndLineCopyCol, &aTmpPara );
+        ForEach_FndLineCopyCol( (SwTableLines&)rTable.GetTabLines(), &aTmpPara );
     }
 
     //Diejenigen Lines einsammeln, die nur selektierte Boxen enthalten.
@@ -316,11 +316,11 @@ void lcl_ProcessRowSize( SvPtrarr &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSi
 void lcl_ProcessBoxSize( SvPtrarr &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew )
 {
     SwTableLines &rLines = pBox->GetTabLines();
-    if ( rLines.Count() )
+    if ( !rLines.empty() )
     {
         SwFmtFrmSize aSz( rNew );
-        aSz.SetHeight( rNew.GetHeight() ? rNew.GetHeight() / rLines.Count() : 0 );
-        for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
+        aSz.SetHeight( rNew.GetHeight() ? rNew.GetHeight() / rLines.size() : 0 );
+        for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
             ::lcl_ProcessRowSize( rFmtCmp, rLines[i], aSz );
     }
 }

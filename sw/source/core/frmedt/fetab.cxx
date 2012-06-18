@@ -103,7 +103,7 @@ TblWait::TblWait( sal_uInt16 nCnt, SwFrm *pFrm, SwDocShell &rDocShell, sal_uInt1
     pWait( 0 )
 {
     sal_Bool bWait = 20 < nCnt || 20 < nCnt2 || (pFrm &&
-                 20 < pFrm->ImplFindTabFrm()->GetTable()->GetTabLines().Count());
+                 20 < pFrm->ImplFindTabFrm()->GetTable()->GetTabLines().size());
     if( bWait )
         pWait = new SwWait( rDocShell, sal_True );
 }
@@ -375,7 +375,7 @@ sal_Bool SwFEShell::DeleteRow()
             _FndBox aFndBox( 0, 0 );
             {
                 _FndPara aPara( aBoxes, &aFndBox );
-                pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+                ForEach_FndLineCopyCol( pTblNd->GetTable().GetTabLines(), &aPara );
             }
 
             if( aFndBox.GetLines().empty() )
@@ -400,8 +400,7 @@ sal_Bool SwFEShell::DeleteRow()
             SwTableBox* pDelBox = pDelLine->GetTabBoxes().back();
             while( !pDelBox->GetSttNd() )
             {
-                SwTableLine* pLn = pDelBox->GetTabLines()[
-                            pDelBox->GetTabLines().Count()-1 ];
+                SwTableLine* pLn = pDelBox->GetTabLines().back();
                 pDelBox = pLn->GetTabBoxes().back();
             }
             SwTableBox* pNextBox = pDelLine->FindNextBox( pTblNd->GetTable(),
@@ -480,7 +479,7 @@ sal_uInt16 SwFEShell::MergeTab()
             StartAllAction();
 
             TblWait( pTableCrsr->GetBoxesCount(), 0, *GetDoc()->GetDocShell(),
-                     pTblNd->GetTable().GetTabLines().Count() );
+                     pTblNd->GetTable().GetTabLines().size() );
 
             nRet = GetDoc()->MergeTbl( *pTableCrsr );
 
@@ -1128,7 +1127,7 @@ sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
         const SwTableLine* pTabLine = static_cast<const SwRowFrm*>(pRow)->GetTabLine();
 
         sal_uInt16 nI = 0;
-        while ( nI < pTabFrm->GetTable()->GetTabLines().Count() )
+        while ( nI < pTabFrm->GetTable()->GetTabLines().size() )
         {
             if ( pTabFrm->GetTable()->GetTabLines()[ nI ] == pTabLine )
             {

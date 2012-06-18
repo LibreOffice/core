@@ -644,7 +644,7 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
     {
         const SwTableLines & rLines = pTable->GetTabLines();
 
-        for (sal_uInt16 n = 0; n < rLines.Count(); n++)
+        for (sal_uInt16 n = 0; n < rLines.size(); n++)
         {
             const SwTableLine * pLine = rLines[n];
 
@@ -710,9 +710,9 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
     const SwTableLines & rLines = pBox->GetTabLines();
     WW8TableNodeInfo::Pointer_t pNodeInfo;
 
-    if (rLines.Count() > 0)
+    if (!rLines.empty())
     {
-        for (sal_uInt32 n = 0; n < rLines.Count(); n++)
+        for (sal_uInt32 n = 0; n < rLines.size(); n++)
         {
             const SwTableLine * pLine = rLines[n];
             const SwTableBoxes & rBoxes = pLine->GetTabBoxes();
@@ -768,14 +768,14 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
     const SwStartNode * pSttNd = pBox->GetSttNd();
     WW8TableNodeInfo::Pointer_t pEndOfCellInfo;
 
-    if (rLines.Count() > 0)
+    if (!rLines.empty())
     {
         pNodeInfo = processTableBoxLines(pBox, pTable, pBox, nRow, nCell, nDepth);
         pNodeInfo->setEndOfCell(true);
         if (bEndOfLine)
             pNodeInfo->setEndOfLine(true);
 
-        for (sal_uInt32 n = 0; n < rLines.Count(); n++)
+        for (sal_uInt32 n = 0; n < rLines.size(); n++)
         {
             const SwTableLine * pLine = rLines[n];
 

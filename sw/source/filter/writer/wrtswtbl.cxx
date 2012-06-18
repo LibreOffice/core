@@ -149,7 +149,7 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
         {
             long nTmp = 0;
             const SwTableLines &rLines = pBox->GetTabLines();
-            for( sal_uInt16 nLine=0; nLine<rLines.Count(); nLine++ )
+            for( sal_uInt16 nLine=0; nLine<rLines.size(); nLine++ )
             {
                 nTmp += GetLineHeight( rLines[nLine] );
             }
@@ -423,7 +423,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                                            sal_uInt16 nDepth )
 {
     sal_Bool bSubExpanded = sal_False;
-    sal_uInt16 nLines = rLines.Count();
+    sal_uInt16 nLines = rLines.size();
 
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nEndCPos = 0;
@@ -555,7 +555,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                                         sal_uInt16 nDepth,
                                         sal_uInt16 nNumOfHeaderRows )
 {
-    sal_uInt16 nLines = rLines.Count();
+    sal_uInt16 nLines = rLines.size();
     sal_Bool bSubExpanded = sal_False;
 
     // Festlegen der Umrandung

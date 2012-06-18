@@ -48,7 +48,7 @@ class SwFmtFrmSize;
 struct _CpyPara;
 struct _InsULPara;
 
-sal_Bool lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara );
+void lcl_LineSetHeadCondColl( const SwTableLine* pLine );
 
 
 #ifdef DBG_UTIL
@@ -133,7 +133,7 @@ struct _SwGCLineBorder
 
     _SwGCLineBorder( const SwTableBox& rBox )
         : pLines( &rBox.GetTabLines() ), pShareFmts(0), nLinePos( 0 )  {}
-    sal_Bool IsLastLine() const { return nLinePos + 1 >= pLines->Count(); }
+    sal_Bool IsLastLine() const { return nLinePos + 1 >= (sal_uInt16)pLines->size(); }
 };
 
 class _SwGCBorder_BoxBrd
@@ -153,12 +153,7 @@ public:
     sal_Bool IsAnyBorderFound() const { return bAnyBorderFnd; }
 };
 
-sal_Bool lcl_GC_Line_Border( const SwTableLine*& , void* pPara );
-
-sal_Bool lcl_GCBorder_ChkBoxBrd_L( const SwTableLine*& , void* pPara );
-sal_Bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox*& , void* pPara );
-
-sal_Bool lcl_GCBorder_GetLastBox_L( const SwTableLine*& , void* pPara );
+void lcl_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara );
 
 
 class SwShareBoxFmt

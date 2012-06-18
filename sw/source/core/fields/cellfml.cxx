@@ -777,7 +777,7 @@ const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
             nLineOffset < 0 || nLineOffset >= USHRT_MAX )
             return 0;
 
-        if( nLineOffset >= long(pLines->Count()) )
+        if( nLineOffset >= long(pLines->size()) )
             return 0;
 
         pLine = (*pLines)[ sal_uInt16(nLineOffset) ];
@@ -798,7 +798,7 @@ const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
             nSttLine = SwTable::_GetBoxNum( sGetName );
 
             // bestimme die Line
-            if( !nSttLine || nSttLine > pLines->Count() )
+            if( !nSttLine || nSttLine > pLines->size() )
                 break;
             pLine = (*pLines)[ nSttLine-1 ];
 
@@ -813,8 +813,8 @@ const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
         {
             if( !pBox->GetSttNd() )
                 // "herunterfallen lassen" bis zur ersten Box
-                while( pBox->GetTabLines().Count() )
-                    pBox = pBox->GetTabLines()[0]->GetTabBoxes()[0];
+                while( !pBox->GetTabLines().empty() )
+                    pBox = pBox->GetTabLines().front()->GetTabBoxes().front();
         }
     }
     else

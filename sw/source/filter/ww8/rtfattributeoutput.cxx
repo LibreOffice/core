@@ -1024,7 +1024,7 @@ void RtfAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer
 
         const SwTable *pTable = pInner->getTable( );
         const SwTableLines& rLines = pTable->GetTabLines( );
-        sal_uInt16 nLinesCount = rLines.Count( );
+        sal_uInt16 nLinesCount = rLines.size( );
 
         if ( pInner->isEndOfCell() )
             EndTableCell();

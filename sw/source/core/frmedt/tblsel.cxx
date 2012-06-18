@@ -1469,7 +1469,7 @@ static sal_Bool lcl_CheckCol( _FndBox const& rFndBox, sal_Bool* pPara )
     if (!rFndBox.GetBox()->GetSttNd())
     {
         if (rFndBox.GetLines().size() !=
-            rFndBox.GetBox()->GetTabLines().Count())
+            rFndBox.GetBox()->GetTabLines().size())
         {
             *pPara = sal_False;
         }
@@ -1512,8 +1512,7 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
         _FndBox aFndBox( 0, 0 );
         _FndPara aPara( rBoxes, &aFndBox );
         const SwTableNode* pTblNd = aPara.rBoxes[0]->GetSttNd()->FindTableNode();
-        ((SwTable&)pTblNd->GetTable()).GetTabLines().ForEach(
-                    &_FndLineCopyCol, &aPara );
+        ForEach_FndLineCopyCol( (SwTableLines&)pTblNd->GetTable().GetTabLines(), &aPara );
         if( !aFndBox.GetLines().empty() )
         {
             sal_Bool bMergeSelOk = sal_True;
@@ -1617,7 +1616,7 @@ void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
                     const SwTableLines& rLns = pCellFrm->
                                                 GetTabBox()->GetTabLines();
                     if( rLns[ 0 ] == ((SwRowFrm*)aSttArr[ n ])->GetTabLine() &&
-                        rLns[ rLns.Count() - 1 ] ==
+                        rLns[ rLns.size() - 1 ] ==
                                     ((SwRowFrm*)aEndArr[ n ])->GetTabLine() )
                     {
                         rpStart = rpEnd = pCellFrm;
@@ -2101,10 +2100,10 @@ void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
 static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
 {
     _FndBox* pFndBox = new _FndBox( pBox, pFndPara->pFndLine );
-    if( pBox->GetTabLines().Count() )
+    if( pBox->GetTabLines().size() )
     {
         _FndPara aPara( *pFndPara, pFndBox );
-        pFndBox->GetBox()->GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+        ForEach_FndLineCopyCol( pFndBox->GetBox()->GetTabLines(), &aPara );
         if( pFndBox->GetLines().empty() )
         {
             delete pFndBox;
@@ -2123,10 +2122,9 @@ static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
     pFndPara->pFndLine->GetBoxes().push_back( pFndBox );
 }
 
-sal_Bool _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
+static void _FndLineCopyCol( SwTableLine* pLine, _FndPara* pFndPara )
 {
-    _FndPara* pFndPara = (_FndPara*)pPara;
-    _FndLine* pFndLine = new _FndLine( (SwTableLine*)rpLine, pFndPara->pFndBox );
+    _FndLine* pFndLine = new _FndLine( pLine, pFndPara->pFndBox );
     _FndPara aPara( *pFndPara, pFndLine );
     for( SwTableBoxes::iterator it = pFndLine->GetLine()->GetTabBoxes().begin();
              it != pFndLine->GetLine()->GetTabBoxes().end(); ++it)
@@ -2137,7 +2135,12 @@ sal_Bool _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
     }
     else
         delete pFndLine;
-    return sal_True;
+}
+
+void ForEach_FndLineCopyCol(SwTableLines& rLines, _FndPara* pFndPara )
+{
+    for( SwTableLines::iterator it = rLines.begin(); it != rLines.end(); ++it )
+        _FndLineCopyCol( *it, pFndPara );
 }
 
 void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
@@ -2169,7 +2172,7 @@ void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
     }
     if ( nStPos > 1 )
         pLineBefore = rTable.GetTabLines()[nStPos - 2];
-    if ( nEndPos < rTable.GetTabLines().Count() )
+    if ( nEndPos < rTable.GetTabLines().size() )
         pLineBehind = rTable.GetTabLines()[nEndPos];
 }
 
@@ -2193,7 +2196,7 @@ void _FndBox::SetTableLines( const SwTable &rTable )
     pTmpLine = GetLines().back().GetLine();
     nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
-    if( ++nPos < rTable.GetTabLines().Count() )
+    if( ++nPos < rTable.GetTabLines().size() )
         pLineBehind = rTable.GetTabLines()[nPos];
 }
 
@@ -2211,7 +2214,7 @@ void _FndBox::DelFrms( SwTable &rTable )
     // Always a TabFrm should remain.
 
     sal_uInt16 nStPos = 0;
-    sal_uInt16 nEndPos= rTable.GetTabLines().Count() - 1;
+    sal_uInt16 nEndPos= rTable.GetTabLines().size() - 1;
     if( rTable.IsNewModel() && pLineBefore )
         rTable.CheckRowSpan( pLineBefore, true );
     if ( pLineBefore )
@@ -2371,7 +2374,7 @@ void _FndBox::MakeFrms( SwTable &rTable )
     // All lines between pLineBefore and pLineBehind should be re-generated in layout.
     // And this for all instances of a table (for example in header/footer).
     sal_uInt16 nStPos = 0;
-    sal_uInt16 nEndPos= rTable.GetTabLines().Count() - 1;
+    sal_uInt16 nEndPos= rTable.GetTabLines().size() - 1;
     if ( pLineBefore )
     {
         nStPos = rTable.GetTabLines().GetPos(
@@ -2396,7 +2399,7 @@ void _FndBox::MakeFrms( SwTable &rTable )
             SwRowFrm  *pSibling = 0;
             SwFrm  *pUpperFrm  = 0;
             int i;
-            for ( i = rTable.GetTabLines().Count()-1;
+            for ( i = rTable.GetTabLines().size()-1;
                     i >= 0 && !pSibling; --i )
             {
                 SwTableLine *pLine = pLineBehind ? pLineBehind :
@@ -2456,7 +2459,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
     //nCnt:    how many were inserted nNumber times
 
     const sal_uInt16 nCnt =
-        ((nBhPos != USHRT_MAX ? nBhPos : rTable.GetTabLines().Count()) -
+        ((nBhPos != USHRT_MAX ? nBhPos : rTable.GetTabLines().size()) -
          (nBfPos != USHRT_MAX ? nBfPos + 1 : 0)) / (nNumber + 1);
 
     // search the Master-TabFrm
@@ -2496,7 +2499,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                     pUpperFrm = pTable;
                 }
                 const sal_uInt16 nMax = nBhPos != USHRT_MAX ?
-                                    nBhPos : rTable.GetTabLines().Count();
+                                    nBhPos : rTable.GetTabLines().size();
 
                 sal_uInt16 i = nBfPos != USHRT_MAX ? nBfPos + 1 + nCnt : nCnt;
 
@@ -2544,7 +2547,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
 
                 sal_uInt16 nMax = nBhPos != USHRT_MAX ?
                                     nBhPos - nCnt :
-                                    rTable.GetTabLines().Count() - nCnt;
+                                    rTable.GetTabLines().size() - nCnt;
 
                 i = nBfPos != USHRT_MAX ? nBfPos + 1 : 0;
                 for ( ; i < nMax; ++i )
@@ -2583,7 +2586,7 @@ sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
 {
     // Should we call MakeFrms here?
 
-    if ( !pLineBefore && !pLineBehind && rTable.GetTabLines().Count() )
+    if ( !pLineBefore && !pLineBehind && rTable.GetTabLines().size() )
         return sal_True;
 
     sal_uInt16 nBfPos;
@@ -2629,7 +2632,7 @@ sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
         return sal_False;
 
     // Some adjacent lines at the end of the table have been deleted:
-    if ( nBhPos == USHRT_MAX && nBfPos == (rTable.GetTabLines().Count() - 1) )
+    if ( nBhPos == USHRT_MAX && nBfPos == (rTable.GetTabLines().size() - 1) )
         return sal_False;
 
     // Some adjacent lines in the middle of the table have been deleted:

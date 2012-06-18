@@ -59,6 +59,7 @@
 #include "unotbl.hxx"
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
+#include <boost/foreach.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -138,7 +139,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nEndCPos = 0U;
 #endif
-    sal_uInt16 nLines = rLines.Count();
+    sal_uInt16 nLines = rLines.size();
     sal_uInt16 nLine;
     for( nLine=0U; nLine<nLines; nLine++ )
     {
@@ -656,7 +657,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     }
 
     // pass 3: export line/rows
-    sal_uInt16 nLines = rLines.Count();
+    sal_uInt16 nLines = rLines.size();
     for( sal_uInt16 nLine=0U; nLine<nLines; nLine++ )
     {
         SwTableLine *pLine = rLines[nLine];
@@ -1083,7 +1084,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     }
 
     // pass 3: export line/rows
-    sal_uInt16 nLines = rLines.Count();
+    sal_uInt16 nLines = rLines.size();
     // export header rows, if present
     if( nHeaderRows > 0 )
     {
@@ -1103,14 +1104,14 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     delete pLines;
 }
 
-sal_Bool lcl_xmltble_ClearName_Line( const SwTableLine*& rpLine, void* );
+static void lcl_xmltble_ClearName_Line( SwTableLine* pLine );
 
 static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
 {
     if( !pBox->GetSttNd() )
     {
-        ((SwTableBox *)pBox)->GetTabLines().ForEach(
-                                            &lcl_xmltble_ClearName_Line, 0 );
+        BOOST_FOREACH( SwTableLine* pLine, pBox->GetTabLines() )
+            lcl_xmltble_ClearName_Line( pLine );
     }
     else
     {
@@ -1120,13 +1121,10 @@ static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
     }
 }
 
-sal_Bool lcl_xmltble_ClearName_Line( const SwTableLine*& rpLine, void* )
+void lcl_xmltble_ClearName_Line( SwTableLine* pLine )
 {
-    for( SwTableBoxes::iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
-             it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
-        lcl_xmltble_ClearName_Box( *it );
-
-    return sal_True;
+    BOOST_FOREACH( SwTableBox* pBox, pLine->GetTabBoxes() )
+        lcl_xmltble_ClearName_Box( pBox );
 }
 
 void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
@@ -1179,8 +1177,8 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
         SwXMLTableInfo_Impl aTblInfo( &rTbl );
         ExportTableLines( rTbl.GetTabLines(), aTblInfo, rTbl.GetRowsToRepeat() );
 
-        ((SwTable &)rTbl).GetTabLines().ForEach( &lcl_xmltble_ClearName_Line,
-                                                 0 );
+        BOOST_FOREACH( SwTableLine *pLine, ((SwTable &)rTbl).GetTabLines() )
+            lcl_xmltble_ClearName_Line( pLine );
     }
 }
 

@@ -48,6 +48,7 @@
 #include "htmltbl.hxx"
 #include "ndindex.hxx"
 #include "switerator.hxx"
+#include <boost/foreach.hpp>
 
 using namespace ::com::sun::star;
 
@@ -417,11 +418,11 @@ const SwStartNode *SwHTMLTableLayout::GetAnyBoxStartNode() const
     const SwTableBox* pBox = pSwTable->GetTabLines()[0]->GetTabBoxes()[0];
     while( 0 == (pBoxSttNd = pBox->GetSttNd()) )
     {
-        OSL_ENSURE( pBox->GetTabLines().Count() > 0,
+        OSL_ENSURE( pBox->GetTabLines().size() > 0,
                 "Box without start node and lines" );
-        OSL_ENSURE( pBox->GetTabLines()[0]->GetTabBoxes().size() > 0,
+        OSL_ENSURE( pBox->GetTabLines().front()->GetTabBoxes().size() > 0,
                 "Line without boxes" );
-        pBox = pBox->GetTabLines()[0]->GetTabBoxes()[0];
+        pBox = pBox->GetTabLines().front()->GetTabBoxes().front();
     }
 
     return pBoxSttNd;
@@ -1535,14 +1536,15 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
     }
 }
 
-static sal_Bool lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara );
+static void lcl_ResizeLine( const SwTableLine* pLine, sal_uInt16 *pWidth );
 
-static sal_Bool lcl_ResizeBox( SwTableBox* pBox, sal_uInt16* pWidth )
+static void lcl_ResizeBox( const SwTableBox* pBox, sal_uInt16* pWidth )
 {
     if( !pBox->GetSttNd() )
     {
         sal_uInt16 nWidth = 0;
-        pBox->GetTabLines().ForEach( &lcl_ResizeLine, &nWidth );
+        BOOST_FOREACH( const SwTableLine *pLine, pBox->GetTabLines() )
+            lcl_ResizeLine( pLine, &nWidth );
         pBox->GetFrmFmt()->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
         *pWidth = *pWidth + nWidth;
     }
@@ -1550,27 +1552,21 @@ static sal_Bool lcl_ResizeBox( SwTableBox* pBox, sal_uInt16* pWidth )
     {
         *pWidth = *pWidth + (sal_uInt16)pBox->GetFrmFmt()->GetFrmSize().GetSize().Width();
     }
-
-    return sal_True;
 }
 
-static sal_Bool lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara )
+static void lcl_ResizeLine( const SwTableLine* pLine, sal_uInt16 *pWidth )
 {
-    sal_uInt16 *pWidth = (sal_uInt16 *)pPara;
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt16 nOldWidth = *pWidth;
 #endif
     *pWidth = 0;
-    for( SwTableBoxes::iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
-             it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
-        lcl_ResizeBox(*it, pWidth );
+    BOOST_FOREACH( const SwTableBox* pBox, pLine->GetTabBoxes() )
+        lcl_ResizeBox(pBox, pWidth );
 
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( !nOldWidth || Abs(*pWidth-nOldWidth) < COLFUZZY,
             "A box's rows have all a different length." );
 #endif
-
-    return sal_True;
 }
 
 void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
@@ -1637,8 +1633,8 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
     if( IsTopTable() )
     {
         sal_uInt16 nCalcTabWidth = 0;
-        ((SwTable *)pSwTable)->GetTabLines().ForEach( &lcl_ResizeLine,
-                                                      &nCalcTabWidth );
+        BOOST_FOREACH( const SwTableLine *pLine, pSwTable->GetTabLines() )
+            lcl_ResizeLine( pLine, &nCalcTabWidth );
         OSL_ENSURE( Abs( nRelTabWidth-nCalcTabWidth ) < COLFUZZY,
                 "Table width is not equal to the row width." );
 

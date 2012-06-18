@@ -55,6 +55,7 @@
 #include <SwNodeNum.hxx>
 #include <set>
 #include <vector>
+#include <boost/foreach.hpp>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
@@ -324,7 +325,7 @@ struct _CopyTable
     {}
 };
 
-sal_Bool lcl_CopyTblLine( const SwTableLine*& rpLine, void* pPara );
+static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT );
 
 static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
 {
@@ -360,7 +361,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
                                 pCT->rMapArr.Count() );
     }
 
-    sal_uInt16 nLines = pBox->GetTabLines().Count();
+    sal_uInt16 nLines = pBox->GetTabLines().size();
     SwTableBox* pNewBox;
     if( nLines )
         pNewBox = new SwTableBox( pBoxFmt, nLines, pCT->pInsLine );
@@ -379,43 +380,40 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
     {
         _CopyTable aPara( *pCT );
         aPara.pInsBox = pNewBox;
-        pBox->GetTabLines().ForEach( &lcl_CopyTblLine, &aPara );
+        BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
+            lcl_CopyTblLine( pLine, &aPara );
     }
     else if( pNewBox->IsInHeadline( &pCT->pTblNd->GetTable() ))
         // in der HeadLine sind die Absaetze mit BedingtenVorlage anzupassen
         pNewBox->GetSttNd()->CheckSectionCondColl();
 }
 
-sal_Bool lcl_CopyTblLine( const SwTableLine*& rpLine, void* pPara )
+static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT )
 {
-    _CopyTable* pCT = reinterpret_cast< _CopyTable* >(pPara);
-    SwTableLineFmt* pLineFmt = (SwTableLineFmt*)rpLine->GetFrmFmt();
+    SwTableLineFmt* pLineFmt = (SwTableLineFmt*)pLine->GetFrmFmt();
     pCT->rMapArr.ForEach( lcl_SrchNew, &pLineFmt );
-    if( pLineFmt == rpLine->GetFrmFmt() )   // ein neues anlegen ??
+    if( pLineFmt == pLine->GetFrmFmt() )   // ein neues anlegen ??
     {
         pLineFmt = pCT->pDoc->MakeTableLineFmt();
-        pLineFmt->CopyAttrs( *rpLine->GetFrmFmt() );
-        pCT->rMapArr.Insert( _MapTblFrmFmt( rpLine->GetFrmFmt(), pLineFmt ),
+        pLineFmt->CopyAttrs( *pLine->GetFrmFmt() );
+        pCT->rMapArr.Insert( _MapTblFrmFmt( pLine->GetFrmFmt(), pLineFmt ),
                                 pCT->rMapArr.Count());
     }
     SwTableLine* pNewLine = new SwTableLine( pLineFmt,
-                            rpLine->GetTabBoxes().size(), pCT->pInsBox );
+                            pLine->GetTabBoxes().size(), pCT->pInsBox );
     // die neue Zeile in die Tabelle eintragen
     if( pCT->pInsBox )
     {
-        pCT->pInsBox->GetTabLines().C40_INSERT( SwTableLine, pNewLine,
-                pCT->pInsBox->GetTabLines().Count() );
+        pCT->pInsBox->GetTabLines().push_back( pNewLine );
     }
     else
     {
-        pCT->pTblNd->GetTable().GetTabLines().C40_INSERT( SwTableLine, pNewLine,
-                pCT->pTblNd->GetTable().GetTabLines().Count() );
+        pCT->pTblNd->GetTable().GetTabLines().push_back( pNewLine );
     }
     pCT->pInsLine = pNewLine;
-    for( SwTableBoxes::iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
-             it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
+    for( SwTableBoxes::iterator it = ((SwTableLine*)pLine)->GetTabBoxes().begin();
+             it != ((SwTableLine*)pLine)->GetTabBoxes().end(); ++it)
         lcl_CopyTblBox(*it, pCT );
-    return sal_True;
 }
 
 SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
@@ -499,7 +497,8 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     _MapTblFrmFmts aMapArr;
     _CopyTable aPara( pDoc, aMapArr, GetIndex(), *pTblNd, &GetTable() );
 
-    ((SwTable&)GetTable()).GetTabLines().ForEach( &lcl_CopyTblLine, &aPara );
+    BOOST_FOREACH(const SwTableLine* pLine, GetTable().GetTabLines() )
+        lcl_CopyTblLine( pLine, &aPara );
 
     if( pDDEType )
         pDDEType->IncRefCnt();

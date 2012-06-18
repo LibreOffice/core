@@ -61,7 +61,7 @@ sal_Int32 SwVbaTableHelper::getTabColumnsCount( sal_Int32 nRowIndex ) throw (uno
     if(!pTable->IsTblComplex())
     {
         SwTableLines& rLines = pTable->GetTabLines();
-        SwTableLine* pLine = rLines.GetObject( nRowIndex );
+        SwTableLine* pLine = rLines[ nRowIndex ];
         nRet = pLine->GetTabBoxes().size();
     }
     return nRet;
@@ -71,7 +71,7 @@ sal_Int32 SwVbaTableHelper::getTabColumnsMaxCount( ) throw (uno::RuntimeExceptio
 {
     sal_Int32 nRet = 0;
     //sal_Int32 nRowCount = mxTextTable->getRows()->getCount();
-    sal_Int32 nRowCount = pTable->GetTabLines().Count();
+    sal_Int32 nRowCount = pTable->GetTabLines().size();
     for( sal_Int32 index = 0; index < nRowCount; index++ )
     {
         sal_Int32 nColCount = getTabColumnsCount( index );
@@ -149,12 +149,12 @@ sal_Int32 SwVbaTableHelper::getTableWidth( ) throw (uno::RuntimeException)
 SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw (css::uno::RuntimeException)
 {
     SwTableLines& rLines = pTable->GetTabLines();
-    sal_Int32 nRowCount = rLines.Count();
+    sal_Int32 nRowCount = rLines.size();
     if( nRowCount < nRow )
         throw uno::RuntimeException();
 
     SwTableBox* pStart = NULL;
-    SwTableLine* pLine = rLines.GetObject( nRow );
+    SwTableLine* pLine = rLines[ nRow ];
     if( (sal_Int32)pLine->GetTabBoxes().size() < nCol )
         throw uno::RuntimeException();
 

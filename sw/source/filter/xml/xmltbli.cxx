@@ -1988,7 +1988,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                     MakeTableLine( pBox, nStartRow, nLeftCol, i+1UL,
                                    nRightCol );
 
-                rLines.C40_INSERT( SwTableLine, pLine, rLines.Count() );
+                rLines.push_back( pLine );
 
                 nStartRow = i+1UL;
                 bSplitted = sal_True;
@@ -2655,7 +2655,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             SwTableLine *pLine =
                 MakeTableLine( pBox, nStartRow, 0UL, i+1UL, nCols );
             if( pBox || nStartRow>0UL )
-                rLines.C40_INSERT( SwTableLine, pLine, rLines.Count() );
+                rLines.push_back( pLine );
             nStartRow = i+1UL;
         }
     }

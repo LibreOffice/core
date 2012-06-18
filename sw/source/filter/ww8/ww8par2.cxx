@@ -2567,9 +2567,9 @@ void WW8TabDesc::MergeCells()
                     //
                     // ggfs. eine neue Merge-Gruppe beginnen
                     //
-                    OSL_ENSURE(nRow < pTabLines->Count(),
+                    OSL_ENSURE(nRow < (sal_uInt16)pTabLines->size(),
                         "Too few lines, table ended early");
-                    if (nRow >= pTabLines->Count())
+                    if (nRow >= (sal_uInt16)pTabLines->size())
                         return;
                     pTabLine = (*pTabLines)[ nRow ];
                     pTabBoxes = &pTabLine->GetTabBoxes();
@@ -2678,7 +2678,7 @@ void WW8TabDesc::ParkPaM()
 {
     SwTableBox *pTabBox2 = 0;
     short nRow = nAktRow + 1;
-    if (nRow < pTabLines->Count())
+    if (nRow < (sal_uInt16)pTabLines->size())
     {
         if (SwTableLine *pLine = (*pTabLines)[nRow])
         {
@@ -2825,7 +2825,7 @@ bool WW8TabDesc::IsValidCell(short nCol) const
 {
     return (static_cast<size_t>(nCol) < SAL_N_ELEMENTS(pActBand->bExist)) &&
            pActBand->bExist[nCol] &&
-           (sal_uInt16)nAktRow < pTabLines->Count();
+           (sal_uInt16)nAktRow < pTabLines->size();
 }
 
 bool WW8TabDesc::InFirstParaInCell() const
@@ -2869,7 +2869,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
     sal_uInt16 nCol = pActBand->transCell(nWwCol);
 
-    if ((sal_uInt16)nAktRow >= pTabLines->Count())
+    if ((sal_uInt16)nAktRow >= pTabLines->size())
     {
         OSL_ENSURE(!this, "Actual row bigger than expected." );
         if (bPam)

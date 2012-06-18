@@ -2297,7 +2297,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                                 else if ( bDontSplit )
                                 {
                                     // check if pLine isn't last line in table
-                                    if ( rTable.GetTabLines().Count() - rTable.GetTabLines().GetPos( pLine ) != 1 )
+                                    if ( rTable.GetTabLines().size() - rTable.GetTabLines().GetPos( pLine ) != 1 )
                                         bSetAtPara = true;
                                 }
 

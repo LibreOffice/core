@@ -549,7 +549,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     SwTableBoxFmt* pBoxFmt = GetDoc()->MakeTableBoxFmt();
     SwTableLineFmt* pLineFmt = GetDoc()->MakeTableLineFmt();
     SwTableLine* pLine = new SwTableLine( pLineFmt, rSavedData.size(), 0 );
-    pTblNd->GetTable().GetTabLines().C40_INSERT( SwTableLine, pLine, 0 );
+    pTblNd->GetTable().GetTabLines().insert( pTblNd->GetTable().GetTabLines().begin(), pLine );
 
     std::vector<sal_uLong> aBkmkArr;
     for( sal_uInt16 n = rSavedData.size(); n; )
@@ -885,7 +885,7 @@ _SaveTable::_SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt, sal_Bool bSaveFm
 
     _SaveLine* pLn = pLine;
     if( USHRT_MAX == nLnCnt )
-        nLnCnt = rTbl.GetTabLines().Count();
+        nLnCnt = rTbl.GetTabLines().size();
     for( sal_uInt16 n = 1; n < nLnCnt; ++n )
         pLn = new _SaveLine( pLn, *rTbl.GetTabLines()[ n ], *this );
 
@@ -964,7 +964,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
 
     sal_uInt16 nLnCnt = nLineCount;
     if( USHRT_MAX == nLnCnt )
-        nLnCnt = rTbl.GetTabLines().Count();
+        nLnCnt = rTbl.GetTabLines().size();
 
     _SaveLine* pLn = pLine;
     for( n = 0; n < nLnCnt; ++n, pLn = pLn->pNext )
@@ -1008,7 +1008,7 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
     }
 
     // SwTableBox must have a format
-    SwTableBox aParent( (SwTableBoxFmt*)pFmt, rTbl.GetTabLines().Count(), 0 );
+    SwTableBox aParent( (SwTableBoxFmt*)pFmt, rTbl.GetTabLines().size(), 0 );
 
     // fill FrmFmts with defaults (0)
     pFmt = 0;
@@ -1021,11 +1021,11 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
     // add new lines, delete old ones
     sal_uInt16 nOldLines = nLineCount;
     if( USHRT_MAX == nLineCount )
-        nOldLines = rTbl.GetTabLines().Count();
+        nOldLines = rTbl.GetTabLines().size();
 
     SwDoc *pDoc = rTbl.GetFrmFmt()->GetDoc();
     SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
-    for( n = 0; n < aParent.GetTabLines().Count(); ++n )
+    for( n = 0; n < aParent.GetTabLines().size(); ++n )
     {
         SwTableLine* pLn = aParent.GetTabLines()[ n ];
         pLn->SetUpper( 0 );
@@ -1043,11 +1043,11 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
                     pPCD->DeleteBox( &rTbl, *pBox );
             }
 
-            rTbl.GetTabLines().C40_REPLACE( SwTableLine, pLn, n );
+            rTbl.GetTabLines()[n] = pLn;
             delete pOld;
         }
         else
-            rTbl.GetTabLines().C40_INSERT( SwTableLine, pLn, n );
+            rTbl.GetTabLines().insert( rTbl.GetTabLines().begin() + n, pLn );
     }
 
     if( n < nOldLines )
@@ -1066,10 +1066,13 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
             }
         }
 
-        rTbl.GetTabLines().DeleteAndDestroy( n, nOldLines - n );
+        for( SwTableLines::const_iterator it = rTbl.GetTabLines().begin() + n;
+             it != rTbl.GetTabLines().begin() + nOldLines; ++it )
+            delete *it;
+        rTbl.GetTabLines().erase( rTbl.GetTabLines().begin() + n, rTbl.GetTabLines().begin() + nOldLines );
     }
 
-    aParent.GetTabLines().Remove( 0, n );
+    aParent.GetTabLines().erase( aParent.GetTabLines().begin(), aParent.GetTabLines().begin() + n );
 
     if( bCreateFrms )
         aTmpBox.MakeFrms( rTbl );
@@ -1187,7 +1190,7 @@ void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl
     }
     SwTableLine* pNew = new SwTableLine( pFmt, 1, &rParent );
 
-    rParent.GetTabLines().C40_INSERT( SwTableLine, pNew, rParent.GetTabLines().Count() );
+    rParent.GetTabLines().push_back( pNew );
 
     // HB, #127868# robustness: in some cases - which I
     // cannot reproduce nor see from the code - pNew seems
@@ -1223,7 +1226,7 @@ _SaveBox::_SaveBox( _SaveBox* pPrev, const SwTableBox& rBox, _SaveTable& rSTbl )
         Ptrs.pLine = new _SaveLine( 0, *rBox.GetTabLines()[ 0 ], rSTbl );
 
         _SaveLine* pLn = Ptrs.pLine;
-        for( sal_uInt16 n = 1; n < rBox.GetTabLines().Count(); ++n )
+        for( sal_uInt16 n = 1; n < rBox.GetTabLines().size(); ++n )
             pLn = new _SaveLine( pLn, *rBox.GetTabLines()[ n ], rSTbl );
     }
 }
@@ -1243,14 +1246,14 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
 
     if( ULONG_MAX == nSttNode )     // no EndBox
     {
-        if( !rBox.GetTabLines().Count() )
+        if( !rBox.GetTabLines().size() )
         {
             OSL_ENSURE( !this, "Number of lines changed" );
         }
         else
         {
             _SaveLine* pLn = Ptrs.pLine;
-            for( sal_uInt16 n = 0; n < rBox.GetTabLines().Count(); ++n, pLn = pLn->pNext )
+            for( sal_uInt16 n = 0; n < rBox.GetTabLines().size(); ++n, pLn = pLn->pNext )
             {
                 if( !pLn )
                 {

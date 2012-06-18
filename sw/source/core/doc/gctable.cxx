@@ -31,6 +31,7 @@
 #include <tblrwcl.hxx>
 #include <swtblfmt.hxx>
 #include <algorithm>
+#include <boost/foreach.hpp>
 
 using namespace ::editeng;
 
@@ -55,48 +56,48 @@ sal_Bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
 }
 
 
+static bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox* pBox, _SwGCBorder_BoxBrd* pPara );
 
-sal_Bool lcl_GCBorder_ChkBoxBrd_L( const SwTableLine*& rpLine, void* pPara )
+static bool lcl_GCBorder_ChkBoxBrd_L( const SwTableLine* pLine, _SwGCBorder_BoxBrd* pPara )
 {
-    const SwTableBox* pBox = rpLine->GetTabBoxes()[ 0 ];
+    const SwTableBox* pBox = pLine->GetTabBoxes().front();
     return lcl_GCBorder_ChkBoxBrd_B( pBox, pPara );
 }
 
-sal_Bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox*& rpBox, void* pPara )
+static bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox* pBox, _SwGCBorder_BoxBrd* pPara )
 {
-    sal_Bool bRet = sal_True;
-    if( rpBox->GetTabLines().Count() )
+    bool bRet = true;
+    if( !pBox->GetTabLines().empty() )
     {
-        for( sal_uInt16 n = 0, nLines = rpBox->GetTabLines().Count();
+        for( sal_uInt16 n = 0, nLines = pBox->GetTabLines().size();
                 n < nLines && bRet; ++n )
         {
-            const SwTableLine* pLine = rpBox->GetTabLines()[ n ];
+            const SwTableLine* pLine = pBox->GetTabLines()[ n ];
             bRet = lcl_GCBorder_ChkBoxBrd_L( pLine, pPara );
         }
     }
     else
     {
-        _SwGCBorder_BoxBrd* pBPara = (_SwGCBorder_BoxBrd*)pPara;
-        bRet = pBPara->CheckLeftBorderOfFormat( *rpBox->GetFrmFmt() );
+        bRet = pPara->CheckLeftBorderOfFormat( *pBox->GetFrmFmt() );
     }
     return bRet;
 }
 
 static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPara );
 
-sal_Bool lcl_GCBorder_GetLastBox_L( const SwTableLine*& rpLine, void* pPara )
+static void lcl_GCBorder_GetLastBox_L( const SwTableLine* pLine, SwTableBoxes* pPara )
 {
-    const SwTableBoxes& rBoxes = rpLine->GetTabBoxes();
-    const SwTableBox* pBox = rBoxes.back();
-    lcl_GCBorder_GetLastBox_B( pBox, (SwTableBoxes*)pPara );
-    return sal_True;
+    const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
+    SwTableBox* pBox = rBoxes.back();
+    lcl_GCBorder_GetLastBox_B( pBox, pPara );
 }
 
 static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPara )
 {
-    SwTableLines& rLines = (SwTableLines&)pBox->GetTabLines();
-    if( rLines.Count() )
-        rLines.ForEach( &lcl_GCBorder_GetLastBox_L, pPara );
+    const SwTableLines& rLines = pBox->GetTabLines();
+    if( !rLines.empty() )
+        BOOST_FOREACH( const SwTableLine* pLine, rLines )
+            lcl_GCBorder_GetLastBox_L( pLine, pPara );
     else
         pPara->push_back( (SwTableBox*)pBox );
 }
@@ -168,18 +169,16 @@ void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
     } while( sal_True );
 }
 
-static sal_Bool lcl_GC_Box_Border( SwTableBox* pBox, _SwGCLineBorder* pPara );
+static void lcl_GC_Box_Border( const SwTableBox* pBox, _SwGCLineBorder* pPara );
 
-sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
+void lcl_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
 {
-    _SwGCLineBorder* pGCPara = (_SwGCLineBorder*)pPara;
-
     // First the right edge with the left edge of the succeeding Box within this Line
     {
         _SwGCBorder_BoxBrd aBPara;
         const SvxBorderLine* pBrd;
         const SfxPoolItem* pItem;
-        const SwTableBoxes& rBoxes = rpLine->GetTabBoxes();
+        const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( sal_uInt16 n = 0, nBoxes = rBoxes.size() - 1; n < nBoxes; ++n )
         {
             SwTableBoxes aBoxes;
@@ -221,7 +220,7 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
         SwCollectTblLineBoxes aBottom( sal_False );
         SwCollectTblLineBoxes aTop( sal_True );
 
-        ::lcl_Line_CollectBox( rpLine, &aBottom );
+        ::lcl_Line_CollectBox( pLine, &aBottom );
 
         const SwTableLine* pNextLine = (*pGCPara->pLines)[ pGCPara->nLinePos+1 ];
         ::lcl_Line_CollectBox( pNextLine, &aTop );
@@ -309,24 +308,22 @@ sal_Bool lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
         } while( sal_True );
     }
 
-    for( SwTableBoxes::iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
-             it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
-        lcl_GC_Box_Border(*it, (_SwGCLineBorder*)pPara );
+    for( SwTableBoxes::const_iterator it = pLine->GetTabBoxes().begin();
+             it != pLine->GetTabBoxes().end(); ++it)
+        lcl_GC_Box_Border(*it, pGCPara );
 
     ++pGCPara->nLinePos;
-
-    return sal_True;
 }
 
-static sal_Bool lcl_GC_Box_Border( SwTableBox* pBox, _SwGCLineBorder* pPara )
+static void lcl_GC_Box_Border( const SwTableBox* pBox, _SwGCLineBorder* pPara )
 {
-    if( pBox->GetTabLines().Count() )
+    if( !pBox->GetTabLines().empty() )
     {
         _SwGCLineBorder aPara( *pBox );
         aPara.pShareFmts = pPara->pShareFmts;
-        pBox->GetTabLines().ForEach( &lcl_GC_Line_Border, &aPara );
+        BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
+            lcl_GC_Line_Border( pLine, &aPara );
     }
-    return sal_True;
 }
 
 struct _GCLinePara
@@ -339,21 +336,21 @@ struct _GCLinePara
     {}
 };
 
-static bool lcl_MergeGCLine(const SwTableLine*& rpLine, void*const pPara);
+static bool lcl_MergeGCLine(SwTableLine* pLine, _GCLinePara* pPara);
 
-static bool lcl_MergeGCBox(SwTableBox* pTblBox, void*const pPara)
+static bool lcl_MergeGCBox(SwTableBox* pTblBox, _GCLinePara* pPara)
 {
-    sal_uInt16 n, nLen = pTblBox->GetTabLines().Count();
+    sal_uInt16 n, nLen = pTblBox->GetTabLines().size();
     if( nLen )
     {
         // ATTENTION: The Line count can change!
-        _GCLinePara aPara( pTblBox->GetTabLines(), (_GCLinePara*)pPara );
-        for( n = 0; n < pTblBox->GetTabLines().Count() &&
-            lcl_MergeGCLine( *(pTblBox->GetTabLines().GetData() + n), &aPara );
+        _GCLinePara aPara( pTblBox->GetTabLines(), pPara );
+        for( n = 0; n < pTblBox->GetTabLines().size() &&
+            lcl_MergeGCLine( pTblBox->GetTabLines()[n], &aPara );
             ++n )
             ;
 
-        if( 1 == pTblBox->GetTabLines().Count() )
+        if( 1 == pTblBox->GetTabLines().size() )
         {
             // Box with a Line, then move all the Line's Boxes after this Box
             // into the parent Line and delete this Box
@@ -375,18 +372,16 @@ static bool lcl_MergeGCBox(SwTableBox* pTblBox, void*const pPara)
     return true;
 }
 
-static bool lcl_MergeGCLine(const SwTableLine*& rpLine, void *const pPara)
+static bool lcl_MergeGCLine(SwTableLine* pLn, _GCLinePara* pGCPara)
 {
-    SwTableLine* pLn = (SwTableLine*)rpLine;
     sal_uInt16 nLen = pLn->GetTabBoxes().size();
     if( nLen )
     {
-        _GCLinePara* pGCPara = (_GCLinePara*)pPara;
         while( 1 == nLen )
         {
             // We have a Box with Lines
             SwTableBox* pBox = pLn->GetTabBoxes().front();
-            if( !pBox->GetTabLines().Count() )
+            if( pBox->GetTabLines().empty() )
                 break;
 
             SwTableLine* pLine = pBox->GetTabLines()[0];
@@ -394,17 +389,16 @@ static bool lcl_MergeGCLine(const SwTableLine*& rpLine, void *const pPara)
             // pLine turns into the current Line (that is rpLine), the rest is moved
             // into the LinesArray past the current one.
             // The LinesArray is in pPara!
-            nLen = pBox->GetTabLines().Count();
+            nLen = pBox->GetTabLines().size();
 
             SwTableLines& rLns = *pGCPara->pLns;
-            const SwTableLine* pTmp = pLn;
-            sal_uInt16 nInsPos = rLns.GetPos( pTmp );
+            sal_uInt16 nInsPos = rLns.GetPos( pLn );
             OSL_ENSURE( USHRT_MAX != nInsPos, "Could not find Line!" );
 
             SwTableBox* pUpper = pLn->GetUpper();
 
-            rLns.Remove( nInsPos, 1 );      // remove the Line from the array
-            rLns.Insert( &pBox->GetTabLines(), nInsPos );
+            rLns.erase( rLns.begin() + nInsPos );      // remove the Line from the array
+            rLns.insert( rLns.begin() + nInsPos, pBox->GetTabLines().begin(), pBox->GetTabLines().end() );
 
             // JP 31.03.99: Bug 60000
             // Pass the attributes of the to-be-deleted Lines to the "inserted" one
@@ -419,7 +413,7 @@ static bool lcl_MergeGCLine(const SwTableLine*& rpLine, void *const pPara)
                         pGCPara->pShareFmts->SetAttr( *rBoxLns[ nLns ], *pItem );
             }
 
-            pBox->GetTabLines().Remove( 0, nLen );  // Remove Lines from the array
+            pBox->GetTabLines().erase( pBox->GetTabLines().begin(), pBox->GetTabLines().begin() + nLen );  // Remove Lines from the array
 
             delete pLn;
 
@@ -433,7 +427,7 @@ static bool lcl_MergeGCLine(const SwTableLine*& rpLine, void *const pPara)
 
         // ATTENTION: The number of boxes can change!
         for( nLen = 0; nLen < pLn->GetTabBoxes().size(); ++nLen )
-            if( !lcl_MergeGCBox( pLn->GetTabBoxes()[nLen], pPara ))
+            if( !lcl_MergeGCBox( pLn->GetTabBoxes()[nLen], pGCPara ))
                 --nLen;
     }
     return true;
@@ -446,8 +440,8 @@ void SwTable::GCLines()
     _GCLinePara aPara( GetTabLines() );
     SwShareBoxFmts aShareFmts;
     aPara.pShareFmts = &aShareFmts;
-    for( sal_uInt16 n = 0; n < GetTabLines().Count() &&
-            lcl_MergeGCLine( *(GetTabLines().GetData() + n ), &aPara ); ++n )
+    for( sal_uInt16 n = 0; n < GetTabLines().size() &&
+            lcl_MergeGCLine( GetTabLines()[n], &aPara ); ++n )
         ;
 }
 

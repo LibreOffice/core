@@ -82,7 +82,6 @@ TYPEINIT1( SwTableFmt, SwFrmFmt );
 TYPEINIT1( SwTableBoxFmt, SwFrmFmt );
 TYPEINIT1( SwTableLineFmt, SwFrmFmt );
 
-SV_IMPL_PTRARR(SwTableLines,SwTableLine*);
 SV_IMPL_PTRARR_SORT(SwTableSortBoxes,SwTableBoxPtr);
 
 SV_IMPL_REF( SwServerObject )
@@ -335,7 +334,7 @@ void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
 void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
                          const long nNew, SvPtrarr& rFmtArr, const bool bCheckSum )
 {
-    for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
         ::lcl_ModifyBoxes( rLines[i]->GetTabBoxes(), nOld, nNew, rFmtArr );
     if( bCheckSum )
     {
@@ -361,7 +360,7 @@ void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
     for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
     {
         SwTableBox &rBox = *rBoxes[i];
-        if ( rBox.GetTabLines().Count() )
+        if ( !rBox.GetTabLines().empty() )
         {
             // For SubTables the rounding problem will not be solved :-(
             ::lcl_ModifyLines( rBox.GetTabLines(), nOld, nNew, rFmtArr, false );
@@ -565,10 +564,10 @@ void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
 void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
                         const SwFrmFmt *pTabFmt, bool bRefreshHidden )
 {
-    if ( pBox->GetTabLines().Count() )
+    if ( !pBox->GetTabLines().empty() )
     {
         const SwTableLines &rLines = pBox->GetTabLines();
-        for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
         {   const SwTableBoxes &rBoxes = rLines[i]->GetTabBoxes();
             for ( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
                 ::lcl_ProcessBoxGet( rBoxes[j], rToFill, pTabFmt, bRefreshHidden);
@@ -587,7 +586,7 @@ void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
         if ( pBox->GetSttNd() )
             ::lcl_SortedTabColInsert( rToFill, pBox, pTabFmt, sal_True, sal_False );
         else
-            for ( sal_uInt16 j = 0; j < pBox->GetTabLines().Count(); ++j )
+            for ( sal_uInt16 j = 0; j < pBox->GetTabLines().size(); ++j )
                 ::lcl_ProcessLineGet( pBox->GetTabLines()[j], rToFill, pTabFmt );
     }
 }
@@ -662,7 +661,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
         //4.
         if ( !bCurRowOnly )
         {
-            for ( i = 0; i < aLines.Count(); ++i )
+            for ( i = 0; i < aLines.size(); ++i )
                 ::lcl_ProcessLineGet( aLines[i], rToFill, pTabFmt );
         }
 
@@ -719,9 +718,9 @@ void lcl_ProcessLine( SwTableLine *pLine, Parm &rParm )
 
 void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
 {
-    if ( pBox->GetTabLines().Count() )
+    if ( !pBox->GetTabLines().empty() )
     {   SwTableLines &rLines = pBox->GetTabLines();
-        for ( int i = rLines.Count()-1; i >= 0; --i )
+        for ( int i = rLines.size()-1; i >= 0; --i )
             lcl_ProcessLine( rLines[ static_cast< sal_uInt16 >(i) ], rParm );
     }
     else
@@ -843,8 +842,7 @@ void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
                 // The outer cells of the last row are responsible to adjust a surrounding cell.
                 // Last line check:
                 if ( pBox->GetUpper()->GetUpper() &&
-                     pBox->GetUpper() != pBox->GetUpper()->GetUpper()->GetTabLines()
-                        [pBox->GetUpper()->GetUpper()->GetTabLines().Count()-1])
+                     pBox->GetUpper() != pBox->GetUpper()->GetUpper()->GetTabLines().back())
                 {
                    pBox = 0;
                 }
@@ -867,10 +865,10 @@ void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
 void lcl_ProcessBoxPtr( SwTableBox *pBox, SvPtrarr &rBoxArr,
                            sal_Bool bBefore )
 {
-    if ( pBox->GetTabLines().Count() )
+    if ( !pBox->GetTabLines().empty() )
     {
         const SwTableLines &rLines = pBox->GetTabLines();
-        for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
         {
             const SwTableBoxes &rBoxes = rLines[i]->GetTabBoxes();
             for ( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
@@ -887,7 +885,7 @@ void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm );
 
 void lcl_AdjustLines( SwTableLines &rLines, const long nDiff, Parm &rParm )
 {
-    for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
     {
         SwTableBox *pBox = rLines[i]->GetTabBoxes()
                                 [rLines[i]->GetTabBoxes().size()-1];
@@ -897,7 +895,7 @@ void lcl_AdjustLines( SwTableLines &rLines, const long nDiff, Parm &rParm )
 
 void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm )
 {
-    if ( pBox->GetTabLines().Count() )
+    if ( !pBox->GetTabLines().empty() )
         ::lcl_AdjustLines( pBox->GetTabLines(), nDiff, rParm );
 
     //Groesse der Box anpassen.
@@ -1050,7 +1048,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             //Um uns nicht selbst hereinzulegen muss natuerlich rueckwaerst
             //gearbeitet werden!
             SwTableLines &rLines = GetTabLines();
-            for ( int i = rLines.Count()-1; i >= 0; --i )
+            for ( int i = rLines.size()-1; i >= 0; --i )
                 ::lcl_ProcessLine( rLines[ static_cast< sal_uInt16 >(i) ], aParm );
         }
     }
@@ -1331,7 +1329,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             };
             aRowSpanPos.clear();
         }
-        if( nCurr+1 < rLines.Count() )
+        if( nCurr+1 < (sal_uInt16)rLines.size() )
         {
             ChangeList aCopy;
             ChangeList::iterator pCop = aOldNew.begin();
@@ -1351,12 +1349,12 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
                 lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[++j],
                     rParm.nOldWish, nOldWidth, false );
                 lcl_AdjustWidthsInLine( rLines[j], aCopy, rParm, 0 );
-                bGoOn = !aRowSpanPos.empty() && j+1 < rLines.Count();
+                bGoOn = !aRowSpanPos.empty() && j+1 < (sal_uInt16)rLines.size();
             };
         }
         ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, COLFUZZY );
     }
-    else for( sal_uInt16 i = 0; i < rLines.Count(); ++i )
+    else for( sal_uInt16 i = 0; i < rLines.size(); ++i )
         ::lcl_AdjustWidthsInLine( rLines[i], aOldNew, rParm, COLFUZZY );
     CHECK_TABLE( *this )
 }
@@ -1459,7 +1457,7 @@ const SwTableBox* SwTable::GetTblBox( const String& rName,
         nLine = SwTable::_GetBoxNum( aNm, sal_False, bPerformValidCheck );
 
         // bestimme die Line
-        if( !nLine || nLine > pLines->Count() )
+        if( !nLine || nLine > pLines->size() )
             return 0;
         pLine = (*pLines)[ nLine-1 ];
 
@@ -1476,8 +1474,8 @@ const SwTableBox* SwTable::GetTblBox( const String& rName,
     {
         OSL_FAIL( "Box ohne Inhalt, suche die naechste !!" );
         // "herunterfallen lassen" bis zur ersten Box
-        while( pBox->GetTabLines().Count() )
-            pBox = pBox->GetTabLines()[0]->GetTabBoxes()[0];
+        while( !pBox->GetTabLines().empty() )
+            pBox = pBox->GetTabLines().front()->GetTabBoxes().front();
     }
     return pBox;
 }
@@ -1701,18 +1699,19 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
 |*************************************************************************/
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, sal_uInt16 nLines, SwTableLine *pUp )
     : SwClient( 0 ),
-    aLines( (sal_uInt8)nLines ),
+    aLines(),
     pSttNd( 0 ),
     pUpper( pUp ),
     pImpl( 0 )
 {
+    aLines.reserve( (sal_uInt8)nLines );
     CheckBoxFmt( pFmt )->Add( this );
 }
 
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwNodeIndex &rIdx,
                         SwTableLine *pUp )
     : SwClient( 0 ),
-    aLines( 0 ),
+    aLines(),
     pUpper( pUp ),
     pImpl( 0 )
 {
@@ -1731,7 +1730,7 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwNodeIndex &rIdx,
 
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableLine *pUp ) :
     SwClient( 0 ),
-    aLines( 0 ),
+    aLines(),
     pSttNd( &rSttNd ),
     pUpper( pUp ),
     pImpl( 0 )
@@ -2824,6 +2823,13 @@ void SwTableBox::ForgetFrmFmt()
 {
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove(this);
+}
+
+// free's any remaining child objects
+SwTableLines::~SwTableLines()
+{
+    for ( const_iterator it = begin(); it != end(); ++it )
+        delete *it;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,10 +53,11 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
                           rTable.GetTabSortBoxes().Count()  ); // move die Inh. Boxen
     rTable.GetTabSortBoxes().Remove( (sal_uInt16)0, rTable.GetTabSortBoxes().Count() );
 
-    aLines.Insert( &rTable.GetTabLines(),0 );                       // move die Lines
-    rTable.GetTabLines().Remove( 0, rTable.GetTabLines().Count() );
+    aLines.insert( aLines.begin(),
+                   rTable.GetTabLines().begin(), rTable.GetTabLines().end() ); // move die Lines
+    rTable.GetTabLines().clear();
 
-    if( aLines.Count() )
+    if( !aLines.empty() )
     {
         const SwNode& rNd = *GetTabSortBoxes()[0]->GetSttNd();
         if( rNd.GetNodes().IsDocNodes() )
@@ -80,7 +81,7 @@ SwDDETable::~SwDDETable()
 {
     SwDDEFieldType* pFldTyp = (SwDDEFieldType*)aDepend.GetRegisteredIn();
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
-    if( !pDoc->IsInDtor() && aLines.Count() &&
+    if( !pDoc->IsInDtor() && !aLines.empty() &&
         GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         pFldTyp->DecRefCnt();
 
@@ -113,7 +114,7 @@ void SwDDETable::ChangeContent()
     OSL_ENSURE( GetFrmFmt(), "Kein FrameFormat" );
 
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
-    if( !aLines.Count() )
+    if( aLines.empty() )
         return;
     OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
     if( !GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
@@ -124,7 +125,7 @@ void SwDDETable::ChangeContent()
 
     String aExpand = comphelper::string::remove(pDDEType->GetExpansion(), '\r');
 
-    for( sal_uInt16 n = 0; n < aLines.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aLines.size(); ++n )
     {
         String aLine = aExpand.GetToken( n, '\n' );
         SwTableLine* pLine = aLines[ n ];
@@ -164,7 +165,7 @@ sal_Bool SwDDETable::NoDDETable()
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
 
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
-    if( !aLines.Count() )
+    if( aLines.empty() )
         return sal_False;
     OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
     SwNode* pNd = (SwNode*)GetTabSortBoxes()[0]->GetSttNd();
@@ -181,8 +182,9 @@ sal_Bool SwDDETable::NoDDETable()
                           GetTabSortBoxes().Count()  ); // move die Inh. Boxen
     GetTabSortBoxes().Remove( (sal_uInt16)0, GetTabSortBoxes().Count() );
 
-    pNewTbl->GetTabLines().Insert( &GetTabLines(),0 );                      // move die Lines
-    GetTabLines().Remove( 0, GetTabLines().Count() );
+    pNewTbl->GetTabLines().insert( pNewTbl->GetTabLines().begin(),
+                                   GetTabLines().begin(), GetTabLines().end() ); // move die Lines
+    GetTabLines().clear();
 
     if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
         ((SwDDEFieldType*)aDepend.GetRegisteredIn())->DecRefCnt();

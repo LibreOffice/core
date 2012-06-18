@@ -1432,9 +1432,9 @@ SwTableBox* SwFltOutDoc::GetBox(sal_uInt16 ny, sal_uInt16 nx /*= USHRT_MAX */)
         OSL_FAIL("SwFltOutDoc:GetBox:pTableLines");
         return 0;
     }
-    if( ny >= pTableLines->Count() ){   // Notbremse
+    if( ny >= pTableLines->size() ){   // Notbremse
         OSL_FAIL( "SwFltOutDoc:GetBox:ny >= Count()");
-        ny = pTableLines->Count() - 1;
+        ny = pTableLines->size() - 1;
     }
     SwTableLine* pTableLine = (*pTableLines)[ny];
     if(!pTableLine){
@@ -1664,9 +1664,9 @@ sal_Bool SwFltOutDoc::SeekCell(short nRow, short nCol, sal_Bool bPam)
     SwTableBoxes* pTableBoxes = &pTableLine->GetTabBoxes();
     SwTableBox* pTableBox = (*pTableBoxes)[usTableX];
 
-    if ((sal_uInt16)nRow >= pTableLines->Count())
+    if ((sal_uInt16)nRow >= pTableLines->size())
     {
-       OSL_ENSURE((sal_uInt16)nRow >= pTableLines->Count(), "SwFltOutDoc");
+       OSL_ENSURE((sal_uInt16)nRow >= pTableLines->size(), "SwFltOutDoc");
         return sal_False;
     }
     pTableLine = (*pTableLines)[nRow];

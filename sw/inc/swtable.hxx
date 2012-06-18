@@ -73,7 +73,18 @@ struct Parm;
 SV_DECL_REF( SwServerObject )
 #endif
 
-SV_DECL_PTRARR_DEL(SwTableLines, SwTableLine*, 10)
+class SwTableLines : public std::vector<SwTableLine*> {
+public:
+    // free's any remaining child objects
+    ~SwTableLines();
+
+    // return USHRT_MAX if not found, else index of position
+    sal_uInt16 GetPos(const SwTableLine* pBox) const
+    {
+        const_iterator it = std::find(begin(), end(), pBox);
+        return it == end() ? USHRT_MAX : it - begin();
+    }
+};
 
 class SwTableBoxes : public std::vector<SwTableBox*> {
 public:
@@ -89,7 +100,6 @@ public:
 // (for calculation in table).
 typedef SwTableBox* SwTableBoxPtr;
 SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25 )
-typedef SwTableLine* SwTableLinePtr;
 
 class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrmFmt.
 {
@@ -176,7 +186,7 @@ public:
     void SetTableModel( sal_Bool bNew ){ bNewModel = bNew; }
     sal_Bool IsNewModel() const { return bNewModel; }
 
-    sal_uInt16 GetRowsToRepeat() const { return Min( GetTabLines().Count(), nRowsToRepeat ); }
+    sal_uInt16 GetRowsToRepeat() const { return Min( (sal_uInt16)GetTabLines().size(), nRowsToRepeat ); }
     sal_uInt16 _GetRowsToRepeat() const { return nRowsToRepeat; }
     void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { nRowsToRepeat = nNumOfRows; }
 
@@ -252,7 +262,7 @@ public:
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
         { _FindSuperfluousRows( rBoxes, 0, 0 ); }
-    void CheckRowSpan( SwTableLinePtr &rpLine, bool bUp ) const;
+    void CheckRowSpan( SwTableLine* &rpLine, bool bUp ) const;
 
           SwTableSortBoxes& GetTabSortBoxes()       { return aSortCntBoxes; }
     const SwTableSortBoxes& GetTabSortBoxes() const { return aSortCntBoxes; }

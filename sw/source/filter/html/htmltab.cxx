@@ -1882,7 +1882,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                              bFirstPara, 0==pCnts->Next() );
                 pLine->GetTabBoxes().push_back( pCntBox );
 
-                rLines.C40_INSERT( SwTableLine, pLine, rLines.Count() );
+                rLines.push_back( pLine );
             }
             else
             {
@@ -2423,7 +2423,7 @@ void HTMLTable::_MakeTable( SwTableBox *pBox )
     {
         SwTableLine *pLine = MakeTableLine( pBox, i, 0, i+1, nCols );
         if( pBox || i > 0 )
-            rLines.C40_INSERT( SwTableLine, pLine, rLines.Count() );
+            rLines.push_back( pLine );
     }
 }
 
@@ -2611,7 +2611,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         SwTableLine *pLine =
             new SwTableLine( pLineFrmFmtNoHeight ? pLineFrmFmtNoHeight
                                                  : pLineFmt, 0, pBox );
-        rLines.C40_INSERT( SwTableLine, pLine, rLines.Count() );
+        rLines.push_back( pLine );
 
         // Sicherstellen, dass wie ein Format ohne Hoehe erwischt haben
         if( !pLineFrmFmtNoHeight )
@@ -2675,7 +2675,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     // Top-Level-Tabelle durch
     if( this==pTopTable )
     {
-        if( 1==nRows && nHeight && 1==pSwTable->GetTabLines().Count() )
+        if( 1==nRows && nHeight && 1==pSwTable->GetTabLines().size() )
         {
             // Hoehe einer einzeiligen Tabelle als Mindesthoehe der
             // Zeile setzen. (War mal fixe Hoehe, aber das gibt manchmal

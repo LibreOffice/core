@@ -102,7 +102,7 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
     //Create the lines and insert them.
     const SwTableLines &rLines = rTab.GetTabLines();
     SwFrm *pTmpPrev = 0;
-    for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
     {
         SwRowFrm *pNew = new SwRowFrm( *rLines[i], this );
         if( pNew->Lower() )
@@ -4654,7 +4654,7 @@ SwCellFrm::SwCellFrm( const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent )
     {
         const SwTableLines &rLines = rBox.GetTabLines();
         SwFrm *pTmpPrev = 0;
-        for ( sal_uInt16 i = 0; i < rLines.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
         {
             SwRowFrm *pNew = new SwRowFrm( *rLines[i], this, bInsertContent );
             pNew->InsertBehind( this, pTmpPrev );
