@@ -56,6 +56,10 @@ struct ThumbnailViewItem
 
     ~ThumbnailViewItem ();
 
+    bool isVisible () const { return mbVisible; }
+
+    void show (bool bVisible);
+
     bool isSelected () const { return mbSelected; }
 
     void setSelection (bool state);

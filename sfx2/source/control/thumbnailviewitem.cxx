@@ -60,6 +60,18 @@ ThumbnailViewItem::~ThumbnailViewItem()
     delete mpSelectBox;
 }
 
+void ThumbnailViewItem::show (bool bVisible)
+{
+    mbVisible = bVisible;
+
+    if (mbMode)
+        mpSelectBox->Show(bVisible);
+    else if (!bVisible)
+        mpSelectBox->Show(bVisible);
+    else if (mbSelected)
+        mpSelectBox->Show(bVisible);
+}
+
 void ThumbnailViewItem::setSelection (bool state)
 {
     mbSelected = state;

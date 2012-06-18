@@ -256,7 +256,7 @@ void ThumbnailView::ImplDeleteItems()
     for ( size_t i = 0; i < n; ++i )
     {
         ThumbnailViewItem *const pItem = mItemList[i];
-        if ( pItem->mbVisible && ImplHasAccessibleListeners() )
+        if ( pItem->isVisible() && ImplHasAccessibleListeners() )
         {
             ::com::sun::star::uno::Any aOldAny, aNewAny;
 
@@ -516,7 +516,7 @@ void ThumbnailView::CalculateItemPositions ()
 
         for ( size_t i = 0; i < nItemCount; i++ )
         {
-            mItemList[i]->mbVisible = false;
+            mItemList[i]->show(false);
         }
 
         if ( mpScrBar )
@@ -575,7 +575,7 @@ void ThumbnailView::CalculateItemPositions ()
 
             if ( (i >= nFirstItem) && (i < nLastItem) )
             {
-                if( !pItem->mbVisible && ImplHasAccessibleListeners() )
+                if( !pItem->isVisible() && ImplHasAccessibleListeners() )
                 {
                     ::com::sun::star::uno::Any aOldAny, aNewAny;
 
@@ -583,7 +583,7 @@ void ThumbnailView::CalculateItemPositions ()
                     ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
-                pItem->mbVisible = true;
+                pItem->show(true);
                 pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
                 pItem->calculateItemsPosition();
 
@@ -597,7 +597,7 @@ void ThumbnailView::CalculateItemPositions ()
             }
             else
             {
-                if( pItem->mbVisible && ImplHasAccessibleListeners() )
+                if( pItem->isVisible() && ImplHasAccessibleListeners() )
                 {
                     ::com::sun::star::uno::Any aOldAny, aNewAny;
 
@@ -605,7 +605,7 @@ void ThumbnailView::CalculateItemPositions ()
                     ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
-                pItem->mbVisible = false;
+                pItem->show(false);
             }
         }
 
@@ -720,7 +720,7 @@ sal_uInt16 ThumbnailView::ImplGetVisibleItemCount() const
 
     for ( size_t n = 0; n < nItemCount; ++n )
     {
-        if ( mItemList[n]->mbVisible )
+        if ( mItemList[n]->isVisible() )
             ++nRet;
     }
 
@@ -735,7 +735,7 @@ ThumbnailViewItem* ThumbnailView::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
     {
         ThumbnailViewItem *const pItem = mItemList[n];
 
-        if ( pItem->mbVisible && !nVisiblePos-- )
+        if ( pItem->isVisible() && !nVisiblePos-- )
             return pItem;
     }
 
@@ -791,7 +791,7 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
 
             if ( (i >= nFirstItem) && (i < nLastItem) )
             {
-                pItem->mbVisible = true;
+                pItem->show(true);
                 pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
                 pItem->calculateItemsPosition();
 
@@ -805,7 +805,7 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
             }
             else
             {
-                pItem->mbVisible = false;
+                pItem->show(false);
             }
         }
 
@@ -1704,8 +1704,10 @@ void ThumbnailView::setSelectionMode (bool mode)
 
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
-        if (mItemList[i]->mbVisible)
-            mItemList[i]->setSelectionMode(mode);
+        mItemList[i]->setSelectionMode(mode);
+
+        if (mItemList[i]->isVisible())
+            DrawItem(mItemList[i]);
     }
 }
 
