@@ -84,8 +84,8 @@ struct ShapeTypeModel
     ::rtl::OUString     maRotation;             ///< Rotation of the shape, in degrees.
     ::rtl::OUString     maFlip;                 ///< Flip type of the shape (can be "x" or "y").
     sal_Bool            mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)
-    sal_Bool            mbVisible;              /// Visible or Hidden
-    ::rtl::OUString     maWrapStyle;            /// Wrapping mode for text.
+    sal_Bool            mbVisible;              ///< Visible or Hidden
+    ::rtl::OUString     maWrapStyle;            ///< Wrapping mode for text.
 
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
@@ -133,8 +133,8 @@ private:
     ::com::sun::star::awt::Rectangle getRelRectangle() const;
 
 protected:
-    Drawing&            mrDrawing;          /// The VML drawing page that contains this shape.
-    ShapeTypeModel      maTypeModel;        /// The model structure containing shape type data.
+    Drawing&            mrDrawing;          ///< The VML drawing page that contains this shape.
+    ShapeTypeModel      maTypeModel;        ///< The model structure containing shape type data.
 };
 
 // ============================================================================
@@ -260,7 +260,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape ) const;
 
 protected:
-    ShapeModel          maShapeModel;       /// The model structure containing shape data.
+    ShapeModel          maShapeModel;       ///< The model structure containing shape data.
 };
 
 // ============================================================================
@@ -281,7 +281,7 @@ protected:
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
 
 private:
-    ::rtl::OUString     maService;          /// Name of the UNO shape service.
+    ::rtl::OUString     maService;          ///< Name of the UNO shape service.
 };
 
 // ============================================================================
@@ -397,7 +397,7 @@ private:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef ::std::auto_ptr< ShapeContainer > ShapeContainerPtr;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    ShapeContainerPtr   mxChildren;         /// Shapes and templates that are part of this group.
+    ShapeContainerPtr   mxChildren;         ///< Shapes and templates that are part of this group.
 };
 
 // ============================================================================
