@@ -822,6 +822,14 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     }
                     else
                     {
+                        if (pItem->isInsideTitle(rMEvt.GetPosPixel()))
+                        {
+                            pItem->setSelection(!pItem->isSelected());
+
+                            if (!pItem->isHighlighted())
+                                DrawItem(pItem);
+                        }
+
                         //StartTracking( STARTTRACK_SCROLLREPEAT );
                     }
                 }

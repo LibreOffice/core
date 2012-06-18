@@ -127,6 +127,14 @@ void ThumbnailViewItem::setSelectClickHdl (const Link &link)
     maClickHdl = link;
 }
 
+bool ThumbnailViewItem::isInsideTitle (const Point &pt) const
+{
+    Rectangle aRect(Point(maTextPos.X(),mpSelectBox->GetPosPixel().Y()),
+                    Point(maDrawArea.Right(),maDrawArea.Bottom()));
+
+    return aRect.IsInside(pt);
+}
+
 IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )
 {
     mbSelected = mpSelectBox->GetState() == STATE_CHECK;

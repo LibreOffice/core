@@ -83,6 +83,8 @@ struct ThumbnailViewItem
 
     void setSelectClickHdl (const Link &link);
 
+    bool isInsideTitle (const Point &pt) const;
+
 private:
 
     DECL_LINK (OnClick, CheckBox *);
