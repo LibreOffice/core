@@ -167,7 +167,6 @@ void ScXMLTableColContext::EndElement()
     if ( sCellStyleName.isEmpty() )
         sCellStyleName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Default" ));
 
-    GetScImport().GetTables().AddColCount(nColCount);
     GetScImport().GetTables().AddColStyle(nColCount, sCellStyleName);
 }
 

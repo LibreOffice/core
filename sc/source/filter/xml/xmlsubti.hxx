@@ -47,52 +47,6 @@
 
 class ScXMLImport;
 
-typedef std::vector<sal_Int32> ScMysalIntVec;
-typedef std::list<sal_Int32> ScMysalIntList;
-
-const ScMysalIntVec::size_type nDefaultRowCount = 20;
-const ScMysalIntVec::size_type nDefaultColCount = 20;
-const ScMysalIntVec::size_type nDefaultTabCount = 10;
-
-class ScMyTableData
-{
-private:
-    ScAddress                           maTableCellPos;
-    ScMysalIntVec                       nColsPerCol;
-    ScMysalIntVec                       nRealCols;
-    ScMysalIntVec                       nRowsPerRow;
-    ScMysalIntVec                       nRealRows;
-    sal_Int32                           nSpannedCols;
-    sal_Int32                           nColCount;
-    sal_Int32                           nSubTableSpanned;
-    ScMysalIntList                      nChangedCols;
-public:
-                                        ScMyTableData(SCTAB nSheet = -1, SCCOL nCol = -1, SCROW nRow = -1);
-                                        ~ScMyTableData();
-    SCROW                               GetRow() const { return maTableCellPos.Row(); }
-    SCCOL                               GetColumn() const { return maTableCellPos.Col(); }
-    void                                AddRow();
-    void                                AddColumn();
-    void                                SetFirstColumn() { maTableCellPos.SetCol(-1); }
-    sal_Int32                           GetColsPerCol(const sal_Int32 nIndex) const { return nColsPerCol[nIndex]; }
-    void                                SetColsPerCol(const sal_Int32 nIndex, sal_Int32 nValue = 1) { nColsPerCol[nIndex] = nValue; }
-    sal_Int32                           GetRealCols(const sal_Int32 nIndex, const bool bIsNormal = true) const;
-    void                                SetRealCols(const sal_Int32 nIndex, const sal_Int32 nValue) { nRealCols[nIndex] = nValue; }
-    sal_Int32                           GetRowsPerRow(const sal_Int32 nIndex) const { return nRowsPerRow[nIndex]; }
-    void                                SetRowsPerRow(const sal_Int32 nIndex, const sal_Int32 nValue = 1) { nRowsPerRow[nIndex] = nValue; }
-    sal_Int32                           GetRealRows(const sal_Int32 nIndex) const { return nIndex < 0 ? 0 : nRealRows[nIndex]; }
-    void                                SetRealRows(const sal_Int32 nIndex, const sal_Int32 nValue) { nRealRows[nIndex] = nValue; }
-    sal_Int32                           GetSpannedCols() const { return nSpannedCols; }
-    void                                SetSpannedCols(const sal_Int32 nTempSpannedCols) { nSpannedCols = nTempSpannedCols; }
-    sal_Int32                           GetColCount() const { return nColCount; }
-    void                                SetColCount(const sal_Int32 nTempColCount) { nColCount = nTempColCount; }
-    sal_Int32                           GetSubTableSpanned() const { return nSubTableSpanned; }
-    void                                SetSubTableSpanned(const sal_Int32 nValue) { nSubTableSpanned = nValue; }
-    sal_Int32                           GetChangedCols(const sal_Int32 nFromIndex, const sal_Int32 nToIndex) const;
-    void                                SetChangedCols(const sal_Int32 nValue);
-};
-
-
 struct ScMatrixRange
 {
     rtl::OUString sFormula;
@@ -134,14 +88,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
     ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
     rtl::OUString                       sCurrentSheetName;
-    ::boost::ptr_vector<ScMyTableData>  maTables;
+    ScAddress                           maCellPos;
     ScXMLTabProtectionData              maProtectionData;
     ScMyMatrixRangeList                 aMatrixRangeList;
     sal_Int32                           nCurrentColStylePos;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
-    SCTAB                               nCurrentSheet;
-    ScMyTableData*                      pCurrentTab;
 
     void                                NewRow();
     void                                NewColumn(bool bIsCovered);
@@ -158,16 +110,15 @@ public:
     void                                UpdateRowHeights();
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
     bool                                IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
-        { return ScMyOLEFixer::IsOLE(rShape); }
+                                            { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
-    ScAddress                           GetRealScCellPos() const;
-    void                                AddColCount(sal_Int32 nTempColCount);
+    ScAddress                           GetRealScCellPos() const { return maCellPos; };
     void                                AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName);
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
     rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
-    SCTAB                               GetCurrentSheet() const { return nCurrentSheet; }
-    sal_Int32                           GetCurrentColumn() const { return maTables.back().GetColCount(); }
-    sal_Int32                           GetCurrentRow() const { return maTables.back().GetRow(); }
+    SCTAB                               GetCurrentSheet() const { return (maCellPos.Tab() >= 0) ? maCellPos.Tab() : 0; }
+    SCCOL                               GetCurrentColumn() const { return (maCellPos.Col() >= 0) ? maCellPos.Col() : 0; }
+    SCROW                               GetCurrentRow() const { return (maCellPos.Row() >= 0) ? maCellPos.Row() : 0; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
                                         GetCurrentXSheet() const { return xCurrentSheet; }
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
