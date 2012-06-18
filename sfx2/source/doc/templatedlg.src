@@ -70,7 +70,7 @@ ModalDialog DLG_TEMPLATE_MANAGER
 
         ButtonImage = Image
         {
-            ImageBitmap = Bitmap { File = "signet.png" ; };
+            ImageBitmap = Bitmap { File = "select.png" ; };
         };
     };
 
