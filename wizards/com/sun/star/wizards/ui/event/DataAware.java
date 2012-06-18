@@ -291,15 +291,13 @@ public abstract class DataAware {
          * @param obj the object which contains the property.
          * @return the get method reflection object.
          */
-        private static Class[] EMPTY_ARRAY = new Class[0];
-
         protected Method createGetMethod(String propName, Object obj)
         {
             Method m = null;
             try
             { //try to get a "get" method.
 
-                m = obj.getClass().getMethod("get" + propName, EMPTY_ARRAY);
+                m = obj.getClass().getMethod("get" + propName);
             }
             catch (NoSuchMethodException ex1)
             {
@@ -313,7 +311,7 @@ public abstract class DataAware {
          */
         public Object get(Object target) {
             try {
-                return getMethod.invoke(target, (Object[])EMPTY_ARRAY);
+                return getMethod.invoke(target);
             } catch (IllegalAccessException ex1) {
                 ex1.printStackTrace();
             } catch (InvocationTargetException ex2) {
@@ -334,7 +332,7 @@ public abstract class DataAware {
         protected Method createSetMethod(String propName, Object obj, Class paramClass) {
             Method m = null;
             try {
-                m = obj.getClass().getMethod("set" + propName, new Class[] { paramClass });
+                m = obj.getClass().getMethod("set" + propName, paramClass);
             } catch (NoSuchMethodException ex1) {
                 throw new IllegalArgumentException("set" + propName + "(" + getMethod.getReturnType().getName() + ") method does not exist on " + obj.getClass().getName());
             }

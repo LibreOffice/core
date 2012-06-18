@@ -42,10 +42,6 @@ import java.lang.reflect.Method;
  */
 public class MethodInvocation
 {
-
-    static final Class[] EMPTY_ARRAY =
-    {
-    };
     //the method to invoke.
     Method mMethod;
     //the object to invoke the method on.
@@ -66,10 +62,7 @@ public class MethodInvocation
 
     public MethodInvocation(String methodName, Object obj, Class paramClass) throws NoSuchMethodException
     {
-        this(paramClass == null ? obj.getClass().getMethod(methodName, (Class[])null) : obj.getClass().getMethod(methodName, new Class[]
-                {
-                    paramClass
-                }), obj, paramClass);
+        this(paramClass == null ? obj.getClass().getMethod(methodName) : obj.getClass().getMethod(methodName, paramClass), obj, paramClass);
     }
 
     public MethodInvocation(Method method, Object obj, Class paramClass)
@@ -86,12 +79,11 @@ public class MethodInvocation
     {
         if (mWithParam)
         {
-            return mMethod.invoke(mObject, (Object) param
-                    );
+            return mMethod.invoke(mObject, param);
         }
         else
         {
-            return mMethod.invoke(mObject, (Object[])EMPTY_ARRAY);
+            return mMethod.invoke(mObject);
         }
     }
 
