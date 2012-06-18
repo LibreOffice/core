@@ -203,7 +203,6 @@ public:
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef int(*YieldFunc)(int fd, void* data);
-struct YieldEntry;
 
 class VCLPLUG_GEN_PUBLIC SalXLib
 {
@@ -217,7 +216,6 @@ protected:
     int             nFDs_;
     fd_set          aReadFDS_;
     fd_set          aExceptionFDS_;
-    YieldEntry      *pYieldEntries_;
 
 
     struct XErrorStackEntry
