@@ -1439,7 +1439,6 @@ static void GetKern(TrueTypeFont *ttf)
         ttf->nkern = GetUInt16(table, 2, 1);
         ttf->kerntables = (const sal_uInt8**)calloc(ttf->nkern, sizeof(sal_uInt8 *));
         assert(ttf->kerntables != 0);
-        memset(ttf->kerntables, 0, ttf->nkern * sizeof(sal_uInt8 *));
         ttf->kerntype = KT_MICROSOFT;
         ptr = table + 4;
         for( unsigned i = 0; i < ttf->nkern; ++i) {
@@ -1457,9 +1456,8 @@ static void GetKern(TrueTypeFont *ttf)
 
     if (GetUInt32(table, 0, 1) == 0x00010000) {                       /* MacOS style kern tables: fixed32 version and sal_uInt32 nTables fields */
         ttf->nkern = GetUInt32(table, 4, 1);
-        ttf->kerntables = (const sal_uInt8**)calloc(ttf->nkern, sizeof(sal_uInt8*));
+        ttf->kerntables = (const sal_uInt8**)calloc(ttf->nkern, sizeof(sal_uInt8 *));
         assert(ttf->kerntables != 0);
-        memset(ttf->kerntables, 0, ttf->nkern * sizeof(sal_uInt8 *));
         ttf->kerntype = KT_APPLE_NEW;
         ptr = table + 8;
         for( unsigned i = 0; i < ttf->nkern; ++i) {
@@ -1624,13 +1622,10 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     if( t->ntables >= 128 )
         return SF_TTFORMAT;
 
-    t->tables = (const sal_uInt8**)calloc(NUM_TAGS, sizeof(sal_uInt8*));
+    t->tables = (const sal_uInt8**)calloc(NUM_TAGS, sizeof(sal_uInt8 *));
     assert(t->tables != 0);
     t->tlens = (sal_uInt32*)calloc(NUM_TAGS, sizeof(sal_uInt32));
     assert(t->tlens != 0);
-
-    memset(t->tables, 0, NUM_TAGS * sizeof(void *));
-    memset(t->tlens, 0, NUM_TAGS * sizeof(sal_uInt32));
 
     /* parse the tables */
     for (i=0; i<(int)t->ntables; i++) {
