@@ -129,7 +129,7 @@ public:
     ~VCLXToolkit();
 
     // ::com::sun::star::awt::XToolkit2
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >      SAL_CALL createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int64 addressOfMemoryBufferForSharedArrayWrapper ) throw
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >      SAL_CALL createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 AddressOfMemoryBufferForSharedArrayWrapper ) throw
 (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XToolkit

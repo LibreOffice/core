@@ -36,7 +36,11 @@ interface XToolkit2: XToolkit
 
   com::sun::star::awt::XDevice createScreenCompatibleDeviceUsingBuffer( [in] long Width,
                                                                         [in] long Height,
-                                                                        [in] hyper addressOfMemoryBufferForSharedArrayWrapper );
+                                                                        [in] long ScaleNumerator,
+                                                                        [in] long ScaleDenominator,
+                                                                        [in] long XOffset,
+                                                                        [in] long YOffset,
+                                                                        [in] hyper AddressOfMemoryBufferForSharedArrayWrapper );
 };
 
 }; }; }; };

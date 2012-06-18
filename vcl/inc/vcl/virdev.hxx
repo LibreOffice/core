@@ -106,7 +106,7 @@ public:
     virtual             ~VirtualDevice();
 
     sal_Bool                SetOutputSizePixel( const Size& rNewSize, sal_Bool bErase = sal_True );
-    sal_Bool                SetOutputSizePixelAndBuffer( const Size& rNewSize, const basebmp::RawMemorySharedArray &pBuffer );
+    sal_Bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer );
     sal_Bool                SetOutputSize( const Size& rNewSize, sal_Bool bErase = sal_True )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }
 

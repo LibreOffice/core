@@ -216,7 +216,7 @@ public:
 
         selection <<= m_xComponent;
 
-        uno::Reference< awt::XDevice > device( m_xToolkit->createScreenCompatibleDeviceUsingBuffer( width, height, buffer ) );
+        uno::Reference< awt::XDevice > device( m_xToolkit->createScreenCompatibleDeviceUsingBuffer( width, height, 1, 1, 0, 0, buffer ) );
 
         beans::PropertyValues renderProps;
 

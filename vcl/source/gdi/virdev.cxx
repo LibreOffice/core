@@ -368,16 +368,15 @@ sal_Bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, sal_Bool bEras
     return ImplSetOutputSizePixel( rNewSize, bErase, basebmp::RawMemorySharedArray() );
 }
 
-sal_Bool VirtualDevice::SetOutputSizePixelAndBuffer( const Size& rNewSize, const basebmp::RawMemorySharedArray &pBuffer )
+sal_Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer )
 {
-    // Is this the place to put in scaling and offsetting, passed in as parameters from createScreenCompatibleDeviceUsingBuffer?
-    // Bogus test just to see that something happens:
-    // if (pBuffer) {
-    //    MapMode mm = GetMapMode();
-    //    mm.SetScaleX(Fraction(4, 1));
-    //    mm.SetScaleY(Fraction(4, 1));
-    //    SetMapMode(mm);
-    //}
+    if (pBuffer) {
+        MapMode mm = GetMapMode();
+        mm.SetOrigin( rNewOffset );
+        mm.SetScaleX( rScale );
+        mm.SetScaleY( rScale );
+        SetMapMode( mm );
+    }
     return ImplSetOutputSizePixel( rNewSize, sal_True, pBuffer);
 }
 

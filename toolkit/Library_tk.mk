@@ -148,4 +148,10 @@ $(eval $(call gb_Library_use_libraries,tk,\
 endif
 endif
 
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Library_use_libraries,tk,\
+    libotouch \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

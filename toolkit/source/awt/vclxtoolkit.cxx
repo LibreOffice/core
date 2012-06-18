@@ -567,10 +567,10 @@ void SAL_CALL VCLXToolkit::disposing()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return createScreenCompatibleDeviceUsingBuffer( Width, Height, 0 );
+    return createScreenCompatibleDeviceUsingBuffer( Width, Height, 1, 1, 0, 0, 0 );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int64 addressOfMemoryBufferForSharedArrayWrapper ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 addressOfMemoryBufferForSharedArrayWrapper ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -583,7 +583,8 @@ void SAL_CALL VCLXToolkit::disposing()
     if ( addressOfMemoryBufferForSharedArrayWrapper != 0 ) {
 #if defined(ANDROID)
         ByteBufferWrapper *bbw = (ByteBufferWrapper *) (intptr_t) addressOfMemoryBufferForSharedArrayWrapper;
-        pV->SetOutputSizePixelAndBuffer( Size( Width, Height ), basebmp::RawMemorySharedArray( bbw->pointer(), *bbw ));
+        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( bbw->pointer(), *bbw ));
+#else
         OSL_FAIL( "rendering to a pre-allocated buffer not done yet for this OS" );
 #endif
     } else {

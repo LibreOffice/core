@@ -44,6 +44,7 @@ import android.widget.ViewFlipper;
 
 import com.polites.android.GestureImageView;
 
+import com.sun.star.awt.Size;
 import com.sun.star.awt.XBitmap;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XDevice;
@@ -202,40 +203,75 @@ public class DocumentLoader
 
     ByteBuffer renderPage(int number)
     {
-        ByteBuffer bb;
-
-        bb = ByteBuffer.allocateDirect(1024*1024*4);
-        long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
-        Log.i(TAG, "bb is " + bb);
-        XDevice device = toolkit.createScreenCompatibleDeviceUsingBuffer(1024, 1024, wrapped_bb);
-
-        dumpUNOObject("device", device);
-
-        PropertyValue renderProps[] = new PropertyValue[3];
-        renderProps[0] = new PropertyValue();
-        renderProps[0].Name = "IsPrinter";
-        renderProps[0].Value = new Boolean(true);
-        renderProps[1] = new PropertyValue();
-        renderProps[1].Name = "RenderDevice";
-        renderProps[1].Value = device;
-        renderProps[2] = new PropertyValue();
-        renderProps[2].Name = "View";
-        renderProps[2].Value = new MyXController();
-
         try {
+            // A small device with no scale of offset just to find out the paper size of this page
+
+            ByteBuffer smallbb = ByteBuffer.allocateDirect(128*128*4);
+            long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
+            XDevice device = toolkit.createScreenCompatibleDeviceUsingBuffer(128, 128, 1, 1, 0, 0, wrapped_smallbb);
+
+            PropertyValue renderProps[] = new PropertyValue[3];
+            renderProps[0] = new PropertyValue();
+            renderProps[0].Name = "IsPrinter";
+            renderProps[0].Value = new Boolean(true);
+            renderProps[1] = new PropertyValue();
+            renderProps[1].Name = "RenderDevice";
+            renderProps[1].Value = device;
+            renderProps[2] = new PropertyValue();
+            renderProps[2].Name = "View";
+            renderProps[2].Value = new MyXController();
+
+            // getRenderer returns a set of properties that include the PageSize
             long t0 = System.currentTimeMillis();
-            renderable.render(number, doc, renderProps);
+            PropertyValue rendererProps[] = renderable.getRenderer(number, doc, renderProps);
             long t1 = System.currentTimeMillis();
+            Log.i(TAG, "renderer properties: (took " + ((t1-t0)-timingOverhead) + " ms)");
+
+            int pageWidth = 0, pageHeight = 0;
+            for (int i = 0; i < rendererProps.length; i++) {
+                if (rendererProps[i].Name.equals("PageSize")) {
+                    pageWidth = ((Size) rendererProps[i].Value).Width;
+                    pageHeight = ((Size) rendererProps[i].Value).Height;
+                    Log.i(TAG, "  PageSize: " + pageWidth + "x" + pageHeight);
+                }
+            }
+
+            // Create a new device with the correct scale and offset
+            ByteBuffer bb = ByteBuffer.allocateDirect(1024*1024*4);
+            long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
+
+            Log.i(TAG, "bb is " + bb);
+
+            if (pageWidth == 0) {
+                // Huh?
+                device = toolkit.createScreenCompatibleDeviceUsingBuffer(1024, 1024, 1, 1, 0, 0, wrapped_bb);
+            } else {
+                // Scale so that it fits our device which has a resolution of 96/in (see
+                // SvpSalGraphics::GetResolution()). The page size returned from getRenderer() is in 1/mm * 100.
+                int scaleDenumerator = Math.max(pageWidth, pageHeight) / 2540 * 96;
+                Log.i(TAG, "Scaling with 1024/" + scaleDenumerator);
+
+                device = toolkit.createScreenCompatibleDeviceUsingBuffer(1024, 1024, 1024, scaleDenumerator, 0, 0, wrapped_bb);
+            }
+
+            // Update the property that points to the device
+            renderProps[1].Value = device;
+
+            t0 = System.currentTimeMillis();
+            renderable.render(number, doc, renderProps);
+            t1 = System.currentTimeMillis();
             Log.i(TAG, "Rendering page " + number + " took " + ((t1-t0)-timingOverhead) + " ms");
+
+            Bootstrap.force_full_alpha_bb(bb, 0, 1024 * 1024 * 4);
+
+            return bb;
         }
         catch (Exception e) {
             e.printStackTrace(System.err);
-            System.exit(1);
+            finish();
         }
 
-        Bootstrap.force_full_alpha_bb(bb, 0, 1024 * 1024 * 4);
-
-        return bb;
+        return null;
     }
 
     class Page
@@ -415,7 +451,7 @@ public class DocumentLoader
 
             ByteBuffer smallbb = ByteBuffer.allocateDirect(128*128*4);
             long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
-            XDevice smalldevice = toolkit.createScreenCompatibleDeviceUsingBuffer(128, 128, wrapped_smallbb);
+            XDevice smalldevice = toolkit.createScreenCompatibleDeviceUsingBuffer(128, 128, 1, 1, 0, 0, wrapped_smallbb);
 
             PropertyValue renderProps[] = new PropertyValue[3];
             renderProps[0] = new PropertyValue();
@@ -428,8 +464,10 @@ public class DocumentLoader
             renderProps[2].Name = "View";
             renderProps[2].Value = new MyXController();
 
+            t0 = System.currentTimeMillis();
             pageCount = renderable.getRendererCount(doc, renderProps);
-            Log.i(TAG, "getRendererCount: " + pageCount);
+            t1 = System.currentTimeMillis();
+            Log.i(TAG, "getRendererCount: " + pageCount + ", took " + ((t1-t0)-timingOverhead) + " ms");
 
             flipper = new ViewFlipper(this);
 
@@ -450,7 +488,7 @@ public class DocumentLoader
         }
         catch (Exception e) {
             e.printStackTrace(System.err);
-            System.exit(1);
+            finish();
         }
     }
 

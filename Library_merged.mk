@@ -75,6 +75,12 @@ $(eval $(call gb_Library_use_libraries,merged,\
 ))
 endif
 
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Library_use_libraries,merged,\
+	libotouch \
+))
+endif
+
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_libraries,merged,\
     objc \
