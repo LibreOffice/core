@@ -281,16 +281,16 @@ struct QuickHelpData
     sal_uInt16 nLen;
 
     /// Help data stores AutoText names rather than AutoComplete words.
-    sal_Bool bIsAutoText : 1;
+    bool m_bIsAutoText;
     /// Display help string as a tip rather than inline.
-    sal_Bool bIsTip : 1;
+    bool m_bIsTip;
     /// Tip ID when a help string is displayed as a tip.
     sal_uLong nTipId;
     /// Append a space character to the displayed help string (if appropriate).
-    sal_Bool bChkInsBlank : 1;
+    bool m_bAppendSpace;
 
     /// Help string is currently displayed.
-    sal_Bool bClear : 1;
+    bool m_bIsDisplayed;
 
     sal_uInt16* pAttrs;
     CommandExtTextInputData* pCETID;
@@ -307,12 +307,12 @@ struct QuickHelpData
     void Inc( sal_Bool bEndLess )
     {
         if( ++nCurArrPos >= m_aHelpStrings.size() )
-            nCurArrPos = (bEndLess && !bIsAutoText ) ? 0 : nCurArrPos-1;
+            nCurArrPos = (bEndLess && !m_bIsAutoText ) ? 0 : nCurArrPos-1;
     }
     void Dec( sal_Bool bEndLess )
     {
         if( 0 == nCurArrPos-- )
-            nCurArrPos = (bEndLess && !bIsAutoText ) ? m_aHelpStrings.size()-1 : 0;
+            nCurArrPos = (bEndLess && !m_bIsAutoText ) ? m_aHelpStrings.size()-1 : 0;
     }
     void FillStrArr( SwWrtShell& rSh, const String& rWord );
     void SortAndFilter();
@@ -1352,7 +1352,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     eBufferLanguage = eNewLanguage;
 
     QuickHelpData aTmpQHD;
-    if( pQuickHlpData->bClear )
+    if( pQuickHlpData->m_bIsDisplayed )
     {
         aTmpQHD.Move( *pQuickHlpData );
         pQuickHlpData->Stop( rSh );
@@ -1374,8 +1374,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     sal_Bool bFlushBuffer = sal_False;
     sal_Bool bNormalChar = sal_False;
-    sal_Bool bChkInsBlank = pQuickHlpData->bChkInsBlank;
-    pQuickHlpData->bChkInsBlank = sal_False;
+    bool bAppendSpace = pQuickHlpData->m_bAppendSpace;
+    pQuickHlpData->m_bAppendSpace = false;
 
     if ( getenv("SW_DEBUG") && rKEvt.GetKeyCode().GetCode() == KEY_F12 )
     {
@@ -1615,7 +1615,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             else
             {
                 if( pACorr && aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
-                    !rSh.HasReadonlySel() && !aTmpQHD.bIsAutoText &&
+                    !rSh.HasReadonlySel() && !aTmpQHD.m_bIsAutoText &&
                     pACorr->GetSwFlags().nAutoCmpltExpandKey ==
                     (rKeyCode.GetModifier() | rKeyCode.GetCode()) )
                 {
@@ -1831,7 +1831,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1)
                             eKeyState = KS_GoIntoDrawing;
                         else if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
-                            aTmpQHD.bIsAutoText )
+                            aTmpQHD.m_bIsAutoText )
                             eKeyState = KS_GlossaryExpand;
 
                         //RETURN and empty paragraph in numbering -> end numbering
@@ -2323,7 +2323,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             {
                 sal_Bool bIsNormalChar = GetAppCharClass().isLetterNumeric(
                                                             String( aCh ), 0 );
-                if( bChkInsBlank && bIsNormalChar &&
+                if( bAppendSpace && bIsNormalChar &&
                     (aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
                 {
                     // insert a blank ahead of the character. this ends up
@@ -2485,7 +2485,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 rSh.StartUndo( UNDO_START );
 
                 String sFnd( aTmpQHD.m_aHelpStrings[ aTmpQHD.nCurArrPos ] );
-                if( aTmpQHD.bIsAutoText )
+                if( aTmpQHD.m_bIsAutoText )
                 {
                     SwGlossaryList* pList = ::GetGlossaryList();
                     String sShrtNm;
@@ -2497,13 +2497,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         SwGlossaryHdl* pGlosHdl = GetView().GetGlosHdl();
                         pGlosHdl->SetCurGroup(sGroup, sal_True);
                         pGlosHdl->InsertGlossary( sShrtNm);
-                        pQuickHlpData->bChkInsBlank = sal_True;
+                        pQuickHlpData->m_bAppendSpace = true;
                     }
                 }
                 else
                 {
                     rSh.Insert( sFnd.Erase( 0, aTmpQHD.nLen ));
-                    pQuickHlpData->bChkInsBlank = !pACorr ||
+                    pQuickHlpData->m_bAppendSpace = !pACorr ||
                             pACorr->GetSwFlags().bAutoCmpltAppendBlanc;
                 }
                 rSh.EndUndo( UNDO_END );
@@ -2697,9 +2697,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
     sal_Bool bCallBase = sal_True;
 
-    if( pQuickHlpData->bClear )
+    if( pQuickHlpData->m_bIsDisplayed )
         pQuickHlpData->Stop( rSh );
-    pQuickHlpData->bChkInsBlank = sal_False;
+    pQuickHlpData->m_bAppendSpace = false;
 
     if( rSh.FinishOLEObj() )
         return; // end InPlace and the click doesn't count anymore
@@ -4620,7 +4620,7 @@ SwEditWin::~SwEditWin()
     aKeyInputTimer.Stop();
     delete pShadCrsr;
     delete pRowColumnSelectionStart;
-    if( pQuickHlpData->bClear && rView.GetWrtShellPtr() )
+    if( pQuickHlpData->m_bIsDisplayed && rView.GetWrtShellPtr() )
         pQuickHlpData->Stop( rView.GetWrtShell() );
     bExecuteDrag = sal_False;
     delete pApplyTempl;
@@ -4714,7 +4714,7 @@ void SwEditWin::LoseFocus()
 {
     rView.GetWrtShell().InvalidateAccessibleFocus();
     Window::LoseFocus();
-    if( pQuickHlpData->bClear )
+    if( pQuickHlpData->m_bIsDisplayed )
         pQuickHlpData->Stop( rView.GetWrtShell() );
     rView.LostFocus();
 }
@@ -4994,7 +4994,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         if(!bIsDocReadOnly)
         {
             QuickHelpData aTmpQHD;
-            if( pQuickHlpData->bClear )
+            if( pQuickHlpData->m_bIsDisplayed )
             {
                 aTmpQHD.Move( *pQuickHlpData );
                 pQuickHlpData->Stop( rSh );
@@ -5429,7 +5429,7 @@ void SwEditWin::_FinitStaticData()
  * of autocorrection suggestions */
 void SwEditWin::StopQuickHelp()
 {
-    if( HasFocus() && pQuickHlpData && pQuickHlpData->bClear  )
+    if( HasFocus() && pQuickHlpData && pQuickHlpData->m_bIsDisplayed  )
         pQuickHlpData->Stop( rView.GetWrtShell() );
 }
 
@@ -5479,12 +5479,12 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
     m_aHelpStrings.clear();
     m_aHelpStrings.swap( rCpy.m_aHelpStrings );
 
-    bClear = rCpy.bClear;
+    m_bIsDisplayed = rCpy.m_bIsDisplayed;
     nLen = rCpy.nLen;
     nCurArrPos = rCpy.nCurArrPos;
-    bChkInsBlank = rCpy.bChkInsBlank;
-    bIsTip = rCpy.bIsTip;
-    bIsAutoText = rCpy.bIsAutoText;
+    m_bAppendSpace = rCpy.m_bAppendSpace;
+    m_bIsTip = rCpy.m_bIsTip;
+    m_bIsAutoText = rCpy.m_bIsAutoText;
 
     delete pCETID;
     pCETID = rCpy.pCETID;
@@ -5498,11 +5498,11 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
 void QuickHelpData::ClearCntnt()
 {
     nLen = nCurArrPos = 0;
-    bClear = bChkInsBlank = sal_False;
+    m_bIsDisplayed = m_bAppendSpace = false;
     nTipId = 0;
     m_aHelpStrings.clear();
-    bIsTip = sal_True;
-    bIsAutoText = sal_True;
+    m_bIsTip = true;
+    m_bIsAutoText = true;
     delete pCETID, pCETID = 0;
     delete[] pAttrs, pAttrs = 0;
 }
@@ -5520,10 +5520,10 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
         nLen = nWrdLen;
         nCurArrPos = 0;
     }
-    bClear = sal_True;
+    m_bIsDisplayed = true;
 
     Window& rWin = rSh.GetView().GetEditWin();
-    if( bIsTip )
+    if( m_bIsTip )
     {
         Point aPt( rWin.OutputToScreenPixel( rWin.LogicToPixel(
                     rSh.GetCharRect().Pos() )));
@@ -5561,7 +5561,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
 
 void QuickHelpData::Stop( SwWrtShell& rSh )
 {
-    if( !bIsTip )
+    if( !m_bIsTip )
         rSh.DeleteExtTextInput( 0, sal_False );
     else if( nTipId )
         Help::HideTip( nTipId );
@@ -5710,13 +5710,13 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
 
     if( !pQuickHlpData->m_aHelpStrings.empty() )
     {
-        pQuickHlpData->bIsTip = sal_True;
-        pQuickHlpData->bIsAutoText = sal_True;
+        pQuickHlpData->m_bIsTip = true;
+        pQuickHlpData->m_bIsAutoText = true;
     }
     else if( pACorr->GetSwFlags().bAutoCompleteWords )
     {
-        pQuickHlpData->bIsAutoText = sal_False;
-        pQuickHlpData->bIsTip = bFromIME ||
+        pQuickHlpData->m_bIsAutoText = false;
+        pQuickHlpData->m_bIsTip = bFromIME ||
                     !pACorr ||
                     pACorr->GetSwFlags().bAutoCmpltShowAsTip;
 
