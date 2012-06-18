@@ -636,7 +636,7 @@ public:
 
 }
 
-void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount)
+void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount)
 {
     if (!GetModel().is())
         return;
@@ -812,7 +812,7 @@ void ScXMLExport::_ExportMeta()
     sal_Int32 nTableCount(0);
     sal_Int32 nShapesCount(0);
     GetAutoStylePool()->ClearEntries();
-    CollectSharedData(nTableCount, nShapesCount, nCellCount);
+    CollectSharedData(nTableCount, nShapesCount);
 
     uno::Sequence<beans::NamedValue> stats(3);
     stats[0] = beans::NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount")),
@@ -1673,8 +1673,7 @@ void ScXMLExport::_ExportContent()
     {
         sal_Int32 nTableCount(0);
         sal_Int32 nShapesCount(0);
-        sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
-        CollectSharedData(nTableCount, nShapesCount, nCellCount);
+        CollectSharedData(nTableCount, nShapesCount);
         OSL_FAIL("no shared data setted");
     }
     ScXMLExportDatabaseRanges aExportDatabaseRanges(*this);
@@ -1763,8 +1762,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
     {
         sal_Int32 nTableCount(0);
         sal_Int32 nShapesCount(0);
-        sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
-        CollectSharedData(nTableCount, nShapesCount, nCellCount);
+        CollectSharedData(nTableCount, nShapesCount);
     }
     ScXMLStyleExport aStylesExp(*this, rtl::OUString(), GetAutoStylePool().get());
     if (GetModel().is())
@@ -2336,8 +2334,7 @@ void ScXMLExport::_ExportAutoStyles()
         {
             sal_Int32 nTableCount(0);
             sal_Int32 nShapesCount(0);
-            sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
-            CollectSharedData(nTableCount, nShapesCount, nCellCount);
+            CollectSharedData(nTableCount, nShapesCount);
         }
         sal_Int32 nTableCount(xIndex->getCount());
         pCellStyles->AddNewTable(nTableCount - 1);
