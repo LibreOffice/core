@@ -66,7 +66,7 @@ public class MethodInvocation
 
     public MethodInvocation(String methodName, Object obj, Class paramClass) throws NoSuchMethodException
     {
-        this(paramClass == null ? obj.getClass().getMethod(methodName, null) : obj.getClass().getMethod(methodName, new Class[]
+        this(paramClass == null ? obj.getClass().getMethod(methodName, (Class[])null) : obj.getClass().getMethod(methodName, new Class[]
                 {
                     paramClass
                 }), obj, paramClass);
@@ -91,7 +91,7 @@ public class MethodInvocation
         }
         else
         {
-            return mMethod.invoke(mObject, EMPTY_ARRAY);
+            return mMethod.invoke(mObject, (Object[])EMPTY_ARRAY);
         }
     }
 

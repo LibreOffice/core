@@ -313,7 +313,7 @@ public abstract class DataAware {
          */
         public Object get(Object target) {
             try {
-                return getMethod.invoke(target, EMPTY_ARRAY);
+                return getMethod.invoke(target, (Object[])EMPTY_ARRAY);
             } catch (IllegalAccessException ex1) {
                 ex1.printStackTrace();
             } catch (InvocationTargetException ex2) {
