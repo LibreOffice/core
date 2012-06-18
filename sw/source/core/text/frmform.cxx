@@ -513,8 +513,8 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::AdjustFollow()
- * AdjustFollow expects the following situtation:
+ * SwTxtFrm::AdjustFollow()
+ * AdjustFollow expects the following situation:
  * The SwTxtIter points to the lower end of the Master, the Offset is set in
  * the Follow.
  * nOffset holds the Offset in the text string, from which the Master closes
@@ -529,8 +529,8 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
     SwFrmSwapper aSwapper( this, sal_False );
 
     // We got the rest of the text mass: Delete all Follows
-    // DummyPortions() are a special caseSonderfall
-    // - special cases are controlled by parameter <nMode>.
+    // DummyPortions() are a special case.
+    // Special cases are controlled by parameter <nMode>.
     if( HasFollow() && !(nMode & 1) && nOffset == nEnd )
     {
         while( GetFollow() )
@@ -546,7 +546,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         return;
     }
 
-    // Dancing on the vulcano: We'll just format the last line quickly
+    // Dancing on the volcano: We'll just format the last line quickly
     // for the QuoVadis stuff.
     // The Offset can move of course:
     const xub_StrLen nNewOfst = ( IsInFtn() && ( !GetIndNext() || HasFollow() ) ) ?
@@ -585,7 +585,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
 
     SwTxtFrm *pNxt = pFoll->GetFollow();
 
-    // All footnotes of the to-be-destroyed Follow are reloacted to us
+    // All footnotes of the to-be-destroyed Follow are relocated to us
     xub_StrLen nStart = pFoll->GetOfst();
     if ( pFoll->HasFtn() )
     {
@@ -679,7 +679,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     }
 
     // If footnotes end up in pNew bz our actions, we need
-    // to reregister them
+    // to re-register them
     if ( HasFtn() )
     {
         const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
@@ -1289,7 +1289,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // Optimization: If rReformat starts after the first word of the line
     // this line cannot possibly influence the previous one.
     // Unfortunately it can: Text size changes + FlyFrames.
-    // The backlash can affact multiple lines (Frame!)!
+    // The backlash can affect multiple lines (Frame!)!
 
     // #i46560#
     // FME: Yes, consider this case: (word) has to go to the next line
@@ -1554,8 +1554,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         if( rRepaint.HasArea() )
             SetRepaint();
         rLine.SetTruncLines( sal_False );
-        if( nOldBottom )                    // We check if, for paragraphs that need scrolling
-                                            // can be shrunk, so that the don't need scrolling anymore
+        if( nOldBottom ) // We check whether paragraphs that need scrolling can
+                         // be shrunk, so that they don't need scrolling anymore
         {
             rLine.Bottom();
             SwTwips nNewBottom = rLine.Y();
@@ -1698,7 +1698,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
     CalcAdditionalFirstLineOffset();
 
-    // The raneg autopilot or the BASIC interface pass us TxtFrms with
+    // The range autopilot or the BASIC interface pass us TxtFrms with
     // a width <= 0 from time to time
     if( (Prt().*fnRect->fnGetWidth)() <= 0 )
     {
@@ -1769,7 +1769,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
         if( CalcPreps() )
             ; // nothing
-        // We return if already formated, but if the TxtFrm was just created
+        // We return if already formatted, but if the TxtFrm was just created
         // and does not have any format information
         else if( !bNew && !aAccess.GetPara()->GetReformat()->Len() )
         {
