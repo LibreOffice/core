@@ -33,6 +33,10 @@ $(eval $(call gb_Library_add_exception_objects,libotouch,\
 
 ifeq ($(OS),ANDROID)
 
+$(eval $(call gb_Library_use_libraries,libotouch,\
+	lo-bootstrap \
+))
+
 $(eval $(call gb_Library_add_exception_objects,libotouch,\
 	touch/source/android/android \
 ))

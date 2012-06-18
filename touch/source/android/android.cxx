@@ -10,8 +10,42 @@
 #include <jni.h>
 
 #include <sal/ByteBufferWrapper.hxx>
+#include <osl/detail/android-bootstrap.h>
 
 using org::libreoffice::touch::ByteBufferWrapper;
+
+static JNIEnv *get_env()
+{
+    JavaVMAttachArgs args = {
+        JNI_VERSION_1_2,
+        NULL,
+        NULL
+    };
+
+    JavaVM *jvm = lo_get_javavm();
+    JNIEnv *env = NULL;
+
+    jvm->AttachCurrentThread(&env, &args);
+    return env;
+}
+
+__attribute__ ((visibility("default")))
+ByteBufferWrapper::ByteBufferWrapper(JNIEnv *env, jobject o)
+{
+    object = env->NewGlobalRef(o);
+}
+
+__attribute__ ((visibility("default")))
+sal_uInt8* ByteBufferWrapper::pointer()
+{
+    return (sal_uInt8 *) get_env()->GetDirectBufferAddress(object);
+}
+
+__attribute__ ((visibility("default")))
+void ByteBufferWrapper::operator()(sal_uInt8 * /* p */)
+{
+    get_env()->DeleteGlobalRef(object);
+}
 
 extern "C"
 __attribute__ ((visibility("default")))

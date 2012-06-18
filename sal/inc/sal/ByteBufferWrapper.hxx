@@ -21,25 +21,14 @@ namespace org { namespace libreoffice { namespace touch {
 class ByteBufferWrapper
 {
 private:
-  JNIEnv *env;
-  jobject object;
+    jobject object;
 
 public:
-  ByteBufferWrapper(JNIEnv *e, jobject o) :
-    env(e)
-  {
-    object = env->NewGlobalRef(o);
-  }
+    ByteBufferWrapper(JNIEnv *env, jobject o);
 
-  sal_uInt8* pointer()
-  {
-    return (sal_uInt8 *) env->GetDirectBufferAddress(object);
-  }
+    sal_uInt8* pointer();
 
-  void operator()(sal_uInt8 * /* p */)
-  {
-    env->DeleteGlobalRef(object);
-  }
+    void operator()(sal_uInt8 *p);
 };
 
 }; }; };
