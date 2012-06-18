@@ -37,6 +37,9 @@ import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /**
 * Testing <code>com.sun.star.ucb.XSimpleFileAccess</code>
 * interface methods. <p>
@@ -347,28 +350,30 @@ public class _XSimpleFileAccess extends MultiMethodTest {
             java.io.File the_file = new java.io.File(filename);
             long lastModified = the_file.lastModified();
             java.util.Date lastMod = new java.util.Date(lastModified);
+            GregorianCalendar lastModCal = new GregorianCalendar();
+            lastModCal.setTime(lastMod);
 
             //compare the dates gained by java with those gained by this method
             boolean res = true;
-            boolean partResult = (fTime.Day == lastMod.getDay());
+            boolean partResult = (fTime.Day == lastModCal.get(Calendar.DAY_OF_WEEK));
             if (!partResult) {
                 log.println("Wrong Day");
-                log.println("Expected: "+lastMod.getDay());
+                log.println("Expected: "+lastModCal.get(Calendar.DAY_OF_WEEK));
                 log.println("Gained: "+fTime.Day);
                 log.println("------------------------------");
             }
-            partResult = (fTime.Month == lastMod.getMonth());
+            partResult = (fTime.Month == lastModCal.get(Calendar.MONTH));
             if (!partResult) {
                 log.println("Wrong Month");
-                log.println("Expected: "+lastMod.getMonth());
+                log.println("Expected: "+lastModCal.get(Calendar.MONTH));
                 log.println("Gained: "+fTime.Month);
                 log.println("------------------------------");
             }
 
-            partResult = (fTime.Year == lastMod.getYear());
+            partResult = (fTime.Year == (lastModCal.get(Calendar.MONTH) - 1900));
             if (!partResult) {
                 log.println("Wrong Year");
-                log.println("Expected: "+lastMod.getYear());
+                log.println("Expected: "+(lastModCal.get(Calendar.MONTH) - 1900));
                 log.println("Gained: "+fTime.Year);
                 log.println("------------------------------");
             }
