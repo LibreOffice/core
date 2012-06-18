@@ -270,14 +270,30 @@ public:
     }
 };
 
+/// Assists with auto-completion of AutoComplete words and AutoText names.
 struct QuickHelpData
 {
+    /// Strings that at least partially match an input word.
     std::vector<String> m_aHelpStrings;
+    /// Index of the current help string.
+    sal_uInt16 nCurArrPos;
+    /// Length of the input word associated with the help data.
+    sal_uInt16 nLen;
+
+    /// Help data stores AutoText names rather than AutoComplete words.
+    sal_Bool bIsAutoText : 1;
+    /// Display help string as a tip rather than inline.
+    sal_Bool bIsTip : 1;
+    /// Tip ID when a help string is displayed as a tip.
+    sal_uLong nTipId;
+    /// Append a space character to the displayed help string (if appropriate).
+    sal_Bool bChkInsBlank : 1;
+
+    /// Help string is currently displayed.
+    sal_Bool bClear : 1;
+
     sal_uInt16* pAttrs;
     CommandExtTextInputData* pCETID;
-    sal_uLong nTipId;
-    sal_uInt16 nLen, nCurArrPos;
-    sal_Bool bClear : 1, bChkInsBlank : 1, bIsTip : 1, bIsAutoText : 1;
 
     QuickHelpData() : pAttrs( 0 ), pCETID( 0 ) { ClearCntnt(); }
 
