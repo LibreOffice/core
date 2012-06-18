@@ -226,7 +226,7 @@ enum AlwaysInputMode { AlwaysInputNone = 0, AlwaysInputEnabled = 1, AlwaysInputD
 class WindowImpl
 {
 public:
-    WindowImpl();
+    WindowImpl( WindowType );
     ~WindowImpl();
 
     ImplWinData*        mpWinData;
