@@ -5690,12 +5690,8 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
         pList->HasLongName( rWord, &pQuickHlpData->m_aHelpStrings );
     }
 
-    if( !pQuickHlpData->m_aHelpStrings.empty() )
-    {
-        pQuickHlpData->m_bIsTip = true;
-        pQuickHlpData->m_bIsAutoText = true;
-    }
-    else if( pACorr->GetSwFlags().bAutoCompleteWords )
+    if( pQuickHlpData->m_aHelpStrings.empty() &&
+        pACorr->GetSwFlags().bAutoCompleteWords )
     {
         pQuickHlpData->m_bIsAutoText = false;
         pQuickHlpData->m_bIsTip = bFromIME ||
