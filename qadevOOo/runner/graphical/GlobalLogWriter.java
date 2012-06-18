@@ -44,10 +44,6 @@ public class GlobalLogWriter
         get().println(_sMsg);
     }
 
-    /**
-     * @deprecated use GlobalLogWriter.println(...) direct
-     * @return
-     */
     protected static synchronized LogWriter get()
         {
             if (m_aGlobalLogWriter == null)

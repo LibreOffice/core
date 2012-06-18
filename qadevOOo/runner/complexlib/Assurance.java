@@ -409,9 +409,9 @@ public class Assurance
         assure(msg, false, cont);
     }
 
-    /**
-     * @deprecated
-     */
+//    /**
+//     * @deprecated
+//     */
 //    protected void addResult(String message, boolean state) {
 //        String msg = message + " - " + state;
 //        this.state &= state;

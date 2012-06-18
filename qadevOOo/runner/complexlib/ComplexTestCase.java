@@ -190,7 +190,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 if (th.isAlive())
                 {
                     log.println("Destroy " + mTestMethodName);
-                    th.destroy();
+                    th.stopRunning();
                     subEntry.State = "Test did sleep for " + (m_nThreadTimeOut / 1000) + " seconds and has been killed!";
                     subEntry.hasErrorMsg = true;
                     subEntry.ErrorMsg = subEntry.State;

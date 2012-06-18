@@ -95,8 +95,17 @@ public class MethodThread extends Thread
 
     /**
      * Stop the running method.
+     * @deprecated
      */
     public void destroy()
+    {
+        stop();
+    }
+
+    /**
+     * Stop the running method.
+     */
+    public void stopRunning()
     {
         try
         {
