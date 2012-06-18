@@ -2152,12 +2152,16 @@ Size TabControl::GetOptimalSize(WindowSizeType eType) const
             if (aPageSize.Height() > aOptimalPageSize.Height())
                 aOptimalPageSize.Height() = aPageSize.Height();
 
-            sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
             TabControl* pThis = const_cast<TabControl*>(this);
+
+            sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
             Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aPageSize.Width(), aPageSize.Height());
             if (aTabRect.Bottom() > nTabLabelsBottom)
                 nTabLabelsBottom = aTabRect.Bottom();
-            nTotalTabLabelWidths += aTabRect.GetWidth();
+
+            ImplTabItem* pItem = const_cast<ImplTabItem*>(&(*it));
+            Size aTabSize = pThis->ImplGetItemSize(pItem, LONG_MAX);
+            nTotalTabLabelWidths += aTabSize.Width();
         }
 
         Size aOptimalSize(aOptimalPageSize);
