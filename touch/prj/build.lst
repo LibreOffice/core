@@ -1,2 +1,2 @@
-th	touch : sw sc NULL
+th	touch : sal NULL
 th touch\prj nmake - all th_prj NULL
