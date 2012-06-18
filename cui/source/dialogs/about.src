@@ -27,37 +27,43 @@ ModalDialog RID_DEFAULTABOUT
 {
     HelpID = "cui:ModalDialog:RID_DEFAULTABOUT";
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 245 , 260 ) ;
     Moveable = TRUE ;
     SVLook = TRUE ;
-    Text [ x-comment ] = "PB: ; PB: only %PRODUCTNAME";
     Text [ en-US ] = "About %PRODUCTNAME" ;
-    OKButton ABOUT_BTN_OK
+    OKButton RID_CUI_ABOUT_BTN_OK
     {
         DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 174 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    FixedText ABOUT_FTXT_VERSION
+    FixedText RID_CUI_ABOUT_FTXT_VERSION
     {
-        Pos = MAP_APPFONT ( 54 , 6 ) ;
-        Size = MAP_APPFONT ( 118 , 16 ) ;
         WordBreak = TRUE ;
         Text = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION" ;
     };
-    MultiLineEdit ABOUT_FTXT_COPYRIGHT
+    MultiLineEdit RID_CUI_ABOUT_FTXT_BUILDDATA
+   {
+        //HelpID = "cui:MultiLineEdit:RID_DEFAULTABOUT:ABOUT_FTXT_BUILDDATA";
+        Border = FALSE ;
+        IgnoreTab = TRUE ;
+        ReadOnly = TRUE ;
+        AutoVScroll = FALSE ;
+    };
+    MultiLineEdit RID_CUI_ABOUT_FTXT_COPYRIGHT
     {
         HelpID = "cui:MultiLineEdit:RID_DEFAULTABOUT:ABOUT_FTXT_COPYRIGHT";
         Border = FALSE ;
-        Pos = MAP_APPFONT ( 54 , 25 ) ;
-        Size = MAP_APPFONT ( 168 , 51 ) ;
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
-        AutoVScroll = TRUE ;
+        AutoVScroll = FALSE ;
     };
-    String ABOUT_STR_ACCEL
+    FixedText RID_CUI_ABOUT_FTXT_WELCOME_LINK
     {
-        Text = "SDT" ;
+        Left = TRUE ;
+        Text = "http://www.openoffice.org/welcome/credits.html";
+    };
+    String RID_CUI_ABOUT_STR_COPYRIGHT
+    {
+        Text[ en-US ] = "Copyright © 2012 Apache Software Foundation.\nAll rights reserved.\n\nThis product was created by %OOOVENDOR, based on Apache OpenOffice.\nApache OpenOffice acknowledges all community members, especially those mentioned at";
     };
 };
 

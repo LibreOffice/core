@@ -45,209 +45,61 @@
 #include <dialmgr.hxx>
 #include <svtools/svtools.hrc>
 
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+
 // defines ---------------------------------------------------------------
 
-#define SCROLL_OFFSET   1
-#define SPACE_OFFSET    5
-#define SCROLL_TIMER    30
-
-#define WELCOME_URL     DEFINE_CONST_UNICODE( "http://www.openoffice.org/welcome/credits.html" )
-
-// class AboutDialog -----------------------------------------------------
-static void layoutText( FixedInfo &rText, long &nY, long nTextWidth, Size a6Size )
-{
-    Point aTextPos = rText.GetPosPixel();
-    aTextPos.X() = a6Size.Width() * 2;
-    aTextPos.Y() = nY;
-    rText.SetPosPixel( aTextPos );
-
-    Size aTxtSiz = rText.GetSizePixel();
-    aTxtSiz.Width() = nTextWidth;
-    Size aCalcSize = rText.CalcMinimumSize( nTextWidth );
-    aTxtSiz.Height() = aCalcSize.Height();
-    rText.SetSizePixel( aTxtSiz );
-
-    nY += aTxtSiz.Height();
-}
-
-String InitDevVersionStr()
-{
-    String sDefault;
-    String sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
-    OSL_ENSURE( sBuildId.Len() > 0, "No BUILDID in bootstrap file" );
-
-    String sProductSource( utl::Bootstrap::getProductSource( sDefault ) );
-    OSL_ENSURE( sProductSource.Len() > 0, "No ProductSource in bootstrap file" );
-
-    // the product source is something like "DEV300", where the
-    // build id is something like "300m12(Build:12345)". For better readability,
-    // strip the duplicate UPD ("300").
-    if ( sProductSource.Len() )
-    {
-        bool bMatchingUPD =
-                ( sProductSource.Len() >= 3 )
-            &&  ( sBuildId.Len() >= 3 )
-            &&  ( sProductSource.Copy( sProductSource.Len() - 3 ) == sBuildId.Copy( 0, 3 ) );
-        OSL_ENSURE( bMatchingUPD, "BUILDID and ProductSource do not match in their UPD" );
-        if ( bMatchingUPD )
-            sProductSource = sProductSource.Copy( 0, sProductSource.Len() - 3 );
-
-        // prepend the product source
-        sBuildId.Insert( sProductSource, 0 );
-    }
-
-    return sBuildId;
-}
-
-AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
-
-    SfxModalDialog  ( pParent,  rId ),
-
-    aOKButton       ( this,     ResId( ABOUT_BTN_OK, *rId.GetResMgr() ) ),
-    aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
-    aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
-    aBuildData      ( this ),
-    pDeveloperAry(0),
-    aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
-    aTimer          (),
-    nOff            ( 0 ),
-    m_nDeltaWidth   ( 0 ),
-    m_nPendingScrolls( 0 ),
-    bNormal         ( sal_True )
-{
-    aDevVersionStr = InitDevVersionStr();
-
-    ::com::sun::star::lang::Locale aLocale;
-    ResMgr* pResMgr = ResMgr::SearchCreateResMgr( "about", aLocale );
-    if ( pResMgr )
-    {
-        aCopyrightTextStr = String( ResId( ABOUT_STR_COPYRIGHT, *pResMgr ) );
-        pDeveloperAry = new ResStringArray( ResId( ABOUT_STR_DEVELOPER_ARY, *pResMgr ) );
-        delete pResMgr;
-    }
-
-    rtl::OUString sProduct;
-    utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
-
-    // load image from module path
-    aAppLogo = SfxApplication::GetApplicationLogo();
-
-    // Transparenter Font
-    Font aFont = GetFont();
-    aFont.SetTransparent( sal_True );
-    SetFont( aFont );
-
-    // if necessary more info
-    String sVersion = aVersionText.GetText();
-    sVersion.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
-    aVersionText.SetText( sVersion );
-
-    // Initialisierung fuer Aufruf Entwickler
-    if ( aAccelStr.Len() && ByteString(U2S(aAccelStr)).IsAlphaAscii() )
-    {
-        Accelerator *pAccel = 0, *pPrevAccel = 0, *pFirstAccel = 0;
-        aAccelStr.ToUpperAscii();
-
-        for ( sal_uInt16 i = 0; i < aAccelStr.Len(); ++i )
-        {
-            pPrevAccel = pAccel;
-            pAccel = new Accelerator;
-            aAccelList.Insert( pAccel, LIST_APPEND );
-            sal_uInt16 nKey = aAccelStr.GetChar(i) - 'A' + KEY_A;
-            pAccel->InsertItem( 1, KeyCode( nKey, KEY_MOD1 ) );
-            if ( i > 0 )
-                pPrevAccel->SetAccel( 1, pAccel );
-            if ( i == 0 )
-                pFirstAccel = pAccel;
-        }
-        pAccel->SetSelectHdl( LINK( this, AboutDialog, AccelSelectHdl ) );
-        GetpApp()->InsertAccel( pFirstAccel );
-    }
-
-    // set for background and text the correct system color
-    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    Color aWhiteCol( rSettings.GetWindowColor() );
-    Wallpaper aWall( aWhiteCol );
-    SetBackground( aWall );
-    Font aNewFont( aCopyrightText.GetFont() );
-    aNewFont.SetTransparent( sal_True );
-
-    aVersionText.SetFont( aNewFont );
-    aCopyrightText.SetFont( aNewFont );
-
-    aVersionText.SetBackground();
-    aCopyrightText.SetBackground();
-
-    Color aTextColor( rSettings.GetWindowTextColor() );
-    aVersionText.SetControlForeground( aTextColor );
-    aCopyrightText.SetControlForeground( aTextColor );
-    aBuildData.SetBackground( );
-
-    Font aSmallFont = rSettings.GetInfoFont();
-    Size aSmaller = aNewFont.GetSize();
-    aSmaller.Width() = (long) (aSmaller.Width() * 0.75);
-    aSmaller.Height() = (long) (aSmaller.Height() * 0.75);
-    aNewFont.SetSize( aSmaller );
-    aBuildData.SetFont( aNewFont );
-
-    String sRevision( utl::Bootstrap::getRevisionInfo() );
-
-    String aBuildString(aDevVersionStr);
-    aBuildString += (DEFINE_CONST_UNICODE("  -  Rev. "));
-    aBuildString += sRevision;
-
-#ifdef BUILD_VER_STRING
 #define _STRINGIFY(x) #x
 #define STRINGIFY(x) _STRINGIFY(x)
-    aBuildString += '\n';
-    aBuildString += ( DEFINE_CONST_UNICODE( STRINGIFY( BUILD_VER_STRING ) ) );
-#endif
-    aBuildData.SetText( aBuildString );
-    aBuildData.Show();
 
-    // determine size and position of the dialog & elements
-    Size aAppLogoSiz = aAppLogo.GetSizePixel();
-    Size aOutSiz     = GetOutputSizePixel();
-    aOutSiz.Width()  = aAppLogoSiz.Width();
+// -----------------------------------------------------------------------
 
-    Size a6Size      = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
-    long nDlgMargin  = a6Size.Width() * 4 ;
-    long nCtrlMargin = a6Size.Height() * 2;
-    long nTextWidth  = aOutSiz.Width() - nDlgMargin;
+static void layoutFixedText( FixedText &rControl, const Point& aPos, Size &aSize, const long nTextWidth )
+{
+    aSize = rControl.GetSizePixel();
+    // change the width
+    aSize.Width() = nTextWidth;
+    // set Position and Size, to calculate the minimum size
+    // this will update the Height
+    rControl.SetPosSizePixel( aPos, aSize );
+    aSize = rControl.CalcMinimumSize();
+    // update the size with the right Height
+    rControl.SetSizePixel( aSize );
+}
 
-    aCopyrightText.SetText( aCopyrightTextStr );
+static void layoutEdit( Edit &rControl, const Point& aPos, Size &aSize, const long nTextWidth )
+{
+    aSize = rControl.GetSizePixel();
+    // change the width
+    aSize.Width() = nTextWidth;
+    // set Position and Size, to calculate the minimum size
+    // this will update the Height
+    rControl.SetPosSizePixel( aPos, aSize );
+    aSize = rControl.CalcMinimumSize();
+    // update the size with the right Height
+    rControl.SetSizePixel( aSize );
+}
 
-    // layout fixed text controls
-    layoutText( aVersionText, nY, nTextWidth, a6Size );
-    if( aBuildString.Len() > 0 )
-    {
-        nY += ( a6Size.Height() / 2 );
-        layoutText( aBuildData, nY, nTextWidth, a6Size );
-    }
-    nY += nCtrlMargin;
+// -----------------------------------------------------------------------
 
-    // OK-Button-Position (at the bottom and centered)
-    Size aOKSiz = aOKButton.GetSizePixel();
-    Point aOKPnt = aOKButton.GetPosPixel();
+AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
+    SfxModalDialog( pParent, rId ),
+    maOKButton( this, ResId( RID_CUI_ABOUT_BTN_OK, *rId.GetResMgr() ) ),
+    maVersionText( this, ResId( RID_CUI_ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
+    maBuildInfoEdit( this, ResId( RID_CUI_ABOUT_FTXT_BUILDDATA, *rId.GetResMgr() ) ),
+    maCopyrightEdit( this, ResId( RID_CUI_ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
+    maCreditsLink( this, ResId( RID_CUI_ABOUT_FTXT_WELCOME_LINK, *rId.GetResMgr() )  ),
+    maCopyrightTextStr( ResId( RID_CUI_ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) )
+{
+    // load image from module path
+    maAppLogo = SfxApplication::GetApplicationLogo();
 
-    // Multiline edit with Copyright-Text
-    Point aCopyPnt = aCopyrightText.GetPosPixel();
-    Size aCopySize = aCopyrightText.GetSizePixel();
-    aCopySize.Width()  = nTextWidth;
-    aCopySize.Height() = aOutSiz.Height() - nY - ( aOKSiz.Height() * 2 ) - nCtrlMargin;
+    InitControls();
 
-    aCopyPnt.X() = ( aOutSiz.Width() - aCopySize.Width() ) / 2;
-    aCopyPnt.Y() = nY;
-    aCopyrightText.SetPosSizePixel( aCopyPnt, aCopySize );
-
-    nY += aCopySize.Height() + nCtrlMargin;
-    aOKPnt.X() = ( aOutSiz.Width() - aOKSiz.Width() ) / 2;
-    aOKPnt.Y() = nY;
-    aOKButton.SetPosPixel( aOKPnt );
-
-    // Change the width of the dialog
-    SetOutputSizePixel( aOutSiz );
+    // set links
+    maCreditsLink.SetClickHdl( LINK( this, AboutDialog, OpenLinkHdl_Impl ) );
 
     FreeResource();
 
@@ -258,62 +110,189 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
 
 AboutDialog::~AboutDialog()
 {
-    // L"oschen des Entwickleraufrufs
-    delete pDeveloperAry;
-    if ( aAccelList.Count() )
+}
+
+// -----------------------------------------------------------------------
+
+void AboutDialog::InitControls()
+{
+    // apply font, background et al.
+    ApplyStyleSettings();
+
+    // set strings
+    maCopyrightEdit.SetText( maCopyrightTextStr );
+    maBuildInfoEdit.SetText( GetBuildVersionString() );
+    maCreditsLink.SetURL( maCreditsLink.GetText() );
+
+    // determine size and position of the dialog & elements
+    Size aDlgSize;
+    LayoutControls( aDlgSize );
+
+    // Change the width of the dialog
+    SetOutputSizePixel( aDlgSize );
+}
+
+// -----------------------------------------------------------------------
+
+void AboutDialog::ApplyStyleSettings()
+{
+    // Transparenter Font
+    Font aFont = GetFont();
+    aFont.SetTransparent( sal_True );
+    SetFont( aFont );
+
+    // set for background and text the correct system color
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    Color aWhiteCol( rSettings.GetWindowColor() );
+    Wallpaper aWall( aWhiteCol );
+    SetBackground( aWall );
+    Font aNewFont( maCopyrightEdit.GetFont() );
+    aNewFont.SetTransparent( sal_True );
+
+    maVersionText.SetFont( aNewFont );
+    maCopyrightEdit.SetFont( aNewFont );
+
+    maVersionText.SetBackground();
+    maCopyrightEdit.SetBackground();
+    maBuildInfoEdit.SetBackground();
+    maCreditsLink.SetBackground();
+
+    Color aTextColor( rSettings.GetWindowTextColor() );
+    maVersionText.SetControlForeground( aTextColor );
+    maCopyrightEdit.SetControlForeground( aTextColor );
+    maBuildInfoEdit.SetControlForeground( aTextColor );
+    maCreditsLink.SetControlForeground();
+
+    Size aSmaller = aNewFont.GetSize();
+    aSmaller.Width() = (long) (aSmaller.Width() * 0.75);
+    aSmaller.Height() = (long) (aSmaller.Height() * 0.75);
+    aNewFont.SetSize( aSmaller );
+
+    maBuildInfoEdit.SetFont( aNewFont );
+
+    // the following is a hack to force the MultiLineEdit update its settings
+    // in order to reflect the Font
+    // See
+    //      Window::SetControlFont
+    //      MultiLineEdit::StateChanged
+    //      MultiLineEdit::ImplInitSettings
+    // TODO Override SetFont in MultiLineEdit and do the following,
+    // otherwise SetFont has no effect at all!
+    aSmaller = PixelToLogic( aSmaller, MAP_POINT );
+    aNewFont.SetSize( aSmaller );
+    maBuildInfoEdit.SetControlFont( aNewFont );
+}
+
+// -----------------------------------------------------------------------
+
+void AboutDialog::LayoutControls( Size& aDlgSize )
+{
+    Size aAppLogoSiz = maAppLogo.GetSizePixel();
+
+    aDlgSize = GetOutputSizePixel();
+    aDlgSize.Width() = aAppLogoSiz.Width();
+
+    Size a6Size      = maVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+    long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
+    long nDlgMargin  = a6Size.Width() * 2;
+    long nCtrlMargin = a6Size.Height() * 2;
+    long nTextWidth  = aDlgSize.Width() - ( nDlgMargin * 2 );
+
+    Point aPos( nDlgMargin, nY );
+    Size aSize;
+    // layout fixed text control
+    layoutFixedText( maVersionText, aPos, aSize, nTextWidth );
+    // set the next control closer
+    nY += aSize.Height() + (nCtrlMargin / 2);
+
+    // Multiline edit with Build info
+    aPos.Y() = nY;
+    layoutEdit( maBuildInfoEdit, aPos, aSize, nTextWidth );
+    nY += aSize.Height() + nCtrlMargin;
+
+    // Multiline edit with Copyright-Text
+    aPos.Y() = nY;
+    layoutEdit( maCopyrightEdit, aPos, aSize, nTextWidth );
+    // set the next control closer
+    nY += aSize.Height() + (nCtrlMargin/2);
+
+    // Hyperlink
+    aPos.Y() = nY;
+    layoutFixedText( maCreditsLink, aPos, aSize, nTextWidth );
+    nY += aSize.Height() + nCtrlMargin;
+
+    // OK-Button-Position (at the bottom and centered)
+    Size aOKSiz = maOKButton.GetSizePixel();
+    Point aOKPnt( ( aDlgSize.Width() - aOKSiz.Width() ) / 2, nY );
+    maOKButton.SetPosPixel( aOKPnt );
+
+    aDlgSize.Height() = aOKPnt.Y() + aOKSiz.Height() + nCtrlMargin;
+}
+
+// -----------------------------------------------------------------------
+
+const rtl::OUString AboutDialog::GetBuildId() const
+{
+    rtl::OUString sDefault;
+
+    // Get buildid from version[rc|.ini]
+    rtl::OUString sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
+    OSL_ENSURE( sBuildId.getLength() > 0, "No BUILDID in bootstrap file" );
+    rtl::OUStringBuffer sBuildIdBuff( sBuildId );
+
+    // Get ProductSource from version[rc|.ini]
+    rtl::OUString sProductSource( utl::Bootstrap::getProductSource( sDefault ) );
+    OSL_ENSURE( sProductSource.getLength() > 0, "No ProductSource in bootstrap file" );
+
+    // the product source is something like "AOO340",
+    // while the build id is something like "340m1(Build:9590)"
+    // For better readability, strip the duplicate ProductMajor ("340").
+    if ( sProductSource.getLength() )
     {
-        GetpApp()->RemoveAccel( aAccelList.First() );
-        Accelerator* pAccel = aAccelList.Last();
+        bool bMatchingUPD =
+                ( sProductSource.getLength() >= 3 )
+            &&  ( sBuildId.getLength() >= 3 )
+            &&  ( sProductSource.copy( sProductSource.getLength() - 3 ) == sBuildId.copy( 0, 3 ) );
+        OSL_ENSURE( bMatchingUPD, "BUILDID and ProductSource do not match in their UPD" );
+        if ( bMatchingUPD )
+            sProductSource = sProductSource.copy( 0, sProductSource.getLength() - 3 );
 
-        while ( pAccel )
-        {
-            delete pAccel;
-            pAccel = aAccelList.Prev();
-        }
+        // prepend the product source
+        sBuildIdBuff.insert( 0, sProductSource );
     }
+
+    return sBuildIdBuff.makeStringAndClear();
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( AboutDialog, TimerHdl, Timer *, pTimer )
+const rtl::OUString AboutDialog::GetBuildVersionString() const
 {
-    (void)pTimer; //unused
-    ++m_nPendingScrolls;
-    Invalidate( INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN );
-    return 0;
-}
+    rtl::OUStringBuffer aBuildString( GetBuildId() );
+    rtl::OUString sRevision( utl::Bootstrap::getRevisionInfo() );
 
-// -----------------------------------------------------------------------
+    if ( sRevision.getLength() > 0 )
+    {
+        aBuildString.appendAscii( RTL_CONSTASCII_STRINGPARAM( "  -  Rev. " ) );
+        aBuildString.append( sRevision );
+    }
 
-IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
-{
-#ifdef YURI_DARIO
-    aCopyrightText.SetHelpText( DEFINE_CONST_UNICODE("Conoscere qualcuno ovunque egli sia, con cui comprendersi nonostante le distanze\n"
-                      "e le differenze, puo' trasformare la terra in un giardino. baci Valeria") );
+#ifdef BUILD_VER_STRING
+    rtl::OUString sBuildVer( RTL_CONSTASCII_USTRINGPARAM( STRINGIFY( BUILD_VER_STRING ) ) );
+    if ( sBuildVer.getLength() > 0 )
+    {
+        aBuildString.append( sal_Unicode( '\n' ) );
+        aBuildString.append( sBuildVer );
+    }
 #endif
 
-    (void)pAccelerator; //unused
-    // init Timer
-    aTimer.SetTimeoutHdl( LINK( this, AboutDialog, TimerHdl ) );
-
-    // init scroll mode
-    nOff = GetOutputSizePixel().Height();
-    MapMode aMapMode( MAP_PIXEL );
-    SetMapMode( aMapMode );
-    bNormal = sal_False;
-
-    // start scroll Timer
-    aTimer.SetTimeout( SCROLL_TIMER );
-    aTimer.Start();
-    return 0;
+    return aBuildString.makeStringAndClear();
 }
 
 // -----------------------------------------------------------------------
 
 sal_Bool AboutDialog::Close()
 {
-    // stop Timer and finish the dialog
-    aTimer.Stop();
     EndDialog( RET_OK );
     return( sal_False );
 }
@@ -323,71 +302,35 @@ sal_Bool AboutDialog::Close()
 void AboutDialog::Paint( const Rectangle& rRect )
 {
     SetClipRegion( rRect );
+    Point aPos( 0, 0 );
+    DrawImage( aPos, maAppLogo );
 
-    if ( bNormal ) // not in scroll mode
+    return;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK ( AboutDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
+{
+    ::rtl::OUString sURL( maCreditsLink.GetURL() );
+    if ( sURL.getLength() > 0 )
     {
-        Point aPos( m_nDeltaWidth / 2, 0 );
-        DrawImage( aPos, aAppLogo );
-        return;
-    }
-
-    // scroll the content
-    const int nDeltaY = -SCROLL_OFFSET * m_nPendingScrolls;
-    if( !nDeltaY )
-        return;
-    nOff += nDeltaY;
-    Scroll( 0, nDeltaY, SCROLL_NOERASE );
-    m_nPendingScrolls = 0;
-
-    // draw the credits text
-    const Font aOrigFont = GetFont();
-    const int nFullWidth = GetOutputSizePixel().Width();
-
-    int nY = nOff;
-    const int nDevCnt = static_cast<int>( pDeveloperAry->Count() );
-    for( int i = 0; i < nDevCnt; ++i )
-    {
-        if( nY >= rRect.Bottom() )
-            break;
-
-        int nPos2 = nY + GetTextHeight() + 3;
-        if( nPos2 >= rRect.Top() + nDeltaY )
+        try
         {
-            const String aStr = pDeveloperAry->GetString(i);
-            const long nVal = pDeveloperAry->GetValue(i);
-
-            if ( nVal )
-            {
-                // emphasize the headers
-                Font aFont = aOrigFont;
-                aFont.SetWeight( (FontWeight)nVal );
-                SetFont( aFont );
-                nPos2 = nY + GetTextHeight() + 3;
-            }
-
-            // clear text background
-            Rectangle aEraseRect( Point(0,nY), Size( nFullWidth, nPos2-nY));
-            Erase( aEraseRect );
-
-            // draw centered text
-            const long nTextWidth = GetTextWidth( aStr );
-            long nX = (nFullWidth - 5 - nTextWidth) / 2;
-            if( nX < 0 )
-                nX = SPACE_OFFSET;
-            const Point aPnt( nX, nY );
-            DrawText( aPnt, aStr );
-
-            // restore the font if needed
-            if( nVal )
-                SetFont( aOrigFont );
+            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMGR =
+                ::comphelper::getProcessServiceFactory();
+            com::sun::star::uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
+                xSMGR->createInstance( ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                com::sun::star::uno::UNO_QUERY_THROW );
+            if ( xSystemShell.is() )
+                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
         }
-        nY = nPos2;
+        catch( const com::sun::star::uno::Exception& e )
+        {
+             OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+                rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        }
     }
-
-    // close dialog if the whole text has been scrolled
-    if ( nY <= 0 )
-    {
-        bNormal = sal_True;
-        Close();
-    }
+    return 0;
 }

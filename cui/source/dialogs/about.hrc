@@ -21,10 +21,11 @@
 
 
 
-#include <sfx2/sfx.hrc>
+#include <cuires.hrc>
 
-#define ABOUT_BTN_OK                        1
-#define ABOUT_FTXT_VERSION                  1
-#define ABOUT_STR_ACCEL                     3
-#define ABOUT_FTXT_COPYRIGHT                    4
-
+#define RID_CUI_ABOUT_BTN_OK                        1
+#define RID_CUI_ABOUT_FTXT_VERSION                  2
+#define RID_CUI_ABOUT_FTXT_COPYRIGHT                3
+#define RID_CUI_ABOUT_FTXT_BUILDDATA                4
+#define RID_CUI_ABOUT_STR_COPYRIGHT                 5
+#define RID_CUI_ABOUT_FTXT_WELCOME_LINK             6

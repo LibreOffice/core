@@ -25,53 +25,46 @@
 
 // include ---------------------------------------------------------------
 
-#include <tools/resary.hxx>
 #include <vcl/button.hxx>
-#include <vcl/accel.hxx>
 #include <svtools/svmedit.hxx>
+#include <svtools/fixedhyper.hxx>
 #include <tools/list.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>        // SfxModalDialog
-
-DECLARE_LIST( AccelList, Accelerator* )
 
 // class AboutDialog -----------------------------------------------------
 
 class AboutDialog : public SfxModalDialog
 {
 private:
-    OKButton        aOKButton;
-    Image           aAppLogo;
+    OKButton            maOKButton;
+    FixedInfo           maVersionText;
+    MultiLineEdit       maBuildInfoEdit;
+    MultiLineEdit       maCopyrightEdit;
+    svt::FixedHyperlink maCreditsLink;
 
-    FixedInfo       aVersionText;
-    MultiLineEdit   aCopyrightText;
-    FixedInfo       aBuildData;
+    Image               maAppLogo;
 
-    ResStringArray* pDeveloperAry;
-    String          aDevVersionStr;
-    String          aAccelStr;
-    String          aVersionData;
-    String          aCopyrightTextStr;
+    String              maCopyrightTextStr;
+    rtl::OUString       maVersionData;
 
-    AccelList       aAccelList;
+    void                InitControls();
+    void                ApplyStyleSettings();
+    void                LayoutControls( Size& aDlgSize );
 
-    AutoTimer       aTimer;
-    long            nOff;
-    long            m_nDeltaWidth;
-    int             m_nPendingScrolls;
+    const rtl::OUString GetBuildId() const;
+    const rtl::OUString GetBuildVersionString() const;
 
-    sal_Bool            bNormal;
+    DECL_DLLPRIVATE_LINK(OpenLinkHdl_Impl, svt::FixedHyperlink* );
 
 protected:
     virtual sal_Bool    Close();
-    virtual void    Paint( const Rectangle& );
+    virtual void        Paint( const Rectangle& );
 
 public:
     AboutDialog( Window* pParent, const ResId& nId );
     ~AboutDialog();
 
-    DECL_LINK( TimerHdl, Timer * );
-    DECL_LINK( AccelSelectHdl, Accelerator * );
 };
 
 #endif // #ifndef _ABOUT_HXX
