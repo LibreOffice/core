@@ -211,6 +211,10 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
         aAttribs.Insert( pMyAttr, aAttribs.Count()  );
     }
 
+    // memory leak #119992: to release pWrongs cloned from rCopyFrom
+    if (pWrongs != NULL)
+        delete pWrongs;
+
     // Wrongs
     pWrongs = NULL;
 #ifndef SVX_LIGHT
