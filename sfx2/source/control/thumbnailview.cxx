@@ -350,12 +350,8 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
                                             aFillColor));
 
         // Draw thumbnail
-        Point aPos = aRect.TopLeft();
+        Point aPos = pItem->getPrev1Pos();
         Size aImageSize = pItem->maPreview1.GetSizePixel();
-        Size aRectSize = aRect.GetSize();
-        aPos.X() = aRect.Left() + (aRectSize.Width()-aImageSize.Width())/2;
-        aPos.Y() = aRect.Top() + (aRectSize.Height()-aImageSize.Height())/2;
-
 
         float fScaleX = 1.0f;
         float fScaleY = 1.0f;
@@ -383,9 +379,7 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
                                             ));
 
         // Draw centered text below thumbnail
-        aPos.Y() += aImageSize.Height();
-        aPos.Y() = aPos.Y() + GetTextHeight() + (aRect.Bottom() - aPos.Y() - GetTextHeight())/2;
-        aPos.X() = aRect.Left() + (aRectSize.Width() - GetTextWidth(pItem->maText))/2;
+        aPos = pItem->getTextPos();
 
         // Create the text primitive
         B2DVector aFontSize;

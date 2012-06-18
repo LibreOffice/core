@@ -101,11 +101,13 @@ void ThumbnailViewItem::calculateItemsPosition ()
     Point aPos = maDrawArea.TopLeft();
     aPos.X() = maDrawArea.Left() + (aRectSize.Width()-aImageSize.Width())/2;
     aPos.Y() = maDrawArea.Top() + (aRectSize.Height()-aImageSize.Height())/2;
+    maPrev1Pos = aPos;
 
     // Calculate text position
     aPos.Y() += aImageSize.Height();
     aPos.Y() = aPos.Y() + aTextDev.getTextHeight() + (maDrawArea.Bottom() - aPos.Y() - aTextDev.getTextHeight())/2;
     aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maText,0,maText.getLength()))/2;
+    maTextPos = aPos;
 
     // Calculate checkbox position
     aPos.Y() -= aTextDev.getTextHeight();

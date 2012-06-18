@@ -73,6 +73,12 @@ struct ThumbnailViewItem
 
     void calculateItemsPosition ();
 
+    const Point& getTextPos () const { return maTextPos; }
+
+    const Point& getPrev1Pos () const { return maPrev1Pos; }
+
+    const Point& getPrev2Pos () const { return maPrev2Pos; }
+
     void setSelectionMode (bool mode);
 
     void setSelectClickHdl (const Link &link);
@@ -84,6 +90,9 @@ private:
 private:
 
     bool mbMode;
+    Point maTextPos;
+    Point maPrev1Pos;
+    Point maPrev2Pos;
     Rectangle maDrawArea;
     Link maClickHdl;
     CheckBox *mpSelectBox;
