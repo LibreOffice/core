@@ -329,7 +329,8 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
         case SQL_TIMESTAMP:
             *(TIMESTAMP_STRUCT*)_pData = *(TIMESTAMP_STRUCT*)_pValue;
             *pLen = (SQLLEN)sizeof(TIMESTAMP_STRUCT);
-            _nColumnSize = 19;
+            // 20+sub-zero precision; we have hundredths of seconds
+            _nColumnSize = 22;
             break;
     }
 }
