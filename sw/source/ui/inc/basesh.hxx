@@ -41,10 +41,8 @@
 #include <set>
 
 class SwWrtShell;
-class SwCrsrShell;
 class SwView;
 class SfxItemSet;
-class Graphic;
 
 struct DBTextStruct_Impl;
 class SwBaseShell: public SfxShell

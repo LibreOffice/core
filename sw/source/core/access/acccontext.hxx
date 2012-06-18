@@ -47,8 +47,6 @@ namespace utl {
 namespace accessibility {
     class AccessibleShape;
 }
-class SwFmtFld;
-class SwAccessibleChildContainer;
 
 const sal_Char sAccessibleServiceName[] = "com.sun.star.accessibility.Accessible";
 

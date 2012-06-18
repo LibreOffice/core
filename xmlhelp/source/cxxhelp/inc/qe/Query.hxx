@@ -38,9 +38,6 @@ namespace xmlsearch {
 
     namespace qe {
 
-        class Search;
-        class RoleFiller;
-
         class QueryHit
         {
         public:

@@ -31,9 +31,6 @@
 #include <svtools/svtreebx.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-namespace com{namespace sun{namespace star{namespace container{
-    class XNameAccess;
-}}}}
 #include "swdllapi.h"
 #include <swtypes.hxx>
 

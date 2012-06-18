@@ -39,7 +39,6 @@ class SdrObject;
 class SwTxtPaintInfo;
 class SwFmt;
 class TextRanger;
-class Color;
 class SwAnchoredObject;
 
 #include <fmtsrndenum.hxx>

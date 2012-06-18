@@ -88,8 +88,6 @@
 #define GETFLDVAL(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
 #define SETFLDVAL(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
 
-class SwNewDBMgr;
-
 class SwLabRec
 {
 public:

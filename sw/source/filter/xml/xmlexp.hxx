@@ -35,7 +35,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <vector>
 
-class SwPaM;
 class SwFmt;
 class SwFrmFmt;
 class SvXMLUnitConverter;

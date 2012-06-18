@@ -77,11 +77,6 @@ public:
     ~SwBoldFixedInfo();
 };
 struct SwAddressPreview_Impl;
-namespace com{namespace sun{namespace star{
-    namespace container{
-        class XNameAccess;
-    }
-}}}
 
 /*-------------------------------------------------------------------------
     Preview window used to show the possible selection of address blocks

@@ -35,7 +35,6 @@
 class SdrView;
 class SwView;
 class SwWrtShell;
-class SfxModule;
 
 class SwDrawTextShell: public SfxShell
 {

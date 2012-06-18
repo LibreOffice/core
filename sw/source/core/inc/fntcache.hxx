@@ -34,7 +34,6 @@
 #include "swtypes.hxx"
 #include "swcache.hxx"
 
-class Printer;
 class OutputDevice;
 class FontMetric;
 class SwFntObj;

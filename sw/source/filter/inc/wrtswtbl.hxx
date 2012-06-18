@@ -35,11 +35,9 @@
 
 #include <swdllapi.h>
 
-class Color;
 class SwTableBox;
 class SwTableLine;
 class SwTableLines;
-class SwTable;
 class SwHTMLTableLayout;
 class SvxBrushItem;
 

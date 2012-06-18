@@ -35,7 +35,6 @@
 class SwFrmFmt;
 class SwWrtShell;
 class Window;
-class SfxItemSet;
 class SwFlyFrmFmt;
 
 namespace com { namespace sun { namespace star {

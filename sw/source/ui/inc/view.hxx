@@ -44,7 +44,6 @@
 #include <shellid.hxx>
 #include <IMark.hxx>
 
-class SwBaseShell;
 class Button;
 class ImageButton;
 class SwTxtFmtColl;
@@ -52,17 +51,14 @@ class SwPageDesc;
 class SwFrmFmt;
 class SwCharFmt;
 class SwNumRule;
-class SwViewOption;
 class SwGlossaryHdl;
 class SwDrawBase;
 class SvxRuler;
 class SvxLRSpaceItem;
 class SwDocShell;
 class SwScrollbar;
-class SvxVCBrowser;
 class SvBorder;
 class Ruler;
-class OutlinerView;
 class SvxSearchItem;
 class SearchAttrItemList;
 class SvxSearchDialog;
@@ -72,12 +68,10 @@ class SdrObject;
 class SdrPageView;
 class SwNaviImageButton;
 class SwHlpImageButton;
-class Outliner;
 class SwView;
 class SwEditWin;
 class SwWrtShell;
 class SwView_Impl;
-class XSelectionObject;
 struct SwSearchOptions;
 class FmFormShell;
 class CommandEvent;
@@ -87,13 +81,11 @@ class SvtAccessibilityOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#
-class SwPrintData;
 class SwFormatClipboard;
 struct SwConversionArgs;
 class Graphic;
 class GraphicFilter;
 class SwPostItMgr;
-class SwFieldBookmark;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }

@@ -30,8 +30,6 @@
 
 #include <vcl/msgbox.hxx>
 
-class CheckBox;
-
 class LockFailedQueryBox : public MessBox
 {
 public:

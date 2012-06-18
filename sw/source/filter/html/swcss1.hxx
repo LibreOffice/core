@@ -34,7 +34,6 @@
 #include "svxcss1.hxx"
 
 class SwDoc;
-class SwFmt;
 class SwCharFmt;
 class SwTxtFmtColl;
 class SvxBrushItem;

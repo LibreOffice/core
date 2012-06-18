@@ -56,7 +56,6 @@ class SwTxtNode;
 
 namespace sw {
     class Meta;
-    class MetaField;
 }
 
 typedef ::cppu::ImplInheritanceHelper6

@@ -42,7 +42,6 @@ class SwSpzFrmFmts;
 class SwAttrSetChg;
 class PolyPolygon;
 class SwFlyDrawContact;
-class SwDrawContact;
 class SwFmt;
 
 #include <anchoredobject.hxx>

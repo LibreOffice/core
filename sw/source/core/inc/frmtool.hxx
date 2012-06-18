@@ -49,7 +49,6 @@ class SdrMarkList;
 class SwNodeIndex;
 class OutputDevice;
 class SwPageDesc;
-class SwTableBox;
 struct SwFindRowSpanCacheObj;
 
 #define FAR_AWAY LONG_MAX - 20000  // initial position of a Fly

@@ -45,7 +45,6 @@ class SwRootFrm;
 class SwPageFrm;
 class SwFlyFrm;
 class SwSectionFrm;
-class SdrObject;
 class SwFtnFrm;
 class SwFtnBossFrm;
 class SwTabFrm;

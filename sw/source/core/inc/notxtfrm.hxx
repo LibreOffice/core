@@ -33,7 +33,6 @@
 class SwNoTxtNode;
 class OutputDevice;
 class SwBorderAttrs;
-class Bitmap;
 struct SwCrsrMoveState;
 
 class SwNoTxtFrm: public SwCntntFrm

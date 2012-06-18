@@ -42,7 +42,6 @@ class SwTable;
 class SwTableLine;
 class SwTableBox;
 class SwNode;
-class SwWW8Writer;
 class AttributeOutputBase;
 
 namespace ww8

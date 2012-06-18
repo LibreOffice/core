@@ -37,8 +37,6 @@ namespace editeng { class SvxBorderLine; }
 
 class SwDoc;
 class SwTableNode;
-class _FndLine;
-class _FndBox;
 class SwTableLine;
 class SwTableBox;
 class SwTableBoxFmt;

@@ -45,7 +45,6 @@ class SfxPrinter;
 class SwStdFontConfig;
 class SwWrtShell;
 class FontList;
-class SwCompareConfig;
 
 class SwContentOptPage : public SfxTabPage
 {

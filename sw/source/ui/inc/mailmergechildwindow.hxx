@@ -45,8 +45,6 @@ public:
     virtual void    FillInfo(SfxChildWinInfo&) const;
 };
 
-class SwSendMailDialog;
-
 class SwMailMergeChildWindow : public SfxChildWindow
 {
 public:

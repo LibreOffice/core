@@ -39,8 +39,6 @@ namespace sun {
 namespace star {
 namespace security {
     class XCertificate; }
-namespace xml { namespace crypto {
-    class XSecurityEnvironment; }}
 }}}
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -49,8 +47,6 @@ namespace xml { namespace crypto {
 namespace css = com::sun::star;
 namespace cssu = com::sun::star::uno;
 namespace css = ::com::sun::star;
-
-class HeaderBar;
 
 class MacroWarning : public ModalDialog
 {

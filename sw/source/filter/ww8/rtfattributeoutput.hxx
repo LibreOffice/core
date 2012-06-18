@@ -38,7 +38,6 @@
 
 class SwGrfNode;
 class SwOLENode;
-class SdrObject;
 class SwFlyFrmFmt;
 
 /// The class that has handlers for various resource types when exporting as RTF

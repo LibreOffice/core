@@ -35,7 +35,6 @@
 #include "swtablerep.hxx"
 
 class SwWrtShell;
-class SwTabCols;
 struct TColumn;
 
 /*-------------------------------------------------------

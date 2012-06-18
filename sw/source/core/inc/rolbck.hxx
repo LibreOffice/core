@@ -41,15 +41,12 @@ namespace sfx2 {
 }
 
 class SwDoc;
-class SwFmt;
 class SwFmtColl;
 class SwHistoryHint;
 class SwTxtAttr;
 class SfxPoolItem;
-class SwTxtNode;
 class SwUndoSaveSection;
 class SwTxtFtn;
-class SwTxtFlyCnt;
 class SwUndoDelLayFmt;
 class SwFlyFrmFmt;
 class SwFmtFld;

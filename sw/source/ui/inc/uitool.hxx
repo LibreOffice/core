@@ -35,7 +35,6 @@
 
 class MetricFormatter;
 class SfxItemSet;
-class SfxMedium;
 class SwPageDesc;
 class SvxTabStopItem;
 class SwWrtShell;

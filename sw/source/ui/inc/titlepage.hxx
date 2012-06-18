@@ -38,8 +38,6 @@
 #include <numberingtypelistbox.hxx>
 
 class Window;
-class SfxItemSet;
-class SwView;
 class SwWrtShell;
 class SwPageDesc;
 

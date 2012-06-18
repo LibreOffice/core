@@ -32,9 +32,6 @@
 #include "frmsh.hxx"
 
 class SfxItemSet;
-class SwWrtShell;
-
-
 
 class SwNavigationShell: public SwBaseShell
 {

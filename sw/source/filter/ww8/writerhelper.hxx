@@ -49,7 +49,6 @@ class SwCharFmt;
 class SdrObject;
 class SdrOle2Obj;
 class OutlinerParaObject;
-class SdrTextObj;
 class SwNumFmt;
 class SwTxtNode;
 class SwNoTxtNode;

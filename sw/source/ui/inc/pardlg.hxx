@@ -30,9 +30,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-class SwView;
-class SfxItemSet;
-
 //DialogModes:
 #define DLG_STD         0
 #define DLG_ENVELOP     2

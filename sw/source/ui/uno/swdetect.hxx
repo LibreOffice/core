@@ -48,17 +48,9 @@ namespace com
     {
         namespace star
         {
-            namespace uno
-            {
-                class Any;
-            }
             namespace lang
             {
                 class XMultiServiceFactory;
-            }
-            namespace frame
-            {
-                class XFrame;
             }
             namespace beans
             {

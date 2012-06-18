@@ -35,7 +35,6 @@
 
 class SwGrfNode;
 class String;
-class SwAsyncRetrieveInputStreamThread;
 
 /** class to provide creation of a thread to retrieve an input stream given by
     an URL and to consume the retrieved input stream.

@@ -39,7 +39,6 @@ class SvxRuler;
 class SwScrollbar;
 class ViewShell;
 class Window;
-class SwWrtShell;
 
 // folgende Funktionen stehen im viewprt.cxx
 void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, sal_Bool bWeb );

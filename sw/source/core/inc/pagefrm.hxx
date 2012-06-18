@@ -42,7 +42,6 @@ class SwPageDesc;
 class SwCntntFrm;
 struct SwPosition;
 struct SwCrsrMoveState;
-class SdrObject;
 class SwAttrSetChg;
 class Font;
 

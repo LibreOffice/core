@@ -33,7 +33,6 @@
 #include <sfx2/docfile.hxx>
 #include <swblocks.hxx>
 
-class SfxMedium;
 class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;

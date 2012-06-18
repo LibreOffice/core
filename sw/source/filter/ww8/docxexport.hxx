@@ -37,8 +37,6 @@ class SwTableNode;
 class SwTxtNode;
 class SwGrfNode;
 class SwOLENode;
-class SwSectionNode;
-class SwNumRuleTbl;
 
 namespace oox {
     namespace drawingml { class DrawingML; }

@@ -39,13 +39,9 @@ typedef std::map<sal_uInt16,Color> RtfColorTbl;
 typedef std::map<sal_uInt16,rtl::OString> RtfStyleTbl;
 typedef std::map<String,sal_uInt16> RtfRedlineTbl;
 class SwNode;
-class SwEndNode;
-class SwTableNode;
 class SwTxtNode;
 class SwGrfNode;
 class SwOLENode;
-class SwSectionNode;
-class SwNumRuleTbl;
 
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }

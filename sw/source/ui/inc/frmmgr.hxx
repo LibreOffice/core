@@ -42,7 +42,6 @@ class   SwWrtShell;
 struct  SvxSwFrameValidation;
 struct  SwPosition;
 
-class   SwFmt;
 class   SwFmtCol;
 
 const SwTwips   DFLT_WIDTH      = MM50 * 4;

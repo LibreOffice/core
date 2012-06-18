@@ -38,7 +38,6 @@
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XDataSource;
-        class XConnection;
         class XResultSet;
     }
     namespace sdbcx{

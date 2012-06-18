@@ -34,7 +34,6 @@
 #include <svl/svarray.hxx>
 
 
-class SfxMedium;
 class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;

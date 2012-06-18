@@ -38,7 +38,6 @@ class SwFmtAnchor;
 class SdrMarkList;
 class SwUndoDelete;
 class SwRedlineSaveData;
-class SwFrm;
 class SwFmt;
 
 namespace sw {

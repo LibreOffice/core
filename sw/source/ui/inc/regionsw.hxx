@@ -55,7 +55,6 @@
 #include <boost/ptr_container/ptr_set.hpp>
 
 class SwWrtShell;
-class EditRegionDlg;
 
 namespace sfx2
 {

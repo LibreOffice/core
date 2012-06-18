@@ -30,7 +30,6 @@
 
 #include "swabstdlg.hxx"
 
-class SwSaveLabelDlg;
 class SwInsertAbstractDlg;
 class SfxSingleTabDialog;
 class SwAsciiFilterDlg;
@@ -46,7 +45,6 @@ class SwFldDlg;
 class SwRenameXNamedDlg;
 class SwModalRedlineAcceptDlg;
 class SwTOXMark;
-class SwWordCountDialog;
 class SwSplitTblDlg;
 
 #include "itabenum.hxx"

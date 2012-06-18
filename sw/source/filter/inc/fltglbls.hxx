@@ -38,9 +38,6 @@ class SwDoc;
 class SwPaM;
 class SwTable;
 
-class XF_Buffer;
-class ColorBuffer;
-class FontBuffer;
 class SvNumberFormatter;
 
 

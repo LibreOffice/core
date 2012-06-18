@@ -36,7 +36,6 @@ class SwSectionFrm;
 class SwFtnFrm;
 class SwPageFrm;
 class SwLooping;
-class IDocumentLayoutAccess;
 
 // --> #i28701#
 class SwMovedFwdFrmsByObjPos;
@@ -48,7 +47,6 @@ class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
 // --> #i40155#
 #include <vector>
-class SwFrm;
 // --> #i65250#
 #include <boost/unordered_map.hpp>
 class SwFlowFrm;

@@ -35,7 +35,6 @@
 #include <map>
 
 class SwAccessibleMap;
-class SwDoc;
 class SwRect;
 class SwFrm;
 class SdrObject;

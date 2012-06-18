@@ -60,7 +60,6 @@ class SwTxtFrm;
 class SwTxtSizeInfo;
 class SwViewOption;
 class ViewShell;
-class SwTxtFtn;
 class SwAttrIter;
 struct SwMultiCreator;
 class SwMultiPortion;

@@ -37,9 +37,6 @@ namespace xmlsearch {
     namespace util {
 
 
-        class CompressorIterator;
-
-
         class Decompressor
         {
         public:

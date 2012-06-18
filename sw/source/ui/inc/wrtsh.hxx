@@ -37,15 +37,12 @@
 #include "navmgr.hxx"
 
 class Window;
-class OutputDevice;
 class SbxArray;
 class SwDoc;
-class SpellCheck;
 class SwViewOption;
 class SwFlyFrmAttrMgr;
 class SwField;
 class SwTOXBase;
-class SdrView;
 class SwView;
 class SvGlobalName;
 class SwInputFieldList;
@@ -53,14 +50,10 @@ class SwSectionData;
 class Timer;
 class SvxMacro;
 class SwFmtINetFmt;
-class SvxINetBookmark;
 class SvxAutoCorrect;
 class NaviContentBookmark;
 struct SwCallMouseEvent;
-class DropEvent;
-struct ChartSelectionInfo;
 class SfxStringListItem;
-class SfxRequest;
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;

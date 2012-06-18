@@ -40,9 +40,6 @@ namespace xmlsearch {
     namespace qe {
 
 
-        class Query;
-
-
         class NonnegativeIntegerGenerator
         {
         public:

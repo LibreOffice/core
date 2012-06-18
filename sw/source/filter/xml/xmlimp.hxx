@@ -39,7 +39,6 @@
 #include "xmlitmap.hxx"
 
 class SwDoc;
-class SwPaM;
 class SvXMLUnitConverter;
 class SvXMLTokenMap;
 class SvXMLImportItemMapper;
