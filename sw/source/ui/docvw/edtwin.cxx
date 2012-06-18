@@ -4992,12 +4992,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                               rSh.IsCrsrReadonly();
         if(!bIsDocReadOnly)
         {
-            QuickHelpData aTmpQHD;
             if( pQuickHlpData->m_bIsDisplayed )
-            {
-                aTmpQHD.Move( *pQuickHlpData );
                 pQuickHlpData->Stop( rSh );
-            }
+
             String sWord;
             if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
