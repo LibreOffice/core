@@ -585,7 +585,12 @@ void SAL_CALL VCLXToolkit::disposing()
         ByteBufferWrapper *bbw = (ByteBufferWrapper *) (intptr_t) addressOfMemoryBufferForSharedArrayWrapper;
         pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( bbw->pointer(), *bbw ));
 #else
+        (void) ScaleNumerator;
+        (void) ScaleDenominator;
+        (void) XOffset;
+        (void) YOffset;
         OSL_FAIL( "rendering to a pre-allocated buffer not done yet for this OS" );
+        pV->SetOutputSizePixel( Size( Width, Height ) );
 #endif
     } else {
         pV->SetOutputSizePixel( Size( Width, Height ) );
