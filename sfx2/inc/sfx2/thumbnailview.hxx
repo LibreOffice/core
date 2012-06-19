@@ -308,6 +308,7 @@ protected:
     ScrollBar* mpScrBar;
     Rectangle maNoneItemRect;
     Rectangle maItemListRect;
+    long mnHeaderHeight;
     long mnItemWidth;
     long mnItemHeight;
     long mnVisLines;

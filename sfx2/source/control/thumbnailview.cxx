@@ -85,6 +85,7 @@ ThumbnailView::~ThumbnailView()
 void ThumbnailView::ImplInit()
 {
     mpScrBar            = NULL;
+    mnHeaderHeight      = 0;
     mnItemWidth         = 0;
     mnItemHeight        = 0;
     mnVisLines          = 0;
@@ -356,7 +357,7 @@ void ThumbnailView::CalculateItemPositions ()
 
         // calculate offsets
         long nStartX = 0;
-        long nStartY = 0;
+        long nStartY = mnHeaderHeight;
 
         // calculate and draw items
         long x = nStartX;
@@ -367,7 +368,7 @@ void ThumbnailView::CalculateItemPositions ()
         sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
 
         maItemListRect.Left() = x;
-        maItemListRect.Top() = y;
+        maItemListRect.Top() = y + mnHeaderHeight;
         maItemListRect.Right() = x + mnCols*(mnItemWidth+mnSpacing) - mnSpacing - 1;
         maItemListRect.Bottom() = y + mnVisLines*(mnItemHeight+mnSpacing) - mnSpacing - 1;
 
@@ -909,7 +910,7 @@ void ThumbnailView::Paint( const Rectangle& )
 
     // calculate offsets
     long nStartX = 0;
-    long nStartY = 0;
+    long nStartY = mnHeaderHeight;
 
     // calculate and draw items
     long x = nStartX;
