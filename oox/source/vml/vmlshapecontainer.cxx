@@ -118,12 +118,12 @@ const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId, bool bD
    return 0;
 }
 
-const ShapeBase* ShapeContainer::takeLastShape()
+boost::shared_ptr< ShapeBase > ShapeContainer::takeLastShape()
 {
     assert( mrDrawing.getType() == VMLDRAWING_WORD );
     if( maShapes.empty())
-        return NULL;
-    const ShapeBase* ret = maShapes.back().get();
+        return boost::shared_ptr< ShapeBase >();
+    boost::shared_ptr< ShapeBase > ret = maShapes.back();
     maShapes.pop_back();
     return ret;
 }
