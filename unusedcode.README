@@ -13,7 +13,12 @@ a) It's possible that some other platform or configuration uses the code,
    so manual inspection is always required.
 b) At the time of writing the majority of unused code now originates via 
    macros, mostly from pre-STL containers, see [2] for killing two birds
-   with one stone.
+   with one stone. These are typically methods of signatures...
+	*::Insert
+	*::Remove
+	*::DeleteAndDestroy
+	*::_ForEach
+	*::Replace
 c) callcatcher ignores virtuals. But implementations of "pure virtuals"
    are not actually virtual methods. If something is declared pure virtual
    and provides an impl and that base-class impl is not explicitly called
