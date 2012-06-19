@@ -38,6 +38,7 @@
 
 class SessionManagerClient
 {
+    static SalSession * m_pSession;
     static SmcConn          aSmcConnection;
     static rtl::OString m_aClientID;
     static bool         bDocSaveDone;
@@ -64,7 +65,7 @@ class SessionManagerClient
     DECL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void* );
     DECL_STATIC_LINK( SessionManagerClient, InteractionHdl, void* );
 public:
-    static void open(); // needed by other plugins, so export
+    static void open(SalSession * pSession);
     static void close();
 
     static bool checkDocumentsSaved();

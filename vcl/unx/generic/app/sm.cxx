@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cassert>
+
 #include <string.h>
 #include <unistd.h>
 #include <sys/poll.h>
@@ -52,14 +56,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-static IceSalSession* pOneInstance = NULL;
-
 SalSession* X11SalInstance::CreateSalSession()
 {
-    if( ! pOneInstance )
-        pOneInstance = new IceSalSession();
-    SessionManagerClient::open();
-    return pOneInstance;
+    SalSession * p = new IceSalSession;
+    SessionManagerClient::open(p);
+    return p;
 }
 
 /*
@@ -74,8 +75,6 @@ IceSalSession::IceSalSession()
 
 IceSalSession::~IceSalSession()
 {
-    if( pOneInstance == this )
-        pOneInstance = NULL;
 }
 
 void IceSalSession::queryInteraction()
@@ -135,6 +134,7 @@ public:
 };
 
 
+SalSession * SessionManagerClient::m_pSession = 0;
 SmcConn             SessionManagerClient::aSmcConnection            = NULL;
 rtl::OString SessionManagerClient::m_aClientID;
 sal_Bool                ICEConnectionObserver::bIsWatching              = sal_False;
@@ -273,10 +273,10 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, SaveYourselfHdl, void*, pStat
         }
     }
 
-    if( pOneInstance )
+    if( m_pSession )
     {
         SalSessionSaveRequestEvent aEvent( shutdown, false );
-        pOneInstance->CallCallback( &aEvent );
+        m_pSession->CallCallback( &aEvent );
     }
     else
         saveDone();
@@ -287,10 +287,10 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, SaveYourselfHdl, void*, pStat
 IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, InteractionHdl, void*, EMPTYARG )
 {
     SAL_INFO("vcl.sm", "interaction link");
-    if( pOneInstance )
+    if( m_pSession )
     {
         SalSessionInteractionEvent aEvent( true );
-        pOneInstance->CallCallback( &aEvent );
+        m_pSession->CallCallback( &aEvent );
     }
 
     return 0;
@@ -299,10 +299,10 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, InteractionHdl, void*, EMPTYA
 IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownCancelHdl, void*, EMPTYARG )
 {
     SAL_INFO("vcl.sm", "shutdown cancel");
-    if( pOneInstance )
+    if( m_pSession )
     {
         SalSessionShutdownCancelEvent aEvent;
-        pOneInstance->CallCallback( &aEvent );
+        m_pSession->CallCallback( &aEvent );
     }
 
     return 0;
@@ -348,10 +348,10 @@ void SessionManagerClient::SaveYourselfProc(
 
 IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownHdl, void*, EMPTYARG )
 {
-    if( pOneInstance )
+    if( m_pSession )
     {
         SalSessionQuitEvent aEvent;
-        pOneInstance->CallCallback( &aEvent );
+        m_pSession->CallCallback( &aEvent );
     }
 
     const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
@@ -414,8 +414,11 @@ void SessionManagerClient::saveDone()
 }
 
 
-void SessionManagerClient::open()
+void SessionManagerClient::open(SalSession * pSession)
 {
+    assert(!m_pSession);
+    m_pSession = pSession;
+
     static SmcCallbacks aCallbacks;
 
     // this is the way Xt does it, so we can too
