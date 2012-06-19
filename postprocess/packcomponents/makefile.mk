@@ -179,7 +179,7 @@ my_components = \
 .IF "$(OS)" == "MACOSX"
 my_components += component/vcl/vcl.macosx
 .ELSE
-.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT" || "$(OS)" == "OS2"
 my_components += component/vcl/vcl.windows
 .ELSE
 my_components += component/vcl/vcl.unx
@@ -314,6 +314,12 @@ my_components += \
     smplmail \
     sysdtrans \
     wininetbe1
+.END
+
+.IF "$(OS)" == "OS2"
+my_components += \
+    dtrans \
+    sysdtrans
 .END
 
 .IF "$(OS)" == "WNT" && "$(DISABLE_ATL)" == ""

@@ -27,6 +27,8 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
+else ifeq ($(OS),OS2)
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
 else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif

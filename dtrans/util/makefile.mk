@@ -29,6 +29,9 @@ TARGET1=mcnttype
 TARGET2=ftransl
 TARGET3=sysdtrans
 TARGET4=dnd
+.IF "$(GUI)"=="OS2"
+TARGET3=sysdtran
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
