@@ -13,6 +13,7 @@
 #include "svtools/svtdllapi.h"
 
 #include <vector>
+#include <boost/function.hpp>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
@@ -151,6 +152,17 @@ namespace drawinglayer {
 #define THUMBNAILVIEW_APPEND         ((sal_uInt16)-1)
 #define THUMBNAILVIEW_ITEM_NOTFOUND  ((sal_uInt16)-1)
 
+// Display all the available items in the thumbnail.
+class ViewFilterAll
+{
+public:
+
+    bool operator () (const ThumbnailViewItem*) const
+    {
+        return true;
+    }
+};
+
 /**
  *
  *  Class to display thumbnails with their names below their respective icons
@@ -225,6 +237,8 @@ public:
     long            GetScrollWidth() const;
 
     void setSelectionMode (bool mode);
+
+    void filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func);
 
 protected:
 
@@ -326,6 +340,7 @@ protected:
 
     ThumbnailItemAttributes *mpItemAttrs;
     drawinglayer::processor2d::BaseProcessor2D *mpProcessor;
+    boost::function<bool (const ThumbnailViewItem*) > maFilterFunc;
 };
 
 #endif // THUMBNAILVIEW_HXX

@@ -104,6 +104,7 @@ void ThumbnailView::ImplInit()
     mbScroll            = false;
     mbHasVisibleItems   = false;
     mbSelectionMode = false;
+    maFilterFunc = ViewFilterAll();
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
@@ -340,8 +341,7 @@ void ThumbnailView::CalculateItemPositions ()
         long y = nStartY;
 
         // draw items
-        sal_uLong nFirstItem = mnFirstLine * mnCols;
-        sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
+        size_t nTotalItems = mnFirstLine*mnCols + mnVisLines*mnCols;
 
         maItemListRect.Left() = x;
         maItemListRect.Top() = y + mnHeaderHeight;
@@ -352,14 +352,15 @@ void ThumbnailView::CalculateItemPositions ()
         // then we add one more line if parts of these line are
         // visible
         if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
-            nLastItem += mnCols;
+            nTotalItems += mnCols;
         maItemListRect.Bottom() = aWinSize.Height() - y;
 
+        size_t nCurCount = 0;
         for ( size_t i = 0; i < nItemCount; i++ )
         {
             ThumbnailViewItem *const pItem = mItemList[i];
 
-            if ( (i >= nFirstItem) && (i < nLastItem) )
+            if (maFilterFunc(pItem) && nCurCount < nTotalItems)
             {
                 if( !pItem->isVisible() && ImplHasAccessibleListeners() )
                 {
@@ -380,6 +381,8 @@ void ThumbnailView::CalculateItemPositions ()
                 }
                 else
                     x += mnItemWidth+mnSpacing;
+
+                ++nCurCount;
             }
             else
             {
@@ -1400,6 +1403,15 @@ void ThumbnailView::setSelectionMode (bool mode)
     mbSelectionMode = mode;
 
     OnSelectionMode(mode);
+}
+
+void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func)
+{
+    maFilterFunc = func;
+
+    CalculateItemPositions();
+
+    Invalidate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
