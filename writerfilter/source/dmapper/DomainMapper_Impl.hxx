@@ -613,6 +613,8 @@ public:
 
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();
+    /// If the current paragraph has a numbering style associated, this method returns its character style
+    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> GetCurrentNumberingCharStyle();
 };
 } //namespace dmapper
 } //namespace writerfilter
