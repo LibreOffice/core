@@ -27,7 +27,12 @@ public:
 
 private:
 
+    virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);
+
+private:
+
     SfxOrganizeMgr *mpMgr;
+    ThumbnailView *mpItemView;
 };
 
 #endif // TEMPLATEFOLDERVIEW_HXX

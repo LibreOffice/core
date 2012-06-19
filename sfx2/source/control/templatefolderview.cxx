@@ -139,13 +139,20 @@ BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 
 TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
-      mpMgr(new SfxOrganizeMgr(NULL,NULL))
+      mpMgr(new SfxOrganizeMgr(NULL,NULL)),
+      mpItemView(new ThumbnailView(this,WB_VSCROLL))
 {
+    mpItemView->SetColor(Color(COL_WHITE));
+    mpItemView->SetPosPixel(Point(0,0));
+    mpItemView->SetSizePixel(GetOutputSizePixel());
+    mpItemView->SetColCount(3);
+    mpItemView->SetLineCount(2);
 }
 
 TemplateFolderView::~TemplateFolderView()
 {
     delete mpMgr;
+    delete mpItemView;
 }
 
 void TemplateFolderView::Populate ()
@@ -180,6 +187,25 @@ void TemplateFolderView::Populate ()
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
+}
+
+void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
+{
+    // Clear previous items
+    mpItemView->Clear();
+
+    // Fill templates
+    sal_uInt16 nRegionId = pRegionItem->mnId-1;
+    const SfxDocumentTemplates* pTemplates = mpMgr->GetTemplates();
+
+    sal_uInt16 nEntries = pTemplates->GetCount(nRegionId);
+    for (sal_uInt16 i = 0; i < nEntries; ++i)
+    {
+        mpItemView->InsertItem(i+1,lcl_fetchThumbnail(pTemplates->GetPath(nRegionId,i),128,128),
+                               pTemplates->GetName(nRegionId,i));
+    }
+
+    mpItemView->Show();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
