@@ -1536,7 +1536,11 @@ SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;
     Styles = (PACKED);
+#ifdef OS2
+    Name = LIBNAME(lnth);
+#else
     Name = LIBNAME(lnth.uno);
+#endif
     Dir = SCP2_OOO_BIN_DIR;
 End
 

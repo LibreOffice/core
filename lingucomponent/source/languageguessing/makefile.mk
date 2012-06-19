@@ -24,7 +24,11 @@
 PRJ=..$/..
 PRJNAME=lingucomponent
 
+.IF "$(GUI)"=="OS2"
+TARGET=guesslan
+.ELSE
 TARGET=guesslang
+.ENDIF
 
 ENABLE_EXCEPTIONS=TRUE
 
