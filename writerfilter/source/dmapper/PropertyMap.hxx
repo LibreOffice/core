@@ -207,7 +207,7 @@ class SectionPropertyMap : public PropertyMap
     bool HasFooter( bool bFirstPage ) const;
 
     void SetBorderDistance( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xStyle,
-        PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom );
+        PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom, sal_uInt32 nLineWidth );
 
 public:
         explicit SectionPropertyMap(bool bIsFirstSection);
