@@ -1422,7 +1422,11 @@ STD_LIB_FILE( gid_File_Lib_Editeng, editeng)
 
 STD_LIB_FILE( gid_File_Lib_Msfilter, msfilter)
 
+#ifdef OS2
+STD_LIB_FILE( gid_File_Lib_Sw , swoo)
+#else
 STD_LIB_FILE( gid_File_Lib_Sw , sw)
+#endif
 STD_LIB_FILE( gid_File_Lib_Swui, swui)
 
 STD_LIB_FILE( gid_File_Lib_Msword, msword )

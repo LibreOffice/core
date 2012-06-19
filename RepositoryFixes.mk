@@ -194,6 +194,7 @@ gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt%,$(gb_Library_FILENA
 gb_Library_FILENAMES := $(patsubst stl:stl%,stl:stdc++%,$(gb_Library_FILENAMES))
 
 # translate to 8.3 naming
+gb_Library_DLLFILENAMES := $(patsubst sw:sw%,sw:swoo%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst drawinglayer:drawinglayer%,drawinglayer:drawingl%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst fsstorage:fsstorage.uno%,fsstorage:fsstorag%,$(gb_Library_DLLFILENAMES))
