@@ -54,10 +54,14 @@ int main( int argc, char* argv[])
     DosQueryModuleName(pib->pib_hmte, sizeof(szApplicationName), szApplicationName);
 
     // adjust libpath
+#if OSL_DEBUG_LEVEL > 0
+    rc = DosQueryExtLIBPATH( (PSZ)szLibpath, BEGIN_LIBPATH);
+    fprintf( stderr, "1 BeginLibPath: %s\n", szLibpath);
+#endif
     _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
     char* basedir = strstr( szDir, "\\PROGRAM\\");
     if (basedir) *basedir = 0;
-     sprintf( szLibpath, "\"%s%s\\URE\\BIN\";\"%s%s\\BASIS\\PROGRAM\";%BeginLIBPATH%",
+     sprintf( szLibpath, "\"%s%s\\URE\\BIN\";\"%s%s\\BASIS\\PROGRAM\";%%BeginLIBPATH%%;",
           szDrive, szDir, szDrive, szDir);
     DosSetExtLIBPATH( (PCSZ)szLibpath, BEGIN_LIBPATH);
     // make sure we load DLL from our path only, so multiple instances/versions
@@ -66,6 +70,10 @@ int main( int argc, char* argv[])
     // YD this feature is not compatible with innowin b20,
     // java cannot load with this flag enabled
     DosSetExtLIBPATH( (PCSZ)"T", LIBPATHSTRICT);
+#endif
+#if OSL_DEBUG_LEVEL > 0
+    rc = DosQueryExtLIBPATH( (PSZ)szLibpath, BEGIN_LIBPATH);
+    fprintf( stderr, "2 BeginLibPath: %s\n", szLibpath);
 #endif
 
     // adjust exe name
