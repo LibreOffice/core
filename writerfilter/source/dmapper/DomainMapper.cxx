@@ -1484,15 +1484,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             //convert the ListTable entry to a NumberingRules propery and apply it
             ListsManager::Pointer pListTable = m_pImpl->GetListTable();
             ListDef::Pointer pList = pListTable->GetList( nIntValue );
+            if( m_pImpl->IsStyleSheetImport() )
+            {
+                //style sheets cannot have a numbering rule attached
+                StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
+                pStyleSheetPropertyMap->SetListId( nIntValue );
+            }
             if( pList.get( ) )
             {
-                if( m_pImpl->IsStyleSheetImport() )
-                {
-                    //style sheets cannot have a numbering rule attached
-                    StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                    pStyleSheetPropertyMap->SetListId( nIntValue );
-                }
-                else
+                if( !m_pImpl->IsStyleSheetImport() )
                 {
                     uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
                     rContext->Insert( PROP_NUMBERING_RULES, true, aRules );
