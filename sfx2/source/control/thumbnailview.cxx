@@ -203,6 +203,17 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
         pItem->Paint(mpProcessor,mpItemAttrs);
 }
 
+void ThumbnailView::OnSelectionMode (bool bMode)
+{
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        mItemList[i]->setSelectionMode(bMode);
+
+        if (mItemList[i]->isVisible())
+            DrawItem(mItemList[i]);
+    }
+}
+
 void ThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
 {
 }
@@ -1430,13 +1441,7 @@ void ThumbnailView::setSelectionMode (bool mode)
 {
     mbSelectionMode = mode;
 
-    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
-    {
-        mItemList[i]->setSelectionMode(mode);
-
-        if (mItemList[i]->isVisible())
-            DrawItem(mItemList[i]);
-    }
+    OnSelectionMode(mode);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
