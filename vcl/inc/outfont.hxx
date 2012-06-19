@@ -71,6 +71,12 @@ public: // TODO: create matching interface class
     FontWidth       GetWidthType() const    { return meWidthType; }
     bool            IsSymbolFont() const    { return mbSymbolFlag; }
 
+    bool operator==(const ImplFontAttributes& rOther) const;
+    bool operator!=(const ImplFontAttributes& rOther) const
+    {
+        return !(*this == rOther);
+    }
+
 public: // TODO: hide members behind accessor methods
     String          maName;         // Font Family Name
     String          maStyleName;    // Font Style Name
@@ -109,7 +115,6 @@ public: // TODO: hide members behind accessor methods
 // ----------------
 // - PhysicalFontFace -
 // ----------------
-// DONE: rename ImplFontData to PhysicalFontFace
 // TODO: no more direct access to members
 // TODO: add reference counting
 // TODO: get rid of height/width for scalable fonts
@@ -152,24 +157,27 @@ friend class ImplDevFontListData;
     PhysicalFontFace*       mpNext;
 };
 
-// ----------------------
-// - FontSelectPattern -
-// ----------------------
-
-class FontSelectPattern : public ImplFontAttributes
+class FontSelectPatternAttributes : public ImplFontAttributes
 {
 public:
-                        FontSelectPattern( const Font&, const String& rSearchName,
-                                           const Size&, float fExactHeight );
-                        FontSelectPattern( const PhysicalFontFace&, const Size&,
-                                           float fExactHeight, int nOrientation, bool bVertical );
+                        FontSelectPatternAttributes( const Font&, const String& rSearchName,
+                            const Size&, float fExactHeight );
+                        FontSelectPatternAttributes( const PhysicalFontFace&, const Size&,
+                            float fExactHeight, int nOrientation, bool bVertical );
 
-public: // TODO: change to private
+    size_t              hashCode() const;
+    bool operator==(const FontSelectPatternAttributes& rOther) const;
+    bool operator!=(const FontSelectPatternAttributes& rOther) const
+    {
+        return !(*this == rOther);
+    }
+
+public:
     String              maTargetName;       // name of the font name token that is chosen
     String              maSearchName;       // name of the font that matches best
     int                 mnWidth;            // width of font in pixel units
     int                 mnHeight;           // height of font in pixel units
-    float               mfExactHeight;       // requested height (in pixels with subpixel details)
+    float               mfExactHeight;      // requested height (in pixels with subpixel details)
     int                 mnOrientation;      // text orientation in 3600 system
     LanguageType        meLanguage;         // text language
     bool                mbVertical;         // vertical mode of requested font
@@ -177,9 +185,20 @@ public: // TODO: change to private
 
     bool                mbEmbolden;         // Force emboldening
     ItalicMatrix        maItalicMatrix;     // Force matrix for slant
+};
 
+class FontSelectPattern : public FontSelectPatternAttributes
+{
+public:
+                        FontSelectPattern( const Font&, const String& rSearchName,
+                            const Size&, float fExactHeight );
+                        FontSelectPattern( const PhysicalFontFace&, const Size&,
+                            float fExactHeight, int nOrientation, bool bVertical );
+
+public: // TODO: change to private
     const PhysicalFontFace* mpFontData;         // a matching PhysicalFontFace object
     ImplFontEntry*      mpFontEntry;        // pointer to the resulting FontCache entry
+    void copyAttributes(const FontSelectPatternAttributes &rAttributes);
 };
 
 // -------------------

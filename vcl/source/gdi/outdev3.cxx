@@ -2139,21 +2139,17 @@ ImplGetDevSizeList* ImplDevFontList::GetDevSizeList( const String& rFontName ) c
     return pGetDevSizeList;
 }
 
-// =======================================================================
-
-FontSelectPattern::FontSelectPattern( const Font& rFont,
-    const String& rSearchName, const Size& rSize, float fExactHeight)
-:   maSearchName( rSearchName ),
-    mnWidth( rSize.Width() ),
-    mnHeight( rSize.Height() ),
-    mfExactHeight( fExactHeight),
-    mnOrientation( rFont.GetOrientation() ),
-    meLanguage( rFont.GetLanguage() ),
-    mbVertical( rFont.IsVertical() ),
-    mbNonAntialiased( false ),
-    mbEmbolden( false ),
-    mpFontData( NULL ),
-    mpFontEntry( NULL )
+FontSelectPatternAttributes::FontSelectPatternAttributes( const Font& rFont,
+    const String& rSearchName, const Size& rSize, float fExactHeight )
+    : maSearchName( rSearchName )
+    , mnWidth( rSize.Width() )
+    , mnHeight( rSize.Height() )
+    , mfExactHeight( fExactHeight)
+    , mnOrientation( rFont.GetOrientation() )
+    , meLanguage( rFont.GetLanguage() )
+    , mbVertical( rFont.IsVertical() )
+    , mbNonAntialiased( false )
+    , mbEmbolden( false )
 {
     maTargetName = maName;
 
@@ -2175,49 +2171,113 @@ FontSelectPattern::FontSelectPattern( const Font& rFont,
         mnWidth = -mnWidth;
 }
 
-// -----------------------------------------------------------------------
+FontSelectPattern::FontSelectPattern( const Font& rFont,
+    const String& rSearchName, const Size& rSize, float fExactHeight)
+    : FontSelectPatternAttributes(rFont, rSearchName, rSize, fExactHeight)
+    , mpFontData( NULL )
+    , mpFontEntry( NULL )
+{
+}
+
 // NOTE: this ctor is still used on Windows. Do not remove.
-FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
+FontSelectPatternAttributes::FontSelectPatternAttributes( const PhysicalFontFace& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
-:   ImplFontAttributes( rFontData ),
-    mnWidth( rSize.Width() ),
-    mnHeight( rSize.Height() ),
-    mfExactHeight( fExactHeight ),
-    mnOrientation( nOrientation ),
-    meLanguage( 0 ),
-    mbVertical( bVertical ),
-    mbNonAntialiased( false ),
-    mbEmbolden( false ),
-    mpFontData( &rFontData ),
-    mpFontEntry( NULL )
+    : ImplFontAttributes( rFontData )
+    , mnWidth( rSize.Width() )
+    , mnHeight( rSize.Height() )
+    , mfExactHeight( fExactHeight )
+    , mnOrientation( nOrientation )
+    , meLanguage( 0 )
+    , mbVertical( bVertical )
+    , mbNonAntialiased( false )
+    , mbEmbolden( false )
 {
     maTargetName = maSearchName = maName;
     // NOTE: no normalization for width/height/orientation
+}
+
+FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
+    const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
+    : FontSelectPatternAttributes(rFontData, rSize, fExactHeight, nOrientation, bVertical)
+    , mpFontData( &rFontData )
+    , mpFontEntry( NULL )
+{
+}
+
+void FontSelectPattern::copyAttributes(const FontSelectPatternAttributes &rAttributes)
+{
+    static_cast<FontSelectPatternAttributes&>(*this) = rAttributes;
 }
 
 // =======================================================================
 
 size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) const
 {
+    return rFSD.hashCode();
+}
+
+size_t FontSelectPatternAttributes::hashCode() const
+{
     // TODO: does it pay off to improve this hash function?
     static FontNameHash aFontNameHash;
-    size_t nHash = aFontNameHash( rFSD.maSearchName );
+    size_t nHash = aFontNameHash( maSearchName );
 #ifdef ENABLE_GRAPHITE
     // check for features and generate a unique hash if necessary
-    if (rFSD.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+    if (maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
         != STRING_NOTFOUND)
     {
-        nHash = aFontNameHash( rFSD.maTargetName );
+        nHash = aFontNameHash( maTargetName );
     }
 #endif
-    nHash += 11 * rFSD.mnHeight;
-    nHash += 19 * rFSD.meWeight;
-    nHash += 29 * rFSD.meItalic;
-    nHash += 37 * rFSD.mnOrientation;
-    nHash += 41 * rFSD.meLanguage;
-    if( rFSD.mbVertical )
+    nHash += 11 * mnHeight;
+    nHash += 19 * meWeight;
+    nHash += 29 * meItalic;
+    nHash += 37 * mnOrientation;
+    nHash += 41 * meLanguage;
+    if( mbVertical )
         nHash += 53;
     return nHash;
+}
+
+bool FontSelectPatternAttributes::operator==(const FontSelectPatternAttributes& rOther) const
+{
+    if (static_cast<const ImplFontAttributes&>(*this) != static_cast<const ImplFontAttributes&>(rOther))
+        return false;
+
+    if (maTargetName != rOther.maTargetName)
+        return false;
+
+    if (maSearchName != rOther.maSearchName)
+        return false;
+
+    if (mnWidth != rOther.mnWidth)
+        return false;
+
+    if (mnHeight != rOther.mnHeight)
+        return false;
+
+    if (mfExactHeight != rOther.mfExactHeight)
+        return false;
+
+    if (mnOrientation != rOther.mnOrientation)
+        return false;
+
+    if (meLanguage != rOther.meLanguage)
+        return false;
+
+    if (mbVertical != rOther.mbVertical)
+        return false;
+
+    if (mbNonAntialiased != rOther.mbNonAntialiased)
+        return false;
+
+    if (mbEmbolden != rOther.mbEmbolden)
+        return false;
+
+    if (maItalicMatrix != rOther.maItalicMatrix)
+        return false;
+
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -3328,6 +3388,37 @@ void OutputDevice::ImplInitTextLineSize()
 void OutputDevice::ImplInitAboveTextLineSize()
 {
     mpFontEntry->maMetric.ImplInitAboveTextLineSize();
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplFontAttributes::operator==(const ImplFontAttributes& rOther) const
+{
+    if (maName != rOther.maName)
+        return false;
+
+    if (maStyleName != rOther.maStyleName)
+        return false;
+
+    if (meWeight != rOther.meWeight)
+        return false;
+
+    if (meItalic != rOther.meItalic)
+        return false;
+
+    if (meFamily != rOther.meFamily)
+        return false;
+
+    if (mePitch != rOther.mePitch)
+        return false;
+
+    if (meWidthType != rOther.meWidthType)
+        return false;
+
+    if (mbSymbolFlag != rOther.mbSymbolFlag)
+        return false;
+
+    return true;
 }
 
 // -----------------------------------------------------------------------
