@@ -28,13 +28,18 @@
 #ifndef _VCL_SM_HXX
 #define _VCL_SM_HXX
 
-#include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
-#include "tools/link.hxx"
-#include "unx/salunx.h"
+#include "sal/config.h"
+
 #include <X11/SM/SMlib.h>
-#include "salsession.hxx"
+
+#include "tools/link.hxx"
 #include "vclpluginapi.h"
+
+namespace rtl {
+    class OString;
+    class OUString;
+}
+class SalSession;
 
 class SessionManagerClient
 {
@@ -75,20 +80,6 @@ public:
 
     static rtl::OUString getExecName();
     static VCLPLUG_GEN_PUBLIC const rtl::OString& getSessionID();
-};
-
-class SalFrame;
-
-class IceSalSession : public SalSession
-{
-public:
-    IceSalSession();
-    virtual ~IceSalSession();
-
-    virtual void queryInteraction();
-    virtual void interactionDone();
-    virtual void saveDone();
-    virtual bool cancelShutdown();
 };
 
 #endif

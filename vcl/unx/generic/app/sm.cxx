@@ -56,6 +56,24 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
+#include "salsession.hxx"
+
+namespace {
+
+class IceSalSession : public SalSession
+{
+public:
+    IceSalSession();
+    virtual ~IceSalSession();
+
+    virtual void queryInteraction();
+    virtual void interactionDone();
+    virtual void saveDone();
+    virtual bool cancelShutdown();
+};
+
+}
+
 SalSession* X11SalInstance::CreateSalSession()
 {
     SalSession * p = new IceSalSession;
