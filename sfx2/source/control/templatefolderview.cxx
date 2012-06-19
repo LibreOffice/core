@@ -203,6 +203,19 @@ void TemplateFolderView::showOverlay (bool bVisible)
         mpItemView->Clear();
 }
 
+void TemplateFolderView::OnSelectionMode (bool bMode)
+{
+    if (mpItemView->IsVisible())
+    {
+        mpItemView->setSelectionMode(bMode);
+
+        for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+            mItemList[i]->setSelectionMode(bMode);
+    }
+    else
+        ThumbnailView::OnSelectionMode(bMode);
+}
+
 void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 {
     // Fill templates
@@ -215,6 +228,9 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
         mpItemView->InsertItem(i+1,lcl_fetchThumbnail(pTemplates->GetPath(nRegionId,i),128,128),
                                pTemplates->GetName(nRegionId,i));
     }
+
+    if (mbSelectionMode)
+        mpItemView->setSelectionMode(true);
 
     mpItemView->Show();
 }

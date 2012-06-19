@@ -32,6 +32,8 @@ public:
 
 private:
 
+    virtual void OnSelectionMode (bool bMode);
+
     virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);
 
 private:
