@@ -189,11 +189,22 @@ void TemplateFolderView::Populate ()
         Invalidate();
 }
 
+bool TemplateFolderView::isOverlayVisible () const
+{
+    return mpItemView->IsVisible();
+}
+
+void TemplateFolderView::showOverlay (bool bVisible)
+{
+    mpItemView->Show(bVisible);
+
+    // Clear items is the overlay is closed.
+    if (!bVisible)
+        mpItemView->Clear();
+}
+
 void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 {
-    // Clear previous items
-    mpItemView->Clear();
-
     // Fill templates
     sal_uInt16 nRegionId = pRegionItem->mnId-1;
     const SfxDocumentTemplates* pTemplates = mpMgr->GetTemplates();

@@ -25,6 +25,11 @@ public:
     // Fill view with template folders thumbnails
     void Populate ();
 
+    // Check if the overlay is visible or not.
+    bool isOverlayVisible () const;
+
+    void showOverlay (bool bVisible);
+
 private:
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);

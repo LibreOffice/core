@@ -31,6 +31,8 @@ public:
 
 private:
 
+    virtual void MouseButtonDown( const MouseEvent& rMEvt );
+
     DECL_LINK(OnClickSelectionMode, ImageButton*);
 
 private:

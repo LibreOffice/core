@@ -69,6 +69,12 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewDrawsHdl)
     return 0;
 }
 
+void SfxTemplateManagerDlg::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if (!maView->GetActiveClipRegion().IsInside(rMEvt.GetPosPixel()) && maView->isOverlayVisible())
+        maView->showOverlay(false);
+}
+
 IMPL_LINK (SfxTemplateManagerDlg, OnClickSelectionMode, ImageButton*, pButton)
 {
     maView->setSelectionMode(pButton->GetState() == STATE_CHECK);
