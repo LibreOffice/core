@@ -1437,6 +1437,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     rtl::OUString sStringValue = pValue->getString();
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
     switch(nSprmId)
     {
@@ -1983,6 +1984,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                         rContext->Insert(ePropertyId, true, aBold );
                         if( nSprmId != NS_sprm::LN_CFBoldBi ) // sprmCFBoldBi
                             rContext->Insert(PROP_CHAR_WEIGHT_ASIAN, true, aBold );
+
+                        uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
+                        if (xCharStyle.is())
+                            xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_WEIGHT), aBold);
                     }
                     break;
                     case 61: /*sprmCFItalic*/
@@ -2060,6 +2065,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 //Asian get the same value as Western
                 rContext->Insert( PROP_CHAR_HEIGHT, true, aVal );
                 rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, true, aVal );
+
+                uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
+                if (xCharStyle.is())
+                    xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_HEIGHT), aVal);
             }
         }
         break;
