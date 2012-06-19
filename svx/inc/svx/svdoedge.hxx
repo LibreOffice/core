@@ -266,6 +266,11 @@ public:
     virtual void NbcMove(const Size& aSize);
     virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact);
 
+    // #54102# added rotate, mirrorn and shear support
+    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
+    virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+
     // #102344# Added missing implementation
     virtual void NbcSetAnchorPos(const Point& rPnt);
 
