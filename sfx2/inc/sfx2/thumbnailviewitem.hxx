@@ -29,6 +29,8 @@
 #ifndef THUMBNAILVIEWITEM_HXX
 #define THUMBNAILVIEWITEM_HXX
 
+#include <basegfx/vector/b2dvector.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 
@@ -37,8 +39,23 @@
 #define THUMBNAILVIEW_ITEM_NONEITEM      0xFFFE
 
 class CheckBox;
+class Font;
 class Window;
 class ThumbnailView;
+
+namespace drawinglayer {
+    namespace processor2d {
+        class BaseProcessor2D;
+    }
+}
+
+struct ThumbnailItemAttributes
+{
+    basegfx::BColor aFillColor;
+    basegfx::BColor aHighlightColor;
+    basegfx::B2DVector aFontSize;
+    drawinglayer::attribute::FontAttribute aFontAttr;
+};
 
 struct ThumbnailViewItem
 {
@@ -89,7 +106,8 @@ struct ThumbnailViewItem
 
     bool isInsideTitle (const Point &pt) const;
 
-    void Paint (const Rectangle &aRect);
+    void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
+                const ThumbnailItemAttributes *pAttrs);
 
 private:
 
@@ -105,6 +123,9 @@ private:
     Link maClickHdl;
     CheckBox *mpSelectBox;
 };
+
+// Helper function to convert a rectangle to a polygon.
+basegfx::B2DPolygon Rect2Polygon (const Rectangle &aRect);
 
 #endif // THUMBNAILVIEWITEM_HXX
 

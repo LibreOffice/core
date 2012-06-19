@@ -16,7 +16,6 @@
 
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -61,17 +60,6 @@ enum
     SCRBAR_OFFSET = 1,
     SCROLL_OFFSET = 4
 };
-
-B2DPolygon lcl_Rect2Polygon (const Rectangle &aRect)
-{
-    B2DPolygon aPolygon;
-    aPolygon.append(B2DPoint(aRect.Left(),aRect.Top()));
-    aPolygon.append(B2DPoint(aRect.Left(),aRect.Bottom()));
-    aPolygon.append(B2DPoint(aRect.Right(),aRect.Bottom()));
-    aPolygon.append(B2DPoint(aRect.Right(),aRect.Top()));
-
-    return aPolygon;
-}
 
 BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 {
@@ -214,6 +202,7 @@ ThumbnailView::~ThumbnailView()
 
     delete mpMgr;
     delete mpScrBar;
+    delete mpItemAttrs;
 
     ImplDeleteItems();
 }
@@ -245,6 +234,10 @@ void ThumbnailView::ImplInit()
     mbScroll            = false;
     mbHasVisibleItems   = false;
     mbSelectionMode = false;
+
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    mpProcessor = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*this, aNewViewInfos );
 
     ImplInitSettings( true, true, true );
 }
@@ -303,6 +296,11 @@ void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
             aColor = rStyleSettings.GetFaceColor();
         SetBackground( aColor );
     }
+
+    mpItemAttrs = new ThumbnailItemAttributes;
+    mpItemAttrs->aFillColor = maColor.getBColor();
+    mpItemAttrs->aHighlightColor = rStyleSettings.GetHighlightColor().getBColor();
+    mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize,GetFont(),false,true);
 }
 
 void ThumbnailView::ImplInitScrollBar()
@@ -328,87 +326,7 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
     Rectangle aRect = pItem->getDrawArea();
 
     if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
-    {
-        int nCount = 0;
-        int nSeqSize = 3;
-
-        if (!pItem->maPreview2.IsEmpty())
-            ++nSeqSize;
-
-        Primitive2DSequence aSeq(nSeqSize);
-
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-        // Draw item background
-        BColor aFillColor = maColor.getBColor();
-
-        if ( pItem->isSelected() || pItem->isHighlighted() )
-            aFillColor = rStyleSettings.GetHighlightColor().getBColor();
-
-        aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
-                                            B2DPolyPolygon(lcl_Rect2Polygon(aRect)),
-                                            aFillColor));
-
-        // Draw thumbnail
-        Point aPos = pItem->getPrev1Pos();
-        Size aImageSize = pItem->maPreview1.GetSizePixel();
-
-        float fScaleX = 1.0f;
-        float fScaleY = 1.0f;
-
-        if (!pItem->maPreview2.IsEmpty())
-        {
-            fScaleX = 0.8;
-            fScaleY = 0.8;
-
-            aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
-                                                createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
-                                                FillBitmapAttribute(pItem->maPreview2,
-                                                                    B2DPoint(35,20),
-                                                                    B2DVector(aImageSize.Width(),aImageSize.Height()),
-                                                                    false)
-                                                ));
-        }
-
-        aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
-                                            createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
-                                            FillBitmapAttribute(pItem->maPreview1,
-                                                                B2DPoint(0,0),
-                                                                B2DVector(aImageSize.Width(),aImageSize.Height()),
-                                                                false)
-                                            ));
-
-        // Draw centered text below thumbnail
-        aPos = pItem->getTextPos();
-
-        // Create the text primitive
-        B2DVector aFontSize;
-        FontAttribute aFontAttr = getFontAttributeFromVclFont(
-               aFontSize, GetFont(), false, true );
-
-
-        basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
-                    aFontSize.getX(), aFontSize.getY(),
-                    double( aPos.X() ), double( aPos.Y() ) ) );
-
-        aSeq[nCount++] = Primitive2DReference(
-                    new TextSimplePortionPrimitive2D(aTextMatrix,
-                                                     pItem->maText,0,pItem->maText.getLength(),
-                                                     std::vector< double >( ),
-                                                     aFontAttr,
-                                                     com::sun::star::lang::Locale(),
-                                                     Color(COL_BLACK).getBColor() ) );
-
-        // Create the processor and process the primitives
-        const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-        drawinglayer::processor2d::BaseProcessor2D * pProcessor =
-            drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
-                        *this, aNewViewInfos );
-
-        pProcessor->process(aSeq);
-
-        pItem->Paint(aRect);
-    }
+        pItem->Paint(mpProcessor,mpItemAttrs);
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ThumbnailView::CreateAccessible()
@@ -1585,7 +1503,9 @@ rtl::OUString ThumbnailView::GetItemText( sal_uInt16 nItemId ) const
 
 void ThumbnailView::SetColor( const Color& rColor )
 {
-    maColor     = rColor;
+    maColor = rColor;
+    mpItemAttrs->aFillColor = rColor.getBColor();
+
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }

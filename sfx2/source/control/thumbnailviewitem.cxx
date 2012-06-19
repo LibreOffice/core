@@ -26,14 +26,28 @@
  *
  ************************************************************************/
 
+#include <sfx2/thumbnailviewitem.hxx>
+
 #include "thumbnailviewacc.hxx"
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 
+using namespace basegfx;
+using namespace basegfx::tools;
 using namespace ::com::sun::star;
+using namespace drawinglayer::attribute;
+using namespace drawinglayer::primitive2d;
 
 ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, Window *pParent)
     : mrParent(rView)
@@ -149,10 +163,75 @@ bool ThumbnailViewItem::isInsideTitle (const Point &pt) const
     return aRect.IsInside(pt);
 }
 
-void ThumbnailViewItem::Paint (const Rectangle &aRect)
+void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
+                               const ThumbnailItemAttributes *pAttrs)
 {
+    int nCount = 0;
+    int nSeqSize = 3;
+
+    if (!maPreview2.IsEmpty())
+        ++nSeqSize;
+
+    BColor aFillColor = pAttrs->aFillColor;
+    Primitive2DSequence aSeq(nSeqSize);
+
+    // Draw background
+    if ( mbSelected || mbHover )
+        aFillColor = pAttrs->aHighlightColor;
+
+    aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+                                               B2DPolyPolygon(Rect2Polygon(maDrawArea)),
+                                               aFillColor));
+
+    // Draw thumbnail
+    Point aPos = maPrev1Pos;
+    Size aImageSize = maPreview1.GetSizePixel();
+
+    float fScaleX = 1.0f;
+    float fScaleY = 1.0f;
+
+    if (!maPreview2.IsEmpty())
+    {
+        fScaleX = 0.8;
+        fScaleY = 0.8;
+
+        aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
+                                            createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
+                                            FillBitmapAttribute(maPreview2,
+                                                                B2DPoint(35,20),
+                                                                B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                                                false)
+                                            ));
+    }
+
+    aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
+                                        createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
+                                        FillBitmapAttribute(maPreview1,
+                                                            B2DPoint(0,0),
+                                                            B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                                            false)
+                                        ));
+
+    // Draw centered text below thumbnail
+    aPos = maTextPos;
+
+    // Create the text primitive
+    basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
+                pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
+                double( aPos.X() ), double( aPos.Y() ) ) );
+
+    aSeq[nCount++] = Primitive2DReference(
+                new TextSimplePortionPrimitive2D(aTextMatrix,
+                                                 maText,0,maText.getLength(),
+                                                 std::vector< double >( ),
+                                                 pAttrs->aFontAttr,
+                                                 com::sun::star::lang::Locale(),
+                                                 Color(COL_BLACK).getBColor() ) );
+
+    pProcessor->process(aSeq);
+
     if (mbMode || mbHover || mbSelected)
-        mpSelectBox->Paint(aRect);
+        mpSelectBox->Paint(maDrawArea);
 }
 
 IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )
@@ -161,6 +240,17 @@ IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )
     mpSelectBox->Invalidate();
     maClickHdl.Call(this);
     return 0;
+}
+
+basegfx::B2DPolygon Rect2Polygon (const Rectangle &aRect)
+{
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append(basegfx::B2DPoint(aRect.Left(),aRect.Top()));
+    aPolygon.append(basegfx::B2DPoint(aRect.Left(),aRect.Bottom()));
+    aPolygon.append(basegfx::B2DPoint(aRect.Right(),aRect.Bottom()));
+    aPolygon.append(basegfx::B2DPoint(aRect.Right(),aRect.Top()));
+
+    return aPolygon;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

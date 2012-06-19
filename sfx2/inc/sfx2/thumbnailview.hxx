@@ -28,8 +28,15 @@ class SfxOrganizeMgr;
 struct ThumbnailViewItem;
 typedef ::std::vector< ThumbnailViewItem* > ValueItemList;
 
+class ThumbnailItemAttributes;
 class ThumbnailViewAcc;
 class ThumbnailViewItemAcc;
+
+namespace drawinglayer {
+    namespace processor2d {
+        class BaseProcessor2D;
+    }
+}
 
 /*************************************************************************
 
@@ -329,6 +336,9 @@ protected:
     bool mbHasVisibleItems : 1;
     bool mbSelectionMode;
     Color maColor;
+
+    ThumbnailItemAttributes *mpItemAttrs;
+    drawinglayer::processor2d::BaseProcessor2D *mpProcessor;
 };
 
 #endif // THUMBNAILVIEW_HXX
