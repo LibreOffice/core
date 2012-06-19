@@ -93,7 +93,7 @@ public:
     const ShapeBase*    findShape( const Functor& rFunctor ) const;
 
     /** Returns and removes the last shape in the collection (Word only). */
-    const ShapeBase*    takeLastShape();
+    boost::shared_ptr< ShapeBase > takeLastShape();
 
     /** Creates and inserts all UNO shapes into the passed container. */
     void                convertAndInsert(

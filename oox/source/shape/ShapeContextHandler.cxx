@@ -244,7 +244,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         if ( getContextHandler() == getDrawingShapeContext() )
         {
             mpDrawing->finalizeFragmentImport();
-            if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().takeLastShape() )
+            if( boost::shared_ptr< ::oox::vml::ShapeBase > pShape = mpDrawing->getShapes().takeLastShape() )
                 xResult = pShape->convertAndInsert( xShapes );
         }
         else if (mpShape.get() != NULL)
