@@ -13,7 +13,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 
-class ThumbnailView;
+class TemplateFolderView;
 
 class SfxTemplateManagerDlg : public ModalDialog
 {
@@ -42,7 +42,7 @@ private:
     PushButton aButtonDraws;
     ImageButton maButtonSelMode;
 
-    ThumbnailView *maView;
+    TemplateFolderView *maView;
 };
 
 #endif // TEMPLATEDLG_HXX

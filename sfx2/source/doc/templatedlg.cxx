@@ -10,7 +10,7 @@
 #include "templatedlg.hxx"
 
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/thumbnailview.hxx>
+#include <sfx2/templatefolderview.hxx>
 
 #include "doc.hrc"
 #include "templatedlg.hrc"
@@ -26,7 +26,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
       aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
       maButtonSelMode(this,SfxResId(BTN_SELECTION_MODE)),
-      maView(new ThumbnailView(this,SfxResId(TEMPLATE_VIEW)))
+      maView(new TemplateFolderView(this,SfxResId(TEMPLATE_VIEW)))
 {
     maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
 
