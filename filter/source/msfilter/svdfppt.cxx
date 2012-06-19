@@ -588,6 +588,7 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
 PptSlidePersistEntry::~PptSlidePersistEntry()
 {
     delete pStyleSheet;
+    delete pHeaderFooterEntry;
     delete pSolverContainer;
     delete[] pPresentationObjects;
 };
