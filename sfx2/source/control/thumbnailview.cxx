@@ -203,6 +203,10 @@ void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
         pItem->Paint(mpProcessor,mpItemAttrs);
 }
 
+void ThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
+{
+}
+
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ThumbnailView::CreateAccessible()
 {
     return new ThumbnailViewAcc( this, mbIsTransientChildrenDisabled );
@@ -674,7 +678,7 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     }
                 }
                 else if ( rMEvt.GetClicks() == 2 )
-                    ;
+                    OnItemDblClicked(pItem);
             }
 
             return;

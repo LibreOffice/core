@@ -266,6 +266,8 @@ protected:
 
     virtual void DrawItem (ThumbnailViewItem *pItem);
 
+    virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
+
 protected:
 
     friend class ThumbnailViewAcc;
