@@ -303,6 +303,7 @@ EmbeddedObjectRef::~EmbeddedObjectRef()
     if ( mpImp->pHCGraphic )
         DELETEZ( mpImp->pHCGraphic );
     Clear();
+    delete mpImp;
 }
 /*
 EmbeddedObjectRef& EmbeddedObjectRef::operator = ( const EmbeddedObjectRef& rObj )
