@@ -241,10 +241,10 @@ bool SessionManagerClient::checkDocumentsSaved()
     return bDocSaveDone;
 }
 
-IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, SaveYourselfHdl, void*, pStateVal )
 {
-    //decode argument smuggled in by abusing pThis member of SessionManagerClient
-    sal_uIntPtr nStateVal = (sal_uIntPtr)pThis;
+    // Decode argument smuggled in as void*:
+    sal_uIntPtr nStateVal = reinterpret_cast< sal_uIntPtr >(pStateVal);
     Bool shutdown = nStateVal != 0;
 
     SAL_INFO("vcl.sm", "posting save documents event shutdown = " << (shutdown ? "true" : "false" ));
@@ -340,9 +340,9 @@ void SessionManagerClient::SaveYourselfProc(
         SessionManagerClient::saveDone();
         return;
     }
-    //Smuggle argument in by abusing pThis member of SessionManagerClient
-    sal_uIntPtr nStateVal = shutdown ? 0xffffffff : 0x0;
-    Application::PostUserEvent( STATIC_LINK( (void*)nStateVal, SessionManagerClient, SaveYourselfHdl ) );
+    // Smuggle argument in as void*:
+    sal_uIntPtr nStateVal = shutdown;
+    Application::PostUserEvent( STATIC_LINK( 0, SessionManagerClient, SaveYourselfHdl ), reinterpret_cast< void * >(nStateVal) );
     SAL_INFO("vcl.sm", "waiting for save yourself event to be processed" );
 }
 
