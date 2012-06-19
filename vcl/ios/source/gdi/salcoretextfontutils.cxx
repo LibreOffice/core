@@ -257,7 +257,7 @@ void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
 }
 
 ImplCoreTextFontData::ImplCoreTextFontData( const ImplDevFontAttributes& rDFA, CTFontRef font )
-:   ImplFontData( rDFA, 0 )
+:   PhysicalFontFace( rDFA, 0 )
 ,   m_CTFontRef((CTFontRef)CFRetain(font))
 ,   m_pCharMap( NULL )
 ,   m_bHasOs2Table( false )
@@ -280,7 +280,7 @@ ImplCoreTextFontData::~ImplCoreTextFontData()
     }
 }
 
-ImplFontData* ImplCoreTextFontData::Clone() const
+PhysicalFontFace* ImplCoreTextFontData::Clone() const
 {
     ImplCoreTextFontData* pClone = new ImplCoreTextFontData(*this);
     if ( m_pCharMap )

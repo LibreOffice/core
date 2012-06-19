@@ -176,7 +176,7 @@ private:
 
 // -----------------------------------------------------------------------
 
-class ImplFTSFontData : public ImplFontData
+class ImplFTSFontData : public PhysicalFontFace
 {
 private:
     FtFontInfo*             mpFtFontInfo;
@@ -188,10 +188,10 @@ public:
     FtFontInfo*             GetFtFontInfo() const { return mpFtFontInfo; }
 
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
-    virtual ImplFontData*   Clone() const   { return new ImplFTSFontData( *this ); }
+    virtual PhysicalFontFace* Clone() const   { return new ImplFTSFontData( *this ); }
     virtual sal_IntPtr      GetFontId() const { return mpFtFontInfo->GetFontId(); }
 
-    static bool             CheckFontData( const ImplFontData& r ) { return r.CheckMagic( IFTSFONT_MAGIC ); }
+    static bool             CheckFontData( const PhysicalFontFace& r ) { return r.CheckMagic( IFTSFONT_MAGIC ); }
 };
 
 // -----------------------------------------------------------------------

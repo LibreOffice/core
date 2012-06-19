@@ -49,7 +49,7 @@ typedef unsigned short LanguageType;
 #include <vcl/vclenum.hxx>
 
 class SalGraphics;
-class ImplFontData;
+class PhysicalFontFace;
 
 #define MAX_FALLBACK 16
 
@@ -197,7 +197,7 @@ public:
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     int             GetOrientation() const                  { return mnOrientation; }
 
-    virtual const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
+    virtual const PhysicalFontFace* GetFallbackFontData( sal_GlyphId ) const;
 
     // methods using string indexing
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra=0, int nFactor=1 ) const = 0;
@@ -271,14 +271,14 @@ public:
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout,
-                         const ImplFontData* pBaseFont = NULL );
+                         const PhysicalFontFace* pBaseFont = NULL );
     virtual bool    AddFallback( SalLayout& rFallbackLayout,
-                         ImplLayoutRuns&, const ImplFontData* pFallbackFont );
+                         ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    InitFont() const;
 
-    virtual const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
+    virtual const PhysicalFontFace* GetFallbackFontData( sal_GlyphId ) const;
 
     void SetInComplete(bool bInComplete = true);
 
@@ -297,7 +297,7 @@ private:
 
 private:
     SalLayout*      mpLayouts[ MAX_FALLBACK ];
-    const ImplFontData* mpFallbackFonts[ MAX_FALLBACK ];
+    const PhysicalFontFace* mpFallbackFonts[ MAX_FALLBACK ];
     ImplLayoutRuns  maFallbackRuns[ MAX_FALLBACK ];
     int             mnLevel;
     bool            mbInComplete;

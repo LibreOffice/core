@@ -211,7 +211,7 @@ ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
 
     // the FontList's key mpFontData member is reinterpreted as font id
     FontSelectPattern aFontSelData = rFontSelData;
-    aFontSelData.mpFontData = reinterpret_cast<ImplFontData*>( nFontId );
+    aFontSelData.mpFontData = reinterpret_cast<PhysicalFontFace*>( nFontId );
     FontList::iterator it = maFontList.find( aFontSelData );
     if( it != maFontList.end() )
     {

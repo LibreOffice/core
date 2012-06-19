@@ -792,7 +792,7 @@ bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph ) const
 
 // -----------------------------------------------------------------------
 
-const ImplFontData* SalLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) const
+const PhysicalFontFace* SalLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) const
 {
     return NULL;
 }
@@ -1459,7 +1459,7 @@ void GenericSalLayout::SortGlyphItems()
 
 // =======================================================================
 
-MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout, const ImplFontData* pBaseFont )
+MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout, const PhysicalFontFace* pBaseFont )
 :   SalLayout()
 ,   mnLevel( 1 )
 ,   mbInComplete( false )
@@ -1487,7 +1487,7 @@ MultiSalLayout::~MultiSalLayout()
 // -----------------------------------------------------------------------
 
 bool MultiSalLayout::AddFallback( SalLayout& rFallback,
-    ImplLayoutRuns& rFallbackRuns, const ImplFontData* pFallbackFont )
+    ImplLayoutRuns& rFallbackRuns, const PhysicalFontFace* pFallbackFont )
 {
     if( mnLevel >= MAX_FALLBACK )
         return false;
@@ -1888,7 +1888,7 @@ void MultiSalLayout::InitFont() const
 
 // -----------------------------------------------------------------------
 
-const ImplFontData* MultiSalLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) const
+const PhysicalFontFace* MultiSalLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) const
 {
     int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
     return mpFallbackFonts[ nFallbackLevel ];

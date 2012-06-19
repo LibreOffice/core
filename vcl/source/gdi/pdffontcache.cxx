@@ -34,14 +34,14 @@
 
 using namespace vcl;
 
-PDFFontCache::FontIdentifier::FontIdentifier( const ImplFontData* pFont, bool bVertical ) :
+PDFFontCache::FontIdentifier::FontIdentifier( const PhysicalFontFace* pFont, bool bVertical ) :
     m_nFontId( pFont->GetFontId() ),
     m_nMagic( pFont->GetFontMagic() ),
     m_bVertical( bVertical )
 {
 }
 
-PDFFontCache::FontData& PDFFontCache::getFont( const ImplFontData* pFont, bool bVertical )
+PDFFontCache::FontData& PDFFontCache::getFont( const PhysicalFontFace* pFont, bool bVertical )
 {
     FontIdentifier aId( pFont, bVertical );
     FontToIndexMap::iterator it = m_aFontToIndex.find( aId );
@@ -52,7 +52,7 @@ PDFFontCache::FontData& PDFFontCache::getFont( const ImplFontData* pFont, bool b
     return m_aFonts.back();
 }
 
-sal_Int32 PDFFontCache::getGlyphWidth( const ImplFontData* pFont, sal_GlyphId nGlyph, bool bVertical, SalGraphics* pGraphics )
+sal_Int32 PDFFontCache::getGlyphWidth( const PhysicalFontFace* pFont, sal_GlyphId nGlyph, bool bVertical, SalGraphics* pGraphics )
 {
     sal_Int32 nWidth = 0;
     FontData& rFontData( getFont( pFont, bVertical ) );

@@ -69,7 +69,7 @@ public:
     virtual bool    GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
-    const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
+    const PhysicalFontFace* GetFallbackFontData( sal_GlyphId ) const;
 
     virtual void    InitFont() const;
     virtual void    MoveGlyph( int nStart, long nNewXPos );
@@ -127,7 +127,7 @@ class FallbackInfo
 public:
         FallbackInfo() : mnMaxLevel(0) {}
     int AddFallback( ATSUFontID );
-    const ImplFontData* GetFallbackFontData( int nLevel ) const;
+    const PhysicalFontFace* GetFallbackFontData( int nLevel ) const;
 
 private:
     const ImplMacFontData* maFontData[ MAX_FALLBACK ];
@@ -1110,9 +1110,9 @@ void ATSLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void ATSLayout::DropGlyph( int /*nStart*/ ) {}
 void ATSLayout::Simplify( bool /*bIsBase*/ ) {}
 
-// get the ImplFontData for a glyph fallback font
+// get the PhysicalFontFace for a glyph fallback font
 // for a glyphid that was returned by ATSLayout::GetNextGlyphs()
-const ImplFontData* ATSLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) const
+const PhysicalFontFace* ATSLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) const
 {
     // check if any fallback fonts were needed
     if( !mpFallbackInfo )
@@ -1138,7 +1138,7 @@ int FallbackInfo::AddFallback( ATSUFontID nFontId )
         return 0;
     // keep ATSU font id of fallback font
     maATSUFontId[ mnMaxLevel ] = nFontId;
-    // find and cache the corresponding ImplFontData pointer
+    // find and cache the corresponding PhysicalFontFace pointer
     const SystemFontList* pSFL = GetSalData()->mpFontList;
     const ImplMacFontData* pFontData = pSFL->GetFontDataFromId( nFontId );
     maFontData[ mnMaxLevel ] = pFontData;
@@ -1148,7 +1148,7 @@ int FallbackInfo::AddFallback( ATSUFontID nFontId )
 
 // -----------------------------------------------------------------------
 
-const ImplFontData* FallbackInfo::GetFallbackFontData( int nFallbackLevel ) const
+const PhysicalFontFace* FallbackInfo::GetFallbackFontData( int nFallbackLevel ) const
 {
     const ImplMacFontData* pFallbackFont = maFontData[ nFallbackLevel-1 ];
     return pFallbackFont;

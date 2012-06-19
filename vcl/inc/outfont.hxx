@@ -107,19 +107,19 @@ public: // TODO: hide members behind accessor methods
 };
 
 // ----------------
-// - ImplFontData -
+// - PhysicalFontFace -
 // ----------------
-// TODO: rename ImplFontData to PhysicalFontFace
+// DONE: rename ImplFontData to PhysicalFontFace
 // TODO: no more direct access to members
 // TODO: add reference counting
 // TODO: get rid of height/width for scalable fonts
 // TODO: make cloning cheaper
 
 // abstract base class for physical font faces
-class VCL_PLUGIN_PUBLIC ImplFontData : public ImplDevFontAttributes
+class VCL_PLUGIN_PUBLIC PhysicalFontFace : public ImplDevFontAttributes
 {
 public:
-    // by using an ImplFontData object as a factory for its corresponding
+    // by using an PhysicalFontFace object as a factory for its corresponding
     // ImplFontEntry an ImplFontEntry can be extended to cache device and
     // font instance specific data
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const = 0;
@@ -130,17 +130,17 @@ public:
     int                     GetFontMagic() const        { return mnMagic; }
     bool                    IsScalable() const          { return (mnHeight == 0); }
     bool                    CheckMagic( int n ) const   { return (n == mnMagic); }
-    ImplFontData*           GetNextFace() const         { return mpNext; }
-    ImplFontData*           CreateAlias() const         { return Clone(); }
+    PhysicalFontFace*       GetNextFace() const         { return mpNext; }
+    PhysicalFontFace*       CreateAlias() const         { return Clone(); }
 
     bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
-    StringCompare           CompareWithSize( const ImplFontData& ) const;
-    StringCompare           CompareIgnoreSize( const ImplFontData& ) const;
-    virtual                 ~ImplFontData() {}
-    virtual ImplFontData*   Clone() const = 0;
+    StringCompare           CompareWithSize( const PhysicalFontFace& ) const;
+    StringCompare           CompareIgnoreSize( const PhysicalFontFace& ) const;
+    virtual                 ~PhysicalFontFace() {}
+    virtual PhysicalFontFace* Clone() const = 0;
 
 protected:
-    explicit                ImplFontData( const ImplDevFontAttributes&, int nMagic );
+    explicit                PhysicalFontFace( const ImplDevFontAttributes&, int nMagic );
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)
@@ -149,7 +149,7 @@ protected:
 private:
 friend class ImplDevFontListData;
     const int               mnMagic;    // poor man's RTTI
-    ImplFontData*           mpNext;
+    PhysicalFontFace*       mpNext;
 };
 
 // ----------------------
@@ -160,9 +160,9 @@ class FontSelectPattern : public ImplFontAttributes
 {
 public:
                         FontSelectPattern( const Font&, const String& rSearchName,
-                            const Size&, float fExactHeight );
-                        FontSelectPattern( const ImplFontData&, const Size&,
-                            float fExactHeight, int nOrientation, bool bVertical );
+                                           const Size&, float fExactHeight );
+                        FontSelectPattern( const PhysicalFontFace&, const Size&,
+                                           float fExactHeight, int nOrientation, bool bVertical );
 
 public: // TODO: change to private
     String              maTargetName;       // name of the font name token that is chosen
@@ -178,7 +178,7 @@ public: // TODO: change to private
     bool                mbEmbolden;         // Force emboldening
     ItalicMatrix        maItalicMatrix;     // Force matrix for slant
 
-    const ImplFontData* mpFontData;         // a matching ImplFontData object
+    const PhysicalFontFace* mpFontData;         // a matching PhysicalFontFace object
     ImplFontEntry*      mpFontEntry;        // pointer to the resulting FontCache entry
 };
 
@@ -206,7 +206,7 @@ public:
     virtual                 ~ImplDevFontList();
 
     // fill the list with device fonts
-    void                    Add( ImplFontData* );
+    void                    Add( PhysicalFontFace* );
     void                    Clear();
     int                     Count() const { return maDevFontList.size(); }
 
@@ -238,7 +238,7 @@ protected:
         const rtl::OUString& rShortName) const;
     ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
     ImplDevFontListData*    ImplFindByAttributes(sal_uLong nSearchType, FontWeight, FontWidth,
-                                FontItalic, const rtl::OUString& rSearchFamily) const;
+                                                 FontItalic, const rtl::OUString& rSearchFamily) const;
     ImplDevFontListData*    FindDefaultFont() const;
 
 private:
@@ -256,8 +256,8 @@ private:
 
 struct ImplKernPairData
 {
-    sal_uInt16              mnChar1;
-    sal_uInt16              mnChar2;
+    sal_uInt16          mnChar1;
+    sal_uInt16          mnChar2;
     long                mnKern;
 };
 

@@ -74,7 +74,7 @@ private:
 #endif
 
 // win32 specific physically available font face
-class ImplWinFontData : public ImplFontData
+class ImplWinFontData : public PhysicalFontFace
 {
 public:
     explicit                ImplWinFontData( const ImplDevFontAttributes&,
@@ -82,7 +82,7 @@ public:
                                 BYTE nPitchAndFamily  );
     virtual                 ~ImplWinFontData();
 
-    virtual ImplFontData*   Clone() const;
+    virtual PhysicalFontFace*   Clone() const;
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
     virtual sal_IntPtr      GetFontId() const;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
@@ -322,7 +322,7 @@ public:
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
     virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
-                                              const ImplFontData*,
+                                              const PhysicalFontFace*,
                                               long* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
@@ -337,7 +337,7 @@ public:
     // glyphs with only a name) exist it is set to the corresponding
     // map for non encoded glyphs; the encoding vector contains -1
     // as encoding for these cases
-    virtual const Ucs2SIntMap* GetFontEncodingVector( const ImplFontData*, const Ucs2OStrMap** ppNonEncoded );
+    virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded );
 
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
@@ -346,14 +346,14 @@ public:
     //                      pWidths MUST support at least 256 members;
     //             rInfo: additional outgoing information
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData( const ImplFontData*,
+    virtual const void* GetEmbedFontData( const PhysicalFontFace*,
                                           const sal_Ucs* pUnicodes,
                                           sal_Int32* pWidths,
                                           FontSubsetInfo& rInfo,
                                           long* pDataLen );
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
-    virtual void            GetGlyphWidths( const ImplFontData*,
+    virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );

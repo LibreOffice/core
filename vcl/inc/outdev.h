@@ -70,19 +70,19 @@ public:
     bool                IsScalable() const       { return mpFirst->IsScalable(); }
     int                 GetMinQuality() const    { return mnMinQuality; }
 
-    bool                AddFontFace( ImplFontData* );
+    bool                AddFontFace( PhysicalFontFace* );
     void                InitMatchData( const utl::FontSubstConfiguration&,
                             const String& rSearchName );
-    ImplFontData*       FindBestFontFace( const FontSelectPattern& rFSD ) const;
+    PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
     void                GetFontHeights( std::set<int>& rHeights ) const;
     void                UpdateDevFontList( ImplGetDevFontList& ) const;
     void                UpdateCloneFontList( ImplDevFontList&,
-                            bool bScalable, bool bEmbeddable ) const;
+                                             bool bScalable, bool bEmbeddable ) const;
 
 private:
 friend class ImplDevFontList; // TODO: remove soon
-    ImplFontData*       mpFirst;            // linked list of physical font faces
+    PhysicalFontFace*   mpFirst;            // linked list of physical font faces
     String              maName;             // Fontname (original font family name)
     String              maSearchName;       // normalized font family name
     String              maMapNames;         // fontname aliases
@@ -106,12 +106,12 @@ friend class ImplDevFontList; // TODO: remove soon
 class ImplGetDevFontList
 {
 private:
-    std::vector<ImplFontData*> maDevFontVector;
+    std::vector<PhysicalFontFace*> maDevFontVector;
 
 public:
                         ImplGetDevFontList()        { maDevFontVector.reserve(1024); }
-    void                Add( ImplFontData* pFace )  { maDevFontVector.push_back( pFace ); }
-    ImplFontData*       Get( int nIndex ) const     { return maDevFontVector[ nIndex ]; }
+    void                Add( PhysicalFontFace* pFace )  { maDevFontVector.push_back( pFace ); }
+    PhysicalFontFace*   Get( int nIndex ) const     { return maDevFontVector[ nIndex ]; }
     int                 Count() const               { return maDevFontVector.size(); }
 };
 
