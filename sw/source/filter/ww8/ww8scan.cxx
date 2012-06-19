@@ -6060,7 +6060,7 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             a16Bit = 0;
             rSt >> a16Bit;
             pStd->fAutoRedef =   a16Bit & 0x0001       ;
-            pStd->fHidden    = ( a16Bit & 0x0002 ) >> 2;
+            pStd->fHidden    = ( a16Bit & 0x0002 ) >> 1;
 
             // man kann nie wissen: vorsichtshalber ueberlesen
             // wir eventuelle Fuellsel, die noch zum BASE-Part gehoeren...
