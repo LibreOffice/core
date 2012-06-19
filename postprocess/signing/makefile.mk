@@ -32,25 +32,33 @@ TARGET=signing
 # PFXFILE	has to be set elsewhere
 # PFXPASSWORD	has to be set elsewhere
 
+.IF "$(VISTA_SIGNING)"!=""
+.IF "$(COM)"=="MSC"
+.IF "$(product)"=="full"
+
 EXCLUDELIST=no_signing.txt
 LOGFILE=$(MISC)$/signing_log.txt
 IMAGENAMES=$(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll $(SOLARBINDIR)$/*.exe $(SOLARBINDIR)$/so$/*.exe
 TIMESTAMPURL*="http://timestamp.verisign.com/scripts/timstamp.dll"
 
-signing.done :
-.IF "$(VISTA_SIGNING)"!=""
-.IF "$(COM)"=="MSC"
-.IF "$(product)"=="full"
-    $(PERL) signing.pl -e $(EXCLUDELIST) -f $(PFXFILE) -p $(PFXPASSWORD) -t $(TIMESTAMPURL) $(IMAGENAMES) && $(TOUCH) $(MISC)$/signing.done
-.ELSE  # "$(product)"=="full"
-    @echo Doing nothing on non product builds ...
-.ENDIF # "$(product)"=="full"
-.ELSE  # "$(GUI)"=="MSC"
-    @echo Nothing to do, signing is Windows \(MSC\) only.
-.ENDIF # "$(GUI)"=="MSC"
-.ELSE  # "$(VISTA_SIGNING)"!=""
-    @echo Doing nothing. To switch on signing set VISTA_SIGNING=TRUE ...
-.ENDIF # "$(VISTA_SIGNING)"!=""
+signing.done : $(MISC)/signing-filelist.txt
+    $(PERL) signing.pl -e $(EXCLUDELIST) -f $(PFXFILE) -p $(PFXPASSWORD) -t $(TIMESTAMPURL) -i $(MISC)/signing-filelist.txt && $(TOUCH) $(MISC)$/signing.done
+
+# Create a file that contains all dlls that are to be signed.
+$(MISC)/signing-filelist.txt :
+    -ls -1U $(IMAGENAMES) > $@ 2>/dev/null
 
 .INCLUDE : target.mk
 
+.ELSE  # "$(product)"=="full"
+all :
+    @echo Doing nothing on non product builds ...
+.ENDIF # "$(product)"=="full"
+.ELSE  # "$(GUI)"=="MSC"
+all :
+    @echo Nothing to do, signing is Windows \(MSC\) only.
+.ENDIF # "$(GUI)"=="MSC"
+.ELSE  # "$(VISTA_SIGNING)"!=""
+all :
+    @echo Doing nothing. To switch on signing set VISTA_SIGNING=TRUE ...
+.ENDIF # "$(VISTA_SIGNING)"!=""

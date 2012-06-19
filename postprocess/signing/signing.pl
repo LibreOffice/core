@@ -82,9 +82,10 @@ sub parse_options       #09.07.2007 08:13
 {
     # e exclude list file
     # v verbose
+    my $filelist_filename = undef;
     my $success = GetOptions('h' => \$opt_help,
          'd=s' => \$opt_dir, 'e=s'=>\$opt_exclude, 'f=s'=>\$opt_pfxfile, 'l=s'=>\$opt_log,
-         'p=s'=>\$opt_pass,'v'=>\$opt_verbose, 't=s'=>\$opt_timestamp_url);
+         'p=s'=>\$opt_pass,'v'=>\$opt_verbose, 't=s'=>\$opt_timestamp_url, 'i=s'=>\$filelist_filename);
     if ( !$success || $opt_help ) {
         usage();
         exit(1);
@@ -94,7 +95,17 @@ sub parse_options       #09.07.2007 08:13
         usage();
         exit(1);
     }
-    return @ARGV;
+
+    # Read the names of files to sign from the given file.
+    die "no list of files given" unless defined $filelist_filename;
+    open my $in, $filelist_filename;
+    my @filelist = ();
+    while (<$in>)
+    {
+        chomp($_);
+        push @filelist, $_;
+    }
+    return @filelist;
 }   ##parse_options
 
 ############################################################################
@@ -251,7 +262,7 @@ sub print_error     #09.07.2007 11:21
 sub usage       #09.07.2007 08:39
 ############################################################################
  {
-    print "Usage:\t $myname <-e filename> <-f filename> <-p password> <-t timestamp> [-l filename] [-v] <file[list]> \n";
+    print "Usage:\t $myname <-e filename> <-f filename> <-p password> <-t timestamp> <-i filename> [-l filename] [-v]\n";
     print "Options:\n";
     print "\t -e filename\t\t\tFile which contains a list of files which don't have to be signed.\n";
     print                            "Mandatory.\n";
@@ -259,11 +270,8 @@ sub usage       #09.07.2007 08:39
     print                            "Mandatory.\n";
     print "\t -p password\t\t\tPassword for \"Personal Information Exchange\" file. Mandatory.\n";
     print "\t -t timestamp\t\t\tTimestamp URL e.g. \"http://timestamp.verisign.com/scripts/timstamp.dll\"\n";
+    print "\t -i filename\t\t\tName of the file that contains the names of files to sign.\"\n";
     print "\t\t\t\t\tMandatory.\n";
     print "\t -l log_filename\t\tFile for logging.\n";
     print "\t -v\t\t\t\tVerbose.\n";
 }   ##usage
-
-
-
-
