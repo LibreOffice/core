@@ -124,9 +124,6 @@ private:
     CheckBox *mpSelectBox;
 };
 
-// Helper function to convert a rectangle to a polygon.
-basegfx::B2DPolygon Rect2Polygon (const Rectangle &aRect);
-
 #endif // THUMBNAILVIEWITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

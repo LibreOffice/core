@@ -242,17 +242,6 @@ IMPL_LINK (ThumbnailViewItem, OnClick, CheckBox*, )
     return 0;
 }
 
-basegfx::B2DPolygon Rect2Polygon (const Rectangle &aRect)
-{
-    basegfx::B2DPolygon aPolygon;
-    aPolygon.append(basegfx::B2DPoint(aRect.Left(),aRect.Top()));
-    aPolygon.append(basegfx::B2DPoint(aRect.Left(),aRect.Bottom()));
-    aPolygon.append(basegfx::B2DPoint(aRect.Right(),aRect.Bottom()));
-    aPolygon.append(basegfx::B2DPoint(aRect.Right(),aRect.Top()));
-
-    return aPolygon;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 
