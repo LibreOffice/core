@@ -9,14 +9,23 @@
 
 #include <sfx2/templateview.hxx>
 
+#include <sfx2/doctempl.hxx>
+
 TemplateView::TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates)
     : ThumbnailView(pParent),
+      mnRegionId(0),
       mpDocTemplates(pTemplates)
 {
 }
 
 TemplateView::~TemplateView ()
 {
+}
+
+void TemplateView::setRegionId (const sal_uInt16 nRegionId)
+{
+    mnRegionId = nRegionId;
+    maFolderName = mpDocTemplates->GetRegionName(nRegionId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

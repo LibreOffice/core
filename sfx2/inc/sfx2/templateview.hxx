@@ -22,9 +22,15 @@ public:
 
     virtual ~TemplateView ();
 
+    void setRegionId (const sal_uInt16 nRegionId);
+
+    sal_uInt16 getRegionId () const { return mnRegionId; }
+
 private:
 
-     SfxDocumentTemplates *mpDocTemplates;
+    sal_uInt16 mnRegionId;
+    rtl::OUString maFolderName;
+    SfxDocumentTemplates *mpDocTemplates;
 };
 
 #endif // TEMPLATEVIEW_HXX

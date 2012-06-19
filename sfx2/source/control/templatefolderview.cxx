@@ -223,6 +223,8 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
     sal_uInt16 nRegionId = pRegionItem->mnId-1;
     const SfxDocumentTemplates* pTemplates = mpMgr->GetTemplates();
 
+    mpItemView->setRegionId(nRegionId);
+
     sal_uInt16 nEntries = pTemplates->GetCount(nRegionId);
     for (sal_uInt16 i = 0; i < nEntries; ++i)
     {
