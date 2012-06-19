@@ -11,6 +11,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/doctempl.hxx>
+#include <sfx2/templateview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
@@ -140,7 +141,7 @@ BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
       mpMgr(new SfxOrganizeMgr(NULL,NULL)),
-      mpItemView(new ThumbnailView(this,WB_VSCROLL))
+      mpItemView(new TemplateView(this,(SfxDocumentTemplates*)mpMgr->GetTemplates()))
 {
     mpItemView->SetColor(Color(COL_WHITE));
     mpItemView->SetPosPixel(Point(0,0));
