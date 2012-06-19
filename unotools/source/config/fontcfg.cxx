@@ -287,58 +287,31 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
     #define FALLBACKFONT_UI_SANS_CHINSIM "Andale Sans UI;Arial Unicode MS;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Lucida Sans Unicode;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;"
     #define FALLBACKFONT_UI_SANS_CHINTRD "Andale Sans UI;Arial Unicode MS;AR PL Mingti2L Big5;AR PL KaitiM Big5;Kai;PMingLiU;MingLiU;Ming;Lucida Sans Unicode;gnu-unifont;Interface User;"
 
-    // we need localized names for japanese fonts
-    static sal_Unicode const aMSGothic[] = { 0xFF2D, 0xFF33, ' ', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-    static sal_Unicode const aMSPGothic[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-    static sal_Unicode const aTLPGothic[] = { 0x0054, 0x004C, 0x0050, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-    static sal_Unicode const aLXGothic[] = { 0x004C, 0x0058, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-    static sal_Unicode const aKochiGothic[] = { 0x6771, 0x98A8, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
-
-    String aFallBackJapaneseLocalized( RTL_CONSTASCII_USTRINGPARAM( "MS UI Gothic;" ) );
-    aFallBackJapaneseLocalized += String( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE1 ) );
-    aFallBackJapaneseLocalized += OUString( aMSPGothic );
-    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackJapaneseLocalized += OUString( aMSGothic );
-    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackJapaneseLocalized += OUString( aTLPGothic );
-    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackJapaneseLocalized += OUString( aLXGothic );
-    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackJapaneseLocalized += OUString( aKochiGothic );
-    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackJapaneseLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_JAPANESE2 ) );
-    static const OUString aFallBackJapanese( aFallBackJapaneseLocalized );
-    static const OUString aFallback (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS));
-    static const OUString aFallbackLatin2 (RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_UI_SANS_LATIN2));
-    static const OUString aFallBackArabic (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_ARABIC ) );
-    static const OUString aFallBackThai (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_THAI ) );
-    static const OUString aFallBackChineseSIM (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_CHINSIM ) );
-    static const OUString aFallBackChineseTRD (RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_CHINTRD ) );
-
-    // we need localized names for korean fonts
-    static sal_Unicode const aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0 };
-    static sal_Unicode const aBaekmukGulim[] = { 0xBC31, 0xBC35, 0xAD74, 0xB9BC, 0 };
-    rtl::OUString aFallBackKoreanLocalized( aSunGulim );
-    aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackKoreanLocalized += rtl::OUString( aBaekmukGulim );
-    aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( ";" ) );
-    aFallBackKoreanLocalized += String(RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_KOREAN ) );
-    static const OUString aFallBackKorean( aFallBackKoreanLocalized );
-
     // optimize font list for some locales, as long as Andale Sans UI does not support them
     if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ar" ) ) ||
         aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "he" ) ) ||
         aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "iw" ) ) )
     {
-        return aFallBackArabic;
+        return rtl::OUString(FALLBACKFONT_UI_SANS_ARABIC);
     }
     else if ( aLocale.Language == "th" )
     {
-        return aFallBackThai;
+        return rtl::OUString(FALLBACKFONT_UI_SANS_THAI);
     }
     else if ( aLocale.Language == "ko" )
     {
-        return aFallBackKorean;
+        // we need localized names for korean fonts
+        const sal_Unicode aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0 };
+        const sal_Unicode aBaekmukGulim[] = { 0xBC31, 0xBC35, 0xAD74, 0xB9BC, 0 };
+
+        rtl::OUStringBuffer aFallBackKoreanLocalized;
+        aFallBackKoreanLocalized.append(aSunGulim);
+        aFallBackKoreanLocalized.append(';');
+        aFallBackKoreanLocalized.append(aBaekmukGulim);
+        aFallBackKoreanLocalized.append(";");
+        aFallBackKoreanLocalized.append(FALLBACKFONT_UI_SANS_KOREAN);
+
+        return aFallBackKoreanLocalized.makeStringAndClear();
     }
     else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cs" ) ) ||
              aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hu" ) ) ||
@@ -350,21 +323,43 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
              aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sl" ) ) ||
              aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sb" ) ) )
     {
-        return aFallbackLatin2;
+        return rtl::OUString(FALLBACKFONT_UI_SANS_LATIN2);
     }
     else if ( aLocale.Language == "zh" )
     {
         if( ! aLocale.Country.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cn" ) ) )
-            return aFallBackChineseTRD;
+            return rtl::OUString(FALLBACKFONT_UI_SANS_CHINTRD);
         else
-            return aFallBackChineseSIM;
+            return rtl::OUString(FALLBACKFONT_UI_SANS_CHINSIM);
     }
     else if ( aLocale.Language == "ja" )
     {
-        return aFallBackJapanese;
+        // we need localized names for japanese fonts
+        const sal_Unicode aMSGothic[] = { 0xFF2D, 0xFF33, ' ', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
+        const sal_Unicode aMSPGothic[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
+        const sal_Unicode aTLPGothic[] = { 0x0054, 0x004C, 0x0050, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
+        const sal_Unicode aLXGothic[] = { 0x004C, 0x0058, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
+        const sal_Unicode aKochiGothic[] = { 0x6771, 0x98A8, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
+
+        rtl::OUStringBuffer aFallBackJapaneseLocalized;
+        aFallBackJapaneseLocalized.append("MS UI Gothic;");
+        aFallBackJapaneseLocalized.append(FALLBACKFONT_UI_SANS_JAPANESE1);
+        aFallBackJapaneseLocalized.append(aMSPGothic);
+        aFallBackJapaneseLocalized.append(';');
+        aFallBackJapaneseLocalized.append(aMSGothic);
+        aFallBackJapaneseLocalized.append(';');
+        aFallBackJapaneseLocalized.append(aTLPGothic);
+        aFallBackJapaneseLocalized.append(';');
+        aFallBackJapaneseLocalized.append(aLXGothic);
+        aFallBackJapaneseLocalized.append(';');
+        aFallBackJapaneseLocalized.append(aKochiGothic);
+        aFallBackJapaneseLocalized.append(';');
+        aFallBackJapaneseLocalized.append(FALLBACKFONT_UI_SANS_JAPANESE2);
+
+        return aFallBackJapaneseLocalized.makeStringAndClear();
     }
 
-   return aFallback;
+    return rtl::OUString(FALLBACKFONT_UI_SANS);
 }
 
 // ------------------------------------------------------------------------------------
