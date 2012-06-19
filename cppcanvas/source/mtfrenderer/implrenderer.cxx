@@ -1052,11 +1052,8 @@ namespace cppcanvas
                     pChars[0] = '/';
                 pChars[3]=pChars[2]=pChars[1]=pChars[0];
 
-                long nStrikeoutWidth = nWidth;
-                String aStrikeoutTest(pChars, SAL_N_ELEMENTS(pChars));
-
-                nStrikeoutWidth = ( rParms.mrVDev.GetTextWidth( aStrikeoutTest ) + 2 ) / 4;
-                aStrikeoutTest.Erase();
+                long nStrikeoutWidth = (rParms.mrVDev.GetTextWidth(
+                    rtl::OUString(pChars, SAL_N_ELEMENTS(pChars))) + 2) / 4;
 
                 if( nStrikeoutWidth <= 0 )
                     nStrikeoutWidth = 1;
@@ -1070,7 +1067,6 @@ namespace cppcanvas
                 String aStrikeoutText;
                 while( (nFullStrikeoutWidth+=nStrikeoutWidth ) < nMaxWidth+1 )
                     aStrikeoutText += pChars[0];
-
 
                 xub_StrLen nLen = aStrikeoutText.Len();
 
