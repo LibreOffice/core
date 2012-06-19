@@ -2264,8 +2264,8 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
 void SdrEdgeObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
     // handle start and end point if not connected
-    FASTBOOL bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage && aCon1.pObj->IsInserted();
-    FASTBOOL bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage && aCon2.pObj->IsInserted();
+    FASTBOOL bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
+    FASTBOOL bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage;
 
     if(!bCon1 && pEdgeTrack)
     {
@@ -2285,8 +2285,8 @@ void SdrEdgeObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 void SdrEdgeObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     // handle start and end point if not connected
-    FASTBOOL bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage && aCon1.pObj->IsInserted();
-    FASTBOOL bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage && aCon2.pObj->IsInserted();
+    FASTBOOL bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
+    FASTBOOL bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage;
 
     if(!bCon1 && pEdgeTrack)
     {
@@ -2306,8 +2306,8 @@ void SdrEdgeObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 void SdrEdgeObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
     // handle start and end point if not connected
-    FASTBOOL bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage && aCon1.pObj->IsInserted();
-    FASTBOOL bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage && aCon2.pObj->IsInserted();
+    FASTBOOL bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
+    FASTBOOL bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage;
 
     if(!bCon1 && pEdgeTrack)
     {
