@@ -636,7 +636,7 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
     {
         ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
 
-        if (pItem)
+        if (pItem && pItem->isVisible())
         {
             if ( !rMEvt.IsMod2() )
             {
@@ -684,7 +684,7 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
 
     if (pItem)
     {
-        if (mnHighItemId != pItem->mnId)
+        if (mnHighItemId != pItem->mnId && pItem->isVisible())
         {
             size_t nPos = GetItemPos(mnHighItemId);
 

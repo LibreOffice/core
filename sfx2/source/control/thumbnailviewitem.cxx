@@ -146,7 +146,7 @@ void ThumbnailViewItem::setSelectionMode (bool mode)
 {
     mbMode = mode;
 
-    if (!mbHover && !mbSelected)
+    if (!mbHover && !mbSelected && mbVisible)
         mpSelectBox->Show(mode);
 }
 
