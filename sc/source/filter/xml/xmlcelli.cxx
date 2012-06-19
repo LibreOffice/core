@@ -1012,6 +1012,11 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
             pDoc->IncXMLImportedFormulaCount( aText.getLength() );
             pNewCell = new ScFormulaCell( pDoc, rCellPos, pCode, eGrammar, MM_NONE );
             delete pCode;
+
+            if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
+                static_cast<ScFormulaCell*>(pNewCell)->SetHybridString( *pOUTextValue );
+            else
+                static_cast<ScFormulaCell*>(pNewCell)->SetHybridDouble( fValue );
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {
@@ -1025,26 +1030,14 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
             sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
             double fVal;
             if ( pFormatter->IsNumberFormat( aText, nEnglish, fVal ) )
-            {
                 pNewCell = new ScValueCell( fVal );
-            }
+            //the (english) number format will not be set
+            //search matching local format and apply it
             else
                 pNewCell = ScBaseCell::CreateTextCell( aText, pDoc );
-            //  das (englische) Zahlformat wird nicht gesetzt
-            //! passendes lokales Format suchen und setzen???
         }
 
-        if( pNewCell )
-            pDoc->PutCell( rCellPos, pNewCell );
-
-        ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rCellPos );
-        if( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-        {
-            if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
-                static_cast<ScFormulaCell*>(pCell)->SetHybridString( *pOUTextValue );
-            else
-                static_cast<ScFormulaCell*>(pCell)->SetHybridDouble( fValue );
-        }
+        pDoc->PutCell( rCellPos, pNewCell );
     }
 }
 
