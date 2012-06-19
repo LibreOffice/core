@@ -351,15 +351,16 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 
 void SdrEdgeObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=sal_False;
-    rInfo.bRotate90Allowed  =sal_False;
-    rInfo.bMirrorFreeAllowed=sal_False;
-    rInfo.bMirror45Allowed  =sal_False;
-    rInfo.bMirror90Allowed  =sal_False;
+    // #i54102# allow rotation, mirror and shear
+    rInfo.bRotateFreeAllowed = true;
+    rInfo.bRotate90Allowed = true;
+    rInfo.bMirrorFreeAllowed = true;
+    rInfo.bMirror45Allowed = true;
+    rInfo.bMirror90Allowed = true;
     rInfo.bTransparenceAllowed = sal_False;
     rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed     =sal_False;
-    rInfo.bEdgeRadiusAllowed=sal_False;
+    rInfo.bShearAllowed = true;
+    rInfo.bEdgeRadiusAllowed = sal_False;
     bool bCanConv=!HasText() || ImpCanConvTextToCurve();
     rInfo.bCanConvToPath=bCanConv;
     rInfo.bCanConvToPoly=bCanConv;
@@ -565,7 +566,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         // SdrEdgeObj BoundRect calculations
         ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_True;
 
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetCurrentBoundRect();
         SetRectsDirty();
         *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
         ImpSetEdgeInfoToAttr(); // copy values from aEdgeInfo into the pool
@@ -698,8 +699,11 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
             aPt2=aOutRect.BottomRight();
         }
     }
-    bool bCon1=rCon1.pObj!=NULL && rCon1.pObj->GetPage()==pPage && rCon1.pObj->IsInserted();
-    bool bCon2=rCon2.pObj!=NULL && rCon2.pObj->GetPage()==pPage && rCon2.pObj->IsInserted();
+
+    // #i54102# To allow interactive preview, do also if not inserted
+    bool bCon1=rCon1.pObj!=NULL && rCon1.pObj->GetPage()==pPage;
+    bool bCon2=rCon2.pObj!=NULL && rCon2.pObj->GetPage()==pPage;
+
     const SfxItemSet& rSet = GetObjectItemSet();
 
     if (bCon1) {
@@ -1574,7 +1578,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             (pSdrHint && pSdrHint->GetKind()==HINT_OBJREMOVED))
         {
             // broadcasting only, if on the same page
-            Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+            Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetCurrentBoundRect();
             ImpDirtyEdgeTrack();
 
             // only redraw here, object hasn't actually changed
@@ -2248,6 +2252,69 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
         aEdgeInfo.aObj2Line2 = Point();
         aEdgeInfo.aObj2Line3 = Point();
         aEdgeInfo.aMiddleLine = Point();
+    }
+}
+
+// #i54102# added rotation support
+void SdrEdgeObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+{
+    // handle start and end point if not connected
+    bool bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
+    bool bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage;
+
+    if(!bCon1 && pEdgeTrack)
+    {
+        RotatePoint((*pEdgeTrack)[0],rRef,sn,cs);
+        ImpDirtyEdgeTrack();
+    }
+
+    if(!bCon2 && pEdgeTrack)
+    {
+        sal_uInt16 nPntAnz = pEdgeTrack->GetPointCount();
+        RotatePoint((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],rRef,sn,cs);
+        ImpDirtyEdgeTrack();
+    }
+}
+
+// #i54102# added mirror support
+void SdrEdgeObj::NbcMirror(const Point& rRef1, const Point& rRef2)
+{
+    // handle start and end point if not connected
+    bool bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
+    bool bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage;
+
+    if(!bCon1 && pEdgeTrack)
+    {
+        MirrorPoint((*pEdgeTrack)[0],rRef1,rRef2);
+        ImpDirtyEdgeTrack();
+    }
+
+    if(!bCon2 && pEdgeTrack)
+    {
+        sal_uInt16 nPntAnz = pEdgeTrack->GetPointCount();
+        MirrorPoint((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],rRef1,rRef2);
+        ImpDirtyEdgeTrack();
+    }
+}
+
+// #i54102# added shear support
+void SdrEdgeObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+{
+    // handle start and end point if not connected
+    bool bCon1=aCon1.pObj!=NULL && aCon1.pObj->GetPage()==pPage;
+    bool bCon2=aCon2.pObj!=NULL && aCon2.pObj->GetPage()==pPage;
+
+    if(!bCon1 && pEdgeTrack)
+    {
+        ShearPoint((*pEdgeTrack)[0],rRef,tn,bVShear);
+        ImpDirtyEdgeTrack();
+    }
+
+    if(!bCon2 && pEdgeTrack)
+    {
+        sal_uInt16 nPntAnz = pEdgeTrack->GetPointCount();
+        ShearPoint((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],rRef,tn,bVShear);
+        ImpDirtyEdgeTrack();
     }
 }
 

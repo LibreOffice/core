@@ -91,6 +91,12 @@ public:
     SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
     virtual ~SdrDragEntrySdrObject();
 
+    // #i54102# Split createPrimitive2DSequenceInCurrentState in prepareCurrentState and processing,
+    // added accessors to original and clone
+    void prepareCurrentState(SdrDragMethod& rDragMethod);
+    const SdrObject& getOriginal() const { return maOriginal; }
+    SdrObject* getClone() { return mpClone; }
+
     virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod);
 };
 
@@ -140,8 +146,8 @@ private:
 
 protected:
     // access for derivated classes to maSdrDragEntries
-    void clearSdrDragEntries() { for(sal_uInt32 a(0); a < maSdrDragEntries.size(); a++) { delete maSdrDragEntries[a]; } maSdrDragEntries.clear(); }
-    void addSdrDragEntry(SdrDragEntry* pNew) { if(pNew) { maSdrDragEntries.push_back(pNew); }}
+    void clearSdrDragEntries();
+    void addSdrDragEntry(SdrDragEntry* pNew);
     virtual void createSdrDragEntries();
     virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
 

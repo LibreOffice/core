@@ -22,7 +22,6 @@
 
 #include <tools/bigint.hxx>
 #include <vcl/svapp.hxx>
-
 #include "svx/xattr.hxx"
 #include <svx/xpoly.hxx>
 #include <svx/svdetc.hxx>
@@ -68,6 +67,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
+#include <map>
+#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -142,13 +143,11 @@ SdrDragEntrySdrObject::~SdrDragEntrySdrObject()
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
 {
     // for the moment, i need to re-create the clone in all cases. I need to figure
     // out when clone and original have the same class, so that i can use operator=
     // in those cases
-
-    const SdrObject* pSource = &maOriginal;
 
     if(mpClone)
     {
@@ -165,7 +164,15 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrim
 
         // apply original transformation, implemented at the DragMethods
         rDragMethod.applyCurrentTransformationToSdrObject(*mpClone);
+    }
+}
 
+drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod)
+{
+    const SdrObject* pSource = &maOriginal;
+
+    if(mbModify && mpClone)
+    {
         // choose source for geometry data
         pSource = mpClone;
     }
@@ -291,6 +298,24 @@ void SdrDragMethod::resetSdrDragEntries()
 basegfx::B2DRange SdrDragMethod::getCurrentRange() const
 {
     return getB2DRangeFromOverlayObjectList();
+}
+
+void SdrDragMethod::clearSdrDragEntries()
+{
+    for(sal_uInt32 a(0); a < maSdrDragEntries.size(); a++)
+    {
+        delete maSdrDragEntries[a];
+    }
+
+    maSdrDragEntries.clear();
+}
+
+void SdrDragMethod::addSdrDragEntry(SdrDragEntry* pNew)
+{
+    if(pNew)
+    {
+        maSdrDragEntries.push_back(pNew);
+    }
 }
 
 void SdrDragMethod::createSdrDragEntries()
@@ -635,6 +660,16 @@ void SdrDragMethod::CancelSdrDrag()
     Hide();
 }
 
+struct compareConstSdrObjectRefs
+{
+    bool operator()(const SdrObject* p1, const SdrObject* p2) const
+    {
+        return (p1 < p2);
+    }
+};
+
+typedef std::map< const SdrObject*, SdrObject*, compareConstSdrObjectRefs> SdrObjectAndCloneMap;
+
 void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
 {
     // create SdrDragEntries on demand
@@ -647,10 +682,77 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
     // modification from current interactive state
     if(!maSdrDragEntries.empty())
     {
+        // #i54102# SdrDragEntrySdrObject creates clones of SdrObjects as base for creating the needed
+        // primitives, holding the original and the clone. If connectors (Edges) are involved,
+        // the cloned connectors need to be connected to the cloned SdrObjects (after cloning
+        // they are connected to the original SdrObjects). To do so, trigger the preparation
+        // steps for SdrDragEntrySdrObject, save an association of (orig, clone) in a helper
+        // and evtl. remember if it was an edge
+        SdrObjectAndCloneMap aOriginalAndClones;
+        std::vector< SdrEdgeObj* > aEdges;
+        sal_uInt32 a;
+
+        // #i54102# execute prepareCurrentState for all SdrDragEntrySdrObject, register pair of original and
+        // clone, remember edges
+        for(a = 0; a < maSdrDragEntries.size(); a++)
+        {
+            SdrDragEntrySdrObject* pSdrDragEntrySdrObject = dynamic_cast< SdrDragEntrySdrObject*>(maSdrDragEntries[a]);
+
+            if(pSdrDragEntrySdrObject)
+            {
+                pSdrDragEntrySdrObject->prepareCurrentState(*this);
+
+                SdrEdgeObj* pSdrEdgeObj = dynamic_cast< SdrEdgeObj* >(pSdrDragEntrySdrObject->getClone());
+
+                if(pSdrEdgeObj)
+                {
+                    aEdges.push_back(pSdrEdgeObj);
+                }
+
+                if(pSdrDragEntrySdrObject->getClone())
+                {
+                    aOriginalAndClones[&pSdrDragEntrySdrObject->getOriginal()] = pSdrDragEntrySdrObject->getClone();
+                }
+            }
+        }
+
+        // #i54102# if there are edges, reconnect their ends to the corresponding clones (if found)
+        if(aEdges.size())
+        {
+            for(a = 0; a < aEdges.size(); a++)
+            {
+                SdrEdgeObj* pSdrEdgeObj = aEdges[a];
+                SdrObject* pConnectedTo = pSdrEdgeObj->GetConnectedNode(true);
+
+                if(pConnectedTo)
+                {
+                    SdrObjectAndCloneMap::iterator aEntry = aOriginalAndClones.find(pConnectedTo);
+
+                    if(aEntry != aOriginalAndClones.end())
+                    {
+                        pSdrEdgeObj->ConnectToNode(true, aEntry->second);
+                    }
+                }
+
+                pConnectedTo = pSdrEdgeObj->GetConnectedNode(false);
+
+                if(pConnectedTo)
+                {
+                    SdrObjectAndCloneMap::iterator aEntry = aOriginalAndClones.find(pConnectedTo);
+
+                    if(aEntry != aOriginalAndClones.end())
+                    {
+                        pSdrEdgeObj->ConnectToNode(false, aEntry->second);
+                    }
+                }
+            }
+        }
+
+        // collect primitives for visualisation
         drawinglayer::primitive2d::Primitive2DSequence aResult;
         drawinglayer::primitive2d::Primitive2DSequence aResultTransparent;
 
-        for(sal_uInt32 a(0); a < maSdrDragEntries.size(); a++)
+        for(a = 0; a < maSdrDragEntries.size(); a++)
         {
             SdrDragEntry* pCandidate = maSdrDragEntries[a];
 
