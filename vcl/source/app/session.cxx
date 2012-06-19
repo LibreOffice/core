@@ -84,8 +84,7 @@ class VCLSession : public cppu::WeakComponentImplHelper1 < XSessionManagerClient
     bool                                            m_bInteractionDone;
     bool                                            m_bSaveDone;
 
-    static void SalSessionEventProc( SalSessionEvent* pEvent );
-    static VCLSession* pOneInstance;
+    static void SalSessionEventProc( void* pData, SalSessionEvent* pEvent );
 
     void callSaveRequested( bool bShutdown, bool bCancelable );
     void callShutdownCancelled();
@@ -103,8 +102,6 @@ public:
     virtual sal_Bool SAL_CALL cancelShutdown() throw( RuntimeException );
 };
 
-VCLSession* VCLSession::pOneInstance = NULL;
-
 VCLSession::VCLSession()
         : cppu::WeakComponentImplHelper1< XSessionManagerClient >( m_aMutex ),
           m_bInteractionRequested( false ),
@@ -112,17 +109,13 @@ VCLSession::VCLSession()
           m_bInteractionDone( false ),
           m_bSaveDone( false )
 {
-    DBG_ASSERT( pOneInstance == 0, "One instance  of VCLSession only !" );
-    pOneInstance = this;
     m_pSession = ImplGetSVData()->mpDefInst->CreateSalSession();
     if( m_pSession )
-        m_pSession->SetCallback( SalSessionEventProc );
+        m_pSession->SetCallback( SalSessionEventProc, this );
 }
 
 VCLSession::~VCLSession()
 {
-    DBG_ASSERT( pOneInstance == this, "Another instance of VCLSession in destructor !" );
-    pOneInstance = NULL;
     delete m_pSession;
 }
 
@@ -230,27 +223,28 @@ void VCLSession::callQuit()
     Application::AcquireSolarMutex( nAcquireCount );
 }
 
-void VCLSession::SalSessionEventProc( SalSessionEvent* pEvent )
+void VCLSession::SalSessionEventProc( void* pData, SalSessionEvent* pEvent )
 {
+    VCLSession * pThis = static_cast< VCLSession * >( pData );
     switch( pEvent->m_eType )
     {
         case Interaction:
         {
             SalSessionInteractionEvent* pIEv = static_cast<SalSessionInteractionEvent*>(pEvent);
-            pOneInstance->callInteractionGranted( pIEv->m_bInteractionGranted );
+            pThis->callInteractionGranted( pIEv->m_bInteractionGranted );
         }
         break;
         case SaveRequest:
         {
             SalSessionSaveRequestEvent* pSEv = static_cast<SalSessionSaveRequestEvent*>(pEvent);
-            pOneInstance->callSaveRequested( pSEv->m_bShutdown, pSEv->m_bCancelable );
+            pThis->callSaveRequested( pSEv->m_bShutdown, pSEv->m_bCancelable );
         }
         break;
         case ShutdownCancel:
-            pOneInstance->callShutdownCancelled();
+            pThis->callShutdownCancelled();
             break;
         case Quit:
-            pOneInstance->callQuit();
+            pThis->callQuit();
             break;
     }
 }
@@ -372,11 +366,7 @@ Sequence< rtl::OUString > SAL_CALL vcl_session_getSupportedServiceNames()
 
 css::uno::Reference< XInterface > SAL_CALL vcl_session_createInstance( const css::uno::Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/ )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->xSMClient.is() )
-        pSVData->xSMClient = new VCLSession();
-
-    return css::uno::Reference< XInterface >(pSVData->xSMClient, UNO_QUERY );
+    return static_cast< cppu::OWeakObject * >(new VCLSession);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

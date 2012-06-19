@@ -53,16 +53,9 @@
 
 #include <boost/unordered_map.hpp>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace lang {
+namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
-}
-namespace frame {
-    class XSessionManagerClient;
-}
-}}}
+} } } }
 
 struct ImplTimerData;
 struct ImplFileImageCacheData;
@@ -366,7 +359,6 @@ struct ImplSVData
     rtl::Reference< vcl::DisplayConnection >            mxDisplayConnection;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxAccessBridge;
-    com::sun::star::uno::Reference< com::sun::star::frame::XSessionManagerClient > xSMClient;
     ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
     boost::unordered_map< int, rtl::OUString >*     mpPaperNames;

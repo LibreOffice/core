@@ -95,7 +95,7 @@ extern "C" {
             Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
             if( vcl_session_getImplementationName().equalsAscii( pImplementationName ) )
             {
-                xFactory = ::cppu::createSingleFactory(
+                xFactory = ::cppu::createOneInstanceFactory(
                     xMgr, vcl_session_getImplementationName(), vcl_session_createInstance,
                     vcl_session_getSupportedServiceNames() );
             }

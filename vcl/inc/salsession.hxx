@@ -84,25 +84,27 @@ struct SalSessionQuitEvent : public SalSessionEvent
     {}
 };
 
-typedef void(*SessionProc)( SalSessionEvent *pEvent);
+typedef void(*SessionProc)(void *pData, SalSessionEvent *pEvent);
 
 class VCL_PLUGIN_PUBLIC SalSession
 {
     SessionProc         m_aProc;
+    void *              m_pProcData;
 public:
     SalSession()
             : m_aProc( 0 )
     {}
     virtual ~SalSession();
 
-    void SetCallback( SessionProc aCallback )
+    void SetCallback( SessionProc aCallback, void * pCallbackData )
     {
         m_aProc = aCallback;
+        m_pProcData = pCallbackData;
     }
     void CallCallback( SalSessionEvent* pEvent )
     {
         if( m_aProc )
-            m_aProc( pEvent );
+            m_aProc( m_pProcData, pEvent );
     }
 
     // query the session manager for a user interaction slot
