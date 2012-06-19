@@ -145,7 +145,7 @@ static typelib_TypeClass cpp2uno_call(
         }
     }
 
-        // now the stack has all of the paramters stored in it ready to be processed
+        // now the stack has all of the parameters stored in it ready to be processed
         // so we are ready to build the uno call stack
     pCppStack = (char *)ovrflw;
 

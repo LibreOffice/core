@@ -343,7 +343,7 @@ public class XMLTools {
         /**
         * Checks if there were no errors during document handling.
         * I.e. startDocument() and endDocument() must be called,
-        * XML must be well formed, paramters must be valid.
+        * XML must be well formed, parameters must be valid.
         */
         public boolean isWellFormed() {
             if (!docEnded) {

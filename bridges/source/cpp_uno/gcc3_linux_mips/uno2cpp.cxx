@@ -113,7 +113,7 @@ namespace
     fprintf(stderr,"overflow area pointer p=%p\n",p);
 
     /* Let's figure out what is really going on here*/
-    fprintf(stderr,"callVirtualMethod paramters string is %s\n",pPT);
+    fprintf(stderr,"callVirtualMethod parameters string is %s\n",pPT);
     int k = nStackLongs;
     long * q = (long *)pStackLongs;
     while (k > 0) {
