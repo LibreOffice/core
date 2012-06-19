@@ -4,7 +4,7 @@ Globals
     {
         variables
         {
-            UREPACKAGEVERSION 3.6.98
+            UREPACKAGEVERSION 3.7.0.0.alpha0
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 3.4
             UNIXBASISROOTNAME libreoffice3.7
@@ -50,13 +50,13 @@ LibreOffice
             PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha0
+            SHORT_PRODUCTEXTENSION .0.0.alpha0
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 3.7
             USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.7.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX alpha0+
+            ABOUTBOXPRODUCTVERSION 3.7.0.0.alpha0
+            ABOUTBOXPRODUCTVERSIONSUFFIX +
             BASEPRODUCTVERSION 3.7
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
@@ -65,7 +65,7 @@ LibreOffice
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.6.98
+            PACKAGEVERSION 3.7.0.0.alpha0
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -102,14 +102,14 @@ LibreOffice_Dev
             PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha0
+            SHORT_PRODUCTEXTENSION .0.0.alpha0
             UNIXBASISROOTNAME lodev3.7
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 3.7
             USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.7.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX alpha0+
+            ABOUTBOXPRODUCTVERSION 3.7.0.0.alpha0
+            ABOUTBOXPRODUCTVERSIONSUFFIX +
             BASEPRODUCTVERSION 3.7
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX lodevbasis
@@ -123,7 +123,7 @@ LibreOffice_Dev
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.6.98
+            PACKAGEVERSION 3.7.0.0.alpha0
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -161,12 +161,12 @@ URE
         {
             PRODUCTNAME URE
             PRODUCTVERSION 3.7
-            PACKAGEVERSION 3.7
+            PACKAGEVERSION 3.7.0.0.alpha0
             PACKAGEREVISION 1
             PRODUCTEXTENSION
             BRANDPACKAGEVERSION 3.7
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha0
+            SHORT_PRODUCTEXTENSION .0.0.alpha0
             LICENSENAME LGPL
             NOVERSIONINDIRNAME 1
             PCPFILENAME ure.pcp
@@ -198,11 +198,11 @@ LibreOffice_SDK
             PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha0
+            SHORT_PRODUCTEXTENSION .0.0.alpha0
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3.7
-            PACKAGEVERSION 3.6.98
+            PACKAGEVERSION 3.7.0.0.alpha0
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
             DMG_VOLUMEEXTENSION SDK
@@ -239,12 +239,12 @@ LibreOffice_Dev_SDK
             PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha0
+            SHORT_PRODUCTEXTENSION .0.0.alpha0
             UNIXBASISROOTNAME lodev3.7
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3.7
-            PACKAGEVERSION 3.6.98
+            PACKAGEVERSION 3.7.0.0.alpha0
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
@@ -286,11 +286,11 @@ LibreOffice_Test
             PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha0
+            SHORT_PRODUCTEXTENSION .0.0.alpha0
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 3.7
-            PACKAGEVERSION 3.6.98
+            PACKAGEVERSION 3.7.0.0.alpha0
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
             DMG_VOLUMEEXTENSION TEST
@@ -327,12 +327,12 @@ LibreOffice_Dev_Test
             PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION alpha0
+            SHORT_PRODUCTEXTENSION .0.0.alpha0
             UNIXBASISROOTNAME lodev3.7
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 3.7
-            PACKAGEVERSION 3.6.98
+            PACKAGEVERSION 3.7.0.0.alpha0
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
             UREPACKAGEPREFIX lodev
@@ -373,13 +373,13 @@ OxygenOffice
             PRODUCTVERSION 3.7
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION  alpha0
+            SHORT_PRODUCTEXTENSION .0.0.alpha0
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 3.7
             USERDIRPRODUCTVERSION 3
-            ABOUTBOXPRODUCTVERSION 3.7.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX alpha0+
+            ABOUTBOXPRODUCTVERSION 3.7.0.0.alpha0
+            ABOUTBOXPRODUCTVERSIONSUFFIX +
             BASEPRODUCTVERSION 3.7
             PCPFILENAME openoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
@@ -388,7 +388,7 @@ OxygenOffice
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-            PACKAGEVERSION 3.6.98
+            PACKAGEVERSION 3.7.0.0.alpha0
             PACKAGEREVISION {buildid}
             LICENSENAME LGPL
             SERVICESPROJEKT 1
