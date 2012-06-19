@@ -136,6 +136,17 @@ BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
     return aThumbnail;
 }
 
+ViewFilter_Application::ViewFilter_Application (SfxDocumentTemplates *pDocTemplates,
+                                                ViewFilter_Application::APP_GENERATOR App)
+    : mApp(App), mpDocTemplates(pDocTemplates)
+{
+}
+
+bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
+{
+    return true;
+}
+
 TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
       mpDocTemplates(new SfxDocumentTemplates),

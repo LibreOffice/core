@@ -15,6 +15,29 @@
 class SfxDocumentTemplates;
 class TemplateView;
 
+// Display template items depending on the generator application
+class ViewFilter_Application
+{
+public:
+
+    enum APP_GENERATOR
+    {
+        APP_WRITER,
+        APP_CALC,
+        APP_IMPRESS,
+        APP_DRAW
+    };
+
+    ViewFilter_Application (SfxDocumentTemplates *pDocTemplates, APP_GENERATOR App);
+
+    bool operator () (const ThumbnailViewItem *pItem);
+
+private:
+
+    APP_GENERATOR mApp;
+    SfxDocumentTemplates *mpDocTemplates;
+};
+
 class TemplateFolderView : public ThumbnailView
 {
 public:
