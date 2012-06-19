@@ -106,11 +106,11 @@ private:
     typedef RefMap< ::rtl::OUString, ShapeType >    ShapeTypeMap;
     typedef RefMap< ::rtl::OUString, ShapeBase >    ShapeMap;
 
-    Drawing&            mrDrawing;          /// The VML drawing page that contains this shape.
-    ShapeTypeVector     maTypes;            /// All shape templates.
-    ShapeVector         maShapes;           /// All shape definitions.
-    ShapeTypeMap        maTypesById;        /// All shape templates mapped by identifier.
-    ShapeMap            maShapesById;       /// All shape definitions mapped by identifier.
+    Drawing&            mrDrawing;          ///< The VML drawing page that contains this shape.
+    ShapeTypeVector     maTypes;            ///< All shape templates.
+    ShapeVector         maShapes;           ///< All shape definitions.
+    ShapeTypeMap        maTypesById;        ///< All shape templates mapped by identifier.
+    ShapeMap            maShapesById;       ///< All shape definitions mapped by identifier.
 };
 
 // ----------------------------------------------------------------------------
