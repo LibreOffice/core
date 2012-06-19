@@ -273,7 +273,7 @@ namespace dbtools
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxComponent
                 );
 
-        /** collects initial meta information about inner paramaters (i.e. it initially fills
+        /** collects initial meta information about inner parameters (i.e. it initially fills
             <member>m_aParameterInformation</member>).
 
             @param _bSecondRun

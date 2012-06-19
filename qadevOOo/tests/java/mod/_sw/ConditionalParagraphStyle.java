@@ -85,7 +85,7 @@ public class ConditionalParagraphStyle extends TestCase {
      * Create a new instance of the conditional
      * paragraph style, and insert it into the document.
      * @see com.sun.star.style.ConditionalParagraphStyle
-     * @param tParam The test paramters
+     * @param tParam The test parameters
      * @param log The log writer.
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {

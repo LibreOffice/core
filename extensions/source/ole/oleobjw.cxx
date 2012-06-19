@@ -728,7 +728,7 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
 
     // we should probably just check the funckind
         // basic has been modified to handle properties ( 'get' ) props at
-    // least with paramaters
+    // least with parameters
     // additionally you can call invoke(Get|Set)Property on the bridge
         // you can determine if a property has parameter is hasMethod
     // returns true for the name

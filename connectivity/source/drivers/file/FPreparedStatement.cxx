@@ -415,7 +415,7 @@ Reference<XResultSet> OPreparedStatement::initResultSet()
     m_pResultSet->clear();
     Reference<XResultSet> xRs(m_pResultSet);
 
-    // check if we got enough paramters
+    // check if we got enough parameters
     if ( (m_aParameterRow.is() && ( m_aParameterRow->get().size() -1 ) < m_xParamColumns->get().size()) ||
          (m_xParamColumns.is() && !m_aParameterRow.is() && !m_aParameterRow->get().empty()) )
          m_pConnection->throwGenericSQLException(STR_INVALID_PARA_COUNT,*this);

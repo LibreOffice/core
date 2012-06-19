@@ -199,7 +199,7 @@ namespace dbtools
                 ::rtl::OUString sName;
                 xParam->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME) ) >>= sName;
 
-                // only append additonal paramters when they are not already in the list
+                // only append additonal parameters when they are not already in the list
                 ParameterInformation::iterator aExistentPos = m_aParameterInformation.find( sName );
                 OSL_ENSURE( !_bSecondRun || ( aExistentPos != m_aParameterInformation.end() ),
                     "ParameterManager::collectInnerParameters: the parameter information should already exist in the second run!" );

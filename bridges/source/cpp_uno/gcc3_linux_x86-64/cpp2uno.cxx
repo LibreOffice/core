@@ -55,7 +55,7 @@ using namespace ::com::sun::star::uno;
 
 // Perform the UNO call
 //
-// We must convert the paramaters stored in gpreg, fpreg and ovrflw to UNO
+// We must convert the parameters stored in gpreg, fpreg and ovrflw to UNO
 // arguments and call pThis->getUnoI()->pDispatcher.
 //
 // gpreg:  [ret *], this, [gpr params]

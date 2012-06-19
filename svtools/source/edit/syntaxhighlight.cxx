@@ -452,7 +452,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     // only for BASIC '\'' should be a comment, otherwise it is a normal string and handled there
     else if ( ( testCharFlags( c, CHAR_OPERATOR ) == sal_True ) || ( (c == '\'') && (aLanguage==HIGHLIGHT_BASIC)) )
     {
-        // paramters for SQL view
+        // parameters for SQL view
         if ( (c==':') || (c=='?'))
         {
             if (c!='?')
