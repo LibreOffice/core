@@ -106,7 +106,6 @@ public:
         WM_PROTOCOLS,
         WM_DELETE_WINDOW,
         WM_TAKE_FOCUS,
-        WM_SAVE_YOURSELF,
         WM_CLIENT_LEADER,
         WM_COMMAND,
         WM_LOCALE_NAME,

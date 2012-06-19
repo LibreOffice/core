@@ -64,8 +64,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     friend class vcl_sal::NetWMAdaptor;
     friend class vcl_sal::GnomeWMAdaptor;
 
-    static X11SalFrame* s_pSaveYourselfFrame;
-
     X11SalFrame*    mpParent;             // pointer to parent frame
                                           // which should never obscur this frame
     bool            mbTransientForRoot;
@@ -166,8 +164,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     long            HandleClientMessage ( XClientMessageEvent*pEvent );
 
     DECL_LINK( HandleAlwaysOnTopRaise, void* );
-
-    void            passOnSaveYourSelf();
 
     void            createNewWindow( XLIB_Window aParent, SalX11Screen nXScreen = SalX11Screen( -1 ) );
     void            updateScreenNumber();
@@ -278,7 +274,6 @@ public:
     // done setting up the clipregion
     virtual void                    EndSetClipRegion();
 
-    static void SaveYourselfDone( SalFrame* );
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
 
     /// @internal

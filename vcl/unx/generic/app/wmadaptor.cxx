@@ -171,7 +171,6 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "WM_PROTOCOLS", WMAdaptor::WM_PROTOCOLS },
     { "WM_DELETE_WINDOW", WMAdaptor::WM_DELETE_WINDOW },
     { "WM_TAKE_FOCUS", WMAdaptor::WM_TAKE_FOCUS },
-    { "WM_SAVE_YOURSELF", WMAdaptor::WM_SAVE_YOURSELF },
     { "WM_COMMAND", WMAdaptor::WM_COMMAND },
     { "WM_CLIENT_LEADER", WMAdaptor::WM_CLIENT_LEADER },
     { "WM_LOCALE_NAME", WMAdaptor::WM_LOCALE_NAME },

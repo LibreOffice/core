@@ -108,8 +108,6 @@ static XLIB_Window  hPresentationWindow = None, hPresFocusWindow = None;
 static ::std::list< XLIB_Window > aPresentationReparentList;
 static int          nVisibleFloats      = 0;
 
-X11SalFrame* X11SalFrame::s_pSaveYourselfFrame = NULL;
-
 // -=-= C++ statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void doReparentPresentationDialogues( SalDisplay* pDisplay )
@@ -530,17 +528,11 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     {
         XSetWMHints( GetXDisplay(), mhWindow, &Hints );
         // WM Protocols && internals
-        Atom a[4];
+        Atom a[3];
         int  n = 0;
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
         if( pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING ) )
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING );
-        if( ! s_pSaveYourselfFrame && ! mpParent)
-        {
-            // at all times have only one frame with SaveYourself
-            a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
-            s_pSaveYourselfFrame = this;
-        }
         if( (nSalFrameStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_TAKE_FOCUS );
         XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
@@ -731,39 +723,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,
     Init( nSalFrameStyle, GetDisplay()->GetDefaultXScreen(), pSystemParent );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-void X11SalFrame::passOnSaveYourSelf()
-{
-    if( this == s_pSaveYourselfFrame )
-    {
-        // pass on SaveYourself
-        const X11SalFrame* pFrame = NULL;
-        const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
-        std::list< SalFrame* >::const_iterator it = rFrames.begin();
-        while( it != rFrames.end() )
-        {
-            pFrame = static_cast< const X11SalFrame* >(*it);
-            if( ! ( IsChildWindow() || pFrame->mpParent )
-                && pFrame != s_pSaveYourselfFrame )
-                    break;
-            ++it;
-        }
-
-        s_pSaveYourselfFrame = (it != rFrames.end() ) ? const_cast<X11SalFrame*>(pFrame) : NULL;
-        if( s_pSaveYourselfFrame )
-        {
-            Atom a[4];
-            int  n = 0;
-            a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
-            a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
-            if( pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING ) )
-                a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING );
-            XSetWMProtocols( GetXDisplay(), s_pSaveYourselfFrame->GetShellWindow(), a, n );
-        }
-    }
-}
-
 X11SalFrame::~X11SalFrame()
 {
     notifyDelete();
@@ -842,8 +801,6 @@ X11SalFrame::~X11SalFrame()
             && ++sit == GetDisplay()->getFrames().end() )
             vcl::I18NStatus::free();
     }
-
-    passOnSaveYourSelf();
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2637,8 +2594,6 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, SalX11Screen nXScreen
     XDestroyWindow( GetXDisplay(), mhWindow );
     mhWindow = None;
 
-    passOnSaveYourSelf();
-
     // now init with new parent again
     if ( aParentData.aWindow != None )
         Init( nStyle_ | SAL_FRAME_STYLE_PLUG, nXScreen, &aParentData );
@@ -4001,23 +3956,6 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
                          "ownerdraw" : "NON OWNERDRAW" );
     #endif
             }
-            else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
-            {
-                    if( this == s_pSaveYourselfFrame )
-                    {
-                        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
-                        const char* argv[2];
-                        argv[0] = "/bin/sh";
-                        argv[1] = const_cast<char*>(aExec.getStr());
-    #if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
-    #endif
-                        XSetCommand( GetXDisplay(), GetShellWindow(), (char**)argv, 2 );
-                    }
-                    else
-                        // can only happen in race between WM and window closing
-                        XChangeProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
-            }
         }
     }
     else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::XEMBED ) &&
@@ -4038,46 +3976,6 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
         }
     }
     return 0;
-}
-
-void X11SalFrame::SaveYourselfDone( SalFrame* pSaveFrame )
-{
-    // session save was done, inform dtwm
-    if( s_pSaveYourselfFrame && pSaveFrame )
-    {
-        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
-        const char* argv[2];
-        argv[0] = "/bin/sh";
-        argv[1] = const_cast<char*>(aExec.getStr());
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
-#endif
-        XSetCommand( s_pSaveYourselfFrame->GetXDisplay(),
-                     s_pSaveYourselfFrame->GetShellWindow(),
-                     (char**)argv, 2 );
-        if( pSaveFrame != s_pSaveYourselfFrame )
-        {
-            // check if it still exists
-            const X11SalFrame* pFrame = NULL;
-            const std::list< SalFrame* >& rFrames = static_cast<X11SalFrame*>(pSaveFrame)->GetDisplay()->getFrames();
-            std::list< SalFrame* >::const_iterator it = rFrames.begin();
-            while( it != rFrames.end() )
-            {
-                pFrame = static_cast< const X11SalFrame* >(*it);
-                if( pFrame == pSaveFrame )
-                    break;
-                ++it;
-            }
-            if( pFrame == pSaveFrame )
-            {
-                const WMAdaptor& rWMAdaptor( *pFrame->pDisplay_->getWMAdaptor() );
-                XChangeProperty( pFrame->GetXDisplay(),
-                                 pFrame->GetShellWindow(),
-                                 rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
-            }
-        }
-        s_pSaveYourselfFrame->ShutDown();
-    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

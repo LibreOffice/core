@@ -63,8 +63,10 @@ namespace {
 class IceSalSession : public SalSession
 {
 public:
-    IceSalSession();
-    virtual ~IceSalSession();
+    IceSalSession() {}
+
+private:
+    virtual ~IceSalSession() {}
 
     virtual void queryInteraction();
     virtual void interactionDone();
@@ -79,20 +81,6 @@ SalSession* X11SalInstance::CreateSalSession()
     SalSession * p = new IceSalSession;
     SessionManagerClient::open(p);
     return p;
-}
-
-/*
- *  class IceSalSession
- */
-
-static X11SalFrame* pOldStyleSaveFrame = NULL;
-
-IceSalSession::IceSalSession()
-{
-}
-
-IceSalSession::~IceSalSession()
-{
 }
 
 void IceSalSession::queryInteraction()
@@ -112,11 +100,6 @@ void IceSalSession::interactionDone()
 void IceSalSession::saveDone()
 {
     SessionManagerClient::saveDone();
-    if( pOldStyleSaveFrame )
-    {
-        // note: does nothing if not running in generic plugin
-        X11SalFrame::SaveYourselfDone( pOldStyleSaveFrame );
-    }
 }
 
 bool IceSalSession::cancelShutdown()
