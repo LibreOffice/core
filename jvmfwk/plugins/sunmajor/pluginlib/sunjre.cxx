@@ -67,6 +67,7 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/jrockit/jvm.dll"
 #elif defined(OS2)
         "/bin/classic/jvm.dll",
+        "/bin/client/jvm.dll",
         // TODO add jrockit here
 #elif UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",

@@ -76,6 +76,10 @@ protected:
     ,
         Rel_FreeBSD
 #endif
+#if defined(OS2)
+    ,
+        Rel_OS2
+#endif
     };
 
     //contains major,minor,micro,update

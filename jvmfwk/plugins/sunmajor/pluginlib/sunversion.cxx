@@ -215,6 +215,10 @@ SunVersion::PreRelease SunVersion::getPreRelease(const char *szRelease)
 {
     if (szRelease == NULL)
         return Rel_NONE;
+#ifdef OS2
+    // all prerelases codes are threated the same way (-ga1, -ga2, ...)
+        return Rel_OS2;
+#endif
     if( ! strcmp(szRelease,"ea"))
         return  Rel_EA;
     else if( ! strcmp(szRelease,"ea1"))
