@@ -218,10 +218,6 @@ public:
 
     bool IsColor() const { return maColor.GetTransparency() == 0; }
 
-    void            StartSelection();
-
-    void            EndSelection();
-
     Size            CalcWindowSizePixel( const Size& rItemSize,
                                          sal_uInt16 nCalcCols = 0,
                                          sal_uInt16 nCalcLines = 0 );
@@ -306,7 +302,6 @@ protected:
     Timer maTimer;
     ValueItemList mItemList;
     ScrollBar* mpScrBar;
-    Rectangle maNoneItemRect;
     Rectangle maItemListRect;
     long mnHeaderHeight;
     long mnItemWidth;
@@ -323,12 +318,6 @@ protected:
     sal_uInt16 mnUserVisLines;
     sal_uInt16 mnFirstLine;
     sal_uInt16 mnSpacing;
-    sal_uInt16 mnFrameStyle;
-    bool mbHighlight : 1;
-    bool mbSelection : 1;
-    bool mbDrawSelection : 1;
-    bool mbBlackSel : 1;
-    bool mbDoubleSel : 1;
     bool mbScroll : 1;
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;

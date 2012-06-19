@@ -101,12 +101,6 @@ void ThumbnailView::ImplInit()
     mnUserCols          = 0;
     mnUserVisLines      = 0;
     mnSpacing           = 0;
-    mnFrameStyle        = 0;
-    mbHighlight         = false;
-    mbSelection         = false;
-    mbDrawSelection     = true;
-    mbBlackSel          = false;
-    mbDoubleSel         = false;
     mbScroll            = false;
     mbHasVisibleItems   = false;
     mbSelectionMode = false;
@@ -336,25 +330,6 @@ void ThumbnailView::CalculateItemPositions ()
     else
     {
         mbHasVisibleItems = true;
-
-        // determine Frame-Style
-        mnFrameStyle = FRAME_DRAW_IN;
-
-        // determine selected color and width
-        // if necessary change the colors, to make the selection
-        // better detectable
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        Color aHighColor( rStyleSettings.GetHighlightColor() );
-        if ( ((aHighColor.GetRed() > 0x80) || (aHighColor.GetGreen() > 0x80) ||
-              (aHighColor.GetBlue() > 0x80)) ||
-             ((aHighColor.GetRed() == 0x80) && (aHighColor.GetGreen() == 0x80) &&
-              (aHighColor.GetBlue() == 0x80)) )
-            mbBlackSel = true;
-        else
-            mbBlackSel = false;
-
-        // draw the selection with double width if the items are bigger
-        mbDoubleSel = false;
 
         // calculate offsets
         long nStartX = 0;
@@ -634,16 +609,10 @@ IMPL_LINK_NOARG(ThumbnailView, ImplTimerHdl)
 
 void ThumbnailView::ImplTracking( const Point& rPos, bool bRepeat )
 {
-    if ( bRepeat || mbSelection )
+    if ( bRepeat )
     {
         if ( ImplScroll( rPos ) )
         {
-            if ( mbSelection )
-            {
-                maTimer.SetTimeoutHdl( LINK( this, ThumbnailView, ImplTimerHdl ) );
-                maTimer.SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
-                maTimer.Start();
-            }
         }
     }
 }
@@ -873,7 +842,6 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 
     // This point is reached only if key travelling was used,
     // in which case selection mode should be switched off
-    EndSelection();
 
     if ( nItemPos != THUMBNAILVIEW_ITEM_NOTFOUND )
     {
@@ -1337,32 +1305,12 @@ void ThumbnailView::SetColor( const Color& rColor )
         Invalidate();
 }
 
-void ThumbnailView::StartSelection()
-{
-    mbHighlight     = true;
-    mbSelection     = true;
-    mnHighItemId    = mnSelItemId;
-}
-
-void ThumbnailView::EndSelection()
-{
-    if ( mbHighlight )
-    {
-        if ( IsTracking() )
-            EndTracking( ENDTRACK_CANCEL );
-
-        mbHighlight = false;
-    }
-    mbSelection = false;
-}
-
 bool ThumbnailView::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 {
     if ( rCEvt.GetCommand() != COMMAND_STARTDRAG )
         return false;
 
     // if necessary abort an existing action
-    EndSelection();
 
     // Check out if the the clicked on page is selected. If this is not the
     // case set it as the current item. We only check mouse actions since
