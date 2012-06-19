@@ -1067,7 +1067,7 @@ namespace cppcanvas
                 nMaxWidth += nWidth + 1;
 
                 long nFullStrikeoutWidth = 0;
-                String aStrikeoutText( pChars, 0 );
+                String aStrikeoutText;
                 while( (nFullStrikeoutWidth+=nStrikeoutWidth ) < nMaxWidth+1 )
                     aStrikeoutText += pChars[0];
 
