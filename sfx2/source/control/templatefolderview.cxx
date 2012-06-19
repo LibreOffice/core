@@ -22,8 +22,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include "orgmgr.hxx"
-
 BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 {
     using namespace ::com::sun::star;
@@ -140,8 +138,8 @@ BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 
 TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
-      mpMgr(new SfxOrganizeMgr(NULL,NULL)),
-      mpItemView(new TemplateView(this,(SfxDocumentTemplates*)mpMgr->GetTemplates()))
+      mpDocTemplates(new SfxDocumentTemplates),
+      mpItemView(new TemplateView(this,mpDocTemplates))
 {
     mpItemView->SetColor(Color(COL_WHITE));
     mpItemView->SetPosPixel(Point(0,0));
@@ -152,20 +150,18 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
 
 TemplateFolderView::~TemplateFolderView()
 {
-    delete mpMgr;
     delete mpItemView;
+    delete mpDocTemplates;
 }
 
 void TemplateFolderView::Populate ()
 {
-    const SfxDocumentTemplates* pTemplates = mpMgr->GetTemplates();
-
-    sal_uInt16 nCount = pTemplates->GetRegionCount();
+    sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        rtl::OUString aRegionName(pTemplates->GetFullRegionName(i));
+        rtl::OUString aRegionName(mpDocTemplates->GetFullRegionName(i));
 
-        sal_uInt16 nEntries = pTemplates->GetCount(i);
+        sal_uInt16 nEntries = mpDocTemplates->GetCount(i);
 
         if (nEntries)
         {
@@ -175,10 +171,10 @@ void TemplateFolderView::Populate ()
             pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
 
             /// Preview first 2 thumbnails for folder
-            pItem->maPreview1 = lcl_fetchThumbnail(pTemplates->GetPath(i,0),128,128);
+            pItem->maPreview1 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,0),128,128);
 
             if ( nEntries > 2 )
-                pItem->maPreview2 = lcl_fetchThumbnail(pTemplates->GetPath(i,1),128,128);
+                pItem->maPreview2 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,1),128,128);
 
             mItemList.push_back(pItem);
         }
@@ -221,15 +217,14 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 {
     // Fill templates
     sal_uInt16 nRegionId = pRegionItem->mnId-1;
-    const SfxDocumentTemplates* pTemplates = mpMgr->GetTemplates();
 
     mpItemView->setRegionId(nRegionId);
 
-    sal_uInt16 nEntries = pTemplates->GetCount(nRegionId);
+    sal_uInt16 nEntries = mpDocTemplates->GetCount(nRegionId);
     for (sal_uInt16 i = 0; i < nEntries; ++i)
     {
-        mpItemView->InsertItem(i+1,lcl_fetchThumbnail(pTemplates->GetPath(nRegionId,i),128,128),
-                               pTemplates->GetName(nRegionId,i));
+        mpItemView->InsertItem(i+1,lcl_fetchThumbnail(mpDocTemplates->GetPath(nRegionId,i),128,128),
+                               mpDocTemplates->GetName(nRegionId,i));
     }
 
     if (mbSelectionMode)

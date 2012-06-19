@@ -12,7 +12,7 @@
 
 #include <sfx2/thumbnailview.hxx>
 
-class SfxOrganizeMgr;
+class SfxDocumentTemplates;
 class TemplateView;
 
 class TemplateFolderView : public ThumbnailView
@@ -39,7 +39,7 @@ private:
 
 private:
 
-    SfxOrganizeMgr *mpMgr;
+    SfxDocumentTemplates *mpDocTemplates;
     TemplateView *mpItemView;
 };
 
