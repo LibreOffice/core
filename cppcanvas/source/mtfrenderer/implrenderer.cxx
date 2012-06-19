@@ -1055,14 +1055,11 @@ namespace cppcanvas
                 long nStrikeoutWidth = nWidth;
                 String aStrikeoutTest( pChars, 4 );
 
-                if( aStrikeoutTest.Len() )
-                {
-                    nStrikeoutWidth = ( rParms.mrVDev.GetTextWidth( aStrikeoutTest ) + 2 ) / 4;
-                    aStrikeoutTest.Erase();
+                nStrikeoutWidth = ( rParms.mrVDev.GetTextWidth( aStrikeoutTest ) + 2 ) / 4;
+                aStrikeoutTest.Erase();
 
-                    if( nStrikeoutWidth <= 0 )
-                        nStrikeoutWidth = 1;
-                }
+                if( nStrikeoutWidth <= 0 )
+                    nStrikeoutWidth = 1;
 
                 long nMaxWidth = nStrikeoutWidth/2;
                 if ( nMaxWidth < 2 )
