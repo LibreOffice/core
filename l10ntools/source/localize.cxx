@@ -367,15 +367,15 @@ bool excludeDirectory(rtl::OUString const & directory) {
 
 /// Handle one directory in the hierarchy.
 ///
-/// Ignores symlinks and instead explicitly descends into clone/*, as the
-/// Cygwin symlinks are not supported by osl::Directory on Windows.
+/// Ignores symlinks and instead explicitly descends into clone/* or src/*,
+/// as the Cygwin symlinks are not supported by osl::Directory on Windows.
 ///
 /// @param url the absolute file URL of this directory
 ///
 /// @param level 0 if this is either the root directory that contains the
-/// projects or one of the clone/* directories that contain the additional
-/// projects; -1 if this is the clone directory; 1 if this is a project
-/// directory; 2 if this is a directory inside a project
+/// projects or one of the clone/* or src/* directories that contain the
+/// additional projects; -1 if this is the clone directory; 1 if this
+/// is a project directory; 2 if this is a directory inside a project
 ///
 /// @param project the name of the project (empty and ignored if level <= 0)
 ///
@@ -411,7 +411,7 @@ void handleDirectory(
             throw false; //TODO
         }
         switch (level) {
-        case -1: // the clone directory
+        case -1: // the clone or src directory
             if (stat.getFileType() == osl::FileStatus::Directory) {
                 handleDirectory(
                     stat.getFileURL(), 0, rtl::OUString(), rtl::OUString());
@@ -423,7 +423,7 @@ void handleDirectory(
                     handleDirectory(
                         stat.getFileURL(), 1, stat.getFileName(),
                         rtl::OUString());
-                } else if ( stat.getFileName() == "clone" )
+                } else if ( stat.getFileName() == "clone" || stat.getFileName() == "src" )
                 {
                     handleDirectory(
                         stat.getFileURL(), -1, rtl::OUString(),
