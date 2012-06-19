@@ -10,17 +10,27 @@
 #include <sfx2/templateview.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+#include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <sfx2/doctempl.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 
+#include "templateview.hrc"
+
+using namespace basegfx;
 using namespace basegfx::tools;
+using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
 TemplateView::TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates)
     : ThumbnailView(pParent),
+      maCloseImg(SfxResId(IMG_TEMPLATE_VIEW_CLOSE)),
       mnRegionId(0),
       mpDocTemplates(pTemplates)
 {
@@ -41,7 +51,7 @@ void TemplateView::Paint (const Rectangle &rRect)
 {
     ThumbnailView::Paint(rRect);
 
-    Primitive2DSequence aSeq(1);
+    Primitive2DSequence aSeq(2);
     TextLayouterDevice aTextDev;
 
     // Draw centered region name
@@ -62,6 +72,20 @@ void TemplateView::Paint (const Rectangle &rRect)
                                                  mpItemAttrs->aFontAttr,
                                                  com::sun::star::lang::Locale(),
                                                  Color(COL_BLACK).getBColor() ) );
+
+    // Draw close icon
+    Size aImageSize = maCloseImg.GetSizePixel();
+
+    aPos.Y() = (mnHeaderHeight - aImageSize.Height())/2;
+    aPos.X() = aWinSize.Width() - aImageSize.Width() - aPos.Y();
+
+    aSeq[1] = Primitive2DReference( new FillBitmapPrimitive2D(
+                                        createTranslateB2DHomMatrix(aPos.X(),aPos.Y()),
+                                        FillBitmapAttribute(maCloseImg.GetBitmapEx(),
+                                                            B2DPoint(0,0),
+                                                            B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                                            false)
+                                        ));
 
     mpProcessor->process(aSeq);
 }

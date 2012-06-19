@@ -11,6 +11,7 @@
 #define TEMPLATEVIEW_HXX
 
 #include <sfx2/thumbnailview.hxx>
+#include <vcl/image.hxx>
 
 class SfxDocumentTemplates;
 
@@ -30,6 +31,7 @@ public:
 
 private:
 
+    Image maCloseImg;
     sal_uInt16 mnRegionId;
     rtl::OUString maFolderName;
     SfxDocumentTemplates *mpDocTemplates;
