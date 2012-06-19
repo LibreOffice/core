@@ -501,17 +501,20 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
         }
         if( m_nBorderDistances[nBorder] >= 0 )
         {
+            sal_uInt32 nLineWidth = 0;
+            if (m_pBorderLines[nBorder])
+                nLineWidth = m_pBorderLines[nBorder]->LineWidth;
             SetBorderDistance( xFirst, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
-                  m_nBorderDistances[nBorder], nOffsetFrom );
+                  m_nBorderDistances[nBorder], nOffsetFrom, nLineWidth );
             if(xSecond.is())
                 SetBorderDistance( xSecond, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
-                      m_nBorderDistances[nBorder], nOffsetFrom );
+                      m_nBorderDistances[nBorder], nOffsetFrom, nLineWidth );
         }
     }
 }
 
 void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet > xStyle,
-        PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom )
+        PropertyIds eMarginId, PropertyIds eDistId, sal_Int32 nDistance, sal_Int32 nOffsetFrom, sal_uInt32 nLineWidth )
 {
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
@@ -523,8 +526,8 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
         sal_Int32 nMargin = 0;
         aMargin >>= nMargin;
 
-        // Change the margins with the border distance
-        xStyle->setPropertyValue( sMarginName, uno::makeAny( nDistance ) );
+        // Change the margins with the ( border distance - line width )
+        xStyle->setPropertyValue( sMarginName, uno::makeAny( nDistance - nLineWidth ) );
 
         // Set the distance to ( Margin - distance )
         nDist = nMargin - nDistance;
