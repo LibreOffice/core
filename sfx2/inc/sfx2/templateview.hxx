@@ -26,6 +26,8 @@ public:
 
     sal_uInt16 getRegionId () const { return mnRegionId; }
 
+    virtual void Paint (const Rectangle &rRect);
+
 private:
 
     sal_uInt16 mnRegionId;
