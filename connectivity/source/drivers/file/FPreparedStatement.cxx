@@ -126,7 +126,6 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
 
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::queryInterface" );
     Any aRet = OStatement_BASE2::queryInterface(rType);
     return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
                                         static_cast< XPreparedStatement*>(this),
@@ -136,7 +135,6 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::getTypes" );
         ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
                                         ::getCppuType( (const ::com::sun::star::uno::Reference< XParameters > *)0 ),
                                         ::getCppuType( (const ::com::sun::star::uno::Reference< XResultSetMetaDataSupplier > *)0 ));
@@ -577,8 +575,6 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
                 continue;   // this AssignValue is no Parameter
 
             ++nParaCount; // now the Parameter is valid
-            // Replace Parameter. If the Parameter isn't available, set value to NULL
-            //  (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
         }
 
         if (m_aParameterRow.is() &&  (m_xParamColumns->get().size()+1) != m_aParameterRow->get().size() )
@@ -591,13 +587,9 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
                 if ( !(m_aParameterRow->get())[i].is() )
                     (m_aParameterRow->get())[i] = new ORowSetValueDecorator;
             }
-            //m_aParameterRow->resize(m_xParamColumns->size()+1);
         }
         if (m_aParameterRow.is() && nParaCount < m_aParameterRow->get().size() )
-        {
-
             m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
-        }
     }
 }
 // -----------------------------------------------------------------------------
