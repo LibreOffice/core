@@ -1453,44 +1453,6 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
     }
 }
 
-void ThumbnailView::SetItemText( sal_uInt16 nItemId, const rtl::OUString& rText )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == THUMBNAILVIEW_ITEM_NOTFOUND )
-        return;
-
-
-    ThumbnailViewItem* pItem = mItemList[nPos];
-
-    // Remember old and new name for accessibility event.
-    ::com::sun::star::uno::Any aOldName, aNewName;
-    ::rtl::OUString sString (pItem->maText);
-    aOldName <<= sString;
-    sString = rText;
-    aNewName <<= sString;
-
-    pItem->maText = rText;
-
-    if ( IsReallyVisible() && IsUpdateMode() )
-    {
-        sal_uInt16 nTempId = mnSelItemId;
-
-        if ( mbHighlight )
-            nTempId = mnHighItemId;
-    }
-
-    if (ImplHasAccessibleListeners())
-    {
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::accessibility::XAccessible> xAccessible (
-                  pItem->GetAccessible( mbIsTransientChildrenDisabled ) );
-        static_cast<ThumbnailViewAcc*>(xAccessible.get())->FireAccessibleEvent (
-            ::com::sun::star::accessibility::AccessibleEventId::NAME_CHANGED,
-            aOldName, aNewName);
-    }
-}
-
 rtl::OUString ThumbnailView::GetItemText( sal_uInt16 nItemId ) const
 {
     size_t nPos = GetItemPos( nItemId );

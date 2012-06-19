@@ -212,8 +212,6 @@ public:
     bool IsItemSelected( sal_uInt16 nItemId ) const
         { return nItemId == mnSelItemId; }
 
-    void SetItemText( sal_uInt16 nItemId, const rtl::OUString &rStr );
-
     rtl::OUString GetItemText( sal_uInt16 nItemId ) const;
 
     void SetColor( const Color& rColor );
