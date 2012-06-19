@@ -1,20 +1,12 @@
 package org.libreoffice.ui;
 
-import java.io.File;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.MenuItem;
 
 public class WriterViewerActivity extends Activity{
-	private String currentDirectoryKey = "CURRENT_DIRECTORY";
-	private String filterModeKey = "FILTER_MODE";
-	File dir;
-	private int filterMode;
 	private Bundle extras;
 	
 	@Override

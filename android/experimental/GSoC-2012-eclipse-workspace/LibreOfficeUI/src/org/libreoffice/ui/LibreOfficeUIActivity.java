@@ -36,21 +36,24 @@ import android.widget.TextView;
 
 public class LibreOfficeUIActivity extends Activity implements OnNavigationListener {
     private String tag = "file_manager";
-    private File homeDirectory;//make final?
+	private SharedPreferences prefs;
+    private File homeDirectory;
 	private File currentDirectory;
 	private int filterMode = FileUtilities.ALL;
-	private int viewType = 0;
+	private int viewMode;
+	private int sortMode;
+	
 	FileFilter fileFilter;
 	FilenameFilter filenameFilter;
 	private String[] fileNames;
 	private File[] filePaths;
-	//private ActionBar actionBar;
-	private SharedPreferences prefs;
+	
 	
 	private static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
 	private static final String FILTER_MODE_KEY = "FILTER_MODE";
 	public static final String EXPLORER_VIEW_TYPE_KEY = "EXPLORER_VIEW_TYPE";
 	public static final String EXPLORER_PREFS_KEY = "EXPLORER_PREFS";
+	public static final String SORT_MODE_KEY = "SORT_MODE";
 	
 	public static final int GRID_VIEW = 0;
 	public static final int LIST_VIEW = 1;
@@ -69,7 +72,8 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
         currentDirectory = homeDirectory;        
         //Load default settings
         prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
-        viewType = prefs.getInt( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
+        viewMode = prefs.getInt( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
+        sortMode = prefs.getInt( SORT_MODE_KEY, FileUtilities.SORT_AZ );
 
     }
     
@@ -84,7 +88,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         
-    	if( viewType == GRID_VIEW){
+    	if( viewMode == GRID_VIEW){
 	        // code to make a grid view
         	setContentView(R.layout.file_grid);
 	    	gv = (GridView)findViewById(R.id.file_explorer_grid_view);
@@ -139,9 +143,13 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
             ActionBar actionBar = getActionBar();
             actionBar.setDisplayHomeAsUpEnabled( false );
         }
-    	fileNames = currentDirectory.list( FileUtilities.getFilenameFilter( filterMode ) );
     	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
-    	if( viewType == GRID_VIEW){
+    	fileNames = new String[ filePaths.length ];
+    	FileUtilities.sortFiles( filePaths, sortMode );
+    	for( int i = 0; i < fileNames.length; i++){
+    		fileNames[ i ] = filePaths[ i ].getName();
+    	}
+    	if( viewMode == GRID_VIEW){
     		gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
     	}else{
     		lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
@@ -152,7 +160,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     	Intent i = new Intent( this , WriterViewerActivity.class );
     	i.putExtra( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
     	i.putExtra( FILTER_MODE_KEY  , filterMode );
-    	i.putExtra( EXPLORER_VIEW_TYPE_KEY  , viewType );
+    	i.putExtra( EXPLORER_VIEW_TYPE_KEY  , viewMode );
     	startActivity( i );
     }
     
@@ -162,10 +170,12 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
         inflater.inflate(R.menu.view_menu, menu);
         
         MenuItem item = (MenuItem)menu.findItem(R.id.menu_view_toggle);
-        if( viewType == GRID_VIEW){
+        if( viewMode == GRID_VIEW){
         	item.setTitle(R.string.list_view);
+        	item.setIcon( R.drawable.light_view_as_list );
         }else{
         	item.setTitle(R.string.grid_view);
+        	item.setIcon( R.drawable.light_view_as_grid );
         }
         return true;
     }
@@ -178,12 +188,15 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 	            }
 	            break;
 	        case R.id.menu_view_toggle:
-	        	if( viewType == GRID_VIEW){
-	        		viewType = LIST_VIEW;
+	        	if( viewMode == GRID_VIEW){
+	        		viewMode = LIST_VIEW;
 	        		item.setTitle(R.string.grid_view);//Button points to next view.
+	            	item.setIcon( R.drawable.light_view_as_grid );
+	        		
 	        	}else{
-	        		viewType = GRID_VIEW;
+	        		viewMode = GRID_VIEW;
 	        		item.setTitle(R.string.list_view);//Button points to next view.
+	            	item.setIcon( R.drawable.light_view_as_list );
 	        	}
 	        	createUI();
 	        	break;
@@ -257,15 +270,46 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
         }
     }
     
+    @SuppressWarnings("unused")//see android:onClick properties in view_menu.xml
+	public void sortFiles(MenuItem item){
+		switch ( item.getItemId() ) {
+			case R.id.menu_sort_az:
+				if( sortMode == FileUtilities.SORT_AZ ){
+					sortMode = FileUtilities.SORT_ZA;
+				}else{
+					sortMode = FileUtilities.SORT_AZ;
+				}
+				break;
+			case R.id.menu_sort_modified:
+				if( sortMode == FileUtilities.SORT_NEWEST ){
+					sortMode = FileUtilities.SORT_OLDEST;
+				}else{
+					sortMode = FileUtilities.SORT_NEWEST;
+				}
+				break;
+			case R.id.menu_sort_size:
+				if( sortMode == FileUtilities.SORT_LARGEST ){
+					sortMode = FileUtilities.SORT_SMALLEST;
+				}else{
+					sortMode = FileUtilities.SORT_LARGEST;
+				}
+				break;
+			default:
+				break;
+		}
+		this.onResume();
+		return;
+    }
+    
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	// TODO Auto-generated method stub
     	super.onSaveInstanceState(outState);
     	outState.putString( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
     	outState.putInt( FILTER_MODE_KEY , filterMode );
-    	outState.putInt( EXPLORER_VIEW_TYPE_KEY , viewType );
+    	outState.putInt( EXPLORER_VIEW_TYPE_KEY , viewMode );
 
-    	Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewType) );
+    	Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
     	//prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
     	Log.d(tag, "savedInstanceSate");
     }
@@ -279,10 +323,10 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     	}
     	currentDirectory = new File( savedInstanceState.getString( CURRENT_DIRECTORY_KEY ) );
     	filterMode = savedInstanceState.getInt( FILTER_MODE_KEY , FileUtilities.ALL ) ;
-    	viewType = savedInstanceState.getInt( EXPLORER_VIEW_TYPE_KEY , GRID_VIEW );
+    	viewMode = savedInstanceState.getInt( EXPLORER_VIEW_TYPE_KEY , GRID_VIEW );
     	//openDirectory( currentDirectory );
     	Log.d(tag, "onRestoreInstanceState");
-    	Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewType) );
+    	Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
     }
     
     @Override
@@ -307,7 +351,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
             Log.d(tag, FILTER_MODE_KEY);
         }
         if( i.hasExtra( EXPLORER_VIEW_TYPE_KEY ) ){
-            viewType = i.getIntExtra( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
+            viewMode = i.getIntExtra( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
             Log.d(tag, EXPLORER_VIEW_TYPE_KEY);
         }
     	createUI();

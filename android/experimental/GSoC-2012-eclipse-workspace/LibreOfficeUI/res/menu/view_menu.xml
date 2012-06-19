@@ -5,4 +5,13 @@
           android:showAsAction="always" />
     <item android:id="@+id/menu_view_toggle"
           android:title="@string/grid_view"/>
+    <item android:id="@+id/menu_sort_size"
+          android:title="@string/menu_sort_size"
+          android:onClick="sortFiles"/>
+    <item android:id="@+id/menu_sort_az"
+          android:title="@string/menu_sort_az"
+          android:onClick="sortFiles"/>
+    <item android:id="@+id/menu_sort_modified"
+          android:title="@string/menu_sort_modified"
+          android:onClick="sortFiles"/>
 </menu>

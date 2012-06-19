@@ -15,7 +15,10 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-/*Currently this is class is not used but instead an inner class in LibreOfficeUI is impemented */
+/*Currently this is class is not used but instead is implemented as an inner class in LibreOfficeUI.
+ * This is because I can't get the onItemClickListener to fire on the listview so I need to set an 
+ * onClick listener in the adapter. ( I've tried turning off the focusability etc of the listitem 
+ * contents but no dice...) */
 public class ListItemAdapter implements ListAdapter{
 	private Context mContext;
 	private File[] filePaths;
