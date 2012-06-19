@@ -1180,7 +1180,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                 *pTmp = nTmp;
                             }
 #endif
-                            aText = String( pBuf, (xub_StrLen)nLen );
+                            aText = rtl::OUString(pBuf, nLen);
                             delete[] pBuf;
                         }
                     }

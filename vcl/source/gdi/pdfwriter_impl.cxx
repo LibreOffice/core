@@ -2375,7 +2375,7 @@ PDFSalLayout::PDFSalLayout( PDFWriterImpl& rPDFWriterImpl,
 
 bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    const String aText( rArgs.mpStr+rArgs.mnMinCharPos, sal::static_int_cast<xub_StrLen>(rArgs.mnEndCharPos-rArgs.mnMinCharPos) );
+    const rtl::OUString aText(rArgs.mpStr+rArgs.mnMinCharPos, rArgs.mnEndCharPos-rArgs.mnMinCharPos);
     SetText( aText );
     SetUnitsPerPixel( 1000 );
 

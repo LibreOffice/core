@@ -293,7 +293,7 @@ void StgEntry::GetName( String& rName ) const
     sal_uInt16 n = nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
-    rName = String( nName, n );
+    rName = rtl::OUString(nName, n);
 }
 
 // Compare two entries. Do this case-insensitive.
@@ -350,7 +350,7 @@ sal_Bool StgEntry::Load( const void* pFrom )
         return sal_False;
     }
 
-    aName = String( nName, n );
+    aName = rtl::OUString( nName, n );
     // I don't know the locale, so en_US is hopefully fine
     aName = ToUpperUnicode( aName );
     aName.Erase( nMaxLegalStr );

@@ -1333,7 +1333,7 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
         }
     }
 
-    return String( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
+    return rtl::OUString(aBuf, pBuf-aBuf);
 }
 
 // -----------------------------------------------------------------------

@@ -392,7 +392,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       pPreeditData->aInputEv.mpTextAttr = Preedit_FeedbackToSAL(
             pPreeditData->aText.pCharStyle, pPreeditData->aText.nLength, pPreeditData->aInputFlags);
       pPreeditData->aInputEv.mnCursorPos = call_data->caret;
-      pPreeditData->aInputEv.maText = String (pPreeditData->aText.pUnicodeBuffer,
+      pPreeditData->aInputEv.maText = rtl::OUString(pPreeditData->aText.pUnicodeBuffer,
                                 pPreeditData->aText.nLength);
     pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
       pPreeditData->aInputEv.mnDeltaStart = 0; // call_data->chg_first;

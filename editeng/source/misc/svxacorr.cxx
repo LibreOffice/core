@@ -1030,8 +1030,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     // check on the basis of the exception list
     if( pExceptStt )
     {
-        sWord = String(
-            pStr, sal::static_int_cast< xub_StrLen >( pExceptStt - pStr + 1 ) );
+        sWord = rtl::OUString(pStr, pExceptStt - pStr + 1);
         if( FindInCplSttExceptList(eLang, sWord) )
             return sal_False;
 
@@ -1725,7 +1724,7 @@ static const SvxAutocorrWord* lcl_SearchWordsInList(
                 ( nCalcStt < rStt &&
                     IsWordDelim( rTxt.GetChar(nCalcStt - 1 ) ))) )
             {
-                String sWord( rTxt.GetBuffer() + nCalcStt, rChk.Len() );
+                rtl::OUString sWord(rTxt.GetBuffer() + nCalcStt, rChk.Len());
                 if( rCmp.isEqual( rChk, sWord ))
                 {
                     rStt = nCalcStt;

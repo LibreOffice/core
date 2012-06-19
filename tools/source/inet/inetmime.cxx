@@ -344,7 +344,7 @@ bool parseParameters(ParameterList const & rInput,
                     bBadEncoding = true;
                     break;
                 }
-                aValue += UniString(pUnicode, static_cast< xub_StrLen >(nSize));
+                aValue += rtl::OUString(pUnicode, static_cast<sal_Int32>(nSize));
                 delete[] pUnicode;
                 pNext = pNext->m_pNext;
             }

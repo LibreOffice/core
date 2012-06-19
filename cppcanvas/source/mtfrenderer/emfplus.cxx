@@ -1180,7 +1180,7 @@ namespace cppcanvas
             }
 
             // create and add the text action
-            XubString text( chars, stringLength );
+            rtl::OUString text(chars, stringLength);
 
             delete[] chars;
 

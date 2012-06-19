@@ -4079,7 +4079,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     xub_Unicode aChars[nMaxStrikeStrLen+1]; // +1 for valgrind...
     for( int i = 0; i < nTestStrLen; ++i)
         aChars[i] = cStrikeoutChar;
-    const String aStrikeoutTest( aChars, nTestStrLen );
+    const rtl::OUString aStrikeoutTest(aChars, nTestStrLen);
 
     // calculate approximation of strikeout atom size
     long nStrikeoutWidth = 0;
@@ -4099,7 +4099,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     // build the strikeout string
     for( int i = nTestStrLen; i < nStrikeStrLen; ++i)
         aChars[i] = cStrikeoutChar;
-    const String aStrikeoutText( aChars, xub_StrLen(nStrikeStrLen) );
+    const rtl::OUString aStrikeoutText(aChars, nStrikeStrLen);
 
     if( mpFontEntry->mnOrientation )
         ImplRotatePos( 0, 0, nDistX, nDistY, mpFontEntry->mnOrientation );
@@ -6370,7 +6370,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
     xub_StrLen nRetVal = sal::static_int_cast<xub_StrLen>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
 
     // calculate hyphenated break position
-    String aHyphenatorStr( &nHyphenatorChar, 1 );
+    rtl::OUString aHyphenatorStr(nHyphenatorChar);
     xub_StrLen nTempLen = 1;
     SalLayout* pHyphenatorLayout = ImplLayout( aHyphenatorStr, 0, nTempLen );
     if( pHyphenatorLayout )

@@ -469,7 +469,7 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
         if( pCurToken && nCurTokenLen )
-            aToken = XubString( pCurToken, nCurTokenLen );
+            aToken = rtl::OUString(pCurToken, nCurTokenLen);
         else
             aToken.Erase();
 

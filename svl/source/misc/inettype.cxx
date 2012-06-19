@@ -958,7 +958,7 @@ bool INetContentTypes::parse(UniString const & rMediaType,
     }
     if (p == pToken)
         return false;
-    rType = UniString(pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
+    rType = rtl::OUString(pToken, p - pToken);
     if (bDowncase)
         rType.ToLowerAscii();
 
@@ -976,8 +976,7 @@ bool INetContentTypes::parse(UniString const & rMediaType,
     }
     if (p == pToken)
         return false;
-    rSubType = UniString(
-        pToken, sal::static_int_cast< xub_StrLen >(p - pToken));
+    rSubType = rtl::OUString(pToken, p - pToken);
     if (bDowncase)
         rSubType.ToLowerAscii();
 

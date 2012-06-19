@@ -214,8 +214,8 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
         *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE : SOT_FORMATSTR_ID_STARCALC_8;
-        *pFullTypeName  = String( RTL_CONSTASCII_USTRINGPARAM("calc8") );
-        *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
+        *pFullTypeName  = rtl::OUString("calc8");
+        *pShortTypeName = ScResId(SCSTR_SHORT_SCDOC_NAME).toString();
     }
     else
     {

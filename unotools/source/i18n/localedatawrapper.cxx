@@ -1458,17 +1458,17 @@ rtl::OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper
     // day of month
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
     pBuf = ImplAdd2UNum( aBuf, nVal, bDayOfMonthWithLeadingZero );
-    String aDay( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
+    rtl::OUString aDay(aBuf, pBuf-aBuf);
     // month of year
     nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-    String aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, nDisplayMonth ) );
+    rtl::OUString aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, nDisplayMonth ) );
     // year
     nVal = rCal.getValue( CalendarFieldIndex::YEAR );
     if ( bTwoDigitYear )
         pBuf = ImplAddUNum( aBuf, nVal % 100, 2 );
     else
         pBuf = ImplAddUNum( aBuf, nVal );
-    String aYear( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
+    rtl::OUString aYear(aBuf, pBuf-aBuf);
     // concatenate
     switch ( getLongDateFormat() )
     {
@@ -1524,7 +1524,7 @@ rtl::OUString LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, 
         }
     }
 
-    return String( aBuf, (xub_StrLen)(sal_uLong)(pBuf-aBuf) );
+    return rtl::OUString(aBuf, pBuf-aBuf);
 }
 
 
@@ -1554,13 +1554,12 @@ rtl::OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals
 
     sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals,
         bUseThousandSep, bTrailingZeros );
-    String aStr( pBuffer, (xub_StrLen)(sal_uLong)(pBuf-pBuffer) );
+    rtl::OUString aStr(pBuffer, pBuf-pBuffer);
 
     if ( pBuffer != aBuf )
         delete [] pBuffer;
     return aStr;
 }
-
 
 rtl::OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         const rtl::OUString& rCurrencySymbol, sal_Bool bUseThousandSep ) const
@@ -1753,7 +1752,7 @@ rtl::OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimal
         }
     }
 
-    String aNumber( pBuffer, (xub_StrLen)(sal_uLong)(pBuf-pBuffer) );
+    rtl::OUString aNumber(pBuffer, pBuf-pBuffer);
 
     if ( pBuffer != aBuf )
         delete [] pBuffer;

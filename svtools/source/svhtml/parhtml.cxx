@@ -519,7 +519,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
 
                     if( IsParserWorking() && !rInput.IsEof() )
                     {
-                        String sEntity( sEntityBuffer.getStr(), nPos );
+                        rtl::OUString sEntity(sEntityBuffer.getStr(), nPos);
                         cChar = GetHTMLCharName( sEntity );
 
                         // not found ( == 0 ): plain text
@@ -533,8 +533,8 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             {
                                 nNextCh = sEntityBuffer[i];
                                 sEntityBuffer.setLength( i );
-                                sEntity.Assign( sEntityBuffer.getStr(), i );
-                                 cChar = GetHTMLCharName( sEntity );
+                                sEntity = rtl::OUString(sEntityBuffer.getStr(), i);
+                                cChar = GetHTMLCharName( sEntity );
                                 if( cChar )
                                 {
                                     rInput.SeekRel( -(long)
@@ -896,9 +896,7 @@ int HTMLParser::_GetNextRawToken()
                     nNextCh = GetNextChar();
                 }
 
-                String aTok( sTmpBuffer.getStr(),
-                             sal::static_int_cast< xub_StrLen >(
-                                 sTmpBuffer.getLength()) );
+                String aTok( sTmpBuffer.toString() );
                 aTok.ToUpperAscii();
                 bool bDone = false;
                 if( bReadScript || aEndToken.Len() )
