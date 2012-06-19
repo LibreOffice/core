@@ -640,7 +640,7 @@ ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
 // =======================================================================
 
 ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplDevFontAttributes& rDFA )
-:   ImplFontData( rDFA, IFTSFONT_MAGIC ),
+:   PhysicalFontFace( rDFA, IFTSFONT_MAGIC ),
     mpFtFontInfo( pFI )
 {
     mbDevice        = false;

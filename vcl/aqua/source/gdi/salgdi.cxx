@@ -77,7 +77,7 @@ typedef std::vector<unsigned char> ByteVector;
 // =======================================================================
 
 ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, ATSUFontID nFontId )
-:   ImplFontData( rDFA, 0 )
+:   PhysicalFontFace( rDFA, 0 )
 ,   mnFontId( nFontId )
 ,   mpCharMap( NULL )
 ,   mbOs2Read( false )
@@ -104,7 +104,7 @@ sal_IntPtr ImplMacFontData::GetFontId() const
 
 // -----------------------------------------------------------------------
 
-ImplFontData* ImplMacFontData::Clone() const
+PhysicalFontFace* ImplMacFontData::Clone() const
 {
     ImplMacFontData* pClone = new ImplMacFontData(*this);
     if( mpCharMap )
@@ -1711,7 +1711,7 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     if (pSalData->mpFontList == NULL)
         pSalData->mpFontList = new SystemFontList();
 
-    // Copy all ImplFontData objects contained in the SystemFontList
+    // Copy all PhysicalFontFace objects contained in the SystemFontList
     pSalData->mpFontList->AnnounceFonts( *pFontList );
 }
 
@@ -2072,7 +2072,7 @@ static void FakeDirEntry( FourCharCode eFCC, ByteCount nOfs, ByteCount nLen,
     rpDest += 16;
 }
 
-static bool GetRawFontData( const ImplFontData* pFontData,
+static bool GetRawFontData( const PhysicalFontFace* pFontData,
     ByteVector& rBuffer, bool* pJustCFF )
 {
     const ImplMacFontData* pMacFont = static_cast<const ImplMacFontData*>(pFontData);
@@ -2222,7 +2222,7 @@ static bool GetRawFontData( const ImplFontData* pFontData,
 }
 
 sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
-    const ImplFontData* pFontData, long* pGlyphIDs, sal_uInt8* pEncoding,
+    const PhysicalFontFace* pFontData, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
     // TODO: move more of the functionality here into the generic subsetter code
@@ -2356,7 +2356,7 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVertical,
+void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bVertical,
     Int32Vector& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
 {
     rGlyphWidths.clear();
@@ -2428,14 +2428,14 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
 // -----------------------------------------------------------------------
 
 const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
-    const ImplFontData*, const Ucs2OStrMap** /*ppNonEncoded*/ )
+    const PhysicalFontFace*, const Ucs2OStrMap** /*ppNonEncoded*/ )
 {
     return NULL;
 }
 
 // -----------------------------------------------------------------------
 
-const void* AquaSalGraphics::GetEmbedFontData( const ImplFontData*,
+const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
                               const sal_Ucs* /*pUnicodes*/,
                               sal_Int32* /*pWidths*/,
                               FontSubsetInfo&,

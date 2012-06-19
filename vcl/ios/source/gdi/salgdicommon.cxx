@@ -144,7 +144,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
 }
 
 sal_Bool IosSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
-                                            const ImplFontData* pFontData,
+                                            const PhysicalFontFace* pFontData,
                                             long* pGlyphIDs, sal_uInt8* pEncoding,
                                             sal_Int32* pGlyphWidths, int nGlyphCount,
                                             FontSubsetInfo& rInfo )

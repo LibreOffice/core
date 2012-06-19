@@ -39,12 +39,12 @@ class ImplDevFontList;
 #include "outfont.hxx"
 #include "impfont.hxx"
 
-class ImplCoreTextFontData : public ImplFontData
+class ImplCoreTextFontData : public PhysicalFontFace
 {
 public:
     ImplCoreTextFontData(const ImplDevFontAttributes&, CTFontRef font);
     virtual ~ImplCoreTextFontData();
-    virtual ImplFontData* Clone() const;
+    virtual PhysicalFontFace* Clone() const;
     virtual ImplFontEntry* CreateFontInstance( FontSelectPattern& ) const;
     virtual sal_IntPtr GetFontId() const { return (sal_IntPtr)m_CTFontRef;};
     CTFontRef GetCTFont() const { return m_CTFontRef; };

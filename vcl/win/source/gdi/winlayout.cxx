@@ -3027,7 +3027,7 @@ bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
 
 // =======================================================================
 
-ImplFontData* ImplWinFontData::Clone() const
+PhysicalFontFace* ImplWinFontData::Clone() const
 {
     if( mpUnicodeMap )
         mpUnicodeMap->AddReference();
@@ -3035,7 +3035,7 @@ ImplFontData* ImplWinFontData::Clone() const
     if ( mpGraphiteData )
         mpGraphiteData->AddReference();
 #endif
-    ImplFontData* pClone = new ImplWinFontData( *this );
+    PhysicalFontFace* pClone = new ImplWinFontData( *this );
     return pClone;
 }
 

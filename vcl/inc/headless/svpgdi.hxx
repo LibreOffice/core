@@ -108,21 +108,21 @@ public:
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName );
     virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
-                                              const ImplFontData*,
+                                              const PhysicalFontFace*,
                                               sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
                                               FontSubsetInfo& rInfo
                                               );
-    virtual const Ucs2SIntMap* GetFontEncodingVector( const ImplFontData*, const Ucs2OStrMap** ppNonEncoded );
-    virtual const void* GetEmbedFontData( const ImplFontData*,
+    virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded );
+    virtual const void* GetEmbedFontData( const PhysicalFontFace*,
                                           const sal_Ucs* pUnicodes,
                                           sal_Int32* pWidths,
                                           FontSubsetInfo& rInfo,
                                           long* pDataLen );
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
-    virtual void            GetGlyphWidths( const ImplFontData*,
+    virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );

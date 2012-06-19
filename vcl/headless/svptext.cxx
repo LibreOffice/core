@@ -373,7 +373,7 @@ bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
 
 sal_Bool SvpSalGraphics::CreateFontSubset(
     const rtl::OUString& rToFile,
-    const ImplFontData* pFont,
+    const PhysicalFontFace* pFont,
     sal_Int32* pGlyphIDs,
     sal_uInt8* pEncoding,
     sal_Int32* pWidths,
@@ -385,7 +385,7 @@ sal_Bool SvpSalGraphics::CreateFontSubset(
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the ImplFontData pFont
+    // be to have the GlyphCache search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -401,13 +401,13 @@ sal_Bool SvpSalGraphics::CreateFontSubset(
 
 // ---------------------------------------------------------------------------
 
-const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const ImplFontData* pFont, const Ucs2OStrMap** pNonEncoded )
+const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the ImplFontData pFont
+    // be to have the GlyphCache search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
     return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
@@ -415,7 +415,7 @@ const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const ImplFontData* pF
 // ---------------------------------------------------------------------------
 
 const void* SvpSalGraphics::GetEmbedFontData(
-    const ImplFontData* pFont,
+    const PhysicalFontFace* pFont,
     const sal_Ucs* pUnicodes,
     sal_Int32* pWidths,
     FontSubsetInfo& rInfo,
@@ -426,7 +426,7 @@ const void* SvpSalGraphics::GetEmbedFontData(
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the ImplFontData pFont
+    // be to have the GlyphCache search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
     return GenPspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 }
@@ -438,7 +438,7 @@ void SvpSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
     GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
-void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
+void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                    bool bVertical,
                                    Int32Vector& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )
@@ -447,7 +447,7 @@ void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
-    // be to have the GlyphCache search for the ImplFontData pFont
+    // be to have the GlyphCache search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }

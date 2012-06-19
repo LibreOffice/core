@@ -350,7 +350,7 @@ public:
         FontEmitList        m_aSubsets;
         FontMapping         m_aMapping;
     };
-    typedef std::map< const ImplFontData*, FontSubset > FontSubsetData;
+    typedef std::map< const PhysicalFontFace*, FontSubset > FontSubsetData;
     struct EmbedCode
     {
         sal_Ucs             m_aUnicode;
@@ -369,7 +369,7 @@ public:
 
         EmbedFont() : m_nNormalFontID( 0 ) {}
     };
-    typedef std::map< const ImplFontData*, EmbedFont > FontEmbedData;
+    typedef std::map< const PhysicalFontFace*, EmbedFont > FontEmbedData;
 
     struct PDFDest
     {
@@ -838,7 +838,7 @@ i12626
     void appendLiteralStringEncrypt( rtl::OStringBuffer& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const ImplFontData* pFallbackFonts[] );
+    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const PhysicalFontFace* pFallbackFonts[] );
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -879,13 +879,13 @@ i12626
     /* writes all gradient patterns */
     bool emitGradients();
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
-    sal_Int32 emitBuiltinFont( const ImplFontData*, sal_Int32 nObject = -1 );
+    sal_Int32 emitBuiltinFont( const PhysicalFontFace*, sal_Int32 nObject = -1 );
     /* writes a type1 embedded font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
-    std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( const ImplFontData*, EmbedFont& );
+    std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( const PhysicalFontFace*, EmbedFont& );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
-    std::map< sal_Int32, sal_Int32 > emitSystemFont( const ImplFontData*, EmbedFont& );
+    std::map< sal_Int32, sal_Int32 > emitSystemFont( const PhysicalFontFace*, EmbedFont& );
     /* writes a font descriptor and returns its object id (or 0) */
-    sal_Int32 emitFontDescriptor( const ImplFontData*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
+    sal_Int32 emitFontDescriptor( const PhysicalFontFace*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
     sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_Int32* pEncToUnicodeIndex, int nGlyphs );
 
@@ -1081,7 +1081,7 @@ public:
     ImplDevFontList* filterDevFontList( ImplDevFontList* pFontList );
     /*  for OutputDevice: get layout for builtin fonts
      */
-    bool isBuiltinFont( const ImplFontData* ) const;
+    bool isBuiltinFont( const PhysicalFontFace* ) const;
     SalLayout* GetTextLayout( ImplLayoutArgs& rArgs, FontSelectPattern* pFont );
     void getFontMetric( FontSelectPattern* pFont, ImplFontMetricData* pMetric ) const;
 

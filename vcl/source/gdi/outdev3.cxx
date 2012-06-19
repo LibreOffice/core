@@ -740,7 +740,7 @@ static void ImplCalcType( sal_uLong& rType, FontWeight& rWeight, FontWidth& rWid
 
 // =======================================================================
 
-ImplFontData::ImplFontData( const ImplDevFontAttributes& rDFA, int nMagic )
+PhysicalFontFace::PhysicalFontFace( const ImplDevFontAttributes& rDFA, int nMagic )
 :   ImplDevFontAttributes( rDFA ),
     mnWidth(0),
     mnHeight(0),
@@ -756,7 +756,7 @@ ImplFontData::ImplFontData( const ImplDevFontAttributes& rDFA, int nMagic )
 
 // -----------------------------------------------------------------------
 
-StringCompare ImplFontData::CompareIgnoreSize( const ImplFontData& rOther ) const
+StringCompare PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const
 {
     // compare their width, weight, italic and style name
     if( meWidthType < rOther.meWidthType )
@@ -780,7 +780,7 @@ StringCompare ImplFontData::CompareIgnoreSize( const ImplFontData& rOther ) cons
 
 // -----------------------------------------------------------------------
 
-StringCompare ImplFontData::CompareWithSize( const ImplFontData& rOther ) const
+StringCompare PhysicalFontFace::CompareWithSize( const PhysicalFontFace& rOther ) const
 {
     StringCompare eCompare = CompareIgnoreSize( rOther );
     if( eCompare != COMPARE_EQUAL )
@@ -810,7 +810,7 @@ public:
     const xub_Unicode*  mpTargetStyleName;
 };
 
-bool ImplFontData::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
+bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
 {
     int nMatch = 0;
 
@@ -1040,7 +1040,7 @@ ImplDevFontListData::~ImplDevFontListData()
     // release all physical font faces
     while( mpFirst )
     {
-        ImplFontData* pFace = mpFirst;
+        PhysicalFontFace* pFace = mpFirst;
         mpFirst = pFace->GetNextFace();
         delete pFace;
     }
@@ -1048,7 +1048,7 @@ ImplDevFontListData::~ImplDevFontListData()
 
 // -----------------------------------------------------------------------
 
-bool ImplDevFontListData::AddFontFace( ImplFontData* pNewData )
+bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
 {
     pNewData->mpNext = NULL;
 
@@ -1114,8 +1114,8 @@ bool ImplDevFontListData::AddFontFace( ImplFontData* pNewData )
 
     // insert new physical font face into linked list
     // TODO: get rid of linear search?
-    ImplFontData* pData;
-    ImplFontData** ppHere = &mpFirst;
+    PhysicalFontFace* pData;
+    PhysicalFontFace** ppHere = &mpFirst;
     for(; (pData=*ppHere) != NULL; ppHere=&pData->mpNext )
     {
         StringCompare eComp = pNewData->CompareWithSize( *pData );
@@ -1167,7 +1167,7 @@ void ImplDevFontListData::InitMatchData( const utl::FontSubstConfiguration& rFon
 
 // -----------------------------------------------------------------------
 
-ImplFontData* ImplDevFontListData::FindBestFontFace( const FontSelectPattern& rFSD ) const
+PhysicalFontFace* ImplDevFontListData::FindBestFontFace( const FontSelectPattern& rFSD ) const
 {
     if( !mpFirst )
         return NULL;
@@ -1182,8 +1182,8 @@ ImplFontData* ImplDevFontListData::FindBestFontFace( const FontSelectPattern& rF
         pTargetStyleName = rSearchName.GetBuffer() + maSearchName.Len() + 1;
 
     // linear search, TODO: improve?
-    ImplFontData* pFontFace = mpFirst;
-    ImplFontData* pBestFontFace = pFontFace;
+    PhysicalFontFace* pFontFace = mpFirst;
+    PhysicalFontFace* pBestFontFace = pFontFace;
     FontMatchStatus aFontMatchStatus = {0,0,0, pTargetStyleName};
     for(; pFontFace; pFontFace = pFontFace->GetNextFace() )
         if( pFontFace->IsBetterMatch( rFSD, aFontMatchStatus ) )
@@ -1198,8 +1198,8 @@ ImplFontData* ImplDevFontListData::FindBestFontFace( const FontSelectPattern& rF
 // meaning different font attributes, but not different fonts sizes
 void ImplDevFontListData::UpdateDevFontList( ImplGetDevFontList& rDevFontList ) const
 {
-    ImplFontData* pPrevFace = NULL;
-    for( ImplFontData* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
+    PhysicalFontFace* pPrevFace = NULL;
+    for( PhysicalFontFace* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
     {
         if( !pPrevFace || pFace->CompareIgnoreSize( *pPrevFace ) )
             rDevFontList.Add( pFace );
@@ -1212,7 +1212,7 @@ void ImplDevFontListData::UpdateDevFontList( ImplGetDevFontList& rDevFontList ) 
 void ImplDevFontListData::GetFontHeights( std::set<int>& rHeights ) const
 {
     // add all available font heights
-    for( const ImplFontData* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
+    for( const PhysicalFontFace* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
         rHeights.insert( pFace->GetHeight() );
 }
 
@@ -1221,14 +1221,14 @@ void ImplDevFontListData::GetFontHeights( std::set<int>& rHeights ) const
 void ImplDevFontListData::UpdateCloneFontList( ImplDevFontList& rDevFontList,
     bool bScalable, bool bEmbeddable ) const
 {
-    for( ImplFontData* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
+    for( PhysicalFontFace* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
     {
         if( bScalable && !pFace->IsScalable() )
             continue;
         if( bEmbeddable && !pFace->IsEmbeddable() && !pFace->IsSubsettable() )
             continue;
 
-        ImplFontData* pClonedFace = pFace->Clone();
+        PhysicalFontFace* pClonedFace = pFace->Clone();
         rDevFontList.Add( pClonedFace );
     }
 }
@@ -1481,7 +1481,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
 
 // -----------------------------------------------------------------------
 
-void ImplDevFontList::Add( ImplFontData* pNewData )
+void ImplDevFontList::Add( PhysicalFontFace* pNewData )
 {
     int nAliasQuality = pNewData->mnQuality - 100;
     String aMapNames = pNewData->maMapNames;
@@ -2177,7 +2177,7 @@ FontSelectPattern::FontSelectPattern( const Font& rFont,
 
 // -----------------------------------------------------------------------
 // NOTE: this ctor is still used on Windows. Do not remove.
-FontSelectPattern::FontSelectPattern( const ImplFontData& rFontData,
+FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
 :   ImplFontAttributes( rFontData ),
     mnWidth( rSize.Width() ),
@@ -2373,7 +2373,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         }
     }
 
-    ImplFontData* pFontData = NULL;
+    PhysicalFontFace* pFontData = NULL;
 
     if (!pEntry && pFontFamily)// no cache hit => find the best matching physical font face
     {
@@ -7231,7 +7231,7 @@ FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
     int nCount = GetDevFontCount();
     if( nDevFontIndex < nCount )
     {
-        const ImplFontData& rData = *mpGetDevFontList->Get( nDevFontIndex );
+        const PhysicalFontFace& rData = *mpGetDevFontList->Get( nDevFontIndex );
         aFontInfo.SetName( rData.maName );
         aFontInfo.SetStyleName( rData.maStyleName );
         aFontInfo.SetCharSet( rData.mbSymbolFlag ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
@@ -8096,10 +8096,10 @@ sal_Bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     static const int NMAXITEMS = 16;
     static int nUsedItems = 0, nCurItem = 0;
 
-    struct CharMapCacheItem { const ImplFontData* mpFontData; FontCharMap maCharMap; };
+    struct CharMapCacheItem { const PhysicalFontFace* mpFontData; FontCharMap maCharMap; };
     static CharMapCacheItem aCache[ NMAXITEMS ];
 
-    const ImplFontData* pFontData = mpFontEntry->maFontSelData.mpFontData;
+    const PhysicalFontFace* pFontData = mpFontEntry->maFontSelData.mpFontData;
 
     int i;
     for( i = nUsedItems; --i >= 0; )

@@ -2235,7 +2235,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
     return m_pReferenceDevice;
 }
 
-class ImplPdfBuiltinFontData : public ImplFontData
+class ImplPdfBuiltinFontData : public PhysicalFontFace
 {
 private:
     const PDFWriterImpl::BuiltinFont& mrBuiltin;
@@ -2245,12 +2245,12 @@ public:
                                         ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& );
     const PDFWriterImpl::BuiltinFont*   GetBuiltinFont() const  { return &mrBuiltin; }
 
-    virtual ImplFontData*               Clone() const { return new ImplPdfBuiltinFontData(*this); }
+    virtual PhysicalFontFace*           Clone() const { return new ImplPdfBuiltinFontData(*this); }
     virtual ImplFontEntry*              CreateFontInstance( FontSelectPattern& ) const;
     virtual sal_IntPtr                  GetFontId() const { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
 };
 
-inline const ImplPdfBuiltinFontData* GetPdfFontData( const ImplFontData* pFontData )
+inline const ImplPdfBuiltinFontData* GetPdfFontData( const PhysicalFontFace* pFontData )
 {
     const ImplPdfBuiltinFontData* pFD = NULL;
     if( pFontData && pFontData->CheckMagic( ImplPdfBuiltinFontData::PDF_FONT_MAGIC ) )
@@ -2279,7 +2279,7 @@ static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinF
 }
 
 ImplPdfBuiltinFontData::ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& rBuiltin )
-:   ImplFontData( GetDevFontAttributes(rBuiltin), PDF_FONT_MAGIC ),
+:   PhysicalFontFace( GetDevFontAttributes(rBuiltin), PDF_FONT_MAGIC ),
     mrBuiltin( rBuiltin )
 {}
 
@@ -2298,13 +2298,13 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
     if( !m_bIsPDF_A1 && !m_bEmbedStandardFonts)
         for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aBuiltinFonts); i++ )
         {
-            ImplFontData* pNewData = new ImplPdfBuiltinFontData( m_aBuiltinFonts[i] );
+            PhysicalFontFace* pNewData = new ImplPdfBuiltinFontData( m_aBuiltinFonts[i] );
             pFiltered->Add( pNewData );
         }
     return pFiltered;
 }
 
-bool PDFWriterImpl::isBuiltinFont( const ImplFontData* pFont ) const
+bool PDFWriterImpl::isBuiltinFont( const PhysicalFontFace* pFont ) const
 {
     const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pFont );
     return (pFD != NULL);
@@ -3086,7 +3086,7 @@ bool PDFWriterImpl::emitTilings()
     return true;
 }
 
-sal_Int32 PDFWriterImpl::emitBuiltinFont( const ImplFontData* pFont, sal_Int32 nFontObject )
+sal_Int32 PDFWriterImpl::emitBuiltinFont( const PhysicalFontFace* pFont, sal_Int32 nFontObject )
 {
     const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pFont );
     if( !pFD )
@@ -3110,7 +3110,7 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const ImplFontData* pFont, sal_Int32 n
     return nFontObject;
 }
 
-std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontData* pFont, EmbedFont& rEmbed )
+std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFontFace* pFont, EmbedFont& rEmbed )
 {
     std::map< sal_Int32, sal_Int32 > aRet;
     if( isBuiltinFont( pFont ) )
@@ -3259,7 +3259,7 @@ struct FontException : public std::exception
 };
 
 // TODO: always subset instead of embedding the full font => this method becomes obsolete then
-std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFontData* pFont, EmbedFont& rEmbed )
+std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const PhysicalFontFace* pFont, EmbedFont& rEmbed )
 {
     std::map< sal_Int32, sal_Int32 > aRet;
     if( isBuiltinFont( pFont ) )
@@ -3944,7 +3944,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
     return nStream;
 }
 
-sal_Int32 PDFWriterImpl::emitFontDescriptor( const ImplFontData* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
+sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
 {
     OStringBuffer aLine( 1024 );
     // get font flags, see PDF reference 1.4 p. 358
@@ -4249,7 +4249,7 @@ bool PDFWriterImpl::emitFonts()
             }
             else
             {
-                const ImplFontData* pFont = it->first;
+                const PhysicalFontFace* pFont = it->first;
                 rtl::OStringBuffer aErrorComment( 256 );
                 aErrorComment.append( "CreateFontSubset failed for font \"" );
                 aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
@@ -6838,7 +6838,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const Font& i_rFont )
     getReferenceDevice()->SetFont( i_rFont );
     getReferenceDevice()->ImplNewFont();
 
-    const ImplFontData* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
+    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
     sal_Int32 nFontID = 0;
     FontEmbedData::iterator it = m_aSystemFonts.find( pDevFont );
     if( it != m_aSystemFonts.end() )
@@ -6863,14 +6863,14 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                                     sal_Int32* pUnicodesPerGlyph,
                                     sal_uInt8* pMappedGlyphs,
                                     sal_Int32* pMappedFontObjects,
-                                    const ImplFontData* pFallbackFonts[] )
+                                    const PhysicalFontFace* pFallbackFonts[] )
 {
-    const ImplFontData* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
+    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
     sal_Ucs* pCurUnicode = pUnicodes;
     for( int i = 0; i < nGlyphs; pCurUnicode += pUnicodesPerGlyph[i] , i++ )
     {
         const int nFontGlyphId = pGlyphs[i] & (GF_IDXMASK | GF_ISCHAR | GF_GSUB);
-        const ImplFontData* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
+        const PhysicalFontFace* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
 
         if( isBuiltinFont( pCurrentFont ) )
         {
@@ -7308,7 +7308,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     sal_Int32 pUnicodesPerGlyph[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
     sal_Int32 nAdvanceWidths[nMaxGlyphs];
-    const ImplFontData* pFallbackFonts[nMaxGlyphs];
+    const PhysicalFontFace* pFallbackFonts[nMaxGlyphs];
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;

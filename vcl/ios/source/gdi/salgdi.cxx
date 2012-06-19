@@ -100,7 +100,7 @@ void IosSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     {
         pSalData->mpFontList = new SystemFontList();
     }
-    // Copy all ImplFontData objects contained in the SystemFontList
+    // Copy all PhysicalFontFace objects contained in the SystemFontList
     pSalData->mpFontList->AnnounceFonts( *pFontList );
 }
 
@@ -109,7 +109,7 @@ void IosSalGraphics::GetDevFontSubstList( OutputDevice* )
     // nothing to do since there are no device-specific fonts on Ios
 }
 
-const void* IosSalGraphics::GetEmbedFontData( const ImplFontData*,
+const void* IosSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
                               const sal_Ucs* /*pUnicodes*/,
                               sal_Int32* /*pWidths*/,
                               FontSubsetInfo&,
@@ -118,7 +118,7 @@ const void* IosSalGraphics::GetEmbedFontData( const ImplFontData*,
     return NULL;
 }
 
-const Ucs2SIntMap* IosSalGraphics::GetFontEncodingVector(const ImplFontData*,
+const Ucs2SIntMap* IosSalGraphics::GetFontEncodingVector(const PhysicalFontFace*,
                                                           const Ucs2OStrMap** /*ppNonEncoded*/ )
 {
     return NULL;
@@ -159,7 +159,7 @@ sal_Bool IosSalGraphics::GetGlyphOutline( sal_GlyphId /*nGlyphId*/, basegfx::B2D
     return false;
 }
 
-void IosSalGraphics::GetGlyphWidths( const ImplFontData* /*pFontData*/, bool /*bVertical*/,
+void IosSalGraphics::GetGlyphWidths( const PhysicalFontFace* /*pFontData*/, bool /*bVertical*/,
                                       Int32Vector& /*rGlyphWidths*/, Ucs2UIntMap& /*rUnicodeEnc*/ )
 {
 }
@@ -187,7 +187,7 @@ const ImplFontCharMap* IosSalGraphics::GetImplFontCharMap() const
     return m_pCoreTextFontData->GetImplFontCharMap();
 }
 
-bool IosSalGraphics::GetRawFontData( const ImplFontData* pFontData,
+bool IosSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
                      std::vector<unsigned char>& rBuffer, bool* pJustCFF )
 {
     const ImplCoreTextFontData* font_data = static_cast<const ImplCoreTextFontData*>(pFontData);
