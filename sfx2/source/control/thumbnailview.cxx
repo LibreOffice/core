@@ -15,6 +15,7 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
@@ -903,7 +904,7 @@ void ThumbnailView::Command( const CommandEvent& rCEvt )
     Control::Command( rCEvt );
 }
 
-void ThumbnailView::Paint( const Rectangle& )
+void ThumbnailView::Paint( const Rectangle &aRect)
 {
     Size        aWinSize = GetOutputSizePixel();
     size_t      nItemCount = mItemList.size();
@@ -925,6 +926,14 @@ void ThumbnailView::Paint( const Rectangle& )
     // visible
     if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
         nLastItem += mnCols;
+
+    // Draw background
+    Primitive2DSequence aSeq(1);
+    aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+                                        B2DPolyPolygon(Polygon(aRect,5,5).getB2DPolygon()),
+                                        maColor.getBColor()));
+
+    mpProcessor->process(aSeq);
 
     for ( size_t i = 0; i < nItemCount; i++ )
     {
