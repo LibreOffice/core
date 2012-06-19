@@ -899,19 +899,12 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     {
         case LANGUAGE_CHINESE:
         case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_SINGAPORE:
             mpArray = aImplSimplifiedChinese;
             mnElem = SAL_N_ELEMENTS(aImplSimplifiedChinese);
             break;
 
-#if 0 // #i89077# disabled by popular request
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_SINGAPORE:
-        case LANGUAGE_CHINESE_MACAU:
-        case LANGUAGE_CHINESE_TRADITIONAL:
-            mpArray = aImplTraditionalChinese;
-            mnElem = SAL_N_ELEMENTS(aImplTraditionalChinese);
-            break;
-#endif
+        // equivalent for traditional chinese disabled by popular request, #i89077#
 
         default:
             mpArray = NULL;
