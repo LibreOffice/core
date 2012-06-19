@@ -42,15 +42,27 @@
 #include "salprn.hxx"
 #include "region.h"
 
+#include <list>
+
 // ===========================================================================
 // platform specific font substitution hooks
 // ===========================================================================
+
+struct FontSelectPatternAttributesHash
+{
+    size_t operator()(const FontSelectPatternAttributes& rAttributes) const
+        { return rAttributes.hashCode(); }
+};
 
 class FcPreMatchSubstititution
 :   public ImplPreMatchFontSubstitution
 {
 public:
     bool FindFontSubstitute( FontSelectPattern& ) const;
+    typedef ::std::pair<FontSelectPatternAttributes, FontSelectPatternAttributes> value_type;
+private:
+    typedef ::std::list<value_type> CachedFontMapType;
+    mutable CachedFontMapType maCachedFontMap;
 };
 
 class FcGlyphFallbackSubstititution
@@ -135,6 +147,19 @@ namespace
             rOrig.meWidthType == rNew.meWidthType
           );
     }
+
+    class equal
+    {
+    private:
+        const FontSelectPatternAttributes& mrAttributes;
+    public:
+        equal(const FontSelectPatternAttributes& rAttributes)
+            : mrAttributes(rAttributes)
+        {
+        }
+        bool operator()(const FcPreMatchSubstititution::value_type& rOther) const
+            { return rOther.first == mrAttributes; }
+    };
 }
 
 //--------------------------------------------------------------------------
@@ -149,11 +174,26 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     ||  0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "opensymbol", 10) )
         return false;
 
-    //Note: see fdo#41556 if you feel compelled to cache the results here,
-    //remember that fontconfig can return e.g. an italic font for a non-italic
-    //input and/or different fonts depending on fontsize, bold, etc settings so
-    //don't cache just on the name, cache on all the input and don't just
-    //return the original selection data with the fontname updated
+    //see fdo#41556 and fdo#47636
+    //fontconfig can return e.g. an italic font for a non-italic input and/or
+    //different fonts depending on fontsize, bold, etc settings so don't cache
+    //just on the name, cache map all the input and all the output not just map
+    //from original selection to output fontname
+    FontSelectPatternAttributes& rPatternAttributes = rFontSelData;
+    CachedFontMapType &rCachedFontMap = const_cast<CachedFontMapType &>(maCachedFontMap);
+    CachedFontMapType::iterator itr = std::find_if(rCachedFontMap.begin(), rCachedFontMap.end(), equal(rPatternAttributes));
+    if (itr != rCachedFontMap.end())
+    {
+        // Cached substitution
+        rFontSelData.copyAttributes(itr->second);
+        if (itr != rCachedFontMap.begin())
+        {
+            // MRU, move it to the front
+            rCachedFontMap.splice(rCachedFontMap.begin(), rCachedFontMap, itr);
+        }
+        return true;
+    }
+
     rtl::OUString aDummy;
     const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, aDummy );
 
@@ -178,7 +218,14 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
 #endif
 
     if( bHaveSubstitute )
+    {
+        rCachedFontMap.push_front(value_type(rFontSelData, aOut));
+        //fairly arbitrary limit in this case, but I recall measuring max 8
+        //fonts as the typical max amount of fonts in medium sized documents
+        if (rCachedFontMap.size() > 8)
+            rCachedFontMap.pop_back();
         rFontSelData = aOut;
+    }
 
     return bHaveSubstitute;
 }
@@ -190,7 +237,7 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
 {
     // We dont' actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )
-    return false;
+        return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( 0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "starsymbol", 10)
     ||  0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "opensymbol", 10) )
