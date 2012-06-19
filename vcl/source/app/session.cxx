@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
+#include <boost/scoped_ptr.hpp>
 #include <cppuhelper/compbase1.hxx>
 
 #include <tools/debug.hxx>
@@ -77,7 +79,7 @@ class VCLSession : public cppu::WeakComponentImplHelper1 < XSessionManagerClient
     };
 
     std::list< Listener >                           m_aListeners;
-    SalSession*                                     m_pSession;
+    boost::scoped_ptr< SalSession >                 m_pSession;
     osl::Mutex                                      m_aMutex;
     bool                                            m_bInteractionRequested;
     bool                                            m_bInteractionGranted;
@@ -86,13 +88,7 @@ class VCLSession : public cppu::WeakComponentImplHelper1 < XSessionManagerClient
 
     static void SalSessionEventProc( void* pData, SalSessionEvent* pEvent );
 
-    void callSaveRequested( bool bShutdown, bool bCancelable );
-    void callShutdownCancelled();
-    void callInteractionGranted( bool bGranted );
-    void callQuit();
-public:
-    VCLSession();
-    virtual ~VCLSession();
+    virtual ~VCLSession() {}
 
     virtual void SAL_CALL addSessionManagerListener( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
     virtual void SAL_CALL removeSessionManagerListener( const css::uno::Reference< XSessionManagerListener>& xListener ) throw( RuntimeException );
@@ -100,23 +96,26 @@ public:
     virtual void SAL_CALL interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
     virtual void SAL_CALL saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
     virtual sal_Bool SAL_CALL cancelShutdown() throw( RuntimeException );
+
+    void callSaveRequested( bool bShutdown, bool bCancelable );
+    void callShutdownCancelled();
+    void callInteractionGranted( bool bGranted );
+    void callQuit();
+
+public:
+    VCLSession();
 };
 
 VCLSession::VCLSession()
         : cppu::WeakComponentImplHelper1< XSessionManagerClient >( m_aMutex ),
+          m_pSession( ImplGetSVData()->mpDefInst->CreateSalSession() ),
           m_bInteractionRequested( false ),
           m_bInteractionGranted( false ),
           m_bInteractionDone( false ),
           m_bSaveDone( false )
 {
-    m_pSession = ImplGetSVData()->mpDefInst->CreateSalSession();
     if( m_pSession )
         m_pSession->SetCallback( SalSessionEventProc, this );
-}
-
-VCLSession::~VCLSession()
-{
-    delete m_pSession;
 }
 
 void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
@@ -138,7 +137,7 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
         m_bInteractionDone = false;
         // without session we assume UI is always possible,
         // so it was reqeusted and granted
-        m_bInteractionRequested = m_bInteractionGranted = m_pSession ? false : true;
+        m_bInteractionRequested = m_bInteractionGranted = !m_pSession;
 
         // answer the session manager even if no listeners available anymore
         DBG_ASSERT( ! aListeners.empty(), "saveRequested but no listeners !" );
@@ -346,25 +345,24 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
 
 sal_Bool SAL_CALL VCLSession::cancelShutdown() throw( RuntimeException )
 {
-    return m_pSession ? (sal_Bool)m_pSession->cancelShutdown() : sal_False;
+    return m_pSession && m_pSession->cancelShutdown();
 }
 
 // service implementation
 
 OUString SAL_CALL vcl_session_getImplementationName()
 {
-    static OUString aImplementationName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.VCLSessionManagerClient" ) );
-    return aImplementationName;
+    return OUString( "com.sun.star.frame.VCLSessionManagerClient" );
 }
 
 Sequence< rtl::OUString > SAL_CALL vcl_session_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SessionManagerClient"));
+    aRet[0] = "com.sun.star.frame.SessionManagerClient";
     return aRet;
 }
 
-css::uno::Reference< XInterface > SAL_CALL vcl_session_createInstance( const css::uno::Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/ )
+css::uno::Reference< XInterface > SAL_CALL vcl_session_createInstance( SAL_UNUSED_PARAMETER const css::uno::Reference< XMultiServiceFactory > & )
 {
     return static_cast< cppu::OWeakObject * >(new VCLSession);
 }
