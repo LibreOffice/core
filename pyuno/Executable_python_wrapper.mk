@@ -24,17 +24,17 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,python_wrapper))
+$(eval $(call gb_Executable_Executable,pyuno/python))
 
-$(eval $(call gb_Executable_use_static_libraries,python_wrapper,\
+$(eval $(call gb_Executable_use_static_libraries,pyuno/python,\
     ooopathutils \
 ))
 
-$(eval $(call gb_Executable_use_custom_headers,python_wrapper,\
+$(eval $(call gb_Executable_use_custom_headers,pyuno/python,\
     pyuno/pyversion \
 ))
 
-$(eval $(call gb_Executable_add_noexception_objects,python_wrapper,\
+$(eval $(call gb_Executable_add_noexception_objects,pyuno/python,\
     pyuno/zipcore/python \
 ))
 

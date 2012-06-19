@@ -105,7 +105,7 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	langsupport \
 	odbcconfig \
 	officeloader \
-	python_wrapper \
+	pyuno/python \
 	quickstart \
 	sbase \
 	scalc \
