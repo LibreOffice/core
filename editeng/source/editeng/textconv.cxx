@@ -336,6 +336,17 @@ void TextConvWrapper::HandleNewUnit(
     SelectNewUnit_impl( nUnitStart, nUnitEnd );
 }
 
+#ifdef DBG_UTIL
+namespace
+{
+    sal_Bool IsSimilarChinese( LanguageType nLang1, LanguageType nLang2 )
+    {
+        using namespace editeng;
+        return (HangulHanjaConversion::IsTraditional(nLang1) && HangulHanjaConversion::IsTraditional(nLang2)) ||
+               (HangulHanjaConversion::IsSimplified(nLang1)  && HangulHanjaConversion::IsSimplified(nLang2));
+    }
+}
+#endif
 
 void TextConvWrapper::ReplaceUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,

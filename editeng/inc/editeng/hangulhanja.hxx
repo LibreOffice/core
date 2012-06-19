@@ -141,7 +141,6 @@ namespace editeng
         static inline sal_Bool IsSimplified( LanguageType nLang );
         static inline sal_Bool IsTraditional( LanguageType nLang );
         static inline sal_Bool IsChinese( LanguageType nLang );
-        static inline sal_Bool IsSimilarChinese( LanguageType nLang1, LanguageType nLang2 );
 
         // used to specify that the conversion direction states from the
         // last incarnation should be used as
@@ -291,13 +290,6 @@ namespace editeng
     {
         return IsTraditional( nLang ) || IsSimplified( nLang );
     }
-
-    sal_Bool HangulHanjaConversion::IsSimilarChinese( LanguageType nLang1, LanguageType nLang2 )
-    {
-        return (IsTraditional(nLang1) && IsTraditional(nLang2)) ||
-               (IsSimplified(nLang1)  && IsSimplified(nLang2));
-    }
-
 //.............................................................................
 }   // namespace svx
 //.............................................................................
