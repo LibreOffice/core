@@ -37,6 +37,10 @@
 ASM=as
 AFLAGS=
 
+# until we get a solution to libc ticket#251, use dmik's -q option.
+EMXOMFOPT = -q
+.EXPORT : EMXOMFOPT
+
 #//YD SOLAR_JAVA=TRUE
 JAVAFLAGSDEBUG=-g
 

@@ -45,6 +45,10 @@ ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
 
+# until we get a solution to libc ticket#251, use dmik's -q option.
+EMXOMFOPT = -q
+export EMXOMFOPT
+
 gb_OSDEFS := \
 	-D$(OS) \
 	-D_PTHREADS \
