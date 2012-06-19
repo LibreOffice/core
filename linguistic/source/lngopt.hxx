@@ -53,9 +53,6 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         struct PropertyChangeEvent;
     }
-    namespace registry {
-        class XRegistryKey;
-    }
 }}}
 
 

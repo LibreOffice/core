@@ -40,8 +40,6 @@ namespace com {
 namespace sun {
 namespace star {
 namespace io {
-    class XStream;
-    class XOutputStream;
     class XInputStream; }
 namespace embed {
     class XStorage; }

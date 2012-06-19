@@ -42,7 +42,6 @@
 
 class X2CParser;
 class HtmlCreator;
-class Index;
 
 class XmlElement
 {

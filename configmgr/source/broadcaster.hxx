@@ -44,8 +44,6 @@ namespace com { namespace sun { namespace star {
 
 namespace configmgr {
 
-class Access;
-
 class Broadcaster: private boost::noncopyable {
 public:
     void addDisposeNotification(

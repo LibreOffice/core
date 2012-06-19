@@ -56,7 +56,6 @@ struct SvcInfo;
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XLinguServiceEventBroadcaster;
     class XSpellChecker;
-    class XProofreader;
     class XProofreadingIterator;
     class XHyphenator;
     class XThesaurus;

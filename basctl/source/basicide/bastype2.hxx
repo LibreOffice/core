@@ -37,12 +37,9 @@ enum BasicEntryType { OBJ_TYPE_UNKNOWN, OBJ_TYPE_DOCUMENT, OBJ_TYPE_LIBRARY, OBJ
 #define BROWSEMODE_SUBS         0x02
 #define BROWSEMODE_DIALOGS      0x04
 
-class SbMethod;
-class SbxObject;
 class SbModule;
 class SvLBoxEntry;
 class SbxVariable;
-class String;
 
 
 class BasicEntry

@@ -40,7 +40,6 @@
 #include <vector>
 #include <boost/ptr_container/ptr_deque.hpp>
 
-class Accelerator;
 class CheckBox;
 class SvtFileDialog;
 

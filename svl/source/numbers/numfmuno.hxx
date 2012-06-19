@@ -41,8 +41,6 @@
 #include <rtl/ref.hxx>
 #include <tools/solar.h>
 
-class SvNumberformat;
-class SvNumberFormatter;
 class SvNumberFormatsSupplierObj;
 
 

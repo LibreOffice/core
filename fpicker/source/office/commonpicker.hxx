@@ -46,11 +46,6 @@
 class SvtFileDialog;
 class Window;
 
-namespace comphelper
-{
-    class OWeakEventListenerAdapter;
-}
-
 //.........................................................................
 namespace svt
 {

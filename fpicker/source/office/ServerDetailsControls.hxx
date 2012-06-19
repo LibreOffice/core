@@ -34,8 +34,6 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 
-class PlaceEditDialog;
-
 class DetailsContainer
 {
     private:

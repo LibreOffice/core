@@ -35,8 +35,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/lstbox.hxx>
 
-class StarBASIC;
-
 enum NewObjectMode
 {
     NEWOBJECTMODE_LIB  = 1,

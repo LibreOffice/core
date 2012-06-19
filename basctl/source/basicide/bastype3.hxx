@@ -25,8 +25,6 @@
 
 #include <iderid.hxx>
 
-class EditorWindow;
-
 #ifndef NO_SPECIALEDIT
 
 class ExtendedEdit : public Edit

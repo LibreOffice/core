@@ -49,8 +49,6 @@
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 
 
-class SvStream;
-
 sal_Bool    IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
 
 struct StrLT

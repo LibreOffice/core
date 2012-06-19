@@ -43,7 +43,6 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-class Place;
 class PlaceEditDialog : public ModalDialog
 {
 private :

@@ -70,8 +70,6 @@ struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
     {}
 };
 
-class SfxStyleSheetIterator;
-
 struct SfxItemPool_Impl
 {
     SfxBroadcaster                  aBC;

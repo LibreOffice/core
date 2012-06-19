@@ -28,8 +28,6 @@
 
 #include <bastype2.hxx>
 
-class StarBASIC;
-
 class ObjectCatalogToolBox_Impl: public ToolBox
 {
 public:

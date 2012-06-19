@@ -87,7 +87,6 @@ namespace rtl { class OUString; }
 namespace configmgr {
 
 class Broadcaster;
-class Change;
 class ChildAccess;
 class Components;
 class Node;

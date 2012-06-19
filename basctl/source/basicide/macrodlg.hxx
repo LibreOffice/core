@@ -38,8 +38,6 @@
 #define MACROCHOOSER_CHOOSEONLY     2
 #define MACROCHOOSER_RECORDING      3
 
-class BasicManager;
-
 class MacroChooser : public SfxModalDialog
 {
 private:

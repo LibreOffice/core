@@ -471,8 +471,6 @@ inline SvtFileView* SvtFileDialog::GetView() const
 //*****************************************************************************
 //*****************************************************************************
 
-class SvtFilePicker;
-
 #define FILE_SELECTION_CHANGED  1
 #define DIRECTORY_CHANGED       2
 #define HELP_REQUESTED          3
