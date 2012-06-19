@@ -74,6 +74,7 @@
 #include <lcms2.h>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -96,6 +97,8 @@ using ::rtl::OUStringBuffer;
 #else
 #define DEBUG_DISABLE_PDFCOMPRESSION // also do not compress streams
 #endif
+
+#define MAX_SIGNATURE_CONTENT_LENGTH 0x4000
 
 #ifdef DO_TEST_PDF
 class PDFTestOutputStream : public PDFOutputStream
@@ -520,6 +523,13 @@ void doTestCode()
     aWriter.CreateOutlineItem( nPage2OL, OUString( "Dest 1"  ), nFirstDest );
 
     aWriter.EndStructureElement(); // close document
+
+    // sign the document
+    PDFWriter::SignatureWidget aSignature;
+    aSignature.Name = OUString("Signature1");
+    aSignature.Location = Rectangle( Point( 0, 0 ), Size( 0, 0 ) );
+    aWriter.CreateControl( aSignature, 0);
+
     aWriter.Emit();
 }
 #endif
@@ -1755,6 +1765,9 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_eInheritedOrientation( PDFWriter::Portrait ),
         m_nCurrentPage( -1 ),
         m_nResourceDict( -1 ),
+        m_nSignatureObject( -1 ),
+        m_nSignatureContentOffset( 0 ),
+        m_nSignatureLastByteRangeNoOffset( 0 ),
         m_nFontDictObject( -1 ),
         m_pCodec( NULL ),
         m_aDocDigest( rtl_digest_createMD5() ),
@@ -5452,15 +5465,29 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             // emit widget annotation only for terminal fields
             if( rWidget.m_aKids.empty() )
             {
-                aLine.append( "/Type/Annot/Subtype/Widget/F 4\n"
-                              "/Rect[" );
-                appendFixedInt( rWidget.m_aRect.Left()-1, aLine );
+                int iRectMargin;
+
+                aLine.append( "/Type/Annot/Subtype/Widget/F " );
+
+                if (rWidget.m_eType == PDFWriter::Signature)
+                {
+                    aLine.append( "132\n" ); // Print & Locked
+                    iRectMargin = 0;
+                }
+                else
+                {
+                    aLine.append( "4\n" );
+                    iRectMargin = 1;
+                }
+
+                aLine.append("/Rect[" );
+                appendFixedInt( rWidget.m_aRect.Left()-iRectMargin, aLine );
                 aLine.append( ' ' );
-                appendFixedInt( rWidget.m_aRect.Top()+1, aLine );
+                appendFixedInt( rWidget.m_aRect.Top()+iRectMargin, aLine );
                 aLine.append( ' ' );
-                appendFixedInt( rWidget.m_aRect.Right()+1, aLine );
+                appendFixedInt( rWidget.m_aRect.Right()+iRectMargin, aLine );
                 aLine.append( ' ' );
-                appendFixedInt( rWidget.m_aRect.Bottom()-1, aLine );
+                appendFixedInt( rWidget.m_aRect.Bottom()-iRectMargin, aLine );
                 aLine.append( "]\n" );
             }
             aLine.append( "/FT/" );
@@ -5514,6 +5541,10 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 case PDFWriter::Edit:
                     aLine.append( "Tx" );
                     appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
+                    break;
+                case PDFWriter::Signature:
+                    aLine.append( "Sig" );
+                    aValue.append(OUStringToOString(rWidget.m_aValue, RTL_TEXTENCODING_ASCII_US));
                     break;
                 case PDFWriter::Hierarchy: // make the compiler happy
                     break;
@@ -5877,6 +5908,14 @@ bool PDFWriterImpl::emitCatalog()
     }
     else
         aInitPageRef.append( "0" );
+
+    if (m_nSignatureObject != -1) // Document will be signed
+    {
+        aLine.append("/Perms<</DocMDP ");
+        aLine.append(m_nSignatureObject);
+        aLine.append(" 0 R>>");
+    }
+
     switch( m_aContext.PDFDocumentAction )
     {
     case PDFWriter::ActionDefault :     //do nothing, this is the Acrobat default
@@ -6001,7 +6040,12 @@ bool PDFWriterImpl::emitCatalog()
                 aLine.append( (nOut++ % 5)==4 ? " 0 R\n" : " 0 R " );
             }
         }
-        aLine.append( "\n]/DR " );
+        aLine.append( "\n]" );
+
+        if (m_nSignatureObject != -1)
+            aLine.append( "/SigFlags 3");
+
+        aLine.append( "/DR " );
         aLine.append( getResourceDictObj() );
         aLine.append( " 0 R" );
         if( m_bIsPDF_A1 )
@@ -6028,6 +6072,99 @@ bool PDFWriterImpl::emitCatalog()
                   "endobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
+    return true;
+}
+
+bool PDFWriterImpl::emitSignature()
+{
+    if( !updateObject( m_nSignatureObject ) )
+        return false;
+
+    OStringBuffer aLine( 0x5000 );
+    aLine.append( m_nSignatureObject );
+    aLine.append( " 0 obj\n" );
+    aLine.append("<</Reference[<</Data ");
+    aLine.append( m_nCatalogObject );
+    aLine.append(" 0 R/Type/SigRef/TransformParams<</Type/TransformParams"
+                 "/V/1.2/P 1>>/DigestMethod/MD5/DigestLocation[0 0]"
+                 "/DigestValue(aa)/TransformMethod/DocMDP>>]/Contents <" );
+
+    sal_uInt64 nOffset = ~0U;
+    oslFileError aError = osl_getFilePos( m_aFile, &nOffset );
+    DBG_ASSERT( aError == osl_File_E_None, "could not get file position" );
+
+    m_nSignatureContentOffset = nOffset + aLine.getLength();
+
+    // reserve some space for the PKCS#7 object
+    OStringBuffer aContentFiller( MAX_SIGNATURE_CONTENT_LENGTH );
+    comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
+    aLine.append( aContentFiller.makeStringAndClear() );
+    aLine.append( ">\n/Type/Sig/SubFilter/adbe.pkcs7.sha1/Location()"
+                  "/Name ");
+
+    if( m_aContext.DocumentInfo.Author.Len() )
+        appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Author, m_nSignatureObject, aLine );
+    else
+        aLine.append("()");
+
+    aLine.append( " /M ");
+    appendLiteralStringEncrypt( m_aCreationDateString, m_nSignatureObject, aLine );
+
+    aLine.append( " /ByteRange [ 0 ");
+    aLine.append( m_nSignatureContentOffset, 10 );
+    aLine.append( " " );
+    aLine.append( m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH, 10 );
+    aLine.append( " " );
+
+    m_nSignatureLastByteRangeNoOffset = nOffset + aLine.getLength();
+
+    // mark the last ByteRange no and add some space. Now, we don't know
+    // how many bytes we need for this ByteRange value
+    // The real value will be overwritten in the finalizeSignature method
+    OStringBuffer aByteRangeFiller( 100  );
+    comphelper::string::padToLength(aByteRangeFiller, 100, ' ');
+    aLine.append( aByteRangeFiller.makeStringAndClear() );
+    aLine.append("  /Filter/Adobe.PPKMS/Reason()>>"
+                 "\nendobj\n\n" );
+
+    if (!writeBuffer( aLine.getStr(), aLine.getLength() ))
+        return false;
+
+    return true;
+}
+
+bool PDFWriterImpl::finalizeSignature()
+{
+    // 1- calculate last ByteRange value
+    sal_uInt64 nOffset = ~0U;
+    oslFileError aError = osl_getFilePos( m_aFile, &nOffset );
+
+    if ( aError != osl_File_E_None )
+        return false;
+
+    sal_Int64 nLastByteRangeNo = nOffset - (m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH);
+
+    // 2- overwrite the value to the m_nSignatureLastByteRangeNoOffset position
+    sal_uInt64 nWritten = 0;
+    osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset );
+    OStringBuffer aByteRangeNo( 256 );
+    aByteRangeNo.append( nLastByteRangeNo, 10);
+    aByteRangeNo.append( " ]" );
+
+    if( osl_writeFile( m_aFile, aByteRangeNo.getStr(), aByteRangeNo.getLength(), &nWritten ) != osl_File_E_None )
+    {
+        osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset );
+        return false;
+    }
+
+    // 3- create the PKCS#7 object using NSS
+
+    // 4- overwrite the PKCS7 content to the m_nSignatureContentOffset
+    osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset );
+    // osl_writeFile()
+
+    // revert the file position back
+    osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset );
     return true;
 }
 
@@ -6818,8 +6955,14 @@ bool PDFWriterImpl::emit()
     // emit catalog
     CHECK_RETURN( emitCatalog() );
 
+    if (m_nSignatureObject != -1) // if document is signed, emit sigdict
+        CHECK_RETURN( emitSignature() );
+
     // emit trailer
     CHECK_RETURN( emitTrailer() );
+
+    if (m_nSignatureObject != -1) // finalize the signature
+        CHECK_RETURN( finalizeSignature() );
 
     osl_closeFile( m_aFile );
     m_bOpen = false;
@@ -11721,6 +11864,14 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aValue = rEdit.Text;
 
         createDefaultEditAppearance( rNewWidget, rEdit );
+    }
+    else if( rControl.getType() == PDFWriter::Signature)
+    {
+        //const PDFWriter::SignatureWidget& rSig = static_cast<const PDFWriter::SignatureWidget&>(rControl);
+        m_nSignatureObject = createObject();
+        rNewWidget.m_aValue = OUString::valueOf( m_nSignatureObject );
+        rNewWidget.m_aValue += OUString(" 0 R");
+        //createDefaultSignatureAppearance( rNewWidget, rSig );
     }
 
     // convert to default user space now, since the mapmode may change

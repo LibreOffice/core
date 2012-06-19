@@ -678,6 +678,10 @@ private:
     sal_Int32                           m_nCurrentPage;
 
     sal_Int32                           m_nCatalogObject;
+    // object number of the main signature dictionary
+    sal_Int32                           m_nSignatureObject;
+    sal_Int64                           m_nSignatureContentOffset;
+    sal_Int64                           m_nSignatureLastByteRangeNoOffset;
     sal_Int32                           m_nResourceDict;
     ResourceDict                        m_aGlobalResourceDict;
     sal_Int32                           m_nFontDictObject;
@@ -950,6 +954,11 @@ i12626
     sal_Int32 emitStructParentTree( sal_Int32 nTreeObject );
     // writes page tree and catalog
     bool emitCatalog();
+    // writes signature dictionary object
+    bool emitSignature();
+    // creates a PKCS7 object using the ByteRange and overwrite /Contents
+    // of the signature dictionary
+    bool finalizeSignature();
     // writes xref and trailer
     bool emitTrailer();
     // emit additional streams collected; also create there object numbers

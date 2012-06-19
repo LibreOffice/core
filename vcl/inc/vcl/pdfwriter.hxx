@@ -197,7 +197,8 @@ public:
 
     enum WidgetType
     {
-        PushButton, RadioButton, CheckBox, Edit, ListBox, ComboBox, Hierarchy
+        PushButton, RadioButton, CheckBox, Edit, ListBox, ComboBox, Hierarchy,
+        Signature
     };
 
     enum WidgetState
@@ -446,6 +447,22 @@ public:
         virtual AnyWidget* Clone() const
         {
             return new ComboBoxWidget( *this );
+        }
+    };
+
+    struct SignatureWidget: public AnyWidget
+    {
+        rtl::OUString                    SigLocation;
+        rtl::OUString                    SigReason;
+        rtl::OUString                    SigContactInfo;
+
+        SignatureWidget()
+                : AnyWidget( vcl::PDFWriter::Signature )
+        {}
+
+        virtual AnyWidget* Clone() const
+        {
+            return new SignatureWidget( *this );
         }
     };
 
