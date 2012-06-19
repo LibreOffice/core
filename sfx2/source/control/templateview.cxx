@@ -90,6 +90,29 @@ void TemplateView::Paint (const Rectangle &rRect)
     mpProcessor->process(aSeq);
 }
 
+void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
+{
+    if (rMEvt.IsLeft())
+    {
+        Size aWinSize = GetOutputSizePixel();
+        Size aImageSize = maCloseImg.GetSizePixel();
+
+        Point aPos;
+        aPos.Y() = (mnHeaderHeight - aImageSize.Height())/2;
+        aPos.X() = aWinSize.Width() - aImageSize.Width() - aPos.Y();
+
+        Rectangle aImgRect(aPos,aImageSize);
+
+        if (aImgRect.IsInside(rMEvt.GetPosPixel()))
+        {
+            Show(false);
+            Clear();
+        }
+    }
+
+    ThumbnailView::MouseButtonDown(rMEvt);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 

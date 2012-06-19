@@ -29,6 +29,10 @@ public:
 
     virtual void Paint (const Rectangle &rRect);
 
+protected:
+
+    virtual void MouseButtonDown (const MouseEvent &rMEvt);
+
 private:
 
     Image maCloseImg;
