@@ -1,38 +1,42 @@
 // -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+//
+// This file is part of the LibreOffice project.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Version: MPL 1.1 / GPLv3+ / LGPLv3+
-//
-// The contents of this file are subject to the Mozilla Public License Version
-// 1.1 (the "License"); you may not use this file except in compliance with
-// the License or as specified alternatively below. You may obtain a copy of
-// the License at http://www.mozilla.org/MPL/
-//
-// Software distributed under the License is distributed on an "AS IS" basis,
-// WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
-// for the specific language governing rights and limitations under the
-// License.
-//
-// Major Contributor(s):
-// Copyright (C) 2011 Tor Lillqvist <tml@iki.fi> (initial developer)
-// Copyright (C) 2011 SUSE Linux http://suse.com (initial developer's employer)
-//
-// All Rights Reserved.
-//
-// For minor contributions see the git repository.
-//
-// Alternatively, the contents of this file may be used under the terms of
-// either the GNU General Public License Version 3 or later (the "GPLv3+"), or
-// the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
-// in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
-// instead of those above.
+// This is just a testbed for ideas and implementations. (Still, it might turn
+// out to be somewhat useful as such while waiting for "real" apps.)
+
+// Important points:
+
+// Everything that might take a long time should be done asynchronously:
+//  - loading the document (loadComponentFromURL())
+//  - counting number of pages (getRendererCount())
+//  - rendering a page (render())
+
+// Unclear whether pages can be rendered in parallel. Probably best to
+// serialize all the above in the same worker thread, for instance using
+// AsyncTask.SERIAL_EXECUTOR.
+
+// While a page is loading ideally should display some animated spinner (but
+// for now just a static "please wait" text).
+
+// Just three views are used for the pages: For the current page being viewed,
+// the previous, and the next. This could be bumped higher, need to make the
+// "3" into a parameter below.
 
 package org.libreoffice.android.examples;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -40,7 +44,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
+import android.widget.ViewSwitcher;
 
 import com.polites.android.GestureImageView;
 
@@ -73,16 +79,18 @@ public class DocumentLoader
     private static String TAG = "DocumentLoader";
 
     long timingOverhead;
-    Object desktop;
+    XComponentContext context;
+    XMultiComponentFactory mcf;
     XComponentLoader componentLoader;
     XToolkit2 toolkit;
     Object doc;
     int pageCount;
     XRenderable renderable;
 
-    PropertyValue[] loadProps;
-
     GestureDetector gestureDetector;
+
+    ViewGroup.LayoutParams matchParent;
+
     ViewFlipper flipper;
 
     class GestureListener
@@ -96,38 +104,49 @@ public class DocumentLoader
         {
             Log.i(TAG, "onFling: " + event1 + " " + event2);
             if (event1.getX() - event2.getX() > 120) {
-                AnimationSet leftIn = new AnimationSet(true);
-                leftIn.addAnimation(new AlphaAnimation(0.1f, 1.0f));
-                leftIn.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
-                                                           Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
-                leftIn.setDuration(500);
-                flipper.setInAnimation(leftIn);
+                if (((PageViewer)flipper.getCurrentView()).currentPageNumber == pageCount-1)
+                    return false;
 
-                AnimationSet leftOut = new AnimationSet(true);
-                leftOut.addAnimation(new AlphaAnimation(1f, 0.1f));
-                leftOut.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, -1,
-                                                            Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
-                leftOut.setDuration(500);
-                flipper.setOutAnimation(leftOut);
+                AnimationSet inFromRight = new AnimationSet(true);
+                inFromRight.addAnimation(new AlphaAnimation(0.1f, 1.0f));
+                inFromRight.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
+                                                                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                inFromRight.setDuration(500);
+                flipper.setInAnimation(inFromRight);
+
+                AnimationSet outToLeft = new AnimationSet(true);
+                outToLeft.addAnimation(new AlphaAnimation(1f, 0.1f));
+                outToLeft.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, -1,
+                                                              Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                outToLeft.setDuration(500);
+                flipper.setOutAnimation(outToLeft);
 
                 flipper.showNext();
+
+                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + 1) % 3)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber + 1);
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
-                AnimationSet rightIn = new AnimationSet(true);
-                rightIn.addAnimation(new AlphaAnimation(0.1f, 1.0f));
-                rightIn.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
-                                                            Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
-                rightIn.setDuration(500);
-                flipper.setInAnimation(rightIn);
+                if (((PageViewer)flipper.getCurrentView()).currentPageNumber == 0)
+                    return false;
 
-                AnimationSet rightOut = new AnimationSet(true);
-                rightOut.addAnimation(new AlphaAnimation(1f, 0.1f));
-                rightOut.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
-                                                             Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
-                rightOut.setDuration(500);
-                flipper.setOutAnimation(rightOut);
+                AnimationSet inFromLeft = new AnimationSet(true);
+                inFromLeft.addAnimation(new AlphaAnimation(0.1f, 1.0f));
+                inFromLeft.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
+                                                               Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                inFromLeft.setDuration(500);
+                flipper.setInAnimation(inFromLeft);
+
+                AnimationSet outToRight = new AnimationSet(true);
+                outToRight.addAnimation(new AlphaAnimation(1f, 0.1f));
+                outToRight.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
+                                                               Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                outToRight.setDuration(500);
+                flipper.setOutAnimation(outToRight);
 
                 flipper.showPrevious();
+
+                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + 2) % 3)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber - 1);
+
                 return true;
             }
             return false;
@@ -198,8 +217,6 @@ public class DocumentLoader
             Log.i(TAG, "removeEventListener");
         }
     }
-
-    enum PageState { LOADING, READY };
 
     ByteBuffer renderPage(int number)
     {
@@ -274,19 +291,153 @@ public class DocumentLoader
         return null;
     }
 
-    class Page
+    enum PageState { NONEXISTENT, LOADING, READY };
+
+    class PageViewer
+        extends ViewSwitcher
     {
-        int number;
-        PageState state = PageState.LOADING;
+        int currentPageNumber = -1;
+        TextView waitView;
+        PageState state = PageState.NONEXISTENT;
         ByteBuffer bb;
 
-        Page(int number)
+        class PageLoadTask
+            extends AsyncTask<Void, Void, Void>
         {
-            this.number = number;
+            protected Void doInBackground(Void... params)
+            {
+                if (currentPageNumber == pageCount)
+                    return null;
 
-            bb = renderPage(number);
+                try {
+                    Thread.sleep(5000);
+                }
+                catch (InterruptedException e) {
+                }
+                state = PageState.LOADING;
+                bb = renderPage(currentPageNumber);
+                return null;
+            }
 
-            state = PageState.READY;
+            protected void onPostExecute(Void result)
+            {
+                if (currentPageNumber == pageCount)
+                    return;
+
+                Bitmap bm = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
+                bm.copyPixelsFromBuffer(bb);
+
+                ImageView imageView = new ImageView(DocumentLoader.this);
+                imageView.setImageBitmap(bm);
+
+                imageView.setScaleY(-1);
+
+                if (getChildCount() == 2)
+                    removeViewAt(1);
+                addView(imageView, 1, matchParent);
+                showNext();
+                state = PageState.READY;
+            }
+        }
+
+        void display(int number)
+        {
+            if (number == currentPageNumber)
+                return;
+
+            currentPageNumber = number;
+
+            waitView.setText("Page " + (currentPageNumber + 1) + ", wait...");
+            state = PageState.NONEXISTENT;
+
+            if (getDisplayedChild() == 1) {
+                showPrevious();
+                removeViewAt(1);
+            }
+
+            Log.i(TAG, "PageViewer display(" + number + ")");
+            if (currentPageNumber >= 0) {
+                new PageLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+            }
+        }
+
+        PageViewer(int number)
+        {
+            super(DocumentLoader.this);
+
+            waitView = new TextView(DocumentLoader.this);
+            waitView.setTextSize(24);
+            waitView.setGravity(Gravity.CENTER);
+            waitView.setBackgroundColor(Color.WHITE);
+            waitView.setTextColor(Color.BLACK);
+            addView(waitView, 0, matchParent);
+
+            display(number);
+        }
+    }
+
+    class DocumentLoadTask
+        extends AsyncTask<String, Void, Void>
+    {
+        protected Void doInBackground(String... params)
+        {
+            try {
+                String url = params[0];
+                Log.i(TAG, "Attempting to load " + url);
+
+                PropertyValue loadProps[] = new PropertyValue[3];
+                loadProps[0] = new PropertyValue();
+                loadProps[0].Name = "Hidden";
+                loadProps[0].Value = new Boolean(true);
+                loadProps[1] = new PropertyValue();
+                loadProps[1].Name = "ReadOnly";
+                loadProps[1].Value = new Boolean(true);
+                loadProps[2] = new PropertyValue();
+                loadProps[2].Name = "Preview";
+                loadProps[2].Value = new Boolean(true);
+
+                long t0 = System.currentTimeMillis();
+                doc = componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+                long t1 = System.currentTimeMillis();
+                Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms");
+
+                dumpUNOObject("doc", doc);
+
+                Object toolkitService = mcf.createInstanceWithContext
+                    ("com.sun.star.awt.Toolkit", context);
+
+                dumpUNOObject("toolkitService", toolkitService);
+
+                toolkit = (XToolkit2) UnoRuntime.queryInterface(XToolkit2.class, toolkitService);
+                dumpUNOObject("toolkit", toolkit);
+
+                renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
+
+                ByteBuffer smallbb = ByteBuffer.allocateDirect(128*128*4);
+                long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
+                XDevice smalldevice = toolkit.createScreenCompatibleDeviceUsingBuffer(128, 128, 1, 1, 0, 0, wrapped_smallbb);
+
+                PropertyValue renderProps[] = new PropertyValue[3];
+                renderProps[0] = new PropertyValue();
+                renderProps[0].Name = "IsPrinter";
+                renderProps[0].Value = new Boolean(true);
+                renderProps[1] = new PropertyValue();
+                renderProps[1].Name = "RenderDevice";
+                renderProps[1].Value = smalldevice;
+                renderProps[2] = new PropertyValue();
+                renderProps[2].Name = "View";
+                renderProps[2].Value = new MyXController();
+
+                t0 = System.currentTimeMillis();
+                pageCount = renderable.getRendererCount(doc, renderProps);
+                t1 = System.currentTimeMillis();
+                Log.i(TAG, "getRendererCount: " + pageCount + ", took " + ((t1-t0)-timingOverhead) + " ms");
+            }
+            catch (Exception e) {
+                e.printStackTrace(System.err);
+                finish();
+            }
+            return null;
         }
     }
 
@@ -376,16 +527,14 @@ public class DocumentLoader
             Bootstrap.dlopen("libswdlo.so");
             Bootstrap.dlopen("libswlo.so");
             
-            Log.i(TAG, "Sleeping NOW");
-            Thread.sleep(20000);
-
-            XComponentContext context = null;
+            // Log.i(TAG, "Sleeping NOW");
+            // Thread.sleep(20000);
 
             context = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
 
             Log.i(TAG, "context is" + (context!=null ? " not" : "") + " null");
 
-            XMultiComponentFactory mcf = context.getServiceManager();
+            mcf = context.getServiceManager();
 
             Log.i(TAG, "mcf is" + (mcf!=null ? " not" : "") + " null");
 
@@ -404,85 +553,27 @@ public class DocumentLoader
 
             Bootstrap.initVCL();
 
-            Object oDesktop = mcf.createInstanceWithContext
+            Object desktop = mcf.createInstanceWithContext
                 ("com.sun.star.frame.Desktop", context);
 
-            Log.i(TAG, "oDesktop is" + (oDesktop!=null ? " not" : "") + " null");
+            Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
 
             Bootstrap.initUCBHelper();
 
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, oDesktop);
+            componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
 
-            Log.i(TAG, "xCompLoader is" + (xCompLoader!=null ? " not" : "") + " null");
+            Log.i(TAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");
 
             // Load the wanted document
-
-            PropertyValue loadProps[] = new PropertyValue[3];
-            loadProps[0] = new PropertyValue();
-            loadProps[0].Name = "Hidden";
-            loadProps[0].Value = new Boolean(true);
-            loadProps[1] = new PropertyValue();
-            loadProps[1].Name = "ReadOnly";
-            loadProps[1].Value = new Boolean(true);
-            loadProps[2] = new PropertyValue();
-            loadProps[2].Name = "Preview";
-            loadProps[2].Value = new Boolean(true);
-
-            String sUrl = "file://" + input;
-
-            Log.i(TAG, "Attempting to load " + sUrl);
-
-            t0 = System.currentTimeMillis();
-            doc = xCompLoader.loadComponentFromURL(sUrl, "_blank", 0, loadProps);
-            t1 = System.currentTimeMillis();
-            Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms");
-
-            dumpUNOObject("doc", doc);
-
-            Object toolkitService = mcf.createInstanceWithContext
-                ("com.sun.star.awt.Toolkit", context);
-
-            dumpUNOObject("toolkitService", toolkitService);
-
-            toolkit = (XToolkit2) UnoRuntime.queryInterface(XToolkit2.class, toolkitService);
-            dumpUNOObject("toolkit", toolkit);
-
-            renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
-
-            ByteBuffer smallbb = ByteBuffer.allocateDirect(128*128*4);
-            long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
-            XDevice smalldevice = toolkit.createScreenCompatibleDeviceUsingBuffer(128, 128, 1, 1, 0, 0, wrapped_smallbb);
-
-            PropertyValue renderProps[] = new PropertyValue[3];
-            renderProps[0] = new PropertyValue();
-            renderProps[0].Name = "IsPrinter";
-            renderProps[0].Value = new Boolean(true);
-            renderProps[1] = new PropertyValue();
-            renderProps[1].Name = "RenderDevice";
-            renderProps[1].Value = smalldevice;
-            renderProps[2] = new PropertyValue();
-            renderProps[2].Name = "View";
-            renderProps[2].Value = new MyXController();
-
-            t0 = System.currentTimeMillis();
-            pageCount = renderable.getRendererCount(doc, renderProps);
-            t1 = System.currentTimeMillis();
-            Log.i(TAG, "getRendererCount: " + pageCount + ", took " + ((t1-t0)-timingOverhead) + " ms");
+            new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
 
             flipper = new ViewFlipper(this);
 
-            flipper.setScaleY(-1);
+            matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-            for (int i = 0; i < pageCount; i++) {
-                ByteBuffer bb = renderPage(i);
-                Bitmap bm = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
-                bm.copyPixelsFromBuffer(bb);
-
-                ImageView imageView = new ImageView(this);
-                imageView.setImageBitmap(bm);
-
-                flipper.addView(imageView, i, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            }
+            flipper.addView(new PageViewer(0), 0, matchParent);
+            flipper.addView(new PageViewer(1), 1, matchParent);
+            flipper.addView(new PageViewer(-1), 2, matchParent);
 
             setContentView(flipper);
         }
