@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "editeng/editengdllapi.h"
+#include <i18npool/mslangid.hxx>
 
 //.............................................................................
 namespace editeng
@@ -275,20 +276,17 @@ namespace editeng
 
     sal_Bool HangulHanjaConversion::IsSimplified( LanguageType nLang )
     {
-        return  nLang == LANGUAGE_CHINESE_SIMPLIFIED ||
-                nLang == LANGUAGE_CHINESE_SINGAPORE;
+        return MsLangId::isSimplifiedChinese(nLang);
     }
 
     sal_Bool HangulHanjaConversion::IsTraditional( LanguageType nLang )
     {
-        return  nLang == LANGUAGE_CHINESE_TRADITIONAL ||
-                nLang == LANGUAGE_CHINESE_HONGKONG ||
-                nLang == LANGUAGE_CHINESE_MACAU;
+        return MsLangId::isTraditionalChinese(nLang);
     }
 
     sal_Bool HangulHanjaConversion::IsChinese( LanguageType nLang )
     {
-        return IsTraditional( nLang ) || IsSimplified( nLang );
+        return MsLangId::isChinese(nLang);
     }
 //.............................................................................
 }   // namespace svx

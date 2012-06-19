@@ -58,13 +58,8 @@ void lcl_getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont,Langu
         //      be queried for Korean, too (the Latin language from the document can't be Korean).
         //      This is the same logic as in SwDocShell::InitNew.
         LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
-        switch( eUiLanguage )
-        {
-                case LANGUAGE_KOREAN:
-                case LANGUAGE_KOREAN_JOHAB:
-                        eLatin = eUiLanguage;
-                break;
-        }
+        if (MsLangId::isKorean(eUiLanguage))
+            eLatin = eUiLanguage;
 
         rLatinFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, eLatin, DEFAULTFONT_FLAGS_ONLYONE );
         rCJKFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, _eCJK, DEFAULTFONT_FLAGS_ONLYONE );

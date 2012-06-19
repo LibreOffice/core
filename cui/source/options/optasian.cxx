@@ -33,6 +33,7 @@
 #include <optasian.hrc>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
+#include <i18npool/mslangid.hxx>
 #include <tools/shl.hxx>
 #include <svl/asiancfg.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -301,17 +302,10 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     {
         eLastUsedLanguageTypeForForbiddenCharacters = SvxLocaleToLanguage(
             Application::GetSettings().GetLocale() );
-        switch(eLastUsedLanguageTypeForForbiddenCharacters)
-        {
-            case  LANGUAGE_CHINESE            :
-            case  LANGUAGE_CHINESE_SINGAPORE  :
-                eLastUsedLanguageTypeForForbiddenCharacters = LANGUAGE_CHINESE_SIMPLIFIED;
-            break;
-            case  LANGUAGE_CHINESE_HONGKONG   :
-            case  LANGUAGE_CHINESE_MACAU      :
-                eLastUsedLanguageTypeForForbiddenCharacters = LANGUAGE_CHINESE_TRADITIONAL;
-            break;
-        }
+        if (MsLangId::isSimplifiedChinese(eLastUsedLanguageTypeForForbiddenCharacters))
+            eLastUsedLanguageTypeForForbiddenCharacters = LANGUAGE_CHINESE_SIMPLIFIED;
+        else if (MsLangId::isTraditionalChinese(eLastUsedLanguageTypeForForbiddenCharacters))
+            eLastUsedLanguageTypeForForbiddenCharacters = LANGUAGE_CHINESE_TRADITIONAL;
     }
     aLanguageLB.SelectLanguage( eLastUsedLanguageTypeForForbiddenCharacters );
     LanguageHdl(&aLanguageLB);

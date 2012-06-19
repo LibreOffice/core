@@ -28,6 +28,7 @@
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
+#include <i18npool/mslangid.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
@@ -291,13 +292,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     //  be queried for Korean, too (the Latin language from the document can't be Korean).
     //  This is the same logic as in SwDocShell::InitNew.
     LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
-    switch( eUiLanguage )
-    {
-        case LANGUAGE_KOREAN:
-        case LANGUAGE_KOREAN_JOHAB:
-            eLatin = eUiLanguage;
-        break;
-    }
+    if (MsLangId::isKorean(eUiLanguage))
+        eLatin = eUiLanguage;
 
     lcl_CheckFont( *pSet, eLatin, DEFAULTFONT_LATIN_SPREADSHEET, ATTR_FONT );
     lcl_CheckFont( *pSet, eCjk, DEFAULTFONT_CJK_SPREADSHEET, ATTR_CJK_FONT );

@@ -50,6 +50,7 @@
 #include "osl/file.hxx"
 #include "osl/thread.hxx"
 
+#include "langboost.hxx"
 #include "sft.hxx"
 
 #include <ft2build.h>
@@ -177,27 +178,7 @@ FtFontFile::FtFontFile( const ::rtl::OString& rNativeFileName )
         if( bOnce )
         {
             bOnce = false;
-            LanguageType aLang = Application::GetSettings().GetUILanguage();
-            switch( aLang )
-            {
-                case LANGUAGE_JAPANESE:
-                    pLangBoost = "jan";
-                    break;
-                case LANGUAGE_CHINESE:
-                case LANGUAGE_CHINESE_SIMPLIFIED:
-                case LANGUAGE_CHINESE_SINGAPORE:
-                    pLangBoost = "zhs";
-                    break;
-                case LANGUAGE_CHINESE_TRADITIONAL:
-                case LANGUAGE_CHINESE_HONGKONG:
-                case LANGUAGE_CHINESE_MACAU:
-                    pLangBoost = "zht";
-                    break;
-                case LANGUAGE_KOREAN:
-                case LANGUAGE_KOREAN_JOHAB:
-                    pLangBoost = "kor";
-                    break;
-            }
+            pLangBoost = vcl::getLangBoost();
         }
 
         if( pLangBoost && !strncasecmp( pLangBoost, &maNativeFileName.getStr()[nPos+1], 3 ) )

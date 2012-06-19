@@ -34,6 +34,7 @@
 
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <i18npool/mslangid.hxx>
 
 using namespace ::com::sun::star;
 
@@ -148,22 +149,8 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
     sal_Bool bChanged = sal_False;
     xub_StrLen nLen = aKey.Len();
 
-    sal_Bool bCJK = sal_False;
-    switch( Application::GetSettings().GetUILanguage() )
-    {
-        case LANGUAGE_JAPANESE:
-        case LANGUAGE_CHINESE_TRADITIONAL:
-        case LANGUAGE_CHINESE_SIMPLIFIED:
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_SINGAPORE:
-        case LANGUAGE_CHINESE_MACAU:
-        case LANGUAGE_KOREAN:
-        case LANGUAGE_KOREAN_JOHAB:
-            bCJK = sal_True;
-            break;
-        default:
-            break;
-    }
+    bool bCJK = MsLangId::isCJK(Application::GetSettings().GetUILanguage());
+
     // #107889# in CJK versions ALL strings (even those that contain latin characters)
     // will get mnemonics in the form: xyz (M)
     // thus steps 1) and 2) are skipped for CJK locales

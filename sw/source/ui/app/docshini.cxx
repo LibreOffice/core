@@ -214,13 +214,8 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 if ( i == 0 )
                 {
                     LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
-                    switch( eUiLanguage )
-                    {
-                        case LANGUAGE_KOREAN:
-                        case LANGUAGE_KOREAN_JOHAB:
-                            eLanguage = eUiLanguage;
-                        break;
-                    }
+                    if (MsLangId::isKorean(eUiLanguage))
+                        eLanguage = eUiLanguage;
                 }
 
                 Font aLangDefFont = OutputDevice::GetDefaultFont(

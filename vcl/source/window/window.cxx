@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <i18npool/mslangid.hxx>
 
 #include "tools/time.hxx"
 #include "tools/debug.hxx"
@@ -405,21 +406,9 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     // if the UI is korean, chinese or another locale
     // where the system font size is kown to be often too small to
     // generate readable fonts enforce a minimum font size of 9 points
-    bool bBrokenLangFontHeight = false;
-    static const LanguageType eBrokenSystemFontSizeLanguages[] =
-    { LANGUAGE_KOREAN, LANGUAGE_KOREAN_JOHAB,
-      LANGUAGE_CHINESE_HONGKONG, LANGUAGE_CHINESE_MACAU, LANGUAGE_CHINESE_SIMPLIFIED, LANGUAGE_CHINESE_SINGAPORE, LANGUAGE_CHINESE_TRADITIONAL
-    };
-    static std::set< LanguageType > aBrokenSystemFontSizeLanguagesSet(
-        eBrokenSystemFontSizeLanguages,
-        eBrokenSystemFontSizeLanguages + SAL_N_ELEMENTS(eBrokenSystemFontSizeLanguages)
-        );
-    LanguageType aLang = Application::GetSettings().GetUILanguage();
-    if( aBrokenSystemFontSizeLanguagesSet.find( aLang ) != aBrokenSystemFontSizeLanguagesSet.end() )
-    {
+    bool bBrokenLangFontHeight = MsLangId::isCJK(Application::GetSettings().GetUILanguage());
+    if (bBrokenLangFontHeight)
         defFontheight = Max(9, defFontheight);
-        bBrokenLangFontHeight = true;
-    }
 
     // i22098, toolfont will be scaled differently to avoid bloated rulers and status bars for big fonts
     int toolfontheight = defFontheight;

@@ -428,23 +428,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
         if( !nDefaultLang )
             nDefaultLang = Application::GetSettings().GetUILanguage();
 
-        LanguageType nDefaultCJK = LANGUAGE_CHINESE;
-        switch( nDefaultLang )
-        {
-            case LANGUAGE_JAPANESE:
-            case LANGUAGE_KOREAN:
-            case LANGUAGE_KOREAN_JOHAB:
-            case LANGUAGE_CHINESE_SIMPLIFIED:
-            case LANGUAGE_CHINESE_TRADITIONAL:
-            case LANGUAGE_CHINESE_SINGAPORE:
-            case LANGUAGE_CHINESE_HONGKONG:
-            case LANGUAGE_CHINESE_MACAU:
-                nDefaultCJK = nDefaultLang;
-                break;
-            default:
-                nDefaultCJK = LANGUAGE_CHINESE;
-                break;
-        }
+        LanguageType nDefaultCJK = MsLangId::isCJK(nDefaultLang) ? nDefaultLang : LANGUAGE_CHINESE;
 
         // change the marked entries to prefered language
         static const int nCount = SAL_N_ELEMENTS(aLangFromCodeChart);

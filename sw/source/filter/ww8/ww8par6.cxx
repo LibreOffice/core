@@ -75,6 +75,7 @@
 #include <editeng/pgrditem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <i18npool/mslangid.hxx>
 #include <fmtpdsc.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx> // SwTxtNode, siehe unten: JoinNode()
@@ -4365,10 +4366,7 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
             nVal = EMPHASISMARK_NONE;
             break;
         case 2:
-            if ((nLang == LANGUAGE_CHINESE_HONGKONG) ||
-                (nLang == LANGUAGE_CHINESE_MACAU) ||
-                (nLang == LANGUAGE_CHINESE_TRADITIONAL) ||
-                (nLang == LANGUAGE_KOREAN))
+            if (MsLangId::isKorean(nLang) || MsLangId::isTraditionalChinese(nLang))
                 nVal = EMPHASISMARK_CIRCLE_ABOVE;
             else if (nLang == LANGUAGE_JAPANESE)
                 nVal = EMPHASISMARK_SIDE_DOTS;
@@ -4382,8 +4380,7 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
             nVal = EMPHASISMARK_DOTS_BELOW;
             break;
         case 1:
-            if ((nLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
-                (nLang == LANGUAGE_CHINESE_SINGAPORE))
+            if (MsLangId::isSimplifiedChinese(nLang))
                 nVal = EMPHASISMARK_DOTS_BELOW;
             else
                 nVal = EMPHASISMARK_DOTS_ABOVE;

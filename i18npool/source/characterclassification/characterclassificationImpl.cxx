@@ -178,7 +178,6 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
             }
 
             static sal_Unicode under = (sal_Unicode)'_';
-            static OUString tw("TW");
             sal_Int32 l = rLocale.Language.getLength();
             sal_Int32 c = rLocale.Country.getLength();
             sal_Int32 v = rLocale.Variant.getLength();
@@ -197,7 +196,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
                                     rLocale.Country.compareToAscii("MO") == 0) &&
                     // if the country code is HK or MO, one more step to try TW.
                     createLocaleSpecificCharacterClassification(aBuf.append(rLocale.Language).append(under).append(
-                                    tw).makeStringAndClear(), rLocale)) ||
+                                    "TW").makeStringAndClear(), rLocale)) ||
                 (l > 0 &&
                     // load service with name <base>_<lang>
                     createLocaleSpecificCharacterClassification(rLocale.Language, rLocale))) {

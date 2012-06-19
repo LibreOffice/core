@@ -639,9 +639,7 @@ sal_Bool SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProp
                             if( ! (rVal >>= rOpt.bIsDirectionToSimplified) )
                             {
                                 //default is locale dependent:
-                                if(  rOpt.nDefaultLanguage_CJK == LANGUAGE_CHINESE_HONGKONG
-                                  || rOpt.nDefaultLanguage_CJK == LANGUAGE_CHINESE_MACAU
-                                  || rOpt.nDefaultLanguage_CJK == LANGUAGE_CHINESE_TRADITIONAL )
+                                if (MsLangId::isTraditionalChinese(rOpt.nDefaultLanguage_CJK))
                                 {
                                     rOpt.bIsDirectionToSimplified = sal_False;
                                 }

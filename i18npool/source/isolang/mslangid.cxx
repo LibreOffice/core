@@ -249,9 +249,54 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
     return false;
 }
 
+// static
+bool MsLangId::isSimplifiedChinese( LanguageType nLang )
+{
+    return isChinese(nLang) && !isTraditionalChinese(nLang);
+}
 
 // static
-bool MsLangId::hasForbiddenCharacters( LanguageType nLang )
+bool MsLangId::isSimplifiedChinese( const ::com::sun::star::lang::Locale & rLocale )
+{
+    return rLocale.Language == "zh" && !isTraditionalChinese(rLocale);
+}
+
+// static
+bool MsLangId::isTraditionalChinese( LanguageType nLang )
+{
+    bool bRet = false;
+    switch (nLang)
+    {
+        case LANGUAGE_CHINESE_TRADITIONAL:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_MACAU:
+            bRet = true;
+        default:
+            break;
+    }
+    return bRet;
+}
+
+// static
+bool MsLangId::isTraditionalChinese( const ::com::sun::star::lang::Locale & rLocale )
+{
+    return rLocale.Language == "zh" && (rLocale.Country == "TW" || rLocale.Country == "HK" || rLocale.Country == "MO");
+}
+
+//static
+bool MsLangId::isChinese( LanguageType nLang )
+{
+    return MsLangId::getPrimaryLanguage(nLang) == LANGUAGE_CHINESE;
+}
+
+//static
+bool MsLangId::isKorean( LanguageType nLang )
+{
+    return MsLangId::getPrimaryLanguage(nLang) == LANGUAGE_KOREAN;
+}
+
+// static
+bool MsLangId::isCJK( LanguageType nLang )
 {
     switch (nLang & LANGUAGE_MASK_PRIMARY)
     {
@@ -263,6 +308,18 @@ bool MsLangId::hasForbiddenCharacters( LanguageType nLang )
             break;
     }
     return false;
+}
+
+// static
+bool MsLangId::isFamilyNameFirst( LanguageType nLang )
+{
+    return isCJK(nLang) || nLang == LANGUAGE_HUNGARIAN;
+}
+
+// static
+bool MsLangId::hasForbiddenCharacters( LanguageType nLang )
+{
+    return isCJK(nLang);
 }
 
 

@@ -195,8 +195,6 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     }
 
     static sal_Unicode under = (sal_Unicode) '_';
-    static OUString tw("TW");
-    static OUString unicode("Unicode");
 
     sal_Int32 l = rLocale.Language.getLength();
     sal_Int32 c = rLocale.Country.getLength();
@@ -215,7 +213,7 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
                      under).append(rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
             (l > 0 && c > 0 && a > 0 && rLocale.Language == "zh" && (rLocale.Country == "HK" || rLocale.Country == "MO") &&
              // if the country code is HK or MO, one more step to try TW.
-             createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(tw).append(under).append(
+             createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append("TW").append(under).append(
                      rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
             (l > 0 && a > 0 &&
              // load service with name <base>_<lang>_<algorithm>
@@ -225,7 +223,7 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
             (a > 0 &&
              createCollator(rLocale, rSortAlgorithm, rSortAlgorithm)) ||
             // load default service with name <base>_Unicode
-            createCollator(rLocale, unicode, rSortAlgorithm)) {
+            createCollator(rLocale, "Unicode", rSortAlgorithm)) {
                 return;
             } else {
                 cachedItem = NULL;

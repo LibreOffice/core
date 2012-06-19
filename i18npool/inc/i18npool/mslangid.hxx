@@ -184,6 +184,29 @@ public:
     /** Whether locale has a Right-To-Left orientation. */
     static bool isRightToLeft( LanguageType nLang );
 
+    /** Whether locale is a CJK locale */
+    static bool isCJK( LanguageType nLang );
+
+    /** Whether locale is a chinese locale */
+    static bool isChinese( LanguageType nLang );
+
+    /** Whether locale is a simplified chinese locale */
+    static bool isSimplifiedChinese( LanguageType nLang );
+
+    /** Whether locale is a traditional chinese locale */
+    static bool isTraditionalChinese( LanguageType nLang );
+
+    /** Whether locale is a korean locale */
+    static bool isKorean( LanguageType nLang );
+
+    /** Whether locale is a simplified chinese locale */
+    static bool isSimplifiedChinese( const ::com::sun::star::lang::Locale & rLocale );
+
+    /** Whether locale is a traditional chinese locale */
+    static bool isTraditionalChinese( const ::com::sun::star::lang::Locale & rLocale );
+
+    /** Whether locale is one where family name comes first, e.g. Japan, Hungary, Samoa */
+    static bool isFamilyNameFirst( LanguageType nLang );
 
     /** Whether there are "forbidden characters at start or end of line" in
         this locale. CJK locales.

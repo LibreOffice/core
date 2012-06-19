@@ -54,13 +54,15 @@
 #include "fontsubset.hxx"
 #include "salprn.hxx"
 #include "region.h"
+#include "langboost.hxx"
 
 #ifdef ENABLE_GRAPHITE
 #include <graphite_layout.hxx>
 #include <graphite_serverfont.hxx>
 #endif
 
-#include "comphelper/string.hxx"
+#include <comphelper/string.hxx>
+#include <i18npool/mslangid.hxx>
 
 using namespace psp;
 
@@ -1178,6 +1180,26 @@ ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPri
     return aDFA;
 }
 
+namespace vcl
+{
+    const char* getLangBoost()
+    {
+        const char* pLangBoost;
+        const LanguageType eLang = Application::GetSettings().GetUILanguage();
+        if (eLang == LANGUAGE_JAPANESE)
+            pLangBoost = "jan";
+        else if (MsLangId::isKorean(eLang))
+            pLangBoost = "kor";
+        else if (MsLangId::isSimplifiedChinese(eLang))
+            pLangBoost = "zhs";
+        else if (MsLangId::isTraditionalChinese(eLang))
+            pLangBoost = "zht";
+        else
+            pLangBoost = NULL;
+        return pLangBoost;
+    }
+}
+
 // -----------------------------------------------------------------------
 
 void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastPrintFontInfo& aInfo )
@@ -1199,27 +1221,7 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
             if( bOnce )
             {
                 bOnce = false;
-                const LanguageType aLang = Application::GetSettings().GetUILanguage();
-                switch( aLang )
-                {
-                    case LANGUAGE_JAPANESE:
-                        pLangBoost = "jan";
-                        break;
-                    case LANGUAGE_CHINESE:
-                    case LANGUAGE_CHINESE_SIMPLIFIED:
-                    case LANGUAGE_CHINESE_SINGAPORE:
-                        pLangBoost = "zhs";
-                        break;
-                    case LANGUAGE_CHINESE_TRADITIONAL:
-                    case LANGUAGE_CHINESE_HONGKONG:
-                    case LANGUAGE_CHINESE_MACAU:
-                        pLangBoost = "zht";
-                        break;
-                    case LANGUAGE_KOREAN:
-                    case LANGUAGE_KOREAN_JOHAB:
-                        pLangBoost = "kor";
-                        break;
-                }
+                pLangBoost = vcl::getLangBoost();
             }
 
             if( pLangBoost )

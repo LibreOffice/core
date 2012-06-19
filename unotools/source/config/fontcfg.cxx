@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <i18npool/mslangid.hxx>
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontdefs.hxx>
 #include <comphelper/processfactory.hxx>
@@ -325,13 +326,10 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
     {
         return rtl::OUString(FALLBACKFONT_UI_SANS_LATIN2);
     }
-    else if ( aLocale.Language == "zh" )
-    {
-        if( ! aLocale.Country.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cn" ) ) )
-            return rtl::OUString(FALLBACKFONT_UI_SANS_CHINTRD);
-        else
-            return rtl::OUString(FALLBACKFONT_UI_SANS_CHINSIM);
-    }
+    else if (MsLangId::isTraditionalChinese(aLocale))
+        return rtl::OUString(FALLBACKFONT_UI_SANS_CHINTRD);
+    else if (MsLangId::isSimplifiedChinese(aLocale))
+        return rtl::OUString(FALLBACKFONT_UI_SANS_CHINSIM);
     else if ( aLocale.Language == "ja" )
     {
         // we need localized names for japanese fonts

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-
+#include <i18npool/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 #include <nativenumbersupplier.hxx>
@@ -526,7 +526,7 @@ static sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
 static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
 {
     // return zh_TW for TW, HK and MO, return zh_CN for other zh locales.
-    if (isLang("zh")) return (isCtry("TW") || isCtry("HK") || isCtry("MO")) ? 1 : 0;
+    if (isLang("zh")) return MsLangId::isTraditionalChinese(rLocale) ? 1 : 0;
 
     for (sal_Int16 i = 2; i < nbOfLocale; i++)
         if (isLang(natnum1Locales[i]))

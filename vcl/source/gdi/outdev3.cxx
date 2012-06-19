@@ -2734,30 +2734,19 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     }
 
     // if still needed use the font request's attributes to find a good match
-    switch( rFSD.meLanguage )
+    if (MsLangId::isSimplifiedChinese(rFSD.meLanguage))
+        nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC;
+    else if (MsLangId::isTraditionalChinese(rFSD.meLanguage))
+        nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC;
+    else if (MsLangId::isKorean(rFSD.meLanguage))
+        nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR;
+    else if (rFSD.meLanguage == LANGUAGE_JAPANESE)
+        nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP;
+    else
     {
-        case LANGUAGE_CHINESE:
-        case LANGUAGE_CHINESE_SIMPLIFIED:
-        case LANGUAGE_CHINESE_SINGAPORE:
-            nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC;
-            break;
-        case LANGUAGE_CHINESE_TRADITIONAL:
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_MACAU:
-            nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC;
-            break;
-        case LANGUAGE_KOREAN:
-        case LANGUAGE_KOREAN_JOHAB:
-            nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR;
-            break;
-        case LANGUAGE_JAPANESE:
-            nSearchType |= IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP;
-            break;
-        default:
-            nSearchType |= ImplIsCJKFont( rFSD.maName );
-            if( rFSD.IsSymbolFont() )
-                nSearchType |= IMPL_FONT_ATTR_SYMBOL;
-            break;
+        nSearchType |= ImplIsCJKFont( rFSD.maName );
+        if( rFSD.IsSymbolFont() )
+            nSearchType |= IMPL_FONT_ATTR_SYMBOL;
     }
 
     ImplCalcType( nSearchType, eSearchWeight, eSearchWidth, rFSD.meFamily, pFontAttr );
@@ -2936,15 +2925,13 @@ FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const Font& rFont )
     {
         LanguageType eLang = rFont.GetLanguage();
         // In Chinese Simplified the EmphasisMarks are below/left
-        if ( (eLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
-             (eLang == LANGUAGE_CHINESE_SINGAPORE) )
+        if (MsLangId::isSimplifiedChinese(eLang))
             nEmphasisMark |= EMPHASISMARK_POS_BELOW;
         else
         {
             eLang = rFont.GetCJKContextLanguage();
             // In Chinese Simplified the EmphasisMarks are below/left
-            if ( (eLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
-                 (eLang == LANGUAGE_CHINESE_SINGAPORE) )
+            if (MsLangId::isSimplifiedChinese(eLang))
                 nEmphasisMark |= EMPHASISMARK_POS_BELOW;
             else
                 nEmphasisMark |= EMPHASISMARK_POS_ABOVE;

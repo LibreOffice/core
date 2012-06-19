@@ -29,6 +29,7 @@
 #include <ctype.h>
 
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <i18npool/mslangid.hxx>
 #include <hintids.hxx>     // CH_TXTATR
 #include <SwPortionHandler.hxx>
 #include <porlay.hxx>
@@ -101,7 +102,7 @@ sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
         LanguageType aLang =
             rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript );
 
-        if ( LANGUAGE_KOREAN != aLang && LANGUAGE_KOREAN_JOHAB != aLang )
+        if (MsLangId::isKorean(aLang))
         {
             const SwLinePortion* pPor = rPor.GetPortion();
             if ( pPor && ( pPor->IsKernPortion() ||
@@ -209,7 +210,7 @@ sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
             LanguageType aLang =
                 rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos, 1, nNextScript );
 
-            if ( LANGUAGE_KOREAN != aLang && LANGUAGE_KOREAN_JOHAB != aLang )
+            if (MsLangId::isKorean(aLang))
                 ++nCnt;
         }
     }

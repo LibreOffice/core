@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <comphelper/string.hxx>
+#include <i18npool/mslangid.hxx>
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -162,11 +163,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
         aFirstName.SetZOrder( &aName, WINDOW_ZORDER_BEHIND );
         aFatherName.SetZOrder( &aFirstName, WINDOW_ZORDER_BEHIND );
     }
-    else if ( LANGUAGE_JAPANESE == eLang ||
-          LANGUAGE_KOREAN == eLang ||
-          LANGUAGE_HUNGARIAN == eLang ||
-          LANGUAGE_CHINESE_TRADITIONAL == eLang ||
-          LANGUAGE_CHINESE_SIMPLIFIED == eLang)
+    else if (MsLangId::isFamilyNameFirst(eLang))
     {
         aUsCityEdit.Hide();
         aUsStateEdit.Hide();

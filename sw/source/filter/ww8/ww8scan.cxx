@@ -31,7 +31,8 @@
 #include <functional>
 #include <algorithm>
 
-#include <string.h>         // memset()
+#include <string.h>
+#include <i18npool/mslangid.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/macros.h>
 
@@ -5582,25 +5583,11 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
     lid = 0x409; // LANGUAGE_ENGLISH_US
 
     LanguageType nLang = Application::GetSettings().GetLanguage();
-    switch( nLang )
-    {
-        case LANGUAGE_CHINESE:
-        case LANGUAGE_CHINESE_SIMPLIFIED:
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_SINGAPORE:
-        case LANGUAGE_CHINESE_MACAU:
-        case LANGUAGE_CHINESE_TRADITIONAL:
-        case LANGUAGE_KOREAN:
-        case LANGUAGE_KOREAN_JOHAB:
-        case LANGUAGE_JAPANESE:
-            lidFE = nLang;
-            fFarEast = true;
-            break;
-        default:
-            lidFE = lid;
-            fFarEast = false;
-            break;
-    };
+    fFarEast = MsLangId::isCJK(nLang);
+    if (fFarEast)
+        lidFE = nLang;
+    else
+        lidFE = lid;
 
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, lid );

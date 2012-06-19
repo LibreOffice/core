@@ -895,22 +895,17 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     if ( eLanguage == LANGUAGE_SYSTEM )
         eLanguage = MsLangId::getSystemUILanguage();
 
-    switch( eLanguage )
+    if (MsLangId::isSimplifiedChinese(eLanguage))
     {
-        case LANGUAGE_CHINESE:
-        case LANGUAGE_CHINESE_SIMPLIFIED:
-        case LANGUAGE_CHINESE_SINGAPORE:
-            mpArray = aImplSimplifiedChinese;
-            mnElem = SAL_N_ELEMENTS(aImplSimplifiedChinese);
-            break;
-
         // equivalent for traditional chinese disabled by popular request, #i89077#
-
-        default:
-            mpArray = NULL;
-            mnElem = 0;
-            break;
-    };
+        mpArray = aImplSimplifiedChinese;
+        mnElem = SAL_N_ELEMENTS(aImplSimplifiedChinese);
+    }
+    else
+    {
+        mpArray = NULL;
+        mnElem = 0;
+    }
 }
 
 //------------------------------------------------------------------------
