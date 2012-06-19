@@ -522,7 +522,7 @@ xray ThisComponent.StyleFamilies.PageStyles.Default.Width
     uno::Reference<uno::XInterface> defaultStyle;
     pageStyles->getByName("Default") >>= defaultStyle;
     uno::Reference<beans::XPropertySet> styleProperties( defaultStyle, uno::UNO_QUERY );
-    sal_Int32 width;
+    sal_Int32 width = 0;
     styleProperties->getPropertyValue( "Width" ) >>= width;
     CPPUNIT_ASSERT( pos.X > width / 2 );
 }
