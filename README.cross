@@ -206,6 +206,12 @@ Wine-dbg>x /50u rLibName->pData+10
 
 TODO:
 
+- make the debugging more convenient on (native) Windows
+  - check possibilities like WinGDB - http://www.wingdb.com/
+  - or find / write a MSVS / WinDBG extension that can read MinGW debugging
+    symbols natively; more info
+    http://windbg.info/forum/12-symbol-and-source-files-/21-debugging-mingwgcc-built-dll-in-visual-studio.html
+
 - installation
   - so far the make_installer.pl calls makecab.exe, uuidgen.exe, and
     others; would be best to avoid that if at all possible (using a free
