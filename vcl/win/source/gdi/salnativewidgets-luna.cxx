@@ -493,81 +493,70 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
 // ----
 
 /// Draw an effect under the menubar for better readibility in the non-client area
-static bool impl_drawAeroMenubar( HWND hWnd, HDC hDC, RECT rc )
+static bool impl_drawAeroMenubar( HDC hDC, RECT rc )
 {
-    const long GLOW_OFFSET = 5;
+    const long GROWING_WIDTH = 52;
+
+    const COLOR16 FINAL_VALUE = 0xf000;
+    const COLOR16 FINAL_OPACITY = 0xff00;
+
     const long VISIBLE_FRAME = 2;
-    const long TRIANGLE_WIDTH = rc.bottom - rc.top - GLOW_OFFSET - VISIBLE_FRAME;
-    const COLOR16 FINAL_OPACITY = 0x2000;
-
-    // the glow effect gives us a nice fade into the gradient
-    HTHEME hGlowTheme = getThemeHandle( hWnd, L"TextGlow");
-    if ( !hGlowTheme )
-        return sal_False;
-
-    // first clear everything
-    FillRect( hDC, &rc, static_cast< HBRUSH >( GetStockObject( BLACK_BRUSH ) ) );
+    const int FRAME_RATIO = 3;
 
     // gradient under the menu
     TRIVERTEX vert[2] = {
-        { rc.left + GLOW_OFFSET + TRIANGLE_WIDTH,  rc.top + GLOW_OFFSET,      0x0000, 0x0000, 0x0000, 0x0000 },
-        { rc.right - GLOW_OFFSET - TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
+        { rc.left + GROWING_WIDTH,  rc.top,                    0x0000, 0x0000, 0x0000, 0x0000 },
+        { rc.right - GROWING_WIDTH, rc.bottom - VISIBLE_FRAME, FINAL_VALUE, FINAL_VALUE, FINAL_VALUE, FINAL_OPACITY }
     };
     GRADIENT_RECT g_rect[1] = { { 0, 1 } };
     GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
-    // left side of the gradient consists of 2 triangles
-    TRIVERTEX vert_left_1[3] = {
-        { rc.left + GLOW_OFFSET, rc.top + GLOW_OFFSET,                       0x0000, 0x0000, 0x0000, 0x0000 },
-        { rc.left + GLOW_OFFSET, rc.bottom - VISIBLE_FRAME,                  0x0000, 0x0000, 0x0000, 0x0000 },
-        { rc.left + GLOW_OFFSET + TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
+    // gradient in the frame (2 pixels between menu and the toolbars)
+    // [the "gradient" here is not really a gradient, but it is convenient to
+    // draw it this way ;-)]
+    TRIVERTEX vert_2[2] = {
+        { rc.left + GROWING_WIDTH,  rc.bottom - VISIBLE_FRAME, FINAL_VALUE / FRAME_RATIO, FINAL_VALUE / FRAME_RATIO, FINAL_VALUE / FRAME_RATIO, FINAL_OPACITY / FRAME_RATIO },
+        { rc.right - GROWING_WIDTH, rc.bottom,                 FINAL_VALUE / FRAME_RATIO, FINAL_VALUE / FRAME_RATIO, FINAL_VALUE / FRAME_RATIO, FINAL_OPACITY / FRAME_RATIO }
     };
-    GRADIENT_TRIANGLE g_triangle[1] = { { 0, 1, 2 } };
-    GradientFill( hDC, vert_left_1, 3, g_triangle, 1, GRADIENT_FILL_TRIANGLE );
+    GradientFill( hDC, vert_2, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
-    TRIVERTEX vert_left_2[3] = {
-        { rc.left + GLOW_OFFSET, rc.top + GLOW_OFFSET,                       0x0000, 0x0000, 0x0000, 0x0000 },
-        { rc.left + GLOW_OFFSET + TRIANGLE_WIDTH, rc.top + GLOW_OFFSET,      0x0000, 0x0000, 0x0000, 0x0000 },
-        { rc.left + GLOW_OFFSET + TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
-    };
-    GradientFill( hDC, vert_left_2, 3, g_triangle, 1, GRADIENT_FILL_TRIANGLE );
+    const int STEP = 2;
+    for ( int i = 0; i < GROWING_WIDTH; i += STEP )
+    {
+        COLOR16 val = static_cast< double >( FINAL_VALUE ) * sin( ( static_cast< double >( i ) / GROWING_WIDTH ) * M_PI_2 );
+        COLOR16 op = static_cast< double >( FINAL_OPACITY ) * sin( ( static_cast< double >( i ) / GROWING_WIDTH ) * M_PI_2 );
 
-    // right side of the gradient consists of 2 triangles
-    TRIVERTEX vert_right_1[3] = {
-        { rc.right - GLOW_OFFSET, rc.top + GLOW_OFFSET,                       0x0000, 0x0000, 0x0000, 0x0000 },
-        { rc.right - GLOW_OFFSET, rc.bottom - VISIBLE_FRAME,                  0x0000, 0x0000, 0x0000, 0x0000 },
-        { rc.right - GLOW_OFFSET - TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
-    };
-    GradientFill( hDC, vert_right_1, 3, g_triangle, 1, GRADIENT_FILL_TRIANGLE );
+        // "growing" part of the gradient - menu
+        TRIVERTEX vert_left[2] = {
+            { rc.left + i, rc.top,                           0x0000, 0x0000, 0x0000, 0x0000 },
+            { rc.left + i + STEP, rc.bottom - VISIBLE_FRAME, val, val, val, op }
+        };
+        GradientFill( hDC, vert_left, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
-    TRIVERTEX vert_right_2[3] = {
-        { rc.right - GLOW_OFFSET, rc.top + GLOW_OFFSET,                       0x0000, 0x0000, 0x0000, 0x0000 },
-        { rc.right - GLOW_OFFSET - TRIANGLE_WIDTH, rc.top + GLOW_OFFSET,      0x0000, 0x0000, 0x0000, 0x0000 },
-        { rc.right - GLOW_OFFSET - TRIANGLE_WIDTH, rc.bottom - VISIBLE_FRAME, 0xff00, 0xff00, 0xff00, FINAL_OPACITY }
-    };
-    GradientFill( hDC, vert_right_2, 3, g_triangle, 1, GRADIENT_FILL_TRIANGLE );
+        TRIVERTEX vert_right[2] = {
+            { rc.right - i, rc.top,                           0x0000, 0x0000, 0x0000, 0x0000 },
+            { rc.right - i - STEP, rc.bottom - VISIBLE_FRAME, val, val, val, op }
+        };
+        GradientFill( hDC, vert_right, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
-    // I have no idea what is the correct name of the contstant
-    // that is represented by '1' below - but that draws the glow
-    // effect
-    // I've found the "TextGlow" theme handle here:
-    //   http://fc01.deviantart.net/fs26/f/2008/154/0/6/Vista_Visual_Style_Classes_by_UkIntel.html
-    // and its rendering here:
-    //   http://deskmodder.de/wiki/index.php/Vista_msstyleImage_900-938
-    // No better documentation on the topic, unfortunately :-(
-    RECT tmp_rc = rc;
-    tmp_rc.bottom += rc.bottom - rc.top; // expand it vertically so that it continues to the window
-    ImplDrawTheme( hGlowTheme, hDC, 1, MBI_NORMAL, tmp_rc, OUString() );
+        // "growing" part of the gradient - frame
+        TRIVERTEX vert_bottom_l[2] = {
+            { rc.left + i, rc.bottom - VISIBLE_FRAME, val / FRAME_RATIO, val / FRAME_RATIO, val / FRAME_RATIO, op / FRAME_RATIO },
+            { rc.left + i + STEP, rc.bottom,          val / FRAME_RATIO, val / FRAME_RATIO, val / FRAME_RATIO, op / FRAME_RATIO }
+        };
+        GradientFill( hDC, vert_bottom_l, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
-    // make the frame visible, so that it integrates nicely with Aero
-    tmp_rc = rc;
-    tmp_rc.top = rc.bottom - VISIBLE_FRAME;
-    FillRect( hDC, &tmp_rc, static_cast< HBRUSH >( GetStockObject( BLACK_BRUSH ) ) );
+        TRIVERTEX vert_bottom_r[2] = {
+            { rc.right - i, rc.bottom - VISIBLE_FRAME, val / FRAME_RATIO, val / FRAME_RATIO, val / FRAME_RATIO, op / FRAME_RATIO },
+            { rc.right - i - STEP, rc.bottom,          val / FRAME_RATIO, val / FRAME_RATIO, val / FRAME_RATIO, op / FRAME_RATIO }
+        };
+        GradientFill( hDC, vert_bottom_r, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
+    }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool ImplDrawNativeControl( HWND hWnd, HDC hDC, HTHEME hTheme, RECT rc,
+sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
                             ControlPart nPart,
                             ControlState nState,
@@ -1031,7 +1020,7 @@ sal_Bool ImplDrawNativeControl( HWND hWnd, HDC hDC, HTHEME hTheme, RECT rc,
                         // gradient at the bottom
                         TRIVERTEX vert[2] = {
                             { rc.left, gradient_break, 0xfa00, 0xfa00, 0xfa00, 0xff00 },
-                            { rc.right, rc.bottom,     0xe500, 0xe900, 0xee00, 0xff00 }
+                            { rc.right, rc.bottom,     0xf000, 0xf000, 0xf000, 0xff00 }
                         };
                         GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
@@ -1050,7 +1039,7 @@ sal_Bool ImplDrawNativeControl( HWND hWnd, HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_ENTIRE_CONTROL )
         {
             // Windows Vista or later?  Try drawing to the non-client area...
-            if( ImplGetSVData()->maNWFData.mbTransparentMenubar && impl_drawAeroMenubar( hWnd, hDC, rc ) )
+            if( ImplGetSVData()->maNWFData.mbTransparentMenubar && impl_drawAeroMenubar( hDC, rc ) )
                 return sal_True;
 
             // ...otherwise use the theme
@@ -1348,7 +1337,7 @@ sal_Bool WinSalGraphics::drawNativeControl( ControlType nType,
     int ta = SetTextAlign( mhDC, TA_LEFT|TA_TOP|TA_NOUPDATECP );
 
     OUString aCaptionStr( aCaption.replace('~', '&') ); // translate mnemonics
-    bOk = ImplDrawNativeControl(mhWnd, mhDC, hTheme, rc,
+    bOk = ImplDrawNativeControl(mhDC, hTheme, rc,
                             nType, nPart, nState, aValue,
                             aCaptionStr );
 
