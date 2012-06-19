@@ -180,7 +180,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
         aFillColor = pAttrs->aHighlightColor;
 
     aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
-                                               B2DPolyPolygon(Rect2Polygon(maDrawArea)),
+                                               B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                aFillColor));
 
     // Draw thumbnail
