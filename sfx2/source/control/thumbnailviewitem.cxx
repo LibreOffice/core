@@ -166,20 +166,14 @@ bool ThumbnailViewItem::isInsideTitle (const Point &pt) const
 void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                                const ThumbnailItemAttributes *pAttrs)
 {
-    int nCount = 0;
-    int nSeqSize = 3;
-
-    if (!maPreview2.IsEmpty())
-        ++nSeqSize;
-
     BColor aFillColor = pAttrs->aFillColor;
-    Primitive2DSequence aSeq(nSeqSize);
+    Primitive2DSequence aSeq(3);
 
     // Draw background
     if ( mbSelected || mbHover )
         aFillColor = pAttrs->aHighlightColor;
 
-    aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                aFillColor));
 
@@ -187,25 +181,8 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     Point aPos = maPrev1Pos;
     Size aImageSize = maPreview1.GetSizePixel();
 
-    float fScaleX = 1.0f;
-    float fScaleY = 1.0f;
-
-    if (!maPreview2.IsEmpty())
-    {
-        fScaleX = 0.8;
-        fScaleY = 0.8;
-
-        aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
-                                            createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
-                                            FillBitmapAttribute(maPreview2,
-                                                                B2DPoint(35,20),
-                                                                B2DVector(aImageSize.Width(),aImageSize.Height()),
-                                                                false)
-                                            ));
-    }
-
-    aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
-                                        createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
+    aSeq[1] = Primitive2DReference( new FillBitmapPrimitive2D(
+                                        createTranslateB2DHomMatrix(aPos.X(),aPos.Y()),
                                         FillBitmapAttribute(maPreview1,
                                                             B2DPoint(0,0),
                                                             B2DVector(aImageSize.Width(),aImageSize.Height()),
@@ -220,7 +197,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                 pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
                 double( aPos.X() ), double( aPos.Y() ) ) );
 
-    aSeq[nCount++] = Primitive2DReference(
+    aSeq[2] = Primitive2DReference(
                 new TextSimplePortionPrimitive2D(aTextMatrix,
                                                  maText,0,maText.getLength(),
                                                  std::vector< double >( ),

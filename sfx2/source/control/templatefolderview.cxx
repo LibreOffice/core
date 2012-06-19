@@ -12,7 +12,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/templateview.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
+#include <sfx2/templatefolderviewitem.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
 
@@ -165,7 +165,7 @@ void TemplateFolderView::Populate ()
 
         if (nEntries)
         {
-            ThumbnailViewItem* pItem = new ThumbnailViewItem( *this, this );
+            TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
             pItem->mnId = i+1;
             pItem->maText = aRegionName;
             pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));

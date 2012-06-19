@@ -65,7 +65,6 @@ struct ThumbnailViewItem
     bool mbSelected;
     bool mbHover;
     BitmapEx maPreview1;
-    BitmapEx maPreview2;
     rtl::OUString maText;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
@@ -92,13 +91,11 @@ struct ThumbnailViewItem
 
     const Rectangle& getDrawArea () const { return maDrawArea; }
 
-    void calculateItemsPosition ();
+    virtual void calculateItemsPosition ();
 
     const Point& getTextPos () const { return maTextPos; }
 
     const Point& getPrev1Pos () const { return maPrev1Pos; }
-
-    const Point& getPrev2Pos () const { return maPrev2Pos; }
 
     void setSelectionMode (bool mode);
 
@@ -106,19 +103,18 @@ struct ThumbnailViewItem
 
     bool isInsideTitle (const Point &pt) const;
 
-    void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
-                const ThumbnailItemAttributes *pAttrs);
+    virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
+                        const ThumbnailItemAttributes *pAttrs);
 
 private:
 
     DECL_LINK (OnClick, CheckBox *);
 
-private:
+protected:
 
     bool mbMode;
     Point maTextPos;
     Point maPrev1Pos;
-    Point maPrev2Pos;
     Rectangle maDrawArea;
     Link maClickHdl;
     CheckBox *mpSelectBox;
