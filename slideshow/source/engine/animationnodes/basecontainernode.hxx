@@ -51,6 +51,7 @@ protected:
 
 private:
     virtual bool init_st();
+    virtual bool init_children();
     virtual void deactivate_st( NodeState eDestState );
     virtual bool hasPendingAnimation() const;
     // force to be implemented by derived class:
@@ -65,6 +66,8 @@ protected:
 
     /// @return true: if all children have been deactivated
     bool notifyDeactivatedChild( AnimationNodeSharedPtr const& pChildNode );
+
+    bool repeat();
 
     template <typename FuncT>
     inline void forEachChildNode( FuncT const& func,
@@ -83,6 +86,7 @@ protected:
     typedef ::std::vector<AnimationNodeSharedPtr> VectorOfNodes;
     VectorOfNodes       maChildren;
     ::std::size_t       mnFinishedChildren;
+    double       mnLeftIterations;
 
 private:
     const bool          mbDurationIndefinite;

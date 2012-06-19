@@ -422,16 +422,6 @@ AnimationBaseNode::fillCommonParameters() const
             else
                 aRepeats.reset( nRepeats / nDuration );
         }
-        // This is a temporary workaround:
-        // as the repeatCount attribute is defined on the <par> parent node
-        // and activities are created only for animation node leaves, that
-        // actual performs a shape effect, we get the repeatCount value
-        // from the parent node.
-        else if( ( getXAnimationNode()->getType() != animations::AnimationNodeType::SET )
-                 && (getParentNode()->getXAnimationNode()->getRepeatCount() >>= nRepeats) )
-        {
-            aRepeats.reset( nRepeats );
-        }
         else
         {
             // no double value for both values - Timing::INDEFINITE?

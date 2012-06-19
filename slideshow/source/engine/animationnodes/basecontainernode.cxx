@@ -32,10 +32,12 @@
 #include <canvas/verbosetrace.hxx>
 
 #include "basecontainernode.hxx"
+#include "eventqueue.hxx"
 #include "tools.hxx"
 #include "nodetools.hxx"
 #include "delayevent.hxx"
 
+#include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
 #include <algorithm>
 
@@ -65,7 +67,15 @@ void BaseContainerNode::dispose()
 
 bool BaseContainerNode::init_st()
 {
+   if( !(getXAnimationNode()->getRepeatCount() >>= mnLeftIterations) )
+        mnLeftIterations = 1.0;
+   return init_children();
+}
+
+bool BaseContainerNode::init_children()
+{
     mnFinishedChildren = 0;
+
     // initialize all children
     return (std::count_if(
                 maChildren.begin(), maChildren.end(),
@@ -75,6 +85,7 @@ bool BaseContainerNode::init_st()
 
 void BaseContainerNode::deactivate_st( NodeState eDestState )
 {
+    mnLeftIterations = 0.0;
     if (eDestState == FROZEN) {
         // deactivate all children that are not FROZEN or ENDED:
         forEachChildNode( boost::mem_fn(&AnimationNode::deactivate),
@@ -137,17 +148,42 @@ bool BaseContainerNode::notifyDeactivatedChild(
     std::size_t const nSize = maChildren.size();
     OSL_ASSERT( mnFinishedChildren < nSize );
     ++mnFinishedChildren;
-    bool const bFinished = (mnFinishedChildren >= nSize);
+    bool bFinished = (mnFinishedChildren >= nSize);
 
     // all children finished, and we've got indefinite duration?
     // think of ParallelTimeContainer::notifyDeactivating()
     // if duration given, we will be deactivated by some end event
     // @see fillCommonParameters()
     if (bFinished && isDurationIndefinite()) {
-        deactivate();
+        if( mnLeftIterations >= 1.0 )
+        {
+            mnLeftIterations -= 1.0;
+        }
+        if( mnLeftIterations >= 1.0 )
+        {
+            bFinished = false;
+            EventSharedPtr aRepetitionEvent =
+                    makeDelay( boost::bind( &BaseContainerNode::repeat, this ),
+                               0.0,
+                               "BaseContainerNode::repeat");
+            getContext().mrEventQueue.addEvent( aRepetitionEvent );
+        }
+        else
+        {
+            deactivate();
+        }
     }
 
     return bFinished;
+}
+
+bool BaseContainerNode::repeat()
+{
+    deactivate_st( ENDED );
+    sal_Bool bState = init_children();
+    if( bState )
+        activate_st();
+    return bState;
 }
 
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)

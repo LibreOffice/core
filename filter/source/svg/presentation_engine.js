@@ -1439,7 +1439,7 @@ var aRegisterEventDebugPrinter = new DebugPrinter();
 aRegisterEventDebugPrinter.off();
 
 var aTimerEventQueueDebugPrinter = new DebugPrinter();
-aTimerEventQueueDebugPrinter.off();
+aTimerEventQueueDebugPrinter.on();
 
 var aEventMultiplexerDebugPrinter = new DebugPrinter();
 aEventMultiplexerDebugPrinter.off();
@@ -4522,7 +4522,7 @@ function createStateTransitionTable()
     aTable[FROZEN_NODE]         = INVALID_NODE;  // this state is unreachable here
     aTable[ENDED_NODE]          = ENDED_NODE;    // this state is a sink here (cannot restart)
 
-// transition table for restart=NEVER, fill=FREEZE
+    // transition table for restart=NEVER, fill=FREEZE
     aTable =
     aSTT[RESTART_MODE_NEVER][FILL_MODE_FREEZE] =
     aSTT[RESTART_MODE_NEVER][FILL_MODE_HOLD] =
@@ -5352,8 +5352,8 @@ BaseNode.prototype.resolve = function()
 
 BaseNode.prototype.activate = function()
 {
-//    log( 'restart mode: ' + aRestartModeOutMap[ this.getRestartMode() ] );
-//    log( 'fill mode: ' + aFillModeOutMap[ this.getFillMode() ] );
+    log( 'restart mode: ' + aRestartModeOutMap[ this.getRestartMode() ] );
+    log( 'fill mode: ' + aFillModeOutMap[ this.getFillMode() ] );
 
     if( ! this.checkValidNode() )
         return false;
@@ -5687,6 +5687,7 @@ function AnimationBaseNode( aAnimElem, aParentNode, aNodeContext )
     this.bIsContainer = false;
     this.aTargetElement = null;
     this.aAnimatedElement = null;
+    this.nAnimatedElementOriginalState = 0;
     this.aActivity = null;
 
     this.nMinFrameCount = undefined;
@@ -5734,7 +5735,7 @@ AnimationBaseNode.prototype.parseElement = function()
     if( this.aTargetElement )
     {
         // set up target element initial visibility
-        if( true && aAnimElem.getAttribute( 'attributeName' ) === 'visibility' )
+        if( aAnimElem.getAttribute( 'attributeName' ) === 'visibility' )
         {
             if( aAnimElem.getAttribute( 'to' ) === 'visible' )
                 this.aTargetElement.setAttribute( 'visibility', 'hidden' );
@@ -5774,6 +5775,7 @@ AnimationBaseNode.prototype.activate_st = function()
 {
     if( this.aActivity )
     {
+        this.nAnimatedElementOriginalState = this.getAnimatedElement().getCurrentState();
         this.aActivity.setTargets( this.getAnimatedElement() );
         this.getContext().aActivityQueue.addActivity( this.aActivity );
     }
@@ -5840,6 +5842,16 @@ AnimationBaseNode.prototype.fillActivityParams = function()
 AnimationBaseNode.prototype.hasPendingAnimation = function()
 {
     return true;
+};
+
+AnimationBaseNode.prototype.saveStateOfAnimatedElement = function()
+{
+    this.getAnimatedElement().saveState();
+};
+
+AnimationBaseNode.prototype.removeEffect = function()
+{
+    this.getAnimatedElement().setTo( this.nAnimatedElementOriginalState );
 };
 
 AnimationBaseNode.prototype.getTargetElement = function()
@@ -6096,6 +6108,7 @@ function BaseContainerNode( aAnimElem, aParentNode, aNodeContext )
     this.aChildrenArray = new Array();
     this.nFinishedChildren = 0;
     this.bDurationIndefinite = false;
+    this.nLeftIterations = 1;
 
     this.eImpressNodeType = undefined;
     this.ePresetClass =  undefined;
@@ -6157,6 +6170,13 @@ BaseContainerNode.prototype.appendChildNode = function( aAnimationNode )
 
 BaseContainerNode.prototype.init_st = function()
 {
+    this.nLeftIterations = this.getRepeatCount();
+
+    return this.init_children();
+};
+
+BaseContainerNode.prototype.init_children = function()
+{
     this.nFinishedChildren = 0;
     var nChildrenCount = this.aChildrenArray.length;
     var nInitChildren = 0;
@@ -6169,6 +6189,7 @@ BaseContainerNode.prototype.init_st = function()
     }
     return ( nChildrenCount == nInitChildren );
 };
+
 
 BaseContainerNode.prototype.deactivate_st = function( eDestState )
 {
@@ -6245,11 +6266,48 @@ BaseContainerNode.prototype.notifyDeactivatedChild = function( aChildNode )
 
     if( bFinished && this.isDurationIndefinite() )
     {
-        this.deactivate();
+        if( this.nLeftIterations >= 1.0 )
+        {
+            this.nLeftIterations -= 1.0;
+        }
+        if( this.nLeftIterations >= 1.0 )
+        {
+            bFinished = false;
+            var aRepetitionEvent = makeDelay( bind( this, this.repeat ), 0.0 );
+            this.aContext.aTimerEventQueue.addEvent( aRepetitionEvent );
+        }
+        else
+        {
+            this.deactivate();
+        }
     }
 
     return bFinished;
 };
+
+BaseContainerNode.prototype.repeat = function()
+{
+    this.deactivate_st( ENDED_NODE );
+    this.removeEffect();
+    var bInitialized = this.init_children();
+    if( bInitialized )
+        this.activate_st();
+    return bInitialized;
+};
+
+BaseContainerNode.prototype.removeEffect = function()
+{
+    this.forEachChildNode( mem_fn( 'removeEffect' ), FROZEN_NODE | ENDED_NODE );
+};
+
+BaseContainerNode.prototype.saveStateOfAnimatedElement = function()
+{
+    var nChildrenCount = this.aChildrenArray.length;
+    for( var i = 0; i < nChildrenCount; ++i )
+    {
+        this.aChildrenArray[i].saveStateOfAnimatedElement();
+    }
+}
 
 BaseContainerNode.prototype.forEachChildNode = function( aFunction, eNodeStateMask )
 {
@@ -6417,6 +6475,11 @@ SequentialTimeContainer.prototype.rewindEffect = function( aChildNode )
 SequentialTimeContainer.prototype.resolveChild = function( aChildNode )
 {
     var bResolved = aChildNode.resolve();
+
+    if( bResolved && this.isMainSequenceRootNode() )
+    {
+        aChildNode.saveStateOfAnimatedElement();
+    }
 
     if( bResolved && this.isMainSequenceRootNode() )
     {
@@ -8307,7 +8370,7 @@ function AnimatedElement( aElement )
 
     this.aPreviousElement = null;
     this.aElementArray = new Array();
-    this.nCurrentState = 0;
+    this.nCurrentState = -1;
     this.eAdditiveMode = ADDITIVE_MODE_REPLACE;
     this.bIsUpdated = true;
 
@@ -8316,7 +8379,7 @@ function AnimatedElement( aElement )
     this.aICTM = document.documentElement.createSVGMatrix();
     this.setCTM();
 
-    this.aElementArray[0] = this.aActiveElement.cloneNode( true );
+    //this.aElementArray[0] = this.aActiveElement.cloneNode( true );
 }
 
 AnimatedElement.prototype.initElement = function()
@@ -8382,6 +8445,11 @@ AnimatedElement.prototype.getId = function()
     return this.aActiveElement.getAttribute( 'id' );
 };
 
+AnimatedElement.prototype.getCurrentState = function()
+{
+    return this.nCurrentState;
+};
+
 AnimatedElement.prototype.isUpdated = function()
 {
     return this.bIsUpdated;
@@ -8432,26 +8500,35 @@ AnimatedElement.prototype.notifyAnimationEnd = function()
 
 AnimatedElement.prototype.notifyNextEffectStart = function( nEffectIndex )
 {
-    assert( this.nCurrentState === nEffectIndex,
-            'AnimatedElement(' + this.getId() + ').notifyNextEffectStart: assertion (current state == effect index) failed' );
+//    assert( this.nCurrentState === nEffectIndex,
+//            'AnimatedElement(' + this.getId() + ').notifyNextEffectStart: assertion (current state == effect index) failed' );
+//
+//    if( this.isUpdated() )
+//    {
+//        if( !this.aElementArray[ nEffectIndex ] )
+//        {
+//            this.aElementArray[ nEffectIndex ] =  this.aElementArray[ this.nCurrentState ];
+//            this.DBG( '.notifyNextEffectStart(' + nEffectIndex + '): new state set to previous one ' );
+//        }
+//    }
+//    else
+//    {
+//        if( !this.aElementArray[ nEffectIndex ] )
+//        {
+//            this.aElementArray[ nEffectIndex ] = this.aActiveElement.cloneNode( true );
+//            this.DBG( '.notifyNextEffectStart(' + nEffectIndex + '): cloned active state ' );
+//        }
+//    }
+//    ++this.nCurrentState;
+};
 
-    if( this.isUpdated() )
-    {
-        if( !this.aElementArray[ nEffectIndex ] )
-        {
-            this.aElementArray[ nEffectIndex ] =  this.aElementArray[ this.nCurrentState ];
-            this.DBG( '.notifyNextEffectStart(' + nEffectIndex + '): new state set to previous one ' );
-        }
-    }
-    else
-    {
-        if( !this.aElementArray[ nEffectIndex ] )
-        {
-            this.aElementArray[ nEffectIndex ] = this.aActiveElement.cloneNode( true );
-            this.DBG( '.notifyNextEffectStart(' + nEffectIndex + '): cloned active state ' );
-        }
-    }
+AnimatedElement.prototype.saveState = function()
+{
     ++this.nCurrentState;
+    if( !this.aElementArray[ this.nCurrentState ] )
+    {
+        this.aElementArray[ this.nCurrentState ] = this.aActiveElement.cloneNode( true );
+    }
 };
 
 AnimatedElement.prototype.setToFirst = function()
@@ -8464,12 +8541,19 @@ AnimatedElement.prototype.setToLast = function()
     this.setTo( this.aElementArray.length - 1 );
 };
 
-AnimatedElement.prototype.setTo = function( nEffectIndex )
+AnimatedElement.prototype.setTo = function( nNewState )
 {
-    var bRet = this.setToElement( this.aElementArray[ nEffectIndex ] );
+    if( !this.aElementArray[ nNewState ] )
+    {
+        log( 'AnimatedElement(' + this.getId() + ').setTo: state '
+                 + nNewState + ' is not valid' );
+        return false;
+    }
+
+    var bRet = this.setToElement( this.aElementArray[ nNewState ] );
     if( bRet )
     {
-        this.nCurrentState = nEffectIndex;
+        this.nCurrentState = nNewState;
 
         var aBBox = this.getBBox();
         var aBaseBBox = this.getBaseBBox();
@@ -10613,7 +10697,7 @@ function FromToByActivityTemplate( BaseType ) // template parameter
     {
         if( this.aAnimation )
         {
-            if( this.isAutoreverse() )
+            if( this.isAutoReverse() )
                 this.aAnimation.perform( this.aStartValue );
             else
                 this.aAnimation.perform( this.aEndValue );
