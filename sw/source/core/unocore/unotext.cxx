@@ -1668,7 +1668,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     // see if there are frames already anchored to this node
     std::vector<SwFrmFmt*> aAnchoredFrames;
-    for (int i = 0; i < (int)m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
+    for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
     {
         SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();

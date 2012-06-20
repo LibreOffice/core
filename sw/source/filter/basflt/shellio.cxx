@@ -168,7 +168,10 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         // Speicher mal alle Fly's
         if( pCrsr )
-            std::copy( pDoc->GetSpzFrmFmts()->begin(), pDoc->GetSpzFrmFmts()->end(), aFlyFrmArr.begin() );
+        {
+            std::copy(pDoc->GetSpzFrmFmts()->begin(),
+                pDoc->GetSpzFrmFmts()->end(), std::back_inserter(aFlyFrmArr));
+        }
 
         xub_StrLen nSttCntnt = pPam->GetPoint()->nContent.GetIndex();
 

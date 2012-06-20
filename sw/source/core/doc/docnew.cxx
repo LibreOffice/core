@@ -632,14 +632,14 @@ SwDoc::~SwDoc()
     // array, we should delete it as the last. With this we avoid
     // remangling the Formats all the time!
     if( 2 < pTxtFmtCollTbl->size() )
-        DeleteAndDestroy( *pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size()-2 );
-    DeleteAndDestroy( *pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size()-1 );
+        DeleteAndDestroy(*pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size());
+    DeleteAndDestroy(*pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size());
     delete pTxtFmtCollTbl;
 
     OSL_ENSURE( pDfltGrfFmtColl == (*pGrfFmtCollTbl)[0],
             "DefaultGrfCollection must always be at the start" );
 
-    DeleteAndDestroy( *pGrfFmtCollTbl, 1, pGrfFmtCollTbl->size()-1 );
+    DeleteAndDestroy(*pGrfFmtCollTbl, 1, pGrfFmtCollTbl->size());
     // Is the result anyway - no _DEL array!
     //  pGrfFmtCollTbl->Remove( 0, n );
     delete pGrfFmtCollTbl;
@@ -876,20 +876,20 @@ void SwDoc::ClearDoc()
     // array, we should delete it as the last. With this we avoid
     // remangling the Formats all the time!
     if( 2 < pTxtFmtCollTbl->size() )
-        DeleteAndDestroy( *pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size()-2 );
-    DeleteAndDestroy( *pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size()-1 );
-    DeleteAndDestroy( *pGrfFmtCollTbl, 1, pGrfFmtCollTbl->size()-1 );
-    DeleteAndDestroy( *pCharFmtTbl, 1, pCharFmtTbl->size()-1 );
+        DeleteAndDestroy(*pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size());
+    DeleteAndDestroy(*pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size());
+    DeleteAndDestroy(*pGrfFmtCollTbl, 1, pGrfFmtCollTbl->size());
+    DeleteAndDestroy(*pCharFmtTbl, 1, pCharFmtTbl->size());
 
     if( pCurrentView )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
         pFrmFmtTbl->erase( std::find( pFrmFmtTbl->begin(), pFrmFmtTbl->end(), pCurrentView->GetLayout()->GetFmt() ) );
-        DeleteAndDestroy( *pFrmFmtTbl, 1, pFrmFmtTbl->size()-1 );
+        DeleteAndDestroy(*pFrmFmtTbl, 1, pFrmFmtTbl->size());
         pFrmFmtTbl->push_back( pCurrentView->GetLayout()->GetFmt() );
     }
     else    //swmod 071029//swmod 071225
-        DeleteAndDestroy( *pFrmFmtTbl, 1, pFrmFmtTbl->size()-1 );
+        DeleteAndDestroy(*pFrmFmtTbl, 1, pFrmFmtTbl->size());
 
     xForbiddenCharsTable.clear();
 

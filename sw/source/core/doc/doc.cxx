@@ -2245,8 +2245,9 @@ bool SwDoc::RemoveInvisibleContent()
                     pParent = pTmp;
                 }
 
-                SwSectionFmts::iterator it = std::find( aSectFmts.begin(), aSectFmts.end(), pSect->GetFmt() );
-                if ( it != aSectFmts.end() )
+                SwSectionFmts::iterator it = std::find(
+                        aSectFmts.begin(), aSectFmts.end(), pSect->GetFmt() );
+                if (it == aSectFmts.end())
                     aSectFmts.insert( aSectFmts.begin(), pSect->GetFmt() );
             }
             if( pSect->GetCondition().Len() )
