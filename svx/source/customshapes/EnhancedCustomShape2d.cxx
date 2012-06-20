@@ -1578,10 +1578,77 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
                     {
                         // create a circle
-                        Point _aCenter( GetPoint( seqCoordinates[ rSrcPt ], true, true ) );
+                        Point _aCenter;
                         double fWidth, fHeight;
-                        GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, true, false );
-                        GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, false, true );
+                        const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( mso_sptEllipse  );
+                        bool bIsDefaultViewBox = false;
+                        bool bIsDefaultPath = false;
+                        bool bIsMSEllipse = false;
+
+                        if( ( nCoordWidth == pDefCustomShape->nCoordWidth )
+                            && ( nCoordHeight == pDefCustomShape->nCoordHeight ) )
+                            bIsDefaultViewBox = true;
+                        sal_Int32 j, nCount = pDefCustomShape->nVertices;//==3
+                        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1, seqCoordinates2;
+
+                        seqCoordinates1.realloc( nCount );
+                        for ( j = 0; j < nCount; j++ )
+                        {
+                            seqCoordinates1[j] = seqCoordinates[ rSrcPt + j];
+                        }
+
+                        seqCoordinates2.realloc( nCount );
+                        for ( j = 0; j < nCount; j++ )
+                        {
+                            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ j ].First, pDefCustomShape->pVertices[ j ].nValA );
+                            EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ j ].Second, pDefCustomShape->pVertices[ j ].nValB );
+                        }
+                        if(seqCoordinates1 == seqCoordinates2)
+                            bIsDefaultPath = true;
+
+                        const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
+                        rtl::OUString sShpType;
+                        SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+                        Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
+                        if ( pAny )
+                            *pAny >>= sShpType;
+                        if( sShpType.getLength() > 3 &&
+                            sShpType.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "mso" ))){
+                                bIsMSEllipse = true;
+                        }
+                        if( (! bIsDefaultPath   && ! bIsDefaultViewBox) || (bIsDefaultViewBox && bIsMSEllipse) /*&& (nGeneratorVersion == SfxObjectShell::Sym_L2)*/ )
+                        {
+                            _aCenter = GetPoint( seqCoordinates[ rSrcPt ], true, true );
+                            GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, true, false );
+                            GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, false, true );
+                            fWidth /= 2;
+                            fHeight /= 2;
+                        }else if( bIsDefaultPath && !bIsDefaultViewBox /*&& (nGeneratorVersion == SfxObjectShell::Sym_L2)*/ )
+                        {
+                            _aCenter.X() = nCoordWidth/2 * fXScale;
+                            _aCenter.Y() = nCoordHeight/2 * fYScale;
+                            fWidth = nCoordWidth/2;
+                            fHeight = nCoordHeight/2;
+
+                            const rtl::OUString sViewBox( RTL_CONSTASCII_USTRINGPARAM ( "ViewBox" ) );
+                            const Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sViewBox );
+                            com::sun::star::awt::Rectangle aViewBox;
+                            if ( pViewBox && (*pViewBox >>= aViewBox ) )
+                            {
+                                aViewBox.Width = pDefCustomShape->nCoordWidth;
+                                aViewBox.Height = pDefCustomShape->nCoordHeight;
+                            }
+                            com::sun::star::beans::PropertyValue aPropVal;
+                            aPropVal.Name = sViewBox;
+                            aPropVal.Value <<= aViewBox;
+                            rGeometryItem.SetPropertyValue( aPropVal );
+                            pCustomShapeObj->SetMergedItem( rGeometryItem );
+                        }else{
+                            _aCenter = GetPoint( seqCoordinates[ rSrcPt ], true, true );
+                            GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, true, false);
+                            GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, false, true );
+                        }
+
                         fWidth *= fXScale;
                         fHeight*= fYScale;
                         Point aP( (sal_Int32)( _aCenter.X() - fWidth ), (sal_Int32)( _aCenter.Y() - fHeight ) );
