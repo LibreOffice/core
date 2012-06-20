@@ -265,7 +265,8 @@ static const struct {
     { "jbo",    lcl_DATA_OTHERS },
     { "kab_DZ", lcl_DATA_OTHERS },
     { "pt_AO",  lcl_DATA_OTHERS },
-    { "pjt_AU", lcl_DATA_OTHERS }
+    { "pjt_AU", lcl_DATA_OTHERS },
+    { "pap_CW", lcl_DATA_OTHERS }
 };
 
 #else
