@@ -598,8 +598,9 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         xMBroadcaster->addModifyListener( this );
 #endif
 
-    //select chart area per default:
-    select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) ) );
+    // #119999# Do not do this per default to allow the user to deselect the chart OLE with a single press to ESC
+    // select chart area per default:
+    // select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) ) );
 
     uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
     if( xFact.is())
