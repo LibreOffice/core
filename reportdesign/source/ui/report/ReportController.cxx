@@ -153,7 +153,6 @@
 #include "PageNumber.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "UndoEnv.hxx"
-#include "InsertFunctions.hxx"
 #include "ReportControllerObserver.hxx"
 
 #include <boost/mem_fn.hpp>
