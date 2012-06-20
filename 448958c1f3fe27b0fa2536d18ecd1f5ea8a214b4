@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAACn///58\u003d",
+        "filename": "configure.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 6685,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-20T20:46:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAACn///68\u003d",
+      "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAACn///6w\u003d",
         "filename": "pyuno/CustomTarget_python_mingw_bin.mk",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAACn///54\u003d",
+        "filename": "pyuno/CustomTarget_python_mingw_bin.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-20T20:46:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAACn///6w\u003d",
+      "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAACn///6s\u003d",
         "filename": "scp2/InstallModule_python.mk",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2012-06-20T07:50:03Z",
       "side": 1,
       "message": "The \u003dYES is unecessary (and possibly may cause problems, because it is neither number nor quoted string?)",
+      "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///50\u003d",
+        "filename": "scp2/InstallModule_python.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-20T20:46:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAACn///6s\u003d",
       "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -81,6 +135,24 @@
       "writtenOn": "2012-06-20T11:05:34Z",
       "side": 1,
       "message": "somehow managed to lose your fix ;-(\r\nBut it were your fix ... anyway, that why i\u0027m really missing the possibility that somebody else (in this case you) could fix/extend/adapt my gerrit patch.\r\nThe only way i see, is to push your own gerrit patch an make my depends on your or other way round.",
+      "parentUuid": "AAAACn///6o\u003d",
+      "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///5w\u003d",
+        "filename": "scp2/source/python/file_python.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-20T20:46:31Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "AAAACn///6o\u003d",
       "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
