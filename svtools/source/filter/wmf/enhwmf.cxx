@@ -987,9 +987,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                             aBitmap.Crop( aCropRect );
                         }
-                    /* Pseudocomment to add more context so that make patch.unapply
-                     * works better. Ha!
-                     */
                     aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ) );
                     }
                 }
@@ -1060,7 +1057,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                             aBitmap.Crop( aCropRect );
                         }
-                    /* Another pseudocomment to make make patch.unapply work better */
                     aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ) );
                     }
                 }
