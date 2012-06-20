@@ -290,14 +290,29 @@ void SdrUndoObj::ImpShowPageOfThisObject()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void SdrUndoAttrObj::ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rStyleSheetPool, SfxStyleSheet& rSheet)
+{
+    SfxStyleSheetBase* pThere = rStyleSheetPool.Find(rSheet.GetName(), rSheet.GetFamily());
+
+    if(!pThere)
+    {
+        // re-insert remembered style which was removed in the meantime. To do this
+        // without assertion, do it without parent and set parent after insertion
+        const UniString aParent(rSheet.GetParent());
+
+        rSheet.SetParent(UniString());
+        rStyleSheetPool.Insert(&rSheet);
+        rSheet.SetParent(aParent);
+    }
+}
+
 SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBOOL bSaveText)
 :   SdrUndoObj(rNewObj),
     pUndoSet(NULL),
     pRedoSet(NULL),
     pRepeatSet(NULL),
-    pUndoStyleSheet(NULL),
-    pRedoStyleSheet(NULL),
-    pRepeatStyleSheet(NULL),
+    mxUndoStyleSheet(),
+    mxRedoStyleSheet(),
     bHaveToTakeRedoSet(sal_True),
     pTextUndo(NULL),
 
@@ -335,7 +350,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBO
         pUndoSet = new SfxItemSet(pObj->GetMergedItemSet());
 
         if(bStyleSheet)
-            pUndoStyleSheet = pObj->GetStyleSheet();
+            mxUndoStyleSheet = pObj->GetStyleSheet();
 
         if(bSaveText)
         {
@@ -394,7 +409,7 @@ void SdrUndoAttrObj::Undo()
             pRedoSet = new SfxItemSet(pObj->GetMergedItemSet());
 
             if(bStyleSheet)
-                pRedoStyleSheet=pObj->GetStyleSheet();
+                mxRedoStyleSheet = pObj->GetStyleSheet();
 
             if(pTextUndo)
             {
@@ -408,8 +423,18 @@ void SdrUndoAttrObj::Undo()
 
         if(bStyleSheet)
         {
-            pRedoStyleSheet = pObj->GetStyleSheet();
-            pObj->SetStyleSheet(pUndoStyleSheet, sal_True);
+            mxRedoStyleSheet = pObj->GetStyleSheet();
+            SfxStyleSheet* pSheet = dynamic_cast< SfxStyleSheet* >(mxUndoStyleSheet.get());
+
+            if(pSheet && pObj->GetModel() && pObj->GetModel()->GetStyleSheetPool())
+            {
+                ensureStyleSheetInStyleSheetPool(*pObj->GetModel()->GetStyleSheetPool(), *pSheet);
+                pObj->SetStyleSheet(pSheet, sal_True);
+            }
+            else
+            {
+                OSL_ENSURE(false, "OOps, something went wrong in SdrUndoAttrObj (!)");
+            }
         }
 
         sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
@@ -482,8 +507,18 @@ void SdrUndoAttrObj::Redo()
     {
         if(bStyleSheet)
         {
-            pUndoStyleSheet = pObj->GetStyleSheet();
-            pObj->SetStyleSheet(pRedoStyleSheet, sal_True);
+            mxUndoStyleSheet = pObj->GetStyleSheet();
+            SfxStyleSheet* pSheet = dynamic_cast< SfxStyleSheet* >(mxRedoStyleSheet.get());
+
+            if(pSheet && pObj->GetModel() && pObj->GetModel()->GetStyleSheetPool())
+            {
+                ensureStyleSheetInStyleSheetPool(*pObj->GetModel()->GetStyleSheetPool(), *pSheet);
+                pObj->SetStyleSheet(pSheet, sal_True);
+            }
+            else
+            {
+                OSL_ENSURE(false, "OOps, something went wrong in SdrUndoAttrObj (!)");
+            }
         }
 
         sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);

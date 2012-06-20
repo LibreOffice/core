@@ -33,6 +33,7 @@
 #include <svx/svdtypes.hxx> // fuer enum RepeatFuncts
 #include <svx/svdsob.hxx>
 #include "svx/svxdllapi.h"
+#include <svl/style.hxx>
 
 //************************************************************
 //   Vorausdeklarationen
@@ -166,9 +167,8 @@ protected:
     SfxItemSet*                 pRepeatSet;
 
     // oder besser den StyleSheetNamen merken?
-    SfxStyleSheet*              pUndoStyleSheet;
-    SfxStyleSheet*              pRedoStyleSheet;
-    SfxStyleSheet*              pRepeatStyleSheet;
+    rtl::Reference< SfxStyleSheetBase > mxUndoStyleSheet;
+    rtl::Reference< SfxStyleSheetBase > mxRedoStyleSheet;
     FASTBOOL                    bStyleSheet;
     FASTBOOL                    bHaveToTakeRedoSet;
 
@@ -180,6 +180,9 @@ protected:
 
     // Wenn sich um ein Gruppenobjekt handelt:
     SdrUndoGroup*               pUndoGroup;
+
+    // helper to ensure StyleSheet is in pool (provided by SdrModel from SdrObject)
+    void ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rStyleSheetPool, SfxStyleSheet& rSheet);
 
 public:
     SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1=sal_False, FASTBOOL bSaveText=sal_False);
