@@ -381,6 +381,25 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 {
 }
 
+void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
+{
+    if ( rTypeModel.maPosition == "absolute" )
+    {
+        // I'm not sure if AT_PAGE is always correct here (not sure what the parent that
+        // the spec talks about can be), but with Writer SwXDrawPage::add()
+        // always in practice uses this because of pDoc->GetCurrentLayout() being NULL at this point.
+        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PAGE);
+    }
+    else if( rTypeModel.maPosition == "relative" )
+    {   // I'm not very sure this is correct either.
+        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PARAGRAPH);
+    }
+    else // static (is the default) means anchored inline
+    {
+        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AS_CHARACTER);
+    }
+}
+
 Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
     Rectangle aShapeRect(rShapeRect);
@@ -417,17 +436,16 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             PropertySet( xShape ).setProperty( PROP_LegacyFragment, xInStrm );
     }
 
+    PropertySet aPropertySet(xShape);
     if (xShape.is() && !maTypeModel.maRotation.isEmpty())
     {
-        PropertySet aPropertySet(xShape);
         aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(maTypeModel.maRotation.toInt32() * 100));
         // If rotation is used, simple setPosition() is not enough.
         aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
         aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
     }
 
-    if (xShape.is() && maTypeModel.maWrapStyle == "none")
-        PropertySet(xShape).setAnyProperty(PROP_AnchorType, makeAny(text::TextContentAnchorType_AS_CHARACTER));
+    lcl_SetAnchorType(aPropertySet, maTypeModel);
 
     return xShape;
 }
@@ -611,19 +629,9 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
                 aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
                 aPropSet.setProperty(PROP_Opaque, sal_False);
-                // I'm not sure if AT_PAGE is always correct here (not sure what the parent that
-                // the spec talks about can be), but with Writer SwXDrawPage::add()
-                // always in practice uses this because of pDoc->GetCurrentLayout() being NULL at this point.
-                aPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PAGE);
             }
-            else if( maTypeModel.maPosition == "relative" )
-            {   // I'm not very sure this is correct either.
-                aPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PARAGRAPH);
-            }
-            else // static (is the default) means anchored inline
-            {
-                aPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AS_CHARACTER);
-            }
+
+            lcl_SetAnchorType(aPropSet, maTypeModel);
 
             if ( maTypeModel.maPositionVerticalRelative == "page" )
             {
