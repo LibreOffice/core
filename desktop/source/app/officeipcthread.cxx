@@ -297,7 +297,7 @@ void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
 oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* pInfo)
 {
     if( pInfo->Signal == osl_Signal_Terminate )
-        OfficeIPCThread::DisableOfficeIPCThread();
+        OfficeIPCThread::DisableOfficeIPCThread(false);
     return osl_Signal_ActCallNextHdl;
 }
 
@@ -575,7 +575,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     return IPC_STATUS_OK;
 }
 
-void OfficeIPCThread::DisableOfficeIPCThread()
+void OfficeIPCThread::DisableOfficeIPCThread(bool join)
 {
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
@@ -604,7 +604,10 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         OfficeIPCThread::SetReady(pOfficeIPCThread);
 
         // exit gracefully and join
-        pOfficeIPCThread->join();
+        if (join)
+        {
+            pOfficeIPCThread->join();
+        }
     }
 }
 

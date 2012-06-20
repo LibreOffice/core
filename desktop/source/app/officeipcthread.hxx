@@ -128,7 +128,7 @@ class OfficeIPCThread : public salhelper::Thread
 
     // return sal_False if second office
     static Status               EnableOfficeIPCThread();
-    static void                 DisableOfficeIPCThread();
+    static void                 DisableOfficeIPCThread(bool join = true);
     // start dispatching events...
     static void                 SetReady(
         rtl::Reference< OfficeIPCThread > const & pThread =
