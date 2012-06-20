@@ -1721,7 +1721,7 @@ void ScXMLExport::_ExportContent()
         {
             sal_Int32 nStartOffset = -1;
             sal_Int32 nEndOffset = -1;
-            if (pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable))
+            if (pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) && !pDoc->GetChangeTrack())
                 pSheetData->GetStreamPos( nTable, nStartOffset, nEndOffset );
 
             if ( nStartOffset >= 0 && nEndOffset >= 0 && xSourceStream.is() )
@@ -2342,7 +2342,8 @@ void ScXMLExport::_ExportAutoStyles()
         for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable, IncrementProgressBar(false))
         {
             bool bUseStream = pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) &&
-                              pSheetData->HasStreamPos(nTable) && xSourceStream.is();
+                              pSheetData->HasStreamPos(nTable) && xSourceStream.is() &&
+                              !pDoc->GetChangeTrack();
 
             Reference <sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
             if (!xTable.is())
