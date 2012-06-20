@@ -222,6 +222,7 @@ void WorkbookFragment::finalizeImport()
         importOoxFragment( new ConnectionsFragment( *this, aConnFragmentPath ) );
     xGlobalSegment->setPosition( 1.0 );
 
+
     /*  Create fragments for all sheets, before importing them. Needed to do
         some preprocessing in the fragment constructors, e.g. loading the table
         fragments for all sheets that are needed before the cell formulas are
@@ -243,7 +244,9 @@ void WorkbookFragment::finalizeImport()
             OSL_ENSURE( !aFragmentPath.isEmpty(), "WorkbookFragment::finalizeImport - cannot access sheet fragment" );
             if( !aFragmentPath.isEmpty() )
             {
-                double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - nWorksheet);
+                // leave space for formula processing ( calcuate the segments as
+                // if there is an extra sheet )
+                double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - ( nWorksheet - 1) );
                 ISegmentProgressBarRef xSheetSegment = getProgressBar().createSegment( fSegmentLength );
 
                 // get the sheet type according to the relations type
@@ -293,7 +296,7 @@ void WorkbookFragment::finalizeImport()
     // create all defined names and database ranges
     getDefinedNames().finalizeImport();
     getTables().finalizeImport();
-
+    int nSheetNum = 0;
     // load all worksheets
     for( SheetFragmentVector::iterator aIt = aSheetFragments.begin(), aEnd = aSheetFragments.end(); aIt != aEnd; ++aIt )
     {

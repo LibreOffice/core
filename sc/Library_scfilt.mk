@@ -184,6 +184,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
         sc/source/filter/oox/externallinkfragment \
 	sc/source/filter/oox/extlstcontext \
         sc/source/filter/oox/formulabase \
+        sc/source/filter/oox/formulabuffer \
         sc/source/filter/oox/formulaparser \
         sc/source/filter/oox/numberformatsbuffer \
         sc/source/filter/oox/pagesettings \

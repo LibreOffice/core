@@ -42,7 +42,7 @@ typedef ::boost::unordered_map< String, ScAutoNameAddresses, ScStringHashCode, :
 //  (during CompileXML, no document content is changed)
 //
 
-class ScAutoNameCache
+class SC_DLLPUBLIC ScAutoNameCache
 {
     ScAutoNameHashMap   aNames;
     ScDocument*         pDoc;

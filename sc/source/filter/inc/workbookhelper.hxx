@@ -54,6 +54,7 @@ namespace com { namespace sun { namespace star {
 namespace oox {
     class AttributeList;
     class SegmentProgressBar;
+    class ISegmentProgressBar;
     class SequenceInputStream;
 }
 
@@ -113,6 +114,7 @@ class UnitConverter;
 class ViewSettings;
 class WorkbookSettings;
 class WorksheetBuffer;
+class FormulaBuffer;
 
 class WorkbookGlobals;
 typedef ::boost::shared_ptr< WorkbookGlobals > WorkbookGlobalsRef;
@@ -144,6 +146,8 @@ public:
     FilterType          getFilterType() const;
     /** Returns the filter progress bar. */
     SegmentProgressBar& getProgressBar() const;
+    ::boost::shared_ptr<oox::ISegmentProgressBar> getFormulaProgressBar() const;
+    void setFormulaProgressBar( ::boost::shared_ptr<oox::ISegmentProgressBar> rBar );
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
     bool                isWorkbookFile() const;
     /** Returns the index of the current Calc sheet, if filter currently processes a sheet. */
@@ -221,6 +225,7 @@ public:
 
     // buffers ----------------------------------------------------------------
 
+    FormulaBuffer&      getFormulaBuffer() const;
     /** Returns the global workbook settings object. */
     WorkbookSettings&   getWorkbookSettings() const;
     /** Returns the workbook and sheet view settings object. */
