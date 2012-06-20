@@ -31,6 +31,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/string.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sfx2/sfx.hrc>
 #include <svx/svxids.hrc>
 #if OSL_DEBUG_LEVEL > 0
@@ -5371,25 +5372,25 @@ void SwHTMLParser::ParseMoreMetaOptions()
         return;
     }
 
-    String sText(
-            String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("HTML: <")) );
-    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_meta) );
-    sText.Append( ' ' );
+    rtl::OUStringBuffer sText;
+    sText.append("HTML: <");
+    sText.append(OOO_STRING_SVTOOLS_HTML_meta);
+    sText.append(' ');
     if( bHTTPEquiv  )
-        sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_httpequiv) );
+        sText.append(OOO_STRING_SVTOOLS_HTML_O_httpequiv);
     else
-        sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_name) );
-    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("=\"") );
-    sText.Append( aName );
-    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("\" ") );
-    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_content) );
-    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("=\"") );
-    sText.Append( aContent );
-    sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("\">") );
+        sText.append(OOO_STRING_SVTOOLS_HTML_O_name);
+    sText.append("=\"");
+    sText.append(aName);
+    sText.append("\" ");
+    sText.append(OOO_STRING_SVTOOLS_HTML_O_content);
+    sText.append("=\"");
+    sText.append(aContent);
+    sText.append("\">");
 
     SwPostItField aPostItFld(
         (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
-        aEmptyStr, sText, DateTime( DateTime::SYSTEM ) );
+        aEmptyStr, sText.makeStringAndClear(), DateTime( DateTime::SYSTEM ) );
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );
 }

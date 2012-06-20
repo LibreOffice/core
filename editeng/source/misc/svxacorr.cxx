@@ -672,7 +672,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
 
 
             // Check the presence of "://" in the word
-            xub_StrLen nStrPos = rTxt.Search( String::CreateFromAscii( "://" ), nSttWdPos + 1 );
+            xub_StrLen nStrPos = rTxt.Search( rtl::OUString( "://" ), nSttWdPos + 1 );
             if ( STRING_NOTFOUND == nStrPos && nEndPos > 0 )
             {
                 // Check the previous char
@@ -2110,11 +2110,10 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
             {
                 xStrm->SetSize( 0 );
                 xStrm->SetBufferSize( 8192 );
-                String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
                 OUString aMime( "text/xml" );
                 uno::Any aAny;
                 aAny <<= aMime;
-                xStrm->SetProperty( aPropName, aAny );
+                xStrm->SetProperty( rtl::OUString("MediaType"), aAny );
 
 
                 uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
@@ -2388,7 +2387,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         aDest = INetURLObject ( sUserAutoCorrFile );
         if ( SotStorage::IsOLEStorage ( sShareAutoCorrFile ) )
         {
-            aDest.SetExtension ( String::CreateFromAscii ( "bak" ) );
+            aDest.SetExtension ( rtl::OUString("bak") );
             bConvert = sal_True;
         }
         bCopy = sal_True;
@@ -2397,7 +2396,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     {
         aSource = INetURLObject ( sUserAutoCorrFile );
         aDest = INetURLObject ( sUserAutoCorrFile );
-        aDest.SetExtension ( String::CreateFromAscii ( "bak" ) );
+        aDest.SetExtension ( rtl::OUString("bak") );
         bCopy = bConvert = sal_True;
     }
     if (bCopy)
@@ -2486,7 +2485,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
         {
             refList->SetSize( 0 );
             refList->SetBufferSize( 8192 );
-            String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+            String aPropName( rtl::OUString( "MediaType" ) );
             OUString aMime( "text/xml" );
             uno::Any aAny;
             aAny <<= aMime;

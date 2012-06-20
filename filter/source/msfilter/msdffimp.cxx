@@ -6766,8 +6766,7 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
 
 sal_Bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile & rMtf )
 {
-    String aPersistStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SVEXT_PERSIST_STREAM ) ) );
-    SotStorageStreamRef xStm = pStor->OpenSotStream( aPersistStream );
+    SotStorageStreamRef xStm = pStor->OpenSotStream(rtl::OUString(SVEXT_PERSIST_STREAM));
     xStm->SetVersion( pStor->GetVersion() );
     xStm->SetBufferSize( 8192 );
 
@@ -6908,7 +6907,7 @@ sal_Bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                     const GDIMetaFile * pMtf, const SotStorageRef& rDest )
 {
     sal_Bool bMtfRead = sal_False;
-    SotStorageStreamRef xOle10Stm = rDest->OpenSotStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) ),
+    SotStorageStreamRef xOle10Stm = rDest->OpenSotStream( rtl::OUString("\1Ole10Native"),
                                                     STREAM_WRITE| STREAM_SHARE_DENYALL );
     if( xOle10Stm->GetError() )
         return sal_False;
@@ -7174,7 +7173,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
         static sal_Int32 nOleCount(0);
         String aTmpName(RTL_CONSTASCII_USTRINGPARAM("/tmp/embedded_stream_"));
         aTmpName += String::CreateFromInt32(nOleCount++);
-        aTmpName += String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(".bin"));
+        aTmpName += rtl::OUString(".bin");
         SvFileStream aTmpStream(aTmpName,STREAM_READ|STREAM_WRITE|STREAM_TRUNC);
         pStream->Seek(0);
         *pStream >> aTmpStream;
@@ -7183,7 +7182,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
         if ( pName || pFilter )
         {
             //Reuse current ole name
-            String aDstStgName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
+            rtl::OUString aDstStgName(MSO_OLE_Obj);
             aDstStgName += String::CreateFromInt32(nMSOleObjCntr);
 
             ::rtl::OUString aFilterName;
@@ -7288,8 +7287,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         // ( ist er z.B. bei FontWork nicht )
         // Wenn nicht -> Einbindung als Grafik
         sal_Bool bValidStorage = sal_False;
-        String aDstStgName( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM(MSO_OLE_Obj)));
+        rtl::OUString aDstStgName(MSO_OLE_Obj);
 
         aDstStgName += String::CreateFromInt32( ++nMSOleObjCntr );
 

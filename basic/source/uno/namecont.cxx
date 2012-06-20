@@ -1393,7 +1393,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                                                     embed::ElementModes::READWRITE );
                 //    throw uno::RuntimeException(); // TODO: method must either return the stream or throw an exception
 
-                String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
                 OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
 
                 uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
@@ -1404,11 +1403,10 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if ( xProps.is() )
                 {
-                    xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+                    xProps->setPropertyValue( rtl::OUString("MediaType"), uno::makeAny( aMime ) );
 
                     // #87671 Allow encryption
-                    aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
-                    xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
+                    xProps->setPropertyValue( rtl::OUString("UseCommonStoragePasswordEncryption"), uno::makeAny( sal_True ) );
 
                     Reference< XOutputStream > xOutput = xElementStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
@@ -1541,13 +1539,11 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
 
             if ( xProps.is() )
             {
-                String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
                 OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
-                xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+                xProps->setPropertyValue( rtl::OUString("MediaType"), uno::makeAny( aMime ) );
 
                 // #87671 Allow encryption
-                aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
-                xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
+                xProps->setPropertyValue( rtl::OUString("UseCommonStoragePasswordEncryption"), uno::makeAny( sal_True ) );
 
                 xOut = xInfoStream->getOutputStream();
             }
@@ -2014,13 +2010,11 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             if ( !xProps.is() )
                 throw uno::RuntimeException();
 
-            String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
             OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
-            xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+            xProps->setPropertyValue( rtl::OUString("MediaType"), uno::makeAny( aMime ) );
 
             // #87671 Allow encryption
-            aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("UseCommonStoragePasswordEncryption") );
-            xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
+            xProps->setPropertyValue( rtl::OUString("UseCommonStoragePasswordEncryption"), uno::makeAny( sal_True ) );
 
             xOut = xInfoStream->getOutputStream();
         }

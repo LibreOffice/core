@@ -1420,14 +1420,12 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
 
     if( pArg1 )
     {
-        sStr.SearchAndReplace( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "$(ARG1)" )),
+        sStr.SearchAndReplace( rtl::OUString("$(ARG1)"),
                                String( *pArg1 ) );
     }
     if( pArg2 )
     {
-        sStr.SearchAndReplace( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "$(ARG2)" )),
+        sStr.SearchAndReplace( rtl::OUString("$(ARG2)"),
                                String( *pArg2 ) );
     }
 

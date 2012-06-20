@@ -434,7 +434,7 @@ String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntr
 {
     String aWildcard( GetImportFormatExtension( nFormat, nEntry ) );
     if ( aWildcard.Len() )
-        aWildcard.Insert( UniString::CreateFromAscii( "*.", 2 ), 0 );
+        aWildcard.Insert( rtl::OUString("*."), 0 );
     return aWildcard;
 }
 
@@ -551,7 +551,7 @@ String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntr
 {
     String aWildcard( GetExportFormatExtension( nFormat, nEntry ) );
     if ( aWildcard.Len() )
-        aWildcard.Insert( UniString::CreateFromAscii( "*.", 2 ), 0 );
+        aWildcard.Insert( rtl::OUString("*."), 0 );
     return aWildcard;
 }
 

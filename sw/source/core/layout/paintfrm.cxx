@@ -6828,8 +6828,7 @@ const Font& SwPageFrm::GetEmptyPageFont()
         pEmptyPgFont->SetSize( Size( 0, 80 * 20 )); // == 80 pt
         pEmptyPgFont->SetWeight( WEIGHT_BOLD );
         pEmptyPgFont->SetStyleName( aEmptyStr );
-        pEmptyPgFont->SetName( String::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "Helvetica" )) );
+        pEmptyPgFont->SetName(rtl::OUString("Helvetica"));
         pEmptyPgFont->SetFamily( FAMILY_SWISS );
         pEmptyPgFont->SetTransparent( sal_True );
         pEmptyPgFont->SetColor( COL_GRAY );

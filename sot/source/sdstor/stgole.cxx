@@ -103,7 +103,7 @@ void StgInternalStream::Commit()
 ///////////////////////// class StgCompObjStream /////////////////////////
 
 StgCompObjStream::StgCompObjStream( BaseStorage& rStg, sal_Bool bWr )
-            : StgInternalStream( rStg, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1CompObj" ) ), bWr )
+            : StgInternalStream( rStg, rtl::OUString("\1CompObj"), bWr )
 {
     memset( &aClsId, 0, sizeof( ClsId ) );
     nCbFormat = 0;
@@ -168,7 +168,7 @@ sal_Bool StgCompObjStream::Store()
 /////////////////////////// class StgOleStream ///////////////////////////
 
 StgOleStream::StgOleStream( BaseStorage& rStg, sal_Bool bWr )
-            : StgInternalStream( rStg, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole" ) ), bWr )
+            : StgInternalStream( rStg, rtl::OUString("\1Ole"), bWr )
 {
     nFlags = 0;
 }

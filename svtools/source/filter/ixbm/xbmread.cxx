@@ -45,7 +45,7 @@ XBMReader::XBMReader( SvStream& rStm ) :
             bStatus         ( sal_True )
 {
     pHexTable = new short[ 256 ];
-    maUpperName = String::CreateFromAscii( "SVIXBM", 6 );
+    maUpperName = rtl::OUString("SVIXBM");
     InitTable();
 }
 

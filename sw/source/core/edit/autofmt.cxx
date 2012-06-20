@@ -313,8 +313,7 @@ void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
     }
 #if OSL_DEBUG_LEVEL > 0
     else
-        sTxt = String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "Action-Text fehlt" ));
+        sTxt = rtl::OUString("Action-Text fehlt");
 #endif
 
     pDoc->SetAutoFmtRedlineComment( &sTxt, nSeqNo );
@@ -1834,8 +1833,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
     {
         String sTxt(ViewShell::GetShellRes()->GetAutoFmtNameLst()[
                                     STR_AUTOFMTREDL_SET_TMPL_HEADLINE ] );
-        sTxt.SearchAndReplace( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "$(ARG1)" )),
+        sTxt.SearchAndReplace( rtl::OUString("$(ARG1)"),
                                 String::CreateFromInt32( nLvl + 1 ) );
         pDoc->SetAutoFmtRedlineComment( &sTxt );
     }

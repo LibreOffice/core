@@ -1001,8 +1001,7 @@ SwFltShell::~SwFltShell()
         SwDoc& rDoc = GetDoc();
                         // 1. SectionFmt und Section anlegen
         SwSectionFmt* pSFmt = rDoc.MakeSectionFmt( 0 );
-        SwSectionData aSectionData( CONTENT_SECTION, String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM("PMW-Protect") ));
+        SwSectionData aSectionData(CONTENT_SECTION, rtl::OUString("PMW-Protect"));
         aSectionData.SetProtectFlag( true );
                         // 2. Start- und EndIdx suchen
         const SwNode* pEndNd = &rDoc.GetNodes().GetEndOfContent();
@@ -1085,8 +1084,7 @@ SwFltShell& SwFltShell::operator << ( const sal_Unicode c )
 
 SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
 {
-    String aName( String::CreateFromAscii(
-                    RTL_CONSTASCII_STRINGPARAM( "ErrorTag" )));
+    String aName(rtl::OUString("ErrorTag"));
     SwFieldType* pFT = GetDoc().GetFldType( RES_SETEXPFLD, aName, false );
     if( pFT == 0)
     {

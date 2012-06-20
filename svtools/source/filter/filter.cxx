@@ -314,7 +314,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             }
             rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
             if (bOK && !rStream.GetError()) {
-                rFormatExtension= UniString::CreateFromAscii( "MET", 3 );
+                rFormatExtension = rtl::OUString("MET");
                 return sal_True;
             }
         }
@@ -348,7 +348,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
                    sFirstBytes[14+nOffs] == 0x28 ||
                    sFirstBytes[14+nOffs] == 0x0c )
             {
-                rFormatExtension = UniString::CreateFromAscii( "BMP", 3 );
+                rFormatExtension = rtl::OUString("BMP");
                 return sal_True;
             }
         }
@@ -364,13 +364,13 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
 
         if ( nFirstLong==0xd7cdc69a || nFirstLong==0x01000900 )
         {
-            rFormatExtension = UniString::CreateFromAscii( "WMF", 3 );
+            rFormatExtension = rtl::OUString("WMF");
             return sal_True;
         }
         else if( nFirstLong == 0x01000000 && sFirstBytes[ 40 ] == 0x20 && sFirstBytes[ 41 ] == 0x45 &&
             sFirstBytes[ 42 ] == 0x4d && sFirstBytes[ 43 ] == 0x46 )
         {
-            rFormatExtension = UniString::CreateFromAscii( "EMF", 3 );
+            rFormatExtension = rtl::OUString("EMF");
             return sal_True;
         }
     }
@@ -385,7 +385,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             sal_uInt8 nEncoding=sFirstBytes[2];
             if( ( nVersion==0 || nVersion==2 || nVersion==3 || nVersion==5 ) && nEncoding<=1 )
             {
-                rFormatExtension = UniString::CreateFromAscii( "PCX", 3 );
+                rFormatExtension = rtl::OUString("PCX");
                 return sal_True;
             }
         }
@@ -397,7 +397,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         bSomethingTested=sal_True;
         if ( nFirstLong==0x49492a00 || nFirstLong==0x4d4d002a )
         {
-            rFormatExtension=UniString::CreateFromAscii( "TIF", 3 );
+            rFormatExtension = rtl::OUString("TIF");
             return sal_True;
         }
     }
@@ -408,7 +408,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         bSomethingTested=sal_True;
         if ( nFirstLong==0x47494638 && (sFirstBytes[4]==0x37 || sFirstBytes[4]==0x39) && sFirstBytes[5]==0x61 )
         {
-            rFormatExtension = UniString::CreateFromAscii( "GIF", 3 );
+            rFormatExtension = rtl::OUString("GIF");
             return sal_True;
         }
     }
@@ -419,7 +419,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         bSomethingTested=sal_True;
         if (nFirstLong==0x89504e47 && nSecondLong==0x0d0a1a0a)
         {
-            rFormatExtension = UniString::CreateFromAscii( "PNG", 3 );
+            rFormatExtension = rtl::OUString("PNG");
             return sal_True;
         }
     }
@@ -431,7 +431,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         if ( ( nFirstLong==0xffd8ffe0 && sFirstBytes[6]==0x4a && sFirstBytes[7]==0x46 && sFirstBytes[8]==0x49 && sFirstBytes[9]==0x46 ) ||
              ( nFirstLong==0xffd8fffe ) || ( 0xffd8ff00 == ( nFirstLong & 0xffffff00 ) ) )
         {
-            rFormatExtension = UniString::CreateFromAscii( "JPG", 3 );
+            rFormatExtension = rtl::OUString("JPG");
             return sal_True;
         }
     }
@@ -442,13 +442,13 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         bSomethingTested=sal_True;
         if( nFirstLong==0x53564744 && sFirstBytes[4]==0x49 )
         {
-            rFormatExtension = UniString::CreateFromAscii( "SVM", 3 );
+            rFormatExtension = rtl::OUString("SVM");
             return sal_True;
         }
         else if( sFirstBytes[0]==0x56 && sFirstBytes[1]==0x43 && sFirstBytes[2]==0x4C &&
                  sFirstBytes[3]==0x4D && sFirstBytes[4]==0x54 && sFirstBytes[5]==0x46 )
         {
-            rFormatExtension = UniString::CreateFromAscii( "SVM", 3 );
+            rFormatExtension = rtl::OUString("SVM");
             return sal_True;
         }
     }
@@ -465,7 +465,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
 
             if( strncmp( sBuf, "PCD_IPI", 7 ) ==  0 )
             {
-                rFormatExtension = UniString::CreateFromAscii( "PCD", 3 );
+                rFormatExtension = rtl::OUString("PCD");
                 return sal_True;
             }
         }
@@ -477,7 +477,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         bSomethingTested = sal_True;
         if ( ( nFirstLong == 0x38425053 ) && ( (nSecondLong >> 16 ) == 1 ) )
         {
-            rFormatExtension = UniString::CreateFromAscii( "PSD", 3 );
+            rFormatExtension = rtl::OUString("PSD");
             return sal_True;
         }
     }
@@ -489,7 +489,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         if ( ( nFirstLong == 0xC5D0D3C6 ) || ( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
              ImplSearchEntry( &sFirstBytes[15], (sal_uInt8*)"EPS", 3, 3 ) ) )
         {
-            rFormatExtension = UniString::CreateFromAscii( "EPS", 3 );
+            rFormatExtension = rtl::OUString("EPS");
             return sal_True;
         }
     }
@@ -500,7 +500,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         //Binary DXF File Format
         if( strncmp( (const char*) sFirstBytes, "AutoCAD Binary DXF", 18 ) == 0 )
         {
-            rFormatExtension = UniString::CreateFromAscii( "DXF", 3 );
+            rFormatExtension = rtl::OUString("DXF");
             return sal_True;
         }
 
@@ -522,7 +522,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
 
             if (i+7<256 && (strncmp((const char*)(sFirstBytes+i),"SECTION",7)==0))
             {
-                rFormatExtension = UniString::CreateFromAscii( "DXF", 3 );
+                rFormatExtension = rtl::OUString("DXF");
                 return sal_True;
             }
         }
@@ -561,19 +561,19 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             // normal version 2 - page A23 and A24
             if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x02)
             {
-              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+              rFormatExtension = rtl::OUString("PCT");
               return sal_True;
             }
             // normal version 1 - page A25
             else if (sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 && bdBoxOk) {
-              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+              rFormatExtension = rtl::OUString("PCT");
               return sal_True;
             }
             // previous code kept in order to do not break any compatibility
             // probably eroneous
             else if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x01 && bdBoxOk)
             {
-              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+              rFormatExtension = rtl::OUString("PCT");
               return sal_True;
             }
         }
@@ -592,17 +592,17 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             {
                 case '1' :
                 case '4' :
-                    rFormatExtension = UniString::CreateFromAscii( "PBM", 3 );
+                    rFormatExtension = rtl::OUString("PBM");
                 return sal_True;
 
                 case '2' :
                 case '5' :
-                    rFormatExtension = UniString::CreateFromAscii( "PGM", 3 );
+                    rFormatExtension = rtl::OUString("PGM");
                 return sal_True;
 
                 case '3' :
                 case '6' :
-                    rFormatExtension = UniString::CreateFromAscii( "PPM", 3 );
+                    rFormatExtension = rtl::OUString("PPM");
                 return sal_True;
             }
         }
@@ -614,7 +614,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         bSomethingTested=sal_True;
         if( nFirstLong == 0x59a66a95 )
         {
-            rFormatExtension = UniString::CreateFromAscii( "RAS", 3 );
+            rFormatExtension = rtl::OUString("RAS");
             return sal_True;
         }
     }
@@ -625,7 +625,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         bSomethingTested = sal_True;
         if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"/* XPM */", 256, 9 ) )
         {
-            rFormatExtension = UniString::CreateFromAscii( "XPM", 3 );
+            rFormatExtension = rtl::OUString("XPM");
             return sal_True;
         }
     }
@@ -649,7 +649,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         {
             if( ImplSearchEntry( pPtr, (sal_uInt8*)"_width", pBuf + nSize - pPtr, 6 ) )
             {
-                rFormatExtension = UniString::CreateFromAscii( "XBM", 3 );
+                rFormatExtension = rtl::OUString("XBM");
                 delete[] pBuf;
                 return sal_True;
             }
@@ -683,7 +683,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         if( std::search(aBuf.begin(), aBuf.end(),
                         aMagic1, aMagic1+SAL_N_ELEMENTS(aMagic1)) != aBuf.end() )
         {
-            rFormatExtension = UniString::CreateFromAscii( "SVG", 3 );
+            rFormatExtension = rtl::OUString("SVG");
             return sal_True;
         }
 
@@ -691,7 +691,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         if( std::search(aBuf.begin(), aBuf.end(),
                         aMagic2, aMagic2+SAL_N_ELEMENTS(aMagic2)) != aBuf.end() )
         {
-            rFormatExtension = UniString::CreateFromAscii( "SVG", 3 );
+            rFormatExtension = rtl::OUString("SVG");
             return sal_True;
         }
     }
@@ -722,7 +722,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         bSomethingTested=sal_True;
         if( sFirstBytes[ 0 ] == 'J' && sFirstBytes[ 1 ] == 'J' )
         {
-            rFormatExtension = UniString::CreateFromAscii( "SGF", 3 );
+            rFormatExtension = rtl::OUString("SGF");
             return sal_True;
         }
     }
@@ -941,7 +941,7 @@ ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const String& rPathname, const S
 PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
 {
     if( !mpfnImport )
-        mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol( UniString::CreateFromAscii( IMPORT_FUNCTION_NAME ) );
+        mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol(rtl::OUString(IMPORT_FUNCTION_NAME));
 
     return mpfnImport;
 }
@@ -2052,7 +2052,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 String aPhysicalName( ImpCreateFullFilterPath( getToken(aFilterPath, i, ';'), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
 
-                PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) );
+                PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol(rtl::OUString(EXPORT_FUNCTION_NAME));
                 // Dialog in DLL ausfuehren
                 if( pFunc )
                 {

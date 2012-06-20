@@ -156,8 +156,7 @@ SwDrawDocument::~SwDrawDocument()
 SdrPage* SwDrawDocument::AllocPage(bool bMasterPage)
 {
     SwDPage* pPage = new SwDPage(*this, 0 != bMasterPage);
-    pPage->SetName( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "Controls" )) );
+    pPage->SetName(rtl::OUString("Controls"));
     return pPage;
 }
 

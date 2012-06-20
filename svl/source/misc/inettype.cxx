@@ -765,9 +765,7 @@ UniString INetContentTypes::GetContentType(INetContentType eTypeID)
     if (aTypeName.Len() == 0)
     {
         OSL_FAIL("INetContentTypes::GetContentType(): Bad ID");
-        return
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
-                                           CONTENT_TYPE_STR_APP_OCTSTREAM));
+        return rtl::OUString(CONTENT_TYPE_STR_APP_OCTSTREAM);
     }
     return aTypeName;
 }

@@ -688,9 +688,8 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     if ( !xProps.is() )
                         throw uno::RuntimeException();
 
-                    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
                     OUString aMime( "text/xml" );
-                    xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+                    xProps->setPropertyValue( rtl::OUString("MediaType"), uno::makeAny( aMime ) );
 
                     // Set encryption key
                     setStreamKey( xSourceStream, pLib->maPassword );
@@ -824,9 +823,8 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY );
                     if ( !xProps.is() )
                         throw uno::RuntimeException();
-                    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
                     OUString aMime( "text/xml" );
-                    xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+                    xProps->setPropertyValue( rtl::OUString("MediaType"), uno::makeAny( aMime ) );
 
                     Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );

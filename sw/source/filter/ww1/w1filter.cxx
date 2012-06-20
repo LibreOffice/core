@@ -822,8 +822,7 @@ oncemore:
             }
             else // rekursion:
             {
-                String aName( String::CreateFromAscii(
-                                        RTL_CONSTASCII_STRINGPARAM( "Ww" )));
+                rtl::OUString aName("Ww");
                 aName += String::CreateFromInt32( nPlcIndex );
                 SwFieldType* pFT = rOut.GetDoc().GetFldType( RES_SETEXPFLD, aName, false);
                 if (pFT == 0)

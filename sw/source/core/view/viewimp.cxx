@@ -334,7 +334,7 @@ void SwViewImp::MakeDrawView()
             pDrawView = new SwDrawView( *this, pIDDMA->GetDrawModel(), pOutDevForDrawView);
         }
 
-        GetDrawView()->SetActiveLayer( XubString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Heaven" ) ) );
+        GetDrawView()->SetActiveLayer(rtl::OUString("Heaven"));
         const SwViewOption* pSwViewOption = GetShell()->GetViewOptions();
         Init(pSwViewOption);
 

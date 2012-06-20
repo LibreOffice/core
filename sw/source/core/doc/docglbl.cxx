@@ -207,13 +207,11 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
     switch( eDocType )
     {
     case SPLITDOC_TO_HTML:
-        pFilter = SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "HTML" )));
+        pFilter = SwIoSystem::GetFilterOfFormat(rtl::OUString("HTML"));
         break;
 
     default:
-        pFilter = SwIoSystem::GetFilterOfFormat(
-                                    String::CreateFromAscii( FILTER_XML ));
+        pFilter = SwIoSystem::GetFilterOfFormat(rtl::OUString(FILTER_XML));
         eDocType = SPLITDOC_TO_GLOBALDOC;
         break;
     }

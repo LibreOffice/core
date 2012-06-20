@@ -53,9 +53,6 @@
 
 #include "filter/msfilter/msoleexp.hxx"
 
-#define CREATE_CONST_ASC(s) String::CreateFromAscii( \
-    RTL_CONSTASCII_STRINGPARAM(s))
-
 using namespace ::com::sun::star;
 
 SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
@@ -79,19 +76,18 @@ SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
 String GetStorageType( const SvGlobalName& aEmbName )
 {
     if ( aEmbName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "LibreOffice.MathDocument.1" );
+        return rtl::OUString("LibreOffice.MathDocument.1");
     else if ( aEmbName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "LibreOffice.WriterDocument.1" );
+        return rtl::OUString("LibreOffice.WriterDocument.1");
     else if ( aEmbName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "LibreOffice.CalcDocument.1" );
+        return rtl::OUString("LibreOffice.CalcDocument.1");
     else if ( aEmbName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "LibreOffice.DrawDocument.1" );
+        return rtl::OUString("LibreOffice.DrawDocument.1");
     else if ( aEmbName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "LibreOffice.ImpressDocument.1" );
+        return rtl::OUString("LibreOffice.ImpressDocument.1");
     else if ( aEmbName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
-            return String::CreateFromAscii( "LibreOffice.ChartDocument.1" );
-
-    return String();
+        return rtl::OUString("LibreOffice.ChartDocument.1");
+    return rtl::OUString();
 }
 
 sal_Bool UseOldMSExport()
@@ -239,8 +235,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                                 SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE,
                                 GetStorageType( aEmbName ) );
             SotStorageStreamRef xExtStm = rDestStg.OpenSotStream(
-                                            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "properties_stream" ) ),
-                                            STREAM_STD_READWRITE );
+                                            rtl::OUString("properties_stream"),
+                                            STREAM_STD_READWRITE);
 
             sal_Bool bExtentSuccess = sal_False;
             if( !xExtStm->GetError() )
@@ -294,8 +290,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             if ( bExtentSuccess )
             {
                 SotStorageStreamRef xEmbStm = rDestStg.OpenSotStream(
-                                                String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "package_stream" ) ),
-                                                STREAM_STD_READWRITE );
+                                                rtl::OUString("package_stream"),
+                                                STREAM_STD_READWRITE);
                 if( !xEmbStm->GetError() )
                 {
                     try
@@ -349,7 +345,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
     }
 
     //We never need this stream: See #99809# and #i2179#
-    rDestStg.Remove(CREATE_CONST_ASC(SVEXT_PERSIST_STREAM));
+    rDestStg.Remove(rtl::OUString(SVEXT_PERSIST_STREAM));
 }
 
 

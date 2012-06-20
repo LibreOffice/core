@@ -32,8 +32,7 @@
 #include <editeng/swafopt.hxx>
 
 SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
-    : aBulletFont( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "StarSymbol" )),
+    : aBulletFont( rtl::OUString("StarSymbol"),
                     Size( 0, 14 ) )
 {
     bAutoCorrect =

@@ -646,7 +646,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     do {        // middle check loop
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         String aStreamName;
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("styles.xml"));
+        aStreamName = rtl::OUString("styles.xml");
         uno::Reference < container::XNameAccess > xAccess( rMedium.GetStorage(), uno::UNO_QUERY );
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
         {

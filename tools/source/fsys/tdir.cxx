@@ -258,7 +258,7 @@ void Dir::Construct( DirEntryKind nKindFlags )
 #endif
     }
     else
-        aNameMask.setGlob(String("*", osl_getThreadTextEncoding()));
+        aNameMask.setGlob(rtl::OUString(static_cast<sal_Unicode>('*')));
 }
 
 /*************************************************************************

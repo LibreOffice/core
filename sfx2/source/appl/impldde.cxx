@@ -240,7 +240,7 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         {
             sal_Bool bSysTopic;
             {
-                DdeConnection aTmp( sServer, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "SYSTEM" ) ) );
+                DdeConnection aTmp(sServer, rtl::OUString("SYSTEM"));
                 bSysTopic = !aTmp.GetError();
             }
 

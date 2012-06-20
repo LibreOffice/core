@@ -47,7 +47,7 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
         sal_Char * p = new sal_Char[ nLen ];
         if( rStm.Read( p, nLen ) == (sal_uLong) nLen )
         {
-            nFormat = SotExchange::RegisterFormatName( String::CreateFromAscii( p, short(nLen-1) ) );
+            nFormat = SotExchange::RegisterFormatName(rtl::OUString(p, nLen-1, RTL_TEXTENCODING_ASCII_US));
         }
         else
             rStm.SetError( SVSTREAM_GENERALERROR );

@@ -60,7 +60,7 @@ GIFReader::GIFReader( SvStream& rStm ) :
             bGCTransparent  ( sal_False ),
             bImGraphicReady ( sal_False )
 {
-    maUpperName = UniString::CreateFromAscii( "SVIGIF", 6 );
+    maUpperName = rtl::OUString("SVIGIF");
     pSrcBuf = new sal_uInt8[ 256 ];
     ClearImageExtensions();
 }

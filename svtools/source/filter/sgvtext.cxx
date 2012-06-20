@@ -575,32 +575,32 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, sal_Bool Kapt, s
           case 92500: case 92501: case 92504: case 92505:
           {
 #if defined(WNT)
-              FNam=String::CreateFromAscii( "Times New Roman" );  // CG Times ist unter Windows Times New Roman
+              FNam=rtl::OUString("Times New Roman");  // CG Times ist unter Windows Times New Roman
 #else
-              FNam=String::CreateFromAscii( "Times" );            // ansonsten ist das einfach Times
+              FNam=rtl::OUString("Times");            // ansonsten ist das einfach Times
 #endif
               StdBrei=40;
               aFont.SetFamily(FAMILY_ROMAN);
           } break;
           case 94021: case 94022: case 94023: case 94024: {
 #if defined(WNT)
-              FNam=String::CreateFromAscii( "Arial", 5 );            // Univers ist unter Windows Arial
+              FNam=rtl::OUString("Arial");            // Univers ist unter Windows Arial
 #else
-              FNam=String::CreateFromAscii( "Helvetica" );        // und ansonsten Helvetica
+              FNam=rtl::OUString("Helvetica");        // und ansonsten Helvetica
 #endif
               aFont.SetFamily(FAMILY_SWISS);
               StdBrei=47;
           } break;
           case 93950: case 93951: case 93952: case 93953: {
 #if defined(WNT)
-              FNam=String::CreateFromAscii( "Courier New" );      // Der Vector-Courierfont unter Windows heisst Courier New
+              FNam=rtl::OUString("Courier New");      // Der Vector-Courierfont unter Windows heisst Courier New
 #else
-              FNam=String::CreateFromAscii( "Courier" );          // ansonsten ist und bleibt Courier immer Courier
+              FNam=rtl::OUString("Courier");          // ansonsten ist und bleibt Courier immer Courier
 #endif
               aFont.SetFamily(FAMILY_ROMAN);
               aFont.SetPitch(PITCH_FIXED);
           } break;
-          default: FNam=String::CreateFromAscii( "Helvetica", 9 );
+          default: FNam = rtl::OUString("Helvetica");
         }
         aFont.SetName(FNam);
         //aFont.SetCharSet(CHARSET_SYSTEM);

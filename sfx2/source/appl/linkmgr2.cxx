@@ -547,8 +547,7 @@ sal_uIntPtr LinkManager::RegisterStatusInfoId()
     if( !nFormat )
     {
         nFormat = SotExchange::RegisterFormatName(
-                    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                                "StatusInfo from SvxInternalLink" )));
+                    rtl::OUString("StatusInfo from SvxInternalLink"));
     }
     return nFormat;
 }
@@ -704,7 +703,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxStringItem aName( SID_FILE_NAME, sTopic );
             SfxBoolItem aMinimized(SID_MINIMIZED, sal_True);
             SfxBoolItem aHidden(SID_HIDDEN, sal_True);
-            SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
+            SfxStringItem aTarget( SID_TARGETNAME, rtl::OUString("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
             SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );
             SfxBoolItem aReadOnly(SID_DOC_READONLY, false);

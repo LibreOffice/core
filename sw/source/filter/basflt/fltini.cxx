@@ -272,8 +272,7 @@ sal_Bool SwReader::CheckPasswd( const String& /*rPasswd*/, const Reader& /*rOpti
 </FilterFlags>
 */
 
-#define FILTER_OPTION_ROOT              String::CreateFromAscii( \
-                                RTL_CONSTASCII_STRINGPARAM( "Office.Writer/FilterFlags" ) )
+#define FILTER_OPTION_ROOT      rtl::OUString("Office.Writer/FilterFlags")
 
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
                                                                 sal_uInt32* pValues )
@@ -543,8 +542,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                         // if the first node dont contained any content, then
                                         // insert one char in it calc again and delete once again
                                         SwIndex aNdIdx( pFirstTxtNd );
-                    pFirstTxtNd->InsertText( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "MM" )), aNdIdx );
+                                        pFirstTxtNd->InsertText(rtl::OUString("MM"), aNdIdx);
                                         sal_uLong nAbsMinCnts;
                                         pFirstTxtNd->GetMinMaxSize( pFirstTxtNd->GetIndex(),
                                                                                         nMinFrm, nMaxFrm, nAbsMinCnts );

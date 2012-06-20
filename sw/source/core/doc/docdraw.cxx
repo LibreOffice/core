@@ -261,8 +261,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             pObj->NbcMove( Size( aAnchorPos.X(), aAnchorPos.Y() ) );
         }
 
-        pFmt = MakeDrawFrmFmt( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "DrawObject" )),
+        pFmt = MakeDrawFrmFmt( rtl::OUString("DrawObject"),
                                 GetDfltFrmFmt() );
         pFmt->SetFmtAttr( aAnch );
         // #i36010# - set layout direction of the position
@@ -327,8 +326,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if( !pMyObj->GetUpGroup() )
         {
-            String sDrwFmtNm( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM("DrawObject" )));
+            rtl::OUString sDrwFmtNm("DrawObject");
             for ( sal_uInt16 i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();

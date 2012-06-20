@@ -99,7 +99,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
     }
     else
     {
-        String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
+        String aStreamName = aFolderName + rtl::OUString(".xml");
         try
         {
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
@@ -315,7 +315,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
     sal_uLong n = 0;
     sal_Bool bTextOnly = sal_True;
     String aFolderName = GeneratePackageName ( rShort );
-    String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
+    String aStreamName = aFolderName + rtl::OUString(".xml");
     rText.Erase();
 
     try
@@ -325,7 +325,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
         if ( !xAccess->hasByName( aStreamName ) || !xRoot->isStreamElement( aStreamName ) )
         {
             bTextOnly = sal_False;
-            aStreamName = String::CreateFromAscii("content.xml");
+            aStreamName = rtl::OUString("content.xml");
         }
 
         uno::Reference < io::XStream > xContents = xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
@@ -400,7 +400,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
     }
     */
     String aFolderName( rPackageName );
-    String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
+    String aStreamName = aFolderName + rtl::OUString(".xml");
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
         comphelper::getProcessServiceFactory();
@@ -423,11 +423,10 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
                 embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
     uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
     OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
     Any aAny;
     aAny <<= aMime;
-    xSet->setPropertyValue( aPropName, aAny );
+    xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
     uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
        uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
        xSrc->setOutputStream(xOut);
@@ -571,11 +570,10 @@ void SwXMLTextBlocks::WriteInfo( void )
                     embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
         uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-        String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
         OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
         Any aAny;
         aAny <<= aMime;
-        xSet->setPropertyValue( aPropName, aAny );
+        xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
         uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
         uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
         xSrc->setOutputStream(xOut);
@@ -646,11 +644,10 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
                         embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-            String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
             OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
             Any aAny;
             aAny <<= aMime;
-            xSet->setPropertyValue( aPropName, aAny );
+            xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
             uno::Reference < io::XOutputStream > xOutputStream = xDocStream->getOutputStream();
 
             // get XML writer

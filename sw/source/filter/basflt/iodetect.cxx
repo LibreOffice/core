@@ -105,19 +105,17 @@ const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     if( rUserData.EqualsAscii(FILTER_XML) ||
         rUserData.EqualsAscii(FILTER_XMLV) ||
         rUserData.EqualsAscii(FILTER_XMLVW) )
-        return String::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "content.xml" ));
+        return rtl::OUString("content.xml");
     if( rUserData.EqualsAscii(sWW6) || rUserData.EqualsAscii(FILTER_WW8) )
-        return String::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM( "WordDocument" ));
-    return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "" ));
+        return rtl::OUString("WordDocument");
+    return rtl::OUString();
 }
 
 const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
     const SfxFilterContainer* pCnt)
 {
-    SfxFilterContainer aCntSw( String::CreateFromAscii( sSWRITER ) );
-    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( sSWRITERWEB ) );
+    SfxFilterContainer aCntSw( rtl::OUString(sSWRITER) );
+    SfxFilterContainer aCntSwWeb( rtl::OUString(sSWRITERWEB) );
     const SfxFilterContainer* pFltCnt = pCnt ? pCnt : ( IsDocShellRegistered() ? &aCntSw : &aCntSwWeb );
 
     do {
@@ -177,13 +175,13 @@ sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
         if( rFilter.GetUserData().EqualsAscii(FILTER_WW8) ||
                 rFilter.GetUserData().EqualsAscii(sWW6) )
         {
-            bRet = !((rStg.IsContained( String::CreateFromAscii("0Table" )) ||
-                        rStg.IsContained( String::CreateFromAscii("1Table" ))) ^
+            bRet = !((rStg.IsContained( rtl::OUString("0Table")) ||
+                        rStg.IsContained( rtl::OUString("1Table"))) ^
                     rFilter.GetUserData().EqualsAscii(FILTER_WW8));
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
                 SotStorageStreamRef xRef =
-                    rStg.OpenSotStream(String::CreateFromAscii("WordDocument"),
+                    rStg.OpenSotStream(rtl::OUString("WordDocument"),
                             STREAM_STD_READ | STREAM_NOCREATE );
                 xRef->Seek(10);
                 sal_uInt8 nByte;
@@ -216,8 +214,8 @@ sal_Bool SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
 {
     sal_Bool bRet = sal_False;
 
-    SfxFilterContainer aCntSw( String::CreateFromAscii( sSWRITER ) );
-    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( sSWRITERWEB ) );
+    SfxFilterContainer aCntSw( rtl::OUString(sSWRITER) );
+    SfxFilterContainer aCntSwWeb( rtl::OUString(sSWRITERWEB) );
     const SfxFilterContainer& rFltContainer = IsDocShellRegistered() ? aCntSw : aCntSwWeb;
 
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStor;
@@ -288,8 +286,8 @@ sal_Bool SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
 const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     const String& rPrefFltName, SfxMedium* pMedium)
 {
-    SfxFilterContainer aCntSw( String::CreateFromAscii( sSWRITER ) );
-    SfxFilterContainer aCntSwWeb( String::CreateFromAscii( sSWRITERWEB ) );
+    SfxFilterContainer aCntSw( rtl::OUString(sSWRITER) );
+    SfxFilterContainer aCntSwWeb( rtl::OUString(sSWRITERWEB) );
     const SfxFilterContainer* pFCntnr = IsDocShellRegistered() ? &aCntSw : &aCntSwWeb;
 
     if( !pFCntnr )

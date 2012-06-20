@@ -103,8 +103,7 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
         pFont = new Font();
         pFont->SetWeight( WEIGHT_BOLD );
         pFont->SetStyleName( aEmptyStr );
-        pFont->SetName( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "Arial Unicode" )));
+        pFont->SetName(rtl::OUString("Arial Unicode"));
         pFont->SetFamily( FAMILY_SWISS );
         pFont->SetTransparent( sal_True );
     }

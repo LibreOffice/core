@@ -47,8 +47,7 @@
 
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
-    : SfxItemPool( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "SWG" )),
+    : SfxItemPool( rtl::OUString("SWG"),
                     POOLATTR_BEGIN, POOLATTR_END-1,
                     aSlotTab, aAttrTab ),
     pDoc( pD )

@@ -2142,8 +2142,7 @@ sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRp
     if( bRegExpRplc )
     {
         xub_StrLen nPos = 0;
-        String sPara( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "\\n" )));
+        rtl::OUString sPara("\\n");
         while( STRING_NOTFOUND != ( nPos = rStr.Search( sPara, nPos )) )
         {
             // Has this been escaped?
@@ -2155,7 +2154,7 @@ sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRp
             else
             {
                 rRet = rStr.Copy( 0, nPos );
-                rStr.Erase( 0, nPos + sPara.Len() );
+                rStr.Erase( 0, nPos + sPara.getLength() );
                 bRet = sal_True;
                 break;
             }
