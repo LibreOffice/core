@@ -950,7 +950,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     cxSrc = cySrc = 0;
 
                 Bitmap      aBitmap;
-                Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
+                Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
 
                 cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
                 cyDest = abs( (int)cyDest );        // and also 122889
@@ -1019,7 +1019,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                       >> cyDest;
 
                 Bitmap      aBitmap;
-                Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
+                Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
 
                 cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
                 cyDest = abs( (int)cyDest );        // and also 122889
