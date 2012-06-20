@@ -1153,27 +1153,13 @@ void impl_checkRecoveryState(sal_Bool& bCrashed           ,
                              sal_Bool& bRecoveryDataExists,
                              sal_Bool& bSessionDataExists )
 {
-    static const ::rtl::OUString SERVICENAME_RECOVERYCORE("com.sun.star.frame.AutoRecovery");
-    static const ::rtl::OUString PROP_CRASHED("Crashed");
-    static const ::rtl::OUString PROP_EXISTSRECOVERY("ExistsRecoveryData");
-    static const ::rtl::OUString PROP_EXISTSSESSION("ExistsSessionData");
-
-    bCrashed            = sal_False;
-    bRecoveryDataExists = sal_False;
-    bSessionDataExists  = sal_False;
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    try
-    {
-        css::uno::Reference< css::beans::XPropertySet > xRecovery(
-            xSMGR->createInstance(SERVICENAME_RECOVERYCORE),
-            css::uno::UNO_QUERY_THROW);
-
-        xRecovery->getPropertyValue(PROP_CRASHED       ) >>= bCrashed           ;
-        xRecovery->getPropertyValue(PROP_EXISTSRECOVERY) >>= bRecoveryDataExists;
-        xRecovery->getPropertyValue(PROP_EXISTSSESSION ) >>= bSessionDataExists ;
-    }
-    catch(const css::uno::Exception&) {}
+    bCrashed = officecfg::Office::Recovery::RecoveryInfo::Crashed::get();
+    bool elements = officecfg::Office::Recovery::RecoveryList::get()->
+        hasElements();
+    bool session
+        = officecfg::Office::Recovery::RecoveryInfo::SessionData::get();
+    bRecoveryDataExists = elements && !session;
+    bSessionDataExists = elements && session;
 }
 
 //-----------------------------------------------
@@ -2488,7 +2474,7 @@ void Desktop::OpenClients()
             OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
 
-        if ( bExistsSessionData )
+        if ( !bExistsRecoveryData )
         {
             // session management
             try
