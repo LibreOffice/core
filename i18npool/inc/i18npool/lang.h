@@ -544,6 +544,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_ENGLISH_MALAWI        0x8809  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_ERZYA                 0x066C
 #define LANGUAGE_USER_MARI_MEADOW           0x066D
+#define LANGUAGE_USER_PAPIAMENTU_CURACAO    0x8479  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
+#define LANGUAGE_USER_PAPIAMENTU_BONAIRE    0x8879  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
 
