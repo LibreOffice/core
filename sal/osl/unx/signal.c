@@ -105,7 +105,7 @@ static struct SignalAction
     void (*Handler)(int);
 } Signals[] =
 {
-    { SIGHUP,    ACT_IGNORE, NULL },    /* hangup */
+    { SIGHUP,    ACT_HIDE, NULL },    /* hangup */
     { SIGINT,    ACT_EXIT,   NULL },    /* interrupt (rubout) */
     { SIGQUIT,   ACT_EXIT,  NULL },    /* quit (ASCII FS) */
     { SIGILL,    ACT_SYSTEM,  NULL },    /* illegal instruction (not reset when caught) */
@@ -973,7 +973,6 @@ void SignalHandlerFunction(int Signal)
         case SIGINT:
         case SIGTERM:
         case SIGQUIT:
-        case SIGHUP:
             Info.Signal = osl_Signal_Terminate;
             break;
 
