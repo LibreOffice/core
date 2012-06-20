@@ -3442,15 +3442,7 @@ bool MainSequence::disposeShape( const Reference< XShape >& xShape )
     InteractiveSequenceList::iterator aIter;
     for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end();  )
     {
-        if( (*aIter)->getTriggerShape() == xShape )
-        {
-            aIter = maInteractiveSequenceList.erase( aIter );
-            bChanges = true;
-        }
-        else
-        {
             bChanges |= (*aIter++)->disposeShape( xShape );
-        }
     }
 
     if( bChanges )
