@@ -3728,7 +3728,7 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
         rOutliner.SetVertical( pText->IsVerticalWriting() );
 
         sal_uInt16 nParaIndex = 0;
-        sal_uInt32 nParaSize;
+        sal_Int32 nParaSize;
         const sal_Unicode* pCurrent, *pBuf = rText.GetBuffer();
         const sal_Unicode* pEnd = rText.GetBuffer() + rText.Len();
 
@@ -3752,12 +3752,12 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
                     break;
                 }
                 else
-                    nParaSize++;
+                    ++nParaSize;
             }
             ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
-            String aParagraph( pCurrent, (sal_uInt16)nParaSize );
-            if ( !nParaIndex && !aParagraph.Len() )                 // SJ: we are crashing if the first paragraph is empty ?
-                aParagraph += (sal_Unicode)' ';                     // otherwise these two lines can be removed.
+            rtl::OUString aParagraph( pCurrent, nParaSize );
+            if ( !nParaIndex && aParagraph.isEmpty() )              // SJ: we are crashing if the first paragraph is empty ?
+                aParagraph += rtl::OUString(' ');                   // otherwise these two lines can be removed.
             rOutliner.Insert( aParagraph, nParaIndex, 0 );
             rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
 

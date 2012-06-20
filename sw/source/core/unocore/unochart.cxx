@@ -2190,12 +2190,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                             if (bUseCol)
                             {
                                 aRplc = String::CreateFromAscii( "%COLUMNLETTER" );
-                                aNew = String( aCellName.GetBuffer(), static_cast<xub_StrLen>(pBuf - aCellName.GetBuffer()) );
+                                aNew = rtl::OUString(aCellName.GetBuffer(), pBuf - aCellName.GetBuffer());
                             }
                             else
                             {
                                 aRplc = String::CreateFromAscii( "%ROWNUMBER" );
-                                aNew = String( pBuf, static_cast<xub_StrLen>((aCellName.GetBuffer() + nLen) - pBuf) );
+                                aNew = rtl::OUString(pBuf, (aCellName.GetBuffer() + nLen) - pBuf);
                             }
                             xub_StrLen nPos = aTxt.Search( aRplc );
                             if (nPos != STRING_NOTFOUND)

@@ -1881,8 +1881,8 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 const sal_Unicode* p0 = p;
                                 while( *p && *p != ';' )
                                     p++;
-                                String aNumber( p0, sal::static_int_cast<xub_StrLen>( p - p0 ) );
-                                nFormat = aNumber.ToInt32();
+                                rtl::OUString aNumber(p0, p - p0);
+                                nFormat = aNumber.toInt32();
                             }
                             break;
                     }

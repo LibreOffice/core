@@ -114,7 +114,7 @@ sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlig
                             sal_Unicode* pWString = (sal_Unicode*)pString;
                             for ( i = 0; i < nItemSize; i++ )
                                 *this >> pWString[ i ];
-                            rString = String( pWString, lcl_getMaxSafeStrLen(nItemSize) );
+                            rString = rtl::OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
                         }
                         else
                             rString = String();
@@ -156,7 +156,7 @@ sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlig
                     if ( pString[ i - 1 ] == 0 )
                     {
                         if ( (sal_uInt16)nItemSize > 1 )
-                            rString = String( pString, lcl_getMaxSafeStrLen(nItemSize) );
+                            rString = rtl::OUString(pString, lcl_getMaxSafeStrLen(nItemSize));
                         else
                             rString = String();
                         bRetValue = sal_True;
@@ -304,7 +304,7 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
                         sal_Unicode* pWString = (sal_Unicode*)pString;
                         for ( i = 0; i < nSize; i++ )
                             aStream >> pWString[ i ];
-                        aString = String( pWString, lcl_getMaxSafeStrLen(nSize) );
+                        aString = rtl::OUString(pWString, lcl_getMaxSafeStrLen(nSize));
                     }
                     else
                         aString = rtl::OUString(pString, lcl_getMaxSafeStrLen(nSize), mnTextEnc);

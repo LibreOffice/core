@@ -442,7 +442,7 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
         cData[ i ] = ( nTemp >> 8 ) | ( nTemp << 8 );
 #endif
     }
-    rAtom.aName = String( cData, i );
+    rAtom.aName = rtl::OUString(cData, i);
     OutputDevice* pDev = (OutputDevice*)Application::GetDefaultDevice();
     rAtom.bAvailable = pDev->IsFontAvailable( rAtom.aName );
     aHd.SeekToEndOfRecord( rIn );
@@ -2217,14 +2217,14 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
             {
                 PPTPortionObj* pPortion;
                 sal_Unicode* pParaText = new sal_Unicode[ nTextSize ];
-                sal_uInt32 nCurrentIndex = 0;
+                sal_Int32 nCurrentIndex = 0;
                 for ( pPortion = pPara->First(); pPortion; pPortion = pPara->Next() )
                 {
                     if ( pPortion->mpFieldItem )
                         pParaText[ nCurrentIndex++ ] = ' ';
                     else
                     {
-                        sal_uInt32 nCharacters = pPortion->Count();
+                        sal_Int32 nCharacters = pPortion->Count();
                         const sal_Unicode* pSource = pPortion->maString.GetBuffer();
                         sal_Unicode* pDest = pParaText + nCurrentIndex;
 
@@ -2233,9 +2233,8 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                         PptFontEntityAtom* pFontEnityAtom = GetFontEnityAtom( nFont );
                         if ( pFontEnityAtom && ( pFontEnityAtom->eCharSet == RTL_TEXTENCODING_SYMBOL ) )
                         {
-                            sal_uInt32 i;
                             sal_Unicode nUnicode;
-                            for ( i = 0; i < nCharacters; i++ )
+                            for (sal_Int32 i = 0; i < nCharacters; i++ )
                             {
                                 nUnicode = pSource[ i ];
                                 if ( ! ( nUnicode & 0xff00 ) )
@@ -2253,7 +2252,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
 
                 ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
                 rOutliner.Insert( String(), nParaIndex, pPara->pParaSet->mnDepth );
-                rOutliner.QuickInsertText( String( pParaText, (sal_uInt16)nCurrentIndex ), aSelection );
+                rOutliner.QuickInsertText( rtl::OUString(pParaText, nCurrentIndex), aSelection );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
                 if ( pS )
                     rOutliner.SetStyleSheet( nParaIndex, pS );
@@ -5054,7 +5053,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
             }
         }
         if ( i )
-            aString = String( pBuf, (sal_uInt16)i );
+            aString = rtl::OUString(pBuf, i);
         delete[] pBuf;
     }
     else if( aTextHd.nRecType == PPT_PST_TextBytesAtom )

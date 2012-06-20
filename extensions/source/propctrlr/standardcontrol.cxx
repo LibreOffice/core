@@ -199,8 +199,7 @@ namespace pcr
             _rValue >>= nValue;
             if ( nValue )
             {
-                sal_Unicode nCharacter = nValue;
-                sText = String( &nCharacter, 1 );
+                sText = rtl::OUString(static_cast<sal_Unicode>(nValue));
             }
         }
         else

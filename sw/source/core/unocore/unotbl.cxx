@@ -350,18 +350,18 @@ void lcl_GetCellPosition( const String &rCellName,
         // start of number found?
         if (pBuf < pEnd && ('0' <= *pBuf && *pBuf <= '9'))
         {
-            String aColTxt( rCellName.GetBuffer(), static_cast< xub_StrLen >(pBuf - rCellName.GetBuffer()) );
-            String aRowTxt( pBuf, static_cast< xub_StrLen >(rCellName.GetBuffer() + nLen - pBuf) );
-            if (aColTxt.Len() && aRowTxt.Len())
+            rtl::OUString aColTxt(rCellName.GetBuffer(), pBuf - rCellName.GetBuffer());
+            rtl::OUString aRowTxt(pBuf, (rCellName.GetBuffer() + nLen - pBuf));
+            if (!aColTxt.isEmpty() && !aRowTxt.isEmpty())
             {
                 sal_Int32 nColIdx = 0;
-                sal_Int32 nLength = aColTxt.Len();
-                for (xub_StrLen i = 0;  i < nLength;  ++i)
+                sal_Int32 nLength = aColTxt.getLength();
+                for (sal_Int32 i = 0;  i < nLength;  ++i)
                 {
                     nColIdx = 52 * nColIdx;
                     if (i < nLength - 1)
                         ++nColIdx;
-                    sal_Unicode cChar = aColTxt.GetBuffer()[i];
+                    sal_Unicode cChar = aColTxt[i];
                     if ('A' <= cChar && cChar <= 'Z')
                         nColIdx = nColIdx + (cChar - 'A');
                     else if ('a' <= cChar && cChar <= 'z')
@@ -374,7 +374,7 @@ void lcl_GetCellPosition( const String &rCellName,
                 }
 
                 rColumn = nColIdx;
-                rRow    = aRowTxt.ToInt32() - 1;    // - 1 because indices ought to be 0 based
+                rRow    = aRowTxt.toInt32() - 1;    // - 1 because indices ought to be 0 based
             }
         }
     }
