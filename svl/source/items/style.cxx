@@ -734,14 +734,19 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
             // Alle Styles umsetzen, deren Parent dieser hier ist
             ChangeParent( p->GetName(), p->GetParent() );
 
-            com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), com::sun::star::uno::UNO_QUERY );
-            if( xComp.is() ) try
-            {
-                xComp->dispose();
-            }
-            catch( com::sun::star::uno::Exception& )
-            {
-            }
+            // #120015# Do not dispose, the removed StyleSheet may still be used in
+            // existing SdrUndoAttrObj incarnations. Rely on refcounting for disposal,
+            // this works well under normal conditions (checked breaking and counting
+            // on SfxStyleSheetBase constructors and destructors)
+            //
+            // com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp( static_cast< ::cppu::OWeakObject* >((*aIter).get()), com::sun::star::uno::UNO_QUERY );
+            // if( xComp.is() ) try
+            // {
+            //  xComp->dispose();
+            // }
+            // catch( com::sun::star::uno::Exception& )
+            // {
+            // }
 
             aStyles.erase(aIter);
             Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) );
