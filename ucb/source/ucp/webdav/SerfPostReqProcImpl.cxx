@@ -78,10 +78,6 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
     if ( mpPostData != 0 && mnPostDataLen > 0 )
     {
         body_bkt = SERF_BUCKET_SIMPLE_STRING_LEN( mpPostData, mnPostDataLen, pSerfBucketAlloc );
-        if ( useChunkedEncoding() )
-        {
-            body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
-        }
     }
 
     // create serf request
@@ -90,6 +86,7 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
                                                                  getPathStr(),
                                                                  body_bkt,
                                                                  serf_request_get_alloc( inSerfRequest ) );
+    handleChunkedEncoding(req_bkt, mnPostDataLen);
 
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
@@ -97,15 +94,6 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
     setRequestHeaders( hdrs_bkt );
 
     // request specific header fields
-    if ( body_bkt != 0 )
-    {
-        if ( useChunkedEncoding() )
-        {
-            serf_bucket_headers_set( hdrs_bkt, "Transfer-Encoding", "chunked");
-        }
-        serf_bucket_headers_set( hdrs_bkt, "Content-Length",
-                                 rtl::OUStringToOString( rtl::OUString::valueOf( (sal_Int32)mnPostDataLen ), RTL_TEXTENCODING_UTF8 ) );
-    }
     if ( mpContentType != 0 )
     {
         serf_bucket_headers_set( hdrs_bkt, "Content-Type", mpContentType );

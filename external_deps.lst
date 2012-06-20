@@ -109,9 +109,10 @@ if ( true )
     URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if ( true )
-    MD5 = 3b179ed18f65c43141528aa6d2440db4
-    name = serf-1.0.0.tar.bz2
-    URL1 = $(SVN_TRUNK)$(MD5)-$(name)
+    SHA1 = 231af70b7567a753b49df4216743010c193884b7
+    name = serf-1.1.0.tar.bz2
+    URL1 = http://serf.googlecode.com/files/serf-1.1.0.tar.bz2
+    URL2 = http://svn.apache.org/repos/asf/!svn/bc/1351976/incubator/ooo/trunk/ext_sources/$(SHA1)-$(name)
 
 if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
     MD5 = 3c219630e4302863a9a83d0efde889db

@@ -31,9 +31,10 @@
     replace the definition of global variables and variables earlier in the same
     block.
     Some variables have special names:
-    - MD5 is the expected MD5 sum of the library tarball.
+    - MD5 is the expected MD5 checksum of the library tarball.
+    - SHA1 is the expected SHA1 checksum of the library tarball.
     - URL1 to URL9 specify from where to download the tarball.  The urls are tried in order.
-      The first successful download (download completed and MD5 sum match) stops the iteration.
+      The first successful download (download completed and checksum match) stops the iteration.
 
     Expressions are explained below in the comment of EvaluateExpression().
 
@@ -62,6 +63,7 @@ use File::Path;
 use File::Basename;
 use LWP::UserAgent;
 use Digest::MD5;
+use Digest::SHA;
 use URI;
 
 my $Debug = 1;
@@ -155,10 +157,15 @@ sub ProcessLastBlock ()
     else
     {
         my $name = GetValue('name');
+        my $checksum = GetChecksum();
 
-        if ( ! IsPresent($name, GetValue('MD5')))
+        if ( ! defined $checksum)
         {
-            AddDownloadRequest($name);
+            die "no checksum given for $name";
+        }
+        elsif ( ! IsPresent($name, $checksum))
+        {
+            AddDownloadRequest($name, $checksum);
         }
     }
 }
@@ -166,15 +173,15 @@ sub ProcessLastBlock ()
 
 
 
-=head3 AddDownloadRequest($name)
+=head3 AddDownloadRequest($name, $checksum)
 
     Add a request for downloading the library $name to @Missing.
     Collect all available URL[1-9] variables as source URLs.
 
 =cut
-sub AddDownloadRequest ($)
+sub AddDownloadRequest ($$)
 {
-    my $name = shift;
+    my ($name, $checksum) = @_;
 
     print "adding download request for $name\n";
 
@@ -188,7 +195,36 @@ sub AddDownloadRequest ($)
         push @$urls, SubstituteVariables($url);
     }
 
-    push @Missing, [$name, GetValue('MD5'), $urls];
+    push @Missing, [$name, $checksum, $urls];
+}
+
+
+
+
+=head3 GetChecksum()
+
+    When either MD5 or SHA1 are variables in the current scope then return
+    a reference to a hash with two entries:
+        'type' is either 'MD5' or 'SHA1', the type or algorithm of the checksum,
+        'value' is the actual checksum
+    Otherwise undef is returned.
+
+=cut
+sub GetChecksum()
+{
+    my $checksum = GetValue("MD5");
+    if (defined $checksum && $checksum ne "")
+    {
+        return { 'type' => 'MD5', 'value' => $checksum };
+    }
+    elsif (defined ($checksum=GetValue("SHA1")) && $checksum ne "")
+    {
+        return { 'type' => 'SHA1', 'value' => $checksum };
+    }
+    else
+    {
+        return undef;
+    }
 }
 
 
@@ -334,38 +370,52 @@ sub EvaluateTerm ($)
 
 
 
-=head IsPresent($name,$given_md5)
+=head IsPresent($name, $given_checksum)
 
     Check if an external library tar ball with the basename $name already
     exists in the target directory TARFILE_LOCATION.  The basename is
-    prefixed with the given MD5 sum.
-    If the file exists then its MD5 sum is compare with the given MD5 sum.
+    prefixed with the MD5 or SHA1 checksum.
+    If the file exists then its checksum is compared to the given one.
 
 =cut
 sub IsPresent ($$)
 {
-    my $name = shift;
-    my $given_md5 = shift;
+    my ($name, $given_checksum) = @_;
 
-    my $filename = File::Spec->catfile($ENV{'TARFILE_LOCATION'}, $given_md5."-".$name);
+    my $filename = File::Spec->catfile($ENV{'TARFILE_LOCATION'}, $given_checksum->{'value'}."-".$name);
+    return 0 unless -f $filename;
 
-    return 0 if ! -f $filename;
-
-    # File exists.  Check if its md5 sum is correct.
-    my $md5 = Digest::MD5->new();
-    open my $in, $filename;
-    $md5->addfile($in);
-
-    if ($given_md5 ne $md5->hexdigest())
+    # File exists.  Check if its checksum is correct.
+    my $checksum;
+    if ($given_checksum->{'type'} eq "MD5")
     {
-        # MD5 check sum does not match.  Delete the file.
-        print "$name exists, but md5 does not match => deleting\n";
+        my $md5 = Digest::MD5->new();
+        open my $in, $filename;
+        $md5->addfile($in);
+        $checksum = $md5->hexdigest();
+    }
+    elsif ($given_checksum->{'type'} eq "SHA1")
+    {
+        my $sha1 = Digest::SHA->new("1");
+        open my $in, $filename;
+        $sha1->addfile($in);
+        $checksum = $sha1->hexdigest();
+    }
+    else
+    {
+        die "unsupported checksum type (not MD5 or SHA1)";
+    }
+
+    if ($given_checksum->{'value'} ne $checksum)
+    {
+        # Checksum does not match.  Delete the file.
+        print "$name exists, but checksum does not match => deleting\n";
         #unlink($filename);
         return 0;
     }
     else
     {
-        print "$name exists, md5 is OK\n";
+        printf("%s exists, %s checksum is OK\n", $name, $given_checksum->{'type'});
         return 1;
     }
 }
@@ -377,8 +427,8 @@ sub IsPresent ($$)
 
     Download a set of files specified by @Missing.
 
-    For http URLs there may be an optional MD5 checksum.  If it is present then downloaded
-    files that do not match that checksum are an error and lead to abortion of the current process.
+    For http URLs there may be an optional checksum.  If it is present then downloaded
+    files that do not match that checksum lead to abortion of the current process.
     Files that have already been downloaded are not downloaded again.
 
 =cut
@@ -401,11 +451,11 @@ sub Download ()
     # Download the missing files.
     for my $item (@Missing)
     {
-        my ($name, $given_md5, $urls) = @$item;
+        my ($name, $checksum, $urls) = @$item;
 
         foreach my $url (@$urls)
         {
-            last if DownloadFile($given_md5."-".$name, $url, $given_md5);
+            last if DownloadFile($checksum->{'value'}."-".$name, $url, $checksum);
         }
     }
 }
@@ -413,17 +463,17 @@ sub Download ()
 
 
 
-=head3 DownloadFile($name,$URL,$md5sum)
+=head3 DownloadFile($name,$URL,$checksum)
 
     Download a single external library tarball.  It origin is given by $URL.
-    Its destination is $(TARFILE_LOCATION)/$md5sum-$name.
+    Its destination is $(TARFILE_LOCATION)/$checksum-$name.
 
 =cut
 sub DownloadFile ($$$)
 {
     my $name = shift;
     my $URL = shift;
-    my $md5sum = shift;
+    my $checksum = shift;
 
     my $filename = File::Spec->catfile($ENV{'TARFILE_LOCATION'}, $name);
 
@@ -433,8 +483,22 @@ sub DownloadFile ($$$)
     open my $out, ">$temporary_filename";
     binmode($out);
 
-    # Prepare md5
-    my $md5 = Digest::MD5->new();
+    # Prepare checksum
+    my $digest;
+    if (defined $checksum && $checksum->{'type'} eq "SHA1")
+    {
+        # Use SHA1 only when explicitly requested (by the presence of a "SHA1=..." line.)
+        $digest = Digest::SHA->new("1");
+    }
+    elsif ( ! defined $checksum || $checksum->{'type'} eq "MD5")
+    {
+        # Use MD5 when explicitly requested or when no checksum type is given.
+        $digest = Digest::MD5->new();
+    }
+    else
+    {
+        die "checksum type ".$checksum->{'type'}." is not supported";
+    }
 
     # Download the extension.
     my $agent = LWP::UserAgent->new();
@@ -452,41 +516,47 @@ sub DownloadFile ($$$)
                             {
                                 $last_was_redirect = 0;
                                 # Throw away the data we got so far.
-                                $md5->reset();
+                                $checksum->reset();
                                 close $out;
                                 open $out, ">$temporary_filename";
                                 binmode($out);
                             }
                             my($response,$agent,$h,$data)=@_;
                             print $out $data;
-                            $md5->add($data);
+                            $digest->add($data);
                         });
 
     my $response = $agent->get($URL);
     close $out;
 
-    # When download was successfull then check the md5 checksum and rename the .part file
+    # When download was successfull then check the checksum and rename the .part file
     # into the actual extension name.
     if ($response->is_success())
     {
-        my $file_md5 = $md5->hexdigest();
-        if (defined $md5sum && length($md5sum)==32)
+        my $file_checksum = $digest->hexdigest();
+        if (defined $checksum)
         {
-            if ($md5sum eq $file_md5)
+            if ($checksum->{'value'} eq $file_checksum)
             {
-                print "md5 is OK\n";
+                printf("%s checksum is OK\n", $checksum->{'type'});
             }
             else
             {
                 unlink($temporary_filename);
-                print "    md5 does not match ($file_md5 instead of $md5sum)\n";
+                printf("    %s checksum does not match (%s instead of %s)\n",
+                       $file_checksum,
+                       $checksum->{'value'},
+                       $checksum->{'type'});
                 return 0;
             }
         }
         else
         {
-            printf("md5 not given, md5 of file is %s\n", $file_md5);
-            $filename = File::Spec->catfile($ENV{'TARFILE_LOCATION'}, $file_md5 . "-" . $name);
+            # The datafile does not contain a checksum to match against.
+            # Display the one that was calculated for the downloaded file so that
+            # it can be integrated manually into the data file.
+            printf("checksum not given, md5 of file is %s\n", $file_checksum);
+            $filename = File::Spec->catfile($ENV{'TARFILE_LOCATION'}, $file_checksum . "-" . $name);
         }
 
         rename($temporary_filename, $filename) || die "can not rename $temporary_filename to $filename";

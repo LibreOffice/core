@@ -2045,11 +2045,11 @@ File gid_File_Lib_Serf
 	// Looks like the major version number is part of the name, not
 	// part of the suffix.  An error?
 	#ifdef MACOSX
-            Name = STRING(CONCAT6(libserf-1,.0.,SERF_MINOR,.,SERF_MICRO,UNXSUFFIX));
+            Name = STRING(CONCAT8(libserf-,SERF_MAJOR,.,SERF_MINOR,.,SERF_MICRO,.0,UNXSUFFIX));
 	#elif FREEBSD
             Name = STRING(CONCAT3(libserf-1,UNXSUFFIX,.0));
 	#else
-            Name = STRING(CONCAT6(libserf-1,UNXSUFFIX,.0.,SERF_MINOR,.,SERF_MICRO));
+            Name = STRING(CONCAT3(libserf-1,UNXSUFFIX,.0.0.0));
 	#endif
     #endif
     PACKED_LIB_FILE_BODY;

@@ -138,10 +138,6 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                     rtl::OUString::createFromAscii( PROPFIND_TRAILER );
         body_bkt = SERF_BUCKET_SIMPLE_STRING( rtl::OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
                                               pSerfBucketAlloc );
-        if ( useChunkedEncoding() )
-        {
-            body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
-        }
     }
 
     // create serf request
@@ -150,23 +146,25 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                                                  getPathStr(),
                                                                  body_bkt,
                                                                  pSerfBucketAlloc );
+    handleChunkedEncoding(req_bkt, aBodyText.getLength());
 
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    // general header fields provided by caller
-    setRequestHeaders( hdrs_bkt );
-
-    // request specific header fields
-    serf_bucket_headers_set( hdrs_bkt, "Depth", mDepthStr );
-    if ( body_bkt != 0 && aBodyText.getLength() > 0 )
+    if (hdrs_bkt != NULL)
     {
-        if ( useChunkedEncoding() )
+        // general header fields provided by caller
+        setRequestHeaders( hdrs_bkt );
+
+        // request specific header fields
+        serf_bucket_headers_set( hdrs_bkt, "Depth", mDepthStr );
+        if (hdrs_bkt!=NULL && body_bkt != 0 && aBodyText.getLength() > 0 )
         {
-            serf_bucket_headers_set( hdrs_bkt, "Transfer-Encoding", "chunked");
+            serf_bucket_headers_set( hdrs_bkt, "Content-Type", "application/xml" );
         }
-        serf_bucket_headers_set( hdrs_bkt, "Content-Type", "application/xml" );
-        serf_bucket_headers_set( hdrs_bkt, "Content-Length",
-                                 rtl::OUStringToOString( rtl::OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
+    }
+    else
+    {
+        OSL_ASSERT("Headers Bucket missing");
     }
 
     return req_bkt;
