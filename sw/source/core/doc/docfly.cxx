@@ -261,7 +261,8 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, sal_Bool bNew
                     "Missing FlyInCnt-Hint." );
         OSL_ENSURE( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == &rFmt,
                     "Wrong TxtFlyCnt-Hint." );
-        const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
+        if (pHnt)
+            const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
         // They are disconnected. We now have to destroy the attribute.
         pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
