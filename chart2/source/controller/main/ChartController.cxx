@@ -581,8 +581,9 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
         xMBroadcaster->addModifyListener( this );
 #endif
 
-    //select chart area per default:
-    select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
+    // #i119999# Do not do this per default to allow the user to deselect the chart OLE with a single press to ESC
+    // select chart area per default:
+    // select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
 
     uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
     if( xFact.is())
