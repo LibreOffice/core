@@ -1523,12 +1523,17 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
 
     if ( mbSkipEmptyPages )
     {
-        maIsPageEmpty.resize( mrSh.GetPageCount() );
+        maPageNumberMap.resize( mrSh.GetPageCount() );
         const SwPageFrm* pCurrPage =
             static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );
-        for ( size_t i = 0, n = maIsPageEmpty.size(); i < n && pCurrPage; ++i )
+        sal_Int32 nPageNumber = 0;
+        for ( size_t i = 0, n = maPageNumberMap.size(); i < n && pCurrPage; ++i )
         {
-            maIsPageEmpty[i] = pCurrPage->IsEmptyPage();
+            if ( pCurrPage->IsEmptyPage() )
+                maPageNumberMap[i] = -1;
+            else
+                maPageNumberMap[i] = nPageNumber++;
+
             pCurrPage = static_cast<const SwPageFrm*>( pCurrPage->GetNext() );
         }
     }
@@ -2150,7 +2155,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect ) const
 {
     // Document page number.
-    const sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rRect );
+    sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rRect );
     if ( nPageNumOfRect < 0 )
         return -1;
 
@@ -2158,6 +2163,10 @@ sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect ) co
     sal_Int32 nRet = -1;
     if ( mpRangeEnum )
     {
+        if ( mbSkipEmptyPages )
+            // Map the page number to the range without empty pages.
+            nPageNumOfRect = maPageNumberMap[ nPageNumOfRect ];
+
         if ( mpRangeEnum->hasValue( nPageNumOfRect ) )
         {
             sal_Int32 nOutputPageNum = 0;
@@ -2165,18 +2174,12 @@ sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect ) co
             StringRangeEnumerator::Iterator aEnd  = mpRangeEnum->end();
             for ( ; aIter != aEnd; ++aIter )
             {
-                bool bSkipThisPage = mbSkipEmptyPages &&
-                    static_cast<size_t>( *aIter ) < maIsPageEmpty.size() &&
-                    maIsPageEmpty[*aIter];
-                if ( !bSkipThisPage )
+                if ( *aIter == nPageNumOfRect )
                 {
-                    if ( *aIter == nPageNumOfRect )
-                    {
-                        nRet = nOutputPageNum;
-                        break;
-                    }
-                    ++nOutputPageNum;
+                    nRet = nOutputPageNum;
+                    break;
                 }
+                ++nOutputPageNum;
             }
         }
     }
@@ -2185,9 +2188,9 @@ sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect ) co
         if ( mbSkipEmptyPages )
         {
             sal_Int32 nOutputPageNum = 0;
-            for ( size_t i = 0; i < maIsPageEmpty.size(); ++i )
+            for ( size_t i = 0; i < maPageNumberMap.size(); ++i )
             {
-                if ( !maIsPageEmpty[i] )
+                if ( maPageNumberMap[i] >= 0 ) // is not empty?
                 {
                     if ( i == static_cast<size_t>( nPageNumOfRect ) )
                     {
@@ -2218,13 +2221,17 @@ void SwEnhancedPDFExportHelper::CalcOutputPageNums( const SwRect& rRect,
     rPageNums.clear();
 
     // Document page number.
-    const sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rRect );
+    sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rRect );
     if ( nPageNumOfRect < 0 )
         return;
 
     // What will be the page numbers of page nPageNumOfRect in the output pdf?
     if ( mpRangeEnum )
     {
+        if ( mbSkipEmptyPages )
+            // Map the page number to the range without empty pages.
+            nPageNumOfRect = maPageNumberMap[ nPageNumOfRect ];
+
         if ( mpRangeEnum->hasValue( nPageNumOfRect ) )
         {
             sal_Int32 nOutputPageNum = 0;
@@ -2232,15 +2239,9 @@ void SwEnhancedPDFExportHelper::CalcOutputPageNums( const SwRect& rRect,
             StringRangeEnumerator::Iterator aEnd  = mpRangeEnum->end();
             for ( ; aIter != aEnd; ++aIter )
             {
-                bool bSkipThisPage = mbSkipEmptyPages &&
-                    static_cast<size_t>( *aIter ) < maIsPageEmpty.size() &&
-                    maIsPageEmpty[*aIter];
-                if ( !bSkipThisPage )
-                {
-                    if ( *aIter == nPageNumOfRect )
-                        rPageNums.push_back( nOutputPageNum );
-                    ++nOutputPageNum;
-                }
+                if ( *aIter == nPageNumOfRect )
+                    rPageNums.push_back( nOutputPageNum );
+                ++nOutputPageNum;
             }
         }
     }
@@ -2249,9 +2250,9 @@ void SwEnhancedPDFExportHelper::CalcOutputPageNums( const SwRect& rRect,
         if ( mbSkipEmptyPages )
         {
             sal_Int32 nOutputPageNum = 0;
-            for ( size_t i = 0; i < maIsPageEmpty.size(); ++i )
+            for ( size_t i = 0; i < maPageNumberMap.size(); ++i )
             {
-                if ( !maIsPageEmpty[i] )
+                if ( maPageNumberMap[i] >= 0 ) // is not empty?
                 {
                     if ( i == static_cast<size_t>( nPageNumOfRect ) )
                     {
