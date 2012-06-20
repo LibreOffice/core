@@ -220,7 +220,7 @@ static void BuildSmPropertyList()
         pSmProps[ 3 ].num_vals  = 1;
         pSmProps[ 3 ].vals      = new SmPropValue;
         pSmProps[ 3 ].vals->value   = strdup( aUser.getStr() );
-        pSmProps[ 3 ].vals->length  = strlen( (char *)pSmProps[ 3 ].vals->value )+1;
+        pSmProps[ 3 ].vals->length  = rtl_str_getLength( (char *)pSmProps[ 3 ].vals->value )+1;
 
         pSmProps[ 4 ].name      = const_cast<char*>(SmRestartStyleHint);
         pSmProps[ 4 ].type      = const_cast<char*>(SmCARD8);
