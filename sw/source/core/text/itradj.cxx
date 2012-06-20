@@ -45,22 +45,22 @@
 using namespace ::com::sun::star;
 
 /*************************************************************************
- *                    SwTxtAdjuster::FormatBlock()
+ * SwTxtAdjuster::FormatBlock()
  *************************************************************************/
 
 void SwTxtAdjuster::FormatBlock( )
 {
-    // In der letzten Zeile gibt's keinen Blocksatz.
-    // Und bei Tabulatoren aus Tradition auch nicht.
-    // 7701: wenn Flys im Spiel sind, geht's weiter
+    // Block format does not apply to the last line.
+    // And for tabs it doesn't exist out of tradition
+    // If we have Flys we continue.
 
     const SwLinePortion *pFly = 0;
 
     sal_Bool bSkip = !IsLastBlock() &&
         nStart + pCurr->GetLen() >= GetInfo().GetTxt().Len();
 
-    // ????: mehrzeilige Felder sind fies: wir muessen kontrollieren,
-    // ob es noch andere Textportions im Absatz gibt.
+    // Multi-line fields are tricky, because we need to check whether there are
+    // any other text portions in the paragraph.
     if( bSkip )
     {
         const SwLineLayout *pLay = pCurr->GetNext();
@@ -90,21 +90,21 @@ void SwTxtAdjuster::FormatBlock( )
         {
             const SwLinePortion *pTmpFly = NULL;
 
-            // 7701: beim letzten Fly soll Schluss sein
+            // End at the last Fly
             const SwLinePortion *pPos = pCurr->GetFirstPortion();
             while( pPos )
             {
-                // Ich suche jetzt den letzten Fly, hinter dem noch Text ist:
+                // Look for the last Fly which has text coming after it:
                 if( pPos->IsFlyPortion() )
-                    pTmpFly = pPos; // Ein Fly wurde gefunden
+                    pTmpFly = pPos; // Found a Fly
                 else if ( pTmpFly && pPos->InTxtGrp() )
                 {
-                    pFly = pTmpFly; // Ein Fly mit nachfolgendem Text!
+                    pFly = pTmpFly; // A Fly with follow-up text!
                     pTmpFly = NULL;
                 }
                 pPos = pPos->GetPortion();
             }
-            // 8494: Wenn keiner gefunden wurde, ist sofort Schluss!
+            // End if we didn't find one
             if( !pFly )
             {
                 if( IsLastCenter() )
@@ -123,7 +123,7 @@ void SwTxtAdjuster::FormatBlock( )
 }
 
 /*************************************************************************
- *                    lcl_CheckKashidaPositions()
+ * lcl_CheckKashidaPositions()
  *************************************************************************/
 bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr,
                                 xub_StrLen& nKashidas, xub_StrLen& nGluePortion )
@@ -201,7 +201,7 @@ bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIte
 }
 
 /*************************************************************************
- *                    lcl_CheckKashidaWidth()
+ * lcl_CheckKashidaWidth()
  *************************************************************************/
 bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr, xub_StrLen& nKashidas,
                              xub_StrLen& nGluePortion, const long nGluePortionWidth, long& nSpaceAdd )
@@ -261,11 +261,11 @@ bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& 
 }
 
 /*************************************************************************
- *                    SwTxtAdjuster::CalcNewBlock()
+ * SwTxtAdjuster::CalcNewBlock()
  *
- * CalcNewBlock() darf erst nach CalcLine() gerufen werden !
- * Aufgespannt wird immer zwischen zwei RandPortions oder FixPortions
- * (Tabs und Flys). Dabei werden die Glues gezaehlt und ExpandBlock gerufen.
+ * CalcNewBlock() must only be called _after_ CalcLine()!
+ * We always span between two RandPortions or FixPortions (Tabs and Flys).
+ * We count the Glues and call ExpandBlock.
  *************************************************************************/
 
 void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
@@ -301,8 +301,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
         }
     }
 
-    // Nicht vergessen:
-    // CalcRightMargin() setzt pCurrent->Width() auf die Zeilenbreite !
+    // Do not forget: CalcRightMargin() sets pCurrent->Width() to the line width!
     if (!bSkipKashida)
         CalcRightMargin( pCurrent, nReal );
 
@@ -417,7 +416,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 }
 
 /*************************************************************************
- *                    SwTxtAdjuster::CalcKanaAdj()
+ * SwTxtAdjuster::CalcKanaAdj()
  *************************************************************************/
 
 SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
@@ -435,8 +434,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     SwTwips nX = 0;
     sal_Bool bNoCompression = sal_False;
 
-    // Nicht vergessen:
-    // CalcRightMargin() setzt pCurrent->Width() auf die Zeilenbreite !
+    // Do not forget: CalcRightMargin() sets pCurrent->Width() to the line width!
     CalcRightMargin( pCurrent, 0 );
 
     SwLinePortion* pPos = pCurrent->GetPortion();
@@ -564,7 +562,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 }
 
 /*************************************************************************
- *                    SwTxtAdjuster::CalcRightMargin()
+ * SwTxtAdjuster::CalcRightMargin()
  *************************************************************************/
 
 SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
@@ -582,8 +580,7 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     else
     {
         nRealWidth = GetLineWidth();
-        // Fuer jeden FlyFrm, der in den rechten Rand hineinragt,
-        // wird eine FlyPortion angelegt.
+        // For each FlyFrm extending into the right margin, we create a FlyPortion.
         const long nLeftMar = GetLeftMargin();
         SwRect aCurrRect( nLeftMar + nPrtWidth, Y() + nRealHeight - nLineHeight,
                           nRealWidth - nPrtWidth, nLineHeight );
@@ -608,40 +605,36 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     if( long( nPrtWidth )< nRealWidth )
         pRight->PrtWidth( KSHORT( nRealWidth - nPrtWidth ) );
 
-    // pCurrent->Width() wird auf die reale Groesse gesetzt,
-    // da jetzt die MarginPortions eingehaengt sind.
-    // Dieser Trick hat wundersame Auswirkungen.
-    // Wenn pCurrent->Width() == nRealWidth ist, dann wird das gesamte
-    // Adjustment implizit ausgecontert. GetLeftMarginAdjust() und
-    // IsBlocksatz() sind der Meinung, sie haetten eine mit Zeichen
-    // gefuellte Zeile.
+    // pCurrent->Width() is set to the real size, because we attach the
+    // MarginPortions.
+    // This trick gives miraculous results:
+    // If pCurrent->Width() == nRealWidth, then the adjustment gets overruled
+    // implicitly. GetLeftMarginAdjust() and IsJustified() think they have a
+    // line filled with chars.
 
     pCurrent->PrtWidth( KSHORT( nRealWidth ) );
     return pRight;
 }
 
 /*************************************************************************
- *                    SwTxtAdjuster::CalcFlyAdjust()
+ * SwTxtAdjuster::CalcFlyAdjust()
  *************************************************************************/
 
 void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 {
-    // 1) Es wird ein linker Rand eingefuegt:
+    // 1) We insert a left margin:
     SwMarginPortion *pLeft = pCurrent->CalcLeftMargin();
-    SwGluePortion *pGlue = pLeft;       // die letzte GluePortion
+    SwGluePortion *pGlue = pLeft; // the last GluePortion
 
 
-    // 2) Es wird ein rechter Rand angehaengt:
-    // CalcRightMargin berechnet auch eventuelle Ueberlappungen mit
-    // FlyFrms.
+    // 2) We attach a right margin:
+    // CalcRightMargin also calculates a possible overlap with FlyFrms.
     CalcRightMargin( pCurrent );
 
     SwLinePortion *pPos = pLeft->GetPortion();
     xub_StrLen nLen = 0;
 
-    // Wenn wir nur eine Zeile vorliegen haben und die Textportion zusammen
-    // haengend ist und wenn zentriert wird, dann ...
-
+    // If we only have one line, the text portion is consecutive and we center, then ...
     sal_Bool bComplete = 0 == nStart;
     const sal_Bool bTabCompat = GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
     sal_Bool bMultiTab = sal_False;
@@ -660,12 +653,10 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
                 ((SwGluePortion*)pPos)->MoveAllGlue( pGlue );
             else
             {
-                // Eine schlaue Idee von MA:
-                // Fuer die erste Textportion wird rechtsbuendig eingestellt,
-                // fuer die letzte linksbuendig.
-
-                // Die erste Textportion kriegt den ganzen Glue
-                // Aber nur, wenn wir mehr als eine Zeile besitzen.
+                // We set the first text portion to right-aligned and the last one
+                // to left-aligned.
+                // The first text portion gets the whole Glue, but only if we have
+                // more than one line.
                 if( bComplete && GetInfo().GetTxt().Len() == nLen )
                     ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
                 else
@@ -674,8 +665,8 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
                     {
                         if( pLeft == pGlue )
                         {
-                            // Wenn es nur einen linken und rechten Rand gibt,
-                            // dann teilen sich die Raender den Glue.
+                            // If we only have a left and right margin, the
+                            // margins share the Glue.
                             if( nLen + pPos->GetLen() >= pCurrent->GetLen() )
                                 ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
                             else
@@ -683,7 +674,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
                         }
                         else
                         {
-                            // Die letzte Textportion behaelt sein Glue
+                         // The last text portion retains its Glue.
                          if( !pPos->IsMarginPortion() )
                               ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
                          }
@@ -706,7 +697,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 }
 
 /*************************************************************************
- *                  SwTxtAdjuster::CalcAdjLine()
+ * SwTxtAdjuster::CalcAdjLine()
  *************************************************************************/
 
 void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
@@ -736,12 +727,12 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 }
 
 /*************************************************************************
- *                    SwTxtAdjuster::CalcFlyPortion()
+ * SwTxtAdjuster::CalcFlyPortion()
  *
- * Die Berechnung hat es in sich: nCurrWidth geibt die Breite _vor_ dem
- * aufaddieren des Wortes das noch auf die Zeile passt! Aus diesem Grund
- * stimmt die Breite der FlyPortion auch, wenn die Blockierungssituation
- * bFirstWord && !WORDFITS eintritt.
+ * This is a quite complicated calculation: nCurrWidth is the width _before_
+ * adding the word, that still fits onto the line! For this reason the FlyPortion's
+ * width is still correct if we get a deadlock-situation of:
+ * bFirstWord && !WORDFITS
  *************************************************************************/
 
 SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
@@ -758,7 +749,7 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
     if ( GetTxtFrm()->IsVertical() )
         GetTxtFrm()->SwitchHorizontalToVertical( aLineVert );
 
-    // aFlyRect ist dokumentglobal !
+    // aFlyRect is document-global!
     SwRect aFlyRect( aTxtFly.GetFrm( aLineVert ) );
 
     if ( GetTxtFrm()->IsRightToLeft() )
@@ -766,35 +757,33 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
     if ( GetTxtFrm()->IsVertical() )
         GetTxtFrm()->SwitchVerticalToHorizontal( aFlyRect );
 
-    // Wenn ein Frame ueberlappt, wird eine Portion eroeffnet.
+    // If a Frame overlapps we open a Portion
     if( aFlyRect.HasArea() )
     {
-        // aLocal ist framelokal
+        // aLocal is frame-local
         SwRect aLocal( aFlyRect );
         aLocal.Pos( aLocal.Left() - GetLeftMargin(), aLocal.Top() );
         if( nCurrWidth > aLocal.Left() )
             aLocal.Left( nCurrWidth );
 
-        // Wenn das Rechteck breiter als die Zeile ist, stutzen
-        // wir es ebenfalls zurecht.
+        // If the rect is wider than the line, we adjust it to the right size
         KSHORT nLocalWidth = KSHORT( aLocal.Left() + aLocal.Width() );
         if( nRealWidth < long( nLocalWidth ) )
             aLocal.Width( nRealWidth - aLocal.Left() );
         GetInfo().GetParaPortion()->SetFly( sal_True );
         pFlyPortion = new SwFlyPortion( aLocal );
         pFlyPortion->Height( KSHORT( rCurrRect.Height() ) );
-        // Die Width koennte kleiner sein als die FixWidth, daher:
+        // The Width could be smaller than the FixWidth, thus:
         pFlyPortion->AdjFixWidth();
     }
     return pFlyPortion;
 }
 
 /*************************************************************************
- *                SwTxtPainter::_CalcDropAdjust()
+ * SwTxtPainter::_CalcDropAdjust()
+ * Drops and Adjustment
+ * CalcDropAdjust is called at the end by Format() if needed
  *************************************************************************/
-
-// 6721: Drops und Adjustment
-// CalcDropAdjust wird ggf. am Ende von Format() gerufen.
 
 void SwTxtAdjuster::CalcDropAdjust()
 {
@@ -803,25 +792,25 @@ void SwTxtAdjuster::CalcDropAdjust()
 
     const MSHORT nLineNumber = GetLineNr();
 
-    // 1) Dummies ueberspringen
+    // 1) Skip dummies
     Top();
 
     if( !pCurr->IsDummy() || NextLine() )
     {
-        // Erst adjustieren.
+        // Adjust first
         GetAdjusted();
 
         SwLinePortion *pPor = pCurr->GetFirstPortion();
 
-        // 2) Sicherstellen, dass die DropPortion dabei ist.
-        // 3) pLeft: Die GluePor vor der DropPor
+        // 2) Make sure we include the ropPortion
+        // 3) pLeft is the GluePor preceding the DropPor
         if( pPor->InGlueGrp() && pPor->GetPortion()
               && pPor->GetPortion()->IsDropPortion() )
         {
             const SwLinePortion *pDropPor = (SwDropPortion*) pPor->GetPortion();
             SwGluePortion *pLeft = (SwGluePortion*) pPor;
 
-            // 4) pRight: Die GluePor hinter der DropPor suchen
+            // 4) pRight: Find the GluePor coming after the DropPor
             pPor = pPor->GetPortion();
             while( pPor && !pPor->InFixMargGrp() )
                 pPor = pPor->GetPortion();
@@ -830,7 +819,7 @@ void SwTxtAdjuster::CalcDropAdjust()
                                     (SwGluePortion*) pPor : 0;
             if( pRight && pRight != pLeft )
             {
-                // 5) nMinLeft berechnen. Wer steht am weitesten links?
+                // 5) Calculate nMinLeft. Who is the most to left?
                 const KSHORT nDropLineStart =
                     KSHORT(GetLineStart()) + pLeft->Width() + pDropPor->Width();
                 KSHORT nMinLeft = nDropLineStart;
@@ -838,7 +827,7 @@ void SwTxtAdjuster::CalcDropAdjust()
                 {
                     if( NextLine() )
                     {
-                        // Erst adjustieren.
+                        // Adjust first
                         GetAdjusted();
 
                         pPor = pCurr->GetFirstPortion();
@@ -856,11 +845,11 @@ void SwTxtAdjuster::CalcDropAdjust()
                     }
                 }
 
-                // 6) Den Glue zwischen pLeft und pRight neu verteilen.
+                // 6) Distribute the Glue anew between pLeft and pRight
                 if( nMinLeft < nDropLineStart )
                 {
-                    // Glue wird immer von pLeft nach pRight abgegeben,
-                    // damit der Text nach links wandert.
+                    // The Glue is always passed from pLeft to pRight, so that
+                    // the text moves to the left.
                     const short nGlue = nDropLineStart - nMinLeft;
                     if( !nMinLeft )
                         pLeft->MoveAllGlue( pRight );
@@ -880,7 +869,7 @@ void SwTxtAdjuster::CalcDropAdjust()
 }
 
 /*************************************************************************
- *                SwTxtAdjuster::CalcDropRepaint()
+ * SwTxtAdjuster::CalcDropRepaint()
  *************************************************************************/
 
 void SwTxtAdjuster::CalcDropRepaint()
