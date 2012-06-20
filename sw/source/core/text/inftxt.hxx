@@ -65,7 +65,7 @@ struct SwMultiCreator;
 class SwMultiPortion;
 class SwWrongList;
 
-/* Minimum: Prozentwert fuers kernen */
+/* Minimum percentage for kerning */
 #define MINKERNPERCENT 5
 #define ARROW_WIDTH 200
 #define DIR_LEFT2RIGHT 0
@@ -80,10 +80,9 @@ class SwWrongList;
 #endif
 
 /*************************************************************************
- *                      class SwLineInfo
+ * class SwLineInfo
+ * Respects the attribute LineSpace when calculating the Height/Ascent
  *************************************************************************/
-
-// Beruecksichtigt das Attribut LineSpace bei der Hoehen/Ascentberechnung.
 
 class SwLineInfo
 {
@@ -133,7 +132,7 @@ public:
 };
 
 /*************************************************************************
- *                      class SwTxtInfo
+ * class SwTxtInfo
  *************************************************************************/
 
 class SwTxtInfo
@@ -141,7 +140,7 @@ class SwTxtInfo
     // Implementation in txthyph.cxx
     friend void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot );
     SwParaPortion *pPara;
-    xub_StrLen nTxtStart;                 // TxtOfst bei Follows
+    xub_StrLen nTxtStart;                 // TxtOfst for Follows
 
 protected:
     inline SwTxtInfo() : pPara(0) {}
@@ -157,7 +156,7 @@ public:
 };
 
 /*************************************************************************
- *                      class SwTxtSizeInfo
+ * class SwTxtSizeInfo
  *************************************************************************/
 
 typedef ::std::map< sal_uLong, sal_IntPtr > SwTxtPortionMap;
@@ -188,8 +187,8 @@ protected:
     sal_Bool bOnWin     : 1;
     sal_Bool bNotEOL    : 1;
     sal_Bool bURLNotify : 1;
-    sal_Bool bStopUnderFlow : 1;// Underflow gestoppt z.B. von einer FlyPortion
-    sal_Bool bFtnInside : 1;    // the current line contains a footnote
+    sal_Bool bStopUnderFlow : 1; // Underflow was stopped e.g. by a FlyPortion
+    sal_Bool bFtnInside : 1;     // the current line contains a footnote
     sal_Bool bOtherThanFtnInside : 1; // the current line contains another portion than a footnote portion.
                                       // needed for checking keep together of footnote portion with previous portion
     sal_Bool bMulti : 1;        // inside a multiportion
@@ -314,7 +313,7 @@ public:
 
     friend SvStream &operator<<( SvStream &rOS, const SwTxtSizeInfo &rInf );
 
-// 7780: Keine Bullets beim Symbol-Zeichensatz!
+    // No Bullets for the symbol font!
     inline sal_Bool IsNoSymbol() const
     { return RTL_TEXTENCODING_SYMBOL != pFnt->GetCharSet( pFnt->GetActual() ); }
 
@@ -374,7 +373,7 @@ public:
 };
 
 /*************************************************************************
- *                      class SwTxtPaintInfo
+ * class SwTxtPaintInfo
  *************************************************************************/
 
 class SwTxtPaintInfo : public SwTxtSizeInfo
@@ -383,11 +382,11 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
     const SwWrongList *pGrammarCheckList;
     const SwWrongList *pSmartTags;    // SMARTTAGS
     std::vector<long>* pSpaceAdd;
-    const SvxBrushItem *pBrushItem; // Fuer den Hintergrund
-    SwRect      aItemRect;          // ebenfalls fuer den Hintergrund
-    SwTxtFly    aTxtFly;    // FlyFrm-Berechnung
-    Point       aPos;       // Ausgabeposition
-    SwRect      aPaintRect; // Original Ausgaberechteck (aus Layout-Paint)
+    const SvxBrushItem *pBrushItem; // For the background
+    SwRect      aItemRect;          // Also for the background
+    SwTxtFly    aTxtFly;    // Calculate the FlyFrm
+    Point       aPos;       // Paint position
+    SwRect      aPaintRect; // Original paint rect (from Layout paint)
 
     MSHORT nSpaceIdx;
     void _DrawText( const XubString &rText, const SwLinePortion &rPor,
@@ -496,7 +495,7 @@ public:
 };
 
 /*************************************************************************
- *                      class SwTxtFormatInfo
+ * class SwTxtFormatInfo
  *************************************************************************/
 
 class SwTxtFormatInfo : public SwTxtPaintInfo
@@ -504,60 +503,60 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     // temporary arguments for hyphenation
     com::sun::star::beans::PropertyValues   aHyphVals;
 
-    SwLineLayout    *pRoot;       // die Root der aktuellen Zeile (pCurr)
-    SwLinePortion   *pLast;       // die letzte Portion
-    SwFlyPortion    *pFly;        // die nachfolgende FlyPortion
-    SwFldPortion    *pLastFld;    // umgebrochenes Feld
-    SwLinePortion   *pUnderFlow;  // Unterlaufsituation: letzte Portion
-    SwLinePortion   *pRest;       // Rest ist der Beginn der naechsten Zeile
+    SwLineLayout    *pRoot;       // The Root of the current line (pCurr)
+    SwLinePortion   *pLast;       // The last Portion
+    SwFlyPortion    *pFly;        // The following FlyPortion
+    SwFldPortion    *pLastFld;    // Wrapped Field
+    SwLinePortion   *pUnderFlow;  // Underflow: Last Portion
+    SwLinePortion   *pRest;       // The Rest is the start of the next Line
 
-    SwTabPortion    *pLastTab;     // die _letzte_ TabPortion
+    SwTabPortion    *pLastTab;     // The _last_ TabPortion
 
-    xub_StrLen nSoftHyphPos;    // SoftHyphPos fuer Hyphenate
-    xub_StrLen nHyphStart;      // TxtPos, an der die interakt.Tr.z.Z. steht
-    xub_StrLen nHyphWrdStart;   // gefundene Wort-Position
-    xub_StrLen nHyphWrdLen;     // gefundene Wort-Laenge
-    xub_StrLen nLineStart;      // aktueller Zeilenbeginn im rTxt
+    xub_StrLen nSoftHyphPos;    // SoftHyphPos forr Hyphenation
+    xub_StrLen nHyphStart;      // TxtPos at which the interactive hyphen is at the moment
+    xub_StrLen nHyphWrdStart;   // Position of the found word
+    xub_StrLen nHyphWrdLen;     // Length of the found word
+    xub_StrLen nLineStart;      // Current line start in rTxt
     xub_StrLen nUnderScorePos;  // enlarge repaint if underscore has been found
     // #i34348# Changed type from sal_uInt16 to SwTwips
-    SwTwips nLeft;          // linker Rand
-    SwTwips nRight;           // rechter Rand
-    SwTwips nFirst;           // EZE
-    KSHORT nRealWidth;      // "echte" Zeilenbreite
-    KSHORT nWidth;          // "virtuelle" Zeilenbreite
-    KSHORT nLineHeight;     // endgueltige Hoehe nach CalcLine
-    KSHORT nLineNettoHeight;   // line height without spacing
-    KSHORT nForcedLeftMargin;   // Verschiebung des linken Rands wg. Rahmen
+    SwTwips nLeft;              // Left margin
+    SwTwips nRight;             // Right margin
+    SwTwips nFirst;             // EZE
+    KSHORT nRealWidth;          // "real" line width
+    KSHORT nWidth;              // "virtual" line width
+    KSHORT nLineHeight;         // Final height after CalcLine
+    KSHORT nLineNettoHeight;    // line height without spacing
+    KSHORT nForcedLeftMargin;   // Shift of left margin due to frame
 
     sal_Int16  nMinLeading;     // minimum number of chars before hyphenation point
     sal_Int16  nMinTrailing;    // minimum number of chars after hyphenation point
     sal_Int16  nMinWordLength;  // minimum length of word to be hyphenated
 
-    sal_Bool bFull   : 1;      // Zeile ist voll
-    sal_Bool bFtnDone  : 1;    // Ftn bereits formatiert
-    sal_Bool bErgoDone : 1;    // ErgoDone bereits formatiert
-    sal_Bool bNumDone  : 1;    // bNumDone bereits formatiert
-    sal_Bool bArrowDone : 1;    // Pfeil nach links bei gescrollten Absaetzen
-    sal_Bool bStop   : 1;      // Sofort abbrechen, Zeile verwerfen.
-    sal_Bool bNewLine  : 1;    // Noch eine weitere Zeile formatieren.
-    sal_Bool bShift  : 1;      // Positionsaend.: Repaint bis auf Weiteres
-    sal_Bool bUnderFlow : 1;       // Kontext: UnderFlow() ?
-    sal_Bool bInterHyph: 1;    // interaktive Trennung ?
-    sal_Bool bAutoHyph : 1;    // automatische Trennung ?
-    sal_Bool bDropInit : 1;    // DropWidth einstellen.
+    sal_Bool bFull   : 1;      // Line is full
+    sal_Bool bFtnDone  : 1;    // Ftn already formatted
+    sal_Bool bErgoDone : 1;    // ErgoDone already formatted
+    sal_Bool bNumDone  : 1;    // bNumDone already formatted
+    sal_Bool bArrowDone : 1;   // Arrow to the left for scrolling paragraphs
+    sal_Bool bStop   : 1;      // Cancel immediately, discarding the line
+    sal_Bool bNewLine  : 1;    // Format another line
+    sal_Bool bShift  : 1;      // Position change: Repaint until further notice
+    sal_Bool bUnderFlow : 1;   // Context: UnderFlow() ?
+    sal_Bool bInterHyph: 1;    // Interactive hyphenation?
+    sal_Bool bAutoHyph : 1;    // Automatic hyphenation?
+    sal_Bool bDropInit : 1;    // Set DropWidth
     sal_Bool bQuick  : 1;      // FormatQuick()
-    sal_Bool bNoEndHyph  : 1;  // Trennung am Zeilenende abgeschaltet wg. MaxHyphens
-    sal_Bool bNoMidHyph  : 1;  // Trennung vor Flies abgeschaltet wg. MaxHyphens
-    sal_Bool bIgnoreFly: 1;    // FitToContent ignoriert Flies
+    sal_Bool bNoEndHyph  : 1;  // Switch off hyphenation at the line end (due to MaxHyphens)
+    sal_Bool bNoMidHyph  : 1;  // Switch off hyphenation before flys (due to MaxHyphens)
+    sal_Bool bIgnoreFly: 1;    // FitToContent ignores flys
     sal_Bool bFakeLineStart: 1; // String has been replaced by field portion
                                 // info structure only pretends that we are at
                                 // the beginning of a line
     sal_Bool bTabOverflow;      // Tabs are expanding after the end margin
 
-    xub_Unicode   cTabDecimal;  // das _aktuelle_ Dezimalzeichen
-    xub_Unicode   cHookChar;    // fuer Tabs in Feldern etc.
-    sal_uInt8   nMaxHyph;       // max. Zeilenanz. aufeinanderfolg. Trenn.
-    sal_Bool   bTestFormat;     // Testformatierung aus WouldFit, keine Benachrichtigungen etc.
+    xub_Unicode   cTabDecimal;  // the current decimal delimiter
+    xub_Unicode   cHookChar;    // For tabs in fields etc.
+    sal_uInt8   nMaxHyph;       // Max. line count of followup hyphenations
+    sal_Bool   bTestFormat;     // Test formatting from WouldFit, no notification etc.
 
     // Hyphenating ...
     sal_Bool InitHyph( const sal_Bool bAuto = sal_False );
@@ -579,10 +578,10 @@ public:
     inline void Width( const KSHORT nNew ) { nWidth = nNew; }
            void Init();
 
-    // liefert die erste veraenderte Position im Absatz zurueck
+    // Returns the first changed position of the paragraph
     inline xub_StrLen GetReformatStart() const;
 
-    // Raender
+    // Margins
     inline SwTwips Left() const { return nLeft; }
     inline void Left( const SwTwips nNew ) { nLeft = nNew; }
     inline SwTwips Right() const { return nRight; }
@@ -682,11 +681,11 @@ public:
     inline sal_Bool IsArrowDone() const { return bArrowDone; }
     inline void SetArrowDone( const sal_Bool bNew ) { bArrowDone = bNew; }
 
-    // Fuer SwTxtPortion::Hyphenate
+    // For SwTxtPortion::Hyphenate
     inline sal_Bool IsSoftHyph( const xub_StrLen nPos ) const;
     sal_Bool ChgHyph( const sal_Bool bNew );
 
-    // Soll die Trennhilfe angeschmissen werden?
+    // Should the hyphenate helper be discarded?
     sal_Bool IsHyphenate() const;
     inline void SetHyphStart( const xub_StrLen nNew ) { nHyphStart = nNew; }
     inline xub_StrLen GetHyphStart() const { return nHyphStart; }
@@ -697,7 +696,7 @@ public:
     inline xub_StrLen GetUnderScorePos() const { return nUnderScorePos; }
     inline void SetUnderScorePos( xub_StrLen nNew ) { nUnderScorePos = nNew; }
 
-    // ruft HyphenateWord() des Hyphenators
+    // Calls HyphenateWord() of Hyphenator
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord >
                 HyphWord( const String &rTxt, const sal_uInt16 nMinTrail );
@@ -707,17 +706,17 @@ public:
     sal_Bool CheckFtnPortion( SwLineLayout* pCurr )
         { return IsFtnInside() && _CheckFtnPortion( pCurr ); }
 
-    // Dropcaps vom SwTxtFormatter::CTOR gerufen.
+    // Dropcaps called by SwTxtFormatter::CTOR
     const SwFmtDrop *GetDropFmt() const;
 
-    // setzt die FormatInfo wieder in den Anfangszustand
+    // Resets the FormatInfo back to its original state
     void Reset( const SwTxtFrm *pFrame); // , const sal_Bool bAll );
 
     // Sets the last SwKernPortion as pLast, if it is followed by empty portions
     sal_Bool LastKernPortion();
 
-    // Sucht ab nIdx bis nEnd nach Tabs, TabDec, TXTATR und BRK.
-    // Return: gefundene Position, setzt ggf. cHookChar
+    // Looks for tabs, TabDec, TXTATR and BRK from nIdx until nEnd.
+    // Return: Position; sets cHookChar if necessary
     xub_StrLen ScanPortionEnd( const xub_StrLen nStart, const xub_StrLen nEnd );
 
     friend SvStream &operator<<( SvStream &rOS, const SwTxtFormatInfo &rInf );
@@ -727,14 +726,13 @@ public:
 };
 
 /*************************************************************************
- *                      class SwTxtSlot
- *************************************************************************/
-
-// Fuer die Textersetzung und Restaurierung der SwTxtSizeInfo.
-// Die Art und Weise ist etwas kriminell, rInf ist const und wird
-// trotzdem veraendert. Da rInf im DTOR wieder restauriert wird,
-// ist dies zulaessig, es handelt sich um ein "logisches const".
-
+ * class SwTxtSlot
+ * For the text replacement and restoration of SwTxtSizeInfo.
+ * The way this is done is a bit of a hack: Although rInf is const we change it
+ * anyway.
+ * Because rInf is restorated again in the DTOR, we can do this.
+ * You could call it a "logical const", if you wish.
+*************************************************************************/
 class SwTxtSlot
 {
     XubString aTxt;
@@ -748,8 +746,8 @@ class SwTxtSlot
 protected:
     SwTxtSizeInfo *pInf;
 public:
-    // Der Ersetzungstring kommt wahlweise aus der Portion via GetExpText()
-    // oder aus dem char Pointer pCh, wenn dieser ungleich NULL ist.
+    // The replacement string originates either from the portion via GetExpText()
+    // or from the char * pCh, if it is not NULL
     SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor, bool bTxtLen,
                bool bExgLists, const sal_Char *pCh = NULL );
     ~SwTxtSlot();
@@ -757,7 +755,7 @@ public:
 };
 
 /*************************************************************************
- *                      class SwFontSave
+ * class SwFontSave
  *************************************************************************/
 
 class SwFontSave
@@ -772,7 +770,7 @@ public:
 };
 
 /*************************************************************************
- *                      class SwDefFontSave
+ * class SwDefFontSave
  *************************************************************************/
 
 class SwDefFontSave
@@ -787,7 +785,7 @@ public:
 };
 
 /*************************************************************************
- *                       Inline-Implementierungen SwTxtSizeInfo
+ * Inline implementations of SwTxtSizeInfo
  *************************************************************************/
 
 inline KSHORT SwTxtSizeInfo::GetAscent() const
@@ -816,7 +814,7 @@ inline SwPosSize SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI,
 }
 
 /*************************************************************************
- *                       Inline-Implementierungen SwTxtPaintInfo
+ * Inline implementations of SwTxtPaintInfo
  *************************************************************************/
 
 inline SwTwips SwTxtPaintInfo::GetPaintOfst() const
@@ -855,7 +853,7 @@ inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
 }
 
 /*************************************************************************
- *                       Inline-Implementierungen SwTxtFormatInfo
+ * Inline implementations of SwTxtFormatInfo
  *************************************************************************/
 
 inline xub_StrLen SwTxtFormatInfo::GetReformatStart() const

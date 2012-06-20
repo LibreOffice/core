@@ -258,11 +258,10 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     }
     else
     {
-        //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
+        // Access via StarONE. We do not need a Shell or an active one.
         if ( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
         {
-            //in Ermangelung eines Besseren kann hier ja wohl nur noch das
-            //AppWin genommen werden?
+            // We can only pick the AppWin here? (there's nothing better to pick?)
             pOut = GetpApp()->GetDefaultDevice();
         }
         else
@@ -294,10 +293,10 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     //
     pOpt = pVsh ?
            pVsh->GetViewOptions() :
-           SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) ); //Options vom Module wg. StarONE
+           SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) ); // Options from Module, due to StarONE
 
-    // bURLNotify wird gesetzt, wenn MakeGraphic dies vorbereitet
-    // TODO: Aufdr?seln
+    // bURLNotify is set if MakeGraphic prepares it
+    // TODO: Unwind
     bURLNotify = pNoteURL && !bOnWin;
 
     SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() &&
@@ -355,10 +354,9 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
 
 void SwTxtSizeInfo::SelectFont()
 {
-    // 8731: Der Weg muss ueber ChgPhysFnt gehen, sonst geraet
-    // der FontMetricCache durcheinander. In diesem Fall steht pLastMet
-    // auf dem alten Wert.
-    // Falsch: GetOut()->SetFont( GetFont()->GetFnt() );
+     // The path needs to go via ChgPhysFnt or the FontMetricCache gets confused.
+     // In this case pLastMet has it's old value.
+     // Wrong: GetOut()->SetFont( GetFont()->GetFnt() );
     GetFont()->Invalidate();
     GetFont()->ChgPhysFnt( pVsh, *GetOut() );
 }
@@ -393,7 +391,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
     const SwScriptInfo& rSI =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
-    // in some cases, compression is not allowed or surpressed for
+    // in some cases, compression is not allowed or suppressed for
     // performance reasons
     sal_uInt16 nComp =( SW_CJK == GetFont()->GetActual() &&
                     rSI.CountCompChg() &&
@@ -522,19 +520,16 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
         const SvxBrushItem* pItem;
         SwRect aOrigBackRect;
 
-        /// OD 21.08.2002
-        ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
-        ///     - see implementation in /core/layout/paintfrm.cxx
-        /// OD 21.08.2002 #99657#
-        ///     There is a background color, if there is a background brush and
-        ///     its color is *not* "no fill"/"auto fill".
+        // Consider, that [GetBackgroundBrush(...)] can set <pCol>
+        // See implementation in /core/layout/paintfrm.cxx
+        // There is a background color, if there is a background brush and
+        // its color is *not* "no fill"/"auto fill".
         if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, sal_False ) )
         {
             if ( !pCol )
                 pCol = &pItem->GetColor();
 
-            /// OD 30.08.2002 #99657#
-            /// determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
+            // Determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
             if ( pCol->GetColor() == COL_TRANSPARENT)
                 pCol = NULL;
         }
@@ -600,7 +595,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     if ( ! rPor.InFldGrp() )
         pSI = &GetParaPortion()->GetScriptInfo();
 
-    // in some cases, kana compression is not allowed or surpressed for
+    // in some cases, kana compression is not allowed or suppressed for
     // performance reasons
     sal_uInt16 nComp = 0;
     if ( ! IsMulti() )
@@ -626,7 +621,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     if ( nSpaceAdd )
     {
         xub_StrLen nCharCnt;
-        // #i41860# Thai justified alignemt needs some
+        // #i41860# Thai justified alignment needs some
         // additional information:
         aDrawInf.SetNumberOfBlanks( rPor.InTxtGrp() ?
                                     static_cast<const SwTxtPortion&>(rPor).GetSpaceCnt( *this, nCharCnt ) :
@@ -650,8 +645,8 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 
     if( GetTxtFly()->IsOn() )
     {
-        // aPos muss als TopLeft vorliegen, weil die ClipRects sonst
-        // nicht berechnet werden koennen.
+        // aPos needs to be the TopLeft, because we cannot calculate the
+        // ClipRects otherwise
         const Point aPoint( aPos.X(), aPos.Y() - rPor.GetAscent() );
         const Size aSize( rPor.Width(), rPor.Height() );
         aDrawInf.SetPos( aPoint );
@@ -757,8 +752,8 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
  * lcl_DrawSpecial
  *
  * Draws a special portion, e.g., line break portion, tab portion.
- * rPor - The portion
- * rRect - The rectangle surrounding the character
+ * rPor     - The portion
+ * rRect    - The rectangle surrounding the character
  * pCol     - Specify a color for the character
  * bCenter  - Draw the character centered, otherwise left aligned
  * bRotate  - Rotate the character if character rotation is set
@@ -1052,7 +1047,7 @@ void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked)
 
 void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 {
-    OSL_ENSURE( OnWin(), "SwTxtPaintInfo::DrawBackground: printer polution ?" );
+    OSL_ENSURE( OnWin(), "SwTxtPaintInfo::DrawBackground: printer pollution ?" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect );
@@ -1229,7 +1224,7 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
         pVal[1].Value <<= nMinTrailing;
     }
     else {
-        OSL_FAIL( "unxpected size of sequence" );
+        OSL_FAIL( "unexpected size of sequence" );
     }
 }
 
@@ -1294,12 +1289,11 @@ void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const sal_Bool b
 
 /*************************************************************************
  * SwTxtFormatInfo::IsHyphenate()
- * Trennen oder nicht trennen, das ist hier die Frage:
- * - in keinem Fall trennen, wenn der Hyphenator ERROR zurueckliefert,
- * oder wenn als Sprache NOLANGUAGE eingestellt ist.
- * - ansonsten immer trennen, wenn interaktive Trennung vorliegt
- * - wenn keine interakt. Trennung, dann nur trennen, wenn im ParaFmt
- * automatische Trennung eingestellt ist.
+ * If the Hyphenator returns ERROR or the language is set to NOLANGUAGE
+ * we do not hyphenate.
+ * Else, we always hyphenate if we do interactive hyphenation.
+ * If we do not do interactive hyphenation, we only hyphenate if ParaFmt is
+ * set to automatic hyphenation.
  *************************************************************************/
 sal_Bool SwTxtFormatInfo::IsHyphenate() const
 {
@@ -1321,7 +1315,7 @@ sal_Bool SwTxtFormatInfo::IsHyphenate() const
 
 /*************************************************************************
  * SwTxtFormatInfo::GetDropFmt()
- * Dropcaps vom SwTxtFormatter::CTOR gerufen.
+ * Dropcaps called by the SwTxtFormatter::CTOR
 *************************************************************************/
 
 const SwFmtDrop *SwTxtFormatInfo::GetDropFmt() const
@@ -1335,7 +1329,7 @@ const SwFmtDrop *SwTxtFormatInfo::GetDropFmt() const
 
 void SwTxtFormatInfo::Init()
 {
-    // Nicht initialisieren: pRest, nLeft, nRight, nFirst, nRealWidth
+    // Not initialized: pRest, nLeft, nRight, nFirst, nRealWidth
     X(0);
     bArrowDone = bFull = bFtnDone = bErgoDone = bNumDone = bNoEndHyph =
         bNoMidHyph = bStop = bNewLine = bUnderFlow = bTabOverflow = sal_False;
@@ -1534,7 +1528,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
         }
     }
 
-    // #130210# Check if character *behind* the portion has
+    // Check if character *behind* the portion has
     // to become the hook:
     if ( i == nEnd && i < GetTxt().Len() && bNumFound )
     {
@@ -1592,7 +1586,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
     else
         bOn = pPor->GetExpTxt( *pNew, aTxt );
 
-    // Der Text wird ausgetauscht...
+    // Teh text is replaced ...
     if( bOn )
     {
         pInf = (SwTxtSizeInfo*)pNew;
@@ -1700,7 +1694,7 @@ SwFontSave::~SwFontSave()
 {
     if( pFnt )
     {
-        // SwFont zurueckstellen
+        // Reset SwFont
         pFnt->Invalidate();
         pInf->SetFont( pFnt );
         if( pIter )
@@ -1755,7 +1749,7 @@ SwDefFontSave::~SwDefFontSave()
     if( pFnt )
     {
         delete pNewFnt;
-        // SwFont zurueckstellen
+        // Reset SwFont
         pFnt->Invalidate();
         pInf->SetFont( pFnt );
     }
@@ -1768,7 +1762,7 @@ sal_Bool SwTxtFormatInfo::ChgHyph( const sal_Bool bNew )
     {
         bAutoHyph = bNew;
         InitHyph( bNew );
-        // 5744: Sprache am Hyphenator einstellen.
+        // Set language in the Hyphenator
         if( pFnt )
             pFnt->ChgPhysFnt( pVsh, *pOut );
     }

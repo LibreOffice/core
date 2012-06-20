@@ -126,14 +126,14 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
     }
     MSHORT nVirtPageNum = 0;
     if( bLineNum )
-    {   /* initialisiert die Member, die bei Zeilennumerierung notwendig sind:
+        {/* Initializes the Members necessary for line numbering:
 
-            nDivider,   wie oft ist ein Teilerstring gewuenscht, 0 == nie;
-            nX,         X-Position der Zeilennummern;
-            pFnt,       der Font der Zeilennummern;
-            nLineNr,    die erste Zeilennummer;
-        bLineNum wird ggf.wieder auf sal_False gesetzt, wenn die Numerierung sich
-        komplett ausserhalb des Paint-Rechtecks aufhaelt. */
+            nDivider,   how often do we want a substring; 0 == never
+            nX,         line number's x position
+            pFnt,       line number's font
+            nLineNr,    the first line number
+            bLineNum is set back to sal_False if the numbering is completely
+            outside of the paint rect */
         nDivider = rLineInf.GetDivider().Len() ? rLineInf.GetDividerCountBy() : 0;
         nX = pFrm->Frm().Left();
         SwCharFmt* pFmt = rLineInf.GetCharFmt( const_cast<IDocumentStylePoolAccess&>(*pFrm->GetNode()->getIDocumentStylePoolAccess()) );
@@ -195,11 +195,11 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
 
 void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed )
 {
-    //Zeilennummer ist staerker als der Teiler
+  // Line number is stronger than the divider
     const XubString aTmp( HasNumber() ? rLineInf.GetNumType().GetNumStr( nLineNr )
                                 : rLineInf.GetDivider() );
 
-    // get script type of line numbering:
+    // Get script type of line numbering:
     pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmp, 0 ) );
 
     SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, aTmp.Len() );
@@ -340,7 +340,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             aLayoutModeModifier.Modify( sal_False );
 
             SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
-            sal_Bool bNoDummy = !aLine.GetNext(); // Nur eine Leerzeile!
+            sal_Bool bNoDummy = !aLine.GetNext(); // Only one empty line!
 
             while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
             {
@@ -431,8 +431,8 @@ SwRect SwTxtFrm::Paint()
         aRet += Frm().Pos();
     else
     {
-        // AMA: Wir liefern jetzt mal das richtige Repaintrechteck zurueck,
-        //      d.h. als linken Rand den berechneten PaintOfst!
+        // We return the right paint rect. Use the calculated PaintOfst as the
+        // left margin
         SwRepaint *pRepaint = GetPara()->GetRepaint();
         long l;
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
@@ -602,8 +602,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
 
-        //Kann gut sein, dass mir der IdleCollector mir die gecachten
-        //Informationen entzogen hat.
+        // It can happen that the IdleCollector withdrew my cached information
         if( !HasPara() )
         {
             OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
@@ -623,25 +622,23 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             }
         }
 
-        // Waehrend wir painten, wollen wir nicht gestoert werden.
-        // Aber erst hinter dem Format() !
+        // We don't want to be interrupted while painting.
+        // Do that after thr Format()!
         SwTxtFrmLocker aLock((SwTxtFrm*)this);
 
-        //Hier wird ggf. nur der Teil des TxtFrm ausgegeben, der sich veraendert
-        //hat und der in dem Bereich liegt, dessen Ausgabe angefordert wurde.
-        //Man kann jetzt auf die Idee kommen, dass der Bereich rRect ausgegeben
-        //werden _muss_ obwohl rRepaint gesetzt ist; in der Tat kann dieses
-        //Problem nicht formal vermieden werden. Gluecklicherweise koennen
-        //wir davon ausgehen, dass rRepaint immer dann leer ist, wenn der Frm
-        //komplett gepainted werden muss.
+        // We only paint the part of the TxtFrm which changed, is within the
+        // range and was requested to paint.
+        // One could think that the area rRect _needs_ to be painted, although
+        // rRepaint is set. Indeed, we cannot avoid this problem from a formal
+        // perspective. Luckily we can assume rRepaint to be empty when we need
+        // paint the while Frm.
         SwTxtLineAccess aAccess( (SwTxtFrm*)this );
         SwParaPortion *pPara = aAccess.GetPara();
 
         SwRepaint &rRepaint = *(pPara->GetRepaint());
 
-        // Das Recycling muss abgeschaltet werden, wenn wir uns im
-        // FlyCntFrm befinden, weil ein DrawRect fuer die Retusche der
-        // Zeile aufgerufen wird.
+        // Switch off recycling when in the FlyCntFrm.
+        // A DrawRect is called for repainting the line anyways.
         if( rRepaint.GetOfst() )
         {
             const SwFlyFrm *pFly = FindFlyFrm();
@@ -649,8 +646,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 rRepaint.SetOfst( 0 );
         }
 
-        // Hier holen wir uns den String fuer die Ausgabe, besonders
-        // die Laenge ist immer wieder interessant.
+        // Ge the String for painting. The length is of special interest.
 
         // Rectangle
         OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );
@@ -671,8 +667,8 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         aInf.GetTxtFly()->SetTopRule();
 
         SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
-        // Eine Optimierung, die sich lohnt: wenn kein freifliegender Frame
-        // in unsere Zeile ragt, schaltet sich der SwTxtFly einfach ab:
+        // Optimization: if no free flying Frm overlaps into our line, the
+        // SwTxtFly just switches off
         aInf.GetTxtFly()->Relax();
 
         OutputDevice* pOut = aInf.GetOut();
@@ -680,9 +676,9 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
         SwSaveClip aClip( bOnWin || IsUndersized() ? pOut : 0 );
 
-        // Ausgabeschleife: Fuer jede Zeile ... (die noch zu sehen ist) ...
-        // rRect muss angepasst werden (Top+1, Bottom-1), weil der Iterator
-        // die Zeilen nahtlos aneinanderfuegt.
+        // Output loop: For each Line ... (which is still visible) ...
+        //   adapt rRect (Top + 1, Bottom - 1)
+        // Because the Iterator attaches the Lines without a gap to each other
         aLine.TwipsToLine( rRect.Top() + 1 );
         long nBottom = rRect.Bottom();
 
@@ -702,7 +698,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             } while( aLine.Next() && aLine.Y() <= nBottom );
         }
 
-        // Einmal reicht:
+        // Once is enough:
         if( aLine.IsPaintDrop() )
             aLine.PaintDropPortion();
 
