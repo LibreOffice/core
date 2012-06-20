@@ -269,6 +269,7 @@ apr_status_t SerfSession::setupSerfConnection( apr_socket_t * inAprSocket,
         */
         serf_ssl_server_cert_chain_callback_set(
             serf_bucket_ssl_decrypt_context_get(tmpInputBkt),
+            NULL,
             Serf_CertificateChainValidation,
             this);
         serf_ssl_set_hostname( serf_bucket_ssl_decrypt_context_get( tmpInputBkt ),
@@ -366,7 +367,7 @@ namespace {
 
 apr_status_t SerfSession::verifySerfCertificateChain (
     int,
-    const char** pCertificateChainBase64Encoded,
+    const serf_ssl_certificate_t * const * pCertificateChainBase64Encoded,
     int nCertificateChainLength)
 {
     // Check arguments.
@@ -411,9 +412,13 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     }
 
     // Decode the server certificate.
+    const char* sBase64EncodedServerCertificate (
+        serf_ssl_cert_export(
+            pCertificateChainBase64Encoded[0],
+            getAprPool()));
     uno::Reference< security::XCertificate > xServerCertificate(
         xSecurityEnv->createCertificateFromAscii(
-            OUString::createFromAscii(pCertificateChainBase64Encoded[0])));
+            OUString::createFromAscii(sBase64EncodedServerCertificate)));
     if ( ! xServerCertificate.is())
         return SERF_SSL_CERT_UNKNOWN_FAILURE;
 
@@ -454,9 +459,13 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     std::vector< uno::Reference< security::XCertificate > > aChain;
     for (int nIndex=1; nIndex<nCertificateChainLength; ++nIndex)
     {
+        const char* sBase64EncodedCertificate (
+            serf_ssl_cert_export(
+                pCertificateChainBase64Encoded[nIndex],
+                getAprPool()));
         uno::Reference< security::XCertificate > xCertificate(
             xSecurityEnv->createCertificateFromAscii(
-                OUString::createFromAscii(pCertificateChainBase64Encoded[nIndex])));
+                OUString::createFromAscii(sBase64EncodedCertificate)));
         if ( ! xCertificate.is())
             return SERF_SSL_CERT_UNKNOWN_FAILURE;
         aChain.push_back(xCertificate);

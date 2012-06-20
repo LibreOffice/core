@@ -20,6 +20,14 @@
 #include "SerfRequestProcessorImpl.hxx"
 #include "webdavuseragent.hxx"
 
+namespace
+{
+// Define a magic value that is used by serf to reset chunked
+// encoding.  The value definition is not supported by serf, hence the
+// definition here.
+static const apr_int64_t SERF_UNKNOWN_LENGTH (-1);
+}
+
 namespace http_dav_ucp
 {
 
@@ -49,6 +57,27 @@ bool SerfRequestProcessorImpl::useChunkedEncoding() const
 {
     return mbUseChunkedEncoding;
 }
+
+
+void SerfRequestProcessorImpl::handleChunkedEncoding (
+    serf_bucket_t* pRequestBucket,
+    apr_int64_t nLength) const
+{
+    if (pRequestBucket != NULL)
+    {
+        if (useChunkedEncoding())
+        {
+            // Activate chunked encoding.
+            serf_bucket_request_set_CL(pRequestBucket, SERF_UNKNOWN_LENGTH);
+        }
+        else
+        {
+            // Deactivate chunked encoding by setting the length.
+            serf_bucket_request_set_CL(pRequestBucket, nLength);
+        }
+    }
+}
+
 
 void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeaderBucket )
 {

@@ -49,10 +49,6 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
     if ( mpData != 0 && mnDataLen > 0 )
     {
         body_bkt = SERF_BUCKET_SIMPLE_STRING_LEN( mpData, mnDataLen, pSerfBucketAlloc );
-        if ( useChunkedEncoding() )
-        {
-            body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
-        }
     }
 
     // create serf request
@@ -61,23 +57,7 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
                                                                  getPathStr(),
                                                                  body_bkt,
                                                                  serf_request_get_alloc( inSerfRequest ) );
-
-    // set request header fields
-    serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    // general header fields provided by caller
-    setRequestHeaders( hdrs_bkt );
-
-    // request specific header fields
-    if ( body_bkt != 0 )
-    {
-        if ( useChunkedEncoding() )
-        {
-            serf_bucket_headers_set( hdrs_bkt, "Transfer-Encoding", "chunked");
-        }
-        serf_bucket_headers_set( hdrs_bkt, "Content-Length",
-                                 OUStringToOString( OUString::valueOf( (sal_Int32)mnDataLen ), RTL_TEXTENCODING_UTF8 ) );
-    }
-
+    handleChunkedEncoding(req_bkt, mnDataLen);
 
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
