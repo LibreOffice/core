@@ -47,6 +47,13 @@ public:
 
     void activateChunkedEncoding();
 
+    /** Turn chunked encoding on or off, dependeing on the result of
+        useChunkedEncoding().
+    */
+    void handleChunkedEncoding (
+        serf_bucket_t* pRequestBucket,
+        apr_int64_t nLength) const;
+
 protected:
     void setRequestHeaders( serf_bucket_t* inoutSerfHeaderBucket );
 
