@@ -11872,6 +11872,8 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aValue = OUString::valueOf( m_nSignatureObject );
         rNewWidget.m_aValue += OUString(" 0 R");
         //createDefaultSignatureAppearance( rNewWidget, rSig );
+        // let's add a fake appearance
+        rNewWidget.m_aAppearances[ "N" ][ "Standard" ] = new SvMemoryStream();
     }
 
     // convert to default user space now, since the mapmode may change
