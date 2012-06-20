@@ -124,9 +124,6 @@ public:
     inline FilterBase&  getBaseFilter() const { return mrBaseFilter; }
     /** Returns the filter progress bar. */
     inline SegmentProgressBar& getProgressBar() const { return *mxProgressBar; }
-    /** Returns the formula progress bar. */
-    inline ISegmentProgressBarRef getFormulaProgressBar() const { return mxFormulaProgressBar; }
-    inline void setFormulaProgressBar( ISegmentProgressBarRef rBar ) {  mxFormulaProgressBar = rBar; }
     /** Returns the file type of the current filter. */
     inline FilterType   getFilterType() const { return meFilterType; }
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
@@ -274,7 +271,6 @@ private:
     ExcelFilterBase&    mrExcelBase;            /// Base object for registration of this structure.
     FilterType          meFilterType;           /// File type of the filter.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
-    ISegmentProgressBarRef mxFormulaProgressBar;/// The progress bar for end of import formula processing
     StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
     sal_Int16           mnCurrSheet;            /// Current sheet index in Calc document.
     bool                mbWorkbook;             /// True = multi-sheet file.
@@ -563,7 +559,6 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         //! TODO: localize progress bar text
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), CREATE_OUSTRING( "Saving..." ) ) );
     }
-//    mxFormulaProgressBar =  mxProgressBar->createSegment( 0.4 );
     // filter specific
     switch( getFilterType() )
     {
@@ -636,16 +631,6 @@ FilterType WorkbookHelper::getFilterType() const
 SegmentProgressBar& WorkbookHelper::getProgressBar() const
 {
     return mrBookGlob.getProgressBar();
-}
-
-ISegmentProgressBarRef WorkbookHelper::getFormulaProgressBar() const
-{
-    return mrBookGlob.getFormulaProgressBar();
-}
-
-void WorkbookHelper::setFormulaProgressBar(ISegmentProgressBarRef rFormBar )
-{
-    return mrBookGlob.setFormulaProgressBar( rFormBar );
 }
 
 bool WorkbookHelper::isWorkbookFile() const
