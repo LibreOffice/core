@@ -31,6 +31,7 @@
 #include <tools/solar.h>
 #include <sal/types.h>
 #include "swdllapi.h"
+#include <tools/datetime.hxx>
 
 #include <vector>
 
@@ -69,10 +70,10 @@ SW_DLLPUBLIC sal_Bool UCB_IsReadOnlyFileName( const String& rURL );
     //          pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a SvPtrarr -->
     //                       !! objects must be deleted from the caller!!
-sal_Bool UCB_GetFileListOfFolder( const String& rURL,
+bool UCB_GetFileListOfFolder( const String& rURL,
                                 std::vector<String*>& rList,
                                 const String* pExtension = 0,
-                                SvPtrarr* pDateTimeList = 0 );
+                                std::vector<DateTime*>* pDateTimeList = 0 );
 
     // is the URL an existing file?
 SW_DLLPUBLIC sal_Bool UCB_IsFile( const String& rURL );

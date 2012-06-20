@@ -201,10 +201,10 @@ sal_Bool UCB_IsDirectory( const String& rURL )
     //          pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a SvPtrarr -->
     //                       !! objects must be deleted from the caller!!
-sal_Bool UCB_GetFileListOfFolder( const String& rURL,
+bool UCB_GetFileListOfFolder( const String& rURL,
                                 std::vector<String*>& rList,
                                 const String* pExtension,
-                                SvPtrarr* pDateTimeList )
+                                std::vector< ::DateTime* >* pDateTimeList )
 {
     sal_Bool bOk = sal_False;
     try
@@ -256,9 +256,7 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL,
                                                 aStamp.Minutes,
                                                 aStamp.Seconds,
                                                 aStamp.HundredthSeconds ));
-                                void* p = pDateTime;
-                                pDateTimeList->Insert( p,
-                                                    pDateTimeList->Count() );
+                                pDateTimeList->push_back( pDateTime );
                             }
                         }
 
