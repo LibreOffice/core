@@ -60,7 +60,7 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
 {
     static long aStaticTabs[]=
     {
-        3, 0, 10, 70
+        3, 0, 15, 75
     };
 
     m_aCertPathList.SvxSimpleTable::SetTabs( aStaticTabs );
