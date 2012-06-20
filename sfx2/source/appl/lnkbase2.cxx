@@ -134,12 +134,19 @@ public:
 *************************************************************************/
 
 SvBaseLink::SvBaseLink()
+:   SvRefBase(),
+    xObj(),
+    aLinkName(),
+    pImpl(new BaseLink_Impl()),
+    nObjType(OBJECT_CLIENT_SO),
+    bVisible(sal_True),
+    bSynchron(sal_True),
+    bUseCache(sal_True),
+    bWasLastEditOK(sal_False),
+    pImplData(new ImplBaseLinkData),
+    m_bIsReadOnly(false),
+    m_xInputStreamToLoadFrom()
 {
-    pImpl = new BaseLink_Impl();
-    nObjType = OBJECT_CLIENT_SO;
-    pImplData = new ImplBaseLinkData;
-    bVisible = bSynchron = bUseCache = sal_True;
-    bWasLastEditOK = sal_False;
 }
 
 /************************************************************************
@@ -149,13 +156,19 @@ SvBaseLink::SvBaseLink()
 *************************************************************************/
 
 SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
+:   SvRefBase(),
+    xObj(),
+    aLinkName(),
+    pImpl(new BaseLink_Impl()),
+    nObjType(OBJECT_CLIENT_SO),
+    bVisible(sal_True),
+    bSynchron(sal_True),
+    bUseCache(sal_True),
+    bWasLastEditOK(sal_False),
+    pImplData(new ImplBaseLinkData),
+    m_bIsReadOnly(false),
+    m_xInputStreamToLoadFrom()
 {
-    pImpl = new BaseLink_Impl();
-    nObjType = OBJECT_CLIENT_SO;
-    pImplData = new ImplBaseLinkData;
-    bVisible = bSynchron = bUseCache = sal_True;
-    bWasLastEditOK = sal_False;
-
     // falls es ein Ole-Link wird,
     pImplData->ClientType.nUpdateMode = nUpdateMode;
     pImplData->ClientType.nCntntType = nContentType;
@@ -169,13 +182,19 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
 *************************************************************************/
 
 SvBaseLink::SvBaseLink( const String& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
+:   SvRefBase(),
+    xObj(),
+    aLinkName(rLinkName),
+    pImpl(0),
+    nObjType(nObjectType),
+    bVisible(sal_True),
+    bSynchron(sal_True),
+    bUseCache(sal_True),
+    bWasLastEditOK(sal_False),
+    pImplData(new ImplBaseLinkData),
+    m_bIsReadOnly(false),
+    m_xInputStreamToLoadFrom()
 {
-    bVisible = bSynchron = bUseCache = sal_True;
-    bWasLastEditOK = sal_False;
-    aLinkName = rLinkName;
-    pImplData = new ImplBaseLinkData;
-    nObjType = nObjectType;
-
     if( !pObj )
     {
         DBG_ASSERT( pObj, "Wo ist mein zu linkendes Object" );
@@ -223,18 +242,30 @@ SvBaseLink::~SvBaseLink()
     }
 
     delete pImplData;
+
+    if(pImpl)
+    {
+        delete pImpl;
+    }
 }
 
 IMPL_LINK( SvBaseLink, EndEditHdl, String*, _pNewName )
 {
-    String sNewName;
-    if ( _pNewName )
-        sNewName = *_pNewName;
-    if ( !ExecuteEdit( sNewName ) )
-        sNewName.Erase();
-    bWasLastEditOK = ( sNewName.Len() > 0 );
-    if ( pImpl->m_aEndEditLink.IsSet() )
-        pImpl->m_aEndEditLink.Call( this );
+    if(pImpl)
+    {
+        String sNewName;
+        if ( _pNewName )
+            sNewName = *_pNewName;
+        if ( !ExecuteEdit( sNewName ) )
+            sNewName.Erase();
+        bWasLastEditOK = ( sNewName.Len() > 0 );
+        if ( pImpl->m_aEndEditLink.IsSet() )
+            pImpl->m_aEndEditLink.Call( this );
+    }
+    else
+    {
+        OSL_ENSURE(false, "No pImpl (!)");
+    }
     return 0;
 }
 
@@ -408,35 +439,42 @@ sal_uInt16 SvBaseLink::GetUpdateMode() const
 
 void SvBaseLink::_GetRealObject( sal_Bool bConnect)
 {
-    if( !pImpl->m_pLinkMgr )
-        return;
-
-    DBG_ASSERT( !xObj.Is(), "object already exist" );
-
-    if( OBJECT_CLIENT_DDE == nObjType )
+    if(pImpl)
     {
-        String sServer;
-        if( pImpl->m_pLinkMgr->GetDisplayNames( this, &sServer ) &&
-            sServer == GetpApp()->GetAppName() )        // interner Link !!!
+        if( !pImpl->m_pLinkMgr )
+            return;
+
+        DBG_ASSERT( !xObj.Is(), "object already exist" );
+
+        if( OBJECT_CLIENT_DDE == nObjType )
         {
-            // damit der Internal - Link erzeugt werden kann !!!
-            nObjType = OBJECT_INTERN;
+            String sServer;
+            if( pImpl->m_pLinkMgr->GetDisplayNames( this, &sServer ) &&
+                sServer == GetpApp()->GetAppName() )        // interner Link !!!
+            {
+                // damit der Internal - Link erzeugt werden kann !!!
+                nObjType = OBJECT_INTERN;
+                xObj = pImpl->m_pLinkMgr->CreateObj( this );
+
+                pImplData->ClientType.bIntrnlLnk = sal_True;
+                nObjType = OBJECT_CLIENT_DDE;       // damit wir wissen was es mal war !!
+            }
+            else
+            {
+                pImplData->ClientType.bIntrnlLnk = sal_False;
+                xObj = pImpl->m_pLinkMgr->CreateObj( this );
+            }
+        }
+        else if( OBJECT_CLIENT_SO & nObjType )
             xObj = pImpl->m_pLinkMgr->CreateObj( this );
 
-            pImplData->ClientType.bIntrnlLnk = sal_True;
-            nObjType = OBJECT_CLIENT_DDE;       // damit wir wissen was es mal war !!
-        }
-        else
-        {
-            pImplData->ClientType.bIntrnlLnk = sal_False;
-            xObj = pImpl->m_pLinkMgr->CreateObj( this );
-        }
+        if( bConnect && ( !xObj.Is() || !xObj->Connect( this ) ) )
+            Disconnect();
     }
-    else if( (OBJECT_CLIENT_SO & nObjType) )
-        xObj = pImpl->m_pLinkMgr->CreateObj( this );
-
-    if( bConnect && ( !xObj.Is() || !xObj->Connect( this ) ) )
-        Disconnect();
+    else
+    {
+        OSL_ENSURE(false, "No pImpl (!)");
+    }
 }
 
 sal_uIntPtr SvBaseLink::GetContentType() const
@@ -460,17 +498,34 @@ sal_Bool SvBaseLink::SetContentType( sal_uIntPtr nType )
 
 LinkManager* SvBaseLink::GetLinkManager()
 {
-    return pImpl->m_pLinkMgr;
+    if(pImpl)
+    {
+        return pImpl->m_pLinkMgr;
+    }
+
+    return 0;
 }
 
 const LinkManager* SvBaseLink::GetLinkManager() const
 {
-    return pImpl->m_pLinkMgr;
+    if(pImpl)
+    {
+        return pImpl->m_pLinkMgr;
+    }
+
+    return 0;
 }
 
 void SvBaseLink::SetLinkManager( LinkManager* _pMgr )
 {
-    pImpl->m_pLinkMgr = _pMgr;
+    if(pImpl)
+    {
+        pImpl->m_pLinkMgr = _pMgr;
+    }
+    else
+    {
+        OSL_ENSURE(false, "No pImpl (!)");
+    }
 }
 
 void SvBaseLink::Disconnect()
@@ -496,79 +551,94 @@ void SvBaseLink::DataChanged( const String &, const ::com::sun::star::uno::Any &
 
 void SvBaseLink::Edit( Window* pParent, const Link& rEndEditHdl )
 {
-    pImpl->m_pParentWin = pParent;
-    pImpl->m_aEndEditLink = rEndEditHdl;
-    pImpl->m_bIsConnect = ( xObj.Is() != sal_False );
-    if( !pImpl->m_bIsConnect )
-        _GetRealObject( xObj.Is() );
-
-    bool bAsync = false;
-    Link aLink = LINK( this, SvBaseLink, EndEditHdl );
-
-    if( OBJECT_CLIENT_SO & nObjType && pImplData->ClientType.bIntrnlLnk )
+    if(pImpl)
     {
-        if( pImpl->m_pLinkMgr )
+        pImpl->m_pParentWin = pParent;
+        pImpl->m_aEndEditLink = rEndEditHdl;
+        pImpl->m_bIsConnect = ( xObj.Is() != sal_False );
+        if( !pImpl->m_bIsConnect )
+            _GetRealObject( xObj.Is() );
+
+        bool bAsync = false;
+        Link aLink = LINK( this, SvBaseLink, EndEditHdl );
+
+        if( OBJECT_CLIENT_SO & nObjType && pImplData->ClientType.bIntrnlLnk )
         {
-            SvLinkSourceRef ref = pImpl->m_pLinkMgr->CreateObj( this );
-            if( ref.Is() )
+            if( pImpl->m_pLinkMgr )
             {
-                ref->Edit( pParent, this, aLink );
-                bAsync = true;
+                SvLinkSourceRef ref = pImpl->m_pLinkMgr->CreateObj( this );
+                if( ref.Is() )
+                {
+                    ref->Edit( pParent, this, aLink );
+                    bAsync = true;
+                }
             }
+        }
+        else
+        {
+            xObj->Edit( pParent, this, aLink );
+            bAsync = true;
+        }
+
+        if ( !bAsync )
+        {
+            ExecuteEdit( String() );
+            bWasLastEditOK = sal_False;
+            if ( pImpl->m_aEndEditLink.IsSet() )
+                pImpl->m_aEndEditLink.Call( this );
         }
     }
     else
     {
-        xObj->Edit( pParent, this, aLink );
-        bAsync = true;
-    }
-
-    if ( !bAsync )
-    {
-        ExecuteEdit( String() );
-        bWasLastEditOK = sal_False;
-        if ( pImpl->m_aEndEditLink.IsSet() )
-            pImpl->m_aEndEditLink.Call( this );
+        OSL_ENSURE(false, "No pImpl (!)");
     }
 }
 
 bool SvBaseLink::ExecuteEdit( const String& _rNewName )
 {
-    if( _rNewName.Len() != 0 )
+    if(pImpl)
     {
-        SetLinkSourceName( _rNewName );
-        if( !Update() )
+        if( _rNewName.Len() != 0 )
         {
-            String sApp, sTopic, sItem, sError;
-            pImpl->m_pLinkMgr->GetDisplayNames( this, &sApp, &sTopic, &sItem );
-            if( nObjType == OBJECT_CLIENT_DDE )
+            SetLinkSourceName( _rNewName );
+            if( !Update() )
             {
-                sError = SfxResId( STR_DDE_ERROR );
+                String sApp, sTopic, sItem, sError;
+                pImpl->m_pLinkMgr->GetDisplayNames( this, &sApp, &sTopic, &sItem );
+                if( nObjType == OBJECT_CLIENT_DDE )
+                {
+                    sError = SfxResId( STR_DDE_ERROR );
 
-                sal_uInt16 nFndPos = sError.Search( '%' );
-                if( STRING_NOTFOUND != nFndPos )
-                {
-                    sError.Erase( nFndPos, 1 ).Insert( sApp, nFndPos );
-                    nFndPos = nFndPos + sApp.Len();
+                    sal_uInt16 nFndPos = sError.Search( '%' );
+                    if( STRING_NOTFOUND != nFndPos )
+                    {
+                        sError.Erase( nFndPos, 1 ).Insert( sApp, nFndPos );
+                        nFndPos = nFndPos + sApp.Len();
+                    }
+                    if( STRING_NOTFOUND != ( nFndPos = sError.Search( '%', nFndPos )))
+                    {
+                        sError.Erase( nFndPos, 1 ).Insert( sTopic, nFndPos );
+                        nFndPos = nFndPos + sTopic.Len();
+                    }
+                    if( STRING_NOTFOUND != ( nFndPos = sError.Search( '%', nFndPos )))
+                        sError.Erase( nFndPos, 1 ).Insert( sItem, nFndPos );
                 }
-                if( STRING_NOTFOUND != ( nFndPos = sError.Search( '%', nFndPos )))
-                {
-                    sError.Erase( nFndPos, 1 ).Insert( sTopic, nFndPos );
-                    nFndPos = nFndPos + sTopic.Len();
-                }
-                if( STRING_NOTFOUND != ( nFndPos = sError.Search( '%', nFndPos )))
-                    sError.Erase( nFndPos, 1 ).Insert( sItem, nFndPos );
+                else
+                    return false;
+
+                ErrorBox( pImpl->m_pParentWin, WB_OK, sError ).Execute();
             }
-            else
-                return false;
-
-            ErrorBox( pImpl->m_pParentWin, WB_OK, sError ).Execute();
         }
+        else if( !pImpl->m_bIsConnect )
+            Disconnect();
+        pImpl->m_bIsConnect = false;
+        return true;
     }
-    else if( !pImpl->m_bIsConnect )
-        Disconnect();
-    pImpl->m_bIsConnect = false;
-    return true;
+    else
+    {
+        OSL_ENSURE(false, "No pImpl (!)");
+        return false;
+    }
 }
 
 void SvBaseLink::Closed()
@@ -580,10 +650,18 @@ void SvBaseLink::Closed()
 
 FileDialogHelper* SvBaseLink::GetFileDialog( sal_uInt32 nFlags, const String& rFactory ) const
 {
-    if ( pImpl->m_pFileDlg )
-        delete pImpl->m_pFileDlg;
-    pImpl->m_pFileDlg = new FileDialogHelper( nFlags, rFactory );
-    return pImpl->m_pFileDlg;
+    if(pImpl)
+    {
+        if ( pImpl->m_pFileDlg )
+            delete pImpl->m_pFileDlg;
+        pImpl->m_pFileDlg = new FileDialogHelper( nFlags, rFactory );
+        return pImpl->m_pFileDlg;
+    }
+    else
+    {
+        OSL_ENSURE(false, "No pImpl (!)");
+        return 0;
+    }
 }
 
 ImplDdeItem::~ImplDdeItem()
