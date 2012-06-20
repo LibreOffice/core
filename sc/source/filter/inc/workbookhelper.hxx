@@ -146,8 +146,6 @@ public:
     FilterType          getFilterType() const;
     /** Returns the filter progress bar. */
     SegmentProgressBar& getProgressBar() const;
-    ::boost::shared_ptr<oox::ISegmentProgressBar> getFormulaProgressBar() const;
-    void setFormulaProgressBar( ::boost::shared_ptr<oox::ISegmentProgressBar> rBar );
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
     bool                isWorkbookFile() const;
     /** Returns the index of the current Calc sheet, if filter currently processes a sheet. */

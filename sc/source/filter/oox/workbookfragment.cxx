@@ -296,7 +296,6 @@ void WorkbookFragment::finalizeImport()
     // create all defined names and database ranges
     getDefinedNames().finalizeImport();
     getTables().finalizeImport();
-    int nSheetNum = 0;
     // load all worksheets
     for( SheetFragmentVector::iterator aIt = aSheetFragments.begin(), aEnd = aSheetFragments.end(); aIt != aEnd; ++aIt )
     {

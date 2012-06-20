@@ -121,7 +121,6 @@ private:
 private:
     ::rtl::OUString     maCellValue;        /// Cell value string (OOXML only).
     RichStringRef       mxInlineStr;        /// Inline rich string (OOXML only).
-    ApiTokenSequence    maTokens;           /// Formula token array (OOXML only).
     ::rtl::OUString     maFormulaStr;
     DataTableModel      maTableData;        /// Settings for table operations.
     BinAddress          maCurrPos;          /// Current cell position (BIFF12 only).

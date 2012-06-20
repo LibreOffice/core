@@ -165,7 +165,6 @@ void SheetDataContext::onCharacters( const OUString& rChars )
         case XLS_TOKEN( f ):
             if( maFmlaData.mnFormulaType != XML_TOKEN_INVALID )
             {
-//                maTokens = mrFormulaParser.importFormula( maCellData.maCellAddr, rChars );
                   maFormulaStr = rChars;
             }
         break;
@@ -183,7 +182,6 @@ void SheetDataContext::onEndElement()
             // a) need to set format first
             // :/
             case XML_normal:
-                //mrSheetData.setFormulaCell( maCellData, maTokens );
                 setCellFormula( maCellData.maCellAddr, maFormulaStr );
                 mrSheetData.setCellFormat( maCellData );
                 break;
@@ -195,7 +193,6 @@ void SheetDataContext::onEndElement()
                         //mrSheetData.createSharedFormula( maFmlaData.mnSharedId, mrFormulaParser.importFormula( maCellData.maCellAddr, maFormulaStr ) );
                         createSharedFormulaMapEntry( maCellData.maCellAddr, maFmlaData.mnSharedId, maFormulaStr );
                     }
-                    //mrSheetData.setFormulaCell( maCellData, maFmlaData.mnSharedId );
                     setCellFormula( maCellData.maCellAddr, maFmlaData.mnSharedId );
                     mrSheetData.setCellFormat( maCellData );
                 }
@@ -205,7 +202,6 @@ void SheetDataContext::onEndElement()
             break;
             case XML_array:
                 if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
-                    //mrSheetData.createArrayFormula( maFmlaData.maFormulaRef, maTokens );
                     setCellArrayFormula( maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr );
                 // set cell formatting, but do not set result as cell value
                 mrSheetData.setBlankCell( maCellData );
@@ -379,8 +375,6 @@ void SheetDataContext::importFormula( const AttributeList& rAttribs )
         maTableData.mbRef2Deleted = rAttribs.getBool( XML_del2, false );
     }
 
-    // clear token array, will be regenerated from element text
-    maTokens = ApiTokenSequence();
     maFormulaStr = rtl::OUString();
 }
 
