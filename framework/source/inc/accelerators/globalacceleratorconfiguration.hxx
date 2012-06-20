@@ -88,6 +88,9 @@ class GlobalAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
             throw (css::uno::Exception       ,
             css::uno::RuntimeException);
 
+        // XComponent
+        virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+
     //______________________________________
     // helper
 

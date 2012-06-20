@@ -120,4 +120,23 @@ void GlobalAcceleratorConfiguration::impl_ts_fillCache()
         {}
 }
 
+//-----------------------------------------------
+//
+// XComponent.dispose(),  #120029#, to release the cyclic reference
+//
+void SAL_CALL GlobalAcceleratorConfiguration::dispose()
+    throw(css::uno::RuntimeException)
+{
+    try
+    {
+        css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
+        if ( xBroadcaster.is() )
+            xBroadcaster->removeChangesListener(static_cast< css::util::XChangesListener* >(this));
+    }
+    catch(const css::uno::RuntimeException& exRun)
+    { throw exRun; }
+    catch(const css::uno::Exception&)
+    {}
+}
+
 } // namespace framework

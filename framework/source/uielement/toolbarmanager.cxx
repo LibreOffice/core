@@ -706,6 +706,9 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
 
         m_xFrame.clear();
         m_xServiceManager.clear();
+        Reference< XComponent > xCompGAM( m_xGlobalAcceleratorManager, UNO_QUERY );
+        if ( xCompGAM.is() )
+            xCompGAM->dispose();
         m_xGlobalAcceleratorManager.clear();
         m_xModuleAcceleratorManager.clear();
         m_xDocAcceleratorManager.clear();
