@@ -100,6 +100,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <vector>
 
@@ -129,9 +130,6 @@ public:
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XModifyListener > XModifyListenerRef;
 typedef boost::ptr_vector<XModifyListenerRef> XModifyListenerArr_Impl;
-
-class ScNamedEntry;
-typedef boost::ptr_vector<ScNamedEntry> ScNamedEntryArr_Impl;
 
 
 //  ScCellRangesBase - base class for ScCellRangesObj (with access by index)
@@ -497,7 +495,8 @@ class SC_DLLPUBLIC ScCellRangesObj : public ScCellRangesBase,
                         public com::sun::star::container::XEnumerationAccess
 {
 private:
-    ScNamedEntryArr_Impl    aNamedEntries;
+    struct Impl;
+    ::boost::scoped_ptr<Impl> m_pImpl;
 
     ScCellRangeObj*         GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
