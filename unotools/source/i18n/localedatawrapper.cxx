@@ -801,21 +801,20 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         const ::rtl::OUString& rCode = pFormatArr[nNeg].Code;
         sal_Int32 nDelim = rCode.indexOf(';');
         scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
-        if (areChecksEnabled() && (nNum == -1 ||
-                    nSym == -1 || (nPar == -1 &&
-                        nSign == -1)))
+        if (areChecksEnabled() && (nNum == -1 || nSym == -1 || (nPar == -1 && nSign == -1)))
         {
             rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
                         "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?"));
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
+        // NOTE: one of nPar or nSign are allowed to be -1
         if (nBlank == -1)
         {
             if ( nSym < nNum )
             {
-                if ( nPar < nSym )
+                if ( -1 < nPar && nPar < nSym )
                     nCurrNegativeFormat = 0;    // ($1)
-                else if ( nSign < nSym )
+                else if ( -1 < nSign && nSign < nSym )
                     nCurrNegativeFormat = 1;    // -$1
                 else if ( nNum < nSign )
                     nCurrNegativeFormat = 3;    // $1-
@@ -824,9 +823,9 @@ void LocaleDataWrapper::getCurrFormatsImpl()
             }
             else
             {
-                if ( nPar < nNum )
+                if ( -1 < nPar && nPar < nNum )
                     nCurrNegativeFormat = 4;    // (1$)
-                else if ( nSign < nNum )
+                else if ( -1 < nSign && nSign < nNum )
                     nCurrNegativeFormat = 5;    // -1$
                 else if ( nSym < nSign )
                     nCurrNegativeFormat = 7;    // 1$-
@@ -838,9 +837,9 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         {
             if ( nSym < nNum )
             {
-                if ( nPar < nSym )
+                if ( -1 < nPar && nPar < nSym )
                     nCurrNegativeFormat = 14;   // ($ 1)
-                else if ( nSign < nSym )
+                else if ( -1 < nSign && nSign < nSym )
                     nCurrNegativeFormat = 9;    // -$ 1
                 else if ( nNum < nSign )
                     nCurrNegativeFormat = 12;   // $ 1-
@@ -849,9 +848,9 @@ void LocaleDataWrapper::getCurrFormatsImpl()
             }
             else
             {
-                if ( nPar < nNum )
+                if ( -1 < nPar && nPar < nNum )
                     nCurrNegativeFormat = 15;   // (1 $)
-                else if ( nSign < nNum )
+                else if ( -1 < nSign && nSign < nNum )
                     nCurrNegativeFormat = 8;    // -1 $
                 else if ( nSym < nSign )
                     nCurrNegativeFormat = 10;   // 1 $-
