@@ -96,7 +96,7 @@ public:
 
     apr_status_t verifySerfCertificateChain (
         int nFailures,
-        const char** pCertificateChainBase64Encoded,
+        const serf_ssl_certificate_t * const * pCertificateChainBase64Encoded,
         int nCertificateChainLength);
 
     serf_bucket_t* acceptSerfResponse( serf_request_t * inSerfRequest,

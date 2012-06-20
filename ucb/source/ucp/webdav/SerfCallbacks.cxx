@@ -59,8 +59,9 @@ extern "C" apr_status_t Serf_Credentials( char **username,
 extern "C" apr_status_t Serf_CertificateChainValidation(
     void* pSerfSession,
     int nFailures,
-    const char** pCertificateChainBase64Encoded,
-    int nCertificateChainLength)
+    int nErrorCode,
+    const serf_ssl_certificate_t * const * pCertificateChainBase64Encoded,
+    apr_size_t nCertificateChainLength)
 {
     return static_cast<SerfSession*>(pSerfSession)
         ->verifySerfCertificateChain(nFailures, pCertificateChainBase64Encoded, nCertificateChainLength);
