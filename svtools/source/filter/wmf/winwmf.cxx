@@ -1229,7 +1229,7 @@ void WMFReader::ReadWMF()
                         if( bEMFAvailable )
                         {
                             pOut->AddFromGDIMetaFile( aMeta );
-                            pOut->SetrclFrame( Rectangle(0, 0, aMeta.GetPrefSize().Width(), aMeta.GetPrefSize().Height() ));
+                            pOut->SetrclFrame( Rectangle( Point(0, 0), aMeta.GetPrefSize()));
 
                             // the stream needs to be set to the wmf end position,
                             // otherwise the GfxLink that is created will be incorrect
