@@ -253,20 +253,35 @@ public class DocumentLoader
             }
 
             // Create a new device with the correct scale and offset
-            ByteBuffer bb = ByteBuffer.allocateDirect(1024*1024*4);
+            ByteBuffer bb = ByteBuffer.allocateDirect(flipper.getWidth()*flipper.getHeight()*4);
             long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
 
             XDevice device;
             if (pageWidth == 0) {
                 // Huh?
-                device = toolkit.createScreenCompatibleDeviceUsingBuffer(1024, 1024, 1, 1, 0, 0, wrapped_bb);
+                device = toolkit.createScreenCompatibleDeviceUsingBuffer(flipper.getWidth(), flipper.getHeight(), 1, 1, 0, 0, wrapped_bb);
             } else {
+
                 // Scale so that it fits our device which has a resolution of 96/in (see
                 // SvpSalGraphics::GetResolution()). The page size returned from getRenderer() is in 1/mm * 100.
-                int scaleDenumerator = Math.max(pageWidth, pageHeight) / 2540 * 96;
-                Log.i(TAG, "Scaling with 1024/" + scaleDenumerator);
 
-                device = toolkit.createScreenCompatibleDeviceUsingBuffer(1024, 1024, 1024, scaleDenumerator, 0, 0, wrapped_bb);
+                int scaleNumerator, scaleDenominator;
+
+                // If the view has a wider aspect ratio than the page, fit
+                // height; otherwise, fit width
+                if ((double) flipper.getWidth() / flipper.getHeight() > (double) pageWidth / pageHeight) {
+                    scaleNumerator = flipper.getHeight();
+                    scaleDenominator = pageHeight / 2540 * 96;
+                } else {
+                    scaleNumerator = flipper.getWidth();
+                    scaleDenominator = pageWidth / 2540 * 96;
+                }
+                Log.i(TAG, "Scaling with " + scaleNumerator + "/" + scaleDenominator);
+
+                device = toolkit.createScreenCompatibleDeviceUsingBuffer(flipper.getWidth(), flipper.getHeight(),
+                                                                         scaleNumerator, scaleDenominator,
+                                                                         0, 0,
+                                                                         wrapped_bb);
             }
 
             // Update the property that points to the device
@@ -277,7 +292,7 @@ public class DocumentLoader
             t1 = System.currentTimeMillis();
             Log.i(TAG, "Rendering page " + number + " took " + ((t1-t0)-timingOverhead) + " ms");
 
-            Bootstrap.force_full_alpha_bb(bb, 0, 1024 * 1024 * 4);
+            Bootstrap.force_full_alpha_bb(bb, 0, flipper.getWidth() * flipper.getHeight() * 4);
 
             return bb;
         }
@@ -312,7 +327,7 @@ public class DocumentLoader
                 state = PageState.LOADING;
                 currentPageNumber = number;
                 ByteBuffer bb = renderPage(currentPageNumber);
-                bm = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
+                bm = Bitmap.createBitmap(flipper.getWidth(), flipper.getHeight(), Bitmap.Config.ARGB_8888);
                 bm.copyPixelsFromBuffer(bb);
 
                 return currentPageNumber;
