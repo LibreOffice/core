@@ -75,13 +75,24 @@ import org.libreoffice.android.Bootstrap;
 public class DocumentLoader
     extends Activity
 {
-    private static String TAG = "DocumentLoader";
+    private static final String TAG = "DocumentLoader";
+
+    // Size of a small virtual (bitmap) device used to find out page count and
+    // page sizes
+    private static final int SMALLSIZE = 128;
+
+    // We pre-render this many pages preceding and succeeding the currently
+    // viewed one, i.e. the total number of rendered pages kept is
+    // PAGECACHE_PLUSMINUS*2+1.
+    private static final int PAGECACHE_PLUSMINUS = 2;
+    private static final int PAGECACHE_SIZE = PAGECACHE_PLUSMINUS*2 + 1;
 
     long timingOverhead;
     XComponentContext context;
     XMultiComponentFactory mcf;
     XComponentLoader componentLoader;
     XToolkit2 toolkit;
+    XDevice dummySmallDevice;
     Object doc;
     int pageCount;
     XRenderable renderable;
@@ -118,7 +129,7 @@ public class DocumentLoader
 
                 flipper.showNext();
 
-                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + 1) % 3)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber + 1);
+                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber + PAGECACHE_PLUSMINUS);
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == 0)
@@ -136,7 +147,7 @@ public class DocumentLoader
 
                 flipper.showPrevious();
 
-                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + 2) % 3)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber - 1);
+                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_SIZE - PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber - PAGECACHE_PLUSMINUS);
 
                 return true;
             }
@@ -212,11 +223,8 @@ public class DocumentLoader
     ByteBuffer renderPage(int number)
     {
         try {
-            // A small device with no scale of offset just to find out the paper size of this page
-
-            ByteBuffer smallbb = ByteBuffer.allocateDirect(128*128*4);
-            long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
-            XDevice device = toolkit.createScreenCompatibleDeviceUsingBuffer(128, 128, 1, 1, 0, 0, wrapped_smallbb);
+            // Use dummySmallDevice with no scale of offset just to find out
+            // the paper size of this page.
 
             PropertyValue renderProps[] = new PropertyValue[3];
             renderProps[0] = new PropertyValue();
@@ -224,7 +232,7 @@ public class DocumentLoader
             renderProps[0].Value = new Boolean(true);
             renderProps[1] = new PropertyValue();
             renderProps[1].Name = "RenderDevice";
-            renderProps[1].Value = device;
+            renderProps[1].Value = dummySmallDevice;
             renderProps[2] = new PropertyValue();
             renderProps[2].Name = "View";
             renderProps[2].Value = new MyXController();
@@ -248,6 +256,7 @@ public class DocumentLoader
             ByteBuffer bb = ByteBuffer.allocateDirect(1024*1024*4);
             long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
 
+            XDevice device;
             if (pageWidth == 0) {
                 // Huh?
                 device = toolkit.createScreenCompatibleDeviceUsingBuffer(1024, 1024, 1, 1, 0, 0, wrapped_bb);
@@ -297,7 +306,7 @@ public class DocumentLoader
             {
                 int number = params[0];
 
-                if (number == pageCount)
+                if (number >= pageCount)
                     return -1;
 
                 state = PageState.LOADING;
@@ -385,21 +394,17 @@ public class DocumentLoader
                 long t1 = System.currentTimeMillis();
                 Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms");
 
-                dumpUNOObject("doc", doc);
-
                 Object toolkitService = mcf.createInstanceWithContext
                     ("com.sun.star.awt.Toolkit", context);
-
-                dumpUNOObject("toolkitService", toolkitService);
-
                 toolkit = (XToolkit2) UnoRuntime.queryInterface(XToolkit2.class, toolkitService);
-                dumpUNOObject("toolkit", toolkit);
 
                 renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
 
-                ByteBuffer smallbb = ByteBuffer.allocateDirect(128*128*4);
+                // Set up dummySmallDevice and use it to find out the number
+                // of pages ("renderers").
+                ByteBuffer smallbb = ByteBuffer.allocateDirect(SMALLSIZE*SMALLSIZE*4);
                 long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
-                XDevice smalldevice = toolkit.createScreenCompatibleDeviceUsingBuffer(128, 128, 1, 1, 0, 0, wrapped_smallbb);
+                dummySmallDevice = toolkit.createScreenCompatibleDeviceUsingBuffer(SMALLSIZE, SMALLSIZE, 1, 1, 0, 0, wrapped_smallbb);
 
                 PropertyValue renderProps[] = new PropertyValue[3];
                 renderProps[0] = new PropertyValue();
@@ -407,7 +412,7 @@ public class DocumentLoader
                 renderProps[0].Value = new Boolean(true);
                 renderProps[1] = new PropertyValue();
                 renderProps[1].Name = "RenderDevice";
-                renderProps[1].Value = smalldevice;
+                renderProps[1].Value = dummySmallDevice;
                 renderProps[2] = new PropertyValue();
                 renderProps[2].Name = "View";
                 renderProps[2].Value = new MyXController();
@@ -434,9 +439,6 @@ public class DocumentLoader
 
         XTypeProvider typeProvider = (XTypeProvider)
             UnoRuntime.queryInterface(XTypeProvider.class, object);
-
-        Log.i(TAG, "typeProvider is " + (typeProvider != null ? typeProvider.toString() : "null"));
-
         if (typeProvider == null)
             return;
 
@@ -556,8 +558,10 @@ public class DocumentLoader
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
             flipper.addView(new PageViewer(0), 0, matchParent);
-            flipper.addView(new PageViewer(1), 1, matchParent);
-            flipper.addView(new PageViewer(-1), 2, matchParent);
+            for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
+                flipper.addView(new PageViewer(i+1), i+1, matchParent);
+            for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
+                flipper.addView(new PageViewer(-1), PAGECACHE_PLUSMINUS + i+1, matchParent);
 
             setContentView(flipper);
         }
