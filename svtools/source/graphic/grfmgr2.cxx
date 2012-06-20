@@ -317,9 +317,8 @@ sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                 {
                     if( !!aContainedBmpEx )
                     {
-                        // #117889# Use bitmap output method, if
-                        // metafile basically contains only a single
-                        // bitmap
+                        // Use bitmap output method, if metafile basically contains only a single
+                        // bitmap (allows caching the resulting pixmap).
                         BitmapEx aDstBmpEx;
 
                         if( ImplCreateOutput( pOut, rPt, rSz, aContainedBmpEx, rAttr, nFlags, &aDstBmpEx ) )
@@ -593,7 +592,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 
     rOutMtf = rMtf;
 
-    // #117889# count bitmap actions, and flag actions that paint, but
+    // Count bitmap actions, and flag actions that paint, but
     // are no bitmaps.
     sal_Int32   nNumBitmaps(0);
     bool        bNonBitmapActionEncountered(false);
@@ -608,9 +607,9 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         const MapMode rPrefMapMode( rMtf.GetPrefMapMode() );
         const Size rSizePix( pOut->LogicToPixel( aNewSize, rPrefMapMode ) );
 
-        // taking care of font width default if scaling metafile.
-        // #117889# use existing metafile scan, to determine whether
-        // the metafile basically displays a single bitmap. Note that
+        // Determine whether the metafile basically displays
+        // a single bitmap (in which case that bitmap is simply used directly
+        // instead of playing the metafile). Note that
         // the solution, as implemented here, is quite suboptimal (the
         // cases where a mtf consisting basically of a single bitmap,
         // that fail to pass the test below, are probably frequent). A
@@ -627,6 +626,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
             {
                 case META_FONT_ACTION:
                 {
+                    // taking care of font width default if scaling metafile.
                     MetaFontAction* pA = (MetaFontAction*)pAct;
                     Font aFont( pA->GetFont() );
                     if ( !aFont.GetWidth() )
