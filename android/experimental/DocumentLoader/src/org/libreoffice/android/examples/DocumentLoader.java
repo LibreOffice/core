@@ -39,7 +39,6 @@ import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
@@ -107,17 +106,13 @@ public class DocumentLoader
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == pageCount-1)
                     return false;
 
-                AnimationSet inFromRight = new AnimationSet(true);
-                inFromRight.addAnimation(new AlphaAnimation(0.1f, 1.0f));
-                inFromRight.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
-                                                                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                Animation inFromRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
+                                                               Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
                 inFromRight.setDuration(500);
                 flipper.setInAnimation(inFromRight);
 
-                AnimationSet outToLeft = new AnimationSet(true);
-                outToLeft.addAnimation(new AlphaAnimation(1f, 0.1f));
-                outToLeft.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, -1,
-                                                              Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                Animation outToLeft = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, -1,
+                                                             Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
                 outToLeft.setDuration(500);
                 flipper.setOutAnimation(outToLeft);
 
@@ -129,17 +124,13 @@ public class DocumentLoader
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == 0)
                     return false;
 
-                AnimationSet inFromLeft = new AnimationSet(true);
-                inFromLeft.addAnimation(new AlphaAnimation(0.1f, 1.0f));
-                inFromLeft.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
-                                                               Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                Animation inFromLeft = new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
+                                                              Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
                 inFromLeft.setDuration(500);
                 flipper.setInAnimation(inFromLeft);
 
-                AnimationSet outToRight = new AnimationSet(true);
-                outToRight.addAnimation(new AlphaAnimation(1f, 0.1f));
-                outToRight.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
-                                                               Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0));
+                Animation outToRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
+                                                              Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
                 outToRight.setDuration(500);
                 flipper.setOutAnimation(outToRight);
 
@@ -242,22 +233,20 @@ public class DocumentLoader
             long t0 = System.currentTimeMillis();
             PropertyValue rendererProps[] = renderable.getRenderer(number, doc, renderProps);
             long t1 = System.currentTimeMillis();
-            Log.i(TAG, "renderer properties: (took " + ((t1-t0)-timingOverhead) + " ms)");
+            Log.i(TAG, "getRenderer took " + ((t1-t0)-timingOverhead) + " ms");
 
             int pageWidth = 0, pageHeight = 0;
             for (int i = 0; i < rendererProps.length; i++) {
                 if (rendererProps[i].Name.equals("PageSize")) {
                     pageWidth = ((Size) rendererProps[i].Value).Width;
                     pageHeight = ((Size) rendererProps[i].Value).Height;
-                    Log.i(TAG, "  PageSize: " + pageWidth + "x" + pageHeight);
+                    Log.i(TAG, "PageSize: " + pageWidth + "x" + pageHeight);
                 }
             }
 
             // Create a new device with the correct scale and offset
             ByteBuffer bb = ByteBuffer.allocateDirect(1024*1024*4);
             long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
-
-            Log.i(TAG, "bb is " + bb);
 
             if (pageWidth == 0) {
                 // Huh?
@@ -299,33 +288,32 @@ public class DocumentLoader
         int currentPageNumber = -1;
         TextView waitView;
         PageState state = PageState.NONEXISTENT;
-        ByteBuffer bb;
+        Bitmap bm;
 
         class PageLoadTask
-            extends AsyncTask<Void, Void, Void>
+            extends AsyncTask<Integer, Void, Integer>
         {
-            protected Void doInBackground(Void... params)
+            protected Integer doInBackground(Integer... params)
             {
-                if (currentPageNumber == pageCount)
-                    return null;
+                int number = params[0];
 
-                try {
-                    Thread.sleep(5000);
-                }
-                catch (InterruptedException e) {
-                }
+                if (number == pageCount)
+                    return -1;
+
                 state = PageState.LOADING;
-                bb = renderPage(currentPageNumber);
-                return null;
+                currentPageNumber = number;
+                ByteBuffer bb = renderPage(currentPageNumber);
+                bm = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
+                bm.copyPixelsFromBuffer(bb);
+
+                return currentPageNumber;
             }
 
-            protected void onPostExecute(Void result)
+            protected void onPostExecute(Integer result)
             {
-                if (currentPageNumber == pageCount)
+                Log.i(TAG, "onPostExecute: " + result);
+                if (result == -1)
                     return;
-
-                Bitmap bm = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
-                bm.copyPixelsFromBuffer(bb);
 
                 ImageView imageView = new ImageView(DocumentLoader.this);
                 imageView.setImageBitmap(bm);
@@ -342,12 +330,9 @@ public class DocumentLoader
 
         void display(int number)
         {
-            if (number == currentPageNumber)
-                return;
-
-            currentPageNumber = number;
-
-            waitView.setText("Page " + (currentPageNumber + 1) + ", wait...");
+            Log.i(TAG, "PageViewer display(" + number + ")");
+            if (number >= 0)
+                waitView.setText("Page " + (number+1) + ", wait...");
             state = PageState.NONEXISTENT;
 
             if (getDisplayedChild() == 1) {
@@ -355,9 +340,8 @@ public class DocumentLoader
                 removeViewAt(1);
             }
 
-            Log.i(TAG, "PageViewer display(" + number + ")");
-            if (currentPageNumber >= 0) {
-                new PageLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+            if (number >= 0) {
+                new PageLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, number);
             }
         }
 
