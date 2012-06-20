@@ -1720,6 +1720,69 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
                 bChanged = true;
             }
 
+            //#i119988#
+            /************************************************************************/
+            /*
+            Note, the setAnimateForm means set the animation from TextGroup to Object's Shape
+            And on the UI in means "Animate attached shape" in "Effect Option" dialog
+            The setTextGrouping means set animation to Object's Text,
+            the nTextGrouping is Text Animation Type
+            nTextGrouping = -1 is "As one Object", means no text animation.
+
+            The previous call order first do the setTextGrouping and then do the setAnimateForm,
+            that will cause such defect: in the setTextGrouping, the effect has been removed,
+            but in setAnimateForm still need this effect, then a NULL pointer of that effect will
+            be gotten, and cause crash.
+
+            []bHasAnimateForm means the UI has changed, bAnimateForm is it value
+
+            So if create a new textgroup animation, the following animation will never be run!
+            Since the ¡°Animate attached shape¡± is default checked.
+            And the bHasAnimateForm default is false, and if user uncheck it the value bAnimateForm will be false,
+            it same as the TextGroup¡¯s default value, also could not be run setAnimateForm.
+            if( bHasAnimateForm )
+            {
+            if( pTextGroup->getAnimateForm() != bAnimateForm )
+            {
+            pEffectSequence->setAnimateForm( pTextGroup, bAnimateForm );
+            bChanged = true;
+            }
+            }
+
+            In setTextGrouping, there are three case:
+            1.  Create new text effects for empty TextGroup
+            2.  Remove all text effects of TextGroup (nTextGrouping == -1)
+            3.  Change all the text effects¡¯ start type
+
+            So here is the right logic:
+            If set the animation from text to shape and remove text animation,
+            should do setAnimateForm first, then do setTextGrouping.
+            Other case,do setTextGrouping first, then do setAnimateForm.
+
+            */
+            /************************************************************************/
+
+            bool    bDoSetAnimateFormFirst = false;
+            bool    bNeedDoSetAnimateForm = false;
+
+            if( bHasAnimateForm )
+            {
+                if( pTextGroup->getAnimateForm() != bAnimateForm )
+                {
+                    if( (pTextGroup->getTextGrouping() >= 0) && (nTextGrouping == -1 ) )
+                    {
+                        bDoSetAnimateFormFirst = true;
+                    }
+                    bNeedDoSetAnimateForm = true;
+                }
+            }
+
+            if (bDoSetAnimateFormFirst)
+            {
+                pEffectSequence->setAnimateForm( pTextGroup, bAnimateForm );
+                bChanged = true;
+            }
+
             if( bHasTextGrouping )
             {
                 if( (pTextGroup->getTextGrouping() != nTextGrouping) )
@@ -1729,13 +1792,10 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
                 }
             }
 
-            if( bHasAnimateForm )
+            if (!bDoSetAnimateFormFirst&&bNeedDoSetAnimateForm)
             {
-                if( pTextGroup->getAnimateForm() != bAnimateForm )
-                {
-                    pEffectSequence->setAnimateForm( pTextGroup, bAnimateForm );
-                    bChanged = true;
-                }
+                pEffectSequence->setAnimateForm( pTextGroup, bAnimateForm );
+                bChanged = true;
             }
 
             if( bHasTextGroupingAuto )
