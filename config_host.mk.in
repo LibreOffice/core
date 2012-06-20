@@ -1,6 +1,6 @@
  # config variable for LibreOffice
  # this file is intented to be able to be included in a Makefile
- # or to be sourced in a shell session
+ # and not to be sourced in a shell session
  #
 export SRC_ROOT=@SRC_ROOT@
 
