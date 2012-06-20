@@ -177,7 +177,6 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
     if( ( rObj.GetType() == GRAPHIC_BITMAP ) || ( rObj.GetType() == GRAPHIC_GDIMETAFILE ) )
     {
         // create output and fill cache
-        const Size aOutSize( pOut->GetOutputSizePixel() );
 
         if( rObj.IsAnimated() || ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
             ( !( nFlags & GRFMGR_DRAW_NO_SUBSTITUTE ) &&
