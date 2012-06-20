@@ -72,13 +72,13 @@ String lcl_dbg_out_SvPtrArr(const T & rArr)
 {
     String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
 
-    for (sal_Int16 n = 0; n < rArr.Count(); n++)
+    for (typename T::const_iterator i(rArr.begin()); i != rArr.end(); ++i)
     {
-        if (n > 0)
+        if (i != rArr.begin())
             aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
 
-        if (rArr[n])
-            aStr += lcl_dbg_out(*rArr[n]);
+        if (*i)
+            aStr += lcl_dbg_out(**i);
         else
             aStr += String("(null)", RTL_TEXTENCODING_ASCII_US);
     }
@@ -473,9 +473,10 @@ const String lcl_AnchoredFrames(const SwNode & rNode)
         if (pFrmFmts)
         {
             bool bFirst = true;
-            for (sal_uInt16 nI = 0; nI < pFrmFmts->Count(); nI++)
+            for (SwFrmFmts::const_iterator i(pFrmFmts->begin());
+                 i != pFrmFmts->end(); ++i)
             {
-                const SwFmtAnchor & rAnchor = (*pFrmFmts)[nI]->GetAnchor();
+                const SwFmtAnchor & rAnchor = (*i)->GetAnchor();
                 const SwPosition * pPos = rAnchor.GetCntntAnchor();
 
                 if (pPos && &pPos->nNode.GetNode() == &rNode)
@@ -483,8 +484,8 @@ const String lcl_AnchoredFrames(const SwNode & rNode)
                     if (! bFirst)
                         aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
 
-                    if ((*pFrmFmts)[nI])
-                        aResult += lcl_dbg_out(*(*pFrmFmts)[nI]);
+                    if (*i)
+                        aResult += lcl_dbg_out(**i);
                     bFirst = false;
                 }
             }
