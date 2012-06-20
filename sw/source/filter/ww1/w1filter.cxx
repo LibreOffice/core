@@ -850,8 +850,6 @@ oncemore:
             aFName = URIHelper::SmartRel2Abs(
                 INetURLObject(rOut.GetBaseURL()), aFName );
 
-            String aName( String::CreateFromAscii(
-                                        RTL_CONSTASCII_STRINGPARAM( "WW" )));
             SwSectionData * pSection = new SwSectionData( FILE_LINK_SECTION,
                 rOut.GetDoc().GetUniqueSectionName( &aStr ) );
             pSection->SetLinkFileName( aFName );
