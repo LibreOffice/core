@@ -634,21 +634,23 @@ OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 
 //-----------------------------------------------
 //  XInterface, XTypeProvider
-DEFINE_XINTERFACE_7(XCUBasedAcceleratorConfiguration                       ,
+DEFINE_XINTERFACE_8(XCUBasedAcceleratorConfiguration                       ,
                     OWeakObject                                            ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider             ),
                     DIRECT_INTERFACE(css::ui::XAcceleratorConfiguration  ),
                     DIRECT_INTERFACE(css::util::XChangesListener          ),
                     DIRECT_INTERFACE(css::form::XReset                    ),
+                    DIRECT_INTERFACE(css::lang::XComponent                ),
                     DIRECT_INTERFACE(css::ui::XUIConfigurationPersistence),
                     DIRECT_INTERFACE(css::ui::XUIConfigurationStorage    ),
                     DIRECT_INTERFACE(css::ui::XUIConfiguration           ))
 
-                    DEFINE_XTYPEPROVIDER_7(XCUBasedAcceleratorConfiguration ,
+                    DEFINE_XTYPEPROVIDER_8(XCUBasedAcceleratorConfiguration ,
                     css::lang::XTypeProvider             ,
                     css::ui::XAcceleratorConfiguration  ,
                     css::util::XChangesListener          ,
                     css::form::XReset                    ,
+                    css::lang::XComponent                ,
                     css::ui::XUIConfigurationPersistence,
                     css::ui::XUIConfigurationStorage    ,
                     css::ui::XUIConfiguration           )
@@ -1247,6 +1249,27 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
 void SAL_CALL XCUBasedAcceleratorConfiguration::disposing(const css::lang::EventObject& /*aSource*/)
     throw(css::uno::RuntimeException)
 {
+}
+
+//-----------------------------------------------
+void SAL_CALL XCUBasedAcceleratorConfiguration::dispose()
+    throw(css::uno::RuntimeException)
+{
+    // nop
+}
+
+//-----------------------------------------------
+void SAL_CALL XCUBasedAcceleratorConfiguration::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& /*xListener*/ )
+    throw(css::uno::RuntimeException)
+{
+    // nop
+}
+
+//-----------------------------------------------
+void SAL_CALL XCUBasedAcceleratorConfiguration::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& /*xListener*/ )
+    throw(css::uno::RuntimeException)
+{
+    // nop
 }
 
 //-----------------------------------------------

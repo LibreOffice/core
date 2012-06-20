@@ -379,6 +379,9 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
         }
         m_xDocImageManager.clear();
         m_xModuleImageManager.clear();
+        Reference< XComponent > xCompGAM( m_xGlobalAcceleratorManager, UNO_QUERY );
+        if ( xCompGAM.is() )
+            xCompGAM->dispose();
         m_xGlobalAcceleratorManager.clear();
         m_xModuleAcceleratorManager.clear();
         m_xDocAcceleratorManager.clear();

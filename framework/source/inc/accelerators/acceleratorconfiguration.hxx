@@ -290,6 +290,7 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
                                        , public    ::cppu::OWeakObject
                                        , public    css::lang::XTypeProvider
                                        , public    css::util::XChangesListener
+                                       , public    css::lang::XComponent
                                        , public    css::form::XReset                    // TODO use XPresetHandler instead if available
                                        , public    css::ui::XAcceleratorConfiguration  // => css::ui::XUIConfigurationPersistence
                                                                                        //    css::ui::XUIConfigurationStorage
@@ -415,6 +416,11 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
         // css.lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException);
+
+        // XComponent
+        virtual  void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+        virtual  void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual  void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
         //______________________________________
         // helper for derived classes

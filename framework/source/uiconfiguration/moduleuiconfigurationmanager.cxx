@@ -761,6 +761,9 @@ void SAL_CALL ModuleUIConfigurationManager::dispose() throw (::com::sun::star::u
     ResetableGuard aGuard( m_aLock );
     Reference< XComponent > xModuleImageManager( m_xModuleImageManager );
     m_xModuleImageManager.clear();
+    Reference< XComponent > xCompMAM( m_xModuleAcceleratorManager, UNO_QUERY );
+    if ( xCompMAM.is() )
+        xCompMAM->dispose();
     m_xModuleAcceleratorManager.clear();
     m_aUIElements[LAYER_USERDEFINED].clear();
     m_aUIElements[LAYER_DEFAULT].clear();
