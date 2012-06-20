@@ -122,6 +122,7 @@ void SwFrameControlsManager::SetReadonlyControls( bool bReadonly )
             aCtrlIt->second->SetReadonly( bReadonly );
             ++aCtrlIt;
         }
+        ++pIt;
     }
 }
 
