@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACn///5k\u003d",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-06-20T20:28:06Z",
+      "side": 1,
+      "message": "use $GERRITHOST (here and everywhere liek that below",
+      "revId": "38feb6a2f39102f9afe6f0cc661fb5ae8d8f5d4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///5s\u003d",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-06-20T20:28:06Z",
+      "side": 1,
+      "message": "it would be best to detect if the argument _is_ already a sha or not, and check for sanity.",
+      "revId": "38feb6a2f39102f9afe6f0cc661fb5ae8d8f5d4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///5o\u003d",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-06-20T20:28:06Z",
+      "side": 1,
+      "message": "Meta-X delete-trailing-whitespace :-)",
+      "revId": "38feb6a2f39102f9afe6f0cc661fb5ae8d8f5d4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
