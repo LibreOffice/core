@@ -6111,9 +6111,9 @@ bool PDFWriterImpl::emitSignature()
     appendLiteralStringEncrypt( m_aCreationDateString, m_nSignatureObject, aLine );
 
     aLine.append( " /ByteRange [ 0 ");
-    aLine.append( m_nSignatureContentOffset, 10 );
+    aLine.append( m_nSignatureContentOffset - 1, 10 );
     aLine.append( " " );
-    aLine.append( m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH, 10 );
+    aLine.append( m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1, 10 );
     aLine.append( " " );
 
     m_nSignatureLastByteRangeNoOffset = nOffset + aLine.getLength();
@@ -6142,7 +6142,7 @@ bool PDFWriterImpl::finalizeSignature()
     if ( aError != osl_File_E_None )
         return false;
 
-    sal_Int64 nLastByteRangeNo = nOffset - (m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH);
+    sal_Int64 nLastByteRangeNo = nOffset - (m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH) - 1;
 
     // 2- overwrite the value to the m_nSignatureLastByteRangeNoOffset position
     sal_uInt64 nWritten = 0;
