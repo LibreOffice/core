@@ -8799,7 +8799,7 @@ if test "x$enable_gtk3" = "xyes"; then
     if test "$with_system_cairo" != yes; then
         echo "System cairo required for gtk3 support, please use --with-system-cairo"
     fi
-    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.2 gtk+-unix-print-3.0 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
+    PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.2 gtk+-unix-print-3.0 gmodule-no-export-2.0 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
     if test "x$ENABLE_GTK3" = "xTRUE"; then
         R="gtk3"
     else
