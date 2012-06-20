@@ -22,8 +22,9 @@
 
 #include <svl/solar.hrc>
 #include <svl/undo.hxx>
+#include <svl/style.hxx>
 #include <tools/gen.hxx>
-#include <svx/svdtypes.hxx> // fuer enum RepeatFuncts
+#include <svx/svdtypes.hxx> // for enum RepeatFuncts
 #include <svx/svdsob.hxx>
 #include "svx/svxdllapi.h"
 
@@ -159,9 +160,8 @@ protected:
     SfxItemSet*                 pRepeatSet;
 
     // oder besser den StyleSheetNamen merken?
-    SfxStyleSheet*              pUndoStyleSheet;
-    SfxStyleSheet*              pRedoStyleSheet;
-    SfxStyleSheet*              pRepeatStyleSheet;
+    rtl::Reference< SfxStyleSheetBase > mxUndoStyleSheet;
+    rtl::Reference< SfxStyleSheetBase > mxRedoStyleSheet;
     bool                        bStyleSheet;
     bool                        bHaveToTakeRedoSet;
 
@@ -173,6 +173,9 @@ protected:
 
     // Wenn sich um ein Gruppenobjekt handelt:
     SdrUndoGroup*               pUndoGroup;
+
+    // helper to ensure StyleSheet is in pool (provided by SdrModel from SdrObject)
+    void ensureStyleSheetInStyleSheetPool(SfxStyleSheetBasePool& rStyleSheetPool, SfxStyleSheet& rSheet);
 
 public:
     SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1 = false, bool bSaveText = false);
