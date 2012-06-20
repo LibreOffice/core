@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACn///68\u003d",
+        "filename": "configure.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 6685,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-06-20T07:50:03Z",
+      "side": 1,
+      "message": "I think there should be standalone test for it, somewhere before the first check for mingw sys-root. Something like\n\nfor sysroot in ...; do\n  if test -d \"$sysroot\"; then\n    MINGW_SYSROOT\u003d\"$sysroot\"\n    break\n  fi\ndone\nAC_SUBST([MINGW_SYSROOT])\n\nAnother possibility is to use gcc:\n\nMINGW_SYSROOT\u003d\"`$CC -print-sysroot`\"\nAC_SUBST([MINGW_SYSROOT])\n\nThis seems to be even easier/better. Anyway, it can be changed at later time, so it is not a stopper for this patch.",
+      "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///6w\u003d",
+        "filename": "pyuno/CustomTarget_python_mingw_bin.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-06-20T07:50:03Z",
+      "side": 1,
+      "message": "I would prefer to copy this at the same place we are copying the DLLs--in external/mingw-dlls/makefile.mk . It just seems unnecessary to introduce an extra makefile just for it. We could even introduce a configure variable for it--say MINGW_PYTHON_EXE :-)",
+      "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///6s\u003d",
+        "filename": "scp2/InstallModule_python.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-06-20T07:50:03Z",
+      "side": 1,
+      "message": "The \u003dYES is unecessary (and possibly may cause problems, because it is neither number nor quoted string?)",
+      "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///6o\u003d",
+        "filename": "scp2/source/python/file_python.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-06-20T07:50:03Z",
+      "side": 1,
+      "message": "You forgot to fix the syntax errors :-) This should be\nParentID \u003d gid_Dir_Py_PythonCore;\nHostName \u003d \"bin\";",
+      "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
