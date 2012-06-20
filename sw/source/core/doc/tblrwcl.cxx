@@ -196,7 +196,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #define CHECKBOXWIDTH                                           \
     {                                                           \
         SwTwips nSize = GetFrmFmt()->GetFrmSize().GetWidth();   \
-        for( sal_uInt16 nTmp = 0; nTmp < aLines.Count(); ++nTmp )   \
+        for (size_t nTmp = 0; nTmp < aLines.size(); ++nTmp)   \
             ::_CheckBoxWidth( *aLines[ nTmp ], nSize );         \
     }
 
@@ -721,12 +721,12 @@ sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
     // Find all Boxes/Lines
     _FndBox aFndBox( 0, 0 );
     {
-        const SwTableLine* pLLine = GetTabLines().back();
+        SwTableLine* pLLine = GetTabLines().back();
 
         const SwSelBoxes* pBxs = 0;     // Dummy!!!
         _FndPara aPara( *pBxs, &aFndBox );
 
-        _FndBoxAppendRowLine( (SwTableLine*)pLLine, &aPara );
+        _FndBoxAppendRowLine(pLLine, &aPara);
     }
     if( aFndBox.GetLines().empty() )
         return sal_False;

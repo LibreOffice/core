@@ -1059,8 +1059,10 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
 extern void _CheckBoxWidth( const SwTableLine&, SwTwips );
         // checke doch mal ob die Tabellen korrekte Breiten haben
         SwTwips nSize = GetFrmFmt()->GetFrmSize().GetWidth();
-        for( sal_uInt16 n = 0; n < aLines.Count(); ++n  )
+        for (size_t n = 0; n < aLines.size(); ++n)
+        {
             _CheckBoxWidth( *aLines[ n ], nSize );
+        }
     }
 #endif
 }

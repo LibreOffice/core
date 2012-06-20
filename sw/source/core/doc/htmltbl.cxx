@@ -1679,8 +1679,10 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
             // check if the tables have correct widths
             SwTwips nSize = pSwTable->GetFrmFmt()->GetFrmSize().GetWidth();
             const SwTableLines& rLines = pSwTable->GetTabLines();
-            for( sal_uInt16 n = 0; n < rLines.Count(); ++n  )
+            for (size_t n = 0; n < rLines.size(); ++n)
+            {
                 _CheckBoxWidth( *rLines[ n ], nSize );
+            }
         }
 #endif
 
