@@ -2669,11 +2669,17 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                         // draw selected item
                         MenubarValue aControlValue;
                         aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( pWin );
+
+                        // transparent menubar needs a trick to write nice text, do it via NWF
+                        OUString aText;
+                        if ( bIsMenuBar && ImplGetSVData()->maNWFData.mbTransparentMenubar )
+                            aText = pData->aText;
+
                         pWin->DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
                                 aRect,
                                 CTRL_STATE_ENABLED | ( bHighlight? CTRL_STATE_SELECTED: 0 ),
                                 aControlValue,
-                                OUString() );
+                                aText );
 
                         pWin->Pop();
                     }
@@ -2803,7 +2809,8 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                 }
 
                 // Text:
-                if ( ( pData->eType == MENUITEM_STRING ) || ( pData->eType == MENUITEM_STRINGIMAGE ) )
+                if ( ( ( pData->eType == MENUITEM_STRING ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) &&
+                     !(bIsMenuBar && ImplGetSVData()->maNWFData.mbTransparentMenubar) )
                 {
                     aTmpPos.X() = aPos.X() + nTextPos;
                     aTmpPos.Y() = aPos.Y();
