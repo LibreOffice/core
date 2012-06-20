@@ -1106,12 +1106,12 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     : m_aFrames()
 {
     SolarMutexGuard aGuard;
-    const SwSpzFrmFmts* const pFmts = pDoc->GetSpzFrmFmts();
-    if(!pFmts->Count())
+    const SwFrmFmts* const pFmts = pDoc->GetSpzFrmFmts();
+    if(pFmts->empty())
         return;
     // #i104937#
 //    const SwFrmFmt* const pFmtsEnd = (*pFmts)[pFmts->Count()];
-    const sal_uInt16 nSize = pFmts->Count();
+    const sal_uInt16 nSize = pFmts->size();
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // #i104937#
     SwFrmFmt* pFmt( 0 );
@@ -1458,7 +1458,7 @@ sal_Int32 SwXTextSections::getCount(void) throw( uno::RuntimeException )
     if(!IsValid())
         throw uno::RuntimeException();
     const SwSectionFmts& rSectFmts = GetDoc()->GetSections();
-    sal_uInt16 nCount = rSectFmts.Count();
+    sal_uInt16 nCount = rSectFmts.size();
     for(sal_uInt16 i = nCount; i; i--)
     {
         if( !rSectFmts[i - 1]->IsInNodesArr())
@@ -1477,7 +1477,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         SwSectionFmts& rFmts = GetDoc()->GetSections();
 
         const SwSectionFmts& rSectFmts = GetDoc()->GetSections();
-        sal_uInt16 nCount = rSectFmts.Count();
+        sal_uInt16 nCount = rSectFmts.size();
         for(sal_uInt16 i = 0; i < nCount; i++)
         {
             if( !rSectFmts[i]->IsInNodesArr())
@@ -1487,7 +1487,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
             if(nIndex == i)
                 break;
         }
-        if(nIndex >= 0 && nIndex < rFmts.Count())
+        if(nIndex >= 0 && nIndex < (sal_Int32)rFmts.size())
         {
             SwSectionFmt* pFmt = rFmts[(sal_uInt16)nIndex];
             xRet = GetObject(*pFmt);
@@ -1510,7 +1510,7 @@ uno::Any SwXTextSections::getByName(const OUString& Name)
         String aName(Name);
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         uno::Reference< XTextSection >  xSect;
-        for(sal_uInt16 i = 0; i < rFmts.Count(); i++)
+        for(sal_uInt16 i = 0; i < rFmts.size(); i++)
         {
             SwSectionFmt* pFmt = rFmts[i];
             if (pFmt->IsInNodesArr()
@@ -1535,7 +1535,7 @@ uno::Sequence< OUString > SwXTextSections::getElementNames(void)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    sal_uInt16 nCount = GetDoc()->GetSections().Count();
+    sal_uInt16 nCount = GetDoc()->GetSections().size();
     SwSectionFmts& rSectFmts = GetDoc()->GetSections();
     for(sal_uInt16 i = nCount; i; i--)
     {
@@ -1571,7 +1571,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& Name)
     if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
-        for(sal_uInt16 i = 0; i < rFmts.Count(); i++)
+        for(sal_uInt16 i = 0; i < rFmts.size(); i++)
         {
             const SwSectionFmt* pFmt = rFmts[i];
             if (aName == pFmt->GetSection()->GetSectionName())
@@ -1602,7 +1602,7 @@ sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
     if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
-        nCount = rFmts.Count();
+        nCount = rFmts.size();
     }
     else
         throw uno::RuntimeException();

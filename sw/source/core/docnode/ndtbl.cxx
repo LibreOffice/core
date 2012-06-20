@@ -1640,8 +1640,8 @@ sal_Bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
 
     // #i28006# Fly frames have to be restored even if the table was
     // #alone in the section
-    const SwSpzFrmFmts& rFlyArr = *GetDoc()->GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < rFlyArr.Count(); ++n )
+    const SwFrmFmts& rFlyArr = *GetDoc()->GetSpzFrmFmts();
+    for( sal_uInt16 n = 0; n < rFlyArr.size(); ++n )
     {
         SwFrmFmt *const pFmt = (SwFrmFmt*)rFlyArr[n];
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
@@ -3886,13 +3886,13 @@ String SwDoc::GetUniqueTblName() const
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
 
-    sal_uInt16 nNum, nTmp, nFlagSize = ( pTblFrmFmtTbl->Count() / 8 ) +2;
+    sal_uInt16 nNum, nTmp, nFlagSize = ( pTblFrmFmtTbl->size() / 8 ) +2;
     sal_uInt16 n;
 
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    for( n = 0; n < pTblFrmFmtTbl->Count(); ++n )
+    for( n = 0; n < pTblFrmFmtTbl->size(); ++n )
     {
         const SwFrmFmt* pFmt = (*pTblFrmFmtTbl)[ n ];
         if( !pFmt->IsDefault() && IsUsed( *pFmt )  &&
@@ -3900,13 +3900,13 @@ String SwDoc::GetUniqueTblName() const
         {
             // Nummer bestimmen und das Flag setzen
             nNum = static_cast<sal_uInt16>(pFmt->GetName().Copy( nNmLen ).ToInt32());
-            if( nNum-- && nNum < pTblFrmFmtTbl->Count() )
+            if( nNum-- && nNum < pTblFrmFmtTbl->size() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
     }
 
     // alle Nummern entsprechend geflag, also bestimme die richtige Nummer
-    nNum = pTblFrmFmtTbl->Count();
+    nNum = pTblFrmFmtTbl->size();
     for( n = 0; n < nFlagSize; ++n )
         if( 0xff != ( nTmp = pSetFlags[ n ] ))
         {
@@ -3925,11 +3925,11 @@ SwTableFmt* SwDoc::FindTblFmtByName( const String& rName, sal_Bool bAll ) const
 {
     const SwFmt* pRet = 0;
     if( bAll )
-        pRet = FindFmtByName( (SvPtrarr&)*pTblFrmFmtTbl, rName );
+        pRet = FindFmtByName( *pTblFrmFmtTbl, rName );
     else
     {
         // dann nur die, die im Doc gesetzt sind
-        for( sal_uInt16 n = 0; n < pTblFrmFmtTbl->Count(); ++n )
+        for( sal_uInt16 n = 0; n < pTblFrmFmtTbl->size(); ++n )
         {
             const SwFrmFmt* pFmt = (*pTblFrmFmtTbl)[ n ];
             if( !pFmt->IsDefault() && IsUsed( *pFmt ) &&
@@ -4507,7 +4507,7 @@ sal_Bool SwDoc::UnProtectTbls( const SwPaM& rPam )
     SwFrmFmts& rFmts = *GetTblFrmFmts();
     SwTable* pTbl;
     const SwTableNode* pTblNd;
-    for( sal_uInt16 n = rFmts.Count(); n ; )
+    for( sal_uInt16 n = rFmts.size(); n ; )
         if( 0 != (pTbl = SwTable::FindTable( rFmts[ --n ] )) &&
             0 != (pTblNd = pTbl->GetTableNode() ) &&
             pTblNd->GetNodes().IsDocNodes() )

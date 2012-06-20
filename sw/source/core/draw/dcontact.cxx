@@ -690,7 +690,7 @@ SwDrawContact::~SwDrawContact()
 
 void SwDrawContact::GetTextObjectsFromFmt( std::list<SdrTextObj*>& rTextObjects, SwDoc* pDoc )
 {
-    for( sal_Int32 n=0; n<pDoc->GetSpzFrmFmts()->Count(); n++ )
+    for( sal_Int32 n=0; n<(sal_Int32)pDoc->GetSpzFrmFmts()->size(); n++ )
     {
         SwFrmFmt* pFly = (*pDoc->GetSpzFrmFmts())[n];
         if( pFly->IsA( TYPE(SwDrawFrmFmt) ) )
@@ -1853,8 +1853,8 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                         else
                         {
                             const SwNodeIndex& rIdx = pAnch->GetCntntAnchor()->nNode;
-                            SwSpzFrmFmts& rFmts = *(pDrawFrmFmt->GetDoc()->GetSpzFrmFmts());
-                            for( sal_uInt16 i = 0; i < rFmts.Count(); ++i )
+                            SwFrmFmts& rFmts = *(pDrawFrmFmt->GetDoc()->GetSpzFrmFmts());
+                            for( sal_uInt16 i = 0; i < rFmts.size(); ++i )
                             {
                                 SwFrmFmt* pFlyFmt = rFmts[i];
                                 if( pFlyFmt->GetCntnt().GetCntntIdx() &&

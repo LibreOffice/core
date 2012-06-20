@@ -103,10 +103,6 @@ public:
 TYPEINIT1(SwSectionFmt,SwFrmFmt );
 TYPEINIT1(SwSection,SwClient );
 
-typedef SwSection* SwSectionPtr;
-
-SV_IMPL_PTRARR(SwSectionFmts,SwSectionFmt*)
-
 
 SwSectionData::SwSectionData(SectionType const eType, String const& rName)
     : m_eType(eType)
@@ -675,7 +671,7 @@ SwSectionFmt::~SwSectionFmt()
             // noch anzeigen muessen!
             if( rSect.IsHiddenFlag() )
             {
-                SwSectionPtr pParentSect = rSect.GetParent();
+                SwSection* pParentSect = rSect.GetParent();
                 if( !pParentSect || !pParentSect->IsHiddenFlag() )
                 {
                     // Nodes wieder anzeigen
@@ -973,7 +969,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
     if( !GetDepends() )
         return;
 
-    SwSectionPtr pSection = 0;
+    SwSection* pSection = 0;
     const SvxProtectItem* pProtect(0);
     // edit in readonly sections
     const SwFmtEditInReadonly* pEditInReadonly = 0;
@@ -990,7 +986,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                     pSection = GetSection();
                     if( GetRegisteredIn() )
                     {
-                        const SwSectionPtr pPS = GetParentSection();
+                        const SwSection* pPS = GetParentSection();
                         pProtect = &pPS->GetFmt()->GetProtect();
                         // edit in readonly sections
                         pEditInReadonly = &pPS->GetFmt()->GetEditInReadonly();
@@ -1030,10 +1026,10 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
             else if( !pSection &&
                     pLast->IsA( TYPE(SwSection) ) )
             {
-                pSection = (SwSectionPtr)pLast;
+                pSection = (SwSection*)pLast;
                 if( GetRegisteredIn() )
                 {
-                    const SwSectionPtr pPS = GetParentSection();
+                    const SwSection* pPS = GetParentSection();
                     pProtect = &pPS->GetFmt()->GetProtect();
                     // edit in readonly sections
                     pEditInReadonly = &pPS->GetFmt()->GetEditInReadonly();
@@ -1596,7 +1592,7 @@ void SwIntrnlSectRefLink::Closed()
         // kennzeichnen und das Flag umsetzen
 
         const SwSectionFmts& rFmts = pDoc->GetSections();
-        for( sal_uInt16 n = rFmts.Count(); n; )
+        for( sal_uInt16 n = rFmts.size(); n; )
             if( rFmts[ --n ] == &rSectFmt )
             {
                 ViewShell* pSh;
@@ -1744,6 +1740,22 @@ sal_Bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
             pSttNd->EndOfSectionIndex() < nEndNd;
 }
 
+sal_uInt16 SwSectionFmts::GetPos(const SwSectionFmt* p) const
+{
+    const_iterator it = std::find(begin(), end(), p);
+    return it == end() ? USHRT_MAX : it - begin();
+}
+
+bool SwSectionFmts::Contains(const SwSectionFmt* p) const
+{
+    return std::find(begin(), end(), p) != end();
+}
+
+SwSectionFmts::~SwSectionFmts()
+{
+    for(const_iterator it = begin(); it != end(); ++it)
+        delete *it;
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

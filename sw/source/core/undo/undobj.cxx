@@ -612,16 +612,16 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
     if( nsDelCntntType::DELCNT_FLY & nDelCntntType )
     {
         sal_uInt16 nChainInsPos = pHistory ? pHistory->Count() : 0;
-        const SwSpzFrmFmts& rSpzArr = *pDoc->GetSpzFrmFmts();
-        if( rSpzArr.Count() )
+        const SwFrmFmts& rSpzArr = *pDoc->GetSpzFrmFmts();
+        if( !rSpzArr.empty() )
         {
             const sal_Bool bDelFwrd = rMark.nNode.GetIndex() <= rPoint.nNode.GetIndex();
             SwFlyFrmFmt* pFmt;
             const SwFmtAnchor* pAnchor;
-            sal_uInt16 n = rSpzArr.Count();
+            sal_uInt16 n = rSpzArr.size();
             const SwPosition* pAPos;
 
-            while( n && rSpzArr.Count() )
+            while( n && !rSpzArr.empty() )
             {
                 pFmt = (SwFlyFrmFmt*)rSpzArr[--n];
                 pAnchor = &pFmt->GetAnchor();
@@ -643,7 +643,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         assert(pFlyHnt);
                         pHistory->Add( pFlyHnt, 0, false );
                         // reset n so that no Format is skipped
-                        n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
+                        n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                     }
                     break;
                 case FLY_AT_PARA:
@@ -687,8 +687,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                                 {
                                     pHistory->Add( *pFmt, nChainInsPos );
                                     // reset n so that no Format is skipped
-                                    n = n >= rSpzArr.Count() ?
-                                        rSpzArr.Count() : n+1;
+                                    n = n >= rSpzArr.size() ?
+                                        rSpzArr.size() : n+1;
                                 }
                             }
                         }
@@ -704,7 +704,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                                 *pAPos, *pStt, *pEnd, nDelCntntType))
                         {
                             pHistory->Add( *pFmt, nChainInsPos );
-                            n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
+                            n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                         }
                         else if( !( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType ) )
                         {
@@ -735,7 +735,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         pHistory->Add( *pFmt, nChainInsPos );
 
                         // reset n so that no Format is skipped
-                        n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
+                        n = n >= rSpzArr.size() ? rSpzArr.size() : n+1;
                     }
                     break;
                 default: break;

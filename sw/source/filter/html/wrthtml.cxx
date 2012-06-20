@@ -208,8 +208,8 @@ sal_uLong SwHTMLWriter::WriteStream()
         bOldHTMLMode = pTemplate->get(IDocumentSettingAccess::HTML_MODE);
         pTemplate->set(IDocumentSettingAccess::HTML_MODE, true);
 
-        nOldTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->Count();
-        nOldCharFmtCnt = pTemplate->GetCharFmts()->Count();
+        nOldTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->size();
+        nOldCharFmtCnt = pTemplate->GetCharFmts()->size();
     }
 
     if( bShowProgress )
@@ -432,16 +432,16 @@ sal_uLong SwHTMLWriter::WriteStream()
     {
         // Waehrend des Exports angelegte Zeichen- und Abastzvorlagen
         // loeschen
-        sal_uInt16 nTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->Count();
+        sal_uInt16 nTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->size();
         while( nTxtFmtCollCnt > nOldTxtFmtCollCnt )
             pTemplate->DelTxtFmtColl( --nTxtFmtCollCnt );
-        OSL_ENSURE( pTemplate->GetTxtFmtColls()->Count() == nOldTxtFmtCollCnt,
+        OSL_ENSURE( pTemplate->GetTxtFmtColls()->size() == nOldTxtFmtCollCnt,
                 "falsche Anzahl TxtFmtColls geloescht" );
 
-        sal_uInt16 nCharFmtCnt = pTemplate->GetCharFmts()->Count();
+        sal_uInt16 nCharFmtCnt = pTemplate->GetCharFmts()->size();
         while( nCharFmtCnt > nOldCharFmtCnt )
             pTemplate->DelCharFmt( --nCharFmtCnt );
-        OSL_ENSURE( pTemplate->GetCharFmts()->Count() == nOldCharFmtCnt,
+        OSL_ENSURE( pTemplate->GetCharFmts()->size() == nOldCharFmtCnt,
                 "falsche Anzahl CharFmts geloescht" );
 
         // HTML-Modus wieder restaurieren

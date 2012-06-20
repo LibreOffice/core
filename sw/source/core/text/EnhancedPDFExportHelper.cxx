@@ -1768,8 +1768,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         //
         // HYPERLINKS (Graphics, Frames, OLEs )
         //
-        const SwSpzFrmFmts* pTbl = pDoc->GetSpzFrmFmts();
-        const sal_uInt16 nSpzFrmFmtsCount = pTbl->Count();
+        const SwFrmFmts* pTbl = pDoc->GetSpzFrmFmts();
+        const sal_uInt16 nSpzFrmFmtsCount = pTbl->size();
         for( sal_uInt16 n = 0; n < nSpzFrmFmtsCount; ++n )
         {
             const SwFrmFmt* pFrmFmt = (*pTbl)[n];

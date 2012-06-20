@@ -558,10 +558,10 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
         {
             // dann erstmal den richtigen Anker finden
             const SwFrmFmt* pFmt = 0;
-            const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
+            const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
             sal_uInt16 n;
 
-            for( n = 0; n < rFmts.Count(); ++n )
+            for( n = 0; n < rFmts.size(); ++n )
             {
                 SwFrmFmt* pFrmFmt = rFmts[ n ];
                 const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
@@ -584,7 +584,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                     while( pFlyNd )
                     {
                         // dann ueber den Anker nach oben "hangeln"
-                        for( n = 0; n < rFmts.Count(); ++n )
+                        for( n = 0; n < rFmts.size(); ++n )
                         {
                             const SwFrmFmt* pFrmFmt = rFmts[ n ];
                             const SwNodeIndex* pIdx = pFrmFmt->GetCntnt().
@@ -610,7 +610,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                                 break;
                             }
                         }
-                        if( n >= rFmts.Count() )
+                        if( n >= rFmts.size() )
                         {
                             OSL_ENSURE( !this, "Fly-Section aber kein Format gefunden" );
                             return sal_False;
@@ -765,8 +765,8 @@ SwFrmFmt* SwNode::GetFlyFmt() const
         if( !pRet )
         {
             // dann gibts noch harten steinigen Weg uebers Dokument:
-            const SwSpzFrmFmts& rFrmFmtTbl = *GetDoc()->GetSpzFrmFmts();
-            for( sal_uInt16 n = 0; n < rFrmFmtTbl.Count(); ++n )
+            const SwFrmFmts& rFrmFmtTbl = *GetDoc()->GetSpzFrmFmts();
+            for( sal_uInt16 n = 0; n < rFrmFmtTbl.size(); ++n )
             {
                 SwFrmFmt* pFmt = rFrmFmtTbl[n];
                 const SwFmtCntnt& rCntnt = pFmt->GetCntnt();

@@ -941,7 +941,7 @@ void SwFEShell::GetPageObjs( SvPtrarr& rFillArr )
         rFillArr.Remove( 0, rFillArr.Count() );
 
     const SwFrmFmt* pFmt;
-    for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->Count(); ++n )
+    for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
     {
         pFmt = (const SwFrmFmt*)(*pDoc->GetSpzFrmFmts())[n];
         if (FLY_AT_PAGE == pFmt->GetAnchor().GetAnchorId())
@@ -972,7 +972,7 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
     for( sal_uInt16 n = 0; n < rFillArr.Count(); ++n )
     {
         pFmt = (SwFrmFmt*)rFillArr[n];
-        if( USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( pFmt ))
+        if( pDoc->GetSpzFrmFmts()->Contains( pFmt ))
         {
             // FlyFmt is still valid, therefore process
 
@@ -1488,8 +1488,8 @@ SwFrmFmt* SwFEShell::WizzardGetFly()
 {
     // do not search the Fly via the layout. Now we can delete a frame
     // without a valid layout. ( e.g. for the wizards )
-    SwSpzFrmFmts& rSpzArr = *pDoc->GetSpzFrmFmts();
-    sal_uInt16 nCnt = rSpzArr.Count();
+    SwFrmFmts& rSpzArr = *pDoc->GetSpzFrmFmts();
+    sal_uInt16 nCnt = rSpzArr.size();
     if( nCnt )
     {
         SwNodeIndex& rCrsrNd = GetCrsr()->GetPoint()->nNode;

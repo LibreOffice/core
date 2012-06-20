@@ -3097,7 +3097,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     //USER STYLES
 
     const SwCharFmts *pFmts = pDoc->GetCharFmts();
-    for(sal_uInt16 i = 0; i < pFmts->Count(); ++i)
+    for(sal_uInt16 i = 0; i < pFmts->size(); ++i)
     {
         const SwAttrSet &rAttrSet = (*pFmts)[i]->GetAttrSet();
         LanguageType nLang = LANGUAGE_DONTKNOW;
@@ -3122,7 +3122,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     }
 
     const SwTxtFmtColls *pColls = pDoc->GetTxtFmtColls();
-    for (sal_uInt16 i = 0; i < pColls->Count(); ++i)
+    for (sal_uInt16 i = 0; i < pColls->size(); ++i)
     {
         const SwAttrSet &rAttrSet = (*pColls)[i]->GetAttrSet();
         LanguageType nLang = LANGUAGE_DONTKNOW;

@@ -434,7 +434,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     if( !pDoc->IsCopyIsMove() )
     {
         const SwFrmFmts& rTblFmts = *pDoc->GetTblFrmFmts();
-        for( sal_uInt16 n = rTblFmts.Count(); n; )
+        for( sal_uInt16 n = rTblFmts.size(); n; )
             if( rTblFmts[ --n ]->GetName() == sTblName )
             {
                 sTblName = pDoc->GetUniqueTblName();
@@ -543,9 +543,9 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
 sal_Bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
                         sal_uLong nInsNd )
 {
-    const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
+    const SwFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-    for( sal_uInt16 n = 0; n < rFrmFmtTbl.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rFrmFmtTbl.size(); ++n )
     {
         SwFrmFmt const*const  pFmt = rFrmFmtTbl[n];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -1402,7 +1402,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     //            beibehalten.
     SwDoc *const pDest = rStartIdx.GetNode().GetDoc();
     ::std::set< _ZSortFly > aSet;
-    sal_uInt16 nArrLen = GetSpzFrmFmts()->Count();
+    sal_uInt16 nArrLen = GetSpzFrmFmts()->size();
 
     for ( sal_uInt16 n = 0; n < nArrLen; ++n )
     {

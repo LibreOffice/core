@@ -641,11 +641,11 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
 
     sal_uInt16 nNum = 0;
     sal_uInt16 nTmp = 0;
-    sal_uInt16 nFlagSize = ( pSectionFmtTbl->Count() / 8 ) +2;
+    sal_uInt16 nFlagSize = ( pSectionFmtTbl->size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    for( n = 0; n < pSectionFmtTbl->Count(); ++n )
+    for( n = 0; n < pSectionFmtTbl->size(); ++n )
         if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) )&&
              TOX_CONTENT_SECTION == (pSect = &pSectNd->GetSection())->GetType())
         {
@@ -654,7 +654,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             {
                 // Calculate number and set the Flag
                 nNum = (sal_uInt16)rNm.Copy( nNmLen ).ToInt32();
-                if( nNum-- && nNum < pSectionFmtTbl->Count() )
+                if( nNum-- && nNum < pSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
             if( pChkStr && pChkStr->Equals( rNm ) )
@@ -664,7 +664,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     if( !pChkStr )
     {
         // All Numbers have been flagged accordingly, so get the right Number
-        nNum = pSectionFmtTbl->Count();
+        nNum = pSectionFmtTbl->size();
         for( n = 0; n < nFlagSize; ++n )
             if( 0xff != ( nTmp = pSetFlags[ n ] ))
             {
@@ -1513,7 +1513,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
     SwNodes& rNds = pDoc->GetNodes();
     const SwFrmFmts& rArr = *pDoc->GetTblFrmFmts();
 
-    for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rArr.size(); ++n )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 

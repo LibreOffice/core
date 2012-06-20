@@ -154,9 +154,6 @@ public:
 */
 };
 
-typedef SwTxtFmtColl* SwTxtFmtCollPtr;
-SV_DECL_PTRARR(SwTxtFmtColls,SwTxtFmtCollPtr,2)
-
 class SwGrfFmtColl: public SwFmtColl
 {
     friend class SwDoc;
@@ -176,9 +173,6 @@ protected:
 public:
     TYPEINFO(); // Already in base class Client.
 };
-
-typedef SwGrfFmtColl* SwGrfFmtCollPtr;
-SV_DECL_PTRARR(SwGrfFmtColls,SwGrfFmtCollPtr,2)
 
 // FEATURE::CONDCOLL
 // Conditional styles.

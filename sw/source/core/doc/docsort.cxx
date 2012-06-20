@@ -312,7 +312,7 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     const SwPosition *pStart = rPaM.Start(), *pEnd = rPaM.End();
 
     // Set index to the Selection's start
-    for ( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+    for ( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
     {
         SwFrmFmt *const pFmt = static_cast<SwFrmFmt*>((*GetSpzFrmFmts())[n]);
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();

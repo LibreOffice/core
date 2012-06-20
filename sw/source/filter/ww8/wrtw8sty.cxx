@@ -146,8 +146,8 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport )
         m_rExport.pDoc->GetFtnInfo().GetAnchorCharFmt( *m_rExport.pDoc );
         m_rExport.pDoc->GetFtnInfo().GetCharFmt( *m_rExport.pDoc );
     }
-    sal_uInt16 nAlloc = WW8_RESERVED_SLOTS + m_rExport.pDoc->GetCharFmts()->Count() - 1 +
-                                         m_rExport.pDoc->GetTxtFmtColls()->Count() - 1;
+    sal_uInt16 nAlloc = WW8_RESERVED_SLOTS + m_rExport.pDoc->GetCharFmts()->size() - 1 +
+                                         m_rExport.pDoc->GetTxtFmtColls()->size() - 1;
 
     // etwas grosszuegig ( bis zu 15 frei )
     pFmtA = new SwFmt*[ nAlloc ];
@@ -272,21 +272,19 @@ void MSWordStyles::BuildStylesTable()
 {
     nUsedSlots = WW8_RESERVED_SLOTS;    // soviele sind reserviert fuer
                                         // Standard und HeadingX u.a.
-    SwFmt* pFmt;
-    sal_uInt16 n;
-    const SvPtrarr& rArr = *m_rExport.pDoc->GetCharFmts();       // erst CharFmt
+    const SwCharFmts& rArr = *m_rExport.pDoc->GetCharFmts();       // erst CharFmt
     // das Default-ZeichenStyle ( 0 ) wird nicht mit ausgegeben !
-    for( n = 1; n < rArr.Count(); n++ )
+    for( sal_uInt16 n = 1; n < rArr.size(); n++ )
     {
-        pFmt = (SwFmt*)rArr[n];
+        SwCharFmt* pFmt = rArr[n];
         pFmtA[ BuildGetSlot( *pFmt ) ] = pFmt;
     }
 
-    const SvPtrarr& rArr2 = *m_rExport.pDoc->GetTxtFmtColls();   // dann TxtFmtColls
+    const SwTxtFmtColls& rArr2 = *m_rExport.pDoc->GetTxtFmtColls();   // dann TxtFmtColls
     // das Default-TextStyle ( 0 ) wird nicht mit ausgegeben !
-    for( n = 1; n < rArr2.Count(); n++ )
+    for( sal_uInt16 n = 1; n < rArr2.size(); n++ )
     {
-        pFmt = (SwFmt*)rArr2[n];
+        SwTxtFmtColl* pFmt = rArr2[n];
         pFmtA[ BuildGetSlot( *pFmt ) ] = pFmt;
     }
 }

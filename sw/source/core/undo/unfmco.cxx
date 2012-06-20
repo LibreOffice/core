@@ -32,6 +32,7 @@
 #include "ndtxt.hxx"
 #include <UndoCore.hxx>
 #include "rolbck.hxx"
+#include "docary.hxx"
 
 //--------------------------------------------------
 

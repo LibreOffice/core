@@ -191,7 +191,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
     {
         // Look for the 1st level OutlineTemplate
         const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
-        for( sal_uInt16 n = rFmtColls.Count(); n; )
+        for( sal_uInt16 n = rFmtColls.size(); n; )
             if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
                 pSplitColl = rFmtColls[ n ];
@@ -330,7 +330,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
                     // We need to have a Layout for the HTMLFilter, so that
                     // TextFrames/Controls/OLE objects can be exported correctly as graphics.
                     if( SPLITDOC_TO_HTML == eDocType &&
-                        pDoc->GetSpzFrmFmts()->Count() )
+                        !pDoc->GetSpzFrmFmts()->empty() )
                     {
                             SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
@@ -377,7 +377,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
                             CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), sal_True);
 
                             // If FlyFrames are still around, delete these too
-                            for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+                            for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
                             {
                                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
@@ -496,8 +496,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
         if( get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         {
             // save all remaining sections
-            while( GetSections().Count() )
-                DelSectionFmt( GetSections()[ 0 ] );
+            while( !GetSections().empty() )
+                DelSectionFmt( GetSections().front() );
 
             SfxFilterContainer* pFCntnr = pDocShell->GetFactory().GetFilterContainer();
             pFilter = pFCntnr->GetFilter4EA( pFilter->GetTypeName(), SFX_FILTER_EXPORT );

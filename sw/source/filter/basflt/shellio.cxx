@@ -147,7 +147,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     RedlineMode_t ePostReadRedlineMode( nsRedlineMode_t::REDLINE_IGNORE );
 
     // Array von FlyFormaten
-    SwSpzFrmFmts aFlyFrmArr;
+    SwFrmFmts aFlyFrmArr;
     // only read templates? then ignore multi selection!
     sal_Bool bFmtsOnly = po->aOpt.IsFmtsOnly();
 
@@ -168,7 +168,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         // Speicher mal alle Fly's
         if( pCrsr )
-            aFlyFrmArr.Insert( pDoc->GetSpzFrmFmts(), 0L );
+            std::copy( pDoc->GetSpzFrmFmts()->begin(), pDoc->GetSpzFrmFmts()->end(), aFlyFrmArr.begin() );
 
         xub_StrLen nSttCntnt = pPam->GetPoint()->nContent.GetIndex();
 
@@ -229,7 +229,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
             // Suche alle neuen Fly's und speicher sie als einzelne Undo
             // Objecte
-            for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->Count(); ++n )
+            for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
             {
                 SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ n ];
                 const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
@@ -306,8 +306,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                     }
                 }
             }
-            if( aFlyFrmArr.Count() )
-                aFlyFrmArr.Remove( 0, aFlyFrmArr.Count() );
+            if( !aFlyFrmArr.empty() )
+                aFlyFrmArr.clear();
 
             pDoc->SetRedlineMode_intern( eOld );
             if( pDoc->IsRedlineOn() )

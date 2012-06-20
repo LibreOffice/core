@@ -929,7 +929,7 @@ SwCntntNotify::~SwCntntNotify()
         pCnt->SetRetouche();    //fix(13870)
 
         SwDoc *pDoc = pCnt->GetNode()->GetDoc();
-        if ( pDoc->GetSpzFrmFmts()->Count() &&
+        if ( !pDoc->GetSpzFrmFmts()->empty() &&
              !pDoc->IsLoaded() && !pDoc->IsNewDoc() )
         {
             //Der Frm wurde wahrscheinlich zum ersten mal formatiert.
@@ -944,9 +944,9 @@ SwCntntNotify::~SwCntntNotify()
 
             const SwPageFrm *pPage = 0;
             SwNodeIndex   *pIdx  = 0;
-            SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
+            SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
 
-            for ( sal_uInt16 i = 0; i < pTbl->Count(); ++i )
+            for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
             {
                 if ( !pPage )
                     pPage = pCnt->FindPageFrm();
@@ -1027,10 +1027,10 @@ SwCntntNotify::~SwCntntNotify()
 
 /*************************************************************************/
 
-void AppendObjs( const SwSpzFrmFmts *pTbl, sal_uLong nIndex,
+void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
                         SwFrm *pFrm, SwPageFrm *pPage )
 {
-    for ( sal_uInt16 i = 0; i < pTbl->Count(); ++i )
+    for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
     {
         SwFrmFmt *pFmt = (SwFrmFmt*)(*pTbl)[i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
@@ -1148,7 +1148,7 @@ bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
     return bRetVal;
 }
 
-void AppendAllObjs( const SwSpzFrmFmts *pTbl, const SwFrm* pSib )
+void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
 {
     //Verbinden aller Objekte, die in der SpzTbl beschrieben sind mit dem
     //Layout.
@@ -1156,15 +1156,14 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl, const SwFrm* pSib )
     //uebrigbleiben, weil wir weder zeichengebunde Rahmen verbinden noch
     //Objecte die in zeichengebundenen verankert sind.
 
-    SwSpzFrmFmts aCpy( 255 );
-    aCpy.Insert( pTbl, 0 );
+    SwFrmFmts aCpy( *pTbl );
 
     sal_uInt16 nOldCnt = USHRT_MAX;
 
-    while ( aCpy.Count() && aCpy.Count() != nOldCnt )
+    while ( !aCpy.empty() && aCpy.size() != nOldCnt )
     {
-        nOldCnt = aCpy.Count();
-        for ( int i = 0; i < int(aCpy.Count()); ++i )
+        nOldCnt = aCpy.size();
+        for ( int i = 0; i < int(aCpy.size()); ++i )
         {
             SwFrmFmt *pFmt = (SwFrmFmt*)aCpy[ sal_uInt16(i) ];
             const SwFmtAnchor &rAnch = pFmt->GetAnchor();
@@ -1190,12 +1189,12 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl, const SwFrm* pSib )
             }
             if ( bRemove )
             {
-                aCpy.Remove( sal_uInt16(i) );
+                aCpy.erase( aCpy.begin() + i );
                 --i;
             }
         }
     }
-    aCpy.Remove( 0, aCpy.Count() );
+    aCpy.clear();
 }
 
 /** local method to set 'working' position for newly inserted frames
@@ -1244,7 +1243,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     const sal_Bool bStartPercent = bPages && !nEndIndex;
 
     SwPageFrm *pPage = pLay->FindPageFrm();
-    const SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
+    const SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
     SwFrm       *pFrm = 0;
     sal_Bool   bBreakAfter   = sal_False;
 
@@ -1340,7 +1339,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             lcl_SetPos( *pFrm, *pLay );
             pPrv = pFrm;
 
-            if ( pTbl->Count() && bObjsDirect && !bDontCreateObjects )
+            if ( !pTbl->empty() && bObjsDirect && !bDontCreateObjects )
                 AppendObjs( pTbl, nIndex, pFrm, pPage );
         }
         else if ( pNd->IsTableNode() )
@@ -1378,7 +1377,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                             dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
                 }
             }
-            if ( bObjsDirect && pTbl->Count() )
+            if ( bObjsDirect && !pTbl->empty() )
                 ((SwTabFrm*)pFrm)->RegistFlys();
             // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
             // for setting position at newly inserted frame
@@ -1557,7 +1556,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         else if( pNd->IsStartNode() &&
                  SwFlyStartNode == ((SwStartNode*)pNd)->GetStartNodeType() )
         {
-            if ( pTbl->Count() && bObjsDirect && !bDontCreateObjects )
+            if ( !pTbl->empty() && bObjsDirect && !bDontCreateObjects )
             {
                 SwFlyFrm* pFly = pLay->FindFlyFrm();
                 if( pFly )
@@ -1790,8 +1789,8 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 // depend on value of <bAllowMove>
                 if( !bDontCreateObjects )
                 {
-                    const SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
-                    if( pTbl->Count() )
+                    const SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
+                    if( !pTbl->empty() )
                         AppendAllObjs( pTbl, pUpper );
                 }
 

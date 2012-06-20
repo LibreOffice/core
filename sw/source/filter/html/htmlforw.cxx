@@ -1433,8 +1433,8 @@ void SwHTMLWriter::GetControls()
     }
 
     // und jetzt die in einem zeichengebundenen Rahmen
-    const SwSpzFrmFmts* pSpzFrmFmts = pDoc->GetSpzFrmFmts();
-    for( i=0; i<pSpzFrmFmts->Count(); i++ )
+    const SwFrmFmts* pSpzFrmFmts = pDoc->GetSpzFrmFmts();
+    for( i=0; i<pSpzFrmFmts->size(); i++ )
     {
         const SwFrmFmt *pFrmFmt = (*pSpzFrmFmts)[i];
         if( RES_DRAWFRMFMT != pFrmFmt->Which() )

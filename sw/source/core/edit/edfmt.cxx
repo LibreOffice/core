@@ -46,7 +46,7 @@
 
 sal_uInt16 SwEditShell::GetCharFmtCount() const
 {
-    return GetDoc()->GetCharFmts()->Count();
+    return GetDoc()->GetCharFmts()->size();
 }
 
 

@@ -234,8 +234,7 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
     if ( RES_TXTATR_CHARFMT == m_pAttr->Which() )
     {
         // ask the Doc if the CharFmt still exists
-        if ( USHRT_MAX == pDoc->GetCharFmts()->GetPos(
-                        (static_cast<SwFmtCharFmt&>(*m_pAttr)).GetCharFmt() ) )
+        if ( !pDoc->GetCharFmts()->Contains( (static_cast<SwFmtCharFmt&>(*m_pAttr)).GetCharFmt() ) )
             return; // do not set, format does not exist
     }
 

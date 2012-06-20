@@ -170,11 +170,10 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
     case EVENT_OBJECT_URLITEM:
     case EVENT_OBJECT_IMAGE:
         {
-            const SwFrmFmtPtr pFmt = (SwFrmFmtPtr)rCallEvent.PTR.pFmt;
+            const SwFrmFmt* pFmt = (SwFrmFmt*)rCallEvent.PTR.pFmt;
             if( bCheckPtr )
             {
-                sal_uInt16 nPos = GetSpzFrmFmts()->GetPos( pFmt );
-                if( USHRT_MAX != nPos )
+                if ( GetSpzFrmFmts()->Contains( pFmt ) )
                     bCheckPtr = sal_False;      // misuse as a flag
             }
             if( !bCheckPtr )
@@ -187,13 +186,12 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             const IMapObject* pIMapObj = rCallEvent.PTR.IMAP.pIMapObj;
             if( bCheckPtr )
             {
-                const SwFrmFmtPtr pFmt = (SwFrmFmtPtr)rCallEvent.PTR.IMAP.pFmt;
-                sal_uInt16 nPos = GetSpzFrmFmts()->GetPos( pFmt );
+                const SwFrmFmt* pFmt = (SwFrmFmt*)rCallEvent.PTR.IMAP.pFmt;
                 const ImageMap* pIMap;
-                if( USHRT_MAX != nPos &&
+                if( GetSpzFrmFmts()->Contains( pFmt ) &&
                     0 != (pIMap = pFmt->GetURL().GetMap()) )
                 {
-                    for( nPos = pIMap->GetIMapObjectCount(); nPos; )
+                    for( sal_uInt16 nPos = pIMap->GetIMapObjectCount(); nPos; )
                         if( pIMapObj == pIMap->GetIMapObject( --nPos ))
                         {
                             bCheckPtr = sal_False;      // misuse as a flag

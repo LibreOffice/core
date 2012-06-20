@@ -373,8 +373,8 @@ sal_Bool SwAutoFormat::HasObjects( const SwNode& rNd )
     // Is there something bound to the paragraph in the paragraph
     // like borders, DrawObjects, ...
     sal_Bool bRet = sal_False;
-    const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+    const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
+    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
         const SwFmtAnchor& rAnchor = rFmts[ n ]->GetAnchor();
         if ((FLY_AT_PAGE != rAnchor.GetAnchorId()) &&

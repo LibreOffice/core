@@ -692,7 +692,7 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const String& rNm ) const
 {
     const SwFrmFmts& rTblFmts = *rDoc.GetTblFrmFmts();
     const SwTable* pTmpTbl, *pRet = 0;
-    for( sal_uInt16 nFmtCnt = rTblFmts.Count(); nFmtCnt; )
+    for( sal_uInt16 nFmtCnt = rTblFmts.size(); nFmtCnt; )
     {
         SwFrmFmt* pFmt = rTblFmts[ --nFmtCnt ];
         // falls wir von Sw3Writer gerufen werden, dann ist dem

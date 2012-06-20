@@ -45,6 +45,7 @@
 #include <pam.hxx>
 #include <docary.hxx>
 #include <MarkManager.hxx>
+#include <boost/foreach.hpp>
 
 using namespace ::com::sun::star;
 
@@ -85,10 +86,9 @@ struct _FindItem
     {}
 };
 
-sal_Bool lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bCaseSensitive )
+static bool lcl_FindSection( const SwSectionFmt* pSectFmt, _FindItem * const pItem, bool bCaseSensitive )
 {
-    _FindItem * const pItem( static_cast<_FindItem*>(pArgs) );
-    SwSection* pSect = rpSectFmt->GetSection();
+    SwSection* pSect = pSectFmt->GetSection();
     if( pSect )
     {
         String sNm( (bCaseSensitive)
@@ -101,52 +101,43 @@ sal_Bool lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bC
         {
             // found, so get the data
             const SwNodeIndex* pIdx;
-            if( 0 != (pIdx = rpSectFmt->GetCntnt().GetCntntIdx() ) &&
-                &rpSectFmt->GetDoc()->GetNodes() == &pIdx->GetNodes() )
+            if( 0 != (pIdx = pSectFmt->GetCntnt().GetCntntIdx() ) &&
+                &pSectFmt->GetDoc()->GetNodes() == &pIdx->GetNodes() )
             {
                 // a table in the normal NodesArr
                 pItem->pSectNd = pIdx->GetNode().GetSectionNode();
-                return sal_False;
+                return false;
             }
             // If the name is already correct, but not the rest then we don't have them.
             // The names are always unique.
         }
     }
-    return sal_True;
-}
-sal_Bool lcl_FindSectionCaseSensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
-{
-    return lcl_FindSection( rpSectFmt, pArgs, true );
-}
-sal_Bool lcl_FindSectionCaseInsensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
-{
-    return lcl_FindSection( rpSectFmt, pArgs, false );
+    return true;
 }
 
 
 
-sal_Bool lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
+static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
 {
-    _FindItem * const pItem( static_cast<_FindItem*>(pArgs) );
-    String sNm( GetAppCharClass().lowercase( rpTableFmt->GetName() ));
+    String sNm( GetAppCharClass().lowercase( pTableFmt->GetName() ));
     if (sNm.Equals( pItem->m_Item ))
     {
         SwTable* pTmpTbl;
         SwTableBox* pFBox;
-        if( 0 != ( pTmpTbl = SwTable::FindTable( rpTableFmt ) ) &&
+        if( 0 != ( pTmpTbl = SwTable::FindTable( pTableFmt ) ) &&
             0 != ( pFBox = pTmpTbl->GetTabSortBoxes()[0] ) &&
             pFBox->GetSttNd() &&
-            &rpTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
+            &pTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
         {
             // a table in the normal NodesArr
             pItem->pTblNd = (SwTableNode*)
                                         pFBox->GetSttNd()->FindTableNode();
-            return sal_False;
+            return false;
         }
         // If the name is already correct, but not the rest then we don't have them.
         // The names are always unique.
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -165,8 +156,11 @@ bool SwDoc::GetData( const rtl::OUString& rItem, const String& rMimeType,
         // Do we already have the Item?
         String sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
-                                                    bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
+        BOOST_FOREACH( const SwSectionFmt* pFmt, *pSectionFmtTbl )
+        {
+            if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
+                break;
+        }
         if( aPara.pSectNd )
         {
             // found, so get the data
@@ -178,8 +172,11 @@ bool SwDoc::GetData( const rtl::OUString& rItem, const String& rMimeType,
     }
 
     _FindItem aPara( GetAppCharClass().lowercase( rItem ));
-    ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach( 0, pTblFrmFmtTbl->Count(),
-                                            lcl_FindTable, &aPara );
+    BOOST_FOREACH( const SwFrmFmt* pFmt, *pTblFrmFmtTbl )
+    {
+        if (!(lcl_FindTable(pFmt, &aPara)))
+            break;
+    }
     if( aPara.pTblNd )
     {
         return SwServerObject( *aPara.pTblNd ).GetData( rValue, rMimeType );
@@ -204,7 +201,11 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
         // Do we already have the Item?
         String sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        pSectionFmtTbl->ForEach( 0, pSectionFmtTbl->Count(), bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
+        BOOST_FOREACH( const SwSectionFmt* pFmt, *pSectionFmtTbl )
+        {
+            if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
+                break;
+        }
         if( aPara.pSectNd )
         {
             // found, so get the data
@@ -217,7 +218,11 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
 
     String sItem(GetAppCharClass().lowercase(rItem));
     _FindItem aPara( sItem );
-    pTblFrmFmtTbl->ForEach( 0, pTblFrmFmtTbl->Count(), lcl_FindTable, &aPara );
+    BOOST_FOREACH( const SwFrmFmt* pFmt, *pTblFrmFmtTbl )
+    {
+        if (!(lcl_FindTable(pFmt, &aPara)))
+            break;
+    }
     if( aPara.pTblNd )
     {
         return SwServerObject( *aPara.pTblNd ).SetData( rMimeType, rValue );
@@ -251,7 +256,12 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
 
         _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         // sections
-        ((SwSectionFmts&)*pSectionFmtTbl).ForEach(0, pSectionFmtTbl->Count(), bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara);
+        BOOST_FOREACH( const SwSectionFmt* pFmt, *pSectionFmtTbl )
+        {
+            if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
+                break;
+        }
+
         if(aPara.pSectNd
             && (0 == (pObj = aPara.pSectNd->GetSection().GetObject())))
         {
@@ -269,7 +279,11 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
 
     _FindItem aPara( GetAppCharClass().lowercase(rItem) );
     // tables
-    ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach(0, pTblFrmFmtTbl->Count(), lcl_FindTable, &aPara);
+    BOOST_FOREACH( const SwFrmFmt* pFmt, *pTblFrmFmtTbl )
+    {
+        if (!(lcl_FindTable(pFmt, &aPara)))
+            break;
+    }
     if(aPara.pTblNd
         && (0 == (pObj = aPara.pTblNd->GetTable().GetObject())))
     {
@@ -310,8 +324,11 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         if( sCmp.EqualsAscii( pMarkToTable ) )
         {
             sName = rCC.lowercase( sName );
-            ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach( 0, pTblFrmFmtTbl->Count(),
-                                                    lcl_FindTable, &aPara );
+            BOOST_FOREACH( const SwFrmFmt* pFmt, *pTblFrmFmtTbl )
+            {
+                if (!(lcl_FindTable(pFmt, &aPara)))
+                    break;
+            }
             if( aPara.pTblNd )
             {
                 rpRange = new SwNodeRange( *aPara.pTblNd, 0,
@@ -389,10 +406,13 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         //
         _FindItem aPara( bCaseSensitive ? sItem : String(rCC.lowercase( sItem )) );
 
-        if( pSectionFmtTbl->Count() )
+        if( !pSectionFmtTbl->empty() )
         {
-            ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
-                                                    bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
+            BOOST_FOREACH( const SwSectionFmt* pFmt, *pSectionFmtTbl )
+            {
+                if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
+                    break;
+            }
             if( aPara.pSectNd )
             {
                 rpRange = new SwNodeRange( *aPara.pSectNd, 1,

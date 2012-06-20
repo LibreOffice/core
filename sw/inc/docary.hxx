@@ -33,6 +33,7 @@
 #include <algorithm>
 
 class SwFieldType;
+class SwFmt;
 class SwFrmFmt;
 class SwCharFmt;
 class SwTOXType;
@@ -42,6 +43,8 @@ class SwNumRule;
 class SwRedline;
 class SwUnoCrsr;
 class SwOLENode;
+class SwTxtFmtColl;
+class SwGrfFmtColl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
     struct ForbiddenCharacters;    // comes from the I18N UNO interface
@@ -50,18 +53,70 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #include <swtypes.hxx>
 #include <svl/svarray.hxx>
 
-// PageDescriptor-interface
-// typedef SwPageDesc * SwPageDescPtr;
-// SV_DECL_PTRARR_DEL(SwPageDescs, SwPageDescPtr,1);
+// provides some methods for generic operations on lists that contain
+// SwFmt* subclasses.
+class SwFmtsBase
+{
+public:
+    virtual size_t GetFmtCount() const = 0;
+    virtual SwFmt* GetFmt(size_t idx) const = 0;
+    virtual ~SwFmtsBase() = 0;
+};
 
-typedef SwFrmFmt* SwFrmFmtPtr;
-SV_DECL_PTRARR_DEL(SwFrmFmts,SwFrmFmtPtr,4)
+class SwGrfFmtColls : public std::vector<SwGrfFmtColl*>, public SwFmtsBase
+{
+public:
+    virtual size_t GetFmtCount() const { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    sal_uInt16 GetPos(const SwGrfFmtColl* pFmt) const;
+    // free's any remaining child objects
+    virtual ~SwGrfFmtColls() {}
+};
 
 // Specific frame formats (frames, DrawObjects).
-SV_DECL_PTRARR_DEL(SwSpzFrmFmts,SwFrmFmtPtr,0)
+class SW_DLLPUBLIC SwFrmFmts : public std::vector<SwFrmFmt*>, public SwFmtsBase
+{
+public:
+    virtual size_t GetFmtCount() const { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    sal_uInt16 GetPos(const SwFrmFmt* pFmt) const;
+    bool Contains(const SwFrmFmt* pFmt) const;
+    // free's any remaining child objects
+    virtual ~SwFrmFmts();
+};
 
-typedef SwCharFmt* SwCharFmtPtr;
-SV_DECL_PTRARR_DEL(SwCharFmts,SwCharFmtPtr,4)
+class SwCharFmts : public std::vector<SwCharFmt*>, public SwFmtsBase
+{
+public:
+    virtual size_t GetFmtCount() const { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    sal_uInt16 GetPos(const SwCharFmt* pFmt) const;
+    bool Contains(const SwCharFmt* pFmt) const;
+    // free's any remaining child objects
+    virtual ~SwCharFmts();
+};
+
+class SwTxtFmtColls : public std::vector<SwTxtFmtColl*>, public SwFmtsBase
+{
+public:
+    virtual size_t GetFmtCount() const { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    sal_uInt16 GetPos(const SwTxtFmtColl* pFmt) const;
+    bool Contains(const SwTxtFmtColl* pFmt) const;
+    virtual ~SwTxtFmtColls() {}
+};
+
+// Array of Undo-history.
+class SW_DLLPUBLIC SwSectionFmts : public std::vector<SwSectionFmt*>, public SwFmtsBase
+{
+public:
+    virtual size_t GetFmtCount() const { return size(); }
+    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
+    sal_uInt16 GetPos(const SwSectionFmt* pFmt) const;
+    bool Contains(const SwSectionFmt* pFmt) const;
+    // free's any remaining child objects
+    virtual ~SwSectionFmts();
+};
 
 class SwFldTypes : public std::vector<SwFieldType*> {
 public:
@@ -76,10 +131,6 @@ public:
     ~SwTOXTypes();
     sal_uInt16 GetPos(const SwTOXType* pTOXType) const;
 };
-
-// Array of Undo-history.
-typedef SwSectionFmt* SwSectionFmtPtr;
-SV_DECL_PTRARR_DEL(SwSectionFmts,SwSectionFmtPtr,0)
 
 class SW_DLLPUBLIC SwNumRuleTbl : public std::vector<SwNumRule*> {
 public:

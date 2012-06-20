@@ -253,7 +253,7 @@ sal_Bool SwCursor::GotoRegion( const String& rName )
 {
     sal_Bool bRet = sal_False;
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = rFmts.Count(); n; )
+    for( sal_uInt16 n = rFmts.size(); n; )
     {
         const SwSectionFmt* pFmt = rFmts[ --n ];
         const SwNodeIndex* pIdx;

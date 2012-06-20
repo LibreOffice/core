@@ -1314,9 +1314,9 @@ void SwHTMLParser::StripTrailingPara()
         {
             sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
-            const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
+            const SwFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-            for( sal_uInt16 i=0; i<rFrmFmtTbl.Count(); i++ )
+            for( sal_uInt16 i=0; i<rFrmFmtTbl.size(); i++ )
             {
                 SwFrmFmt const*const pFmt = rFrmFmtTbl[i];
                 SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();

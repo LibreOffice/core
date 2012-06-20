@@ -73,6 +73,7 @@
 #include <swevent.hxx>
 #include <view.hxx>         // for the current view
 #include <docsh.hxx>        // creation of documents
+#include <docary.hxx>
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <viewopt.hxx>
@@ -1267,7 +1268,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 }
                         }
 
-                        const sal_uInt16 nStyleCount = pDoc->GetTxtFmtColls()->Count();
+                        const sal_uInt16 nStyleCount = pDoc->GetTxtFmtColls()->size();
                         Sequence<OUString> aListBoxEntries( MAXLEVEL + nStyleCount);
                         OUString* pEntries = aListBoxEntries.getArray();
                         sal_Int32   nIdx = 0 ;
@@ -1282,8 +1283,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         OUString    sStyle( SW_RESSTR(STR_FDLG_STYLE) );
                         for(sal_uInt16 i = 0; i < nStyleCount; ++i)
                         {
-                            SwTxtFmtColl &rTxtColl =
-                                *pDoc->GetTxtFmtColls()->GetObject( i );
+                            SwTxtFmtColl &rTxtColl = *(*pDoc->GetTxtFmtColls())[ i ];
                             if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
                             {
                                 pEntries[nIdx++] = sStyle + rTxtColl.GetName();

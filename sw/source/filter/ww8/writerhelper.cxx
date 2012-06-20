@@ -447,7 +447,7 @@ namespace sw
             typedef ParaStyles::size_type mysizet;
 
             const SwTxtFmtColls *pColls = rDoc.GetTxtFmtColls();
-            mysizet nCount = pColls ? pColls->Count() : 0;
+            mysizet nCount = pColls ? pColls->size() : 0;
             aStyles.reserve(nCount);
             for (mysizet nI = 0; nI < nCount; ++nI)
                 aStyles.push_back((*pColls)[ static_cast< sal_uInt16 >(nI) ]);

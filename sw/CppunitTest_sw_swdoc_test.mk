@@ -58,6 +58,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_swdoc_test, \
     svt \
     svx \
     svxcore \
+    sw \
     swd \
 	test \
     tk \

@@ -773,7 +773,7 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
 
     const SwTxtNode* pTxtNd;
     const SwCharFmts* pFmts = GetDoc()->GetCharFmts();
-    for( sal_uInt16 n = pFmts->Count(); 1 < n; )
+    for( sal_uInt16 n = pFmts->size(); 1 < n; )
     {
         SwIterator<SwTxtINetFmt,SwCharFmt> aIter(*(*pFmts)[--n]);
         for( SwTxtINetFmt* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )

@@ -143,7 +143,7 @@ sal_uLong SwASCWriter::WriteStream()
                     // No length
                     !pNd->GetTxt().Len() &&
                     // Frame exists
-                    pDoc->GetSpzFrmFmts()->Count() &&
+                    pDoc->GetSpzFrmFmts()->size() &&
                     // Only one node in the array
                     pDoc->GetNodes().GetEndOfExtras().GetIndex() + 3 ==
                     pDoc->GetNodes().GetEndOfContent().GetIndex() &&

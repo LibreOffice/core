@@ -842,7 +842,7 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
     {
         Set( n, rNumRule.aFmts[ n ] );
         if( aFmts[ n ] && aFmts[ n ]->GetCharFmt() &&
-            USHRT_MAX == pDoc->GetCharFmts()->GetPos( aFmts[n]->GetCharFmt() ))
+            !pDoc->GetCharFmts()->Contains( aFmts[n]->GetCharFmt() ))
             // If we copy across different Documents, then copy the
             // corresponding CharFormat into the new Document.
             aFmts[n]->SetCharFmt( pDoc->CopyCharFmt( *aFmts[n]->

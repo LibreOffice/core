@@ -76,7 +76,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
 
     if( !bFnd )
     {
-        nOrdNum = pFmt->GetDoc()->GetSpzFrmFmts()->Count();
+        nOrdNum = pFmt->GetDoc()->GetSpzFrmFmts()->size();
         nOrdNum += nArrPos;
     }
 }

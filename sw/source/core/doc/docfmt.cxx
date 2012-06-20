@@ -80,24 +80,16 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-SV_IMPL_PTRARR(SwFrmFmts,SwFrmFmtPtr)
-SV_IMPL_PTRARR(SwCharFmts,SwCharFmtPtr)
-
-// Specific frame formats (frames)
-SV_IMPL_PTRARR(SwSpzFrmFmts,SwFrmFmtPtr)
-
 /*
  * Internal functions
  */
 
-sal_Bool SetTxtFmtCollNext( const SwTxtFmtCollPtr& rpTxtColl, void* pArgs )
+static void SetTxtFmtCollNext( SwTxtFmtColl* pTxtColl, const SwTxtFmtColl* pDel )
 {
-    SwTxtFmtColl *pDel = (SwTxtFmtColl*) pArgs;
-    if ( &rpTxtColl->GetNextTxtFmtColl() == pDel )
+    if ( &pTxtColl->GetNextTxtFmtColl() == pDel )
     {
-        rpTxtColl->SetNextTxtFmtColl( *rpTxtColl );
+        pTxtColl->SetNextTxtFmtColl( *pTxtColl );
     }
-    return sal_True;
 }
 
 /*
@@ -1313,7 +1305,8 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast)
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
-    pCharFmtTbl->DeleteAndDestroy(nFmt);
+    delete (*pCharFmtTbl)[nFmt];
+    pCharFmtTbl->erase(pCharFmtTbl->begin() + nFmt);
 
     SetModified();
 }
@@ -1322,7 +1315,6 @@ void SwDoc::DelCharFmt( SwCharFmt *pFmt, sal_Bool bBroadcast )
 {
     sal_uInt16 nFmt = pCharFmtTbl->GetPos( pFmt );
     OSL_ENSURE( USHRT_MAX != nFmt, "Fmt not found," );
-
     DelCharFmt( nFmt, bBroadcast );
 }
 
@@ -1338,8 +1330,8 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast )
     {
 
         // The format has to be in the one or the other, we'll see in which one.
-        sal_uInt16 nPos;
-        if ( USHRT_MAX != ( nPos = pFrmFmtTbl->GetPos( pFmt )) )
+        SwFrmFmts::iterator it = std::find( pFrmFmtTbl->begin(), pFrmFmtTbl->end(), pFmt );
+        if ( it != pFrmFmtTbl->end() )
         {
             if (bBroadcast)
                 BroadcastStyleOperation(pFmt->GetName(),
@@ -1353,23 +1345,28 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast )
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
-            pFrmFmtTbl->DeleteAndDestroy( nPos );
+            delete *it;
+            pFrmFmtTbl->erase(it);
         }
         else
         {
-            nPos = GetSpzFrmFmts()->GetPos( pFmt );
-            OSL_ENSURE( nPos != USHRT_MAX, "FrmFmt not found." );
-            if( USHRT_MAX != nPos )
-                GetSpzFrmFmts()->DeleteAndDestroy( nPos );
+            SwFrmFmts::iterator it2 = std::find( GetSpzFrmFmts()->begin(), GetSpzFrmFmts()->end(), pFmt );
+            OSL_ENSURE( it2 != GetSpzFrmFmts()->end(), "FrmFmt not found." );
+            if( it2 != GetSpzFrmFmts()->end() )
+            {
+                delete *it2;
+                GetSpzFrmFmts()->erase( it2 );
+            }
         }
     }
 }
 
 void SwDoc::DelTblFrmFmt( SwTableFmt *pFmt )
 {
-    sal_uInt16 nPos = pTblFrmFmtTbl->GetPos( pFmt );
-    OSL_ENSURE( USHRT_MAX != nPos, "Fmt not found," );
-    pTblFrmFmtTbl->DeleteAndDestroy( nPos );
+    SwFrmFmts::iterator it = std::find( pTblFrmFmtTbl->begin(), pTblFrmFmtTbl->end(), pFmt );
+    OSL_ENSURE( it != pTblFrmFmtTbl->end(), "Fmt not found," );
+    delete *it;
+    pTblFrmFmtTbl->erase(it);
 }
 
 /*
@@ -1379,7 +1376,7 @@ SwFlyFrmFmt *SwDoc::MakeFlyFrmFmt( const String &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
     SwFlyFrmFmt *pFmt = new SwFlyFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
-    GetSpzFrmFmts()->Insert(pFmt, GetSpzFrmFmts()->Count());
+    GetSpzFrmFmts()->push_back(pFmt);
     SetModified();
     return pFmt;
 }
@@ -1388,7 +1385,7 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const String &rFmtName,
                                      SwFrmFmt *pDerivedFrom )
 {
     SwDrawFrmFmt *pFmt = new SwDrawFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom);
-    GetSpzFrmFmts()->Insert(pFmt,GetSpzFrmFmts()->Count());
+    GetSpzFrmFmts()->push_back(pFmt);
     SetModified();
     return pFmt;
 }
@@ -1396,14 +1393,13 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const String &rFmtName,
 
 sal_uInt16 SwDoc::GetTblFrmFmtCount(sal_Bool bUsed) const
 {
-    sal_uInt16 nCount = pTblFrmFmtTbl->Count();
+    sal_uInt16 nCount = pTblFrmFmtTbl->size();
     if(bUsed)
     {
         SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         for ( sal_uInt16 i = nCount; i; )
         {
             if((*pTblFrmFmtTbl)[--i]->GetInfo( aGetHt ))
-
                 --nCount;
         }
     }
@@ -1433,7 +1429,7 @@ SwTableFmt* SwDoc::MakeTblFrmFmt( const String &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
     SwTableFmt* pFmt = new SwTableFmt( GetAttrPool(), rFmtName, pDerivedFrom );
-    pTblFrmFmtTbl->Insert( pFmt, pTblFrmFmtTbl->Count() );
+    pTblFrmFmtTbl->push_back( pFmt );
     SetModified();
 
     return pFmt;
@@ -1447,7 +1443,7 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
     SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
 
     pFmt->SetAuto(bAuto);
-    pFrmFmtTbl->Insert( pFmt, pFrmFmtTbl->Count());
+    pFrmFmtTbl->push_back( pFmt );
     SetModified();
 
     if (bBroadcast)
@@ -1483,7 +1479,7 @@ SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
                                sal_Bool )
 {
     SwCharFmt *pFmt = new SwCharFmt( GetAttrPool(), rFmtName, pDerivedFrom );
-    pCharFmtTbl->Insert( pFmt, pCharFmtTbl->Count() );
+    pCharFmtTbl->push_back( pFmt );
     pFmt->SetAuto( sal_False );
     SetModified();
 
@@ -1525,7 +1521,7 @@ SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
 {
     SwTxtFmtColl *pFmtColl = new SwTxtFmtColl( GetAttrPool(), rFmtName,
                                                 pDerivedFrom );
-    pTxtFmtCollTbl->Insert(pFmtColl, pTxtFmtCollTbl->Count());
+    pTxtFmtCollTbl->push_back(pFmtColl);
     pFmtColl->SetAuto( sal_False );
     SetModified();
 
@@ -1560,7 +1556,7 @@ SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const String &rFmtName,
 {
     SwConditionTxtFmtColl*pFmtColl = new SwConditionTxtFmtColl( GetAttrPool(),
                                                     rFmtName, pDerivedFrom );
-    pTxtFmtCollTbl->Insert(pFmtColl, pTxtFmtCollTbl->Count());
+    pTxtFmtCollTbl->push_back(pFmtColl);
     pFmtColl->SetAuto( sal_False );
     SetModified();
 
@@ -1579,7 +1575,7 @@ SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const String &rFmtName,
 {
     SwGrfFmtColl *pFmtColl = new SwGrfFmtColl( GetAttrPool(), rFmtName,
                                                 pDerivedFrom );
-    pGrfFmtCollTbl->Insert( pFmtColl, pGrfFmtCollTbl->Count() );
+    pGrfFmtCollTbl->push_back( pFmtColl );
     pFmtColl->SetAuto( sal_False );
     SetModified();
     return pFmtColl;
@@ -1607,10 +1603,10 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, sal_Bool bBroadcast)
     }
 
     // Remove the FmtColl
-    pTxtFmtCollTbl->Remove(nFmtColl);
+    pTxtFmtCollTbl->erase(pTxtFmtCollTbl->begin() + nFmtColl);
     // Correct next
-    pTxtFmtCollTbl->ForEach( 1, pTxtFmtCollTbl->Count(),
-                            &SetTxtFmtCollNext, pDel );
+    for( SwTxtFmtColls::const_iterator it = pTxtFmtCollTbl->begin() + 1; it != pTxtFmtCollTbl->end(); ++it )
+        SetTxtFmtCollNext( *it, pDel );
     delete pDel;
     SetModified();
 }
@@ -1734,17 +1730,17 @@ sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
 // ---- Copy the formats to itself (SwDoc) ----------------------
 
 SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
-                        const SvPtrarr& rFmtArr,
+                        const SwFmtsBase& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt )
 {
     // It's no autoformat, default format or collection format,
     // then search for it.
     if( !rFmt.IsAuto() || !rFmt.GetRegisteredIn() )
-        for( sal_uInt16 n = 0; n < rFmtArr.Count(); n++ )
+        for( sal_uInt16 n = 0; n < rFmtArr.GetFmtCount(); n++ )
         {
             // Does the Doc already contain the template?
-            if( ((SwFmt*)rFmtArr[n])->GetName().Equals( rFmt.GetName() ))
-                return (SwFmt*)rFmtArr[n];
+            if( rFmtArr.GetFmt(n)->GetName().Equals( rFmt.GetName() ))
+                return (SwFmt*)rFmtArr.GetFmt(n);
         }
 
     // Search for the "parent" first
@@ -1805,7 +1801,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     {
         pNewColl = new SwConditionTxtFmtColl( GetAttrPool(), rColl.GetName(),
                                                 pParent);
-        pTxtFmtCollTbl->Insert( pNewColl, pTxtFmtCollTbl->Count() );
+        pTxtFmtCollTbl->push_back( pNewColl );
         pNewColl->SetAuto( sal_False );
         SetModified();
 
@@ -1895,8 +1891,8 @@ SwPageDesc* lcl_FindPageDesc( const SwPageDescs& rArr, const String& rName )
     return 0;
 }
 
-void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
-                        SvPtrarr& rDestArr,
+void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
+                        SwFmtsBase& rDestArr,
                         FNCopyFmt fnCopyFmt,
                         SwFmt& rDfltFmt )
 {
@@ -1904,9 +1900,9 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
     SwFmt* pSrc, *pDest;
 
     // 1st step: Create all formats (skip the 0th - it's the default one)
-    for( nSrc = rSourceArr.Count(); nSrc > 1; )
+    for( nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
     {
-        pSrc = (SwFmt*)rSourceArr[ --nSrc ];
+        pSrc = (SwFmt*)rSourceArr.GetFmt( --nSrc );
         if( pSrc->IsDefault() || pSrc->IsAuto() )
             continue;
 
@@ -1921,9 +1917,9 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
     }
 
     // 2nd step: Copy all attributes, set the right parents
-    for( nSrc = rSourceArr.Count(); nSrc > 1; )
+    for( nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
     {
-        pSrc = (SwFmt*)rSourceArr[ --nSrc ];
+        pSrc = (SwFmt*)rSourceArr.GetFmt( --nSrc );
         if( pSrc->IsDefault() || pSrc->IsAuto() )
             continue;
 
@@ -2206,16 +2202,16 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     SetModified();
 }
 
-SwFmt* SwDoc::FindFmtByName( const SvPtrarr& rFmtArr,
+SwFmt* SwDoc::FindFmtByName( const SwFmtsBase& rFmtArr,
                                     const String& rName ) const
 {
     SwFmt* pFnd = 0;
-    for( sal_uInt16 n = 0; n < rFmtArr.Count(); n++ )
+    for( sal_uInt16 n = 0; n < rFmtArr.GetFmtCount(); n++ )
     {
         // Does the Doc already contain the template?
-        if( ((SwFmt*)rFmtArr[n])->GetName() == rName )
+        if( rFmtArr.GetFmt(n)->GetName() == rName )
         {
-            pFnd = (SwFmt*)rFmtArr[n];
+            pFnd = (SwFmt*)rFmtArr.GetFmt(n);
             break;
         }
     }
@@ -2514,7 +2510,7 @@ namespace docfunc
         const SwTxtFmtColls* pTxtFmtColls( rDoc.GetTxtFmtColls() );
         if ( pTxtFmtColls )
         {
-            const sal_uInt16 nCount = pTxtFmtColls->Count();
+            const sal_uInt16 nCount = pTxtFmtColls->size();
             for ( sal_uInt16 i = 0; i < nCount; ++i )
             {
                 SwTxtFmtColl* pTxtFmtColl = (*pTxtFmtColls)[i];
@@ -2545,6 +2541,42 @@ namespace docfunc
         }
         return bRet;
     }
+}
+
+SwFmtsBase::~SwFmtsBase() {}
+
+sal_uInt16 SwFrmFmts::GetPos(const SwFrmFmt* p) const
+{
+    const_iterator it = std::find(begin(), end(), p);
+    return it == end() ? USHRT_MAX : it - begin();
+}
+
+bool SwFrmFmts::Contains(const SwFrmFmt* p) const
+{
+    return std::find(begin(), end(), p) != end();
+}
+
+SwFrmFmts::~SwFrmFmts()
+{
+    for(const_iterator it = begin(); it != end(); ++it)
+        delete *it;
+}
+
+sal_uInt16 SwCharFmts::GetPos(const SwCharFmt* p) const
+{
+    const_iterator it = std::find(begin(), end(), p);
+    return it == end() ? USHRT_MAX : it - begin();
+}
+
+bool SwCharFmts::Contains(const SwCharFmt* p) const
+{
+    return std::find(begin(), end(), p) != end();
+}
+
+SwCharFmts::~SwCharFmts()
+{
+    for(const_iterator it = begin(); it != end(); ++it)
+        delete *it;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

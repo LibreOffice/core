@@ -1691,7 +1691,7 @@ void SwDoc::GetAllUsedDB( std::vector<String>& rDBNameList,
     }
 
     SwSectionFmts& rArr = GetSections();
-    for (sal_uInt16 n = rArr.Count(); n; )
+    for (sal_uInt16 n = rArr.size(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
 
@@ -1844,7 +1844,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
     String sFormel;
 
     SwSectionFmts& rArr = GetSections();
-    for (sal_uInt16 n = rArr.Count(); n; )
+    for (sal_uInt16 n = rArr.size(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
 
@@ -2234,7 +2234,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         sal_uInt16 nArrStt = 0;
         sal_uLong nSttCntnt = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
-        for (sal_uInt16 n = rArr.Count(); n; )
+        for (sal_uInt16 n = rArr.size(); n; )
         {
             SwSection* pSect = rArr[ --n ]->GetSection();
             if( pSect && pSect->IsHidden() && pSect->GetCondition().Len() &&

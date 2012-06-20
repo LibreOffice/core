@@ -468,7 +468,7 @@ const String lcl_AnchoredFrames(const SwNode & rNode)
     const SwDoc * pDoc = rNode.GetDoc();
     if (pDoc)
     {
-        const SwSpzFrmFmts * pFrmFmts = pDoc->GetSpzFrmFmts();
+        const SwFrmFmts * pFrmFmts = pDoc->GetSpzFrmFmts();
 
         if (pFrmFmts)
         {

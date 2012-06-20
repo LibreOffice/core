@@ -325,7 +325,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
     SwTxtFmtColl* pNewColl;
     sal_uInt16 nOutLvlBits = 0;
-    for( sal_uInt16 n = 0; n < pTxtFmtCollTbl->Count(); ++n )
+    for( sal_uInt16 n = 0; n < pTxtFmtCollTbl->size(); ++n )
     {
         if( nId == ( pNewColl = (*pTxtFmtCollTbl)[ n ] )->GetPoolFmtId() )
         {
@@ -375,7 +375,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                                             ? pDfltTxtFmtColl
                                             : GetTxtCollFromPool( nParent ));
         pNewColl->SetPoolFmtId( nId );
-        pTxtFmtCollTbl->Insert( pNewColl, pTxtFmtCollTbl->Count() );
+        pTxtFmtCollTbl->push_back( pNewColl );
     }
 
     switch( nId )
@@ -1060,7 +1060,7 @@ bool SwDoc::IsPoolTxtCollUsed( sal_uInt16 nId ) const
 
     SwTxtFmtColl* pNewColl = 0;
     sal_Bool bFnd = sal_False;
-    for( sal_uInt16 n = 0; !bFnd && n < pTxtFmtCollTbl->Count(); ++n )
+    for( sal_uInt16 n = 0; !bFnd && n < pTxtFmtCollTbl->size(); ++n )
     {
         pNewColl = (*pTxtFmtCollTbl)[ n ];
         if( nId == pNewColl->GetPoolFmtId() )
@@ -1081,7 +1081,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
     SwFmt *pNewFmt = 0;
     SwFmt *pDeriveFmt = 0;
 
-    SvPtrarr* pArray[ 2 ];
+    SwFmtsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1, nRCId = 0;
     sal_uInt16* pWhichRange = 0;
 
@@ -1134,8 +1134,8 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
     OSL_ENSURE( nRCId, "invalid Id" );
 
     while( nArrCnt-- )
-        for( sal_uInt16 n = 0; n < (*pArray[nArrCnt]).Count(); ++n )
-            if( nId == ( pNewFmt = (SwFmt*)(*pArray[ nArrCnt ] )[ n ] )->
+        for( sal_uInt16 n = 0; n < (*pArray[nArrCnt]).GetFmtCount(); ++n )
+            if( nId == ( pNewFmt = (*pArray[ nArrCnt ] ).GetFmt( n ) )->
                     GetPoolFmtId() )
             {
                 return pNewFmt;
@@ -1369,7 +1369,7 @@ SwCharFmt* SwDoc::GetCharFmtFromPool( sal_uInt16 nId )
 bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
 {
     SwFmt *pNewFmt = 0;
-    const SvPtrarr* pArray[ 2 ];
+    const SwFmtsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1;
     sal_Bool bFnd = sal_True;
 
@@ -1393,8 +1393,8 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     {
         bFnd = sal_False;
         while( nArrCnt-- && !bFnd )
-            for( sal_uInt16 n = 0; !bFnd && n < (*pArray[nArrCnt]).Count(); ++n )
-                if( nId == ( pNewFmt = (SwFmt*)(*pArray[ nArrCnt ] )[ n ] )->
+            for( sal_uInt16 n = 0; !bFnd && n < (*pArray[nArrCnt]).GetFmtCount(); ++n )
+                if( nId == ( pNewFmt = (*pArray[ nArrCnt ] ).GetFmt( n ) )->
                         GetPoolFmtId() )
                     bFnd = sal_True;
     }

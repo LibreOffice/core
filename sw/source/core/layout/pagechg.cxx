@@ -420,13 +420,13 @@ void lcl_FormatLay( SwLayoutFrm *pLay )
     pLay->Calc();
 }
 
-void lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
+void lcl_MakeObjs( const SwFrmFmts &rTbl, SwPageFrm *pPage )
 {
     //Anlegen bzw. registrieren von Flys und Drawobjekten.
     //Die Formate stehen in der SpzTbl (vom Dokument).
     //Flys werden angelegt, DrawObjekte werden bei der Seite angemeldet.
 
-    for ( sal_uInt16 i = 0; i < rTbl.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rTbl.size(); ++i )
     {
         SdrObject *pSdrObj;
         SwFrmFmt *pFmt = rTbl[i];
@@ -1559,13 +1559,13 @@ void SwRootFrm::AssertFlyPages()
     bAssertFlyPages = sal_False;
 
     SwDoc *pDoc = GetFmt()->GetDoc();
-    const SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
+    const SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
 
     //Auf welche Seite will der 'letzte' Fly?
     sal_uInt16 nMaxPg = 0;
     sal_uInt16 i;
 
-    for ( i = 0; i < pTbl->Count(); ++i )
+    for ( i = 0; i < pTbl->size(); ++i )
     {
         const SwFmtAnchor &rAnch = (*pTbl)[i]->GetAnchor();
         if ( !rAnch.GetCntntAnchor() && nMaxPg < rAnch.GetPageNum() )

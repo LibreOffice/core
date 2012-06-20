@@ -638,7 +638,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
 
     // das Default-TextStyle wir nicht mit ausgegeben !!
     // das 0-Style ist das Default, wird nie ausgegeben !!
-    sal_uInt16 nArrLen = pDoc->GetTxtFmtColls()->Count();
+    sal_uInt16 nArrLen = pDoc->GetTxtFmtColls()->size();
     sal_uInt16 i;
 
     for( i = 1; i < nArrLen; i++ )
@@ -651,7 +651,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     }
 
     // das Default-TextStyle wir nicht mit ausgegeben !!
-    nArrLen = pDoc->GetCharFmts()->Count();
+    nArrLen = pDoc->GetCharFmts()->size();
     for( i=1; i<nArrLen; i++ )
     {
         const SwCharFmt *pCFmt = (*pDoc->GetCharFmts())[i];

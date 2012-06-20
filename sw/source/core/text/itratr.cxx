@@ -61,6 +61,7 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <editeng/lrspitem.hxx>
 #include <switerator.hxx>
+#include <boost/foreach.hpp>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -450,9 +451,9 @@ public:
     void Minimum( long nNew ) { if( nNew > nMinWidth ) nMinWidth = nNew; }
 };
 
-sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
+static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
 {
-    const SwFmtAnchor& rFmtA = ((SwFrmFmt*)rpNd)->GetAnchor();
+    const SwFmtAnchor& rFmtA = pNd->GetAnchor();
 
     bool bCalculate = false;
     if ((FLY_AT_PARA == rFmtA.GetAnchorId()) ||
@@ -463,7 +464,6 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
 
     if (bCalculate)
     {
-        const SwMinMaxNodeArgs *pIn = (const SwMinMaxNodeArgs*)pArgs;
         const SwPosition *pPos = rFmtA.GetCntntAnchor();
         OSL_ENSURE(pPos && pIn, "Unexpected NULL arguments");
         if (!pPos || !pIn || pIn->nIndx != pPos->nNode.GetIndex())
@@ -474,27 +474,27 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
     {
         long nMin, nMax;
         SwHTMLTableLayout *pLayout = 0;
-        MSHORT nWhich = ((SwFrmFmt*)rpNd)->Which();
+        MSHORT nWhich = pNd->Which();
         if( RES_DRAWFRMFMT != nWhich )
         {
             // Enthaelt der Rahmen zu Beginn oder am Ende eine Tabelle?
-            const SwNodes& rNodes = static_cast<SwFrmFmt*>(rpNd)->GetDoc()->GetNodes();
-            const SwFmtCntnt& rFlyCntnt = ((SwFrmFmt*)rpNd)->GetCntnt();
+            const SwNodes& rNodes = pNd->GetDoc()->GetNodes();
+            const SwFmtCntnt& rFlyCntnt = pNd->GetCntnt();
             sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
             SwTableNode* pTblNd = rNodes[nStt+1]->GetTableNode();
             if( !pTblNd )
             {
-                SwNode *pNd = rNodes[nStt];
-                pNd = rNodes[pNd->EndOfSectionIndex()-1];
-                if( pNd->IsEndNode() )
-                    pTblNd = pNd->StartOfSectionNode()->GetTableNode();
+                SwNode *pNd2 = rNodes[nStt];
+                pNd2 = rNodes[pNd2->EndOfSectionIndex()-1];
+                if( pNd2->IsEndNode() )
+                    pTblNd = pNd2->StartOfSectionNode()->GetTableNode();
             }
 
             if( pTblNd )
                 pLayout = pTblNd->GetTable().GetHTMLTableLayout();
         }
 
-        const SwFmtHoriOrient& rOrient = ((SwFrmFmt*)rpNd)->GetHoriOrient();
+        const SwFmtHoriOrient& rOrient = pNd->GetHoriOrient();
         sal_Int16 eHoriOri = rOrient.GetHoriOrient();
 
         long nDiff;
@@ -508,7 +508,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
         {
             if( RES_DRAWFRMFMT == nWhich )
             {
-                const SdrObject* pSObj = rpNd->FindSdrObject();
+                const SdrObject* pSObj = pNd->FindSdrObject();
                 if( pSObj )
                     nMin = pSObj->GetCurrentBoundRect().GetWidth();
                 else
@@ -517,23 +517,23 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
             }
             else
             {
-                const SwFmtFrmSize &rSz = ( (SwFrmFmt*)rpNd )->GetFrmSize();
+                const SwFmtFrmSize &rSz = pNd->GetFrmSize();
                 nMin = rSz.GetWidth();
             }
             nMax = nMin;
             nDiff = 0;
         }
 
-        const SvxLRSpaceItem &rLR = ( (SwFrmFmt*)rpNd )->GetLRSpace();
+        const SvxLRSpaceItem &rLR = pNd->GetLRSpace();
         nMin += rLR.GetLeft();
         nMin += rLR.GetRight();
         nMax += rLR.GetLeft();
         nMax += rLR.GetRight();
 
-        if( SURROUND_THROUGHT == ((SwFrmFmt*)rpNd)->GetSurround().GetSurround() )
+        if( SURROUND_THROUGHT == pNd->GetSurround().GetSurround() )
         {
-            ( (SwMinMaxNodeArgs*)pArgs )->Minimum( nMin );
-            return sal_True;
+            pIn->Minimum( nMin );
+            return;
         }
 
         // Rahmen, die recht bzw. links ausgerichtet sind, gehen nur
@@ -546,40 +546,37 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
             {
                 if( nDiff )
                 {
-                    ((SwMinMaxNodeArgs*)pArgs)->nRightRest -=
-                        ((SwMinMaxNodeArgs*)pArgs)->nRightDiff;
-                    ((SwMinMaxNodeArgs*)pArgs)->nRightDiff = nDiff;
+                    pIn->nRightRest -= pIn->nRightDiff;
+                    pIn->nRightDiff = nDiff;
                 }
                 if( text::RelOrientation::FRAME != rOrient.GetRelationOrient() )
                 {
-                    if( ((SwMinMaxNodeArgs*)pArgs)->nRightRest > 0 )
-                        ((SwMinMaxNodeArgs*)pArgs)->nRightRest = 0;
+                    if( pIn->nRightRest > 0 )
+                        pIn->nRightRest = 0;
                 }
-                ((SwMinMaxNodeArgs*)pArgs)->nRightRest -= nMin;
+                pIn->nRightRest -= nMin;
                 break;
             }
             case text::HoriOrientation::LEFT:
             {
                 if( nDiff )
                 {
-                    ((SwMinMaxNodeArgs*)pArgs)->nLeftRest -=
-                        ((SwMinMaxNodeArgs*)pArgs)->nLeftDiff;
-                    ((SwMinMaxNodeArgs*)pArgs)->nLeftDiff = nDiff;
+                    pIn->nLeftRest -= pIn->nLeftDiff;
+                    pIn->nLeftDiff = nDiff;
                 }
                 if( text::RelOrientation::FRAME != rOrient.GetRelationOrient() &&
-                    ((SwMinMaxNodeArgs*)pArgs)->nLeftRest < 0 )
-                    ((SwMinMaxNodeArgs*)pArgs)->nLeftRest = 0;
-                ((SwMinMaxNodeArgs*)pArgs)->nLeftRest -= nMin;
+                    pIn->nLeftRest < 0 )
+                    pIn->nLeftRest = 0;
+                pIn->nLeftRest -= nMin;
                 break;
             }
             default:
             {
-                ( (SwMinMaxNodeArgs*)pArgs )->nMaxWidth += nMax;
-                ( (SwMinMaxNodeArgs*)pArgs )->Minimum( nMin );
+                pIn->nMaxWidth += nMax;
+                pIn->Minimum( nMin );
             }
         }
     }
-    return sal_True;
 }
 
 #define FLYINCNT_MIN_WIDTH 284
@@ -623,11 +620,12 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     aNodeArgs.nRightDiff = 0;
     if( nIndex )
     {
-        SwSpzFrmFmts* pTmp = (SwSpzFrmFmts*)GetDoc()->GetSpzFrmFmts();
+        SwFrmFmts* pTmp = (SwFrmFmts*)GetDoc()->GetSpzFrmFmts();
         if( pTmp )
         {
             aNodeArgs.nIndx = nIndex;
-            pTmp->ForEach( &lcl_MinMaxNode, &aNodeArgs );
+            BOOST_FOREACH( SwFrmFmt *pFmt, *pTmp )
+                lcl_MinMaxNode( pFmt, &aNodeArgs );
         }
     }
     if( aNodeArgs.nLeftRest < 0 )

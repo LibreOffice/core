@@ -57,13 +57,13 @@
     ( == AUTO ), if the anchor frame has be moved via _MoveNodes(..) and
     DelFrms(..)
 */
-void lcl_MakeAutoFrms( const SwSpzFrmFmts& rSpzArr, sal_uLong nMovedIndex )
+void lcl_MakeAutoFrms( const SwFrmFmts& rSpzArr, sal_uLong nMovedIndex )
 {
-    if( rSpzArr.Count() )
+    if( !rSpzArr.empty() )
     {
         SwFlyFrmFmt* pFmt;
         const SwFmtAnchor* pAnchor;
-        for( sal_uInt16 n = 0; n < rSpzArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rSpzArr.size(); ++n )
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();
@@ -711,14 +711,14 @@ SwRewriter SwUndoDelete::GetRewriter() const
 }
 
 // Every object, anchored "AtCntnt" will be reanchored at rPos
-void lcl_ReAnchorAtCntntFlyFrames( const SwSpzFrmFmts& rSpzArr, SwPosition &rPos, sal_uLong nOldIdx )
+void lcl_ReAnchorAtCntntFlyFrames( const SwFrmFmts& rSpzArr, SwPosition &rPos, sal_uLong nOldIdx )
 {
-    if( rSpzArr.Count() )
+    if( !rSpzArr.empty() )
     {
         SwFlyFrmFmt* pFmt;
         const SwFmtAnchor* pAnchor;
         const SwPosition* pAPos;
-        for( sal_uInt16 n = 0; n < rSpzArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rSpzArr.size(); ++n )
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();

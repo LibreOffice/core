@@ -483,7 +483,7 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
             sal_uInt16 nBaseCount =  RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN  +
                                      RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN;
             nIndex = nIndex - nBaseCount;
-            const sal_uInt16 nArrLen = rDoc.GetCharFmts()->Count();
+            const sal_uInt16 nArrLen = rDoc.GetCharFmts()->size();
             for( sal_uInt16 i = 0; i < nArrLen; i++ )
             {
                 SwCharFmt* pFmt = (*rDoc.GetCharFmts())[ i ];
@@ -516,7 +516,7 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
                                     RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN +
                                     RES_POOLCOLL_TEXT_END  - RES_POOLCOLL_TEXT_BEGIN;
             nIndex = nIndex - nBaseCount;
-            const sal_uInt16 nArrLen = rDoc.GetTxtFmtColls()->Count();
+            const sal_uInt16 nArrLen = rDoc.GetTxtFmtColls()->size();
             for ( sal_uInt16 i = 0; i < nArrLen; i++ )
             {
                 SwTxtFmtColl * pColl = (*rDoc.GetTxtFmtColls())[i];
@@ -539,7 +539,7 @@ sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String
         {
             sal_uInt16 nBaseCount = RES_POOLFRM_END - RES_POOLFRM_BEGIN;
             nIndex = nIndex - nBaseCount;
-            const sal_uInt16 nArrLen = rDoc.GetFrmFmts()->Count();
+            const sal_uInt16 nArrLen = rDoc.GetFrmFmts()->size();
             for( sal_uInt16 i = 0; i < nArrLen; i++ )
             {
                 SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];
@@ -1744,7 +1744,7 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
                     SwNumRule aSetRule(*pSwXRules->GetNumRule());
                     const SwCharFmts* pFmts = pDoc->GetCharFmts();
-                    sal_uInt16 nChCount = pFmts->Count();
+                    sal_uInt16 nChCount = pFmts->size();
                     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
                     {
 

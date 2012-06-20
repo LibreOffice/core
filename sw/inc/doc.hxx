@@ -131,6 +131,7 @@ class SwField;
 class SwTxtFld;
 class SwFldTypes;
 class SwFlyFrmFmt;
+class SwFmtsBase;
 class SwFmt;
 class SwFmtINetFmt;
 class SwFmtRefMark;
@@ -162,7 +163,6 @@ class SwSectionFmt;
 class SwSectionFmts;
 class SwSectionData;
 class SwSelBoxes;
-class SwSpzFrmFmts;
 class SwTOXBase;
 class SwTOXBaseSection;
 class SwTOXMark;
@@ -315,7 +315,7 @@ class SW_DLLPUBLIC SwDoc :
 
     SwFrmFmts       *pFrmFmtTbl;        // Format table
     SwCharFmts      *pCharFmtTbl;
-    SwSpzFrmFmts    *pSpzFrmFmtTbl;
+    SwFrmFmts       *pSpzFrmFmtTbl;
     SwSectionFmts   *pSectionFmtTbl;
     SwFrmFmts       *pTblFrmFmtTbl;     // For tables
     SwTxtFmtColls   *pTxtFmtCollTbl;    // FormatCollections
@@ -634,13 +634,13 @@ private:
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
     typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, sal_Bool, sal_Bool );
-    SwFmt* CopyFmt( const SwFmt& rFmt, const SvPtrarr& rFmtArr,
+    SwFmt* CopyFmt( const SwFmt& rFmt, const SwFmtsBase& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt );
-    void CopyFmtArr( const SvPtrarr& rSourceArr, SvPtrarr& rDestArr,
+    void CopyFmtArr( const SwFmtsBase& rSourceArr, SwFmtsBase& rDestArr,
                         FNCopyFmt fnCopyFmt, SwFmt& rDfltFmt );
     void CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt );
-    SwFmt* FindFmtByName( const SvPtrarr& rFmtArr,
+    SwFmt* FindFmtByName( const SwFmtsBase& rFmtArr,
                                     const String& rName ) const;
 
     VirtualDevice& CreateVirtualDevice_() const;
@@ -1202,8 +1202,8 @@ public:
     const SwCharFmts* GetCharFmts() const   { return pCharFmtTbl;}
 
     /* LayoutFormats (frames, DrawObjects), sometimes const sometimes not  */
-    const SwSpzFrmFmts* GetSpzFrmFmts() const   { return pSpzFrmFmtTbl; }
-          SwSpzFrmFmts* GetSpzFrmFmts()         { return pSpzFrmFmtTbl; }
+    const SwFrmFmts* GetSpzFrmFmts() const   { return pSpzFrmFmtTbl; }
+          SwFrmFmts* GetSpzFrmFmts()         { return pSpzFrmFmtTbl; }
 
     const SwFrmFmt *GetDfltFrmFmt() const   { return pDfltFrmFmt; }
           SwFrmFmt *GetDfltFrmFmt()         { return pDfltFrmFmt; }
@@ -1224,7 +1224,7 @@ public:
                           sal_Bool bBroadcast = sal_False, sal_Bool bAuto = sal_True);
     void       DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast = sal_False );
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const
-        {   return (SwFrmFmt*)FindFmtByName( (SvPtrarr&)*pFrmFmtTbl, rName ); }
+        {   return (SwFrmFmt*)FindFmtByName( (SwFmtsBase&)*pFrmFmtTbl, rName ); }
 
     SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom,
                            sal_Bool bBroadcast = sal_False,
@@ -1232,7 +1232,7 @@ public:
     void       DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast = sal_False);
     void       DelCharFmt(SwCharFmt* pFmt, sal_Bool bBroadcast = sal_False);
     SwCharFmt* FindCharFmtByName( const String& rName ) const
-        {   return (SwCharFmt*)FindFmtByName( (SvPtrarr&)*pCharFmtTbl, rName ); }
+        {   return (SwCharFmt*)FindFmtByName( (SwFmtsBase&)*pCharFmtTbl, rName ); }
 
     /* Formatcollections (styles) */
     // TXT
@@ -1258,7 +1258,7 @@ public:
                             bool bReset = true,
                             bool bResetListAttrs = false );
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
-        {   return (SwTxtFmtColl*)FindFmtByName( (SvPtrarr&)*pTxtFmtCollTbl, rName ); }
+        {   return (SwTxtFmtColl*)FindFmtByName( (SwFmtsBase&)*pTxtFmtCollTbl, rName ); }
 
     void ChkCondColls();
 
@@ -1268,7 +1268,7 @@ public:
     SwGrfFmtColl *MakeGrfFmtColl(const String &rFmtName,
                                     SwGrfFmtColl *pDerivedFrom);
     SwGrfFmtColl* FindGrfFmtCollByName( const String& rName ) const
-        {   return (SwGrfFmtColl*)FindFmtByName( (SvPtrarr&)*pGrfFmtCollTbl, rName ); }
+        {   return (SwGrfFmtColl*)FindFmtByName( (SwFmtsBase&)*pGrfFmtCollTbl, rName ); }
 
     // Table formating
     const SwFrmFmts* GetTblFrmFmts() const  { return pTblFrmFmtTbl; }

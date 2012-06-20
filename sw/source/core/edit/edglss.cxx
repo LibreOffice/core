@@ -217,7 +217,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
             {
                 const String& rTblName = pTblNd->GetTable().GetFrmFmt()->GetName();
                 const SwFrmFmts& rTblFmts = *pInsDoc->GetTblFrmFmts();
-                for( sal_uInt16 n = rTblFmts.Count(); n; )
+                for( sal_uInt16 n = rTblFmts.size(); n; )
                     if( rTblFmts[ --n ]->GetName() == rTblName )
                     {
                         bCpyTblNm = sal_False;

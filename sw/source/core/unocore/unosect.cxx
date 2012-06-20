@@ -530,7 +530,7 @@ lcl_UpdateSection(SwSectionFmt *const pFmt,
         SwDoc *const pDoc = pFmt->GetDoc();
         SwSectionFmts const& rFmts = pDoc->GetSections();
         UnoActionContext aContext(pDoc);
-        for (sal_uInt16 i = 0; i < rFmts.Count(); i++)
+        for (sal_uInt16 i = 0; i < rFmts.size(); i++)
         {
             if (rFmts[i]->GetSection()->GetSectionName()
                     == rSection.GetSectionName())
@@ -1728,7 +1728,7 @@ throw (uno::RuntimeException)
 
         const SwSectionFmts& rFmts = pFmt->GetDoc()->GetSections();
         sal_uInt16 nApplyPos = USHRT_MAX;
-        for( sal_uInt16 i = 0; i < rFmts.Count(); i++ )
+        for( sal_uInt16 i = 0; i < rFmts.size(); i++ )
         {
             if(rFmts[i]->GetSection() == pSect)
             {

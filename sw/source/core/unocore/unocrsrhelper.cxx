@@ -608,7 +608,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         {
 
                             // get CharStyle and set the rule
-                            sal_uInt16 nChCount = pDoc->GetCharFmts()->Count();
+                            sal_uInt16 nChCount = pDoc->GetCharFmts()->size();
                             SwCharFmt* pCharFmt = 0;
                             for(sal_uInt16 nCharFmt = 0; nCharFmt < nChCount; nCharFmt++)
                             {

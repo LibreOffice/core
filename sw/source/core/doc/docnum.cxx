@@ -156,7 +156,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 
 void SwDoc::PropagateOutlineRule()
 {
-    for (sal_uInt16 n = 0; n < pTxtFmtCollTbl->Count(); n++)
+    for (sal_uInt16 n = 0; n < pTxtFmtCollTbl->size(); n++)
     {
         SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
 
@@ -211,7 +211,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     SwTxtFmtColl* aCollArr[ MAXLEVEL ];
     memset( aCollArr, 0, sizeof( SwTxtFmtColl* ) * MAXLEVEL );
 
-    for( n = 0; n < pTxtFmtCollTbl->Count(); ++n )
+    for( n = 0; n < pTxtFmtCollTbl->size(); ++n )
     {
         if((*pTxtFmtCollTbl)[ n ]->IsAssignedToListLevelOfOutlineStyle())
         {

@@ -1046,7 +1046,7 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
         pDoc = SwImport::GetDocFromXMLImport( *this );
 
     const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
-    sal_uInt16 nCount = rColls.Count();
+    sal_uInt16 nCount = rColls.size();
     for( sal_uInt16 i=0; i < nCount; i++ )
     {
         SwTxtFmtColl *pColl = rColls[i];

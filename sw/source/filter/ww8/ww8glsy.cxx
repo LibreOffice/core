@@ -67,7 +67,7 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, sal_uInt8 nVersion,
 bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
 {
     bool bRet=false;
-    for( sal_uInt16 nCnt = pDoc->GetSpzFrmFmts()->Count(); nCnt; )
+    for( sal_uInt16 nCnt = pDoc->GetSpzFrmFmts()->size(); nCnt; )
     {
         SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ --nCnt ];
         if ( RES_FLYFRMFMT != pFrmFmt->Which() &&

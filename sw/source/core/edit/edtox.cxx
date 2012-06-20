@@ -259,7 +259,7 @@ sal_uInt16 SwEditShell::GetTOXCount() const
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     sal_uInt16 nRet = 0;
-    for( sal_uInt16 n = rFmts.Count(); n; )
+    for( sal_uInt16 n = rFmts.size(); n; )
     {
         const SwSection* pSect = rFmts[ --n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -273,7 +273,7 @@ sal_uInt16 SwEditShell::GetTOXCount() const
 const SwTOXBase* SwEditShell::GetTOX( sal_uInt16 nPos ) const
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0, nCnt = 0; n < rFmts.Count(); ++n )
+    for( sal_uInt16 n = 0, nCnt = 0; n < rFmts.size(); ++n )
     {
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&

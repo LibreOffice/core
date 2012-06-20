@@ -2802,7 +2802,7 @@ namespace
 void MSWordExportBase::ExportDocument( bool bWriteAll )
 {
     nCharFmtStart = ANZ_DEFAULT_STYLES;
-    nFmtCollStart = nCharFmtStart + pDoc->GetCharFmts()->Count() - 1;
+    nFmtCollStart = nCharFmtStart + pDoc->GetCharFmts()->size() - 1;
 
     bStyDef = bBreakBefore = bOutKF =
         bOutFlyFrmAttrs = bOutPageDescs = bOutTable = bOutFirstPage =

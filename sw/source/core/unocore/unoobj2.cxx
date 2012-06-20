@@ -230,8 +230,8 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     }
     else
     {
-        const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-        sal_uInt16 nSize = rFmts.Count();
+        const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
+        sal_uInt16 nSize = rFmts.size();
         for ( sal_uInt16 i = 0; i < nSize; i++)
         {
             const SwFrmFmt* pFmt = rFmts[ i ];

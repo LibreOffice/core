@@ -636,7 +636,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, sal_Bool bSorted
     }
     // non-pool styles
     const SwCharFmts* pFmts = pDoc->GetCharFmts();
-    for(sal_uInt16 i = 0; i < pFmts->Count(); i++)
+    for(sal_uInt16 i = 0; i < pFmts->size(); i++)
     {
         const SwCharFmt* pFmt = (*pFmts)[i];
         if(pFmt->IsDefault())

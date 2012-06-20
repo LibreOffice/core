@@ -853,7 +853,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                         rPropertyName, rValue, aAttrSet);
 
                 const SwSectionFmts& rSects = m_pImpl->m_pDoc->GetSections();
-                for (sal_uInt16 i = 0; i < rSects.Count(); i++)
+                for (sal_uInt16 i = 0; i < rSects.size(); i++)
                 {
                     const SwSectionFmt* pTmpFmt = rSects[ i ];
                     if (pTmpFmt == pSectionFmt)
@@ -2399,7 +2399,7 @@ SwXDocumentIndexes::getCount() throw (uno::RuntimeException)
 
     sal_uInt32 nRet = 0;
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2424,7 +2424,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     sal_Int32 nIdx = 0;
 
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2455,7 +2455,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
 
     String sToFind(rName);
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2485,7 +2485,7 @@ SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException)
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     sal_Int32 nCount = 0;
     sal_uInt16 n;
-    for( n = 0; n < rFmts.Count(); ++n )
+    for( n = 0; n < rFmts.size(); ++n )
     {
         SwSection const*const pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2498,7 +2498,7 @@ SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException)
     uno::Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
     sal_uInt16 nCnt;
-    for( n = 0, nCnt = 0; n < rFmts.Count(); ++n )
+    for( n = 0, nCnt = 0; n < rFmts.size(); ++n )
     {
         SwSection const*const pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2522,7 +2522,7 @@ throw (uno::RuntimeException)
 
     String sToFind(rName);
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
         SwSection const*const pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&

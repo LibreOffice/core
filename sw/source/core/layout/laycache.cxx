@@ -572,7 +572,7 @@ sal_uLong SwLayHelper::CalcPageCount()
             sal_uLong nTmp = pDoc->GetNodes().GetEndOfContent().GetIndex() -
                         pDoc->GetNodes().GetEndOfExtras().GetIndex();
             //Tables have a little overhead..
-            nTmp -= pDoc->GetTblFrmFmts()->Count() * 25;
+            nTmp -= pDoc->GetTblFrmFmts()->size() * 25;
             //Fly frames, too ..
             nTmp -= (pDoc->GetNodes().GetEndOfAutotext().GetIndex() -
                        pDoc->GetNodes().GetEndOfInserts().GetIndex()) / 3 * 5;
@@ -683,8 +683,8 @@ bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
 {
     bool bHasTextFrmAnchoredObjs( false );
 
-    const SwSpzFrmFmts* pSpzFrmFmts = p_pTxtFrm->GetTxtNode()->GetDoc()->GetSpzFrmFmts();
-    for ( sal_uInt16 i = 0; i < pSpzFrmFmts->Count(); ++i )
+    const SwFrmFmts* pSpzFrmFmts = p_pTxtFrm->GetTxtNode()->GetDoc()->GetSpzFrmFmts();
+    for ( sal_uInt16 i = 0; i < pSpzFrmFmts->size(); ++i )
     {
         SwFrmFmt *pFmt = (SwFrmFmt*)(*pSpzFrmFmts)[i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();

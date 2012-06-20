@@ -111,7 +111,7 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     }
 
     // also delete surrounding FlyFrames if any
-    for( sal_uInt16 n = 0; n < pClpDoc->GetSpzFrmFmts()->Count(); ++n )
+    for( sal_uInt16 n = 0; n < pClpDoc->GetSpzFrmFmts()->size(); ++n )
     {
         SwFlyFrmFmt* pFly = (SwFlyFrmFmt*)(*pClpDoc->GetSpzFrmFmts())[n];
         pClpDoc->DelLayoutFmt( pFly );
@@ -155,14 +155,14 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
 
        // assure the "RootFmt" is the first element in Spz-Array
         // (if necessary Flys were copied in Flys)
-        SwSpzFrmFmts& rSpzFrmFmts = *(SwSpzFrmFmts*)pClpDoc->GetSpzFrmFmts();
+        SwFrmFmts& rSpzFrmFmts = *(SwFrmFmts*)pClpDoc->GetSpzFrmFmts();
         if( rSpzFrmFmts[ 0 ] != pFlyFmt )
         {
-            sal_uInt16 nPos = rSpzFrmFmts.GetPos( pFlyFmt );
-            OSL_ENSURE( nPos != USHRT_MAX, "Fly not contained in Spz-Array" );
+            SwFrmFmts::iterator it = std::find( rSpzFrmFmts.begin(), rSpzFrmFmts.end(), pFlyFmt );
+            OSL_ENSURE( it != rSpzFrmFmts.end(), "Fly not contained in Spz-Array" );
 
-            rSpzFrmFmts.Remove( nPos );
-            rSpzFrmFmts.Insert( pFlyFmt, 0 );
+            rSpzFrmFmts.erase( it );
+            rSpzFrmFmts.insert( rSpzFrmFmts.begin(), pFlyFmt );
         }
 
         if ( FLY_AS_CHAR == aAnchor.GetAnchorId() )
@@ -894,13 +894,13 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
             break;      // exit the "while-loop"
         }
         else if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
-                 pClpDoc->GetSpzFrmFmts()->Count() )
+                 pClpDoc->GetSpzFrmFmts()->size() )
         {
             // we need a DrawView
             if( !Imp()->GetDrawView() )
                 MakeDrawView();
 
-            for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->Count(); ++i )
+            for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->size(); ++i )
             {
                 sal_Bool bInsWithFmt = sal_True;
                 const SwFrmFmt& rCpyFmt = *(*pClpDoc->GetSpzFrmFmts())[i];
@@ -1082,13 +1082,13 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 GetDoc()->DelFullPara(aPara);
             }
             //additionally copy page bound frames
-            if( bIncludingPageFrames && pClpDoc->GetSpzFrmFmts()->Count() )
+            if( bIncludingPageFrames && pClpDoc->GetSpzFrmFmts()->size() )
             {
                 // create a draw view if necessary
                 if( !Imp()->GetDrawView() )
                     MakeDrawView();
 
-                for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->Count(); ++i )
+                for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->size(); ++i )
                 {
                     sal_Bool bInsWithFmt = sal_True;
                     const SwFrmFmt& rCpyFmt = *(*pClpDoc->GetSpzFrmFmts())[i];
@@ -1190,13 +1190,13 @@ sal_Bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_u
     }
     // now the page bound objects
     // additionally copy page bound frames
-    if( GetDoc()->GetSpzFrmFmts()->Count() )
+    if( GetDoc()->GetSpzFrmFmts()->size() )
     {
         // create a draw view if necessary
         if( !rToFill.Imp()->GetDrawView() )
             rToFill.MakeDrawView();
 
-        for ( sal_uInt16 i = 0; i < GetDoc()->GetSpzFrmFmts()->Count(); ++i )
+        for ( sal_uInt16 i = 0; i < GetDoc()->GetSpzFrmFmts()->size(); ++i )
         {
             const SwFrmFmt& rCpyFmt = *(*GetDoc()->GetSpzFrmFmts())[i];
             SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );

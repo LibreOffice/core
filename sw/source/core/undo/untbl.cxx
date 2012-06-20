@@ -426,8 +426,8 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     const SwTableNode* pTblNd = rTbl.GetTableNode();
     sal_uLong nTblStt = pTblNd->GetIndex(), nTblEnd = pTblNd->EndOfSectionIndex();
 
-    const SwSpzFrmFmts& rFrmFmtTbl = *pTblNd->GetDoc()->GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < rFrmFmtTbl.Count(); ++n )
+    const SwFrmFmts& rFrmFmtTbl = *pTblNd->GetDoc()->GetSpzFrmFmts();
+    for( sal_uInt16 n = 0; n < rFrmFmtTbl.size(); ++n )
     {
         SwFrmFmt* pFmt = rFrmFmtTbl[ n ];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -889,7 +889,7 @@ _SaveTable::_SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt, sal_Bool bSaveFm
     for( sal_uInt16 n = 1; n < nLnCnt; ++n )
         pLn = new _SaveLine( pLn, *rTbl.GetTabLines()[ n ], *this );
 
-    aFrmFmts.Remove( 0, aFrmFmts.Count() );
+    aFrmFmts.clear();
     pSwTable = 0;
 }
 
@@ -925,7 +925,7 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
         }
         nRet = aSets.size();
         aSets.push_back( pSet );
-        aFrmFmts.Insert( pFmt, nRet );
+        aFrmFmts.insert( aFrmFmts.begin() + nRet, pFmt );
     }
     return nRet;
 }
@@ -960,7 +960,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
     // fill FrmFmts with defaults (0)
     pFmt = 0;
     for( n = aSets.size(); n; --n )
-        aFrmFmts.Insert( pFmt, aFrmFmts.Count() );
+        aFrmFmts.push_back( pFmt );
 
     sal_uInt16 nLnCnt = nLineCount;
     if( USHRT_MAX == nLnCnt )
@@ -978,7 +978,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
         pLn->RestoreAttr( *rTbl.GetTabLines()[ n ], *this );
     }
 
-    aFrmFmts.Remove( 0, aFrmFmts.Count() );
+    aFrmFmts.clear();
     bModifyBox = sal_False;
 }
 
@@ -1013,10 +1013,10 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
     // fill FrmFmts with defaults (0)
     pFmt = 0;
     for( n = aSets.size(); n; --n )
-        aFrmFmts.Insert( pFmt, aFrmFmts.Count() );
+        aFrmFmts.push_back( pFmt );
 
     pLine->CreateNew( rTbl, aParent, *this );
-    aFrmFmts.Remove( 0, aFrmFmts.Count() );
+    aFrmFmts.clear();
 
     // add new lines, delete old ones
     sal_uInt16 nOldLines = nLineCount;
@@ -1093,7 +1093,7 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
         else
             pFmt = pDoc->MakeTableBoxFmt();
         pFmt->SetFmtAttr( *aSets[ nFmtPos ] );
-        aFrmFmts.Replace( pFmt, nFmtPos );
+        aFrmFmts[nFmtPos] = pFmt;
     }
 
     // first re-assign Frms
@@ -1183,7 +1183,7 @@ void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableLineFmt();
         pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
-        rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
+        rSTbl.aFrmFmts[ nItemSet ] = pFmt;
     }
     SwTableLine* pNew = new SwTableLine( pFmt, 1, &rParent );
 
@@ -1337,7 +1337,7 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableBoxFmt();
         pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
-        rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
+        rSTbl.aFrmFmts[nItemSet] = pFmt;
     }
 
     if( ULONG_MAX == nSttNode )     // no EndBox

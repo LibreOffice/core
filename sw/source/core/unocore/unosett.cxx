@@ -1262,7 +1262,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                             rProperties, nIndex);
         //hier noch die Zeichenformate bei Bedarf setzen
         const SwCharFmts* pFmts = pDocShell->GetDoc()->GetCharFmts();
-        sal_uInt16 nChCount = pFmts->Count();
+        sal_uInt16 nChCount = pFmts->size();
         for(sal_uInt16 i = 0; i < MAXLEVEL;i++)
         {
             SwNumFmt aFmt(aNumRule.Get( i ));
@@ -1565,7 +1565,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         //Vorlagenname
         String sValue(SW_RES(STR_POOLCOLL_HEADLINE1 + nIndex));
         const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
-        const sal_uInt16 nCount = pColls->Count();
+        const sal_uInt16 nCount = pColls->size();
         for(sal_uInt16 i = 0; i < nCount;++i)
         {
             SwTxtFmtColl &rTxtColl = *pColls->operator[](i);
@@ -1767,7 +1767,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     {
                         SwDoc* pLocalDoc = pDoc ? pDoc : pDocShell->GetDoc();
                         const SwCharFmts* pFmts = pLocalDoc->GetCharFmts();
-                        sal_uInt16 nChCount = pFmts->Count();
+                        sal_uInt16 nChCount = pFmts->size();
 
                         SwCharFmt* pCharFmt = 0;
                         if(sCharFmtName.Len())
@@ -1926,7 +1926,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         String sStyleName;
                         SwStyleNameMapper::FillUIName(uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
                         const SwTxtFmtColls* pColls = pDoc->GetTxtFmtColls();
-                        const sal_uInt16 nCount = pColls->Count();
+                        const sal_uInt16 nCount = pColls->size();
                         for(sal_uInt16 k = 0; k < nCount; ++k)
                         {
                             SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
@@ -2081,7 +2081,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     String sStyleName;
                     SwStyleNameMapper::FillUIName(uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
                     const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
-                    const sal_uInt16 nCount = pColls->Count();
+                    const sal_uInt16 nCount = pColls->size();
                     for(sal_uInt16 k = 0; k < nCount; ++k)
                     {
                         SwTxtFmtColl &rTxtColl = *((*pColls)[k]);

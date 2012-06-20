@@ -75,7 +75,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     const SwSectionFmts& rSectFmts = pMyDoc->GetSections();
     sal_uInt16 n;
 
-    for( n = rSectFmts.Count(); n; )
+    for( n = rSectFmts.size(); n; )
     {
         const SwSection* pSect = rSectFmts[ --n ]->GetGlobalDocSection();
         if( pSect )

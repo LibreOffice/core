@@ -79,9 +79,6 @@
 using namespace ::com::sun::star;
 
 
-// sw/inc/docary.hxx
-SV_IMPL_PTRARR( SwSectionFmts, SwSectionFmtPtr )
-
 #define FILE_NAME_LENGTH 17
 
 static void   lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox );
@@ -819,8 +816,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
     // are copied (ClearRedo!)
 
     const SwSectionFmts& rDocFmts = rSh.GetDoc()->GetSections();
-    SwSectionFmts aOrigArray( 0 );
-    aOrigArray.Insert( &rDocFmts, 0 );
+    SwSectionFmts aOrigArray(rDocFmts);
 
     rSh.StartAllAction();
     rSh.StartUndo();
@@ -875,7 +871,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
             rSh.DelSectionFmt( nNewPos );
     }
 
-    aOrigArray.Remove( 0, aOrigArray.Count() );
+    aOrigArray.clear();
 
     // EndDialog must be called ahead of EndAction's end,
     // otherwise ScrollError can occur.
@@ -1144,12 +1140,11 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
         aSet.Put( pSectRepr->GetLRSpace() );
 
         const SwSectionFmts& rDocFmts = rSh.GetDoc()->GetSections();
-        SwSectionFmts aOrigArray( 0 );
-        aOrigArray.Insert( &rDocFmts, 0 );
+        SwSectionFmts aOrigArray(rDocFmts);
 
         SwSectionFmt* pFmt = aOrigArray[pSectRepr->GetArrPos()];
         long nWidth = rSh.GetSectionWidth(*pFmt);
-        aOrigArray.Remove( 0, aOrigArray.Count() );
+        aOrigArray.clear();
         if (!nWidth)
             nWidth = USHRT_MAX;
 

@@ -38,7 +38,7 @@ class SwFmtFrmSize;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
 class SwVirtFlyDrawObj;
-class SwSpzFrmFmts;
+class SwFrmFmts;
 class SwAttrSetChg;
 class PolyPolygon;
 class SwFlyDrawContact;
@@ -66,7 +66,7 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove =
 class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 {
     // is allowed to lock, implemented in frmtool.cxx
-    friend void AppendObjs   ( const SwSpzFrmFmts *, sal_uLong, SwFrm *, SwPageFrm * );
+    friend void AppendObjs   ( const SwFrmFmts *, sal_uLong, SwFrm *, SwPageFrm * );
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 

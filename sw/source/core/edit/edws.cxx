@@ -184,7 +184,7 @@ sal_uInt16 SwEditShell::GetCntType() const
 sal_Bool SwEditShell::HasOtherCnt() const
 
 {
-    if ( GetDoc()->GetSpzFrmFmts()->Count() )
+    if ( !GetDoc()->GetSpzFrmFmts()->empty() )
         return sal_True;
 
     const SwNodes &rNds = GetDoc()->GetNodes();

@@ -39,6 +39,7 @@
 #include <SwRewriter.hxx>
 #include <numrule.hxx>
 #include <swundo.hxx>
+#include <docary.hxx>
 
 /*************************************
  * FormatColl
@@ -54,7 +55,7 @@ SwTxtFmtColl& SwEditShell::GetDfltTxtFmtColl() const
 
 sal_uInt16 SwEditShell::GetTxtFmtCollCount() const
 {
-    return GetDoc()->GetTxtFmtColls()->Count();
+    return GetDoc()->GetTxtFmtColls()->size();
 }
 
 

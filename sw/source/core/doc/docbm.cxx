@@ -1341,7 +1341,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                                         continue;
                                 }
                             }
-                            aSave.SetCount( pDoc->GetSpzFrmFmts()->Count() );
+                            aSave.SetCount( pDoc->GetSpzFrmFmts()->size() );
                             while( aSave.GetCount() &&
                                     &rFmt != (*pDoc->GetSpzFrmFmts())[
                                     aSave.DecCount() ] )
@@ -1356,7 +1356,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
             }
             else // No layout, so it's a bit more expensive ...
             {
-                for( aSave.SetCount( pDoc->GetSpzFrmFmts()->Count() );
+                for( aSave.SetCount( pDoc->GetSpzFrmFmts()->size() );
                         aSave.GetCount() ; )
                 {
                     SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[
@@ -1447,7 +1447,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
 {
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
-    SwSpzFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
+    SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     sal_uInt16 n = 0;
     while( n < rSaveArr.size() )
@@ -1608,7 +1608,7 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
 {
     const SwDoc* pDoc = rNd.GetDoc();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
-    const SwSpzFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
+    const SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
 

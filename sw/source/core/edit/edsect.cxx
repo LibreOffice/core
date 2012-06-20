@@ -125,14 +125,14 @@ const SwSection* SwEditShell::GetAnySection( sal_Bool bOutOfTab, const Point* pP
 
 sal_uInt16 SwEditShell::GetSectionFmtCount() const
 {
-    return GetDoc()->GetSections().Count();
+    return GetDoc()->GetSections().size();
 }
 
 
 sal_Bool SwEditShell::IsAnySectionInDoc( sal_Bool bChkReadOnly, sal_Bool bChkHidden, sal_Bool bChkTOX ) const
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    sal_uInt16 nCnt = rFmts.Count();
+    sal_uInt16 nCnt = rFmts.size();
     sal_uInt16 n;
 
     for( n = 0; n < nCnt; ++n )

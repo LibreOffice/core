@@ -3469,7 +3469,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
         sal_Bool bNameFound = sal_False;
         SwFrmFmt* pTmpFmt;
         const SwFrmFmts* pTbl = pFmt->GetDoc()->GetTblFrmFmts();
-        for( sal_uInt16 i = pTbl->Count(); i; )
+        for( sal_uInt16 i = pTbl->size(); i; )
             if( !( pTmpFmt = (*pTbl)[ --i ] )->IsDefault() &&
                 pTmpFmt->GetName() == sNewTblName &&
                             pFmt->GetDoc()->IsUsed( *pTmpFmt ))

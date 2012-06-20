@@ -4414,10 +4414,10 @@ sal_Bool SwHTMLParser::HasCurrentParaFlys( sal_Bool bNoSurroundOnly,
     // sonst:               Der Absatz enthaelt irgendeinen Rahmen
     SwNodeIndex& rNodeIdx = pPam->GetPoint()->nNode;
 
-    const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
+    const SwFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
     sal_Bool bFound = sal_False;
-    for ( sal_uInt16 i=0; i<rFrmFmtTbl.Count(); i++ )
+    for ( sal_uInt16 i=0; i<rFrmFmtTbl.size(); i++ )
     {
         SwFrmFmt *const pFmt = rFrmFmtTbl[i];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -5067,9 +5067,9 @@ void SwHTMLParser::InsertLineBreak()
         SwTxtNode* pTxtNd = rNodeIdx.GetNode().GetTxtNode();
         if( pTxtNd )
         {
-            const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
+            const SwFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-            for( sal_uInt16 i=0; i<rFrmFmtTbl.Count(); i++ )
+            for( sal_uInt16 i=0; i<rFrmFmtTbl.size(); i++ )
             {
                 SwFrmFmt *const pFmt = rFrmFmtTbl[i];
                 SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();

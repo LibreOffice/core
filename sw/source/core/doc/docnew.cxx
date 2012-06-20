@@ -128,9 +128,6 @@ const sal_Char sCharFmtStr[] = "Zeichenformat";
 const sal_Char sTxtCollStr[] = "Textformatvorlage";
 const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 
-SV_IMPL_PTRARR( SwTxtFmtColls, SwTxtFmtCollPtr)
-SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
-
 /*
  * global functions...
  */
@@ -192,15 +189,14 @@ void StartGrammarChecking( SwDoc &rDoc )
 /*
  * internal functions
  */
-sal_Bool lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
+static void lcl_DelFmtIndizes( SwFmt* pFmt )
 {
-    SwFmtCntnt &rFmtCntnt = (SwFmtCntnt&)rpFmt->GetCntnt();
+    SwFmtCntnt &rFmtCntnt = (SwFmtCntnt&)pFmt->GetCntnt();
     if ( rFmtCntnt.GetCntntIdx() )
         rFmtCntnt.SetNewCntntIdx( 0 );
-    SwFmtAnchor &rFmtAnchor = (SwFmtAnchor&)rpFmt->GetAnchor();
+    SwFmtAnchor &rFmtAnchor = (SwFmtAnchor&)pFmt->GetAnchor();
     if ( rFmtAnchor.GetCntntAnchor() )
         rFmtAnchor.SetAnchor( 0 );
-    return sal_True;
 }
 
 /*
@@ -222,7 +218,7 @@ SwDoc::SwDoc()
     pDfltGrfFmtColl( new SwGrfFmtColl( GetAttrPool(), sGrfCollStr ) ),
     pFrmFmtTbl( new SwFrmFmts() ),
     pCharFmtTbl( new SwCharFmts() ),
-    pSpzFrmFmtTbl( new SwSpzFrmFmts() ),
+    pSpzFrmFmtTbl( new SwFrmFmts() ),
     pSectionFmtTbl( new SwSectionFmts() ),
     pTblFrmFmtTbl( new SwFrmFmts() ),
     pTxtFmtCollTbl( new SwTxtFmtColls() ),
@@ -376,14 +372,14 @@ SwDoc::SwDoc()
      * DefaultFormats and are also in the list.
      */
     /* Formats */
-    pFrmFmtTbl->Insert(pDfltFrmFmt, 0 );
-    pCharFmtTbl->Insert(pDfltCharFmt, 0 );
+    pFrmFmtTbl->push_back(pDfltFrmFmt);
+    pCharFmtTbl->push_back(pDfltCharFmt);
 
     /* FmtColls */
     // TXT
-    pTxtFmtCollTbl->Insert(pDfltTxtFmtColl, 0 );
+    pTxtFmtCollTbl->push_back(pDfltTxtFmtColl);
     // GRF
-    pGrfFmtCollTbl->Insert(pDfltGrfFmtColl, 0 );
+    pGrfFmtCollTbl->push_back(pDfltGrfFmtColl);
 
     // Create PageDesc, EmptyPageFmt and ColumnFmt
     if ( aPageDescs.empty() )
@@ -442,6 +438,46 @@ SwDoc::SwDoc()
     nRsidRoot = nRsid;
 
     ResetModified();
+}
+
+static void DeleteAndDestroy(SwFrmFmts& rFmts, int aStartIdx, int aEndIdx)
+{
+    if (aEndIdx < aStartIdx)
+        return;
+    for( SwFrmFmts::const_iterator it = rFmts.begin() + aStartIdx;
+         it != rFmts.begin() + aEndIdx; ++it )
+             delete *it;
+    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
+}
+
+static void DeleteAndDestroy(SwTxtFmtColls& rFmts, int aStartIdx, int aEndIdx)
+{
+    if (aEndIdx < aStartIdx)
+        return;
+    for( SwTxtFmtColls::const_iterator it = rFmts.begin() + aStartIdx;
+         it != rFmts.begin() + aEndIdx; ++it )
+             delete *it;
+    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
+}
+
+static void DeleteAndDestroy(SwCharFmts& rFmts, int aStartIdx, int aEndIdx)
+{
+    if (aEndIdx < aStartIdx)
+        return;
+    for( SwCharFmts::const_iterator it = rFmts.begin() + aStartIdx;
+         it != rFmts.begin() + aEndIdx; ++it )
+             delete *it;
+    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
+}
+
+static void DeleteAndDestroy(SwGrfFmtColls& rFmts, int aStartIdx, int aEndIdx)
+{
+    if (aEndIdx < aStartIdx)
+        return;
+    for( SwGrfFmtColls::const_iterator it = rFmts.begin() + aStartIdx;
+         it != rFmts.begin() + aEndIdx; ++it )
+             delete *it;
+    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
 }
 
 /*
@@ -559,9 +595,12 @@ SwDoc::~SwDoc()
 
     // Any of the FrmFormats can still have indices registered.
     // These need to be destroyed now at the latest.
-    pFrmFmtTbl->ForEach( &lcl_DelFmtIndizes, this );
-    pSpzFrmFmtTbl->ForEach( &lcl_DelFmtIndizes, this );
-    ((SwFrmFmts&)*pSectionFmtTbl).ForEach( &lcl_DelFmtIndizes, this );
+    BOOST_FOREACH( SwFrmFmt* pFmt, *pFrmFmtTbl )
+        lcl_DelFmtIndizes( pFmt );
+    BOOST_FOREACH( SwFrmFmt* pFmt, *pSpzFrmFmtTbl )
+        lcl_DelFmtIndizes( pFmt );
+    BOOST_FOREACH( SwSectionFmt* pFmt, *pSectionFmtTbl )
+        lcl_DelFmtIndizes( pFmt );
 
     // The formattings that come hereafter depend on the default formattings.
     // [Destroy] these only after destroying the FmtIndices, because the content
@@ -592,15 +631,15 @@ SwDoc::~SwDoc()
     // Optimization: Based on the fact that Standard is always 2nd in the
     // array, we should delete it as the last. With this we avoid
     // remangling the Formats all the time!
-    if( 2 < pTxtFmtCollTbl->Count() )
-        pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
-    pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
+    if( 2 < pTxtFmtCollTbl->size() )
+        DeleteAndDestroy( *pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size()-2 );
+    DeleteAndDestroy( *pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size()-1 );
     delete pTxtFmtCollTbl;
 
     OSL_ENSURE( pDfltGrfFmtColl == (*pGrfFmtCollTbl)[0],
             "DefaultGrfCollection must always be at the start" );
 
-    pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
+    DeleteAndDestroy( *pGrfFmtCollTbl, 1, pGrfFmtCollTbl->size()-1 );
     // Is the result anyway - no _DEL array!
     //  pGrfFmtCollTbl->Remove( 0, n );
     delete pGrfFmtCollTbl;
@@ -611,8 +650,8 @@ SwDoc::~SwDoc()
      * In order to not be deleted by the array's dtor, we remove them
      * now.
      */
-    pFrmFmtTbl->Remove( 0 );
-    pCharFmtTbl->Remove( 0 );
+    pFrmFmtTbl->erase( pFrmFmtTbl->begin() );
+    pCharFmtTbl->erase( pCharFmtTbl->begin() );
 
     // Delete for pPrt
     DELETEZ( pPrt );
@@ -621,7 +660,7 @@ SwDoc::~SwDoc()
     // All Flys need to be destroyed before the Drawing Model,
     // because Flys can still contain DrawContacts, when no
     // Layout could be constructed due to a read error.
-    pSpzFrmFmtTbl->DeleteAndDestroy( 0, pSpzFrmFmtTbl->Count() );
+    DeleteAndDestroy( *pSpzFrmFmtTbl, 0, pSpzFrmFmtTbl->size() );
 
     // Only now destroy the Model, the drawing objects - which are also
     // contained in the Undo - need to remove their attributes from the
@@ -771,7 +810,7 @@ void SwDoc::ClearDoc()
 
     // if there are still FlyFrames dangling around, delete them too
     sal_uInt16 n;
-    while ( 0 != (n = GetSpzFrmFmts()->Count()) )
+    while ( 0 != (n = GetSpzFrmFmts()->size()) )
         DelLayoutFmt((*pSpzFrmFmtTbl)[n-1]);
     OSL_ENSURE( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
@@ -836,21 +875,21 @@ void SwDoc::ClearDoc()
     // Optimization: Based on the fact that Standard is always 2nd in the
     // array, we should delete it as the last. With this we avoid
     // remangling the Formats all the time!
-    if( 2 < pTxtFmtCollTbl->Count() )
-        pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
-    pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
-    pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
-    pCharFmtTbl->DeleteAndDestroy( 1, pCharFmtTbl->Count()-1 );
+    if( 2 < pTxtFmtCollTbl->size() )
+        DeleteAndDestroy( *pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size()-2 );
+    DeleteAndDestroy( *pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size()-1 );
+    DeleteAndDestroy( *pGrfFmtCollTbl, 1, pGrfFmtCollTbl->size()-1 );
+    DeleteAndDestroy( *pCharFmtTbl, 1, pCharFmtTbl->size()-1 );
 
     if( pCurrentView )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
-        pFrmFmtTbl->Remove( pFrmFmtTbl->GetPos( pCurrentView->GetLayout()->GetFmt() ) );
-        pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
-        pFrmFmtTbl->Insert( pCurrentView->GetLayout()->GetFmt(), pFrmFmtTbl->Count() );
+        pFrmFmtTbl->erase( std::find( pFrmFmtTbl->begin(), pFrmFmtTbl->end(), pCurrentView->GetLayout()->GetFmt() ) );
+        DeleteAndDestroy( *pFrmFmtTbl, 1, pFrmFmtTbl->size()-1 );
+        pFrmFmtTbl->push_back( pCurrentView->GetLayout()->GetFmt() );
     }
     else    //swmod 071029//swmod 071225
-        pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
+        DeleteAndDestroy( *pFrmFmtTbl, 1, pFrmFmtTbl->size()-1 );
 
     xForbiddenCharsTable.clear();
 
@@ -1208,9 +1247,9 @@ void SwDoc::Paste( const SwDoc& rSource )
             this->DelFullPara(aPara);
         }
         //additionally copy page bound frames
-        if( /*bIncludingPageFrames && */rSource.GetSpzFrmFmts()->Count() )
+        if( /*bIncludingPageFrames && */rSource.GetSpzFrmFmts()->size() )
         {
-            for ( sal_uInt16 i = 0; i < rSource.GetSpzFrmFmts()->Count(); ++i )
+            for ( sal_uInt16 i = 0; i < rSource.GetSpzFrmFmts()->size(); ++i )
             {
                 sal_Bool bInsWithFmt = sal_True;
                 const SwFrmFmt& rCpyFmt = *(*rSource.GetSpzFrmFmts())[i];
@@ -1234,5 +1273,23 @@ void SwDoc::Paste( const SwDoc& rSource )
     UnlockExpFlds();
     UpdateFlds(NULL, false);
 }
+
+sal_uInt16 SwTxtFmtColls::GetPos(const SwTxtFmtColl* p) const
+{
+    const_iterator it = std::find(begin(), end(), p);
+    return it == end() ? USHRT_MAX : it - begin();
+}
+
+bool SwTxtFmtColls::Contains(const SwTxtFmtColl* p) const
+{
+    return std::find(begin(), end(), p) != end();
+}
+
+sal_uInt16 SwGrfFmtColls::GetPos(const SwGrfFmtColl* p) const
+{
+    const_iterator it = std::find(begin(), end(), p);
+    return it == end() ? USHRT_MAX : it - begin();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

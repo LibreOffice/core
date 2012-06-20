@@ -64,8 +64,8 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
     SwDoc *const pDoc = & rContext.GetDoc();
 
     // add again into array
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
-    rFlyFmts.Insert( pFrmFmt, rFlyFmts.Count() );
+    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    rFlyFmts.push_back( pFrmFmt );
 
     // OD 26.06.2003 #108784# - insert 'master' drawing object into drawing page
     if ( RES_DRAWFRMFMT == pFrmFmt->Which() )
@@ -224,8 +224,8 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
 
     // delete from array
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
-    rFlyFmts.Remove( rFlyFmts.GetPos( pFrmFmt ));
+    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFrmFmt ));
 }
 
 SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_StrLen nCntIdx )
@@ -542,7 +542,7 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmtPtr)pOldFmt ) )
+    if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmt*)pOldFmt ) )
     {
         if( bAnchorChgd )
             pFrmFmt->DelFrms();
@@ -615,7 +615,7 @@ void SwUndoSetFlyFmt::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmtPtr)pNewFmt ) )
+    if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmt*)pNewFmt ) )
     {
 
         if( bAnchorChgd )

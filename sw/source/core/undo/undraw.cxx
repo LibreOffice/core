@@ -242,15 +242,15 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 
     // remove from array
     SwDoc* pDoc = pFmt->GetDoc();
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
-    rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
+    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 
     for( sal_uInt16 n = 1; n < nSize; ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
 
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
-        rFlyFmts.Insert( rSave.pFmt, rFlyFmts.Count() );
+        rFlyFmts.push_back( rSave.pFmt );
 
         pObj = rSave.pObj;
 
@@ -274,7 +274,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
 
     // remove from array
     SwDoc* pDoc = pObjArr->pFmt->GetDoc();
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
     SdrObject* pObj;
 
     for( sal_uInt16 n = 1; n < nSize; ++n )
@@ -294,12 +294,12 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
         // notify UNO objects to decouple
         ::lcl_SendRemoveToUno( *rSave.pFmt );
 
-        rFlyFmts.Remove( rFlyFmts.GetPos( rSave.pFmt ));
+        rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), rSave.pFmt ));
     }
 
     // re-insert group object
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
-    rFlyFmts.Insert( pObjArr->pFmt, rFlyFmts.Count() );
+    rFlyFmts.push_back( pObjArr->pFmt );
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
     // #i26791# - correction: connect object to layout
@@ -326,8 +326,8 @@ void SwUndoDrawGroup::AddObj( sal_uInt16 nPos, SwDrawFrmFmt* pFmt, SdrObject* pO
     ::lcl_SendRemoveToUno( *pFmt );
 
     // remove from array
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
-    rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
+    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
+    rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 }
 
 void SwUndoDrawGroup::SetGroupFmt( SwDrawFrmFmt* pFmt )
@@ -361,8 +361,8 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
     ::lcl_SendRemoveToUno( *pFmt );
 
     // remove from array
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
-    rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
+    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
+    rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 }
 
 SwUndoDrawUnGroup::~SwUndoDrawUnGroup()
@@ -384,7 +384,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     bDelFmt = sal_True;
 
     SwDoc *const pDoc = & rContext.GetDoc();
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
 
     // remove from array
     for( sal_uInt16 n = 1; n < nSize; ++n )
@@ -396,12 +396,12 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
            // notify UNO objects to decouple
         ::lcl_SendRemoveToUno( *rSave.pFmt );
 
-        rFlyFmts.Remove( rFlyFmts.GetPos( rSave.pFmt ));
+        rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), rSave.pFmt ));
     }
 
     // re-insert group object
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
-    rFlyFmts.Insert( pObjArr->pFmt, rFlyFmts.Count() );
+    rFlyFmts.push_back( pObjArr->pFmt );
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
     pContact->ConnectToLayout();
@@ -436,15 +436,15 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 
     // remove from array
     SwDoc* pDoc = pFmt->GetDoc();
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
-    rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
+    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 
     for( sal_uInt16 n = 1; n < nSize; ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
 
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
-        rFlyFmts.Insert( rSave.pFmt, rFlyFmts.Count() );
+        rFlyFmts.push_back( rSave.pFmt );
 
         // #i45952# - notify that position attributes are already set
         OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
@@ -537,12 +537,12 @@ SwUndoDrawDelete::~SwUndoDrawDelete()
 void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     bDelFmt = sal_False;
-    SwSpzFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
+    SwFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
     for( sal_uInt16 n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
-        rFlyFmts.Insert( rSave.pFmt, rFlyFmts.Count() );
+        rFlyFmts.push_back( rSave.pFmt );
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->_Changed( *pObj, SDRUSERCALL_INSERTED, NULL );
@@ -562,7 +562,7 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     bDelFmt = sal_True;
-    SwSpzFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
+    SwFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
     for( sal_uInt16 n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
@@ -577,7 +577,7 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
            // notify UNO objects to decouple
         ::lcl_SendRemoveToUno( *pFmt );
 
-        rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
+        rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
         ::lcl_SaveAnchor( pFmt, rSave.nNodeIdx );
     }
 }
@@ -595,8 +595,8 @@ void SwUndoDrawDelete::AddObj( sal_uInt16 , SwDrawFrmFmt* pFmt,
 
     // remove from array
     SwDoc* pDoc = pFmt->GetDoc();
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
-    rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
+    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 
     pMarkLst->InsertEntry( rMark );
 }

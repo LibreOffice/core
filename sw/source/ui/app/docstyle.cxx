@@ -1378,7 +1378,7 @@ void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
     case SFX_STYLE_FAMILY_CHAR:
         {
             const SwCharFmts& rTbl = *rDoc.GetCharFmts();
-            for( sal_uInt16 n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 rArr.Insert( p, n );
@@ -1388,7 +1388,7 @@ void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
     case SFX_STYLE_FAMILY_PARA:
         {
             const SwTxtFmtColls& rTbl = *rDoc.GetTxtFmtColls();
-            for( sal_uInt16 n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 rArr.Insert( p, n );
@@ -1398,7 +1398,7 @@ void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
     case SFX_STYLE_FAMILY_FRAME:
         {
             const SwFrmFmts& rTbl = *rDoc.GetFrmFmts();
-            for( sal_uInt16 n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 rArr.Insert( p, n );
@@ -1439,7 +1439,7 @@ void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
         {
             std::vector<sal_uInt16> aDelArr;
             const SwCharFmts& rTbl = *rDoc.GetCharFmts();
-            for( n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 if( USHRT_MAX == rArr.GetPos( p ))
@@ -1454,7 +1454,7 @@ void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
         {
             std::vector<sal_uInt16> aDelArr;
             const SwTxtFmtColls& rTbl = *rDoc.GetTxtFmtColls();
-            for( n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 if( USHRT_MAX == rArr.GetPos( p ))
@@ -1469,7 +1469,7 @@ void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
         {
             SvPtrarr aDelArr;
             const SwFrmFmts& rTbl = *rDoc.GetFrmFmts();
-            for( n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 if( USHRT_MAX == rArr.GetPos( p ))
@@ -2431,7 +2431,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     if( nSearchFamily == SFX_STYLE_FAMILY_CHAR
      || nSearchFamily == SFX_STYLE_FAMILY_ALL )
     {
-        const sal_uInt16 nArrLen = rDoc.GetCharFmts()->Count();
+        const sal_uInt16 nArrLen = rDoc.GetCharFmts()->size();
         for( sal_uInt16 i = 0; i < nArrLen; i++ )
         {
             SwCharFmt* pFmt = (*rDoc.GetCharFmts())[ i ];
@@ -2507,7 +2507,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 nSMask = SWSTYLEBIT_HTML;
         }
 
-        const sal_uInt16 nArrLen = rDoc.GetTxtFmtColls()->Count();
+        const sal_uInt16 nArrLen = rDoc.GetTxtFmtColls()->size();
         for( sal_uInt16 i = 0; i < nArrLen; i++ )
         {
             SwTxtFmtColl* pColl = (*rDoc.GetTxtFmtColls())[ i ];
@@ -2650,7 +2650,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     if( nSearchFamily == SFX_STYLE_FAMILY_FRAME ||
         nSearchFamily == SFX_STYLE_FAMILY_ALL )
     {
-        const sal_uInt16 nArrLen = rDoc.GetFrmFmts()->Count();
+        const sal_uInt16 nArrLen = rDoc.GetFrmFmts()->size();
         for( sal_uInt16 i = 0; i < nArrLen; i++ )
         {
             SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];

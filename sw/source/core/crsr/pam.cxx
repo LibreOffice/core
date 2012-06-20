@@ -700,7 +700,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
             if( nSttIdx + 3 < nEndIdx )
             {
                 const SwSectionFmts& rFmts = GetDoc()->GetSections();
-                for( sal_uInt16 n = rFmts.Count(); n;  )
+                for( sal_uInt16 n = rFmts.size(); n;  )
                 {
                     const SwSectionFmt* pFmt = rFmts[ --n ];
                     if( pFmt->GetProtect().IsCntntProtected() )

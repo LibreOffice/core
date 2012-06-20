@@ -516,17 +516,17 @@ SwSectionFmt* SwDoc::MakeSectionFmt( SwSectionFmt *pDerivedFrom )
     if( !pDerivedFrom )
         pDerivedFrom = (SwSectionFmt*)pDfltFrmFmt;
     SwSectionFmt* pNew = new SwSectionFmt( pDerivedFrom, this );
-    pSectionFmtTbl->Insert( pNew, pSectionFmtTbl->Count() );
+    pSectionFmtTbl->push_back( pNew );
     return pNew;
 }
 
 void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, sal_Bool bDelNodes )
 {
-    sal_uInt16 nPos = pSectionFmtTbl->GetPos( pFmt );
+    SwSectionFmts::iterator itFmtPos = std::find( pSectionFmtTbl->begin(), pSectionFmtTbl->end(), pFmt );
 
     GetIDocumentUndoRedo().StartUndo(UNDO_DELSECTION, NULL);
 
-    if( USHRT_MAX != nPos )
+    if( pSectionFmtTbl->end() != itFmtPos )
     {
         const SwNodeIndex* pIdx = pFmt->GetCntnt( sal_False ).GetCntntIdx();
         const SfxPoolItem* pFtnEndAtTxtEnd;
@@ -575,12 +575,12 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, sal_Bool bDelNodes )
 
         // A ClearRedo could result in a rekursive call of this function and delete some section
         // formats => the position iside the SectionFmtTbl could have changed
-        nPos = pSectionFmtTbl->GetPos( pFmt );
+        itFmtPos = std::find( pSectionFmtTbl->begin(), pSectionFmtTbl->end(), pFmt );
 
         // ACHTUNG: erst aus dem Array entfernen und dann loeschen.
         //          Der Section-DTOR versucht selbst noch sein Format
         //          zu loeschen!
-        pSectionFmtTbl->Remove( nPos );
+        pSectionFmtTbl->erase( itFmtPos );
 //FEATURE::CONDCOLL
         sal_uLong nCnt = 0, nSttNd = 0;
         if( pIdx && &GetNodes() == &pIdx->GetNodes() &&
@@ -1426,14 +1426,14 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     xub_StrLen nNmLen = aName.Len();
 
     sal_uInt16 nNum = 0;
-    sal_uInt16 nTmp, nFlagSize = ( pSectionFmtTbl->Count() / 8 ) +2;
+    sal_uInt16 nTmp, nFlagSize = ( pSectionFmtTbl->size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
     const SwSectionNode* pSectNd;
     sal_uInt16 n;
 
-    for( n = 0; n < pSectionFmtTbl->Count(); ++n )
+    for( n = 0; n < pSectionFmtTbl->size(); ++n )
         if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) ))
         {
             const String& rNm = pSectNd->GetSection().GetSectionName();
@@ -1441,7 +1441,7 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
             {
                 // Nummer bestimmen und das Flag setzen
                 nNum = static_cast<sal_uInt16>(rNm.Copy( nNmLen ).ToInt32());
-                if( nNum-- && nNum < pSectionFmtTbl->Count() )
+                if( nNum-- && nNum < pSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
             if( pChkStr && pChkStr->Equals( rNm ) )
@@ -1451,7 +1451,7 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     if( !pChkStr )
     {
         // alle Nummern entsprechend geflag, also bestimme die richtige Nummer
-        nNum = pSectionFmtTbl->Count();
+        nNum = pSectionFmtTbl->size();
         for( n = 0; n < nFlagSize; ++n )
             if( 0xff != ( nTmp = pSetFlags[ n ] ))
             {

@@ -152,8 +152,7 @@ void SwUndoFmtAttr::Init()
     else if ( RES_FRMFMT == m_nFmtWhich )
     {
         SwDoc* pDoc = m_pFmt->GetDoc();
-        if (USHRT_MAX != pDoc->GetTblFrmFmts()->GetPos(
-                            static_cast<const SwFrmFmtPtr>(m_pFmt)))
+        if ( pDoc->GetTblFrmFmts()->Contains(static_cast<const SwFrmFmt*>(m_pFmt)))
         {
             // Table Format: save table position, table formats are volatile!
             SwTable * pTbl = SwIterator<SwTable,SwFmt>::FirstElement( *m_pFmt );
@@ -163,8 +162,7 @@ void SwUndoFmtAttr::Init()
                     ->FindTableNode()->GetIndex();
             }
         }
-        else if (USHRT_MAX != pDoc->GetSections().GetPos(
-                                static_cast<const SwSectionFmtPtr>(m_pFmt)))
+        else if ( pDoc->GetSections().Contains(static_cast<const SwSectionFmt*>(m_pFmt)))
         {
             m_nNodeIndex = m_pFmt->GetCntnt().GetCntntIdx()->GetIndex();
         }
@@ -242,17 +240,17 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
     {
         case RES_TXTFMTCOLL:
             nPos = pDoc->GetTxtFmtColls()->GetPos(
-                    static_cast<const SwTxtFmtCollPtr>(m_pFmt) );
+                    static_cast<const SwTxtFmtColl*>(m_pFmt) );
             break;
 
         case RES_GRFFMTCOLL:
             nPos = pDoc->GetGrfFmtColls()->GetPos(
-                    static_cast<const SwGrfFmtCollPtr>(m_pFmt) );
+                    static_cast<const SwGrfFmtColl*>(m_pFmt) );
             break;
 
         case RES_CHRFMT:
             nPos = pDoc->GetCharFmts()->GetPos(
-                    static_cast<SwCharFmtPtr>(m_pFmt) );
+                    static_cast<SwCharFmt*>(m_pFmt) );
             break;
 
         case RES_FRMFMT:
@@ -294,11 +292,11 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
         case RES_DRAWFRMFMT:
         case RES_FLYFRMFMT:
             nPos = pDoc->GetSpzFrmFmts()->GetPos(
-                    static_cast<const SwFrmFmtPtr>(m_pFmt) );
+                    static_cast<const SwFrmFmt*>(m_pFmt) );
             if ( USHRT_MAX == nPos )
             {
                 nPos = pDoc->GetFrmFmts()->GetPos(
-                    static_cast<const SwFrmFmtPtr>(m_pFmt) );
+                    static_cast<const SwFrmFmt*>(m_pFmt) );
             }
             break;
     }

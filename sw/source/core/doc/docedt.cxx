@@ -207,8 +207,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         aPos.nContent.Assign( 0, 0 );
         SwFmtAnchor aAnchor( pFmt->GetAnchor() );
         aAnchor.SetAnchor( &aPos );
-        pFmt->GetDoc()->GetSpzFrmFmts()->Insert(
-                pFmt, pFmt->GetDoc()->GetSpzFrmFmts()->Count() );
+        pFmt->GetDoc()->GetSpzFrmFmts()->push_back( pFmt );
         pFmt->SetFmtAttr( aAnchor );
         SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
         if( pCNd && pCNd->getLayoutFrm( pFmt->GetDoc()->GetCurrentLayout(), 0, 0, sal_False ) )
@@ -218,8 +217,8 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
 
 void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
 {
-    SwSpzFrmFmts& rFmts = *rRg.aStart.GetNode().GetDoc()->GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+    SwFrmFmts& rFmts = *rRg.aStart.GetNode().GetDoc()->GetSpzFrmFmts();
+    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
         SwFrmFmt *const pFmt = static_cast<SwFrmFmt*>(rFmts[n]);
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -233,7 +232,7 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
                             pFmt, sal_False );
             rArr.push_back( aSave );
             pFmt->DelFrms();
-            rFmts.Remove( n--, 1 );
+            rFmts.erase( rFmts.begin() + n-- );
         }
     }
 }
@@ -241,7 +240,7 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
 void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                        _SaveFlyArr& rArr, bool bMoveAllFlys )
 {
-    SwSpzFrmFmts& rFmts = *rPam.GetPoint()->nNode.GetNode().GetDoc()->GetSpzFrmFmts();
+    SwFrmFmts& rFmts = *rPam.GetPoint()->nNode.GetNode().GetDoc()->GetSpzFrmFmts();
     SwFrmFmt* pFmt;
     const SwFmtAnchor* pAnchor;
 
@@ -258,7 +257,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
 
     const SwNodeIndex* pCntntIdx;
 
-    for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
         sal_Bool bInsPos = sal_False;
         pFmt = (SwFrmFmt*)rFmts[n];
@@ -294,7 +293,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                                 pFmt, bInsPos );
                 rArr.push_back( aSave );
                 pFmt->DelFrms();
-                rFmts.Remove( n--, 1 );
+                rFmts.erase( rFmts.begin() + n-- );
             }
         }
     }
@@ -308,8 +307,8 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
     const sal_Bool bDelFwrd = rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex();
 
     SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
-    SwSpzFrmFmts& rTbl = *pDoc->GetSpzFrmFmts();
-    for ( sal_uInt16 i = rTbl.Count(); i; )
+    SwFrmFmts& rTbl = *pDoc->GetSpzFrmFmts();
+    for ( sal_uInt16 i = rTbl.size(); i; )
     {
         SwFrmFmt *pFmt = rTbl[--i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
@@ -339,8 +338,8 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                                     SwNodeIndex( *rCntnt.GetCntntIdx()->
                                             GetNode().EndOfSectionNode() ));
                     // Position could have been moved!
-                    if( i > rTbl.Count() )
-                        i = rTbl.Count();
+                    if( i > rTbl.size() )
+                        i = rTbl.size();
                     else if( pFmt != rTbl[i] )
                         i = rTbl.GetPos( pFmt );
                 }
@@ -348,8 +347,8 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                 pDoc->DelLayoutFmt( pFmt );
 
                 // DelLayoutFmt can also trigger the deletion of objects.
-                if( i > rTbl.Count() )
-                    i = rTbl.Count();
+                if( i > rTbl.size() )
+                    i = rTbl.size();
             }
         }
     }
@@ -1158,7 +1157,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
 
     // Save the paragraph-bound Flys, so that they can be moved.
     _SaveFlyArr aSaveFlyArr;
-    if( GetSpzFrmFmts()->Count() )
+    if( !GetSpzFrmFmts()->empty() )
         _SaveFlyInRange( rRange, aSaveFlyArr );
 
     // Set it to before the Position, so that it cannot be moved further.
@@ -2596,7 +2595,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             // What's with Flys?
         {
             // If there are FlyFrames left, delete these too
-            for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+            for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
             {
                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();

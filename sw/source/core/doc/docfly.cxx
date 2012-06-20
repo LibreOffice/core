@@ -73,8 +73,8 @@ using namespace ::com::sun::star;
 
 sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType ) const
 {
-    const SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
-    sal_uInt16 nSize = rFmts.Count();
+    const SwFrmFmts& rFmts = *GetSpzFrmFmts();
+    sal_uInt16 nSize = rFmts.size();
     sal_uInt16 nCount = 0;
     const SwNodeIndex* pIdx;
     for ( sal_uInt16 i = 0; i < nSize; i++)
@@ -115,9 +115,9 @@ sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType ) const
 // If you change this, also update SwXFrameEnumeration in unocoll.
 SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType )
 {
-    SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
+    SwFrmFmts& rFmts = *GetSpzFrmFmts();
     SwFrmFmt* pRetFmt = 0;
-    sal_uInt16 nSize = rFmts.Count();
+    sal_uInt16 nSize = rFmts.size();
     const SwNodeIndex* pIdx;
     sal_uInt16 nCount = 0;
     for( sal_uInt16 i = 0; !pRetFmt && i < nSize; ++i )
@@ -886,7 +886,7 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
         pTxtNd->GetTxt().Len() )
         return SW_CHAIN_NOT_EMPTY;
 
-    sal_uInt16 nArrLen = GetSpzFrmFmts()->Count();
+    sal_uInt16 nArrLen = GetSpzFrmFmts()->size();
     for( sal_uInt16 n = 0; n < nArrLen; ++n )
     {
         const SwFmtAnchor& rAnchor = (*GetSpzFrmFmts())[ n ]->GetAnchor();

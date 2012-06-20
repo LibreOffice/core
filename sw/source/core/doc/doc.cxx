@@ -2098,7 +2098,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
             GetNodes()._Copy( aRange, aEndOfDoc );
         }
         const SwTxtFmtColls *pColl = pExtDoc->GetTxtFmtColls();
-        for( i = 0; i < pColl->Count(); ++i )
+        for( i = 0; i < pColl->size(); ++i )
             (*pColl)[ i ]->ResetFmtAttr( RES_PAGEDESC, RES_BREAK );
         SwNodeIndex aIndx( pExtDoc->GetNodes().GetEndOfExtras() );
         ++aEndOfDoc;
@@ -2228,7 +2228,7 @@ bool SwDoc::RemoveInvisibleContent()
         SwSectionFmts& rSectFmts = GetSections();
         sal_uInt16 n;
 
-        for( n = rSectFmts.Count(); n; )
+        for( n = rSectFmts.size(); n; )
         {
             SwSectionFmt* pSectFmt = rSectFmts[ --n ];
             // don't add sections in Undo/Redo
@@ -2245,8 +2245,9 @@ bool SwDoc::RemoveInvisibleContent()
                     pParent = pTmp;
                 }
 
-                if( USHRT_MAX == aSectFmts.GetPos( pSect->GetFmt() ) )
-                    aSectFmts.Insert( pSect->GetFmt(), 0 );
+                SwSectionFmts::iterator it = std::find( aSectFmts.begin(), aSectFmts.end(), pSect->GetFmt() );
+                if ( it != aSectFmts.end() )
+                    aSectFmts.insert( aSectFmts.begin(), pSect->GetFmt() );
             }
             if( pSect->GetCondition().Len() )
             {
@@ -2257,7 +2258,7 @@ bool SwDoc::RemoveInvisibleContent()
             }
         }
 
-        if( 0 != ( n = aSectFmts.Count() ))
+        if( 0 != ( n = aSectFmts.size() ))
         {
             while( n )
             {
@@ -2295,7 +2296,7 @@ bool SwDoc::RemoveInvisibleContent()
 
                 }
             }
-            aSectFmts.Remove( 0, aSectFmts.Count() );
+            aSectFmts.clear();
         }
     }
 
@@ -2339,7 +2340,7 @@ bool SwDoc::HasInvisibleContent() const
         const SwSectionFmts& rSectFmts = GetSections();
         sal_uInt16 n;
 
-        for( n = rSectFmts.Count(); !bRet && (n > 0); )
+        for( n = rSectFmts.size(); !bRet && (n > 0); )
         {
             SwSectionFmt* pSectFmt = rSectFmts[ --n ];
             // don't add sections in Undo/Redo
@@ -2666,7 +2667,7 @@ SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, sal_Bool bTblCrsr )
 
 void SwDoc::ChkCondColls()
 {
-     for (sal_uInt16 n = 0; n < pTxtFmtCollTbl->Count(); n++)
+     for (sal_uInt16 n = 0; n < pTxtFmtCollTbl->size(); n++)
      {
         SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
         if (RES_CONDTXTFMTCOLL == pColl->Which())

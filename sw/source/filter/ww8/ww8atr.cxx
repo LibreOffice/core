@@ -96,6 +96,7 @@
 #include <txtftn.hxx>
 #include <poolfmt.hxx>
 #include <doc.hxx>          // Doc for footnotes
+#include <docary.hxx>
 #include <pam.hxx>
 #include <paratr.hxx>
 #include <fldbas.hxx>       // for SwField
@@ -2162,7 +2163,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             // styles 1-9 and find the lowest valid outline level
             sal_uInt8 nPosOfLowestNonStandardLvl = MAXLEVEL;
             const SwTxtFmtColls& rColls = *GetExport().pDoc->GetTxtFmtColls();
-            for( n = rColls.Count(); n; )
+            for( n = rColls.size(); n; )
                       {
             const SwTxtFmtColl* pColl = rColls[ --n ];
             sal_uInt16 nPoolId = pColl->GetPoolFmtId();
@@ -2198,7 +2199,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             if( nMaxMSAutoEvaluate < nTOXLvl )
                       {
             // collect this templates into the \t otion
-            for( n = rColls.Count(); n;)
+            for( n = rColls.size(); n;)
                           {
                 const SwTxtFmtColl* pColl = rColls[ --n ];
                 if (!pColl->IsAssignedToListLevelOfOutlineStyle())

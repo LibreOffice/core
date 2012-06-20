@@ -274,7 +274,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     std::vector<String> aFormats;
     SwDoc* pDoc = pDocShell->GetDoc();
-    const sal_uInt16 nArrLen = pDoc->GetFrmFmts()->Count();
+    const sal_uInt16 nArrLen = pDoc->GetFrmFmts()->size();
     sal_uInt16 i;
     for( i = 0; i < nArrLen; i++ )
     {

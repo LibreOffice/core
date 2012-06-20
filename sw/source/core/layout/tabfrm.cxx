@@ -74,7 +74,7 @@
 #include <layouter.hxx>
 #include <switerator.hxx>
 
-extern void AppendObjs( const SwSpzFrmFmts *pTbl, sal_uLong nIndex,
+extern void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
                         SwFrm *pFrm, SwPageFrm *pPage );
 
 using namespace ::com::sun::star;
@@ -1211,8 +1211,8 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
             pHeadline->InsertBefore( pFoll, 0 );
 
             SwPageFrm *pPage = pHeadline->FindPageFrm();
-            const SwSpzFrmFmts *pTbl = GetFmt()->GetDoc()->GetSpzFrmFmts();
-            if( pTbl->Count() )
+            const SwFrmFmts *pTbl = GetFmt()->GetDoc()->GetSpzFrmFmts();
+            if( !pTbl->empty() )
             {
                 sal_uLong nIndex;
                 SwCntntFrm* pFrm = pHeadline->ContainsCntnt();

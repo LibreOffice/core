@@ -1248,13 +1248,13 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const String& rClass ) c
 
 SwTxtFmtColl *SwCSS1Parser::GetTxtCollFromPool( sal_uInt16 nPoolId ) const
 {
-    sal_uInt16 nOldArrLen = pDoc->GetTxtFmtColls()->Count();
+    sal_uInt16 nOldArrLen = pDoc->GetTxtFmtColls()->size();
 
     SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool( nPoolId, false );
 
     if( bIsNewDoc )
     {
-        sal_uInt16 nArrLen = pDoc->GetTxtFmtColls()->Count();
+        sal_uInt16 nArrLen = pDoc->GetTxtFmtColls()->size();
         for( sal_uInt16 i=nOldArrLen; i<nArrLen; i++ )
             lcl_swcss1_setEncoding( *(*pDoc->GetTxtFmtColls())[i],
                                     GetDfltEncoding() );
@@ -1265,13 +1265,13 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtCollFromPool( sal_uInt16 nPoolId ) const
 
 SwCharFmt *SwCSS1Parser::GetCharFmtFromPool( sal_uInt16 nPoolId ) const
 {
-    sal_uInt16 nOldArrLen = pDoc->GetCharFmts()->Count();
+    sal_uInt16 nOldArrLen = pDoc->GetCharFmts()->size();
 
     SwCharFmt *pCharFmt = pDoc->GetCharFmtFromPool( nPoolId );
 
     if( bIsNewDoc )
     {
-        sal_uInt16 nArrLen = pDoc->GetCharFmts()->Count();
+        sal_uInt16 nArrLen = pDoc->GetCharFmts()->size();
 
         for( sal_uInt16 i=nOldArrLen; i<nArrLen; i++ )
             lcl_swcss1_setEncoding( *(*pDoc->GetCharFmts())[i],
@@ -2397,12 +2397,12 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
             }
 
             // Change all paragraph styles that do specify a font.
-            sal_uInt16 nArrLen = pDoc->GetTxtFmtColls()->Count();
+            sal_uInt16 nArrLen = pDoc->GetTxtFmtColls()->size();
             for( i=1; i<nArrLen; i++ )
                 lcl_swcss1_setEncoding( *(*pDoc->GetTxtFmtColls())[i], eEnc );
 
             // Change all character styles that do specify a font.
-            nArrLen = pDoc->GetCharFmts()->Count();
+            nArrLen = pDoc->GetCharFmts()->size();
             for( i=1; i<nArrLen; i++ )
                 lcl_swcss1_setEncoding( *(*pDoc->GetCharFmts())[i], eEnc );
         }

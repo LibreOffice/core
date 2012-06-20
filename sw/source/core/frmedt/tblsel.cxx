@@ -932,12 +932,12 @@ sal_Bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
     if( bRet )
     {
         // now check for paragraph bound flyes
-        const SwSpzFrmFmts& rFmts = *rPam.GetDoc()->GetSpzFrmFmts();
+        const SwFrmFmts& rFmts = *rPam.GetDoc()->GetSpzFrmFmts();
         sal_uLong nSttIdx = rPam.GetPoint()->nNode.GetIndex(),
               nEndIdx = rBox.GetSttNd()->EndOfSectionIndex(),
               nIdx;
 
-        for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
         {
             const SwFmtAnchor& rAnchor = rFmts[n]->GetAnchor();
             const SwPosition* pAPos = rAnchor.GetCntntAnchor();

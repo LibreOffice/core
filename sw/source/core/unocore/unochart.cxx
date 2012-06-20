@@ -151,7 +151,7 @@ void SwChartLockController_Helper::LockUnlockAllCharts( sal_Bool bLock )
         return;
 
     const SwFrmFmts& rTblFmts = *pDoc->GetTblFrmFmts();
-    for( sal_uInt16 n = 0; n < rTblFmts.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rTblFmts.size(); ++n )
     {
         SwTable* pTmpTbl;
         const SwTableNode* pTblNd;

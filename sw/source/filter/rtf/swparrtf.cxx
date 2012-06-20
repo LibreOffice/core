@@ -491,10 +491,10 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
                 {
                     // Do not delete the paragraph if it has anchored objects:
                     bool bAnchoredObjs = false;
-                    const SwSpzFrmFmts* pFrmFmts = pDoc->GetSpzFrmFmts();
-                    if ( pFrmFmts && pFrmFmts->Count() )
+                    const SwFrmFmts* pFrmFmts = pDoc->GetSpzFrmFmts();
+                    if ( pFrmFmts && !pFrmFmts->empty() )
                     {
-                        for ( sal_uInt16 nI = pFrmFmts->Count(); nI; --nI )
+                        for ( sal_uInt16 nI = pFrmFmts->size(); nI; --nI )
                         {
                             const SwFmtAnchor & rAnchor = (*pFrmFmts)[ nI - 1 ]->GetAnchor();
                             if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
@@ -2711,7 +2711,7 @@ void SwRTFParser::MakeStyleTab()
         {
             // search all outlined collections
             const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
-            for( sal_uInt16 n = rColls.Count(); n; )
+            for( sal_uInt16 n = rColls.size(); n; )
                 if( rColls[ --n ]->IsAssignedToListLevelOfOutlineStyle())
                     nValidOutlineLevels |= 1 << rColls[ n ]->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
         }

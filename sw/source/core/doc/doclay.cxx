@@ -282,13 +282,13 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
             const SwNodeIndex* pCntntIdx = pFmt->GetCntnt().GetCntntIdx();
             if ( pCntntIdx )
             {
-                const SwSpzFrmFmts* pTbl = pFmt->GetDoc()->GetSpzFrmFmts();
+                const SwFrmFmts* pTbl = pFmt->GetDoc()->GetSpzFrmFmts();
                 if ( pTbl )
                 {
                     std::vector<SwFrmFmt*> aToDeleteFrmFmts;
                     const sal_uLong nNodeIdxOfFlyFmt( pCntntIdx->GetIndex() );
 
-                    for ( sal_uInt16 i = 0; i < pTbl->Count(); ++i )
+                    for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
                     {
                         SwFrmFmt* pTmpFmt = (*pTbl)[i];
                         const SwFmtAnchor &rAnch = pTmpFmt->GetAnchor();
@@ -1026,7 +1026,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
     SwFrmFmt *pFly;
 
     // collect all anchored somehow to paragraphs
-    for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+    for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
     {
         pFly = (*GetSpzFrmFmts())[ n ];
         bool bDrawFmt = bDrawAlso ? RES_DRAWFRMFMT == pFly->Which() : false;
@@ -1175,7 +1175,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     SwTxtFmtColl * pColl = NULL;
     if( pType )
     {
-        for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
+        for( sal_uInt16 i = pTxtFmtCollTbl->size(); i; )
         {
             if( (*pTxtFmtCollTbl)[ --i ]->GetName().Equals(pType->GetName()) )
             {
@@ -1531,7 +1531,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     SwTxtFmtColl *pColl = NULL;
     if( pType )
     {
-        for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
+        for( sal_uInt16 i = pTxtFmtCollTbl->size(); i; )
         {
             if( (*pTxtFmtCollTbl)[ --i ]->GetName().Equals(pType->GetName()) )
             {
@@ -1941,15 +1941,15 @@ static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
 
-    const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
+    const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
 
-    sal_uInt16 nNum, nTmp, nFlagSize = ( rFmts.Count() / 8 ) +2;
+    sal_uInt16 nNum, nTmp, nFlagSize = ( rFmts.size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     sal_uInt16 n;
 
     memset( pSetFlags, 0, nFlagSize );
 
-    for( n = 0; n < rFmts.Count(); ++n )
+    for( n = 0; n < rFmts.size(); ++n )
     {
         const SwFrmFmt* pFlyFmt = rFmts[ n ];
         if( RES_FLYFRMFMT == pFlyFmt->Which() &&
@@ -1957,13 +1957,13 @@ static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
         {
             // Only get and set the Flag
             nNum = static_cast< sal_uInt16 >( pFlyFmt->GetName().Copy( nNmLen ).ToInt32() );
-            if( nNum-- && nNum < rFmts.Count() )
+            if( nNum-- && nNum < rFmts.size() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
     }
 
     // All numbers are flagged accordingly, so determine the right one
-    nNum = rFmts.Count();
+    nNum = rFmts.size();
     for( n = 0; n < nFlagSize; ++n )
         if( 0xff != ( nTmp = pSetFlags[ n ] ))
         {
@@ -1995,8 +1995,8 @@ String SwDoc::GetUniqueFrameName() const
 
 const SwFlyFrmFmt* SwDoc::FindFlyByName( const String& rName, sal_Int8 nNdTyp ) const
 {
-    const SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
-    for( sal_uInt16 n = rFmts.Count(); n; )
+    const SwFrmFmts& rFmts = *GetSpzFrmFmts();
+    for( sal_uInt16 n = rFmts.size(); n; )
     {
         const SwFrmFmt* pFlyFmt = rFmts[ --n ];
         const SwNodeIndex* pIdx;
@@ -2050,13 +2050,14 @@ void SwDoc::SetAllUniqueFlyNames()
     String sGrfNm( nGrfId );
     String sOLENm( nOLEId );
 
-    if( 255 < ( n = GetSpzFrmFmts()->Count() ))
+    if( 255 < ( n = GetSpzFrmFmts()->size() ))
         n = 255;
-    SwSpzFrmFmts aArr( (sal_Int8)n );
-    SwFrmFmtPtr pFlyFmt;
+    SwFrmFmts aArr;
+    aArr.reserve( (sal_Int8)n );
+    SwFrmFmt* pFlyFmt;
     sal_Bool bLoadedFlag = sal_True;            // something for the Layout
 
-    for( n = GetSpzFrmFmts()->Count(); n; )
+    for( n = GetSpzFrmFmts()->size(); n; )
     {
         if( RES_FLYFRMFMT == (pFlyFmt = (*GetSpzFrmFmts())[ --n ])->Which() )
         {
@@ -2077,7 +2078,7 @@ void SwDoc::SetAllUniqueFlyNames()
             }
             else
                 // we want to set that afterwards
-                aArr.Insert( pFlyFmt, aArr.Count() );
+                aArr.push_back( pFlyFmt );
 
         }
         if( bLoadedFlag )
@@ -2099,7 +2100,7 @@ void SwDoc::SetAllUniqueFlyNames()
 
     const SwNodeIndex* pIdx;
 
-    for( n = aArr.Count(); n; )
+    for( n = aArr.size(); n; )
         if( 0 != ( pIdx = ( pFlyFmt = aArr[ --n ])->GetCntnt().GetCntntIdx() )
             && pIdx->GetNode().GetNodes().IsDocNodes() )
         {
@@ -2122,7 +2123,7 @@ void SwDoc::SetAllUniqueFlyNames()
             }
             pFlyFmt->SetName( sNm += String::CreateFromInt32( nNum ));
         }
-    aArr.Remove( 0, aArr.Count() );
+    aArr.clear();
 
     if( GetFtnIdxs().Count() )
     {
@@ -2181,7 +2182,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     {
         // get up by using the Anchor
         sal_uInt16 n;
-        for( n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+        for( n = 0; n < GetSpzFrmFmts()->size(); ++n )
         {
             const SwFrmFmt* pFmt = (*GetSpzFrmFmts())[ n ];
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
@@ -2199,7 +2200,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
                 break;
             }
         }
-        if( n >= GetSpzFrmFmts()->Count() )
+        if( n >= GetSpzFrmFmts()->size() )
         {
             OSL_ENSURE( mbInReading, "Found a FlySection but not a Format!" );
             return sal_False;

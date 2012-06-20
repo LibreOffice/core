@@ -1256,7 +1256,7 @@ SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName 
     if( rName.Len() )
     {
         SwCharFmt* pFmt;
-        sal_uInt16 nArrLen = pCharFmts->Count();
+        sal_uInt16 nArrLen = pCharFmts->size();
         for( sal_uInt16 i = 1; i < nArrLen; i++ )
         {
             pFmt = (*pCharFmts)[ i ];
