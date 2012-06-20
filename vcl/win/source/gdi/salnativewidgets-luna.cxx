@@ -998,7 +998,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 if( pValue->mbIsTopDockingArea )
                 {
                     // make it more compatible with Aero
-                    if( ImplGetSVData()->maNWFData.mbTransparentMenubar )
+                    if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
                     {
                         const long GRADIENT_HEIGHT = 32;
 
