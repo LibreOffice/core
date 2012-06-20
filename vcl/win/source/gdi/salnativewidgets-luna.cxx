@@ -66,6 +66,40 @@ using ::rtl::OUString;
 typedef map< wstring, HTHEME > ThemeMap;
 static ThemeMap aThemeMap;
 
+#ifdef __MINGW32__
+
+typedef int (WINAPI *DTT_CALLBACK_PROC)
+(
+  HDC hdc,
+  LPWSTR pszText,
+  int cchText,
+  LPRECT prc,
+  UINT dwFlags,
+  LPARAM lParam
+);
+
+typedef struct _DTTOPTS {
+  DWORD             dwSize;
+  DWORD             dwFlags;
+  COLORREF          crText;
+  COLORREF          crBorder;
+  COLORREF          crShadow;
+  int               iTextShadowType;
+  POINT             ptShadowOffset;
+  int               iBorderSize;
+  int               iFontPropId;
+  int               iColorPropId;
+  int               iStateId;
+  BOOL              fApplyOverlay;
+  int               iGlowSize;
+  DTT_CALLBACK_PROC pfnDrawTextCallback;
+  LPARAM            lParam;
+} DTTOPTS, *PDTTOPTS;
+
+#define DTT_GLOWSIZE   (1UL << 11)
+#define DTT_COMPOSITED (1UL << 13)
+
+#endif
 
 /****************************************************
  wrap visual styles API to avoid linking against it
@@ -81,6 +115,7 @@ private:
     typedef HRESULT (WINAPI * GetThemeBackgroundContentRect_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pBoundingRect, RECT *pContentRect );
     typedef HRESULT (WINAPI * DrawThemeBackground_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect, const RECT *pClipRect );
     typedef HRESULT (WINAPI * DrawThemeText_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect );
+    typedef HRESULT (WINAPI * DrawThemeTextEx_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, LPRECT pRect, const DTTOPTS *pOptions );
     typedef HRESULT (WINAPI * GetThemePartSize_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz );
     typedef HRESULT (WINAPI * GetThemeSysFont_Proc_T) ( HTHEME hTheme, int iFontID, LOGFONTW *plf );
     typedef BOOL    (WINAPI * IsThemeActive_Proc_T) ( void );
@@ -90,6 +125,7 @@ private:
     GetThemeBackgroundContentRect_Proc_T    lpfnGetThemeBackgroundContentRect;
     DrawThemeBackground_Proc_T              lpfnDrawThemeBackground;
     DrawThemeText_Proc_T                    lpfnDrawThemeText;
+    DrawThemeTextEx_Proc_T                  lpfnDrawThemeTextEx;
     GetThemePartSize_Proc_T                 lpfnGetThemePartSize;
     GetThemeSysFont_Proc_T                  lpfnGetThemeSysFont;
     IsThemeActive_Proc_T                    lpfnIsThemeActive;
@@ -112,6 +148,7 @@ public:
     HRESULT GetThemeBackgroundContentRect( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pBoundingRect, RECT *pContentRect );
     HRESULT DrawThemeBackground( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect, const RECT *pClipRect );
     HRESULT DrawThemeText( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect );
+    HRESULT DrawThemeTextEx( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, LPRECT pRect, const DTTOPTS *pOptions );
     HRESULT GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz );
     HRESULT GetThemeSysFont( HTHEME hTheme, int iFontID, LOGFONTW *plf );
     BOOL IsThemeActive( void );
@@ -127,6 +164,7 @@ VisualStylesAPI::VisualStylesAPI()
       lpfnGetThemeBackgroundContentRect( NULL ),
       lpfnDrawThemeBackground( NULL ),
       lpfnDrawThemeText( NULL ),
+      lpfnDrawThemeTextEx( NULL ),
       lpfnGetThemePartSize( NULL ),
       lpfnGetThemeSysFont( NULL ),
       lpfnIsThemeActive( NULL ),
@@ -142,6 +180,7 @@ VisualStylesAPI::VisualStylesAPI()
         lpfnGetThemeBackgroundContentRect = (GetThemeBackgroundContentRect_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "GetThemeBackgroundContentRect" );
         lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "DrawThemeBackground" );
         lpfnDrawThemeText = (DrawThemeText_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "DrawThemeText" );
+        lpfnDrawThemeTextEx = (DrawThemeTextEx_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "DrawThemeTextEx" );
         lpfnGetThemePartSize = (GetThemePartSize_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "GetThemePartSize" );
         lpfnGetThemeSysFont = (GetThemeSysFont_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "GetThemeSysFont" );
         lpfnIsThemeActive = (IsThemeActive_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "IsThemeActive" );
@@ -203,6 +242,17 @@ HRESULT VisualStylesAPI::DrawThemeText( HTHEME hTheme, HDC hdc, int iPartId, int
         return (*lpfnDrawThemeText) (hTheme, hdc, iPartId, iStateId, pszText, iCharCount, dwTextFlags, dwTextFlags2, pRect);
     else
         return S_FALSE;
+}
+
+HRESULT VisualStylesAPI::DrawThemeTextEx( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, LPRECT pRect, const DTTOPTS *pOptions )
+{
+    if(lpfnDrawThemeTextEx)
+        return (*lpfnDrawThemeTextEx) (hTheme, hdc, iPartId, iStateId, pszText, iCharCount, dwTextFlags, pRect, pOptions);
+    else
+    {
+        // try to fallback
+        return DrawThemeText(hTheme, hdc, iPartId, iStateId, pszText, iCharCount, dwTextFlags, 0, pRect);
+    }
 }
 
 HRESULT VisualStylesAPI::GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz )
@@ -452,6 +502,12 @@ sal_Bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, 
                     {
                         HBITMAP hbmOld = (HBITMAP)SelectObject(hdcPaint, hbm);
 
+                        // Setup the theme drawing options.
+                        DTTOPTS DttOpts;
+                        DttOpts.dwSize = sizeof(DTTOPTS);
+                        DttOpts.dwFlags = DTT_COMPOSITED | DTT_GLOWSIZE;
+                        DttOpts.iGlowSize = 8;
+
                         // Select a font.
                         LOGFONTW lgFont;
                         HFONT hFontOld = NULL;
@@ -469,10 +525,10 @@ sal_Bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, 
                         rcPaint.left = rcPaint.top = 0;
                         rcPaint.right = cx;
                         rcPaint.bottom = cy;
-                        hr = vsAPI.DrawThemeText( hCompositedTheme, hdcPaint, iPart, iState,
+                        hr = vsAPI.DrawThemeTextEx( hCompositedTheme, hdcPaint, iPart, iState,
                                 reinterpret_cast<LPCWSTR>(aStr.getStr()), -1,
                                 DT_CENTER | DT_VCENTER | DT_SINGLELINE,
-                                0, &rcPaint);
+                                &rcPaint, &DttOpts );
 
                         // Blit text to the frame.
                         BitBlt(hDC, rc.left, rc.top, cx, cy, hdcPaint, 0, 0, SRCCOPY);
