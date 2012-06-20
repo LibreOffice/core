@@ -48,64 +48,6 @@
 #define WATERMARK_LUM_OFFSET        50
 #define WATERMARK_CON_OFFSET        -70
 
-// -----------
-// - helpers -
-// -----------
-
-namespace {
-
-void muckWithBitmap( const Point&    rDestPoint,
-                     const Size&     rDestSize,
-                     const Size&     rRefSize,
-                     bool&           o_rbNonBitmapActionEncountered )
-{
-    const Point aEmptyPoint;
-
-    if( aEmptyPoint != rDestPoint ||
-        rDestSize != rRefSize )
-    {
-        // non-fullscale, or offsetted bmp -> fallback to mtf
-        // rendering
-        o_rbNonBitmapActionEncountered = true;
-    }
-}
-
-BitmapEx muckWithBitmap( const BitmapEx& rBmpEx,
-                         const Point&    rSrcPoint,
-                         const Size&     rSrcSize,
-                         const Point&    rDestPoint,
-                         const Size&     rDestSize,
-                         const Size&     rRefSize,
-                         bool&           o_rbNonBitmapActionEncountered )
-{
-    BitmapEx aBmpEx;
-
-    muckWithBitmap(rDestPoint,
-                   rDestSize,
-                   rRefSize,
-                   o_rbNonBitmapActionEncountered);
-
-    if( o_rbNonBitmapActionEncountered )
-        return aBmpEx;
-
-    aBmpEx = rBmpEx;
-
-    if( (rSrcPoint.X() != 0 && rSrcPoint.Y() != 0) ||
-        rSrcSize != rBmpEx.GetSizePixel() )
-    {
-        // crop bitmap to given source rectangle (no
-        // need to copy and convert the whole bitmap)
-        const Rectangle aCropRect( rSrcPoint,
-                                   rSrcSize );
-        aBmpEx.Crop( aCropRect );
-    }
-
-    return aBmpEx;
-}
-
-} // namespace {
-
-
 // ------------------
 // - GraphicManager -
 // ------------------
@@ -585,6 +527,66 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 
 // -----------------------------------------------------------------------------
 
+// This function checks whether the bitmap is usable for skipping
+// mtf rendering by using just this one bitmap (i.e. in case the metafile
+// contains just this one pixmap that covers the entire metafile area).
+static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
+                                     Point    rSrcPoint,
+                                     Size     rSrcSize,
+                                     const Point&    rDestPoint,
+                                     const Size&     rDestSize,
+                                     const Size&     rRefSize,
+                                     bool&           o_rbNonBitmapActionEncountered )
+{
+    BitmapEx aBmpEx;
+    if( rSrcSize == Size())
+        rSrcSize = rBmpEx.GetSizePixel();
+
+    if( rDestPoint != Point( 0, 0 ))
+    {   // The pixmap in the metafile has an offset (and so would not cover)
+        // the entire result -> fall back to mtf rendering.
+        o_rbNonBitmapActionEncountered = true;
+        return aBmpEx;
+    }
+    if( rDestSize != rRefSize )
+    {   // The pixmap is not fullscale (does not cover the entire metafile area).
+        // HACK: The code here should refuse to use the bitmap directly
+        // and fall back to mtf rendering, but there seem to be metafiles
+        // that do not specify exactly their area (the Windows API requires apps
+        // the specify it manually, the rectangle is specified as topleft/bottomright
+        // rather than topleft/size [which may be confusing], and the docs
+        // on the exact meaning are somewhat confusing as well), so if it turns
+        // out this metafile really contains just one bitmap and no other painting,
+        // and if the sizes almost match, just use the pixmap (which will be scaled
+        // to fit exactly the requested size, so there should not be any actual problem
+        // caused by this small difference). This will allow caching of the resulting
+        // (scaled) pixmap, which can make a noticeable performance difference.
+        if( rBmpEx.GetSizePixel().Width() > 100 && rBmpEx.GetSizePixel().Height() > 100
+            && abs( rDestSize.Width() - rRefSize.Width()) < 5
+            && abs( rDestSize.Height() - rRefSize.Height()) < 5 )
+            ; // ok, assume it's close enough
+        else
+        {  // fall back to mtf rendering
+            o_rbNonBitmapActionEncountered = true;
+            return aBmpEx;
+        }
+    }
+
+    aBmpEx = rBmpEx;
+
+    if( (rSrcPoint.X() != 0 && rSrcPoint.Y() != 0) ||
+        rSrcSize != rBmpEx.GetSizePixel() )
+    {
+        // crop bitmap to given source rectangle (no
+        // need to copy and convert the whole bitmap)
+        const Rectangle aCropRect( rSrcPoint,
+                                   rSrcSize );
+        aBmpEx.Crop( aCropRect );
+    }
+
+    return aBmpEx;
+}
+
 sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
@@ -675,12 +677,14 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     {
                         MetaBmpAction* pAction = (MetaBmpAction*)pAct;
 
-                        rOutBmpEx = BitmapEx( pAction->GetBitmap() );
-                        muckWithBitmap( pOut->LogicToPixel( pAction->GetPoint(),
-                                                            rPrefMapMode ),
-                                        pAction->GetBitmap().GetSizePixel(),
-                                        rSizePix,
-                                        bNonBitmapActionEncountered );
+                        rOutBmpEx = checkMetadataBitmap(
+                            BitmapEx( pAction->GetBitmap()),
+                            Point(), Size(),
+                            pOut->LogicToPixel( pAction->GetPoint(),
+                                                rPrefMapMode ),
+                            pAction->GetBitmap().GetSizePixel(),
+                            rSizePix,
+                            bNonBitmapActionEncountered );
                         ++nNumBitmaps;
                     }
                     break;
@@ -690,13 +694,15 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     {
                         MetaBmpScaleAction* pAction = (MetaBmpScaleAction*)pAct;
 
-                        rOutBmpEx = BitmapEx( pAction->GetBitmap() );
-                        muckWithBitmap( pOut->LogicToPixel( pAction->GetPoint(),
-                                                            rPrefMapMode ),
-                                        pOut->LogicToPixel( pAction->GetSize(),
-                                                            rPrefMapMode ),
-                                        rSizePix,
-                                        bNonBitmapActionEncountered );
+                        rOutBmpEx = checkMetadataBitmap(
+                            BitmapEx( pAction->GetBitmap()),
+                            Point(), Size(),
+                            pOut->LogicToPixel( pAction->GetPoint(),
+                                                rPrefMapMode ),
+                            pOut->LogicToPixel( pAction->GetSize(),
+                                                rPrefMapMode ),
+                            rSizePix,
+                            bNonBitmapActionEncountered );
                         ++nNumBitmaps;
                     }
                     break;
@@ -706,7 +712,8 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     {
                         MetaBmpScalePartAction* pAction = (MetaBmpScalePartAction*)pAct;
 
-                        rOutBmpEx = muckWithBitmap( BitmapEx( pAction->GetBitmap() ),
+                        rOutBmpEx = checkMetadataBitmap(
+                                                    BitmapEx( pAction->GetBitmap() ),
                                                     pAction->GetSrcPoint(),
                                                     pAction->GetSrcSize(),
                                                     pOut->LogicToPixel( pAction->GetDestPoint(),
@@ -724,12 +731,14 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     {
                         MetaBmpExAction* pAction = (MetaBmpExAction*)pAct;
 
-                        rOutBmpEx = pAction->GetBitmapEx();
-                        muckWithBitmap( pOut->LogicToPixel( pAction->GetPoint(),
-                                                            rPrefMapMode ),
-                                        pAction->GetBitmapEx().GetSizePixel(),
-                                        rSizePix,
-                                        bNonBitmapActionEncountered );
+                        rOutBmpEx = checkMetadataBitmap(
+                            pAction->GetBitmapEx(),
+                            Point(), Size(),
+                            pOut->LogicToPixel( pAction->GetPoint(),
+                                                rPrefMapMode ),
+                            pAction->GetBitmapEx().GetSizePixel(),
+                            rSizePix,
+                            bNonBitmapActionEncountered );
                         ++nNumBitmaps;
                     }
                     break;
@@ -739,13 +748,15 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     {
                         MetaBmpExScaleAction* pAction = (MetaBmpExScaleAction*)pAct;
 
-                        rOutBmpEx = pAction->GetBitmapEx();
-                        muckWithBitmap( pOut->LogicToPixel( pAction->GetPoint(),
-                                                            rPrefMapMode ),
-                                        pOut->LogicToPixel( pAction->GetSize(),
-                                                            rPrefMapMode ),
-                                        rSizePix,
-                                        bNonBitmapActionEncountered );
+                        rOutBmpEx = checkMetadataBitmap(
+                            pAction->GetBitmapEx(),
+                            Point(), Size(),
+                            pOut->LogicToPixel( pAction->GetPoint(),
+                                                rPrefMapMode ),
+                            pOut->LogicToPixel( pAction->GetSize(),
+                                                rPrefMapMode ),
+                            rSizePix,
+                            bNonBitmapActionEncountered );
                         ++nNumBitmaps;
                     }
                     break;
@@ -755,7 +766,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     {
                         MetaBmpExScalePartAction* pAction = (MetaBmpExScalePartAction*)pAct;
 
-                        rOutBmpEx = muckWithBitmap( pAction->GetBitmapEx(),
+                        rOutBmpEx = checkMetadataBitmap( pAction->GetBitmapEx(),
                                                     pAction->GetSrcPoint(),
                                                     pAction->GetSrcSize(),
                                                     pOut->LogicToPixel( pAction->GetDestPoint(),
