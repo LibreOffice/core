@@ -2664,6 +2664,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( nSpType, nSpFlags, aSolverContainer );
+
+                // #119459# for connector shape, the start point and end point is fixed, and should not be rotated.
+                mnAngle = 0;
             }
             else if ( mType == "drawing.Measure" )
             {
