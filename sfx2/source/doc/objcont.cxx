@@ -166,10 +166,12 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
     pFile->Record( &aDevice );
 
     LanguageType eLang;
-    SvtCTLOptions*  pCTLOptions = new SvtCTLOptions;
-    if ( SvtCTLOptions::NUMERALS_HINDI == pCTLOptions->GetCTLTextNumerals() )
+    // #120038# use local incarnation, so deletion cannot be forgotten
+    const SvtCTLOptions aCTLOptions;
+
+    if ( SvtCTLOptions::NUMERALS_HINDI == aCTLOptions.GetCTLTextNumerals() )
         eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
-    else if ( SvtCTLOptions::NUMERALS_ARABIC == pCTLOptions->GetCTLTextNumerals() )
+    else if ( SvtCTLOptions::NUMERALS_ARABIC == aCTLOptions.GetCTLTextNumerals() )
         eLang = LANGUAGE_ENGLISH;
     else
         eLang = (LanguageType) Application::GetSettings().GetLanguage();
