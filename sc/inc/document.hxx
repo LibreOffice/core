@@ -883,6 +883,7 @@ public:
     void            CompileXML();
 
     ScAutoNameCache* GetAutoNameCache()     { return pAutoNameCache; }
+    SC_DLLPUBLIC  void             SetAutoNameCache(  ScAutoNameCache* pCache );
 
                     /** Creates a ScLookupCache cache for the range if it
                         doesn't already exist. */

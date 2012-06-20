@@ -72,6 +72,8 @@ typedef ::std::map< rtl::OUString, void* >  ExtLst;
 // ============================================================================
 // ============================================================================
 
+typedef ::std::map< BinAddress, sal_Int32 > SharedFormulaMap;
+
 /** An enumeration for all types of sheets in a workbook. */
 enum WorksheetType
 {
@@ -316,6 +318,12 @@ public:
     /** Final conversion after importing the worksheet. */
     void                finalizeWorksheetImport();
 
+    void                setCellFormula( ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString&  );
+    void                setCellFormula( ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32  );
+    void                setCellArrayFormula( ::com::sun::star::table::CellRangeAddress& rRangeAddress, ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString&  );
+    void                createSharedFormulaMapEntry( ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens );
+    void                setCellFormulaValue( ::com::sun::star::table::CellAddress& rAddress,
+                            double fValue  );
 private:
     WorksheetGlobals&   mrSheetGlob;
 };

@@ -165,7 +165,8 @@ void SheetDataContext::onCharacters( const OUString& rChars )
         case XLS_TOKEN( f ):
             if( maFmlaData.mnFormulaType != XML_TOKEN_INVALID )
             {
-                maTokens = mrFormulaParser.importFormula( maCellData.maCellAddr, rChars );
+//                maTokens = mrFormulaParser.importFormula( maCellData.maCellAddr, rChars );
+                  maFormulaStr = rChars;
             }
         break;
     }
@@ -178,15 +179,25 @@ void SheetDataContext::onEndElement()
         // try to create a formula cell
         if( mbHasFormula ) switch( maFmlaData.mnFormulaType )
         {
+            // will buffer formulas but need to
+            // a) need to set format first
+            // :/
             case XML_normal:
-                mrSheetData.setFormulaCell( maCellData, maTokens );
+                //mrSheetData.setFormulaCell( maCellData, maTokens );
+                setCellFormula( maCellData.maCellAddr, maFormulaStr );
+                mrSheetData.setCellFormat( maCellData );
                 break;
             case XML_shared:
                 if( maFmlaData.mnSharedId >= 0 )
                 {
                     if( mbValidRange && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
-                        mrSheetData.createSharedFormula( maFmlaData.mnSharedId, maTokens );
-                    mrSheetData.setFormulaCell( maCellData, maFmlaData.mnSharedId );
+                    {
+                        //mrSheetData.createSharedFormula( maFmlaData.mnSharedId, mrFormulaParser.importFormula( maCellData.maCellAddr, maFormulaStr ) );
+                        createSharedFormulaMapEntry( maCellData.maCellAddr, maFmlaData.mnSharedId, maFormulaStr );
+                    }
+                    //mrSheetData.setFormulaCell( maCellData, maFmlaData.mnSharedId );
+                    setCellFormula( maCellData.maCellAddr, maFmlaData.mnSharedId );
+                    mrSheetData.setCellFormat( maCellData );
                 }
                 else
                     // no success, set plain cell value and formatting below
@@ -194,7 +205,8 @@ void SheetDataContext::onEndElement()
             break;
             case XML_array:
                 if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
-                    mrSheetData.createArrayFormula( maFmlaData.maFormulaRef, maTokens );
+                    //mrSheetData.createArrayFormula( maFmlaData.maFormulaRef, maTokens );
+                    setCellArrayFormula( maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr );
                 // set cell formatting, but do not set result as cell value
                 mrSheetData.setBlankCell( maCellData );
             break;
@@ -246,7 +258,7 @@ void SheetDataContext::onEndElement()
         {
             case XML_n:
                 /* Set the pre-loaded value */
-                mrSheetData.putFormulaResult( maCellData.maCellAddr, maCellValue.toDouble() );
+                setCellFormulaValue( maCellData.maCellAddr, maCellValue.toDouble() );
                 break;
         }
     }
@@ -369,6 +381,7 @@ void SheetDataContext::importFormula( const AttributeList& rAttribs )
 
     // clear token array, will be regenerated from element text
     maTokens = ApiTokenSequence();
+    maFormulaStr = rtl::OUString();
 }
 
 void SheetDataContext::importRow( SequenceInputStream& rStrm )

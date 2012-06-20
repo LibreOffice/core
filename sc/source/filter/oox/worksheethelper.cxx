@@ -48,7 +48,6 @@
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
-#include <com/sun/star/table/XCell2.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -75,6 +74,7 @@
 #include "workbooksettings.hxx"
 #include "worksheetbuffer.hxx"
 #include "worksheetsettings.hxx"
+#include "formulabuffer.hxx"
 
 namespace oox {
 namespace xls {
@@ -1549,6 +1549,12 @@ void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fVal
     }
 }
 
+void WorksheetHelper::setCellFormulaValue( ::com::sun::star::table::CellAddress& rAddress,
+                            double fValue  )
+{
+    getFormulaBuffer().setCellFormulaValue( rAddress, fValue );
+}
+
 void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText ) const
 {
     ScAddress aAddress;
@@ -1585,6 +1591,26 @@ void WorksheetHelper::initializeWorksheetImport()
 void WorksheetHelper::finalizeWorksheetImport()
 {
     mrSheetGlob.finalizeWorksheetImport();
+}
+
+void WorksheetHelper::setCellFormula( ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString& rTokenStr )
+{
+    getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
+}
+
+void WorksheetHelper::setCellFormula( ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32 nSharedId )
+{
+    getFormulaBuffer().setCellFormula( rTokenAddress,  nSharedId );
+}
+
+void WorksheetHelper::setCellArrayFormula( ::com::sun::star::table::CellRangeAddress& rRangeAddress, ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString& rTokenStr )
+{
+    getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
+}
+
+void WorksheetHelper::createSharedFormulaMapEntry(  ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens )
+{
+    getFormulaBuffer().createSharedFormulaMapEntry( rAddress, nSharedId, rTokens );
 }
 
 // ============================================================================

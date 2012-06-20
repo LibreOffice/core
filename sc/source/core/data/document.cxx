@@ -5740,4 +5740,9 @@ ScNotes* ScDocument::GetNotes(SCTAB nTab)
     return NULL;
 }
 
+void ScDocument::SetAutoNameCache(  ScAutoNameCache* pCache )
+{
+    delete pAutoNameCache;
+    pAutoNameCache = pCache;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

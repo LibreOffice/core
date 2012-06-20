@@ -77,6 +77,7 @@
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
 
+#include "formulabuffer.hxx"
 namespace oox {
 namespace xls {
 
@@ -123,6 +124,9 @@ public:
     inline FilterBase&  getBaseFilter() const { return mrBaseFilter; }
     /** Returns the filter progress bar. */
     inline SegmentProgressBar& getProgressBar() const { return *mxProgressBar; }
+    /** Returns the formula progress bar. */
+    inline ISegmentProgressBarRef getFormulaProgressBar() const { return mxFormulaProgressBar; }
+    inline void setFormulaProgressBar( ISegmentProgressBarRef rBar ) {  mxFormulaProgressBar = rBar; }
     /** Returns the file type of the current filter. */
     inline FilterType   getFilterType() const { return meFilterType; }
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
@@ -177,6 +181,7 @@ public:
 
     // buffers ----------------------------------------------------------------
 
+    inline FormulaBuffer& getFormulaBuffer() const { return *mxFormulaBuffer; }
     /** Returns the global workbook settings object. */
     inline WorkbookSettings& getWorkbookSettings() const { return *mxWorkbookSettings; }
     /** Returns the workbook and sheet view settings object. */
@@ -238,6 +243,7 @@ private:
     void                finalize();
 
 private:
+    typedef ::std::auto_ptr< FormulaBuffer >            FormulaBufferPtr;
     typedef ::std::auto_ptr< SegmentProgressBar >       ProgressBarPtr;
     typedef ::std::auto_ptr< WorkbookSettings >         WorkbookSettPtr;
     typedef ::std::auto_ptr< ViewSettings >             ViewSettingsPtr;
@@ -268,11 +274,13 @@ private:
     ExcelFilterBase&    mrExcelBase;            /// Base object for registration of this structure.
     FilterType          meFilterType;           /// File type of the filter.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
+    ISegmentProgressBarRef mxFormulaProgressBar;/// The progress bar for end of import formula processing
     StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
     sal_Int16           mnCurrSheet;            /// Current sheet index in Calc document.
     bool                mbWorkbook;             /// True = multi-sheet file.
 
     // buffers
+    FormulaBufferPtr    mxFormulaBuffer;
     WorkbookSettPtr     mxWorkbookSettings;     /// Global workbook settings.
     ViewSettingsPtr     mxViewSettings;         /// Workbook and sheet view settings.
     WorksheetBfrPtr     mxWorksheets;           /// Sheet info buffer.
@@ -509,6 +517,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
     OSL_ENSURE( mxDoc.is(), "WorkbookGlobals::initialize - no spreadsheet document" );
 
+    mxFormulaBuffer.reset( new FormulaBuffer( *this ) );
     mxWorkbookSettings.reset( new WorkbookSettings( *this ) );
     mxViewSettings.reset( new ViewSettings( *this ) );
     mxWorksheets.reset( new WorksheetBuffer( *this ) );
@@ -554,7 +563,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         //! TODO: localize progress bar text
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), CREATE_OUSTRING( "Saving..." ) ) );
     }
-
+//    mxFormulaProgressBar =  mxProgressBar->createSegment( 0.4 );
     // filter specific
     switch( getFilterType() )
     {
@@ -585,6 +594,9 @@ void WorkbookGlobals::finalize()
         // enable automatic update of linked sheets and DDE links
         aPropSet.setProperty( PROP_IsExecuteLinkEnabled, true );
         // #i79826# enable updating automatic row height after loading the document
+        aPropSet.setProperty( PROP_IsAdjustHeightEnabled, true );
+        getFormulaBuffer().finalizeImport();
+        // hack, setting it true the second time will delete the cache
         aPropSet.setProperty( PROP_IsAdjustHeightEnabled, true );
         // #i76026# enable Undo after loading the document
         aPropSet.setProperty( PROP_IsUndoEnabled, true );
@@ -624,6 +636,16 @@ FilterType WorkbookHelper::getFilterType() const
 SegmentProgressBar& WorkbookHelper::getProgressBar() const
 {
     return mrBookGlob.getProgressBar();
+}
+
+ISegmentProgressBarRef WorkbookHelper::getFormulaProgressBar() const
+{
+    return mrBookGlob.getFormulaProgressBar();
+}
+
+void WorkbookHelper::setFormulaProgressBar(ISegmentProgressBarRef rFormBar )
+{
+    return mrBookGlob.setFormulaProgressBar( rFormBar );
 }
 
 bool WorkbookHelper::isWorkbookFile() const
@@ -765,6 +787,11 @@ Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bo
 }
 
 // buffers --------------------------------------------------------------------
+
+FormulaBuffer& WorkbookHelper::getFormulaBuffer() const
+{
+    return mrBookGlob.getFormulaBuffer();
+}
 
 WorkbookSettings& WorkbookHelper::getWorkbookSettings() const
 {

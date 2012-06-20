@@ -156,6 +156,7 @@ private:
 
 // ============================================================================
 
+
 /** Manages the cell contents and cell formatting of a sheet.
  */
 class SheetDataBuffer : public WorksheetHelper
@@ -202,6 +203,7 @@ public:
     void                createSharedFormula(
                             sal_Int32 nSharedId,
                             const ApiTokenSequence& rTokens );
+
     /** Creates a named range with a special name for a shared formula with the
         specified base address and formula definition (BIFF only). */
     void                createSharedFormula(
@@ -216,6 +218,10 @@ public:
     void                setStandardNumFmt(
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             sal_Int16 nStdNumFmt );
+    /** Processes the cell formatting data of the passed cell.
+        @param nNumFmtId  If set, overrides number format of the cell XF. */
+    void                setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId = -1 );
+
 
     /** Final processing after the sheet has been imported. */
     void                finalizeImport();
@@ -244,10 +250,6 @@ private:
                             const ::com::sun::star::table::CellRangeAddress& rRange,
                             const DataTableModel& rModel ) const;
 
-    /** Processes the cell formatting data of the passed cell.
-        @param nNumFmtId  If set, overrides number format of the cell XF. */
-    void                setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId = -1 );
-
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
     void                writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const;
     void                applyCellMerging( const ::com::sun::star::table::CellRangeAddress& rRange );
@@ -261,7 +263,6 @@ private:
     typedef ::std::pair< ::com::sun::star::table::CellRangeAddress, DataTableModel > TableOperation;
     typedef ::std::list< TableOperation > TableOperationList;
 
-    typedef ::std::map< BinAddress, sal_Int32 > SharedFormulaMap;
 
     /** Stores information about a range of rows with equal cell formatting. */
     struct XfIdRowRange
