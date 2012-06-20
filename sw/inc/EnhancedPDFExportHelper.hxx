@@ -216,7 +216,14 @@ class SwEnhancedPDFExportHelper
     OutputDevice& mrOut;
 
     StringRangeEnumerator* mpRangeEnum;
-    std::vector<bool> maIsPageEmpty;
+    /** The problem is that numbers in StringRangeEnumerator aren't accordant
+     * to real page numbers if mbSkipEmptyPages is true, because in this case
+     * empty pages are excluded from a page range and numbers in
+     * StringRangeEnumerator are shifted.
+     *
+     * maPageNumberMap[real_page_number] is either a corresponding page number
+     * in a page range without empty pages, or -1 if this page is empty. */
+    std::vector< sal_Int32 > maPageNumberMap;
 
     bool mbSkipEmptyPages;
     bool mbEditEngineOnly;
