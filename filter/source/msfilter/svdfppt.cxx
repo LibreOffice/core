@@ -5447,7 +5447,16 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
     {
         PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
         if ( pFontEnityAtom )
+        {
             rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO ) );
+
+            // #i119475# bullet font info for CJK and CTL
+            if ( RTL_TEXTENCODING_SYMBOL ==  pFontEnityAtom->eCharSet )
+            {
+                rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CJK ) );
+                rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CTL ) );
+            }
+        }
     }
     if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nDestinationInstance ) ) // Schriftgrad in Point
     {
