@@ -67,6 +67,24 @@
       "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///6Q\u003d",
+        "filename": "scp2/source/python/file_python.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-20T11:05:34Z",
+      "side": 1,
+      "message": "somehow managed to lose your fix ;-(\r\nBut it were your fix ... anyway, that why i\u0027m really missing the possibility that somebody else (in this case you) could fix/extend/adapt my gerrit patch.\r\nThe only way i see, is to push your own gerrit patch an make my depends on your or other way round.",
+      "parentUuid": "AAAACn///6o\u003d",
+      "revId": "448958c1f3fe27b0fa2536d18ecd1f5ea8a214b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
