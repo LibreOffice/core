@@ -210,42 +210,16 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
 
 extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
 {
-    // Finding the product with the help of the propery FINDPRODUCT,
-    // that contains a Windows Registry key, that points to the install location.
+    std::_tstring sInstDir = GetMsiProperty( handle, TEXT("CustomActionData") );
 
-    TCHAR szValue[8192];
-    DWORD nValueSize = sizeof(szValue);
-    HKEY  hKey;
-    std::_tstring sInstDir;
+    // Removing complete directory "share\prereg\bundled"
+    RemoveCompleteDirectory( sInstDir + TEXT("share\\prereg\\bundled") );
 
-    std::_tstring sProductKey = GetMsiProperty( handle, TEXT("FINDPRODUCT") );
-
-    if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
-    {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
-        {
-            sInstDir = szValue;
-        }
-        RegCloseKey( hKey );
-    }
-    else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
-    {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
-        {
-            sInstDir = szValue;
-        }
-        RegCloseKey( hKey );
-    }
-    else
-    {
-        return ERROR_SUCCESS;
-    }
-
-    // Removing complete directory "Basis\prereg\bundled"
-
-    std::_tstring sCacheDir = sInstDir + TEXT("share\\prereg\\bundled");
-
-    RemoveCompleteDirectory( sCacheDir );
+    // At this point we need to take care about removing upper directories,
+    // because we are after InstallFinalize. We remove only empty directories.
+    RemoveDirectory( (sInstDir + TEXT("share\\prereg")).c_str() );
+    RemoveDirectory( (sInstDir + TEXT("share")).c_str() );
+    RemoveDirectory( sInstDir.c_str() );
 
     return ERROR_SUCCESS;
 }
