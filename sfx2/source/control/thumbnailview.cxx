@@ -374,7 +374,7 @@ void ThumbnailView::CalculateItemPositions ()
                 pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
                 pItem->calculateItemsPosition();
 
-                if ( !((i+1) % mnCols) )
+                if ( !((nCurCount+1) % mnCols) )
                 {
                     x = nStartX;
                     y += mnItemHeight+mnSpacing;
