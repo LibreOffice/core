@@ -54,6 +54,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
 {
+    maView->filterTemplatesByApp(FILTER_APP_NONE);
     return 0;
 }
 
