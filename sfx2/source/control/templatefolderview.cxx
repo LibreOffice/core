@@ -12,7 +12,11 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/templateview.hxx>
+#include <sfx2/templateviewitem.hxx>
 #include <sfx2/templatefolderviewitem.hxx>
+#include <svl/inettype.hxx>
+#include <svtools/imagemgr.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
 
@@ -187,6 +191,20 @@ void TemplateFolderView::Populate ()
             if ( nEntries > 2 )
                 pItem->maPreview2 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,1),128,128);
 
+            for (sal_uInt16 j = 0; j < nEntries; ++j)
+            {
+                rtl::OUString aURL = mpDocTemplates->GetPath(i,j);
+                rtl::OUString aType = SvFileInformationManager::GetDescription(INetURLObject(aURL));
+
+                TemplateViewItem *pTemplateItem = new TemplateViewItem(*mpItemView,mpItemView);
+                pTemplateItem->mnId = j+1;
+                pTemplateItem->maText = mpDocTemplates->GetName(i,j);
+                pTemplateItem->setFileType(aType);
+                pTemplateItem->maPreview1 = lcl_fetchThumbnail(aURL,128,128);
+
+                pItem->maTemplates.push_back(pTemplateItem);
+            }
+
             mItemList.push_back(pItem);
         }
     }
@@ -230,13 +248,7 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
     sal_uInt16 nRegionId = pRegionItem->mnId-1;
 
     mpItemView->setRegionId(nRegionId);
-
-    sal_uInt16 nEntries = mpDocTemplates->GetCount(nRegionId);
-    for (sal_uInt16 i = 0; i < nEntries; ++i)
-    {
-        mpItemView->InsertItem(i+1,lcl_fetchThumbnail(mpDocTemplates->GetPath(nRegionId,i),128,128),
-                               mpDocTemplates->GetName(nRegionId,i));
-    }
+    mpItemView->InsertItems(static_cast<TemplateFolderViewItem*>(pRegionItem)->maTemplates);
 
     if (mbSelectionMode)
         mpItemView->setSelectionMode(true);

@@ -17,6 +17,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <sfx2/templateviewitem.hxx>
 #include <vcl/button.hxx>
 
 using namespace basegfx;
@@ -31,6 +32,8 @@ TemplateFolderViewItem::TemplateFolderViewItem (ThumbnailView &rView, Window *pP
 
 TemplateFolderViewItem::~TemplateFolderViewItem ()
 {
+    for (size_t i = 0; i < maTemplates.size(); ++i)
+        delete maTemplates[i];
 }
 
 void TemplateFolderViewItem::calculateItemsPosition ()

@@ -12,9 +12,12 @@
 
 #include <sfx2/thumbnailviewitem.hxx>
 
+class TemplateViewItem;
+
 struct TemplateFolderViewItem : public ThumbnailViewItem
 {
     BitmapEx maPreview2;
+    std::vector<TemplateViewItem*> maTemplates;
 
     TemplateFolderViewItem (ThumbnailView &rView, Window *pParent);
 
