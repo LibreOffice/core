@@ -385,10 +385,16 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 {
     if ( rTypeModel.maPosition == "absolute" )
     {
-        // I'm not sure if AT_PAGE is always correct here (not sure what the parent that
-        // the spec talks about can be), but with Writer SwXDrawPage::add()
-        // always in practice uses this because of pDoc->GetCurrentLayout() being NULL at this point.
-        rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PAGE);
+        if (rTypeModel.moWrapAnchorX.get() == "page" && rTypeModel.moWrapAnchorY.get() == "page")
+        {
+            // I'm not sure if AT_PAGE is always correct here (not sure what the parent that
+            // the spec talks about can be), but with Writer SwXDrawPage::add()
+            // always in practice uses this because of pDoc->GetCurrentLayout() being NULL at this point.
+            rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PAGE);
+        }
+        else
+            // Map to as-character by default, that fixes vertical position of some textframes.
+            rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_CHARACTER);
     }
     else if( rTypeModel.maPosition == "relative" )
     {   // I'm not very sure this is correct either.

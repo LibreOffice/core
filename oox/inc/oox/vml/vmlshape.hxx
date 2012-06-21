@@ -92,6 +92,8 @@ struct ShapeTypeModel
 
     OptValue< ::rtl::OUString > moGraphicPath;  ///< Path to a graphic for this shape.
     OptValue< ::rtl::OUString > moGraphicTitle; ///< Title of the graphic.
+    OptValue< ::rtl::OUString > moWrapAnchorX;  ///< The base object from which our horizontal positioning should be calculated.
+    OptValue< ::rtl::OUString > moWrapAnchorY;  ///< The base object from which our vertical positioning should be calculated.
 
     explicit            ShapeTypeModel();
 
