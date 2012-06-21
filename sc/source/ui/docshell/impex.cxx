@@ -843,23 +843,20 @@ sal_Bool ScImportExport::Text2Doc( SvStream& rStrm )
             while( *p )
             {
                 aCell.Erase();
-                if( *p == cStr )
+
+                if( *p == cStr )//cStr = "
                 {
                     p = lcl_ScanString( p, aCell, cStr, DQM_KEEP );
-                    while( *p && *p != cSep )
-                        p++;
-                    if( *p )
-                        p++;
                 }
-                else
-                {
-                    const sal_Unicode* q = p;
-                    while( *p && *p != cSep )
-                        p++;
-                    aCell.Assign( q, sal::static_int_cast<xub_StrLen>( p - q ) );
-                    if( *p )
-                        p++;
-                }
+
+                const sal_Unicode* q = p;
+                while( *p && *p != cSep )// cSep = tab
+                    p++;
+
+                aCell.Append( q, sal::static_int_cast<xub_StrLen>( p - q ) );
+
+                if( *p )
+                    p++;
                 if (ValidCol(nCol) && ValidRow(nRow) )
                 {
                     if( bSingle )
