@@ -261,24 +261,24 @@ void testRangeNameImpl(ScDocument* pDoc)
     CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
     double aValue;
     pDoc->GetValue(1,0,0,aValue);
-    CPPUNIT_ASSERT_MESSAGE("range name Global1 should reference Sheet1.A1", aValue == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Global1 should reference Sheet1.A1", 1.0, aValue);
     pRangeData = pDoc->GetRangeName(0)->findByUpperName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL1")));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
     pDoc->GetValue(1,2,0,aValue);
-    CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", aValue == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", 3.0, aValue);
     pRangeData = pDoc->GetRangeName(1)->findByUpperName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL2")));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
     pDoc->GetValue(1,1,1,aValue);
-    CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 should reference Sheet2.A2", aValue == 7);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet2.Local2 should reference Sheet2.A2", 7.0, aValue);
     //check for correct results for the remaining formulas
     pDoc->GetValue(1,1,0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("=global2 should be 2", aValue == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("=global2 should be 2", 2.0, aValue);
     pDoc->GetValue(1,3,0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("=local2 should be 4", aValue == 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("=local2 should be 4", 4.0, aValue);
     pDoc->GetValue(2,0,0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("=SUM(global3) should be 10", aValue == 10);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("=SUM(global3) should be 10", 10.0, aValue);
     pDoc->GetValue(1,0,1,aValue);
-    CPPUNIT_ASSERT_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", aValue == 5);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", 5.0, aValue);
 }
 
 }
@@ -366,16 +366,16 @@ void testDBRanges_Impl(ScDocument* pDoc, sal_Int32 nFormat)
         double aValue;
         pDoc->GetValue(0,10,1, aValue);
         rtl::OUString aString;
-        CPPUNIT_ASSERT_MESSAGE("Sheet2: A11: formula result is incorrect", aValue == 4);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: A11: formula result is incorrect", 4.0, aValue);
         pDoc->GetValue(1, 10, 1, aValue);
-        CPPUNIT_ASSERT_MESSAGE("Sheet2: B11: formula result is incorrect", aValue == 2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: B11: formula result is incorrect", 2.0, aValue);
     }
     double aValue;
     pDoc->GetValue(3,10,1, aValue);
     rtl::OUString aString;
-    CPPUNIT_ASSERT_MESSAGE("Sheet2: D11: formula result is incorrect", aValue == 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: D11: formula result is incorrect", 4.0, aValue);
     pDoc->GetValue(4, 10, 1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("Sheet2: E11: formula result is incorrect", aValue == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: E11: formula result is incorrect", 2.0, aValue);
 
 }
 
@@ -434,67 +434,57 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
     pPattern = pDoc->GetPattern(0,0,1);
     Font aFont;
     pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font size should be 10", aFont.GetSize().getHeight() == 200);
-    CPPUNIT_ASSERT_MESSAGE("font color should be black", aFont.GetColor() == COL_AUTO);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", 200l, aFont.GetSize().getHeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aFont.GetColor().GetColor());
     pPattern = pDoc->GetPattern(0,1,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font size should be 12", aFont.GetSize().getHeight() == 240);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 12", 240l, aFont.GetSize().getHeight());
     pPattern = pDoc->GetPattern(0,2,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be italic",aFont.GetItalic() == ITALIC_NORMAL);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be italic", ITALIC_NORMAL, aFont.GetItalic());
     pPattern = pDoc->GetPattern(0,4,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be bold",aFont.GetWeight() == WEIGHT_BOLD );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
     pPattern = pDoc->GetPattern(1,0,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be blue", aFont.GetColor() == COL_BLUE );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aFont.GetColor().GetColor());
     pPattern = pDoc->GetPattern(1,1,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be striked out with a single line", aFont.GetStrikeout() == STRIKEOUT_SINGLE );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a single line", STRIKEOUT_SINGLE, aFont.GetStrikeout());
     //some tests on sheet2 only for ods
     if (nFormat == ODS)
     {
         pPattern = pDoc->GetPattern(1,2,1);
         pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-        CPPUNIT_ASSERT_MESSAGE("font should be striked out with a double line", aFont.GetStrikeout() == STRIKEOUT_DOUBLE );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a double line", STRIKEOUT_DOUBLE, aFont.GetStrikeout());
         pPattern = pDoc->GetPattern(1,3,1);
         pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-        CPPUNIT_ASSERT_MESSAGE("font should be underlined with a dotted line", aFont.GetUnderline() == UNDERLINE_DOTTED);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be underlined with a dotted line", UNDERLINE_DOTTED, aFont.GetUnderline());
         //test case for proper import height of first row with styles and text (related to i53253)
-        sal_uInt16 nRowHeight = pDoc->GetRowHeight(0,1);
-        rtl::OString sRowHeight = rtl::OString::valueOf( static_cast<sal_Int32>(nRowHeight) );
-        rtl::OString aMsg1("Expected: 253; Actual: ");
-        aMsg1 += sRowHeight;
-        CPPUNIT_ASSERT_MESSAGE( aMsg1.pData->buffer, nRowHeight == 253 );
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(253), pDoc->GetRowHeight(0,1) );
         //test case for i53253 where a cell has text with different styles and space between the text.
-        rtl::OUString aTestOUStr;
-        pDoc->GetString(3,0,1, aTestOUStr);
-        rtl::OUString aKnownGoodOUStr("text14 space");
-        rtl::OString aTestOStr(rtl::OUStringToOString(aTestOUStr, RTL_TEXTENCODING_UTF8));
-        rtl::OString aKnownGoodOStr(rtl::OUStringToOString(aKnownGoodOUStr, RTL_TEXTENCODING_UTF8));
-        rtl::OString aMsg2("Expected: \"" + aKnownGoodOStr + "\"; Actual: \"" + aTestOStr + "\"");
-        CPPUNIT_ASSERT_MESSAGE( aMsg2.pData->buffer, aKnownGoodOUStr.equals(aTestOUStr) );
+        rtl::OUString aTestStr;
+        pDoc->GetString(3,0,1, aTestStr);
+        rtl::OUString aKnownGoodStr("text14 space");
+        CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
         //test case for cell text with line breaks.
-        pDoc->GetString(3,5,1, aTestOUStr);
-        aKnownGoodOUStr = "Hello,\nCalc!";
-        aTestOStr = rtl::OUStringToOString(aTestOUStr, RTL_TEXTENCODING_UTF8);
-        aKnownGoodOStr = rtl::OUStringToOString(aKnownGoodOUStr, RTL_TEXTENCODING_UTF8);
-        rtl::OString aMsg3("Expected: \"" + aKnownGoodOStr + "\"; Actual: \"" + aTestOStr + "\"");
-        CPPUNIT_ASSERT_MESSAGE( aMsg3.pData->buffer, aKnownGoodOUStr.equals(aTestOUStr) );
+        pDoc->GetString(3,5,1, aTestStr);
+        aKnownGoodStr = "Hello,\nCalc!";
+        CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
     }
     pPattern = pDoc->GetPattern(1,4,1);
     Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
     CPPUNIT_ASSERT_MESSAGE("background color should be green", aColor == COL_LIGHTGREEN);
     pPattern = pDoc->GetPattern(2,0,1);
     SvxCellHorJustify eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_CENTER);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
     //test alignment
     pPattern = pDoc->GetPattern(2,1,1);
     eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned right horizontally", eHorJustify == SVX_HOR_JUSTIFY_RIGHT);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned right horizontally", SVX_HOR_JUSTIFY_RIGHT, eHorJustify);
     pPattern = pDoc->GetPattern(2,2,1);
     eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned block horizontally", eHorJustify == SVX_HOR_JUSTIFY_BLOCK);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned block horizontally", SVX_HOR_JUSTIFY_BLOCK, eHorJustify);
 
     //test Sheet3 only for ods
     if ( nFormat == ODS )
@@ -733,16 +723,11 @@ void checkMergedCells( ScDocument* pDoc, const ScAddress& rStartAddress,
     pDoc->ExtendMerge( rStartAddress.Col(), rStartAddress.Row(),
                        nActualEndCol, nActualEndRow, rStartAddress.Tab(), false );
     rtl::OString sTab = rtl::OString::valueOf( static_cast<sal_Int32>(rStartAddress.Tab() + 1) );
-    rtl::OString sExpectedEndCol = rtl::OString::valueOf( static_cast<sal_Int32>(rExpectedEndAddress.Col()) );
-    rtl::OString sExpectedEndRow = rtl::OString::valueOf( static_cast<sal_Int32>(rExpectedEndAddress.Row()) );
-    rtl::OString sActualEndCol = rtl::OString::valueOf( static_cast<sal_Int32>(nActualEndCol) );
-    rtl::OString sActualEndRow = rtl::OString::valueOf( static_cast<sal_Int32>(nActualEndRow) );
-    rtl::OString msg = "Merged cells are not correctly imported on sheet" + sTab + "\n" +
-                       "  Expected EndCol, EndRow: " + sExpectedEndCol + ", " + sExpectedEndRow + "\n" +
-                       "  Actual EndCol, EndRow: " + sActualEndCol + ", " + sActualEndRow;
-    CPPUNIT_ASSERT_MESSAGE( msg.pData->buffer,
-                            nActualEndCol == rExpectedEndAddress.Col() &&
-                            nActualEndRow == rExpectedEndAddress.Row() );
+    rtl::OString msg = "Merged cells are not correctly imported on sheet" + sTab;
+    rtl::OString msgCol = msg + "; end col";
+    rtl::OString msgRow = msg + "; end row";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( msgCol.pData->buffer, rExpectedEndAddress.Col(), nActualEndCol );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( msgRow.pData->buffer, rExpectedEndAddress.Row(), nActualEndRow );
 }
 
 }
