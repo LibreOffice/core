@@ -238,7 +238,7 @@ class SwEnhancedPDFExportHelper
 
     void EnhancedPDFExport();
     sal_Int32 CalcOutputPageNum( const SwRect& rRect ) const;
-    void CalcOutputPageNums( const SwRect& rRect, std::vector<sal_Int32>& rPageNums ) const;
+    std::vector< sal_Int32 > CalcOutputPageNums( const SwRect& rRect ) const;
 
     void MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                 const SwTxtNode& rTNd, const SwRect& rLinkRect,

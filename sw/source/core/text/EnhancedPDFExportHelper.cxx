@@ -1627,8 +1627,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         const SwRect& rNoteRect = mrSh.GetCharRect();
 
                         // Link PageNums
-                        std::vector<sal_Int32> aNotePageNums;
-                        CalcOutputPageNums( rNoteRect, aNotePageNums );
+                        std::vector<sal_Int32> aNotePageNums = CalcOutputPageNums( rNoteRect );
                         for ( size_t nNumIdx = 0; nNumIdx < aNotePageNums.size(); ++nNumIdx )
                         {
                             // Link Note
@@ -1740,8 +1739,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             const SwRect& rLinkRect( aTmp[ i ] );
 
                             // Link PageNums
-                            std::vector<sal_Int32> aLinkPageNums;
-                            CalcOutputPageNums( rLinkRect, aLinkPageNums );
+                            std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( rLinkRect );
 
                             for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
                             {
@@ -1810,8 +1808,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     const SwRect aLinkRect = pFrmFmt->FindLayoutRect( sal_False, &aNullPt );
 
                     // Link PageNums
-                    std::vector<sal_Int32> aLinkPageNums;
-                    CalcOutputPageNums( aLinkRect, aLinkPageNums );
+                    std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( aLinkRect );
 
                     // Link Export
                     for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
@@ -1900,8 +1897,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             const SwRect& rLinkRect( aTmp[ i ] );
 
                             // Link PageNums
-                            std::vector<sal_Int32> aLinkPageNums;
-                            CalcOutputPageNums( rLinkRect, aLinkPageNums );
+                            std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( rLinkRect );
 
                             for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
                             {
@@ -1969,8 +1965,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             if ( mrSh.GotoFtnTxt() )
             {
                 // Link PageNums
-                std::vector<sal_Int32> aLinkPageNums;
-                CalcOutputPageNums( aLinkRect, aLinkPageNums );
+                std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( aLinkRect );
 
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();
@@ -2211,19 +2206,19 @@ sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect ) co
 /*
  * SwEnhancedPDFExportHelper::CalcOutputPageNums()
  *
- * Fills rPageNums with the page numbers in the output pdf on which the given
+ * Returns a vector of the page numbers in the output pdf on which the given
  * rect is located. There can be many such pages since StringRangeEnumerator
  * allows duplication of its entries.
  */
-void SwEnhancedPDFExportHelper::CalcOutputPageNums( const SwRect& rRect,
-    std::vector<sal_Int32>& rPageNums ) const
+std::vector< sal_Int32 > SwEnhancedPDFExportHelper::CalcOutputPageNums(
+    const SwRect& rRect ) const
 {
-    rPageNums.clear();
+    std::vector< sal_Int32 > aPageNums;
 
     // Document page number.
     sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rRect );
     if ( nPageNumOfRect < 0 )
-        return;
+        return aPageNums;
 
     // What will be the page numbers of page nPageNumOfRect in the output pdf?
     if ( mpRangeEnum )
@@ -2240,7 +2235,7 @@ void SwEnhancedPDFExportHelper::CalcOutputPageNums( const SwRect& rRect,
             for ( ; aIter != aEnd; ++aIter )
             {
                 if ( *aIter == nPageNumOfRect )
-                    rPageNums.push_back( nOutputPageNum );
+                    aPageNums.push_back( nOutputPageNum );
                 ++nOutputPageNum;
             }
         }
@@ -2256,7 +2251,7 @@ void SwEnhancedPDFExportHelper::CalcOutputPageNums( const SwRect& rRect,
                 {
                     if ( i == static_cast<size_t>( nPageNumOfRect ) )
                     {
-                        rPageNums.push_back( nOutputPageNum );
+                        aPageNums.push_back( nOutputPageNum );
                         break;
                     }
                     ++nOutputPageNum;
@@ -2264,8 +2259,10 @@ void SwEnhancedPDFExportHelper::CalcOutputPageNums( const SwRect& rRect,
             }
         }
         else
-            rPageNums.push_back( nPageNumOfRect );
+            aPageNums.push_back( nPageNumOfRect );
     }
+
+    return aPageNums;
 }
 
 void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rPDFExtOutDevData,
@@ -2293,8 +2290,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
             if ( aHFLinkRect.Pos() != rLinkRect.Pos() )
             {
                 // Link PageNums
-                std::vector<sal_Int32> aHFLinkPageNums;
-                CalcOutputPageNums( aHFLinkRect, aHFLinkPageNums );
+                std::vector<sal_Int32> aHFLinkPageNums = CalcOutputPageNums( aHFLinkRect );
 
                 for ( size_t nNumIdx = 0; nNumIdx < aHFLinkPageNums.size(); ++nNumIdx )
                 {
