@@ -153,10 +153,13 @@ class XmlPortionDumper:public SwPortionHandler
                 text which is painted on-screen
         @param nType
                 type of this portion
+        @param nHeight
+                font size of the painted text
       */
     virtual void Special( sal_uInt16 nLength,
                           const String & rText,
-                          sal_uInt16 nType )
+                          sal_uInt16 nType,
+                          sal_Int32 nHeight = 0 )
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "Special" ) );
         xmlTextWriterWriteFormatAttribute( writer,
@@ -170,6 +173,9 @@ class XmlPortionDumper:public SwPortionHandler
                                                        RTL_TEXTENCODING_UTF8 );
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rText" ),
                                            "%s", sText8.getStr(  ) );
+
+        if (nHeight > 0)
+            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", (int)nHeight);
 
         xmlTextWriterEndElement( writer );
         ofs += nLength;

@@ -471,7 +471,10 @@ sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) c
 
 void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Special( GetLen(), aExpand, GetWhichPor() );
+    sal_Int32 nH = 0;
+    if (pFnt)
+        nH = pFnt->GetSize(pFnt->GetActual()).Height();
+    rPH.Special( GetLen(), aExpand, GetWhichPor(), nH );
 }
 
 /*************************************************************************

@@ -66,7 +66,8 @@ public:
     virtual void Special(
         sal_uInt16 nLength,      /// length of this portion in the model string
         const String& rText, /// text which is painted on-screen
-        sal_uInt16 nType         /// type of this portion
+        sal_uInt16 nType,         /// type of this portion
+        sal_Int32 nHeight = 0     /// font height of the painted text
         ) = 0;
 
     /** line break. This method is called whenever a line break in the
