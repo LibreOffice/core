@@ -1375,7 +1375,7 @@ private:
     const SfxItemPool* pEditPool;
     std::vector<EECharAttrib> aTxtAtrArr;
     SvPtrarr aChrTxtAtrArr;
-    std::vector<sal_uInt16> aChrSetArr;
+    std::vector<rtl_TextEncoding> aChrSetArr;
     sal_uInt16 nPara;
     xub_StrLen nAktSwPos;
     xub_StrLen nTmpSwPos;                   // for HasItem()
