@@ -462,23 +462,10 @@ size_t ThumbnailView::ImplGetItem( const Point& rPos, bool bMove ) const
 
     if ( maItemListRect.IsInside( rPos ) )
     {
-        const int xc = rPos.X()-maItemListRect.Left();
-        const int yc = rPos.Y()-maItemListRect.Top();
-        // The point is inside the area of item list,
-        // let's find the containing item.
-        const int col = xc/(mnItemWidth+mnSpacing);
-        const int x = xc%(mnItemWidth+mnSpacing);
-        const int row = yc/(mnItemHeight+mnSpacing);
-        const int y = yc%(mnItemHeight+mnSpacing);
-
-        if (x<mnItemWidth && y<mnItemHeight)
+        for (size_t i = 0; i < mItemList.size(); ++i)
         {
-            // the point is inside item rect and not inside spacing
-            const size_t item = (mnFirstLine+row)*mnCols+col;
-            if (item < mItemList.size())
-            {
-                return item;
-            }
+            if (mItemList[i]->isVisible() && mItemList[i]->getDrawArea().IsInside(rPos))
+                return i;
         }
 
         // return the previously selected item if spacing is set and
