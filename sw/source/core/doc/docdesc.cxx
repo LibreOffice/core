@@ -831,7 +831,7 @@ void SwDoc::CheckDefaultPageFmt()
 {
     for ( sal_uInt16 i = 0; i < GetPageDescCnt(); ++i )
     {
-        SwPageDesc& rDesc = _GetPageDesc( i );
+        SwPageDesc& rDesc = GetPageDesc( i );
 
         SwFrmFmt& rMaster = rDesc.GetMaster();
         SwFrmFmt& rLeft   = rDesc.GetLeft();
@@ -863,7 +863,7 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
 
     for ( sal_uInt16 i = 0; i < GetPageDescCnt(); ++i )
     {
-        SwPageDesc& rDesc = _GetPageDesc( i );
+        SwPageDesc& rDesc = GetPageDesc( i );
 
         SwFrmFmt& rMaster = rDesc.GetMaster();
         SwFrmFmt& rLeft = rDesc.GetLeft();

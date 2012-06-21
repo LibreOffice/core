@@ -3634,9 +3634,7 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         {
             const SwPageDesc *pDesc = GetFmt()->GetPageDesc().GetPageDesc();
             if ( (pDesc && pDesc != pPage->GetPageDesc()) ||
-                 (!pDesc && pPage->GetPageDesc() !=
-                  &(const_cast<const SwDoc *>(GetFmt()->GetDoc())
-                    ->GetPageDesc(0))) )
+                 (!pDesc && pPage->GetPageDesc() != &GetFmt()->GetDoc()->GetPageDesc(0)) )
                 CheckPageDescs( pPage, sal_True );
         }
     }

@@ -828,8 +828,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         if ( !pDefaultPageDesc )
         {
             // determine default page description
-            pDefaultPageDesc =
-                &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
+            pDefaultPageDesc = &pDoc->GetPageDesc( 0 );
         }
     }
 

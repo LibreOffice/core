@@ -237,8 +237,7 @@ sal_Bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, sal_Bool bInHeader )
         const SwPageFrm* pPage = GetCurrFrm()->FindPageFrm();
         if( pPage )
             for( sal_uInt16 i = 0; i < pMyDoc->GetPageDescCnt(); ++i )
-                if( pPage->GetPageDesc() ==
-                    &const_cast<const SwDoc *>(pMyDoc)->GetPageDesc( i ) )
+                if( pPage->GetPageDesc() == &pMyDoc->GetPageDesc( i ) )
                 {
                     nDescNo = i;
                     break;

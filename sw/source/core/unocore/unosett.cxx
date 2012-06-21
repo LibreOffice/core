@@ -256,8 +256,7 @@ SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
     SwStyleNameMapper::FillUIName(uTmp, sPageDesc, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
     for( sal_uInt16 i = 0; i < nCount; i++)
     {
-        const SwPageDesc& rDesc = const_cast<const SwDoc *>(pDoc)
-            ->GetPageDesc( i );
+        const SwPageDesc& rDesc = pDoc->GetPageDesc( i );
         if(rDesc.GetName() == sPageDesc)
         {
             pRet = (SwPageDesc*)&rDesc;

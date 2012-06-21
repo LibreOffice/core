@@ -1642,8 +1642,7 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
         sal_uInt16 nPDescCount = rDoc.GetPageDescCnt();
         for(i = 0; i < nPDescCount; i++)
         {
-            const SwPageDesc& rDesc =
-                const_cast<const SwDoc &>(rDoc).GetPageDesc( i );
+            const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
             if(rDesc.GetName() == rStyleName)
             {
                 pOldPageDesc = & rDesc;
@@ -1664,8 +1663,7 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
             }
             for(i = 0; i < nPDescCount + 1; i++)
             {
-                const SwPageDesc& rDesc =
-                    const_cast<const SwDoc &>(rDoc).GetPageDesc( i );
+                const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
                 if(rDesc.GetName() == rStyleName)
                 {
                     nPDescPos = i;
@@ -2776,7 +2774,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
             {
                 if( USHRT_MAX != nPgDscPos )
                 {
-                    SwPageDesc& rPageDesc = m_pDoc->_GetPageDesc(nPgDscPos);
+                    SwPageDesc& rPageDesc = m_pDoc->GetPageDesc(nPgDscPos);
                     rPageDesc.ResetAllMasterAttr();
 
                     SvxLRSpaceItem aLR(RES_LR_SPACE);
@@ -2819,9 +2817,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     pTargetFmt->ResetAllFmtAttr();
 
                 if( USHRT_MAX != nPgDscPos )
-                    m_pDoc->ChgPageDesc( nPgDscPos,
-                                         const_cast<const SwDoc *>(m_pDoc)
-                                         ->GetPageDesc(nPgDscPos) );
+                    m_pDoc->ChgPageDesc( nPgDscPos, m_pDoc->GetPageDesc(nPgDscPos) );
             }
 
         }

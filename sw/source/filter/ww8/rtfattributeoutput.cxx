@@ -615,8 +615,7 @@ void RtfAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     {
         const SwNode* pNode = pTableTextNodeInfoInner->getNode();
         const SwFrmFmt* pFrmFmt = GetExport().mpParentFrame ? &GetExport().mpParentFrame->GetFrmFmt() :
-            const_cast<const SwDoc *>(GetExport().pDoc)
-               ->GetPageDesc(0).GetPageFmtOfNode(*pNode, false);
+            GetExport().pDoc->GetPageDesc(0).GetPageFmtOfNode(*pNode, false);
 
         const SvxLRSpaceItem& rLR = pFrmFmt->GetLRSpace();
         nPageSize = pFrmFmt->GetFrmSize().GetWidth() -

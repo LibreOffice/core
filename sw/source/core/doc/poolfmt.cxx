@@ -107,8 +107,7 @@ long lcl_GetRightMargin( SwDoc& rDoc )
 {
     // Make sure that the printer settings are taken over to the standard
     // page template
-    const SwFrmFmt& rPgDscFmt =
-            const_cast<const SwDoc *>(&rDoc)->GetPageDesc( 0 ).GetMaster();
+    const SwFrmFmt& rPgDscFmt = rDoc.GetPageDesc( 0 ).GetMaster();
     const SvxLRSpaceItem& rLR = rPgDscFmt.GetLRSpace();
     const long nLeft = rLR.GetLeft();
     const long nRight = rLR.GetRight();
@@ -2476,7 +2475,7 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
     sal_uInt16 nCount = GetPageDescCnt();
     for( sal_uInt16 i=0; i<nCount; ++i )
     {
-        SwPageDesc& rDesc = _GetPageDesc( i );
+        SwPageDesc& rDesc = GetPageDesc( i );
         rDesc.GetMaster().SetFmtAttr( aFrameDir );
         rDesc.GetLeft().SetFmtAttr( aFrameDir );
     }

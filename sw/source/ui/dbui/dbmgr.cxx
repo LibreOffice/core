@@ -808,7 +808,7 @@ void lcl_CopyFollowPageDesc(
         SwDoc* pTargetDoc = rTargetShell.GetDoc();
         String sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo );
         sal_uInt16 nNewDesc = pTargetDoc->MakePageDesc( sNewFollowPageDesc );
-        SwPageDesc& rTargetFollowPageDesc = pTargetDoc->_GetPageDesc( nNewDesc );
+        SwPageDesc& rTargetFollowPageDesc = pTargetDoc->GetPageDesc( nNewDesc );
 
         pTargetDoc->CopyPageDesc( *pFollowPageDesc, rTargetFollowPageDesc, sal_False );
         SwPageDesc aDesc( rTargetPageDesc );

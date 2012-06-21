@@ -1242,9 +1242,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
             const sal_uInt16 nPDescCount = rDoc.GetPageDescCnt();
             for(sal_uInt16 i = 0; i < nPDescCount; i++)
             {
-                const SwPageDesc& rDesc =
-                    // C++ is retarded
-                    const_cast<SwDoc const&>(rDoc).GetPageDesc( i );
+                const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
                 const SwFrmFmt* pFrmFmtMaster = &rDesc.GetMaster();
                 const SwFrmFmt* pFrmFmtLeft = &rDesc.GetLeft();
 

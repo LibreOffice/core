@@ -1764,7 +1764,7 @@ sal_Bool SwFrm::WannaRightPage() const
         return sal_True;
 
     const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
-    SwPageDesc *pDesc = 0;
+    const SwPageDesc *pDesc = 0;
     sal_uInt16 nPgNum = 0;
     if ( pFlow )
     {
@@ -1774,7 +1774,7 @@ sal_Bool SwFrm::WannaRightPage() const
         if ( !pTmp->IsFollow() )
         {
             const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
-            pDesc = (SwPageDesc*)rPgDesc.GetPageDesc();
+            pDesc = rPgDesc.GetPageDesc();
             nPgNum = rPgDesc.GetNumOffset();
         }
     }
@@ -1788,7 +1788,7 @@ sal_Bool SwFrm::WannaRightPage() const
         else
         {
             const SwDoc* pDoc = pPage->GetFmt()->GetDoc();
-            pDesc = (SwPageDesc*)&pDoc->GetPageDesc( 0 );
+            pDesc = &pDoc->GetPageDesc( 0 );
         }
     }
     OSL_ENSURE( pDesc, "No pagedescriptor" );

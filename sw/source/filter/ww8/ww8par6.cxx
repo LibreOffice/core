@@ -697,7 +697,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
     OSL_ENSURE(pPage, "no page outside this section!");
 
     if (!pPage)
-        pPage = &mrReader.rDoc._GetPageDesc(0);
+        pPage = &mrReader.rDoc.GetPageDesc(0);
 
     if (!pPage)
         return 0;

@@ -2216,7 +2216,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
             const SwFrmFmt* pParentFmt =
                 GetExport().mpParentFrame ?
                 &(GetExport().mpParentFrame->GetFrmFmt()) :
-                    const_cast<const SwDoc *>(GetExport().pDoc)->GetPageDesc(0).GetPageFmtOfNode(*pTxtNd, false);
+                    GetExport().pDoc->GetPageDesc(0).GetPageFmtOfNode(*pTxtNd, false);
             aRect = pParentFmt->FindLayoutRect(true);
             if ( 0 == ( nPageSize = aRect.Width() ) )
             {

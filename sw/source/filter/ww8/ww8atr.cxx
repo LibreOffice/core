@@ -4317,7 +4317,7 @@ void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
 SwTwips WW8Export::CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const
 {
     const SwFrmFmt* pFmt = pAktPageDesc ? &pAktPageDesc->GetMaster()
-        : &const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetMaster();
+        : &pDoc->GetPageDesc(0).GetMaster();
 
     const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
     SwTwips nPageSize = pFmt->GetFrmSize().GetWidth();

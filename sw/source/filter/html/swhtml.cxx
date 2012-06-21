@@ -567,8 +567,7 @@ SvParserState SwHTMLParser::CallParser()
         rInput.ResetError();
     }
 
-    SwPageDesc& rDesc = pDoc->_GetPageDesc( 0 );
-    rDesc.Add( this );
+    pDoc->GetPageDesc( 0 ).Add( this );
 
     SvParserState eRet = HTMLParser::CallParser();
     return eRet;

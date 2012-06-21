@@ -207,8 +207,7 @@ void SwHTMLParser::NewDivision( int nToken )
             // Die Seitenvorlage aktualisieren
             for( sal_uInt16 i=0; i < pDoc->GetPageDescCnt(); i++ )
             {
-                if( RES_POOLPAGE_HTML==const_cast<const SwDoc *>(pDoc)
-                    ->GetPageDesc(i).GetPoolFmtId() )
+                if( RES_POOLPAGE_HTML == pDoc->GetPageDesc(i).GetPoolFmtId() )
                 {
                     pDoc->ChgPageDesc( i, *pPageDesc );
                     break;

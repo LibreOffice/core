@@ -445,8 +445,7 @@ void RtfExport::WritePageDescTable()
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_PGDSCTBL;
     for( sal_uInt16 n = 0; n < nSize; ++n )
     {
-        const SwPageDesc& rPageDesc =
-            const_cast<const SwDoc*>(pDoc)->GetPageDesc( n );
+        const SwPageDesc& rPageDesc = pDoc->GetPageDesc( n );
 
         Strm() << sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_PGDSC;
         OutULong( n ) << OOO_STRING_SVTOOLS_RTF_PGDSCUSE;
@@ -457,8 +456,7 @@ void RtfExport::WritePageDescTable()
         // search for the next page description
         sal_uInt16 i = nSize;
         while( i  )
-            if( rPageDesc.GetFollow() ==
-                    &const_cast<const SwDoc *>(pDoc)->GetPageDesc( --i ) )
+            if( rPageDesc.GetFollow() == &pDoc->GetPageDesc( --i ) )
                 break;
         Strm() << OOO_STRING_SVTOOLS_RTF_PGDSCNXT;
         OutULong( i ) << ' ';
@@ -571,7 +569,7 @@ void RtfExport::ExportDocument_Impl()
             }
         }
         const SwPageDesc& rPageDesc = pSttPgDsc ? *pSttPgDsc->GetPageDesc()
-            : const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
+            : pDoc->GetPageDesc( 0 );
         const SwFrmFmt &rFmtPage = rPageDesc.GetMaster();
 
         {

@@ -1338,6 +1338,7 @@ public:
     // PageDescriptor interface.
     sal_uInt16 GetPageDescCnt() const { return aPageDescs.size(); }
     const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return *aPageDescs[i]; }
+    SwPageDesc& GetPageDesc( sal_uInt16 i ) { return *aPageDescs[i]; }
     SwPageDesc* FindPageDescByName( const String& rName,
                                     sal_uInt16* pPos = 0 ) const;
 
@@ -1359,7 +1360,6 @@ public:
     //For Reader.
 
     SwPageDesc * GetPageDesc( const String & rName );
-    SwPageDesc& _GetPageDesc( sal_uInt16 i ) const { return *aPageDescs[i]; }
     void ChgPageDesc( const String & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
     sal_Bool FindPageDesc( const String & rName, sal_uInt16 * pFound );

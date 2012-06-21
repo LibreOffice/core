@@ -553,8 +553,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     else
         bIsVirtPageNum = sal_False;
     if ( !pDesc )
-        pDesc = (SwPageDesc*)
-            &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
+        pDesc = &pDoc->GetPageDesc( 0 );
     const sal_Bool bOdd = !nPgNum || 0 != ( nPgNum % 2 );
 
     // Create a page and put it in the layout

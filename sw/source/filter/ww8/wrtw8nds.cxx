@@ -1276,7 +1276,7 @@ short MSWordExportBase::GetCurrentPageDirection() const
 {
     const SwFrmFmt &rFmt = pAktPageDesc
                     ? pAktPageDesc->GetMaster()
-                    : const_cast<const SwDoc *>( pDoc )->GetPageDesc( 0 ).GetMaster();
+                    : pDoc->GetPageDesc( 0 ).GetMaster();
     return rFmt.GetFrmDir().GetValue();
 }
 
@@ -1345,7 +1345,7 @@ const SvxBrushItem* WW8Export::GetCurrentPageBgBrush() const
 {
     const SwFrmFmt  &rFmt = pAktPageDesc
                     ? pAktPageDesc->GetMaster()
-                    : const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetMaster();
+                    : pDoc->GetPageDesc(0).GetMaster();
 
     const SfxPoolItem* pItem = 0;
     //If not set, or "no fill", get real bg

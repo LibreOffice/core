@@ -958,7 +958,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     }
 
     if( !pPageDesc )
-        pPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
+        pPageDesc = &pDoc->GetPageDesc( 0 );
 
     // und nun ... das Style-Sheet!!!
     if( bCfgOutStyles )

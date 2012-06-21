@@ -923,7 +923,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
     : mbDocumentIsProtected( false )
 {
     const SwSectionFmt *pFmt = 0;
-    rExport.pAktPageDesc = &const_cast<const SwDoc *>(rExport.pDoc)->GetPageDesc( 0 );
+    rExport.pAktPageDesc = &rExport.pDoc->GetPageDesc( 0 );
 
     const SfxPoolItem* pI;
     const SwNode* pNd = rExport.pCurPam->GetCntntNode();
@@ -1496,7 +1496,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     const SwPageDesc* pPd = rSepInfo.pPageDesc;
 
     if ( rSepInfo.pSectionFmt && !pPd )
-        pPd = &const_cast<const SwDoc *>( pDoc )->GetPageDesc( 0 );
+        pPd = &pDoc->GetPageDesc( 0 );
 
     pAktPageDesc = pPd;
 

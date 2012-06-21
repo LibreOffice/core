@@ -1245,8 +1245,7 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
 
 void WW8Export::CreateEscher()
 {
-    SfxItemState eBackSet =
-        (const_cast<const SwDoc*>(pDoc))->GetPageDesc(0).GetMaster().
+    SfxItemState eBackSet = pDoc->GetPageDesc(0).GetMaster().
         GetItemState(RES_BACKGROUND);
     if (pHFSdrObjs->size() || pSdrObjs->size() || SFX_ITEM_SET == eBackSet)
     {
@@ -2048,7 +2047,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             AddShape( ESCHER_ShpInst_Rectangle, 0xe00, nSecondShapeId );
 
             EscherPropertyContainer aPropOpt;
-            const SwFrmFmt &rFmt = const_cast<const SwDoc *>(rWrt.pDoc)->GetPageDesc(0).GetMaster();
+            const SwFrmFmt &rFmt = rWrt.pDoc->GetPageDesc(0).GetMaster();
             const SfxPoolItem* pItem = 0;
             SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true,
                 &pItem);

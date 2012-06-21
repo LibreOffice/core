@@ -821,7 +821,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
             pFlow = pFlow->FindTabFrm();
         pRet = (SwPageDesc*)pFlow->GetAttrSet()->GetPageDesc().GetPageDesc();
         if ( !pRet )
-            pRet = &GetFmt()->GetDoc()->_GetPageDesc( 0 );
+            pRet = &GetFmt()->GetDoc()->GetPageDesc( 0 );
         return pRet;
     }
 
@@ -852,8 +852,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
 
     //4.
     if ( !pRet )
-        pRet = (SwPageDesc*)&(const_cast<const SwDoc *>(GetFmt()->GetDoc())
-                              ->GetPageDesc( 0 ));
+        pRet = &GetFmt()->GetDoc()->GetPageDesc( 0 );
 
 
     OSL_ENSURE( pRet, "Kein Descriptor gefunden." );

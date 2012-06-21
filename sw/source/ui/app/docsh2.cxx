@@ -386,7 +386,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
 
         // never delete default PageDesc and Standard Charactertemplate !!!
         if( ( SFX_STYLE_FAMILY_PAGE == eOldFamily &&
-              const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName() ==
+              pDoc->GetPageDesc(0).GetName() ==
               rOldName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eOldFamily &&
                 rOldName == SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
@@ -576,7 +576,7 @@ sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // see Insert
 
         // never delete default PageDesc and Standard Character template!!!
         if( ( SFX_STYLE_FAMILY_PAGE == eFamily &&
-              const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName()
+              pDoc->GetPageDesc(0).GetName()
               == aName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eFamily &&
                 aName == SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -

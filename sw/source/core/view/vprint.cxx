@@ -260,8 +260,7 @@ void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
 
     for( sal_uInt16 i = 0; i < nAll; ++ i )
     {
-        const SwPageDesc& rOld =
-            const_cast<const SwDoc *>(GetDoc())->GetPageDesc( i );
+        const SwPageDesc& rOld = GetDoc()->GetPageDesc( i );
 
         if( rOld.GetLandscape() != bNewOri )
         {
@@ -307,7 +306,7 @@ void ViewShell::ChgAllPageSize( Size &rSz )
 
     for( sal_uInt16 i = 0; i < nAll; ++i )
     {
-        const SwPageDesc &rOld = const_cast<const SwDoc *>(pMyDoc)->GetPageDesc( i );
+        const SwPageDesc &rOld = pMyDoc->GetPageDesc( i );
         SwPageDesc aNew( rOld );
         {
             ::sw::UndoGuard const ug(GetDoc()->GetIDocumentUndoRedo());
@@ -425,7 +424,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 
     // get page descriptor - fall back to the first one if pPage could not be found
     const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDescByName(
-        pPage->GetPageDesc()->GetName() ) : &pPrtDoc->_GetPageDesc( (sal_uInt16)0 );
+        pPage->GetPageDesc()->GetName() ) : &pPrtDoc->GetPageDesc( (sal_uInt16)0 );
 
     if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
     {   // Am letzten Absatz die Absatzattribute richten:

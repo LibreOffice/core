@@ -882,7 +882,7 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
     OSL_ENSURE(pPage, "no page outside this section!");
 
     if (!pPage)
-        pPage = &mrReader.pDoc->_GetPageDesc(0);
+        pPage = &mrReader.pDoc->GetPageDesc(0);
 
     if (!pPage)
         return 0;
@@ -951,7 +951,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                     sal_uInt16 nPos = mrReader.pDoc->MakePageDesc(
                         ViewShell::GetShellRes()->GetPageDescName(nDesc, ShellResource::NORMAL_PAGE)
                         , 0, false);
-                    aIter->mpTitlePage = &mrReader.pDoc->_GetPageDesc(nPos);
+                    aIter->mpTitlePage = &mrReader.pDoc->GetPageDesc(nPos);
                 }
                 OSL_ENSURE(aIter->mpTitlePage, "no page!");
                 if (!aIter->mpTitlePage)
@@ -973,7 +973,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                     ViewShell::GetShellRes()->GetPageDescName(nDesc,
                         aIter->HasTitlePage() ? ShellResource::FIRST_PAGE : ShellResource::NORMAL_PAGE),
                         aIter->mpTitlePage, false);
-                aIter->mpPage = &mrReader.pDoc->_GetPageDesc(nPos);
+                aIter->mpPage = &mrReader.pDoc->GetPageDesc(nPos);
             }
             OSL_ENSURE(aIter->mpPage, "no page!");
             if (!aIter->mpPage)
@@ -2337,7 +2337,7 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
             FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
 
         // direkt an der Standartseite drehen
-        SwPageDesc& rPg = pDoc->_GetPageDesc( 0 );
+        SwPageDesc& rPg = pDoc->GetPageDesc( 0 );
         rPg.WriteUseOn( eUseOn );
 
         if (rInfo.mbLandscape)
@@ -2990,7 +2990,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                     String aName(RTL_CONSTASCII_USTRINGPARAM("rtfHdFt"));
                     aName += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aName);
-                    aNewSection.mpPageHdFt = &pDoc->_GetPageDesc(nPageNo);
+                    aNewSection.mpPageHdFt = &pDoc->GetPageDesc(nPageNo);
                     aNewSection.mbPageHdFtUsed = true;
                     maSegments.maDummyPageNos.push_back(nPageNo);
                 }
@@ -3005,7 +3005,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                     String aTitle(RTL_CONSTASCII_USTRINGPARAM("rtfTitleHdFt"));
                     aTitle += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aTitle);
-                    aNewSection.mpTitlePageHdFt = &pDoc->_GetPageDesc(nPageNo);
+                    aNewSection.mpTitlePageHdFt = &pDoc->GetPageDesc(nPageNo);
                     aNewSection.mbTitlePageHdFtUsed = true;
                     maSegments.maDummyPageNos.push_back(nPageNo);
                 }
@@ -3284,7 +3284,7 @@ void SwRTFParser::ReadPageDescTbl()
                     OSL_FAIL( "PageDesc an falscher Position" );
                 }
             }
-            pPg = &pDoc->_GetPageDesc(nPos);
+            pPg = &pDoc->GetPageDesc(nPos);
             pPg->SetLandscape( sal_False );
             pPgFmt = &pPg->GetMaster();
 
@@ -3301,8 +3301,7 @@ void SwRTFParser::ReadPageDescTbl()
             if( nTokenValue )
                 pPg->SetFollow( (const SwPageDesc*)nTokenValue );
             else
-                pPg->SetFollow( & const_cast<const SwDoc *>(pDoc)
-                                ->GetPageDesc( 0 ) );
+                pPg->SetFollow( &pDoc->GetPageDesc( 0 ) );
             break;
 
         case RTF_FORMULA:   /* Zeichen "\|" !!! */
@@ -3467,10 +3466,9 @@ void SwRTFParser::ReadPageDescTbl()
     // Follow schon gesetzt.
     for( nPos = 0; nPos < pDoc->GetPageDescCnt(); ++nPos )
     {
-        SwPageDesc* pPgDsc = &pDoc->_GetPageDesc( nPos );
+        SwPageDesc* pPgDsc = &pDoc->GetPageDesc( nPos );
         if( (sal_uInt16)(long)pPgDsc->GetFollow() < pDoc->GetPageDescCnt() )
-            pPgDsc->SetFollow(& const_cast<const SwDoc *>(pDoc)
-                              ->GetPageDesc((sal_uInt16)(long)
+            pPgDsc->SetFollow(& pDoc->GetPageDesc((sal_uInt16)(long)
                                             pPgDsc->GetFollow()));
     }
 
@@ -4183,8 +4181,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
         if( IsNewDoc() && bSwPageDesc &&
             sal_uInt16(nTokenValue) < pDoc->GetPageDescCnt() )
         {
-            const SwPageDesc* pPgDsc = &const_cast<const SwDoc *>(pDoc)
-                ->GetPageDesc( (sal_uInt16)nTokenValue );
+            const SwPageDesc* pPgDsc = &pDoc->GetPageDesc( (sal_uInt16)nTokenValue );
             pDoc->InsertPoolItem( *pPam, SwFmtPageDesc( pPgDsc ), 0);
         }
         break;

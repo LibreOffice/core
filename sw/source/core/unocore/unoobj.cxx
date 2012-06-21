@@ -700,7 +700,7 @@ SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName)
 
     for( i = 0; i < nDCount; i++ )
     {
-        SwPageDesc* pDsc = &rDoc._GetPageDesc( i );
+        SwPageDesc* pDsc = &rDoc.GetPageDesc( i );
         if(pDsc->GetName() == rName)
         {
             pRet = pDsc;

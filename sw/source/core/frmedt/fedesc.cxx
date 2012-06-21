@@ -151,7 +151,7 @@ void SwFEShell::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 
 const SwPageDesc& SwFEShell::GetPageDesc( sal_uInt16 i ) const
 {
-    return const_cast<const SwDoc *>(GetDoc())->GetPageDesc( i );
+    return GetDoc()->GetPageDesc( i );
 }
 
 SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
@@ -184,8 +184,7 @@ sal_uInt16 SwFEShell::GetMousePageDesc( const Point &rPt ) const
             SwDoc *pMyDoc = GetDoc();
             for ( sal_uInt16 i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
             {
-                if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pMyDoc)
-                     ->GetPageDesc(i) )
+                if ( pPage->GetPageDesc() == &pMyDoc->GetPageDesc(i) )
                     return i;
             }
         }
@@ -204,8 +203,7 @@ sal_uInt16 SwFEShell::GetCurPageDesc( const sal_Bool bCalcFrm ) const
             SwDoc *pMyDoc = GetDoc();
             for ( sal_uInt16 i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
             {
-                if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pMyDoc)
-                     ->GetPageDesc(i) )
+                if ( pPage->GetPageDesc() == &pMyDoc->GetPageDesc(i) )
                     return i;
             }
         }

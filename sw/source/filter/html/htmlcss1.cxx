@@ -101,7 +101,7 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
     sal_uInt16 nPageDescs = pDoc->GetPageDescCnt();
     sal_uInt16 i;
     for( i=0; i<nPageDescs; i++ )
-        if( pPageDesc == &(const_cast<const SwDoc *>(pDoc)->GetPageDesc(i)) )
+        if( pPageDesc == &pDoc->GetPageDesc(i) )
         {
             pDoc->ChgPageDesc( i, rNewPageDesc );
             return;
@@ -1373,11 +1373,10 @@ static SwPageDesc *FindPageDesc( SwDoc *pDoc, sal_uInt16 nPoolId, sal_uInt16& rP
 {
     sal_uInt16 nPageDescs = pDoc->GetPageDescCnt();
     for( rPage=0; rPage < nPageDescs &&
-         const_cast<const SwDoc *>(pDoc)->
-             GetPageDesc(rPage).GetPoolFmtId() != nPoolId; rPage++ )
+         pDoc->GetPageDesc(rPage).GetPoolFmtId() != nPoolId; rPage++ )
          ;
 
-    return rPage < nPageDescs ? &pDoc->_GetPageDesc( rPage ) : 0;
+    return rPage < nPageDescs ? &pDoc->GetPageDesc( rPage ) : 0;
 }
 
 const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreate )
