@@ -322,6 +322,18 @@ public:
               (eOp1 == NUMBERFORMAT_OP_GT && eOp2 == NUMBERFORMAT_OP_LT) ||
               (eOp1 == NUMBERFORMAT_OP_NO && eOp2 == NUMBERFORMAT_OP_NO) );
         }
+    // Whether the first subformat code is really for negative numbers
+    // or another limit set.
+    sal_Bool IsNegativeRealNegative2() const
+        {
+            return fLimit1 == 0.0 && fLimit2 == 0.0 &&
+            ( (eOp2 == NUMBERFORMAT_OP_GT && eOp1 == NUMBERFORMAT_OP_LT) ||
+              (eOp2 == NUMBERFORMAT_OP_EQ && eOp1 == NUMBERFORMAT_OP_LT) ||
+              (eOp2 == NUMBERFORMAT_OP_GE && eOp1 == NUMBERFORMAT_OP_LT) ||
+              (eOp2 == NUMBERFORMAT_OP_NO && eOp1 == NUMBERFORMAT_OP_LT) ||
+              (eOp2 == NUMBERFORMAT_OP_NO && eOp1 == NUMBERFORMAT_OP_LE) ||
+              (eOp2 == NUMBERFORMAT_OP_GT && eOp1 == NUMBERFORMAT_OP_LE));
+        }
 
     // Whether the negative format is without a sign or not
     bool IsNegativeWithoutSign() const;

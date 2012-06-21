@@ -2526,6 +2526,9 @@ bool SvNumberformat::GetOutputString(double fNumber,
         {
             fNumber = -fNumber;                 // Vorzeichen eliminieren
         }
+        if(nIx == 0 &&
+                IsNegativeRealNegative2() && fNumber < 0.0)
+            fNumber = -fNumber;
         *ppColor = NumFor[nIx].GetColor();
         const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
         const sal_uInt16 nAnz = NumFor[nIx].GetCount();
