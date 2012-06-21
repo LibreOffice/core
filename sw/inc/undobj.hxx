@@ -233,7 +233,7 @@ class SwUndoInsLayFmt;
 class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveCntnt
 {
     SwTxtFmtColl *pTxtFmtColl, *pLastNdColl;
-    SvPtrarr* pFrmFmts;
+    std::vector<SwFrmFmt*>* pFrmFmts;
     ::std::vector< ::boost::shared_ptr<SwUndoInsLayFmt> > m_FlyUndos;
     SwRedlineData* pRedlData;
     sal_Bool bSttWasTxtNd;

@@ -70,8 +70,8 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
                      nSttNode == pAPos->nNode.GetIndex() )
                 {
                     if( !pFrmFmts )
-                        pFrmFmts = new SvPtrarr;
-                    pFrmFmts->Insert( pFmt, pFrmFmts->Count() );
+                        pFrmFmts = new std::vector<SwFrmFmt*>;
+                    pFrmFmts->push_back( pFmt );
                 }
             }
         }
@@ -112,7 +112,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
     {
         // than collect all new Flys
         SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
-        sal_uInt16 nFndPos, nArrLen = pDoc->GetSpzFrmFmts()->size();
+        sal_uInt16 nArrLen = pDoc->GetSpzFrmFmts()->size();
         for( sal_uInt16 n = 0; n < nArrLen; ++n )
         {
             SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
@@ -122,15 +122,16 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
                 (pAnchor->GetAnchorId() == FLY_AT_PARA) &&
                 nSttNode == pAPos->nNode.GetIndex() )
             {
+                std::vector<SwFrmFmt*>::iterator it;
                 if( !pFrmFmts ||
-                    USHRT_MAX == ( nFndPos = pFrmFmts->GetPos( pFmt ) ) )
+                    pFrmFmts->end() == ( it = std::find( pFrmFmts->begin(), pFrmFmts->end(), pFmt ) ) )
                 {
                     ::boost::shared_ptr<SwUndoInsLayFmt> const pFlyUndo(
                         new SwUndoInsLayFmt(pFmt, 0, 0));
                     m_FlyUndos.push_back(pFlyUndo);
                 }
                 else
-                    pFrmFmts->Remove( nFndPos );
+                    pFrmFmts->erase( it );
             }
         }
         delete pFrmFmts, pFrmFmts = 0;
