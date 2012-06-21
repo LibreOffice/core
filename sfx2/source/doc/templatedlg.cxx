@@ -19,6 +19,8 @@
 #define MAX_COLUMN_COUNT 4
 #define MAX_LINE_COUNT 2
 
+#define PADDING_TOOLBAR_VIEW    15
+
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModalDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
       aButtonAll(this,SfxResId(BTN_SELECT_ALL)),
@@ -54,6 +56,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     // Set toolbox styles
     mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
     mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
+
+    // Set view position below toolbox
+    Point aViewPos = maView->GetPosPixel();
+    aViewPos.setY(aActionPos.Y() + aActionSize.getHeight() + PADDING_TOOLBAR_VIEW);
+    maView->SetPosPixel(aViewPos);
 
     maView->SetStyle(WB_TABSTOP | WB_VSCROLL);
     maView->SetColCount(MAX_COLUMN_COUNT);
