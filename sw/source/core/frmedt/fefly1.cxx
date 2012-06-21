@@ -935,18 +935,16 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
 #*  Methode     :  GetPageObjs
 #***********************************************************************/
 
-void SwFEShell::GetPageObjs( SvPtrarr& rFillArr )
+void SwFEShell::GetPageObjs( std::vector<SwFrmFmt*>& rFillArr )
 {
-    if( rFillArr.Count() )
-        rFillArr.Remove( 0, rFillArr.Count() );
+    rFillArr.clear();
 
-    const SwFrmFmt* pFmt;
     for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
     {
-        pFmt = (const SwFrmFmt*)(*pDoc->GetSpzFrmFmts())[n];
+        SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
         if (FLY_AT_PAGE == pFmt->GetAnchor().GetAnchorId())
         {
-            rFillArr.Insert( (VoidPtr)pFmt, rFillArr.Count() );
+            rFillArr.push_back( pFmt );
         }
     }
 }
@@ -956,22 +954,21 @@ void SwFEShell::GetPageObjs( SvPtrarr& rFillArr )
 #*  Methode     :  SetPageFlysNewPage
 #***********************************************************************/
 
-void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
+void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffset )
 {
-    if( !rFillArr.Count() || !nOffset )
+    if( rFillArr.empty() || !nOffset )
         return;
 
     StartAllAction();
     StartUndo();
 
-    SwFrmFmt* pFmt;
     long nNewPage;
     SwRootFrm* pTmpRootFrm = GetLayout();//swmod 080317
     sal_uInt16 nMaxPage = pTmpRootFrm->GetPageNum();
     sal_Bool bTmpAssert = sal_False;
-    for( sal_uInt16 n = 0; n < rFillArr.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rFillArr.size(); ++n )
     {
-        pFmt = (SwFrmFmt*)rFillArr[n];
+        SwFrmFmt* pFmt = rFillArr[n];
         if( pDoc->GetSpzFrmFmts()->Contains( pFmt ))
         {
             // FlyFmt is still valid, therefore process

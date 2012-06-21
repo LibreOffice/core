@@ -329,8 +329,8 @@ public:
     Size  GetObjSize()       const;
 
     // SS for envelopes: get all page-bound objects and set them to new page.
-    void GetPageObjs( SvPtrarr& rFillArr );
-    void SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset = 1 );
+    void GetPageObjs( std::vector<SwFrmFmt*>& rFillArr );
+    void SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffset = 1 );
 
     // Show current selection (frame / draw object as required).
     virtual void MakeSelVisible();

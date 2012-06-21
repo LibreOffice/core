@@ -336,7 +336,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->SetNewDoc();   // Avoid performance problems
 
         // Remember Flys of this site
-        SvPtrarr aFlyArr(0);
+        std::vector<SwFrmFmt*> aFlyArr;
         if( ENV_NEWDOC != nMode && !bEnvChange )
             pSh->GetPageObjs( aFlyArr );
 
@@ -460,7 +460,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         InsertLabEnvText(*pSh, aFldMgr, rItem.aAddrText);
 
         // Move Flys to the "old" pages
-        if (aFlyArr.Count())
+        if (!aFlyArr.empty())
             pSh->SetPageObjsNewPage(aFlyArr, 1);
 
         // Finished
