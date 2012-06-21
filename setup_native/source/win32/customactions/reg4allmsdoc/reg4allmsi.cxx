@@ -66,13 +66,16 @@ static const CHAR* g_Extensions[] =
     ".potx",    // Office PowerPoint 2007 XML template
     ".potm",    // Office PowerPoint 2007 macro-enabled XML template
     ".ppsx",    // Office PowerPoint 2007 XML show
+    ".vsd",     // Visio 2000/XP/2003 document
+    ".vst",     // Visio 2000/XP/2003 template
     0
 };
 
 static const int WORD_START = 0;
 static const int EXCEL_START = 7;
 static const int POWERPOINT_START = 15;
-static const int POWERPOINT_END = 23;
+static const int VISIO_START = 23;
+static const int VISIO_END = 25;
 
 //    ".xlam",    // Office Excel 2007 XML macro-enabled add-in
 //    ".ppam",    // Office PowerPoint 2007 macro-enabled XML add-in
@@ -121,7 +124,7 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
             {   // We will replace registration for our own types, too
                 bRet = true;
             }
-            else if ( strncmp( szBuffer, "ooostub.", 8 ) == 0 )
+            else if ( strncmp( szBuffer, "lostub.", 8 ) == 0 )
             {   // We will replace registration for ooostub, too
                 bRet = true;
             }
@@ -333,7 +336,7 @@ static void saveOldRegistration( LPCSTR lpSubKey )
             if ( strncmp( szBuffer, "LibreOffice.", 12 ) != 0 )
             {
                 // Save the old association
-                RegSetValueExA( hKey, "OOoBackupAssociation", 0,
+                RegSetValueExA( hKey, "LOBackupAssociation", 0,
                                 REG_SZ, (LPBYTE)szBuffer, nSize );
                 // Also save what the old association means, just so we can try to verify
                 // if/when restoring it that the old application still exists
@@ -346,7 +349,7 @@ static void saveOldRegistration( LPCSTR lpSubKey )
                     lResult = RegQueryValueExA( hKey2, "", NULL, NULL, (LPBYTE)szBuffer, &nSize );
                     if ( ERROR_SUCCESS == lResult )
                     {
-                        RegSetValueExA( hKey, "OOoBackupAssociationDeref", 0,
+                        RegSetValueExA( hKey, "LOBackupAssociationDeref", 0,
                                         REG_SZ, (LPBYTE)szBuffer, nSize );
                     }
                     RegCloseKey( hKey2 );
@@ -414,6 +417,7 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
     bool bWriterEnabled = false;
     bool bCalcEnabled = false;
     bool bImpressEnabled = false;
+    bool bDrawEnabled = false;
     bool bRegisterNone = IsSetMsiProp( handle, "REGISTER_NO_MSO_TYPES" );
 
     if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Wrt", &current_state, &future_state ) ) &&
@@ -446,9 +450,20 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
     else
         OutputDebugStringFormat( "LookForRegisteredExtensions: Impress is NOT enabled" );
 
+    if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Draw", &current_state, &future_state ) ) &&
+         ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
+        bDrawEnabled = true;
+
+    OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Draw is [%d], will be [%d]", current_state, future_state );
+    if ( bImpressEnabled )
+        OutputDebugStringFormat( "LookForRegisteredExtensions: Draw is enabled" );
+    else
+        OutputDebugStringFormat( "LookForRegisteredExtensions: Draw is NOT enabled" );
+
     MsiSetPropertyA( handle, "SELECT_WORD", "" );
     MsiSetPropertyA( handle, "SELECT_EXCEL", "" );
     MsiSetPropertyA( handle, "SELECT_POWERPOINT", "" );
+    MsiSetPropertyA( handle, "SELECT_VISIO", "" );
 
     if ( ! bRegisterNone )
     {
@@ -460,23 +475,30 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
                 MsiSetPropertyA( handle, "SELECT_EXCEL", "1" );
             if ( bImpressEnabled )
                 MsiSetPropertyA( handle, "SELECT_POWERPOINT", "1" );
+            if ( bDrawEnabled )
+                MsiSetPropertyA( handle, "SELECT_VISIO", "1" );
         }
         else
         {
             if ( bWriterEnabled && ! checkSomeExtensionInRegistry( WORD_START, EXCEL_START ) )
             {
                 MsiSetPropertyA( handle, "SELECT_WORD", "1" );
-                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for MicroSoft Word" );
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for Microsoft Word" );
             }
             if ( bCalcEnabled && ! checkSomeExtensionInRegistry( EXCEL_START, POWERPOINT_START ) )
             {
                 MsiSetPropertyA( handle, "SELECT_EXCEL", "1" );
-                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for MicroSoft Excel" );
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for Microsoft Excel" );
             }
-            if ( bImpressEnabled && ! checkSomeExtensionInRegistry( POWERPOINT_START, POWERPOINT_END ) )
+            if ( bImpressEnabled && ! checkSomeExtensionInRegistry( POWERPOINT_START, VISIO_START ) )
             {
                 MsiSetPropertyA( handle, "SELECT_POWERPOINT", "1" );
-                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for MicroSoft PowerPoint" );
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for Microsoft PowerPoint" );
+            }
+            if ( bImpressEnabled && ! checkSomeExtensionInRegistry( VISIO_START, VISIO_END ) )
+            {
+                MsiSetPropertyA( handle, "SELECT_VISIO", "1" );
+                OutputDebugStringFormat( "LookForRegisteredExtensions: Register for Microsoft Visio" );
             }
         }
     }
@@ -495,7 +517,7 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
     {
         registerSomeExtensions( handle, WORD_START, EXCEL_START, true );
         MsiSetFeatureState( handle, L"gm_p_Wrt_MSO_Reg", INSTALLSTATE_LOCAL );
-        OutputDebugStringFormat( "RegisterSomeExtensions: Register for MicroSoft Word" );
+        OutputDebugStringFormat( "RegisterSomeExtensions: Register for Microsoft Word" );
     }
     else
     {
@@ -507,7 +529,7 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
     {
         registerSomeExtensions( handle, EXCEL_START, POWERPOINT_START, true );
         MsiSetFeatureState( handle, L"gm_p_Calc_MSO_Reg", INSTALLSTATE_LOCAL );
-        OutputDebugStringFormat( "RegisterSomeExtensions: Register for MicroSoft Excel" );
+        OutputDebugStringFormat( "RegisterSomeExtensions: Register for Microsoft Excel" );
     }
     else
     {
@@ -517,16 +539,27 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
 
     if ( IsSetMsiProp( handle, "SELECT_POWERPOINT" ) )
     {
-        registerSomeExtensions( handle, POWERPOINT_START, POWERPOINT_END, true );
+        registerSomeExtensions( handle, POWERPOINT_START, VISIO_START, true );
         MsiSetFeatureState( handle, L"gm_p_Impress_MSO_Reg", INSTALLSTATE_LOCAL );
-        OutputDebugStringFormat( "RegisterSomeExtensions: Register for MicroSoft PowerPoint" );
+        OutputDebugStringFormat( "RegisterSomeExtensions: Register for Microsoft PowerPoint" );
     }
     else
     {
-        registerSomeExtensions( handle, POWERPOINT_START, POWERPOINT_END, false );
+        registerSomeExtensions( handle, POWERPOINT_START, VISIO_START, false );
         MsiSetFeatureState( handle, L"gm_p_Impress_MSO_Reg", INSTALLSTATE_ABSENT );
     }
 
+    if ( IsSetMsiProp( handle, "SELECT_VISIO" ) )
+    {
+        registerSomeExtensions( handle, VISIO_START, VISIO_END, true );
+        MsiSetFeatureState( handle, L"gm_p_Draw_MSO_Reg", INSTALLSTATE_LOCAL );
+        OutputDebugStringFormat( "RegisterSomeExtensions: Register for Microsoft Visio" );
+    }
+    else
+    {
+        registerSomeExtensions( handle, VISIO_START, VISIO_END, false );
+        MsiSetFeatureState( handle, L"gm_p_Draw_MSO_Reg", INSTALLSTATE_ABSENT );
+    }
     return ERROR_SUCCESS;
 }
 
@@ -564,7 +597,9 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
     if ( IsSetMsiProp( handle, "SELECT_EXCEL" ) )
         registerSomeExtensions( handle, EXCEL_START, POWERPOINT_START, true );
     if ( IsSetMsiProp( handle, "SELECT_POWERPOINT" ) )
-        registerSomeExtensions( handle, POWERPOINT_START, POWERPOINT_END, true );
+        registerSomeExtensions( handle, POWERPOINT_START, VISIO_START, true );
+    if ( IsSetMsiProp( handle, "SELECT_VISIO" ) )
+        registerSomeExtensions( handle, VISIO_START, VISIO_END, true );
 
     registerForExtensions( handle, bRegisterAll );
 
@@ -607,7 +642,7 @@ static void restoreOldRegistration( LPCSTR lpSubKey )
         CHAR    szBuffer[1024];
         DWORD   nSize = sizeof( szBuffer );
 
-        lResult = RegQueryValueExA( hKey, "OOoBackupAssociation", NULL, NULL,
+        lResult = RegQueryValueExA( hKey, "LOBackupAssociation", NULL, NULL,
                                     (LPBYTE)szBuffer, &nSize );
         if ( ERROR_SUCCESS == lResult )
         {
@@ -626,7 +661,7 @@ static void restoreOldRegistration( LPCSTR lpSubKey )
                     DWORD  nSize3 = sizeof( szBuffer3 );
 
                     // Try to verify that the old association is OK to restore
-                    lResult = RegQueryValueExA( hKey, "OOoBackupAssociationDeref", NULL, NULL,
+                    lResult = RegQueryValueExA( hKey, "LOBackupAssociationDeref", NULL, NULL,
                                                 (LPBYTE)szBuffer3, &nSize3 );
                     if ( ERROR_SUCCESS == lResult )
                     {
@@ -639,9 +674,9 @@ static void restoreOldRegistration( LPCSTR lpSubKey )
                 }
                 RegCloseKey( hKey2 );
             }
-            RegDeleteValueA( hKey, "OOoBackupAssociation" );
+            RegDeleteValueA( hKey, "LOBackupAssociation" );
         }
-        RegDeleteValueA( hKey, "OOoBackupAssociationDeref" );
+        RegDeleteValueA( hKey, "LOBackupAssociationDeref" );
         RegCloseKey( hKey );
     }
 }

@@ -31,3 +31,8 @@ en-US = "OpenDocument Drawing"
 [STR_REG_VAL_OO_DRAW_TEMPLATE]
 en-US = "OpenDocument Drawing Template"
 
+[STR_REG_VAL_MS_VISIO_DOCUMENT]
+en-US = "Microsoft Visio 2000/XP/2003 Document"
+
+[STR_REG_VAL_MS_VISIO_TEMPLATE]
+en-US = "Microsoft Visio 2000/XP/2003 Template"
