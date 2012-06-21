@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACn///5M\u003d",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-21T08:44:36Z",
+      "side": 1,
+      "message": "Why are you limit here to the core git repository?\r\nIt is not obviuosly from the help message. May be we could provide a shortcat for the project:core, while letting the generall query command project-less?, Something like\r\nlogerrit qc (for query core).\r\n\r\nOr even introduce a new parameter -p (--profile)?\r\nin profile i. e.logerrit qc -p om we could put one letter for satus (o for open) and branch m (for master),\r\nSure one can use aliases...\r\nBut everybody wants this: logerrit com:\r\nquery core open master",
+      "revId": "364a1e650923c839436996aca30b2d4f9aef5c81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
