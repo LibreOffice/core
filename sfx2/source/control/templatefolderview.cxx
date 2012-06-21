@@ -148,6 +148,29 @@ ViewFilter_Application::ViewFilter_Application (SfxDocumentTemplates *pDocTempla
 
 bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
 {
+    const TemplateViewItem *pTempItem = static_cast<const TemplateViewItem*>(pItem);
+
+    if (mApp == APP_WRITER)
+    {
+        return pTempItem->getFileType() == "OpenDocument Text" ||
+                pTempItem->getFileType() == "OpenDocument Text Template";
+    }
+    else if (mApp == APP_CALC)
+    {
+        return pTempItem->getFileType() == "OpenDocument Spreadsheet" ||
+                pTempItem->getFileType() == "OpenDocument Spreadsheet Template";
+    }
+    else if (mApp == APP_IMPRESS)
+    {
+        return pTempItem->getFileType() == "OpenDocument Presentation" ||
+                pTempItem->getFileType() == "OpenDocument Presentation Template";
+    }
+    else if (mApp == APP_DRAW)
+    {
+        return pTempItem->getFileType() == "OpenDocument Drawing" ||
+                pTempItem->getFileType() == "OpenDocument Drawing Template";
+    }
+
     return true;
 }
 
