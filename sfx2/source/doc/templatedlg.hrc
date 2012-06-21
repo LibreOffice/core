@@ -15,4 +15,18 @@
 
 #define TEMPLATE_VIEW               7
 
+#define TBX_ACTION_VIEW             8
+#define TBI_TEMPLATE_CREATE         9
+#define TBI_TEMPLATE_IMPORT         10
+
+#define TBX_ACTION_ACTION           11
+#define TBI_TEMPLATE_SEARCH         12
+#define TBI_TEMPLATE_ACTION         13
+
+#define TBX_ACTION_TEMPLATES        14
+#define TBI_TEMPLATE_EDIT           15
+#define TBI_TEMPLATE_PROPERTIES     16
+#define TBI_TEMPLATE_MOVE           17
+#define TBI_TEMPLATE_DELETE         18
+
 #define IMG_ONLINE_REPOSITORY       100

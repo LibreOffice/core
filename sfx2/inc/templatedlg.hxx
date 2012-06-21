@@ -14,6 +14,7 @@
 #include <vcl/button.hxx>
 
 class TemplateFolderView;
+class ToolBox;
 
 class SfxTemplateManagerDlg : public ModalDialog
 {
@@ -44,6 +45,9 @@ private:
     PushButton aButtonDraws;
     ImageButton maButtonSelMode;
 
+    ToolBox *mpViewBar;
+    ToolBox *mpActionBar;
+    ToolBox *mpTemplateBar;
     TemplateFolderView *maView;
 };
 

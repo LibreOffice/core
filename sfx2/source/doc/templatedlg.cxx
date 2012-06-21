@@ -11,6 +11,7 @@
 
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatefolderview.hxx>
+#include <vcl/toolbox.hxx>
 
 #include "doc.hrc"
 #include "templatedlg.hrc"
@@ -26,9 +27,33 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
       aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
       maButtonSelMode(this,SfxResId(BTN_SELECTION_MODE)),
+      mpViewBar( new ToolBox(this, SfxResId(TBX_ACTION_VIEW))),
+      mpActionBar( new ToolBox(this, SfxResId(TBX_ACTION_ACTION))),
+      mpTemplateBar( new ToolBox(this, SfxResId(TBX_ACTION_TEMPLATES))),
       maView(new TemplateFolderView(this,SfxResId(TEMPLATE_VIEW)))
 {
     maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
+
+    // Calculate toolboxs size and positions
+    Size aWinSize = GetOutputSize();
+    Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
+    Size aActionSize = mpActionBar->CalcMinimumWindowSizePixel();
+    Size aTemplateSize = mpTemplateBar->CalcMinimumWindowSizePixel();
+
+    aActionSize.setWidth(2*aActionSize.getWidth());
+    aViewSize.setWidth(aWinSize.getWidth()-aActionSize.getWidth()-mpViewBar->GetPosPixel().X());
+    aTemplateSize.setWidth(aWinSize.getWidth());
+
+    Point aActionPos = mpActionBar->GetPosPixel();
+    aActionPos.setX(aWinSize.getWidth() - aActionSize.getWidth());
+
+    mpViewBar->SetSizePixel(aViewSize);
+    mpActionBar->SetPosSizePixel(aActionPos,aActionSize);
+    mpTemplateBar->SetSizePixel(aTemplateSize);
+
+    // Set toolbox styles
+    mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
+    mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
 
     maView->SetStyle(WB_TABSTOP | WB_VSCROLL);
     maView->SetColCount(MAX_COLUMN_COUNT);
@@ -40,6 +65,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     aButtonSheets.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewSheetsHdl));
     aButtonDraws.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDrawsHdl));
     maButtonSelMode.SetClickHdl(LINK(this,SfxTemplateManagerDlg,OnClickSelectionMode));
+
+    mpViewBar->Show();
+    mpActionBar->Show();
 
     maView->Populate();
     maView->Show();
