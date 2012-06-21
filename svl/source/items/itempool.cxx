@@ -381,12 +381,22 @@ void SfxItemPool::ReleaseDefaults
 SfxItemPool::~SfxItemPool()
 {
     DBG_DTOR(SfxItemPool, 0);
-    DBG_ASSERT( pMaster == this, "destroying active Secondary-Pool" );
 
     if ( pImp->ppPoolItems && ppPoolDefaults )
         Delete();
     delete[] _pPoolRanges;
     delete pImp;
+
+    if (pMaster != NULL && pMaster != this)
+    {
+        // This condition indicates an error.  A
+        // pMaster->SetSecondaryPool(...) call should have been made
+        // earlier to prevent this.  At this point we can only try to
+        // prevent a crash later on.
+        DBG_ASSERT( pMaster == this, "destroying active Secondary-Pool" );
+        if (pMaster->pSecondary == this)
+            pMaster->pSecondary = NULL;
+    }
 }
 
 void SfxItemPool::Free(SfxItemPool* pPool)
