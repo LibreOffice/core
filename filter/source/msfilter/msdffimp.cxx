@@ -1826,8 +1826,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_c3DOriginX ) || IsProperty( DFF_Prop_c3DOriginY ) )
         {
             const OUString sExtrusionOrigin( "Origin" );
-            double fOriginX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginX, 0 ));
-            double fOriginY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginY, 0 ));
+            double fOriginX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginX, 32768 ));
+            double fOriginY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginY, (sal_uInt32)-32768 ));
             fOriginX /= 65536;
             fOriginY /= 65536;
             EnhancedCustomShapeParameterPair aOriginPair;
