@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACn///38\u003d",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T13:26:44Z",
+      "side": 0,
+      "message": "leaving the OOo bugzilla reference in place here might make sense ...",
+      "revId": "db053e48d2ca17e1256eb12500f075488483603b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///34\u003d",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T13:26:44Z",
+      "side": 0,
+      "message": "same here for i#11859",
+      "revId": "db053e48d2ca17e1256eb12500f075488483603b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///30\u003d",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T13:26:44Z",
+      "side": 0,
+      "message": "also a public OOo bug reference to keep",
+      "revId": "db053e48d2ca17e1256eb12500f075488483603b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///3w\u003d",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T13:26:44Z",
+      "side": 0,
+      "message": "keep bug ref",
+      "revId": "db053e48d2ca17e1256eb12500f075488483603b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///3s\u003d",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T13:26:44Z",
+      "side": 0,
+      "message": "keep public bug ref",
+      "revId": "db053e48d2ca17e1256eb12500f075488483603b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///3o\u003d",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1997,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T13:26:44Z",
+      "side": 0,
+      "message": "keep public bug ref",
+      "revId": "db053e48d2ca17e1256eb12500f075488483603b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///3k\u003d",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2638,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T13:26:44Z",
+      "side": 0,
+      "message": "public bug ref",
+      "revId": "db053e48d2ca17e1256eb12500f075488483603b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///3g\u003d",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2645,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T13:26:44Z",
+      "side": 0,
+      "message": "public bug ref",
+      "revId": "db053e48d2ca17e1256eb12500f075488483603b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///3c\u003d",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2734,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T13:26:44Z",
+      "side": 0,
+      "message": "public bug ref",
+      "revId": "db053e48d2ca17e1256eb12500f075488483603b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
