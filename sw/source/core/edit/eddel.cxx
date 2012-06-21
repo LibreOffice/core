@@ -57,7 +57,10 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
     //  1. Point und Mark stehen in einer Box, Selection normal loeschen
     //  2. Point und Mark stehen in unterschiedlichen Boxen, alle
     // selektierten Boxen suchen in den Inhalt loeschen
-    if( rPam.GetNode()->FindTableNode() &&
+
+    //Comment:If the point is outside of a table and the mark point is in the a table cell,
+    //          should go throw the following code
+    if( (rPam.GetNode()->FindTableNode() || rPam.GetNode(sal_False)->FindTableNode()) &&
         rPam.GetNode()->StartOfSectionNode() !=
         rPam.GetNode(sal_False)->StartOfSectionNode() )
     {
@@ -72,7 +75,11 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
         do {
             aDelPam.SetMark();
             SwNode* pNd = aDelPam.GetNode();
-            const SwNode& rEndNd = *pNd->EndOfSectionNode();
+            //Comment:If the point is outside of table, select the table start node as the end node of current selection node
+            const SwNode& rEndNd = !rPam.GetNode()->FindTableNode() && !pNd->FindTableNode()?
+                        *(SwNode*)(rPam.GetNode(sal_False)->FindTableNode())
+                        :
+                        *pNd->EndOfSectionNode();
             if( pEndSelPos->nNode.GetIndex() <= rEndNd.GetIndex() )
             {
                 *aDelPam.GetPoint() = *pEndSelPos;
