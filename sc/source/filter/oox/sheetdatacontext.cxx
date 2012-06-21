@@ -190,7 +190,6 @@ void SheetDataContext::onEndElement()
                 {
                     if( mbValidRange && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
                     {
-                        //mrSheetData.createSharedFormula( maFmlaData.mnSharedId, mrFormulaParser.importFormula( maCellData.maCellAddr, maFormulaStr ) );
                         createSharedFormulaMapEntry( maCellData.maCellAddr, maFmlaData.mnSharedId, maFormulaStr );
                     }
                     setCellFormula( maCellData.maCellAddr, maFmlaData.mnSharedId );

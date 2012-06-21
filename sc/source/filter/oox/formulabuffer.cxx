@@ -20,6 +20,7 @@
 
 #include "rangelst.hxx"
 #include "autonamecache.hxx"
+#include "tokenuno.hxx"
 
 namespace oox {
 namespace xls {
@@ -134,22 +135,25 @@ void FormulaBuffer::finalizeImport()
 
 void FormulaBuffer::applyCellFormulas( std::vector< TokenAddressItem >& rVector )
 {
+    ScDocument& rDoc = getScDocument();
     for ( std::vector< TokenAddressItem >::iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
     {
         ::com::sun::star::table::CellAddress& rAddress = it->maCellAddress;
         ApiTokenSequence rTokens = getFormulaParser().importFormula( rAddress, it->maTokenStr );
-
-        Reference< XFormulaTokens > xTokens( getCell( rAddress ), UNO_QUERY );
-        OSL_ENSURE( xTokens.is(), "WorksheetHelper::putFormulaTokens - missing token interface" );
-        if( xTokens.is() ) xTokens->setTokens( rTokens );
+        ScTokenArray aTokenArray;
+        ScAddress aCellPos;
+        ScUnoConversion::FillScAddress( aCellPos, rAddress );
+        ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
+        ScBaseCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
+        rDoc.PutCell( aCellPos, pNewCell, sal_True );
     }
 }
 
 void FormulaBuffer::applyCellFormulaValues( std::vector< ValueAddressPair >& rVector )
 {
+    ScDocument& rDoc = getScDocument();
     for ( std::vector< ValueAddressPair >::iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
     {
-        ScDocument& rDoc = getScDocument();
         ScAddress aCellPos;
         ScUnoConversion::FillScAddress( aCellPos, it->first );
         ScBaseCell* pBaseCell = rDoc.GetCell( aCellPos );
