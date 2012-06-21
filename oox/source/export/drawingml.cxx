@@ -635,6 +635,11 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
+    if ( aSize.Width < 0 )
+        aSize.Width = 1000;
+    if ( aSize.Height < 0 )
+        aSize.Height = 1000;
+
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, nRotation );
 }
 
