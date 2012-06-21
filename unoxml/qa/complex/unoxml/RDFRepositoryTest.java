@@ -611,44 +611,29 @@ public class RDFRepositoryTest
 
     static Statement[] toSeq(XEnumeration i_Enum) throws Exception
     {
-        java.util.Collection c = new java.util.Vector();
+        java.util.Collection<Statement> c = new java.util.ArrayList<Statement>();
         while (i_Enum.hasMoreElements()) {
             Statement s = (Statement) i_Enum.nextElement();
 //System.out.println("toSeq: " + s.getSubject().getStringValue() + " " + s.getPredicate().getStringValue() + " " + s.getObject().getStringValue() + ".");
             c.add(s);
         }
-//        return (Statement[]) c.toArray();
-        // java sucks
-        Object[] arr = c.toArray();
-        Statement[] ret = new Statement[arr.length];
-        for (int i = 0; i < arr.length; ++i) {
-            ret[i] = (Statement) arr[i];
-        }
-        return ret;
+        return c.toArray(new Statement[c.size()]);
     }
 
     static XNode[][] toSeqs(XEnumeration i_Enum) throws Exception
     {
-        java.util.Collection c = new java.util.Vector();
+        java.util.Collection<XNode[]> c = new java.util.ArrayList<XNode[]>();
         while (i_Enum.hasMoreElements()) {
             XNode[] s = (XNode[]) i_Enum.nextElement();
             c.add(s);
         }
-//        return (XNode[][]) c.toArray();
-        Object[] arr = c.toArray();
-        XNode[][] ret = new XNode[arr.length][];
-        for (int i = 0; i < arr.length; ++i) {
-            ret[i] = (XNode[]) arr[i];
-        }
-        return ret;
+        return c.toArray(new XNode[c.size()][]);
     }
 
-    static class BindingComp implements java.util.Comparator
+    static class BindingComp implements java.util.Comparator<XNode[]>
     {
-        public int compare(Object i_Left, Object i_Right)
+        public int compare(XNode[] left, XNode[] right)
         {
-            XNode[] left = (XNode[]) i_Left;
-            XNode[] right = (XNode[]) i_Right;
             if (left.length != right.length)
             {
                 throw new RuntimeException();
@@ -662,13 +647,11 @@ public class RDFRepositoryTest
         }
     }
 
-    static class StmtComp implements java.util.Comparator
+    static class StmtComp implements java.util.Comparator<Statement>
     {
-        public int compare(Object i_Left, Object i_Right)
+        public int compare(Statement left, Statement right)
         {
             int eq;
-            Statement left = (Statement) i_Left;
-            Statement right = (Statement) i_Right;
             if ((eq = cmp(left.Graph,     right.Graph    )) != 0)
             {
                 return eq;
@@ -738,8 +721,7 @@ public class RDFRepositoryTest
                 i_Expected.length);
             return false;
         }
-        Statement[] expected = (Statement[])
-            java.util.Arrays.asList(i_Expected).toArray();
+        Statement[] expected = i_Expected.clone(); // make a copy
         java.util.Arrays.sort(i_Result, new StmtComp());
         java.util.Arrays.sort(expected, new StmtComp());
         for (int i = 0; i < expected.length; ++i) {
