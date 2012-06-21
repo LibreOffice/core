@@ -22,7 +22,7 @@
 
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hdl>
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
 #include <resultcolumn.hxx>

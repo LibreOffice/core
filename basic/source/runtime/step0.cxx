@@ -38,7 +38,7 @@
 #include "sbunoobj.hxx"
 #include "image.hxx"
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/util/SearchOptions.hdl>
+#include <com/sun/star/util/SearchOptions.hpp>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
 

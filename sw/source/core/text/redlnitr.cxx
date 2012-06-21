@@ -29,7 +29,7 @@
 #include "hintids.hxx"
 #include <svl/whiter.hxx>
 #include <tools/shl.hxx>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <swmodule.hxx>
 #include <redline.hxx>      // SwRedline
 #include <txtatr.hxx>       // SwTxt ...

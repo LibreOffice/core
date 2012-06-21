@@ -35,7 +35,7 @@
 #include <editeng/brkitem.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/i18n/WordType.hdl>
+#include <com/sun/star/i18n/WordType.hpp>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <fmtanchr.hxx>

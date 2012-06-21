@@ -51,7 +51,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <hintids.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>

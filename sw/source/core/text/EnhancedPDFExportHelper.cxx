@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <EnhancedPDFExportHelper.hxx>
 #include <hintids.hxx>
 

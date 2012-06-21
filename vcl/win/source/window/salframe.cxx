@@ -91,7 +91,7 @@
 using ::std::max;
 #endif
 
-#include <com/sun/star/uno/Exception.hdl>
+#include <com/sun/star/uno/Exception.hpp>
 
 #include <time.h>
 

@@ -31,7 +31,7 @@
 
 #include "quicktimecommon.hxx"
 
-#include "com/sun/star/media/XFrameGrabber.hdl"
+#include "com/sun/star/media/XFrameGrabber.hpp"
 
 namespace avmedia { namespace quicktime {
 

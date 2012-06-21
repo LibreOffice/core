@@ -38,7 +38,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <com/sun/star/awt/SystemPointer.hdl>
+#include <com/sun/star/awt/SystemPointer.hpp>
 
 #include "window.hxx"
 #include "player.hxx"

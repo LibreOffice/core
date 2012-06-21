@@ -29,7 +29,7 @@
 
 #include "hintids.hxx"
 
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/lspcitem.hxx>
 #include <txtflcnt.hxx>
 #include <txtftn.hxx>

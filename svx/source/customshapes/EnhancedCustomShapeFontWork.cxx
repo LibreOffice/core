@@ -56,10 +56,10 @@
 #include <numeric>
 #include <algorithm>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/CharacterIteratorMode.hdl>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace com::sun::star;

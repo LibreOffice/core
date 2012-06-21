@@ -31,7 +31,7 @@
 
 #include "gstcommon.hxx"
 
-#include "com/sun/star/media/XManager.hdl"
+#include "com/sun/star/media/XManager.hpp"
 
 // -----------
 // - Manager -

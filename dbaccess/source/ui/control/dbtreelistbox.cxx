@@ -24,7 +24,7 @@
 #include "listviewitems.hxx"
 #include "callbacks.hxx"
 
-#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hdl>
+#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

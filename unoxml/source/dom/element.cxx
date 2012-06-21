@@ -34,7 +34,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <com/sun/star/xml/sax/FastToken.hdl>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <comphelper/attributelist.hxx>
 

@@ -40,8 +40,8 @@
 #include <vcl/sysdata.hxx>
 #endif
 
-#include <com/sun/star/awt/SystemPointer.hdl>
-#include <com/sun/star/lang/XComponent.hdl>
+#include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 #define AVMEDIA_TOOLBOXITEM_PREV    0x0001
 #define AVMEDIA_TOOLBOXITEM_PLAY    0x0002

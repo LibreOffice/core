@@ -31,7 +31,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <txatbase.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>

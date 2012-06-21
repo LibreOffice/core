@@ -40,7 +40,7 @@
 #include <txtpaint.hxx> // SwSaveClip
 #include <blink.hxx>    // pBlink
 #include <breakit.hxx>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <editeng/langitem.hxx>
 #include <charatr.hxx>

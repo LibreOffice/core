@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <functional>
 
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <rtl/tencinfo.h>
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>

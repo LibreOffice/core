@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/awt/SystemPointer.hdl>
+#include <com/sun/star/awt/SystemPointer.hpp>
 
 #include "gstwindow.hxx"
 #include "gstplayer.hxx"

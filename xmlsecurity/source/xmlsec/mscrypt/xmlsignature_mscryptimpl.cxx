@@ -29,7 +29,7 @@
 #include <sal/config.h>
 #include <rtl/uuid.h>
 
-#include "com/sun/star/xml/crypto/SecurityOperationStatus.hdl"
+#include "com/sun/star/xml/crypto/SecurityOperationStatus.hpp"
 #include "xmlsignature_mscryptimpl.hxx"
 #include "xmldocumentwrapper_xmlsecimpl.hxx"
 #include "xmlelementwrapper_xmlsecimpl.hxx"

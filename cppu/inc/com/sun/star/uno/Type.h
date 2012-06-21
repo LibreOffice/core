@@ -20,9 +20,7 @@
 #define _COM_SUN_STAR_UNO_TYPE_H_
 
 #include <typelib/typedescription.h>
-#ifndef _COM_SUN_STAR_UNO_TYPECLASS_HDL_
 #include <com/sun/star/uno/TypeClass.hdl>
-#endif
 #include <cppu/macros.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/alloc.h>

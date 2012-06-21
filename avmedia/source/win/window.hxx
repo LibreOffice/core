@@ -32,7 +32,7 @@
 #include "wincommon.hxx"
 #include <cppuhelper/interfacecontainer.h>
 
-#include "com/sun/star/media/XPlayerWindow.hdl"
+#include "com/sun/star/media/XPlayerWindow.hpp"
 
 struct IVideoWindow;
 

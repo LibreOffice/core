@@ -36,7 +36,7 @@
 #include <vcl/window.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <com/sun/star/frame/XFrame.hdl>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

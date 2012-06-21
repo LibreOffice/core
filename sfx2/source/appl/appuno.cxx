@@ -2076,8 +2076,8 @@ throw (::com::sun::star::uno::RuntimeException)
 #ifdef TEST_HANDLERS
 #include <cppuhelper/implbase2.hxx>
 
-#include <com/sun/star/awt/XKeyHandler.hdl>
-#include <com/sun/star/awt/XMouseClickHandler.hdl>
+#include <com/sun/star/awt/XKeyHandler.hpp>
+#include <com/sun/star/awt/XMouseClickHandler.hpp>
 
 class TestKeyHandler: public ::cppu::WeakImplHelper2
 <

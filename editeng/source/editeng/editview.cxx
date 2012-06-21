@@ -65,7 +65,7 @@
 #include <osl/file.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/beans/PropertyValues.hdl>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <linguistic/lngprops.hxx>
 #include <vcl/settings.hxx>

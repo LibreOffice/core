@@ -44,7 +44,7 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
-#include <com/sun/star/i18n/NumberFormatIndex.hdl>
+#include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>

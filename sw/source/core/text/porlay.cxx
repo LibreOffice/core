@@ -38,9 +38,9 @@
 #include <pormulti.hxx> // SwMultiPortion
 #include <breakit.hxx>
 #include <unicode/uchar.h>
-#include <com/sun/star/i18n/ScriptType.hdl>
-#include <com/sun/star/i18n/CTLScriptType.hdl>
-#include <com/sun/star/i18n/WordType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/CTLScriptType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #include <paratr.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/scripttypeitem.hxx>

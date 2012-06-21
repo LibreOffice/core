@@ -28,7 +28,7 @@
 
 #include <hintids.hxx>
 
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/graph.hxx>
 #include <editeng/brshitem.hxx>
 #include <vcl/metric.hxx>

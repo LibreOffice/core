@@ -37,7 +37,7 @@
 #include <svtools/helpopt.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
-#include <com/sun/star/i18n/UnicodeType.hdl>
+#include <com/sun/star/i18n/UnicodeType.hpp>
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>

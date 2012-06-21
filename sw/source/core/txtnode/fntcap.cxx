@@ -31,8 +31,8 @@
 #include <editeng/svxfont.hxx>
 
 #include <vcl/outdev.hxx>
-#include <com/sun/star/i18n/CharType.hdl>
-#include <com/sun/star/i18n/WordType.hdl>
+#include <com/sun/star/i18n/CharType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 
 #include <vcl/print.hxx>
 #include <fntcache.hxx>

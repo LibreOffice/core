@@ -62,7 +62,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/lang/XComponent.hdl>
+#include <com/sun/star/lang/XComponent.hpp>
 
 #include "viewmediashape.hxx"
 #include "mediashape.hxx"

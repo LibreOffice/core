@@ -40,9 +40,9 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
-#include <com/sun/star/linguistic2/ConversionDirection.hdl>
+#include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/TextConversionOption.hdl>
+#include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 
 #include <comphelper/processfactory.hxx>

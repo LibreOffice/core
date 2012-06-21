@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/outdev.hxx>
 #include <IDocumentSettingAccess.hxx>
 

@@ -43,7 +43,7 @@
 #include <hints.hxx>        // SwUpdateAttr
 #include <unostyle.hxx>
 #include <unoevent.hxx>     // SwHyperlinkEventDescriptor
-#include <com/sun/star/text/RubyAdjust.hdl>
+#include <com/sun/star/text/RubyAdjust.hpp>
 
 #include <cmdid.h>
 #include <com/sun/star/uno/Any.h>

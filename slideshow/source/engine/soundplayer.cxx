@@ -36,7 +36,7 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XComponent.hdl>
+#include <com/sun/star/lang/XComponent.hpp>
 
 #include <tools/urlobj.hxx>
 

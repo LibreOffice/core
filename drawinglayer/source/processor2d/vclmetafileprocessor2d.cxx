@@ -56,7 +56,7 @@
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/i18n/CharacterIteratorMode.hdl>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>

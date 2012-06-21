@@ -115,7 +115,7 @@
 #include <tox.hxx>
 #include <fmtftntx.hxx>
 #include <breakit.hxx>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <tgrditem.hxx>
 #include <flddropdown.hxx>

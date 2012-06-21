@@ -37,7 +37,7 @@
 #include <paratr.hxx>
 #include <charfmt.hxx>
 #include <ndtxt.hxx>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <writerfilter/doctok/sprmids.hxx>
 

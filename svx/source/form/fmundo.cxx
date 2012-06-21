@@ -80,7 +80,7 @@ using namespace ::com::sun::star::form::binding;
 using namespace ::svxform;
 
 
-#include <com/sun/star/script/XScriptListener.hdl>
+#include <com/sun/star/script/XScriptListener.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 

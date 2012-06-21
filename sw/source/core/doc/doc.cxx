@@ -36,8 +36,8 @@
 #include <svx/svxids.hrc>
 #include <rtl/random.h>
 
-#include <com/sun/star/i18n/WordType.hdl>
-#include <com/sun/star/i18n/ForbiddenCharacters.hdl>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

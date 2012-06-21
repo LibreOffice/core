@@ -19,7 +19,7 @@
 
 #include <hintids.hxx>
 
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <tools/string.hxx>
 #include <editeng/langitem.hxx>
 #include <txatritr.hxx>

@@ -32,7 +32,7 @@
 #include "rtfattributeoutput.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <docsh.hxx>
 #include <viewsh.hxx>

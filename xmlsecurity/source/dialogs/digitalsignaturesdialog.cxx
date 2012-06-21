@@ -42,7 +42,7 @@
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/security/CertificateValidity.hdl>
+#include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>

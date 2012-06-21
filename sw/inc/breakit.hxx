@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>
-#include <com/sun/star/i18n/ForbiddenCharacters.hdl>
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <i18npool/lang.h>
 #include <swdllapi.h>
 

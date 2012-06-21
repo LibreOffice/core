@@ -28,7 +28,7 @@
 
 #include <hintids.hxx>
 
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <fmtcntnt.hxx>
 #include <txatbase.hxx>
 #include <frmatr.hxx>

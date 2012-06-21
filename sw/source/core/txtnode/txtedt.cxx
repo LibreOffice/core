@@ -75,8 +75,8 @@
 #include <unomid.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/i18n/WordType.hdl>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 

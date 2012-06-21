@@ -91,7 +91,7 @@
 #include <pagedesc.hxx>
 #include <ww8par.hxx>
 #include <breakit.hxx>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include "ww8attributeoutput.hxx"
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

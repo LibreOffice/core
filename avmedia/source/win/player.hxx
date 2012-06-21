@@ -31,7 +31,7 @@
 
 #include "wincommon.hxx"
 
-#include "com/sun/star/media/XPlayer.hdl"
+#include "com/sun/star/media/XPlayer.hpp"
 
 struct IGraphBuilder;
 struct IBaseFilter;

@@ -41,7 +41,7 @@
 #endif
 #include <comphelper/processfactory.hxx>
 #include <unotools/misccfg.hxx>
-#include <com/sun/star/i18n/WordType.hdl>
+#include <com/sun/star/i18n/WordType.hpp>
 #include <fmtpdsc.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>

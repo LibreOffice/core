@@ -31,7 +31,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hdl>
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

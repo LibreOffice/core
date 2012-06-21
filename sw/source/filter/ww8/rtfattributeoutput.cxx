@@ -103,7 +103,7 @@
 
 #include <vcl/cvtgrf.hxx>
 
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 using ::editeng::SvxBorderLine;
 using rtl::OString;

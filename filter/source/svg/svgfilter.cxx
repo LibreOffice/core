@@ -33,25 +33,25 @@
 #include <uno/environment.h>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/frame/XDesktop.hdl>
-#include <com/sun/star/frame/XController.hdl>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XController.hpp>
 
 
-#include <com/sun/star/view/XSelectionSupplier.hdl>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/drawing/XDrawSubController.hdl>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XDrawSubController.hpp>
-#include <com/sun/star/container/XNamed.hdl>
+#include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/uno/XComponentContext.hdl>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hdl>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hdl>
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/framework/XResource.hdl>
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XResource.hpp>
-#include <com/sun/star/drawing/framework/XView.hdl>
+#include <com/sun/star/drawing/framework/XResource.hpp>
+#include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <comphelper/processfactory.hxx>

@@ -29,7 +29,7 @@
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/TextSearch.hpp>
-#include <com/sun/star/util/SearchFlags.hdl>
+#include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>

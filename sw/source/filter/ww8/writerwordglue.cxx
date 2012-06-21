@@ -36,7 +36,7 @@
 
 #include <unicode/ubidi.h>          //ubidi_getLogicalRun
 #include <tools/tenccvt.hxx>        //GetExtendedTextEncoding
-#include <com/sun/star/i18n/ScriptType.hdl> //ScriptType
+#include <com/sun/star/i18n/ScriptType.hpp> //ScriptType
 
 #include <unotools/fontcvt.hxx>  //GetSubsFontName
 #include <editeng/paperinf.hxx>  //lA0Width...

@@ -31,7 +31,7 @@
 #include <vcl/imgctrl.hxx>
 #include <tools/rcid.h>
 
-#include <com/sun/star/awt/ImageScaleMode.hdl>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 
 namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 

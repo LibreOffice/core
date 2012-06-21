@@ -94,7 +94,7 @@
 
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hdl>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>

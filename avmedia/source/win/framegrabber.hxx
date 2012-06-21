@@ -31,7 +31,7 @@
 
 #include "wincommon.hxx"
 
-#include "com/sun/star/media/XFrameGrabber.hdl"
+#include "com/sun/star/media/XFrameGrabber.hpp"
 
 struct IMediaDet;
 

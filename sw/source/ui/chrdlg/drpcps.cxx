@@ -47,7 +47,7 @@
 #include <editeng/svxfont.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/printer.hxx>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/processfactory.hxx>

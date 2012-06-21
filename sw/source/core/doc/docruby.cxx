@@ -29,8 +29,8 @@
 
 #include <string.h>         // for strchr()
 
-#include <com/sun/star/i18n/UnicodeType.hdl>
-#include <com/sun/star/i18n/WordType.hdl>
+#include <com/sun/star/i18n/UnicodeType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 
 #include <unotools/charclass.hxx>
 

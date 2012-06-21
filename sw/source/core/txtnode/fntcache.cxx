@@ -33,8 +33,8 @@
 #include <vcl/metric.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/i18n/CharacterIteratorMode.hdl>
-#include <com/sun/star/i18n/WordType.hdl>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #include <breakit.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>

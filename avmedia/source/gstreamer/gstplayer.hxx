@@ -32,7 +32,7 @@
 #include <osl/conditn.hxx>
 #include "gstcommon.hxx"
 
-#include "com/sun/star/media/XPlayer.hdl"
+#include "com/sun/star/media/XPlayer.hpp"
 
 typedef struct _GstXOverlay GstXOverlay;
 

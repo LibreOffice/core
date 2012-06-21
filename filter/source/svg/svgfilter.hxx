@@ -55,11 +55,11 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hdl>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hdl>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 
 #include <boost/unordered_set.hpp>

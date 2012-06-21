@@ -32,7 +32,7 @@
 #include <osl/conditn.h>
 #include "quicktimecommon.hxx"
 
-#include "com/sun/star/media/XPlayer.hdl"
+#include "com/sun/star/media/XPlayer.hpp"
 
 namespace avmedia { namespace quicktime {
 

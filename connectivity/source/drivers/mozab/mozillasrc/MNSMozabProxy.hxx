@@ -25,7 +25,7 @@
 #include <MNSInclude.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/mozilla/XCodeProxy.hpp>
-#include "com/sun/star/mozilla/XProxyRunner.hdl"
+#include "com/sun/star/mozilla/XProxyRunner.hpp"
 
 namespace connectivity
 {

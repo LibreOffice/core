@@ -42,7 +42,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/RuntimeException.hdl>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <cppuhelper/weak.hxx>
 

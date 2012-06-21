@@ -30,7 +30,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#include <com/sun/star/uno/Exception.hdl>
+#include <com/sun/star/uno/Exception.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

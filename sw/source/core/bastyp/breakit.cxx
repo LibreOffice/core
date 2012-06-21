@@ -30,7 +30,7 @@
 #include "breakit.hxx"
 #include <unicode/uchar.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <unotools/localedatawrapper.hxx>
 

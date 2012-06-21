@@ -37,8 +37,8 @@
 #include <ooo/vba/excel/XComment.hpp>
 #include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/excel/XPivotTable.hpp>
-#include <ooo/vba/excel/XlPasteType.hdl>
-#include <ooo/vba/excel/XlPasteSpecialOperation.hdl>
+#include <ooo/vba/excel/XlPasteType.hpp>
+#include <ooo/vba/excel/XlPasteSpecialOperation.hpp>
 
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>

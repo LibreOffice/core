@@ -58,7 +58,7 @@
 #include <itrtxt.hxx>
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/lrspitem.hxx>
 #include <switerator.hxx>
 #include <boost/foreach.hpp>

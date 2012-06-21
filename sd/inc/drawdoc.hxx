@@ -31,7 +31,7 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/frame/XModel.hdl>
+#include <com/sun/star/frame/XModel.hpp>
 #include <vcl/print.hxx>
 #include <svx/fmmodel.hxx>
 #include "pres.hxx"

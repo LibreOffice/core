@@ -40,7 +40,7 @@
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/ResultSetException.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/sdbc/XResultSet.hdl>
+#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>

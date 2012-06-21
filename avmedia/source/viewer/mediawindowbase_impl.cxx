@@ -35,7 +35,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hdl>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/media/XManager.hpp>
 
 #define MEDIA_TIMER_TIMEOUT 100

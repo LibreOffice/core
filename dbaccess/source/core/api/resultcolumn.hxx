@@ -20,7 +20,7 @@
 #ifndef _DBACORE_RESULTCOLUMN_HXX_
 #define _DBACORE_RESULTCOLUMN_HXX_
 
-#include <com/sun/star/sdbc/XResultSetMetaData.hdl>
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <column.hxx>
 #include <boost/optional.hpp>
 namespace dbaccess

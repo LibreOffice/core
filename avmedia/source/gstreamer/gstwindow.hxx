@@ -32,7 +32,7 @@
 #include "gstcommon.hxx"
 #include <cppuhelper/interfacecontainer.h>
 
-#include "com/sun/star/media/XPlayerWindow.hdl"
+#include "com/sun/star/media/XPlayerWindow.hpp"
 
 namespace avmedia { namespace gstreamer {
 

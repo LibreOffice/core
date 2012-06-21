@@ -31,7 +31,7 @@
 #include <hintids.hxx>
 
 #include <sal/macros.h>
-#include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/string.hxx>
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
