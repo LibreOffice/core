@@ -553,12 +553,6 @@ void SwRTFParser::ReadTable( int nToken )
 
         pOldTblNd = pTableNode;
         bNewTbl = sal_False;
-
-        {
-            //TabellenUmrandungen optimieren
-            void* p = pFmt;
-            aTblFmts.Insert( p, aTblFmts.Count() );
-        }
     }
     else
     {
@@ -653,12 +647,6 @@ void SwRTFParser::ReadTable( int nToken )
 
             m_nCurrentBox = 0;
             pOldTblNd = pTableNode;
-
-            {
-                // TabellenUmrandungen optimieren
-                void* p = pFmt;
-                aTblFmts.Insert( p, aTblFmts.Count() );
-            }
         }
     }
 
