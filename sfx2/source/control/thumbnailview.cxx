@@ -877,26 +877,7 @@ void ThumbnailView::Command( const CommandEvent& rCEvt )
 
 void ThumbnailView::Paint( const Rectangle &aRect)
 {
-    Size        aWinSize = GetOutputSizePixel();
     size_t      nItemCount = mItemList.size();
-
-    // calculate offsets
-    long nStartX = 0;
-    long nStartY = mnHeaderHeight;
-
-    // calculate and draw items
-    long x = nStartX;
-    long y = nStartY;
-
-    // draw items
-    sal_uLong nFirstItem = mnFirstLine * mnCols;
-    sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
-
-    // If want also draw parts of items in the last line,
-    // then we add one more line if parts of these line are
-    // visible
-    if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
-        nLastItem += mnCols;
 
     // Draw background
     Primitive2DSequence aSeq(1);
@@ -906,22 +887,13 @@ void ThumbnailView::Paint( const Rectangle &aRect)
 
     mpProcessor->process(aSeq);
 
+    // draw items
     for ( size_t i = 0; i < nItemCount; i++ )
     {
         ThumbnailViewItem *const pItem = mItemList[i];
 
-        if ( (i >= nFirstItem) && (i < nLastItem) )
-        {
+        if ( pItem->isVisible() )
             DrawItem(pItem);
-
-            if ( !((i+1) % mnCols) )
-            {
-                x = nStartX;
-                y += mnItemHeight+mnSpacing;
-            }
-            else
-                x += mnItemWidth+mnSpacing;
-        }
     }
 
     if ( mpScrBar && mpScrBar->IsVisible() )
