@@ -5799,6 +5799,8 @@ AnimationBaseNode.prototype.deactivate_st = function( eDestState )
     {
         if( this.aActivity )
             this.aActivity.dispose();
+        if( ( this.getFillMode() == FILL_MODE_REMOVE ) && this.getAnimatedElement()  )
+            this.removeEffect();
     }
 };
 
@@ -6202,6 +6204,8 @@ BaseContainerNode.prototype.deactivate_st = function( eDestState )
     {
         // end all children that are not ENDED:
         this.forEachChildNode( mem_fn( 'end' ), ~ENDED_NODE );
+        if( this.getFillMode() == FILL_MODE_REMOVE )
+            this.forEachChildNode( mem_fn( 'removeEffect' ), ENDED_NODE );
     }
 };
 
@@ -8562,6 +8566,7 @@ AnimatedElement.prototype.setTo = function( nNewState )
         this.nScaleFactorX = aBBox.width / aBaseBBox.width;
         this.nScaleFactorY = aBBox.height / aBaseBBox.height;
     }
+    return bRet;
 };
 
 AnimatedElement.prototype.getBaseBBox = function()
