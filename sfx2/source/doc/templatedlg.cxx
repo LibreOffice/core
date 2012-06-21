@@ -36,6 +36,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
     aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));
+    aButtonPresents.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewPresentsHdl));
+    aButtonSheets.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewSheetsHdl));
+    aButtonDraws.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDrawsHdl));
     maButtonSelMode.SetClickHdl(LINK(this,SfxTemplateManagerDlg,OnClickSelectionMode));
 
     maView->Populate();
@@ -56,16 +59,25 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewDocsHdl)
 {
+    maView->filterTemplatesByApp(FILTER_APP_WRITER);
     return 0;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewPresentsHdl)
 {
+    maView->filterTemplatesByApp(FILTER_APP_IMPRESS);
+    return 0;
+}
+
+IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewSheetsHdl)
+{
+    maView->filterTemplatesByApp(FILTER_APP_CALC);
     return 0;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewDrawsHdl)
 {
+    maView->filterTemplatesByApp(FILTER_APP_DRAW);
     return 0;
 }
 
