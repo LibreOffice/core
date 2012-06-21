@@ -689,7 +689,7 @@ void SwRTFParser::RemoveUnusedNumRule( SwNumRule* pRule )
 void SwRTFParser::RemoveUnusedNumRules()
 {
     SwListEntry* pEntry;
-    SvPtrarr aDelArr;
+    std::set<SwNumRule*> aDelArr;
     size_t n;
     for( n = aListArr.size(); n; )
     {
@@ -704,20 +704,20 @@ void SwRTFParser::RemoveUnusedNumRules()
             }
             if (unused)
             {
-                void * p = pDoc->GetNumRuleTbl()[pEntry->nListDocPos];
+                SwNumRule* p = pDoc->GetNumRuleTbl()[pEntry->nListDocPos];
                 // dont delete named char formats
-                if( USHRT_MAX == aDelArr.GetPos( p ) &&
-                    ((SwNumRule*)p)->GetName().EqualsAscii( RTF_NUMRULE_NAME, 0,
+                if( aDelArr.find( p ) == aDelArr.end() &&
+                    p->GetName().EqualsAscii( RTF_NUMRULE_NAME, 0,
                                     sizeof( RTF_NUMRULE_NAME )) )
-                    aDelArr.Insert( p, aDelArr.Count() );
+                    aDelArr.insert( p );
             }
         }
     }
 
-    for( n = aDelArr.Count(); n; )
+    while( !aDelArr.empty() )
     {
-        SwNumRule* pDel = (SwNumRule*)aDelArr[ --n ];
-        RemoveUnusedNumRule( pDel );
+        RemoveUnusedNumRule( *aDelArr.begin() );
+        aDelArr.erase( aDelArr.begin() );
     }
 }
 
