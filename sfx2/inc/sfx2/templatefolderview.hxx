@@ -39,6 +39,8 @@ public:
 
     void showOverlay (bool bVisible);
 
+    void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
+
 private:
 
     virtual void OnSelectionMode (bool bMode);
@@ -47,6 +49,8 @@ private:
 
 private:
 
+    bool mbFilteredResults;     // Flag keep track if overlay has been filtered so folders can get filtered too afterwards
+    FILTER_APPLICATION meFilterOption;
     SfxDocumentTemplates *mpDocTemplates;
     TemplateView *mpItemView;
 };

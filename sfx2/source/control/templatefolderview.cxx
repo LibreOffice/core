@@ -185,6 +185,7 @@ private:
 
 TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
+      mbFilteredResults(false),
       mpDocTemplates(new SfxDocumentTemplates),
       mpItemView(new TemplateView(this,mpDocTemplates))
 {
@@ -259,9 +260,29 @@ void TemplateFolderView::showOverlay (bool bVisible)
     // Clear items is the overlay is closed.
     if (!bVisible)
     {
+        // Check if the folder view needs to be filtered
+        if (mbFilteredResults)
+        {
+
+            mbFilteredResults = false;
+        }
+
         mpItemView->Clear();
 
         setSelectionMode(mbSelectionMode);
+    }
+}
+
+void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
+{
+    if (mpItemView->IsVisible())
+    {
+        mbFilteredResults = true;
+        meFilterOption = eApp;
+        mpItemView->filterItems(ViewFilter_Application(mpDocTemplates,eApp));
+    }
+    else
+    {
     }
 }
 
