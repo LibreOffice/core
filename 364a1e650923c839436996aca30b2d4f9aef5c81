@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAACn///4s\u003d",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T10:20:28Z",
+      "side": 1,
+      "message": "Hmmm, we could do a:\ngit branch backup/nextpatch-`date +%F-%H%M%S`\njust to make sure nothing gets lost (it wouldnt anyway until the next git gc, but its maybe good to prevent panics) ...",
+      "revId": "364a1e650923c839436996aca30b2d4f9aef5c81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAACn///5M\u003d",
         "filename": "logerrit",
         "patchSetId": 2
