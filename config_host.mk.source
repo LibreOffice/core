@@ -6,5 +6,5 @@
 
 temp_conf=`mktemp config_host.mk.XXXXXX`
 sed -e 's/^\s*\(export [A-Z0-9_]*=\)\(.*\)$/\1"\2"/' config_host.mk >$temp_conf
-source $temp_conf
+source ./$temp_conf
 rm $temp_conf
