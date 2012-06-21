@@ -26,7 +26,7 @@ package complex.ucb;
  */
 
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -121,7 +121,7 @@ public class UCB  {
 
         XResultSet xResultSet = xSet.getStaticResultSet();
 
-        List files = new Vector();
+        List<String> files = new ArrayList<String>();
 
         if (xResultSet.first())
                 {
