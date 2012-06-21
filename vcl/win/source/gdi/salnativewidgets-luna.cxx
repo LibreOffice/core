@@ -459,7 +459,32 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
     pRect->bottom = rRect.Bottom()+1;
 }
 
-// ----
+void impl_drawAeroToolbar( HDC hDC, RECT rc )
+{
+    const long GRADIENT_HEIGHT = 32;
+
+    long gradient_break = rc.top;
+    GRADIENT_RECT g_rect[1] = { { 0, 1 } };
+
+    // very slow gradient at the top (if we have space for that)
+    if ( rc.bottom - rc.top > GRADIENT_HEIGHT )
+    {
+        gradient_break = rc.bottom - GRADIENT_HEIGHT;
+
+        TRIVERTEX vert[2] = {
+            { rc.left, rc.top,          0xff00, 0xff00, 0xff00, 0xff00 },
+            { rc.right, gradient_break, 0xfa00, 0xfa00, 0xfa00, 0xff00 },
+        };
+        GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
+    }
+
+    // gradient at the bottom
+    TRIVERTEX vert[2] = {
+        { rc.left, gradient_break, 0xfa00, 0xfa00, 0xfa00, 0xff00 },
+        { rc.right, rc.bottom,     0xe500, 0xe900, 0xee00, 0xff00 }
+    };
+    GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
+}
 
 sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
@@ -902,37 +927,14 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 const ToolbarValue *pValue = static_cast<const ToolbarValue*>(&aValue);
                 if( pValue->mbIsTopDockingArea )
                 {
+                    rc.top = 0; // extend potential gradient to cover menu bar as well
+
                     // make it more compatible with Aero
                     if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
                     {
-                        const long GRADIENT_HEIGHT = 32;
-
-                        long gradient_break = rc.top;
-                        GRADIENT_RECT g_rect[1] = { { 0, 1 } };
-
-                        // very slow gradient at the top (if we have space for that)
-                        if ( rc.bottom - rc.top > GRADIENT_HEIGHT )
-                        {
-                            gradient_break = rc.bottom - GRADIENT_HEIGHT;
-
-                            TRIVERTEX vert[2] = {
-                                { rc.left, rc.top,          0xff00, 0xff00, 0xff00, 0xff00 },
-                                { rc.right, gradient_break, 0xfa00, 0xfa00, 0xfa00, 0xff00 },
-                            };
-                            GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
-                        }
-
-                        // gradient at the bottom
-                        TRIVERTEX vert[2] = {
-                            { rc.left, gradient_break, 0xfa00, 0xfa00, 0xfa00, 0xff00 },
-                            { rc.right, rc.bottom,     0xe500, 0xe900, 0xee00, 0xff00 }
-                        };
-                        GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
-
+                        impl_drawAeroToolbar( hDC, rc );
                         return sal_True;
                     }
-                    else
-                        rc.top = 0; // extend potential gradient to cover menu bar as well
                 }
             }
             return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
@@ -947,6 +949,13 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             {
                 const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
                 rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
+
+                // make it more compatible with Aero
+                if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
+                {
+                    impl_drawAeroToolbar( hDC, rc );
+                    return sal_True;
+                }
             }
             return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
         }

@@ -754,7 +754,7 @@ static void ImplAddNWFSeparator( Window *pThis, const MenubarValue& rMenubarValu
     // add a separator if
     // - we have an adjacent docking area
     // - and if toolbars would draw them as well (mbDockingAreaSeparateTB must not be set, see dockingarea.cxx)
-    if( rMenubarValue.maTopDockingAreaHeight && !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
+    if( rMenubarValue.maTopDockingAreaHeight && !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB && !ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
     {
         // note: the menubar only provides the upper (dark) half of it, the rest (bright part) is drawn by the docking area
 
@@ -861,27 +861,24 @@ static int ImplGetTopDockingAreaHeight( Window *pWindow )
 {
     // find docking area that is top aligned and return its height
     // note: dockingareas are direct children of the SystemWindow
-    int height=0;
-    sal_Bool bDone = sal_False;
     if( pWindow->ImplGetFrameWindow() )
     {
-        Window *pWin = pWindow->ImplGetFrameWindow()->GetWindow( WINDOW_FIRSTCHILD); //mpWindowImpl->mpFirstChild;
-        while( pWin && !bDone )
+        Window *pWin = pWindow->ImplGetFrameWindow()->GetWindow( WINDOW_FIRSTCHILD ); //mpWindowImpl->mpFirstChild;
+        while( pWin )
         {
             if( pWin->IsSystemWindow() )
             {
-                pWin = pWin->GetWindow( WINDOW_FIRSTCHILD); //mpWindowImpl->mpFirstChild;
-                while( pWin && !bDone )
+                Window *pChildWin = pWin->GetWindow( WINDOW_FIRSTCHILD ); //mpWindowImpl->mpFirstChild;
+                while( pChildWin )
                 {
-                    DockingAreaWindow *pDockingArea = dynamic_cast< DockingAreaWindow* >( pWin );
-                    if( pDockingArea && pDockingArea->GetAlign() == WINDOWALIGN_TOP )
-                    {
-                        bDone = sal_True;
-                        if( pDockingArea->IsVisible() )
-                            height = pDockingArea->GetOutputSizePixel().Height();
-                    }
+                    DockingAreaWindow *pDockingArea = NULL;
+                    if ( pChildWin->GetType() == WINDOW_DOCKINGAREA )
+                        pDockingArea = static_cast< DockingAreaWindow* >( pChildWin );
+
+                    if( pDockingArea && pDockingArea->GetAlign() == WINDOWALIGN_TOP && pDockingArea->IsVisible() )
+                        return pDockingArea->GetOutputSizePixel().Height();
                     else
-                        pWin = pWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
+                        pChildWin = pChildWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
                 }
 
             }
@@ -889,7 +886,7 @@ static int ImplGetTopDockingAreaHeight( Window *pWindow )
                 pWin = pWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
         }
     }
-    return height;
+    return 0;
 }
 
 Menu::Menu()
