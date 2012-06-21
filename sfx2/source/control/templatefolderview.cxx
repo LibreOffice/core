@@ -183,6 +183,54 @@ private:
     SfxDocumentTemplates *mpDocTemplates;
 };
 
+class FolderFilter_Application
+{
+public:
+
+    FolderFilter_Application ( SfxDocumentTemplates *pDocTemplates, FILTER_APPLICATION eApp)
+        : meApp(eApp)
+    {
+        maFilterFunc = ViewFilter_Application(pDocTemplates,eApp);
+    }
+
+    bool operator () (const ThumbnailViewItem *pItem)
+    {
+        TemplateFolderViewItem *pFolderItem = (TemplateFolderViewItem*)pItem;
+
+        std::vector<TemplateViewItem*> &rTemplates = pFolderItem->maTemplates;
+
+        size_t nVisCount = 0;
+        ThumbnailViewItem *pTemplateItem;
+
+        // Clear thumbnails
+        pFolderItem->maPreview1.Clear();
+        pFolderItem->maPreview2.Clear();
+
+        for (size_t i = 0, n = rTemplates.size(); i < n; ++i)
+        {
+            pTemplateItem = rTemplates[i];
+
+            if (maFilterFunc(pTemplateItem))
+            {
+                ++nVisCount;
+
+                // Update the thumbnails
+                if (nVisCount == 1)
+                    pFolderItem->maPreview1 = pTemplateItem->maPreview1;
+                else if (nVisCount == 2)
+                    pFolderItem->maPreview2 = pTemplateItem->maPreview1;
+            }
+        }
+
+        return nVisCount;
+    }
+
+private:
+
+    FILTER_APPLICATION meApp;
+    boost::function<bool (const ThumbnailViewItem*)> maFilterFunc;
+};
+
 TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
       mbFilteredResults(false),
@@ -285,6 +333,7 @@ void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
     }
     else
     {
+        filterItems(FolderFilter_Application(mpDocTemplates,eApp));
     }
 }
 
