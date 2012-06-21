@@ -28,7 +28,6 @@
 
 #include <mdiexp.hxx>
 #include <tools/shl.hxx>
-#include <svl/svstdarr.hxx>
 #include <sfx2/progress.hxx>
 #include <tools/resid.hxx>
 #include <docsh.hxx>
@@ -45,13 +44,13 @@ struct SwProgress
     SfxProgress *pProgress;
 };
 
-static SvPtrarr *pProgressContainer = 0;
+static std::vector<SwProgress*> *pProgressContainer = 0;
 
 static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
 {
-    for ( sal_uInt16 i = 0; i < pProgressContainer->Count(); ++i )
+    for ( sal_uInt16 i = 0; i < pProgressContainer->size(); ++i )
     {
-        SwProgress *pTmp = (SwProgress*)(*pProgressContainer)[i];
+        SwProgress *pTmp = (*pProgressContainer)[i];
         if ( pTmp->pDocShell == pDocShell )
             return pTmp;
     }
@@ -67,7 +66,7 @@ void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
         SwProgress *pProgress = 0;
 
         if ( !pProgressContainer )
-            pProgressContainer = new SvPtrarr( 2 );
+            pProgressContainer = new std::vector<SwProgress*>;
         else
         {
             if ( 0 != (pProgress = lcl_SwFindProgress( pDocShell )) )
@@ -83,7 +82,7 @@ void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
                                                     sal_True );
             pProgress->nStartCount = 1;
             pProgress->pDocShell = pDocShell;
-            pProgressContainer->Insert( (void*)pProgress, 0 );
+            pProgressContainer->insert( pProgressContainer->begin(), pProgress );
         }
         pProgress->nStartValue = nStartValue;
     }
@@ -107,7 +106,7 @@ void EndProgress( SwDocShell *pDocShell )
     {
         SwProgress *pProgress = 0;
         sal_uInt16 i;
-        for ( i = 0; i < pProgressContainer->Count(); ++i )
+        for ( i = 0; i < pProgressContainer->size(); ++i )
         {
             SwProgress *pTmp = (SwProgress*)(*pProgressContainer)[i];
             if ( pTmp->pDocShell == pDocShell )
@@ -120,12 +119,12 @@ void EndProgress( SwDocShell *pDocShell )
         if ( pProgress && 0 == --pProgress->nStartCount )
         {
             pProgress->pProgress->Stop();
-            pProgressContainer->Remove( i );
+            pProgressContainer->erase( pProgressContainer->begin() + i );
             delete pProgress->pProgress;
             delete pProgress;
             //#112337# it may happen that the container has been removed
             //while rescheduling
-            if ( pProgressContainer && !pProgressContainer->Count() )
+            if ( pProgressContainer && pProgressContainer->empty() )
                 delete pProgressContainer, pProgressContainer = 0;
         }
     }
