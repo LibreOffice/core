@@ -313,20 +313,29 @@ static void refresh_menu( GtkWidget *pMenu )
     gtk_widget_set_sensitive( pDisableMenuItem, !bModal);
 }
 
-
-static gboolean display_menu_cb( GtkWidget *,
-                                 GdkEventButton *event, GtkWidget *pMenu )
+static void activate_cb( GtkStatusIcon *status_icon,
+                         gpointer pMenu )
 {
-    if (event->button == 2)
-        return sal_False;
-
-    refresh_menu( pMenu );
+    refresh_menu( GTK_WIDGET( pMenu ) );
 
     gtk_menu_popup( GTK_MENU( pMenu ), NULL, NULL,
                     gtk_status_icon_position_menu,
-                    pTrayIcon, 0, event->time );
+                    status_icon, 0, gtk_get_current_event_time() );
+}
 
-    return sal_True;
+static void popup_menu_cb(GtkStatusIcon *status_icon,
+                          guint button,
+                          guint activate_time,
+                          gpointer pMenu)
+{
+    if (button == 2)
+        return;
+
+    refresh_menu( GTK_WIDGET( pMenu ) );
+
+    gtk_menu_popup( GTK_MENU( pMenu ), NULL, NULL,
+                    gtk_status_icon_position_menu,
+                    status_icon, button, activate_time );
 }
 
 void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
@@ -359,16 +368,23 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
     GdkPixbuf *pPixbuf = ResIdToPixbuf( SV_ICON_LARGE_START + SV_ICON_ID_OFFICE );
     g_object_set( G_OBJECT( pTrayIcon ),
                   "pixbuf", pPixbuf,
-                  "title", aLabel.getStr(),
+                  "title", aLabel.getStr(),/* Since 2.18 */
+                  "tooltip-text", aLabel.getStr(), /* Since 2.16 */
                   NULL );
     g_object_unref( pPixbuf );
 
-    gtk_status_icon_set_tooltip_text( pTrayIcon, aLabel.getStr() );
+    // gtk_status_icon_set_tooltip_text is available since 2.16
+    // so use instead deprecated gtk_status_icon_set_tooltip
+   gtk_status_icon_set_tooltip( pTrayIcon, aLabel.getStr() );
 
     GtkWidget *pMenu = gtk_menu_new();
 
-    g_signal_connect( pTrayIcon, "button-press-event",
-                      G_CALLBACK( display_menu_cb ), pMenu );
+    // Signal "button-press-event" is available since 2.14
+    // Use "activate" and "popup-menu" instead
+    g_signal_connect( pTrayIcon, "activate",
+                      G_CALLBACK( activate_cb ), pMenu );
+    g_signal_connect( pTrayIcon, "popup-menu",
+                      G_CALLBACK( popup_menu_cb ), pMenu );
 
     g_signal_connect( pMenu, "deactivate",
                       G_CALLBACK (menu_deactivate_cb), NULL);
