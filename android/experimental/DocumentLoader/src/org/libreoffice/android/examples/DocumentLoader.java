@@ -17,15 +17,42 @@
 //  - rendering a page (render())
 
 // Unclear whether pages can be rendered in parallel. Probably best to
-// serialize all the above in the same worker thread, for instance using
-// AsyncTask.SERIAL_EXECUTOR.
+// serialize all the above in the same worker thread. We use
+// AsyncTask.SERIAL_EXECUTOR below.
 
 // While a page is loading ideally should display some animated spinner (but
 // for now just a static "please wait" text).
 
-// Just three views are used for the pages: For the current page being viewed,
-// the previous, and the next. This could be bumped higher, need to make the
-// "3" into a parameter below.
+// ===
+
+// How should we handle re-rendering at higher resolution when zooming in, and
+// then panning around?
+
+// Hopefully when LO is asked to render just a part of a page (i.e. the
+// MapMode of the device rendered to causes significant parts of the page to
+// be outside the device) the code is clever enough to quickly skip stuff that
+// will be clipped. But I don't hold my breath.
+
+// How could we do it?
+
+// 1/ Re-render just the zoomed-in area. Probably not a good idea, as probably
+// the user will almost immediately also pan a bit or zoom out a bit, which
+// would cause a re-render.
+
+// 2/ Some kind of tiled approach. Initially just one tile for the whole
+// page. When zooming in, at some point (2x?) split the currently visible
+// tiles into four sub-tiles, each initially displaying the same resolution as
+// the parent tile. Start asynchronous rendering of visible sub-tiles at
+// double resolution. Keep the "parent" rendered bitmap but don't keep bitmaps
+// that go out of view. (Except perhaps for some caching.) When zooming out,
+// at some point (0.5x?) merge four sub-tiles back into one. Hmm. Is this the
+// right approach?
+
+// In any case, also this rendering at higher resolution should be done
+// asynchronously, of course. If the user zooms in and pans around, the
+// existing bitmap will be shown scaled (and ugly) until required rendering
+// has finished and then the affected tiles are replaced with
+// higher-resolution ones.
 
 package org.libreoffice.android.examples;
 
