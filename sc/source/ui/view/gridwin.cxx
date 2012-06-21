@@ -936,6 +936,8 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     long nSizeY  = 0;
     long nHeight = 0;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+    // The button height should not use the merged cell height, should still use single row height
+    nSizeY = pViewData->ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
     if ( bLayoutRTL )
         aPos.X() -= nSizeX;
@@ -1820,8 +1822,19 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
     if ( !bDouble && !bFormulaMode && rMEvt.IsLeft() )
     {
+        SCsCOL nRealPosX;
+        SCsROW nRealPosY;
+        pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nRealPosX, nRealPosY, false );//the real row/col
+        ScMergeFlagAttr* pRealPosAttr = (ScMergeFlagAttr*)
+                                    pDoc->GetAttr( nRealPosX, nRealPosY, nTab, ATTR_MERGE_FLAG );
         ScMergeFlagAttr* pAttr = (ScMergeFlagAttr*)
                                     pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
+        if( pRealPosAttr->HasAutoFilter() )
+        {
+            SC_MOD()->InputEnterHandler();
+            if (DoAutoFilterButton( nRealPosX, nRealPosY, rMEvt))
+                return;
+        }
         if (pAttr->HasAutoFilter())
         {
             if (DoAutoFilterButton(nPosX, nPosY, rMEvt))

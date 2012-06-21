@@ -1144,7 +1144,9 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
             for (nCol=nX1; nCol<=nX2; nCol++)
             {
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nCol+1];
-                if ( pInfo->bAutoFilter && !pInfo->bHOverlapped && !pInfo->bVOverlapped )
+                //if several columns merged on a row, there should be only one auto button at the end of the columns.
+                //if several rows merged on a column, the button may be in the middle, so "!pInfo->bVOverlapped" should not be used
+                if ( pInfo->bAutoFilter && !pInfo->bHOverlapped )
                 {
                     if (!pQueryParam)
                         pQueryParam = new ScQueryParam;
@@ -1197,7 +1199,13 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
                     bool bArrowState = bSimpleQuery && bColumnFound;
                     long    nSizeX;
                     long    nSizeY;
-                    pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+                    SCCOL nStartCol= nCol;
+                    SCROW nStartRow = nRow;
+                    //if address(nCol,nRow) is not the start pos of the merge area, the value of the nSizeX will be incorrect, it will be the length of the cell.
+                    //should first get the start pos of the merge area, then get the nSizeX through the start pos.
+                    pDoc->ExtendOverlapped(nStartCol, nStartRow,nCol, nRow, nTab);//get nStartCol,nStartRow
+                    pViewData->GetMergeSizePixel( nStartCol, nStartRow, nSizeX, nSizeY );//get nSizeX
+                    nSizeY = pViewData->ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
                     Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
 
                     aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
