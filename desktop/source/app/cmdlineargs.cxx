@@ -293,6 +293,9 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     if (!oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("backtrace")) &&
                         !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("strace")) &&
                         !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("valgrind")) &&
+                    // for X Session Management, handled in
+                    // vcl/unx/generic/app/sm.cxx:
+                        !oArg.match("session=") &&
                     //ignore additional legacy options that don't do anything anymore
                         !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("nocrashreport")))
                     {

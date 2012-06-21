@@ -197,11 +197,11 @@ static void BuildSmPropertyList()
         pSmProps[ 2 ].vals[0].length    = aExec.getLength()+1;
         pSmProps[ 2 ].vals[0].value = strdup( aExec.getStr() );
         rtl::OStringBuffer aRestartOption;
-        aRestartOption.append(RTL_CONSTASCII_STRINGPARAM("-session="));
+        aRestartOption.append(RTL_CONSTASCII_STRINGPARAM("--session="));
         aRestartOption.append(SessionManagerClient::getSessionID());
         pSmProps[ 2 ].vals[1].length    = aRestartOption.getLength()+1;
         pSmProps[ 2 ].vals[1].value = strdup(aRestartOption.getStr());
-        rtl::OString aRestartOptionNoLogo(RTL_CONSTASCII_STRINGPARAM("-nologo"));
+        rtl::OString aRestartOptionNoLogo(RTL_CONSTASCII_STRINGPARAM("--nologo"));
         pSmProps[ 2 ].vals[2].length    = aRestartOptionNoLogo.getLength()+1;
         pSmProps[ 2 ].vals[2].value = strdup(aRestartOptionNoLogo.getStr());
 
@@ -544,10 +544,10 @@ const rtl::OString& SessionManagerClient::getPreviousSessionID()
     {
         ::rtl::OUString aArg;
         osl_getCommandArg( i, &aArg.pData );
-        if(aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-session=")))
+        if(aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("--session=")))
         {
             aPrevId = rtl::OUStringToOString(
-                aArg.copy(RTL_CONSTASCII_LENGTH("-session=")),
+                aArg.copy(RTL_CONSTASCII_LENGTH("--session=")),
                 osl_getThreadTextEncoding());
             break;
         }
