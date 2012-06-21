@@ -2241,7 +2241,12 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
 
     bool bInNamespaces = mMyNamespaces.find(nNameSpace) != mMyNamespaces.end();
     bool bInTokens = mMyTokens.find( Element ) != mMyTokens.end( );
-    if ( bInNamespaces )
+
+    // We have methods to _add_ individual tokens or whole namespaces to be
+    // processed by writerfilter (instead of oox), but we have no method to
+    // filter out a single token. Just hardwire the wrap token here till we
+    // need a more generic solution.
+    if ( bInNamespaces && Element != static_cast<sal_Int32>(NS_vml_wordprocessingDrawing | OOXML_wrap) )
         xResult.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
     else if (mxContext.is())
     {

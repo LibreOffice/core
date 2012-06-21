@@ -322,11 +322,18 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maFillModel.moRotate = lclDecodeBool( rAttribs, XML_rotate );
         break;
         case VML_TOKEN( imagedata ):
+        {
             // shapes in docx use r:id for the relationship id
             // in xlsx it they use o:relid
             bool bHasORelId = rAttribs.hasAttribute( O_TOKEN( relid ) );
             mrTypeModel.moGraphicPath = decodeFragmentPath( rAttribs, bHasORelId ? O_TOKEN( relid ) : R_TOKEN( id ) );
             mrTypeModel.moGraphicTitle = rAttribs.getString( O_TOKEN( title ) );
+        }
+        break;
+        case NMSP_vmlWord | XML_wrap:
+            mrTypeModel.moWrapAnchorX = rAttribs.getString(XML_anchorx);
+            mrTypeModel.moWrapAnchorY = rAttribs.getString(XML_anchory);
+        break;
         break;
     }
     return 0;
