@@ -141,7 +141,7 @@ BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 }
 
 ViewFilter_Application::ViewFilter_Application (SfxDocumentTemplates *pDocTemplates,
-                                                ViewFilter_Application::APP_GENERATOR App)
+                                                FILTER_APPLICATION App)
     : mApp(App), mpDocTemplates(pDocTemplates)
 {
 }
@@ -150,22 +150,22 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
 {
     const TemplateViewItem *pTempItem = static_cast<const TemplateViewItem*>(pItem);
 
-    if (mApp == APP_WRITER)
+    if (mApp == FILTER_APP_WRITER)
     {
         return pTempItem->getFileType() == "OpenDocument Text" ||
                 pTempItem->getFileType() == "OpenDocument Text Template";
     }
-    else if (mApp == APP_CALC)
+    else if (mApp == FILTER_APP_CALC)
     {
         return pTempItem->getFileType() == "OpenDocument Spreadsheet" ||
                 pTempItem->getFileType() == "OpenDocument Spreadsheet Template";
     }
-    else if (mApp == APP_IMPRESS)
+    else if (mApp == FILTER_APP_IMPRESS)
     {
         return pTempItem->getFileType() == "OpenDocument Presentation" ||
                 pTempItem->getFileType() == "OpenDocument Presentation Template";
     }
-    else if (mApp == APP_DRAW)
+    else if (mApp == FILTER_APP_DRAW)
     {
         return pTempItem->getFileType() == "OpenDocument Drawing" ||
                 pTempItem->getFileType() == "OpenDocument Drawing Template";

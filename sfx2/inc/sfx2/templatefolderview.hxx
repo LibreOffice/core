@@ -15,26 +15,28 @@
 class SfxDocumentTemplates;
 class TemplateView;
 
+enum FILTER_APPLICATION
+{
+    FILTER_APP_WRITER,
+    FILTER_APP_CALC,
+    FILTER_APP_IMPRESS,
+    FILTER_APP_DRAW
+};
+
 // Display template items depending on the generator application
 class ViewFilter_Application
 {
 public:
 
-    enum APP_GENERATOR
-    {
-        APP_WRITER,
-        APP_CALC,
-        APP_IMPRESS,
-        APP_DRAW
-    };
 
-    ViewFilter_Application (SfxDocumentTemplates *pDocTemplates, APP_GENERATOR App);
+
+    ViewFilter_Application (SfxDocumentTemplates *pDocTemplates, FILTER_APPLICATION App);
 
     bool operator () (const ThumbnailViewItem *pItem);
 
 private:
 
-    APP_GENERATOR mApp;
+    FILTER_APPLICATION mApp;
     SfxDocumentTemplates *mpDocTemplates;
 };
 
