@@ -1134,6 +1134,18 @@ LanguageType SvNumberformat::ImpGetLanguageType( const String& rString,
         LANGUAGE_DONTKNOW;
 }
 
+sal_Bool IsSingleSymbol(String& rString, xub_StrLen nPos){
+    sal_Bool ret = sal_False;
+    while(nPos > 0){
+        if(rString.GetChar(nPos) == '*' || rString.GetChar(nPos) == '\\' || rString.GetChar(nPos) == '_'){
+            ret = !ret;
+            nPos--;
+        }
+        else
+            return ret;
+    }
+    return ret;
+}
 
 short SvNumberformat::ImpNextSymbol(String& rString,
                                  xub_StrLen& nPos,
@@ -1285,8 +1297,10 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             break;
             case SsGetString:
             {
-                if (cToken == ';')
+                if (cToken == ';' && !IsSingleSymbol(rString, nPos-2))
+                {
                     eState = SsStop;
+                }
                 else
                     sSymbol += cToken;
             }
