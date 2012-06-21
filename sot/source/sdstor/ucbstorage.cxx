@@ -60,7 +60,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <ucbhelper/commandenvironment.hxx>
