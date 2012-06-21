@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-
 #undef SC_DLLIMPLEMENTATION
-
-//      ohne precompiled Headers uebersetzen !!!
 
 #include <svx/svxids.hrc>
 

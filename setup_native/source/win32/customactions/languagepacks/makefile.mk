@@ -39,9 +39,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE : settings.mk
 
-#Disable precompiled header
-CDEFS+=-Dnot_used_define_to_disable_pch
-
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""

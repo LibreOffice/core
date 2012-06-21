@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// NO PCH here - breaks the purpose of this file
-
 // This is just a dummy file; see the makefile.mk for the real work.
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

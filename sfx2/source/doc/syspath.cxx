@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// Comment out precompiled statement due to redefinition errors
-
 #include "syspath.hxx"
 
 extern "C" bool GetUserTemplateLocation(sal_Unicode*, int nSize);
