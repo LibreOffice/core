@@ -81,7 +81,7 @@ endif
 ifeq ($(OS),SOLARIS)
 
 $(eval $(call gb_Executable_use_libraries,oosplash,\
-    -lsocket \
+    socket \
 ))
 
 endif
