@@ -497,6 +497,8 @@ protected:
 
     /** Derived classes will set additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        mxShape;        /// The UNO wrapper of the control shape.
 
 private:
     /** Reads a list of cell ranges from a formula at the current stream position. */
@@ -506,8 +508,6 @@ private:
 
 private:
     const XclImpRoot&   mrRoot;         /// Not derived from XclImpRoot to allow multiple inheritance.
-    mutable ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        mxShape;        /// The UNO wrapper of the control shape.
     ScfRef< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
     ScfRef< ScRange >   mxSrcRange;     /// Source data range in the Calc document.
     XclCtrlBindMode     meBindMode;     /// Value binding mode.

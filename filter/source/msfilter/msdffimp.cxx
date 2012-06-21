@@ -4810,6 +4810,14 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         mpTracer->RemoveAttribute( aObjData.nSpFlags & SP_FGROUP
                                     ? rtl::OUString::createFromAscii( "GroupShape" )
                                     : rtl::OUString::createFromAscii( "Shape" ) );
+    //Import alt text as description
+    if ( pRet && SeekToContent( DFF_Prop_wzDescription, rSt ) )
+    {
+        String aAltText;
+        MSDFFReadZString( rSt, aAltText, GetPropertyValue( DFF_Prop_wzDescription ), sal_True );
+        pRet->SetDescription( aAltText );
+    }
+
     return pRet;
 }
 

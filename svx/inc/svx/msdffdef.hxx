@@ -1220,4 +1220,7 @@ sal_uInt8  m_bTag;
 void  *m_pvBits;              // raster bits of the blip.
 #endif
 
+//ALT_TXT_MSINTEROP
+#define MSPROP_DESCRIPTION_MAX_LEN  4096
+
 #endif
