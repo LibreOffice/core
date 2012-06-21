@@ -614,19 +614,13 @@ en-US = "Microsoft &Excel Spreadsheets"
 en-US = "Microsoft Po&werPoint Presentations"
 
 [OOO_CONTROL_273]
-en-US = "&[ProductName] Writer/Web"
+en-US = "Microsoft &Visio Documents"
 
 [OOO_CONTROL_274]
 en-US = "Set [DEFINEDPRODUCT] to be the default application for Microsoft Office file types."
 
 [OOO_CONTROL_275]
 en-US = "[ProductName] can be set as the default application to open Microsoft Office file types. This means, for instance, that if you double click on one of these files, [ProductName] will open it, not the program that opens it now."
-
-[OOO_CONTROL_276]
-en-US = "File types"
-
-[OOO_CONTROL_277]
-en-US = "Default HTML editor"
 
 [OOO_CONTROL_278]
 en-US = "{&MSSansBold8}File Type"

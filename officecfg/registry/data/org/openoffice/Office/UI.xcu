@@ -63,7 +63,7 @@
                         <value xml:lang="en-US">Drawings</value>
                     </prop>
                     <prop oor:name="Filters">
-                                                <value oor:separator=";">draw_StarOffice_XML_Draw_Template;SGV - StarDraw 2.0;StarDraw 3.0;StarDraw 3.0 Vorlage;StarDraw 5.0;StarDraw 5.0 Vorlage;StarOffice XML (Draw);draw8;draw8_template</value>
+                                                <value oor:separator=";">draw_StarOffice_XML_Draw_Template;SGV - StarDraw 2.0;StarDraw 3.0;StarDraw 3.0 Vorlage;StarDraw 5.0;StarDraw 5.0 Vorlage;StarOffice XML (Draw);draw8;draw8_template;Visio Document;SVG - Scalable Vector Graphics;Corel Draw Document</value>
                     </prop>
                 </node>
                 <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">

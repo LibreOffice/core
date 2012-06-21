@@ -647,6 +647,8 @@ sub update_checkbox_table
             push(@{$checkboxfile}, $checkboxline);
             $checkboxline = "SELECT_POWERPOINT" . "\t" . "0" . "\n";
             push(@{$checkboxfile}, $checkboxline);
+            $checkboxline = "SELECT_VISIO" . "\t" . "0" . "\n";
+            push(@{$checkboxfile}, $checkboxline);
 
             # Saving the property file
             installer::files::save_file($checkboxfilename ,$checkboxfile);
