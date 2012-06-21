@@ -871,7 +871,7 @@ void MSWord_SdrAttrIter::NextPara( sal_uInt16 nPar )
     // Attributwechsel an Pos 0 wird ignoriert, da davon ausgegangen
     // wird, dass am Absatzanfang sowieso die Attribute neu ausgegeben
     // werden.
-    aChrTxtAtrArr.Remove( 0, aChrTxtAtrArr.Count() );
+    aChrTxtAtrArr.clear();
     aChrSetArr.clear();
     nAktSwPos = nTmpSwPos = 0;
 
@@ -920,30 +920,26 @@ xub_StrLen MSWord_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
 
 void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
 {
-    void* p = 0;
-    rtl_TextEncoding eChrSet;
     const SfxPoolItem& rItem = *rAttr.pAttr;
-    switch( rItem.Which() )
+    if( rItem.Which() != EE_CHAR_FONTINFO )
     {
-    case EE_CHAR_FONTINFO:
-        p = (void*)&rAttr;
-        eChrSet = ((SvxFontItem&)rItem).GetCharSet();
-        break;
+        return;
     }
 
-    if( p )
+    if( bStart )
     {
-        sal_uInt16 nPos;
-        if( bStart )
+        rtl_TextEncoding eChrSet = ((SvxFontItem&)rItem).GetCharSet();
+        aChrSetArr.push_back( eChrSet );
+        aChrTxtAtrArr.push_back( &rAttr );
+    }
+    else
+    {
+        std::vector<const EECharAttrib*>::iterator it =
+           std::find( aChrTxtAtrArr.begin(), aChrTxtAtrArr.end(), &rAttr );
+        if ( it != aChrTxtAtrArr.end() )
         {
-            nPos = aChrSetArr.size();
-            aChrSetArr.push_back( eChrSet );
-            aChrTxtAtrArr.Insert( p, nPos );
-        }
-        else if( USHRT_MAX != ( nPos = aChrTxtAtrArr.GetPos( p )) )
-        {
-            aChrTxtAtrArr.Remove( nPos );
-            aChrSetArr.erase( aChrSetArr.begin() + nPos );
+            aChrTxtAtrArr.erase( it );
+            aChrSetArr.erase( aChrSetArr.begin() + (it - aChrTxtAtrArr.begin()) );
         }
     }
 }

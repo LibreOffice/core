@@ -1374,7 +1374,7 @@ private:
     const EditTextObject* pEditObj;
     const SfxItemPool* pEditPool;
     std::vector<EECharAttrib> aTxtAtrArr;
-    SvPtrarr aChrTxtAtrArr;
+    std::vector<const EECharAttrib*> aChrTxtAtrArr;
     std::vector<rtl_TextEncoding> aChrSetArr;
     sal_uInt16 nPara;
     xub_StrLen nAktSwPos;
