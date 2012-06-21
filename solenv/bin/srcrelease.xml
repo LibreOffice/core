@@ -23,7 +23,7 @@
 
   <property name="out.dir" value="."/>
   <property name="aoo.name" value="aoo"/>
-  <property name="aoo.ver" value="3.4.0"/>
+  <property name="aoo.ver" value="3.5.0"/>
   <property name="release.dir.name" value="${aoo.name}-${aoo.ver}"/>
   <property name="release.file.name" value="${release.dir.name}-incubating-src"/>
   <property name="release.zip" value="${out.dir}/${release.file.name}.zip"/>
