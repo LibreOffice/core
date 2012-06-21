@@ -35,7 +35,7 @@ FormulaBuffer::FormulaBuffer( const WorkbookHelper& rHelper ) : WorkbookHelper( 
 {
 }
 
-Reference< XCellRange > FormulaBuffer::getRange( CellRangeAddress& rRange)
+Reference< XCellRange > FormulaBuffer::getRange( const CellRangeAddress& rRange)
 {
     Reference< XCellRange > xRange;
     try
@@ -101,10 +101,7 @@ void FormulaBuffer::finalizeImport()
                 if ( itTokenId != rTokenIdMap.end() )
                 {
                     ApiTokenSequence aTokens =  getFormulaParser().convertNameToFormula( itTokenId->second );
-                    Reference< XFormulaTokens > xTokens( getCell( rAddress ), UNO_QUERY );
-                    OSL_ENSURE( xTokens.is(), "FormulaBuffer::finalizeImport - missing token interface" );
-                    if( xTokens.is() ) xTokens->setTokens( aTokens );
-
+                    applyCellFormula( rDoc, aTokens, rAddress );
                 }
             }
         }
@@ -132,27 +129,31 @@ void FormulaBuffer::finalizeImport()
     rDoc.SetAutoNameCache( NULL );
     xFormulaBar->setPosition( 1.0 );
 }
-
-void FormulaBuffer::applyCellFormulas( std::vector< TokenAddressItem >& rVector )
+void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& rTokens, const ::com::sun::star::table::CellAddress& rAddress )
 {
-    ScDocument& rDoc = getScDocument();
-    for ( std::vector< TokenAddressItem >::iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
-    {
-        ::com::sun::star::table::CellAddress& rAddress = it->maCellAddress;
-        ApiTokenSequence rTokens = getFormulaParser().importFormula( rAddress, it->maTokenStr );
         ScTokenArray aTokenArray;
         ScAddress aCellPos;
         ScUnoConversion::FillScAddress( aCellPos, rAddress );
         ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
         ScBaseCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
         rDoc.PutCell( aCellPos, pNewCell, sal_True );
+}
+
+void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )
+{
+    ScDocument& rDoc = getScDocument();
+    for ( std::vector< TokenAddressItem >::const_iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
+    {
+        const ::com::sun::star::table::CellAddress& rAddress = it->maCellAddress;
+        ApiTokenSequence aTokens = getFormulaParser().importFormula( rAddress, it->maTokenStr );
+        applyCellFormula( rDoc, aTokens, rAddress );
     }
 }
 
-void FormulaBuffer::applyCellFormulaValues( std::vector< ValueAddressPair >& rVector )
+void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair >& rVector )
 {
     ScDocument& rDoc = getScDocument();
-    for ( std::vector< ValueAddressPair >::iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
+    for ( std::vector< ValueAddressPair >::const_iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
     {
         ScAddress aCellPos;
         ScUnoConversion::FillScAddress( aCellPos, it->first );
@@ -167,55 +168,55 @@ void FormulaBuffer::applyCellFormulaValues( std::vector< ValueAddressPair >& rVe
     }
 }
 
-void FormulaBuffer::applyArrayFormulas( std::vector< TokenRangeAddressItem >& rVector )
+void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem >& rVector )
 {
-    for ( std::vector< TokenRangeAddressItem >::iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
+    for ( std::vector< TokenRangeAddressItem >::const_iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
     {
         Reference< XArrayFormulaTokens > xTokens( getRange( it->maCellRangeAddress ), UNO_QUERY );
         OSL_ENSURE( xTokens.is(), "SheetDataBuffer::finalizeArrayFormula - missing formula token interface" );
-        ApiTokenSequence rTokens = getFormulaParser().importFormula( it->maTokenAndAddress.maCellAddress, it->maTokenAndAddress.maTokenStr );
+        ApiTokenSequence aTokens = getFormulaParser().importFormula( it->maTokenAndAddress.maCellAddress, it->maTokenAndAddress.maTokenStr );
         if( xTokens.is() )
-            xTokens->setArrayTokens( rTokens );
+            xTokens->setArrayTokens( aTokens );
     }
 }
 
-void FormulaBuffer::createSharedFormulaMapEntry(::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens )
+void FormulaBuffer::createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens )
 {
      std::vector<SharedFormulaEntry>& rSharedFormulas = sharedFormulas[ rAddress.Sheet ];
     SharedFormulaEntry aEntry( rAddress, rTokens, nSharedId );
     rSharedFormulas.push_back( aEntry );
 }
 
-void FormulaBuffer::setCellFormula( ::com::sun::star::table::CellAddress& rAddress, rtl::OUString& rTokenStr )
+void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, const rtl::OUString& rTokenStr )
 {
     cellFormulas[ rAddress.Sheet ].push_back( TokenAddressItem( rTokenStr, rAddress ) );
 }
 
-void FormulaBuffer::setCellFormula( ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId )
+void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId )
 {
     sharedFormulaIds[ rAddress.Sheet ].push_back( SharedFormulaDesc( rAddress, nSharedId ) );
 }
 
-void FormulaBuffer::setCellArrayFormula( ::com::sun::star::table::CellRangeAddress& rRangeAddress, ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString& rTokenStr )
+void FormulaBuffer::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString& rTokenStr )
 {
 
     TokenAddressItem tokenPair( rTokenStr, rTokenAddress );
     cellArrayFormulas[ rRangeAddress.Sheet ].push_back( TokenRangeAddressItem( tokenPair, rRangeAddress ) );
 }
 
-void FormulaBuffer::setCellFormulaValue( ::com::sun::star::table::CellAddress& rAddress, double fValue )
+void FormulaBuffer::setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress, double fValue )
 {
     cellFormulaValues[ rAddress.Sheet ].push_back( ValueAddressPair( rAddress, fValue ) );
 }
 
-void  FormulaBuffer::createSharedFormula(::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const rtl::OUString& rTokenStr )
+void  FormulaBuffer::createSharedFormula( const ::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const rtl::OUString& rTokenStr )
 {
-    ApiTokenSequence rTokens = getFormulaParser().importFormula( rAddress, rTokenStr );
+    ApiTokenSequence aTokens = getFormulaParser().importFormula( rAddress, rTokenStr );
     rtl::OUString aName = rtl::OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
         append( static_cast< sal_Int32 >( rAddress.Sheet + 1 ) ).
         append( sal_Unicode( '_' ) ).append( nSharedId ).
         append( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_0") ) ).makeStringAndClear();
-    ScRangeData* pScRangeData  = createNamedRangeObject( aName, rTokens, 0  );
+    ScRangeData* pScRangeData  = createNamedRangeObject( aName, aTokens, 0  );
 
     pScRangeData->SetType(RT_SHARED);
     sal_Int32 nTokenIndex = static_cast< sal_Int32 >( pScRangeData->GetIndex() );
