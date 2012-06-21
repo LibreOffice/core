@@ -51,6 +51,24 @@
       "revId": "364a1e650923c839436996aca30b2d4f9aef5c81",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///4Q\u003d",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-21T12:09:37Z",
+      "side": 1,
+      "message": "\u003eOTOH we might grep in \"$@\" for \"project:\" and only add project:core if none was given.\r\nbut then we could do the same with branch and status: default branch \u003d master, default status \u003d open \u003d\u003e logerrit query would be translated to core/master/open. How about it?",
+      "parentUuid": "AAAACn///5E\u003d",
+      "revId": "364a1e650923c839436996aca30b2d4f9aef5c81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
