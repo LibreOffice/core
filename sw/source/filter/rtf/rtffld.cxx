@@ -712,9 +712,9 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                            nFntWhich = GetWhichOfScript( RES_CHRATR_FONT, nScript );
 
                     //Check to see if we already have a ruby charstyle that this fits
-                    for(sal_uInt16 i=0; i < aRubyCharFmts.Count(); ++i )
+                    for(sal_uInt16 i=0; i < aRubyCharFmts.size(); ++i )
                     {
-                        SwCharFmt *pFmt = (SwCharFmt *)aRubyCharFmts[i];
+                        SwCharFmt *pFmt = aRubyCharFmts[i];
                         const SvxFontHeightItem &rF = (const SvxFontHeightItem &)
                                                     pFmt->GetFmtAttr( nFntHWhich );
                         if( rF.GetHeight() == sal_uInt16(aData.nFontSize * 10 ))
@@ -735,7 +735,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                         String sNm;
                         //Take this as the base name
                         SwStyleNameMapper::FillUIName( RES_POOLCHR_RUBYTEXT, sNm );
-                        sNm += String::CreateFromInt32( aRubyCharFmts.Count() + 1 );
+                        sNm += String::CreateFromInt32( aRubyCharFmts.size() + 1 );
                         pCharFmt = pDoc->MakeCharFmt( sNm,
                                             ( SwCharFmt*)pDoc->GetDfltCharFmt() );
 
@@ -747,8 +747,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 
                         pCharFmt->SetFmtAttr( aHeightItem );
                         pCharFmt->SetFmtAttr( aFontItem );
-                        void* p = pCharFmt;
-                        aRubyCharFmts.Insert( p, aRubyCharFmts.Count() );
+                        aRubyCharFmts.push_back( pCharFmt );
                     }
                 }
 

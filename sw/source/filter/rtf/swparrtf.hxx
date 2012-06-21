@@ -304,7 +304,7 @@ class SwRTFParser : public SvxRTFParser
     std::vector<bool> aMergeBoxes;      // Flags fuer gemergte Zellen
     SwListArr aListArr;
     SvPtrarr aTblFmts;
-    SvPtrarr aRubyCharFmts;
+    std::vector<SwCharFmt*> aRubyCharFmts;
     BookmarkPosition* mpBookmarkStart;
     sw::util::RedlineStack *mpRedlineStack;
     sw::util::AuthorInfos m_aAuthorInfos;
