@@ -125,8 +125,9 @@ public:
     sal_Bool MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, OUString& );
 
     // remove an embedded object from the container and from the storage; if object can't be closed
-    sal_Bool            RemoveEmbeddedObject( const OUString& rName, sal_Bool bClose=sal_True );
-    sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, sal_Bool bClose=sal_True );
+    // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
+    sal_Bool            RemoveEmbeddedObject( const OUString& rName, sal_Bool bClose = sal_True, sal_Bool bKeepToTempStorage = sal_True );
+    sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, sal_Bool bClose = sal_True, sal_Bool bKeepToTempStorage = sal_True );
 
     // close and remove an embedded object from the container without removing it from the storage
     sal_Bool            CloseEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );

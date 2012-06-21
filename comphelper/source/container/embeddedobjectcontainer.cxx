@@ -923,13 +923,15 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
     return bRet;
 }
 
-sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, sal_Bool bClose )
+// #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
+sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, sal_Bool bClose, sal_Bool bKeepToTempStorage )
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::RemoveEmbeddedObject( Name )" );
 
     uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( rName );
     if ( xObj.is() )
-        return RemoveEmbeddedObject( xObj, bClose );
+        //return RemoveEmbeddedObject( xObj, bClose );
+        return RemoveEmbeddedObject( xObj, bClose, bKeepToTempStorage );
     else
         return sal_False;
 }
@@ -987,7 +989,9 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, Emb
     return sal_False;
 }
 
-sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Bool bClose )
+//sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Bool bClose )
+// #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
+sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Bool bClose, sal_Bool bKeepToTempStorage )
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::RemoveEmbeddedObject( Object )" );
 
@@ -1024,7 +1028,8 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
         // somebody still needs the object, so we must assign a temporary persistence
         try
         {
-            if ( xPersist.is() )
+        //    if ( xPersist.is() )
+             if ( xPersist.is() && bKeepToTempStorage ) // #i119941
             {
                 /*
                 //TODO/LATER: needs storage handling!  Why not letting the object do it?!
@@ -1105,7 +1110,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
 
     OSL_ENSURE( bFound, "Object not found for removal!" );
     (void)bFound;
-    if ( xPersist.is() )
+    if ( xPersist.is() && bKeepToTempStorage )  // #i119941#
     {
         // remove replacement image (if there is one)
         RemoveGraphicStream( aName );
