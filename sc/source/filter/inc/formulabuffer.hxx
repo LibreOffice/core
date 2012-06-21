@@ -45,14 +45,14 @@ struct TokenAddressItem
 {
     ::rtl::OUString maTokenStr;
     ::com::sun::star::table::CellAddress maCellAddress;
-    TokenAddressItem( rtl::OUString& rTokenStr, ::com::sun::star::table::CellAddress& rCellAddress ) : maTokenStr( rTokenStr ), maCellAddress( rCellAddress ) {}
+    TokenAddressItem( const rtl::OUString& rTokenStr, const ::com::sun::star::table::CellAddress& rCellAddress ) : maTokenStr( rTokenStr ), maCellAddress( rCellAddress ) {}
 };
 
 struct TokenRangeAddressItem
 {
     TokenAddressItem maTokenAndAddress;
     ::com::sun::star::table::CellRangeAddress maCellRangeAddress;
-    TokenRangeAddressItem( TokenAddressItem& rTokenAndAddress, ::com::sun::star::table::CellRangeAddress& rCellRangeAddress ) : maTokenAndAddress( rTokenAndAddress ), maCellRangeAddress( rCellRangeAddress ) {}
+    TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const ::com::sun::star::table::CellRangeAddress& rCellRangeAddress ) : maTokenAndAddress( rTokenAndAddress ), maCellRangeAddress( rCellRangeAddress ) {}
 };
 
 typedef ::std::map< sal_Int32, std::vector< TokenAddressItem > > FormulaDataMap;
@@ -69,8 +69,8 @@ typedef ::std::map< sal_Int32, SharedIdToTokenIndex > SheetToSharedIdToTokenInde
 typedef ::std::pair< ::com::sun::star::table::CellAddress, double > ValueAddressPair;
 typedef ::std::map< sal_Int32, std::vector< ValueAddressPair > > FormulaValueMap;
 
-    void createSharedFormula(  ::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const rtl::OUString& rTokens );
-    ::com::sun::star::uno::Reference< com::sun::star::table::XCellRange > getRange( ::com::sun::star::table::CellRangeAddress& rRange);
+    void createSharedFormula(  const ::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const rtl::OUString& rTokens );
+    ::com::sun::star::uno::Reference< com::sun::star::table::XCellRange > getRange( const ::com::sun::star::table::CellRangeAddress& rRange);
     ::com::sun::star::uno::Reference< com::sun::star::table::XCell > getCell( ::com::sun::star::table::CellAddress& rAddress );
     com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > mxCurrSheet;
     FormulaDataMap      cellFormulas;
@@ -80,18 +80,19 @@ typedef ::std::map< sal_Int32, std::vector< ValueAddressPair > > FormulaValueMap
     SheetToSharedIdToTokenIndex tokenIndexes;
     FormulaValueMap        cellFormulaValues;
 
-    void                applyArrayFormulas(  std::vector< TokenRangeAddressItem >& rVector );
-    void                applyCellFormulas(  std::vector< TokenAddressItem >& rVector );
-    void                applyCellFormulaValues( std::vector< ValueAddressPair >& rVector );
+    void                applyArrayFormulas(  const std::vector< TokenRangeAddressItem >& rVector );
+    void                applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& rTokens, const ::com::sun::star::table::CellAddress& rAddress );
+    void                applyCellFormulas(  const std::vector< TokenAddressItem >& rVector );
+    void                applyCellFormulaValues( const std::vector< ValueAddressPair >& rVector );
 
 public:
     explicit            FormulaBuffer( const WorkbookHelper& rHelper );
     void                finalizeImport();
-    void                setCellFormula( ::com::sun::star::table::CellAddress& rAddress, rtl::OUString&  );
-    void                setCellFormula( ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId );
-    void                setCellFormulaValue( ::com::sun::star::table::CellAddress& rAddress, double fValue  );
-    void                setCellArrayFormula( ::com::sun::star::table::CellRangeAddress& rRangeAddress, ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString&  );
-    void                createSharedFormulaMapEntry(::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens );
+    void                setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, const rtl::OUString&  );
+    void                setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId );
+    void                setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress, double fValue  );
+    void                setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString&  );
+    void                createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens );
 };
 }
 }
