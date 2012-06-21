@@ -39,8 +39,19 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ooxmltok, \
     sal \
     test \
     unotest \
+    sw \
     vcl \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_ooxmltok,\
+    libxml2 \
+))
+
+$(eval $(call gb_CppunitTest_set_include,sw_subsequent_ooxmltok,\
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,sw_subsequent_ooxmltok,\
