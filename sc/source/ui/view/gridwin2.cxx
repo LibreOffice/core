@@ -125,6 +125,8 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 
     long nSizeX, nSizeY;
     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+    // The button height should not use the merged cell height, should still use single row height
+    nSizeY = pViewData->ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
     Size aScrSize(nSizeX-1, nSizeY-1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
