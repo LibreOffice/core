@@ -14,6 +14,7 @@
 #include <vcl/image.hxx>
 
 class SfxDocumentTemplates;
+class TemplateViewItem;
 
 class TemplateView : public ThumbnailView
 {
@@ -28,6 +29,8 @@ public:
     sal_uInt16 getRegionId () const { return mnRegionId; }
 
     virtual void Paint (const Rectangle &rRect);
+
+    void InsertItems (const std::vector<TemplateViewItem*> &rTemplates);
 
 protected:
 

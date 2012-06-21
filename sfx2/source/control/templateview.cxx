@@ -19,7 +19,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
+#include <sfx2/templateviewitem.hxx>
 
 #include "templateview.hrc"
 
@@ -88,6 +88,26 @@ void TemplateView::Paint (const Rectangle &rRect)
                                         ));
 
     mpProcessor->process(aSeq);
+}
+
+void TemplateView::InsertItems (const std::vector<TemplateViewItem*> &rTemplates)
+{
+    for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
+    {
+        TemplateViewItem *pItem = new TemplateViewItem(*this,this);
+        TemplateViewItem *pCur = rTemplates[i];
+
+        pItem->mnId = pCur->mnId;
+        pItem->maText = pCur->maText;
+        pItem->setFileType(pCur->getFileType());
+        pItem->maPreview1 = pCur->maPreview1;
+
+        mItemList.push_back(pItem);
+    }
+
+    CalculateItemPositions();
+
+    Invalidate();
 }
 
 void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
