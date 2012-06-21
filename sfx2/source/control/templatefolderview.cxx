@@ -312,6 +312,8 @@ void TemplateFolderView::showOverlay (bool bVisible)
         // Check if the folder view needs to be filtered
         if (mbFilteredResults)
         {
+            filterItems(FolderFilter_Application(mpDocTemplates,meFilterOption));
+
             mbFilteredResults = false;
             meFilterOption = FILTER_APP_NONE;
         }
