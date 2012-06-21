@@ -42,8 +42,6 @@ namespace comphelper
 }
 namespace rptui
 {
-    class OReportWindow;
-    class ODesignView;
     class OViewsWindow;
     class OSectionWindow :      public Window
                             ,   public ::cppu::BaseMutex

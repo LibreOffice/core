@@ -40,8 +40,6 @@
 #include <oox/mathml/export.hxx>
 #include <oox/mathml/import.hxx>
 
-class SmFormat;
-
 ////////////////////////////////////////////////////////////
 
 #define PRTUIOPT_TITLE_ROW          "TitleRow"

@@ -70,14 +70,12 @@
 #include <boost/shared_ptr.hpp>
 #include <functional>
 
-class TransferableHelper;
 class TransferableClipboardListener;
 class VclWindowEvent;
 class SfxUndoManager;
 namespace rptui
 {
     class OGroupsSortingDialog;
-    class OPropertyMediator;
     class OReportModel;
     class OSectionView;
     class OAddFieldWindow;

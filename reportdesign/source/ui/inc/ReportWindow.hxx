@@ -45,13 +45,8 @@
 namespace rptui
 {
     class ODesignView;
-    class OReportSection;
     class OScrollWindowHelper;
     class OSectionView;
-    class OReportModel;
-    class OEndMarker;
-    class OReportPage;
-    class DlgEdFunc;
     class DlgEdFactory;
 
     class OReportWindow :    public Window

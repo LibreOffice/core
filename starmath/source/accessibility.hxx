@@ -52,7 +52,6 @@
 #include <svx/AccessibleTextHelper.hxx>
 #include <edit.hxx>
 
-class Window;
 class SmGraphicWindow;
 class SmEditWindow;
 class SmDocShell;

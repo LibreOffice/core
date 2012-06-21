@@ -32,24 +32,13 @@
 #include <functional>
 
 namespace com { namespace sun { namespace star {
-    namespace awt {
-        class XControl;
-        class XControlContainer;
-    }
     namespace drawing {
         class XShape;
     }
 }}}
 
-namespace dbaui
-{
-    class IController;
-}
 namespace rptui
 {
-    class OObjectBase;
-
-
     /** \class OSectionUndo
      * Undo class for section add and remove.
      */

@@ -49,7 +49,6 @@ namespace svx { class ToolboxButtonColorUpdater; }
 
 namespace rptui
 {
-    class ConditionalFormattingDialog;
     class OColorPopup;
     class OReportController;
     class IConditionalFormatAction;

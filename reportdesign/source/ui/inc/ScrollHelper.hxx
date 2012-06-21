@@ -32,14 +32,11 @@
 #include <MarkedSection.hxx>
 #include "ReportWindow.hxx"
 
-class SdrView;
 namespace rptui
 {
     class ODesignView;
     class OReportWindow;
     class OSectionView;
-    class OReportSection;
-    class OReportModel;
 
     /** This class defines the scrollable area of the report design. It includes
         the h-ruler and the sections, and end marker. Not the start marker.

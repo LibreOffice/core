@@ -60,21 +60,12 @@
 #include <memory>
 #include <boost/shared_ptr.hpp>
 
-namespace com { namespace sun { namespace star {
-    namespace awt {
-        class XControl;
-        class XControlContainer;
-    }
-}}}
-
 namespace dbaui
 {
     class IController;
 }
 namespace rptui
 {
-    class OObjectBase;
-
     enum Action
     {
         Inserted = 1,

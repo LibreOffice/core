@@ -51,8 +51,6 @@ class SdrHdl;
 namespace rptui
 {
     class OReportWindow;
-    class ODesignView;
-    class OEndMarker;
     class OReportSection;
     class OSectionView;
 

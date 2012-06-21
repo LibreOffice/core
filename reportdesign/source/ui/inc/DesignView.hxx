@@ -58,13 +58,10 @@ class Window;
 
 namespace rptui
 {
-    class OReportSection;
-    class OUnoObject;
     class OSectionView;
     class OReportController;
     class PropBrw;
     class OAddFieldWindow;
-    class OReportModel;
     class ONavigator;
     //==================================================================
     //==================================================================

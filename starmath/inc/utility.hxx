@@ -36,7 +36,6 @@
 #include <tools/fract.hxx>
 
 
-class SmRect;
 class String;
 
 #define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))

@@ -35,12 +35,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/report/meta/XFormulaParser.hpp>
 
-class SvLBoxEntry;
 //============================================================================
 namespace rptui
 {
 //============================================================================
-class FunctionManager;
 class OAddFieldWindow;
 
 //============================================================================

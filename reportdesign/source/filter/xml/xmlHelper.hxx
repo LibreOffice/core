@@ -35,8 +35,6 @@
 #define XML_STYLE_FAMILY_REPORT_PREFIX          "rptelem"
 
 
-class SvXMLImport;
-class SvXMLExport;
 class SvXMLStylesContext;
 class SvXMLTokenMap;
 namespace rptxml

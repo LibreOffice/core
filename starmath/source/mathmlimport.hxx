@@ -39,8 +39,7 @@
 class SfxMedium;
 namespace com { namespace sun { namespace star {
     namespace io {
-        class XInputStream;
-        class XOutputStream; }
+        class XIutputStream; }
     namespace beans {
         class XPropertySet; }
 } } }

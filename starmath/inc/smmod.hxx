@@ -40,7 +40,6 @@
 
 #include <unotools/options.hxx>
 
-class SvxErrorHandler;
 class SfxObjectFactory;
 class SmConfig;
 class SmModule;

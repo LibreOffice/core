@@ -26,9 +26,6 @@
 #include "cfgitem.hxx"
 
 
-class SmPreferenceDialog;
-class SmPrintDialog;
-class SmPrintOptionDialog;
 class SfxItemSet;
 
 class SmConfig : public SmMathConfig, public SfxBroadcaster

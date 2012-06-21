@@ -20,8 +20,6 @@
 #ifndef APPLICAT_HXX
 #define APPLICAT_HXX
 
-class SvxErrorHandler;
-
 #include <sfx2/app.hxx>
 
 
