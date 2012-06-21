@@ -276,10 +276,11 @@ void TemplateFolderView::showOverlay (bool bVisible)
 
 void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
 {
+    meFilterOption = eApp;
+
     if (mpItemView->IsVisible())
     {
         mbFilteredResults = true;
-        meFilterOption = eApp;
         mpItemView->filterItems(ViewFilter_Application(mpDocTemplates,eApp));
     }
     else
@@ -308,6 +309,9 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 
     if (mbSelectionMode)
         mpItemView->setSelectionMode(true);
+
+    if (meFilterOption != FILTER_APP_NONE)
+        mpItemView->filterItems(ViewFilter_Application(mpDocTemplates,meFilterOption));
 
     mpItemView->Show();
 }
