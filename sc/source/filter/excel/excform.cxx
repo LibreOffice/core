@@ -1525,6 +1525,37 @@ sal_Bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sa
     return rRangeList.Count() != 0;
 }
 
+static DefTokenId missArgForZeroList[] = {
+    ocCount,
+    ocCount2,
+    ocAverage,
+    ocMin,
+    ocMinA,
+    ocMax,
+    ocMaxA,
+    ocStDev,
+    ocStDevA,
+    ocVar,
+    ocVarP,
+    ocAveDev,
+    ocKurt,
+    ocSchiefe,
+    ocVarPA,
+    ocVarA,
+    ocDevSq
+};
+
+#define missArgForZeroCount sizeof(missArgForZeroList)/sizeof(DefTokenId)
+
+
+sal_Bool lcl_isInMissArgForZeroList(DefTokenId id)
+{
+    for(short index = 0; index < missArgForZeroCount; index++)
+        if(missArgForZeroList[index] == id)
+            return sal_True;
+    return sal_False;
+
+}
 void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCount )
 {
     TokenId                 eParam[ 256 ];
@@ -1575,7 +1606,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCo
             nSkipEnd = 0;       // letzten Parameter bei Bedarf weglassen
 
         // Joost-Spezialfaelle
-        else if( eId == ocIf )
+        else if( eId == ocIf || lcl_isInMissArgForZeroList(eId))
         {
             sal_uInt16          nNullParam = 0;
             for( nLauf = 0 ; nLauf < nAnz ; nLauf++ )
