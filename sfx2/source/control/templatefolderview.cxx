@@ -249,17 +249,19 @@ void TemplateFolderView::showOverlay (bool bVisible)
 
     // Clear items is the overlay is closed.
     if (!bVisible)
+    {
         mpItemView->Clear();
+
+        setSelectionMode(mbSelectionMode);
+    }
 }
 
 void TemplateFolderView::OnSelectionMode (bool bMode)
 {
     if (mpItemView->IsVisible())
     {
+        mbSelectionMode = bMode;
         mpItemView->setSelectionMode(bMode);
-
-        for (size_t i = 0, n = mItemList.size(); i < n; ++i)
-            mItemList[i]->setSelectionMode(bMode);
     }
     else
         ThumbnailView::OnSelectionMode(bMode);
