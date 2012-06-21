@@ -95,22 +95,15 @@
 #define DS_COL_2                        (DS_COL_1+DS_BTNWIDTH_1)
 #define DS_COL_3                        (DS_COL_2+DS_BTNSPACE_X)
 #define DS_COL_4                        (DS_COL_3+DS_BTNWIDTH_1)
-#define DS_COL_5                        (DS_COL_4+DS_BTNSPACE_X)
 
 #define DS_COL_7                        (DS_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define DS_COL_6                        DS_COL_7
 
 #define DS_ROW_0                        RSC_SP_DLG_INNERBORDER_TOP
-#define DS_ROW_1                        (DS_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_X)
-#define DS_ROW_7                        DLGS_BOTTOM_BTN_L(DS_HEIGHT)
-#define DS_ROW_6                        DLGS_BOTTOM_BTN_Y(DS_HEIGHT)
-#define DS_ROW_5                        DLGS_BOTTOM_FL_Y(DS_HEIGHT)
 #define DS_ROW_4                        DLGS_BOTTOM_LAST_CTRL_L(DS_HEIGHT)
 #define DS_ROW_3                        (DS_ROW_4-RSC_CD_PUSHBUTTON_HEIGHT)
 #define DS_ROW_2A                       (DS_ROW_3-RSC_CD_FIXEDTEXT_HEIGHT-RSC_SP_CTRL_Y)
 #define DS_ROW_2                        (DS_ROW_2A-RSC_SP_CTRL_GROUP_Y)
 
-#define DS_LB_WIDTH                     (DS_COL_7-DS_COL_0)
 
 // --------- dialog Ceritficate chooser ---------
 #define FT_HINT_SELECT                  1
@@ -184,7 +177,6 @@
 #define CW_COL_4b                       (CW_COL_4a+DATE_WIDTH)
 #define CW_COL_4c                       (CW_COL_4b+3)
 #define CW_COL_4d                       (CW_COL_4c+8)
-#define CW_COL_4e                       (CW_COL_4d+3)
 #define CW_ROW_0                        (CV_ROW_0+RSC_SP_GRP_INNERBORDER_TOP)
 #define CW_ROW_1                        (CW_ROW_0+RSC_SP_GRP_INNERBORDER_TOP)
 #define CW_ROW_2                        (CW_ROW_0+IMG1_HEIGHT)
@@ -197,7 +189,6 @@
 #define CW_ROW_8                        (CW_ROW_7+RSC_SP_CTRL_Y+RSC_CD_FIXEDTEXT_HEIGHT)
 #define CW_ROW_9                        (CW_ROW_8+RSC_SP_CTRL_Y+RSC_CD_FIXEDTEXT_HEIGHT)
 #define CW_ROW_10                       (CW_ROW_9+2)
-#define CW_ROW_11                       (CW_ROW_9+IMG2_HEIGHT)
 
 // --------- tab page Certificate viewer - Details ---------
 

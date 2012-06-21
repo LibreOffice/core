@@ -95,18 +95,6 @@
 #define FT_WATERMARK                33
 #define ED_WATERMARK                34
 
-#define FL_OLD_PAGES        51
-#define RB_OLD_ALL          52
-#define RB_OLD_RANGE        53
-#define RB_OLD_SELECTION    54
-#define ED_OLD_PAGES        55
-#define BT_OLD_OK           56
-#define BT_OLD_CANCEL       57
-#define BT_OLD_HELP         58
-#define FL_OLD_COMPRESSION  59
-#define RB_OLD_SCREEN       60
-#define RB_OLD_PRINT        61
-#define RB_OLD_PRESS        62
 
 //controls for open options tab page
 #define FL_INITVIEW               80

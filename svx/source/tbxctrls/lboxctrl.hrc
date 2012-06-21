@@ -26,5 +26,4 @@
  ************************************************************************/
 
 #define LB_SVXTBX_UNDO_REDO_CTRL        11
-#define FT_NUM_OPERATIONS               12
 

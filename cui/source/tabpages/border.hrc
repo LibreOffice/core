@@ -48,9 +48,6 @@
 #define FT_SHADOWCOLOR          35
 #define LB_SHADOWCOLOR          36
 
-#define FT_XSPACE               41
-#define ED_XSPACE               42
-
 #define FL_DISTANCE             50
 #define FT_LEFT                 51
 #define MF_LEFT                 52

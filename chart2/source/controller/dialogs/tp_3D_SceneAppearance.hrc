@@ -34,5 +34,4 @@
 
 #define FL_SEPERATOR 1
 
-#define LB_SHADING 1
 #define LB_SCHEME 2

@@ -49,7 +49,6 @@
 #define TBI_FREEPOLY            8
 
 #define TBI_ACTIVE              16
-#define TBI_COLOR               17
 #define TBI_MACRO               18
 #define TBI_PROPERTY            19
 
@@ -63,10 +62,8 @@
 
 #define FT_URL                  1
 #define FT_TEXT                 2
-#define FT_TARG                 3
 #define CBB_URL                 1
 #define EDT_TEXT                1
-#define LB_TARG                 1
 
 #define STB_STATUS              1
 

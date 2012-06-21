@@ -54,9 +54,6 @@
 #define STR_MODIFY          42
 
 #define BTN_EDITCLOSE   50
-#define BTN_EDITNEW     51
-#define BTN_EDITCHANGE  52
-#define BTN_EDITREMOVE  53
 #define BTN_EDITHELP    54
 
 

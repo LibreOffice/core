@@ -34,7 +34,6 @@
 #define FT_NAME 6
 #define ED_NAME 7
 #define BT_OK 10
-#define BT_SECTION 11
 #define BT_EDIT 12
 #define BT_NEW 13
 #define BT_DELETE 15

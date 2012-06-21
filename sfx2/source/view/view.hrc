@@ -89,32 +89,12 @@
 
 #define GB_WIDTH                        23
 #define GB_HEIGHT                       24
-#define RB_PIXELWIDTH                   25
-#define RB_PERCENTWIDTH                 26
-#define RB_RELATIVEWIDTH                27
-#define RB_PIXELHEIGHT                  28
-#define RB_PERCENTHEIGHT                29
-#define RB_RELATIVEHEIGHT               30
-#define FT_WIDTHCOMMENT                 31
-#define FT_HEIGHTCOMMENT                32
 #define FT_WIDTH                        33
-#define NM_WIDTH                        34
-#define CB_WIDTHFIXED                   35
-#define CB_HEIGHTFIXED                  36
 #define FT_HEIGHT                       37
-#define NM_HEIGHT                       38
 
-#define FT_FRAMESPACING                 39
-#define NM_FRAMESPACING                 40
-#define CB_FRAMESPACING_INHERIT         41
-#define FT_FRAMESPACINGCOLOR            42
-#define ED_FRAMESPACINGCOLOR            43
-#define CB_FRAMESPACINGCOLOR_INHERIT    44
-#define GB_FRAMESET                     45
 #define FL_SEP_LEFT                     46
 #define FL_SEP_RIGHT                    47
 
-#define STR_FRAME_FILEDLG                   (RID_SFX_VIEW_START+46)
 
 #endif
 

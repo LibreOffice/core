@@ -24,5 +24,4 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define FLT_WIN_PREVIEW 783
 #define CTL_PREVIEW 1

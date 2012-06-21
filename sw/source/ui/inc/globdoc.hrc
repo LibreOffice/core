@@ -35,21 +35,7 @@
 #define STR_WRITER_GLOBALDOC_FULLTYPE_50        (RC_GLOBDOC_BEGIN + 4)
 #define STR_WRITER_GLOBALDOC_FULLTYPE           (RC_GLOBDOC_BEGIN + 5)
 
-#define MN_GLOBALFILE                              (RC_GLOBDOC_BEGIN + 30)
-#define MN_GLOBALEDIT                              (RC_GLOBDOC_BEGIN + 31)
-#define MN_GLOBALVIEW                              (RC_GLOBDOC_BEGIN + 32)
-#define MN_GLOBALINS                               (RC_GLOBDOC_BEGIN + 33)
-#define MN_GLOBALFORMAT                            (RC_GLOBDOC_BEGIN + 34)
-#define MN_GLOBALEXTRA                             (RC_GLOBDOC_BEGIN + 35)
-#define MN_GLOBALWIN                               (RC_GLOBDOC_BEGIN + 36)
 
-#define MN_GLOBALFILE_PORT                         (RC_GLOBDOC_BEGIN + 47)
-#define MN_GLOBALEDIT_PORT                         (RC_GLOBDOC_BEGIN + 48)
-#define MN_GLOBALVIEW_PORT                         (RC_GLOBDOC_BEGIN + 49)
-#define MN_GLOBALINS_PORT                          (RC_GLOBDOC_BEGIN + 50)
-#define MN_GLOBALFORMAT_PORT                       (RC_GLOBDOC_BEGIN + 51)
-#define MN_GLOBALEXTRA_PORT                        (RC_GLOBDOC_BEGIN + 52)
-#define MN_GLOBALWIN_PORT                          (RC_GLOBDOC_BEGIN + 53)
 
 #define MN_GLOBAL_TEXT_POPUPMENU                  (RC_GLOBDOC_BEGIN + 63)
 // ------------------------------------------------------------------------

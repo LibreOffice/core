@@ -46,30 +46,4 @@
     #error id range overflow
 #endif
 
-// -----------------------------------------------------------------------
-// - help id ranges
-
-#define HID_DBP_START       ( HID_EXTENSIONS_START +   0 )
-#define HID_DBP_END         ( HID_EXTENSIONS_START +  19 )
-
-#define HID_ABP_START       ( HID_EXTENSIONS_START +  20 )
-#define HID_ABP_END         ( HID_EXTENSIONS_START +  39 )
-
-#define HID_BIBLIO_START    ( HID_EXTENSIONS_START +   40 )
-#define HID_BIBLIO_END      ( HID_EXTENSIONS_START +   89 )
-
-#define HID_PROPC_START     ( HID_EXTENSIONS_START +   90 )
-#define HID_PROPC_END       ( HID_EXTENSIONS_START +  499 )
-
-#define HID_UPDATE_START    ( HID_EXTENSIONS_START +  500 )
-#define HID_UPDATE_END      ( HID_EXTENSIONS_START +  519 )
-
-// !!! please adjust HID_LAST_EXTENSIONS_RANGE if you add new ranges here !!!
-
-#define HID_LAST_EXTENSIONS_RANGE HID_UPDATE_END
-
-#if HID_LAST_EXTENSIONS_RANGE > HID_EXTENSIONS_END
-    #error id range overflow
-#endif
-
 #endif

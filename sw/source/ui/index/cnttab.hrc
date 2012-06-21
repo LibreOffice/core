@@ -24,57 +24,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define CB_MARKS        4
-#define CB_OUTLN        5
 #define FT_LEVEL        6
-#define ED_LEVEL        7
-#define FL_CREATE       8
-#define ED_BSP         11
-#define FL_BSP         12
-#define BT_OUTLN       13
 #define FL_TITLE       14
 #define ED_TITLE       15
 #define BT_HELP        16
 #define ST_AUTHTYPE    17
 
 #define LB_ENTRY       20
-#define FT_NUM         21
 #define ED_ENTRY       22
-#define BT_ENTRY_NUMBER  23
-#define BT_ENTRY_TEXT  24
-#define BT_TAB         25
 #define BT_STD         26
-#define BT_PAGE        27
 #define FL_ENTRY       28
-//#define FT_LEVEL       28
 #define LB_LEVEL       29
 #define FT_TEMPLATE    30
 #define LB_PARALAY     31
 #define BT_ASSIGN      32
 #define FL_FORMAT      33
-#define BT_ENTRY        34
-//#define BT_EDIT        34
-#define BT_JUMP        35
-#define CB_RECALC_TABS      36
-#define CB_FIRST_TAB_POS    37
-#define MF_FIRST_TAB_POS    38
-#define CB_REL_TO_TEXT      39
 #define BT_EDIT_STYLE       40
-#define CB_SAME             41
-#define CB_FF               42
 #define CB_CASE             43
-#define CB_SEC              44
-#define CB_ALPHA            45
-#define FL_OPT                  46
-#define CB_MAKRS            47
-#define DLB_TOD             48
-#define CB_TEMPL            49
-#define DLB_LAYOUT          50
 #define CB_OBJECT           51
-#define DLB_OBJECT          52
-#define FL_SOURCE           53
-#define CB_USER_MARKS       54
-#define BT_ALL_LEVEL        55
 #define FT_MAIN_ENTRY_STYLE 56
 #define LB_MAIN_ENTRY_STYLE 57
 
@@ -128,14 +95,10 @@
 #define CB_FILLCHAR             46
 #define FT_CHAPTERENTRY         47
 #define LB_CHAPTERENTRY         48
-#define FT_SORTING              49
-#define LB_SORTING              50
 #define FT_TABPOS               51
 #define MF_TABPOS               52
 #define CB_AUTORIGHT            53
 #define CB_RELTOSTYLE           54
-#define CB_RECALCTAB            56
-#define CB_NUMSTYLEFROMPDESC    57
 #define CB_ALPHADELIM           58
 #define CB_COMMASEPARATED       59
 
@@ -243,17 +206,7 @@
 
 //TabDialog
 #define WIN_EXAMPLE         1
-#define RES_EXAMPLE_TEXT    2
 
-#define ST_HEADING_1        4
-#define ST_TEXT_1           5
-#define ST_HEADING_1_1      6
-#define ST_TEXT_1_1         7
-#define ST_HEADING_1_2      8
-#define ST_TEXT_1_2         9
-#define ST_TABLE_LABEL      10
-#define ST_FRAME_LABEL      11
-#define ST_GRAPHIC_LABEL    12
 #define ST_USERDEFINEDINDEX 13
 #define CB_SHOWEXAMPLE      14
 

@@ -27,7 +27,6 @@
 #define FT_NUMBER       1
 #define ED_NUMBER       2
 #define FT_DISTANCE     3
-#define ED_DISTANCE     4
 #define CB_AUTO_WIDTH   4
 #define FL_COLUMNS              6
 
@@ -55,7 +54,6 @@
 
 #define WN_BSP          41
 
-#define LB_REFERENCE        42
 #define CB_REGISTER             43
 #define FL_REGISTER             44
 #define FT_REFERENCE        45
@@ -67,7 +65,6 @@
 #define FT_WIDTH                49
 #define FT_DIST                 50
 #define VS_DEFAULTS             51
-#define IL_PRE_COLS             52
 
 #define FT_APPLY_TO             53
 #define LB_APPLY_TO             54

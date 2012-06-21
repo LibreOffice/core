@@ -127,7 +127,7 @@
 
 // Verzeichnisse
 #define RC_INDEX_BEGIN              RC_INDEX
-#define RC_INDEX_END                (RC_INDEX + 99)
+//      RC_INDEX_END                (RC_INDEX + 99)
 
 //
 #define RC_RIBBAR_BEGIN             RC_RIBBAR
@@ -141,14 +141,13 @@
 #define RC_FMTUI_BEGIN              RC_FMTUI
 #define RC_FMTUI_END                (RC_FMTUI_BEGIN + 69)
 
-
 // Grafik Dialoge
 #define RC_GRFDLG_BEGIN             RC_GRFDLG
-#define RC_GRFDLG_END               (RC_GRFDLG_BEGIN + 99)
+//      RC_GRFDLG_END               (RC_GRFDLG_BEGIN + 99)
 
 // ????
 #define RC_FSTDLG_BEGIN             RC_FSTDLG
-#define RC_FSTDLG_END               (RC_FSTDLG_BEGIN + 99)
+//      RC_FSTDLG_END               (RC_FSTDLG_BEGIN + 99)
 
 // Rahmen Dialoge
 #define RC_FRMDLG_BEGIN             RC_FRMDLG
@@ -156,7 +155,7 @@
 
 // Feld Dialoge
 #define RC_FLDDLG_BEGIN             RC_FLDDLG
-#define RC_FLDDLG_END               (RC_FLDDLG_BEGIN + 149)
+//      RC_FLDDLG_END               (RC_FLDDLG_BEGIN + 149)
 
 // Utilities UI
 #define RC_UTLUI_BEGIN              RC_UTLUI
@@ -181,7 +180,7 @@
 
 // DBMgr
 #define RC_DBUI_BEGIN               RC_DBUI
-#define RC_DBUI_END                 (RC_DBUI + 99)
+//      RC_DBUI_END                 (RC_DBUI + 99)
 
 // Der Rest der Imp-Klassen
 #define RC_DOCHDL_BEGIN             RC_DOCHDL
@@ -189,56 +188,50 @@
 
 // Zeichenvorlagen
 #define RC_POOLCHRFMT_BEGIN         RC_POOLCHRFMT
-#define RC_POOLCHRFMT_END           (RC_POOLCHRFMT + 29)
+//      RC_POOLCHRFMT_END           (RC_POOLCHRFMT + 29)
 #define RC_POOLCHRFMT_HTML_BEGIN    RC_POOLHTMLCHRFMT
-#define RC_POOLCHRFMT_HTML_END      (RC_POOLHTMLCHRFMT+ 30)
+//      RC_POOLCHRFMT_HTML_END      (RC_POOLHTMLCHRFMT+ 30)
 
 
 // Rahmenvorlagen
 #define RC_POOLFRMFMT_BEGIN         RC_POOLFRMFMT
-#define RC_POOLFRMFMT_END           (RC_POOLFRMFMT + 20)
+//      RC_POOLFRMFMT_END           (RC_POOLFRMFMT + 20)
 
 // Collections
-#define RC_POOLTXTCOLL_BEGIN        RC_POOLTXTCOLL
 
 #define RC_POOLCOLL_TEXT_BEGIN      RC_POOLTXTCOLL
-#define RC_POOLCOLL_TEXT_END        (RC_POOLTXTCOLL + 19)
+//      RC_POOLCOLL_TEXT_END        (RC_POOLTXTCOLL + 19)
 #define RC_POOLCOLL_LISTS_BEGIN     (RC_POOLTXTCOLL + 20)
-#define RC_POOLCOLL_LISTS_END       (RC_POOLTXTCOLL + 69)
+//      RC_POOLCOLL_LISTS_END       (RC_POOLTXTCOLL + 69)
 #define RC_POOLCOLL_EXTRA_BEGIN     (RC_POOLTXTCOLL + 70)
-#define RC_POOLCOLL_EXTRA_END       (RC_POOLTXTCOLL + 89)
+//      RC_POOLCOLL_EXTRA_END       (RC_POOLTXTCOLL + 89)
 #define RC_POOLCOLL_REGISTER_BEGIN  (RC_POOLTXTCOLL + 90)
-#define RC_POOLCOLL_REGISTER_END    (RC_POOLTXTCOLL + 119)
+//      RC_POOLCOLL_REGISTER_END    (RC_POOLTXTCOLL + 119)
 #define RC_POOLCOLL_DOC_BEGIN       (RC_POOLTXTCOLL + 130)
-#define RC_POOLCOLL_DOC_END         (RC_POOLTXTCOLL + 139)
+//      RC_POOLCOLL_DOC_END         (RC_POOLTXTCOLL + 139)
 #define RC_POOLCOLL_HTML_BEGIN      (RC_POOLTXTCOLL + 140)
 #define RC_POOLCOLL_HTML_END        (RC_POOLTXTCOLL + 169)
 
-#define RC_POOLTXTCOLL_END          RC_POOLCOLL_HTML_END
 
 // Poolvorlagen Seite
 #define RC_POOLPAGEDESC_BEGIN       RC_POOLPAGEDESC
-#define RC_POOLPAGEDESC_END         (RC_POOLPAGEDESC + 10)
+//      RC_POOLPAGEDESC_END         (RC_POOLPAGEDESC + 10)
 
 // Poolvorlagen Numerierung
 #define RC_POOLNUMRULE_BEGIN        RC_POOLNUMRULE
-#define RC_POOLNUMRULE_END          (RC_POOLNUMRULE + 10)
+//      RC_POOLNUMRULE_END          (RC_POOLNUMRULE + 10)
 
-// Pooltemplate Paragraph
-#define STR_POOLPARSTYLE_BEGIN      STR_POOLPARSTYLE
-#define STR_POOLPARSTYLE_END        (STR_POOLPARSTYLE + 9)
+// free: STR_POOLPARSTYLE to (STR_POOLPARSTYLE + 9)
 
 // Envelp-Verzeichnis
 #define RC_ENVELP_BEGIN             (RC_ENVELP     )
-#define RC_ENVELP_END               (RC_ENVELP + 99)
+//      RC_ENVELP_END               (RC_ENVELP + 99)
 
-// Statuszeile mit Laufbalken
-#define RC_STATLIN_STR_BEGIN        (RC_STATLIN_STR)
-#define RC_STATLIN_STR_END          (RC_STATLIN_STR + 49)
+// free: RC_STATLIN_STR_BEGIN to (RC_STATLIN_STR + 49)
 
 // Gemeinsame Core-Strings
 #define RC_COMCORE_BEGIN            (RC_COMMON_CORE)
-#define RC_COMCORE_END              (RC_COMMON_CORE + 59)
+//      RC_COMCORE_END              (RC_COMMON_CORE + 59)
 
 // Shell-Verzeichnis
 #define RC_SHELLS_BEGIN             RC_SHELLS
@@ -248,26 +241,21 @@
 #define RC_POPUPS_BEGIN             RC_POPUPS
 #define RC_POPUPS_END               (RC_POPUPS + 99)
 
-// Strings fuer ConfigItems in div. Verzeichnissen
-#define RC_CFGITEMS_BEGIN           RC_CFGITEMS
-#define RC_CFGITEMS_END             (RC_CFGITEMS + 99)
+// free: RC_CFGITEMS_BEGIN to (RC_CFGITEMS + 99)
 
 // Lingu
 #define RC_LINGU_BEGIN          RC_LINGU
-#define RC_LINGU_END                    (RC_LINGU + 99)
+//      RC_LINGU_END                    (RC_LINGU + 99)
 
 // Accessibility
 #define RC_ACCESS_BEGIN             RC_ACCESS
 #define RC_ACCESS_END               (RC_ACCESS + 99)
 
-// Undos
-#define RC_UNDO_BEGIN               RC_UNDO
-#define RC_UNDO_END                 (RC_UNDO + 199)
+// free: RC_UNDO to (RC_UNDO + 199)
 
-// SMARTTAGS
 // Smarttags
 #define RC_SMARTTAG_BEGIN                      RC_SMARTTAG
-#define RC_SMARTTAG_END                    (RC_SMARTTAG + 99)
+//      RC_SMARTTAG_END                    (RC_SMARTTAG + 99)
 
 // unocore
 #define RC_UNOCORE_BEGIN            RC_UNOCORE

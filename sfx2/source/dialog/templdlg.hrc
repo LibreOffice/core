@@ -24,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define TB_FMT 1
 #define LB_FMT 3
 #define BTN_EDIT 11
 #define BTN_DELETE 12
@@ -32,11 +31,8 @@
 #define BTN_NEW 10
 #define LB_FILTER 4
 
-#define ID_APPLY_TEMPLATE   10
-
 #define ID_NEW_STYLE_BY_EXAMPLE 20
 #define ID_UPDATE_STYLE_BY_EXAMPLE 21
-#define ID_TREEVIEW 22
 
 #define BT_OK 1
 #define BT_CANCEL 2

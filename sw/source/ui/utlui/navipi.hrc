@@ -24,19 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define TB_1                1
-#define TB_2                2
-#define TB_3                3
-#define TB_4                4
-#define BT_UP               5
-#define BT_DOWN             6
 #define IL_CONTENT          7
 #define FT_PAGE             10
 #define ED_PAGE             11
-#define LB_SELECT           22
-#define TL_SELECT           23
-#define TB_PAGE_TEXT                    41
-#define TB_PAGE_COUNT                   42
 #define TB_CONTENT          50
 #define TL_CONTENT          51
 #define LB_DOCS             53

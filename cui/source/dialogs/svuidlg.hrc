@@ -32,7 +32,6 @@
 
 // gemeinsame Id's
 #define CB_DISPLAY_AS_ICON     12
-#define FI_DISPLAY             13
 #define PB_CHANGE_ICON         14
 
 #define STR_AUTOLINK                            32006

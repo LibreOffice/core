@@ -34,8 +34,6 @@
 #include "cmdid.h"
 #include "swtypes.hxx"
 #include "tblctrl.hxx"
-#include "tblctrl.hrc"
-
 
 
 SFX_IMPL_TOOLBOX_CONTROL( SwTableOptimizeCtrl, SfxUInt16Item );

@@ -184,7 +184,6 @@
 #define SID_ARRANGEMENU                         ( SID_RPTUI_START +  148 )
 #define SID_SELECTALL_IN_SECTION                ( SID_RPTUI_START +  149 )
 
-#define SID_ICON_GROUP                          ( SID_RPTUI_START +  150 )
 #define SID_ICON_DETAIL                         ( SID_RPTUI_START +  151 )
 
 #define SID_SECTION_ALIGN                       ( SID_RPTUI_START +  152 )

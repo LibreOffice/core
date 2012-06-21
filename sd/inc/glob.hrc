@@ -43,13 +43,11 @@
 #define STR_PRESOBJ_CHART                       RID_GLOB_START+10
 #define STR_PRESOBJ_ORGCHART                    RID_GLOB_START+11
 #define STR_PRESOBJ_TABLE                       RID_GLOB_START+12
-#define STR_PRESOBJ_IMAGE                       RID_GLOB_START+13
 #define BMP_PRESOBJ_GRAPHIC                     RID_GLOB_START+14
 #define BMP_PRESOBJ_OBJECT                      RID_GLOB_START+15
 #define BMP_PRESOBJ_CHART                       RID_GLOB_START+16
 #define BMP_PRESOBJ_ORGCHART                    RID_GLOB_START+17
 #define BMP_PRESOBJ_TABLE                       RID_GLOB_START+18
-#define BMP_PRESOBJ_IMAGE                       RID_GLOB_START+19
 #define STR_OUTLINEVIEWSHELL                    RID_GLOB_START+21
 #define STR_DRAWVIEWSHELL                       RID_GLOB_START+22
 #define STR_TEXTOBJECTBARSHELL                  RID_GLOB_START+23
@@ -79,7 +77,6 @@
 #define STR_NOTES                               RID_GLOB_START+47
 #define STR_HANDOUT                             RID_GLOB_START+48
 #define STR_MASTERPAGE                          RID_GLOB_START+49
-#define STR_PRESOBJNOTESTEXT                    RID_GLOB_START+50
 #define STR_BAD_PASSWORD_OR_FILE_CORRUPTED      RID_GLOB_START+51
 #define STR_UNDO_MOVEPAGES                      RID_GLOB_START+52
 #define STR_NOT_ENOUGH_MEMORY                   RID_GLOB_START+53
@@ -118,8 +115,6 @@
 #define STR_LAYOUT_DEFAULT_TITLE_NAME           RID_GLOB_START+93
 #define STR_GRAFOBJECTBARSHELL                  RID_GLOB_START+94
 #define STR_POWERPOINT_IMPORT                   RID_GLOB_START+95
-#define STR_STAROFFICE_XML_DRAW                 RID_GLOB_START+96
-#define STR_STAROFFICE_XML_IMPRESS              RID_GLOB_START+97
 #define STR_PRESVIEWSHELL                       RID_GLOB_START+98
 #define STR_LOAD_DOC                            RID_GLOB_START+99
 #define STR_SAVE_DOC                            RID_GLOB_START+100
@@ -136,7 +131,6 @@
 #define STR_SLIDE_NAME                          RID_GLOB_START+112
 #define STR_LEFT_IMPRESS_PANE_SHELL             RID_GLOB_START+113
 #define STR_LEFT_DRAW_PANE_SHELL                RID_GLOB_START+114
-#define STR_RIGHT_PANE_SHELL                    RID_GLOB_START+115
 #define STR_TOOL_PANEL_SHELL                    RID_GLOB_START+116
 
 #define RID_CUSTOMANIMATION_START               RID_GLOB_START+120

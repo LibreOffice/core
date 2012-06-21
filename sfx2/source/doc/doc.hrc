@@ -34,11 +34,6 @@
 #define RID_SFX_DOC_END                     (RID_SFX_DIALOG_START-1)
 
 #define STR_NODEFPRINTER                    (RID_SFX_DOC_START+ 0)
-#define STR_PRINTER_NOTAVAIL_1              (RID_SFX_DOC_START+ 1)
-#define STR_PRINTER_NOTAVAIL_2              (RID_SFX_DOC_START+ 2)
-#define STR_PRINTER_NOTAVAIL_3              (RID_SFX_DOC_START+ 3)
-#define STR_PRINTER_NOTAVAIL_4              (RID_SFX_DOC_START+ 4)
-#define STR_PRINTER_NOTAVAIL_5              (RID_SFX_DOC_START+ 5)
 #define STR_PRINT_OPTIONS                   (RID_SFX_DOC_START+ 6)
 #define STR_ERROR_PRINTER_BUSY              (RID_SFX_DOC_START+ 7)
 #define STR_NOSTARTPRINTER                  (RID_SFX_DOC_START+ 8)
@@ -124,7 +119,6 @@
 #define STR_DOCTYPENAME_MESSAGE             (RID_SFX_DOC_START+ 75)
 #define RID_STR_NEW_TASK                    (RID_SFX_DOC_START+ 76)
 
-#define STR_SAVEANDCLOSE                    (RID_SFX_DOC_START+ 77)
 #define STR_NOSAVEANDCLOSE                  (RID_SFX_DOC_START+ 78)
 #define STR_PACKNGO_NOACCESS                (RID_SFX_DOC_START+ 79)
 #define STR_PACKNGO_NEWMEDIUM               (RID_SFX_DOC_START+ 80)
@@ -135,11 +129,6 @@
 
 #define STR_OBJECT                          (RID_SFX_DOC_START+ 84)
 
-#define DLOAD_URL 1
-#define DLOAD_STATUS 2
-#define DLOAD_NAME 3
-#define DLOAD_TEXT 4
-#define DLOAD_CANCEL 1
 
 #define DLG_MACROQUERY                      (RID_SFX_DOC_START+87)
 #define BTN_OK                              (RID_SFX_DOC_START+88)
@@ -158,7 +147,6 @@
 // some icons are commented out since they are removed
 #define BMP_SIGNATURE                       (RID_SFX_DOC_START+97)
 #define BMP_128X128_CALC_DOC                (RID_SFX_DOC_START+99)
-#define BMP_128X128_CHART_DOC               (RID_SFX_DOC_START+101)
 #define BMP_128X128_DRAW_DOC                (RID_SFX_DOC_START+102)
 #define BMP_128X128_IMPRESS_DOC             (RID_SFX_DOC_START+104)
 #define BMP_128X128_MATH_DOC                (RID_SFX_DOC_START+107)

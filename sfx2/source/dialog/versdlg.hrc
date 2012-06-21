@@ -44,5 +44,4 @@
 #define PB_OK               15
 #define PB_CANCEL           16
 #define PB_COMPARE          17
-#define PB_MERGE            18
 

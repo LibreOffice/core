@@ -33,8 +33,6 @@
 #define ED_PASSWD_TO_OPEN               12
 #define FT_REENTER_PASSWD_TO_OPEN       13
 #define ED_REENTER_PASSWD_TO_OPEN       14
-#define IMG_PASSWD_MATCH                15
-#define IMG_PASSWD_MATCH_HC             16
 #define FT_PASSWD_NOTE                  17
 #define FL_BUTTONS                      18
 #define BTN_MORE_FEWER_OPTIONS          19
@@ -45,8 +43,6 @@
 #define ED_PASSWD_TO_MODIFY             24
 #define FT_REENTER_PASSWD_TO_MODIFY     25
 #define ED_REENTER_PASSWD_TO_MODIFY     26
-#define FI_PASSWD_TO_OPEN_MATCH         27
-#define FI_PASSWD_TO_MODIFY_MATCH       28
 #define CB_OPEN_READONLY                29
 
 #define STR_MORE_OPTIONS                    51

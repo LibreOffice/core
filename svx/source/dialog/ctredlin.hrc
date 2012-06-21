@@ -51,7 +51,6 @@
 #define CB_COMMENT      19
 #define ED_COMMENT      20
 
-#define HG_VIEW         1
 #define DG_VIEW         2
 #define PB_ACCEPT       3
 #define PB_ACCEPTALL    4

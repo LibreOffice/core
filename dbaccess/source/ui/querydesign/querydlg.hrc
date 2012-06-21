@@ -28,7 +28,6 @@
 
 #define LB_JOINTYPE     1
 
-#define GB_FIELDS       1
 
 #define CB_NATURAL      1
 

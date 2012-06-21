@@ -27,8 +27,6 @@
 #define DLG_DIAGRAM_DATA 744
 
 #define FT_POS 1
-#define TBX_EDIT 1
-#define EDT_FIELD 1
 #define TBX_DATA 2
 #define CTL_DATA 1
 

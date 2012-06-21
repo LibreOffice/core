@@ -30,7 +30,6 @@
 
 #define BTN_OK         1
 #define BTN_CANCEL     2
-#define TXT_SAMPLE     3
 #define TXT_CATEGORY   4
 #define BOX_CATEGORY   5
 #define TXT_FORMAT     6
@@ -48,8 +47,6 @@
 #define FT_SEPARATOR  18
 #define ED_SEPARATOR  19
 #define CB_COPY_ATTR  20
-#define FT_OBJECT_NAME 21
-#define ED_OBJECT_NAME 22
 #define BTN_AUTOCAPTION 23
 #define TXT_SEP         24
 #define EDT_SEP         25

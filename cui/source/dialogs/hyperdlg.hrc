@@ -31,7 +31,6 @@
 #define RB_LINKTYP_INTERNET         2
 #define RB_LINKTYP_FTP              3
 #define FT_TARGET_HTML              5
-#define CB_TARGET_HTML              6
 #define FT_LOGIN                    7
 #define ED_LOGIN                    8
 #define FT_PASSWD                   9
@@ -46,7 +45,6 @@
 #define RB_LINKTYP_MAIL             2
 #define RB_LINKTYP_NEWS             3
 #define FT_RECEIVER                 4
-#define CB_RECEIVER                 5
 #define FT_SUBJECT                  6
 #define ED_SUBJECT                  7
 #define BTN_ADRESSBOOK              8
@@ -55,7 +53,6 @@
 
 #define GRP_DOCUMENT                1
 #define FT_PATH_DOC                 2
-#define CB_PATH_DOC                 3
 #define BTN_FILEOPEN                4
 #define GRP_TARGET                  5
 #define FT_TARGET_DOC               6

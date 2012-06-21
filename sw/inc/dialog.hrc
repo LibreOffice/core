@@ -32,12 +32,8 @@
 
 // Dialoge ******************************************************************
 
-#define DLG_SAVE_REGISTRY_FILE  (RC_DIALOG_BEGIN +  1)
 
 #define DLG_PASSWD              (RC_DIALOG_BEGIN +  3)
-#define DLG_PASTESPECIAL        (RC_DIALOG_BEGIN +  5)
-#define DLG_LINKS               (RC_DIALOG_BEGIN +  6)
-#define DLG_LINKEDIT            (RC_DIALOG_BEGIN +  7)
 #define DLG_INSERT_ABSTRACT     (RC_DIALOG_BEGIN +  8)
 #define DLG_ASCII_FILTER        (RC_DIALOG_BEGIN +  9)
 #define DLG_WORDCOUNT           (RC_DIALOG_BEGIN + 10)
@@ -53,8 +49,6 @@
 
 #define STR_FLT_SGV             (RC_DIALOG_BEGIN +  8)
 
-#define STR_NEWDLG_NAME         (RC_DIALOG_BEGIN + 10)
-
 // Controls *****************************************************************
 
 #define CB_USE_PASSWD           (RC_DIALOG_BEGIN     )
@@ -62,12 +56,11 @@
 
 // Bereiche *****************************************************************
 
-
 #define RC_REGIONSW_BEGIN       (RC_DIALOG_BEGIN + 60)
-#define RC_REGIONSW_END         (RC_DIALOG_BEGIN + 79)
+//      RC_REGIONSW_END         (RC_DIALOG_BEGIN + 79)
 
-#define RC_MACASSGN_BEGIN       (RC_DIALOG_BEGIN + 80)
 #define RC_MACASSGN_END         (RC_DIALOG_BEGIN + 89)
+//      RC_MACASSGN_END         (RC_DIALOG_BEGIN + 89)
 
 #define RC_DLG_ADDR         (RC_DIALOG_BEGIN + 90)
 #define RC_SWDLG_BACKGROUND     (RC_DIALOG_BEGIN + 91)

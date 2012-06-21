@@ -24,6 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _EDT_UNOMID_HXX
 #define _EDT_UNOMID_HXX
 
@@ -128,8 +129,6 @@
 #define MID_END_BRACKET         2
 
 //ULSpaceItem
-#define MID_UL_MARGIN       1
-#define MID_UL_REL_MARGIN   2
 #define MID_UP_MARGIN       3
 #define MID_LO_MARGIN       4
 #define MID_UP_REL_MARGIN   5
@@ -137,10 +136,6 @@
 #define MID_CTX_MARGIN      7
 
 //LRSpaceItem
-#define MID_LR_MARGIN       0
-#define MID_LRP_MARGIN      1
-#define MID_LR_REL_MARGIN   2
-#define MID_LRP_REL_MARGIN  3
 #define MID_L_MARGIN        4
 #define MID_R_MARGIN        5
 #define MID_L_REL_MARGIN    6
@@ -188,10 +183,6 @@
 //SvxFmtBreakItem
 #define MID_BREAK_BEFORE        0
 #define MID_BREAK_AFTER         1
-
-//SvxCaseMapItem
-#define MID_CASEMAP_VARIANT     0
-#define MID_CASEMAP_TRANS       1
 
 // SvxHorJustifyItem
 #define MID_HORJUST_HORJUST     0

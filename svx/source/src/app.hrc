@@ -136,15 +136,12 @@
 #define RID_RIDER_SLL_SITE              (RID_OFA_START + 100)
 #define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)
 
-
 // "Uberlaufkontrolle der HID's
 #define ACT_HID_END     HID_OFA_TP_MEMORY
 #if ACT_HID_END > HID_OFA_END
 #error Resource-Ueberlauf bei den HIDs der OFA
 #endif
 
-#define STR_SD_STAROFFICE_XML_DRAW      (RID_OFA_START + 245)
-#define STR_SD_STAROFFICE_XML_IMPRESS   (RID_OFA_START + 246)
 
 #endif
 

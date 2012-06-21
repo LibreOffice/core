@@ -24,6 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SC_SC_HRC
 #define SC_SC_HRC
 
@@ -45,17 +46,16 @@
 // areas
 
 #define SC_VIEW_START           (SID_SC_START)
-#define SC_VIEW_END             (SID_SC_START + 99)
+//      SC_VIEW_END             (SID_SC_START + 99)
 #define SC_MESSAGE_START        (SID_SC_START + 100)
-#define SC_MESSAGE_END          (SID_SC_START + 199)
+//      SC_MESSAGE_END          (SID_SC_START + 199)
 #define SC_FUNCTION_START       (SID_SC_START + 200)
-#define SC_FUNCTION_END         (SID_SC_START + 299)
+//      SC_FUNCTION_END         (SID_SC_START + 299)
 #define SC_PARAM_START          (SID_SC_START + 300)
-#define SC_PARAM_END            (SID_SC_START + 399)
+//      SC_PARAM_END            (SID_SC_START + 399)
 
 //  stay compatible to the past
 #define SC_RESOURCE_START       (RID_APP_START+5000)
-#define SC_RESOURCE_END         (RID_APP_END)
 
 // help IDs -
 //  calc has a range of 2000 IDs
@@ -74,7 +74,6 @@
 #define HID_SC_SHEET_PAGE_REP   (HID_SC_SHEET_START +11 )
 
 // help IDs for shells (helper) (max. 20)
-#define HID_SCSHELL_APP         (HID_SC_SHELL_START +0 )
 #define HID_SCSHELL_DOCSH       (HID_SC_SHELL_START +1 )
 #define HID_SCSHELL_DRAWSH      (HID_SC_SHELL_START +2 )
 #define HID_SCSHELL_DRTXTOB     (HID_SC_SHELL_START +3 )
@@ -92,36 +91,14 @@
 #define HID_SCSHELL_MEDIA       (HID_SC_SHELL_START +15)
 
 // view-functions (max. 100)
-#define FID_TESTFUNC0           (SC_VIEW_START)
-#define FID_TESTFUNC1           (SC_VIEW_START + 1)
-#define FID_TESTFUNC2           (SC_VIEW_START + 2)
-#define FID_TESTFUNC3           (SC_VIEW_START + 3)
-#define FID_TESTFUNC4           (SC_VIEW_START + 4)
-#define FID_TESTFUNC5           (SC_VIEW_START + 5)
-#define FID_TESTFUNC6           (SC_VIEW_START + 6)
-#define FID_TESTFUNC7           (SC_VIEW_START + 7)
-#define FID_TESTFUNC8           (SC_VIEW_START + 8)
-#define FID_TESTFUNC9           (SC_VIEW_START + 9)
 #define FID_SCALESTATUS         (SC_VIEW_START + 10)
-#define FID_COLOR               (SC_VIEW_START + 11)
 #define SID_UPDATECHART         (SC_VIEW_START + 13)
-#define FID_MARKLEFT            (SC_VIEW_START + 14)
-#define FID_MARKRIGHT           (SC_VIEW_START + 15)
-#define FID_MARKUP              (SC_VIEW_START + 16)
-#define FID_MARKDOWN            (SC_VIEW_START + 17)
-#define FID_MARKPAGEUP          (SC_VIEW_START + 18)
-#define FID_MARKPAGEDOWN        (SC_VIEW_START + 19)
 
 // Format options
 #define SID_SCFORMULAOPTIONS    (SC_VIEW_START + 20)
 #define SID_SCDEFAULTSOPTIONS   (SC_VIEW_START + 21)
 
 // slot-IDs for attributes
-#define SID_SCATTR_HOR_JUSTIFY  (SC_VIEW_START + 30)    // alignment-page
-#define SID_SCATTR_VER_JUSTIFY  (SC_VIEW_START + 31)
-#define SID_SCATTR_MARGIN       (SC_VIEW_START + 32)
-#define SID_SCATTR_STACKED      (SC_VIEW_START + 33)
-#define SID_SCATTR_LINEBREAK    (SC_VIEW_START + 35)
 #define SID_SCATTR_PROTECTION   (SC_VIEW_START + 36)    // protection-page
 
 // other slot-IDs:
@@ -158,7 +135,6 @@
 // misc:
 #define SID_LINKS               (SC_VIEW_START + 60)
 #define SID_INSERT_SIMAGE       (SC_VIEW_START + 61)
-#define SID_INSERT_SCHART       (SC_VIEW_START + 62)
 #define SID_INSERT_SMATH        (SC_VIEW_START + 63)
 #define SID_STANDARD_FONTS      (SC_VIEW_START + 64)
 #define SID_MIRROR_VERTICAL     (SC_VIEW_START + 65)
@@ -232,10 +208,8 @@
 #define FID_REFMODECHANGED      (SC_MESSAGE_START + 4)
 #define FID_KILLEDITVIEW        (SC_MESSAGE_START + 5)
 #define SID_SOLVE               (SC_MESSAGE_START + 6)
-#define FID_FONT_SELECTED       (SC_MESSAGE_START + 7)
 #define FID_FILTER_OK           (SC_MESSAGE_START + 8)
 #define SC_HINT_DRWLAYER_NEW    (SC_MESSAGE_START + 9)
-#define SID_TABDELETED          (SC_MESSAGE_START + 10)
 #define FID_INPUTLINE_MATRIX    (SC_MESSAGE_START + 11)
 #define SID_DLG_RETOK           (SC_MESSAGE_START + 12)
 #define FID_ANYDATACHANGED      (SC_MESSAGE_START + 13)
@@ -285,14 +259,10 @@
 // functions
 
 
-#define FID_DOC_MANAGER         (SC_FUNCTION_START + 1)
-#define FID_CURSOR_ENTER        (SC_FUNCTION_START + 2)
-#define SID_MAIL                (SC_FUNCTION_START + 3)
 #define SID_OPEN_CALC           (SC_FUNCTION_START + 4)
 #define FILE_MENU_END           (SC_FUNCTION_START + 20)
 
 #define EDIT_MENU_START         (FILE_MENU_END)
-#define FID_DELETE_CELLCONTENTS (EDIT_MENU_START + 1)
 #define FID_DELETE_CELL         (EDIT_MENU_START + 2)
 #define FID_DELETE_TABLE        (EDIT_MENU_START + 3)
 #define FID_FILL_TO_BOTTOM      (EDIT_MENU_START + 4)
@@ -301,10 +271,6 @@
 #define FID_FILL_TO_LEFT        (EDIT_MENU_START + 7)
 #define FID_FILL_TAB            (EDIT_MENU_START + 8)
 #define FID_FILL_SERIES         (EDIT_MENU_START + 9)
-#define FID_SEARCH_REPLACE_DLG  (EDIT_MENU_START + 10)
-#define FID_EDIT_OBJECT         (EDIT_MENU_START + 11)
-#define SID_SC_NAVIGATOR        (EDIT_MENU_START + 12)
-#define SID_SC_WIZARD           (EDIT_MENU_START + 13)
 #define SID_SC_EDIT_OBJECT      (EDIT_MENU_START + 14)
 #define SID_HFEDIT              (EDIT_MENU_START + 15)
 
@@ -316,12 +282,10 @@
 #define EDIT_MENU_END           (EDIT_MENU_START + 20)
 #define VIEW_MENU_START         (EDIT_MENU_END)
 
-#define FID_TOGGLEOBJECT        (VIEW_MENU_START)
 #define FID_TOGGLEINPUTLINE     (VIEW_MENU_START + 1)
 #define FID_TOGGLEHEADERS       (VIEW_MENU_START + 2)
 #define FID_SCALE               (VIEW_MENU_START + 4)
 #define FID_TOGGLESYNTAX        (VIEW_MENU_START + 5)
-#define FID_SCREEN_OPTIONS      (VIEW_MENU_START + 6)
 #define FID_PAGEBREAKMODE       (VIEW_MENU_START + 7)
 #define FID_FUNCTION_BOX        (VIEW_MENU_START + 8)
 #define FID_NORMALVIEWMODE      (VIEW_MENU_START + 9)
@@ -332,7 +296,6 @@
 #define VIEW_MENU_END           (VIEW_MENU_START + 20)
 
 #define INSERT_MENU_START       (VIEW_MENU_END)
-#define FID_PAGEBREAK           (INSERT_MENU_START)
 #define FID_INS_ROWBRK          (INSERT_MENU_START + 1)
 #define FID_INS_COLBRK          (INSERT_MENU_START + 2)
 #define FID_DEL_ROWBRK          (INSERT_MENU_START + 3)
@@ -349,7 +312,6 @@
 #define FID_APPLY_NAME          (INSERT_MENU_START + 14)
 #define FID_INS_TABLE_EXT       (INSERT_MENU_START + 15)
 #define FID_ADD_NAME            (INSERT_MENU_START + 16)
-#define SID_INSERT_CLIPART      (INSERT_MENU_START + 17) //!!! should come from Svx
 #define FID_INS_CELLSDOWN       (INSERT_MENU_START + 18)
 #define FID_INS_CELLSRIGHT      (INSERT_MENU_START + 19)
 #define INSERT_MENU_END         (INSERT_MENU_START + 20)
@@ -368,7 +330,6 @@
 #define FID_TABLE_SHOW          (FORMAT_MENU_START + 10)
 #define SID_COLORSCALE          (FORMAT_MENU_START + 11)
 #define SID_DATABAR             (FORMAT_MENU_START + 12)
-#define SID_SCSTYLES            (FORMAT_MENU_START + 14)
 #define FID_MERGE_ON            (FORMAT_MENU_START + 15)
 #define FID_MERGE_OFF           (FORMAT_MENU_START + 16)
 #define SID_FORMATPAGE          (FORMAT_MENU_START + 17)
@@ -379,25 +340,16 @@
 #define FORMAT_MENU_END         (FORMAT_MENU_START + 22)
 
 #define EXTRA_MENU_START        (FORMAT_MENU_END)
-#define FID_VOICE_CONTROL       (EXTRA_MENU_START + 1)
-#define SID_RECALC_TITLE        (EXTRA_MENU_START + 2)
 #define FID_AUTO_CALC           (EXTRA_MENU_START + 3)
 #define FID_RECALC              (EXTRA_MENU_START + 4)
-#define FID_UPDATE_DIAGRAMS     (EXTRA_MENU_START + 5)
 #define FID_PROTECT_TABLE       (EXTRA_MENU_START + 6)
 #define FID_PROTECT_DOC         (EXTRA_MENU_START + 7)
-#define SID_EDIT_MACRO          (EXTRA_MENU_START + 8)
 #define SID_SCOPTIONS           (EXTRA_MENU_START + 9)
-#define SID_MACRO_CHOOSER       (EXTRA_MENU_START + 10)
 #define SID_SHARE_DOC           (EXTRA_MENU_START + 11)
 #define SID_SCENARIOS           (EXTRA_MENU_START + 12)
 #define SID_ADD_IN_MANAGER      (EXTRA_MENU_START + 13)
 #define SID_PIVOT_RECALC        (EXTRA_MENU_START + 14)
 #define SID_PIVOT_KILL          (EXTRA_MENU_START + 15)
-
-// wrong here, but better than nothing
-#define SID_SC_HELP_PI          (EXTRA_MENU_START + 16)
-#define SID_SC_SHOW_KEYBOARD_HELP (EXTRA_MENU_START + 17)
 
 #define FID_HARD_RECALC         (EXTRA_MENU_START + 18)
 #define FID_AUTOCOMPLETE        (EXTRA_MENU_START + 19)
@@ -462,15 +414,9 @@
 #define OBJBAR_FORMAT_END       (OBJBAR_FORMAT_START+20)
 
 #define RID_INPUTBAR_START      (OBJBAR_FORMAT_END)
-#define SID_INPUT_WINDOW        (RID_INPUTBAR_START)
 #define RID_INPUTBAR_END        (RID_INPUTBAR_START+1)
 
 #define DRAW_BAR_START          (RID_INPUTBAR_END)
-#define SID_DRAWTOABOVE         (DRAW_BAR_START+15)
-#define SID_DRAWTOBELOW         (DRAW_BAR_START+16)
-#define SID_FRAMETOTOP          (DRAW_BAR_START+19)
-#define SID_FRAMETOBOTTOM       (DRAW_BAR_START+20)
-#define SID_TOOL_TEXT           (DRAW_BAR_START+23)
 #define SID_ANCHOR_PAGE         (DRAW_BAR_START+24)
 #define SID_ANCHOR_CELL         (DRAW_BAR_START+25)
 #define SID_ANCHOR_TOGGLE       (DRAW_BAR_START+26)
@@ -479,9 +425,6 @@
 #define DRAW_BAR_END            (DRAW_BAR_START+50)
 
 #define DRAWTEXTBAR_START       (DRAW_BAR_END)
-#define SID_TEXT_LINESPACING_1  (DRAWTEXTBAR_START)
-#define SID_TEXT_LINESPACING_2  (DRAWTEXTBAR_START+1)
-#define SID_TEXT_LINESPACING_3  (DRAWTEXTBAR_START+2)
 #define DRAWTEXTBAR_END         (DRAWTEXTBAR_START+20)
 
 #define DETECTIVE_START         (DRAWTEXTBAR_END)
@@ -521,7 +464,6 @@
 #define SID_PREVIEW_PREVIOUS    (SID_PREVIEW_START+1)
 #define SID_PREVIEW_FIRST       (SID_PREVIEW_START+2)
 #define SID_PREVIEW_LAST        (SID_PREVIEW_START+3)
-#define SID_PREVIEW_GOTO        (SID_PREVIEW_START+4)
 #define SID_PREVIEW_ZOOMIN      (SID_PREVIEW_START+5)
 #define SID_PREVIEW_ZOOMOUT     (SID_PREVIEW_START+6)
 #define SID_PREVIEW_CLOSE       (SID_PREVIEW_START+7)
@@ -571,7 +513,6 @@
 
 #define SID_MARKAREA            (SID_KEYFUNC_START + 33)
 
-#define SID_AUTOFILL            (SID_KEYFUNC_START + 34)
 #define FID_FILL_AUTO           (SID_KEYFUNC_START + 35)
 #define SID_CANCEL              (SID_KEYFUNC_START + 36)
 
@@ -586,17 +527,8 @@
 #define SID_KEYFUNC_END         (SID_KEYFUNC_START + 50)
 
 #define SID_NEW_SLOTS           (SID_KEYFUNC_END)
-#define SID_NEW_SLOTS_END       (SID_NEW_SLOTS+100)
 
 #define SID_NEW_TABLENAME       (SID_NEW_SLOTS+1)
-#define SID_COL_START           (SID_NEW_SLOTS+2)
-#define SID_ROW_START           (SID_NEW_SLOTS+3)
-#define SID_COL_END             (SID_NEW_SLOTS+4)
-#define SID_ROW_END             (SID_NEW_SLOTS+5)
-#define SID_KEEP_MARK           (SID_NEW_SLOTS+6)
-#define SID_FILL_DIR            (SID_NEW_SLOTS+7)
-#define SID_FILL_COUNT          (SID_NEW_SLOTS+8)
-#define SID_WITH_UNDO           (SID_NEW_SLOTS+9)
 #define FID_MERGE_TOGGLE        (SID_NEW_SLOTS+10)
 #define SID_ATTR_ROWHEADERS     (SID_NEW_SLOTS+11)
 #define SID_ATTR_COLHEADERS     (SID_NEW_SLOTS+12)
@@ -606,8 +538,6 @@
 #define SID_SC_SELECTION        (SID_NEW_SLOTS+15)
 #define SID_SC_CELLTEXT         (SID_NEW_SLOTS+16)
 
-#define SID_SC_NAME_TITLE       (SID_NEW_SLOTS+17)
-
 #define SID_SC_ACTIVECELL       (SID_NEW_SLOTS+18)
 #define SID_SC_ACTIVETAB        (SID_NEW_SLOTS+19)
 #define SID_RANGE_ROW           (SID_NEW_SLOTS+20)
@@ -615,7 +545,6 @@
 #define SID_RANGE_TABLE         (SID_NEW_SLOTS+22)
 #define SID_RANGE_VALUE         (SID_NEW_SLOTS+23)
 #define SID_RANGE_FORMULA       (SID_NEW_SLOTS+24)
-#define SID_RANGE_TEXT          (SID_NEW_SLOTS+25)
 #define SID_RANGE_TEXTVALUE     (SID_NEW_SLOTS+26)
 #define SID_TABLE_ACTIVATE      (SID_NEW_SLOTS+27)
 #define SID_TABLES_GET          (SID_NEW_SLOTS+28)
@@ -979,21 +908,6 @@
 #define SCSTR_VALID_RANGE       (STR_START + 317)
 #define SCSTR_VALID_LIST        (STR_START + 318)
 
-// formulator
-#define SCSTR_FUDB              (STR_START + 389)
-#define SCSTR_FUDATE            (STR_START + 390)
-#define SCSTR_FUFIN             (STR_START + 391)
-#define SCSTR_FUINFO            (STR_START + 392)
-#define SCSTR_FULOG             (STR_START + 393)
-#define SCSTR_FUMATHS           (STR_START + 394)
-#define SCSTR_FUSTAT            (STR_START + 395)
-#define SCSTR_FUTAB             (STR_START + 396)
-#define SCSTR_FUTEXT            (STR_START + 397)
-
-#define SCSTR_COMPILER_STRINGS  (STR_START + 398)
-#define SCSTR_FILTER_STRINGS    (STR_START + 399)
-#define SCSTR_COMPILER_INTL_STR (STR_START + 400)
-
 // media shell
 #define SCSTR_MEDIASHELL        (STR_START + 401)
 
@@ -1202,7 +1116,6 @@
 #define SID_INSERT_CURRENT_TIME     (SC_OOO_BUILD_START + 5)
 
 // data Form
-#define SID_DATAFORM_NEW            (SC_OOO_BUILD_START + 6) // message
 #define SID_DATA_FORM               (SC_OOO_BUILD_START + 7) // menu (in Data menu)
 #define RID_SCDLG_DATAFORM          (SC_OOO_BUILD_START + 8) // dialog
 

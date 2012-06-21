@@ -38,5 +38,4 @@
 #define ID_FUNCTION_GRP_TEXT        10
 #define ID_FUNCTION_GRP_ADDINS      11
 
-#define ID_FUNCTION_OFFSET          90
 

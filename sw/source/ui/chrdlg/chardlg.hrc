@@ -24,48 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define FONT_FT        1
-#define FONT_CB        2
-#define FACE_FT        3
-#define FACE_LB        4
 #define SIZE_FT        5
-#define SIZE_CB        6
-#define OUTLINE_TB     7
-#define SHADOW_TB      8
-#define UNDERL_TB      9
-#define STRIKETHRU_TB  10
-#define COLOR_FT       11
 #define COLOR_LB       12
-#define LANG_FT        13
-#define LANG_LB        14
-#define EXAMPLE_WN     15
-#define EXAMPLE_FL     16
-#define CASEMAP_FL     17
-#define NONE_RB        20
 #define CAPS_RB        21
-#define LOWERCASE_RB   22
-#define SMALLCAPS_RB   23
-#define TITEL_RB       24
-#define HIGH_RB        25
-#define NORMAL_RB      26
-#define DEEP_RB        27
-#define DEEPHIGHT_FT   28
-#define DEEPHIGH_MF    29
-#define RELSIZE_FT     30
-#define RELSIZE_MF     31
-#define KERN_LB        32
-#define KERN_FT        33
-#define KERN_MF        34
-#define UNDERLINE_FT   35
-#define UNDERLINE_LB   36
-#define STRIKE_FT      37
-#define STRIKE_LB      38
-#define STRIKE_CB      39
-#define EFFECT_FL      41
-#define POS_FL         42
-#define POSEXT_FL      43
-#define KERN_FL        45
-#define FONTTYPE_FT    46
 
 #define FL_URL          50
 #define FT_URL          51

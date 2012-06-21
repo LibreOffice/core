@@ -26,13 +26,9 @@
  ************************************************************************/
 
 #define GRP_FUNCTIONS 22
-#define BTN_ACC_OK               1
-#define BTN_ACC_CANCEL           2
 #define BTN_ACC_CHANGE           3
 #define BTN_ACC_REMOVE           4
 #define BOX_ACC_ENTRIES          5
-#define TXT_ACC_DESCRIPTIONTEXT  6
-#define TXT_ACC_DESCRIPTIONINFO  7
 #define GRP_ACC_KEYBOARD         8
 #define TXT_ACC_GROUP            9
 #define BOX_ACC_GROUP           10
@@ -57,7 +53,6 @@
 #define IMG_DOC                 56
 #define STR_GROUP_STYLES        58
 #define STR_PDF_EXPORT_SEND     59
-#define STR_RECHECK_DOCUMENT    60
 #define IMG_INFO                61
     // FREE
 #define BMP_COLLAPSED           63

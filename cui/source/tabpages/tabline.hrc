@@ -35,8 +35,6 @@
 #define TSB_INVISIBLE 1
 #define FL_LINE 1
 #define FL_LINE_ENDS 2
-#define FT_LINE_START 4
-#define FT_LINE_END 8
 #define FT_LINE_ENDS_STYLE 5
 #define FT_LINE_ENDS_WIDTH 6
 #define LB_START_STYLE 3
@@ -59,16 +57,13 @@
 #define MTR_FLD_START_WIDTH 3
 #define MTR_FLD_END_WIDTH 2
 #define CBX_SYNCHRONIZE 1
-#define FL_MEASURING 3
 #define CTL_POSITION 2
 #define FT_POSITION 9
-#define TSB_SHOW_MEASURING 2
 #define CTL_PREVIEW 1
 #define FL_DEFINITION 1
 #define FT_NUMBER 3
 #define FT_DISTANCE 2
 #define FT_LENGTH 4
-#define TSB_SYNCHRONIZE 3
 #define LB_TYPE_1 3
 #define FT_TYPE 1
 #define LB_TYPE_2 1

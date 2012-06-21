@@ -28,21 +28,6 @@
 #include "bib.hrc"
 
 //General
-/*#define FT_FIRST_MIDDLE       1
-#define ED_FIRST            2
-#define ED_MIDDLE           3
-#define FT_NAME_SUFFIX      4
-#define ED_NAME             5
-#define CB_SUFFIX           6
-#define ED_INITIALS         8
-#define FT_COMPANY          9
-#define ED_COMPANY          10
-#define FT_DEPARTMENT       11
-#define ED_DEPARTMENT       12
-#define FT_SALUTATION       13
-#define CB_SALUTATION       14
-#define FT_SHOWNNAME        15
-#define ED_SHOWNNAME        16*/
 #define FT_IDENTIFIER       1
 #define FT_AUTHTYPE         2
 #define FT_AUTHOR           3
@@ -83,19 +68,14 @@
 #define FL_3                36
 
 //Business Address
-#define FT_OFFICE       1
 #define FT_STREET       2
 #define FT_CITY         3
-#define FT_STATE        4
 #define FT_COUNTRY      5
-#define FT_ZIP          6
-#define ED_OFFICE       7
 #define ED_STREET       8
 #define ED_CITY         9
 #define ED_STATE        10
 #define ED_COUNTRY      11
 #define ED_ZIP          12
-#define ED_POBOX        13
 
 
 //Popup SectionControl

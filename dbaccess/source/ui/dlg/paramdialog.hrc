@@ -23,12 +23,9 @@
 #define FL_PARAMS       2
 #define FT_VALUE        3
 #define ET_PARAM        4
-#define CB_NULLVAL      5
 #define BT_TRAVELNEXT   6
 #define BT_OK           7
 #define BT_CANCEL       8
-#define AB_PREV         9
-#define AB_NEXT         10
 
 
 #define STR_COULD_NOT_CONVERT_PARAM 1

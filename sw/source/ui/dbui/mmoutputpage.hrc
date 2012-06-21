@@ -48,7 +48,6 @@
 #define LB_PRINT                 22
 #define PB_PRINTERSETTINGS       23
 #define RB_PRINTALL              24
-#define RB_PRINTCURRENT          25
 #define PB_PRINTNOW              26
 #define ST_SAVESTART             27
 #define ST_SAVEMERGED            28

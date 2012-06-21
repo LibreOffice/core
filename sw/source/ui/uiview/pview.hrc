@@ -42,12 +42,9 @@
 #define PVIEW_MAX_COL   20
 
 //Dialog Druckoptionen
-#define FL_ROWCOL               1
 #define FT_ROWS         2
 #define NF_ROWS         3
-#define FT_COLS         4
 #define NF_COLS         5
-#define FL_MARGINS      6
 #define FL_DISTANCE     7
 #define FL_ORIENTATION  8
 
@@ -58,13 +55,9 @@
 #define MF_LMARGIN      13
 #define FT_RMARGIN      14
 #define MF_RMARGIN      15
-#define FT_TMARGIN      16
 #define MF_TMARGIN      17
-#define FT_BMARGIN      18
 #define MF_BMARGIN      19
-#define FT_HMARGIN      20
 #define MF_HMARGIN      21
-#define FT_VMARGIN      22
 #define MF_VMARGIN      23
 #define PB_STANDARD     24
 

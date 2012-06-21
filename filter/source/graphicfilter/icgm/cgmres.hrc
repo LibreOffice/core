@@ -24,5 +24,4 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define MB_CGM          1
 #define MID_TEST        1

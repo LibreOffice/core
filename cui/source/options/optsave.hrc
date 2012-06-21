@@ -38,14 +38,12 @@
 #define BTN_AUTOSAVE            16
 #define ED_AUTOSAVE             17
 #define FT_MINUTE               18
-#define BTN_AUTOSAVEPROMPT      19
 #define BTN_NOPRETTYPRINTING    20
 #define FI_BACKUP               21
 #define BTN_WARNALIENFORMAT     22
 #define FT_ODF_VERSION          23
 #define LB_ODF_VERSION          24
 
-#define GB_RELATIVE             40
 #define BTN_RELATIVE_FSYS       41
 #define BTN_RELATIVE_INET       42
 
@@ -72,7 +70,6 @@
 //Filter warning
 #define PB_OK                   1
 #define FT_FILTER_WARNING       2
-#define CB_DONT_SHOW_AGAIN      3
 #define IMG_WARNING             4
 #define PB_CANCEL               5
 

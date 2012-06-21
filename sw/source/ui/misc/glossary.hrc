@@ -65,8 +65,6 @@
 
 // Box library text blocks
 #define FL_EDIT                         1
-#define FL_BIB                          2
-#define ED_BIB              3
 
 #define PB_NEW              10
 #define PB_DELETE           11

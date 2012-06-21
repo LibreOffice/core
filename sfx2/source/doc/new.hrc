@@ -26,8 +26,6 @@
  ************************************************************************/
 #define BTN_PREVIEW 51
 #define WIN_PREVIEW 50
-#define GB_DOCCLASS 1
-#define LB_DOCCLASS 2
 #define GB_DESC 10
 #define FT_DESC 11
 #define FT_STYLESHEETS 19
@@ -37,7 +35,6 @@
 #define FT_KEYWORDS 60
 #define FT_TITLE 55
 #define ED_DESC 71
-#define FT_DOCINFO 70
 #define LB_REGION 21
 #define BT_OK 30
 #define BT_CANCEL 31

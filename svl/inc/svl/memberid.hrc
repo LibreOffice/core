@@ -28,8 +28,6 @@
 #ifndef _MEMBERID_HRC
 #define _MEMBERID_HRC
 
-#define SFX_MEMBERID(nUserData) ( ( (nUserData) >> 20 ) & 0xFF )
-#define SFX_SLOTID(nUserData)   ( (nUserData) & 0xFFFF )
 
 #define MID_X       1
 #define MID_Y       2

@@ -33,12 +33,10 @@
 #define FL_LAYOUT           6
 #define FT_LINESPERPAGE     7
 #define NF_LINESPERPAGE     8
-#define FT_LINESPERPAGEHINT 9
 #define FT_TEXTSIZE         10
 #define MF_TEXTSIZE         11
 #define FT_CHARSPERLINE     12
 #define NF_CHARSPERLINE     13
-#define FT_CHARSPERLINEHINT 14
 #define FT_RUBYSIZE         15
 #define MF_RUBYSIZE         16
 #define CB_RUBYBELOW        17

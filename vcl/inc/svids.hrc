@@ -82,17 +82,12 @@
 #define SV_PRINT_PAGE_BACKWARD              7
 #define SV_PRINT_PAGE_EDIT                  8
 #define SV_PRINT_TABCTRL                    9
-#define SV_PRINT_PRT_TYPE                   10
-#define SV_PRINT_PRT_STATUS                 11
-#define SV_PRINT_PRT_LOCATION               12
-#define SV_PRINT_PRT_COMMENT                13
 #define SV_PRINT_TOFILE_TXT                 14
 #define SV_PRINT_DEFPRT_TXT                 15
 #define SV_PRINT_PRINTPREVIEW_TXT           16
 
 #define SV_PRINT_TAB_NUP                       1
 #define SV_PRINT_PRT_NUP_LAYOUT_FL             1
-#define SV_PRINT_PRT_NUP_DEFAULT_BTN           2
 #define SV_PRINT_PRT_NUP_BROCHURE_BTN          3
 #define SV_PRINT_PRT_NUP_PAGES_BTN             4
 #define SV_PRINT_PRT_NUP_PAGES_BOX             5
@@ -125,11 +120,6 @@
 #define SV_PRINT_PRINTERS_FL                1
 #define SV_PRINT_PRINTERS                   2
 #define SV_PRINT_PRT_SETUP                  3
-#define SV_PRINT_RANGE                      4
-#define SV_PRINT_ALL                        5
-#define SV_PRINT_PAGERANGE                  6
-#define SV_PRINT_SELECTION                  7
-#define SV_PRINT_PAGERANGE_EDIT             8
 #define SV_PRINT_COPIES                     9
 #define SV_PRINT_COPYCOUNT                  10
 #define SV_PRINT_COPYCOUNT_FIELD            11
@@ -193,7 +183,6 @@
 #define SV_STDTEXT_PREFERENCES              10205
 #define SV_MAC_SCREENNNAME                  10206
 #define SV_STDTEXT_ALLFILETYPES             10207
-#define SV_STDTEXT_LAST                     SV_STDTEXT_ALLFILETYPES
 
 #define STR_FPICKER_AUTO_EXTENSION                10300
 #define STR_FPICKER_PASSWORD                      10301
@@ -214,7 +203,6 @@
 #define STR_FPICKER_SAVE                          10316
 #define STR_FPICKER_TYPE                          10317
 
-#define SV_ACCESSERROR_FIRST                SV_ACCESSERROR_WRONG_VERSION
 #define SV_ACCESSERROR_WRONG_VERSION        10500
 #define SV_ACCESSERROR_BRIDGE_MSG           10501
 #define SV_ACCESSERROR_OK_CANCEL_MSG        10502
@@ -226,7 +214,6 @@
 #define SV_ACCESSERROR_JAVA_DISABLED        10508
 #define SV_ACCESSERROR_TURNAROUND_MSG       10509
 #define SV_ACCESSERROR_NO_FONTS             10510
-#define SV_ACCESSERROR_LAST                 SV_ACCESSERROR_NO_FONTS
 
 #define SV_SHORTCUT_HELP                    10600
 #define SV_SHORTCUT_CONTEXTHELP             10601

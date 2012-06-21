@@ -51,7 +51,6 @@
 #define ED_RANAME              19
 #define ED_RNAME               20
 #define FT_CONDITION           21
-#define FL_EDIT_OPTIONS        22
 #define FLD_END_OFFSET         23
 #define FLD_FTN_OFFSET         24
 #define FT_DDE                 25
@@ -62,7 +61,6 @@
 #define FT_FTN_OFFSET          30
 #define FT_FTN_PREFIX          31
 #define FT_FTN_SUFFIX          32
-#define FT_RNAME               33
 #define FT_SUBREG              34
 #define LB_END_NUMVIEW         36
 #define LB_FTN_NUMVIEW         37
@@ -72,7 +70,6 @@
 #define PB_HELP                41
 #define PB_OK                  42
 #define PB_OPTIONS             43
-#define PB_SAVED               44
 #define ST_INSERT              45
 #define TLB_SECTION            46
 #define FL_NAME                47
@@ -91,7 +88,6 @@
 #define STR_REG_DUPLICATE       (RC_REGIONSW_BEGIN+6)
 #define STR_INFO_DUPLICATE      (RC_REGIONSW_BEGIN+7)
 
-#define MD_INS_REGION           (RC_REGIONSW_BEGIN+8)
 #define MD_EDIT_REGION          (RC_REGIONSW_BEGIN+9)
 #define QB_CONNECT              (RC_REGIONSW_BEGIN+10)
 #define REG_WRONG_PASSWORD      (RC_REGIONSW_BEGIN+11)

@@ -24,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define TAB_DLG_IMPRESS_OPTIONS     842
-#define TAB_DLG_DRAW_OPTIONS        843
 
 #define TP_GENERAL          1
 #define TP_SAVE             2

@@ -36,7 +36,6 @@
 #define ID_DELETE 203
 #define ID_EDIT 204
 #define ID_COPY_FROM 211
-#define ID_EXPORT 221
 #define ID_RESCAN 220
 #define ID_COPY_TO 210
 #define ID_NEW 200
@@ -55,8 +54,6 @@
 #define BTN_FILES 3
 #define BTN_ADDRESSTEMPLATE 4
 #define LB_LEFT 1
-#define FT_DEFAULT_TEMPLATE_LABEL 20
-#define FT_DEFAULT_TEMPLATE 21
 #define BTN_HELP 100
 
 #ifdef BTN_OK

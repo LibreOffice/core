@@ -67,7 +67,6 @@
 
 #define SID_LOADSYMBOLS             (SID_SMA_START + 107)
 #define SID_SAVESYMBOLS             (SID_SMA_START + 108)
-#define SID_ZOOMSTATUS              (SID_SMA_START + 109)
 #define SID_MODIFYSTATUS            (SID_SMA_START + 110)
 #define SID_TEXTSTATUS              (SID_SMA_START + 111)
 
@@ -86,7 +85,6 @@
 #define SID_TOOLBOXWINDOW           (SID_SMA_START + 123)
 #define SID_NO_RIGHT_SPACES         (SID_SMA_START + 124)
 #define SID_SAVE_ONLY_USED_SYMBOLS  (SID_SMA_START + 125)
-#define SID_DUMMY                   (SID_SMA_START + 254)
 
 
 #define RID_FONTDIALOG              (RID_APP_START + 2)
@@ -406,7 +404,6 @@
 #define RID_SPANISH_50_NAMES            (RID_APP_START + 3113)
 #define RID_SPANISH_60_NAMES            (RID_APP_START + 3114)
 
-#define MN_SUB_SENDTO                   (RID_APP_START + 3120)
 
 #define BMP_ARROW_RIGHT     1
 

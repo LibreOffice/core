@@ -44,10 +44,6 @@
 #define ED_FORMAT               14
 #define BTN_ADD                 15
 #define BTN_REMOVE              16
-#define BMP_CHECK               17
-#define BMP_DCHECK              18
-#define BMP_CROSS               19
-#define BMP_DCROSS              20
 #define FT_DECIMALS             21
 #define ED_DECIMALS             22
 #define FT_LEADZEROES           23
@@ -64,7 +60,6 @@
 #define CB_SOURCEFORMAT         34
 #define STR_AUTO_ENTRY          36
 
-#define TBX_ADDREMOVE           1
 #define IID_ADD                 1
 #define IID_REMOVE              2
 #define IID_INFO                3

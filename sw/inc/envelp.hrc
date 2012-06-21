@@ -59,7 +59,7 @@
 #define RC_ENVFMT_END    (RC_ENVELP_BEGIN + 19)
 
 #define RC_ENVPRT_BEGIN  (RC_ENVELP_BEGIN + 20)
-#define RC_ENVPRT_END    (RC_ENVELP_BEGIN + 39)
+//      RC_ENVPRT_END    (RC_ENVELP_BEGIN + 39)
 
 #define RC_LABEL_BEGIN   (RC_ENVELP_BEGIN + 40)
 #define RC_LABEL_END     (RC_ENVELP_BEGIN + 49)
@@ -67,7 +67,7 @@
 #define RC_LABFMT_BEGIN  (RC_ENVELP_BEGIN + 50)
 #define RC_LABFMT_END    (RC_ENVELP_BEGIN + 62)
 
-#define RC_LABPRT_BEGIN  (RC_ENVELP_BEGIN + 63)
+//      RC_LABPRT_BEGIN  (RC_ENVELP_BEGIN + 63)
 #define RC_LABPRT_END    (RC_ENVELP_BEGIN + 72)
 
 // Strings --------------------------------------------------------------------

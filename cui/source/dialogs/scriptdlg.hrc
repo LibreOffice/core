@@ -30,8 +30,6 @@
 
 #include <svl/solar.hrc>
 
-#define SCRIPTDLG_OFFSET        400
-
 // ScriptOrgDialog
 #define SF_TXT_SCRIPTS                  1
 #define SF_CTRL_SCRIPTSBOX              2

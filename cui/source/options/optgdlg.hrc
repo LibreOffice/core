@@ -111,7 +111,6 @@
 #define PB_HELPAGENT_RESET          14
 #define FT_HELPFORMAT               15
 #define LB_HELPFORMAT               16
-#define FT_EXPERIMENTAL             17
 #define CB_EXPERIMENTAL             18
 #define FT_MACRORECORDER            19
 #define CB_MACRORECORDER            20
@@ -173,8 +172,6 @@
 // tabpage languages -----------------------------------------------------
 
 #define FL_UI_LANG              1
-#define FT_UI_LANG              2
-#define LB_UI_LANG              3
 #define FL_LINGU_LANG           4
 #define FT_WEST_LANG            5
 #define LB_WEST_LANG            6
@@ -202,7 +199,6 @@
 #define FI_USERINTERFACE        29
 #define FT_USERINTERFACE        30
 #define LB_USERINTERFACE        31
-#define STR_IB_LANGCHANGE_TITLE 32
 
 #define FL_FILEDLG                  53
 #define FI_FILEDLG_RO               54
@@ -210,7 +206,6 @@
 #define FT_GRAPHICCACHE_UNIT        56
 #define FT_GRAPHICOBJECTCACHE_UNIT  57
 #define FT_GRAPHICOBJECTTIME_UNIT   58
-#define FT_HELPAGENT_TIME_UNIT      59
 #define FL_DOCSTATUS                60
 #define CB_DOCSTATUS                61
 #define CB_ODMADLG                  62

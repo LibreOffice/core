@@ -53,8 +53,6 @@
 #define BTN_INSERT   19
 #define BTN_SYNC     20
 
-#define RB_FROM_AUTO_TEXT       1
-#define RB_FROM_EDIT            2
 #define LB_AUTO_TEXT            3
 #define FT_AUTO_TEXT_GROUP      4
 #define LB_AUTO_TEXT_GROUP      5

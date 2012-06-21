@@ -124,7 +124,6 @@
 #define HHO_ROW_a3                  (HHO_ROW_a2+2)
 #define HHO_ROW_a4                  (HHO_ROW_a3+14)
 #define HHO_ROW_a5                  (HHO_ROW_a4+4)
-#define HHO_ROW_a6                  (HHO_ROW_a5+14)
 
 
 // Hangul / Hanja New Dictonary Dialog
@@ -185,7 +184,6 @@
 #define HHE_ROW_6                   (HHE_ROW_5+12)
 #define HHE_ROW_7                   (HHE_ROW_6+2)
 #define HHE_ROW_8                   (HHE_ROW_7+2)
-#define HHE_ROW_9                   (HHE_ROW_6+12)
 #define HHE_ROW_10                  (HHE_ROW_8+RSC_SP_CTRL_GROUP_Y)
 #define HHE_ROW_11                  (HHE_ROW_10+8+2)
 #define HHE_ROW_12                  (HHE_ROW_11+4*12)

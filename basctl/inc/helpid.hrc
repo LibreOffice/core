@@ -20,11 +20,6 @@
 
 #define HID_BASICIDE_TOOLBOX                              "BASCTL_HID_BASICIDE_TOOLBOX"
 #define HID_BASICIDE_OBJECTS                              "BASCTL_HID_BASICIDE_OBJECTS"
-#define HID_MACRO_OPTIONS                                 "BASCTL_HID_MACRO_OPTIONS"
-#define HID_BASICIDE_BRKPNTS                              "BASCTL_HID_BASICIDE_BRKPNTS"
-#define HID_BASICIDE_MODULS                               "BASCTL_HID_BASICIDE_MODULS"
-#define HID_BASICIDE_LIBS_TP                              "BASCTL_HID_BASICIDE_LIBS_TP"
-#define HID_BASICIDE_LIBS_DLG                             "BASCTL_HID_BASICIDE_LIBS_DLG"
 #define HID_BASICIDE_CONTROLS                             "BASCTL_HID_BASICIDE_CONTROLS"
 #define HID_BASICIDE_MACROS                               "BASCTL_HID_BASICIDE_MACROS"
 #define HID_BASICIDE_LIBS                                 "BASCTL_HID_BASICIDE_LIBS"

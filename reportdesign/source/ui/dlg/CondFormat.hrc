@@ -58,9 +58,6 @@
 #define FL_SEPARATOR1               12
 #define ED_CONDITION_RHS            13
 #define CT_CONDITION                14
-#define CT_DEFAULT                  15
-#define CT_CONDITION_1              16
-#define CT_CONDITION_2              17
 #define SB_ALL_CONDITIONS           18
 #define WND_COND_PLAYGROUND         19
 #define BTN_MOVE_UP                 20

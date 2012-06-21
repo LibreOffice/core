@@ -25,22 +25,7 @@
  *
  ************************************************************************/
 
-#define DLG_PACKNGO             939
-
 #define BTN_OK                  1
 #define BTN_CANCEL              2
 #define BTN_HELP                3
-
-#define GRP_DOKU                4
-#define CBX_UNLINK              5
-#define GRP_STORE               6
-#define GRP_SEPARATOR           7
-#define CBX_SPANNING            8
-#define LB_STOREMEDIUM          9
-
-#define FT_DOKU_DESCR           10
-#define FT_STORE_DESCR          11
-#define FT_STOREMEDIUM          12
-
-#define MTR_USERDEFINED         13
 

@@ -91,7 +91,6 @@
 
 // id range for 'set language for all text' sub menu entries
 #define MN_SET_LANGUAGE_ALL_TEXT_START      1300
-#define MN_SET_LANGUAGE_ALL_TEXT_END        (MN_SET_LANGUAGE_ALL_TEXT_START + MN_MAX_NUM_LANG)
 
 #endif
 

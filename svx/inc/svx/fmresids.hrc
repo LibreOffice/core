@@ -70,7 +70,6 @@
 #define RID_SVXIMG_NAVIGATIONBAR                    SID_FM_NAVIGATIONBAR
 
 // Dialog-Id's -----------------------------------------------------------
-#define TBX_FORM                                    (RID_FORMS_START + 2)
 #define RID_SVXDLG_SETFORM                          (RID_FORMS_START + 5)
 #define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 6)
 #define RID_SVXDLG_ADD_DATAITEM                     (RID_FORMS_START + 12)

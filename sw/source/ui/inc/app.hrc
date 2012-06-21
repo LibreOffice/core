@@ -30,9 +30,6 @@
 
 #include "rcid.hrc"
 
-// Document-Icon
-#define RC_DOC_ICON                     (RC_APP_BEGIN + 2)
-
 // Should the clipboard for other applications...
 #define MSG_CLPBRD_CLEAR                (RC_APP_BEGIN + 3)
 
@@ -57,24 +54,6 @@
 #define BMP_STYLES_FAMILY_NUM           (RC_APP_BEGIN + 17)
 
 // Strings for regions in the configuration
-#define STR_GRP_FILE                    (RC_APP_BEGIN + 56)
-#define STR_GRP_EDIT                    (RC_APP_BEGIN + 57)
-#define STR_GRP_TRAVELLING              (RC_APP_BEGIN + 58)
-#define STR_GRP_VIEW                    (RC_APP_BEGIN + 59)
-#define STR_GRP_INSERT                  (RC_APP_BEGIN + 60)
-#define STR_GRP_FORMAT                  (RC_APP_BEGIN + 61)
-#define STR_GRP_STYLE                   (RC_APP_BEGIN + 62)
-#define STR_GRP_TEXT                    (RC_APP_BEGIN + 63)
-#define STR_GRP_FRAME                   (RC_APP_BEGIN + 64)
-#define STR_GRP_GRAPHIC                 (RC_APP_BEGIN + 65)
-#define STR_GRP_TABLE                   (RC_APP_BEGIN + 66)
-#define STR_GRP_TOOLS                   (RC_APP_BEGIN + 67)
-#define STR_GRP_NUMBERING               (RC_APP_BEGIN + 68)
-#define STR_GRP_WINDOW                  (RC_APP_BEGIN + 69)
-#define STR_GRP_MISC                    (RC_APP_BEGIN + 70)
-#define STR_GRP_MACRO                   (RC_APP_BEGIN + 71)
-#define RES_EXT_HELP_STRING             (RC_APP_BEGIN + 72)
-#define RES_STD_HELP_STRING             (RC_APP_BEGIN + 73)
 #define STR_PAGEOFFSET                  (RC_APP_BEGIN + 74)
 #define STR_PAGEBREAK                   (RC_APP_BEGIN + 75)
 #define STR_REDLINE_UNKNOWN_AUTHOR      (RC_APP_BEGIN + 76)
@@ -89,7 +68,6 @@
 #define PB_MERGE_CANCEL                 3
 #define IMG_MERGE                       4
 
-#define SID_TOGGLETOOLBOX               (RC_APP_BEGIN + 89)
 
 #define STR_ENV_TITLE                   (RC_APP_BEGIN + 91)
 #define STR_LAB_TITLE                   (RC_APP_BEGIN + 92)

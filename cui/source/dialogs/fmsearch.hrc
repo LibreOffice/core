@@ -44,7 +44,6 @@
 #define RID_STR_OVERFLOW_BACKWARD                   (RID_FORMS_START +  35)
 #define RID_STR_SEARCH_COUNTING                     (RID_FORMS_START +  76)
 
-#define FT_SEARCHTEXT       1
 #define FT_FORM             2
 #define FT_POSITION         3
 #define FT_RECORDLABEL      4

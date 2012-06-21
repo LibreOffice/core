@@ -38,18 +38,12 @@
 #define FT_LEGEND_TEXTDIR           3
 #define LB_LEGEND_TEXTDIR           4
 
-#define FL_TEXTBREAK                3
-#define CBX_TEXTBREAK               2
-#define CBX_TEXTOVERLAP             4
-
 //Seit 4/1998 koennen Texte frei gedreht werden: SCHATTR_TEXT_DEGREES
 // ID's for title rotation tabpage
 #define CTR_DIAL                6030
 #define BTN_TXTSTACKED          6031
 #define FT_DEGREES              6032
 #define NF_ORIENT               6033
-#define CTR_DUMMY               6034
-#define FT_DUMMY                6035
 #define FL_ALIGN                6037
 #define FT_TEXTDIR              6038
 #define LB_TEXTDIR              6039
@@ -79,8 +73,6 @@
 #define FL_SEPARATOR                    18
 #define FT_AXIS_TEXTDIR                 19
 #define LB_AXIS_TEXTDIR                 20
-
-//#define TP_AXIS_POSITIONS   904
 
 #define FL_AXIS_LINE        1
 #define FL_LABELS           2

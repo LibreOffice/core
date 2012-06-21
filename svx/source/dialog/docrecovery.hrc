@@ -46,7 +46,6 @@
 #define FT_SAVE_DESCR               4
 #define FT_SAVE_FILELIST            5
 #define LB_SAVE_FILELIST            6
-#define CB_SAVE_LAUNCHAUTO          7
 #define FL_SAVE_BOTTOM              8
 #define BT_SAVE_OK                  9
 
@@ -54,7 +53,6 @@
 #define SAVE_WIDTH                  290
 #define SAVE_HEIGHT                 238
 #define SAVE_TITLEWINHEIGHT         36
-#define SAVE_DESCRHEIGHT            48
 #define SAVE_COL0                   (RSC_SP_DLG_INNERBORDER_LEFT)
 #define SAVE_COL2                   (SAVE_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
 #define SAVE_COL1                   (SAVE_COL2-RSC_CD_PUSHBUTTON_WIDTH)
@@ -121,10 +119,7 @@
 #define RECOV_TITLEWINHEIGHT        SAVE_TITLEWINHEIGHT
 #define RECOV_DESCRHEIGHT           6*RSC_CD_FIXEDTEXT_HEIGHT
 #define RECOV_COL1                  (RSC_SP_DLG_INNERBORDER_LEFT)
-#define RECOV_COL2                  40
 #define RECOV_COL3                  (RECOV_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define RECOV_COL_A                 (RECOV_COL1)
-#define RECOV_COL_B                 (COL_1+RSC_CD_PUSHBUTTON_WIDTH)
 #define RECOV_COL_G                 (RECOV_COL3)
 #define RECOV_COL_F                 (RECOV_COL_G-RSC_CD_PUSHBUTTON_WIDTH)
 #define RECOV_COL_E                 (RECOV_COL_F-RSC_SP_CTRL_X)
@@ -179,7 +174,6 @@
 // TabPage Error Report Welcome
 // most defines equal to TabPage Recovery
 
-#define RECOV_DESCR_HEIGHT          (RECOV_ROW7-RECOV_ROW2)
 
 // TabPage Error Report Send
 // borrow basic metrics from TabPage Recovery
@@ -223,7 +217,6 @@
 #define ERRSEND_ROW8                (ERRSEND_ROW7+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_GROUP_Y)
 #define ERRSEND_ROW9                (ERRSEND_ROW8+RSC_CD_PUSHBUTTON_HEIGHT)
 #define ERRSEND_ROW10               (ERRSEND_ROW9+RSC_SP_CTRL_GROUP_Y)
-#define ERRSEND_ROW11               (ERRSEND_ROW10+RSC_CD_PUSHBUTTON_HEIGHT)
 
 #define ERRSEND_ROW16               (ERRSEND_HEIGHT-RSC_SP_DLG_INNERBORDER_RIGHT-RSC_CD_PUSHBUTTON_HEIGHT)
 #define ERRSEND_ROW15               (ERRSEND_ROW16-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDLINE_HEIGHT)

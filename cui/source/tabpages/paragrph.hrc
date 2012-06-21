@@ -51,7 +51,6 @@
 #define FL_ALIGN                        34
 #define FL_VERTALIGN                    35
 #define LB_VERTALIGN                    36
-#define FL_VERTEX                       37
 #define CB_SNAP                         38
 #define FT_VERTALIGN                    39
 

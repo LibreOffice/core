@@ -29,16 +29,8 @@
 
 #include "rcid.hrc"
 
-
-#define DLG_FLD             RC_FLDDLG_BEGIN
-#define DLG_RECORD_MRG      (RC_FLDDLG_BEGIN + 1)
-#define DLG_RECORD_INS      (RC_FLDDLG_BEGIN + 2)
-#define DLG_FLD_EDIT        (RC_FLDDLG_BEGIN + 3)
 #define DLG_POSTIT          (RC_FLDDLG_BEGIN + 4)
 #define DLG_FLD_INPUT       (RC_FLDDLG_BEGIN + 5)
-#define DLG_BRCFG           (RC_FLDDLG_BEGIN + 6)
-#define DLG_BRSEEK          (RC_FLDDLG_BEGIN + 7)
-#define DLG_BRSORT          (RC_FLDDLG_BEGIN + 8)
 #define DLG_CHANGE_DB       (RC_FLDDLG_BEGIN + 9)
 #define DLG_JAVAEDIT        (RC_FLDDLG_BEGIN + 10)
 #define DLG_FLD_INSERT      (RC_FLDDLG_BEGIN + 11)
@@ -80,7 +72,6 @@
 #define STR_NEXTPAGEFLD     (STR_TYPE_BEGIN + 28)
 #define STR_PREVPAGEFLD     (STR_TYPE_BEGIN + 29)
 #define STR_EXTUSERFLD      (STR_TYPE_BEGIN + 30)
-
 
 #define STR_SETINPUTFLD     (STR_TYPE_BEGIN + 33)
 #define STR_USRINPUTFLD     (STR_TYPE_BEGIN + 34)
@@ -288,7 +279,6 @@
 #define STR_ALL_DATABASE        (STR_EXTRA  + 13)
 #define STR_FLD_EDIT_DLG        (STR_EXTRA  + 14)
 
-#define FLDDLG_ACT_END          (STR_FLD_EDIT_DLG)
 
 
 #endif

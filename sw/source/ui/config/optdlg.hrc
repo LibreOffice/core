@@ -50,24 +50,12 @@
 #define FL_LINE                 22
 #define CB_POSTIT               23
 #define CB_VRULER_RIGHT         24
-#define CB_BIGHANDLE            25
 
 #define FL_SETTINGS             26
 #define LB_METRIC               27
 #define FT_METRIC               28
 
 //test tab page
-#define CB_TEST1        25
-#define CB_TEST2        26
-#define CB_TEST3        27
-#define CB_TEST4        28
-#define CB_TEST5        29
-#define CB_TEST6        30
-#define CB_TEST7        31
-#define CB_TEST8        32
-#define CB_TEST9        33
-#define CB_TEST10       34
-#define FL_TEST                 35
 
 #define CB_FLD_HIDDEN_PARA 36  // right in the middle of it, so that HelpIds stay compatible to FPII
 #define CB_SMOOTH_SCROLL 37
@@ -75,21 +63,14 @@
 #define BT_OK           38
 #define BT_CANCEL       39
 #define BT_MORE         40
-#define BT_GRID         41
-#define MF_HFRAME       42
-#define MF_VFRAME       43
 
 #define CB_INDEX        44
 
 #define LB_COLOR        50
-#define WIN_COLOR       52
-#define ED_COLORNAME    53
 #define BT_EDIT         55
 #define BT_NEW          56
 #define BT_DELETE       57
 #define BT_DEFAULT      58
-#define CB_HANDLE       59
-#define CB_SECT_BOUNDS  60
 #define CB_CHAR_HIDDEN  61
 // Print-Extra-Page
 #define CB_PGRF            61
@@ -179,21 +160,13 @@
 #define FT_VAR                      126
 
 #define FT_MOVE                     128
-#define FL_COLOR                                        130
-#define FT_SGML                     131
-#define LB_SGML                     132
 #define FT_COMMENT                  133
-#define LB_COMMENT                  134
-#define FT_KEYWD                    135
-#define LB_KEYWD                    136
 #define FT_UNKNOWN                  137
-#define LB_UNKNOWN                  138
 #define FL_TABLE_SEPARATOR          139
 #define CB_PROSPECT_RTL        140
 
 #define FL_SHDWCRSFLAG                 1
 #define CB_SHDWCRSONOFF                2
-#define FL_SHDWCRSMODE                 3
 #define FT_SHDWCRSFILLMODE             4
 #define RB_SHDWCRSFILLMARGIN           5
 #define RB_SHDWCRSFILLINDENT           6

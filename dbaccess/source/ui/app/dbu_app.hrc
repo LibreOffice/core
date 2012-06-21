@@ -22,7 +22,6 @@
 #include "dbu_resource.hrc"
 #endif
 
-#define TBI_SWITCH_PREVIEW                  RID_DBACCESS_START
 
 #define RID_STR_NEW_FORM                    RID_STR_APP_START
 #define RID_STR_NEW_FORM_AUTO               RID_STR_APP_START + 1

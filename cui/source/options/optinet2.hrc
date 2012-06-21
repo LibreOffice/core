@@ -67,20 +67,6 @@
 #define ST_MSG_255_0                111
 #define ST_MSG_255_1                112
 
-// Site Certificate --------------------------------------------------------
-#define GB_SITECERT                 120
-#define LB_SITECERT                 121
-#define LB_FILTERCERT               122
-#define PB_EDIT_CERT                123
-#define PB_DELETE_CERT              124
-
-// personal Certificate ----------------------------------------------------
-#define GB_PERSCERT                 130
-#define LB_PERSCERT                 131
-#define PB_NEW_PERSCERT             132
-#define PB_INFO_PERSCERT            133
-#define PB_DELETE_PERSCERT          134
-
 // Security  -------------------------------------------------------------
 
 #define FL_SEC_SECURITYOPTIONS      10
@@ -101,7 +87,6 @@
 
 #define STR_SEC_NOPASSWDSAVE        12
 
-#define OFFS_BUTTON_Y               (-6)
 #define BORDER_OFFSET               8
 #define COL_0                       (RSC_SP_TBPG_INNERBORDER_LEFT)
 #define COL_1                       (COL_0+RSC_SP_FLGR_SPACE_X)
@@ -130,7 +115,6 @@
 #define IMG_JSCPT_WARNING           220
 #define FT_JSCPT_WARNING            221
 #define CB_JSCPT_DISABLE            222
-#define GB_JSCPT_WARNING            223
 #define BTN_JSCPT_YES               224
 #define BTN_JSCPT_NO                225
 

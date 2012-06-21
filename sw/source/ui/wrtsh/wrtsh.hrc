@@ -29,7 +29,6 @@
 
 #include "rcid.hrc"
 
-#define DLG_GOTO                (RC_WRTSH_BEGIN +  1)
 
 
 #define STR_DDEERROR_APP1       (RC_WRTSH_BEGIN +  2)

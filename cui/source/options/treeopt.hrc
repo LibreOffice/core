@@ -26,7 +26,6 @@
  ************************************************************************/
 
 #include <sfx2/tabpage.hrc>
-
 #include <svtools/controldims.hrc>
 
 #define PB_OK                   1
@@ -39,21 +38,7 @@
 
 #define FT_HINT                 21
 #define CB_DISABLE              22
-#define BTN_HINT                23
 #define ST_LOAD_ERROR           24
-
-#define STR_GENERAL_PAGES_START 1
-#define STR_GENERAL             (STR_GENERAL_PAGES_START)
-#define STR_MISC_PAGE           (STR_GENERAL_PAGES_START + 1)
-#define STR_DESKTOP_PAGE        (STR_GENERAL_PAGES_START + 2)
-#define STR_VIEW_PAGE           (STR_GENERAL_PAGES_START + 3)
-#define STR_FONT_PAGE           (STR_GENERAL_PAGES_START + 4)
-#define STR_PRINT_PAGE          (STR_GENERAL_PAGES_START + 5)
-#define STR_COLOR_PAGE          (STR_GENERAL_PAGES_START + 6)
-#define STR_LING_PAGE           (STR_GENERAL_PAGES_START + 7)
-#define STR_PATH_PAGE           (STR_GENERAL_PAGES_START + 8)
-#define STR_SAVE_PAGE           (STR_GENERAL_PAGES_START + 9)
-#define STR_USERDATA_PAGE       (STR_GENERAL_PAGES_START + 10)
 
 // metrics
 

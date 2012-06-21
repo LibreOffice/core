@@ -24,33 +24,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define RB_1            1
-#define RB_2            2
-#define RB_3            3
-#define RB_4            4
-#define RB_5            5
 #define FT_1            6
 #define FT_2            7
 #define FT_3            8
 #define FT_4            9
 #define FT_5            10
-#define FI_1            11
-#define FI_2            12
-#define FI_3            13
-#define FI_4            14
-#define FI_5            15
-//#define FL_LEVEL        16
 
 #define FT_COLL         20
 #define LB_COLL         21
 #define FT_NUMBER       22
 #define LB_NUMBER       23
 #define FT_DELIM        24
-#define FT_DELIM_BEVOR  25
-#define FT_DELIM_AFTER  26
-#define ED_DELIM_BEVOR  27
-#define ED_DELIM_AFTER  28
-#define CB_COMPLETE     29
 #define FL_NUMBER       30
 
 #define LB_ALIGN        31
@@ -63,8 +47,6 @@
 #define BT_OK           100
 #define BT_CANCEL       101
 #define BT_HELP         102
-#define BT_FORM         103
-#define BT_RESET        104
 #define FL_FORM         105
 #define LB_FORM         106
 #define ED_FORM         107

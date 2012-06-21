@@ -43,14 +43,11 @@
 #define DLG_EXPORT_GIF                  (RID_GOODIES_START+ 1)
 #define DLG_EXPORT_EMET                 (RID_GOODIES_START+ 2)
 #define DLG_EXPORT_JPG                  (RID_GOODIES_START+ 3)
-#define DLG_IMPORT_PCD                  (RID_GOODIES_START+ 4)
 #define DLG_EXPORT_EPNG                 (RID_GOODIES_START+ 5)
 #define DLG_EXPORT_EPS                  (RID_GOODIES_START+ 8)
 #define DLG_EXPORT_EPBM                 (RID_GOODIES_START+ 9)
 #define DLG_EXPORT_EPGM                 (RID_GOODIES_START+ 10)
 #define DLG_EXPORT_EPPM                 (RID_GOODIES_START+ 11)
-#define DLG_SSL_NEWCERT                 (RID_GOODIES_START+ 12)
-#define DLG_SSL_INFCERT                 (RID_GOODIES_START+ 13)
 
 // warning, next range is RID_FILTER_START + 100 !
 

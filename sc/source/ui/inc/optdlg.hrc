@@ -31,12 +31,10 @@
 #define TP_GENERAL          1
 #define TP_SAVE             2
 #define TP_PATH             3
-#define TP_SPELL            4
 #define TP_VIEW             5
 #define TP_CALC             6
 #define TP_USERLISTS        7
 #define TP_PRINT            8
-#define TP_COLORS           9
 #define TP_GRID             10
 #define TP_CONTENT          11
 #define TP_LAYOUT           12
@@ -59,7 +57,6 @@
 #define FT_VALUE            13
 #define GB_DATE             14
 #define BTN_CASE            15
-#define FT_CASE             16
 #define BTN_CALC            17
 #define BTN_MATCH           18
 #define BTN_LOOKUP          19
@@ -67,21 +64,11 @@
 #define BTN_GENERAL_PREC    21
 
 // TP_VIEW:
-#define BTN_VSCROLL         1
-#define BTN_HSCROLL         2
-#define BTN_REGISTER        3
-#define BTN_OUTLINER        4
-#define BTN_HEADERFOOTER    5
 #define BTN_GRID            6
-#define BTN_SYNTAX          7
-#define LB_GRIDCOLOR        9
-#define GB_ELEMENTS         10
-#define BTN_HELPLINES       11
 
 #define BTN_FORMULAS        20
 #define BTN_NULLVALS        21
 #define BTN_NOTES           22
-#define GB_CONTENTS         23
 
 
 // TP_USERLISTS:
@@ -151,7 +138,6 @@
 #define GB_UNIT         61
 #define LB_UNIT         62
 #define ST_UNIT         63
-#define GB_TAB          64
 #define MF_TAB          65
 #define CB_PAGEBREAKS   66
 #define FT_TAB          69

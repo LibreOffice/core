@@ -34,10 +34,6 @@
 
 #define SET_BGDCOLOR    10
 #define GB_BGDCOLOR     11
-#define SET_PATTERN     12
-#define GB_COL_PREVIEW  13
-#define SET_PATCOLOR    14
-#define GB_PATCOLOR     15
 #define CT_BORDER       16
 #define FT_PREVIEW      20
 #define WIN_PREVIEW1    21
@@ -53,7 +49,6 @@
 #define WND_POSITION    28
 #define GB_POSITION     29
 #define WIN_PREVIEW2    30
-#define GB_PREVIEW      31
 #define LB_TBL_BOX      32
 #define FT_TBL_DESC     33
 #define LB_PARA_BOX     34

@@ -33,7 +33,6 @@
 #define FT_DESC         1
 #define FT_DOCDBTEXT    2
 #define FT_DOCDBNAME    3
-#define BT_CHANGEDB     4
 #define FT_USEDDB       5
 #define FT_AVAILDB      6
 #define TLB_USEDDB      7

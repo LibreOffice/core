@@ -54,11 +54,7 @@
 #define BTN_NEXT    3
 #define BTN_PREV    4
 
-#define TBX_TOOLBAR 1
 #define FT_AUTHOR   1
-#define ED_AUTHOR   2
-#define FT_DATE     3
-#define ED_DATE     4
 
 #define CT_TEXT     5
 

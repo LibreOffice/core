@@ -84,19 +84,10 @@
 #define STR_PAGETITLE_GENERAL               1
 #define STR_PAGETITLE_CONNECTION            2
 #define STR_PAGETITLE_ADVANCED              3
-#define STR_NO_WILDCARDS                    4
 #define STR_MYSQLENTRY                      5
 #define STR_PARENTTITLE                     6
 #define STR_COULDNOTLOAD_ODBCLIB            7
 #define STR_UNSUPPORTED_DATASOURCE_TYPE     8
-#define STR_MYSQL_CONFIG_NEXT_PAGE          9
-#define STR_JDBC_DEFAULT_URL                10
-
-//========================================================================
-// menu item ids
-#define MID_NEW_DATASOURCE                  1
-#define MID_DELETE_DATASOURCE               2
-#define MID_RESTORE_DATASOURCE              3
 
 #endif // _DBAUI_DBADMIN_HRC_
 

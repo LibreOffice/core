@@ -234,10 +234,6 @@
 #error Resource-Ueberlauf in #line, #file
 #endif
 
-#define SID_TEXT_ALIGNLEFT                                SID_ATTR_PARA_ADJUST_LEFT
-#define SID_TEXT_ALIGNRIGHT                               SID_ATTR_PARA_ADJUST_RIGHT
-#define SID_TEXT_ALIGNCENTER                              SID_ATTR_PARA_ADJUST_CENTER
-#define SID_TEXT_ALIGNBLOCK                               SID_ATTR_PARA_ADJUST_BLOCK
 #define SID_DRAW_TEXT_VERTICAL                            SID_ATTR_CHAR_VERTICAL
 
 #endif

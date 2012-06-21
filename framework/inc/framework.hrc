@@ -39,10 +39,6 @@
 
 #define DLG_FILTER_SELECT                   (RID_FWK_DIALOG_START_CORRECT + 0)
 
-#define STR_FILTER_DOWNLOAD                 (RID_FWK_START+0)
-#define STR_FILTER_CHOOSER                  (RID_FWK_START+1)
-#define STR_FILTER_OTHERS                   (RID_FWK_START+2)
-#define STR_FILTER_ZIPPED                   (RID_FWK_START+3)
 
 // ResIds for BackingWindow
 #define DLG_BACKING                         (RID_FWK_DIALOG_START_CORRECT+100)

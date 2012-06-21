@@ -24,16 +24,10 @@
 
 #define FT_USERNAME                 1
 #define FT_JDBCDRIVERCLASS          2
-#define FT_DBASE_PATH_OR_FILE       3
-#define FT_NAME_OF_ODBC_DATASOURCE  4
 #define FT_MYSQL_DATABASE_NAME      5
-#define FT_MSACCESS_MDB_FILE        6
-#define FT_FLAT_PATH_OR_FILE        7
-#define FT_CALC_PATH_OR_FILE        8
     // FREE
 #define FT_NO_ADDITIONAL_SETTINGS   10
 #define FT_HOSTNAME                 11
-#define FT_ORACLE_DATABASE_NAME     12
 
 #define ET_USERNAME             1
 #define ET_JDBCDRIVERCLASS      2

@@ -28,7 +28,6 @@
 #define _SVX_FMHELP_HRC
 
 // Help-Ids --------------------------------------------------------------
-#define HID_DLG_DBMSG                                         "SVX_HID_DLG_DBMSG"
 #define HID_FORM_NAVIGATOR                                    "SVX_HID_FORM_NAVIGATOR"
 #define HID_FORM_NAVIGATOR_WIN                                "SVX_HID_FORM_NAVIGATOR_WIN"
 #define HID_FIELD_SEL                                         "SVX_HID_FIELD_SEL"

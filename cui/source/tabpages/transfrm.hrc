@@ -33,7 +33,6 @@
 #define MTR_FLD_POS_X               7
 #define MTR_FLD_POS_Y               8
 #define CBX_COPY                    9
-#define TSB_PROTECT                 10
 #define TSB_AUTO                    11
 #define TSB_AUTOGROW_HEIGHT         12
 #define TSB_AUTOGROW_WIDTH          13
@@ -55,7 +54,6 @@
 #define MTR_FLD_RADIUS              29
 #define FL_ANGLE                    30
 #define FT_ANGLE                    31
-#define TSB_VERTICAL                32
 #define FL_ANCHOR                   33
 #define FT_ANCHOR                   34
 #define LB_ANCHOR                   35

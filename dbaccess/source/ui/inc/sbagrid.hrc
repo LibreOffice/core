@@ -22,20 +22,7 @@
 //----------------Menueitems-------------------------------------------------
 // Tabelle
 #define SBA_WHICHID_START       100
-// Zeilenhoehe
-#define SBA_DEF_ROWHEIGHT       (SBA_WHICHID_START+131) // SbaColRowSizeItem
 
-#define SBA_DEF_RANGEFONT       (SBA_WHICHID_START+132) // RangeItem
-#define SBA_DEF_FONT            (SBA_WHICHID_START+133) // SvxFontItem
-#define SBA_DEF_FONTHEIGHT      (SBA_WHICHID_START+134) // SvxFontHeightItem
-#define SBA_DEF_FONTCOLOR       (SBA_WHICHID_START+135) // SvxColorItem
-#define SBA_DEF_FONTWEIGHT      (SBA_WHICHID_START+136) // SvxWeightItem
-#define SBA_DEF_POSTURE         (SBA_WHICHID_START+137) // SvxPostureItem
-#define SBA_DEF_SHADOWED        (SBA_WHICHID_START+138) // SvxShadowedItem
-#define SBA_DEF_CONTOUR         (SBA_WHICHID_START+139) // SvxContourItem
-#define SBA_DEF_CROSSEDOUT      (SBA_WHICHID_START+140) // SvxCrossedOutItem
-#define SBA_DEF_UNDERLINE       (SBA_WHICHID_START+141) // SvxUnderlineItem
-#define SBA_DEF_LANGUAGE        (SBA_WHICHID_START+142) // SvxLanguageItem
 
 // Spalten
 // Formatierung
@@ -77,22 +64,5 @@
 #define SBA_DEF_FLTTABLE            (SBA_WHICHID_START + 151) // SfxStringItem
 // Spalte ausblenden
 #define SBA_DEF_FLTHIDE             (SBA_WHICHID_START + 152) // SfxBoolItem
-// Kommentar zum Feld
-#define SBA_DEF_FLTCOMMENT          (SBA_WHICHID_START + 153) // SfxStringItem
-// default wert
-#define SBA_DEF_FLTDEFAULT          (SBA_WHICHID_START + 154) // SfxStringItem
-// Primärschluessel
-#define SBA_DEF_FLTPRIMARY          (SBA_WHICHID_START + 155) // SfxBoolItem
-// table properties
-#define SBA_DEF_TABLEPROP           (SBA_WHICHID_START + 156) // SfxString
-#define SBA_DEF_SORT                (SBA_WHICHID_START + 157) // SfxString
-#define SBA_DEF_FILTER              (SBA_WHICHID_START + 158) // SfxString
-#define SBA_DEF_FILTERAPPLIED       (SBA_WHICHID_START + 159) // SfxBool
-#define SBA_DEF_ROWHEIGHT_DEFAULT   (SBA_WHICHID_START + 160) // SfxBool
-// the col has a default width ?
-#define SBA_DEF_FLTCOLWIDTH_DEFAULT (SBA_WHICHID_START + 161) // SfxBool
-#define SBA_DEF_WORDLINEMODE        (SBA_WHICHID_START + 162) // SfxBool
-
-
 
 #endif // DBACCESS_SBA_GRID_HRC

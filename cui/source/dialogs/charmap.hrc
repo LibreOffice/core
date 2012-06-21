@@ -45,7 +45,6 @@
 #define ED_SHORTCUT     32
 #define BT_ASSIGN       33
 #define FT_ASSIGN       34
-#define CT_ASSIGN       35
 
 #endif
 

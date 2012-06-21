@@ -25,20 +25,8 @@
  *
  ************************************************************************/
 
-#define BRUSH_LBL               1
-#define BRUSH_LBOX              2
-
 #define COLOR_LBL               3
 #define COLOR_LBOX              4
-
-#define FILLIN_COLOR_LBL        5
-#define FILLIN_COLOR_LBOX       6
-
-#define NO_PATTERN_BOX          7
-
-#define PATTERN_FRM             8
-#define EXAMPLE_FRM             9
-#define EXAMPLE_WIN             10
 
 #define OK_BTN                  11
 #define CANCEL_BTN              12

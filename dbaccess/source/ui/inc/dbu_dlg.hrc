@@ -43,7 +43,6 @@
 #define INIT_Y               28
 #define INDENTED_X           6
 #define INDENT_BELOW_RADIO   10
-#define INDENT_BELOW_CHECK   10
 
 
     // FREE
@@ -110,7 +109,6 @@
 #define STR_EXCEPTION_INFO                  RID_STR_DLG_START + 64
 #define STR_EXCEPTION_DETAILS               RID_STR_DLG_START + 65
 #define STR_MSACCESS_2007_FILTERNAME        RID_STR_DLG_START + 66
-#define STR_MSACCESS_ACCDB_FILE             RID_STR_DLG_START + 67
 
 
 // please adjust checking before insert new strings

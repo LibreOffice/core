@@ -59,7 +59,6 @@
 #define RB_STOP_ON_NEXT_SLIDE       28
 #define RB_STOP_AFTER_N_SLIDES      29
 #define MF_STOP_AFTER_SLIDES        30
-#define TP_CUSTOMANIMATION_EFFECT_COUNT 31
 
 // TabPage RID_TP_CUSTOMANIMATION_DURATION
 #define FT_START                    1
@@ -75,7 +74,6 @@
 #define RB_CLICKSEQUENCE            11
 #define RB_INTERACTIVE              12
 #define LB_TRIGGER                  13
-#define TP_CUSTOMANIMATION_DURATION_COUNT 13
 
 // TabPage RID_TP_CUSTOMANIMATION_TEXT
 #define FT_GROUP_TEXT               1
@@ -84,6 +82,5 @@
 #define MF_GROUP_AUTO               4
 #define CBX_ANIMATE_FORM            5
 #define CBX_REVERSE                 6
-#define TP_CUSTOMANIMATION_TEXT_COUNT 6
 
 #endif // _SD_CUSTOMANIMATIONDIALOG_HRC

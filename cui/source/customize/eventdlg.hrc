@@ -35,9 +35,5 @@
 #define TXT_SAVEIN      10
 #define LB_SAVEIN           11
 
-#define MB_CONFIG   17
-#define CB_WARNING      18
-#define CB_WARNING_ALWAYS 19
-#define GB_SAFETY       20
 #define ID_APP      21
 #define ID_DOC      22

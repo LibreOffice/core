@@ -33,7 +33,6 @@
 #define RB_ANCHOR_AS_CHAR       4
 #define RB_ANCHOR_FRAME         5
 #define WN_BSP                  21
-#define FT_BSP                  22
 
 
 // SwFrmPage
@@ -59,7 +58,6 @@
 #define LB_VERT_RELATION        4
 #define FL_POSITION             43
 #define BT_REALSIZE             44
-#define BT_MANUAL               45
 #define CB_AUTOWIDTH            46
 #define FT_WIDTH_AUTO           47
 #define FT_HEIGHT_AUTO          48

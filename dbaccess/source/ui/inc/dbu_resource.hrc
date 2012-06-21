@@ -79,7 +79,6 @@
 
 #define DLG_DATABASE_ADMINISTRATION     RID_DIALOG_START +  0
 #define DLG_DBASE_INDEXES               RID_DIALOG_START +  1
-#define DLG_SQLMESSAGE                  RID_DIALOG_START +  2
 #define DLG_SQLEXCEPTIONCHAIN           RID_DIALOG_START +  3
 #define DLG_DATASOURCE_SELECTION        RID_DIALOG_START +  4
 #define DLG_PARAMETERS                  RID_DIALOG_START +  5
@@ -119,7 +118,6 @@
     // FREE
 #define PAGE_CONNECTION                 RID_PAGE_START +  6
 #define PAGE_ADO                        RID_PAGE_START +  7
-#define PAGE_QUERYADMINISTRATION        RID_PAGE_START +  8
 #define TAB_WIZ_COLUMN_SELECT           RID_PAGE_START +  9
 #define TAB_WIZ_TYPE_SELECT             RID_PAGE_START + 10
 #define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 11
@@ -139,17 +137,14 @@
 #define PAGE_TABLESUBSCRIPTION          RID_PAGE_START + 28
     // FREE
 #define PAGE_MOZILLA                    RID_PAGE_START + 32
-#define PAGE_DS_ORACLE_ADVANCED_SETTINGS RID_PAGE_START + 33
 
 
-#define PAGE_DBWIZARD_INTRO                     RID_PAGE_START + 40
 #define PAGE_DBWIZARD_DBASE                     RID_PAGE_START + 41
 #define PAGE_DBWIZARD_TEXT                      RID_PAGE_START + 42
 #define PAGE_DBWIZARD_MSACCESS                  RID_PAGE_START + 43
 #define PAGE_DBWIZARD_LDAP                      RID_PAGE_START + 44
     // FREE
 #define PAGE_DBWIZARD_MYSQL_INTRO               RID_PAGE_START + 46
-#define PAGE_DBWIZARD_MYSQL_ODBC                RID_PAGE_START + 47
 #define PAGE_DBWIZARD_ORACLE                    RID_PAGE_START + 48
 #define PAGE_DBWIZARD_JDBC                      RID_PAGE_START + 49
 #define PAGE_DBWIZARD_ADO                       RID_PAGE_START + 50
@@ -164,8 +159,6 @@
 //========================================================================
 // error boxes
 
-#define ERR_NOREGISTEREDDATASOURCES     RID_ERRORBOX_START +  0
-// free
 #define ERR_QRY_CRITERIA_ON_ASTERISK    RID_ERRORBOX_START +  2
 #define ERR_QRY_ORDERBY_ON_ASTERISK     RID_ERRORBOX_START +  3
 #define ERR_QRY_AMB_FIELD               RID_ERRORBOX_START +  4
@@ -175,7 +168,6 @@
 #define ERR_NEED_INDEX_FIELDS           RID_ERRORBOX_START +  8
 #define ERR_QRY_NOSTATEMENT             RID_ERRORBOX_START +  9
 #define ERR_QRY_NOCRITERIA              RID_ERRORBOX_START + 10
-#define ERR_CANTDOTABLEACTION           RID_ERRORBOX_START + 11
 
 
 
@@ -212,8 +204,6 @@
 // free
 #define IMG_PKEYICON                    RID_IMAGE_START + 12
 // free
-#define IMG_DATABASE_CONNECTED          RID_IMAGE_START + 15
-// free
 #define REPORTFOLDER_TREE_ICON          RID_IMAGE_START + 24
 #define IMG_FORMFOLDER_TREE_L           RID_IMAGE_START + 39
 #define IMG_REPORTFOLDER_TREE_L         RID_IMAGE_START + 40
@@ -232,19 +222,13 @@
 #define IMG_JOINS                       RID_IMAGELIST_START +  0
 #define IMG_INDEX_DLG_SC                RID_IMAGELIST_START +  1
 #define IMG_INDEX_DLG_LC                RID_IMAGELIST_START +  3
-#define IMP_FORM_SC                     RID_IMAGELIST_START +  5
-#define IMP_FORM_LC                     RID_IMAGELIST_START +  7
-#define IMP_REPORT_SC                   RID_IMAGELIST_START +  9
-#define IMP_REPORT_LC                   RID_IMAGELIST_START + 11
 
 //========================================================================
 // menus
 
 #define MENU_TABLETREE_POPUP            RID_MENU_START +  0
-#define MENU_DATASOURCELIST_POPUP       RID_MENU_START +  1
 #define RID_SBA_GRID_COLCTXMENU         RID_MENU_START +  2
 #define RID_SBA_GRID_ROWCTXMENU         RID_MENU_START +  3
-#define MENU_BROWSERTREE_CONTEXT        RID_MENU_START +  4
 #define RID_QUERYCOLPOPUPMENU           RID_MENU_START +  5
 #define RID_QUERYFUNCTION_POPUPMENU     RID_MENU_START +  6
 #define RID_TABLEDESIGNROWPOPUPMENU     RID_MENU_START +  7
@@ -314,21 +298,13 @@
 
 #define RSC_CHARSETS                    RID_UNTYPED_START +  2
 #define RSC_QUERY_OBJECT_TYPE           RID_UNTYPED_START +  4
-#define IMG_TABLESUBCRIPTION_SC         RID_UNTYPED_START +  5
-#define IMG_TABLESUBCRIPTION_LC         RID_UNTYPED_START +  7
-#define IMG_QUERYADMINISTRATION_SC      RID_UNTYPED_START +  9
-#define IMG_QUERYADMINISTRATION_LC      RID_UNTYPED_START + 11
-#define IMG_DOCUMENTLINKS_SC            RID_UNTYPED_START + 13
-#define IMG_DOCUMENTLINKS_LC            RID_UNTYPED_START + 15
 
 //========================================================================
 // various
 
 #define PB_FORMAT                       RID_MISC_START +  0
-#define FIXED_NO_CONNECTION             RID_MISC_START +  1
 #define LB_LEFT_TABLE                   RID_MISC_START +  2
 #define LB_RIGHT_TABLE                  RID_MISC_START +  3
-#define LB_CONTROL                      RID_MISC_START +  4
 #define FL_INVOLVED_TABLES              RID_MISC_START +  5
 #define FL_INVOLVED_FIELDS              RID_MISC_START +  6
 

@@ -71,8 +71,6 @@
 #define RSC_SP_FLGR_SPACE_Y                 4
 #define RSC_SP_GRP_SPACE_X                  6       // between groupings made with GroupBox
 #define RSC_SP_GRP_SPACE_Y                  6
-#define RSC_SP_TXT_SPACE_X                  5       // spacing between text paragraphs
-#define RSC_SP_TXT_SPACE_Y                  7
 #define RSC_SP_CHK_TEXTINDENT               8       // x indent of text aligned to checkbox title
 
 // dialog inner border
@@ -97,6 +95,5 @@
 #define RSC_SP_GRP_INNERBORDER_LEFT         6       // for GroupBox groupings
 #define RSC_SP_GRP_INNERBORDER_TOP          6
 #define RSC_SP_GRP_INNERBORDER_RIGHT        6
-#define RSC_SP_GRP_INNERBORDER_BOTTOM       6
 
 #endif // _SVT_CONTROLDIMS_HRC_

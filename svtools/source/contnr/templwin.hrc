@@ -41,7 +41,6 @@
 #define TI_DOCTEMPLATE_DOCINFO  4
 #define TI_DOCTEMPLATE_PREVIEW  5
 
-#define HBI_CATEGORY            1
 
 #define DI_TITLE                1
 #define DI_FROM                 2

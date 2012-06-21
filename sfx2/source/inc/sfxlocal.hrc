@@ -49,8 +49,6 @@
 
 #define SFX_CB_PROPERTY_NAME                (RID_SFX_SFXLOCAL_START +  0)
 #define SFX_ED_PROPERTY_VALUE               (RID_SFX_SFXLOCAL_START +  1)
-#define SFX_RB_PROPERTY_YES                 (RID_SFX_SFXLOCAL_START +  2)
-#define SFX_RB_PROPERTY_NO                  (RID_SFX_SFXLOCAL_START +  3)
 #define SFX_LB_PROPERTY_TYPE                (RID_SFX_SFXLOCAL_START +  4)
 #define SFX_PB_PROPERTY_REMOVE              (RID_SFX_SFXLOCAL_START +  5)
 #define SFX_WIN_PROPERTY_YESNO              (RID_SFX_SFXLOCAL_START +  6)

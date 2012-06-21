@@ -276,13 +276,5 @@
 #define STR_COLUMN_VALUESET_ITEM3       (RC_POOLNUMRULE_BEGIN + 13 )
 #define STR_COLUMN_VALUESET_ITEM4       (RC_POOLNUMRULE_BEGIN + 14 )
 //-----IAccessibility2 Impplementaton 2009
-//-----------------
-// Paragraph styles
-//-----------------
-#define STR_POOLPARSTYLE_HEAD1              (STR_POOLPARSTYLE_BEGIN+  0)
-#define STR_POOLPARSTYLE_HEAD2              (STR_POOLPARSTYLE_BEGIN+  1)
-#define STR_POOLPARSTYLE_HEAD3              (STR_POOLPARSTYLE_BEGIN+  2)
-#define STR_POOLPARSTYLE_DEFAULT            (STR_POOLPARSTYLE_BEGIN+  3)
-#define STR_POOLPARSTYLE_TEXTBODY           (STR_POOLPARSTYLE_BEGIN+  4)
 
 #endif

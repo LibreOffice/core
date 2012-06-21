@@ -36,7 +36,5 @@
 #define WND_DATAFORM_SCROLLBAR    7
 #define LAB_DATAFORM_RECORDNO     8
 
-#define FT_DATAFORM_FIXEDTEXT1    9
-#define ED_DATAFORM_EDIT1         10
 
 #define STR_NEW_RECORD            11

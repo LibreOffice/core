@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #ifndef _DBAUI_AUTOCONTROLS_HRC_
 #define _DBAUI_AUTOCONTROLS_HRC_
 
@@ -432,17 +431,11 @@
     };
 
 
-#define NAMECONTROLGROUP_HEIGHT (FIXEDTEXT_HEIGHT + 2 + EDIT_HEIGHT)
-#define BROWSECONTROLGROUP_HEIGHT ( FIXEDTEXT_HEIGHT + 2 + BUTTON_HEIGHT)
-
 // --------------------------------------------------------------------------------------------------
 
 #define AUTO_HELP_BROWSECONTROLGROUP(AUTO_LINECOUNT, AUTO_HID, AUTO_HID2)                           \
     AUTO_WIZARDHELPTEXT(AUTO_LINECOUNT)                                                 \
     AUTO_BROWSECONTROLGROUP(START_X, INIT_Y + AUTO_LINECOUNT * FIXEDTEXT_HEIGHT + 2, WIZARD_PAGE_X, AUTO_HID, AUTO_HID2)
-
-
-// --------------------------------------------------------------------------------------------------
 
 
 // --------------------------------------------------------------------------------------------------

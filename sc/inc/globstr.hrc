@@ -183,14 +183,12 @@
 #define STR_TEXTATTRS               148
 
 #define STR_HFCMD_DELIMITER         149
-#define HFCMD_START                 150
 #define STR_HFCMD_PAGE              150
 #define STR_HFCMD_PAGES             151
 #define STR_HFCMD_DATE              152
 #define STR_HFCMD_TIME              153
 #define STR_HFCMD_FILE              154
 #define STR_HFCMD_TABLE             155
-#define HFCMD_END                   155
 
 #define STR_PROTECTIONERR           156
 

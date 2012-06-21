@@ -33,8 +33,6 @@
 #define TP_PAGE_STD     1
 #define TP_PAGE_HEADER  2
 #define TP_PAGE_FOOTER  3
-#define TP_PAGE_TABLE   4
-#define TP_PAGE_AREAS   5
 
 //================================================
 // TabPage: Tabelle

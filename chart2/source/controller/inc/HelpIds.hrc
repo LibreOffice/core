@@ -31,7 +31,6 @@
 #define HID_SCH_LEGEND_POS                                  "CHART2_HID_SCH_LEGEND_POS"
 #define HID_SCH_DATA_DESCR                                  "CHART2_HID_SCH_DATA_DESCR"
 
-#define HID_SCH_STAT                                        "CHART2_HID_SCH_STAT"
 #define HID_SCH_WIN_DOCUMENT                                "CHART2_HID_SCH_WIN_DOCUMENT"
 #define HID_SCH_CTL_DATA                                    "CHART2_HID_SCH_CTL_DATA"
 
