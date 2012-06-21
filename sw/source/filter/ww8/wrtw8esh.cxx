@@ -780,8 +780,7 @@ bool WW8_WrPlcTxtBoxes::WriteTxt( WW8Export& rWrt )
 
 void WW8_WrPlcTxtBoxes::Append( const SdrObject& rObj, sal_uInt32 nShapeId )
 {
-    void* p = (void*)&rObj;
-    aCntnt.Insert( p, aCntnt.Count() );
+    aCntnt.push_back( &rObj );
     aShapeIds.push_back( nShapeId );
 }
 
@@ -2564,8 +2563,7 @@ sal_Int32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,
                 rShapeId = GetFlyShapeId(rFmt, rObj.mnHdFtIndex, rPVec);
                 if( !nOff )
                 {
-                    void* p = (void*)pObj;
-                    nTxtId = pTxtBxs->GetPos( p );
+                    nTxtId = pTxtBxs->GetPos( pObj );
                     if( USHRT_MAX == nTxtId )
                     {
                         pTxtBxs->Append( *pObj, rShapeId );
@@ -2577,8 +2575,7 @@ sal_Int32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,
                 else
                 {
                     const SdrObject* pPrevObj = pFmt->FindRealSdrObject();
-                    void* p = (void*)pPrevObj;
-                    nTxtId = pTxtBxs->GetPos( p );
+                    nTxtId = pTxtBxs->GetPos( pPrevObj );
                     if( USHRT_MAX == nTxtId )
                     {
                         sal_uInt32 nPrevShapeId =

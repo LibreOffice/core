@@ -1137,7 +1137,7 @@ private:
     WW8_WrPlcSubDoc& operator=(const WW8_WrPlcSubDoc&);
 protected:
     std::vector<WW8_CP> aCps;
-    SvPtrarr aCntnt;                // PTRARR von SwFmtFtn/PostIts/..
+    std::vector<const void*> aCntnt;                // PTRARR von SwFmtFtn/PostIts/..
     WW8_WrPlc0* pTxtPos;            // Pos der einzelnen Texte
 
     WW8_WrPlcSubDoc();
@@ -1212,8 +1212,13 @@ public:
     bool WriteTxt( WW8Export& rWrt );
     void WritePlc( WW8Export& rWrt ) const;
     void Append( const SdrObject& rObj, sal_uInt32 nShapeId );
-    sal_uInt16 Count() const { return aCntnt.Count(); }
-    sal_uInt16 GetPos( const VoidPtr& p ) const { return aCntnt.GetPos( p ); }
+    sal_uInt16 Count() const { return aCntnt.size(); }
+    sal_uInt16 GetPos( const void* p ) const
+    {
+        std::vector<const void*>::const_iterator it
+            = std::find( aCntnt.begin(), aCntnt.end(), p );
+        return it == aCntnt.end() ? USHRT_MAX : it - aCntnt.begin();
+    }
 };
 
 // Plc fuer Chpx und Papx ( incl PN-Plc )

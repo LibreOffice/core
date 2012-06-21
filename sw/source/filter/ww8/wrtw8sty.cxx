@@ -1919,8 +1919,7 @@ WW8_WrPlcSubDoc::~WW8_WrPlcSubDoc()
 void WW8_WrPlcFtnEdn::Append( WW8_CP nCp, const SwFmtFtn& rFtn )
 {
     aCps.push_back( nCp );
-    void* p = (void*)&rFtn;
-    aCntnt.Insert( p, aCntnt.Count() );
+    aCntnt.push_back( &rFtn );
 }
 
 WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt)
@@ -1948,7 +1947,7 @@ void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
 {
     aCps.push_back( nCp );
     WW8_Annotation* p = new WW8_Annotation(pPostIt);
-    aCntnt.Insert( p, aCntnt.Count() );
+    aCntnt.push_back( p );
 }
 
 void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwRedlineData *pRedline )
@@ -1956,7 +1955,7 @@ void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwRedlineData *pRedline )
     maProcessedRedlines.insert(pRedline);
     aCps.push_back( nCp );
     WW8_Annotation* p = new WW8_Annotation(pRedline);
-    aCntnt.Insert( p, aCntnt.Count() );
+    aCntnt.push_back( p );
 }
 
 bool WW8_WrPlcAnnotations::IsNewRedlineComment( const SwRedlineData *pRedline )
@@ -1966,14 +1965,14 @@ bool WW8_WrPlcAnnotations::IsNewRedlineComment( const SwRedlineData *pRedline )
 
 WW8_WrPlcAnnotations::~WW8_WrPlcAnnotations()
 {
-    for( sal_uInt16 n=0; n < aCntnt.Count(); n++ )
+    for( sal_uInt16 n=0; n < aCntnt.size(); n++ )
         delete (WW8_Annotation*)aCntnt[n];
 }
 
 bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
     WW8_CP& rCount )
 {
-    sal_uInt16 nLen = aCntnt.Count();
+    sal_uInt16 nLen = aCntnt.size();
     if ( !nLen )
         return false;
 
