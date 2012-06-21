@@ -16,6 +16,24 @@
       "revId": "364a1e650923c839436996aca30b2d4f9aef5c81",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///5E\u003d",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-06-21T09:17:17Z",
+      "side": 1,
+      "message": "Because thats the most common usecase and this should steamline the most common usecase. If you want to query another repo you can still \"ssh logerrit gerrit query ...\". OTOH we might grep in \"$@\" for \"project:\" and only add project:core if none was given. Patches welcome :P\nAs for new parameters: absolutely not. This thing should be _simple_ for the default usecase. If somebody wants something fancy, he/she should do a wrapper for that themselves as trying to do too much will just introduce too much complexity.",
+      "parentUuid": "AAAACn///5M\u003d",
+      "revId": "364a1e650923c839436996aca30b2d4f9aef5c81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
