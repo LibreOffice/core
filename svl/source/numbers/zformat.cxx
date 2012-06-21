@@ -1297,7 +1297,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             break;
             case SsGetString:
             {
-                if (cToken == ';' && !IsSingleSymbol(rString, nPos-2))
+                if (cToken == ';' && (nPos>=2) &&!IsSingleSymbol(rString, nPos-2))
                 {
                     eState = SsStop;
                 }
