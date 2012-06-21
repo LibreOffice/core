@@ -71,12 +71,9 @@
 #include <accessibilityoptions.hxx>
 #include <statstr.hrc>
 #include <comcore.hrc>
-// OD 14.01.2003 #103492#
 #include <pagepreviewlayout.hxx>
-// --> OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
-// <--
 
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
@@ -84,7 +81,6 @@
 
 #include <vcl/svapp.hxx>
 
-// #i74769#
 #include <svx/sdrpaintwindow.hxx>
 
 sal_Bool ViewShell::bLstAct = sal_False;
@@ -203,17 +199,10 @@ void ViewShell::DLPostPaint2(bool bPaintFormLayer)
 
 //////////////////////////////////////////////////////////////////////////////
 
-/******************************************************************************
-|*
-|*  ViewShell::ImplEndAction()
-|*
-|*  Letzte Aenderung    MA 04. Sep. 96
-|*
-******************************************************************************/
 
 void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
 {
-    //Fuer den Drucker gibt es hier nichts zu tun.
+    // Nothing to do for the printer?
     if ( !GetWin() || IsPreView() )
     {
         bPaintWorks = sal_True;
@@ -458,14 +447,6 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
         Imp()->FireAccessibleEvents();
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::ImplStartAction()
-|*
-|*  Ersterstellung      MA 25. Jul. 94
-|*  Letzte Aenderung    MA 25. Jul. 94
-|*
-******************************************************************************/
 
 void ViewShell::ImplStartAction()
 {
@@ -473,15 +454,6 @@ void ViewShell::ImplStartAction()
     Imp()->StartAction();
 }
 
-
-/******************************************************************************
-|*
-|*  ViewShell::ImplLockPaint(), ImplUnlockPaint()
-|*
-|*  Ersterstellung      MA 11. Jun. 96
-|*  Letzte Aenderung    MA 11. Jun. 96
-|*
-******************************************************************************/
 
 void ViewShell::ImplLockPaint()
 {
@@ -546,14 +518,6 @@ void ViewShell::ImplUnlockPaint( sal_Bool bVirDev )
         Imp()->UnlockPaint();
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::AddPaintRect()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 09. Feb. 97
-|*
-******************************************************************************/
 
 sal_Bool ViewShell::AddPaintRect( const SwRect & rRect )
 {
@@ -564,24 +528,15 @@ sal_Bool ViewShell::AddPaintRect( const SwRect & rRect )
         if( pSh->Imp() )
         {
         if ( pSh->IsPreView() && pSh->GetWin() )
-//          pSh->GetWin()->Invalidate();
             ::RepaintPagePreview( pSh, rRect );
         else
-                bRet |= pSh->Imp()->AddPaintRect( rRect );//swmod 080111
+                bRet |= pSh->Imp()->AddPaintRect( rRect );
         }
         pSh = (ViewShell*)pSh->GetNext();
     } while ( pSh != this );
     return bRet;
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::InvalidateWindows()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 09. Feb. 97
-|*
-******************************************************************************/
 
 void ViewShell::InvalidateWindows( const SwRect &rRect )
 {
@@ -593,7 +548,6 @@ void ViewShell::InvalidateWindows( const SwRect &rRect )
             if ( pSh->GetWin() )
             {
                 if ( pSh->IsPreView() )
-//                  pSh->GetWin()->Invalidate();
                     ::RepaintPagePreview( pSh, rRect );
                 else if ( pSh->VisArea().IsOver( rRect ) )
                     pSh->GetWin()->Invalidate( rRect.SVRect() );
@@ -604,14 +558,6 @@ void ViewShell::InvalidateWindows( const SwRect &rRect )
     }
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::MakeVisible()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    AMA 10. Okt. 95
-|*
-******************************************************************************/
 
 void ViewShell::MakeVisible( const SwRect &rRect )
 {
@@ -643,14 +589,6 @@ void ViewShell::MakeVisible( const SwRect &rRect )
     }
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::CareChildWindow()
-|*
-|*  Ersterstellung      AMA 10. Okt. 95
-|*  Letzte Aenderung    AMA 10. Okt. 95
-|*
-******************************************************************************/
 
 Window* ViewShell::CareChildWin(ViewShell& rVSh)
 {
@@ -666,28 +604,12 @@ Window* ViewShell::CareChildWin(ViewShell& rVSh)
     return NULL;
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::GetPagePos()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 04. Aug. 93
-|*
-******************************************************************************/
 
 Point ViewShell::GetPagePos( sal_uInt16 nPageNum ) const
 {
     return GetLayout()->GetPagePos( nPageNum );
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::GetNumPages()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 20. Apr. 94
-|*
-******************************************************************************/
 
 sal_uInt16 ViewShell::GetNumPages()
 {
@@ -701,18 +623,12 @@ sal_Bool ViewShell::IsDummyPage( sal_uInt16 nPageNum ) const
     return GetLayout() ? GetLayout()->IsDummyPage( nPageNum ) : 0;
 }
 
-/*************************************************************************
-|*
-|*                  ViewShell::UpdateFlds()
-|*
-|*    Ersterstellung    BP 04.05.92
-|*    Beschreibung      erzwingt ein Update fuer jedes Feld
-|*
-|*  UpdateFlds benachrichtigt alle Felder mit pNewHt.
-|*  Wenn pNewHt == 0 ist (default), wird der Feldtyp verschickt.
-|*
-*************************************************************************/
-
+/**
+ * Forces update of each field.
+ * It notifies all fields with pNewHt. If that is 0 (default), the field
+ * type is sent (???).
+ * @param[in] bCloseDB Passed in to GetDoc()->UpdateFlds. [TODO] Purpose???
+ */
 void ViewShell::UpdateFlds(sal_Bool bCloseDB)
 {
     SET_CURR_SHELL( this );
@@ -731,7 +647,7 @@ void ViewShell::UpdateFlds(sal_Bool bCloseDB)
         EndAction();
 }
 
-// update all charts, for that exists any table
+/** update all charts for which any table exists */
 void ViewShell::UpdateAllCharts()
 {
     SET_CURR_SHELL( this );
@@ -758,14 +674,6 @@ sal_Bool ViewShell::HasCharts() const
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*    ViewShell::LayoutIdle()
-|*
-|*    Ersterstellung    MA 26. May. 92
-|*    Letzte Aenderung  OG 19. Mar. 96
-|*
-*************************************************************************/
 
 void ViewShell::LayoutIdle()
 {
@@ -811,11 +719,6 @@ void ViewShell::LayoutIdle()
     }
 }
 
-/*************************************************************************
-|*
-|*    DOCUMENT COMPATIBILITY FLAGS
-|*
-*************************************************************************/
 
 void lcl_InvalidateAllCntnt( ViewShell& rSh, sal_uInt8 nInv )
 {
@@ -834,13 +737,9 @@ void lcl_InvalidateAllCntnt( ViewShell& rSh, sal_uInt8 nInv )
 }
 
 /** local method to invalidate/re-calculate positions of floating screen
-    objects (Writer fly frame and drawing objects), which are anchored
-    to paragraph or to character.
-
-    #i11860#
-
-    @author OD
-*/
+ *  objects (Writer fly frame and drawing objects), which are anchored
+ *  to paragraph or to character. #i11860#
+ */
 void lcl_InvalidateAllObjPos( ViewShell &_rSh )
 {
     const bool bIsCrsrShell = _rSh.ISA(SwCrsrShell);
@@ -922,8 +821,10 @@ void ViewShell::SetUseVirDev( bool bNewVirtual )
     }
 }
 
-// OD 2004-02-16 #106629# - control, if paragraph and table spacing is added
-// at bottom of table cells
+/** Sets if paragraph and table spacing is added at bottom of table cells.
+ * #106629#
+ * @param[in] (bool) setting of the new value
+ */
 void ViewShell::SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -936,8 +837,11 @@ void ViewShell::SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells
     }
 }
 
-// OD 06.01.2004 #i11859# - control, if former formatting of text lines with
-// proportional line spacing is used or not.
+/**
+ * Sets if former formatting of text lines with proportional line spacing should used.
+ * #i11859#
+ * @param[in] (bool) setting of the new value
+ */
 void ViewShell::SetUseFormerLineSpacing( bool _bUseFormerLineSpacing )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -950,7 +854,12 @@ void ViewShell::SetUseFormerLineSpacing( bool _bUseFormerLineSpacing )
     }
 }
 
-// OD 2004-03-12 #i11860# - control, if former object positioning is used or not.
+
+/**
+ * Sets IDocumentSettingAccess if former object positioning should be used.
+ * #i11860#
+ * @param[in] (bool) setting the new value
+ */
 void ViewShell::SetUseFormerObjectPositioning( bool _bUseFormerObjPos )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -962,7 +871,8 @@ void ViewShell::SetUseFormerObjectPositioning( bool _bUseFormerObjPos )
     }
 }
 
-// OD 2004-05-05 #i28701#
+
+// #i28701#
 void ViewShell::SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -974,7 +884,7 @@ void ViewShell::SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos )
     }
 }
 
-// --> FME #108724#
+
 void ViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -986,9 +896,9 @@ void ViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
         lcl_InvalidateAllCntnt( *this, nInv );
     }
 }
-// <--
 
-// -> PB 2007-06-11 #i45491#
+
+// #i45491#
 void ViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -1001,16 +911,6 @@ void ViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWit
     }
 }
 
-// <--
-
-/******************************************************************************
-|*
-|*  ViewShell::Reformat
-|*
-|*  Ersterstellung      BP ???
-|*  Letzte Aenderung    MA 13. Feb. 98
-|*
-******************************************************************************/
 
 void ViewShell::Reformat()
 {
@@ -1043,15 +943,6 @@ void ViewShell::Reformat()
      Reformat();
  }
 
-/******************************************************************************
-|*
-|*  ViewShell::CalcLayout()
-|*                  Vollstaendige Formatierung von Layout und Inhalt.
-|*
-|*  Ersterstellung      MA 31. Jan. 94
-|*  Letzte Aenderung    MA 08. Oct. 96
-|*
-******************************************************************************/
 
 void ViewShell::CalcLayout()
 {
@@ -1102,14 +993,6 @@ void ViewShell::CalcLayout()
         ::EndProgress( GetDoc()->GetDocShell() );
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::SetFirstVisPageInvalid()
-|*
-|*  Ersterstellung      MA 19. May. 94
-|*  Letzte Aenderung    MA 19. May. 94
-|*
-******************************************************************************/
 
 void ViewShell::SetFirstVisPageInvalid()
 {
@@ -1123,14 +1006,6 @@ void ViewShell::SetFirstVisPageInvalid()
     } while ( pSh != this );
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::SizeChgNotify()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 17. Sep. 96
-|*
-******************************************************************************/
 
 void ViewShell::SizeChgNotify()
 {
@@ -1160,14 +1035,6 @@ void ViewShell::SizeChgNotify()
     }
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::VisPortChgd()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 22. Jul. 96
-|*
-******************************************************************************/
 
 void ViewShell::VisPortChgd( const SwRect &rRect)
 {
@@ -1343,14 +1210,6 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::SmoothScroll()
-|*
-|*  Ersterstellung      MA 04. Jul. 96
-|*  Letzte Aenderung    MA 25. Mar. 97
-|*
-******************************************************************************/
 
 sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 {
@@ -1598,14 +1457,7 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
     return sal_False;
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::PaintDesktop()
-|*
-|*  Ersterstellung      MA 16. Dec. 93
-|*  Letzte Aenderung    MA 30. Nov. 95
-|*
-******************************************************************************/
+
 void ViewShell::PaintDesktop( const SwRect &rRect )
 {
     if ( !GetWin() && !GetOut()->GetConnectMetaFile() )
@@ -1741,14 +1593,6 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
     GetOut()->Pop();
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::CheckInvalidForPaint()
-|*
-|*  Ersterstellung      MA 19. May. 94
-|*  Letzte Aenderung    MA 09. Jun. 94
-|*
-******************************************************************************/
 
 sal_Bool ViewShell::CheckInvalidForPaint( const SwRect &rRect )
 {
@@ -1854,14 +1698,6 @@ sal_Bool ViewShell::CheckInvalidForPaint( const SwRect &rRect )
     return bRet;
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::Paint()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 17. Sep. 96
-|*
-******************************************************************************/
 
 void ViewShell::Paint(const Rectangle &rRect)
 {
@@ -1987,27 +1823,17 @@ void ViewShell::Paint(const Rectangle &rRect)
             const Region aDLRegion(rRect);
             DLPrePaint2(aDLRegion);
 
-            // OD 2004-04-23 #116347#
             pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             pOut->SetFillColor( Imp()->GetRetoucheColor() );
             pOut->SetLineColor();
             pOut->DrawRect( rRect );
             pOut->Pop();
-
             // #i68597#
             DLPostPaint2(true);
         }
     }
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::SetBrowseBorder()
-|*
-|*  Ersterstellung      AMA 20. Aug. 96
-|*  Letzte Aenderung    AMA 20. Aug. 96
-|*
-******************************************************************************/
 
 void ViewShell::SetBrowseBorder( const Size& rNew )
 {
@@ -2038,14 +1864,6 @@ sal_Int32 ViewShell::GetBrowseWidth() const
         return aVisArea.Width() - 2 * GetOut()->PixelToLogic(aBrowseBorder).Width();
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::CheckBrowseView()
-|*
-|*  Ersterstellung      MA 04. Mar. 96
-|*  Letzte Aenderung    MA 04. Jul. 96
-|*
-******************************************************************************/
 
 void ViewShell::CheckBrowseView( sal_Bool bBrowseChgd )
 {
@@ -2105,15 +1923,6 @@ void ViewShell::CheckBrowseView( sal_Bool bBrowseChgd )
     UnlockPaint();
 }
 
-/*************************************************************************
-|*
-|*    ViewShell::GetLayout()
-|*    ViewShell::GetNodes()
-|*
-|*    Ersterstellung    OK 26. May. 92
-|*    Letzte Aenderung  MA 16. Sep. 93
-|*
-*************************************************************************/
 
 SwRootFrm *ViewShell::GetLayout() const
 {
@@ -2163,14 +1972,6 @@ SfxItemPool& ViewShell::GetAttrPool()
     return GetDoc()->GetAttrPool();
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::ApplyViewOptions(), ImplApplyViewOptions()
-|*
-|*  Ersterstellung      ??
-|*  Letzte Aenderung    MA 03. Mar. 98
-|*
-******************************************************************************/
 
 void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 {
@@ -2349,14 +2150,6 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::SetUIOptions()
-|*
-|*  Ersterstellung      OS 29.07.96
-|*  Letzte Aenderung    OS 29.07.96
-|*
-******************************************************************************/
 
 void ViewShell::SetUIOptions( const SwViewOption &rOpt )
 {
@@ -2369,14 +2162,6 @@ void ViewShell::SetUIOptions( const SwViewOption &rOpt )
     pOpt->SetSymbolFont(rOpt.GetSymbolFont());
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::SetReadonly()
-|*
-|*  Ersterstellung      OS 05.09.96
-|*  Letzte Aenderung    MA 12. Feb. 97
-|*
-******************************************************************************/
 
 void ViewShell::SetReadonlyOption(sal_Bool bSet)
 {
@@ -2407,9 +2192,8 @@ void ViewShell::SetReadonlyOption(sal_Bool bSet)
             Imp()->InvalidateAccessibleEditableState( sal_False );
     }
 }
-/* -----------------28.08.2003 15:45-----------------
 
- --------------------------------------------------*/
+
 void  ViewShell::SetPDFExportOption(sal_Bool bSet)
 {
     if( bSet != pOpt->IsPDFExport() )
@@ -2419,9 +2203,8 @@ void  ViewShell::SetPDFExportOption(sal_Bool bSet)
         pOpt->SetPDFExport(bSet);
     }
 }
-/* -----------------------------2002/07/31 17:06------------------------------
 
- ---------------------------------------------------------------------------*/
+
 void  ViewShell::SetReadonlySelectionOption(sal_Bool bSet)
 {
     if( bSet != pOpt->IsSelectionInReadonly() )
@@ -2430,28 +2213,11 @@ void  ViewShell::SetReadonlySelectionOption(sal_Bool bSet)
     }
 }
 
-/******************************************************************************
-|*
-|*  ViewShell::SetPrtFormatOption()
-|*
-|*  Ersterstellung      AMA 10. Sep. 97
-|*  Letzte Aenderung    AMA 10. Sep. 97
-|*
-******************************************************************************/
 
 void ViewShell::SetPrtFormatOption( sal_Bool bSet )
 {
     pOpt->SetPrtFormat( bSet );
 }
-
-/******************************************************************************
-|*
-|*  ViewShell::UISizeNotify()
-|*
-|*  Ersterstellung      MA 14. Jan. 97
-|*  Letzte Aenderung    MA 14. Jan. 97
-|*
-******************************************************************************/
 
 
 void ViewShell::UISizeNotify()
@@ -2469,7 +2235,7 @@ void ViewShell::UISizeNotify()
 
 void    ViewShell::SetRestoreActions(sal_uInt16 nSet)
 {
-    OSL_ENSURE(!GetRestoreActions()||!nSet, "mehrfaches Restore der Actions ?");
+    OSL_ENSURE(!GetRestoreActions()||!nSet, "multiple restore of the Actions ?");
     Imp()->SetRestoreActions(nSet);
 }
 sal_uInt16  ViewShell::GetRestoreActions() const
@@ -2506,10 +2272,8 @@ ViewShell::CreateAccessiblePreview()
     OSL_ENSURE( pLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
-    // OD 15.01.2003 #103492# - add condition <IsPreView()>
     if ( IsPreView() && GetLayout()&& GetWin() )
     {
-        // OD 14.01.2003 #103492# - adjustment for new method signature
         return Imp()->GetAccessibleMap().GetDocumentPreview(
                     PagePreviewLayout()->maPrevwPages,
                     GetWin()->GetMapMode().GetScaleX(),
@@ -2525,12 +2289,9 @@ void ViewShell::InvalidateAccessibleFocus()
         Imp()->GetAccessibleMap().InvalidateFocus();
 }
 
-/** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
-
-    OD 2005-12-01 #i27138#
-
-    @author OD
-*/
+/*
+ * invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs #i27138#
+ */
 void ViewShell::InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
                                                       const SwTxtFrm* _pToTxtFrm )
 {
@@ -2540,12 +2301,9 @@ void ViewShell::InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtF
     }
 }
 
-/** invalidate text selection for paragraphs
-
-    OD 2005-12-12 #i27301#
-
-    @author OD
-*/
+/*
+ * invalidate text selection for paragraphs #i27301#
+ */
 void ViewShell::InvalidateAccessibleParaTextSelection()
 {
     if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
@@ -2554,12 +2312,9 @@ void ViewShell::InvalidateAccessibleParaTextSelection()
     }
 }
 
-/** invalidate attributes for paragraphs
-
-    OD 2009-01-06 #i88069#
-
-    @author OD
-*/
+/**
+ * invalidate attributes for paragraphs #i88069#
+ */
 void ViewShell::InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
 {
     if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
@@ -2577,9 +2332,8 @@ SwAccessibleMap* ViewShell::GetAccessibleMap()
 
     return 0;
 }
-/* -----------------------------06.05.2002 13:23------------------------------
 
- ---------------------------------------------------------------------------*/
+
 void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
     if(pOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
@@ -2635,17 +2389,17 @@ const Size ViewShell::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) c
     return aSize;
 }
 
-// --> FME 2004-06-15 #i12836# enhanced pdf export
+
+// #i12836# enhanced pdf export
 sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const
 {
     OSL_ENSURE( GetLayout(), "GetPageNumAndSetOffsetForPDF assumes presence of layout" );
 
     sal_Int32 nRet = -1;
 
-    // --> FME 2005-01-07 #i40059# Position out of bounds:
+    // #i40059# Position out of bounds:
     SwRect aRect( rRect );
     aRect.Pos().X() = Max( aRect.Left(), GetLayout()->Frm().Left() );
-    // <--
 
     const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aRect.Center() );
     if ( pPage )
@@ -2665,7 +2419,7 @@ sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwR
 
     return nRet;
 }
-// <--
+
 
 // --> PB 2007-05-30 #146850#
 const BitmapEx& ViewShell::GetReplacementBitmap( bool bIsErrorState )
@@ -2695,7 +2449,6 @@ void ViewShell::DeleteReplacementBitmaps()
     DELETEZ( pErrorBmp );
     DELETEZ( pReplaceBmp );
 }
-// <--
 
 SwPostItMgr* ViewShell::GetPostItMgr()
 {
@@ -2740,6 +2493,5 @@ const IDocumentOutlineNodes* ViewShell::getIDocumentOutlineNodesAccess() const
 {
     return pDoc;
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
