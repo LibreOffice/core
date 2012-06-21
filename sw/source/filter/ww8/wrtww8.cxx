@@ -2821,8 +2821,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     pOutFmtNode = 0;
     pEscher = 0;
     pRedlAuthors = 0;
-    if ( aTOXArr.Count() )
-        aTOXArr.Remove( 0, aTOXArr.Count() );
+    aTOXArr.clear();
 
     if ( !pOLEExp )
     {

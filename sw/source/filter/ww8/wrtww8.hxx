@@ -450,7 +450,7 @@ public:
     std::vector<sal_uLong> maChapterFieldLocs;
     typedef std::vector<sal_uLong>::const_iterator mycCFIter;
     String aMainStg;
-    SvPtrarr aTOXArr;
+    std::vector<const SwTOXType*> aTOXArr;
     const SfxItemSet* pISet;    // fuer Doppel-Attribute
     WW8_WrPct*  pPiece;         // Pointer auf Piece-Table
     SwNumRuleTbl* pUsedNumTbl;  // alle used NumRules

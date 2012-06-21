@@ -1942,11 +1942,14 @@ void WW8Export::EndCommentOutput(const String& rName)
 
 sal_uInt16 MSWordExportBase::GetId( const SwTOXType& rTOXType )
 {
-    void* p = (void*)&rTOXType;
-    sal_uInt16 nRet = aTOXArr.GetPos( p );
-    if( USHRT_MAX == nRet )
-        aTOXArr.Insert( p, nRet = aTOXArr.Count() );
-    return nRet;
+    std::vector<const SwTOXType*>::iterator it
+        = std::find( aTOXArr.begin(), aTOXArr.end(), &rTOXType );
+    if ( it != aTOXArr.end() )
+    {
+        return it - aTOXArr.begin();
+    }
+    aTOXArr.push_back( &rTOXType );
+    return aTOXArr.size() - 1;
 }
 
 // return values:  1 - no PageNum,
