@@ -1371,7 +1371,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     }
 }
 
-void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
+void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
 {
     switch( nFamily )
     {
@@ -1380,8 +1380,7 @@ void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
             const SwCharFmts& rTbl = *rDoc.GetCharFmts();
             for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
-                void* p = (void*)rTbl[ n ];
-                rArr.Insert( p, n );
+                rArr.push_back( rTbl[ n ] );
             }
         }
         break;
@@ -1390,8 +1389,7 @@ void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
             const SwTxtFmtColls& rTbl = *rDoc.GetTxtFmtColls();
             for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
-                void* p = (void*)rTbl[ n ];
-                rArr.Insert( p, n );
+                rArr.push_back( rTbl[ n ] );
             }
         }
         break;
@@ -1400,8 +1398,7 @@ void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
             const SwFrmFmts& rTbl = *rDoc.GetFrmFmts();
             for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
-                void* p = (void*)rTbl[ n ];
-                rArr.Insert( p, n );
+                rArr.push_back( rTbl[ n ] );
             }
         }
         break;
@@ -1410,8 +1407,7 @@ void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
         {
             for( sal_uInt16 n = 0, nCnt = rDoc.GetPageDescCnt(); n < nCnt; ++n )
             {
-                void* p = (void*)&rDoc.GetPageDesc( n );
-                rArr.Insert( p, n );
+                rArr.push_back( &rDoc.GetPageDesc( n ) );
             }
         }
         break;
@@ -1421,28 +1417,31 @@ void lcl_SaveStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
             const SwNumRuleTbl& rTbl = rDoc.GetNumRuleTbl();
             for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
-                void* p = (void*)rTbl[ n ];
-                rArr.Insert( p, n );
+                rArr.push_back( rTbl[ n ] );
             }
         }
         break;
     }
 }
 
-void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
+static bool lcl_Contains(const std::vector<void*>& rArr, const void* p)
+{
+    return std::find( rArr.begin(), rArr.end(), p ) != rArr.end();
+}
+
+void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
 {
     sal_uInt16 n, nCnt;
     switch( nFamily )
     {
     case SFX_STYLE_FAMILY_CHAR:
         {
-            std::vector<sal_uInt16> aDelArr;
+            std::deque<sal_uInt16> aDelArr;
             const SwCharFmts& rTbl = *rDoc.GetCharFmts();
             for( n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
-                void* p = (void*)rTbl[ n ];
-                if( USHRT_MAX == rArr.GetPos( p ))
-                    aDelArr.insert( aDelArr.begin(), n );
+                if( !lcl_Contains( rArr, rTbl[ n ] ))
+                    aDelArr.push_front( n );
             }
             for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
                 rDoc.DelCharFmt( aDelArr[ n ] );
@@ -1451,13 +1450,12 @@ void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
 
     case SFX_STYLE_FAMILY_PARA :
         {
-            std::vector<sal_uInt16> aDelArr;
+            std::deque<sal_uInt16> aDelArr;
             const SwTxtFmtColls& rTbl = *rDoc.GetTxtFmtColls();
             for( n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
-                void* p = (void*)rTbl[ n ];
-                if( USHRT_MAX == rArr.GetPos( p ))
-                    aDelArr.insert( aDelArr.begin(), n );
+                if( !lcl_Contains( rArr, rTbl[ n ] ))
+                    aDelArr.push_front( n );
             }
             for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
                 rDoc.DelTxtFmtColl( aDelArr[ n ] );
@@ -1466,27 +1464,25 @@ void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
 
     case SFX_STYLE_FAMILY_FRAME:
         {
-            SvPtrarr aDelArr;
+            std::deque<SwFrmFmt*> aDelArr;
             const SwFrmFmts& rTbl = *rDoc.GetFrmFmts();
             for( n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
-                void* p = (void*)rTbl[ n ];
-                if( USHRT_MAX == rArr.GetPos( p ))
-                    aDelArr.Insert( p, 0 );
+                if( !lcl_Contains( rArr, rTbl[ n ] ))
+                    aDelArr.push_front( rTbl[ n ] );
             }
-            for( n = 0, nCnt = aDelArr.Count(); n < nCnt; ++n )
-                rDoc.DelFrmFmt( (SwFrmFmt*)aDelArr[ n ] );
+            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
+                rDoc.DelFrmFmt( aDelArr[ n ] );
         }
         break;
 
     case SFX_STYLE_FAMILY_PAGE:
         {
-            std::vector<sal_uInt16> aDelArr;
+            std::deque<sal_uInt16> aDelArr;
             for( n = 0, nCnt = rDoc.GetPageDescCnt(); n < nCnt; ++n )
             {
-                void* p = (void*)&rDoc.GetPageDesc( n );
-                if( USHRT_MAX == rArr.GetPos( p ))
-                    aDelArr.insert( aDelArr.begin(), n );
+                if( !lcl_Contains( rArr, &rDoc.GetPageDesc( n ) ))
+                    aDelArr.push_front( n );
             }
             for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
                 rDoc.DelPageDesc( aDelArr[ n ] );
@@ -1496,16 +1492,15 @@ void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
 
     case SFX_STYLE_FAMILY_PSEUDO:
         {
-            SvPtrarr aDelArr;
+            std::deque<SwNumRule*> aDelArr;
             const SwNumRuleTbl& rTbl = rDoc.GetNumRuleTbl();
             for( n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
-                void* p = (void*)rTbl[ n ];
-                if( USHRT_MAX == rArr.GetPos( p ))
-                    aDelArr.Insert( p, 0 );
+                if( !lcl_Contains( rArr, rTbl[ n ] ))
+                    aDelArr.push_front( rTbl[ n ] );
             }
-            for( n = 0, nCnt = aDelArr.Count(); n < nCnt; ++n )
-                rDoc.DelNumRule( ((SwNumRule*)aDelArr[ n ])->GetName() );
+            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
+                rDoc.DelNumRule( aDelArr[ n ]->GetName() );
         }
         break;
     }
@@ -1524,7 +1519,7 @@ sal_Bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
     sal_Bool bCreate = FillPhysical == eFType;
     sal_Bool bDeleteInfo = sal_False;
     sal_Bool bFillOnlyInfo = FillAllInfo == eFType;
-    SvPtrarr aDelArr;
+    std::vector<void*> aDelArr;
 
     switch(nFamily)
     {
