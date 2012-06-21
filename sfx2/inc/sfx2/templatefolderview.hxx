@@ -23,23 +23,6 @@ enum FILTER_APPLICATION
     FILTER_APP_DRAW
 };
 
-// Display template items depending on the generator application
-class ViewFilter_Application
-{
-public:
-
-
-
-    ViewFilter_Application (SfxDocumentTemplates *pDocTemplates, FILTER_APPLICATION App);
-
-    bool operator () (const ThumbnailViewItem *pItem);
-
-private:
-
-    FILTER_APPLICATION mApp;
-    SfxDocumentTemplates *mpDocTemplates;
-};
-
 class TemplateFolderView : public ThumbnailView
 {
 public:

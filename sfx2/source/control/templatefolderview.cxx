@@ -140,39 +140,48 @@ BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
     return aThumbnail;
 }
 
-ViewFilter_Application::ViewFilter_Application (SfxDocumentTemplates *pDocTemplates,
-                                                FILTER_APPLICATION App)
-    : mApp(App), mpDocTemplates(pDocTemplates)
+// Display template items depending on the generator application
+class ViewFilter_Application
 {
-}
+public:
 
-bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
-{
-    const TemplateViewItem *pTempItem = static_cast<const TemplateViewItem*>(pItem);
+    ViewFilter_Application (SfxDocumentTemplates *pDocTemplates, FILTER_APPLICATION App)
+        : mApp(App), mpDocTemplates(pDocTemplates)
+    {}
 
-    if (mApp == FILTER_APP_WRITER)
+    bool operator () (const ThumbnailViewItem *pItem)
     {
-        return pTempItem->getFileType() == "OpenDocument Text" ||
-                pTempItem->getFileType() == "OpenDocument Text Template";
-    }
-    else if (mApp == FILTER_APP_CALC)
-    {
-        return pTempItem->getFileType() == "OpenDocument Spreadsheet" ||
-                pTempItem->getFileType() == "OpenDocument Spreadsheet Template";
-    }
-    else if (mApp == FILTER_APP_IMPRESS)
-    {
-        return pTempItem->getFileType() == "OpenDocument Presentation" ||
-                pTempItem->getFileType() == "OpenDocument Presentation Template";
-    }
-    else if (mApp == FILTER_APP_DRAW)
-    {
-        return pTempItem->getFileType() == "OpenDocument Drawing" ||
-                pTempItem->getFileType() == "OpenDocument Drawing Template";
+        const TemplateViewItem *pTempItem = static_cast<const TemplateViewItem*>(pItem);
+
+        if (mApp == FILTER_APP_WRITER)
+        {
+            return pTempItem->getFileType() == "OpenDocument Text" ||
+                    pTempItem->getFileType() == "OpenDocument Text Template";
+        }
+        else if (mApp == FILTER_APP_CALC)
+        {
+            return pTempItem->getFileType() == "OpenDocument Spreadsheet" ||
+                    pTempItem->getFileType() == "OpenDocument Spreadsheet Template";
+        }
+        else if (mApp == FILTER_APP_IMPRESS)
+        {
+            return pTempItem->getFileType() == "OpenDocument Presentation" ||
+                    pTempItem->getFileType() == "OpenDocument Presentation Template";
+        }
+        else if (mApp == FILTER_APP_DRAW)
+        {
+            return pTempItem->getFileType() == "OpenDocument Drawing" ||
+                    pTempItem->getFileType() == "OpenDocument Drawing Template";
+        }
+
+        return true;
     }
 
-    return true;
-}
+private:
+
+    FILTER_APPLICATION mApp;
+    SfxDocumentTemplates *mpDocTemplates;
+};
 
 TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
