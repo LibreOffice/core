@@ -50,7 +50,10 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maAsianFont.assignIfUsed( rSourceProps.maAsianFont );
     maComplexFont.assignIfUsed( rSourceProps.maComplexFont );
     maSymbolFont.assignIfUsed( rSourceProps.maSymbolFont );
-    maCharColor.assignIfUsed( rSourceProps.maCharColor );
+    // keep existing char color
+    if (!maCharColor.isUsed())
+        maCharColor.assignIfUsed( rSourceProps.maCharColor );
+
     maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
     maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
     moHeight.assignIfUsed( rSourceProps.moHeight );

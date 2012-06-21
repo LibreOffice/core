@@ -151,6 +151,15 @@ void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell 
     xPropSet->setPropertyValue( sVerticalAdjust, Any( eVA ) );
 }
 
+// save char color from tblstyle for combination later
+void lcl_getCharPropFromTblStylePart(TextCharacterProperties& rDstCharProp, const TableStylePart& rSrcTblStyle)
+{
+    const Color& clr = const_cast<TableStylePart&>(rSrcTblStyle).getTextColor();
+    if (clr.isUsed())
+        rDstCharProp.maCharColor = clr;
+    // TODO: there may be other similar properties from tblstyle which need combination later
+}
+
 void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oox::drawingml::TextListStylePtr pMasterTextListStyle,
     const ::com::sun::star::uno::Reference < ::com::sun::star::table::XCell >& rxCell, const TableProperties& rTableProperties,
         const TableStyle& rTableStyle, sal_Int32 nColumn, sal_Int32 nMaxColumn, sal_Int32 nRow, sal_Int32 nMaxRow )
@@ -162,8 +171,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     Reference< text::XTextCursor > xAt = xText->createTextCursor();
 
     applyTableCellProperties( rxCell, *this );
-    TextCharacterProperties aTextStyleProps;
-    getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
 
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
     oox::drawingml::FillProperties aFillProperties;
@@ -187,6 +194,10 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
         aLinePropertiesBottomLeftToTopRight,
         rTable.getWholeTbl() );
 
+    // get char color from tblstyle for combination later
+    TextCharacterProperties aTextCharProps;
+    lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getWholeTbl());
+
     if ( rProperties.isFirstRow() && ( nRow == 0 ) )
     {
         applyTableStylePart( rFilterBase, rxCell, aFillProperties,
@@ -197,6 +208,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getFirstRow() );
+       lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getFirstRow());
     }
     if ( rProperties.isLastRow() && ( nRow == nMaxRow ) )
     {
@@ -208,6 +220,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getLastRow() );
+        lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getLastRow());
     }
     if ( rProperties.isFirstCol() && ( nColumn == 0 ) )
     {
@@ -219,6 +232,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getFirstCol() );
+        lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getFirstCol());
     }
     if ( rProperties.isLastCol() && ( nColumn == nMaxColumn ) )
     {
@@ -230,6 +244,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getLastCol() );
+        lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getLastCol());
     }
     if ( rProperties.isBandRow() )
     {
@@ -249,6 +264,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
                     rTable.getBand2H() );
+                lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getBand2H());
             }
             else
             {
@@ -260,6 +276,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
                     rTable.getBand1H() );
+                lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getBand1H());
             }
         }
     }
@@ -273,6 +290,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getNwCell() );
+        lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getNwCell());
     }
     if ( ( nRow == nMaxRow ) && ( nColumn == 0 ) )
     {
@@ -284,6 +302,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getSwCell() );
+        lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getSwCell());
     }
     if ( ( nRow == 0 ) && ( nColumn == nMaxColumn ) )
     {
@@ -295,6 +314,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getNeCell() );
+        lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getNeCell());
     }
     if ( ( nRow == nMaxColumn ) && ( nColumn == nMaxColumn ) )
     {
@@ -306,6 +326,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getSeCell() );
+        lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getSeCell());
     }
     if ( rProperties.isBandCol() )
     {
@@ -325,6 +346,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
                     rTable.getBand2V() );
+                lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getBand2V());
             }
             else
             {
@@ -336,9 +358,13 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
                     rTable.getBand1V() );
+                lcl_getCharPropFromTblStylePart(aTextCharProps, rTable.getBand1V());
             }
         }
     }
+
+    getTextBody()->insertAt( rFilterBase, xText, xAt, aTextCharProps, pMasterTextListStyle );
+
     aLinePropertiesLeft.assignUsed( maLinePropertiesLeft );
     aLinePropertiesRight.assignUsed( maLinePropertiesRight );
     aLinePropertiesTop.assignUsed( maLinePropertiesTop );
