@@ -45,14 +45,6 @@
 
 #include <vcl/svapp.hxx>
 
-#include <unotxdoc.hxx>
-#include <docsh.hxx>
-#include <doc.hxx>
-#include <rootfrm.hxx>
-
-#include <libxml/xmlwriter.h>
-#include <libxml/xpath.h>
-
 using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringBuffer;
@@ -568,34 +560,10 @@ void Test::testN758883()
      * to the numbering. This is easier to test using a layout dump.
      */
 
-    // create xml writer
-    xmlBufferPtr pXmlBuffer = xmlBufferCreate();
-    xmlTextWriterPtr pXmlWriter = xmlNewTextWriterMemory(pXmlBuffer, 0);
-    xmlTextWriterStartDocument(pXmlWriter, NULL, NULL, NULL);
-
-    // create dump
     load("n758883.docx");
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
-    SwRootFrm* pLayout = pDoc->GetCurrentLayout();
-    pLayout->dumpAsXml(pXmlWriter);
 
-    // delete xml writer
-    xmlTextWriterEndDocument(pXmlWriter);
-    xmlFreeTextWriter(pXmlWriter);
-
-    // parse the dump
-    xmlDocPtr pXmlDoc = xmlParseMemory((const char*)xmlBufferContent(pXmlBuffer), xmlBufferLength(pXmlBuffer));;
-    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
-    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST("/root/page/body/txt/Special"), pXmlXpathCtx);
-    xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString aHeight = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST("nHeight")));
+    OUString aHeight = parseDump("/root/page/body/txt/Special", "nHeight");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(220), aHeight.toInt32()); // It was 280
-
-    // delete dump
-    xmlFreeDoc(pXmlDoc);
-    xmlBufferFree(pXmlBuffer);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

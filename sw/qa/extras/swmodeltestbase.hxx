@@ -32,12 +32,31 @@
 #include <unotest/macros_test.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <doc.hxx>
+#include <rootfrm.hxx>
+
+#include <libxml/xmlwriter.h>
+#include <libxml/xpath.h>
+
 using namespace com::sun::star;
 
 /// Base class for filter tests loading or roundtriping a document, then asserting the document model.
 class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
+    SwModelTestBase()
+        : mpXmlBuffer(0)
+    {
+    }
+
+    ~SwModelTestBase()
+    {
+        if (mpXmlBuffer)
+            xmlBufferFree(mpXmlBuffer);
+    }
+
     virtual void setUp()
     {
         test::BootstrapFixture::setUp();
@@ -53,6 +72,26 @@ public:
 
         test::BootstrapFixture::tearDown();
     }
+
+private:
+    void dumpLayout()
+    {
+        // create the xml writer
+        mpXmlBuffer = xmlBufferCreate();
+        xmlTextWriterPtr pXmlWriter = xmlNewTextWriterMemory(mpXmlBuffer, 0);
+        xmlTextWriterStartDocument(pXmlWriter, NULL, NULL, NULL);
+
+        // create the dump
+        SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+        SwRootFrm* pLayout = pDoc->GetCurrentLayout();
+        pLayout->dumpAsXml(pXmlWriter);
+
+        // delete xml writer
+        xmlTextWriterEndDocument(pXmlWriter);
+        xmlFreeTextWriter(pXmlWriter);
+    }
+
 
 protected:
     /// Get the length of the whole document.
@@ -84,7 +123,27 @@ protected:
         return xStyleFamily;
     }
 
+    /// Extract a value from the layout dump using an XPath expression and an attribute name.
+    rtl::OUString parseDump(rtl::OString aXPath, rtl::OString aAttribute)
+    {
+        if (!mpXmlBuffer)
+            dumpLayout();
+
+        xmlDocPtr pXmlDoc = xmlParseMemory((const char*)xmlBufferContent(mpXmlBuffer), xmlBufferLength(mpXmlBuffer));;
+
+        xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
+        xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
+        xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+        rtl::OUString aRet = rtl::OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
+
+        xmlFreeDoc(pXmlDoc);
+
+        return aRet;
+    }
+
     uno::Reference<lang::XComponent> mxComponent;
+    xmlBufferPtr mpXmlBuffer;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
