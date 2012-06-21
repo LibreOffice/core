@@ -4705,6 +4705,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         pRet->SetPrintable( ( nGroupProperties & 1 ) != 0 );
     }
 
+    //Import alt text as description
+    if ( pRet && SeekToContent( DFF_Prop_wzDescription, rSt ) )
+    {
+        OUString aAltText = MSDFFReadZString(rSt, GetPropertyValue(DFF_Prop_wzDescription), true);
+        pRet->SetDescription( aAltText );
+    }
+
     return pRet;
 }
 

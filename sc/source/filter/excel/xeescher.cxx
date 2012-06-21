@@ -686,6 +686,13 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     if( aCtrlProp.GetProperty( aCtrlName, "Name" ) && !aCtrlName.isEmpty() )
         aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
 
+    //Export description as alt text
+    if( SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape ) )
+    {
+        String  aAltTxt( pSdrObj->GetDescription(), 0, MSPROP_DESCRIPTION_MAX_LEN );
+        aPropOpt.AddOpt( ESCHER_Prop_wzDescription, aAltTxt );
+    }
+
     // write DFF property set to stream
     aPropOpt.Commit( mrEscherEx.GetStream() );
 

@@ -107,6 +107,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 
+using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
@@ -1997,6 +1998,20 @@ void XclImpTbxObjBase::ConvertLabel( ScfPropertySet& rPropSet ) const
                 aLabel.Insert( '~', nPos );
         }
         rPropSet.SetStringProperty( "Label", aLabel );
+
+        //Excel Alt text <==> Aoo description
+        //For TBX control, if user does not operate alt text, alt text will be set label text as default value in Excel.
+        //In this case, DFF_Prop_wzDescription will not be set in excel file.
+        //So In the end of SvxMSDffManager::ImportShape, description will not be set. But actually in excel,
+        //the alt text is the label value. So here set description as label text first which is called before ImportShape.
+        Reference< ::com::sun::star::beans::XPropertySet > xPropset( mxShape, UNO_QUERY );
+        try{
+        if(xPropset.is())
+            xPropset->setPropertyValue( "Description", makeAny(::rtl::OUString(aLabel)) );
+        }catch( ... )
+        {
+            OSL_TRACE( " Can't set a default text for TBX Control ");
+        }
     }
     ConvertFont( rPropSet );
 }

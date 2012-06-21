@@ -1179,6 +1179,9 @@ typedef enum {
     mso_colorBParamShift = 16           // To extract the parameter value
 } MSO_SYSCOLORINDEX;
 
+//ALT_TXT_MSINTEROP
+#define MSPROP_DESCRIPTION_MAX_LEN  4096
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
