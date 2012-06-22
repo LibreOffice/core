@@ -157,7 +157,7 @@ void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
     ::editeng::SvxBorderStyle eStyle = ::editeng::NO_STYLE;
     if ( nStyle != API_LINE_NONE )
         eStyle = ::editeng::SvxBorderStyle( nStyle );
-    rLine.SetStyle( eStyle );
+    rLine.SetSvxBorderStyle(eStyle);
 }
 
 sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
@@ -206,7 +206,9 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
            if (bHasWidth && USHRT_MAX != nNamedWidth)
            {
                if (bDouble)
-                   rpLine->SetStyle( ::editeng::DOUBLE );
+               {
+                   rpLine->SetSvxBorderStyle( ::editeng::DOUBLE );
+               }
                rpLine->SetWidth( aBorderWidths[nNamedWidth] );
            }
            else

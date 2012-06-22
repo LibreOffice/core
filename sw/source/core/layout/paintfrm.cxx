@@ -4623,7 +4623,7 @@ lcl_MakeBorderLine(SwRect const& rRect,
             nExtentRightStart, nExtentRightEnd,
             aLeftColor.getBColor(), aRightColor.getBColor(),
             rBorder.GetColorGap().getBColor(), rBorder.HasGapColor(),
-            rBorder.GetStyle() );
+            rBorder.GetSvxBorderStyle() );
     g_pBorderLines->AddBorderLine(xLine);
 }
 

@@ -520,7 +520,7 @@ rtl::OString ScHTMLExport::BorderToStyle(const char* pBorderName,
             std::max(int(nWidth / TWIPS_PER_PIXEL), 1) : 0;
         aOut.append(static_cast<sal_Int32>(nPxWidth)).
             append(RTL_CONSTASCII_STRINGPARAM("px "));
-        switch ( pLine->GetStyle() )
+        switch (pLine->GetSvxBorderStyle())
         {
             case ::editeng::SOLID:
                 aOut.append(RTL_CONSTASCII_STRINGPARAM("solid"));

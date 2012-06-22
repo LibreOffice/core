@@ -1149,7 +1149,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
     sal_uInt16              nModifier = aFrameSet.GetModifier();
     sal_uInt8               nValidFlags = 0;
 
-    theDefLine.GuessLinesWidths( theDefLine.GetStyle(), DEF_LINE_WIDTH_0 );
+    theDefLine.GuessLinesWidths(theDefLine.GetSvxBorderStyle(),
+            DEF_LINE_WIDTH_0);
     switch ( nSel )
     {
         case 1: nValidFlags |= FRM_VALID_ALL;
@@ -1389,7 +1390,7 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
     if ( m_aLineStyleLb.GetSelectEntryPos( ) > 0 )
     {
         SvxBorderLine aTmp;
-        aTmp.SetStyle( nStyle );
+        aTmp.SetSvxBorderStyle( nStyle );
         aTmp.SetWidth( 20 ); // TODO Make it depend on a width field
         aLineItem.SetLine( &aTmp );
     }

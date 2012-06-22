@@ -919,7 +919,8 @@ bool lclConvertBorderLine( ::editeng::SvxBorderLine& rLine, const XclImpPalette&
 
     rLine.SetColor( rPalette.GetColor( nXclColor ) );
     rLine.SetWidth( ppnLineParam[ nXclLine ][ 0 ] );
-    rLine.SetStyle( (::editeng::SvxBorderStyle)ppnLineParam[ nXclLine ][ 1 ] );
+    rLine.SetSvxBorderStyle( static_cast< ::editeng::SvxBorderStyle>(
+                ppnLineParam[ nXclLine ][ 1 ]) );
     return true;
 }
 

@@ -124,7 +124,7 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
     {
         aRet.append(pStr);
         // single line
-        switch ( pLine->GetStyle( ) )
+        switch (pLine->GetSvxBorderStyle())
         {
             case ::editeng::SOLID:
                 {
