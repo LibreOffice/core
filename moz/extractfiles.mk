@@ -170,8 +170,6 @@ DEFAULTS_RUNTIMELIST=	\
     greprefs$/security-prefs.js
 
 .IF "$(SYSTEM_NSS)"=="NO"
-#These headers come from the separate NSS module if enabled
-NSS_INCLUDE_LIST=
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -412,12 +410,6 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
     chmod -R 775 $(INCCOM)
 .ENDIF
     $(TOUCH) $@
-.IF "$(SYSTEM_NSS)"=="NO"
-    +$(foreach,dir,$(NSS_INCLUDE_LIST) $(RENAME:s/+//) $(INCLUDE_DIR)$/$(dir) $(INCLUDE_DIR)$/$(dir)_remove_me &&) echo >& $(NULLDEV)
-    $(foreach,dir,$(NSS_INCLUDE_LIST) rm -rf $(INCLUDE_DIR)$/$(dir)_remove_me &&) echo >& $(NULLDEV)
-    -$(MKDIR)	$(OUT)$/inc.nss
-    cd $(OUT)$/inc.nss && $(foreach,dir,$(NSS_INCLUDE_LIST) $(GNUCOPY) -pRL $(SOLARINCDIR)$/mozilla/$(dir) . &&) echo >& $(NULLDEV)
-.ENDIF
 
 # On UNX the rules for so_moz_runtime_files copy files into the same directory
 # used here (LIB_DIR), and on MACOSX all those files together need to be

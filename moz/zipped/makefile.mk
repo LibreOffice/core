@@ -95,7 +95,6 @@ $(BIN)$/mozruntime%zip : $(OS)$(COM)UBruntime.zip
 
 LIBLIST =
 BIN_RUNTIMELIST = 
-NSS_INCLUDE_LIST =
 NSS_MODULE_RUNTIME_LIST =
 
 # The prebuilt moz files include all the old NSS stuff from moz and not the new
@@ -153,10 +152,6 @@ LIBLIST= \
 
 .ENDIF # .IF "$(GUI)"=="WNT"
 
-
-NSS_INCLUDE_LIST=
-
-
 .IF "$(OS)" == "SOLARIS" 
 .IF "$(CPU)" == "S" #32bit
 FREEBL=freebl_32fpu_3 freebl_32int64_3 freebl_32int_3
@@ -194,10 +189,6 @@ NSS_MODULE_RUNTIME_LIST += sqlite/sqlite3
 # Remove the nss libs build in moz and those build in the nss module
 $(MISC)$/replace_old_nss_libs : $(MISC)$/unpacked_$(TARGET)_lib \
 $(MISC)$/unpacked_$(TARGET)_inc $(BIN)$/mozruntime.zip
-    +$(foreach,dir,$(NSS_INCLUDE_LIST) $(RENAME:s/+//) $(INCCOM)$/$(dir) \
-    $(INCCOM)$/$(dir)_remove_me &&)  echo >& $(NULLDEV)
-    $(foreach,dir,$(NSS_INCLUDE_LIST) rm -r -f $(INCCOM)$/$(dir)_remove_me &&) \
-        echo >& $(NULLDEV)
     $(foreach,lib,$(LIBLIST) rm -f $(LB)$/$(lib) &&) \
     echo >& $(NULLDEV)
     $(foreach,lib,$(BIN_RUNTIMELIST) zip -d $(BIN)$/mozruntime.zip $(DLLPRE)$(lib:f)$(DLLPOST) &&) \
