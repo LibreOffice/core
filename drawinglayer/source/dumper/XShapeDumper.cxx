@@ -1025,7 +1025,7 @@ namespace {
             if(aAny >>= sValue)
             {
                 xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
-                    rtl::OUStringToOString(aCustomShapeGeometry[i].Name, RTL_TEXTENCODING_UTF8).getStr());
+                    rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
             }
             switch(aCustomShapeGeometry[i].State)
             {
