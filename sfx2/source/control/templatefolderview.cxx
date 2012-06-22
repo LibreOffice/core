@@ -371,6 +371,7 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 
 IMPL_LINK(TemplateFolderView, TVTemplateStateHdl, const ThumbnailViewItem*, pItem)
 {
+    maTemplateStateHdl.Call((void*)pItem);
     return 0;
 }
 

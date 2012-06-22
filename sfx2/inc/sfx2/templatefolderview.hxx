@@ -42,6 +42,8 @@ public:
 
     void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
+    void setTemplateStateHdl (const Link &aLink) { maTemplateStateHdl = aLink; }
+
 private:
 
     virtual void OnSelectionMode (bool bMode);
@@ -56,6 +58,7 @@ private:
     FILTER_APPLICATION meFilterOption;
     SfxDocumentTemplates *mpDocTemplates;
     TemplateView *mpItemView;
+    Link maTemplateStateHdl;
 };
 
 #endif // TEMPLATEFOLDERVIEW_HXX
