@@ -14,6 +14,7 @@
 #include <vcl/button.hxx>
 
 class TemplateFolderView;
+class ThumbnailViewItem;
 class ToolBox;
 
 class SfxTemplateManagerDlg : public ModalDialog
@@ -39,6 +40,9 @@ private:
     DECL_LINK(TBXViewHdl, void*);
     DECL_LINK(TBXActionHdl, void*);
     DECL_LINK(TBXTemplateHdl, void*);
+
+    DECL_LINK(TVFolderStateHdl, const ThumbnailViewItem*);
+    DECL_LINK(TVTemplateStateHdl, const ThumbnailViewItem*);
 
     void OnTemplateCreate ();
     void OnTemplateImport ();

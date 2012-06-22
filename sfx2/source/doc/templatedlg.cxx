@@ -71,6 +71,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maView->SetColCount(MAX_COLUMN_COUNT);
     maView->SetLineCount(MAX_LINE_COUNT);
 
+    maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
+    maView->setTemplateStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
+
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
     aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));
     aButtonPresents.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewPresentsHdl));
@@ -188,6 +191,16 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
         break;
     }
 
+    return 0;
+}
+
+IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pItem)
+{
+    return 0;
+}
+
+IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, pItem)
+{
     return 0;
 }
 
