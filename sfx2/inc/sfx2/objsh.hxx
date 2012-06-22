@@ -203,6 +203,7 @@ private:
     SfxObjectCreateMode         eCreateMode;        // Zweck des Objekts
     sal_Bool                    bHasName :1,        // sal_True := bestehendes Objekt, sal_False := es ist ein neues Objekt
                                 bIsTmp :1;          // temp. Storage
+        sal_Bool        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
 private:
 //#if 0 // _SOLAR__PRIVATE
@@ -438,6 +439,8 @@ public:
                                     sal_Bool bSigned,
                                     sal_Bool bIsTemplate,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
+
+    sal_Bool                    IsInGenerateAndStoreThumbnail() const {return bIsInGenerateThumbnail;}//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
     // Transfer IFace
     void                        AbortImport();

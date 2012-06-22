@@ -3522,6 +3522,20 @@ void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
 
 void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
+    //begin:optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    ViewShell *pShell = getRootFrm()->GetCurrShell();
+    if (pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocShell())
+    {
+        sal_Bool bInGenerateThumbnail = pShell->GetDoc()->GetDocShell()->IsInGenerateAndStoreThumbnail();
+        if (bInGenerateThumbnail)
+        {
+            SwRect aVisRect = pShell->VisArea();
+            if (!aVisRect.IsOver(Frm()))
+                return;
+        }
+    }
+    //end:i120030
+
     //wegen der Ueberlappung von Rahmen und Zeichenobjekten muessen die
     //Flys ihre Umrandung (und die der Innenliegenden) direkt ausgeben.
     //z.B. #33066#
