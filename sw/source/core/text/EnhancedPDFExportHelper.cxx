@@ -2149,58 +2149,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
  */
 sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect ) const
 {
-    // Document page number.
-    sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rRect );
-    if ( nPageNumOfRect < 0 )
-        return -1;
-
-    // What will be the page number of page nPageNumOfRect in the output pdf?
-    sal_Int32 nRet = -1;
-    if ( mpRangeEnum )
-    {
-        if ( mbSkipEmptyPages )
-            // Map the page number to the range without empty pages.
-            nPageNumOfRect = maPageNumberMap[ nPageNumOfRect ];
-
-        if ( mpRangeEnum->hasValue( nPageNumOfRect ) )
-        {
-            sal_Int32 nOutputPageNum = 0;
-            StringRangeEnumerator::Iterator aIter = mpRangeEnum->begin();
-            StringRangeEnumerator::Iterator aEnd  = mpRangeEnum->end();
-            for ( ; aIter != aEnd; ++aIter )
-            {
-                if ( *aIter == nPageNumOfRect )
-                {
-                    nRet = nOutputPageNum;
-                    break;
-                }
-                ++nOutputPageNum;
-            }
-        }
-    }
-    else
-    {
-        if ( mbSkipEmptyPages )
-        {
-            sal_Int32 nOutputPageNum = 0;
-            for ( size_t i = 0; i < maPageNumberMap.size(); ++i )
-            {
-                if ( maPageNumberMap[i] >= 0 ) // is not empty?
-                {
-                    if ( i == static_cast<size_t>( nPageNumOfRect ) )
-                    {
-                        nRet = nOutputPageNum;
-                        break;
-                    }
-                    ++nOutputPageNum;
-                }
-            }
-        }
-        else
-            nRet = nPageNumOfRect;
-    }
-
-    return nRet;
+    std::vector< sal_Int32 > aPageNums = CalcOutputPageNums( rRect );
+    if ( !aPageNums.empty() )
+        return aPageNums[0];
+    return -1;
 }
 
 /*
