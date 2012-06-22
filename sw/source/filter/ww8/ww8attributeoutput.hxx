@@ -55,7 +55,7 @@ public:
 
     /// Start of the text run.
     ///
-    virtual void StartRun( const SwRedlineData* pRedlineData );
+    virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false );
 
     /// End of the text run.
     ///
