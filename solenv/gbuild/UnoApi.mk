@@ -62,7 +62,7 @@ endef
 
 define gb_UnoApi__add_headerfile_impl
 $(call gb_Package_add_file,$(1)_inc,inc/$(2),$(3))
-$(call gb_UnoApiHeadersTarget_add_headerfile,$(1),$(3))
+$(call gb_UnoApiHeadersTarget_add_headerfile,$(1),$(2),$(3))
 
 endef
 
