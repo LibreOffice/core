@@ -973,7 +973,7 @@ void WW8AttributeOutput::StartRunProperties()
 }
 
 
-void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData )
+void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bSingleEmptyRun*/ )
 {
     if (pRedlineData)
     {

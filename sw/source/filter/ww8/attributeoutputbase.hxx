@@ -156,7 +156,7 @@ public:
     virtual void EmptyParagraph() = 0;
 
     /// Start of the text run.
-    virtual void StartRun( const SwRedlineData* pRedlineData ) = 0;
+    virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false ) = 0;
 
     /// End of the text run.
     virtual void EndRun() = 0;

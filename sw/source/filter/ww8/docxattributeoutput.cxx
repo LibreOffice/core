@@ -491,7 +491,7 @@ void DocxAttributeOutput::EndParagraphProperties()
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
 }
 
-void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData )
+void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bSingleEmptyRun*/ )
 {
     // if there is some redlining in the document, output it
     StartRedline( pRedlineData );

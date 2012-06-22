@@ -64,7 +64,7 @@ public:
     virtual void EndParagraphProperties();
 
     /// Start of the text run.
-    virtual void StartRun( const SwRedlineData* pRedlineData );
+    virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false );
 
     /// End of the text run.
     virtual void EndRun();
@@ -540,6 +540,9 @@ private:
 
     /// Number of cells from the table definition, by depth.
     std::map<sal_uInt32,sal_uInt32> m_aCells;
+
+    /// If we're in a paragraph that has a single empty run only.
+    bool m_bSingleEmptyRun;
 public:
     RtfAttributeOutput( RtfExport &rExport );
 

@@ -48,6 +48,7 @@ public:
     void testFdo49683();
     void testFdo44174();
     void testFdo50087();
+    void testFdo50831();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testFdo49683);
     CPPUNIT_TEST(testFdo44174);
     CPPUNIT_TEST(testFdo50087);
+    CPPUNIT_TEST(testFdo50831);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -127,6 +129,19 @@ void Test::testFdo50087()
     CPPUNIT_ASSERT_EQUAL(OUString("Title"), xDocumentProperties->getTitle());
     CPPUNIT_ASSERT_EQUAL(OUString("Subject"), xDocumentProperties->getSubject());
     CPPUNIT_ASSERT_EQUAL(OUString("First line.\nSecond line."), xDocumentProperties->getDescription());
+}
+
+void Test::testFdo50831()
+{
+    roundtrip("fdo50831.rtf");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
+    float fValue = 0;
+    xPropertySet->getPropertyValue("CharHeight") >>= fValue;
+    CPPUNIT_ASSERT_EQUAL(10.f, fValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
