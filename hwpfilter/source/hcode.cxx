@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 /**
  * Rule :
@@ -49,10 +40,6 @@
 #define PI 3.14159265358979323846
 
 static hchar jaso2ks(hchar hh);
-
-/* Conversion table.  */
-#define KSC5601_HANJA  4888
-#define KSC5601_SYMBOL  986
 
 // ccvHH2ASC    code convert HWP20 to ASC(KSSM)
 
@@ -1169,7 +1156,7 @@ hchar ksc5601_sym_to_ucs2 (hchar input)
     ch2 = sal::static_int_cast<unsigned char>(input & 0xff);
     idx = (ch - 0xA1) * 94 + (ch2 - 0xA1);
     if (idx <= 1114 && idx >= 0){
-    hchar value = ksc5601_sym_to_ucs[idx];
+    hchar value = ksc5601_2uni_page21[idx];
     return value ? value :  0x25a1;
     }
     return 0x25a1;
@@ -1185,7 +1172,7 @@ hchar ksc5601_han_to_ucs2 (hchar input)
     idx = (ch - 0xA1) * 94 + (ch2 - 0xA1);
     if (idx >= 3854){
     // Hanja : row 42 - row 93 : 3854 = 94 * (42-1)
-    hchar value = ksc5601_hanja_to_ucs[idx - 3854];
+    hchar value = ksc5601_2uni_page21[idx - 3854];
     return value ? value : '?';
     }
     return '?';
