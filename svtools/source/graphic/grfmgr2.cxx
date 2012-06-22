@@ -536,6 +536,7 @@ static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
                                      const Size&     rRefSize,
                                      bool&           o_rbNonBitmapActionEncountered )
 {
+// NOTE: If you do changes in this function, change checkMetadataBitmap() in grfcache.cxx too.
     BitmapEx aBmpEx;
     if( rSrcSize == Size())
         rSrcSize = rBmpEx.GetSizePixel();
@@ -608,6 +609,9 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 
         const MapMode rPrefMapMode( rMtf.GetPrefMapMode() );
         const Size rSizePix( pOut->LogicToPixel( aNewSize, rPrefMapMode ) );
+
+// NOTE: If you do changes in this function, check GraphicDisplayCacheEntry::IsCacheableAsBitmap
+// in grfcache.cxx too.
 
         // Determine whether the metafile basically displays
         // a single bitmap (in which case that bitmap is simply used directly
