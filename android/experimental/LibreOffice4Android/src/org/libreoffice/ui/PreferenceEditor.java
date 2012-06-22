@@ -1,5 +1,7 @@
 package org.libreoffice.ui;
 
+import org.libreoffice.R;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;

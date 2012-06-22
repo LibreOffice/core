@@ -1,5 +1,7 @@
 package org.libreoffice.ui;
 
+import org.libreoffice.R;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;

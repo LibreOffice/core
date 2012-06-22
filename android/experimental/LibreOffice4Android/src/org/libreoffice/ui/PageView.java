@@ -1,5 +1,7 @@
 package org.libreoffice.ui;
 
+import org.libreoffice.R;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -1,5 +1,8 @@
 package org.libreoffice.ui;
 
+import org.libreoffice.R;
+//import org.libreoffice.android.examples.DocumentLoader;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -157,11 +160,14 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     }
     
     public void open(String file){
+    	
     	Intent i = new Intent( this , WriterViewerActivity.class );
     	i.putExtra( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
     	i.putExtra( FILTER_MODE_KEY  , filterMode );
     	i.putExtra( EXPLORER_VIEW_TYPE_KEY  , viewMode );
     	startActivity( i );
+    	
+    	//startActivity( new Intent( this , org.libreoffice.android.examples.DocumentLoader ) );
     }
     
     @Override

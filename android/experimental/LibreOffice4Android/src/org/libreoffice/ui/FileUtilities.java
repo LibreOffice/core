@@ -1,5 +1,7 @@
 package org.libreoffice.ui;
 
+import org.libreoffice.R;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
