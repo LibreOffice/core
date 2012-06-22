@@ -143,48 +143,52 @@ void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
     rFmt.SetFmtAttr( aBox );
 }
 
-void lcl_SetDfltBoxAttr( SwTableBox& rBox, SvPtrarr &rBoxFmtArr, sal_uInt8 nId,
+typedef struct {
+    SwFrmFmt* pBoxFrmFmt;
+    SwTableBoxFmt* pTableBoxFmt;
+} DfltBoxAttrTmp;
+typedef std::vector<DfltBoxAttrTmp> DfltBoxAttrTmpVec;
+typedef std::vector<DfltBoxAttrTmpVec*> DfltBoxAttrTmpVecVec;
+
+void lcl_SetDfltBoxAttr( SwTableBox& rBox, DfltBoxAttrTmpVecVec &rBoxFmtArr, sal_uInt8 nId,
                             const SwTableAutoFmt* pAutoFmt = 0 )
 {
-    SvPtrarr* pArr = (SvPtrarr*)rBoxFmtArr[ nId ];
+    DfltBoxAttrTmpVec* pArr = rBoxFmtArr[ nId ];
     if( !pArr )
     {
-        pArr = new SvPtrarr;
-        rBoxFmtArr.Replace( pArr, nId );
+        pArr = new DfltBoxAttrTmpVec;
+        rBoxFmtArr[ nId ] = pArr;
     }
 
-    SwTableBoxFmt* pNewBoxFmt = 0;
-    SwFrmFmt* pBoxFmt = rBox.GetFrmFmt();
-    for( sal_uInt16 n = 0; n < pArr->Count(); n += 2 )
-        if( pArr->GetObject( n ) == pBoxFmt )
+    SwTableBoxFmt* pNewTableBoxFmt = 0;
+    SwFrmFmt* pBoxFrmFmt = rBox.GetFrmFmt();
+    for( sal_uInt16 n = 0; n < pArr->size(); ++n )
+        if( (*pArr)[n].pBoxFrmFmt == pBoxFrmFmt )
         {
-            pNewBoxFmt = (SwTableBoxFmt*)pArr->GetObject( n + 1 );
+            pNewTableBoxFmt = (*pArr)[n].pTableBoxFmt;
             break;
         }
 
-    if( !pNewBoxFmt )
+    if( !pNewTableBoxFmt )
     {
-        SwDoc* pDoc = pBoxFmt->GetDoc();
+        SwDoc* pDoc = pBoxFrmFmt->GetDoc();
         // das Format ist also nicht vorhanden, also neu erzeugen
-        pNewBoxFmt = pDoc->MakeTableBoxFmt();
-        pNewBoxFmt->SetFmtAttr( pBoxFmt->GetAttrSet().Get( RES_FRM_SIZE ) );
+        pNewTableBoxFmt = pDoc->MakeTableBoxFmt();
+        pNewTableBoxFmt->SetFmtAttr( pBoxFrmFmt->GetAttrSet().Get( RES_FRM_SIZE ) );
 
         if( pAutoFmt )
-            pAutoFmt->UpdateToSet( nId, (SfxItemSet&)pNewBoxFmt->GetAttrSet(),
+            pAutoFmt->UpdateToSet( nId, (SfxItemSet&)pNewTableBoxFmt->GetAttrSet(),
                                     SwTableAutoFmt::UPDATE_BOX,
                                     pDoc->GetNumberFormatter( sal_True ) );
         else
-            ::lcl_SetDfltBoxAttr( *pNewBoxFmt, nId );
+            ::lcl_SetDfltBoxAttr( *pNewTableBoxFmt, nId );
 
-        void* p = pBoxFmt;
-        pArr->Insert( p, pArr->Count() );
-        p = pNewBoxFmt;
-        pArr->Insert( p, pArr->Count() );
+        pArr->push_back( { pBoxFrmFmt, pNewTableBoxFmt } );
     }
-    rBox.ChgFrmFmt( pNewBoxFmt );
+    rBox.ChgFrmFmt( pNewTableBoxFmt );
 }
 
-SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, SvPtrarr &rBoxFmtArr,
+SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
                                     sal_uInt16 nCols, sal_uInt8 nId )
 {
     if ( !rBoxFmtArr[nId] )
@@ -194,12 +198,12 @@ SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, SvPtrarr &rBoxFmtArr,
             pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
         ::lcl_SetDfltBoxAttr( *pBoxFmt, nId );
-        rBoxFmtArr.Replace( pBoxFmt, nId );
+        rBoxFmtArr[ nId ] = pBoxFmt;
     }
-    return (SwTableBoxFmt*)rBoxFmtArr[nId];
+    return rBoxFmtArr[nId];
 }
 
-SwTableBoxFmt *lcl_CreateAFmtBoxFmt( SwDoc &rDoc, SvPtrarr &rBoxFmtArr,
+SwTableBoxFmt *lcl_CreateAFmtBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
                                     const SwTableAutoFmt& rAutoFmt,
                                     sal_uInt16 nCols, sal_uInt8 nId )
 {
@@ -212,9 +216,9 @@ SwTableBoxFmt *lcl_CreateAFmtBoxFmt( SwDoc &rDoc, SvPtrarr &rBoxFmtArr,
         if( USHRT_MAX != nCols )
             pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
-        rBoxFmtArr.Replace( pBoxFmt, nId );
+        rBoxFmtArr[ nId ] = pBoxFmt;
     }
-    return (SwTableBoxFmt*)rBoxFmtArr[nId];
+    return rBoxFmtArr[nId];
 }
 
 SwTableNode* SwDoc::IsIdxInTbl(const SwNodeIndex& rIdx)
@@ -473,7 +477,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     pNdTbl->SetRowsToRepeat( nRowsToRepeat );
     pNdTbl->SetTableModel( bNewModel );
 
-    SvPtrarr aBoxFmtArr( 0 );
+    std::vector<SwTableBoxFmt*> aBoxFmtArr;
     SwTableBoxFmt* pBoxFmt = 0;
     if( !bDfltBorders && !pTAFmt )
     {
@@ -483,8 +487,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     else
     {
         const sal_uInt16 nBoxArrLen = pTAFmt ? 16 : 4;
-        for( sal_uInt16 i = 0; i < nBoxArrLen; ++i )
-            aBoxFmtArr.Insert( (void*)0, i );
+        aBoxFmtArr.resize( nBoxArrLen, NULL );
     }
     SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
 
@@ -760,11 +763,17 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
         sal_uInt8 nBoxArrLen = pTAFmt ? 16 : 4;
-        SvPtrarr aBoxFmtArr( nBoxArrLen );
+        boost::scoped_ptr< DfltBoxAttrTmpVecVec > aBoxFmtArr1;
+        boost::scoped_ptr< std::vector<SwTableBoxFmt*> > aBoxFmtArr2;
+        if( bUseBoxFmt )
         {
-            for( sal_uInt8 i = 0; i < nBoxArrLen; ++i )
-                aBoxFmtArr.Insert( (void*)0, i );
+            aBoxFmtArr1.reset(new DfltBoxAttrTmpVecVec( nBoxArrLen, NULL ));
         }
+        else
+        {
+            aBoxFmtArr2.reset(new std::vector<SwTableBoxFmt*>( nBoxArrLen, NULL ));
+        }
+
 
         SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
 
@@ -789,11 +798,11 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                     nId = nId + static_cast<sal_uInt8>(!i ? 0 :
                                 ( i+1 == nCols ? 3 : (1 + ((i-1) & 1))));
                     if( bUseBoxFmt )
-                        ::lcl_SetDfltBoxAttr( *pBox, aBoxFmtArr, nId, pTAFmt );
+                        ::lcl_SetDfltBoxAttr( *pBox, *aBoxFmtArr1, nId, pTAFmt );
                     else
                     {
-                        bChgSz = 0 == aBoxFmtArr[ nId ];
-                        pBoxF = ::lcl_CreateAFmtBoxFmt( *this, aBoxFmtArr,
+                        bChgSz = 0 == (*aBoxFmtArr2)[ nId ];
+                        pBoxF = ::lcl_CreateAFmtBoxFmt( *this, *aBoxFmtArr2,
                                                 *pTAFmt, USHRT_MAX, nId );
                     }
 
@@ -828,11 +837,11 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                 {
                     sal_uInt8 nId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
                     if( bUseBoxFmt )
-                        ::lcl_SetDfltBoxAttr( *pBox, aBoxFmtArr, nId );
+                        ::lcl_SetDfltBoxAttr( *pBox, *aBoxFmtArr1, nId );
                     else
                     {
-                        bChgSz = 0 == aBoxFmtArr[ nId ];
-                        pBoxF = ::lcl_CreateDfltBoxFmt( *this, aBoxFmtArr,
+                        bChgSz = 0 == (*aBoxFmtArr2)[ nId ];
+                        pBoxF = ::lcl_CreateDfltBoxFmt( *this, *aBoxFmtArr2,
                                                         USHRT_MAX, nId );
                     }
                 }
@@ -850,8 +859,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         {
             for( sal_uInt8 i = 0; i < nBoxArrLen; ++i )
             {
-                SvPtrarr* pArr = (SvPtrarr*)aBoxFmtArr[ i ];
-                delete pArr;
+                delete (*aBoxFmtArr1)[ i ];
             }
         }
     }
