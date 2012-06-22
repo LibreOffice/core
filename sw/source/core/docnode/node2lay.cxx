@@ -49,7 +49,7 @@ class SwNode2LayImpl
 {
     SwIterator<SwFrm,SwModify>* pIter;
     SwModify* pMod;
-    SvPtrarr *pUpperFrms;// Zum Einsammeln der Upper
+    std::vector<SwFrm*>* pUpperFrms;// Zum Einsammeln der Upper
     sal_uLong nIndex;        // Der Index des einzufuegenden Nodes
     sal_Bool bMaster    : 1; // sal_True => nur Master , sal_False => nur Frames ohne Follow
     sal_Bool bInit      : 1; // Ist am SwClient bereits ein First()-Aufruf erfolgt?
@@ -261,7 +261,7 @@ SwFrm* SwNode2LayImpl::NextFrm()
 
 void SwNode2LayImpl::SaveUpperFrms()
 {
-    pUpperFrms = new SvPtrarr( 0 );
+    pUpperFrms = new std::vector<SwFrm*>;
     SwFrm* pFrm;
     while( 0 != (pFrm = NextFrm()) )
     {
@@ -275,8 +275,8 @@ void SwNode2LayImpl::SaveUpperFrms()
                 pFrm->FindSctFrm()->ColLock();
             if( pPrv && pPrv->IsSctFrm() )
                 ((SwSectionFrm*)pPrv)->LockJoin();
-            pUpperFrms->Insert( (void*)pPrv, pUpperFrms->Count() );
-            pUpperFrms->Insert( (void*)pFrm, pUpperFrms->Count() );
+            pUpperFrms->push_back( pPrv );
+            pUpperFrms->push_back( pFrm );
         }
     }
     delete pIter;
@@ -356,9 +356,9 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
         SwFrm* pNxt;
         SwLayoutFrm* pUp;
         if( (pNd = rNds[nStt])->IsCntntNode() )
-            for( sal_uInt16 n = 0; n < pUpperFrms->Count(); )
+            for( sal_uInt16 n = 0; n < pUpperFrms->size(); )
             {
-                pNxt = (SwFrm*)(*pUpperFrms)[n++];
+                pNxt = (*pUpperFrms)[n++];
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
                     ((SwSectionFrm*)pNxt)->UnlockJoin();
                 pUp = (SwLayoutFrm*)(*pUpperFrms)[n++];
@@ -371,9 +371,9 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
                 (*pUpperFrms)[n-2] = pNew;
             }
         else if( pNd->IsTableNode() )
-            for( sal_uInt16 x = 0; x < pUpperFrms->Count(); )
+            for( sal_uInt16 x = 0; x < pUpperFrms->size(); )
             {
-                pNxt = (SwFrm*)(*pUpperFrms)[x++];
+                pNxt = (*pUpperFrms)[x++];
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
                     ((SwSectionFrm*)pNxt)->UnlockJoin();
                 pUp = (SwLayoutFrm*)(*pUpperFrms)[x++];
@@ -390,9 +390,9 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
         else if( pNd->IsSectionNode() )
         {
             nStt = pNd->EndOfSectionIndex();
-            for( sal_uInt16 x = 0; x < pUpperFrms->Count(); )
+            for( sal_uInt16 x = 0; x < pUpperFrms->size(); )
             {
-                pNxt = (SwFrm*)(*pUpperFrms)[x++];
+                pNxt = (*pUpperFrms)[x++];
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
                     ((SwSectionFrm*)pNxt)->UnlockJoin();
                 pUp = (SwLayoutFrm*)(*pUpperFrms)[x++];
@@ -404,9 +404,9 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
         }
         bFirst = sal_False;
     }
-    for( sal_uInt16 x = 0; x < pUpperFrms->Count(); ++x )
+    for( sal_uInt16 x = 0; x < pUpperFrms->size(); ++x )
     {
-        SwFrm* pTmp = (SwFrm*)(*pUpperFrms)[++x];
+        SwFrm* pTmp = (*pUpperFrms)[++x];
         if( pTmp->IsFtnFrm() )
             ((SwFtnFrm*)pTmp)->ColUnlock();
         else if ( pTmp->IsInSct() )
