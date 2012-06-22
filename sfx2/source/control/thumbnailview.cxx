@@ -322,6 +322,9 @@ void ThumbnailView::CalculateItemPositions ()
 
         for ( size_t i = 0; i < nItemCount; i++ )
         {
+            if (mItemList[i]->isVisible())
+                maItemStateHdl.Call(mItemList[i]);
+
             mItemList[i]->show(false);
         }
 
@@ -370,6 +373,9 @@ void ThumbnailView::CalculateItemPositions ()
                     ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
+                if (!mItemList[i]->isVisible())
+                    maItemStateHdl.Call(mItemList[i]);
+
                 pItem->show(true);
                 pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
                 pItem->calculateItemsPosition();
@@ -393,6 +399,9 @@ void ThumbnailView::CalculateItemPositions ()
                     aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
                     ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
+
+                if (mItemList[i]->isVisible())
+                    maItemStateHdl.Call(mItemList[i]);
 
                 pItem->show(false);
             }
@@ -567,6 +576,9 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
 
             if ( (i >= nFirstItem) && (i < nLastItem) )
             {
+                if (!mItemList[i]->isVisible())
+                    maItemStateHdl.Call(mItemList[i]);
+
                 pItem->show(true);
                 pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
                 pItem->calculateItemsPosition();
@@ -581,6 +593,9 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
             }
             else
             {
+                if (mItemList[i]->isVisible())
+                    maItemStateHdl.Call(mItemList[i]);
+
                 pItem->show(false);
             }
         }
@@ -635,6 +650,8 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 
                         if (!pItem->isHighlighted())
                             DrawItem(pItem);
+
+                        maItemStateHdl.Call(pItem);
                     }
                     else
                     {
@@ -644,6 +661,8 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 
                             if (!pItem->isHighlighted())
                                 DrawItem(pItem);
+
+                            maItemStateHdl.Call(pItem);
                         }
 
                         //StartTracking( STARTTRACK_SCROLLREPEAT );

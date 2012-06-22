@@ -240,6 +240,8 @@ public:
 
     void filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func);
 
+    void setItemStateHdl (const Link &aLink) { maItemStateHdl = aLink; }
+
 protected:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
@@ -338,6 +340,7 @@ protected:
     bool mbSelectionMode;
     Color maColor;
 
+    Link maItemStateHdl;
     ThumbnailItemAttributes *mpItemAttrs;
     drawinglayer::processor2d::BaseProcessor2D *mpProcessor;
     boost::function<bool (const ThumbnailViewItem*) > maFilterFunc;
