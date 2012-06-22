@@ -96,6 +96,7 @@ public:
     void testFdo50539();
     void testFdo50665();
     void testFdo49659();
+    void testFdo46966();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -135,6 +136,7 @@ public:
     CPPUNIT_TEST(testFdo50539);
     CPPUNIT_TEST(testFdo50665);
     CPPUNIT_TEST(testFdo49659);
+    CPPUNIT_TEST(testFdo46966);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -792,6 +794,21 @@ void Test::testFdo49659()
     sal_Int8 nValue = 0;
     xGraphic->getPropertyValue("GraphicType") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL, nValue);
+}
+
+void Test::testFdo46966()
+{
+    /*
+     * The problem was the top margin was 1440 (1 inch), but it should be 720 (0.5 inch).
+     *
+     * xray ThisComponent.StyleFamilies.PageStyles.Default.TopMargin
+     */
+    load("fdo46966.rtf");
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    sal_Int32 nValue = 0;
+    xPropertySet->getPropertyValue("TopMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(720)), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
