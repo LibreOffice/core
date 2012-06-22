@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LibreOfficeUI</string>
+    <string name="menu_search">Search</string>
+    <string name="list_view">List</string>
+    <string name="grid_view">Grid</string>
+    <string name="menu_sort_size">Sort By Size</string>
+    <string name="menu_sort_az">Sort A-Z</string>
+    <string name="menu_sort_modified">Sort by Date</string>
+    <string name="menu_preferences">Preferences</string>
+    <!-- Pref keys as resources ; Not currently used -->
+    <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
+    <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
+    
+
+</resources>

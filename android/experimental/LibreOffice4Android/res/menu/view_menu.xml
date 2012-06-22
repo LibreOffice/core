@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_search"
+          android:icon="@drawable/action_search"
+          android:showAsAction="always" />
+    <item android:id="@+id/menu_view_toggle"
+          android:title="@string/grid_view"/>
+    <item android:id="@+id/menu_sort_size"
+          android:title="@string/menu_sort_size"
+          android:onClick="sortFiles"/>
+    <item android:id="@+id/menu_sort_az"
+          android:title="@string/menu_sort_az"
+          android:onClick="sortFiles"/>
+    <item android:id="@+id/menu_sort_modified"
+          android:title="@string/menu_sort_modified"
+          android:onClick="sortFiles"/>
+	<item android:id="@+id/menu_preferences"
+	          android:title="@string/menu_preferences"
+	          android:onClick="editPreferences"/>
+</menu>
