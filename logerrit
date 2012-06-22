@@ -1,5 +1,16 @@
 #!/bin/sh
 
+#
+# Installation:
+# ln -s in some directory on your PATH with git- prefix
+# i. e.:
+# sudo ln -s /home/projects/libo /usr/local/bin/git-lr
+# or
+# ln -s /home/libo/logerrit $HOME/bin/git-lr
+# after that git lr test should work
+#
+
+
 #GERRITHOST=gerrit.libreoffice.org
 GERRITHOST=logerrit
 GERRITURL=ssh://$GERRITHOST/core
@@ -182,6 +193,13 @@ case "$1" in
 		ssh ${GERRITHOST?} gerrit query project:core $@
 	;;
 	*)
+		COMMAND=$2
+		if test -z "$COMMAND"
+		then
+		    echo "please specifiy some gerrit command, sorry"
+		    exit 1
+		fi
+		shift
 		ssh ${GERRITHOST?} gerrit $@
 	;;
 esac
