@@ -1313,7 +1313,7 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
     aFndBox.DelFrms( *this );
 
     _CpyTabFrms aFrmArr;
-    SvPtrarr aLastBoxArr;
+    std::vector<SwTableBoxFmt*> aLastBoxArr;
     sal_uInt16 nFndPos;
     for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
     {
@@ -1350,14 +1350,13 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
                 pLastBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                                 nBoxSz - ( nNewBoxSz * nCnt ), 0 ) );
             }
-            void* p = pLastBoxFmt;
-            aLastBoxArr.Insert( p, nFndPos );
+            aLastBoxArr.insert( aLastBoxArr.begin() + nFndPos, pLastBoxFmt );
         }
         else
         {
             aFindFrm = aFrmArr[ nFndPos ];
             pSelBox->ChgFrmFmt( (SwTableBoxFmt*)aFindFrm.pNewFrmFmt );
-            pLastBoxFmt = (SwTableBoxFmt*)aLastBoxArr[ nFndPos ];
+            pLastBoxFmt = aLastBoxArr[ nFndPos ];
         }
 
         // Insert the Boxes at the Position
@@ -1386,7 +1385,7 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
                     rCTF.Value.pFrmFmt == aFindFrm.pNewFrmFmt )
                 {
                     aFrmArr.Remove( i );
-                    aLastBoxArr.Remove( i );
+                    aLastBoxArr.erase( aLastBoxArr.begin() + i );
                 }
             }
         }
