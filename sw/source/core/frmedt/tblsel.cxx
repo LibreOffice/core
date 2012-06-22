@@ -1579,37 +1579,35 @@ void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
     while ( rpEnd->GetNext() )
         rpEnd = (SwLayoutFrm*)rpEnd->GetNext();
 
-    SvPtrarr aSttArr( 8 ), aEndArr( 8 );
+    std::deque<const SwLayoutFrm *> aSttArr, aEndArr;
     const SwLayoutFrm *pTmp;
     for( pTmp = rpStart; (FRM_CELL|FRM_ROW) & pTmp->GetType();
                 pTmp = pTmp->GetUpper() )
     {
-        void* p = (void*)pTmp;
-        aSttArr.Insert( p, 0 );
+        aSttArr.push_front( pTmp );
     }
     for( pTmp = rpEnd; (FRM_CELL|FRM_ROW) & pTmp->GetType();
                 pTmp = pTmp->GetUpper() )
     {
-        void* p = (void*)pTmp;
-        aEndArr.Insert( p, 0 );
+        aEndArr.push_front( pTmp );
     }
 
-    for( sal_uInt16 n = 0; n < aEndArr.Count() && n < aSttArr.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aEndArr.size() && n < aSttArr.size(); ++n )
         if( aSttArr[ n ] != aEndArr[ n ] )
         {
             // first unequal line or box - all odds are
             if( n & 1 )                 // 1, 3, 5, ... are boxes
             {
-                rpStart = (SwLayoutFrm*)aSttArr[ n ];
-                rpEnd = (SwLayoutFrm*)aEndArr[ n ];
+                rpStart = aSttArr[ n ];
+                rpEnd = aEndArr[ n ];
             }
             else                                // 0, 2, 4, ... are lines
             {
                 // check if start & end line are the first & last Line of the
                 // box. If not return these cells.
                 // Else the hole line with all Boxes has to be deleted.
-                rpStart = (SwLayoutFrm*)aSttArr[ n+1 ];
-                rpEnd = (SwLayoutFrm*)aEndArr[ n+1 ];
+                rpStart = aSttArr[ n+1 ];
+                rpEnd = aEndArr[ n+1 ];
                 if( n )
                 {
                     const SwCellFrm* pCellFrm = (SwCellFrm*)aSttArr[ n-1 ];
