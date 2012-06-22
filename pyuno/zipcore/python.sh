@@ -43,10 +43,6 @@ cd "$sd_cwd"
 PATH=$sd_prog${PATH+:$PATH}
 export PATH
 
-# Set %%OOO_LIBRARY_PATH_VAR%% so that "import pyuno" finds libpyuno.so:
-%%OOO_LIBRARY_PATH_VAR%%=$sd_prog:$sd_prog/../ure-link/lib${%%OOO_LIBRARY_PATH_VAR%%:+:$%%OOO_LIBRARY_PATH_VAR%%}
-export %%OOO_LIBRARY_PATH_VAR%%
-
 # Set UNO_PATH so that "officehelper.bootstrap()" can find soffice executable:
 : ${UNO_PATH=$sd_prog}
 export UNO_PATH
@@ -57,6 +53,11 @@ export UNO_PATH
 export URE_BOOTSTRAP
 
 NONMACSECTION
+# Set %%OOO_LIBRARY_PATH_VAR%% so that python.bin finds libpython2.6.so (this
+# can go once python.bin contains a proper RPATH):
+%%OOO_LIBRARY_PATH_VAR%%=$sd_prog${%%OOO_LIBRARY_PATH_VAR%%:+:$%%OOO_LIBRARY_PATH_VAR%%}
+export %%OOO_LIBRARY_PATH_VAR%%
+
 PYTHONPATH=$sd_prog:$sd_prog/python-core-%%PYVERSION%%/lib:$sd_prog/python-core-%%PYVERSION%%/lib/lib-dynload:$sd_prog/python-core-%%PYVERSION%%/lib/lib-tk:$sd_prog/python-core-%%PYVERSION%%/lib/site-packages${PYTHONPATH+:$PYTHONPATH}
 export PYTHONPATH
 PYTHONHOME=$sd_prog/python-core-%%PYVERSION%%
