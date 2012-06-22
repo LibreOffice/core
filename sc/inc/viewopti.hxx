@@ -36,9 +36,7 @@
 #include "optutil.hxx"
 #include "global.hxx"
 
-//==================================================================
-// View-Optionen
-//==================================================================
+// View options
 
 enum ScViewOption
 {
@@ -71,9 +69,7 @@ enum ScVObjType
 
 #define SC_STD_GRIDCOLOR    COL_LIGHTGRAY
 
-//==================================================================
-// SvxGrid-Optionen mit Standard-Operatoren
-//==================================================================
+// SvxGrid options with standard operators
 
 class ScGridOptions : public SvxOptionsGrid
 {
@@ -87,9 +83,7 @@ public:
     bool                    operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
 };
 
-//==================================================================
-// Einstellungen - Ansicht
-//==================================================================
+// Options - View
 
 class SC_DLLPUBLIC ScViewOptions
 {
@@ -125,9 +119,7 @@ private:
     ScGridOptions   aGridOpt;
 };
 
-//==================================================================
-// Item fuer Einstellungsdialog - Ansicht
-//==================================================================
+// Item for the options dialoge - View
 
 class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 {
@@ -148,9 +140,7 @@ private:
 };
 
 
-//==================================================================
-// CfgItem fuer View-Optionen
-//==================================================================
+// CfgItem for View options
 
 class ScViewCfg : public ScViewOptions
 {
