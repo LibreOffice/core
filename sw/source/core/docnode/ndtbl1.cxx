@@ -79,8 +79,8 @@ public:
 
     SwTblFmtCmp( SwFrmFmt *pOld, SwFrmFmt *pNew, sal_Int16 nType );
 
-    static SwFrmFmt *FindNewFmt( SvPtrarr &rArr, SwFrmFmt*pOld, sal_Int16 nType );
-    static void Delete( SvPtrarr &rArr );
+    static SwFrmFmt *FindNewFmt( std::vector<SwTblFmtCmp*> &rArr, SwFrmFmt*pOld, sal_Int16 nType );
+    static void Delete( std::vector<SwTblFmtCmp*> &rArr );
 };
 
 
@@ -89,21 +89,21 @@ SwTblFmtCmp::SwTblFmtCmp( SwFrmFmt *pO, SwFrmFmt *pN, sal_Int16 nT )
 {
 }
 
-SwFrmFmt *SwTblFmtCmp::FindNewFmt( SvPtrarr &rArr, SwFrmFmt *pOld, sal_Int16 nType )
+SwFrmFmt *SwTblFmtCmp::FindNewFmt( std::vector<SwTblFmtCmp*> &rArr, SwFrmFmt *pOld, sal_Int16 nType )
 {
-    for ( sal_uInt16 i = 0; i < rArr.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rArr.size(); ++i )
     {
-        SwTblFmtCmp *pCmp = (SwTblFmtCmp*)rArr[i];
+        SwTblFmtCmp *pCmp = rArr[i];
         if ( pCmp->pOld == pOld && pCmp->nType == nType )
             return pCmp->pNew;
     }
     return 0;
 }
 
-void SwTblFmtCmp::Delete( SvPtrarr &rArr )
+void SwTblFmtCmp::Delete( std::vector<SwTblFmtCmp*> &rArr )
 {
-    for ( sal_uInt16 i = 0; i < rArr.Count(); ++i )
-        delete (SwTblFmtCmp*)rArr[i];
+    for ( sal_uInt16 i = 0; i < rArr.size(); ++i )
+        delete rArr[i];
 }
 
 void lcl_GetStartEndCell( const SwCursor& rCrsr,
@@ -285,7 +285,7 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor, bool bRemoveLine
 
 //-----------------------------------------------------------------------------
 
-void lcl_ProcessRowAttr( SvPtrarr& rFmtCmp, SwTableLine* pLine, const SfxPoolItem& rNew )
+void lcl_ProcessRowAttr( std::vector<SwTblFmtCmp*>& rFmtCmp, SwTableLine* pLine, const SfxPoolItem& rNew )
 {
     SwFrmFmt *pNewFmt;
     if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( rFmtCmp, pLine->GetFrmFmt(), 0 )))
@@ -295,15 +295,15 @@ void lcl_ProcessRowAttr( SvPtrarr& rFmtCmp, SwTableLine* pLine, const SfxPoolIte
         SwFrmFmt *pOld = pLine->GetFrmFmt();
         SwFrmFmt *pNew = pLine->ClaimFrmFmt();
         pNew->SetFmtAttr( rNew );
-        rFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, 0 ), rFmtCmp.Count());
+        rFmtCmp.push_back( new SwTblFmtCmp( pOld, pNew, 0 ) );
     }
 }
 
 //-----------------------------------------------------------------------------
 
-void lcl_ProcessBoxSize( SvPtrarr &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew );
+void lcl_ProcessBoxSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew );
 
-void lcl_ProcessRowSize( SvPtrarr &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSize &rNew )
+void lcl_ProcessRowSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSize &rNew )
 {
     lcl_ProcessRowAttr( rFmtCmp, pLine, rNew );
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
@@ -313,7 +313,7 @@ void lcl_ProcessRowSize( SvPtrarr &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSi
 
 //-----------------------------------------------------------------------------
 
-void lcl_ProcessBoxSize( SvPtrarr &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew )
+void lcl_ProcessBoxSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew )
 {
     SwTableLines &rLines = pBox->GetTabLines();
     if ( !rLines.empty() )
@@ -345,7 +345,8 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
-            SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ) );
+            std::vector<SwTblFmtCmp*> aFmtCmp;
+            aFmtCmp.reserve( Max( 255, (int)aRowArr.Count() ) );
 
             for( sal_uInt16 i = 0; i < aRowArr.Count(); ++i )
                 ::lcl_ProcessRowAttr( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
@@ -405,7 +406,8 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
-            SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ) );
+            std::vector<SwTblFmtCmp*> aFmtCmp;
+            aFmtCmp.reserve( Max( 255, (int)aRowArr.Count() ) );
             for ( sal_uInt16 i = 0; i < aRowArr.Count(); ++i )
                 ::lcl_ProcessRowSize( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
             SwTblFmtCmp::Delete( aFmtCmp );
@@ -479,7 +481,8 @@ sal_Bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly )
                             new SwUndoAttrTbl(*pTblNd));
                 }
 
-                SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ) );
+                std::vector<SwTblFmtCmp*> aFmtCmp;
+                aFmtCmp.reserve( Max( 255, (int)aRowArr.Count() ) );
                 for( i = 0; i < aRowArr.Count(); ++i )
                     ::lcl_ProcessRowSize( aFmtCmp, (SwTableLine*)aRowArr[i], aNew );
                 SwTblFmtCmp::Delete( aFmtCmp );
@@ -510,7 +513,8 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
-            SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ) );
+            std::vector<SwTblFmtCmp*> aFmtCmp;
+            aFmtCmp.reserve( Max( 255, (int)aRowArr.Count() ) );
 
             for( sal_uInt16 i = 0; i < aRowArr.Count(); ++i )
                 ::lcl_ProcessRowAttr( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
@@ -603,7 +607,8 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTbl(*pTblNd) );
         }
 
-        SvPtrarr aFmtCmp( 255 );
+        std::vector<SwTblFmtCmp*> aFmtCmp;
+        aFmtCmp.reserve( 255 );
         const SvxBoxItem* pSetBox;
         const SvxBoxInfoItem *pSetBoxInfo;
 
@@ -787,7 +792,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                     SwFrmFmt *pOld = pBox->GetFrmFmt();
                     SwFrmFmt *pNew = pBox->ClaimFrmFmt();
                     pNew->SetFmtAttr( aBox );
-                    aFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, nType ), aFmtCmp.Count());
+                    aFmtCmp.push_back( new SwTblFmtCmp( pOld, pNew, nType ) );
                 }
             }
 
@@ -1130,7 +1135,8 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
             GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTbl(*pTblNd) );
         }
 
-        SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aBoxes.Count()) ) );
+        std::vector<SwTblFmtCmp*> aFmtCmp;
+        aFmtCmp.reserve( Max( 255, (int)aBoxes.Count() ) );
         for ( sal_uInt16 i = 0; i < aBoxes.Count(); ++i )
         {
             SwTableBox *pBox = aBoxes[i];
@@ -1143,7 +1149,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
                 SwFrmFmt *pOld = pBox->GetFrmFmt();
                 SwFrmFmt *pNew = pBox->ClaimFrmFmt();
                 pNew->SetFmtAttr( rNew );
-                aFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, 0 ), aFmtCmp.Count());
+                aFmtCmp.push_back( new SwTblFmtCmp( pOld, pNew, 0 ) );
             }
         }
 
