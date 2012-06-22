@@ -32,21 +32,25 @@
 
 #include <X11/SM/SMlib.h>
 
+#include "boost/scoped_ptr.hpp"
 #include "tools/link.hxx"
+
 #include "vclpluginapi.h"
 
 namespace rtl {
     class OString;
     class OUString;
 }
+class ICEConnectionObserver;
 class SalSession;
 
 class SessionManagerClient
 {
     static SalSession * m_pSession;
-    static SmcConn          aSmcConnection;
+    static boost::scoped_ptr< ICEConnectionObserver > m_pICEConnectionObserver;
+    static SmcConn m_pSmcConnection;
     static rtl::OString m_aClientID;
-    static bool         bDocSaveDone;
+    static bool m_bDocSaveDone;
 
     static void SaveYourselfProc(       SmcConn connection,
                                         SmPointer client_data,
@@ -63,7 +67,7 @@ class SessionManagerClient
     static void InteractProc(           SmcConn connection,
                                         SmPointer clientData );
 
-    static const rtl::OString& getPreviousSessionID();
+    static rtl::OString getPreviousSessionID();
 
     DECL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void* );
     DECL_STATIC_LINK( SessionManagerClient, ShutDownCancelHdl, void* );
@@ -79,7 +83,7 @@ public:
     static void interactionDone( bool bCancelShutdown );
 
     static rtl::OUString getExecName();
-    static VCLPLUG_GEN_PUBLIC const rtl::OString& getSessionID();
+    static VCLPLUG_GEN_PUBLIC rtl::OString getSessionID();
 };
 
 #endif
