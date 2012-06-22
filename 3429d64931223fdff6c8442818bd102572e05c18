@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACn///1s\u003d",
+        "filename": "scp2/source/python/file_python.scp",
+        "patchSetId": 3
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-06-22T11:09:11Z",
+      "side": 1,
+      "message": "This is still wrong--missing quotes :-) But I will take care of it.",
+      "revId": "3429d64931223fdff6c8442818bd102572e05c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
