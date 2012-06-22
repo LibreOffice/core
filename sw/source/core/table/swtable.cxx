@@ -693,19 +693,12 @@ struct Parm
     const SwTabCols &rOld;
     long nNewWish,
          nOldWish;
-    SvPtrarr aBoxArr;
+    std::deque<SwTableBox*> aBoxArr;
     SwShareBoxFmts aShareFmts;
 
     Parm( const SwTabCols &rN, const SwTabCols &rO ) :
         rNew( rN ), rOld( rO ), nNewWish(0), nOldWish(0), aBoxArr( 10 ){}
 };
-inline sal_Bool BoxInArr( SvPtrarr& rArr, SwTableBox* pBox )
-{
-    sal_Bool bRet = USHRT_MAX != rArr.GetPos( (VoidPtr)pBox );
-    if( !bRet )
-        rArr.Insert( (VoidPtr)pBox, rArr.Count() );
-    return bRet;
-}
 
 void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm );
 
@@ -862,7 +855,7 @@ void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
     }
 }
 
-void lcl_ProcessBoxPtr( SwTableBox *pBox, SvPtrarr &rBoxArr,
+void lcl_ProcessBoxPtr( SwTableBox *pBox, std::deque<SwTableBox*> &rBoxArr,
                            sal_Bool bBefore )
 {
     if ( !pBox->GetTabLines().empty() )
@@ -876,9 +869,9 @@ void lcl_ProcessBoxPtr( SwTableBox *pBox, SvPtrarr &rBoxArr,
         }
     }
     else if ( bBefore )
-        rBoxArr.Insert( (VoidPtr)pBox, 0 );
+        rBoxArr.push_front( pBox );
     else
-        rBoxArr.Insert( (VoidPtr)pBox, rBoxArr.Count() );
+        rBoxArr.push_back( pBox );
 }
 
 void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm );
@@ -1035,9 +1028,9 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             //Nachdem wir haufenweise Boxen (hoffentlich alle und in der richtigen
             //Reihenfolge) eingetragen haben, brauchen diese nur noch rueckwaerts
             //verarbeitet zu werden.
-            for ( int j = aParm.aBoxArr.Count()-1; j >= 0; --j )
+            for ( int j = aParm.aBoxArr.size()-1; j >= 0; --j )
             {
-                SwTableBox *pBox = (SwTableBox*)aParm.aBoxArr[ static_cast< sal_uInt16 >(j)];
+                SwTableBox *pBox = aParm.aBoxArr[j];
                 ::lcl_ProcessBoxSet( pBox, aParm );
             }
         }
