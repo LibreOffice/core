@@ -538,6 +538,7 @@ static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
                                      const Size&     rRefSize,
                                      bool&           o_rbNonBitmapActionEncountered )
 {
+// NOTE: If you do changes in this function, change checkMetadataBitmap() in grfcache.cxx too.
     BitmapEx aBmpEx;
     if( rSrcSize == Size())
         rSrcSize = rBmpEx.GetSizePixel();
@@ -612,9 +613,12 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         const Size&    rSizePix( pOut->LogicToPixel( aNewSize,
                                                      rPrefMapMode ) );
 
-        // taking care of font width default if scaling metafile.
-        // #117889# use existing metafile scan, to determine whether
-        // the metafile basically displays a single bitmap. Note that
+// NOTE: If you do changes in this function, check GraphicDisplayCacheEntry::IsCacheableAsBitmap
+// in grfcache.cxx too.
+
+        // Determine whether the metafile basically displays
+        // a single bitmap (in which case that bitmap is simply used directly
+        // instead of playing the metafile). Note that
         // the solution, as implemented here, is quite suboptimal (the
         // cases where a mtf consisting basically of a single bitmap,
         // that fail to pass the test below, are probably frequent). A
