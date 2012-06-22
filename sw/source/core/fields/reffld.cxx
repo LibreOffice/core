@@ -77,7 +77,7 @@ using ::rtl::OUString;
 
 extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
 
-void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
+void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 {
     while( pFrm )
     {
@@ -85,8 +85,7 @@ void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
             pFrm = pFrm->GetUpper();
         else
         {
-            void* p = (void*)pFrm;
-            rArr.Insert( p, rArr.Count() );
+            rArr.push_back( pFrm );
 
             // bei der Seite ist schluss
             if( pFrm->IsPageFrm() )
@@ -115,18 +114,18 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
     if( !pFrm || !pMyFrm || pFrm == pMyFrm )
         return sal_False;
 
-    SvPtrarr aRefArr( 10 ), aArr( 10 );
+    std::vector<const SwFrm*> aRefArr, aArr;
     ::lcl_GetLayTree( pFrm, aRefArr );
     ::lcl_GetLayTree( pMyFrm, aArr );
 
-    sal_uInt16 nRefCnt = aRefArr.Count() - 1, nCnt = aArr.Count() - 1;
+    sal_uInt16 nRefCnt = aRefArr.size() - 1, nCnt = aArr.size() - 1;
     sal_Bool bVert = sal_False;
     sal_Bool bR2L = sal_False;
 
     // solange bis ein Frame ungleich ist ?
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
     {
-        const SwFrm* pTmpFrm = (const SwFrm*)aArr[ nCnt ];
+        const SwFrm* pTmpFrm = aArr[ nCnt ];
         bVert = pTmpFrm->IsVertical();
         bR2L = pTmpFrm->IsRightToLeft();
         --nCnt, --nRefCnt;
@@ -141,8 +140,8 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
             --nRefCnt;
     }
 
-    const SwFrm* pRefFrm = (const SwFrm*)aRefArr[ nRefCnt ];
-    const SwFrm* pFldFrm = (const SwFrm*)aArr[ nCnt ];
+    const SwFrm* pRefFrm = aRefArr[ nRefCnt ];
+    const SwFrm* pFldFrm = aArr[ nCnt ];
 
     // unterschiedliche Frames, dann ueberpruefe deren Y-/X-Position
     sal_Bool bRefIsLower = sal_False;
@@ -174,9 +173,9 @@ sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
             pRefFrm = 0;
         }
         else if( ( FRM_COLUMN | FRM_CELL ) & pFldFrm->GetType() )
-            pFldFrm = (const SwFrm*)aArr[ nCnt - 1 ];
+            pFldFrm = aArr[ nCnt - 1 ];
         else
-            pRefFrm = (const SwFrm*)aRefArr[ nRefCnt - 1 ];
+            pRefFrm = aRefArr[ nRefCnt - 1 ];
     }
 
     if( pRefFrm )               // als Flag missbrauchen
