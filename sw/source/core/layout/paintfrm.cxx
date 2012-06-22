@@ -3880,6 +3880,19 @@ private:
 
 void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
+    //optimize thumbnail generation and store procedure to improve odt saving performance, #i120030#
+    ViewShell *pShell = getRootFrm()->GetCurrShell();
+    if (pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocShell())
+    {
+        sal_Bool bInGenerateThumbnail = pShell->GetDoc()->GetDocShell()->IsInGenerateAndStoreThumbnail();
+        if (bInGenerateThumbnail)
+        {
+            SwRect aVisRect = pShell->VisArea();
+            if (!aVisRect.IsOver(Frm()))
+                return;
+        }
+    }
+
     //because of the overlapping of frames and drawing objects the flys have to
     //paint their borders (and those of the internal ones) directly.
     //e.g. #33066#

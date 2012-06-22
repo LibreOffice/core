@@ -3523,6 +3523,8 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::GenerateAndStoreThumbnail" );
 
+    bIsInGenerateThumbnail = sal_True;//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+
     sal_Bool bResult = sal_False;
 
     try {
@@ -3546,6 +3548,8 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
     catch( uno::Exception& )
     {
     }
+
+    bIsInGenerateThumbnail = sal_False;//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
     return bResult;
 }

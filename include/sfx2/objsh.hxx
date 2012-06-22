@@ -198,6 +198,7 @@ private:
     sal_Bool                    bHasName :1,      // sal_True  := existing object,
                                                   // sal_False := new object
                                 bIsTmp :1;        // temporary Storage
+    sal_Bool                    bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
 private:
     SAL_DLLPRIVATE void UpdateTime_Impl(const ::com::sun::star::uno::Reference<
@@ -443,6 +444,8 @@ public:
                                     sal_Bool bSigned,
                                     sal_Bool bIsTemplate,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
+
+    sal_Bool                    IsInGenerateAndStoreThumbnail() const {return bIsInGenerateThumbnail;}//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
     // Transfer IFace
     void                        AbortImport();
