@@ -557,14 +557,14 @@ sal_Bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill
 #*  Class      :  SwDoc
 #*  Methoden   :  SetTabBorders(), GetTabBorders()
 #***********************************************************************/
-inline void InsertCell( SvPtrarr& rCellArr, SwCellFrm* pCellFrm )
+inline void InsertCell( std::vector<SwCellFrm*>& rCellArr, SwCellFrm* pCellFrm )
 {
-    if( USHRT_MAX == rCellArr.GetPos( pCellFrm ) )
-        rCellArr.Insert( pCellFrm, rCellArr.Count() );
+    if( rCellArr.end() == std::find( rCellArr.begin(), rCellArr.end(), pCellFrm ) )
+        rCellArr.push_back( pCellFrm );
 }
 
 //-----------------------------------------------------------------------------
-void lcl_CollectCells( SvPtrarr &rArr, const SwRect &rUnion,
+void lcl_CollectCells( std::vector<SwCellFrm*> &rArr, const SwRect &rUnion,
                           SwTabFrm *pTab )
 {
     SwLayoutFrm *pCell = pTab->FirstCell();
@@ -663,7 +663,8 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             const SwRect &rUnion = pUnion->GetUnion();
             const sal_Bool bLast  = i == aUnions.size() - 1 ? sal_True : sal_False;
 
-            SvPtrarr aCellArr( 255 );
+            std::vector<SwCellFrm*> aCellArr;
+            aCellArr.reserve( 255 );
             ::lcl_CollectCells( aCellArr, pUnion->GetUnion(), pTab );
 
             //Alle Zellenkanten, die mit dem UnionRect uebereinstimmen oder
@@ -674,9 +675,9 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             //handelt doch keine Aussenkanten sein.
             //Aussenkanten werden links, rechts, oben und unten gesetzt.
             //Innenkanten werden nur oben und links gesetzt.
-            for ( sal_uInt16 j = 0; j < aCellArr.Count(); ++j )
+            for ( sal_uInt16 j = 0; j < aCellArr.size(); ++j )
             {
-                SwCellFrm *pCell = (SwCellFrm*)aCellArr[j];
+                SwCellFrm *pCell = aCellArr[j];
                 const sal_Bool bVert = pTab->IsVertical();
                 const sal_Bool bRTL = pTab->IsRightToLeft();
                 sal_Bool bTopOver, bLeftOver, bRightOver, bBottomOver;
@@ -859,12 +860,13 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
         {
             SwSelUnion *pUnion = &aUnions[i];
             SwTabFrm *pTab = pUnion->GetTable();
-            SvPtrarr aCellArr( 255 );
+            std::vector<SwCellFrm*> aCellArr;
+            aCellArr.reserve( 255 );
             ::lcl_CollectCells( aCellArr, pUnion->GetUnion(), pTab );
 
-            for ( sal_uInt16 j = 0; j < aCellArr.Count(); ++j )
+            for ( sal_uInt16 j = 0; j < aCellArr.size(); ++j )
             {
-                SwCellFrm *pCell = ( SwCellFrm* )aCellArr[j];
+                SwCellFrm *pCell = aCellArr[j];
 
                 //Grundsaetzlich nichts setzen in HeadlineRepeats.
                 if ( pTab->IsFollow() && pTab->IsInHeadline( *pCell ) )
@@ -945,12 +947,13 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
             const sal_Bool bFirst = i == 0 ? sal_True : sal_False;
             const sal_Bool bLast  = i == aUnions.size() - 1 ? sal_True : sal_False;
 
-            SvPtrarr aCellArr( 255 );
+            std::vector<SwCellFrm*> aCellArr;
+            aCellArr.reserve(255);
             ::lcl_CollectCells( aCellArr, rUnion, (SwTabFrm*)pTab );
 
-            for ( sal_uInt16 j = 0; j < aCellArr.Count(); ++j )
+            for ( sal_uInt16 j = 0; j < aCellArr.size(); ++j )
             {
-                const SwCellFrm *pCell = (const SwCellFrm*)aCellArr[j];
+                SwCellFrm *pCell = aCellArr[j];
                 const sal_Bool bVert = pTab->IsVertical();
                 const sal_Bool bRTL = pTab->IsRightToLeft();
                 sal_Bool bTopOver, bLeftOver, bRightOver, bBottomOver;
