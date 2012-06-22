@@ -641,7 +641,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 
     static const long nAdd = 20;
 
-    SvPtrarr   aCheck( 64 );
+    std::vector<SwLineRect*> aCheck;
 
     for (size_t i = 0; i < this->size(); ++i)
     {
@@ -649,7 +649,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         if ( !rL1.GetTab() || rL1.IsPainted() || rL1.IsLocked() )
             continue;
 
-        aCheck.Remove( 0, aCheck.Count() );
+        aCheck.clear();
 
         const sal_Bool bVert = rL1.Height() > rL1.Width();
         long nL1a, nL1b, nL1c, nL1d;
@@ -692,23 +692,22 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                    (nL1c >= nL2c && nL1b - nAdd < nL2c) ||
                    (nL1b <= nL2b && nL1c + nAdd > nL2b)) )
             {
-                SwLineRect *pMSC = &rL2;
-                aCheck.Insert( pMSC, aCheck.Count() );
+                aCheck.push_back( &rL2 );
             }
         }
-        if ( aCheck.Count() < 2 )
+        if ( aCheck.size() < 2 )
             continue;
 
         sal_Bool bRemove = sal_False;
 
         // For each line test all following ones.
-        for ( sal_uInt16 k = 0; !bRemove && k < aCheck.Count(); ++k )
+        for ( sal_uInt16 k = 0; !bRemove && k < aCheck.size(); ++k )
         {
-            SwLineRect &rR1 = (SwLineRect&)*(SwLineRect*)aCheck[k];
+            SwLineRect &rR1 = *aCheck[k];
 
-            for ( sal_uInt16 k2 = k+1; !bRemove && k2 < aCheck.Count(); ++k2 )
+            for ( sal_uInt16 k2 = k+1; !bRemove && k2 < aCheck.size(); ++k2 )
             {
-                SwLineRect &rR2 = (SwLineRect&)*(SwLineRect*)aCheck[k2];
+                SwLineRect &rR2 = *aCheck[k2];
                 if ( bVert )
                 {
                     SwLineRect *pLA = 0;
@@ -738,7 +737,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             if ( isFull() )
                             {
                                 --i;
-                                k = aCheck.Count();
+                                k = aCheck.size();
                                 break;
                             }
                         }
@@ -778,7 +777,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             if ( isFull() )
                             {
                                 --i;
-                                k = aCheck.Count();
+                                k = aCheck.size();
                                 break;
                             }
                         }
