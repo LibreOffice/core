@@ -16,6 +16,74 @@
       "revId": "213fcbd804a4c15d5e6bdb91fd4d4b9e48300fcc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///2I\u003d",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-22T09:49:34Z",
+      "side": 1,
+      "message": "to handle optional parameter [-n|--dryrun] something like that should work:\r\n\r\ndry\u003dfalse\r\n\r\nwhile\r\n  case $1 in\r\n    -n|--dry-run) dry\u003dtrue ;;\r\n    *) break ;;\r\n  esac\r\ndo\r\n  test $# -gt 0 \u0026\u0026 shift;\r\ndone",
+      "revId": "213fcbd804a4c15d5e6bdb91fd4d4b9e48300fcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///18\u003d",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-22T09:49:34Z",
+      "side": 1,
+      "message": "change it correspondingly:\r\necho \"Usage: ./logerrit [-n|--dry-run] subcommand [options]\"",
+      "revId": "213fcbd804a4c15d5e6bdb91fd4d4b9e48300fcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///2E\u003d",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-22T09:49:34Z",
+      "side": 1,
+      "message": "to use here dry: use instead of direct command call:\r\ndoit cmd",
+      "revId": "213fcbd804a4c15d5e6bdb91fd4d4b9e48300fcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAACn///2A\u003d",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-22T09:49:34Z",
+      "side": 1,
+      "message": "doit method can be something like this:\r\ndoit()\r\n{\r\n  $dry \u0026\u0026 { echo \"Dry run command: $@\"; } || \"$@\"\r\n}",
+      "revId": "213fcbd804a4c15d5e6bdb91fd4d4b9e48300fcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
