@@ -68,7 +68,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-class SwOLELRUCache : private SvPtrarr, private utl::ConfigItem
+class SwOLELRUCache : private std::deque<SwOLEObj*>, private utl::ConfigItem
 {
     sal_uInt16 nLRU_InitSize;
     sal_Bool bInUnload;
@@ -83,16 +83,15 @@ public:
     void Load();
 
     void SetInUnload( sal_Bool bFlag )  { bInUnload = bFlag; }
-    using SvPtrarr::Count;
 
     void InsertObj( SwOLEObj& rObj );
     void RemoveObj( SwOLEObj& rObj );
 
     void RemovePtr( SwOLEObj* pObj )
     {
-        sal_uInt16 nPos = SvPtrarr::GetPos( pObj );
-        if( USHRT_MAX != nPos )
-            SvPtrarr::Remove( nPos );
+        iterator it = std::find( begin(), end(), pObj );
+        if( it != end() )
+            erase( it  );
     }
 };
 
@@ -898,7 +897,7 @@ String SwOLEObj::GetDescription()
 
 
 SwOLELRUCache::SwOLELRUCache()
-    : SvPtrarr( 64 ),
+    : std::deque<SwOLEObj*>(),
     utl::ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Cache"))),
     nLRU_InitSize( 20 ),
     bInUnload( sal_False )
@@ -939,13 +938,13 @@ void SwOLELRUCache::Load()
             if( nVal < nLRU_InitSize )
             {
                 // size of cache has been changed
-                sal_uInt16 nCount = SvPtrarr::Count();
+                sal_uInt16 nCount = size();
                 sal_uInt16 nPos = nCount;
 
                 // try to remove the last entries until new maximum size is reached
                 while( nCount > nVal )
                 {
-                    SwOLEObj* pObj = (SwOLEObj*) SvPtrarr::GetObject( --nPos );
+                    SwOLEObj* pObj = operator[]( --nPos );
                     if ( pObj->UnloadObject() )
                         nCount--;
                     if ( !nPos )
@@ -961,21 +960,21 @@ void SwOLELRUCache::Load()
 void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
 {
     SwOLEObj* pObj = &rObj;
-    sal_uInt16 nPos = SvPtrarr::GetPos( pObj );
-    if( nPos )
+    iterator it = std::find( begin(), end(), pObj );
+    if( it != begin() )
     {
         // object is currently not the first in cache
-        if( USHRT_MAX != nPos )
-            SvPtrarr::Remove( nPos );
+        if( it != end() )
+            erase( it );
 
-        SvPtrarr::Insert( pObj, 0 );
+        push_front( pObj );
 
         // try to remove objects if necessary (of course not the freshly inserted one at nPos=0)
-        sal_uInt16 nCount = SvPtrarr::Count();
-        nPos = nCount-1;
+        sal_uInt16 nCount = size();
+        sal_uInt16 nPos = nCount-1;
         while( nPos && nCount > nLRU_InitSize )
         {
-            pObj = (SwOLEObj*) SvPtrarr::GetObject( nPos-- );
+            pObj = operator[]( nPos-- );
             if ( pObj->UnloadObject() )
                 nCount--;
         }
@@ -984,10 +983,10 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
 
 void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
 {
-    sal_uInt16 nPos = SvPtrarr::GetPos( &rObj );
-    if ( nPos != 0xFFFF )
-        SvPtrarr::Remove( nPos );
-    if( !Count() )
+    iterator it = std::find( begin(), end(), &rObj );
+    if ( it != end() )
+        erase( it );
+    if( empty() )
         DELETEZ( pOLELRU_Cache );
 }
 
