@@ -4466,22 +4466,22 @@ sal_Bool SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
                 ? new SwUndoAttrTbl( *rBoxes[0]->GetSttNd()->FindTableNode() )
                 : 0;
 
-        SvPtrarr aFmts( 16 ), aNewFmts( 16 );
+        std::vector<SwFrmFmt*> aFmts, aNewFmts;
         for( sal_uInt16 i = rBoxes.Count(); i; )
         {
             SwTableBox* pBox = rBoxes[ --i ];
             SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
             if( pBoxFmt->GetProtect().IsCntntProtected() )
             {
-                sal_uInt16 nFnd = aFmts.GetPos( pBoxFmt );
-                if( USHRT_MAX != nFnd )
-                    pBox->ChgFrmFmt( (SwTableBoxFmt*)aNewFmts[ nFnd ] );
+                std::vector<SwFrmFmt*>::iterator it = std::find( aFmts.begin(), aFmts.end(), pBoxFmt );
+                if( aFmts.end() != it )
+                    pBox->ChgFrmFmt( (SwTableBoxFmt*)*it );
                 else
                 {
-                    aFmts.Insert( pBoxFmt, aFmts.Count() );
+                    aFmts.push_back( pBoxFmt );
                     pBoxFmt = pBox->ClaimFrmFmt();
                     pBoxFmt->ResetFmtAttr( RES_PROTECT );
-                    aNewFmts.Insert( pBoxFmt, aNewFmts.Count() );
+                    aNewFmts.push_back( pBoxFmt );
                 }
                 bChgd = sal_True;
             }
