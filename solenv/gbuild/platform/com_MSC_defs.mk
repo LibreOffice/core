@@ -240,6 +240,10 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-DEXCEPTIONS_OFF \
 
+gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
+
+gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
+
 gb_LinkTarget_LDFLAGS := \
 	$(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-nologo,) \
 	-MANIFEST \

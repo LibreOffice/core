@@ -78,6 +78,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CXXFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
+		$(PCHFLAGS) \
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
@@ -86,6 +87,44 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Fo$(1)) $(call gb_create_deps,$(4),$(1),$(3))
 endef
 
+
+# PrecompiledHeader class
+
+gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
+	-Fp$(call gb_PrecompiledHeader_get_target,$(1))
+
+define gb_PrecompiledHeader__command
+$(call gb_Output_announce,$(2),$(true),PCH,1)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
+	unset INCLUDE && \
+	$(gb_CXX) \
+		$(4) $(5) -Fd$(PDBFILE) \
+		$(gb_COMPILERDEPFLAGS) \
+		-I$(dir $(3)) \
+		$(6) \
+		-c $(3) \
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(3))
+endef
+
+# NoexPrecompiledHeader class
+
+gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
+	-Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
+
+define gb_NoexPrecompiledHeader__command
+$(call gb_Output_announce,$(2),$(true),PCH,1)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
+	unset INCLUDE && \
+	$(gb_CXX) \
+		$(4) $(5) -Fd$(PDBFILE) \
+		$(gb_COMPILERDEPFLAGS) \
+		-I$(dir $(3)) \
+		$(6) \
+		-c $(3) \
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_NoexPrecompiledHeader,$(2)),$(3))
+endef
 
 # AsmObject class
 
@@ -131,7 +170,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
-		$(NATIVERES)) && \
+		$(PCHOBJS) $(NATIVERES)) && \
 		$(if $(filter $(call gb_Library_get_linktargetname,merged),$(2)),$(call gb_LinkTarget_MergedResponseFile)) \
 	unset INCLUDE && \
 	$(if $(filter YES,$(LIBRARY_X64)), $(LINK_X64_BINARY), $(gb_LINK)) \

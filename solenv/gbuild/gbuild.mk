@@ -141,6 +141,12 @@ gb_SYMBOL := $(true)
 endif
 endif
 
+ifneq ($(strip $(ENABLE_PCH)),)
+gb_ENABLE_PCH := $(true)
+else
+gb_ENABLE_PCH := $(false)
+endif
+
 ifneq ($(nodep),)
 gb_FULLDEPS := $(false)
 else
@@ -303,6 +309,7 @@ include $(foreach class, \
 	CustomTarget \
 	ExternalProject \
 	Pagein \
+	PrecompiledHeaders \
 	Pyuno \
 	Rdb \
 	CppunitTest \

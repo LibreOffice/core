@@ -677,6 +677,11 @@ AC_ARG_ENABLE(vba,
         [Disables the vba compatibility feature.])
 )
 
+AC_ARG_ENABLE(pch,
+    AS_HELP_STRING([--enable-pch],
+        [Enables precompiled header support for C++.])
+)
+
 AC_ARG_ENABLE(win-mozab-driver,
     AS_HELP_STRING([--enable-win-mozab-driver],
         [LibreOffice includes a driver to connect to Mozilla 
@@ -4474,7 +4479,23 @@ dnl ===================================================================
 dnl ENABLE_PCH i now a no-op
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable pch feature])
-AC_MSG_RESULT([no, obsolete])
+if test -n "$enable_pch" && test "$enable_pch" != "no"; then
+    if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+        ENABLE_PCH="TRUE"
+        AC_MSG_RESULT([yes])
+dnl There is no PCH support in GCC versions prior to this
+    elif test "$GCC" = "yes"; then
+        ENABLE_PCH="TRUE"
+        AC_MSG_RESULT([yes])
+    else
+        ENABLE_PCH=""
+        AC_MSG_WARN([Precompiled header not yet supported for your platform/compiler])
+    fi
+else
+    ENABLE_PCH=""
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_PCH)
 
 dnl ===================================================================
 dnl Search all the common names for GNU make

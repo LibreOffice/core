@@ -68,8 +68,9 @@ gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_
 #                                                          LinkTarget/headers
 # LinkTarget/dep              joined dep file              AsmObject/dep CObject/dep CxxObject/dep GenCObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep
 #                                                          | LinkTarget/headers
-# LinkTarget/headers          all headers available        LinkTarget/external_headers
+# LinkTarget/headers          all headers available        LinkTarget/external_headers PCH
 #                              including own generated     own generated headers
+# PCH                         precompiled headers (win)    LinkTarget/external_headers
 # LinkTarget/external_headers all external headers avail.  header files of linked libs
 #
 # CObject                     plain c compile              | LinkTarget/headers
@@ -153,17 +154,47 @@ gb_CxxObject_get_source = $(1)/$(2).cxx
 # defined by platform
 #  gb_CxxObject__command
 
+# Only enable PCH if the PCH_CXXFLAGS and the PCH_DEFS (from the linktarget)
+# are the same as the T_CXXFLAGS and DEFS we want to use for this object. This
+# should usually be the case.  The DEFS/T_CXXFLAGS would have to be manually
+# overridden for one object file for them to differ.  PCH_CXXFLAGS/PCH_DEFS
+# should never be overridden on an object -- they should be the same as for the
+# whole linktarget. In general it should be cleaner to use a static library
+# compiled with different flags and link that in rather than mixing different
+# flags in one linktarget.
+define gb_CxxObject__set_pchflags
+ifeq ($(gb_ENABLE_PCH),$(true))
+ifneq ($(strip $$(PCH_NAME)),)
+ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(DEFS)))
+$$@ : PCHFLAGS := $$(call gb_PrecompiledHeader_get_enableflags,$$(PCH_NAME))
+else
+ifeq ($$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)),$$(sort $$(T_CXXFLAGS) $$(DEFS)))
+$$@ : PCHFLAGS := $$(call gb_NoexPrecompiledHeader_get_enableflags,$$(PCH_NAME))
+else
+$$(info No precompiled header available for $$*.cxx .)
+$$(info precompiled header flags (  ex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
+$$(info precompiled header flags (noex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)))
+$$(info .           object flags        : $$(sort $$(T_CXXFLAGS) $$(DEFS)))
+$$@ : PCHFLAGS :=
+endif
+endif
+endif
+endif
+endef
+
 ifneq ($(COMPILER_PLUGIN_TOOL),)
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) force_compiler_tool_run
 	$(call gb_CxxObject__tool_command,$*,$<)
 else
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
+	$(eval $(gb_CxxObject__set_pchflags))
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_CxxObject_get_dep_target,$*))
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
+	  $(eval $(gb_CxxObject__set_pchflags))\
 	  $(call gb_Object__command_dep,$@,$(call gb_CxxObject_get_target,$*)))
 
 endif
@@ -463,6 +494,9 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 # Explanation of some of the variables:
 # - AUXTARGETS are the additionally generated files that need to be cleaned out
 #   on clean.
+# - PCH_CXXFLAGS and PCH_DEFS are the flags that the precompiled headers will
+#   be compiled with.  They should never be overridden in a single object
+#   files.
 # - TARGETTYPE is the type of linktarget as some platforms need very different
 #   command to link different targettypes.
 # - LIBRARY_X64 is only relevent for building a x64 library on windows.
@@ -506,10 +540,14 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $$(call gb_LinkTarget_rtl_defs,$(1)) $(CPPFLAGS)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -519,6 +557,9 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_target,$(1)) : LIBRARY_X64 :=
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
@@ -540,13 +581,15 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : YACCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $$(call gb_LinkTarget_rtl_defs,$(1)) $(CPPFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS :=
@@ -568,8 +611,11 @@ endef
 define gb_LinkTarget_add_defs
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS += $(2)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS += $(2)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS += $(2)
 endif
 endef
 
@@ -598,8 +644,11 @@ endef
 define gb_LinkTarget_add_cxxflags
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS += $(2)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS += $(2)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS += $(2)
 endif
 endef
 
@@ -1133,6 +1182,39 @@ endef
 define gb_LinkTarget_add_sdi_headers
 $(call gb_LinkTarget__add_internal_headers,$(1),$(foreach sdi,$(2),$(call gb_SdiTarget_get_target,$(sdi))))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTarget_get_clean_target,$(sdi)))
+
+endef
+
+define gb_LinkTarget__add_precompiled_header_impl
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_target,$(3)))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
+$(call gb_PrecompiledHeader_get_target,$(3)) : $(2).cxx
+
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_NoexPrecompiledHeader_get_target,$(3)))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_NoexPrecompiledHeader_get_clean_target,$(3))
+$(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(2).cxx
+
+$(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $(call gb_PrecompiledHeader_get_target,$(3)).obj $(call gb_NoexPrecompiledHeader_get_target,$(3)).obj
+
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS = $$(DEFS)
+ifeq ($(gb_FULLDEPS),$(true))
+-include \
+	$(call gb_PrecompiledHeader_get_dep_target,$(3)) \
+	$(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
+$(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS = $$(DEFS)
+endif
+
+endef
+
+define gb_LinkTarget_add_precompiled_header
+ifeq ($(gb_ENABLE_PCH),$(true))
+$(call gb_LinkTarget__add_precompiled_header_impl,$(1),$(2),$(notdir $(2)))
+endif
 
 endef
 
