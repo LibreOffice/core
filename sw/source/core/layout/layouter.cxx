@@ -60,7 +60,7 @@ class SwEndnoter
 {
     SwLayouter* pMaster;
     SwSectionFrm* pSect;
-    SvPtrarr* pEndArr;
+    SwFtnFrms*    pEndArr;
 public:
     SwEndnoter( SwLayouter* pLay )
         : pMaster( pLay ), pSect( NULL ), pEndArr( NULL ) {}
@@ -69,7 +69,7 @@ public:
     void CollectEndnote( SwFtnFrm* pFtn );
     const SwSectionFrm* GetSect() const { return pSect; }
     void InsertEndnotes();
-    sal_Bool HasEndnotes() const { return pEndArr && pEndArr->Count(); }
+    sal_Bool HasEndnotes() const { return pEndArr && !pEndArr->empty(); }
 };
 
 void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
@@ -84,7 +84,7 @@ void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
 
 void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
 {
-    if( pEndArr && USHRT_MAX != pEndArr->GetPos( (VoidPtr)pFtn ) )
+    if( pEndArr && pEndArr->end() != std::find( pEndArr->begin(), pEndArr->end(), pFtn ) )
         return;
 
     if( pFtn->GetUpper() )
@@ -117,9 +117,9 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
     }
     else if( pEndArr )
     {
-        for ( sal_uInt16 i = 0; i < pEndArr->Count(); ++i )
+        for ( sal_uInt16 i = 0; i < pEndArr->size(); ++i )
         {
-            SwFtnFrm *pEndFtn = (SwFtnFrm*)((*pEndArr)[i]);
+            SwFtnFrm *pEndFtn = (*pEndArr)[i];
             if( pEndFtn->GetAttr() == pFtn->GetAttr() )
             {
                 delete pFtn;
@@ -128,15 +128,15 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
         }
     }
     if( !pEndArr )
-        pEndArr = new SvPtrarr( 5 );  // deleted from the SwLayouter
-    pEndArr->Insert( (VoidPtr)pFtn, pEndArr->Count() );
+        pEndArr = new SwFtnFrms;  // deleted from the SwLayouter
+    pEndArr->push_back( pFtn );
 }
 
 void SwEndnoter::InsertEndnotes()
 {
     if( !pSect )
         return;
-    if( !pEndArr || !pEndArr->Count() )
+    if( !pEndArr || pEndArr->empty() )
     {
         pSect = NULL;
         return;

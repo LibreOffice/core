@@ -1931,7 +1931,7 @@ void SwFtnBossFrm::ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *pAttr,
 /// footnote boss frame <this> have to be collected.
 void SwFtnBossFrm::CollectFtns( const SwCntntFrm* _pRef,
                                 SwFtnBossFrm*     _pOld,
-                                SvPtrarr&         _rFtnArr,
+                                SwFtnFrms&        _rFtnArr,
                                 const sal_Bool    _bCollectOnlyPreviousFtns )
 {
     SwFtnFrm *pFtn = _pOld->FindFirstFtn();
@@ -1989,10 +1989,10 @@ void SwFtnBossFrm::CollectFtns( const SwCntntFrm* _pRef,
 |*  SwFtnBossFrm::_CollectFtns()
 |*
 |*************************************************************************/
-inline void FtnInArr( SvPtrarr& rFtnArr, SwFtnFrm* pFtn )
+inline void FtnInArr( SwFtnFrms& rFtnArr, SwFtnFrm* pFtn )
 {
-    if ( USHRT_MAX == rFtnArr.GetPos( (VoidPtr)pFtn ) )
-        rFtnArr.Insert( (VoidPtr)pFtn, rFtnArr.Count() );
+    if ( rFtnArr.end() == std::find( rFtnArr.begin(), rFtnArr.end(), pFtn ) )
+        rFtnArr.push_back( pFtn );
 }
 
 /// OD 03.04.2003 #108446# - add parameters <_bCollectOnlyPreviousFtns> and
@@ -2003,7 +2003,7 @@ inline void FtnInArr( SvPtrarr& rFtnArr, SwFtnFrm* pFtn )
 /// Adjust parameter names.
 void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
                                  SwFtnFrm*           _pFtn,
-                                 SvPtrarr&           _rFtnArr,
+                                 SwFtnFrms&          _rFtnArr,
                                  sal_Bool            _bCollectOnlyPreviousFtns,
                                  const SwFtnBossFrm* _pRefFtnBossFrm)
 {
@@ -2018,7 +2018,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
     //(der Inhalt zu einem Attribut kann ueber mehrere Seiten verteilt sein)
     //und ausschneiden.
 
-    SvPtrarr aNotFtnArr( 20 );  //Zur Robustheit werden hier die nicht
+    SwFtnFrms aNotFtnArr;           //Zur Robustheit werden hier die nicht
                                     //dazugehoerigen Fussnoten eingetragen.
                                     //Wenn eine Fussnote zweimal angefasst wird
                                     //ists vorbei! So kommt die Funktion auch
@@ -2135,8 +2135,8 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
                 break;
         }
         if ( pNxtFtn &&
-             USHRT_MAX == _rFtnArr.GetPos( (VoidPtr)pNxtFtn ) &&
-             USHRT_MAX == aNotFtnArr.GetPos( (VoidPtr)pNxtFtn ) )
+             _rFtnArr.end() == std::find( _rFtnArr.begin(), _rFtnArr.end(), pNxtFtn ) &&
+             aNotFtnArr.end() == std::find( aNotFtnArr.begin(), aNotFtnArr.end(), pNxtFtn ) )
             _pFtn = pNxtFtn;
         else
             break;
@@ -2150,7 +2150,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
 |*************************************************************************/
 
 
-void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
+void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
 {
     //Alle Fussnoten die von pRef referenziert werden muessen von der
     //aktuellen Position, die sich durch die alte Spalte/Seite ergab, auf eine
@@ -2162,9 +2162,9 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
     // #i21478# - keep last inserted footnote in order to
     // format the content of the following one.
     SwFtnFrm* pLastInsertedFtn = 0L;
-    for ( sal_uInt16 i = 0; i < rFtnArr.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rFtnArr.size(); ++i )
     {
-        SwFtnFrm *pFtn = (SwFtnFrm*)rFtnArr[i];
+        SwFtnFrm *pFtn = rFtnArr[i];
 
         SwFtnBossFrm* pRefBoss = pFtn->GetRef()->FindFtnBossFrm( sal_True );
         if( pRefBoss != this )
@@ -2377,9 +2377,9 @@ void SwFtnBossFrm::MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
         OSL_ENSURE( pDestBoss, "+SwPageFrm::MoveFtns: no destination boss" );
         if( pDestBoss )     // robust
         {
-            SvPtrarr aFtnArr( 5 );
+            SwFtnFrms aFtnArr;
             pDestBoss->_CollectFtns( pDest, pFtn, aFtnArr );
-            if ( aFtnArr.Count() )
+            if ( !aFtnArr.empty() )
             {
                 pDestBoss->_MoveFtns( aFtnArr, sal_True );
                 SwPageFrm* pSrcPage = FindPageFrm();
@@ -2888,7 +2888,7 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
     if( !pStart )
         pStart = ContainsCntnt();
 
-    SvPtrarr aFtnArr( 5 );
+    SwFtnFrms aFtnArr;
 
     while ( IsAnLower( pStart ) )
     {
@@ -2906,13 +2906,13 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
 
     OSL_ENSURE( pOldBoss->IsInSct() == pNewBoss->IsInSct(),
             "MoveLowerFtns: Section confusion" );
-    SvPtrarr *pFtnArr;
+    SwFtnFrms *pFtnArr;
     SwLayoutFrm* pNewChief = 0;
     SwLayoutFrm* pOldChief = 0;
     if( pStart && pOldBoss->IsInSct() && ( pOldChief = pOldBoss->FindSctFrm() )
         != ( pNewChief = pNewBoss->FindSctFrm() ) )
     {
-        pFtnArr = new SvPtrarr( 5 );
+        pFtnArr = new SwFtnFrms;
         pOldChief = pOldBoss->FindFtnBossFrm( sal_True );
         pNewChief = pNewBoss->FindFtnBossFrm( sal_True );
         while( pOldChief->IsAnLower( pStart ) )
@@ -2922,7 +2922,7 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
                                         (SwFtnBossFrm*)pOldBoss, *pFtnArr );
             pStart = pStart->GetNextCntntFrm();
         }
-        if( !pFtnArr->Count() )
+        if( pFtnArr->empty() )
         {
             delete pFtnArr;
             pFtnArr = NULL;
@@ -2931,9 +2931,9 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
     else
         pFtnArr = NULL;
 
-    if ( aFtnArr.Count() || pFtnArr )
+    if ( !aFtnArr.empty() || pFtnArr )
     {
-        if( aFtnArr.Count() )
+        if( !aFtnArr.empty() )
             pNewBoss->_MoveFtns( aFtnArr, sal_True );
         if( pFtnArr )
         {

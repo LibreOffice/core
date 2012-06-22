@@ -53,6 +53,8 @@ public:
 #define NA_GROW_ADJUST 2
 #define NA_ADJUST_GROW 3
 
+typedef std::vector<SwFtnFrm*> SwFtnFrms;
+
 class SwFtnBossFrm: public SwLayoutFrm
 {
     // for private footnote operations
@@ -108,7 +110,7 @@ public:
     // <_pRefFtnBossFrm> has to be referenced by an object.
     static void _CollectFtns( const SwCntntFrm*   _pRef,
                               SwFtnFrm*           _pFtn,
-                              SvPtrarr&           _rFtnArr,
+                              SwFtnFrms&          _rFtnArr,
                               const sal_Bool      _bCollectOnlyPreviousFtns = sal_False,
                               const SwFtnBossFrm* _pRefFtnBossFrm = NULL);
     // The parameter <_bCollectOnlyPreviousFtns> controls if only footnotes
@@ -116,9 +118,9 @@ public:
     // collected.
     void    CollectFtns( const SwCntntFrm* _pRef,
                          SwFtnBossFrm*     _pOld,
-                         SvPtrarr&         _rFtnArr,
+                         SwFtnFrms&        _rFtnArr,
                          const sal_Bool    _bCollectOnlyPreviousFtns = sal_False );
-    void    _MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc = sal_False );
+    void    _MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc = sal_False );
     void    MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
                       SwTxtFtn *pAttr );
 
