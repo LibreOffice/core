@@ -10,6 +10,8 @@
 #ifndef TEMPLATEDLG_HXX
 #define TEMPLATEDLG_HXX
 
+#include <set>
+
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 
@@ -66,6 +68,9 @@ private:
     ToolBox *mpActionBar;
     ToolBox *mpTemplateBar;
     TemplateFolderView *maView;
+
+    int mnSelectionCount;
+    std::set<const ThumbnailViewItem*> maSelTemplates;
 };
 
 #endif // TEMPLATEDLG_HXX

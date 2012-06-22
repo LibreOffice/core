@@ -11,6 +11,7 @@
 
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatefolderview.hxx>
+#include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/toolbox.hxx>
 
 #include "doc.hrc"
@@ -32,7 +33,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       mpViewBar( new ToolBox(this, SfxResId(TBX_ACTION_VIEW))),
       mpActionBar( new ToolBox(this, SfxResId(TBX_ACTION_ACTION))),
       mpTemplateBar( new ToolBox(this, SfxResId(TBX_ACTION_TEMPLATES))),
-      maView(new TemplateFolderView(this,SfxResId(TEMPLATE_VIEW)))
+      maView(new TemplateFolderView(this,SfxResId(TEMPLATE_VIEW))),
+      mnSelectionCount(0)
 {
     maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
 
@@ -201,6 +203,32 @@ IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pIt
 
 IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, pItem)
 {
+    if (pItem->isSelected())
+    {
+        if (maSelTemplates.empty())
+        {
+            mpViewBar->Show(false);
+            mpActionBar->Show(false);
+            mpTemplateBar->Show();
+        }
+
+        maSelTemplates.insert(pItem);
+    }
+    else
+    {
+        if (maSelTemplates.find(pItem) != maSelTemplates.end())
+        {
+            maSelTemplates.erase(pItem);
+
+            if (maSelTemplates.empty())
+            {
+                mpTemplateBar->Show(false);
+                mpViewBar->Show();
+                mpActionBar->Show();
+            }
+        }
+    }
+
     return 0;
 }
 
