@@ -374,11 +374,13 @@ void RtfAttributeOutput::EndParagraphProperties()
     m_rExport.Strm() << m_aStyles.makeStringAndClear().getStr();
 }
 
-void RtfAttributeOutput::StartRun( const SwRedlineData* pRedlineData )
+void RtfAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
-    m_aRun.append('{');
+    m_bSingleEmptyRun = bSingleEmptyRun;
+    if (!m_bSingleEmptyRun)
+        m_aRun.append('{');
 
     // if there is some redlining in the document, output it
     Redline( pRedlineData );
@@ -391,7 +393,8 @@ void RtfAttributeOutput::EndRun()
     OSL_TRACE("%s", OSL_THIS_FUNC);
     m_aRun.append(m_rExport.sNewLine);
     m_aRun.append(m_aRunText.makeStringAndClear());
-    m_aRun.append('}');
+    if (!m_bSingleEmptyRun)
+        m_aRun.append('}');
 }
 
 void RtfAttributeOutput::StartRunProperties()
@@ -3020,7 +3023,8 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_bWroteCellInfo( false ),
     m_bHadFieldResult( false ),
     m_bTableRowEnded( false ),
-    m_aCells()
+    m_aCells(),
+    m_bSingleEmptyRun(false)
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 }
