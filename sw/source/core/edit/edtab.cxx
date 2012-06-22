@@ -52,6 +52,42 @@ using namespace ::com::sun::star::uno;
 
 extern void ClearFEShellTabCols();
 
+//Added for bug #i119954# Application crashed if undo/redo covert nest table to text
+sal_Bool ConvertTableToText( const SwTableNode *pTableNode, sal_Unicode cCh );
+
+void    ConvertNestedTablesToText( const SwTableLines &rTableLines, sal_Unicode cCh )
+{
+    for (size_t n = 0; n < rTableLines.size(); ++n)
+    {
+        SwTableLine* pTableLine = rTableLines[ n ];
+        for (size_t i = 0; i < pTableLine->GetTabBoxes().size(); ++i)
+        {
+            SwTableBox* pTableBox = pTableLine->GetTabBoxes()[ i ];
+            if (pTableBox->GetTabLines().empty())
+            {
+                SwNodeIndex nodeIndex( *pTableBox->GetSttNd(), 1 );
+                SwNodeIndex endNodeIndex( *pTableBox->GetSttNd()->EndOfSectionNode() );
+                for( ; nodeIndex < endNodeIndex ; nodeIndex++ )
+                {
+                    if ( SwTableNode* pTableNode = nodeIndex.GetNode().GetTableNode() )
+                        ConvertTableToText( pTableNode, cCh );
+                }
+            }
+            else
+            {
+                ConvertNestedTablesToText( pTableBox->GetTabLines(), cCh );
+            }
+        }
+    }
+}
+
+sal_Bool ConvertTableToText( const SwTableNode *pConstTableNode, sal_Unicode cCh )
+{
+    SwTableNode *pTableNode = const_cast< SwTableNode* >( pConstTableNode );
+    ConvertNestedTablesToText( pTableNode->GetTable().GetTabLines(), cCh );
+    return pTableNode->GetDoc()->TableToText( pTableNode, cCh );
+}
+//End for bug #i119954#
 const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                                          sal_uInt16 nRows, sal_uInt16 nCols,
                                          sal_Int16 eAdj,
@@ -129,7 +165,11 @@ sal_Bool SwEditShell::TableToText( sal_Unicode cCh )
     pCrsr->SetMark();
     pCrsr->DeleteMark();
 
-    bRet = GetDoc()->TableToText( pTblNd, cCh );
+    //Modified for bug #i119954# Application crashed if undo/redo covert nest table to text
+    StartUndo();
+    bRet = ConvertTableToText( pTblNd, cCh );
+    EndUndo();
+    //End  for bug #i119954#
     pCrsr->GetPoint()->nNode = aTabIdx;
 
     SwCntntNode* pCNd = pCrsr->GetCntntNode();
