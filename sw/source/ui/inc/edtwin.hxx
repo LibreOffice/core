@@ -293,9 +293,6 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    // delete tip window
-    static void ClearTip();
-
     static inline long GetDDStartPosX() { return nDDStartPosX; }
     static inline long GetDDStartPosY() { return nDDStartPosY; }
 

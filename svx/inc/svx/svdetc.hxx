@@ -151,11 +151,6 @@ public:
 
 protected:
     ~ContainerSorter() {}
-
-private: // damit keiner vergessen wird
-virtual
-        void
-                 Is1stLessThan2nd(const void* pElem1, const void* pElem2) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

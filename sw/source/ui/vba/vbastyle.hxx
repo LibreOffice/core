@@ -60,7 +60,6 @@ public:
     virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL LinkToListTemplate( const css::uno::Reference< ooo::vba::word::XListTemplate >& ListTemplate, const css::uno::Any& ListLevelNumber ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getNameLocal() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setNameLocal( const ::rtl::OUString& _namelocal ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ::ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() throw (css::uno::RuntimeException);

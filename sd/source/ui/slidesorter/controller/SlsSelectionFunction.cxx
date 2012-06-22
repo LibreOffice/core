@@ -664,20 +664,6 @@ void SelectionFunction::Deactivate()
 
 
 
-void SelectionFunction::ScrollStart (void)
-{
-}
-
-
-
-
-void SelectionFunction::ScrollEnd (void)
-{
-}
-
-
-
-
 void SelectionFunction::DoCut (void)
 {
     if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())

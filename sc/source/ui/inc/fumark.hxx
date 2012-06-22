@@ -46,9 +46,6 @@ class FuMarkRect : public FuPoor
 
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
 
-    virtual void ScrollStart();
-    virtual void ScrollEnd();
-
     virtual void Activate();
     virtual void Deactivate();
 

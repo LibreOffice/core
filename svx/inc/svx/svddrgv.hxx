@@ -95,8 +95,6 @@ protected:
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
-    SVX_DLLPRIVATE void ImpMakeDragAttr();
-    SVX_DLLPRIVATE void ImpDelDragAttr();
 
 protected:
     virtual void SetMarkHandles();

@@ -48,9 +48,6 @@ public:
 
     virtual sal_Bool Command(const CommandEvent& rCEvt);
 
-    virtual void ScrollStart();
-    virtual void ScrollEnd();
-
 protected:
     FuOutline (
         ViewShell* pViewShell,

@@ -179,13 +179,8 @@ sal_uLong RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, con
         return ERR_SWG_READ_ERROR;
     }
 
-    // Alle Ueberschriften sind normalerweise ohne
-    //              Kapitelnummer. Darum hier explizit abschalten
-    //              weil das Default jetzt wieder auf AN ist.
     if( !bInsertMode )
     {
-        Reader::SetNoOutlineNum( rDoc );
-
         // MIB 27.09.96: Umrandung uns Abstaende aus Frm-Vorlagen entf.
         Reader::ResetFrmFmts( rDoc );
     }

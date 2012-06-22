@@ -100,11 +100,6 @@ SwVbaStyle::getFont() throw ( uno::RuntimeException )
     return new SwVbaFont( mxParent, mxContext, aColors.getPalette(), mxStyleProps );
 }
 
-
-void SAL_CALL SwVbaStyle::LinkToListTemplate( const uno::Reference< word::XListTemplate >& /*ListTemplate*/, const uno::Any& /*ListLevelNumber*/ ) throw (uno::RuntimeException)
-{
-}
-
 void SwVbaStyle::setStyle( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Any& rStyle )throw (uno::RuntimeException)
 {
     rtl::OUString sStyle;

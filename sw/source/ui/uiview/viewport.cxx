@@ -297,8 +297,6 @@ void SwView::SetVisArea( const Rectangle &rRect, sal_Bool bUpdateScrollbar )
 
     InvalidateRulerPos();
 
-    SwEditWin::ClearTip();
-
     if ( bOuterResize && !bInOuterResizePixel && !bInInnerResizePixel)
             OuterResizePixel( Point(),
                 GetViewFrame()->GetWindow().GetOutputSizePixel() );

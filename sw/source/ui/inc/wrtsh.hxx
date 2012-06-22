@@ -444,9 +444,6 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     void NavigatorPaste( const NaviContentBookmark& rBkmk,
                          const sal_uInt16 nAction );
 
-    // Core creates a selection, SttSelect has to be called
-    virtual void NewCoreSelection();
-
     virtual void ApplyViewOptions( const SwViewOption &rOpt );
     virtual void SetReadonlyOption( sal_Bool bSet );
 

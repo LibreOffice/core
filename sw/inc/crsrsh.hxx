@@ -798,10 +798,6 @@ public:
     void ClearTblBoxCntnt();
     sal_Bool EndAllTblBoxEdit();
 
-    // gets called when a table selection gets created in UpdateCrsr without
-    // the UI knowing of it
-    virtual void NewCoreSelection();
-
     void SetSelTblCells( sal_Bool bFlag )           { bSelTblCells = bFlag; }
     sal_Bool IsSelTblCells() const                  { return bSelTblCells; }
 

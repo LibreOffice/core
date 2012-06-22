@@ -68,15 +68,6 @@ sal_Bool FuOutline::Command(const CommandEvent& rCEvt)
     return bResult;
 }
 
-void FuOutline::ScrollStart()
-{
-}
-
-void FuOutline::ScrollEnd()
-{
-}
-
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

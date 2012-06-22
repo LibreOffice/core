@@ -199,9 +199,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
                 if (bScrollable)
                 {
                     // Scrollaktion in abgeleiteter Klasse
-                    ScrollStart();
                     mpViewShell->ScrollLines(dx, dy);
-                    ScrollEnd();
                     aScrollTimer.Start();
                 }
                 else if (! bDelayActive) StartDelayToScrollTimer ();
@@ -830,9 +828,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 else
                 {
                     // Seite scrollen
-                    ScrollStart();
                     mpViewShell->ScrollLines(nX, nY);
-                    ScrollEnd();
                 }
 
                 bReturn = sal_True;

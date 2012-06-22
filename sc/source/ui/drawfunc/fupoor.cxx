@@ -151,9 +151,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 
     if ( dx != 0 || dy != 0 )
     {
-        ScrollStart();                          // Scrollaktion in abgeleiteter Klasse
         pViewShell->ScrollLines(2*dx, 4*dy);
-        ScrollEnd();
         aScrollTimer.Start();
     }
 }

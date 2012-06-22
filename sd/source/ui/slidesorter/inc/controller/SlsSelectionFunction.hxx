@@ -69,9 +69,6 @@ public:
     virtual void Activate();
     virtual void Deactivate();
 
-    virtual void ScrollStart();
-    virtual void ScrollEnd();
-
     /// Forward to the clipboard manager.
     virtual void DoCut (void);
 

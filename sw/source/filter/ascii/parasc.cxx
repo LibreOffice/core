@@ -86,11 +86,6 @@ sal_uLong AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const Stri
         return ERR_SWG_READ_ERROR;
     }
 
-    // All headers normally do not have a chapter number.
-    // We explicitly disable them here, because the default is set back to on.
-    if( !bInsertMode )
-        Reader::SetNoOutlineNum( rDoc );
-
     SwASCIIParser* pParser = new SwASCIIParser( &rDoc, rPam, *pStrm,
                                         !bInsertMode, aOpt.GetASCIIOpts() );
     sal_uLong nRet = pParser->CallParser();

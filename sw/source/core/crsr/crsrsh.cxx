@@ -2911,11 +2911,6 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
 }
 
 
-void SwCrsrShell::NewCoreSelection()
-{
-}
-
-
 sal_Bool SwCrsrShell::IsCrsrReadonly() const
 {
     if ( GetViewOptions()->IsReadonly() ||

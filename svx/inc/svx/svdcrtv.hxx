@@ -86,7 +86,6 @@ protected:
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
-    SVX_DLLPRIVATE void ImpMakeCreateAttr();
 
 protected:
     sal_Bool ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,

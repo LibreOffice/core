@@ -1759,12 +1759,6 @@ sal_Bool SwWrtShell::CanInsert()
     return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
 }
 
-// die Core erzeugt eine Selektion, das SttSelect muss gerufen werden
-void SwWrtShell::NewCoreSelection()
-{
-    SttSelect();
-}
-
 // --------------
 void SwWrtShell::ChgDBData(const SwDBData& aDBData)
 {

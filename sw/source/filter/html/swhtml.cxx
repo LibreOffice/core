@@ -213,7 +213,6 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, co
 
     if( !bInsertMode )
     {
-        Reader::SetNoOutlineNum( rDoc );
         Reader::ResetFrmFmts( rDoc );
 
         // Die HTML-Seitenvorlage setzen, wenn des kein HTML-Dokument ist,

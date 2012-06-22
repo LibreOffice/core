@@ -46,14 +46,6 @@ public:
     virtual sal_Bool MouseButtonUp (const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown (const MouseEvent& rMEvt);
 
-    /** Called from ForceScroll() before the actual scrolling.
-    */
-    virtual void ScrollStart (void);
-
-    /** Called from ForceScroll() after the actual scrolling.
-    */
-    virtual void ScrollEnd (void);
-
 protected:
     SlideFunction (
         SlideSorter& rSlideSorter,

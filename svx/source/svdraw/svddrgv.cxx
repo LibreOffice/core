@@ -91,24 +91,13 @@ void SdrDragView::ImpClearVars()
     mbSolidDragging = getOptionsDrawinglayer().IsSolidDragCreate();
 }
 
-void SdrDragView::ImpMakeDragAttr()
-{
-    ImpDelDragAttr();
-}
-
 SdrDragView::SdrDragView(SdrModel* pModel1, OutputDevice* pOut)
 :   SdrExchangeView(pModel1,pOut)
 {
     ImpClearVars();
-    ImpMakeDragAttr();
 }
 
 SdrDragView::~SdrDragView()
-{
-    ImpDelDragAttr();
-}
-
-void SdrDragView::ImpDelDragAttr()
 {
 }
 

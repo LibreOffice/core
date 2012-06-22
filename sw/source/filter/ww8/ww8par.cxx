@@ -5524,11 +5524,8 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, cons
 
     if( !nRet )
     {
-        // Alle Ueberschriften sind normalerweise ohne Kapitelnummer.
-        // Darum hier explizit abschalten weil das Default jetzt wieder auf AN ist.
         if (bNew)
         {
-            Reader::SetNoOutlineNum( rDoc );
             // MIB 27.09.96: Umrandung uns Abstaende aus Frm-Vorlagen entf.
             Reader::ResetFrmFmts( rDoc );
         }

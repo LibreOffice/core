@@ -92,9 +92,6 @@ public:
     virtual void Activate();        // Function aktivieren
     virtual void Deactivate();      // Function deaktivieren
 
-    virtual void ScrollStart() {}   // diese Funktionen werden von
-    virtual void ScrollEnd() {}     // ForceScroll aufgerufen
-
     void SetWindow(::sd::Window* pWin) { mpWindow = pWin; }
 
     virtual void SelectionHasChanged();

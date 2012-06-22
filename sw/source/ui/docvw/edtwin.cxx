@@ -5396,10 +5396,6 @@ SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
     return pShell;
 }
 
-void SwEditWin::ClearTip()
-{
-}
-
 IMPL_LINK_NOARG(SwEditWin, KeyInputFlushHandler)
 {
     FlushInBuffer();

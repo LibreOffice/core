@@ -241,10 +241,6 @@ void ContainerSorter::DoSort(sal_uIntPtr a, sal_uIntPtr b) const
     if (a<b) ImpSubSort(a,b);
 }
 
-void ContainerSorter::Is1stLessThan2nd(const void* /*pElem1*/, const void* /*pElem2*/) const
-{
-}
-
 void ContainerSorter::ImpSubSort(long nL, long nR) const
 {
     long i,j;

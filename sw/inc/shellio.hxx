@@ -240,7 +240,6 @@ public:
     SwgReaderOption& GetReaderOpt() { return aOpt; }
 
     virtual void SetFltName( const String& rFltNm );
-    static void SetNoOutlineNum( SwDoc& rDoc );
 
     // Adapt item-set of a Frm-Format to the old format.
     static void ResetFrmFmtAttrs( SfxItemSet &rFrmSet );

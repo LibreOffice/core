@@ -64,9 +64,6 @@ private:
     SVX_DLLPRIVATE void ImpResetPolyPossibilityFlags();
     SVX_DLLPRIVATE void ImpCheckPolyPossibilities();
 
-    // Markierte Punkte kopieren und anstelle der alten markieren
-    // ist noch nicht implementiert!
-    SVX_DLLPRIVATE void ImpCopyMarkedPoints();
     typedef void (*PPolyTrFunc)(Point&, Point*, Point*, const void*, const void*, const void*, const void*, const void*);
     SVX_DLLPRIVATE void ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* p1=NULL, const void* p2=NULL, const void* p3=NULL, const void* p4=NULL, const void* p5=NULL);
 

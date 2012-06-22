@@ -131,8 +131,6 @@ protected:
     virtual OUString implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException);
     /** Is called when a new UNO shape has been created but not yet inserted into the drawing page. */
     virtual void implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException);
-    /** Is called when a new UNO shape has been inserted into the drawing page. */
-    virtual void implOnShapeInserted( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException);
 
 protected:
     uno::Reference< XHelperInterface > mxParent;
@@ -189,7 +187,6 @@ sal_Int32 ScVbaObjectContainer::insertShape( const uno::Reference< drawing::XSha
 {
     mxShapes->add( rxShape );
     maShapes.push_back( rxShape );
-    implOnShapeInserted( rxShape );
     return mxShapes->getCount() - 1;
 }
 
@@ -250,10 +247,6 @@ OUString ScVbaObjectContainer::implGetShapeName( const uno::Reference< drawing::
 }
 
 void ScVbaObjectContainer::implOnShapeCreated( const uno::Reference< drawing::XShape >& /*rxShape*/ ) throw (uno::RuntimeException)
-{
-}
-
-void ScVbaObjectContainer::implOnShapeInserted( const uno::Reference< drawing::XShape >& /*rxShape*/ ) throw (uno::RuntimeException)
 {
 }
 

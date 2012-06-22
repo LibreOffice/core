@@ -675,28 +675,6 @@ void FuDraw::SelectionHasChanged()
 
 /*************************************************************************
 |*
-|* Vor dem Scrollen Selektionsdarstellung ausblenden
-|*
-\************************************************************************/
-
-void FuDraw::ScrollStart()
-{
-//      HideShownXor in Gridwin
-}
-
-/*************************************************************************
-|*
-|* Nach dem Scrollen Selektionsdarstellung wieder anzeigen
-|*
-\************************************************************************/
-
-void FuDraw::ScrollEnd()
-{
-//      ShowShownXor in Gridwin
-}
-
-/*************************************************************************
-|*
 |* Function aktivieren
 |*
 \************************************************************************/

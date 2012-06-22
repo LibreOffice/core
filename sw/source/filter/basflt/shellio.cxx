@@ -640,12 +640,6 @@ void Reader::SetFltName( const String& )
 }
 
 
-void Reader::SetNoOutlineNum( SwDoc& /*rDoc*/ )
-{
-    // jetzt wieder keine Nummerierung in den Vorlagen
-}
-
-
 void Reader::ResetFrmFmtAttrs( SfxItemSet &rFrmSet )
 {
     rFrmSet.Put( SvxLRSpaceItem(RES_LR_SPACE) );

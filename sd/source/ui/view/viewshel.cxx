@@ -1218,11 +1218,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
         {
             FunctionReference xFunc( GetCurrentFunction() );
             if( xFunc.is() )
-            {
-                xFunc->ScrollStart();
                 ScrollLines( 0, -1 );
-                xFunc->ScrollEnd();
-            }
 
             rReq.Done();
         }

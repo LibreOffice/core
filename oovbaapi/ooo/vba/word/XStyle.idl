@@ -51,8 +51,6 @@ interface XStyle
     [attribute] any BaseStyle;
     [attribute] any NextParagraphStyle;
     [attribute, readonly] long ListLevelNumber;
-
-    void LinkToListTemplate( [in] XListTemplate ListTemplate, [in] any ListLevelNumber );
 };
 
 }; }; };

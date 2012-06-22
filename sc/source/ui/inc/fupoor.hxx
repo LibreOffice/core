@@ -109,9 +109,6 @@ public:
     virtual void Activate();        // Function aktivieren
     virtual void Deactivate();      // Function deaktivieren
 
-    virtual void ScrollStart() {}   // diese Funktionen werden von
-    virtual void ScrollEnd() {}     // ForceScroll aufgerufen
-
     void SetWindow(Window* pWin) { pWindow = pWin; }
 
     sal_uInt16 GetSlotID() const { return( aSfxRequest.GetSlot() ); }

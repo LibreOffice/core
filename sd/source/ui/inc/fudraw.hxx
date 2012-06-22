@@ -46,9 +46,6 @@ public:
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
     virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
 
-    virtual void ScrollStart();
-    virtual void ScrollEnd();
-
     virtual void Activate();
     virtual void Deactivate();
 

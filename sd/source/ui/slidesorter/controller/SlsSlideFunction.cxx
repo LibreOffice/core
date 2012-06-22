@@ -43,14 +43,6 @@ SlideFunction::SlideFunction (
 {
 }
 
-void SlideFunction::ScrollStart (void)
-{
-}
-
-void SlideFunction::ScrollEnd (void)
-{
-}
-
 sal_Bool SlideFunction::MouseMove(const MouseEvent& )
 {
     return sal_False;

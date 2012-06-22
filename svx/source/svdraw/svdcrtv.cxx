@@ -215,17 +215,12 @@ void SdrCreateView::ImpClearVars()
     ImpClearConnectMarker();
 }
 
-void SdrCreateView::ImpMakeCreateAttr()
-{
-}
-
 SdrCreateView::SdrCreateView(SdrModel* pModel1, OutputDevice* pOut)
 :   SdrDragView(pModel1,pOut),
     mpCoMaOverlay(0L),
     mpCreateViewExtraData(new ImpSdrCreateViewExtraData())
 {
     ImpClearVars();
-    ImpMakeCreateAttr();
 }
 
 SdrCreateView::~SdrCreateView()
