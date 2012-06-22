@@ -1,5 +1,42 @@
 #!/bin/sh
 
+# Usage:
+# main worklfow:
+# git commit -am "really cool change"
+# ./r
+#
+# With -n|--dry-run option in place, it will show you what it would do,
+# without really doing it.
+#
+# want be even cooler?
+# install this script in some directory in your PATH, i. e.
+# ln -s <path to you libo git repo dir>/r ~/bin/git-r
+# 
+# With it in place your workflow is now:
+#
+# git commit -am "really cool change"
+# git r
+#
+# is that cool ot what ;-)
+#
+# TODO:
+# still has to provide helper for squashing changes for subsequent
+# commits:
+#
+# git commit -am "cool"
+# git commit -am "even cooler"
+# git commit -am "really cool"
+# now one *must* do
+# git rebase -i HEAD~n and squash it there.
+# git r
+# 
+# how can we squish those commit in this script with i.e.:
+# git r -squash
+# will de the magic: # git rebase -i HEAD~n and squash it there.
+# somehow in this script
+# any ideas?
+#
+
 #GERRITHOST=gerrit.libreoffice.org
 GERRITHOST=logerrit
 GERRITURL=ssh://$GERRITHOST/core
@@ -27,20 +64,36 @@ ask_tristate() {
 
 }
 
+doit() {
+	$dry && { echo "Dry run: $@"; } || "$@"
+}
+
+dry=false
+
+while
+case $1 in
+-n|--dry-run) dry=true ;;
+*) break ;;
+esac
+do
+test $# -gt 0 && shift;
+done
+
 case "$1" in
 	help)
-		echo "Usage: ./logerrit subcommand [options]"
+		echo "Usage: ./r [-n|--dry-run] [subcommand] [options]"
 		echo "subcommands:"
 		echo "             test                 test your gerrit setup"
-		echo "             submit [BRANCH]      submit your change for review to a branch"
-		echo "             nextchange [BRANCH]   reset branch to the remote to start with the next change"
+		echo "             nextchange [BRANCH]  reset branch to the remote to start with the next change"
 		echo "             checkout CHANGEID    checkout the changes for review"
 		echo "             pull CHANGEID        pull (and merge) the changes on current branch"
 		echo "             cherry-pick CHANGEID cherry-pick the change on current branch"
 		echo "             patch CHANGEID       show the change as a patch"
-		echo "             review [CHANGEID]    interactively review a change (current one if no changeid given)"
 		echo "             query ....           query for changes for review on project core"
-		echo "             <any other gerrit command>"
+		echo "             cmd ....             <any other gerrit command>"
+		echo "             review  [CHANGEID]   interactively review a change (current one if no changeid given)"
+		echo "default:     ------ [BRANCH]      submit your change for review to a branch"
+
 		exit
 	;;
 	test)
@@ -52,21 +105,6 @@ case "$1" in
 			echo "please have the output of: ssh -vvvv logerrit"
 			echo "at hand when looking for help."
 		fi
-	;;
-	submit)
-		BRANCH=$2
-		if test -z "$BRANCH"
-		then
-			BRANCH=`git symbolic-ref HEAD 2> /dev/null`
-			BRANCH="${BRANCH##refs/heads/}"
-			if test -z "$BRANCH"
-			then
-				echo "no branch specified, and could not guess the current branch"
-				exit 1
-			fi
-			echo "no branch specified, guessing current branch $BRANCH"
-		fi
-		git push $GERRITURL HEAD:refs/for/$BRANCH
 	;;
 	nextchange)
 		CHANGEID=`git log --format=format:%b -1 HEAD|grep Change-Id|cut -d: -f2|tr -d \ `
@@ -89,9 +127,40 @@ case "$1" in
 			fi
 			echo "no branch specified, guessing current branch $BRANCH"
 		fi
-		git reset --hard remotes/origin/$BRANCH
+		doit git reset --hard remotes/origin/$BRANCH
+	;;
+	checkout)
+		get_SHA_for_change $2
+		doit git fetch $GERRITURL $SHA && git checkout FETCH_HEAD
+	;;
+	pull)
+		get_SHA_for_change $2
+		doit git pull $GERRITURL $SHA
+	;;
+	cherry-pick)
+		get_SHA_for_change $2
+		doit git fetch $GERRITURL $SHA && git cherry-pick FETCH_HEAD
+	;;
+	patch)
+		get_SHA_for_change $2
+		doit git fetch $GERRITURL $SHA && git format-patch -1 --stdout FETCH_HEAD
+	;;
+	query)
+		shift
+		doit ssh ${GERRITHOST?} gerrit query project:core "$@"
+	;;
+	cmd)
+		COMMAND=$2
+		if test -z "$COMMAND"
+		then
+		    echo "please specifiy some gerrit command, sorry"
+		    exit 1
+		fi
+		shift
+		doit ssh ${GERRITHOST?} gerrit "$@"
 	;;
 	review)
+		# dry-run not supported here, make sense to warn?
 		CHANGEID=$2
 		if test -z "$CHANGEID"
 		then
@@ -161,27 +230,20 @@ case "$1" in
 		read -p "please type a friendly comment$MESSAGEREQ: " MESSAGE
 		echo ssh ${GERRITHOST?} gerrit review -m \"$MESSAGE\" $VERIFIEDFLAG $CODEREVIEWFLAG $CHANGEID
 	;;
-	checkout)
-		get_SHA_for_change $2
-		git fetch $GERRITURL $SHA && git checkout FETCH_HEAD
-	;;
-	pull)
-		get_SHA_for_change $2
-		git pull $GERRITURL $SHA
-	;;
-	cherry-pick)
-		get_SHA_for_change $2
-		git fetch $GERRITURL $SHA && git cherry-pick FETCH_HEAD
-	;;
-	patch)
-		get_SHA_for_change $2
-		git fetch $GERRITURL $SHA && git format-patch -1 --stdout FETCH_HEAD
-	;;
-	query)
-		shift
-		ssh ${GERRITHOST?} gerrit query project:core $@
-	;;
 	*)
-		ssh ${GERRITHOST?} gerrit $@
+		BRANCH=$2
+		if test -z "$BRANCH"
+		then
+			BRANCH=`git symbolic-ref HEAD 2> /dev/null`
+			BRANCH="${BRANCH##refs/heads/}"
+			if test -z "$BRANCH"
+			then
+				echo "no branch specified, and could not guess the current branch"
+				exit 1
+			fi
+			echo "no branch specified, guessing current branch $BRANCH"
+		fi
+		doit git push $GERRITURL HEAD:refs/for/$BRANCH
 	;;
+
 esac
