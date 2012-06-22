@@ -1806,11 +1806,12 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     do {
         const SwRedlineData* pRedlineData = aAttrIter.GetRedline( nAktPos );
 
-        AttrOutput().StartRun( pRedlineData );
+        xub_StrLen nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
+        // Is this the only run in this paragraph and it's empty?
+        bool bSingleEmptyRun = nAktPos == 0 && nNextAttr == 0;
+        AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
         if( nTxtTyp == TXT_FTN || nTxtTyp == TXT_EDN )
             AttrOutput().FootnoteEndnoteRefTag();
-
-        xub_StrLen nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
 
         if( nNextAttr > nEnd )
             nNextAttr = nEnd;
