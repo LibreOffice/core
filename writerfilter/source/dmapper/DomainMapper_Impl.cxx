@@ -3381,7 +3381,8 @@ void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nV
 
 _PageMar::_PageMar()
 {
-    header = footer = top = bottom = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
+    header = footer = ConversionHelper::convertTwipToMM100(sal_Int32(720));
+    top = bottom = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
     right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1800));
     gutter = 0;
 }
