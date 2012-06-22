@@ -57,6 +57,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
     mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
 
+    // Set toolbox handlers
+    mpViewBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXViewHdl));
+    mpActionBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXActionHdl));
+    mpTemplateBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXTemplateHdl));
+
     // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
     aViewPos.setY(aActionPos.Y() + aActionSize.getHeight() + PADDING_TOOLBAR_VIEW);
@@ -127,6 +132,95 @@ IMPL_LINK (SfxTemplateManagerDlg, OnClickSelectionMode, ImageButton*, pButton)
 {
     maView->setSelectionMode(pButton->GetState() == STATE_CHECK);
     return 0;
+}
+
+IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
+{
+    switch(mpViewBar->GetCurItemId())
+    {
+    case TBI_TEMPLATE_CREATE:
+        OnTemplateCreate();
+        break;
+    case TBI_TEMPLATE_IMPORT:
+        OnTemplateImport();
+        break;
+    default:
+        break;
+    }
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXActionHdl)
+{
+    switch(mpActionBar->GetCurItemId())
+    {
+    case TBI_TEMPLATE_SEARCH:
+        OnTemplateSearch();
+        break;
+    case TBI_TEMPLATE_ACTION:
+        OnTemplateAction();
+        break;
+    default:
+        break;
+    }
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
+{
+    switch(mpTemplateBar->GetCurItemId())
+    {
+    case TBI_TEMPLATE_EDIT:
+        OnTemplateEdit();
+        break;
+    case TBI_TEMPLATE_PROPERTIES:
+        OnTemplateProperties();
+        break;
+    case TBI_TEMPLATE_MOVE:
+        OnTemplateMove();
+        break;
+    case TBI_TEMPLATE_DELETE:
+        OnTemplateDelete();
+        break;
+    default:
+        break;
+    }
+
+    return 0;
+}
+
+void SfxTemplateManagerDlg::OnTemplateCreate ()
+{
+}
+
+void SfxTemplateManagerDlg::OnTemplateImport ()
+{
+}
+
+void SfxTemplateManagerDlg::OnTemplateSearch ()
+{
+}
+
+void SfxTemplateManagerDlg::OnTemplateAction ()
+{
+}
+
+void SfxTemplateManagerDlg::OnTemplateEdit ()
+{
+}
+
+void SfxTemplateManagerDlg::OnTemplateProperties ()
+{
+}
+
+void SfxTemplateManagerDlg::OnTemplateMove ()
+{
+}
+
+void SfxTemplateManagerDlg::OnTemplateDelete ()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

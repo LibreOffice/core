@@ -36,6 +36,19 @@ private:
 
     DECL_LINK(OnClickSelectionMode, ImageButton*);
 
+    DECL_LINK(TBXViewHdl, void*);
+    DECL_LINK(TBXActionHdl, void*);
+    DECL_LINK(TBXTemplateHdl, void*);
+
+    void OnTemplateCreate ();
+    void OnTemplateImport ();
+    void OnTemplateSearch ();
+    void OnTemplateAction ();
+    void OnTemplateEdit ();
+    void OnTemplateProperties ();
+    void OnTemplateMove ();
+    void OnTemplateDelete ();
+
 private:
 
     PushButton aButtonAll;
