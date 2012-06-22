@@ -3291,25 +3291,22 @@ sal_Bool lcl_ChgTblSize( SwTable& rTbl )
 
 class _SplitTable_Para
 {
-    SvPtrarr aSrc, aDest;
+    std::map<SwFrmFmt*, SwFrmFmt*> aSrcDestMap;
     SwTableNode* pNewTblNd;
     SwTable& rOldTbl;
 
 public:
     _SplitTable_Para( SwTableNode* pNew, SwTable& rOld )
-        : aSrc( 16 ), aDest( 16 ), pNewTblNd( pNew ), rOldTbl( rOld )
+        : aSrcDestMap(), pNewTblNd( pNew ), rOldTbl( rOld )
     {}
-    sal_uInt16 SrcFmt_GetPos( void* pFmt ) const
-            { return aSrc.GetPos( pFmt ); }
+    SwFrmFmt* GetDestFmt( SwFrmFmt* pSrcFmt ) const
+    {
+        std::map<SwFrmFmt*, SwFrmFmt*>::const_iterator it = aSrcDestMap.find( pSrcFmt );
+        return it == aSrcDestMap.end() ? NULL : it->second;
+    }
 
-    void DestFmt_Insert( void* pFmt )
-            { aDest.Insert( pFmt, aDest.Count() ); }
-
-    void SrcFmt_Insert( void* pFmt )
-            { aSrc.Insert( pFmt, aSrc.Count() ); }
-
-    SwFrmFmt* DestFmt_Get( sal_uInt16 nPos ) const
-            { return (SwFrmFmt*)aDest[ nPos ]; }
+    void InsertSrcDest( SwFrmFmt* pSrcFmt, SwFrmFmt* pDestFmt )
+            { aSrcDestMap[ pSrcFmt ] = pDestFmt; }
 
     void ChgBox( SwTableBox* pBox )
     {
@@ -3324,14 +3321,13 @@ static void lcl_SplitTable_CpyBox( SwTableBox* pBox, _SplitTable_Para* pPara );
 static void lcl_SplitTable_CpyLine( SwTableLine* pLn, _SplitTable_Para* pPara )
 {
     SwFrmFmt *pSrcFmt = pLn->GetFrmFmt();
-    sal_uInt16 nPos = pPara->SrcFmt_GetPos( pSrcFmt );
-    if( USHRT_MAX == nPos )
+    SwTableLineFmt* pDestFmt = (SwTableLineFmt*) pPara->GetDestFmt( pSrcFmt );
+    if( pDestFmt == NULL )
     {
-        pPara->DestFmt_Insert( pLn->ClaimFrmFmt() );
-        pPara->SrcFmt_Insert( pSrcFmt );
+        pPara->InsertSrcDest( pSrcFmt, pLn->ClaimFrmFmt() );
     }
     else
-        pLn->ChgFrmFmt( (SwTableLineFmt*)pPara->DestFmt_Get( nPos ) );
+        pLn->ChgFrmFmt( pDestFmt );
 
     for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
              it != pLn->GetTabBoxes().end(); ++it)
@@ -3341,14 +3337,13 @@ static void lcl_SplitTable_CpyLine( SwTableLine* pLn, _SplitTable_Para* pPara )
 static void lcl_SplitTable_CpyBox( SwTableBox* pBox, _SplitTable_Para* pPara )
 {
     SwFrmFmt *pSrcFmt = pBox->GetFrmFmt();
-    sal_uInt16 nPos = pPara->SrcFmt_GetPos( pSrcFmt );
-    if( USHRT_MAX == nPos )
+    SwTableBoxFmt* pDestFmt = (SwTableBoxFmt*)pPara->GetDestFmt( pSrcFmt );
+    if( pDestFmt == NULL )
     {
-        pPara->DestFmt_Insert( pBox->ClaimFrmFmt() );
-        pPara->SrcFmt_Insert( pSrcFmt );
+        pPara->InsertSrcDest( pSrcFmt, pBox->ClaimFrmFmt() );
     }
     else
-        pBox->ChgFrmFmt( (SwTableBoxFmt*)pPara->DestFmt_Get( nPos ) );
+        pBox->ChgFrmFmt( pDestFmt );
 
     if( pBox->GetSttNd() )
         pPara->ChgBox( pBox );
