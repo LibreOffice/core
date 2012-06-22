@@ -2807,9 +2807,9 @@ static void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
              pObj->GetDrawObj()->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() &&
              pObj->GetDrawObj()->GetPage() )
         {
-            pObj->DrawObj()->GetPage()->SetObjectOrdNum(
-                                pObj->GetDrawObj()->GetOrdNumDirect(),
-                                pFly->GetVirtDrawObj()->GetOrdNumDirect() + 1 );
+            //#i119945# set pFly's OrdNum to pObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
+            pObj->DrawObj()->GetPage()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(),
+                                                         pObj->GetDrawObj()->GetOrdNumDirect() );
         }
     }
 }

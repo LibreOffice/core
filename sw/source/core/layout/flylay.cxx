@@ -603,14 +603,15 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
     SdrObject* pObj = pNew->GetVirtDrawObj();
     OSL_ENSURE( pNew->GetAnchorFrm(), "Fly without Anchor" );
-    const SwFlyFrm* pFly = pNew->GetAnchorFrm()->FindFlyFrm();
+    SwFlyFrm* pFly = (SwFlyFrm*)pNew->GetAnchorFrm()->FindFlyFrm();
     if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
     {
-        sal_uInt32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect();
+        //#i119945# set pFly's OrdNum to _rNewObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
+        sal_uInt32 nNewNum = pObj->GetOrdNumDirect();
         if ( pObj->GetPage() )
-            pObj->GetPage()->SetObjectOrdNum( pObj->GetOrdNumDirect(), nNewNum);
+            pObj->GetPage()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(), nNewNum );
         else
-            pObj->SetOrdNum( nNewNum );
+            pFly->GetVirtDrawObj()->SetOrdNum( nNewNum );
     }
 
     // Don't look further at Flys that sit inside the Cntnt.
@@ -857,16 +858,16 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
     }
 
     OSL_ENSURE( _rNewObj.GetAnchorFrm(), "anchored draw object without anchor" );
-    const SwFlyFrm* pFlyFrm = _rNewObj.GetAnchorFrm()->FindFlyFrm();
+    SwFlyFrm* pFlyFrm = (SwFlyFrm*)_rNewObj.GetAnchorFrm()->FindFlyFrm();
     if ( pFlyFrm &&
          _rNewObj.GetDrawObj()->GetOrdNum() < pFlyFrm->GetVirtDrawObj()->GetOrdNum() )
     {
-        sal_uInt32 nNewNum = pFlyFrm->GetVirtDrawObj()->GetOrdNumDirect();
+        //#i119945# set pFly's OrdNum to _rNewObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
+        sal_uInt32 nNewNum = _rNewObj.GetDrawObj()->GetOrdNumDirect();
         if ( _rNewObj.GetDrawObj()->GetPage() )
-            _rNewObj.DrawObj()->GetPage()->SetObjectOrdNum(
-                            _rNewObj.GetDrawObj()->GetOrdNumDirect(), nNewNum);
+            _rNewObj.DrawObj()->GetPage()->SetObjectOrdNum( pFlyFrm->GetVirtDrawObj()->GetOrdNumDirect(), nNewNum );
         else
-            _rNewObj.DrawObj()->SetOrdNum( nNewNum );
+            pFlyFrm->GetVirtDrawObj()->SetOrdNum( nNewNum );
     }
 
     if ( FLY_AS_CHAR == _rNewObj.GetFrmFmt().GetAnchor().GetAnchorId() )
