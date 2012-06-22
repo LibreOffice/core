@@ -685,8 +685,8 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                             pAction->GetBitmap().GetSizePixel(),
                             rSizePix,
                             bNonBitmapActionEncountered );
-                        ++nNumBitmaps;
                     }
+                    ++nNumBitmaps;
                     break;
 
                 case META_BMPSCALE_ACTION:
@@ -703,8 +703,8 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                                 rPrefMapMode ),
                             rSizePix,
                             bNonBitmapActionEncountered );
-                        ++nNumBitmaps;
                     }
+                    ++nNumBitmaps;
                     break;
 
                 case META_BMPSCALEPART_ACTION:
@@ -722,8 +722,8 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                                                         rPrefMapMode ),
                                                     rSizePix,
                                                     bNonBitmapActionEncountered );
-                        ++nNumBitmaps;
                     }
+                    ++nNumBitmaps;
                     break;
 
                 case META_BMPEX_ACTION:
@@ -739,8 +739,8 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                             pAction->GetBitmapEx().GetSizePixel(),
                             rSizePix,
                             bNonBitmapActionEncountered );
-                        ++nNumBitmaps;
                     }
+                    ++nNumBitmaps;
                     break;
 
                 case META_BMPEXSCALE_ACTION:
@@ -757,8 +757,8 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                                 rPrefMapMode ),
                             rSizePix,
                             bNonBitmapActionEncountered );
-                        ++nNumBitmaps;
                     }
+                    ++nNumBitmaps;
                     break;
 
                 case META_BMPEXSCALEPART_ACTION:
@@ -775,8 +775,8 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                                                         rPrefMapMode ),
                                                     rSizePix,
                                                     bNonBitmapActionEncountered );
-                        ++nNumBitmaps;
                     }
+                    ++nNumBitmaps;
                     break;
 
                     // these actions actually output something (that's
