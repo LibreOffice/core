@@ -338,7 +338,7 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
                                     const SwSectionNode& rNd )
 {
     sal_uInt16 nRet = 0, nWh;
-    SvPtrarr* pArr;
+    std::vector<const SwSectionNode*>* pArr;
     std::vector<sal_uInt16> *pNum;
     if( rTxtFtn.GetFtn().IsEndNote() )
     {
@@ -352,10 +352,9 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
         pNum = &aFtnNums;
         nWh = RES_FTN_AT_TXTEND;
     }
-    void* pNd = (void*)&rNd;
 
-    for( sal_uInt16 n = pArr->Count(); n; )
-        if( pArr->GetObject( --n ) == pNd )
+    for( sal_uInt16 n = pArr->size(); n; )
+        if( (*pArr)[ --n ] == &rNd )
         {
             nRet = ++((*pNum)[ n ]);
             break;
@@ -363,7 +362,7 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
 
     if( !nRet )
     {
-        pArr->Insert( pNd, pArr->Count() );
+        pArr->push_back( &rNd );
         nRet = ((SwFmtFtnEndAtTxtEnd&)rNd.GetSection().GetFmt()->
                                 GetFmtAttr( nWh )).GetOffset();
         ++nRet;

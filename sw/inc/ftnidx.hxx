@@ -58,11 +58,11 @@ public:
 
 class SwUpdFtnEndNtAtEnd
 {
-    SvPtrarr aFtnSects, aEndSects;
+    std::vector<const SwSectionNode*> aFtnSects, aEndSects;
     std::vector<sal_uInt16> aFtnNums, aEndNums;
 
 public:
-    SwUpdFtnEndNtAtEnd() : aFtnSects( 0 ), aEndSects( 0 ) {}
+    SwUpdFtnEndNtAtEnd() : aFtnSects(), aEndSects() {}
 
     static const SwSectionNode* FindSectNdWithEndAttr(
                                             const SwTxtFtn& rTxtFtn );
