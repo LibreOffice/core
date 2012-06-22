@@ -1,4 +1,0 @@
-JNI_OnLoad
-JNI_OnUnload
-Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_getProcessID
-Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping
