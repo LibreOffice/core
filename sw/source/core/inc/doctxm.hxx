@@ -74,7 +74,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     // replace page num placeholder with actual page number
     void _UpdatePageNum( SwTxtNode* pNd,
                          const std::vector<sal_uInt16>& rNums,
-                         const SvPtrarr &rDescs,
+                         const std::vector<SwPageDesc*>& rDescs,
                          const std::vector<sal_uInt16>* pMainEntryNums,
                          const SwTOXInternational& rIntl );
 

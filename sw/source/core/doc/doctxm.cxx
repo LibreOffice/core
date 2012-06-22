@@ -1879,7 +1879,7 @@ void SwTOXBaseSection::UpdatePageNum()
     {
         // Loop over all SourceNodes
         std::vector<sal_uInt16> aNums; // the PageNumber
-        SvPtrarr  aDescs;       // The PageDescriptors matching the PageNumbers
+        std::vector<SwPageDesc*> aDescs;        // The PageDescriptors matching the PageNumbers
         std::vector<sal_uInt16> *pMainNums = 0; // contains page numbers of main entries
 
         // process run in lines
@@ -1940,7 +1940,7 @@ void SwTOXBaseSection::UpdatePageNum()
                     if( i >= aNums.size() || aNums[ i ] != nPage )
                     {
                         aNums.insert(aNums.begin() + i, nPage);
-                        aDescs.Insert( (void*)pAktPage->GetPageDesc(), i );
+                        aDescs.insert(aDescs.begin() + i, pAktPage->GetPageDesc() );
                     }
                     // is it a main entry?
                     if(TOX_SORT_INDEX == pSortBase->GetType() &&
@@ -1986,7 +1986,7 @@ sal_Bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uI
 
 void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                                     const std::vector<sal_uInt16>& rNums,
-                                    const SvPtrarr & rDescs,
+                                    const std::vector<SwPageDesc*>& rDescs,
                                     const std::vector<sal_uInt16>* pMainEntryNums,
                                     const SwTOXInternational& rIntl )
 {
@@ -2009,7 +2009,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     sal_uInt16 nOld = rNums[0],
            nBeg = nOld,
            nCount  = 0;
-    String aNumStr( SvxNumberType( ((SwPageDesc*)rDescs[0])->GetNumType() ).
+    String aNumStr( SvxNumberType( rDescs[0]->GetNumType() ).
                     GetNumStr( nBeg ) );
     if( pCharStyleIdx && lcl_HasMainEntry( pMainEntryNums, nBeg ))
     {
@@ -2038,7 +2038,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
 
     for( i = 1; i < rNums.size(); ++i)
     {
-        SvxNumberType aType( ((SwPageDesc*)rDescs[i])->GetNumType() );
+        SvxNumberType aType( rDescs[i]->GetNumType() );
         if( TOX_INDEX == SwTOXBase::GetType() )
         {   // Summarize for the following
             // Add up all following
@@ -2105,8 +2105,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 aNumStr.AppendAscii( sPageDeli );
             //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
             if(nCount)
-                aNumStr += SvxNumberType( ((SwPageDesc*)rDescs[i-1])->
-                                GetNumType() ).GetNumStr( nBeg+nCount );
+                aNumStr += SvxNumberType( rDescs[i-1]->GetNumType() ).GetNumStr( nBeg+nCount );
         }
     }
     pNd->InsertText( aNumStr, aPos,
