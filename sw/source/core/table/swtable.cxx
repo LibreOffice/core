@@ -321,26 +321,26 @@ SwTable::~SwTable()
 |*  SwTable::Modify()
 |*
 |*************************************************************************/
-inline void FmtInArr( SvPtrarr& rFmtArr, SwFmt* pBoxFmt )
+static void FmtInArr( std::vector<SwFmt*>& rFmtArr, SwFmt* pBoxFmt )
 {
-    sal_Bool bRet = USHRT_MAX != rFmtArr.GetPos( (VoidPtr)pBoxFmt );
-    if( !bRet )
-        rFmtArr.Insert( (VoidPtr)pBoxFmt, rFmtArr.Count() );
+    std::vector<SwFmt*>::const_iterator it = std::find( rFmtArr.begin(), rFmtArr.end(), pBoxFmt );
+    if ( it == rFmtArr.end() )
+        rFmtArr.push_back( pBoxFmt );
 }
 
-void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
-                         const long nNew, SvPtrarr& rFmtArr );
+static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
+                         const long nNew, std::vector<SwFmt*>& rFmtArr );
 
-void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
-                         const long nNew, SvPtrarr& rFmtArr, const bool bCheckSum )
+static void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
+                         const long nNew, std::vector<SwFmt*>& rFmtArr, const bool bCheckSum )
 {
     for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
         ::lcl_ModifyBoxes( rLines[i]->GetTabBoxes(), nOld, nNew, rFmtArr );
     if( bCheckSum )
     {
-        for( sal_uInt16 i = 0; i < rFmtArr.Count(); ++i )
+        for( sal_uInt16 i = 0; i < rFmtArr.size(); ++i )
         {
-            SwFmt* pFmt = (SwFmt*)rFmtArr[i];
+            SwFmt* pFmt = rFmtArr[i];
             sal_uInt64 nBox = pFmt->GetFrmSize().GetWidth();
             nBox *= nNew;
             nBox /= nOld;
@@ -352,8 +352,8 @@ void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
     }
 }
 
-void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
-                         const long nNew, SvPtrarr& rFmtArr )
+static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
+                         const long nNew, std::vector<SwFmt*>& rFmtArr )
 {
     sal_uInt64 nSum = 0; // To avoid rounding errors we summarize all box widths
     sal_uInt64 nOriginalSum = 0; // Sum of original widths
@@ -430,7 +430,8 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
 void SwTable::AdjustWidths( const long nOld, const long nNew )
 {
-    SvPtrarr aFmtArr( (sal_uInt8)aLines[0]->GetTabBoxes().size() );
+    std::vector<SwFmt*> aFmtArr;
+    aFmtArr.reserve( aLines[0]->GetTabBoxes().size() );
     ::lcl_ModifyLines( aLines, nOld, nNew, aFmtArr, true );
 }
 
