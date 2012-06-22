@@ -34,7 +34,6 @@
 
 
 class VirtualDevice;
-class Point;
 class Size;
 
 namespace basegfx

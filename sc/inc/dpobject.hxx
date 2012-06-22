@@ -61,14 +61,12 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class Rectangle;
-class SvStream;
 class ScDPSaveData;
 class ScDPOutput;
 struct ScPivotParam;
 struct ScImportSourceDesc;
 class ScSheetSourceDesc;
 struct PivotField;
-class ScDPCacheTable;
 class ScDPTableData;
 class ScDPDimensionSaveData;
 

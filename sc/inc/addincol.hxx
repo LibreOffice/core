@@ -51,7 +51,6 @@
 class String;
 class SfxObjectShell;
 class ScUnoAddInFuncData;
-class ScMatrix;
 class ScFuncDesc;
 
 

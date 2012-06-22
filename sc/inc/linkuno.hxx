@@ -56,7 +56,6 @@
 #include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class ScAreaLink;
 class ScDocShell;
 class ScTableLink;
 

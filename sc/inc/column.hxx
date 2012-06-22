@@ -41,10 +41,7 @@ namespace editeng { class SvxBorderLine; }
 
 class Fraction;
 class OutputDevice;
-class Rectangle;
-class SfxBroadcaster;
 class SfxItemPoolCache;
-class SfxItemSet;
 class SvtListener;
 class SfxPoolItem;
 class SfxStyleSheetBase;
@@ -64,7 +61,6 @@ class ScStyleSheet;
 class SvtBroadcaster;
 class ScTypedStrData;
 class ScProgress;
-class ScPostIt;
 struct ScFunctionData;
 struct ScLineFlags;
 struct ScMergePatternState;

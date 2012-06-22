@@ -42,8 +42,6 @@
 
 //------------------------------------------------------------------------
 
-class SvStream;
-
 class ScArea;
 class ScDocument;
 class ScRange;

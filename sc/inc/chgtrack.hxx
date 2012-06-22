@@ -82,8 +82,6 @@ enum ScChangeActionClipMode
     SC_CACM_PASTE
 };
 
-class SvStream;
-
 // --- ScChangeActionLinkEntry ---------------------------------------------
 
 // Inserts itself as the head of a chain (better: linked list?), or before a LinkEntry

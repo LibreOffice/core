@@ -43,9 +43,6 @@
 class GDIMetaFile;
 class VirtualDevice;
 class Gradient;
-class BitmapEx;
-class MapMode;
-class Size;
 class Rectangle;
 class Font;
 class PolyPolygon;

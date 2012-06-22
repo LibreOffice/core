@@ -38,16 +38,11 @@
 #include <vector>
 
 class SdrObject;
-class SdrPage;
-class String;
 
-class ScPostIt;
-class ScCommentData;
 class ScDetectiveData;
 class ScDocument;
 class ScAddress;
 class ScRange;
-class ScRangeList;
 
 #define SC_DET_MAXCIRCLE    1000
 

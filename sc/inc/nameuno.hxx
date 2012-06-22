@@ -56,7 +56,6 @@ class ScRangeName;
 class ScRangeData;
 class ScTokenArray;
 class ScNamedRangesObj;
-class ScTableSheetObj;
 
 class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
                             ::com::sun::star::sheet::XNamedRange,

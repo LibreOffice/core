@@ -56,9 +56,7 @@ class ScEditSource;
 class SvxFieldItem;
 class SvxFieldData;
 class ScEditFieldObj;
-class ScHeaderFooterContentObj;
 class ScDocShell;
-class EditTextObject;
 class ScHeaderFooterTextData;
 
 class ScCellFieldsObj : public cppu::WeakImplHelper5<

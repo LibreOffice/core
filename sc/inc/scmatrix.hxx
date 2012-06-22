@@ -37,7 +37,6 @@
 
 #include <boost/intrusive_ptr.hpp>
 
-class SvStream;
 class ScInterpreter;
 class SvNumberFormatter;
 class ScMatrixImpl;

@@ -53,7 +53,6 @@ class ScAddress;
 class ScDocument;
 class ScDPSource;
 class ScDPDimension;
-class ScDPDimensions;
 class ScDPLevel;
 class ScDPMember;
 class ScDPAggData;

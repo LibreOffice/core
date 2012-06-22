@@ -39,7 +39,6 @@
 #include "dpnumgroupinfo.hxx"
 
 class ScDocument;
-class SvNumberFormatter;
 
 typedef ::std::vector<ScDPItemData> ScDPItemDataVec;
 

@@ -74,8 +74,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 
 class ScDocShell;
 class ScDPSaveDimension;
-class ScDPSaveGroupDimension;
-class ScDPSaveNumGroupDimension;
 struct ScDPNumGroupInfo;
 
 class ScDataPilotTableObj;

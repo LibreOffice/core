@@ -71,8 +71,6 @@ class ScPrintSelectionStatus;
 class ScTableColumnObj;
 class ScTableRowObj;
 class ScTableSheetObj;
-class SvxFmDrawPage;
-class SvxDrawPage;
 class ScRangeList;
 class ScPrintUIOptions;
 class ScSheetSaveData;

@@ -51,12 +51,6 @@
 #include <formula/ExternalReferenceHelper.hxx>
 
 class ScDocument;
-namespace formula
-{
-    class FormulaToken;
-}
-class ScToken;
-class ScMatrix;
 class ScTokenArray;
 class String;
 class SfxObjectShellRef;

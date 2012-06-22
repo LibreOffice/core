@@ -49,7 +49,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 }}}}
 
 class Rectangle;
-class SvStream;
 class ScDocument;
 
 struct ScDPOutLevelData;

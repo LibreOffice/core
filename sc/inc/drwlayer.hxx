@@ -35,14 +35,12 @@
 #include "global.hxx"
 
 class ScDocument;
-class SfxViewShell;
 class SfxObjectShell;
 class ScDrawObjData;
 class ScIMapInfo;
 class ScMacroInfo;
 class IMapObject;
 class ScMarkData;
-class SdrOle2Obj;
 class ScRange;
 class ScAddress;
 

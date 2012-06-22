@@ -37,6 +37,7 @@
 #include "svx/sdtaitm.hxx"
 #include <boost/shared_ptr.hpp>
 
+class ScPostIt;
 
 namespace com { namespace sun { namespace star {
     namespace script { struct ScriptEventDescriptor; }

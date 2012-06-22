@@ -38,7 +38,6 @@
 struct ScRawToken;
 struct ScSingleRefData;
 struct ScComplexRefData;
-class ScMatrix;
 
 class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 {

@@ -29,10 +29,6 @@
 #ifndef SC_SCDLL_HXX
 #define SC_SCDLL_HXX
 
-class ResMgr;
-class SvFactory;
-class SotFactory;
-class StatusBar;
 class SfxMedium;
 class SfxFilter;
 

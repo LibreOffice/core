@@ -24,8 +24,6 @@
 #include <unotools/configitem.hxx>
 #include <tools/solar.h>
 
-class SvStream;
-
 
 class ScInputOptions
 {

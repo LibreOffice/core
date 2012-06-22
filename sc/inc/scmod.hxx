@@ -44,11 +44,8 @@
 
 
 class KeyEvent;
-class SdrModel;
-class SdrView;
 class EditView;
 class SfxErrorHandler;
-class SvxErrorHandler;
 class SvtAccessibilityOptions;
 class SvtCTLOptions;
 class SvtUserOptions;
@@ -72,7 +69,6 @@ class ScFormulaOptions;
 class ScInputOptions;
 class ScPrintOptions;
 class ScInputHandler;
-class ScInputWindow;
 class ScTabViewShell;
 class ScMessagePool;
 class EditFieldInfo;

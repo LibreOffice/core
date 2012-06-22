@@ -36,7 +36,6 @@
 
 #define SC_OL_MAXDEPTH      7
 
-class SvStream;
 class ScTable;
 
 

@@ -35,9 +35,7 @@
 #include <sfx2/lnkbase.hxx>
 #include "scdllapi.h"
 
-class ScDocShell;
 class SfxObjectShell;
-class AbstractScLinkedAreaDlg;
 struct AreaLink_Impl;
 
 class SC_DLLPUBLIC ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer

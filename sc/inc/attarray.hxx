@@ -39,7 +39,6 @@ class ScPatternAttr;
 class ScStyleSheet;
 class ScFlatBoolRowSegments;
 
-class Rectangle;
 class SfxItemPoolCache;
 class SfxStyleSheetBase;
 class SvxBoxItem;

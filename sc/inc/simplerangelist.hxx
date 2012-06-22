@@ -36,7 +36,6 @@
 #include <map>
 #include <list>
 
-class ScAddress;
 class ScRange;
 class ScRangeList;
 

@@ -49,7 +49,6 @@ class ScAutoFormatData;
 class ScDocument;
 struct ScImportSourceDesc;
 class ScViewData;
-class ScRangeName;
 class ScQueryItem;
 class ScImportOptions;
 class SfxStyleSheetBase;

@@ -42,8 +42,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
 }}}}
 
-class ScDPDimension;
-class ScDPItemData;
 class ScDPDimensionSaveData;
 
 /**

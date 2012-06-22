@@ -41,8 +41,6 @@
 
 #include <boost/unordered_map.hpp>
 
-class ScDocument;
-
 /**
  * When assigning a string value, you can also assign an interned string
  * whose life-cycle is managed by the pivot cache that it belongs to.  Those

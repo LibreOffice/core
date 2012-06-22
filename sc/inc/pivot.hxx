@@ -52,8 +52,6 @@
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class SubTotal;
-
 #define PIVOT_DATA_FIELD        (MAXCOLCOUNT)
 #define PIVOT_FUNC_REF          (MAXCOLCOUNT)
 #include <com/sun/star/uno/Sequence.hxx>
@@ -61,11 +59,6 @@ class SubTotal;
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
-
-class SvStream;
-class ScDocument;
-class ScUserListData;
-class ScProgress;
 
 struct ScDPLabelData;
 

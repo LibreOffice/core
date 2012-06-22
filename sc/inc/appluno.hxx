@@ -31,8 +31,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <rtl/ustring.hxx>
 
-class ScFunctionDescriptionObj;
-
 
 
 com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL

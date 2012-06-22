@@ -70,33 +70,28 @@ class SfxBindings;
 class SfxPoolItem;
 class SfxItemPool;
 class SfxPrinter;
-class SfxStatusBarManager;
 class SfxStyleSheetBase;
 class SvMemoryStream;
 class SvNumberFormatter;
 class SvxBoxInfoItem;
 class SvxBoxItem;
-class SvxBrushItem;
 class SvxForbiddenCharactersTable;
 namespace sfx2 {
     class LinkManager;
     }
 class SvxSearchItem;
-class SvxShadowItem;
 class Window;
 class XColorList;
 
 struct ScAttrEntry;
 class ScAutoFormatData;
 class ScBaseCell;
-class ScStringCell;
 class ScBroadcastAreaSlotMachine;
 class ScChangeViewSettings;
 class ScChartCollection;
 class ScChartListenerCollection;
 class ScConditionalFormat;
 class ScConditionalFormatList;
-class ScColorFormat;
 class ScDBCollection;
 class ScDBData;
 class ScDetOpData;

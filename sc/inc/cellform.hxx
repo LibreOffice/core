@@ -32,8 +32,6 @@
 #include <tools/solar.h>
 #include "scdllapi.h"
 
-class String;
-
 class ScBaseCell;
 class SvNumberFormatter;
 class Color;

@@ -79,9 +79,6 @@ enum ExportFormatExcel { ExpBiff2, ExpBiff3, ExpBiff4, ExpBiff4W, ExpBiff5, ExpB
 
 // These are implemented inside the scfilt library and lazy loaded
 
-class ScRTFImport;
-class ScHTMLImport;
-
 class ScEEAbsImport {
   public:
     virtual ~ScEEAbsImport() {}

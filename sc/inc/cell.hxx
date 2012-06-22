@@ -57,9 +57,7 @@ class ScDocument;
 class EditTextObject;
 class ScMatrix;
 class SvtBroadcaster;
-class ScCodeArray;
 class ScProgress;
-class ScPostIt;
 class ScPatternAttr;
 
 // ============================================================================
