@@ -1668,7 +1668,10 @@ void ScPrintFunc::MakeEditEngine()
         pEditEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True );
 
         pEditEngine->EnableUndo(false);
-        pEditEngine->SetRefDevice( pDev );
+        //fdo#45869 we want text to be positioned as it would be for the the
+        //high dpi printed output, not as would be ideal for the 96dpi preview
+        //window itself
+        pEditEngine->SetRefDevice(pPrinter ? pPrinter : pDoc->GetRefDevice());
         pEditEngine->SetWordDelimiters(
                 ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
         pEditEngine->SetControlWord( pEditEngine->GetControlWord() & ~EE_CNTRL_RTFSTYLESHEETS );
