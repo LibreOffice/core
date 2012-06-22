@@ -4534,8 +4534,8 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 SwFrmFmt* SwShareBoxFmt::GetFormat( long nWidth ) const
 {
     SwFrmFmt *pRet = 0, *pTmp;
-    for( sal_uInt16 n = aNewFmts.Count(); n; )
-        if( ( pTmp = (SwFrmFmt*)aNewFmts[ --n ])->GetFrmSize().GetWidth()
+    for( sal_uInt16 n = aNewFmts.size(); n; )
+        if( ( pTmp = aNewFmts[ --n ])->GetFrmSize().GetWidth()
                 == nWidth )
         {
             pRet = pTmp;
@@ -4550,8 +4550,8 @@ SwFrmFmt* SwShareBoxFmt::GetFormat( const SfxPoolItem& rItem ) const
     sal_uInt16 nWhich = rItem.Which();
     SwFrmFmt *pRet = 0, *pTmp;
     const SfxPoolItem& rFrmSz = pOldFmt->GetFmtAttr( RES_FRM_SIZE, sal_False );
-    for( sal_uInt16 n = aNewFmts.Count(); n; )
-        if( SFX_ITEM_SET == ( pTmp = (SwFrmFmt*)aNewFmts[ --n ])->
+    for( sal_uInt16 n = aNewFmts.size(); n; )
+        if( SFX_ITEM_SET == ( pTmp = aNewFmts[ --n ])->
             GetItemState( nWhich, sal_False, &pItem ) && *pItem == rItem &&
             pTmp->GetFmtAttr( RES_FRM_SIZE, sal_False ) == rFrmSz )
         {
@@ -4561,23 +4561,21 @@ SwFrmFmt* SwShareBoxFmt::GetFormat( const SfxPoolItem& rItem ) const
     return pRet;
 }
 
-void SwShareBoxFmt::AddFormat( const SwFrmFmt& rNew )
+void SwShareBoxFmt::AddFormat( SwFrmFmt& rNew )
 {
-    void* pFmt = (void*)&rNew;
-    aNewFmts.Insert( pFmt, aNewFmts.Count() );
+    aNewFmts.push_back( &rNew );
 }
 
-sal_Bool SwShareBoxFmt::RemoveFormat( const SwFrmFmt& rFmt )
+bool SwShareBoxFmt::RemoveFormat( const SwFrmFmt& rFmt )
 {
     // returns sal_True, if we can delete
     if( pOldFmt == &rFmt )
         return sal_True;
 
-    void* p = (void*)&rFmt;
-    sal_uInt16 nFnd = aNewFmts.GetPos( p );
-    if( USHRT_MAX != nFnd )
-        aNewFmts.Remove( nFnd );
-    return 0 == aNewFmts.Count();
+    std::vector<SwFrmFmt*>::iterator it = std::find( aNewFmts.begin(), aNewFmts.end(), &rFmt );
+    if( aNewFmts.end() != it )
+        aNewFmts.erase( it );
+    return aNewFmts.empty();
 }
 
 SwShareBoxFmts::~SwShareBoxFmts()
@@ -4600,7 +4598,7 @@ SwFrmFmt* SwShareBoxFmts::GetFormat( const SwFrmFmt& rFmt,
                     : 0;
 }
 
-void SwShareBoxFmts::AddFormat( const SwFrmFmt& rOld, const SwFrmFmt& rNew )
+void SwShareBoxFmts::AddFormat( const SwFrmFmt& rOld, SwFrmFmt& rNew )
 {
     {
         sal_uInt16 nPos;

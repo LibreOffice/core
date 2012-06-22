@@ -159,20 +159,20 @@ void lcl_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara );
 class SwShareBoxFmt
 {
     const SwFrmFmt* pOldFmt;
-    SvPtrarr aNewFmts;
+    std::vector<SwFrmFmt*> aNewFmts;
 
 public:
     SwShareBoxFmt( const SwFrmFmt& rFmt )
-        : pOldFmt( &rFmt ), aNewFmts( 1 )
+        : pOldFmt( &rFmt ), aNewFmts()
     {}
 
     const SwFrmFmt& GetOldFormat() const { return *pOldFmt; }
 
     SwFrmFmt* GetFormat( long nWidth ) const;
     SwFrmFmt* GetFormat( const SfxPoolItem& rItem ) const;
-    void AddFormat( const SwFrmFmt& rFmt );
+    void AddFormat( SwFrmFmt& rFmt );
     // returnt sal_True, wenn geloescht werden kann
-    sal_Bool RemoveFormat( const SwFrmFmt& rFmt );
+    bool RemoveFormat( const SwFrmFmt& rFmt );
 };
 
 
@@ -192,7 +192,7 @@ public:
     SwFrmFmt* GetFormat( const SwFrmFmt& rFmt, long nWidth ) const;
     SwFrmFmt* GetFormat( const SwFrmFmt& rFmt, const SfxPoolItem& ) const;
 
-    void AddFormat( const SwFrmFmt& rOld, const SwFrmFmt& rNew );
+    void AddFormat( const SwFrmFmt& rOld, SwFrmFmt& rNew );
 
     void SetSize( SwTableBox& rBox, const SwFmtFrmSize& rSz );
     void SetAttr( SwTableBox& rBox, const SfxPoolItem& rItem );
