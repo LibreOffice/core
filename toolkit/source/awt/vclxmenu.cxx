@@ -678,7 +678,7 @@ namespace
 
                 sal_Bool bModified( sal_False );
                 BitmapEx aBitmapEx = aImage.GetBitmapEx();
-                bModified = aBitmapEx.Scale( aNewSize, BMP_SCALE_LANCZOS );
+                bModified = aBitmapEx.Scale( aNewSize, BMP_SCALE_BEST );
 
                 if ( bModified )
                     aImage = Image( aBitmapEx );

@@ -93,7 +93,7 @@ void InterpolateFixedBitmap( FixedBitmap * pBitmap )
 {
     Bitmap aBmp( pBitmap->GetBitmap() );
     Size aSize = pBitmap->GetSizePixel();
-    aBmp.Scale( aSize, BMP_SCALE_LANCZOS );
+    aBmp.Scale( aSize, BMP_SCALE_BEST );
     pBitmap->SetBitmap( aBmp );
 }
 

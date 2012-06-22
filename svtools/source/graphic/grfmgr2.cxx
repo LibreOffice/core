@@ -428,7 +428,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 }
                 else if( nFlags & GRFMGR_DRAW_SMOOTHSCALE )
                 {
-                    // Scale using the Box filter, rather than this algorithm, as that one provides
+                    // Scale using Bitmap::Scale() rather than this algorithm, as that one provides
                     // better quality, while being somewhat slower (the result should be cached though).
                     aOutBmpEx = aBmpEx;
                     bRet = true;
@@ -438,8 +438,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     if( bRet )
                         bRet = aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
                     if( bRet ) // scale as last (rotating would destroy the smooth scaling)
-                        bRet = aOutBmpEx.Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ),
-                            BMP_SCALE_BOX );
+                        bRet = aOutBmpEx.Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ));
                 }
                 else
                 {
@@ -467,11 +466,10 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                         bRet = ( aOutBmpEx = aBmpEx ).Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ) );
                     else if( nFlags & GRFMGR_DRAW_SMOOTHSCALE )
                     {
-                    // Scale using the Box filter, rather than this algorithm, as that one provides
+                    // Scale using Bitmap::Scale() rather than this algorithm, as that one provides
                     // better quality, while being somewhat slower (the result should be cached though).
                         aOutBmpEx = aBmpEx;
-                        bRet = aOutBmpEx.Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ),
-                            BMP_SCALE_BOX );
+                        bRet = aOutBmpEx.Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ));
                         if( bRet && ( bHMirr || bVMirr ))
                             bRet = aOutBmpEx.Mirror(( bHMirr ? BMP_MIRROR_HORZ : BMP_MIRROR_NONE )
                                     | ( bVMirr ? BMP_MIRROR_VERT : BMP_MIRROR_NONE ));
