@@ -139,14 +139,14 @@ namespace editeng {
         sal_uInt16      GetInWidth() const;
         sal_uInt16      GetDistance() const;
 
-        SvxBorderStyle  GetStyle() const { return m_nStyle; }
+        SvxBorderStyle  GetSvxBorderStyle() const { return m_nStyle; }
 
         void            SetColor( const Color &rColor ) { aColor = rColor; }
         void            SetColorOutFn( Color (*pColorOutFn)( Color ) ) { m_pColorOutFn = pColorOutFn; }
         void            SetColorInFn( Color (*pColorInFn)( Color ) ) { m_pColorInFn = pColorInFn; }
         void            SetColorGapFn( Color (*pColorGapFn)( Color ) ) { m_pColorGapFn = pColorGapFn; }
         void            SetUseLeftTop( bool bUseLeftTop ) { m_bUseLeftTop = bUseLeftTop; }
-        void            SetStyle( SvxBorderStyle nNew );
+        void            SetSvxBorderStyle( SvxBorderStyle nNew );
         void            ScaleMetrics( long nMult, long nDiv );
 
         sal_Bool            operator==( const SvxBorderLine &rCmp ) const;

@@ -127,7 +127,7 @@ void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
     SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
     if ( bHTML )
     {
-        aLine.SetStyle( editeng::DOUBLE );
+        aLine.SetSvxBorderStyle( editeng::DOUBLE );
         aLine.SetWidth( DEF_LINE_WIDTH_0 );
     }
     SvxBoxItem aBox(RES_BOX); aBox.SetDistance( 55 );

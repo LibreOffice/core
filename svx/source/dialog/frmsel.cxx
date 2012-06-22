@@ -878,14 +878,17 @@ bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderStyle& rnStyle ) co
     const SvxBorderLine& rStyle = (*aIt)->GetCoreStyle();
     bool bFound = true;
     for( ++aIt; bFound && aIt.Is(); ++aIt )
+    {
         bFound =
             (rStyle.GetWidth() == (*aIt)->GetCoreStyle().GetWidth()) &&
-            (rStyle.GetStyle() == (*aIt)->GetCoreStyle().GetStyle());
+            (rStyle.GetSvxBorderStyle() ==
+                (*aIt)->GetCoreStyle().GetSvxBorderStyle());
+    }
 
     if( bFound )
     {
         rnWidth = rStyle.GetWidth();
-        rnStyle = rStyle.GetStyle();
+        rnStyle = rStyle.GetSvxBorderStyle();
     }
     return bFound;
 }
@@ -948,7 +951,7 @@ void FrameSelector::SelectAllVisibleBorders( bool bSelect )
 
 void FrameSelector::SetStyleToSelection( long nWidth, SvxBorderStyle nStyle )
 {
-    mxImpl->maCurrStyle.SetStyle( nStyle );
+    mxImpl->maCurrStyle.SetSvxBorderStyle( nStyle );
     mxImpl->maCurrStyle.SetWidth( nWidth );
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
         mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );

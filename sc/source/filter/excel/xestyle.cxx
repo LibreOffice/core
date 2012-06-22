@@ -1571,13 +1571,13 @@ void lclGetBorderLine(
         else if( nOuterWidth >= EXC_BORDER_MEDIUM )
         {
             rnXclLine = EXC_LINE_MEDIUM;
-            if ( pLine->GetStyle( ) == ::editeng::DASHED )
+            if (pLine->GetSvxBorderStyle( ) == ::editeng::DASHED)
                 rnXclLine = EXC_LINE_MEDIUMDASHED;
         }
         else if( nOuterWidth >= EXC_BORDER_THIN )
         {
             rnXclLine = EXC_LINE_THIN;
-            switch ( pLine->GetStyle( ) )
+            switch (pLine->GetSvxBorderStyle())
             {
                 case ::editeng::DASHED:
                     rnXclLine = EXC_LINE_DASHED;

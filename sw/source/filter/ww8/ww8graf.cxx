@@ -1569,7 +1569,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         aLine.SetColor( rLineColor );
 
         aLine.SetWidth( nLineThick ); // No conversion here, nLineThick is already in twips
-        aLine.SetStyle( nIdx );
+        aLine.SetSvxBorderStyle(nIdx);
         if (editeng::DOUBLE == nIdx)
         {  // fdo#43249: divide width by 3 for outer line, gap, inner line
            aLine.ScaleMetrics(1, 3);

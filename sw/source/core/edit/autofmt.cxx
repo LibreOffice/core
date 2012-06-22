@@ -593,27 +593,27 @@ sal_Bool SwAutoFormat::DoUnderline()
         switch( eState )
         {
         case 1:         // einfach, 0,05 pt
-            aLine.SetStyle( editeng::SOLID );
+            aLine.SetSvxBorderStyle( editeng::SOLID );
             aLine.SetWidth( DEF_LINE_WIDTH_0 );
             break;
         case 2:         // einfach, 1,0 pt
-            aLine.SetStyle( editeng::SOLID );
+            aLine.SetSvxBorderStyle( editeng::SOLID );
             aLine.SetWidth( DEF_LINE_WIDTH_1 );
             break;
         case 3:         // doppelt, 1,1 pt
-            aLine.SetStyle( editeng::DOUBLE );
+            aLine.SetSvxBorderStyle( editeng::DOUBLE );
             aLine.SetWidth( DEF_LINE_WIDTH_0 );
             break;
         case 4:         // doppelt, 4,5 pt
-            aLine.SetStyle( editeng::THICKTHIN_SMALLGAP );
+            aLine.SetSvxBorderStyle( editeng::THICKTHIN_SMALLGAP );
             aLine.SetWidth( DEF_LINE_WIDTH_1  );
             break;
         case 5:         // doppelt, 6,0 pt
-            aLine.SetStyle( editeng::THINTHICK_SMALLGAP );
+            aLine.SetSvxBorderStyle( editeng::THINTHICK_SMALLGAP );
             aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
         case 6:         // doppelt, 9,0 pt
-            aLine.SetStyle( editeng::DOUBLE );
+            aLine.SetSvxBorderStyle( editeng::DOUBLE );
             aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
         }

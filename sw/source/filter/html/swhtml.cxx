@@ -5245,7 +5245,9 @@ void SwHTMLParser::InsertHorzRule()
             long nPHeight = (long)nSize;
             SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
             if ( !bNoShade )
-                aBorderLine.SetStyle( ::editeng::DOUBLE );
+            {
+                aBorderLine.SetSvxBorderStyle( ::editeng::DOUBLE );
+            }
             aBorderLine.SetWidth( nPHeight );
         }
         else if( bNoShade )
@@ -5254,7 +5256,7 @@ void SwHTMLParser::InsertHorzRule()
         }
         else
         {
-            aBorderLine.SetStyle( ::editeng::DOUBLE );
+            aBorderLine.SetSvxBorderStyle( ::editeng::DOUBLE );
             aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
         }
 

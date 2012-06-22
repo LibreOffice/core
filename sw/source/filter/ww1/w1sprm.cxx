@@ -228,13 +228,13 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
                 break;
         }
         pLine->SetWidth( nCode );
-        pLine->SetStyle( eStyle );
+        pLine->SetSvxBorderStyle( eStyle );
     }
     else
     {
         if ( pBrc->dxpLine1WidthGet() == 1 && pBrc->dxpLine2WidthGet() == 1 )
         {
-            pLine->SetStyle( ::editeng::DOUBLE );
+            pLine->SetSvxBorderStyle( ::editeng::DOUBLE );
             pLine->SetWidth( DEF_LINE_WIDTH_0 );
         }
         else

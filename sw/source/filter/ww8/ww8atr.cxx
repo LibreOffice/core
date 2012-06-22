@@ -4073,7 +4073,7 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             {
                 // All the border types values are available on
                 // http://msdn.microsoft.com/en-us/library/dd908142%28v=office.12%29.aspx
-                switch ( rLine.GetStyle( ) )
+                switch (rLine.GetSvxBorderStyle())
                 {
                     case ::editeng::SOLID:
                         {
@@ -4145,9 +4145,9 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             nWidth = ( nWidth + 7 ) / 15;
             if( nWidth > 5 )
                 nWidth = 5;
-            if ( ::editeng::DOTTED == rLine.GetStyle( ) )
+            if ( ::editeng::DOTTED == rLine.GetSvxBorderStyle() )
                 nWidth = 6;
-            else if ( ::editeng::DASHED == rLine.GetStyle( ) )
+            else if ( ::editeng::DASHED == rLine.GetSvxBorderStyle() )
                 nWidth = 7;
         }
 

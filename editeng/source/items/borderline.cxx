@@ -277,13 +277,13 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
         if ( nWidth > 0 )
         {
             nStyle = nTestStyle;
-            SetStyle( nStyle );
+            SetSvxBorderStyle(nStyle);
             m_nWidth = nWidth;
         }
         else
         {
             // fdo#38542: not a known double, default to something custom...
-            SetStyle( nStyle );
+            SetSvxBorderStyle(nStyle);
             m_nWidth = nOut + nIn + nDist;
             if (nOut + nIn + nDist)
             {
@@ -297,7 +297,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
     }
     else
     {
-        SetStyle( nStyle );
+        SetSvxBorderStyle(nStyle);
         if (nOut == 0 && nIn > 0)
         {
             // If only inner width is given swap inner and outer widths for
@@ -347,14 +347,14 @@ sal_Bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
              ( m_nWidth == rCmp.m_nWidth )           &&
              ( m_bMirrorWidths  == rCmp.m_bMirrorWidths )  &&
              ( m_aWidthImpl  == rCmp.m_aWidthImpl )  &&
-             ( m_nStyle == rCmp.GetStyle() )         &&
+             ( m_nStyle == rCmp.GetSvxBorderStyle()) &&
              ( m_bUseLeftTop == rCmp.m_bUseLeftTop ) &&
              ( m_pColorOutFn == rCmp.m_pColorOutFn ) &&
              ( m_pColorInFn == rCmp.m_pColorInFn )   &&
              ( m_pColorGapFn == rCmp.m_pColorGapFn ) );
 }
 
-void SvxBorderLine::SetStyle( SvxBorderStyle nNew )
+void SvxBorderLine::SetSvxBorderStyle( SvxBorderStyle nNew )
 {
     m_nStyle = nNew;
     m_aWidthImpl = getWidthImpl( m_nStyle );

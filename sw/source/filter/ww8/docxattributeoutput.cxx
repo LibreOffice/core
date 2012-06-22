@@ -1412,7 +1412,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     const char* pVal = "none";
     if ( !pBorderLine->isEmpty( ) )
     {
-        switch ( pBorderLine->GetStyle( ) )
+        switch (pBorderLine->GetSvxBorderStyle())
         {
             case ::editeng::SOLID:
                 pVal = ( sal_Char* )"single";

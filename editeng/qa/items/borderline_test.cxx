@@ -96,7 +96,7 @@ void BorderLineTest::testGuessWidthDouble()
     // Normal double case
     SvxBorderLine line;
     line.GuessLinesWidths( DOUBLE, TEST_WIDTH, TEST_WIDTH, TEST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetStyle() );
+    CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetSvxBorderStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
 }
 
@@ -105,7 +105,7 @@ void BorderLineTest::testGuessWidthNoMatch()
     SvxBorderLine line;
     line.GuessLinesWidths( DOUBLE,
             TEST_WIDTH + 1, TEST_WIDTH + 2, TEST_WIDTH + 3 );
-    CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetStyle() );
+    CPPUNIT_ASSERT_EQUAL( DOUBLE, line.GetSvxBorderStyle() );
     CPPUNIT_ASSERT_EQUAL( long( (3 * TEST_WIDTH) + 6 ), line.GetWidth() );
 }
 
@@ -116,7 +116,7 @@ void BorderLineTest::testGuessWidthThinthickSmallgap()
             THINTHICKSG_OUT_WIDTH,
             THINTHICKSG_IN_WIDTH,
             THINTHICKSG_DIST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( THINTHICK_SMALLGAP, line.GetStyle() );
+    CPPUNIT_ASSERT_EQUAL( THINTHICK_SMALLGAP, line.GetSvxBorderStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
 }
 
@@ -127,7 +127,7 @@ void BorderLineTest::testGuessWidthThinthickLargegap()
             THINTHICKLG_OUT_WIDTH,
             THINTHICKLG_IN_WIDTH,
             THINTHICKLG_DIST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( THINTHICK_LARGEGAP, line.GetStyle() );
+    CPPUNIT_ASSERT_EQUAL( THINTHICK_LARGEGAP, line.GetSvxBorderStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
 }
 
@@ -138,7 +138,7 @@ void BorderLineTest::testGuessWidthNostyleDouble()
             THINTHICKLG_OUT_WIDTH,
             THINTHICKLG_IN_WIDTH,
             THINTHICKLG_DIST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( THINTHICK_LARGEGAP, line.GetStyle() );
+    CPPUNIT_ASSERT_EQUAL( THINTHICK_LARGEGAP, line.GetSvxBorderStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
 }
 
@@ -146,7 +146,7 @@ void BorderLineTest::testGuessWidthNostyleSingle()
 {
     SvxBorderLine line;
     line.GuessLinesWidths( NO_STYLE, TEST_WIDTH );
-    CPPUNIT_ASSERT_EQUAL( SOLID, line.GetStyle() );
+    CPPUNIT_ASSERT_EQUAL( SOLID, line.GetSvxBorderStyle() );
     CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, line.GetWidth() );
 }
 

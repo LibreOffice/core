@@ -365,7 +365,7 @@ void SvXMLExportItemMapper::handleElementItem(
 bool lcl_isOdfDoubleLine( const SvxBorderLine* pLine )
 {
     bool bIsOdfDouble = false;
-    switch ( pLine->GetStyle() )
+    switch (pLine->GetSvxBorderStyle())
     {
         case ::editeng::DOUBLE:
         case ::editeng::THINTHICK_SMALLGAP:
@@ -743,7 +743,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
                         enum XMLTokenEnum eStyle = XML_SOLID;
                         bool bNoBorder = false;
-                        switch ( pLine->GetStyle( ) )
+                        switch (pLine->GetSvxBorderStyle())
                         {
                             case ::editeng::SOLID:
                                 eStyle = XML_SOLID;

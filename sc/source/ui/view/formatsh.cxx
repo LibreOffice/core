@@ -1511,7 +1511,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
                         if ( pDefLine )
                         {
-                            pDefLine->SetStyle( pLine->GetStyle( ) );
+                            pDefLine->SetSvxBorderStyle(
+                                    pLine->GetSvxBorderStyle());
                             pDefLine->SetWidth( pLine->GetWidth( ) );
                             pTabViewShell->SetSelectionFrameLines( pDefLine, false );
                         }

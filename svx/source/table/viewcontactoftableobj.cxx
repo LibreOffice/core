@@ -331,7 +331,7 @@ namespace drawinglayer
                         getLeftLine().GetColorIn(true).getBColor(),
                         getLeftLine().GetColorGap().getBColor(),
                         getLeftLine().HasGapColor(),
-                        getLeftLine().GetStyle()));
+                        getLeftLine().GetSvxBorderStyle()));
                 }
             }
 
@@ -362,7 +362,7 @@ namespace drawinglayer
                         getBottomLine().GetColorIn(false).getBColor(),
                         getBottomLine().GetColorGap().getBColor(),
                         getBottomLine().HasGapColor(),
-                        getBottomLine().GetStyle()));
+                        getBottomLine().GetSvxBorderStyle()));
                 }
             }
 
@@ -393,7 +393,7 @@ namespace drawinglayer
                         getRightLine().GetColorIn(true).getBColor(),
                         getRightLine().GetColorGap().getBColor(),
                         getRightLine().HasGapColor(),
-                        getRightLine().GetStyle()));
+                        getRightLine().GetSvxBorderStyle()));
                 }
             }
 
@@ -424,7 +424,7 @@ namespace drawinglayer
                         getTopLine().GetColorIn(false).getBColor(),
                         getTopLine().GetColorGap().getBColor(),
                         getTopLine().HasGapColor(),
-                        getTopLine().GetStyle()));
+                        getTopLine().GetSvxBorderStyle()));
                 }
             }
 

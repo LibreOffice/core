@@ -3583,7 +3583,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
 
     // Linien-Stil: solid oder double
     sOut.append(' ');
-    switch ( pLine->GetStyle( ) )
+    switch (pLine->GetSvxBorderStyle())
     {
         case ::editeng::SOLID:
             sOut.append(sCSS1_PV_solid);

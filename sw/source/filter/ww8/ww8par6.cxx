@@ -1353,7 +1353,7 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
     }
 
     ::editeng::SvxBorderLine aLine;
-    aLine.SetStyle( eStyle );
+    aLine.SetSvxBorderStyle( eStyle );
     aLine.SetWidth( nLineThickness );
 
     //No AUTO for borders as yet, so if AUTO, use BLACK

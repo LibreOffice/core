@@ -323,31 +323,31 @@ void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) 
     switch ( eStyle )
     {
         case CSS1_BS_SINGLE:
-            aBorderLine.SetStyle( ::editeng::SOLID );
+            aBorderLine.SetSvxBorderStyle( ::editeng::SOLID );
             break;
         case CSS1_BS_DOUBLE:
-            aBorderLine.SetStyle( ::editeng::DOUBLE );
+            aBorderLine.SetSvxBorderStyle( ::editeng::DOUBLE );
             break;
         case CSS1_BS_DOTTED:
-            aBorderLine.SetStyle( ::editeng::DOTTED );
+            aBorderLine.SetSvxBorderStyle( ::editeng::DOTTED );
             break;
         case CSS1_BS_DASHED:
-            aBorderLine.SetStyle( ::editeng::DASHED );
+            aBorderLine.SetSvxBorderStyle( ::editeng::DASHED );
             break;
         case CSS1_BS_GROOVE:
-            aBorderLine.SetStyle( ::editeng::ENGRAVED );
+            aBorderLine.SetSvxBorderStyle( ::editeng::ENGRAVED );
             break;
         case CSS1_BS_RIDGE:
-            aBorderLine.SetStyle( ::editeng::EMBOSSED );
+            aBorderLine.SetSvxBorderStyle( ::editeng::EMBOSSED );
             break;
         case CSS1_BS_INSET:
-            aBorderLine.SetStyle( ::editeng::INSET );
+            aBorderLine.SetSvxBorderStyle( ::editeng::INSET );
             break;
         case CSS1_BS_OUTSET:
-            aBorderLine.SetStyle( ::editeng::OUTSET );
+            aBorderLine.SetSvxBorderStyle( ::editeng::OUTSET );
             break;
         default:
-            aBorderLine.SetStyle( ::editeng::NO_STYLE );
+            aBorderLine.SetSvxBorderStyle( ::editeng::NO_STYLE );
             break;
     }
 

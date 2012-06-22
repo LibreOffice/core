@@ -1025,7 +1025,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     }
 
     if ( pOptions->nCellSpacing != 0 )
-        aTopBorderLine.SetStyle( ::editeng::DOUBLE );
+        aTopBorderLine.SetSvxBorderStyle( ::editeng::DOUBLE );
     aTopBorderLine.SetWidth( nPHeight );
     aTopBorderLine.SetColor( rBorderColor );
     aBottomBorderLine = aTopBorderLine;
@@ -1037,7 +1037,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     else
     {
         if ( pOptions->nCellSpacing != 0 )
-            aLeftBorderLine.SetStyle( ::editeng::DOUBLE );
+            aLeftBorderLine.SetSvxBorderStyle( ::editeng::DOUBLE );
         aLeftBorderLine.SetWidth( nPWidth );
         aLeftBorderLine.SetColor( rBorderColor );
     }
@@ -1045,7 +1045,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
 
     if( pOptions->nCellSpacing != 0 )
     {
-        aBorderLine.SetStyle( ::editeng::DOUBLE );
+        aBorderLine.SetSvxBorderStyle( ::editeng::DOUBLE );
         aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
     }
     else
@@ -1487,7 +1487,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
 
                     sal_uInt16 nBorderWidth = aBorderLine.GetOutWidth();
                     nBorderWidth *= (nEmptyRows + 1);
-                    aThickBorderLine.SetStyle( ::editeng::SOLID );
+                    aThickBorderLine.SetSvxBorderStyle( ::editeng::SOLID );
                     aThickBorderLine.SetWidth( nBorderWidth );
                     aBoxItem.SetLine( &aThickBorderLine, BOX_LINE_BOTTOM );
                 }

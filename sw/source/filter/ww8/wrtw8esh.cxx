@@ -1727,7 +1727,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                         DrawModelToEmu( nLineWidth ));
 
                     MSO_LineDashing eDashing = mso_lineSolid;
-                    switch ( pLine->GetStyle( ) )
+                    switch (pLine->GetSvxBorderStyle())
                     {
                         case  ::editeng::DASHED:
                             eDashing = mso_lineDashGEL;
