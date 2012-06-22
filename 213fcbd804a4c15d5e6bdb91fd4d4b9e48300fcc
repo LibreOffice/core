@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAACn///2k\u003d",
+        "filename": "logerrit",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-06-22T08:19:39Z",
+      "side": 1,
+      "message": "After some thoughts it would require, that the root git repository name would be retrieved dynamically.\r\nIf user has multiple LO repos on his system (master and multiple release-branches) then it makes no sense to link to logerrit script in some of this repo, but to just copy it in some dir with PATH.\r\n\r\nBut then the question is how to update it?\r\nThat why it may be an option do move it to dev-tools, like patched gnu make and install it in PATH from there.\r\n\r\nThen it still has to be extended to retrieve the git repo root dir and use it inside th script. By doing so, git lr would work, and we would remove the requirement to issue this command from git repo dir.",
+      "revId": "213fcbd804a4c15d5e6bdb91fd4d4b9e48300fcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
