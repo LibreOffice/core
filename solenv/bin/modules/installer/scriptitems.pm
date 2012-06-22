@@ -1014,7 +1014,7 @@ sub replace_setup_variables
         my $value = $oneitem->{'Value'};
 
         $value =~ s/\<buildid\>/$buildidstring/;
-        $value =~ s/\<scsrevision\>/$scsrevision/;
+        $value =~ s/\<scsrevision\>/$scsrevision/ if defined $scsrevision;
         $value =~ s/\<sequence_languages\>/$languagesstring/;
         $value =~ s/\<productkey\>/$productkey/;
         $value =~ s/\<productcode\>/$installer::globals::productcode/;
