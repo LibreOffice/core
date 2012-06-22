@@ -522,7 +522,7 @@ BigInt::BigInt( const BigInt& rBigInt )
 
 // -----------------------------------------------------------------------
 
-BigInt::BigInt( const String& rString )
+BigInt::BigInt( const rtl::OUString& rString )
 {
     bIsSet = sal_True;
     bIsNeg = sal_False;
@@ -530,7 +530,7 @@ BigInt::BigInt( const String& rString )
     nVal   = 0;
 
     sal_Bool bNeg = sal_False;
-    const sal_Unicode* p = rString.GetBuffer();
+    const sal_Unicode* p = rString.getStr();
     if ( *p == '-' )
     {
         bNeg = sal_True;
@@ -655,7 +655,7 @@ BigInt::operator double() const
 
 // -----------------------------------------------------------------------
 
-String BigInt::GetString() const
+rtl::OUString BigInt::GetString() const
 {
     String aString;
 

@@ -29,9 +29,9 @@
 #define _BIGINT_HXX
 
 #include <climits>
+#include <rtl/ustring.hxx>
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
-#include <tools/string.hxx>
 
 class SvStream;
 #ifdef _TLBIGINT_INT64
@@ -83,7 +83,7 @@ public:
                     BigInt( sal_uInt16 nVal );
                     BigInt( sal_uInt32 nVal );
                     BigInt( const BigInt& rBigInt );
-                    BigInt( const String& rString );
+                    BigInt( const rtl::OUString& rString );
 #ifdef _TLBIGINT_INT64
                     BigInt( const SbxINT64  &r );
                     BigInt( const SbxUINT64 &r );
@@ -97,7 +97,7 @@ public:
     operator        sal_uIntPtr() const;
 
     void            Set( sal_Bool bSet ) { bIsSet = bSet; }
-    String          GetString() const;
+    rtl::OUString   GetString() const;
 
     sal_Bool            IsSet() const { return bIsSet; }
     sal_Bool            IsNeg() const;
