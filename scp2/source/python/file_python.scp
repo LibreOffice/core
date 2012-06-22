@@ -353,7 +353,7 @@ End
 
 Directory gid_Dir_Py_PythonCore_Bin
     ParentID = gid_Dir_Py_PythonCore;
-    HostName = bin;
+    HostName = "bin";
 End
 
 File gid_File_Py_Python_Bin
