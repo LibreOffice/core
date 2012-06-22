@@ -35,7 +35,6 @@
 #include <section.hxx>
 
 class  SwTOXInternational;
-class  SvPtrarr;
 class  SwPageDesc;
 class  SwTxtNode;
 class  SwTxtFmtColl;
