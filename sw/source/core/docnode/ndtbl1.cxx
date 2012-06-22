@@ -168,10 +168,10 @@ sal_Bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
 //Alle veraenderten Zeilen erhalten ggf. ein eigenes FrmFmt.
 //Natuerlich darf jede Zeile nur einmal angefasst werden.
 
-inline void InsertLine( SvPtrarr& rLineArr, SwTableLine* pLine )
+inline void InsertLine( std::vector<SwTableLine*>& rLineArr, SwTableLine* pLine )
 {
-    if( USHRT_MAX == rLineArr.GetPos( pLine ) )
-        rLineArr.Insert( pLine, rLineArr.Count() );
+    if( rLineArr.end() == std::find( rLineArr.begin(), rLineArr.end(), pLine ) )
+        rLineArr.push_back( pLine );
 }
 
 //-----------------------------------------------------------------------------
@@ -192,12 +192,12 @@ sal_Bool lcl_IsAnLower( const SwTableLine *pLine, const SwTableLine *pAssumed )
 
 struct LinesAndTable
 {
-          SvPtrarr &rLines;
-    const SwTable  &rTable;
-          sal_Bool      bInsertLines;
+    std::vector<SwTableLine*> &rLines;
+    const SwTable             &rTable;
+    bool                      bInsertLines;
 
-    LinesAndTable( SvPtrarr &rL, const SwTable &rTbl ) :
-          rLines( rL ), rTable( rTbl ), bInsertLines( sal_True ) {}
+    LinesAndTable( std::vector<SwTableLine*> &rL, const SwTable &rTbl ) :
+          rLines( rL ), rTable( rTbl ), bInsertLines( true ) {}
 };
 
 
@@ -243,7 +243,7 @@ sal_Bool _FindLine( _FndLine& rLine, LinesAndTable* pPara )
     return sal_True;
 }
 
-void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor, bool bRemoveLines )
+void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& rCursor, bool bRemoveLines )
 {
     //Zuerst die selektierten Boxen einsammeln.
     SwSelBoxes aBoxes;
@@ -266,14 +266,14 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor, bool bRemoveLine
     // (Not for row split)
     if ( bRemoveLines )
     {
-        for ( sal_uInt16 i = 0; i < rArr.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < rArr.size(); ++i )
         {
-            SwTableLine *pUpLine = (SwTableLine*)rArr[i];
-            for ( sal_uInt16 k = 0; k < rArr.Count(); ++k )
+            SwTableLine *pUpLine = rArr[i];
+            for ( sal_uInt16 k = 0; k < rArr.size(); ++k )
             {
-                if ( k != i && ::lcl_IsAnLower( pUpLine, (SwTableLine*)rArr[k] ) )
+                if ( k != i && ::lcl_IsAnLower( pUpLine, rArr[k] ) )
                 {
-                    rArr.Remove( k );
+                    rArr.erase( rArr.begin() + k );
                     if ( k <= i )
                         --i;
                     --k;
@@ -335,10 +335,10 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25 ); //Zum sammeln Lines.
+        std::vector<SwTableLine*> aRowArr; //Zum sammeln Lines.
         ::lcl_CollectLines( aRowArr, rCursor, false );
 
-        if( aRowArr.Count() )
+        if( !aRowArr.empty() )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
@@ -346,10 +346,10 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
             }
 
             std::vector<SwTblFmtCmp*> aFmtCmp;
-            aFmtCmp.reserve( Max( 255, (int)aRowArr.Count() ) );
+            aFmtCmp.reserve( Max( 255, (int)aRowArr.size() ) );
 
-            for( sal_uInt16 i = 0; i < aRowArr.Count(); ++i )
-                ::lcl_ProcessRowAttr( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
+            for( sal_uInt16 i = 0; i < aRowArr.size(); ++i )
+                ::lcl_ProcessRowAttr( aFmtCmp, aRowArr[i], rNew );
 
             SwTblFmtCmp::Delete( aFmtCmp );
             SetModified();
@@ -368,17 +368,16 @@ void SwDoc::GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz ) const
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25 ); //Zum sammeln der Lines.
+        std::vector<SwTableLine*> aRowArr; //Zum sammeln der Lines.
         ::lcl_CollectLines( aRowArr, rCursor, false );
 
-        if( aRowArr.Count() )
+        if( !aRowArr.empty() )
         {
-            rpSz = &(SwFmtRowSplit&)((SwTableLine*)aRowArr[0])->
-                                                GetFrmFmt()->GetRowSplit();
+            rpSz = &(SwFmtRowSplit&)aRowArr[0]->GetFrmFmt()->GetRowSplit();
 
-            for ( sal_uInt16 i = 1; i < aRowArr.Count() && rpSz; ++i )
+            for ( sal_uInt16 i = 1; i < aRowArr.size() && rpSz; ++i )
             {
-                if ( (*rpSz).GetValue() != ((SwTableLine*)aRowArr[i])->GetFrmFmt()->GetRowSplit().GetValue() )
+                if ( (*rpSz).GetValue() != aRowArr[i]->GetFrmFmt()->GetRowSplit().GetValue() )
                     rpSz = 0;
             }
             if ( rpSz )
@@ -396,10 +395,10 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25 ); //Zum sammeln Lines.
+        std::vector<SwTableLine*> aRowArr; //Zum sammeln Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
-        if( aRowArr.Count() )
+        if( !aRowArr.empty() )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
@@ -407,9 +406,9 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
             }
 
             std::vector<SwTblFmtCmp*> aFmtCmp;
-            aFmtCmp.reserve( Max( 255, (int)aRowArr.Count() ) );
-            for ( sal_uInt16 i = 0; i < aRowArr.Count(); ++i )
-                ::lcl_ProcessRowSize( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
+            aFmtCmp.reserve( Max( 255, (int)aRowArr.size() ) );
+            for ( sal_uInt16 i = 0; i < aRowArr.size(); ++i )
+                ::lcl_ProcessRowSize( aFmtCmp, aRowArr[i], rNew );
             SwTblFmtCmp::Delete( aFmtCmp );
 
             SetModified();
@@ -428,17 +427,16 @@ void SwDoc::GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25 ); //Zum sammeln der Lines.
+        std::vector<SwTableLine*> aRowArr; //Zum sammeln der Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
-        if( aRowArr.Count() )
+        if( !aRowArr.empty() )
         {
-            rpSz = &(SwFmtFrmSize&)((SwTableLine*)aRowArr[0])->
-                                                GetFrmFmt()->GetFrmSize();
+            rpSz = &(SwFmtFrmSize&)aRowArr[0]->GetFrmFmt()->GetFrmSize();
 
-            for ( sal_uInt16 i = 1; i < aRowArr.Count() && rpSz; ++i )
+            for ( sal_uInt16 i = 1; i < aRowArr.size() && rpSz; ++i )
             {
-                if ( *rpSz != ((SwTableLine*)aRowArr[i])->GetFrmFmt()->GetFrmSize() )
+                if ( *rpSz != aRowArr[i]->GetFrmFmt()->GetFrmSize() )
                     rpSz = 0;
             }
             if ( rpSz )
@@ -453,19 +451,19 @@ sal_Bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly )
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25 ); //Zum sammeln der Lines.
+        std::vector<SwTableLine*> aRowArr; //Zum sammeln der Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
-        if( 1 < aRowArr.Count() )
+        if( 1 < aRowArr.size() )
         {
             if( !bTstOnly )
             {
                 long nHeight = 0;
                 sal_uInt16 i;
 
-                for ( i = 0; i < aRowArr.Count(); ++i )
+                for ( i = 0; i < aRowArr.size(); ++i )
                 {
-                    SwIterator<SwFrm,SwFmt> aIter( *((SwTableLine*)aRowArr[i])->GetFrmFmt() );
+                    SwIterator<SwFrm,SwFmt> aIter( *aRowArr[i]->GetFrmFmt() );
                     SwFrm* pFrm = aIter.First();
                     while ( pFrm )
                     {
@@ -482,8 +480,8 @@ sal_Bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly )
                 }
 
                 std::vector<SwTblFmtCmp*> aFmtCmp;
-                aFmtCmp.reserve( Max( 255, (int)aRowArr.Count() ) );
-                for( i = 0; i < aRowArr.Count(); ++i )
+                aFmtCmp.reserve( Max( 255, (int)aRowArr.size() ) );
+                for( i = 0; i < aRowArr.size(); ++i )
                     ::lcl_ProcessRowSize( aFmtCmp, (SwTableLine*)aRowArr[i], aNew );
                 SwTblFmtCmp::Delete( aFmtCmp );
 
@@ -503,10 +501,10 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25 ); //Zum sammeln Lines.
+        std::vector<SwTableLine*> aRowArr; //Zum sammeln Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
-        if( aRowArr.Count() )
+        if( !aRowArr.empty() )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
@@ -514,10 +512,10 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
             }
 
             std::vector<SwTblFmtCmp*> aFmtCmp;
-            aFmtCmp.reserve( Max( 255, (int)aRowArr.Count() ) );
+            aFmtCmp.reserve( Max( 255, (int)aRowArr.size() ) );
 
-            for( sal_uInt16 i = 0; i < aRowArr.Count(); ++i )
-                ::lcl_ProcessRowAttr( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
+            for( sal_uInt16 i = 0; i < aRowArr.size(); ++i )
+                ::lcl_ProcessRowAttr( aFmtCmp, aRowArr[i], rNew );
 
             SwTblFmtCmp::Delete( aFmtCmp );
             SetModified();
@@ -534,16 +532,16 @@ sal_Bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        SvPtrarr aRowArr( 25 ); //Zum sammeln Lines.
+        std::vector<SwTableLine*> aRowArr; //Zum sammeln Lines.
         ::lcl_CollectLines( aRowArr, rCursor, true );
 
-        if( aRowArr.Count() )
+        if( !aRowArr.empty() )
         {
-            rToFill = ((SwTableLine*)aRowArr[0])->GetFrmFmt()->GetBackground();
+            rToFill = aRowArr[0]->GetFrmFmt()->GetBackground();
 
             bRet = sal_True;
-            for ( sal_uInt16 i = 1; i < aRowArr.Count(); ++i )
-                if ( rToFill != ((SwTableLine*)aRowArr[i])->GetFrmFmt()->GetBackground() )
+            for ( sal_uInt16 i = 1; i < aRowArr.size(); ++i )
+                if ( rToFill != aRowArr[i]->GetFrmFmt()->GetBackground() )
                 {
                     bRet = sal_False;
                     break;
