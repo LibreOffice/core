@@ -66,13 +66,18 @@ SvxUnoDrawPool::SvxUnoDrawPool( SdrModel* pModel ) throw()
 
 SvxUnoDrawPool::~SvxUnoDrawPool() throw()
 {
-    // memory leak #119991: to release the secondary pool created in function SvxUnoDrawPool::init()
-    SfxItemPool* pSecondaryPool=mpDefaultsPool->GetSecondaryPool();
-    if (pSecondaryPool != NULL)
-        SfxItemPool::Free(pSecondaryPool);
-    // memory leak #119991
+    // memory leak #119991#: to release the secondary pool created in function SvxUnoDrawPool::init()
+    SfxItemPool* pSecondaryPool = mpDefaultsPool->GetSecondaryPool();
 
+    // #119991# delete master pool first, this will reset the pMaster entry in pSecondaryPool as needed.
+    // This is the needed order (see SdrModel::~SdrModel for example)
     SfxItemPool::Free(mpDefaultsPool);
+
+    // delete pSecondaryPool if exists
+    if(pSecondaryPool)
+    {
+        SfxItemPool::Free(pSecondaryPool);
+    }
 }
 
 void SvxUnoDrawPool::init()
