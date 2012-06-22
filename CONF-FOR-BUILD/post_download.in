@@ -1,0 +1,72 @@
+AC_INIT([LibreOffice],[3.6],[],[],[http://documentfoundation.org/])
+AC_PREREQ([2.59])
+
+echo "********************************************************************"
+echo "*"
+echo "*   Running the post download checks."
+echo "*"
+echo "********************************************************************"
+
+AC_CANONICAL_HOST
+case "$host_os" in
+    cygwin*) # Windows
+        _os=WINNT
+        ;;
+   *)
+	# We only do stuff for Windows here anyway
+        _os=whatever
+   ;;
+esac
+
+dnl ===================================================================
+dnl Windows builds need dbghelp.dll in external/dbghelp/
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([for dbghelp.dll])
+   if test -f ./external/dbghelp/dbghelp.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([dbghelp.dll is missing in external/dbghelp/.
+Get it from the Microsoft site and put it into external/dbghelp.
+(Note: Microsoft seems to enjoy changing the exact location of this file. You
+may have to search Microsoft's website.) Last time it was seen at:
+<http://www.microsoft.com/downloads/release.asp?releaseid=30682>.])
+   fi
+fi
+
+dnl ===================================================================
+dnl Windows builds - use oowintool to copy CRT dlls and manifest
+dnl ===================================================================
+if test "$COM" = "MSC"; then
+    if ! ./oowintool --msvc-copy-dlls ./external/msvcp ; then
+       AC_MSG_ERROR([oowintool failed to copy CRT])
+    fi
+fi
+
+dnl ===================================================================
+dnl Windows builds - use oowintool to copy VC redist merge modules
+dnl ===================================================================
+if test "$COM" = "MSC"; then
+    if ! ./oowintool --msvc-copy-msms ./external/msm90 ; then
+       AC_MSG_ERROR([oowintool failed to copy merge modules])
+    fi
+    if ! ./oowintool --msvc-copy-msms-64 ./external/msm90 ; then
+       AC_MSG_WARN([oowintool failed to copy x64 merge modules, installation
+will lack the 64-bit Explorer extension])
+    fi
+fi
+
+dnl ===================================================================
+dnl Windows builds need gdiplus.dll in external/gdiplus/
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([for gdiplus.dll])
+   if test -f ./external/gdiplus/gdiplus.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([gdiplus.dll is missing in external/gdiplus/.
+Get it from the Microsoft site and put it into external/gdiplus.
+You may have to search Microsoft's website. Last time it was seen at:
+<http://www.microsoft.com/downloads/details.aspx?familyid=6A63AB9C-DF12-4D41-933C-BE590FEAA05A&displaylang=en>.])
+   fi
+fi
