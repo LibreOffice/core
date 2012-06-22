@@ -216,7 +216,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         const Size aSuperSampleSize(
             aPreviewSize.Width()*gnSuperScaleFactor,
             aPreviewSize.Height()*gnSuperScaleFactor);
-        aPreview.Scale(aPreviewSize, BMP_SCALE_LANCZOS);
+        aPreview.Scale(aPreviewSize, BMP_SCALE_BEST);
         rContent.DrawBitmapEx(aPageOffset, aPreview);
 
         // When the page is marked as excluded from the slide show then

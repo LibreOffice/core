@@ -139,7 +139,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                     aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
                 }
                 if( aNewBmpSize.Width() && aNewBmpSize.Height() )
-                    aBitmapEx.Scale( aNewBmpSize, BMP_SCALE_LANCZOS );
+                    aBitmapEx.Scale( aNewBmpSize, BMP_SCALE_BEST );
                 else
                     aBitmapEx.SetEmpty();
             }

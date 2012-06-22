@@ -51,6 +51,11 @@
 #define BMP_SCALE_INTERPOLATE       0x00000002UL
 #define BMP_SCALE_LANCZOS           0x00000003UL
 
+// Aliases, try to use these two (or BMP_SCALE_FAST/BMP_SCALE_NONE),
+// use a specific algorithm only if you really need to.
+#define BMP_SCALE_BEST              BMP_SCALE_LANCZOS
+#define BMP_SCALE_DEFAULT           BMP_SCALE_INTERPOLATE
+
 // -----------------------------------------------------------------------------
 
 #define BMP_DITHER_NONE             0x00000000UL
@@ -538,7 +543,7 @@ public:
         @return sal_True, if the operation was completed successfully.
      */
     sal_Bool                    Scale( const Size& rNewSize,
-                                   sal_uLong nScaleFlag = BMP_SCALE_LANCZOS );
+                                   sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
 
     /** Scale the bitmap
 
@@ -551,7 +556,7 @@ public:
         @return sal_True, if the operation was completed successfully.
      */
     sal_Bool                    Scale( const double& rScaleX, const double& rScaleY,
-                                   sal_uLong nScaleFlag = BMP_SCALE_LANCZOS );
+                                   sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
 
     /** Rotate bitmap by the specified angle
 
