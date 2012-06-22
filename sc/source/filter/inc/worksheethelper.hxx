@@ -318,11 +318,11 @@ public:
     /** Final conversion after importing the worksheet. */
     void                finalizeWorksheetImport();
 
-    void                setCellFormula( ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString&  );
-    void                setCellFormula( ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32  );
-    void                setCellArrayFormula( ::com::sun::star::table::CellRangeAddress& rRangeAddress, ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString&  );
-    void                createSharedFormulaMapEntry( ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens );
-    void                setCellFormulaValue( ::com::sun::star::table::CellAddress& rAddress,
+    void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString&  );
+    void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32  );
+    void                setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString&  );
+    void                createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens );
+    void                setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress,
                             double fValue  );
 private:
     WorksheetGlobals&   mrSheetGlob;

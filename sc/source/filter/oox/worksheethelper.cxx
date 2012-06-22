@@ -1549,7 +1549,7 @@ void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fVal
     }
 }
 
-void WorksheetHelper::setCellFormulaValue( ::com::sun::star::table::CellAddress& rAddress,
+void WorksheetHelper::setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress,
                             double fValue  )
 {
     getFormulaBuffer().setCellFormulaValue( rAddress, fValue );
@@ -1593,22 +1593,22 @@ void WorksheetHelper::finalizeWorksheetImport()
     mrSheetGlob.finalizeWorksheetImport();
 }
 
-void WorksheetHelper::setCellFormula( ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString& rTokenStr )
+void WorksheetHelper::setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString& rTokenStr )
 {
     getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
 }
 
-void WorksheetHelper::setCellFormula( ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32 nSharedId )
+void WorksheetHelper::setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32 nSharedId )
 {
     getFormulaBuffer().setCellFormula( rTokenAddress,  nSharedId );
 }
 
-void WorksheetHelper::setCellArrayFormula( ::com::sun::star::table::CellRangeAddress& rRangeAddress, ::com::sun::star::table::CellAddress& rTokenAddress, rtl::OUString& rTokenStr )
+void WorksheetHelper::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString& rTokenStr )
 {
     getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
 }
 
-void WorksheetHelper::createSharedFormulaMapEntry(  ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens )
+void WorksheetHelper::createSharedFormulaMapEntry(  const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens )
 {
     getFormulaBuffer().createSharedFormulaMapEntry( rAddress, nSharedId, rTokens );
 }
