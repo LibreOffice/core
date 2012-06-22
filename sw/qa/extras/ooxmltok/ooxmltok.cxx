@@ -35,6 +35,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -555,15 +556,53 @@ void Test::testN766477()
 
 void Test::testN758883()
 {
+    load("n758883.docx");
+
     /*
      * The problem was that direct formatting of the paragraph was not applied
      * to the numbering. This is easier to test using a layout dump.
      */
-
-    load("n758883.docx");
-
     OUString aHeight = parseDump("/root/page/body/txt/Special", "nHeight");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(220), aHeight.toInt32()); // It was 280
+
+    /*
+     * Next problem was that the page margin contained the width of the page border as well.
+     *
+     * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin
+     */
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    sal_Int32 nValue = 0;
+    xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(820), nValue);
+
+    // No assert for the 3rd problem: see the comment in the test doc.
+
+    /*
+     * 4th problem: Wrap type of the textwrape was not 'through'.
+     *
+     * xray ThisComponent.DrawPage(0).Surround ' was 2, should be 1
+     */
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    xPropertySet.set(xDraws->getByIndex(0), uno::UNO_QUERY);
+    text::WrapTextMode eValue;
+    xPropertySet->getPropertyValue("Surround") >>= eValue;
+    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_THROUGHT);
+
+    /*
+     * 5th problem: anchor type of the second textbox was wrong.
+     *
+     * xray ThisComponent.DrawPage(1).AnchorType ' was 1, should be 4
+     */
+    xPropertySet.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+    text::TextContentAnchorType eAnchorType;
+    xPropertySet->getPropertyValue("AnchorType") >>= eAnchorType;
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eAnchorType);
+
+    // 6th problem: xray ThisComponent.DrawPage(2).AnchorType ' was 2, should be 4
+    xPropertySet.set(xDraws->getByIndex(2), uno::UNO_QUERY);
+    xPropertySet->getPropertyValue("AnchorType") >>= eAnchorType;
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eAnchorType);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
