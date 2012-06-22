@@ -344,34 +344,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         sal_Bool            bHMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
         sal_Bool            bVMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
 
-        if( nFlags & GRFMGR_DRAW_BILINEAR )
-        {
-            const double    fRevScaleX = ( nNewW > 1L ) ? ( (double) ( nW - 1L ) / ( nNewW - 1L ) ) : 0.0;
-            const double    fRevScaleY = ( nNewH > 1L ) ? ( (double) ( nH - 1L ) / ( nNewH - 1L ) ) : 0.0;
-
-            // create horizontal mapping table
-            for( nX = 0L, nTmpX = nW - 1L, nTmp = nW - 2L; nX < nNewW; nX++ )
-            {
-                fTmp = nX * fRevScaleX;
-
-                if( bHMirr )
-                    fTmp = nTmpX - fTmp;
-
-                pMapFX[ nX ] = (long) ( ( fTmp - ( pMapIX[ nX ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
-            }
-
-            // create vertical mapping table
-            for( nY = 0L, nTmpY = nH - 1L, nTmp = nH - 2L; nY < nNewH; nY++ )
-            {
-                fTmp = nY * fRevScaleY;
-
-                if( bVMirr )
-                    fTmp = nTmpY - fTmp;
-
-                pMapFY[ nY ] = (long) ( ( fTmp - ( pMapIY[ nY ] = MinMax( (long) fTmp, 0, nTmp ) ) ) * 1048576. );
-            }
-        }
-        else
+        if( !( nFlags & GRFMGR_DRAW_SMOOTHSCALE ))
         {
             // #98290# Use a different mapping for non-interpolating mode, to avoid missing rows/columns
             const double    fRevScaleX = ( nNewW > 1L ) ? ( (double) nW / nNewW ) : 0.0;
@@ -453,7 +426,22 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     bRet = ( aOutBmpEx = aBmpEx ).Scale( aUnrotatedSzPix );
 
                     if( bRet )
-                        aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
+                        bRet = aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
+                }
+                else if( nFlags & GRFMGR_DRAW_SMOOTHSCALE )
+                {
+                    // Scale using the Box filter, rather than this algorithm, as that one provides
+                    // better quality, while being somewhat slower (the result should be cached though).
+                    aOutBmpEx = aBmpEx;
+                    bRet = true;
+                    if( bHMirr || bVMirr )
+                        bRet = aOutBmpEx.Mirror(( bHMirr ? BMP_MIRROR_HORZ : BMP_MIRROR_NONE )
+                                    | ( bVMirr ? BMP_MIRROR_VERT : BMP_MIRROR_NONE ));
+                    if( bRet )
+                        bRet = aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
+                    if( bRet ) // scale as last (rotating would destroy the smooth scaling)
+                        bRet = aOutBmpEx.Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ),
+                            BMP_SCALE_BOX );
                 }
                 else
                 {
@@ -479,6 +467,17 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 {
                     if( bSimple )
                         bRet = ( aOutBmpEx = aBmpEx ).Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ) );
+                    else if( nFlags & GRFMGR_DRAW_SMOOTHSCALE )
+                    {
+                    // Scale using the Box filter, rather than this algorithm, as that one provides
+                    // better quality, while being somewhat slower (the result should be cached though).
+                        aOutBmpEx = aBmpEx;
+                        bRet = aOutBmpEx.Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ),
+                            BMP_SCALE_BOX );
+                        if( bRet && ( bHMirr || bVMirr ))
+                            bRet = aOutBmpEx.Mirror(( bHMirr ? BMP_MIRROR_HORZ : BMP_MIRROR_NONE )
+                                    | ( bVMirr ? BMP_MIRROR_VERT : BMP_MIRROR_NONE ));
+                    }
                     else
                     {
                         bRet = ImplCreateScaled( aBmpEx,
