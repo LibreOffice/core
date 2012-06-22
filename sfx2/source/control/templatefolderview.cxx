@@ -243,6 +243,8 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
     mpItemView->SetSizePixel(GetOutputSizePixel());
     mpItemView->SetColCount(3);
     mpItemView->SetLineCount(2);
+
+    mpItemView->setItemStateHdl(LINK(this,TemplateFolderView,TVTemplateStateHdl));
 }
 
 TemplateFolderView::~TemplateFolderView()
@@ -365,6 +367,11 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
         mpItemView->filterItems(ViewFilter_Application(mpDocTemplates,meFilterOption));
 
     mpItemView->Show();
+}
+
+IMPL_LINK(TemplateFolderView, TVTemplateStateHdl, const ThumbnailViewItem*, pItem)
+{
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

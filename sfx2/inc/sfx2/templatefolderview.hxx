@@ -48,6 +48,8 @@ private:
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);
 
+    DECL_LINK(TVTemplateStateHdl, const ThumbnailViewItem*);
+
 private:
 
     bool mbFilteredResults;     // Flag keep track if overlay has been filtered so folders can get filtered too afterwards
