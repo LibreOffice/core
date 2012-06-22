@@ -6,6 +6,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.prefs.Preferences;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -16,6 +17,7 @@ import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -71,9 +73,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
         homeDirectory.mkdirs();
         currentDirectory = homeDirectory;        
         //Load default settings
-        prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
-        viewMode = prefs.getInt( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
-        sortMode = prefs.getInt( SORT_MODE_KEY, FileUtilities.SORT_AZ );
+        
 
     }
     
@@ -301,6 +301,19 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 		return;
     }
     
+    public void readPreferences(){
+    	prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
+        viewMode = prefs.getInt( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
+        sortMode = prefs.getInt( SORT_MODE_KEY, FileUtilities.SORT_AZ );
+        SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences( getBaseContext() );
+        filterMode = Integer.valueOf( defaultPrefs.getString( FILTER_MODE_KEY , "-1") );
+        sortMode = Integer.valueOf( defaultPrefs.getString( SORT_MODE_KEY , "-1") );
+    }
+    
+    public void editPreferences(MenuItem item){
+    	startActivity( new Intent( this , PreferenceEditor.class) );
+    }
+    
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	// TODO Auto-generated method stub
@@ -341,6 +354,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     	// TODO Auto-generated method stub
     	super.onResume();
     	Log.d(tag, "onResume");
+    	readPreferences();// intent values take precedence over prefs?
     	Intent i = this.getIntent();
         if( i.hasExtra( CURRENT_DIRECTORY_KEY ) ){
         	currentDirectory = new File( i.getStringExtra( CURRENT_DIRECTORY_KEY ) );

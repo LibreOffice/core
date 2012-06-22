@@ -14,4 +14,7 @@
     <item android:id="@+id/menu_sort_modified"
           android:title="@string/menu_sort_modified"
           android:onClick="sortFiles"/>
+	<item android:id="@+id/menu_preferences"
+	          android:title="@string/menu_preferences"
+	          android:onClick="editPreferences"/>
 </menu>
