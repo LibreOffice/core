@@ -79,7 +79,7 @@ void SwVbaEventsHelper::implPostProcessEvent( EventQueue& /*rEventQueue*/,
         const uno::Sequence< uno::Any >& /*rArgs*/ ) const throw (lang::IllegalArgumentException)
 {
     // TODO: get actual codename from document
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThisDocument" ) );
+    return ::rtl::OUString( "ThisDocument" );
 }
 
 // ============================================================================

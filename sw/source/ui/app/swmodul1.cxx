@@ -381,9 +381,7 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, sal_Bool /*bOnlyI
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
     Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
-    uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_beamer")),
-                                        FrameSearchFlag::CHILDREN);
+    uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame("_beamer", FrameSearchFlag::CHILDREN);
     if (xBeamerFrame.is())
     {   // the beamer has been opened by the SfxViewFrame
         Reference<XController> xController = xBeamerFrame->getController();
@@ -428,7 +426,7 @@ const String& SwModule::GetRedlineAuthor(sal_uInt16 nPos)
     OSL_ENSURE(nPos < pAuthorNames->size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
     while(!(nPos < pAuthorNames->size()))
     {
-        InsertRedlineAuthor(String(RTL_CONSTASCII_USTRINGPARAM("nn")));
+        InsertRedlineAuthor(String("nn"));
     };
     return (*pAuthorNames)[nPos];
 }

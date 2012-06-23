@@ -62,8 +62,7 @@ SwTableOptimizeCtrl::~SwTableOptimizeCtrl()
 
 SfxPopupWindow* SwTableOptimizeCtrl::CreatePopupWindow()
 {
-    rtl::OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/optimizetablebar" ));
-    createAndPositionSubToolBar( aToolBarResStr );
+    createAndPositionSubToolBar("private:resource/toolbar/optimizetablebar");
     return NULL;
 }
 

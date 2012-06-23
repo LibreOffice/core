@@ -281,15 +281,13 @@ void SwSpellPopup::fillLangPopupMenu(
 
 
     sal_uInt16 nItemId = nLangItemIdStart;
-    const OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));  // multiple languages in current selection
-    const OUString sEmpty;  // 'no language found' from language guessing
     std::set< OUString >::const_iterator it;
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
         OUString aEntryTxt( *it );
         if (aEntryTxt != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) )&&
-            aEntryTxt != sAsterix &&
-            aEntryTxt != sEmpty)
+            aEntryTxt != "*" && // multiple languages in current selection
+            !aEntryTxt.isEmpty()) // 'no language found' from language guessing
         {
             OSL_ENSURE( nLangItemIdStart <= nItemId && nItemId <= nLangItemIdStart + MN_MAX_NUM_LANG,
                     "nItemId outside of expected range!" );
@@ -319,7 +317,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
     OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
     Graphic aGraphic;
-    const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
+    const String aFilterName( IMP_PNG );
     if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
@@ -335,12 +333,11 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
     {
         try
         {
-            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.frame.UICommandDescription" ), uno::UNO_QUERY );
             if ( xNameAccess.is() )
             {
                 uno::Reference< container::XNameAccess > xUICommandLabels;
-                const OUString aModule( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) );
-                uno::Any a = xNameAccess->getByName( aModule );
+                uno::Any a = xNameAccess->getByName( "com.sun.star.text.TextDocument" );
                 uno::Reference< container::XNameAccess > xUICommands;
                 a >>= xUICommandLabels;
                 OUString aStr;
@@ -552,8 +549,7 @@ SwSpellPopup::SwSpellPopup(
     if (bUseImagesInMenus)
     {
         uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
-        Image rImg = ::GetImage( xFrame,
-                OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
+        Image rImg = ::GetImage( xFrame, ".uno:SpellingAndGrammarDialog", sal_False );
         SetItemImage( MN_SPELLING_DLG, rImg );
     }
 
@@ -707,8 +703,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     if (bUseImagesInMenus)
     {
         uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
-        Image rImg = ::GetImage( xFrame,
-                OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
+        Image rImg = ::GetImage( xFrame, ".uno:SpellingAndGrammarDialog", sal_False );
         SetItemImage( MN_SPELLING_DLG, rImg );
     }
 
