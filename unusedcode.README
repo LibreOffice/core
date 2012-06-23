@@ -17,7 +17,6 @@ b) At the time of writing the majority of unused code now originates via
 	*::Insert
 	*::Remove
 	*::DeleteAndDestroy
-	*::_ForEach
 	*::Replace
 c) callcatcher ignores virtuals. But implementations of "pure virtuals"
    are not actually virtual methods. If something is declared pure virtual

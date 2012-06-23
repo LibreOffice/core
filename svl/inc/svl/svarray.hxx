@@ -316,7 +316,6 @@ sal_uInt16 GetPos( const AERef aE ) const;\
 _SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, AE &, vis )
 
 #define SV_DECL_PTRARR_GEN(nm, AE, IS, Base, AERef, VPRef, vis )\
-typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\
 class vis nm: public Base \
 {\
 public:\
@@ -344,15 +343,6 @@ public:\
     const AE* GetData() const {\
         return (const AE*)Base::GetData();\
     }\
-    void ForEach( CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( 0, nA, (FnForEach_##Base)fnForEach, pArgs );\
-    }\
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE, \
-                    CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( nS, nE, (FnForEach_##Base)fnForEach, pArgs );\
-    }\
     AE operator[]( sal_uInt16 nP )const  { \
         return (AE)Base::operator[](nP); }\
     AE GetObject(sal_uInt16 nP) const { \
@@ -374,7 +364,6 @@ SV_DECL_PTRARR_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, )
 SV_DECL_PTRARR_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, vis )
 
 #define SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, Base, AERef, VPRef, vis )\
-typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\
 class vis nm: public Base \
 {\
 public:\
@@ -402,15 +391,6 @@ public:\
     }\
     const AE* GetData() const {\
         return (const AE*)Base::GetData();\
-    }\
-    void ForEach( CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( 0, nA, (FnForEach_##Base)fnForEach, pArgs );\
-    }\
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE, \
-                    CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( nS, nE, (FnForEach_##Base)fnForEach, pArgs );\
     }\
     AE operator[]( sal_uInt16 nP )const  { \
         return (AE)Base::operator[](nP); }\
@@ -452,7 +432,6 @@ _SV_DECL_PTRARR_DEF( SvPtrarr, VoidPtr, 0, SVL_DLLPUBLIC )
 // SORTARR - Begin
 
 #define _SORT_CLASS_DEF(nm, AE, IS, vis)\
-typedef sal_Bool (*FnForEach_##nm)( const AE&, void* );\
 class vis nm : private nm##_SAR \
 {\
 public:\
@@ -637,15 +616,6 @@ _SORT_CLASS_DEF(nm, AE, IS, vis)\
         return nm##_SAR::GetObject( nP );\
     }\
     sal_Bool Seek_Entry( const AE aE, sal_uInt16* pP = 0 ) const;\
-    void ForEach( CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( 0, nA, (FnForEach_SvPtrarr)fnForEach, pArgs );\
-    }\
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE, \
-                    CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( nS, nE, (FnForEach_SvPtrarr)fnForEach, pArgs );\
-    }\
     void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 ); \
     _SORTARR_BLC_CASTS(nm, AE )\
 \
@@ -689,15 +659,6 @@ _SORT_CLASS_DEF(nm, AE, IS, vis) \
         return nm##_SAR::GetObject( nP );\
     }\
     sal_Bool Seek_Entry( const AE & aE, sal_uInt16* pP = 0 ) const;\
-    void ForEach( CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( 0, nA, (FnForEach_##nm##_SAR)fnForEach, pArgs );\
-    }\
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE, \
-                    CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( nS, nE, (FnForEach_##nm##_SAR)fnForEach, pArgs );\
-    }\
 private:\
     nm( const nm& );\
     nm& operator=( const nm& );\
