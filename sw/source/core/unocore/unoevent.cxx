@@ -45,17 +45,6 @@ using ::cppu::WeakImplHelper2;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-
-const sal_Char sAPI_ServiceName[] = "com.sun.star.container.XNameReplace";
-const sal_Char sAPI_SwFrameEventDescriptor[] = "SwFrameEventDescriptor";
-const sal_Char sAPI_SwFrameStyleEventDescriptor[] =
-                                    "SwFrameStyleEventDescriptor";
-const sal_Char sAPI_SwDetachedEventDescriptor[] = "SwDetachedEventDescriptor";
-const sal_Char sAPI_SwHyperlinkEventDescriptor[] =
-                                    "SwHyperlinkEventDescriptor";
-const sal_Char sAPI_SwAutoTextEventDescriptor[] =
-                                    "SwAutoTextEventDescriptor";
-
 //
 // tables of allowed events for specific objects
 //
@@ -131,7 +120,7 @@ const struct SvEventDescription aFrameStyleEvents[] =
 
 SwHyperlinkEventDescriptor::SwHyperlinkEventDescriptor() :
     SvDetachedEventDescriptor(aHyperlinkEvents),
-    sImplName(RTL_CONSTASCII_USTRINGPARAM(sAPI_SwHyperlinkEventDescriptor))
+    sImplName("SwHyperlinkEventDescriptor")
 {
 }
 
@@ -201,8 +190,7 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextFrame& rFrameRef ) :
         SvEventDescriptor((text::XTextFrame&)rFrameRef, aFrameEvents),
-        sSwFrameEventDescriptor(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_SwFrameEventDescriptor)),
+        sSwFrameEventDescriptor("SwFrameEventDescriptor"),
         rFrame(rFrameRef)
 {
 }
@@ -255,8 +243,7 @@ SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
     SwXFrameStyle& rStyleRef ) :
         SvEventDescriptor((document::XEventsSupplier&)rStyleRef,
                           aFrameStyleEvents),
-        sSwFrameStyleEventDescriptor(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_SwFrameStyleEventDescriptor)),
+        sSwFrameStyleEventDescriptor("SwFrameStyleEventDescriptor"),
         rStyle(rStyleRef)
 {
 }
