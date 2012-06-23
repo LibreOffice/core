@@ -1433,13 +1433,13 @@ var NAVDBG = new DebugPrinter();
 NAVDBG.off();
 
 var ANIMDBG = new DebugPrinter();
-ANIMDBG.on();
+ANIMDBG.off();
 
 var aRegisterEventDebugPrinter = new DebugPrinter();
 aRegisterEventDebugPrinter.off();
 
 var aTimerEventQueueDebugPrinter = new DebugPrinter();
-aTimerEventQueueDebugPrinter.on();
+aTimerEventQueueDebugPrinter.off();
 
 var aEventMultiplexerDebugPrinter = new DebugPrinter();
 aEventMultiplexerDebugPrinter.off();
@@ -4585,49 +4585,6 @@ function createStateTransitionTable()
 var aStateTransitionTable = createStateTransitionTable();
 
 
-
-
-
-// ------------------------------------------------------------------------------------------ //
-// Transition tables
-
-// transition table for restart=NEVER, fill=FREEZE
-var aStateTransitionTable_Never_Freeze =
-[
-    INVALID_NODE,
-    RESOLVED_NODE | ENDED_NODE,         // active successors for UNRESOLVED
-    ACTIVE_NODE | ENDED_NODE,           // active successors for RESOLVED
-    INVALID_NODE,
-    FROZEN_NODE | ENDED_NODE,           // active successors for ACTIVE: freeze object
-    INVALID_NODE,
-    INVALID_NODE,
-    INVALID_NODE,
-    ENDED_NODE,                         // active successors for FROZEN: end
-    INVALID_NODE,
-    INVALID_NODE,
-    INVALID_NODE,
-    INVALID_NODE,
-    INVALID_NODE,
-    INVALID_NODE,
-    INVALID_NODE,
-    ENDED_NODE                          // active successors for ENDED:
-    // this state is a sink here (cannot restart)
-];
-
-
-// Table guide
-var aTableGuide =
-[
-     null,
-     null,
-     null,
-     aStateTransitionTable_Never_Freeze,
-     null,
-     null
-];
-
-
-
 // ------------------------------------------------------------------------------------------ //
 function getTransitionTable( eRestartMode, eFillMode )
 {
@@ -5352,9 +5309,6 @@ BaseNode.prototype.resolve = function()
 
 BaseNode.prototype.activate = function()
 {
-    log( 'restart mode: ' + aRestartModeOutMap[ this.getRestartMode() ] );
-    log( 'fill mode: ' + aFillModeOutMap[ this.getFillMode() ] );
-
     if( ! this.checkValidNode() )
         return false;
 
@@ -8373,7 +8327,7 @@ function AnimatedElement( aElement )
     this.aClipPathContent = null;
 
     this.aPreviousElement = null;
-    this.aElementArray = new Array();
+    this.aStateArray = new Array();
     this.nCurrentState = -1;
     this.eAdditiveMode = ADDITIVE_MODE_REPLACE;
     this.bIsUpdated = true;
@@ -8486,7 +8440,8 @@ AnimatedElement.prototype.setToElement = function( aElement )
 
 AnimatedElement.prototype.notifySlideStart = function()
 {
-    this.setToFirst();
+    this.nCurrentState = -1;
+    //this.setToFirst();
     this.DBG( '.notifySlideStart invoked' );
 };
 
@@ -8529,9 +8484,15 @@ AnimatedElement.prototype.notifyNextEffectStart = function( nEffectIndex )
 AnimatedElement.prototype.saveState = function()
 {
     ++this.nCurrentState;
-    if( !this.aElementArray[ this.nCurrentState ] )
+    if( !this.aStateArray[ this.nCurrentState ] )
     {
-        this.aElementArray[ this.nCurrentState ] = this.aActiveElement.cloneNode( true );
+        this.aStateArray[ this.nCurrentState ] = new Object();
+        var aState = this.aStateArray[ this.nCurrentState ];
+        aState.aElement = this.aActiveElement.cloneNode( true );
+        aState.nCenterX = this.nCenterX;
+        aState.nCenterY = this.nCenterY;
+        aState.nScaleFactorX = this.nScaleFactorX;
+        aState.nScaleFactorY = this.nScaleFactorY;
     }
 };
 
@@ -8542,29 +8503,28 @@ AnimatedElement.prototype.setToFirst = function()
 
 AnimatedElement.prototype.setToLast = function()
 {
-    this.setTo( this.aElementArray.length - 1 );
+    this.setTo( this.aStateArray.length - 1 );
 };
 
 AnimatedElement.prototype.setTo = function( nNewState )
 {
-    if( !this.aElementArray[ nNewState ] )
+    if( !this.aStateArray[ nNewState ] )
     {
         log( 'AnimatedElement(' + this.getId() + ').setTo: state '
                  + nNewState + ' is not valid' );
         return false;
     }
 
-    var bRet = this.setToElement( this.aElementArray[ nNewState ] );
+    var aState = this.aStateArray[ nNewState ];
+    var bRet = this.setToElement( aState.aElement );
     if( bRet )
     {
         this.nCurrentState = nNewState;
 
-        var aBBox = this.getBBox();
-        var aBaseBBox = this.getBaseBBox();
-        this.nCenterX = aBBox.x + aBBox.width / 2;
-        this.nCenterY = aBBox.y + aBBox.height / 2;
-        this.nScaleFactorX = aBBox.width / aBaseBBox.width;
-        this.nScaleFactorY = aBBox.height / aBaseBBox.height;
+        this.nCenterX = aState.nCenterX;
+        this.nCenterY = aState.nCenterY;
+        this.nScaleFactorX = aState.nScaleFactorX;
+        this.nScaleFactorY = aState.nScaleFactorY;
     }
     return bRet;
 };
