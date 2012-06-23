@@ -2307,7 +2307,7 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
 
 sal_Bool SwTOXBase::IsTOXBaseInReadonly() const
 {
-    const SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
+    const SwTOXBaseSection *pSect = dynamic_cast<const SwTOXBaseSection*>(this);
     sal_Bool bRet = sal_False;
     const SwSectionNode* pSectNode;
     if(pSect && pSect->GetFmt() &&
@@ -2325,7 +2325,7 @@ sal_Bool SwTOXBase::IsTOXBaseInReadonly() const
 
 const SfxItemSet* SwTOXBase::GetAttrSet() const
 {
-    const SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
+    const SwTOXBaseSection *pSect = dynamic_cast<const SwTOXBaseSection*>(this);
     if(pSect && pSect->GetFmt())
         return &pSect->GetFmt()->GetAttrSet();
     return 0;
@@ -2333,7 +2333,7 @@ const SfxItemSet* SwTOXBase::GetAttrSet() const
 
 void SwTOXBase::SetAttrSet( const SfxItemSet& rSet )
 {
-    SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
+    const SwTOXBaseSection *pSect = dynamic_cast<const SwTOXBaseSection*>(this);
     if( pSect && pSect->GetFmt() )
         pSect->GetFmt()->SetFmtAttr( rSet );
 }
@@ -2344,7 +2344,7 @@ sal_Bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
     {
     case RES_CONTENT_VISIBLE:
         {
-            SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
+            const SwTOXBaseSection *pSect = dynamic_cast<const SwTOXBaseSection*>(this);
             if( pSect && pSect->GetFmt() )
                 pSect->GetFmt()->GetInfo( rInfo );
         }
