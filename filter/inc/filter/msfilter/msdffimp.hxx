@@ -201,19 +201,19 @@ SV_DECL_PTRARR_SORT_VISIBILITY( SvxMSDffShapeTxBxSort, SvxMSDffShapeOrder*, 16, 
 #define SVXMSDFF_SETTINGS_IMPORT_PPT        2
 #define SVXMSDFF_SETTINGS_IMPORT_EXCEL      4
 
-#define SP_FGROUP       0x001   // This shape is a group shape
-#define SP_FCHILD       0x002   // Not a top-level shape
-#define SP_FPATRIARCH   0x004   // This is the topmost group shape.
-                                // Exactly one of these per drawing.
-#define SP_FDELETED     0x008   // The shape has been deleted
-#define SP_FOLESHAPE    0x010   // The shape is an OLE object
-#define SP_FHAVEMASTER  0x020   // Shape has a hspMaster property
-#define SP_FFLIPH       0x040   // Shape is flipped horizontally
-#define SP_FFLIPV       0x080   // Shape is flipped vertically
-#define SP_FCONNECTOR   0x100   // Connector type of shape
-#define SP_FHAVEANCHOR  0x200   // Shape has an anchor of some kind
-#define SP_FBACKGROUND  0x400   // Background shape
-#define SP_FHAVESPT     0x800   // Shape has a shape type property
+#define SP_FGROUP       0x001   ///< This shape is a group shape
+#define SP_FCHILD       0x002   ///< Not a top-level shape
+#define SP_FPATRIARCH   0x004   ///< This is the topmost group shape.
+                                ///< Exactly one of these per drawing.
+#define SP_FDELETED     0x008   ///< The shape has been deleted
+#define SP_FOLESHAPE    0x010   ///< The shape is an OLE object
+#define SP_FHAVEMASTER  0x020   ///< Shape has a hspMaster property
+#define SP_FFLIPH       0x040   ///< Shape is flipped horizontally
+#define SP_FFLIPV       0x080   ///< Shape is flipped vertically
+#define SP_FCONNECTOR   0x100   ///< Connector type of shape
+#define SP_FHAVEANCHOR  0x200   ///< Shape has an anchor of some kind
+#define SP_FBACKGROUND  0x400   ///< Background shape
+#define SP_FHAVESPT     0x800   ///< Shape has a shape type property
 
 // for the CreateSdrOLEFromStorage we need the information, how we handle
 // convert able OLE-Objects - this ist stored in
@@ -225,20 +225,21 @@ SV_DECL_PTRARR_SORT_VISIBILITY( SvxMSDffShapeTxBxSort, SvxMSDffShapeOrder*, 16, 
 struct SvxMSDffConnectorRule
 {
     sal_uInt32  nRuleId;
-    sal_uInt32  nShapeA;        // SPID of shape A
+    sal_uInt32  nShapeA;   ///< SPID of shape A
+    sal_uInt32  nShapeB;   ///< SPID of shape B
+    sal_uInt32  nShapeC;   ///< SPID of connector shape
+    sal_uInt32  ncptiA;    ///< Connection site Index of shape A
+    sal_uInt32  ncptiB;    ///< Connection site Index of shape B
+    sal_uInt32  nSpFlagsA; ///< SpFlags of shape A (the original mirror flags
+                           ///< must be known when solving the Solver Container)
+    sal_uInt32  nSpFlagsB; ///< SpFlags of shape B
 
-    sal_uInt32  nShapeB;        // SPID of shape B
-    sal_uInt32  nShapeC;        // SPID of connector shape
-    sal_uInt32  ncptiA;         // Connection site Index of shape A
-    sal_uInt32  ncptiB;         // Connection site Index of shape B
-    sal_uInt32  nSpFlagsA;      // SpFlags of shape A ( the original mirror flags must be known when solving the Solver Container )
-    sal_uInt32  nSpFlagsB;      // SpFlags of shape A
+    SdrObject*  pAObj;     ///< pPtr of object (corresponding to shape A)
+    SdrObject*  pBObj;     ///< pPtr of object (corresponding to shape B)
+    SdrObject*  pCObj;     ///< pPtr of connector object
 
-    SdrObject*  pAObj;       // pPtr of object ( corresponding to shape A )
-    SdrObject*  pBObj;       //   "
-    SdrObject*  pCObj;       //   "  of connector object
-
-    SvxMSDffConnectorRule() : nSpFlagsA( 0 ), nSpFlagsB( 0 ), pAObj( NULL ), pBObj( NULL ), pCObj( NULL ) {};
+    SvxMSDffConnectorRule() : nSpFlagsA( 0 ), nSpFlagsB( 0 ), pAObj( NULL ),
+                              pBObj( NULL ), pCObj( NULL ) {};
 
     friend SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rAtom );
 };
@@ -257,8 +258,8 @@ struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
 
 struct FIDCL
 {
-    sal_uInt32  dgid;       // DG owning the SPIDs in this cluster
-    sal_uInt32  cspidCur;   // number of SPIDs used so far
+    sal_uInt32  dgid;       ///< DG owning the SPIDs in this cluster
+    sal_uInt32  cspidCur;   ///< number of SPIDs used so far
 };
 
 /// provided by SvxMSDffManager for each shape in a group
@@ -317,7 +318,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     sal_Bool        bVFlip :1;
     sal_Bool        bHFlip :1;
     sal_Bool        bAutoWidth      :1;
-    int             relativeHorizontalWidth; // in 0.1% or -1 for none
+    int             relativeHorizontalWidth; ///< in 0.1% or -1 for none
     bool            isHorizontalRule;
 
     SvxMSDffImportRec();
@@ -477,7 +478,7 @@ typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
     sal_uInt32      mnDrawingsSaved;    // access the right drawing
     sal_uInt32      mnIdClusters;       // while only knowing the shapeid
     std::vector<FIDCL> maFidcls;
-    OffsetMap       maDgOffsetTable;    // array of fileoffsets
+    OffsetMap       maDgOffsetTable;    ///< array of fileoffsets
 
     friend class DffPropertyReader;
 
@@ -498,9 +499,8 @@ typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
     sal_uInt32      nSvxMSDffSettings;
     sal_uInt32      nSvxMSDffOLEConvFlags;
 
-    /** stores a reference to an imported SdrObject with its shape id if
-        it has one
-    */
+    /** stores a reference to an imported SdrObject
+        with its shape id if it has one */
     SvxMSDffShapeIdContainer    maShapeIdContainer;
 
     void GetCtrlData(sal_uInt32 nOffsDgg);
@@ -526,7 +526,7 @@ typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
     bool ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& );
     // #i32596# - pass <nCalledByGroup> to method
-    // Needed in the Writer Microsoft Word import to avoid import of OLE objects
+    // Needed in Writer's Microsoft Word import to avoid import of OLE objects
     // inside groups. Instead a graphic object is created.
     virtual SdrObject* ImportOLE( long nOLEId,
                                   const Graphic& rGraf,
@@ -548,8 +548,8 @@ typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
     virtual sal_uLong Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const;
     virtual bool GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
 
-    // SJ: New implementation of ReadObjText is used by Fontwork objects, because
-    // the old one does not properly import multiple paragraphs
+    // Fontwork objects use a new implementation of ReadObjText because the old
+    // one does not properly import multiple paragraphs.
     void ReadObjText( const String& rText, SdrObject* pObj ) const;
 
 // the following method needs to be overridden for the import of OLE objects
@@ -684,31 +684,6 @@ public:
     */
     sal_uInt16 GetBLIPCount() const{ return nBLIPCount; }
 
-/*
-    ZCodecDecompressed()  - Dekomprimierung eines komp. WMF oder Enhanced WMF
-    ====================
-    Input:  rIn     -bereits korrekt positionierter Stream,
-                     der das komprimierte Bild enthaelt
-            rOut    -bereits korrekt positionierter Ausgabe-Stream,
-
-        bLookForEnd -Flag, ob das komp. Bild bis zum Stream-Ende reicht.
-                     Falls sal_True, wird jeweils geprueft, ob das gelesene noch
-                                                        zum Bild gehoert.
-                     Falls sal_False, wird bis zum Stream-Ende gelesen.
-
-    Output: rIn     -Der Stream steht hinter dem Ende des komp. Bildes.
-                     (es kann aber noch eine Ende-Kennung und CRC-Sum folgen)
-            rOut    -Der Stream enthaelt das dekomprimierte Bild.
-                     Der Stream wird auf den Anfang des Bildes positioniert.
-                     (also dorthin, wo der Stream vor der Verarbeitung stand)
-
-    Rueckgabewert:  sal_True, im Erfolgsfall
-                    sal_False bei Fehler oder Null Bytes geschrieben
-*/
-//  static sal_Bool ZCodecDecompressed( SvStream& rIn,
-//                                  SvStream& rOut,
-//                                  sal_Bool bLookForEnd );
-//
     SdrObject* ImportObj(SvStream& rSt, void* pData,
         Rectangle& rClientRect, const Rectangle& rGlobalChildRect, int nCalledByGroup = 0, sal_Int32* pShapeId = NULL);
 
@@ -759,8 +734,11 @@ public:
                                                 sal_uInt32 nConvertFlags,
                                                 sal_Int64 nAspect );
 
-    /* the method SolveSolver will create connections between shapes, it should be called after a page is imported.
-    The SvxMSDffSolverContainer is containing necessary data data that is collected during the import of each shape
+    /** Create connections between shapes.
+        This method should be called after a page is imported.
+
+        @param rSolver contains necessary data that is collected during the
+                       import of each shape
     */
     void SolveSolver( const SvxMSDffSolverContainer& rSolver );
 
