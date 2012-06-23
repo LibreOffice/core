@@ -52,7 +52,7 @@ ALLTAR: \
     $(MISC)$/unpacked_$(TARGET)_inc \
     $(MISC)$/unpacked_$(TARGET)_lib \
     $(BIN)$/mozruntime.zip \
-    $(MISC)$/replace_old_nss_libs
+    $(MISC)$/remove_old_nss_libs
 .ENDIF
 .IF "$(GUI)" == "UNX"
 
@@ -94,24 +94,11 @@ $(BIN)$/mozruntime%zip : $(OS)$(COM)UBruntime.zip
 .ENDIF # "$(GUIBASE)"=="aqua"
 
 LIBLIST =
-BIN_RUNTIMELIST = 
-NSS_MODULE_RUNTIME_LIST =
 
-# The prebuilt moz files include all the old NSS stuff from moz and not the new
-# NSS libs, headers, etc, from the separate nss module. If we use the nss module
-# then we must take care not to deliver the old NSS stuff from the "prebuilts"
-.IF "$(GUI)" == "WNT"
-    FREEBL_LIB_OLD=freebl3
-.ELSE # "$(GUI)" == "WNT"
-    .IF "$(OS)$(CPUNAME)" == "SOLARISSPARC"
-        FREEBL_LIB_OLD=freebl_32fpu_3
-    .ELSE # "$(OS)$(CPUNAME)" == "SOLARISSPARC"
-        FREEBL_LIB_OLD=freebl3
-    .ENDIF # "$(OS)$(CPUNAME)" == "SOLARISSPARC"
-.ENDIF # "$(GUI)" == "WNT"
-
-BIN_RUNTIMELIST= \
-    $(FREEBL_LIB_OLD) \
+# The old prebuilt moz files include all the old NSS stuff from moz but we
+# always build the toplevel nss module, so we must delete all these
+NSS_RUNTIMELIST= \
+    freebl3 \
     nspr4 \
     plc4 \
     plds4 \
@@ -141,7 +128,7 @@ LIBLIST= \
 .ENDIF
 .ELSE   #"$(GUI)"=="WNT"
 LIBLIST= \
-    lib$(FREEBL_LIB_OLD)$(DLLPOST) \
+    libfreebl3$(DLLPOST) \
     libnspr4$(DLLPOST) \
     libsoftokn3$(DLLPOST) \
     libplc4$(DLLPOST) \
@@ -152,21 +139,8 @@ LIBLIST= \
 
 .ENDIF # .IF "$(GUI)"=="WNT"
 
-.IF "$(OS)" == "SOLARIS" 
-.IF "$(CPU)" == "S" #32bit
-FREEBL=freebl_32fpu_3 freebl_32int64_3 freebl_32int_3
-.ELIF "$(CPU)" == "U" #64bit unxsolu4
-FREEBL=freebl_64int_3 freebl_64fpu_3
-.ELSE
-FREEBL=freebl3
-.ENDIF #"$(CPU)" == "S"
-
-.ELSE # "$(OS)" == "SOLARIS" 
-FREEBL=freebl3
-.ENDIF # "$(OS)" == "SOLARIS" 
-
-NSS_MODULE_RUNTIME_LIST:= \
-    $(FREEBL) \
+NSS_RUNTIMELIST:= \
+    freebl3 \
     nspr4 \
     nss3 \
     nssckbi \
@@ -174,33 +148,22 @@ NSS_MODULE_RUNTIME_LIST:= \
     nssutil3 \
     plc4 \
     plds4 \
+    sqlite3 \
     smime3 \
     softokn3 \
     ssl3
 
-# On Linux/Unix sqlite is delivered to $(SOLARLIBDIR)/sqlite/libsqlite3.so (see
-# nss/README) and for Mac OS X >= 10.6 the system lib is used instead (see
-# nss/makefile.mk):
-.IF "$(OS)" == "MACOSX" && "$(MAC_OS_X_VERSION_MIN_REQUIRED)" >= "1060"
-.ELSE
-NSS_MODULE_RUNTIME_LIST += sqlite/sqlite3
-.END
-
-# Remove the nss libs build in moz and those build in the nss module
-$(MISC)$/replace_old_nss_libs : $(MISC)$/unpacked_$(TARGET)_lib \
+# Remove the nss libs
+$(MISC)$/remove_old_nss_libs : $(MISC)$/unpacked_$(TARGET)_lib \
 $(MISC)$/unpacked_$(TARGET)_inc $(BIN)$/mozruntime.zip
     $(foreach,lib,$(LIBLIST) rm -f $(LB)$/$(lib) &&) \
-    echo >& $(NULLDEV)
-    $(foreach,lib,$(BIN_RUNTIMELIST) zip -d $(BIN)$/mozruntime.zip $(DLLPRE)$(lib:f)$(DLLPOST) &&) \
-    echo >& $(NULLDEV)
-.IF "$(GUI)"=="WNT"
-    +$(foreach,lib,$(NSS_MODULE_RUNTIME_LIST) zip -g -j $(BIN)$/mozruntime.zip $(SOLARBINDIR)$/$(DLLPRE)$(lib:f)$(DLLPOST) &&) \
-    echo >& $(NULLDEV)
-.ELSE
-    +$(foreach,lib,$(NSS_MODULE_RUNTIME_LIST) zip -g -j $(BIN)$/mozruntime.zip $(SOLARLIBDIR)$/$(lib:d)$(DLLPRE)$(lib:f)$(DLLPOST) &&) \
-    echo >& $(NULLDEV)
-.ENDIF
+    	echo >& $(NULLDEV)
+    $(foreach,lib,$(NSS_RUNTIMELIST) zip -d $(BIN)$/mozruntime.zip $(DLLPRE)$(lib:f)$(DLLPOST) &&) \
+    	echo >& $(NULLDEV)
+    rm -r -f $(INCCOM)$/nss &&) \
+        echo >& $(NULLDEV)
+    rm -r -f $(INCCOM)$/nspr &&) \
+        echo >& $(NULLDEV)
     $(TOUCH) $@     
 
 .ENDIF   # unpack mozab zips
-

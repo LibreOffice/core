@@ -76,6 +76,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_MOZILLA \
 	SYSTEM_MYTHES \
 	SYSTEM_NEON \
+	SYSTEM_NSS \
 	SYSTEM_OPENSSL \
 	SYSTEM_PANGO \
 	SYSTEM_PORTAUDIO \

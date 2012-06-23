@@ -32,75 +32,10 @@ RUNTIME_DIR=$(MISC)$/$(MOZTARGET)runtime
 LIB_DIR=$(LB)
 INCLUDE_DIR=$(INCCOM)
 
-
-
-#If we build the NSS module then we do not need the old nss libs from here
-.IF "$(SYSTEM_NSS)"=="NO"
-
-
-.IF "$(OS)" == "SOLARIS" 
-.IF "$(CPU)" == "S" #32bit
-FREEBL_LIB=freebl_32fpu_3 freebl_32int64_3 freebl_32int_3
-.ELIF "$(CPU)" == "U" #64bit unxsolu4
-FREEBL_LIB=freebl_64int_3 freebl_64fpu_3
-.ELSE
-FREEBL_LIB=freebl3
-.ENDIF #"$(CPU)" == "S"
-
-.ELSE # "$(OS)" == "SOLARIS" 
-FREEBL_LIB=freebl3
-.ENDIF # "$(OS)" == "SOLARIS" 
-
-
-NSS_MODULE_RUNTIME_LIST:= \
-    $(FREEBL_LIB) \
-    nspr4 \
-    nss3 \
-    nssckbi \
-    nssdbm3 \
-    nssutil3 \
-    plc4 \
-    plds4 \
-    smime3 \
-    softokn3 \
-    ssl3
-
-# For Mac OS X >= 10.6 the system lib is used instead (see nss/makefile.mk):
-.IF "$(OS)" == "MACOSX" && "$(MAC_OS_X_VERSION_MIN_REQUIRED)" >= "1060"
-.ELSE
-NSS_MODULE_RUNTIME_LIST += sqlite/sqlite3
-.END
-
 BIN_RUNTIMELIST= \
     xpcom \
     xpcom_core \
     xpcom_compat	
-.ELSE
-
-.IF "$(GUI)" == "WNT"
-    FREEBL_LIB=freebl3
-.ELSE # "$(GUI)" == "WNT"
-    .IF "$(OS)$(CPUNAME)" == "SOLARISSPARC"
-        FREEBL_LIB=freebl_32fpu_3
-    .ELSE # "$(OS)$(CPUNAME)" == "SOLARISSPARC"
-        FREEBL_LIB=freebl3
-    .ENDIF # "$(OS)$(CPUNAME)" == "SOLARISSPARC"
-.ENDIF # "$(GUI)" == "WNT"
-
-
-BIN_RUNTIMELIST=	\
-    nspr4	\
-    plc4	\
-    plds4	\
-    xpcom	\
-    xpcom_core	\
-    xpcom_compat	\
-    nss3	\
-    ssl3	\
-    softokn3	\
-    smime3 \
-    $(FREEBL_LIB)
-.ENDIF #  "$(SYSTEM_NSS)"=="NO"
 
 .IF "$(GUI)"=="WNT"
 BIN_RUNTIMELIST+=	\
@@ -169,47 +104,6 @@ DEFAULTS_RUNTIMELIST=	\
     greprefs$/all.js	\
     greprefs$/security-prefs.js
 
-.IF "$(SYSTEM_NSS)"=="NO"
-
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"=="GCC"
-
-
-LIBLIST=        \
-        libembed_base_s.a \
-        libmozreg_s.a \
-        libnslber32v50.a \
-        libnsldap32v50.a \
-    libxpcom_core.dll.a \
-        libxpcom.dll.a 
-
-.ELSE #"$(COM)"=="GCC"
-
-LIBLIST=        \
-        embed_base_s.lib \
-        mozreg_s.lib \
-        nslber32v50.lib \
-        nsldap32v50.lib \
-    xpcom_core.lib	\
-        xpcom.lib 
-
-.ENDIF #"$(COM)"=="GCC"
-
-.ELSE   #"$(GUI)"=="WNT"
-
-LIBLIST=        \
-        libembed_base_s.a \
-        libmozreg_s.a \
-        liblber50.a \
-    libxpcom_core$(DLLPOST)	\
-        libxpcom$(DLLPOST)      \
-        libmsgbaseutil$(DLLPOST)        \
-        libldap50$(DLLPOST) \
-
-.ENDIF
-
-.ELSE # .IF"$(SYSTEM_NSS)"=="NO"
-
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 
@@ -218,11 +112,8 @@ LIBLIST=	\
     libmozreg_s.a	\
     libnslber32v50.a	\
     libnsldap32v50.a	\
-    libnspr4.a 	\
     libxpcom_core.dll.a	\
-    libxpcom.dll.a	\
-    libnss3.a	\
-    libsmime3.a
+    libxpcom.dll.a
 
 .ELSE
 
@@ -231,14 +122,8 @@ LIBLIST=	\
     mozreg_s.lib	\
     nslber32v50.lib	\
     nsldap32v50.lib	\
-    nspr4.lib 	\
     xpcom_core.lib	\
-    xpcom.lib	\
-    plc4.lib	\
-    plds4.lib	\
-    nss3.lib	\
-    ssl3.lib	\
-    smime3.lib
+    xpcom.lib
 
 .ENDIF
 
@@ -248,20 +133,12 @@ LIBLIST=	\
     libembed_base_s.a	\
     libmozreg_s.a	\
     liblber50.a	\
-    libnspr4$(DLLPOST)	\
     libxpcom_core$(DLLPOST)	\
     libxpcom$(DLLPOST)	\
     libmsgbaseutil$(DLLPOST)	\
-    libldap50$(DLLPOST) \
-    libsoftokn3$(DLLPOST) \
-    libplc4$(DLLPOST) \
-    libplds4$(DLLPOST) \
-    libnss3$(DLLPOST)	\
-    libssl3$(DLLPOST)	\
-    libsmime3$(DLLPOST)
+    libldap50$(DLLPOST)
 
-.ENDIF
-.ENDIF # .IF "$(SYSTEM_NSS)"=="NO"
+.ENDIF #"$(GUI)"=="WNT"
 
 INCLUDE_PATH=$(MOZ_DIST_DIR)$/include$/
 PUBLIC_PATH=$(MOZ_DIST_DIR)$/public$/
@@ -304,21 +181,7 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     $(foreach,file,$(BIN_RUNTIMELIST) $(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$(file)$(DLLPOST) \
     $(LIB_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
     echo >& $(NULLDEV)
-.IF "$(SYSTEM_NSS)" == "NO"
-# We add the libraries from the separate nss module
-    $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARLIBDIR)$/$(file:d:d)/$(DLLPRE)$(file:f)$(DLLPOST) \
-    $(RUNTIME_DIR)$/$(DLLPRE)$(file:f)$(DLLPOST) &&) \
-    echo >& $(NULLDEV)
-.ENDIF
-.ELSE # .IF "$(GUI)" == "UNX"
-.IF "$(SYSTEM_NSS)" == "NO"
-# We add the libraries from the separate nss module
-    $(foreach,file,$(NSS_MODULE_RUNTIME_LIST) $(COPY) $(SOLARBINDIR)$/$(DLLPRE)$(file)$(DLLPOST) \
-    $(RUNTIME_DIR)$/$(DLLPRE)$(file)$(DLLPOST) &&) \
-    echo >& $(NULLDEV)
-.ENDIF
 .ENDIF # .IF "$(GUI)" == "UNX"
-
 
 # copy files in RES_FILELIST
 .IF "$(OS)"=="SOLARIS"
@@ -357,29 +220,14 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
 # relative ("@loader_path") ones:
     $(foreach,file,$(shell ls $(RUNTIME_DIR)$/components$/*$(DLLPOST)) \
         install_name_tool \
-        -change @executable_path/libnspr4.dylib @loader_path/libnspr4.dylib \
-        -change @executable_path/libplc4.dylib @loader_path/libplc4.dylib \
-        -change @executable_path/libplds4.dylib @loader_path/libplds4.dylib \
-        $(file) &&) true
-    $(foreach,file,$(shell ls $(RUNTIME_DIR)$/components$/*$(DLLPOST)) \
-        install_name_tool \
         -change @executable_path/libldap50.dylib \
             @loader_path/../libldap50.dylib \
         -change @executable_path/libmozjs.dylib @loader_path/../libmozjs.dylib \
         -change @executable_path/libmozz.dylib @loader_path/../libmozz.dylib \
         -change @executable_path/libmsgbaseutil.dylib \
             @loader_path/../libmsgbaseutil.dylib \
-        -change @executable_path/libnspr4.dylib @loader_path/../libnspr4.dylib \
-        -change @executable_path/libnss3.dylib @loader_path/../libnss3.dylib \
-        -change @executable_path/libplc4.dylib @loader_path/../libplc4.dylib \
-        -change @executable_path/libplds4.dylib @loader_path/../libplds4.dylib \
         -change @executable_path/libprldap50.dylib \
             @loader_path/../libprldap50.dylib \
-        -change @executable_path/libsmime3.dylib \
-            @loader_path/../libsmime3.dylib \
-        -change @executable_path/libsoftokn3.dylib \
-            @loader_path/../libsoftokn3.dylib \
-        -change @executable_path/libssl3.dylib @loader_path/../libssl3.dylib \
         -change @executable_path/libxpcom.dylib @loader_path/../libxpcom.dylib \
         -change @executable_path/libxpcom_compat.dylib \
             @loader_path/../libxpcom_compat.dylib \
@@ -460,6 +308,3 @@ $(MISC)$/CREATETARBALL:	extract_mozab_files
 .ENDIF
     cd $(LB) && zip -r ..$/zipped$/$(MOZTARGET)lib.zip *
     cd $(INCCOM) && zip -r ..$/zipped$/$(MOZTARGET)inc.zip *
-.IF "$(SYSTEM_NSS)"=="NO"
-    cd $(OUT)$/inc.nss && zip -r ..$/zipped$/$(MOZTARGET)inc.zip *
-.ENDIF
