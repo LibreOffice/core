@@ -298,8 +298,9 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
         debug_printf("Os2Clipboard::setContents UnsupportedFlavorException (no bitmap)\n");
     }
 
-    // copy to clipboard
-    if ( UWinOpenClipbrd( hAB) && (pSharedText || hbm))
+    // copy to clipboard only if we have data available, otherwise clipboard
+    // remains in use and locks all other applications.
+    if ( (pSharedText || hbm) && UWinOpenClipbrd( hAB) )
     {
         // set the flag, so we will ignore the next WM_DRAWCLIPBOARD
         // since we generate it with following code.
