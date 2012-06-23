@@ -1101,6 +1101,8 @@ void ScXMLTableRowCellContext::EndElement()
     else // if ( pOUFormula )
         AddFormulaCell( aCellPos );
 
+    UnlockSolarMutex(); //if LockSolarMutex got used, we presumably need to ensure an UnlockSolarMutex
+
     bIsMerged = false;
     nMergedCols = 1;
     nMergedRows = 1;
