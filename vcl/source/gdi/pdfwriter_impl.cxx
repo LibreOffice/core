@@ -6090,7 +6090,7 @@ bool PDFWriterImpl::emitSignature()
                  "/DigestValue(aa)/TransformMethod/DocMDP>>]/Contents <" );
 
     sal_uInt64 nOffset = ~0U;
-    oslFileError aError = osl_getFilePos( m_aFile, &nOffset );
+    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nOffset ) ) );
     DBG_ASSERT( aError == osl_File_E_None, "could not get file position" );
 
     m_nSignatureContentOffset = nOffset + aLine.getLength();
@@ -6137,34 +6137,31 @@ bool PDFWriterImpl::finalizeSignature()
 {
     // 1- calculate last ByteRange value
     sal_uInt64 nOffset = ~0U;
-    oslFileError aError = osl_getFilePos( m_aFile, &nOffset );
-
-    if ( aError != osl_File_E_None )
-        return false;
+    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nOffset ) ) );
 
     sal_Int64 nLastByteRangeNo = nOffset - (m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH) - 1;
 
     // 2- overwrite the value to the m_nSignatureLastByteRangeNoOffset position
     sal_uInt64 nWritten = 0;
-    osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset );
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureLastByteRangeNoOffset ) ) );
     OStringBuffer aByteRangeNo( 256 );
     aByteRangeNo.append( nLastByteRangeNo, 10);
     aByteRangeNo.append( " ]" );
 
     if( osl_writeFile( m_aFile, aByteRangeNo.getStr(), aByteRangeNo.getLength(), &nWritten ) != osl_File_E_None )
     {
-        osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset );
+        CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset ) ) );
         return false;
     }
 
     // 3- create the PKCS#7 object using NSS
 
     // 4- overwrite the PKCS7 content to the m_nSignatureContentOffset
-    osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset );
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset ) ) );
     // osl_writeFile()
 
     // revert the file position back
-    osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset );
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, nOffset ) ) );
     return true;
 }
 
