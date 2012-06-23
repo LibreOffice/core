@@ -6048,7 +6048,8 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( "/DR " );
         aLine.append( getResourceDictObj() );
         aLine.append( " 0 R" );
-        if( m_bIsPDF_A1 )
+        // /NeedAppearances must not be used if PDF is signed
+        if( m_bIsPDF_A1 || ( m_nSignatureObject != -1 ) )
             aLine.append( ">>\n" );
         else
             aLine.append( "/NeedAppearances true>>\n" );
