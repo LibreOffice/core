@@ -30,8 +30,6 @@
 #include <view.hxx>
 #include <breakit.hxx>
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -96,7 +94,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
         }
 
         // sub-menu starts with smart tag caption and separator
-        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + C2U(": ") + aRangeText;
+        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + ": " + aRangeText;
         nSubMenuPos = 0;
         pSbMenu->InsertItem( nMenuId++, aSmartTagCaption2, MIB_NOSELECT, nSubMenuPos++ );
         pSbMenu->InsertSeparator( nSubMenuPos++ );

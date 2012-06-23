@@ -62,7 +62,7 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 }
 
 SwNavigationConfig::SwNavigationConfig() :
-    utl::ConfigItem(C2U("Office.Writer/Navigator")),
+    utl::ConfigItem("Office.Writer/Navigator"),
     nRootType(0xffff),
     nSelectedPos(0),
     nOutlineLevel(MAXLEVEL),

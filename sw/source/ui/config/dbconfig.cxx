@@ -66,7 +66,7 @@ const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 }
 
 SwDBConfig::SwDBConfig() :
-    ConfigItem(C2U("Office.DataAccess"),
+    ConfigItem("Office.DataAccess",
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     pAdrImpl(0),
     pBibImpl(0)

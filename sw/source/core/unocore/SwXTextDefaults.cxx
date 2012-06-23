@@ -252,20 +252,20 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
 rtl::OUString SAL_CALL SwXTextDefaults::getImplementationName(  )
     throw (RuntimeException)
 {
-    return C2U("SwXTextDefaults");
+    return OUString("SwXTextDefaults");
 }
 
 
 sal_Bool SAL_CALL SwXTextDefaults::supportsService( const ::rtl::OUString& rServiceName )
     throw (RuntimeException)
 {
-    return  rServiceName == C2U("com.sun.star.text.Defaults") ||
-            rServiceName == C2U("com.sun.star.style.CharacterProperties") ||
-            rServiceName == C2U("com.sun.star.style.CharacterPropertiesAsian") ||
-            rServiceName == C2U("com.sun.star.style.CharacterPropertiesComplex") ||
-            rServiceName == C2U("com.sun.star.style.ParagraphProperties") ||
-            rServiceName == C2U("com.sun.star.style.ParagraphPropertiesAsian") ||
-            rServiceName == C2U("com.sun.star.style.ParagraphPropertiesComplex");
+    return  rServiceName == "com.sun.star.text.Defaults" ||
+            rServiceName == "com.sun.star.style.CharacterProperties" ||
+            rServiceName == "com.sun.star.style.CharacterPropertiesAsian" ||
+            rServiceName == "com.sun.star.style.CharacterPropertiesComplex" ||
+            rServiceName == "com.sun.star.style.ParagraphProperties" ||
+            rServiceName == "com.sun.star.style.ParagraphPropertiesAsian" ||
+            rServiceName == "com.sun.star.style.ParagraphPropertiesComplex";
 }
 
 
@@ -274,13 +274,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNa
 {
     uno::Sequence< OUString > aRet(7);
     OUString* pArr = aRet.getArray();
-    *pArr++ = C2U("com.sun.star.text.Defaults");
-    *pArr++ = C2U("com.sun.star.style.CharacterProperties");
-    *pArr++ = C2U("com.sun.star.style.CharacterPropertiesAsian");
-    *pArr++ = C2U("com.sun.star.style.CharacterPropertiesComplex");
-    *pArr++ = C2U("com.sun.star.style.ParagraphProperties");
-    *pArr++ = C2U("com.sun.star.style.ParagraphPropertiesAsian");
-    *pArr++ = C2U("com.sun.star.style.ParagraphPropertiesComplex");
+    *pArr++ = "com.sun.star.text.Defaults";
+    *pArr++ = "com.sun.star.style.CharacterProperties";
+    *pArr++ = "com.sun.star.style.CharacterPropertiesAsian";
+    *pArr++ = "com.sun.star.style.CharacterPropertiesComplex";
+    *pArr++ = "com.sun.star.style.ParagraphProperties";
+    *pArr++ = "com.sun.star.style.ParagraphPropertiesAsian";
+    *pArr++ = "com.sun.star.style.ParagraphPropertiesComplex";
     return aRet;
 }
 

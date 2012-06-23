@@ -602,7 +602,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         nComp = GetKanaComp();
 
     sal_Bool bCfgIsAutoGrammar = sal_False;
-    SvtLinguConfig().GetProperty( C2U( UPN_IS_GRAMMAR_AUTO ) ) >>= bCfgIsAutoGrammar;
+    SvtLinguConfig().GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bCfgIsAutoGrammar;
     const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
     const sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell();
     const sal_Bool bTmpGrammarCheck = bGrammarCheck && OnWin() && bCfgIsAutoGrammar && GetOpt().IsOnlineSpell();
@@ -1209,11 +1209,11 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
         rVals.realloc( 2 );
         PropertyValue *pVal = rVals.getArray();
 
-        pVal[0].Name    = C2U( UPN_HYPH_MIN_LEADING );
+        pVal[0].Name    = UPN_HYPH_MIN_LEADING;
         pVal[0].Handle  = UPH_HYPH_MIN_LEADING;
         pVal[0].Value   <<= nMinLeading;
 
-        pVal[1].Name    = C2U( UPN_HYPH_MIN_TRAILING );
+        pVal[1].Name    = UPN_HYPH_MIN_TRAILING;
         pVal[1].Handle  = UPH_HYPH_MIN_TRAILING;
         pVal[1].Value   <<= nMinTrailing;
     }

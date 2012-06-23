@@ -523,7 +523,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
                     // right now we don't have view options for automatic grammar checking. Thus...
                     sal_Bool bIsAutoGrammar = sal_False;
-                    aCfg.GetProperty( C2U( UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
+                    aCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bIsAutoGrammar;
 
                     if (pDoc && bIsAutoGrammar)
                         StartGrammarChecking( *pDoc );

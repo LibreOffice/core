@@ -429,7 +429,7 @@ SwSpellPopup::SwSpellPopup(
     }
 
     OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
-    OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
+    OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
@@ -637,7 +637,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     }
 
     OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
-    OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
+    OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
