@@ -184,7 +184,7 @@ typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 
 #define SVEXT_PERSIST_STREAM "\002OlePres000"
 
-// nach der Reihenfolge des Auftretens sortiert werden:
+// are sorted by the order of occurrence:
 typedef boost::ptr_vector<SvxMSDffBLIPInfo> SvxMSDffBLIPInfos;
 
 class SvxMSDffShapeOrders : public std::vector<SvxMSDffShapeOrder*>
@@ -193,7 +193,7 @@ public:
     ~SvxMSDffShapeOrders();
 };
 
-// explizit sortiert werden:
+// will be sorted explicitly:
 SV_DECL_PTRARR_SORT_DEL_VISIBILITY(SvxMSDffShapeInfos,  SvxMSDffShapeInfo_Ptr,  16, MSFILTER_DLLPUBLIC)
 
 SV_DECL_PTRARR_SORT_VISIBILITY(SvxMSDffShapeTxBxSort,   SvxMSDffShapeOrder*, 16, MSFILTER_DLLPUBLIC)
@@ -263,7 +263,7 @@ struct FIDCL
 };
 
 //---------------------------------------------------------------------------
-//  von SvxMSDffManager fuer jedes in der Gruppe enthaltene Shape geliefert
+//  from SvxMSDffManager provided for each group included in the shape
 //---------------------------------------------------------------------------
 struct MSDffTxId
 {
@@ -294,7 +294,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     sal_uInt32      nLayoutInTableCell;
     sal_uInt32      nFlags;
     long            nTextRotationAngle;
-    long            nDxTextLeft;    // Abstand der Textbox vom umgebenden Shape
+    long            nDxTextLeft;    // The distance from the surrounding text box shape
     long            nDyTextTop;
     long            nDxTextRight;
     long            nDyTextBottom;
@@ -306,8 +306,8 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     long            nCropFromBottom;
     long            nCropFromLeft;
     long            nCropFromRight;
-    MSDffTxId       aTextId;        // Kennungen fuer Textboxen
-    sal_uLong       nNextShapeId;   // fuer verlinkte Textboxen
+    MSDffTxId       aTextId;        // Identifiers for text boxes
+    sal_uLong       nNextShapeId;   // for linked text boxes
     sal_uLong       nShapeId;
     MSO_SPT         eShapeType;
     MSO_LineStyle   eLineStyle;   // Umrandungs-Arten
@@ -337,7 +337,7 @@ private:
 
 typedef SvxMSDffImportRec* MSDffImportRec_Ptr;
 
-// Liste aller SvxMSDffImportRec fuer eine Gruppe
+// List of all SvxMSDffImportRec for a Group
 SV_DECL_PTRARR_SORT_DEL_VISIBILITY(MSDffImportRecords, MSDffImportRec_Ptr, 16, MSFILTER_DLLPUBLIC)
 
 //---------------------------------------------------------------------------
@@ -345,10 +345,10 @@ SV_DECL_PTRARR_SORT_DEL_VISIBILITY(MSDffImportRecords, MSDffImportRec_Ptr, 16, M
 //---------------------------------------------------------------------------
 struct SvxMSDffImportData
 {
-    MSDffImportRecords  aRecords;   // Shape-Pointer, -Ids und private Daten
-    Rectangle           aParentRect;// Rectangle der umgebenden Gruppe
+    MSDffImportRecords  aRecords;   // Shape-Pointer ids and private data
+    Rectangle           aParentRect;// Rectangle der umgebenden group
                                     // bzw. von aussen reingegebenes Rect
-    Rectangle           aNewRect;   // mit diesem Shape definiertes Rectangle
+    Rectangle           aNewRect;   // defined by this Rectangle shape
 
     SvxMSDffImportData()
         {}
@@ -448,10 +448,10 @@ class MSFILTER_DLLPUBLIC DffRecordManager : public DffRecordList
 };
 
 /*
-    SvxMSDffManager - abstrakte Basis-Klasse fuer Escher-Import
+    SvxMSDffManager - abstract base class for Escher-Import
     ===============
-    Zweck:  Zugriff auf Objekte im Drawing File Format
-    Stand:  Zugriff nur auf BLIPs (wird spaeter erweitert)
+    Purpose:  To access objects in the Drawing File Format
+    Current Status: Access only to blips (will be extended later)
 
     Beachte: in der zwecks PowerPoint-, ODER Word- ODER Excel-Import
     ======== abgeleiteten Klasse
@@ -546,7 +546,7 @@ typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
                 const Rectangle& rVisArea );
 
 /*
-        folgende Methoden sind zum Excel-Import zu ueberschreiben:
+        the following methods are to overwrite the Excel import:
 */
     virtual sal_Bool ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen, char*& rpBuff, sal_uInt32& rBuffLen ) const;
     virtual void ProcessClientAnchor2( SvStream& rStData, DffRecordHeader& rHd, void* pData, DffObjData& );
@@ -602,23 +602,23 @@ public:
         sal_uInt16& rInst, sal_uInt16& rFbt, sal_uInt32& rLength)
         SAL_WARN_UNUSED_RESULT;
 /*
-    Konstruktor
+    Constructor
     ===========
-    Input:  rStCtrl   - Verwaltungsstream mit Containern,
-                        FBSE Objekten und Shapes
-                        ( muss immer uebergeben werden;
-                          Stream muss bereits offen sein )
+    Input:  rStCtrl   - Stream management of containers,
+                        FBSE Objects and Shapes
+                        ( to be handed over;
+                          Stream must already be open )
 
-            nOffsDgg  - Offset im rStCtrl: Beginn des Drawing Group Containers
+            nOffsDgg  - Offset in rStCtrl: Beginning of the Drawing Group Container
 
-            pStData   - Datenstream, in dem die BLIPs gespeichert sind
-                        ( falls Null, wird angenommen, dass die
-                          BLIPs ebenfalls im rStCtrl gespeichert sind;
-                          dieser Stream muss ebenfalls bereits offen sein )
+            pStData   - Datastream, in which the blips are stored
+                        ( if zero, it is assumed that the blips are also
+                          stored in rStCtrl; this stream must also be
+                          already open )
             pSdrModel_  kann beim Ctor-Aufruf leer bleiben, muss dann aber
                         spaeter ueber SetModel() gesetzt werden!
 
-    setzt nBLIPCount
+    is nBLIPCount
 */
     SvxMSDffManager( SvStream& rStCtrl,
                      const String& rBaseURL,
@@ -657,28 +657,28 @@ public:
     sal_Int32 ScalePoint( sal_Int32 nVal ) const;
 
 /*
-    GetBLIP()           - Anforderung eines bestimmten BLIP
+    GetBLIP()           - Requirement of a particular BLIP
     =========
-    Input:  nIdx        - Nummer des angeforderten BLIP
+    Input:  nIdx        - Number of requested BLIP
                           ( muss immer uebergeben werden )
 
-    Output: rData       - bereits fertig konvertierte Daten
-                          ( direkt als Grafik in unsere Dokumente einzusetzen )
+    Output: rData       - already completely converted data
+                          ( should be used directly as an image in our documents )
 
-    Rueckgabewert: sal_True, im Erfolgsfalls, sal_False bei Fehler
+    Returns: sal_True, on success, sal_False on error
 */
     sal_Bool GetBLIP( sal_uLong nIdx, Graphic& rData, Rectangle* pVisArea = NULL );
 
 /*
-    GetBLIPDirect()     -Einlesen eines BLIP aus schon positioniertem Stream
+    GetBLIPDirect()     -Reading an already positioned stream of BLIP
     ===============
-    Input:  rBLIPStream -bereits korrekt positionierter Stream
+    Input:  rBLIPStream -already correctly positioned in the stream
                           ( muss immer uebergeben werden )
 
-    Output: rData       -bereits fertig konvertierte Daten
-                          ( direkt als Grafik in unsere Dokumente einzusetzen )
+    Output: rData       -already completely converted data
+                          ( should be used directly as an image in our documents )
 
-    Rueckgabewert: sal_True, im Erfolgsfalls, sal_False bei Fehler
+    Returns: sal_True, on success, sal_False on error
 */
     sal_Bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea = NULL ) const;
 
@@ -686,39 +686,39 @@ public:
                   SdrObject*& rpData, SvxMSDffImportData& rData);
 
 /*
-    GetBLIPCount()  - Abfrage der verwalteten BLIP Anzahl
+    GetBLIPCount()  - Query the number of managed BLIP
     ==============
     Input:  ./.
     Output: ./.
-    Rueckgabewert: nBLIPCount   - Anzahl der im pStData (bzw. rStCtrl) enthaltenen BLIPs
-                                  ( sprich: Anzahl der FBSEs im Drawing Group Container )
+    Returns: nBLIPCount   - Number of pStData (or rStCtrl) contained in BLIPs
+                                  (that is: number of FBSEs in Drawing Group Container )
 
-                        Werte:  0   - Struktur Ok, jedoch keine BLIPs vorhanden
-                                1.. - Anzahl der BLIPs
-                        USHRT_MAX   - Fehler: kein korrektes Drawing File Format
+                        Values:  0  - Structure Ok, however BLIPs is not available
+                                1.. - Number of BLIPs
+                        USHRT_MAX   - Error: drawing not in the correct file format
 */
     sal_uInt16 GetBLIPCount() const{ return nBLIPCount; }
 
 /*
-    ZCodecDecompressed()  - Dekomprimierung eines komp. WMF oder Enhanced WMF
+    ZCodecDecompressed()  - Decompress a complete WMF or Enhanced WMF
     ====================
-    Input:  rIn     -bereits korrekt positionierter Stream,
-                     der das komprimierte Bild enthaelt
-            rOut    -bereits korrekt positionierter Ausgabe-Stream,
+    Input:  rIn     -contains the already correctly possitioned Stream,
+                     of the compressed image
+            rOut    -already correctly positioned output stream
 
         bLookForEnd -Flag, ob das komp. Bild bis zum Stream-Ende reicht.
                      Falls sal_True, wird jeweils geprueft, ob das gelesene noch
                                                         zum Bild gehoert.
-                     Falls sal_False, wird bis zum Stream-Ende gelesen.
+                     If sal_False, will read until the end of the stream.
 
-    Output: rIn     -Der Stream steht hinter dem Ende des komp. Bildes.
-                     (es kann aber noch eine Ende-Kennung und CRC-Sum folgen)
-            rOut    -Der Stream enthaelt das dekomprimierte Bild.
-                     Der Stream wird auf den Anfang des Bildes positioniert.
-                     (also dorthin, wo der Stream vor der Verarbeitung stand)
+    Output: rIn     -The stream behind the end of the complete image.
+                     (but it can still follow an end identifier and CRC-Sum)
+            rOut    -The stream contains the decompressed image.
+                     The stream is positioned at the beginning of the picture.
+                     (that is, to the place where the stream was before processing)
 
-    Rueckgabewert:  sal_True, im Erfolgsfall
-                    sal_False bei Fehler oder Null Bytes geschrieben
+    Returns:        sal_True, if successful
+                    sal_False written in error or zero bytes
 */
 //  static sal_Bool ZCodecDecompressed( SvStream& rIn,
 //                                  SvStream& rOut,
@@ -793,21 +793,21 @@ public:
 
 struct SvxMSDffBLIPInfo
 {
-    sal_uInt16 nBLIPType;   // Art des BLIP: z.B. 6 fuer PNG
-    sal_uLong  nFilePos;    // Offset des BLIP im Daten-Stream
-    sal_uLong  nBLIPSize;   // Anzahl Bytes, die der BLIP im Stream einnimmt
+    sal_uInt16 nBLIPType;   // Type of BLIP example : 6 for PNG
+    sal_uLong  nFilePos;    // Offset in the data stram of the BLIP
+    sal_uLong  nBLIPSize;   // Number of bytes in the strean that the BLIP takes
     SvxMSDffBLIPInfo(sal_uInt16 nBType, sal_uLong nFPos, sal_uLong nBSize):
         nBLIPType( nBType ), nFilePos( nFPos ), nBLIPSize( nBSize ){}
 };
 
 struct SvxMSDffShapeInfo
 {
-    sal_uInt32 nShapeId;     // Shape Id, verwendet im PLCF SPA und im mso_fbtSp (FSP)
-    sal_uLong nFilePos;  // Offset des Shape im Kontroll-Stream fuer eventuelle
-                     // erneute Zugriffe auf dieses Shape
+    sal_uInt32 nShapeId;     // Shape Id, used in SPA and the PLCF mso_fbtSp (FSP)
+    sal_uLong nFilePos;  // Offset of the shape in the control stream for any new requests
+                         // for this shape
     sal_uInt32 nTxBxComp;
 
-    sal_Bool bReplaceByFly  :1; // Shape darf im Writer durch Rahmen ersetzt werden.
+    sal_Bool bReplaceByFly  :1; // Shape maybe replaced by writer framework.
     sal_Bool bSortByShapeId :1;
     sal_Bool bLastBoxInChain:1;
 
@@ -854,12 +854,12 @@ struct SvxMSDffShapeOrder
     short nHdFtSection; // used by Writer to find out if linked frames are in the
                         // same header or footer of the same section
 
-    SdrObject*  pObj;   // Zeiger auf das Draw-Objekt (bzw. Null, falls nicht verwendet)
+    SdrObject*  pObj;   // Pointer to draw the object or null if not used
 
     // Vorgehensweise:  im Ctor des SvxMSDffManager werden im der Shape-Order-Array
     //                  nur die Shape-Ids vermerkt,
-    //                  Text-Box-Nummer und der Objekt-Pointer werden nur dann
-    //                  gespeichert, wenn das Shape tatsaechlich importiert wird!
+    //                  Text-Box number and the object pointer will be saved only if
+    //                  the shape is actually imported!
     SvxMSDffShapeOrder( sal_uLong nId ):
         nShapeId( nId ), nTxBxComp( 0 ), pFly( 0 ), nHdFtSection( 0 ), pObj( 0 ){}
 
