@@ -85,7 +85,6 @@ bool BaseContainerNode::init_children()
 
 void BaseContainerNode::deactivate_st( NodeState eDestState )
 {
-    mnLeftIterations = 0.0;
     if (eDestState == FROZEN) {
         // deactivate all children that are not FROZEN or ENDED:
         forEachChildNode( boost::mem_fn(&AnimationNode::deactivate),
