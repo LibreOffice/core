@@ -527,7 +527,6 @@ void doTestCode()
     // sign the document
     PDFWriter::SignatureWidget aSignature;
     aSignature.Name = OUString("Signature1");
-    aSignature.Location = Rectangle( Point( 0, 0 ), Size( 0, 0 ) );
     aWriter.CreateControl( aSignature, 0);
 
     aWriter.Emit();
@@ -11699,13 +11698,14 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
         return -1;
 
+    bool sigHidden;
     sal_Int32 nNewWidget = m_aWidgets.size();
     m_aWidgets.push_back( PDFWidget() );
 
     m_aWidgets.back().m_nObject         = createObject();
-    m_aWidgets.back().m_aRect               = rControl.Location;
-    m_aWidgets.back().m_nPage               = nPageNr;
-    m_aWidgets.back().m_eType               = rControl.getType();
+    m_aWidgets.back().m_aRect           = rControl.Location;
+    m_aWidgets.back().m_nPage           = nPageNr;
+    m_aWidgets.back().m_eType           = rControl.getType();
 
     sal_Int32 nRadioGroupWidget = -1;
     // for unknown reasons the radio buttons of a radio group must not have a
@@ -11865,7 +11865,12 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     }
     else if( rControl.getType() == PDFWriter::Signature)
     {
-        //const PDFWriter::SignatureWidget& rSig = static_cast<const PDFWriter::SignatureWidget&>(rControl);
+        const PDFWriter::SignatureWidget& rSig = static_cast<const PDFWriter::SignatureWidget&>(rControl);
+        sigHidden = rSig.SigHidden;
+
+        if ( sigHidden )
+            rNewWidget.m_aRect = Rectangle(0, 0, 0, 0);
+
         m_nSignatureObject = createObject();
         rNewWidget.m_aValue = OUString::valueOf( m_nSignatureObject );
         rNewWidget.m_aValue += OUString(" 0 R");
@@ -11874,9 +11879,15 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aAppearances[ "N" ][ "Standard" ] = new SvMemoryStream();
     }
 
-    // convert to default user space now, since the mapmode may change
-    // note: create default appearances before m_aRect gets transformed
-    m_aPages[ nPageNr ].convertRect( rNewWidget.m_aRect );
+
+    // if control is a hidden signature, do not convert coordinates since we
+    // need /Rect [ 0 0 0 0 ]
+    if ( ! ( ( rControl.getType() == PDFWriter::Signature ) && ( sigHidden ) ) )
+    {
+        // convert to default user space now, since the mapmode may change
+        // note: create default appearances before m_aRect gets transformed
+        m_aPages[ nPageNr ].convertRect( rNewWidget.m_aRect );
+    }
 
     // insert widget to page's annotation list
     m_aPages[ nPageNr ].m_aAnnotations.push_back( rNewWidget.m_nObject );

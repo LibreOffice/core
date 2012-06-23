@@ -452,12 +452,18 @@ public:
 
     struct SignatureWidget: public AnyWidget
     {
+        // Use Sig prefix for members to avoid conflict with
+        // the Location member of the AnyWidget which spcifies the coordinates
+        // of the signature
+
         rtl::OUString                    SigLocation;
         rtl::OUString                    SigReason;
         rtl::OUString                    SigContactInfo;
+        bool                             SigHidden;
 
         SignatureWidget()
-                : AnyWidget( vcl::PDFWriter::Signature )
+                : AnyWidget( vcl::PDFWriter::Signature ),
+                  SigHidden( true )
         {}
 
         virtual AnyWidget* Clone() const
