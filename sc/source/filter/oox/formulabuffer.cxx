@@ -48,19 +48,6 @@ Reference< XCellRange > FormulaBuffer::getRange( const CellRangeAddress& rRange)
     return xRange;
 }
 
-Reference< XCell > FormulaBuffer::getCell( CellAddress& rAddress )
-{
-    Reference< XCell > xCell;
-    try
-    {
-        xCell = mxCurrSheet->getCellByPosition( rAddress.Column, rAddress.Row );
-    }
-    catch( Exception& )
-    {
-    }
-    return xCell;
-}
-
 void FormulaBuffer::finalizeImport()
 {
     ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );

@@ -71,7 +71,6 @@ typedef ::std::map< sal_Int32, std::vector< ValueAddressPair > > FormulaValueMap
 
     void createSharedFormula(  const ::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const rtl::OUString& rTokens );
     ::com::sun::star::uno::Reference< com::sun::star::table::XCellRange > getRange( const ::com::sun::star::table::CellRangeAddress& rRange);
-    ::com::sun::star::uno::Reference< com::sun::star::table::XCell > getCell( ::com::sun::star::table::CellAddress& rAddress );
     com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > mxCurrSheet;
     FormulaDataMap      cellFormulas;
     ArrayFormulaDataMap cellArrayFormulas;

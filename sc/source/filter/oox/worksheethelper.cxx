@@ -1534,21 +1534,6 @@ void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue ) con
     getScDocument().SetValue( aAddress.Col(), aAddress.Row(), aAddress.Tab(), fValue );
 }
 
-void WorksheetHelper::putFormulaResult( const CellAddress& rAddress, double fValue ) const
-{
-    ScDocument& rDoc = getScDocument();
-    ScAddress aCellPos;
-    ScUnoConversion::FillScAddress( aCellPos, rAddress );
-    ScBaseCell* pBaseCell = rDoc.GetCell( aCellPos );
-    if ( pBaseCell->GetCellType() == CELLTYPE_FORMULA )
-    {
-        ScFormulaCell* pCell = static_cast< ScFormulaCell* >( pBaseCell );
-        pCell->SetHybridDouble( fValue );
-        pCell->ResetDirty();
-        pCell->ResetChanged();
-    }
-}
-
 void WorksheetHelper::setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress,
                             double fValue  )
 {

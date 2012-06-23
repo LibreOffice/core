@@ -331,9 +331,6 @@ public:
     static SAL_DLLPRIVATE void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( ToolBox* pBox, const Point& rPos );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList );
-    static SAL_DLLPRIVATE void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, sal_Bool bBlack, sal_Bool bColTransform,
-                                                  sal_Bool bLeft = sal_False, sal_Bool bTop = sal_False,
-                                                  long nSize = 6 );
     static SAL_DLLPRIVATE void ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight );
     static SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks( const ToolBox *pThis );
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }

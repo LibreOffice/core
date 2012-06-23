@@ -55,7 +55,6 @@ public:
                             SystemChildWindow( Window* pParent, WinBits nStyle = 0 );
                             // create a SystemChildWindow using the given SystemWindowData
                             SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow = sal_True );
-                            SystemChildWindow( Window* pParent, const ResId& rResId );
                             ~SystemChildWindow();
 
     const SystemEnvData*    GetSystemData() const;

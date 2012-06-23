@@ -187,8 +187,6 @@ public:
     void                setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCode );
     /** Inserts a formula cell into the sheet. */
     void                setFormulaCell( const CellModel& rModel, const ApiTokenSequence& rTokens );
-    /** Inserts a shared formula cell into the sheet (OOXML only). */
-    void                setFormulaCell( const CellModel& rModel, sal_Int32 nSharedId );
 
     /** Inserts the passed token array as array formula. */
     void                createArrayFormula(
@@ -198,11 +196,6 @@ public:
     void                createTableOperation(
                             const ::com::sun::star::table::CellRangeAddress& rRange,
                             const DataTableModel& rModel );
-    /** Creates a named range with a special name for a shared formula with the
-        specified identifier and formula definition (OOXML only). */
-    void                createSharedFormula(
-                            sal_Int32 nSharedId,
-                            const ApiTokenSequence& rTokens );
 
     /** Creates a named range with a special name for a shared formula with the
         specified base address and formula definition (BIFF only). */

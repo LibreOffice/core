@@ -115,7 +115,6 @@ public:
     void AddCurrencyRange(const ScRange& rRange,
         const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
         ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
-    void InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc);
     void SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLImport& rImport);
 };
@@ -178,7 +177,6 @@ public:
         rtl::OUString* pCurrency, const sal_Int16 nCellType);
     void AddRange(const ScRange& rRange);
     void AddCell(const ScAddress& rAddress);
-    void InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc); // a row is inserted before nRow
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc); // a col is inserted before nCol
     void EndTable();
     void SetStylesToRanges();

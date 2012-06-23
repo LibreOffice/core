@@ -152,20 +152,6 @@ SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWin
 
 // -----------------------------------------------------------------------
 
-SystemChildWindow::SystemChildWindow( Window* pParent, const ResId& rResId ) :
-    Window( WINDOW_SYSTEMCHILDWINDOW )
-{
-    rResId.SetRT( RSC_WINDOW );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInitSysChild( pParent, nStyle, NULL );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 SystemChildWindow::~SystemChildWindow()
 {
     Hide();

@@ -144,35 +144,6 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
         aItr->mpRanges->addRange(rRange);
 }
 
-void ScMyStyleRanges::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* /*pDoc*/)
-{
-    if (mpTextList)
-        mpTextList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
-    if (mpNumberList)
-        mpNumberList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
-    if (mpTimeList)
-        mpTimeList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
-    if (mpDateTimeList)
-        mpDateTimeList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
-    if (mpPercentList)
-        mpPercentList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
-    if (mpLogicalList)
-        mpLogicalList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
-    if (mpUndefinedList)
-        mpUndefinedList->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
-
-    if (pCurrencyList)
-    {
-        ScMyCurrencyStylesSet::iterator aItr(pCurrencyList->begin());
-        ScMyCurrencyStylesSet::iterator aEndItr(pCurrencyList->end());
-        while (aItr != aEndItr)
-        {
-            aItr->mpRanges->insertRow(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab));
-            ++aItr;
-        }
-    }
-}
-
 void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* /*pDoc*/)
 {
     if (mpTextList)
@@ -500,18 +471,6 @@ void ScMyStylesImportHelper::AddCell(const ScAddress& rAddress)
 {
     ScRange aScRange( rAddress, rAddress );
     AddRange(aScRange);
-}
-
-void ScMyStylesImportHelper::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc)
-{
-    ScXMLImport::MutexGuard aGuard(rImport);
-    ScMyStylesSet::iterator aItr(aCellStyles.begin());
-    ScMyStylesSet::iterator aEndItr(aCellStyles.end());
-    while (aItr != aEndItr)
-    {
-        aItr->xRanges->InsertRow(nRow, nTab, pDoc);
-        ++aItr;
-    }
 }
 
 void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc)

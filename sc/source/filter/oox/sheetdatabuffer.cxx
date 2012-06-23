@@ -329,12 +329,6 @@ void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSeq
     setCellFormat( rModel );
 }
 
-void SheetDataBuffer::setFormulaCell( const CellModel& rModel, sal_Int32 nSharedId )
-{
-    setCellFormula( rModel.maCellAddr, resolveSharedFormula( BinAddress( nSharedId, 0 ) ) );
-    setCellFormat( rModel );
-}
-
 void SheetDataBuffer::createArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens )
 {
     /*  Array formulas will be inserted later in finalizeImport(). This is
@@ -349,11 +343,6 @@ void SheetDataBuffer::createTableOperation( const CellRangeAddress& rRange, cons
         needed to not disturb collecting all the cells, which will be put into
         the sheet in large blocks to increase performance. */
     maTableOperations.push_back( TableOperation( rRange, rModel ) );
-}
-
-void SheetDataBuffer::createSharedFormula( sal_Int32 nSharedId, const ApiTokenSequence& rTokens )
-{
-    createSharedFormula( BinAddress( nSharedId, 0 ), rTokens );
 }
 
 void SheetDataBuffer::createSharedFormula( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )

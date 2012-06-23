@@ -102,7 +102,6 @@ public:
     virtual size_t GetFmtCount() const { return size(); }
     virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwTxtFmtColl* pFmt) const;
-    bool Contains(const SwTxtFmtColl* pFmt) const;
     virtual ~SwTxtFmtColls() {}
 };
 
