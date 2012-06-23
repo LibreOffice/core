@@ -56,7 +56,7 @@ MasterPropertySetInfo::~MasterPropertySetInfo()
     while (aIter != aEnd )
     {
         delete (*aIter).second;
-        aIter++;
+        ++aIter;
     }
 }
 

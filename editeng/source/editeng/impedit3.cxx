@@ -3147,7 +3147,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             }
                                         }
                                         ::std::vector< sal_Int32 >::iterator curIt = itSubLines;
-                                        itSubLines++;
+                                        ++itSubLines;
                                         if( itSubLines != pExtraInfo->lineBreaksList.end() )
                                         {
                                             nTextStart = *curIt;

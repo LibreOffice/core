@@ -2926,7 +2926,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 bLastWasText = sal_False;
             }
 
-            aIt++; // #i21237#
+            ++aIt; // #i21237#
         }
         if(!bLastWasText)
         {

@@ -395,7 +395,7 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
         while ( pIt != aToCompare.end() && !bInvalid )
         {
             bInvalid = ( nWidth != *pIt );
-            pIt++;
+            ++pIt;
         }
         if ( bInvalid )
             nWidth = 0.0;

@@ -105,7 +105,7 @@ namespace
         xObjStor->FillInfoList( &aInfoList );
 
         for( SvStorageInfoList::iterator aIt = aInfoList.begin();
-             aIt != aInfoList.end(); aIt++ )
+             aIt != aInfoList.end(); ++aIt )
         {
 //            fprintf( stderr, "Stream '%s' size %ld\n",
 //                     rtl::OUStringToOString( aIt->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(),
