@@ -460,8 +460,10 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
         pPattern = pDoc->GetPattern(1,3,1);
         pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be underlined with a dotted line", UNDERLINE_DOTTED, aFont.GetUnderline());
-        //test case for proper import height of first row with styles and text (related to i53253)
-        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(253), pDoc->GetRowHeight(0,1) );
+        //check row height import
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(256), pDoc->GetRowHeight(0,1) ); //0.178in
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(304), pDoc->GetRowHeight(1,1) ); //0.211in
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(477), pDoc->GetRowHeight(5,1) ); //0.3311in
         //test case for i53253 where a cell has text with different styles and space between the text.
         rtl::OUString aTestStr;
         pDoc->GetString(3,0,1, aTestStr);
