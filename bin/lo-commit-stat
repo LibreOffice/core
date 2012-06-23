@@ -312,11 +312,11 @@ sub get_bug_name($$)
         my $response = $ua->get($url);
         if ($response->is_success) {
             my $title = $response->title;
-            if ( $title =~ s/^Bug \d+ – // ) {
+            if ( $title =~ s/^Bug \d+ \S+ // ) {
                 print "$title\n";
                 return $title;
             } else {
-                print "warning: not found; using commit message\n";
+                print "warning: not found; using commit message (only got $title)\n";
             }
         } else {
             print "\n";
