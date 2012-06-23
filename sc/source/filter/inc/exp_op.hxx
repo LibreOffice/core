@@ -38,7 +38,6 @@ class ScDocument;
 class ScPatternAttr;
 class ScFormulaCell;
 class ExcDocument;
-class SotStorage;
 
 
 class ExportTyp

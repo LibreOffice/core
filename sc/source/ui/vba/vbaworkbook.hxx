@@ -33,8 +33,6 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadocumentbase.hxx>
 
-class ScModelObj;
-
 typedef cppu::ImplInheritanceHelper1< VbaDocumentBase, ov::excel::XWorkbook > ScVbaWorkbook_BASE;
 
 class ScVbaWorkbook : public ScVbaWorkbook_BASE

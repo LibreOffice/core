@@ -103,7 +103,6 @@ private:
 // Hyperlinks =================================================================
 
 class SvxURLField;
-class INetURLObject;
 
 /** Provides export of hyperlink data. */
 class XclExpHyperlink : public XclExpRecord
@@ -287,8 +286,6 @@ private:
 };
 
 // Data Validation ============================================================
-
-class ScValidationData;
 
 /** Provides export of the data of a DV record.
     @descr  This record contains the settings for a data validation. In detail

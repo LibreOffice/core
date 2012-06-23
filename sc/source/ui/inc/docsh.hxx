@@ -51,13 +51,11 @@
 #include <sot/sotref.hxx>
 
 class ScEditEngineDefaulter;
-class FontList;
 class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;
 struct ChartSelectionInfo;
 class INetURLObject;
 
-class ScPaintItem;
 class ScViewData;
 class ScDocFunc;
 class ScDrawLayer;

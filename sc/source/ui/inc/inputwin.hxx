@@ -46,7 +46,6 @@ class ScInputHandler;
 class ScAccessibleEditLineTextData;
 struct EENotify;
 class ScRangeList;
-class ScDocument;
 class ScTabViewShell;
 
 //========================================================================

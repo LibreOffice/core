@@ -179,8 +179,6 @@ struct ScMyRejAction : public ScMyBaseAction
 
 typedef std::list<ScMyBaseAction*> ScMyActions;
 
-class ScChangeViewSettings;
-
 class ScXMLChangeTrackingImportHelper
 {
     std::set<rtl::OUString> aUsers;

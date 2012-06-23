@@ -215,6 +215,7 @@ private:
 // ----------------------------------------------------------------------------
 
 class EditEngine;
+class EditTextObject;
 class SdrTextObj;
 class ScStringCell;
 class ScEditCell;
@@ -424,7 +425,6 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-class ScDocument;
 class ScMatrix;
 
 /** Contains cached values in a 2-dimensional array. */

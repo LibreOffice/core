@@ -57,10 +57,8 @@
 #include "vbaformat.hxx"
 #include <formula/grammar.hxx>
 
-class ScTableSheetsObj;
 class ScCellRangesBase;
 class ScCellRangeObj;
-class ScCellRangesObj;
 class ScDocShell;
 class ScDocument;
 class ScRangeList;

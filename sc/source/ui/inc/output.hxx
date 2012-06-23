@@ -38,14 +38,11 @@
 class Rectangle;
 class Font;
 class OutputDevice;
-class Window;
 class EditEngine;
 class ScDocument;
 class ScBaseCell;
 class ScPatternAttr;
-class SvxMarginItem;
 class SdrObject;
-class SdrOle2Obj;
 struct RowInfo;
 struct ScTableInfo;
 class ScTabViewShell;

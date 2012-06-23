@@ -31,7 +31,6 @@
 
 #include "svx/sdr/overlay/overlayobject.hxx"
 
-class OutputDevice;
 class Window;
 
 class ScOverlayDashedBorder : public ::sdr::overlay::OverlayObject

@@ -43,8 +43,6 @@
 #define SC_PREVIEW_RANGE_TAB    3
 
 class OutputDevice;
-class String;
-class Point;
 class Rectangle;
 class ScAddress;
 class ScRange;

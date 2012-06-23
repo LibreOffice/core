@@ -37,7 +37,6 @@
 class ScDocShell;
 class ScDocument;
 class SvStream;
-class SfxMedium;
 class ScAsciiOptions;
 
 /**

@@ -29,7 +29,6 @@
 
 class ScRangeName;
 
-class NameBuffer;
 class RangeNameBufferWK3;
 class ShrfmlaBuffer;
 class ExtNameBuff;
@@ -38,7 +37,6 @@ class ExcelToSc;
 
 class XclImpColRowSettings;
 class XclImpAutoFilterBuffer;
-class XclImpPivotCacheList;
 class _ScRangeListTabs;
 
 class XclExpChTrTabId;

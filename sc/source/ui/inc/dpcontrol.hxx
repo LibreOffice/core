@@ -40,7 +40,6 @@ class OutputDevice;
 class Point;
 class Size;
 class StyleSettings;
-class Window;
 class ScDocument;
 
 /**

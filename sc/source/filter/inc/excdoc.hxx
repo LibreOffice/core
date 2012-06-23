@@ -39,10 +39,6 @@
 //------------------------------------------------------------------ Forwards -
 
 class SvStream;
-class ScBaseCell;
-class ScHorizontalCellIterator;
-class ScDocument;
-class ScProgress;
 
 class NameBuffer;
 

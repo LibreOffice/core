@@ -42,7 +42,6 @@ class SvxClipboardFmtItem;
 class TransferableDataHelper;
 class TransferableClipboardListener;
 class AbstractScLinkedAreaDlg;
-class ScTabViewShell;
 
 struct CellShell_Impl
 {

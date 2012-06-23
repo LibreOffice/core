@@ -36,7 +36,6 @@
 #include "address.hxx"
 #include "scitems.hxx"
 
-class ScDocument;
 class ScDocumentPool;
 class ScPatternAttr;
 class SvxColorItem;

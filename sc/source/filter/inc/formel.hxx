@@ -42,7 +42,6 @@
 
 class XclImpStream;
 class ScTokenArray;
-class ScFormulaCell;
 struct ScSingleRefData;
 struct ScComplexRefData;
 

@@ -34,9 +34,6 @@
 
 #define XLS_USE_NEW_ROW_CONT 1
 
-
-class XclImpStream;
-
 // ============================================================================
 
 class XclImpColRowSettings : protected XclImpRoot

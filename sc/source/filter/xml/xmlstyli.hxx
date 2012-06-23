@@ -42,8 +42,6 @@
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include "xmlimprt.hxx"
 
-class ScSheetSaveData;
-
 class ScXMLCellImportPropertyMapper : public SvXMLImportPropertyMapper
 {
 protected:

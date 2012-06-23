@@ -40,7 +40,6 @@
 #include "xlstyle.hxx"
 #include "xiroot.hxx"
 
-class ScDocumentPool;
 struct ScAttrEntry;
 
 /* ============================================================================

@@ -42,7 +42,6 @@
 
 class ScDocument;
 class DateTime;
-class SvXMLUnitConverter;
 
 
 //___________________________________________________________________

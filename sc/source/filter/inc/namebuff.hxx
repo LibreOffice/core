@@ -38,7 +38,6 @@
 #include <boost/unordered_map.hpp>
 #include <list>
 
-class ScDocument;
 class ScTokenArray;
 class NameBuffer;
 

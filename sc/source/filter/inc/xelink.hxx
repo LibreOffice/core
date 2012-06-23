@@ -37,7 +37,6 @@
 #include "externalrefmgr.hxx"
 #include <boost/shared_ptr.hpp>
 
-class ScRange;
 struct ScSingleRefData;
 struct ScComplexRefData;
 

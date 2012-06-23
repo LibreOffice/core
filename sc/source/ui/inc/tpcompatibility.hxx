@@ -14,8 +14,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-class ScAppOptions;
-
 class ScTpCompatOptions : public SfxTabPage
 {
 public:

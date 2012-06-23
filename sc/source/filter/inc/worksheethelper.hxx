@@ -55,8 +55,6 @@ namespace xls {
 class AutoFilterBuffer;
 struct BinAddress;
 struct BinRange;
-class BiffSheetDrawing;
-class BinRangeList;
 class CommentsBuffer;
 class CondFormatBuffer;
 class Font;

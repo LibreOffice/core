@@ -49,7 +49,6 @@ class ScDocument;
 class ScFuncDesc;
 class ScInputHandler;
 class ScDocShell;
-class SvLBoxEntry;
 
 //============================================================================
 typedef ScTabViewShell* PtrTabViewShell;

@@ -42,11 +42,9 @@
 #include <boost/noncopyable.hpp>
 
 class ScDocument;
-class ScTabView;
 class ScTabViewShell;
 class ScInputWindow;
 class ScPatternAttr;
-class EditEngine;
 class ScEditEngineDefaulter;
 class EditView;
 class EditTextObject;

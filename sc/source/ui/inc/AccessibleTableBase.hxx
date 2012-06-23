@@ -28,8 +28,6 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <cppuhelper/implbase2.hxx>
 
-class ScTabViewShell;
-
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleTable</code> service.

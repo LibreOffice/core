@@ -142,7 +142,6 @@ class SfxPoolItem;
 class SfxItemSet;
 class ScStyleSheet;
 class ScStyleSheetPool;
-class SotStorage;
 class SotStorageRef;
 class SotStorageStreamRef;
 class SvStream;

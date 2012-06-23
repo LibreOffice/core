@@ -41,12 +41,8 @@ namespace com { namespace sun { namespace star {
     namespace script { struct ScriptEventDescriptor; }
 } } }
 
-class SdrObject;
 class Rectangle;
-class ScDocument;
-class SvStream;
 class XclImpStream;
-class XclExpStream;
 
 // Constants and Enumerations =================================================
 

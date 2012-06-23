@@ -33,9 +33,6 @@
 
 // ============================================================================
 
-class ScEditCell;
-class ScPatternAttr;
-class EditTextObject;
 class XclExpStream;
 class XclExpXmlStream;
 

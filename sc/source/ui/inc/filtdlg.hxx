@@ -49,7 +49,6 @@
 //----------------------------------------------------------------------------
 
 class ScFilterOptionsMgr;
-class ScRangeData;
 class ScViewData;
 class ScDocument;
 class ScQueryItem;

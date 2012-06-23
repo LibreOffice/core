@@ -43,13 +43,11 @@
 #include <boost/scoped_ptr.hpp>
 
 struct ScTableInfo;
-class ScViewSelectionEngine;
 class ScDPObject;
 class ScCheckListMenuWindow;
 class ScDPFieldButton;
 class ScOutputData;
 class ScFilterListBox;
-class AutoFilterPopup;
 class SdrObject;
 class SdrEditView;
 class ScNoteMarker;

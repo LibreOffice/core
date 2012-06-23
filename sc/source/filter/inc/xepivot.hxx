@@ -38,7 +38,6 @@ class ScDPObject;
 class ScDPSaveData;
 class ScDPSaveDimension;
 class ScDPSaveMember;
-class ScDPDimensionSaveData;
 class ScDPSaveGroupDimension;
 class ScDPSaveNumGroupDimension;
 struct ScDPNumGroupInfo;

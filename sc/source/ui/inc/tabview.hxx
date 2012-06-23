@@ -47,7 +47,6 @@ class ScColBar;
 class ScTabControl;
 class ScTabViewShell;
 struct ScRangeFindData;
-class SfxPrinter;
 class ScDrawView;
 class SvBorder;
 class FuPoor;

@@ -56,7 +56,6 @@
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
-class ScRangeList;
 class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
 
@@ -673,12 +672,7 @@ enum ScXMLConsolidationAttrTokens
 };
 
 
-class SvI18NMap;
 class SvXMLTokenMap;
-//class SvXMLImportItemMapper;
-class SvXMLStyleContext;
-class SfxItemSet;
-class SvXMLNumFmtHelper;
 class XMLShapeImportHelper;
 class ScXMLChangeTrackingImportHelper;
 class SolarMutexGuard;

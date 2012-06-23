@@ -51,7 +51,6 @@ SV_DECL_VARARR_SORT( ScRTFColTwips, sal_uLong, 16 )
 #else       // SC_RTFPARSE_CXX
 
 struct ScRTFCellDefault;
-class ScRTFDefaultList;
 class ScRTFColTwips;
 
 #endif      // SC_RTFPARSE_CXX

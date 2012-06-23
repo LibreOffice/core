@@ -43,14 +43,10 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 
-class SfxItemSet;
 class SvStream;
 
 class ScFormulaCell;
-class SdrObject;
 class ScDocument;
-class ScToken;
-class _ScRangeListTabs;
 
 class ExcelToSc;
 

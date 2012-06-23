@@ -39,12 +39,9 @@
 #include <boost/shared_ptr.hpp>
 
 class ScDocShell;
-class ScBaseCell;
 class ScDocument;
 class ScOutlineTable;
-class ScRangeName;
 class ScRangeList;
-class ScDBCollection;
 class ScPatternAttr;
 class SvxBoxItem;
 class SvxBoxInfoItem;

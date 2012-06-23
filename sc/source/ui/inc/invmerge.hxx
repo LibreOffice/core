@@ -33,8 +33,6 @@
 
 #include <vector>
 
-class Window;
-
 class ScInvertMerger
 {
 private:

@@ -38,6 +38,8 @@
 #include "xiroot.hxx"
 #include "xistring.hxx"
 
+class ScRangeList;
+
 // Excel->Calc cell address/range conversion ==================================
 
 /** Provides functions to convert Excel cell addresses to Calc cell addresses. */

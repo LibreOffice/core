@@ -35,7 +35,6 @@
 #include <tools/solar.h>
 
 class ScNavigatorDlg;
-class ScNavigatorSettings;
 class ScDocument;
 class ScDocShell;
 class ScAreaLink;

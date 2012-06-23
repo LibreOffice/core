@@ -55,17 +55,12 @@ namespace oox {
     class AttributeList;
     class SegmentProgressBar;
     class ISegmentProgressBar;
-    class SequenceInputStream;
 }
 
 namespace oox { namespace core {
     class FilterBase;
     class FragmentHandler;
     class XmlFilterBase;
-} }
-
-namespace oox { namespace drawingml {
-    class Theme;
 } }
 
 class ScDocument;

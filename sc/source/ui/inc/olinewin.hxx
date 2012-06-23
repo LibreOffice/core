@@ -24,7 +24,6 @@
 
 class ScOutlineEntry;
 class ScOutlineArray;
-class ScOutlineTable;
 
 
 // ============================================================================

@@ -37,8 +37,6 @@
 
 class ScDocument;
 class ScViewData;
-class ScRangeUtil;
-class ScRangeItem;
 
 
 //============================================================================

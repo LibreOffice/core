@@ -23,8 +23,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-class ScDocShell;
-
 //============================================================================
 
 class ScPrintRangeData

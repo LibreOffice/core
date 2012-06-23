@@ -86,9 +86,6 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid );
 
 // Excel Tools ================================================================
 
-class SvStream;
-class ScDocument;
-
 /** This class contains static helper methods for the Excel import and export filters. */
 class XclTools : boost::noncopyable
 {

@@ -33,7 +33,6 @@
 #include <svl/zforlist.hxx>
 #include "anyrefdg.hxx"
 
-class ScDataBarFormat;
 struct ScDataBarFormatData;
 
 class ScDataBarSettingsDlg : public ModalDialog

@@ -22,7 +22,6 @@
 
 #include <sfx2/ipclient.hxx>
 
-class ScDocument;
 class ScTabViewShell;
 class SdrOle2Obj;
 class SdrGrafObj;

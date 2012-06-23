@@ -50,20 +50,7 @@
 
 //------------------------------------------------------------------ Forwards -
 
-class SvStream;
-class Font;
-class ScPatternAttr;
-class ScTokenArray;
-class ScRangeData;
-class ScDBData;
-class ScEditCell;
-class SfxItemSet;
-class EditTextObject;
-class ScPageHFItem;
-class ScProgress;
 struct ScQueryEntry;
-
-class ExcTable;
 
 //----------------------------------------------------------- class ExcRecord -
 

@@ -33,10 +33,6 @@ class ScAccessibleSpreadsheet;
 class ScChildrenShapes;
 class ScAccessibleEditObject;
 
-namespace accessibility
-{
-    class AccessibleShape;
-}
 namespace utl
 {
     class AccessibleRelationSetHelper;

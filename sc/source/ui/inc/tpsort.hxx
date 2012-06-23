@@ -113,7 +113,6 @@ private:
 // Sort Options
 
 class ScDocument;
-class ScRangeData;
 class CollatorRessource;
 class CollatorWrapper;
 

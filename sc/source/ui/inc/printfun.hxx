@@ -36,7 +36,6 @@
 #include <vcl/print.hxx>
 
 class SfxPrinter;
-class SfxProgress;
 class ScDocShell;
 class ScDocument;
 class ScViewData;

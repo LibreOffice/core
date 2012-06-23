@@ -49,12 +49,7 @@ enum ScHFEntryId
     eEntryCount
 };
 
-class ScHeaderEditEngine;
-class ScPatternAttr;
-class EditView;
 class EditTextObject;
-class SvxFieldItem;
-class ScAccessibleEditObject;
 
 
 class ScHFEditPage : public SfxTabPage

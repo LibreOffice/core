@@ -44,7 +44,6 @@ class ScChangeActionDel;
 class ScBigRange;
 class ScEditEngineTextObj;
 class String;
-class DateTime;
 
 typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
 typedef std::map<sal_uLong, ScChangeAction*> ScChangeActionMap;

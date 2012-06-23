@@ -45,8 +45,6 @@ class DateTime;
 
 struct XclAddress;
 struct XclRange;
-class XclRangeList;
-class XclTokenArray;
 
 // Global data ================================================================
 
@@ -136,10 +134,8 @@ class ScModelObj;
 class OutputDevice;
 class SvNumberFormatter;
 class SdrPage;
-class ScDocumentPool;
 class ScStyleSheetPool;
 class ScRangeName;
-class ScDBCollection;
 struct XclFontData;
 
 /** Access to global data for a filter object (imported or exported document) from other classes. */

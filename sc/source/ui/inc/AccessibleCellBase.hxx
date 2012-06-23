@@ -27,8 +27,6 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-class ScTabViewShell;
-
 typedef cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleValue>
                     ScAccessibleCellBaseImpl;
 

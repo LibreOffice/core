@@ -85,7 +85,6 @@ struct XclObjFillData;
 
 // Common =====================================================================
 
-class ScfProgressBar;
 struct XclImpChRootData;
 class XclImpChChart;
 class ScTokenArray;

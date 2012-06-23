@@ -98,7 +98,6 @@ const sal_uInt16 EXC_PAPERSIZE_USER         = 0xFFFF;
 // Page settings ==============================================================
 
 class SvxBrushItem;
-class SfxPrinter;
 
 /** Contains all page (print) settings for a single sheet. */
 struct XclPageData : private boost::noncopyable

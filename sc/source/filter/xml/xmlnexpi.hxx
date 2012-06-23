@@ -37,7 +37,6 @@
 class ScXMLImport;
 struct ScMyNamedExpression;
 class ScRangeName;
-class ScDocument;
 
 class ScXMLNamedExpressionsContext : public SvXMLImportContext
 {

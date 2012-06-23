@@ -40,8 +40,6 @@
 
 #include "address.hxx"
 
-class ScModelObj;
-
 
 typedef CollTestImplHelper< ov::excel::XWorksheets > ScVbaWorksheets_BASE;
 

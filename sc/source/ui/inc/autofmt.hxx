@@ -41,7 +41,6 @@
 
 //------------------------------------------------------------------------
 
-class ScAutoFormat;
 class ScAutoFormatData;
 class SvxBoxItem;
 class SvxLineItem;

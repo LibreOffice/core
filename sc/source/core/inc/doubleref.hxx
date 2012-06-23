@@ -24,7 +24,6 @@
 #include "scmatrix.hxx"
 
 class ScDocument;
-class ScBaseCell;
 struct ScDBQueryParamBase;
 struct ScQueryParamBase;
 

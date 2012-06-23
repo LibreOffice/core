@@ -36,7 +36,6 @@
 #include <vbahelper/vbafontbase.hxx>
 #include "vbapalette.hxx"
 
-class ScTableSheetsObj;
 class ScCellRangeObj;
 
 typedef cppu::ImplInheritanceHelper1< VbaFontBase, ov::excel::XFont > ScVbaFont_BASE;

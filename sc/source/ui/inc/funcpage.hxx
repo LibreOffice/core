@@ -34,10 +34,6 @@
 #include "compiler.hxx"
 #include "cell.hxx"
 
-
-class ScViewData;
-class ScFuncName_Impl;
-class ScDocument;
 class ScFuncDesc;
 
 //============================================================================

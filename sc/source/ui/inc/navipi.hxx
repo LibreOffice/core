@@ -49,7 +49,6 @@ class ScNavigatorControllerItem;
 class ScNavigatorDialogWrapper;
 class ScNavigatorDlg;
 class ScNavigatorSettings;
-class ScRange;
 
 //========================================================================
 

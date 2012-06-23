@@ -37,7 +37,6 @@
 struct RootData;
 class XclImpRoot;
 class XclImpStream;
-class ScDocument;
 
 class ExcScenarioCell
 {

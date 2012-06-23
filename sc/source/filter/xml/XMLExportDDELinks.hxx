@@ -31,7 +31,6 @@
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
-class String;
 class ScXMLExport;
 struct ScMatrixValue;
 

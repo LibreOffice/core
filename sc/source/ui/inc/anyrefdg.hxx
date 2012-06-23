@@ -50,7 +50,6 @@ class ScDocument;
 class ScTabViewShell;
 class ScRefHandler;
 class ScRangeList;
-class SfxShell;
 
 class ScFormulaReferenceHelper
 {

@@ -46,6 +46,7 @@ namespace com { namespace sun { namespace star {
 class SdrObjList;
 class ScfProgressBar;
 class ScfPropertySet;
+class ScRangeList;
 class XclImpChart;
 class XclImpDffConverter;
 class XclImpDrawing;

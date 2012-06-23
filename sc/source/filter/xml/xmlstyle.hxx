@@ -108,7 +108,6 @@ extern const XMLPropertyMapEntry aXMLScTableStylesImportProperties[];
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)
 
 class ScXMLExport;
-class ScXMLImport;
 
 class ScXMLCellExportPropertyMapper : public SvXMLExportPropertyMapper
 {

@@ -37,7 +37,6 @@
 class ScXMLImport;
 class ScChartListenerCollection;
 class ScDocument;
-class Rectangle;
 
 struct ScMyToFixupOLE
 {

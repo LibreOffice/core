@@ -49,8 +49,6 @@ class SfxPoolItem;
 class EditTextObject;
 struct ScSolveParam;
 struct ScTabOpParam;
-class ScPostIt;
-class ScConditionalFormat;
 class ScValidationData;
 class ScConversionParam;
 class SdrModel;

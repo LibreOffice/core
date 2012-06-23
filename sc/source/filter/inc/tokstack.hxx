@@ -62,7 +62,6 @@ struct TokenId
 //------------------------------------------------------------------------
 struct ScComplexRefData;
 class TokenStack;
-class ScToken;
 
 
 enum E_TYPE

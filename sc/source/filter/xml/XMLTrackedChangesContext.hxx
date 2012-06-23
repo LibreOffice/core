@@ -27,7 +27,6 @@
 
 class ScXMLImport;
 class ScXMLChangeTrackingImportHelper;
-class ScEditEngineTextObj;
 
 class ScXMLTrackedChangesContext : public SvXMLImportContext
 {

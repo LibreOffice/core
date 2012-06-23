@@ -68,7 +68,6 @@
 
 class ScViewData;
 class ScDocument;
-class ScRangeData;
 struct ScDPFuncData;
 class ScDPObject;
 

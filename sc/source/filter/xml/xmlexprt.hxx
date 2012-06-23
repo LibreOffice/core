@@ -46,7 +46,6 @@ namespace com { namespace sun { namespace star {
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
-class ScMyShapesContainer;
 class ScMyMergedRangesContainer;
 class ScMyValidationsContainer;
 class ScMyNotEmptyCellsIterator;
@@ -66,7 +65,6 @@ class XMLNumberFormatAttributesExportHelper;
 class ScChartListener;
 class SfxItemPool;
 class ScAddress;
-class ScBaseCell;
 class ScXMLCachedRowAttrAccess;
 class ScRangeName;
 

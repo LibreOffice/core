@@ -36,7 +36,6 @@
 
 // Forward declarations of objects in public use ==============================
 
-class XclExpStream;
 class XclExpRecordBase;
 class XclExpString;
 

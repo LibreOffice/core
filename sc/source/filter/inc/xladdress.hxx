@@ -32,7 +32,6 @@
 #include <vector>
 #include "address.hxx"
 
-class ScRangeList;
 class XclImpStream;
 class XclExpStream;
 

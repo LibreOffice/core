@@ -35,6 +35,7 @@
 
 #include <vector>
 
+class ScFormulaCell;
 class ScRangeList;
 
 

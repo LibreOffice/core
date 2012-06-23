@@ -40,14 +40,7 @@
 #include "ftools.hxx"
 #include "queryparam.hxx"
 
-class SotStorage;
-
-class ScBaseCell;
-class ScRangeList;
 class ScDBData;
-
-class ScfSimpleProgressBar;
-
 class XclImpStream;
 
 

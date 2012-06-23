@@ -36,7 +36,6 @@ class ScDBCollection;
 class ScRangeName;
 class ScPrintRangeSaver;
 class ScDPCollection;
-class ScChartCollection;
 class ScDetOpList;
 class ScChartListenerCollection;
 class ScAreaLinkSaveCollection;
