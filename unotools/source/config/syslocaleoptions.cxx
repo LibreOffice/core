@@ -609,9 +609,9 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
     if ( aIsoStr.Len() )
     {
         ::rtl::OUStringBuffer aStr( rAbbrev.Len() + 1 + aIsoStr.Len() );
-        aStr.append( rAbbrev.GetBuffer(), rAbbrev.Len() );
+        aStr.append( rAbbrev );
         aStr.append( sal_Unicode('-') );
-        aStr.append( aIsoStr.GetBuffer(), aIsoStr.Len() );
+        aStr.append( aIsoStr );
         return aStr.makeStringAndClear();
     }
     else
