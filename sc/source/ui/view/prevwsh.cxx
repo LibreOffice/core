@@ -354,10 +354,6 @@ void ScPreviewShell::UpdateNeededScrollBars()
     pCorner->SetPosSizePixel( Point( aPos.X() + aNewSize.Width(), aPos.Y() + aNewSize.Height() ),
                               Size( nBarW, nBarH ) );
 
-    if ( SVX_ZOOM_WHOLEPAGE == eZoom )
-        pPreview->SetZoom( pPreview->GetOptimalZoom( sal_False ) );
-    else if ( SVX_ZOOM_PAGEWIDTH == eZoom )
-        pPreview->SetZoom( pPreview->GetOptimalZoom( sal_True ) );
     UpdateScrollBars();
 }
 
