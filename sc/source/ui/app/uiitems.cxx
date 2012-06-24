@@ -45,7 +45,6 @@ TYPEINIT1(ScConsolidateItem,    SfxPoolItem);
 TYPEINIT1(ScPivotItem,          SfxPoolItem);
 TYPEINIT1(ScSolveItem,          SfxPoolItem);
 TYPEINIT1(ScTabOpItem,          SfxPoolItem);
-TYPEINIT1(ScCondFrmtItem,       SfxPoolItem);
 
 TYPEINIT1(ScTablesHint,         SfxHint);
 TYPEINIT1(ScEditViewHint,       SfxHint);
@@ -676,59 +675,6 @@ int ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
 SfxPoolItem* ScTabOpItem::Clone( SfxItemPool * ) const
 {
     return new ScTabOpItem( *this );
-}
-
-
-// -----------------------------------------------------------------------
-//      ScCondFrmtItem - Daten fuer den Dialog bedingte Formatierung
-// -----------------------------------------------------------------------
-
-ScCondFrmtItem::ScCondFrmtItem( sal_uInt16 nWhichP,
-//!                             const ScConditionalFormat* pCondFrmt )
-                                const ScConditionalFormat& rCondFrmt )
-    :   SfxPoolItem ( nWhichP ),
-        theCondFrmtData ( rCondFrmt )   //!
-{
-//! if ( pCondFrmt ) theCondFrmtData = *pCondFrmt;
-}
-
-//------------------------------------------------------------------------
-
-ScCondFrmtItem::ScCondFrmtItem( const ScCondFrmtItem& rItem )
-    :   SfxPoolItem     ( rItem ),
-        theCondFrmtData ( rItem.theCondFrmtData )
-{
-}
-
-//------------------------------------------------------------------------
-
-ScCondFrmtItem::~ScCondFrmtItem()
-{
-}
-
-//------------------------------------------------------------------------
-
-String ScCondFrmtItem::GetValueText() const
-{
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScCondFrmtItem"));
-}
-
-//------------------------------------------------------------------------
-
-int ScCondFrmtItem::operator==( const SfxPoolItem& rItem ) const
-{
-    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
-
-    const ScCondFrmtItem& rPItem = (const ScCondFrmtItem&)rItem;
-
-    return ( theCondFrmtData == rPItem.theCondFrmtData );
-}
-
-//------------------------------------------------------------------------
-
-SfxPoolItem* ScCondFrmtItem::Clone( SfxItemPool * ) const
-{
-    return new ScCondFrmtItem( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

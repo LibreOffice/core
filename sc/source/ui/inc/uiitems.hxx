@@ -348,31 +348,6 @@ private:
     ScTabOpParam    theTabOpData;
 };
 
-//----------------------------------------------------------------------------
-// Parameter-Item fuer den Dialog bedingte Formatierung
-
-class ScCondFrmtItem : public SfxPoolItem
-{
-public:
-                TYPEINFO();
-                ScCondFrmtItem( sal_uInt16 nWhich,
-//!                             const ScConditionalFormat* pCondFrmt );
-                                const ScConditionalFormat& rCondFrmt );
-                ScCondFrmtItem( const ScCondFrmtItem& rItem );
-                ~ScCondFrmtItem();
-
-    virtual String          GetValueText() const;
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-
-    const ScConditionalFormat&  GetData() const { return theCondFrmtData; }
-
-private:
-    ScConditionalFormat theCondFrmtData;
-};
-
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
