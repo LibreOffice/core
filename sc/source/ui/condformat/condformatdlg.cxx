@@ -628,6 +628,9 @@ void ScCondFrmtEntry::Select()
         case FORMULA:
             SetFormulaType();
             break;
+        default:
+            //should not happen
+            break;
     }
     SwitchToType(meType);
     mbActive = true;
