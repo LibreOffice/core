@@ -99,6 +99,7 @@ void TemplateView::InsertItems (const std::vector<TemplateViewItem*> &rTemplates
 
         pItem->mnId = pCur->mnId;
         pItem->maText = pCur->maText;
+        pItem->setPath(pCur->getPath());
         pItem->setFileType(pCur->getFileType());
         pItem->maPreview1 = pCur->maPreview1;
 

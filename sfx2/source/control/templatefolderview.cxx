@@ -283,6 +283,7 @@ void TemplateFolderView::Populate ()
                 TemplateViewItem *pTemplateItem = new TemplateViewItem(*mpItemView,mpItemView);
                 pTemplateItem->mnId = j+1;
                 pTemplateItem->maText = mpDocTemplates->GetName(i,j);
+                pTemplateItem->setPath(aURL);
                 pTemplateItem->setFileType(aType);
                 pTemplateItem->maPreview1 = lcl_fetchThumbnail(aURL,128,128);
 

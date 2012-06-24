@@ -20,6 +20,10 @@ public:
 
     virtual ~TemplateViewItem ();
 
+    void setPath (const rtl::OUString &rPath) { maPath = rPath; }
+
+    const rtl::OUString& getPath () const { return maPath; }
+
     void setAuthor (const rtl::OUString &rAuthor) { maAuthor = rAuthor; }
 
     const rtl::OUString& getAuthor () const { return maAuthor; }
@@ -34,6 +38,7 @@ public:
 
 private:
 
+    rtl::OUString maPath;
     rtl::OUString maAuthor;
     rtl::OUString maKeywords;
     rtl::OUString maFileType;
