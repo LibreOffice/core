@@ -91,7 +91,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maView->SetColCount(MAX_COLUMN_COUNT);
     maView->SetLineCount(MAX_LINE_COUNT);
 
-    maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
+    maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
     maView->setTemplateStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
 
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
