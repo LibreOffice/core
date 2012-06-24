@@ -39,7 +39,6 @@
 #include "ControllerLockGuard.hxx"
 #include "ObjectNameProvider.hxx"
 #include "Strings.hrc"
-#include "SchSlotIds.hxx"
 #include "macros.hxx"
 #include "DragMethod_PieSegment.hxx"
 #include "DragMethod_RotateDiagram.hxx"

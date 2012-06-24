@@ -17,7 +17,6 @@
  */
 
 #include "dlg_InsertErrorBars.hrc"
-#include "SchSlotIds.hxx"
 #include "HelpIds.hrc"
 #include "CommonResources.hrc"
 #include "res_ErrorBar.hrc"

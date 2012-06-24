@@ -18,7 +18,6 @@
 
 #include "tp_3D_SceneAppearance.hrc"
 #include "dlg_View3D.hrc"
-#include "SchSlotIds.hxx"
 
 #define WIDTH_FL 108
 #define WIDTH_LB 57

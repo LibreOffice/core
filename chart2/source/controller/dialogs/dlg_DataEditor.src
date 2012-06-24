@@ -26,7 +26,6 @@
  ************************************************************************/
 
 #include "dlg_DataEditor.hrc"
-#include "SchSlotIds.hxx"
 #include "HelpIds.hrc"
 
 // Mask Color for standard images

@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "HelpIds.hrc"
-#include "SchSlotIds.hxx"
 #include "tp_Wizard_TitlesAndObjects.hrc"
 #include "res_Titlesx.hrc"
 #include "res_SecondaryAxisCheckBoxes.hrc"

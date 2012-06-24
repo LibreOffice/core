@@ -19,7 +19,6 @@
 #include "dlg_ChartType.hrc"
 #include "dlg_CreationWizard.hrc"
 #include "HelpIds.hrc"
-#include "SchSlotIds.hxx"
 
 // for BUTTONS_OK_CANCEL_HELP_STACKED
 #include "CommonResources.hrc"

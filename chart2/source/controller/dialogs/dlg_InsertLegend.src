@@ -17,7 +17,6 @@
  */
 
 #include "dlg_InsertLegend.hrc"
-#include "SchSlotIds.hxx"
 #include "CommonResources.hrc"
 #include "res_LegendPosition.hrc"
 

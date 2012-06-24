@@ -18,7 +18,6 @@
 
 #include "dlg_InsertTitle.hrc"
 #include "res_Titlesx.hrc"
-#include "SchSlotIds.hxx"
 #include "CommonResources.hrc"
 
 ModalDialog DLG_TITLE

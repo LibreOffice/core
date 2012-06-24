@@ -18,7 +18,6 @@
 
 #include "tp_3D_SceneIllumination.hrc"
 #include "dlg_View3D.hrc"
-#include "SchSlotIds.hxx"
 
 #define WIDTH_HEAD 108
 #define WIDTH_FT 41

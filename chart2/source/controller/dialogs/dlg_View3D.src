@@ -17,7 +17,6 @@
  */
 
 #include "dlg_View3D.hrc"
-#include "SchSlotIds.hxx"
 #include "CommonResources.hrc"
 #include "HelpIds.hrc"
 

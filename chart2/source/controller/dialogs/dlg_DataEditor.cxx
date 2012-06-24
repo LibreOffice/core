@@ -33,7 +33,6 @@
 #include "DataBrowser.hxx"
 
 #include "ResId.hxx"
-#include "SchSlotIds.hxx"
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>

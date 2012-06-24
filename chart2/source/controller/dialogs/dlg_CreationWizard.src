@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "dlg_CreationWizard.hrc"
-#include "SchSlotIds.hxx"
 #include "HelpIds.hrc"
 
 ModalDialog DLG_CHART_WIZARD

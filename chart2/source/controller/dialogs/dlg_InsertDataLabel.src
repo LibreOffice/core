@@ -17,7 +17,6 @@
  */
 
 #include "dlg_InsertDataLabel.hrc"
-#include "SchSlotIds.hxx"
 #include "CommonResources.hrc"
 #include "res_DataLabel.hrc"
 

@@ -31,7 +31,6 @@
 
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
-#include "SchSlotIds.hxx"
 #include "HelpIds.hrc"
 #include "NoWarningThisInCTOR.hxx"
 #include "ObjectNameProvider.hxx"

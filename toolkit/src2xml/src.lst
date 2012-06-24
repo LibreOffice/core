@@ -448,7 +448,6 @@
 ../../dbaccess/source/ui/tabledesign/table.src
 ../../dbaccess/source/ui/querydesign/querydlg.src
 ../../dbaccess/source/ui/querydesign/query.src
-../../dbaccess/source/ui/browser/bcommon.src
 ../../dbaccess/source/ui/browser/sbagrid.src
 ../../dbaccess/source/ui/browser/sbabrw.src
 ../../dbaccess/source/core/resource/strings.src
