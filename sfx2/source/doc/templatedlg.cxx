@@ -18,6 +18,7 @@
 #include <sfx2/thumbnailviewitem.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -34,6 +35,7 @@
 #define MAX_LINE_COUNT 2
 
 #define PADDING_TOOLBAR_VIEW    15
+#define PADDING_DLG_BORDER      10
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -47,6 +49,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
       aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
       maButtonSelMode(this,SfxResId(BTN_SELECTION_MODE)),
+      mpSearchEdit(new Edit(this,WB_HIDE | WB_BORDER)),
       mpViewBar( new ToolBox(this, SfxResId(TBX_ACTION_VIEW))),
       mpActionBar( new ToolBox(this, SfxResId(TBX_ACTION_ACTION))),
       mpTemplateBar( new ToolBox(this, SfxResId(TBX_ACTION_TEMPLATES))),
@@ -86,6 +89,13 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     Point aViewPos = maView->GetPosPixel();
     aViewPos.setY(aActionPos.Y() + aActionSize.getHeight() + PADDING_TOOLBAR_VIEW);
     maView->SetPosPixel(aViewPos);
+
+    // Set search box position and size
+    Size aSearchSize = mpSearchEdit->CalcMinimumSize();
+    aSearchSize.setWidth(aWinSize.getWidth() - 2*PADDING_DLG_BORDER);
+
+    mpSearchEdit->SetSizePixel(aSearchSize);
+    mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aActionPos.Y()+aActionSize.getHeight()));
 
     maView->SetStyle(WB_TABSTOP | WB_VSCROLL);
     maView->SetColCount(MAX_COLUMN_COUNT);
@@ -341,6 +351,22 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
 void SfxTemplateManagerDlg::OnTemplateSearch ()
 {
+    Point aPos = maView->GetPosPixel();
+    bool bVisible = mpSearchEdit->IsVisible();
+
+    if (bVisible)
+    {
+        aPos.setY(aPos.getY() - mpSearchEdit->GetSizePixel().getHeight());
+        mpActionBar->SetItemState(TBI_TEMPLATE_SEARCH,STATE_NOCHECK);
+    }
+    else
+    {
+        aPos.setY(aPos.getY() + mpSearchEdit->GetSizePixel().getHeight());
+        mpActionBar->SetItemState(TBI_TEMPLATE_SEARCH,STATE_CHECK);
+    }
+
+    maView->SetPosPixel(aPos);
+    mpSearchEdit->Show(!bVisible);
 }
 
 void SfxTemplateManagerDlg::OnTemplateAction ()

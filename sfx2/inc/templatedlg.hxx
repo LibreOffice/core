@@ -15,6 +15,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 
+class Edit;
 class TemplateFolderView;
 class ThumbnailViewItem;
 class ToolBox;
@@ -70,6 +71,7 @@ private:
     PushButton aButtonDraws;
     ImageButton maButtonSelMode;
 
+    Edit *mpSearchEdit;
     ToolBox *mpViewBar;
     ToolBox *mpActionBar;
     ToolBox *mpTemplateBar;
