@@ -38,11 +38,6 @@ using ::std::max;
 ScSimpleRangeList::Range::Range(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) :
     mnCol1(nCol1), mnRow1(nRow1), mnCol2(nCol2), mnRow2(nRow2) {}
 
-bool ScSimpleRangeList::Range::contains(const Range& r) const
-{
-    return mnCol1 <= r.mnCol1 && mnRow1 <= r.mnRow1 && r.mnCol2 <= mnCol2 && r.mnRow2 <= mnRow2;
-}
-
 // ----------------------------------------------------------------------------
 
 ScSimpleRangeList::ScSimpleRangeList()
@@ -164,35 +159,6 @@ void ScSimpleRangeList::insertCol(SCCOL nCol, SCTAB nTab)
         {
             // insertion point cuts through the range.
             ++r.mnCol2;
-        }
-    }
-}
-
-void ScSimpleRangeList::insertRow(SCROW nRow, SCTAB nTab)
-{
-    RangeListRef pRef = findTab(nTab);
-    if (!pRef)
-        // This should never happen!
-        return;
-
-    list<Range>::iterator itr = pRef->begin(), itrEnd = pRef->end();
-    for (; itr != itrEnd; ++itr)
-    {
-        Range& r = *itr;
-        if (r.mnRow2 < nRow)
-            // insertion point is below the range.
-            continue;
-
-        if (nRow <= r.mnRow1)
-        {
-            // insertion point is above the range.
-            ++r.mnRow1;
-            ++r.mnRow2;
-        }
-        else if (nRow <= r.mnRow2)
-        {
-            // insertion point cuts through the range.
-            ++r.mnRow2;
         }
     }
 }

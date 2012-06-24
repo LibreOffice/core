@@ -214,7 +214,6 @@ public:
         const ScDBData* findByRange(const ScRange& rRange) const;
         ScDBData* getByRange(const ScRange& rRange);
         void insert(ScDBData* p);
-        void erase(iterator itr);
         bool empty() const;
         bool operator== (const AnonDBs& r) const;
     };

@@ -816,11 +816,6 @@ void ScDBCollection::AnonDBs::insert(ScDBData* p)
     maDBs.push_back(pNew);
 }
 
-void ScDBCollection::AnonDBs::erase(iterator itr)
-{
-    maDBs.erase(itr);
-}
-
 bool ScDBCollection::AnonDBs::empty() const
 {
     return maDBs.empty();
