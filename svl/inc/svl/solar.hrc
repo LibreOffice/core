@@ -185,13 +185,10 @@
 #define SID_SD_START                27000
 //      SID_SD_END                  27999
 
-#define SID_OBJ2_START              (SID_OBJ_START +  256)
-#define SID_OBJ1_START              (SID_OBJ_START +  512)
-#define SID_OBJ3_START              (SID_OBJ_START +  768)
-
-#define SID_SMA_START               SID_OBJ2_START
-//      SID_SMA_END                 (SID_SMA_START + 255 )
-#define SID_BASICIDE_START          (SID_OBJ3_START)
+#define SID_SMA_START               (SID_OBJ_START + 256)
+//      SID_SMA_END                 (SID_OBJ_START + 511)
+// free: SID_OBJ_START + 512 to SID_OBJ_START + 767
+#define SID_BASICIDE_START          (SID_OBJ_START + 768)
 //      SID_BASICIDE_END            (SID_BASICIDE_START + 255)
 
 #define SID_SVX_START               SID_LIB_START               // 10000
