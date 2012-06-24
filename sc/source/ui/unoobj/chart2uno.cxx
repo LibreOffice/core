@@ -308,11 +308,11 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
             {
                 FormulaTokenMap* pCol = it1->second;
                 FormulaTokenMap::const_iterator it2 = pCol->begin();
-                for (SCROW nRow = 0; !bFoundValues && nRow < nSmallestValueRowIndex; ++nRow)
+                for (SCROW nRow = 0; !bFoundValues && nRow < nSmallestValueRowIndex && it2 != pCol->end(); ++nRow)
                 {
-                    if (it2 != pCol->end() && nRow>=nHeaderRowCount)
+                    FormulaToken* pToken = it2->second;
+                    if (pToken && nRow>=nHeaderRowCount)
                     {
-                        FormulaToken* pToken = it2->second;
                         ScRange aRange;
                         bool bExternal = false;
                         StackVar eType = pToken->GetType();
