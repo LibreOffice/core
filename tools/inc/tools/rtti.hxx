@@ -63,8 +63,6 @@ typedef void* (*TypeId)();
 
 //-------------------------------------------------------------------------
 
-#define TYPEINIT(sType) TYPEINIT_FACTORY(sType, 0)
-
 #define SUPERTYPE(sSuper) \
             if ( sSuper::IsOf(aSameOrSuperType ) ) \
                 return sal_True
@@ -113,31 +111,6 @@ typedef void* (*TypeId)();
 #define ISA(sType) IsA(sType::StaticType())
 #define ISOF(sType) IsOf(sType::StaticType())
 #define CREATE(TypeId) (TypeId())
-
-//-------------------------------------------------------------------------
-// On-Demand-faehige persistent-TypeId Version
-
-#define TYPEINIT_ID(sType) \
-        TypeId sType::Type() const { return StaticType(); } \
-        sal_Bool   sType::IsOf( TypeId aSameOrSuperType ) \
-        { \
-            if ( aSameOrSuperType == StaticType() ) \
-                return sal_True
-
-#define TYPEINIT0_ID(sType) \
-        TYPEINIT_ID(sType); \
-        TYPEINIT_END(sType)
-
-#define TYPEINIT1_ID(sType, sSuper) \
-        TYPEINIT_ID(sType); \
-            SUPERTYPE(sSuper); \
-        TYPEINIT_END(sType)
-
-#define TYPEINIT2_ID(sType, sSuper1, sSuper2) \
-        TYPEINIT_ID(sType); \
-            SUPERTYPE(sSuper1); \
-            SUPERTYPE(sSuper2); \
-        TYPEINIT_END(sType)
 
 //-------------------------------------------------------------------------
 
