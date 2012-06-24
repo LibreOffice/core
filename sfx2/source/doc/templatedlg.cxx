@@ -353,18 +353,23 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
 {
     Point aPos = maView->GetPosPixel();
     bool bVisible = mpSearchEdit->IsVisible();
+    Size aWinSize = GetSizePixel();
+    long nEditHeight = mpSearchEdit->GetSizePixel().getHeight();
 
     if (bVisible)
     {
-        aPos.setY(aPos.getY() - mpSearchEdit->GetSizePixel().getHeight());
+        aWinSize.setHeight(aWinSize.getHeight() - nEditHeight );
+        aPos.setY(aPos.getY() - nEditHeight );
         mpActionBar->SetItemState(TBI_TEMPLATE_SEARCH,STATE_NOCHECK);
     }
     else
     {
-        aPos.setY(aPos.getY() + mpSearchEdit->GetSizePixel().getHeight());
+        aWinSize.setHeight(aWinSize.getHeight() + nEditHeight );
+        aPos.setY(aPos.getY() + nEditHeight );
         mpActionBar->SetItemState(TBI_TEMPLATE_SEARCH,STATE_CHECK);
     }
 
+    SetSizePixel(aWinSize);
     maView->SetPosPixel(aPos);
     mpSearchEdit->Show(!bVisible);
 }
