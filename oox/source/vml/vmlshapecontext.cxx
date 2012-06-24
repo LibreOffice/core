@@ -334,7 +334,6 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.moWrapAnchorX = rAttribs.getString(XML_anchorx);
             mrTypeModel.moWrapAnchorY = rAttribs.getString(XML_anchory);
         break;
-        break;
     }
     return 0;
 }
