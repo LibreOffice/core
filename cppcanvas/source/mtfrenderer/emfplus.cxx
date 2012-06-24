@@ -1169,24 +1169,6 @@ namespace cppcanvas
             }
         }
 
-        static XubString readString (SvMemoryStream& rMF, sal_uInt32 stringLength)
-        {
-            sal_uInt16 *chars = new sal_uInt16[stringLength];
-
-            for( sal_uInt32 i=0; i<stringLength; i++) {
-                rMF >> chars[i];
-                EMFP_DEBUG (printf ("EMF+\tglyph[%u]: 0x%04x\n",
-                (unsigned int)i, chars[i]));
-            }
-
-            // create and add the text action
-            rtl::OUString text(chars, stringLength);
-
-            delete[] chars;
-
-            return text;
-        }
-
         double ImplRenderer::setFont (sal_uInt8 objectId, const ActionFactoryParameters& rParms, OutDevState& rState)
         {
             EMFPFont *font = (EMFPFont*) aObjects[ objectId ];
@@ -1503,7 +1485,7 @@ namespace cppcanvas
 
                             EMFP_DEBUG (printf ("EMF+ DrawString layoutRect: %f,%f - %fx%f\n", lx, ly, lw, lh));
 
-                            XubString text = readString ( rMF, stringLength );
+                            rtl::OUString text = read_uInt16s_ToOUString(rMF, stringLength);
 
                             double cellSize = setFont (flags & 0xff, rFactoryParms, rState);
                             SET_TEXT_COLOR( brushId );
@@ -1659,7 +1641,7 @@ namespace cppcanvas
             float *charsPosX = new float[glyphsCount];
             float *charsPosY = new float[glyphsCount];
 
-            XubString text = readString (rMF, glyphsCount);
+            rtl::OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
 
             for( sal_uInt32 i=0; i<glyphsCount; i++) {
                 rMF >> charsPosX[i] >> charsPosY[i];
