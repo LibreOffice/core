@@ -459,6 +459,10 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
                     maCondText.append(getExpression(maLbCondType.GetSelectEntryPos()));
                 maFtCondition.SetText(maCondText.makeStringAndClear());
                 maFtCondition.Show();
+                maLbType.Hide();
+                HideCondElements();
+                HideColorScaleElements();
+                HideDataBarElements();
             }
             break;
         default:
@@ -466,6 +470,7 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
             maLbType.Show();
             maFtCondition.SetText(rtl::OUString(""));
             maFtCondition.Hide();
+            maLbType.Show();
             break;
     }
 }
@@ -609,6 +614,21 @@ void ScCondFrmtEntry::SetFormulaType()
 void ScCondFrmtEntry::Select()
 {
     SetControlForeground(Color(COL_RED));
+    switch(meType)
+    {
+        case CONDITION:
+            SetCondType();
+            break;
+        case COLORSCALE:
+            SetColorScaleType();
+            break;
+        case DATABAR:
+            SetDataBarType();
+            break;
+        case FORMULA:
+            SetFormulaType();
+            break;
+    }
     SwitchToType(meType);
     mbActive = true;
     SetHeight();
@@ -1045,6 +1065,10 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
 {
     ScCondFrmtEntry* pNewEntry = new ScCondFrmtEntry(this, mpDoc);
     maEntries.push_back( pNewEntry );
+    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+        itr->Deselect();
+    }
     pNewEntry->Select();
     RecalcAll();
     return 0;
