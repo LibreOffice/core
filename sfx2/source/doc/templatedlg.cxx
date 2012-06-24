@@ -12,10 +12,14 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatefolderview.hxx>
+#include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/toolbox.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -28,6 +32,7 @@
 #define PADDING_TOOLBAR_VIEW    15
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
@@ -259,6 +264,26 @@ void SfxTemplateManagerDlg::OnTemplateAction ()
 
 void SfxTemplateManagerDlg::OnTemplateEdit ()
 {
+    uno::Sequence< PropertyValue > aArgs(1);
+    aArgs[0].Name = "AsTemplate";
+    aArgs[0].Value <<= sal_False;
+
+    uno::Reference< XStorable > xStorable;
+    std::set<const ThumbnailViewItem*>::const_iterator pIter;
+    for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter)
+    {
+        const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*pIter);
+
+        try
+        {
+            xStorable = uno::Reference< XStorable >(
+                        mxDesktop->loadComponentFromURL(pItem->getPath(),rtl::OUString("_blank"), 0, aArgs ),
+                        uno::UNO_QUERY );
+        }
+        catch( const uno::Exception& )
+        {
+        }
+    }
 }
 
 void SfxTemplateManagerDlg::OnTemplateProperties ()
