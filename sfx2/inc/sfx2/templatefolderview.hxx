@@ -13,6 +13,7 @@
 #include <sfx2/thumbnailview.hxx>
 
 class SfxDocumentTemplates;
+class TemplateFolderViewItem;
 class TemplateView;
 
 enum FILTER_APPLICATION
@@ -43,6 +44,8 @@ public:
     void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
     void setTemplateStateHdl (const Link &aLink) { maTemplateStateHdl = aLink; }
+
+    void copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath);
 
 private:
 

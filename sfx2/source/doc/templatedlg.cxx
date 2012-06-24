@@ -13,6 +13,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatefolderview.hxx>
+#include <sfx2/templatefolderviewitem.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <tools/urlobj.hxx>
@@ -318,15 +319,22 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
     aFileDlg.AddFilter( sFilterName, sFilterExt );
     aFileDlg.SetCurrentFilter( sFilterName );
 
-    aFileDlg.Execute();
+    ErrCode nCode = aFileDlg.Execute();
 
-    if ( aFileDlg.GetError() == ERRCODE_NONE )
+    if ( nCode == ERRCODE_NONE )
     {
         com::sun::star::uno::Sequence< ::rtl::OUString > aFiles = aFileDlg.GetSelectedFiles();
 
         if (aFiles.hasElements())
         {
+            std::set<const ThumbnailViewItem*>::const_iterator pIter;
+            for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+            {
+                TemplateFolderViewItem *pFolder = (TemplateFolderViewItem*)(*pIter);
 
+                for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
+                    maView->copyFrom(pFolder,aFiles[i]);
+            }
         }
     }
 }

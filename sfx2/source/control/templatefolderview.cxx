@@ -342,6 +342,28 @@ void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
     }
 }
 
+void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath)
+{
+    sal_uInt16 nId = 0;
+    sal_uInt16 nRegionId = pItem->mnId - 1;
+    String aPath(rPath);
+
+    if (!mItemList.empty())
+        nId = (mItemList.back())->mnId+1;
+
+    if (mpDocTemplates->CopyFrom(nRegionId,nId,aPath))
+    {
+        TemplateViewItem *pTemplate = new TemplateViewItem(*mpItemView,mpItemView);
+        pTemplate->mnId = nId;
+        pTemplate->maText = mpDocTemplates->GetName(nRegionId,nId);
+        pTemplate->maPreview1 = lcl_fetchThumbnail(rPath,128,128);
+        pTemplate->setPath(rPath);
+        pTemplate->setFileType(SvFileInformationManager::GetDescription(INetURLObject(rPath)));
+
+        pItem->maTemplates.push_back(pTemplate);
+    }
+}
+
 void TemplateFolderView::OnSelectionMode (bool bMode)
 {
     if (mpItemView->IsVisible())

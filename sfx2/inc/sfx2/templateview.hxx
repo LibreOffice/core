@@ -30,6 +30,8 @@ public:
 
     virtual void Paint (const Rectangle &rRect);
 
+    void InsertItem (const TemplateViewItem *pItem);
+
     void InsertItems (const std::vector<TemplateViewItem*> &rTemplates);
 
 protected:
