@@ -1397,6 +1397,9 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
             SvtBroadcaster* pBC = pOldCell->ReleaseBroadcaster();
             if (pNewCell || pBC)
             {
+                if(!pNewCell)
+                    pNewCell = new ScNoteCell();
+
                 if (pBC)
                 {
                     pNewCell->TakeBroadcaster(pBC);
