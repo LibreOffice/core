@@ -342,6 +342,42 @@ void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
     }
 }
 
+bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
+{
+    sal_uInt16 nRegionId = mpItemView->getRegionId();
+    sal_uInt16 nItemRegionId = nRegionId + 1;
+    sal_uInt16 nTemplateId = nItemId - 1;
+
+    if (!mpDocTemplates->Delete(nRegionId,nTemplateId))
+        return false;
+
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        if (mItemList[i]->mnId == nItemRegionId)
+        {
+
+            TemplateFolderViewItem *pItem = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+            std::vector<TemplateViewItem*>::iterator pIter;
+            for (pIter = pItem->maTemplates.begin(); pIter != pItem->maTemplates.end(); ++pIter)
+            {
+                if ((*pIter)->mnId == nItemId)
+                {
+                    delete *pIter;
+
+                    pItem->maTemplates.erase(pIter);
+
+                    mpItemView->RemoveItem(nItemId);
+                    break;
+                }
+            }
+
+            break;
+        }
+    }
+
+    return true;
+}
+
 void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath)
 {
     sal_uInt16 nId = 0;

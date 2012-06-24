@@ -381,6 +381,14 @@ void SfxTemplateManagerDlg::OnTemplateMove ()
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
+    std::set<const ThumbnailViewItem*>::const_iterator pIter;
+    for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
+    {
+        if (maView->removeTemplate((*pIter)->mnId))
+            maSelTemplates.erase(pIter++);
+        else
+            ++pIter;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

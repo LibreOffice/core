@@ -45,6 +45,8 @@ public:
 
     void setTemplateStateHdl (const Link &aLink) { maTemplateStateHdl = aLink; }
 
+    bool removeTemplate (const sal_uInt16 nItemId);
+
     void copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath);
 
 private:
