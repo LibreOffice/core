@@ -256,6 +256,9 @@ SpellDialog::SpellDialog(
     aChangePB.      SetHelpId(HID_SPLDLG_BUTTON_CHANGE   );
     aChangeAllPB.   SetHelpId(HID_SPLDLG_BUTTON_CHANGEALL);
     aExplainPB.     SetHelpId(HID_SPLDLG_BUTTON_EXPLAIN );
+
+    aAddToDictMB.SetPopupMenu( new PopupMenu );
+
     Init_Impl();
 
     // disable controls if service is missing
@@ -301,6 +304,7 @@ void SpellDialog::Init_Impl()
     aSuggestionLB.SetDoubleClickHdl( LINK( this, SpellDialog, ChangeHdl ) );
 
     aSentenceED.SetModifyHdl(LINK ( this, SpellDialog, ModifyHdl) );
+    aAddToDictMB.SetActivateHdl(LINK ( this, SpellDialog, MenuButtonActivateHdl ) );
     aAddToDictMB.SetSelectHdl(LINK ( this, SpellDialog, AddToDictionaryHdl ) );
     aLanguageLB.SetSelectHdl(LINK( this, SpellDialog, LanguageSelectHdl ) );
 
@@ -309,9 +313,6 @@ void SpellDialog::Init_Impl()
 
     // get current language
     UpdateBoxes_Impl();
-
-    // fill dictionary PopupMenu
-    InitUserDicts();
 
     aSentenceED.ClearModifyFlag();
     SvxGetChangeAllList()->clear();
@@ -347,8 +348,11 @@ void SpellDialog::UpdateBoxes_Impl()
     }
     else
         SetTitle_Impl( nAltLanguage );
+
     SetSelectedLang_Impl( nAltLanguage );
 
+    // Initialize/update user dictionaries after setting the language in the listbox
+    InitUserDicts();
 
     // Alternativen eintragen
     const ::rtl::OUString *pNewWords = aNewWords.getConstArray();
@@ -853,6 +857,8 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
 
          aSentenceED.AddUndoAction(new SpellUndoAction_Impl(SPELLUNDO_CHANGE_LANGUAGE, aDialogUndoLink));
     }
+
+    // Update listboxes and user dictionaries when selected language changes
     SpellDialog::UpdateBoxes_Impl();
     return 0;
 }
@@ -930,34 +936,46 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
   -----------------------------------------------------------------------*/
 void SpellDialog::InitUserDicts()
 {
-    const LanguageType nLang = aLanguageLB.GetSelectLanguage();
-
-    const Reference< XDictionary >  *pDic = 0;
+    bool bEnable = false;
 
     // get list of dictionaries
     Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
         // add active, positive dictionary to dic-list (if not already done).
-        // This is to ensure that there is at least on dictionary to which
+        // This is to ensure that there is at least one dictionary to which
         // words could be added.
         Reference< XDictionary >  xDic( SvxGetOrCreatePosDic( xDicList ) );
         if (xDic.is())
             xDic->setActive( sal_True );
 
         pImpl->aDics = xDicList->getDictionaries();
+
+        // this is redundant, there will always be *at least* one dictionary
+        bEnable = pImpl->aDics.getLength();
     }
+
+    aAddToDictMB.Enable( bEnable );
+}
+
+IMPL_LINK(SpellDialog, MenuButtonActivateHdl, MenuButton*, )
+{
+    bool bEnable = false;
+    const LanguageType nLang = aLanguageLB.GetSelectLanguage();
+    const Reference< XDictionary >  *pDic = 0;
 
     SvtLinguConfig aCfg;
     const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // list suitable dictionaries
-    bool bEnable = false;
     const sal_Int32 nSize = pImpl->aDics.getLength();
     pDic = pImpl->aDics.getConstArray();
-    delete aAddToDictMB.GetPopupMenu();
-    PopupMenu* pMenu = new PopupMenu;
+
+    PopupMenu* pMenu = aAddToDictMB.GetPopupMenu();
+    OSL_ENSURE( pMenu, "svx::SpellDialog::MenuButtonActivateHdl - no PopupMenu!" );
+    pMenu->Clear();
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+
     sal_uInt16 nItemId = 1;     // menu items should be enumerated from 1 and not 0
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
@@ -990,9 +1008,12 @@ void SpellDialog::InitUserDicts()
             ++nItemId;
         }
     }
-    aAddToDictMB.SetPopupMenu(pMenu);
+
     aAddToDictMB.Enable( bEnable );
+
+    return 0;
 }
+
 /*-- 20.10.2003 15:31:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/

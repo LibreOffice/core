@@ -212,6 +212,7 @@ private:
     DECL_LINK( CancelHdl, Button * );
     DECL_LINK( ModifyHdl, SentenceEditWindow_Impl *);
     DECL_LINK( UndoHdl, Button * );
+    DECL_LINK( MenuButtonActivateHdl, MenuButton* );
     DECL_LINK( AddToDictionaryHdl, MenuButton* );
     DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );
