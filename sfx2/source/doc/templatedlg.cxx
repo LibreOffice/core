@@ -215,6 +215,15 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
 
 IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pItem)
 {
+    if (pItem->isSelected())
+    {
+        maSelFolders.insert(pItem);
+    }
+    else
+    {
+        maSelFolders.erase(pItem);
+    }
+
     return 0;
 }
 

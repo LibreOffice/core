@@ -77,6 +77,7 @@ private:
 
     int mnSelectionCount;
     std::set<const ThumbnailViewItem*> maSelTemplates;
+    std::set<const ThumbnailViewItem*> maSelFolders;
 
     com::sun::star::uno::Reference< com::sun::star::frame::XComponentLoader > mxDesktop;
 };
