@@ -19,6 +19,12 @@ class TemplateFolderView;
 class ThumbnailViewItem;
 class ToolBox;
 
+namespace com {
+    namespace sun { namespace star { namespace frame {
+        class XComponentLoader;
+    }   }   }
+}
+
 class SfxTemplateManagerDlg : public ModalDialog
 {
 public:
@@ -71,6 +77,8 @@ private:
 
     int mnSelectionCount;
     std::set<const ThumbnailViewItem*> maSelTemplates;
+
+    com::sun::star::uno::Reference< com::sun::star::frame::XComponentLoader > mxDesktop;
 };
 
 #endif // TEMPLATEDLG_HXX

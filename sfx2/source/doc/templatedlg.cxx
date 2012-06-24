@@ -9,10 +9,15 @@
 
 #include "templatedlg.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatefolderview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/toolbox.hxx>
+
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "doc.hrc"
 #include "templatedlg.hrc"
@@ -21,6 +26,9 @@
 #define MAX_LINE_COUNT 2
 
 #define PADDING_TOOLBAR_VIEW    15
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::frame;
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModalDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
@@ -34,7 +42,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       mpActionBar( new ToolBox(this, SfxResId(TBX_ACTION_ACTION))),
       mpTemplateBar( new ToolBox(this, SfxResId(TBX_ACTION_TEMPLATES))),
       maView(new TemplateFolderView(this,SfxResId(TEMPLATE_VIEW))),
-      mnSelectionCount(0)
+      mnSelectionCount(0),
+      mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
 {
     maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
 
