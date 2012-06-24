@@ -2788,12 +2788,12 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
     /* bool bStartEncodedWord = true; */
     const sal_Char * pWSPBegin = pBegin;
-    UniString sEncodedText;
     bool bQuotedEncodedText = false;
     sal_uInt32 nCommentLevel = 0;
 
     for (const sal_Char * p = pBegin; p != pEnd;)
     {
+        rtl::OUString sEncodedText;
         if (p != pEnd && *p == '=' /* && bStartEncodedWord */)
         {
             const sal_Char * q = p + 1;
@@ -3058,9 +3058,7 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                         static_cast< xub_StrLen >(nUnicodeSize));
                 else if (nCommentLevel == 0)
                 {
-                    sEncodedText.Append(
-                        pUnicodeBuffer,
-                        static_cast< xub_StrLen >(nUnicodeSize));
+                    sEncodedText = rtl::OUString(pUnicodeBuffer, nUnicodeSize);
                     if (!bQuotedEncodedText)
                     {
                         const sal_Unicode * pTextPtr = pUnicodeBuffer;
@@ -3105,13 +3103,13 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             }
         }
 
-        if (sEncodedText.Len() != 0)
+        if (!sEncodedText.isEmpty())
         {
             if (bQuotedEncodedText)
             {
                 sDecoded += '"';
-                const sal_Unicode * pTextPtr = sEncodedText.GetBuffer();
-                const sal_Unicode * pTextEnd = pTextPtr + sEncodedText.Len();
+                const sal_Unicode * pTextPtr = sEncodedText.getStr();
+                const sal_Unicode * pTextEnd = pTextPtr + sEncodedText.getLength();
                 for (;pTextPtr != pTextEnd; ++pTextPtr)
                 {
                     switch (*pTextPtr)
@@ -3128,7 +3126,6 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             }
             else
                 sDecoded += sEncodedText;
-            sEncodedText.Erase();
             bQuotedEncodedText = false;
         }
 
