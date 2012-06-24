@@ -1901,7 +1901,7 @@ sub run_job {
             return 1 if (! $path =~ /prj$/ );
             mkpath("$workdir/Logs");
             my $gbuild_flags = '-j' . $ENV{GMAKE_MODULE_PARALLELISM};
-            my $gbuild_target = 'all slowcheck';
+            my $gbuild_target = 'all';
             if ($registered_name =~ /tail_build\/prj$/ )
             {
                 $gbuild_flags = '-j' . $ENV{GMAKE_PARALLELISM};

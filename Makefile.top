@@ -246,7 +246,7 @@ xsltml\
 zlib\
 
 gb_TAILBUILDMODULES := $(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)
-export gb_TAILBUILDTARGET=all slowcheck
+export gb_TAILBUILDTARGET=all
 
 define gbuild_module_rules
 .PHONY: $(1) $(1).all $(1).clean $(1).deliver
@@ -488,9 +488,15 @@ findunusedcode:
               | grep -v WPX \
               > unusedcode.easy
 
-check: dev-install subsequentcheck
+check: unitcheck slowcheck dev-install subsequentcheck
 
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
+	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+
+unitcheck:
+	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+
+slowcheck:
 	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 debugrun:

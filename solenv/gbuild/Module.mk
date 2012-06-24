@@ -139,7 +139,7 @@ gb_Module_DEVINSTALLHINT=
 debugrun :| build
 endif
 
-all : build unitcheck
+all : build
 	$(info $(gb_Module_BUILDHINT))
 
 build : 
