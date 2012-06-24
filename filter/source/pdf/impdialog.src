@@ -834,9 +834,18 @@ TabPage  RID_PDF_TAB_SIGNING
         Text[ en-US ] = "Sign PDF file" ;
     };
 
+    PushButton BTN_SIGN_SELECT_CERT
+    {
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 12, 17 ) ;
+        Size = MAP_APPFONT ( 120 , 13 ) ;
+        Text[ en-US ] = "Select c~ertificate...";
+    };
+
     FixedText FT_SIGN_LOCATION
     {
-        Pos = MAP_APPFONT( 12, 15 );
+        Pos = MAP_APPFONT( 12, 35 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Location";
     };
@@ -844,13 +853,13 @@ TabPage  RID_PDF_TAB_SIGNING
     Edit ED_SIGN_LOCATION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122, 15 ) ;
+        Pos = MAP_APPFONT ( 122, 35 ) ;
         Size = MAP_APPFONT ( 48 , 12 ) ;
     };
 
     FixedText FT_SIGN_CONTACT
     {
-        Pos = MAP_APPFONT( 12, 28 );
+        Pos = MAP_APPFONT( 12, 48 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Contact Information";
     };
@@ -858,13 +867,13 @@ TabPage  RID_PDF_TAB_SIGNING
     Edit ED_SIGN_CONTACT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122, 28 ) ;
+        Pos = MAP_APPFONT ( 122, 48 ) ;
         Size = MAP_APPFONT ( 48 , 12 ) ;
     };
 
     FixedText FT_SIGN_REASON
     {
-        Pos = MAP_APPFONT( 12, 41 );
+        Pos = MAP_APPFONT( 12, 61 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Reason";
     };
@@ -872,7 +881,7 @@ TabPage  RID_PDF_TAB_SIGNING
     Edit ED_SIGN_REASON
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122, 41 ) ;
+        Pos = MAP_APPFONT ( 122, 61 ) ;
         Size = MAP_APPFONT ( 48 , 12 ) ;
     };
 

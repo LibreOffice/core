@@ -1674,14 +1674,23 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage( Window* pParent,
     maFtSignContactInfo( this, PDFFilterResId( FT_SIGN_CONTACT ) ),
     maEdSignContactInfo( this, PDFFilterResId( ED_SIGN_CONTACT ) ),
     maFtSignReason( this, PDFFilterResId( FT_SIGN_REASON ) ),
-    maEdSignReason( this, PDFFilterResId( ED_SIGN_REASON ) )
+    maEdSignReason( this, PDFFilterResId( ED_SIGN_REASON ) ),
+    maPbSignSelectCert( this, PDFFilterResId( BTN_SIGN_SELECT_CERT ) )
 {
     FreeResource();
+
+    maPbSignSelectCert.SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignSelectCert ) );
 }
 
 // -----------------------------------------------------------------------------
 ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
 {
+}
+
+IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignSelectCert )
+{
+    // Certificate selection dialog will pop up
+    return 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -1709,6 +1718,7 @@ void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent
     maEdSignLocation.Enable( false );
     maEdSignContactInfo.Enable( false );
     maEdSignReason.Enable( false );
+    maPbSignSelectCert.Enable( false );
 
     if (paParent->mbSignPDF)
     {
@@ -1725,6 +1735,7 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ToggleSignPDFHdl)
     maEdSignLocation.Enable( maCbSignPDF.IsChecked() );
     maEdSignContactInfo.Enable( maCbSignPDF.IsChecked() );
     maEdSignReason.Enable( maCbSignPDF.IsChecked() );
+    maPbSignSelectCert.Enable( maCbSignPDF.IsChecked() );
 
     return 0;
 }

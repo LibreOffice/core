@@ -447,8 +447,10 @@ class ImpPDFTabSigningPage : public SfxTabPage
     Edit                        maEdSignContactInfo;
     FixedText                   maFtSignReason;
     Edit                        maEdSignReason;
+    PushButton                  maPbSignSelectCert;
 
     DECL_LINK( ToggleSignPDFHdl, void* );
+    DECL_LINK( ClickmaPbSignSelectCert, void* );
 
 public:
     ImpPDFTabSigningPage( Window* pParent,
