@@ -10,11 +10,13 @@
 #include "templatedlg.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatefolderview.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -22,6 +24,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include "doc.hrc"
 #include "templatedlg.hrc"
@@ -252,6 +255,71 @@ void SfxTemplateManagerDlg::OnTemplateCreate ()
 
 void SfxTemplateManagerDlg::OnTemplateImport ()
 {
+    sal_Int16 nDialogType =
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+
+    sfx2::FileDialogHelper aFileDlg(nDialogType, SFXWB_MULTISELECTION);
+
+    // add "All" filter
+    aFileDlg.AddFilter( String(SfxResId( STR_SFX_FILTERNAME_ALL) ),
+                        DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
+
+    // add template filter
+    rtl::OUString sFilterExt;
+    rtl::OUString sFilterName( SfxResId( STR_TEMPLATE_FILTER ).toString() );
+
+    // add filters of modules which are installed
+    SvtModuleOptions aModuleOpt;
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        sFilterExt += "*.ott;*.stw;*.oth";
+
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    {
+        if ( !sFilterExt.isEmpty() )
+            sFilterExt += ";";
+
+        sFilterExt += "*.ots;*.stc";
+    }
+
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    {
+        if ( !sFilterExt.isEmpty() )
+            sFilterExt += ";";
+
+        sFilterExt += "*.otp;*.sti";
+    }
+
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+    {
+        if ( !sFilterExt.isEmpty() )
+            sFilterExt += ";";
+
+        sFilterExt += "*.otg;*.std";
+    }
+
+    if ( !sFilterExt.isEmpty() )
+        sFilterExt += ";";
+
+    sFilterExt += "*.vor";
+
+    sFilterName += " (";
+    sFilterName += sFilterExt;
+    sFilterName += ")";
+
+    aFileDlg.AddFilter( sFilterName, sFilterExt );
+    aFileDlg.SetCurrentFilter( sFilterName );
+
+    aFileDlg.Execute();
+
+    if ( aFileDlg.GetError() == ERRCODE_NONE )
+    {
+        com::sun::star::uno::Sequence< ::rtl::OUString > aFiles = aFileDlg.GetSelectedFiles();
+
+        if (aFiles.hasElements())
+        {
+
+        }
+    }
 }
 
 void SfxTemplateManagerDlg::OnTemplateSearch ()
