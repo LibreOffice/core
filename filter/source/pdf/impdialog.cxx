@@ -124,7 +124,13 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbExportRelativeFsysLinks( sal_False ),
     mnViewPDFMode( 0 ),
     mbConvertOOoTargets( sal_False ),
-    mbExportBmkToPDFDestination( sal_False )
+    mbExportBmkToPDFDestination( sal_False ),
+
+    mbSignPDF( sal_False ),
+    msSignLocation ( ' ' ),
+    msSignContact( ' ' ),
+    msSignReason( ' ' )
+
 {
     FreeResource();
 // check for selection
@@ -241,7 +247,14 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbConvertOOoTargets = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ), sal_False );
     mbExportBmkToPDFDestination = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ), sal_False );
 
+//prepare values for digital signatures
+    mbSignPDF = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignPDF" ) ), sal_False );
+    //msSignLocation = maConfigItem.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureLocation" ) ), "" );
+    //msSignContact = maConfigItem.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureContactInfo" ) ), "" );
+    //msSignReason = maConfigItem.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureReason" ) ), "" );
+
 //queue the tab pages for later creation (created when first shown)
+    AddTabPage( RID_PDF_TAB_SIGNING, ImpPDFTabSigningPage::Create, 0 );
     AddTabPage( RID_PDF_TAB_SECURITY, ImpPDFTabSecurityPage::Create, 0 );
     AddTabPage( RID_PDF_TAB_LINKS, ImpPDFTabLinksPage::Create, 0 );
     AddTabPage( RID_PDF_TAB_VPREFER, ImpPDFTabViewerPage::Create, 0 );
@@ -281,6 +294,7 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     RemoveTabPage( RID_PDF_TAB_OPNFTR );
     RemoveTabPage( RID_PDF_TAB_LINKS );
     RemoveTabPage( RID_PDF_TAB_SECURITY );
+    RemoveTabPage( RID_PDF_TAB_SIGNING );
 }
 
 // -----------------------------------------------------------------------------
@@ -303,6 +317,9 @@ void ImpPDFTabDialog::PageCreated( sal_uInt16 _nId,
         break;
     case RID_PDF_TAB_SECURITY:
         ( ( ImpPDFTabSecurityPage* )&_rPage )->SetFilterConfigItem( this );
+        break;
+    case RID_PDF_TAB_SIGNING:
+        ( ( ImpPDFTabSigningPage* )&_rPage )->SetFilterConfigItem( this );
         break;
     }
 }
@@ -329,6 +346,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
         ( ( ImpPDFTabLinksPage* )GetTabPage( RID_PDF_TAB_LINKS ) )->GetFilterConfigItem( this );
     if( GetTabPage( RID_PDF_TAB_SECURITY ) )
         ( ( ImpPDFTabSecurityPage* )GetTabPage( RID_PDF_TAB_SECURITY ) )->GetFilterConfigItem( this );
+    if( GetTabPage( RID_PDF_TAB_SIGNING ) )
+        ( ( ImpPDFTabSigningPage* )GetTabPage( RID_PDF_TAB_SIGNING ) )->GetFilterConfigItem( this );
 
 //prepare the items to be returned
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ), mbUseLosslessCompression );
@@ -379,6 +398,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ), mbConvertOOoTargets );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ), mbExportBmkToPDFDestination );
 
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignPDF" ) ), mbSignPDF );
+
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ), mnPrint );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ), mnChangesAllowed );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableCopyingOfContent" ) ), mbCanCopyOrExtract );
@@ -386,7 +407,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
-    int nElementAdded = 6;
+    int nElementAdded = 9;
 
     aRet.realloc( aRet.getLength() + nElementAdded );
 
@@ -421,12 +442,26 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     {
         aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
         aRet[ nLength - nElementAdded ].Value <<= OUString( msPageRange );
+        nElementAdded--;
     }
     else if( mbSelectionIsChecked )
     {
         aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
         aRet[ nLength - nElementAdded ].Value <<= maSelection;
+        nElementAdded--;
     }
+
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureLocation" ) );
+    aRet[ nLength - nElementAdded ].Value <<= OUString( msSignLocation );
+    nElementAdded--;
+
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureReason" ) );
+    aRet[ nLength - nElementAdded ].Value <<= OUString( msSignReason );
+    nElementAdded--;
+
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureContactInfo" ) );
+    aRet[ nLength - nElementAdded ].Value <<= OUString( msSignContact );
+    nElementAdded--;
 
     return aRet;
 }
@@ -1623,6 +1658,74 @@ IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
 {
     String* pStr = reinterpret_cast<String*>(maErrors.GetEntryData( maErrors.GetSelectEntryPos() ));
     maExplanation.SetText( pStr ? *pStr : String() );
+    return 0;
+}
+
+////////////////////////////////////////////////////////
+// The digital signatures tab page
+// -----------------------------------------------------------------------------
+ImpPDFTabSigningPage::ImpPDFTabSigningPage( Window* pParent,
+                                              const SfxItemSet& rCoreSet ) :
+    SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_SIGNING ), rCoreSet ),
+
+    maCbSignPDF( this, PDFFilterResId( CB_SIGN_PDF ) ),
+    maFtSignLocation( this, PDFFilterResId( FT_SIGN_LOCATION ) ),
+    maEdSignLocation( this, PDFFilterResId( ED_SIGN_LOCATION ) ),
+    maFtSignContactInfo( this, PDFFilterResId( FT_SIGN_CONTACT ) ),
+    maEdSignContactInfo( this, PDFFilterResId( ED_SIGN_CONTACT ) ),
+    maFtSignReason( this, PDFFilterResId( FT_SIGN_REASON ) ),
+    maEdSignReason( this, PDFFilterResId( ED_SIGN_REASON ) )
+{
+    FreeResource();
+}
+
+// -----------------------------------------------------------------------------
+ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
+{
+}
+
+// -----------------------------------------------------------------------------
+SfxTabPage*  ImpPDFTabSigningPage::Create( Window* pParent,
+                                          const SfxItemSet& rAttrSet)
+{
+    return ( new  ImpPDFTabSigningPage( pParent, rAttrSet ) );
+}
+
+// -----------------------------------------------------------------------------
+void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
+{
+    paParent->mbSignPDF = maCbSignPDF.IsChecked();
+    paParent->msSignLocation = maEdSignLocation.GetText();
+    paParent->msSignContact = maEdSignContactInfo.GetText();
+    paParent->msSignReason = maEdSignReason.GetText();
+
+}
+
+// -----------------------------------------------------------------------------
+void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
+{
+
+    maCbSignPDF.SetToggleHdl( LINK( this, ImpPDFTabSigningPage, ToggleSignPDFHdl ) );
+    maEdSignLocation.Enable( false );
+    maEdSignContactInfo.Enable( false );
+    maEdSignReason.Enable( false );
+
+    if (paParent->mbSignPDF)
+    {
+        maCbSignPDF.Check();
+        maEdSignLocation.SetText(paParent->msSignLocation);
+        maEdSignContactInfo.SetText(paParent->msSignContact);
+        maEdSignReason.SetText(paParent->msSignReason);
+    }
+}
+
+// -----------------------------------------------------------------------------
+IMPL_LINK_NOARG(ImpPDFTabSigningPage, ToggleSignPDFHdl)
+{
+    maEdSignLocation.Enable( maCbSignPDF.IsChecked() );
+    maEdSignContactInfo.Enable( maCbSignPDF.IsChecked() );
+    maEdSignReason.Enable( maCbSignPDF.IsChecked() );
+
     return 0;
 }
 

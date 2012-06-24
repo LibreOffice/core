@@ -33,6 +33,7 @@
 #define RID_PDF_TAB_OPNFTR          (RID_PDF_DIALOG_START +   3)
 #define RID_PDF_TAB_SECURITY        (RID_PDF_DIALOG_START +   4)
 #define RID_PDF_TAB_LINKS           (RID_PDF_DIALOG_START +   12)
+#define RID_PDF_TAB_SIGNING         (RID_PDF_DIALOG_START +   13)
 #define RID_PDF_WARNPDFAPASSWORD    (RID_PDF_DIALOG_START +   6)
 
 //strings
@@ -198,3 +199,13 @@
 #define FL_INITVIEW_VERTICAL 158
 #define FL_VPREFER_VERTICAL  158
 #define FL_SECURITY_VERTICAL 160
+
+//controls for digital signatures tab page
+#define CB_SIGN_PDF          170
+#define FT_SIGN_LOCATION     171
+#define ED_SIGN_LOCATION     172
+#define FT_SIGN_CONTACT      173
+#define ED_SIGN_CONTACT      174
+#define FT_SIGN_REASON       175
+#define ED_SIGN_REASON       176
+
