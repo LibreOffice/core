@@ -85,7 +85,6 @@ static const sal_Int32 PREPARED_STATEMENT_RESULT_SET_CONCURRENCY = 7;
 static const sal_Int32 PREPARED_STATEMENT_RESULT_SET_TYPE = 8;
 
 #define PREPARED_STATEMENT_SIZE 9
-class ResultSet;
 
 class PreparedStatement : public cppu::OComponentHelper,
                           public cppu::OPropertySetHelper,

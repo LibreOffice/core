@@ -25,7 +25,6 @@
 
 namespace com { namespace sun { namespace star { namespace sheet {
     class XSpreadsheet;
-    class XSpreadsheetDocument;
 } } } }
 
 namespace com { namespace sun { namespace star { namespace util {

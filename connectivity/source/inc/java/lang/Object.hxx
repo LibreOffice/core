@@ -66,7 +66,6 @@ namespace connectivity
     };
     //=====================================================================
     //=====================================================================
-    class java_lang_Class;
     class  java_lang_Object
     {
         // operator= and the copy ctor are forbidden

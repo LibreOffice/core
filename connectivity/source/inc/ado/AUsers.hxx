@@ -26,10 +26,6 @@
 
 namespace connectivity
 {
-    namespace sdbcx
-    {
-        class IRefreshableUsers;
-    }
     namespace ado
     {
 

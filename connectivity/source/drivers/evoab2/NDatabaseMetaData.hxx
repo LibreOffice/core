@@ -29,9 +29,6 @@ namespace connectivity
 {
     namespace evoab
     {
-        class EvoContacts;
-
-
         //**************************************************************
         //************ Class: OEvoabDatabaseMetaData
         //**************************************************************

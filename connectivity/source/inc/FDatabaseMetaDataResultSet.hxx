@@ -42,7 +42,6 @@
 
 namespace connectivity
 {
-    class ODatabaseMetaDataResultSetMetaData;
     typedef ::cppu::WeakComponentImplHelper9<   ::com::sun::star::sdbc::XResultSet,
                                                 ::com::sun::star::sdbc::XRow,
                                                 ::com::sun::star::sdbc::XResultSetMetaDataSupplier,

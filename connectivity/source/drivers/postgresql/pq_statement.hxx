@@ -81,7 +81,6 @@ static const sal_Int32 STATEMENT_RESULT_SET_CONCURRENCY = 7;
 static const sal_Int32 STATEMENT_RESULT_SET_TYPE = 8;
 
 #define STATEMENT_SIZE 9
-class ResultSet;
 
 class Statement : public cppu::OComponentHelper,
                   public cppu::OPropertySetHelper,

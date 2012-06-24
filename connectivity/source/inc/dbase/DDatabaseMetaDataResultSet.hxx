@@ -43,7 +43,6 @@ namespace connectivity
         namespace ::com::sun::star::beans     = ::com::sun::star::beans;
         namespace ::com::sun::star::util      = ::com::sun::star::util;
 
-        class ODatabaseMetaDataResultSetMetaData;
         typedef ::cppu::WeakComponentImplHelper7<       ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
                                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,

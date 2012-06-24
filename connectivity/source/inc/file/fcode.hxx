@@ -32,10 +32,6 @@
 namespace connectivity
 {
     class OSQLParseNode;
-    namespace dbase
-    {
-        class ODbaseIndex;
-    }
     namespace file
     {
 

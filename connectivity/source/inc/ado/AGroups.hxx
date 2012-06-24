@@ -26,13 +26,8 @@
 
 namespace connectivity
 {
-    namespace sdbcx
-    {
-        class IRefreshableGroups;
-    }
     namespace ado
     {
-        class OAdabasConnection;
         class OGroups : public sdbcx::OCollection
         {
             WpADOGroups m_aCollection;

@@ -39,7 +39,6 @@ namespace connectivity
 {
     namespace ado
     {
-        class ODatabaseMetaDataResultSetMetaData;
         /*
         **  java_sql_ResultSet
         */

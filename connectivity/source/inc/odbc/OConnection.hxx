@@ -38,10 +38,7 @@ namespace connectivity
 {
     namespace odbc
     {
-
-        class OStatement_Base;
         class ODBCDriver;
-        class ODatabaseMetaData;
 
         typedef connectivity::OMetaConnection OConnection_BASE;
         typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;

@@ -33,7 +33,6 @@
 
 /****************** C L A S S E S ****************************************/
 class RscTypCont;
-class RscExpression;
 /*********** R s c F i l e I n s t ***************************************/
 
 #define READBUFFER_MAX  256

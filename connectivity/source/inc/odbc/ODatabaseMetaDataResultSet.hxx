@@ -41,7 +41,6 @@ namespace connectivity
 {
     namespace odbc
     {
-        class ODatabaseMetaDataResultSetMetaData;
         /*
         **  java_sql_ResultSet
         */

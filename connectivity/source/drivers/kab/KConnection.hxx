@@ -47,9 +47,7 @@ namespace connectivity
                                                 ::com::sun::star::lang::XServiceInfo
                                             > OMetaConnection_BASE;
 
-        class KabStatement_Base;
         class KabDriver;
-        class KabDatabaseMetaData;
 
         typedef OMetaConnection_BASE                KabConnection_BASE; // implements basics and text encoding
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;

@@ -42,9 +42,7 @@ namespace connectivity
                                                 ::com::sun::star::lang::XServiceInfo
                                             > OMetaConnection_BASE;
 
-        class MacabStatement_Base;
         class MacabDriver;
-        class MacabDatabaseMetaData;
         class MacabAddressBook;
 
         //typedef OMetaConnection_BASE              MacabConnection_BASE; // implements basics and text encoding

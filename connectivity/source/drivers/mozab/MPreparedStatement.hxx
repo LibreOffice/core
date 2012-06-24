@@ -33,7 +33,6 @@ namespace connectivity
     namespace mozab
     {
 
-        class OBoundParam;
         typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
                                         ::com::sun::star::sdbc::XParameters,
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,

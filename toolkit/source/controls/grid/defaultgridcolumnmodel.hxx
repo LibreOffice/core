@@ -32,11 +32,6 @@
 #include <comphelper/componentcontext.hxx>
 #include <vector>
 
-namespace comphelper
-{
-    class ComponentGuard;
-}
-
 namespace toolkit
 {
 

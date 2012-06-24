@@ -70,7 +70,6 @@
 
 namespace pq_sdbc_driver
 {
-class Views;
 class View : public ReflectionBase,
              public com::sun::star::sdbcx::XRename
 {

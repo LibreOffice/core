@@ -80,7 +80,6 @@ namespace pq_sdbc_driver
 // static const sal_Int32 RESULTSET_RESULT_SET_TYPE = 5;
 
 //#define RESULTSET_SIZE 6
-class ResultSetGuard;
 
 class SequenceResultSet : public BaseResultSet
 {

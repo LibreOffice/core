@@ -25,7 +25,6 @@
 
 namespace connectivity
 {
-    class OSQLParseNode;
     namespace file
     {
         /** DAYOFWEEK(date)

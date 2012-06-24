@@ -35,8 +35,6 @@ namespace connectivity
 {
 //........................................................................
 
-    class OMetaConnection;
-
     namespace hsqldb
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );

@@ -28,7 +28,6 @@ namespace connectivity
     {
         // please don't name the class the same name as in an other namespaces
         // some compilers have problems with this task as I noticed on windows
-        class OAdabasConnection;
         class OMySQLCatalog : public connectivity::sdbcx::OCatalog
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;

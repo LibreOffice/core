@@ -41,7 +41,6 @@ namespace connectivity
     {
 
         class MozabDriver;
-        class ODatabaseMetaData;
         class MNameMapper;
         class ErrorDescriptor;
 

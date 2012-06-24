@@ -40,8 +40,6 @@ namespace connectivity
 {
     namespace file
     {
-
-        class OStatement_Base;
         class ODatabaseMetaData;
         class OFileDriver;
 

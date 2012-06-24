@@ -31,8 +31,6 @@ namespace connectivity
 {
     namespace macab
     {
-
-        class OBoundParam;
         typedef ::cppu::ImplInheritanceHelper4< MacabCommonStatement,
                                                 ::com::sun::star::sdbc::XPreparedStatement,
                                                 ::com::sun::star::sdbc::XParameters,
