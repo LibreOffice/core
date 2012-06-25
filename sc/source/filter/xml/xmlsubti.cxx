@@ -200,48 +200,6 @@ void ScMyTables::AddColumn(bool bIsCovered)
         rImport.GetStylesImportHelper()->InsertCol(maCurrentCellPos.Col(), maCurrentCellPos.Tab(), rImport.GetDocument());
 }
 
-void ScMyTables::UpdateRowHeights()
-{
-    if (rImport.GetModel().is())
-    {
-        ScXMLImport::MutexGuard aGuard(rImport);
-
-        // update automatic row heights
-
-        // For sheets with any kind of shapes (including notes),
-        // update row heights immediately (before setting the positions).
-        // For sheets without shapes, set "pending" flag
-        // and update row heights when a sheet is shown.
-        // The current sheet (from view settings) is always updated immediately.
-
-        ScDocument* pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
-        if (pDoc)
-        {
-            SCTAB nCount = pDoc->GetTableCount();
-            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-
-            SCTAB nVisible = rImport.GetVisibleSheet();
-
-            ScMarkData aUpdateSheets;
-            for (SCTAB nTab=0; nTab<nCount; ++nTab)
-            {
-                const SdrPage* pPage = pDrawLayer ? pDrawLayer->GetPage(nTab) : NULL;
-                if ( nTab == nVisible || ( pPage && pPage->GetObjCount() != 0 ) )
-                    aUpdateSheets.SelectTable( nTab, true );
-                else
-                    pDoc->SetPendingRowHeights( nTab, true );
-            }
-
-            if (aUpdateSheets.GetSelectCount())
-            {
-                pDoc->LockStreamValid( true );      // ignore draw page size (but not formula results)
-                ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights(&aUpdateSheets);
-                pDoc->LockStreamValid( false );
-            }
-        }
-    }
-}
-
 void ScMyTables::DeleteTable()
 {
     ScXMLImport::MutexGuard aGuard(rImport);

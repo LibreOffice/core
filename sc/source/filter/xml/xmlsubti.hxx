@@ -107,7 +107,6 @@ public:
     void                                AddRow();
     void                                SetRowStyle(const rtl::OUString& rCellStyleName);
     void                                AddColumn(bool bIsCovered);
-    void                                UpdateRowHeights();
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
     bool                                IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
                                             { return ScMyOLEFixer::IsOLE(rShape); }

@@ -2808,6 +2808,7 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
+    pDoc->EnableAdjustHeight(false);
 }
 
 // XServiceInfo
@@ -3101,8 +3102,6 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
                 if (!pSheetData->IsSheetBlocked( nTab ))
                     pDoc->SetStreamValid( nTab, true );
         }
-
-        aTables.UpdateRowHeights();
         aTables.FixupOLEs();
     }
     if (GetModel().is())
