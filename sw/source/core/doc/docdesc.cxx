@@ -675,7 +675,7 @@ void SwDoc::PrtDataChanged()
 // about printer changes. Thereby saving loading a lot of objects (luckily all foreign
 // objects are mapped to one ID).
 // Initialisation and deinitialisation can be found in init.cxx
-extern SvPtrarr *pGlobalOLEExcludeList;
+extern std::vector<SvGlobalName*> *pGlobalOLEExcludeList;
 
 void SwDoc::PrtOLENotify( sal_Bool bAll )
 {
@@ -738,11 +738,10 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
 
                 sal_Bool bFound = sal_False;
                 for ( sal_uInt16 j = 0;
-                      j < pGlobalOLEExcludeList->Count() && !bFound;
+                      j < pGlobalOLEExcludeList->size() && !bFound;
                       ++j )
                 {
-                    bFound = *(SvGlobalName*)(*pGlobalOLEExcludeList)[j] ==
-                                    aName;
+                    bFound = *(*pGlobalOLEExcludeList)[j] == aName;
                 }
                 if ( bFound )
                     continue;
@@ -751,9 +750,7 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
                 // If it doesn't want to be informed
                 if ( xObj.is() )
                 {
-                        pGlobalOLEExcludeList->Insert(
-                                new SvGlobalName( aName ),
-                                pGlobalOLEExcludeList->Count() );
+                        pGlobalOLEExcludeList->push_back( new SvGlobalName( aName ) );
                 }
             }
             delete pNodes;

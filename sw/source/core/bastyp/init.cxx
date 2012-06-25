@@ -434,7 +434,7 @@ const sal_Char* pMarkToOutline  = "outline";
 const sal_Char* pMarkToGraphic  = "graphic";
 const sal_Char* pMarkToOLE      = "ole";
 
-SvPtrarr *pGlobalOLEExcludeList = 0;
+std::vector<SvGlobalName*> *pGlobalOLEExcludeList = 0;
 
 SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 
@@ -715,7 +715,7 @@ void _InitCore()
     SwSelPaintRects::pMapMode = new MapMode;
     SwFntObj::pPixMap = new MapMode;
 
-    pGlobalOLEExcludeList = new SvPtrarr;
+    pGlobalOLEExcludeList = new std::vector<SvGlobalName*>;
 
     const SvxSwAutoFmtFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
     SwDoc::pACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
@@ -803,8 +803,8 @@ void _FinitCore()
     delete[] SwAttrPool::pVersionMap5;
     delete[] SwAttrPool::pVersionMap6;
 
-    for ( sal_uInt16 i = 0; i < pGlobalOLEExcludeList->Count(); ++i )
-        delete (SvGlobalName*)(*pGlobalOLEExcludeList)[i];
+    for ( sal_uInt16 i = 0; i < pGlobalOLEExcludeList->size(); ++i )
+        delete (*pGlobalOLEExcludeList)[i];
     delete pGlobalOLEExcludeList;
 }
 
