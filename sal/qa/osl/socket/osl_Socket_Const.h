@@ -96,49 +96,6 @@ extern "C"
 #define IP_VER     4                   /// currently only IPv4 is considered.
 
 //------------------------------------------------------------------------
-// Ip port definition
-//------------------------------------------------------------------------
-// #define IP_PORT_ZERO    0
-// #define IP_PORT_TELNET 23
-// #define IP_PORT_SMTP 25
-// #define IP_PORT_GOPHER 70
-// #define IP_PORT_POP3  110
-// #define IP_PORT_NETBIOS_DGM  138
-// #define IP_PORT_NETBIOS  139
-// #define IP_PORT_IMAP  143
-// #define IP_PORT_HTTPS  443
-// /**reference: http://www.iana.org/assignments/port-numbers */
-// #define IP_PORT_MYPORT  8881     //8888
-// #define IP_PORT_MYPORT1  8882    //8889
-// #define IP_PORT_MYPORT3  8884    //8891
-// #define IP_PORT_MYPORT4  8885    //8892
-// #define IP_PORT_MYPORT5  8886    //8893
-// #define IP_PORT_MYPORT6  8887    //8894
-// #define IP_PORT_MYPORT7  8895
-// #define IP_PORT_MYPORT8  8896
-// #define IP_PORT_MYPORT9  8897
-// #define IP_PORT_MYPORT10  8898
-//
-// #define IP_PORT_TMP    9999
-// #define IP_PORT_INVAL  99999
-
-//------------------------------------------------------------------------
-// service definitions.
-//------------------------------------------------------------------------
-// OSLTEST_DECLARE( ServiceFTP,  "ftp" );
-// OSLTEST_DECLARE( ServiceTELNET,  "telnet" );
-// OSLTEST_DECLARE( ServiceGOPHER,  "gopher" );
-// OSLTEST_DECLARE( ServiceIMAP,  "imap" );
-// OSLTEST_DECLARE( ServiceHTTPS,  "https" );
-// OSLTEST_DECLARE( ServiceNETBIOS,  "netbios-dgm" );
-
-//------------------------------------------------------------------------
-// protocol definitions.
-//------------------------------------------------------------------------
-// OSLTEST_DECLARE( ProtocolTCP,  "tcp" );
-// OSLTEST_DECLARE( ProtocolUDP,  "udp" );
-
-//------------------------------------------------------------------------
 // Hostnames.
 //------------------------------------------------------------------------
 // OSLTEST_DECLARE( HostName1,  "localhost" );

@@ -140,10 +140,6 @@ sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 
             Point aScroll = aBeginPos - aEndPos;
 
-            // #i2237#
-            // removed old stuff here which still forced zoom to be
-            // %BRUSH_SIZE which is outdated now
-
             if (aScroll.X() != 0 || aScroll.Y() != 0)
             {
                 Size aWorkSize = mpView->GetWorkArea().GetSize();

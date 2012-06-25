@@ -36,7 +36,6 @@ namespace chelp {
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
 
-//#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME         "com.sun.star.ucb.CHelpContentProvider"
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME1   "com.sun.star.help.XMLHelp"
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH1 25
 

@@ -30,7 +30,6 @@
 #include "cmdid.h"
 #include "helpid.h"
 
- // #define DLG_SEL_GLOS 256
 ModalDialog DLG_SEL_GLOS
 {
     HelpID = CMD_FN_EXPAND_GLOSSARY ;

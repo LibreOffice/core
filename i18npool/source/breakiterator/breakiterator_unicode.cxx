@@ -48,8 +48,6 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 #define ERROR ::com::sun::star::uno::RuntimeException()
 
-//#define ImplementName "com.sun.star.i18n.BreakIterator_Unicode";
-
 
 BreakIterator_Unicode::BreakIterator_Unicode() :
     cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" ),    // implementation name

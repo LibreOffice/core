@@ -194,7 +194,6 @@ typedef sal_uIntPtr SbError;
 
 #define ERRCODE_BASIC_UNEXPECTED            ((LAST_SBX_ERROR_ID+63UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_COMPILER)             // Unexpected symbol: xx
-// #define  ERRCODE_BASIC_COMPILER_BGN          ERRCODE_BASIC_UNEXPECTED
 #define ERRCODE_BASIC_EXPECTED              ((LAST_SBX_ERROR_ID+64UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_COMPILER)             // Expected: xx
 #define ERRCODE_BASIC_SYMBOL_EXPECTED       ((LAST_SBX_ERROR_ID+65UL) | ERRCODE_AREA_SBX | \
@@ -373,7 +372,6 @@ typedef sal_uIntPtr SbError;
 #define SbERR_METHOD_FAILED                 ERRCODE_BASIC_METHOD_FAILED
 #define SbERR_SETPROP_FAILED                ERRCODE_BASIC_SETPROP_FAILED
 #define SbERR_GETPROP_FAILED                ERRCODE_BASIC_GETPROP_FAILED
-// #define  SbERR_COMPILER_BGN                  ERRCODE_BASIC_COMPILER_BGN
 #define SbERR_UNEXPECTED                    ERRCODE_BASIC_UNEXPECTED
 #define SbERR_EXPECTED                      ERRCODE_BASIC_EXPECTED
 #define SbERR_SYMBOL_EXPECTED               ERRCODE_BASIC_SYMBOL_EXPECTED
@@ -411,142 +409,6 @@ typedef sal_uIntPtr SbError;
 #define SbERR_BASIC_OPER_NOT_PERFORM        ERRCODE_BASIC_OPER_NOT_PERFORM
 #define SbERR_BASIC_TOO_MANY_DLL            ERRCODE_BASIC_TOO_MANY_DLL
 #define SbERR_BASIC_LOOP_NOT_INIT           ERRCODE_BASIC_LOOP_NOT_INIT
-// #define  SbERR_COMPILER_END                  ERRCODE_BASIC_COMPILER_END
-
-/* ALT
-#define SbERR_SYNTAX                2       // unspecified syntax error
-#define SbERR_NO_GOSUB              3       // Return without Gosub
-#define SbERR_REDO_FROM_START       4       // Redo form start (SB internal)
-#define SbERR_BAD_ARGUMENT          5       // Invalid procedure call
-#define SbERR_MATH_OVERFLOW         6       // Overflow
-#define SbERR_NO_MEMORY             7       // Out of memory
-#define SbERR_ALREADY_DIM           8       // Array already dimensioned
-#define SbERR_OUT_OF_RANGE          9       // Subscript out of range
-#define SbERR_DUPLICATE_DEF         10      // Duplicate definition
-#define SbERR_ZERODIV               11      // Division by zero
-#define SbERR_VAR_UNDEFINED         12      // Variable undefined (SB)
-#define SbERR_CONVERSION            13      // Type mismatch
-#define SbERR_BAD_PARAMETER         14      // Invalid Parameter
-#define SbERR_USER_ABORT            18      // User interrupt occurred
-#define SbERR_BAD_RESUME            20      // Resume without error
-#define SbERR_STACK_OVERFLOW        28      // Out of stack space
-#define SbERR_PROC_UNDEFINED        35      // Sub or Function not defined
-#define SbERR_BAD_DLL_LOAD          48      // Error in loading DLL
-#define SbERR_BAD_DLL_CALL          49      // Bad DLL calling convention
-#define SbERR_INTERNAL_ERROR        51      // internal error
-#define SbERR_BAD_CHANNEL           52      // Bad file name or number
-#define SbERR_FILE_NOT_FOUND        53      // File not found
-#define SbERR_BAD_FILE_MODE         54      // Bad file mode
-#define SbERR_FILE_ALREADY_OPEN     55      // File already open
-#define SbERR_IO_ERROR              57      // Device I/O error
-#define SbERR_FILE_EXISTS           58      // File already exists
-#define SbERR_BAD_RECORD_LENGTH     59      // bad record length
-#define SbERR_DISK_FULL             61      // disk full
-#define SbERR_READ_PAST_EOF         62      // Input past end of file
-#define SbERR_BAD_RECORD_NUMBER     63      // Bad record number
-#define SbERR_TOO_MANY_FILES        67      // Too many files
-#define SbERR_NO_DEVICE             68      // Device not available
-#define SbERR_ACCESS_DENIED         70      // Permission denied
-#define SbERR_NOT_READY             71      // Disk not ready
-#define SbERR_NOT_IMPLEMENTED       73      // Feature not implemented
-#define SbERR_DIFFERENT_DRIVE       74      // No rename with different drive
-#define SbERR_ACCESS_ERROR          75      // Path/File access error
-#define SbERR_PATH_NOT_FOUND        76      // Path not found
-#define SbERR_NO_OBJECT             91      // Object variable not set
-#define SbERR_BAD_PATTERN           93      // Invalid pattern string
-#define SBERR_IS_NULL               94      // Invalid use of Null
-
-// DDE messages from 250-299
-#define SbERR_DDE_ERROR             250
-#define SbERR_DDE_WAITINGACK        280
-#define SbERR_DDE_OUTOFCHANNELS     281
-#define SbERR_DDE_NO_RESPONSE       282
-#define SbERR_DDE_MULT_RESPONSES    283
-#define SbERR_DDE_CHANNEL_LOCKED    284
-#define SbERR_DDE_NOTPROCESSED      285
-#define SbERR_DDE_TIMEOUT           286
-#define SbERR_DDE_USER_INTERRUPT    287
-#define SbERR_DDE_BUSY              288
-#define SbERR_DDE_NO_DATA           289
-#define SbERR_DDE_WRONG_DATA_FORMAT 290
-#define SbERR_DDE_PARTNER_QUIT      291
-#define SbERR_DDE_CONV_CLOSED       292
-#define SbERR_DDE_NO_CHANNEL        293
-#define SbERR_DDE_INVALID_LINK      294
-#define SbERR_DDE_QUEUE_OVERFLOW    295
-#define SbERR_DDE_LINK_ALREADY_EST  296
-#define SbERR_DDE_LINK_INV_TOPIC    297
-#define SbERR_DDE_DLL_NOT_FOUND     298
-
-#define SbERR_CANNOT_LOAD           323     // Can't load module
-#define SbERR_BAD_INDEX             341     // Invalid object index
-#define SbERR_NO_ACTIVE_OBJECT      366     // No active view or document
-#define SbERR_BAD_PROP_VALUE        380     // Bad property value
-#define SbERR_PROP_READONLY         382     // Property is read only
-#define SbERR_PROP_WRITEONLY        394     // Property is write only
-#define SbERR_INVALID_OBJECT        420     // Invalid object reference
-#define SbERR_NO_METHOD             423     // Property or method not found
-#define SbERR_NEEDS_OBJECT          424     // Object required
-#define SbERR_INVALID_USAGE_OBJECT  425     // Invalid usee of object
-#define SbERR_NO_OLE                430     // Class does not support OLE
-#define SbERR_BAD_METHOD            438     // Object doesn't support method
-#define SbERR_OLE_ERROR             440     // OLE Automation error
-#define SbERR_BAD_ACTION            445     // Object doesn't support this action
-#define SbERR_NO_NAMED_ARGS         446     // Object doesn't support named args
-#define SbERR_BAD_LOCALE            447     // Object doesn't support current locale setting
-#define SbERR_NAMED_NOT_FOUND       448     // Named argument not found
-#define SbERR_NOT_OPTIONAL          449     // Argument not optional
-#define SbERR_WRONG_ARGS            450     // Wrong number of arguments
-#define SbERR_NOT_A_COLL            451     // Object not a collection
-#define SbERR_BAD_ORDINAL           452     // Invalid ordinal
-#define SbERR_DLLPROC_NOT_FOUND     453     // Specified DLL function not found
-#define SbERR_BAD_CLIPBD_FORMAT     460     // Invalid clipboard format
-
-// Debugger messages from 700-799
-
-#define SbERR_PROPERTY_NOT_FOUND    1000    // Class not have property
-#define SbERR_METHOD_NOT_FOUND      1001    // Class does not have method
-#define SbERR_ARG_MISSING           1002    // Missing required argument
-#define SbERR_BAD_NUMBER_OF_ARGS    1003    // Bad number of arguments
-#define SbERR_METHOD_FAILED         1004    // Method failed
-#define SbERR_SETPROP_FAILED        1005    // Unable to set property
-#define SbERR_GETPROP_FAILED        1006    // Unable to get property
-
-// Compiler Errors (do not happen at runtime)
-// These IDs can shift at any time
-
-#define SbERR_COMPILER_BGN          950
-#define SbERR_UNEXPECTED            951 // Unexpected symbol: xx
-#define SbERR_EXPECTED              952 // Expected: xx
-#define SbERR_SYMBOL_EXPECTED       953 // Symbol expected
-#define SbERR_VAR_EXPECTED          954 // Variable expected
-#define SbERR_LABEL_EXPECTED        955 // Label expected
-#define SbERR_LVALUE_EXPECTED       956 // Lvalue expected
-#define SbERR_VAR_DEFINED           957 // Variable xxx already defined
-#define SbERR_PROC_DEFINED          958 // Procedure xx already defined
-#define SbERR_LABEL_DEFINED         959 // Label xxx already defined
-#define SbERR_UNDEF_VAR             960 // Variable xx undefined
-#define SbERR_UNDEF_ARRAY           961 // Array or function xx undefined
-#define SbERR_UNDEF_PROC            962 // Procedure xxx undefined
-#define SbERR_UNDEF_LABEL           963 // Label xxx undefined
-#define SbERR_UNDEF_TYPE            964 // Unknown user defined type xxx
-#define SbERR_BAD_EXIT              965 // Exit XXX expexted
-#define SbERR_BAD_BLOCK             966 // Unterminated statement block: missing XX
-#define SbERR_BAD_BRACKETS          967 // Parentheses do not match
-#define SbERR_BAD_DECLARATION       968 // Symbol xx defined differently
-#define SbERR_BAD_PARAMETERS        969 // Parameters do not match
-#define SbERR_BAD_CHAR_IN_NUMBER    970 // Bad character in number
-#define SbERR_MUST_HAVE_DIMS        971 // Array needs dimensioning
-#define SbERR_NO_IF                 972 // Else/Endif without If
-#define SbERR_NOT_IN_SUBR           973 // xxx not allowed within a sub
-#define SbERR_NOT_IN_MAIN           974 // xxx not allowed outside a sub
-#define SbERR_WRONG_DIMS            975 // Dimensions do not match
-#define SbERR_BAD_OPTION            976 // Unknown option: xxx
-#define SbERR_CONSTANT_REDECLARED   977 // Constant xx redeclared
-#define SbERR_PROG_TOO_LARGE        978 // Program is too large
-#define SbERR_NO_STRINGS_ARRAYS     979
-#define SbERR_COMPILER_END          299
-*/
 
 // Grid messages from 30000-30999
 // OLE messages from 31000-31999

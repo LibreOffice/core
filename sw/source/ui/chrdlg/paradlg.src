@@ -29,7 +29,6 @@
 #include "chrdlg.hrc"
 #include "paradlg.hrc"
 #define HelpText "error - hier keine HelpTexte HelpText"
- // #define DLG_PARA 256
 TabDialog DLG_PARA
 {
     OutputSize = TRUE ;

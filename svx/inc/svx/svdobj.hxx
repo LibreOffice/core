@@ -159,9 +159,6 @@ enum SdrUserCallType {SDRUSERCALL_MOVEONLY,         // Nur verschoben, Groesse u
                       SDRUSERCALL_CHILD_INSERTED,   // Ein Child einer Gruppe hat sich veraendert
                       SDRUSERCALL_CHILD_REMOVED};   // Ein Child einer Gruppe hat sich veraendert
 
-/* nur voruebergehend, weil sonst MUSS-Aenderung */
-// #define nLayerID nLayerId
-
 //************************************************************
 //   Hilfsklasse SdrObjUserCall
 //************************************************************

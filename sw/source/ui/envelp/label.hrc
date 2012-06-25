@@ -95,8 +95,6 @@
 #define ED_SHORTCUT_2           68
 
 #define FT_PHONE_MOBILE         70
-//#define FT_PHONE              71
-//#define FT_MOBILE             72
 #define FT_FAX                  73
 
 // global resources ********************************************************

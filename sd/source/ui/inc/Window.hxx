@@ -38,14 +38,6 @@ namespace sd {
 
 class ViewShell;
 
-// Since we removed all old SV-stuff, there is no brush any more
-// and so there is no BRUSH_SIZE defined in VCL.
-// So I define it here
-// #i2237#
-// removed old stuff here which still forced zoom to be
-// %BRUSH_SIZE which is outdated now
-//#define BRUSH_SIZE        8
-
 /** An SdWindow contains the actual working area of ViewShell.
 
     <p>The zoom factor used by this class controls how much the page and the

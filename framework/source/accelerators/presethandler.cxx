@@ -41,17 +41,11 @@
 // interface includes
 
 #include <com/sun/star/configuration/CorruptedUIConfigurationException.hpp>
-
 #include <com/sun/star/container/NoSuchElementException.hpp>
-
 #include <com/sun/star/container/XNameAccess.hpp>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <com/sun/star/embed/ElementModes.hpp>
-
 #include <com/sun/star/embed/XTransactedObject.hpp>
-
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 //_______________________________________________
@@ -71,8 +65,6 @@
 
 #define RELPATH_SHARE_LAYER     DECLARE_ASCII("soffice.cfg")
 #define RELPATH_USER_LAYER      DECLARE_ASCII("soffice.cfg")
-// #define RELPATH_SHARE_LAYER     DECLARE_ASCII("soffice.cfg/uiconfig.zip")
-// #define RELPATH_USER_LAYER      DECLARE_ASCII("soffice.cfg/uiconfig.zip")
 
 #define FILE_EXTENSION          DECLARE_ASCII(".xml")
 

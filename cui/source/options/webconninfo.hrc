@@ -25,7 +25,6 @@
 #define PB_REMOVEALL        13
 #define PB_CHANGE           14
 #define FL_BUTTONS          15
-// #define PB_OK               16
 #define PB_CLOSE            17
 #define PB_HELP             18
 

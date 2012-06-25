@@ -41,7 +41,6 @@
 #define BTN_FONT        23
 #define BTN_PATTERN     24
 #define BTN_ALIGNMENT   25
-//#define BTN_ADJUST        26
 #define STR_ADD_TITLE   100
 #define STR_ADD_LABEL   101
 #define STR_DEL_TITLE   102

@@ -60,7 +60,6 @@
 
 #define DIFF(v1,v2)                     (v2-v1)
 #define OFFS_TEXTBOX_FIXEDTEXT(base)    (base+(RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
-//#define OFFS_PUSHBUTTON_FIXEDTEXT(base)   (base+(RSC_CD_PUSHBUTTON_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
 
 #define ROW_MF_SCALING          (13)
 #define ROW_FT_ICONSIZESTYLE    (ROW_MF_SCALING+RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
@@ -105,12 +104,6 @@
 #define CB_EXPERIMENTAL             18
 #define FT_MACRORECORDER            19
 #define CB_MACRORECORDER            20
-
-//#define FL_FILEDLG                 20
-//#define CB_FILEDLG                 21
-
-//#define FL_DOCSTATUS               30
-//#define CB_DOCSTATUS               31
 
 #define FL_TWOFIGURE                40
 #define FT_INTERPRET                41

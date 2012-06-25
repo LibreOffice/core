@@ -61,7 +61,6 @@
 
 #define SECTION_NAME     "Versions"
 #define SOFFICE_VERSION  "StarOffice 8"
-//#define SOFFICE_VERSION  "SunShine Office 1.0"
 
 #define APP_ERROR 1
 #define APP_CHAR  2

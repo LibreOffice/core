@@ -21,11 +21,8 @@
 #define FT_SHORTNAME        1
 #define ED_SHORTNAME        2
 #define FT_NAME             3
-//#define DCB_NAME          4
 #define ED_NAME             4
 #define CB_INSERT_TIP                   5
-
-//#define FT_BIB                10
 
 #define PB_INSERT           50
 #define PB_EDIT             52

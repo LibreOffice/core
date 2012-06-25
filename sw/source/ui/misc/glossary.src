@@ -31,7 +31,6 @@
 #include "helpid.h"
 #include "access.hrc"
 
- // #define DLG_GLOSSARY 256
 ModalDialog DLG_GLOSSARY
 {
     HelpID = CMD_FN_GLOSSARY_DLG ;

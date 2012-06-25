@@ -20,7 +20,6 @@
 #include "instable.hrc"
 #include "cmdid.h"
 #include "helpid.h"
- // #define DLG_INSERT_TABLE 256
 ModalDialog DLG_INSERT_TABLE
 {
     HelpID = CMD_FN_INSERT_TABLE ;

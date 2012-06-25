@@ -28,7 +28,6 @@
 #define RID_SVXIMGLIST_FMEXPL                       (RID_FORMS_START + 0)
 
 // Image-Id's -----------------------------------------------------------
-//#define SID_FMSLOTS_START                          (SID_SVX_START + 592)  -> svxids.hrc
 #define RID_SVXIMG_FORM                             SID_FM_CONFIG
 #define RID_SVXIMG_CONTROL                          SID_CHOOSE_CONTROLS
 #define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)
@@ -182,27 +181,6 @@
 #define RID_STR_PROPTITLE_SCROLLBAR                 (RID_FORMS_START +  99)
 #define RID_STR_PROPTITLE_SPINBUTTON                (RID_FORMS_START + 100)
 #define RID_STR_PROPTITLE_HIDDEN                    (RID_FORMS_START + 101)
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
-    // FREE
     // FREE
 #define RID_STR_DATANAVIGATOR                       (RID_FORMS_START + 124)
 #define RID_STR_DATANAV_SUBM_PARENT                 (RID_FORMS_START + 125)

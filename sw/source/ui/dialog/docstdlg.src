@@ -28,7 +28,6 @@
 #include "globals.hrc"
 #include "docstdlg.hrc"
 #include "helpid.h"
- // #define TP_DOC_STAT 256
 TabPage TP_DOC_STAT
 {
     HelpID = HID_DOC_STAT ;

@@ -45,8 +45,6 @@
 #define LB_FRAMEDIR                 44
 #define BTN_SHRINK                  45
 
-//#define ED_INDENT1                  100
-
 // list box indexes
 #define ALIGNDLG_HORALIGN_STD       0
 #define ALIGNDLG_HORALIGN_LEFT      1

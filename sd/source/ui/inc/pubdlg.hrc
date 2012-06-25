@@ -115,10 +115,6 @@
 
 //////////////////////////////
 
-//#define PAGE6_PAGE_SND        128
-
-//////////////////////////////
-
 #define BUT_LAST 200
 #define BUT_NEXT 201
 #define BUT_FINISH 202

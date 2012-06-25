@@ -20,7 +20,6 @@
 #include "colwd.hrc"
 #include "cmdid.h"
 #include "helpid.h"
- // #define DLG_COL_WIDTH 256
 ModalDialog DLG_COL_WIDTH
 {
     HelpID = CMD_FN_TABLE_SET_COL_WIDTH ;

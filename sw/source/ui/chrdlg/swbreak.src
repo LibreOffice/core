@@ -29,7 +29,6 @@
 #include "break.hrc"
 #include "cmdid.h"
 #include "helpid.h"
- // #define DLG_BREAK 256
 ModalDialog DLG_BREAK
 {
     HelpID = CMD_FN_INSERT_BREAK_DLG ;

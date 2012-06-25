@@ -32,7 +32,6 @@
 #include "helpid.h"
 #include "access.hrc"
 
- // #define TP_COLUMN 256
 TabPage TP_COLUMN
 {
     HelpID = HID_COLUMN ;

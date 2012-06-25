@@ -36,7 +36,6 @@
 #define GRP_ORTHO 2
 #define FT_SNAP_AREA 1
 #define FT_BEZ_ANGLE 4
-//#define FT_METRIC 5
 #define LB_METRIC 1
 #define MTR_FLD_SNAP_AREA 1
 #define MTR_FLD_ANGLE 2

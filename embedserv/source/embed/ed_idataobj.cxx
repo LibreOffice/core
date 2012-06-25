@@ -20,19 +20,7 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-// actually this workaround should be in presys.h!
-//#define UINT64 USE_WIN_UINT64
-//#define INT64 USE_WIN_INT64
-//#define UINT32 USE_WIN_UINT32
-//#define INT32 USE_WIN_INT32
-
 #include "embeddoc.hxx"
-
-//#undef UINT64
-//#undef INT64
-//#undef UINT32
-//#undef INT32
-
 
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Exception.hpp>

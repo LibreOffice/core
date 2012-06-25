@@ -61,9 +61,6 @@
 #define SID_SETUPPRINTER                    (SID_SFX_START + 302)
 #define SID_EXITANDRETURN                   (SID_SFX_START + 303)
 
-// SID_TITLE, this value below is given in chaos/cntids.hrc!!
-//#define SID_TITLE             (SID_SFX_START + 307)
-
 #define SID_CONTEXT                         (SID_SFX_START + 310)
 
 #define SID_PASTE_SPECIAL                   (SID_SFX_START + 311)
@@ -178,9 +175,6 @@
 #define SID_BROWSER                         (SID_SFX_START + 1318)
 #define SID_MACROEXECMODE                   (SID_SFX_START + 1319)
 
-// The Id value is given in chaos/cntids.hrc!!
-//#define SID_INTERNET_ONLINE       (SID_SFX_START + 1370)
-
 #define SID_FILTER_DATA                     (SID_SFX_START + 1375)
 
 #define SID_EXPLORER_FILEPROPS_START        (SID_SFX_START + 1390)
@@ -206,8 +200,6 @@
 
 #define SID_CREATE_BASICOBJECT              (SID_SFX_START + 1555)
 #define SID_DELETE_BASICOBJECT              (SID_SFX_START + 1556)
-
-//#define SID_EXPLORER_CREATEPROJECT    (SID_SFX_START + 1567)
 
 #define SID_UPDATE_VERSION                  (SID_SFX_START + 1568)
 #define SID_BUILD_VERSION                   (SID_SFX_START + 1569)
@@ -442,9 +434,6 @@
 #define SID_CUT                             (SID_SFX_START + 710)
 #define SID_COPY                            (SID_SFX_START + 711)
 #define SID_PASTE                           (SID_SFX_START + 712)
-
-// Value below given in chaos/cntids.hrc!!!
-//#define SID_DELETE                (SID_SFX_START + 713)
 
 #define SID_BACKSPACE                       (SID_SFX_START + 714)
 #define SID_FORMATPAINTBRUSH                (SID_SFX_START + 715)

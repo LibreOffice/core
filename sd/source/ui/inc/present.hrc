@@ -54,5 +54,3 @@
 #define STR_MONITOR 2
 #define STR_ALL_MONITORS 3
 
-// #define CBX_ENDLESS 1
-// #define CBX_WINDOW_PRESENTATION 9

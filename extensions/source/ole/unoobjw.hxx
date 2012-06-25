@@ -39,7 +39,6 @@
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 
-//#define INVOCATION_SERVICE    L"com.sun.star.script.Invocation"
 #define JSCRIPT_VALUE_FUNC  L"_GetValueObject"
 #define GET_STRUCT_FUNC     L"_GetStruct"
 #define BRIDGE_VALUE_FUNC L"Bridge_GetValueObject"

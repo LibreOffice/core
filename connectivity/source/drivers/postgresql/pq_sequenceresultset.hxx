@@ -72,15 +72,6 @@
 namespace pq_sdbc_driver
 {
 
-// static const sal_Int32 RESULTSET_CURSOR_NAME = 0;
-// static const sal_Int32 RESULTSET_ESCAPE_PROCESSING = 1;
-// static const sal_Int32 RESULTSET_FETCH_DIRECTION = 2;
-// static const sal_Int32 RESULTSET_FETCH_SIZE = 3;
-// static const sal_Int32 RESULTSET_RESULT_SET_CONCURRENCY = 4;
-// static const sal_Int32 RESULTSET_RESULT_SET_TYPE = 5;
-
-//#define RESULTSET_SIZE 6
-
 class SequenceResultSet : public BaseResultSet
 {
 protected:

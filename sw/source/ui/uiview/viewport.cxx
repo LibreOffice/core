@@ -313,7 +313,6 @@ void SwView::SetVisArea( const Point &rPt, sal_Bool bUpdateScrollbar )
     //passgenau ist, kann nicht aligned werden (bessere Idee?!?!)
     //MA 29. Oct. 96 (fix: Bild.de, 200%) ganz ohne Alignment geht es nicht
     //mal sehen wie weit wir mit der halben BrushSize kommen.
-    //TODO: why BRUSH_SIZE?
     Point aPt( rPt );
 //  const long nTmp = GetWrtShell().IsFrameView() ? BRUSH_SIZE/2 : BRUSH_SIZE;
     const long nTmp = GetWrtShell().IsFrameView() ? 4 : 8;

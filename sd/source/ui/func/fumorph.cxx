@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-//#define _FUMORPH_PRIVATE
 #include "fumorph.hxx"
 #include <svx/xfillit.hxx>
 #include <svx/xlineit.hxx>

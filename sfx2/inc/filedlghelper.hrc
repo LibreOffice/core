@@ -21,7 +21,6 @@
 
 #include <sfx2/sfx.hrc>
 
-//#define STR_SFX_IMPORT_ALL          (RID_SFX_EXPLORER_START + 50)
 #define STR_CB_AUTO_EXTENSION       (RID_SFX_EXPLORER_START + 51)
 #define STR_CB_SELECTION            (RID_SFX_EXPLORER_START + 52)
 #define STR_CB_INSERT_AS_LINK       (RID_SFX_EXPLORER_START + 53)

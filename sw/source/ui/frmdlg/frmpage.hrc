@@ -82,8 +82,6 @@
 
 #define CB_HOR                  46
 #define CB_VERT                 47
-//#define LB_MIRROR_PAGES           49
-//#define FT_MIRROR_PAGES           50
 #define FL_MIRROR                               51
 #define WN_BMP                  52
 #define PB_BROWSE               53

@@ -24,7 +24,6 @@
 // define ranges for other libraries
 
 #define PRIMITIVE3D_ID_RANGE_DRAWINGLAYER           (0 << 16)
-// #define  PRIMITIVE3D_ID_RANGE_SVX                    (1 << 16)
 
 //////////////////////////////////////////////////////////////////////////////
 // local primitives

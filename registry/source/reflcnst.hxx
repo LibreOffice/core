@@ -64,12 +64,10 @@ extern const sal_uInt16 majorVersion;
 #define FIELD_OFFSET_VALUE          (FIELD_OFFSET_TYPE + sizeof(sal_uInt16))
 #define FIELD_OFFSET_DOKU           (FIELD_OFFSET_VALUE + sizeof(sal_uInt16))
 #define FIELD_OFFSET_FILENAME       (FIELD_OFFSET_DOKU + sizeof(sal_uInt16))
-//#define FIELD_ENTRY_SIZE          (FIELD_OFFSET_FILENAME + sizeof(sal_uInt16))
 
 #define PARAM_OFFSET_TYPE           0
 #define PARAM_OFFSET_MODE           (PARAM_OFFSET_TYPE + sizeof(sal_uInt16))
 #define PARAM_OFFSET_NAME           (PARAM_OFFSET_MODE + sizeof(sal_uInt16))
-//#define PARAM_ENTRY_SIZE          (PARAM_OFFSET_NAME + sizeof(sal_uInt16))
 
 #define METHOD_OFFSET_SIZE          0
 #define METHOD_OFFSET_MODE          (METHOD_OFFSET_SIZE + sizeof(sal_uInt16))
@@ -77,13 +75,11 @@ extern const sal_uInt16 majorVersion;
 #define METHOD_OFFSET_RETURN        (METHOD_OFFSET_NAME + sizeof(sal_uInt16))
 #define METHOD_OFFSET_DOKU          (METHOD_OFFSET_RETURN + sizeof(sal_uInt16))
 #define METHOD_OFFSET_PARAM_COUNT   (METHOD_OFFSET_DOKU + sizeof(sal_uInt16))
-//#define METHOD_OFFSET_PARAM(i)        (METHOD_OFFSET_PARAM_COUNT + sizeof(sal_uInt16) + (i * PARAM_ENTRY_SIZE))
 
 #define REFERENCE_OFFSET_TYPE       0
 #define REFERENCE_OFFSET_NAME       (REFERENCE_OFFSET_TYPE + sizeof(sal_uInt16))
 #define REFERENCE_OFFSET_DOKU       (REFERENCE_OFFSET_NAME + sizeof(sal_uInt16))
 #define REFERENCE_OFFSET_ACCESS     (REFERENCE_OFFSET_DOKU + sizeof(sal_uInt16))
-//#define REFERENCE_ENTRY_SIZE      (REFERENCE_OFFSET_ACCESS + sizeof(sal_uInt16))
 
 enum CPInfoTag
 {

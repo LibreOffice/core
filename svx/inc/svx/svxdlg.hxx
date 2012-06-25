@@ -70,7 +70,6 @@ namespace svx{ class SpellDialogChildWindow;}
 
 #define EMPTY_FRAME_REF com::sun::star::uno::Reference < com::sun::star::frame::XFrame >()
 
-//#define SVX_DIALOGFACTORY_CLASSID 0xf8e5fd97, 0x49e2, 0x4ae5, 0xac, 0x31, 0x4, 0xcb, 0xf7, 0xf3, 0xcf, 0x69
 class AbstractSvxDistributeDialog :public VclAbstractDialog  //add for SvxDistributeDialog
 {
 public:

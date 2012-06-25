@@ -28,7 +28,6 @@
 #include "misc.hrc"
 #include "insfnote.hrc"
 #include "helpid.h"
- // #define DLG_INS_FOOTNOTE 257
 ModalDialog DLG_INS_FOOTNOTE
 {
     HelpID = "sw:ModalDialog:DLG_INS_FOOTNOTE";

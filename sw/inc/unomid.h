@@ -20,7 +20,6 @@
 #define SW_UNOMID_HXX
 
 #define C2S(cChar) String::CreateFromAscii( cChar )
-//#define C2U(cChar) rtl::OUString::createFromAscii( cChar )
 #define C2U(cChar) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( cChar ))
 
 #define MID_MIRROR_VERT                         0

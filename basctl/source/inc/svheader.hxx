@@ -26,12 +26,7 @@
 #define _CURSOR_HXX
 #define _FONTDLG_HXX
 #define _PRVWIN_HXX
-//#define _SELENG_HXX
 #define _VIRTDEV_HXX
-
-// For Brkdlg without PCH:
-// #define _SPIN_HXX
-// #define _FIELD_HXX
 
 // SVTOOLS
 #define _CTRLBOX_HXX
@@ -50,12 +45,9 @@
 #define _INTRO_HXX
 #define _SFXMSGDESCR_HXX
 #define _SFXMSGPOOL_HXX
-// #define _PASSWD_HXX
 #define _SFXMNUMGR_HXX
 
 // SFXDLG
-// #define _SFXTABDLG_HXX
-// #define _SFX_DINFDLG_HXX
 #define _SFX_MGETEMPL_HXX
 #define _SFX_STYLEDLG_HXX
 #define _SFX_TPLPITEM_HXX
@@ -66,8 +58,6 @@
 #define _SFXNEW_HXX
 
 // SFXDOC
-// #define _SFXDOCINF_HXX
-//#define _SFX_DOCFILT_HXX
 #define _SFX_IPFRM_HXX
 #define _SFX_INTERNO_HXX
 

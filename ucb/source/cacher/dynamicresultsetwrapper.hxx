@@ -36,9 +36,6 @@
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//#define CACHED_CRS_STUB_SERVICE_NAME "com.sun.star.ucb.CachedContentResultSetStub"
-//#define CACHED_CRS_STUB_FACTORY_NAME "com.sun.star.ucb.CachedContentResultSetStubFactory"
-
 //=========================================================================
 
 class DynamicResultSetWrapperListener;

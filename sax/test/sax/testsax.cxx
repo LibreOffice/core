@@ -32,11 +32,8 @@
 #include <osl/time.h>
 #include <osl/diagnose.h>
 
-
 #include <com/sun/star/test/XSimpleTest.hpp>
-
 #include <com/sun/star/io/XOutputStream.hpp>
-
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -275,14 +272,6 @@ Reference< XInputStream > createStreamFromFile(
 
 
 
-
-
-
-
-
-
-//  #define PCHAR_TO_OUSTRING(x) OStringToOUString(x,CHARSET_PC_1252)
-//  #define USTRING_TO_PCHAR(x) UStringToString(x,CHARSET_PC_437).GetStr()
 
 
 
