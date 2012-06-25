@@ -952,28 +952,19 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         InsertAlphaDelimitter( aIntl );
 
     // Sort the List of all TOC Marks and TOC Sections
-    void* p = 0;
-    sal_uInt16 nCnt = 0, nFormMax = GetTOXForm().GetFormMax();
-    SvPtrarr aCollArr( (sal_uInt8)nFormMax );
-    for( ; nCnt < nFormMax; ++nCnt )
-    {
-        aCollArr.Insert( p, nCnt );
-    }
-
+    std::vector<SwTxtFmtColl*> aCollArr( GetTOXForm().GetFormMax(), 0 );
     SwNodeIndex aInsPos( *pFirstEmptyNd, 1 );
-    for( nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
+    for( sal_uInt16 nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
         // Put the Text into the TOC
         sal_uInt16 nLvl = aSortArr[ nCnt ]->GetLevel();
-        SwTxtFmtColl* pColl = (SwTxtFmtColl*)aCollArr[ nLvl ];
+        SwTxtFmtColl* pColl = aCollArr[ nLvl ];
         if( !pColl )
         {
             pColl = GetTxtFmtColl( nLvl );
-            aCollArr.Remove( nLvl );
-            p = pColl;
-            aCollArr.Insert( p , nLvl );
+            aCollArr[ nLvl ] = pColl;
         }
 
         // Generate: Set dynamic TabStops
