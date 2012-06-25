@@ -10265,7 +10265,7 @@ AC_MSG_CHECKING([for Google Docs extension integration])
 GOOGLE_DOCS_EXTENSION_PACK=
 if test "x$enable_ext_google_docs" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_GOOGLE_DOCS"
-    GOOGLE_DOCS_EXTENSION_PACK="cea0f63d5985ba4fcbd882031df44346-gdocs_3.0.0_modified.oxt"
+    GOOGLE_DOCS_EXTENSION_PACK="2a64b8e6f185a7f6c19d00fb8bb4cf64-gdocs_3.0.1_modified.oxt"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
