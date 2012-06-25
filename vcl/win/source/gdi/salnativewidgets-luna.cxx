@@ -35,10 +35,7 @@
 // (found at http://stackoverflow.com/questions/4009701/windows-visual-themes-gallery-of-parts-and-states/4009712#4009712)
 //
 // Theme subclasses:
-//   http://msdn.microsoft.com/en-us/library/windows/desktop/bb773218%28v=vs.85%29.aspx
-//
-// Drawing in non-client area (general DWM-related info):
-//   http://msdn.microsoft.com/en-us/library/windows/desktop/bb688195%28v=vs.85%29.aspx
+// http://msdn.microsoft.com/en-us/library/windows/desktop/bb773218%28v=vs.85%29.aspx
 
 #define _SV_SALNATIVEWIDGETS_CXX
 
@@ -51,7 +48,6 @@
 #include "win/svsys.h"
 #include "win/salgdi.h"
 #include "win/saldata.hxx"
-#include "win/salframe.h"
 
 #include "uxtheme.h"
 #include "vssym32.h"
@@ -75,7 +71,6 @@ static ThemeMap aThemeMap;
 class VisualStylesAPI
 {
 private:
-    // uxtheme.dll functions
     typedef HTHEME  (WINAPI * OpenThemeData_Proc_T) ( HWND hwnd, LPCWSTR pszClassList );
     typedef HRESULT (WINAPI * CloseThemeData_Proc_T) ( HTHEME hTheme );
     typedef HRESULT (WINAPI * GetThemeBackgroundContentRect_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pBoundingRect, RECT *pContentRect );
@@ -92,18 +87,12 @@ private:
     GetThemePartSize_Proc_T                 lpfnGetThemePartSize;
     IsThemeActive_Proc_T                    lpfnIsThemeActive;
 
-    // dwmapi.dll functions
-    typedef HRESULT (WINAPI * DwmExtendFrameIntoClientArea_Proc_T) ( HWND hWnd, const MARGINS *pMarInset );
-
-    DwmExtendFrameIntoClientArea_Proc_T     lpfnDwmExtendFrameIntoClientArea;
-
-    // module handles of the appropriate dll's
-    oslModule mhUxthemeModule;
-    oslModule mhDwmapiModule;
+    oslModule mhModule;
 
 public:
     VisualStylesAPI();
     ~VisualStylesAPI();
+    sal_Bool IsAvailable()  { return (mhModule != NULL); }
 
     HTHEME OpenThemeData( HWND hwnd, LPCWSTR pszClassList );
     HRESULT CloseThemeData( HTHEME hTheme );
@@ -112,52 +101,40 @@ public:
     HRESULT DrawThemeText( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect );
     HRESULT GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz );
     BOOL IsThemeActive( void );
-
-    HRESULT DwmExtendFrameIntoClientArea( HWND hWnd, const MARGINS *pMarInset );
 };
 
 static VisualStylesAPI vsAPI;
 
 VisualStylesAPI::VisualStylesAPI()
-    : lpfnOpenThemeData( NULL ),
-      lpfnCloseThemeData( NULL ),
-      lpfnGetThemeBackgroundContentRect( NULL ),
-      lpfnDrawThemeBackground( NULL ),
-      lpfnDrawThemeText( NULL ),
-      lpfnGetThemePartSize( NULL ),
-      lpfnIsThemeActive( NULL ),
-      lpfnDwmExtendFrameIntoClientArea( NULL )
 {
-    OUString aLibraryName( "uxtheme.dll" );
-    mhUxthemeModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+    OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "uxtheme.dll" ) );
+    mhModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
 
-    if ( mhUxthemeModule )
+    if ( mhModule )
     {
-        lpfnOpenThemeData = (OpenThemeData_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "OpenThemeData" );
-        lpfnCloseThemeData = (CloseThemeData_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "CloseThemeData" );
-        lpfnGetThemeBackgroundContentRect = (GetThemeBackgroundContentRect_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "GetThemeBackgroundContentRect" );
-        lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "DrawThemeBackground" );
-        lpfnDrawThemeText = (DrawThemeText_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "DrawThemeText" );
-        lpfnGetThemePartSize = (GetThemePartSize_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "GetThemePartSize" );
-        lpfnIsThemeActive = (IsThemeActive_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "IsThemeActive" );
+        lpfnOpenThemeData = (OpenThemeData_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "OpenThemeData" );
+        lpfnCloseThemeData = (CloseThemeData_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "CloseThemeData" );
+        lpfnGetThemeBackgroundContentRect = (GetThemeBackgroundContentRect_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "GetThemeBackgroundContentRect" );
+        lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "DrawThemeBackground" );
+        lpfnDrawThemeText = (DrawThemeText_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "DrawThemeText" );
+        lpfnGetThemePartSize = (GetThemePartSize_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "GetThemePartSize" );
+        lpfnIsThemeActive = (IsThemeActive_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "IsThemeActive" );
     }
-
-    aLibraryName = "dwmapi.dll";
-    mhDwmapiModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-
-    if ( mhDwmapiModule )
+    else
     {
-        lpfnDwmExtendFrameIntoClientArea = (DwmExtendFrameIntoClientArea_Proc_T)osl_getAsciiFunctionSymbol( mhDwmapiModule, "DwmExtendFrameIntoClientArea" );
+        lpfnOpenThemeData = NULL;
+        lpfnCloseThemeData = NULL;
+        lpfnGetThemeBackgroundContentRect = NULL;
+        lpfnDrawThemeBackground = NULL;
+        lpfnDrawThemeText = NULL;
+        lpfnGetThemePartSize = NULL;
     }
 }
 
 VisualStylesAPI::~VisualStylesAPI()
 {
-    if( mhUxthemeModule )
-        osl_unloadModule( mhUxthemeModule );
-
-    if( mhDwmapiModule )
-        osl_unloadModule( mhDwmapiModule );
+    if( mhModule )
+        osl_unloadModule( mhModule );
 }
 
 HTHEME VisualStylesAPI::OpenThemeData( HWND hwnd, LPCWSTR pszClassList )
@@ -214,14 +191,6 @@ BOOL VisualStylesAPI::IsThemeActive( void )
         return (*lpfnIsThemeActive) ();
     else
         return FALSE;
-}
-
-HRESULT VisualStylesAPI::DwmExtendFrameIntoClientArea( HWND hWnd, const MARGINS *pMarInset )
-{
-    if (lpfnDwmExtendFrameIntoClientArea)
-        return (*lpfnDwmExtendFrameIntoClientArea) ( hWnd, pMarInset );
-    else
-        return S_FALSE;
 }
 
 /*********************************************************
@@ -492,7 +461,7 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
 
 // ----
 
-sal_Bool ImplDrawNativeControl( HWND hWnd, HDC hDC, HTHEME hTheme, RECT rc,
+sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
                             ControlPart nPart,
                             ControlState nState,
@@ -974,22 +943,12 @@ sal_Bool ImplDrawNativeControl( HWND hWnd, HDC hDC, HTHEME hTheme, RECT rc,
     {
         if( nPart == PART_ENTIRE_CONTROL )
         {
-            if( ImplGetSVData()->maNWFData.mbTransparentMenubar )
+            if( aValue.getType() == CTRL_MENUBAR )
             {
-                // When the frame is correctly extended to the client area,
-                // Aero just needs us to repaint the affected rectangle in black
-                FillRect( hDC, &rc, static_cast< HBRUSH >( GetStockObject( BLACK_BRUSH ) ) );
-                return sal_True;
+                const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
+                rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
             }
-            else
-            {
-                if( aValue.getType() == CTRL_MENUBAR )
-                {
-                    const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
-                    rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
-                }
-                return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
-            }
+            return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
         }
         else if( nPart == PART_MENU_ITEM )
         {
@@ -997,25 +956,6 @@ sal_Bool ImplDrawNativeControl( HWND hWnd, HDC hDC, HTHEME hTheme, RECT rc,
                 iState = (nState & CTRL_STATE_SELECTED) ? MBI_HOT : MBI_NORMAL;
             else
                 iState = (nState & CTRL_STATE_SELECTED) ? MBI_DISABLEDHOT : MBI_DISABLED;
-
-            // draw the text glow so that the text is better visible
-            if ( ImplGetSVData()->maNWFData.mbTransparentMenubar )
-            {
-                HTHEME hGlowTheme = getThemeHandle( hWnd, L"TextGlow");
-                if ( !hTheme )
-                    return sal_False;
-
-                // I have no idea what is the correct name of the contstant
-                // that is represented by '1' below - but that draws the glow
-                // effect
-                // I've found the "TextGlow" theme handle here:
-                //   http://fc01.deviantart.net/fs26/f/2008/154/0/6/Vista_Visual_Style_Classes_by_UkIntel.html
-                // and its rendering here:
-                //   http://deskmodder.de/wiki/index.php/Vista_msstyleImage_900-938
-                // No better documentation on the topic, unfortunately :-(
-                ImplDrawTheme( hGlowTheme, hDC, 1, MBI_NORMAL, rc, aCaption );
-            }
-
             return ImplDrawTheme( hTheme, hDC, MENU_BARITEM, iState, rc, aCaption );
         }
     }
@@ -1296,7 +1236,7 @@ sal_Bool WinSalGraphics::drawNativeControl( ControlType nType,
     int ta = SetTextAlign( mhDC, TA_LEFT|TA_TOP|TA_NOUPDATECP );
 
     OUString aCaptionStr( aCaption.replace('~', '&') ); // translate mnemonics
-    bOk = ImplDrawNativeControl(mhWnd, mhDC, hTheme, rc,
+    bOk = ImplDrawNativeControl(mhDC, hTheme, rc,
                             nType, nPart, nState, aValue,
                             aCaptionStr );
 
@@ -1552,22 +1492,6 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     }
 
     rSettings.SetStyleSettings( aStyleSettings );
-}
-
-void WinSalFrame::extendWindowManagerFrameNative( int nLeft, int nRight, int nTop, int nBottom )
-{
-    // nothing to do for Windows before Vista
-    if( aSalShlData.maVersionInfo.dwMajorVersion < 6 || !vsAPI.IsThemeActive() )
-        return;
-
-    MARGINS aMargins = { nLeft, nRight, nTop, nBottom };
-    HRESULT nRet = vsAPI.DwmExtendFrameIntoClientArea( mhWnd, &aMargins );
-
-    ImplSVData* pSVData = ImplGetSVData();
-    if( nRet == S_OK )
-        pSVData->maNWFData.mbTransparentMenubar = true;
-    else
-        pSVData->maNWFData.mbTransparentMenubar = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
