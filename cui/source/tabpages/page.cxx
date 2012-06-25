@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
+#include <com/sun/star/text/XNumberingTypeInfo.hpp>
+//------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/resary.hxx>
@@ -69,6 +73,12 @@
 #include <svl/aeitem.hxx>
 #include <sfx2/request.hxx>
 
+//Namespaces--------------------------------------------------------------
+using namespace com::sun::star::uno;
+using namespace com::sun::star::text;
+using namespace com::sun::star::style;
+using rtl::OUString;
+
 // static ----------------------------------------------------------------
 
 static const long MINBODY       = 284;  // 0,5 cm rounded up in twips
@@ -85,7 +95,6 @@ static sal_uInt16 pRanges[] =
     SID_SWREGISTER_MODE,
     0
 };
-
 // ------- Mapping page layout ------------------------------------------
 
 sal_uInt16 aArr[] =
@@ -361,6 +370,58 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     aPortraitBtn.SetAccessibleRelationMemberOf(&aOrientationFT);
     aLandscapeBtn.SetAccessibleRelationMemberOf(&aOrientationFT);
+
+// Get the CTL/Asian Language Numbering and added to list box
+    Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider();
+    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
+    Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
+    sal_Int16 nPos;
+    const sal_uInt16 nDontRemove = 0xffff;
+    std::vector< sal_uInt16> aRemove( aNumberFormatBox.GetEntryCount(), nDontRemove);
+    for (size_t i=0; i<aRemove.size(); ++i)
+    {
+        sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)aNumberFormatBox.GetEntryData(
+            sal::static_int_cast< sal_uInt16 >(i));
+        if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N)
+            aRemove[i] = nEntryData;
+    }
+    if(xInfo.is())
+    {
+        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
+        const sal_Int16* pTypes = aTypes.getConstArray();
+        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+        {
+            sal_Int16 nCurrent = pTypes[nType];
+            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+            {
+                sal_Bool bInsert = sal_True;
+                for(sal_uInt16 nEntry = 0; nEntry < aNumberFormatBox.GetEntryCount(); nEntry++)
+                {
+                    sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)aNumberFormatBox.GetEntryData(nEntry);
+                    if(nEntryData == (sal_uInt16) nCurrent)
+                    {
+                        bInsert = sal_False;
+                        aRemove[nEntry] = nDontRemove;
+                        break;
+                    }
+                }
+                if(bInsert)
+                {
+                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
+                    nPos = aNumberFormatBox.InsertEntry(aIdent);
+                    aNumberFormatBox.SetEntryData(nPos,(void*)(sal_uLong)nCurrent);
+                }
+            }
+        }
+    }
+    for (size_t i=0; i<aRemove.size(); ++i)
+    {
+        if (aRemove[i] != nDontRemove)
+        {
+            nPos = aNumberFormatBox.GetEntryPos( (void*)(sal_uLong)aRemove[i]);
+            aNumberFormatBox.RemoveEntry( nPos);
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -468,8 +529,13 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     aBspWin.SetUsage( nUse );
     LayoutHdl_Impl( 0 );
 
-    // adjust numeration type of the page style
-    aNumberFormatBox.SelectEntryPos( sal::static_int_cast< sal_uInt16 >(eNumType) );
+    //adjust numeration type of the page style
+    //Get the Position of the saved NumType
+    for(int i=0; i<aNumberFormatBox.GetEntryCount(); i++)
+        if(eNumType == (sal_uInt16)(sal_uLong)aNumberFormatBox.GetEntryData(i)){
+            aNumberFormatBox.SelectEntryPos( i );
+            break;
+        }
 
     aPaperTrayBox.Clear();
     sal_uInt8 nPaperBin = PAPERBIN_PRINTER_SETTINGS;
@@ -804,12 +870,12 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         bMod |= sal_True;
     }
 
-
+    //Get the NumType value
     nPos = aNumberFormatBox.GetSelectEntryPos();
-
+    sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)aNumberFormatBox.GetEntryData(nPos);
     if ( nPos != aNumberFormatBox.GetSavedValue() )
     {
-        aPage.SetNumType( (SvxNumType)nPos );
+        aPage.SetNumType( (SvxNumType)nEntryData );
         bMod |= sal_True;
     }
 
