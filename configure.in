@@ -12010,6 +12010,14 @@ cat << _EOF
 To build, issue:
 $GNUMAKE
 
+run: $GNUMAKE help
+for details
+
+_EOF
+
+if test $_os != WINNT -a "$CROSS_COMPILING" != YES; then
+    cat << _EOF
+
 To install when the build is finished, issue:
 $GNUMAKE install
 
@@ -12019,12 +12027,7 @@ $GNUMAKE dev-install
 If you want to run the smoketest, issue:
 $GNUMAKE check
 
-ATTENTION: Env.Host.sh and Env.Build.sh are no more.
-The environment is now in config_host.mk and config_build.mk (for cross-compile)
-You do not need to source them, even for partial build.
-run: make help
-for details
-
 _EOF
+fi
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
