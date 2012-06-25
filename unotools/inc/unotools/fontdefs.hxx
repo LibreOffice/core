@@ -39,17 +39,6 @@ namespace utl {
 
 UNOTOOLS_DLLPUBLIC String GetSubsFontName( const String& rName, sal_uLong nFlags );
 
-// -----------------
-// - FontTokenName -
-// -----------------
-
-UNOTOOLS_DLLPUBLIC String GetFontToken( const String& rName, xub_StrLen nToken, xub_StrLen& rIndex );
-inline String GetFontToken( const String& rName, xub_StrLen nToken )
-{
-    xub_StrLen nTempIndex = 0;
-    return GetFontToken( rName, nToken, nTempIndex );
-}
-
 UNOTOOLS_DLLPUBLIC void AddTokenFontName( String& rName, const String& rNewToken );
 
 struct UNOTOOLS_DLLPUBLIC FontNameHash { int operator()(const String&) const; };

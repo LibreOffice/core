@@ -724,7 +724,8 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
         let words own font substitution kick in
         */
         rChrSet = RTL_TEXTENCODING_UNICODE;
-        rFontName = ::GetFontToken(rFontName, 0);
+        xub_StrLen nIndex = 0;
+        rFontName = ::GetNextFontToken(rFontName, nIndex);
      }
      else
      {

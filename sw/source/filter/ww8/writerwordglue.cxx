@@ -458,10 +458,11 @@ namespace sw
 
         FontMapExport::FontMapExport(const String &rFamilyName)
         {
-            msPrimary = GetFontToken(rFamilyName, 0);
+            xub_StrLen nIndex = 0;
+            msPrimary = GetNextFontToken(rFamilyName, nIndex);
             msSecondary = myImplHelpers::FindBestMSSubstituteFont(msPrimary);
-            if (!msSecondary.Len())
-                msSecondary = GetFontToken(rFamilyName, 1);
+            if (!msSecondary.Len() && nIndex != STRING_NOTFOUND)
+                msSecondary = GetNextFontToken(rFamilyName, nIndex);
         }
 
         bool ItemSort::operator()(sal_uInt16 nA, sal_uInt16 nB) const

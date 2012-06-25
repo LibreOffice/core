@@ -477,17 +477,6 @@ String GetNextFontToken( const String& rTokenStr, xub_StrLen& rIndex )
     return String( rTokenStr, nTokenStart, nTokenLen );
 }
 
-// TODO: get rid of this in another incompatible build with SW project.
-// SW's WW8 and RTF filters still use this (from fontcvt.hxx)
-String GetFontToken( const String& rTokenStr, xub_StrLen nToken, xub_StrLen& rIndex )
-{
-    // skip nToken Tokens
-    for( xub_StrLen i = 0; (i < nToken) && (rIndex != STRING_NOTFOUND); ++i )
-        GetNextFontToken( rTokenStr, rIndex );
-
-    return GetNextFontToken( rTokenStr, rIndex );
-}
-
 // =======================================================================
 
 static bool ImplIsFontToken( const String& rName, const String& rToken )
