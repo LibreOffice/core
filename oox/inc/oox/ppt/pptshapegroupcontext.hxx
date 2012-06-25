@@ -39,6 +39,7 @@ class PPTShapeGroupContext : public ::oox::drawingml::ShapeGroupContext
     SlidePersistPtr     mpSlidePersistPtr;
     ShapeLocation       meShapeLocation;
     oox::drawingml::ShapePtr    pGraphicShape;
+    void                importExtDrawings();
 
 public:
     PPTShapeGroupContext(

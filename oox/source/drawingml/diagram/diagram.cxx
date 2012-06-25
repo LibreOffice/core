@@ -408,40 +408,44 @@ void loadDiagram( ShapePtr& pShape,
                 pShape->addExtDrawingRelId( *aIt );
     }
 
-    // layout
-    if( rLayoutPath.getLength() > 0 )
+    // extLst is present, lets bet on that and ignore the rest of the data from here
+    if( !pData->getExtDrawings().size() )
     {
-        rtl::Reference< core::FragmentHandler > xRef(
-            new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
-        importFragment(rFilter,
-                       loadFragment(rFilter,xRef),
-                       "DiagramLayout",
-                       pShape,
-                       xRef);
-    }
+        // layout
+        if( !rLayoutPath.isEmpty() )
+        {
+            rtl::Reference< core::FragmentHandler > xRef(
+                    new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
+            importFragment(rFilter,
+                    loadFragment(rFilter,xRef),
+                    "DiagramLayout",
+                    pShape,
+                    xRef);
+        }
 
-    // style
-    if( rQStylePath.getLength() > 0 )
-    {
-        rtl::Reference< core::FragmentHandler > xRef(
-            new DiagramQStylesFragmentHandler( rFilter, rQStylePath, pDiagram->getStyles() ));
-        importFragment(rFilter,
-                       loadFragment(rFilter,xRef),
-                       "DiagramQStyle",
-                       pShape,
-                       xRef);
-    }
+        // style
+        if( !rQStylePath.isEmpty() )
+        {
+            rtl::Reference< core::FragmentHandler > xRef(
+                    new DiagramQStylesFragmentHandler( rFilter, rQStylePath, pDiagram->getStyles() ));
+            importFragment(rFilter,
+                    loadFragment(rFilter,xRef),
+                    "DiagramQStyle",
+                    pShape,
+                    xRef);
+        }
 
-    // colors
-    if( rColorStylePath.getLength() > 0 )
-    {
-        rtl::Reference< core::FragmentHandler > xRef(
-            new ColorFragmentHandler( rFilter, rColorStylePath, pDiagram->getColors() ));
-        importFragment(rFilter,
-                       loadFragment(rFilter,xRef),
-                       "DiagramColorStyle",
-                       pShape,
-                       xRef);
+        // colors
+        if( !rColorStylePath.isEmpty() )
+        {
+            rtl::Reference< core::FragmentHandler > xRef(
+                    new ColorFragmentHandler( rFilter, rColorStylePath, pDiagram->getColors() ));
+            importFragment(rFilter,
+                    loadFragment(rFilter,xRef),
+                    "DiagramColorStyle",
+                    pShape,
+                    xRef);
+        }
     }
 
     // diagram loaded. now lump together & attach to shape
