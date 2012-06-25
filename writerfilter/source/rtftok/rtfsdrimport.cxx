@@ -160,6 +160,12 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             aAny <<= i->second.toInt32()*100/65536;
             xPropertySet->setPropertyValue("RotateAngle", aAny);
         }
+        else if (i->first == "lineWidth" && xPropertySet.is())
+        {
+
+            aAny <<= i->second.toInt32()/360;
+            xPropertySet->setPropertyValue("LineWidth", aAny);
+        }
         else if ( i->first == "pVerticies" )
         {
             uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
