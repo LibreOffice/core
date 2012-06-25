@@ -390,11 +390,6 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                         }
                     }
                     break;
-                case SID_ENABLE_METAFILEPRINT :
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT(sal_False, "SfxApplication::GetOptions()\nSoffice.ini key \"Common\\MetafilePrint\" is obsolete! .. How I can support SID_ENABLE_METAFILEPRINT any longer?\n");
-#endif
-                    break;
                 case SID_INET_PROXY_TYPE :
                     if (rSet.Put(
                             SfxUInt16Item(
@@ -444,12 +439,6 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     {
                         bRet = true;
                     }
-                    break;
-                case SID_INET_SECURITY_PROXY_NAME :
-                case SID_INET_SECURITY_PROXY_PORT :
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-                    DBG_ASSERT( sal_False, "SfxApplication::GetOptions()\nSome INET values no longer supported!\n" );
-#endif
                     break;
                 case SID_INET_NOPROXY :
                     if (rSet.Put(
@@ -807,14 +796,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         aSecurityOptions.SetConfirmationEnabled( ( (const SfxBoolItem *)pItem )->GetValue() );
-    }
-
-    // EnableMetafilePrint
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ENABLE_METAFILEPRINT ), sal_True, &pItem ) )
-    {
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-        DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nsoffice.ini key \"MetafilPrint\" not supported any longer!\n");
-#endif
     }
 
     // Store changed data

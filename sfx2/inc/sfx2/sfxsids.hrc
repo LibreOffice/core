@@ -209,18 +209,10 @@
 #define SID_DOCUMENT_COMPARE                (SID_SFX_START + 1586)
 #define SID_DOCUMENT_MERGE                  (SID_SFX_START + 1587)
 
-#define SID_OFFICE_PLK                      (SID_SFX_START + 1601)
-#define SID_OFFICE_PALK                     (SID_SFX_START + 1604)
-#define SID_CHECK_KEY                       (SID_SFX_START + 1605)
-#define SID_OFFICE_PRIVATE_USE                  (SID_SFX_START + 1606)
-#define SID_OFFICE_COMMERCIAL_USE               (SID_SFX_START + 1607)
 #define SID_OFFICE_CUSTOMERNUMBER               (SID_SFX_START + 1608)
 #define SID_OFFICE_CHECK_PLZ                (SID_SFX_START + 1610)
-#define SID_INTERNET_SEARCH                 (SID_SFX_START + 1611)
 #define SID_CURRENT_URL                     (SID_SFX_START + 1613)
-#define SID_OLD_PALK                        (SID_SFX_START + 1620)
 #define SID_GROUPVIEW                       (SID_SFX_START + 1621)
-
 
 #define SID_TIPWINDOW                           (SID_SFX_START + 1632)
 #define SID_CHARSET                         (SID_SFX_START + 1633)
@@ -362,8 +354,6 @@
 #define SID_STYLE_FAMILY3                   (SID_STYLE_FAMILY_START + 2)
 #define SID_STYLE_FAMILY4                   (SID_STYLE_FAMILY_START + 3)
 #define SID_STYLE_FAMILY5                   (SID_STYLE_FAMILY_START + 4)
-
-#define SID_ENABLE_METAFILEPRINT            (SID_SFX_START + 543)
 
 #define SID_STYLE_NEW                       (SID_SFX_START + 549)
 #define SID_STYLE_EDIT                      (SID_SFX_START + 550)
@@ -578,8 +568,6 @@
 #define SID_INET_FTP_PROXY_NAME         (SID_OPTIONS_START + 40)
 #define SID_INET_FTP_PROXY_PORT         (SID_OPTIONS_START + 41)
 #define SID_INET_SOCKS_PROXY_PORT       (SID_OPTIONS_START + 43)
-#define SID_INET_SECURITY_PROXY_NAME    (SID_OPTIONS_START + 44)
-#define SID_INET_SECURITY_PROXY_PORT    (SID_OPTIONS_START + 45)
 
 #define SID_INET_EXE_PLUGIN             (SID_OPTIONS_START + 52)
 

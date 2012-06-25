@@ -900,33 +900,6 @@ SfxTemplateItem CharStyle SID_STYLE_FAMILY1
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem CheckKey SID_CHECK_KEY
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_SPECIAL;
-]
-
-//--------------------------------------------------------------------------
 SfxStringItem ChooseMacro SID_BASICIDE_CHOOSEMACRO
 ()
 [
@@ -1131,33 +1104,6 @@ SfxStringItem Comments SID_DOCINFO_COMMENTS
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = ;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem CommercialUse SID_OFFICE_COMMERCIAL_USE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_SPECIAL;
 ]
 
 //--------------------------------------------------------------------------
@@ -3206,31 +3152,6 @@ SfxBoolItem InternetOnline SID_INTERNET_ONLINE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InternetSearch SID_INTERNET_SEARCH
-(SfxStringItem SearchString SID_INTERNET_SEARCH)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem IsLoading SID_DOC_LOADING
 
 [
@@ -3473,33 +3394,6 @@ SfxStringItem LibSelector SID_BASICIDE_LIBSELECTOR
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_MACRO;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem LicenceKey SID_OFFICE_PLK
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
 ]
 
 //--------------------------------------------------------------------------
@@ -4434,33 +4328,6 @@ SfxStringItem ObjectMenue SID_OBJECT
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem OldPALK SID_OLD_PALK
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_SPECIAL;
-]
-
-//--------------------------------------------------------------------------
 SfxObjectItem Open SID_OPENDOC
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER,SfxStringItem SuggestedSaveAsDir SID_DEFAULTFILEPATH,SfxStringItem SuggestedSaveAsName SID_DEFAULTFILENAME)
 [
@@ -5127,33 +4994,6 @@ SfxBoolItem PrintPreview SID_PRINTPREVIEW
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem PrivateUse SID_OFFICE_PRIVATE_USE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_SPECIAL;
 ]
 
 //--------------------------------------------------------------------------
@@ -6172,31 +6012,6 @@ SfxVoidItem SetOptions SID_SETOPTIONS
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = ;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem SetPALK SID_OFFICE_PALK
-(SfxStringItem PALK SID_OFFICE_PALK)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_SPECIAL;
 ]
 
 //--------------------------------------------------------------------------

@@ -242,13 +242,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_OFFICE_PRIVATE_USE:
-        case SID_OFFICE_COMMERCIAL_USE:
-        {
-            DBG_ASSERT( sal_False, "SfxApplication::PropExec_Impl()\nSID_OFFICE_PRIVATE_USE & SID_OFFICE_COMMERCIAL_USE are obsolete!\n" );
-            break;
-        }
-
         case SID_OFFICE_CUSTOMERNUMBER:
         {
             SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, sal_False);
