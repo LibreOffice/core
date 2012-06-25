@@ -434,6 +434,7 @@ class Frame :   // interfaces
         css::uno::Reference< ::com::sun::star::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
         css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
         css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper                      ;
+         void*                                                                   mp_WindowCommandDispatch            ;   /// holds the window command dispatch
 
     protected:
 

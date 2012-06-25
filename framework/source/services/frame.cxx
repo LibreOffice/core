@@ -294,6 +294,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_bSelfClose                ( sal_False                                         ) // Important!
         ,   m_bIsHidden                 ( sal_True                                          )
         ,   m_xTitleHelper              (                                                   )
+         ,   mp_WindowCommandDispatch    ( NULL                                              )
         ,   m_aChildFrameContainer      (                                                   )
 {
     // Check incoming parameter to avoid against wrong initialization.
@@ -316,6 +317,10 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
 Frame::~Frame()
 {
     LOG_ASSERT2( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "Frame::~Frame()", "Who forgot to dispose this service?" )
+     if (mp_WindowCommandDispatch != NULL)
+     {
+          delete ((WindowCommandDispatch *)mp_WindowCommandDispatch);  // memory leak #i120079#
+     }
 }
 
 /*-************************************************************************************************************//**
@@ -625,7 +630,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     impl_enablePropertySet();
 
     // create WindowCommandDispatch; it is supposed to release itself at frame destruction
-    (void)new WindowCommandDispatch(xSMGR, this);
+    mp_WindowCommandDispatch = new WindowCommandDispatch(xSMGR, this);  // memory leak #i120079#
 
     // Initialize title functionality
     TitleHelper* pTitleHelper = new TitleHelper(xSMGR);
