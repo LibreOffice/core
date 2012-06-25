@@ -2210,6 +2210,12 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     SCROW nLastUsedScRow;
     rDoc.GetFormattedAndUsedArea( nScTab, nLastUsedScCol, nLastUsedScRow );
 
+    if(nLastUsedScCol > nMaxScCol)
+        nLastUsedScCol = nMaxScCol;
+
+    if(nLastUsedScRow > nMaxScRow)
+        nLastUsedScRow = nMaxScRow;
+
     ScRange aUsedRange( 0, 0, nScTab, nLastUsedScCol, nLastUsedScRow, nScTab );
     GetAddressConverter().ValidateRange( aUsedRange, true );
     nLastUsedScCol = aUsedRange.aEnd.Col();
