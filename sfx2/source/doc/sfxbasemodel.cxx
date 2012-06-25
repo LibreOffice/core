@@ -481,12 +481,9 @@ SfxSaveGuard::SfxSaveGuard(const uno::Reference< frame::XModel >&             xM
     , m_pData      (pData )
     , m_pFramesLock(0     )
 {
-    static ::rtl::OUString MSG_1("Object already disposed.");
-    static ::rtl::OUString MSG_2("Concurrent save requests on the same document are not possible.");
-
     if ( m_pData->m_bClosed )
         throw ::com::sun::star::lang::DisposedException(
-                MSG_1,
+                ::rtl::OUString("Object already disposed."),
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
 
     if (
@@ -494,7 +491,7 @@ SfxSaveGuard::SfxSaveGuard(const uno::Reference< frame::XModel >&             xM
         m_pData->m_bSaving
        )
         throw ::com::sun::star::io::IOException(
-                MSG_2,
+                ::rtl::OUString("Concurrent save requests on the same document are not possible."),
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
 
     m_pData->m_bSaving = sal_True;
@@ -1473,8 +1470,6 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const uno::Reference< XMODIFYLI
 
 void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
 {
-    static ::rtl::OUString MSG_1("Cant close while saving.");
-
     SolarMutexGuard aGuard;
     if ( impl_isDisposed() || m_pData->m_bClosed || m_pData->m_bClosing )
         return;
@@ -1503,7 +1498,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
         if (bDeliverOwnership)
             m_pData->m_bSuicide = sal_True;
         throw util::CloseVetoException(
-                MSG_1,
+                ::rtl::OUString("Cant close while saving."),
                 static_cast< ::com::sun::star::util::XCloseable* >(this));
     }
 
@@ -3739,7 +3734,7 @@ css::uno::Reference< css::frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
     if ( ! m_pData->m_xTitleHelper.is ())
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory ();
-        static const ::rtl::OUString SERVICENAME_DESKTOP("com.sun.star.frame.Desktop");
+        const ::rtl::OUString SERVICENAME_DESKTOP("com.sun.star.frame.Desktop");
         css::uno::Reference< css::frame::XUntitledNumbers >    xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::frame::XModel >              xThis   (static_cast< css::frame::XModel* >(this), css::uno::UNO_QUERY_THROW);
 

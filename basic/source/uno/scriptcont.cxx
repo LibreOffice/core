@@ -1171,16 +1171,7 @@ Sequence< OUString > SfxScriptLibraryContainer::getSupportedServiceNames_static(
 
 OUString SfxScriptLibraryContainer::getImplementationName_static()
 {
-    static OUString aImplName;
-    static sal_Bool bNeedsInit = sal_True;
-
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
-    if( bNeedsInit )
-    {
-        aImplName = OUString("com.sun.star.comp.sfx2.ScriptLibraryContainer" );
-        bNeedsInit = sal_False;
-    }
-    return aImplName;
+    return OUString("com.sun.star.comp.sfx2.ScriptLibraryContainer" );
 }
 
 Reference< XInterface > SAL_CALL SfxScriptLibraryContainer::Create

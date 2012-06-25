@@ -202,31 +202,15 @@ SFX_IMPL_ONEINSTANCEFACTORY( SfxApplicationScriptLibraryContainer )
 
 Sequence< OUString > SfxApplicationScriptLibraryContainer::impl_getStaticSupportedServiceNames()
 {
-    static Sequence< OUString > seqServiceNames( 1 );
-    static sal_Bool bNeedsInit = sal_True;
-
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
-    if( bNeedsInit )
-    {
-        OUString* pSeq = seqServiceNames.getArray();
-        pSeq[0] = OUString("com.sun.star.script.ApplicationScriptLibraryContainer");
-        bNeedsInit = sal_False;
-    }
+    Sequence< OUString > seqServiceNames( 1 );
+    OUString* pSeq = seqServiceNames.getArray();
+    pSeq[0] = OUString("com.sun.star.script.ApplicationScriptLibraryContainer");
     return seqServiceNames;
 }
 
 OUString SfxApplicationScriptLibraryContainer::impl_getStaticImplementationName()
 {
-    static OUString aImplName;
-    static sal_Bool bNeedsInit = sal_True;
-
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
-    if( bNeedsInit )
-    {
-        aImplName = OUString("com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer");
-        bNeedsInit = sal_False;
-    }
-    return aImplName;
+    return OUString("com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer");
 }
 
 Reference< XInterface > SAL_CALL SfxApplicationScriptLibraryContainer::impl_createInstance

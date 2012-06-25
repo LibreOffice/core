@@ -258,10 +258,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 aRepresentation = pDoc->CreatePageNumValue((sal_uInt16)nPgNum);
             }
             else
-            {
-                static String aNumberText( SdResId( STR_FIELD_PLACEHOLDER_NUMBER ) );
-                aRepresentation = aNumberText;
-            }
+                aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_NUMBER).toString();
 
             pInfo->SetRepresentation( aRepresentation );
         }
@@ -298,14 +295,9 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             }
 
             if( nPageCount > 0 )
-            {
                 aRepresentation = pDoc->CreatePageNumValue(nPageCount);
-            }
             else
-            {
-                static String aNumberText( SdResId( STR_FIELD_PLACEHOLDER_COUNT ) );
-                aRepresentation = aNumberText;
-            }
+                aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_COUNT).toString();
 
             pInfo->SetRepresentation( aRepresentation );
         }
@@ -351,20 +343,11 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 if( (pPage == NULL) || bMasterView )
                 {
                     if( bHeaderField )
-                    {
-                        static String aHeaderStr( SdResId( STR_FIELD_PLACEHOLDER_HEADER ) );
-                        aRepresentation = aHeaderStr;
-                    }
+                        aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_HEADER).toString();
                     else if (bFooterField )
-                    {
-                        static String aFooterStr( SdResId( STR_FIELD_PLACEHOLDER_FOOTER ) );
-                        aRepresentation = aFooterStr;
-                    }
+                        aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_FOOTER).toString();
                     else if (bDateTimeField )
-                    {
-                        static String aDateTimeStr( SdResId( STR_FIELD_PLACEHOLDER_DATETIME ) );
-                        aRepresentation = aDateTimeStr;
-                    }
+                        aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_DATETIME).toString();
                 }
                 else
                 {

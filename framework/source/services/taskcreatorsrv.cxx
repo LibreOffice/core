@@ -119,23 +119,17 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
-    static ::rtl::OUString     DEFAULTVAL_FRAMENAME                     = ::rtl::OUString();
-    static sal_Bool            DEFAULTVAL_MAKEVISIBLE                   = sal_False;
-    static sal_Bool            DEFAULTVAL_CREATETOPWINDOW               = sal_True;
-    static css::awt::Rectangle DEFAULTVAL_POSSIZE                       = css::awt::Rectangle(0, 0, 0, 0); // only possize=[0,0,0,0] triggers default handling of vcl !
-    static sal_Bool            DEFAULTVAL_SUPPORTPERSSISTENTWINDOWSTATE = sal_False;
-    static sal_Bool            DEFAULTVAL_ENABLE_TITLEBARUPDATE         = sal_True;
-
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
     css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_PARENTFRAME)                  , css::uno::Reference< css::frame::XFrame >());
-    ::rtl::OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_FRAMENAME)                    , DEFAULTVAL_FRAMENAME                       );
-    sal_Bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_MAKEVISIBLE)                  , DEFAULTVAL_MAKEVISIBLE                     );
-    sal_Bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_CREATETOPWINDOW)              , DEFAULTVAL_CREATETOPWINDOW                 );
-    css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_POSSIZE)                      , DEFAULTVAL_POSSIZE                         );
+    ::rtl::OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_FRAMENAME)                    , ::rtl::OUString()                          );
+    sal_Bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_MAKEVISIBLE)                  , sal_False                                  );
+    sal_Bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_CREATETOPWINDOW)              , sal_True                                   );
+    // only possize=[0,0,0,0] triggers default handling of vcl !
+    css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_POSSIZE)                      , css::awt::Rectangle(0, 0, 0, 0)            );
     css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_CONTAINERWINDOW)              , css::uno::Reference< css::awt::XWindow >() );
-    sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , DEFAULTVAL_SUPPORTPERSSISTENTWINDOWSTATE   );
-    sal_Bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , DEFAULTVAL_ENABLE_TITLEBARUPDATE           );
+    sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , sal_False                                  );
+    sal_Bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , sal_True                                   );
 
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );

@@ -109,9 +109,6 @@ void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) 
 
 void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException )
 {
-    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER("com.sun.star.frame.GlobalEventBroadcaster");
-    static ::rtl::OUString EVENT_QUIT_APP                ("OnCloseApp");
-
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
     if( xDesktop.is() == sal_True )
         xDesktop->removeTerminateListener( this );
@@ -125,11 +122,11 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     pApp->Get_Impl()->pAppDispatch->release();
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    css::uno::Reference< css::document::XEventListener > xGlobalBroadcaster(xSMGR->createInstance(SERVICE_GLOBALEVENTBROADCASTER), css::uno::UNO_QUERY);
+    css::uno::Reference< css::document::XEventListener > xGlobalBroadcaster(xSMGR->createInstance("com.sun.star.frame.GlobalEventBroadcaster"), css::uno::UNO_QUERY);
     if (xGlobalBroadcaster.is())
     {
         css::document::EventObject aEvent2;
-        aEvent2.EventName = EVENT_QUIT_APP;
+        aEvent2.EventName = "OnCloseApp";
         xGlobalBroadcaster->notifyEvent(aEvent2);
     }
 
@@ -139,8 +136,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
 ::rtl::OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException)
 {
-    static const ::rtl::OUString IMPLNAME("com.sun.star.comp.sfx2.SfxTerminateListener");
-    return IMPLNAME;
+    return ::rtl::OUString("com.sun.star.comp.sfx2.SfxTerminateListener");
 }
 
 ::sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (RuntimeException)

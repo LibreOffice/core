@@ -697,9 +697,8 @@ void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFormat _eF
             }
             else
             {
-                static const OUString sSetService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.SetAccess"));
                 Reference<XServiceInfo> xSVI(_xParentNode, UNO_QUERY);
-                if (xSVI.is() && xSVI->supportsService(sSetService))
+                if (xSVI.is() && xSVI->supportsService("com.sun.star.configuration.SetAccess"))
                 {
                     OUString * pNames = _rNames.getArray();
                     for(int i = 0; i<_rNames.getLength(); ++i)

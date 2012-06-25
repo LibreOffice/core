@@ -230,6 +230,7 @@ class SaxExpatParser_Impl
 {
 public: // module scope
     Mutex               aMutex;
+    OUString            sCDATA;
 
     Reference< XDocumentHandler >   rDocumentHandler;
     Reference< XExtendedDocumentHandler > rExtendedDocumentHandler;
@@ -263,6 +264,11 @@ public: // module scope
     Locale              locale;
 
 public:
+    SaxExpatParser_Impl()
+        : sCDATA("CDATA")
+    {
+    }
+
     // the C-Callbacks for the expat parser
     void static callbackStartElement(void *userData, const XML_Char *name , const XML_Char **atts);
     void static callbackEndElement(void *userData, const XML_Char *name);
@@ -789,10 +795,6 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
                                                 const XML_Char *pwName ,
                                                 const XML_Char **awAttributes )
 {
-    // in case of two concurrent threads, there is only the danger of an leak,
-    // which is neglectable for one string
-    static OUString g_CDATA(  "CDATA"  );
-
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
 
     if( pImpl->rDocumentHandler.is() ) {
@@ -804,7 +806,7 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
             OSL_ASSERT( awAttributes[i+1] );
             pImpl->pAttrList->addAttribute(
                 XML_CHAR_TO_OUSTRING( awAttributes[i] ) ,
-                g_CDATA ,  // expat doesn't know types
+                pImpl->sCDATA,  // expat doesn't know types
                 XML_CHAR_TO_OUSTRING( awAttributes[i+1] ) );
             i +=2;
         }

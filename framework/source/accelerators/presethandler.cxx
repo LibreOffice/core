@@ -83,43 +83,37 @@ namespace framework
 //-----------------------------------------------
 ::rtl::OUString PresetHandler::PRESET_DEFAULT()
 {
-    static ::rtl::OUString RSTYPE = DECLARE_ASCII("default");
-    return RSTYPE;
+    return ::rtl::OUString("default");
 }
 
 //-----------------------------------------------
 ::rtl::OUString PresetHandler::TARGET_CURRENT()
 {
-    static ::rtl::OUString RSTYPE = DECLARE_ASCII("current");
-    return RSTYPE;
+    return ::rtl::OUString("current");
 }
 
 //-----------------------------------------------
 ::rtl::OUString PresetHandler::RESOURCETYPE_MENUBAR()
 {
-    static ::rtl::OUString RSTYPE = DECLARE_ASCII("menubar");
-    return RSTYPE;
+    return ::rtl::OUString("menubar");
 }
 
 //-----------------------------------------------
 ::rtl::OUString PresetHandler::RESOURCETYPE_TOOLBAR()
 {
-    static ::rtl::OUString RSTYPE = DECLARE_ASCII("toolbar");
-    return RSTYPE;
+    return ::rtl::OUString("toolbar");
 }
 
 //-----------------------------------------------
 ::rtl::OUString PresetHandler::RESOURCETYPE_ACCELERATOR()
 {
-    static ::rtl::OUString RSTYPE = DECLARE_ASCII("accelerator");
-    return RSTYPE;
+    return ::rtl::OUString("accelerator");
 }
 
 //-----------------------------------------------
 ::rtl::OUString PresetHandler::RESOURCETYPE_STATUSBAR()
 {
-    static ::rtl::OUString RSTYPE = DECLARE_ASCII("statusbar");
-    return RSTYPE;
+    return ::rtl::OUString("statusbar");
 }
 
 //-----------------------------------------------

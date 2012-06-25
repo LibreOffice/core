@@ -117,7 +117,7 @@ String FilterConfigCache::FilterConfigCacheEntry::GetShortName()
 
     @param  sPackage
             specify, which config package should be opened.
-            Must be one of the defined static values TYPEPKG or FILTERPKG.
+            Must be one of "types" or "filters"
 
     @return A valid object if open was successfull. The access on opened
             data will be readonly. It returns NULL in case open failed.
@@ -127,9 +127,6 @@ String FilterConfigCache::FilterConfigCacheEntry::GetShortName()
 Reference< XInterface > openConfig(const char* sPackage)
     throw(RuntimeException)
 {
-    static OUString TYPEPKG( "types"  );
-    static OUString FILTERPKG( "filters"  );
-
     Reference< XMultiServiceFactory > xSMGR(
         comphelper::getProcessServiceFactory() );
     Reference< XInterface >           xCfg;
@@ -146,9 +143,9 @@ Reference< XInterface > openConfig(const char* sPackage)
 
             // define cfg path for open
             aParam.Name = OUString( "nodepath" );
-            if (TYPEPKG.equalsIgnoreAsciiCaseAscii(sPackage))
+            if (rtl_str_compareIgnoreAsciiCase(sPackage, "types") == 0)
                 aParam.Value <<= OUString( "/org.openoffice.TypeDetection.Types/Types" );
-            if (FILTERPKG.equalsIgnoreAsciiCaseAscii(sPackage))
+            if (rtl_str_compareIgnoreAsciiCase(sPackage, "filters") == 0)
                 aParam.Value <<= OUString( "/org.openoffice.TypeDetection.GraphicFilter/Filters" );
             lParams[0] = makeAny(aParam);
 
@@ -167,14 +164,14 @@ Reference< XInterface > openConfig(const char* sPackage)
 
 void FilterConfigCache::ImplInit()
 {
-    static OUString STYPE                ( "Type"                );
-    static OUString SUINAME              ( "UIName"              );
-    static OUString SUICOMPONENT         ( "UIComponent"         );
-    static OUString SFLAGS               ( "Flags"               );
-    static OUString SMEDIATYPE           ( "MediaType"           );
-    static OUString SEXTENSIONS          ( "Extensions"          );
-    static OUString SFORMATNAME          ( "FormatName"          );
-    static OUString SREALFILTERNAME      ( "RealFilterName"      );
+    OUString STYPE                ( "Type"                );
+    OUString SUINAME              ( "UIName"              );
+    OUString SUICOMPONENT         ( "UIComponent"         );
+    OUString SFLAGS               ( "Flags"               );
+    OUString SMEDIATYPE           ( "MediaType"           );
+    OUString SEXTENSIONS          ( "Extensions"          );
+    OUString SFORMATNAME          ( "FormatName"          );
+    OUString SREALFILTERNAME      ( "RealFilterName"      );
 
     // get access to config
     Reference< XNameAccess > xTypeAccess  ( openConfig("types"  ), UNO_QUERY );

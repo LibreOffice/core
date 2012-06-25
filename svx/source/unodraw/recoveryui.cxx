@@ -167,8 +167,7 @@ void SAL_CALL RecoveryUI::removeStatusListener(const css::uno::Reference< css::f
 //===============================================
 ::rtl::OUString RecoveryUI::st_getImplementationName()
 {
-    static ::rtl::OUString IMPLEMENTATIONNAME = IMPLEMENTATIONNAME_RECOVERYUI;
-    return IMPLEMENTATIONNAME;
+    return ::rtl::OUString(IMPLEMENTATIONNAME_RECOVERYUI);
 }
 
 //===============================================

@@ -63,7 +63,7 @@ Reference<XInterface> SAL_CALL TaskPanelFactory_createInstance (
 Sequence<rtl::OUString> SAL_CALL TaskPanelFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const OUString sServiceName("com.sun.star.drawing.framework.TaskPanelFactory");
+    const OUString sServiceName("com.sun.star.drawing.framework.TaskPanelFactory");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

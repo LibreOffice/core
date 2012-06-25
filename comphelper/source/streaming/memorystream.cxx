@@ -221,8 +221,7 @@ void SAL_CALL UNOMemoryStream::truncate() throw (IOException, RuntimeException)
 
 ::rtl::OUString SAL_CALL UNOMemoryStream::getImplementationName_static()
 {
-    static const OUString sImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.MemoryStream" ) );
-    return sImplName;
+    return ::rtl::OUString("com.sun.star.comp.MemoryStream");
 }
 
 Sequence< ::rtl::OUString > SAL_CALL UNOMemoryStream::getSupportedServiceNames_static()

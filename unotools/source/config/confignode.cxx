@@ -488,19 +488,14 @@ namespace utl
     //========================================================================
     namespace
     {
-        //--------------------------------------------------------------------
-        static const ::rtl::OUString& lcl_getProviderServiceName( )
-        {
-            static ::rtl::OUString s_sProviderServiceName(  "com.sun.star.configuration.ConfigurationProvider"  );
-            return s_sProviderServiceName;
-        }
+        static const char s_sProviderServiceName[] = "com.sun.star.configuration.ConfigurationProvider";
 
         //--------------------------------------------------------------------
         Reference< XMultiServiceFactory > lcl_getConfigProvider( const ::comphelper::ComponentContext& i_rContext )
         {
             try
             {
-                Reference< XMultiServiceFactory > xProvider( i_rContext.createComponent( lcl_getProviderServiceName() ), UNO_QUERY_THROW );
+                Reference< XMultiServiceFactory > xProvider( i_rContext.createComponent(s_sProviderServiceName), UNO_QUERY_THROW );
                 return xProvider;
             }
             catch ( const Exception& )
@@ -614,7 +609,7 @@ namespace utl
         {
             try
             {
-                Reference< XMultiServiceFactory > xConfigFactory( _rxORB->createInstance( lcl_getProviderServiceName( ) ), UNO_QUERY );
+                Reference< XMultiServiceFactory > xConfigFactory( _rxORB->createInstance(s_sProviderServiceName), UNO_QUERY );
                 if ( xConfigFactory.is() )
                     return createWithProvider( xConfigFactory, _rPath, _nDepth, _eMode, _bLazyWrite );
             }

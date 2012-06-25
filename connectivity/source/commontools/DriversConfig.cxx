@@ -63,31 +63,25 @@ namespace
         const ::utl::OConfigurationNode aURLPatternNode = _aInstalled.openNode(_sEntry);
         if ( aURLPatternNode.isValid() )
         {
-            static const ::rtl::OUString s_sParentURLPattern(RTL_CONSTASCII_USTRINGPARAM("ParentURLPattern"));
-            static const ::rtl::OUString s_sDriver(RTL_CONSTASCII_USTRINGPARAM("Driver"));
-            static const ::rtl::OUString s_sDriverTypeDisplayName(RTL_CONSTASCII_USTRINGPARAM("DriverTypeDisplayName"));
-            static const ::rtl::OUString s_sProperties(RTL_CONSTASCII_USTRINGPARAM("Properties"));
-            static const ::rtl::OUString s_sFeatures(RTL_CONSTASCII_USTRINGPARAM("Features"));
-            static const ::rtl::OUString s_sMetaData(RTL_CONSTASCII_USTRINGPARAM("MetaData"));
             ::rtl::OUString sParentURLPattern;
-            aURLPatternNode.getNodeValue(s_sParentURLPattern) >>= sParentURLPattern;
+            aURLPatternNode.getNodeValue("ParentURLPattern") >>= sParentURLPattern;
             if ( !sParentURLPattern.isEmpty() )
                 lcl_readURLPatternNode(_aInstalled,sParentURLPattern,_rInstalledDriver);
 
             ::rtl::OUString sDriverFactory;
-            aURLPatternNode.getNodeValue(s_sDriver) >>= sDriverFactory;
+            aURLPatternNode.getNodeValue("Driver") >>= sDriverFactory;
             if ( !sDriverFactory.isEmpty() )
                 _rInstalledDriver.sDriverFactory = sDriverFactory;
 
             ::rtl::OUString sDriverTypeDisplayName;
-            aURLPatternNode.getNodeValue(s_sDriverTypeDisplayName) >>= sDriverTypeDisplayName;
+            aURLPatternNode.getNodeValue("DriverTypeDisplayName") >>= sDriverTypeDisplayName;
             OSL_ENSURE(!sDriverTypeDisplayName.isEmpty(),"No valid DriverTypeDisplayName property!");
             if ( !sDriverTypeDisplayName.isEmpty() )
                 _rInstalledDriver.sDriverTypeDisplayName = sDriverTypeDisplayName;
 
-            lcl_fillValues(aURLPatternNode,s_sProperties,_rInstalledDriver.aProperties);
-            lcl_fillValues(aURLPatternNode,s_sFeatures,_rInstalledDriver.aFeatures);
-            lcl_fillValues(aURLPatternNode,s_sMetaData,_rInstalledDriver.aMetaData);
+            lcl_fillValues(aURLPatternNode,"Properties",_rInstalledDriver.aProperties);
+            lcl_fillValues(aURLPatternNode,"Features",_rInstalledDriver.aFeatures);
+            lcl_fillValues(aURLPatternNode,"MetaData",_rInstalledDriver.aMetaData);
         }
     }
 }

@@ -624,20 +624,17 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
 //-----------------------------------------------
 ::comphelper::Locale XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
-    static ::rtl::OUString LOCALE_PACKAGE("/org.openoffice.Setup");
-    static ::rtl::OUString LOCALE_PATH("L10N");
-    static ::rtl::OUString LOCALE_KEY("ooLocale");
-
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig(xSMGR, LOCALE_PACKAGE, LOCALE_PATH, fpc::ConfigurationHelper::E_READONLY);
+    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig(xSMGR,
+        "/org.openoffice.Setup", "L10N", fpc::ConfigurationHelper::E_READONLY);
     css::uno::Reference< css::beans::XPropertySet > xProp     (xCFG, css::uno::UNO_QUERY_THROW);
     ::rtl::OUString                                 sISOLocale;
-    xProp->getPropertyValue(LOCALE_KEY) >>= sISOLocale;
+    xProp->getPropertyValue("ooLocale") >>= sISOLocale;
 
     if (sISOLocale.isEmpty())
         return ::comphelper::Locale::EN_US();
@@ -1666,20 +1663,17 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
 //-----------------------------------------------
 ::comphelper::Locale XCUBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
-    static ::rtl::OUString LOCALE_PACKAGE("/org.openoffice.Setup");
-    static ::rtl::OUString LOCALE_PATH("L10N");
-    static ::rtl::OUString LOCALE_KEY("ooLocale");
-
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig(xSMGR, LOCALE_PACKAGE, LOCALE_PATH, fpc::ConfigurationHelper::E_READONLY);
+    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig(xSMGR,
+        "/org.openoffice.Setup", "L10N", fpc::ConfigurationHelper::E_READONLY);
     css::uno::Reference< css::beans::XPropertySet > xProp     (xCFG, css::uno::UNO_QUERY_THROW);
     ::rtl::OUString                                 sISOLocale;
-    xProp->getPropertyValue(LOCALE_KEY) >>= sISOLocale;
+    xProp->getPropertyValue("ooLocale") >>= sISOLocale;
 
     if (sISOLocale.isEmpty())
         return ::comphelper::Locale::EN_US();

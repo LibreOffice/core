@@ -163,15 +163,6 @@ typedef Bootstrap::PathStatus PathStatus;
 sal_Unicode const cURLSeparator = '/';
 
 // ---------------------------------------------------------------------------------------
-static
-inline
-OUString getURLSeparator()
-{
-    static OUString theSep(&cURLSeparator,1);
-    return theSep;
-}
-
-// ---------------------------------------------------------------------------------------
 // path status utility function
 static
 PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirItem)
@@ -263,28 +254,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
         return false;
     }
 }
-/*  old code to strip embedded dots
-    static OUString const sDots(RTL_CONSTASCII_USTRINGPARAM("/.."));
 
-    sal_Int32 nDotsIndex = _rsURL.indexOf(sDots);
-    while (nDotsIndex >= 0)
-    {
-        OSL_ASSERT(_rsURL.indexOf(sDots) == nDotsIndex);
-
-        sal_Int32 nStripIndex = _rsURL.lastIndexOf(cURLSeparator,nDotsIndex);
-        if (nStripIndex < 0 || nStripIndex+1 == nDotsIndex)
-        {
-            OSL_TRACE("Invalid use of dots in bootstrap URL");
-            return false;
-        }
-        _rsURL = _rsURL.copy(0,nStripIndex) + _rsURL.copy(nDotsIndex + sDots.getLength());
-
-        nDotsIndex = _rsURL.indexOf(sDots,nStripIndex);
-    }
-    return true;
-}
-
-*/
 // ---------------------------------------------------------------------------------------
 
 static
@@ -365,7 +335,6 @@ PathStatus getDerivedPath(
           )
 {
     OUString sDerivedURL;
-
     OSL_PRECOND(!_rData.getFrom(_sBootstrapParameter,sDerivedURL),"Setting for derived path is already defined");
     OSL_PRECOND(!_sRelativeURL.isEmpty() && _sRelativeURL[0] != cURLSeparator,"Invalid Relative URL");
 
@@ -376,7 +345,7 @@ PathStatus getDerivedPath(
     {
         OSL_PRECOND(_aBaseURL[_aBaseURL.getLength()-1] != cURLSeparator,"Unexpected: base URL ends in slash");
 
-        sDerivedURL = _aBaseURL + getURLSeparator() + _sRelativeURL;
+        sDerivedURL = rtl::OUStringBuffer(_aBaseURL).append(cURLSeparator).append(_sRelativeURL).makeStringAndClear();
 
         // a derived (nested) URL can only exist or have a lesser status, if the parent exists
         if (aStatus == Bootstrap::PATH_EXISTS)

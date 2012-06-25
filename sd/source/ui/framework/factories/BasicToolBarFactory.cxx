@@ -64,7 +64,7 @@ Reference<XInterface> SAL_CALL BasicToolBarFactory_createInstance (
 Sequence<rtl::OUString> SAL_CALL BasicToolBarFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.BasicToolBarFactory");
+    const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.BasicToolBarFactory");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

@@ -282,8 +282,6 @@ rtl::OUString URLParameter::get_the_jar()
 
 void URLParameter::readBerkeley()
 {
-    static rtl::OUString aQuestionMark("?");
-
     if( get_id().compareToAscii("") == 0 )
         return;
 
@@ -344,9 +342,9 @@ void URLParameter::readBerkeley()
         if( !aExtensionPath.isEmpty() )
         {
             rtl::OUStringBuffer aExtendedJarStrBuf;
-            aExtendedJarStrBuf.append( aQuestionMark );
+            aExtendedJarStrBuf.append( '?' );
             aExtendedJarStrBuf.append( aExtensionPath );
-            aExtendedJarStrBuf.append( aQuestionMark );
+            aExtendedJarStrBuf.append( '?' );
             aExtendedJarStrBuf.append( m_aJar );
             m_aJar = aExtendedJarStrBuf.makeStringAndClear();
             m_aExtensionRegistryPath = aExtensionRegistryPath;

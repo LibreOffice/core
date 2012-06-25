@@ -103,10 +103,6 @@ TaskCreator::~TaskCreator()
 css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::OUString& sName    ,
                                                                          sal_Bool         bVisible )
 {
-    static ::rtl::OUString PACKAGE("org.openoffice.Office.TabBrowse");
-    static ::rtl::OUString RELPATH("TaskCreatorService");
-    static ::rtl::OUString KEY("ImplementationName");
-
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
@@ -123,7 +119,11 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
             ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_DEFAULT) )
            )
         {
-            ::comphelper::ConfigurationHelper::readDirectKey(xSMGR, PACKAGE, RELPATH, KEY, ::comphelper::ConfigurationHelper::E_READONLY) >>= sCreator;
+            ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
+                "org.openoffice.Office.TabBrowse",
+                "TaskCreatorService",
+                "ImplementationName",
+                ::comphelper::ConfigurationHelper::E_READONLY) >>= sCreator;
         }
 
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(

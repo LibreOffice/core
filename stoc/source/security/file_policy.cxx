@@ -594,8 +594,7 @@ Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW(())
 //--------------------------------------------------------------------------------------------------
 OUString filepolicy_getImplementationName() SAL_THROW(())
 {
-    static OUString s_implName = OUSTR(IMPL_NAME);
-    return s_implName;
+    return OUSTR(IMPL_NAME);
 }
 }
 

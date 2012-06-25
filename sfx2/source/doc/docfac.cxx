@@ -390,20 +390,17 @@ String SfxObjectFactory::GetFactoryURL() const
 
 String SfxObjectFactory::GetModuleName() const
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER("com.sun.star.frame.ModuleManager");
-    static ::rtl::OUString PROP_MODULEUINAME        ("ooSetupFactoryUIName");
-
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
         css::uno::Reference< css::container::XNameAccess > xModuleManager(
-            xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
+            xSMGR->createInstance("com.sun.star.frame.ModuleManager"),
             css::uno::UNO_QUERY_THROW);
 
         ::rtl::OUString sDocService(GetDocumentServiceName());
         ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(sDocService) );
-        ::rtl::OUString sModuleName = aPropSet.getUnpackedValueOrDefault(PROP_MODULEUINAME, ::rtl::OUString());
+        ::rtl::OUString sModuleName = aPropSet.getUnpackedValueOrDefault("ooSetupFactoryUIName", ::rtl::OUString());
         return String(sModuleName);
     }
     catch(const css::uno::RuntimeException&)
