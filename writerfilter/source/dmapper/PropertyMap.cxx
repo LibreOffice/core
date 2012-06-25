@@ -1025,6 +1025,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             OSL_FAIL( "Exception in SectionPropertyMap::CloseSectionGroup");
         }
     }
+    rDM_Impl.SetIsFirstParagraphInSection(true);
 }
 
 

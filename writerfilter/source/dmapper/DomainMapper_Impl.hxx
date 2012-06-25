@@ -349,8 +349,12 @@ private:
     RedlineParamsPtr                m_pParaRedline;
     bool                            m_bIsParaChange;
 
+    /// If the current paragraph has any runs.
     bool                            m_bParaChanged;
+    bool                            m_bIsFirstParaInSection;
     bool                            m_bIsLastParaInSection;
+    /// If the current paragraph contains section property definitions.
+    bool                            m_bParaSectpr;
     bool                            m_bUsingEnhancedFields;
 
     //annotation import
@@ -406,6 +410,12 @@ public:
 
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
+    bool GetIsLastParagraphInSection();
+    void SetIsFirstParagraphInSection( bool bIsFirst );
+    bool GetIsFirstParagraphInSection();
+    void SetParaSectpr(bool bParaSectpr);
+    bool GetParaSectpr();
+    bool GetParaChanged();
 
     void deferBreak( BreakType deferredBreakType );
     bool isBreakDeferred( BreakType deferredBreakType );
