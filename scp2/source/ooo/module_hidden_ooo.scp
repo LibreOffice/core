@@ -552,7 +552,6 @@ Module gid_Module_Root_Files_6
 	gid_File_Basic_Gimmicks,
 	gid_File_Basic_Importwiz,
 	gid_File_Basic_Formwiz,
-	gid_File_Basic_Schedule,
 	gid_File_Basic_Scriptbindinglib,
 	gid_File_Basic_Template,
 	gid_File_Basic_Tools,

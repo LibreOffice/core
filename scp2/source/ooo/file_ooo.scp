@@ -57,12 +57,6 @@ File gid_File_Basic_Formwiz
     Name = "basicsrvform.zip";
 End
 
-File gid_File_Basic_Schedule
-    Dir = gid_Dir_Basic_Schedule;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "basicsrvschedule.zip";
-End
-
 File gid_File_Basic_Scriptbindinglib
     Dir = gid_Dir_Basic_Scriptbindinglib;
     ARCHIVE_TXT_FILE_BODY;
