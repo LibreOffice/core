@@ -57,8 +57,6 @@ GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize
 {
 }
 
-// -----------------------------------------------------------------------------
-
 GraphicManager::~GraphicManager()
 {
     for( size_t i = 0, n = maObjList.size(); i < n; ++i )
@@ -67,35 +65,25 @@ GraphicManager::~GraphicManager()
     delete mpCache;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicManager::SetMaxCacheSize( sal_uLong nNewCacheSize )
 {
     mpCache->SetMaxDisplayCacheSize( nNewCacheSize );
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicManager::SetMaxObjCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
 {
     mpCache->SetMaxObjDisplayCacheSize( nNewMaxObjSize, bDestroyGreaterCached );
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicManager::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 {
     mpCache->SetCacheTimeout( nTimeoutSeconds );
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicManager::ReleaseFromCache( const GraphicObject& /*rObj*/ )
 {
     // !!!
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
                                     const Size& rSz, const GraphicObject& rObj,
@@ -103,8 +91,6 @@ sal_Bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
 {
     return mpCache->IsInDisplayCache( pOut, rPt, rSz, rObj, rAttr );
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               GraphicObject& rObj, const GraphicAttr& rAttr,
@@ -162,16 +148,12 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute,
                                       const rtl::OString* pID, const GraphicObject* pCopyObj )
 {
     maObjList.push_back( (GraphicObject*)&rObj );
     mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
 {
@@ -185,35 +167,25 @@ void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicManager::ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj )
 {
     mpCache->GraphicObjectWasSwappedOut( rObj );
 }
-
-// -----------------------------------------------------------------------------
 
 rtl::OString GraphicManager::ImplGetUniqueID( const GraphicObject& rObj ) const
 {
     return mpCache->GetUniqueID( rObj );
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool GraphicManager::ImplFillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
 {
     return( mpCache->FillSwappedGraphicObject( rObj, rSubstitute ) );
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
 {
     mpCache->GraphicObjectWasSwappedIn( rObj );
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                                const Size& rSz, GraphicObject& rObj,
@@ -519,8 +491,6 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 // This function checks whether the bitmap is usable for skipping
 // mtf rendering by using just this one bitmap (i.e. in case the metafile
@@ -894,8 +864,6 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 
     return sal_True;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
                                        long* pMapIX, long* pMapFX, long* pMapIY, long* pMapFY,
@@ -1730,8 +1698,6 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
@@ -1782,8 +1748,6 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sa
         OSL_FAIL( "Missing implementation: Mtf-Transparency" );
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
 {
@@ -1836,8 +1800,6 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                const GDIMetaFile& rMtf, const GraphicAttr& rAttr )
 {
@@ -1864,8 +1826,6 @@ void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size&
 
     pOut->Pop();
 }
-
-// -----------------------------------------------------------------------------
 
 struct ImplTileInfo
 {
@@ -1929,8 +1889,6 @@ bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 // define for debug drawings
 //#define DBG_TEST
@@ -2115,8 +2073,6 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     return true;
 }
 
-// -----------------------------------------------------------------------------
-
 bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSizePixel,
                                    const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D )
 {
@@ -2225,8 +2181,6 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
                                    int nNumTilesX, int nNumTilesY,
                                    const Size& rTileSizePixel, const GraphicAttr* pAttr, sal_uLong nFlags )
@@ -2237,11 +2191,11 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
 
     // #107607# Use logical coordinates for metafile playing, too
     bool    bDrawInPixel( rOut.GetConnectMetaFile() == NULL && GRAPHIC_BITMAP == GetType() );
-    sal_Bool    bRet( sal_False );
+    bool    bRet = false;
 
     // #105229# Switch off mapping (converting to logic and back to
     // pixel might cause roundoff errors)
-    sal_Bool bOldMap( rOut.IsMapModeEnabled() );
+    bool bOldMap( rOut.IsMapModeEnabled() );
 
     if( bDrawInPixel )
         rOut.EnableMapMode( sal_False );
@@ -2274,8 +2228,6 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
                                          const GraphicAttr& rAttr,
