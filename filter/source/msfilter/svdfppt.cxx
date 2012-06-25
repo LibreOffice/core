@@ -5023,13 +5023,11 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHea
             }
             if ( nLang )
             {
-                sal_uInt16 nScriptType = GetI18NScriptTypeOfLanguage( nLang );
-                if ( nScriptType & SCRIPTTYPE_LATIN )
-                    pEntry->nLanguage[ 0 ] = nLang;
-                if ( nScriptType & SCRIPTTYPE_ASIAN )
-                    pEntry->nLanguage[ 1 ] = nLang;
-                if ( nScriptType & SCRIPTTYPE_COMPLEX )
-                    pEntry->nLanguage[ 2 ] = nLang;
+// bug119985 2012.06.14
+                if (i == 2)
+                {
+                    pEntry->nLanguage[ 0 ] = pEntry->nLanguage[ 1 ] = pEntry->nLanguage[ 2 ] = nLang;
+                }
             }
             nFlags &= ~i;
         }
