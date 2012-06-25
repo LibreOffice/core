@@ -1183,6 +1183,10 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         addExtensionsToMap(mapExt, bundledExt, OUSTR("bundled"));
         addExtensionsToMap(mapExt, bundledExt, OUSTR("bundled_prereg"));
 
+        // Create the tmp repository to trigger its clean up (deletion
+        // of old temporary data.)
+        getTmpRepository();
+
         //copy the values of the map to a vector for sorting
         ::std::vector< ::std::vector<Reference<deploy::XPackage> > >
               vecExtensions;
