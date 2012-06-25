@@ -31,6 +31,7 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/stlunosequence.hxx>
 
 #include <SwXTextDefaults.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -259,13 +260,8 @@ rtl::OUString SAL_CALL SwXTextDefaults::getImplementationName(  )
 sal_Bool SAL_CALL SwXTextDefaults::supportsService( const ::rtl::OUString& rServiceName )
     throw (RuntimeException)
 {
-    return  rServiceName == "com.sun.star.text.Defaults" ||
-            rServiceName == "com.sun.star.style.CharacterProperties" ||
-            rServiceName == "com.sun.star.style.CharacterPropertiesAsian" ||
-            rServiceName == "com.sun.star.style.CharacterPropertiesComplex" ||
-            rServiceName == "com.sun.star.style.ParagraphProperties" ||
-            rServiceName == "com.sun.star.style.ParagraphPropertiesAsian" ||
-            rServiceName == "com.sun.star.style.ParagraphPropertiesComplex";
+    uno::Sequence< ::rtl::OUString > aSeq(getSupportedServiceNames());
+    return std::find(comphelper::stl_begin(aSeq), comphelper::stl_end(aSeq), rServiceName) != comphelper::stl_end(aSeq);
 }
 
 
