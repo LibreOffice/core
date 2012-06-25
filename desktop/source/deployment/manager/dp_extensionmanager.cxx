@@ -1171,6 +1171,10 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
             getBundledRepository()->getDeployedPackages(xAbort, xCmdEnv);
         addExtensionsToMap(mapExt, bundledExt, "bundled");
 
+        // Create the tmp repository to trigger its clean up (deletion
+        // of old temporary data.)
+        getTmpRepository();
+
         //copy the values of the map to a vector for sorting
         ::std::vector< ::std::vector<Reference<deploy::XPackage> > >
               vecExtensions;
