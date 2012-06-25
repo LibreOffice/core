@@ -870,54 +870,6 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-//#define OLD_TAB_STYLE
-#ifdef OLD_TAB_STYLE
-    case CTRL_TAB_PANE:
-        {
-            HIThemeTabPaneDrawInfo aTabPaneDrawInfo;
-            aTabPaneDrawInfo.version = 0;
-            aTabPaneDrawInfo.state = kThemeStateActive;
-            aTabPaneDrawInfo.direction=kThemeTabNorth;
-            aTabPaneDrawInfo.size=kHIThemeTabSizeNormal;
-
-            //the border is outside the rect rc for Carbon
-            //but for VCL it should be inside
-            rc.origin.x+=1;
-            rc.size.width-=2;
-
-            HIThemeDrawTabPane(&rc, &aTabPaneDrawInfo, mrContext, kHIThemeOrientationNormal);
-            bOK = true;
-        }
-        break;
-
-    case CTRL_TAB_ITEM:
-        {
-            HIThemeTabDrawInfo aTabItemDrawInfo;
-            aTabItemDrawInfo.version=0;
-            aTabItemDrawInfo.style=kThemeTabNonFront;
-            aTabItemDrawInfo.direction=kThemeTabNorth;
-            aTabItemDrawInfo.size=kHIThemeTabSizeNormal;
-            aTabItemDrawInfo.adornment=kHIThemeTabAdornmentNone;
-
-            if(nState & CTRL_STATE_SELECTED) {
-                aTabItemDrawInfo.style=kThemeTabFront;
-            }
-            if(nState & CTRL_STATE_FOCUSED) {
-                aTabItemDrawInfo.adornment=kHIThemeTabAdornmentFocus;
-            }
-
-            /*if(rc.size.height>=TAB_HEIGHT_NORMAL) rc.size.height=TAB_HEIGHT_NORMAL;
-            else if(rc.size.height>=TAB_HEIGHT_SMALL) rc.size.height=TAB_HEIGHT_SMALL;
-            else rc.size.height=TAB_HEIGHT_MINI;*/
-            //now we only use the default size
-            rc.size.height=TAB_HEIGHT_NORMAL;
-
-            HIThemeDrawTab(&rc, &aTabItemDrawInfo, mrContext, kHIThemeOrientationNormal, &rc );
-
-            bOK=true;
-        }
-        break;
-#else
     case CTRL_TAB_PANE:
         {
             HIThemeTabPaneDrawInfo aTabPaneDrawInfo;
@@ -991,7 +943,6 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             bOK=true;
         }
         break;
-#endif
 
     case  CTRL_LISTBOX:
         switch( nPart)
