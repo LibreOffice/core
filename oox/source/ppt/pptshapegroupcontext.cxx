@@ -128,6 +128,8 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
         break;
     case PPT_TOKEN( graphicFrame ): // CT_GraphicalObjectFrame
         {
+            if( pGraphicShape )
+                importExtDrawings();
             pGraphicShape = oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.OLE2Shape" ) );
             xRet.set( new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, pGraphicShape, true ) );
         }
@@ -141,9 +143,9 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
     return xRet;
 }
 
-void PPTShapeGroupContext::endFastElement( sal_Int32 nElement ) throw (SAXException, RuntimeException)
+void PPTShapeGroupContext::importExtDrawings( )
 {
-    if( nElement == PPT_TOKEN( spTree ) && pGraphicShape )
+    if( pGraphicShape )
     {
         for( ::std::vector<OUString>::const_iterator aIt = pGraphicShape->getExtDrawings().begin(), aEnd = pGraphicShape->getExtDrawings().end();
                     aIt != aEnd; ++aIt )
@@ -154,10 +156,14 @@ void PPTShapeGroupContext::endFastElement( sal_Int32 nElement ) throw (SAXExcept
                                                                            mpMasterShapePtr,
                                                                            mpGroupShapePtr,
                                                                            pGraphicShape ) );
-
             }
-        pGraphicShape = oox::drawingml::ShapePtr( (PPTShape *)NULL );
+            pGraphicShape = oox::drawingml::ShapePtr( (PPTShape *)NULL );
     }
+}
+
+void PPTShapeGroupContext::endFastElement( sal_Int32 /*nElement*/ ) throw (SAXException, RuntimeException)
+{
+    importExtDrawings();
 }
 
 } }
