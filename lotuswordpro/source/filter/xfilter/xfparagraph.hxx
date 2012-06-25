@@ -65,7 +65,6 @@
 #include    <vector>
 
 class IXFStream;
-class IXFTextSpan;
 
 /**
  * @brief

@@ -58,7 +58,6 @@ com::sun::star::uno::Any convertToException(GError *pError,
     const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rContext, bool bThrow=true);
 
 class ContentProvider;
-class ContentProperties;
 class Content : public ::ucbhelper::ContentImplHelper, public com::sun::star::ucb::XContentCreator
 {
 private:

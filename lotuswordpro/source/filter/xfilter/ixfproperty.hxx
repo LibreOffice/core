@@ -62,8 +62,6 @@
 
 #include    "ixfobject.hxx"
 
-class IXFStream;
-
 class IXFProperty : public IXFObject
 {
 public:

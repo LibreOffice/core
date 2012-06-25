@@ -63,11 +63,9 @@ April 2005          Created
 #define _LWPTOCSUPERTABLELAYOUT_HXX
 #include "lwptablelayout.hxx"
 class XFIndex;
-class LwpDocument;
 class LwpFoundry;
 class LwpTocLevelData;
 class XFIndex;
-class XFIndexTemplate;
 /**
  * @brief
  * VO_TOCSUPERTABLELAYOUT object

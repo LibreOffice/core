@@ -62,8 +62,6 @@
 
 #include    "xfglobal.hxx"
 
-class IXFStyle;
-
 /**
  * @brief Base interface for all content object.Implementation classes include text span,paragraph,
     Drawing obejcts, image, ole and so on.

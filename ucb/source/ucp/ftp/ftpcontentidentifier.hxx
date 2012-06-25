@@ -39,10 +39,6 @@
 
 namespace ftp {
 
-
-    class FTPContentProvider;
-
-
     class FTPContentIdentifier
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,

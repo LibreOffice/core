@@ -37,8 +37,6 @@ namespace webdav_ucp {
 
 struct DataSupplier_Impl;
 class Content;
-struct DAVResource;
-class ContentProperties;
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {

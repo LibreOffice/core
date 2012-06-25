@@ -42,7 +42,7 @@ typedef struct NodeFrameSet
 } NodeFrameSet;
 
 class CGM;
-class VclGradient;
+class CGMBitmapDescriptor;
 class CGMOutAct
 {
     protected:

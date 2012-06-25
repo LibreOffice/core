@@ -68,7 +68,6 @@
 #include    "xftabstop.hxx"
 
 class XFIndex;
-class XFIndexEntry;
 class XFIndexTemplate;
 class XFParagraph;
 

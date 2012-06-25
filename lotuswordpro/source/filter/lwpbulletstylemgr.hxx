@@ -74,14 +74,10 @@
 #include <utility>
 #include "xfilter/xfcontentcontainer.hxx"
 
-class XFListStyle;
 class XFList;
 class LwpPara;
-class LwpSilverBullet;
-class XFStyleManager;
 class LwpIndentOverride;
 class LwpBulletOverride;
-class LwpFribParaNumber;
 
 class LwpBulletStyleMgr
 {

@@ -40,8 +40,6 @@
 namespace basegfx
 {
     class B2DPoint;
-    class B2DVector;
-    class B2DHomMatrix;
 } // end of namespace basegfx
 
 namespace basegfx

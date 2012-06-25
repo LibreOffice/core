@@ -52,7 +52,6 @@ namespace gvfs
 {
 
 class ContentProvider;
-class ContentProperties;
 
 // Random made up names - AFAICS
 #define GVFS_FILE_TYPE   "application/vnd.sun.staroffice.gvfs-file"

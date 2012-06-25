@@ -119,9 +119,7 @@ private:
 /**
  * @brief   VO_FOOTNOTE object
 */
-class LwpSuperTableLayout;
 class LwpEnSuperTableLayout;
-class LwpFnSuperTableLayout;
 class LwpCellLayout;
 class LwpDocument;
 class LwpTable;

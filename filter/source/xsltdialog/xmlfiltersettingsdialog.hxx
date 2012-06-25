@@ -88,8 +88,6 @@ public:
 
 // --------------------------------------------------------------------
 
-class XMLFilterTestDialog;
-
 class XMLFilterSettingsDialog : public WorkWindow
 {
 public:

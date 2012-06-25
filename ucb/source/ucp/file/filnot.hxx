@@ -39,7 +39,6 @@
 namespace fileaccess {
 
     class shell;
-    class BaseContent;
 
     class ContentEventNotifier
     {

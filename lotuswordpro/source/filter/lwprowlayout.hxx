@@ -68,11 +68,9 @@
 #include "lwptablelayout.hxx"
 #include "lwpcelllayout.hxx"
 
-class XFCell;
 class XFRow;
 class XFTable;
 class LwpTableLayout;
-class XFRowStyle;
 /**
  * @brief
  * VO_ROWLAYOUT obj

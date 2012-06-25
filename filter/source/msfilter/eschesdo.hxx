@@ -112,7 +112,6 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 class EscherExHostAppData;
-class Polygon;
 
 class ImplEESdrWriter
 {

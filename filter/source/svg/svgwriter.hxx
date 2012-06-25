@@ -145,7 +145,6 @@ struct SVGShapeDescriptor
 // -------------------
 
 class SVGAttributeWriter;
-class SvXMLExport;
 class GDIMetaFile;
 
 class SVGActionWriter

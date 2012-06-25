@@ -346,13 +346,6 @@ public:
     virtual    ~SVGFilter();
 };
 
-// -----------------------------------------------------------------------------
-
-
-
-class SvStream;
-class Graphic;
-
 #endif // SVGFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,17 +48,14 @@
 
 // ---------------------------------------------------------------
 
-class   Bundle;
 class   Graphic;
 class   SvStream;
 class   CGMChart;
 class   CGMBitmap;
 class   CGMOutAct;
 class   CGMElements;
-class   BitmapColor;
 class   GDIMetaFile;
 class   VirtualDevice;
-class   CGMBitmapDescriptor;
 
 class CGM
 {

@@ -62,11 +62,6 @@
 #include    "xfcolor.hxx"
 #include    "xfpadding.hxx"
 
-class XFBorders;
-class XFColumns;
-class XFShadow;
-class XFBGImage;
-
 /**
 * @brief
 * Style for all frame obejcts.

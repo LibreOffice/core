@@ -73,7 +73,6 @@ namespace fileaccess {
     class XPropertySetInfo_impl;
     class XCommandInfo_impl;
     class XResultSet_impl;
-    class BaseContent;
     class shell;
 
     class shell

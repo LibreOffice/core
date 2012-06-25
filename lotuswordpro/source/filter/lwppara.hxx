@@ -145,7 +145,6 @@ struct ParaNumbering
 };
 
 class LwpDropcapLayout;
-class LwpCellLayout;
 class LwpPara : public LwpDLVList
 {
 public:

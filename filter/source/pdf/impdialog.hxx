@@ -51,7 +51,6 @@
 // - ImpPDFDialog -
 // ----------------
 
-class ResMgr;
 class ImpPDFTabGeneralPage;
 class ImpPDFTabViewerPage;
 class ImpPDFTabOpnFtrPage;

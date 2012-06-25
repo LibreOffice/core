@@ -63,7 +63,6 @@
 #include    "xfstyle.hxx"
 #include    "xfcontentcontainer.hxx"
 
-class XFPageMaster;
 class XFFooter;
 class XFHeader;
 class XFMasterPage : public XFStyle

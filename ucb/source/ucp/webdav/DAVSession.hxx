@@ -51,8 +51,6 @@ namespace com { namespace sun { namespace star { namespace ucb {
 namespace webdav_ucp
 {
 
-class DAVAuthListener;
-
 class DAVSession
 {
 public:

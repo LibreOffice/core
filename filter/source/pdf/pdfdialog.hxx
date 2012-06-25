@@ -30,7 +30,6 @@
 // -------------
 
 class Window;
-class ResMgr;
 
 typedef ::svt::OGenericUnoDialog             PDFDialog_DialogBase;
 typedef ::cppu::ImplInheritanceHelper2  <

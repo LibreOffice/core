@@ -35,13 +35,7 @@
 #include <vcl/pdfextoutdevdata.hxx>
 #include <com/sun/star/view/XRenderable.hpp>
 
-class SvEmbeddedObject;
 class GDIMetaFile;
-class VirtualDevice;
-class PolyPolygon;
-class Gradient;
-class BitmapEx;
-class Point;
 class Size;
 
 namespace vcl { class PDFWriter; }

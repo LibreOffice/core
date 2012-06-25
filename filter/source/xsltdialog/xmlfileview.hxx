@@ -38,11 +38,8 @@
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 
-class ScrollBar;
-class TextEngine;
 class TextView;
 class DataChangedEvent;
-class filter_info_impl;
 
 class TextViewOutWin : public Window
 {

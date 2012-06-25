@@ -56,7 +56,6 @@ namespace fileaccess {
 
     class PropertyListeners;
     class shell;
-    class FileProvider;
 
     class BaseContent:
         public cppu::OWeakObject,

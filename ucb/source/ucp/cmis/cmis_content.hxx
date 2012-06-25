@@ -64,7 +64,6 @@ namespace cmis
 #define CMIS_FOLDER_TYPE "application/vnd.sun.staroffice.cmis-folder"
 
 class ContentProvider;
-class ContentProperties;
 class Content : public ::ucbhelper::ContentImplHelper, public com::sun::star::ucb::XContentCreator
 {
 private:

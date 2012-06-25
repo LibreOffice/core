@@ -107,7 +107,6 @@ protected:
     rtl::OUString m_strStyleName;
 };
 
-class LwpFrameLayout;
 /**
  * @descr
  * class to read and parse VO_OLEOBJECT object
