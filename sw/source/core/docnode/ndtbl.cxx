@@ -143,36 +143,31 @@ void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
     rFmt.SetFmtAttr( aBox );
 }
 
-typedef struct {
-    SwFrmFmt* pBoxFrmFmt;
-    SwTableBoxFmt* pTableBoxFmt;
-} DfltBoxAttrTmp;
-typedef std::vector<DfltBoxAttrTmp> DfltBoxAttrTmpVec;
-typedef std::vector<DfltBoxAttrTmpVec*> DfltBoxAttrTmpVecVec;
+typedef std::map<SwFrmFmt *, SwTableBoxFmt *> DfltBoxAttrMap_t;
+typedef std::vector<DfltBoxAttrMap_t *> DfltBoxAttrList_t;
 
-void lcl_SetDfltBoxAttr( SwTableBox& rBox, DfltBoxAttrTmpVecVec &rBoxFmtArr, sal_uInt8 nId,
-                            const SwTableAutoFmt* pAutoFmt = 0 )
+static void
+lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFmtArr,
+        sal_uInt8 const nId, SwTableAutoFmt const*const pAutoFmt = 0)
 {
-    DfltBoxAttrTmpVec* pArr = rBoxFmtArr[ nId ];
-    if( !pArr )
+    DfltBoxAttrMap_t * pMap = rBoxFmtArr[ nId ];
+    if (!pMap)
     {
-        pArr = new DfltBoxAttrTmpVec;
-        rBoxFmtArr[ nId ] = pArr;
+        pMap = new DfltBoxAttrMap_t;
+        rBoxFmtArr[ nId ] = pMap;
     }
 
     SwTableBoxFmt* pNewTableBoxFmt = 0;
     SwFrmFmt* pBoxFrmFmt = rBox.GetFrmFmt();
-    for( sal_uInt16 n = 0; n < pArr->size(); ++n )
-        if( (*pArr)[n].pBoxFrmFmt == pBoxFrmFmt )
-        {
-            pNewTableBoxFmt = (*pArr)[n].pTableBoxFmt;
-            break;
-        }
-
-    if( !pNewTableBoxFmt )
+    DfltBoxAttrMap_t::iterator const iter(pMap->find(pBoxFrmFmt));
+    if (pMap->end() != iter)
+    {
+        pNewTableBoxFmt = iter->second;
+    }
+    else
     {
         SwDoc* pDoc = pBoxFrmFmt->GetDoc();
-        // das Format ist also nicht vorhanden, also neu erzeugen
+        // format does not exist, so create it
         pNewTableBoxFmt = pDoc->MakeTableBoxFmt();
         pNewTableBoxFmt->SetFmtAttr( pBoxFrmFmt->GetAttrSet().Get( RES_FRM_SIZE ) );
 
@@ -183,7 +178,7 @@ void lcl_SetDfltBoxAttr( SwTableBox& rBox, DfltBoxAttrTmpVecVec &rBoxFmtArr, sal
         else
             ::lcl_SetDfltBoxAttr( *pNewTableBoxFmt, nId );
 
-        pArr->push_back( { pBoxFrmFmt, pNewTableBoxFmt } );
+        (*pMap)[pBoxFrmFmt] = pNewTableBoxFmt;
     }
     rBox.ChgFrmFmt( pNewTableBoxFmt );
 }
@@ -763,11 +758,11 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
         sal_uInt8 nBoxArrLen = pTAFmt ? 16 : 4;
-        boost::scoped_ptr< DfltBoxAttrTmpVecVec > aBoxFmtArr1;
+        boost::scoped_ptr< DfltBoxAttrList_t > aBoxFmtArr1;
         boost::scoped_ptr< std::vector<SwTableBoxFmt*> > aBoxFmtArr2;
         if( bUseBoxFmt )
         {
-            aBoxFmtArr1.reset(new DfltBoxAttrTmpVecVec( nBoxArrLen, NULL ));
+            aBoxFmtArr1.reset(new DfltBoxAttrList_t( nBoxArrLen, NULL ));
         }
         else
         {
