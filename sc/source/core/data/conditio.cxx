@@ -1486,7 +1486,15 @@ bool lcl_CutRange( ScRange& rRange, const ScRange& rOther )
 
 void ScConditionalFormat::DoRepaint( const ScRange* pModified )
 {
-    pDoc->RepaintRange(*pModified);
+    if(pModified)
+        pDoc->RepaintRange(*pModified);
+    else
+    {
+        // all conditional format cells
+        size_t n = maRanges.size();
+        for(size_t i = 0; i < n; ++i)
+            pDoc->RepaintRange(*maRanges[i]);
+    }
 }
 
 void ScConditionalFormat::CompileAll()
