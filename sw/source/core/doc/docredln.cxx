@@ -3545,7 +3545,7 @@ void SwRedline::MoveFromSection()
     {
         SwDoc* pDoc = GetDoc();
         const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
-        SvPtrarr aBeforeArr( 16 ), aBehindArr( 16 );
+        std::vector<SwPosition*> aBeforeArr, aBehindArr;
         sal_uInt16 nMyPos = rTbl.GetPos( this );
         OSL_ENSURE( this, "this is not in the array?" );
         sal_Bool bBreak = sal_False;
@@ -3556,14 +3556,12 @@ void SwRedline::MoveFromSection()
             bBreak = sal_True;
             if( rTbl[ n ]->GetBound(sal_True) == *GetPoint() )
             {
-                void* pTmp = &rTbl[ n ]->GetBound(sal_True);
-                aBehindArr.Insert( pTmp, aBehindArr.Count());
+                aBehindArr.push_back( &rTbl[ n ]->GetBound(sal_True) );
                 bBreak = sal_False;
             }
             if( rTbl[ n ]->GetBound(sal_False) == *GetPoint() )
             {
-                void* pTmp = &rTbl[ n ]->GetBound(sal_False);
-                aBehindArr.Insert( pTmp, aBehindArr.Count() );
+                aBehindArr.push_back( &rTbl[ n ]->GetBound(sal_False) );
                 bBreak = sal_False;
             }
         }
@@ -3573,14 +3571,12 @@ void SwRedline::MoveFromSection()
             bBreak = sal_True;
             if( rTbl[ n ]->GetBound(sal_True) == *GetPoint() )
             {
-                void* pTmp = &rTbl[ n ]->GetBound(sal_True);
-                aBeforeArr.Insert( pTmp, aBeforeArr.Count() );
+                aBeforeArr.push_back( &rTbl[ n ]->GetBound(sal_True) );
                 bBreak = sal_False;
             }
             if( rTbl[ n ]->GetBound(sal_False) == *GetPoint() )
             {
-                void* pTmp = &rTbl[ n ]->GetBound(sal_False);
-                aBeforeArr.Insert( pTmp, aBeforeArr.Count() );
+                aBeforeArr.push_back( &rTbl[ n ]->GetBound(sal_False) );
                 bBreak = sal_False;
             }
         }
@@ -3650,10 +3646,10 @@ void SwRedline::MoveFromSection()
 
         // adjustment of redline table positions must take start and
         // end into account, not point and mark.
-        for( n = 0; n < aBeforeArr.Count(); ++n )
-            *(SwPosition*)aBeforeArr[ n ] = *Start();
-        for( n = 0; n < aBehindArr.Count(); ++n )
-            *(SwPosition*)aBehindArr[ n ] = *End();
+        for( n = 0; n < aBeforeArr.size(); ++n )
+            *aBeforeArr[ n ] = *Start();
+        for( n = 0; n < aBehindArr.size(); ++n )
+            *aBehindArr[ n ] = *End();
     }
     else
         InvalidateRange();
