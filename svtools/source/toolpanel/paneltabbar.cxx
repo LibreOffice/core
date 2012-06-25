@@ -533,13 +533,13 @@ namespace svt
         m_aScrollBack.SetSymbol( IsVertical() ? SYMBOL_ARROW_UP : SYMBOL_ARROW_LEFT );
         m_aScrollBack.Show();
         m_aScrollBack.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
-        m_aScrollBack.SetAccessibleDescription( String( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_FWD ) ) );
+        m_aScrollBack.SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_FWD ).toString() );
         m_aScrollBack.SetAccessibleName( m_aScrollBack.GetAccessibleDescription() );
 
         m_aScrollForward.SetSymbol( IsVertical() ? SYMBOL_ARROW_DOWN : SYMBOL_ARROW_RIGHT );
         m_aScrollForward.Show();
         m_aScrollForward.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
-        m_aScrollForward.SetAccessibleDescription( String( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_BACK ) ) );
+        m_aScrollForward.SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_BACK ).toString() );
         m_aScrollForward.SetAccessibleName( m_aScrollForward.GetAccessibleDescription() );
     }
 

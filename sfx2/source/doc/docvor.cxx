@@ -329,7 +329,7 @@ sal_Bool QueryDelete_Impl(Window *pParent,      // Parent to QueryBox
 */
 {
     SfxResId aResId( nId );
-    String aEntryText( aResId );
+    String aEntryText( aResId.toString() );
     aEntryText.SearchAndReplaceAscii( "$1", rTemplateName );
     QueryBox aBox( pParent, WB_YES_NO | WB_DEF_NO, aEntryText );
     return RET_NO != aBox.Execute();
@@ -346,12 +346,12 @@ void ErrorDelete_Impl(Window *pParent, const String &rName, sal_Bool bFolder = s
 {
     if ( bFolder )
     {
-        String aText( SfxResId( STR_ERROR_DELETE_TEMPLATE_DIR ) );
+        rtl::OUString aText(SfxResId(STR_ERROR_DELETE_TEMPLATE_DIR).toString());
         ErrorBox( pParent, WB_OK, aText ).Execute();
     }
     else
     {
-        String aText( SfxResId( STR_ERROR_DELETE_TEMPLATE ) );
+        String aText( SfxResId(STR_ERROR_DELETE_TEMPLATE).toString() );
         aText.SearchAndReplaceAscii( "$1", rName );
         ErrorBox( pParent, WB_OK, aText ).Execute();
     }
@@ -594,7 +594,7 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
         else if ( bCopy )
         {
             // the template organizer always tries copy after the move, so no error is required for move case
-            String aText( SfxResId( bCopy ? STR_ERROR_COPY_TEMPLATE : STR_ERROR_MOVE_TEMPLATE ) );
+            String aText( SfxResId( bCopy ? STR_ERROR_COPY_TEMPLATE : STR_ERROR_MOVE_TEMPLATE ).toString() );
             aText.SearchAndReplaceAscii( "$1",
                                          ( (SvTreeListBox *)pSourceBox )->GetEntryText( pSource ) );
             ErrorBox( this, WB_OK, aText ).Execute();
@@ -1499,10 +1499,10 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( sal_Bool bOpen, const String& rFileNam
     pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0L );
 
     // add "All" filter
-    pFileDlg->AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
+    pFileDlg->AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString(),
                          DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     // add template filter
-    String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
+    String sFilterName( SfxResId(STR_TEMPLATE_FILTER).toString() );
     String sFilterExt;
     // add filters of modules which are installed
     SvtModuleOptions aModuleOpt;
@@ -1594,11 +1594,11 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( sal_Bool bOpen, const String& rFileNam
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, SFXWB_MULTISELECTION );
 
     // add "All" filter
-    pFileDlg->AddFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ),
+    pFileDlg->AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString(),
                          DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
 
     // add template filter
-    String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
+    String sFilterName( SfxResId(STR_TEMPLATE_FILTER).toString() );
     String sFilterExt;
     // add filters of modules which are installed
     SvtModuleOptions aModuleOpt;
@@ -2211,20 +2211,20 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
     static String sConfigExt( DEFINE_CONST_UNICODE( "*.cfg" ) );
     static String sBasicExt( DEFINE_CONST_UNICODE( "*.sbl" ) );
 
-    String sFilterName( SfxResId( RID_STR_FILTCONFIG ) );
+    String sFilterName( SfxResId(RID_STR_FILTCONFIG).toString() );
     sFilterName += sOpenBracket;
     sFilterName += sConfigExt;
     sFilterName += sCloseBracket;
     pFileDlg->AddFilter( sFilterName, sConfigExt );
 
-    sFilterName = String( SfxResId( RID_STR_FILTBASIC ) );
+    sFilterName = SfxResId(RID_STR_FILTBASIC).toString();
     sFilterName += sOpenBracket;
     sFilterName += sBasicExt;
     sFilterName += sCloseBracket;
     pFileDlg->AddFilter( sFilterName, sBasicExt );
 
     // set "All" filter as current
-    pFileDlg->SetCurrentFilter( String( SfxResId( STR_SFX_FILTERNAME_ALL ) ) );
+    pFileDlg->SetCurrentFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString() );
 
     if ( aLastDir.Len() )
         pFileDlg->SetDisplayDirectory( aLastDir );
@@ -2262,7 +2262,7 @@ IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ImportHdl)
 
         if ( aPath.Len() && !aMgr.CopyTo( m_nRegion, m_nIndex, aPath ) )
         {
-            String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
+            String aText( SfxResId(STR_ERROR_COPY_TEMPLATE).toString() );
             aText.SearchAndReplaceAscii( "$1", aPath );
             ErrorBox( pDialog, WB_OK, aText ).Execute();
         }
@@ -2294,7 +2294,7 @@ IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ExportHdl)
        String aPath = String( aPaths.getArray()[0] );
        if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, m_nRegion, m_nIndex, aPath ) )
        {
-           String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
+           String aText( SfxResId(STR_ERROR_COPY_TEMPLATE).toString() );
            aText.SearchAndReplaceAscii( "$1", aPath );
            ErrorBox( pDialog, WB_OK, aText ).Execute();
        }
@@ -2312,7 +2312,7 @@ IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ExportHdl)
             String aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
             if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, m_nRegion, m_nIndex, aPath ) )
             {
-                String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
+                String aText( SfxResId(STR_ERROR_COPY_TEMPLATE).toString() );
                 aText.SearchAndReplaceAscii( "$1", aPath );
                 ErrorBox( pDialog, WB_OK, aText ).Execute();
             }

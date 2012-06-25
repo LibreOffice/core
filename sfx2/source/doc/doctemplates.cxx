@@ -2419,7 +2419,7 @@ WaitWindow_Impl::WaitWindow_Impl()
 {
     Rectangle aRect = Rectangle( 0, 0, 300, 30000 );
     _nTextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE;
-    _aText = String( SfxResId( RID_CNT_STR_WAITING ) );
+    _aText = SfxResId( RID_CNT_STR_WAITING ).toString();
     _aRect = GetTextRect( aRect, _aText, _nTextStyle );
     aRect = _aRect;
     aRect.Right() += 2*X_OFFSET;

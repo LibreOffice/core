@@ -296,24 +296,20 @@ void LocaleDataWrapper::invalidateData()
         {
             if (areChecksEnabled())
             {
-                String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                            "LocaleDataWrapper::getInstalledLanguageTypes: Variants not supported, locale\n"));
-                aMsg += aDebugLocale;
-                outputCheckMessage( aMsg );
+                rtl::OUStringBuffer aMsg("LocaleDataWrapper::getInstalledLanguageTypes: Variants not supported, locale\n");
+                aMsg.append(aDebugLocale);
+                outputCheckMessage(aMsg.makeStringAndClear());
             }
             continue;
         }
         LanguageType eLang = MsLangId::convertLocaleToLanguage( xLoc[i] );
 
         // In checks, exclude known problems because no MS-LCID defined.
-        if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW
-//              && !aDebugLocale.EqualsAscii( "br_AE" ) // ?!? Breton in United Arabic Emirates
-            )
+        if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW)
         {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n"));
-            aMsg += aDebugLocale;
-            outputCheckMessage( aMsg );
+            rtl::OUStringBuffer aMsg("ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n");
+            aMsg.append(aDebugLocale);
+            outputCheckMessage(aMsg.makeStringAndClear());
         }
 
         switch ( eLang )
@@ -622,8 +618,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
         if ( nElem >= nCnt )
         {
             if (areChecksEnabled())
-                outputCheckMessage( String( RTL_CONSTASCII_USTRINGPARAM(
-                                "LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles")));
+                outputCheckMessage(rtl::OUString("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles"));
             aCurrSymbol = rtl::OUString("ShellsAndPebbles");
             aCurrBankSymbol = aCurrSymbol;
             nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;

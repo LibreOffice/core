@@ -121,7 +121,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     if ( !pStyle->GetName().Len() && pPool )
     {
         // NullString as Name -> generate Name
-        String aNoName( SfxResId( STR_NONAME ) );
+        String aNoName( SfxResId(STR_NONAME).toString() );
         sal_uInt16 nNo = 1;
         String aNo( aNoName );
         aNoName += String::CreateFromInt32( nNo );
@@ -180,7 +180,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     {
         if ( pStyle->HasClearParentSupport() )
             // the base template can be set to NULL
-            aBaseLb.InsertEntry( String( SfxResId( STR_NONE ) ) );
+            aBaseLb.InsertEntry( SfxResId(STR_NONE).toString() );
 
         SfxStyleSheetBase* pPoolStyle = pPool->First();
 
@@ -482,11 +482,11 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
             pStyle->SetParent( aParent );
 
         if ( !aParent.Len() )
-            aBaseLb.SelectEntry( String( SfxResId( STR_NONE ) ) );
+            aBaseLb.SelectEntry( SfxResId(STR_NONE).toString() );
         else
             aBaseLb.SelectEntry( aParent );
 
-        if ( String( SfxResId( STR_STANDARD ) ) == aName )
+        if ( SfxResId(STR_STANDARD).toString().equals(aName) )
         {
             // the default template can not be linked
             aBaseFt.Disable();
@@ -612,7 +612,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
     {
         String aParentEntry( aBaseLb.GetSelectEntry() );
 
-        if ( String( SfxResId( STR_NONE ) ) == aParentEntry || aParentEntry == pStyle->GetName() )
+        if ( SfxResId(STR_NONE).toString().equals(aParentEntry) || aParentEntry == pStyle->GetName() )
             aParentEntry.Erase();
 
         if ( pStyle->GetParent() != aParentEntry )

@@ -232,10 +232,10 @@ std::vector<sal_uInt16>* SfxApplication::GetDisabledSlotList_Impl()
         // If an entry slot is present, but no or faulty slot file, or a slot
         // file, but no slot entry, then this is considered to be a
         // misconfiguration
-        new SfxSpecialConfigError_Impl( String( SfxResId( RID_SPECIALCONFIG_ERROR ) ) );
+        new SfxSpecialConfigError_Impl( SfxResId( RID_SPECIALCONFIG_ERROR ).toString() );
     }
 
-       return pList;
+    return pList;
 }
 
 

@@ -792,7 +792,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
     if ( pAddonMenu && pAddonMenu->GetItemCount() > 0 )
     {
         sal_uInt16 nItemCount = pMenu->GetItemCount();
-        String aAddonsTitle( SfxResId( STR_MENU_ADDONS ));
+        rtl::OUString aAddonsTitle(SfxResId(STR_MENU_ADDONS).toString());
         if ( nItemCount > 0 && pMenu->GetItemType( nItemCount-1 ) != MENUITEM_SEPARATOR )
             pMenu->InsertSeparator();
         pMenu->InsertItem( SID_ADDONS, aAddonsTitle );

@@ -90,7 +90,7 @@ static sal_uInt16 aWndFunc(
             break;
     }
 
-    String aErr(SvtResId(STR_ERR_HDLMESS));
+    String aErr(SvtResId(STR_ERR_HDLMESS).toString());
     String aAction(rAction);
     if ( aAction.Len() )
         aAction += String::CreateFromAscii( ":\n" );
@@ -264,7 +264,7 @@ class ResString: public String
 //-------------------------------------------------------------------------
 
 ResString::ResString(ResId & rId):
-    String(rId.SetAutoRelease(sal_False)),
+    String(rId.SetAutoRelease(sal_False).toString()),
     nFlags(0)
 {
     ResMgr * pResMgr = rId.GetResMgr();
@@ -371,7 +371,7 @@ sal_Bool SfxErrorHandler::GetErrorString(
     SolarMutexGuard aGuard;
 
     sal_Bool bRet = sal_False;
-    rStr=String(SvtResId(RID_ERRHDL_CLASS));
+    rStr=SvtResId(RID_ERRHDL_CLASS).toString();
     ResId aResId(nId, *pMgr);
 
     {

@@ -168,7 +168,7 @@ short SvxOpenGraphicDialog::Execute()
             // could not load?
             if ( nFound == USHRT_MAX )
             {
-                WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, String( SfxResId( SvxOpenGrfErr2ResId(nImpRet) ) ) );
+                WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, SfxResId( SvxOpenGrfErr2ResId(nImpRet) ).toString() );
                 bQuitLoop = aWarningBox.Execute()==RET_RETRY ? sal_False : sal_True;
             }
             else

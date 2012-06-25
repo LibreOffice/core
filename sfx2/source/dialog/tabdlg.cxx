@@ -520,7 +520,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
     aOKBtn.SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
     aCancelBtn.SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );
     aResetBtn.SetClickHdl( LINK( this, SfxTabDialog, ResetHdl ) );
-    aResetBtn.SetText( String( SfxResId( STR_RESET ) ) );
+    aResetBtn.SetText( SfxResId( STR_RESET ).toString() );
     aTabCtrl.SetActivatePageHdl(
             LINK( this, SfxTabDialog, ActivatePageHdl ) );
     aTabCtrl.SetDeactivatePageHdl(
@@ -543,8 +543,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
              different behavior than implemented!! */
     if ( bFmtFlag )
     {
-        String aStd( SfxResId( STR_STANDARD_SHORTCUT ) );
-        aBaseFmtBtn.SetText( aStd );
+        aBaseFmtBtn.SetText( SfxResId( STR_STANDARD_SHORTCUT ).toString() );
         aBaseFmtBtn.SetClickHdl( LINK( this, SfxTabDialog, BaseFmtHdl ) );
         aBaseFmtBtn.SetHelpId( HID_TABDLG_STANDARD_BTN );
 
@@ -632,7 +631,7 @@ void SfxTabDialog::EnableApplyButton(sal_Bool bEnable)
         pImpl->pApplyButton = new PushButton( this );
         // in the z-order, the apply button should be behind the ok button, thus appearing at the right side of it
         pImpl->pApplyButton->SetZOrder(&aOKBtn, WINDOW_ZORDER_BEHIND);
-        pImpl->pApplyButton->SetText( String( SfxResId( STR_APPLY ) ) );
+        pImpl->pApplyButton->SetText( SfxResId( STR_APPLY ).toString() );
         pImpl->pApplyButton->Show();
 
         pImpl->pApplyButton->SetHelpId( HID_TABDLG_APPLY_BTN );

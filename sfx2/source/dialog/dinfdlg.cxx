@@ -123,7 +123,7 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes = sal_True, sal_B
 String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartExtraBytes )
 {
     String aUnitStr = ' ';
-    aUnitStr += String( SfxResId(STR_BYTES) );
+    aUnitStr += SfxResId(STR_BYTES).toString();
     sal_uIntPtr nSize1 = nSize;
     sal_uIntPtr nSize2 = nSize1;
     sal_uIntPtr nMega = 1024 * 1024;
@@ -136,7 +136,7 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
     {
         nSize1 /= 1024;
         aUnitStr = ' ';
-        aUnitStr += String( SfxResId(STR_KB) );
+        aUnitStr += SfxResId(STR_KB).toString();
         fSize /= 1024;
         nDec = 0;
     }
@@ -144,7 +144,7 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
     {
         nSize1 /= nMega;
         aUnitStr = ' ';
-        aUnitStr += String( SfxResId(STR_MB) );
+        aUnitStr += SfxResId(STR_MB).toString();
         fSize /= nMega;
         nDec = 2;
     }
@@ -152,7 +152,7 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
     {
         nSize1 /= nGiga;
         aUnitStr = ' ';
-        aUnitStr += String( SfxResId(STR_GB) );
+        aUnitStr += SfxResId(STR_GB).toString();
         bGB = sal_True;
         fSize /= nGiga;
         nDec = 3;
@@ -171,7 +171,7 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
         aSizeStr += DEFINE_CONST_UNICODE(" (");
         aSizeStr += rLocaleWrapper.getNum( nSize2, 0 );
         aSizeStr += ' ';
-        aSizeStr += String( SfxResId(STR_BYTES) );
+        aSizeStr += SfxResId(STR_BYTES).toString();
         aSizeStr += ')';
     }
     else if ( bGB && bSmartExtraBytes )
@@ -801,14 +801,14 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aTemplFt        ( this, SfxResId( FT_TEMPL ) ),
     aTemplValFt     ( this, SfxResId( FT_TEMPL_VAL ) ),
 
-    aUnknownSize    ( SfxResId( STR_UNKNOWNSIZE ) ),
-    aMultiSignedStr ( SfxResId( STR_MULTSIGNED ) ),
+    aUnknownSize    ( SfxResId( STR_UNKNOWNSIZE ).toString() ),
+    aMultiSignedStr ( SfxResId( STR_MULTSIGNED ).toString() ),
 
     bEnableUseUserData  ( sal_False ),
     bHandleDelete       ( sal_False )
 
 {
-    aNameED.SetAccessibleName( String( SfxResId( EDIT_FILE_NAME ) ) );
+    aNameED.SetAccessibleName( SfxResId( EDIT_FILE_NAME ).toString() );
     FreeResource();
     ImplUpdateSignatures();
     ImplCheckPasswordState();
@@ -1107,7 +1107,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         INetURLObject aURL(aFile);
         aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
         if ( !aName.Len() || aURL.GetProtocol() == INET_PROT_PRIVATE )
-            aName = String( SfxResId( STR_NONAME ) );
+            aName = SfxResId( STR_NONAME ).toString();
         aNameED.SetReadOnly( sal_True );
     }
     else
@@ -1140,7 +1140,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 
     String aDescription = SvFileInformationManager::GetDescription( INetURLObject(rMainURL) );
     if ( aDescription.Len() == 0 )
-        aDescription = String( SfxResId( STR_SFX_NEWOFFICEDOC ) );
+        aDescription = SfxResId( STR_SFX_NEWOFFICEDOC ).toString();
     aShowTypeFT.SetText( aDescription );
 
     // determine location
@@ -1214,7 +1214,7 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aFTFrame            ( this, SfxResId( FT_FRAME              ) ),
     aCBFrame            ( this, SfxResId( CB_FRAME              ) ),
 
-    aForwardErrorMessg  (       SfxResId( STR_FORWARD_ERRMSSG   ) ),
+    aForwardErrorMessg  ( SfxResId(STR_FORWARD_ERRMSSG).toString() ),
     pInfoItem           ( NULL ),
     pFileDlg            ( NULL ),
     eState              ( S_Init )
@@ -1573,7 +1573,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
                 aTitle += aFile;
         }
         else
-            aTitle += String( SfxResId( STR_NONAME ) );
+            aTitle += SfxResId( STR_NONAME ).toString();
     }
     else
     {
@@ -1777,7 +1777,7 @@ CustomPropertyLine::CustomPropertyLine( Window* pParent ) :
     m_aValueEdit    ( pParent, SfxResId( SFX_ED_PROPERTY_VALUE ), this ),
     m_aDateField    ( pParent, SfxResId( SFX_FLD_DATE), this),
     m_aTimeField    ( pParent, SfxResId( SFX_FLD_TIME), this),
-    m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT )),
+    m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT ).toString() ),
     m_aDurationField( pParent, SfxResId( SFX_FLD_DURATION), this),
     m_aEditButton(    pParent, SfxResId( SFX_PB_EDIT ), this),
     m_aYesNoButton  ( pParent, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
@@ -1831,9 +1831,9 @@ CustomPropertiesWindow::CustomPropertiesWindow( Window* pParent, const ResId& rR
     m_aBoxLoseFocusTimer.SetTimeoutHdl( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
 
     ResMgr* pResMgr = rResId.GetResMgr();
-    m_aNameBox.SetAccessibleName( String( ResId( STR_HEADER_NAME, *pResMgr ) ) );
-    m_aTypeBox.SetAccessibleName( String( ResId( STR_HEADER_TYPE, *pResMgr ) ) );
-    m_aValueEdit.SetAccessibleName( String( ResId( STR_HEADER_VALUE, *pResMgr ) ) );
+    m_aNameBox.SetAccessibleName( ResId( STR_HEADER_NAME, *pResMgr ).toString() );
+    m_aTypeBox.SetAccessibleName( ResId( STR_HEADER_TYPE, *pResMgr ).toString() );
+    m_aValueEdit.SetAccessibleName( ResId( STR_HEADER_VALUE, *pResMgr ).toString() );
 }
 
 CustomPropertiesWindow::~CustomPropertiesWindow()
@@ -2315,10 +2315,10 @@ CustomPropertiesControl::CustomPropertiesControl( Window* pParent, const ResId& 
     const HeaderBarItemBits nHeadBits = HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS | HIB_LEFT;
     nWidth = nWidth / 4;
     ResMgr* pResMgr = rResId.GetResMgr();
-    m_aHeaderBar.InsertItem( HI_NAME, String( ResId( STR_HEADER_NAME, *pResMgr ) ), nWidth, nHeadBits );
-    m_aHeaderBar.InsertItem( HI_TYPE, String( ResId( STR_HEADER_TYPE, *pResMgr ) ), nWidth, nHeadBits );
-    m_aHeaderBar.InsertItem( HI_VALUE, String( ResId( STR_HEADER_VALUE, *pResMgr ) ), nWidth, nHeadBits );
-    m_aHeaderBar.InsertItem( HI_ACTION, String( ResId( STR_HEADER_ACTION, *pResMgr ) ), nWidth, nHeadBits );
+    m_aHeaderBar.InsertItem( HI_NAME, ResId( STR_HEADER_NAME, *pResMgr ).toString(), nWidth, nHeadBits );
+    m_aHeaderBar.InsertItem( HI_TYPE, ResId( STR_HEADER_TYPE, *pResMgr ).toString(), nWidth, nHeadBits );
+    m_aHeaderBar.InsertItem( HI_VALUE, ResId( STR_HEADER_VALUE, *pResMgr ).toString(), nWidth, nHeadBits );
+    m_aHeaderBar.InsertItem( HI_ACTION, ResId( STR_HEADER_ACTION, *pResMgr ).toString(), nWidth, nHeadBits );
     m_aHeaderBar.Show();
 
     FreeResource();

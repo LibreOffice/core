@@ -264,10 +264,10 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                     if( pType )
                     {
                         sal_uInt16 nObjType = pLink->GetObjType();
-                        *pType = String( SfxResId(
+                        *pType = SfxResId(
                                     ( OBJECT_CLIENT_FILE == nObjType || OBJECT_CLIENT_OLE == nObjType )
                                             ? RID_SVXSTR_FILELINK
-                                            : RID_SVXSTR_GRAFIKLINK ));
+                                            : RID_SVXSTR_GRAFIKLINK).toString();
                     }
                     bRet = true;
                 }
@@ -357,7 +357,7 @@ void LinkManager::UpdateAllLinks(
 
         if( bAskUpdate )
         {
-            int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ) ).Execute();
+            int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ).toString() ).Execute();
             if( RET_YES != nRet )
                 return ;         // nothing should be updated
             bAskUpdate = sal_False;  // once is enough

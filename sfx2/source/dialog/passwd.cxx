@@ -119,15 +119,15 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     maCancelBtn     ( this, SfxResId( BTN_PASSWD_CANCEL ) ),
     maHelpBtn       ( this, SfxResId( BTN_PASSWD_HELP ) ),
 
-    maMinLenPwdStr  ( SfxResId( STR_PASSWD_MIN_LEN ) ),
-    maEmptyPwdStr   ( SfxResId( STR_PASSWD_EMPTY ) ),
+    maMinLenPwdStr  ( SfxResId( STR_PASSWD_MIN_LEN ).toString() ),
+    maEmptyPwdStr   ( SfxResId( STR_PASSWD_EMPTY ).toString() ),
     maMainPwdStr    ( ),
     mnMinLen        ( 5 ),
     mnExtras        ( 0 ),
     mbAsciiOnly     ( false )
 
 {
-    maPasswordED.SetAccessibleName(String(SfxResId(TEXT_PASSWD)));
+    maPasswordED.SetAccessibleName(SfxResId(TEXT_PASSWD).toString());
     FreeResource();
 
     // setup layout

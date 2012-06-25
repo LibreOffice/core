@@ -64,7 +64,7 @@ SfxNavigator::SfxNavigator( SfxBindings* pBind ,
                                             nBits )
                         , pWrapper( pChildWin )
 {
-    SetText( String( SfxResId( SID_NAVIGATOR ) ) );
+    SetText( SfxResId(SID_NAVIGATOR).toString() );
 }
 
 void SfxNavigator::Resize()

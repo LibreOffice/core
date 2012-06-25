@@ -351,17 +351,17 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 
 #ifdef DBG_UTIL
         case EXC_RSCNOTLOADED:
-            Abort( XubString( RTL_CONSTASCII_USTRINGPARAM( "Resource not loaded" ) ) );
+            Abort(rtl::OUString("Resource not loaded"));
             break;
         case EXC_SYSOBJNOTCREATED:
-            Abort( XubString( RTL_CONSTASCII_USTRINGPARAM( "System Object not created" ) ) );
+            Abort(rtl::OUString("System Object not created"));
             break;
         default:
-            Abort( XubString( RTL_CONSTASCII_USTRINGPARAM( "Unknown Error" ) ) );
+            Abort(rtl::OUString("Unknown Error"));
             break;
 #else
         default:
-            Abort( ImplGetSVEmptyStr() );
+            Abort(rtl::OUString());
             break;
 #endif
     }

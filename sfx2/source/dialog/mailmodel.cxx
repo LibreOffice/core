@@ -235,11 +235,9 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                 //add an internal property, used to tell the dialog we want to set a different
                                 //string for the ok button
                                 //used in filter/source/pdf/impdialog.cxx
-                                String aOkSendText( SfxResId( STR_PDF_EXPORT_SEND ));
-
                                 uno::Sequence< beans::PropertyValue > aFilterDataValue(1);
                                 aFilterDataValue[0].Name = ::rtl::OUString( "_OkButtonString" );
-                                aFilterDataValue[0].Value = css::uno::makeAny( ::rtl::OUString( aOkSendText ));
+                                aFilterDataValue[0].Value = css::uno::makeAny(SfxResId(STR_PDF_EXPORT_SEND ).toString());
 
                                 //add to the filterdata property, the only one the PDF export filter dialog will care for
                                 aPropsForDialog[0].Name =  ::rtl::OUString( "FilterData" );

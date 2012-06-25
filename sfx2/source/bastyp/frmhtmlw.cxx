@@ -144,7 +144,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
     }
 
     // Who we are
-    String sGenerator( SfxResId( STR_HTML_GENERATOR ) );
+    String sGenerator( SfxResId(STR_HTML_GENERATOR).toString() );
     ::rtl::OUString os( "$_OS" );
     ::rtl::Bootstrap::expandMacros(os);
     sGenerator.SearchAndReplaceAscii( "%1", os );

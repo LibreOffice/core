@@ -381,7 +381,7 @@ void SfxDocumentInfoObject_Impl::Reset(uno::Reference<document::XDocumentPropert
                 names.push_back(props[i].Name);
             }
             const ::rtl::OUString sInfo(
-                        String( SfxResId( STR_DOCINFO_INFOFIELD ) ));
+                        SfxResId(STR_DOCINFO_INFOFIELD).toString());
             for (sal_Int32 i = oldLength; i < FOUR; ++i) {
                 ::rtl::OUString sName(sInfo);
                 sal_Int32 idx = sName.indexOfAsciiL("%1", 2);

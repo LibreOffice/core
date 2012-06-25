@@ -62,7 +62,7 @@ SearchDialog::SearchDialog( Window* pWindow, const ::rtl::OUString& rConfigName 
     m_aBackwardsBox     ( this, SfxResId( CB_BACKWARDS ) ),
     m_aFindBtn          ( this, SfxResId( PB_FIND ) ),
     m_aCancelBtn        ( this, SfxResId( PB_CANCELFIND ) ),
-    m_sToggleText       (       SfxResId( STR_TOGGLE ) ),
+    m_sToggleText       ( SfxResId( STR_TOGGLE ).toString() ),
     m_sConfigName       ( rConfigName ),
     m_bIsConstructed    ( false )
 

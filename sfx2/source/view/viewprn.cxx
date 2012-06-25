@@ -343,7 +343,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
             case view::PrintableState_JOB_FAILED :
             {
                 // "real" problem (not simply printing cancelled by user)
-                String aMsg( SfxResId( STR_NOSTARTPRINTER ) );
+                rtl::OUString aMsg( SfxResId(STR_NOSTARTPRINTER).toString() );
                 if ( !m_bApi )
                     ErrorBox( mpViewShell->GetWindow(), WB_OK | WB_DEF_OK,  aMsg ).Execute();
                 // intentionally no break
@@ -517,21 +517,21 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
             bSizeToDoc;
 
     // Message and Flags for page format, summaries changes
-    String aMsg;
+    rtl::OUString aMsg;
     sal_uInt16 nNewOpt=0;
     if( bOriChg && bPgSzChg )
     {
-        aMsg = String(SfxResId(STR_PRINT_NEWORISIZE));
+        aMsg = SfxResId(STR_PRINT_NEWORISIZE).toString();
         nNewOpt = SFX_PRINTER_CHG_ORIENTATION | SFX_PRINTER_CHG_SIZE;
     }
     else if (bOriChg )
     {
-        aMsg = String(SfxResId(STR_PRINT_NEWORI));
+        aMsg = SfxResId(STR_PRINT_NEWORI).toString();
         nNewOpt = SFX_PRINTER_CHG_ORIENTATION;
     }
     else if (bPgSzChg)
     {
-        aMsg = String(SfxResId(STR_PRINT_NEWSIZE));
+        aMsg = SfxResId(STR_PRINT_NEWSIZE).toString();
         nNewOpt = SFX_PRINTER_CHG_SIZE;
     }
 
@@ -797,7 +797,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     break;
                 }
                 else
-                    ErrorBox( NULL, WB_OK | WB_DEF_OK, String( SfxResId( STR_NODEFPRINTER ) ) ).Execute();
+                    ErrorBox( NULL, WB_OK | WB_DEF_OK, SfxResId(STR_NODEFPRINTER).toString() ).Execute();
             }
 
             // FIXME: printer isn't used for printing anymore!
@@ -805,7 +805,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 // if printer is busy, abort printing
                 if ( !bSilent )
-                    InfoBox( NULL, String( SfxResId( STR_ERROR_PRINTER_BUSY ) ) ).Execute();
+                    InfoBox( NULL, SfxResId(STR_ERROR_PRINTER_BUSY).toString() ).Execute();
                 rReq.SetReturnValue(SfxBoolItem(0,sal_False));
                 break;
             }

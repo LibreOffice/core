@@ -403,7 +403,7 @@ void SfxObjectShell::GetContent(String &rText,
 
             if ( nTextResId )
             {
-                rText  = String(SfxResId(nTextResId));
+                rText = SfxResId(nTextResId).toString();
                 rClosedBitmap = Bitmap(SfxResId(nClosedBitmapResId));
                 rOpenedBitmap = Bitmap(SfxResId(nOpenedBitmapResId));
             }
@@ -679,7 +679,7 @@ sal_Bool SfxObjectShell::Print
             const sal_uInt16 nXIndent = 200;
             sal_uInt16 nYIndent = 200;
             Point aOutPos(nXIndent, nYIndent);
-            String aHeader(SfxResId(STR_PRINT_STYLES_HEADER));
+            String aHeader(SfxResId(STR_PRINT_STYLES_HEADER).toString());
             if ( pObjectName )
                 aHeader += *pObjectName;
             else
@@ -940,7 +940,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                         bLoad = sal_True;
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
-                        String sMessage( SfxResId( STR_QRYTEMPL_MESSAGE ) );
+                        String sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString() );
                         sMessage.SearchAndReplace( String::CreateFromAscii("$(ARG1)"), aTemplName );
                         sfx2::QueryTemplateBox aBox( GetDialogParent(), sMessage );
                         if ( RET_YES == aBox.Execute() )

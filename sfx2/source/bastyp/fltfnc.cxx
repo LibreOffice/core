@@ -507,7 +507,7 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
     if ( pFilter->GetFilterFlags() & SFX_FILTER_MUSTINSTALL )
     {
         // Here could a  re-installation be offered
-        String aText( SfxResId( STR_FILTER_NOT_INSTALLED ) );
+        String aText( SfxResId(STR_FILTER_NOT_INSTALLED).toString() );
         aText.SearchAndReplaceAscii( "$(FILTER)", pFilter->GetUIName() );
         QueryBox aQuery( NULL, WB_YES_NO | WB_DEF_YES, aText );
         short nRet = aQuery.Execute();
@@ -525,7 +525,7 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
     }
     else if ( pFilter->GetFilterFlags() & SFX_FILTER_CONSULTSERVICE )
     {
-        String aText( SfxResId( STR_FILTER_CONSULT_SERVICE ) );
+        String aText( SfxResId(STR_FILTER_CONSULT_SERVICE).toString() );
         aText.SearchAndReplaceAscii( "$(FILTER)", pFilter->GetUIName() );
         InfoBox ( NULL, aText ).Execute();
         return sal_False;

@@ -134,7 +134,7 @@ static bool lcl_IsPasswordCorrect( const String &rPassword )
     if (SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword ))
         bRes = true;    // password was correct
     else
-        InfoBox( NULL, String( SfxResId( RID_SFX_INCORRECT_PASSWORD ) ) ).Execute();
+        InfoBox( NULL, SfxResId( RID_SFX_INCORRECT_PASSWORD ).toString() ).Execute();
 
     return bRes;
 }
@@ -200,12 +200,12 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const Sfx
     m_aOpenReadonlyCB               (&rTabPage, SfxResId( OPEN_READONLY_CB ) ),
     m_aRecordChangesCB              (&rTabPage, SfxResId( RECORD_CHANGES_CB ) ),
     m_aChangeProtectionPB           (&rTabPage, SfxResId( CHANGE_PROTECTION_PB ) ),
-    m_aProtectSTR                   ( SfxResId( STR_PROTECT ) ),
-    m_aUnProtectSTR                 ( SfxResId( STR_UNPROTECT ) ),
+    m_aProtectSTR                   ( SfxResId( STR_PROTECT ).toString() ),
+    m_aUnProtectSTR                 ( SfxResId( STR_UNPROTECT ).toString() ),
     m_eRedlingMode                  ( RL_NONE ),
     m_bOrigPasswordIsConfirmed      ( false ),
     m_bNewPasswordIsValid           ( false ),
-    m_aEndRedliningWarning          ( SfxResId( STR_END_REDLINING_WARNING ) ),
+    m_aEndRedliningWarning          ( SfxResId( STR_END_REDLINING_WARNING ).toString() ),
     m_bEndRedliningWarningDone      ( false )
 {
     m_aChangeProtectionPB.SetText( m_aProtectSTR );

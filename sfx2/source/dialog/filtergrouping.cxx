@@ -776,7 +776,7 @@ namespace sfx2
     {
         ::rtl::OUString sUIName;
         sal_Bool        bHasAll = sal_False;
-        _rAllFilterName = String( SfxResId( STR_SFX_FILTERNAME_ALL ) );
+        _rAllFilterName = SfxResId( STR_SFX_FILTERNAME_ALL ).toString();
 
         // ===============================================================
         // check if there's already a filter <ALL>

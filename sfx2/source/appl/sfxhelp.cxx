@@ -97,7 +97,7 @@ public:
 
 NoHelpErrorBox::NoHelpErrorBox( Window* _pParent ) :
 
-    ErrorBox( _pParent, WB_OK, String( SfxResId( RID_STR_HLPFILENOTEXIST ) ) )
+    ErrorBox( _pParent, WB_OK, SfxResId( RID_STR_HLPFILENOTEXIST ).toString() )
 {
     // Error message: "No help available"
 }
@@ -587,7 +587,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
         if (xProps.is())
             xProps->setPropertyValue(
                 DEFINE_CONST_UNICODE("Title"),
-                makeAny(::rtl::OUString(String(SfxResId(STR_HELP_WINDOW_TITLE)))));
+                makeAny(SfxResId(STR_HELP_WINDOW_TITLE).toString()));
 
         pHelpWindow->setContainerWindow( xParentWindow );
         xParentWindow->setVisible(sal_True);

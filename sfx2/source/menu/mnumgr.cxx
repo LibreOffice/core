@@ -218,16 +218,16 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         }
         else // nNumSynonyms == 0
         {
-            const String aItemText( SfxResId( STR_MENU_NO_SYNONYM_FOUND ) );
+            const rtl::OUString aItemText( SfxResId(STR_MENU_NO_SYNONYM_FOUND).toString() );
             pThesSubMenu->InsertItem( 1, aItemText, MIB_NOSELECT );
         }
         pThesSubMenu->InsertSeparator();
-        const String sThesaurus( SfxResId( STR_MENU_THESAURUS ) );
+        const rtl::OUString sThesaurus( SfxResId(STR_MENU_THESAURUS).toString() );
         pThesSubMenu->InsertItem( 100, sThesaurus );
         pThesSubMenu->SetItemCommand( 100, ::rtl::OUString(".uno:ThesaurusDialog") );
 
         pSVMenu->InsertSeparator();
-        const String sSynonyms( SfxResId( STR_MENU_SYNONYMS ) );
+        const rtl::OUString sSynonyms( SfxResId(STR_MENU_SYNONYMS).toString() );
         pSVMenu->InsertItem( SID_THES, sSynonyms );
         pSVMenu->SetPopupMenu( SID_THES, pThesSubMenu );
     }

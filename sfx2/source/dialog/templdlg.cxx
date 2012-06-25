@@ -789,7 +789,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     bHierarchical           ( sal_False ),
     bBindingUpdate          ( sal_True )
 {
-    aFmtLb.SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
+    aFmtLb.SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST).toString());
     aFmtLb.SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb.SetHelpId( HID_TEMPLATE_FILTER );
     aFmtLb.SetStyle( aFmtLb.GetStyle() | WB_SORT | WB_HIDESELECTION );
@@ -1278,7 +1278,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             aFilterLb.SetUpdateMode(sal_False);
             aFilterLb.Clear();
             //insert hierarchical at the beginning
-            sal_uInt16 nPos = aFilterLb.InsertEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)), 0);
+            sal_uInt16 nPos = aFilterLb.InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString(), 0);
             aFilterLb.SetEntryData( nPos, (void*)(sal_uIntPtr)SFXSTYLEBIT_ALL );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
             for( size_t i = 0; i < rFilter.size(); ++i)
@@ -1300,7 +1300,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 
             // if the tree view again, select family hierarchy
             if(pTreeBox)
-                aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
+                aFilterLb.SelectEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString());
 
             // show maximum 12 entries
             aFilterLb.SetDropDownLineCount( MAX_FILTER_ENTRIES );
@@ -1751,7 +1751,7 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 // Handler der Listbox der Filter
 IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
 {
-    if ( pBox->GetSelectEntry() ==  String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)) )
+    if ( SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString().equals(pBox->GetSelectEntry()) )
     {
         if ( !bHierarchical )
         {
@@ -1778,7 +1778,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             pTreeBox->SetIndent(10);
             FillTreeBox();
             SelectStyle(aSelectEntry);
-            pTreeBox->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
+            pTreeBox->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST).toString());
             pTreeBox->Show();
         }
     }
@@ -2041,8 +2041,8 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
         {
             String aMsg;
             if ( pStyle->IsUsed() )
-                aMsg = String( SfxResId( STR_DELETE_STYLE_USED ) );
-            aMsg += String ( SfxResId( STR_DELETE_STYLE ) );
+                aMsg = SfxResId(STR_DELETE_STYLE_USED).toString();
+            aMsg += SfxResId(STR_DELETE_STYLE).toString();
             aMsg.SearchAndReplaceAscii( "$1", aTemplName );
 #if defined UNX
             QueryBox aBox( SFX_APP()->GetTopWindow(), WB_YES_NO | WB_DEF_NO, aMsg );
@@ -2685,7 +2685,7 @@ IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, CancelHdl, Button *, pButton )
 IMPL_LINK_INLINE_START( SfxTemplateCatalog_Impl, NewHdl, Button *, pButton )
 {
     (void)pButton; //unused
-    aCancelBtn.SetText( String( SfxResId( STR_CLOSE ) ) );
+    aCancelBtn.SetText( SfxResId(STR_CLOSE).toString() );
     SfxCommonTemplateDialog_Impl::NewHdl( NULL );
     return 0;
 }
@@ -2696,7 +2696,7 @@ IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, NewHdl, Button *, pButton )
 IMPL_LINK_INLINE_START( SfxTemplateCatalog_Impl, ChangeHdl, Button *, pButton )
 {
     (void)pButton; //unused
-    aCancelBtn.SetText( String( SfxResId( STR_CLOSE ) ) );
+    aCancelBtn.SetText( SfxResId(STR_CLOSE).toString() );
     SfxCommonTemplateDialog_Impl::EditHdl( NULL );
     return 0;
 }
@@ -2717,7 +2717,7 @@ IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, DelHdl, Button *, pButton )
 IMPL_LINK( SfxTemplateCatalog_Impl, OrgHdl, Button *, pButton )
 {
     (void)pButton; //unused
-    aCancelBtn.SetText( String( SfxResId( STR_CLOSE ) ) );
+    aCancelBtn.SetText( SfxResId(STR_CLOSE).toString() );
     SfxDocumentTemplates aTemplates;
     aTemplates.Construct();
     SfxTemplateOrganizeDlg* pDlg = new SfxTemplateOrganizeDlg( pReal, &aTemplates );
@@ -2826,7 +2826,7 @@ void SfxTemplateCatalog_Impl::ClearFamilyList()
 void SfxTemplateCatalog_Impl::PrepareDeleteAction()
 {
     aDelBtn.Disable();
-    aCancelBtn.SetText( String( SfxResId( STR_CLOSE ) ) );
+    aCancelBtn.SetText( SfxResId(STR_CLOSE).toString() );
 }
 
 

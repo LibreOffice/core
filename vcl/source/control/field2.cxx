@@ -1078,12 +1078,10 @@ static sal_uInt16 ImplCutMonthFromString( XubString& rStr, const CalendarWrapper
 
 static String ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, ExtDateFieldFormat eFormat )
 {
-    String aDateSep = rLocaleDataWrapper.getDateSep();
-
     if ( ( eFormat == XTDATEF_SHORT_YYMMDD_DIN5008 ) || ( eFormat == XTDATEF_SHORT_YYYYMMDD_DIN5008 ) )
-        aDateSep = String( RTL_CONSTASCII_USTRINGPARAM( "-" ) );
-
-    return aDateSep;
+        return rtl::OUString("-");
+    else
+        return rLocaleDataWrapper.getDateSep();
 }
 
 static sal_Bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldFormat eFormat,
@@ -2267,18 +2265,18 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
     // Nach Separatoren suchen
     if (!rLocaleDataWrapper.getTimeSep().isEmpty())
     {
-        XubString aSepStr( RTL_CONSTASCII_USTRINGPARAM( ",.;:/" ) );
+        rtl::OUStringBuffer aSepStr(",.;:/");
         if ( !bDuration )
-            aSepStr.Append( '-' );
+            aSepStr.append('-');
 
         // Die obigen Zeichen durch das Separatorzeichen ersetzen
-        for ( xub_StrLen i = 0; i < aSepStr.Len(); i++ )
+        for (sal_Int32 i = 0; i < aSepStr.getLength(); ++i)
         {
-            if (string::equals(rLocaleDataWrapper.getTimeSep(), aSepStr.GetChar(i)))
+            if (string::equals(rLocaleDataWrapper.getTimeSep(), aSepStr[i]))
                 continue;
             for ( xub_StrLen j = 0; j < aStr.Len(); j++ )
             {
-                if ( aStr.GetChar( j ) == aSepStr.GetChar( i ) )
+                if (aStr.GetChar( j ) == aSepStr[i])
                     aStr.SetChar( j, rLocaleDataWrapper.getTimeSep()[0] );
             }
         }
@@ -2414,8 +2412,8 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
         XubString aPM( rLocaleDataWrapper.getTimePM() );
         aAM.ToUpperAscii();
         aPM.ToUpperAscii();
-        XubString aAM2( RTL_CONSTASCII_USTRINGPARAM( "AM" ) );  // aAM is localized
-        XubString aPM2( RTL_CONSTASCII_USTRINGPARAM( "PM" ) );  // aPM is localized
+        rtl::OUString aAM2("AM");  // aAM is localized
+        rtl::OUString aPM2("PM");  // aPM is localized
 
         if ( (nHour < 12) && ( ( aStr.Search( aPM ) != STRING_NOTFOUND ) || ( aStr.Search( aPM2 ) != STRING_NOTFOUND ) ) )
             nHour += 12;

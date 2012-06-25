@@ -457,13 +457,12 @@ static String GetDescriptionByFactory_Impl( const String& rFactory )
     else if ( rFactory.EqualsIgnoreCaseAscii( "sdatabase", 0, 9 ) )
         nResId = STR_DESCRIPTION_FACTORY_DATABASE;
 
-    String aRet;
     if ( nResId )
     {
         SolarMutexGuard aGuard;
-        aRet = String( SvtResId( nResId ) );
+        return SvtResId(nResId).toString();
     }
-    return aRet;
+    return rtl::OUString();
 }
 
 static sal_uInt16 GetFolderDescriptionId_Impl( const String& rURL )
@@ -588,7 +587,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
             sDescription += '-';
         }
         SolarMutexGuard aGuard;
-        sDescription += String( SvtResId( nResId ) );
+        sDescription += SvtResId(nResId).toString();
     }
 
     DBG_ASSERT( sDescription.Len() > 0, "file without description" );
@@ -667,8 +666,7 @@ String SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo
     else if ( rInfo.m_bIsRemoveable || rInfo.m_bIsVolume )
         nResId = STR_DESCRIPTION_LOCALE_VOLUME;
 
-    String sDescription = String( SvtResId( nResId ) );
-    return sDescription;
+    return SvtResId(nResId).toString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

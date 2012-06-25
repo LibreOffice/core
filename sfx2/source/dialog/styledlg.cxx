@@ -64,7 +64,7 @@ SfxStyleDialog::SfxStyleDialog
 
 {
     AddTabPage( ID_TABPAGE_MANAGESTYLES,
-                String( SfxResId( STR_TABPAGE_MANAGESTYLES ) ),
+                SfxResId( STR_TABPAGE_MANAGESTYLES ).toString(),
                 SfxManageStyleSheetPage::Create, 0, sal_False, 0 );
 
     // With new template always set the management page as the current page

@@ -432,7 +432,7 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, 
         if ( !aResId.GetResMgr() || !aResId.GetResMgr()->IsAvailable(aResId) )
             pUI->pName = new String (DEFINE_CONST_UNICODE("NoName"));
         else
-            pUI->pName = new String(aResId);
+            pUI->pName = new String(aResId.toString());
     }
     else
         pUI->pName = new String(*pStr);

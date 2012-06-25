@@ -1076,10 +1076,10 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         }
         if( (aData.nTestFlags & ~IMMEDIATE_FLAGS) != (pData->nTestFlags & ~IMMEDIATE_FLAGS) )
         {
-            InfoBox aBox( this, String( RTL_CONSTASCII_USTRINGPARAM(
+            InfoBox aBox( this, rtl::OUString(
                 "Some of the changed settings will only be active after "
                 "restarting the process"
-                ) ) );
+                ) );
             aBox.Execute();
         }
         EndDialog( sal_True );
@@ -1574,8 +1574,8 @@ class DbgMessageBox : public ErrorBox
        ErrorBox( NULL, WB_YES_NO_CANCEL | WB_DEF_NO, rMessage ),
        m_aMessage( rMessage )
     {
-        SetText( String( RTL_CONSTASCII_USTRINGPARAM("Debug Output") ) );
-        AddButton( String( RTL_CONSTASCII_USTRINGPARAM( "Copy" ) ), COPY_BUTTON_ID, 0 );
+        SetText(rtl::OUString("Debug Output"));
+        AddButton(rtl::OUString("Copy"), COPY_BUTTON_ID, 0);
     }
 
     virtual void Click()

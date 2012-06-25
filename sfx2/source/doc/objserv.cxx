@@ -950,7 +950,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     bool bMediumRO = IsReadOnlyMedium();
                     if ( !bMediumRO && GetMedium() && bAllowSave )
                         rSet.Put(SfxStringItem(
-                            nWhich, String(SfxResId(STR_SAVEDOC))));
+                            nWhich, SfxResId(STR_SAVEDOC).toString()));
                     else
                         rSet.DisableItem(nWhich);
                 }
@@ -977,7 +977,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 if ( pDoc->GetFlags() & SFXOBJECTSHELL_DONTCLOSE )
                     rSet.DisableItem(nWhich);
                 else
-                    rSet.Put(SfxStringItem(nWhich, String(SfxResId(STR_CLOSEDOC))));
+                    rSet.Put(SfxStringItem(nWhich, SfxResId(STR_CLOSEDOC).toString()));
                 break;
             }
 
@@ -991,7 +991,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 if ( /*!pCombinedFilters ||*/ !GetMedium() )
                     rSet.DisableItem( nWhich );
                 else
-                    rSet.Put( SfxStringItem( nWhich, String( SfxResId( STR_SAVEASDOC ) ) ) );
+                    rSet.Put( SfxStringItem( nWhich, SfxResId(STR_SAVEASDOC).toString() ) );
                 break;
             }
 
@@ -1386,7 +1386,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
         }
         else
         {
-            ErrorBox( NULL, WB_OK, SfxResId( STR_XMLSEC_ODF12_EXPECTED ) ).Execute();
+            ErrorBox( NULL, WB_OK, SfxResId(STR_XMLSEC_ODF12_EXPECTED).toString() ).Execute();
             return;
         }
 

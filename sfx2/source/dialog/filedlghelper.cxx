@@ -659,7 +659,7 @@ void FileDialogHelper_Impl::updateVersions()
                 uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
 
                 aEntries.realloc( xVersions.getLength() + 1 );
-                aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
+                aEntries[0] = SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ).toString();
 
                 for ( sal_Int32 i=0; i<xVersions.getLength(); i++ )
                     aEntries[ i + 1 ] = xVersions[i].Identifier;
@@ -1119,7 +1119,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // Export dialog
     if ( mbExport )
     {
-        mxFileDlg->setTitle( OUString( String( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ) ) ) );
+        mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ).toString() );
         try {
                 com::sun::star::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
                 xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, sal_True );
@@ -1130,14 +1130,14 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // the "insert file" dialog needs another title
     if ( mbInsert )
     {
-        mxFileDlg->setTitle( OUString( String( SfxResId( STR_SFX_EXPLORERFILE_INSERT ) ) ) );
+        mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_INSERT ).toString() );
         uno::Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
         if ( xExtDlg.is() )
         {
             try
             {
                 xExtDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
-                                   OUString( String( SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ) ) ) );
+                                   SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ).toString() );
             }
             catch( const IllegalArgumentException& ){}
         }
@@ -1909,7 +1909,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
     try
     {
-        OUString aAllFilterName = String( SfxResId( STR_SFX_IMPORT_ALL ) );
+        OUString aAllFilterName = SfxResId( STR_SFX_IMPORT_ALL ).toString();
         aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode, *this );
 
         xFltMgr->appendFilter( aAllFilterName, aExtensions );

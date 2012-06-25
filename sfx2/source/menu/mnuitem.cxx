@@ -220,14 +220,14 @@ void SfxMenuControl::StateChanged
         String aStr( ((const SfxStringItem*)pState)->GetValue() );
         if ( aStr.CompareToAscii("($1)",4) == COMPARE_EQUAL )
         {
-            String aEntry(SfxResId(STR_UPDATEDOC));
+            String aEntry(SfxResId(STR_UPDATEDOC).toString());
             aEntry += ' ';
             aEntry += aStr.Copy(4);
             aStr = aEntry;
         }
         else if ( aStr.CompareToAscii("($2)",4) == COMPARE_EQUAL )
         {
-            String aEntry(SfxResId(STR_CLOSEDOC_ANDRETURN));
+            String aEntry(SfxResId(STR_CLOSEDOC_ANDRETURN).toString());
             aEntry += aStr.Copy(4);
             aStr = aEntry;
         }

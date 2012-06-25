@@ -949,9 +949,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 SolarMutexGuard aGuard;
                 Window *pWindow = SFX_APP()->GetTopWindow();
 
-                String aSecurityWarningBoxTitle( SfxResId( RID_SECURITY_WARNING_TITLE ));
                 WarningBox  aSecurityWarningBox( pWindow, SfxResId( RID_SECURITY_WARNING_NO_HYPERLINKS ));
-                aSecurityWarningBox.SetText( aSecurityWarningBoxTitle );
+                aSecurityWarningBox.SetText( SfxResId(RID_SECURITY_WARNING_TITLE).toString() );
                 aSecurityWarningBox.Execute();
                 return;
             }

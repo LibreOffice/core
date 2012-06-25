@@ -995,7 +995,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 
     if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
     {
-        String aTmp( SvtResId( STR_UNDO ) );
+        String aTmp(SvtResId(STR_UNDO).toString());
         aTmp+= pShUndoMgr->GetUndoActionComment(0);
         rSet.Put( SfxStringItem( SID_UNDO, aTmp ) );
     }
@@ -1004,7 +1004,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 
     if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
     {
-        String aTmp( SvtResId(STR_REDO) );
+        String aTmp(SvtResId(STR_REDO).toString());
         aTmp += pShUndoMgr->GetRedoActionComment(0);
         rSet.Put( SfxStringItem( SID_REDO, aTmp ) );
     }
@@ -1014,7 +1014,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
     if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() &&
          pShUndoMgr->CanRepeat(*pTarget) )
     {
-        String aTmp( SvtResId(STR_REPEAT) );
+        String aTmp(SvtResId(STR_REPEAT).toString());
         aTmp += pShUndoMgr->GetRepeatActionComment(*pTarget);
         rSet.Put( SfxStringItem( SID_REPEAT, aTmp ) );
     }

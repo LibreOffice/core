@@ -333,16 +333,16 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     // Evt. den Text kuerzen
     if ( aSize.Width()+4 >= nMaxWidth )
     {
-        XubString aAppendStr( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+        rtl::OUString aAppendStr("...");
         pItem->maFormatText += aAppendStr;
         do
         {
-            pItem->maFormatText.Erase( pItem->maFormatText.Len()-aAppendStr.Len()-1, 1 );
+            pItem->maFormatText.Erase( pItem->maFormatText.Len()-aAppendStr.getLength()-1, 1 );
             aSize.Width() = GetCtrlTextWidth( pItem->maFormatText );
             aSize.Width() += aImageSize.Width();
             aSize.Width() += TAB_TABOFFSET_X*2;
         }
-        while ( (aSize.Width()+4 >= nMaxWidth) && (pItem->maFormatText.Len() > aAppendStr.Len()) );
+        while ( (aSize.Width()+4 >= nMaxWidth) && (pItem->maFormatText.Len() > aAppendStr.getLength()) );
         if ( aSize.Width()+4 >= nMaxWidth )
         {
             pItem->maFormatText.Assign( '.' );

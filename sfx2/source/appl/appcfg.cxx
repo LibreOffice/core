@@ -470,8 +470,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     for ( sal_uInt16 nProp = SvtPathOptions::PATH_ADDIN;
                           nProp <= SvtPathOptions::PATH_WORK; nProp++ )
                     {
-                        const String aName( SfxResId( CONFIG_PATH_START + nProp ) );
-                        aNames.InsertValue( nProp, aName );
+                        aNames.InsertValue( nProp, SfxResId(CONFIG_PATH_START + nProp).toString() );
                         rtl::OUString aValue;
                         switch ( nProp )
                         {

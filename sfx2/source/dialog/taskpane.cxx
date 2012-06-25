@@ -215,7 +215,7 @@ namespace sfx2
         ,m_aPaneController( m_aTaskPane, *this )
     {
         m_aTaskPane.Show();
-        SetText( String( SfxResId( SID_TASKPANE ) ) );
+        SetText( SfxResId( SID_TASKPANE ).toString() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -943,7 +943,7 @@ namespace sfx2
     {
         m_rDockingWindow.ResetToolBox();
         m_nViewMenuID = m_rDockingWindow.AddDropDownToolBoxItem(
-            String( SfxResId( STR_SFX_TASK_PANE_VIEW ) ),
+            SfxResId( STR_SFX_TASK_PANE_VIEW ).toString(),
             HID_TASKPANE_VIEW_MENU,
             LINK( this, TaskPaneController_Impl, OnToolboxClicked )
         );
@@ -959,7 +959,7 @@ namespace sfx2
             m_aPanelRepository.push_back( PanelDescriptor( pPanel ) );
         }
 
-        SetDefaultTitle( String( SfxResId( STR_SFX_TASKS ) ) );
+        SetDefaultTitle( SfxResId( STR_SFX_TASKS ).toString() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1259,12 +1259,12 @@ namespace sfx2
         if ( m_rDockingWindow.IsFloatingMode() )
             pMenu->InsertItem(
                 MID_LOCK_TASK_PANEL,
-                String( SfxResId( STR_SFX_DOCK ) )
+                SfxResId( STR_SFX_DOCK ).toString()
             );
         else
             pMenu->InsertItem(
                 MID_UNLOCK_TASK_PANEL,
-                String( SfxResId( STR_SFX_UNDOCK ) )
+                SfxResId( STR_SFX_UNDOCK ).toString()
             );
 
         pMenu->RemoveDisabledEntries( sal_False, sal_False );

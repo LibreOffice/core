@@ -33,9 +33,9 @@ QueryTemplateBox::QueryTemplateBox( Window* pParent, const String& rMessage ) :
     SetImage( QueryBox::GetStandardImage() );
     SetHelpId( HID_QUERY_LOAD_TEMPLATE );
 
-    AddButton( String( SfxResId( STR_QRYTEMPL_UPDATE_BTN ) ), RET_YES,
+    AddButton( SfxResId( STR_QRYTEMPL_UPDATE_BTN ).toString(), RET_YES,
             BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
-    AddButton( String( SfxResId( STR_QRYTEMPL_KEEP_BTN ) ), RET_NO, BUTTONDIALOG_CANCELBUTTON );
+    AddButton( SfxResId(STR_QRYTEMPL_KEEP_BTN).toString(), RET_NO, BUTTONDIALOG_CANCELBUTTON );
 }
 
 } // end of namespace sfx2

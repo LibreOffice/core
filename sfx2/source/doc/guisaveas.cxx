@@ -647,9 +647,8 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
             && GetMediaDescr().find( aVersionCommentString ) == GetMediaDescr().end() )
             {
                 // notify the user that SaveAs is going to be done
-                String aString( SfxResId( STR_NEW_FILENAME_SAVE ) );
                 Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
-                QueryBox aMessageBox( pWin, WB_OK_CANCEL | WB_DEF_OK, aString );
+                QueryBox aMessageBox( pWin, WB_OK_CANCEL | WB_DEF_OK, SfxResId(STR_NEW_FILENAME_SAVE).toString() );
                 if ( aMessageBox.Execute() == RET_OK )
                     nResult = STATUS_SAVEAS;
                 else
@@ -897,10 +896,10 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
         if ( xControlAccess.is() )
         {
-            ::rtl::OUString aCtrlText = String( SfxResId( STR_EXPORTBUTTON ) );
+            ::rtl::OUString aCtrlText = SfxResId(STR_EXPORTBUTTON).toString();
             xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, aCtrlText );
 
-            aCtrlText = ::rtl::OUString( String( SfxResId( STR_LABEL_FILEFORMAT ) ) );
+            aCtrlText = SfxResId(STR_LABEL_FILEFORMAT).toString();
             xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, aCtrlText );
         }
     }

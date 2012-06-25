@@ -101,13 +101,11 @@ SalSystem* ImplGetSalSystem()
 }
 
 
-static String& ReplaceJavaErrorMessages( String& rString )
+static rtl::OUString ReplaceJavaErrorMessages( const rtl::OUString& rString )
 {
-    rString.SearchAndReplaceAllAscii( "%OK", Button::GetStandardText( BUTTON_OK ) );
-    rString.SearchAndReplaceAllAscii( "%IGNORE", Button::GetStandardText( BUTTON_IGNORE ) );
-    rString.SearchAndReplaceAllAscii( "%CANCEL", Button::GetStandardText( BUTTON_CANCEL ) );
-
-    return rString;
+    return rString.replaceAll("%OK", Button::GetStandardText(BUTTON_OK)).
+            replaceAll("%IGNORE", Button::GetStandardText(BUTTON_IGNORE)).
+            replaceAll("%CANCEL", Button::GetStandardText(BUTTON_CANCEL));
 }
 
 // =======================================================================
@@ -400,15 +398,14 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            String aTitle(ResId(SV_ACCESSERROR_JAVA_NOT_CONFIGURED, *pResMgr).toString());
-            String aMessage((ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr)).toString());
+            rtl::OUString aTitle(ResId(SV_ACCESSERROR_JAVA_NOT_CONFIGURED, *pResMgr).toString());
+            rtl::OUStringBuffer aMessage((ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr)).toString());
 
-            aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-            aMessage += ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString();
+            aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
 
             int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
-                ReplaceJavaErrorMessages(aMessage),
+                ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
 
@@ -424,15 +421,14 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            String aTitle(ResId(SV_ACCESSERROR_FAULTY_JAVA, *pResMgr).toString());
-            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
+            rtl::OUString aTitle(ResId(SV_ACCESSERROR_FAULTY_JAVA, *pResMgr).toString());
+            rtl::OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
 
-            aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-            aMessage += ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString();
+            aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
 
             int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
-                ReplaceJavaErrorMessages(aMessage),
+                ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
 
@@ -448,15 +444,14 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            String aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, *pResMgr).toString());
-            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
+            rtl::OUString aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, *pResMgr).toString());
+            rtl::OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
 
-            aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-            aMessage += ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString();
+            aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
 
             int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
-                ReplaceJavaErrorMessages(aMessage),
+                ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
 
@@ -472,15 +467,14 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            String aTitle(ResId(SV_ACCESSERROR_JAVA_DISABLED, *pResMgr).toString());
-            String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
+            rtl::OUString aTitle(ResId(SV_ACCESSERROR_JAVA_DISABLED, *pResMgr).toString());
+            rtl::OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
 
-            aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-            aMessage += ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString();
+            aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
 
             int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                 aTitle,
-                ReplaceJavaErrorMessages(aMessage),
+                ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
                 SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
 
@@ -496,8 +490,8 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && pResMgr )
         {
-            String aTitle;
-            String aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr).toString());
+            rtl::OUString aTitle;
+            rtl::OUStringBuffer aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr).toString());
 
             if( 0 == e.Message.compareTo(::rtl::OUString("ClassNotFound"), 13) )
             {
@@ -508,19 +502,18 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                 aTitle = ResId(SV_ACCESSERROR_WRONG_VERSION, *pResMgr).toString();
             }
 
-            if( aTitle.Len() != 0 )
+            if (!aTitle.isEmpty())
             {
                 if( bAllowCancel )
                 {
                     // Something went wrong initializing the Java AccessBridge (on Windows) during the
                     // startup. Since the office will be probably unusable for a disabled user, we offer
                     // to terminate directly.
-                    aMessage += String(" ", 1, RTL_TEXTENCODING_ASCII_US);
-                    aMessage += ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString();
+                    aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
 
                     int ret = ImplGetSalSystem()->ShowNativeMessageBox(
                         aTitle,
-                        ReplaceJavaErrorMessages(aMessage),
+                        ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL,
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL);
 
@@ -534,7 +527,7 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                     // so we don't offer to terminate here !
                     ImplGetSalSystem()->ShowNativeMessageBox(
                         aTitle,
-                        ReplaceJavaErrorMessages(aMessage),
+                        ReplaceJavaErrorMessages(aMessage.makeStringAndClear()),
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
                         SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK);
                 }

@@ -87,8 +87,7 @@ void BasicDLL::BasicBreak()
         {
             bJustStopping = sal_True;
             StarBASIC::Stop();
-            String aMessageStr( BasResId( IDS_SBERR_TERMINATED ) );
-            InfoBox( 0, aMessageStr ).Execute();
+            InfoBox( 0, BasResId(IDS_SBERR_TERMINATED).toString() ).Execute();
             bJustStopping = sal_False;
         }
     }

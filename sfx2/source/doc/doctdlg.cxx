@@ -111,7 +111,7 @@ void SfxDocumentTemplateDlg::Init()
     for(sal_uInt16 i = 0; i < nCount; ++i)
         aRegionLb.InsertEntry(pTemplates->GetFullRegionName(i));
     if(!nCount)
-        aRegionLb.InsertEntry(String(SfxResId(STR_STANDARD)));
+        aRegionLb.InsertEntry(SfxResId(STR_STANDARD).toString());
     aRegionLb.SelectEntryPos(0);
     if(nCount)
     {
@@ -145,7 +145,7 @@ IMPL_LINK( SfxDocumentTemplateDlg, OrganizeHdl, Button *, pButton )
         aRegionLb.SetUpdateMode( sal_True );
         aRegionLb.Invalidate();
         aRegionLb.Update();
-        aCancelBt.SetText(String(SfxResId(STR_CLOSE)));
+        aCancelBt.SetText(SfxResId(STR_CLOSE).toString());
     }
     else if(RET_EDIT_STYLE == nRet)
         EndDialog(RET_CANCEL);

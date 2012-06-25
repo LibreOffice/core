@@ -41,12 +41,12 @@ short ExecuteQuerySaveDocument(Window* _pParent,const String& _rTitle)
     {   // don't block Desktop::terminate() if there's no user to ask
         return RET_NO;
     }
-    String aText( SfxResId( STR_QUERY_SAVE_DOCUMENT ) );
+    String aText( SfxResId(STR_QUERY_SAVE_DOCUMENT).toString() );
     aText.SearchAndReplace( DEFINE_CONST_UNICODE( "$(DOC)" ),
                             _rTitle );
     QueryBox aQBox( _pParent, WB_YES_NO_CANCEL | WB_DEF_YES, aText );
-    aQBox.SetButtonText( BUTTONID_NO, SfxResId( STR_NOSAVEANDCLOSE ) );
-    aQBox.SetButtonText( BUTTONID_YES, SfxResId( STR_SAVEDOC ) );
+    aQBox.SetButtonText( BUTTONID_NO, SfxResId(STR_NOSAVEANDCLOSE).toString() );
+    aQBox.SetButtonText( BUTTONID_YES, SfxResId(STR_SAVEDOC).toString() );
     return aQBox.Execute();
 }
 // -----------------------------------------------------------------------------

@@ -222,7 +222,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
     pPage       ( NULL )
 
 {
-    SetText( SfxResId( STR_PRINT_OPTIONS_TITLE ) );
+    SetText( SfxResId(STR_PRINT_OPTIONS_TITLE).toString() );
 
     // Insert TabPage
     pPage = pViewSh->CreatePrintOptionsPage( this, *pOptions );

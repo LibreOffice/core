@@ -751,7 +751,7 @@ void SfxOrganizeMgr::SaveAll(Window *pParent)
             {
                 if(!pTemplates->DeleteObjectShell(i, j))
                 {
-                    String aText = String(SfxResId(STR_ERROR_SAVE_TEMPLATE));
+                    String aText = SfxResId(STR_ERROR_SAVE_TEMPLATE).toString();
                     aText += pTemplates->GetName(i, j);
                     ErrorBox aBox(pParent,
                                   WinBits(WB_OK_CANCEL | WB_DEF_CANCEL),
@@ -768,7 +768,7 @@ void SfxOrganizeMgr::SaveAll(Window *pParent)
         _FileListEntry *pEntry = (*pImpl->pDocList)[i];
         if(!pEntry->DeleteObjectShell())
         {
-            String aText(SfxResId(STR_ERROR_SAVE_TEMPLATE));
+            String aText(SfxResId(STR_ERROR_SAVE_TEMPLATE).toString());
             aText += pEntry->aBaseName;
             ErrorBox aBox(pParent, WinBits(WB_OK_CANCEL | WB_DEF_CANCEL), aText);
             if(RET_CANCEL == aBox.Execute())

@@ -207,7 +207,7 @@ namespace
         {
             if ( i != STR_LICENSING_INFORMATION_1 )
                 aLicensing += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
-            aLicensing += String( SfxResId( i ) );
+            aLicensing += SfxResId( i ).toString();
         }
 
         aText.SetText( aLicensing );
@@ -732,7 +732,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     if ( pAppData_Impl->nDocModalMode )
                         rSet.DisableItem(nWhich);
                     else
-                        rSet.Put(SfxStringItem(nWhich, String(SfxResId(STR_QUITAPP))));
+                        rSet.Put(SfxStringItem(nWhich, SfxResId(STR_QUITAPP).toString()));
                     break;
                 }
 

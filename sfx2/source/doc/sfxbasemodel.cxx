@@ -3795,24 +3795,24 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
                     }
                 }
             }
-            catch (ucb::ContentCreationException &)
+            catch (const ucb::ContentCreationException &)
             {
             }
-            catch (ucb::CommandAbortedException &)
+            catch (const ucb::CommandAbortedException &)
             {
             }
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairedDocItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
             if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
-                aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
+                aResult += SfxResId(STR_REPAIREDDOCUMENT).toString();
         }
 
         if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (pMedium && pMedium->IsReadOnly()) )
-            aResult += ::rtl::OUString( String( SfxResId(STR_READONLY) ) );
+            aResult += SfxResId(STR_READONLY).toString();
         else if ( m_pData->m_pObjectShell->IsDocShared() )
-            aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );
+            aResult += SfxResId(STR_SHARED).toString();
 
         if ( m_pData->m_pObjectShell->GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
-            aResult += String( SfxResId( RID_XMLSEC_DOCUMENTSIGNED ) );
+            aResult += SfxResId(RID_XMLSEC_DOCUMENTSIGNED).toString();
     }
 
     return aResult;

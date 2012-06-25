@@ -651,7 +651,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
             const SfxPoolItem *pPoolItem;
             if ( IsSaveVersionOnClose() )
             {
-                SfxStringItem aItem( SID_DOCINFO_COMMENTS, String( SfxResId( STR_AUTOMATICVERSION ) ) );
+                SfxStringItem aItem( SID_DOCINFO_COMMENTS, SfxResId(STR_AUTOMATICVERSION).toString() );
                 SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
                 const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, 0 };
                 pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );

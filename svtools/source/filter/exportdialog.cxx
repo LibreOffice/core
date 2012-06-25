@@ -617,9 +617,9 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
                 maRbEPSCompressionNone  ( this, ResId( RB_EPS_COMPRESSION_NONE, *rPara.pResMgr ) ),
                 maFlEstimatedSize       ( this, ResId( FL_ESTIMATED_SIZE, *rPara.pResMgr ) ),
                 maFtEstimatedSize       ( this, ResId( FT_ESTIMATED_SIZE, *rPara.pResMgr ) ),
-                msEstimatedSizePix1     ( ResId( STR_ESTIMATED_SIZE_PIX_1, *rPara.pResMgr ) ),
-                msEstimatedSizePix2     ( ResId( STR_ESTIMATED_SIZE_PIX_2, *rPara.pResMgr ) ),
-                msEstimatedSizeVec      ( ResId( STR_ESTIMATED_SIZE_VEC, *rPara.pResMgr ) ),
+                msEstimatedSizePix1     ( ResId( STR_ESTIMATED_SIZE_PIX_1, *rPara.pResMgr ).toString() ),
+                msEstimatedSizePix2     ( ResId( STR_ESTIMATED_SIZE_PIX_2, *rPara.pResMgr ).toString() ),
+                msEstimatedSizeVec      ( ResId( STR_ESTIMATED_SIZE_VEC, *rPara.pResMgr ).toString() ),
                 maFlButtons             ( this, ResId( FL_BUTTONS, *rPara.pResMgr ) ),
                 maFbJPGPreview          ( this, ResId( FB_JPG_PREVIEW, *rPara.pResMgr ) ),
                 maSbZoom                ( this, ResId( SB_ZOOM, *rPara.pResMgr ) ),
@@ -629,13 +629,13 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
                 maBtnOK                 ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
                 maBtnCancel             ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
                 maBtnHelp               ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
-                ms1BitTreshold          ( ResId( STR_1BIT_THRESHOLD, *rPara.pResMgr ) ),
-                ms1BitDithered          ( ResId( STR_1BIT_DITHERED, *rPara.pResMgr ) ),
-                ms4BitGrayscale         ( ResId( STR_4BIT_GRAYSCALE, *rPara.pResMgr ) ),
-                ms4BitColorPalette      ( ResId( STR_4BIT_COLOR_PALETTE, *rPara.pResMgr ) ),
-                ms8BitGrayscale         ( ResId( STR_8BIT_GRAYSCALE, *rPara.pResMgr ) ),
-                ms8BitColorPalette      ( ResId( STR_8BIT_COLOR_PALETTE, *rPara.pResMgr ) ),
-                ms24BitColor            ( ResId( STR_24BIT_TRUE_COLOR, *rPara.pResMgr ) ),
+                ms1BitTreshold          ( ResId( STR_1BIT_THRESHOLD, *rPara.pResMgr ).toString() ),
+                ms1BitDithered          ( ResId( STR_1BIT_DITHERED, *rPara.pResMgr ).toString() ),
+                ms4BitGrayscale         ( ResId( STR_4BIT_GRAYSCALE, *rPara.pResMgr ).toString() ),
+                ms4BitColorPalette      ( ResId( STR_4BIT_COLOR_PALETTE, *rPara.pResMgr ).toString() ),
+                ms8BitGrayscale         ( ResId( STR_8BIT_GRAYSCALE, *rPara.pResMgr ).toString() ),
+                ms8BitColorPalette      ( ResId( STR_8BIT_COLOR_PALETTE, *rPara.pResMgr ).toString() ),
+                ms24BitColor            ( ResId( STR_24BIT_TRUE_COLOR, *rPara.pResMgr ).toString() ),
                 maExt                   ( rPara.aFilterExt ),
                 mnFormat                ( FORMAT_UNKNOWN ),
                 mnMaxFilesizeForRealtimePreview( 0 ),
@@ -663,7 +663,7 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
     maFtEstimatedSize.SetText( String( RTL_CONSTASCII_USTRINGPARAM( " \n " ) ) );
 
     String  aTitle( maExt );
-    aTitle += String( ResId( DLG_EXPORT_TITLE, *mpMgr ) );
+    aTitle += ResId(DLG_EXPORT_TITLE, *mpMgr).toString();
     SetText( aTitle );
 
     mnFormat = GetFilterFormat( maExt );

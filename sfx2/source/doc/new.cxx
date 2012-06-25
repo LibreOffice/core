@@ -303,7 +303,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     sal_uInt16 nc=aSel.Search('(');
     if (nc-1&&nc!=STRING_NOTFOUND)
         aSel.Erase(nc-1);
-    if (aSel.CompareIgnoreCaseToAscii( String(SfxResId(STR_STANDARD)) )==COMPARE_EQUAL)
+    if (aSel.CompareIgnoreCaseToAscii( SfxResId(STR_STANDARD).toString() )==COMPARE_EQUAL)
         aTemplateLb.InsertEntry(aNone);
     for (sal_uInt16 i = 0; i < nCount; ++i)
         aTemplateLb.InsertEntry(aTemplates.GetName(nRegion, i));
@@ -391,7 +391,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
     sal_uInt16 nc=aSel.Search('(');
     if (nc-1&&nc!=STRING_NOTFOUND)
         aSel.Erase(nc-1);
-    if (aSel.CompareIgnoreCaseToAscii(String(SfxResId(STR_STANDARD)))!=COMPARE_EQUAL)
+    if (aSel.CompareIgnoreCaseToAscii(SfxResId(STR_STANDARD).toString())!=COMPARE_EQUAL)
         nEntry++;
     if (!aTemplateLb.GetSelectEntryCount())
         nEntry=0;
@@ -479,8 +479,8 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         aCancelBt( pAntiImplP, SfxResId( BT_CANCEL ) ),
         aHelpBt( pAntiImplP, SfxResId( BT_HELP ) ),
         pMoreBt( new MoreButton( pAntiImplP, SfxResId( BT_MORE ) ) ),
-        aNone( SfxResId(STR_NONE) ),
-        sLoadTemplate( SfxResId(STR_LOAD_TEMPLATE)),
+        aNone(SfxResId(STR_NONE).toString()),
+        sLoadTemplate(SfxResId(STR_LOAD_TEMPLATE).toString()),
         nFlags(nFl),
         pAntiImpl( pAntiImplP )
 {

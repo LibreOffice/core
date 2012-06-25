@@ -877,20 +877,20 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                     // initialize the Basic-formater help object:
                     // get resources for predefined output
                     // of the Format()-command, e. g. for "On/Off"
-                    String aOnStrg = String( SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_ON ) );
-                    String aOffStrg = String( SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_OFF) );
-                    String aYesStrg = String( SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_YES) );
-                    String aNoStrg = String( SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_NO) );
-                    String aTrueStrg = String( SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_TRUE) );
-                    String aFalseStrg = String( SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_FALSE) );
-                    String aCurrencyFormatStrg = String( SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_CURRENCY) );
+                    rtl::OUString aOnStrg = SbxValueFormatResId(
+                        STR_BASICKEY_FORMAT_ON).toString();
+                    rtl::OUString aOffStrg = SbxValueFormatResId(
+                        STR_BASICKEY_FORMAT_OFF).toString();
+                    rtl::OUString aYesStrg = SbxValueFormatResId(
+                        STR_BASICKEY_FORMAT_YES).toString();
+                    rtl::OUString aNoStrg = SbxValueFormatResId(
+                        STR_BASICKEY_FORMAT_NO).toString();
+                    rtl::OUString aTrueStrg = SbxValueFormatResId(
+                        STR_BASICKEY_FORMAT_TRUE).toString();
+                    rtl::OUString aFalseStrg = SbxValueFormatResId(
+                        STR_BASICKEY_FORMAT_FALSE).toString();
+                    rtl::OUString aCurrencyFormatStrg = SbxValueFormatResId(
+                        STR_BASICKEY_FORMAT_CURRENCY).toString();
 
                     rAppData.pBasicFormater
                         = new SbxBasicFormater( cComma,c1000,aOnStrg,aOffStrg,

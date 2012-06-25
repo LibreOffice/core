@@ -131,8 +131,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bJavaNotFound_Handled = true;
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_JAVANOTFOUND ) );
-            String aTitle( SvtResId( STR_WARNING_JAVANOTFOUND ) );
-            aWarningBox.SetText( aTitle );
+            aWarningBox.SetText(SvtResId(STR_WARNING_JAVANOTFOUND).toString());
             nResult = aWarningBox.Execute();
         }
         else
@@ -152,8 +151,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
 #else
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_INVALIDJAVASETTINGS ) );
 #endif
-            String aTitle( SvtResId(STR_WARNING_INVALIDJAVASETTINGS));
-            aWarningBox.SetText( aTitle );
+            aWarningBox.SetText(SvtResId(STR_WARNING_INVALIDJAVASETTINGS).toString());
             nResult = aWarningBox.Execute();
         }
         else
@@ -169,8 +167,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             m_bJavaDisabled_Handled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
             QueryBox aQueryBox( NULL, SvtResId( QBX_JAVADISABLED ) );
-            String aTitle( SvtResId( STR_QUESTION_JAVADISABLED ) );
-            aQueryBox.SetText( aTitle );
+            aQueryBox.SetText(SvtResId( STR_QUESTION_JAVADISABLED ).toString());
             nResult = aQueryBox.Execute();
             if ( nResult == RET_YES )
             {
@@ -197,8 +194,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
 #else
             ErrorBox aErrorBox( NULL, SvtResId( ERRORBOX_JVMCREATIONFAILED ) );
 #endif
-            String aTitle( SvtResId( STR_ERROR_JVMCREATIONFAILED ) );
-            aErrorBox.SetText( aTitle );
+            aErrorBox.SetText(SvtResId( STR_ERROR_JVMCREATIONFAILED ).toString());
             nResult = aErrorBox.Execute();
         }
         else
@@ -215,8 +211,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bRestartRequired_Handled = true;
             ErrorBox aErrorBox(NULL, SvtResId( ERRORBOX_RESTARTREQUIRED ) );
-            String aTitle( SvtResId( STR_ERROR_RESTARTREQUIRED ) );
-            aErrorBox.SetText( aTitle );
+            aErrorBox.SetText(SvtResId( STR_ERROR_RESTARTREQUIRED ).toString());
             nResult = aErrorBox.Execute();
         }
         else
