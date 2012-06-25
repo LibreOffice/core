@@ -944,6 +944,8 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                                       rUnitConverter );
                 if( bOk )
                     bOk = rItem.PutValue( aAny );
+
+                delete pWritingModeHandler;
             }
         }
         break;
