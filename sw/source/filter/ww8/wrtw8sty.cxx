@@ -1907,7 +1907,7 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader )
 // WW8_WrPlcFtnEdn ist die Klasse fuer Fuss- und Endnoten
 //------------------------------------------------------------------------------
 WW8_WrPlcSubDoc::WW8_WrPlcSubDoc()
-    : aCntnt( 0 ), pTxtPos( 0 )
+    : pTxtPos( 0 )
 {
 }
 

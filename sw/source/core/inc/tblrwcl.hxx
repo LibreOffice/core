@@ -163,7 +163,7 @@ class SwShareBoxFmt
 
 public:
     SwShareBoxFmt( const SwFrmFmt& rFmt )
-        : pOldFmt( &rFmt ), aNewFmts()
+        : pOldFmt( &rFmt )
     {}
 
     const SwFrmFmt& GetOldFormat() const { return *pOldFmt; }
