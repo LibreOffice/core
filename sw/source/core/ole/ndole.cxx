@@ -68,10 +68,13 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-class SwOLELRUCache : private std::deque<SwOLEObj*>, private utl::ConfigItem
+class SwOLELRUCache
+    : private utl::ConfigItem
 {
-    sal_uInt16 nLRU_InitSize;
-    sal_Bool bInUnload;
+private:
+    typedef std::deque<SwOLEObj *> OleObjects_t;
+    OleObjects_t m_OleObjects;
+    sal_Int32 m_nLRU_InitSize;
     uno::Sequence< rtl::OUString > GetPropertyNames();
 
 public:
@@ -82,16 +85,17 @@ public:
     virtual void Commit();
     void Load();
 
-    void SetInUnload( sal_Bool bFlag )  { bInUnload = bFlag; }
-
     void InsertObj( SwOLEObj& rObj );
     void RemoveObj( SwOLEObj& rObj );
 
     void RemovePtr( SwOLEObj* pObj )
     {
-        iterator it = std::find( begin(), end(), pObj );
-        if( it != end() )
-            erase( it  );
+        OleObjects_t::iterator const it =
+            std::find(m_OleObjects.begin(), m_OleObjects.end(), pObj);
+        if (it != m_OleObjects.end())
+        {
+            m_OleObjects.erase(it);
+        }
     }
 };
 
@@ -897,10 +901,8 @@ String SwOLEObj::GetDescription()
 
 
 SwOLELRUCache::SwOLELRUCache()
-    : std::deque<SwOLEObj*>(),
-    utl::ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Cache"))),
-    nLRU_InitSize( 20 ),
-    bInUnload( sal_False )
+    : utl::ConfigItem(OUString("Office.Common/Cache"))
+    , m_nLRU_InitSize( 20 )
 {
     EnableNotification( GetPropertyNames() );
     Load();
@@ -935,16 +937,16 @@ void SwOLELRUCache::Load()
         *pValues >>= nVal;
 
         {
-            if( nVal < nLRU_InitSize )
+            if (nVal < m_nLRU_InitSize)
             {
                 // size of cache has been changed
-                sal_uInt16 nCount = size();
-                sal_uInt16 nPos = nCount;
+                sal_Int32 nCount = m_OleObjects.size();
+                sal_Int32 nPos = nCount;
 
                 // try to remove the last entries until new maximum size is reached
                 while( nCount > nVal )
                 {
-                    SwOLEObj* pObj = operator[]( --nPos );
+                    SwOLEObj *const pObj = m_OleObjects[ --nPos ];
                     if ( pObj->UnloadObject() )
                         nCount--;
                     if ( !nPos )
@@ -953,28 +955,32 @@ void SwOLELRUCache::Load()
             }
         }
 
-        nLRU_InitSize = (sal_uInt16)nVal;
+        m_nLRU_InitSize = nVal;
     }
 }
 
 void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
 {
     SwOLEObj* pObj = &rObj;
-    iterator it = std::find( begin(), end(), pObj );
-    if( it != begin() )
+    OleObjects_t::iterator it =
+        std::find(m_OleObjects.begin(), m_OleObjects.end(), pObj);
+    if (it != m_OleObjects.end() && it != m_OleObjects.begin())
     {
-        // object is currently not the first in cache
-        if( it != end() )
-            erase( it );
+        // object in cache but is currently not the first in cache
+        m_OleObjects.erase(it);
+        it = m_OleObjects.end();
+    }
+    if (it == m_OleObjects.end())
+    {
+        m_OleObjects.push_front( pObj );
 
-        push_front( pObj );
-
-        // try to remove objects if necessary (of course not the freshly inserted one at nPos=0)
-        sal_uInt16 nCount = size();
-        sal_uInt16 nPos = nCount-1;
-        while( nPos && nCount > nLRU_InitSize )
+        // try to remove objects if necessary
+        // (of course not the freshly inserted one at nPos=0)
+        sal_Int32 nCount = m_OleObjects.size();
+        sal_Int32 nPos = nCount-1;
+        while (nPos && nCount > m_nLRU_InitSize)
         {
-            pObj = operator[]( nPos-- );
+            pObj = m_OleObjects[ nPos-- ];
             if ( pObj->UnloadObject() )
                 nCount--;
         }
@@ -983,11 +989,16 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
 
 void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
 {
-    iterator it = std::find( begin(), end(), &rObj );
-    if ( it != end() )
-        erase( it );
-    if( empty() )
+    OleObjects_t::iterator const it =
+        std::find(m_OleObjects.begin(), m_OleObjects.end(), &rObj);
+    if (it != m_OleObjects.end())
+    {
+        m_OleObjects.erase(it);
+    }
+    if (m_OleObjects.empty())
+    {
         DELETEZ( pOLELRU_Cache );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
