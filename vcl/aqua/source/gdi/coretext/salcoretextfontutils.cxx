@@ -11,6 +11,7 @@
 
 static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFontAttributes& rDFA  )
 {
+    int value = 0;
 
     // reset the attributes
     rDFA.meFamily     = FAMILY_DONTKNOW;
@@ -35,7 +36,6 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     CFRelease(rHeadTable);
 #else
     CFNumberRef format = (CFNumberRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontFormatAttribute);
-    int value = 0;
     CFNumberGetValue(format, kCFNumberIntType, &value);
     CFRelease(format);
 
@@ -54,7 +54,6 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
 
     CFDictionaryRef traits = (CFDictionaryRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontTraitsAttribute);
     CFNumberRef symbolics = (CFNumberRef)CFDictionaryGetValue(traits, kCTFontSymbolicTrait);
-    int value = 0;
     CFNumberGetValue(symbolics, kCFNumberIntType, &value);
     CFRelease(symbolics);
 
