@@ -156,6 +156,16 @@ $(foreach file,$(3),$(call gb_Extension_add_file,$(1),$(if $(strip $(2)),$(strip
 
 endef
 
+# add a library from the solver; DO NOT use gb_Library_get_target
+define gb_Extension_add_library
+$(call gb_Extension_add_file,$(1),$(call gb_Library_get_runtime_filename,$(2)),\
+	$(gb_Helper_OUTDIRLIBDIR)/$(call gb_Library_get_runtime_filename,$(2)))
+endef
+
+define gb_Extension_add_libraries
+$(foreach lib,$(2),$(call gb_Extension_add_library,$(1),$(lib)))
+endef
+
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_Extension_localize_properties

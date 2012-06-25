@@ -33,9 +33,12 @@ $(eval $(call gb_Extension_set_platform,pdfimport,$(sdext_PLATFORM)))
 
 $(eval $(call gb_Extension_add_file,pdfimport,components.rdb,$(call gb_Rdb_get_target,pdfimport)))
 
+$(eval $(call gb_Extension_add_libraries,pdfimport,\
+    pdfimport \
+))
+
 $(eval $(call gb_Extension_add_files,pdfimport,,\
     $(call gb_Executable_get_target,xpdfimport) \
-    $(call gb_Library_get_target,pdfimport) \
     $(SRCDIR)/sdext/source/pdfimport/config/pdf_import_filter.xcu \
     $(SRCDIR)/sdext/source/pdfimport/config/pdf_types.xcu \
     $(SRCDIR)/sdext/source/pdfimport/dialogs/xpdfimport_err.pdf \
