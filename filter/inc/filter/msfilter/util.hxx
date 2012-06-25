@@ -59,6 +59,17 @@ to find it, unfortunately :-(
 */
 MSFILTER_DLLPUBLIC rtl::OString DateTimeToOString( const DateTime& rDateTime );
 
+/// Given a cBullet in encoding r_ioChrSet and fontname r_ioFontName return a
+/// suitable new Bullet and change r_ioChrSet and r_ioFontName to form the
+/// best-fit replacement in terms of default available MSOffice symbol
+/// fonts.
+///
+/// Set bDisableUnicodeSupport when exporting to 8bit encodings
+///
+/// Used to map from [Open|Star]Symbol to some Windows font or other.
+MSFILTER_DLLPUBLIC sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cBullet,
+    rtl_TextEncoding& r_ioChrSet, rtl::OUString& r_ioFontName, bool bDisableUnicodeSupport = false);
+
 }
 }
 

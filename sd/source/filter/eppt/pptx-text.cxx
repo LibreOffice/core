@@ -48,11 +48,11 @@
 #include <comphelper/processfactory.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
+#include <filter/msfilter/util.hxx>
 #include <i18nutil/scripttypedetector.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
 #include <oox/export/drawingml.hxx> // for SubstituteBullet
-#include <unotools/fontcvt.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
@@ -746,43 +746,6 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
     }
 }
 
-// from sw/source/filter/ww8/wrtw8num.cxx for default bullets to export to MS intact
-static void lcl_SubstituteBullet(rtl::OUString& rNumStr, rtl_TextEncoding& rChrSet, rtl::OUString& rFontName)
-{
-    sal_Unicode cChar = rNumStr[0];
-    StarSymbolToMSMultiFont *pConvert = CreateStarSymbolToMSMultiFont();
-    rtl::OUString sFont = pConvert->ConvertChar(cChar);
-    delete pConvert;
-    if (!sFont.isEmpty())
-    {
-        rNumStr = rtl::OUString(static_cast< sal_Unicode >(cChar | 0xF000));
-        rFontName = sFont;
-        rChrSet = RTL_TEXTENCODING_SYMBOL;
-    }
-    else if ( (rNumStr[0] < 0xE000 || rNumStr[0] > 0xF8FF) )
-    {
-        /*
-        Ok we can't fit into a known windows unicode font, but
-        we are not in the private area, so we are a
-        standardized symbol, so turn off the symbol bit and
-        let words own font substitution kick in
-        */
-        rChrSet = RTL_TEXTENCODING_UNICODE;
-        xub_StrLen nIndex = 0;
-        rFontName = ::GetNextFontToken(rFontName, nIndex);
-    }
-    else
-    {
-        /*
-        Well we don't have an available substition, and we're
-        in our private area, so give up and show a standard
-        bullet symbol
-        */
-        rFontName = "Wingdings";
-        rNumStr = rtl::OUString(static_cast< sal_Unicode >(0x6C));
-     }
-}
-
 void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue )
 {
     ::com::sun::star::uno::Any aAny;
@@ -930,16 +893,12 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                     case SVX_NUM_CHAR_SPECIAL :                           // Bullet
                     {
-                        if ( aFontDesc.Name.equals("starsymbol") ||  aFontDesc.Name.equals("opensymbol") )
+                        if ( aFontDesc.Name.equals("starsymbol") || aFontDesc.Name.equals("opensymbol") )
                         {
-                            rtl::OUString sFontName(aFontDesc.Name);
-                            rtl::OUString sNumStr(cBulletId);
                             rtl_TextEncoding eChrSet = aFontDesc.CharSet;
-                            lcl_SubstituteBullet(sNumStr,eChrSet,sFontName);
-                            aFontDesc.Name = sFontName;
-                            cBulletId = sNumStr[ 0 ];
+                            cBulletId = msfilter::util::bestFitOpenSymbolToMSFont(cBulletId, eChrSet, aFontDesc.Name);
                             aFontDesc.CharSet = eChrSet;
-                         }
+                        }
 
                         if ( !aFontDesc.Name.isEmpty() )
                         {

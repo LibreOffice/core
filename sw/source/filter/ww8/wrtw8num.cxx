@@ -693,48 +693,12 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
 void MSWordExportBase::SubstituteBullet( String& rNumStr,
     rtl_TextEncoding& rChrSet, String& rFontName ) const
 {
-    StarSymbolToMSMultiFont *pConvert = 0;
-
     if (!bSubstituteBullets)
         return;
-
-    if (!pConvert)
-    {
-        pConvert = CreateStarSymbolToMSMultiFont();
-    }
-    sal_Unicode cChar = rNumStr.GetChar(0);
-    String sFont = pConvert->ConvertChar(cChar);
-
-    if (sFont.Len())
-    {
-        rNumStr = static_cast< sal_Unicode >(cChar | 0xF000);
-        rFontName = sFont;
-        rChrSet = RTL_TEXTENCODING_SYMBOL;
-    }
-    else if ( SupportsUnicode() &&
-        (rNumStr.GetChar(0) < 0xE000 || rNumStr.GetChar(0) > 0xF8FF) )
-    {
-        /*
-        Ok we can't fit into a known windows unicode font, but
-        we are not in the private area, so we are a
-        standardized symbol, so turn off the symbol bit and
-        let words own font substitution kick in
-        */
-        rChrSet = RTL_TEXTENCODING_UNICODE;
-        xub_StrLen nIndex = 0;
-        rFontName = ::GetNextFontToken(rFontName, nIndex);
-     }
-     else
-     {
-        /*
-        Well we don't have an available substition, and we're
-        in our private area, so give up and show a standard
-        bullet symbol
-        */
-        rFontName.ASSIGN_CONST_ASC("Wingdings");
-        rNumStr = static_cast< sal_Unicode >(0x6C);
-     }
-     delete pConvert;
+    rtl::OUString sFontName = rFontName;
+    rNumStr.SetChar(0, msfilter::util::bestFitOpenSymbolToMSFont(rNumStr.GetChar(0),
+        rChrSet, sFontName, !SupportsUnicode()));
+    rFontName = sFontName;
 }
 
 static void SwWw8_InsertAnlText( const String& rStr, sal_uInt8*& rpCh,

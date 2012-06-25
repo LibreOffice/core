@@ -66,15 +66,15 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
+#include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
 #include <filter/msfilter/escherex.hxx>
+#include <filter/msfilter/util.hxx>
 #include <editeng/svxenum.hxx>
 
 using namespace ::com::sun::star;
@@ -1427,59 +1427,17 @@ void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorE
                                FSEND );
 }
 
-// from sw/source/filter/ww8/wrtw8num.cxx for default bullets to export to MS intact
-static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, String& rFontName)
-{
-    sal_Unicode cChar = rNumStr.GetChar(0);
-    StarSymbolToMSMultiFont *pConvert = CreateStarSymbolToMSMultiFont();
-    String sFont = pConvert->ConvertChar(cChar);
-    delete pConvert;
-    if (sFont.Len())
-    {
-        rNumStr = static_cast< sal_Unicode >(cChar | 0xF000);
-        rFontName = sFont;
-        rChrSet = RTL_TEXTENCODING_SYMBOL;
-    }
-    else if ( (rNumStr.GetChar(0) < 0xE000 || rNumStr.GetChar(0) > 0xF8FF) )
-    {
-        /*
-           Ok we can't fit into a known windows unicode font, but
-           we are not in the private area, so we are a
-           standardized symbol, so turn off the symbol bit and
-           let words own font substitution kick in
-           */
-        rChrSet = RTL_TEXTENCODING_UNICODE;
-        xub_StrLen nIndex = 0;
-        rFontName = ::GetNextFontToken(rFontName, nIndex);
-    }
-    else
-    {
-        /*
-           Well we don't have an available substition, and we're
-           in our private area, so give up and show a standard
-           bullet symbol
-           */
-        rFontName.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Wingdings"));
-        rNumStr = static_cast< sal_Unicode >(0x6C);
-    }
-}
-
 sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star::awt::FontDescriptor& rFontDesc )
 {
-    String sNumStr = cBulletId;
-
     if ( rFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starsymbol")) ||
-         rFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")) )  {
-        String sFontName = rFontDesc.Name;
-        rtl_TextEncoding aCharSet = rFontDesc.CharSet;
-
-        lcl_SubstituteBullet( sNumStr, aCharSet, sFontName );
-
-        rFontDesc.Name = sFontName;
-        rFontDesc.CharSet = aCharSet;
+         rFontDesc.Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")) )
+    {
+        rtl_TextEncoding eCharSet = rFontDesc.CharSet;
+        cBulletId = msfilter::util::bestFitOpenSymbolToMSFont(cBulletId, eCharSet, rFontDesc.Name);
+        rFontDesc.CharSet = eCharSet;
     }
 
-    return sNumStr.GetChar( 0 );
+    return cBulletId;
 }
 
 sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (

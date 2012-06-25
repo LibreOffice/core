@@ -28,6 +28,8 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
+#include <unotools/fontcvt.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/svapp.hxx>
 #include <filter/msfilter/util.hxx>
 
@@ -138,6 +140,43 @@ rtl::OString DateTimeToOString( const DateTime& rDateTime )
     aBuffer.append( 'Z' ); // we are in UTC
 
     return aBuffer.makeStringAndClear();
+}
+
+sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
+    rtl_TextEncoding& rChrSet, rtl::OUString& rFontName, bool bDisableUnicodeSupport)
+{
+    StarSymbolToMSMultiFont *pConvert = CreateStarSymbolToMSMultiFont();
+    rtl::OUString sFont = pConvert->ConvertChar(cChar);
+    delete pConvert;
+    if (!sFont.isEmpty())
+    {
+        cChar = static_cast< sal_Unicode >(cChar | 0xF000);
+        rFontName = sFont;
+        rChrSet = RTL_TEXTENCODING_SYMBOL;
+    }
+    else if (!bDisableUnicodeSupport && (cChar < 0xE000 || cChar > 0xF8FF))
+    {
+        /*
+          Ok we can't fit into a known windows unicode font, but
+          we are not in the private area, so we are a
+          standardized symbol, so turn off the symbol bit and
+          let words own font substitution kick in
+        */
+        rChrSet = RTL_TEXTENCODING_UNICODE;
+        xub_StrLen nIndex = 0;
+        rFontName = ::GetNextFontToken(rFontName, nIndex);
+    }
+    else
+    {
+        /*
+          Well we don't have an available substition, and we're
+          in our private area, so give up and show a standard
+          bullet symbol
+        */
+        rFontName = "Wingdings";
+        cChar = static_cast< sal_Unicode >(0x6C);
+    }
+    return cChar;
 }
 
 }
