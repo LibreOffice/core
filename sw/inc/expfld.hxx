@@ -28,10 +28,10 @@
 #ifndef SW_EXPFLD_HXX
 #define SW_EXPFLD_HXX
 
-#include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <fldbas.hxx>
 #include <cellfml.hxx>
+#include <set>
 
 class SfxPoolItem;
 class SwTxtNode;
@@ -356,9 +356,9 @@ public:
     void        RemoveUnselectedFlds();
 
 private:
-    SwEditShell*    pSh;
-    _SetGetExpFlds* pSrtLst;
-    SvPtrarr        aTmpLst;
+    SwEditShell*              pSh;
+    _SetGetExpFlds*           pSrtLst;
+    std::set<const SwTxtFld*> aTmpLst;
 };
 
 // Implementation in tblcalc.cxx.

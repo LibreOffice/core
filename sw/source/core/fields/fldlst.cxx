@@ -78,8 +78,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst )
                 {
                     if( bBuildTmpLst )
                     {
-                        VoidPtr pTmp = (VoidPtr)pTxtFld;
-                        aTmpLst.Insert( pTmp, aTmpLst.Count() );
+                        aTmpLst.insert( pTxtFld );
                     }
                     else
                     {
@@ -171,25 +170,24 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
                 const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
                 if( rTxtNode.GetNodes().IsDocNodes() )
                 {
-                    VoidPtr pTmp = (VoidPtr)pTxtFld;
                     // nicht in der TempListe vorhanden, also in die SortListe
                     // aufnehemen
-                    sal_uInt16 nFndPos = aTmpLst.GetPos( pTmp );
-                    if( USHRT_MAX == nFndPos )
+                    std::set<const SwTxtFld*>::iterator it = aTmpLst.find( pTxtFld );
+                    if( aTmpLst.end() == it )
                     {
                         SwNodeIndex aIdx( rTxtNode );
                         _SetGetExpFld* pNew = new _SetGetExpFld(aIdx, pTxtFld );
                         pSrtLst->Insert( pNew );
                     }
                     else
-                        aTmpLst.Remove( nFndPos );
+                        aTmpLst.erase( it );
                 }
             }
         }
     }
 
     // die Pointer werden nicht mehr gebraucht
-    aTmpLst.Remove( 0, aTmpLst.Count() );
+    aTmpLst.clear();
     return pSrtLst->Count();
 }
 
