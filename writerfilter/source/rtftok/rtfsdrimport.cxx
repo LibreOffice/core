@@ -155,6 +155,11 @@ void RTFSdrImport::resolve(RTFShape& rShape)
            aAny <<= uno::makeAny(sal_uInt32(opacity));
            xPropertySet->setPropertyValue("FillTransparence", aAny);
         }
+        else if (i->first == "rotation" && xPropertySet.is())
+        {
+            aAny <<= i->second.toInt32()*100/65536;
+            xPropertySet->setPropertyValue("RotateAngle", aAny);
+        }
         else if ( i->first == "pVerticies" )
         {
             uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
