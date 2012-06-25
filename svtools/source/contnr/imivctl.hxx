@@ -168,7 +168,7 @@ class SvxIconChoiceCtrl_Impl
     ScrollBar               aHorSBar;
     ScrollBarBox            aScrBarBox;
     Rectangle               aCurSelectionRect;
-    SvPtrarr                aSelectedRectList;
+    std::vector<Rectangle*> aSelectedRectList;
     Timer                   aEditTimer;                 // for editing in place
     Timer                   aAutoArrangeTimer;
     Timer                   aDocRectChangedTimer;
@@ -264,7 +264,7 @@ class SvxIconChoiceCtrl_Impl
                             SvxIconChoiceCtrlEntry* pEntry1,
                             SvxIconChoiceCtrlEntry* pEntry2,
                             sal_Bool bAdd = sal_True,
-                            SvPtrarr* pOtherRects = 0
+                            std::vector<Rectangle*>* pOtherRects = 0
                         );
 
     void                SelectRange(
@@ -473,15 +473,15 @@ public:
 
     void                HideDDIcon();
 
-    sal_Bool            IsOver(
-                            SvPtrarr* pSelectedRectList,
+    bool                IsOver(
+                            std::vector<Rectangle*>* pSelectedRectList,
                             const Rectangle& rEntryBoundRect
                         ) const;
 
     void                SelectRect(
                             const Rectangle&,
-                            sal_Bool bAdd = sal_True,
-                            SvPtrarr* pOtherRects = 0
+                            bool bAdd = true,
+                            std::vector<Rectangle*>* pOtherRects = 0
                         );
 
     sal_Bool            IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );

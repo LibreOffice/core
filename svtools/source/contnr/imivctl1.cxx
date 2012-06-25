@@ -2743,7 +2743,7 @@ static Rectangle GetHotSpot( const Rectangle& rRect )
 }
 
 void SvxIconChoiceCtrl_Impl::SelectRect( SvxIconChoiceCtrlEntry* pEntry1, SvxIconChoiceCtrlEntry* pEntry2,
-    sal_Bool bAdd, SvPtrarr* pOtherRects )
+    sal_Bool bAdd, std::vector<Rectangle*>* pOtherRects )
 {
     DBG_ASSERT(pEntry1 && pEntry2,"SelectEntry: Invalid Entry-Ptr");
     Rectangle aRect( GetEntryBoundRect( pEntry1 ) );
@@ -2751,8 +2751,8 @@ void SvxIconChoiceCtrl_Impl::SelectRect( SvxIconChoiceCtrlEntry* pEntry1, SvxIco
     SelectRect( aRect, bAdd, pOtherRects );
 }
 
-void SvxIconChoiceCtrl_Impl::SelectRect( const Rectangle& rRect, sal_Bool bAdd,
-    SvPtrarr* pOtherRects )
+void SvxIconChoiceCtrl_Impl::SelectRect( const Rectangle& rRect, bool bAdd,
+    std::vector<Rectangle*>* pOtherRects )
 {
     aCurSelectionRect = rRect;
     if( !pZOrderList || !pZOrderList->size() )
@@ -2768,7 +2768,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const Rectangle& rRect, sal_Bool bAdd,
 
     Rectangle aRect( rRect );
     aRect.Justify();
-    sal_Bool bCalcOverlap = (bAdd && pOtherRects && pOtherRects->Count()) ? sal_True : sal_False;
+    bool bCalcOverlap = (bAdd && pOtherRects && !pOtherRects->empty()) ? true : false;
 
     sal_Bool bResetClipRegion = sal_False;
     if( !pView->IsClipRegion() )
@@ -2894,16 +2894,16 @@ void SvxIconChoiceCtrl_Impl::SelectRange(
     }
 }
 
-sal_Bool SvxIconChoiceCtrl_Impl::IsOver( SvPtrarr* pRectList, const Rectangle& rBoundRect ) const
+bool SvxIconChoiceCtrl_Impl::IsOver( std::vector<Rectangle*>* pRectList, const Rectangle& rBoundRect ) const
 {
-    const sal_uInt16 nCount = pRectList->Count();
+    const sal_uInt16 nCount = pRectList->size();
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
-        Rectangle* pRect = (Rectangle*)pRectList->GetObject( nCur );
+        Rectangle* pRect = (*pRectList)[ nCur ];
         if( rBoundRect.IsOver( *pRect ))
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 void SvxIconChoiceCtrl_Impl::AddSelectedRect( SvxIconChoiceCtrlEntry* pEntry1,
@@ -2919,18 +2919,18 @@ void SvxIconChoiceCtrl_Impl::AddSelectedRect( const Rectangle& rRect )
 {
     Rectangle* pRect = new Rectangle( rRect );
     pRect->Justify();
-    aSelectedRectList.Insert( (void*)pRect, aSelectedRectList.Count() );
+    aSelectedRectList.push_back( pRect );
 }
 
 void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
 {
-    const sal_uInt16 nCount = aSelectedRectList.Count();
+    const sal_uInt16 nCount = aSelectedRectList.size();
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
-        Rectangle* pRect = (Rectangle*)aSelectedRectList.GetObject( nCur );
+        Rectangle* pRect = aSelectedRectList[ nCur ];
         delete pRect;
     }
-    aSelectedRectList.Remove( 0, aSelectedRectList.Count() );
+    aSelectedRectList.clear();
 }
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl)
