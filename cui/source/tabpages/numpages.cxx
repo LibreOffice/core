@@ -1036,6 +1036,64 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, LinkBmpHdl_Impl)
     return 0;
 }
 
+// static
+void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotRemove )
+{
+
+    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
+    Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
+
+    // Extended numbering schemes present in the resource but not offered by
+    // the i18n framework per configuration must be removed from the listbox.
+    // Do not remove a special entry matching nDoNotRemove.
+    const sal_uInt16 nDontRemove = 0xffff;
+    ::std::vector< sal_uInt16> aRemove( rFmtLB.GetEntryCount(), nDontRemove);
+    for (size_t i=0; i<aRemove.size(); ++i)
+    {
+        sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)rFmtLB.GetEntryData(
+                sal::static_int_cast< sal_uInt16 >(i));
+        if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N && nEntryData != nDoNotRemove)
+            aRemove[i] = nEntryData;
+    }
+    if(xInfo.is())
+    {
+        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
+        const sal_Int16* pTypes = aTypes.getConstArray();
+        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+        {
+            sal_Int16 nCurrent = pTypes[nType];
+            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+            {
+                sal_Bool bInsert = sal_True;
+                for(sal_uInt16 nEntry = 0; nEntry < rFmtLB.GetEntryCount(); nEntry++)
+                {
+                    sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)rFmtLB.GetEntryData(nEntry);
+                    if(nEntryData == (sal_uInt16) nCurrent)
+                    {
+                        bInsert = sal_False;
+                        aRemove[nEntry] = nDontRemove;
+                        break;
+                    }
+                }
+                if(bInsert)
+                {
+                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
+                    sal_uInt16 nPos = rFmtLB.InsertEntry(aIdent);
+                    rFmtLB.SetEntryData(nPos,(void*)(sal_uLong)nCurrent);
+                }
+            }
+        }
+    }
+    for (size_t i=0; i<aRemove.size(); ++i)
+    {
+        if (aRemove[i] != nDontRemove)
+        {
+            sal_uInt16 nPos = rFmtLB.GetEntryPos( (void*)(sal_uLong)aRemove[i]);
+            rFmtLB.RemoveEntry( nPos);
+        }
+    }
+}
+
 // tabpage numeration options
 #define NUM_NO_GRAPHIC 1000
 SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
@@ -1126,60 +1184,9 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
 
     FreeResource();
 
-    //get advanced numbering types from the component
-    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
-    Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
-
-    // Extended numbering schemes present in the resource but not offered by
-    // the i18n framework per configuration must be removed from the listbox.
+    // Get advanced numbering types from the component.
     // Watch out for the ugly 0x88/*SVX_NUM_BITMAP|0x80*/ to not remove that.
-    const sal_uInt16 nDontRemove = 0xffff;
-    ::std::vector< sal_uInt16> aRemove( aFmtLB.GetEntryCount(), nDontRemove);
-    for (size_t i=0; i<aRemove.size(); ++i)
-    {
-        sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)aFmtLB.GetEntryData(
-            sal::static_int_cast< sal_uInt16 >(i));
-        if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N &&
-                nEntryData != (SVX_NUM_BITMAP | 0x80))
-            aRemove[i] = nEntryData;
-    }
-    if(xInfo.is())
-    {
-        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
-        const sal_Int16* pTypes = aTypes.getConstArray();
-        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
-        {
-            sal_Int16 nCurrent = pTypes[nType];
-            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
-            {
-                sal_Bool bInsert = sal_True;
-                for(sal_uInt16 nEntry = 0; nEntry < aFmtLB.GetEntryCount(); nEntry++)
-                {
-                    sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)aFmtLB.GetEntryData(nEntry);
-                    if(nEntryData == (sal_uInt16) nCurrent)
-                    {
-                        bInsert = sal_False;
-                        aRemove[nEntry] = nDontRemove;
-                        break;
-                    }
-                }
-                if(bInsert)
-                {
-                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
-                    sal_uInt16 nPos = aFmtLB.InsertEntry(aIdent);
-                    aFmtLB.SetEntryData(nPos,(void*)(sal_uLong)nCurrent);
-                }
-            }
-        }
-    }
-    for (size_t i=0; i<aRemove.size(); ++i)
-    {
-        if (aRemove[i] != nDontRemove)
-        {
-            sal_uInt16 nPos = aFmtLB.GetEntryPos( (void*)(sal_uLong)aRemove[i]);
-            aFmtLB.RemoveEntry( nPos);
-        }
-    }
+    GetI18nNumbering( aFmtLB, (SVX_NUM_BITMAP | 0x80));
 
     aBulletPB.SetAccessibleRelationMemberOf(&aFormatFL);
     aBulletPB.SetAccessibleRelationLabeledBy(&aStartFT);
