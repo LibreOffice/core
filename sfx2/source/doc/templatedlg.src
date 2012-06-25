@@ -152,12 +152,6 @@ ModalDialog DLG_TEMPLATE_MANAGER
                 Identifier = TBI_TEMPLATE_ACTION;
                 Text [en-US] = "Action Menu";
             };
-
-            ToolBoxItem
-            {
-                Identifier = TBI_TEMPLATE_IMPORT ;
-                Text [ en-US ] = "Import a template" ;
-            };
         };
     };
 
