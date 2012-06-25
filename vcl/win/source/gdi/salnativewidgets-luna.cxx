@@ -82,7 +82,6 @@ private:
     typedef HRESULT (WINAPI * DrawThemeBackground_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect, const RECT *pClipRect );
     typedef HRESULT (WINAPI * DrawThemeText_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect );
     typedef HRESULT (WINAPI * GetThemePartSize_Proc_T) ( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz );
-    typedef HRESULT (WINAPI * GetThemeSysFont_Proc_T) ( HTHEME hTheme, int iFontID, LOGFONTW *plf );
     typedef BOOL    (WINAPI * IsThemeActive_Proc_T) ( void );
 
     OpenThemeData_Proc_T                    lpfnOpenThemeData;
@@ -91,7 +90,6 @@ private:
     DrawThemeBackground_Proc_T              lpfnDrawThemeBackground;
     DrawThemeText_Proc_T                    lpfnDrawThemeText;
     GetThemePartSize_Proc_T                 lpfnGetThemePartSize;
-    GetThemeSysFont_Proc_T                  lpfnGetThemeSysFont;
     IsThemeActive_Proc_T                    lpfnIsThemeActive;
 
     // dwmapi.dll functions
@@ -113,7 +111,6 @@ public:
     HRESULT DrawThemeBackground( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const RECT *pRect, const RECT *pClipRect );
     HRESULT DrawThemeText( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, LPCWSTR pszText, int iCharCount, DWORD dwTextFlags, DWORD dwTextFlags2, const RECT *pRect );
     HRESULT GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, int iStateId, RECT *prc, THEMESIZE eSize, SIZE *psz );
-    HRESULT GetThemeSysFont( HTHEME hTheme, int iFontID, LOGFONTW *plf );
     BOOL IsThemeActive( void );
 
     HRESULT DwmExtendFrameIntoClientArea( HWND hWnd, const MARGINS *pMarInset );
@@ -128,7 +125,6 @@ VisualStylesAPI::VisualStylesAPI()
       lpfnDrawThemeBackground( NULL ),
       lpfnDrawThemeText( NULL ),
       lpfnGetThemePartSize( NULL ),
-      lpfnGetThemeSysFont( NULL ),
       lpfnIsThemeActive( NULL ),
       lpfnDwmExtendFrameIntoClientArea( NULL )
 {
@@ -143,7 +139,6 @@ VisualStylesAPI::VisualStylesAPI()
         lpfnDrawThemeBackground = (DrawThemeBackground_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "DrawThemeBackground" );
         lpfnDrawThemeText = (DrawThemeText_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "DrawThemeText" );
         lpfnGetThemePartSize = (GetThemePartSize_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "GetThemePartSize" );
-        lpfnGetThemeSysFont = (GetThemeSysFont_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "GetThemeSysFont" );
         lpfnIsThemeActive = (IsThemeActive_Proc_T)osl_getAsciiFunctionSymbol( mhUxthemeModule, "IsThemeActive" );
     }
 
@@ -209,14 +204,6 @@ HRESULT VisualStylesAPI::GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, 
 {
     if(lpfnGetThemePartSize)
         return (*lpfnGetThemePartSize) (hTheme, hdc, iPartId, iStateId, prc, eSize, psz);
-    else
-        return S_FALSE;
-}
-
-HRESULT VisualStylesAPI::GetThemeSysFont( HTHEME hTheme, int iFontID, LOGFONTW *plf )
-{
-    if(lpfnGetThemeSysFont)
-        return (*lpfnGetThemeSysFont) ( hTheme, iFontID, plf );
     else
         return S_FALSE;
 }
@@ -415,89 +402,18 @@ sal_Bool WinSalGraphics::hitTestNativeControl( ControlType,
     return FALSE;
 }
 
-sal_Bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr, bool bAeroTrick = false )
+sal_Bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
 {
     HRESULT hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, 0);
 
     if( aStr.getLength() )
     {
-        // oh well, in order to be able to draw solid text in the Aero border,
-        // we need to do the trick from
-        // http://msdn.microsoft.com/en-us/library/windows/desktop/bb688195%28v=vs.85%29.aspx#appendixb
-        if ( bAeroTrick && ( iPart == MENU_BARITEM ) )
-        {
-            HTHEME hCompositedTheme = vsAPI.OpenThemeData( NULL, L"CompositedWindow::Window" );
-            if ( hCompositedTheme )
-            {
-                HDC hdcPaint = CreateCompatibleDC(hDC);
-                if (hdcPaint)
-                {
-                    int cx = rc.right - rc.left;
-                    int cy = rc.bottom - rc.top;
-
-                    // Define the BITMAPINFO structure used to draw text.
-                    // Note that biHeight is negative. This is done because
-                    // DrawThemeTextEx() needs the bitmap to be in top-to-bottom
-                    // order.
-                    BITMAPINFO dib;
-                    dib.bmiHeader.biSize            = sizeof(BITMAPINFOHEADER);
-                    dib.bmiHeader.biWidth           = cx;
-                    dib.bmiHeader.biHeight          = -cy;
-                    dib.bmiHeader.biPlanes          = 1;
-                    dib.bmiHeader.biBitCount        = 32;
-                    dib.bmiHeader.biCompression     = 0; // BI_RGB - MinGW does not seem to define the contstant
-
-                    HBITMAP hbm = CreateDIBSection(hDC, &dib, DIB_RGB_COLORS, NULL, NULL, 0);
-                    if (hbm)
-                    {
-                        HBITMAP hbmOld = (HBITMAP)SelectObject(hdcPaint, hbm);
-
-                        // Select a font.
-                        LOGFONTW lgFont;
-                        HFONT hFontOld = NULL;
-                        if (SUCCEEDED(vsAPI.GetThemeSysFont(hCompositedTheme, TMT_MENUFONT, &lgFont)))
-                        {
-                            HFONT hFont = CreateFontIndirectW(&lgFont);
-                            hFontOld = (HFONT) SelectObject(hdcPaint, hFont);
-                        }
-
-                        // Blit the background to the bitmap
-                        BitBlt(hdcPaint, 0, 0, cx, cy, hDC, rc.left, rc.top, SRCCOPY);
-
-                        // Draw the title.
-                        RECT rcPaint;
-                        rcPaint.left = rcPaint.top = 0;
-                        rcPaint.right = cx;
-                        rcPaint.bottom = cy;
-                        hr = vsAPI.DrawThemeText( hCompositedTheme, hdcPaint, iPart, iState,
-                                reinterpret_cast<LPCWSTR>(aStr.getStr()), -1,
-                                DT_CENTER | DT_VCENTER | DT_SINGLELINE,
-                                0, &rcPaint);
-
-                        // Blit text to the frame.
-                        BitBlt(hDC, rc.left, rc.top, cx, cy, hdcPaint, 0, 0, SRCCOPY);
-
-                        SelectObject(hdcPaint, hbmOld);
-                        if (hFontOld)
-                        {
-                            SelectObject(hdcPaint, hFontOld);
-                        }
-                        DeleteObject(hbm);
-                    }
-                    DeleteDC(hdcPaint);
-                }
-                vsAPI.CloseThemeData(hCompositedTheme);
-            }
-        }
-        else
-        {
-            RECT rcContent;
-            hr = vsAPI.GetThemeBackgroundContentRect( hTheme, hDC, iPart, iState, &rc, &rcContent);
-            hr = vsAPI.DrawThemeText( hTheme, hDC, iPart, iState,
-                    reinterpret_cast<LPCWSTR>(aStr.getStr()), -1,
-                    DT_CENTER | DT_VCENTER | DT_SINGLELINE,
-                    0, &rcContent);
-        }
+        RECT rcContent;
+        hr = vsAPI.GetThemeBackgroundContentRect( hTheme, hDC, iPart, iState, &rc, &rcContent);
+        hr = vsAPI.DrawThemeText( hTheme, hDC, iPart, iState,
+            reinterpret_cast<LPCWSTR>(aStr.getStr()), -1,
+            DT_CENTER | DT_VCENTER | DT_SINGLELINE,
+            0, &rcContent);
     }
     return (hr == S_OK);
 }
@@ -1141,7 +1057,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else
                 iState = (nState & CTRL_STATE_SELECTED) ? MBI_DISABLEDHOT : MBI_DISABLED;
 
-            return ImplDrawTheme( hTheme, hDC, MENU_BARITEM, iState, rc, aCaption, true );
+            return ImplDrawTheme( hTheme, hDC, MENU_BARITEM, iState, rc, aCaption );
         }
     }
 
