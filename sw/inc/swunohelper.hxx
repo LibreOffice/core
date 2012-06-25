@@ -31,7 +31,6 @@
 #include <tools/solar.h>
 #include <sal/types.h>
 #include "swdllapi.h"
-#include <tools/datetime.hxx>
 
 #include <vector>
 
@@ -42,7 +41,7 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class String;
-class SvPtrarr;
+class DateTime;
 
 namespace SWUnoHelper {
 
@@ -68,7 +67,7 @@ SW_DLLPUBLIC sal_Bool UCB_IsReadOnlyFileName( const String& rURL );
     // get a list of files from the folder of the URL
     // options: pExtension = 0 -> all, else this specific extension
     //          pDateTime != 0 -> returns also the modified date/time of
-    //                       the files in a SvPtrarr -->
+    //                       the files in a vector -->
     //                       !! objects must be deleted from the caller!!
 bool UCB_GetFileListOfFolder( const String& rURL,
                                 std::vector<String*>& rList,

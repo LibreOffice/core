@@ -304,7 +304,7 @@ void SwGlossaryList::Update()
         {
             std::vector<String> aFoundGroupNames;
             std::vector<String*> aFiles;
-            std::vector<DateTime*> aDateTimeArr( 16 );
+            std::vector<DateTime*> aDateTimeArr;
 
             SWUnoHelper::UCB_GetFileListOfFolder( rPathArr[nPath], aFiles,
                                                     &sExt, &aDateTimeArr );
