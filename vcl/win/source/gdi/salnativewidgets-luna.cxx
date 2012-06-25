@@ -109,6 +109,13 @@ public:
 static VisualStylesAPI vsAPI;
 
 VisualStylesAPI::VisualStylesAPI()
+    : lpfnOpenThemeData( NULL ),
+      lpfnCloseThemeData( NULL ),
+      lpfnGetThemeBackgroundContentRect( NULL ),
+      lpfnDrawThemeBackground( NULL ),
+      lpfnDrawThemeText( NULL ),
+      lpfnGetThemePartSize( NULL ),
+      lpfnIsThemeActive( NULL )
 {
     OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "uxtheme.dll" ) );
     mhModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
@@ -122,15 +129,6 @@ VisualStylesAPI::VisualStylesAPI()
         lpfnDrawThemeText = (DrawThemeText_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "DrawThemeText" );
         lpfnGetThemePartSize = (GetThemePartSize_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "GetThemePartSize" );
         lpfnIsThemeActive = (IsThemeActive_Proc_T)osl_getAsciiFunctionSymbol( mhModule, "IsThemeActive" );
-    }
-    else
-    {
-        lpfnOpenThemeData = NULL;
-        lpfnCloseThemeData = NULL;
-        lpfnGetThemeBackgroundContentRect = NULL;
-        lpfnDrawThemeBackground = NULL;
-        lpfnDrawThemeText = NULL;
-        lpfnGetThemePartSize = NULL;
     }
 }
 
