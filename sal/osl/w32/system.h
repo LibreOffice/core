@@ -89,9 +89,6 @@
     #pragma warning(pop)
 #endif
 
-#define _MAX_CMD    4096    /* maximum length of commandline     */
-/* #define _MAX_ENV 4096     maximum length of environment var (isn't used anywhere) */
-
 #ifdef GCC
     #   ifndef SA_FAMILY_DECL
     #       define SA_FAMILY_DECL short sa_family
