@@ -192,9 +192,6 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
 {
     switch(mpViewBar->GetCurItemId())
     {
-    case TBI_TEMPLATE_CREATE:
-        OnTemplateCreate();
-        break;
     case TBI_TEMPLATE_IMPORT:
         OnTemplateImport();
         break;
@@ -211,9 +208,6 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXActionHdl)
     {
     case TBI_TEMPLATE_SEARCH:
         OnTemplateSearch();
-        break;
-    case TBI_TEMPLATE_ACTION:
-        OnTemplateAction();
         break;
     default:
         break;
@@ -350,10 +344,6 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
     return 0;
 }
 
-void SfxTemplateManagerDlg::OnTemplateCreate ()
-{
-}
-
 void SfxTemplateManagerDlg::OnTemplateImport ()
 {
     sal_Int16 nDialogType =
@@ -453,10 +443,6 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     SetSizePixel(aWinSize);
     maView->SetPosPixel(aPos);
     mpSearchEdit->Show(!bVisible);
-}
-
-void SfxTemplateManagerDlg::OnTemplateAction ()
-{
 }
 
 void SfxTemplateManagerDlg::OnTemplateEdit ()

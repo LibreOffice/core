@@ -57,10 +57,8 @@ private:
 
     DECL_LINK(MenuSelectHdl, Menu*);
 
-    void OnTemplateCreate ();
     void OnTemplateImport ();
     void OnTemplateSearch ();
-    void OnTemplateAction ();
     void OnTemplateEdit ();
     void OnTemplateProperties ();
     void OnTemplateMove ();
