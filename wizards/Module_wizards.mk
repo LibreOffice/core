@@ -29,7 +29,6 @@
 $(eval $(call gb_Module_Module,wizards))
 
 $(eval $(call gb_Module_add_targets,wizards,\
-	AllLangResTarget_cal \
 	AllLangResTarget_dbw \
 	AllLangResTarget_eur \
 	AllLangResTarget_imp \
@@ -44,7 +43,6 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	Zip_gimmicks \
 	Zip_import \
 	Zip_launcher \
-	Zip_schedule \
 	Zip_share \
 	Zip_standard \
 	Zip_template \

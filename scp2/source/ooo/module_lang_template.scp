@@ -53,7 +53,6 @@ Module gid_Module_Langpack_Resource_Template
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Res_Basctl,
              gid_File_Res_Bib,
-             gid_File_Res_Cal,
              gid_File_Res_Chartcontroller,
              gid_File_Res_Sdbt,
              gid_File_Res_Dbmm,
