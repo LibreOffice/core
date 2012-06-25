@@ -698,9 +698,6 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
     if (!bSubstituteBullets)
         return;
 
-    if (!bSubstituteBullets)
-        return;
-
     if (!pConvert)
     {
         pConvert = CreateStarSymbolToMSMultiFont();
