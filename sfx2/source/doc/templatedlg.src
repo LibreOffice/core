@@ -72,6 +72,8 @@ ModalDialog DLG_TEMPLATE_MANAGER
         {
             ImageBitmap = Bitmap { File = "select.png" ; };
         };
+
+        QuickHelpText [en-US] = "Enables selecting items by just clicking in the thumbnail or title.";
     };
 
     Control TEMPLATE_VIEW
