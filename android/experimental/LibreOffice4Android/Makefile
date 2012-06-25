@@ -1,7 +1,7 @@
 include ../../../config_host.mk
 
 # The package of this app
-APP_PACKAGE=org.libreoffice.android.examples
+APP_PACKAGE=org.libreoffice
 
 # We can't keep assuming APP_DATA_PATH like this, surely this can vary with
 # Android versions and whatnot, this is temporary and works at least with the

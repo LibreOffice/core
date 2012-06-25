@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="DocumentViewer" parent="@android:style/Theme.Holo">
+        <item name="android:windowActionBarOverlay">true</item>
+    	<item name="android:windowActionModeOverlay">true</item>
+    	<item name="android:actionBarStyle">@style/TransparentDarkActionBar</item>
+    </style>
+    <style name="TransparentDarkActionBar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">#dd000000</item>
+    </style>
+    
+</resources>

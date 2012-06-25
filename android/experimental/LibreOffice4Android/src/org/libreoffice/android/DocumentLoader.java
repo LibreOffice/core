@@ -27,7 +27,7 @@
 // the previous, and the next. This could be bumped higher, need to make the
 // "3" into a parameter below.
 
-package org.libreoffice.android.examples;
+package org.libreoffice.android;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

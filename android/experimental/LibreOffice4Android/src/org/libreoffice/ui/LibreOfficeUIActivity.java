@@ -1,7 +1,7 @@
 package org.libreoffice.ui;
 
 import org.libreoffice.R;
-import org.libreoffice.android.examples.DocumentLoader;
+import org.libreoffice.android.DocumentLoader;
 
 import java.io.File;
 import java.io.FileFilter;

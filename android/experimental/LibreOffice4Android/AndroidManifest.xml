@@ -14,8 +14,8 @@
 		 android:theme="@android:style/Theme.Holo.Light">
 		 
         <!-- Original Document Loader activity - file Viewer -->         
-        <activity android:name=".android.examples.DocumentLoader"
-                  android:label="LO DocumentLoader"
+        <activity android:name=".android.DocumentLoader"
+                  android:label="DocumentLoader"
                   android:configChanges="orientation|keyboardHidden">
             <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
