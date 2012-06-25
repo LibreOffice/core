@@ -35,7 +35,10 @@
 // (found at http://stackoverflow.com/questions/4009701/windows-visual-themes-gallery-of-parts-and-states/4009712#4009712)
 //
 // Theme subclasses:
-// http://msdn.microsoft.com/en-us/library/windows/desktop/bb773218%28v=vs.85%29.aspx
+//   http://msdn.microsoft.com/en-us/library/windows/desktop/bb773218%28v=vs.85%29.aspx
+//
+// Drawing in non-client area (general DWM-related info):
+//   http://msdn.microsoft.com/en-us/library/windows/desktop/bb688195%28v=vs.85%29.aspx
 
 #define _SV_SALNATIVEWIDGETS_CXX
 
