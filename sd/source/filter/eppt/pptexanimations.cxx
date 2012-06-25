@@ -278,6 +278,16 @@ AnimationExporter::AnimationExporter( const EscherSolverContainer& rSolverContai
 sal_Int16 AnimationExporter::GetFillMode( const Reference< XAnimationNode >& xNode, const sal_Int16 nFillDefault )
 {
     sal_Int16 nFill = xNode->getFill();
+    //#i119699 <Animation> The animation effect "Emphasis->FlashBulb" play incorrectly in Aoo saves a .ppt to another .ppt and plays the saved one.
+    //#i119740 <Animation> The animation effect "Entrance->Flash Once" fails to play in Aoo while Aoo saves a .ppt to another .ppt and plays the saved one.
+    if ((xNode->getType() == AnimationNodeType::ANIMATE)
+        ||(xNode->getType() == AnimationNodeType::SET)
+        ||(xNode->getType() == AnimationNodeType::TRANSITIONFILTER))
+    {
+        if ( nFill == AnimationFill::DEFAULT )
+            return nFill;
+    }
+
     if ( ( nFill == AnimationFill::DEFAULT ) ||
         ( nFill == AnimationFill::INHERIT ) )
     {
