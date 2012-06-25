@@ -206,7 +206,9 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsCustomFtnMark( false ),
         m_bIsParaChange( false ),
         m_bParaChanged( false ),
+        m_bIsFirstParaInSection( true ),
         m_bIsLastParaInSection( false ),
+        m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false )
 {
     appendTableManager( );
@@ -307,7 +309,35 @@ void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
     m_bIsLastParaInSection = bIsLast;
 }
 
+bool DomainMapper_Impl::GetIsLastParagraphInSection()
+{
+    return m_bIsLastParaInSection;
+}
 
+void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
+{
+    m_bIsFirstParaInSection = bIsFirst;
+}
+
+bool DomainMapper_Impl::GetIsFirstParagraphInSection()
+{
+    return m_bIsFirstParaInSection;
+}
+
+void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
+{
+    m_bParaSectpr = bParaSectpr;
+}
+
+bool DomainMapper_Impl::GetParaSectpr()
+{
+    return m_bParaSectpr;
+}
+
+bool DomainMapper_Impl::GetParaChanged()
+{
+    return m_bParaChanged;
+}
 
 void    DomainMapper_Impl::PushProperties(ContextType eId)
 {
@@ -1030,6 +1060,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                 CheckParaRedline( xParaEnd );
 
+                m_bIsFirstParaInSection = false;
                 m_bIsLastParaInSection = false;
                 m_bParaChanged = false;
 
