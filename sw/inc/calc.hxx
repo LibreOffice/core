@@ -28,7 +28,6 @@
 #ifndef _CALC_HXX
 #define _CALC_HXX
 
-#include <svl/svarray.hxx>
 #include <unotools/syslocale.hxx>
 
 #ifndef __SBX_SBXVALUE //autogen
@@ -40,6 +39,7 @@ class CharClass;
 class LocaleDataWrapper;
 class SwFieldType;
 class SwDoc;
+class SwUserFieldType;
 
 #define TBLSZ 47                // should be a prime, because of hash table
 
@@ -176,7 +176,7 @@ class SwCalc
     SwHash*     VarTable[ TBLSZ ];
     String      aVarName, sCurrSym;
     String      sCommand;
-    SvPtrarr    aRekurStk;
+    std::vector<const SwUserFieldType*> aRekurStk;
     SwSbxValue  nLastLeft;
     SwSbxValue  nNumberValue;
     SwCalcExp   aErrExpr;
@@ -221,8 +221,8 @@ public:
     void        VarChange( const String& rStr, double );
     SwHash**    GetVarTable()                       { return VarTable; }
 
-    sal_Bool        Push( const VoidPtr pPtr );
-    void        Pop( const VoidPtr pPtr );
+    bool        Push(const SwUserFieldType* pUserFieldType);
+    void        Pop();
 
     void        SetCalcError( SwCalcError eErr )    { eError = eErr; }
     sal_Bool        IsCalcError() const                 { return 0 != eError; }

@@ -634,20 +634,20 @@ void SwCalc::VarChange( const String& rStr, const SwSbxValue& rValue )
     }
 }
 
-sal_Bool SwCalc::Push( const VoidPtr pPtr )
+bool SwCalc::Push( const SwUserFieldType* pUserFieldType )
 {
-    if( USHRT_MAX != aRekurStk.GetPos( pPtr ) )
-        return sal_False;
+    if( aRekurStk.end() != std::find(aRekurStk.begin(), aRekurStk.end(), pUserFieldType ) )
+        return false;
 
-    aRekurStk.Insert( pPtr, aRekurStk.Count() );
-    return sal_True;
+    aRekurStk.push_back( pUserFieldType );
+    return true;
 }
 
-void SwCalc::Pop( const VoidPtr )
+void SwCalc::Pop()
 {
-    OSL_ENSURE( aRekurStk.Count(), "SwCalc: Pop on an invalid pointer" );
+    OSL_ENSURE( aRekurStk.size(), "SwCalc: Pop on an invalid pointer" );
 
-    aRekurStk.Remove( aRekurStk.Count() - 1 );
+    aRekurStk.pop_back();
 }
 
 SwCalcOper SwCalc::GetToken()

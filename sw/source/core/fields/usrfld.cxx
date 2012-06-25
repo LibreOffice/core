@@ -247,7 +247,7 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
         return 0;
     }
     nValue = rCalc.Calculate( aContent ).GetDouble();
-    rCalc.Pop( this );
+    rCalc.Pop();
 
     if( !rCalc.IsCalcError() )
         bValidValue = sal_True;
