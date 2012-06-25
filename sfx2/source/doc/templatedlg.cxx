@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
-void lcl_createTemplate(const FILTER_APPLICATION eApp);
+void lcl_createTemplate(uno::Reference<XComponentLoader> xDesktop, const FILTER_APPLICATION eApp);
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModalDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
@@ -424,7 +424,8 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     }
 }
 
-void lcl_createTemplate(const FILTER_APPLICATION eApp)
+void lcl_createTemplate(uno::Reference< com::sun::star::frame::XComponentLoader > xDesktop,
+                        const FILTER_APPLICATION eApp)
 {
     rtl::OUString aURL;
 
@@ -449,7 +450,7 @@ void lcl_createTemplate(const FILTER_APPLICATION eApp)
     if (!aURL.isEmpty())
     {
         uno::Sequence<PropertyValue> aArgs;
-        mxDesktop->loadComponentFromURL(aURL,rtl::OUString("_blank"), 0, aArgs );
+        xDesktop->loadComponentFromURL(aURL,rtl::OUString("_blank"), 0, aArgs );
     }
 }
 
