@@ -30,6 +30,11 @@ String STR_CREATE_DRAW
     Text [ en-US ] = "Drawing Template";
 };
 
+String STR_ACTION_SORT_NAME
+{
+    Text [ en-US ] = "Sort by name";
+};
+
 ModalDialog DLG_TEMPLATE_MANAGER
 {
     HelpId = CMD_SID_TEMPLATE_MANAGER;

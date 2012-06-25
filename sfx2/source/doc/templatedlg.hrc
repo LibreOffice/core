@@ -34,9 +34,13 @@
 #define MNI_CREATE_PRESENT          21
 #define MNI_CREATE_DRAW             22
 
+#define MNI_ACTION_SORT_NAME        23
+
 #define STR_CREATE_TEXT             260
 #define STR_CREATE_SHEET            261
 #define STR_CREATE_PRESENT          262
 #define STR_CREATE_DRAW             263
+
+#define STR_ACTION_SORT_NAME        264
 
 #define IMG_ONLINE_REPOSITORY       100

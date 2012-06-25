@@ -81,6 +81,7 @@ private:
     ToolBox *mpTemplateBar;
     TemplateFolderView *maView;
     PopupMenu *mpCreateMenu;
+    PopupMenu *mpActionMenu;
 
     int mnSelectionCount;
     std::set<const ThumbnailViewItem*> maSelTemplates;

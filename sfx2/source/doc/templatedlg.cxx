@@ -69,6 +69,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpCreateMenu->InsertItem(MNI_CREATE_DRAW,SfxResId(STR_CREATE_DRAW).toString());
     mpCreateMenu->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, MenuSelectHdl));
 
+    mpActionMenu = new PopupMenu;
+    mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString());
+    mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
+
     // Calculate toolboxs size and positions
     Size aWinSize = GetOutputSize();
     Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
@@ -92,11 +96,13 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     // Set toolbox button bits
     mpViewBar->SetItemBits(TBI_TEMPLATE_CREATE, TIB_DROPDOWNONLY);
+    mpActionBar->SetItemBits(TBI_TEMPLATE_ACTION, TIB_DROPDOWNONLY);
 
     // Set toolbox handlers
     mpViewBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXViewHdl));
     mpViewBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
     mpActionBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXActionHdl));
+    mpActionBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
     mpTemplateBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXTemplateHdl));
 
     // Set view position below toolbox
@@ -255,6 +261,16 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
         pBox->EndSelection();
         pBox->Invalidate();
         break;
+    case TBI_TEMPLATE_ACTION:
+        pBox->SetItemDown( nCurItemId, true );
+
+        mpActionMenu->Execute(pBox,pBox->GetItemRect(TBI_TEMPLATE_ACTION),
+                              POPUPMENU_EXECUTE_DOWN);
+
+        pBox->SetItemDown( nCurItemId, false );
+        pBox->EndSelection();
+        pBox->Invalidate();
+        break;
     default:
         break;
     }
@@ -324,6 +340,8 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
         break;
     case MNI_CREATE_DRAW:
         lcl_createTemplate(mxDesktop,FILTER_APP_DRAW);
+        break;
+    case MNI_ACTION_SORT_NAME:
         break;
     default:
         break;
