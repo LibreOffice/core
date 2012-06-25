@@ -41,6 +41,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
+void lcl_createTemplate(const FILTER_APPLICATION eApp);
+
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModalDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
       aButtonAll(this,SfxResId(BTN_SELECT_ALL)),
@@ -419,6 +421,35 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
             maSelTemplates.erase(pIter++);
         else
             ++pIter;
+    }
+}
+
+void lcl_createTemplate(const FILTER_APPLICATION eApp)
+{
+    rtl::OUString aURL;
+
+    switch(eApp)
+    {
+    case FILTER_APP_WRITER:
+        aURL = "private:factory/swriter";
+        break;
+    case FILTER_APP_CALC:
+        aURL = "private:factory/scalc";
+        break;
+    case FILTER_APP_IMPRESS:
+        aURL = "private:factory/simpress";
+        break;
+    case FILTER_APP_DRAW:
+        aURL = "private:factory/sdraw";
+        break;
+    default:
+        break;
+    }
+
+    if (!aURL.isEmpty())
+    {
+        uno::Sequence<PropertyValue> aArgs;
+        mxDesktop->loadComponentFromURL(aURL,rtl::OUString("_blank"), 0, aArgs );
     }
 }
 
