@@ -10,6 +10,26 @@
 #include "templatedlg.hrc"
 #include "helpid.hrc"
 
+String STR_CREATE_TEXT
+{
+    Text [ en-US ] = "Text Document Template";
+};
+
+String STR_CREATE_SHEET
+{
+    Text [ en-US ] = "Spreedsheet Template";
+};
+
+String STR_CREATE_PRESENT
+{
+    Text [ en-US ] = "Presentation Template";
+};
+
+String STR_CREATE_DRAW
+{
+    Text [ en-US ] = "Drawing Template";
+};
+
 ModalDialog DLG_TEMPLATE_MANAGER
 {
     HelpId = CMD_SID_TEMPLATE_MANAGER;

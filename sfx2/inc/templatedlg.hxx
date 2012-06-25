@@ -16,6 +16,7 @@
 #include <vcl/button.hxx>
 
 class Edit;
+class PopupMenu;
 class TemplateFolderView;
 class ThumbnailViewItem;
 class ToolBox;
@@ -49,9 +50,12 @@ private:
     DECL_LINK(TBXViewHdl, void*);
     DECL_LINK(TBXActionHdl, void*);
     DECL_LINK(TBXTemplateHdl, void*);
+    DECL_LINK(TBXDropdownHdl, ToolBox*);
 
     DECL_LINK(TVFolderStateHdl, const ThumbnailViewItem*);
     DECL_LINK(TVTemplateStateHdl, const ThumbnailViewItem*);
+
+    DECL_LINK(MenuSelectHdl, Menu*);
 
     void OnTemplateCreate ();
     void OnTemplateImport ();
@@ -76,6 +80,7 @@ private:
     ToolBox *mpActionBar;
     ToolBox *mpTemplateBar;
     TemplateFolderView *maView;
+    PopupMenu *mpCreateMenu;
 
     int mnSelectionCount;
     std::set<const ThumbnailViewItem*> maSelTemplates;

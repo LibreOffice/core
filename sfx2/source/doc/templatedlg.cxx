@@ -61,6 +61,14 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 {
     maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
 
+    // Create popup menus
+    mpCreateMenu = new PopupMenu;
+    mpCreateMenu->InsertItem(MNI_CREATE_TEXT,SfxResId(STR_CREATE_TEXT).toString());
+    mpCreateMenu->InsertItem(MNI_CREATE_SHEET,SfxResId(STR_CREATE_SHEET).toString());
+    mpCreateMenu->InsertItem(MNI_CREATE_PRESENT,SfxResId(STR_CREATE_PRESENT).toString());
+    mpCreateMenu->InsertItem(MNI_CREATE_DRAW,SfxResId(STR_CREATE_DRAW).toString());
+    mpCreateMenu->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, MenuSelectHdl));
+
     // Calculate toolboxs size and positions
     Size aWinSize = GetOutputSize();
     Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
@@ -82,8 +90,12 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
     mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
 
+    // Set toolbox button bits
+    mpViewBar->SetItemBits(TBI_TEMPLATE_CREATE, TIB_DROPDOWNONLY);
+
     // Set toolbox handlers
     mpViewBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXViewHdl));
+    mpViewBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
     mpActionBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXActionHdl));
     mpTemplateBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXTemplateHdl));
 
@@ -125,6 +137,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 {
     delete maView;
+    delete mpCreateMenu;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
@@ -226,6 +239,29 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
     return 0;
 }
 
+IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
+{
+    const sal_uInt16 nCurItemId = pBox->GetCurItemId();
+
+    switch(nCurItemId)
+    {
+    case TBI_TEMPLATE_CREATE:
+        pBox->SetItemDown( nCurItemId, true );
+
+        mpCreateMenu->Execute(pBox,pBox->GetItemRect(TBI_TEMPLATE_CREATE),
+                              POPUPMENU_EXECUTE_DOWN);
+
+        pBox->SetItemDown( nCurItemId, false );
+        pBox->EndSelection();
+        pBox->Invalidate();
+        break;
+    default:
+        break;
+    }
+
+    return 0;
+}
+
 IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pItem)
 {
     if (pItem->isSelected())
@@ -266,6 +302,31 @@ IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, p
                 mpActionBar->Show();
             }
         }
+    }
+
+    return 0;
+}
+
+IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+
+    switch(nMenuId)
+    {
+    case MNI_CREATE_TEXT:
+        lcl_createTemplate(mxDesktop,FILTER_APP_WRITER);
+        break;
+    case MNI_CREATE_SHEET:
+        lcl_createTemplate(mxDesktop,FILTER_APP_CALC);
+        break;
+    case MNI_CREATE_PRESENT:
+        lcl_createTemplate(mxDesktop,FILTER_APP_IMPRESS);
+        break;
+    case MNI_CREATE_DRAW:
+        lcl_createTemplate(mxDesktop,FILTER_APP_DRAW);
+        break;
+    default:
+        break;
     }
 
     return 0;
