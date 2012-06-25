@@ -1125,7 +1125,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     }
 
     _SaveRedlines aSaveRedl;
-    SvPtrarr aSavRedlInsPosArr( 0 );
+    std::vector<SwRedline*> aSavRedlInsPosArr;
     if( DOC_MOVEREDLINES & eMvFlags && GetRedlineTbl().Count() )
     {
         lcl_SaveRedlines( rRange, aSaveRedl );
@@ -1142,8 +1142,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
                 pREnd = pTmp->End();
                 if( pREnd->nNode == rPos && pRStt->nNode < rPos )
                 {
-                    void* p = pTmp;
-                    aSavRedlInsPosArr.Insert( p, aSavRedlInsPosArr.Count() );
+                    aSavRedlInsPosArr.push_back( pTmp );
                 }
             } while( pRStt->nNode < rPos && ++nRedlPos < GetRedlineTbl().Count());
         }
@@ -1192,12 +1191,12 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         ++pBkmk)
         pBkmk->SetInDoc(this, aIdx);
 
-    if( aSavRedlInsPosArr.Count() )
+    if( !aSavRedlInsPosArr.empty() )
     {
         SwNode* pNewNd = &aIdx.GetNode();
-        for( sal_uInt16 n = 0; n < aSavRedlInsPosArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aSavRedlInsPosArr.size(); ++n )
         {
-            SwRedline* pTmp = (SwRedline*)aSavRedlInsPosArr[ n ];
+            SwRedline* pTmp = aSavRedlInsPosArr[ n ];
             if( USHRT_MAX != GetRedlineTbl().GetPos( pTmp ) )
             {
                 SwPosition* pEnd = pTmp->End();
