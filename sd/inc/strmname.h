@@ -29,17 +29,6 @@
 #ifndef _SD_STRMNAME_H
 #define _SD_STRMNAME_H
 
-// Alter Name des Dokument-Streams
-static const rtl::OUString pStarDrawDoc("StarDrawDocument");
-
-// Name des Dokument-Streams
-static const rtl::OUString pStarDrawDoc3( "StarDrawDocument3" );
-
-// Sonstige
-static const rtl::OUString pSfxStyleSheets( "SfxStyleSheets" );
-static const rtl::OUString pVCItemPoolName( "VCPool" );
-static const rtl::OUString pPreviewName( "StarDrawTemplatePreview" );
-
 // PowerPoint-Filter
 static const rtl::OUString pFilterPowerPoint97( "MS PowerPoint 97" );
 static const rtl::OUString pFilterPowerPoint97Template( "MS PowerPoint 97 Vorlage" );
