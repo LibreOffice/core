@@ -142,8 +142,13 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
 SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 {
+    delete mpSearchEdit;
+    delete mpViewBar;
+    delete mpActionBar;
+    delete mpTemplateBar;
     delete maView;
     delete mpCreateMenu;
+    delete mpActionMenu;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
