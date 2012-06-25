@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_ooxmltok, \
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ooxmltok, \
     cppu \
+    cppuhelper \
     sal \
     test \
     unotest \
