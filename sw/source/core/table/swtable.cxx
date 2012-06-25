@@ -696,8 +696,9 @@ struct Parm
     std::deque<SwTableBox*> aBoxArr;
     SwShareBoxFmts aShareFmts;
 
-    Parm( const SwTabCols &rN, const SwTabCols &rO ) :
-        rNew( rN ), rOld( rO ), nNewWish(0), nOldWish(0), aBoxArr( 10 ){}
+    Parm( const SwTabCols &rN, const SwTabCols &rO )
+        : rNew( rN ), rOld( rO ), nNewWish(0), nOldWish(0)
+    {}
 };
 
 void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm );
