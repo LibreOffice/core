@@ -37,8 +37,11 @@ $(eval $(call gb_Extension_add_libraries,pdfimport,\
     pdfimport \
 ))
 
+$(eval $(call gb_Extension_add_executables,pdfimport,\
+    xpdfimport \
+))
+
 $(eval $(call gb_Extension_add_files,pdfimport,,\
-    $(call gb_Executable_get_target,xpdfimport) \
     $(SRCDIR)/sdext/source/pdfimport/config/pdf_import_filter.xcu \
     $(SRCDIR)/sdext/source/pdfimport/config/pdf_types.xcu \
     $(SRCDIR)/sdext/source/pdfimport/dialogs/xpdfimport_err.pdf \

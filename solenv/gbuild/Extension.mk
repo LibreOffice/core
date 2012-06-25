@@ -166,6 +166,16 @@ define gb_Extension_add_libraries
 $(foreach lib,$(2),$(call gb_Extension_add_library,$(1),$(lib)))
 endef
 
+# add an executable from the solver
+define gb_Extension_add_executable
+$(call gb_Extension_add_file,$(1),$(notdir $(call gb_Executable_get_target,$(2))),\
+	$(call gb_Executable_get_target,$(2)))
+endef
+
+define gb_Extension_add_executables
+$(foreach exe,$(2),$(call gb_Extension_add_executable,$(1),$(exe)))
+endef
+
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_Extension_localize_properties
