@@ -3186,27 +3186,49 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             graphic preview of an associated ole2 object (or a simple
             graphic of course)
             */
-            if (!IsInlineEscherHack())
+            //normally in the canvas field, the code is 0x8 0x1.
+            //in a special case, the code is 0x1 0x1, which yields a simple picture
             {
-                SwFrmFmt *pResult = 0;
-                if (bObj)
-                    pResult = ImportOle();
-                else if (bSpec)
-                    pResult = ImportGraf();
+                bool bReadObj = IsInlineEscherHack();
+                if( bReadObj )
+                {
+                    long nCurPos = pStrm->Tell();
+                    sal_uInt16 nWordCode(0);
 
-                // If we have a bad 0x1 insert a space instead.
-                if (!pResult)
-                {
-                    cInsert = ' ';
-                    OSL_ENSURE(!bObj && !bEmbeddObj && !nObjLocFc,
-                        "WW8: Please report this document, it may have a "
-                        "missing graphic");
+                    if( bIsUnicode )
+                        *pStrm >> nWordCode;
+                    else
+                    {
+                        sal_uInt8 nByteCode(0);
+                        *pStrm >> nByteCode;
+                        nWordCode = nByteCode;
+                    }
+                    if( nWordCode == 0x1 )
+                        bReadObj = false;
+                    pStrm->Seek( nCurPos );
                 }
-                else
+                if( !bReadObj )
                 {
-                    // reset the flags.
-                    bObj = bEmbeddObj = false;
-                    nObjLocFc = 0;
+                    SwFrmFmt *pResult = 0;
+                    if (bObj)
+                        pResult = ImportOle();
+                    else if (bSpec)
+                        pResult = ImportGraf();
+
+                    //#102160# If we have a bad 0x1 insert a space instead.
+                    if (!pResult)
+                    {
+                        cInsert = ' ';
+                        OSL_ENSURE(!bObj && !bEmbeddObj && !nObjLocFc,
+                            "WW8: Please report this document, it may have a "
+                            "missing graphic");
+                    }
+                    else
+                    {
+                        // reset the flags.
+                        bObj = bEmbeddObj = false;
+                        nObjLocFc = 0;
+                    }
                 }
             }
             break;
