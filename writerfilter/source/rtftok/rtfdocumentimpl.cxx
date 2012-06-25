@@ -2080,6 +2080,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 
         case RTF_DPLINE:
         case RTF_DPRECT:
+        case RTF_DPELLIPSE:
                 {
                     sal_Int32 nType = 0;
                     switch (nKeyword)
@@ -2089,6 +2090,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                             break;
                         case RTF_DPRECT:
                             nType = ESCHER_ShpInst_Rectangle;
+                            break;
+                        case RTF_DPELLIPSE:
+                            nType = ESCHER_ShpInst_Ellipse;
                             break;
                         default:
                             break;
