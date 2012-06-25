@@ -2795,6 +2795,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_CT_Style_rPr:
     case NS_ooxml::LN_CT_PPr_rPr:
     case NS_ooxml::LN_CT_PPrBase_numPr:
+        if (nSprmId == NS_ooxml::LN_CT_PPr_sectPr)
+            m_pImpl->SetParaSectpr(true);
         resolveSprmProps(*this, rSprm);
     break;
     case NS_ooxml::LN_EG_SectPrContents_footnotePr:
@@ -3396,7 +3398,15 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
         // RTF always uses text() instead of utext() for run break
         if(len == 1 && ((*data_) == 0x0d || (*data_) == 0x07) && !IsRTFImport())
+        {
+            // If the paragraph contains only the section properties and it has
+            // no runs, we should not create a paragraph for it in Writer.
+            bool bRemove = !m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr();
+            m_pImpl->SetParaSectpr(false);
             m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
+            if (bRemove)
+                m_pImpl->RemoveLastParagraph();
+        }
         else
         {
 

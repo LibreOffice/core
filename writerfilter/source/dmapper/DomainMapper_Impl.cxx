@@ -207,6 +207,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsParaChange( false ),
         m_bParaChanged( false ),
         m_bIsLastParaInSection( false ),
+        m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false )
 {
     appendTableManager( );
@@ -307,7 +308,20 @@ void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
     m_bIsLastParaInSection = bIsLast;
 }
 
+void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
+{
+    m_bParaSectpr = bParaSectpr;
+}
 
+bool DomainMapper_Impl::GetParaSectpr()
+{
+    return m_bParaSectpr;
+}
+
+bool DomainMapper_Impl::GetParaChanged()
+{
+    return m_bParaChanged;
+}
 
 void    DomainMapper_Impl::PushProperties(ContextType eId)
 {
