@@ -4780,13 +4780,16 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHea
             }
             if ( nLang )
             {
-                sal_uInt16 nScriptType = GetI18NScriptTypeOfLanguage( nLang );
-                if ( nScriptType & SCRIPTTYPE_LATIN )
-                    pEntry->nLanguage[ 0 ] = nLang;
-                if ( nScriptType & SCRIPTTYPE_ASIAN )
-                    pEntry->nLanguage[ 1 ] = nLang;
-                if ( nScriptType & SCRIPTTYPE_COMPLEX )
-                    pEntry->nLanguage[ 2 ] = nLang;
+                // #i119985#, we could probably handle this better if we have a
+                // place to over-ride the final language for weak
+                // characters/fields to fallback to, rather than the current
+                // application locale. Assuming that we can determine what the
+                // default fallback language for a given .ppt, etc is during
+                // load time.
+                if (i == 2)
+                {
+                    pEntry->nLanguage[ 0 ] = pEntry->nLanguage[ 1 ] = pEntry->nLanguage[ 2 ] = nLang;
+                }
             }
             nFlags &= ~i;
         }
