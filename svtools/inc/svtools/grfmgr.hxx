@@ -589,35 +589,6 @@ private:
                             BitmapEx& rOutBmpEx
                         );
 
-    sal_Bool SVT_DLLPRIVATE ImplCreateScaled(
-                            const BitmapEx& rBmpEx,
-                            long* pMapIX,
-                            long* pMapFX,
-                            long* pMapIY,
-                            long* pMapFY,
-                            long nStartX,
-                            long nEndX,
-                            long nStartY,
-                            long nEndY,
-                            BitmapEx& rOutBmpEx
-                        );
-
-    sal_Bool SVT_DLLPRIVATE ImplCreateRotatedScaled(
-                            const BitmapEx& rBmpEx,
-                            sal_uInt16 nRot10,
-                            const Size& rOutSzPix,
-                            const Size& rUntSzPix,
-                            long* pMapIX,
-                            long* pMapFX,
-                            long* pMapIY,
-                            long* pMapFY,
-                            long nStartX,
-                            long nEndX,
-                            long nStartY,
-                            long nEndY,
-                            BitmapEx& rOutBmpEx
-                        );
-
     static void SVT_DLLPRIVATE ImplAdjust(
                             BitmapEx& rBmpEx,
                             const GraphicAttr& rAttr,
