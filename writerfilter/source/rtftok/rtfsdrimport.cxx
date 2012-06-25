@@ -149,6 +149,12 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 xPropertySet->setPropertyValue("LineStyle", aAny);
             }
         }
+        else if (i->first == "fillOpacity" && xPropertySet.is())
+        {
+           int opacity = 100 - (i->second.toInt32())*100/65536;
+           aAny <<= uno::makeAny(sal_uInt32(opacity));
+           xPropertySet->setPropertyValue("FillTransparence", aAny);
+        }
         else if ( i->first == "pVerticies" )
         {
             uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
