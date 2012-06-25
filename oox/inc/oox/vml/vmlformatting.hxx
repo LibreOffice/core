@@ -166,16 +166,16 @@ struct StrokeArrowModel
 /** The stroke model structure contains all shape border properties. */
 struct StrokeModel
 {
-    OptValue< bool >    moStroked;              /// Shape border line on/off.
-    StrokeArrowModel    maStartArrow;           /// Start line arrow style.
-    StrokeArrowModel    maEndArrow;             /// End line arrow style.
-    OptValue< ::rtl::OUString > moColor;        /// Solid line color.
-    OptValue< double > moOpacity;               /// Solid line color opacity.
-    OptValue< ::rtl::OUString > moWeight;       /// Line width.
-    OptValue< ::rtl::OUString > moDashStyle;    /// Line dash (predefined or manually).
-    OptValue< sal_Int32 > moLineStyle;          /// Line style (single, double, ...).
-    OptValue< sal_Int32 > moEndCap;             /// Type of line end cap.
-    OptValue< sal_Int32 > moJoinStyle;          /// Type of line join.
+    OptValue< bool >    moStroked;              ///< Shape border line on/off.
+    StrokeArrowModel    maStartArrow;           ///< Start line arrow style.
+    StrokeArrowModel    maEndArrow;             ///< End line arrow style.
+    OptValue< ::rtl::OUString > moColor;        ///< Solid line color.
+    OptValue< double > moOpacity;               ///< Solid line color opacity.
+    OptValue< ::rtl::OUString > moWeight;       ///< Line width.
+    OptValue< ::rtl::OUString > moDashStyle;    ///< Line dash (predefined or manually).
+    OptValue< sal_Int32 > moLineStyle;          ///< Line style (single, double, ...).
+    OptValue< sal_Int32 > moEndCap;             ///< Type of line end cap.
+    OptValue< sal_Int32 > moJoinStyle;          ///< Type of line join.
 
     void                assignUsed( const StrokeModel& rSource );
 
@@ -190,18 +190,18 @@ struct StrokeModel
 /** The fill model structure contains all shape fill properties. */
 struct FillModel
 {
-    OptValue< bool >    moFilled;               /// Shape fill on/off.
-    OptValue< ::rtl::OUString > moColor;        /// Solid fill color.
-    OptValue< double >  moOpacity;              /// Solid fill color opacity.
-    OptValue< ::rtl::OUString > moColor2;       /// End color of gradient.
-    OptValue< double >  moOpacity2;             /// End color opacity of gradient.
-    OptValue< sal_Int32 > moType;               /// Fill type.
-    OptValue< sal_Int32 > moAngle;              /// Gradient rotation angle.
-    OptValue< double >  moFocus;                /// Linear gradient focus of second color.
-    OptValue< DoublePair > moFocusPos;          /// Rectangular gradient focus position of second color.
-    OptValue< DoublePair > moFocusSize;         /// Rectangular gradient focus size of second color.
-    OptValue< ::rtl::OUString > moBitmapPath;   /// Path to fill bitmap fragment.
-    OptValue< bool >    moRotate;               /// True = rotate gradient/bitmap with shape.
+    OptValue< bool >    moFilled;               ///< Shape fill on/off.
+    OptValue< ::rtl::OUString > moColor;        ///< Solid fill color.
+    OptValue< double >  moOpacity;              ///< Solid fill color opacity.
+    OptValue< ::rtl::OUString > moColor2;       ///< End color of gradient.
+    OptValue< double >  moOpacity2;             ///< End color opacity of gradient.
+    OptValue< sal_Int32 > moType;               ///< Fill type.
+    OptValue< sal_Int32 > moAngle;              ///< Gradient rotation angle.
+    OptValue< double >  moFocus;                ///< Linear gradient focus of second color.
+    OptValue< DoublePair > moFocusPos;          ///< Rectangular gradient focus position of second color.
+    OptValue< DoublePair > moFocusSize;         ///< Rectangular gradient focus size of second color.
+    OptValue< ::rtl::OUString > moBitmapPath;   ///< Path to fill bitmap fragment.
+    OptValue< bool >    moRotate;               ///< True = rotate gradient/bitmap with shape.
 
     void                assignUsed( const FillModel& rSource );
 
