@@ -32,7 +32,7 @@
 #include <unotools/configitem.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class Mapping;
+struct Mapping;
 typedef boost::ptr_vector<Mapping> MappingArray;
 
 
