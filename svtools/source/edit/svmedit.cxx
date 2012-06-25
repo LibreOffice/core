@@ -804,8 +804,8 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
         {
             // Damit die Selektion erhalten bleibt
             mbActivePopup = sal_True;
-            XubString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
-            if ( aChars.Len() )
+            rtl::OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
+            if (!aChars.isEmpty())
             {
                 mpExtTextView->InsertText( aChars );
                 mpExtTextView->GetTextEngine()->SetModified( sal_True );
@@ -905,8 +905,8 @@ void TextWindow::Command( const CommandEvent& rCEvt )
                                             break;
             case SV_MENU_EDIT_INSERTSYMBOL:
                 {
-                    XubString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
-                    if ( aChars.Len() )
+                    rtl::OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
+                    if (!aChars.isEmpty())
                     {
                         mpExtTextView->InsertText( aChars );
                         mpExtTextEngine->SetModified( sal_True );

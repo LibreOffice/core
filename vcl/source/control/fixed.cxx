@@ -231,8 +231,8 @@ void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     WinBits                 nWinStyle = GetStyle();
-    XubString               aText( GetText() );
-    sal_uInt16                  nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+    rtl::OUString           aText( GetText() );
+    sal_uInt16              nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
     Point                   aPos = rPos;
 
     if ( nWinStyle & WB_EXTRAOFFSET )

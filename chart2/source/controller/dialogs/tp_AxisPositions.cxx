@@ -327,7 +327,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
         else
         {
             m_aED_CrossesAtCategory.SetNoSelection();
-            m_aED_CrossesAt.SetTextValue(XubString());
+            m_aED_CrossesAt.SetTextValue(rtl::OUString());
         }
     }
     else

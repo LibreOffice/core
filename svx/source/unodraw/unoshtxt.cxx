@@ -657,9 +657,9 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         if (mpOutliner->GetParagraphCount()==1)
         {
             // if we only have one paragraph we check if it is empty
-            XubString aStr( mpOutliner->GetText( mpOutliner->GetParagraph( 0 ) ) );
+            rtl::OUString aStr(mpOutliner->GetText(mpOutliner->GetParagraph(0)));
 
-            if(!aStr.Len())
+            if (aStr.isEmpty())
             {
                 // its empty, so we have to force the outliner to initialise itself
                 mpOutliner->SetText( String(), mpOutliner->GetParagraph( 0 ) );

@@ -261,7 +261,7 @@ void VCLXAccessibleList::UpdateSelection (::rtl::OUString sTextOfSelectedItem)
         if ( pBox != NULL )
         {
             // Find the index of the selected item inside the VCL control...
-            sal_uInt16 nIndex = pBox->GetEntryPos (XubString(sTextOfSelectedItem));
+            sal_uInt16 nIndex = pBox->GetEntryPos(sTextOfSelectedItem);
             // ...and then find the associated accessibility object.
             if ( nIndex == LISTBOX_ENTRY_NOTFOUND )
                 nIndex = 0;
