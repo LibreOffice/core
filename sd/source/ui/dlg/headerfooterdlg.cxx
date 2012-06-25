@@ -638,8 +638,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
             }
         }
 
-        // and set it, or just get it from the handout master page
-        GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( 0, PK_HANDOUT ) );
+        // #i119985# and set it, or just get it from the notes master page
+        GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( 0, PK_NOTES ) );
     }
     else
     {
@@ -688,7 +688,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
                     if( aFieldInfo.pFieldItem )
                     {
                         const SvxFieldData* pFieldData = aFieldInfo.pFieldItem->GetField();
-                        if( pFieldData && pFieldData->ISA( SvxDateTimeField ) )
+                        if( pFieldData && (pFieldData->ISA( SvxDateTimeField ) || pFieldData->ISA( SvxDateField )) )
                         {
                             break;
                         }
