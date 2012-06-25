@@ -109,25 +109,25 @@ sal_Bool SwTxtAttrIterator::Next()
     if( nChgPos < aSIter.GetText().Len() )
     {
         bRet = sal_True;
-        if( aStack.Count() )
+        if( !aStack.empty() )
         {
             do {
-                const SwTxtAttr* pHt = (SwTxtAttr*)aStack[ 0 ];
+                const SwTxtAttr* pHt = aStack.front();
                 sal_uInt16 nEndPos = *pHt->GetEnd();
                 if( nChgPos >= nEndPos )
-                    aStack.Remove( 0 );
+                    aStack.pop_front();
                 else
                     break;
-            } while( aStack.Count() );
+            } while( !aStack.empty() );
         }
 
-        if( aStack.Count() )
+        if( !aStack.empty() )
         {
             sal_uInt16 nSavePos = nAttrPos;
             SearchNextChg();
-            if( aStack.Count() )
+            if( !aStack.empty() )
             {
-                const SwTxtAttr* pHt = (SwTxtAttr*)aStack[ 0 ];
+                const SwTxtAttr* pHt = aStack.front();
                 sal_uInt16 nEndPos = *pHt->GetEnd();
                 if( nChgPos >= nEndPos )
                 {
@@ -144,7 +144,7 @@ sal_Bool SwTxtAttrIterator::Next()
                     else
                         pCurItem = &pHt->GetAttr();
 
-                    aStack.Remove( 0 );
+                    aStack.pop_front();
                 }
             }
         }
@@ -156,13 +156,12 @@ sal_Bool SwTxtAttrIterator::Next()
 
 void SwTxtAttrIterator::AddToStack( const SwTxtAttr& rAttr )
 {
-    void* pAdd = (void*)&rAttr;
     sal_uInt16 nIns = 0, nEndPos = *rAttr.GetEnd();
-    for( ; nIns < aStack.Count(); ++nIns )
-        if( *((SwTxtAttr*)aStack[ nIns ] )->GetEnd() > nEndPos )
+    for( ; nIns < aStack.size(); ++nIns )
+        if( *aStack[ nIns ]->GetEnd() > nEndPos )
             break;
 
-    aStack.Insert( pAdd, nIns );
+    aStack.insert( aStack.begin() + nIns, &rAttr );
 }
 
 void SwTxtAttrIterator::SearchNextChg()
@@ -175,7 +174,7 @@ void SwTxtAttrIterator::SearchNextChg()
         nAttrPos = 0;       // must be restart at the beginning, because
                             // some attributes can start before or inside
                             // the current scripttype!
-        aStack.Remove( 0, aStack.Count() );
+        aStack.clear();
     }
     if( !pParaItem )
     {

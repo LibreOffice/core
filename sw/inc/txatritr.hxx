@@ -21,9 +21,9 @@
 
 #include <tools/solar.h>
 #include <sal/types.h>
-#include <svl/svarray.hxx>
 #include <editeng/langitem.hxx>
 #include <hintids.hxx>
+#include <deque>
 
 class String;
 class SwTxtNode;
@@ -53,7 +53,7 @@ public:
 class SwTxtAttrIterator
 {
     SwScriptIterator aSIter;
-    SvPtrarr aStack;
+    std::deque<const SwTxtAttr*> aStack;
     const SwTxtNode& rTxtNd;
     const SfxPoolItem *pParaItem, *pCurItem;
     xub_StrLen nChgPos;
