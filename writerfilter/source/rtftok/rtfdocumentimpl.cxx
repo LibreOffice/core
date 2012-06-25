@@ -2392,6 +2392,12 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterSprms.set(0x6877, pValue);
             }
             break;
+        case RTF_HIGHLIGHT:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CHighlight, pValue);
+            }
+            break;
         case RTF_UP:
         case RTF_DN:
             {
