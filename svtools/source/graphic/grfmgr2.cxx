@@ -295,230 +295,159 @@ sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
-sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
-                                       const Point& rPt, const Size& rSz,
-                                       const BitmapEx& rBmpEx, const GraphicAttr& rAttr,
+sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
+                                       const Point& rPoint, const Size& rSize,
+                                       const BitmapEx& rBitmapEx, const GraphicAttr& rAttr,
                                        const sal_uLong nFlags, BitmapEx* pBmpEx )
 {
-    sal_uInt16  nRot10 = rAttr.GetRotation() % 3600;
-    Point   aOutPtPix;
-    Size    aOutSzPix;
-    Size    aUnrotatedSzPix( pOut->LogicToPixel( rSz ) );
-    sal_Bool    bRet = sal_False;
+    bool        bRet = false;
+    Point       aOutPointInPixels;
+    Size        aOutSizeInPixels;
+    int         nRotation = rAttr.GetRotation() % 3600;
+    Size        aUnrotatedSizeInPixels( pOutputDevice->LogicToPixel( rSize ) );
 
-    if( nRot10 )
+    BitmapEx    aBitmapEx( rBitmapEx );
+
+    if( !aUnrotatedSizeInPixels.Width() || !aUnrotatedSizeInPixels.Height() )
+        return false;
+
+    if( nRotation )
     {
-        Polygon aPoly( Rectangle( rPt, rSz ) );
+        Polygon aRotationPolygon( Rectangle( rPoint, rSize ) );
+        aRotationPolygon.Rotate( rPoint, nRotation );
+        const Rectangle aRotationBoundRectangle( aRotationPolygon.GetBoundRect() );
+        aOutPointInPixels = pOutputDevice->LogicToPixel( aRotationBoundRectangle.TopLeft() );
+        aOutSizeInPixels = pOutputDevice->LogicToPixel( aRotationBoundRectangle.GetSize() );
 
-        aPoly.Rotate( rPt, nRot10 );
-        const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
-        aOutPtPix = pOut->LogicToPixel( aRotBoundRect.TopLeft() );
-        aOutSzPix = pOut->LogicToPixel( aRotBoundRect.GetSize() );
+        // rotate the image before further processing
+        aBitmapEx.Rotate( nRotation, COL_TRANSPARENT );
     }
     else
     {
-        aOutPtPix = pOut->LogicToPixel( rPt );
-        aOutSzPix = aUnrotatedSzPix;
+        aOutPointInPixels = pOutputDevice->LogicToPixel( rPoint );
+        aOutSizeInPixels = aUnrotatedSizeInPixels;
     }
 
-    if( aUnrotatedSzPix.Width() && aUnrotatedSzPix.Height() )
+    Point           aOutPoint;
+    Size            aOutSize;
+    const Size&     rBitmapSizePixels = rBitmapEx.GetSizePixel();
+    long            nStartX, nStartY, nEndX, nEndY;
+    bool            isHorizontalMirrored = ( rAttr.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
+    bool            isVerticalMirrored   = ( rAttr.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
+
+    Rectangle   aBmpRect( aOutPointInPixels, aOutSizeInPixels );
+
+    // calculate output sizes
+    if( !pBmpEx )
     {
-        BitmapEx        aBmpEx( rBmpEx );
-        BitmapEx        aOutBmpEx;
-        Point           aOutPt;
-        Size            aOutSz;
-        const Size&     rBmpSzPix = rBmpEx.GetSizePixel();
-        const long      nW = rBmpSzPix.Width();
-        const long      nH = rBmpSzPix.Height();
-        const long      nNewW = aUnrotatedSzPix.Width();
-        const long      nNewH = aUnrotatedSzPix.Height();
-        double          fTmp;
-        long*           pMapIX = new long[ nNewW ];
-        long*           pMapFX = new long[ nNewW ];
-        long*           pMapIY = new long[ nNewH ];
-        long*           pMapFY = new long[ nNewH ];
-        long            nStartX = -1, nStartY = -1, nEndX = -1, nEndY = -1;
-        long            nX, nY, nTmp, nTmpX, nTmpY;
-        sal_Bool            bHMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
-        sal_Bool            bVMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
+        Point       aPoint;
+        Rectangle   aOutRect( aPoint, pOutputDevice->GetOutputSizePixel() );
 
-        if( !( nFlags & GRFMGR_DRAW_SMOOTHSCALE ))
+        if( pOutputDevice->GetOutDevType() == OUTDEV_WINDOW )
         {
-            // #98290# Use a different mapping for non-interpolating mode, to avoid missing rows/columns
-            const double    fRevScaleX = ( nNewW > 1L ) ? ( (double) nW / nNewW ) : 0.0;
-            const double    fRevScaleY = ( nNewH > 1L ) ? ( (double) nH / nNewH ) : 0.0;
-
-            // create horizontal mapping table
-            for( nX = 0L, nTmpX = nW - 1L, nTmp = nW - 2L; nX < nNewW; nX++ )
+            const Region aPaintRgn( ( (Window*) pOutputDevice )->GetPaintRegion() );
+            if( !aPaintRgn.IsNull() )
             {
-                fTmp = nX * fRevScaleX;
-
-                if( bHMirr )
-                    fTmp = nTmpX - fTmp;
-
-                // #98290# Do not use round to zero, otherwise last column will be missing
-                pMapIX[ nX ] = MinMax( (long) fTmp, 0, nTmp );
-                pMapFX[ nX ] = fTmp >= nTmp+1 ? 1048576 : 0;
-            }
-
-            // create vertical mapping table
-            for( nY = 0L, nTmpY = nH - 1L, nTmp = nH - 2L; nY < nNewH; nY++ )
-            {
-                fTmp = nY * fRevScaleY;
-
-                if( bVMirr )
-                    fTmp = nTmpY - fTmp;
-
-                // #98290# Do not use round to zero, otherwise last row will be missing
-                pMapIY[ nY ] = MinMax( (long) fTmp, 0, nTmp );
-                pMapFY[ nY ] = fTmp >= nTmp+1 ? 1048576 : 0;
+                aOutRect.Intersection( pOutputDevice->LogicToPixel( aPaintRgn.GetBoundRect() ) );
             }
         }
+        aOutRect.Intersection( aBmpRect );
 
-        // calculate output sizes
-        if( !pBmpEx )
+        if( !aOutRect.IsEmpty() )
         {
-            Point       aPt;
-            Rectangle   aOutRect( aPt, pOut->GetOutputSizePixel() );
-            Rectangle   aBmpRect( aOutPtPix, aOutSzPix );
-
-            if( pOut->GetOutDevType() == OUTDEV_WINDOW )
-            {
-                const Region aPaintRgn( ( (Window*) pOut )->GetPaintRegion() );
-                if( !aPaintRgn.IsNull() )
-                    aOutRect.Intersection( pOut->LogicToPixel( aPaintRgn.GetBoundRect() ) );
-            }
-
-            aOutRect.Intersection( aBmpRect );
-
-            if( !aOutRect.IsEmpty() )
-            {
-                aOutPt = pOut->PixelToLogic( aOutRect.TopLeft() );
-                aOutSz = pOut->PixelToLogic( aOutRect.GetSize() );
-                nStartX = aOutRect.Left() - aBmpRect.Left();
-                nStartY = aOutRect.Top() - aBmpRect.Top();
-                nEndX = aOutRect.Right() - aBmpRect.Left();
-                nEndY = aOutRect.Bottom() - aBmpRect.Top();
-            }
-            else
-                nStartX = -1L; // invalid
+            aOutPoint = pOutputDevice->PixelToLogic( aOutRect.TopLeft() );
+            aOutSize = pOutputDevice->PixelToLogic( aOutRect.GetSize() );
+            nStartX = aOutRect.Left() - aBmpRect.Left();
+            nStartY = aOutRect.Top() - aBmpRect.Top();
+            nEndX = aOutRect.Right() - aBmpRect.Left();
+            nEndY = aOutRect.Bottom() - aBmpRect.Top();
         }
         else
+            nStartX = -1L; // invalid
+    }
+    else
+    {
+        aOutPoint = pOutputDevice->PixelToLogic( aOutPointInPixels );
+        aOutSize = pOutputDevice->PixelToLogic( aOutSizeInPixels );
+        nStartX = nStartY = 0;
+        nEndX = aOutSizeInPixels.Width() - 1L;
+        nEndY = aOutSizeInPixels.Height() - 1L;
+    }
+
+
+    if( nStartX < 0L )
+        return false;
+
+    // do transformation
+
+    // #105229# Don't scale if output size equals bitmap size
+    // #107226# Copy through only if we're not mirroring
+    if( !isHorizontalMirrored &&
+        !isVerticalMirrored &&
+        aOutSizeInPixels == rBitmapSizePixels &&
+        !nRotation)
+    {
+        // #107226# Use original dimensions when just copying through
+        aOutPoint = pOutputDevice->PixelToLogic( aOutPointInPixels );
+        aOutSize = pOutputDevice->PixelToLogic( aOutSizeInPixels );
+        bRet = true;
+    }
+    else
+    {
+        // calculate scaling factors
+        double fScaleX = aBmpRect.GetWidth()  / (double) aBitmapEx.GetSizePixel().Width();
+        double fScaleY = aBmpRect.GetHeight() / (double) aBitmapEx.GetSizePixel().Height();
+
+        // calculate crop regions on original non-scaled bitmap
+        long nOriginalStartX = nStartX / fScaleX;
+        long nOriginalEndX = nEndX / fScaleX;
+        long nOriginalStartY = nStartY / fScaleY;
+        long nOriginalEndY = nEndY / fScaleY;
+
+        Size aScaleSize( nEndX - nStartX + 1, nEndY - nStartY + 1 );
+
+        // crop the bitmap, so we deal with a smaller bitmap
+        // todo: join crop and scale step into one step on Bitmap to decrease processing
+        bRet = aBitmapEx.Crop( Rectangle( nOriginalStartX, nOriginalStartY, nOriginalEndX, nOriginalEndY ) );
+
+        // mirror the image - this should not impact the picture dimenstions
+        if( isHorizontalMirrored || isVerticalMirrored )
+            bRet = aBitmapEx.Mirror( rAttr.GetMirrorFlags() );
+
+        // depending on the flags, scale the image to the desired proportions
+        // use FAST scale if no smooth scale is desired
+        if( !( nFlags & GRFMGR_DRAW_SMOOTHSCALE ))
+            bRet = aBitmapEx.Scale( aScaleSize, BMP_SCALE_FAST );
+        else
+            bRet = aBitmapEx.Scale( aScaleSize );
+    }
+
+    if( bRet )
+    {
+        // attribute adjustment if neccessary
+        if( rAttr.IsSpecialDrawMode() || rAttr.IsAdjusted() || rAttr.IsTransparent() )
+            ImplAdjust( aBitmapEx, rAttr, ADJUSTMENT_DRAWMODE | ADJUSTMENT_COLORS | ADJUSTMENT_TRANSPARENCY );
+
+        // OutDev adjustment if neccessary
+        if( pOutputDevice->GetOutDevType() != OUTDEV_PRINTER &&
+                pOutputDevice->GetBitCount() <= 8 &&
+                aBitmapEx.GetBitCount() >= 8 )
         {
-            aOutPt = pOut->PixelToLogic( aOutPtPix );
-            aOutSz = pOut->PixelToLogic( aOutSzPix );
-            nStartX = nStartY = 0;
-            nEndX = aOutSzPix.Width() - 1L;
-            nEndY = aOutSzPix.Height() - 1L;
+            aBitmapEx.Dither( BMP_DITHER_MATRIX );
         }
+    }
 
-        // do transformation
-        if( nStartX >= 0L )
+    // create output
+    if( bRet )
+    {
+        if( pBmpEx )
         {
-            const sal_Bool bSimple = ( 1 == nW || 1 == nH );
+            if( !rAttr.IsTransparent() && !aBitmapEx.IsAlpha() )
+                aBitmapEx = BitmapEx( aBitmapEx.GetBitmap().CreateDisplayBitmap( pOutputDevice ), aBitmapEx.GetMask() );
 
-            if( nRot10 )
-            {
-                if( bSimple )
-                {
-                    bRet = ( aOutBmpEx = aBmpEx ).Scale( aUnrotatedSzPix );
-
-                    if( bRet )
-                        bRet = aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
-                }
-                else if( nFlags & GRFMGR_DRAW_SMOOTHSCALE )
-                {
-                    // Scale using the Box filter, rather than this algorithm, as that one provides
-                    // better quality, while being somewhat slower (the result should be cached though).
-                    aOutBmpEx = aBmpEx;
-                    bRet = true;
-                    if( bHMirr || bVMirr )
-                        bRet = aOutBmpEx.Mirror(( bHMirr ? BMP_MIRROR_HORZ : BMP_MIRROR_NONE )
-                                    | ( bVMirr ? BMP_MIRROR_VERT : BMP_MIRROR_NONE ));
-                    if( bRet )
-                        bRet = aOutBmpEx.Rotate( nRot10, COL_TRANSPARENT );
-                    if( bRet ) // scale as last (rotating would destroy the smooth scaling)
-                        bRet = aOutBmpEx.Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ),
-                            BMP_SCALE_BOX );
-                }
-                else
-                {
-                    bRet = ImplCreateRotatedScaled( aBmpEx,
-                                                    nRot10, aOutSzPix, aUnrotatedSzPix,
-                                                    pMapIX, pMapFX, pMapIY, pMapFY, nStartX, nEndX, nStartY, nEndY,
-                                                    aOutBmpEx );
-                }
-            }
-            else
-            {
-                // #105229# Don't scale if output size equals bitmap size
-                // #107226# Copy through only if we're not mirroring
-                if( !bHMirr && !bVMirr && aOutSzPix == rBmpSzPix )
-                {
-                    // #107226# Use original dimensions when just copying through
-                    aOutPt = pOut->PixelToLogic( aOutPtPix );
-                    aOutSz = pOut->PixelToLogic( aOutSzPix );
-                    aOutBmpEx = aBmpEx;
-                    bRet = sal_True;
-                }
-                else
-                {
-                    if( bSimple )
-                        bRet = ( aOutBmpEx = aBmpEx ).Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ) );
-                    else if( nFlags & GRFMGR_DRAW_SMOOTHSCALE )
-                    {
-                    // Scale using the Box filter, rather than this algorithm, as that one provides
-                    // better quality, while being somewhat slower (the result should be cached though).
-                        aOutBmpEx = aBmpEx;
-                        bRet = aOutBmpEx.Scale( Size( nEndX - nStartX + 1, nEndY - nStartY + 1 ),
-                            BMP_SCALE_BOX );
-                        if( bRet && ( bHMirr || bVMirr ))
-                            bRet = aOutBmpEx.Mirror(( bHMirr ? BMP_MIRROR_HORZ : BMP_MIRROR_NONE )
-                                    | ( bVMirr ? BMP_MIRROR_VERT : BMP_MIRROR_NONE ));
-                    }
-                    else
-                    {
-                        bRet = ImplCreateScaled( aBmpEx,
-                                                 pMapIX, pMapFX, pMapIY, pMapFY,
-                                                 nStartX, nEndX, nStartY, nEndY,
-                                                 aOutBmpEx );
-                    }
-                }
-            }
-
-            if( bRet )
-            {
-                // attribute adjustment if neccessary
-                if( rAttr.IsSpecialDrawMode() || rAttr.IsAdjusted() || rAttr.IsTransparent() )
-                    ImplAdjust( aOutBmpEx, rAttr, ADJUSTMENT_DRAWMODE | ADJUSTMENT_COLORS | ADJUSTMENT_TRANSPARENCY );
-
-                // OutDev adjustment if neccessary
-                if( pOut->GetOutDevType() != OUTDEV_PRINTER && pOut->GetBitCount() <= 8 && aOutBmpEx.GetBitCount() >= 8 )
-                    aOutBmpEx.Dither( BMP_DITHER_MATRIX );
-            }
+            *pBmpEx = aBitmapEx;
         }
-
-        // delete lookup tables
-        delete[] pMapIX;
-        delete[] pMapFX;
-        delete[] pMapIY;
-        delete[] pMapFY;
-
-        // create output
-        if( bRet )
-        {
-            if( !pBmpEx )
-                pOut->DrawBitmapEx( aOutPt, aOutSz, aOutBmpEx );
-            else
-            {
-                if( !rAttr.IsTransparent() && !aOutBmpEx.IsAlpha() )
-                    aOutBmpEx = BitmapEx( aOutBmpEx.GetBitmap().CreateDisplayBitmap( pOut ), aOutBmpEx.GetMask() );
-
-                pOut->DrawBitmapEx( aOutPt, aOutSz, *pBmpEx = aOutBmpEx );
-            }
-        }
+        pOutputDevice->DrawBitmapEx( aOutPoint, aOutSize, aBitmapEx);
     }
 
     return bRet;
