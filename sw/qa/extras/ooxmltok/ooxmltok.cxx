@@ -71,6 +71,7 @@ public:
     void testN764745();
     void testN766477();
     void testN758883();
+    void testN766481();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(testN764745);
     CPPUNIT_TEST(testN766477);
     CPPUNIT_TEST(testN758883);
+    CPPUNIT_TEST(testN766481);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -603,6 +605,25 @@ void Test::testN758883()
     xPropertySet.set(xDraws->getByIndex(2), uno::UNO_QUERY);
     xPropertySet->getPropertyValue("AnchorType") >>= eAnchorType;
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eAnchorType);
+}
+
+void Test::testN766481()
+{
+    /*
+     * The problem was that we had an additional paragraph before the pagebreak.
+     *
+     * oParas = ThisComponent.Text.createEnumeration
+     * oPara = oParas.nextElement
+     * oPara = oParas.nextElement
+     * xray oParas.hasMoreElements ' should be false
+     */
+    load("n766481.docx");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
+    for (int i = 0; i < 2; ++i)
+        xParaEnum->nextElement();
+    CPPUNIT_ASSERT_EQUAL(sal_False, xParaEnum->hasMoreElements());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
