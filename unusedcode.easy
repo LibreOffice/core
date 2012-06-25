@@ -615,8 +615,6 @@ dbtools::SQLExceptionInfo::SQLExceptionInfo(com::sun::star::sdb::SQLErrorEvent c
 dbtools::SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(com::sun::star::sdb::SQLContext const&)
 dbtools::SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(com::sun::star::sdbc::SQLWarning const&)
 dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
-dp_misc::TRACE(rtl::OString const&)
-dp_misc::writeConsoleError(rtl::OString const&)
 drawinglayer::attribute::SdrFormTextAttribute::getFormTextShdwTransp() const
 drawinglayer::attribute::SdrTextAttribute::isWrongSpell() const
 formula::FormulaTokenIterator::First()
@@ -633,7 +631,6 @@ sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::RegisterFactory(unsigned short)
-slideshow::internal::DrawShapeSubsetting::reset(slideshow::internal::DocTreeNode const&, boost::shared_ptr<GDIMetaFile> const&)
 std::__cxx1998::multimap<_xmlNode*, com::sun::star::uno::Reference<com::sun::star::xml::dom::events::XEventListener>, std::less<_xmlNode*>, std::allocator<std::pair<_xmlNode* const, com::sun::star::uno::Reference<com::sun::star::xml::dom::events::XEventListener> > > >::~multimap()
 std::__cxx1998::vector<OrderedEntry*, std::allocator<OrderedEntry*> >::~vector()
 std::__cxx1998::vector<ServiceInfo*, std::allocator<ServiceInfo*> >::~vector()

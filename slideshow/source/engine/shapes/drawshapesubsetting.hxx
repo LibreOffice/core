@@ -86,25 +86,6 @@ namespace slideshow
              */
             void reset( const ::boost::shared_ptr< GDIMetaFile >&   rMtf );
 
-            /** Reset metafile and subset.
-
-                Use this method to completely reset the
-                ShapeSubsetting, with a new metafile and subset
-                range. Note that any information previously set will
-                be lost, including added subset shapes!
-
-                @param rShapeSubset
-                The subset this object represents (can be empty, then
-                denoting 'represents a whole shape')
-
-                @param rMtf
-                Metafile to retrieve subset info from (must have been
-                generated with verbose text comments switched on).
-             */
-            void reset( const DocTreeNode&                          rShapeSubset,
-                        const ::boost::shared_ptr< GDIMetaFile >&   rMtf );
-
-
             // Shape subsetting methods
             // ========================================================
 

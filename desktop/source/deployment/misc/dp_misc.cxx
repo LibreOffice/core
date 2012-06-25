@@ -494,30 +494,7 @@ void writeConsoleWithStream(::rtl::OUString const & sText, FILE * stream)
 }
 #endif
 
-#ifdef WNT
-void writeConsoleWithStream(::rtl::OString const & sText, HANDLE stream)
-{
-    writeConsoleWithStream(OStringToOUString(
-        sText, RTL_TEXTENCODING_UTF8), stream);
-}
-#else
-void writeConsoleWithStream(::rtl::OString const & sText, FILE * stream)
-{
-    fprintf(stream, "%s", sText.getStr());
-    fflush(stream);
-}
-#endif
-
 void writeConsole(::rtl::OUString const & sText)
-{
-#ifdef WNT
-    writeConsoleWithStream(sText, GetStdHandle(STD_OUTPUT_HANDLE));
-#else
-    writeConsoleWithStream(sText, stdout);
-#endif
-}
-
-void writeConsole(::rtl::OString const & sText)
 {
 #ifdef WNT
     writeConsoleWithStream(sText, GetStdHandle(STD_OUTPUT_HANDLE));
@@ -534,18 +511,6 @@ void writeConsoleError(::rtl::OUString const & sText)
     writeConsoleWithStream(sText, stderr);
 #endif
 }
-
-
-void writeConsoleError(::rtl::OString const & sText)
-{
-#ifdef WNT
-    writeConsoleWithStream(sText, GetStdHandle(STD_ERROR_HANDLE));
-#else
-    writeConsoleWithStream(sText, stderr);
-#endif
-}
-
-
 
 OUString readConsole()
 {
@@ -573,14 +538,6 @@ OUString readConsole()
 }
 
 void TRACE(::rtl::OUString const & sText)
-{
-    (void) sText;
-#if OSL_DEBUG_LEVEL > 1
-    writeConsole(sText);
-#endif
-}
-
-void TRACE(::rtl::OString const & sText)
 {
     (void) sText;
 #if OSL_DEBUG_LEVEL > 1

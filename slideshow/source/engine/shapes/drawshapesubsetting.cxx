@@ -293,16 +293,6 @@ namespace slideshow
             initCurrentSubsets();
         }
 
-        void DrawShapeSubsetting::reset( const DocTreeNode&                          rShapeSubset,
-                                         const ::boost::shared_ptr< GDIMetaFile >&   rMtf )
-        {
-            reset();
-            mpMtf = rMtf;
-            maSubset = rShapeSubset;
-
-            initCurrentSubsets();
-        }
-
         void DrawShapeSubsetting::initCurrentSubsets()
         {
             // only add subset to vector, if it's not empty - that's
