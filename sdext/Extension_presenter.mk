@@ -31,8 +31,8 @@ $(eval $(call gb_Extension_Extension,presenter-screen,sdext/source/presenter))
 
 $(eval $(call gb_Extension_set_platform,presenter-screen,$(sdext_PLATFORM)))
 
-$(eval $(call gb_Extension_add_files,presenter-screen,,\
-    $(call gb_Library_get_target,PresenterScreen) \
+$(eval $(call gb_Extension_add_libraries,presenter-screen,\
+    PresenterScreen \
 ))
 
 $(eval $(call gb_Extension_add_file,presenter-screen,components.rdb,$(call gb_Rdb_get_target,presenter)))
