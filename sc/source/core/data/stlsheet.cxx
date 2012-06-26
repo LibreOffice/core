@@ -119,8 +119,11 @@ sal_Bool __EXPORT ScStyleSheet::SetParent( const String& rParentName )
     SfxStyleSheetBase* pStyle = rPool.Find( aEffName, nFamily );
     if (!pStyle)
     {
-        SfxStyleSheetIterator* pIter = rPool.CreateIterator( nFamily, SFXSTYLEBIT_ALL );
-        pStyle = pIter->First();
+        // memory leak #i120077#
+        SfxStyleSheetIterator aIter(&rPool, nFamily, SFXSTYLEBIT_ALL);
+
+        pStyle = aIter.First();
+
         if (pStyle)
             aEffName = pStyle->GetName();
     }

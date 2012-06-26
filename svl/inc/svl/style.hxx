@@ -238,7 +238,6 @@ public:
     SfxItemPool&                GetPool();
     const SfxItemPool&          GetPool() const;
 
-    virtual SfxStyleSheetIterator* CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
     virtual sal_uInt16              Count();
     virtual SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
 

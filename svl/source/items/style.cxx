@@ -587,7 +587,7 @@ SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl()
     if( !rpIter || (rpIter->GetSearchMask() != nMask) || (rpIter->GetSearchFamily() != nSearchFamily) )
     {
         delete rpIter;
-        rpIter = CreateIterator( nSearchFamily, nMask );
+        rpIter = new SfxStyleSheetIterator( this, nSearchFamily, nMask );
     }
     return *rpIter;
 }
@@ -666,16 +666,6 @@ String SfxStyleSheetBasePool::GetStreamName()
 
 /////////////////////////////////// Factory ////////////////////////////////
 
-
-
-SfxStyleSheetIterator* SfxStyleSheetBasePool::CreateIterator
-(
- SfxStyleFamily eFam,
- sal_uInt16 mask
-)
-{
-    return new SfxStyleSheetIterator(this,eFam,mask);
-}
 
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Create
