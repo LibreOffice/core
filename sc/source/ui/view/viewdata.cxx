@@ -2520,6 +2520,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                     double nFactor = pDocShell->GetOutputFactor();
                     aPixel.X() = (long)( aPixel.X() * nFactor + 0.5 );
                 }
+
+                bHSplit = bHSplit && aPixel.X() > 0;
+                bVSplit = bVSplit && aPixel.Y() > 0;
                 if( bHSplit )
                 {
                     rViewTab.eHSplitMode = SC_SPLIT_NORMAL;
