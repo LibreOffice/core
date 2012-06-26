@@ -2919,6 +2919,9 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
     // in "SaveAs" title and password will be cleared ( maybe the new itemset contains new values, otherwise they will be empty )
     pMergedParams->ClearItem( SID_PASSWORD );
+    // 119366 - As the SID_ENCRYPTIONDATA and SID_PASSWORD are using for setting passward together, we need to clear them both.
+    // Also, ( maybe the new itemset contains new values, otherwise they will be empty )
+    pMergedParams->ClearItem( SID_ENCRYPTIONDATA );
     pMergedParams->ClearItem( SID_DOCINFO_TITLE );
 
     pMergedParams->ClearItem( SID_INPUTSTREAM );
