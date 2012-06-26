@@ -103,7 +103,7 @@ namespace
     {
         ResMgr * operator ()()
         {
-            return ResMgr::CreateResMgr (CREATEVERSIONRESMGR_NAME(svs));
+            return ResMgr::CreateResMgr (CREATEVERSIONRESMGR_NAME(svl));
         }
         static ResMgr * getOrCreate()
         {
