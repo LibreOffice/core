@@ -19,7 +19,6 @@
 
 
 #include <sfx2/sfxdlg.hxx>
-//#include "cuilib.hxx"
 
 #include <osl/module.hxx>
 

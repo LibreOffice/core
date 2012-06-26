@@ -61,16 +61,6 @@
 #include <jni.h>
 #endif
 
-// [ed 5/14/02 Add in explicit check for quartz graphics.  OS X will define
-// unx for both quartz and X11 graphics, but we include svunx.h only if we're
-// building X11 graphics layers.
-
-#if defined UNX && ! defined QUARTZ
-//#include "svunx.h"
-#endif
-
-//#include "svsys.h"
-
 #include "salinst.hxx"
 #include "salwtype.hxx"
 #include "svdata.hxx"

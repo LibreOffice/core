@@ -28,7 +28,6 @@
 
 #include "oox/drawingml/textbodypropertiescontext.hxx"
 
-//#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>

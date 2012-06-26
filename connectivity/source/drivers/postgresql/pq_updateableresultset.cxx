@@ -62,7 +62,6 @@
 #include <cppuhelper/typeprovider.hxx>
 
 #include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
-// #include <com/sun/star/sdbcx/XRowLocate.hpp>
 
 #include "pq_updateableresultset.hxx"
 #include "pq_resultsetmetadata.hxx"

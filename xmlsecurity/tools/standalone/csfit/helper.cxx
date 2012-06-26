@@ -30,8 +30,6 @@
 #include "helper.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustring.h"
-/*#include "libxml/xmlstring.h"
-*/
 
 /*-
  * Helper : create a input stream from a file

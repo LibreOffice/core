@@ -37,7 +37,6 @@
 #include <sfx2/bindings.hxx>
 #include <uivwimp.hxx>
 #include <avmedia/mediaplayer.hxx>
-//#include <swlinguconfig.hxx>
 #include <swmodule.hxx>
 
 #include <sfx2/objface.hxx>

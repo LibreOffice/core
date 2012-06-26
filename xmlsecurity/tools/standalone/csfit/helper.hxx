@@ -18,9 +18,6 @@
  */
 
 #include <stdio.h>
-/*#include <libxml/xmlstring.h>
-*/
-
 #include <rtl/ustring.hxx>
 #include <pk11func.h>
 

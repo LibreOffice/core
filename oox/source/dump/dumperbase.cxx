@@ -41,7 +41,6 @@
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/textinputstream.hxx"
-//#include "oox/xls/biffhelper.hxx"
 
 #if OOX_INCLUDE_DUMPER
 

@@ -33,7 +33,6 @@
 
 #include "cppunit/extensions/TestFactoryRegistry.h"
 #include "cppunit/plugin/TestPlugIn.h"
-//#include "cppunit/plugin/PlugInManager.h"
 
 #include <osl/detail/ios-bootstrap.h>
 
