@@ -2871,6 +2871,7 @@ void ScInterpreter::ScN()
             return;
         }
         case svString:
+            PopError();
             PushDouble(0);
             return;
         default:
