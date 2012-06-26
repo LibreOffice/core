@@ -67,34 +67,49 @@ namespace abp
         aItemSize.Width() = GetOutputSizePixel().Width() - 30;
 
         bool bWithMozilla = true, bUnx = true;
-        bool bHaveEvolution = true, bHaveKab = true;
-        bool bHaveMacab = true;
+        bool bHaveEvolution = false, bHaveKab = false;
+        bool bHaveMacab = false;
 
 #if !defined WITH_MOZILLA || defined MACOSX
         bWithMozilla = false;
 #endif
 #ifndef UNX
         bUnx = false;
-        bHaveEvolution = false;
-        bHaveKab = false;
-        bHaveMacab = false;
 #else
         Reference< XDriverAccess> xManager(_pParent->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager"))), UNO_QUERY);
 
-        // check whether Evolution is available
-        Reference< XDriver > xDriver( xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:evolution:local"))) );
-        if ( !xDriver.is() )
-            bHaveEvolution = false;
+        try
+        {
+            // check whether Evolution is available
+            Reference< XDriver > xDriver( xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:evolution:local"))) );
+            if ( xDriver.is() )
+                bHaveEvolution = true;
+        }
+        catch (...)
+        {
+        }
 
         // check whether KDE address book is available
-        xDriver = xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:kab")));
-        if ( !xDriver.is() )
-            bHaveKab = false;
+        try
+        {
+            Reference< XDriver > xDriver( xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:kab"))) );
+            if ( xDriver.is() )
+                bHaveKab = true;
+        }
+        catch (...)
+        {
+        }
 
-        // check whether Mac OS X address book is available
-        xDriver = xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:macab")));
-        if ( !xDriver.is() )
-            bHaveMacab = false;
+        try
+        {
+            // check whether Mac OS X address book is available
+            Reference< XDriver > xDriver( xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:macab"))) );
+            if ( xDriver.is() )
+                bHaveMacab = true;
+        }
+        catch(...)
+        {
+        }
 #endif
 
         // Items are displayed in list order
