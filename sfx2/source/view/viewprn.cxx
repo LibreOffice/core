@@ -671,8 +671,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         bSilent = pSilentItem && pSilentItem->GetValue();
     }
 
-    //FIXME: how to transport "bPrintOnHelp"?
-
     // no help button in dialogs if called from the help window
     // (pressing help button would exchange the current page inside the help
     // document that is going to be printed!)
@@ -744,6 +742,11 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 }
             }
 
+            // we will add the "PrintSelectionOnly" or "HideHelpButton" properties
+            // we have to increase the capacity of aProps
+            sal_Int32 nLen = aProps.getLength();
+            aProps.realloc( nLen + 1 );
+
             // HACK: writer sets the SID_SELECTION item when printing directly and expects
             // to get only the selection document in that case (see getSelectionObject)
             // however it also reacts to the PrintContent property. We need this distinction here, too,
@@ -755,10 +758,14 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False);
                 sal_Bool bSelection = ( pSelectItem != NULL && pSelectItem->GetValue() );
 
-                sal_Int32 nLen = aProps.getLength();
-                aProps.realloc( nLen + 1 );
                 aProps[nLen].Name = rtl::OUString( "PrintSelectionOnly"  );
                 aProps[nLen].Value = makeAny( bSelection );
+            }
+            else // if nId == SID_PRINTDOC ; nothing to do with the previous HACK
+            {
+                // should the printer selection and properties dialogue display an help button
+                aProps[nLen].Name = rtl::OUString( "HideHelpButton" );
+                aProps[nLen].Value = makeAny( bPrintOnHelp );
             }
 
             ExecPrint( aProps, bIsAPI, (nId == SID_PRINTDOCDIRECT) );
