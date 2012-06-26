@@ -193,6 +193,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
     rtl::OUString sGradient;
     rtl::OUString sAxisPosition;
     rtl::OUString sShowValue;
+    rtl::OUString sAxisColor;
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataBarAttrMap();
@@ -220,6 +221,9 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
                 break;
             case XML_TOK_DATABAR_SHOWVALUE:
                 sShowValue = sValue;
+                break;
+            case XML_TOK_DATABAR_AXISCOLOR:
+                sAxisColor = sValue;
                 break;
             default:
                 break;
@@ -252,6 +256,13 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
     }
     else
         mpFormatData->mbNeg = false;
+
+    if(!sAxisColor.isEmpty())
+    {
+        sal_Int32 nColor = 0;
+        sax::Converter::convertColor( nColor, sAxisColor );
+        mpFormatData->maAxisColor = Color(nColor);
+    }
 
     if(!sShowValue.isEmpty())
     {
