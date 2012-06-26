@@ -11,14 +11,22 @@
 
 #include <vector>
 #include <map>
+#include <list>
 #include <iterator>
 #include <memory>
 #include <deque>
 #include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
 #include <iostream>
+#include <cassert>
+#include <cstdarg>
+#include <sstream>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/bind.hpp>
 
 #endif
 
