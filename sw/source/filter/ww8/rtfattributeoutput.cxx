@@ -383,6 +383,7 @@ void RtfAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool bSing
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
+    m_bInRun = true;
     m_bSingleEmptyRun = bSingleEmptyRun;
     if (!m_bSingleEmptyRun)
         m_aRun->append('{');
@@ -398,8 +399,9 @@ void RtfAttributeOutput::EndRun()
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     m_aRun->append(m_rExport.sNewLine);
     m_aRun.appendAndClear(m_aRunText);
-    if (!m_bSingleEmptyRun)
+    if (!m_bSingleEmptyRun && m_bInRun)
         m_aRun->append('}');
+    m_bInRun = false;
 }
 
 void RtfAttributeOutput::StartRunProperties()
@@ -3028,7 +3030,8 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_bHadFieldResult( false ),
     m_bTableRowEnded( false ),
     m_aCells(),
-    m_bSingleEmptyRun(false)
+    m_bSingleEmptyRun(false),
+    m_bInRun(false)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 }

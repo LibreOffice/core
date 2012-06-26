@@ -543,6 +543,8 @@ private:
 
     /// If we're in a paragraph that has a single empty run only.
     bool m_bSingleEmptyRun;
+
+    bool m_bInRun;
 public:
     RtfAttributeOutput( RtfExport &rExport );
 
