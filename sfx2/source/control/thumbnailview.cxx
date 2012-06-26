@@ -628,6 +628,7 @@ void ThumbnailView::ImplEndTracking( const Point& rPos, bool bCancel )
 
 IMPL_LINK (ThumbnailView, OnFolderSelected, ThumbnailViewItem*, pItem)
 {
+    maItemStateHdl.Call(pItem);
     return 0;
 }
 
