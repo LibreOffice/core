@@ -188,7 +188,7 @@ public:
         queryCreatableContentsInfo( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
                 throw( com::sun::star::uno::RuntimeException );
 
-    libcmis::ObjectPtr getObject( );
+    libcmis::ObjectPtr getObject( ) throw ( libcmis::Exception );
 };
 
 }

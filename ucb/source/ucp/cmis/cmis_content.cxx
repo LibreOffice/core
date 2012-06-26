@@ -209,24 +209,17 @@ namespace cmis
     {
     }
 
-    libcmis::ObjectPtr Content::getObject( )
+    libcmis::ObjectPtr Content::getObject( ) throw ( libcmis::Exception )
     {
-        try
+        if ( !m_pObject.get() )
         {
-            if ( !m_pObject.get() )
+            if ( !m_sObjectPath.isEmpty( ) )
+                m_pObject = m_pSession->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
+            else
             {
-                if ( !m_sObjectPath.isEmpty( ) )
-                    m_pObject = m_pSession->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
-                else
-                {
-                    m_pObject = m_pSession->getRootFolder( );
-                    m_sObjectPath = "/";
-                }
+                m_pObject = m_pSession->getRootFolder( );
+                m_sObjectPath = "/";
             }
-        }
-        catch ( const libcmis::Exception& e )
-        {
-            SAL_INFO( "cmisucp", "Unexpected exception: " << e.what() );
         }
 
         return m_pObject;
@@ -240,8 +233,21 @@ namespace cmis
 
     bool Content::isFolder(const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        resetAuthProvider( xEnv );
-        return getObject( )->getBaseType( ) == "cmis:folder";
+        bool bIsFolder = false;
+        try
+        {
+            resetAuthProvider( xEnv );
+            bIsFolder = getObject( )->getBaseType( ) == "cmis:folder";
+        }
+        catch ( const libcmis::Exception& e )
+        {
+            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_GENERAL,
+                                uno::Sequence< uno::Any >( 0 ),
+                                xEnv,
+                                rtl::OUString::createFromAscii( e.what() ) );
+        }
+        return bIsFolder;
     }
 
     uno::Any Content::getBadArgExcept()
@@ -267,111 +273,122 @@ namespace cmis
 
         for( sal_Int32 n = 0; n < nProps; ++n )
         {
-            const beans::Property& rProp = pProps[ n ];
+            try
+            {
+                const beans::Property& rProp = pProps[ n ];
 
-            if ( rProp.Name == "IsDocument" )
-            {
-                if ( getObject( ).get( ) )
-                    xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:document" );
-                else if ( m_pObjectType.get( ) )
-                    xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:document" );
-                else
-                    xRow->appendVoid( rProp );
-            }
-            else if ( rProp.Name == "IsFolder" )
-            {
-                if ( getObject( ).get( ) )
-                    xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:folder" );
-                else if ( m_pObjectType.get( ) )
-                    xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:folder" );
-                else
-                    xRow->appendVoid( rProp );
-            }
-            else if ( rProp.Name == "Title" )
-            {
-                rtl::OUString sTitle;
-                if ( getObject().get() )
-                    sTitle = rtl::OUString::createFromAscii( getObject()->getName().c_str( ) );
-                else if ( m_pObjectProps.size() > 0 )
+                if ( rProp.Name == "IsDocument" )
                 {
-                    map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
-                    if ( it != m_pObjectProps.end( ) )
-                    {
-                        vector< string > values = it->second->getStrings( );
-                        if ( values.size() > 0 )
-                            sTitle = rtl::OUString::createFromAscii( values.front( ).c_str( ) );
-                    }
-                }
-
-                // Nothing worked... get it from the path
-                if ( sTitle.isEmpty( ) )
-                {
-                    rtl::OUString sPath = m_sObjectPath;
-
-                    // Get rid of the trailing slash problem
-                    if ( sPath[ sPath.getLength( ) - 1 ] == '/' )
-                        sPath = sPath.copy( 0, sPath.getLength() - 1 );
-
-                    // Get the last segment
-                    sal_Int32 nPos = sPath.lastIndexOf( '/' );
-                    if ( nPos >= 0 )
-                        sTitle = sPath.copy( nPos + 1 );
-                }
-
-                if ( !sTitle.isEmpty( ) )
-                    xRow->appendString( rProp, sTitle );
-                else
-                    xRow->appendVoid( rProp );
-            }
-            else if ( rProp.Name == "TitleOnServer" )
-            {
-                string path;
-                if ( getObject().get( ) )
-                {
-                    vector< string > paths = getObject( )->getPaths( );
-                    if ( paths.size( ) > 0 )
-                        path = paths.front( );
+                    if ( getObject( ).get( ) )
+                        xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:document" );
+                    else if ( m_pObjectType.get( ) )
+                        xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:document" );
                     else
-                        path = getObject()->getName( );
+                        xRow->appendVoid( rProp );
+                }
+                else if ( rProp.Name == "IsFolder" )
+                {
+                    if ( getObject( ).get( ) )
+                        xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:folder" );
+                    else if ( m_pObjectType.get( ) )
+                        xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:folder" );
+                    else
+                        xRow->appendVoid( rProp );
+                }
+                else if ( rProp.Name == "Title" )
+                {
+                    rtl::OUString sTitle;
+                    if ( getObject().get() )
+                        sTitle = rtl::OUString::createFromAscii( getObject()->getName().c_str( ) );
+                    else if ( m_pObjectProps.size() > 0 )
+                    {
+                        map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
+                        if ( it != m_pObjectProps.end( ) )
+                        {
+                            vector< string > values = it->second->getStrings( );
+                            if ( values.size() > 0 )
+                                sTitle = rtl::OUString::createFromAscii( values.front( ).c_str( ) );
+                        }
+                    }
 
-                    xRow->appendString( rProp, rtl::OUString::createFromAscii( path.c_str() ) );
+                    // Nothing worked... get it from the path
+                    if ( sTitle.isEmpty( ) )
+                    {
+                        rtl::OUString sPath = m_sObjectPath;
+
+                        // Get rid of the trailing slash problem
+                        if ( sPath[ sPath.getLength( ) - 1 ] == '/' )
+                            sPath = sPath.copy( 0, sPath.getLength() - 1 );
+
+                        // Get the last segment
+                        sal_Int32 nPos = sPath.lastIndexOf( '/' );
+                        if ( nPos >= 0 )
+                            sTitle = sPath.copy( nPos + 1 );
+                    }
+
+                    if ( !sTitle.isEmpty( ) )
+                        xRow->appendString( rProp, sTitle );
+                    else
+                        xRow->appendVoid( rProp );
+                }
+                else if ( rProp.Name == "TitleOnServer" )
+                {
+                    string path;
+                    if ( getObject().get( ) )
+                    {
+                        vector< string > paths = getObject( )->getPaths( );
+                        if ( paths.size( ) > 0 )
+                            path = paths.front( );
+                        else
+                            path = getObject()->getName( );
+
+                        xRow->appendString( rProp, rtl::OUString::createFromAscii( path.c_str() ) );
+                    }
+                    else
+                        xRow->appendVoid( rProp );
+                }
+                else if ( rProp.Name == "IsReadOnly" )
+                {
+                    boost::shared_ptr< libcmis::AllowableActions > allowableActions = getObject()->getAllowableActions( );
+                    sal_Bool bReadOnly = sal_False;
+                    if ( allowableActions->isAllowed( libcmis::ObjectAction::SetContentStream ) )
+                        bReadOnly = sal_True;
+
+                    xRow->appendBoolean( rProp, bReadOnly );
+                }
+                else if ( rProp.Name == "DateCreated" )
+                {
+                    util::DateTime aTime = lcl_boostToUnoTime( getObject( )->getCreationDate( ) );
+                    xRow->appendTimestamp( rProp, aTime );
+                }
+                else if ( rProp.Name == "DateModified" )
+                {
+                    util::DateTime aTime = lcl_boostToUnoTime( getObject( )->getLastModificationDate( ) );
+                    xRow->appendTimestamp( rProp, aTime );
+                }
+                else if ( rProp.Name == "Size" )
+                {
+                    libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get( ) );
+                    if ( NULL != document )
+                        xRow->appendLong( rProp, document->getContentLength() );
+                    else
+                        xRow->appendVoid( rProp );
+                }
+                else if ( rProp.Name == "CreatableContentsInfo" )
+                {
+                    xRow->appendObject( rProp, uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
                 }
                 else
-                    xRow->appendVoid( rProp );
+                    SAL_INFO( "cmisucp", "Looking for unsupported property " << rProp.Name );
             }
-            else if ( rProp.Name == "IsReadOnly" )
+            catch ( const libcmis::Exception& e )
             {
-                boost::shared_ptr< libcmis::AllowableActions > allowableActions = getObject()->getAllowableActions( );
-                sal_Bool bReadOnly = sal_False;
-                if ( allowableActions->isAllowed( libcmis::ObjectAction::SetContentStream ) )
-                    bReadOnly = sal_True;
-
-                xRow->appendBoolean( rProp, bReadOnly );
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_GENERAL,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv,
+                                    rtl::OUString::createFromAscii( e.what() ) );
             }
-            else if ( rProp.Name == "DateCreated" )
-            {
-                util::DateTime aTime = lcl_boostToUnoTime( getObject( )->getCreationDate( ) );
-                xRow->appendTimestamp( rProp, aTime );
-            }
-            else if ( rProp.Name == "DateModified" )
-            {
-                util::DateTime aTime = lcl_boostToUnoTime( getObject( )->getLastModificationDate( ) );
-                xRow->appendTimestamp( rProp, aTime );
-            }
-            else if ( rProp.Name == "Size" )
-            {
-                libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get( ) );
-                if ( NULL != document )
-                    xRow->appendLong( rProp, document->getContentLength() );
-                else
-                    xRow->appendVoid( rProp );
-            }
-            else if ( rProp.Name == "CreatableContentsInfo" )
-            {
-                xRow->appendObject( rProp, uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
-            }
-            else
-                SAL_INFO( "cmisucp", "Looking for unsupported property " << rProp.Name );
         }
 
         return uno::Reference< sdbc::XRow >( xRow.get() );
@@ -504,104 +521,105 @@ namespace cmis
                 xEnv );
         }
 
-        try
+        // For transient content, the URL is the one of the parent
+        if ( m_bTransient )
         {
-            // For transient content, the URL is the one of the parent
-            if ( m_bTransient )
-            {
-                rtl::OUString sNewPath;
+            rtl::OUString sNewPath;
 
-                // Try to get the object from the server if there is any
-                libcmis::Folder* pFolder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
-                if ( pFolder != NULL )
+            // Try to get the object from the server if there is any
+            libcmis::Folder* pFolder = NULL;
+            try
+            {
+                pFolder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
+            }
+            catch ( const libcmis::Exception& )
+            {
+            }
+
+            if ( pFolder != NULL )
+            {
+                map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
+                if ( it == m_pObjectProps.end( ) )
                 {
-                    map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
-                    if ( it == m_pObjectProps.end( ) )
+                    ucbhelper::cancelCommandExecution( uno::makeAny
+                        ( uno::RuntimeException( "Missing name property",
+                            static_cast< cppu::OWeakObject * >( this ) ) ),
+                        xEnv );
+                }
+                string newName = it->second->getStrings( ).front( );
+                string newPath = pFolder->getPath( );
+                if ( newPath[ newPath.size( ) - 1 ] != '/' )
+                    newPath += "/";
+                newPath += newName;
+
+                libcmis::ObjectPtr object;
+                try
+                {
+                    object = m_pSession->getObjectByPath( newPath );
+                    sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
+                }
+                catch ( const libcmis::Exception& )
+                {
+                    // Nothing matched the path
+                }
+
+                if ( NULL != object.get( ) )
+                {
+                    // Are the base type matching?
+                    if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
                     {
                         ucbhelper::cancelCommandExecution( uno::makeAny
-                            ( uno::RuntimeException( "Missing name property",
+                            ( uno::RuntimeException( "Can't change a folder into a document and vice-versa.",
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
                             xEnv );
                     }
-                    string newName = it->second->getStrings( ).front( );
-                    string newPath = pFolder->getPath( );
-                    if ( newPath[ newPath.size( ) - 1 ] != '/' )
-                        newPath += "/";
-                    newPath += newName;
 
-                    libcmis::ObjectPtr object;
-                    try
+                    // Update the existing object if it's a document
+                    libcmis::Document* document = dynamic_cast< libcmis::Document* >( object.get( ) );
+                    if ( NULL != document )
                     {
-                        object = m_pSession->getObjectByPath( newPath );
+                        boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
+                        uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
+                        copyData( xInputStream, xOutput );
+                        document->setContentStream( pOut, string( ), bReplaceExisting );
+                    }
+                }
+                else
+                {
+                    // We need to create a brand new object... either folder or document
+                    bool bIsFolder = m_pObjectType->getBaseType( )->getId( ) == "cmis:folder";
+                    setCmisProperty( "cmis:objectTypeId", m_pObjectType->getId( ) );
+
+                    if ( bIsFolder )
+                    {
+                        libcmis::FolderPtr pNew = pFolder->createFolder( m_pObjectProps );
                         sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
-                    }
-                    catch ( const libcmis::Exception& )
-                    {
-                        // Nothing matched the path
-                    }
-
-                    if ( NULL != object.get( ) )
-                    {
-                        // Are the base type matching?
-                        if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
-                        {
-                            ucbhelper::cancelCommandExecution( uno::makeAny
-                                ( uno::RuntimeException( "Can't change a folder into a document and vice-versa.",
-                                    static_cast< cppu::OWeakObject * >( this ) ) ),
-                                xEnv );
-                        }
-
-                        // Update the existing object if it's a document
-                        libcmis::Document* document = dynamic_cast< libcmis::Document* >( object.get( ) );
-                        if ( NULL != document )
-                        {
-                            boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
-                            uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
-                            copyData( xInputStream, xOutput );
-                            document->setContentStream( pOut, string( ), bReplaceExisting );
-                        }
                     }
                     else
                     {
-                        // We need to create a brand new object... either folder or document
-                        bool bIsFolder = m_pObjectType->getBaseType( )->getId( ) == "cmis:folder";
-                        setCmisProperty( "cmis:objectTypeId", m_pObjectType->getId( ) );
-
-                        if ( bIsFolder )
-                        {
-                            libcmis::FolderPtr pNew = pFolder->createFolder( m_pObjectProps );
-                            sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
-                        }
-                        else
-                        {
-                            boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
-                            uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
-                            copyData( xInputStream, xOutput );
-                            libcmis::DocumentPtr pNew = pFolder->createDocument( m_pObjectProps, pOut, string() );
-                            sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
-                        }
-                    }
-
-                    if ( !sNewPath.isEmpty( ) )
-                    {
-                        // Update the current content: it's no longer transient
-                        m_sObjectPath = sNewPath;
-                        URL aUrl( m_sURL );
-                        aUrl.setObjectPath( m_sObjectPath );
-                        m_sURL = aUrl.asString( );
-                        m_pObject.reset( );
-                        m_pObjectType.reset( );
-                        m_pObjectProps.clear( );
-                        m_bTransient = false;
-
-                        inserted();
+                        boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
+                        uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
+                        copyData( xInputStream, xOutput );
+                        libcmis::DocumentPtr pNew = pFolder->createDocument( m_pObjectProps, pOut, string() );
+                        sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
                     }
                 }
+
+                if ( !sNewPath.isEmpty( ) )
+                {
+                    // Update the current content: it's no longer transient
+                    m_sObjectPath = sNewPath;
+                    URL aUrl( m_sURL );
+                    aUrl.setObjectPath( m_sObjectPath );
+                    m_sURL = aUrl.asString( );
+                    m_pObject.reset( );
+                    m_pObjectType.reset( );
+                    m_pObjectProps.clear( );
+                    m_bTransient = false;
+
+                    inserted();
+                }
             }
-        }
-        catch ( const libcmis::Exception& e )
-        {
-            throw uno::Exception( rtl::OUString::createFromAscii( e.what( ) ), *this );
         }
     }
 
@@ -621,13 +639,24 @@ namespace cmis
 
     uno::Sequence< uno::Any > Content::setPropertyValues(
             const uno::Sequence< beans::PropertyValue >& rValues,
-            const uno::Reference< ucb::XCommandEnvironment >& )
+            const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        // Get the already set properties if possible
-        if ( !m_bTransient && getObject( ).get( ) )
+        try
         {
-            m_pObjectProps = getObject()->getProperties( );
-            m_pObjectType = getObject()->getTypeDescription();
+            // Get the already set properties if possible
+            if ( !m_bTransient && getObject( ).get( ) )
+            {
+                m_pObjectProps = getObject()->getProperties( );
+                m_pObjectType = getObject()->getTypeDescription();
+            }
+        }
+        catch ( const libcmis::Exception& e )
+        {
+            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_GENERAL,
+                                uno::Sequence< uno::Any >( 0 ),
+                                xEnv,
+                                rtl::OUString::createFromAscii( e.what() ) );
         }
 
         sal_Int32 nCount = rValues.getLength();
@@ -681,16 +710,27 @@ namespace cmis
             }
         }
 
-        if ( !m_bTransient && bChanged )
+        try
         {
-            getObject()->updateProperties();
+            if ( !m_bTransient && bChanged )
+            {
+                getObject()->updateProperties();
+            }
+        }
+        catch ( const libcmis::Exception& e )
+        {
+            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_GENERAL,
+                                uno::Sequence< uno::Any >( 0 ),
+                                xEnv,
+                                rtl::OUString::createFromAscii( e.what() ) );
         }
 
         return aRet;
     }
 
     sal_Bool Content::feedSink( uno::Reference< uno::XInterface> xSink,
-        const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
+        const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         if ( !xSink.is() )
             return sal_False;
@@ -705,17 +745,28 @@ namespace cmis
         if ( xDataStreamer.is() && !xOut.is() )
             xOut = xDataStreamer->getStream()->getOutputStream();
 
-        libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get() );
-        boost::shared_ptr< istream > aIn = document->getContentStream( );
+        try
+        {
+            libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get() );
+            boost::shared_ptr< istream > aIn = document->getContentStream( );
 
-        uno::Reference< io::XInputStream > xIn = new ucbhelper::StdInputStream( aIn );
-        if( !xIn.is( ) )
-            return sal_False;
+            uno::Reference< io::XInputStream > xIn = new ucbhelper::StdInputStream( aIn );
+            if( !xIn.is( ) )
+                return sal_False;
 
-        if ( xDataSink.is() )
-            xDataSink->setInputStream( xIn );
-        else if ( xOut.is() )
-            copyData( xIn, xOut );
+            if ( xDataSink.is() )
+                xDataSink->setInputStream( xIn );
+            else if ( xOut.is() )
+                copyData( xIn, xOut );
+        }
+        catch ( const libcmis::Exception& e )
+        {
+            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_GENERAL,
+                                uno::Sequence< uno::Any >( 0 ),
+                                xEnv,
+                                rtl::OUString::createFromAscii( e.what() ) );
+        }
 
         return sal_True;
     }
@@ -814,7 +865,7 @@ namespace cmis
         return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
     }
 
-    ::rtl::OUString Content::getParentURL()
+    ::rtl::OUString Content::getParentURL( )
     {
         rtl::OUString sRet;
 
@@ -966,10 +1017,11 @@ namespace cmis
             }
             catch ( const libcmis::Exception& e )
             {
-                ucbhelper::cancelCommandExecution( uno::makeAny
-                    ( uno::RuntimeException( rtl::OUString::createFromAscii( e.what() ),
-                        static_cast< cppu::OWeakObject * >( this ) ) ),
-                    xEnv );
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_GENERAL,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv,
+                                    rtl::OUString::createFromAscii( e.what() ) );
             }
         }
         else
