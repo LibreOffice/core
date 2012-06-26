@@ -87,15 +87,8 @@
 
 #include "svl/svldllapi.h"
 
-#ifndef INCLUDED_STRING_H
 #include <string.h>     // memmove()
-#define INCLUDED_STRING_H
-#endif
-
-#ifndef INCLUDED_LIMITS_H
 #include <limits.h>     // USHRT_MAX
-#define INCLUDED_LIMITS_H
-#endif
 #include <rtl/alloc.h>
 #include <tools/solar.h>
 
