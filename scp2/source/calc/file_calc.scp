@@ -64,7 +64,9 @@ File gid_File_Lib_CbcSolver
     Name = SPECIAL_NAME_VER(CbcSolver,3);
     PACKED_LIB_FILE_BODY;
 End
-#else
+#endif
+
+#ifdef ADD_MAIN_COINMP_LIBRARY
 // On Windows only the CoinMP library is built and used.
 // Version numbering is not used either.
 File gid_File_Lib_CoinMP

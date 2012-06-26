@@ -20,8 +20,11 @@
  *************************************************************/
 
 
-
+#ifdef SYSTEM_COINMP
+#include <coin/CoinMP.h>
+#else
 #include <coinmp/CoinMP.h>
+#endif
 
 #include "solver.hxx"
 #include "solver.hrc"

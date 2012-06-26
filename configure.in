@@ -771,6 +771,18 @@ AC_ARG_WITH(local-solver,
 AC_ARG_ENABLE(javascript,
 [  --disable-javascript    Disables support for JavaScript macros.
 ],,)
+AC_ARG_WITH(system-apr,
+[  --with-system-apr       Use apr library already installed on the system
+],,)
+AC_ARG_WITH(system-apr-util,
+[  --with-system-apr-util  Use apr-util library already installed on the system
+],,)
+AC_ARG_WITH(system-serf,
+[  --with-system-serf      Use serf library already installed on the system
+],,)
+AC_ARG_WITH(system-coinmp,
+[  --with-system-coinmp    Use CoinMP library already installed on the system
+],,)
 AC_ARG_ENABLE(coinmp,
 [  --disable-coinmp        Do not use CoinMP as the Calc solver.
 ],,)
@@ -4442,19 +4454,103 @@ AC_SUBST(ENABLE_JAVASCRIPT)
 
 
 dnl ===================================================================
+dnl Check for system apr
+dnl ===================================================================
+SYSTEM_APR=NO
+APR_CFLAGS=
+APR_LIBS=
+AC_MSG_CHECKING([which libapr to use])
+if test "x$with_system_apr" = "xyes" -o -n "$with_system_libs"; then
+    AC_MSG_RESULT([system])
+    PKG_CHECK_MODULES([APR], [apr-1 >= 1.0])
+    SYSTEM_APR=YES
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_APR=NO
+    BUILD_TYPE="$BUILD_TYPE APR"
+fi
+AC_SUBST(SYSTEM_APR)
+AC_SUBST(APR_CFLAGS)
+AC_SUBST(APR_LIBS)
+
+
+dnl ===================================================================
+dnl Check for system apr-util
+dnl ===================================================================
+SYSTEM_APRUTIL=NO
+APRUTIL_CFLAGS=
+APRUTIL_LIBS=
+AC_MSG_CHECKING([which libapr-util to use])
+if test "x$with_system_apr_util" = "xyes" -o -n "$with_system_libs"; then
+    AC_MSG_RESULT([system])
+    PKG_CHECK_MODULES([APRUTIL], [apr-util-1 >= 1.0])
+    SYSTEM_APRUTIL=YES
+else
+    AC_MSG_RESULT([internal])
+    SYSTEMAPR_UTIL=NO
+    BUILD_TYPE="$BUILD_TYPE APR_UTIL"
+fi
+AC_SUBST(SYSTEM_APRUTIL)
+AC_SUBST(APRUTIL_CFLAGS)
+AC_SUBST(APRUTIL_LIBS)
+
+
+dnl ===================================================================
+dnl Check for system serf
+dnl ===================================================================
+SYSTEM_SERF=NO
+SERF_CFLAGS=
+SERF_LIBS=
+AC_MSG_CHECKING([which libserf to use])
+if test "x$with_system_serf" = "xyes" -o -n "$with_system_libs"; then
+    AC_MSG_RESULT([system])
+    PKG_CHECK_MODULES([SERF], [serf-1 >= 1.1])
+    SYSTEM_SERF=YES
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_SERF=NO
+    BUILD_TYPE="$BUILD_TYPE SERF"
+fi
+AC_SUBST(SYSTEM_SERF)
+AC_SUBST(SERF_CFLAGS)
+AC_SUBST(SERF_LIBS)
+
+
+dnl ===================================================================
 dnl Check for CoinMP
 dnl ===================================================================
 ENABLE_COINMP=
+SYSTEM_COINMP=NO
+COINMP_CFLAGS=
+COINMP_LIBS=
 AC_MSG_CHECKING([whether to enable support for CoinMP])
 if test "x$enable_coinmp" = "xyes"; then
-   BUILD_TYPE="$BUILD_TYPE COINMP"
-   AC_MSG_RESULT([yes])
-   ENABLE_COINMP=YES
+    BUILD_TYPE="$BUILD_TYPE COINMP"
+    AC_MSG_RESULT([yes])
+    ENABLE_COINMP=YES
+
+    dnl Check wether to use system or internal CoinMP
+    AC_MSG_CHECKING([which coinmp to use])
+    if test "x$with_system_coinmp" = "xyes" -o -n "$with_system_libs"; then
+        AC_MSG_RESULT([system])
+	PKG_CHECK_MODULES([COINMP], [coinmp])
+        SYSTEM_COINMP=YES
+        # some systems need this. Like Ubuntu....
+        AC_CHECK_LIB(m, floor)
+        AC_CHECK_LIB(dl, dlopen)
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_COINMP=NO
+        BUILD_TYPE="$BUILD_TYPE COINMP"
+    fi
 else
-   AC_MSG_RESULT([no])
-   ENABLE_COINMP=NO
+    AC_MSG_RESULT([no])
+    ENABLE_COINMP=NO
 fi
 AC_SUBST(ENABLE_COINMP)
+AC_SUBST(SYSTEM_COINMP)
+AC_SUBST(COINMP_CFLAGS)
+AC_SUBST(COINMP_LIBS)
 
 
 dnl ===================================================================

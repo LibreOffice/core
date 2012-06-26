@@ -58,13 +58,21 @@ SHL1STDLIBS=    $(COMPHELPERLIB)    \
                 $(CPPUHELPERLIB)    \
                 $(CPPULIB)          \
                 $(SALLIB)           \
-                $(TOOLSLIB)         \
-                $(COINMPLIBS)
+                $(TOOLSLIB)
 
 SHL1DEPN=       makefile.mk
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1VERSIONMAP= $(SOLARENV)/src/component.map
 DEF1NAME=       $(SHL1TARGET)
+
+.IF "$(SYSTEM_COINMP)" == "YES"
+CFLAGS+= $(COINMP_CFLAGS) -DSYSTEM_COINMP
+# Use the library flags from configure
+SHL1STDLIBS+=$(COINMP_LIBS)
+.ELSE
+# Use the library flags from solenv
+SHL1STDLIBS+=$(COINMPLIBS)
+.ENDIF
 
 # --- Resources --------------------------------
 

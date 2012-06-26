@@ -2002,8 +2002,10 @@ End
 #endif
 #endif
 
+// AF: is this still needed with explicit support for system apr,apr-util,serf ?
 #if !defined(OS2) // using system libs
 
+#ifdef APR_MAJOR 
 File gid_File_Lib_Apr
      #ifdef WNT
         Name = SPECIAL_NAME(libapr-1);
@@ -2020,7 +2022,9 @@ File gid_File_Lib_Apr
      #endif
      PACKED_LIB_FILE_BODY;
 End
+#endif
 
+#ifdef APR_UTIL_MAJOR
 File gid_File_Lib_AprUtil
     #ifdef WNT
         Name = SPECIAL_NAME(apr-util);
@@ -2037,7 +2041,9 @@ File gid_File_Lib_AprUtil
     #endif
     PACKED_LIB_FILE_BODY;
 End
+#endif
 
+#ifdef SERF_MAJOR
 File gid_File_Lib_Serf
     #ifdef WNT
         Name = SPECIAL_NAME(serf);
@@ -2054,5 +2060,6 @@ File gid_File_Lib_Serf
     #endif
     PACKED_LIB_FILE_BODY;
 End
+#endif
 
 #endif // !defined(OS2)

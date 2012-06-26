@@ -241,19 +241,27 @@ SCPDEFS+=-DDISABLE_ATL
 .ENDIF
 
 # Detect version numbers for apr, apr-util, serf.
+.IF "$(SYSTEM_APR)"!="YES"
 .INCLUDE : apr_version.mk
-.INCLUDE : aprutil_version.mk
-.INCLUDE : serf_version.mk
 SCPDEFS+=\
     -DAPR_MAJOR=$(APR_MAJOR)		\
     -DAPR_MINOR=$(APR_MINOR)		\
-    -DAPR_MICRO=$(APR_MICRO)		\
+    -DAPR_MICRO=$(APR_MICRO)
+.ENDIF
+.IF "$(SYSTEM_APR_UTIL)"!="YES"
+.INCLUDE : aprutil_version.mk
+SCPDEFS+=\
     -DAPR_UTIL_MAJOR=$(APR_UTIL_MAJOR)	\
     -DAPR_UTIL_MINOR=$(APR_UTIL_MINOR)	\
-    -DAPR_UTIL_MICRO=$(APR_UTIL_MICRO)	\
+    -DAPR_UTIL_MICRO=$(APR_UTIL_MICRO)
+.ENDIF
+.IF "$(SYSTEM_SERF)"!="YES"
+.INCLUDE : serf_version.mk
+SCPDEFS+=\
     -DSERF_MAJOR=$(SERF_MAJOR)		\
     -DSERF_MINOR=$(SERF_MINOR)		\
     -DSERF_MICRO=$(SERF_MICRO)
+.ENDIF
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
 SCPDEFS+=-DSYSTEM_PYTHON

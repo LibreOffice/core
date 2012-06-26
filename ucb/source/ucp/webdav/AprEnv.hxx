@@ -23,11 +23,7 @@
 #ifndef INCLUDED_APRENV_HXX
 #define INCLUDED_APRENV_HXX
 
-#ifdef OS2 // use system apr headers
 #include <apr_pools.h>
-#else
-#include <apr/apr_pools.h>
-#endif
 
 namespace apr_environment
 {

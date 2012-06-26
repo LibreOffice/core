@@ -96,6 +96,7 @@ End
 // The major version number is handled in a non-standard way (part of the name).
 // Therefore the hard-coded .0 suffix.
 
+#ifdef APR_MAJOR 
 Shortcut gid_Shortcut_Lib_Apr
     FileID = gid_File_Lib_Apr;
     Dir = SCP2_OOO_BIN_DIR;
@@ -106,7 +107,9 @@ Shortcut gid_Shortcut_Lib_Apr
     #endif
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
+#endif
 
+#ifdef APR_UTIL_MAJOR
 Shortcut gid_Shortcut_Lib_AprUtil
     FileID = gid_File_Lib_AprUtil;
     Dir = SCP2_OOO_BIN_DIR;
@@ -117,7 +120,9 @@ Shortcut gid_Shortcut_Lib_AprUtil
     #endif
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
+#endif
 
+#ifdef SERF_MAJOR
 Shortcut gid_Shortcut_Lib_Serf
     FileID = gid_File_Lib_Serf;
     Dir = SCP2_OOO_BIN_DIR;
@@ -128,6 +133,7 @@ Shortcut gid_Shortcut_Lib_Serf
     #endif
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
+#endif
 
 #endif
 

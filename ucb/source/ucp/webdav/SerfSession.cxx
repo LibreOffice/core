@@ -162,7 +162,7 @@ void SerfSession::Init()
         if ( m_aProxyName.getLength() )
         {
             apr_sockaddr_t *proxy_address = NULL;
-            const apr_status_t status = apr_sockaddr_info_get( &proxy_address,
+            status = apr_sockaddr_info_get( &proxy_address,
                                                                rtl::OUStringToOString( m_aProxyName, RTL_TEXTENCODING_UTF8 ),
                                                                APR_UNSPEC,
                                                                static_cast<apr_port_t>(m_nProxyPort),
@@ -460,7 +460,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     // done outside the isDomainMatch() block because the result is
     // used by the interaction handler.
     std::vector< uno::Reference< security::XCertificate > > aChain;
-    for (int nIndex=1; nIndex<nCertificateChainLength; ++nIndex)
+    for (nIndex=1; nIndex<nCertificateChainLength; ++nIndex)
     {
         const char* sBase64EncodedCertificate (
             serf_ssl_cert_export(
