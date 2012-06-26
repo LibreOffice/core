@@ -345,6 +345,8 @@ void RtfAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
     {
         const SwTxtNode* pTxtNode = static_cast< SwTxtNode* >( &aNextIndex.GetNode() );
         m_rExport.OutputSectionBreaks( pTxtNode->GetpSwAttrSet(), *pTxtNode );
+        // Save the current page description for now, so later we will be able to access the previous one.
+        m_pPrevPageDesc = pTxtNode->FindPageDesc(sal_False);
     }
     else if ( aNextIndex.GetNode().IsTableNode() )
     {
@@ -378,6 +380,7 @@ void RtfAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool bSing
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
+    m_bInRun = true;
     m_bSingleEmptyRun = bSingleEmptyRun;
     if (!m_bSingleEmptyRun)
         m_aRun.append('{');
@@ -393,8 +396,9 @@ void RtfAttributeOutput::EndRun()
     OSL_TRACE("%s", OSL_THIS_FUNC);
     m_aRun.append(m_rExport.sNewLine);
     m_aRun.append(m_aRunText.makeStringAndClear());
-    if (!m_bSingleEmptyRun)
+    if (!m_bSingleEmptyRun && m_bInRun)
         m_aRun.append('}');
+    m_bInRun = false;
 }
 
 void RtfAttributeOutput::StartRunProperties()
@@ -3024,7 +3028,9 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_bHadFieldResult( false ),
     m_bTableRowEnded( false ),
     m_aCells(),
-    m_bSingleEmptyRun(false)
+    m_bSingleEmptyRun(false),
+    m_bInRun(false),
+    m_pPrevPageDesc(0)
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 }

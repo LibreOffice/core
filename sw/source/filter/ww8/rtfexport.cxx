@@ -698,7 +698,9 @@ void RtfExport::PrepareNewPageDesc( const SfxItemSet* pSet,
     else if ( pNewPgDesc )
         m_pSections->AppendSection( pNewPgDesc, rNd, pFmt, nLnNm );
 
-    AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
+    // Don't insert a page break, when we're changing page style just because the next page has to be a different one.
+    if (!m_pAttrOutput->m_pPrevPageDesc || m_pAttrOutput->m_pPrevPageDesc->GetFollow() != pNewPgDesc)
+        AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
 }
 
 bool RtfExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )

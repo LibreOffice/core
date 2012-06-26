@@ -542,6 +542,8 @@ private:
 
     /// If we're in a paragraph that has a single empty run only.
     bool m_bSingleEmptyRun;
+
+    bool m_bInRun;
 public:
     RtfAttributeOutput( RtfExport &rExport );
 
@@ -551,6 +553,9 @@ public:
     virtual MSWordExportBase& GetExport();
 
     rtl::OStringBuffer m_aTabStop;
+
+    /// Access to the page style of the previous paragraph.
+    const SwPageDesc* m_pPrevPageDesc;
 
     // These are used by wwFont::WriteRtf()
     /// Start the font.
