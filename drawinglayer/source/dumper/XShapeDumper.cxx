@@ -1618,6 +1618,11 @@ namespace {
         }
     }
 
+    void XShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference< beans::XPropertySet > xPropSet, EnhancedShapeDumper enhancedDumper)
+    {
+
+    }
+
     void XShapeDumper::dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
@@ -1676,6 +1681,14 @@ namespace {
 
         if(xServiceInfo->supportsService("com.sun.star.drawing.CustomShape"))
             dumpCustomShapeService(xPropSet, xmlWriter);
+
+        // EnhancedShapeDumper used
+
+        if(xServiceInfo->supportsService("com.sun.star.drawing.EnhancedCustomShapeExtrusion"))
+        {
+            EnhancedShapeDumper enhancedDumper(xmlWriter);
+            dumpEnhancedCustomShapeExtrusionService(xPropSet, enhancedDumper);
+        }
 
         #if DEBUG_DUMPER
             sal_Int32 nServices = aServiceNames.getLength();

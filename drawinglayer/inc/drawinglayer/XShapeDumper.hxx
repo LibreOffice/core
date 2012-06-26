@@ -28,6 +28,8 @@
 
 #include <libxml/xmlwriter.h>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/EnhancedShapeDumper.hxx>
+
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -57,8 +59,8 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#ifndef ChartViewDumper_hxx
-#define ChartViewDumper_hxx
+#ifndef XShapeDumper_hxx
+#define XShapeDumper_hxx
 
 class DRAWINGLAYER_DLLPUBLIC XShapeDumper
 {
@@ -193,6 +195,7 @@ private:
     void dumpShapeService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
     void dumpPolyPolygonBezierDescriptorService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
     void dumpCustomShapeService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+    void dumpEnhancedCustomShapeExtrusionService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, EnhancedShapeDumper enhancedDumper);
 
 };
 #endif
