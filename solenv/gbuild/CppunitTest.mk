@@ -307,6 +307,10 @@ $(foreach extra,$(2),$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(extr
 
 endef
 
+define gb_CppunitTest_use_executable
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Executable_get_target,$(2))
+endef
+
 define gb_CppunitTest__forward_to_Linktarget
 gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest__get_linktargetname,$$(1)),$$(2),$$(3),CppunitTest_$$(1))
 
