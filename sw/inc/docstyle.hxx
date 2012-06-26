@@ -208,8 +208,7 @@ public:
     void    SetOrganizerMode( sal_Bool bMode )  { bOrganizer = bMode; }
     sal_Bool    IsOrganizerMode() const         { return bOrganizer; }
 
-    virtual SfxStyleSheetIterator* CreateIterator( SfxStyleFamily,
-                                                    sal_uInt16 nMask );
+    virtual SfxStyleSheetIteratorPtr CreateIterator( SfxStyleFamily, sal_uInt16 nMask );
 
     SwDoc& GetDoc() const { return rDoc; }
 

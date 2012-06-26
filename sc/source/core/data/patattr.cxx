@@ -1161,9 +1161,8 @@ void ScPatternAttr::UpdateStyleSheet()
         //! es wird vorausgesetzt, dass "Standard" immer der erste Eintrag ist!
         if (!pStyle)
         {
-            SfxStyleSheetIterator* pIter = pDoc->GetStyleSheetPool()->CreateIterator(
-                                                    SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
-            pStyle = (ScStyleSheet*)pIter->First();
+            SfxStyleSheetIteratorPtr pIter = pDoc->GetStyleSheetPool()->CreateIterator( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
+            pStyle = dynamic_cast< ScStyleSheet* >(pIter->First());
         }
 
         if (pStyle)

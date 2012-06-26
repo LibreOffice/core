@@ -600,8 +600,6 @@ sal_Bool SfxObjectShell::Remove
     return bRet;
 }
 
-//--------------------------------------------------------------------
-
 void SfxObjectShell::LoadStyles
 (
     SfxObjectShell &rSource         /*  the document template from which

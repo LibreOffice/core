@@ -37,10 +37,10 @@
 #include <svl/stylesheetuser.hxx>
 
 #include <svl/style.hrc>
+#include <boost/shared_ptr.hpp>
 
 class SfxItemSet;
 class SfxItemPool;
-
 class SfxStyleSheetBasePool;
 class SvStream;
 
@@ -192,6 +192,7 @@ private:
 friend class SfxStyleSheetBasePool;
 };
 
+typedef ::boost::shared_ptr< SfxStyleSheetIterator > SfxStyleSheetIteratorPtr;
 //=========================================================================
 
 class SfxStyleSheetBasePool_Impl;
@@ -228,7 +229,7 @@ public:
     SfxItemPool&                GetPool();
     const SfxItemPool&          GetPool() const;
 
-    virtual SfxStyleSheetIterator* CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
+    virtual SfxStyleSheetIteratorPtr CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
     virtual sal_uInt16              Count();
     virtual SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
 

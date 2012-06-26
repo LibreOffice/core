@@ -2179,10 +2179,9 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
     }
 }
 
-SfxStyleSheetIterator*  SwDocStyleSheetPool::CreateIterator(
-                        SfxStyleFamily eFam, sal_uInt16 _nMask )
+SfxStyleSheetIteratorPtr SwDocStyleSheetPool::CreateIterator( SfxStyleFamily eFam, sal_uInt16 _nMask )
 {
-    return new SwStyleSheetIterator( this, eFam, _nMask );
+    return SfxStyleSheetIteratorPtr(new SwStyleSheetIterator( this, eFam, _nMask ));
 }
 
 void SwDocStyleSheetPool::dispose()
