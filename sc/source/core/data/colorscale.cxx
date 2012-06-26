@@ -842,6 +842,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
     pInfo->mbGradient = mpFormatData->mbGradient;
     pInfo->mbShowValue = !mpFormatData->mbOnlyBar;
+    pInfo->maAxisColor = mpFormatData->maAxisColor;
 
     return pInfo;
 }
