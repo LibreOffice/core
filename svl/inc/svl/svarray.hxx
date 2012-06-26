@@ -307,13 +307,10 @@ _SVVARARR_IMPL_GET_OP_INLINE(nm, AE )\
 #define SV_IMPL_VARARR( nm, AE ) \
 SV_IMPL_VARARR_GEN( nm, AE, AE & )
 
-#define _SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, AERef, vis )\
-_SV_DECL_VARARR_GEN( nm, AE, IS, AERef, vis)\
-sal_uInt16 GetPos( const AERef aE ) const;\
-};
-
 #define _SV_DECL_PTRARR_DEF( nm, AE, IS, vis )\
-_SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, AE &, vis )
+_SV_DECL_VARARR_GEN( nm, AE, IS, AE &, vis)\
+sal_uInt16 GetPos( const AE & aE ) const;\
+};
 
 #define SV_DECL_PTRARR_GEN(nm, AE, IS, Base, AERef, VPRef, vis )\
 class vis nm: public Base \
