@@ -1043,8 +1043,44 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Ind_start:
         case NS_ooxml::LN_CT_Ind_left:
             if (m_pImpl->GetTopContext())
+            {
+                // Word inherits FirstLineIndent property of the numbering, even if ParaLeftMargin is set, Writer does not.
+                // So copy it explicitly, if necessary.
+                PropertyMapPtr pContext = m_pImpl->GetTopContext();
+                sal_Int32 nFirstLineIndent = 0;
+
+                // See if we have a FirstLineIndent
+                PropertyMap::iterator it = pContext->find(PropertyDefinition( PROP_NUMBERING_RULES, true ) );
+                uno::Reference<container::XIndexAccess> xNumberingRules;
+                if (it != pContext->end())
+                    xNumberingRules.set(it->second, uno::UNO_QUERY);
+                it = pContext->find(PropertyDefinition( PROP_NUMBERING_LEVEL, true ) );
+                sal_Int32 nNumberingLevel = -1;
+                if (it != pContext->end())
+                    it->second >>= nNumberingLevel;
+                if (xNumberingRules.is() && nNumberingLevel != -1)
+                {
+                    uno::Sequence<beans::PropertyValue> aProps;
+                    xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
+                    for (int i = 0; i < aProps.getLength(); ++i)
+                    {
+                        const beans::PropertyValue& rProp = aProps[i];
+
+                        if (rProp.Name == "FirstLineIndent")
+                        {
+                            rProp.Value >>= nFirstLineIndent;
+                            break;
+                        }
+                    }
+                }
+
+                // Then copy it over.
+                if (nFirstLineIndent != 0)
+                    m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT, true, uno::makeAny(nFirstLineIndent));
+
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_LEFT_MARGIN, true, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
+            }
             break;
         case NS_ooxml::LN_CT_Ind_end:
         case NS_ooxml::LN_CT_Ind_right:
