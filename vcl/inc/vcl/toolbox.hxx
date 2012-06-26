@@ -130,8 +130,6 @@ typedef sal_uInt16 ToolBoxItemBits;
 // - ToolBox-Types -
 // -----------------
 
-#define TOOLBOX_STYLE_OUTBUTTON     ((sal_uInt16)0x0001)
-#define TOOLBOX_STYLE_HANDPOINTER   ((sal_uInt16)0x0002)
 #define TOOLBOX_STYLE_FLAT          ((sal_uInt16)0x0004)
 
 #define TOOLBOX_APPEND              ((sal_uInt16)0xFFFF)

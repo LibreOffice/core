@@ -72,11 +72,6 @@ DBG_NAMEEX( Window )
 #define SMALLBUTTON_OFF_PRESSED_X   5
 #define SMALLBUTTON_OFF_PRESSED_Y   5
 
-#define OUTBUTTON_SIZE              6
-#define OUTBUTTON_BORDER            4
-#define OUTBUTTON_OFF_NORMAL_X      1
-#define OUTBUTTON_OFF_NORMAL_Y      1
-
 // -----------------------------------------------------------------------
 
 #define TB_TEXTOFFSET           2
@@ -1444,51 +1439,6 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawOutButton( OutputDevice* pOutDev, const Rectangle& rRect,
-                               sal_uInt16 nStyle )
-{
-    const StyleSettings&    rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
-    Color                   aShadowColor = rStyleSettings.GetShadowColor();
-    Point                   aPos( rRect.TopLeft() );
-    Size                    aSize( rRect.GetSize() );
-    long                    nOffset = 0;
-
-    if ( pOutDev->GetBackground().GetColor() == aShadowColor )
-        aShadowColor = rStyleSettings.GetDarkShadowColor();
-
-    if ( nStyle & BUTTON_DRAW_PRESSED )
-    {
-        aPos.X()++;
-        aPos.Y()++;
-        nOffset++;
-    }
-
-    // delete background
-    pOutDev->Erase( rRect );
-
-    // draw button
-    pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
-    pOutDev->DrawLine( aPos,
-                       Point( aPos.X()+aSize.Width()-OUTBUTTON_BORDER, aPos.Y() ) );
-    pOutDev->DrawLine( aPos,
-                       Point( aPos.X(), aPos.Y()+aSize.Height()-OUTBUTTON_BORDER ) );
-    pOutDev->SetLineColor( aShadowColor );
-    pOutDev->DrawLine( Point( aPos.X()+aSize.Width()-OUTBUTTON_BORDER, aPos.Y() ),
-                       Point( aPos.X()+aSize.Width()-OUTBUTTON_BORDER, aPos.Y()+aSize.Height()-OUTBUTTON_BORDER ) );
-    pOutDev->DrawLine( Point( aPos.X(), aPos.Y()+aSize.Height()-OUTBUTTON_BORDER ),
-                       Point( aPos.X()+aSize.Width()-OUTBUTTON_BORDER, aPos.Y()+aSize.Height()-OUTBUTTON_BORDER ) );
-    for ( long i = 0; i < OUTBUTTON_BORDER-1-nOffset; i++ )
-    {
-        pOutDev->DrawLine( Point( aPos.X()+aSize.Width()-(OUTBUTTON_BORDER-i-1), aPos.Y()+OUTBUTTON_BORDER ),
-                           Point( aPos.X()+aSize.Width()-(OUTBUTTON_BORDER-i-1), aPos.Y()+aSize.Height()-1 ) );
-        pOutDev->DrawLine( Point( aPos.X()+OUTBUTTON_BORDER, aPos.Y()+aSize.Height()-(OUTBUTTON_BORDER-i-1) ),
-                           Point( aPos.X()+aSize.Width()-1, aPos.Y()+aSize.Height()-(OUTBUTTON_BORDER-i-1) )  );
-    }
-}
-
-
-// -----------------------------------------------------------------------
-
 void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 {
 
@@ -1775,18 +1725,10 @@ ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
 }
 // -----------------------------------------------------------------------
 
-static void ImplAddButtonBorder( long &rWidth, long& rHeight, sal_uInt16 aOutStyle, sal_Bool bNativeButtons )
+static void ImplAddButtonBorder( long &rWidth, long& rHeight, sal_Bool bNativeButtons )
 {
-    if ( aOutStyle & TOOLBOX_STYLE_OUTBUTTON )
-    {
-        rWidth += OUTBUTTON_SIZE;
-        rHeight += OUTBUTTON_SIZE;
-    }
-    else
-    {
-        rWidth += SMALLBUTTON_HSIZE;
-        rHeight += SMALLBUTTON_VSIZE;
-    }
+    rWidth += SMALLBUTTON_HSIZE;
+    rHeight += SMALLBUTTON_VSIZE;
 
     if( bNativeButtons )
     {
@@ -2001,7 +1943,7 @@ sal_Bool ToolBox::ImplCalcItem()
             if ( it->meType == TOOLBOXITEM_BUTTON || it->meType == TOOLBOXITEM_SPACE )
             {
                 // add borders
-                ImplAddButtonBorder( it->maItemSize.Width(), it->maItemSize.Height(), mnOutStyle, mpData->mbNativeButtons );
+                ImplAddButtonBorder( it->maItemSize.Width(), it->maItemSize.Height(), mpData->mbNativeButtons );
 
                 if( it->meType == TOOLBOXITEM_BUTTON )
                 {
@@ -2026,7 +1968,7 @@ sal_Bool ToolBox::ImplCalcItem()
         nMaxWidth  = nDefWidth;
         nMaxHeight = nDefHeight;
 
-        ImplAddButtonBorder( nMaxWidth, nMaxHeight, mnOutStyle, mpData->mbNativeButtons );
+        ImplAddButtonBorder( nMaxWidth, nMaxHeight, mpData->mbNativeButtons );
     }
 
     if( !ImplIsFloatingMode() && GetToolboxButtonSize() != TOOLBOX_BUTTONSIZE_DONTCARE )
@@ -2038,7 +1980,7 @@ sal_Bool ToolBox::ImplCalcItem()
 
         long nFixedWidth = nDefWidth+nDropDownArrowWidth;
         long nFixedHeight = nDefHeight;
-        ImplAddButtonBorder( nFixedWidth, nFixedHeight, mnOutStyle, mpData->mbNativeButtons );
+        ImplAddButtonBorder( nFixedWidth, nFixedHeight, mpData->mbNativeButtons );
 
         if( mbHorz )
             nMaxHeight = nFixedHeight;
@@ -3220,17 +3162,6 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
         nStyle |= BUTTON_DRAW_PRESSED;
     }
 
-    if ( mnOutStyle & TOOLBOX_STYLE_OUTBUTTON )
-    {
-        nOffX = OUTBUTTON_OFF_NORMAL_X;
-        nOffY = OUTBUTTON_OFF_NORMAL_Y;
-        if ( nHighlight != 0 )
-        {
-            nOffX++;
-            nOffY++;
-        }
-    }
-
     if( ! bLayout )
     {
         if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
@@ -3242,13 +3173,8 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
         }
         else
         {
-            if ( mnOutStyle & TOOLBOX_STYLE_OUTBUTTON )
-                ImplDrawOutButton( this, aButtonRect, nStyle );
-            else
-            {
-                DecorationView aDecoView( this );
-                aDecoView.DrawButton( aButtonRect, nStyle );
-            }
+            DecorationView aDecoView( this );
+            aDecoView.DrawButton( aButtonRect, nStyle );
         }
     }
 
@@ -3850,8 +3776,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if ( bDrawHotSpot && ( ((eStyle == POINTER_ARROW) && (mnOutStyle & TOOLBOX_STYLE_HANDPOINTER)) ||
-         (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
+    if ( bDrawHotSpot && ( (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
     {
         sal_Bool bClearHigh = sal_True;
         if ( !rMEvt.IsLeaveWindow() && (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
@@ -3887,8 +3812,6 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                 ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
                             }
                         }
-                        if ( mnOutStyle & TOOLBOX_STYLE_HANDPOINTER )
-                            eStyle = POINTER_REFHAND;
                     }
                     break;
                 }
