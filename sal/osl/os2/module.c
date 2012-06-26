@@ -103,7 +103,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
             }
             _makepath( buffer, drive, dir, fname, ext);
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL>10
             debug_printf("osl_loadModule module %s", buffer);
 #endif
             //rc = _DosLoadModule( szErrorMessage, sizeof( szErrorMessage), (PCSZ)buffer, &hModule);
@@ -124,7 +124,8 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 #if OSL_DEBUG_LEVEL>0
                     fprintf( stderr, szError);
 #endif
-                    //OSL_TRACE(szError);
+                    debug_printf("osl_loadModule error %s", szError);
+
 #ifndef OSL_DEBUG_LEVEL
                     WinMessageBox(HWND_DESKTOP,HWND_DESKTOP,
                         szError, "Critical error: DosLoadModule failed",
