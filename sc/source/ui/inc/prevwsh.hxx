@@ -50,7 +50,6 @@ class CommandEvent;
 
 class ScPreviewShell: public SfxViewShell
 {
-friend class ScPreview; // allow access to AdjustPosSizePixel
     ScDocShell*     pDocShell;
 
     SystemWindow*   mpFrameWindow;
@@ -66,7 +65,6 @@ friend class ScPreview; // allow access to AdjustPosSizePixel
 
     SfxBroadcaster* pAccessibilityBroadcaster;
     bool            GetPageSize( Size& aPageSize );
-    void            UpdateNeededScrollBars();
 private:
     void            Construct( Window* pParent );
     DECL_LINK(ScrollHandler, ScrollBar* );
@@ -106,6 +104,7 @@ public:
     void            InitStartTable(SCTAB nTab);
 
     void            UpdateScrollBars();
+    void            UpdateNeededScrollBars(bool bFromZoom = false);
     sal_Bool            ScrollCommand( const CommandEvent& rCEvt );
 
     void            Execute( SfxRequest& rReq );
