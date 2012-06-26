@@ -297,16 +297,9 @@ bool ScPreviewShell::GetPageSize( Size& aPageSize )
     return true;
 }
 
-void ScPreviewShell::UpdateNeededScrollBars()
+void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
 {
-    bool bVert = pVerScroll ? pVerScroll->IsVisible() : false;
-    bool bHori = pHorScroll ? pHorScroll->IsVisible() : false;
-
     Size aPageSize;
-    if ( !GetPageSize( aPageSize ) )
-        return;
-
-    Size aWindowSize = pPreview->GetOutputSize();
     OutputDevice* pDevice = Application::GetDefaultDevice();
 
     long nBarW = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -315,49 +308,74 @@ void ScPreviewShell::UpdateNeededScrollBars()
     long aHeightOffSet = pDevice ? pDevice->PixelToLogic( Size( nBarW, nBarH ), pPreview->GetMapMode() ).Height() : 0;
     long aWidthOffSet = aHeightOffSet;
 
-    if( pHorScroll )
-    {
-        long nMaxPos = aPageSize.Width() - aWindowSize.Width() + aWidthOffSet;
-        if ( nMaxPos<0 )
-            bHori = false;
-        else
-            bHori = true;
-        pHorScroll->Show( bHori );
-    }
 
-    if( pVerScroll )
-    {
-        nMaxVertPos = aPageSize.Height() - aWindowSize.Height() + aHeightOffSet;
+    if (!GetPageSize( aPageSize ))
+        return;
 
-        if ( nMaxVertPos < 0 )
-            bVert = false;
-        else
-            bVert = true;
-        pVerScroll->Show( bVert );
-    }
-
-    Size aOutSize = pPreview->GetSizePixel();
-    Size aNewSize = aOutSize;
+    //  for centering, page size without the shadow is used
+    bool bVert = pVerScroll ? pVerScroll->IsVisible() : false;
+    bool bHori = pHorScroll ? pHorScroll->IsVisible() : false;
+    Size aWindowSize = pPreview->GetOutputSize();
     Point aPos = pPreview->GetPosPixel();
+    Size aWindowPixelSize = pPreview->GetOutputSizePixel();
 
+    // if we are called from Zoom then we need to compensate for whatever
+    // scrollbars were displayed before the zoom was called
+    if ( bFromZoom )
+    {
+        if ( bVert )
+        {
+            aWindowPixelSize.Width() += nBarH;
+            aWindowSize.Width() += aHeightOffSet;
+        }
+        if ( bHori )
+        {
+            aWindowPixelSize.Height() += nBarW;
+            aWindowSize.Height() += aWidthOffSet;
+        }
+    }
+    // recalculate any needed scrollbars
+    bHori = false;
+    bVert = false;
+
+    long nMaxWidthPos = aPageSize.Width() - aWindowSize.Width();
+    if ( nMaxWidthPos<0 )
+        bHori = false;
+    else
+        bHori = true;
+
+    long nMaxHeightPos = aPageSize.Height() - aWindowSize.Height();
+
+    if ( nMaxHeightPos < 0 )
+        bVert = false;
+    else
+        bVert = true;
+
+    // see if having a scroll bar requires the other
+    if ( bVert != bHori && ( bVert || bHori ) )
+    {
+        if ( bVert && ( (nMaxWidthPos + aWidthOffSet  ) > 0 ) )
+            bHori = true;
+        else if ( (nMaxHeightPos + aHeightOffSet ) > 0 )
+            bVert = true;
+    }
+    pHorScroll->Show( bHori );
+    pVerScroll->Show( bVert );
+
+    // make room for needed scrollbars ( and reduce the size
+    // of the preview appropriately )
     if ( bHori )
-        aNewSize.Height() -= nBarH;
+        aWindowPixelSize.Height() -= nBarW;
     if ( bVert )
-        aNewSize.Width() -= nBarW;
+        aWindowPixelSize.Width() -= nBarH;
 
-    pPreview->SetPosSizePixel( aPos, aNewSize );
-
-    pHorScroll->SetPosSizePixel( Point( aPos.X(), aPos.Y() + aNewSize.Height() ),
-                                 Size( aNewSize.Width(), nBarH ) );
-    pVerScroll->SetPosSizePixel( Point( aPos.X() + aNewSize.Width(), aPos.Y() ),
-                                 Size( nBarW, aNewSize.Height() ) );
-    pCorner->SetPosSizePixel( Point( aPos.X() + aNewSize.Width(), aPos.Y() + aNewSize.Height() ),
+    pPreview->SetSizePixel( aWindowPixelSize );
+    pHorScroll->SetPosSizePixel( Point( aPos.X(), aPos.Y() + aWindowPixelSize.Height() ),
+                                 Size( aWindowPixelSize.Width(), nBarH ) );
+    pVerScroll->SetPosSizePixel( Point( aPos.X() + aWindowPixelSize.Width(), aPos.Y() ),
+                                 Size( nBarW, aWindowPixelSize.Height() ) );
+    pCorner->SetPosSizePixel( Point( aPos.X() + aWindowPixelSize.Width(), aPos.Y() + aWindowPixelSize.Height() ),
                               Size( nBarW, nBarH ) );
-
-    if ( SVX_ZOOM_WHOLEPAGE == eZoom )
-        pPreview->SetZoom( pPreview->GetOptimalZoom( sal_False ) );
-    else if ( SVX_ZOOM_PAGEWIDTH == eZoom )
-        pPreview->SetZoom( pPreview->GetOptimalZoom( sal_True ) );
     UpdateScrollBars();
 }
 
