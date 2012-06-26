@@ -31,17 +31,6 @@
 #endif
 
 /*
- * signature status
- */
-/*
-#define STATUS_INIT         0
-#define STATUS_CREATION_SUCCEED     1
-#define STATUS_CREATION_FAIL        2
-#define STATUS_VERIFY_SUCCEED       3
-#define STATUS_VERIFY_FAIL      4
-*/
-
-/*
  * type of reference
  */
 #define TYPE_SAMEDOCUMENT_REFERENCE 1

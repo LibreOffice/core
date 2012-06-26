@@ -315,23 +315,6 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
     else if( pParent == DIALOG_NO_PARENT )
         pParent = NULL;
 
-/*
-    // Now, all Dialogs are per default system windows !!!
-    if ( pParent && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE) )
-    {
-        if ( !pParent->mpWindowImpl->mpFrameWindow->IsVisible() )
-            pParent = NULL;
-        else
-        {
-            if ( pParent->mpWindowImpl->mpFrameWindow->IsDialog() )
-            {
-                Size aOutSize = pParent->mpWindowImpl->mpFrameWindow->GetOutputSizePixel();
-                if ( (aOutSize.Width() < 210) ||(aOutSize.Height() < 160) )
-                    nStyle |= WB_SYSTEMWINDOW;
-            }
-        }
-    }
-*/
 
     if ( !pParent || (nStyle & WB_SYSTEMWINDOW) ||
          (pParent->mpWindowImpl->mpFrameData->mbNeedSysWindow && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE)) ||

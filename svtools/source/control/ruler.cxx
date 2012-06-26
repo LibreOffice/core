@@ -1845,12 +1845,6 @@ void Ruler::ImplDrag( const Point& rPos )
             Drag();
 
             // Und neu ausgeben (zeitverzoegert)
-/*
-            mnUpdateFlags |= RULER_UPDATE_DRAW;
-            if ( mnUpdateEvtId )
-                Application::RemoveUserEvent( mnUpdateEvtId );
-            mnUpdateEvtId = Application::PostUserEvent( LINK( this, Ruler, ImplUpdateHdl ), NULL );
-*/
             ImplDraw();
 
             // Daten wieder wie vor dem Cancel herstellen

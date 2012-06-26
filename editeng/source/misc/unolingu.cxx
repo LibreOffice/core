@@ -302,12 +302,6 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                 // merge services list (previously configured to be listed first).
                 aCfgSvcs = lcl_MergeSeq( aCfgSvcs, aNewSvcs );
 
-/*
-                // there is at most one Hyphenator per language allowed
-                // to be configured, thus we only use the first one found.
-                if (k == 2 && aCfgSvcs.getLength() > 1)
-                    aCfgSvcs.realloc(1);
-*/
                 aCurSvcs[k][ aCfgLocaleStr ] = aCfgSvcs;
             }
 

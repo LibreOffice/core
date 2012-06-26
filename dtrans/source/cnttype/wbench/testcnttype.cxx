@@ -54,49 +54,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-//------------------------------------------------------------
-//  globales
-//------------------------------------------------------------
-
-//################################################################
-
-/*
-void CheckMimeContentType( const OUString& aCntType, const OUString& aType, const OUString& aSubtype, sal_Int32 nParams )
-{
-
-    Reference< XMimeContentType > xMimeCntType = xMCntTypeFactory->createMimeContentType( aCntType );
-
-    OSL_ASSERT( aType    == xMimeCntType->getMediaType ( ) );
-    OSL_ASSERT( aSubtype == xMimeCntType->getMediaSubtype ( ) );
-
-    try
-    {
-        Sequence< OUString > seqParam = xMimeCntType->getParameters( );
-        OSL_ASSERT( seqParam.getLength( ) == nParams );
-
-        OUString param;
-        OUString pvalue;
-        for ( sal_Int32 i = 0; i < seqParam.getLength( ); i++ )
-        {
-            param  = seqParam[i];
-            OSL_ASSERT( xMimeCntType->hasParameter( param ) );
-
-            pvalue = xMimeCntType->getParameterValue( param );
-        }
-
-        pvalue = xMimeCntType->getParameterValue( OUString("aparam") );
-    }
-    catch( IllegalArgumentException& )
-    {
-        printf( "FAILED: Invalid Mime Contenttype detected\n" );
-    }
-    catch( NoSuchElementException& )
-    {
-
-    }
-}
-*/
-
 //----------------------------------------------------------------
 //
 //----------------------------------------------------------------
