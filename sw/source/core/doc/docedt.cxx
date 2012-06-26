@@ -666,16 +666,16 @@ _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx
         const SwPosition* pEnd;
         SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetCntntNode(), nCnt ));
         const SwRedline* pRedl = pDest->GetRedline( aSrcPos, &nFndPos );
-        while( nFndPos-- && *( pEnd = ( pRedl =
-            pDest->GetRedlineTbl()[ nFndPos ] )->End() ) == aSrcPos && *pRedl->Start() < aSrcPos )
+        while( nFndPos--
+              && *( pEnd = ( pRedl = pDest->GetRedlineTbl()[ nFndPos ] )->End() ) == aSrcPos
+              && *pRedl->Start() < aSrcPos )
         {
             if( !pSavArr )
             {
-                pSavArr = new SvPtrarr( 2 );
+                pSavArr = new std::vector<SwPosition*>;
                 pSavIdx = new SwNodeIndex( rInsIdx, -1 );
             }
-            void* p = (void*)pEnd;
-            pSavArr->Insert( p, pSavArr->Count() );
+            pSavArr->push_back( (SwPosition*)pEnd );
         }
     }
 }
@@ -695,8 +695,8 @@ void _SaveRedlEndPosForRestore::_Restore()
     if( pNode )
     {
         SwPosition aPos( *pSavIdx, SwIndex( pNode, nSavCntnt ));
-        for( sal_uInt16 n = pSavArr->Count(); n; )
-            *((SwPosition*)pSavArr->GetObject( --n )) = aPos;
+        for( sal_uInt16 n = pSavArr->size(); n; )
+            *(*pSavArr)[ --n ] = aPos;
     }
 }
 

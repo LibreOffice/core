@@ -195,7 +195,7 @@ public:
 
 class _SaveRedlEndPosForRestore
 {
-    SvPtrarr* pSavArr;
+    std::vector<SwPosition*>* pSavArr;
     SwNodeIndex* pSavIdx;
     xub_StrLen nSavCntnt;
 
