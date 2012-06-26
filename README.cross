@@ -78,6 +78,7 @@ where <your_os> is one of SLE_11, SLE_11_SP1, openSUSE_11.3, openSUSE_11.4 or
 openSUSE_Factory.
 
 zypper in mingw32-cross-gcc mingw32-cross-gcc-c++ mingw32-python-devel \
+    mingw32-python \
     mingw32-libexpat-devel mingw32-libexpat mingw32-boost-devel \
     mingw32-libhyphen-devel mingw32-libhyphen mingw32-hyphen-en \
     mingw32-liblpsolve mingw32-liblpsolve-devel \
