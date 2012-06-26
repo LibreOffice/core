@@ -923,6 +923,9 @@ protected:
     SwWW8Writer        *m_pWriter;      ///< Pointer to the writer
     WW8AttributeOutput *m_pAttrOutput;  ///< Converting attributes to stream data
 
+private:
+    SvStorageRef       xEscherStg;      /// memory leak #i120098#, to hold the reference to unnamed SotStorage obj
+
 public:
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const;

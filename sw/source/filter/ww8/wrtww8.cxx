@@ -2743,7 +2743,8 @@ void WW8Export::WriteFkpPlcUsw()
              the existence of an ObjectPool dir is necessary for triggering
              some magic. cmc
             */
-            GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool),
+            // avoid memory leak #i120098#, the unnamed obj will be released in destructor.
+            xEscherStg = GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool),
                 STREAM_READWRITE | STREAM_SHARE_DENYALL);
         }
 
