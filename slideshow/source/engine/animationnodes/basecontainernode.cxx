@@ -85,6 +85,7 @@ bool BaseContainerNode::init_children()
 
 void BaseContainerNode::deactivate_st( NodeState eDestState )
 {
+    mnLeftIterations = 0; // in order to make skip effect work correctly
     if (eDestState == FROZEN) {
         // deactivate all children that are not FROZEN or ENDED:
         forEachChildNode( boost::mem_fn(&AnimationNode::deactivate),
@@ -178,7 +179,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
 
 bool BaseContainerNode::repeat()
 {
-    deactivate_st( ENDED );
+    forEachChildNode( boost::mem_fn(&AnimationNode::end), ~ENDED );
     sal_Bool bState = init_children();
     if( bState )
         activate_st();
