@@ -34,8 +34,11 @@ $(eval $(call gb_Library_use_packages,sal,\
 	sal_inc \
 ))
 
+$(eval $(call gb_Library_add_precompiled_header,sal,$(SRCDIR)/sal/inc/pch/precompiled_sal))
+
 $(eval $(call gb_Library_set_include,sal,\
 	$$(INCLUDE) \
+	-I$(SRCDIR)/sal/inc/pch \
 	-I$(SRCDIR)/sal/inc \
 ))
 
