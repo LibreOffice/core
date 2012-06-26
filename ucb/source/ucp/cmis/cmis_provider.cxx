@@ -88,16 +88,10 @@ ContentProvider::ContentProvider(
     const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
 : ::ucbhelper::ContentProviderImplHelper( rSMgr )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "ContentProvider::ContentProvider( )\n" );
-#endif
 }
 
 ContentProvider::~ContentProvider()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "ContentProvider::~ContentProvider( )\n" );
-#endif
 }
 
 XINTERFACE_IMPL_3( ContentProvider,
