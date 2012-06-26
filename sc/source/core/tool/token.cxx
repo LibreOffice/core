@@ -116,19 +116,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken )
 // Need quite a lot of ScDoubleRefToken
 IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken )
 
-// --- helpers --------------------------------------------------------------
-
-inline bool lcl_IsReference( OpCode eOp, StackVar eType )
-{
-    return
-        (eOp == ocPush && (eType == svSingleRef || eType == svDoubleRef))
-        || (eOp == ocColRowNameAuto && eType == svDoubleRef)
-        || (eOp == ocColRowName && eType == svSingleRef)
-        || (eOp == ocMatRef && eType == svSingleRef)
-        ;
-}
-
-
 // --- class ScRawToken -----------------------------------------------------
 
 xub_StrLen ScRawToken::GetStrLen( const sal_Unicode* pStr )
