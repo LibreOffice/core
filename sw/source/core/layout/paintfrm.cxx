@@ -2682,11 +2682,6 @@ void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
 
 void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
 {
-    std::vector< const SwFrm* > aTestVec;
-    aTestVec.push_back( &rFrm );
-    aTestVec.push_back( &rFrm );
-    aTestVec.push_back( &rFrm );
-
     // build 4 line entries for the 4 borders:
     SwRect aBorderRect = rFrm.Frm();
     if ( rFrm.IsTabFrm() )
