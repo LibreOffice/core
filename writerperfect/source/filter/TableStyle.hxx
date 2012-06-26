@@ -33,7 +33,6 @@
 
 #include "Style.hxx"
 
-class DocumentElement;
 class OdfDocumentHandler;
 
 class TableCellStyle : public Style

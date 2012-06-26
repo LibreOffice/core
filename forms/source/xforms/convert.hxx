@@ -29,7 +29,6 @@ namespace com { namespace sun { namespace star { namespace uno
     class Type;
 } } } }
 namespace rtl { class OUString; }
-class ConvertImpl;
 
 namespace xforms
 {

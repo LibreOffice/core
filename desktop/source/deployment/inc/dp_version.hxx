@@ -24,9 +24,6 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "dp_misc_api.hxx"
 
-namespace com { namespace sun { namespace star { namespace deployment {
-    class XPackage;
-} } } }
 namespace rtl { class OUString; }
 
 namespace dp_misc {

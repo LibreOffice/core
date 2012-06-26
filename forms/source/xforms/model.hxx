@@ -60,7 +60,6 @@ namespace com { namespace sun { namespace star
 namespace rtl { class OUString; }
 namespace xforms
 {
-    class Binding;
     class MIP;
     class BindingCollection;
     class SubmissionCollection;

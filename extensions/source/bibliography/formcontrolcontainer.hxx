@@ -24,8 +24,6 @@
 #include "loadlisteneradapter.hxx"
 #include <com/sun/star/awt/XControlContainer.hpp>
 
-class BibDataManager;
-
 //.........................................................................
 namespace bib
 {

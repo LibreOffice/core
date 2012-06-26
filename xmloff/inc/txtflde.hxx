@@ -44,7 +44,6 @@
 
 
 class SvXMLExport;
-class SvXMLNumFmtExport;
 struct XMLPropertyState;
 
 namespace com { namespace sun { namespace star {

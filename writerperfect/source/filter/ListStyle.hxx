@@ -33,8 +33,6 @@
 
 #include "Style.hxx"
 
-class DocumentElement;
-
 class ListLevelStyle
 {
 public:

@@ -38,9 +38,7 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace ldap = css::ldap ;
 //------------------------------------------------------------------------------
-// LdapUserProfile classes
 struct LdapUserProfile;
-class LdapUserProfileMap;
 
 typedef LDAP_API(int) (LDAP_CALL *t_ldap_unbind_s)( LDAP *ld );
 typedef LDAP_API(int) (LDAP_CALL *t_ldap_simple_bind_s)( LDAP *ld, const char *who, const char *passwd );

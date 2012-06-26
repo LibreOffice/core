@@ -46,9 +46,7 @@
 
 
 class SvStream;
-class ImageConsumer;
 class Graphic;
-class GraphicFilter;
 
 namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;

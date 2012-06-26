@@ -49,7 +49,6 @@ namespace pcr
         }
     };
 
-    class IPropertyInfoService;
     class IPropertyEnumRepresentation;
     //====================================================================
     //= GenericPropertyHandler

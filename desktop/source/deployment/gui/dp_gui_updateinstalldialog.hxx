@@ -37,17 +37,8 @@ namespace com { namespace sun { namespace star { namespace deployment {
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 }}}}
-namespace com { namespace sun { namespace star { namespace xml { namespace dom {
-    class XNode;
-}}}}}
-namespace com { namespace sun { namespace star { namespace xml { namespace xpath {
-    class XXPathAPI;
-}}}}}
 
 class Window;
-namespace osl {
-    class Condition;
-}
 
 namespace dp_gui {
 

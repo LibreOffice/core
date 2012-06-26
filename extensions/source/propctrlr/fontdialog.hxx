@@ -24,9 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-class SvxFontListItem;
-class FontList;
-
 //............................................................................
 namespace pcr
 {

@@ -32,13 +32,6 @@ namespace com { namespace sun { namespace star {
         namespace uno {
         class XComponentContext;
         }
-        namespace xml { namespace dom {
-            class XDocument;
-            class XNode;
-        }}
-        namespace xml { namespace xpath {
-            class XXPathAPI;
-        }}
 }}}
 
 namespace dp_registry {

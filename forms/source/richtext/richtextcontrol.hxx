@@ -41,7 +41,6 @@ namespace frm
 //.........................................................................
 
     class ORichTextFeatureDispatcher;
-    class RichTextControl;
 
     //==================================================================
     // ORichTextControl

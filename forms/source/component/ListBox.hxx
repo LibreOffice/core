@@ -53,11 +53,6 @@
 
 #include <vector>
 
-namespace dbtools
-{
-    class FormattedColumnValue;
-}
-
 //.........................................................................
 namespace frm
 {
@@ -203,8 +198,6 @@ typedef ::cppu::ImplHelper4 <   ::com::sun::star::awt::XFocusListener
                             ,   ::com::sun::star::awt::XListBox
                             ,   ::com::sun::star::form::XChangeBroadcaster
                             >   OListBoxControl_BASE;
-
-class ChangeListeners;
 
 class OListBoxControl   :public OBoundControl
                         ,public OListBoxControl_BASE

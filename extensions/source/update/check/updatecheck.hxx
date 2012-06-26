@@ -44,7 +44,6 @@
 
 
 class UpdateCheck;
-class UpdateCheckConfig;
 
 class UpdateCheckInitData {
 

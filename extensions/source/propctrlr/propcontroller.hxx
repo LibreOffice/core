@@ -72,10 +72,7 @@
 #include <vector>
 #include <memory>
 
-class SvNumberFormatsSupplierObj;
-class Font;
 class Window;
-class SfxItemSet;
 
 //............................................................................
 namespace pcr

@@ -30,7 +30,6 @@ namespace com { namespace sun { namespace star {
         class XDataType;
     }
     namespace beans {
-        class XPropertySet;
         class XPropertySetInfo;
     }
 } } }

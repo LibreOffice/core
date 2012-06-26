@@ -52,7 +52,6 @@ namespace basegfx
 {
     class B2DTuple;
     class B2DHomMatrix;
-    class B3DTuple;
     class B3DHomMatrix;
 } // end of namespace basegfx
 

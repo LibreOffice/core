@@ -36,22 +36,10 @@
 #include <xmloff/prhdlfac.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace chart {
-        class XDiagram;
-        class XChartDocument;
-        struct ChartSeriesAddress;
-    }
-    namespace drawing {
-        class XShape;
-    }
     namespace task {
         class XStatusIndicator;
     }
 }}}
-
-class SvXMLAutoStylePoolP;
-class SvXMLUnitConverter;
-class XMLChartExportPropertyMapper;
 
 // ------------------------------------------
 // export class for a complete chart document

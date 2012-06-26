@@ -40,7 +40,6 @@
 
 // forward declaration
 namespace psp { class PrinterInfoManager; }
-class Printer;
 
 namespace padmin {
 

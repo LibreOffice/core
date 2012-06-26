@@ -39,8 +39,6 @@
 
 #include "Style.hxx"
 
-class TagOpenElement;
-class DocumentElement;
 class OdfDocumentHandler;
 
 class ParagraphStyle

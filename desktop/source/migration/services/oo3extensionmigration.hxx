@@ -49,9 +49,6 @@ namespace com { namespace sun { namespace star {
     namespace uno {
         class XComponentContext;
     }
-    namespace deployment {
-        class XPackage;
-    }
 }}}
 
 class INetURLObject;
