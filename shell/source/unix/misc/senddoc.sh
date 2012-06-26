@@ -208,7 +208,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         rm -f $BODY
         ;;
 
-    evolution)
+    evolution | gnome | xdg) # NB. shortened from the dash on
 
         while [ "$1" != "" ]; do
             case $1 in
