@@ -103,6 +103,10 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/printer.hxx>
+//Begin Bug 119922
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+//End Bug 119922
 #include <SwStyleNameMapper.hxx>
 #include <xmloff/xmlcnitm.hxx>
 #include <poolfmt.hxx>
@@ -143,7 +147,13 @@ public:
 //    void          GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny );
 
 //    const SfxItemPropertyMap*       GetMap() const {return _pMap;}
-    sal_Bool                        FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet &rFromSet, sal_Bool& rSizeFound);
+    //Begin Bug 119922:Graphic in header and footer can not be displayed correctly.
+    //Set default value for "Follow text flow" to false if a previous version didn't support "Follow text flow".
+    sal_Bool                        FillBaseProperties(SfxItemSet& rToSet,
+                                                        const SfxItemSet &rFromSet,
+                                                        sal_Bool& rSizeFound,
+                                                        const sal_Bool bOasis = sal_False );
+    //End Bug 119922
 
     virtual sal_Bool                AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound) = 0;
 
@@ -163,7 +173,13 @@ sal_Bool BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMembe
     return aAnyMap.FillValue( nWID, nMemberId, rpAny );
 }
 
-sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet& rFromSet, sal_Bool& rSizeFound)
+//Begin Bug 119922:Graphic in header and footer can not be displayed correctly.
+//Set default value for "Follow text flow" to false if a previous version didn't support "Follow text flow".
+sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet,
+                                                      const SfxItemSet& rFromSet,
+                                                      sal_Bool& rSizeFound,
+                                                      const sal_Bool bOasis /*sal_False*/ )
+//End Bug 119922
 {
     sal_Bool bRet = sal_True;
     //Anker kommt auf jeden Fall in den Set
@@ -497,6 +513,10 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
         aFmtFollowTextFlow.PutValue(*pFollowTextFlow, 0);
         rToSet.Put(aFmtFollowTextFlow);
     }
+    //Begin Bug 119922
+    else if ( bOasis )
+        rToSet.Put( SwFmtFollowTextFlow() );
+    //End Bug 119922
 
     // OD 2004-05-04 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
     const ::uno::Any* pWrapInfluenceOnObjPos = 0;
@@ -636,7 +656,15 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     {
         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet(*pStyle) );
         const :: SfxItemSet *pItemSet = &xStyle->GetItemSet();
-        bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
+        //Begin Bug 119922
+            sal_Bool bOasis = sal_False;
+        SfxMedium* pMedium = NULL;
+        const SfxFilter * pFilter = NULL;
+        if ( ( pMedium = pDoc->GetDocShell()->GetMedium() ) &&
+                ( pFilter = pMedium->GetFilter() ) )
+            bOasis = pFilter->GetVersion() > SOFFICE_FILEFORMAT_60;
+        bRet = FillBaseProperties( rFrmSet, *pItemSet, rSizeFound, bOasis );
+        //End Bug 119922
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
     else
