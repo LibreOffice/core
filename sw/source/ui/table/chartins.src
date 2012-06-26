@@ -124,5 +124,3 @@ ModelessDialog DLG_INSERT_CHART
         Text [ en-US ] = "Cre~ate" ;
     };
 };
-
-

@@ -20,5 +20,3 @@
 #define CB_NEW_START 1
 #define CB_NUMBER_NEW_START 2
 #define NF_NEW_START 3
-
-

@@ -347,30 +347,3 @@ DockingWindow RID_SVX_FMEXPLORER
     Closeable = TRUE ;
     Text [ en-US ] = "Form Navigator" ;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

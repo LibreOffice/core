@@ -44,12 +44,3 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
         Text [ en-US ]  = "~Validate";
     };
 };
-
-
-
-
-
-
-
-
-

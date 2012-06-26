@@ -102,6 +102,3 @@ TabPage DLG_MM_MERGE_PAGE
         Text [ en-US ] = "Ma~tch case";
     };
 };
-
-
-

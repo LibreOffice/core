@@ -227,5 +227,3 @@ String RID_STR_GROUPWIZ_DBFIELD
 {
     Text [ en-US ] = "You can either save the value of the option group in a database field or use it for a later action.";
 };
-
-

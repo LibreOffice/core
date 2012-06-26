@@ -27,5 +27,3 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
 {
     Text [ en-US ] = "Image bullet" ;
 };
-
-

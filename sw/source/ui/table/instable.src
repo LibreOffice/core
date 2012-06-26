@@ -185,5 +185,3 @@ ModalDialog DLG_INSERT_TABLE
         TabStop = TRUE ;
     };
 };
-
-

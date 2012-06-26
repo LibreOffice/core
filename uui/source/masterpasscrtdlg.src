@@ -103,24 +103,3 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

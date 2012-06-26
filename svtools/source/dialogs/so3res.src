@@ -302,5 +302,3 @@ String STR_UNKNOWN_SOURCE
 {
     Text [ en-US ] = "Unknown source" ;
 };
-
-

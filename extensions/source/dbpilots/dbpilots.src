@@ -68,5 +68,3 @@ String RID_STR_COULDNOTOPENTABLE
 {
     Text [ en-US ] = "The table connection to the data source could not be established.";
 };
-
-

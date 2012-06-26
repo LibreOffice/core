@@ -1839,6 +1839,3 @@ FloatingWindow RID_TOOLBOXWINDOW
         MaskColor = IMAGE_STDBTN_COLOR ;
         CATALOG_IDLIST
     };
-
-
-

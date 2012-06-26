@@ -304,5 +304,3 @@ TabPage RID_SD_TABPAGE_HEADERFOOTER
         Text [ en-US ] = "Include on page";
     };
 };
-
-

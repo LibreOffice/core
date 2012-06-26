@@ -119,5 +119,3 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
         Text[ en-US ] = "~Edit Document...";
     };
 };
-
-

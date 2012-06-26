@@ -471,21 +471,3 @@ ModalDialog RID_DLG_DBCHANGE
         Border = TRUE;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

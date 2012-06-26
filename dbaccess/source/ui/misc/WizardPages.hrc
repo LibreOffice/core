@@ -68,5 +68,3 @@
 #define CTRL_RIGHT              2
 
 #endif // DBAUI_WIZARD_PAGES_HRC
-
-

@@ -248,5 +248,3 @@ ModalDialog DLG_MM_MAILBODY
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
-
-

@@ -96,6 +96,3 @@ TabPage DLG_MM_OUTPUTTYPE_PAGE
         Text[ en-US ] = "%PRODUCTNAME was unable to find a Java Mail connection. In order to send e-mail with %PRODUCTNAME, you need to install the latest version of Java Mail. You can find further information about Java Mail on the internet at 'http://java.sun.com/products/javamail/'.";
     };
 };
-
-
-

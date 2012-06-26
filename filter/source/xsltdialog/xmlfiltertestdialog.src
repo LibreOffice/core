@@ -191,11 +191,3 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( 50, 14 );
     };
 };
-
-
-
-
-
-
-
-

@@ -108,5 +108,3 @@ String RID_STR_TIMEPOSTFIX
 {
     Text [ en-US ] = " (Time)";
 };
-
-

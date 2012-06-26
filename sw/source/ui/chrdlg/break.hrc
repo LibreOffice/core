@@ -28,5 +28,3 @@
 #define BT_OK       100
 #define BT_CANCEL   101
 #define BT_HELP     102
-
-

@@ -40,6 +40,3 @@
 #define STR_STATSTR_SWGPRTOLENOTIFY (RC_STATLIN_STR + 17)
 
 #endif
-
-
-

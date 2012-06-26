@@ -63,5 +63,3 @@
 // Texte
 #define STR_STRUCT_ERR1     1
 #define STR_STRUCT_ERR2     2
-
-

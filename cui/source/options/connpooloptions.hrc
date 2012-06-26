@@ -36,5 +36,3 @@
 #define STR_NO                  5
 
 #endif // _OFFAPP_CONNPOOLOPTIONS_HRC_
-
-

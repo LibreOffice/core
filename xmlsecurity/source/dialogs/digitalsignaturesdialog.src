@@ -203,5 +203,3 @@ QueryBox MSG_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN
     Message [ en-US ] = "Adding or removing a macro signature will remove all document signatures.\n"
         "Do you really want to continue?";
 };
-
-

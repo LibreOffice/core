@@ -221,7 +221,3 @@
 #define MN_AUTOMARK_OPEN    1
 #define MN_AUTOMARK_NEW     2
 #define MN_AUTOMARK_EDIT    3
-
-
-
-

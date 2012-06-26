@@ -187,6 +187,3 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ en-US ] = "Symbol" ;
     };
 };
-
-
-

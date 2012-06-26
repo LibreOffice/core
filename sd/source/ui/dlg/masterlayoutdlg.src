@@ -100,7 +100,3 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Text [ en-US ] = "Master Elements";
     };
 };
-
-
-
-

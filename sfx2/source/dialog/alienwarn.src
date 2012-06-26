@@ -87,5 +87,3 @@ ModalDialog RID_DLG_ALIEN_WARNING
         Text [ en-US ] = "~Ask when not saving in ODF format";
     };
 };
-
-

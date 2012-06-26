@@ -254,5 +254,3 @@ String STR_SWBG_FOOTER
 
 // #i68101# no longer needed:
 // String STR_NAME_SHAPE_LABEL {// String STR_NAME_SHAPE_DIALOG { Text [ de ] = "Objekt benennen" ; Text [ en-US ] = "Name Object"; };
-
-

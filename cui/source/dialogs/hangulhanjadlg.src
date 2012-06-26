@@ -440,6 +440,3 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
         Text [ en-US ] = "Close";
     };
 };
-
-
-

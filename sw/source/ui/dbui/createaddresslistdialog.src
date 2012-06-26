@@ -228,5 +228,3 @@ ModelessDialog DLG_MM_FIND_ENTRY
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
-
-

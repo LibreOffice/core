@@ -34,5 +34,3 @@
 #define STR_ADD_TABLE_OR_QUERY  2
 
 #endif // DBAUI_ADTABDLG_HRC
-
-

@@ -94,6 +94,3 @@ TabPage DLG_MM_DOCSELECT_PAGE
         Border = TRUE;
     };
 };
-
-
-

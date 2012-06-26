@@ -117,5 +117,3 @@ ModalDialog DLG_CHANGE_DB
         TabStop = TRUE ;
     };
 };
-
-

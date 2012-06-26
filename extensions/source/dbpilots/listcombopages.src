@@ -183,20 +183,3 @@ String RID_STR_COMBOWIZ_DBFIELD
 {
     Text [ en-US ] = "You can either save the value of the combo box in a database field or use it for display purposes.";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
