@@ -2059,7 +2059,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             double fVal = double(nIntValue) / 2.;
             uno::Any aVal = uno::makeAny( fVal );
             if( NS_sprm::LN_CHpsBi == nSprmId )
+            {
                 rContext->Insert( PROP_CHAR_HEIGHT_COMPLEX, true, aVal );
+                // Also set Western, but don't overwrite it.
+                rContext->Insert( PROP_CHAR_HEIGHT, true, aVal, false );
+            }
             else
             {
                 //Asian get the same value as Western
