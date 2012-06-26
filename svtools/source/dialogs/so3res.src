@@ -168,12 +168,6 @@ Resource RID_SO_ERROR_HANDLER
     {
         Text [ en-US ] = "The specified file could not be opened." ;
     };
-    /*
-    String  & S_MAX
-    {
-        Text          = "";
-    };
-*/
 };
 Resource RID_SO_ERRCTX
 {

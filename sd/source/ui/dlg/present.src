@@ -140,14 +140,6 @@ ModalDialog DLG_START_PRESENTATION
         Text [ en-US ] = "A~uto" ;
         TabStop = TRUE ;
     };
-/*
-    FixedText FT_PAUSE
-    {
-        Pos = MAP_APPFONT ( 32, 124 ) ;
-        Size = MAP_APPFONT ( 25, 12 ) ;
-        Text [ en-US ] = "Pause:" ;
-    };
-*/
     TimeField TMF_PAUSE
     {
         HelpID = "sd:TimeField:DLG_START_PRESENTATION:TMF_PAUSE";

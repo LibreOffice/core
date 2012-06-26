@@ -205,13 +205,6 @@ TabDialog DLG_FRM_OLE
                 PageResID = TP_BACKGROUND ;
                 Text [ en-US ] = "Background" ;
             };
-            /*
-            PageItem  {
-                Identifier = TP_COLUMN ;
-                PageResID = TP_COLUMN;
-                Text [ en-US ] = "Columns" ;
-            };
-*/
             PageItem
             {
                 Identifier = TP_MACRO_ASSIGN ;

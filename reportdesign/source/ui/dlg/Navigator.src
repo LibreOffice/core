@@ -152,24 +152,6 @@ Menu RID_MENU_NAVIGATOR
         {
             ITEM_EDIT_DELETE
         };
-/*
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            ITEM_EDIT_CUT
-        };
-        MenuItem
-        {
-            ITEM_EDIT_COPY
-        };
-        MenuItem
-        {
-            ITEM_EDIT_PASTE
-        };
-*/
     };
 };
 

@@ -373,33 +373,6 @@ Menu MODIFY_TOOLBAR_CONTENT
         {
             Separator = TRUE ;
         };
-        /*
-        MenuItem
-        {
-            Identifier = ID_ICON_ONLY ;
-            Text [ en-US ] = "Icon Only" ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = ID_TEXT_ONLY ;
-            Text [ en-US ] = "Text Only" ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = ID_ICON_AND_TEXT ;
-            Text [ en-US ] = "Icon & Text" ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        */
         MenuItem
         {
             Identifier = ID_CHANGE_SYMBOL ;
