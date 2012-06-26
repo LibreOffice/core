@@ -137,7 +137,7 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
     // initialize extra ui options
     if( mxRenderable.is() )
     {
-        for (sal_Int32 nProp=0; nProp<rProps.getLength(); nProp++)
+        for (sal_Int32 nProp=0; nProp < rProps.getLength(); ++nProp)
             setValue( rProps[nProp].Name, rProps[nProp].Value );
 
         Sequence< beans::PropertyValue > aRenderOptions( 3 );
@@ -654,13 +654,19 @@ Printer* SfxViewShell::GetActivePrinter() const
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
-    sal_uInt16                  nDialogRet = RET_CANCEL;
+    sal_uInt16              nDialogRet = RET_CANCEL;
     SfxPrinter*             pPrinter = 0;
     SfxDialogExecutor_Impl* pExecutor = 0;
     bool                    bSilent = false;
-    sal_Bool bIsAPI = rReq.GetArgs() && rReq.GetArgs()->Count();
+
+    // does the function have been called by the user interface or by an API call
+    sal_Bool bIsAPI = rReq.IsAPI();
     if ( bIsAPI )
     {
+        // the function have been called by the API
+
+        // Should it be visible on the user interface,
+        // should it launch popup dialogue ?
         SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
         bSilent = pSilentItem && pSilentItem->GetValue();
     }
@@ -678,27 +684,20 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     const sal_uInt16 nId = rReq.GetSlot();
     switch( nId )
     {
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_PRINTDOC:
-        case SID_PRINTDOCDIRECT:
+        case SID_PRINTDOC: // display the printer selection and properties dialogue : File > Print…
+        case SID_PRINTDOCDIRECT: // Print the document directly, without displaying the dialogue
         {
             SfxObjectShell* pDoc = GetObjectShell();
 
             // derived class may decide to abort this
-            if( !pDoc->QuerySlotExecutable( nId ) )
+            if( pDoc == NULL || !pDoc->QuerySlotExecutable( nId ) )
             {
                 rReq.SetReturnValue( SfxBoolItem( 0, sal_False ) );
                 return;
             }
 
-            bool bDetectHidden = ( !bSilent && pDoc );
-            if ( bDetectHidden && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
-                break;
-
-            SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False);
-            sal_Bool bSelection = pSelectItem && pSelectItem->GetValue();
-            if( pSelectItem && rReq.GetArgs()->Count() == 1 )
-                bIsAPI = sal_False;
+            if ( !bSilent && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
+                return;
 
             uno::Sequence < beans::PropertyValue > aProps;
             if ( bIsAPI )
@@ -714,21 +713,28 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // bool Asynchron
                 // bool Collate
                 // bool Silent
+
+                // the TransformItems function overwrite aProps
                 TransformItems( nId, *rReq.GetArgs(), aProps, GetInterface()->GetSlot(nId) );
-                for ( sal_Int32 nProp=0; nProp<aProps.getLength(); nProp++ )
+
+                for ( sal_Int32 nProp=0; nProp < aProps.getLength(); ++nProp )
                 {
                     if ( aProps[nProp].Name == "Copies" )
+                    {
                         aProps[nProp]. Name = rtl::OUString("CopyCount");
+                    }
                     else if ( aProps[nProp].Name == "RangeText" )
+                    {
                         aProps[nProp]. Name = rtl::OUString("Pages");
-                    if ( aProps[nProp].Name == "Asynchron" )
+                    }
+                    else if ( aProps[nProp].Name == "Asynchron" )
                     {
                         aProps[nProp]. Name = rtl::OUString("Wait");
                         sal_Bool bAsynchron = sal_False;
                         aProps[nProp].Value >>= bAsynchron;
                         aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
                     }
-                    if ( aProps[nProp].Name == "Silent" )
+                    else if ( aProps[nProp].Name == "Silent" )
                     {
                         aProps[nProp]. Name = rtl::OUString("MonitorVisible");
                         sal_Bool bPrintSilent = sal_False;
@@ -737,6 +743,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     }
                 }
             }
+
             // HACK: writer sets the SID_SELECTION item when printing directly and expects
             // to get only the selection document in that case (see getSelectionObject)
             // however it also reacts to the PrintContent property. We need this distinction here, too,
@@ -744,6 +751,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             // it would be better if writer handled this internally
             if( nId == SID_PRINTDOCDIRECT )
             {
+                // should we print only the selection or the whole document
+                SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False);
+                sal_Bool bSelection = ( pSelectItem != NULL && pSelectItem->GetValue() );
+
                 sal_Int32 nLen = aProps.getLength();
                 aProps.realloc( nLen + 1 );
                 aProps[nLen].Name = rtl::OUString( "PrintSelectionOnly"  );
@@ -756,8 +767,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             rReq.Done();
             break;
         }
-
-        case SID_SETUPPRINTER :
+        case SID_SETUPPRINTER : // display the printer settings dialogue : File > Printer Settings…
         case SID_PRINTER_NAME : // only for recorded macros
         {
             // get printer and printer settings from the document
@@ -771,7 +781,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 pPrinter = new SfxPrinter( pDocPrinter->GetOptions().Clone(), ((const SfxStringItem*) pPrinterItem)->GetValue() );
 
                 // if printer is unknown, it can't be used - now printer from document will be used
-                if ( !pPrinter->IsOriginal() )
+                if ( !pPrinter->IsKnown() )
                     DELETEZ(pPrinter);
             }
 
@@ -780,7 +790,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // just set a recorded printer name
                 if ( pPrinter )
                     SetPrinter( pPrinter, SFX_PRINTER_PRINTER  );
-                break;
+                return;
             }
 
             // no PrinterName parameter in ItemSet or the PrinterName points to an unknown printer
@@ -791,23 +801,23 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if( !pPrinter || !pPrinter->IsValid() )
             {
                 // no valid printer either in ItemSet or at the document
-                if ( bSilent )
-                {
-                    rReq.SetReturnValue(SfxBoolItem(0,sal_False));
-                    break;
-                }
-                else
+                if ( !bSilent )
                     ErrorBox( NULL, WB_OK | WB_DEF_OK, SfxResId(STR_NODEFPRINTER).toString() ).Execute();
+
+                rReq.SetReturnValue(SfxBoolItem(0,sal_False));
+
+                break;
             }
 
             // FIXME: printer isn't used for printing anymore!
             if( pPrinter->IsPrinting() )
             {
-                // if printer is busy, abort printing
+                // if printer is busy, abort configuration
                 if ( !bSilent )
                     InfoBox( NULL, SfxResId(STR_ERROR_PRINTER_BUSY).toString() ).Execute();
                 rReq.SetReturnValue(SfxBoolItem(0,sal_False));
-                break;
+
+                return;
             }
 
             // if no arguments are given, retrieve them from a dialog
@@ -879,14 +889,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     if ( SID_PRINTDOC == nId )
                         rReq.SetReturnValue(SfxBoolItem(0,sal_False));
                     if ( nId == SID_SETUPPRINTER )
-                    {
                         rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, sal_False ) );
-            }
                 }
             }
         }
-
-        break;
     }
 }
 
