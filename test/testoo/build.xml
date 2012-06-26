@@ -1,0 +1,254 @@
+<?xml version="1.0"?>
+<!--************************************************************************
+ *
+ * Licensed Materials - Property of IBM.
+ * (C) Copyright IBM Corporation 2003, 2012.  All Rights Reserved.
+ * U.S. Government Users Restricted Rights:
+ * Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+ *
+ ************************************************************************ -->
+
+<project basedir="." default="test">
+    <property file="build.properties" />
+    <property environment="env" />
+    <property name="src" value="./src" />
+    <property name="out" value="output"/>
+    <property name="classes" value="${out}/class" />
+    <property name="lib" value="${out}/lib" />
+    <property name="dist" value="${out}/dist" />
+
+    <property name="env.TESTSPACE" value="../testspace" />
+    <property name="junit.home" value="${env.JUNIT_HOME}" />
+    <property name="testspace" value="${env.TESTSPACE}" />
+    <property name="test.classes" value="testsuite/BVT.class" />
+    <property name="test.output" value="${testspace}/output" />
+    <property name="test.result" value="${test.output}/result" />
+    <property name="test.report" value="${test.output}/report" />
+    <property name="junit.style.dir" value="./reportstyle" />
+
+    <path id="classpath">
+        <pathelement location="${classes}" />
+        <fileset dir="${lib}" erroronmissingdir="false">
+            <include name="**/testcommon.jar" />
+            <include name="**/testgui.jar" />
+            <include name="**/junit.jar" />
+        </fileset>
+        <fileset dir="${solar.jar}" erroronmissingdir="false">
+            <include name="**/testcommon.jar" />
+            <include name="**/testgui.jar" />
+            <include name="**/junit.jar" />
+        </fileset>
+        <fileset dir="${junit.home}" erroronmissingdir="false">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
+    <target name="init">
+        <mkdir dir="${classes}" />
+        <mkdir dir="${lib}" />
+        <copy includeemptydirs="false" todir="${classes}">
+            <fileset dir="src">
+                <exclude name="**/*.java" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean" description="Clean all output">
+        <delete dir="${classes}" />
+        <delete dir="${testspace}" />
+    </target>
+
+    <target name="check.dependencies">
+        <available file="testcommon.jar" property="testcommon.jar.exists">
+            <filepath refid="classpath" />
+        </available>
+        <available file="testgui.jar" property="testgui.jar.exists">
+            <filepath refid="classpath" />
+        </available>
+        <available file="junit.jar" property="junit.jar.exists">
+            <filepath refid="classpath" />
+        </available>
+    </target>
+
+    <target name="prepare.junit" unless="junit.jar.exists">
+        <property name="junit.jar.repos" value="http://repo1.maven.org/maven2/junit/junit/4.10/junit-4.10.jar" />
+        <get src="${junit.jar.repos}" dest="${lib}/junit.jar" skipexisting="true" />
+    </target>
+
+    <target name="prepare.testcommon" unless="testcommon.jar.exists">
+        <ant dir="../testcommon" target="dist" inheritAll="false">
+            <property name="dist" location="${lib}" />
+        </ant>
+    </target>
+
+    <target name="prepare.testgui" unless="testgui.jar.exists">
+        <ant dir="../testgui" target="dist" inheritAll="false">
+            <property name="dist" location="${lib}" />
+        </ant>
+    </target>
+
+    <target name="prepare.dependencies" depends="init, check.dependencies, prepare.junit, prepare.testcommon, prepare.testgui" description="Download all dependencies">
+    </target>
+
+    <target name="compile" depends="init, prepare.dependencies" description="Compile source code">
+        <javac srcdir="${src}" destdir="${classes}" debug="on" source="1.6">
+            <classpath refid="classpath" />
+        </javac>
+    </target>
+
+    <target name="dist" depends="compile">
+        <tstamp />
+        <property name="dist.archive" value="testoo_${DSTAMP}.zip" />
+        <zip destfile="../${dist.archive}" basedir="." update="true" />
+    </target>
+
+    <target name="check.build" description="Check the build context">
+        <condition property="openoffice.archive.dir" value="${env.SRC_ROOT}/instsetoo_native/${env.INPATH}/OpenOffice/archive/install/en-US">
+            <and>
+                <isset property="env.SRC_ROOT" />
+                <isset property="env.INPATH" />
+            </and>
+        </condition>
+
+        <condition property="openoffice.build" value="localbuild">
+            <isset property="openoffice.archive.dir" />
+        </condition>
+
+        <condition property="find.build.skip">
+            <or>
+                <isset property="openoffice.build" />
+                <isset property="openoffice.archive.dir" />
+                <isset property="openoffice.home" />
+            </or>
+        </condition>
+        <condition property="download.build.skip">
+            <or>
+                <isset property="openoffice.archive.dir" />
+                <isset property="openoffice.home" />
+            </or>
+        </condition>
+        <condition property="install.build.skip">
+            <or>
+                <isset property="openoffice.home" />
+            </or>
+        </condition>
+    </target>
+
+    <target name="find.build" unless="find.build.skip" description="Find the newest build on the remote server">
+        <loadresource property="openoffice.build">
+            <url url="${openoffice.build.url}" />
+            <filterchain>
+                <deletecharacters chars=" \t\r\n" />
+            </filterchain>
+        </loadresource>
+        <echo>Latest build: ${openoffice.build}</echo>
+    </target>
+
+    <target name="download.build" unless="download.build.skip" description="Download the specified build from the remote server">
+        <script language="javascript">
+                        value = project.getProperty("openoffice.archive.url");
+                        resolvedValue = project.replaceProperties(value);
+                        project.setProperty("openoffice.archive.url", resolvedValue);
+        </script>
+        <echo>Archive address: ${openoffice.archive.url}</echo>
+        <property name="openoffice.archive.dir" value="${testspace}/download/${openoffice.build}" />
+        <mkdir dir="${openoffice.archive.dir}" />
+        <get src="${openoffice.archive.url}" dest="${openoffice.archive.dir}" verbose="false" usetimestamp="true" skipexisting="true" />
+    </target>
+
+    <target name="install.build" unless="install.build.skip" description="Install the build to the local">
+        <property name="openoffice.installation.dir" value="${testspace}/installation/${openoffice.build}" />
+        <mkdir dir="${openoffice.installation.dir}" />
+        <unzip dest="${openoffice.installation.dir}">
+            <fileset dir="${openoffice.archive.dir}">
+                <include name="**/*.zip" />
+            </fileset>
+        </unzip>
+        <pathconvert property="gz.files" pathsep=" " setonempty="false">
+            <path>
+                <fileset dir="${openoffice.archive.dir}" includes="*.gz" />
+            </path>
+        </pathconvert>
+        <exec dir="${openoffice.installation.dir}" executable="tar" failifexecutionfails="false">
+            <arg line="-zxf ${gz.files}" />
+        </exec>
+        <pathconvert property="openoffice.bin" pathsep=" " setonempty="false">
+            <path>
+                <fileset dir="${openoffice.installation.dir}" includes="**/*/soffice.bin" followsymlinks="false" />
+            </path>
+        </pathconvert>
+        <dirname property="openoffice.home" file="${openoffice.bin}" />
+        <fail unless="openoffice.home" />
+        <echo>Openoffice is installed to ${openoffice.home}</echo>
+    </target>
+
+    <target name="clean.test" unless="clean.test.skip" description="Clean testing footprint">
+        <delete dir="${testspace}/oouser" quiet="true" failonerror="false" />
+    </target>
+
+    <target name="run.test" depends="compile" description="Run junit">
+        <tstamp>
+            <format property="output.stamp" pattern="yyMMdd.hhmm" />
+        </tstamp>
+
+        <move file="${test.output}" tofile="${test.output}.${output.stamp}" failonerror="false" />
+        <mkdir dir="${test.result}" />
+        <mkdir dir="${test.report}" />
+        <mkdir dir="${test.output}/temp" />
+        <property file="${openoffice.home}/versionrc" prefix="version" />
+        <property file="${openoffice.home}/version.ini" />
+
+        <junit fork="yes" forkmode="once" tempdir="${test.output}/temp" printsummary="yes" showoutput="false" errorProperty="test.failed" failureProperty="test.failed" dir=".">
+            <sysproperty key="openoffice.home" value="${openoffice.home}" />
+            <sysproperty key="testspace" value="${testspace}" />
+            <syspropertyset>
+                <propertyref builtin="commandline" />
+            </syspropertyset>
+            <batchtest todir="${test.result}">
+                <fileset dir="${classes}" includes="${test.classes}" />
+            </batchtest>
+
+            <formatter type="xml" />
+            <classpath refid="classpath" />
+        </junit>
+
+        <junitreport todir="${test.report}">
+            <fileset dir="${test.result}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report format="frames" styledir="${junit.style.dir}" todir="${test.report}">
+                <param name="TITLE" expression="GUI Test Result" />
+            </report>
+        </junitreport>
+    </target>
+
+    <target name="test" depends="check.build,find.build,download.build,install.build,clean.test,run.test" description="Run testing on the specified build. The build is automatically downloaded and installed according to the context.">
+        <fail message="Test Failed" if="test.failed" />
+    </target>
+
+    <target name="report.test" unless="report.test.skip" description="Upload the testing result to report repository.">
+        <exec executable="hostname" outputproperty="host.name" />
+        <property name="report.to" value="${openoffice.build}/${host.name}" />
+        <echo>Sending report to ${report.repos.server}/${report.repos.dir}/${report.to}</echo>
+        <ftp server="${report.repos.server}" remotedir="${report.repos.dir}/${report.to}" userid="${report.repos.user}" password="${report.repos.password}" action="mkdir" />
+        <ftp server="${report.repos.server}" remotedir="${report.repos.dir}/${report.to}" userid="${report.repos.user}" password="${report.repos.password}" depends="yes">
+            <fileset dir="${test.output}">
+            </fileset>
+        </ftp>
+    </target>
+
+    <target name="detect.build" depends="find.build" description="Check if new build is available. If no new build is available, the target will be failed.">
+        <loadfile property="local.build" srcFile="${testspace}/build.txt" quiet="true" failonerror="false" />
+        <fail message="The build has been tested! We don't want to test it twice.">
+            <condition>
+                <equals arg1="${openoffice.build}" arg2="${local.build}" trim="true" />
+            </condition>
+        </fail>
+        <mkdir dir="${testspace}" />
+        <echo file="${testspace}/build.txt">${openoffice.build}</echo>
+    </target>
+
+    <target name="routine.test" depends="detect.build,download.build,install.build,clean.test,run.test,report.test" description="Periodically run testing.">
+        <fail message="Test Failed" if="test.failed" />
+    </target>
+</project>

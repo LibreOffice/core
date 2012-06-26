@@ -1,0 +1,2 @@
+atest test :: testgui NULL
+atest test nmake - all test_all NULL

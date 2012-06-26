@@ -1,0 +1,1 @@
+The Java library enables developers to use Java to write automated GUI testing.  

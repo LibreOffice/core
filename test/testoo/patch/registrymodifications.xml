@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--************************************************************************
+ *
+ * Licensed Materials - Property of IBM.
+ * (C) Copyright IBM Corporation 2003, 2012.  All Rights Reserved.
+ * U.S. Government Users Restricted Rights:
+ * Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+ *
+ ************************************************************************ -->
+
+<oor:items xmlns:oor="http://openoffice.org/2001/registry"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <item oor:path="/org.openoffice.Office.Common/Help/Registration">
+        <prop oor:name="ReminderDate" oor:op="fuse">
+            <value>Patch9584</value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.Office.Common/Misc">
+        <prop oor:name="FirstRun" oor:op="fuse">
+            <value>false</value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.Office.Common/Misc">
+        <prop oor:name="UseSystemFileDialog" oor:op="fuse">
+            <value>false</value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.Setup/Office">
+        <prop oor:name="FirstStartWizardCompleted" oor:op="fuse">
+            <value>true</value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.Setup/Office">
+        <prop oor:name="ooSetupInstCompleted" oor:op="fuse">
+            <value>true</value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="givenname" oor:op="fuse">
+            <value>firstname</value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="homephone" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="initials" oor:op="fuse">
+            <value>initials</value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="l" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="mail" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="o" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="position" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="postalcode" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="sn" oor:op="fuse">
+            <value>lastname</value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="st" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="street" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="telephonenumber" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.UserProfile/Data">
+        <prop oor:name="title" oor:op="fuse">
+            <value></value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.Office.Common/Security/Scripting">
+        <prop oor:name="MacroSecurityLevel" oor:op="fuse">
+            <value>0</value>
+        </prop>
+    </item>
+    <item oor:path="/org.openoffice.Office.Common/Security/Scripting">
+        <prop oor:name="OfficeBasic" oor:op="fuse">
+            <value>2</value>
+        </prop>
+    </item>
+</oor:items>
