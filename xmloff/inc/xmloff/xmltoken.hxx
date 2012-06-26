@@ -288,6 +288,7 @@ namespace xmloff { namespace token {
         XML_AUTOSIZE,
         XML_AVERAGE,
         XML_AXIS,
+        XML_AXIS_COLOR,
         XML_BACK_SCALE,
         XML_BACKFACE_CULLING,
         XML_BACKGROUND,

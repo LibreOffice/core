@@ -292,6 +292,7 @@ namespace xmloff { namespace token {
         TOKEN( "autosize",                        XML_AUTOSIZE ),
         TOKEN( "average",                         XML_AVERAGE ),
         TOKEN( "axis",                            XML_AXIS ),
+        TOKEN( "axis-color",                      XML_AXIS_COLOR ),
         TOKEN( "back-scale",                      XML_BACK_SCALE ),
         TOKEN( "backface-culling",                XML_BACKFACE_CULLING ),
         TOKEN( "background",                      XML_BACKGROUND ),
