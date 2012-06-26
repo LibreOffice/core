@@ -78,7 +78,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/options.hxx,unotools
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/pathoptions.hxx,unotools/pathoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/printwarningoptions.hxx,unotools/printwarningoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/progresshandlerwrap.hxx,unotools/progresshandlerwrap.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/querydeep.hxx,unotools/querydeep.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/readwritemutexguard.hxx,unotools/readwritemutexguard.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/saveopt.hxx,unotools/saveopt.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/searchopt.hxx,unotools/searchopt.hxx))

@@ -72,7 +72,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filter.hxx,svtools/fil
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filechangedchecker.hxx,svtools/filechangedchecker.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fixedhyper.hxx,svtools/fixedhyper.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fltcall.hxx,svtools/fltcall.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fltdefs.hxx,svtools/fltdefs.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fmtfield.hxx,svtools/fmtfield.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fontsubstconfig.hxx,svtools/fontsubstconfig.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/framestatuslistener.hxx,svtools/framestatuslistener.hxx))

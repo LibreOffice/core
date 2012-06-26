@@ -39,6 +39,5 @@ $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbashaperange.hxx,
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbashapes.hxx,vbahelper/vbashapes.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbatextframe.hxx,vbahelper/vbatextframe.hxx))
 $(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/vbawindowbase.hxx,vbahelper/vbawindowbase.hxx))
-$(eval $(call gb_Package_add_file,vbahelper_inc,inc/vbahelper/weakreference.hxx,vbahelper/weakreference.hxx))
 
 # vim: set noet sw=4 ts=4:

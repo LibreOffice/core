@@ -27,15 +27,12 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,canvas_inc,$(SRCDIR)/canvas/inc))
-$(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/basemutexhelper.hxx,canvas/base/basemutexhelper.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/bitmapcanvasbase.hxx,canvas/base/bitmapcanvasbase.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/bufferedgraphicdevicebase.hxx,canvas/base/bufferedgraphicdevicebase.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/cachedprimitivebase.hxx,canvas/base/cachedprimitivebase.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/canvasbase.hxx,canvas/base/canvasbase.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/canvascustomspritebase.hxx,canvas/base/canvascustomspritebase.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/canvascustomspritehelper.hxx,canvas/base/canvascustomspritehelper.hxx))
-$(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/doublebitmapbase.hxx,canvas/base/doublebitmapbase.hxx))
-$(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/floatbitmapbase.hxx,canvas/base/floatbitmapbase.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/graphicdevicebase.hxx,canvas/base/graphicdevicebase.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/integerbitmapbase.hxx,canvas/base/integerbitmapbase.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/base/sprite.hxx,canvas/base/sprite.hxx))

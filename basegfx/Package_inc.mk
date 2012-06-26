@@ -36,7 +36,6 @@ $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b2dpolypolygon
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b2dpolypolygontools.hxx,basegfx/polygon/b2dpolypolygontools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b2dtrapezoid.hxx,basegfx/polygon/b2dtrapezoid.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b3dpolygon.hxx,basegfx/polygon/b3dpolygon.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b3dpolygonclipper.hxx,basegfx/polygon/b3dpolygonclipper.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b3dpolygontools.hxx,basegfx/polygon/b3dpolygontools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b3dpolypolygon.hxx,basegfx/polygon/b3dpolypolygon.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/polygon/b3dpolypolygontools.hxx,basegfx/polygon/b3dpolypolygontools.hxx))

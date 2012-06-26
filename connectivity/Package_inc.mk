@@ -31,7 +31,6 @@ $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/BlobHelper.h
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/CommonTools.hxx,CommonTools.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/conncleanup.hxx,conncleanup.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/ConnectionWrapper.hxx,ConnectionWrapper.hxx))
-$(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/DateConversion.hxx,DateConversion.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/dbcharset.hxx,dbcharset.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/dbconversion.hxx,dbconversion.hxx))
 $(eval $(call gb_Package_add_file,connectivity_inc,inc/connectivity/dbexception.hxx,dbexception.hxx))
