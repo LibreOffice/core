@@ -129,7 +129,7 @@ public class DocumentLoader
     ViewGroup.LayoutParams matchParent;
 
     ViewFlipper flipper;
-    
+
     Bundle extras;
 
     class GestureListener
@@ -539,7 +539,7 @@ public class DocumentLoader
     {
         super.onCreate(savedInstanceState);
 
-		extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
 
         gestureDetector = new GestureDetector(this, new GestureListener());
 
@@ -558,7 +558,7 @@ public class DocumentLoader
             Bootstrap.dlopen("libmergedlo.so");
             Bootstrap.dlopen("libswdlo.so");
             Bootstrap.dlopen("libswlo.so");
-            
+
             // Log.i(TAG, "Sleeping NOW");
             // Thread.sleep(20000);
 
