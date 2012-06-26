@@ -162,13 +162,14 @@ namespace cmis
         m_sURL = m_xIdentifier->getContentIdentifier( );
         cmis::URL url( m_sURL );
 
-        // Look for a cached session
-        m_pSession = pProvider->getSession( url.getBindingUrl( ) );
+        // Look for a cached session, key is binding url + repo id
+        INetURLObject aUrlObj( m_sURL );
+        m_pSession = pProvider->getSession( aUrlObj.GetHost( ) );
         if ( NULL == m_pSession )
         {
             // Initiate a CMIS session and register it as we found nothing
             m_pSession = libcmis::SessionFactory::createSession( url.getSessionParams( ) );
-            pProvider->registerSession( url.getBindingUrl( ), m_pSession );
+            pProvider->registerSession( aUrlObj.GetHost( ), m_pSession );
         }
 
         m_sObjectPath = url.getObjectPath( );
