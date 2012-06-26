@@ -2950,45 +2950,57 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                 const SfxFilter* pFilter = pMedium->GetFilter();
                 if ( pFilter && aFilterName.equals( pFilter->GetFilterName() ) )
                 {
-                    aArgHash.erase( aFilterString );
-                    aArgHash.erase( OUString( "URL"  ) );
-
-                    try
+                    // #i119366# - If the former file saving with password, do not trying in StoreSelf anyway...
+                    bool bFormerPassword = false;
                     {
-                        storeSelf( aArgHash.getAsConstPropertyValueList() );
-                        bSaved = sal_True;
-                    }
-                    catch( const lang::IllegalArgumentException& )
-                    {
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-                        // some additional arguments do not allow to use saving, SaveAs should be done
-                        // but only for normal documents, the shared documents would be overwritten in this case
-                        // that would mean an information loss
-                        // TODO/LATER: need a new interaction for this case
-                        if ( m_pData->m_pObjectShell->IsDocShared() )
+                        uno::Sequence< beans::NamedValue > aOldEncryptionData;
+                        if (GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData ))
                         {
-                            m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "Can't store shared document!"  ) );
-                            m_pData->m_pObjectShell->StoreLog();
-
-                            Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault( OUString( "EncryptionData"  ), Sequence< beans::NamedValue >() );
-                            if ( !aNewEncryptionData.getLength() )
-                            {
-                                OUString aNewPassword = aArgHash.getUnpackedValueOrDefault( OUString( "Password"  ), OUString() );
-                                aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aNewPassword );
-                            }
-
-                            Sequence< beans::NamedValue > aOldEncryptionData;
-                            GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData );
-
-                            if ( !aOldEncryptionData.getLength() && !aNewEncryptionData.getLength() )
-                                throw;
-                            else
-                            {
-                                // if the password is changed a special error should be used in case of shared document
-                                throw task::ErrorCodeIOException( OUString( "Cant change password for shared document."  ), Reference< XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
-                            }
+                            bFormerPassword = true;
                         }
+                    }
+                    if ( !bFormerPassword )
+                    {
+                        aArgHash.erase( aFilterString );
+                        aArgHash.erase( OUString( "URL" ) );
+
+                        try
+                        {
+                            storeSelf( aArgHash.getAsConstPropertyValueList() );
+                            bSaved = sal_True;
+                        }
+                        catch( const lang::IllegalArgumentException& )
+                        {
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+                            // some additional arguments do not allow to use saving, SaveAs should be done
+                            // but only for normal documents, the shared documents would be overwritten in this case
+                            // that would mean an information loss
+                            // TODO/LATER: need a new interaction for this case
+                            if ( m_pData->m_pObjectShell->IsDocShared() )
+                            {
+                                m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "Can't store shared document!" ) );
+                                m_pData->m_pObjectShell->StoreLog();
+
+                                uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault( OUString( "EncryptionData" ), uno::Sequence< beans::NamedValue >() );
+                                if ( !aNewEncryptionData.getLength() )
+                                {
+                                    OUString aNewPassword = aArgHash.getUnpackedValueOrDefault( OUString( "Password" ), OUString() );
+                                    aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aNewPassword );
+                                }
+
+                                uno::Sequence< beans::NamedValue > aOldEncryptionData;
+                                GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData );
+
+                                if ( !aOldEncryptionData.getLength() && !aNewEncryptionData.getLength() )
+                                    throw;
+                                else
+                                {
+                                    // if the password is changed a special error should be used in case of shared document
+                                    throw task::ErrorCodeIOException( OUString( "Cant change password for shared document." ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
+                                }
+                            }
 #endif
+                        }
                     }
                 }
             }
