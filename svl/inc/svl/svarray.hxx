@@ -307,11 +307,6 @@ _SVVARARR_IMPL_GET_OP_INLINE(nm, AE )\
 #define SV_IMPL_VARARR( nm, AE ) \
 SV_IMPL_VARARR_GEN( nm, AE, AE & )
 
-#define _SV_DECL_PTRARR_DEF( nm, AE, IS, vis )\
-_SV_DECL_VARARR_GEN( nm, AE, IS, AE &, vis)\
-sal_uInt16 GetPos( const AE & aE ) const;\
-};
-
 #define SV_DECL_PTRARR_GEN(nm, AE, IS, Base, AERef, VPRef, vis )\
 class vis nm: public Base \
 {\
@@ -424,7 +419,9 @@ void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
 SV_IMPL_PTRARR_GEN(nm, AE, SvPtrarr )
 
 typedef void* VoidPtr;
-_SV_DECL_PTRARR_DEF( SvPtrarr, VoidPtr, 0, SVL_DLLPUBLIC )
+_SV_DECL_VARARR_GEN( SvPtrarr, VoidPtr, 0, 1, VoidPtr &, )
+USHORT GetPos( const VoidPtr & aE ) const;
+};
 
 // SORTARR - Begin
 
