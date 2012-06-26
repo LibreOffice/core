@@ -1620,7 +1620,18 @@ namespace {
 
     void XShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference< beans::XPropertySet > xPropSet, EnhancedShapeDumper enhancedDumper)
     {
-
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("Extrusion");
+            sal_Bool bExtrusion;
+            if(anotherAny >>= bExtrusion)
+                enhancedDumper.dumpExtrusionAsAttribute(bExtrusion);
+        }
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue("Brightness");
+            double aBrightness;
+            if(anotherAny >>= aBrightness)
+                enhancedDumper.dumpBrightnessAsAttribute(aBrightness);
+        }
     }
 
     void XShapeDumper::dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter)

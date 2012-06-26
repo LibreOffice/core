@@ -29,5 +29,20 @@
 #include <drawinglayer/EnhancedShapeDumper.hxx>
 #include <rtl/strbuf.hxx>
 
+// ------------------------------------------------------
+// ---------- EnhancedCustomShapeExtrusion.idl ----------
+// ------------------------------------------------------
 
+void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
+{
+    if(bExtrusion)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusion"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusion"), "%s", "false");
+}
+
+void EnhancedShapeDumper::dumpBrightnessAsAttribute(double aBrightness)
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("brightness"), "%f", aBrightness);
+}
 

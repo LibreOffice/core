@@ -42,6 +42,9 @@ public:
 
     }
 
+    // EnhancedCustomShapeExtrusion.idl
+    void dumpExtrusionAsAttribute(sal_Bool bExtrusion);
+    void dumpBrightnessAsAttribute(double aBrightness);
 
 private:
     xmlTextWriterPtr xmlWriter;
