@@ -46,6 +46,8 @@
 
 #include <vcl/svapp.hxx>
 
+#define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+
 using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringBuffer;
@@ -72,6 +74,7 @@ public:
     void testN766477();
     void testN758883();
     void testN766481();
+    void testN766487();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -94,6 +97,7 @@ public:
     CPPUNIT_TEST(testN766477);
     CPPUNIT_TEST(testN758883);
     CPPUNIT_TEST(testN766481);
+    CPPUNIT_TEST(testN766487);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -624,6 +628,37 @@ void Test::testN766481()
     for (int i = 0; i < 2; ++i)
         xParaEnum->nextElement();
     CPPUNIT_ASSERT_EQUAL(sal_False, xParaEnum->hasMoreElements());
+}
+
+void Test::testN766487()
+{
+    /*
+     * The problem was that 1) the font size of the first para was too large 2) numbering had no first-line-indent.
+     *
+     * oParas = ThisComponent.Text.createEnumeration
+     * oPara = oParas.nextElement
+     * oRuns = oPara.createEnumeration
+     * oRun = oRuns.nextElement
+     * xray oRun.CharHeight ' 12, was larger
+     * oPara = oParas.nextElement
+     * xray oPara.ParaFirstLineIndent ' -635, was 0
+     */
+    load("n766487.docx");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
+
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum(xRunEnumAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+    float fValue = 0;
+    xPropertySet->getPropertyValue("CharHeight") >>= fValue;
+    CPPUNIT_ASSERT_EQUAL(12.f, fValue);
+
+    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nValue = 0;
+    xPropertySet->getPropertyValue("ParaFirstLineIndent") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(-360)), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
