@@ -119,6 +119,10 @@ protected:
     */
     bool PrepareLeaveCurrentPage();
 
+    /** save the position of the TabDialog and which tab page is the currently active one
+     */
+    void SavePosAndId();
+
 public:
     SfxTabDialog( Window* pParent, const ResId &rResId, const SfxItemSet * = 0,
                   sal_Bool bEditFmt = sal_False, const String *pUserButtonText = 0 );

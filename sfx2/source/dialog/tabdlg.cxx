@@ -468,6 +468,8 @@ SfxTabDialog::SfxTabDialog
 
 SfxTabDialog::~SfxTabDialog()
 {
+    SavePosAndId();
+
     const sal_uInt16 nCount = pImpl->pData->Count();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
@@ -871,6 +873,14 @@ SfxTabPage* SfxTabDialog::GetTabPage( sal_uInt16 nPageId ) const
     return NULL;
 }
 
+void SfxTabDialog::SavePosAndId()
+{
+    // save settings (screen position and current page)
+    SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
+    aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(WINDOWSTATE_MASK_POS),RTL_TEXTENCODING_ASCII_US));
+    aDlgOpt.SetPageID( aTabCtrl.GetCurPageId() );
+}
+
 // -----------------------------------------------------------------------
 
 short SfxTabDialog::Ok()
@@ -893,10 +903,7 @@ short SfxTabDialog::Ok()
 */
 
 {
-    // save settings (screen position and current page)
-    SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
-    aDlgOpt.SetWindowState(OStringToOUString(GetWindowState(WINDOWSTATE_MASK_POS),RTL_TEXTENCODING_ASCII_US));
-    aDlgOpt.SetPageID( aTabCtrl.GetCurPageId() );
+    SavePosAndId(); //See fdo#38828 "Apply" resetting window position
 
     pImpl->bInOK = sal_True;
 
