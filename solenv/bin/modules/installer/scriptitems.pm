@@ -985,7 +985,8 @@ sub replace_setup_variables
     if ( $hashref->{'USERDIRPRODUCTVERSION'} ) { $userdirproductversion = $hashref->{'USERDIRPRODUCTVERSION'}; }
     my $productkey = $productname . " " . $productversion;
 
-    my $scsrevision = SvnRevision::DetectRevisionId(File::Spec->catfile($ENV{'SRC_ROOT'}, File::Spec->updir()));
+    my $scsrevision;
+    $scsrevision = "" unless ( $scsrevision = SvnRevision::DetectRevisionId(File::Spec->catfile($ENV{'SRC_ROOT'}, File::Spec->updir())) );
 
     # string $buildid, which is used to replace the setup variable <buildid>
 
@@ -1014,7 +1015,7 @@ sub replace_setup_variables
         my $value = $oneitem->{'Value'};
 
         $value =~ s/\<buildid\>/$buildidstring/;
-        $value =~ s/\<scsrevision\>/$scsrevision/ if defined $scsrevision;
+        $value =~ s/\<scsrevision\>/$scsrevision/;
         $value =~ s/\<sequence_languages\>/$languagesstring/;
         $value =~ s/\<productkey\>/$productkey/;
         $value =~ s/\<productcode\>/$installer::globals::productcode/;
