@@ -97,7 +97,7 @@ sub create_directory_with_privileges
                     }
                     else
                     {
-                        $infoline = "\Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
+                        $infoline = "\nError: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
                         push(@installer::globals::logfileinfo, $infoline);
                         if ( -d $parentdir )
                         {
