@@ -2853,40 +2853,19 @@ void ScInterpreter::ScIsOdd()
 
 void ScInterpreter::ScN()
 {
-    switch (GetRawStackType())
-    {
-        case svSingleRef:
-        case svDoubleRef:
-        case svMatrix:
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
-        {
-            ScMatrixRef pMat = GetMatrix();
-            SCSIZE nC, nR;
-            pMat->GetDimensions(nC, nR);
-            if (!nC || !nR)
-                PushDouble(0);
-            else
-                PushDouble(pMat->GetDouble(0, 0));
-            return;
-        }
-        case svString:
-            PopError();
-            PushDouble(0);
-            return;
-        default:
-            ;
-    }
-
-    // Default action
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScN" );
+    sal_uInt16 nErr = nGlobalError;
+    nGlobalError = 0;
+    // Temporarily override the ConvertStringToValue() error for
+    // GetCellValue() / GetCellValueOrZero()
+    sal_uInt16 nSErr = mnStringNoValueError;
+    mnStringNoValueError = errCellNoValue;
     double fVal = GetDouble();
-    if (nGlobalError)
-    {
-        // Don't propagate the error. Push 0 instead.
-        nGlobalError = 0;
-        PushDouble(0);
-        return;
-    }
+    mnStringNoValueError = nSErr;
+    if (nErr)
+        nGlobalError = nErr;    // preserve previous error if any
+    else if (nGlobalError == errCellNoValue)
+        nGlobalError = 0;       // reset temporary detection error
     PushDouble(fVal);
 }
 

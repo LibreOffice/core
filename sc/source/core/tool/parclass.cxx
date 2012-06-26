@@ -144,7 +144,6 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocModalValue,      {{ ForceArray                                           }, true }},
     { ocMul,             {{ Array, Array                                         }, false }},
     { ocMultiArea,       {{ Reference                                            }, true }},
-    { ocN,               {{ Reference                                            }, false }},
     { ocNPV,             {{ Value, Reference                                     }, true }},
     { ocNeg,             {{ Array                                                }, false }},
     { ocNegSub,          {{ Array                                                }, false }},
@@ -195,9 +194,13 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocVLookup,         {{ Value, Reference, Value, Value                       }, false }},
     { ocZTest,           {{ Reference, Value, Value                              }, false }},
     // Excel doubts:
-    // ocT: Excel says (and handles) Reference, error? This means no position
-    // dependent SingleRef if DoubleRef, and no array calculation, just the
-    // upper left corner. We never did that.
+    // ocN, ocT: Excel says (and handles) Reference, error? This means no
+    // position dependent SingleRef if DoubleRef, and no array calculation,
+    // just the upper left corner. We never did that for ocT and now also not
+    // for ocN (position dependent intersection worked before but array
+    // didn't). No specifics in ODFF, so the general rule applies. Gnumeric
+    // does the same.
+    { ocN, {{ Value }, false }},
     { ocT, {{ Value }, false }},
     // The stopper.
     { ocNone, {{ Bounds }, false } }
