@@ -628,7 +628,6 @@ void ThumbnailView::ImplEndTracking( const Point& rPos, bool bCancel )
 
 IMPL_LINK (ThumbnailView, OnFolderSelected, ThumbnailViewItem*, pItem)
 {
-    DrawItem(pItem);
     return 0;
 }
 
