@@ -165,10 +165,6 @@ public:
         XMLChildNode *pChild    /// the new child
     );
 
-    void AddChild(
-        XMLChildNode *pChild , size_t pos   /// the new child
-    );
-
     void RemoveAndDeleteAllChildren();
 };
 

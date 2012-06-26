@@ -126,13 +126,6 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::uno:
 }
 
 //------------------------------------------------------------------------------
-SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdb::SQLErrorEvent& _rError)
-{
-    m_aContent = _rError.Reason;
-    implDetermineType();
-}
-
-//------------------------------------------------------------------------------
 SQLExceptionInfo::SQLExceptionInfo(const staruno::Any& _rError)
 {
     const staruno::Type& aSQLExceptionType = ::getCppuType(reinterpret_cast< ::com::sun::star::sdbc::SQLException*>(NULL));

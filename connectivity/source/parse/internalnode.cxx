@@ -45,16 +45,6 @@ OSQLInternalNode::OSQLInternalNode(const ::rtl::OString &_NewValue,
 }
 
 //-----------------------------------------------------------------------------
-OSQLInternalNode::OSQLInternalNode(const sal_Unicode* pNewValue,
-                                   SQLNodeType eNodeType,
-                                   sal_uInt32 nNodeID)
-                 :OSQLParseNode(pNewValue,eNodeType,nNodeID)
-{
-    OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
-    (*OSQLParser::s_pGarbageCollector)->push_back(this);
-}
-
-//-----------------------------------------------------------------------------
 OSQLInternalNode::OSQLInternalNode(const ::rtl::OUString &_NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)

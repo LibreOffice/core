@@ -85,7 +85,6 @@ public:
 
     SQLExceptionInfo(const SQLExceptionInfo& _rCopySource);
 
-    SQLExceptionInfo(const ::com::sun::star::sdb::SQLErrorEvent& _rError);
             // use for events got via XSQLErrorListener::errorOccured
     SQLExceptionInfo(const ::com::sun::star::uno::Any& _rError);
             // use with the Reason member of an SQLErrorEvent or with NextElement of an SQLException

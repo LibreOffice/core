@@ -143,22 +143,6 @@ void XMLParentNode::AddChild( XMLChildNode *pChild )
 }
 
 /*****************************************************************************/
-void XMLParentNode::AddChild( XMLChildNode *pChild , size_t pos )
-/*****************************************************************************/
-{
-    if ( !pChildList )
-        pChildList = new XMLChildNodeList();
-    if ( pos < pChildList->size() )
-    {
-        XMLChildNodeList::iterator it = pChildList->begin();
-        ::std::advance( it, pos );
-        pChildList->insert( it, pChild );
-    } else {
-        pChildList->push_back( pChild );
-    }
-}
-
-/*****************************************************************************/
 void XMLParentNode::RemoveAndDeleteAllChildren(){
 /*****************************************************************************/
     if ( pChildList ) {
