@@ -875,15 +875,18 @@ static int ImplGetTopDockingAreaHeight( Window *pWindow )
                     if ( pChildWin->GetType() == WINDOW_DOCKINGAREA )
                         pDockingArea = static_cast< DockingAreaWindow* >( pChildWin );
 
-                    if( pDockingArea && pDockingArea->GetAlign() == WINDOWALIGN_TOP && pDockingArea->IsVisible() )
+                    if( pDockingArea && pDockingArea->GetAlign() == WINDOWALIGN_TOP &&
+                        pDockingArea->IsVisible() && pDockingArea->GetOutputSizePixel().Height() != 0 )
+                    {
                         return pDockingArea->GetOutputSizePixel().Height();
-                    else
-                        pChildWin = pChildWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
+                    }
+
+                    pChildWin = pChildWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
                 }
 
             }
-            else
-                pWin = pWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
+
+            pWin = pWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
         }
     }
     return 0;
