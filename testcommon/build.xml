@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--************************************************************************
+ *
+ * Licensed Materials - Property of IBM.
+ * (C) Copyright IBM Corporation 2003, 2012.  All Rights Reserved.
+ * U.S. Government Users Restricted Rights:
+ * Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+ *
+ ************************************************************************ -->
+
+<project basedir="." default="dist">
+    <property name="src" value="./source" />
+    <property name="out" value="output" />
+    <property name="classes" value="${out}/class" />
+    <property name="dist" value="${out}/class" />
+    <property name="jar.name" value="testcommon.jar" />
+
+    <target name="init">
+        <mkdir dir="${classes}" />
+        <mkdir dir="${dist}" />
+        <copy includeemptydirs="false" todir="${classes}">
+            <fileset dir="${src}">
+                <exclude name="**/*.java" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean" description="Clean all output">
+        <delete dir="${classes}" />
+        <delete dir="${dist}" />
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${classes}" debug="on" source="1.6">
+        </javac>
+    </target>
+
+    <target name="dist" depends="compile">
+        <jar destfile="${dist}/${jar.name}" basedir="${classes}"  excludes="*.jar"/>
+    </target>
+
+</project>

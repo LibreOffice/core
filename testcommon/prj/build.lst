@@ -1,0 +1,2 @@
+tcomm testcommon : NULL
+tcomm testcommon nmake - all tcomm_mkout NULL
