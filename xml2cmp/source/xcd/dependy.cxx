@@ -72,6 +72,8 @@ DependencyFinder::DependencyFinder()
 
 DependencyFinder::~DependencyFinder()
 {
+    for (Map_Services::const_iterator aIter = aServices.begin(); aIter != aServices.end(); ++aIter)
+        delete aIter->second;
 }
 
 void
