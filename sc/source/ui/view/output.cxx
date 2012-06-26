@@ -861,10 +861,11 @@ void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, con
         aLineInfo.SetDashCount( 4 );
         aLineInfo.SetDistance( 3 );
         aLineInfo.SetDashLen( 3 );
-        pDev->SetFillColor(COL_BLACK);
-        pDev->SetLineColor(COL_BLACK);
+        pDev->SetFillColor(pOldDataBarInfo->maAxisColor);
+        pDev->SetLineColor(pOldDataBarInfo->maAxisColor);
         pDev->DrawLine(aPoint1, aPoint2, aLineInfo);
         pDev->SetLineColor();
+        pDev->SetFillColor();
     }
 }
 

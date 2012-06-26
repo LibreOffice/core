@@ -176,6 +176,7 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
     ::SetType(rData.mpUpperLimit.get(), maLbTypeMax);
     SetValue(rData.mpLowerLimit.get(), maEdMin);
     SetValue(rData.mpUpperLimit.get(), maEdMax);
+    maLbAxisCol.SelectEntry(rData.maAxisColor);
 
     TypeSelectHdl(NULL);
 }
@@ -259,6 +260,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     pData->mbGradient = true; //FIXME
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
+    pData->maAxisColor = maLbAxisCol.GetSelectEntryColor();
 
     ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get(), mpNumberFormatter);
     ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get(), mpNumberFormatter);

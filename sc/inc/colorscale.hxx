@@ -99,6 +99,7 @@ enum ScAxisPostion
 struct SC_DLLPUBLIC ScDataBarFormatData
 {
     ScDataBarFormatData():
+        maAxisColor(COL_BLACK),
         mbGradient(true),
         mbNeg(true),
         meAxisPosition(databar::AUTOMATIC),
@@ -106,6 +107,7 @@ struct SC_DLLPUBLIC ScDataBarFormatData
 
     ScDataBarFormatData(const ScDataBarFormatData& r):
         maPositiveColor(r.maPositiveColor),
+        maAxisColor(r.maAxisColor),
         mbGradient(r.mbGradient),
         mbNeg(r.mbNeg),
         meAxisPosition(r.meAxisPosition),
@@ -130,6 +132,11 @@ struct SC_DLLPUBLIC ScDataBarFormatData
      * Default color is 0xFF0000, this value is not set
      */
     boost::scoped_ptr<Color> mpNegativeColor;
+    /**
+     * Color of the axis if used
+     * Default color is black
+     */
+    Color maAxisColor;
     /**
      * Paint the bars with gradient. If this is used the default is to draw with
      * borders.
