@@ -123,11 +123,11 @@ case "$1" in
 		ask_tristate $CODEREVIEW
 		case "$ANSWER" in
 			"y")
-				read -p 'do you approve and submit the change (+) too, or prefer someone else to do that ()? ' CODEREVIEW
+				read -p 'do you approve the change (+) too, or prefer someone else to do that ()? ' CODEREVIEW
 				ask_tristate $CODEREVIEW
 				case "$ANSWER" in
 					"y")
-						CODEREVIEWFLAG="--codereview=2 --submit"
+						CODEREVIEWFLAG="--codereview=2"
 					;;
 					"n")
 						CODEREVIEWFLAG="--codereview=1"
