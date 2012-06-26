@@ -239,10 +239,16 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
     // We keep this code until we provide a friendly way to convert string
     // numbers into numbers in the UI.
     double fValue = 0.0;
+    if (mnStringNoValueError == errCellNoValue)
+    {
+        // Requested that all strings result in 0, error handled by caller.
+        SetError( mnStringNoValueError);
+        return fValue;
+    }
     sal_uInt32 nFIndex = 0;
     if (!pFormatter->IsNumberFormat(rStr, nFIndex, fValue))
     {
-        SetError(errNoValue);
+        SetError( mnStringNoValueError);
         fValue = 0.0;
     }
     return fValue;
