@@ -433,25 +433,37 @@ void testFuncN(ScDocument* pDoc)
     pDoc->SetString(1, 13, 0, OUString("=N(\"foo\")"));
 
     // Range references
-    pDoc->SetString(1, 14, 0, OUString("=N(A1:A8)"));
-    pDoc->SetString(1, 15, 0, OUString("=N(A4:B8)"));
-    pDoc->SetString(1, 16, 0, OUString("=N(A6:B8)"));
-    pDoc->SetString(1, 17, 0, OUString("=N(A2:B8)"));
+    pDoc->SetString(2, 2, 0, OUString("=N(A1:A8)"));
+    pDoc->SetString(2, 3, 0, OUString("=N(A1:A8)"));
+    pDoc->SetString(2, 4, 0, OUString("=N(A1:A8)"));
+    pDoc->SetString(2, 5, 0, OUString("=N(A1:A8)"));
 
     // Calculate and check the results.
     pDoc->CalcAll();
-    double checks[] = {
+    double checks1[] = {
         0, 0,  0,    1, -1, 12.3, 0, // cell reference
-        0, 1, -1, 123,  0,    0, 0, // in-line values
-        0, 1, 12.3, 0                // range references
+        0, 1, -1, 123,  0,    0, 0   // in-line values
     };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(checks); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(checks1); ++i)
     {
         pDoc->GetValue(1, i, 0, result);
-        bool bGood = result == checks[i];
+        bool bGood = result == checks1[i];
         if (!bGood)
         {
-            cerr << "row " << (i+1) << ": expected=" << checks[i] << " actual=" << result << endl;
+            cerr << "row " << (i+1) << ": expected=" << checks1[i] << " actual=" << result << endl;
+            CPPUNIT_ASSERT_MESSAGE("Unexpected result for N", false);
+        }
+    }
+    double checks2[] = {
+        0, 1, -1, 12.3               // range references
+    };
+    for (size_t i = 0; i < SAL_N_ELEMENTS(checks2); ++i)
+    {
+        pDoc->GetValue(1, i+2, 0, result);
+        bool bGood = result == checks2[i];
+        if (!bGood)
+        {
+            cerr << "row " << (i+2+1) << ": expected=" << checks2[i] << " actual=" << result << endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for N", false);
         }
     }
