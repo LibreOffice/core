@@ -90,20 +90,20 @@ public:
                             const ControlConverter& rConv ) const;
 
 protected:
-    ::rtl::OUString     maName;             /// Name of the control.
-    ::rtl::OUString     maTag;              /// User defined tag.
-    ::rtl::OUString     maToolTip;          /// Tool tip for the control.
-    ::rtl::OUString     maControlSource;    /// Linked cell for the control value in a spreadsheet.
-    ::rtl::OUString     maRowSource;        /// Source data for the control in a spreadsheet.
+    ::rtl::OUString     maName;             ///< Name of the control.
+    ::rtl::OUString     maTag;              ///< User defined tag.
+    ::rtl::OUString     maToolTip;          ///< Tool tip for the control.
+    ::rtl::OUString     maControlSource;    ///< Linked cell for the control value in a spreadsheet.
+    ::rtl::OUString     maRowSource;        ///< Source data for the control in a spreadsheet.
 
-    AxPairData          maPos;              /// Position in parent container.
-    sal_Int32           mnId;               /// Control identifier.
-    sal_Int32           mnHelpContextId;    /// Help context identifier.
-    sal_uInt32          mnFlags;            /// Various flags.
-    sal_uInt32          mnStreamLen;        /// Size of control stream data.
-    sal_Int16           mnTabIndex;         /// Tab order index.
-    sal_uInt16          mnClassIdOrCache;   /// Class name identifier or GUID cache index.
-    sal_uInt16          mnGroupId;          /// Group identifier for grouped controls.
+    AxPairData          maPos;              ///< Position in parent container.
+    sal_Int32           mnId;               ///< Control identifier.
+    sal_Int32           mnHelpContextId;    ///< Help context identifier.
+    sal_uInt32          mnFlags;            ///< Various flags.
+    sal_uInt32          mnStreamLen;        ///< Size of control stream data.
+    sal_Int16           mnTabIndex;         ///< Tab order index.
+    sal_uInt16          mnClassIdOrCache;   ///< Class name identifier or GUID cache index.
+    sal_uInt16          mnGroupId;          ///< Group identifier for grouped controls.
 };
 
 typedef ::boost::shared_ptr< VbaSiteModel > VbaSiteModelRef;
@@ -173,12 +173,12 @@ private:
     static bool         compareByTabIndex( const VbaFormControlRef& rxLeft, const VbaFormControlRef& rxRight );
 
 protected:
-    VbaSiteModelRef     mxSiteModel;        /// Common control properties.
-    ControlModelRef     mxCtrlModel;        /// Specific control properties.
+    VbaSiteModelRef     mxSiteModel;        ///< Common control properties.
+    ControlModelRef     mxCtrlModel;        ///< Specific control properties.
 
 private:
-    VbaFormControlVector maControls;        /// All embedded form controls.
-    AxClassTable         maClassTable;      /// Class identifiers for exotic embedded controls.
+    VbaFormControlVector maControls;        ///< All embedded form controls.
+    AxClassTable         maClassTable;      ///< Class identifiers for exotic embedded controls.
 };
 
 // ============================================================================

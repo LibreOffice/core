@@ -191,16 +191,16 @@ private:
     typedef ::std::map< ::rtl::OUString, sal_Int32 >    DummyModuleMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                        mxContext;          /// Component context with service manager.
+                        mxContext;          ///< Component context with service manager.
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                        mxDocModel;         /// Document model used to import/export the VBA project.
+                        mxDocModel;         ///< Document model used to import/export the VBA project.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        mxBasicLib;         /// The Basic library of the document used for import.
+                        mxBasicLib;         ///< The Basic library of the document used for import.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        mxDialogLib;        /// The dialog library of the document used for import.
-    MacroAttacherVector maMacroAttachers;   /// Objects that want to attach a VBA macro to an action.
-    DummyModuleMap      maDummyModules;     /// Additional empty modules created on import.
-    ::rtl::OUString     maPrjName;          /// Name of the VBA project.
+                        mxDialogLib;        ///< The dialog library of the document used for import.
+    MacroAttacherVector maMacroAttachers;   ///< Objects that want to attach a VBA macro to an action.
+    DummyModuleMap      maDummyModules;     ///< Additional empty modules created on import.
+    ::rtl::OUString     maPrjName;          ///< Name of the VBA project.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxOleOverridesSink;
 };

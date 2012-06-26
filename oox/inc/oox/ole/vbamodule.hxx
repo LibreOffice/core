@@ -100,9 +100,9 @@ private:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                        mxContext;          /// Component context with service manager.
+                        mxContext;          ///< Component context with service manager.
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                        mxDocModel;         /// Document model used to import/export the VBA project.
+                        mxDocModel;         ///< Document model used to import/export the VBA project.
     ::rtl::OUString     maName;
     ::rtl::OUString     maStreamName;
     ::rtl::OUString     maDocString;
