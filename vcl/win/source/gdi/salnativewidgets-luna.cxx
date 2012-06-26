@@ -482,7 +482,7 @@ void impl_drawAeroToolbar( HDC hDC, RECT rc )
     // gradient at the bottom
     TRIVERTEX vert[2] = {
         { rc.left, gradient_break, 0xfa00, 0xfa00, 0xfa00, 0xff00 },
-        { rc.right, rc.bottom,     0xe500, 0xe900, 0xee00, 0xff00 }
+        { rc.right, rc.bottom,     0xf000, 0xf000, 0xf000, 0xff00 }
     };
     GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 }
