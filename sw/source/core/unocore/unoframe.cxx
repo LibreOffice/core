@@ -99,6 +99,8 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <editeng/xmlcnitm.hxx>
 #include <poolfmt.hxx>
@@ -556,6 +558,20 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
         SwFmtFollowTextFlow aFmtFollowTextFlow;
         aFmtFollowTextFlow.PutValue(*pFollowTextFlow, 0);
         rToSet.Put(aFmtFollowTextFlow);
+    }
+    else
+    {
+        // #i119922# Set default value for "Follow text flow" to false if a
+        // previous version didn't support "Follow text flow"
+        SfxMedium* pMedium = NULL;
+        const SfxFilter * pFilter = NULL;
+        if ( ( pMedium = pDoc->GetDocShell()->GetMedium() ) &&
+                ( pFilter = pMedium->GetFilter() ) )
+        {
+            bool bOasis = pFilter->GetVersion() > SOFFICE_FILEFORMAT_60;
+            if (bOasis)
+                rToSet.Put( SwFmtFollowTextFlow() );
+        }
     }
 
     // #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
