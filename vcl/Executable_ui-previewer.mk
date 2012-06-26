@@ -31,16 +31,16 @@ $(eval $(call gb_Executable_set_include,ui-previewer,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_add_api,ui-previewer,\
+$(eval $(call gb_Executable_use_api,ui-previewer,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,ui-previewer,\
+$(eval $(call gb_Executable_use_static_libraries,ui-previewer,\
     vclmain \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,ui-previewer,\
+$(eval $(call gb_Executable_use_libraries,ui-previewer,\
 	comphelper \
 	cppu \
 	cppuhelper \

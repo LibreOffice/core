@@ -9831,12 +9831,10 @@ void Window::take_properties(Window &rOther)
     mpWindowImpl->mbDisableAccessibleLabeledByRelation = pWindowImpl->mbDisableAccessibleLabeledByRelation;
     mpWindowImpl->mbHelpTextDynamic = pWindowImpl->mbHelpTextDynamic;
     mpWindowImpl->mbFakeFocusSet = pWindowImpl->mbFakeFocusSet;
-    mpWindowImpl->mbInterceptChildWindowKeyDown = pWindowImpl->mbInterceptChildWindowKeyDown;
     mpWindowImpl->mbHexpand = pWindowImpl->mbHexpand;
     mpWindowImpl->mbVexpand = pWindowImpl->mbVexpand;
     mpWindowImpl->meHalign = pWindowImpl->meHalign;
     mpWindowImpl->meValign = pWindowImpl->meValign;
-
 
     std::swap(m_aWidgetProperties, rOther.m_aWidgetProperties);
 
