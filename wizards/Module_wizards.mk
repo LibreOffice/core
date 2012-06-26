@@ -33,7 +33,6 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	AllLangResTarget_eur \
 	AllLangResTarget_imp \
 	AllLangResTarget_tpl \
-	AllLangResTarget_wwz \
 	AllLangResTarget_wzi \
 	Pyuno_fax \
 	Pyuno_commonwizards \
