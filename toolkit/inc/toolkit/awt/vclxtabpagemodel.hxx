@@ -40,7 +40,6 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
-#include "forward.hxx"
 #include <cppuhelper/implbase1.hxx>
 //  ----------------------------------------------------
 typedef ::cppu::AggImplInheritanceHelper1 <    UnoControlModel,
