@@ -2210,7 +2210,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     // find used area (non-empty cells)
     SCCOL nLastUsedScCol;
     SCROW nLastUsedScRow;
-    rDoc.GetFormattedAndUsedArea( nScTab, nLastUsedScCol, nLastUsedScRow );
+    rDoc.GetTableArea( nScTab, nLastUsedScCol, nLastUsedScRow );
 
     ScRange aUsedRange( 0, 0, nScTab, nLastUsedScCol, nLastUsedScRow, nScTab );
     GetAddressConverter().ValidateRange( aUsedRange, true );
