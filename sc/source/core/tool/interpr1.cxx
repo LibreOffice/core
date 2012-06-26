@@ -2970,14 +2970,14 @@ void ScInterpreter::ScN()
 
 void ScInterpreter::ScTrim()
 {
-    // Doesn't only trim but writes out twice!
+    // Doesn't only trim but also removes duplicated blanks within!
     String aVal = comphelper::string::strip(GetString(), ' ');
     String aStr;
     register const sal_Unicode* p = aVal.GetBuffer();
     register const sal_Unicode* const pEnd = p + aVal.Len();
     while ( p < pEnd )
     {
-        if ( *p != ' ' || p[-1] != ' ' )    // ' ' can't be first, -1 is fine too
+        if ( *p != ' ' || p[-1] != ' ' )    // first can't be ' ', so -1 is fine
             aStr += *p;
         p++;
     }
