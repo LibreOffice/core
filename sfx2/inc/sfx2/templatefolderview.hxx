@@ -43,6 +43,9 @@ public:
 
     void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
+    void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
+                                                       const ThumbnailViewItem*) > &func);
+
     void setTemplateStateHdl (const Link &aLink) { maTemplateStateHdl = aLink; }
 
     bool removeTemplate (const sal_uInt16 nItemId);

@@ -240,6 +240,9 @@ public:
 
     void filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func);
 
+    void sortItems (const boost::function<bool (const ThumbnailViewItem*,
+                                                const ThumbnailViewItem*) > &func);
+
     void setItemStateHdl (const Link &aLink) { maItemStateHdl = aLink; }
 
 protected:

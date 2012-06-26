@@ -342,6 +342,12 @@ void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
     }
 }
 
+void TemplateFolderView::sortOverlayItems(const boost::function<bool (const ThumbnailViewItem*,
+                                                                      const ThumbnailViewItem*) > &func)
+{
+    mpItemView->sortItems(func);
+}
+
 bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
 {
     sal_uInt16 nRegionId = mpItemView->getRegionId();

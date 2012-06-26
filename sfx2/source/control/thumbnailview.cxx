@@ -1392,6 +1392,15 @@ void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailView
     Invalidate();
 }
 
+void ThumbnailView::sortItems (const boost::function<bool (const ThumbnailViewItem*, const ThumbnailViewItem*) > &func)
+{
+    std::sort(mItemList.begin(),mItemList.end(),func);
+
+    CalculateItemPositions();
+
+    Invalidate();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 

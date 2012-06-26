@@ -43,6 +43,17 @@ using namespace ::com::sun::star::frame;
 
 void lcl_createTemplate(uno::Reference<XComponentLoader> xDesktop, const FILTER_APPLICATION eApp);
 
+// Sort by name in ascending order
+class SortView_Name
+{
+public:
+
+    bool operator() (const ThumbnailViewItem *pItem1, const ThumbnailViewItem *pItem2)
+    {
+        return (pItem1->maText.compareTo(pItem2->maText) < 0);
+    }
+};
+
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModalDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
       aButtonAll(this,SfxResId(BTN_SELECT_ALL)),
@@ -341,6 +352,10 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
         lcl_createTemplate(mxDesktop,FILTER_APP_DRAW);
         break;
     case MNI_ACTION_SORT_NAME:
+        if (maView->isOverlayVisible())
+            maView->sortOverlayItems(SortView_Name());
+        else
+            maView->sortItems(SortView_Name());
         break;
     default:
         break;
