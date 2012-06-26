@@ -196,6 +196,13 @@ public:
     void SetMatrix( ScMatrix* p );
     void SetExternal(const sal_Unicode* pStr);
 
+    /** If the token is a non-external reference, determine if the reference is
+        valid. If the token is an external reference, return true. Else return
+        false. Used only in ScCompiler::NextNewToken() to preserve non-existing
+        sheet names in otherwise valid references.
+     */
+    bool IsValidReference() const;
+
     ScRawToken* Clone() const;      // real copy!
     formula::FormulaToken* CreateToken() const;   // create typified token
     void Load( SvStream&, sal_uInt16 nVer );

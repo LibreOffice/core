@@ -3657,6 +3657,14 @@ bool ScCompiler::NextNewToken( bool bInArray )
         {
             if (mbRewind)   // Range operator, but no direct reference.
                 continue;   // do; up to range operator.
+            // If a syntactically correct reference was recognized but invalid
+            // e.g. because of non-existing sheet name => entire reference
+            // ocBad to preserve input instead of #REF!.A1
+            if (!pRawToken->IsValidReference())
+            {
+                aUpper = aOrg;          // ensure for ocBad
+                break;                  // do; create ocBad token or set error.
+            }
             return true;
         }
 

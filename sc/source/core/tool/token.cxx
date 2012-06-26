@@ -292,6 +292,25 @@ void ScRawToken::SetExternal( const sal_Unicode* pStr )
     nRefCnt = 0;
 }
 
+
+bool ScRawToken::IsValidReference() const
+{
+    switch (eType)
+    {
+        case svSingleRef:
+            return aRef.Ref1.Valid();
+        case svDoubleRef:
+            return aRef.Valid();
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+            return true;
+        default:
+            ;   // nothing
+    }
+    return false;
+}
+
+
 sal_uInt16 lcl_ScRawTokenOffset()
 {
     // offset of sbyte in ScRawToken
