@@ -40,6 +40,7 @@
 
 #include <svtools/ivctrl.hxx>
 #include <svl/svarray.hxx>
+#include <boost/ptr_container/ptr_map.hpp>
 
 class IcnCursor_Impl;
 class SvtIconChoiceCtrl;
@@ -156,6 +157,9 @@ public:
 //
 // Implementation-class of IconChoiceCtrl
 //
+
+typedef boost::ptr_map<sal_uInt16, SvxIconChoiceCtrlColumnInfo> SvxIconChoiceCtrlColumnInfoMap;
+
 class SvxIconChoiceCtrl_Impl
 {
     friend class IcnCursor_Impl;
@@ -188,7 +192,7 @@ class SvxIconChoiceCtrl_Impl
     long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
     long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
     SvxIconChoiceCtrlEntryList_impl*    pZOrderList;
-    SvPtrarr*               pColumns;
+    SvxIconChoiceCtrlColumnInfoMap* pColumns;
     IcnViewEdit_Impl*       pEdit;
     WinBits                 nWinBits;
     long                    nMaxBoundHeight;            // height of highest BoundRects

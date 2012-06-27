@@ -3718,36 +3718,17 @@ void SvxIconChoiceCtrl_Impl::ClearColumnList()
     if( !pColumns )
         return;
 
-    const sal_uInt16 nCount = pColumns->Count();
-    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
-    {
-        SvxIconChoiceCtrlColumnInfo* pInfo = (SvxIconChoiceCtrlColumnInfo*)
-            pColumns->GetObject( nCur );
-        delete pInfo;
-    }
+    pColumns->clear();
     DELETEZ(pColumns);
 }
 
 void SvxIconChoiceCtrl_Impl::SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCtrlColumnInfo& rInfo)
 {
     if( !pColumns )
-        pColumns = new SvPtrarr;
-    while( pColumns->Count() < nIndex + 1 )
-        pColumns->Insert( (void*)0, pColumns->Count() );
+        pColumns = new SvxIconChoiceCtrlColumnInfoMap;
 
-    SvxIconChoiceCtrlColumnInfo* pInfo =
-        (SvxIconChoiceCtrlColumnInfo*)pColumns->GetObject(nIndex);
-    if( !pInfo )
-    {
-        pInfo = new SvxIconChoiceCtrlColumnInfo( rInfo );
-        pColumns->Insert( (void*)pInfo, nIndex );
-    }
-    else
-    {
-        delete pInfo;
-        pInfo = new SvxIconChoiceCtrlColumnInfo( rInfo );
-        pColumns->Replace( pInfo, nIndex );
-    }
+    SvxIconChoiceCtrlColumnInfo* pInfo = new SvxIconChoiceCtrlColumnInfo( rInfo );
+    pColumns->insert( nIndex,  pInfo );
 
     // HACK: Detail mode is not yet fully implemented, this workaround makes it
     // fly with a single column
@@ -3760,9 +3741,12 @@ void SvxIconChoiceCtrl_Impl::SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCt
 
 const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16 nIndex ) const
 {
-    if( !pColumns || nIndex >= pColumns->Count() )
+    if( !pColumns || nIndex >= pColumns->size() )
         return 0;
-    return (const SvxIconChoiceCtrlColumnInfo*)pColumns->GetObject( nIndex );
+    SvxIconChoiceCtrlColumnInfoMap::const_iterator it = pColumns->find( nIndex );
+    if( it == pColumns->end() )
+        return 0;
+    return it->second;
 }
 
 void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(
