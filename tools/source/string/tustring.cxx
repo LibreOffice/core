@@ -70,11 +70,7 @@ UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
 UniString UniString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
 {
-    sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
-    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFINT32 <= STRING_MAXLEN);
-    return UniString(
-        aBuf,
-        static_cast< xub_StrLen >(rtl_ustr_valueOfInt32( aBuf, n, nRadix )) );
+    return rtl::OUString::valueOf(n, nRadix);
 }
 
 // -----------------------------------------------------------------------
