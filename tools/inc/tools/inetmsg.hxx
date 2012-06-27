@@ -105,14 +105,14 @@ class INetMessage
     HeaderList_impl m_aHeaderList;
 
     sal_uIntPtr     m_nDocSize;
-    UniString       m_aDocName;
+    rtl::OUString   m_aDocName;
     SvLockBytesRef  m_xDocLB;
 
     void ListCleanup_Impl();
     void ListCopy (const INetMessage& rMsg);
 
 protected:
-    UniString GetHeaderName_Impl (
+    rtl::OUString GetHeaderName_Impl (
         sal_uIntPtr nIndex, rtl_TextEncoding eEncoding) const
     {
         if ( nIndex < m_aHeaderList.size() ) {
@@ -122,13 +122,13 @@ protected:
         }
     }
 
-    UniString GetHeaderValue_Impl (
+    rtl::OUString GetHeaderValue_Impl (
         sal_uIntPtr nIndex, INetMIME::HeaderFieldType eType) const
     {
         if ( nIndex < m_aHeaderList.size() ) {
             return INetMIME::decodeHeaderFieldBody(eType, m_aHeaderList[ nIndex ]->GetValue());
         } else {
-            return UniString();
+            return rtl::OUString();
         }
     }
 
@@ -151,8 +151,8 @@ protected:
     void SetHeaderField_Impl (
         INetMIME::HeaderFieldType  eType,
         const rtl::OString        &rName,
-        const UniString           &rValue,
-        sal_uIntPtr                     &rnIndex);
+        const rtl::OUString       &rValue,
+        sal_uIntPtr               &rnIndex);
 
     virtual SvStream& operator<< (SvStream& rStrm) const;
     virtual SvStream& operator>> (SvStream& rStrm);
@@ -180,12 +180,12 @@ public:
 
     sal_uIntPtr GetHeaderCount() const { return m_aHeaderList.size(); }
 
-    UniString GetHeaderName (sal_uIntPtr nIndex) const
+    rtl::OUString GetHeaderName (sal_uIntPtr nIndex) const
     {
         return GetHeaderName_Impl (nIndex, RTL_TEXTENCODING_ASCII_US);
     }
 
-    UniString GetHeaderValue (sal_uIntPtr nIndex) const
+    rtl::OUString GetHeaderValue (sal_uIntPtr nIndex) const
     {
         return GetHeaderValue_Impl (nIndex, INetMIME::HEADER_FIELD_TEXT);
     }
@@ -207,8 +207,8 @@ public:
     sal_uIntPtr GetDocumentSize() const { return m_nDocSize; }
     void  SetDocumentSize (sal_uIntPtr nSize) { m_nDocSize = nSize; }
 
-    const UniString& GetDocumentName() const { return m_aDocName; }
-    void  SetDocumentName (const UniString& rName) { m_aDocName = rName; }
+    const rtl::OUString& GetDocumentName() const { return m_aDocName; }
+    void  SetDocumentName (const rtl::OUString& rName) { m_aDocName = rName; }
 
     SvLockBytes* GetDocumentLB() const { return m_xDocLB; }
     void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
@@ -267,7 +267,7 @@ public:
     INetRFC822Message& operator= (const INetRFC822Message& rMsg);
 
     static sal_Bool ParseDateField (
-        const UniString& rDateField, DateTime& rDateTime);
+        const rtl::OUString& rDateField, DateTime& rDateTime);
 
     using INetMessage::SetHeaderField;
     virtual sal_uIntPtr SetHeaderField (
@@ -277,105 +277,105 @@ public:
 
     /** Header fields.
      */
-    UniString GetBCC() const
+    rtl::OUString GetBCC() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_BCC],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetCC() const
+    rtl::OUString GetCC() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_CC],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetComments() const
+    rtl::OUString GetComments() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_COMMENTS],
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    UniString GetDate() const
+    rtl::OUString GetDate() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_DATE],
             INetMIME::HEADER_FIELD_STRUCTURED);
     }
 
-    UniString GetFrom() const
+    rtl::OUString GetFrom() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_FROM],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetInReplyTo() const
+    rtl::OUString GetInReplyTo() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_IN_REPLY_TO],
             INetMIME::HEADER_FIELD_ADDRESS); // ??? MESSAGE_ID ???
     }
 
-    UniString GetKeywords() const
+    rtl::OUString GetKeywords() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_KEYWORDS],
             INetMIME::HEADER_FIELD_PHRASE);
     }
 
-    UniString GetMessageID() const
+    rtl::OUString GetMessageID() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_MESSAGE_ID],
             INetMIME::HEADER_FIELD_MESSAGE_ID);
     }
 
-    UniString GetReferences() const
+    rtl::OUString GetReferences() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_REFERENCES],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetReplyTo() const
+    rtl::OUString GetReplyTo() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_REPLY_TO],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetReturnPath() const
+    rtl::OUString GetReturnPath() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_RETURN_PATH],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetReturnReceiptTo() const
+    rtl::OUString GetReturnReceiptTo() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_RETURN_RECEIPT_TO],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetSender() const
+    rtl::OUString GetSender() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_SENDER],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetSubject() const
+    rtl::OUString GetSubject() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_SUBJECT],
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    UniString GetTo() const
+    rtl::OUString GetTo() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_TO],

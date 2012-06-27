@@ -109,8 +109,8 @@ void INetMessage::ListCopy (const INetMessage &rMsg)
 void INetMessage::SetHeaderField_Impl (
     INetMIME::HeaderFieldType  eType,
     const rtl::OString        &rName,
-    const UniString           &rValue,
-    sal_uIntPtr                     &rnIndex)
+    const rtl::OUString       &rValue,
+    sal_uIntPtr               &rnIndex)
 {
     INetMIMEStringOutputSink aSink (0, STRING_MAXLEN);
     INetMIME::writeHeaderFieldBody (
@@ -329,7 +329,7 @@ static sal_uInt16 ParseMonth(const rtl::OString& rStr, sal_uInt16& nIndex)
 }
 
 sal_Bool INetRFC822Message::ParseDateField (
-    const UniString& rDateFieldW, DateTime& rDateTime)
+    const rtl::OUString& rDateFieldW, DateTime& rDateTime)
 {
     rtl::OString aDateField(rtl::OUStringToOString(rDateFieldW,
         RTL_TEXTENCODING_ASCII_US));
