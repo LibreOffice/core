@@ -555,6 +555,9 @@ public:
 
     rtl::OStringBuffer m_aTabStop;
 
+    /// Access to the page style of the previous paragraph.
+    const SwPageDesc* m_pPrevPageDesc;
+
     // These are used by wwFont::WriteRtf()
     /// Start the font.
     void StartFont( const String& rFamilyName ) const;

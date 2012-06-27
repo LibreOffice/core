@@ -350,6 +350,8 @@ void RtfAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
     {
         const SwTxtNode* pTxtNode = static_cast< SwTxtNode* >( &aNextIndex.GetNode() );
         m_rExport.OutputSectionBreaks( pTxtNode->GetpSwAttrSet(), *pTxtNode );
+        // Save the current page description for now, so later we will be able to access the previous one.
+        m_pPrevPageDesc = pTxtNode->FindPageDesc(sal_False);
     }
     else if ( aNextIndex.GetNode().IsTableNode() )
     {
@@ -3031,7 +3033,8 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_bTableRowEnded( false ),
     m_aCells(),
     m_bSingleEmptyRun(false),
-    m_bInRun(false)
+    m_bInRun(false),
+    m_pPrevPageDesc(0)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 }
