@@ -774,10 +774,10 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 String time;
 
                 // first I replace the minutes titles...
-                List items = searchFillInItems();
+                List<XTextRange> items = searchFillInItems();
                 for (int itemIndex = 0; itemIndex < items.size(); itemIndex++)
                 {
-                    item = (XTextRange) items.get(itemIndex);
+                    item = items.get(itemIndex);
                     itemText = item.getString().trim().toLowerCase();
 
                     if (itemText.equals(FILLIN_MINUTES_TITLE))
@@ -814,7 +814,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                     items = searchFillInItems();
                     for (int itemIndex = 0; itemIndex < items.size(); itemIndex++)
                     {
-                        item = (XTextRange) items.get(itemIndex);
+                        item = items.get(itemIndex);
                         itemText = item.getString().trim().toLowerCase();
 
                         if (itemText.equals(FILLIN_MINUTE_NUM))
