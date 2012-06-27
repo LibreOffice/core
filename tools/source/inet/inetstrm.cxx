@@ -1349,8 +1349,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             if (aContentType.Len())
             {
                 // Determine default Content-Type.
-                UniString aDefaultType;
-                pMsg->GetDefaultContentType (aDefaultType);
+                UniString aDefaultType = pMsg->GetDefaultContentType();
 
                 if (aDefaultType.CompareIgnoreCaseToAscii (
                     aContentType, aContentType.Len()) == 0)
@@ -1380,7 +1379,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
                 if (aContentType.Len() == 0)
                 {
                     // Determine default Content-Type.
-                    pMsg->GetDefaultContentType (aContentType);
+                    aContentType = pMsg->GetDefaultContentType();
                 }
                 eEncoding = GetMsgEncoding (aContentType);
             }
@@ -1739,8 +1738,7 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
              */
             if (pMsg->GetContentType().Len() == 0)
             {
-                String aDefaultCT;
-                pMsg->GetDefaultContentType (aDefaultCT);
+                String aDefaultCT = pMsg->GetDefaultContentType();
                 pMsg->SetContentType (aDefaultCT);
             }
 

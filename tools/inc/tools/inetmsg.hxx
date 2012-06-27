@@ -500,7 +500,7 @@ public:
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
     }
 
-    virtual void GetDefaultContentType (UniString& rContentType);
+    UniString GetDefaultContentType ();
 
     /** Message container methods.
      */

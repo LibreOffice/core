@@ -1033,36 +1033,18 @@ void INetMIMEMessage::SetContentTransferEncoding (
 /*
  * GetDefaultContentType.
  */
-void INetMIMEMessage::GetDefaultContentType (String& rContentType)
+UniString INetMIMEMessage::GetDefaultContentType()
 {
-    String aDefaultCT (
-        "text/plain; charset=us-ascii", RTL_TEXTENCODING_ASCII_US);
-    if (pParent == NULL)
-    {
-        rContentType = aDefaultCT;
-    }
-    else
+    if (pParent != NULL)
     {
         String aParentCT (pParent->GetContentType());
         if (aParentCT.Len() == 0)
-            pParent->GetDefaultContentType (aParentCT);
+            aParentCT = pParent->GetDefaultContentType();
 
-        if (aParentCT.CompareIgnoreCaseToAscii ("message/", 8) == 0)
-        {
-            rContentType = aDefaultCT;
-        }
-        else if (aParentCT.CompareIgnoreCaseToAscii ("multipart/", 10) == 0)
-        {
-            if (aParentCT.CompareIgnoreCaseToAscii ("multipart/digest") == 0)
-                rContentType.AssignAscii ("message/rfc822");
-            else
-                rContentType = aDefaultCT;
-        }
-        else
-        {
-            rContentType = aDefaultCT;
-        }
+        if (aParentCT.CompareIgnoreCaseToAscii ("multipart/digest") == 0)
+            return rtl::OUString("message/rfc822");
     }
+    return String("text/plain; charset=us-ascii", RTL_TEXTENCODING_ASCII_US);
 }
 
 /*
