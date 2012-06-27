@@ -117,6 +117,7 @@ public abstract class TestCase
      *          is the class of the exception to be caught. If this is null,
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
+    @SuppressWarnings("unchecked")
     protected void assureException( final String _message, final Object _object, final String _methodName,
         final Class[] _argClasses, final Object[] _methodArgs, final Class _expectedExceptionClass )
     {
@@ -199,6 +200,7 @@ public abstract class TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @SuppressWarnings("unchecked")
     protected void assureException( Object _object, Class _unoInterfaceClass, String _methodName, Object[] _methodArgs,
         Class _expectedExceptionClass )
     {

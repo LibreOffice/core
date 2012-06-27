@@ -88,8 +88,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
     private static final String _BLANK = "_blank";
     private XComponent m_callbackFactory = null;
-    private final ArrayList m_documentEvents = new ArrayList();
-    private final ArrayList m_globalEvents = new ArrayList();
+    private final ArrayList<String> m_documentEvents = new ArrayList<String>();
+    private final ArrayList<String> m_globalEvents = new ArrayList<String>();
     // for those states, see testDocumentEvents
     private static short STATE_NOT_STARTED = 0;
     private static short STATE_LOADING_DOC = 1;
@@ -143,7 +143,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     private class CallbackComponentFactory implements XSingleComponentFactory, XServiceInfo, XComponent
     {
 
-        private final ArrayList m_eventListeners = new ArrayList();
+        private final ArrayList<XEventListener> m_eventListeners = new ArrayList<XEventListener>();
 
         public Object createInstanceWithContext(XComponentContext _context) throws com.sun.star.uno.Exception
         {
@@ -173,15 +173,16 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                     };
         }
 
+        @SuppressWarnings("unchecked")
         public void dispose()
         {
             final EventObject event = new EventObject(this);
 
-            final ArrayList eventListenersCopy = (ArrayList) m_eventListeners.clone();
-            final Iterator iter = eventListenersCopy.iterator();
+            final ArrayList<XEventListener> eventListenersCopy = (ArrayList<XEventListener>)m_eventListeners.clone();
+            final Iterator<XEventListener> iter = eventListenersCopy.iterator();
             while (iter.hasNext())
             {
-                ((XEventListener) iter.next()).disposing(event);
+                iter.next().disposing(event);
             }
         }
 
@@ -850,7 +851,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private void impl_stopObservingEvents(ArrayList _actualEvents, String[] _expectedEvents, String _context)
+    private void impl_stopObservingEvents(ArrayList<String> _actualEvents, String[] _expectedEvents, String _context)
     {
         try
         {
@@ -896,13 +897,13 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    int impl_waitForEvent(ArrayList _eventQueue, String _expectedEvent, int _maxMilliseconds)
+    int impl_waitForEvent(ArrayList<String> _eventQueue, String _expectedEvent, int _maxMilliseconds)
     {
         return impl_waitForEvent(_eventQueue, _expectedEvent, _maxMilliseconds, 0);
     }
 
     // --------------------------------------------------------------------------------------------------------
-    int impl_waitForEvent(ArrayList _eventQueue, String _expectedEvent, int _maxMilliseconds, int _firstQueueElementToCheck)
+    int impl_waitForEvent(ArrayList<String> _eventQueue, String _expectedEvent, int _maxMilliseconds, int _firstQueueElementToCheck)
     {
         synchronized (_eventQueue)
         {

@@ -370,6 +370,7 @@ public class RowSet extends TestCase
     // --------------------------------------------------------------------------------------------------------
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testRowSetEvents() throws java.lang.Exception
     {
         System.out.println("testing RowSet Events");
