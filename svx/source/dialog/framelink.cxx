@@ -33,25 +33,8 @@
 #include <editeng/borderline.hxx>
 #include <svtools/borderhelper.hxx>
 
-// ----------------------------------------------------------------------------
-
-/** Define to select the drawing mode of thin dotted lines.
-
-    0 = Draw lines using an own implementation (recommended). Draws always
-        little dots in an appropriate distance.
-    1 = Draw dotted lines using vcl/LineInfo. Results in dashed lines instead
-        of dotted lines, which may look ugly for diagonal lines.
- */
-#define SVX_FRAME_USE_LINEINFO 0
-
-// ----------------------------------------------------------------------------
-
-#if SVX_FRAME_USE_LINEINFO
-#include <vcl/lineinfo.hxx>
-#else
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
 
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/clippedborderlineprimitive2d.hxx>
@@ -61,7 +44,6 @@ using namespace editeng;
 namespace svx {
 namespace frame {
 
-// ============================================================================
 // ============================================================================
 
 namespace {
