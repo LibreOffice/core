@@ -23,45 +23,44 @@
 
 
 /*Java Uno Helper Classes*/
-import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
-import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.Iterator;
 
-/*StarOffice/Uno Classes*/
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.comp.loader.FactoryHelper;
-import com.sun.star.lang.XServiceName;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.registry.XRegistryKey;
-import com.sun.star.frame.XConfigManager;
-import com.sun.star.xml.sax.InputSource;
-import com.sun.star.xml.sax.XParser;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
-import com.sun.star.xml.sax.XDocumentHandler;
-import com.sun.star.uno.AnyConverter;
+import javax.xml.parsers.ParserConfigurationException;
 
-/* Generated from Idls */
-import com.sun.star.xml.XImportFilter;
-import com.sun.star.xml.XExportFilter;
-
-/* XMerge Classes */
-import org.openoffice.xmerge.util.registry.ConverterInfoReader;
-import org.openoffice.xmerge.util.registry.ConverterInfo;
-import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 import org.openoffice.xmerge.Convert;
+import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConverterFactory;
 import org.openoffice.xmerge.Document;
-import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.converter.xml.OfficeDocument;
-/*Java Classes*/
-import java.util.Enumeration;
-import java.io.*;
-import javax.xml.parsers.*;
-import java.net.URI;
+import org.openoffice.xmerge.util.registry.ConverterInfo;
+import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
+import org.openoffice.xmerge.util.registry.ConverterInfoReader;
+
+import com.sun.star.comp.loader.FactoryHelper;
+import com.sun.star.frame.XConfigManager;
+import com.sun.star.io.XInputStream;
+import com.sun.star.io.XOutputStream;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.XServiceName;
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XTypeProvider;
+import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
+import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
+import com.sun.star.registry.XRegistryKey;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.xml.XExportFilter;
+import com.sun.star.xml.XImportFilter;
+import com.sun.star.xml.sax.InputSource;
+import com.sun.star.xml.sax.XDocumentHandler;
+import com.sun.star.xml.sax.XParser;
 
 
 /** This outer class provides an inner class to implement the service
@@ -436,7 +435,7 @@ public class XMergeBridge {
          String name= getFileName(FileName);
 
          ConverterInfo converterInfo = null;
-         Enumeration ciEnum= null;
+         Iterator ciEnum= null;
 
          XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);
 
@@ -476,10 +475,10 @@ public class XMergeBridge {
                  cv.addInputStream(name,(InputStream)xis,false);
                  ConvertData dataOut = cv.convert();
 
-                 Enumeration docEnum = dataOut.getDocumentEnumeration();
+                 Iterator docEnum = dataOut.getDocumentEnumeration();
 
-                 if (docEnum.hasMoreElements()){
-                     Document docOut      = (Document)docEnum.nextElement();
+                 if (docEnum.hasNext()){
+                     Document docOut      = (Document)docEnum.next();
                      String fileName      = docOut.getFileName();
                      docOut.write(newxos);
 
@@ -488,7 +487,7 @@ public class XMergeBridge {
 
 
                      int i=1;
-                     while (docEnum.hasMoreElements() && sURL.startsWith("file:")) {
+                     while (docEnum.hasNext() && sURL.startsWith("file:")) {
 
                      URI uri=new URI(sURL);
                      String  newFileName= getPath(uri);
@@ -502,7 +501,7 @@ public class XMergeBridge {
                      }
 
                      FileOutputStream fos = new FileOutputStream(newFile);
-                     docOut      = (Document)docEnum.nextElement();
+                     docOut      = (Document)docEnum.next();
                      fileName      = docOut.getFileName();
                      docOut.write(fos);
                      fos.flush();
@@ -539,9 +538,9 @@ public class XMergeBridge {
 
                  cv.addInputStream(name,(InputStream)xis,false);
                  ConvertData dataIn = cv.convert();
-                 Enumeration docEnum = dataIn.getDocumentEnumeration();
-                 while (docEnum.hasMoreElements()) {
-                 OfficeDocument docIn      = (OfficeDocument)docEnum.nextElement();
+                 Iterator docEnum = dataIn.getDocumentEnumeration();
+                 while (docEnum.hasNext()) {
+                 OfficeDocument docIn      = (OfficeDocument)docEnum.next();
 
                  docIn.write(newxos,false);
                  }

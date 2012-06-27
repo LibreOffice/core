@@ -18,13 +18,12 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.pocketword;
 
-import org.openoffice.xmerge.util.EndianConverter;
-
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 
-import java.util.Vector;
+import org.openoffice.xmerge.util.EndianConverter;
 
 
 /**
@@ -47,10 +46,10 @@ class DocumentDescriptor {
     private short length = 0;
     private short numLines = 0;
 
-    private Vector paragraphDesc = null;
+    private ArrayList paragraphDesc = null;
 
     DocumentDescriptor() {
-        paragraphDesc = new Vector(0, 1);
+        paragraphDesc = new ArrayList(0);
     }
 
 
@@ -107,7 +106,7 @@ class DocumentDescriptor {
                                           0x00, 0x00, 0x00, 0x00 } );
 
             for (int i = 0; i < paragraphDesc.size(); i++) {
-                ParagraphDescriptor pd = (ParagraphDescriptor)paragraphDesc.elementAt(i);
+                ParagraphDescriptor pd = (ParagraphDescriptor)paragraphDesc.get(i);
 
                 descStream.write(pd.getDescriptor());
             }

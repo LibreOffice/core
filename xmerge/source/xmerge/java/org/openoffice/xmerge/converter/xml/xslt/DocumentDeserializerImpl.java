@@ -18,40 +18,32 @@
 
 package org.openoffice.xmerge.converter.xml.xslt;
 
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.Enumeration;
-import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
-
-
-
-
-import org.openoffice.xmerge.Document;
-import org.openoffice.xmerge.ConvertData;
-import org.openoffice.xmerge.ConvertException;
-import org.openoffice.xmerge.DocumentDeserializer;
-import org.openoffice.xmerge.converter.dom.DOMDocument;
-import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
-import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.registry.ConverterInfo;
-
-// Imported TraX classes
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.Source;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
-// Imported java classes
-import java.io.FileNotFoundException;
+import org.openoffice.xmerge.ConvertData;
+import org.openoffice.xmerge.ConvertException;
+import org.openoffice.xmerge.Document;
+import org.openoffice.xmerge.DocumentDeserializer;
+import org.openoffice.xmerge.converter.dom.DOMDocument;
+import org.openoffice.xmerge.util.Debug;
+import org.openoffice.xmerge.util.registry.ConverterInfo;
 
 
 /**
@@ -106,14 +98,14 @@ public final class DocumentDeserializerImpl
      */
     public Document deserialize() throws ConvertException, IOException {
     log("\nFound the XSLT deserializer");
-    Enumeration enumerate = cd.getDocumentEnumeration();
+    Iterator enumerate = cd.getDocumentEnumeration();
     org.w3c.dom.Document domDoc=null;
     DOMDocument docOut=null;
     GenericOfficeDocument doc = null;
     ByteArrayOutputStream baos =null;
     GenericOfficeDocument sxwDoc = new GenericOfficeDocument("output");
-    while (enumerate.hasMoreElements()) {
-         docOut = (DOMDocument) enumerate.nextElement();
+    while (enumerate.hasNext()) {
+         docOut = (DOMDocument) enumerate.next();
     }
     domDoc = docOut.getContentDOM();
     try{

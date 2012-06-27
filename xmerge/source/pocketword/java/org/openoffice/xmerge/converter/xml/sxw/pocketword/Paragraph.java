@@ -18,18 +18,16 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.pocketword;
 
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import java.util.Vector;
-import java.util.Enumeration;
-
-import java.awt.Color;
-
-import org.openoffice.xmerge.util.EndianConverter;
-import org.openoffice.xmerge.util.ColourConverter;
 import org.openoffice.xmerge.converter.xml.ParaStyle;
 import org.openoffice.xmerge.converter.xml.TextStyle;
+import org.openoffice.xmerge.util.ColourConverter;
+import org.openoffice.xmerge.util.EndianConverter;
 
 
 /**
@@ -73,9 +71,9 @@ class Paragraph implements PocketWordConstants {
      * representation.
      */
 
-    private Vector textSegments = null;
+    private ArrayList textSegments = null;
 
-    private Vector lineDescriptors = null;
+    private ArrayList lineDescriptors = null;
 
     private ParaStyle pStyle = null;
 
@@ -87,7 +85,7 @@ class Paragraph implements PocketWordConstants {
      * initialisation of the Vector storing the paragraph's text.
      */
     private Paragraph () {
-        textSegments = new Vector(0, 1);
+        textSegments = new ArrayList();
     }
 
 
@@ -101,7 +99,7 @@ class Paragraph implements PocketWordConstants {
     public Paragraph (ParaStyle style) {
         this();
 
-        lineDescriptors = new Vector(0, 1);
+        lineDescriptors = new ArrayList();
         pStyle = style;
     }
 
@@ -473,7 +471,7 @@ class Paragraph implements PocketWordConstants {
 
         try {
             for (int i = 0; i < textSegments.size(); i++) {
-                ParagraphTextSegment pts = (ParagraphTextSegment)textSegments.elementAt(i);
+                ParagraphTextSegment pts = (ParagraphTextSegment)textSegments.get(i);
                 segs.write(pts.getData());
             }
         }
@@ -605,7 +603,7 @@ class Paragraph implements PocketWordConstants {
 
             // Now write out the line descriptors
             for (int i = 0; i < lineDescriptors.size(); i++) {
-                LineDescriptor ld = (LineDescriptor)lineDescriptors.elementAt(i);
+                LineDescriptor ld = (LineDescriptor)lineDescriptors.get(i);
 
                 bos.write(ld.getDescriptorInfo());
             }
@@ -653,11 +651,11 @@ class Paragraph implements PocketWordConstants {
         StringBuffer sb = new StringBuffer("");
 
         // Line Descriptor info should be eliminated each time
-        lineDescriptors = new Vector(1, 1);
+        lineDescriptors = new ArrayList();
         lines = 0;
 
         for (int i = 0; i < textSegments.size(); i++) {
-            ParagraphTextSegment pts = (ParagraphTextSegment)textSegments.elementAt(i);
+            ParagraphTextSegment pts = (ParagraphTextSegment)textSegments.get(i);
             sb.append(pts.getText());
         }
 
@@ -765,8 +763,8 @@ class Paragraph implements PocketWordConstants {
      *
      * @return  An <code>Enumeration</code> of the text segments.
      */
-    public Enumeration getSegmentsEnumerator () {
-        return textSegments.elements();
+    public Iterator getSegmentsEnumerator () {
+        return textSegments.iterator();
     }
 
 

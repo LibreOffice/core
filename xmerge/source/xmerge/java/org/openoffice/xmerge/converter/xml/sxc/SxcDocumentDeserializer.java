@@ -18,25 +18,21 @@
 
 package org.openoffice.xmerge.converter.xml.sxc;
 
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Iterator;
 
-import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
+import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
-import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
-import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
-import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
-import org.openoffice.xmerge.converter.xml.sxc.CellStyle;
 import org.openoffice.xmerge.converter.xml.Style;
 import org.openoffice.xmerge.converter.xml.StyleCatalog;
 import org.openoffice.xmerge.util.Debug;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *  <p>General spreadsheet implementation of <code>DocumentDeserializer</code>
@@ -255,8 +251,8 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         }
 
         // Add the Defined Name table if there is one
-        Enumeration nameDefinitionTable = decoder.getNameDefinitions();
-        if(nameDefinitionTable.hasMoreElements()) {
+        Iterator nameDefinitionTable = decoder.getNameDefinitions();
+        if(nameDefinitionTable.hasNext()) {
             processNameDefinition(node, nameDefinitionTable);
         }
 
@@ -304,15 +300,15 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    protected void processNameDefinition(Node root, Enumeration eNameDefinitions) throws IOException {
+    protected void processNameDefinition(Node root, Iterator eNameDefinitions) throws IOException {
 
         Debug.log(Debug.TRACE, "<NAMED-EXPRESSIONS>");
 
         Element namedExpressionsElement = (Element) doc.createElement(TAG_NAMED_EXPRESSIONS);
 
-        while(eNameDefinitions.hasMoreElements()) {
+        while(eNameDefinitions.hasNext()) {
 
-            NameDefinition tableEntry = (NameDefinition) eNameDefinitions.nextElement();
+            NameDefinition tableEntry = (NameDefinition) eNameDefinitions.next();
             tableEntry.writeNode(doc, namedExpressionsElement);
         }
 
@@ -380,9 +376,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      */
     protected void processColumns(Node root) throws IOException {
 
-        for(Enumeration e = decoder.getColumnRowInfos();e.hasMoreElements();) {
+        for(Iterator e = decoder.getColumnRowInfos();e.hasNext();) {
 
-            ColumnRowInfo ci = (ColumnRowInfo) e.nextElement();
+            ColumnRowInfo ci = (ColumnRowInfo) e.next();
             if(ci.isColumn()) {
                 ColumnStyle cStyle = new ColumnStyle("Default",SxcConstants.COLUMN_STYLE_FAMILY,
                             SxcConstants.DEFAULT_STYLE, ci.getSize(), null);
@@ -486,8 +482,8 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 rowElement = (Element) doc.createElement(TAG_TABLE_ROW);
 
 
-                for(Enumeration e = decoder.getColumnRowInfos();e.hasMoreElements();) {
-                    ColumnRowInfo cri = (ColumnRowInfo) e.nextElement();
+                for(Iterator e = decoder.getColumnRowInfos();e.hasNext();) {
+                    ColumnRowInfo cri = (ColumnRowInfo) e.next();
                     if(cri.isRow() && cri.getRepeated()==newRow-1) {
                         // We have the correct Row BIFFRecord for this row
                         RowStyle rStyle = new RowStyle("Default",SxcConstants.ROW_STYLE_FAMILY,

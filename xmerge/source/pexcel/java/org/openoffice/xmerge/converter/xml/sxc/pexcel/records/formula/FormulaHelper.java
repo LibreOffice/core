@@ -20,8 +20,9 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 
@@ -69,14 +70,14 @@ public class FormulaHelper {
      */
     public byte[] convertCalcToPXL(String formula) throws UnsupportedFunctionException, FormulaParsingException {
 
-        Vector parseTokens = parser.parse(formula);
-        Vector rpnTokens = compiler.infix2RPN(parseTokens);
+        ArrayList parseTokens = parser.parse(formula);
+        ArrayList rpnTokens = compiler.infix2RPN(parseTokens);
 
         ByteArrayOutputStream bytes = null;
         try {
             bytes = new ByteArrayOutputStream();
-            for (Enumeration e = rpnTokens.elements(); e.hasMoreElements();) {
-                Token t = (Token)e.nextElement();
+            for (Iterator e = rpnTokens.iterator(); e.hasNext();) {
+                Token t = (Token)e.next();
                 bytes.write(encoder.getByte(t));
             }
         } catch (IOException e) {
@@ -92,12 +93,12 @@ public class FormulaHelper {
      */
     public String convertPXLToCalc(byte[] formula) {
 
-        Vector parseTokens = decoder.getTokenVector(formula);
-        Vector infixTokens = compiler.RPN2Infix(parseTokens);
+        ArrayList parseTokens = decoder.getTokenVector(formula);
+        ArrayList infixTokens = compiler.RPN2Infix(parseTokens);
 
         StringBuffer buff = new StringBuffer();
-        for (Enumeration e = infixTokens.elements();e.hasMoreElements();) {
-            Token t = (Token)e.nextElement();
+        for (Iterator e = infixTokens.iterator();e.hasNext();) {
+            Token t = (Token)e.next();
             buff.append(t.toString());
             // If we are parsing a Name definition we need to know if it is of
             // type range or expression

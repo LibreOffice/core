@@ -19,15 +19,14 @@
 package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
+import org.openoffice.xmerge.util.Debug;
 
 
 /**
@@ -84,8 +83,8 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
     protected String getWorkbookName(ConvertData cd)
         throws IOException {
 
-        Enumeration e = cd.getDocumentEnumeration();
-        Workbook wb = (Workbook) e.nextElement();
+        Iterator e = cd.getDocumentEnumeration();
+        Workbook wb = (Workbook) e.next();
 
         String workbookName = wb.getName();
         return workbookName;
@@ -103,14 +102,14 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
     protected String[] getWorksheetNames(ConvertData cd)
         throws IOException {
 
-        Enumeration e = cd.getDocumentEnumeration();
-        Workbook wb = (Workbook) e.nextElement();
-        Vector v = wb.getWorksheetNames();
-        e = v.elements();
+        Iterator e = cd.getDocumentEnumeration();
+        Workbook wb = (Workbook) e.next();
+        ArrayList v = wb.getWorksheetNames();
+        e = v.iterator();
         String worksheetNames[] = new String[v.size()];
         int i = 0;
-        while(e.hasMoreElements()) {
-            worksheetNames[i] = (String) e.nextElement();
+        while(e.hasNext()) {
+            worksheetNames[i] = (String) e.next();
             Debug.log(Debug.TRACE,"Worksheet Name : " + worksheetNames[i]);
             i++;
         }

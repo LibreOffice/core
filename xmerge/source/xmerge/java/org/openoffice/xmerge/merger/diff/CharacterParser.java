@@ -22,7 +22,7 @@ import org.w3c.dom.Node;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -57,7 +57,7 @@ public class CharacterParser {
      */
     public CharacterParser(Node node) {
         textNodes = new TextNodeIterator(node);
-        nodeList_ = new Vector();
+        nodeList_ = new ArrayList();
 
         parseNodes();
     }

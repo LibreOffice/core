@@ -18,7 +18,7 @@
 
 package org.openoffice.xmerge.merger.diff;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import org.openoffice.xmerge.merger.Difference;
 
 /**
@@ -54,7 +54,7 @@ public class CharArrayLCSAlgorithm {
         // in those 2 sequences
         diffTable = createDiffTable(orgSeq, modSeq);
 
-        Vector diffResult = new Vector();
+        ArrayList diffResult = new ArrayList();
 
         generateResult(diffTable, orgSeqlen, modSeqlen, diffResult);
 
@@ -64,7 +64,7 @@ public class CharArrayLCSAlgorithm {
         // generateResult is called recursively
         if (diffResult.size() > 0) {
             diffArray = new Difference[diffResult.size()];
-            diffResult.copyInto(diffArray);
+            diffResult.toArray(diffArray);
         }
 
         diffTable = null;
@@ -154,7 +154,7 @@ public class CharArrayLCSAlgorithm {
      *                       and positions filled in.
      */
     private void generateResult(int[][] diffTable,
-                                int i, int j, Vector diffVector) {
+                                int i, int j, ArrayList diffVector) {
 
         // handle the first element
         if (i == 0 || j == 0) {

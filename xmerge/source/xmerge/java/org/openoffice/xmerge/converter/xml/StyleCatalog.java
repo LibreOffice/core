@@ -18,13 +18,14 @@
 
 package org.openoffice.xmerge.converter.xml;
 
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
-import org.openoffice.xmerge.util.*;
-import java.util.Vector;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+
+import org.openoffice.xmerge.util.Debug;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 /**
@@ -41,7 +42,7 @@ import java.lang.reflect.Constructor;
  */
 public class StyleCatalog {
 
-    private Vector styles;  // The actual styles
+    private ArrayList styles;  // The actual styles
 
     /**
      *  Constructor
@@ -50,7 +51,7 @@ public class StyleCatalog {
      *                          for efficiency purposes.
      */
     public StyleCatalog(int initialEntries) {
-        styles = new Vector(initialEntries);
+        styles = new ArrayList(initialEntries);
     }
 
 
@@ -159,7 +160,7 @@ public class StyleCatalog {
      *  @param  s  The <code>Style</code> to add.
      */
     public void add(Style s) {
-        styles.addElement(s);
+        styles.add(s);
     }
 
 
@@ -182,7 +183,7 @@ public class StyleCatalog {
                         Class styleClass) {
         int nStyles = styles.size();
         for (int i = 0; i < nStyles; i++) {
-            Style s = (Style)styles.elementAt(i);
+            Style s = (Style)styles.get(i);
             if ((name != null) && (s.getName() != null)
             && (!s.getName().equals(name)))
                 continue;
@@ -217,7 +218,7 @@ public class StyleCatalog {
         int matchCount = 0;
         int nStyles = styles.size();
         for (int j = 0; j < nStyles; j++) {
-            Style p = ((Style)styles.elementAt(j)).getResolved();
+            Style p = ((Style)styles.get(j)).getResolved();
             if (p.isSubset(s)) matchCount++;
         }
 
@@ -225,7 +226,7 @@ public class StyleCatalog {
         Style[] matchArray = new Style[matchCount];
         matchCount = 0;
         for (int j = 0; j < nStyles; j++) {
-            Style p = ((Style)styles.elementAt(j)).getResolved();
+            Style p = ((Style)styles.get(j)).getResolved();
             if (p.isSubset(s)) matchArray[matchCount++] = p;
         }
         return matchArray;

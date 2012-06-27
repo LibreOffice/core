@@ -32,13 +32,13 @@ import java.io.*;
  */
 public final class ConverterInfoMgr {
 
-    private static Vector converterInfoList;
+    private static ArrayList converterInfoList;
 
    /**
     *  Constructor
     */
     static {
-       converterInfoList = new Vector();
+       converterInfoList = new ArrayList();
     }
 
    /**
@@ -73,7 +73,7 @@ public final class ConverterInfoMgr {
                 "Converter must have valid office mime specified.");
             throw re;
         }
-        if (! ci.getDeviceMime().hasMoreElements()) {
+        if (! ci.getDeviceMime().hasNext()) {
             RegistryException re = new RegistryException(
                 "Converter must have valid device mime specified.");
             throw re;
@@ -82,9 +82,9 @@ public final class ConverterInfoMgr {
         // Verify there is no converter with the same Display Name in
         // the registry.
         //
-        Enumeration ciEnum = converterInfoList.elements();
-        while (ciEnum.hasMoreElements()) {
-            converterInfo = (ConverterInfo)ciEnum.nextElement();
+        Iterator ciEnum = converterInfoList.iterator();
+        while (ciEnum.hasNext()) {
+            converterInfo = (ConverterInfo)ciEnum.next();
             if (ci.getDisplayName().equals(converterInfo.getDisplayName())) {
                 RegistryException re = new RegistryException(
                     "Converter with specified display name already exists.");
@@ -112,10 +112,10 @@ public final class ConverterInfoMgr {
     *  @throws  RegistryException  If a <code>ConverterInfo</code> in the
     *                              <code>Vector</code> is not valid.
     */
-    public static void addPlugIn(Enumeration jarEnum) throws RegistryException {
+    public static void addPlugIn(Iterator jarEnum) throws RegistryException {
 
-        while (jarEnum.hasMoreElements()) {
-            ConverterInfo converterInfo = (ConverterInfo)jarEnum.nextElement();
+        while (jarEnum.hasNext()) {
+            ConverterInfo converterInfo = (ConverterInfo)jarEnum.next();
             addPlugIn(converterInfo);
         }
     }
@@ -128,8 +128,8 @@ public final class ConverterInfoMgr {
     *           <code>ConverterInfo</code> objects, an empty
     *           <code>Vector</code> if none exist.
     */
-   public static Enumeration getConverterInfoEnumeration() {
-      return (converterInfoList.elements());
+   public static Iterator getConverterInfoEnumeration() {
+      return (converterInfoList.iterator());
    }
 
    /**
@@ -183,10 +183,10 @@ public final class ConverterInfoMgr {
         ConverterInfo converterInfo;
         boolean       rc = false;
 
-        Enumeration ciEnum = converterInfoList.elements();
-        while (ciEnum.hasMoreElements())
+        Iterator ciEnum = converterInfoList.iterator();
+        while (ciEnum.hasNext())
         {
-            converterInfo = (ConverterInfo)ciEnum.nextElement();
+            converterInfo = (ConverterInfo)ciEnum.next();
             if (name.equals(converterInfo.getDisplayName())) {
                converterInfoList.remove(converterInfo);
                rc = true;
@@ -218,17 +218,17 @@ public final class ConverterInfoMgr {
 
         // Loop over elements comparing with deviceFromMime
         //
-        Enumeration ciEnum = converterInfoList.elements();
-        while (ciEnum.hasMoreElements()) {
+        Iterator ciEnum = converterInfoList.iterator();
+        while (ciEnum.hasNext()) {
 
-            converterInfo = (ConverterInfo)ciEnum.nextElement();
+            converterInfo = (ConverterInfo)ciEnum.next();
             String toDeviceInfo = (String)converterInfo.getOfficeMime();
-            Enumeration fromEnum = converterInfo.getDeviceMime();
+            Iterator fromEnum = converterInfo.getDeviceMime();
 
             // Loop over the deviceMime types.
             //
-            while (fromEnum.hasMoreElements()) {
-                String fromDeviceInfo = (String)fromEnum.nextElement();
+            while (fromEnum.hasNext()) {
+                String fromDeviceInfo = (String)fromEnum.next();
                 if (deviceMime.trim().equals(fromDeviceInfo) &&
                     officeMime.trim().equals(toDeviceInfo)) {
                    return (converterInfo);
@@ -261,36 +261,36 @@ public final class ConverterInfoMgr {
 
         // Loop over elements comparing with deviceFromMime
         //
-        Enumeration cifEnum = converterInfoList.elements();
-        while (cifEnum.hasMoreElements()) {
+        Iterator cifEnum = converterInfoList.iterator();
+        while (cifEnum.hasNext()) {
 
-            converterInfo[0] = (ConverterInfo)cifEnum.nextElement();
+            converterInfo[0] = (ConverterInfo)cifEnum.next();
             String fromOfficeInfo = converterInfo[0].getOfficeMime();
-            Enumeration fromEnum = converterInfo[0].getDeviceMime();
+            Iterator fromEnum = converterInfo[0].getDeviceMime();
 
             // Loop over the deviceMime types looking for a deviceFromMime
             // match.
             //
-            while (fromEnum.hasMoreElements()) {
-                String fromDeviceInfo = (String)fromEnum.nextElement();
+            while (fromEnum.hasNext()) {
+                String fromDeviceInfo = (String)fromEnum.next();
 
                 if (deviceFromMime.trim().equals(fromDeviceInfo)) {
 
                     // Found a a match for deviceFrom.  Now loop over the
                     // elements comparing with deviceToMime
                     //
-                    Enumeration citEnum = converterInfoList.elements();
-                    while (citEnum.hasMoreElements()) {
+                    Iterator citEnum = converterInfoList.iterator();
+                    while (citEnum.hasNext()) {
 
-                        converterInfo[1] = (ConverterInfo)citEnum.nextElement();
+                        converterInfo[1] = (ConverterInfo)citEnum.next();
                         String toOfficeInfo = converterInfo[1].getOfficeMime();
-                        Enumeration toEnum = converterInfo[1].getDeviceMime();
+                        Iterator toEnum = converterInfo[1].getDeviceMime();
 
                         // Loop over deviceMime types looking for a
                         // deviceToMime match.
                         //
-                        while (toEnum.hasMoreElements()) {
-                            String toDeviceInfo = (String)toEnum.nextElement();
+                        while (toEnum.hasNext()) {
+                            String toDeviceInfo = (String)toEnum.next();
                             if (deviceToMime.trim().equals(toDeviceInfo) &&
                                 fromOfficeInfo.equals(toOfficeInfo)) {
 
@@ -365,7 +365,7 @@ public final class ConverterInfoMgr {
                 }
 
                 if (cir != null) {
-                    Enumeration jarInfoEnum = cir.getConverterInfoEnumeration();
+                    Iterator jarInfoEnum = cir.getConverterInfoEnumeration();
                     try {
                         ConverterInfoMgr.addPlugIn(jarInfoEnum);
                     } catch (Exception e) {
@@ -471,25 +471,25 @@ public final class ConverterInfoMgr {
             //
             } else if (c == 'V') {
 
-                Enumeration ciEnum = ConverterInfoMgr.getConverterInfoEnumeration();
+                Iterator ciEnum = ConverterInfoMgr.getConverterInfoEnumeration();
 
                 int ciCnt = 0;
-                while (ciEnum.hasMoreElements())
+                while (ciEnum.hasNext())
                 {
                     System.out.println("");
                     System.out.println("  Displaying converter number " + ciCnt);
-                    ConverterInfo converterInfo = (ConverterInfo)ciEnum.nextElement();
+                    ConverterInfo converterInfo = (ConverterInfo)ciEnum.next();
                     System.out.println("    DisplayName  : " + converterInfo.getDisplayName());
                     System.out.println("    JarFile      : " + converterInfo.getJarName());
                     System.out.println("    Description  : " + converterInfo.getDescription());
                     System.out.println("    Version      : " + converterInfo.getVersion());
                     System.out.println("    OfficeMime   : " + converterInfo.getOfficeMime());
-                    Enumeration fromEnum = converterInfo.getDeviceMime();
+                    Iterator fromEnum = converterInfo.getDeviceMime();
                     int feCnt = 1;
-                    while (fromEnum.hasMoreElements())
+                    while (fromEnum.hasNext())
                     {
                         System.out.println("    DeviceMime   : (#" + feCnt + ") : " +
-                            (String)fromEnum.nextElement());
+                            (String)fromEnum.next());
                         feCnt++;
                     }
                     if (feCnt == 1) {

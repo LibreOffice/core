@@ -20,13 +20,10 @@ package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.*;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Vector;
 
-import org.openoffice.xmerge.converter.palm.*;
+import org.openoffice.xmerge.converter.palm.Record;
 
 /**
  *  This class is used by {@link
@@ -61,7 +58,7 @@ final class WSEncoder {
     WseHeader header = null;
     WseFontTable ft = null;
     WseColorTable ct = null;
-    private Vector elements;  // paragraphs & text runs
+    private ArrayList elements;  // paragraphs & text runs
 
     /* Totals for the WordSmith document. */
     int nrParagraphs = 0;
@@ -78,7 +75,7 @@ final class WSEncoder {
         version = 1;
         textLen = 0;
         maxRecSize = 4096;
-        elements = new Vector();
+        elements = new ArrayList();
     }
 
 
@@ -95,7 +92,7 @@ final class WSEncoder {
         else if (elem.getClass() == WseColorTable.class)
             ct = (WseColorTable)elem;
         else
-            elements.addElement(elem);
+            elements.add(elem);
     }
 
 
@@ -109,13 +106,13 @@ final class WSEncoder {
      */
     Record[] getRecords() throws IOException {
 
-        Vector allRecs = new Vector();
+        ArrayList allRecs = new ArrayList();
         int nElements = elements.size();
 
         // Count up the number of paragraphs, atoms, and characters.
         int currElement = 0;
         while (currElement < nElements) {
-            Wse e = (Wse)elements.elementAt(currElement++);
+            Wse e = (Wse)elements.get(currElement++);
             if (e.getClass() == WsePara.class)
                 nrParagraphs++;
             if (e.getClass() == WseTextRun.class) {
@@ -147,7 +144,7 @@ final class WSEncoder {
 
         currElement = 0;
         while (currElement < nElements) {
-            Wse e = (Wse)elements.elementAt(currElement++);
+            Wse e = (Wse)elements.get(currElement++);
             int length = e.getByteCount();
             if ((length + currRecLen) <= 4096) {
                 System.arraycopy(e.getBytes(), 0, currRec, currRecLen, length);
@@ -159,7 +156,7 @@ final class WSEncoder {
                 System.arraycopy(e.getBytes(), 0, currRec, currRecLen,
                                  firstPartLen);
                 Record r = new Record(currRec);
-                allRecs.addElement(r);
+                allRecs.add(r);
 
                 // Put the remainder at the beginning of the next record
                 currRecLen = 0;
@@ -174,7 +171,7 @@ final class WSEncoder {
             byte[] partial = new byte[currRecLen];
             System.arraycopy(currRec, 0, partial, 0, currRecLen);
             Record rr = new Record(partial);
-            allRecs.addElement(rr);
+            allRecs.add(rr);
         }
 
 
@@ -189,13 +186,13 @@ final class WSEncoder {
         dos.writeShort(allRecs.size());
         dos.writeShort(maxRecSize);
         dos.writeInt(0);
-        allRecs.insertElementAt(new Record(bos.toByteArray()), 0);
+        allRecs.add(0, new Record(bos.toByteArray()));
 
         // Convert Vector of Records to an array and return it.
         int nRecs = allRecs.size();
         Record recs[] = new Record[nRecs];
         for (int i = 0; i < nRecs; i++)
-        recs[i] = (Record)allRecs.elementAt(i);
+        recs[i] = (Record)allRecs.get(i);
         return recs;
     }
 

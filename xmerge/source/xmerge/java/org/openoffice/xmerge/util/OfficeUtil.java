@@ -25,7 +25,7 @@ import org.w3c.dom.Text;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 
 /**
@@ -46,7 +46,7 @@ public class OfficeUtil implements OfficeConstants {
      *          representing the text.
      */
     public static Node[] parseText(String text, Document parentDoc) {
-        Vector nodeVec = new Vector();
+        ArrayList nodeVec = new ArrayList();
 
         /*
          * Break up the text from the text run into Open
@@ -80,7 +80,7 @@ public class OfficeUtil implements OfficeConstants {
             if (closerIndex > 0) {
                 String beginningText = text.substring(0, closerIndex);
                 Text textNode = parentDoc.createTextNode(beginningText);
-                nodeVec.addElement(textNode);
+                nodeVec.add(textNode);
             }
             text = text.substring(closerIndex);
 
@@ -120,7 +120,7 @@ public class OfficeUtil implements OfficeConstants {
         // Now create and populate an array to return the nodes in.
         Node nodes[] = new Node[nodeVec.size()];
         for (int i = 0; i < nodeVec.size(); i++)
-            nodes[i] = (Node)nodeVec.elementAt(i);
+            nodes[i] = (Node)nodeVec.get(i);
         return nodes;
     }
 }

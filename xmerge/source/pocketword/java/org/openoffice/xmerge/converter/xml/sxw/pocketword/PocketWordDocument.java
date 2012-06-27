@@ -18,18 +18,17 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.pocketword;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.converter.xml.ParaStyle;
 import org.openoffice.xmerge.converter.xml.TextStyle;
-
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-
-import java.util.Enumeration;
-import java.util.Vector;
 
 
 /**
@@ -46,9 +45,9 @@ public class PocketWordDocument implements Document, PocketWordConstants {
     private String      docName;
 
     private byte[] preamble;
-    private Vector fonts;
+    private ArrayList fonts;
     private DocumentDescriptor descriptor;
-    private Vector paragraphs;
+    private ArrayList paragraphs;
 
     private ParaStyle   pStyle;
     private Paragraph   currentPara;
@@ -86,9 +85,9 @@ public class PocketWordDocument implements Document, PocketWordConstants {
         docName = trimDocumentName(name);
 
         preamble   = new byte[52];
-        fonts      = new Vector(0, 1);
+        fonts      = new ArrayList();
         descriptor = new DocumentDescriptor();
-        paragraphs = new Vector(0, 1);
+        paragraphs = new ArrayList();
     }
 
 
@@ -206,8 +205,8 @@ public class PocketWordDocument implements Document, PocketWordConstants {
      *
      * @return <code>Enumeration</code> over the paragraphs in the document.
      */
-    public Enumeration getParagraphEnumeration() {
-        return paragraphs.elements();
+    public Iterator getParagraphEnumeration() {
+        return paragraphs.iterator();
     }
 
 
@@ -253,19 +252,19 @@ public class PocketWordDocument implements Document, PocketWordConstants {
 
         loadFonts();
         for (int i = 0; i < fonts.size(); i++ ) {
-            ByteArrayOutputStream fontData = (ByteArrayOutputStream)fonts.elementAt(i);
+            ByteArrayOutputStream fontData = (ByteArrayOutputStream)fonts.get(i);
             dos.write(fontData.toByteArray());
         }
 
 
         for (int i = 0; i < paragraphs.size(); i++) {
-            Paragraph para = (Paragraph)paragraphs.elementAt(i);
+            Paragraph para = (Paragraph)paragraphs.get(i);
             descriptor.addParagraph((short)para.getTextLength(), para.getLines());
         }
         dos.write(descriptor.getDescriptor());
 
         for (int i = 0; i < paragraphs.size(); i++ ) {
-            Paragraph para = (Paragraph)paragraphs.elementAt(i);
+            Paragraph para = (Paragraph)paragraphs.get(i);
 
             // Last paragraph has some extra data
             if (i + 1 == paragraphs.size()) {

@@ -121,7 +121,7 @@ public class ActiveSyncDriver {
         }
 
         // Get the document and write it out.
-        Document doc = (Document)dataOut.getDocumentEnumeration().nextElement();
+        Document doc = (Document)dataOut.getDocumentEnumeration().next();
         if (doc == null) {
             return false;
         }

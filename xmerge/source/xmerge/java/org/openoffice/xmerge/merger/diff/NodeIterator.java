@@ -18,17 +18,16 @@
 
 package org.openoffice.xmerge.merger.diff;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.NamedNodeMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.merger.Iterator;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.Resources;
-
-import java.util.Vector;
-import java.util.List;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 /**
@@ -61,7 +60,7 @@ public abstract class NodeIterator implements Iterator {
      */
     public NodeIterator(ConverterCapabilities cc, Node node) {
         cc_ = cc;
-        nodeList = new Vector();
+        nodeList = new ArrayList();
         root = node;
         markTree(node);
     }
@@ -137,7 +136,7 @@ public abstract class NodeIterator implements Iterator {
 
 
     public void refresh() {
-        nodeList = new Vector();
+        nodeList = new ArrayList();
         markTree(root);
         currentPosition = 0;
     }

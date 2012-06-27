@@ -21,7 +21,7 @@ package org.openoffice.xmerge.merger.diff;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import org.openoffice.xmerge.merger.DiffAlgorithm;
 import org.openoffice.xmerge.merger.Difference;
 import org.openoffice.xmerge.merger.Iterator;
@@ -76,7 +76,7 @@ public class IteratorRowCompare implements DiffAlgorithm {
         int orgSeqlen = orgSeq.elementCount();
         int modSeqlen = modSeq.elementCount();
 
-        Vector diffVector = new Vector();
+        ArrayList diffVector = new ArrayList();
 
         // i and j are counters to keep track the current position in the
         // iterator
@@ -194,7 +194,7 @@ public class IteratorRowCompare implements DiffAlgorithm {
 
         // convert the vector to array
         Difference[] diffArray = new Difference[diffVector.size()];
-        diffVector.copyInto(diffArray);
+        diffVector.toArray(diffArray);
 
         return diffArray;
     }

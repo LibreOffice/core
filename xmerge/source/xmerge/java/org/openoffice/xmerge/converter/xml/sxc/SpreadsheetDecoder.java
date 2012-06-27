@@ -19,9 +19,8 @@
 package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.Iterator;
 
-import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.ConvertData;
 
 /**
@@ -50,7 +49,7 @@ public abstract class SpreadsheetDecoder {
      *
      *  @return  The Enumeration
      */
-    public abstract Enumeration getNameDefinitions();
+    public abstract Iterator getNameDefinitions();
 
     /**
      *  Returns an <code>BookSettings</code>
@@ -64,7 +63,7 @@ public abstract class SpreadsheetDecoder {
      *
      *  @return  The Enumeration
      */
-    public abstract Enumeration getColumnRowInfos();
+    public abstract Iterator getColumnRowInfos();
 
     /**
      *  Returns the number of populated rows in the current WorkSheet.

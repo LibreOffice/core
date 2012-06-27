@@ -18,24 +18,23 @@
 
 package org.openoffice.xmerge.converter.xml.xslt;
 
-import org.openoffice.xmerge.Document;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Properties;
+
 import org.openoffice.xmerge.ConvertData;
-import org.openoffice.xmerge.DocumentSerializer;
-import org.openoffice.xmerge.DocumentSerializerFactory;
+import org.openoffice.xmerge.ConverterCapabilities;
+import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.DocumentDeserializerFactory;
-import org.openoffice.xmerge.PluginFactory;
-import org.openoffice.xmerge.converter.dom.DOMDocument;
-import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
-import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.DocumentMerger;
 import org.openoffice.xmerge.DocumentMergerFactory;
-import org.openoffice.xmerge.ConverterCapabilities;
-
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.io.IOException;
-import java.util.Properties;
+import org.openoffice.xmerge.DocumentSerializer;
+import org.openoffice.xmerge.DocumentSerializerFactory;
+import org.openoffice.xmerge.PluginFactory;
+import org.openoffice.xmerge.converter.dom.DOMDocument;
+import org.openoffice.xmerge.util.registry.ConverterInfo;
 
 /**
  *  <p>Xslt implementation of the <code>PluginFactory</code>.
@@ -142,9 +141,9 @@ public final class PluginFactoryImpl extends PluginFactory
     String ext= ".txt";
     String mimeType = null;
     ConverterInfo ci = this.getConverterInfo();
-    Enumeration enumerate = ci.getDeviceMime();
-    while (enumerate.hasMoreElements()) {
-        mimeType= (String) enumerate.nextElement();
+    Iterator enumerate = ci.getDeviceMime();
+    while (enumerate.hasNext()) {
+        mimeType= (String) enumerate.next();
     }
     try {
         props.load(is);

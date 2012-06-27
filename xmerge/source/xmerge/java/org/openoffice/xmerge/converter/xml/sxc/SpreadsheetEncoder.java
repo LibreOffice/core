@@ -19,7 +19,7 @@
 package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  *  <p>This class is a abstract class for encoding an SXC into an
@@ -99,7 +99,7 @@ public abstract class SpreadsheetEncoder {
      *  @param  columnRows  An <code>IntArrayList</code> of column
      *                        widths.
      */
-    public abstract void setColumnRows(Vector columnRows) throws IOException;
+    public abstract void setColumnRows(ArrayList columnRows) throws IOException;
 
     /**
      *  Set the name definition of this spreadsheet

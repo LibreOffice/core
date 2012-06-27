@@ -18,15 +18,16 @@
 
 package org.openoffice.xmerge.util.registry;
 
-import java.util.Vector;
-import java.util.Enumeration;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.lang.reflect.Constructor;
-import org.openoffice.xmerge.PluginFactory;
-import org.openoffice.xmerge.DocumentSerializerFactory;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.openoffice.xmerge.DocumentDeserializerFactory;
 import org.openoffice.xmerge.DocumentMergerFactory;
+import org.openoffice.xmerge.DocumentSerializerFactory;
+import org.openoffice.xmerge.PluginFactory;
 
 /**
  *  Class for storing the information about a converter plugin.
@@ -53,7 +54,7 @@ public class ConverterInfo {
 
     private String           piJarName;
     private String           piOfficeMime;
-    private Vector           piDeviceMime;
+    private ArrayList        piDeviceMime;
     private String           piDisplayName;
     private String           piDescription;
     private String           piVersion;
@@ -87,7 +88,7 @@ public class ConverterInfo {
      *                              be loaded.
      */
     public ConverterInfo(String jarName, String officeMime,
-        Vector deviceMime, String displayName, String description,
+                         ArrayList deviceMime, String displayName, String description,
     String version, String vendor, String impl,String xsltSerial,
     String xsltDeserial)
         throws RegistryException {
@@ -165,7 +166,7 @@ public class ConverterInfo {
 
 
     public ConverterInfo(String jarName, String officeMime,
-        Vector deviceMime, String displayName, String description,
+        ArrayList deviceMime, String displayName, String description,
         String version, String vendor, String impl)
         throws RegistryException {
 
@@ -289,8 +290,8 @@ public class ConverterInfo {
      *  @return  An <code>Enumeration</code> of <code>String</code>
      *           objects indicating the device mime-type.
      */
-    public Enumeration getDeviceMime() {
-        return(piDeviceMime.elements());
+    public Iterator getDeviceMime() {
+        return(piDeviceMime.iterator());
     }
 
 

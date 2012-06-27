@@ -18,16 +18,16 @@
 
 package org.openoffice.xmerge.converter.xml.sxc;
 
-import java.util.Vector;
-import java.util.Enumeration;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.XmlUtil;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * This is a class representing the different attributes for a worksheet
@@ -42,7 +42,7 @@ public class BookSettings implements OfficeConstants {
 
     private boolean hasColumnRowHeaders = true;
     private String  activeSheet         = new String();
-    private Vector  worksheetSettings   = new Vector();
+    private ArrayList  worksheetSettings   = new ArrayList();
 
     /**
      * Constructor for a <code>BookSettings</code>. Reads document settings
@@ -59,7 +59,7 @@ public class BookSettings implements OfficeConstants {
      *
      * @param worksheetSettings If it's a row the height, a column the width
      */
-    public BookSettings(Vector worksheetSettings) {
+    public BookSettings(ArrayList worksheetSettings) {
         this.worksheetSettings = worksheetSettings;
     }
 
@@ -86,7 +86,7 @@ public class BookSettings implements OfficeConstants {
      *
      * @return <code>Vector</code> of <code>SheetSettings</code>
      */
-    public Vector getSheetSettings() {
+    public ArrayList getSheetSettings() {
         return worksheetSettings;
     }
 
@@ -140,8 +140,8 @@ public class BookSettings implements OfficeConstants {
         this.settings = settings;
         Element configItemMapNamed      = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_NAMED);
         configItemMapNamed.setAttribute(ATTRIBUTE_CONFIG_NAME, "Tables");
-        for(Enumeration e = worksheetSettings.elements();e.hasMoreElements();) {
-            SheetSettings s = (SheetSettings) e.nextElement();
+        for(Iterator e = worksheetSettings.iterator();e.hasNext();) {
+            SheetSettings s = (SheetSettings) e.next();
             s.writeNode(settings, configItemMapNamed);
         }
         addConfigItem(root, "ActiveTable", "string", activeSheet);

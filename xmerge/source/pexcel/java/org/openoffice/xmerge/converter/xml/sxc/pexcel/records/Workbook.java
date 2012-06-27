@@ -18,20 +18,21 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
-import java.io.OutputStream;
-import java.io.InputStream;
 import java.io.IOException;
-import java.util.Vector;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
+import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
+import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
-import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
 import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
-import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
-import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
+import org.openoffice.xmerge.util.Debug;
 
 /**
  *  This class is used by <code> PxlDocument</code> to maintain pexcel
@@ -42,11 +43,11 @@ import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 public class Workbook implements org.openoffice.xmerge.Document,
 OfficeConstants {
 
-    private Vector fonts                = new Vector();
-    private Vector extendedFormats      = new Vector();
-    private Vector worksheets           = new Vector();
-    private Vector boundsheets          = new Vector();
-    private Vector definedNames         = new Vector();
+    private ArrayList fonts                = new ArrayList();
+    private ArrayList extendedFormats      = new ArrayList();
+    private ArrayList worksheets           = new ArrayList();
+    private ArrayList boundsheets          = new ArrayList();
+    private ArrayList definedNames         = new ArrayList();
     private static final CodePage cp;
     private static final Window1 win1;
     private static final BeginningOfFile bof;;
@@ -98,27 +99,27 @@ OfficeConstants {
     public void write(OutputStream os) throws IOException {
         bof.write(os);
         cp.write(os);
-        for(Enumeration e = definedNames.elements();e.hasMoreElements();) {
-            DefinedName dn = (DefinedName) e.nextElement();
+        for(Iterator e = definedNames.iterator();e.hasNext();) {
+            DefinedName dn = (DefinedName) e.next();
             dn.write(os);
         }
         win1.write(os);
-        for(Enumeration e = fonts.elements();e.hasMoreElements();) {
-            FontDescription fd = (FontDescription) e.nextElement();
+        for(Iterator e = fonts.iterator();e.hasNext();) {
+            FontDescription fd = (FontDescription) e.next();
             fd.write(os);
         }
-        for(Enumeration e = extendedFormats.elements();e.hasMoreElements();) {
-            ExtendedFormat xf = (ExtendedFormat) e.nextElement();
+        for(Iterator e = extendedFormats.iterator();e.hasNext();) {
+            ExtendedFormat xf = (ExtendedFormat) e.next();
             xf.write(os);
         }
-        for(Enumeration e = boundsheets.elements();e.hasMoreElements();) {
-            BoundSheet bs = (BoundSheet) e.nextElement();
+        for(Iterator e = boundsheets.iterator();e.hasNext();) {
+            BoundSheet bs = (BoundSheet) e.next();
             bs.write(os);
         }
         eof.write(os);
 
-        for(Enumeration e = worksheets.elements();e.hasMoreElements();) {
-            Worksheet ws = (Worksheet) e.nextElement();
+        for(Iterator e = worksheets.iterator();e.hasNext();) {
+            Worksheet ws = (Worksheet) e.next();
             ws.write(os);
         }
     }
@@ -213,8 +214,8 @@ OfficeConstants {
         boolean alreadyExists = false;
         int i = 0;
 
-        for(Enumeration e = fonts.elements();e.hasMoreElements();) {
-            FontDescription fd = (FontDescription) e.nextElement();
+        for(Iterator e = fonts.iterator();e.hasNext();) {
+            FontDescription fd = (FontDescription) e.next();
             if(fd.compareTo(f)) {
                 alreadyExists = true;
                 break;
@@ -243,8 +244,8 @@ OfficeConstants {
         boolean alreadyExists = false;
         int i = 0;
 
-        for(Enumeration e = extendedFormats.elements();e.hasMoreElements();) {
-            ExtendedFormat currentXF = (ExtendedFormat) e.nextElement();
+        for(Iterator e = extendedFormats.iterator();e.hasNext();) {
+            ExtendedFormat currentXF = (ExtendedFormat) e.next();
             if(xf.compareTo(currentXF)) {
                 alreadyExists = true;
                 break;
@@ -266,7 +267,7 @@ OfficeConstants {
       */
     public Worksheet getWorksheet(int index) {
 
-        return ((Worksheet) worksheets.elementAt(index));
+        return ((Worksheet) worksheets.get(index));
     }
 
     /**
@@ -278,7 +279,7 @@ OfficeConstants {
      */
     public FontDescription getFontDescription(int ixfnt) {
 
-        return (FontDescription) fonts.elementAt(ixfnt);
+        return (FontDescription) fonts.get(ixfnt);
     }
 
     /**
@@ -290,7 +291,7 @@ OfficeConstants {
      */
     public ExtendedFormat getExtendedFormat(int ixfe) {
 
-        return (ExtendedFormat) extendedFormats.elementAt(ixfe);
+        return (ExtendedFormat) extendedFormats.get(ixfe);
     }
 
     /**
@@ -298,9 +299,9 @@ OfficeConstants {
      *
       * @return Enumeration for the DefinedNames
       */
-    public Enumeration getDefinedNames() {
+    public Iterator getDefinedNames() {
 
-        return definedNames.elements();
+        return definedNames.iterator();
     }
 
     /**
@@ -310,10 +311,10 @@ OfficeConstants {
       */
     public BookSettings getSettings() {
 
-        Vector settingsVector = new Vector();
+        ArrayList settingsVector = new ArrayList();
         int index = 0;
-        for(Enumeration e = worksheets.elements();e.hasMoreElements();) {
-            Worksheet ws = (Worksheet) e.nextElement();
+        for(Iterator e = worksheets.iterator();e.hasNext();) {
+            Worksheet ws = (Worksheet) e.next();
             SheetSettings s = ws.getSettings();
             s.setSheetName(getSheetName(index++));
             settingsVector.add(s);
@@ -329,9 +330,9 @@ OfficeConstants {
      *
      * @return a <code>Vector</code> containing all the worksheet Names
      */
-    public Vector getWorksheetNames() {
+    public ArrayList getWorksheetNames() {
 
-        Vector wsNames = new Vector();
+        ArrayList wsNames = new ArrayList();
 
         for(int i = 0;i < boundsheets.size();i++) {
             wsNames.add(getSheetName(i));
@@ -346,7 +347,7 @@ OfficeConstants {
      * @return a <code>String</code> containing the name of the worksheet
      */
     public String getSheetName(int index) {
-        BoundSheet bs = (BoundSheet) boundsheets.elementAt(index);
+        BoundSheet bs = (BoundSheet) boundsheets.get(index);
 
         return bs.getSheetName();
     }
@@ -376,7 +377,7 @@ OfficeConstants {
     public void addCell(int row,int col, Format fmt, String cellContents)
     throws IOException {
 
-        Worksheet currentWS = (Worksheet) worksheets.elementAt(worksheets.size()-1);
+        Worksheet currentWS = (Worksheet) worksheets.get(worksheets.size()-1);
         int ixfe = addExtendedFormat(fmt);
 
         String category = fmt.getCategory();
@@ -428,16 +429,16 @@ OfficeConstants {
      *
       * @param  columnRows <code>Vector</code> of <code>ColumnRowInfo</code>
       */
-    public void addColInfo(Vector columnRows) throws IOException {
+    public void addColInfo(ArrayList columnRows) throws IOException {
 
-        Worksheet currentWS = (Worksheet) worksheets.elementAt(worksheets.size()-1);
+        Worksheet currentWS = (Worksheet) worksheets.get(worksheets.size()-1);
 
         int nCols = 0;
         int nRows = 0;
 
         Debug.log(Debug.TRACE,"Workbook: addColInfo()");
-        for(Enumeration e = columnRows.elements();e.hasMoreElements();) {
-            ColumnRowInfo cri =(ColumnRowInfo) e.nextElement();
+        for(Iterator e = columnRows.iterator();e.hasNext();) {
+            ColumnRowInfo cri =(ColumnRowInfo) e.next();
             int ixfe = 0;
             int size = cri.getSize();
             int repeated = cri.getRepeated();
@@ -484,17 +485,17 @@ OfficeConstants {
     public void addSettings(BookSettings book) throws IOException {
 
         int index = 0;
-        Vector sheetSettings = book.getSheetSettings();
+        ArrayList sheetSettings = book.getSheetSettings();
         String activeSheetName = book.getActiveSheet();
 
-        for(Enumeration e = worksheets.elements();e.hasMoreElements();) {
-            Worksheet ws = (Worksheet) e.nextElement();
+        for(Iterator e = worksheets.iterator();e.hasNext();) {
+            Worksheet ws = (Worksheet) e.next();
             String name = getSheetName(index++);
             if(activeSheetName.equals(name)) {
                 win1.setActiveSheet(index-1);
             }
-            for(Enumeration eSettings = sheetSettings.elements();eSettings.hasMoreElements();) {
-                SheetSettings s = (SheetSettings) eSettings.nextElement();
+            for(Iterator eSettings = sheetSettings.iterator();eSettings.hasNext();) {
+                SheetSettings s = (SheetSettings) eSettings.next();
                 if(name.equals(s.getSheetName())) {
                     ws.addSettings(s);
                 }

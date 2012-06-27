@@ -18,7 +18,10 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Stack;
+
 import org.openoffice.xmerge.util.Debug;
 
 /**
@@ -88,8 +91,8 @@ public class FormulaCompiler {
      * @param   tokens  The tokens in RPN form
      * @return  The vector of tokens re-ordered in Infix notation
      */
-    public Vector RPN2Infix(Vector tokens) {
-        Vector infixExpr = new Vector(15);
+    public ArrayList RPN2Infix(ArrayList tokens) {
+        ArrayList infixExpr = new ArrayList(15);
         ListIterator iter = tokens.listIterator();
         Stack evalStack = new Stack();
         Stack args = new Stack();
@@ -97,7 +100,7 @@ public class FormulaCompiler {
         while (iter.hasNext()) {
             Token pt = (Token)iter.next();
             if (pt.isOperand()) {
-                Vector expr = new Vector(5);
+                ArrayList expr = new ArrayList(5);
                 expr.add(pt);
                 evalStack.push(expr);
             } else if (pt.isOperator() || pt.isFunction()) {
@@ -108,7 +111,7 @@ public class FormulaCompiler {
                 evalStack.push(makeExpression(pt, args));
             }
         }
-        return (Vector)evalStack.elementAt(0);
+        return (ArrayList)evalStack.elementAt(0);
     }
 
     /**
@@ -120,8 +123,8 @@ public class FormulaCompiler {
      *
      * @return  A vector of tokens for the expression in Reverse Polish Notation order
      */
-    public Vector infix2RPN(Vector tokens) {
-        Vector rpnExpr = new Vector(15);
+    public ArrayList infix2RPN(ArrayList tokens) {
+        ArrayList rpnExpr = new ArrayList(15);
         Stack evalStack = new Stack();
         ListIterator iter = tokens.listIterator();
         while (iter.hasNext()) {
@@ -134,7 +137,7 @@ public class FormulaCompiler {
                 if (pt.isFunction()) {
                     iter.next();
                 }
-                Vector param = extractParameter(iter);
+                ArrayList param = extractParameter(iter);
                 Debug.log(Debug.TRACE, "Extracted parameter " + param);
                 rpnExpr.addAll(infix2RPN(param));
             } else if (isCloseBrace(pt)) { //Pop off stack till you meet a function or an open bracket
@@ -186,8 +189,8 @@ public class FormulaCompiler {
      * @param iter an iterator into the list
      * @return A complete sub-expression
      */
-    protected Vector extractParameter(ListIterator iter) {
-        Vector param = new Vector(5);
+    protected ArrayList extractParameter(ListIterator iter) {
+        ArrayList param = new ArrayList(5);
         int subExprCount = 0;
 
         while (iter.hasNext()) {
@@ -220,21 +223,21 @@ public class FormulaCompiler {
      * @param   args    The arguments for this operator
      * @return  A correctly ordered expression
      */
-    protected Vector makeExpression(Token pt, Stack args) {
-        Vector tmp = new Vector(5);
+    protected ArrayList<Object> makeExpression(Token pt, Stack<ArrayList> args) {
+        ArrayList<Object> tmp = new ArrayList<Object>(5);
         TokenFactory tf = new TokenFactory();
         if (pt.isOperator()) {
             if (pt.getNumArgs()==2) { //Binary operator
-                tmp.addAll((Vector)args.pop());
+                tmp.addAll((ArrayList)args.pop());
                 tmp.add(pt);
-                tmp.addAll((Vector)args.pop());
+                tmp.addAll((ArrayList)args.pop());
             } else if (pt.getNumArgs() == 1) {
                 if(isPercent(pt)) {
-                    tmp.addAll((Vector)args.elementAt(0));
+                    tmp.addAll((ArrayList)args.elementAt(0));
                     tmp.add(pt);
                 } else {
                     tmp.add(pt);
-                    tmp.addAll((Vector)args.elementAt(0));
+                    tmp.addAll((ArrayList)args.elementAt(0));
                 }
                 if (isOpenBrace(pt)) {
                     tmp.add(tf.getOperatorToken(")",1));
@@ -244,12 +247,12 @@ public class FormulaCompiler {
             tmp.add(pt);
             tmp.add(tf.getOperatorToken("(",1));
             if (!args.isEmpty()) {
-                Vector v = (Vector)args.pop();
+                ArrayList v = (ArrayList)args.pop();
                 tmp.addAll(v);
             }
             while (!args.isEmpty()) {
                 tmp.add(tf.getOperatorToken(",",1));
-                Vector v = (Vector)args.pop();
+                ArrayList v = (ArrayList)args.pop();
                 tmp.addAll(v);
 
             }

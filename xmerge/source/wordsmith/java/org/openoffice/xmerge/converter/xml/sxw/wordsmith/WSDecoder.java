@@ -120,7 +120,7 @@ final class WSDecoder implements DOCConstants {
      */
     Wse[] parseDocument(Record[] recs) throws IOException {
 
-        java.util.Vector v = new java.util.Vector(20, 20);
+        java.util.ArrayList v = new java.util.ArrayList(20);
         WseFontTable fontTable = null;
         WseColorTable colorTable = null;
 

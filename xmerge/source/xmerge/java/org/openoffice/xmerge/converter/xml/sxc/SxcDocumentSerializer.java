@@ -19,28 +19,22 @@
 package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.awt.Color;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
-
 import java.io.IOException;
-import java.util.Vector;
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
+import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.DocumentSerializer;
-
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
-import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
-import org.openoffice.xmerge.converter.xml.sxc.CellStyle;
 import org.openoffice.xmerge.converter.xml.StyleCatalog;
-
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.XmlUtil;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *  <p>General spreadsheet implementation of <code>DocumentSerializer</code>
@@ -89,7 +83,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      *  An array of column widths of the current worksheet.  Width is
      *  measured in number of characters.
      */
-    private Vector ColumnRowList;
+    private ArrayList ColumnRowList;
 
     /**  Width, in characters, of the current cell display data. */
     private int displayWidth = 0;
@@ -308,7 +302,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         Debug.log(Debug.TRACE, "<TABLE>");
 
-        ColumnRowList = new Vector();
+        ColumnRowList = new ArrayList();
 
         // Get table attributes
         // TODO - extract style from attribute
@@ -631,8 +625,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         if (fmt.isDefault() && styleName.length()==0) {
             int index = 1;
-            for(Enumeration e = ColumnRowList.elements();e.hasMoreElements();) {
-                ColumnRowInfo cri = (ColumnRowInfo) e.nextElement();
+            for(Iterator e = ColumnRowList.iterator();e.hasNext();) {
+                ColumnRowInfo cri = (ColumnRowInfo) e.next();
                 if(cri.isColumn()) {
                     if(colID>=index && colID<(index+cri.getRepeated())) {
                         fmt = new Format(cri.getFormat());

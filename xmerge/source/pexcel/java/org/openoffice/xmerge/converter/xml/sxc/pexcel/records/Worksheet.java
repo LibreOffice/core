@@ -18,16 +18,17 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.Vector;
-import java.util.Enumeration;
 import java.awt.Point;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 
-import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+import org.openoffice.xmerge.util.Debug;
 
 /**
  *  This class is used by <code>PxlDocument</code> to maintain pexcel
@@ -39,9 +40,9 @@ public class Worksheet {
 
     private String name;
     private Workbook wb;
-    private Vector rows         = new Vector();
-    private Vector colInfo      = new Vector();
-    private Vector cells        = new Vector();
+    private ArrayList rows         = new ArrayList();
+    private ArrayList colInfo      = new ArrayList();
+    private ArrayList cells        = new ArrayList();
     private DefColWidth dcw     = new DefColWidth();
     private DefRowHeight drh    = new DefRowHeight();
     private Window2 win2        = new Window2();
@@ -75,17 +76,17 @@ public class Worksheet {
         bof     = new BeginningOfFile(false);
         bof.write(os);
         dcw.write(os);
-        for(Enumeration e = colInfo.elements();e.hasMoreElements();) {
-            ColInfo ci = (ColInfo) e.nextElement();
+        for(Iterator e = colInfo.iterator();e.hasNext();) {
+            ColInfo ci = (ColInfo) e.next();
             ci.write(os);
         }
         drh.write(os);
-        for(Enumeration e = rows.elements();e.hasMoreElements();) {
-            Row rw = (Row) e.nextElement();
+        for(Iterator e = rows.iterator();e.hasNext();) {
+            Row rw = (Row) e.next();
             rw.write(os);
         }
-        for(Enumeration e = cells.elements();e.hasMoreElements();) {
-            BIFFRecord cv = (BIFFRecord) e.nextElement();
+        for(Iterator e = cells.iterator();e.hasNext();) {
+            BIFFRecord cv = (BIFFRecord) e.next();
             cv.write(os);
         }
         win2.write(os);
@@ -214,8 +215,8 @@ public class Worksheet {
      *
       * @return an enumerator to the worksheet cells
       */
-    public Enumeration getCellEnumerator() throws IOException {
-        return (cells.elements());
+    public Iterator getCellEnumerator() throws IOException {
+        return (cells.iterator());
     }
 
     /**
@@ -270,9 +271,9 @@ public class Worksheet {
      *
      * @return an <code>Enumeration</code> to the ColInfo's
      */
-     public Enumeration getColInfos() {
+     public Iterator getColInfos() {
 
-         return (colInfo.elements());
+         return (colInfo.iterator());
      }
 
     /**
@@ -300,9 +301,9 @@ public class Worksheet {
      *
      * @return an <code>Enumeration</code> to the Rows
      */
-     public Enumeration getRows() {
+     public Iterator getRows() {
 
-         return (rows.elements());
+         return (rows.iterator());
      }
 
 }

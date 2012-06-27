@@ -19,19 +19,29 @@
 package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
-import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
-import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
+import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
-import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.*;
+import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.CellValue;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.ColInfo;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.DefinedName;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.ExtendedFormat;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.FloatNumber;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.FontDescription;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Formula;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Row;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Worksheet;
+import org.openoffice.xmerge.util.Debug;
 
 /**
  *  This class is used by {@link
@@ -48,7 +58,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
     private int maxRows = 0;
     private int maxCols = 0;
     private int wsIndex;
-    private Enumeration cellValue;
+    private Iterator cellValue;
     private Format fmt = null;
 
     /**
@@ -80,8 +90,8 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      */
     public void addDeviceContent(ConvertData cd) throws IOException {
 
-        Enumeration e = cd.getDocumentEnumeration();
-        wb = (Workbook) e.nextElement();
+        Iterator e = cd.getDocumentEnumeration();
+        wb = (Workbook) e.next();
     }
 
 
@@ -93,7 +103,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      */
     public int getNumberOfSheets() {
 
-        Vector v = wb.getWorksheetNames();
+        ArrayList v = wb.getWorksheetNames();
         Debug.log(Debug.TRACE,"Total Number of Sheets : " + v.size());
         return (v.size());
     }
@@ -104,17 +114,17 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      *
      *  @return  The number of sheets in the WorkBook.
      */
-    public Enumeration getNameDefinitions() {
+    public Iterator getNameDefinitions() {
 
-        Enumeration e  = wb.getDefinedNames();
-        Vector nameDefinitionVector = new Vector();
-        while(e.hasMoreElements()) {
-            DefinedName dn = (DefinedName)e.nextElement();
+        Iterator e  = wb.getDefinedNames();
+        ArrayList nameDefinitionVector = new ArrayList();
+        while(e.hasNext()) {
+            DefinedName dn = (DefinedName)e.next();
             NameDefinition nameDefinitionEntry = dn.getNameDefinition();
             nameDefinitionVector.add(nameDefinitionEntry);
         }
         Debug.log(Debug.TRACE,"Getting " + nameDefinitionVector.size() + " DefinedName records");
-        return (nameDefinitionVector.elements());
+        return (nameDefinitionVector.iterator());
     }
 
     /**
@@ -133,13 +143,13 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      *
      *  @return  The number of sheets in the WorkBook.
      */
-    public Enumeration getColumnRowInfos() {
+    public Iterator getColumnRowInfos() {
 
-        Vector colRowVector = new Vector();
+        ArrayList colRowVector = new ArrayList();
 
         // Collect Columns from worksheet and add them to the vector
-        for(Enumeration e  = ws.getColInfos();e.hasMoreElements();) {
-            ColInfo ci = (ColInfo)e.nextElement();
+        for(Iterator e  = ws.getColInfos();e.hasNext();) {
+            ColInfo ci = (ColInfo)e.next();
             int repeated = ci.getLast() - ci.getFirst() + 1;
             ColumnRowInfo colInfo = new ColumnRowInfo(  ci.getColWidth(),
                                                         repeated,
@@ -148,8 +158,8 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         }
 
         // Collect Rows from worksheet and add them to the vector
-        for(Enumeration e  = ws.getRows();e.hasMoreElements();) {
-            Row rw = (Row)e.nextElement();
+        for(Iterator e  = ws.getRows();e.hasNext();) {
+            Row rw = (Row)e.next();
             // We will use the repeat field for number (unlike columns rows
             // cannot be repeated, we have unique record for each row in pxl
             int repeated = rw.getRowNumber();
@@ -159,7 +169,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
             colRowVector.add(rowInfo);
         }
         Debug.log(Debug.TRACE,"Getting " + colRowVector.size() + " ColRowInfo records");
-        return (colRowVector.elements());
+        return (colRowVector.iterator());
     }
 
     /**
@@ -214,7 +224,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         boolean success = false;
 
         try {
-            cell = (CellValue) cellValue.nextElement();
+            cell = (CellValue) cellValue.next();
             Debug.log(Debug.TRACE,"Current Cell : " + cell.getString());
             readCellFormat();
             success = true;

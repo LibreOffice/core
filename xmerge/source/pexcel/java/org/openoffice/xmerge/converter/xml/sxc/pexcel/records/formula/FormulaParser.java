@@ -19,7 +19,7 @@
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 import org.openoffice.xmerge.util.Debug;
@@ -41,7 +41,7 @@ public class FormulaParser {
     private String formulaStr;
     private int index = 1;
     private TokenFactory tokenFactory;
-    private Vector tokenVector;
+    private ArrayList tokenVector;
     private Workbook wb;
 
      /**
@@ -51,7 +51,7 @@ public class FormulaParser {
 
         Debug.log(Debug.TRACE,"Creating a Formula Parser");
         tokenFactory = new TokenFactory();
-        tokenVector = new Vector();
+        tokenVector = new ArrayList();
     }
 
     /**
@@ -69,7 +69,7 @@ public class FormulaParser {
      * starting with the '=' character
      * @return A <code>Vector</code> containing the parsed <code>Token</code>s
      */
-    public Vector parse(String formula) throws FormulaParsingException {
+    public ArrayList parse(String formula) throws FormulaParsingException {
 
         index = 1;
         look = ' ';
@@ -368,7 +368,7 @@ public class FormulaParser {
             int numArgs = arguments();
             match(')');
             tokenVector.add(tokenFactory.getOperatorToken(")", 1));
-            tokenVector.insertElementAt(tokenFactory.getFunctionToken(cell, numArgs), index);
+            tokenVector.add(index, tokenFactory.getFunctionToken(cell, numArgs));
          } else {
 
             if(cell.indexOf('.')!=-1) {

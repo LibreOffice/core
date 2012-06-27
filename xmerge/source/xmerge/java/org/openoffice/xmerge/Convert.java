@@ -18,9 +18,9 @@
 
 package org.openoffice.xmerge;
 
-import java.io.InputStream;
 import java.io.IOException;
-import java.util.Enumeration;
+import java.io.InputStream;
+import java.util.Iterator;
 
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 
@@ -212,9 +212,9 @@ public class Convert implements Cloneable {
             DocumentSerializerFactory myDocSerializerFactory =
                 ci.getDocSerializerFactory();
 
-            Enumeration e = inputCD.getDocumentEnumeration();
+            Iterator e = inputCD.getDocumentEnumeration();
 
-            Document doc = (Document) e.nextElement();
+            Document doc = (Document) e.next();
             DocumentSerializer ser = myDocSerializerFactory.createDocumentSerializer(doc);
             dataOut = ser.serialize();
 
@@ -266,9 +266,9 @@ public class Convert implements Cloneable {
             DocumentSerializerFactory myDocSerializerFactory =
                 ci.getDocSerializerFactory();
 
-            Enumeration e = inputCD.getDocumentEnumeration();
+            Iterator e = inputCD.getDocumentEnumeration();
 
-            Document doc = (Document) e.nextElement();
+            Document doc = (Document) e.next();
             DocumentSerializer ser = myDocSerializerFactory.createDocumentSerializer(doc);
             dataOut = ser instanceof DocumentSerializer2 ?
                 ((DocumentSerializer2) ser).serialize(sFromURL,sToURL) :

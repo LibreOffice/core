@@ -18,20 +18,20 @@
 
 package org.openoffice.xmerge.test;
 
-import java.util.Vector;
-import java.util.Enumeration;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 import org.openoffice.xmerge.Convert;
-import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConverterFactory;
-import org.openoffice.xmerge.test.ConverterInfoList;
+import org.openoffice.xmerge.Document;
+import org.openoffice.xmerge.DocumentMerger;
 import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 import org.openoffice.xmerge.util.registry.ConverterInfoReader;
-import org.openoffice.xmerge.DocumentMerger;
 
 /**
  *  This class is a command-line driver for the converter framework.
@@ -51,7 +51,7 @@ public final class Driver {
     private String mergeFile = null;
 
     /**  Command-line parmeter. */
-    private Vector deviceFiles = new Vector();
+    private ArrayList deviceFiles = new ArrayList();
 
     /**  Command-line parmeter shortcuts. */
     private String mimeTypes[] = {
@@ -78,12 +78,12 @@ public final class Driver {
                 " property file");
         }
 
-        Enumeration jarInfoEnumeration;
+        Iterator jarInfoEnumeration;
         ConverterInfoReader cir;
 
-        Enumeration jarFileEnum = cil.getJarFileEnum();
-        while (jarFileEnum.hasMoreElements()) {
-            String jarName = (String) jarFileEnum.nextElement();
+        Iterator jarFileEnum = cil.getJarFileEnum();
+        while (jarFileEnum.hasNext()) {
+            String jarName = (String) jarFileEnum.next();
             try {
                 cir = new ConverterInfoReader(jarName, false);
                 jarInfoEnumeration = cir.getConverterInfoEnumeration();
@@ -134,9 +134,9 @@ public final class Driver {
         }
 
         try {
-            Enumeration dfEnum = deviceFiles.elements();
-            while (dfEnum.hasMoreElements()) {
-                processFile = (String)dfEnum.nextElement();
+            Iterator dfEnum = deviceFiles.iterator();
+            while (dfEnum.hasNext()) {
+                processFile = (String)dfEnum.next();
                 File f = new File(processFile);
 
                 // Make sure the input file actually exists before using it
@@ -165,9 +165,9 @@ public final class Driver {
         if (dataOut != null ) {
 
             if (mergeFile == null) {
-                Enumeration docEnum = dataOut.getDocumentEnumeration();
-                while (docEnum.hasMoreElements()) {
-                    Document docOut      = (Document)docEnum.nextElement();
+                Iterator docEnum = dataOut.getDocumentEnumeration();
+                while (docEnum.hasNext()) {
+                    Document docOut      = (Document)docEnum.next();
                     String fileName      = docOut.getFileName();
                     try {
                         FileOutputStream fos = new FileOutputStream(fileName);
@@ -185,8 +185,8 @@ public final class Driver {
                     FileInputStream mergeIS = new FileInputStream(mergeFile);
                     Document mergeDoc = myConvert.getOfficeDocument(mergeFile, mergeIS);
                     DocumentMerger merger = myConvert.getDocumentMerger(mergeDoc);
-                    Enumeration mergeDocEnum = dataOut.getDocumentEnumeration();
-                    Document convertedFile = (Document)mergeDocEnum.nextElement();
+                    Iterator mergeDocEnum = dataOut.getDocumentEnumeration();
+                    Document convertedFile = (Document)mergeDocEnum.next();
 
                     merger.merge(convertedFile);
               mergeIS.close();

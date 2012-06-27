@@ -18,8 +18,8 @@
 
 package org.openoffice.xmerge;
 
-import java.util.Vector;
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *  <p><code>ConvertData</code> is used as a container for passing
@@ -34,7 +34,7 @@ public class ConvertData {
     /**
      *  Vector of <code>Document</code> objects.
      */
-    private Vector v = new Vector();
+    private ArrayList v = new ArrayList();
 
     /**
      *  Name of the <code>ConvertData</code> object.
@@ -49,7 +49,7 @@ public class ConvertData {
      */
     public void reset() {
         name = null;
-                v.removeAllElements();
+        v.clear();
     }
 
     /**
@@ -89,8 +89,8 @@ public class ConvertData {
      *  @return  The <code>Enumeration</code> to access the
      *           <code>Vector</code> of <code>Document</code> objects.
      */
-    public Enumeration getDocumentEnumeration() {
-        Enumeration enumerate = v.elements();
+    public Iterator getDocumentEnumeration() {
+        Iterator enumerate = v.iterator();
         return (enumerate);
     }
 

@@ -18,14 +18,15 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
-import java.io.*;
-import java.util.Vector;
-import java.util.Enumeration;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.DefinedName;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
+import org.openoffice.xmerge.util.Debug;
+import org.openoffice.xmerge.util.EndianConverter;
 
 /**
  * The TokenDecoder decodes a byte[] to an equivalent <code>String</code>. The only
@@ -79,9 +80,9 @@ public class TokenDecoder {
      * @param formula A Pocket Excel Formula byte[]
      * @return A <code>Vector</code> of deoded <code>Token</code>
      */
-    public Vector getTokenVector(byte[] formula) {
+    public ArrayList getTokenVector(byte[] formula) {
 
-        Vector v = new Vector();
+        ArrayList v = new ArrayList();
 
         ByteArrayInputStream bis = new ByteArrayInputStream(formula);
         int b = 0 ;
@@ -96,46 +97,46 @@ public class TokenDecoder {
                 case TokenConstants.TAREA3D:
                                 Debug.log(Debug.TRACE, "Decoded 3D Area Cell Reference: ");
                                 v.add(read3DCellAreaRefToken(bis));
-                                Debug.log(Debug.TRACE, "Decoded 3D Area Cell Reference: " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded 3D Area Cell Reference: " + last(v));
                                 break;
                 case TokenConstants.TREF3D:
                                 Debug.log(Debug.TRACE, "Decoded 3D Cell Reference: ");
                                 v.add(read3DCellRefToken(bis));
-                                Debug.log(Debug.TRACE, "Decoded 3D Cell Reference: " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded 3D Cell Reference: " + last(v));
                                 break;
                 case TokenConstants.TREF :
                                 v.add(readCellRefToken(bis));
-                                Debug.log(Debug.TRACE, "Decoded Cell Reference: " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded Cell Reference: " + last(v));
                                 break;
                 case TokenConstants.TAREA :
                                 v.add(readCellAreaRefToken(bis));
-                                Debug.log(Debug.TRACE, "Decoded Cell Area Reference: " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded Cell Area Reference: " + last(v));
                                 break;
                 case TokenConstants.TNUM :
                                 v.add(readNumToken(bis));
-                                Debug.log(Debug.TRACE, "Decoded number : " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded number : " + last(v));
                                 break;
                 case TokenConstants.TFUNCVAR :
                                 v.add(readFunctionVarToken(bis));
-                                Debug.log(Debug.TRACE, "Decoded variable argument function: " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded variable argument function: " + last(v));
                                 break;
                 case TokenConstants.TFUNC :
                                 v.add(readFunctionToken(bis));
-                                Debug.log(Debug.TRACE, "Decoded function: " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded function: " + last(v));
                                 break;
                 case TokenConstants.TSTRING :
                                 v.add(readStringToken(bis));
-                                Debug.log(Debug.TRACE, "Decoded string: " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded string: " + last(v));
                                 break;
                 case TokenConstants.TNAME :
                                 v.add(readNameToken(bis));
-                                Debug.log(Debug.TRACE, "Decoded defined name: " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded defined name: " + last(v));
                                 break;
                 case TokenConstants.TUPLUS:
                 case TokenConstants.TUMINUS:
                 case TokenConstants.TPERCENT:
                                 v.add(readOperatorToken(b, 1));
-                                Debug.log(Debug.TRACE, "Decoded Unary operator : " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded Unary operator : " + last(v));
                                 break;
                 case TokenConstants.TADD :
                 case TokenConstants.TSUB :
@@ -148,7 +149,7 @@ public class TokenDecoder {
                 case TokenConstants.TGREATER :
                 case TokenConstants.TNEQUALS :
                                 v.add(readOperatorToken(b, 2));
-                                Debug.log(Debug.TRACE, "Decoded Binary operator : " + v.lastElement());
+                                Debug.log(Debug.TRACE, "Decoded Binary operator : " + last(v));
                                 break;
 
                 default :
@@ -156,6 +157,11 @@ public class TokenDecoder {
             }
         }
         return v;
+    }
+
+    private static Object last(ArrayList list)
+    {
+        return list.get(list.size() - 1);
     }
 
     /**
@@ -213,14 +219,14 @@ public class TokenDecoder {
         buffer[1] = (byte) bis.read();
         int nameIndex = EndianConverter.readShort(buffer);
         bis.skip(12);       // the next 12 bytes are unused
-        Enumeration e = wb.getDefinedNames();
+        Iterator e = wb.getDefinedNames();
         int i = 1;
         while(i<nameIndex) {
-            e.nextElement();
+            e.next();
             i++;
         }
         Debug.log(Debug.TRACE,"Name index is " + nameIndex);
-        DefinedName dn = (DefinedName)e.nextElement();
+        DefinedName dn = (DefinedName)e.next();
         Debug.log(Debug.TRACE,"DefinedName is " + dn.getName());
         return (tf.getOperandToken(dn.getName(), "NAME"));
     }

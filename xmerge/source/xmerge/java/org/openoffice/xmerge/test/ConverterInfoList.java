@@ -18,12 +18,12 @@
 
 package org.openoffice.xmerge.test;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.BufferedInputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Properties;
-import java.util.Vector;
-import java.util.Enumeration;
 
 /**
  *  Loads a properties file so that registry knows which plug-ins
@@ -35,7 +35,7 @@ public class ConverterInfoList {
 
     private static String  defaultPropsFile = "ConverterInfoList.properties";
 
-    private Vector     jars;
+    private ArrayList  jars;
     private Properties props            = null;
 
 
@@ -68,7 +68,7 @@ public class ConverterInfoList {
 
         int i              = 1;
         String jarFileName = new String();
-        jars               = new Vector();
+        jars               = new ArrayList();
 
         while ((jarFileName = props.getProperty("jarname" + i)) != null) {
             jars.add(jarFileName);
@@ -88,9 +88,9 @@ public class ConverterInfoList {
     *           <code>String</code> describes a plug-in to be
     *           loaded into the registry.
     */
-    public Enumeration getJarFileEnum() {
+    public Iterator getJarFileEnum() {
 
-        return jars.elements();
+        return jars.iterator();
     }
 }
 

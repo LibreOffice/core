@@ -18,28 +18,30 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.wordsmith;
 
-import org.w3c.dom.*;
-
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
+import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.DocumentDeserializer;
-import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.palm.PalmDB;
-import org.openoffice.xmerge.converter.palm.Record;
-import org.openoffice.xmerge.converter.palm.PdbDecoder;
 import org.openoffice.xmerge.converter.palm.PalmDocument;
+import org.openoffice.xmerge.converter.palm.Record;
+import org.openoffice.xmerge.converter.xml.OfficeConstants;
+import org.openoffice.xmerge.converter.xml.ParaStyle;
+import org.openoffice.xmerge.converter.xml.Style;
+import org.openoffice.xmerge.converter.xml.StyleCatalog;
+import org.openoffice.xmerge.converter.xml.TextStyle;
 import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
-
-import java.util.Vector;
-import java.io.ByteArrayInputStream;
-
-import org.openoffice.xmerge.converter.xml.*;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.XmlUtil;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  *  <p>WordSmith implementation of
@@ -102,10 +104,10 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
 
         Document doc         = null;
         PalmDocument palmDoc = null;
-        Enumeration e        = cd.getDocumentEnumeration();
+        Iterator e        = cd.getDocumentEnumeration();
 
-        while(e.hasMoreElements()) {
-            palmDoc        = (PalmDocument) e.nextElement();
+        while(e.hasNext()) {
+            palmDoc        = (PalmDocument) e.next();
             PalmDB pdb     = palmDoc.getPdb();
             Record[] recs  = pdb.getRecords();
             decoder        = new WSDecoder();
@@ -201,7 +203,7 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
      *  @return  Array of <code>Node</code> objects.
      */
     private Node[] parseText(String text, org.w3c.dom.Document parentDoc) {
-    Vector nodeVec = new Vector();
+        ArrayList nodeVec = new ArrayList();
 
         // Break up the text from the WordSmith text run into Open
         // Office text runs.  There may be more runs in OO because
@@ -229,7 +231,7 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
             if (closerIndex > 0) {
                 String beginningText = text.substring(0, closerIndex);
                 Text textNode = parentDoc.createTextNode(beginningText);
-                nodeVec.addElement(textNode);
+                nodeVec.add(textNode);
                 log("<TEXT>");
                 log(beginningText);
                 log("</TEXT>");
@@ -272,7 +274,7 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
         // Now create and populate an array to return the nodes in.
         Node nodes[] = new Node[nodeVec.size()];
         for (int i = 0; i < nodeVec.size(); i++)
-            nodes[i] = (Node)nodeVec.elementAt(i);
+            nodes[i] = (Node)nodeVec.get(i);
         return nodes;
     }
 

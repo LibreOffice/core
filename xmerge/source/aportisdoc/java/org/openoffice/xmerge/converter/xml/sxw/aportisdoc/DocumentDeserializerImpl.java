@@ -18,24 +18,23 @@
 
 package org.openoffice.xmerge.converter.xml.sxw.aportisdoc;
 
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.Iterator;
 
-import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
+import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.DocumentDeserializer;
+import org.openoffice.xmerge.converter.palm.PalmDB;
+import org.openoffice.xmerge.converter.palm.PalmDocument;
+import org.openoffice.xmerge.converter.palm.Record;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
-import org.openoffice.xmerge.converter.palm.PalmDB;
-import org.openoffice.xmerge.converter.palm.Record;
-import org.openoffice.xmerge.converter.palm.PalmDocument;
 import org.openoffice.xmerge.util.Debug;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  *  <p>AportisDoc implementation of <code>DocumentDeserializer</code>
@@ -88,9 +87,9 @@ public final class DocumentDeserializerImpl
         Document doc = null;
         int i=0;
         ConvertData cdOut;
-        Enumeration e = cd.getDocumentEnumeration();
-        while (e.hasMoreElements()) {
-            PalmDocument palmDoc = (PalmDocument) e.nextElement();
+        Iterator e = cd.getDocumentEnumeration();
+        while (e.hasNext()) {
+            PalmDocument palmDoc = (PalmDocument) e.next();
             PalmDB pdb = palmDoc.getPdb();
 
             log("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");

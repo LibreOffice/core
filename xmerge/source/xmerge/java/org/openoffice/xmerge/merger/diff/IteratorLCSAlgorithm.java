@@ -18,7 +18,7 @@
 
 package org.openoffice.xmerge.merger.diff;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import org.openoffice.xmerge.merger.DiffAlgorithm;
 import org.openoffice.xmerge.merger.Difference;
 import org.openoffice.xmerge.merger.Iterator;
@@ -50,7 +50,7 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
             printDiffTable(diffTable);
         }
 
-        Vector diffResult = new Vector();
+        ArrayList diffResult = new ArrayList();
 
         generateResult(diffTable, orgSeqlen, modSeqlen, diffResult);
 
@@ -60,7 +60,7 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
         // generateResult is called recursively
         if (diffResult.size() > 0) {
             diffArray = new Difference[diffResult.size()];
-            diffResult.copyInto(diffArray);
+            diffResult.toArray(diffArray);
         }
 
         diffTable = null;
@@ -161,7 +161,7 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
      *                       and positions fill in.
      */
     private void generateResult(int[][] diffTable,
-                                int i, int j, Vector diffVector) {
+                                int i, int j, ArrayList diffVector) {
 
         // handle the first element
         if (i == 0 && j == 0) {

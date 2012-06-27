@@ -18,14 +18,14 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
-import java.io.*;
-import java.util.Vector;
-import java.util.Enumeration;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.DefinedName;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.DefinedName;
 
 /**
  * The TokenEncoder encodes a Token to an equivalent pexcel byte[]. The only
@@ -75,7 +75,7 @@ public class TokenEncoder {
      */
     public byte[] getByte(Token t) throws IOException {
 
-        Vector tmpByteArray = null;     // we use this cause we don't know till after
+        ArrayList tmpByteArray = null;     // we use this cause we don't know till after
                                         // the encoding takes place how big the byte [] will be
            //index=0;                       // This class is declared static in
                                         // FormulaHelper so better make sure our index is 0
@@ -114,8 +114,8 @@ public class TokenEncoder {
         byte cellRefArray[] = new byte[tmpByteArray.size()];
         int i = 0;
         String s = new String();
-        for(Enumeration e = tmpByteArray.elements();e.hasMoreElements();) {
-            Byte tmpByte = (Byte) e.nextElement();
+        for(Iterator e = tmpByteArray.iterator();e.hasNext();) {
+            Byte tmpByte = (Byte) e.next();
             s = s + tmpByte + " ";
             cellRefArray[i] = tmpByte.byteValue();
             i++;
@@ -130,9 +130,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector operatorEncoder(Token t) {
+    private ArrayList operatorEncoder(Token t) {
 
-        Vector tmpByteArray = new Vector();
+        ArrayList tmpByteArray = new ArrayList();
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         return tmpByteArray;
     }
@@ -144,9 +144,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector stringEncoder(Token t) throws IOException{
+    private ArrayList stringEncoder(Token t) throws IOException{
 
-        Vector tmpByteArray = new Vector();
+        ArrayList tmpByteArray = new ArrayList();
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         tmpByteArray.add(new Byte((byte)(t.getValue().length())));
         tmpByteArray.add(new Byte((byte)0x01));
@@ -164,9 +164,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector numEncoder(Token t) {
+    private ArrayList numEncoder(Token t) {
 
-        Vector tmpByteArray = new Vector();
+        ArrayList tmpByteArray = new ArrayList();
 
         double cellLong = (double) Double.parseDouble(t.getValue());
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
@@ -313,23 +313,23 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector nameDefinitionEncoder(Token t) {
+    private ArrayList nameDefinitionEncoder(Token t) {
 
-        Vector tmpByteArray = new Vector();
+        ArrayList tmpByteArray = new ArrayList();
 
         String nameString = t.getValue();
         Debug.log(Debug.TRACE,"NameDefinitionEncoder : " + nameString);
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
-        Enumeration e = wb.getDefinedNames();
+        Iterator e = wb.getDefinedNames();
         DefinedName dn;
         String name;
         int definedNameIndex = 0;
         do {
-            dn = (DefinedName)e.nextElement();
+            dn = (DefinedName)e.next();
             name = dn.getName();
             Debug.log(Debug.TRACE,"Name pulled from DefinedName : " + name);
             definedNameIndex++;
-        } while(!nameString.equalsIgnoreCase(name) && e.hasMoreElements());
+        } while(!nameString.equalsIgnoreCase(name) && e.hasNext());
 
         tmpByteArray.add(new Byte((byte)definedNameIndex));
         tmpByteArray.add(new Byte((byte)0x00));
@@ -347,9 +347,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector cellRefEncoder(Token t) {
+    private ArrayList cellRefEncoder(Token t) {
 
-        Vector tmpByteArray = new Vector();
+        ArrayList tmpByteArray = new ArrayList();
 
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         byte cellRefBytes[] = encodeCellCoordinates(t.getValue());
@@ -376,12 +376,12 @@ public class TokenEncoder {
             sheetName = s.substring(0,s.length());
         }
         Debug.log(Debug.TRACE,"Searching for Worksheet : " + sheetName);
-        Vector names = wb.getWorksheetNames();
-        Enumeration e = names.elements();
+        ArrayList names = wb.getWorksheetNames();
+        Iterator e = names.iterator();
         do {
-            savedName = (String) e.nextElement();
+            savedName = (String) e.next();
             sheetIndex++;
-        } while(!savedName.equalsIgnoreCase(sheetName) && e.hasMoreElements());
+        } while(!savedName.equalsIgnoreCase(sheetName) && e.hasNext());
 
         Debug.log(Debug.TRACE,"Setting sheetindex to " + sheetIndex);
         return (short)(sheetIndex-1);
@@ -393,9 +393,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector threeDCellRefEncoder(Token t) {
+    private ArrayList threeDCellRefEncoder(Token t) {
 
-        Vector tmpByteArray = new Vector();
+        ArrayList tmpByteArray = new ArrayList();
         parseString = t.getValue();
         Debug.log(Debug.TRACE,"Encoding 3D Cell reference " + t);
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
@@ -437,9 +437,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector threeDAreaRefEncoder(Token t) {
+    private ArrayList threeDAreaRefEncoder(Token t) {
 
-        Vector tmpByteArray = new Vector();
+        ArrayList tmpByteArray = new ArrayList();
         parseString = t.getValue();
         Debug.log(Debug.TRACE,"Encoding 3D Area reference " + t);
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
@@ -494,9 +494,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector areaRefEncoder(Token t) {
+    private ArrayList areaRefEncoder(Token t) {
 
-        Vector tmpByteArray = new Vector();
+        ArrayList tmpByteArray = new ArrayList();
 
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         String param = t.getValue();
@@ -530,8 +530,8 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private Vector functionEncoder(Token t) {
-        Vector tmpByteArray = new Vector();
+    private ArrayList functionEncoder(Token t) {
+        ArrayList tmpByteArray = new ArrayList();
 
         int id = t.getTokenID();
         if(t.getTokenType()==ParseToken.TOKEN_FUNCTION_VARIABLE) {
