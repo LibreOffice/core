@@ -2701,6 +2701,7 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     svx::frame::Style aB( rBoxItem.GetBottom() );
 
     const SwTwips nHalfTopWidth = aT.GetWidth() / 2;
+    const SwTwips nHalfBottomWidth = aB.GetWidth() / 2;
 
     aR.MirrorSelf();
     aB.MirrorSelf();
@@ -2713,10 +2714,14 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     aT.SetRefMode( !bVert ? svx::frame::REFMODE_BEGIN : svx::frame::REFMODE_END );
     aB.SetRefMode( !bVert ? svx::frame::REFMODE_BEGIN : svx::frame::REFMODE_END );
 
-    SwLineEntry aLeft  ( nLeft,   nTop + nHalfTopWidth,  nBottom + nHalfTopWidth, bVert ? aB : ( bR2L ? aR : aL ) );
-    SwLineEntry aRight ( nRight,  nTop + nHalfTopWidth,  nBottom + nHalfTopWidth, bVert ? aT : ( bR2L ? aL : aR ) );
-    SwLineEntry aTop   ( nTop + nHalfTopWidth,    nLeft, nRight,  bVert ? aL : aT );
-    SwLineEntry aBottom( nBottom + nHalfTopWidth, nLeft, nRight,  bVert ? aR : aB );
+    SwLineEntry aLeft  ( nLeft,   nTop + nHalfTopWidth,
+            nBottom + nHalfBottomWidth, bVert ? aB : ( bR2L ? aR : aL ) );
+    SwLineEntry aRight ( nRight,  nTop + nHalfTopWidth,
+            nBottom + nHalfBottomWidth, bVert ? aT : ( bR2L ? aL : aR ) );
+    SwLineEntry aTop   ( nTop + nHalfTopWidth,
+            nLeft, nRight,  bVert ? aL : aT );
+    SwLineEntry aBottom( nBottom + nHalfBottomWidth,
+            nLeft, nRight,  bVert ? aR : aB );
 
     Insert( aLeft, false );
     Insert( aRight, false );
