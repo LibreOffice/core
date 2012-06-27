@@ -17,10 +17,12 @@
  */
 package helper;
 
-import lib.TestParameters;
-import java.util.Properties;
-import java.util.Enumeration;
 import java.io.FileInputStream;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Properties;
+
+import lib.TestParameters;
 import util.PropertyName;
 
 /**
@@ -94,18 +96,18 @@ public class CfgParser
 
         debug = param.DebugIsActive;
 
-        //check for platform dependend parameters
+        //check for platform dependent parameters
         //this would have a $OperatingSystem as prefix
         String os = (String) param.get(PropertyName.OPERATING_SYSTEM);
         if (os != null && os.length() > 1)
         {
 
-            //found something that could be a prefex
+            //found something that could be a prefix
             //check all parameters for this
-            Enumeration keys = param.keys();
-            while (keys.hasMoreElements())
+            Iterator keys = param.keySet().iterator();
+            while (keys.hasNext())
             {
-                String key = (String) keys.nextElement();
+                String key = (String) keys.next();
                 if (key.startsWith(os))
                 {
                     Object oldValue = param.get(key);

@@ -19,7 +19,7 @@
 package lib;
 
 import java.util.Iterator;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -149,7 +149,7 @@ public class Parameters implements XPropertySet {
     }
 
     public Map toMap() {
-        return new Hashtable(parameters) {
+        return new HashMap(parameters) {
             public Object get(Object obj) {
                 if (obj instanceof String) {
                     return Parameters.this.get((String) obj);
@@ -199,7 +199,7 @@ public class Parameters implements XPropertySet {
     }
 
     public static Map toMap(XPropertySet props) {
-        Hashtable result = new Hashtable(10);
+        HashMap result = new HashMap(10);
 
         XPropertySetInfo setInfo = props.getPropertySetInfo();
         Property[] properties = setInfo.getProperties();

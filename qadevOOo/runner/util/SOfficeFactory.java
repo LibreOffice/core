@@ -17,7 +17,7 @@
  */
 package util;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 // access the implementations via names
 import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -44,7 +44,7 @@ import com.sun.star.awt.*;
 
 public class SOfficeFactory {
 
-    private static Hashtable lookup = new Hashtable(10);
+    private static HashMap lookup = new HashMap(10);
     protected XComponentLoader oCLoader;
 
     private SOfficeFactory(XMultiServiceFactory xMSF) {

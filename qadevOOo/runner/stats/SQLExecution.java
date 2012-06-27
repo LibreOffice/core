@@ -24,7 +24,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 /**
@@ -120,10 +122,10 @@ public class SQLExecution {
      * Execute an sql command.
      * @param command The command to execute.
      * @param sqlInput Input values for the command.
-     * @param sqlOutput The results of the command are put in this Hashtable.
+     * @param sqlOutput The results of the command are put in this HashMap.
      * @return True, if no error occurred.
      */
-    public boolean executeSQLCommand(String command, Hashtable sqlInput, Hashtable sqlOutput)
+    public boolean executeSQLCommand(String command, HashMap sqlInput, HashMap sqlOutput)
                                         throws IllegalArgumentException {
         return executeSQLCommand(command, sqlInput, sqlOutput, false);
     }
@@ -132,15 +134,15 @@ public class SQLExecution {
      * Execute an sql command.
      * @param command The command to execute.
      * @param sqlInput Input values for the command.
-     * @param sqlOutput The results of the command are put in this Hashtable.
+     * @param sqlOutput The results of the command are put in this HashMap.
      * @param mergeOutputIntoInput The output of the result is put into the
-     * sqlInput Hashtable.
+     * sqlInput HashMap.
      * @return True, if no error occurred.
      */
-    public boolean executeSQLCommand(String command, Hashtable sqlInput, Hashtable sqlOutput, boolean mergeOutputIntoInput)
+    public boolean executeSQLCommand(String command, HashMap sqlInput, HashMap sqlOutput, boolean mergeOutputIntoInput)
                                         throws IllegalArgumentException {
         if (sqlOutput == null) {
-            sqlOutput = new Hashtable();
+            sqlOutput = new HashMap();
             // this has to be true, so the user of this method gets a return
             mergeOutputIntoInput = true;
             if (sqlInput == null) {
@@ -229,9 +231,9 @@ public class SQLExecution {
             execute((String)sqlCommand.get(i), sqlOutput, update);
             // merge output with input
             if (!update && mergeOutputIntoInput) {
-                Enumeration keys = sqlOutput.keys();
-                while(keys.hasMoreElements()) {
-                    String key = (String)keys.nextElement();
+                Iterator keys = sqlOutput.keySet().iterator();
+                while(keys.hasNext()) {
+                    String key = (String)keys.next();
                     String[]val = (String[])sqlOutput.get(key);
                     if (val != null && val.length != 0) {
                         if (val.length == 1)
@@ -252,9 +254,9 @@ public class SQLExecution {
      * @param command The command.
      * @param update If true, it is a update/alter command instead of an select
      *          command
-     * @return A Hashtable with the result.
+     * @return A HashMap with the result.
      */
-    private void execute(String command, Hashtable output, boolean update) {
+    private void execute(String command, HashMap output, boolean update) {
         if (m_bDebug)
             System.out.println("Debug - SQLExecution - execute Command: " + command);
         try {
@@ -287,7 +289,7 @@ public class SQLExecution {
                     if (goThroughRowsTheFirstTime)
                         goThroughRowsTheFirstTime = false;
 
-                    // put result in output Hashtable
+                    // put result in output HashMap
                     String[]s = new String[countRows];
                     s = (String[])v.toArray(s);
                     output.put(columnNames[i-1], s);

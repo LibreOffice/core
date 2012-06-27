@@ -19,7 +19,7 @@
 package lib;
 import com.sun.star.uno.XInterface;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 
 /**
@@ -34,7 +34,7 @@ public final class TestEnvironment {
      * Contains object relations - auxiliary objects associated with the
      * tested object and required for testing.
      */
-    private final Hashtable relations = new Hashtable(10);
+    private final HashMap relations = new HashMap(10);
 
     /**
      * An instance of the tested implementation object.

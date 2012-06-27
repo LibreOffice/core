@@ -18,17 +18,19 @@
 
 package ifc.style;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import lib.MultiPropertyTest;
+import util.ValueChanger;
+import util.utils;
+
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.xml.AttributeData;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import lib.MultiPropertyTest;
-
-import util.ValueChanger;
-import util.utils;
 
 
 /**
@@ -481,11 +483,11 @@ public class _CharacterProperties extends MultiPropertyTest {
     }
 
     private class OwnUserDefinedAttributes implements XNameContainer{
-        Hashtable members = null;
+        HashMap members = null;
 
 
         public OwnUserDefinedAttributes() {
-            members = new Hashtable();
+            members = new HashMap();
         }
 
         public Object getByName(String str) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
@@ -493,18 +495,18 @@ public class _CharacterProperties extends MultiPropertyTest {
         }
 
         public String[] getElementNames() {
-            Enumeration oEnum = members.keys();
+            Iterator oEnum = members.keySet().iterator();
             int count = members.size();
             String[] res = new String[count];
             int i=0;
-            while(oEnum.hasMoreElements())
-                res[i] = (String)oEnum.nextElement();
+            while(oEnum.hasNext())
+                res[i++] = (String)oEnum.next();
             return res;
         }
 
         public com.sun.star.uno.Type getElementType() {
-            Enumeration oEnum = members.keys();
-            String key = (String)oEnum.nextElement();
+            Iterator oEnum = members.keySet().iterator();
+            String key = (String)oEnum.next();
             Object o = members.get(key);
             return new Type(o.getClass());
         }

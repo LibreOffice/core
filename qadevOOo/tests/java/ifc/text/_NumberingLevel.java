@@ -18,12 +18,14 @@
 
 package ifc.text;
 
-import com.sun.star.beans.PropertyValue;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Iterator;
+
 import lib.StatusException;
 import lib.TestParameters;
 import share.LogWriter;
+
+import com.sun.star.beans.PropertyValue;
 
 
 /**
@@ -63,7 +65,7 @@ import share.LogWriter;
 public class _NumberingLevel {
 
     private static TestParameters tParam = null;
-    private static Hashtable NumberingLevel = new Hashtable();
+    private static HashMap NumberingLevel = new HashMap();
     private static PropertyValue[] PropertyArray = null;
     private static LogWriter log = null;
 
@@ -137,8 +139,8 @@ public class _NumberingLevel {
 
             // get rest of properties and check if they are optional
             if (! NumberingLevel.isEmpty()){
-                for (Enumeration e = NumberingLevel.keys() ; e.hasMoreElements() ;) {
-                    String property = (String) e.nextElement();
+                for (Iterator e = NumberingLevel.keySet().iterator() ; e.hasNext() ;) {
+                    String property = (String) e.next();
 
                     // if some elements are not optional -> failed
                     if ( ! ((Boolean)NumberingLevel.get(property)).booleanValue() ){

@@ -18,7 +18,7 @@
 
 package lib;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * The class supports interface tests development and Status calculation.
@@ -27,7 +27,7 @@ public class TestResult {
     /**
      * Contains methods having been tested and their results.
      */
-    protected Hashtable testedMethods = new Hashtable();
+    protected HashMap testedMethods = new HashMap();
 
     /**
      * The method makes method tested with the result, i.e. it adds to its

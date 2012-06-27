@@ -19,7 +19,7 @@ package stats;
 
 import share.LogWriter;
 import java.text.DecimalFormat;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -30,7 +30,7 @@ import java.util.GregorianCalendar;
 public class ComplexDataBaseOutProducer extends DataBaseOutProducer {
 
     /** Creates a new instance of ComplexDataBaseOutProducer */
-    public ComplexDataBaseOutProducer(Hashtable param) {
+    public ComplexDataBaseOutProducer(HashMap param) {
         super(param);
         // do we have to write debug output?
         Object o = param.get("DebugIsActive");

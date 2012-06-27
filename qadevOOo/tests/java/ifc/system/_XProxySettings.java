@@ -18,7 +18,7 @@
 
 package ifc.system;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 import lib.MultiMethodTest;
 import lib.Status;
@@ -30,7 +30,7 @@ import com.sun.star.system.XProxySettings;
  * Tests <code>com.sun.star.system.XProxySettings</code> interface. The result
  * of each method is compared with expected settings which is specified by the
  * caller of the tests via object relation "XProxySettings.proxaSettings". That
- * should be a Hashtable containing the following keys:
+ * should be a HashMap containing the following keys:
  * <ul>
  *   <li>ftpProxyAddress</li>
  *   <li>ftpProxyPort</li>
@@ -54,10 +54,10 @@ public class _XProxySettings extends MultiMethodTest {
     public XProxySettings oObj;
 
     /**
-     * Contains a Hashtable with correct results of the tested methods. See
+     * Contains a HashMap with correct results of the tested methods. See
      * the class description.
      */
-    Hashtable expectedProxies;
+    Map expectedProxies;
 
     /**
      * Checks that the "XProxySettings.proxySettings" object relation is
@@ -68,7 +68,7 @@ public class _XProxySettings extends MultiMethodTest {
      * @see #expectedProxies
      */
     public void before() {
-        expectedProxies = (Hashtable)tEnv.getObjRelation(
+        expectedProxies = (Map)tEnv.getObjRelation(
                 "XProxySettings.proxySettings");
 
         if (expectedProxies == null) {

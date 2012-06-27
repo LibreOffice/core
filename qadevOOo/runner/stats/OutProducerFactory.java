@@ -18,7 +18,7 @@
 package stats;
 
 import share.LogWriter;
-import java.util.Hashtable;
+import java.util.HashMap;
 import util.DynamicClassLoader;
 
 /**
@@ -36,7 +36,7 @@ public class OutProducerFactory {
      * @param Parameters of the test.
      * @return The created out producer.
      */
-    public static LogWriter createOutProducer(Hashtable param) {
+    public static LogWriter createOutProducer(HashMap param) {
         LogWriter dbOut = null;
         boolean getDatabase = convertToBool(param.get("DataBaseOut"));
         if (getDatabase) {
@@ -61,11 +61,11 @@ public class OutProducerFactory {
     }
 
     /**
-     * Create a databbase out producer.
+     * Create a database out producer.
      * @param The test parameters
      * @return The database out producer, or null if it couldn't be created.
      */
-    public static LogWriter createDataBaseOutProducer(Hashtable param) {
+    public static LogWriter createDataBaseOutProducer(HashMap param) {
         String dataProducerName = (String)param.get("DataBaseOutProducer");
         if (dataProducerName == null) {
             String testBaseName = (String)param.get("TestBase");
@@ -77,7 +77,7 @@ public class OutProducerFactory {
         LogWriter dbOut = null;
         try {
             dbOut = (LogWriter)dcl.getInstance(dataProducerName,
-                new Class[]{new Hashtable().getClass()}, new Object[]{param});
+                new Class[]{new HashMap().getClass()}, new Object[]{param});
         }
         catch(IllegalArgumentException e) {
             e.printStackTrace();

@@ -19,7 +19,7 @@
 package mod._proxyset;
 
 import java.io.PrintWriter;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -59,7 +59,7 @@ public class SystemProxySettings extends TestCase {
      * <ul>
      *  <li> <code>'XProxySettings.proxySettings'</code> for
      *      {@link ifc.system._XProxySettings} : </li>
-     *   <p>It passes a Hashtable with expected proxy settings as object
+     *   <p>It passes a HashMap with expected proxy settings as object
      *   relation "XProxySettings.proxySettings", to verify results. The expected
      *   settings are taken from parameters. The following parameters are recognized:
      *   <ul>
@@ -98,7 +98,7 @@ public class SystemProxySettings extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // extracting parameters to proxy settings
-        Hashtable proxySettings = new Hashtable(12);
+        HashMap proxySettings = new HashMap(12);
 
         String prefix = "test.proxy.system.";
 

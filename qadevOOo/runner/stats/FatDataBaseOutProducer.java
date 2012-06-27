@@ -19,7 +19,7 @@ package stats;
 
 import java.text.DecimalFormat;
 import share.LogWriter;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -31,7 +31,7 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
 
 
     /** Creates a new instance of APIDataBaseOutProducer */
-    public FatDataBaseOutProducer(Hashtable param) {
+    public FatDataBaseOutProducer(HashMap param) {
         super(param);
         String testBase = (String)mSqlInput.get("TestBase");
         int sep = testBase.indexOf('_');

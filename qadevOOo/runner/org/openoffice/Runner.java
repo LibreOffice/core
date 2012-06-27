@@ -17,14 +17,17 @@
  */
 package org.openoffice;
 
+import helper.CfgParser;
+import helper.ClParser;
+
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
+
 import lib.TestParameters;
 import util.DynamicClassLoader;
 import base.TestBase;
-import helper.ClParser;
-import helper.CfgParser;
 
 /**
  * The main class, will call ClParser and CfgParser to <br>
@@ -151,10 +154,10 @@ public class Runner
         bEmergencyStop |= checkPathVariable("sun.boot.class.path", sDelim);
 
         // ----- check all TestParameters -----
-        aEnum = _aParams.keys();
-        while (aEnum.hasMoreElements())
+        Iterator aIter = _aParams.keySet().iterator();
+        while (aIter.hasNext())
         {
-            String sKey = (String) aEnum.nextElement();
+            String sKey = (String) aIter.next();
             if (_aParams.get(sKey) instanceof String)
             {
                 String sValue = (String) _aParams.get(sKey);

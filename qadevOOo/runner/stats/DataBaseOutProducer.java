@@ -20,25 +20,25 @@ package stats;
 import share.LogWriter;
 import share.DescEntry;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  *
  * @author  sg128468
  */
 public abstract class DataBaseOutProducer implements LogWriter {
-    protected Hashtable mSqlInput = null;
-    protected Hashtable mSqlOutput = null;
+    protected HashMap mSqlInput = null;
+    protected HashMap mSqlOutput = null;
     protected String[] mWriteableEntryTypes = null;
     protected SQLExecution mSqlExec;
     protected boolean m_bDebug = false;
 
 
     /** Creates a new instance of DataBaseOutProducer
-     * @param param The Hashtable with test parameters
+     * @param param The HashMap with test parameters
      */
-    public DataBaseOutProducer(Hashtable param) {
-        mSqlInput = new Hashtable();
+    public DataBaseOutProducer(HashMap param) {
+        mSqlInput = new HashMap();
         mSqlInput.putAll(param);
 
         Object o = param.get("DebugIsActive");
@@ -118,10 +118,10 @@ public abstract class DataBaseOutProducer implements LogWriter {
      * @param log The log writer.
      */
     protected boolean insertEntry(DescEntry entry, LogWriter log) {
-        // copy the swlInput Hashtable, so it can be reset easily for the next run
-        Hashtable copySqlInput = new Hashtable();
+        // copy the swlInput HashMap, so it can be reset easily for the next run
+        HashMap copySqlInput = new HashMap();
         copySqlInput.putAll(mSqlInput);
-        // put some stuff from entry in the Hashtable
+        // put some stuff from entry in the HashMap
         mSqlInput.put("EntryLongName", entry.longName);
         mSqlInput.put("EntryName", entry.entryName);
         mSqlInput.put("EntryState", entry.State);
