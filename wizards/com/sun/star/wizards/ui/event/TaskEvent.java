@@ -21,9 +21,6 @@ import java.util.EventObject;
 
 /**
  * @author rpiterman
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class TaskEvent extends EventObject
 {
