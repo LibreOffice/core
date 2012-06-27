@@ -70,14 +70,19 @@ namespace cmis
         return params;
     }
 
-    rtl::OUString URL::getObjectPath( )
+    rtl::OUString& URL::getObjectPath( )
     {
         return m_sPath;
     }
 
-    rtl::OUString URL::getBindingUrl( )
+    rtl::OUString& URL::getBindingUrl( )
     {
         return m_sBindingUrl;
+    }
+
+    rtl::OUString& URL::getRepositoryId( )
+    {
+        return m_sRepositoryId;
     }
 
     void URL::setObjectPath( rtl::OUString sPath )
