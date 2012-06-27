@@ -82,6 +82,11 @@ X2CParser::Parse()
     Parse_XmlDeclaration();
     Parse_Doctype();
 
+    // skip XML comment
+    Goto('<');
+    if ( IsText("<!--") )
+        Goto_And_Pass('>');
+
     pDocumentData->Parse(*this);
 }
 
