@@ -1915,37 +1915,37 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">1</col>
+        <col id="0">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">2</col>
+        <col id="0">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">3</col>
+        <col id="0">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">4</col>
+        <col id="0">4</col>
       </row>
       <row>
-        <col id="0" translatable="yes">5</col>
+        <col id="0">5</col>
       </row>
       <row>
-        <col id="0" translatable="yes">6</col>
+        <col id="0">6</col>
       </row>
       <row>
-        <col id="0" translatable="yes">7</col>
+        <col id="0">7</col>
       </row>
       <row>
-        <col id="0" translatable="yes">8</col>
+        <col id="0">8</col>
       </row>
       <row>
-        <col id="0" translatable="yes">9</col>
+        <col id="0">9</col>
       </row>
       <row>
-        <col id="0" translatable="yes">10</col>
+        <col id="0">10</col>
       </row>
       <row>
-        <col id="0" translatable="yes">1 - 10</col>
+        <col id="0">1 - 10</col>
       </row>
     </data>
   </object>
