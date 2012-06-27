@@ -1433,7 +1433,7 @@ var NAVDBG = new DebugPrinter();
 NAVDBG.off();
 
 var ANIMDBG = new DebugPrinter();
-ANIMDBG.off();
+ANIMDBG.on();
 
 var aRegisterEventDebugPrinter = new DebugPrinter();
 aRegisterEventDebugPrinter.off();
@@ -2987,8 +2987,19 @@ function dispatchEffects(dir)
 
 function skipEffects(dir)
 {
-    // TODO to be implemented
-    switchSlide(dir, true);
+    if( dir == 1 )
+    {
+        var bRet = aSlideShow.skipEffect();
+
+        if( !bRet )
+        {
+            switchSlide( 1, false );
+        }
+    }
+    else
+    {
+        switchSlide( dir, false );
+    }
 }
 
 function switchSlide( nOffset, bSkipTransition )
@@ -6149,6 +6160,7 @@ BaseContainerNode.prototype.init_children = function()
 
 BaseContainerNode.prototype.deactivate_st = function( eDestState )
 {
+    this.nLeftIterations = 0;
     if( eDestState == FROZEN_NODE )
     {
         // deactivate all children that are not FROZEN or ENDED:
@@ -6245,7 +6257,8 @@ BaseContainerNode.prototype.notifyDeactivatedChild = function( aChildNode )
 
 BaseContainerNode.prototype.repeat = function()
 {
-    this.deactivate_st( ENDED_NODE );
+    // end all children that are not ENDED:
+    this.forEachChildNode( mem_fn( 'end' ), ~ENDED_NODE );
     this.removeEffect();
     var bInitialized = this.init_children();
     if( bInitialized )
@@ -6370,6 +6383,7 @@ function SequentialTimeContainer( aAnimElem, aParentNode, aNodeContext )
     SequentialTimeContainer.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
 
     this.sClassName = 'SequentialTimeContainer';
+    this.aCurrentSkipEvent = null;
 }
 extend( SequentialTimeContainer, BaseContainerNode );
 
@@ -6422,7 +6436,16 @@ SequentialTimeContainer.prototype.notifyDeactivating = function( aNotifier )
 
 SequentialTimeContainer.prototype.skipEffect = function( aChildNode )
 {
-    // not implemented
+    if( this.isChildNode( aChildNode ) )
+    {
+        this.getContext().aTimerEventQueue.forceEmpty();
+        var aEvent = makeEvent( bind2( aChildNode.deactivate, aChildNode ) );
+        this.getContext().aTimerEventQueue.addEvent( aEvent );
+    }
+    else
+    {
+        log( 'SequentialTimeContainer.skipEffect: unknown child: ' + aChildNode.getId() );
+    }
 };
 
 SequentialTimeContainer.prototype.rewindEffect = function( aChildNode )
@@ -6437,13 +6460,22 @@ SequentialTimeContainer.prototype.resolveChild = function( aChildNode )
     if( bResolved && this.isMainSequenceRootNode() )
     {
         aChildNode.saveStateOfAnimatedElement();
-    }
 
-    if( bResolved && this.isMainSequenceRootNode() )
-    {
-        // skip/rewind events handling
+        if( this.aCurrentSkipEvent )
+            this.aCurrentSkipEvent.dispose();
+
+        this.aCurrentSkipEvent = makeEvent( bind2( this.skipEffect, this, aChildNode ) );
+        this.aContext.aEventMultiplexer.registerSkipEffectEvent( this.aCurrentSkipEvent );
     }
     return bResolved;
+};
+
+SequentialTimeContainer.prototype.dispose = function()
+{
+    if( this.aCurrentSkipEvent )
+        this.aCurrentSkipEvent.dispose();
+
+    SequentialTimeContainer.superclass.dispose.call( this );
 };
 
 
@@ -8311,37 +8343,41 @@ function AnimatedElement( aElement )
         log( 'AnimatedElement constructor: element is not valid' );
     }
 
+    this.aBaseElement = aElement.cloneNode( true );
     this.aActiveElement = aElement;
-    this.initElement();
     this.sElementId = this.aActiveElement.getAttribute( 'id' );
 
     this.aBaseBBox = this.aActiveElement.getBBox();
     this.nBaseCenterX = this.aBaseBBox.x + this.aBaseBBox.width / 2;
     this.nBaseCenterY = this.aBaseBBox.y + this.aBaseBBox.height / 2;
-    this.nCenterX = this.nBaseCenterX;
-    this.nCenterY = this.nBaseCenterY;
-    this.nScaleFactorX = 1.0;
-    this.nScaleFactorY = 1.0;
+
 
     this.aClipPathElement = null;
     this.aClipPathContent = null;
 
     this.aPreviousElement = null;
     this.aStateArray = new Array();
-    this.nCurrentState = -1;
+
     this.eAdditiveMode = ADDITIVE_MODE_REPLACE;
     this.bIsUpdated = true;
 
     this.aTMatrix = document.documentElement.createSVGMatrix();
     this.aCTM = document.documentElement.createSVGMatrix();
     this.aICTM = document.documentElement.createSVGMatrix();
-    this.setCTM();
 
+    this.initElement();
     //this.aElementArray[0] = this.aActiveElement.cloneNode( true );
 }
 
 AnimatedElement.prototype.initElement = function()
 {
+    this.nCenterX = this.nBaseCenterX;
+    this.nCenterY = this.nBaseCenterY;
+    this.nScaleFactorX = 1.0;
+    this.nScaleFactorY = 1.0;
+    this.setCTM();
+
+    this.nCurrentState = -1;
     // add a transform attribute of type matrix
     this.aActiveElement.setAttribute( 'transform', makeMatrixString( 1, 0, 0, 1, 0, 0 ) );
 };
@@ -8440,14 +8476,16 @@ AnimatedElement.prototype.setToElement = function( aElement )
 
 AnimatedElement.prototype.notifySlideStart = function()
 {
-    this.nCurrentState = -1;
-    //this.setToFirst();
+    var aClone = this.aBaseElement.cloneNode( true );
+    this.aActiveElement.parentNode.replaceChild( aClone, this.aActiveElement );
+    this.aActiveElement = aClone;
+
+    this.initElement();
     this.DBG( '.notifySlideStart invoked' );
 };
 
 AnimatedElement.prototype.notifyAnimationStart = function()
 {
-
     this.DBG( '.notifyAnimationStart invoked' );
     this.bIsUpdated = false;
 };
@@ -9561,7 +9599,7 @@ function EventMultiplexer( aTimerEventQueue )
 {
     this.aTimerEventQueue = aTimerEventQueue;
     this.aEventMap = new Object();
-
+    this.aSkipEffectEvent = null;
 }
 
 
@@ -9594,6 +9632,20 @@ EventMultiplexer.prototype.notifyEvent = function( eEventType, aNotifierId )
                 this.aTimerEventQueue.addEvent( aEventArray[i] );
             }
         }
+    }
+};
+
+EventMultiplexer.prototype.registerSkipEffectEvent = function( aEvent )
+{
+    this.aSkipEffectEvent = aEvent;
+};
+
+EventMultiplexer.prototype.notifySkipEffectEvent = function()
+{
+    if( this.aSkipEffectEvent )
+    {
+        this.aTimerEventQueue.addEvent( this.aSkipEffectEvent );
+        this.aSkipEffectEvent = null;
     }
 };
 
@@ -11162,7 +11214,10 @@ SlideShow.prototype.nextEffect = function()
         return false;
 
     if( this.isRunning() )
+    {
+        this.skipCurrentEffect();
         return true;
+    }
 
     if( !this.aNextEffectEventArray )
         return false;
@@ -11174,6 +11229,29 @@ SlideShow.prototype.nextEffect = function()
 
     this.eDirection = FORWARD;
     this.aNextEffectEventArray.at( this.nCurrentEffect ).fire();
+    ++this.nCurrentEffect;
+    this.update();
+    return true;
+};
+
+SlideShow.prototype.skipCurrentEffect = function()
+{
+    this.aEventMultiplexer.notifySkipEffectEvent();
+    this.update();
+};
+
+SlideShow.prototype.skipEffect = function()
+{
+    if( !this.aNextEffectEventArray )
+        return false;
+
+    this.notifyNextEffectStart();
+    if( this.nCurrentEffect >= this.aNextEffectEventArray.size() )
+        return false;
+
+    this.eDirection = FORWARD;
+    this.aNextEffectEventArray.at( this.nCurrentEffect ).fire();
+    this.aEventMultiplexer.notifySkipEffectEvent();
     ++this.nCurrentEffect;
     this.update();
     return true;
@@ -11461,11 +11539,22 @@ TimerEventQueue.prototype.addEvent = function( aEvent )
     return true;
 };
 
+TimerEventQueue.prototype.forceEmpty = function()
+{
+    this.process_(true);
+};
+
+
 TimerEventQueue.prototype.process = function()
+{
+    this.process_(false);
+};
+
+TimerEventQueue.prototype.process_ = function( bFireAllEvents )
 {
     var nCurrentTime = this.aTimer.getElapsedTime();
 
-    while( !this.isEmpty() && ( this.aEventSet.top().nActivationTime <= nCurrentTime ) )
+    while( !this.isEmpty() && ( bFireAllEvents || ( this.aEventSet.top().nActivationTime <= nCurrentTime ) ) )
     {
         var aEventEntry = this.aEventSet.top();
         this.aEventSet.pop();
