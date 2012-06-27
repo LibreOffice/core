@@ -28,6 +28,7 @@
 // "3" into a parameter below.
 
 package org.libreoffice.android;
+import org.libreoffice.R;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -46,6 +47,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
+import android.view.MenuItem;
+import android.content.Intent;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.BaseAdapter;
+import android.view.View.OnClickListener;
+// Obsolete? 
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+import android.widget.AdapterView;
+
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.graphics.BitmapFactory;
 
 import com.polites.android.GestureImageView;
 
@@ -71,6 +89,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import org.libreoffice.android.Bootstrap;
+import org.libreoffice.ui.LibreOfficeUIActivity;
 
 public class DocumentLoader
     extends Activity
@@ -102,6 +121,11 @@ public class DocumentLoader
     ViewGroup.LayoutParams matchParent;
 
     ViewFlipper flipper;
+    
+    Bundle extras;
+    
+    LinearLayout ll ;
+    LayoutInflater inflater ;
 
     class GestureListener
         extends GestureDetector.SimpleOnGestureListener
@@ -153,6 +177,29 @@ public class DocumentLoader
             }
             return false;
         }
+        
+        @Override
+        public boolean onSingleTapUp(MotionEvent event){
+        	if( getActionBar().isShowing() ){
+        		getActionBar().hide();
+        	}else{
+        		getActionBar().show();
+        	}	
+        	return true;
+        }
+        
+        @Override
+        public boolean onDoubleTap(MotionEvent event){
+        LinearLayout ll = (LinearLayout)findViewById( R.id.navigator);
+        	if( ll.isShown() ){
+        		ll.setVisibility( View.GONE );
+        	}else{
+        		ll.setVisibility( View.VISIBLE );
+        	}
+        	return true;	
+        }
+        
+        
     }
 
     class MyXController
@@ -303,6 +350,90 @@ public class DocumentLoader
 
         return null;
     }
+    
+    ByteBuffer renderPage(int number, int width , int height)
+    {
+        try {
+            // Use dummySmallDevice with no scale of offset just to find out
+            // the paper size of this page.
+
+            PropertyValue renderProps[] = new PropertyValue[3];
+            renderProps[0] = new PropertyValue();
+            renderProps[0].Name = "IsPrinter";
+            renderProps[0].Value = new Boolean(true);
+            renderProps[1] = new PropertyValue();
+            renderProps[1].Name = "RenderDevice";
+            renderProps[1].Value = dummySmallDevice;
+            renderProps[2] = new PropertyValue();
+            renderProps[2].Name = "View";
+            renderProps[2].Value = new MyXController();
+
+            // getRenderer returns a set of properties that include the PageSize
+            long t0 = System.currentTimeMillis();
+            PropertyValue rendererProps[] = renderable.getRenderer(number, doc, renderProps);
+            long t1 = System.currentTimeMillis();
+            Log.i(TAG, "w,h getRenderer took " + ((t1-t0)-timingOverhead) + " ms");
+
+            int pageWidth = 0, pageHeight = 0;
+            for (int i = 0; i < rendererProps.length; i++) {
+                if (rendererProps[i].Name.equals("PageSize")) {
+                    pageWidth = ((Size) rendererProps[i].Value).Width;
+                    pageHeight = ((Size) rendererProps[i].Value).Height;
+                    Log.i(TAG, " w,h PageSize: " + pageWidth + "x" + pageHeight);
+                }
+            }
+
+            // Create a new device with the correct scale and offset
+            ByteBuffer bb = ByteBuffer.allocateDirect(width*height*4);
+            long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
+
+            XDevice device;
+            if (pageWidth == 0) {
+                // Huh?
+                device = toolkit.createScreenCompatibleDeviceUsingBuffer(width, height, 1, 1, 0, 0, wrapped_bb);
+            } else {
+
+                // Scale so that it fits our device which has a resolution of 96/in (see
+                // SvpSalGraphics::GetResolution()). The page size returned from getRenderer() is in 1/mm * 100.
+
+                int scaleNumerator, scaleDenominator;
+
+                // If the view has a wider aspect ratio than the page, fit
+                // height; otherwise, fit width
+                if ((double) width / height > (double) pageWidth / pageHeight) {
+                    scaleNumerator = height;
+                    scaleDenominator = pageHeight / 2540 * 96;
+                } else {
+                    scaleNumerator = width;
+                    scaleDenominator = pageWidth / 2540 * 96;
+                }
+                Log.i(TAG, "w,h Scaling with " + scaleNumerator + "/" + scaleDenominator);
+
+                device = toolkit.createScreenCompatibleDeviceUsingBuffer(width, height,
+                                                                         scaleNumerator, scaleDenominator,
+                                                                         0, 0,
+                                                                         wrapped_bb);
+            }
+
+            // Update the property that points to the device
+            renderProps[1].Value = device;
+
+            t0 = System.currentTimeMillis();
+            renderable.render(number, doc, renderProps);
+            t1 = System.currentTimeMillis();
+            Log.i(TAG, "w,h Rendering page " + number + " took " + ((t1-t0)-timingOverhead) + " ms");
+
+            Bootstrap.force_full_alpha_bb(bb, 0, width * height * 4);
+
+            return bb;
+        }
+        catch (Exception e) {
+            e.printStackTrace(System.err);
+            finish();
+        }
+
+        return null;
+    }
 
     enum PageState { NONEXISTENT, LOADING, READY };
 
@@ -381,6 +512,79 @@ public class DocumentLoader
             addView(waitView, 0, matchParent);
 
             display(number);
+        }
+    }
+
+    class ThumbnailView
+        extends ViewSwitcher
+    {
+        int currentPageNumber = -1;
+        TextView waitView;
+        View thumbnailView;
+        //PageState state = PageState.NONEXISTENT;
+        Bitmap bm;
+
+        class ThumbLoadTask
+            extends AsyncTask<Integer, Void, Integer>
+        {
+            protected Integer doInBackground(Integer... params)
+            {
+                int number = params[0];
+
+                if (number >= pageCount)
+                    return -1;
+
+                //state = PageState.LOADING;
+                ByteBuffer bb = renderPage( number , 120 , 120);
+                bm = Bitmap.createBitmap( 120 , 120 , Bitmap.Config.ARGB_8888);
+                bm.copyPixelsFromBuffer(bb);
+
+                return number;
+            }
+
+            protected void onPostExecute(Integer result)
+            {
+                Log.i(TAG, "onPostExecute: " + result);
+                if (result == -1)
+                    return;
+
+                //ImageView imageView = new ImageView(DocumentLoader.this);
+                
+				ImageView thumbImage = new ImageView(DocumentLoader.this);//(ImageView)findViewById( R.id.thumbnail );
+                thumbImage.setImageBitmap(bm);
+
+                thumbImage.setScaleY(-1);
+
+				Log.i( TAG, Integer.toString( thumbImage.getWidth() ) );
+                if (getChildCount() == 1)
+                    removeViewAt(0);
+                addView(thumbImage, matchParent);
+                showNext();
+                //state = PageState.READY;
+            }
+        }
+
+        void display(int number)
+        {
+            Log.i(TAG, "PageViewer display(" + number + ")");
+            if (number >= 0)
+                waitView.setText("Page " + (number+1) + ", wait...");
+            //state = PageState.NONEXISTENT;
+
+            if (number >= 0) {
+                new ThumbLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, number);
+            }
+        }
+
+        ThumbnailView(int number)
+        {
+            super(DocumentLoader.this);
+			waitView = new TextView( DocumentLoader.this );
+            thumbnailView = inflater.inflate( R.layout.navigation_grid_item , null);
+
+            display(number);
+            
+            
         }
     }
 
@@ -510,6 +714,8 @@ public class DocumentLoader
     {
         super.onCreate(savedInstanceState);
 
+		extras = getIntent().getExtras();
+
         gestureDetector = new GestureDetector(this, new GestureListener());
 
         try {
@@ -568,8 +774,9 @@ public class DocumentLoader
             // Load the wanted document
             new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
 
-            flipper = new ViewFlipper(this);
-
+			setContentView( R.layout.document_viewer );
+            //flipper = new ViewFlipper(this);
+			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
             flipper.addView(new PageViewer(0), 0, matchParent);
@@ -577,8 +784,38 @@ public class DocumentLoader
                 flipper.addView(new PageViewer(i+1), i+1, matchParent);
             for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
                 flipper.addView(new PageViewer(-1), PAGECACHE_PLUSMINUS + i+1, matchParent);
-
-            setContentView(flipper);
+                
+            ll = (LinearLayout)findViewById( R.id.navigator);
+            inflater = (LayoutInflater) getApplicationContext().getSystemService(
+				Context.LAYOUT_INFLATER_SERVICE);
+            
+			
+			
+			//ThumbnailView pv = new ThumbnailView(0);
+            /*Bitmap thumbnailBitmap = Bitmap.createBitmap(120, 120, Bitmap.Config.ARGB_8888);
+            thumbnailBitmap.copyPixelsFromBuffer(bb);
+            ImageView pageImage = (ImageView)findViewById( R.id.thumbnail );
+            pageImage.setImageBitmap( thumbnailBitmap );
+			*/
+			
+			
+			for( int i = 0; i < 2 ; i++ ){
+				View thumbnailView = inflater.inflate( R.layout.navigation_grid_item , null );
+				ThumbnailView thumb = new ThumbnailView( i );
+				final int pos = i;
+				thumb.setOnClickListener(new OnClickListener() {
+			
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Log.d("nav" , Integer.toString( pos ) );
+						//(PageViewer)flipper.getChildAt( (flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display( ( (PageViewer)flipper.getCurrentView() ).currentPageNumber + PAGECACHE_PLUSMINUS);
+					}
+				});
+				ll.addView ( thumb );
+			}
+            
+	    	
         }
         catch (Exception e) {
             e.printStackTrace(System.err);
@@ -591,6 +828,21 @@ public class DocumentLoader
     {
         return gestureDetector.onTouchEvent(event);
     }
+    
+    @Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            // app icon in action bar clicked; go home
+	            Intent intent = new Intent(this, LibreOfficeUIActivity.class);
+	            intent.putExtras( extras );
+	            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	            startActivity(intent);
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 }
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

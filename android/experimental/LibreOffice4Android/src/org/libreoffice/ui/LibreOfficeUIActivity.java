@@ -169,6 +169,9 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     	*/
     	Intent i = new Intent( this , DocumentLoader.class );
     	i.putExtra("input",new File( currentDirectory , file).getAbsolutePath() );
+    	i.putExtra( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
+    	i.putExtra( FILTER_MODE_KEY  , filterMode );
+    	i.putExtra( EXPLORER_VIEW_TYPE_KEY  , viewMode );
     	startActivity( i );
     }
     

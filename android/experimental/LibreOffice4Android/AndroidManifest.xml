@@ -15,6 +15,7 @@
 		 
         <!-- Original Document Loader activity - file Viewer -->         
         <activity android:name=".android.DocumentLoader"
+        		  android:theme="@style/DocumentViewer"
                   android:label="DocumentLoader"
                   android:configChanges="orientation|keyboardHidden">
             <!-- <intent-filter>
