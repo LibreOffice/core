@@ -58,7 +58,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
 
-public class ReportWizard extends DatabaseObjectWizard implements XTextListener, XCompletion
+public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 {
 
     protected FieldSelection CurGroupFieldSelection;

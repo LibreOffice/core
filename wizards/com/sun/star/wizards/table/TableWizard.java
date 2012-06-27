@@ -35,7 +35,7 @@ import com.sun.star.wizards.db.DatabaseObjectWizard;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.*;
 
-public class TableWizard extends DatabaseObjectWizard implements XTextListener, XCompletion
+public class TableWizard extends DatabaseObjectWizard implements XTextListener
 {
 
     static String slblFields;

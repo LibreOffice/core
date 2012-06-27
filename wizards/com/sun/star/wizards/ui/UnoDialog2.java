@@ -35,7 +35,7 @@ import com.sun.star.wizards.ui.event.*;
  * wenn an event on a component is trigered.
  * see the classes AbstractListener, CommonListener, MethodInvocation for details.
  */
-public class UnoDialog2 extends UnoDialog implements EventNames
+public class UnoDialog2 extends UnoDialog
 {
 
     /**
