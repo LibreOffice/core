@@ -149,12 +149,13 @@ public class DocumentLoader
 
                 Animation inFromRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
                                                                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-                inFromRight.setDuration(500);
+                int duration = Math.abs((int)((float)flipper.getWidth()/velocityX*1000f));
+                inFromRight.setDuration(duration);
                 flipper.setInAnimation(inFromRight);
 
                 Animation outToLeft = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, -1,
                                                              Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-                outToLeft.setDuration(500);
+                outToLeft.setDuration(duration);
                 flipper.setOutAnimation(outToLeft);
 
                 flipper.showNext();
@@ -167,12 +168,13 @@ public class DocumentLoader
 
                 Animation inFromLeft = new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
                                                               Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-                inFromLeft.setDuration(500);
+                int duration = Math.abs((int)((float)flipper.getWidth()/velocityX*1000f));
+                inFromLeft.setDuration(duration);
                 flipper.setInAnimation(inFromLeft);
 
                 Animation outToRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
                                                               Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-                outToRight.setDuration(500);
+                outToRight.setDuration(duration);
                 flipper.setOutAnimation(outToRight);
 
                 flipper.showPrevious();
