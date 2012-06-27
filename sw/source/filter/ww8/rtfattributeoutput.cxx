@@ -3119,8 +3119,21 @@ void RtfAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
 void RtfAttributeOutput::WriteExpand( const SwField* pFld )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-    String sCmd;
-    m_rExport.OutputField(pFld, ww::eUNKNOWN, sCmd);
+    String sCmd;        // for optional Parameters
+    switch (pFld->GetTyp()->Which())
+    {
+        //#i119803# Export user field and DB field for RTF filter
+        case RES_DBFLD:
+            sCmd = FieldString(ww::eMERGEFIELD);
+            // no break !!
+        case RES_USERFLD:
+            sCmd += pFld->GetTyp()->GetName();
+            m_rExport.OutputField(pFld, ww::eNONE, sCmd);
+            break;
+        default:
+            m_rExport.OutputField(pFld, ww::eUNKNOWN, sCmd);
+            break;
+    }
 }
 
 void RtfAttributeOutput::RefField( const SwField& /*rFld*/, const String& /*rRef*/ )
