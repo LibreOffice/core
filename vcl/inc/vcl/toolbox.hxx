@@ -155,9 +155,6 @@ enum ToolBoxItemType { TOOLBOXITEM_DONTKNOW, TOOLBOXITEM_BUTTON,
 // dontcare will let the toolbox decide about its size
 enum ToolBoxButtonSize { TOOLBOX_BUTTONSIZE_DONTCARE, TOOLBOX_BUTTONSIZE_SMALL, TOOLBOX_BUTTONSIZE_LARGE };
 
-// used for internal sizing calculations
-enum FloatingSizeMode { FSMODE_AUTO, FSMODE_FAVOURWIDTH, FSMODE_FAVOURHEIGHT };
-
 // TBX_LAYOUT_NORMAL   - traditional layout, items are centered in the toolbar
 // TBX_LAYOUT_LOCKVERT - special mode (currently used for calc input/formula
 //                       bar) where item's vertical position is locked, e.g.
@@ -287,7 +284,7 @@ private:
     SAL_DLLPRIVATE sal_Bool            ImplIsFloatingMode() const;
     SAL_DLLPRIVATE sal_Bool            ImplIsInPopupMode() const;
     SAL_DLLPRIVATE const XubString& ImplGetHelpText( sal_uInt16 nItemId ) const;
-    SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize( FloatingSizeMode eMode );
+    SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
     SAL_DLLPRIVATE sal_Bool            ImplHasExternalMenubutton();
     SAL_DLLPRIVATE void            ImplDrawFloatwinBorder( ImplToolItem* pItem );
 

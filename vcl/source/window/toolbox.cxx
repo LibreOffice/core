@@ -2156,7 +2156,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool b
 
 // -----------------------------------------------------------------------
 
-Size ToolBox::ImplGetOptimalFloatingSize( FloatingSizeMode eMode )
+Size ToolBox::ImplGetOptimalFloatingSize()
 {
     if( !ImplIsFloatingMode() )
         return Size();
@@ -2166,60 +2166,55 @@ Size ToolBox::ImplGetOptimalFloatingSize( FloatingSizeMode eMode )
     Size aSize2( aCurrentSize );
 
     // try to preserve current height
-    if( eMode == FSMODE_AUTO || eMode == FSMODE_FAVOURHEIGHT )
-    {
-        // calc number of floating lines for current window height
-        sal_uInt16 nFloatLinesHeight = ImplCalcLines( this, mnDY );
-        // calc window size according to this number
-        aSize1 = ImplCalcFloatSize( this, nFloatLinesHeight );
 
-        if( eMode == FSMODE_FAVOURHEIGHT || aCurrentSize == aSize1 )
-            return aSize1;
-    }
+    // calc number of floating lines for current window height
+    sal_uInt16 nFloatLinesHeight = ImplCalcLines( this, mnDY );
+    // calc window size according to this number
+    aSize1 = ImplCalcFloatSize( this, nFloatLinesHeight );
 
-    if( eMode == FSMODE_AUTO || eMode == FSMODE_FAVOURWIDTH )
-    {
-        // try to preserve current width
-        long nLineHeight = ( mnWinHeight > mnMaxItemHeight ) ? mnWinHeight : mnMaxItemHeight;
-        int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder;
-        int nBorderY = 2*TB_BORDER_OFFSET2 + mnTopBorder + mnBottomBorder;
-        Size aSz( aCurrentSize );
-        long maxX;
-        sal_uInt16 nLines = ImplCalcBreaks( aSz.Width()-nBorderX, &maxX, mbHorz );
+    if( aCurrentSize == aSize1 )
+        return aSize1;
 
-        sal_uInt16 manyLines = 1000;
-        Size aMinimalFloatSize = ImplCalcFloatSize( this, manyLines );
+    // try to preserve current width
 
-        aSz.Height() = nBorderY + nLineHeight * nLines;
-        // line space when more than one line
-        if ( mnWinStyle & WB_LINESPACING )
-            aSz.Height() += (nLines-1)*TB_LINESPACING;
+    long nLineHeight = ( mnWinHeight > mnMaxItemHeight ) ? mnWinHeight : mnMaxItemHeight;
+    int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder;
+    int nBorderY = 2*TB_BORDER_OFFSET2 + mnTopBorder + mnBottomBorder;
+    Size aSz( aCurrentSize );
+    long maxX;
+    sal_uInt16 nLines = ImplCalcBreaks( aSz.Width()-nBorderX, &maxX, mbHorz );
 
-        aSz.Width() = nBorderX + maxX;
+    sal_uInt16 manyLines = 1000;
+    Size aMinimalFloatSize = ImplCalcFloatSize( this, manyLines );
 
-        // avoid clipping of any items
-        if( aSz.Width() < aMinimalFloatSize.Width() )
-            aSize2 = ImplCalcFloatSize( this, nLines );
-        else
-            aSize2 = aSz;
+    aSz.Height() = nBorderY + nLineHeight * nLines;
+    // line space when more than one line
+    if ( mnWinStyle & WB_LINESPACING )
+        aSz.Height() += (nLines-1)*TB_LINESPACING;
 
-        if( eMode == FSMODE_FAVOURWIDTH || aCurrentSize == aSize2 )
-            return aSize2;
-        else
-        {
-            // set the size with the smallest delta as the current size
-            long dx1 = abs( mnDX - aSize1.Width() );
-            long dy1 = abs( mnDY - aSize1.Height() );
+    aSz.Width() = nBorderX + maxX;
 
-            long dx2 = abs( mnDX - aSize2.Width() );
-            long dy2 = abs( mnDY - aSize2.Height() );
+    // avoid clipping of any items
+    if( aSz.Width() < aMinimalFloatSize.Width() )
+        aSize2 = ImplCalcFloatSize( this, nLines );
+    else
+        aSize2 = aSz;
 
-            if( dx1*dy1 < dx2*dy2 )
-                aCurrentSize = aSize1;
-            else
-                aCurrentSize = aSize2;
-        }
-    }
+    if( aCurrentSize == aSize2 )
+        return aSize2;
+
+    // set the size with the smallest delta as the current size
+    long dx1 = abs( mnDX - aSize1.Width() );
+    long dy1 = abs( mnDY - aSize1.Height() );
+
+    long dx2 = abs( mnDX - aSize2.Width() );
+    long dy2 = abs( mnDY - aSize2.Height() );
+
+    if( dx1*dy1 < dx2*dy2 )
+        aCurrentSize = aSize1;
+    else
+        aCurrentSize = aSize2;
+
     return aCurrentSize;
 }
 
@@ -2304,7 +2299,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
         if ( bResize )
             mnFloatLines = ImplCalcLines( this, mnDY );
         else
-            SetOutputSizePixel( ImplGetOptimalFloatingSize( FSMODE_AUTO ) );
+            SetOutputSizePixel( ImplGetOptimalFloatingSize() );
     }
 
     // Horizontal
