@@ -689,7 +689,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      * changes the text of the status label and 
      * (TODO) the status image.
      * @param label
-     * @param color
+     * @param image
      */
     private void setLabel(String label, String image)
     {

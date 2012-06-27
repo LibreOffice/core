@@ -125,7 +125,6 @@ public class CGSettings extends ConfigGroup
     /**
      * call after read.
      * @param xmsf
-     * @param document the background document. used for date/number formatting.
      */
     public void configure(XMultiServiceFactory xmsf) throws Exception
     {

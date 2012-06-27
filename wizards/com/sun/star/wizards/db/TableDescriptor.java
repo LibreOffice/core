@@ -804,7 +804,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     }
 
     /**
-     * @param _stablename
+     * @param _scomposedtablename
      * @return
      */
     public boolean appendTableNameToFilter(String _scomposedtablename)

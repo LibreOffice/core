@@ -405,7 +405,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
     }
 
     /**
-     * @see getExporter()
+     * @see #getExporter()
      */
     public void setExporter(short[] exporter_)
     {
@@ -414,7 +414,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
     }
 
     /**
-     * @see getExporter()
+     * @see #getExporter()
      * @return
      */
     private short getExporterIndex()

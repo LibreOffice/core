@@ -1534,7 +1534,7 @@ public class NumericalHelper
          * converted using ASCII letters (3999 -> MMMCMXCIX).
          * @param n the arabic number
          * @return the roman equivalent as string
-         * @throws BasicErrorException if the number cannot be converted.
+         * @throws com.sun.star.script.BasicErrorException if the number cannot be converted.
          */
         public static String getRomanEquivalent(int n)
                 throws Exception

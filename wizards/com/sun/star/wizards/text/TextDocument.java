@@ -380,7 +380,6 @@ public class TextDocument
      * and adds a explanatory sentence to the template description.
      * @param WizardName The name of the Wizard.
      * @param TemplateDescription The old Description which is being appended with another sentence.
-     * @return void.
      */
     public void setWizardTemplateDocInfo(String WizardName, String TemplateDescription)
     {

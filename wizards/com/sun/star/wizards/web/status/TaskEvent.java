@@ -39,9 +39,6 @@ public class TaskEvent extends EventObject
      * general constructor-
      * @param source
      * @param type_
-     * @param max_
-     * @param success_
-     * @param failed_
      */
     public TaskEvent(Task source, int type_)
     {

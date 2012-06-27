@@ -43,7 +43,6 @@ public class DataAwareFields
      * @param fieldname
      * @param value
      * @return
-     * @throws NoSuchFieldException
      */
     public static DataAware.Value getFieldValueFor(Object owner, String fieldname, Object value)
     {

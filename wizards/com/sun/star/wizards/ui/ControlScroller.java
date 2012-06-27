@@ -72,10 +72,10 @@ public abstract class ControlScroller
     /**
      *
      * @param _CurUnoDialog
-     * @param iStep
-     * @param iCompPosX
-     * @param iCompPosY
-     * @param iCompWidth
+     * @param _iStep
+     * @param _iCompPosX
+     * @param _iCompPosY
+     * @param _iCompWidth
      * @param _nblockincrement
      * @param _firsthelpindex
      * @author bc93774
@@ -128,7 +128,7 @@ public abstract class ControlScroller
 
     /**
      * @author bc93774
-     * @param _ntotfieldcount: The number of fields that are to be administered by the ControlScroller
+     * @param _ntotfieldcount The number of fields that are to be administered by the ControlScroller
      */
     protected void initialize(int _ntotfieldcount)
     {
@@ -464,8 +464,8 @@ public abstract class ControlScroller
      *  The controls should be put on Step 99 (means made invisible at first). All the controlrows that are needed are than
      *  made visible automatically when calling "initialize(_fieldcount)"
      * @author bc93774
-     * @param i: The index of the control group
-     * @param npos: Can be an x coordinate or an y coordinate which depends on the orientation of the scrollbar
+     * @param _index The index of the control group
+     * @param npos Can be an x coordinate or an y coordinate which depends on the orientation of the scrollbar
      */
     protected abstract void insertControlGroup(int _index, int npos);
 

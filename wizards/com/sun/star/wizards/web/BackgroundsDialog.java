@@ -83,7 +83,7 @@ public class BackgroundsDialog extends ImageListDialog
      * opens a "file open" dialog, adds the selected 
      * image to the list and to the web wizard configuration,
      * and then jumps to the new image, selecting it in the list.
-     * @see add(String)
+     * @see #add(String)
      */
     public void other()
     {

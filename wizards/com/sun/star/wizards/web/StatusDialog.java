@@ -228,8 +228,8 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
 
     /**
      * displays the status dialog
-     * @param parent the parent dialog
-     * @param r what to do
+     * @param parent_ the parent dialog
+     * @param task what to do
      */
     public void execute(final UnoDialog parent_, final Task task, String title)
     {

@@ -60,15 +60,12 @@ public class CallReportWizard
     /** Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
      * <p>
-     * @return Returns a <code>XSingleServiceFactory</code> for creating the
-     * component.
-     * @see com.sun.star.comp.loader.JavaLoader#
+     * @return Returns a <code>XSingleServiceFactory</code> for creating the component.
+     * @see com.sun.star.comp.loader.JavaLoader
      * @param stringImplementationName The implementation name of the component.
-     * @param xMSF The service manager, who gives access to every
-     * known service.
-     * @param xregistrykey Makes structural information (except regarding tree
-     * structures) of a single
-     * registry key accessible.
+     * @param xMSF The service manager, who gives access to every known service.
+     * @param xregistrykey Makes structural information (except regarding treestructures) of a single
+     *    registry key accessible.
      */
     public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(String stringImplementationName, com.sun.star.lang.XMultiServiceFactory xMSF, com.sun.star.registry.XRegistryKey xregistrykey)
     {

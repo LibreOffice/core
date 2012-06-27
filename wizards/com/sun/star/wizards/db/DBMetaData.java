@@ -819,8 +819,8 @@ public class DBMetaData
 
     /**
      * inserts a Query to a datasource; There is no validation if the queryname is already existing in the datasource
-     * @param oQuery
-     * @param QueryName
+     * @param _oSQLQueryComposer
+     * @param _QueryName
      */
     public boolean createQuery(SQLQueryComposer _oSQLQueryComposer, String _QueryName)
     {
@@ -914,7 +914,7 @@ public class DBMetaData
      * the document may not be open
      * @param _xComponent
      * @param _xDocNameAccess 
-     * @param _bcreateTemplate  describes the type of the document: "form" or "report"
+     * @param i_createTemplate  describes the type of the document: "form" or "report"
      */
     public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)
     {

@@ -542,7 +542,7 @@ public class UnoDialog implements EventNames
      * The problem with setting the visibility of controls is that changing the current step
      * of a dialog will automatically make all controls visible. The PropertyNames.PROPERTY_STEP property always wins against
      * the property "visible". Therfor a control meant to be invisible is placed on a step far far away.
-     * @param the name of the control
+     * @param controlname the name of the control
      * @param iStep  change the step if you want to make the control invisible
      */
     private void setControlVisible(String controlname, int iStep)
@@ -800,7 +800,7 @@ public class UnoDialog implements EventNames
      * peer as a parent.
      * @param parentPeer
      * @return
-     * @throws java.lang.Exception
+     * @throws com.sun.star.uno.Exception
      */
     public XWindowPeer createWindowPeer(XWindowPeer parentPeer) throws com.sun.star.uno.Exception
     {
@@ -823,7 +823,7 @@ public class UnoDialog implements EventNames
      * dialog, using the active OO frame
      * as the parent window.
      * @return
-     * @throws java.lang.Exception
+     * @throws com.sun.star.uno.Exception
      */
     public XWindowPeer createWindowPeer() throws com.sun.star.uno.Exception
     {

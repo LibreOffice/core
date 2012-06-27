@@ -50,7 +50,7 @@ public class CallWizard
      *
      * @return Returns a <code>XSingleServiceFactory</code> for creating the component.
      *
-     * @see com.sun.star.comp.loader.JavaLoader#
+     * @see com.sun.star.comp.loader.JavaLoader
      */
     public static XSingleServiceFactory __getServiceFactory(String stringImplementationName, XMultiServiceFactory xMSF, XRegistryKey xregistrykey)
     {

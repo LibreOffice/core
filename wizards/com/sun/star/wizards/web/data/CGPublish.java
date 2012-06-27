@@ -50,7 +50,7 @@ public class CGPublish extends ConfigGroup
     /**
      * here I get an URL from user input, and parse it to
      * a UCB url...
-     * @param url
+     * @param path
      */
     public void setURL(String path)
     {

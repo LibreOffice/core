@@ -208,7 +208,6 @@ public interface IReportDocument
      * @param Name
      * @param _bAsTemplate
      * @param _bOpenInDesign
-     * @return
      */
     public void createAndOpenReportDocument(
         final String Name,
@@ -252,7 +251,7 @@ public interface IReportDocument
 
     /**
      * check internal invariants
-     * @throws a 
+     * @throws java.lang.Exception
      */
     public void checkInvariants() throws java.lang.Exception;
 }

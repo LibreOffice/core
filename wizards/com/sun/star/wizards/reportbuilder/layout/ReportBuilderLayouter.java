@@ -240,14 +240,15 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         return nIndent;
     }
+
+    int m_nLeftIndent = -1;
+
     /**
      * Get left page indent.
      * The left indent is the area on the left side which will no be printed.
      * The default is 2000 1/100mm what is 2cm of DIN A4.
      * @return the left indent in 1/100mm
      */
-    int m_nLeftIndent = -1;
-
     protected int getLeftPageIndent()
     {
         if (m_nLeftIndent < 0)
@@ -256,14 +257,15 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
         return m_nLeftIndent;
     }
+
+    int m_nRightIndent = -1;
+
     /**
      * Get right page indent.
      * The right indent is the area on the right side which will no be printed.
      * The default is 2000 1/100mm what is 2cm of DIN A4.
      * @return the right indent in 1/100mm
      */
-    int m_nRightIndent = -1;
-
     protected int getRightPageIndent()
     {
         if (m_nRightIndent < 0)
@@ -330,12 +332,13 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             aHelper.setPropertyValueDontThrow(_sStyleName, _aObj);
         }
     }
+
+    int m_nPageWidth = -1;
+
     /**
      * Get page width. The default is 21000 1/100mm what is 21cm of DIN A4.
      * @return the Width of the page in 1/100mm
      */
-    int m_nPageWidth = -1;
-
     protected int getPageWidth()
     {
         if (m_nPageWidth < 0)
@@ -1198,8 +1201,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Helper function, to copy all not read only properties of _xFromSection to _xToSection
-     * @param _xFromSection
-     * @param _xToSection
+     * @param _aFrom
+     * @param _aTo
      */
     private void copyProperties(Object _aFrom, Object _aTo)
     {

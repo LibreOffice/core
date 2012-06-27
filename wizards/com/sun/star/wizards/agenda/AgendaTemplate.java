@@ -181,8 +181,8 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * loads the given template, and analyze its structure.
      * @param templateURL
      * @param topics
-     * @see AgendaTemplate.initialize()
-     * @see AgendaTemplate.initializeData()
+     * @see #initialize()
+     * @see #initializeData(List)
      */
     public synchronized void load(String templateURL, List<PropertyValue[]> topics)
     {

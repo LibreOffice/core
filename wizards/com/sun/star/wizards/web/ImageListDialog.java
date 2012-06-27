@@ -255,7 +255,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         String template;
 
         /**
-         * @param aTempalte a template for this renderer.
+         * @param aTemplate a template for this renderer.
          * The strings %START, %END ,%TOTAL will be replaced
          * with the actual values.
          */

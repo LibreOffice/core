@@ -60,8 +60,8 @@ public class StylePreview
     /**
      * copies the html file to the temp directory, and calculates the
      * destination names of the background and css files. 
-     * @param wwRoot is the root directory of the web wizard files (
-     * usually [oo]/share/template/[lang]/wizard/web
+     * @param wwRoot_ is the root directory of the web wizard files (
+     *                usually [oo]/share/template/[lang]/wizard/web
      */
     public StylePreview(XMultiServiceFactory xmsf, String wwRoot_) throws Exception
     {

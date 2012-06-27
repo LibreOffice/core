@@ -298,8 +298,6 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
 
     /** Notifies all registered listeners about the event.
      *
-     * @param event The event to be fired
-     *
      */
     private void fireListDataListenerIntervalAdded(int i0, int i1)
     {
@@ -320,8 +318,6 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
 
     /** Notifies all registered listeners about the event.
      *
-     * @param event The event to be fired
-     *
      */
     private void fireListDataListenerIntervalRemoved(int i0, int i1)
     {
@@ -341,8 +337,6 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
     }
 
     /** Notifies all registered listeners about the event.
-     *
-     * @param event The event to be fired
      *
      */
     private void fireListDataListenerContentsChanged(int i0, int i1)
@@ -394,7 +388,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
      * the index number 0
      * Do not forget to call commit() after calling this method.
      * @param confView
-     * @param memebrName
+     * @param memberName
      */
     public void reindexSet(Object confView, String memberName, String indexPropertyName) throws Exception
     {

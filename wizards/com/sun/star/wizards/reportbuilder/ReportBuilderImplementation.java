@@ -119,7 +119,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     /**
      * initialize the Report Builder and open it representation
      * @param _aDoc
-     * @param _xConnection
      */
     private void initialize(Object _aDoc)
     {

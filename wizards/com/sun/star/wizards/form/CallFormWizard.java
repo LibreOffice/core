@@ -41,15 +41,12 @@ public class CallFormWizard
     /** Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
      * <p>
-     * @return Returns a <code>XSingleServiceFactory</code> for creating the
-     * component.
-     * @see com.sun.star.comp.loader.JavaLoader#
+     * @return Returns a <code>XSingleServiceFactory</code> for creating the component.
+     * @see com.sun.star.comp.loader.JavaLoader
      * @param stringImplementationName The implementation name of the component.
-     * @param xmultiservicefactory The service manager, who gives access to every
-     * known service.
-     * @param xregistrykey Makes structural information (except regarding tree
-     * structures) of a single
-     * registry key accessible.
+     * @param xMSF The service manager, who gives access to every known service.
+     * @param xregistrykey Makes structural information (except regarding tree structures) of a single
+     *   registry key accessible.
      */
     public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(String stringImplementationName, com.sun.star.lang.XMultiServiceFactory xMSF, com.sun.star.registry.XRegistryKey xregistrykey)
     {
@@ -105,7 +102,7 @@ public class CallFormWizard
          * directly after its creation.
          * @param object This array of arbitrary objects will be passed to the
          * component after its creation.
-         * @throws Exception Every exception will not be handled, but will be
+         * @throws com.sun.star.uno.Exception Every exception will not be handled, but will be
          * passed to the caller.
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception

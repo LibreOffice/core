@@ -586,8 +586,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     /** Notifies all registered listeners about the event.
      *
-     * @param event The event to be fired
-     *
      */
     @SuppressWarnings("unchecked")
     private void fireItemSelected()
