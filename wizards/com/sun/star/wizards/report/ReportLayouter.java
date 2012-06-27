@@ -98,7 +98,7 @@ public class ReportLayouter
             {
                 iSelPos = 0;
             }
-            iOldContentPos = (int) iSelPos;
+            iOldContentPos = iSelPos;
             xContentListBox = CurUnoDialog.insertListBox("lstContent", SOCONTENTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[]
                     {
@@ -146,7 +146,7 @@ public class ReportLayouter
                             iSelLayoutPos
                         }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), 99
                     });
-            iOldLayoutPos = (int) iSelPos;
+            iOldLayoutPos = iSelPos;
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblOrientation",
                     new String[]
                     {

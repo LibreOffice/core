@@ -68,7 +68,7 @@ public abstract class Configuration
         Object o = getNode(name, parent);
         if (AnyConverter.isVoid(o))
         {
-            return (float) 0;
+            return 0;
         }
         return AnyConverter.toFloat(o);
     }
@@ -78,7 +78,7 @@ public abstract class Configuration
         Object o = getNode(name, parent);
         if (AnyConverter.isVoid(o))
         {
-            return (double) 0;
+            return 0;
         }
         return AnyConverter.toDouble(o);
     }

@@ -218,7 +218,7 @@ public class NumericalHelper
         switch (aTypeObject.iType)
         {
             case BYTE_TYPE:
-                retValue = (short) getByte(aTypeObject);
+                retValue = getByte(aTypeObject);
                 break;
             case CHAR_TYPE:
                 retValue = (byte) getChar(aTypeObject);
@@ -501,13 +501,13 @@ public class NumericalHelper
         switch (aTypeObject.iType)
         {
             case BYTE_TYPE:
-                retValue = (int) getByte(aTypeObject);
+                retValue = getByte(aTypeObject);
                 break;
             case CHAR_TYPE:
-                retValue = (int) getChar(aTypeObject);
+                retValue = getChar(aTypeObject);
                 break;
             case SHORT_TYPE:
-                retValue = (int) getShort(aTypeObject);
+                retValue = getShort(aTypeObject);
                 break;
             case INT_TYPE:
                 retValue = getInt(aTypeObject);
@@ -557,16 +557,16 @@ public class NumericalHelper
         switch (aTypeObject.iType)
         {
             case BYTE_TYPE:
-                retValue = (long) getByte(aTypeObject);
+                retValue = getByte(aTypeObject);
                 break;
             case CHAR_TYPE:
-                retValue = (long) getChar(aTypeObject);
+                retValue = getChar(aTypeObject);
                 break;
             case SHORT_TYPE:
-                retValue = (long) getShort(aTypeObject);
+                retValue = getShort(aTypeObject);
                 break;
             case INT_TYPE:
-                retValue = (long) getInt(aTypeObject);
+                retValue = getInt(aTypeObject);
                 break;
             case LONG_TYPE:
                 retValue = getLong(aTypeObject);
@@ -613,19 +613,19 @@ public class NumericalHelper
         switch (aTypeObject.iType)
         {
             case BYTE_TYPE:
-                retValue = (float) getByte(aTypeObject);
+                retValue = getByte(aTypeObject);
                 break;
             case CHAR_TYPE:
-                retValue = (float) getChar(aTypeObject);
+                retValue = getChar(aTypeObject);
                 break;
             case SHORT_TYPE:
-                retValue = (float) getShort(aTypeObject);
+                retValue = getShort(aTypeObject);
                 break;
             case INT_TYPE:
-                retValue = (float) getInt(aTypeObject);
+                retValue = getInt(aTypeObject);
                 break;
             case LONG_TYPE:
-                retValue = (float) getLong(aTypeObject);
+                retValue = getLong(aTypeObject);
                 break;
             case FLOAT_TYPE:
                 retValue = getFloat(aTypeObject);
@@ -669,22 +669,22 @@ public class NumericalHelper
         switch (aTypeObject.iType)
         {
             case BYTE_TYPE:
-                retValue = (double) getByte(aTypeObject);
+                retValue = getByte(aTypeObject);
                 break;
             case CHAR_TYPE:
-                retValue = (double) getChar(aTypeObject);
+                retValue = getChar(aTypeObject);
                 break;
             case SHORT_TYPE:
-                retValue = (double) getShort(aTypeObject);
+                retValue = getShort(aTypeObject);
                 break;
             case INT_TYPE:
-                retValue = (double) getInt(aTypeObject);
+                retValue = getInt(aTypeObject);
                 break;
             case LONG_TYPE:
-                retValue = (double) getLong(aTypeObject);
+                retValue = getLong(aTypeObject);
                 break;
             case FLOAT_TYPE:
-                retValue = (double) getFloat(aTypeObject);
+                retValue = getFloat(aTypeObject);
                 break;
             case DOUBLE_TYPE:
                 retValue = getDouble(aTypeObject);
@@ -1557,7 +1557,7 @@ public class NumericalHelper
                 for (int i = number.length() - 1; i >= 0; i--)
                 {
                     StringBuffer romanDigit = new StringBuffer();
-                    int b = (int) number.charAt(i) - ASCII_CODE_0;
+                    int b = number.charAt(i) - ASCII_CODE_0;
                     if (b == FOUR)
                     { // special case IV
                         romanDigit.append(ROMAN_EQUIV[symbolIndex]);
@@ -1597,7 +1597,7 @@ public class NumericalHelper
 
     public static boolean representsIntegerNumber(double _dblvalue)
     {
-        double dblsecvalue = (double) ((int) _dblvalue);
+        double dblsecvalue = ((int) _dblvalue);
         return Double.compare(_dblvalue, dblsecvalue) == 0;
     }
 
@@ -1608,7 +1608,7 @@ public class NumericalHelper
 
     public static double roundDouble(double _dblvalue, int _ndecimals)
     {
-        double dblfactor = java.lang.Math.pow(10.0, (double) _ndecimals);
-        return ((double) ((int) (_dblvalue * dblfactor))) / dblfactor;
+        double dblfactor = java.lang.Math.pow(10.0, _ndecimals);
+        return ((int) (_dblvalue * dblfactor)) / dblfactor;
     }
 }

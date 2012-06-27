@@ -291,7 +291,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
      */
     public void itemStateChanged(ItemEvent arg0)
     {
-        initializeTable((int) xTableListBox.getSelectedItemPos());
+        initializeTable(xTableListBox.getSelectedItemPos());
     }
 
     /* (non-Javadoc)

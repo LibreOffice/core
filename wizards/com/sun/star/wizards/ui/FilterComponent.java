@@ -259,7 +259,7 @@ public class FilterComponent
                     if (currentControlRow.isEnabled() && currentControlRow.isConditionComplete())
                     {
                         String sFieldName = currentControlRow.getSelectedFieldName();
-                        int nOperator = (int) currentControlRow.getSelectedOperator();
+                        int nOperator = currentControlRow.getSelectedOperator();
                         FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
                         columnSet.setPropertyValue(PropertyNames.PROPERTY_NAME, aFieldColumn.getFieldName());
                         columnSet.setPropertyValue("Type", aFieldColumn.getXColumnPropertySet().getPropertyValue("Type"));

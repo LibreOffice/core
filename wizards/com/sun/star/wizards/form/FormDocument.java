@@ -135,8 +135,8 @@ public class FormDocument extends TextDocument
             xPropPageStyle.setPropertyValue("TopMargin", new Integer(nMargin));
             xPropPageStyle.setPropertyValue("BottomMargin", new Integer(nMargin));
             aMainFormPoint = new Point(nMargin, nMargin);
-            nFormWidth = (int) (0.8 * (double) nPageWidth) - 2 * nMargin;
-            nFormHeight = (int) (0.65 * (double) nPageHeight) - 2 * nMargin;
+            nFormWidth = (int) (0.8 * nPageWidth) - 2 * nMargin;
+            nFormHeight = (int) (0.65 * nPageHeight) - 2 * nMargin;
         }
         catch (Exception e)
         {

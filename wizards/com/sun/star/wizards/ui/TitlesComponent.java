@@ -229,8 +229,8 @@ public class TitlesComponent extends ControlScroller
 
     private int getFieldNameWidth(int iMAPControlWidth, double dblMAPConversion)
     {
-        int iFieldNameWidth = (int) (1.15 * ((double) (iMAPControlWidth)) / dblMAPConversion);
-        double dblAvailableWidth = (double) (iCompWidth - iScrollBarWidth - iRelLabelPosXDist);
+        int iFieldNameWidth = (int) (1.15 * (iMAPControlWidth) / dblMAPConversion);
+        double dblAvailableWidth = (iCompWidth - iScrollBarWidth - iRelLabelPosXDist);
         if (iFieldNameWidth > (0.5 * (dblAvailableWidth)))
         {
             iFieldNameWidth = (int) (0.5 * (dblAvailableWidth));

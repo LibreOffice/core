@@ -101,7 +101,7 @@ public class ListModelBinder implements ListDataListener
 
     protected String getItemString(short i)
     {
-        return getItemString(listModel.getElementAt((int) i));
+        return getItemString(listModel.getElementAt(i));
     }
 
     protected String getItemString(Object item)

@@ -114,8 +114,8 @@ public class TimeStampControl extends DatabaseControl
     {
         try
         {
-            int ndatewidth = (int) (nreldatewidth * (double) _aSize.Width);
-            int ntimewidth = (int) (nreltimewidth * (double) _aSize.Width);
+            int ndatewidth = (int) (nreldatewidth * _aSize.Width);
+            int ntimewidth = (int) (nreltimewidth * _aSize.Width);
             oDateControl.xShape.setSize(new Size(ndatewidth, _aSize.Height));
             oTimeControl.xShape.setSize(new Size(ntimewidth, _aSize.Height));
         }

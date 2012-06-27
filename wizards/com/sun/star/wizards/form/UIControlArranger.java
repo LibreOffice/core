@@ -398,7 +398,7 @@ public class UIControlArranger
             m_aButtonList.setSelectionGap(new Size(2, 2));
             m_aButtonList.setGap(new Size(3, 3));
 //            m_aButtonList.scaleImages = Boolean.FALSE;
-            m_aButtonList.tabIndex = (int) curtabindex++;
+            m_aButtonList.tabIndex = curtabindex++;
             m_aButtonList.helpURL = 34453 + (formindex * 4);
 
             m_aButtonList.setListModel(model);

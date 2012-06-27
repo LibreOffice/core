@@ -311,11 +311,11 @@ public class DBColumn
                 {
                     if (AnyConverter.isBoolean(CurGroupValue))
                     {
-                        dblValue = (double) AnyConverter.toInt(CurGroupValue);
+                        dblValue = AnyConverter.toInt(CurGroupValue);
                     }
                     if (AnyConverter.isByte(CurGroupValue))
                     {
-                        dblValue = (double) AnyConverter.toByte(CurGroupValue);
+                        dblValue = AnyConverter.toByte(CurGroupValue);
                     }
                     else if (AnyConverter.isDouble(CurGroupValue))
                     {
@@ -323,19 +323,19 @@ public class DBColumn
                     }
                     else if (AnyConverter.isFloat(CurGroupValue))
                     {
-                        dblValue = (double) AnyConverter.toFloat(CurGroupValue);
+                        dblValue = AnyConverter.toFloat(CurGroupValue);
                     }
                     else if (AnyConverter.isInt(CurGroupValue))
                     {
-                        dblValue = (double) AnyConverter.toInt(CurGroupValue);
+                        dblValue = AnyConverter.toInt(CurGroupValue);
                     }
                     else if (AnyConverter.isLong(CurGroupValue))
                     {
-                        dblValue = (double) AnyConverter.toLong(CurGroupValue);
+                        dblValue = AnyConverter.toLong(CurGroupValue);
                     }
                     else if (AnyConverter.isShort(CurGroupValue))
                     {
-                        dblValue = (double) AnyConverter.toShort(CurGroupValue);
+                        dblValue = AnyConverter.toShort(CurGroupValue);
                     }
                     xValCell.setValue(dblValue);
                 }

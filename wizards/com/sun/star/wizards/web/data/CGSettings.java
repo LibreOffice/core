@@ -198,7 +198,7 @@ public class CGSettings extends ConfigGroup
 
         public String formatFileSize(int size)
         {
-            float sizeInKB = ((float) size) / 1024f;
+            float sizeInKB = size / 1024f;
             String sSize = dateUtils.getFormatter().convertNumberToString(numberFormat, sizeInKB);
             return JavaTools.replaceSubString(resources[CGSettings.RESOURCE_SIZE_TEMPLATE], sSize, "%NUMBER");
         }

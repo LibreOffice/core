@@ -107,7 +107,7 @@ public class RecordParser extends QueryMetaData
             Double DblValue;
             if (bisDate)
             {
-                DblValue = new Double(xResultSetRow.getDouble(ColIndex) + (double) super.getNullDateCorrection());
+                DblValue = new Double(xResultSetRow.getDouble(ColIndex) + super.getNullDateCorrection());
             }
             else
             {
