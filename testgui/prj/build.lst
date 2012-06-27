@@ -1,2 +1,0 @@
-tgui testgui :: testcommon NULL
-tgui testgui nmake - all tgui_mkout NULL
