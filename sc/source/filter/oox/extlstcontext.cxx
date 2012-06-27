@@ -58,6 +58,10 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
             break;
         case XLS_EXT_TOKEN( negativeFillColor ):
             importNegativeFillColor( rAttribs );
+            break;
+        case XLS_EXT_TOKEN( axisColor ):
+            importAxisColor( rAttribs );
+            break;
 
         default:
             break;
@@ -91,6 +95,15 @@ namespace {
     return ::Color(ornR, ornG, ornB);
 }
 
+}
+
+void ExtCfRuleContext::importAxisColor( const AttributeList& rAttribs )
+{
+    ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+
+    sal_Int32 nColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+    ::Color aColor = RgbToRgbComponents(nColor);
+    pDataBar->maAxisColor = aColor;
 }
 
 void ExtCfRuleContext::importNegativeFillColor( const AttributeList& rAttribs )

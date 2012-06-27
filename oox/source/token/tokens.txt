@@ -713,6 +713,7 @@ axId
 axPos
 axis
 axisCol
+axisColor
 axisPage
 axisPosition
 axisRow
