@@ -160,8 +160,12 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     BODY="$2"
                     shift
                     ;;
+                --from)
+                    FROM="$2"
+                    shift
+                    ;;
                 --attach)
-                    ATTACH="$2"
+                    ATTACH="${ATTACH:-}${ATTACH:+ }--attach "`echo "file://$2" | ${URI_ENCODE}`
                     shift
                     ;;
                 *)
@@ -170,9 +174,14 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             shift;
         done
 
-        ${MAILER} --composer ${CC:+--cc} ${CC:+"${CC}"} ${BCC:+--bcc} ${BCC:+"${BCC}"} \
-            ${SUBJECT:+--subject} ${SUBJECT:+"${SUBJECT}"} ${BODY:+--body} ${BODY:+"${BODY}"} \
-            ${ATTACH:+--attach} ${ATTACH:+"${ATTACH}"} ${TO:+"${TO}"}
+        ${MAILER} --composer \
+            ${CC:+--cc} ${CC:+"${CC}"}  \
+            ${BCC:+--bcc} ${BCC:+"${BCC}"} \
+            ${SUBJECT:+--subject} ${SUBJECT:+"${SUBJECT}"}  \
+            ${BODY:+--body} ${BODY:+"${BODY}"} \
+            ${FROM:+--header} ${FROM:+"From: ${FROM}"} \
+            ${ATTACH:+${ATTACH}}  \
+            ${TO:+"${TO}"}
         ;;
 
     mutt)
