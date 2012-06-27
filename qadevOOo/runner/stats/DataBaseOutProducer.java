@@ -28,7 +28,7 @@ import java.util.HashMap;
  */
 public abstract class DataBaseOutProducer implements LogWriter {
     protected HashMap mSqlInput = null;
-    protected HashMap mSqlOutput = null;
+    protected HashMap<String, String[]> mSqlOutput = null;
     protected String[] mWriteableEntryTypes = null;
     protected SQLExecution mSqlExec;
     protected boolean m_bDebug = false;

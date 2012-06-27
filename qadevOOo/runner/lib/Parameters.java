@@ -41,7 +41,7 @@ import com.sun.star.uno.Type;
 public class Parameters implements XPropertySet {
 /*    final protected Map parameters;
     final Parameters defaults; */
-    final protected Map parameters;
+    final protected Map<String, Object> parameters;
     final Parameters defaults;
     Property[] props;
 
@@ -49,12 +49,12 @@ public class Parameters implements XPropertySet {
         this (params, null);
     }
 
-    public Parameters(Map params, Parameters defaultParams) {
+    public Parameters(Map<String, Object> params, Parameters defaultParams) {
         parameters = params;
         defaults = defaultParams;
         checkParameters(parameters);
 
-        Set paramSet = new HashSet(parameters.keySet());
+        Set<String> paramSet = new HashSet<String>(parameters.keySet());
 
         if (defaults != null) {
             Set defSet = defaults.toMap().keySet();
@@ -65,8 +65,8 @@ public class Parameters implements XPropertySet {
 
         int num = 0;
 
-        for (Iterator i = paramSet.iterator(); i.hasNext(); num++) {
-            String name = (String)i.next();
+        for (Iterator<String> i = paramSet.iterator(); i.hasNext(); num++) {
+            String name = i.next();
 
             props[num] = new Property(name, num, new Type(String.class), (short)0);
         }
@@ -160,8 +160,8 @@ public class Parameters implements XPropertySet {
         };
     }
 
-    private static void checkParameters(Map params) {
-        for (Iterator i = params.keySet().iterator(); i.hasNext();) {
+    private static void checkParameters(Map<String, Object> params) {
+        for (Iterator<String> i = params.keySet().iterator(); i.hasNext();) {
             Object key = i.next();
 
             if (!(key instanceof String)) {
@@ -198,8 +198,8 @@ public class Parameters implements XPropertySet {
         }
     }
 
-    public static Map toMap(XPropertySet props) {
-        HashMap result = new HashMap(10);
+    public static Map<String, Object> toMap(XPropertySet props) {
+        HashMap<String, Object> result = new HashMap<String, Object>(10);
 
         XPropertySetInfo setInfo = props.getPropertySetInfo();
         Property[] properties = setInfo.getProperties();

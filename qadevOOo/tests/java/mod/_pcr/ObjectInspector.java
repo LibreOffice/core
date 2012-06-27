@@ -104,19 +104,17 @@ public class ObjectInspector extends TestCase {
         try {
             XInterface oInspector = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspector");
 
-            XObjectInspector xInspector = (XObjectInspector) UnoRuntime.queryInterface(XObjectInspector.class, oInspector);
+            XObjectInspector xInspector = UnoRuntime.queryInterface(XObjectInspector.class, oInspector);
 
             log.println("ImplementationName '" + utils.getImplName(xInspector) + "'");
 
             XInterface oInspectorModel = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspectorModel");
 
-            XObjectInspectorModel xInspectorModel = (XObjectInspectorModel)
-            UnoRuntime.queryInterface(XObjectInspectorModel.class, oInspectorModel);
+            XObjectInspectorModel xInspectorModel = UnoRuntime.queryInterface(XObjectInspectorModel.class, oInspectorModel);
 
             XInterface oInspectorModelToSet = (XInterface) xMSF.createInstance("com.sun.star.inspection.ObjectInspectorModel");
 
-            XObjectInspectorModel xInspectorModelToSet = (XObjectInspectorModel)
-            UnoRuntime.queryInterface(XObjectInspectorModel.class, oInspectorModelToSet);
+            XObjectInspectorModel xInspectorModelToSet = UnoRuntime.queryInterface(XObjectInspectorModel.class, oInspectorModelToSet);
 
 
             log.println("create a floating frame...");
@@ -126,7 +124,7 @@ public class ObjectInspector extends TestCase {
 
                 XWindowPeer xWindowPeer = DesktopTools.createFloatingWindow(xMSF);
 
-                xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xWindowPeer);
+                xWindow = UnoRuntime.queryInterface(XWindow.class, xWindowPeer);
 
             } catch (StatusException e){
                 throw new StatusException("Coud not create test object", e);
@@ -139,7 +137,7 @@ public class ObjectInspector extends TestCase {
             xFrame.setName("ObjectInspector");
             xFrame.initialize(xWindow);
 
-            XFramesSupplier xFramesSup = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, StarDesktop);
+            XFramesSupplier xFramesSup = UnoRuntime.queryInterface(XFramesSupplier.class, StarDesktop);
 
             XFrames xFrames = xFramesSup.getFrames();
             xFrames.append(xFrame);
@@ -147,7 +145,7 @@ public class ObjectInspector extends TestCase {
 
             log.println("attach ObjectInspector to floating frame...");
 
-            XInitialization xOII = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, xInspectorModel);
+            XInitialization xOII = UnoRuntime.queryInterface(XInitialization.class, xInspectorModel);
 
             xOII.initialize(new Object[0]);
 
@@ -194,7 +192,7 @@ public class ObjectInspector extends TestCase {
         existentInspector = xFrame.findFrame( "ObjectInspector", 255 );
 
         if ( existentInspector != null ){
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                     XCloseable.class, existentInspector);
             try{
                 closer.close(true);

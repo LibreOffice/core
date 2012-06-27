@@ -92,7 +92,7 @@ public class AccessibleMenuSeparator extends TestCase {
         try {
             //activate Edit-Menu
             XAccessible Menu = MenuBar.getAccessibleChild(1);
-            act = (XAccessibleAction) UnoRuntime.queryInterface(
+            act = UnoRuntime.queryInterface(
                           XAccessibleAction.class, Menu);
             act.doAccessibleAction(0);
 

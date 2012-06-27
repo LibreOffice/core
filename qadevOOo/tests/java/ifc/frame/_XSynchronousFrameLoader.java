@@ -93,14 +93,14 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
                 Object oDsk = (
                     (XMultiServiceFactory)tParam.getMSF()).createInstance
                     ("com.sun.star.frame.Desktop") ;
-                XDesktop dsk = (XDesktop) UnoRuntime.queryInterface
+                XDesktop dsk = UnoRuntime.queryInterface
                     (XDesktop.class, oDsk) ;
                 frame = dsk.getCurrentFrame() ;
 
                 Object o = (
                     (XMultiServiceFactory)tParam.getMSF()).createInstance
                     ("com.sun.star.util.URLTransformer") ;
-                xURLTrans = (XURLTransformer) UnoRuntime.queryInterface
+                xURLTrans = UnoRuntime.queryInterface
                     (XURLTransformer.class, o) ;
 
             } catch ( com.sun.star.uno.Exception e ) {

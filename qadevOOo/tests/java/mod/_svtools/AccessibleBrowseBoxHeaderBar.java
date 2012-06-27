@@ -73,7 +73,7 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
             DesktopTools.createDesktop(
             (XMultiServiceFactory) Param.getMSF()));
     }
@@ -132,12 +132,12 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+        XDispatchProvider aProv = UnoRuntime.queryInterface(
             XDispatchProvider.class,
             secondController);
 
@@ -183,7 +183,7 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
 
         XController xCont = the_frame2.getController();
 
-        XSelectionSupplier xSelect = (XSelectionSupplier) UnoRuntime.queryInterface(
+        XSelectionSupplier xSelect = UnoRuntime.queryInterface(
             XSelectionSupplier.class, xCont);
 
         try {
@@ -209,7 +209,7 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
 
         shortWait();
 
-        XAccessibleComponent accComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+        XAccessibleComponent accComp = UnoRuntime.queryInterface(
             XAccessibleComponent.class,
             oObj);
         final Point point = accComp.getLocationOnScreen();

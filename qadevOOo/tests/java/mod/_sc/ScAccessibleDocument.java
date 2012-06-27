@@ -83,8 +83,7 @@ public class ScAccessibleDocument extends TestCase {
         // get the drawpage of drawing here
         log.println( "getting Drawpages" );
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 

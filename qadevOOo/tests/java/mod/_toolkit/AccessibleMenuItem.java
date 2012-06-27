@@ -92,7 +92,7 @@ public class AccessibleMenuItem extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
         shortWait();
@@ -101,7 +101,7 @@ public class AccessibleMenuItem extends TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
@@ -113,7 +113,7 @@ public class AccessibleMenuItem extends TestCase {
         try {
             //activate Edit-Menu
             XAccessible Menu = MenuBar.getAccessibleChild(1);
-            XAccessibleAction act = (XAccessibleAction) UnoRuntime.queryInterface(
+            XAccessibleAction act = UnoRuntime.queryInterface(
                                             XAccessibleAction.class, Menu);
             act.doAccessibleAction(0);
             shortWait();
@@ -130,7 +130,7 @@ public class AccessibleMenuItem extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleAction action = (XAccessibleAction) UnoRuntime.queryInterface(
+        final XAccessibleAction action = UnoRuntime.queryInterface(
                                                  XAccessibleAction.class, oObj);
 
         tEnv.addObjRelation("EventProducer",
@@ -143,7 +143,7 @@ public class AccessibleMenuItem extends TestCase {
             }
         });
 
-        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+        XAccessibleText text = UnoRuntime.queryInterface(
                                        XAccessibleText.class, oObj);
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());

@@ -78,8 +78,7 @@ public class AccessibleOutlineView extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, aModel);
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, aModel);
         final XDrawPages oDPn = oDPS.getDrawPages();
 
         tEnv.addObjRelation("EventMsg","Inserting a drawpage via API has no "+
@@ -133,20 +132,17 @@ public class AccessibleOutlineView extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xImpressDoc);
+        aModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
 
         XInterface oObj = aModel.getCurrentController();
 
         //Change to Outline view
         try {
             String aSlotID = "slot:27010";
-            XDispatchProvider xDispProv = (XDispatchProvider)
-                UnoRuntime.queryInterface( XDispatchProvider.class, oObj );
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-                ((XMultiServiceFactory)Param.getMSF()).
-                createInstance("com.sun.star.util.URLTransformer"));
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, oObj );
+            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+            ((XMultiServiceFactory)Param.getMSF()).
+            createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();

@@ -58,7 +58,7 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent) UnoRuntime.queryInterface
+        XComponent oComp = UnoRuntime.queryInterface
             (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
@@ -73,8 +73,7 @@ public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
             oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.sheet.TableAutoFormats");
 
-            XEnumerationAccess ea = (XEnumerationAccess)
-                        UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
+            XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
 
             oObj = ea.createEnumeration();
 

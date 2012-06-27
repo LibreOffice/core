@@ -103,7 +103,7 @@ public class SvxUnoTextCursor extends TestCase {
                 (xDrawDoc,5000,3500,7500,5000,"Text");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
 
-            XText text = (XText) UnoRuntime.queryInterface(XText.class, oShape) ;
+            XText text = UnoRuntime.queryInterface(XText.class, oShape) ;
 
             XTextCursor cursor = text.createTextCursor() ;
 

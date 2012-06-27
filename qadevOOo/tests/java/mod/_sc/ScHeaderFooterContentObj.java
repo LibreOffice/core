@@ -76,8 +76,7 @@ public class ScHeaderFooterContentObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc);
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -102,10 +101,9 @@ public class ScHeaderFooterContentObj extends TestCase {
         XNameAccess PageStyles = null;
         XStyle StdStyle = null;
 
-        XStyleFamiliesSupplier StyleFam = (XStyleFamiliesSupplier)
-            UnoRuntime.queryInterface(
-                XStyleFamiliesSupplier.class,
-                xSpreadsheetDoc );
+        XStyleFamiliesSupplier StyleFam = UnoRuntime.queryInterface(
+            XStyleFamiliesSupplier.class,
+            xSpreadsheetDoc );
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
         try{
             PageStyles = (XNameAccess) AnyConverter.toObject(

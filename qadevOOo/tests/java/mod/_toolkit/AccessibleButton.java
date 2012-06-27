@@ -96,7 +96,7 @@ public class AccessibleButton extends lib.TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
         util.utils.shortWait(Param.getInt("ShortWait"));
@@ -112,7 +112,7 @@ public class AccessibleButton extends lib.TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
@@ -126,10 +126,10 @@ public class AccessibleButton extends lib.TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        action = (XAccessibleAction) UnoRuntime.queryInterface(
+        action = UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
+        final XAccessibleComponent acomp = UnoRuntime.queryInterface(
                                                    XAccessibleComponent.class,
                                                    oObj);
 
@@ -141,7 +141,7 @@ public class AccessibleButton extends lib.TestCase {
             }
         });
 
-        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+        XAccessibleText text = UnoRuntime.queryInterface(
                                        XAccessibleText.class, oObj);
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
@@ -200,7 +200,7 @@ public class AccessibleButton extends lib.TestCase {
         }
 
         public void run() {
-            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+            XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                                xTextDoc);
 
             XController xController = aModel.getCurrentController();
@@ -208,10 +208,10 @@ public class AccessibleButton extends lib.TestCase {
             //Opening PrinterSetupDialog
             try {
                 String aSlotID = ".uno:Zoom";
-                XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                XDispatchProvider xDispProv = UnoRuntime.queryInterface(
                                                       XDispatchProvider.class,
                                                       xController);
-                XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+                XURLTransformer xParser = UnoRuntime.queryInterface(
                                                   XURLTransformer.class,
                                                   msf.createInstance(
                                                           "com.sun.star.util.URLTransformer"));

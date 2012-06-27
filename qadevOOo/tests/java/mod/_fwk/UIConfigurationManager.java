@@ -65,7 +65,7 @@ public class UIConfigurationManager extends TestCase {
         log.println("Creating instance...");
 
         try {
-            xManager = (XUIConfigurationManager)UnoRuntime.queryInterface(
+            xManager = UnoRuntime.queryInterface(
                     XUIConfigurationManager.class, xMSF.createInstance(
                     "com.sun.star.comp.framework.UIConfigurationManager"));
         }
@@ -87,10 +87,10 @@ public class UIConfigurationManager extends TestCase {
             Object[] props = new Object[2];
             props[0] = deleteCfg;
             props[1] = new Integer(ElementModes.READWRITE);
-            XStorage xRootStorage = (XStorage)UnoRuntime.queryInterface(XStorage.class, xSSF.createInstanceWithArguments(props));
+            XStorage xRootStorage = UnoRuntime.queryInterface(XStorage.class, xSSF.createInstanceWithArguments(props));
             xSubStorage = xRootStorage.openStorageElement("Configurations2", ElementModes.READWRITE);
 
-            XUIConfigurationStorage xConfigStorage =(XUIConfigurationStorage)UnoRuntime.queryInterface(XUIConfigurationStorage.class, xManager);
+            XUIConfigurationStorage xConfigStorage =UnoRuntime.queryInterface(XUIConfigurationStorage.class, xManager);
             xConfigStorage.setStorage(xSubStorage);
             tEnv.addObjRelation("XUIConfigurationStorage.Storage", xSubStorage);
         }
@@ -141,9 +141,9 @@ public class UIConfigurationManager extends TestCase {
                     PropertyValue[]prop = _XUIConfigurationManager.createMenuBarEntry(
                     "Trigger Event", xMenuBarSettings, xMSF, log);
                     _XUIConfigurationManager.createMenuBarItem("Click for Macro",
-                    (XIndexContainer)UnoRuntime.queryInterface(
+                    UnoRuntime.queryInterface(
                     XIndexContainer.class, prop[3].Value), log);
-                    XIndexContainer x = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, xMenuBarSettings);
+                    XIndexContainer x = UnoRuntime.queryInterface(XIndexContainer.class, xMenuBarSettings);
                     x.insertByIndex(x.getCount(), prop);
                     xUIManager.replaceSettings("private:resource/menubar/menubar", xMenuBarSettings);
                     xUIManager.reset();

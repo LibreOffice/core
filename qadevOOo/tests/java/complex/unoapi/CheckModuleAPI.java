@@ -306,9 +306,9 @@ public class CheckModuleAPI extends ComplexTestCase
                 // cws version: all added modules must be tested
                 final String cws = version.substring(4, version.length());
                 final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(cws, param, log);
-                final ArrayList addedModules = cde.getModules();
+                final ArrayList<String> addedModules = cde.getModules();
 
-                final ArrayList moduleNames = new ArrayList();
+                final ArrayList<String> moduleNames = new ArrayList<String>();
                 Iterator iterator = addedModules.iterator();
                 while (iterator.hasNext())
                 {
@@ -320,7 +320,7 @@ public class CheckModuleAPI extends ComplexTestCase
                         moduleNames.add(sModuleName);
                     }
                 }
-                names = (String[]) moduleNames.toArray(new String[0]);
+                names = moduleNames.toArray(new String[0]);
             }
             catch (ParameterNotFoundException ex)
             {
@@ -497,7 +497,7 @@ public class CheckModuleAPI extends ComplexTestCase
         log.println("search for qa/unoapi foldres in all modules based in ");
         log.println("'" + mSRC_ROOT + "'");
 
-        final ArrayList moduleNames = new ArrayList();
+        final ArrayList<String> moduleNames = new ArrayList<String>();
         final File sourceRoot = new File(mSRC_ROOT);
         final File[] sourceTree = sourceRoot.listFiles();
 
@@ -514,7 +514,7 @@ public class CheckModuleAPI extends ComplexTestCase
             }
         }
 
-        final String[] names = (String[]) moduleNames.toArray(new String[0]);
+        final String[] names = moduleNames.toArray(new String[0]);
         return names;
     }
 

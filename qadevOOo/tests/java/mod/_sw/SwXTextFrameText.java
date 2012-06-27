@@ -118,7 +118,7 @@ public class SwXTextFrameText extends TestCase {
             throw new StatusException("Couldn't insert TextFrame ", Ex);
         }
 
-        XText oFText = (XText)UnoRuntime.queryInterface(XText.class, oFrame1);
+        XText oFText = UnoRuntime.queryInterface(XText.class, oFrame1);
         XTextCursor oFCursor = oFText.createTextCursor();
         oFText.insertString(oFCursor, "SwXTextFrameText", false);
 

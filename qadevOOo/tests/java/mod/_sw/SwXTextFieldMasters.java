@@ -111,8 +111,7 @@ public class SwXTextFieldMasters extends TestCase {
 
         // create testobject here
         try {
-            XTextFieldsSupplier oTFS = (XTextFieldsSupplier)
-                UnoRuntime.queryInterface( XTextFieldsSupplier.class, xTextDoc );
+            XTextFieldsSupplier oTFS = UnoRuntime.queryInterface( XTextFieldsSupplier.class, xTextDoc );
 
             oObj = oTFS.getTextFieldMasters();
 

@@ -126,8 +126,7 @@ public class XMLContentExporter extends TestCase {
             oObj = (XInterface) xMSF.createInstanceWithArguments(
                 "com.sun.star.comp.Chart.XMLContentExporter",
                 new Object[] {arg});
-            XExporter xEx = (XExporter)
-                UnoRuntime.queryInterface(XExporter.class,oObj);
+            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
             xEx.setSourceDocument(xChartDoc);
 
             Object oTitle = xChartDoc.getTitle() ;

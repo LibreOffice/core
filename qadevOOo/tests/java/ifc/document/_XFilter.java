@@ -85,7 +85,7 @@ public class _XFilter extends MultiMethodTest {
             sourceDoc = (XComponent)tEnv.getObjRelation("SourceDocument");
         try {
             if (sourceDoc != null) {
-                XExporter xEx = (XExporter)UnoRuntime.queryInterface(
+                XExporter xEx = UnoRuntime.queryInterface(
                                                     XExporter.class,oObj);
                 xEx.setSourceDocument(sourceDoc);
             }

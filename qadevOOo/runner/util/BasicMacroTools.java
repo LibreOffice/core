@@ -66,7 +66,7 @@ public class BasicMacroTools {
             mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
                                                              DocLibCont);
 
-            mLCxLC = (XLibraryContainer) UnoRuntime.queryInterface(
+            mLCxLC = UnoRuntime.queryInterface(
                              XLibraryContainer.class, DocLibCont);
 
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class BasicMacroTools {
             mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
                                                              ASLC);
 
-            mLCxLC = (XLibraryContainer) UnoRuntime.queryInterface(
+            mLCxLC = UnoRuntime.queryInterface(
                              XLibraryContainer.class, ASLC);
 
         } catch (Exception e) {
@@ -117,14 +117,14 @@ public class BasicMacroTools {
             throw new Exception("Could not create DispatchProvider");
         }
 
-        return (XDispatchProvider) UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
                        XDispatchProvider.class, xFrame);
     }
 
     private static XURLTransformer makeParser(XMultiServiceFactory mMSF)
                                        throws java.lang.Exception {
         try {
-            return (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+            return UnoRuntime.queryInterface(
                            XURLTransformer.class, mMSF.createInstance(
                                    "com.sun.star.util.URLTransformer"));
         } catch (Exception e) {
@@ -231,8 +231,7 @@ public class BasicMacroTools {
         Object oProvider = xMSF.createInstance("com.sun.star.configuration.ConfigurationProvider");
 
 
-        XMultiServiceFactory oProviderMSF = (XMultiServiceFactory)
-                        UnoRuntime.queryInterface(XMultiServiceFactory.class, oProvider);
+        XMultiServiceFactory oProviderMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, oProvider);
 
         Object oSecure = oProviderMSF.createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationUpdateAccess",
@@ -246,7 +245,7 @@ public class BasicMacroTools {
         oScriptingSettings.setPropertyValue("SecureURL", new String[]{secureURL});
         oScriptingSettings.setPropertyValue("OfficeBasic", new Integer(2));
 
-        XChangesBatch oSecureChange = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, oSecure);
+        XChangesBatch oSecureChange = UnoRuntime.queryInterface(XChangesBatch.class, oSecure);
         oSecureChange.commitChanges();
     }
 }

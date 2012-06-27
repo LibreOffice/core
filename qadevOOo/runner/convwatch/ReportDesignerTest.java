@@ -115,7 +115,7 @@ class PropertyHelper
        @param _aArrayList
        @return a PropertyValue[]
     */
-    public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList _aPropertyList)
+    public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList<PropertyValue> _aPropertyList)
         {
             // copy the whole PropertyValue List to an PropertyValue Array
             PropertyValue[] aSaveProperties = null;
@@ -131,7 +131,7 @@ class PropertyHelper
                     aSaveProperties = new PropertyValue[_aPropertyList.size()];
                     for (int i = 0;i<_aPropertyList.size(); i++)
                     {
-                        aSaveProperties[i] = (PropertyValue) _aPropertyList.get(i);
+                        aSaveProperties[i] = _aPropertyList.get(i);
                     }
                 }
                 else
@@ -199,7 +199,7 @@ public class ReportDesignerTest extends ComplexTestCase {
                 try
                 {
                     XInterface xInterface = (XInterface) m_xXMultiServiceFactory.createInstance( "com.sun.star.frame.Desktop" );
-                    m_xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xInterface);
+                    m_xDesktop = UnoRuntime.queryInterface(XDesktop.class, xInterface);
                 }
                 catch (com.sun.star.uno.Exception e)
                 {
@@ -388,7 +388,7 @@ public class ReportDesignerTest extends ComplexTestCase {
 //                    log.println("1");
 
                     // PropertySetHelper aHelper = new PropertySetHelper(aObj);
-                XDocumentDataSource xDataSource = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
+                XDocumentDataSource xDataSource = UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
 //                    Object aDatabaseDocmuent = aHelper.getPropertyValueAsObject("DatabaseDocument");
                 XOfficeDatabaseDocument xOfficeDBDoc = xDataSource.getDatabaseDocument();
 
@@ -396,12 +396,12 @@ public class ReportDesignerTest extends ComplexTestCase {
                 assure("can't access DatabaseDocument", xOfficeDBDoc != null);
 //                    log.println("2");
 
-                XModel xDBSource = (XModel)UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
+                XModel xDBSource = UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
                 Object aController = xDBSource.getCurrentController();
                 assure("Controller of xOfficeDatabaseDocument is empty!", aController != null);
 //                     log.println("3");
 
-                XDatabaseDocumentUI aDBDocUI = (XDatabaseDocumentUI)UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
+                XDatabaseDocumentUI aDBDocUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
                 aDBDocUI.connect();
 //                     if (aDBDocUI.isConnected())
 //                     {
@@ -420,14 +420,14 @@ public class ReportDesignerTest extends ComplexTestCase {
                 assure("ActiveConnection is empty", aActiveConnectionObj != null);
 //                     log.println("5");
 
-                XReportDocumentsSupplier xSupplier = (XReportDocumentsSupplier)UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
+                XReportDocumentsSupplier xSupplier = UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
                 xNameAccess = xSupplier.getReportDocuments();
                 assure("xOfficeDatabaseDocument returns no Report Document", xNameAccess != null);
 //                     log.println("5");
 
                 showElements(xNameAccess);
 
-                ArrayList aPropertyList = new ArrayList();
+                ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
                 PropertyValue aActiveConnection = new PropertyValue();
                 aActiveConnection.Name = "ActiveConnection";
@@ -494,7 +494,7 @@ public class ReportDesignerTest extends ComplexTestCase {
             // System.exit(1);
         }
 
-    private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList _aPropertyList /*, int _nType*/ )
+    private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList<PropertyValue> _aPropertyList /*, int _nType*/ )
         {
             if (_xNameAccess != null)
             {
@@ -608,7 +608,7 @@ public class ReportDesignerTest extends ComplexTestCase {
 
             String sOutputURL = URLHelper.getFileURLFromSystemPath(sOutputPath);
 
-            ArrayList aPropertyList = new ArrayList(); // set some properties for storeAsURL
+            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>(); // set some properties for storeAsURL
 
             // PropertyValue aFileFormat = new PropertyValue();
             // aFileFormat.Name = "FilterName";
@@ -621,7 +621,7 @@ public class ReportDesignerTest extends ComplexTestCase {
             aPropertyList.add(aOverwrite);
 
             // store the document in an other directory
-            XStorable aStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, _xComponent);
+            XStorable aStorable = UnoRuntime.queryInterface( XStorable.class, _xComponent);
             if (aStorable != null)
             {
                 log.println("store document as URL: '" + sOutputURL + "'");
@@ -638,10 +638,10 @@ public class ReportDesignerTest extends ComplexTestCase {
             }
         }
 
-    private XComponent loadComponent(String _sName, Object _xComponent, ArrayList _aPropertyList)
+    private XComponent loadComponent(String _sName, Object _xComponent, ArrayList<PropertyValue> _aPropertyList)
         {
             XComponent xDocComponent = null;
-            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface( XComponentLoader.class, _xComponent );
+            XComponentLoader xComponentLoader = UnoRuntime.queryInterface( XComponentLoader.class, _xComponent );
 
             try
             {
@@ -668,7 +668,7 @@ public class ReportDesignerTest extends ComplexTestCase {
     private void closeComponent(XComponent _xDoc)
         {
             // Close the document
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, _xDoc);
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, _xDoc);
             try
             {
                 xCloseable.close(true);

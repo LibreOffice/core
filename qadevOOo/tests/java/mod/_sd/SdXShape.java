@@ -124,11 +124,9 @@ public class SdXShape extends TestCase {
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
-        XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
         XDrawPages oDPn = oDPS.getDrawPages();
-        XIndexAccess oDPi = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
+        XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
         XDrawPage oDP = null;
         try {
             oDP = (XDrawPage) AnyConverter.toObject(
@@ -146,7 +144,7 @@ public class SdXShape extends TestCase {
 
         //get a Shape
         log.println( "getting Shape" );
-        XShapes oShapes = (XShapes) UnoRuntime.queryInterface
+        XShapes oShapes = UnoRuntime.queryInterface
             (XShapes.class, oDP);
         XInterface oObj = SOF.createShape
             (xDrawDoc, 5000, 3500, 7500, 5000, "Rectangle");

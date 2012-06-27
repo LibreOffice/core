@@ -75,8 +75,7 @@ public class SwAccessibleHeaderView extends TestCase {
         XNameAccess PageStyles = null;
         XStyle StdStyle = null;
 
-        XStyleFamiliesSupplier StyleFam = (XStyleFamiliesSupplier)
-            UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDoc);
+        XStyleFamiliesSupplier StyleFam = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDoc);
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
 
         // obtains style 'Standatd' from style family 'PageStyles'
@@ -117,8 +116,7 @@ public class SwAccessibleHeaderView extends TestCase {
             throw new StatusException("Couldn't set propertyValue...", e);
         }
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 

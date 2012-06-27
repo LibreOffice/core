@@ -181,9 +181,8 @@ public class ConnectionLineAccessibility extends TestCase
         try
         {
             log.println("writing database file ...");
-            XDocumentDataSource xDDS = (XDocumentDataSource)
-            UnoRuntime.queryInterface(XDocumentDataSource.class, oDBSource);
-            store = (XStorable) UnoRuntime.queryInterface(XStorable.class,
+            XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, oDBSource);
+            store = UnoRuntime.queryInterface(XStorable.class,
                     xDDS.getDatabaseDocument());
 
             aFile = utils.getOfficeTemp((XMultiServiceFactory) Param.getMSF())+"ConnectionLine.odb";
@@ -198,7 +197,7 @@ public class ConnectionLineAccessibility extends TestCase
             throw new StatusException(Status.failed("Couldn't register object"));
         }
 
-        isolConnection = (XIsolatedConnection) UnoRuntime.queryInterface(
+        isolConnection = UnoRuntime.queryInterface(
                 XIsolatedConnection.class,
                 oDBSource);
 
@@ -243,7 +242,7 @@ public class ConnectionLineAccessibility extends TestCase
             }
         }
 
-        XQueryDefinitionsSupplier querySuppl = (XQueryDefinitionsSupplier) UnoRuntime.queryInterface(
+        XQueryDefinitionsSupplier querySuppl = UnoRuntime.queryInterface(
                 XQueryDefinitionsSupplier.class,
                 oDBSource);
 
@@ -383,7 +382,7 @@ public class ConnectionLineAccessibility extends TestCase
             log.println("... done");
             XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             Object sfa = xMSF.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSFA = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, sfa);
+            XSimpleFileAccess xSFA = UnoRuntime.queryInterface(XSimpleFileAccess.class, sfa);
             log.println("deleting database file");
             xSFA.kill(aFile);
             log.println("Could delete file "+aFile+": "+!xSFA.exists(aFile));

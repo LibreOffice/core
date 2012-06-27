@@ -213,7 +213,7 @@ public class RunnerService implements XJob, XServiceInfo,
            return pVal;
         }
 
-        ArrayList v = new ArrayList(600);
+        ArrayList<String> v = new ArrayList<String>(600);
         try {
             // open connection to  Jar
             java.net.JarURLConnection con =

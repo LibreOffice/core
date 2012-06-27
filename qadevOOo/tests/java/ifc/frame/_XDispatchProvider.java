@@ -70,10 +70,9 @@ public class _XDispatchProvider extends MultiMethodTest {
 
         url.Complete = dispatchUrl;
         try {
-            XURLTransformer xParser=(XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-                    ((XMultiServiceFactory)tParam.getMSF()).createInstance
-                        ("com.sun.star.util.URLTransformer"));
+            XURLTransformer xParser=UnoRuntime.queryInterface(XURLTransformer.class,
+                ((XMultiServiceFactory)tParam.getMSF()).createInstance
+                    ("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of
             // URL objects.
             URL[] aParseURL = new URL[1];
@@ -105,10 +104,9 @@ public class _XDispatchProvider extends MultiMethodTest {
         url2.Complete = dispatchUrl;
         try {
             log.println("Parsing URL");
-            XURLTransformer xParser = (XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-                    ((XMultiServiceFactory)tParam.getMSF()).createInstance
-                        ("com.sun.star.util.URLTransformer"));
+            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+                ((XMultiServiceFactory)tParam.getMSF()).createInstance
+                    ("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of
             // URL objects.
             URL[] aParseURL = new URL[1];

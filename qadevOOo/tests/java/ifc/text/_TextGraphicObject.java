@@ -103,7 +103,7 @@ public class _TextGraphicObject extends MultiPropertyTest {
         boolean result = true;
 
         try {
-            XIndexContainer imgMap = (XIndexContainer) UnoRuntime.queryInterface(
+            XIndexContainer imgMap = UnoRuntime.queryInterface(
                                              XIndexContainer.class,
                                              oObj.getPropertyValue("ImageMap"));
             int previous = imgMap.getCount();
@@ -112,7 +112,7 @@ public class _TextGraphicObject extends MultiPropertyTest {
             Object im = tEnv.getObjRelation("IMGMAP");
             imgMap.insertByIndex(0, im);
             oObj.setPropertyValue("ImageMap", imgMap);
-            imgMap = (XIndexContainer) UnoRuntime.queryInterface(
+            imgMap = UnoRuntime.queryInterface(
                              XIndexContainer.class,
                              oObj.getPropertyValue("ImageMap"));
 

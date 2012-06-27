@@ -97,7 +97,7 @@ public class MultiMethodTest
     /**
      * Contains names of the methods have been already called
      */
-    private ArrayList methCalled = new ArrayList(10);
+    private ArrayList<String> methCalled = new ArrayList<String>(10);
 
     /**
      * Disposes the test environment, which was corrupted by the test.
@@ -147,7 +147,7 @@ public class MultiMethodTest
         // this.log = log;
         this.entry = entry;
         this.tRes = new TestResult();
-        Class testedClass;
+        Class<?> testedClass;
 
         // Some fake code for a self test.
         // For normal test we must not be a "ifc.qadevooo._SelfTest"
@@ -445,7 +445,7 @@ public class MultiMethodTest
             mName = mName.substring(0, mName.length() - 2);
         }
 
-        final Class[] paramTypes = new Class[0];
+        final Class<?>[] paramTypes = new Class[0];
 
         try
         {

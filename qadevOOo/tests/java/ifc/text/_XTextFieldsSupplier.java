@@ -72,17 +72,14 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
                 // we want to create an instance of ScCellFieldObj.
                 // to do this we must get an MultiServiceFactory.
 
-                XMultiServiceFactory _oMSF = (XMultiServiceFactory)
-                    UnoRuntime.queryInterface(XMultiServiceFactory.class, xSheetDoc);
+                XMultiServiceFactory _oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xSheetDoc);
 
                 aField = (XInterface)
                     _oMSF.createInstance("com.sun.star.text.TextField.URL");
-                oContent = (XTextContent)
-                    UnoRuntime.queryInterface(XTextContent.class, aField);
+                oContent = UnoRuntime.queryInterface(XTextContent.class, aField);
 
                 XSpreadsheets oSheets = xSheetDoc.getSheets() ;
-                XIndexAccess oIndexSheets = (XIndexAccess)
-                    UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+                XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
                 XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
                         new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
@@ -99,15 +96,14 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
                     XPropertySet PFieldMaster = (XPropertySet) UnoRuntime.queryInterface
                         (XPropertySet.class,(XInterface) FieldMaster);
 
-                    XDependentTextField xTF = (XDependentTextField)
-                        UnoRuntime.queryInterface(XDependentTextField.class,aField);
+                    XDependentTextField xTF = UnoRuntime.queryInterface(XDependentTextField.class,aField);
 
                     PFieldMaster.setPropertyValue("Content","Some content");
 
                     xTF.attachTextFieldMaster(PFieldMaster);
                 }
 
-                oText = (XText)UnoRuntime.queryInterface(XText.class, xCell);
+                oText = UnoRuntime.queryInterface(XText.class, xCell);
                 XTextCursor the_Cursor = oText.createTextCursor();
 
                 oText.insertTextContent(

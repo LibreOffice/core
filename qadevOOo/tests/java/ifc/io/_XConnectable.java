@@ -53,7 +53,7 @@ public class _XConnectable extends MultiMethodTest {
     */
     public void before() {
         XInterface x = (XInterface)tEnv.getObjRelation("Connectable");
-        xConnect = (XConnectable)UnoRuntime.queryInterface(
+        xConnect = UnoRuntime.queryInterface(
                                                     XConnectable.class, x) ;
     }
 

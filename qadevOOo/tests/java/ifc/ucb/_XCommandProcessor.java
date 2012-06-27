@@ -126,7 +126,7 @@ public class _XCommandProcessor extends MultiMethodTest {
             throw new StatusException("Unexpected exception", e);
         }
 
-        XCommandInfo xCmdInfo = (XCommandInfo)UnoRuntime.queryInterface(
+        XCommandInfo xCmdInfo = UnoRuntime.queryInterface(
                 XCommandInfo.class, result);
 
         CommandInfo[] cmdInfo = xCmdInfo.getCommands();

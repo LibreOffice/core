@@ -74,8 +74,7 @@ public class ScLabelRangeObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -104,8 +103,7 @@ public class ScLabelRangeObj extends TestCase {
             XPropertySet docProps = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
             Object ranges = docProps.getPropertyValue("ColumnLabelRanges");
-            XLabelRanges lRanges = (XLabelRanges)
-                UnoRuntime.queryInterface(XLabelRanges.class, ranges);
+            XLabelRanges lRanges = UnoRuntime.queryInterface(XLabelRanges.class, ranges);
 
             log.println("Adding at least one element for ElementAccess interface");
             CellRangeAddress aRange2 = new CellRangeAddress((short)0, 0, 1, 0, 6);

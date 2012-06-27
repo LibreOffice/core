@@ -86,7 +86,7 @@ public class AccessibleWindow extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -154,7 +154,7 @@ public class AccessibleWindow extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);
 
         XInterface oObj = null;
@@ -175,13 +175,13 @@ public class AccessibleWindow extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        final XExtendedToolkit tk = UnoRuntime.queryInterface(
                                             XExtendedToolkit.class, toolkit);
 
         tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
-                XWindow xWin = (XWindow) UnoRuntime.queryInterface(
+                XWindow xWin = UnoRuntime.queryInterface(
                                        XWindow.class, tk.getActiveTopWindow());
                 Rectangle newPosSize = xWin.getPosSize();
                 newPosSize.Width = newPosSize.Width - 20;

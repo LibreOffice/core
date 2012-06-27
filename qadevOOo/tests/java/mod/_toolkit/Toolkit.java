@@ -90,10 +90,10 @@ public class Toolkit extends TestCase {
         XControlModel the_Model = aShape.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
-        XController cntrlr = (XController) UnoRuntime.queryInterface(
+        XController cntrlr = UnoRuntime.queryInterface(
                                      XController.class,
                                      xTextDoc.getCurrentController());
 
@@ -112,7 +112,7 @@ public class Toolkit extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         log.println("    creating a new environment for toolkit object");
 

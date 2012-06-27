@@ -66,8 +66,7 @@ public class ScIndexEnumeration_CellAnnotationsEnumeration extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -80,8 +79,7 @@ public class ScIndexEnumeration_CellAnnotationsEnumeration extends TestCase {
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
@@ -107,12 +105,10 @@ public class ScIndexEnumeration_CellAnnotationsEnumeration extends TestCase {
                 "Exception occurred while filling cells", e);
         }
 
-        XSheetAnnotationsSupplier sas = (XSheetAnnotationsSupplier)
-            UnoRuntime.queryInterface(XSheetAnnotationsSupplier.class, oSheet);
+        XSheetAnnotationsSupplier sas = UnoRuntime.queryInterface(XSheetAnnotationsSupplier.class, oSheet);
 
         XSheetAnnotations anno = sas.getAnnotations();
-        XEnumerationAccess ea = (XEnumerationAccess)
-                    UnoRuntime.queryInterface(XEnumerationAccess.class, anno);
+        XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class, anno);
 
         oObj = ea.createEnumeration();
 

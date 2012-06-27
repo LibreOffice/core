@@ -130,7 +130,7 @@ public class _GraphicObjectShape extends MultiPropertyTest {
             }
 
             Object o = oObj.getPropertyValue("ImageMap");
-            XIndexContainer xIndexContainer = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, o);
+            XIndexContainer xIndexContainer = UnoRuntime.queryInterface(XIndexContainer.class, o);
             util.dbg.printInterfaces(xIndexContainer);
             int elementCountFirst = xIndexContainer.getCount();
             xIndexContainer.insertByIndex(elementCountFirst, imapObject);
@@ -140,7 +140,7 @@ public class _GraphicObjectShape extends MultiPropertyTest {
             // implementation is needed. See css.lang.XUnoTunnel
             oObj.setPropertyValue("ImageMap", xIndexContainer);
             Object newObject = oObj.getPropertyValue("ImageMap");
-            xIndexContainer = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, newObject);
+            xIndexContainer = UnoRuntime.queryInterface(XIndexContainer.class, newObject);
 
             int elementCountSecond = xIndexContainer.getCount();
             result = (elementCountFirst + 1 == elementCountSecond);

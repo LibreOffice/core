@@ -81,8 +81,7 @@ public class ScFilterDescriptorBase extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -106,8 +105,7 @@ public class ScFilterDescriptorBase extends TestCase {
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
@@ -134,8 +132,7 @@ public class ScFilterDescriptorBase extends TestCase {
                 "Exception occurred while filling cells", e);
         }
 
-        SF = (XSheetFilterable)
-            UnoRuntime.queryInterface(XSheetFilterable.class, oSheet);
+        SF = UnoRuntime.queryInterface(XSheetFilterable.class, oSheet);
 
         oObj = SF.createFilterDescriptor(true);
 

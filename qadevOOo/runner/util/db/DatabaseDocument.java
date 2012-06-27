@@ -37,13 +37,13 @@ public class DatabaseDocument
         m_orb = _orb;
         m_dataSource = _dataSource;
 
-        XDocumentDataSource docDataSource = (XDocumentDataSource)UnoRuntime.queryInterface(
+        XDocumentDataSource docDataSource = UnoRuntime.queryInterface(
             XDocumentDataSource.class, m_dataSource.getDataSource() );
-        m_databaseDocument = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(XOfficeDatabaseDocument.class,
+        m_databaseDocument = UnoRuntime.queryInterface(XOfficeDatabaseDocument.class,
             docDataSource.getDatabaseDocument() );
 
-        m_model = (XModel)UnoRuntime.queryInterface( XModel.class, m_databaseDocument );
-        m_storeDoc = (XStorable)UnoRuntime.queryInterface( XStorable.class, m_databaseDocument );
+        m_model = UnoRuntime.queryInterface( XModel.class, m_databaseDocument );
+        m_storeDoc = UnoRuntime.queryInterface( XStorable.class, m_databaseDocument );
     }
 
     public DataSource getDataSource()

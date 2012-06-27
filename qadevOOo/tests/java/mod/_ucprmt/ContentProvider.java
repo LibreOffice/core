@@ -81,7 +81,7 @@ public class ContentProvider extends TestCase {
         try {
             oObj = (XInterface) xMSF.createInstance
                 ("com.sun.star.ucb.RemoteAccessContentProvider");
-            cntIDFac = (XContentIdentifierFactory) UnoRuntime.queryInterface
+            cntIDFac = UnoRuntime.queryInterface
                     (XContentIdentifierFactory.class, oObj) ;
         }
         catch( com.sun.star.uno.Exception e ) {

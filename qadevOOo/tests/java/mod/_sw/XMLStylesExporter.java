@@ -121,7 +121,7 @@ public class XMLStylesExporter extends TestCase {
             oObj = (XInterface) xMSF.createInstanceWithArguments(
                 "com.sun.star.comp.Writer.XMLStylesExporter",
                 new Object[] {arg});
-            XExporter xEx = (XExporter) UnoRuntime.queryInterface
+            XExporter xEx = UnoRuntime.queryInterface
                 (XExporter.class,oObj);
             xEx.setSourceDocument(xTextDoc);
         } catch (com.sun.star.uno.Exception e) {
@@ -139,7 +139,7 @@ public class XMLStylesExporter extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // Obtain Footnotes properties
-        XFootnotesSupplier supp = (XFootnotesSupplier) UnoRuntime.queryInterface
+        XFootnotesSupplier supp = UnoRuntime.queryInterface
             (XFootnotesSupplier.class, xTextDoc);
         XPropertySet set = supp.getFootnoteSettings();
 

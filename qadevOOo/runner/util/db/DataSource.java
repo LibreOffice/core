@@ -45,7 +45,7 @@ public class DataSource
         m_orb = _orb;
         try
         {
-            m_dataSource = (XDataSource)UnoRuntime.queryInterface( XDataSource.class,
+            m_dataSource = UnoRuntime.queryInterface( XDataSource.class,
                 m_orb.createInstance( "com.sun.star.sdb.DataSource" ) );
             m_properties = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
                 m_dataSource );
@@ -90,7 +90,7 @@ public class DataSource
         try
         {
             dataSourceName = (String)m_properties.getPropertyValue( "Name" );
-            XNamingService dbContext = (XNamingService)UnoRuntime.queryInterface( XNamingService.class,
+            XNamingService dbContext = UnoRuntime.queryInterface( XNamingService.class,
             m_orb.createInstance( "com.sun.star.sdb.DatabaseContext" ) );
             dbContext.revokeObject( dataSourceName );
         }

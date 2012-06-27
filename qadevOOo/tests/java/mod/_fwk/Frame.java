@@ -102,7 +102,7 @@ public class Frame extends TestCase {
      */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         try {
-            XCloseable xTextClose = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xTextDoc);
+            XCloseable xTextClose = UnoRuntime.queryInterface(XCloseable.class, xTextDoc);
             xTextClose.close(true);
         } catch(Exception e){}
 

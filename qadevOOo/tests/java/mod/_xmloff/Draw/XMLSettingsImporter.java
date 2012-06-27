@@ -162,8 +162,7 @@ public class XMLSettingsImporter extends TestCase {
 
         tEnv.addObjRelation("XDocumentHandler.XMLData", xml);
         final PrintWriter logF = log;
-        XModel xDrawModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xDrawDoc);
+        XModel xDrawModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
         XController xController = xDrawModel.getCurrentController();
         final XPropertySet xPropSet = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, xController);

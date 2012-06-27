@@ -121,7 +121,7 @@ public class XMLSettingsExporter extends TestCase {
             oObj = (XInterface) xMSF.createInstanceWithArguments(
                 "com.sun.star.comp.Math.XMLSettingsExporter",
                 new Object[] {arg});
-            XExporter xEx = (XExporter) UnoRuntime.queryInterface
+            XExporter xEx = UnoRuntime.queryInterface
                 (XExporter.class,oObj);
             xEx.setSourceDocument(xMathDoc);
 

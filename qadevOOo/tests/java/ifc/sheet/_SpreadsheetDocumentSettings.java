@@ -72,10 +72,10 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
 
         protected boolean compare(Object obj1, Object obj2) {
             Locale loc = new Locale("ru", "RU", "");
-            XForbiddenCharacters fc1 = (XForbiddenCharacters) UnoRuntime.queryInterface(
+            XForbiddenCharacters fc1 = UnoRuntime.queryInterface(
                                                XForbiddenCharacters.class,
                                                obj1);
-            XForbiddenCharacters fc2 = (XForbiddenCharacters) UnoRuntime.queryInterface(
+            XForbiddenCharacters fc2 = UnoRuntime.queryInterface(
                                                XForbiddenCharacters.class,
                                                obj2);
             boolean has1 = fc1.hasForbiddenCharacters(loc);

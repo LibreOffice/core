@@ -68,8 +68,7 @@ public class ScRecentFunctionsObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface(XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 

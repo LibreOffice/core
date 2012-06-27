@@ -72,9 +72,8 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
      */
     protected void before() /* throws Exception*/ {
 
-        xQueryAna = (XSingleSelectQueryAnalyzer)
-                      UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,
-                      tEnv.getObjRelation("xQueryAna"));
+        xQueryAna = UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,
+          tEnv.getObjRelation("xQueryAna"));
 
         if (xQueryAna == null) {
             throw new StatusException(Status.failed(

@@ -45,11 +45,11 @@ public class _XEventBroadcaster extends MultiMethodTest {
     }
 
     private void switchFocus() {
-        XModel docModel = (XModel) UnoRuntime.queryInterface(
+        XModel docModel = UnoRuntime.queryInterface(
                 XModel.class,tEnv.getTestObject());
         docModel.getCurrentController().getFrame().getContainerWindow().setFocus();
         util.utils.shortWait(1000);
-        XController xc = (XController) UnoRuntime.queryInterface(XController.class,tEnv.getObjRelation("CONT2"));
+        XController xc = UnoRuntime.queryInterface(XController.class,tEnv.getObjRelation("CONT2"));
         xc.getFrame().getContainerWindow().setFocus();
     }
 

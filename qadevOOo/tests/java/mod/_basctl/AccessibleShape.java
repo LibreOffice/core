@@ -55,7 +55,7 @@ public class AccessibleShape extends TestCase {
         try {
             XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
             Object o = xMSF.createInstance("com.sun.star.frame.Desktop");
-            XDesktop xDesk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, o);
+            XDesktop xDesk = UnoRuntime.queryInterface(XDesktop.class, o);
             DesktopTools.closeDoc(xDesk.getCurrentFrame());
         } catch (Exception e) {
             log.println("Couldn't close IDE");
@@ -67,14 +67,14 @@ public class AccessibleShape extends TestCase {
         log.println( "creating a test environment" );
         String aURL=utils.getFullTestURL("basDialog.odt");
         xTextDoc = WriterTools.loadTextDoc(xMSF,aURL);
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
         XFrame xFrame = xModel.getCurrentController().getFrame();
-        XDispatchProvider xDPP = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
+        XDispatchProvider xDPP = UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
 
         log.println( "opening the basic dialog editor" );
         try {
             Object o = xMSF.createInstance("com.sun.star.frame.DispatchHelper");
-            XDispatchHelper xDPH = (XDispatchHelper) UnoRuntime.queryInterface(XDispatchHelper.class, o);
+            XDispatchHelper xDPH = UnoRuntime.queryInterface(XDispatchHelper.class, o);
             PropertyValue[] aArgs = new PropertyValue[4];
             aArgs[0] = new PropertyValue();
             aArgs[0].Name = "Document";

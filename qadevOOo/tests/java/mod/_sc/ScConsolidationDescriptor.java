@@ -69,8 +69,7 @@ public class ScConsolidationDescriptor extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -92,8 +91,7 @@ public class ScConsolidationDescriptor extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        XConsolidatable xConsolidate = (XConsolidatable)
-            UnoRuntime.queryInterface(XConsolidatable.class, xSheetDoc);
+        XConsolidatable xConsolidate = UnoRuntime.queryInterface(XConsolidatable.class, xSheetDoc);
 
         oObj = xConsolidate.createConsolidationDescriptor(true);
         // create testobject here

@@ -163,8 +163,7 @@ public class XMLSettingsImporter extends TestCase {
         tEnv.addObjRelation("XDocumentHandler.XMLData", xml) ;
 
         // get property before import
-        XModel xImpressModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xImpressDoc);
+        XModel xImpressModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
         XController xController = xImpressModel.getCurrentController();
         final XPropertySet xPropSet = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, xController);

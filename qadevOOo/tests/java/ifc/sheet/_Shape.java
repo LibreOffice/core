@@ -27,7 +27,7 @@ import lib.MultiPropertyTest;
 
 public class _Shape extends MultiPropertyTest {
     public void _Anchor() {
-        XSpreadsheetDocument xSheetDoc = (XSpreadsheetDocument) UnoRuntime.queryInterface(
+        XSpreadsheetDocument xSheetDoc = UnoRuntime.queryInterface(
                                                  XSpreadsheetDocument.class,
                                                  tEnv.getObjRelation(
                                                          "DOCUMENT"));

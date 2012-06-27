@@ -61,8 +61,7 @@ public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -90,8 +89,7 @@ public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
             throw new StatusException("Couldn't get NamedRanges", e);
         }
 
-        XNamedRanges xNamedRanges = (XNamedRanges)
-            UnoRuntime.queryInterface(XNamedRanges.class, ranges);
+        XNamedRanges xNamedRanges = UnoRuntime.queryInterface(XNamedRanges.class, ranges);
 
         CellRangeAddress DataArea = new CellRangeAddress((short)0, 0, 0, 2, 2);
         CellAddress base = new CellAddress(DataArea.Sheet,
@@ -105,8 +103,7 @@ public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
 
         oObj = xNamedRanges;
 
-        XEnumerationAccess ea = (XEnumerationAccess)
-                    UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
+        XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
 
         oObj = ea.createEnumeration();
 

@@ -70,8 +70,7 @@ public class _XCellCursor extends MultiMethodTest {
         int startCol, endCol, startRow, endRow = 0;
         int startCol2, endCol2, startRow2, endRow2 = 0;
 
-        XCellRangeAddressable oRange = (XCellRangeAddressable)
-            UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
+        XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
         CellRangeAddress oAddr = oRange.getRangeAddress();
         startRow = oAddr.StartRow;
         startCol = oAddr.StartColumn;
@@ -105,8 +104,7 @@ public class _XCellCursor extends MultiMethodTest {
         int startCol, endCol, startRow, endRow = 0;
         int startCol2, endCol2, startRow2, endRow2 = 0;
 
-        XCellRangeAddressable oRange = (XCellRangeAddressable)
-            UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
+        XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
         CellRangeAddress oAddr = oRange.getRangeAddress();
         startRow = oAddr.StartRow;
         startCol = oAddr.StartColumn;
@@ -139,8 +137,7 @@ public class _XCellCursor extends MultiMethodTest {
         int startCol, endCol, startRow, endRow = 0;
         int startCol2, endCol2, startRow2, endRow2 = 0;
 
-        XCellRangeAddressable oRange = (XCellRangeAddressable)
-                  UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
+        XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
         CellRangeAddress oAddr = oRange.getRangeAddress();
         startRow = oAddr.StartRow;
         startCol = oAddr.StartColumn;
@@ -174,8 +171,7 @@ public class _XCellCursor extends MultiMethodTest {
         boolean bResult = false;
         int startCol, endCol, startRow, endRow = 0;
 
-        XCellRangeAddressable oRange = (XCellRangeAddressable)
-                UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
+        XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
         oObj.gotoStart();
         CellRangeAddress oAddr = oRange.getRangeAddress();
         startRow = oAddr.StartRow;
@@ -201,18 +197,15 @@ public class _XCellCursor extends MultiMethodTest {
         //gotoEnd gets it's own cursor to see a change
         oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
         XCellRange testRange = oSheet.getCellRangeByName("$A$1:$g$7") ;
-        XSheetCellRange testSheetRange = (XSheetCellRange)
-                    UnoRuntime.queryInterface(XSheetCellRange.class,testRange);
+        XSheetCellRange testSheetRange = UnoRuntime.queryInterface(XSheetCellRange.class,testRange);
         XSheetCellCursor oCellCursor = oSheet.createCursorByRange
             (testSheetRange);
-        XCellCursor oCursor = (XCellCursor)
-            UnoRuntime.queryInterface(XCellCursor.class,oCellCursor);
+        XCellCursor oCursor = UnoRuntime.queryInterface(XCellCursor.class,oCellCursor);
 
         boolean bResult = false;
         int startCol, endCol, startRow, endRow = 0;
 
-        XCellRangeAddressable oRange = (XCellRangeAddressable)
-            UnoRuntime.queryInterface(XCellRangeAddressable.class, oCursor);
+        XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oCursor);
         oCursor.gotoEnd();
         CellRangeAddress oAddr = oRange.getRangeAddress();
         startRow = oAddr.StartRow;

@@ -88,8 +88,7 @@ public class _XDataDefinitionSupplier extends MultiMethodTest {
      */
     public void _getDataDefinitionByConnection() {
         boolean bRes = true;
-        XDriver xDriver = (XDriver)
-            UnoRuntime.queryInterface(XDriver.class, oObj);
+        XDriver xDriver = UnoRuntime.queryInterface(XDriver.class, oObj);
         if (xDriver == null) {
             log.println("The XDriver interface isn't supported");
             tRes.tested("getDataDefinitionByConnection()",

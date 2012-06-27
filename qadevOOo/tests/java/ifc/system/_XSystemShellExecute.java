@@ -74,8 +74,7 @@ public class _XSystemShellExecute extends MultiMethodTest {
         try {
             XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
             Object fa = xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            xFileAccess = (XSimpleFileAccess)
-                UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
+            xFileAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class, fa);
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't create SimpleFileAccess:" + e);
             tRes.tested("execute()", false);

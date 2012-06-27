@@ -96,7 +96,7 @@ public class SwXTextTableRow extends TestCase {
         try {
          log.println("getting table row");
             XTableRows oTRn = oTable.getRows();
-            XIndexAccess oIA = (XIndexAccess) UnoRuntime.queryInterface
+            XIndexAccess oIA = UnoRuntime.queryInterface
                 (XIndexAccess.class,oTRn);
             oObj = (XPropertySet) AnyConverter.toObject(
                     new Type(XPropertySet.class),oIA.getByIndex(1));

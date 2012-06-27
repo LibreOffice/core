@@ -66,8 +66,7 @@ public class ScIndexEnumeration_ScenariosEnumeration extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -77,8 +76,7 @@ public class ScIndexEnumeration_ScenariosEnumeration extends TestCase {
         XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
@@ -103,13 +101,11 @@ public class ScIndexEnumeration_ScenariosEnumeration extends TestCase {
             throw new StatusException("Couldn't fill some cell", e);
         }
 
-        XScenariosSupplier xSupp = (XScenariosSupplier)
-            UnoRuntime.queryInterface(XScenariosSupplier.class, oSheet);
+        XScenariosSupplier xSupp = UnoRuntime.queryInterface(XScenariosSupplier.class, oSheet);
         XCellRange oRange = (XCellRange)
             UnoRuntime.queryInterface(XCellRange.class, oSheet);
         XCellRange myRange = oRange.getCellRangeByName("A1:N4");
-        XCellRangeAddressable oRangeAddr = (XCellRangeAddressable)
-            UnoRuntime.queryInterface(XCellRangeAddressable.class, myRange);
+        XCellRangeAddressable oRangeAddr = UnoRuntime.queryInterface(XCellRangeAddressable.class, myRange);
         CellRangeAddress myAddr = oRangeAddr.getRangeAddress();
 
         CellRangeAddress[] oAddr = new CellRangeAddress[1];
@@ -119,8 +115,7 @@ public class ScIndexEnumeration_ScenariosEnumeration extends TestCase {
 
         XInterface oObj = xSupp.getScenarios();
 
-        XEnumerationAccess ea = (XEnumerationAccess)
-                    UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
+        XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
 
         oObj = ea.createEnumeration();
 

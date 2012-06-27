@@ -32,7 +32,7 @@ import java.util.Iterator;
 public class FileLogWriter extends PrintWriter implements LogWriter {
 
 
-    HashMap mFileWriters = null;
+    HashMap<String, FileWriter> mFileWriters = null;
     boolean logging = false;
     share.DescEntry entry = null;
     share.Watcher ow = null;
@@ -61,7 +61,7 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
     public void addFileLog(String filePath){
         try{
             if(mFileWriters == null)
-                mFileWriters = new HashMap();
+                mFileWriters = new HashMap<String, FileWriter>();
             mFileWriters.put(filePath, new FileWriter(filePath));
         }catch(IOException e ){
             e.printStackTrace(this);
@@ -92,9 +92,9 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
             if(mFileWriters != null && mFileWriters.size() > 0){
                 try{
                     FileWriter fw = null;
-                    Iterator iter = mFileWriters.values().iterator();
+                    Iterator<FileWriter> iter = mFileWriters.values().iterator();
                     while(iter.hasNext()){
-                        fw = (FileWriter) iter.next();
+                        fw = iter.next();
                         fw.write("LOG> " + msg + "\n");
                         fw.flush();
                     }

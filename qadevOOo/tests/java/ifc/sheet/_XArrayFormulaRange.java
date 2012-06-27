@@ -80,8 +80,7 @@ public class _XArrayFormulaRange extends MultiMethodTest {
 
         log.println("checking that formula was set correctly...");
         XCellRangeAddressable crAddr =
-            (XCellRangeAddressable)
-                 UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
+            UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
         CellRangeAddress addr = crAddr.getRangeAddress() ;
         XSpreadsheet oSheet = (XSpreadsheet)tEnv.getObjRelation("SHEET");
         if (oSheet == null) throw new StatusException(Status.failed

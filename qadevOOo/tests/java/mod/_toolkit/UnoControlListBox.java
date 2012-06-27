@@ -98,7 +98,7 @@ public class UnoControlListBox extends TestCase {
         XControlModel the_Model2 = aShape2.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
@@ -134,12 +134,12 @@ public class UnoControlListBox extends TestCase {
         // adding object relation for XItemListener
         ifc.awt._XItemListener.TestItemListener listener =
                 new ifc.awt._XItemListener.TestItemListener();
-        XListBox list = (XListBox) UnoRuntime.queryInterface(XListBox.class,
+        XListBox list = UnoRuntime.queryInterface(XListBox.class,
                                                              oObj);
         list.addItemListener(listener);
         tEnv.addObjRelation("TestItemListener", listener);
 
-        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow forObjRel = UnoRuntime.queryInterface(XWindow.class,
                                                                 aControl);
 
         tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);

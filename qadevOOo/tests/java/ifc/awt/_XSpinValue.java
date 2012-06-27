@@ -154,17 +154,17 @@ public class _XSpinValue extends MultiMethodTest {
     private void adjustScrollBar() {
 
 
-        XSpinValue sv = (XSpinValue) UnoRuntime.queryInterface(
+        XSpinValue sv = UnoRuntime.queryInterface(
                                 XSpinValue.class, tEnv.getTestObject());
 
         sv.setValue(500);
 
         shortWait();
 
-        XAccessible acc = (XAccessible) UnoRuntime.queryInterface(
+        XAccessible acc = UnoRuntime.queryInterface(
                                   XAccessible.class, tEnv.getTestObject());
 
-        XAccessibleComponent aCom = (XAccessibleComponent) UnoRuntime.queryInterface(
+        XAccessibleComponent aCom = UnoRuntime.queryInterface(
                                             XAccessibleComponent.class,
                                             acc.getAccessibleContext());
 

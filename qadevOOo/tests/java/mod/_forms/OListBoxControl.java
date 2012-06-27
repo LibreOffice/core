@@ -65,7 +65,7 @@ public class OListBoxControl extends TestCase {
         log.println("    disposing xTextDoc ");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                                         XCloseable.class, xTextDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
@@ -98,7 +98,7 @@ public class OListBoxControl extends TestCase {
         XControlModel the_Model2 = aShape2.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                         XControlAccess.class,xTextDoc.getCurrentController());
 
         //now get the OListBoxControl
@@ -130,16 +130,14 @@ public class OListBoxControl extends TestCase {
         // Adding relation for XItemListener
         ifc.awt._XItemListener.TestItemListener listener =
             new ifc.awt._XItemListener.TestItemListener() ;
-        final XListBox box = (XListBox) UnoRuntime.queryInterface(XListBox.class, oObj) ;
+        final XListBox box = UnoRuntime.queryInterface(XListBox.class, oObj) ;
         box.addItemListener(listener) ;
         tEnv.addObjRelation("TestItemListener", listener) ;
 
         // Adding relation for XWindow
-        XWindow forObjRel = (XWindow)
-                            UnoRuntime.queryInterface(XWindow.class, anotherCtrl);
+        XWindow forObjRel = UnoRuntime.queryInterface(XWindow.class, anotherCtrl);
 
-        XWindow objWin = (XWindow)
-                            UnoRuntime.queryInterface(XWindow.class, oObj);
+        XWindow objWin = UnoRuntime.queryInterface(XWindow.class, oObj);
 
         tEnv.addObjRelation("XWindow.AnotherWindow",forObjRel);
         tEnv.addObjRelation("XWindow.ControlShape",aShape);

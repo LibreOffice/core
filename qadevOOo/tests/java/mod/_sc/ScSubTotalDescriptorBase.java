@@ -86,8 +86,7 @@ public class ScSubTotalDescriptorBase extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -107,8 +106,7 @@ public class ScSubTotalDescriptorBase extends TestCase {
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
@@ -123,8 +121,7 @@ public class ScSubTotalDescriptorBase extends TestCase {
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }
 
-        XSubTotalCalculatable xSTC = (XSubTotalCalculatable)
-            UnoRuntime.queryInterface(XSubTotalCalculatable.class, oSheet);
+        XSubTotalCalculatable xSTC = UnoRuntime.queryInterface(XSubTotalCalculatable.class, oSheet);
 
         SubTotalColumn[] columns = new SubTotalColumn[1];
         SubTotalColumn column = new SubTotalColumn();

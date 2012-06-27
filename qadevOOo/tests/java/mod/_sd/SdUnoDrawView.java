@@ -88,10 +88,9 @@ public class SdUnoDrawView extends TestCase {
     * @see com.sun.star.frame.Desktop
     */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop)
-            UnoRuntime.queryInterface(
-                XDesktop.class, DesktopTools.createDesktop(
-                                    (XMultiServiceFactory)Param.getMSF()) );
+        the_Desk = UnoRuntime.queryInterface(
+            XDesktop.class, DesktopTools.createDesktop(
+                                (XMultiServiceFactory)Param.getMSF()) );
     }
 
     /**
@@ -164,11 +163,9 @@ public class SdUnoDrawView extends TestCase {
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
-        XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
         XDrawPages the_pages = oDPS.getDrawPages();
-        XIndexAccess oDPi = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class,the_pages);
+        XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class,the_pages);
 
         XDrawPage oDrawPage = null;
         try {
@@ -187,8 +184,7 @@ public class SdUnoDrawView extends TestCase {
 
         //put something on the drawpage
         log.println( "inserting some Shapes" );
-        XShapes oShapes = (XShapes)
-            UnoRuntime.queryInterface(XShapes.class, oDrawPage);
+        XShapes oShapes = UnoRuntime.queryInterface(XShapes.class, oDrawPage);
         XShape shape1 = SOF.createShape(
             xDrawDoc, 3000, 4500, 15000, 1000, "Ellipse");
         XShape shape2 = SOF.createShape(
@@ -200,15 +196,13 @@ public class SdUnoDrawView extends TestCase {
         oShapes.add(shape3);
         shortWait();
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xDrawDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
 
         XInterface oObj = aModel.getCurrentController();
 
-        XModel aModel2 = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
+        XModel aModel2 = UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
 
-        XWindow anotherWindow = (XWindow) UnoRuntime.queryInterface(
+        XWindow anotherWindow = UnoRuntime.queryInterface(
                                 XWindow.class,aModel2.getCurrentController());
 
         log.println( "creating a new environment for impress view object" );
@@ -233,8 +227,7 @@ public class SdUnoDrawView extends TestCase {
         XFrame the_frame = the_Desk.getCurrentFrame();
         tEnv.addObjRelation("Frame", the_frame);
 
-         aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
+         aModel = UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
         //Adding ObjRelations for XController
         tEnv.addObjRelation("SecondModel", aModel);
 
@@ -249,8 +242,7 @@ public class SdUnoDrawView extends TestCase {
 
         log.println("Implementation Name: "+utils.getImplName(oObj));
 
-        XModifiable modify = (XModifiable)
-            UnoRuntime.queryInterface(XModifiable.class,xDrawDoc);
+        XModifiable modify = UnoRuntime.queryInterface(XModifiable.class,xDrawDoc);
 
         tEnv.addObjRelation("Modifiable",modify);
 
@@ -258,10 +250,8 @@ public class SdUnoDrawView extends TestCase {
 
         tEnv.addObjRelation("Comparer", new Comparator() {
             public int compare(Object o1, Object o2) {
-                XIndexAccess indAc1 = (XIndexAccess)
-                    UnoRuntime.queryInterface(XIndexAccess.class, o1);
-                XIndexAccess indAc2 = (XIndexAccess)
-                    UnoRuntime.queryInterface(XIndexAccess.class, o2);
+                XIndexAccess indAc1 = UnoRuntime.queryInterface(XIndexAccess.class, o1);
+                XIndexAccess indAc2 = UnoRuntime.queryInterface(XIndexAccess.class, o2);
                 if (indAc1 == null || indAc2 == null) return -1;
                 if (indAc1.getCount() == indAc2.getCount()) {
                     return 0;

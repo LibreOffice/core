@@ -82,8 +82,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
         dispArgs = new PropertyValue[] {prop};
 
         log.println("Dispatching event for frame ...");
-        XDispatchProvider xDispProv = (XDispatchProvider)
-            UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
+        XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
         XDispatch xDisp = xDispProv.queryDispatch(dispURL, "", 0);
         xDisp.dispatch(dispURL, dispArgs);
 

@@ -110,7 +110,7 @@ public class ScCellRangeObj extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
 
-        XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+        XComponent oComp = UnoRuntime.queryInterface(
                                    XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
@@ -139,9 +139,9 @@ public class ScCellRangeObj extends TestCase {
         // first we write what we are intend to do to log file
         log.println("Creating a test environment");
 
-        XSpreadsheets oSpreadsheets = ((XSpreadsheetDocument) UnoRuntime.queryInterface(
+        XSpreadsheets oSpreadsheets = UnoRuntime.queryInterface(
                                                XSpreadsheetDocument.class,
-                                               xSheetDoc)).getSheets();
+                                               xSheetDoc).getSheets();
         XNameAccess oNames = (XNameAccess) UnoRuntime.queryInterface(
                                      XNameAccess.class, oSpreadsheets);
 

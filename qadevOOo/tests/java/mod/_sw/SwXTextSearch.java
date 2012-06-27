@@ -102,7 +102,7 @@ public class SwXTextSearch extends TestCase {
             }
         }
 
-        XSearchable oSearch = (XSearchable)UnoRuntime.queryInterface
+        XSearchable oSearch = UnoRuntime.queryInterface
             (XSearchable.class, xTextDoc);
         XSearchDescriptor xSDesc = oSearch.createSearchDescriptor();
         xSDesc.setSearchString("SwXTextSearch");

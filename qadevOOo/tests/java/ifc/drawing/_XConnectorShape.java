@@ -66,9 +66,9 @@ public class _XConnectorShape extends MultiMethodTest {
             tEnv.getObjRelation("XConnectorShape.Shapes") ;
         if (shapes == null) throw new StatusException(Status.failed
             ("Relation not found.")) ;
-        shape1 = (XConnectableShape) UnoRuntime.queryInterface
+        shape1 = UnoRuntime.queryInterface
             (XConnectableShape.class, shapes[0]) ;
-        shape2 = (XConnectableShape) UnoRuntime.queryInterface
+        shape2 = UnoRuntime.queryInterface
             (XConnectableShape.class, shapes[1]) ;
         if (shape1 == null || shape2 == null) throw new StatusException
             (Status.failed("Shapes don't implement XConnectableShape"+

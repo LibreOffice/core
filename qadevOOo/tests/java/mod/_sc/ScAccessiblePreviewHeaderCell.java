@@ -96,7 +96,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
 
         if (xSheetDoc != null) {
             try {
-                XCloseable oComp = (XCloseable) UnoRuntime.queryInterface(
+                XCloseable oComp = UnoRuntime.queryInterface(
                                            XCloseable.class, xSheetDoc);
                 oComp.close(true);
                 xSheetDoc = null;
@@ -121,7 +121,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
         XInterface oObj = null;
 
         if (xSheetDoc != null) {
-            XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+            XComponent oComp = UnoRuntime.queryInterface(
                                        XComponent.class, xSheetDoc);
             util.DesktopTools.closeDoc(oComp);
         }
@@ -137,7 +137,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel xModel = UnoRuntime.queryInterface(XModel.class,
                                                            xSheetDoc);
 
         XController xController = xModel.getCurrentController();
@@ -149,7 +149,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
             log.println("Getting spreadsheet");
 
             XSpreadsheets oSheets = xSheetDoc.getSheets();
-            XIndexAccess oIndexSheets = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(
                                                 XIndexAccess.class, oSheets);
             XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
                                           new Type(XSpreadsheet.class),
@@ -174,7 +174,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
         xCell.setFormula("Value");
 
         //setting property 'PrintHeaders' of the style 'Default'
-        XStyleFamiliesSupplier xSFS = (XStyleFamiliesSupplier) UnoRuntime.queryInterface(
+        XStyleFamiliesSupplier xSFS = UnoRuntime.queryInterface(
                                               XStyleFamiliesSupplier.class,
                                               xSheetDoc);
         XNameAccess xNA = xSFS.getStyleFamilies();
@@ -218,10 +218,10 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
 
         //switching to 'Print Preview' mode
         try {
-            XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface(
                                                   XDispatchProvider.class,
                                                   xController);
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+            XURLTransformer xParser = UnoRuntime.queryInterface(
                                               XURLTransformer.class,
                                               ( (XMultiServiceFactory) Param.getMSF())
                                                    .createInstance("com.sun.star.util.URLTransformer"));

@@ -522,7 +522,7 @@ public class _XSimpleFileAccess extends MultiMethodTest {
                 (Status.failed("Reelation InteractionHandler not found"));
 
         try {
-            handler = (XInteractionHandler)UnoRuntime.queryInterface
+            handler = UnoRuntime.queryInterface
                 (XInteractionHandler.class, oHandler);
             oObj.setInteractionHandler(handler);
             tRes.tested("setInteractionHandler()", true);

@@ -64,7 +64,7 @@ public class _XViewDataSupplier extends MultiMethodTest {
     }
 
     private void setViewID(XIndexAccess xAccess, String value) {
-        XIndexContainer xIndexContainer = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, xAccess);
+        XIndexContainer xIndexContainer = UnoRuntime.queryInterface(XIndexContainer.class, xAccess);
         int count = xAccess.getCount();
         try {
             if (count > 0) {

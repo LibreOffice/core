@@ -79,8 +79,7 @@ public class ChXDataPoint extends TestCase {
             log.println( "creating a chartdocument" );
             XComponent xComp = SOF.loadDocument(
                              utils.getFullTestURL("TransparencyChart.sxs"));
-            xChartDoc = (XChartDocument)
-                UnoRuntime.queryInterface(XChartDocument.class,xComp);
+            xChartDoc = UnoRuntime.queryInterface(XChartDocument.class,xComp);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

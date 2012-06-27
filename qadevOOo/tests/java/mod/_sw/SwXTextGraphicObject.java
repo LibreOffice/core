@@ -118,12 +118,11 @@ public class SwXTextGraphicObject extends TestCase {
 
             XText the_text = xTextDoc.getText();
             XTextCursor the_cursor = the_text.createTextCursor();
-            XTextContent the_content = (XTextContent)
-                UnoRuntime.queryInterface(XTextContent.class,oObj);
+            XTextContent the_content = UnoRuntime.queryInterface(XTextContent.class,oObj);
 
             log.println("inserting Frame");
             try{
-                XTextContent Framecontent = (XTextContent) UnoRuntime.queryInterface(
+                XTextContent Framecontent = UnoRuntime.queryInterface(
                                                    XTextContent.class, xTextFrame);
                 the_text.insertTextContent(the_cursor, Framecontent, true);
             } catch (Exception e) {
@@ -171,9 +170,8 @@ public class SwXTextGraphicObject extends TestCase {
             //creating ObjectRelation for the property
             // 'ImageMap' of 'TextGraphicObject'
             try {
-                XMultiServiceFactory xDocMSF = (XMultiServiceFactory)
-                    UnoRuntime.queryInterface
-                    (XMultiServiceFactory.class,xTextDoc);
+                XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface
+                (XMultiServiceFactory.class,xTextDoc);
                 ImgMap = xDocMSF.createInstance
                     ("com.sun.star.image.ImageMapRectangleObject");
             }
@@ -183,8 +181,7 @@ public class SwXTextGraphicObject extends TestCase {
 
             tEnv.addObjRelation("IMGMAP",ImgMap);
 
-            tEnv.addObjRelation("CONTENT", (XTextContent)
-                        UnoRuntime.queryInterface(XTextContent.class,instance));
+            tEnv.addObjRelation("CONTENT", UnoRuntime.queryInterface(XTextContent.class,instance));
             tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
 
             //object relation for text.BaseFrameProperties

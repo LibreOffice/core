@@ -75,17 +75,15 @@ public class _XControlAccess extends MultiMethodTest {
             Boolean isSheet = (Boolean) tEnv.getObjRelation("XControlAccess.isSheet");
             XDrawPage oDP = null;
             if (isSheet != null) {
-                XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-                UnoRuntime.queryInterface(XDrawPagesSupplier.class, oDoc);
+                XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, oDoc);
                 oDP = (XDrawPage) UnoRuntime.queryInterface(XDrawPage.class, oDPS.getDrawPages().getByIndex(0));
             } else {
 
 
-            XDrawPageSupplier oDPS = (XDrawPageSupplier)
-                UnoRuntime.queryInterface(XDrawPageSupplier.class, oDoc);
+            XDrawPageSupplier oDPS = UnoRuntime.queryInterface(XDrawPageSupplier.class, oDoc);
             oDP = oDPS.getDrawPage();
             }
-            XShapes shapes = (XShapes) UnoRuntime.queryInterface
+            XShapes shapes = UnoRuntime.queryInterface
                 (XShapes.class, oDP);
             XShape button = FormTools.createControlShape
                 (oDoc, 100, 100, 10000, 50000, "CommandButton");

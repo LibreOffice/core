@@ -59,16 +59,14 @@ public class _XAccessibleTable extends MultiMethodTest {
     XAccessibleContext xACont = null;
 
     protected void before() {
-        xASel = (XAccessibleSelection)
-            UnoRuntime.queryInterface(XAccessibleSelection.class, oObj);
+        xASel = UnoRuntime.queryInterface(XAccessibleSelection.class, oObj);
         if (xASel == null) {
             log.println("The component doesn't implement the interface " +
                 "XAccessibleSelection.");
             log.println("This interface is required for more detailed tests.");
         }
 
-        xACont = (XAccessibleContext)
-            UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
+        xACont = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
     }
 
     int rowCount = 0;

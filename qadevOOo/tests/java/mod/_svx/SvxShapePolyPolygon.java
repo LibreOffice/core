@@ -182,11 +182,10 @@ public class SvxShapePolyPolygon extends TestCase {
             // adding some shapes for testing.
             //SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
             //oShape = SOF.createShape(xDrawDoc,6000,6000,5000,5000,"PolyPolygon");
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class, xDrawDoc) ;
+            XMultiServiceFactory xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xDrawDoc) ;
             XInterface oInst = (XInterface) xMSF.createInstance
                 ("com.sun.star.drawing.PolyPolygonShape") ;
-            oShape = (XShape) UnoRuntime.queryInterface
+            oShape = UnoRuntime.queryInterface
                 (XShape.class, oInst) ;
 
             oShape.setSize(new Size(0,0)) ;

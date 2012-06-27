@@ -95,7 +95,7 @@ public class UnoControlCheckBox extends TestCase {
         XControlModel the_Model = aShape.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
@@ -130,7 +130,7 @@ public class UnoControlCheckBox extends TestCase {
         // adding object relation for XItemListener
         ifc.awt._XItemListener.TestItemListener listener =
                 new ifc.awt._XItemListener.TestItemListener();
-        XCheckBox check = (XCheckBox) UnoRuntime.queryInterface(
+        XCheckBox check = UnoRuntime.queryInterface(
                                   XCheckBox.class, oObj);
         check.addItemListener(listener);
         tEnv.addObjRelation("TestItemListener", listener);

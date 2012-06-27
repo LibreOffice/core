@@ -101,7 +101,7 @@ public class UnoControlContainer extends TestCase {
                                              10000, "TextField");
         WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
         model = shape.getControl();
-        access = (XControlAccess) UnoRuntime.queryInterface(
+        access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
 
         try {
@@ -117,7 +117,7 @@ public class UnoControlContainer extends TestCase {
                                              10000, "TextField");
         WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
         model = shape.getControl();
-        access = (XControlAccess) UnoRuntime.queryInterface(
+        access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
 
         try {
@@ -133,7 +133,7 @@ public class UnoControlContainer extends TestCase {
                                              10000, "CommandButton");
         WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
         model = shape.getControl();
-        access = (XControlAccess) UnoRuntime.queryInterface(
+        access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
 
         try {
@@ -156,7 +156,7 @@ public class UnoControlContainer extends TestCase {
         XControlModel the_Model = aShape.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTD2.getCurrentController());
 
@@ -188,11 +188,11 @@ public class UnoControlContainer extends TestCase {
             oObj = (XInterface) ((XMultiServiceFactory) param.getMSF()).createInstance(
                            "com.sun.star.awt.UnoControlContainer");
 
-            XControl xCtrl = (XControl) UnoRuntime.queryInterface(
+            XControl xCtrl = UnoRuntime.queryInterface(
                                      XControl.class, oObj);
             xCtrl.setModel(the_Model);
 
-            ctrlCont = (XControlContainer) UnoRuntime.queryInterface(
+            ctrlCont = UnoRuntime.queryInterface(
                                XControlContainer.class, oObj);
             ctrlCont.addControl("jupp", access.getControl(aShape.getControl()));
         } catch (Exception e) {
@@ -205,7 +205,7 @@ public class UnoControlContainer extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oObj);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, oObj);
         Rectangle ps = xWindow.getPosSize();
         xWindow.setPosSize(ps.X+10, ps.Y+10, ps.Width+10, ps.Height+10, PosSize.POSSIZE);
 

@@ -254,11 +254,11 @@ public class DB extends DBHelper
             System.out.println("UUID: " + sUUID);
         }
 
-    public ArrayList QuerySQL(Connection _aCon, String _sSQL)
+    public ArrayList<String> QuerySQL(Connection _aCon, String _sSQL)
         {
             java.sql.Statement oStmt = null;
             Connection oCon = null;
-            ArrayList aResultList = new ArrayList();
+            ArrayList<String> aResultList = new ArrayList<String>();
             try
             {
                 oStmt = _aCon.createStatement();
@@ -418,11 +418,11 @@ public class DB extends DBHelper
             Connection aCon = new ShareConnection().getConnection();
 
             String sSQL = "SELECT uuid()";
-            ArrayList aResultList = QuerySQL(aCon, sSQL);
+            ArrayList<String> aResultList = QuerySQL(aCon, sSQL);
 
             for (int i=0;i<aResultList.size();i++)
             {
-                String sResult = (String)aResultList.get(i);
+                String sResult = aResultList.get(i);
 
                 StringTokenizer aTokenizer = new StringTokenizer(sResult,",",false);
                 while (aTokenizer.hasMoreTokens())

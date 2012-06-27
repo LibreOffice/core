@@ -119,8 +119,8 @@ public class FilterFactory extends TestCase {
 
 
         // XMSF
-        ArrayList vFTypes = new ArrayList();
-        ArrayList vFArgs = new ArrayList();
+        ArrayList<String> vFTypes = new ArrayList<String>();
+        ArrayList<Object[]> vFArgs = new ArrayList<Object[]>();
         for (int i = 0; i < filterNames.length; i++) {
             PropertyValue[] filterProps = null;
             try {

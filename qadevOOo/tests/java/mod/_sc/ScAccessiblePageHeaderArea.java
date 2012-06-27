@@ -93,8 +93,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         XCell xCell = null;
         try {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
             XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
                             new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
             xCell = oSheet.getCellByPosition(0, 0) ;
@@ -110,18 +109,15 @@ public class ScAccessiblePageHeaderArea extends TestCase {
             e.printStackTrace(log);
         }
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         XController xController = aModel.getCurrentController();
 
         // switching to 'Page Preview' mode
         try {
-            XDispatchProvider xDispProv = (XDispatchProvider)
-                UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-            ( (XMultiServiceFactory) Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
+            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+         ( (XMultiServiceFactory) Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -148,8 +144,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         try {
             oObj = at.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
-            XAccessibleContext cont = (XAccessibleContext)
-                    UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
+            XAccessibleContext cont = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
             XAccessibleStateSet StateSet = cont.getAccessibleStateSet();
             if (StateSet.contains((short)27)) {
                 log.println("Object is transient");
@@ -166,8 +161,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         XAccessibleContext zoomIn =
             at.getAccessibleObjectForRole(xRoot,AccessibleRole.PUSH_BUTTON, "Zoom In");
 
-        final XAccessibleAction pressZoom = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
+        final XAccessibleAction pressZoom = UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
@@ -191,8 +185,7 @@ public class ScAccessiblePageHeaderArea extends TestCase {
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println( "    disposing xSheetDoc " );
         try {
-        XCloseable oComp = (XCloseable)
-            UnoRuntime.queryInterface (XCloseable.class, xSpreadsheetDoc) ;
+        XCloseable oComp = UnoRuntime.queryInterface (XCloseable.class, xSpreadsheetDoc) ;
         oComp.close(true);
         }catch(com.sun.star.util.CloseVetoException e) {
             log.println("Couldn't close document: "+e.getMessage());

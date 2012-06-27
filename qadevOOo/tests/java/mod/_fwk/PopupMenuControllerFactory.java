@@ -48,7 +48,7 @@ public class PopupMenuControllerFactory extends TestCase {
         log.println("    disposing xTextDoc ");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
             XCloseable.class, xTextDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
@@ -101,8 +101,7 @@ public class PopupMenuControllerFactory extends TestCase {
         }
 
         // register one controller, so it can be instantiated
-        XUIControllerRegistration xReg = (XUIControllerRegistration)
-                UnoRuntime.queryInterface(XUIControllerRegistration.class, xInst);
+        XUIControllerRegistration xReg = UnoRuntime.queryInterface(XUIControllerRegistration.class, xInst);
 
         xReg.registerController(".uno:MyCommandUrl", "", "com.sun.star.comp.framework.FooterMenuController");
         tEnv.addObjRelation("XUIControllerRegistration.RegisteredController", ".uno:MyCommandUrl");

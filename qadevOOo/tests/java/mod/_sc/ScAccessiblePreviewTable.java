@@ -101,7 +101,7 @@ public class ScAccessiblePreviewTable extends TestCase {
      */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)UnoRuntime.queryInterface
+        XComponent oComp = UnoRuntime.queryInterface
             (XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
@@ -119,8 +119,7 @@ public class ScAccessiblePreviewTable extends TestCase {
         try {
             log.println("Getting spreadsheet") ;
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
             XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
@@ -142,18 +141,15 @@ public class ScAccessiblePreviewTable extends TestCase {
 
         xCell.setFormula("Value");
 
-        XModel xModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSheetDoc);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
 
         XController xController = xModel.getCurrentController();
 
         //switch to 'Print Preview' mode
         try {
-            XDispatchProvider xDispProv = (XDispatchProvider)
-                UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-            ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
+            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+         ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
             aParseURL[0].Complete = ".uno:PrintPreview";
@@ -189,8 +185,7 @@ public class ScAccessiblePreviewTable extends TestCase {
 
         log.println("Getting "+ zoomIn.getAccessibleName());
 
-        final XAccessibleAction pressZoom = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
+        final XAccessibleAction pressZoom = UnoRuntime.queryInterface(XAccessibleAction.class, zoomIn);
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {

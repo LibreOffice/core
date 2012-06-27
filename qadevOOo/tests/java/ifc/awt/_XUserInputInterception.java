@@ -472,7 +472,7 @@ public class _XUserInputInterception extends MultiMethodTest {
 
 
                 XAccessibleContext xPanel = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
-                XAccessibleComponent xPanelCont = (XAccessibleComponent) UnoRuntime.queryInterface(XAccessibleComponent.class, xPanel);
+                XAccessibleComponent xPanelCont = UnoRuntime.queryInterface(XAccessibleComponent.class, xPanel);
 
                 // the position of the panel
                 Point point = xPanelCont.getLocationOnScreen();

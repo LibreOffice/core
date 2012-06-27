@@ -84,7 +84,7 @@ public class AccessibleToolBoxItem extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -145,7 +145,7 @@ public class AccessibleToolBoxItem extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);
 
         XInterface oObj = null;
@@ -173,7 +173,7 @@ public class AccessibleToolBoxItem extends TestCase {
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
-        final XAccessibleAction oAction = (XAccessibleAction) UnoRuntime.queryInterface(
+        final XAccessibleAction oAction = UnoRuntime.queryInterface(
                                                   XAccessibleAction.class,
                                                   oObj);
 

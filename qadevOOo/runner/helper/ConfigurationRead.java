@@ -53,9 +53,8 @@ public class ConfigurationRead {
                             "com.sun.star.configuration.ConfigurationAccess",
                             nodeArgs);
 
-            root = (XHierarchicalNameAccess)
-                            UnoRuntime.queryInterface(
-                            XHierarchicalNameAccess.class, rootObject);
+            root = UnoRuntime.queryInterface(
+            XHierarchicalNameAccess.class, rootObject);
         }
         catch(com.sun.star.uno.Exception e) {
             e.printStackTrace();

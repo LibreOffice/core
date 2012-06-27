@@ -53,8 +53,7 @@ public class AccessiblePresentationGraphicShape extends TestCase {
         try {
             log.println( "creating a drawdoc" );
             xDoc = SOF.createImpressDoc(null);
-            aModel = (XModel)
-                UnoRuntime.queryInterface(XModel.class, xDoc);
+            aModel = UnoRuntime.queryInterface(XModel.class, xDoc);
 
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
@@ -81,10 +80,9 @@ public class AccessiblePresentationGraphicShape extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        XMultiServiceFactory docMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, xDoc);
+        XMultiServiceFactory docMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xDoc);
         try {
-            oShape = (XShape) UnoRuntime.queryInterface(XShape.class,
+            oShape = UnoRuntime.queryInterface(XShape.class,
                 docMSF.createInstance
                 ("com.sun.star.presentation.GraphicObjectShape"));
         } catch (com.sun.star.uno.Exception e) {

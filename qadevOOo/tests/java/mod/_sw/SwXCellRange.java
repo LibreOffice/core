@@ -124,8 +124,7 @@ public class SwXCellRange extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
         log.println("ImplName: " + util.utils.getImplName(oObj));
 
-        XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         try {
             XInterface oTS = (XInterface)
                 oDocMSF.createInstance("com.sun.star.text.TextSection");

@@ -73,7 +73,7 @@ public class ValueComparer {
         if ( pv1.length != pv2.length) {
             return  false;
         }
-        HashMap hm1 = new HashMap();
+        HashMap<String, Object> hm1 = new HashMap<String, Object>();
         boolean result = true;
         int i = 0;
 

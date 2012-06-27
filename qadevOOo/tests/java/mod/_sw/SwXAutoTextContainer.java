@@ -64,7 +64,7 @@ public class SwXAutoTextContainer extends TestCase {
             XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();
             Object oInst = myMSF.createInstance
                 ("com.sun.star.text.AutoTextContainer");
-            oContainer = (XAutoTextContainer)UnoRuntime.queryInterface
+            oContainer = UnoRuntime.queryInterface
                 (XAutoTextContainer.class,oInst);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

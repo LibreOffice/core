@@ -127,7 +127,7 @@ public class ONavigationBarControl extends TestCase {
         XControlModel the_Model2 = aShape2.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
@@ -160,7 +160,7 @@ public class ONavigationBarControl extends TestCase {
         tEnv.addObjRelation("TOOLKIT", the_kit);
         tEnv.addObjRelation("MODEL", the_Model);
 
-        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow forObjRel = UnoRuntime.queryInterface(XWindow.class,
                                                                 aControl);
 
         tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);

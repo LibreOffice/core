@@ -85,7 +85,7 @@ public class ComplexDescGetter extends DescGetter
             // case3: method1(param1,param2),method2(param1,param2)
             String method = className.substring(index + 2);
             className = className.substring(0, index);
-            ArrayList methods = new ArrayList();
+            ArrayList<String> methods = new ArrayList<String>();
 
             String[] split = method.split("(?<=\\)),(?=\\w+)");
 
@@ -102,7 +102,7 @@ public class ComplexDescGetter extends DescGetter
             }
 
             methodNames = new String[methods.size()];
-            methodNames = (String[]) methods.toArray(methodNames);
+            methodNames = methods.toArray(methodNames);
         }
 
         // create an instance

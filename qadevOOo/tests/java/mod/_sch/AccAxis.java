@@ -59,8 +59,7 @@ public class AccAxis extends TestCase {
 
         XInterface oObj = null;
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xChartDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xChartDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 
@@ -78,9 +77,8 @@ public class AccAxis extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acc = (XAccessibleComponent)
-                UnoRuntime.queryInterface(
-                    XAccessibleComponent.class,oObj);
+        final XAccessibleComponent acc = UnoRuntime.queryInterface(
+            XAccessibleComponent.class,oObj);
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {

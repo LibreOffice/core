@@ -64,7 +64,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
 
         util.utils.shortWait(Param.getInt("ShortWait"));
@@ -76,7 +76,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               atw);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -98,13 +98,13 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        action = (XAccessibleAction) UnoRuntime.queryInterface(
+        action = UnoRuntime.queryInterface(
                          XAccessibleAction.class, ok_button);
 
-        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+        XAccessibleText text = UnoRuntime.queryInterface(
                                        XAccessibleText.class, oObj);
 
-        XAccessibleEditableText eText = (XAccessibleEditableText) UnoRuntime.queryInterface(
+        XAccessibleEditableText eText = UnoRuntime.queryInterface(
                                                 XAccessibleEditableText.class,
                                                 oObj);
 
@@ -152,7 +152,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
 
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
-            xCalcDoc = (XComponent) UnoRuntime.queryInterface(XComponent.class,
+            xCalcDoc = UnoRuntime.queryInterface(XComponent.class,
                                                               SOF.createCalcDoc(
                                                                       null));
         } catch (com.sun.star.uno.Exception e) {
@@ -174,7 +174,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
         }
 
         public void run() {
-            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+            XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                                xCalcDoc);
 
             XController xController = aModel.getCurrentController();
@@ -182,10 +182,10 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
             //Opening HeaderFooterDialog
             try {
                 String aSlotID = ".uno:EditHeaderAndFooter";
-                XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                XDispatchProvider xDispProv = UnoRuntime.queryInterface(
                                                       XDispatchProvider.class,
                                                       xController);
-                XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+                XURLTransformer xParser = UnoRuntime.queryInterface(
                                                   XURLTransformer.class,
                                                   msf.createInstance(
                                                           "com.sun.star.util.URLTransformer"));

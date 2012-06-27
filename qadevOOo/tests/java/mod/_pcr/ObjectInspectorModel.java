@@ -153,7 +153,7 @@ public class ObjectInspectorModel extends TestCase {
         existentInspector = xFrame.findFrame( "ObjectInspector", 255 );
 
         if ( existentInspector != null ){
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                     XCloseable.class, existentInspector);
             try{
                 closer.close(true);

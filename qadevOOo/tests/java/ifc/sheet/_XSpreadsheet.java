@@ -69,8 +69,7 @@ public class _XSpreadsheet extends MultiMethodTest {
             tRes.tested("createCursorByRange()", false);
         }
 
-        XSheetCellRange oSheetRange = (XSheetCellRange)
-            UnoRuntime.queryInterface(XSheetCellRange.class, oRange) ;
+        XSheetCellRange oSheetRange = UnoRuntime.queryInterface(XSheetCellRange.class, oRange) ;
         log.println("getting Cursor");
         XSheetCellCursor oCursor = oObj.createCursorByRange(oSheetRange);
         tRes.tested("createCursorByRange()", oCursor != null);

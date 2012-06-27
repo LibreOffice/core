@@ -87,7 +87,7 @@ public class ScAnnotationObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent) UnoRuntime.queryInterface
+        XComponent oComp = UnoRuntime.queryInterface
             (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
@@ -122,12 +122,10 @@ public class ScAnnotationObj extends TestCase {
 
         log.println("Getting test object ") ;
 
-        XSpreadsheetDocument xArea = (XSpreadsheetDocument)
-            UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
+        XSpreadsheetDocument xArea = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
         XSpreadsheets oSheets = (XSpreadsheets) xArea.getSheets();
 
-        XIndexAccess XAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+        XIndexAccess XAccess = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         XCell oCell = null;
         try {
             XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
@@ -149,8 +147,7 @@ public class ScAnnotationObj extends TestCase {
                 "Error getting test object from spreadsheet document",e);
         }
 
-        XSheetAnnotationAnchor oAnnoA = (XSheetAnnotationAnchor)
-            UnoRuntime.queryInterface(XSheetAnnotationAnchor.class, oCell);
+        XSheetAnnotationAnchor oAnnoA = UnoRuntime.queryInterface(XSheetAnnotationAnchor.class, oCell);
         XSheetAnnotation oAnno = oAnnoA.getAnnotation();
 
         oObj = oAnno;

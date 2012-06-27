@@ -52,8 +52,7 @@ public class HierarchyContentProvider extends TestCase {
 
         oObj = (XInterface) oInterface;
 
-        XContentIdentifierFactory CIF = (XContentIdentifierFactory)
-            UnoRuntime.queryInterface(XContentIdentifierFactory.class,ucb);
+        XContentIdentifierFactory CIF = UnoRuntime.queryInterface(XContentIdentifierFactory.class,ucb);
 
         System.out.println("ImplementationName: "+util.utils.getImplName(oObj));
 

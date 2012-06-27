@@ -46,7 +46,7 @@ public abstract class DescGetter
     protected DescEntry[] getScenario(String url, String descPath,
             boolean debug)
     {
-        ArrayList entryList = new ArrayList();
+        ArrayList<DescEntry> entryList = new ArrayList<DescEntry>();
         String line = "";
         BufferedReader scenario = null;
         DescEntry[] entries = null;
@@ -78,7 +78,7 @@ public abstract class DescGetter
                     }
                     else
                     {
-                        ArrayList subs = getSubInterfaces(job);
+                        ArrayList<String> subs = getSubInterfaces(job);
                         String partjob = job.substring(0, job.indexOf(",")).trim();
                         aEntry = getDescriptionForSingleJob(partjob, descPath,
                                 debug);
@@ -163,14 +163,14 @@ public abstract class DescGetter
             return null;
         }
         entries = new DescEntry[entryList.size()];
-        entries = (DescEntry[]) entryList.toArray(entries);
+        entries = entryList.toArray(entries);
 
         return entries;
     }
 
-    protected ArrayList getSubInterfaces(String job)
+    protected ArrayList<String> getSubInterfaces(String job)
     {
-        ArrayList namesList = new ArrayList();
+        ArrayList<String> namesList = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(job, ",");
 
         for (int i = 0; st.hasMoreTokens(); i++)

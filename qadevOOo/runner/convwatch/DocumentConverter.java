@@ -131,11 +131,11 @@ public class DocumentConverter extends EnhancedComplexTestCase
     /**
      * Function returns a List of software which must accessable as an external executable
      */
-    protected Object[] mustInstalledSoftware()
+    protected String[] mustInstalledSoftware()
         {
-            ArrayList aList = new ArrayList();
+            ArrayList<String> aList = new ArrayList<String>();
             // aList.add("perl -version");
-            return aList.toArray();
+            return aList.toArray(new String[aList.size()]);
         }
 
     // the test ======================================================================

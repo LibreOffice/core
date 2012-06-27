@@ -468,7 +468,7 @@ public class utils {
         try {
 
             Object fileacc = msf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            XSimpleFileAccess simpleAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class,
+            XSimpleFileAccess simpleAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class,
                 fileacc);
             if (simpleAccess.exists(fileURL)) {
                 exists = true;
@@ -494,7 +494,7 @@ public class utils {
         try {
 
             Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            XSimpleFileAccess simpleAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class,
+            XSimpleFileAccess simpleAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class,
                 fileacc);
             if (simpleAccess.exists(fileURL)) {
                 simpleAccess.kill(fileURL);
@@ -519,7 +519,7 @@ public class utils {
         boolean res = false;
         try {
             Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            XSimpleFileAccess simpleAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class,
+            XSimpleFileAccess simpleAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class,
                 fileacc);
             if (!simpleAccess.exists(destinaion)) {
                 simpleAccess.copy(source, destinaion);
@@ -541,7 +541,7 @@ public class utils {
         try {
             Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
 
-            XSimpleFileAccess simpleAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class,
+            XSimpleFileAccess simpleAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class,
                 fileacc);
             if (simpleAccess.exists(newF)) {
                 simpleAccess.kill(newF);
@@ -681,7 +681,7 @@ public class utils {
         XURLTransformer xTrans = null;
         try {
             Object inst = xMSF.createInstance("com.sun.star.util.URLTransformer");
-            xTrans = (XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class, inst);
+            xTrans = UnoRuntime.queryInterface(XURLTransformer.class, inst);
         } catch (com.sun.star.uno.Exception e) {
         }
 
@@ -734,7 +734,7 @@ public class utils {
     public static String[] getFilteredPropertyNames(XPropertySet props, short includePropertyAttribute,
         short excludePropertyAttribute) {
         Property[] the_props = props.getPropertySetInfo().getProperties();
-        ArrayList l = new ArrayList();
+        ArrayList<String> l = new ArrayList<String>();
         for (int i = 0; i < the_props.length; i++) {
             boolean exclude = ((the_props[i].Attributes & excludePropertyAttribute) != 0);
             boolean include = (includePropertyAttribute == 0) ||
@@ -745,7 +745,7 @@ public class utils {
         }
         Collections.sort(l);
         String[] names = new String[l.size()];
-        names = (String[]) l.toArray(names);
+        names = l.toArray(names);
         return names;
     }
 
@@ -899,7 +899,7 @@ public class utils {
             XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xMSF);
             XComponentContext xContext = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class,
                 xPS.getPropertyValue("DefaultContext"));
-            XMacroExpander xME = (XMacroExpander) UnoRuntime.queryInterface(XMacroExpander.class,
+            XMacroExpander xME = UnoRuntime.queryInterface(XMacroExpander.class,
                 xContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander"));
             return xME.expandMacros(expand);
         } catch (Exception e) {
@@ -948,7 +948,7 @@ public class utils {
      * @throws java.lang.Exception throws <CODE>java.lang.Exception</CODE> on any error
      */
     public static void dispatchURL(XMultiServiceFactory xMSF, XComponent xDoc, String URL) throws java.lang.Exception {
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xDoc);
 
         XController xCont = aModel.getCurrentController();
 
@@ -966,9 +966,9 @@ public class utils {
     public static void dispatchURL(XMultiServiceFactory xMSF, XController xCont, String URL) throws java.lang.Exception {
         try {
 
-            XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xCont);
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xCont);
 
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+            XURLTransformer xParser = UnoRuntime.queryInterface(
                 XURLTransformer.class,
                 xMSF.createInstance("com.sun.star.util.URLTransformer"));
 

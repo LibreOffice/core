@@ -104,11 +104,9 @@ public class SvxShapeGroup extends TestCase {
         // get the drawpage of drawing here
         try {
             log.println( "getting Drawpage" );
-            XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-                UnoRuntime.queryInterface(XDrawPagesSupplier.class,xDrawDoc);
+            XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class,xDrawDoc);
             XDrawPages oDPn = oDPS.getDrawPages();
-            XIndexAccess oDPi = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class,oDPn);
+            XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class,oDPn);
             oObj = (XDrawPage) AnyConverter.toObject(
                 new Type(XDrawPage.class),oDPi.getByIndex(0));
         } catch ( Exception e ) {
@@ -125,7 +123,7 @@ public class SvxShapeGroup extends TestCase {
 
         //put something on the drawpage
         log.println( "inserting some Shapes" );
-        oShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class,oObj);
+        oShapes = UnoRuntime.queryInterface(XShapes.class,oObj);
         XShape Shape1 = SOF.createShape(xDrawDoc,
             3000,4500,15000,1000,"Ellipse");
         oShapes.add(SOF.createShape(xDrawDoc,
@@ -155,7 +153,7 @@ public class SvxShapeGroup extends TestCase {
        //get the XShapeGrouper
        try{
             log.println("get XShapeGroup");
-            XShapeGrouper oSG = (XShapeGrouper)UnoRuntime.queryInterface
+            XShapeGrouper oSG = UnoRuntime.queryInterface
                 (XShapeGrouper.class, oObj);
             oObj = oSG.group(oShapes);
         } catch ( Exception e) {

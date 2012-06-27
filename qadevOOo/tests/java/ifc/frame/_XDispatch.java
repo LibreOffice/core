@@ -121,8 +121,7 @@ public class _XDispatch extends MultiMethodTest {
     */
     private boolean checkXDispatchWithNotification()
     {
-        XNotifyingDispatch xND = (XNotifyingDispatch)
-                      UnoRuntime.queryInterface(XNotifyingDispatch.class, oObj);
+        XNotifyingDispatch xND = UnoRuntime.queryInterface(XNotifyingDispatch.class, oObj);
         if ( xND != null) {
             log.println("   XNotifyingDispatch found:");
             PropertyValue[] arguments = (PropertyValue[])

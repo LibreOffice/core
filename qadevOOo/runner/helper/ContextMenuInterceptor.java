@@ -37,8 +37,8 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
             // create sub menus, menu entries and separators
             XIndexContainer xContextMenu = aEvent.ActionTriggerContainer;
             XMultiServiceFactory xMenuElementFactory =
-                    (XMultiServiceFactory)UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, xContextMenu );
+                    UnoRuntime.queryInterface(
+            XMultiServiceFactory.class, xContextMenu );
 
             if ( xMenuElementFactory != null ) {
 
@@ -58,9 +58,9 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
 
                 // query sub menu for index container to get access
                 XIndexContainer xSubMenuContainer =
-                        (XIndexContainer)UnoRuntime.queryInterface(
-                        XIndexContainer.class,
-                        xMenuElementFactory.createInstance("com.sun.star.ui.ActionTriggerContainer" ));
+                        UnoRuntime.queryInterface(
+                XIndexContainer.class,
+                xMenuElementFactory.createInstance("com.sun.star.ui.ActionTriggerContainer" ));
 
                 // intialize root menu entry "Help"
                 xRootMenuEntry.setPropertyValue( "Text", new String( "Help" ));

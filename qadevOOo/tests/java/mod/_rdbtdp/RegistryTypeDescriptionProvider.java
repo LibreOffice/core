@@ -88,8 +88,7 @@ public class RegistryTypeDescriptionProvider extends TestCase {
             Object o = xContext.getValueByName("/singletons/" +
                         "com.sun.star.reflection.theTypeDescriptionManager");
             // the manager contains all providers
-            XEnumerationAccess aProviderAccess = (XEnumerationAccess)
-                        UnoRuntime.queryInterface(XEnumerationAccess.class, o);
+            XEnumerationAccess aProviderAccess = UnoRuntime.queryInterface(XEnumerationAccess.class, o);
             // collect enumeration
             XEnumeration xProviderEnum;
             if (aProviderAccess.hasElements())

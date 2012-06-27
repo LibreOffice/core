@@ -126,7 +126,7 @@ public class SwXDrawPage extends TestCase {
 
         log.println( "creating a test environment" );
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
-        XDPSupp = (XDrawPageSupplier) UnoRuntime.queryInterface
+        XDPSupp = UnoRuntime.queryInterface
             (XDrawPageSupplier.class, xTextDoc);
         xDP = XDPSupp.getDrawPage();
         oObj = xDP;
@@ -135,7 +135,7 @@ public class SwXDrawPage extends TestCase {
         //System.exit(0);
 
         log.println( "inserting some Shapes" );
-        oShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, oObj);
+        oShapes = UnoRuntime.queryInterface(XShapes.class, oObj);
         oShapes.add(SOF.createShape(xTextDoc,2000,1500,1000,1000,"Line"));
         oShapes.add(SOF.createShape(xTextDoc,3000,4500,15000,1000,"Ellipse"));
         oShapes.add(SOF.createShape(xTextDoc,5000,3500,7500,5000,"Rectangle"));

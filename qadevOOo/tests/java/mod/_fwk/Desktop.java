@@ -119,8 +119,7 @@ public class Desktop extends TestCase {
 
         tEnv.addObjRelation("XDispatchProvider.URL", ".uno:Open");
 
-        tEnv.addObjRelation("Desktop",(XDesktop)
-                                UnoRuntime.queryInterface(XDesktop.class,oObj));
+        tEnv.addObjRelation("Desktop",UnoRuntime.queryInterface(XDesktop.class,oObj));
 
         return tEnv;
     } // finish method getTestEnvironment

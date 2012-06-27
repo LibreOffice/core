@@ -49,7 +49,7 @@ public class CwsDataExchangeImpl implements CwsDataExchange
         mDebug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
     }
 
-    public ArrayList getModules()
+    public ArrayList<String> getModules()
     {
         // the cwstouched command send its version information to StdErr.
         // A piping from StdErr to SdtOut the tcsh does not support.

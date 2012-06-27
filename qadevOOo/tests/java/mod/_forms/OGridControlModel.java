@@ -180,7 +180,7 @@ public class OGridControlModel extends GenericModelTest {
         XPropertySet aControl5 = null;
 
         try {
-            XGridColumnFactory columns = (XGridColumnFactory) UnoRuntime.queryInterface(
+            XGridColumnFactory columns = UnoRuntime.queryInterface(
                               XGridColumnFactory.class, oObj);
             aControl = columns.createColumn("TextField");
             aControl2 = columns.createColumn("DateField");
@@ -229,9 +229,9 @@ public class OGridControlModel extends GenericModelTest {
         tEnv.addObjRelation("Comparer",
                             new Comparator() {
             public int compare(Object o1, Object o2) {
-                XNamed named1 = (XNamed) UnoRuntime.queryInterface(
+                XNamed named1 = UnoRuntime.queryInterface(
                                         XNamed.class, o1);
-                XNamed named2 = (XNamed) UnoRuntime.queryInterface(
+                XNamed named2 = UnoRuntime.queryInterface(
                                         XNamed.class, o2);
 
                 if (named1.getName().equals(named2.getName())) {
@@ -284,7 +284,7 @@ class OGridControlModelold extends TestCase {
         log.println("    disposing xDrawDoc ");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                                         XCloseable.class, xDrawDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
@@ -343,7 +343,7 @@ class OGridControlModelold extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         try {
-            columns = (XGridColumnFactory) UnoRuntime.queryInterface(
+            columns = UnoRuntime.queryInterface(
                               XGridColumnFactory.class, oObj);
             aControl = columns.createColumn("TextField");
             aControl2 = columns.createColumn("DateField");

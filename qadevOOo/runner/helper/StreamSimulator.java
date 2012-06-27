@@ -88,9 +88,8 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
 
         try
         {
-            XSimpleFileAccess xHelper = (XSimpleFileAccess)
-                UnoRuntime.queryInterface(XSimpleFileAccess.class,
-                    ((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.ucb.SimpleFileAccess"));
+            XSimpleFileAccess xHelper = UnoRuntime.queryInterface(XSimpleFileAccess.class,
+                ((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.ucb.SimpleFileAccess"));
 /*            com.sun.star.ucb.XSimpleFileAccess xHelper = (com.sun.star.ucb.XSimpleFileAccess)OfficeConnect.createRemoteInstance(
                 com.sun.star.ucb.XSimpleFileAccess.class,
                 "com.sun.star.ucb.SimpleFileAccess");*/
@@ -101,14 +100,14 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
             if (bInput)
             {
                 m_xInStream = xHelper.openFileRead(m_sFileName);
-                m_xSeek = (com.sun.star.io.XSeekable)UnoRuntime.queryInterface(
+                m_xSeek = UnoRuntime.queryInterface(
                             com.sun.star.io.XSeekable.class,
                             m_xInStream);
             }
             else
             {
                 m_xOutStream = xHelper.openFileWrite(m_sFileName);
-                m_xSeek = (com.sun.star.io.XSeekable)UnoRuntime.queryInterface(
+                m_xSeek = UnoRuntime.queryInterface(
                             com.sun.star.io.XSeekable.class,
                             m_xOutStream);
             }

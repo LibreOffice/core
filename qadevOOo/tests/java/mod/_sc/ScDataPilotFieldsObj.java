@@ -81,8 +81,7 @@ public class ScDataPilotFieldsObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface(XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -115,8 +114,7 @@ public class ScDataPilotFieldsObj extends TestCase {
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
@@ -147,8 +145,7 @@ public class ScDataPilotFieldsObj extends TestCase {
             throw new StatusException("Couldn't fill some cells", e);
         }
 
-        XDataPilotTablesSupplier DPTS = (XDataPilotTablesSupplier)
-            UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
+        XDataPilotTablesSupplier DPTS = UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
 
         log.println("Getting test object ") ;
 

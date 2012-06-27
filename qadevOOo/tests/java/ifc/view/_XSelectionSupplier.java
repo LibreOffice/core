@@ -51,7 +51,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
     public XSelectionSupplier oObj = null;
     public boolean selectionChanged = false;
     Object[] selections = null;
-    Comparator ObjCompare = null;
+    Comparator<Object> ObjCompare = null;
 
     protected void before() {
         selections = (Object[])tEnv.getObjRelation("Selections");
@@ -60,7 +60,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
                     "Couldn't get relation 'Selections'"));
         }
 
-        ObjCompare = (Comparator)tEnv.getObjRelation("Comparer");
+        ObjCompare = (Comparator<Object>)tEnv.getObjRelation("Comparer");
     }
 
     protected void after() {

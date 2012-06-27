@@ -70,8 +70,7 @@ public class ScIndexEnumeration_SubTotalFieldsEnumeration extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -82,8 +81,7 @@ public class ScIndexEnumeration_SubTotalFieldsEnumeration extends TestCase {
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                 new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
@@ -98,8 +96,7 @@ public class ScIndexEnumeration_SubTotalFieldsEnumeration extends TestCase {
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }
 
-        XSubTotalCalculatable xSTC = (XSubTotalCalculatable)
-            UnoRuntime.queryInterface(XSubTotalCalculatable.class, oSheet);
+        XSubTotalCalculatable xSTC = UnoRuntime.queryInterface(XSubTotalCalculatable.class, oSheet);
 
         XSubTotalDescriptor xSTD = xSTC.createSubTotalDescriptor(true);
 
@@ -110,13 +107,11 @@ public class ScIndexEnumeration_SubTotalFieldsEnumeration extends TestCase {
         columns[0] = column;
         xSTD.addNew(columns, 1);
 
-        XIndexAccess oDescIndex = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSTD);
+        XIndexAccess oDescIndex = UnoRuntime.queryInterface(XIndexAccess.class, xSTD);
 
         XInterface oObj = null;
 
-        XEnumerationAccess ea = (XEnumerationAccess)
-                    UnoRuntime.queryInterface(XEnumerationAccess.class,oDescIndex);
+        XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oDescIndex);
 
         oObj = ea.createEnumeration();
 

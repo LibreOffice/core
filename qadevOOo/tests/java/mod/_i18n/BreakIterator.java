@@ -94,7 +94,7 @@ public class BreakIterator extends TestCase {
 
         tEnv.addObjRelation("Locale",  new Locale("en", "US", ""));
 
-        XTextDocument xDoc = (XTextDocument)UnoRuntime.queryInterface
+        XTextDocument xDoc = UnoRuntime.queryInterface
             (XTextDocument.class, xTextDoc);
         XTextRange xTextRange = (XTextRange)xDoc.getText();
         tEnv.addObjRelation("UnicodeString", xTextRange.getString());

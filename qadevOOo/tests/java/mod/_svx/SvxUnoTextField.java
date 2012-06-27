@@ -123,14 +123,12 @@ public class SvxUnoTextField extends TestCase {
           // create testobject here
         try {
 
-            XText the_Text = (XText) UnoRuntime.queryInterface(XText.class,oShape);
-            XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface( XMultiServiceFactory.class, xDrawDoc );
+            XText the_Text = UnoRuntime.queryInterface(XText.class,oShape);
+            XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, xDrawDoc );
             the_Cursor = the_Text.createTextCursor();
             oObj = (XInterface)
                 oDocMSF.createInstance( "com.sun.star.text.TextField.DateTime" );
-            XTextContent the_Field = (XTextContent)
-                             UnoRuntime.queryInterface(XTextContent.class,oObj);
+            XTextContent the_Field = UnoRuntime.queryInterface(XTextContent.class,oObj);
 
 
             the_Text.insertTextContent(the_Cursor,the_Field,false);

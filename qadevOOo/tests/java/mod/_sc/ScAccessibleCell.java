@@ -102,8 +102,7 @@ public class ScAccessibleCell extends TestCase {
 
         XInterface oObj = null;
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -120,8 +119,7 @@ public class ScAccessibleCell extends TestCase {
         final String text = "XAccessibleText";
         try {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
             XSpreadsheet oSheet = null;
             try {
                 oSheet = (XSpreadsheet) AnyConverter.toObject(
@@ -131,11 +129,9 @@ public class ScAccessibleCell extends TestCase {
             }
             xCell = oSheet.getCellByPosition(1, 0) ;
             xCell.setFormula(text);
-            XColumnRowRange oColumnRowRange = (XColumnRowRange)
-                UnoRuntime.queryInterface(XColumnRowRange.class, oSheet);
+            XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, oSheet);
             XTableColumns oColumns = (XTableColumns) oColumnRowRange.getColumns();
-            XIndexAccess oIndexAccess = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oColumns);
+            XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oColumns);
             XPropertySet column = (XPropertySet) UnoRuntime.queryInterface(
                                 XPropertySet.class,oIndexAccess.getByIndex(1));
             column.setPropertyValue("OptimalWidth", new Boolean(true));
@@ -184,8 +180,7 @@ public class ScAccessibleCell extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 }

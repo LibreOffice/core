@@ -43,7 +43,7 @@ public class _XExtendedCalendar extends MultiMethodTest {
         Locale[] installed_locales = null;
         XLocaleData locData = null;
         try {
-            locData = (XLocaleData) UnoRuntime.queryInterface(
+            locData = UnoRuntime.queryInterface(
                 XLocaleData.class,
                     ((XMultiServiceFactory)tParam.getMSF()).createInstance(
                     "com.sun.star.i18n.LocaleData"));

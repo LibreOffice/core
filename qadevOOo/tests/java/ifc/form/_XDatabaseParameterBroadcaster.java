@@ -72,7 +72,7 @@ public class _XDatabaseParameterBroadcaster extends MultiMethodTest {
 
         // trigger the action.
         try {
-            XRowSet xRowSet = (XRowSet)UnoRuntime.queryInterface(XRowSet.class, oObj);
+            XRowSet xRowSet = UnoRuntime.queryInterface(XRowSet.class, oObj);
             xRowSet.execute();
         }
         catch(com.sun.star.sdbc.SQLException e) {

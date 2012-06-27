@@ -174,8 +174,7 @@ public class XMLSettingsImporter extends TestCase {
 
         final PrintWriter logF = log ;
         XController xController = xTextDoc.getCurrentController();
-        XViewSettingsSupplier xViewSetSup = (XViewSettingsSupplier)
-            UnoRuntime.queryInterface(XViewSettingsSupplier.class, xController);
+        XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class, xController);
         final XPropertySet xPropSet = xViewSetSup.getViewSettings();
         tEnv.addObjRelation("XDocumentHandler.ImportChecker",
             new ifc.xml.sax._XDocumentHandler.ImportChecker() {

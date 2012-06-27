@@ -96,7 +96,7 @@ public class OSQLMessageDialog extends TestCase {
         com.sun.star.awt.XToolkit xToolkit = null;
 
         try{
-            xToolkit = (com.sun.star.awt.XToolkit)UnoRuntime.queryInterface(
+            xToolkit = UnoRuntime.queryInterface(
                         com.sun.star.awt.XToolkit.class,
             ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.awt.Toolkit") );
         } catch (com.sun.star.uno.Exception e){
@@ -130,7 +130,7 @@ public class OSQLMessageDialog extends TestCase {
             throw new StatusException("could not create window", e) ;
         }
 
-        com.sun.star.awt.XWindow xWindow = (com.sun.star.awt.XWindow)UnoRuntime.queryInterface (
+        com.sun.star.awt.XWindow xWindow = UnoRuntime.queryInterface (
         com.sun.star.awt.XWindow .class, xPeer);
 
         log.println( "    creating a new environment for object" );

@@ -122,13 +122,11 @@ public class XMLSettingsExporter extends TestCase {
             oObj = (XInterface) xMSF.createInstanceWithArguments(
                 "com.sun.star.comp.Impress.XMLSettingsExporter",
                 new Object[] {arg});
-            XExporter xEx = (XExporter)
-                UnoRuntime.queryInterface(XExporter.class,oObj);
+            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
             xEx.setSourceDocument(xImpressDoc);
 
             //set some settings
-            XModel xImpressModel = (XModel)
-                UnoRuntime.queryInterface(XModel.class, xImpressDoc);
+            XModel xImpressModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
             XController xController = xImpressModel.getCurrentController();
             XPropertySet xPropSet = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, xController);

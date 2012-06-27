@@ -95,9 +95,8 @@ public class ObjectOutputStream extends TestCase {
             try {
                 Object o = xMSF.createInstance(
                         "com.sun.star.registry.ImplementationRegistration");
-                xir = (XImplementationRegistration)
-                                    UnoRuntime.queryInterface(
-                                    XImplementationRegistration.class, o);
+                xir = UnoRuntime.queryInterface(
+                XImplementationRegistration.class, o);
             }
             catch (com.sun.star.uno.Exception e) {
                 System.err.println(
@@ -194,36 +193,28 @@ public class ObjectOutputStream extends TestCase {
         }
 
         // creating the pipe where object has to be written to
-        XActiveDataSource xdSo = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, ostream);
+        XActiveDataSource xdSo = UnoRuntime.queryInterface(XActiveDataSource.class, ostream);
 
-        XActiveDataSource xdSmo = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
+        XActiveDataSource xdSmo = UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
 
-        XOutputStream moStream = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class, mostream);
+        XOutputStream moStream = UnoRuntime.queryInterface(XOutputStream.class, mostream);
 
-        XActiveDataSink markIn = (XActiveDataSink)
-            UnoRuntime.queryInterface(XActiveDataSink.class, minstream);
-        XActiveDataSink inStream = (XActiveDataSink)
-            UnoRuntime.queryInterface(XActiveDataSink.class, istream);
+        XActiveDataSink markIn = UnoRuntime.queryInterface(XActiveDataSink.class, minstream);
+        XActiveDataSink inStream = UnoRuntime.queryInterface(XActiveDataSink.class, istream);
         XInputStream markInStream = (XInputStream)
             UnoRuntime.queryInterface(XInputStream.class, minstream);
 
-        final XOutputStream PipeOut = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class,aPipe);
+        final XOutputStream PipeOut = UnoRuntime.queryInterface(XOutputStream.class,aPipe);
         final XInputStream PipeIn = (XInputStream)
             UnoRuntime.queryInterface(XInputStream.class,aPipe);
 
         markIn.setInputStream(PipeIn);
         inStream.setInputStream(markInStream);
-        XObjectInputStream objInputStream = (XObjectInputStream)
-            UnoRuntime.queryInterface(XObjectInputStream.class, istream);
+        XObjectInputStream objInputStream = UnoRuntime.queryInterface(XObjectInputStream.class, istream);
         xdSo.setOutputStream(moStream);
         xdSmo.setOutputStream(PipeOut);
 
-        oStream = (XObjectOutputStream)
-            UnoRuntime.queryInterface(XObjectOutputStream.class, ostream);
+        oStream = UnoRuntime.queryInterface(XObjectOutputStream.class, ostream);
 
         // creating Persistent object which has to be written
         XPersistObject xPersObj = null ;
@@ -240,7 +231,7 @@ public class ObjectOutputStream extends TestCase {
         oObj = oStream;
 
         // all data types for writing to an XDataInputStream
-        ArrayList data = new ArrayList() ;
+        ArrayList<Object> data = new ArrayList<Object>() ;
         data.add(new Boolean(true)) ;
         data.add(new Byte((byte)123)) ;
         data.add(new Character((char)1234)) ;
@@ -295,9 +286,8 @@ public class ObjectOutputStream extends TestCase {
                         return null;
                     }
 
-                    XActiveDataSink xDataSink = (XActiveDataSink)
-                        UnoRuntime.queryInterface(
-                            XActiveDataSink.class, xInStream);
+                    XActiveDataSink xDataSink = UnoRuntime.queryInterface(
+                        XActiveDataSink.class, xInStream);
                     xDataSink.setInputStream(PipeIn);
 
                     return xInStream;

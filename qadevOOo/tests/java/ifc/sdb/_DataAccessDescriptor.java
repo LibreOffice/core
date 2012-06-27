@@ -33,16 +33,16 @@ public class _DataAccessDescriptor extends MultiPropertyTest {
         try{
 
             log.println("try to get value from property...");
-            XResultSet oldValue = (XResultSet) UnoRuntime.queryInterface(XResultSet.class,oObj.getPropertyValue(propName));
+            XResultSet oldValue = UnoRuntime.queryInterface(XResultSet.class,oObj.getPropertyValue(propName));
 
             log.println("try to get value from object relation...");
-            XResultSet newValue = (XResultSet) UnoRuntime.queryInterface(XResultSet.class,tEnv.getObjRelation("DataAccessDescriptor.XResultSet"));
+            XResultSet newValue = UnoRuntime.queryInterface(XResultSet.class,tEnv.getObjRelation("DataAccessDescriptor.XResultSet"));
 
             log.println("set property to a new value...");
             oObj.setPropertyValue(propName, newValue);
 
             log.println("get the new value...");
-            XResultSet getValue = (XResultSet) UnoRuntime.queryInterface(XResultSet.class,oObj.getPropertyValue(propName));
+            XResultSet getValue = UnoRuntime.queryInterface(XResultSet.class,oObj.getPropertyValue(propName));
 
             tRes.tested(propName, this.compare(newValue, getValue));
         } catch (com.sun.star.beans.PropertyVetoException e){

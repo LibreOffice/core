@@ -54,7 +54,7 @@ public class _XMultipleOperation extends MultiMethodTest {
     public void _setTableOperation() {
         boolean res = true;
         XCellRange cellRange = oSheet.getCellRangeByName("$A$17:$A$17");
-        XCellRangeAddressable CRA = (XCellRangeAddressable) UnoRuntime.queryInterface(
+        XCellRangeAddressable CRA = UnoRuntime.queryInterface(
                                             XCellRangeAddressable.class,
                                             cellRange);
         XCell cell = null;
@@ -69,9 +69,9 @@ public class _XMultipleOperation extends MultiMethodTest {
             log.println("Exception while getting Cell " + e.getMessage());
         }
 
-        XCellAddressable CA = (XCellAddressable) UnoRuntime.queryInterface(
+        XCellAddressable CA = UnoRuntime.queryInterface(
                                       XCellAddressable.class, cell);
-        XCellAddressable CA2 = (XCellAddressable) UnoRuntime.queryInterface(
+        XCellAddressable CA2 = UnoRuntime.queryInterface(
                                        XCellAddressable.class, cell2);
         Point[] cellCoords = new Point[3];
         double[] cellValues = new double[3];

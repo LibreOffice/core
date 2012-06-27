@@ -157,8 +157,7 @@ public class XMLStylesImporter extends TestCase {
 
         final PrintWriter logF = log;
         //obtain style families
-        XStyleFamiliesSupplier styleSup = (XStyleFamiliesSupplier)
-            UnoRuntime.queryInterface (XStyleFamiliesSupplier.class, xDrawDoc) ;
+        XStyleFamiliesSupplier styleSup = UnoRuntime.queryInterface (XStyleFamiliesSupplier.class, xDrawDoc) ;
         final XNameAccess StyleFamilies = styleSup.getStyleFamilies();
 
         tEnv.addObjRelation("XDocumentHandler.ImportChecker",

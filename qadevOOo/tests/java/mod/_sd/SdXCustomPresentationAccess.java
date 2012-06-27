@@ -120,9 +120,8 @@ public class SdXCustomPresentationAccess extends TestCase {
         log.println( "creating a test environment" );
 
         log.println( "get presentation" );
-        XCustomPresentationSupplier oPS = (XCustomPresentationSupplier)
-            UnoRuntime.queryInterface(
-                XCustomPresentationSupplier.class, xImpressDoc);
+        XCustomPresentationSupplier oPS = UnoRuntime.queryInterface(
+            XCustomPresentationSupplier.class, xImpressDoc);
         XInterface oObj = oPS.getCustomPresentations();
 
 

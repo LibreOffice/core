@@ -62,7 +62,7 @@ public class UnoScrollBarControl extends TestCase {
             xTextDoc = SOF.createTextDoc(null);
 
             log.println("maximize the window size");
-            XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xTextDoc);
+            XModel xModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
             XFrame xFrame = xModel.getCurrentController().getFrame();
             XWindow xWin = xFrame.getContainerWindow();
 
@@ -120,7 +120,7 @@ public class UnoScrollBarControl extends TestCase {
         XControlModel the_Model2 = aShape2.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
@@ -158,7 +158,7 @@ public class UnoScrollBarControl extends TestCase {
         tEnv.addObjRelation("TOOLKIT", the_kit);
         tEnv.addObjRelation("MODEL", the_Model);
 
-        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow forObjRel = UnoRuntime.queryInterface(XWindow.class,
                                                                 aControl);
 
         tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);

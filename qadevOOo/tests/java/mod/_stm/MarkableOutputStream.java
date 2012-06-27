@@ -112,25 +112,22 @@ public class MarkableOutputStream extends TestCase {
 
         // Creating construction :
         // MarkableOutputStream -> Pipe -> MarkableInputStream
-        XActiveDataSource xdSmo = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
+        XActiveDataSource xdSmo = UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
 
-        final XOutputStream PipeOut = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class,aPipe);
+        final XOutputStream PipeOut = UnoRuntime.queryInterface(XOutputStream.class,aPipe);
         final XInputStream PipeIn = (XInputStream)
             UnoRuntime.queryInterface(XInputStream.class,aPipe);
 
         xdSmo.setOutputStream(PipeOut);
 
-        XActiveDataSink xmSi = (XActiveDataSink)
-            UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
+        XActiveDataSink xmSi = UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
 
         xmSi.setInputStream(PipeIn) ;
 
         oObj = (XInterface) mostream;
 
         // all data types for writing to an XDataInputStream
-        ArrayList data = new ArrayList() ;
+        ArrayList<Object> data = new ArrayList<Object>() ;
         data.add(new Boolean(true)) ;
         data.add(new Byte((byte)123)) ;
         data.add(new Character((char)1234)) ;
@@ -182,9 +179,8 @@ public class MarkableOutputStream extends TestCase {
                         return null;
                     }
 
-                    XActiveDataSink xDataSink = (XActiveDataSink)
-                        UnoRuntime.queryInterface(
-                            XActiveDataSink.class, xInStream);
+                    XActiveDataSink xDataSink = UnoRuntime.queryInterface(
+                        XActiveDataSink.class, xInStream);
                     xDataSink.setInputStream(PipeIn);
 
                     return xInStream;

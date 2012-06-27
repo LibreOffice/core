@@ -99,7 +99,7 @@ public class APIDescGetter extends DescGetter
             }
             else
             {
-                ArrayList subs = getSubInterfaces(job);
+                ArrayList<String> subs = getSubInterfaces(job);
                 String partjob = job.substring(0, job.indexOf(",")).trim();
                 DescEntry entry = getDescriptionForSingleJob(partjob, descPath,
                         debug);
@@ -167,13 +167,13 @@ public class APIDescGetter extends DescGetter
             {
                 //look the scenarion like this? :
                 // sw.SwXBodyText,sw.SwXTextCursor
-                ArrayList subs = getSubObjects(job);
+                ArrayList<String> subs = getSubObjects(job);
                 DescEntry[] entries = new DescEntry[subs.size()];
 
                 for (int i = 0; i < subs.size(); i++)
                 {
                     entries[i] = getDescriptionForSingleJob(
-                            (String) subs.get(i), descPath, debug);
+                            subs.get(i), descPath, debug);
                 }
                 return entries;
             }
@@ -263,8 +263,8 @@ public class APIDescGetter extends DescGetter
     {
         String line = "";
         String old_ifc_name = "";
-        ArrayList ifc_names = new ArrayList();
-        ArrayList meth_names = new ArrayList();
+        ArrayList<DescEntry> ifc_names = new ArrayList<DescEntry>();
+        ArrayList<DescEntry> meth_names = new ArrayList<DescEntry>();
         DescEntry ifcDesc = null;
 
         while (line != null)
@@ -464,17 +464,17 @@ public class APIDescGetter extends DescGetter
         return methDesc;
     }
 
-    private static void createIfcName(String ifc_name, ArrayList meth_names, DescEntry ifcDesc)
+    private static void createIfcName(String ifc_name, ArrayList<String> meth_names, DescEntry ifcDesc)
     {
     }
 
     /**
      * This method ensures that XComponent will be the last in the list of interfaces
      */
-    protected static Object[] makeArray(ArrayList entries)
+    protected static Object[] makeArray(ArrayList<DescEntry> entries)
     {
         Object[] entriesArray = entries.toArray();
-        ArrayList returnArray = new ArrayList();
+        ArrayList<Object> returnArray = new ArrayList<Object>();
         Object addAtEnd = null;
 
         for (int k = 0; k < entriesArray.length; k++)
@@ -730,9 +730,9 @@ public class APIDescGetter extends DescGetter
         return aEntry;
     }
 
-    protected ArrayList getSubInterfaces(String job)
+    protected ArrayList<String> getSubInterfaces(String job)
     {
-        ArrayList namesList = new ArrayList();
+        ArrayList<String> namesList = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(job, ",");
 
         for (int i = 0; st.hasMoreTokens(); i++)
@@ -748,9 +748,9 @@ public class APIDescGetter extends DescGetter
         return namesList;
     }
 
-    protected ArrayList getSubObjects(String job)
+    protected ArrayList<String> getSubObjects(String job)
     {
-        ArrayList namesList = new ArrayList();
+        ArrayList<String> namesList = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(job, ",");
 
         for (int i = 0; st.hasMoreTokens(); i++)
@@ -792,7 +792,7 @@ public class APIDescGetter extends DescGetter
             boolean debug)
     {
         String[] modules = null;
-        ArrayList componentList = new ArrayList();
+        ArrayList<String> componentList = new ArrayList<String>();
 
         if (!job.equals("unknown") && !job.equals("listall"))
         {
@@ -841,7 +841,7 @@ public class APIDescGetter extends DescGetter
 
         for (int i = 0; i < componentList.size(); i++)
         {
-            scenario[i] = (String) componentList.get(i);
+            scenario[i] = componentList.get(i);
         }
 
         return scenario;
@@ -864,7 +864,7 @@ public class APIDescGetter extends DescGetter
             return null;
         }
 
-        ArrayList scenarioList = new ArrayList();
+        ArrayList<String> scenarioList = new ArrayList<String>();
 
         try
         {
@@ -945,7 +945,7 @@ public class APIDescGetter extends DescGetter
 
     protected boolean isUnusedModule(String moduleName)
     {
-        ArrayList removed = new ArrayList();
+        ArrayList<String> removed = new ArrayList<String>();
         removed.add("acceptor");
         removed.add("brdgfctr");
         removed.add("connectr");

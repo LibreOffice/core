@@ -71,7 +71,7 @@ public class SwXTextEmbeddedObject extends TestCase {
         log.println("    disposing xTextDoc ");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                                         XCloseable.class, xTextDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
@@ -107,10 +107,9 @@ public class SwXTextEmbeddedObject extends TestCase {
 
         XTextCursor xCursor = xTextDoc.getText().createTextCursor();
         try {
-            XMultiServiceFactory xMultiServiceFactory = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+            XMultiServiceFactory xMultiServiceFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
             Object o = xMultiServiceFactory.createInstance("com.sun.star.text.TextEmbeddedObject" );
-            XTextContent xTextContent = (XTextContent)UnoRuntime.queryInterface(XTextContent.class, o);
+            XTextContent xTextContent = UnoRuntime.queryInterface(XTextContent.class, o);
             String sChartClassID = "12dcae26-281f-416f-a234-c3086127382e";
             XPropertySet xPropertySet = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, xTextContent);
@@ -122,12 +121,12 @@ public class SwXTextEmbeddedObject extends TestCase {
             e.printStackTrace((java.io.PrintWriter)log);
         }
 
-        XTextEmbeddedObjectsSupplier oTEOS = (XTextEmbeddedObjectsSupplier) UnoRuntime.queryInterface(
+        XTextEmbeddedObjectsSupplier oTEOS = UnoRuntime.queryInterface(
                                                      XTextEmbeddedObjectsSupplier.class,
                                                      xTextDoc);
 
         XNameAccess oEmObj = oTEOS.getEmbeddedObjects();
-        XIndexAccess oEmIn = (XIndexAccess) UnoRuntime.queryInterface(
+        XIndexAccess oEmIn = UnoRuntime.queryInterface(
                                      XIndexAccess.class, oEmObj);
 
         try {
@@ -145,7 +144,7 @@ public class SwXTextEmbeddedObject extends TestCase {
         XTextFrame aFrame = SOF.createTextFrame(xTextDoc, 500, 500);
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
-        XTextContent the_content = (XTextContent) UnoRuntime.queryInterface(
+        XTextContent the_content = UnoRuntime.queryInterface(
                                            XTextContent.class, aFrame);
 
         try {

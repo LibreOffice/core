@@ -274,7 +274,7 @@ public class DBTools {
         try {
             Object cont = xMSF.createInstance("com.sun.star.sdb.DatabaseContext") ;
 
-            dbContext = (XNamingService) UnoRuntime.queryInterface
+            dbContext = UnoRuntime.queryInterface
                 (XNamingService.class, cont) ;
 
         } catch (com.sun.star.uno.Exception e) {}
@@ -320,9 +320,8 @@ public class DBTools {
             revokeDB(name) ;
         } catch (com.sun.star.uno.Exception e) {}
 
-        XDocumentDataSource xDDS = (XDocumentDataSource)
-        UnoRuntime.queryInterface(XDocumentDataSource.class, dataSource);
-        XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class,
+        XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, dataSource);
+        XStorable store = UnoRuntime.queryInterface(XStorable.class,
                 xDDS.getDatabaseDocument());
         String aFile = utils.getOfficeTemp(xMSF) + name + ".odb";
         store.storeAsURL(aFile, new PropertyValue[] {  });
@@ -355,11 +354,9 @@ public class DBTools {
             dbContext.registerObject(contextName, newSource) ;
 
             Object handler = xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
-            XInteractionHandler xHandler = (XInteractionHandler)
-                UnoRuntime.queryInterface(XInteractionHandler.class, handler) ;
+            XInteractionHandler xHandler = UnoRuntime.queryInterface(XInteractionHandler.class, handler) ;
 
-            XCompletedConnection xSrcCon = (XCompletedConnection)
-                UnoRuntime.queryInterface(XCompletedConnection.class, newSource) ;
+            XCompletedConnection xSrcCon = UnoRuntime.queryInterface(XCompletedConnection.class, newSource) ;
 
             XConnection con = xSrcCon.connectWithCompletion(xHandler) ;
 
@@ -416,11 +413,9 @@ public class DBTools {
         throws com.sun.star.uno.Exception {
 
         Object handler = xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
-        XInteractionHandler xHandler = (XInteractionHandler)
-            UnoRuntime.queryInterface(XInteractionHandler.class, handler) ;
+        XInteractionHandler xHandler = UnoRuntime.queryInterface(XInteractionHandler.class, handler) ;
 
-        XCompletedConnection xSrcCon = (XCompletedConnection)
-            UnoRuntime.queryInterface(XCompletedConnection.class, dbSource) ;
+        XCompletedConnection xSrcCon = UnoRuntime.queryInterface(XCompletedConnection.class, dbSource) ;
 
         return xSrcCon.connectWithCompletion(xHandler) ;
     }
@@ -510,7 +505,7 @@ public class DBTools {
 
         XResultSet set = stat.executeQuery("SELECT * FROM " + table) ;
 
-        XResultSetUpdate updt = (XResultSetUpdate) UnoRuntime.queryInterface
+        XResultSetUpdate updt = UnoRuntime.queryInterface
             (XResultSetUpdate.class, set) ;
 
         int count = 0 ;
@@ -524,7 +519,7 @@ public class DBTools {
             count ++ ;
         }
 
-        XCloseable xClose = (XCloseable) UnoRuntime.queryInterface
+        XCloseable xClose = UnoRuntime.queryInterface
             (XCloseable.class, set) ;
         xClose.close() ;
 
@@ -556,10 +551,10 @@ public class DBTools {
 
         XResultSet set = stat.executeQuery("SELECT * FROM " + table) ;
 
-        XResultSetUpdate updt = (XResultSetUpdate) UnoRuntime.queryInterface
+        XResultSetUpdate updt = UnoRuntime.queryInterface
             (XResultSetUpdate.class, set) ;
 
-        XRowUpdate rowUpdt = (XRowUpdate) UnoRuntime.queryInterface
+        XRowUpdate rowUpdt = UnoRuntime.queryInterface
             (XRowUpdate.class, set) ;
 
         updt.moveToInsertRow() ;
@@ -592,7 +587,7 @@ public class DBTools {
 
         updt.insertRow() ;
 
-        XCloseable xClose = (XCloseable) UnoRuntime.queryInterface
+        XCloseable xClose = UnoRuntime.queryInterface
             (XCloseable.class, set) ;
         xClose.close() ;
     }
@@ -622,8 +617,7 @@ public class DBTools {
     * Prints full info about currently registered DataSource's.
     */
     public void printRegisteredDatabasesInfo(PrintWriter out) {
-        XEnumerationAccess dbContEA = (XEnumerationAccess)
-            UnoRuntime.queryInterface(XEnumerationAccess.class, dbContext) ;
+        XEnumerationAccess dbContEA = UnoRuntime.queryInterface(XEnumerationAccess.class, dbContext) ;
 
         XEnumeration xEnum = dbContEA.createEnumeration() ;
 

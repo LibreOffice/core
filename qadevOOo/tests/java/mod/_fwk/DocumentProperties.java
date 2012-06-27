@@ -98,8 +98,7 @@ public class DocumentProperties extends TestCase {
 
         shortWait();
 
-        XDocumentInfoSupplier xdis = (XDocumentInfoSupplier)
-                UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDoc);
+        XDocumentInfoSupplier xdis = UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDoc);
         //oObj = (XInterface)UnoRuntime.queryInterface(XInterface.class, docInfo);
         oObj = xdis.getDocumentInfo();
         TestEnvironment tEnv = new TestEnvironment( oObj );

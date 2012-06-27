@@ -32,7 +32,7 @@ public class _XScenarioEnhanced extends MultiMethodTest {
     public XScenarioEnhanced oObj = null;
 
     public void before() {
-        oObj = (XScenarioEnhanced) UnoRuntime.queryInterface(
+        oObj = UnoRuntime.queryInterface(
                        XScenarioEnhanced.class,
                        tEnv.getObjRelation("ScenarioSheet"));
     }

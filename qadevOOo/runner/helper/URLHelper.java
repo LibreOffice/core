@@ -240,7 +240,7 @@ public class URLHelper
      *              a filtered list of java File objects of all available files of the start dir
      *              and all accessable sub directories.
      */
-    public static ArrayList getSystemFilesFromDir(String sStartDir)
+    public static ArrayList<File> getSystemFilesFromDir(String sStartDir)
     {
         File aRoot = new File(sStartDir);
 
@@ -254,7 +254,7 @@ public class URLHelper
         if (lAllFiles == null )
             return null;
 
-        ArrayList lFilteredFiles = new ArrayList(lAllFiles.length);
+        ArrayList<File> lFilteredFiles = new ArrayList<File>(lAllFiles.length);
 
         for (int i=0; i<lAllFiles.length; ++i)
         {
@@ -264,10 +264,10 @@ public class URLHelper
             if (lAllFiles[i].isDirectory())
             {
                 // recursion!
-                ArrayList lSubFiles = URLHelper.getSystemFilesFromDir(lAllFiles[i].getPath());
+                ArrayList<File> lSubFiles = URLHelper.getSystemFilesFromDir(lAllFiles[i].getPath());
                 if (lSubFiles != null)
                 {
-                    Iterator aSnapshot = lSubFiles.iterator();
+                    Iterator<File> aSnapshot = lSubFiles.iterator();
                     while (aSnapshot.hasNext())
                         lFilteredFiles.add(aSnapshot.next());
                 }

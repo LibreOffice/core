@@ -88,8 +88,7 @@ public class ScAnnotationsObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -110,8 +109,7 @@ public class ScAnnotationsObj extends TestCase {
 
         log.println("Getting test object ") ;
 
-        XSpreadsheetDocument xSpreadsheetDoc = (XSpreadsheetDocument)
-            UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
+        XSpreadsheetDocument xSpreadsheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
         XSpreadsheets sheets = (XSpreadsheets) xSpreadsheetDoc.getSheets();
 
         XNameAccess oNames = (XNameAccess)
@@ -144,16 +142,13 @@ public class ScAnnotationsObj extends TestCase {
                 "Error getting test object from spreadsheet document",e) ;
         }
 
-        XSheetAnnotationAnchor oAnnoA = (XSheetAnnotationAnchor)
-            UnoRuntime.queryInterface(XSheetAnnotationAnchor.class, oCell);
+        XSheetAnnotationAnchor oAnnoA = UnoRuntime.queryInterface(XSheetAnnotationAnchor.class, oCell);
         XSheetAnnotation oAnno = oAnnoA.getAnnotation();
-        XSimpleText sText = ((XSimpleText)
-            UnoRuntime.queryInterface(XSimpleText.class, oAnno));
+        XSimpleText sText = UnoRuntime.queryInterface(XSimpleText.class, oAnno);
         sText.setString("ScAnnotationsObj");
 
-        XSheetAnnotationsSupplier supp = (XSheetAnnotationsSupplier)
-            UnoRuntime.queryInterface(
-                XSheetAnnotationsSupplier.class, oSheet);
+        XSheetAnnotationsSupplier supp = UnoRuntime.queryInterface(
+            XSheetAnnotationsSupplier.class, oSheet);
         oObj = supp.getAnnotations();
 
         TestEnvironment tEnv = new TestEnvironment( oObj );

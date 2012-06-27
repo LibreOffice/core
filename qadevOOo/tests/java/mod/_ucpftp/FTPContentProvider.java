@@ -52,8 +52,7 @@ public class FTPContentProvider extends TestCase {
 
         oObj = (XInterface) oInterface;
 
-        XContentIdentifierFactory CIF = (XContentIdentifierFactory)
-                UnoRuntime.queryInterface(XContentIdentifierFactory.class,aUCB);
+        XContentIdentifierFactory CIF = UnoRuntime.queryInterface(XContentIdentifierFactory.class,aUCB);
 
         log.println("ImplementationName: "+util.utils.getImplName(oObj));
         util.dbg.printInterfaces(oObj);

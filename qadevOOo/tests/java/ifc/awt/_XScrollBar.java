@@ -163,17 +163,17 @@ public class _XScrollBar extends MultiMethodTest {
     private void adjustScrollBar() {
 
 
-        XScrollBar sc = (XScrollBar) UnoRuntime.queryInterface(
+        XScrollBar sc = UnoRuntime.queryInterface(
                                 XScrollBar.class, tEnv.getTestObject());
 
         sc.setValue(500);
 
         shortWait();
 
-        XAccessible acc = (XAccessible) UnoRuntime.queryInterface(
+        XAccessible acc = UnoRuntime.queryInterface(
                                   XAccessible.class, tEnv.getTestObject());
 
-        XAccessibleComponent aCom = (XAccessibleComponent) UnoRuntime.queryInterface(
+        XAccessibleComponent aCom = UnoRuntime.queryInterface(
                                             XAccessibleComponent.class,
                                             acc.getAccessibleContext());
 

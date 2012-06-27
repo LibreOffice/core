@@ -80,7 +80,7 @@ public class Office implements IOffice
                 }
                 // TODO: run through all documents which exists as reports in odb files
                 OpenOfficeDatabaseReportExtractor aExtractor = new OpenOfficeDatabaseReportExtractor(m_aParameterHelper);
-                ArrayList aList = aExtractor.load(m_sDocumentName);
+                ArrayList<String> aList = aExtractor.load(m_sDocumentName);
                 if (aList != null)
                 {
                     // remove the whole section about the 'name'.odb there are no information we need

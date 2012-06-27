@@ -105,8 +105,7 @@ public class ChXChartAxis extends TestCase {
 
         // get the Axis
         log.println( "getting ChartAxis" );
-        XAxisYSupplier oAxisSup = (XAxisYSupplier)
-            UnoRuntime.queryInterface(XAxisYSupplier.class,oDiagram);
+        XAxisYSupplier oAxisSup = UnoRuntime.queryInterface(XAxisYSupplier.class,oDiagram);
         oObj = (XPropertySet) oAxisSup.getYAxis();
 
         log.println( "creating a new environment for chartdocument object" );

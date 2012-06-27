@@ -142,7 +142,7 @@ public class SvxDrawPage extends TestCase {
         XShape oShape = null;
         XDrawPages oDP = null;
 
-        XComponent xComp = (XComponent) UnoRuntime.queryInterface(
+        XComponent xComp = UnoRuntime.queryInterface(
                                    XComponent.class, xDoc);
 
 
@@ -153,7 +153,7 @@ public class SvxDrawPage extends TestCase {
         try {
             log.println("getting Drawpages");
 
-            XDrawPagesSupplier oDPS = (XDrawPagesSupplier) UnoRuntime.queryInterface(
+            XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(
                                               XDrawPagesSupplier.class, xDoc);
             oDP = (XDrawPages) oDPS.getDrawPages();
             oDP.insertNewByIndex(1);
@@ -191,7 +191,7 @@ public class SvxDrawPage extends TestCase {
 
         //adding a controlButton to have a Form
         FormTools.insertControlShape(
-                (XComponent) UnoRuntime.queryInterface(XComponent.class, xDoc),
+                UnoRuntime.queryInterface(XComponent.class, xDoc),
                 3000, 4500, 15000, 1000, "CommandButton");
 
         // relation for XShapes interface

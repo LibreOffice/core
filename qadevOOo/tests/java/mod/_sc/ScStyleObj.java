@@ -87,8 +87,7 @@ public class ScStyleObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
+        XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -123,12 +122,10 @@ public class ScStyleObj extends TestCase {
         log.println("creating a test environment");
 
         log.println("getting style");
-        XStyleFamiliesSupplier oStyleFamiliesSupplier = (XStyleFamiliesSupplier)
-            UnoRuntime.queryInterface(
-                XStyleFamiliesSupplier.class, xSpreadsheetDoc);
+        XStyleFamiliesSupplier oStyleFamiliesSupplier = UnoRuntime.queryInterface(
+            XStyleFamiliesSupplier.class, xSpreadsheetDoc);
         XNameAccess oStyleFamilies = oStyleFamiliesSupplier.getStyleFamilies();
-        XIndexAccess oStyleFamiliesIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oStyleFamilies);
+        XIndexAccess oStyleFamiliesIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oStyleFamilies);
         XNameAccess oStyleFamilyNameAccess = null;
         XStyle oStyle = null;
         try {
@@ -136,9 +133,8 @@ public class ScStyleObj extends TestCase {
                 new Type(XNameAccess.class),
                     oStyleFamiliesIndexAccess.getByIndex(0));
 
-            XIndexAccess oStyleFamilyIndexAccess = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class,
-                oStyleFamilyNameAccess);
+            XIndexAccess oStyleFamilyIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class,
+            oStyleFamilyNameAccess);
             oStyle = (XStyle) AnyConverter.toObject(
                 new Type(XStyle.class),oStyleFamilyIndexAccess.getByIndex(0));
         } catch(com.sun.star.lang.WrappedTargetException e) {
@@ -153,9 +149,8 @@ public class ScStyleObj extends TestCase {
         }
 
         log.println("Creating a user-defined style");
-        XMultiServiceFactory oMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(
-                XMultiServiceFactory.class, xSpreadsheetDoc);
+        XMultiServiceFactory oMSF = UnoRuntime.queryInterface(
+            XMultiServiceFactory.class, xSpreadsheetDoc);
 
         XInterface oInt = null;
         try {
@@ -194,8 +189,7 @@ public class ScStyleObj extends TestCase {
         //using the style
         log.println("Getting spreadsheet") ;
         XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
-        XIndexAccess oIndexSheets = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+        XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
 
         XCell aCell = null;
         try {
@@ -247,7 +241,7 @@ public class ScStyleObj extends TestCase {
 
     public String[] getPropertyNames(XPropertySet props) {
         Property[] the_props = props.getPropertySetInfo().getProperties();
-        ArrayList names = new ArrayList() ;
+        ArrayList<String> names = new ArrayList<String>() ;
 
         for (int i=0;i<the_props.length;i++) {
             boolean isWritable =
@@ -256,6 +250,6 @@ public class ScStyleObj extends TestCase {
                 names.add(the_props[i].Name);
             }
         }
-        return (String[]) names.toArray(new String[names.size()]) ;
+        return names.toArray(new String[names.size()]) ;
     }
 }    // finish class ScStyleObj

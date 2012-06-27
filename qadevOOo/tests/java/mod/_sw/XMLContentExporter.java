@@ -123,7 +123,7 @@ public class XMLContentExporter extends TestCase {
             oObj = (XInterface) xMSF.createInstanceWithArguments(
                 "com.sun.star.comp.Writer.XMLContentExporter",
                 new Object[] {arg});
-            XExporter xEx = (XExporter) UnoRuntime.queryInterface
+            XExporter xEx = UnoRuntime.queryInterface
                 (XExporter.class,oObj);
             xEx.setSourceDocument(xTextDoc);
 

@@ -96,8 +96,7 @@ public class SwXBookmarks extends TestCase {
             throw new StatusException( "Couldn't create Bookmark", e );
         }
 
-        XBookmarksSupplier oBSupp = (XBookmarksSupplier)
-            UnoRuntime.queryInterface(XBookmarksSupplier.class, xTextDoc);
+        XBookmarksSupplier oBSupp = UnoRuntime.queryInterface(XBookmarksSupplier.class, xTextDoc);
         XNameAccess oBookNA = oBSupp.getBookmarks();
         oObj = oBookNA;
         log.println( "creating a new environment for Bookmarks object" );

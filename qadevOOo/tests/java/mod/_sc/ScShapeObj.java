@@ -43,7 +43,7 @@ public class ScShapeObj extends TestCase {
 
         try {
             log.println( "creating a sheetdoc" );
-            xSheetDoc = (XComponent) UnoRuntime.queryInterface(XComponent.class, SOF.createCalcDoc(null));
+            xSheetDoc = UnoRuntime.queryInterface(XComponent.class, SOF.createCalcDoc(null));
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

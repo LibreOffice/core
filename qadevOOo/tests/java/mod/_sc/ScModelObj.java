@@ -84,11 +84,11 @@ public class ScModelObj extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
 
-        XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+        XComponent oComp = UnoRuntime.queryInterface(
                                    XComponent.class, xSpreadsheetDoc);
         util.DesktopTools.closeDoc(oComp);
 
-        oComp = (XComponent) UnoRuntime.queryInterface(XComponent.class,
+        oComp = UnoRuntime.queryInterface(XComponent.class,
                                                        xSecondsheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
@@ -126,13 +126,13 @@ public class ScModelObj extends TestCase {
                                      (XMultiServiceFactory) Param.getMSF());
 
         if (xSpreadsheetDoc != null) {
-            XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+            XComponent oComp = UnoRuntime.queryInterface(
                                        XComponent.class, xSpreadsheetDoc);
             util.DesktopTools.closeDoc(oComp);
         }
 
         if (xSecondsheetDoc != null) {
-            XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+            XComponent oComp = UnoRuntime.queryInterface(
                                        XComponent.class, xSecondsheetDoc);
             util.DesktopTools.closeDoc(oComp);
         }
@@ -146,9 +146,9 @@ public class ScModelObj extends TestCase {
             throw new StatusException("Couldn't create document ", e);
         }
 
-        XModel model1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel model1 = UnoRuntime.queryInterface(XModel.class,
                                                            xSpreadsheetDoc);
-        XModel model2 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel model2 = UnoRuntime.queryInterface(XModel.class,
                                                            xSecondsheetDoc);
         XInterface oObj = model1;
 
@@ -159,7 +159,7 @@ public class ScModelObj extends TestCase {
         cont1.getFrame().setName("cont1");
         cont2.getFrame().setName("cont2");
 
-        XSelectionSupplier sel = (XSelectionSupplier) UnoRuntime.queryInterface(
+        XSelectionSupplier sel = UnoRuntime.queryInterface(
                                          XSelectionSupplier.class, cont1);
 
         XCell toSel = null;
@@ -168,7 +168,7 @@ public class ScModelObj extends TestCase {
             log.println("Getting spreadsheet");
 
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets();
-            XIndexAccess oIndexSheets = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(
                                                 XIndexAccess.class, oSheets);
             XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
                                           new Type(XSpreadsheet.class),

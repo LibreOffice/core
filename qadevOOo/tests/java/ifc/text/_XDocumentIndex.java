@@ -78,12 +78,11 @@ public class _XDocumentIndex extends MultiMethodTest {
             XTextRange xTR = xText.getEnd();
             xTR.setString("IndexMark");
 
-            XMultiServiceFactory xDocMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+            XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
 
             Object idxMark = xDocMSF.createInstance
                 ("com.sun.star.text.DocumentIndexMark");
-            XTextContent xTC = (XTextContent) UnoRuntime.queryInterface
+            XTextContent xTC = UnoRuntime.queryInterface
                 (XTextContent.class, idxMark);
             xText.insertTextContent(xTR, xTC, true);
         } catch (com.sun.star.uno.Exception e) {

@@ -375,9 +375,8 @@ public class _XResultSet extends MultiMethodTest {
     * refreshRow() equals to saved value.
     */
     public void _refreshRow() {
-        XRowUpdate xRowUpdate = (XRowUpdate)
-            UnoRuntime.queryInterface(XRowUpdate.class, oObj);
-        XRow xRow = (XRow)UnoRuntime.queryInterface(XRow.class, oObj);
+        XRowUpdate xRowUpdate = UnoRuntime.queryInterface(XRowUpdate.class, oObj);
+        XRow xRow = UnoRuntime.queryInterface(XRow.class, oObj);
 
         if (xRowUpdate == null || xRow == null) {
             log.println("Test must be modified because XRow or XRowUpdate is't supported");

@@ -89,13 +89,12 @@ public class SwXFootnotes extends TestCase {
         XInterface oObj = null;
 
         log.println( "Creating a test environment" );
-        XMultiServiceFactory msf = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         log.println("creating a footnote");
         XFootnote oFootnote;
 
         try {
-            oFootnote = (XFootnote) UnoRuntime.queryInterface(XFootnote.class,
+            oFootnote = UnoRuntime.queryInterface(XFootnote.class,
                     msf.createInstance("com.sun.star.text.Footnote"));
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -112,8 +111,7 @@ public class SwXFootnotes extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't insert the footnote", e);
         }
-        oInterface = (XFootnotesSupplier)
-            UnoRuntime.queryInterface(XFootnotesSupplier.class, xTextDoc);
+        oInterface = UnoRuntime.queryInterface(XFootnotesSupplier.class, xTextDoc);
         oObj = oInterface.getFootnotes();
 
         log.println( "creating a new environment for Foontnotes object" );

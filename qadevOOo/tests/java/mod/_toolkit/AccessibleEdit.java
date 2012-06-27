@@ -99,15 +99,15 @@ public class AccessibleEdit extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+        XDispatchProvider aProv = UnoRuntime.queryInterface(
                                           XDispatchProvider.class,
                                           secondController);
 
@@ -116,7 +116,7 @@ public class AccessibleEdit extends TestCase {
         try {
             XInterface transf = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
                                         "com.sun.star.util.URLTransformer");
-            urlTransf = (XURLTransformer) UnoRuntime.queryInterface(
+            urlTransf = UnoRuntime.queryInterface(
                                 XURLTransformer.class, transf);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -139,14 +139,14 @@ public class AccessibleEdit extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Close");
-        action = (XAccessibleAction) UnoRuntime.queryInterface(
+        action = UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT);
@@ -155,7 +155,7 @@ public class AccessibleEdit extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleEditableText edText = (XAccessibleEditableText) UnoRuntime.queryInterface(
+        final XAccessibleEditableText edText = UnoRuntime.queryInterface(
                                                        XAccessibleEditableText.class,
                                                        oObj);
         edText.setText("AccessibleEdit");
@@ -171,7 +171,7 @@ public class AccessibleEdit extends TestCase {
             }
         });
 
-        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+        XAccessibleText text = UnoRuntime.queryInterface(
                                        XAccessibleText.class, oObj);
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());

@@ -46,7 +46,7 @@ public class _XSheetFilterableEx extends MultiMethodTest {
     public void _createFilterDescriptorByObject() {
         boolean res = true;
         Object parent = tEnv.getTestObject();
-        XSheetFilterable aFilterable = (XSheetFilterable) UnoRuntime.queryInterface(
+        XSheetFilterable aFilterable = UnoRuntime.queryInterface(
                                                XSheetFilterable.class, parent);
         XSheetFilterDescriptor desc = oObj.createFilterDescriptorByObject(
                                               aFilterable);

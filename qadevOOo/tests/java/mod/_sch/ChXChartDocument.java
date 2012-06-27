@@ -135,7 +135,7 @@ public class ChXChartDocument extends TestCase {
         cont1.getFrame().setName("cont1");
         cont2.getFrame().setName("cont2");
 
-        XSelectionSupplier sel = (XSelectionSupplier) UnoRuntime.queryInterface(
+        XSelectionSupplier sel = UnoRuntime.queryInterface(
                                          XSelectionSupplier.class, cont1);
 
         log.println("creating a new environment for chartdocument object");

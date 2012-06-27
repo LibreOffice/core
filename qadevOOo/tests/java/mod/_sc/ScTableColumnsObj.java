@@ -85,8 +85,7 @@ public class ScTableColumnsObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -127,8 +126,7 @@ public class ScTableColumnsObj extends TestCase {
             throw new StatusException("Couldn't get spreadsheet", e);
         }
 
-        XColumnRowRange oColumnRowRange = (XColumnRowRange)
-            UnoRuntime.queryInterface(XColumnRowRange.class, xSpreadsheet);
+        XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, xSpreadsheet);
         XTableColumns oColumns = (XTableColumns) oColumnRowRange.getColumns();
         oObj = oColumns;
 

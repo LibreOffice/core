@@ -157,9 +157,8 @@ public class XMLStylesImporter extends TestCase {
         tEnv.addObjRelation("XDocumentHandler.XMLData", xml) ;
         XNameAccess styles = null ;
         try {
-            XStyleFamiliesSupplier sup = (XStyleFamiliesSupplier)
-                UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
-                xImpressDoc);
+            XStyleFamiliesSupplier sup = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
+            xImpressDoc);
             XNameAccess oStyleFamilies = sup.getStyleFamilies();
             Object family = oStyleFamilies.getByName("graphics") ;
             styles = (XNameAccess) UnoRuntime.queryInterface

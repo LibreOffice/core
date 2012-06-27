@@ -280,7 +280,7 @@ public class GraphicalDifferenceCheck
         String resultURL = URLHelper.getFileURLFromSystemPath(ensureEndingFileSep(_sOutputPath) + resultDocName);
 
         XStorable xStorable = null;
-        xStorable  = (com.sun.star.frame.XStorable)UnoRuntime.queryInterface(com.sun.star.frame.XStorable.class, xComponent);
+        xStorable  = UnoRuntime.queryInterface(com.sun.star.frame.XStorable.class, xComponent);
         if(xStorable == null)
         {
             throw new ConvWatchCancelException("com.sun.star.frame.XStorable could not be instantiated from the office.");

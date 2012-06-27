@@ -50,7 +50,7 @@ public class LayoutManager extends TestCase {
         log.println("    disposing xTextDoc ");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
             XCloseable.class, xTextDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {

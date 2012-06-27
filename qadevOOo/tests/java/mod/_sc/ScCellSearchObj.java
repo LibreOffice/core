@@ -84,8 +84,7 @@ public class ScCellSearchObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -111,8 +110,7 @@ public class ScCellSearchObj extends TestCase {
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
@@ -128,8 +126,7 @@ public class ScCellSearchObj extends TestCase {
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }
 
-        XSearchable xSearch = (XSearchable)
-                        UnoRuntime.queryInterface(XSearchable.class,oSheet);
+        XSearchable xSearch = UnoRuntime.queryInterface(XSearchable.class,oSheet);
 
         oObj = xSearch.createSearchDescriptor();
         // create testobject here

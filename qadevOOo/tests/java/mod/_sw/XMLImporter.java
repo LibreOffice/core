@@ -112,7 +112,7 @@ public class XMLImporter extends TestCase {
         try {
             oObj = (XInterface) xMSF.createInstance
                 ("com.sun.star.comp.Writer.XMLImporter");
-            XImporter xIm = (XImporter) UnoRuntime.queryInterface
+            XImporter xIm = UnoRuntime.queryInterface
                 (XImporter.class,oObj);
             xIm.setTargetDocument(xTextDoc);
         } catch (com.sun.star.uno.Exception e) {
@@ -142,7 +142,7 @@ public class XMLImporter extends TestCase {
         tEnv.addObjRelation("TargetDocument",xTextDoc);
         log.println("Implementation Name: "+util.utils.getImplName(oObj));
 
-        final XTextDocument textDoc = (XTextDocument) UnoRuntime.queryInterface
+        final XTextDocument textDoc = UnoRuntime.queryInterface
             (XTextDocument.class, xTextDoc) ;
         final PrintWriter fLog = log ;
         tEnv.addObjRelation("XDocumentHandler.ImportChecker",

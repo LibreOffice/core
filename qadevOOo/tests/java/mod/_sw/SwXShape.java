@@ -99,12 +99,11 @@ public class SwXShape extends TestCase {
 
         log.println( "creating a test environment" );
         log.println( "getting Drawpage" );
-        XDrawPageSupplier oDPS = (XDrawPageSupplier)
-            UnoRuntime.queryInterface(XDrawPageSupplier.class, xTextDoc);
+        XDrawPageSupplier oDPS = UnoRuntime.queryInterface(XDrawPageSupplier.class, xTextDoc);
         oDP = oDPS.getDrawPage();
 
         log.println( "getting Shape" );
-        oShapes = (XShapes) UnoRuntime.queryInterface(XShapes.class, oDP);
+        oShapes = UnoRuntime.queryInterface(XShapes.class, oDP);
         oObj = SOF.createShape(xTextDoc,5000,3500,7500,5000,"Rectangle");
         oShapes.add((XShape) oObj);
 

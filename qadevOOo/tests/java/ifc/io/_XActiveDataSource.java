@@ -55,7 +55,7 @@ public class _XActiveDataSource extends MultiMethodTest {
     */
     public void before() {
         XInterface x = (XInterface)tEnv.getObjRelation("OutputStream");
-        oStream = (XOutputStream) UnoRuntime.queryInterface
+        oStream = UnoRuntime.queryInterface
                 (XOutputStream.class, x) ;
     }
 

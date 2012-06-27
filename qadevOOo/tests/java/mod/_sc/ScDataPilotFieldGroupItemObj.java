@@ -87,7 +87,7 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
     {
         log.println ("    disposing xSheetDoc ");
 
-        XComponent oComp = (XComponent) UnoRuntime.queryInterface (
+        XComponent oComp = UnoRuntime.queryInterface (
             XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc (oComp);
     }
@@ -122,7 +122,7 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
         XSpreadsheets xSpreadsheets = (XSpreadsheets) xSheetDoc.getSheets ();
         XSpreadsheet oSheet = null;
         XSpreadsheet oSheet2 = null;
-        XIndexAccess oIndexAccess = (XIndexAccess) UnoRuntime.queryInterface (
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface (
             XIndexAccess.class, xSpreadsheets);
         // Make sure there are at least two sheets
         xSpreadsheets.insertNewByName("Some Sheet", (short)0);
@@ -215,7 +215,7 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
         // create the test objects
         log.println ("Getting test objects");
 
-        XDataPilotTablesSupplier DPTS = (XDataPilotTablesSupplier) UnoRuntime.queryInterface (
+        XDataPilotTablesSupplier DPTS = UnoRuntime.queryInterface (
             XDataPilotTablesSupplier.class,
             oSheet);
         XDataPilotTables DPT = DPTS.getDataPilotTables ();
@@ -278,11 +278,11 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
         }
 
         DPT.insertNewByName ("DataPilotTable", sCellAdress, DPDsc);
-        XIndexAccess xIA = (XIndexAccess) UnoRuntime.queryInterface (XIndexAccess.class,DPTS.getDataPilotTables ());
+        XIndexAccess xIA = UnoRuntime.queryInterface (XIndexAccess.class,DPTS.getDataPilotTables ());
         XIndexAccess IA = null;
         try
         {
-            XDataPilotDescriptor xDPT = (XDataPilotDescriptor) UnoRuntime.queryInterface (XDataPilotDescriptor.class,xIA.getByIndex (0));
+            XDataPilotDescriptor xDPT = UnoRuntime.queryInterface (XDataPilotDescriptor.class,xIA.getByIndex (0));
             IA = xDPT.getRowFields ();
             //getSRange(IA);
             System.out.println ("COUNT: "+IA.getCount ());
@@ -307,14 +307,14 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
 
         try
         {
-            XDataPilotFieldGrouping  dpfg = (XDataPilotFieldGrouping) UnoRuntime.queryInterface (XDataPilotFieldGrouping.class, datapilotfield);
+            XDataPilotFieldGrouping  dpfg = UnoRuntime.queryInterface (XDataPilotFieldGrouping.class, datapilotfield);
             String[] elements = new String[]{"aName","otherName"};
             dpfg.createNameGroup (elements);
             DataPilotFieldGroupInfo dpgi=null;
-            xIA = (XIndexAccess) UnoRuntime.queryInterface (XIndexAccess.class,DPTS.getDataPilotTables ());
+            xIA = UnoRuntime.queryInterface (XIndexAccess.class,DPTS.getDataPilotTables ());
         try
         {
-            XDataPilotDescriptor xDPT = (XDataPilotDescriptor) UnoRuntime.queryInterface (XDataPilotDescriptor.class,xIA.getByIndex (0));
+            XDataPilotDescriptor xDPT = UnoRuntime.queryInterface (XDataPilotDescriptor.class,xIA.getByIndex (0));
             IA = xDPT.getRowFields ();
         }
         catch (com.sun.star.lang.WrappedTargetException e)
@@ -335,13 +335,13 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
                 if (((Boolean)xPropertySet.getPropertyValue ("IsGroupField")).booleanValue ())
                 {
                     xPropertySet = (XPropertySet) UnoRuntime.queryInterface (XPropertySet.class, datapilotfield);
-                    XNamed xNamed = (XNamed) UnoRuntime.queryInterface (XNamed.class, IA.getByIndex (i));
+                    XNamed xNamed = UnoRuntime.queryInterface (XNamed.class, IA.getByIndex (i));
                     System.out.println ("name: "+xNamed.getName ());
                     dpgi = (DataPilotFieldGroupInfo) xPropertySet.getPropertyValue ("GroupInfo");
                 }
             }
             groups = dpgi.Groups;
-            XIndexAccess groupAccess = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, groups);
+            XIndexAccess groupAccess = UnoRuntime.queryInterface(XIndexAccess.class, groups);
             XNameAccess groupNames = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, groupAccess.getByIndex(0));
             oObj = (XInterface) UnoRuntime.queryInterface(XInterface.class, groupNames.getByName("aName"));
         }

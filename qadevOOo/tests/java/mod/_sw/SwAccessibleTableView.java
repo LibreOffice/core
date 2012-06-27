@@ -88,8 +88,7 @@ public class SwAccessibleTableView extends TestCase {
                 + e.getMessage(), e);
         }
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 
@@ -106,9 +105,8 @@ public class SwAccessibleTableView extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         XController xController = xTextDoc.getCurrentController();
-        XViewSettingsSupplier xViewSetSup = (XViewSettingsSupplier)
-                UnoRuntime.queryInterface(XViewSettingsSupplier.class,
-                xController);
+        XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
+        xController);
 
         final XPropertySet PropSet = xViewSetSup.getViewSettings();
 

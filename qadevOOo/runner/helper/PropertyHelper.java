@@ -29,7 +29,7 @@ public class PropertyHelper
        @param _aArrayList
        @return a PropertyValue[]
     */
-    public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList _aPropertyList)
+    public static PropertyValue[] createPropertyValueArrayFormArrayList(ArrayList<PropertyValue> _aPropertyList)
         {
             // copy the whole PropertyValue List to an PropertyValue Array
             PropertyValue[] aSaveProperties = null;
@@ -40,7 +40,7 @@ public class PropertyHelper
             }
             else
             {
-                aSaveProperties = (PropertyValue[])_aPropertyList.toArray(new PropertyValue[_aPropertyList.size()]);
+                aSaveProperties = _aPropertyList.toArray(new PropertyValue[_aPropertyList.size()]);
                 // old java 1.4
 //                if (_aPropertyList.size() > 0)
 //                {

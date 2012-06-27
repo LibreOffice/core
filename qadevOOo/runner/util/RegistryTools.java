@@ -43,7 +43,7 @@ public class RegistryTools {
 
         Object oInterface = xMSF.createInstance
             ("com.sun.star.registry.SimpleRegistry");
-        return (XSimpleRegistry) UnoRuntime.queryInterface (
+        return UnoRuntime.queryInterface (
             XSimpleRegistry.class, oInterface) ;
     }
 

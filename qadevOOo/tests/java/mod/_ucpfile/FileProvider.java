@@ -49,8 +49,7 @@ public class FileProvider extends TestCase {
 
         oObj = (XInterface) oInterface;
 
-        XContentIdentifierFactory CIF = (XContentIdentifierFactory)
-                UnoRuntime.queryInterface(XContentIdentifierFactory.class,oObj);
+        XContentIdentifierFactory CIF = UnoRuntime.queryInterface(XContentIdentifierFactory.class,oObj);
 
         System.out.println("ImplementationName: "+util.utils.getImplName(oObj));
 

@@ -102,8 +102,7 @@ public class SdDrawPagesAccess extends TestCase {
 
         // get the drawpage of drawing here
         log.println( "getting Drawpages" );
-        XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
         XDrawPages oDP = (XDrawPages) oDPS.getDrawPages();
         oDP.insertNewByIndex(1);
         oDP.insertNewByIndex(2);

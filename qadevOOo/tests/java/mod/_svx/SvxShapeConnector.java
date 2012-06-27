@@ -128,12 +128,11 @@ public class SvxShapeConnector extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
         try {
-            XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class,xDrawDoc);
+            XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class,xDrawDoc);
             Object oInt = oDocMSF.createInstance
                 ( "com.sun.star.drawing.ConnectorShape" );
 
-            oShape = (XShape)UnoRuntime.queryInterface( XShape.class, oInt );
+            oShape = UnoRuntime.queryInterface( XShape.class, oInt );
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
         }
         catch (Exception e) {

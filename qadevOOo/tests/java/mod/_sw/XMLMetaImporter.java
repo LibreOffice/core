@@ -153,7 +153,7 @@ public class XMLMetaImporter extends TestCase {
 
         tEnv.addObjRelation("XDocumentHandler.XMLData", xml) ;
 
-        XDocumentInfoSupplier infoSup = (XDocumentInfoSupplier) UnoRuntime.queryInterface
+        XDocumentInfoSupplier infoSup = UnoRuntime.queryInterface
             (XDocumentInfoSupplier.class, xTextDoc) ;
         final XPropertySet docInfo = (XPropertySet) UnoRuntime.queryInterface
             (XPropertySet.class, infoSup.getDocumentInfo()) ;

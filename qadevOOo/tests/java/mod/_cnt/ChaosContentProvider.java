@@ -87,8 +87,7 @@ public class ChaosContentProvider extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // adding relation for XContentProvider
-        XContentIdentifierFactory CIF = (XContentIdentifierFactory)
-        UnoRuntime.queryInterface(XContentIdentifierFactory.class, cntFactory);
+        XContentIdentifierFactory CIF = UnoRuntime.queryInterface(XContentIdentifierFactory.class, cntFactory);
 
         tEnv.addObjRelation("FACTORY", CIF) ;
         tEnv.addObjRelation("CONTENT1", "ftp://localhost") ;

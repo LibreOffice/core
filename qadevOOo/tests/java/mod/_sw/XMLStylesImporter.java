@@ -153,7 +153,7 @@ public class XMLStylesImporter extends TestCase {
 
         tEnv.addObjRelation("XDocumentHandler.XMLData", xml) ;
 
-        XFootnotesSupplier supp = (XFootnotesSupplier) UnoRuntime.queryInterface
+        XFootnotesSupplier supp = UnoRuntime.queryInterface
             (XFootnotesSupplier.class, xTextDoc);
         final XPropertySet set = supp.getFootnoteSettings();
         final PrintWriter logF = log ;

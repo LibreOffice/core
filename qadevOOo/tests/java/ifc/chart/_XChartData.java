@@ -59,7 +59,7 @@ public class _XChartData extends MultiMethodTest {
         oObj.addChartDataChangeEventListener(listener1);
         oObj.addChartDataChangeEventListener(listener2);
 
-        dataArray = (XChartDataArray) UnoRuntime.queryInterface(
+        dataArray = UnoRuntime.queryInterface(
                             XChartDataArray.class, oObj);
 
         double[][] data = dataArray.getData();
@@ -97,7 +97,7 @@ public class _XChartData extends MultiMethodTest {
         dataChanged[1] = false;
 
         oObj.removeChartDataChangeEventListener(listener1);
-        dataArray = (XChartDataArray) UnoRuntime.queryInterface(
+        dataArray = UnoRuntime.queryInterface(
                             XChartDataArray.class, oObj);
 
         double[][] data = dataArray.getData();

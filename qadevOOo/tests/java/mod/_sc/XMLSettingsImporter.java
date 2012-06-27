@@ -75,7 +75,7 @@ public class XMLSettingsImporter extends TestCase {
         try {
             log.println( "creating a Spreadsheet document" );
             xSheetDoc = SOF.createCalcDoc( null );
-            comp = (XComponent) UnoRuntime.queryInterface
+            comp = UnoRuntime.queryInterface
                 (XComponent.class, xSheetDoc) ;
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
@@ -129,12 +129,11 @@ public class XMLSettingsImporter extends TestCase {
         try {
             oInt = xMSF.createInstance
                 ("com.sun.star.comp.Calc.XMLSettingsImporter") ;
-            XImporter imp = (XImporter) UnoRuntime.queryInterface
+            XImporter imp = UnoRuntime.queryInterface
                 (XImporter.class, oInt) ;
             imp.setTargetDocument(comp) ;
 
-            XModel xSheetModel = (XModel)
-                UnoRuntime.queryInterface(XModel.class, xSheetDoc);
+            XModel xSheetModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
             XController xController = xSheetModel.getCurrentController();
             xPropSet = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, xController);

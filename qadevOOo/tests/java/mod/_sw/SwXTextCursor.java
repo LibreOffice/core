@@ -179,7 +179,7 @@ public class SwXTextCursor extends TestCase {
         tEnv.addObjRelation("PropertyNames", getPropertyNames(xCursorProp));
 
         //Adding relation for util.XSortable
-        final XParagraphCursor paragrCursor = (XParagraphCursor) UnoRuntime.queryInterface(
+        final XParagraphCursor paragrCursor = UnoRuntime.queryInterface(
                                                       XParagraphCursor.class,
                                                       oObj);
         final PrintWriter finalLog = log;
@@ -292,7 +292,7 @@ public class SwXTextCursor extends TestCase {
 
     public String[] getPropertyNames(XPropertySet props) {
         Property[] the_props = props.getPropertySetInfo().getProperties();
-        ArrayList names = new ArrayList();
+        ArrayList<String> names = new ArrayList<String>();
 
         for (int i = 0; i < the_props.length; i++) {
             boolean isWritable = ((the_props[i].Attributes & PropertyAttribute.READONLY) == 0);
@@ -302,6 +302,6 @@ public class SwXTextCursor extends TestCase {
             }
         }
 
-        return (String[]) names.toArray(new String[names.size()]);
+        return names.toArray(new String[names.size()]);
     }
 } // finish class SwXTextCursor

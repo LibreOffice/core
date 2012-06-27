@@ -33,8 +33,8 @@ public class ShowTargets
 
     public static void main( String[] args )
     {
-        ArrayList targets = new ArrayList();
-        ArrayList descs = new ArrayList();
+        ArrayList<String> targets = new ArrayList<String>();
+        ArrayList<String> descs = new ArrayList<String>();
 
         targets.add( "run" );
         descs.add( "runs all complex tests in this module" );
@@ -52,7 +52,7 @@ public class ShowTargets
                 continue;
 
             // get the class
-            Class potentialTestClass = null;
+            Class<?> potentialTestClass = null;
             try { potentialTestClass = Class.forName( completePotentialClassName ); }
             catch( java.lang.ClassNotFoundException e )
             {
@@ -60,7 +60,7 @@ public class ShowTargets
             }
 
             // see if it is derived from complexlib.ComplexTestCase
-            Class superClass = potentialTestClass.getSuperclass();
+            Class<?> superClass = potentialTestClass.getSuperclass();
             while ( superClass != null )
             {
                 if ( superClass.getName().equals( "complexlib.ComplexTestCase" ) )
@@ -94,7 +94,7 @@ public class ShowTargets
 
     /** determines if the test denoted by a given Class is an interactive test
      */
-    static private boolean isInteractiveTest( Class testClass )
+    static private boolean isInteractiveTest( Class<?> testClass )
     {
         java.lang.reflect.Method interactiveTestMethod = null;
         try { interactiveTestMethod = testClass.getMethod( "isInteractiveTest", new Class[]{} ); }
@@ -112,7 +112,7 @@ public class ShowTargets
         return false;
     }
 
-    static private String getShortTestDescription( Class _testClass )
+    static private String getShortTestDescription( Class<?> _testClass )
     {
         java.lang.reflect.Method getShortDescriptionMethod = null;
         try { getShortDescriptionMethod = _testClass.getMethod( "getShortTestDescription", new Class[]{} ); }

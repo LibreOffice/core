@@ -748,7 +748,7 @@ public class ValueChanger {
     if (oldValue instanceof com.sun.star.uno.Enum) {
         // universal changer for Enumerations
         try {
-            Class enumClass = oldValue.getClass() ;
+            Class<?> enumClass = oldValue.getClass() ;
             Field[] flds = enumClass.getFields() ;
 
             newValue = null ;
@@ -861,7 +861,7 @@ public class ValueChanger {
     } else
     if (oldValue.getClass().isArray()) {
         // changer for arrays : changes all elements
-        Class arrType = oldValue.getClass().getComponentType() ;
+        Class<?> arrType = oldValue.getClass().getComponentType() ;
         newValue = Array.newInstance(arrType, Array.getLength(oldValue)) ;
         for (int i = 0; i < Array.getLength(newValue); i++) {
             if (!arrType.isPrimitive()) {
@@ -900,13 +900,13 @@ public class ValueChanger {
     } else
     if (isStructure(oldValue)) {
         // universal changer for structures
-        Class clazz = oldValue.getClass() ;
+        Class<?> clazz = oldValue.getClass() ;
         try {
             newValue = clazz.newInstance() ;
             Field[] fields = clazz.getFields();
             for (int i = 0; i < fields.length; i++) {
                 if ((fields[i].getModifiers() & Modifier.PUBLIC) != 0) {
-                    Class fType = fields[i].getType() ;
+                    Class<?> fType = fields[i].getType() ;
                     Field field = fields[i] ;
                     if (!fType.isPrimitive()) {
                         field.set(newValue, changePValue(field.get(oldValue)));

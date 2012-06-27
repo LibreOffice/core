@@ -142,9 +142,9 @@ public class _BaseIndex extends MultiPropertyTest {
                                        Object newValue, Object resValue,
                                        Exception exception)
                                 throws Exception {
-                PropertyValue[][] res = (PropertyValue[][]) ((XIndexAccess) UnoRuntime.queryInterface(
+                PropertyValue[][] res = (PropertyValue[][]) UnoRuntime.queryInterface(
                                                                      XIndexAccess.class,
-                                                                     resValue)).getByIndex(0);
+                                                                     resValue).getByIndex(0);
 
                 log.println("Result:");
                 printLevelFormatProperty(resValue);

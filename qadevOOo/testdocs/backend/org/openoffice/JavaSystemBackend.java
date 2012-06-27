@@ -219,7 +219,7 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
             XLayerContentDescriber xLayerContentDescriber = null;
 
             try {
-                xLayerContentDescriber = (XLayerContentDescriber) UnoRuntime.queryInterface(
+                xLayerContentDescriber = UnoRuntime.queryInterface(
                                                  XLayerContentDescriber.class,
                                                  msf.createInstance(
                                                          "com.sun.star.comp.configuration.backend.LayerDescriber"));

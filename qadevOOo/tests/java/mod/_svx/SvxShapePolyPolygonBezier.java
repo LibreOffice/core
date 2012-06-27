@@ -184,12 +184,11 @@ public class SvxShapePolyPolygonBezier extends TestCase {
 
             SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class, xDrawDoc) ;
+            XMultiServiceFactory xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xDrawDoc) ;
 
             XInterface oInst = (XInterface) xMSF.createInstance
                 ("com.sun.star.drawing.ClosedBezierShape") ;
-            oShape = (XShape) UnoRuntime.queryInterface
+            oShape = UnoRuntime.queryInterface
                 (XShape.class, oInst) ;
 
             Point[] points = new Point[2];

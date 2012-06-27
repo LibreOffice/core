@@ -225,8 +225,7 @@ public class _XResultSetUpdate extends MultiMethodTest {
             oObj.moveToCurrentRow();
             int rowsBefore = tester.rowCount() ;
             oObj.moveToInsertRow() ;
-            XRowUpdate rowU = (XRowUpdate)
-                            UnoRuntime.queryInterface(XRowUpdate.class, oObj);
+            XRowUpdate rowU = UnoRuntime.queryInterface(XRowUpdate.class, oObj);
             rowU.updateString(1,"open");
             rowU.updateInt(2,5);
             rowU.updateDouble(5,3.4);

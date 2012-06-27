@@ -83,7 +83,7 @@ public class DicList extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         //creating a user defined dictionary for XSearchableDictionaryList
-        XDictionaryList xDicList = (XDictionaryList) UnoRuntime.queryInterface(
+        XDictionaryList xDicList = UnoRuntime.queryInterface(
                                                     XDictionaryList.class, oObj);
         xDicList.removeDictionary(xDicList.getDictionaryByName("MyDictionary"));
         XDictionary xDic = xDicList.createDictionary("NegativDic",new Locale(

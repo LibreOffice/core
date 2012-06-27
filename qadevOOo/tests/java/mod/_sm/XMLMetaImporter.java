@@ -119,7 +119,7 @@ public class XMLMetaImporter extends TestCase {
             oObj = (XInterface)xMSF.createInstance(
                     "com.sun.star.comp.Math.XMLMetaImporter");
 
-            xDocInfoSup = (XDocumentInfoSupplier) UnoRuntime.queryInterface
+            xDocInfoSup = UnoRuntime.queryInterface
                 (XDocumentInfoSupplier.class, xMathDoc) ;
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

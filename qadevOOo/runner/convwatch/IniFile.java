@@ -33,7 +33,7 @@ class IniFile
      * Problem, if ini file changed why other write something difference, we don't realise this.
      */
     String m_sFilename;
-    ArrayList m_aList;
+    ArrayList<String> m_aList;
     boolean m_bListContainUnsavedChanges = false;
 
     /**
@@ -47,10 +47,10 @@ class IniFile
             m_aList = loadLines();
         }
 
-    ArrayList loadLines()
+    ArrayList<String> loadLines()
         {
             File aFile = new File(m_sFilename);
-            ArrayList aLines = new ArrayList();
+            ArrayList<String> aLines = new ArrayList<String>();
             if (! aFile.exists())
             {
                 GlobalLogWriter.get().println("couldn't find file " + m_sFilename);
@@ -120,7 +120,7 @@ class IniFile
 
     String getItem(int i)
         {
-            return (String)m_aList.get(i);
+            return m_aList.get(i);
         }
 
     String buildSectionName(String _sSectionName)

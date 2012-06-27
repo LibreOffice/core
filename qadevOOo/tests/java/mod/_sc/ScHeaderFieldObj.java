@@ -90,8 +90,7 @@ public class ScHeaderFieldObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc);
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -130,10 +129,9 @@ public class ScHeaderFieldObj extends TestCase {
         XTextContent oContent = null;
         XInterface aField = null;
 
-        XStyleFamiliesSupplier StyleFam = (XStyleFamiliesSupplier)
-            UnoRuntime.queryInterface(
-                XStyleFamiliesSupplier.class,
-                xSpreadsheetDoc );
+        XStyleFamiliesSupplier StyleFam = UnoRuntime.queryInterface(
+            XStyleFamiliesSupplier.class,
+            xSpreadsheetDoc );
 
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
         try{
@@ -177,18 +175,16 @@ public class ScHeaderFieldObj extends TestCase {
 
         XText left = RPHC.getLeftText();
 
-        XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(
-                XMultiServiceFactory.class,
-                xSpreadsheetDoc );
+        XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(
+            XMultiServiceFactory.class,
+            xSpreadsheetDoc );
 
         XTextContent the_Field = null;
         try {
             oObj = (XInterface)
                 oDocMSF.createInstance( "com.sun.star.text.TextField.Time" );
 
-            the_Field = (XTextContent)
-                UnoRuntime.queryInterface(XTextContent.class,oObj);
+            the_Field = UnoRuntime.queryInterface(XTextContent.class,oObj);
 
             aField = (XInterface)
                 oDocMSF.createInstance("com.sun.star.text.TextField.Date");
@@ -197,8 +193,7 @@ public class ScHeaderFieldObj extends TestCase {
             throw new StatusException("Couldn't create instance", e);
         }
 
-        oContent = (XTextContent)
-            UnoRuntime.queryInterface(XTextContent.class, aField);
+        oContent = UnoRuntime.queryInterface(XTextContent.class, aField);
 
         XTextCursor the_Cursor = left.createTextCursor();
 

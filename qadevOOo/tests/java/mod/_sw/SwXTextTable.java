@@ -153,17 +153,17 @@ public class SwXTextTable extends TestCase {
             public void prepareToSort() {
                 oTable.getCellByName("A1").setValue(4);
 
-                XTextRange textRange = (XTextRange) UnoRuntime.queryInterface(
+                XTextRange textRange = UnoRuntime.queryInterface(
                                                XTextRange.class,
                                                oTable.getCellByName("A2"));
                 textRange.setString("b");
                 oTable.getCellByName("A3").setValue(3);
-                textRange = (XTextRange) UnoRuntime.queryInterface(
+                textRange = UnoRuntime.queryInterface(
                                     XTextRange.class,
                                     oTable.getCellByName("A4"));
                 textRange.setString("a");
                 oTable.getCellByName("A5").setValue(23);
-                textRange = (XTextRange) UnoRuntime.queryInterface(
+                textRange = UnoRuntime.queryInterface(
                                     XTextRange.class,
                                     oTable.getCellByName("A6"));
                 textRange.setString("ab");
@@ -179,7 +179,7 @@ public class SwXTextTable extends TestCase {
 
                 for (int i = 0; i < 6; i++) {
                     XCell cell = oTable.getCellByName("A" + (i + 1));
-                    XTextRange textRange = (XTextRange) UnoRuntime.queryInterface(
+                    XTextRange textRange = UnoRuntime.queryInterface(
                                                    XTextRange.class, cell);
                     value[i] = textRange.getString();
                 }
@@ -243,7 +243,7 @@ public class SwXTextTable extends TestCase {
         });
 
         tEnv.addObjRelation("CONTENT",
-                            (XTextContent) UnoRuntime.queryInterface(
+                            UnoRuntime.queryInterface(
                                     XTextContent.class, instance));
         tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
 

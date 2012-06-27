@@ -107,11 +107,11 @@ public class _XContentProviderManager extends MultiMethodTest {
 
         log.println("creating testing content providers");
         try {
-            firstContentProvider = (XContentProvider)UnoRuntime.queryInterface(
+            firstContentProvider = UnoRuntime.queryInterface(
                     XContentProvider.class, xMSF.createInstance(
                             "com.sun.star.ucb.FileContentProvider"));
 
-            contentProvider = (XContentProvider)UnoRuntime.queryInterface(
+            contentProvider = UnoRuntime.queryInterface(
                     XContentProvider.class, xMSF.createInstance(
                             "com.sun.star.ucb.FileContentProvider"));
         } catch (Exception e) {

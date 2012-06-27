@@ -60,7 +60,7 @@ public class _XComponentContext extends MultiMethodTest {
 
         Object value = oObj.getValueByName(
                                "/singletons/com.sun.star.lang.theServiceManager");
-        byValue = (XMultiComponentFactory) UnoRuntime.queryInterface(
+        byValue = UnoRuntime.queryInterface(
                           XMultiComponentFactory.class, value);
 
         String[] vNames = byValue.getAvailableServiceNames();

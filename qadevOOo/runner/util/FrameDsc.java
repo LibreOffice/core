@@ -85,7 +85,7 @@ public class FrameDsc extends InstDescr {
         }
         catch( com.sun.star.uno.Exception cssuE ){
         }
-        XShape shape = (XShape)UnoRuntime.queryInterface( XShape.class, SrvObj );
+        XShape shape = UnoRuntime.queryInterface( XShape.class, SrvObj );
         try {
             shape.setSize(size);
         }

@@ -131,11 +131,9 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
     /**
      * Function returns a List of software which must accessable as an external executable
      */
-    protected Object[] mustInstalledSoftware()
+    protected String[] mustInstalledSoftware()
         {
-            ArrayList aList = new ArrayList();
-            aList.add("perl -version");
-            return aList.toArray();
+            return new String[] { "perl -version" };
         }
 
     // the test ======================================================================

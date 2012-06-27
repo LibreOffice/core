@@ -131,7 +131,7 @@ public class _XPrintable extends MultiMethodTest {
             Object oFAcc =
                 ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.ucb.SimpleFileAccess") ;
-            fAcc = (XSimpleFileAccess) UnoRuntime.queryInterface
+            fAcc = UnoRuntime.queryInterface
                 (XSimpleFileAccess.class, oFAcc) ;
             if (fAcc == null) throw new StatusException
                 (Status.failed("Can't create SimpleFileAccess service")) ;

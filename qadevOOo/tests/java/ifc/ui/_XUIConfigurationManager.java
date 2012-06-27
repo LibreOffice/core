@@ -138,10 +138,10 @@ public class _XUIConfigurationManager extends MultiMethodTest {
             return;
         }
 
-        createMenuBarItem("Click for Macro", (XIndexContainer)UnoRuntime.queryInterface(
+        createMenuBarItem("Click for Macro", UnoRuntime.queryInterface(
                                         XIndexContainer.class, prop[3].Value), log);
 
-        XIndexContainer x = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, mxMenuBarSettings);
+        XIndexContainer x = UnoRuntime.queryInterface(XIndexContainer.class, mxMenuBarSettings);
         try {
             x.insertByIndex(x.getCount(), prop);
         }
@@ -209,10 +209,10 @@ public class _XUIConfigurationManager extends MultiMethodTest {
             return;
         }
 
-        createMenuBarItem("A new sub entry", (XIndexContainer)UnoRuntime.queryInterface(
+        createMenuBarItem("A new sub entry", UnoRuntime.queryInterface(
                                         XIndexContainer.class, prop[3].Value), log);
 
-        XIndexContainer x = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class,mxSettings);
+        XIndexContainer x = UnoRuntime.queryInterface(XIndexContainer.class,mxSettings);
         try {
             int count = x.getCount();
             x.insertByIndex(count, prop);
@@ -256,7 +256,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
     public void _getImageManager() {
         Object o = oObj.getImageManager();
         log.println("###### ImageManager ");
-        XImageManager xImageManager = (XImageManager)UnoRuntime.queryInterface(XImageManager.class, o);
+        XImageManager xImageManager = UnoRuntime.queryInterface(XImageManager.class, o);
         tRes.tested("getImageManager()", xImageManager != null);
     }
 
@@ -303,7 +303,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
         prop[3] = new PropertyValue();
         prop[3].Name = "ItemDescriptorContainer";
 
-        XSingleComponentFactory xFactory = (XSingleComponentFactory)UnoRuntime.queryInterface(
+        XSingleComponentFactory xFactory = UnoRuntime.queryInterface(
                                 XSingleComponentFactory.class, xMenuBarSettings);
         try {
             XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xMSF);

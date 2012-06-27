@@ -67,8 +67,7 @@ public class ScDrawPageObj extends TestCase {
      */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent xComp = (XComponent)
-                            UnoRuntime.queryInterface(XComponent.class, xDoc);
+        XComponent xComp = UnoRuntime.queryInterface(XComponent.class, xDoc);
         util.DesktopTools.closeDoc(xComp);
     }
 
@@ -97,16 +96,14 @@ public class ScDrawPageObj extends TestCase {
         XShape oShape = null ;
         XDrawPages oDP = null;
 
-        XComponent xComp = (XComponent)
-                            UnoRuntime.queryInterface(XComponent.class, xDoc);
+        XComponent xComp = UnoRuntime.queryInterface(XComponent.class, xDoc);
 
         // creation of testobject here
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
         try {
             log.println( "getting Drawpages" );
-            XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-                UnoRuntime.queryInterface(XDrawPagesSupplier.class,xDoc);
+            XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class,xDoc);
             oDP = (XDrawPages) oDPS.getDrawPages();
             oDP.insertNewByIndex(1);
             oDP.insertNewByIndex(2);

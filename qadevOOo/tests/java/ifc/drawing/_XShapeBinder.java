@@ -57,7 +57,7 @@ public class _XShapeBinder extends MultiMethodTest {
     */
     public void _bind () {
         XDrawPage dp = (XDrawPage) tEnv.getObjRelation("DrawPage");
-        oShapes = (XShapes)UnoRuntime.queryInterface( XShapes.class, dp );
+        oShapes = UnoRuntime.queryInterface( XShapes.class, dp );
         boolean result = false;
         log.println("testing bind() ... ");
         countBeforeBind = oShapes.getCount();

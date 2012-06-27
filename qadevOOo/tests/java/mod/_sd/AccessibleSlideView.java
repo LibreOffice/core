@@ -66,8 +66,7 @@ public class AccessibleSlideView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, aModel);
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, aModel);
         XDrawPages oDPn = oDPS.getDrawPages();
 
     oDPn.insertNewByIndex(0);
@@ -141,19 +140,16 @@ public class AccessibleSlideView extends TestCase {
 
         shortWait();
 
-        aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xImpressDoc);
+        aModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
 
         //Change to Outline view
         try {
             String aSlotID = "slot:27011";
-            XDispatchProvider xDispProv = (XDispatchProvider)
-                UnoRuntime.queryInterface( XDispatchProvider.class,
-                                        aModel.getCurrentController() );
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-                ((XMultiServiceFactory)Param.getMSF()).
-                createInstance("com.sun.star.util.URLTransformer"));
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class,
+                                    aModel.getCurrentController() );
+            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+            ((XMultiServiceFactory)Param.getMSF()).
+            createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();

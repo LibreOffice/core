@@ -88,8 +88,7 @@ public class ScTableConditionalFormat extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -113,8 +112,7 @@ public class ScTableConditionalFormat extends TestCase {
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
@@ -156,8 +154,7 @@ public class ScTableConditionalFormat extends TestCase {
             throw new StatusException("Couldn't get ConditionalFromat", e);
         }
 
-        XSheetConditionalEntries xSCE = (XSheetConditionalEntries)
-            UnoRuntime.queryInterface(XSheetConditionalEntries.class, oObj);
+        XSheetConditionalEntries xSCE = UnoRuntime.queryInterface(XSheetConditionalEntries.class, oObj);
         xSCE.addNew(Conditions(5));
         xSCE.addNew(Conditions(2));
 

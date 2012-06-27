@@ -112,7 +112,7 @@ public class OCheckBoxControl extends TestCase {
         log.println("    disposing xTextDoc ");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                                         XCloseable.class, xTextDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
@@ -177,7 +177,7 @@ public class OCheckBoxControl extends TestCase {
         XControlModel the_Model2 = aShape2.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                         XControlAccess.class,xTextDoc.getCurrentController());
 
         //now get the OButtonControl
@@ -209,14 +209,13 @@ public class OCheckBoxControl extends TestCase {
         // Adding relation for XItemListener
         ifc.awt._XItemListener.TestItemListener listener =
             new ifc.awt._XItemListener.TestItemListener() ;
-        XCheckBox box = (XCheckBox) UnoRuntime.queryInterface
+        XCheckBox box = UnoRuntime.queryInterface
             (XCheckBox.class, oObj) ;
         box.addItemListener(listener) ;
         tEnv.addObjRelation("TestItemListener", listener) ;
 
         // Adding relation for XWindow
-        XWindow forObjRel = (XWindow)
-                            UnoRuntime.queryInterface(XWindow.class,aControl);
+        XWindow forObjRel = UnoRuntime.queryInterface(XWindow.class,aControl);
 
         tEnv.addObjRelation("XWindow.AnotherWindow",forObjRel);
 

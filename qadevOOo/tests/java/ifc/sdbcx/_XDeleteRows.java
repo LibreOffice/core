@@ -46,10 +46,8 @@ public class _XDeleteRows extends MultiMethodTest {
     * and no exception rizes while method call, FAILED otherwise. <p>
     */
     public void _deleteRows() {
-        XRowLocate xRowLocate = (XRowLocate)
-            UnoRuntime.queryInterface(XRowLocate.class, oObj);
-        XResultSet xResultSet = (XResultSet)
-            UnoRuntime.queryInterface(XResultSet.class, oObj);
+        XRowLocate xRowLocate = UnoRuntime.queryInterface(XRowLocate.class, oObj);
+        XResultSet xResultSet = UnoRuntime.queryInterface(XResultSet.class, oObj);
         if (xRowLocate == null || xResultSet == null) {
             log.println("The test must be modified according to "+
                 "component testcase");

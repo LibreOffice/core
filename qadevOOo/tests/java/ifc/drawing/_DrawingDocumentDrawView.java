@@ -47,8 +47,7 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
 
     protected void before() {
         drawPage = (XDrawPage)tEnv.getObjRelation("DrawPage");
-        XNamed xNamed = (XNamed)
-            UnoRuntime.queryInterface(XNamed.class, drawPage);
+        XNamed xNamed = UnoRuntime.queryInterface(XNamed.class, drawPage);
         xNamed.setName(test_name);
     }
 
@@ -62,8 +61,8 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
         }
 
         protected boolean compare(Object obj1, Object obj2) {
-            XNamed named1 = (XNamed)UnoRuntime.queryInterface(XNamed.class, obj1);
-            XNamed named2 = (XNamed)UnoRuntime.queryInterface(XNamed.class, obj2);
+            XNamed named1 = UnoRuntime.queryInterface(XNamed.class, obj1);
+            XNamed named2 = UnoRuntime.queryInterface(XNamed.class, obj2);
             boolean res = false;
 
             if (named1 != null && named2 != null) {
@@ -78,7 +77,7 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
         }
 
         protected String toString(Object obj) {
-            XNamed named = (XNamed)UnoRuntime.queryInterface(XNamed.class, obj);
+            XNamed named = UnoRuntime.queryInterface(XNamed.class, obj);
             String res = (named == null) ? "null" : named.getName();
             return res;
         }

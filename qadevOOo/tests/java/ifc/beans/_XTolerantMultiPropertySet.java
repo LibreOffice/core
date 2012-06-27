@@ -65,7 +65,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
                                               "Component doesn't provide the needed XPropertySet"));
         }
 
-        pState = (XPropertyState) UnoRuntime.queryInterface(
+        pState = UnoRuntime.queryInterface(
                          XPropertyState.class, tEnv.getTestObject());
 
         if (pState == null) {
@@ -228,7 +228,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
      * have the state DIRECT_VALUE
      */
     protected String[] getDirectProperties(Property[] props) {
-        ArrayList direct = new ArrayList();
+        ArrayList<String> direct = new ArrayList<String>();
 
         for (int i = 0; i < props.length; i++) {
             String pName = props[i].Name;
@@ -268,7 +268,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
      * contained in a given sequence of properties
      */
     protected String[] getProperties() {
-        ArrayList names = new ArrayList();
+        ArrayList<String> names = new ArrayList<String>();
 
         for (int i = 0; i < properties.length; i++) {
             String pName = properties[i].Name;

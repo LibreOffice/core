@@ -57,8 +57,7 @@ public class _XSheetAuditing extends MultiMethodTest {
         // get the draw page for checking the shapes
         xDrawPage = (XDrawPage)tEnv.getObjRelation("XSheetAuditing.DrawPage");
         if (xDrawPage == null) { // get from object
-            XDrawPageSupplier oDPS = (XDrawPageSupplier)
-                UnoRuntime.queryInterface(XDrawPageSupplier.class, oObj);
+            XDrawPageSupplier oDPS = UnoRuntime.queryInterface(XDrawPageSupplier.class, oObj);
             xDrawPage = (XDrawPage) oDPS.getDrawPage();
         }
         if (xDrawPage == null) {
@@ -120,7 +119,7 @@ public class _XSheetAuditing extends MultiMethodTest {
         xPrecedentAddress.setValue(-9);
         String cellAddress = new String(new byte[]{(byte)(precedentAddress.Column + 65)}) + (precedentAddress.Row+1);
         xAddress.setFormula("=SQRT(" + cellAddress + ")");
-        XText xText = (XText)UnoRuntime.queryInterface(XText.class, xAddress);
+        XText xText = UnoRuntime.queryInterface(XText.class, xAddress);
         // correct error in cell:
         String error = xText.getString();
         boolean erg = error.equals("Err:502");
@@ -183,7 +182,7 @@ public class _XSheetAuditing extends MultiMethodTest {
                 for (int i=elementCount; i<newCount; i++) {
                     try {
                         Object o = xDrawPage.getByIndex(i);
-                        XShape xShape = (XShape)UnoRuntime.queryInterface(XShape.class, o);
+                        XShape xShape = UnoRuntime.queryInterface(XShape.class, o);
                         System.out.println("Shape Type: " + xShape.getShapeType());
                     }
                     catch(com.sun.star.uno.Exception e) {

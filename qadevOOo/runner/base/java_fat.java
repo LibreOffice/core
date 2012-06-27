@@ -65,7 +65,7 @@ public class java_fat implements TestBase
             DescGetter dg = new APIDescGetter();
             String job = (String) m_aParams.get("TestJob");
             String ExclusionFile = (String) m_aParams.get("ExclusionList");
-            ArrayList exclusions = null;
+            ArrayList<String> exclusions = null;
             boolean retValue = true;
             m_isDebug = m_aParams.getBool("DebugIsActive");
             logging = m_aParams.getBool("LoggingIsActive");
@@ -494,9 +494,9 @@ public class java_fat implements TestBase
 //            }
 //        }
 
-    private ArrayList getExclusionList(String url, boolean debug)
+    private ArrayList<String> getExclusionList(String url, boolean debug)
         {
-            ArrayList entryList = new ArrayList();
+            ArrayList<String> entryList = new ArrayList<String>();
             String line = "#";
             BufferedReader exclusion = null;
 

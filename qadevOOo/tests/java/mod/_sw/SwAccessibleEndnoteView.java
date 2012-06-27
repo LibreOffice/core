@@ -66,8 +66,7 @@ public class SwAccessibleEndnoteView extends TestCase {
         XInterface oEndnote = null;
 
         log.println( "Creating a test environment" );
-        XMultiServiceFactory msf = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         log.println("creating a endnote");
         try {
             oEndnote = (XInterface) UnoRuntime.queryInterface(XInterface.class,
@@ -81,8 +80,7 @@ public class SwAccessibleEndnoteView extends TestCase {
         XTextCursor oCursor = oText.createTextCursor();
 
         log.println("inserting the footnote into text document");
-        XTextContent xTC = (XTextContent)
-            UnoRuntime.queryInterface(XTextContent.class, oEndnote);
+        XTextContent xTC = UnoRuntime.queryInterface(XTextContent.class, oEndnote);
         try {
             oText.insertTextContent(oCursor, xTC, false);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
@@ -91,9 +89,8 @@ public class SwAccessibleEndnoteView extends TestCase {
         }
 
         XController xController = xTextDoc.getCurrentController();
-        XViewSettingsSupplier xViewSetSup = (XViewSettingsSupplier)
-                UnoRuntime.queryInterface(XViewSettingsSupplier.class,
-                xController);
+        XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
+        xController);
         XPropertySet xPropSet = xViewSetSup.getViewSettings();
 
         try {
@@ -114,8 +111,7 @@ public class SwAccessibleEndnoteView extends TestCase {
             throw new StatusException("Couldn't set propertyValue...", e);
         }
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 

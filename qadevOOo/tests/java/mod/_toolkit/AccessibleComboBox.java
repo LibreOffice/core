@@ -90,7 +90,7 @@ public class AccessibleComboBox extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
         DiagThread psDiag = new DiagThread(xTextDoc,
@@ -105,20 +105,20 @@ public class AccessibleComboBox extends TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Cancel");
-        action = (XAccessibleAction) UnoRuntime.queryInterface(
+        action = UnoRuntime.queryInterface(
                          XAccessibleAction.class, oObj);
 
         oObj = at.getAccessibleObjectForRole(xRoot,
                                              AccessibleRole.PAGE_TAB_LIST);
 
-        XAccessibleSelection xAccSel = (XAccessibleSelection) UnoRuntime.queryInterface(
+        XAccessibleSelection xAccSel = UnoRuntime.queryInterface(
                                                XAccessibleSelection.class,
                                                oObj);
 
@@ -137,10 +137,10 @@ public class AccessibleComboBox extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
+        final XAccessibleComponent acomp = UnoRuntime.queryInterface(
                                                    XAccessibleComponent.class,
                                                    oObj);
-        final XAccessibleComponent acomp1 = (XAccessibleComponent) UnoRuntime.queryInterface(
+        final XAccessibleComponent acomp1 = UnoRuntime.queryInterface(
                                                     XAccessibleComponent.class,
                                                     action);
 
@@ -201,7 +201,7 @@ public class AccessibleComboBox extends TestCase {
         }
 
         public void run() {
-            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+            XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                                xTextDoc);
 
             XController xController = aModel.getCurrentController();
@@ -209,10 +209,10 @@ public class AccessibleComboBox extends TestCase {
             //Opening PrinterSetupDialog
             try {
                 String aSlotID = ".uno:FontDialog";
-                XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                XDispatchProvider xDispProv = UnoRuntime.queryInterface(
                                                       XDispatchProvider.class,
                                                       xController);
-                XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+                XURLTransformer xParser = UnoRuntime.queryInterface(
                                                   XURLTransformer.class,
                                                   msf.createInstance(
                                                           "com.sun.star.util.URLTransformer"));

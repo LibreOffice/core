@@ -316,7 +316,7 @@ public class ODatabaseForm extends TestCase {
                                                                  PrintWriter log) {
         if (xTextDoc != null) {
             try {
-                XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                XCloseable closer = UnoRuntime.queryInterface(
                                             XCloseable.class, xTextDoc);
                 closer.close(true);
             } catch (com.sun.star.util.CloseVetoException e) {
@@ -401,12 +401,12 @@ public class ODatabaseForm extends TestCase {
 
             log.println("Elements in the 'MyForm' :");
 
-            XIndexAccess formElements1 = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess formElements1 = UnoRuntime.queryInterface(
                                                  XIndexAccess.class,
                                                  forms.getByName("MyForm"));
 
             for (int i = 0; i < formElements1.getCount(); i++) {
-                XNamed elemName = (XNamed) UnoRuntime.queryInterface(
+                XNamed elemName = UnoRuntime.queryInterface(
                                           XNamed.class,
                                           formElements1.getByIndex(i));
                 log.println("   '" + elemName.getName() + "'");
@@ -443,12 +443,12 @@ public class ODatabaseForm extends TestCase {
         try {
             log.println("Elements in the 'MyForm' :");
 
-            XIndexAccess formElements1 = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess formElements1 = UnoRuntime.queryInterface(
                                                  XIndexAccess.class,
                                                  forms.getByName("MyForm"));
 
             for (int i = 0; i < formElements1.getCount(); i++) {
-                XNamed elemName = (XNamed) UnoRuntime.queryInterface(
+                XNamed elemName = UnoRuntime.queryInterface(
                                           XNamed.class,
                                           formElements1.getByIndex(i));
                 log.println("   '" + elemName.getName() + "'");
@@ -490,7 +490,7 @@ public class ODatabaseForm extends TestCase {
 
         // adding relation for XSubmit
         XControlModel the_Model = shape2.getControl();
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
         XControl cntrl = null;
@@ -505,7 +505,7 @@ public class ODatabaseForm extends TestCase {
             throw new StatusException("Couldn't get OEditControl", e);
         }
 
-        XResultSet the_set = (XResultSet) UnoRuntime.queryInterface(
+        XResultSet the_set = UnoRuntime.queryInterface(
                                      XResultSet.class, oObj);
 
         try {
@@ -567,12 +567,12 @@ public class ODatabaseForm extends TestCase {
         }
 
         // Adding obj relation for XRowSetApproveBroadcaster test
-        final XResultSet xResSet = (XResultSet) UnoRuntime.queryInterface(
+        final XResultSet xResSet = UnoRuntime.queryInterface(
                                            XResultSet.class, oObj);
-        final XResultSetUpdate xResSetUpdate = (XResultSetUpdate) UnoRuntime.queryInterface(
+        final XResultSetUpdate xResSetUpdate = UnoRuntime.queryInterface(
                                                        XResultSetUpdate.class,
                                                        oObj);
-        final XRowSet xRowSet = (XRowSet) UnoRuntime.queryInterface(
+        final XRowSet xRowSet = UnoRuntime.queryInterface(
                                         XRowSet.class, oObj);
         final PrintWriter logF = log;
         tEnv.addObjRelation("XRowSetApproveBroadcaster.ApproveChecker",
@@ -591,7 +591,7 @@ public class ODatabaseForm extends TestCase {
                 try {
                     xResSet.first();
 
-                    XRowUpdate row = (XRowUpdate) UnoRuntime.queryInterface(
+                    XRowUpdate row = UnoRuntime.queryInterface(
                                              XRowUpdate.class, xResSet);
                     row.updateString(1, "1");
                     xResSetUpdate.updateRow();
@@ -622,7 +622,7 @@ public class ODatabaseForm extends TestCase {
         tEnv.addObjRelation("XColumnLocate.ColumnName", DBTools.TST_STRING_F);
 
         // Adding relation for XParameters ifc test
-        ArrayList params = new ArrayList();
+        ArrayList<Object> params = new ArrayList<Object>();
 
 
         /*****  statement parameter types and their initial
@@ -674,9 +674,9 @@ public class ODatabaseForm extends TestCase {
         }
 
         // Adding relation for XResultSetUpdate
-        final XRowUpdate xRowUpdate = (XRowUpdate) UnoRuntime.queryInterface(
+        final XRowUpdate xRowUpdate = UnoRuntime.queryInterface(
                                               XRowUpdate.class, oObj);
-        final XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, oObj);
+        final XRow xRow = UnoRuntime.queryInterface(XRow.class, oObj);
 
         tEnv.addObjRelation("XResultSetUpdate.UpdateTester",
                             new ifc.sdbc._XResultSetUpdate.UpdateTester() {
@@ -712,7 +712,7 @@ public class ODatabaseForm extends TestCase {
         // Adding relations for XRow as a Vector with all data
         // of current row of RowSet.
 
-        ArrayList rowData = new ArrayList();
+        ArrayList<Object> rowData = new ArrayList<Object>();
 
         for (int i = 0; i < DBTools.TST_TABLE_VALUES[0].length; i++) {
             rowData.add(DBTools.TST_TABLE_VALUES[0][i]);
@@ -721,7 +721,7 @@ public class ODatabaseForm extends TestCase {
         tEnv.addObjRelation("CurrentRowData", rowData);
 
         // Adding relation for XRowUpdate
-        XRow row = (XRow) UnoRuntime.queryInterface(XRow.class, oObj);
+        XRow row = UnoRuntime.queryInterface(XRow.class, oObj);
         tEnv.addObjRelation("XRowUpdate.XRow", row);
 
 
@@ -753,7 +753,7 @@ public class ODatabaseForm extends TestCase {
 
         log.println("closing data source...");
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                                         XCloseable.class, dbSrc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
@@ -766,7 +766,7 @@ public class ODatabaseForm extends TestCase {
         log.println("closing document...");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                                         XCloseable.class, xTextDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {

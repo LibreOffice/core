@@ -62,7 +62,7 @@ public class _XInputStream extends MultiMethodTest {
      */
     public void before() {
         XInterface x = (XInterface)tEnv.getObjRelation("StreamWriter");
-        oStream = (XOutputStream)UnoRuntime.queryInterface(
+        oStream = UnoRuntime.queryInterface(
                                                     XOutputStream.class, x) ;
         bytes = (byte[])tEnv.getObjRelation("ByteData");
         try {

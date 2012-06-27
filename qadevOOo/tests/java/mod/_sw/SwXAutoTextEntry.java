@@ -130,8 +130,7 @@ public class SwXAutoTextEntry extends TestCase {
             XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();
             Object oInst = myMSF.createInstance
                     ("com.sun.star.text.AutoTextContainer");
-            oContainer = (XAutoTextContainer)
-            UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
+            oContainer = UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create AutoTextContainer", e);
@@ -151,7 +150,7 @@ public class SwXAutoTextEntry extends TestCase {
             throw new StatusException("Couldn't get AutoTextGroup", e);
         }
 
-        oGroup = (XAutoTextGroup) UnoRuntime.queryInterface
+        oGroup = UnoRuntime.queryInterface
                 (XAutoTextGroup.class, oObj);
         String[] oENames = oGroup.getElementNames();
         for (int i=0; i<oENames.length; i++) {

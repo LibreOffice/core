@@ -80,7 +80,7 @@ public class AccessibleScrollBar extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -137,7 +137,7 @@ public class AccessibleScrollBar extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xDoc);
 
         XInterface oObj = null;
 
@@ -151,7 +151,7 @@ public class AccessibleScrollBar extends TestCase {
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLL_BAR);
 
-        final XAccessibleAction act = (XAccessibleAction) UnoRuntime.queryInterface(
+        final XAccessibleAction act = UnoRuntime.queryInterface(
                                               XAccessibleAction.class, oObj);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));

@@ -30,7 +30,7 @@ public interface CwsDataExchange {
      * Retunrs all module names which are added to the specified childworkspace
      * @return a String array of all added modules
      */
-    public ArrayList getModules();
+    public ArrayList<String> getModules();
 
     /**
      * Set the test status of cws related UnoAPI tests to the EIS dabase

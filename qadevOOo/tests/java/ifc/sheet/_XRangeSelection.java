@@ -59,7 +59,7 @@ public class _XRangeSelection extends MultiMethodTest {
         if (xModel == null)
             throw new StatusException(Status.failed("Object relation FirstModel' not set."));
         XWindow xWindow = xModel.getCurrentController().getFrame().getContainerWindow();
-        XTopWindow xTopWindow = (XTopWindow)UnoRuntime.queryInterface(XTopWindow.class, xWindow);
+        XTopWindow xTopWindow = UnoRuntime.queryInterface(XTopWindow.class, xWindow);
         xTopWindow.toFront();
         util.utils.shortWait(500);
     }
@@ -170,8 +170,7 @@ public class _XRangeSelection extends MultiMethodTest {
         AccessibilityTools at = new AccessibilityTools();
         XComponent xSheetDoc = (XComponent) tEnv.getObjRelation("DOCUMENT");
 
-        XModel xModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSheetDoc);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
         System.out.println("Name: " + xModel.getCurrentController().getFrame().getName());
 
         XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)tParam.getMSF(), xModel);
@@ -179,7 +178,7 @@ public class _XRangeSelection extends MultiMethodTest {
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE  );
 
-        XAccessibleComponent AccessibleSpreadsheet = (XAccessibleComponent) UnoRuntime.queryInterface(XAccessibleComponent.class,AccessibilityTools.SearchedContext);
+        XAccessibleComponent AccessibleSpreadsheet = UnoRuntime.queryInterface(XAccessibleComponent.class,AccessibilityTools.SearchedContext);
 
         log.println("Got " + util.utils.getImplName(AccessibleSpreadsheet));
 
@@ -193,7 +192,7 @@ public class _XRangeSelection extends MultiMethodTest {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
 
         XTopWindow tw = null;
@@ -202,7 +201,7 @@ public class _XRangeSelection extends MultiMethodTest {
         for (int i=0;i<k;i++) {
             try {
                 XTopWindow tw_temp = tk.getTopWindow(i);
-                XAccessible xacc = (XAccessible) UnoRuntime.queryInterface(XAccessible.class,  tw_temp);
+                XAccessible xacc = UnoRuntime.queryInterface(XAccessible.class,  tw_temp);
                 if (xacc != null) {
                     if (xacc.getAccessibleContext().getAccessibleName().indexOf("d2")>0) {
                         tw=tw_temp;
@@ -240,7 +239,7 @@ public class _XRangeSelection extends MultiMethodTest {
         catch(com.sun.star.uno.Exception e) {
             throw new StatusException("Could not create 'com.sun.star.awt.Toolkit'.", e);
         }
-        XExtendedToolkit xExtendedToolkit = (XExtendedToolkit)UnoRuntime.queryInterface(XExtendedToolkit.class, aToolkit);
+        XExtendedToolkit xExtendedToolkit = UnoRuntime.queryInterface(XExtendedToolkit.class, aToolkit);
         XTopWindow tw = null;
 
         XAccessibleComponent xAccessibleComponent = null;
@@ -248,13 +247,13 @@ public class _XRangeSelection extends MultiMethodTest {
         for (int i=0;i<k;i++) {
             try {
                 XTopWindow tw_temp = xExtendedToolkit.getTopWindow(i);
-                XAccessible xacc = (XAccessible)UnoRuntime.queryInterface(XAccessible.class,  tw_temp);
+                XAccessible xacc = UnoRuntime.queryInterface(XAccessible.class,  tw_temp);
                 if (xacc != null) {
                     System.out.println("Name: " + xacc.getAccessibleContext().getAccessibleName());
                     if (xacc.getAccessibleContext().getAccessibleName().startsWith("the title")) {
                         tw = tw_temp;
                         XAccessibleContext xContext = xacc.getAccessibleContext();
-                        xAccessibleComponent = (XAccessibleComponent)UnoRuntime.queryInterface(XAccessibleComponent.class, xContext);
+                        xAccessibleComponent = UnoRuntime.queryInterface(XAccessibleComponent.class, xContext);
                         if (xAccessibleComponent == null)
                             System.out.println("!!!! MIST !!!!");
                         else
@@ -273,7 +272,7 @@ public class _XRangeSelection extends MultiMethodTest {
             return null;
         }
 
-        XWindow xWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, tw);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, tw);
         Rectangle posSize = xWindow.getPosSize();
 
         // compare the center point with the dimensions of the current top window

@@ -154,12 +154,12 @@ public class SbaXGridControl extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               atw);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -167,7 +167,7 @@ public class SbaXGridControl extends TestCase {
         XInterface button = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                           AccessibleRole.PUSH_BUTTON);
 
-        XAccessibleAction action = (XAccessibleAction) UnoRuntime.queryInterface(
+        XAccessibleAction action = UnoRuntime.queryInterface(
                                            XAccessibleAction.class, button);
 
         try {
@@ -181,7 +181,7 @@ public class SbaXGridControl extends TestCase {
         log.println("    disposing xTextDoc ");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                                         XCloseable.class, xTextDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
@@ -248,12 +248,12 @@ public class SbaXGridControl extends TestCase {
         XLoadable formLoader = FormTools.bindForm(xTextDoc);
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
         try {
-            columns = (XGridColumnFactory) UnoRuntime.queryInterface(
+            columns = UnoRuntime.queryInterface(
                               XGridColumnFactory.class, the_Model);
             aControl = columns.createColumn("TextField");
             aControl.setPropertyValue("DataField", "Identifier");
@@ -321,7 +321,7 @@ public class SbaXGridControl extends TestCase {
 
 
         //Try to query XControlAccess
-        the_access = (XControlAccess) UnoRuntime.queryInterface(
+        the_access = UnoRuntime.queryInterface(
                              XControlAccess.class,
                              xTextDoc.getCurrentController());
 
@@ -331,7 +331,7 @@ public class SbaXGridControl extends TestCase {
 
         try {
             cntrl = the_access.getControl(the_Model);
-            win = (XWindow) UnoRuntime.queryInterface(XWindow.class, cntrl);
+            win = UnoRuntime.queryInterface(XWindow.class, cntrl);
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get Control");
             e.printStackTrace(log);
@@ -412,9 +412,9 @@ public class SbaXGridControl extends TestCase {
             }
 
             public void commit() throws com.sun.star.sdbc.SQLException {
-                XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
+                XBoundComponent bound = UnoRuntime.queryInterface(
                                                 XBoundComponent.class, ctrl);
-                XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
+                XResultSetUpdate update = UnoRuntime.queryInterface(
                                                   XResultSetUpdate.class,
                                                   formLoaderF);
 
@@ -440,7 +440,7 @@ public class SbaXGridControl extends TestCase {
         XControlModel aControl = null;
 
         //get MSF
-        XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
+        XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(
                                                XMultiServiceFactory.class,
                                                oDoc);
 
@@ -453,9 +453,9 @@ public class SbaXGridControl extends TestCase {
                                                XPropertySet.class, aCon);
             model_props.setPropertyValue("DefaultControl",
                                          "com.sun.star.form.control.InteractionGridControl");
-            aControl = (XControlModel) UnoRuntime.queryInterface(
+            aControl = UnoRuntime.queryInterface(
                                XControlModel.class, aCon);
-            oCShape = (XControlShape) UnoRuntime.queryInterface(
+            oCShape = UnoRuntime.queryInterface(
                               XControlShape.class, oInt);
             size.Height = height;
             size.Width = width;

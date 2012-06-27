@@ -43,7 +43,7 @@ public class InstCreator implements XInstCreator {
         this.xParent = xParent;
         this.iDsc = iDsc;
 
-        xMSF = (XMultiServiceFactory)UnoRuntime.queryInterface(
+        xMSF = UnoRuntime.queryInterface(
                                     XMultiServiceFactory.class, xParent );
 
         xInstance = createInstance();
@@ -70,44 +70,39 @@ public class InstCreator implements XInstCreator {
         XNameAccess oNA = null;
 
         if ( iDsc instanceof TableDsc ) {
-            XTextTablesSupplier oTTS = (XTextTablesSupplier)
-                    UnoRuntime.queryInterface(
-                                        XTextTablesSupplier.class, xParent );
+            XTextTablesSupplier oTTS = UnoRuntime.queryInterface(
+                                XTextTablesSupplier.class, xParent );
 
             oNA = oTTS.getTextTables();
         }
         if ( iDsc instanceof FrameDsc ) {
-            XTextFramesSupplier oTTS = (XTextFramesSupplier)
-                    UnoRuntime.queryInterface(
-                                        XTextFramesSupplier.class, xParent );
+            XTextFramesSupplier oTTS = UnoRuntime.queryInterface(
+                                XTextFramesSupplier.class, xParent );
 
             oNA = oTTS.getTextFrames();
         }
         if ( iDsc instanceof BookmarkDsc ) {
-            XBookmarksSupplier oTTS = (XBookmarksSupplier)
-                    UnoRuntime.queryInterface(
-                                        XBookmarksSupplier.class, xParent );
+            XBookmarksSupplier oTTS = UnoRuntime.queryInterface(
+                                XBookmarksSupplier.class, xParent );
 
             oNA = oTTS.getBookmarks();
         }
 
         if ( iDsc instanceof FootnoteDsc ) {
-            XFootnotesSupplier oTTS = (XFootnotesSupplier)
-                    UnoRuntime.queryInterface(
-                                        XFootnotesSupplier.class, xParent );
+            XFootnotesSupplier oTTS = UnoRuntime.queryInterface(
+                                XFootnotesSupplier.class, xParent );
 
             return( oTTS.getFootnotes() );
         }
 
         if ( iDsc instanceof TextSectionDsc ) {
-            XTextSectionsSupplier oTSS = (XTextSectionsSupplier)
-                    UnoRuntime.queryInterface(
-                                        XTextSectionsSupplier.class, xParent );
+            XTextSectionsSupplier oTSS = UnoRuntime.queryInterface(
+                                XTextSectionsSupplier.class, xParent );
 
             oNA = oTSS.getTextSections();
         }
 
-        return (XIndexAccess)UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
                                                     XIndexAccess.class, oNA);
     }
 }

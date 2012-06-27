@@ -108,7 +108,7 @@ public class _XSheetOutline extends MultiMethodTest {
 
     private boolean isCellShown(CellRangeAddress range) {
         boolean isNotShown = true;
-        XCellRangesQuery xCellRangesQuery = (XCellRangesQuery)UnoRuntime.queryInterface(XCellRangesQuery.class, oObj);
+        XCellRangesQuery xCellRangesQuery = UnoRuntime.queryInterface(XCellRangesQuery.class, oObj);
         if (xCellRangesQuery != null) {
             XSheetCellRanges xRanges = xCellRangesQuery.queryVisibleCells();
             CellRangeAddress[] visibleRanges = xRanges.getRangeAddresses();

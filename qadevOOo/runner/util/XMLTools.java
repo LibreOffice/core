@@ -58,8 +58,8 @@ public class XMLTools {
             public String Type ;
             public String Value ;
         }
-        private Hashtable attrByName = new Hashtable() ;
-        private ArrayList attributes = new ArrayList() ;
+        private Hashtable<String, Attribute> attrByName = new Hashtable<String, Attribute>() ;
+        private ArrayList<Attribute> attributes = new ArrayList<Attribute>() ;
         private PrintWriter log = null ;
 
         /**
@@ -128,7 +128,7 @@ public class XMLTools {
         }
 
         public String getNameByIndex(short idx) {
-            String name = ((Attribute) attributes.get(idx)).Name ;
+            String name = attributes.get(idx).Name ;
             if (log != null)
                 log.println("getNameByIndex(" + idx + ") called -> '" +
                 name + "'") ;
@@ -136,7 +136,7 @@ public class XMLTools {
         }
 
         public String getTypeByIndex(short idx) {
-            String type = ((Attribute) attributes.get(idx)).Type  ;
+            String type = attributes.get(idx).Type  ;
             if (log != null)
                 log.println("getTypeByIndex(" + idx + ") called -> '" +
                     type + "'") ;
@@ -144,14 +144,14 @@ public class XMLTools {
         }
 
         public String getTypeByName(String name) {
-            String type = ((Attribute) attrByName.get(name)).Type ;
+            String type = attrByName.get(name).Type ;
             if (log != null)
                 log.println("getTypeByName('" + name + "') called -> '" +
                     type + "'") ;
             return type;
         }
         public String getValueByIndex(short idx) {
-            String value = ((Attribute) attributes.get(idx)).Value ;
+            String value = attributes.get(idx).Value ;
             if (log != null)
                 log.println("getValueByIndex(" + idx + ") called -> '" +
                     value + "'") ;
@@ -159,7 +159,7 @@ public class XMLTools {
         }
 
         public String getValueByName(String name) {
-            String value = ((Attribute) attrByName.get(name)).Value ;
+            String value = attrByName.get(name).Value ;
             if (log != null)
                 log.println("getValueByName('" + name + "') called -> '" +
                     value + "'") ;
@@ -255,7 +255,7 @@ public class XMLTools {
     public static class XMLWellFormChecker extends XMLWriter {
         protected boolean docStarted = false ;
         protected boolean docEnded = false ;
-        protected ArrayList tagStack = new ArrayList() ;
+        protected ArrayList<String> tagStack = new ArrayList<String>() ;
         protected boolean wellFormed = true ;
         protected boolean noOtherErrors = true ;
         protected PrintWriter log = null ;
@@ -279,7 +279,7 @@ public class XMLTools {
         public void reset() {
             docStarted = false ;
             docEnded = false ;
-            tagStack = new ArrayList() ;
+            tagStack = new ArrayList<String>() ;
             wellFormed = true ;
             noOtherErrors = true ;
             PrintWriter log = null ;
@@ -320,7 +320,7 @@ public class XMLTools {
                     wellFormed = false ;
                     printError("No tags to close (bad closing tag </" + name + ">)") ;
                 } else {
-                    String startTag = (String) tagStack.get(0) ;
+                    String startTag = tagStack.get(0) ;
                     tagStack.remove(0) ;
                     if (!startTag.equals(name)) {
                         wellFormed = false ;
@@ -355,7 +355,7 @@ public class XMLTools {
             if (printXMLData) return ;
             log.println("   Tag trace :") ;
             for (int i = 0; i < tagStack.size(); i++) {
-                String tag = (String) tagStack.get(i) ;
+                String tag = tagStack.get(i) ;
                 log.println("      <" + tag + ">") ;
             }
         }
@@ -411,7 +411,7 @@ public class XMLTools {
                 if (!outerTag.equals("")) {
                     boolean isInTag = false ;
                     for (int i = 0; i < tagStack.size(); i++) {
-                        if (outerTag.equals((String) tagStack.get(i))) {
+                        if (outerTag.equals(tagStack.get(i))) {
                             isInTag = true ;
                             break ;
                         }
@@ -434,7 +434,7 @@ public class XMLTools {
                 if (!outerTag.equals("")) {
                     boolean isInTag = false ;
                     for (int i = 0; i < tagStack.size(); i++) {
-                        if (outerTag.equals((String) tagStack.get(i))) {
+                        if (outerTag.equals(tagStack.get(i))) {
                             isInTag = true ;
                             break ;
                         }
@@ -456,21 +456,21 @@ public class XMLTools {
         public boolean checkTags() {
             allOK &= isWellFormed() ;
 
-            Enumeration badTags = tags.keys() ;
-            Enumeration badChars = chars.keys() ;
+            Enumeration<String> badTags = tags.keys() ;
+            Enumeration<String> badChars = chars.keys() ;
 
             if (badTags.hasMoreElements()) {
                 allOK = false ;
                 log.println("Required tags were not found in export :") ;
                 while(badTags.hasMoreElements()) {
-                    log.println("   <" + ((String) badTags.nextElement()) + ">") ;
+                    log.println("   <" + badTags.nextElement() + ">") ;
                 }
             }
             if (badChars.hasMoreElements()) {
                 allOK = false ;
                 log.println("Required characters were not found in export :") ;
                 while(badChars.hasMoreElements()) {
-                    log.println("   <" + ((String) badChars.nextElement()) + ">") ;
+                    log.println("   <" + badChars.nextElement() + ">") ;
                 }
             }
             reset();
@@ -622,11 +622,11 @@ public class XMLTools {
      * character data exists inside any tag specified.
      */
     public static class XMLChecker extends XMLWellFormChecker {
-        protected HashSet tagSet = new HashSet() ;
-        protected ArrayList tags = new ArrayList() ;
-        protected ArrayList chars = new ArrayList() ;
-        protected ArrayList tagStack = new ArrayList() ;
-        protected ArrayList attrStack = new ArrayList() ;
+        protected HashSet<String> tagSet = new HashSet<String>() ;
+        protected ArrayList<Tag[]> tags = new ArrayList<Tag[]>() ;
+        protected ArrayList<Object[]> chars = new ArrayList<Object[]>() ;
+        protected ArrayList<String> tagStack = new ArrayList<String>() ;
+        protected ArrayList<AttributeList> attrStack = new ArrayList<AttributeList>() ;
 
         public XMLChecker(PrintWriter log, boolean writeXML) {
             super(log, writeXML) ;
@@ -656,15 +656,15 @@ public class XMLTools {
 
             if (tagSet.contains(name)) {
                 for (int i = 0; i < tags.size(); i++) {
-                    Tag[] tag = (Tag[]) tags.get(i);
+                    Tag[] tag = tags.get(i);
                     if (tag[0].isMatchTo(name, attr)) {
                         if (tag[1] == null) {
                             tags.remove(i--);
                         } else {
                             boolean isInStack = false ;
                             for (int j = 0; j < tagStack.size(); j++) {
-                                if (tag[1].isMatchTo((String) tagStack.get(j),
-                                    (XAttributeList) attrStack.get(j))) {
+                                if (tag[1].isMatchTo(tagStack.get(j),
+                                    attrStack.get(j))) {
 
                                     isInStack = true ;
                                     break ;
@@ -688,15 +688,15 @@ public class XMLTools {
         public void characters(String ch) {
             super.characters(ch) ;
             for (int i = 0; i < chars.size(); i++) {
-                Object[] chr = (Object[]) chars.get(i);
+                Object[] chr = chars.get(i);
                 if (((String) chr[0]).equals(ch)) {
                     if (chr[1] == null) {
                         chars.remove(i--);
                     } else {
                         boolean isInStack = false ;
                         for (int j = 0; j < tagStack.size(); j++) {
-                            if (((Tag) chr[1]).isMatchTo((String) tagStack.get(j),
-                                (XAttributeList) attrStack.get(j))) {
+                            if (((Tag) chr[1]).isMatchTo(tagStack.get(j),
+                                attrStack.get(j))) {
 
                                 isInStack = true ;
                                 break ;
@@ -727,7 +727,7 @@ public class XMLTools {
             if (tags.size()> 0) {
                 log.println("!!! Error: Some tags were not found :") ;
                 for (int i = 0; i < tags.size(); i++) {
-                    Tag[] tag = (Tag[]) tags.get(i) ;
+                    Tag[] tag = tags.get(i) ;
                     log.println("   Tag " + tag[0] + " was not found");
                     if (tag[1] != null)
                         log.println("      inside tag " + tag[1]) ;
@@ -736,7 +736,7 @@ public class XMLTools {
             if (chars.size() > 0) {
                 log.println("!!! Error: Some character data blocks were not found :") ;
                 for (int i = 0; i < chars.size(); i++) {
-                    Object[] ch = (Object[]) chars.get(i) ;
+                    Object[] ch = chars.get(i) ;
                     log.println("   Character data \"" + ch[0] + "\" was not found ") ;
                     if (ch[1] != null)
                         log.println("      inside tag " + ch[1]) ;
@@ -767,11 +767,10 @@ public class XMLTools {
                                     "com.sun.star.xml.sax.Writer");
             XInterface oPipe = (XInterface) xMSF.createInstance
                 ( "com.sun.star.io.Pipe" );
-            XOutputStream xPipeOutput = (XOutputStream) UnoRuntime.
+            XOutputStream xPipeOutput = UnoRuntime.
                 queryInterface(XOutputStream.class, oPipe) ;
 
-            XActiveDataSource xADS = (XActiveDataSource)
-                UnoRuntime.queryInterface(XActiveDataSource.class,Writer);
+            XActiveDataSource xADS = UnoRuntime.queryInterface(XActiveDataSource.class,Writer);
             xADS.setOutputStream(xPipeOutput);
             XDocumentHandler handler = (XDocumentHandler)
                 UnoRuntime.queryInterface(XDocumentHandler.class,Writer);
@@ -812,13 +811,12 @@ public class XMLTools {
     {
         XInterface oFacc = (XInterface)xMSF.createInstance(
             "com.sun.star.comp.ucb.SimpleFileAccess");
-        XSimpleFileAccess xFacc = (XSimpleFileAccess)UnoRuntime.queryInterface
+        XSimpleFileAccess xFacc = UnoRuntime.queryInterface
             (XSimpleFileAccess.class, oFacc) ;
 
         XInterface oWriter = (XInterface)xMSF.createInstance(
             "com.sun.star.xml.sax.Writer");
-        XActiveDataSource xWriterDS = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, oWriter);
+        XActiveDataSource xWriterDS = UnoRuntime.queryInterface(XActiveDataSource.class, oWriter);
         XDocumentHandler xDocHandWriter = (XDocumentHandler) UnoRuntime.queryInterface
             (XDocumentHandler.class, oWriter) ;
 
@@ -842,13 +840,13 @@ public class XMLTools {
     {
         XInterface oFacc = (XInterface)xMSF.createInstance(
             "com.sun.star.comp.ucb.SimpleFileAccess");
-        XSimpleFileAccess xFacc = (XSimpleFileAccess)UnoRuntime.queryInterface
+        XSimpleFileAccess xFacc = UnoRuntime.queryInterface
             (XSimpleFileAccess.class, oFacc) ;
         XInputStream oIn = xFacc.openFileRead(fileURL) ;
 
         XInterface oParser = (XInterface)xMSF.createInstance(
             "com.sun.star.xml.sax.Parser");
-        XParser xParser = (XParser) UnoRuntime.queryInterface(XParser.class, oParser);
+        XParser xParser = UnoRuntime.queryInterface(XParser.class, oParser);
 
         xParser.setDocumentHandler(handler) ;
         InputSource inSrc = new InputSource() ;
@@ -886,11 +884,11 @@ public class XMLTools {
             "com.sun.star.comp." + docType + ".XML" + exportType + "Exporter",
             new Object[] {arg});
 
-        XExporter xExp = (XExporter) UnoRuntime.queryInterface
+        XExporter xExp = UnoRuntime.queryInterface
             (XExporter.class, oExp) ;
         xExp.setSourceDocument(xDoc) ;
 
-        XFilter filter = (XFilter) UnoRuntime.queryInterface(XFilter.class, oExp) ;
+        XFilter filter = UnoRuntime.queryInterface(XFilter.class, oExp) ;
         filter.filter(XMLTools.createMediaDescriptor(
             new String[] {"FilterName"},
             new Object[] {"Custom filter"})) ;
@@ -919,7 +917,7 @@ public class XMLTools {
 
         XInterface oImp = (XInterface)xMSF.createInstance(
             "com.sun.star.comp." + docType + ".XML" + importType + "Importer");
-        XImporter xImp = (XImporter) UnoRuntime.queryInterface
+        XImporter xImp = UnoRuntime.queryInterface
             (XImporter.class, oImp) ;
         XDocumentHandler xDocHandImp = (XDocumentHandler) UnoRuntime.queryInterface
             (XDocumentHandler.class, oImp) ;

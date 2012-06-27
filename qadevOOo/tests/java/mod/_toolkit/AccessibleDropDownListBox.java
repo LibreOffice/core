@@ -94,7 +94,7 @@ public class AccessibleDropDownListBox extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleAction acomp = (XAccessibleAction) UnoRuntime.queryInterface(
+        final XAccessibleAction acomp = UnoRuntime.queryInterface(
                                                 XAccessibleAction.class, oObj);
         tEnv.addObjRelation("EventProducer",
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {

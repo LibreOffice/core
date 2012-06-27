@@ -106,7 +106,7 @@ public class SvxShapeCollection extends TestCase {
             SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
             Object col = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.drawing.ShapeCollection");
-            XShapes shapes = (XShapes) UnoRuntime.queryInterface
+            XShapes shapes = UnoRuntime.queryInterface
                 (XShapes.class,col);
 
             oShape = SOF.createShape(xDrawDoc,3000,4500,15000,1000,"Ellipse");

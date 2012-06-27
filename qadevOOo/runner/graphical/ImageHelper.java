@@ -80,7 +80,7 @@ class ImageHelper
             File aFile = new File(_sFilename);
             Exception ex = null;
             try {
-                Class imageIOClass = Class.forName("javax.imageio.ImageIO");
+                Class<?> imageIOClass = Class.forName("javax.imageio.ImageIO");
                 Method readMethod = imageIOClass.getDeclaredMethod("read", new Class[]{java.io.File.class});
                 Object retValue = readMethod.invoke(imageIOClass, new Object[]{aFile});
                 aImage = (Image)retValue;

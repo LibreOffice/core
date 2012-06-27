@@ -84,8 +84,7 @@ public class SwXViewSettings extends TestCase {
         // create testobject here
 
         oObj = xTextDoc.getCurrentController();
-        XViewSettingsSupplier oVSSupp = (XViewSettingsSupplier)
-            UnoRuntime.queryInterface(XViewSettingsSupplier.class, oObj);
+        XViewSettingsSupplier oVSSupp = UnoRuntime.queryInterface(XViewSettingsSupplier.class, oObj);
 
         oObj = oVSSupp.getViewSettings();
 

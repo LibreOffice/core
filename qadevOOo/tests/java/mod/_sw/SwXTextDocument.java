@@ -111,14 +111,14 @@ public class SwXTextDocument extends TestCase {
             }
 
             //insert two sections parent and child
-            XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
+            XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(
                                                    XMultiServiceFactory.class,
                                                    xTextDoc);
 
             XInterface oTS;
             XTextSection xTS;
 
-            XTextSectionsSupplier oTSSupp = (XTextSectionsSupplier) UnoRuntime.queryInterface(
+            XTextSectionsSupplier oTSSupp = UnoRuntime.queryInterface(
                                                     XTextSectionsSupplier.class,
                                                     xTextDoc);
             XNameAccess oTSSuppName = oTSSupp.getTextSections();
@@ -126,11 +126,11 @@ public class SwXTextDocument extends TestCase {
             oTS = (XInterface) oDocMSF.createInstance(
                           "com.sun.star.text.TextSection");
 
-            XTextContent oTSC = (XTextContent) UnoRuntime.queryInterface(
+            XTextContent oTSC = UnoRuntime.queryInterface(
                                         XTextContent.class, oTS);
             oText.insertTextContent(oCursor, oTSC, false);
 
-            XWordCursor oWordC = (XWordCursor) UnoRuntime.queryInterface(
+            XWordCursor oWordC = UnoRuntime.queryInterface(
                                          XWordCursor.class, oCursor);
             oCursor.setString("End of TextSection");
             oCursor.gotoStart(false);
@@ -139,11 +139,11 @@ public class SwXTextDocument extends TestCase {
 
             XInterface oTS2 = (XInterface) oDocMSF.createInstance(
                                       "com.sun.star.text.TextSection");
-            oTSC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class,
+            oTSC = UnoRuntime.queryInterface(XTextContent.class,
                                                             oTS2);
             oText.insertTextContent(oCursor, oTSC, false);
 
-            XIndexAccess oTSSuppIndex = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess oTSSuppIndex = UnoRuntime.queryInterface(
                                                 XIndexAccess.class,
                                                 oTSSuppName);
             log.println(
@@ -151,14 +151,14 @@ public class SwXTextDocument extends TestCase {
             xTS = (XTextSection) UnoRuntime.queryInterface(XTextSection.class,
                                                            oTSSuppIndex.getByIndex(0));
 
-            XNamed xTSName = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed xTSName = UnoRuntime.queryInterface(XNamed.class,
                                                                 xTS);
             xTSName.setName("SwXTextSection");
 
             log.println("    adding TextTable");
             the_table = SOfficeFactory.createTextTable(xTextDoc, 6, 4);
 
-            XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed the_name = UnoRuntime.queryInterface(XNamed.class,
                                                                  the_table);
             the_name.setName("SwXTextDocument");
             SOfficeFactory.insertTextContent(xTextDoc,
@@ -168,10 +168,10 @@ public class SwXTextDocument extends TestCase {
 
             XInterface aMark = (XInterface) oDocMSF.createInstance(
                                        "com.sun.star.text.ReferenceMark");
-            the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class, aMark);
+            the_name = UnoRuntime.queryInterface(XNamed.class, aMark);
             the_name.setName("SwXTextDocument");
 
-            XTextContent oTC = (XTextContent) UnoRuntime.queryInterface(
+            XTextContent oTC = UnoRuntime.queryInterface(
                                        XTextContent.class, aMark);
             SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
 
@@ -184,7 +184,7 @@ public class SwXTextDocument extends TestCase {
 
             XInterface aEndNote = (XInterface) oDocMSF.createInstance(
                                           "com.sun.star.text.Endnote");
-            oTC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class,
+            oTC = UnoRuntime.queryInterface(XTextContent.class,
                                                            aEndNote);
             SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
 
@@ -202,7 +202,7 @@ public class SwXTextDocument extends TestCase {
 
             XTextFrame frame = SOfficeFactory.createTextFrame(xTextDoc, 500,
                                                               500);
-            oTC = (XTextContent) UnoRuntime.queryInterface(XTextContent.class,
+            oTC = UnoRuntime.queryInterface(XTextContent.class,
                                                            frame);
             SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
 
@@ -232,9 +232,9 @@ public class SwXTextDocument extends TestCase {
             return tEnv;
         }
 
-        XModel model1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel model1 = UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);
-        XModel model2 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel model2 = UnoRuntime.queryInterface(XModel.class,
                                                            xSecondTextDoc);
 
         XController cont1 = model1.getCurrentController();
@@ -243,7 +243,7 @@ public class SwXTextDocument extends TestCase {
         cont1.getFrame().setName("cont1");
         cont2.getFrame().setName("cont2");
 
-        XSelectionSupplier sel = (XSelectionSupplier) UnoRuntime.queryInterface(
+        XSelectionSupplier sel = UnoRuntime.queryInterface(
                                          XSelectionSupplier.class, cont1);
 
         log.println("Adding SelectionSupplier and Shape to select for XModel");

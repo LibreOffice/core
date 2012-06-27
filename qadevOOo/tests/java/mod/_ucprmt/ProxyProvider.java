@@ -43,7 +43,7 @@ public class ProxyProvider extends TestCase {
         try {
             oObj = (XInterface) xMSF.createInstance
                 ("com.sun.star.ucb.RemoteProxyContentProvider");
-            cntIDFac = (XContentIdentifierFactory) UnoRuntime.queryInterface
+            cntIDFac = UnoRuntime.queryInterface
                 (XContentIdentifierFactory.class, oObj) ;
         } catch( com.sun.star.uno.Exception e ) {
             log.println("Can't create an object." );

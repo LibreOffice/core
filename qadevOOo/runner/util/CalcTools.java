@@ -95,7 +95,7 @@ public class CalcTools {
                             "Couldn't get CellRange from sheett: " + e.toString());
             }
 
-            XCellRangeData xRangeData = (XCellRangeData) UnoRuntime.queryInterface(XCellRangeData.class, xRange);
+            XCellRangeData xRangeData = UnoRuntime.queryInterface(XCellRangeData.class, xRange);
 
             xRangeData.setDataArray(newData);
         } catch (Exception e){
@@ -119,13 +119,11 @@ public class CalcTools {
         XSpreadsheet xSheet = null;
 
         try{
-            XSpreadsheetDocument xSpreadsheetDoc = (XSpreadsheetDocument)
-                    UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
+            XSpreadsheetDocument xSpreadsheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
 
             XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
 
-            XIndexAccess xSheetsIndexArray = (XIndexAccess)
-                        UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+            XIndexAccess xSheetsIndexArray = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
             try{
                 xSheet = (XSpreadsheet) AnyConverter.toObject(

@@ -41,7 +41,7 @@ public class SysUtils {
         return jh;
     }
 
-  static ArrayList files = new ArrayList();
+  static ArrayList<String> files = new ArrayList<String>();
 
   public static Object[] traverse( String afileDirectory ) {
 
@@ -89,7 +89,7 @@ public class SysUtils {
     XComponent ac = null;
     try {
         Object desk = msf.createInstance("com.sun.star.frame.Desktop");
-        XDesktop xDesk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,desk);
+        XDesktop xDesk = UnoRuntime.queryInterface(XDesktop.class,desk);
         ac = xDesk.getCurrentComponent();
     } catch (com.sun.star.uno.Exception e) {
         System.out.println("Couldn't get active Component");
@@ -100,7 +100,7 @@ public class SysUtils {
   public static XFrame getActiveFrame(XMultiServiceFactory msf) {
     try {
         Object desk = msf.createInstance("com.sun.star.frame.Desktop");
-        XDesktop xDesk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,desk);
+        XDesktop xDesk = UnoRuntime.queryInterface(XDesktop.class,desk);
         return xDesk.getCurrentFrame();
     } catch (com.sun.star.uno.Exception e) {
         System.out.println("Couldn't get active Component");
@@ -122,7 +122,7 @@ public class SysUtils {
   public static String getSysClipboardText(XMultiServiceFactory msf)
         throws com.sun.star.uno.Exception {
 
-    XClipboard xCB = (XClipboard) UnoRuntime.queryInterface
+    XClipboard xCB = UnoRuntime.queryInterface
         (XClipboard.class, msf.createInstance
         ("com.sun.star.datatransfer.clipboard.SystemClipboard"));
 

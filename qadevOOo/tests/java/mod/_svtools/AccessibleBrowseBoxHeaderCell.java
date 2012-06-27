@@ -71,7 +71,7 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(
+        the_Desk = UnoRuntime.queryInterface(
                     XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
     }
 
@@ -132,12 +132,11 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel1 = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider)UnoRuntime.
+        XDispatchProvider aProv = UnoRuntime.
             queryInterface(XDispatchProvider.class, secondController);
 
         XDispatch getting = null;
@@ -163,9 +162,8 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
 
         XInterface oObj = null;
 
-        final XInitialization xInit = (XInitialization)
-                UnoRuntime.queryInterface(
-                        XInitialization.class, the_frame2.getController());
+        final XInitialization xInit = UnoRuntime.queryInterface(
+                XInitialization.class, the_frame2.getController());
 
         PropertyValue[] params = new PropertyValue[3];
         PropertyValue param1 = new PropertyValue();
@@ -183,7 +181,7 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
 
         XController xCont = the_frame2.getController();
 
-        XSelectionSupplier xSelect = (XSelectionSupplier) UnoRuntime.queryInterface(
+        XSelectionSupplier xSelect = UnoRuntime.queryInterface(
             XSelectionSupplier.class, xCont);
 
         try {

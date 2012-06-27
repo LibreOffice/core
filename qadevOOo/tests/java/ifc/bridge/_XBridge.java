@@ -65,7 +65,7 @@ public class _XBridge extends MultiMethodTest {
 
         if (args == null) throw new StatusException(Status.failed
             ("Relation 'XInitialization.args' not found")) ;
-        XInitialization xInit = (XInitialization)UnoRuntime.queryInterface(
+        XInitialization xInit = UnoRuntime.queryInterface(
                                        XInitialization.class, oObj);
         try {
             xInit.initialize(args);

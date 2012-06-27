@@ -95,7 +95,7 @@ public class ScDatabaseRangeObj extends TestCase {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xSheetDoc ");
 
-        XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+        XComponent oComp = UnoRuntime.queryInterface(
                                    XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
@@ -140,7 +140,7 @@ public class ScDatabaseRangeObj extends TestCase {
 
         try {
             Object sheet = sheets.getByName(names[0]);
-            xImp = (XImportable) UnoRuntime.queryInterface(XImportable.class,
+            xImp = UnoRuntime.queryInterface(XImportable.class,
                                                            sheet);
             dbRanges = (XDatabaseRanges) AnyConverter.toObject(
                                new Type(XDatabaseRanges.class),
@@ -180,14 +180,14 @@ public class ScDatabaseRangeObj extends TestCase {
             // we need to add it
             dbRanges.addNewByName(dbName,new CellRangeAddress((short)0, 0, 0, 0, 5));
 
-            xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            xNamed = UnoRuntime.queryInterface(XNamed.class,
                                                         dbrNA.getByName(
                                                                 dbName));
 
-            XCellRangeReferrer aReferrer = (XCellRangeReferrer) UnoRuntime.queryInterface(
+            XCellRangeReferrer aReferrer = UnoRuntime.queryInterface(
                                                    XCellRangeReferrer.class,
                                                    dbrNA.getByName(dbName));
-            XCellRangeAddressable aRangeA = (XCellRangeAddressable) UnoRuntime.queryInterface(
+            XCellRangeAddressable aRangeA = UnoRuntime.queryInterface(
                                                     XCellRangeAddressable.class,
                                                     aReferrer.getReferredCells());
             aRange = aRangeA.getRangeAddress();

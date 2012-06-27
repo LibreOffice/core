@@ -154,7 +154,7 @@ class BorderRemover
             Exception ex = null;
             try
             {
-                Class imageIOClass = Class.forName("javax.imageio.ImageIO");
+                Class<?> imageIOClass = Class.forName("javax.imageio.ImageIO");
                 // GlobalLogWriter.get().println("Hello World: get Class");
 
                 Method getWriterMIMETypesMethod = imageIOClass.getDeclaredMethod("getWriterMIMETypes", new Class[]{ });

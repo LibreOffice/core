@@ -85,7 +85,7 @@ public class _XFormController extends MultiMethodTest {
         requiredMethod("getCurrentControl()");
         oObj.addActivateListener(listener) ;
 
-        XWindow wind = (XWindow)UnoRuntime.queryInterface(XWindow.class, cntrl);
+        XWindow wind = UnoRuntime.queryInterface(XWindow.class, cntrl);
         wind.setFocus();
         shortWait();
         XWindow otherWind = (XWindow)tEnv.getObjRelation("otherWindow");
@@ -110,7 +110,7 @@ public class _XFormController extends MultiMethodTest {
         log.println("ActiveListener removed");
         listener.init();
 
-        XWindow wind = (XWindow)UnoRuntime.queryInterface(XWindow.class, cntrl);
+        XWindow wind = UnoRuntime.queryInterface(XWindow.class, cntrl);
         wind.setFocus();
         shortWait();
         XWindow otherWind = (XWindow)tEnv.getObjRelation("otherWindow");

@@ -189,11 +189,10 @@ public class XMLContentImporter extends TestCase {
             new ifc.xml.sax._XDocumentHandler.ImportChecker() {
                 public boolean checkImport() {
                     try {
-                        XDrawPagesSupplier xPagesSup = (XDrawPagesSupplier)
-                            UnoRuntime.queryInterface
-                            (XDrawPagesSupplier.class, xImpressDoc) ;
+                        XDrawPagesSupplier xPagesSup = UnoRuntime.queryInterface
+                        (XDrawPagesSupplier.class, xImpressDoc) ;
                         XDrawPages xPages = xPagesSup.getDrawPages() ;
-                        XNamed xPageName = (XNamed) UnoRuntime.queryInterface
+                        XNamed xPageName = UnoRuntime.queryInterface
                             (XNamed.class, xPages.getByIndex(0)) ;
                         String gName = xPageName.getName() ;
                         logF.println("Page name returned = '" + gName + "'") ;

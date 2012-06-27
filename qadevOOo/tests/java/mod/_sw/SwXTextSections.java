@@ -86,15 +86,13 @@ public class SwXTextSections extends TestCase {
 
         log.println( "inserting TextSections" );
 
-        XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
 
         // First TextSection
         try {
             oTS = (XInterface) oDocMSF.createInstance
                 ("com.sun.star.text.TextSection");
-            XTextContent oTSC = (XTextContent)
-                UnoRuntime.queryInterface(XTextContent.class, oTS);
+            XTextContent oTSC = UnoRuntime.queryInterface(XTextContent.class, oTS);
             oText.insertTextContent(oCursor, oTSC, false);
         }
         catch(Exception e){
@@ -106,8 +104,7 @@ public class SwXTextSections extends TestCase {
         try {
             oTS = (XInterface) oDocMSF.createInstance
                 ("com.sun.star.text.TextSection");
-            XTextContent oTSC = (XTextContent)
-                UnoRuntime.queryInterface(XTextContent.class, oTS);
+            XTextContent oTSC = UnoRuntime.queryInterface(XTextContent.class, oTS);
             oText.insertTextContent(oCursor, oTSC, false);
         }
         catch(Exception e){
@@ -119,9 +116,8 @@ public class SwXTextSections extends TestCase {
         log.println( "try to get a TextSection with the XTextSectionSupplier()" );
 
         try{
-            XTextSectionsSupplier oTSSupp = (XTextSectionsSupplier)
-                UnoRuntime.queryInterface( XTextSectionsSupplier.class,
-                xTextDoc );
+            XTextSectionsSupplier oTSSupp = UnoRuntime.queryInterface( XTextSectionsSupplier.class,
+            xTextDoc );
             oTSSuppName = oTSSupp.getTextSections();
         }
         catch(Exception e){

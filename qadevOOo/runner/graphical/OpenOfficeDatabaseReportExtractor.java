@@ -510,7 +510,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
             return sBackPathName;
         }
 
-    private XComponent loadComponent(String _sName, Object _xComponent, ArrayList _aPropertyList)
+    private XComponent loadComponent(String _sName, Object _xComponent, ArrayList<PropertyValue> _aPropertyList)
         {
             XComponent xDocComponent = null;
             XComponentLoader xComponentLoader =  UnoRuntime.queryInterface( XComponentLoader.class, _xComponent );

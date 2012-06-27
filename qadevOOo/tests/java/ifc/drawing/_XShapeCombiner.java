@@ -56,7 +56,7 @@ public class _XShapeCombiner extends MultiMethodTest {
     */
     public void _combine () {
         XDrawPage dp = (XDrawPage) tEnv.getObjRelation("DrawPage");
-        oShapes = (XShapes)UnoRuntime.queryInterface( XShapes.class, dp );
+        oShapes = UnoRuntime.queryInterface( XShapes.class, dp );
 
         boolean result = false;
 

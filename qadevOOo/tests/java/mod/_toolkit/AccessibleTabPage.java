@@ -84,7 +84,7 @@ public class AccessibleTabPage extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -169,12 +169,12 @@ public class AccessibleTabPage extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+        XDispatchProvider aProv = UnoRuntime.queryInterface(
                                           XDispatchProvider.class,
                                           secondController);
 
@@ -183,7 +183,7 @@ public class AccessibleTabPage extends TestCase {
         try {
             XInterface transf = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                                         "com.sun.star.util.URLTransformer");
-            urlTransf = (XURLTransformer) UnoRuntime.queryInterface(
+            urlTransf = UnoRuntime.queryInterface(
                                 XURLTransformer.class, transf);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -215,14 +215,14 @@ public class AccessibleTabPage extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
         shortWait();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
@@ -231,7 +231,7 @@ public class AccessibleTabPage extends TestCase {
                                                                        AccessibleRole.PUSH_BUTTON,
                                                                        "Close");
 
-        accCloseButton = (XAccessibleAction) UnoRuntime.queryInterface(
+        accCloseButton = UnoRuntime.queryInterface(
                                  XAccessibleAction.class, closeButton);
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB);
@@ -243,7 +243,7 @@ public class AccessibleTabPage extends TestCase {
         tEnv.addObjRelation("EditOnly", "toolkit.AccessibleTabPage");
         tEnv.addObjRelation("LimitedBounds", "toolkit.AccessibleTabPage");
 
-        XAccessibleComponent accComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+        XAccessibleComponent accComp = UnoRuntime.queryInterface(
                                                XAccessibleComponent.class,
                                                oObj);
         final Point point = accComp.getLocationOnScreen();
@@ -251,7 +251,7 @@ public class AccessibleTabPage extends TestCase {
         shortWait();
 
         XInterface xEventInt = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Variables");
-        final XAccessibleComponent eventAccComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+        final XAccessibleComponent eventAccComp = UnoRuntime.queryInterface(
                                                XAccessibleComponent.class,
                                                xEventInt);
 

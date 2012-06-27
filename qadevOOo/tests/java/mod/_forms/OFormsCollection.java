@@ -87,7 +87,7 @@ public class OFormsCollection extends TestCase {
         log.println("    disposing xDrawDoc ");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                                         XCloseable.class, xDrawDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
@@ -147,7 +147,7 @@ public class OFormsCollection extends TestCase {
         // INSTANCEn : _XNameContainer; _XNameReplace
         log.println("adding INSTANCEn as obj relation to environment");
 
-        XComponent xComp = (XComponent) UnoRuntime.queryInterface(
+        XComponent xComp = UnoRuntime.queryInterface(
                                    XComponent.class, xDrawDoc);
         int THRCNT = 1;
         if (Param.get("THRCNT")!= null) {

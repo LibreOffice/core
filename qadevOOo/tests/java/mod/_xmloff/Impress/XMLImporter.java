@@ -153,8 +153,7 @@ public class XMLImporter extends TestCase {
         tEnv.addObjRelation("XDocumentHandler.XMLData", xml);
 
         //get draw pages
-        XDrawPagesSupplier drawPagesSupplier = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
+        XDrawPagesSupplier drawPagesSupplier = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
         XDrawPages drawPages = drawPagesSupplier.getDrawPages();
         final XNameAccess xNamePages = (XNameAccess)
             UnoRuntime.queryInterface(XNameAccess.class, drawPages);

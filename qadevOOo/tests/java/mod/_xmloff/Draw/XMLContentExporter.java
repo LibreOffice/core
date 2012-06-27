@@ -132,12 +132,10 @@ public class XMLContentExporter extends TestCase {
             oObj = (XInterface) xMSF.createInstanceWithArguments(
                 "com.sun.star.comp.Draw.XMLContentExporter",
                 new Object[] {arg});
-            XExporter xEx = (XExporter)
-                UnoRuntime.queryInterface(XExporter.class,oObj);
+            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
             //xEx.setSourceDocument(xDrawDoc);
 
-            XDrawPagesSupplier supp = (XDrawPagesSupplier)
-                UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
+            XDrawPagesSupplier supp = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
             XDrawPages set = supp.getDrawPages();
 
             // This is an XML-export BUG (new slide named "NewSlide2"
@@ -146,13 +144,11 @@ public class XMLContentExporter extends TestCase {
 
             XDrawPage page1 = (XDrawPage)
                 UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(0));
-            XNamed NPage1 = (XNamed)
-                UnoRuntime.queryInterface(XNamed.class,page1);
+            XNamed NPage1 = UnoRuntime.queryInterface(XNamed.class,page1);
             NPage1.setName("NewSlide1");
             XDrawPage page2 = (XDrawPage)
                 UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(1));
-            XNamed NPage2 = (XNamed)
-                UnoRuntime.queryInterface(XNamed.class,page2);
+            XNamed NPage2 = UnoRuntime.queryInterface(XNamed.class,page2);
             NPage2.setName("NewSlide2");
             xEx.setSourceDocument(xDrawDoc);
         } catch (com.sun.star.uno.Exception e) {

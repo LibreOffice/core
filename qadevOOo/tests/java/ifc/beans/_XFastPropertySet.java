@@ -55,7 +55,7 @@ import com.sun.star.uno.UnoRuntime;
 public class _XFastPropertySet extends MultiMethodTest {
 
     public XFastPropertySet oObj = null;
-    private List handles = new ArrayList();
+    private List<Integer> handles = new ArrayList<Integer>();
     private int handle = -1;
     private Set exclude = null ;
 
@@ -177,7 +177,7 @@ public class _XFastPropertySet extends MultiMethodTest {
 
         Random rnd = new Random();
         int nr = rnd.nextInt(handles.size());
-        handle = ((Integer)handles.get(nr)).intValue();
+        handle = handles.get(nr).intValue();
     }
 
     private boolean isChangeable(int handle) {

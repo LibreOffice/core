@@ -82,14 +82,12 @@ public class ParagraphStyle extends TestCase  {
 
         try {
             log.println("getting style");
-            XStyleFamiliesSupplier oSFS = (XStyleFamiliesSupplier)
-                UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
-                xTextDoc);
+            XStyleFamiliesSupplier oSFS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
+            xTextDoc);
             XNameAccess oSF = oSFS.getStyleFamilies();
             oSFNA = (XNameAccess) UnoRuntime.queryInterface(
                             XNameAccess.class,oSF.getByName("ParagraphStyles"));
-            XIndexAccess oSFIA = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
+            XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
             String[] els = oSFNA.getElementNames();
             oStyle = (XStyle) UnoRuntime.queryInterface(
                            XStyle.class,oSFIA.getByIndex(1));
@@ -109,8 +107,7 @@ public class ParagraphStyle extends TestCase  {
 
         try {
             log.print("Creating a user-defined style... ");
-            XMultiServiceFactory oMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+            XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
             XInterface oInt = (XInterface)
                 oMSF.createInstance("com.sun.star.style.ParagraphStyle");
             oMyStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, oInt);

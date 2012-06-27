@@ -96,16 +96,14 @@ public class DataOutputStream extends TestCase {
 
         oObj = (XInterface) oInterface;
 
-        final XOutputStream xPipeOutput = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class, oPipe);
+        final XOutputStream xPipeOutput = UnoRuntime.queryInterface(XOutputStream.class, oPipe);
 
-        XActiveDataSource xDataSource = (XActiveDataSource)
-            UnoRuntime.queryInterface(XActiveDataSource.class, oObj);
+        XActiveDataSource xDataSource = UnoRuntime.queryInterface(XActiveDataSource.class, oObj);
 
         xDataSource.setOutputStream(xPipeOutput);
 
         // all data types for writing to an XDataInputStream
-        ArrayList data = new ArrayList() ;
+        ArrayList<Object> data = new ArrayList<Object>() ;
         data.add(new Boolean(true)) ;
         data.add(new Byte((byte)123)) ;
         data.add(new Character((char)1234)) ;
@@ -158,9 +156,8 @@ public class DataOutputStream extends TestCase {
                         return null;
                     }
 
-                    XActiveDataSink xDataSink = (XActiveDataSink)
-                        UnoRuntime.queryInterface(
-                            XActiveDataSink.class, xInStream);
+                    XActiveDataSink xDataSink = UnoRuntime.queryInterface(
+                        XActiveDataSink.class, xInStream);
                     xDataSink.setInputStream(xPipeInput);
 
                     return xInStream;

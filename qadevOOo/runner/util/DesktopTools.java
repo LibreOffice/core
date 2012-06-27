@@ -59,10 +59,10 @@ public class DesktopTools
      */
     public static XComponentLoader getCLoader(XMultiServiceFactory xMSF)
     {
-        XDesktop oDesktop = (XDesktop) UnoRuntime.queryInterface(
+        XDesktop oDesktop = UnoRuntime.queryInterface(
                 XDesktop.class, createDesktop(xMSF));
 
-        XComponentLoader oCLoader = (XComponentLoader) UnoRuntime.queryInterface(
+        XComponentLoader oCLoader = UnoRuntime.queryInterface(
                 XComponentLoader.class, oDesktop);
 
         return oCLoader;
@@ -97,7 +97,7 @@ public class DesktopTools
      */
     public static XEnumeration getAllComponents(XMultiServiceFactory xMSF)
     {
-        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
+        XDesktop xDesktop = UnoRuntime.queryInterface(
                 XDesktop.class, createDesktop(xMSF));
         return xDesktop.getComponents().createEnumeration();
     }
@@ -109,7 +109,7 @@ public class DesktopTools
      */
     public static XComponent getCurrentComponent(XMultiServiceFactory xMSF)
     {
-        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
+        XDesktop xDesktop = UnoRuntime.queryInterface(
                 XDesktop.class, createDesktop(xMSF));
         return xDesktop.getCurrentComponent();
     }
@@ -121,7 +121,7 @@ public class DesktopTools
      */
     public static XFrame getCurrentFrame(XMultiServiceFactory xMSF)
     {
-        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
+        XDesktop xDesktop = UnoRuntime.queryInterface(
                 XDesktop.class, createDesktop(xMSF));
         return xDesktop.getCurrentFrame();
     }
@@ -138,8 +138,8 @@ public class DesktopTools
      */
     public static Object[] getAllOpenDocuments(XMultiServiceFactory xMSF)
     {
-        ArrayList components = new ArrayList();
-        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
+        ArrayList<XComponent> components = new ArrayList<XComponent>();
+        XDesktop xDesktop = UnoRuntime.queryInterface(
                 XDesktop.class, createDesktop(xMSF));
 
         XEnumeration allComp = getAllComponents(xMSF);
@@ -148,7 +148,7 @@ public class DesktopTools
         {
             try
             {
-                XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
+                XComponent xComponent = UnoRuntime.queryInterface(
                         XComponent.class, allComp.nextElement());
 
                 if (getDocumentType(xComponent) != null)
@@ -293,8 +293,8 @@ public class DesktopTools
             System.out.println("The property 'KeepDocument' is set and so the document won't be disposed");
             return;
         }
-        XModifiable modified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, DocumentToClose);
-        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, DocumentToClose);
+        XModifiable modified = UnoRuntime.queryInterface(XModifiable.class, DocumentToClose);
+        XCloseable closer = UnoRuntime.queryInterface(XCloseable.class, DocumentToClose);
 
         try
         {
@@ -363,7 +363,7 @@ public class DesktopTools
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XToolkit tk = (XToolkit) UnoRuntime.queryInterface(
+        XToolkit tk = UnoRuntime.queryInterface(
                 XToolkit.class, oObj);
 
         WindowDescriptor descriptor = new com.sun.star.awt.WindowDescriptor();
@@ -408,9 +408,9 @@ public class DesktopTools
     {
         try
         {
-            XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
+            XModel xMod = UnoRuntime.queryInterface(XModel.class, xDoc);
             XInterface oCont = xMod.getCurrentController();
-            XViewSettingsSupplier oVSSupp = (XViewSettingsSupplier) UnoRuntime.queryInterface(XViewSettingsSupplier.class, oCont);
+            XViewSettingsSupplier oVSSupp = UnoRuntime.queryInterface(XViewSettingsSupplier.class, oCont);
 
             XInterface oViewSettings = oVSSupp.getViewSettings();
             XPropertySet oViewProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oViewSettings);
@@ -488,9 +488,9 @@ public class DesktopTools
         // System.out.println("DEBUG: bring to front xModel");
 
         XTopWindow xTopWindow =
-                (XTopWindow) UnoRuntime.queryInterface(
-                XTopWindow.class,
-                xModel.getCurrentController().getFrame().getContainerWindow());
+                UnoRuntime.queryInterface(
+        XTopWindow.class,
+        xModel.getCurrentController().getFrame().getContainerWindow());
 
         xTopWindow.toFront();
     }
@@ -498,7 +498,7 @@ public class DesktopTools
     public static void bringWindowToFront(XComponent xComponent)
     {
         // System.out.println("DEBUG: bring to front xComponent");
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xComponent);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, xComponent);
         if (xModel != null)
         {
             bringWindowToFront(xModel);

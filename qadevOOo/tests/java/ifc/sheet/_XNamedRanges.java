@@ -132,12 +132,12 @@ public class _XNamedRanges extends MultiMethodTest {
 
             for (int i = 1; i < 4; i++) {
                 cell = oSheet.getCellByPosition(0, i);
-                textrange = (XTextRange)UnoRuntime.
+                textrange = UnoRuntime.
                                     queryInterface(XTextRange.class, cell);
                 textrange.setString("Row" + i);
 
                 cell = oSheet.getCellByPosition(i, 0);
-                textrange = (XTextRange)UnoRuntime.
+                textrange = UnoRuntime.
                                     queryInterface(XTextRange.class, cell);
                 textrange.setString("Column" + i);
             }
@@ -145,7 +145,7 @@ public class _XNamedRanges extends MultiMethodTest {
             for (int i = 1; i < 4; i++)
                 for (int j = 1; j < 4; j++) {
                     cell = oSheet.getCellByPosition(i, j);
-                    textrange = (XTextRange)UnoRuntime.
+                    textrange = UnoRuntime.
                                     queryInterface(XTextRange.class, cell);
                     textrange.setString("Val" + ((j - 1) * 3 + i));
                 }
@@ -159,12 +159,11 @@ public class _XNamedRanges extends MultiMethodTest {
                 bResult &= oObj.hasByName("Column" + i);
 
                 Object range = oObj.getByName("Column" + i);
-                XCellRangeReferrer CRR = (XCellRangeReferrer)UnoRuntime.
+                XCellRangeReferrer CRR = UnoRuntime.
                                 queryInterface(XCellRangeReferrer.class,range);
 
                 XCellRange CR = CRR.getReferredCells();
-                XCellRangeAddressable xCRA = (XCellRangeAddressable)
-                    UnoRuntime.queryInterface(XCellRangeAddressable.class, CR);
+                XCellRangeAddressable xCRA = UnoRuntime.queryInterface(XCellRangeAddressable.class, CR);
 
                 CellRangeAddress objCRA = xCRA.getRangeAddress();
 
@@ -180,12 +179,11 @@ public class _XNamedRanges extends MultiMethodTest {
                 bResult &= oObj.hasByName("Row" + i);
 
                 Object range = oObj.getByName("Row" + i);
-                XCellRangeReferrer CRR = (XCellRangeReferrer)UnoRuntime.
+                XCellRangeReferrer CRR = UnoRuntime.
                                 queryInterface(XCellRangeReferrer.class,range);
 
                 XCellRange CR = CRR.getReferredCells();
-                XCellRangeAddressable xCRA = (XCellRangeAddressable)
-                    UnoRuntime.queryInterface(XCellRangeAddressable.class, CR);
+                XCellRangeAddressable xCRA = UnoRuntime.queryInterface(XCellRangeAddressable.class, CR);
 
                 CellRangeAddress objCRA = xCRA.getRangeAddress();
 
@@ -221,7 +219,7 @@ public class _XNamedRanges extends MultiMethodTest {
         boolean bResult = true;
         CellAddress CA = new CellAddress((short)0, 0, 0);
 
-        XIndexAccess IA = (XIndexAccess)UnoRuntime.
+        XIndexAccess IA = UnoRuntime.
                             queryInterface(XIndexAccess.class, oObj);
 
         int elementsCount = IA.getCount();
@@ -231,8 +229,7 @@ public class _XNamedRanges extends MultiMethodTest {
         try {
             for (int i = 0; i < elementsCount; i++) {
                 XCell cell = oSheet.getCellByPosition(0, i);
-                XTextRange textrange = (XTextRange)
-                    UnoRuntime.queryInterface(XTextRange.class, cell);
+                XTextRange textrange = UnoRuntime.queryInterface(XTextRange.class, cell);
                 String str = textrange.getString();
                 bResult &= oObj.hasByName(str);
             }
@@ -258,7 +255,7 @@ public class _XNamedRanges extends MultiMethodTest {
     public void _removeByName() {
         requiredMethod("addNewByName()");
         boolean bResult = true;
-        XIndexAccess IA = (XIndexAccess)UnoRuntime.
+        XIndexAccess IA = UnoRuntime.
                             queryInterface(XIndexAccess.class, oObj);
 
         int elementsCount = IA.getCount();

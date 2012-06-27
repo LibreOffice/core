@@ -34,7 +34,7 @@ public final class TestEnvironment {
      * Contains object relations - auxiliary objects associated with the
      * tested object and required for testing.
      */
-    private final HashMap relations = new HashMap(10);
+    private final HashMap<String, Object> relations = new HashMap<String, Object>(10);
 
     /**
      * An instance of the tested implementation object.

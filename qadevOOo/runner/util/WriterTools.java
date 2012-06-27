@@ -40,7 +40,7 @@ public class WriterTools {
     public static XTextDocument createTextDoc(XMultiServiceFactory xMSF) {
         PropertyValue[] Args = new PropertyValue[0];
         XComponent comp = DesktopTools.openNewDoc(xMSF, "swriter", Args);
-        XTextDocument WriterDoc = (XTextDocument) UnoRuntime.queryInterface(
+        XTextDocument WriterDoc = UnoRuntime.queryInterface(
                                           XTextDocument.class, comp);
 
         return WriterDoc;
@@ -57,7 +57,7 @@ public class WriterTools {
     public static XTextDocument loadTextDoc(XMultiServiceFactory xMSF,
                                             String url, PropertyValue[] Args) {
         XComponent comp = DesktopTools.loadDoc(xMSF, url, Args);
-        XTextDocument WriterDoc = (XTextDocument) UnoRuntime.queryInterface(
+        XTextDocument WriterDoc = UnoRuntime.queryInterface(
                                           XTextDocument.class, comp);
 
         return WriterDoc;
@@ -67,7 +67,7 @@ public class WriterTools {
         XDrawPage oDP = null;
 
         try {
-            XDrawPageSupplier oDPS = (XDrawPageSupplier) UnoRuntime.queryInterface(
+            XDrawPageSupplier oDPS = UnoRuntime.queryInterface(
                                              XDrawPageSupplier.class, aDoc);
             oDP = (XDrawPage) oDPS.getDrawPage();
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class WriterTools {
 
             XText the_text = aDoc.getText();
             XTextCursor the_cursor = the_text.createTextCursor();
-            XTextContent the_content = (XTextContent) UnoRuntime.queryInterface(
+            XTextContent the_content = UnoRuntime.queryInterface(
                                                XTextContent.class, oGObject);
             the_text.insertTextContent(the_cursor, the_content, true);
 
@@ -101,7 +101,7 @@ public class WriterTools {
             oProps.setPropertyValue("Width", new Integer(width));
             oProps.setPropertyValue("Height", new Integer(height));
 
-            XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed the_name = UnoRuntime.queryInterface(XNamed.class,
                                                                  oGObject);
             the_name.setName(name);
         } catch (Exception ex) {

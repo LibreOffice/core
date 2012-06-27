@@ -76,9 +76,8 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
                 ("com.sun.star.ucb.UniversalContentBroker",
                 new Object[] {"Local", "Office"}) ;
 
-            XContentIdentifierFactory ciFac = (XContentIdentifierFactory)
-                UnoRuntime.queryInterface
-                    (XContentIdentifierFactory.class,oUCB) ;
+            XContentIdentifierFactory ciFac = UnoRuntime.queryInterface
+                (XContentIdentifierFactory.class,oUCB) ;
 
             String url = util.utils.getFullTestURL("SwXTextEmbeddedObject.sxw") ;
             String escUrl = "" ;
@@ -97,13 +96,11 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
 
             XContentIdentifier CI = ciFac.createContentIdentifier(cntUrl) ;
 
-            XContentProvider cntProv = (XContentProvider)
-                UnoRuntime.queryInterface(XContentProvider.class, oUCB) ;
+            XContentProvider cntProv = UnoRuntime.queryInterface(XContentProvider.class, oUCB) ;
 
             XContent cnt = cntProv.queryContent(CI) ;
 
-            XCommandProcessor cmdProc = (XCommandProcessor)
-                UnoRuntime.queryInterface(XCommandProcessor.class, cnt) ;
+            XCommandProcessor cmdProc = UnoRuntime.queryInterface(XCommandProcessor.class, cnt) ;
 
             Property prop = new Property() ;
             prop.Name = "Title" ;

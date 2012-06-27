@@ -32,7 +32,7 @@ public class DynamicClassLoader {
     * policy is required for Component and Interface
     * testing classes.
     */
-    public static Class forName(String className)
+    public static Class<?> forName(String className)
         throws ClassNotFoundException {
 
         return Class.forName(className) ;
@@ -41,7 +41,7 @@ public class DynamicClassLoader {
         public Object getInstance(String className)
                                             throws IllegalArgumentException {
             try {
-                Class cls = DynamicClassLoader.forName(className);
+                Class<?> cls = DynamicClassLoader.forName(className);
                 return cls.newInstance();
             } catch ( ClassNotFoundException e ) {
                 throw new IllegalArgumentException("Couldn't find " + className
@@ -58,12 +58,12 @@ public class DynamicClassLoader {
         public Object getInstance(String className, Object[] ctorArgs)
                                             throws IllegalArgumentException {
             try {
-                Class cls = DynamicClassLoader.forName(className);
-                Class[] ctorType = new Class[ctorArgs.length];
+                Class<?> cls = DynamicClassLoader.forName(className);
+                Class<?>[] ctorType = new Class[ctorArgs.length];
                 for(int i=0; i<ctorType.length; i++) {
                     ctorType[i] = ctorArgs[i].getClass();
                 }
-                Constructor ctor = cls.getConstructor(ctorType);
+                Constructor<?> ctor = cls.getConstructor(ctorType);
                 return ctor.newInstance(ctorArgs);
             } catch ( ClassNotFoundException e ) {
                 throw new IllegalArgumentException("Couldn't find " + className

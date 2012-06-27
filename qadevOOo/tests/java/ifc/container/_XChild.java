@@ -48,7 +48,7 @@ public class _XChild extends MultiMethodTest {
     */
     public void _getParent() {
         gotten = oObj.getParent();
-        XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class,gotten);
+        XNamed the_name = UnoRuntime.queryInterface(XNamed.class,gotten);
         if (the_name != null)
             log.println("Parent:"+the_name.getName());
         tRes.tested("getParent()",gotten != null);

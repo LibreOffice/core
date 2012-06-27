@@ -84,7 +84,7 @@ public class _XCellRangesQuery extends MultiMethodTest {
         mExpectedResults = (String[])tEnv.getObjRelation(
                                             "XCellRangesQuery.EXPECTEDRESULTS");
 
-        XColumnRowRange oColumnRowRange = (XColumnRowRange) UnoRuntime.queryInterface(
+        XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(
                                                   XColumnRowRange.class,
                                                   oSheet);
         oRows = (XTableRows)oColumnRowRange.getRows();

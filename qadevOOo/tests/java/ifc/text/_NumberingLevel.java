@@ -65,7 +65,7 @@ import com.sun.star.beans.PropertyValue;
 public class _NumberingLevel {
 
     private static TestParameters tParam = null;
-    private static HashMap NumberingLevel = new HashMap();
+    private static HashMap<String, Boolean> NumberingLevel = new HashMap<String,Boolean>();
     private static PropertyValue[] PropertyArray = null;
     private static LogWriter log = null;
 
@@ -143,7 +143,7 @@ public class _NumberingLevel {
                     String property = (String) e.next();
 
                     // if some elements are not optional -> failed
-                    if ( ! ((Boolean)NumberingLevel.get(property)).booleanValue() ){
+                    if ( ! NumberingLevel.get(property).booleanValue() ){
 
                         if ( status ) {
                             log.println("FAILED: com.sun.star.text.NumberingLevel -> " +

@@ -98,9 +98,9 @@ public class _XValidatableFormComponent extends MultiMethodTest
     protected void changeAllProperties()
     {
         XMultiPropertySet mProps =
-            (XMultiPropertySet) UnoRuntime.queryInterface(
-                XMultiPropertySet.class, tEnv.getTestObject()
-            );
+            UnoRuntime.queryInterface(
+            XMultiPropertySet.class, tEnv.getTestObject()
+        );
         XPropertySetInfo propertySetInfo = mProps.getPropertySetInfo();
         Property[] properties = propertySetInfo.getProperties();
         getPropsToTest(properties);

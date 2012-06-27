@@ -107,8 +107,7 @@ public class SmGraphicAccessible extends TestCase {
 
         XInterface oObj = null;
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xMathDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xMathDoc);
 
 
         AccessibilityTools at = new AccessibilityTools();
@@ -121,8 +120,7 @@ public class SmGraphicAccessible extends TestCase {
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
-        final XAccessibleComponent xAC = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
+        final XAccessibleComponent xAC = UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 

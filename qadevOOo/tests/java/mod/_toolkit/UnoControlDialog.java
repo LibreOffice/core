@@ -106,24 +106,24 @@ public class UnoControlDialog extends TestCase {
         }
 
         try {
-            dlgModel = (XControlModel) UnoRuntime.queryInterface(
+            dlgModel = UnoRuntime.queryInterface(
                                XControlModel.class,
                                xMSF.createInstance(
                                        "com.sun.star.awt.UnoControlDialogModel"));
 
-            XControl dlgControl = (XControl) UnoRuntime.queryInterface(
+            XControl dlgControl = UnoRuntime.queryInterface(
                                           XControl.class,
                                           xMSF.createInstance(
                                                   "com.sun.star.awt.UnoControlDialog"));
 
             dlgControl.setModel(dlgModel);
 
-            XControlModel butModel = (XControlModel) UnoRuntime.queryInterface(
+            XControlModel butModel = UnoRuntime.queryInterface(
                                              XControlModel.class,
                                              xMSF.createInstance(
                                                      "com.sun.star.awt.UnoControlButtonModel"));
 
-            butControl = (XControl) UnoRuntime.queryInterface(XControl.class,
+            butControl = UnoRuntime.queryInterface(XControl.class,
                                                               xMSF.createInstance(
                                                                       "com.sun.star.awt.UnoControlButton"));
 
@@ -131,44 +131,44 @@ public class UnoControlDialog extends TestCase {
 
 
             // creating additional controls for XUnoControlContainer
-            tabControl1 = (XTabController) UnoRuntime.queryInterface(
+            tabControl1 = UnoRuntime.queryInterface(
                                   XTabController.class,
                                   xMSF.createInstance(
                                           "com.sun.star.awt.TabController"));
 
-            tabControl2 = (XTabController) UnoRuntime.queryInterface(
+            tabControl2 = UnoRuntime.queryInterface(
                                   XTabController.class,
                                   xMSF.createInstance(
                                           "com.sun.star.awt.TabController"));
 
 
             // creating additional controls for XControlContainer
-            butModel = (XControlModel) UnoRuntime.queryInterface(
+            butModel = UnoRuntime.queryInterface(
                                XControlModel.class,
                                xMSF.createInstance(
                                        "com.sun.star.awt.UnoControlButtonModel"));
 
-            butControl1 = (XControl) UnoRuntime.queryInterface(XControl.class,
+            butControl1 = UnoRuntime.queryInterface(XControl.class,
                                                                xMSF.createInstance(
                                                                        "com.sun.star.awt.UnoControlButton"));
 
             butControl1.setModel(butModel);
 
-            butModel = (XControlModel) UnoRuntime.queryInterface(
+            butModel = UnoRuntime.queryInterface(
                                XControlModel.class,
                                xMSF.createInstance(
                                        "com.sun.star.awt.UnoControlButtonModel"));
 
-            butControl2 = (XControl) UnoRuntime.queryInterface(XControl.class,
+            butControl2 = UnoRuntime.queryInterface(XControl.class,
                                                                xMSF.createInstance(
                                                                        "com.sun.star.awt.UnoControlButton"));
 
             butControl2.setModel(butModel);
 
-            ctrlCont = (XControlContainer) UnoRuntime.queryInterface(
+            ctrlCont = UnoRuntime.queryInterface(
                                XControlContainer.class, dlgControl);
 
-            xWinDlg = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+            xWinDlg = UnoRuntime.queryInterface(XWindow.class,
                                                           dlgControl);
 
             xWinDlg.setVisible(true);

@@ -72,12 +72,10 @@ public class AccessibleDrawDocumentView extends TestCase {
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
-        XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
         XDrawPages oDPn = oDPS.getDrawPages();
         final XDrawPage fDP2 = oDPn.insertNewByIndex(1);
-        XIndexAccess oDPi = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
+        XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
         XDrawPage oDP = null;
         try {
             oDP = (XDrawPage) AnyConverter.toObject(
@@ -98,8 +96,7 @@ public class AccessibleDrawDocumentView extends TestCase {
         XShape oShape = SOF.createShape(xDrawDoc, 5000, 3500, 7500, 5000, "Rectangle");
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xDrawDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 
@@ -118,7 +115,7 @@ public class AccessibleDrawDocumentView extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XDrawView xView = (XDrawView) UnoRuntime.queryInterface
+        final XDrawView xView = UnoRuntime.queryInterface
             (XDrawView.class, aModel.getCurrentController()) ;
         final XDrawPage fDP1 = oDP;
 

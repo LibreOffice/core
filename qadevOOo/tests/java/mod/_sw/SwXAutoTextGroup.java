@@ -108,14 +108,14 @@ public class SwXAutoTextGroup extends TestCase {
         try {
             XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();
             Object oInst = myMSF.createInstance("com.sun.star.text.AutoTextContainer");
-            oContainer = (XAutoTextContainer) UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
+            oContainer = UnoRuntime.queryInterface(XAutoTextContainer.class,oInst);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create AutoTextContainer", e);
         }
         String myGroupName="myNewGroup2*1";
 
-        XAutoTextContainer xATC = (XAutoTextContainer) UnoRuntime.queryInterface(XAutoTextContainer.class, oContainer);
+        XAutoTextContainer xATC = UnoRuntime.queryInterface(XAutoTextContainer.class, oContainer);
 
         try {
             log.println("removing element with name '" + myGroupName + "'");

@@ -54,10 +54,9 @@ public class SdUnoSlideView extends TestCase {
     * @see com.sun.star.frame.Desktop
     */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop)
-            UnoRuntime.queryInterface(
-                XDesktop.class, DesktopTools.createDesktop(
-                                    (XMultiServiceFactory)Param.getMSF()) );
+        the_Desk = UnoRuntime.queryInterface(
+            XDesktop.class, DesktopTools.createDesktop(
+                                (XMultiServiceFactory)Param.getMSF()) );
     }
 
     /**
@@ -118,19 +117,16 @@ public class SdUnoSlideView extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xImpressDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
 
         XInterface oObj = aModel.getCurrentController();
 
         //Change to Slide view
         try {
             String aSlotID = "slot:27011";
-            XDispatchProvider xDispProv = (XDispatchProvider)
-                UnoRuntime.queryInterface( XDispatchProvider.class, oObj );
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-        ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, oObj );
+            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+      ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -153,10 +149,9 @@ public class SdUnoSlideView extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel2 = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
+        XModel aModel2 = UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
 
-        XWindow anotherWindow = (XWindow) UnoRuntime.queryInterface(
+        XWindow anotherWindow = UnoRuntime.queryInterface(
                                 XWindow.class,aModel2.getCurrentController());
 
         oObj = aModel.getCurrentController();

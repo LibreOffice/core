@@ -85,7 +85,7 @@ public class ScSortDescriptorBase extends TestCase {
      */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent) UnoRuntime.queryInterface
+        XComponent oComp = UnoRuntime.queryInterface
             (XComponent.class, xSpreadsheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
@@ -121,8 +121,7 @@ public class ScSortDescriptorBase extends TestCase {
         if (xSpreadsheets == null) log.println("FAILED"); else log.println("OK");
 
         log.println("getting a sheet");
-        XIndexAccess oIndexAccess = (XIndexAccess)
-                    UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
         try {
             oObj = (XInterface) UnoRuntime.queryInterface(XInterface.class,oIndexAccess.getByIndex(0));
@@ -130,7 +129,7 @@ public class ScSortDescriptorBase extends TestCase {
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }
 
-        xSORT = (XSortable) UnoRuntime.queryInterface(XSortable.class,oObj);
+        xSORT = UnoRuntime.queryInterface(XSortable.class,oObj);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
         tEnv.addObjRelation("xSORT",xSORT);

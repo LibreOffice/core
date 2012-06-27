@@ -87,8 +87,7 @@ public class ScDataPilotTableObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface(XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -137,8 +136,7 @@ public class ScDataPilotTableObj extends TestCase {
         log.println( "Creating a test environment" );
         log.println("getting sheets");
         XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         XSpreadsheet oSheet = null;
         Object oChangeCell = null;
         Object oCheckCell = null;
@@ -196,8 +194,7 @@ public class ScDataPilotTableObj extends TestCase {
         filterFields[1].NumericValue = 12;
         filterFields[1].Operator = com.sun.star.sheet.FilterOperator.LESS_EQUAL;
 
-        XDataPilotTablesSupplier DPTS = (XDataPilotTablesSupplier)
-            UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
+        XDataPilotTablesSupplier DPTS = UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
         log.println("Getting test object");
         XDataPilotTables DPT = DPTS.getDataPilotTables();
         XDataPilotDescriptor DPDsc = DPT.createDataPilotDescriptor();
@@ -283,8 +280,7 @@ public class ScDataPilotTableObj extends TestCase {
      */
     private void createTable2(XSpreadsheet oSheet, CellRangeAddress srcRange, TestEnvironment tEnv)
     {
-        XDataPilotTablesSupplier DPTS = (XDataPilotTablesSupplier)
-            UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
+        XDataPilotTablesSupplier DPTS = UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
         log.println("Creating test table object");
         XDataPilotTables DPT = DPTS.getDataPilotTables();
         XDataPilotDescriptor DPDsc = DPT.createDataPilotDescriptor();

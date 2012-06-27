@@ -42,8 +42,8 @@ public class Summarizer
         }
         int count = entry.SubEntryCount;
         int knownIssues = 0;
-        ArrayList failures = new ArrayList();
-        ArrayList states = new ArrayList();
+        ArrayList<String> failures = new ArrayList<String>();
+        ArrayList<String> states = new ArrayList<String>();
         for (int i = 0; i < count; i++)
         {
             if (entry.SubEntries[i].State == null)

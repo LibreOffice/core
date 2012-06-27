@@ -87,40 +87,40 @@ public class AccessibleFixedText extends TestCase {
         XControlModel txtModel = null;
 
         try {
-            dlgModel = (XControlModel) UnoRuntime.queryInterface(
+            dlgModel = UnoRuntime.queryInterface(
                                XControlModel.class,
                                xMSF.createInstance(
                                        "com.sun.star.awt.UnoControlDialogModel"));
 
-            XControl dlgControl = (XControl) UnoRuntime.queryInterface(
+            XControl dlgControl = UnoRuntime.queryInterface(
                                           XControl.class,
                                           xMSF.createInstance(
                                                   "com.sun.star.awt.UnoControlDialog"));
 
             dlgControl.setModel(dlgModel);
 
-            txtModel = (XControlModel) UnoRuntime.queryInterface(
+            txtModel = UnoRuntime.queryInterface(
                                XControlModel.class,
                                xMSF.createInstance(
                                        "com.sun.star.awt.UnoControlFixedTextModel"));
 
-            txtControl = (XControl) UnoRuntime.queryInterface(XControl.class,
+            txtControl = UnoRuntime.queryInterface(XControl.class,
                                                               xMSF.createInstance(
                                                                       "com.sun.star.awt.UnoControlFixedText"));
 
             txtControl.setModel(txtModel);
 
-            XFixedText xFT = (XFixedText) UnoRuntime.queryInterface(
+            XFixedText xFT = UnoRuntime.queryInterface(
                                      XFixedText.class, txtControl);
             xFT.setText("FxedText");
 
-            XControlContainer ctrlCont = (XControlContainer) UnoRuntime.queryInterface(
+            XControlContainer ctrlCont = UnoRuntime.queryInterface(
                                                  XControlContainer.class,
                                                  dlgControl);
 
             ctrlCont.addControl("Text", txtControl);
 
-            xWinDlg = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+            xWinDlg = UnoRuntime.queryInterface(XWindow.class,
                                                           dlgControl);
 
             xWinDlg.setVisible(true);
@@ -154,7 +154,7 @@ public class AccessibleFixedText extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XWindow xWin = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        final XWindow xWin = UnoRuntime.queryInterface(XWindow.class,
                                                                  txtControl);
 
         tEnv.addObjRelation("EventProducer",
@@ -165,7 +165,7 @@ public class AccessibleFixedText extends TestCase {
             }
         });
 
-        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+        XAccessibleText text = UnoRuntime.queryInterface(
                                        XAccessibleText.class, oObj);
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());

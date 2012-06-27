@@ -88,8 +88,7 @@ public class SdDocLinkTargets extends TestCase {
 
         // get the Links here
         log.println( "getting Links" );
-        XLinkTargetSupplier oLTS = (XLinkTargetSupplier)
-            UnoRuntime.queryInterface(XLinkTargetSupplier.class,xDrawDoc);
+        XLinkTargetSupplier oLTS = UnoRuntime.queryInterface(XLinkTargetSupplier.class,xDrawDoc);
         XInterface oObj = oLTS.getLinks();
 
         log.println( "creating a new environment for drawpage object" );

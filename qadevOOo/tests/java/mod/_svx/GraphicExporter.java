@@ -149,10 +149,10 @@ public class GraphicExporter extends TestCase {
             oShapeProps.setPropertyValue("GraphicURL",
                                          util.utils.getFullTestURL(
                                                  "space-metal.jpg"));
-            xComp = (XComponent) UnoRuntime.queryInterface(XComponent.class,
+            xComp = UnoRuntime.queryInterface(XComponent.class,
                                                            oShape);
 
-            XExporter xEx = (XExporter) UnoRuntime.queryInterface(
+            XExporter xEx = UnoRuntime.queryInterface(
                                     XExporter.class, (XInterface) go);
             xEx.setSourceDocument(xComp);
         } catch (com.sun.star.lang.WrappedTargetException e) {
@@ -179,7 +179,7 @@ public class GraphicExporter extends TestCase {
         try {
             Object oFAcc = ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                                    "com.sun.star.ucb.SimpleFileAccess");
-            fAcc = (XSimpleFileAccess) UnoRuntime.queryInterface(
+            fAcc = UnoRuntime.queryInterface(
                            XSimpleFileAccess.class, oFAcc);
 
             if (fAcc.exists(aURL.Complete)) {

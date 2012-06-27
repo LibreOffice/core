@@ -32,7 +32,7 @@ public class _XValidityConstraintListener extends MultiMethodTest {
     public void _validityConstraintChanged() {
         boolean res = false;
         try {
-            XValidatable xValidatable = (XValidatable) UnoRuntime.queryInterface(
+            XValidatable xValidatable = UnoRuntime.queryInterface(
                                                 XValidatable.class,
                                                 tEnv.getTestObject());
 

@@ -53,16 +53,16 @@ public class GfxCompare extends EnhancedComplexTestCase
      *
      * @return a List of software which must accessable as an external executable
      */
-    protected Object[] mustInstalledSoftware()
+    protected String[] mustInstalledSoftware()
         {
-            ArrayList aList = new ArrayList();
+            ArrayList<String> aList = new ArrayList<String>();
             // Tools from ImageMagick
             aList.add( "composite -version" );
             aList.add( "identify -version" );
 
             // Ghostscript
             aList.add( "gs -version" );
-            return aList.toArray();
+            return aList.toArray(new String[aList.size()]);
         }
 
 

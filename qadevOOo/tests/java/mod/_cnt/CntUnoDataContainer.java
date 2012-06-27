@@ -90,7 +90,7 @@ public class CntUnoDataContainer extends TestCase {
                 ( "com.sun.star.ucb.DataContainer" );
 
             // adding one child container
-            XIndexContainer xIC = (XIndexContainer) UnoRuntime.queryInterface
+            XIndexContainer xIC = UnoRuntime.queryInterface
                 (XIndexContainer.class, oInterface) ;
 
             Object child = xMSF.createInstance

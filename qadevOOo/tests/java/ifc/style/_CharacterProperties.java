@@ -483,11 +483,11 @@ public class _CharacterProperties extends MultiPropertyTest {
     }
 
     private class OwnUserDefinedAttributes implements XNameContainer{
-        HashMap members = null;
+        HashMap<String, Object> members = null;
 
 
         public OwnUserDefinedAttributes() {
-            members = new HashMap();
+            members = new HashMap<String, Object>();
         }
 
         public Object getByName(String str) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
@@ -495,18 +495,18 @@ public class _CharacterProperties extends MultiPropertyTest {
         }
 
         public String[] getElementNames() {
-            Iterator oEnum = members.keySet().iterator();
+            Iterator<String> oEnum = members.keySet().iterator();
             int count = members.size();
             String[] res = new String[count];
             int i=0;
             while(oEnum.hasNext())
-                res[i++] = (String)oEnum.next();
+                res[i++] = oEnum.next();
             return res;
         }
 
         public com.sun.star.uno.Type getElementType() {
-            Iterator oEnum = members.keySet().iterator();
-            String key = (String)oEnum.next();
+            Iterator<String> oEnum = members.keySet().iterator();
+            String key = oEnum.next();
             Object o = members.get(key);
             return new Type(o.getClass());
         }

@@ -29,7 +29,7 @@ import java.util.ArrayList;
  */
 public class DirectoryHelper
 {
-    ArrayList m_aFileList = new ArrayList();
+    ArrayList<String> m_aFileList = new ArrayList<String>();
     boolean m_bRecursiveIsAllowed = true;
 
     void setRecursiveIsAllowed(boolean _bValue)

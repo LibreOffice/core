@@ -172,11 +172,9 @@ public class _XNameReplace extends MultiMethodTest {
     // method returns false if the ranges are equal and true otherwise
 
     private boolean compareRanges(Object old, Object newEl) {
-        XCellRangeAddressable xCRA = (XCellRangeAddressable)
-                UnoRuntime.queryInterface(XCellRangeAddressable.class,old);
+        XCellRangeAddressable xCRA = UnoRuntime.queryInterface(XCellRangeAddressable.class,old);
 
-        XCellRangeAddressable xCRA2 = (XCellRangeAddressable)
-                UnoRuntime.queryInterface(XCellRangeAddressable.class,newEl);
+        XCellRangeAddressable xCRA2 = UnoRuntime.queryInterface(XCellRangeAddressable.class,newEl);
 
         int orgStartCol = xCRA.getRangeAddress().StartColumn;
         int orgEndCol = xCRA.getRangeAddress().EndColumn;

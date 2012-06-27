@@ -114,16 +114,14 @@ public class SwXNumberingRules extends TestCase {
             e.printStackTrace(log);
         }
 
-        XStyleFamiliesSupplier oStyleFamiliesSupplier = (XStyleFamiliesSupplier)
-            UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDoc);
+        XStyleFamiliesSupplier oStyleFamiliesSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDoc);
 
         try {
             XNameAccess oStyleFamilies = oStyleFamiliesSupplier.getStyleFamilies();
             XNameContainer NumStyles = (XNameContainer) AnyConverter.toObject(
                 new Type(XNameContainer.class),
                     oStyleFamilies.getByName("NumberingStyles"));
-            NumStyleI = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class,NumStyles);
+            NumStyleI = UnoRuntime.queryInterface(XIndexAccess.class,NumStyles);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Error, exception occurred...");
             e.printStackTrace(log);
@@ -144,7 +142,7 @@ public class SwXNumberingRules extends TestCase {
                 UnoRuntime.queryInterface(XPropertySet.class, oObj);
             oObj = (XInterface) AnyConverter.toObject(
                 new Type(XInterface.class),props.getPropertyValue("NumberingRules"));
-            XIndexAccess nRules = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, props.getPropertyValue("NumberingRules"));
+            XIndexAccess nRules = UnoRuntime.queryInterface(XIndexAccess.class, props.getPropertyValue("NumberingRules"));
             instance1 = nRules.getByIndex(0);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Error, exception occurred...");

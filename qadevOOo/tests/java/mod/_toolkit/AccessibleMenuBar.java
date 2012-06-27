@@ -91,7 +91,7 @@ public class AccessibleMenuBar extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
+        final XAccessibleComponent acomp = UnoRuntime.queryInterface(
                                                    XAccessibleComponent.class,
                                                    oObj);
 

@@ -67,12 +67,11 @@ public class SwAccessibleFootnoteView extends TestCase {
 
         log.println( "Creating a test environment" );
         // get a soffice factory object
-        XMultiServiceFactory msf = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         log.println("creating a footnote");
 
         try {
-            oFootnote = (XFootnote) UnoRuntime.queryInterface(XFootnote.class,
+            oFootnote = UnoRuntime.queryInterface(XFootnote.class,
                     msf.createInstance("com.sun.star.text.Footnote"));
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -91,9 +90,8 @@ public class SwAccessibleFootnoteView extends TestCase {
         }
 
         XController xController = xTextDoc.getCurrentController();
-        XViewSettingsSupplier xViewSetSup = (XViewSettingsSupplier)
-                UnoRuntime.queryInterface(XViewSettingsSupplier.class,
-                xController);
+        XViewSettingsSupplier xViewSetSup = UnoRuntime.queryInterface(XViewSettingsSupplier.class,
+        xController);
         XPropertySet xPropSet = xViewSetSup.getViewSettings();
 
         try {
@@ -114,8 +112,7 @@ public class SwAccessibleFootnoteView extends TestCase {
             throw new StatusException("Couldn't set propertyValue...", e);
         }
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 

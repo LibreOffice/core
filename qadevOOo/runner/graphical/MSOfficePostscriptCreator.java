@@ -318,7 +318,7 @@ public class MSOfficePostscriptCreator implements IOffice
             TimeHelper.waitInSeconds(2, "Give Microsoft Office some time to print.");
         }
 
-    public void realStartCommand(ArrayList _aStartCommand) throws OfficeException
+    public void realStartCommand(ArrayList<String> _aStartCommand) throws OfficeException
         {
             if (_aStartCommand.isEmpty())
             {

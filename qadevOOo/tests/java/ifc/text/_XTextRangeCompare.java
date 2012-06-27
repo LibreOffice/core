@@ -82,7 +82,7 @@ public class _XTextRangeCompare extends MultiMethodTest {
 
         XInterface oIfc = (XInterface)tEnv.getObjRelation("TEXTDOC");
         if (oIfc!=null) {
-            XTextDocument oTDoc = (XTextDocument)UnoRuntime.queryInterface(
+            XTextDocument oTDoc = UnoRuntime.queryInterface(
                                       XTextDocument.class, oIfc);
             oText = oTDoc.getText();
         }

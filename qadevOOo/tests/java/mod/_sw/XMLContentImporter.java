@@ -151,7 +151,7 @@ public class XMLContentImporter extends TestCase {
 
         tEnv.addObjRelation("XDocumentHandler.XMLData", xml) ;
 
-        final XTextDocument textDoc = (XTextDocument) UnoRuntime.queryInterface
+        final XTextDocument textDoc = UnoRuntime.queryInterface
             (XTextDocument.class, xTextDoc) ;
         final PrintWriter fLog = log ;
         tEnv.addObjRelation("XDocumentHandler.ImportChecker",

@@ -98,7 +98,7 @@ public class UnoControlEdit extends TestCase {
         XControlModel the_Model2 = aShape2.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
@@ -131,7 +131,7 @@ public class UnoControlEdit extends TestCase {
         tEnv.addObjRelation("TOOLKIT", the_kit);
         tEnv.addObjRelation("MODEL", the_Model);
 
-        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow forObjRel = UnoRuntime.queryInterface(XWindow.class,
                                                                 aControl);
 
         tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);
@@ -140,7 +140,7 @@ public class UnoControlEdit extends TestCase {
         // Adding relation for XTextListener
         ifc.awt._XTextListener.TestTextListener listener =
                 new ifc.awt._XTextListener.TestTextListener();
-        XTextComponent textComp = (XTextComponent) UnoRuntime.queryInterface(
+        XTextComponent textComp = UnoRuntime.queryInterface(
                                           XTextComponent.class, oObj);
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);

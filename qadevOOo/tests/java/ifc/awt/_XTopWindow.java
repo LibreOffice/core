@@ -163,7 +163,7 @@ public class _XTopWindow extends MultiMethodTest {
         boolean result = true ;
 
         try {
-            menu = (XMenuBar) UnoRuntime.queryInterface(XMenuBar.class,
+            menu = UnoRuntime.queryInterface(XMenuBar.class,
                 ((XMultiServiceFactory)tParam.getMSF()).
                 createInstance("com.sun.star.awt.MenuBar")) ;
         } catch (com.sun.star.uno.Exception e) {

@@ -214,33 +214,25 @@ public class _XPersistObject extends MultiMethodTest {
             Object mostream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.io.MarkableOutputStream");
 
-            XActiveDataSink xdSi = (XActiveDataSink)
-                UnoRuntime.queryInterface(XActiveDataSink.class, istream);
-            XActiveDataSource xdSo = (XActiveDataSource)
-                UnoRuntime.queryInterface(XActiveDataSource.class, ostream);
-            XActiveDataSink xdSmi = (XActiveDataSink)
-                UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
-            XActiveDataSource xdSmo = (XActiveDataSource)
-                UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
+            XActiveDataSink xdSi = UnoRuntime.queryInterface(XActiveDataSink.class, istream);
+            XActiveDataSource xdSo = UnoRuntime.queryInterface(XActiveDataSource.class, ostream);
+            XActiveDataSink xdSmi = UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
+            XActiveDataSource xdSmo = UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
 
             XInputStream miStream = (XInputStream)
                 UnoRuntime.queryInterface(XInputStream.class, mistream);
-            XOutputStream moStream = (XOutputStream)
-                UnoRuntime.queryInterface(XOutputStream.class, mostream);
+            XOutputStream moStream = UnoRuntime.queryInterface(XOutputStream.class, mostream);
             XInputStream PipeIn = (XInputStream)
                 UnoRuntime.queryInterface(XInputStream.class, aPipe);
-            XOutputStream PipeOut = (XOutputStream)
-                UnoRuntime.queryInterface(XOutputStream.class,aPipe);
+            XOutputStream PipeOut = UnoRuntime.queryInterface(XOutputStream.class,aPipe);
 
             xdSi.setInputStream(miStream);
             xdSo.setOutputStream(moStream);
             xdSmi.setInputStream(PipeIn);
             xdSmo.setOutputStream(PipeOut);
 
-            iStream = (XObjectInputStream)
-                UnoRuntime.queryInterface(XObjectInputStream.class, istream);
-            oStream = (XObjectOutputStream)
-                UnoRuntime.queryInterface(XObjectOutputStream.class, ostream);
+            iStream = UnoRuntime.queryInterface(XObjectInputStream.class, istream);
+            oStream = UnoRuntime.queryInterface(XObjectOutputStream.class, ostream);
 
 
         } catch (com.sun.star.uno.Exception e) {

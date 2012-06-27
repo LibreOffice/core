@@ -382,7 +382,7 @@ public class ORowSet extends TestCase {
             // Adding relations for XRow as a Vector with all data
             // of current row of RowSet.
 
-            ArrayList rowData = new ArrayList();
+            ArrayList<Object> rowData = new ArrayList<Object>();
 
             for (int i = 0; i < DBTools.TST_TABLE_VALUES[0].length; i++) {
                 rowData.add(DBTools.TST_TABLE_VALUES[0][i]);
@@ -415,7 +415,7 @@ public class ORowSet extends TestCase {
             }
 
             // Adding relation for XParameters ifc test
-            tEnv.addObjRelation( "XParameters.ParamValues", new ArrayList() );
+            tEnv.addObjRelation( "XParameters.ParamValues", new ArrayList<String>() );
 
             // Adding relation for XRowUpdate
             final XRow row = UnoRuntime.queryInterface( XRow.class, m_rowSet );

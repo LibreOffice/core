@@ -121,15 +121,12 @@ public class SwXStyleFamily extends TestCase {
         log.println( "Creating Test Environment..." );
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
-        XComponent xComp = (XComponent)
-            UnoRuntime.queryInterface(XComponent.class, xTextDoc);
+        XComponent xComp = UnoRuntime.queryInterface(XComponent.class, xTextDoc);
         XInterface oInstance = (XInterface)
             SOF.createInstance(xComp, "com.sun.star.style.CharacterStyle");
-        XStyleFamiliesSupplier oSFsS = (XStyleFamiliesSupplier)
-                UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDoc);
+        XStyleFamiliesSupplier oSFsS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDoc);
         XNameAccess oSF = oSFsS.getStyleFamilies();
-        XIndexAccess oSFIA = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oSF);
+        XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSF);
 
         try {
             oSFNA = (XNameAccess) AnyConverter.toObject(

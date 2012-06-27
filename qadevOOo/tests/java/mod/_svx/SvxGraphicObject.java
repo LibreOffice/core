@@ -226,8 +226,7 @@ public class SvxGraphicObject extends TestCase {
         tEnv.addObjRelation("Bitmap2",aBitmap);
 
         try {
-            XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class,xDrawDoc);
+            XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class,xDrawDoc);
             imap = oDocMSF.createInstance
                 ( "com.sun.star.image.ImageMapRectangleObject" );
         } catch (com.sun.star.uno.Exception e) {

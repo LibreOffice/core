@@ -59,8 +59,8 @@ public class _XDataPilotTable2 extends MultiMethodTest
     private CellRangeAddress mRangeWhole = null;
     private CellRangeAddress mRangeTable = null;
     private CellRangeAddress mRangeResult = null;
-    private ArrayList mDataFieldDims = null;
-    private ArrayList mResultCells = null;
+    private ArrayList<Integer> mDataFieldDims = null;
+    private ArrayList<CellAddress> mResultCells = null;
 
     /**
      * exception to be thrown when obtaining a result data for a cell fails
@@ -71,7 +71,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
     protected void before()
     {
         Object o = tEnv.getObjRelation("DATAPILOTTABLE2");
-        xDPTab2 = (XDataPilotTable2)UnoRuntime.queryInterface(
+        xDPTab2 = UnoRuntime.queryInterface(
             XDataPilotTable2.class, o);
 
         if (xDPTab2 == null)
@@ -98,10 +98,10 @@ public class _XDataPilotTable2 extends MultiMethodTest
         int cellCount = mResultCells.size();
         for (int i = 0; i < cellCount; ++i)
         {
-            CellAddress addr = (CellAddress)mResultCells.get(i);
+            CellAddress addr = mResultCells.get(i);
             DataPilotTablePositionData posData = xDPTab2.getPositionData(addr);
             DataPilotTableResultData resData = (DataPilotTableResultData)posData.PositionData;
-            int dim = ((Integer)mDataFieldDims.get(resData.DataFieldIndex)).intValue();
+            int dim = mDataFieldDims.get(resData.DataFieldIndex).intValue();
             DataResult res = resData.Result;
             double val = res.Value;
 
@@ -188,12 +188,12 @@ public class _XDataPilotTable2 extends MultiMethodTest
         boolean testResult = true;
         int cellCount = mResultCells.size();
         XSpreadsheets xSheets = xSheetDoc.getSheets();
-        XIndexAccess xIA = (XIndexAccess)UnoRuntime.queryInterface(
+        XIndexAccess xIA = UnoRuntime.queryInterface(
             XIndexAccess.class, xSheets);
         int sheetCount = xIA.getCount();
         for (int i = 0; i < cellCount && testResult; ++i)
         {
-            CellAddress addr = (CellAddress)mResultCells.get(i);
+            CellAddress addr = mResultCells.get(i);
 
             Object[][] data = xDPTab2.getDrillDownData(addr);
 
@@ -238,7 +238,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
 
                 // Remove the sheet just inserted.
 
-                XNamed xNamed = (XNamed)UnoRuntime.queryInterface(XNamed.class, xSheet);
+                XNamed xNamed = UnoRuntime.queryInterface(XNamed.class, xSheet);
                 String name = xNamed.getName();
                 try
                 {
@@ -392,7 +392,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
 
         getOutputRanges();
 
-        mResultCells = new ArrayList();
+        mResultCells = new ArrayList<CellAddress>();
         for (int x = mRangeResult.StartColumn; x <= mRangeResult.EndColumn; ++x)
         {
             for (int y = mRangeResult.StartRow; y <= mRangeResult.EndRow; ++y)
@@ -414,8 +414,8 @@ public class _XDataPilotTable2 extends MultiMethodTest
 
     private void buildDataFields()
     {
-        mDataFieldDims = new ArrayList();
-        XDataPilotDescriptor xDesc = (XDataPilotDescriptor)UnoRuntime.queryInterface(
+        mDataFieldDims = new ArrayList<Integer>();
+        XDataPilotDescriptor xDesc = UnoRuntime.queryInterface(
             XDataPilotDescriptor.class, xDPTab2);
 
         XIndexAccess xFields = xDesc.getDataPilotFields();
@@ -489,7 +489,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
             return false;
         }
 
-        XCellRangeData xCRD = (XCellRangeData)UnoRuntime.queryInterface(
+        XCellRangeData xCRD = UnoRuntime.queryInterface(
             XCellRangeData.class, xCR);
 
         Object[][] sheetData = xCRD.getDataArray();
@@ -544,16 +544,16 @@ public class _XDataPilotTable2 extends MultiMethodTest
         try
         {
             XCellRange xRng = xSheet.getCellRangeByPosition(nCol, nRow, nCol, nRow);
-            XSheetCellRange xSCR = (XSheetCellRange)UnoRuntime.queryInterface(
+            XSheetCellRange xSCR = UnoRuntime.queryInterface(
                 XSheetCellRange.class, xRng);
 
             XSheetCellCursor xCursor = xSheet.createCursorByRange(xSCR);
-            XCellCursor xCellCursor = (XCellCursor)UnoRuntime.queryInterface(
+            XCellCursor xCellCursor = UnoRuntime.queryInterface(
                 XCellCursor.class, xCursor);
 
             xCellCursor.gotoEnd();
             XCell xCell = xCursor.getCellByPosition(0, 0);
-            XCellAddressable xCellAddr = (XCellAddressable)UnoRuntime.queryInterface(
+            XCellAddressable xCellAddr = UnoRuntime.queryInterface(
                 XCellAddressable.class, xCell);
 
             return xCellAddr.getCellAddress();

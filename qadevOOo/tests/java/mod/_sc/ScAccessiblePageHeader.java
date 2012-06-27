@@ -96,8 +96,7 @@ public class ScAccessiblePageHeader extends TestCase {
         XCell xCell = null;
         try {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
             XSpreadsheet oSheet = null;
             try {
                 oSheet = (XSpreadsheet) AnyConverter.toObject(
@@ -115,18 +114,15 @@ public class ScAccessiblePageHeader extends TestCase {
             e.printStackTrace(log);
         }
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         XController xController = aModel.getCurrentController();
 
         // switching to 'Page Preview' mode
         try {
-            XDispatchProvider xDispProv = (XDispatchProvider)
-                UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-            ( (XMultiServiceFactory) Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface(XDispatchProvider.class, xController);
+            XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
+         ( (XMultiServiceFactory) Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -158,10 +154,9 @@ public class ScAccessiblePageHeader extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        XStyleFamiliesSupplier StyleFam = (XStyleFamiliesSupplier)
-            UnoRuntime.queryInterface(
-                XStyleFamiliesSupplier.class,
-                xSpreadsheetDoc );
+        XStyleFamiliesSupplier StyleFam = UnoRuntime.queryInterface(
+            XStyleFamiliesSupplier.class,
+            xSpreadsheetDoc );
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
         XStyle StdStyle = null;
 
@@ -240,8 +235,7 @@ public class ScAccessiblePageHeader extends TestCase {
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println( "    disposing xSheetDoc " );
         try {
-        XCloseable oComp = (XCloseable)
-            UnoRuntime.queryInterface (XCloseable.class, xSpreadsheetDoc) ;
+        XCloseable oComp = UnoRuntime.queryInterface (XCloseable.class, xSpreadsheetDoc) ;
         oComp.close(true);
         } catch(com.sun.star.util.CloseVetoException e) {
             log.println("Couldn't close document: "+e.getMessage());

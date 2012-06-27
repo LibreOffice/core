@@ -71,7 +71,7 @@ public class _XExecutableDialog extends MultiMethodTest {
             eThread = new ExecThread(oObj);
             log.println("Starting Dialog");
             eThread.start();
-            XCancellable canc = (XCancellable)UnoRuntime.queryInterface
+            XCancellable canc = UnoRuntime.queryInterface
                     (XCancellable.class, tEnv.getTestObject());
             shortWait();
             if (canc != null) {
@@ -134,7 +134,7 @@ public class _XExecutableDialog extends MultiMethodTest {
     }
 
     private void closeDialog() {
-        XCancellable canc = (XCancellable) UnoRuntime.queryInterface(
+        XCancellable canc = UnoRuntime.queryInterface(
                 XCancellable.class, tEnv.getTestObject());
         if (canc != null) {
             log.println("Cancelling Dialog");

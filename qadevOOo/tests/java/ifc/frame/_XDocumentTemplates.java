@@ -192,7 +192,7 @@ public class _XDocumentTemplates extends MultiMethodTest {
         String ret = "";
         try {
             statRes.first();
-            XRow row = (XRow)UnoRuntime.queryInterface(XRow.class, statRes);
+            XRow row = UnoRuntime.queryInterface(XRow.class, statRes);
             while(! statRes.isAfterLast()) {
                 ret += "\n    " + row.getString(1);
                 statRes.next();
@@ -227,8 +227,7 @@ public class _XDocumentTemplates extends MultiMethodTest {
         command.Handle = -1;
         command.Argument = comArg;
 
-        XCommandProcessor comProc = (XCommandProcessor)
-            UnoRuntime.queryInterface(XCommandProcessor.class, content);
+        XCommandProcessor comProc = UnoRuntime.queryInterface(XCommandProcessor.class, content);
 
         XDynamicResultSet DynResSet = null;
         try {
@@ -245,9 +244,8 @@ public class _XDocumentTemplates extends MultiMethodTest {
 
     protected XContent getSubContent(XContent content, String subName) {
         XResultSet statRes = getStatResultSet(content);
-        XRow row = (XRow)UnoRuntime.queryInterface(XRow.class, statRes);
-        XContentAccess contAcc = (XContentAccess)
-            UnoRuntime.queryInterface(XContentAccess.class, statRes);
+        XRow row = UnoRuntime.queryInterface(XRow.class, statRes);
+        XContentAccess contAcc = UnoRuntime.queryInterface(XContentAccess.class, statRes);
         XContent subContent = null;
         try {
             statRes.first();

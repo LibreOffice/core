@@ -64,18 +64,15 @@ public class ScIndexEnumeration_SpreadsheetViewPanesEnumeration extends TestCase
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println("disposing xSpreadsheetDocument");
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
+        XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSpreadsheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XModel xm = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
+        XModel xm = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
         XController xc = xm.getCurrentController();
-        XIndexAccess xIA = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xc);
+        XIndexAccess xIA = UnoRuntime.queryInterface(XIndexAccess.class, xc);
         try {
             oObj = (XInterface) AnyConverter.toObject(
                         new Type(XInterface.class),xIA.getByIndex(0));
@@ -90,8 +87,7 @@ public class ScIndexEnumeration_SpreadsheetViewPanesEnumeration extends TestCase
             throw new StatusException("Couldn't get by index", e);
         }
 
-        XEnumerationAccess ea = (XEnumerationAccess)
-                    UnoRuntime.queryInterface(XEnumerationAccess.class,xIA);
+        XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,xIA);
 
         oObj = ea.createEnumeration();
 

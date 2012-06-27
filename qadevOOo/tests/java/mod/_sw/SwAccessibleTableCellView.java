@@ -86,7 +86,7 @@ public class SwAccessibleTableCellView extends TestCase {
                                       e.getMessage(), e);
         }
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);
 
         AccessibilityTools at = new AccessibilityTools();
@@ -103,7 +103,7 @@ public class SwAccessibleTableCellView extends TestCase {
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleSelection accSel = (XAccessibleSelection) UnoRuntime.queryInterface(
+        final XAccessibleSelection accSel = UnoRuntime.queryInterface(
                                                     XAccessibleSelection.class,
                                                     at.SearchedContext.getAccessibleParent());
 

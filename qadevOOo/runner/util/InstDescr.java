@@ -25,7 +25,7 @@ import com.sun.star.uno.XInterface;
  */
 abstract public class InstDescr {
 
-    protected Class ifcClass = null;
+    protected Class<?> ifcClass = null;
 
     protected abstract String getIfcName();
     protected abstract String getName();
@@ -33,7 +33,7 @@ abstract public class InstDescr {
     /**
      * the method getIfcClass
      */
-    public Class getIfcClass()  {
+    public Class<?> getIfcClass()  {
         return ifcClass;
     }
     /**

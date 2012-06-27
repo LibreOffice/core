@@ -241,14 +241,13 @@ public class _XSchema extends MultiMethodTest {
         XInputStream xStream = null;
         try {
             Object fileacc = ((XMultiServiceFactory)tParam.getMSF()).createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            simpleAccess = (XSimpleFileAccess)
-                            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
+            simpleAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
             log.println("Going to parse: "+filename);
             xStream = simpleAccess.openFileRead(filename);
         } catch (com.sun.star.uno.Exception e) {
         }
 
-        XActiveDataSink xSink = (XActiveDataSink) UnoRuntime.queryInterface(XActiveDataSink.class, oObj);
+        XActiveDataSink xSink = UnoRuntime.queryInterface(XActiveDataSink.class, oObj);
         xSink.setInputStream(xStream);
     }
 }

@@ -95,7 +95,7 @@ public class UnoControlDateField extends TestCase {
         XControlModel the_Model = aShape.getControl();
 
         //Try to query XControlAccess
-        XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
+        XControlAccess the_access = UnoRuntime.queryInterface(
                                             XControlAccess.class,
                                             xTextDoc.getCurrentController());
 
@@ -147,7 +147,7 @@ public class UnoControlDateField extends TestCase {
         // Adding relation for XTextListener
         ifc.awt._XTextListener.TestTextListener listener =
                 new ifc.awt._XTextListener.TestTextListener();
-        XTextComponent textComp = (XTextComponent) UnoRuntime.queryInterface(
+        XTextComponent textComp = UnoRuntime.queryInterface(
                                           XTextComponent.class, oObj);
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);

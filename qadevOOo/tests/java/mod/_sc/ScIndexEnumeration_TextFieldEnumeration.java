@@ -78,8 +78,7 @@ public class ScIndexEnumeration_TextFieldEnumeration extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -104,28 +103,24 @@ public class ScIndexEnumeration_TextFieldEnumeration extends TestCase {
             // we want to create an instance of ScCellFieldObj.
             // to do this we must get an MultiServiceFactory.
 
-            XMultiServiceFactory _oMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class, xSheetDoc);
+            XMultiServiceFactory _oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xSheetDoc);
 
             aField = (XInterface)
                 _oMSF.createInstance("com.sun.star.text.TextField.URL");
-            oContent = (XTextContent)
-                UnoRuntime.queryInterface(XTextContent.class, aField);
+            oContent = UnoRuntime.queryInterface(XTextContent.class, aField);
 
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
             XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
             XCell oCell = oSheet.getCellByPosition(2,3);
-            oText = (XText)UnoRuntime.queryInterface(XText.class, oCell);
+            oText = UnoRuntime.queryInterface(XText.class, oCell);
 
             oText.insertTextContent(
                 oText.createTextCursor(), oContent, true);
 
-            xTextFieldsSupp = (XTextFieldsSupplier)
-                UnoRuntime.queryInterface(XTextFieldsSupplier.class, oCell);
+            xTextFieldsSupp = UnoRuntime.queryInterface(XTextFieldsSupplier.class, oCell);
 
              oObj = xTextFieldsSupp.getTextFields().createEnumeration();
         } catch (com.sun.star.lang.WrappedTargetException e) {

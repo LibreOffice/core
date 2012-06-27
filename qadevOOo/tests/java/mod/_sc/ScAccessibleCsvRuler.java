@@ -74,10 +74,10 @@ public class ScAccessibleCsvRuler extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -85,7 +85,7 @@ public class ScAccessibleCsvRuler extends TestCase {
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Cancel");
 
-        accAction = (XAccessibleAction) UnoRuntime.queryInterface(
+        accAction = UnoRuntime.queryInterface(
                             XAccessibleAction.class, oObj);
 
         XAccessibleContext acc = AccessibilityTools.getAccessibleObjectForRole(xRoot,
@@ -93,7 +93,7 @@ public class ScAccessibleCsvRuler extends TestCase {
 
         log.println("Click on: " + acc.getAccessibleName());
 
-        XAccessibleAction accAction2 = (XAccessibleAction) UnoRuntime.queryInterface(
+        XAccessibleAction accAction2 = UnoRuntime.queryInterface(
                                                XAccessibleAction.class, acc);
 
         try {
@@ -114,7 +114,7 @@ public class ScAccessibleCsvRuler extends TestCase {
         tEnv.addObjRelation("EditOnly",
                             "This method isn't supported in this dialog");
 
-        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+        XAccessibleText text = UnoRuntime.queryInterface(
                                        XAccessibleText.class, oObj);
 
         int lastone = 100;

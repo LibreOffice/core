@@ -59,7 +59,7 @@ public class _XShapeGrouper extends MultiMethodTest {
         if (dp == null)
             throw new StatusException(Status.failed("Relation not found")) ;
 
-        oShapes = (XShapes)UnoRuntime.queryInterface( XShapes.class, dp );
+        oShapes = UnoRuntime.queryInterface( XShapes.class, dp );
         boolean result = false;
         log.println("Grouping " + oShapes.getCount() + " shapes ... ");
 

@@ -93,7 +93,7 @@ public class AccessibleRadioButton extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -169,12 +169,12 @@ public class AccessibleRadioButton extends TestCase {
 
         util.utils.shortWait(2000);
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+        XDispatchProvider aProv = UnoRuntime.queryInterface(
                                           XDispatchProvider.class,
                                           secondController);
 
@@ -183,7 +183,7 @@ public class AccessibleRadioButton extends TestCase {
         try {
             XInterface transf = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                                         "com.sun.star.util.URLTransformer");
-            urlTransf = (XURLTransformer) UnoRuntime.queryInterface(
+            urlTransf = UnoRuntime.queryInterface(
                                 XURLTransformer.class, transf);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -215,14 +215,14 @@ public class AccessibleRadioButton extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
         util.utils.shortWait(2000);
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
@@ -231,7 +231,7 @@ public class AccessibleRadioButton extends TestCase {
                                                     xRoot, AccessibleRole.TREE,
                                                     "IconChoiceControl");
 
-        XAccessibleSelection sel = (XAccessibleSelection) UnoRuntime.queryInterface(
+        XAccessibleSelection sel = UnoRuntime.queryInterface(
                                            XAccessibleSelection.class,
                                            iconChoiceCtrl);
 
@@ -257,7 +257,7 @@ public class AccessibleRadioButton extends TestCase {
                                                                        "Close");
 
 
-        accCloseButton = (XAccessibleAction) UnoRuntime.queryInterface(
+        accCloseButton = UnoRuntime.queryInterface(
                                  XAccessibleAction.class, closeButton);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
@@ -269,7 +269,7 @@ public class AccessibleRadioButton extends TestCase {
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
-        final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
+        final XAccessibleComponent acomp = UnoRuntime.queryInterface(
                                                    XAccessibleComponent.class,
                                                    oObj);
 
@@ -285,7 +285,7 @@ public class AccessibleRadioButton extends TestCase {
         tEnv.addObjRelation("EditOnly",
                             "Can't change or select Text in AccessibleRadioButton");
 
-        XAccessibleValue anotherButtonValue = (XAccessibleValue) UnoRuntime.queryInterface(
+        XAccessibleValue anotherButtonValue = UnoRuntime.queryInterface(
                                                       XAccessibleValue.class,
                                                       anotherButton);
 

@@ -105,8 +105,7 @@ public class SmEditAccessible extends TestCase {
 
         XInterface oObj = null;
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xMathDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xMathDoc);
 
 
         AccessibilityTools at = new AccessibilityTools();
@@ -123,7 +122,7 @@ public class SmEditAccessible extends TestCase {
 
         tEnv.addObjRelation("Destroy", new Boolean(true));
 
-        final XAccessibleContext con = (XAccessibleContext) UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
+        final XAccessibleContext con = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {

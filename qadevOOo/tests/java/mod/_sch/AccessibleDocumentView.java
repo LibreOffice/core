@@ -47,8 +47,7 @@ public class AccessibleDocumentView extends TestCase {
 
         XInterface oObj = null;
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xChartDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xChartDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 

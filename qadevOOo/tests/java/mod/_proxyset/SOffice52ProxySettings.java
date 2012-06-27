@@ -96,7 +96,7 @@ public class SOffice52ProxySettings extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         // extracting parameters to proxy settings
-        HashMap proxySettings = new HashMap(12);
+        HashMap<String, String> proxySettings = new HashMap<String, String>(12);
 
         String prefix = "test.proxy.soffice52.";
 

@@ -256,7 +256,7 @@ public class PRNCompare
 
             // TODO: return a real filename, due to the fact we don't know how much files are created, maybe better to return a list
 
-            ArrayList m_aFileList = new ArrayList();
+            ArrayList<String> m_aFileList = new ArrayList<String>();
             for (int i=1;i<9999;i++)
             {
                 String sNewJPEGFilename = utils.replaceAll13(sJPGFilename, sGS_PageOutput, StringHelper.createValueString(i, 4));
@@ -270,7 +270,7 @@ public class PRNCompare
                 }
             }
             String[] aList = new String[m_aFileList.size()];
-            aList = (String[])m_aFileList.toArray(aList);
+            aList = m_aFileList.toArray(aList);
             return aList; // sNewJPEGFilename;
         }
 

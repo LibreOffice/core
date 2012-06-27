@@ -95,7 +95,7 @@ public class UnoControlDialogModel extends TestCase {
 
 
             // get the service manager from the dialog model
-            xMultiServiceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(
+            xMultiServiceFactory = UnoRuntime.queryInterface(
                                            XMultiServiceFactory.class,
                                            dialogModel);
 
@@ -133,13 +133,13 @@ public class UnoControlDialogModel extends TestCase {
             xNameCont.insertByName(_labelName, labelModel);
 
             // create the dialog control and set the model
-            XControl dialog = (XControl) UnoRuntime.queryInterface(
+            XControl dialog = UnoRuntime.queryInterface(
                                       XControl.class,
                                       ((XMultiServiceFactory) Param.getMSF()).createInstance(
                                               "com.sun.star.awt.UnoControlDialog"));
-            XControl xControl = (XControl) UnoRuntime.queryInterface(
+            XControl xControl = UnoRuntime.queryInterface(
                                         XControl.class, dialog);
-            XControlModel xControlModel = (XControlModel) UnoRuntime.queryInterface(
+            XControlModel xControlModel = UnoRuntime.queryInterface(
                                                   XControlModel.class,
                                                   dialogModel);
             xControl.setModel(xControlModel);
@@ -151,7 +151,7 @@ public class UnoControlDialogModel extends TestCase {
 
         log.println("creating a new environment for object");
 
-        XMultiServiceFactory oMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
+        XMultiServiceFactory oMSF = UnoRuntime.queryInterface(
                                             XMultiServiceFactory.class, oObj);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);

@@ -66,7 +66,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent) UnoRuntime.
+        XComponent oComp = UnoRuntime.
                                 queryInterface(XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
         util.DesktopTools.closeDoc(oDoc);
@@ -104,8 +104,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
@@ -159,8 +158,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
                 "Error getting test object from spreadsheet document", e) ;
         }
 
-        XEnumerationAccess ea = (XEnumerationAccess)
-                    UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
+        XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
 
         oObj = ea.createEnumeration();
 

@@ -53,8 +53,7 @@ public class AccessiblePresentationOLEShape extends TestCase {
         try {
             log.println( "creating a drawdoc" );
             xDrawDoc = SOF.createImpressDoc(null);
-            aModel = (XModel)
-                UnoRuntime.queryInterface(XModel.class, xDrawDoc);
+            aModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
 
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
@@ -81,10 +80,9 @@ public class AccessiblePresentationOLEShape extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        XMultiServiceFactory docMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, xDrawDoc);
+        XMultiServiceFactory docMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xDrawDoc);
         try {
-            oShape = (XShape) UnoRuntime.queryInterface(XShape.class,
+            oShape = UnoRuntime.queryInterface(XShape.class,
                 docMSF.createInstance("com.sun.star.presentation.OLE2Shape"));
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("couldn't create component", e);

@@ -94,8 +94,7 @@ public class SwXReferenceMark extends TestCase {
 
         log.println( "creating a test environment" );
         oText = xTextDoc.getText();
-        XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         Object instance = null;
         try {
             oObj = (XInterface) oDocMSF.createInstance
@@ -107,10 +106,9 @@ public class SwXReferenceMark extends TestCase {
             throw new StatusException( "Couldn't get ReferenceMark", e);
         }
 
-        XNamed oObjN = (XNamed) UnoRuntime.queryInterface(XNamed.class, oObj);
+        XNamed oObjN = UnoRuntime.queryInterface(XNamed.class, oObj);
         oObjN.setName(Name);
-        XTextContent oObjTC = (XTextContent)
-            UnoRuntime.queryInterface(XTextContent.class, oObj);
+        XTextContent oObjTC = UnoRuntime.queryInterface(XTextContent.class, oObj);
 
         XTextCursor oCursor = oText.createTextCursor();
         try {
@@ -122,8 +120,7 @@ public class SwXReferenceMark extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        tEnv.addObjRelation("CONTENT", (XTextContent)
-                        UnoRuntime.queryInterface(XTextContent.class,instance));
+        tEnv.addObjRelation("CONTENT", UnoRuntime.queryInterface(XTextContent.class,instance));
         tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
 
         return tEnv;

@@ -72,11 +72,9 @@ public class ScAccessibleCsvCell extends TestCase {
         }
 
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-                        UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
+        XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
 
-        XWindow xWindow = (XWindow)
-                UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
@@ -84,15 +82,14 @@ public class ScAccessibleCsvCell extends TestCase {
         oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.PUSH_BUTTON, "Cancel");
 
-        accAction = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
+        accAction = UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
 
         oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.TABLE, true);
 
         //util.dbg.printInterfaces(oObj);
 
-        XAccessibleContext cont = (XAccessibleContext)
-                UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
+        XAccessibleContext cont = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
 
         String name = "";
         try {

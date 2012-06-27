@@ -56,7 +56,7 @@ public class AccessiblePopupMenu extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -136,7 +136,7 @@ public class AccessiblePopupMenu extends TestCase {
 
         shortWait(tParam);
 
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);
 
         XInterface oObj = null;
@@ -151,7 +151,7 @@ public class AccessiblePopupMenu extends TestCase {
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
-        XAccessibleComponent window = (XAccessibleComponent) UnoRuntime.queryInterface(
+        XAccessibleComponent window = UnoRuntime.queryInterface(
                                               XAccessibleComponent.class, oObj);
 
         point = window.getLocationOnScreen();
@@ -170,11 +170,11 @@ public class AccessiblePopupMenu extends TestCase {
 
         shortWait(tParam);
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
 
         try {
-            xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+            xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                           tk.getTopWindow(0));
 
             xRoot = at.getAccessibleObject(xWindow);
@@ -193,7 +193,7 @@ public class AccessiblePopupMenu extends TestCase {
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
                             new Boolean(false));
 
-        final XAccessibleSelection sel = (XAccessibleSelection) UnoRuntime.queryInterface(
+        final XAccessibleSelection sel = UnoRuntime.queryInterface(
                                                  XAccessibleSelection.class,
                                                  oObj);
 

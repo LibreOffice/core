@@ -57,8 +57,7 @@ public class _XCloseable extends MultiMethodTest {
             res = false;
         }
 
-        XResultSet resSet = (XResultSet)
-            UnoRuntime.queryInterface(XResultSet.class, oObj);
+        XResultSet resSet = UnoRuntime.queryInterface(XResultSet.class, oObj);
 
         if (resSet != null) {
             try {

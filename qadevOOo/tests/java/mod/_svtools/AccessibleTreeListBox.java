@@ -76,7 +76,7 @@ public class AccessibleTreeListBox extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(
+        the_Desk = UnoRuntime.queryInterface(
                     XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
     }
 
@@ -138,12 +138,11 @@ public class AccessibleTreeListBox extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel1 = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider)UnoRuntime.
+        XDispatchProvider aProv = UnoRuntime.
             queryInterface(XDispatchProvider.class, secondController);
 
         XDispatch getting = null;
@@ -181,9 +180,8 @@ public class AccessibleTreeListBox extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XInitialization xInit = (XInitialization)
-                UnoRuntime.queryInterface(
-                        XInitialization.class, the_frame2.getController());
+        final XInitialization xInit = UnoRuntime.queryInterface(
+                XInitialization.class, the_frame2.getController());
 
         Object[] params = new Object[3];
         PropertyValue param1 = new PropertyValue();

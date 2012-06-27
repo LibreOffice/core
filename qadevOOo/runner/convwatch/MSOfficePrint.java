@@ -37,7 +37,7 @@ import helper.OSHelper;
 
 class ProcessHelper
 {
-    ArrayList m_aArray;
+    ArrayList<String> m_aArray;
 }
 
 public class MSOfficePrint
@@ -105,7 +105,7 @@ public class MSOfficePrint
         {
             String sDocumentSuffix = FileHelper.getSuffix(_sInputFile);
             String sFilterName = _aGTA.getExportFilterName();
-            ArrayList aStartCommand = new ArrayList();
+            ArrayList<String> aStartCommand = new ArrayList<String>();
             if (isWordDocument(sDocumentSuffix))
             {
                 aStartCommand = createWordStoreHelper();
@@ -166,7 +166,7 @@ public class MSOfficePrint
 
             setPrinterName(_aGTA.getPrinterName());
 
-            ArrayList aStartCommand = new ArrayList();
+            ArrayList<String> aStartCommand = new ArrayList<String>();
             if (isWordDocument(sDocumentSuffix))
             {
                 aStartCommand = createWordPrintHelper();
@@ -235,7 +235,7 @@ public class MSOfficePrint
             TimeHelper.waitInSeconds(2, "Give Microsoft Office some time to print.");
         }
 
-    public void realStartCommand(ArrayList _aStartCommand) throws ConvWatchCancelException
+    public void realStartCommand(ArrayList<String> _aStartCommand) throws ConvWatchCancelException
         {
             if (_aStartCommand.isEmpty())
             {
@@ -281,7 +281,7 @@ public class MSOfficePrint
         }
 
 
-    ArrayList createWordPrintHelper() throws java.io.IOException
+    ArrayList<String> createWordPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -290,7 +290,7 @@ public class MSOfficePrint
 
             String sPrintViaWord = "printViaWord.pl";
 
-            ArrayList aList = searchLocalFile(sPrintViaWord);
+            ArrayList<String> aList = searchLocalFile(sPrintViaWord);
             if (aList.isEmpty() == false)
             {
                 return aList;
@@ -386,12 +386,12 @@ public class MSOfficePrint
 
     // TODO: Maybe give a possibility to say where search the script from outside
 
-    ArrayList searchLocalFile(String _sScriptName)
+    ArrayList<String> searchLocalFile(String _sScriptName)
         {
             String userdir = System.getProperty("user.dir");
             String fs = System.getProperty("file.separator");
 
-            ArrayList aList = new ArrayList();
+            ArrayList<String> aList = new ArrayList<String>();
             File aPerlScript = new File(userdir + fs + _sScriptName);
             if (FileHelper.isDebugEnabled())
             {
@@ -415,7 +415,7 @@ public class MSOfficePrint
             return aList;
         }
 
-    ArrayList createWordStoreHelper() throws java.io.IOException
+    ArrayList<String> createWordStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -425,7 +425,7 @@ public class MSOfficePrint
             // ArrayList aList = new ArrayList();
             String sSaveViaWord = "saveViaWord.pl";
 
-            ArrayList aList = searchLocalFile(sSaveViaWord);
+            ArrayList<String> aList = searchLocalFile(sSaveViaWord);
             if (aList.isEmpty() == false)
             {
                 return aList;
@@ -498,7 +498,7 @@ public class MSOfficePrint
         }
 
 
-    ArrayList createExcelPrintHelper() throws java.io.IOException
+    ArrayList<String> createExcelPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -507,7 +507,7 @@ public class MSOfficePrint
 
             String sPrintViaExcel = "printViaExcel.pl";
 
-            ArrayList aList = searchLocalFile(sPrintViaExcel);
+            ArrayList<String> aList = searchLocalFile(sPrintViaExcel);
             if (aList.isEmpty() == false)
             {
                 return aList;
@@ -596,7 +596,7 @@ public class MSOfficePrint
             return aList;
         }
 
-    ArrayList createExcelStoreHelper() throws java.io.IOException
+    ArrayList<String> createExcelStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -605,7 +605,7 @@ public class MSOfficePrint
 
             String sSaveViaExcel = "saveViaExcel.pl";
 
-            ArrayList aList = searchLocalFile(sSaveViaExcel);
+            ArrayList<String> aList = searchLocalFile(sSaveViaExcel);
             if (aList.isEmpty() == false)
             {
                 return aList;
@@ -686,7 +686,7 @@ public class MSOfficePrint
             return aList;
         }
 
-    ArrayList createPowerPointPrintHelper() throws java.io.IOException
+    ArrayList<String> createPowerPointPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -695,7 +695,7 @@ public class MSOfficePrint
 
             String sPrintViaPowerPoint = "printViaPowerPoint.pl";
 
-            ArrayList aList = searchLocalFile(sPrintViaPowerPoint);
+            ArrayList<String> aList = searchLocalFile(sPrintViaPowerPoint);
             if (aList.isEmpty() == false)
             {
                 return aList;

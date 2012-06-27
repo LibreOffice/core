@@ -67,7 +67,7 @@ public class _XProxyFactory extends MultiMethodTest {
 
         XAggregation xAggr = oObj.createProxy(obj);
 
-        XInitialization xInit = (XInitialization)UnoRuntime.queryInterface(
+        XInitialization xInit = UnoRuntime.queryInterface(
                 XInitialization.class, xAggr);
 
         Object params[] = new Object[0];

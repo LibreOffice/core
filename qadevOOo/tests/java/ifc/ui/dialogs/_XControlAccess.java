@@ -57,7 +57,7 @@ public class _XControlAccess extends MultiMethodTest {
      * properties couldn't be get.
      */
     protected void before() {
-        xCI = (XControlInformation) UnoRuntime.queryInterface
+        xCI = UnoRuntime.queryInterface
             (XControlInformation.class, oObj);
 
         if (xCI == null) throw new StatusException

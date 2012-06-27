@@ -113,7 +113,7 @@ public class _Settings extends MultiPropertyTest {
 
             //check if the property has the right type
             Object pValue = oObj.getPropertyValue("ForbiddenCharacters");
-            XForbiddenCharacters fc = (XForbiddenCharacters) UnoRuntime.queryInterface(
+            XForbiddenCharacters fc = UnoRuntime.queryInterface(
                                               XForbiddenCharacters.class,
                                               pValue);
             res &= (fc != null);

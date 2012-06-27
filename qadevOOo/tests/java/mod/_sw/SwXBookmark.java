@@ -101,8 +101,7 @@ public class SwXBookmark extends TestCase {
 
         util.dbg.printInterfaces((XInterface) instance);
 
-        tEnv.addObjRelation("CONTENT", (XTextContent)
-                        UnoRuntime.queryInterface(XTextContent.class,instance));
+        tEnv.addObjRelation("CONTENT", UnoRuntime.queryInterface(XTextContent.class,instance));
         tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
         return tEnv;
     } // finish method getTestEnvironment

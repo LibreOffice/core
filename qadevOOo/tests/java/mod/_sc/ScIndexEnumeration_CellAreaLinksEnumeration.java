@@ -63,7 +63,7 @@ public class ScIndexEnumeration_CellAreaLinksEnumeration extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent) UnoRuntime.queryInterface
+        XComponent oComp = UnoRuntime.queryInterface
             (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
@@ -90,8 +90,7 @@ public class ScIndexEnumeration_CellAreaLinksEnumeration extends TestCase {
         String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
         links.insertAtPosition (addr, aSourceArea, "a2:b5", "", "") ;
 
-        XEnumerationAccess ea = (XEnumerationAccess)
-                    UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
+        XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
 
         oObj = ea.createEnumeration();
 

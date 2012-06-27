@@ -55,10 +55,9 @@ public class _XDocumentAuditing extends MultiMethodTest {
         // get two sheets
         xSheet = new XSpreadsheet[2];
         try {
-            XSpreadsheetDocument xSpreadsheetDocument = (XSpreadsheetDocument)
-                    UnoRuntime.queryInterface(XSpreadsheetDocument.class, oObj);
+            XSpreadsheetDocument xSpreadsheetDocument = UnoRuntime.queryInterface(XSpreadsheetDocument.class, oObj);
             XSpreadsheets oSheets = xSpreadsheetDocument.getSheets();
-            XIndexAccess oIndexSheets = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess oIndexSheets = UnoRuntime.queryInterface(
                                                 XIndexAccess.class, oSheets);
             XSpreadsheet oSheet = (XSpreadsheet) UnoRuntime.queryInterface(
                                       XSpreadsheet.class, oIndexSheets.getByIndex(0));
@@ -84,8 +83,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         xDrawPage = (XDrawPage)tEnv.getObjRelation("XDocumentAuditing.DrawPage");
         if (xDrawPage == null) { // get from object
             try {
-                XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-                    UnoRuntime.queryInterface(XDrawPagesSupplier.class, oObj);
+                XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, oObj);
                 Object o = oDPS.getDrawPages().getByIndex(1);
                 xDrawPage = (XDrawPage)UnoRuntime.queryInterface(XDrawPage.class, o);
             }
@@ -106,17 +104,17 @@ public class _XDocumentAuditing extends MultiMethodTest {
         props[0] = new PropertyValue();
         props[0].Name = "AutoRefreshArrows";
         props[0].Value = Boolean.FALSE;
-        XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, oObj);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, oObj);
         dispatch(xModel.getCurrentController().getFrame(), (XMultiServiceFactory)tParam.getMSF(), ".uno:AutoRefreshArrows", props);
 
         // prepare the sheets
         try {
             xSheet[0].getCellByPosition(6, 6).setValue(9);
-            XNamed xNamed = (XNamed)UnoRuntime.queryInterface(XNamed.class, xSheet[0]);
+            XNamed xNamed = UnoRuntime.queryInterface(XNamed.class, xSheet[0]);
             sheetName = xNamed.getName();
             xSheet[1].getCellByPosition(6, 6).setValue(16);
             xSheet[1].getCellByPosition(6, 7).setFormula("= SQRT(G7)");
-            XSheetAuditing xSheetAuditing = (XSheetAuditing)UnoRuntime.queryInterface(XSheetAuditing.class, xSheet[1]);
+            XSheetAuditing xSheetAuditing = UnoRuntime.queryInterface(XSheetAuditing.class, xSheet[1]);
             CellAddress add = new CellAddress((short)1, 6, 7);
             xSheetAuditing.showPrecedents(add);
             boolean ok = hasRightAmountOfShapes(1);
@@ -134,7 +132,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         props[0] = new PropertyValue();
         props[0].Name = "AutoRefreshArrows";
         props[0].Value = Boolean.TRUE;
-        XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, oObj);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, oObj);
         dispatch(xModel.getCurrentController().getFrame(), (XMultiServiceFactory)tParam.getMSF(), ".uno:AutoRefreshArrows", props);
     }
 
@@ -191,7 +189,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
                 for (int i=elementCount; i<newCount; i++) {
                     try {
                         Object o = xDrawPage.getByIndex(i);
-                        XShape xShape = (XShape)UnoRuntime.queryInterface(XShape.class, o);
+                        XShape xShape = UnoRuntime.queryInterface(XShape.class, o);
                         pos = xShape.getPosition();
                         System.out.println("Shape Type: " + xShape.getShapeType());
                     }
@@ -205,7 +203,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
     }
 
     private void dispatch(Object oProvider, XMultiServiceFactory xMSF, String url, PropertyValue[] prop) {
-        XDispatchProvider xDispatchProvider = (XDispatchProvider)UnoRuntime.queryInterface(XDispatchProvider.class, oProvider);
+        XDispatchProvider xDispatchProvider = UnoRuntime.queryInterface(XDispatchProvider.class, oProvider);
         Object dispatcher = null;
         try {
             dispatcher = xMSF.createInstance("com.sun.star.frame.DispatchHelper");
@@ -213,7 +211,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         catch(com.sun.star.uno.Exception e) {
         }
 
-        XDispatchHelper xDispatchHelper = (XDispatchHelper)UnoRuntime.queryInterface(XDispatchHelper.class, dispatcher);
+        XDispatchHelper xDispatchHelper = UnoRuntime.queryInterface(XDispatchHelper.class, dispatcher);
         xDispatchHelper.executeDispatch(xDispatchProvider, url, "", 0, prop);
     }
 }

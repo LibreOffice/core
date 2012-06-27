@@ -86,9 +86,9 @@ public class _XAccessibleText extends MultiMethodTest {
         XAccessibleComponent component = null;
 
         if (xat != null) {
-            oObj = (XAccessibleText) UnoRuntime.queryInterface(
+            oObj = UnoRuntime.queryInterface(
                            XAccessibleText.class, xat);
-            component = (XAccessibleComponent) UnoRuntime.queryInterface(
+            component = UnoRuntime.queryInterface(
                                 XAccessibleComponent.class, xat);
         }
 
@@ -107,7 +107,7 @@ public class _XAccessibleText extends MultiMethodTest {
         LimitedBounds = tEnv.getObjRelation("LimitedBounds");
 
         if (component == null) {
-            component = (XAccessibleComponent) UnoRuntime.queryInterface(
+            component = UnoRuntime.queryInterface(
                                 XAccessibleComponent.class,
                                 tEnv.getTestObject());
         }

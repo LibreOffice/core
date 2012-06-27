@@ -127,8 +127,7 @@ public class SwXParagraphEnumeration extends TestCase {
         }
 
         // Enumeration
-        XEnumerationAccess oEnumA = (XEnumerationAccess)
-            UnoRuntime.queryInterface( XEnumerationAccess.class, oText );
+        XEnumerationAccess oEnumA = UnoRuntime.queryInterface( XEnumerationAccess.class, oText );
         XEnumeration oEnum = oEnumA.createEnumeration();
 
         oObj = oEnum;

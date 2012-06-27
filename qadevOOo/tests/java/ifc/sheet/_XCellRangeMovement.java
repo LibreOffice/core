@@ -71,8 +71,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
         }
 
         XCellRangeAddressable oAddr =
-            (XCellRangeAddressable)
-                 UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
+            UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
         short iSheet = oAddr.getRangeAddress().Sheet;
         CellAddress sDest;
         CellRangeAddress sSrc;
@@ -109,8 +108,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
 
         XSpreadsheet oSheet = (XSpreadsheet)
             UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
-        XCellRangeAddressable oAddr = (XCellRangeAddressable)
-            UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
+        XCellRangeAddressable oAddr = UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
         short iSheet = oAddr.getRangeAddress().Sheet;
         try {
             oSheet.getCellByPosition(0,20).setValue(100);
@@ -129,8 +127,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
             else{
                 log.println("Cells were already inserted. "+
                     "Delete old cells now");
-                XColumnRowRange oColumnRowRange = (XColumnRowRange)
-                    UnoRuntime.queryInterface(XColumnRowRange.class, oSheet);
+                XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, oSheet);
 
                 XTableRows oRows = (XTableRows) oColumnRowRange.getRows();
                 oRows.removeByIndex(21,1);
@@ -163,8 +160,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
         XSpreadsheet oSheet = (XSpreadsheet)
             UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
 
-        XCellRangeAddressable oAddr = (XCellRangeAddressable)
-            UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
+        XCellRangeAddressable oAddr = UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
 
         short iSheet = oAddr.getRangeAddress().Sheet;
         //prepare source range
@@ -205,8 +201,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
 
         XSpreadsheet oSheet = (XSpreadsheet)
             UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
-        XCellRangeAddressable oAddr = (XCellRangeAddressable)
-            UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
+        XCellRangeAddressable oAddr = UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
         short iSheet = oAddr.getRangeAddress().Sheet;
         try {
             //prepare source range

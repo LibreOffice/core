@@ -61,7 +61,7 @@ public class ScDocumentConfiguration extends TestCase {
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
-        XMultiServiceFactory docMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
+        XMultiServiceFactory docMSF = UnoRuntime.queryInterface(
                                               XMultiServiceFactory.class,
                                               xSheetDoc);
         Object oObj = null;

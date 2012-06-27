@@ -68,8 +68,7 @@ public class _XCellRangeReferrer extends MultiMethodTest {
             return;
         }
 
-        XCellRangeAddressable xCRA = (XCellRangeAddressable)
-                UnoRuntime.queryInterface(XCellRangeAddressable.class, cr);
+        XCellRangeAddressable xCRA = UnoRuntime.queryInterface(XCellRangeAddressable.class, cr);
 
         CellRangeAddress objCRA = xCRA.getRangeAddress();
 

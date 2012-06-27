@@ -89,7 +89,7 @@ public class Job {
     }
 
     public Type[] getTypes() {
-        Class interfaces[] = getClass().getInterfaces();
+        Class<?> interfaces[] = getClass().getInterfaces();
         Type types[] = new Type[interfaces.length];
         for(int i = 0; i < interfaces.length; ++ i)
         types[i] = new Type(interfaces[i]);

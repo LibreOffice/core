@@ -80,7 +80,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
         (XMultiServiceFactory) Param.getMSF()));
     }
@@ -152,12 +152,12 @@ public class AccessibleIconChoiceCtrl extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+        XDispatchProvider aProv = UnoRuntime.queryInterface(
                                           XDispatchProvider.class,
                                           secondController);
 
@@ -166,7 +166,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
         try {
             XInterface transf = (XInterface) ( (XMultiServiceFactory) tParam.getMSF())
                                                    .createInstance("com.sun.star.util.URLTransformer");
-            urlTransf = (XURLTransformer) UnoRuntime.queryInterface(
+            urlTransf = UnoRuntime.queryInterface(
                                 XURLTransformer.class, transf);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -198,14 +198,14 @@ public class AccessibleIconChoiceCtrl extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+        XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
         shortWait();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
@@ -216,7 +216,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
                                                                        AccessibleRole.PUSH_BUTTON,
                                                                        "Close");
 
-        accCloseButton = (XAccessibleAction) UnoRuntime.queryInterface(
+        accCloseButton = UnoRuntime.queryInterface(
                                  XAccessibleAction.class, closeButton);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
@@ -246,7 +246,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
         tEnv.addObjRelation("expectedStateNames", expectedStateNames);
         tEnv.addObjRelation("expectedStates", expectedStates);
 
-        final XAccessibleSelection selection = (XAccessibleSelection) (XAccessibleSelection) UnoRuntime.queryInterface(
+        final XAccessibleSelection selection = (XAccessibleSelection) UnoRuntime.queryInterface(
                                                                               XAccessibleSelection.class,
                                                                               oObj);
 

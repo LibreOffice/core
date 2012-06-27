@@ -305,12 +305,12 @@ public class _XTableColumns extends MultiMethodTest {
     } // end removeByIndex()
 
     private void setCellText(XCell cell, String text) {
-        XSimpleText xText = (XSimpleText) UnoRuntime.queryInterface
+        XSimpleText xText = UnoRuntime.queryInterface
             (XSimpleText.class, cell) ;
         xText.setString(text);
     }
     private String getCellText(XCell cell) {
-        XSimpleText xText = (XSimpleText) UnoRuntime.queryInterface
+        XSimpleText xText = UnoRuntime.queryInterface
             (XSimpleText.class, cell) ;
         return xText.getString();
     }

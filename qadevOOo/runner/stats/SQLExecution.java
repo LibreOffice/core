@@ -125,7 +125,7 @@ public class SQLExecution {
      * @param sqlOutput The results of the command are put in this HashMap.
      * @return True, if no error occurred.
      */
-    public boolean executeSQLCommand(String command, HashMap sqlInput, HashMap sqlOutput)
+    public boolean executeSQLCommand(String command, HashMap sqlInput, HashMap<String, String[]> sqlOutput)
                                         throws IllegalArgumentException {
         return executeSQLCommand(command, sqlInput, sqlOutput, false);
     }
@@ -139,10 +139,10 @@ public class SQLExecution {
      * sqlInput HashMap.
      * @return True, if no error occurred.
      */
-    public boolean executeSQLCommand(String command, HashMap sqlInput, HashMap sqlOutput, boolean mergeOutputIntoInput)
+    public boolean executeSQLCommand(String command, HashMap sqlInput, HashMap<String, String[]> sqlOutput, boolean mergeOutputIntoInput)
                                         throws IllegalArgumentException {
         if (sqlOutput == null) {
-            sqlOutput = new HashMap();
+            sqlOutput = new HashMap<String, String[]>();
             // this has to be true, so the user of this method gets a return
             mergeOutputIntoInput = true;
             if (sqlInput == null) {
@@ -150,7 +150,7 @@ public class SQLExecution {
                 return false;
             }
         }
-        ArrayList sqlCommand = new ArrayList();
+        ArrayList<String> sqlCommand = new ArrayList<String>();
         sqlCommand.add("");
         boolean update = false;
         // synchronize all "$varname" occurrences in the command string with
@@ -231,10 +231,10 @@ public class SQLExecution {
             execute((String)sqlCommand.get(i), sqlOutput, update);
             // merge output with input
             if (!update && mergeOutputIntoInput) {
-                Iterator keys = sqlOutput.keySet().iterator();
+                Iterator<String> keys = sqlOutput.keySet().iterator();
                 while(keys.hasNext()) {
-                    String key = (String)keys.next();
-                    String[]val = (String[])sqlOutput.get(key);
+                    String key = keys.next();
+                    String[]val = sqlOutput.get(key);
                     if (val != null && val.length != 0) {
                         if (val.length == 1)
                             sqlInput.put(key, val[0]);
@@ -256,7 +256,7 @@ public class SQLExecution {
      *          command
      * @return A HashMap with the result.
      */
-    private void execute(String command, HashMap output, boolean update) {
+    private void execute(String command, HashMap<String, String[]> output, boolean update) {
         if (m_bDebug)
             System.out.println("Debug - SQLExecution - execute Command: " + command);
         try {
@@ -275,7 +275,7 @@ public class SQLExecution {
                 for(int i=1; i<=columnCount; i++) {
                     columnNames[i-1] = sqlRSMeta.getColumnName(i);
                     // initialize output
-                    ArrayList v = new ArrayList();
+                    ArrayList<String> v = new ArrayList<String>();
 
                     sqlResult.beforeFirst();
                     while (sqlResult.next()) {
@@ -291,7 +291,7 @@ public class SQLExecution {
 
                     // put result in output HashMap
                     String[]s = new String[countRows];
-                    s = (String[])v.toArray(s);
+                    s = v.toArray(s);
                     output.put(columnNames[i-1], s);
                     if (m_bDebug) {
                         if (i == 1) {

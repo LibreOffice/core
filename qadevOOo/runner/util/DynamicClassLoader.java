@@ -31,7 +31,7 @@ public class DynamicClassLoader {
     * @param className The name of the class to create.
     * @return The created class.
     */
-    public static Class forName(String className)
+    public static Class<?> forName(String className)
         throws ClassNotFoundException {
 
         return Class.forName(className) ;
@@ -45,7 +45,7 @@ public class DynamicClassLoader {
     public Object getInstance(String className)
                                         throws IllegalArgumentException {
         try {
-            Class cls = DynamicClassLoader.forName(className);
+            Class<?> cls = DynamicClassLoader.forName(className);
             return cls.newInstance();
         } catch ( ClassNotFoundException e ) {
             throw new IllegalArgumentException("Couldn't find " + className
@@ -68,7 +68,7 @@ public class DynamicClassLoader {
      */
     public Object getInstance(String className, Object[] ctorArgs)
                                         throws IllegalArgumentException {
-        Class[] ctorType = new Class[ctorArgs.length];
+        Class<?>[] ctorType = new Class[ctorArgs.length];
         for(int i=0; i<ctorType.length; i++) {
             ctorType[i] = ctorArgs[i].getClass();
         }
@@ -85,11 +85,11 @@ public class DynamicClassLoader {
      * @param ctorArgs Arguments for the constructor.
      * @return The instance of the class.
      */
-    public Object getInstance(String className, Class[]ctorClassTypes, Object[] ctorArgs)
+    public Object getInstance(String className, Class<?>[]ctorClassTypes, Object[] ctorArgs)
                                         throws IllegalArgumentException {
         try {
-            Class cls = DynamicClassLoader.forName(className);
-            Constructor ctor = cls.getConstructor(ctorClassTypes);
+            Class<?> cls = DynamicClassLoader.forName(className);
+            Constructor<?> ctor = cls.getConstructor(ctorClassTypes);
             System.out.println("ctor: " + ctor.getName() +  "  " + ctor.getModifiers());
 
             return ctor.newInstance(ctorArgs);

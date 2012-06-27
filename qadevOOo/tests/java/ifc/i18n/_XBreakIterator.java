@@ -170,7 +170,7 @@ public class _XBreakIterator extends MultiMethodTest {
         tRes.tested("previousCharacters()", bRes);
     }
 
-    ArrayList vBounds = new ArrayList();
+    ArrayList<Boundary> vBounds = new ArrayList<Boundary>();
 
     /**
     * Saves bounds of all returned words for the future tests. <p>
@@ -205,7 +205,7 @@ public class _XBreakIterator extends MultiMethodTest {
         requiredMethod("nextWord()");
 
         int i = UnicodeString.length() - 1;
-        ArrayList vPrevBounds = new ArrayList();
+        ArrayList<Boundary> vPrevBounds = new ArrayList<Boundary>();
         while( i > 0  ) {
             Boundary bounds =
                 oObj.previousWord(UnicodeString, i, locale, wordType);
@@ -237,7 +237,7 @@ public class _XBreakIterator extends MultiMethodTest {
 
         for(int i = 0; i < vBounds.size(); i++) {
             // calculate middle of the word
-            Boundary iBounds = (Boundary)vBounds.get(i);
+            Boundary iBounds = vBounds.get(i);
             int iPos = (iBounds.endPos - iBounds.startPos) / 2
                         + iBounds.startPos;
             Boundary bounds = oObj.getWordBoundary(UnicodeString, iPos,
@@ -268,7 +268,7 @@ public class _XBreakIterator extends MultiMethodTest {
 
         for(int i = 0; i < vBounds.size(); i++) {
             // calculate middle of the word
-            Boundary iBounds = (Boundary)vBounds.get(i);
+            Boundary iBounds = vBounds.get(i);
             int iPos = (iBounds.endPos - iBounds.startPos) / 2
                         + iBounds.startPos;
 
@@ -294,7 +294,7 @@ public class _XBreakIterator extends MultiMethodTest {
         boolean bRes = true;
 
         for(int i = 0; i < vBounds.size(); i++) {
-            Boundary iBounds = (Boundary)vBounds.get(i);
+            Boundary iBounds = vBounds.get(i);
             boolean isBegin = oObj.isBeginWord(UnicodeString, iBounds.startPos,
                                                locale, WordType.ANY_WORD);
             bRes = bRes && isBegin;
@@ -326,7 +326,7 @@ public class _XBreakIterator extends MultiMethodTest {
         boolean bRes = true;
 
         for(int i = 0; i < vBounds.size(); i++) {
-            Boundary iBounds = (Boundary)vBounds.get(i);
+            Boundary iBounds = vBounds.get(i);
             boolean isEnd = oObj.isEndWord(UnicodeString, iBounds.endPos,
                 locale, WordType.ANY_WORD);
             bRes = bRes && isEnd;
@@ -343,7 +343,7 @@ public class _XBreakIterator extends MultiMethodTest {
         tRes.tested("isEndWord()", bRes);
     }
 
-    ArrayList vSentenceStart = new ArrayList();
+    ArrayList<Integer> vSentenceStart = new ArrayList<Integer>();
     /**
      * Tries to find all sentences starting positions passing every character
      * as position parameter and stores them. Then tries to pass invalid
@@ -389,7 +389,7 @@ public class _XBreakIterator extends MultiMethodTest {
     public void _endOfSentence() {
         boolean bRes = true;
         for(int i = 0; i < vSentenceStart.size(); i++) {
-            int start = ((Integer)vSentenceStart.get(i)).intValue();
+            int start = vSentenceStart.get(i).intValue();
             int end = oObj.endOfSentence(UnicodeString, start, locale);
             bRes &= end > start;
             log.println("Sentence " + i + " range is [" + start + ", "
@@ -549,8 +549,8 @@ public class _XBreakIterator extends MultiMethodTest {
         return cType;
     }
 
-    ArrayList vCharBlockBounds = new ArrayList();
-    ArrayList vCharBlockTypes = new ArrayList();
+    ArrayList<Boundary> vCharBlockBounds = new ArrayList<Boundary>();
+    ArrayList<Short> vCharBlockTypes = new ArrayList<Short>();
 
     /**
      * Creates array of all char blocks with their boundaries and
@@ -579,16 +579,16 @@ public class _XBreakIterator extends MultiMethodTest {
         }
 
         for(int i = 0; i < vCharBlockBounds.size() - 1; i++) {
-            int endPos = ((Boundary)vCharBlockBounds.get(i)).endPos;
-            int startPos = ((Boundary)vCharBlockBounds.get(i + 1)).startPos;
+            int endPos = vCharBlockBounds.get(i).endPos;
+            int startPos = vCharBlockBounds.get(i + 1).startPos;
             bCharBlockRes &= endPos == startPos;
         }
 
         log.println("Testing for no intersections : " + bCharBlockRes);
-        int startPos = ((Boundary)vCharBlockBounds.get(0)).startPos;
+        int startPos = vCharBlockBounds.get(0).startPos;
         bCharBlockRes &= startPos == 0;
-        int endPos = ((Boundary)vCharBlockBounds.get
-            (vCharBlockBounds.size() - 1)).endPos;
+        int endPos = vCharBlockBounds.get
+            (vCharBlockBounds.size() - 1).endPos;
         bCharBlockRes &= endPos == UnicodeString.length();
         log.println("Regions should starts with 0 and ends with "
             + UnicodeString.length());
@@ -621,8 +621,8 @@ public class _XBreakIterator extends MultiMethodTest {
 
         boolean bRes = true;
         for(int i = 0; i < vCharBlockBounds.size(); i++) {
-            Boundary bounds = (Boundary)vCharBlockBounds.get(i);
-            Short type = (Short)vCharBlockTypes.get(i);
+            Boundary bounds = vCharBlockBounds.get(i);
+            Short type = vCharBlockTypes.get(i);
             if (bounds.startPos - 1 < 0) continue;
             int iPos = oObj.nextCharBlock(UnicodeString, bounds.startPos - 1,
                 locale, type.shortValue());
@@ -652,8 +652,8 @@ public class _XBreakIterator extends MultiMethodTest {
 
         boolean bRes = true;
         for(int i = 0; i < vCharBlockBounds.size(); i++) {
-            Boundary bounds = (Boundary)vCharBlockBounds.get(i);
-            Short type = (Short)vCharBlockTypes.get(i);
+            Boundary bounds = vCharBlockBounds.get(i);
+            Short type = vCharBlockTypes.get(i);
             int iPos = oObj.previousCharBlock(UnicodeString,
                 bounds.endPos + 1, locale, type.shortValue());
             if (iPos != bounds.startPos) {

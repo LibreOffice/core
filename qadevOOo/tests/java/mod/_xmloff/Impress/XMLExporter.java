@@ -129,17 +129,14 @@ public class XMLExporter extends TestCase {
                 "com.sun.star.comp.Impress.XMLExporter", new Object[] {arg});
 
             //get draw pages
-            XDrawPagesSupplier drawPagesSupplier = (XDrawPagesSupplier)
-                UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
+            XDrawPagesSupplier drawPagesSupplier = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
             XDrawPages drawPages = drawPagesSupplier.getDrawPages();
             //insert new draw page
             XDrawPage newDrawPage = drawPages.insertNewByIndex(0);
             //set specific test name
-            XNamed newPageNamed = (XNamed)
-                UnoRuntime.queryInterface(XNamed.class, newDrawPage);
+            XNamed newPageNamed = UnoRuntime.queryInterface(XNamed.class, newDrawPage);
             newPageNamed.setName(NAME);
-            XExporter xEx = (XExporter)
-                UnoRuntime.queryInterface(XExporter.class,oObj);
+            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
             xEx.setSourceDocument(xImpressDoc);
 
         } catch (com.sun.star.uno.Exception e) {

@@ -82,7 +82,7 @@ public class MutableTreeDataModel extends TestCase {
 
         public void fireEvent(){
 
-            XMutableTreeDataModel xModel = (XMutableTreeDataModel) UnoRuntime.queryInterface(XMutableTreeDataModel.class, oObj);
+            XMutableTreeDataModel xModel = UnoRuntime.queryInterface(XMutableTreeDataModel.class, oObj);
             XMutableTreeNode node = xModel.createNode("EventNode", true);
             try {
                 xModel.setRoot(node);

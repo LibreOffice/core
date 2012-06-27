@@ -113,8 +113,7 @@ public class SwXTextField extends TestCase {
 
           // create testobject here
         try {
-            XMultiServiceFactory oDocMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+            XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
 
             Object FieldMaster = oDocMSF.createInstance
                 ( "com.sun.star.text.FieldMaster.Database" );
@@ -126,16 +125,14 @@ public class SwXTextField extends TestCase {
             instance = (XInterface) oDocMSF.createInstance
                 ( "com.sun.star.text.TextField.DateTime" );
 
-            XDependentTextField xTF = (XDependentTextField)
-                UnoRuntime.queryInterface(XDependentTextField.class,oObj);
+            XDependentTextField xTF = UnoRuntime.queryInterface(XDependentTextField.class,oObj);
 
             PFieldMaster.setPropertyValue("DataBaseName","Address Book File");
             PFieldMaster.setPropertyValue("DataTableName","address");
             PFieldMaster.setPropertyValue("DataColumnName","FIRSTNAME");
             XText the_Text = xTextDoc.getText();
             XTextCursor the_Cursor = the_Text.createTextCursor();
-            XTextContent the_Field = (XTextContent)
-                             UnoRuntime.queryInterface(XTextContent.class,oObj);
+            XTextContent the_Field = UnoRuntime.queryInterface(XTextContent.class,oObj);
 
             xTF.attachTextFieldMaster(PFieldMaster);
             the_Text.insertTextContent(the_Cursor,the_Field,false);
@@ -149,8 +146,7 @@ public class SwXTextField extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
 
-        tEnv.addObjRelation("CONTENT", (XTextContent)
-                        UnoRuntime.queryInterface(XTextContent.class,instance));
+        tEnv.addObjRelation("CONTENT", UnoRuntime.queryInterface(XTextContent.class,instance));
         tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
 
         return tEnv;

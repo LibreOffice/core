@@ -82,7 +82,7 @@ public class _XSheetFilterable extends MultiMethodTest {
             oSheet.getCellByPosition(1, 2).setFormula("B");
             oObj.filter(desc);
 
-            XColumnRowRange oColumnRowRange = (XColumnRowRange) UnoRuntime.queryInterface(
+            XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(
                                                       XColumnRowRange.class,
                                                       oSheet);
             XTableRows oRows = (XTableRows) oColumnRowRange.getRows();

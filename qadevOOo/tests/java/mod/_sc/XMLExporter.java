@@ -121,20 +121,17 @@ public class XMLExporter extends TestCase {
         try {
             oObj = (XInterface) xMSF.createInstanceWithArguments(
                 "com.sun.star.comp.Calc.XMLExporter", new Object[] {arg} );
-            XExporter xEx = (XExporter) UnoRuntime.queryInterface
+            XExporter xEx = UnoRuntime.queryInterface
                 (XExporter.class,oObj);
             xEx.setSourceDocument(xSheetDoc);
 
             //set name of sheet
-            XSpreadsheetDocument xSpreadsheetDoc = (XSpreadsheetDocument)
-                UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
+            XSpreadsheetDocument xSpreadsheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
             XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
-            XIndexAccess xSheetsIndexArray = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+            XIndexAccess xSheetsIndexArray = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
             XSpreadsheet xSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),xSheetsIndexArray.getByIndex(0));
-            XNamed xSheetNamed = (XNamed)
-                UnoRuntime.queryInterface(XNamed.class, xSheet);
+            XNamed xSheetNamed = UnoRuntime.queryInterface(XNamed.class, xSheet);
             xSheetNamed.setName(SHEET_NAME);
 
             log.println("fill sheet with contnet...");

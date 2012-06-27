@@ -115,7 +115,7 @@ public class OFileControlModel extends TestCase {
         log.println("    disposing xDrawDoc ");
 
         try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+            XCloseable closer = UnoRuntime.queryInterface(
                 XCloseable.class, xDrawDoc);
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
@@ -154,7 +154,7 @@ public class OFileControlModel extends TestCase {
         XControlModel aControl = null;
 
         //get MSF
-        XMultiServiceFactory oDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
+        XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(
             XMultiServiceFactory.class,
             xDrawDoc);
 
@@ -163,9 +163,9 @@ public class OFileControlModel extends TestCase {
                 "com.sun.star.drawing.ControlShape");
             Object aCon = oDocMSF.createInstance(
                 "com.sun.star.form.component." + objName);
-            aControl = (XControlModel) UnoRuntime.queryInterface(
+            aControl = UnoRuntime.queryInterface(
                 XControlModel.class, aCon);
-            aShape = (XControlShape) UnoRuntime.queryInterface(
+            aShape = UnoRuntime.queryInterface(
                 XControlShape.class, oInt);
             size.Height = 1500;
             size.Width = 3000;

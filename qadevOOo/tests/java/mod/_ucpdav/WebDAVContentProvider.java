@@ -61,7 +61,7 @@ public class WebDAVContentProvider extends TestCase {
         XContentIdentifierFactory xCIF;
 
         try {
-            xCIF = (XContentIdentifierFactory)UnoRuntime.queryInterface(
+            xCIF = UnoRuntime.queryInterface(
                     XContentIdentifierFactory.class,
                     xMSF.createInstance(
                             "com.sun.star.comp.ucb.UniversalContentBroker"));

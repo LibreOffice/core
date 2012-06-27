@@ -125,14 +125,12 @@ public class XMLMetaExporter extends TestCase {
             oObj = (XInterface) xMSF.createInstanceWithArguments(
                 "com.sun.star.comp.Impress.XMLMetaExporter",
                 new Object[]{arg});
-            XExporter xEx = (XExporter)
-                UnoRuntime.queryInterface(XExporter.class,oObj);
+            XExporter xEx = UnoRuntime.queryInterface(XExporter.class,oObj);
             xEx.setSourceDocument(xImpressDoc);
 
         //change title name
-            XDocumentInfoSupplier infoSup = (XDocumentInfoSupplier)
-                UnoRuntime.queryInterface
-                (XDocumentInfoSupplier.class, xImpressDoc) ;
+            XDocumentInfoSupplier infoSup = UnoRuntime.queryInterface
+            (XDocumentInfoSupplier.class, xImpressDoc) ;
             XPropertySet docInfo = (XPropertySet) UnoRuntime.queryInterface
                 (XPropertySet.class, infoSup.getDocumentInfo()) ;
             docInfo.setPropertyValue("Title", NAME);

@@ -77,8 +77,7 @@ public class ScCellsEnumeration extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -109,24 +108,21 @@ public class ScCellsEnumeration extends TestCase {
 
         // creation of testobject here
         XSpreadsheets oSheets = (XSpreadsheets)xSheetDoc.getSheets();
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         XCellRange oSheet = null;
         try {
             oSheet = (XCellRange) AnyConverter.toObject(
                     new Type(XCellRange.class),oIndexAccess.getByIndex(0));
 
             XCell oCell_1 = (XCell)oSheet.getCellByPosition(0, 0);
-            XTextRange oTextRange = (XTextRange)
-                UnoRuntime.queryInterface(XTextRange.class, oCell_1);
+            XTextRange oTextRange = UnoRuntime.queryInterface(XTextRange.class, oCell_1);
             oTextRange.setString("Test string 1");
 
             XCell oCell_2 = (XCell)oSheet.getCellByPosition(5, 1);
             oCell_2.setValue(15);
 
             XCell oCell_3 = (XCell)oSheet.getCellByPosition(3, 9);
-            oTextRange = (XTextRange)
-                UnoRuntime.queryInterface(XTextRange.class, oCell_3);
+            oTextRange = UnoRuntime.queryInterface(XTextRange.class, oCell_3);
             oTextRange.setString("test 2");
             cellArr[0] = oCell_1;
             cellArr[1] = oCell_2;
@@ -145,8 +141,7 @@ public class ScCellsEnumeration extends TestCase {
             throw new StatusException("Couldn't create test object", e);
         }
 
-        XCellRangesQuery oCellRangesQuery = (XCellRangesQuery)
-            UnoRuntime.queryInterface(XCellRangesQuery.class, oSheet);
+        XCellRangesQuery oCellRangesQuery = UnoRuntime.queryInterface(XCellRangesQuery.class, oSheet);
         XSheetCellRanges oSheetCellRanges = oCellRangesQuery.queryVisibleCells();
         oEnum = (XEnumerationAccess) oSheetCellRanges.getCells();
         oObj = oSheetCellRanges.getCells().createEnumeration();

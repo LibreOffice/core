@@ -70,7 +70,7 @@ public class DocumentTemplates extends TestCase {
         try {
             oObj = (XInterface)xMSF.createInstance
                 ("com.sun.star.frame.DocumentTemplates");
-            store = (XStorable) UnoRuntime.queryInterface
+            store = UnoRuntime.queryInterface
                 (XStorable.class,xTextDoc);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

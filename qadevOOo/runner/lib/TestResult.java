@@ -27,7 +27,7 @@ public class TestResult {
     /**
      * Contains methods having been tested and their results.
      */
-    protected HashMap testedMethods = new HashMap();
+    protected HashMap<String, Status> testedMethods = new HashMap<String, Status>();
 
     /**
      * The method makes method tested with the result, i.e. it adds to its
@@ -70,7 +70,7 @@ public class TestResult {
      * @return methods available in the interface tested.
      */
     public String[] getTestedMethods() {
-        return (String[])testedMethods.keySet().toArray(
+        return testedMethods.keySet().toArray(
                 new String[testedMethods.size()]);
     }
 
@@ -91,7 +91,7 @@ public class TestResult {
      * @see #assert
      */
     public Status getStatusFor( String method ) {
-        return (Status)testedMethods.get( method );
+        return testedMethods.get( method );
     }
 
 }    

@@ -82,7 +82,7 @@ public class DispatchRecorder extends TestCase {
             catch (InterruptedException ex) {
             }
 
-            XModel model = (XModel) UnoRuntime.queryInterface(XModel.class, oDoc);
+            XModel model = UnoRuntime.queryInterface(XModel.class, oDoc);
             xFrame = model.getCurrentController().getFrame();
 
             XPropertySet xFramePS = (XPropertySet) UnoRuntime.queryInterface
@@ -106,7 +106,7 @@ public class DispatchRecorder extends TestCase {
             } else {
                 oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
                     "com.sun.star.comp.framework.DispatchRecorder");
-                xDR = (XDispatchRecorder) UnoRuntime.queryInterface
+                xDR = UnoRuntime.queryInterface
                     (XDispatchRecorder.class, oObj);
                 xDRS.setDispatchRecorder(xDR);
             }

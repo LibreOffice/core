@@ -71,7 +71,7 @@ public class MutableTreeNode extends TestCase {
         XMutableTreeNode xNode;
 
         try {
-            mXTreeDataModel = (XMutableTreeDataModel) UnoRuntime.queryInterface(XMutableTreeDataModel.class,
+            mXTreeDataModel = UnoRuntime.queryInterface(XMutableTreeDataModel.class,
                 mxMSF.createInstance("com.sun.star.awt.tree.MutableTreeDataModel"));
         } catch (com.sun.star.uno.Exception ex) {
             throw new StatusException(Status.failed("ERROR: could not create instance of" +
@@ -129,8 +129,7 @@ public class MutableTreeNode extends TestCase {
             } catch (com.sun.star.uno.Exception ex) {
                 ex.printStackTrace();
             }
-            XSimpleFileAccess sA = (XSimpleFileAccess)
-                            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
+            XSimpleFileAccess sA = UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
 
 
             dirlist(officeUserPath, xNode);
@@ -145,8 +144,7 @@ public class MutableTreeNode extends TestCase {
         } catch (com.sun.star.uno.Exception ex) {
             ex.printStackTrace();
         }
-        XSimpleFileAccess sfa = (XSimpleFileAccess)
-                        UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
+        XSimpleFileAccess sfa = UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
         XMutableTreeNode xChildNode = null;
         try {
             xChildNode = mXTreeDataModel.createNode(dir.substring(dir.lastIndexOf("/")+1, dir.length()), sfa.isFolder(dir));

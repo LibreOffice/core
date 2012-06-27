@@ -90,7 +90,7 @@ public class SpellChecker extends TestCase {
         log.println("Implementation Name: "+Iname);
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        XLinguServiceManager xLinguServiceManager = (XLinguServiceManager) UnoRuntime.queryInterface(XLinguServiceManager.class, LinguServiceManager);
+        XLinguServiceManager xLinguServiceManager = UnoRuntime.queryInterface(XLinguServiceManager.class, LinguServiceManager);
         tEnv.addObjRelation("AlternativeChecker",xLinguServiceManager.getSpellChecker());
 
         return tEnv;

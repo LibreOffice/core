@@ -45,7 +45,7 @@ public class SvxUnoNumberingRules extends TestCase {
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
                                                     PrintWriter log) {
-        XMultiServiceFactory docMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
+        XMultiServiceFactory docMSF = UnoRuntime.queryInterface(
                                               XMultiServiceFactory.class,
                                               xDrawDoc);
         XInterface oObj = null;
@@ -65,7 +65,7 @@ public class SvxUnoNumberingRules extends TestCase {
         Object NewRules=null;
 
         try{
-        XIndexAccess xIA = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, oObj);
+        XIndexAccess xIA = UnoRuntime.queryInterface(XIndexAccess.class, oObj);
         NewRules = xIA.getByIndex(2);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Couldn't get new Rules for XIndexReplace");

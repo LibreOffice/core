@@ -113,8 +113,7 @@ public class SwXTextGraphicObjects extends TestCase {
 
         XText the_text = xTextDoc.getText();
         XTextCursor the_cursor = the_text.createTextCursor();
-        XTextContent the_content = (XTextContent)
-                            UnoRuntime.queryInterface(XTextContent.class,oObj);
+        XTextContent the_content = UnoRuntime.queryInterface(XTextContent.class,oObj);
 
        log.println( "inserting graphic" );
         try {
@@ -141,9 +140,8 @@ public class SwXTextGraphicObjects extends TestCase {
             throw new StatusException("Couldn't set property 'GraphicURL'", e );
         }
 
-        XTextGraphicObjectsSupplier xTGS = (XTextGraphicObjectsSupplier)
-            UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
-            xTextDoc);
+        XTextGraphicObjectsSupplier xTGS = UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
+        xTextDoc);
         oObj = xTGS.getGraphicObjects();
 
         TestEnvironment tEnv = new TestEnvironment( oObj );

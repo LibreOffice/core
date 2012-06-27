@@ -98,13 +98,10 @@ public class SdLayer extends TestCase {
 
         // get the drawpage of drawing here
         log.println( "getting LayerManager" );
-        XLayerSupplier oLS = (XLayerSupplier)
-            UnoRuntime.queryInterface(XLayerSupplier.class, xDrawDoc);
+        XLayerSupplier oLS = UnoRuntime.queryInterface(XLayerSupplier.class, xDrawDoc);
         XNameAccess oNA = oLS.getLayerManager();
-        oLM = (XLayerManager)
-            UnoRuntime.queryInterface(XLayerManager.class, oNA);
-        XIndexAccess oIA = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class,oLM);
+        oLM = UnoRuntime.queryInterface(XLayerManager.class, oNA);
+        XIndexAccess oIA = UnoRuntime.queryInterface(XIndexAccess.class,oLM);
         log.println( "getting LayerManager" );
         try {
             oObj = (XLayer) AnyConverter.toObject(

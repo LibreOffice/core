@@ -118,16 +118,13 @@ public class SwXStyle extends TestCase {
 
         try {
             log.println("getting style");
-            XStyleFamiliesSupplier oSFS = (XStyleFamiliesSupplier)
-                UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
-                xTextDoc);
+            XStyleFamiliesSupplier oSFS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
+            xTextDoc);
             XNameAccess oSF = oSFS.getStyleFamilies();
-            XIndexAccess oSFsIA = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oSF);
+            XIndexAccess oSFsIA = UnoRuntime.queryInterface(XIndexAccess.class, oSF);
             oSFNA = (XNameAccess) AnyConverter.toObject(
                         new Type(XNameAccess.class),oSFsIA.getByIndex(0));
-            XIndexAccess oSFIA = (XIndexAccess)
-                UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
+            XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
             oStyle = (XStyle) AnyConverter.toObject(
                     new Type(XStyle.class),oSFIA.getByIndex(10));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
@@ -146,8 +143,7 @@ public class SwXStyle extends TestCase {
 
         try {
             log.print("Creating a user-defined style... ");
-            XMultiServiceFactory oMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+            XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
             XInterface oInt = (XInterface)
                 oMSF.createInstance("com.sun.star.style.CharacterStyle");
             oMyStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, oInt);

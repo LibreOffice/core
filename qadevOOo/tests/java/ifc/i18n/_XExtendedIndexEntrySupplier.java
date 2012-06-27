@@ -29,7 +29,7 @@ import lib.MultiMethodTest;
 public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
     public XExtendedIndexEntrySupplier oObj;
     protected Locale[] locales = null;
-    protected HashMap algorithms = new HashMap();
+    protected HashMap<Integer, String[]> algorithms = new HashMap<Integer, String[]>();
 
     public void _compareIndexEntry() {
         requiredMethod("getIndexKey()");
@@ -83,7 +83,7 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
             log.println("Language: " + locales[i].Language);
 
             for (int j = 0; j < algorithms.size(); j++) {
-                String[] algs = (String[])algorithms.get(new Integer(j));
+                String[] algs = algorithms.get(new Integer(j));
                 for (int k=0;k<algs.length;k++) {
                 log.println("\t Algorythm :" +
                             algs[k]);
@@ -145,7 +145,7 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
         boolean res = true;
 
         for (int i = 0; i < algorithms.size(); i++) {
-            String[] names = (String[]) algorithms.get(new Integer(i));
+            String[] names = algorithms.get(new Integer(i));
             log.println("loading algorithms for " + locales[i].Country +
                         "," + locales[i].Language);
 

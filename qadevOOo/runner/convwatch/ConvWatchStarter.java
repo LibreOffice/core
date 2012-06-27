@@ -149,9 +149,9 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
      *
      * @return a List of software which must accessable as an external executable
      */
-    protected Object[] mustInstalledSoftware()
+    protected String[] mustInstalledSoftware()
         {
-            ArrayList aList = new ArrayList();
+            ArrayList<String> aList = new ArrayList<String>();
             // Tools from ImageMagick
             if (! OSHelper.isWindows())
             {
@@ -170,7 +170,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                 aList.add( "gswin32c.exe -version" );
             }
 
-            return aList.toArray();
+            return aList.toArray(new String[aList.size()]);
         }
 
 

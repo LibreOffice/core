@@ -101,7 +101,7 @@ public class ChXChartView extends TestCase {
 
         // get the ChartView
         log.println( "getting ChartView" );
-        oModel = (XModel)UnoRuntime.queryInterface(XModel.class, xChartDoc);
+        oModel = UnoRuntime.queryInterface(XModel.class, xChartDoc);
         oObj = (XController)oModel.getCurrentController();
 
         log.println( "creating a new environment for chartdocument object" );
@@ -113,10 +113,8 @@ public class ChXChartView extends TestCase {
 
         tEnv.addObjRelation("Comparer", new Comparator() {
             public int compare(Object o1, Object o2) {
-                XShapeDescriptor descr1 = (XShapeDescriptor)
-                    UnoRuntime.queryInterface(XShapeDescriptor.class, o1);
-                XShapeDescriptor descr2 = (XShapeDescriptor)
-                    UnoRuntime.queryInterface(XShapeDescriptor.class, o2);
+                XShapeDescriptor descr1 = UnoRuntime.queryInterface(XShapeDescriptor.class, o1);
+                XShapeDescriptor descr2 = UnoRuntime.queryInterface(XShapeDescriptor.class, o2);
                 if (descr1 == null || descr2 == null) {
                     return -1;
                 }

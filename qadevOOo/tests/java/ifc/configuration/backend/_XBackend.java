@@ -247,7 +247,7 @@ public class _XBackend extends MultiMethodTest {
         }
 
         if (xPathSubst != null) {
-            return (XStringSubstitution) UnoRuntime.queryInterface(
+            return UnoRuntime.queryInterface(
                            XStringSubstitution.class, xPathSubst);
         } else {
             return null;

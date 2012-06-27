@@ -124,16 +124,14 @@ public class JobExecutor extends TestCase {
         try {
             Object obj = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.configuration.ConfigurationProvider");
-            XMultiServiceFactory xConfigMSF = (XMultiServiceFactory)
-                UnoRuntime.queryInterface(XMultiServiceFactory.class, obj);
+            XMultiServiceFactory xConfigMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, obj);
             PropertyValue[] args = new PropertyValue[1];
             args[0] = new PropertyValue();
             args[0].Name = "nodepath";
             args[0].Value = "org.openoffice.Office.Jobs";
             oRootCfg = xConfigMSF.createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationUpdateAccess", args);
-            XHierarchicalNameAccess xHNA = (XHierarchicalNameAccess)
-                UnoRuntime.queryInterface(XHierarchicalNameAccess.class, oRootCfg);
+            XHierarchicalNameAccess xHNA = UnoRuntime.queryInterface(XHierarchicalNameAccess.class, oRootCfg);
             obj = xHNA.getByHierarchicalName("Jobs");
             jobs = (XNameAccess) UnoRuntime.queryInterface
                 (XNameAccess.class, obj);
@@ -155,8 +153,7 @@ public class JobExecutor extends TestCase {
                 XSingleServiceFactory jobsFac = (XSingleServiceFactory)
                     UnoRuntime.queryInterface(XSingleServiceFactory.class, jobs);
                 Object oNewJob = jobsFac.createInstance();
-                XNameReplace xNewJobNR = (XNameReplace)
-                    UnoRuntime.queryInterface(XNameReplace.class, oNewJob);
+                XNameReplace xNewJobNR = UnoRuntime.queryInterface(XNameReplace.class, oNewJob);
                 xNewJobNR.replaceByName("Service", "test.Job");
                 XNameContainer xJobsNC = (XNameContainer)
                     UnoRuntime.queryInterface(XNameContainer.class, jobs);
@@ -186,8 +183,7 @@ public class JobExecutor extends TestCase {
                     UnoRuntime.queryInterface(XNameContainer.class, events);
                 xEventsNC.insertByName("TestEvent", oNewEvent);
 
-                XChangesBatch xCB = (XChangesBatch)
-                    UnoRuntime.queryInterface(XChangesBatch.class, oRootCfg);
+                XChangesBatch xCB = UnoRuntime.queryInterface(XChangesBatch.class, oRootCfg);
                 xCB.commitChanges();
 
                 try {
@@ -223,7 +219,7 @@ public class JobExecutor extends TestCase {
                 Status.failed("Couldn't create instance"));
         }
 
-        xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class, job);
+        xNamed = UnoRuntime.queryInterface(XNamed.class, job);
         log.println("Count = " + xNamed.getName());
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
@@ -251,7 +247,7 @@ class Job implements
         }
 
         public Type[] getTypes() {
-            Class interfaces[] = getClass().getInterfaces();
+            Class<?> interfaces[] = getClass().getInterfaces();
             Type types[] = new Type[interfaces.length];
             for(int i = 0; i < interfaces.length; ++ i)
                 types[i] = new Type(interfaces[i]);

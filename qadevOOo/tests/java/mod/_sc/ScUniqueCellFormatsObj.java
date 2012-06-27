@@ -72,7 +72,7 @@ public class ScUniqueCellFormatsObj extends TestCase {
                                                     PrintWriter log) {
         log.println("Getting the first sheet");
 
-        XIndexAccess xIA = (XIndexAccess) UnoRuntime.queryInterface(
+        XIndexAccess xIA = UnoRuntime.queryInterface(
                                    XIndexAccess.class, xSheetDoc.getSheets());
 
         try {
@@ -94,7 +94,7 @@ public class ScUniqueCellFormatsObj extends TestCase {
         changeColor("C1:C10", 0, 0, 255);
         changeColor("D1:D10", 0, 255, 0);
 
-        XUniqueCellFormatRangesSupplier xUCRS = (XUniqueCellFormatRangesSupplier) UnoRuntime.queryInterface(
+        XUniqueCellFormatRangesSupplier xUCRS = UnoRuntime.queryInterface(
                                                         XUniqueCellFormatRangesSupplier.class,
                                                         oSheet);
 

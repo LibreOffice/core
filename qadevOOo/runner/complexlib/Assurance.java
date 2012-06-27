@@ -260,9 +260,9 @@ public class Assurance
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
     protected void assureException( final String _message, final Object _object, final String _methodName,
-        final Class[] _argClasses, final Object[] _methodArgs, final Class _expectedExceptionClass )
+        final Class<?>[] _argClasses, final Object[] _methodArgs, final Class<?> _expectedExceptionClass )
     {
-        Class objectClass = _object.getClass();
+        Class<?> objectClass = _object.getClass();
 
         boolean noExceptionAllowed = ( _expectedExceptionClass == null );
 
@@ -296,9 +296,9 @@ public class Assurance
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
     protected void assureException( final String _message, final Object _object, final String _methodName,
-        final Object[] _methodArgs, final Class _expectedExceptionClass )
+        final Object[] _methodArgs, final Class<?> _expectedExceptionClass )
     {
-        Class[] argClasses = new Class[ _methodArgs.length ];
+        Class<?>[] argClasses = new Class[ _methodArgs.length ];
         for ( int i=0; i<_methodArgs.length; ++i )
             argClasses[i] = _methodArgs[i].getClass();
         assureException( _message, _object, _methodName, argClasses, _methodArgs, _expectedExceptionClass );
@@ -313,7 +313,7 @@ public class Assurance
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
     protected void assureException( final Object _object, final String _methodName, final Object[] _methodArgs,
-        final Class _expectedExceptionClass )
+        final Class<?> _expectedExceptionClass )
     {
         assureException(
             "did not catch the expected exception (" +
@@ -330,8 +330,8 @@ public class Assurance
      * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
-    protected void assureException( final Object _object, final String _methodName, final Class[] _argClasses,
-        final Object[] _methodArgs, final Class _expectedExceptionClass )
+    protected void assureException( final Object _object, final String _methodName, final Class<?>[] _argClasses,
+        final Object[] _methodArgs, final Class<?> _expectedExceptionClass )
     {
         assureException(
             "did not catch the expected exception (" +

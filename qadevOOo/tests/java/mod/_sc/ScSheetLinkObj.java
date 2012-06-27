@@ -89,8 +89,7 @@ public class ScSheetLinkObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface(XComponent.class, xSheetDoc);
+        XComponent oComp = UnoRuntime.queryInterface(XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -116,8 +115,7 @@ public class ScSheetLinkObj extends TestCase {
 
         log.println("Getting test object ") ;
         XSpreadsheets oSheets = xSheetDoc.getSheets() ;
-        XIndexAccess oIndexSheets = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
+        XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
@@ -132,8 +130,7 @@ public class ScSheetLinkObj extends TestCase {
             throw new StatusException("Couldn't get a spreadsheet", e);
         }
 
-        XSheetLinkable SL = (XSheetLinkable)
-            UnoRuntime.queryInterface(XSheetLinkable.class, oSheet);
+        XSheetLinkable SL = UnoRuntime.queryInterface(XSheetLinkable.class, oSheet);
 
         // creating link. Doesn't matter that it refers to unexistant object.
         // this is for proper work of XAccess tests.

@@ -83,8 +83,7 @@ public class ScDrawPagesObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -109,8 +108,7 @@ public class ScDrawPagesObj extends TestCase {
 
         // get the drawpage of drawing here
         log.println( "getting Drawpages" );
-        XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, xSheetDoc);
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xSheetDoc);
         oDP = (XDrawPages) oDPS.getDrawPages();
         oDP.insertNewByIndex(1);
         oDP.insertNewByIndex(2);

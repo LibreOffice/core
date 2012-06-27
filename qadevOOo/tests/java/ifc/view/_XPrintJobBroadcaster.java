@@ -87,7 +87,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
          */
         public MyPrintJobListener(Object printable, String printFileName) {
             this.printFileName = printFileName;
-            xPrintable = (XPrintable)UnoRuntime.queryInterface(XPrintable.class, printable);
+            xPrintable = UnoRuntime.queryInterface(XPrintable.class, printable);
             printProps = new PropertyValue[2];
             printProps[0] = new PropertyValue();
             printProps[0].Name = "FileName";

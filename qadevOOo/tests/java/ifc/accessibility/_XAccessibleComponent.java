@@ -51,7 +51,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
     public XAccessibleComponent oObj = null;
     private Rectangle bounds = null;
-    private ArrayList KnownBounds = new ArrayList();
+    private ArrayList<Rectangle> KnownBounds = new ArrayList<Rectangle>();
 
 
     /**
@@ -242,7 +242,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
                             util.AccessibilityTools.accessibleToString(
                                     children[i]));
 
-                XAccessibleContext xAc = (XAccessibleContext) UnoRuntime.queryInterface(
+                XAccessibleContext xAc = UnoRuntime.queryInterface(
                                                  XAccessibleContext.class,
                                                  children[i]);
 
@@ -304,10 +304,10 @@ public class _XAccessibleComponent extends MultiMethodTest {
                         result &= true;
                     }
                 } else {
-                    XAccessible xAccCh = (XAccessible) UnoRuntime.queryInterface(
+                    XAccessible xAccCh = UnoRuntime.queryInterface(
                                                  XAccessible.class,
                                                  children[i]);
-                    XAccessibleContext xAccC = (XAccessibleContext) UnoRuntime.queryInterface(
+                    XAccessibleContext xAccC = UnoRuntime.queryInterface(
                                                        XAccessibleContext.class,
                                                        children[i]);
                     log.println("Child found at point (" + (chBnd.X + curX) +
@@ -378,7 +378,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
                                 ") - OK");
                     result &= true;
                 } else {
-                    XAccessible xAccCh = (XAccessible) UnoRuntime.queryInterface(
+                    XAccessible xAccCh = UnoRuntime.queryInterface(
                                                  XAccessible.class,
                                                  children[i]);
                     boolean res = util.AccessibilityTools.equals(xAccCh, xAcc);
@@ -518,7 +518,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
      * such children were not found or some error occurred.
      */
     private XAccessibleComponent[] getChildrenComponents() {
-        XAccessible xAcc = (XAccessible) UnoRuntime.queryInterface(
+        XAccessible xAcc = UnoRuntime.queryInterface(
                                    XAccessible.class, oObj);
 
         if (xAcc == null) {
@@ -535,13 +535,13 @@ public class _XAccessibleComponent extends MultiMethodTest {
             cnt = 50;
         }
 
-        ArrayList childComp = new ArrayList();
+        ArrayList<XAccessibleComponent> childComp = new ArrayList<XAccessibleComponent>();
 
         for (int i = 0; i < cnt; i++) {
             try {
                 XAccessible child = xAccCon.getAccessibleChild(i);
                 XAccessibleContext xAccConCh = child.getAccessibleContext();
-                XAccessibleComponent xChAccComp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                XAccessibleComponent xChAccComp = UnoRuntime.queryInterface(
                                                           XAccessibleComponent.class,
                                                           xAccConCh);
 
@@ -552,7 +552,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
             }
         }
 
-        return (XAccessibleComponent[]) childComp.toArray(
+        return childComp.toArray(
                          new XAccessibleComponent[childComp.size()]);
     }
 
@@ -564,7 +564,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
      * has no parent or some errors occurred.
      */
     private XAccessibleComponent getParentComponent() {
-        XAccessible xAcc = (XAccessible) UnoRuntime.queryInterface(
+        XAccessible xAcc = UnoRuntime.queryInterface(
                                    XAccessible.class, oObj);
 
         if (xAcc == null) {
@@ -583,7 +583,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
         }
 
         XAccessibleContext xAccConPar = xAccPar.getAccessibleContext();
-        XAccessibleComponent parent = (XAccessibleComponent) UnoRuntime.queryInterface(
+        XAccessibleComponent parent = UnoRuntime.queryInterface(
                                               XAccessibleComponent.class,
                                               xAccConPar);
 
@@ -628,7 +628,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
         int elements = KnownBounds.size();
         boolean Covered = false;
         for (int k=0;k<elements;k++) {
-            Rectangle known = (Rectangle) KnownBounds.get(k);
+            Rectangle known = KnownBounds.get(k);
             Covered = (known.X < p.X);
             Covered &= (known.Y < p.Y);
             Covered &= (p.Y < known.Y+known.Height);

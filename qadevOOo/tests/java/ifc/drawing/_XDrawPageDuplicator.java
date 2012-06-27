@@ -56,8 +56,7 @@ public class _XDrawPageDuplicator extends MultiMethodTest {
     public void _duplicate(){
         boolean result = false;
         XInterface testobj = tEnv.getTestObject();
-        XDrawPagesSupplier PS = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, testobj);
+        XDrawPagesSupplier PS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, testobj);
         XDrawPages DPs = PS.getDrawPages();
         XDrawPage DP = null;
         try {

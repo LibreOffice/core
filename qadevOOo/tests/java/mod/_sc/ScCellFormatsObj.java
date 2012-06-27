@@ -77,8 +77,7 @@ public class ScCellFormatsObj extends TestCase {
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
+        XComponent oComp = UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
         util.DesktopTools.closeDoc(oComp);
     }
 
@@ -100,8 +99,7 @@ public class ScCellFormatsObj extends TestCase {
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
-        XIndexAccess oIndexAccess = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
+        XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
@@ -117,8 +115,7 @@ public class ScCellFormatsObj extends TestCase {
         }
 
         log.println("getting CellFormats");
-        XCellFormatRangesSupplier xCFRS = (XCellFormatRangesSupplier)
-            UnoRuntime.queryInterface(XCellFormatRangesSupplier.class, oSheet);
+        XCellFormatRangesSupplier xCFRS = UnoRuntime.queryInterface(XCellFormatRangesSupplier.class, oSheet);
         XIndexAccess formats = xCFRS.getCellFormatRanges();
 
         oObj = formats;

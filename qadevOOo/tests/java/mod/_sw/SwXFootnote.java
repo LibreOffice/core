@@ -107,12 +107,11 @@ public class SwXFootnote extends TestCase {
 
         log.println( "Creating a test environment" );
         // get a soffice factory object
-        XMultiServiceFactory msf = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
+        XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         log.println("creating a footnote");
         Object instance = null;
         try {
-            oFootnote = (XFootnote) UnoRuntime.queryInterface(XFootnote.class,
+            oFootnote = UnoRuntime.queryInterface(XFootnote.class,
                     msf.createInstance("com.sun.star.text.Footnote"));
             instance = msf.createInstance("com.sun.star.text.Footnote");
         } catch (com.sun.star.uno.Exception e) {
@@ -133,8 +132,7 @@ public class SwXFootnote extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oFootnote);
 
-        tEnv.addObjRelation("CONTENT", (XTextContent)
-                        UnoRuntime.queryInterface(XTextContent.class,instance));
+        tEnv.addObjRelation("CONTENT", UnoRuntime.queryInterface(XTextContent.class,instance));
         tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
 
         log.println( "adding InstDescriptor object" );
