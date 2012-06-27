@@ -46,7 +46,7 @@ copy-stuff:
 #
 # The cppunit library
 #
-	$(call COPY,$(OUTDIR)/lib/libcppunit-1.12.so)
+	$(call COPY,$(OUTDIR)/lib/libcppunit-1.13.so)
 #
 # The tests we run here
 #

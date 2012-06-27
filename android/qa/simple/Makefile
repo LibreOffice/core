@@ -44,7 +44,7 @@ copy-stuff:
 	$(call COPY,$(OUTDIR)/bin/cppunit/cppunittester,libcppunittester.so)
 #
 # The cppunit library
-	$(call COPY,$(OUTDIR)/lib/libcppunit-1.12.so)
+	$(call COPY,$(OUTDIR)/lib/libcppunit-1.13.so)
 #
 # cppunit "plug-ins", first ones from sal
 #

@@ -179,7 +179,7 @@ File gid_Test_File_Lib_Cppunit
     Styles = (PACKED);
     Dir = gid_Test_Brand_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT3(libcppunit-1.12,UNXSUFFIX,.1));
+    Name = STRING(CONCAT3(libcppunit-1.13,UNXSUFFIX,.0));
   #endif
 End
 

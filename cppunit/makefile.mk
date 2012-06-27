@@ -29,36 +29,10 @@ TARGET = cppunit
 
 .INCLUDE: settings.mk
 
-TARFILE_NAME = cppunit-1.12.1
-TARFILE_MD5=bd30e9cf5523cdfc019b94f5e1d7fd19
-    # from <https://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/
-    #  cppunit-1.12.1.tar.gz/download>
+TARFILE_NAME=cppunit-1.13.0
+TARFILE_MD5=4db5c308c80d04ad8b6839aea5224dea
 
-PATCH_FILES = solarisfinite.patch warnings.patch windows.patch ldflags.patch aix.patch avoid-synthetised-destructor.patch ios.patch cppunit-1.12.1-unused-parameters.patch cppunit-1.12.1-warnings.patch
-    # solarisfinite.patch: see <https://sourceforge.net/tracker/?func=detail&
-    #  aid=2912590&group_id=11795&atid=311795>; upstreamed as
-    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
-    #  a76125c7dd07f79c82f3fed9be5c0a5627089e00>
-    # warnings.patch: see <https://sourceforge.net/tracker/?func=detail&
-    #  aid=2912630&group_id=11795&atid=311795>; upstreamed as
-    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
-    #  9cfcff6c2195ae25be4022654990c9eea6fbb2f8>
-    # windows.patch: TOOD
-    # ldflags.patch: upstreamed as <http://cgit.freedesktop.org/libreoffice/
-    #  cppunit/commit/?id=3acfc24e54a9f6d1b2121dda1942e882549870e4>
-    # aix.patch: TODO
-    # avoid-synthetised-destructor.patch: upstreamed as
-    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
-    #  05b202fc3edce92d8343cb0964d9d15134cd8f1d>
-    # ios.patch: TODO
-    # cppunit-1.12.1-unused-parameters.patch: help static analysis tools (see
-    #  SAL_UNUSED_PARAMETER in sal/types.h); upstreamed as
-    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
-    #  7a09bf3a88e99d85c4dec2ad296309dbec2987c3>
-    # cppunit-1.12.1-warnings.patch: work around additional warnings (found when
-    #  converting module unotest to gbuild); upstreamed as
-    #  <http://cgit.freedesktop.org/libreoffice/cppunit/commit/?id=
-    #  0f75eaa0b8de3d68e8b5b5447fbc009531183cb5>
+PATCH_FILES =
 
 .IF "$(OS)" == "ANDROID"
 PATCH_FILES += android.patch
@@ -119,9 +93,9 @@ OUTDIR2INC = ooo-install/include/cppunit
 
 # WTF? A *Cygwin* DLL?
 #OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
-#    ooo-install/bin/cygcppunit-1-12-1.dll
+#    ooo-install/bin/cygcppunit-1-13-0.dll
 OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
-    ooo-install/bin/libcppunit-1-12-1.dll
+    ooo-install/bin/libcppunit-1-13-0.dll
 OUT2LIB = ooo-install/lib/libcppunit.dll.a
 
 .INCLUDE: set_ext.mk
@@ -187,20 +161,20 @@ OUTDIR2INC = ooo-install/include/cppunit ooo-install/lib/pkgconfig
 
 OUT2BIN = ooo-install/bin/DllPlugInTester
 .IF "$(OS)" == "MACOSX"
-OUT2LIB = ooo-install/lib/libcppunit-1.12.1.dylib
+OUT2LIB = ooo-install/lib/libcppunit-1.13.0.dylib
 EXTRPATH = NONE
 PACKAGE_DIR = \
     $(MISC)/@.__________________________________________________$(EXTRPATH)
 .ELIF "$(OS)" == "AIX"
-OUT2LIB = ooo-install/lib/libcppunit-1.12.a
+OUT2LIB = ooo-install/lib/libcppunit-1.13.a
 .ELIF "$(OS)" == "OPENBSD"
-OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1.0
+OUT2LIB = ooo-install/lib/libcppunit-1.13.so.0.0
 .ELIF "$(OS)" == "IOS"
 OUT2LIB = ooo-install/lib/libcppunit.a
 .ELIF "$(OS)" == "ANDROID"
-OUT2LIB = ooo-install/lib/libcppunit-1.12.so
+OUT2LIB = ooo-install/lib/libcppunit-1.13.so
 .ELSE
-OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1
+OUT2LIB = ooo-install/lib/libcppunit-1.13.so.0
 .END
 
 .INCLUDE: set_ext.mk
