@@ -59,7 +59,6 @@ public class AccessibleStatusBarItem {
 
     /**
     * Sleeps for a certain time.
-    * @param Thread is sleeping for this time in milliseconds.
     */
     private void shortWait() {
         try {

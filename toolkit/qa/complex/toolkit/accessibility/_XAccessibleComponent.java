@@ -18,15 +18,16 @@
 
 package complex.toolkit.accessibility;
 
+import java.util.ArrayList;
+
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.uno.XInterface;
-import java.util.Vector;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleComponent</code>
@@ -418,7 +419,7 @@ public class _XAccessibleComponent {
             cnt = 50;
         }
 
-        Vector childComp = new Vector();
+        ArrayList<XAccessibleComponent> childComp = new ArrayList<XAccessibleComponent>();
         for (int i = 0; i < cnt; i++) {
             try {
                 XAccessible child = xAccCon.getAccessibleChild(i);
@@ -430,8 +431,7 @@ public class _XAccessibleComponent {
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {}
         }
 
-        return (XAccessibleComponent[]) childComp.toArray
-            (new XAccessibleComponent[childComp.size()]);
+        return childComp.toArray(new XAccessibleComponent[childComp.size()]);
     }
 
     /**

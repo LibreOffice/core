@@ -365,9 +365,9 @@ public class GridControl
             for ( boolean ascending : new boolean[] { true, false } )
             {
                 m_dataModel.sortByColumn( colIndex, ascending );
-                Pair currentSortOrder = m_dataModel.getCurrentSortOrder();
-                assertEquals( "invalid current sort column (column " + colIndex + ")", ((Integer)currentSortOrder.First).intValue(), colIndex );
-                assertEquals( "invalid current sort direction", ((Boolean)currentSortOrder.Second).booleanValue(), ascending );
+                Pair<Integer,Boolean> currentSortOrder = m_dataModel.getCurrentSortOrder();
+                assertEquals( "invalid current sort column (column " + colIndex + ")", currentSortOrder.First.intValue(), colIndex );
+                assertEquals( "invalid current sort direction", currentSortOrder.Second.booleanValue(), ascending );
 
                 /*for ( int i=0; i<rowCount; ++i )
                 {
@@ -613,7 +613,7 @@ public class GridControl
 
         private final XComponent    m_component;
         private boolean             m_isDisposed;
-    };
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final class ColumnModelListener implements XContainerListener
@@ -639,7 +639,6 @@ public class GridControl
 
         public void disposing( EventObject eo )
         {
-            m_isDisposed = true;
         }
 
         private List< ContainerEvent > assertExclusiveInsertionEvents()
@@ -668,13 +667,10 @@ public class GridControl
         private List< ContainerEvent > getInsertionEvents() { return m_insertionEvents; }
         private List< ContainerEvent > getRemovalEvents() { return m_removalEvents; }
 
-        final boolean isDisposed() { return m_isDisposed; }
-
         private List< ContainerEvent > m_insertionEvents = new ArrayList< ContainerEvent >();
         private List< ContainerEvent > m_removalEvents = new ArrayList< ContainerEvent >();
         private List< ContainerEvent > m_replacementEvents = new ArrayList< ContainerEvent >();
-        private boolean m_isDisposed = false;
-    };
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final OfficeConnection m_connection = new OfficeConnection();

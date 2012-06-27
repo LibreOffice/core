@@ -101,7 +101,6 @@ public class _XAccessibleEventBroadcaster {
     /**
      * c'tor
      * @param object
-     * @param eventMessage
      * @param window
      */
     public _XAccessibleEventBroadcaster(XInterface object, XWindow window) {

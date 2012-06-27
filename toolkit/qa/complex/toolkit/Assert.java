@@ -46,9 +46,9 @@ public class Assert
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
     public static void assertException( final String i_message, final Object i_object, final String i_methodName,
-        final Class[] i_argClasses, final Object[] i_methodArgs, final Class i_expectedExceptionClass )
+        final Class<?>[] i_argClasses, final Object[] i_methodArgs, final Class<?> i_expectedExceptionClass )
     {
-        Class objectClass = i_object.getClass();
+        Class<?> objectClass = i_object.getClass();
 
         boolean noExceptionAllowed = ( i_expectedExceptionClass == null );
 
@@ -88,11 +88,11 @@ public class Assert
     /**
      * retrieves a method, given by name and parameter signature, from the given class
      *
-     * The method does somewhat more than simply calling {@link Class.getMethod}. In particular, it recognizes
+     * The method does somewhat more than simply calling {@link Class#getMethod}. In particular, it recognizes
      * primitiive parameter types, and attempts to find a method taking the given primitive type, instead of the
      * type represented by the parameter class.
      *
-     * For instance, if you have a method <code>foo( int )</code>, {@link Class.getMethod} would not return this
+     * For instance, if you have a method <code>foo( int )</code>, {@link Class#getMethod} would not return this
      * method when you pass <code>Integer.class</code>. <code>impl_getMethod</code> will recognize this, and
      * properly retrieve the method.
      *
@@ -100,12 +100,12 @@ public class Assert
      * and non-primitive types. That is, a method like <code>foo( int, Integer, int )</code> is likely to not be
      * found.
      *
-     * @param i_obbjectClass
+     * @param i_objectClass
      * @param i_methodName
      * @param i_argClasses
      * @return
      */
-    private static Method impl_getMethod( final Class i_objectClass, final String i_methodName, final Class[] i_argClasses ) throws NoSuchMethodException
+    private static Method impl_getMethod( final Class<?> i_objectClass, final String i_methodName, final Class<?>[] i_argClasses ) throws NoSuchMethodException
     {
         try
         {
@@ -117,7 +117,7 @@ public class Assert
 
         int substitutedTypes = 0;
         int substitutedTypesLastRound = 0;
-        final Class[][] substitutionTable = new Class[][] {
+        final Class<?>[][] substitutionTable = new Class[][] {
             new Class[] { Long.class, long.class },
             new Class[] { Integer.class, int.class },
             new Class[] { Short.class, short.class },
@@ -129,7 +129,7 @@ public class Assert
         do
         {
             substitutedTypes = 0;
-            final Class[] argClasses = new Class[ i_argClasses.length ];
+            final Class<?>[] argClasses = new Class[ i_argClasses.length ];
             for ( int i=0; i < argClasses.length; ++i )
             {
                 argClasses[i] = i_argClasses[i];
@@ -172,9 +172,9 @@ public class Assert
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
     public static void assertException( final String i_message, final Object i_object, final String i_methodName,
-        final Object[] i_methodArgs, final Class i_expectedExceptionClass )
+        final Object[] i_methodArgs, final Class<?> i_expectedExceptionClass )
     {
-        Class[] argClasses = new Class[ i_methodArgs.length ];
+        Class<?>[] argClasses = new Class[ i_methodArgs.length ];
         for ( int i=0; i<i_methodArgs.length; ++i )
             argClasses[i] = i_methodArgs[i].getClass();
         assertException( i_message, i_object, i_methodName, argClasses, i_methodArgs, i_expectedExceptionClass );
@@ -189,7 +189,7 @@ public class Assert
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
     public static void assertException( final Object i_object, final String i_methodName, final Object[] i_methodArgs,
-        final Class i_expectedExceptionClass )
+        final Class<?> i_expectedExceptionClass )
     {
         assertException(
             "did not catch the expected exception (" +
@@ -206,8 +206,8 @@ public class Assert
      * @param i_expectedExceptionClass is the class of the exception to be caught. If this is null,
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
-    public static void assertException( final Object i_object, final String i_methodName, final Class[] i_argClasses,
-        final Object[] i_methodArgs, final Class i_expectedExceptionClass )
+    public static void assertException( final Object i_object, final String i_methodName, final Class<?>[] i_argClasses,
+        final Object[] i_methodArgs, final Class<?> i_expectedExceptionClass )
     {
         assertException(
             "did not catch the expected exception (" +
@@ -217,8 +217,8 @@ public class Assert
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public static void assertException( Object i_object, Class _unoInterfaceClass, String i_methodName, Object[] i_methodArgs,
-        Class i_expectedExceptionClass )
+    public static void assertException( Object i_object, Class<?> _unoInterfaceClass, String i_methodName, Object[] i_methodArgs,
+        Class<?> i_expectedExceptionClass )
     {
         assertException( UnoRuntime.queryInterface( _unoInterfaceClass, i_object ), i_methodName,
             i_methodArgs, i_expectedExceptionClass );
