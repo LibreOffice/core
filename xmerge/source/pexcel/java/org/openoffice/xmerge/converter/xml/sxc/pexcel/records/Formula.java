@@ -82,7 +82,7 @@ public class Formula extends CellValue implements OfficeConstants {
             num = EndianConverter.writeDouble(toExcelSerialTime(fmt.getValue()));
         } else if(category.equalsIgnoreCase(CELLTYPE_PERCENT)) {
             Debug.log(Debug.TRACE,"Percent Formula");
-            double percent = (double) Double.parseDouble(fmt.getValue());
+            double percent = Double.parseDouble(fmt.getValue());
             num = EndianConverter.writeDouble(percent);
         } else if(category.equalsIgnoreCase(CELLTYPE_CURRENCY)) {
             Debug.log(Debug.TRACE,"Currency Formula");
@@ -98,7 +98,7 @@ public class Formula extends CellValue implements OfficeConstants {
             num[7]=(byte)0xFF;
         } else {
             Debug.log(Debug.TRACE,"Float Formula");
-            double cellLong = (double) Double.parseDouble(fmt.getValue());
+            double cellLong = Double.parseDouble(fmt.getValue());
             num = EndianConverter.writeDouble(cellLong);
         }
     }

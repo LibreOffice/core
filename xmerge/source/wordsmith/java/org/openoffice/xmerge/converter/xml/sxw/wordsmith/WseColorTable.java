@@ -67,15 +67,15 @@ class WseColorTable extends Wse {
 
         i += 2;  // Skip leading "64" and table length field.
         for (int k = 0; k < 16; k++) {
-            fgColors[k] = new Color(((int)dataArray[i+1]) & 0xFF,
-                                    ((int)dataArray[i+2]) & 0xFF,
-                                    ((int)dataArray[i+3]) & 0xFF);
+            fgColors[k] = new Color(dataArray[i+1] & 0xFF,
+                                    dataArray[i+2] & 0xFF,
+                                    dataArray[i+3] & 0xFF);
             i += 4;
         }
         for (int k = 0; k < 16; k++) {
-            bgColors[k] = new Color(((int)dataArray[i+1]) & 0xFF,
-                                    ((int)dataArray[i+2]) & 0xFF,
-                                    ((int)dataArray[i+3]) & 0xFF);
+            bgColors[k] = new Color(dataArray[i+1] & 0xFF,
+                                    dataArray[i+2] & 0xFF,
+                                    dataArray[i+3] & 0xFF);
             i += 4;
        }
 
@@ -117,7 +117,7 @@ class WseColorTable extends Wse {
                 return false;
             int len = dataArray[startIndex + 1];
             len &= 0xFF;  // eliminate problems with sign-extension
-            int temp = dataArray[startIndex + (int)len + 2];  // probe end of table
+            int temp = dataArray[startIndex + len + 2];  // probe end of table
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }

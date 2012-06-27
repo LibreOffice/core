@@ -70,14 +70,14 @@ public class FormulaHelper {
      */
     public byte[] convertCalcToPXL(String formula) throws UnsupportedFunctionException, FormulaParsingException {
 
-        ArrayList parseTokens = parser.parse(formula);
-        ArrayList rpnTokens = compiler.infix2RPN(parseTokens);
+        ArrayList<Token> parseTokens = parser.parse(formula);
+        ArrayList<Token> rpnTokens = compiler.infix2RPN(parseTokens);
 
         ByteArrayOutputStream bytes = null;
         try {
             bytes = new ByteArrayOutputStream();
-            for (Iterator e = rpnTokens.iterator(); e.hasNext();) {
-                Token t = (Token)e.next();
+            for (Iterator<Token> e = rpnTokens.iterator(); e.hasNext();) {
+                Token t = e.next();
                 bytes.write(encoder.getByte(t));
             }
         } catch (IOException e) {
@@ -93,12 +93,12 @@ public class FormulaHelper {
      */
     public String convertPXLToCalc(byte[] formula) {
 
-        ArrayList parseTokens = decoder.getTokenVector(formula);
-        ArrayList infixTokens = compiler.RPN2Infix(parseTokens);
+        ArrayList<Token> parseTokens = decoder.getTokenVector(formula);
+        ArrayList<Token> infixTokens = compiler.RPN2Infix(parseTokens);
 
         StringBuffer buff = new StringBuffer();
-        for (Iterator e = infixTokens.iterator();e.hasNext();) {
-            Token t = (Token)e.next();
+        for (Iterator<Token> e = infixTokens.iterator();e.hasNext();) {
+            Token t = e.next();
             buff.append(t.toString());
             // If we are parsing a Name definition we need to know if it is of
             // type range or expression

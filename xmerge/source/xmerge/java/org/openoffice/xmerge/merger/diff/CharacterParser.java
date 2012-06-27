@@ -46,7 +46,7 @@ public class CharacterParser {
 
     private TextNodeIterator textNodes;
     private int currentPosition = 0;
-    private List nodeList_ = null;
+    private List<TextNodeEntry> nodeList_ = null;
     private char[] charArray;
 
 
@@ -57,7 +57,7 @@ public class CharacterParser {
      */
     public CharacterParser(Node node) {
         textNodes = new TextNodeIterator(node);
-        nodeList_ = new ArrayList();
+        nodeList_ = new ArrayList<TextNodeEntry>();
 
         parseNodes();
     }
@@ -68,7 +68,7 @@ public class CharacterParser {
      *
      *  @return  The <code>Node</code> pointer with the given character position.
      */
-    public List getNodeList() {
+    public List<TextNodeEntry> getNodeList() {
         // will go through the nodeList to find the corresponding node
         return  nodeList_;
     }

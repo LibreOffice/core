@@ -80,9 +80,9 @@ public class TokenDecoder {
      * @param formula A Pocket Excel Formula byte[]
      * @return A <code>Vector</code> of deoded <code>Token</code>
      */
-    public ArrayList getTokenVector(byte[] formula) {
+    public ArrayList<Token> getTokenVector(byte[] formula) {
 
-        ArrayList v = new ArrayList();
+        ArrayList<Token> v = new ArrayList<Token>();
 
         ByteArrayInputStream bis = new ByteArrayInputStream(formula);
         int b = 0 ;
@@ -159,7 +159,7 @@ public class TokenDecoder {
         return v;
     }
 
-    private static Object last(ArrayList list)
+    private static Object last(ArrayList<Token> list)
     {
         return list.get(list.size() - 1);
     }
@@ -184,8 +184,8 @@ public class TokenDecoder {
      */
     private Token readStringToken(ByteArrayInputStream bis) {
 
-        int len = ((int)bis.read())*2;
-        int options = (int)bis.read();
+        int len = bis.read()*2;
+        int options = bis.read();
         Debug.log(Debug.TRACE,"String length is " + len + " and Options Flag is " + options);
         byte [] stringBytes = new byte[len];
         int numRead =0;
@@ -219,14 +219,14 @@ public class TokenDecoder {
         buffer[1] = (byte) bis.read();
         int nameIndex = EndianConverter.readShort(buffer);
         bis.skip(12);       // the next 12 bytes are unused
-        Iterator e = wb.getDefinedNames();
+        Iterator<DefinedName> e = wb.getDefinedNames();
         int i = 1;
         while(i<nameIndex) {
             e.next();
             i++;
         }
         Debug.log(Debug.TRACE,"Name index is " + nameIndex);
-        DefinedName dn = (DefinedName)e.next();
+        DefinedName dn = e.next();
         Debug.log(Debug.TRACE,"DefinedName is " + dn.getName());
         return (tf.getOperandToken(dn.getName(), "NAME"));
     }

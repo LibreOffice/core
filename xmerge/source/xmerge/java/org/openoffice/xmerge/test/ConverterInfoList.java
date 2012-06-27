@@ -35,7 +35,7 @@ public class ConverterInfoList {
 
     private static String  defaultPropsFile = "ConverterInfoList.properties";
 
-    private ArrayList  jars;
+    private ArrayList<String>  jars;
     private Properties props            = null;
 
 
@@ -59,7 +59,7 @@ public class ConverterInfoList {
     */
     public ConverterInfoList(String propsFile) throws IOException {
 
-        Class c                 = this.getClass();
+        Class<? extends ConverterInfoList> c                 = this.getClass();
         InputStream is          = c.getResourceAsStream(propsFile);
         BufferedInputStream bis = new BufferedInputStream(is);
         props                   = new Properties();
@@ -68,7 +68,7 @@ public class ConverterInfoList {
 
         int i              = 1;
         String jarFileName = new String();
-        jars               = new ArrayList();
+        jars               = new ArrayList<String>();
 
         while ((jarFileName = props.getProperty("jarname" + i)) != null) {
             jars.add(jarFileName);
@@ -88,7 +88,7 @@ public class ConverterInfoList {
     *           <code>String</code> describes a plug-in to be
     *           loaded into the registry.
     */
-    public Iterator getJarFileEnum() {
+    public Iterator<String> getJarFileEnum() {
 
         return jars.iterator();
     }

@@ -54,7 +54,7 @@ public class CharArrayLCSAlgorithm {
         // in those 2 sequences
         diffTable = createDiffTable(orgSeq, modSeq);
 
-        ArrayList diffResult = new ArrayList();
+        ArrayList<Difference> diffResult = new ArrayList<Difference>();
 
         generateResult(diffTable, orgSeqlen, modSeqlen, diffResult);
 
@@ -154,7 +154,7 @@ public class CharArrayLCSAlgorithm {
      *                       and positions filled in.
      */
     private void generateResult(int[][] diffTable,
-                                int i, int j, ArrayList diffVector) {
+                                int i, int j, ArrayList<Difference> diffVector) {
 
         // handle the first element
         if (i == 0 || j == 0) {

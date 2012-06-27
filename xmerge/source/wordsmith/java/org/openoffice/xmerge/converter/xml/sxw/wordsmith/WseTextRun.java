@@ -282,7 +282,7 @@ class WseTextRun extends Wse {
         | TextStyle.SUBSCRIPT;
 
         TextStyle x = new TextStyle(null, "text", null, mask,
-          mod, (int)(fontSize/2), fontName, sc);
+          mod, (fontSize/2), fontName, sc);
 
         // If color table is available, set the colors.
         if (ct != null) {

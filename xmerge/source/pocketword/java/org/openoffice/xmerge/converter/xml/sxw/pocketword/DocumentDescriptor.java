@@ -46,10 +46,10 @@ class DocumentDescriptor {
     private short length = 0;
     private short numLines = 0;
 
-    private ArrayList paragraphDesc = null;
+    private ArrayList<ParagraphDescriptor> paragraphDesc = null;
 
     DocumentDescriptor() {
-        paragraphDesc = new ArrayList(0);
+        paragraphDesc = new ArrayList<ParagraphDescriptor>(0);
     }
 
 
@@ -98,7 +98,7 @@ class DocumentDescriptor {
             descStream.write(EndianConverter.writeShort(numParagraphs));
 
             descStream.write(EndianConverter.writeShort((short)0));
-            descStream.write(EndianConverter.writeShort((short)length));
+            descStream.write(EndianConverter.writeShort(length));
             descStream.write(EndianConverter.writeShort((short)0));
 
             descStream.write(EndianConverter.writeShort(numLines));
@@ -106,7 +106,7 @@ class DocumentDescriptor {
                                           0x00, 0x00, 0x00, 0x00 } );
 
             for (int i = 0; i < paragraphDesc.size(); i++) {
-                ParagraphDescriptor pd = (ParagraphDescriptor)paragraphDesc.get(i);
+                ParagraphDescriptor pd = paragraphDesc.get(i);
 
                 descStream.write(pd.getDescriptor());
             }

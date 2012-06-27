@@ -162,7 +162,7 @@ public class EndianConverter {
                         ((long)(value[3]&0xFF)  << 24)  +
                         ((long)(value[2]&0xFF)  << 16)  +
                         ((long)(value[1]&0xFF)  << 8)   +
-                         (long)(value[0]&0xFF));
+                         (value[0]&0xFF));
 
         return Double.longBitsToDouble(lvalue);
     }

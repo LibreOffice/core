@@ -114,7 +114,7 @@ final class DocEncoder implements DocConstants {
         byte recBytes[] = new byte[TEXT_RECORD_SIZE];
         int pos = 0;
 
-        List textRecords = new ArrayList(textRecCount + 1);
+        List<Record> textRecords = new ArrayList<Record>(textRecCount + 1);
 
         // split textBytes into chunks of Record objects
         // and store in textRecords object.
@@ -147,7 +147,7 @@ final class DocEncoder implements DocConstants {
 
         for (int i = 1; i < allRecords.length; i++) {
 
-            allRecords[i] = (Record) textRecords.get(i-1);
+            allRecords[i] = textRecords.get(i-1);
         }
 
         return allRecords;

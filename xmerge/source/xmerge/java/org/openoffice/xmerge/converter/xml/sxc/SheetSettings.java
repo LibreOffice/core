@@ -251,7 +251,7 @@ public class SheetSettings implements OfficeConstants {
     public void writeNode(org.w3c.dom.Document settings, Node root) {
 
         this.settings = settings;
-        Element configItemMapEntry      = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_ENTRY);
+        Element configItemMapEntry      = settings.createElement(TAG_CONFIG_ITEM_MAP_ENTRY);
         configItemMapEntry.setAttribute(ATTRIBUTE_CONFIG_NAME, getSheetName());
         addConfigItem(configItemMapEntry, "CursorPositionX", "int", Integer.toString(cursorX));
         addConfigItem(configItemMapEntry, "CursorPositionY", "int", Integer.toString(cursorY));

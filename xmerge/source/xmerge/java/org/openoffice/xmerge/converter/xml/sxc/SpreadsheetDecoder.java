@@ -49,7 +49,7 @@ public abstract class SpreadsheetDecoder {
      *
      *  @return  The Enumeration
      */
-    public abstract Iterator getNameDefinitions();
+    public abstract Iterator<NameDefinition> getNameDefinitions();
 
     /**
      *  Returns an <code>BookSettings</code>
@@ -63,7 +63,7 @@ public abstract class SpreadsheetDecoder {
      *
      *  @return  The Enumeration
      */
-    public abstract Iterator getColumnRowInfos();
+    public abstract Iterator<ColumnRowInfo> getColumnRowInfos();
 
     /**
      *  Returns the number of populated rows in the current WorkSheet.

@@ -30,6 +30,7 @@ import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConverterFactory;
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.DocumentMerger;
+import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 import org.openoffice.xmerge.util.registry.ConverterInfoReader;
 
@@ -51,7 +52,7 @@ public final class Driver {
     private String mergeFile = null;
 
     /**  Command-line parmeter. */
-    private ArrayList deviceFiles = new ArrayList();
+    private ArrayList<String> deviceFiles = new ArrayList<String>();
 
     /**  Command-line parmeter shortcuts. */
     private String mimeTypes[] = {
@@ -78,12 +79,12 @@ public final class Driver {
                 " property file");
         }
 
-        Iterator jarInfoEnumeration;
+        Iterator<ConverterInfo> jarInfoEnumeration;
         ConverterInfoReader cir;
 
-        Iterator jarFileEnum = cil.getJarFileEnum();
+        Iterator<String> jarFileEnum = cil.getJarFileEnum();
         while (jarFileEnum.hasNext()) {
-            String jarName = (String) jarFileEnum.next();
+            String jarName = jarFileEnum.next();
             try {
                 cir = new ConverterInfoReader(jarName, false);
                 jarInfoEnumeration = cir.getConverterInfoEnumeration();
@@ -134,9 +135,9 @@ public final class Driver {
         }
 
         try {
-            Iterator dfEnum = deviceFiles.iterator();
+            Iterator<String> dfEnum = deviceFiles.iterator();
             while (dfEnum.hasNext()) {
-                processFile = (String)dfEnum.next();
+                processFile = dfEnum.next();
                 File f = new File(processFile);
 
                 // Make sure the input file actually exists before using it
@@ -165,7 +166,7 @@ public final class Driver {
         if (dataOut != null ) {
 
             if (mergeFile == null) {
-                Iterator docEnum = dataOut.getDocumentEnumeration();
+                Iterator<Object> docEnum = dataOut.getDocumentEnumeration();
                 while (docEnum.hasNext()) {
                     Document docOut      = (Document)docEnum.next();
                     String fileName      = docOut.getFileName();
@@ -185,7 +186,7 @@ public final class Driver {
                     FileInputStream mergeIS = new FileInputStream(mergeFile);
                     Document mergeDoc = myConvert.getOfficeDocument(mergeFile, mergeIS);
                     DocumentMerger merger = myConvert.getDocumentMerger(mergeDoc);
-                    Iterator mergeDocEnum = dataOut.getDocumentEnumeration();
+                    Iterator<Object> mergeDocEnum = dataOut.getDocumentEnumeration();
                     Document convertedFile = (Document)mergeDocEnum.next();
 
                     merger.merge(convertedFile);

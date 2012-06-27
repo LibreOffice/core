@@ -83,7 +83,7 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
     protected String getWorkbookName(ConvertData cd)
         throws IOException {
 
-        Iterator e = cd.getDocumentEnumeration();
+        Iterator<Object> e = cd.getDocumentEnumeration();
         Workbook wb = (Workbook) e.next();
 
         String workbookName = wb.getName();
@@ -102,9 +102,9 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
     protected String[] getWorksheetNames(ConvertData cd)
         throws IOException {
 
-        Iterator e = cd.getDocumentEnumeration();
+        Iterator<Object> e = cd.getDocumentEnumeration();
         Workbook wb = (Workbook) e.next();
-        ArrayList v = wb.getWorksheetNames();
+        ArrayList<Object> v = wb.getWorksheetNames();
         e = v.iterator();
         String worksheetNames[] = new String[v.size()];
         int i = 0;

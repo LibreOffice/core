@@ -143,7 +143,7 @@ public class NameDefinition implements OfficeConstants {
             if(isRangeType()) {
 
                 Debug.log(Debug.TRACE, "Found Range Name : " + getName());
-                Element namedRangeElement = (Element) doc.createElement(TAG_TABLE_NAMED_RANGE);
+                Element namedRangeElement = doc.createElement(TAG_TABLE_NAMED_RANGE);
                 namedRangeElement.setAttribute(ATTRIBUTE_TABLE_NAME, getName());
                 namedRangeElement.setAttribute(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS, getBaseCellAddress());
                 namedRangeElement.setAttribute(ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS, getDefinition());
@@ -151,7 +151,7 @@ public class NameDefinition implements OfficeConstants {
             } else if (isExpressionType()) {
 
                 Debug.log(Debug.TRACE, "Found Expression Name : " + getName());
-                Element namedExpressionElement = (Element) doc.createElement(TAG_TABLE_NAMED_EXPRESSION);
+                Element namedExpressionElement = doc.createElement(TAG_TABLE_NAMED_EXPRESSION);
                 namedExpressionElement.setAttribute(ATTRIBUTE_TABLE_NAME, getName());
                 namedExpressionElement.setAttribute(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS,getBaseCellAddress());
                 namedExpressionElement.setAttribute(ATTRIBUTE_TABLE_EXPRESSION, getDefinition());

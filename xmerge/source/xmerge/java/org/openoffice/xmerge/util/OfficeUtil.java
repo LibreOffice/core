@@ -46,7 +46,7 @@ public class OfficeUtil implements OfficeConstants {
      *          representing the text.
      */
     public static Node[] parseText(String text, Document parentDoc) {
-        ArrayList nodeVec = new ArrayList();
+        ArrayList<Node> nodeVec = new ArrayList<Node>();
 
         /*
          * Break up the text from the text run into Open
@@ -120,7 +120,7 @@ public class OfficeUtil implements OfficeConstants {
         // Now create and populate an array to return the nodes in.
         Node nodes[] = new Node[nodeVec.size()];
         for (int i = 0; i < nodeVec.size(); i++)
-            nodes[i] = (Node)nodeVec.get(i);
+            nodes[i] = nodeVec.get(i);
         return nodes;
     }
 }

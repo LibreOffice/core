@@ -55,7 +55,7 @@ public class FloatNumber extends CellValue {
         setIxfe(ixfe);
         setRow(row);
            setCol(column);
-        double cellLong = (double) Double.parseDouble(cellContents);
+        double cellLong = Double.parseDouble(cellContents);
         num     = EndianConverter.writeDouble(cellLong);
     }
 

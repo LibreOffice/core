@@ -135,15 +135,15 @@ public final class PluginFactoryImpl extends PluginFactory
 
 
     public String getDeviceFileExtension(){
-    Class c = this.getClass();
+    Class<? extends PluginFactoryImpl> c = this.getClass();
     InputStream is = c.getResourceAsStream("XsltPlugin.properties");
     Properties props = new Properties();
     String ext= ".txt";
     String mimeType = null;
     ConverterInfo ci = this.getConverterInfo();
-    Iterator enumerate = ci.getDeviceMime();
+    Iterator<String> enumerate = ci.getDeviceMime();
     while (enumerate.hasNext()) {
-        mimeType= (String) enumerate.next();
+        mimeType= enumerate.next();
     }
     try {
         props.load(is);

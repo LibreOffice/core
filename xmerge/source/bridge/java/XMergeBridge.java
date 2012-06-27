@@ -184,21 +184,21 @@ public class XMergeBridge {
         try{
 
         Object xCfgMgrObj=xMSF.createInstance("com.sun.star.config.SpecialConfigManager");
-         XConfigManager xCfgMgr = (XConfigManager) UnoRuntime.queryInterface(
+         XConfigManager xCfgMgr = UnoRuntime.queryInterface(
                                             XConfigManager.class , xCfgMgrObj );
         String PathString=xCfgMgr.substituteVariables("$(progurl)" );
         PathString= PathString.concat("/");
         udJarPath= PathString.concat(udJarPath);
 
         Object xPipeObj=xMSF.createInstance("com.sun.star.io.Pipe");
-        xInStream = (XInputStream) UnoRuntime.queryInterface(
+        xInStream = UnoRuntime.queryInterface(
                         XInputStream.class , xPipeObj );
-            xOutStream = (XOutputStream) UnoRuntime.queryInterface(
+            xOutStream = UnoRuntime.queryInterface(
                         XOutputStream.class , xPipeObj );
         convert (xis,xOutStream,false,udJarPath,sFileName,offMime,sdMime);
         Object xSaxParserObj=xMSF.createInstance("com.sun.star.xml.sax.Parser");
 
-        XParser xParser = (XParser) UnoRuntime.queryInterface(
+        XParser xParser = UnoRuntime.queryInterface(
                         XParser.class , xSaxParserObj );
         if (xParser==null){
             System.out.println("\nParser creation Failed");
@@ -275,7 +275,7 @@ public class XMergeBridge {
          try{
 
          Object xCfgMgrObj=xMSF.createInstance("com.sun.star.config.SpecialConfigManager");
-         XConfigManager xCfgMgr = (XConfigManager) UnoRuntime.queryInterface(
+         XConfigManager xCfgMgr = UnoRuntime.queryInterface(
                                             XConfigManager.class , xCfgMgrObj );
 
         String PathString=xCfgMgr.substituteVariables("$(progurl)" );
@@ -283,9 +283,9 @@ public class XMergeBridge {
         udJarPath= PathString.concat(udJarPath);
 
         Object xPipeObj=xMSF.createInstance("com.sun.star.io.Pipe");
-        xInStream = (XInputStream) UnoRuntime.queryInterface(
+        xInStream = UnoRuntime.queryInterface(
                         XInputStream.class , xPipeObj );
-        xOutStream = (XOutputStream) UnoRuntime.queryInterface(
+        xOutStream = UnoRuntime.queryInterface(
                         XOutputStream.class , xPipeObj );
            }
           catch (Exception e){
@@ -435,7 +435,7 @@ public class XMergeBridge {
          String name= getFileName(FileName);
 
          ConverterInfo converterInfo = null;
-         Iterator ciEnum= null;
+         Iterator<ConverterInfo> ciEnum= null;
 
          XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);
 
@@ -472,10 +472,10 @@ public class XMergeBridge {
              }
              else
              {
-                 cv.addInputStream(name,(InputStream)xis,false);
+                 cv.addInputStream(name,xis,false);
                  ConvertData dataOut = cv.convert();
 
-                 Iterator docEnum = dataOut.getDocumentEnumeration();
+                 Iterator<Object> docEnum = dataOut.getDocumentEnumeration();
 
                  if (docEnum.hasNext()){
                      Document docOut      = (Document)docEnum.next();
@@ -536,9 +536,9 @@ public class XMergeBridge {
              else
              {
 
-                 cv.addInputStream(name,(InputStream)xis,false);
+                 cv.addInputStream(name,xis,false);
                  ConvertData dataIn = cv.convert();
-                 Iterator docEnum = dataIn.getDocumentEnumeration();
+                 Iterator<Object> docEnum = dataIn.getDocumentEnumeration();
                  while (docEnum.hasNext()) {
                  OfficeDocument docIn      = (OfficeDocument)docEnum.next();
 

@@ -38,8 +38,8 @@ public class OperandLookup extends SymbolLookup {
         if ((stringToID != null) || (idToString != null)) {
             return;
         }
-        stringToID = new HashMap();
-        idToString = new HashMap();
+        stringToID = new HashMap<String, Integer>();
+        idToString = new HashMap<Integer, String>();
         addEntry("CELL_REFERENCE", TokenConstants.TREF);
         addEntry("CELL_AREA_REFERENCE", TokenConstants.TAREA);
         addEntry("INTEGER", TokenConstants.TNUM);

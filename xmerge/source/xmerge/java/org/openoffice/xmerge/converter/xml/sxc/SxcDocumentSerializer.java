@@ -83,7 +83,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      *  An array of column widths of the current worksheet.  Width is
      *  measured in number of characters.
      */
-    private ArrayList ColumnRowList;
+    private ArrayList<ColumnRowInfo> ColumnRowList;
 
     /**  Width, in characters, of the current cell display data. */
     private int displayWidth = 0;
@@ -183,7 +183,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         String families[] = new String[] {  SxcConstants.COLUMN_STYLE_FAMILY,
                                             SxcConstants.ROW_STYLE_FAMILY,
                                             SxcConstants.TABLE_CELL_STYLE_FAMILY };
-        Class classes[]   = new Class[] {   ColumnStyle.class,
+        Class<?> classes[]   = new Class[] {   ColumnStyle.class,
                                             RowStyle.class,
                                             CellStyle.class};
         /*
@@ -302,7 +302,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         Debug.log(Debug.TRACE, "<TABLE>");
 
-        ColumnRowList = new ArrayList();
+        ColumnRowList = new ArrayList<ColumnRowInfo>();
 
         // Get table attributes
         // TODO - extract style from attribute
@@ -625,8 +625,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         if (fmt.isDefault() && styleName.length()==0) {
             int index = 1;
-            for(Iterator e = ColumnRowList.iterator();e.hasNext();) {
-                ColumnRowInfo cri = (ColumnRowInfo) e.next();
+            for(Iterator<ColumnRowInfo> e = ColumnRowList.iterator();e.hasNext();) {
+                ColumnRowInfo cri = e.next();
                 if(cri.isColumn()) {
                     if(colID>=index && colID<(index+cri.getRepeated())) {
                         fmt = new Format(cri.getFormat());

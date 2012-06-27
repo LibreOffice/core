@@ -54,7 +54,7 @@ public class ConverterInfo {
 
     private String           piJarName;
     private String           piOfficeMime;
-    private ArrayList        piDeviceMime;
+    private ArrayList<String>        piDeviceMime;
     private String           piDisplayName;
     private String           piDescription;
     private String           piVersion;
@@ -88,7 +88,7 @@ public class ConverterInfo {
      *                              be loaded.
      */
     public ConverterInfo(String jarName, String officeMime,
-                         ArrayList deviceMime, String displayName, String description,
+                         ArrayList<String> deviceMime, String displayName, String description,
     String version, String vendor, String impl,String xsltSerial,
     String xsltDeserial)
         throws RegistryException {
@@ -117,16 +117,16 @@ public class ConverterInfo {
             URL jarURL = new URL(jarName);
             URLClassLoader loader = new URLClassLoader(new URL[] { jarURL },
                piClassLoader);
-            Class clas = loader.loadClass(piClassImpl);
-            Class[] argumentTypes = { org.openoffice.xmerge.util.registry.ConverterInfo.class };
-            Constructor construct = clas.getConstructor(argumentTypes);
+            Class<?> clas = loader.loadClass(piClassImpl);
+            Class<?>[] argumentTypes = { org.openoffice.xmerge.util.registry.ConverterInfo.class };
+            Constructor<?> construct = clas.getConstructor(argumentTypes);
 
             Object[] arguments = { this };
             piPluginFactory = ( PluginFactory ) construct.newInstance(arguments);
 
             // See which interfaces the plug-in PluginFactory supports.
             //
-            Class[] cl = piPluginFactory.getClass().getInterfaces();
+            Class<?>[] cl = piPluginFactory.getClass().getInterfaces();
             for (int i=0; i < cl.length; i++) {
 
                if (cl[i].getName().equals("org.openoffice.xmerge.DocumentSerializerFactory")) {
@@ -166,7 +166,7 @@ public class ConverterInfo {
 
 
     public ConverterInfo(String jarName, String officeMime,
-        ArrayList deviceMime, String displayName, String description,
+        ArrayList<String> deviceMime, String displayName, String description,
         String version, String vendor, String impl)
         throws RegistryException {
 
@@ -192,16 +192,16 @@ public class ConverterInfo {
             URL jarURL = new URL(jarName);
             URLClassLoader loader = new URLClassLoader(new URL[] { jarURL },
                piClassLoader);
-            Class clas = loader.loadClass(piClassImpl);
-            Class[] argumentTypes = { org.openoffice.xmerge.util.registry.ConverterInfo.class };
-            Constructor construct = clas.getConstructor(argumentTypes);
+            Class<?> clas = loader.loadClass(piClassImpl);
+            Class<?>[] argumentTypes = { org.openoffice.xmerge.util.registry.ConverterInfo.class };
+            Constructor<?> construct = clas.getConstructor(argumentTypes);
 
             Object[] arguments = { this };
             piPluginFactory = ( PluginFactory ) construct.newInstance(arguments);
 
             // See which interfaces the plug-in PluginFactory supports.
             //
-            Class[] cl = piPluginFactory.getClass().getInterfaces();
+            Class<?>[] cl = piPluginFactory.getClass().getInterfaces();
             for (int i=0; i < cl.length; i++) {
 
                if (cl[i].getName().equals("org.openoffice.xmerge.DocumentSerializerFactory")) {
@@ -290,7 +290,7 @@ public class ConverterInfo {
      *  @return  An <code>Enumeration</code> of <code>String</code>
      *           objects indicating the device mime-type.
      */
-    public Iterator getDeviceMime() {
+    public Iterator<String> getDeviceMime() {
         return(piDeviceMime.iterator());
     }
 

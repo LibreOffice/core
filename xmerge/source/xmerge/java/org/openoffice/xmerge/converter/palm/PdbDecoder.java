@@ -201,7 +201,7 @@ public final class PdbDecoder {
             // last record
 
             dis.reset();
-        len = (int) dis.available() - recOffset[lastIndex];
+        len = dis.available() - recOffset[lastIndex];
         dis.skip(recOffset[lastIndex]);
         bytes = new byte[len];
             dis.readFully(bytes);

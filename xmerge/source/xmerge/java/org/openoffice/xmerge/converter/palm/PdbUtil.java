@@ -56,19 +56,19 @@ public final class PdbUtil {
 
         // grab the first char and put it in the high bits
         // note that we only want 8 lower bits of it.
-        temp = (int) s.charAt(0);
+        temp = s.charAt(0);
         id = temp << 24;
 
         // grab the second char and add it in.
-        temp = ((int) s.charAt(1)) & 0x00ff;
+        temp = s.charAt(1) & 0x00ff;
         id += temp << 16;
 
         // grab the second char and add it in.
-        temp = ((int) s.charAt(2)) & 0x00ff;
+        temp = s.charAt(2) & 0x00ff;
         id += temp << 8;
 
         // grab the last char and add it in
-        id += ((int) s.charAt(3)) & 0x00ff;
+        id += s.charAt(3) & 0x00ff;
 
         return id;
     }

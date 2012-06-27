@@ -106,7 +106,7 @@ public final class DocumentSerializerImpl
     org.w3c.dom.Document styleDoc = sxwDoc.getStyleDOM();
     ByteArrayOutputStream baos= new ByteArrayOutputStream();
            ConvertData cd = new ConvertData();
-    Node offnode = (Node)domDoc.getDocumentElement();
+    Node offnode = domDoc.getDocumentElement();
     if (!(offnode.getNodeName()).equals("office:document")){
         try{
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -141,7 +141,7 @@ public final class DocumentSerializerImpl
 
         NodeList nodeList;
         Node tmpNode;
-        Node rootNode = (Node)rootElement;
+        Node rootNode = rootElement;
         if (metaDoc !=null){
         nodeList= metaDoc.getElementsByTagName(TAG_OFFICE_META);
         if (nodeList.getLength()>0){

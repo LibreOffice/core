@@ -212,7 +212,7 @@ public class Convert implements Cloneable {
             DocumentSerializerFactory myDocSerializerFactory =
                 ci.getDocSerializerFactory();
 
-            Iterator e = inputCD.getDocumentEnumeration();
+            Iterator<Object> e = inputCD.getDocumentEnumeration();
 
             Document doc = (Document) e.next();
             DocumentSerializer ser = myDocSerializerFactory.createDocumentSerializer(doc);
@@ -266,7 +266,7 @@ public class Convert implements Cloneable {
             DocumentSerializerFactory myDocSerializerFactory =
                 ci.getDocSerializerFactory();
 
-            Iterator e = inputCD.getDocumentEnumeration();
+            Iterator<Object> e = inputCD.getDocumentEnumeration();
 
             Document doc = (Document) e.next();
             DocumentSerializer ser = myDocSerializerFactory.createDocumentSerializer(doc);

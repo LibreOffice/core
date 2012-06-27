@@ -37,9 +37,9 @@ public class PrecedenceTable {
     public static final int FUNCTION_PRECEDENCE = 8;
     public static final int COMMA_PRECEDENCE    = 8;
 
-    private static HashMap map;
+    private static HashMap<String,Integer> map;
     static {
-        map = new HashMap();
+        map = new HashMap<String,Integer>();
 
         map.put("%", new Integer(UNARY_PRECEDENCE));
         map.put("+", new Integer(ADDOP_PRECEDENCE));

@@ -46,7 +46,7 @@ import org.w3c.dom.NodeList;
  */
 public abstract class NodeIterator implements Iterator {
 
-    private List nodeList = null;
+    private List<Node> nodeList = null;
     private int currentPosition = 0;
     private Node root;
     private ConverterCapabilities cc_ = null;
@@ -60,7 +60,7 @@ public abstract class NodeIterator implements Iterator {
      */
     public NodeIterator(ConverterCapabilities cc, Node node) {
         cc_ = cc;
-        nodeList = new ArrayList();
+        nodeList = new ArrayList<Node>();
         root = node;
         markTree(node);
     }
@@ -136,7 +136,7 @@ public abstract class NodeIterator implements Iterator {
 
 
     public void refresh() {
-        nodeList = new ArrayList();
+        nodeList = new ArrayList<Node>();
         markTree(root);
         currentPosition = 0;
     }

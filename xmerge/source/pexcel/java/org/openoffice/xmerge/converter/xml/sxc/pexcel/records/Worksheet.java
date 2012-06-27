@@ -40,9 +40,9 @@ public class Worksheet {
 
     private String name;
     private Workbook wb;
-    private ArrayList rows         = new ArrayList();
-    private ArrayList colInfo      = new ArrayList();
-    private ArrayList cells        = new ArrayList();
+    private ArrayList<Row> rows         = new ArrayList<Row>();
+    private ArrayList<ColInfo> colInfo      = new ArrayList<ColInfo>();
+    private ArrayList<BIFFRecord> cells        = new ArrayList<BIFFRecord>();
     private DefColWidth dcw     = new DefColWidth();
     private DefRowHeight drh    = new DefRowHeight();
     private Window2 win2        = new Window2();
@@ -76,17 +76,17 @@ public class Worksheet {
         bof     = new BeginningOfFile(false);
         bof.write(os);
         dcw.write(os);
-        for(Iterator e = colInfo.iterator();e.hasNext();) {
-            ColInfo ci = (ColInfo) e.next();
+        for(Iterator<ColInfo> e = colInfo.iterator();e.hasNext();) {
+            ColInfo ci = e.next();
             ci.write(os);
         }
         drh.write(os);
-        for(Iterator e = rows.iterator();e.hasNext();) {
-            Row rw = (Row) e.next();
+        for(Iterator<Row> e = rows.iterator();e.hasNext();) {
+            Row rw = e.next();
             rw.write(os);
         }
-        for(Iterator e = cells.iterator();e.hasNext();) {
-            BIFFRecord cv = (BIFFRecord) e.next();
+        for(Iterator<BIFFRecord> e = cells.iterator();e.hasNext();) {
+            BIFFRecord cv = e.next();
             cv.write(os);
         }
         win2.write(os);
@@ -215,7 +215,7 @@ public class Worksheet {
      *
       * @return an enumerator to the worksheet cells
       */
-    public Iterator getCellEnumerator() throws IOException {
+    public Iterator<BIFFRecord> getCellEnumerator() throws IOException {
         return (cells.iterator());
     }
 
@@ -271,7 +271,7 @@ public class Worksheet {
      *
      * @return an <code>Enumeration</code> to the ColInfo's
      */
-     public Iterator getColInfos() {
+     public Iterator<ColInfo> getColInfos() {
 
          return (colInfo.iterator());
      }
@@ -301,7 +301,7 @@ public class Worksheet {
      *
      * @return an <code>Enumeration</code> to the Rows
      */
-     public Iterator getRows() {
+     public Iterator<Row> getRows() {
 
          return (rows.iterator());
      }

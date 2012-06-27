@@ -41,7 +41,7 @@ public class FormulaParser {
     private String formulaStr;
     private int index = 1;
     private TokenFactory tokenFactory;
-    private ArrayList tokenVector;
+    private ArrayList<Token> tokenVector;
     private Workbook wb;
 
      /**
@@ -51,7 +51,7 @@ public class FormulaParser {
 
         Debug.log(Debug.TRACE,"Creating a Formula Parser");
         tokenFactory = new TokenFactory();
-        tokenVector = new ArrayList();
+        tokenVector = new ArrayList<Token>();
     }
 
     /**
@@ -69,7 +69,7 @@ public class FormulaParser {
      * starting with the '=' character
      * @return A <code>Vector</code> containing the parsed <code>Token</code>s
      */
-    public ArrayList parse(String formula) throws FormulaParsingException {
+    public ArrayList<Token> parse(String formula) throws FormulaParsingException {
 
         index = 1;
         look = ' ';

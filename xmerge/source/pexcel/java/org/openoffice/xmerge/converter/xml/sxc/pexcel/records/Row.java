@@ -35,7 +35,7 @@ public class Row implements BIFFRecord {
     private byte[] miyRw    = new byte[2];
     private byte[] grbit    = new byte[2];
     private byte[] ixfe     = new byte[2];
-    private float  scale = (float) 1;
+    private float  scale = 1;
 
     /**
      * Constructs a pocket Excel Document from the

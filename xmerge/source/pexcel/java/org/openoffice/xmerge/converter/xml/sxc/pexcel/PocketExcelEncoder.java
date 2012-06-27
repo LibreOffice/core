@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import org.openoffice.xmerge.util.Debug;
 
+import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetEncoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
@@ -77,7 +78,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      */
     public int getNumberOfSheets() {
 
-        ArrayList v = wb.getWorksheetNames();
+        ArrayList<Object> v = wb.getWorksheetNames();
         return (v.size());
     }
 
@@ -202,7 +203,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      *  @param  columnWidths  An <code>IntArrayList</code> of column
      *                        widths.
      */
-    public void setColumnRows(ArrayList columnRows) throws IOException {
+    public void setColumnRows(ArrayList<ColumnRowInfo> columnRows) throws IOException {
 
         wb.addColInfo(columnRows);
     }
@@ -268,7 +269,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      *  @param  sheet  The required sheet.
      */
     public String getSheetName(int sheet) {
-        ArrayList v = wb.getWorksheetNames();
+        ArrayList<Object> v = wb.getWorksheetNames();
         String wsName = (String) (v.get(sheet));
 
         return wsName;

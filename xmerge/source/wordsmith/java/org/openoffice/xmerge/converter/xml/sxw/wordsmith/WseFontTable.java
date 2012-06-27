@@ -44,7 +44,7 @@ import org.openoffice.xmerge.converter.xml.*;
  */
 class WseFontTable extends Wse {
 
-    java.util.ArrayList fontNames = new java.util.ArrayList(10);
+    java.util.ArrayList<String> fontNames = new java.util.ArrayList<String>(10);
 
 
     /**
@@ -94,7 +94,7 @@ class WseFontTable extends Wse {
      */
     public String getFontName(int index) {
         try {
-            return (String)fontNames.get(index);
+            return fontNames.get(index);
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }
@@ -110,7 +110,7 @@ class WseFontTable extends Wse {
     public int getFontIndex(String fontName) {
         int len = fontNames.size();
         for (int i = 0; i < len; i++) {
-            String name = (String) fontNames.get(i);
+            String name = fontNames.get(i);
             if (name.equals(fontName))
                 return i;
         }
@@ -175,7 +175,7 @@ class WseFontTable extends Wse {
         int length = 3;  // leading "3" plus 2 bytes for length.
         int nFonts = fontNames.size();
         for (int i = 0; i < nFonts; i++) {
-            String name = (String)fontNames.get(i);
+            String name = fontNames.get(i);
             length += name.length() + 1;  // extra byte is for trailing "0"
         }
         return length;
@@ -197,7 +197,7 @@ class WseFontTable extends Wse {
         b[2] = (byte)(length & 0xFF);
         int indx = 3;
         for (int i = 0; i < nFonts; i++) {
-            String name = (String)fontNames.get(i);
+            String name = fontNames.get(i);
             byte bname[] = name.getBytes();
             System.arraycopy(bname, 0, b, indx, bname.length);
             indx += bname.length;

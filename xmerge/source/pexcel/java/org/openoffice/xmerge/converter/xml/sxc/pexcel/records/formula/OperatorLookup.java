@@ -39,8 +39,8 @@ public class OperatorLookup extends SymbolLookup {
         if ((stringToID != null) || (idToString != null)) {
             return;
         }
-        stringToID = new HashMap();
-        idToString = new HashMap();
+        stringToID = new HashMap<String, Integer>();
+        idToString = new HashMap<Integer, String>();
         addEntry("UNARY_PLUS", TokenConstants.TUPLUS);
         addEntry("UNARY_MINUS", TokenConstants.TUMINUS);
         addEntry("%", TokenConstants.TPERCENT);

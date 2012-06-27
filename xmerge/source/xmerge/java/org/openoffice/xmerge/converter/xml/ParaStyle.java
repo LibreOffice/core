@@ -180,7 +180,7 @@ public class ParaStyle extends Style implements Cloneable {
     };
 
     /**  Array of attribute structures for this paragraph <code>Style</code>. */
-    protected Class algor[] = {
+    protected Class<?> algor[] = {
         horizSize.class,
         horizSize.class,
         horizSize.class,

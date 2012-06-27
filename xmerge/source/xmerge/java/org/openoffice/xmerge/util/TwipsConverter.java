@@ -37,7 +37,7 @@ public class TwipsConverter {
     public static float twips2cm(int value) {
 
         float inches = (float) value/1440;
-        float cm = (float) inches*(float)2.54;
+        float cm = inches*(float)2.54;
 
         return cm;
     }

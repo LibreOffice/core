@@ -62,7 +62,7 @@ public final class Debug {
 
         try {
 
-            Class c = new Debug().getClass();
+            Class<? extends Debug> c = new Debug().getClass();
             InputStream is = c.getResourceAsStream("Debug.properties");
             Properties props = new Properties();
             props.load(is);
@@ -316,7 +316,7 @@ public final class Debug {
 
         for (int i = 0; i < bytes.length; i++) {
 
-            int ch = ((int) bytes[i] & 0xff);
+            int ch = (bytes[i] & 0xff);
             String str = Integer.toHexString(ch);
             if (str.length() < 2)
                 buff.append('0');

@@ -98,7 +98,7 @@ public final class DocumentDeserializerImpl
      */
     public Document deserialize() throws ConvertException, IOException {
     log("\nFound the XSLT deserializer");
-    Iterator enumerate = cd.getDocumentEnumeration();
+    Iterator<Object> enumerate = cd.getDocumentEnumeration();
     org.w3c.dom.Document domDoc=null;
     DOMDocument docOut=null;
     GenericOfficeDocument doc = null;

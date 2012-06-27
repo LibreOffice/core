@@ -50,7 +50,7 @@ public class ConverterInfoReader {
     private final static String TAG_XSLT_SERIAL     = "converter-xslt-serialize";
     private String   jarfilename;
     private Document document;
-    private ArrayList   converterInfoList;
+    private ArrayList<ConverterInfo>   converterInfoList;
 
 
     /**
@@ -87,7 +87,7 @@ public class ConverterInfoReader {
         JarFile                jarfile;
         URL                    url;
 
-        converterInfoList = new ArrayList();
+        converterInfoList = new ArrayList<ConverterInfo>();
         jarfilename       = jar;
 
         // Get Jar via URL
@@ -161,7 +161,7 @@ public class ConverterInfoReader {
         Node    detailNode;
         String  elementTagName;
         String  officeMime  = null;
-        ArrayList  deviceMime  = new ArrayList();
+        ArrayList<String>  deviceMime  = new ArrayList<String>();
         String  name        = null;
         String  desc        = null;
         String  version     = null;
@@ -260,7 +260,7 @@ public class ConverterInfoReader {
      *  @return  An <code>Enumeration</code> of <code>ConverterInfo</code>
      *           objects.
      */
-    public Iterator getConverterInfoEnumeration() {
+    public Iterator<ConverterInfo> getConverterInfoEnumeration() {
        return (converterInfoList.iterator());
     }
 }

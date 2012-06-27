@@ -104,7 +104,7 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
 
         Document doc         = null;
         PalmDocument palmDoc = null;
-        Iterator e        = cd.getDocumentEnumeration();
+        Iterator<Object> e        = cd.getDocumentEnumeration();
 
         while(e.hasNext()) {
             palmDoc        = (PalmDocument) e.next();
@@ -138,7 +138,7 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
             families[0] = "text";
             families[1] = "paragraph";
             families[2] = "paragraph";
-            Class classes[] = new Class[3];
+            Class<?> classes[] = new Class<?>[3];
             classes[0] = TextStyle.class;
             classes[1] = ParaStyle.class;
             classes[2] = TextStyle.class;
@@ -171,7 +171,7 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
     private ParaStyle matchParaByText(Style paraStyles[], TextStyle tStyle) {
         int matchIndex = -1;
     int matchCount = 0;
-    Style txtMatches[] = (Style[]) oldStyleCat.getMatching(tStyle);
+    Style txtMatches[] = oldStyleCat.getMatching(tStyle);
     if (txtMatches.length >= 1) {
         for (int j = 0; j < txtMatches.length; j++) {
             TextStyle t = (TextStyle)txtMatches[j];
@@ -203,7 +203,7 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
      *  @return  Array of <code>Node</code> objects.
      */
     private Node[] parseText(String text, org.w3c.dom.Document parentDoc) {
-        ArrayList nodeVec = new ArrayList();
+        ArrayList<Node> nodeVec = new ArrayList<Node>();
 
         // Break up the text from the WordSmith text run into Open
         // Office text runs.  There may be more runs in OO because
@@ -274,7 +274,7 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
         // Now create and populate an array to return the nodes in.
         Node nodes[] = new Node[nodeVec.size()];
         for (int i = 0; i < nodeVec.size(); i++)
-            nodes[i] = (Node)nodeVec.get(i);
+            nodes[i] = nodeVec.get(i);
         return nodes;
     }
 

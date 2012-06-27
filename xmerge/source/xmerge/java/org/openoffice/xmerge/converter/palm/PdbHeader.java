@@ -111,10 +111,10 @@ final class PdbHeader {
         in.readFully(pdbName);
         attribute = in.readShort();
         version = in.readUnsignedShort();
-        creationDate = ((long) in.readInt()) & 0xffffffffL;
-        modificationDate = ((long) in.readInt()) & 0xffffffffL;
-        lastBackupDate = ((long) in.readInt())  & 0xffffffffL;
-        modificationNumber = ((long) in.readInt()) & 0xffffffffL;
+        creationDate = in.readInt() & 0xffffffffL;
+        modificationDate = in.readInt() & 0xffffffffL;
+        lastBackupDate = in.readInt()  & 0xffffffffL;
+        modificationNumber = in.readInt() & 0xffffffffL;
         appInfoID = in.readInt();
         sortInfoID = in.readInt();
         creatorID = in.readInt();

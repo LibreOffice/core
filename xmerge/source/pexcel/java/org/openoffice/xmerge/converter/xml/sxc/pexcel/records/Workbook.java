@@ -43,14 +43,14 @@ import org.openoffice.xmerge.util.Debug;
 public class Workbook implements org.openoffice.xmerge.Document,
 OfficeConstants {
 
-    private ArrayList fonts                = new ArrayList();
-    private ArrayList extendedFormats      = new ArrayList();
-    private ArrayList worksheets           = new ArrayList();
-    private ArrayList boundsheets          = new ArrayList();
-    private ArrayList definedNames         = new ArrayList();
+    private ArrayList<FontDescription> fonts                = new ArrayList<FontDescription>();
+    private ArrayList<ExtendedFormat> extendedFormats      = new ArrayList<ExtendedFormat>();
+    private ArrayList<Worksheet> worksheets           = new ArrayList<Worksheet>();
+    private ArrayList<BoundSheet> boundsheets          = new ArrayList<BoundSheet>();
+    private ArrayList<DefinedName> definedNames         = new ArrayList<DefinedName>();
     private static final CodePage cp;
     private static final Window1 win1;
-    private static final BeginningOfFile bof;;
+    private static final BeginningOfFile bof;
     private static final Eof eof;
     private String fileName;
 
@@ -99,27 +99,27 @@ OfficeConstants {
     public void write(OutputStream os) throws IOException {
         bof.write(os);
         cp.write(os);
-        for(Iterator e = definedNames.iterator();e.hasNext();) {
-            DefinedName dn = (DefinedName) e.next();
+        for(Iterator<DefinedName> e = definedNames.iterator();e.hasNext();) {
+            DefinedName dn = e.next();
             dn.write(os);
         }
         win1.write(os);
-        for(Iterator e = fonts.iterator();e.hasNext();) {
-            FontDescription fd = (FontDescription) e.next();
+        for(Iterator<FontDescription> e = fonts.iterator();e.hasNext();) {
+            FontDescription fd = e.next();
             fd.write(os);
         }
-        for(Iterator e = extendedFormats.iterator();e.hasNext();) {
-            ExtendedFormat xf = (ExtendedFormat) e.next();
+        for(Iterator<ExtendedFormat> e = extendedFormats.iterator();e.hasNext();) {
+            ExtendedFormat xf = e.next();
             xf.write(os);
         }
-        for(Iterator e = boundsheets.iterator();e.hasNext();) {
-            BoundSheet bs = (BoundSheet) e.next();
+        for(Iterator<BoundSheet> e = boundsheets.iterator();e.hasNext();) {
+            BoundSheet bs = e.next();
             bs.write(os);
         }
         eof.write(os);
 
-        for(Iterator e = worksheets.iterator();e.hasNext();) {
-            Worksheet ws = (Worksheet) e.next();
+        for(Iterator<Worksheet> e = worksheets.iterator();e.hasNext();) {
+            Worksheet ws = e.next();
             ws.write(os);
         }
     }
@@ -214,8 +214,8 @@ OfficeConstants {
         boolean alreadyExists = false;
         int i = 0;
 
-        for(Iterator e = fonts.iterator();e.hasNext();) {
-            FontDescription fd = (FontDescription) e.next();
+        for(Iterator<FontDescription> e = fonts.iterator();e.hasNext();) {
+            FontDescription fd = e.next();
             if(fd.compareTo(f)) {
                 alreadyExists = true;
                 break;
@@ -244,8 +244,8 @@ OfficeConstants {
         boolean alreadyExists = false;
         int i = 0;
 
-        for(Iterator e = extendedFormats.iterator();e.hasNext();) {
-            ExtendedFormat currentXF = (ExtendedFormat) e.next();
+        for(Iterator<ExtendedFormat> e = extendedFormats.iterator();e.hasNext();) {
+            ExtendedFormat currentXF = e.next();
             if(xf.compareTo(currentXF)) {
                 alreadyExists = true;
                 break;
@@ -267,7 +267,7 @@ OfficeConstants {
       */
     public Worksheet getWorksheet(int index) {
 
-        return ((Worksheet) worksheets.get(index));
+        return worksheets.get(index);
     }
 
     /**
@@ -279,7 +279,7 @@ OfficeConstants {
      */
     public FontDescription getFontDescription(int ixfnt) {
 
-        return (FontDescription) fonts.get(ixfnt);
+        return fonts.get(ixfnt);
     }
 
     /**
@@ -291,7 +291,7 @@ OfficeConstants {
      */
     public ExtendedFormat getExtendedFormat(int ixfe) {
 
-        return (ExtendedFormat) extendedFormats.get(ixfe);
+        return extendedFormats.get(ixfe);
     }
 
     /**
@@ -299,7 +299,7 @@ OfficeConstants {
      *
       * @return Enumeration for the DefinedNames
       */
-    public Iterator getDefinedNames() {
+    public Iterator<DefinedName> getDefinedNames() {
 
         return definedNames.iterator();
     }
@@ -311,10 +311,10 @@ OfficeConstants {
       */
     public BookSettings getSettings() {
 
-        ArrayList settingsVector = new ArrayList();
+        ArrayList<SheetSettings> settingsVector = new ArrayList<SheetSettings>();
         int index = 0;
-        for(Iterator e = worksheets.iterator();e.hasNext();) {
-            Worksheet ws = (Worksheet) e.next();
+        for(Iterator<Worksheet> e = worksheets.iterator();e.hasNext();) {
+            Worksheet ws = e.next();
             SheetSettings s = ws.getSettings();
             s.setSheetName(getSheetName(index++));
             settingsVector.add(s);
@@ -330,9 +330,9 @@ OfficeConstants {
      *
      * @return a <code>Vector</code> containing all the worksheet Names
      */
-    public ArrayList getWorksheetNames() {
+    public ArrayList<Object> getWorksheetNames() {
 
-        ArrayList wsNames = new ArrayList();
+        ArrayList<Object> wsNames = new ArrayList<Object>();
 
         for(int i = 0;i < boundsheets.size();i++) {
             wsNames.add(getSheetName(i));
@@ -347,7 +347,7 @@ OfficeConstants {
      * @return a <code>String</code> containing the name of the worksheet
      */
     public String getSheetName(int index) {
-        BoundSheet bs = (BoundSheet) boundsheets.get(index);
+        BoundSheet bs = boundsheets.get(index);
 
         return bs.getSheetName();
     }
@@ -377,7 +377,7 @@ OfficeConstants {
     public void addCell(int row,int col, Format fmt, String cellContents)
     throws IOException {
 
-        Worksheet currentWS = (Worksheet) worksheets.get(worksheets.size()-1);
+        Worksheet currentWS = worksheets.get(worksheets.size()-1);
         int ixfe = addExtendedFormat(fmt);
 
         String category = fmt.getCategory();
@@ -429,16 +429,16 @@ OfficeConstants {
      *
       * @param  columnRows <code>Vector</code> of <code>ColumnRowInfo</code>
       */
-    public void addColInfo(ArrayList columnRows) throws IOException {
+    public void addColInfo(ArrayList<ColumnRowInfo> columnRows) throws IOException {
 
-        Worksheet currentWS = (Worksheet) worksheets.get(worksheets.size()-1);
+        Worksheet currentWS = worksheets.get(worksheets.size()-1);
 
         int nCols = 0;
         int nRows = 0;
 
         Debug.log(Debug.TRACE,"Workbook: addColInfo()");
-        for(Iterator e = columnRows.iterator();e.hasNext();) {
-            ColumnRowInfo cri =(ColumnRowInfo) e.next();
+        for(Iterator<ColumnRowInfo> e = columnRows.iterator();e.hasNext();) {
+            ColumnRowInfo cri =e.next();
             int ixfe = 0;
             int size = cri.getSize();
             int repeated = cri.getRepeated();
@@ -485,17 +485,17 @@ OfficeConstants {
     public void addSettings(BookSettings book) throws IOException {
 
         int index = 0;
-        ArrayList sheetSettings = book.getSheetSettings();
+        ArrayList<SheetSettings> sheetSettings = book.getSheetSettings();
         String activeSheetName = book.getActiveSheet();
 
-        for(Iterator e = worksheets.iterator();e.hasNext();) {
-            Worksheet ws = (Worksheet) e.next();
+        for(Iterator<Worksheet> e = worksheets.iterator();e.hasNext();) {
+            Worksheet ws = e.next();
             String name = getSheetName(index++);
             if(activeSheetName.equals(name)) {
                 win1.setActiveSheet(index-1);
             }
-            for(Iterator eSettings = sheetSettings.iterator();eSettings.hasNext();) {
-                SheetSettings s = (SheetSettings) eSettings.next();
+            for(Iterator<SheetSettings> eSettings = sheetSettings.iterator();eSettings.hasNext();) {
+                SheetSettings s = eSettings.next();
                 if(name.equals(s.getSheetName())) {
                     ws.addSettings(s);
                 }

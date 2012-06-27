@@ -231,10 +231,10 @@ final class DocDecoder implements DocConstants {
         }
 
         // read the number of records - unsigned 2 bytes
-        header.textRecordCount = ((int) dis.readShort()) & 0x0000ffff;
+        header.textRecordCount = dis.readShort() & 0x0000ffff;
 
         // read the record size - unsigned 2 bytes
-        header.textRecordSize = ((int) dis.readShort()) & 0x0000ffff;
+        header.textRecordSize = dis.readShort() & 0x0000ffff;
 
         // read extra 4 unused bytes
         dis.readInt();

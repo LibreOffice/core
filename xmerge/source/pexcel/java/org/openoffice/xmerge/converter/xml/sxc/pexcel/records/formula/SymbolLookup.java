@@ -26,8 +26,8 @@ import java.util.HashMap;
  */
 public abstract class SymbolLookup {
 
-    protected HashMap stringToID = null;
-    protected HashMap idToString = null;
+    protected HashMap<String, Integer> stringToID = null;
+    protected HashMap<Integer, String> idToString = null;
 
     /**
      * Perform lookup table specific initialization. This would typically entail loading values into
@@ -53,7 +53,7 @@ public abstract class SymbolLookup {
      * @return  The string associated with this identifier in the lookup table.
      */
     public String getStringFromID(int id) {
-        return (String)idToString.get(new Integer(id));
+        return idToString.get(new Integer(id));
     }
 
     /**
@@ -63,10 +63,10 @@ public abstract class SymbolLookup {
      * @return  The identifier associated with this string in the lookup table.
      */
     public int getIDFromString(String symbol) throws UnsupportedFunctionException {
-        Integer i = (Integer)stringToID.get(symbol);
+        Integer i = stringToID.get(symbol);
         if (i == null)
             throw new UnsupportedFunctionException("Token '" + symbol + "' not supported by Pocket Excel");
 
-        return ((Integer)stringToID.get(symbol)).intValue();
+        return stringToID.get(symbol).intValue();
     }
 }

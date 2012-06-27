@@ -72,7 +72,7 @@ public final class DocumentDeserializerImpl
      *                  for conversion.
      */
     public DocumentDeserializerImpl(ConvertData cd) {
-        Iterator e = cd.getDocumentEnumeration();
+        Iterator<Object> e = cd.getDocumentEnumeration();
 
         // A Pocket Word file is composed of one binary file
         while (e.hasNext()) {
@@ -98,7 +98,7 @@ public final class DocumentDeserializerImpl
      *  @throws  IOException       If any I/O error occurs.
      */
     public Document deserialize() throws IOException, ConvertException {
-        Iterator pe = pswDoc.getParagraphEnumeration();
+        Iterator<Paragraph> pe = pswDoc.getParagraphEnumeration();
 
         sxwDoc = new SxwDocument (docName);
         sxwDoc.initContentDOM();
@@ -129,7 +129,7 @@ public final class DocumentDeserializerImpl
      *
      * @throws  IOException     If any I/O errors occur.
      */
-    private void buildDocument(Iterator data) throws IOException {
+    private void buildDocument(Iterator<Paragraph> data) throws IOException {
 
         org.w3c.dom.Document doc = sxwDoc.getContentDOM();
 
@@ -158,7 +158,7 @@ public final class DocumentDeserializerImpl
 
         // Down to business ...
         while (data.hasNext()) {
-            Paragraph p = (Paragraph)data.next();
+            Paragraph p = data.next();
             Element paraNode  = doc.createElement(TAG_PARAGRAPH);
 
             // Set paragraph style information here
@@ -179,11 +179,11 @@ public final class DocumentDeserializerImpl
              * For each of the paragraphs, process each segment.
              * There will always be at least one.
              */
-            Iterator paraData = p.getSegmentsEnumerator();
-            ArrayList textSpans = new ArrayList(0);
+            Iterator<ParagraphTextSegment> paraData = p.getSegmentsEnumerator();
+            ArrayList<Element> textSpans = new ArrayList<Element>(0);
 
             do {
-                ParagraphTextSegment pts = (ParagraphTextSegment)paraData.next();
+                ParagraphTextSegment pts = paraData.next();
                 Element span = doc.createElement(OfficeConstants.TAG_SPAN);
 
                 TextStyle ts = pts.getStyle();
@@ -217,7 +217,7 @@ public final class DocumentDeserializerImpl
              * it shouldn't be a span, so just add its children with style
              * set as standard.
              */
-            Element firstSpan = (Element)textSpans.get(0);
+            Element firstSpan = textSpans.get(0);
             String  styleName = firstSpan.getAttribute(ATTRIBUTE_TEXT_STYLE_NAME);
             if (styleName.equals(PocketWordConstants.DEFAULT_STYLE)) {
                 NodeList nl = firstSpan.getChildNodes();
@@ -240,7 +240,7 @@ public final class DocumentDeserializerImpl
 
             // The rest are spans, so just add them
             for (int i = 1; i < textSpans.size(); i++) {
-                paraNode.appendChild((Node)textSpans.get(i));
+                paraNode.appendChild(textSpans.get(i));
             }
 
 

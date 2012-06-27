@@ -124,7 +124,7 @@ public final class DocumentSerializerImpl
         String families[] = new String[] { PocketWordConstants.TEXT_STYLE_FAMILY,
                                            PocketWordConstants.PARAGRAPH_STYLE_FAMILY,
                                            PocketWordConstants.PARAGRAPH_STYLE_FAMILY };
-        Class classes[]   = new Class[] { TextStyle.class,
+        Class<?> classes[]   = new Class[] { TextStyle.class,
                                           ParaStyle.class,
                                           TextStyle.class };
 

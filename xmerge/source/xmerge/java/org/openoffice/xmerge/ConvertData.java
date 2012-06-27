@@ -34,7 +34,7 @@ public class ConvertData {
     /**
      *  Vector of <code>Document</code> objects.
      */
-    private ArrayList v = new ArrayList();
+    private ArrayList<Object> v = new ArrayList<Object>();
 
     /**
      *  Name of the <code>ConvertData</code> object.
@@ -89,8 +89,8 @@ public class ConvertData {
      *  @return  The <code>Enumeration</code> to access the
      *           <code>Vector</code> of <code>Document</code> objects.
      */
-    public Iterator getDocumentEnumeration() {
-        Iterator enumerate = v.iterator();
+    public Iterator<Object> getDocumentEnumeration() {
+        Iterator<Object> enumerate = v.iterator();
         return (enumerate);
     }
 

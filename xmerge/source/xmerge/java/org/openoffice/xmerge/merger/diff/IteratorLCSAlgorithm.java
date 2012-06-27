@@ -50,7 +50,7 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
             printDiffTable(diffTable);
         }
 
-        ArrayList diffResult = new ArrayList();
+        ArrayList<Difference> diffResult = new ArrayList<Difference>();
 
         generateResult(diffTable, orgSeqlen, modSeqlen, diffResult);
 
@@ -161,7 +161,7 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
      *                       and positions fill in.
      */
     private void generateResult(int[][] diffTable,
-                                int i, int j, ArrayList diffVector) {
+                                int i, int j, ArrayList<Difference> diffVector) {
 
         // handle the first element
         if (i == 0 && j == 0) {

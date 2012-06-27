@@ -58,7 +58,7 @@ final class WSEncoder {
     WseHeader header = null;
     WseFontTable ft = null;
     WseColorTable ct = null;
-    private ArrayList elements;  // paragraphs & text runs
+    private ArrayList<Wse> elements;  // paragraphs & text runs
 
     /* Totals for the WordSmith document. */
     int nrParagraphs = 0;
@@ -75,7 +75,7 @@ final class WSEncoder {
         version = 1;
         textLen = 0;
         maxRecSize = 4096;
-        elements = new ArrayList();
+        elements = new ArrayList<Wse>();
     }
 
 
@@ -106,13 +106,13 @@ final class WSEncoder {
      */
     Record[] getRecords() throws IOException {
 
-        ArrayList allRecs = new ArrayList();
+        ArrayList<Record> allRecs = new ArrayList<Record>();
         int nElements = elements.size();
 
         // Count up the number of paragraphs, atoms, and characters.
         int currElement = 0;
         while (currElement < nElements) {
-            Wse e = (Wse)elements.get(currElement++);
+            Wse e = elements.get(currElement++);
             if (e.getClass() == WsePara.class)
                 nrParagraphs++;
             if (e.getClass() == WseTextRun.class) {
@@ -144,7 +144,7 @@ final class WSEncoder {
 
         currElement = 0;
         while (currElement < nElements) {
-            Wse e = (Wse)elements.get(currElement++);
+            Wse e = elements.get(currElement++);
             int length = e.getByteCount();
             if ((length + currRecLen) <= 4096) {
                 System.arraycopy(e.getBytes(), 0, currRec, currRecLen, length);
@@ -192,7 +192,7 @@ final class WSEncoder {
         int nRecs = allRecs.size();
         Record recs[] = new Record[nRecs];
         for (int i = 0; i < nRecs; i++)
-        recs[i] = (Record)allRecs.get(i);
+        recs[i] = allRecs.get(i);
         return recs;
     }
 

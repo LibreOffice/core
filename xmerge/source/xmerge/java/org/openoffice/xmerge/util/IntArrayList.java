@@ -28,14 +28,14 @@ import java.lang.Integer;
 public class IntArrayList {
 
     /**  The list to hold our integers. */
-    private ArrayList list;
+    private ArrayList<Integer> list;
 
     /**
      *  Constructor.
      *  Creates the list with 0 length.
      */
     public IntArrayList() {
-        list = new ArrayList();
+        list = new ArrayList<Integer>();
     }
 
 
@@ -45,7 +45,7 @@ public class IntArrayList {
      *  @param  initialCapacity  Initial capacity of the list.
      */
     public IntArrayList(int initialCapacity) {
-        list = new ArrayList(initialCapacity);
+        list = new ArrayList<Integer>(initialCapacity);
     }
 
 
@@ -122,7 +122,7 @@ public class IntArrayList {
      *  @return  The value of the data stored in element index.
      */
     public int get(int index) {
-        return ((Integer)list.get(index)).intValue();
+        return list.get(index).intValue();
     }
 
 

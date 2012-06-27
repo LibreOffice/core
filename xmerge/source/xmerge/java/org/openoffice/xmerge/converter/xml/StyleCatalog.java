@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class StyleCatalog {
 
-    private ArrayList styles;  // The actual styles
+    private ArrayList<Style> styles;  // The actual styles
 
     /**
      *  Constructor
@@ -51,7 +51,7 @@ public class StyleCatalog {
      *                          for efficiency purposes.
      */
     public StyleCatalog(int initialEntries) {
-        styles = new ArrayList(initialEntries);
+        styles = new ArrayList<Style>(initialEntries);
     }
 
 
@@ -90,8 +90,8 @@ public class StyleCatalog {
      *                               whether there is a match in the
      *                               families array.
      */
-    public void add(Node node, String families[], Class classes[],
-    Class defaultClass, boolean alwaysCreateDefault) {
+    public void add(Node node, String families[], Class<?> classes[],
+    Class<?> defaultClass, boolean alwaysCreateDefault) {
 
     if (node == null)
             return;
@@ -117,7 +117,7 @@ public class StyleCatalog {
 
                     for (int j = 0; j < families.length; j++) {
                         if (families[j].equals(familyName)) {
-                            Class styleClass = classes[j];
+                            Class<?> styleClass = classes[j];
                             callConstructor(classes[j], child);
                             found = true;
                         }
@@ -138,16 +138,16 @@ public class StyleCatalog {
      *  @param  cls   The class whose constructor will be called.
      *  @param  node  The constructed class will be added to this node.
      */
-    private void callConstructor(Class cls, Node node) {
-        Class params[] = new Class[2];
+    private void callConstructor(Class<?> cls, Node node) {
+        Class<?> params[] = new Class[2];
         params[0] = Node.class;
         params[1] = this.getClass();
         try {
-            Constructor c = cls.getConstructor(params);
+            Constructor<?> c = cls.getConstructor(params);
             Object p[] = new Object[2];
             p[0] = node;
             p[1] = this;
-            styles.add(c.newInstance(p));
+            styles.add((Style) c.newInstance(p));
         } catch (Exception e) {
             Debug.log(Debug.ERROR, "Exception when calling constructor", e);
         }
@@ -180,10 +180,10 @@ public class StyleCatalog {
      *           null otherwise
      */
     public Style lookup(String name, String family, String parent,
-                        Class styleClass) {
+                        Class<?> styleClass) {
         int nStyles = styles.size();
         for (int i = 0; i < nStyles; i++) {
-            Style s = (Style)styles.get(i);
+            Style s = styles.get(i);
             if ((name != null) && (s.getName() != null)
             && (!s.getName().equals(name)))
                 continue;
@@ -218,7 +218,7 @@ public class StyleCatalog {
         int matchCount = 0;
         int nStyles = styles.size();
         for (int j = 0; j < nStyles; j++) {
-            Style p = ((Style)styles.get(j)).getResolved();
+            Style p = styles.get(j).getResolved();
             if (p.isSubset(s)) matchCount++;
         }
 
@@ -226,7 +226,7 @@ public class StyleCatalog {
         Style[] matchArray = new Style[matchCount];
         matchCount = 0;
         for (int j = 0; j < nStyles; j++) {
-            Style p = ((Style)styles.get(j)).getResolved();
+            Style p = styles.get(j).getResolved();
             if (p.isSubset(s)) matchArray[matchCount++] = p;
         }
         return matchArray;
@@ -269,7 +269,7 @@ public class StyleCatalog {
 
         int len = styles.size();
         for (int j = 0; j < len; j++) {
-            Style s = (Style)styles.get(j);
+            Style s = styles.get(j);
 
             Element styleNode = parentDoc.createElement("style:style");
 
@@ -304,7 +304,7 @@ public class StyleCatalog {
             TextStyle.dumpHdr();
             int nStyles = styles.size();
             for (int i = 0; i < nStyles; i++) {
-                Style s = (Style)styles.get(i);
+                Style s = styles.get(i);
                 if (s.getClass().equals(TextStyle.class))
                     ((TextStyle)s).dumpCSV();
             }
@@ -312,7 +312,7 @@ public class StyleCatalog {
             ParaStyle.dumpHdr();
             int nStyles = styles.size();
             for (int i = 0; i < nStyles; i++) {
-                Style s = (Style)styles.get(i);
+                Style s = styles.get(i);
                 if (s.getClass().equals(ParaStyle.class))
                     ((ParaStyle)s).dumpCSV();
             }
@@ -335,8 +335,8 @@ public class StyleCatalog {
      *
      *  @return  The class that is appropriate for this node.
      */
-    private Class getClass(Node node, String[] families, Class[] classes,
-    Class defaultClass) {
+    private Class<?> getClass(Node node, String[] families, Class<?>[] classes,
+    Class<?> defaultClass) {
         NamedNodeMap attributes = node.getAttributes();
         if (attributes != null) {
             int len = attributes.getLength();

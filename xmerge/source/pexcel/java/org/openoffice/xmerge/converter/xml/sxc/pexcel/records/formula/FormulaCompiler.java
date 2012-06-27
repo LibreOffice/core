@@ -91,16 +91,15 @@ public class FormulaCompiler {
      * @param   tokens  The tokens in RPN form
      * @return  The vector of tokens re-ordered in Infix notation
      */
-    public ArrayList RPN2Infix(ArrayList tokens) {
-        ArrayList infixExpr = new ArrayList(15);
-        ListIterator iter = tokens.listIterator();
-        Stack evalStack = new Stack();
-        Stack args = new Stack();
+    public ArrayList<Token> RPN2Infix(ArrayList<Token> tokens) {
+        ListIterator<Token> iter = tokens.listIterator();
+        Stack<ArrayList<Token>> evalStack = new Stack<ArrayList<Token>>();
+        Stack<ArrayList<Token>> args = new Stack<ArrayList<Token>>();
 
         while (iter.hasNext()) {
-            Token pt = (Token)iter.next();
+            Token pt = iter.next();
             if (pt.isOperand()) {
-                ArrayList expr = new ArrayList(5);
+                ArrayList<Token> expr = new ArrayList<Token>(5);
                 expr.add(pt);
                 evalStack.push(expr);
             } else if (pt.isOperator() || pt.isFunction()) {
@@ -111,7 +110,7 @@ public class FormulaCompiler {
                 evalStack.push(makeExpression(pt, args));
             }
         }
-        return (ArrayList)evalStack.elementAt(0);
+        return evalStack.elementAt(0);
     }
 
     /**
@@ -123,12 +122,12 @@ public class FormulaCompiler {
      *
      * @return  A vector of tokens for the expression in Reverse Polish Notation order
      */
-    public ArrayList infix2RPN(ArrayList tokens) {
-        ArrayList rpnExpr = new ArrayList(15);
-        Stack evalStack = new Stack();
-        ListIterator iter = tokens.listIterator();
+    public ArrayList<Token> infix2RPN(ArrayList<Token> tokens) {
+        ArrayList<Token> rpnExpr = new ArrayList<Token>(15);
+        Stack<Token> evalStack = new Stack<Token>();
+        ListIterator<Token> iter = tokens.listIterator();
         while (iter.hasNext()) {
-            Token pt = (Token)iter.next();
+            Token pt = iter.next();
 
             if (pt.isOperand()) { //Operands are output immediately
                 rpnExpr.add(pt);
@@ -137,7 +136,7 @@ public class FormulaCompiler {
                 if (pt.isFunction()) {
                     iter.next();
                 }
-                ArrayList param = extractParameter(iter);
+                ArrayList<Token> param = extractParameter(iter);
                 Debug.log(Debug.TRACE, "Extracted parameter " + param);
                 rpnExpr.addAll(infix2RPN(param));
             } else if (isCloseBrace(pt)) { //Pop off stack till you meet a function or an open bracket
@@ -147,7 +146,7 @@ public class FormulaCompiler {
                     if (evalStack.isEmpty()) {
                         bPop = false;
                     } else {
-                        tmpTok = (Token)evalStack.pop();
+                        tmpTok = evalStack.pop();
                         if (!isParamDelimiter(tmpTok)) { //Don't output commas
                             rpnExpr.add(tmpTok);
                         }
@@ -159,8 +158,8 @@ public class FormulaCompiler {
             } else {
                 if (!evalStack.isEmpty()) {
                     while (!evalStack.isEmpty() &&
-                            (((Token)evalStack.peek()).getTokenPriority() >=pt.getTokenPriority())) {
-                        Token topTok = (Token)evalStack.peek();
+                            (evalStack.peek().getTokenPriority() >=pt.getTokenPriority())) {
+                        Token topTok = evalStack.peek();
                         if (topTok.isFunction() || isOpenBrace(topTok)) {
                             break;
                         }
@@ -172,7 +171,7 @@ public class FormulaCompiler {
         }
 
         while (!evalStack.isEmpty()) {
-            Token topTok = (Token)evalStack.peek();
+            Token topTok = evalStack.peek();
             if (!(isOpenBrace(topTok) || isParamDelimiter(topTok))) { //Don't output brackets and commas
                 rpnExpr.add(evalStack.pop());
             }
@@ -189,12 +188,12 @@ public class FormulaCompiler {
      * @param iter an iterator into the list
      * @return A complete sub-expression
      */
-    protected ArrayList extractParameter(ListIterator iter) {
-        ArrayList param = new ArrayList(5);
+    protected ArrayList<Token> extractParameter(ListIterator<Token> iter) {
+        ArrayList<Token> param = new ArrayList<Token>(5);
         int subExprCount = 0;
 
         while (iter.hasNext()) {
-            Token pt = (Token)iter.next();
+            Token pt = iter.next();
             Debug.log(Debug.TRACE, "Token is " + pt + " and subExprCount is " + subExprCount);
             if (isOpenBrace(pt)) {
                 subExprCount++;
@@ -223,21 +222,21 @@ public class FormulaCompiler {
      * @param   args    The arguments for this operator
      * @return  A correctly ordered expression
      */
-    protected ArrayList<Object> makeExpression(Token pt, Stack<ArrayList> args) {
-        ArrayList<Object> tmp = new ArrayList<Object>(5);
+    protected ArrayList<Token> makeExpression(Token pt, Stack<ArrayList<Token>> args) {
+        ArrayList<Token> tmp = new ArrayList<Token>(5);
         TokenFactory tf = new TokenFactory();
         if (pt.isOperator()) {
             if (pt.getNumArgs()==2) { //Binary operator
-                tmp.addAll((ArrayList)args.pop());
+                tmp.addAll(args.pop());
                 tmp.add(pt);
-                tmp.addAll((ArrayList)args.pop());
+                tmp.addAll(args.pop());
             } else if (pt.getNumArgs() == 1) {
                 if(isPercent(pt)) {
-                    tmp.addAll((ArrayList)args.elementAt(0));
+                    tmp.addAll(args.elementAt(0));
                     tmp.add(pt);
                 } else {
                     tmp.add(pt);
-                    tmp.addAll((ArrayList)args.elementAt(0));
+                    tmp.addAll(args.elementAt(0));
                 }
                 if (isOpenBrace(pt)) {
                     tmp.add(tf.getOperatorToken(")",1));
@@ -247,12 +246,12 @@ public class FormulaCompiler {
             tmp.add(pt);
             tmp.add(tf.getOperatorToken("(",1));
             if (!args.isEmpty()) {
-                ArrayList v = (ArrayList)args.pop();
+                ArrayList<Token> v = args.pop();
                 tmp.addAll(v);
             }
             while (!args.isEmpty()) {
                 tmp.add(tf.getOperatorToken(",",1));
-                ArrayList v = (ArrayList)args.pop();
+                ArrayList<Token> v = args.pop();
                 tmp.addAll(v);
 
             }

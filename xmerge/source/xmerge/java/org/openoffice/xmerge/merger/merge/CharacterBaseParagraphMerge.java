@@ -78,8 +78,8 @@ public final class CharacterBaseParagraphMerge
                                  CharacterParser modParser,
                                  Difference[] diffs) {
 
-        List orgNodeList = orgParser.getNodeList();
-        List modNodeList = modParser.getNodeList();
+        List<TextNodeEntry> orgNodeList = orgParser.getNodeList();
+        List<TextNodeEntry> modNodeList = modParser.getNodeList();
         int diffCount = 0;
         int modNodeListCnt = 0;
         int numNode = orgNodeList.size();
@@ -88,7 +88,7 @@ public final class CharacterBaseParagraphMerge
 
             int extraChar = 0;
             int orgDiffCount = diffCount;
-            TextNodeEntry orgTextNode = (TextNodeEntry)(orgNodeList.get(i));
+            TextNodeEntry orgTextNode = (orgNodeList.get(i));
 
             Debug.log(Debug.INFO, "checking node " + (i + 1) + " of " + numNode);
 

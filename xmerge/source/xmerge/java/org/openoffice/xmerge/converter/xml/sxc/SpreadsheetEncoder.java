@@ -40,7 +40,7 @@ public abstract class SpreadsheetEncoder {
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    public SpreadsheetEncoder(String name, String password) throws IOException { };
+    public SpreadsheetEncoder(String name, String password) throws IOException { }
 
 
     /**
@@ -99,7 +99,7 @@ public abstract class SpreadsheetEncoder {
      *  @param  columnRows  An <code>IntArrayList</code> of column
      *                        widths.
      */
-    public abstract void setColumnRows(ArrayList columnRows) throws IOException;
+    public abstract void setColumnRows(ArrayList<ColumnRowInfo> columnRows) throws IOException;
 
     /**
      *  Set the name definition of this spreadsheet

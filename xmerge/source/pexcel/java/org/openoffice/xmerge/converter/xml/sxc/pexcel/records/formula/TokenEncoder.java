@@ -75,7 +75,7 @@ public class TokenEncoder {
      */
     public byte[] getByte(Token t) throws IOException {
 
-        ArrayList tmpByteArray = null;     // we use this cause we don't know till after
+        ArrayList<Byte> tmpByteArray = null;     // we use this cause we don't know till after
                                         // the encoding takes place how big the byte [] will be
            //index=0;                       // This class is declared static in
                                         // FormulaHelper so better make sure our index is 0
@@ -114,8 +114,8 @@ public class TokenEncoder {
         byte cellRefArray[] = new byte[tmpByteArray.size()];
         int i = 0;
         String s = new String();
-        for(Iterator e = tmpByteArray.iterator();e.hasNext();) {
-            Byte tmpByte = (Byte) e.next();
+        for(Iterator<Byte> e = tmpByteArray.iterator();e.hasNext();) {
+            Byte tmpByte = e.next();
             s = s + tmpByte + " ";
             cellRefArray[i] = tmpByte.byteValue();
             i++;
@@ -130,9 +130,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private ArrayList operatorEncoder(Token t) {
+    private ArrayList<Byte> operatorEncoder(Token t) {
 
-        ArrayList tmpByteArray = new ArrayList();
+        ArrayList<Byte> tmpByteArray = new ArrayList<Byte>();
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         return tmpByteArray;
     }
@@ -144,9 +144,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private ArrayList stringEncoder(Token t) throws IOException{
+    private ArrayList<Byte> stringEncoder(Token t) throws IOException{
 
-        ArrayList tmpByteArray = new ArrayList();
+        ArrayList<Byte> tmpByteArray = new ArrayList<Byte>();
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         tmpByteArray.add(new Byte((byte)(t.getValue().length())));
         tmpByteArray.add(new Byte((byte)0x01));
@@ -164,11 +164,11 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private ArrayList numEncoder(Token t) {
+    private ArrayList<Byte> numEncoder(Token t) {
 
-        ArrayList tmpByteArray = new ArrayList();
+        ArrayList<Byte> tmpByteArray = new ArrayList<Byte>();
 
-        double cellLong = (double) Double.parseDouble(t.getValue());
+        double cellLong = Double.parseDouble(t.getValue());
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         byte[] tempByte = EndianConverter.writeDouble(cellLong);
         for(int byteIter=0;byteIter<tempByte.length;byteIter++) {
@@ -313,19 +313,19 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private ArrayList nameDefinitionEncoder(Token t) {
+    private ArrayList<Byte> nameDefinitionEncoder(Token t) {
 
-        ArrayList tmpByteArray = new ArrayList();
+        ArrayList<Byte> tmpByteArray = new ArrayList<Byte>();
 
         String nameString = t.getValue();
         Debug.log(Debug.TRACE,"NameDefinitionEncoder : " + nameString);
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
-        Iterator e = wb.getDefinedNames();
+        Iterator<DefinedName> e = wb.getDefinedNames();
         DefinedName dn;
         String name;
         int definedNameIndex = 0;
         do {
-            dn = (DefinedName)e.next();
+            dn = e.next();
             name = dn.getName();
             Debug.log(Debug.TRACE,"Name pulled from DefinedName : " + name);
             definedNameIndex++;
@@ -347,9 +347,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private ArrayList cellRefEncoder(Token t) {
+    private ArrayList<Byte> cellRefEncoder(Token t) {
 
-        ArrayList tmpByteArray = new ArrayList();
+        ArrayList<Byte> tmpByteArray = new ArrayList<Byte>();
 
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         byte cellRefBytes[] = encodeCellCoordinates(t.getValue());
@@ -376,8 +376,8 @@ public class TokenEncoder {
             sheetName = s.substring(0,s.length());
         }
         Debug.log(Debug.TRACE,"Searching for Worksheet : " + sheetName);
-        ArrayList names = wb.getWorksheetNames();
-        Iterator e = names.iterator();
+        ArrayList<Object> names = wb.getWorksheetNames();
+        Iterator<Object> e = names.iterator();
         do {
             savedName = (String) e.next();
             sheetIndex++;
@@ -393,9 +393,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private ArrayList threeDCellRefEncoder(Token t) {
+    private ArrayList<Byte> threeDCellRefEncoder(Token t) {
 
-        ArrayList tmpByteArray = new ArrayList();
+        ArrayList<Byte> tmpByteArray = new ArrayList<Byte>();
         parseString = t.getValue();
         Debug.log(Debug.TRACE,"Encoding 3D Cell reference " + t);
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
@@ -437,9 +437,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private ArrayList threeDAreaRefEncoder(Token t) {
+    private ArrayList<Byte> threeDAreaRefEncoder(Token t) {
 
-        ArrayList tmpByteArray = new ArrayList();
+        ArrayList<Byte> tmpByteArray = new ArrayList<Byte>();
         parseString = t.getValue();
         Debug.log(Debug.TRACE,"Encoding 3D Area reference " + t);
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
@@ -494,9 +494,9 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private ArrayList areaRefEncoder(Token t) {
+    private ArrayList<Byte> areaRefEncoder(Token t) {
 
-        ArrayList tmpByteArray = new ArrayList();
+        ArrayList<Byte> tmpByteArray = new ArrayList<Byte>();
 
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
         String param = t.getValue();
@@ -530,8 +530,8 @@ public class TokenEncoder {
      * @param t <code>Token</code> to be encoded
      * @return A <code>Vector</code> of pexcel <code>Byte</code>
      */
-    private ArrayList functionEncoder(Token t) {
-        ArrayList tmpByteArray = new ArrayList();
+    private ArrayList<Byte> functionEncoder(Token t) {
+        ArrayList<Byte> tmpByteArray = new ArrayList<Byte>();
 
         int id = t.getTokenID();
         if(t.getTokenType()==ParseToken.TOKEN_FUNCTION_VARIABLE) {

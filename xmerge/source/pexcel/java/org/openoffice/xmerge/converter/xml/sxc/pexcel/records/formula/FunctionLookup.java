@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class FunctionLookup extends SymbolLookup {
 
-    private HashMap stringToArgs = null;
+    private HashMap<String, Integer> stringToArgs = null;
 
     /**
     * The default constructor - invokes {@link #initialize() initialize()}
@@ -38,9 +38,9 @@ public class FunctionLookup extends SymbolLookup {
         if ((stringToID != null) || (idToString != null) || (stringToArgs !=null)) {
             return;
         }
-        stringToID = new HashMap();
-        idToString = new HashMap();
-        stringToArgs = new HashMap();
+        stringToID = new HashMap<String, Integer>();
+        idToString = new HashMap<Integer, String>();
+        stringToArgs = new HashMap<String, Integer>();
 
                 // Functions with Variable number of Arguments
                 // Math and Trig
@@ -190,6 +190,6 @@ public class FunctionLookup extends SymbolLookup {
      * @return  The number of arguments required by this function
      */
     public int getArgCountFromString(String symbol) {
-        return ((Integer)stringToArgs.get(symbol)).intValue();
+        return stringToArgs.get(symbol).intValue();
     }
 }

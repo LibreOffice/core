@@ -42,7 +42,7 @@ public class BookSettings implements OfficeConstants {
 
     private boolean hasColumnRowHeaders = true;
     private String  activeSheet         = new String();
-    private ArrayList  worksheetSettings   = new ArrayList();
+    private ArrayList<SheetSettings>  worksheetSettings   = new ArrayList<SheetSettings>();
 
     /**
      * Constructor for a <code>BookSettings</code>. Reads document settings
@@ -59,7 +59,7 @@ public class BookSettings implements OfficeConstants {
      *
      * @param worksheetSettings If it's a row the height, a column the width
      */
-    public BookSettings(ArrayList worksheetSettings) {
+    public BookSettings(ArrayList<SheetSettings> worksheetSettings) {
         this.worksheetSettings = worksheetSettings;
     }
 
@@ -86,7 +86,7 @@ public class BookSettings implements OfficeConstants {
      *
      * @return <code>Vector</code> of <code>SheetSettings</code>
      */
-    public ArrayList getSheetSettings() {
+    public ArrayList<SheetSettings> getSheetSettings() {
         return worksheetSettings;
     }
 
@@ -138,10 +138,10 @@ public class BookSettings implements OfficeConstants {
     public void writeNode(org.w3c.dom.Document settings, Node root) {
 
         this.settings = settings;
-        Element configItemMapNamed      = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_NAMED);
+        Element configItemMapNamed      = settings.createElement(TAG_CONFIG_ITEM_MAP_NAMED);
         configItemMapNamed.setAttribute(ATTRIBUTE_CONFIG_NAME, "Tables");
-        for(Iterator e = worksheetSettings.iterator();e.hasNext();) {
-            SheetSettings s = (SheetSettings) e.next();
+        for(Iterator<SheetSettings> e = worksheetSettings.iterator();e.hasNext();) {
+            SheetSettings s = e.next();
             s.writeNode(settings, configItemMapNamed);
         }
         addConfigItem(root, "ActiveTable", "string", activeSheet);

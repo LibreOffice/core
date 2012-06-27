@@ -202,7 +202,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         for(int i=0;i<fontTable.length;) {
 
             // Create an element node for the table
-            Element tableElement = (Element) doc.createElement(TAG_STYLE_FONT_DECL);
+            Element tableElement = doc.createElement(TAG_STYLE_FONT_DECL);
 
             tableElement.setAttribute(ATTRIBUTE_STYLE_NAME, fontTable[i++]);
                tableElement.setAttribute(ATTRIBUTE_FO_FONT_FAMILY, fontTable[i++]);
@@ -251,14 +251,14 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         }
 
         // Add the Defined Name table if there is one
-        Iterator nameDefinitionTable = decoder.getNameDefinitions();
+        Iterator<NameDefinition> nameDefinitionTable = decoder.getNameDefinitions();
         if(nameDefinitionTable.hasNext()) {
             processNameDefinition(node, nameDefinitionTable);
         }
 
         // add settings
         NodeList settingsList = settings.getElementsByTagName(TAG_OFFICE_SETTINGS);
-        Node settingsNode = settingsList.item(0);;
+        Node settingsNode = settingsList.item(0);
         processSettings(settingsNode);
 
     }
@@ -276,12 +276,12 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      */
     protected void processSettings(Node root) {
 
-        Element configItemSetEntry      = (Element) settings.createElement(TAG_CONFIG_ITEM_SET);
+        Element configItemSetEntry      = settings.createElement(TAG_CONFIG_ITEM_SET);
         configItemSetEntry.setAttribute(ATTRIBUTE_CONFIG_NAME, "view-settings");
-        Element configItemMapIndexed    = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_INDEXED);
+        Element configItemMapIndexed    = settings.createElement(TAG_CONFIG_ITEM_MAP_INDEXED);
         configItemMapIndexed.setAttribute(ATTRIBUTE_CONFIG_NAME, "Views");
-        Element configItemMapEntry      = (Element) settings.createElement(TAG_CONFIG_ITEM_MAP_ENTRY);
-        BookSettings bs = (BookSettings) decoder.getSettings();
+        Element configItemMapEntry      = settings.createElement(TAG_CONFIG_ITEM_MAP_ENTRY);
+        BookSettings bs = decoder.getSettings();
         bs.writeNode(settings, configItemMapEntry);
 
         configItemMapIndexed.appendChild(configItemMapEntry);
@@ -300,15 +300,15 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    protected void processNameDefinition(Node root, Iterator eNameDefinitions) throws IOException {
+    protected void processNameDefinition(Node root, Iterator<NameDefinition> eNameDefinitions) throws IOException {
 
         Debug.log(Debug.TRACE, "<NAMED-EXPRESSIONS>");
 
-        Element namedExpressionsElement = (Element) doc.createElement(TAG_NAMED_EXPRESSIONS);
+        Element namedExpressionsElement = doc.createElement(TAG_NAMED_EXPRESSIONS);
 
         while(eNameDefinitions.hasNext()) {
 
-            NameDefinition tableEntry = (NameDefinition) eNameDefinitions.next();
+            NameDefinition tableEntry = eNameDefinitions.next();
             tableEntry.writeNode(doc, namedExpressionsElement);
         }
 
@@ -334,7 +334,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         Debug.log(Debug.TRACE, "<TABLE>");
 
         // Create an element node for the table
-        Element tableElement = (Element) doc.createElement(TAG_TABLE);
+        Element tableElement = doc.createElement(TAG_TABLE);
 
         // Get the sheet name
         String sheetName = decoder.getSheetName();
@@ -376,14 +376,14 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      */
     protected void processColumns(Node root) throws IOException {
 
-        for(Iterator e = decoder.getColumnRowInfos();e.hasNext();) {
+        for(Iterator<ColumnRowInfo> e = decoder.getColumnRowInfos();e.hasNext();) {
 
-            ColumnRowInfo ci = (ColumnRowInfo) e.next();
+            ColumnRowInfo ci = e.next();
             if(ci.isColumn()) {
                 ColumnStyle cStyle = new ColumnStyle("Default",SxcConstants.COLUMN_STYLE_FAMILY,
                             SxcConstants.DEFAULT_STYLE, ci.getSize(), null);
 
-                Style result[] = (Style[]) styleCat.getMatching(cStyle);
+                Style result[] = styleCat.getMatching(cStyle);
                 String styleName;
                 if(result.length==0) {
 
@@ -398,7 +398,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 }
 
                 // Create an element node for the new row
-                Element colElement = (Element) doc.createElement(TAG_TABLE_COLUMN);
+                Element colElement = doc.createElement(TAG_TABLE_COLUMN);
                 colElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, styleName);
                 if(ci.getRepeated()!=1) {
                     String repeatStr = String.valueOf(ci.getRepeated());
@@ -479,17 +479,17 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 col = 1;
 
                 // Create an element node for the new row
-                rowElement = (Element) doc.createElement(TAG_TABLE_ROW);
+                rowElement = doc.createElement(TAG_TABLE_ROW);
 
 
-                for(Iterator e = decoder.getColumnRowInfos();e.hasNext();) {
-                    ColumnRowInfo cri = (ColumnRowInfo) e.next();
+                for(Iterator<ColumnRowInfo> e = decoder.getColumnRowInfos();e.hasNext();) {
+                    ColumnRowInfo cri = e.next();
                     if(cri.isRow() && cri.getRepeated()==newRow-1) {
                         // We have the correct Row BIFFRecord for this row
                         RowStyle rStyle = new RowStyle("Default",SxcConstants.ROW_STYLE_FAMILY,
                                     SxcConstants.DEFAULT_STYLE, cri.getSize(), null);
 
-                        Style result[] = (Style[]) styleCat.getMatching(rStyle);
+                        Style result[] = styleCat.getMatching(rStyle);
                         String styleName;
                         if(result.length==0) {
 
@@ -545,7 +545,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             Format fmt = decoder.getCellFormat();
 
             // Create an element node for the cell
-            cellElement = (Element) doc.createElement(TAG_TABLE_CELL);
+            cellElement = doc.createElement(TAG_TABLE_CELL);
 
             Node bodyNode = doc.getElementsByTagName(TAG_OFFICE_BODY).item(0);
 
@@ -562,7 +562,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             CellStyle(  "Default",SxcConstants.TABLE_CELL_STYLE_FAMILY,
                         SxcConstants.DEFAULT_STYLE, fmt, null);
             String styleName;
-            Style result[] = (Style[]) styleCat.getMatching(tStyle);
+            Style result[] = styleCat.getMatching(tStyle);
             if(result.length==0) {
 
                     tStyle.setName("ce" + textStyles++);
@@ -584,7 +584,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             rowElement.appendChild(cellElement);
 
             // Append the cellContents as a text node
-            Element textElement = (Element) doc.createElement(TAG_PARAGRAPH);
+            Element textElement = doc.createElement(TAG_PARAGRAPH);
             cellElement.appendChild(textElement);
             textElement.appendChild(doc.createTextNode(cellContents));
 
@@ -638,7 +638,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     protected void addEmptyRows(int numEmptyRows, Node root, int numEmptyCells) {
 
         // Create an element node for the row
-        Element rowElement = (Element) doc.createElement(TAG_TABLE_ROW);
+        Element rowElement = doc.createElement(TAG_TABLE_ROW);
 
         // TODO - style currently hardcoded - get real value
         // Set row style-name attribute
@@ -681,7 +681,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     protected void addEmptyCells(int numColsSkipped, Node row) {
 
         // Create an empty cellElement
-        Element cellElement = (Element) doc.createElement(TAG_TABLE_CELL);
+        Element cellElement = doc.createElement(TAG_TABLE_CELL);
 
         // TODO - style currently hardcoded - get real value
         // Set cell style-name attribute

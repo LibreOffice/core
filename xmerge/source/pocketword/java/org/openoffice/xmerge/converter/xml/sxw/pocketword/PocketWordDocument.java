@@ -45,9 +45,9 @@ public class PocketWordDocument implements Document, PocketWordConstants {
     private String      docName;
 
     private byte[] preamble;
-    private ArrayList fonts;
+    private ArrayList<Object> fonts;
     private DocumentDescriptor descriptor;
-    private ArrayList paragraphs;
+    private ArrayList<Paragraph> paragraphs;
 
     private ParaStyle   pStyle;
     private Paragraph   currentPara;
@@ -85,9 +85,9 @@ public class PocketWordDocument implements Document, PocketWordConstants {
         docName = trimDocumentName(name);
 
         preamble   = new byte[52];
-        fonts      = new ArrayList();
+        fonts      = new ArrayList<Object>();
         descriptor = new DocumentDescriptor();
-        paragraphs = new ArrayList();
+        paragraphs = new ArrayList<Paragraph>();
     }
 
 
@@ -205,7 +205,7 @@ public class PocketWordDocument implements Document, PocketWordConstants {
      *
      * @return <code>Enumeration</code> over the paragraphs in the document.
      */
-    public Iterator getParagraphEnumeration() {
+    public Iterator<Paragraph> getParagraphEnumeration() {
         return paragraphs.iterator();
     }
 
@@ -258,13 +258,13 @@ public class PocketWordDocument implements Document, PocketWordConstants {
 
 
         for (int i = 0; i < paragraphs.size(); i++) {
-            Paragraph para = (Paragraph)paragraphs.get(i);
+            Paragraph para = paragraphs.get(i);
             descriptor.addParagraph((short)para.getTextLength(), para.getLines());
         }
         dos.write(descriptor.getDescriptor());
 
         for (int i = 0; i < paragraphs.size(); i++ ) {
-            Paragraph para = (Paragraph)paragraphs.get(i);
+            Paragraph para = paragraphs.get(i);
 
             // Last paragraph has some extra data
             if (i + 1 == paragraphs.size()) {

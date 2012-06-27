@@ -34,14 +34,14 @@ import java.io.ByteArrayOutputStream;
 
 class textRecord {
 
-    java.util.ArrayList elements;
+    java.util.ArrayList<Wse> elements;
 
 
     /**
      *  Default constructor
      */
     textRecord() {
-        elements = new java.util.ArrayList(10);
+        elements = new java.util.ArrayList<Wse>(10);
     }
 
 
@@ -66,7 +66,7 @@ class textRecord {
         int totalBytes = 0;
         int nElements = elements.size();
         for (int i = 0; i < nElements; i++) {
-            Wse e = (Wse)elements.get(i);
+            Wse e = elements.get(i);
             totalBytes += e.getByteCount();
         }
         return totalBytes;
@@ -89,7 +89,7 @@ class textRecord {
             os = new DataOutputStream(bs);
             int nElements = elements.size();
             for (int i = 0; i < nElements; i++) {
-                Wse e = (Wse)elements.get(i);
+                Wse e = elements.get(i);
                 os.write(e.getBytes());
             }
 

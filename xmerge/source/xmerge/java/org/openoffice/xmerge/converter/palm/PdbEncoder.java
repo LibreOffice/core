@@ -160,7 +160,7 @@ public final class PdbEncoder {
                 // unique ID (uid) in 4 bytes (int) chunk.
                 // unique ID's have to be unique, thus
                 // increment each time.
-                int attr = (((int) recAttr[i]) << 24 );
+                int attr = (recAttr[i] << 24 );
                 attr |= uid;
                 dos.writeInt(attr);
                 uid++;

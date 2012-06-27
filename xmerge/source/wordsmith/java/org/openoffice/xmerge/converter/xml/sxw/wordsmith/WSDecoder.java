@@ -120,7 +120,7 @@ final class WSDecoder implements DOCConstants {
      */
     Wse[] parseDocument(Record[] recs) throws IOException {
 
-        java.util.ArrayList v = new java.util.ArrayList(20);
+        java.util.ArrayList<Wse> v = new java.util.ArrayList<Wse>(20);
         WseFontTable fontTable = null;
         WseColorTable colorTable = null;
 
@@ -160,7 +160,7 @@ final class WSDecoder implements DOCConstants {
             }
         }
 
-        return (Wse[])v.toArray(new Wse[2]);
+        return v.toArray(new Wse[2]);
     }
 
 
@@ -290,10 +290,10 @@ final class WSDecoder implements DOCConstants {
         }
 
         // read the number of records - unsigned 2 bytes
-        header.textRecordCount = ((int) dis.readShort()) & 0x0000ffff;
+        header.textRecordCount = dis.readShort() & 0x0000ffff;
 
         // read the record size - unsigned 2 bytes
-        header.textRecordSize = ((int) dis.readShort()) & 0x0000ffff;
+        header.textRecordSize = dis.readShort() & 0x0000ffff;
 
         // read extra 4 unused bytes
         dis.readInt();

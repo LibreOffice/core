@@ -52,7 +52,7 @@ class OfficeZip {
 
     private final static int BUFFERSIZE = 1024;
 
-    private List entryList = null;
+    private List<Entry> entryList = null;
 
     private int contentIndex = -1;
     private int styleIndex = -1;
@@ -63,7 +63,7 @@ class OfficeZip {
     /** Default constructor. */
     OfficeZip() {
 
-        entryList = new LinkedList();
+        entryList = new LinkedList<Entry>();
     }
 
 
@@ -205,7 +205,7 @@ class OfficeZip {
         // Could improve performance by caching the name and index when
         // iterating through the ZipFile in read().
         for (int i = 0; i < entryList.size(); i++) {
-            Entry e = (Entry)entryList.get(i);
+            Entry e = entryList.get(i);
 
             if (e.zipEntry.getName().equals(name)) {
                 return getEntryBytes(i);
@@ -228,7 +228,7 @@ class OfficeZip {
      */
     void setNamedBytes(String name, byte[] bytes) {
         for (int i = 0; i < entryList.size(); i++) {
-            Entry e = (Entry)entryList.get(i);
+            Entry e = entryList.get(i);
 
             if (e.zipEntry.getName().equals(name)) {
                 setEntryBytes(i, bytes, name);
@@ -259,7 +259,7 @@ class OfficeZip {
         byte[] bytes = null;
 
         if (index > -1) {
-            Entry entry = (Entry) entryList.get(index);
+            Entry entry = entryList.get(index);
             bytes = entry.bytes;
         }
         return bytes;
@@ -349,7 +349,7 @@ class OfficeZip {
 
             // replace existing entry in entryList
 
-            Entry entry = (Entry) entryList.get(index);
+            Entry entry = entryList.get(index);
             name = entry.zipEntry.getName();
             int method = entry.zipEntry.getMethod();
 
@@ -385,11 +385,11 @@ class OfficeZip {
 
         ZipOutputStream zos = new ZipOutputStream(os);
 
-        ListIterator iterator = entryList.listIterator();
+        ListIterator<Entry> iterator = entryList.listIterator();
 
         while (iterator.hasNext()) {
 
-            Entry entry = (Entry) iterator.next();
+            Entry entry = iterator.next();
             ZipEntry ze = entry.zipEntry;
 
             String name = ze.getName();

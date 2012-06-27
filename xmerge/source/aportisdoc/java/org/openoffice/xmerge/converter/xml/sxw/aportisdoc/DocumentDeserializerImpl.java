@@ -87,7 +87,7 @@ public final class DocumentDeserializerImpl
         Document doc = null;
         int i=0;
         ConvertData cdOut;
-        Iterator e = cd.getDocumentEnumeration();
+        Iterator<Object> e = cd.getDocumentEnumeration();
         while (e.hasNext()) {
             PalmDocument palmDoc = (PalmDocument) e.next();
             PalmDB pdb = palmDoc.getPdb();

@@ -71,9 +71,9 @@ class Paragraph implements PocketWordConstants {
      * representation.
      */
 
-    private ArrayList textSegments = null;
+    private ArrayList<ParagraphTextSegment> textSegments = null;
 
-    private ArrayList lineDescriptors = null;
+    private ArrayList<LineDescriptor> lineDescriptors = null;
 
     private ParaStyle pStyle = null;
 
@@ -85,7 +85,7 @@ class Paragraph implements PocketWordConstants {
      * initialisation of the Vector storing the paragraph's text.
      */
     private Paragraph () {
-        textSegments = new ArrayList();
+        textSegments = new ArrayList<ParagraphTextSegment>();
     }
 
 
@@ -99,7 +99,7 @@ class Paragraph implements PocketWordConstants {
     public Paragraph (ParaStyle style) {
         this();
 
-        lineDescriptors = new ArrayList();
+        lineDescriptors = new ArrayList<LineDescriptor>();
         pStyle = style;
     }
 
@@ -471,7 +471,7 @@ class Paragraph implements PocketWordConstants {
 
         try {
             for (int i = 0; i < textSegments.size(); i++) {
-                ParagraphTextSegment pts = (ParagraphTextSegment)textSegments.get(i);
+                ParagraphTextSegment pts = textSegments.get(i);
                 segs.write(pts.getData());
             }
         }
@@ -603,7 +603,7 @@ class Paragraph implements PocketWordConstants {
 
             // Now write out the line descriptors
             for (int i = 0; i < lineDescriptors.size(); i++) {
-                LineDescriptor ld = (LineDescriptor)lineDescriptors.get(i);
+                LineDescriptor ld = lineDescriptors.get(i);
 
                 bos.write(ld.getDescriptorInfo());
             }
@@ -651,11 +651,11 @@ class Paragraph implements PocketWordConstants {
         StringBuffer sb = new StringBuffer("");
 
         // Line Descriptor info should be eliminated each time
-        lineDescriptors = new ArrayList();
+        lineDescriptors = new ArrayList<LineDescriptor>();
         lines = 0;
 
         for (int i = 0; i < textSegments.size(); i++) {
-            ParagraphTextSegment pts = (ParagraphTextSegment)textSegments.get(i);
+            ParagraphTextSegment pts = textSegments.get(i);
             sb.append(pts.getText());
         }
 
@@ -763,7 +763,7 @@ class Paragraph implements PocketWordConstants {
      *
      * @return  An <code>Enumeration</code> of the text segments.
      */
-    public Iterator getSegmentsEnumerator () {
+    public Iterator<ParagraphTextSegment> getSegmentsEnumerator () {
         return textSegments.iterator();
     }
 

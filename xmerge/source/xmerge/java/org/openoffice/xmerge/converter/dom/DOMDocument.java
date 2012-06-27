@@ -240,7 +240,7 @@ public class DOMDocument
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        java.lang.reflect.Constructor con;
+        java.lang.reflect.Constructor<?> con;
         java.lang.reflect.Method meth;
 
         String domImpl = doc.getClass().getName();
@@ -257,7 +257,7 @@ public class DOMDocument
             // First of all try for JAXP 1.0
             if (domImpl.equals("com.sun.xml.tree.XmlDocument")) {
                 System.out.println("Using JAXP");
-                Class jaxpDoc = Class.forName("com.sun.xml.tree.XmlDocument");
+                Class<?> jaxpDoc = Class.forName("com.sun.xml.tree.XmlDocument");
 
                 // The method is in the XMLDocument class itself, not a helper
                 meth = jaxpDoc.getMethod("write",
@@ -268,7 +268,7 @@ public class DOMDocument
         else if (domImpl.equals("org.apache.crimson.tree.XmlDocument"))
         {
          System.out.println("Using Crimson");
-         Class crimsonDoc = Class.forName("org.apache.crimson.tree.XmlDocument");
+         Class<?> crimsonDoc = Class.forName("org.apache.crimson.tree.XmlDocument");
          // The method is in the XMLDocument class itself, not a helper
                 meth = crimsonDoc.getMethod("write",
                             new Class[] { Class.forName("java.io.OutputStream") } );
@@ -279,7 +279,7 @@ public class DOMDocument
             || domImpl.equals("org.apache.xerces.dom.DeferredDocumentImpl")) {
                 System.out.println("Using Xerces");
                 // Try for Xerces
-                Class xercesSer =
+                Class<?> xercesSer =
                         Class.forName("org.apache.xml.serialize.XMLSerializer");
 
                 // Get the OutputStream constructor
@@ -304,7 +304,7 @@ public class DOMDocument
             else if (domImpl.equals("gnu.xml.dom.DomDocument")) {
                 System.out.println("Using GNU");
 
-                Class gnuSer = Class.forName("gnu.xml.dom.ls.DomLSSerializer");
+                Class<?> gnuSer = Class.forName("gnu.xml.dom.ls.DomLSSerializer");
 
                 // Get the serialize method
                 meth = gnuSer.getMethod("serialize",
@@ -387,7 +387,7 @@ public class DOMDocument
 
         }
 
-        Element root = (Element) doc.createElement(rootName);
+        Element root = doc.createElement(rootName);
         doc.appendChild(root);
 
 

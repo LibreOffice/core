@@ -96,7 +96,7 @@ public abstract class OfficeDocument
     private OfficeZip zip = null;
 
     /** Collection to keep track of the embedded objects in the document. */
-    private Map embeddedObjects = null;
+    private Map<String, EmbeddedObject> embeddedObjects = null;
 
     /**
      *  Default constructor.
@@ -290,10 +290,10 @@ public abstract class OfficeDocument
      *
      * @return An <code>Iterator</code> of <code>EmbeddedObject</code> objects.
      */
-    public Iterator getEmbeddedObjects() {
+    public Iterator<EmbeddedObject> getEmbeddedObjects() {
 
         if (embeddedObjects == null && manifestDoc != null) {
-            embeddedObjects = new HashMap();
+            embeddedObjects = new HashMap<String, EmbeddedObject>();
 
             // Need to read the manifest file and construct a list of objects
             NodeList nl = manifestDoc.getElementsByTagName(TAG_MANIFEST_FILE);
@@ -363,7 +363,7 @@ public abstract class OfficeDocument
         }
 
         if (embeddedObjects.containsKey(name)) {
-            return (EmbeddedObject)embeddedObjects.get(name);
+            return embeddedObjects.get(name);
         }
         else {
             return null;
@@ -382,7 +382,7 @@ public abstract class OfficeDocument
         }
 
         if (embeddedObjects == null) {
-            embeddedObjects = new HashMap();
+            embeddedObjects = new HashMap<String, EmbeddedObject>();
         }
 
         embeddedObjects.put(embObj.getName(), embObj);
@@ -529,12 +529,12 @@ public abstract class OfficeDocument
 
             NodeList nodeList;
             Node tmpNode;
-            Node rootNode = (Node)rootElement;
+            Node rootNode = rootElement;
                 if (newDoc !=null){
             /*content*/
                    contentDoc = createDOM(TAG_OFFICE_DOCUMENT_CONTENT);
                    rootElement=contentDoc.getDocumentElement();
-                   rootNode = (Node)rootElement;
+                   rootNode = rootElement;
 
                    // FIX (HJ): Include office:font-decls in content DOM
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
@@ -558,7 +558,7 @@ public abstract class OfficeDocument
            /*Styles*/
                    styleDoc = createDOM(TAG_OFFICE_DOCUMENT_STYLES);
                    rootElement=styleDoc.getDocumentElement();
-                   rootNode = (Node)rootElement;
+                   rootNode = rootElement;
 
                    // FIX (HJ): Include office:font-decls in styles DOM
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
@@ -590,7 +590,7 @@ public abstract class OfficeDocument
            /*Settings*/
                    settingsDoc = createDOM(TAG_OFFICE_DOCUMENT_SETTINGS);
                    rootElement=settingsDoc.getDocumentElement();
-                   rootNode = (Node)rootElement;
+                   rootNode = rootElement;
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_SETTINGS);
                    if (nodeList.getLength()>0){
                   tmpNode = settingsDoc.importNode(nodeList.item(0),true);
@@ -599,7 +599,7 @@ public abstract class OfficeDocument
            /*Meta*/
                    metaDoc = createDOM(TAG_OFFICE_DOCUMENT_META);
                    rootElement=metaDoc.getDocumentElement();
-                   rootNode = (Node)rootElement;
+                   rootNode = rootElement;
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_META);
                    if (nodeList.getLength()>0){
                   tmpNode = metaDoc.importNode(nodeList.item(0),true);
@@ -671,9 +671,9 @@ public abstract class OfficeDocument
         Element manifestRoot = manifestDoc.getDocumentElement();
 
         // The EmbeddedObjects come first.
-        Iterator embObjs = getEmbeddedObjects();
+        Iterator<EmbeddedObject> embObjs = getEmbeddedObjects();
         while (embObjs.hasNext()) {
-            EmbeddedObject obj = (EmbeddedObject)embObjs.next();
+            EmbeddedObject obj = embObjs.next();
             obj.writeManifestData(manifestDoc);
 
             obj.write(zip);
@@ -780,7 +780,7 @@ public abstract class OfficeDocument
 
         NodeList nodeList;
         Node tmpNode;
-        Node rootNode = (Node)rootElement;
+        Node rootNode = rootElement;
         if (metaDoc !=null){
             nodeList= metaDoc.getElementsByTagName(TAG_OFFICE_META);
             if (nodeList.getLength()>0){
@@ -844,7 +844,7 @@ public abstract class OfficeDocument
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        java.lang.reflect.Constructor con;
+        java.lang.reflect.Constructor<?> con;
         java.lang.reflect.Method meth;
 
         String domImpl = doc.getClass().getName();
@@ -862,7 +862,7 @@ public abstract class OfficeDocument
 
                 Debug.log(Debug.INFO, "Using JAXP");
 
-                Class jaxpDoc = Class.forName("com.sun.xml.tree.XmlDocument");
+                Class<?> jaxpDoc = Class.forName("com.sun.xml.tree.XmlDocument");
 
                 // The method is in the XMLDocument class itself, not a helper
                 meth = jaxpDoc.getMethod("write",
@@ -874,7 +874,7 @@ public abstract class OfficeDocument
         {
                 Debug.log(Debug.INFO, "Using Crimson");
 
-         Class crimsonDoc = Class.forName("org.apache.crimson.tree.XmlDocument");
+         Class<?> crimsonDoc = Class.forName("org.apache.crimson.tree.XmlDocument");
          // The method is in the XMLDocument class itself, not a helper
                 meth = crimsonDoc.getMethod("write",
                             new Class[] { Class.forName("java.io.OutputStream") } );
@@ -887,7 +887,7 @@ public abstract class OfficeDocument
                 Debug.log(Debug.INFO, "Using Xerces");
 
                 // Try for Xerces
-                Class xercesSer =
+                Class<?> xercesSer =
                         Class.forName("org.apache.xml.serialize.XMLSerializer");
 
                 // Get the OutputStream constructor
@@ -912,7 +912,7 @@ public abstract class OfficeDocument
             else if (domImpl.equals("gnu.xml.dom.DomDocument")) {
                 Debug.log(Debug.INFO, "Using GNU");
 
-                Class gnuSer = Class.forName("gnu.xml.dom.ls.DomLSSerializer");
+                Class<?> gnuSer = Class.forName("gnu.xml.dom.ls.DomLSSerializer");
 
                 // Get the serialize method
                 meth = gnuSer.getMethod("serialize",
@@ -1036,7 +1036,7 @@ public abstract class OfficeDocument
 
         }
 
-        Element root = (Element) doc.createElement(rootName);
+        Element root = doc.createElement(rootName);
         doc.appendChild(root);
 
         root.setAttribute("xmlns:office", "http://openoffice.org/2000/office");
@@ -1075,7 +1075,7 @@ public abstract class OfficeDocument
 
         }
 
-        Element root = (Element) doc.createElement(rootName);
+        Element root = doc.createElement(rootName);
         doc.appendChild(root);
 
         root.setAttribute("xmlns:office", "http://openoffice.org/2000/office");
