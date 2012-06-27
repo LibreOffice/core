@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #ifdef IOS
 #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_qa_osl_File
 #endif
@@ -715,7 +712,7 @@ namespace osl_FileBase
       void getAbsoluteFileURL_003();
       void getAbsoluteFileURL_004();
 
-        SAL_CPPUNIT_TEST_SUITE( getAbsoluteFileURL );
+        CPPUNIT_TEST_SUITE( getAbsoluteFileURL );
         CPPUNIT_TEST( getAbsoluteFileURL_001_1 );
       CPPUNIT_TEST( getAbsoluteFileURL_001_2 );
       CPPUNIT_TEST( getAbsoluteFileURL_001_3 );
@@ -727,7 +724,7 @@ namespace osl_FileBase
       CPPUNIT_TEST( getAbsoluteFileURL_002 );
       CPPUNIT_TEST( getAbsoluteFileURL_003 );
       CPPUNIT_TEST( getAbsoluteFileURL_004 );
-      SAL_CPPUNIT_TEST_SUITE_END();
+      CPPUNIT_TEST_SUITE_END();
 
         }; //class getAbsoluteFileURL
 
@@ -894,7 +891,7 @@ namespace osl_FileBase
             void getFileURLFromSystemPath_004();
         void getFileURLFromSystemPath_005();
 
-        SAL_CPPUNIT_TEST_SUITE( SystemPath_FileURL );
+        CPPUNIT_TEST_SUITE( SystemPath_FileURL );
         CPPUNIT_TEST( getSystemPathFromFileURL_001_1 );
         CPPUNIT_TEST( getSystemPathFromFileURL_001_2 );
         CPPUNIT_TEST( getSystemPathFromFileURL_001_21 );
@@ -923,7 +920,7 @@ namespace osl_FileBase
         CPPUNIT_TEST( getFileURLFromSystemPath_003 );
         CPPUNIT_TEST( getFileURLFromSystemPath_004 );
         CPPUNIT_TEST( getFileURLFromSystemPath_005 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class SystemPath_FileURL
 
 
@@ -1323,13 +1320,13 @@ namespace osl_FileBase
                                     ( sal_True == bOk ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( searchFileURL );
+        CPPUNIT_TEST_SUITE( searchFileURL );
         CPPUNIT_TEST( searchFileURL_001 );
         CPPUNIT_TEST( searchFileURL_002 );
         CPPUNIT_TEST( searchFileURL_003 );
         CPPUNIT_TEST( searchFileURL_004 );
         CPPUNIT_TEST( searchFileURL_005 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class searchFileURL
 
 
@@ -1370,10 +1367,10 @@ namespace osl_FileBase
                                     checkDirectory( aUStr,osl_Check_Mode_WriteAccess ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getTempDirURL );
+        CPPUNIT_TEST_SUITE( getTempDirURL );
         CPPUNIT_TEST( getTempDirURL_001 );
         CPPUNIT_TEST( getTempDirURL_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getTempDirURL
 
 
@@ -1471,12 +1468,12 @@ namespace osl_FileBase
 
         }
 
-        SAL_CPPUNIT_TEST_SUITE( createTempFile );
+        CPPUNIT_TEST_SUITE( createTempFile );
         CPPUNIT_TEST( createTempFile_001 );
         CPPUNIT_TEST( createTempFile_002 );
         CPPUNIT_TEST( createTempFile_003 );
         CPPUNIT_TEST( createTempFile_004 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class createTempFile
 
     // -----------------------------------------------------------------------------
@@ -1583,11 +1580,11 @@ namespace osl_VolumeInfo
                                     sal_True == compareFileName( aUStr, aNullURL ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( ctors );
+        CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST( ctors_003 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class ctors
 
 
@@ -1662,11 +1659,11 @@ namespace osl_VolumeInfo
                                      ( sal_True == bOk1 ) && ( sal_True == bOk2 ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( isValid );
+        CPPUNIT_TEST_SUITE( isValid );
         CPPUNIT_TEST( isValid_001 );
         CPPUNIT_TEST( isValid_002 );
         CPPUNIT_TEST( isValid_003 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class isValid
 
      //---------------------------------------------------------------------
@@ -1713,10 +1710,10 @@ namespace osl_VolumeInfo
         }
 #endif
 
-        SAL_CPPUNIT_TEST_SUITE( getRemoteFlag );
+        CPPUNIT_TEST_SUITE( getRemoteFlag );
         CPPUNIT_TEST( getRemoteFlag_001 );
         CPPUNIT_TEST( getRemoteFlag_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getRemoteFlag
 
     //---------------------------------------------------------------------
@@ -1752,10 +1749,10 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for getRemoveableFlag function: get a volume device which is removable, not sure, here we use floppy disk, but it did not pass.",
                                      sal_True == bOk );
         }
-        SAL_CPPUNIT_TEST_SUITE( getRemoveableFlag );
+        CPPUNIT_TEST_SUITE( getRemoveableFlag );
         CPPUNIT_TEST( getRemoveableFlag_001 );
         CPPUNIT_TEST( getRemoveableFlag_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getRemoveableFlag
 
 
@@ -1792,10 +1789,10 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for getCompactDiscFlag function: get a cdrom volume device flag, it did not pass.",
                                       ( sal_True == bOk ) );
         }
-        SAL_CPPUNIT_TEST_SUITE( getCompactDiscFlag );
+        CPPUNIT_TEST_SUITE( getCompactDiscFlag );
         CPPUNIT_TEST( getCompactDiscFlag_001 );
         CPPUNIT_TEST( getCompactDiscFlag_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getCompactDiscFlag
 
 
@@ -1832,10 +1829,10 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for getFloppyDiskFlag function: get a floppy volume device flag, it did not pass.",
                                       ( sal_True == bOk ) );
         }
-        SAL_CPPUNIT_TEST_SUITE( getFloppyDiskFlag );
+        CPPUNIT_TEST_SUITE( getFloppyDiskFlag );
         CPPUNIT_TEST( getFloppyDiskFlag_001 );
         CPPUNIT_TEST( getFloppyDiskFlag_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getFloppyDiskFlag
 
 
@@ -1872,10 +1869,10 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for getFixedDiskFlag function: get a fixed disk volume device flag, it did not pass.",
                                      ( sal_True == bOk ) );
         }
-        SAL_CPPUNIT_TEST_SUITE( getFixedDiskFlag );
+        CPPUNIT_TEST_SUITE( getFixedDiskFlag );
         CPPUNIT_TEST( getFixedDiskFlag_001 );
         CPPUNIT_TEST( getFixedDiskFlag_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getFixedDiskFlag
 
     //---------------------------------------------------------------------
@@ -1911,10 +1908,10 @@ namespace osl_VolumeInfo
             CPPUNIT_ASSERT_MESSAGE( "test for getRAMDiskFlag function: FIX ME, don't know how to get a RAM disk flag, perhaps Windows 98 boot disk can create a RAM disk, it did not pass in (UNX)(W32).",
                                      ( sal_True == bOk ) );
         }
-        SAL_CPPUNIT_TEST_SUITE( getRAMDiskFlag );
+        CPPUNIT_TEST_SUITE( getRAMDiskFlag );
         CPPUNIT_TEST( getRAMDiskFlag_001 );
         CPPUNIT_TEST( getRAMDiskFlag_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getRAMDiskFlag
 
 
@@ -1992,11 +1989,11 @@ namespace osl_VolumeInfo
         }
 #endif
 
-        SAL_CPPUNIT_TEST_SUITE( getTotalSpace );
+        CPPUNIT_TEST_SUITE( getTotalSpace );
         CPPUNIT_TEST( getTotalSpace_001 );
         CPPUNIT_TEST( getTotalSpace_002 );
         CPPUNIT_TEST( getTotalSpace_003 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getTotalSpace
 
     //---------------------------------------------------------------------
@@ -2073,11 +2070,11 @@ namespace osl_VolumeInfo
 #endif
 
 
-        SAL_CPPUNIT_TEST_SUITE( getFreeSpace );
+        CPPUNIT_TEST_SUITE( getFreeSpace );
         CPPUNIT_TEST( getFreeSpace_001 );
          CPPUNIT_TEST( getFreeSpace_002 );
         CPPUNIT_TEST( getFreeSpace_003 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getFreeSpace
 
     //---------------------------------------------------------------------
@@ -2155,11 +2152,11 @@ namespace osl_VolumeInfo
 #endif
 
 
-        SAL_CPPUNIT_TEST_SUITE( getUsedSpace );
+        CPPUNIT_TEST_SUITE( getUsedSpace );
          CPPUNIT_TEST( getUsedSpace_001 );
          CPPUNIT_TEST( getUsedSpace_002 );
         CPPUNIT_TEST( getUsedSpace_003 );
-         SAL_CPPUNIT_TEST_SUITE_END();
+         CPPUNIT_TEST_SUITE_END();
     };// class getUsedSpace
 
 
@@ -2215,10 +2212,10 @@ namespace osl_VolumeInfo
         }
 #endif
 
-        SAL_CPPUNIT_TEST_SUITE( getMaxNameLength );
+        CPPUNIT_TEST_SUITE( getMaxNameLength );
          CPPUNIT_TEST( getMaxNameLength_001 );
         CPPUNIT_TEST( getMaxNameLength_002 );
-         SAL_CPPUNIT_TEST_SUITE_END();
+         CPPUNIT_TEST_SUITE_END();
     };// class getMaxNameLength
 
 
@@ -2268,10 +2265,10 @@ namespace osl_VolumeInfo
 #endif
 
 
-        SAL_CPPUNIT_TEST_SUITE( getMaxPathLength );
+        CPPUNIT_TEST_SUITE( getMaxPathLength );
          CPPUNIT_TEST( getMaxPathLength_001 );
         CPPUNIT_TEST( getMaxPathLength_002 );
-         SAL_CPPUNIT_TEST_SUITE_END();
+         CPPUNIT_TEST_SUITE_END();
     };// class getMaxPathLength
 
 
@@ -2329,10 +2326,10 @@ namespace osl_VolumeInfo
 #endif
 
 
-        SAL_CPPUNIT_TEST_SUITE( getFileSystemName );
+        CPPUNIT_TEST_SUITE( getFileSystemName );
          CPPUNIT_TEST( getFileSystemName_001 );
         CPPUNIT_TEST( getFileSystemName_002 );
-         SAL_CPPUNIT_TEST_SUITE_END();
+         CPPUNIT_TEST_SUITE_END();
     };// class getFileSystemName
 
     //---------------------------------------------------------------------
@@ -2359,9 +2356,9 @@ namespace osl_VolumeInfo
                                      ( sal_False == bOk ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getDeviceHandle );
+        CPPUNIT_TEST_SUITE( getDeviceHandle );
          CPPUNIT_TEST( getDeviceHandle_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getDeviceHandle
 
 
@@ -2455,10 +2452,10 @@ namespace osl_FileStatus
                                      sal_True == compareFileName( aUStr, aNullURL)  );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( ctors );
+        CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class ctors
 
 
@@ -2656,12 +2653,12 @@ namespace osl_FileStatus
         }
 
 
-        SAL_CPPUNIT_TEST_SUITE( isValid );
+        CPPUNIT_TEST_SUITE( isValid );
         CPPUNIT_TEST( isValid_001 );
         CPPUNIT_TEST( isValid_002 );
         CPPUNIT_TEST( isValid_003 );
         CPPUNIT_TEST( isValid_004 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class ctors
 
 
@@ -2787,12 +2784,12 @@ namespace osl_FileStatus
 #endif
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getFileType );
+        CPPUNIT_TEST_SUITE( getFileType );
         CPPUNIT_TEST( getFileType_001 );
         CPPUNIT_TEST( getFileType_002 );
         CPPUNIT_TEST( getFileType_003 );
         CPPUNIT_TEST( getFileType_007 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getFileType
 
     //---------------------------------------------------------------------
@@ -2916,12 +2913,12 @@ namespace osl_FileStatus
         }
 #endif
 
-        SAL_CPPUNIT_TEST_SUITE( getAttributes );
+        CPPUNIT_TEST_SUITE( getAttributes );
         CPPUNIT_TEST( getAttributes_001 );
         CPPUNIT_TEST( getAttributes_002 );
         CPPUNIT_TEST( getAttributes_003 );
         CPPUNIT_TEST( getAttributes_004 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getAttributes
 
     //---------------------------------------------------------------------
@@ -2974,9 +2971,9 @@ namespace osl_FileStatus
                                     sal_True == bOK );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getAccessTime );
+        CPPUNIT_TEST_SUITE( getAccessTime );
         CPPUNIT_TEST( getAccessTime_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getAccessTime
 
     //---------------------------------------------------------------------
@@ -3027,9 +3024,9 @@ namespace osl_FileStatus
                                     sal_True == bOK );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getModifyTime );
+        CPPUNIT_TEST_SUITE( getModifyTime );
         CPPUNIT_TEST( getModifyTime_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getModifyTime
 
 
@@ -3090,10 +3087,10 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_MESSAGE( "test for getFileSize function: file with size of TEST_FILE_SIZE, did not pass in (W32). ",
                                     TEST_FILE_SIZE == uFileSize );
         }
-        SAL_CPPUNIT_TEST_SUITE( getFileSize );
+        CPPUNIT_TEST_SUITE( getFileSize );
         CPPUNIT_TEST( getFileSize_001 );
         CPPUNIT_TEST( getFileSize_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getFileSize
 
     //---------------------------------------------------------------------
@@ -3135,9 +3132,9 @@ namespace osl_FileStatus
                                     sal_True == compareFileName( aFileName, aTmpName2 ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getFileName );
+        CPPUNIT_TEST_SUITE( getFileName );
         CPPUNIT_TEST( getFileName_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getFileName
 
     //---------------------------------------------------------------------
@@ -3177,9 +3174,9 @@ namespace osl_FileStatus
                                     sal_True == compareFileName( aFileURL, aTmpName6 ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getFileURL );
+        CPPUNIT_TEST_SUITE( getFileURL );
         CPPUNIT_TEST( getFileURL_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getFileURL
 
     //---------------------------------------------------------------------
@@ -3247,9 +3244,9 @@ namespace osl_FileStatus
         }
 #endif
 
-        SAL_CPPUNIT_TEST_SUITE( getLinkTargetURL );
+        CPPUNIT_TEST_SUITE( getLinkTargetURL );
         CPPUNIT_TEST( getLinkTargetURL_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getLinkTargetURL
 
     // -----------------------------------------------------------------------------
@@ -3321,10 +3318,10 @@ namespace osl_File
                                      ( ::osl::FileBase::E_None == nError1 ) && ( ::osl::FileBase::E_None == nError2 )  );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( ctors );
+        CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class ctors
 
     //---------------------------------------------------------------------
@@ -3438,14 +3435,14 @@ namespace osl_File
                                     ( 10 == nCount_read ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( open );
+        CPPUNIT_TEST_SUITE( open );
         CPPUNIT_TEST( open_001 );
         CPPUNIT_TEST( open_002 );
         CPPUNIT_TEST( open_003 );
         CPPUNIT_TEST( open_004 );
         CPPUNIT_TEST( open_005 );
         CPPUNIT_TEST( open_006 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class open
 
     //---------------------------------------------------------------------
@@ -3502,10 +3499,10 @@ namespace osl_File
                                     ( ::osl::FileBase::E_None != nError3 ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( close );
+        CPPUNIT_TEST_SUITE( close );
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class close
 
 
@@ -3605,11 +3602,11 @@ namespace osl_File
                                      buffer_read[0] == pBuffer_Char[0] );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( setPos );
+        CPPUNIT_TEST_SUITE( setPos );
         CPPUNIT_TEST( setPos_001 );
         CPPUNIT_TEST( setPos_002 );
         CPPUNIT_TEST( setPos_003 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class setPos
 
     //---------------------------------------------------------------------
@@ -3671,9 +3668,9 @@ namespace osl_File
                                      26 == nFilePointer );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getPos );
+        CPPUNIT_TEST_SUITE( getPos );
         CPPUNIT_TEST( getPos_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getPos
 
 
@@ -3764,10 +3761,10 @@ namespace osl_File
             CPPUNIT_ASSERT_MESSAGE( "test for isEndOfFile function: use isEndOfFile to move pointer step by step",
                                       sizeof( pBuffer_Char ) + 1 == nFilePointer  );
         }
-        SAL_CPPUNIT_TEST_SUITE( isEndOfFile );
+        CPPUNIT_TEST_SUITE( isEndOfFile );
         CPPUNIT_TEST( isEndOfFile_001 );
         CPPUNIT_TEST( isEndOfFile_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class isEndOfFile
 
 
@@ -3863,10 +3860,10 @@ namespace osl_File
                                      10 == nFilePointer );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( setSize );
+        CPPUNIT_TEST_SUITE( setSize );
         CPPUNIT_TEST( setSize_001 );
         CPPUNIT_TEST( setSize_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class setSize
 
 
@@ -3952,10 +3949,10 @@ namespace osl_File
                                      ( 52 == nFilePointer ) && ( 26 == nCount_read ) && ( 0 == strncmp( buffer_read, &pBuffer_Char[26], 26 ) ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( read );
+        CPPUNIT_TEST_SUITE( read );
         CPPUNIT_TEST( read_001 );
         CPPUNIT_TEST( read_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class read
 
     //---------------------------------------------------------------------
@@ -4012,9 +4009,9 @@ namespace osl_File
                                     ( 10 == nCount_write ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( write );
+        CPPUNIT_TEST_SUITE( write );
         CPPUNIT_TEST( write_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class write
 
     //---------------------------------------------------------------------
@@ -4120,13 +4117,13 @@ namespace osl_File
             CPPUNIT_ASSERT( aHash == rtl_str_hashCode( buffer ) );
         }
 #endif
-        SAL_CPPUNIT_TEST_SUITE( readLine );
+        CPPUNIT_TEST_SUITE( readLine );
         CPPUNIT_TEST( readLine_001 );
         CPPUNIT_TEST( readLine_002 );
 #ifdef UNX
         CPPUNIT_TEST( readLine_android );
 #endif
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class readLine
 
     //---------------------------------------------------------------------
@@ -4253,14 +4250,14 @@ namespace osl_File
 #endif
       }
 
-        SAL_CPPUNIT_TEST_SUITE( copy );
+        CPPUNIT_TEST_SUITE( copy );
         CPPUNIT_TEST( copy_001 );
         CPPUNIT_TEST( copy_002 );
         CPPUNIT_TEST( copy_003 );
         CPPUNIT_TEST( copy_004 );
         CPPUNIT_TEST( copy_005 );
         CPPUNIT_TEST( copy_006 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class copy
 
     //---------------------------------------------------------------------
@@ -4410,7 +4407,7 @@ namespace osl_File
                                  ::osl::FileBase::E_None != nError1 );
       }
 
-        SAL_CPPUNIT_TEST_SUITE( move );
+        CPPUNIT_TEST_SUITE( move );
         CPPUNIT_TEST( move_001 );
         CPPUNIT_TEST( move_002 );
         CPPUNIT_TEST( move_003 );
@@ -4420,7 +4417,7 @@ namespace osl_File
         CPPUNIT_TEST( move_007 );
       //      CPPUNIT_TEST( move_008 );
       //CPPUNIT_TEST( move_009 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class move
 
 
@@ -4500,12 +4497,12 @@ namespace osl_File
                                     ( ::osl::FileBase::E_ISDIR == nError1 ) || ( ::osl::FileBase::E_ACCES == nError1 ));
         }
 
-        SAL_CPPUNIT_TEST_SUITE( remove );
+        CPPUNIT_TEST_SUITE( remove );
         CPPUNIT_TEST( remove_001 );
         CPPUNIT_TEST( remove_002 );
         CPPUNIT_TEST( remove_003 );
         CPPUNIT_TEST( remove_004 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class remove
 
 
@@ -4593,10 +4590,10 @@ namespace osl_File
 #endif
         }
 
-        SAL_CPPUNIT_TEST_SUITE( setAttributes );
+        CPPUNIT_TEST_SUITE( setAttributes );
         CPPUNIT_TEST( setAttributes_001 );
         CPPUNIT_TEST( setAttributes_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class setAttributes
 
 
@@ -4682,9 +4679,9 @@ namespace osl_File
             free( pTV_modify );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( setTime );
+        CPPUNIT_TEST_SUITE( setTime );
         CPPUNIT_TEST( setTime_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class setTime
 
     //---------------------------------------------------------------------
@@ -4743,9 +4740,9 @@ namespace osl_File
 
 
 
-        SAL_CPPUNIT_TEST_SUITE( sync );
+        CPPUNIT_TEST_SUITE( sync );
         CPPUNIT_TEST( sync_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class setTime
 
     // -----------------------------------------------------------------------------
@@ -4812,9 +4809,9 @@ namespace osl_DirectoryItem
                                       ::osl::FileBase::E_None == nError1  );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( ctors );
+        CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class ctors
 
     //---------------------------------------------------------------------
@@ -4873,10 +4870,10 @@ namespace osl_DirectoryItem
                                     ( sal_True == compareFileName( rFileStatus.getFileName(), aTmpName2 ) ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( copy_assin_Ctors );
+        CPPUNIT_TEST_SUITE( copy_assin_Ctors );
         CPPUNIT_TEST( copy_assin_Ctors_001 );
         CPPUNIT_TEST( copy_assin_Ctors_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class copy_assin_Ctors
 
     //---------------------------------------------------------------------
@@ -4921,10 +4918,10 @@ namespace osl_DirectoryItem
                                     ( sal_True == rItem.is() ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( is );
+        CPPUNIT_TEST_SUITE( is );
         CPPUNIT_TEST( is_001 );
         CPPUNIT_TEST( is_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class is
 
     //---------------------------------------------------------------------
@@ -4986,11 +4983,11 @@ namespace osl_DirectoryItem
                                     FileBase::E_NOENT == nError1 );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( get );
+        CPPUNIT_TEST_SUITE( get );
         CPPUNIT_TEST( get_001 );
         CPPUNIT_TEST( get_002 );
         CPPUNIT_TEST( get_003 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class get
 
     //---------------------------------------------------------------------
@@ -5065,11 +5062,11 @@ namespace osl_DirectoryItem
         }
 
 
-        SAL_CPPUNIT_TEST_SUITE( getFileStatus );
+        CPPUNIT_TEST_SUITE( getFileStatus );
         CPPUNIT_TEST( getFileStatus_001 );
         CPPUNIT_TEST( getFileStatus_002 );
         CPPUNIT_TEST( getFileStatus_003 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getFileStatus
 
 
@@ -5144,10 +5141,10 @@ namespace osl_Directory
                                     ( ::osl::FileBase::E_None == nError2 ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( ctors );
+        CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class ctors
 
     //---------------------------------------------------------------------
@@ -5240,12 +5237,12 @@ namespace osl_Directory
                                      ( ::osl::FileBase::E_NOTDIR == nError1 ) || ( ::osl::FileBase::E_ACCES ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( open );
+        CPPUNIT_TEST_SUITE( open );
         CPPUNIT_TEST( open_001 );
         CPPUNIT_TEST( open_002 );
         CPPUNIT_TEST( open_003 );
         CPPUNIT_TEST( open_004 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class open
 
     //---------------------------------------------------------------------
@@ -5299,10 +5296,10 @@ namespace osl_Directory
                                     !( sal_True == bOk ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( isOpen );
+        CPPUNIT_TEST_SUITE( isOpen );
         CPPUNIT_TEST( isOpen_001 );
         CPPUNIT_TEST( isOpen_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class isOpen
 
     //---------------------------------------------------------------------
@@ -5355,10 +5352,10 @@ namespace osl_Directory
         }
 
 
-        SAL_CPPUNIT_TEST_SUITE( close );
+        CPPUNIT_TEST_SUITE( close );
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class close
 
     //---------------------------------------------------------------------
@@ -5468,12 +5465,12 @@ namespace osl_Directory
                                     ( ::osl::FileBase::E_INVAL == nError1 ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( reset );
+        CPPUNIT_TEST_SUITE( reset );
         CPPUNIT_TEST( reset_001 );
         CPPUNIT_TEST( reset_002 );
         CPPUNIT_TEST( reset_003 );
         CPPUNIT_TEST( reset_004 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class reset
 
     //---------------------------------------------------------------------
@@ -5639,12 +5636,12 @@ namespace osl_Directory
 #endif
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getNextItem );
+        CPPUNIT_TEST_SUITE( getNextItem );
         CPPUNIT_TEST( getNextItem_001 );
         CPPUNIT_TEST( getNextItem_002 );
         CPPUNIT_TEST( getNextItem_003 );
         CPPUNIT_TEST( getNextItem_004 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getNextItem
 
     //---------------------------------------------------------------------
@@ -5810,7 +5807,7 @@ namespace osl_Directory
 #endif
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getVolumeInfo );
+        CPPUNIT_TEST_SUITE( getVolumeInfo );
         CPPUNIT_TEST( getVolumeInfo_001_1 );
         CPPUNIT_TEST( getVolumeInfo_001_2 );
         CPPUNIT_TEST( getVolumeInfo_001_3 );
@@ -5821,7 +5818,7 @@ namespace osl_Directory
         CPPUNIT_TEST( getVolumeInfo_001_8 );
         CPPUNIT_TEST( getVolumeInfo_002 );
         CPPUNIT_TEST( getVolumeInfo_003 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class getVolumeInfo
 
 
@@ -5896,11 +5893,11 @@ namespace osl_Directory
                                     ( osl::FileBase::E_INVAL == nError1 ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( create );
+        CPPUNIT_TEST_SUITE( create );
         CPPUNIT_TEST( create_001 );
         CPPUNIT_TEST( create_002 );
         CPPUNIT_TEST( create_003 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class create
 
     //---------------------------------------------------------------------
@@ -5987,13 +5984,13 @@ namespace osl_Directory
 #endif
         }
 
-        SAL_CPPUNIT_TEST_SUITE( remove );
+        CPPUNIT_TEST_SUITE( remove );
         CPPUNIT_TEST( remove_001 );
         CPPUNIT_TEST( remove_002 );
         CPPUNIT_TEST( remove_003 );
         CPPUNIT_TEST( remove_004 );
         CPPUNIT_TEST( remove_005 );
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     };// class remove
 
     //########################################
@@ -6208,14 +6205,14 @@ namespace osl_Directory
         }
 #endif /* WNT */
 
-    SAL_CPPUNIT_TEST_SUITE(createPath);
+    CPPUNIT_TEST_SUITE(createPath);
     CPPUNIT_TEST(with_relative_path);
     CPPUNIT_TEST(without_callback);
     CPPUNIT_TEST(with_callback);
 #ifdef WNT
     CPPUNIT_TEST(at_invalid_logical_drive);
 #endif
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 
     }; // class createPath
 

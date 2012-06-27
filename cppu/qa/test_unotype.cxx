@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
+#include <sal/types.h>
 
 #ifdef IOS
 #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_qa_cppu_unotype

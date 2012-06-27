@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 //------------------------------------------------------------------------
 // header file
 //------------------------------------------------------------------------
@@ -92,9 +89,9 @@ namespace osl_Security
                                     aSec.getHandle( ) != NULL );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( ctors );
+        CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
 
 
@@ -129,7 +126,7 @@ namespace osl_Security
         }
 
 
-        SAL_CPPUNIT_TEST_SUITE( logonUser );
+        CPPUNIT_TEST_SUITE( logonUser );
         if  ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) ==  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
         /// if user name and passwd are forwarded
         {
@@ -140,7 +137,7 @@ namespace osl_Security
         {
             CPPUNIT_TEST( logonUser_user_pwd_server );
         }
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class logonUser
 
 
@@ -169,9 +166,9 @@ namespace osl_Security
             CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), strUserID.equals(strID) && (bRes == sal_True));
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getUserIdent );
+        CPPUNIT_TEST_SUITE( getUserIdent );
         CPPUNIT_TEST( getUserIdent_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class getUserIdent
 
 
@@ -202,9 +199,9 @@ namespace osl_Security
                                     ( nPos >= 0 ) && ( sal_True == bRes ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getUserName );
+        CPPUNIT_TEST_SUITE( getUserName );
         CPPUNIT_TEST( getUserName_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class getUserName
 
 
@@ -226,9 +223,9 @@ namespace osl_Security
                                      ( sal_True == bRes ));
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getConfigDir );
+        CPPUNIT_TEST_SUITE( getConfigDir );
         CPPUNIT_TEST( getConfigDir_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class getConfigDir
 
     /** testing the method:
@@ -248,9 +245,9 @@ namespace osl_Security
                                      bRes == isAdmin );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( isAdministrator );
+        CPPUNIT_TEST_SUITE( isAdministrator );
         CPPUNIT_TEST( isAdministrator_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class isAdministrator
 
     /** testing the method:
@@ -270,9 +267,9 @@ namespace osl_Security
                                      bRes == sal_True );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getHandle );
+        CPPUNIT_TEST_SUITE( getHandle );
         CPPUNIT_TEST( getHandle_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class getHandle
 
 
@@ -295,10 +292,10 @@ namespace osl_Security
                 CPPUNIT_ASSERT_MESSAGE( "empty function.", sal_True );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( UserProfile );
+        CPPUNIT_TEST_SUITE( UserProfile );
         CPPUNIT_TEST( loadUserProfile );
         CPPUNIT_TEST( unloadUserProfile );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class UserProfile
 
     class loginUserOnFileServer : public CppUnit::TestFixture
@@ -318,9 +315,9 @@ namespace osl_Security
                 CPPUNIT_ASSERT_MESSAGE( "empty function.", erg == osl_Security_E_UserUnknown );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( loginUserOnFileServer );
+        CPPUNIT_TEST_SUITE( loginUserOnFileServer );
         CPPUNIT_TEST( loginUserOnFileServer_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class loginUserOnFileServer
 
 // -----------------------------------------------------------------------------

@@ -26,10 +26,8 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include <cstddef>
+#include <sal/types.h>
 
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"

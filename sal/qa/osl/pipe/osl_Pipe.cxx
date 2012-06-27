@@ -30,9 +30,7 @@
 // include files
 //------------------------------------------------------------------------
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
+#include <sal/types.h>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
@@ -260,14 +258,14 @@ namespace osl_Pipe
                                         sal_True == bRes && sal_False == bRes1 );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( ctors );
+        CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_none );
         CPPUNIT_TEST( ctors_name_option );
         CPPUNIT_TEST( ctors_name_option_security );
         CPPUNIT_TEST( ctors_copy );
         CPPUNIT_TEST( ctors_no_acquire );
         CPPUNIT_TEST( ctors_acquire );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
 
 
@@ -306,12 +304,12 @@ namespace osl_Pipe
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test is(), an invalid constructor.", sal_False == aPipe.is( ) );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( is );
+        CPPUNIT_TEST_SUITE( is );
         CPPUNIT_TEST( is_001 );
         CPPUNIT_TEST( is_002 );
         CPPUNIT_TEST( is_003 );
         CPPUNIT_TEST( is_004 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class is
 
 
@@ -388,13 +386,13 @@ namespace osl_Pipe
                                         sal_False == bRes );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( create );
+        CPPUNIT_TEST_SUITE( create );
         CPPUNIT_TEST( create_named_security_001 );
         CPPUNIT_TEST( create_named_security_002 );
         CPPUNIT_TEST( create_named_001 );
         CPPUNIT_TEST( create_named_002 );
         CPPUNIT_TEST( create_named_003 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class create
 
 
@@ -417,9 +415,9 @@ namespace osl_Pipe
                                         sal_False == bRes );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( clear );
+        CPPUNIT_TEST_SUITE( clear );
         CPPUNIT_TEST( clear_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class clear
 
 
@@ -460,10 +458,10 @@ namespace osl_Pipe
                                         sal_True == bRes && sal_True == bRes1 );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( assign );
+        CPPUNIT_TEST_SUITE( assign );
         CPPUNIT_TEST( assign_ref );
         CPPUNIT_TEST( assign_handle );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class assign
 
 
@@ -509,10 +507,10 @@ namespace osl_Pipe
                                         sal_True == bRes && sal_False == bRes1 );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( isEqual );
+        CPPUNIT_TEST_SUITE( isEqual );
         CPPUNIT_TEST( isEqual_001 );
         CPPUNIT_TEST( isEqual_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class isEqual
 
 
@@ -547,10 +545,10 @@ namespace osl_Pipe
                                         OSL_PIPE_FAIL == nRet );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( close );
+        CPPUNIT_TEST_SUITE( close );
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class close
 
 
@@ -591,10 +589,10 @@ namespace osl_Pipe
                                         nError != osl_Pipe_E_None );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( getError );
+        CPPUNIT_TEST_SUITE( getError );
         CPPUNIT_TEST( getError_001 );
         CPPUNIT_TEST( getError_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class getError
 
 
@@ -628,10 +626,10 @@ namespace osl_Pipe
                                         sal_True == bRes );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( getHandle );
+        CPPUNIT_TEST_SUITE( getHandle );
         CPPUNIT_TEST( getHandle_001 );
         CPPUNIT_TEST( getHandle_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class getHandle
 
 
@@ -763,14 +761,14 @@ namespace osl_StreamPipe
                                         sal_True == bRes );
             }
 
-        SAL_CPPUNIT_TEST_SUITE( ctors );
+        CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_none );
         CPPUNIT_TEST( ctors_handle );
         CPPUNIT_TEST( ctors_copy );
         CPPUNIT_TEST( ctors_name_option );
         CPPUNIT_TEST( ctors_name_option_security );
         CPPUNIT_TEST( ctors_no_acquire );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
 
 
@@ -928,10 +926,10 @@ namespace osl_StreamPipe
                 //no condition judgement here, if the case could finish excuting within 1 or 2 seconds, it passes.
             }
 
-        SAL_CPPUNIT_TEST_SUITE( recv );
+        CPPUNIT_TEST_SUITE( recv );
         CPPUNIT_TEST( recv_001 );
         CPPUNIT_TEST( recv_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class recv
 
 // -----------------------------------------------------------------------------

@@ -26,13 +26,11 @@
 *
 ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include <cstdlib>
 #include <iostream>
 #include <limits>
 
+#include <sal/types.h>
 #include "boost/noncopyable.hpp"
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"

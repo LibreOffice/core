@@ -28,9 +28,7 @@
 
 #include <string>
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
+#include <sal/types.h>
 #include "cppunit/TestFixture.h"
 #include <cppunit/extensions/HelperMacros.h>
 #include "tools/urlobj.hxx"

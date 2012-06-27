@@ -26,13 +26,11 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #ifdef IOS
 #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_osl_process
 #endif
 
+#include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -302,12 +300,12 @@ public:
         osl_freeProcessHandle(process);
     }
 
-    SAL_CPPUNIT_TEST_SUITE(Test_osl_joinProcess);
+    CPPUNIT_TEST_SUITE(Test_osl_joinProcess);
     CPPUNIT_TEST(osl_joinProcessWithTimeout_timeout_failure);
     CPPUNIT_TEST(osl_joinProcessWithTimeout_without_timeout_failure);
     CPPUNIT_TEST(osl_joinProcessWithTimeout_infinite);
     CPPUNIT_TEST(osl_joinProcess);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 };
 
 //#########################################################
@@ -738,7 +736,7 @@ public:
         osl_freeProcessHandle(process);
     }
 
-    SAL_CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
+    CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
     //TODO: Repair these under windows.
 #ifndef WNT
     CPPUNIT_TEST(osl_execProc_parent_equals_child_environment);
@@ -747,7 +745,7 @@ public:
     CPPUNIT_TEST(osl_execProc_test_batch);
     ///TODO: Repair test (or tested function ;-) - test fails.
     // CPPUNIT_TEST(osl_execProc_exe_name_in_argument_list);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 };
 
 //#####################################

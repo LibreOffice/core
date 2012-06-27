@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include "sal/precppunit.hxx"
-
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/i18n/CharType.hpp>

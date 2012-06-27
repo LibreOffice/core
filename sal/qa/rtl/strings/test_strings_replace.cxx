@@ -26,12 +26,9 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include <ostream>
 
+#include <sal/types.h>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"

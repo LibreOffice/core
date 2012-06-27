@@ -26,9 +26,6 @@
 *
 ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include "test/officeconnection.hxx"
 
 #include <com/sun/star/security/XSanExtension.hpp>

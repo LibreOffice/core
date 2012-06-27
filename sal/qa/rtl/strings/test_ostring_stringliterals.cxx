@@ -33,9 +33,7 @@ bool rtl_string_unittest_invalid_conversion;
 bool rtl_string_unittest_const_literal_function;
 bool rtl_string_unittest_non_const_literal_function;
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
+#include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "rtl/string.h"

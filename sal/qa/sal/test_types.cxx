@@ -26,18 +26,14 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include <cstddef>
 #include <stdio.h> // C99 snprintf not necessarily in <cstdio>
 #include <string.h> // wntmsci10 does not know <cstring> std::strcmp
 
+#include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-
-#include "sal/types.h"
 
 namespace {
 

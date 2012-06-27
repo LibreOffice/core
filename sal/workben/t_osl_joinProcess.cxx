@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
+#include <sal/types.h>
 #include <cppunit/simpleheader.hxx>
 #include <osl/process.h>
 #include <rtl/ustring.hxx>

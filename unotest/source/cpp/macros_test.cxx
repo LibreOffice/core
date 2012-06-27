@@ -31,8 +31,6 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
-#include <sal/config.h>
-#include "sal/precppunit.hxx"
 #include "cppunit/TestAssert.h"
 #include <rtl/ustrbuf.hxx>
 

@@ -26,14 +26,6 @@
  *
  ************************************************************************/
 
-
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
-// LLA:
-// this file is converted to use with testshl2
-// original was placed in sal/test/textenc.cxx
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,6 +41,7 @@
 #include <tchar.h>
 #endif
 
+#include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>

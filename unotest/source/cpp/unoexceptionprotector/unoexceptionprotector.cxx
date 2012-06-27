@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include <limits>
 #include <string>
 #include <iostream>

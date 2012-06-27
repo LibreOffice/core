@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #define BASEGFX_STATICLIBRARY
 
 #ifdef SYSTEM_ZLIB

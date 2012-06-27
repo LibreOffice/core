@@ -26,13 +26,7 @@
  *
  ************************************************************************/
 
-// LLA:
-// this file is converted to use with testshl2
-// original was placed in sal/test/textenc.cxx
-
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
+#include <sal/types.h>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"

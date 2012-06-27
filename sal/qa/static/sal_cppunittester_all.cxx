@@ -26,13 +26,11 @@
 *
 ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include <cstdlib>
 #include <iostream>
 #include <limits>
 #include <string>
+#include <sal/types.h>
 #include "cppunittester/protectorfactory.hxx"
 #include "osl/module.h"
 #include "osl/module.hxx"

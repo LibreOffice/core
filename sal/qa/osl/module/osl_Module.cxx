@@ -210,10 +210,10 @@ namespace osl_Module
                                     sal_True == bRes  );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( ctors );
+        CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_none );
         CPPUNIT_TEST( ctors_name_mode );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
 
 
@@ -260,10 +260,10 @@ namespace osl_Module
 
         /* tester comments: another case is getFunctionSymbol_001*/
 
-        SAL_CPPUNIT_TEST_SUITE( getUrlFromAddress );
+        CPPUNIT_TEST_SUITE( getUrlFromAddress );
         CPPUNIT_TEST( getUrlFromAddress_001 );
         CPPUNIT_TEST( getUrlFromAddress_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class getUrlFromAddress
 
 
@@ -290,9 +290,9 @@ namespace osl_Module
                                     sal_True == bRes  );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( load );
+        CPPUNIT_TEST_SUITE( load );
         CPPUNIT_TEST( load_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class load
 
 
@@ -315,9 +315,9 @@ namespace osl_Module
                                     sal_True == bRes  );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( unload );
+        CPPUNIT_TEST_SUITE( unload );
         CPPUNIT_TEST( unload_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class unload
 
 
@@ -347,9 +347,9 @@ namespace osl_Module
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: test if a module is a loaded module.",
                                      sal_False == bRes && sal_True == bRes1);
         }
-        SAL_CPPUNIT_TEST_SUITE( is );
+        CPPUNIT_TEST_SUITE( is );
         CPPUNIT_TEST( is_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class is
 
 
@@ -377,9 +377,9 @@ namespace osl_Module
 #endif
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getSymbol );
+        CPPUNIT_TEST_SUITE( getSymbol );
         CPPUNIT_TEST( getSymbol_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class getSymbol
 
 
@@ -427,10 +427,10 @@ namespace osl_Module
 #endif
         }
 
-        SAL_CPPUNIT_TEST_SUITE( optr_oslModule );
+        CPPUNIT_TEST_SUITE( optr_oslModule );
         CPPUNIT_TEST( optr_oslModule_001 );
         CPPUNIT_TEST( optr_oslModule_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class optr_oslModule
 
     /** testing the methods:
@@ -455,9 +455,9 @@ namespace osl_Module
 #endif
         }
 
-        SAL_CPPUNIT_TEST_SUITE( getFunctionSymbol );
+        CPPUNIT_TEST_SUITE( getFunctionSymbol );
         CPPUNIT_TEST( getFunctionSymbol_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class getFunctionSymbol
 
 // -----------------------------------------------------------------------------

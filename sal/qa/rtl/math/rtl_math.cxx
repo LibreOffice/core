@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #ifdef WIN32
 // LLA: take a look into Microsofts math.h implementation, why this define is need
 #define _USE_MATH_DEFINES
@@ -39,6 +35,7 @@
 #include <rtl/math.h>
 #include <rtl/string.hxx>
 
+#include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>

@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
+#include <sal/types.h>
 #include <osl/thread.h>
 #include <rtl/locale.hxx>
 
@@ -82,10 +79,10 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    SAL_CPPUNIT_TEST_SUITE(getDefault);
+    CPPUNIT_TEST_SUITE(getDefault);
     CPPUNIT_TEST(getDefault_000);
     CPPUNIT_TEST(getDefault_001);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 }; // class getDefault
 
 
@@ -118,9 +115,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    SAL_CPPUNIT_TEST_SUITE(setDefault);
+    CPPUNIT_TEST_SUITE(setDefault);
     CPPUNIT_TEST(setDefault_001);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 }; // class setDefault
 
 
@@ -156,10 +153,10 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    SAL_CPPUNIT_TEST_SUITE(getLanguage);
+    CPPUNIT_TEST_SUITE(getLanguage);
     CPPUNIT_TEST(getLanguage_001);
     CPPUNIT_TEST(getLanguage_002);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 }; // class getLanguage
 
 
@@ -195,10 +192,10 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    SAL_CPPUNIT_TEST_SUITE(getCountry);
+    CPPUNIT_TEST_SUITE(getCountry);
     CPPUNIT_TEST(getCountry_001);
     CPPUNIT_TEST(getCountry_002);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 }; // class getCountry
 
 
@@ -234,10 +231,10 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    SAL_CPPUNIT_TEST_SUITE(getVariant);
+    CPPUNIT_TEST_SUITE(getVariant);
     CPPUNIT_TEST(getVariant_001);
     CPPUNIT_TEST(getVariant_002);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 }; // class getVariant
 
 
@@ -273,10 +270,10 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    SAL_CPPUNIT_TEST_SUITE(hashCode);
+    CPPUNIT_TEST_SUITE(hashCode);
     CPPUNIT_TEST(hashCode_001);
     CPPUNIT_TEST(hashCode_002);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 }; // class hashCode
 
 
@@ -319,10 +316,10 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    SAL_CPPUNIT_TEST_SUITE(equals);
+    CPPUNIT_TEST_SUITE(equals);
     CPPUNIT_TEST(equals_001);
     CPPUNIT_TEST(equals_002);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 }; // class equals
 
 // -----------------------------------------------------------------------------

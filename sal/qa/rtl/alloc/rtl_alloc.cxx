@@ -26,10 +26,8 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include <rtl/alloc.h>
+#include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -97,10 +95,10 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pMemory, nSize, 2) == true);
     }
 
-    SAL_CPPUNIT_TEST_SUITE(Memory);
+    CPPUNIT_TEST_SUITE(Memory);
     CPPUNIT_TEST(rtl_allocateMemory_001);
     CPPUNIT_TEST(rtl_reallocateMemory_001);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 }; // class test
 
 class ZeroMemory : public CppUnit::TestFixture
@@ -140,9 +138,9 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 3) == true);
     }
 
-    SAL_CPPUNIT_TEST_SUITE(ZeroMemory);
+    CPPUNIT_TEST_SUITE(ZeroMemory);
     CPPUNIT_TEST(rtl_allocateZeroMemory_001);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 };
 
 // -----------------------------------------------------------------------------

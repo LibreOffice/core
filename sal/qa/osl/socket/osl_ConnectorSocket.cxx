@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 /**  test coder preface:
     1. the BSD socket function will meet "unresolved external symbol error" on Windows platform
     if you are not including ws2_32.lib in makefile.mk,  the including format will be like this:
@@ -59,6 +56,7 @@
 // include files
 //------------------------------------------------------------------------
 
+#include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>

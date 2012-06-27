@@ -32,7 +32,6 @@
 #include <osl/thread.h>
 #include <rtl/cipher.h>
 
-#include "sal/precppunit.hxx"
 #include "cppunit/TestAssert.h"
 
 namespace test {

@@ -112,6 +112,7 @@ $(call gb_LinkTarget_set_include,$(2),\
 )
 $(call gb_LinkTarget_add_defs,$(2), \
     $(filter-out -I%,$(CPPUNIT_CFLAGS)) \
+	-DCPPUNIT_PLUGIN_EXPORT='extern "C" SAL_DLLPUBLIC_EXPORT' \
 )
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))

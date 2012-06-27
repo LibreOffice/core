@@ -25,9 +25,6 @@
  * instead of those above.
  */
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>

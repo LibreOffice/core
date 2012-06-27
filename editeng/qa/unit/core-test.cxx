@@ -26,9 +26,6 @@
  * instead of those above.
  */
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include "test/bootstrapfixture.hxx"
 
 #include <cppunit/TestFixture.h>

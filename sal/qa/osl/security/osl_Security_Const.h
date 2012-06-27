@@ -29,9 +29,6 @@
 #ifndef _OSL_SECURITY_CONST_H_
 #define _OSL_SECURITY_CONST_H_
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #if ( defined WNT )                     // Windows
 #include <io.h>
 #endif

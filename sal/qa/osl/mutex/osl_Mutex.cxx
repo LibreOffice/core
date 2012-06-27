@@ -29,9 +29,7 @@
 //------------------------------------------------------------------------
 // include files
 //------------------------------------------------------------------------
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
+#include <sal/types.h>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
@@ -366,10 +364,10 @@ namespace osl_Mutex
             CPPUNIT_ASSERT_MESSAGE( "test Mutex ctor function: increase and decrease a number 3 times without interrupt.", bRes == sal_True );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( ctor );
+        CPPUNIT_TEST_SUITE( ctor );
         CPPUNIT_TEST( ctor_001 );
         CPPUNIT_TEST( ctor_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class ctor
 
 
@@ -423,10 +421,10 @@ namespace osl_Mutex
 
         }
 
-        SAL_CPPUNIT_TEST_SUITE( acquire );
+        CPPUNIT_TEST_SUITE( acquire );
         CPPUNIT_TEST( acquire_001 );
         CPPUNIT_TEST( acquire_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class acquire
 
 
@@ -463,9 +461,9 @@ namespace osl_Mutex
                 bRes1 == sal_False && bRes2 == sal_True);
         }
 
-        SAL_CPPUNIT_TEST_SUITE(tryToAcquire);
+        CPPUNIT_TEST_SUITE(tryToAcquire);
         CPPUNIT_TEST(tryToAcquire_001);
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     }; // class tryToAcquire
 
     /** Test of the osl::Mutex::release method
@@ -505,10 +503,10 @@ namespace osl_Mutex
         {
         }
 
-        SAL_CPPUNIT_TEST_SUITE( release );
+        CPPUNIT_TEST_SUITE( release );
         CPPUNIT_TEST( release_001 );
         CPPUNIT_TEST( release_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class release
 
 
@@ -557,10 +555,10 @@ namespace osl_Mutex
                 bRes == sal_True );
         }
 
-        SAL_CPPUNIT_TEST_SUITE(getGlobalMutex);
+        CPPUNIT_TEST_SUITE(getGlobalMutex);
         CPPUNIT_TEST(getGlobalMutex_001);
         CPPUNIT_TEST(getGlobalMutex_002);
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     }; // class getGlobalMutex
 
 // -----------------------------------------------------------------------------
@@ -645,10 +643,10 @@ namespace osl_Guard
                 bRes == sal_True);
         }
 
-        SAL_CPPUNIT_TEST_SUITE(ctor);
+        CPPUNIT_TEST_SUITE(ctor);
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     }; // class ctor
 
 // -----------------------------------------------------------------------------
@@ -723,10 +721,10 @@ namespace osl_ClearableGuard
                 bRes == sal_True );
         }
 
-        SAL_CPPUNIT_TEST_SUITE(ctor);
+        CPPUNIT_TEST_SUITE(ctor);
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     }; // class ctor
 
     class clear : public CppUnit::TestFixture
@@ -786,10 +784,10 @@ namespace osl_ClearableGuard
                 ( sal_True == bRes ) && ( sal_False == bRes1 ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE( clear );
+        CPPUNIT_TEST_SUITE( clear );
         CPPUNIT_TEST( clear_001 );
         CPPUNIT_TEST( clear_002 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
+        CPPUNIT_TEST_SUITE_END( );
     }; // class clear
 
 // -----------------------------------------------------------------------------
@@ -863,10 +861,10 @@ namespace osl_ResettableGuard
         }
 
 
-        SAL_CPPUNIT_TEST_SUITE(ctor);
+        CPPUNIT_TEST_SUITE(ctor);
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     }; // class ctor
 
     class reset : public CppUnit::TestFixture
@@ -910,12 +908,12 @@ namespace osl_ResettableGuard
                 ( sal_False == bRes ) && ( sal_True == bRes1 ) );
         }
 
-        SAL_CPPUNIT_TEST_SUITE(reset);
+        CPPUNIT_TEST_SUITE(reset);
         CPPUNIT_TEST(reset_001);
 #ifdef LINUX
         CPPUNIT_TEST(reset_002);
 #endif
-        SAL_CPPUNIT_TEST_SUITE_END();
+        CPPUNIT_TEST_SUITE_END();
     }; // class reset
 
 // -----------------------------------------------------------------------------

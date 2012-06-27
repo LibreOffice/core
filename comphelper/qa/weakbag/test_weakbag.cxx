@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "comphelper/weakbag.hxx"

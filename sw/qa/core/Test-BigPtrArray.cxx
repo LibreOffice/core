@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-#include "sal/precppunit.hxx"
-
+#include <sal/types.h>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
@@ -764,7 +763,7 @@ public:
         releaseBigPtrArrayContent(bparr);
     }
 
-    SAL_CPPUNIT_TEST_SUITE(BigPtrArrayUnittest);
+    CPPUNIT_TEST_SUITE(BigPtrArrayUnittest);
     CPPUNIT_TEST(test_ctor);
     CPPUNIT_TEST(test_insert_entries_at_front);
     CPPUNIT_TEST(test_insert_entries_in_the_middle);
@@ -782,7 +781,7 @@ public:
     CPPUNIT_TEST(test_for_some1);
     CPPUNIT_TEST(test_for_some2);
     CPPUNIT_TEST(test_for_some3);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 };
 
 const char* START = "START: ";
@@ -847,7 +846,7 @@ public:
     void test_insert_at_front_1000000()
     { test_insert_at_front("1000000"); }
 
-    SAL_CPPUNIT_TEST_SUITE(BigPtrArrayPerformanceTest);
+    CPPUNIT_TEST_SUITE(BigPtrArrayPerformanceTest);
     CPPUNIT_TEST(test_insert_at_end_1000);
     CPPUNIT_TEST(test_insert_at_end_10000);
     CPPUNIT_TEST(test_insert_at_end_100000);
@@ -856,7 +855,7 @@ public:
     CPPUNIT_TEST(test_insert_at_front_10000);
     CPPUNIT_TEST(test_insert_at_front_100000);
     CPPUNIT_TEST(test_insert_at_front_1000000);
-    SAL_CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 
 private:
     void test_insert_at_end(const char* numElements)
