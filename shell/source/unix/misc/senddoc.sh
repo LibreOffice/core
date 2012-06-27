@@ -115,19 +115,19 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         done
 
         if [ "$TO" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}to=${TO}
+            COMMAND=${COMMAND:-}${COMMAND:+,}to=\'${TO}\'
         fi
         if [ "$CC" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}cc=${CC}
+            COMMAND=${COMMAND:-}${COMMAND:+,}cc=\'${CC}\'
         fi
         if [ "$BCC" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}bcc=${BCC}
+            COMMAND=${COMMAND:-}${COMMAND:+,}bcc=\'${BCC}\'
         fi
         if [ "$SUBJECT" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}subject=${SUBJECT}
+            COMMAND=${COMMAND:-}${COMMAND:+,}subject=\'${SUBJECT}\'
         fi
         if [ "$BODY" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}body=${BODY}
+            COMMAND=${COMMAND:-}${COMMAND:+,}body=\'${BODY}\'
         fi
         if [ "$ATTACH" != "" ]; then
             COMMAND=${COMMAND:-}${COMMAND:+,}attachment=\'${ATTACH}\'
