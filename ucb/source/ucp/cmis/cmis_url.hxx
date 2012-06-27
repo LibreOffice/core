@@ -49,8 +49,9 @@ namespace cmis
             URL( rtl::OUString const & urlStr );
 
             std::map< int, std::string > getSessionParams( );
-            rtl::OUString getObjectPath( );
-            rtl::OUString getBindingUrl( );
+            rtl::OUString& getObjectPath( );
+            rtl::OUString& getBindingUrl( );
+            rtl::OUString& getRepositoryId( );
             void setObjectPath( rtl::OUString sPath );
 
             rtl::OUString asString( );
