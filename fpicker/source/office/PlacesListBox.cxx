@@ -38,9 +38,10 @@
 
 using rtl::OUString;
 
-PlacesListBox_Impl::PlacesListBox_Impl( Window* pParent, const rtl::OUString& rTitle ) :
+PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const rtl::OUString& rTitle ) :
     SvHeaderTabListBox( pParent, WB_TABSTOP | WB_NOINITIALSELECTION ),
-    mpHeaderBar( NULL )
+    mpHeaderBar( NULL ),
+    mpParent( pParent )
 {
     Size aBoxSize = pParent->GetSizePixel( );
     mpHeaderBar = new HeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
@@ -63,6 +64,13 @@ PlacesListBox_Impl::PlacesListBox_Impl( Window* pParent, const rtl::OUString& rT
 PlacesListBox_Impl::~PlacesListBox_Impl( )
 {
     delete mpHeaderBar;
+    mpParent = NULL;
+}
+
+void PlacesListBox_Impl::MouseButtonUp( const MouseEvent& rMEvt )
+{
+    SvHeaderTabListBox::MouseButtonUp( rMEvt );
+    mpParent->updateView( );
 }
 
 PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTitle, const ResId& rResId ) :
@@ -71,7 +79,8 @@ PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTit
     mpDlg( pFileDlg ),
     mpImpl( NULL ),
     mnNbEditables( 0 ),
-    mbUpdated( false )
+    mbUpdated( false ),
+    mbSelectionChanged( false )
 {
     mpImpl = new PlacesListBox_Impl( this, rTitle );
 
@@ -149,8 +158,7 @@ IMPL_LINK( PlacesListBox, Selection, void* , EMPTYARG )
     sal_uInt32 nSelected = mpImpl->GetCurrRow();
     PlacePtr pPlace = maPlaces[nSelected];
 
-    mpDlg->OpenURL_Impl( pPlace->GetUrl() );
-
+    mbSelectionChanged = true;
     if(pPlace->IsEditable())
         mpDlg->RemovablePlaceSelected();
     else
@@ -184,6 +192,17 @@ IMPL_LINK ( PlacesListBox, DoubleClick, void*, EMPTYARG )
 		};
 	}
 	return 0;
+}
+
+void PlacesListBox::updateView( )
+{
+    if ( mbSelectionChanged )
+    {
+        mbSelectionChanged = false;
+        sal_uInt32 nSelected = mpImpl->GetCurrRow();
+        PlacePtr pPlace = maPlaces[nSelected];
+        mpDlg->OpenURL_Impl( pPlace->GetUrl( ) );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
