@@ -307,7 +307,7 @@ public class FieldFormatter implements XItemListener
             {
                 Object oColumn = Helper.getUnoPropertyValue(oColumnDescriptorModel, "Column");
                 Helper.setUnoPropertyValue(oColumn, PropertyNames.PROPERTY_NAME, newfieldname);
-                FieldDescription curfielddescription = (FieldDescription) CurUnoDialog.fielditems.get(oldfieldname);
+                FieldDescription curfielddescription = CurUnoDialog.fielditems.get(oldfieldname);
                 CurUnoDialog.fielditems.remove(oldfieldname);
                 curfielddescription.setName(newfieldname);
                 CurUnoDialog.fielditems.put(newfieldname, curfielddescription);

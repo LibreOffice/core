@@ -131,7 +131,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             agendaTemplate = new AgendaTemplate(xMSF, agenda, resources, this);
             initializeTemplates();
             
-            agendaTemplate.load(agendaTemplates[1][agenda.cp_AgendaType] , new ArrayList());
+            agendaTemplate.load(agendaTemplates[1][agenda.cp_AgendaType] , new ArrayList<PropertyValue[]>());
             
             // build the dialog.
             buildStep1();

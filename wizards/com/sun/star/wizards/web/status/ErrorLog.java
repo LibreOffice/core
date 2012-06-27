@@ -30,7 +30,7 @@ import java.util.List;
 public class ErrorLog implements ErrorReporter
 {
 
-    private List errors = new ArrayList();
+    private List<Err> errors = new ArrayList<Err>();
 
     public void error(Exception ex, Object obj, String s)
     {

@@ -62,7 +62,7 @@ public class RelationController extends CommandName
         try
         {
             String[] sTableNames = super.getCommandMetaData().getTableNames();
-            ArrayList aReferencedTableVector = new ArrayList();
+            ArrayList<String> aReferencedTableVector = new ArrayList<String>();
             XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getExportedKeys((getCatalogName(this)), getSchemaName(), getTableName());
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             while (xResultSet.next())
@@ -107,8 +107,8 @@ public class RelationController extends CommandName
             XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getImportedKeys(getCatalogName(oLocCommandName), oLocCommandName.getSchemaName(), oLocCommandName.getTableName());
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             boolean bleaveLoop = false;
-            ArrayList aMasterFieldNamesVector = new ArrayList();
-            ArrayList aSlaveFieldNamesVector = new ArrayList();
+            ArrayList<String> aMasterFieldNamesVector = new ArrayList<String>();
+            ArrayList<String> aSlaveFieldNamesVector = new ArrayList<String>();
             while (xResultSet.next() && !bleaveLoop)
             {
                 String sPrimaryCatalog = null;

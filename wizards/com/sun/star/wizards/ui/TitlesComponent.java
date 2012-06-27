@@ -32,7 +32,7 @@ public class TitlesComponent extends ControlScroller
     int iLabelPosX;
     final int iRelLabelPosXDist = 6;
     public String[] fieldnames;
-    public Map fieldtitleset;
+    public Map<String, String> fieldtitleset;
     public String[] fieldtitles;
     public XTextListener xTextListener;
     final String SOLABELPREFIX = "lblColumnName_";
@@ -162,7 +162,7 @@ public class TitlesComponent extends ControlScroller
         CurUnoDialog.setControlProperty("lblColumnTitles", PropertyNames.PROPERTY_POSITION_X, TitlePosX);
     }
 
-    public void initialize(String[] _fieldnames, Map _fieldtitleset)
+    public void initialize(String[] _fieldnames, Map<String, String> _fieldtitleset)
     {
         this.fieldnames = _fieldnames;
         this.fieldtitleset = _fieldtitleset;

@@ -33,7 +33,7 @@ public class Task
     private int failed = 0;
     private int max = 0;
     private String taskName;
-    private List listeners = new ArrayList();
+    private List<TaskListener> listeners = new ArrayList<TaskListener>();
     private String subtaskName;
 
     public Task(String taskName_, String subtaskName_, int max_)
@@ -108,7 +108,7 @@ public class Task
 
         for (int i = 0; i < listeners.size(); i++)
         {
-            ((TaskListener) listeners.get(i)).taskStatusChanged(te);
+            listeners.get(i).taskStatusChanged(te);
         }
     }
 
@@ -118,7 +118,7 @@ public class Task
 
         for (int i = 0; i < listeners.size(); i++)
         {
-            ((TaskListener) listeners.get(i)).taskStarted(te);
+            listeners.get(i).taskStarted(te);
         }
     }
 
@@ -128,7 +128,7 @@ public class Task
 
         for (int i = 0; i < listeners.size(); i++)
         {
-            ((TaskListener) listeners.get(i)).taskFinished(te);
+            listeners.get(i).taskFinished(te);
         }
     }
 
@@ -138,7 +138,7 @@ public class Task
 
         for (int i = 0; i < listeners.size(); i++)
         {
-            ((TaskListener) listeners.get(i)).taskFinished(te);
+            listeners.get(i).taskFinished(te);
         }
     }
 
@@ -148,7 +148,7 @@ public class Task
 
         for (int i = 0; i < listeners.size(); i++)
         {
-            ((TaskListener) listeners.get(i)).subtaskNameChanged(te);
+            listeners.get(i).subtaskNameChanged(te);
         }
     }
 

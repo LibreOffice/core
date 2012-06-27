@@ -49,7 +49,7 @@ import com.sun.star.wizards.text.ViewHandler;
 
 public class FormDocument extends TextDocument
 {
-    protected ArrayList oControlForms = new ArrayList();
+    protected ArrayList<ControlForm> oControlForms = new ArrayList<ControlForm>();
     protected CommandMetaData oMainFormDBMetaData;
     protected CommandMetaData oSubFormDBMetaData;
     protected String[][] LinkFieldNames;
@@ -158,9 +158,9 @@ public class FormDocument extends TextDocument
             else
             {
                 oFormHandler.removeControlsofForm(SOMAINFORM);
-                ((ControlForm) oControlForms.get(0)).oFormController = null;
+                oControlForms.get(0).oFormController = null;
             }
-            ((ControlForm) oControlForms.get(0)).initialize(curUIControlArranger.getSelectedArrangement(0), _NBorderType);
+            oControlForms.get(0).initialize(curUIControlArranger.getSelectedArrangement(0), _NBorderType);
         }
         if (_bShouldHaveSubForm)
         {
@@ -177,21 +177,21 @@ public class FormDocument extends TextDocument
                 if (oControlForms.size() > 1)
                 {
                     oFormHandler.removeControlsofForm(SOSUBFORM);
-                    ((ControlForm) oControlForms.get(1)).oFormController = null;
-                    ((ControlForm) oControlForms.get(1)).initialize(curUIControlArranger.getSelectedArrangement(1), _NBorderType);
+                    oControlForms.get(1).oFormController = null;
+                    oControlForms.get(1).initialize(curUIControlArranger.getSelectedArrangement(1), _NBorderType);
                 }
             }
         }
         else
         {
-            ControlForm aMainForm = (ControlForm) oControlForms.get(0);
+            ControlForm aMainForm = oControlForms.get(0);
             // boolean bHasSubForm = aMainForm.xFormContainer.hasByName(SOSUBFORM);
             // WRONG if (oFormHandler.hasFormByName(SOSUBFORM))
             if (aMainForm.xFormContainer != null && aMainForm.xFormContainer.hasByName(SOSUBFORM))
             {
                 oFormHandler.removeControlsofForm(SOSUBFORM);
                 oFormHandler.removeElement( aMainForm.xFormContainer, SOSUBFORM );
-                ((ControlForm) oControlForms.get(1)).oFormController = null;
+                oControlForms.get(1).oFormController = null;
                 // aMainForm.xFormContainer = null; // .removeFormByName(SOSUBFORM);
                 oControlForms.remove(1);
                 adjustMainFormSize(_NBorderType);
@@ -231,20 +231,20 @@ public class FormDocument extends TextDocument
 //      int nSubFormHeight = (int) ((double)nFormHeight/2) - SOFORMGAP;
 //      int nSubFormFieldCount = this.oSubFormDBMetaData.FieldNames.length;
 //      int totfieldcount = oMainFormDBMetaData.FieldNames.length + nSubFormFieldCount;
-        int nMainFormHeight = ((ControlForm) oControlForms.get(0)).getActualFormHeight();
+        int nMainFormHeight = oControlForms.get(0).getActualFormHeight();
         return new Size(nFormWidth, nFormHeight - nMainFormHeight - SOFORMGAP);
     }
 
     private Point getSubFormPoint()
     {
-        ControlForm curMainControlForm = ((ControlForm) oControlForms.get(0));
+        ControlForm curMainControlForm = oControlForms.get(0);
         return new Point(curMainControlForm.aStartPoint.X,
                 (curMainControlForm.aStartPoint.Y + curMainControlForm.getFormSize().Height + SOFORMGAP));
     }
 
     private void adjustMainFormSize(Short _NBorderType)
     {
-        ControlForm oMainControlForm = (ControlForm) oControlForms.get(0);
+        ControlForm oMainControlForm = oControlForms.get(0);
         oMainControlForm.setFormSize(getMainFormSize(oMainControlForm.curArrangement));
         if (oMainControlForm.curArrangement == FormWizard.AS_GRID)
         {
@@ -261,8 +261,8 @@ public class FormDocument extends TextDocument
 
     private void adjustSubFormPosSize(Short _NBorderType)
     {
-        ControlForm oMainControlForm = (ControlForm) oControlForms.get(0);
-        ControlForm oSubControlForm = (ControlForm) oControlForms.get(1);
+        ControlForm oMainControlForm = oControlForms.get(0);
+        ControlForm oSubControlForm = oControlForms.get(1);
         oSubControlForm.setFormSize(new Size(nFormWidth, nFormHeight - oMainControlForm.getFormSize().Height));
         if (oSubControlForm.curArrangement == FormWizard.AS_GRID)
         {
@@ -284,7 +284,7 @@ public class FormDocument extends TextDocument
     {
         for (int i = 0; i < oControlForms.size(); i++)
         {
-            ControlForm curControlForm = ((ControlForm) oControlForms.get(i));
+            ControlForm curControlForm = oControlForms.get(i);
             if (curControlForm.Name.equals(_sname))
             {
                 return curControlForm;
@@ -369,7 +369,7 @@ public class FormDocument extends TextDocument
             Name = _sname;
             if (_sname.equals(SOSUBFORM))
             {
-                ControlForm oMainControlForm = ((ControlForm) oControlForms.get(0));
+                ControlForm oMainControlForm = oControlForms.get(0);
                 xFormContainer = oFormHandler.insertFormbyName(_sname, oMainControlForm.xFormContainer);
             }
             else
@@ -426,7 +426,7 @@ public class FormDocument extends TextDocument
             }
             if ((Name.equals(SOMAINFORM)) && (oControlForms.size() > 1))
             {
-                ControlForm curSubControlForm = ((ControlForm) oControlForms.get(1));
+                ControlForm curSubControlForm = oControlForms.get(1);
                 if (curSubControlForm != null)
                 {
                     adjustSubFormPosSize(_NBorderType);

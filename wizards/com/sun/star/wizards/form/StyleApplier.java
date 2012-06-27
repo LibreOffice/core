@@ -280,7 +280,7 @@ public class StyleApplier
             }
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
-                FormDocument.ControlForm curControlForm = ((FormDocument.ControlForm) curFormDocument.oControlForms.get(m));
+                FormDocument.ControlForm curControlForm = curFormDocument.oControlForms.get(m);
                 if (curControlForm.getArrangemode() == FormWizard.AS_GRID)
                 {
                     GridControl oGridControl = curControlForm.getGridControl();
@@ -438,7 +438,7 @@ public class StyleApplier
         {
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
-                FormDocument.ControlForm curControlForm = ((FormDocument.ControlForm) curFormDocument.oControlForms.get(m));
+                FormDocument.ControlForm curControlForm = curFormDocument.oControlForms.get(m);
                 if (curControlForm.getArrangemode() == FormWizard.AS_GRID)
                 {
                     if (_iStyleColors[SOLABELTEXTCOLOR] > -1)

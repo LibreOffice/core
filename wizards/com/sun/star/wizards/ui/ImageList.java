@@ -457,7 +457,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     };
     private Object[] MOVE_SELECTION_VALS = new Object[3];
     /** Utility field holding list of ItemListeners. */
-    private transient java.util.ArrayList itemListenerList;
+    private transient java.util.ArrayList<XItemListener> itemListenerList;
 
     private void moveSelection(int image)
     {
@@ -567,7 +567,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     {
         if (itemListenerList == null)
         {
-            itemListenerList = new java.util.ArrayList();
+            itemListenerList = new java.util.ArrayList<XItemListener>();
         }
         itemListenerList.add(listener);
     }
@@ -589,22 +589,23 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
      * @param event The event to be fired
      *
      */
+    @SuppressWarnings("unchecked")
     private void fireItemSelected()
     {
 //      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0, 
 //          getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
-        java.util.ArrayList list;
+        java.util.ArrayList<XItemListener> list;
         synchronized(this)
         {
             if (itemListenerList == null)
             {
                 return;
             }
-            list = (java.util.ArrayList) itemListenerList.clone();
+            list = (java.util.ArrayList<XItemListener>) itemListenerList.clone();
         }
         for (int i = 0; i < list.size(); i++)
         {
-            ((com.sun.star.awt.XItemListener) list.get(i)).itemStateChanged(null);
+            list.get(i).itemStateChanged(null);
         }
     }
 

@@ -30,7 +30,7 @@ import com.sun.star.beans.PropertyValue;
 import java.text.Collator;
 import java.util.Comparator;
 
-public class CommandFieldSelection extends FieldSelection implements Comparator
+public class CommandFieldSelection extends FieldSelection implements Comparator<String>
 {
 
     private CommandMetaData CurDBMetaData;
@@ -335,7 +335,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         return aCollator;
     }
 
-    public int compare(Object _oObject1, Object _oObject2)
+    public int compare(String _oObject1, String _oObject2)
     {
         return this.getCollator().compare(_oObject1, _oObject2);
     }

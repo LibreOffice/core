@@ -45,7 +45,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
     FieldFormatter curFieldFormatter;
     PrimaryKeyHandler curPrimaryKeyHandler;
     String sMsgWizardName = PropertyNames.EMPTY_STRING;
-    public HashMap fielditems;
+    public HashMap<String, FieldDescription> fielditems;
     int wizardmode;
     String tablename;
     String serrToManyFields;
@@ -77,7 +77,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
                     218, Boolean.TRUE, "DialogTable", 102, 41, 1, new Short((short) 0), sTitle, 330
                 });
         drawNaviBar();
-        fielditems = new HashMap();
+        fielditems = new HashMap<String, FieldDescription>();
         //TODO if reportResouces cannot be gotten dispose officedocument
         if (getTableResources())
         {

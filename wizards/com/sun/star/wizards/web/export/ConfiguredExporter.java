@@ -38,9 +38,9 @@ public class ConfiguredExporter extends FilterExporter
     public void init(CGExporter exporter)
     {
         super.init(exporter);
-        for (Iterator i = exporter.cp_Arguments.keys().iterator(); i.hasNext();)
+        for (Iterator<String> i = exporter.cp_Arguments.keys().iterator(); i.hasNext();)
         {
-            Object key = i.next();
+            String key = i.next();
             if (!key.equals("Filter"))
             {
                 Object value = exporter.cp_Arguments.getElement(key);

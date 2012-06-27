@@ -69,10 +69,10 @@ public class UCB
         {
           return;
         }
-        List l = listFiles(dir,null);
+        List<String> l = listFiles(dir,null);
         for (int i = 0; i<l.size(); i++)
         {
-            delete(FileAccess.connectURLs(dir ,(String)l.get(i)));
+            delete(FileAccess.connectURLs(dir ,l.get(i)));
     }
     }
     
@@ -89,10 +89,10 @@ public class UCB
     
     public void copy(String sourceDir, String targetDir, Verifier verifier) throws Exception
     {
-        List files = listFiles(sourceDir,verifier);
+        List<String> files = listFiles(sourceDir,verifier);
         for (int i = 0; i<files.size(); i++)
         {
-          copy(sourceDir, (String)files.get(i), targetDir);
+          copy(sourceDir, files.get(i), targetDir);
         }
         
     }
@@ -153,7 +153,7 @@ public class UCB
         return xCmdProcessor.execute(aCommand, 0, null);
     }
 
-    public List listFiles(String path, Verifier verifier) throws Exception
+    public List<String> listFiles(String path, Verifier verifier) throws Exception
     {
         Object xContent = getContent(path);
 
@@ -174,7 +174,7 @@ public class UCB
 
         XResultSet xResultSet = xSet.getStaticResultSet();
         
-        List files = new ArrayList();
+        List<String> files = new ArrayList<String>();
 
         if (xResultSet.first())
         {
@@ -214,7 +214,7 @@ public class UCB
         return files;
     }
     
-    public Object getContentProperty(Object content, String propName, Class type) 
+    public Object getContentProperty(Object content, String propName, Class<?> type)
         throws Exception 
     {
         Property[] pv = new Property[1];

@@ -91,9 +91,9 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     XTextDocument xTextDocument;
     PathSelection myPathSelection;
     CGLetterWizard myConfig;
-    ArrayList mainDA = new ArrayList();
-    ArrayList letterDA = new ArrayList();
-    ArrayList businessDA = new ArrayList();
+    ArrayList<DataAware> mainDA = new ArrayList<DataAware>();
+    ArrayList<DataAware> letterDA = new ArrayList<DataAware>();
+    ArrayList<DataAware> businessDA = new ArrayList<DataAware>();
     String[][] BusinessFiles;
     String[][] OfficialFiles;
     String[][] PrivateFiles;
@@ -1132,7 +1132,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         {
             PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
         };
-        ArrayList allPaths = new ArrayList();
+        ArrayList<String> allPaths = new ArrayList<String>();
         String sLetterSubPath = "/wizard/letter/";
 
         try
@@ -1176,7 +1176,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             e.printStackTrace();
         }
 
-        ArrayList StringsVector = new ArrayList();
+        ArrayList<Strings> StringsVector = new ArrayList<Strings>();
 
         String[] LanguageLabels;
 
@@ -1218,20 +1218,20 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             }
         }
 
-	Collections.sort(StringsVector, new Comparator() {
-		public int compare(Object a, Object b) {
-			return ((Strings)a).LanguageLabel.compareTo(((Strings)b).LanguageLabel);
-		}
-	});
+        Collections.sort(StringsVector, new Comparator<Strings>() {
+            public int compare(Strings a, Strings b) {
+                return a.LanguageLabel.compareTo(b.LanguageLabel);
+            }
+        });
 
         Norms = new String[StringsVector.size()];
         NormPaths = new String[StringsVector.size()];
         LanguageLabels = new String[StringsVector.size()];
 
 	for(int i = 0; i<StringsVector.size(); i++) {
-    Norms[i] = ((Strings)StringsVector.get(i)).Norm;
-    NormPaths[i] = ((Strings)StringsVector.get(i)).NormPath;
-    LanguageLabels[i] = ((Strings)StringsVector.get(i)).LanguageLabel;
+    Norms[i] = StringsVector.get(i).Norm;
+    NormPaths[i] = StringsVector.get(i).NormPath;
+    LanguageLabels[i] = StringsVector.get(i).LanguageLabel;
 	}
 
         setControlProperty("lstLetterNorm", PropertyNames.STRING_ITEM_LIST, LanguageLabels);

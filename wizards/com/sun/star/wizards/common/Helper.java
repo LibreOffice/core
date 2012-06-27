@@ -110,7 +110,7 @@ public class Helper
         throw new RuntimeException();
     }
 
-    public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName, java.lang.Class xClass)
+    public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName, java.lang.Class<?> xClass)
     {
         try
         {
@@ -157,7 +157,7 @@ public class Helper
         return null;
     }
 
-    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName, java.lang.Class xClass)
+    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName, java.lang.Class<?> xClass)
     {
         try
         {

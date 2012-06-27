@@ -125,14 +125,14 @@ public abstract class WWD_Startup extends WWD_General
      * which relay on the selected document
      * as DataObject (or Model).
      */
-    protected List docAware = new ArrayList();
+    protected List<DataAware> docAware = new ArrayList<DataAware>();
     /**
      * The Vector containing DataAware objects
      * which relay on the session's generalInfo
      * Object (CGSession.cp_GeneralInfo) as
      * DataObject (or model).
      */
-    protected List genAware = new ArrayList();
+    protected List<DataAware> genAware = new ArrayList<DataAware>();
     /**
      * The vector containing DataAware objectscm25npd ..
      * which relay on the session's Design Object
@@ -140,7 +140,7 @@ public abstract class WWD_Startup extends WWD_General
      * (or model).
      *
      */
-    protected List designAware = new ArrayList();
+    protected List<DataAware> designAware = new ArrayList<DataAware>();
     /**
      * A Vector containig the DataAware objects
      * which relay on Publishing Objects.
@@ -149,7 +149,7 @@ public abstract class WWD_Startup extends WWD_General
      * on a <b>different</b> CGPublish object,
      * So they are handled with more care.
      */
-    protected List pubAware = new ArrayList(3);
+    protected List<DataAware> pubAware = new ArrayList<DataAware>(3);
     /**
      * The DataAware object which handles
      * the documents-list events.
@@ -746,8 +746,8 @@ public abstract class WWD_Startup extends WWD_General
      */
     private void mount(Object data, int i)
     {
-        ((DataAware) pubAware.get(i * 2)).setDataObject(data, true);
-        ((DataAware) pubAware.get(i * 2 + 1)).setDataObject(data, true);
+        pubAware.get(i * 2).setDataObject(data, true);
+        pubAware.get(i * 2 + 1).setDataObject(data, true);
     }
 
     /**
@@ -769,11 +769,11 @@ public abstract class WWD_Startup extends WWD_General
      * @param data
      * @param list
      */
-    protected void mount(Object data, List list)
+    protected void mount(Object data, List<DataAware> list)
     {
         for (int i = 0; i < list.size(); i++)
         {
-            ((DataAware) list.get(i)).setDataObject(data, true);
+            list.get(i).setDataObject(data, true);
         }
     }
 
@@ -954,7 +954,7 @@ public abstract class WWD_Startup extends WWD_General
         }
     }
 
-    private class StylesComparator implements Comparator
+    private class StylesComparator implements Comparator<Object>
     {
 
         /* (non-Javadoc)

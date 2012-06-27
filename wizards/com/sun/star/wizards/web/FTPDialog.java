@@ -143,7 +143,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
 
     //Resources Object
     private FTPDialogResources resources;
-    private List dataAware = new ArrayList();
+    private List<DataAware> dataAware = new ArrayList<DataAware>();
     public String username = PropertyNames.EMPTY_STRING;
     public String password = PropertyNames.EMPTY_STRING;
     /**
@@ -573,7 +573,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         Object content = ucb.getContent(acountUrl);
 
         //list files in the content.
-        List l = ucb.listFiles(acountUrl, null);
+        List<String> l = ucb.listFiles(acountUrl, null);
 
         //open the content
         OpenCommandArgument2 aArg = new OpenCommandArgument2();

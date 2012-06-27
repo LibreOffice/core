@@ -51,12 +51,12 @@ public class MethodInvocation
         this(method, obj, null);
     }
 
-    public MethodInvocation(String methodName, Object obj, Class paramClass) throws NoSuchMethodException
+    public MethodInvocation(String methodName, Object obj, Class<?> paramClass) throws NoSuchMethodException
     {
         this(paramClass == null ? obj.getClass().getMethod(methodName) : obj.getClass().getMethod(methodName, paramClass), obj, paramClass);
     }
 
-    public MethodInvocation(Method method, Object obj, Class paramClass)
+    public MethodInvocation(Method method, Object obj, Class<?> paramClass)
     {
         mMethod = method;
         mObject = obj;

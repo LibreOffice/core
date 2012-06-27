@@ -214,7 +214,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
      * This method is used for creating Edit, Currency, Date, Formatted, Pattern, File
      * and Time edit components.
      */
-    private Object insertEditField(String sName, String sTextChanged, Object eventTarget, String sModelClass, String[] sPropNames, Object[] oPropValues, Class type)
+    private Object insertEditField(String sName, String sTextChanged, Object eventTarget, String sModelClass, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
     {
         XTextComponent xField = (XTextComponent) insertControlModel2(sModelClass, sName, sPropNames, oPropValues, XTextComponent.class);
         if (sTextChanged != null)
@@ -352,7 +352,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
 
     }
 
-    public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues, Class type)
+    public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
     {
         return UnoRuntime.queryInterface(type, insertControlModel2(serviceName, componentName, sPropNames, oPropValues));
     }

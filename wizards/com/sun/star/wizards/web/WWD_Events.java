@@ -523,8 +523,8 @@ public abstract class WWD_Events extends WWD_Startup
      */
     private void updatePublishUI(int number)
     {
-        ((DataAware) pubAware.get(number)).updateUI();
-        ((DataAware) pubAware.get(number + 1)).updateUI();
+        pubAware.get(number).updateUI();
+        pubAware.get(number + 1).updateUI();
         checkPublish();
     }
 

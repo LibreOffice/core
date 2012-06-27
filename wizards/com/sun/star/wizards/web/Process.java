@@ -100,7 +100,7 @@ public class Process implements WebWizardConst, ProcessErrors
      * This is a cache for exporters, so I do not need to 
      * instanciate the same exporter more than once. 
      */
-    private Map exporters = new HashMap(3);
+    private Map<CGExporter, Exporter> exporters = new HashMap<CGExporter, Exporter>(3);
     private boolean result;
 
     public Process(
@@ -499,21 +499,21 @@ public class Process implements WebWizardConst, ProcessErrors
         /*
          * a map that contains xsl templates. the keys are the xsl file names. 
          */
-        Map templates = layout.getTemplates(xmsf);
+        Map<String, Templates> templates = layout.getTemplates(xmsf);
 
         task.advance(true, TASK_GENERATE_XSL);
 
         /*
          * each template generates a page.
          */
-        for (Iterator i = templates.keySet().iterator(); i.hasNext();)
+        for (Iterator<String> i = templates.keySet().iterator(); i.hasNext();)
         {
 
             String key = PropertyNames.EMPTY_STRING;
 
-            key = (String) i.next();
+            key = i.next();
 
-            Transformer transformer = ((Templates) templates.get(key)).newTransformer();
+            Transformer transformer = templates.get(key).newTransformer();
 
             doc.normalize();
             task.advance(true);
@@ -814,7 +814,7 @@ public class Process implements WebWizardConst, ProcessErrors
             IllegalAccessException,
             InstantiationException
     {
-        Exporter exp = (Exporter) exporters.get(export);
+        Exporter exp = exporters.get(export);
         if (exp == null)
         {
             exp = createExporter(export);

@@ -51,8 +51,8 @@ public class DataAwareFields
         {
             Field f = owner.getClass().getField(fieldname);
 
-            Class c = f.getType();
-            Class c2 = value.getClass();
+            Class<?> c = f.getType();
+            Class<?> c2 = value.getClass();
             if (c.equals(Boolean.TYPE))
             {
                 return new BooleanFieldValue(f, c2);
@@ -95,7 +95,7 @@ public class DataAwareFields
             field = field_;
         }
 
-        public boolean isAssignable(Class type)
+        public boolean isAssignable(Class<?> type)
         {
             return field.getDeclaringClass().isAssignableFrom(type);
         }
@@ -104,9 +104,9 @@ public class DataAwareFields
     private static class BooleanFieldValue extends FieldValue
     {
 
-        private Class convertTo;
+        private Class<?> convertTo;
 
-        public BooleanFieldValue(Field f, Class convertTo_)
+        public BooleanFieldValue(Field f, Class<?> convertTo_)
         {
             super(f);
             convertTo = convertTo_;
@@ -164,9 +164,9 @@ public class DataAwareFields
     private static class IntFieldValue extends FieldValue
     {
 
-        private Class convertTo;
+        private Class<?> convertTo;
 
-        public IntFieldValue(Field f, Class convertTo_)
+        public IntFieldValue(Field f, Class<?> convertTo_)
         {
             super(f);
             convertTo = convertTo_;
@@ -224,9 +224,9 @@ public class DataAwareFields
     private static class DoubleFieldValue extends FieldValue
     {
 
-        private Class convertTo;
+        private Class<?> convertTo;
 
-        public DoubleFieldValue(Field f, Class convertTo_)
+        public DoubleFieldValue(Field f, Class<?> convertTo_)
         {
             super(f);
             convertTo = convertTo_;
@@ -284,9 +284,9 @@ public class DataAwareFields
     private static class ConvertedStringValue extends FieldValue
     {
 
-        private Class convertTo;
+        private Class<?> convertTo;
 
-        public ConvertedStringValue(Field f, Class convertTo_)
+        public ConvertedStringValue(Field f, Class<?> convertTo_)
         {
             super(f);
             convertTo = convertTo_;
@@ -476,7 +476,7 @@ public class DataAwareFields
                 };
     }
 
-    private static Number toNumber(double i, Class c)
+    private static Number toNumber(double i, Class<?> c)
     {
         if (c.equals(Integer.class))
         {

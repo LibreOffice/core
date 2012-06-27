@@ -21,7 +21,6 @@ import com.sun.star.beans.*;
 import com.sun.star.awt.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.common.HelpIds;
 
 import java.util.*;
 
@@ -36,7 +35,7 @@ public abstract class ControlScroller
     protected int nscrollvalue = 0;
     protected int ntotfieldcount;
     XScrollBar xScrollBar;
-    protected ArrayList scrollfields;
+    protected ArrayList<PropertyValue[]> scrollfields;
     protected Integer ICompPosX;
     protected int iCompPosX;
     protected Integer ICompPosY;
@@ -54,7 +53,7 @@ public abstract class ControlScroller
     int SORELFIRSTPOSY = 3;
     protected int curHelpIndex;
     String sIncSuffix;
-    protected ArrayList ControlGroupVector = new ArrayList();
+    protected ArrayList<Object> ControlGroupVector = new ArrayList<Object>();
     protected PeerConfig oTitlePeerConfig;
 
     class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
@@ -113,7 +112,7 @@ public abstract class ControlScroller
                 {
                     new Short((short) 0), Boolean.TRUE, new Integer(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)
                 });
-        scrollfields = new ArrayList();
+        scrollfields = new ArrayList<PropertyValue[]>();
         int ypos = iStartPosY + SORELFIRSTPOSY;
         for (int i = 0; i < nblockincrement; i++)
         {
@@ -192,8 +191,8 @@ public abstract class ControlScroller
 
     protected void fillupControls(int guiRow)
     {
-        PropertyValue[] nameProps = (PropertyValue[]) scrollfields.get(guiRow);
-        PropertyValue[] valueProps = (PropertyValue[]) scrollfields.get(guiRow + nscrollvalue);
+        PropertyValue[] nameProps = scrollfields.get(guiRow);
+        PropertyValue[] valueProps = scrollfields.get(guiRow + nscrollvalue);
         for (int n = 0; n < nameProps.length; n++)
         {
             if (CurUnoDialog.getDlgNameAccess().hasByName(nameProps[n].Name))
@@ -274,7 +273,7 @@ public abstract class ControlScroller
     {
         for (int n = 0; n < scrollfields.size(); n++)
         {
-            PropertyValue[] curproperties = (PropertyValue[]) scrollfields.get(n);
+            PropertyValue[] curproperties = scrollfields.get(n);
             for (int m = 0; m < curproperties.length; m++)
             {
                 PropertyValue curproperty = curproperties[m];
@@ -340,7 +339,7 @@ public abstract class ControlScroller
     {
         int cols =
                 scrollfields.size() > 0
-                ? ((PropertyValue[]) scrollfields.get(0)).length
+                ? scrollfields.get(0).length
                 : 0;
         for (int a = 0; a < ncurfieldcount; a++)
         {
@@ -364,8 +363,8 @@ public abstract class ControlScroller
         if (guiRow + nscrollvalue < scrollfields.size())
         {
             return fieldInfo(
-                    ((PropertyValue[]) scrollfields.get(guiRow + nscrollvalue))[column],
-                    ((PropertyValue[]) scrollfields.get(guiRow))[column]);
+                    scrollfields.get(guiRow + nscrollvalue)[column],
+                    scrollfields.get(guiRow)[column]);
             //System.out.println("getting field info for : " + guiRow + "/" + column  + ":" + pv.Value + "(" + pv.Name + ")" );
         }
         else
@@ -410,7 +409,7 @@ public abstract class ControlScroller
 
     protected PropertyValue[] getControlGroupInfo(int _i)
     {
-        return (PropertyValue[]) scrollfields.get(_i);
+        return scrollfields.get(_i);
     }
 
     protected void setControlData(String controlname, Object newvalue)
@@ -447,7 +446,7 @@ public abstract class ControlScroller
         {
             for (int i = 0; i < scrollfields.size(); i++)
             {
-                curproperties = (PropertyValue[]) scrollfields.get(i);
+                curproperties = scrollfields.get(i);
                 retproperties[i] = curproperties;
             }
             return retproperties;

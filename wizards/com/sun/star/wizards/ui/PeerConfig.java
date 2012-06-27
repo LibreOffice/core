@@ -38,9 +38,9 @@ import com.sun.star.wizards.common.PropertyNames;
 public class PeerConfig implements XWindowListener
 {
 
-    private ArrayList m_aPeerTasks = new ArrayList();
-    ArrayList aControlTasks = new ArrayList();
-    ArrayList aImageUrlTasks = new ArrayList();
+    private ArrayList<PeerTask> m_aPeerTasks = new ArrayList<PeerTask>();
+    ArrayList<ControlTask> aControlTasks = new ArrayList<ControlTask>();
+    ArrayList<ImageUrlTask> aImageUrlTasks = new ArrayList<ImageUrlTask>();
     UnoDialog oUnoDialog = null;
 
     public PeerConfig(UnoDialog _oUnoDialog)
@@ -108,7 +108,7 @@ public class PeerConfig implements XWindowListener
         {
             for (int i = 0; i < this.m_aPeerTasks.size(); i++)
             {
-                PeerTask aPeerTask = (PeerTask) m_aPeerTasks.get(i);
+                PeerTask aPeerTask = m_aPeerTasks.get(i);
                 XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, aPeerTask.xControl.getPeer());
                 for (int n = 0; n < aPeerTask.propnames.length; n++)
                 {
@@ -117,12 +117,12 @@ public class PeerConfig implements XWindowListener
             }
             for (int i = 0; i < this.aControlTasks.size(); i++)
             {
-                ControlTask aControlTask = (ControlTask) aControlTasks.get(i);
+                ControlTask aControlTask = aControlTasks.get(i);
                 Helper.setUnoPropertyValue(aControlTask.oModel, aControlTask.propname, aControlTask.propvalue);
             }
             for (int i = 0; i < this.aImageUrlTasks.size(); i++)
             {
-                ImageUrlTask aImageUrlTask = (ImageUrlTask) aImageUrlTasks.get(i);
+                ImageUrlTask aImageUrlTask = aImageUrlTasks.get(i);
                 String sImageUrl = PropertyNames.EMPTY_STRING;
                 if (AnyConverter.isInt(aImageUrlTask.oResource))
                 {

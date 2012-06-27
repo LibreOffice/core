@@ -31,7 +31,7 @@ public class GroupFieldHandler extends FieldSelection
 {
 
     private IReportDocument CurReportDocument;
-    private ArrayList GroupFieldVector = new ArrayList();
+    private ArrayList<String> GroupFieldVector = new ArrayList<String>();
     private QueryMetaData CurDBMetaData;
     private WizardDialog oWizardDialog;
     private static final short MAXSELFIELDS = 4;
@@ -76,8 +76,8 @@ public class GroupFieldHandler extends FieldSelection
     {
         try
         {
-            ArrayList NormalFieldsVector = new ArrayList();
-            ArrayList SelFieldsVector = new ArrayList();
+            ArrayList<String> NormalFieldsVector = new ArrayList<String>();
+            ArrayList<String> SelFieldsVector = new ArrayList<String>();
             String[] sFieldNames = CurDBMetaData.getFieldNames();
             for (int i = 0; i < sFieldNames.length; i++)
             {

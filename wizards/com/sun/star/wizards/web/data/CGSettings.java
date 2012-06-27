@@ -63,7 +63,7 @@ public class CGSettings extends ConfigGroup
     public ConfigSet savedSessions = new ConfigSet(CGSessionName.class);
     public CGSession cp_DefaultSession = new CGSession();
     public String cp_LastSavedSession;
-    private Map exportersMap = new HashMap();
+    private Map<String, CGExporter[]> exportersMap = new HashMap<String, CGExporter[]>();
     private XMultiServiceFactory xmsf;
     String[] resources;
     public Formatter formatter;
@@ -93,7 +93,7 @@ public class CGSettings extends ConfigGroup
 
     public CGExporter[] getExporters(String mime)
     {
-        CGExporter[] exps = (CGExporter[]) exportersMap.get(mime);
+        CGExporter[] exps = exportersMap.get(mime);
         if (exps == null)
         {
             exportersMap.put(mime, exps = createExporters(mime));
@@ -104,7 +104,7 @@ public class CGSettings extends ConfigGroup
     private CGExporter[] createExporters(String mime)
     {
         Object[] exporters = cp_Exporters.items();
-        ArrayList v = new ArrayList();
+        ArrayList<Object> v = new ArrayList<Object>();
         for (int i = 0; i < exporters.length; i++)
         {
             if (((CGExporter) exporters[i]).supports(mime))
@@ -119,7 +119,7 @@ public class CGSettings extends ConfigGroup
                 }
             }
         }
-        return (CGExporter[]) v.toArray(new CGExporter[v.size()]);
+        return v.toArray(new CGExporter[v.size()]);
     }
 
     /**

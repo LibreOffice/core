@@ -87,7 +87,7 @@ public class DBMetaData
     private XPropertySet xDataSourcePropertySet;
     public String[] DataSourceNames;
     public String[] CommandNames;
-    public java.util.ArrayList CommandObjects = new ArrayList(1);
+    public java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
     public Locale aLocale;
     public int[] CommandTypes;
     public String DataSourceName;
@@ -240,7 +240,6 @@ public class DBMetaData
         return getTableNamesAsNameAccess().hasByName(_stablename);
     }
 
-    @SuppressWarnings("unchecked")
     public void setTableByName(String _tableName)
     {
         CommandObject oTableObject = new CommandObject(_tableName, com.sun.star.sdb.CommandType.TABLE);
@@ -262,7 +261,7 @@ public class DBMetaData
         CommandObject oCommand = null;
         for (int i = 0; i < CommandObjects.size(); i++)
         {
-            oCommand = (CommandObject) CommandObjects.get(i);
+            oCommand = CommandObjects.get(i);
             if ((oCommand.Name.equals(_commandname)) && (oCommand.CommandType == _commandtype))
             {
                 return oCommand;
@@ -962,7 +961,7 @@ public class DBMetaData
         try
         {
             XRow xRow = UnoRuntime.queryInterface( XRow.class, _xResultSet );
-            ArrayList aColVector = new ArrayList();
+            ArrayList<String> aColVector = new ArrayList<String>();
             while (_xResultSet.next())
             {
                 aColVector.add(xRow.getString(_icol));

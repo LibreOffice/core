@@ -65,13 +65,12 @@ public class NamedValueCollection
         return i_default;
     }
 
-    @SuppressWarnings("unchecked")
-    public final < T extends XInterface > T queryOrDefault( final String i_key, final T i_default, Class i_interfaceClass )
+    public final < T extends XInterface > T queryOrDefault( final String i_key, final T i_default, Class<T> i_interfaceClass )
     {
         if ( m_values.containsKey( i_key ) )
         {
             final Object value = m_values.get( i_key );
-            return (T)UnoRuntime.queryInterface( i_interfaceClass, value );
+            return UnoRuntime.queryInterface( i_interfaceClass, value );
         }
         return i_default;
     }

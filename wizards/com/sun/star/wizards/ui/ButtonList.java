@@ -439,22 +439,23 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
      * @param event The event to be fired
      *
      */
+    @SuppressWarnings("unchecked")
     private void fireItemSelected()
     {
 //      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0, 
 //          getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
-        java.util.ArrayList list;
+        java.util.ArrayList<XItemListener> list;
         synchronized(this)
         {
             if (m_aItemListenerList == null)
             {
                 return;
             }
-            list = (java.util.ArrayList) m_aItemListenerList.clone();
+            list = (java.util.ArrayList<XItemListener>) m_aItemListenerList.clone();
         }
         for (int i = 0; i < list.size(); i++)
         {
-            ((com.sun.star.awt.XItemListener) list.get(i)).itemStateChanged(null);
+            list.get(i).itemStateChanged(null);
         }
     }
 

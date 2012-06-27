@@ -219,7 +219,7 @@ public class QueryMetaData extends CommandMetaData
             // this.getIncludedCommandNames(); // fills the var CommandNamesV indirectly :-(
             if (FieldTitleSet == null)
             {
-                FieldTitleSet = new HashMap();
+                FieldTitleSet = new HashMap<String, String>();
             }
             String[] aCommandNames = getIncludedCommandNames();
             for (int i = 0; i < aCommandNames.length; i++)

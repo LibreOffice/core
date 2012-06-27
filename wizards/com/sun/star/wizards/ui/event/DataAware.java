@@ -191,14 +191,14 @@ public abstract class DataAware {
      * calls updateUI() on each memebr of the collection.
      * @param dataAwares a collection containing DataAware objects.
      */
-    public static void updateUI(Collection dataAwares) {
-        for (Iterator i = dataAwares.iterator(); i.hasNext();)
-             ((DataAware) i.next()).updateUI();
+    public static void updateUI(Collection<DataAware> dataAwares) {
+        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
+             i.next().updateUI();
     }
 
-    public static void updateData(Collection dataAwares) {
-        for (Iterator i = dataAwares.iterator(); i.hasNext();)
-             ((DataAware) i.next()).updateData();
+    public static void updateData(Collection<DataAware> dataAwares) {
+        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
+             i.next().updateData();
     }
 
     /**
@@ -209,9 +209,9 @@ public abstract class DataAware {
      * @param dataAwares a collection of DataAware objects.
      * @param dataObject new data object to set to the DataAware objects in the given collection.
      * @param updateUI if true, calls updateUI() on each DataAware object.
-     */public static void setDataObject(Collection dataAwares, Object dataObject, boolean updateUI) {
-        for (Iterator i = dataAwares.iterator(); i.hasNext();)
-             ((DataAware) i.next()).setDataObject(dataObject, updateUI);
+     */public static void setDataObject(Collection<DataAware> dataAwares, Object dataObject, boolean updateUI) {
+        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
+             i.next().setDataObject(dataObject, updateUI);
     }
     
     /**
@@ -244,7 +244,7 @@ public abstract class DataAware {
          * @return true if the given class is acceptible for
          * the Value object. False if not.
          */
-        public boolean isAssignable(Class type);
+        public boolean isAssignable(Class<?> type);
     }
     
     /**
@@ -320,7 +320,7 @@ public abstract class DataAware {
             return null;
         }
 
-        protected Method createSetMethod(String propName, Object obj, Class paramClass) {
+        protected Method createSetMethod(String propName, Object obj, Class<?> paramClass) {
             Method m = null;
             try {
                 m = obj.getClass().getMethod("set" + propName, paramClass);
@@ -346,7 +346,7 @@ public abstract class DataAware {
         /* (non-Javadoc)
          * @see com.sun.star.wizards.ui.event.DataAware.Value#isAssignable(java.lang.Class)
          */
-        public boolean isAssignable(Class type) {
+        public boolean isAssignable(Class<?> type) {
             return getMethod.getDeclaringClass().isAssignableFrom(type) &&
                 setMethod.getDeclaringClass().isAssignableFrom(type);
         }

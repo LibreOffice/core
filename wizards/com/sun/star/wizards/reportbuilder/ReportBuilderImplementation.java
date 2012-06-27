@@ -110,7 +110,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
      */
     private IReportBuilderLayouter getReportBuilderLayouter()
     {
-        return (IReportBuilderLayouter) getLayoutMap().get(m_sReportBuilderLayoutName);
+        return getLayoutMap().get(m_sReportBuilderLayoutName);
     }
     private Object m_aReportDocument;
     private XPropertySet m_documentDefinition;
@@ -274,7 +274,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         aNameContainer.insertByHierarchicalName(Name, m_documentDefinition);
     }
 
-    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList GroupFieldVector, ArrayList ReportPath, int iSelCount)
+    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount)
     {
         final int GroupCount = GroupFieldVector.size();
         if (GroupCount < MAXIMUM_GROUPCOUNT)
@@ -289,7 +289,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
     }
 
-    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, ArrayList GroupFieldVector)
+    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector)
     {
         final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
         GroupFieldVector.remove(CurFieldColumn.getFieldName());
@@ -326,7 +326,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     public void setReportBuilderLayouterName(String _sName)
     {
         final IReportBuilderLayouter aCurrentLayouter = getReportBuilderLayouter();
-        final IReportBuilderLayouter aNewLayouter = (IReportBuilderLayouter) m_aLayoutMap.get(_sName);
+        final IReportBuilderLayouter aNewLayouter = m_aLayoutMap.get(_sName);
         if (aNewLayouter != null)
         {
             m_sReportBuilderLayoutName = _sName;
@@ -523,9 +523,9 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
         return "default";
     }
-    private ArrayList m_aReportPath;
+    private ArrayList<String> m_aReportPath;
 
-    public ArrayList getReportPath()
+    public ArrayList<String> getReportPath()
     {
         if (m_aReportPath == null)
         {
@@ -564,9 +564,9 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         try
         {
             // TODO: Use Package.getPackages(...)
-            final Class a = Class.forName(_sClassName);
+            final Class<?> a = Class.forName(_sClassName);
 
-            final Constructor cTor = a.getConstructor(new Class[]
+            final Constructor<?> cTor = a.getConstructor(new Class[]
                     {
                         IReportDefinitionReadAccess.class, Resource.class
                     });
@@ -581,7 +581,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         }
         return null;
     }
-    private LinkedHashMap m_aLayoutMap = null;
+    private LinkedHashMap<String, IReportBuilderLayouter> m_aLayoutMap = null;
 
     private void insertIntoLayoutMap(IReportBuilderLayouter _aLayout)
     {
@@ -604,12 +604,12 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     /**
      * Initialize all well known com.sun.star.wizards.report.layout.ReportBuilderLayouter Objects and create exact one instance.
      */
-    private LinkedHashMap getLayoutMap()
+    private LinkedHashMap<String, IReportBuilderLayouter> getLayoutMap()
     {
         if (m_aLayoutMap == null)
         {
             // The LayoutMap is empty, so we create a new LinkedHashMap
-            m_aLayoutMap = new LinkedHashMap();
+            m_aLayoutMap = new LinkedHashMap<String, IReportBuilderLayouter>();
 
             // TODO: We must know the name of a layouts, There should be a way to say where to find, not the names.
             IReportBuilderLayouter aLayout = getLayoutInstanceFrom("com.sun.star.wizards.reportbuilder.layout.Tabular");
@@ -642,14 +642,14 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         String[] b = new String[getLayoutMap().size()];
 
         // run through the whole layoutmap and 
-        final Set aKeys = getLayoutMap().keySet();
-        final Iterator aKeyIterator = aKeys.iterator();
+        final Set<String> aKeys = getLayoutMap().keySet();
+        final Iterator<String> aKeyIterator = aKeys.iterator();
         int i = 0;
         while (aKeyIterator.hasNext())
         {
-            final String sKey = (String) aKeyIterator.next();
+            final String sKey = aKeyIterator.next();
             a[i] = sKey;
-            final IReportBuilderLayouter aLayouter = (IReportBuilderLayouter) m_aLayoutMap.get(sKey);
+            final IReportBuilderLayouter aLayouter = m_aLayoutMap.get(sKey);
             b[i++] = aLayouter.getLocalizedName();
         }
 
@@ -665,7 +665,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         try
         {
             // TODO: check different languages in header layouts
-            ArrayList aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
+            ArrayList<String> aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
             FileAccess.combinePaths(getMSF(), aReportPath, "/wizard/report");
 
             LayoutFiles = FileAccess.getFolderTitles(getMSF(), null, aReportPath, ".otr");

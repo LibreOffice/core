@@ -204,7 +204,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         {
             try
             {
-                FieldDescription ofielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(displayfieldnames[i]);
+                FieldDescription ofielddescription = CurTableWizardUnoDialog.fielditems.get(displayfieldnames[i]);
                 if (ofielddescription != null)
                 {
                     afieldnameVector.add(ofielddescription.getName());
@@ -232,7 +232,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         {
             try
             {
-                FieldDescription curfielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(fieldnames[i]);
+                FieldDescription curfielddescription = CurTableWizardUnoDialog.fielditems.get(fieldnames[i]);
                 PropertyValue[] aProperties = curfielddescription.getPropertyValues();
                 this.curtabledescriptor.addColumn(aProperties);
             }
@@ -258,7 +258,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 String stablename = PropertyNames.EMPTY_STRING;
                 try
                 {
-                    FieldDescription ofielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(fieldnames[i]);
+                    FieldDescription ofielddescription = CurTableWizardUnoDialog.fielditems.get(fieldnames[i]);
                     stablename = ofielddescription.gettablename();
                 }
                 catch (RuntimeException e)

@@ -52,7 +52,7 @@ public class ConfigGroup implements ConfigNode
     {
         String propertyName = field.getName().substring(prefix.length());
         //System.out.println("Going to save:" + propertyName);
-        Class fieldType = field.getType();
+        Class<?> fieldType = field.getType();
         if (ConfigNode.class.isAssignableFrom(fieldType))
         {
             Object childView = Configuration.addConfigNode(configView, propertyName);
@@ -127,7 +127,7 @@ public class ConfigGroup implements ConfigNode
     {
         String propertyName = field.getName().substring(prefix.length());
 
-        Class fieldType = field.getType();
+        Class<?> fieldType = field.getType();
         if (ConfigNode.class.isAssignableFrom(fieldType))
         {
             ConfigNode child = (ConfigNode) field.get(this);

@@ -119,7 +119,7 @@ public interface IReportDocument
      * @param iSelCount
      * @return
      */
-    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList GroupFieldVector, ArrayList ReportPath, int iSelCount);
+    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount);
 
     public void refreshGroupFields(String[] _sNewNames);
     // public boolean isGroupField(String _FieldName);
@@ -129,7 +129,7 @@ public interface IReportDocument
      * @param CurGroupTitle
      * @param GroupFieldVector
      */
-    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, java.util.ArrayList GroupFieldVector);
+    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, java.util.ArrayList<String> GroupFieldVector);
 
     /**
      * set the list how to group
@@ -152,7 +152,7 @@ public interface IReportDocument
 
     public int getDefaultPageOrientation();
 
-    public ArrayList getReportPath();
+    public ArrayList<String> getReportPath();
 
     public String getLayoutPath();
 

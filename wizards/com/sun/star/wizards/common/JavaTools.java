@@ -367,7 +367,7 @@ public class JavaTools
         String[] StringArray;
         if (!MainString.equals(PropertyNames.EMPTY_STRING))
         {
-            ArrayList StringVector = new ArrayList();
+            ArrayList<String> StringVector = new ArrayList<String>();
             String LocString = null;
             int iIndex;
             do
@@ -501,7 +501,7 @@ public class JavaTools
         };
         if ((baselist != null) && (_complist != null))
         {
-            ArrayList retvector = new ArrayList();
+            ArrayList<String> retvector = new ArrayList<String>();
 //          String[] orderedcomplist = new String[_complist.length];
 //          System.arraycopy(_complist, 0, orderedcomplist, 0, _complist.length);
             for (int i = 0; i < baselist.length; i++)
@@ -528,7 +528,7 @@ public class JavaTools
         {
             if (baselist.length > 0)
             {
-                ArrayList retvector = new ArrayList();
+                ArrayList<String[]> retvector = new ArrayList<String[]>();
                 for (int i = 0; i < baselist.length; i++)
                 {
                     String sValue = baselist[i][_compindex];
@@ -718,7 +718,7 @@ public class JavaTools
 
     public static String[] removefromList(String[] _sbaselist, String[] _sdellist)
     {
-        ArrayList tempbaselist = new ArrayList();
+        ArrayList<String> tempbaselist = new ArrayList<String>();
         for (int i = 0; i < _sbaselist.length; i++)
         {
             if (FieldInList(_sdellist, _sbaselist[i]) == -1)

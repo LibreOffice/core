@@ -71,8 +71,8 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     XTextDocument xTextDocument;
     PathSelection myPathSelection;
     CGFaxWizard myConfig;
-    ArrayList mainDA = new ArrayList();
-    ArrayList faxDA = new ArrayList();
+    ArrayList<DataAware> mainDA = new ArrayList<DataAware>();
+    ArrayList<DataAware> faxDA = new ArrayList<DataAware>();
     String[][] BusinessFiles;
     String[][] PrivateFiles;
     String sTemplatePath;

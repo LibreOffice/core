@@ -63,7 +63,7 @@ public class TextTableHandler
             xTextTablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
             xSimpleText = UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
             XNumberFormatsSupplier xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
-            aCharLocale = (Locale) Helper.getUnoStructValue((Object) xTextDocument, "CharLocale");
+            aCharLocale = (Locale) Helper.getUnoStructValue(xTextDocument, "CharLocale");
             oNumberFormatter = new NumberFormatter(xNumberFormatsSupplier, aCharLocale);
         }
         catch (java.lang.Exception e)

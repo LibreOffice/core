@@ -408,8 +408,8 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         lockDoc();
         for (int i = lastFocusRow; i < scrollfields.size() - 1; i++)
         {
-            PropertyValue[] pv1 = (PropertyValue[]) scrollfields.get(i);
-            PropertyValue[] pv2 = (PropertyValue[]) scrollfields.get(i + 1);
+            PropertyValue[] pv1 = scrollfields.get(i);
+            PropertyValue[] pv2 = scrollfields.get(i + 1);
             pv1[1].Value = pv2[1].Value;
             pv1[2].Value = pv2[2].Value;
             pv1[3].Value = pv2[3].Value;
@@ -439,8 +439,8 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         insertRowAtEnd();
         for (int i = scrollfields.size() - 2; i > lastFocusRow; i--)
         {
-            PropertyValue[] pv1 = (PropertyValue[]) scrollfields.get(i);
-            PropertyValue[] pv2 = (PropertyValue[]) scrollfields.get(i - 1);
+            PropertyValue[] pv1 = scrollfields.get(i);
+            PropertyValue[] pv2 = scrollfields.get(i - 1);
             pv1[1].Value = pv2[1].Value;
             pv1[2].Value = pv2[2].Value;
             pv1[3].Value = pv2[3].Value;
@@ -453,7 +453,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
 
         // after rotating all the properties from this row on,
         // we clear the row, so it is practically a new one...
-        PropertyValue[] pv1 = (PropertyValue[]) scrollfields.get(lastFocusRow);
+        PropertyValue[] pv1 = scrollfields.get(lastFocusRow);
         pv1[1].Value = PropertyNames.EMPTY_STRING;
         pv1[2].Value = PropertyNames.EMPTY_STRING;
         pv1[3].Value = PropertyNames.EMPTY_STRING;
@@ -636,7 +636,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     {
         if (topic < scrollfields.size())
         {
-            return (PropertyValue[]) scrollfields.get(topic);
+            return scrollfields.get(topic);
         }
         else
         {
@@ -818,8 +818,8 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     private void switchRows(int row1, int row2)
     {
-        PropertyValue[] o1 = (PropertyValue[]) scrollfields.get(row1 + nscrollvalue);
-        PropertyValue[] o2 = (PropertyValue[]) scrollfields.get(row2 + nscrollvalue);
+        PropertyValue[] o1 = scrollfields.get(row1 + nscrollvalue);
+        PropertyValue[] o2 = scrollfields.get(row2 + nscrollvalue);
 
         Object temp = null;
         for (int i = 1; i < o1.length; i++)
@@ -961,7 +961,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     private void updateDocumentRow(int row)
     {
-        updateDocumentRow(row, (PropertyValue[]) scrollfields.get(row));
+        updateDocumentRow(row, scrollfields.get(row));
     }
 
     /**
@@ -1022,7 +1022,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      * needed to make this data poblic.
      * @return the List containing the topics data. 
      */
-    public List getTopicsData()
+    public List<PropertyValue[]> getTopicsData()
     {
         return scrollfields;
     }

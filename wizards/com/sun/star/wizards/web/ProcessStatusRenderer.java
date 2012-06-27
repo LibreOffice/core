@@ -33,7 +33,7 @@ import com.sun.star.wizards.common.IRenderer;
 public class ProcessStatusRenderer implements IRenderer, WebWizardConst
 {
 
-    Map strings = new HashMap(12);
+    Map<String, String> strings = new HashMap<String, String>(12);
 
     public ProcessStatusRenderer(WebWizardDialogResources res)
     {
@@ -54,6 +54,6 @@ public class ProcessStatusRenderer implements IRenderer, WebWizardConst
 
     public String render(Object object)
     {
-        return (String) strings.get(object);
+        return strings.get(object);
     }
 }

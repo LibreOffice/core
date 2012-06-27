@@ -54,15 +54,15 @@ public class Resource
                 aArgs);
             if (xResource == null)
                 throw new Exception("could not initialize ResourceIndexAccess");
-            XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(
+            XNameAccess xNameAccess = UnoRuntime.queryInterface(
                 XNameAccess.class,
                 xResource);
             if (xNameAccess == null)
                 throw new Exception("ResourceIndexAccess is no XNameAccess");
-            this.xStringIndexAccess = (XIndexAccess)UnoRuntime.queryInterface(
+            this.xStringIndexAccess = UnoRuntime.queryInterface(
                 XIndexAccess.class,
                 xNameAccess.getByName("String"));
-            this.xStringListIndexAccess = (XIndexAccess)UnoRuntime.queryInterface(
+            this.xStringListIndexAccess = UnoRuntime.queryInterface(
                 XIndexAccess.class,
                 xNameAccess.getByName("StringList"));
             if(this.xStringListIndexAccess == null)

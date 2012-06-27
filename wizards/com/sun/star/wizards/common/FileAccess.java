@@ -402,11 +402,11 @@ public class FileAccess
     return ResultPath;
     }
      **/
-    public static void combinePaths(XMultiServiceFactory xMSF, ArrayList _aFirstPath, String _sSecondPath) throws NoValidPathException
+    public static void combinePaths(XMultiServiceFactory xMSF, ArrayList<String> _aFirstPath, String _sSecondPath) throws NoValidPathException
     {
         for (int i = 0; i < _aFirstPath.size(); ++i)
         {
-            String sOnePath = (String) _aFirstPath.get(i);
+            String sOnePath = _aFirstPath.get(i);
             sOnePath = addPath(sOnePath, _sSecondPath);
             if (isPathValid(xMSF, sOnePath))
             {
@@ -658,7 +658,7 @@ public class FileAccess
         return sNewPath;
     }
 
-    public static String getPathFromList(XMultiServiceFactory xMSF, ArrayList _aList, String _sFile)
+    public static String getPathFromList(XMultiServiceFactory xMSF, ArrayList<String> _aList, String _sFile)
     {
         String sFoundFile = PropertyNames.EMPTY_STRING;
         try
@@ -668,7 +668,7 @@ public class FileAccess
 
             for (int i = 0; i < _aList.size(); i++)
             {
-                String sPath = (String) _aList.get(i);
+                String sPath = _aList.get(i);
                 sPath = addPath(sPath, _sFile);
                 if (xSimpleFileAccess.exists(sPath))
                 {
@@ -690,7 +690,7 @@ public class FileAccess
      * @return
      * @throws com.sun.star.wizards.common.NoValidPathException
      */
-    public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String _sStartFilterName, ArrayList FolderNames)
+    public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String _sStartFilterName, ArrayList<String> FolderNames)
             throws NoValidPathException
     {
         return getFolderTitles(xMSF, _sStartFilterName, FolderNames, PropertyNames.EMPTY_STRING);
@@ -713,7 +713,7 @@ public class FileAccess
         return sTitle;
     }
 
-    public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String _sStartFilterName, ArrayList FolderName, String _sEndFilterName)
+    public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String _sStartFilterName, ArrayList<String> FolderName, String _sEndFilterName)
             throws NoValidPathException
     {
         String[][] LocLayoutFiles = new String[2][]; //{PropertyNames.EMPTY_STRING,PropertyNames.EMPTY_STRING}{PropertyNames.EMPTY_STRING};
@@ -738,7 +738,7 @@ public class FileAccess
 
         for (int j = 0; j < FolderName.size(); j++)
         {
-            String sFolderName = (String) FolderName.get(j);
+            String sFolderName = FolderName.get(j);
 
             try
             {

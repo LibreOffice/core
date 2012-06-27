@@ -33,7 +33,7 @@ import java.util.*;
  * When finished, call the getProperties() method to get an array of the set properties.
  * @author  rp
  */
-public class Properties extends HashMap
+public class Properties extends HashMap<String,Object>
 {
 
     public static Object getPropertyValue(PropertyValue[] props, String propName)
@@ -65,19 +65,19 @@ public class Properties extends HashMap
         return getProperties(this);
     }
 
-    public static PropertyValue[] getProperties(Map map)
+    public static PropertyValue[] getProperties(Map<String,Object> map)
     {
         PropertyValue[] pv = new PropertyValue[map.size()];
 
-        Iterator it = map.keySet().iterator();
+        Iterator<String> it = map.keySet().iterator();
         for (int i = 0; i < pv.length; i++)
         {
-            pv[i] = createProperty((String) it.next(), map);
+            pv[i] = createProperty(it.next(), map);
         }
         return pv;
     }
 
-    public static PropertyValue createProperty(String name, Map map)
+    public static PropertyValue createProperty(String name, Map<String,Object> map)
     {
         return createProperty(name, map.get(name));
     }

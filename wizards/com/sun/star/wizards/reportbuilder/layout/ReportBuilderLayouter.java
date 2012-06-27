@@ -1546,7 +1546,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return getLabelWidth(_sLabel, 0.0f, 0.0f);
     }
     XFixedText m_aFixedTextHelper = null;
-    HashMap m_aLabelWidthMap;
+    HashMap<String, Integer> m_aLabelWidthMap;
 
     protected int getLabelWidth(String _sLabel, FontDescriptor _aFD)
     {
@@ -1566,7 +1566,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
         if (m_aLabelWidthMap == null)
         {
-            m_aLabelWidthMap = new HashMap();
+            m_aLabelWidthMap = new HashMap<String, Integer>();
         }
         // At first, try to get the Width out of a HashMap (Cache)
         StringBuffer aKey = new StringBuffer(40);

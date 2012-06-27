@@ -18,7 +18,6 @@
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.*;
-import com.sun.star.awt.XReschedule;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.XMultiPropertySet;
 
@@ -32,8 +31,6 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.*;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.ui.event.*;
 
 import java.util.HashMap;
@@ -55,7 +52,7 @@ public class UnoDialog implements EventNames
     public XInterface xUnoDialog;
     public XPropertySet xPSetDlg;
     public XVclWindowPeer xVclWindowPeer;
-    public HashMap ControlList;
+    public HashMap<String, Integer> ControlList;
     public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
     private PeerConfig m_oPeerConfig;
@@ -71,7 +68,7 @@ public class UnoDialog implements EventNames
         try
         {
             this.xMSF = xMSF;
-            ControlList = new HashMap();
+            ControlList = new HashMap<String, Integer>();
             xDialogModel = (XInterface) xMSF.createInstance("com.sun.star.awt.UnoControlDialogModel");
             XMultiPropertySet xMultiPSetDlg = UnoRuntime.queryInterface(XMultiPropertySet.class, xDialogModel);
             xMultiPSetDlg.setPropertyValues(PropertyNames, PropertyValues);
@@ -95,7 +92,7 @@ public class UnoDialog implements EventNames
         }
     }
 
-    public int getControlKey(Object EventObject, HashMap ControlList)
+    public int getControlKey(Object EventObject, HashMap<String, Integer> ControlList)
     {
         int iKey;
         XControl xContrl = UnoRuntime.queryInterface(XControl.class, EventObject);
@@ -104,7 +101,7 @@ public class UnoDialog implements EventNames
         try
         {
             String sName = (String) xPSet.getPropertyValue(PropertyNames.PROPERTY_NAME);
-            Integer KeyObject = (Integer) ControlList.get(sName);
+            Integer KeyObject = ControlList.get(sName);
             iKey = KeyObject.intValue();
         }
         catch (com.sun.star.uno.Exception exception)

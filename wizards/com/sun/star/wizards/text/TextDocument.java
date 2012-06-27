@@ -211,7 +211,7 @@ public class TextDocument
 
         XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         m_xDocProps = xDocPropsSuppl.getDocumentProperties();
-        CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
+        CharLocale = (Locale) Helper.getUnoStructValue(xComponent, "CharLocale");
         xText = xTextDocument.getText();
     }
 
@@ -222,7 +222,7 @@ public class TextDocument
         xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
         XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         m_xDocProps = xDocPropsSuppl.getDocumentProperties();
-        CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
+        CharLocale = (Locale) Helper.getUnoStructValue(xComponent, "CharLocale");
         xStorable = UnoRuntime.queryInterface(XStorable.class, xTextDocument);
         xText = xTextDocument.getText();
     }
@@ -322,7 +322,7 @@ public class TextDocument
 
         XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         m_xDocProps = xDocPropsSuppl.getDocumentProperties();
-        CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
+        CharLocale = (Locale) Helper.getUnoStructValue(xComponent, "CharLocale");
     }
 
     public static XTextCursor createTextCursor(Object oCursorContainer)

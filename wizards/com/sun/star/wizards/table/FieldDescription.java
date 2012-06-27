@@ -36,7 +36,7 @@ public class FieldDescription
     private String keyname;
     private XNameAccess xNameAccessTableNode;
     private XPropertySet xPropertySet;
-    private ArrayList aPropertyValues;
+    private ArrayList<PropertyValue> aPropertyValues;
 //  PropertyValue[] aPropertyValues;
     private Integer Type;
     private Integer Scale;
@@ -53,7 +53,7 @@ public class FieldDescription
         tablename = _curscenarioselector.getTableName();
         Name = _fieldname;
         keyname = _keyname;
-        aPropertyValues = new ArrayList();
+        aPropertyValues = new ArrayList<PropertyValue>();
         xNameAccessTableNode = _curscenarioselector.oCGTable.xNameAccessFieldsNode;
         XNameAccess xNameAccessFieldNode;
         if (_curscenarioselector.bcolumnnameislimited)
@@ -70,7 +70,7 @@ public class FieldDescription
     public FieldDescription(String _fieldname)
     {
         Name = _fieldname;
-        aPropertyValues = new ArrayList();
+        aPropertyValues = new ArrayList<PropertyValue>();
         Type = new Integer(com.sun.star.sdbc.DataType.VARCHAR);
         aPropertyValues.add(Properties.createProperty(PropertyNames.PROPERTY_NAME, _fieldname));
         aPropertyValues.add(Properties.createProperty("Type", Type));
@@ -80,7 +80,7 @@ public class FieldDescription
     {
         for (int i = 0; i < aPropertyValues.size(); i++)
         {
-            PropertyValue aPropertyValue = (PropertyValue) aPropertyValues.get(i);
+            PropertyValue aPropertyValue = aPropertyValues.get(i);
             if (aPropertyValue.Name.equals(PropertyNames.PROPERTY_NAME))
             {
                 aPropertyValue.Value = _newfieldname;

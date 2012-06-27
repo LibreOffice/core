@@ -1401,7 +1401,7 @@ public class NumericalHelper
         TypeObject destObject = new TypeObject();
         Object array = sourceObject.aValue;
         destObject.iType = ARRAY_TYPE;
-        Class c = array.getClass();
+        Class<?> c = array.getClass();
         Object[] aShortVal = null;
         if (c.equals(byte[].class))
         {

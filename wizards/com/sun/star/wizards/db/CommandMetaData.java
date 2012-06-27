@@ -41,7 +41,7 @@ import java.util.Map;
 public class CommandMetaData extends DBMetaData
 {
 
-    public Map FieldTitleSet = new HashMap();
+    public Map<String, String> FieldTitleSet = new HashMap<String, String>();
     public String[] m_aAllFieldNames = new String[]
     {
     };
@@ -114,7 +114,7 @@ public class CommandMetaData extends DBMetaData
             FieldColumns[i] = new FieldColumn(this, _FieldNames[i], _CommandName, false);
             if (FieldTitleSet != null && FieldTitleSet.containsKey(_FieldNames[i]))
             {
-                FieldColumns[i].setFieldTitle((String) FieldTitleSet.get(_FieldNames[i]));
+                FieldColumns[i].setFieldTitle(FieldTitleSet.get(_FieldNames[i]));
                 if (FieldColumns[i].getFieldTitle() == null)
                 {
                     FieldColumns[i].setFieldTitle(_FieldNames[i]);
@@ -124,7 +124,7 @@ public class CommandMetaData extends DBMetaData
         }
     }
 
-    public Map getFieldTitleSet()
+    public Map<String, String> getFieldTitleSet()
     {
         return FieldTitleSet;
     }
@@ -157,7 +157,7 @@ public class CommandMetaData extends DBMetaData
     // @SuppressWarnings("unchecked")
     public void prependSortFieldNames(String[] _fieldnames)
     {
-        ArrayList aSortFields = new ArrayList();
+        ArrayList<String[]> aSortFields = new ArrayList<String[]>();
         for (int i = 0; i < _fieldnames.length; i++)
         {
             String[] sSortFieldName = new String[2];
@@ -503,7 +503,7 @@ public class CommandMetaData extends DBMetaData
         String FieldTitle = FieldName;
         if (this.FieldTitleSet != null)
         {
-            FieldTitle = (String) this.FieldTitleSet.get(FieldName); //FieldTitles[TitleIndex];
+            FieldTitle = this.FieldTitleSet.get(FieldName); //FieldTitles[TitleIndex];
             if (FieldTitle == null)
             {
                 return FieldName;

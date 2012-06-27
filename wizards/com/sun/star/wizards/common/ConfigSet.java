@@ -32,9 +32,9 @@ import org.w3c.dom.*;
 public class ConfigSet implements ConfigNode, XMLProvider, ListModel
 {
 
-    private Class childClass;
-    private Map childrenMap = new HashMap();
-    private List childrenList = new ArrayList();
+    private Class<?> childClass;
+    private Map<String, Object> childrenMap = new HashMap<String, Object>();
+    private List<Object> childrenList = new ArrayList<Object>();
     public Object root;
     /**
      * After reading the configuration set items,
@@ -48,7 +48,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
     /** Utility field used by event firing mechanism. */
     private javax.swing.event.EventListenerList listenerList = null;
 
-    public ConfigSet(Class childType)
+    public ConfigSet(Class<?> childType)
     {
         childClass = childType;
     }
@@ -236,10 +236,10 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
 
     public Object getKey(Object object)
     {
-        for (Iterator i = childrenMap.entrySet().iterator(); i.hasNext();)
+        for (Iterator<Map.Entry<String,Object>> i = childrenMap.entrySet().iterator(); i.hasNext();)
         {
 
-            Map.Entry me = (Map.Entry) i.next();
+            Map.Entry<String,Object> me = i.next();
             if (me.getValue() == object)
             {
                 return me.getKey();
@@ -377,7 +377,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
         return childrenList.size();
     }
 
-    public Set keys()
+    public Set<String> keys()
     {
         return childrenMap.keySet();
     }
@@ -404,7 +404,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
          * to a vector, ordered by there index property
          */
         String[] names = Configuration.getChildrenNames(confView);
-        ArrayList v = new ArrayList(names.length);
+        ArrayList<Object> v = new ArrayList<Object>(names.length);
         Object member = null;
         int index = 0;
         for (int i = 0; i < names.length; i++)
@@ -436,7 +436,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
 
     }
 
-    public void sort(Comparator comparator)
+    public void sort(Comparator<Object> comparator)
     {
         Collections.sort(this.childrenList, comparator);
     }

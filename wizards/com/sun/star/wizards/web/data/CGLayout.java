@@ -32,12 +32,12 @@ public class CGLayout extends ConfigSetItem
 
     public String cp_Name;
     public String cp_FSName;
-    private Map templates;
+    private Map<String, Templates> templates;
 
     private void createTemplates(XMultiServiceFactory xmsf) throws Exception
     {
 
-        templates = new HashMap(3);
+        templates = new HashMap<String, Templates>(3);
 
         TransformerFactory tf = TransformerFactory.newInstance();
 
@@ -66,7 +66,7 @@ public class CGLayout extends ConfigSetItem
                 };
     }
 
-    public Map getTemplates(XMultiServiceFactory xmsf) throws Exception
+    public Map<String, Templates> getTemplates(XMultiServiceFactory xmsf) throws Exception
     {
 
         // TODO uncomment...

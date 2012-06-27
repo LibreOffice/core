@@ -207,7 +207,7 @@ public class UIControlArranger
             short iAlignValue = getAlignValue();
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
-                FormDocument.ControlForm curControlForm = (FormDocument.ControlForm) curFormDocument.oControlForms.get(m);
+                FormDocument.ControlForm curControlForm = curFormDocument.oControlForms.get(m);
                 if (curControlForm.getArrangemode() == FormWizard.COLUMNAR_LEFT)
                 {
                     Control[] LabelControls = curControlForm.getLabelControls();
@@ -443,7 +443,7 @@ public class UIControlArranger
                     enableAlignControlGroup(bEnableAlignControlGroup);
                     final Short nBorderType = CurUnoDialog.getBorderType();
                     final int nSelected = m_aButtonList.getSelected() + 1;
-                    ((FormDocument.ControlForm) curFormDocument.oControlForms.get(formindex)).initialize(nSelected, nBorderType);
+                    curFormDocument.oControlForms.get(formindex).initialize(nSelected, nBorderType);
                 }
             }
             catch (RuntimeException e)

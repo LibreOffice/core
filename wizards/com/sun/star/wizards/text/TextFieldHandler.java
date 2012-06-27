@@ -143,7 +143,7 @@ public class TextFieldHandler
         try
         {
             XDependentTextField[] xDependentFields;
-            ArrayList xDependentVector = new ArrayList();
+            ArrayList<XDependentTextField> xDependentVector = new ArrayList<XDependentTextField>();
             if (xTextFieldsSupplier.getTextFields().hasElements())
             {
                 XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();

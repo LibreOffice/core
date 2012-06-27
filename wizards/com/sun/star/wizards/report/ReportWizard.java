@@ -141,7 +141,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
 
             case SOTITLEPAGE:
                 String[] aFieldNames = m_reportDocument.getRecordParser().getFieldNames();
-                Map aFieldTitleSet = m_reportDocument.getRecordParser().getFieldTitleSet();
+                Map<String, String> aFieldTitleSet = m_reportDocument.getRecordParser().getFieldTitleSet();
                 CurTitlesComponent.initialize(aFieldNames, aFieldTitleSet);
                 break;
 
@@ -451,7 +451,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                     URL[] aURLs = new URL[1];
                     aURLs[0] = aLocationURI.toURL();
                     URLClassLoader aClassLoader = new URLClassLoader(aURLs, this.getClass().getClassLoader());
-                    Class a = aClassLoader.loadClass("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
+                    Class<?> a = aClassLoader.loadClass("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
                     Method aMethod = a.getMethod("create", new Class[]
                             {
                                 XMultiServiceFactory.class

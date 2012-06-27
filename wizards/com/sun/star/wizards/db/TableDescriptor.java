@@ -65,8 +65,8 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private XAppend xKeyAppend;
     private XDrop xKeyDrop;
     private String[] sTableFilters = null;
-    private ArrayList columncontainer;
-    private ArrayList keycolumncontainer;
+    private ArrayList<ColumnDescriptor> columncontainer;
+    private ArrayList<XPropertySet> keycolumncontainer;
     public XHierarchicalNameAccess xTableHierarchicalNameAccess;
     private CommandName ComposedTableName;
     private XAppend xKeyColAppend;
@@ -84,8 +84,8 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     public TableDescriptor(XMultiServiceFactory xMSF, XWindow _xWindow, String _sColumnAlreadyExistsMessage)
     {
         super(xMSF);
-        columncontainer = new ArrayList();
-        keycolumncontainer = new ArrayList();
+        columncontainer = new ArrayList<ColumnDescriptor>();
+        keycolumncontainer = new ArrayList<XPropertySet>();
         sColumnAlreadyExistsMessage = _sColumnAlreadyExistsMessage;
         xWindow = _xWindow;
     }
@@ -267,7 +267,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 {
                     for (int i = 0; i < keycolumncontainer.size(); i++)
                     {
-                        XPropertySet xKeyColPropertySet = (XPropertySet) keycolumncontainer.get(i);
+                        XPropertySet xKeyColPropertySet = keycolumncontainer.get(i);
                         if (!isColunnNameDuplicate(xKeyColumnSupplier.getColumns(), xKeyColPropertySet))
                         {
                             xKeyColAppend.appendByDescriptor(xKeyColPropertySet);
@@ -402,7 +402,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             {
                 for (int i = 0; i < columncontainer.size(); i++)
                 {
-                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    ColumnDescriptor oColumnDescriptor = columncontainer.get(i);
                     if (oColumnDescriptor.Name.equals(_sname))
                     {
                         oColumnDescriptor.xColPropertySet.setPropertyValue(_spropname, _oValue);
@@ -444,7 +444,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             {
                 for (int i = 0; i < columncontainer.size(); i++)
                 {
-                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    ColumnDescriptor oColumnDescriptor = columncontainer.get(i);
                     if (oColumnDescriptor.Name.equals(_sname))
                     {
                         oColumnDescriptor.xColPropertySet = _xColPropertySet;
@@ -471,7 +471,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             {
                 for (int i = 0; i < columncontainer.size(); i++)
                 {
-                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    ColumnDescriptor oColumnDescriptor = columncontainer.get(i);
                     if (oColumnDescriptor != null)
                     {
                         if (oColumnDescriptor.Name.equals(_sname))
@@ -497,7 +497,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 String[] fieldnames = new String[columncontainer.size()];
                 for (int i = 0; i < columncontainer.size(); i++)
                 {
-                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    ColumnDescriptor oColumnDescriptor = columncontainer.get(i);
                     fieldnames[i] = oColumnDescriptor.Name;
                 }
                 return fieldnames;
@@ -520,7 +520,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             {
                 for (int i = 0; i < columncontainer.size(); i++)
                 {
-                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    ColumnDescriptor oColumnDescriptor = columncontainer.get(i);
                     if (oColumnDescriptor.Name.equals(_fieldname))
                     {
                         return true;
@@ -543,7 +543,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             {
                 for (int i = 0; i < columncontainer.size(); i++)
                 {
-                    ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                    ColumnDescriptor oColumnDescriptor = columncontainer.get(i);
                     if (oColumnDescriptor.Name.equals(_fieldname))
                     {
                         return oColumnDescriptor;
@@ -577,7 +577,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         {
             if (columncontainer.size() > _index)
             {
-                ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(_index);
+                ColumnDescriptor oColumnDescriptor = columncontainer.get(_index);
                 return oColumnDescriptor.xColPropertySet;
             }
         }
@@ -638,7 +638,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         try
         {
-            ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) this.columncontainer.get(_nOldIndex);
+            ColumnDescriptor oColumnDescriptor = this.columncontainer.get(_nOldIndex);
             this.columncontainer.remove(_nOldIndex);
             columncontainer.add(_nNewIndex, oColumnDescriptor);
             return true;
@@ -712,12 +712,12 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
 
     public String[] getNonBinaryFieldNames()
     {
-        ArrayList NonBinaryFieldNameVector = new ArrayList();
+        ArrayList<String> NonBinaryFieldNameVector = new ArrayList<String>();
         try
         {
             for (int i = 0; i < columncontainer.size(); i++)
             {
-                ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) columncontainer.get(i);
+                ColumnDescriptor oColumnDescriptor = columncontainer.get(i);
                 XPropertySet xColPropertySet = getByName(oColumnDescriptor.Name);
                 Property[] aProperties = xColPropertySet.getPropertySetInfo().getProperties();
                 int itype;

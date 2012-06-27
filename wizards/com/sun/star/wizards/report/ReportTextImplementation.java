@@ -109,7 +109,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     {
         getDoc().oTextSectionHandler.removeAllTextSections();
         getDoc().oTextTableHandler.removeAllTextTables();
-        getDoc().DBColumnsVector = new ArrayList();
+        getDoc().DBColumnsVector = new ArrayList<DBColumn>();
     }
 
     protected ReportTextImplementation( XMultiServiceFactory i_serviceFactory )
@@ -351,7 +351,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             int ColIndex;
             boolean breset;
             Object oTable;
-            ArrayList DataVector = new ArrayList();
+            ArrayList<Object[]> DataVector = new ArrayList<Object[]>();
             DBColumn CurDBColumn;
             Object CurGroupValue;
             String CurGroupTableName;
@@ -381,7 +381,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                     xGroupBaseTables[ColIndex] = UnoRuntime.queryInterface( XTextTable.class, oTable );
                     CurGroupValue = getRecordParser().getGroupColumnValue(ColIndex);
                     OldGroupFieldValues[ColIndex] = CurGroupValue;
-                    CurDBColumn = (DBColumn) getDoc().DBColumnsVector.get(ColIndex);
+                    CurDBColumn = getDoc().DBColumnsVector.get(ColIndex);
                     addLinkedTextSection(xTextCursor, ReportTextDocument.GROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, CurGroupValue); //COPYOF!!!!
                 }
                 if (getRecordParser().getcurrentRecordData(DataVector))
@@ -399,7 +399,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                             {
                                 breset = true;
                                 insertDataToRecordTable(xTextCursor, DataVector, RecordFieldCount);
-                                CurDBColumn = (DBColumn) getDoc().DBColumnsVector.get(ColIndex);
+                                CurDBColumn = getDoc().DBColumnsVector.get(ColIndex);
                                 addLinkedTextSection(xTextCursor, ReportTextDocument.COPYOFGROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, CurGroupValue);
                                 OldGroupFieldValues[ColIndex] = CurGroupValue;
                                 breset = !(ColIndex == GroupFieldCount - 1);
@@ -420,7 +420,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             {
                 for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++)
                 {
-                    CurDBColumn = (DBColumn) getDoc().DBColumnsVector.get(ColIndex);
+                    CurDBColumn = getDoc().DBColumnsVector.get(ColIndex);
                     Object oValue = PropertyNames.EMPTY_STRING;
                     addLinkedTextSection(xTextCursor, ReportTextDocument.COPYOFGROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, oValue);
                 }
@@ -450,7 +450,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         getDoc().removeLayoutTextTables();
     }
 
-    private void insertDataToRecordTable(XTextCursor xTextCursor, ArrayList DataVector, int FieldCount)
+    private void insertDataToRecordTable(XTextCursor xTextCursor, ArrayList<Object[]> DataVector, int FieldCount)
     {
         int DataLength = DataVector.size();
         if ((FieldCount > 0) && (DataLength > 0))
@@ -491,7 +491,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         int iCount = getDoc().DBColumnsVector.size();
         for (int i = 0; i < iCount; i++)
         {
-            CurDBColumn = (DBColumn) getDoc().DBColumnsVector.get(i);
+            CurDBColumn = getDoc().DBColumnsVector.get(i);
             xNameCellCursor = ReportTextDocument.createTextCursor(CurDBColumn.xNameCell);
             xNameCellCursor.gotoStart(false);
             FieldContent = getDoc().oTextFieldHandler.getUserFieldContent(xNameCellCursor);
@@ -526,7 +526,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         }
     }
 
-    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList GroupFieldVector, ArrayList ReportPath, int iSelCount)
+    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount)
     {
         return getDoc().addGroupNametoDocument(GroupNames, CurGroupTitle, GroupFieldVector, ReportPath, iSelCount);
     }
@@ -540,7 +540,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     // {
     //    return getDoc().isGroupField(_FieldName);
     // }
-    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, ArrayList GroupFieldVector)
+    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector)
     {
         getDoc().removeGroupName(NewSelGroupNames, CurGroupTitle, GroupFieldVector);
     }
@@ -647,9 +647,9 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     }
 
 // TODO: we have to change to String List!!!!
-    private ArrayList m_aReportPath = null;
+    private ArrayList<String> m_aReportPath = null;
 
-    public ArrayList getReportPath()
+    public ArrayList<String> getReportPath()
     {
         if (m_aReportPath == null)
         {
@@ -670,10 +670,10 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     public String getContentPath()
     {
-        ArrayList aReportPath = getReportPath();
+        ArrayList<String> aReportPath = getReportPath();
         for (int i = 0; i < aReportPath.size(); i++)
         {
-            String sPath = (String) aReportPath.get(i);
+            String sPath = aReportPath.get(i);
             sPath += "/cnt-default.ott";
             if (FileAccess.isPathValid(getMSF(), sPath))
             {
@@ -685,10 +685,10 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     public String getLayoutPath()
     {
-        ArrayList aReportPath = getReportPath();
+        ArrayList<String> aReportPath = getReportPath();
         for (int i = 0; i < aReportPath.size(); i++)
         {
-            String sPath = (String) aReportPath.get(i);
+            String sPath = aReportPath.get(i);
             sPath += "/stl-default.ott";
             if (FileAccess.isPathValid(getMSF(), sPath))
             {
