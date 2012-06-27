@@ -231,10 +231,7 @@ public class DrawController_DrawView extends TestCase {
                     return 0;
                 }
                 return 1;
-            }
-            public boolean equals(Object obj) {
-                return compare(this, obj) == 0;
-            } });
+            }});
 
 
 

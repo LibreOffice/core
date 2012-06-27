@@ -123,9 +123,6 @@ public class ChXChartView extends TestCase {
                 }
                 return 1;
             }
-            public boolean equals(Object obj) {
-                return compare(this, obj) == 0;
-            }
         } );
 
         return tEnv;
