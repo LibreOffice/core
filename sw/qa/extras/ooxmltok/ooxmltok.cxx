@@ -75,6 +75,7 @@ public:
     void testN758883();
     void testN766481();
     void testN766487();
+    void testN693238();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -98,6 +99,7 @@ public:
     CPPUNIT_TEST(testN758883);
     CPPUNIT_TEST(testN766481);
     CPPUNIT_TEST(testN766487);
+    CPPUNIT_TEST(testN693238);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -659,6 +661,21 @@ void Test::testN766487()
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("ParaFirstLineIndent") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(-360)), nValue);
+}
+
+void Test::testN693238()
+{
+    /*
+     *
+     * The problem was that a continous section break at the end of the doc caused the margins to be ignored.
+     *
+     * xray ThisComponent.StyleFamilies.PageStyles.Default.LeftMargin ' was 2000, should be 635
+     */
+    load("n693238.docx");
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    sal_Int32 nValue = 0;
+    xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
