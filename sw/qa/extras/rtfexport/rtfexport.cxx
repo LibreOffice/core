@@ -49,6 +49,7 @@ public:
     void testFdo44174();
     void testFdo50087();
     void testFdo50831();
+    void testFdo48335();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -58,6 +59,7 @@ public:
     CPPUNIT_TEST(testFdo44174);
     CPPUNIT_TEST(testFdo50087);
     CPPUNIT_TEST(testFdo50831);
+    CPPUNIT_TEST(testFdo48335);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -142,6 +144,34 @@ void Test::testFdo50831()
     float fValue = 0;
     xPropertySet->getPropertyValue("CharHeight") >>= fValue;
     CPPUNIT_ASSERT_EQUAL(10.f, fValue);
+}
+
+void Test::testFdo48335()
+{
+    /*
+     * The problem was that we exported a fake pagebreak, make sure it's just a soft one now.
+     *
+     * oParas = ThisComponent.Text.createEnumeration
+     * oPara = oParas.nextElement
+     * oPara = oParas.nextElement
+     * oPara = oParas.nextElement
+     * oRuns = oPara.createEnumeration
+     * oRun = oRuns.nextElement
+     * xray oRun.TextPortionType 'was Text, should be SoftPageBreak
+     */
+    roundtrip("fdo48335.odt");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    for (int i = 0; i < 2; i++)
+        xParaEnum->nextElement();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+    OUString aValue;
+    xPropertySet->getPropertyValue("TextPortionType") >>= aValue;
+    CPPUNIT_ASSERT_EQUAL(OUString("SoftPageBreak"), aValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
