@@ -43,6 +43,7 @@ public:
 private:
     void importDataBar( const AttributeList& rAttribs );
     void importNegativeFillColor( const AttributeList& rAttribs );
+    void importAxisColor( const AttributeList& rAttribs );
     void* mpTarget;
 
 };
