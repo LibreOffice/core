@@ -65,6 +65,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     $(if $(filter UCPP,$(BUILD_TYPE)),\
             ucpp \
     ) \
+    uiex \
     ulfconv \
     ulfex \
     xml2cmp \
