@@ -33,13 +33,16 @@
 class SwDoc;
 class SwAutoCompleteWord_Impl;
 class SwAutoCompleteClient;
+class SwAutoCompleteString;
+
+typedef std::deque<SwAutoCompleteString*> SwAutoCompleteStringPtrDeque;
 
 class SwAutoCompleteWord
 {
     friend class SwAutoCompleteClient;
 
     SvStringsISortDtor aWordLst; // contains extended strings carrying source information
-    SvPtrarr aLRULst;
+    SwAutoCompleteStringPtrDeque aLRULst;
 
     SwAutoCompleteWord_Impl* pImpl;
     sal_uInt16 nMaxCount, nMinWrdLen;
