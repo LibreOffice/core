@@ -26,9 +26,6 @@
 
 
 namespace com { namespace sun { namespace star {
-    namespace text {
-        class XTextRange;
-    }
     namespace xml { namespace sax {
         class XAttributeList;
     } }
@@ -36,7 +33,6 @@ namespace com { namespace sun { namespace star {
 namespace rtl {
     class OUString;
 }
-class XMLTextImportHelper;
 
 /**
  */

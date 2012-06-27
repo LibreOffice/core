@@ -28,15 +28,11 @@
 #include "transporttypes.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace frame {
-        class XModel;
-    }
     namespace xml { namespace sax {
         class XAttributeList;
     }}
     namespace chart {
         class XChartDocument;
-        struct ChartSeriesAddress;
 }}}}
 
 // ========================================

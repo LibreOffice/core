@@ -35,17 +35,13 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <rtl/ref.hxx>
 
-class SvXMLImport;
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
-class SvXMLStyleContext;
 
 //.........................................................................
 namespace xmloff
 {
 //.........................................................................
-
-    class OAttribute2Property;
 
     //=====================================================================
     //= IFormsExportContext

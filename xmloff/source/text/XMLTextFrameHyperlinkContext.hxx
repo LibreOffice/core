@@ -29,9 +29,6 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-// OD 2004-04-21 #i26791#
-class XMLTextFrameHint_Impl;
-
 class XMLTextFrameHyperlinkContext : public SvXMLImportContext
 {
     ::rtl::OUString              sHRef;

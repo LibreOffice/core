@@ -38,7 +38,6 @@ namespace com { namespace sun { namespace star {
  } } }
 namespace rtl {
     class OUString;
-    class OUStringBuffer;
 }
 
 // store a list of redline properties

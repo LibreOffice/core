@@ -38,7 +38,6 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
 } } }
 
-class SdXMLCustomShapeContext;
 class XMLEnhancedCustomShapeContext : public SvXMLImportContext
 {
     SvXMLUnitConverter& mrUnitConverter;

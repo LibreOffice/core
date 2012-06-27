@@ -23,8 +23,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-class AnimImpImpl;
-
 //////////////////////////////////////////////////////////////////////////////
 // presentations:animations
 

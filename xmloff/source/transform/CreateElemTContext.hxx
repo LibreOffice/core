@@ -23,8 +23,6 @@
 #include <xmloff/xmltoken.hxx>
 #include "TransformerContext.hxx"
 
-class XMLMutableAttributeList;
-class XMLTransformerActions;
 class XMLCreateElemTransformerContext : public XMLTransformerContext
 {
     sal_uInt16 m_nActionMap;

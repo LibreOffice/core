@@ -23,8 +23,6 @@
 #include <xmloff/xmltoken.hxx>
 #include "TransformerContext.hxx"
 
-class XMLMutableAttributeList;
-class XMLTransformerActions;
 class XMLProcAttrTransformerContext : public XMLTransformerContext
 {
     ::rtl::OUString m_aElemQName;

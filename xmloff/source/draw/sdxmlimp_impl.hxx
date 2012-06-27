@@ -169,10 +169,6 @@ typedef std::map< sal_Int32, com::sun::star::uno::Reference< com::sun::star::dra
 
 class SvXMLUnitConverter;
 class SvXMLTokenMap;
-class XMLSdPropHdlFactory;
-class XMLPropertySetMapper;
-class XMLPropStyleContext;
-class SdXMLStylesContext;
 class SdXMLMasterStylesContext;
 
 //////////////////////////////////////////////////////////////////////////////

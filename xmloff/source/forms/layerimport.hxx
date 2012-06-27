@@ -39,9 +39,7 @@
 
 class SvXMLImport;
 class SvXMLImportContext;
-class XMLPropertyHandlerFactory;
-class SvXMLImportPropertyMapper;
-class XMLPropStyleContext;
+class SvXMLStyleContext;
 
 SV_DECL_REF( SvXMLStylesContext )
     // unfortunately, we can't put this into our namespace, as the macro expands to (amongst others) a forward

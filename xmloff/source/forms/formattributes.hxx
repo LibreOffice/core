@@ -34,7 +34,6 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <comphelper/stl_types.hxx>
 
-class SvXMLExport;
 struct SvXMLEnumMapEntry;
 
 //.........................................................................

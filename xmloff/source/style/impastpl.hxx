@@ -42,7 +42,6 @@
 class SvXMLAutoStylePoolP;
 class SvXMLAutoStylePoolParentsP_Impl;
 class SvXMLAutoStylePoolNamesP_Impl;
-class SvXMLAttributeList;
 class SvXMLExportPropertyMapper;
 class SvXMLExport;
 

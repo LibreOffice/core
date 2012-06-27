@@ -22,8 +22,6 @@
 
 #include "ProcAttrTContext.hxx"
 
-class XMLMutableAttributeList;
-class XMLTransformerActions;
 class XMLProcAddAttrTransformerContext : public XMLProcAttrTransformerContext
 {
     ::rtl::OUString m_aAttrQName;

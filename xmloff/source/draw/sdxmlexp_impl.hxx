@@ -41,20 +41,11 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-class SvXMLUnitConverter;
-class SvXMLExportItemMapper;
-class SfxPoolItem;
-class SfxItemSet;
-class OUStrings_Impl;
 class Rectangle;
 
-class ImpPresPageDrawStylePropMapper;
 class ImpXMLEXPPageMasterInfo;
-class ImpXMLDrawPageInfoList;
 class ImpXMLAutoLayoutInfo;
-class SvXMLAutoStylePoolP;
 class XMLSdPropHdlFactory;
-class ImpXMLShapeStyleInfo;
 class XMLShapeExportPropertyMapper;
 class XMLPageExportPropertyMapper;
 

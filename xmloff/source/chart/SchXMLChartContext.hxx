@@ -40,17 +40,12 @@
 #include <list>
 #include <map>
 
-class SchXMLImport;
 class SchXMLImportHelper;
 
 namespace com { namespace sun { namespace star {
     namespace chart {
         class XChartDocument;
-        class XDiagram;
         struct ChartSeriesAddress;
-    }
-    namespace util {
-        class XStringMapping;
     }
     namespace xml { namespace sax {
         class XAttributeList;
