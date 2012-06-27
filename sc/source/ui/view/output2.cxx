@@ -566,9 +566,9 @@ void ScDrawStringsVars::RepeatToFill( long colWidth )
         return;
 
     long nCharsToInsert = aSpaceToFill / charWidth;
-    for ( int i = 0; i < nCharsToInsert; ++i )
-        aString.Insert( nChar, nPos );
-
+    String aFill;
+    aFill.Expand( nCharsToInsert, nChar);
+    aString.Insert( aFill, nPos);
     TextChanged();
 }
 
