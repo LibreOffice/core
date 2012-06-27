@@ -304,7 +304,7 @@ SmFilterDetect::~SmFilterDetect()
                     SotStorageRef aStorage = new SotStorage ( pStrm, sal_False );
                     if ( !aStorage->GetError() )
                     {
-                        if ( aStorage->IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Equation Native" ) ) ) )
+                        if (aStorage->IsStream(rtl::OUString("Equation Native")))
                         {
                             sal_uInt8 nVersion;
                             if (GetMathTypeVersion( aStorage, nVersion ) && nVersion <=3)

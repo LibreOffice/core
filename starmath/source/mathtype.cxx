@@ -1912,7 +1912,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
 
         SvGlobalName aGName(0x0002ce02L, 0x0000, 0x0000,0xc0,0x00,
             0x00,0x00,0x00,0x00,0x00,0x46 );
-        pStor->SetClass( aGName, 0, C2S("Microsoft Equation 3.0"));
+        pStor->SetClass( aGName, 0, rtl::OUString("Microsoft Equation 3.0"));
 
         static sal_uInt8 const aCompObj[] = {
             0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
@@ -1929,7 +1929,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
-        SvStorageStreamRef xStor( pStor->OpenSotStream( C2S("\1CompObj")));
+        SvStorageStreamRef xStor( pStor->OpenSotStream(rtl::OUString("\1CompObj")));
         xStor->Write(aCompObj,sizeof(aCompObj));
 
         static sal_uInt8 const aOle[] = {
@@ -1937,12 +1937,12 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00
             };
-        SvStorageStreamRef xStor2( pStor->OpenSotStream( C2S("\1Ole")));
+        SvStorageStreamRef xStor2( pStor->OpenSotStream(rtl::OUString("\1Ole")));
         xStor2->Write(aOle,sizeof(aOle));
         xStor.Clear();
         xStor2.Clear();
 
-        SvStorageStreamRef xSrc = pStor->OpenSotStream(C2S("Equation Native"));
+        SvStorageStreamRef xSrc = pStor->OpenSotStream(rtl::OUString("Equation Native"));
         if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
             return 0;
 

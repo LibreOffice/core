@@ -148,10 +148,10 @@ SmFormat::SmFormat()
     vFont[FNT_FUNCTION] =
     vFont[FNT_NUMBER]   =
     vFont[FNT_TEXT]     =
-    vFont[FNT_SERIF]    = SmFace(C2S(FNTNAME_TIMES), aBaseSize);
-    vFont[FNT_SANS]     = SmFace(C2S(FNTNAME_HELV),  aBaseSize);
-    vFont[FNT_FIXED]    = SmFace(C2S(FNTNAME_COUR),  aBaseSize);
-    vFont[FNT_MATH]     = SmFace(C2S(FNTNAME_MATH),  aBaseSize);
+    vFont[FNT_SERIF]    = SmFace(rtl::OUString(FNTNAME_TIMES), aBaseSize);
+    vFont[FNT_SANS]     = SmFace(rtl::OUString(FNTNAME_HELV),  aBaseSize);
+    vFont[FNT_FIXED]    = SmFace(rtl::OUString(FNTNAME_COUR),  aBaseSize);
+    vFont[FNT_MATH]     = SmFace(rtl::OUString(FNTNAME_MATH),  aBaseSize);
 
     vFont[FNT_MATH].SetCharSet( RTL_TEXTENCODING_UNICODE );
 

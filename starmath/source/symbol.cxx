@@ -56,8 +56,8 @@ using namespace ::rtl;
 /**************************************************************************/
 
 SmSym::SmSym() :
-    m_aName(C2S("unknown")),
-    m_aSetName(C2S("unknown")),
+    m_aName(rtl::OUString("unknown")),
+    m_aSetName(rtl::OUString("unknown")),
     m_cChar('\0'),
     m_bPredefined(false),
     m_bDocSymbol(false)

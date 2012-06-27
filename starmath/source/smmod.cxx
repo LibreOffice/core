@@ -235,7 +235,7 @@ SmModule::SmModule(SfxObjectFactory* pObjFact) :
     pSysLocale( 0 ),
     pVirtualDev( 0 )
 {
-    SetName( C2S("StarMath" ));
+    SetName(rtl::OUString("StarMath"));
 
     SvxModifyControl::RegisterControl(SID_DOC_MODIFIED, this);
 }

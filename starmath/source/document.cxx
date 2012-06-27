@@ -391,14 +391,14 @@ EditEngine& SmDocShell::GetEditEngine()
 
         pEditEngine->EnableUndo( true );
         pEditEngine->SetDefTab( sal_uInt16(
-            Application::GetDefaultDevice()->GetTextWidth( C2S("XXXX") ) ) );
+            Application::GetDefaultDevice()->GetTextWidth(rtl::OUString("XXXX"))) );
 
         pEditEngine->SetControlWord(
                 (pEditEngine->GetControlWord() | EE_CNTRL_AUTOINDENTING) &
                 (~EE_CNTRL_UNDOATTRIBS) &
                 (~EE_CNTRL_PASTESPECIAL) );
 
-        pEditEngine->SetWordDelimiters( C2S(" .=+-*/(){}[];\"" ) );
+        pEditEngine->SetWordDelimiters( rtl::OUString(" .=+-*/(){}[];\"" ) );
         pEditEngine->SetRefMapMode( MAP_PIXEL );
 
         pEditEngine->SetPaperSize( Size( 800, 0 ) );
@@ -777,7 +777,7 @@ sal_Bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
             if ( SotStorage::IsStorageFile( pStream ) )
             {
                 SvStorageRef aStorage = new SotStorage( pStream, false );
-                if ( aStorage->IsStream( C2S( "Equation Native" ) ) )
+                if ( aStorage->IsStream(rtl::OUString("Equation Native")) )
                 {
                     // is this a MathType Storage?
                     MathType aEquation( aText );
@@ -824,12 +824,12 @@ sal_Bool SmDocShell::Load( SfxMedium& rMedium )
         uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
         if (
             (
-             xAccess->hasByName( C2S( "content.xml" ) ) &&
-             xStorage->isStreamElement( C2S( "content.xml" ) )
+             xAccess->hasByName( rtl::OUString("content.xml") ) &&
+             xStorage->isStreamElement( rtl::OUString("content.xml") )
             ) ||
             (
-             xAccess->hasByName( C2S( "Content.xml" ) ) &&
-             xStorage->isStreamElement( C2S( "Content.xml" ) )
+             xAccess->hasByName( rtl::OUString("Content.xml") ) &&
+             xStorage->isStreamElement( rtl::OUString("Content.xml") )
             )
            )
         {

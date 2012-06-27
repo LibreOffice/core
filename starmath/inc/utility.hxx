@@ -38,9 +38,6 @@
 
 class String;
 
-#define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
-
-
 /////////////////////////////////////////////////////////////////
 
 inline long SmPtsTo100th_mm(long nNumPts)

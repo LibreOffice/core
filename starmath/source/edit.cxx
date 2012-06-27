@@ -239,7 +239,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         //! see also SmDocShell::GetEditEngine() !
         //!
 
-        pEditEngine->SetDefTab( sal_uInt16( GetTextWidth( C2S("XXXX") ) ) );
+        pEditEngine->SetDefTab(sal_uInt16(GetTextWidth(rtl::OUString("XXXX"))));
 
         SetEditEngineDefaultFonts(*pEditEngineItemPool);
 
@@ -771,7 +771,7 @@ void SmEditWindow::SelNextMark()
     {
         ESelection eSelection = pEditView->GetSelection();
         sal_uInt16     Pos        = eSelection.nEndPos;
-        String     aMark (C2S("<?>"));
+        rtl::OUString aMark("<?>");
         String     aText;
         sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
 
@@ -803,7 +803,7 @@ void SmEditWindow::SelPrevMark()
         sal_uInt16     Pos        = STRING_NOTFOUND;
         xub_StrLen Max        = eSelection.nStartPos;
         String     Text( pEditEngine->GetText( eSelection.nStartPara ) );
-        String     aMark (C2S("<?>"));
+        rtl::OUString aMark("<?>");
         sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
 
         do

@@ -1520,7 +1520,7 @@ bool SmViewShell::Insert( SfxMedium& rMedium )
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
     if ( xNameAccess.is() && xNameAccess->getElementNames().getLength() )
     {
-        if ( xNameAccess->hasByName( C2S( "content.xml" ) ) || xNameAccess->hasByName( C2S( "Content.xml" ) ))
+        if ( xNameAccess->hasByName( rtl::OUString("content.xml") ) || xNameAccess->hasByName( rtl::OUString("Content.xml") ))
         {
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(pDoc->GetModel());
@@ -2026,7 +2026,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
 
     SetStatusText(String());
     SetWindow(&aGraphic);
-    SfxShell::SetName(C2S("SmView"));
+    SfxShell::SetName(rtl::OUString("SmView"));
     SfxShell::SetUndoManager( &GetDoc()->GetEditEngine().GetUndoManager() );
     SetHelpId( HID_SMA_VIEWSHELL_DOCUMENT );
 }
