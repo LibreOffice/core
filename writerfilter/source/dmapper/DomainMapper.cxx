@@ -2369,7 +2369,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         */
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
-            pSectionContext->SetBreakType( nIntValue );
+        {
+            // Ignore continous section break at the end of the document
+            // It makes the importer loose margin settings with no benefit
+            if (m_pImpl->GetParaSectpr() || nIntValue != 0)
+                pSectionContext->SetBreakType( nIntValue );
+        }
         break;
     case 143:
     case NS_sprm::LN_SFTitlePage: // sprmSFTitlePage
