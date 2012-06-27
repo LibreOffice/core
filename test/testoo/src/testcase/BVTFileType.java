@@ -12,19 +12,13 @@
  */
 package testcase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.openoffice.test.vcl.Tester.sleep;
-import static org.openoffice.test.vcl.Tester.typeKeys;
-import static org.openoffice.test.vcl.Tester.typeText;
+import static org.junit.Assert.*;
+import static org.openoffice.test.vcl.Tester.*;
 import static testlib.AppUtil.*;
 import static testlib.UIMap.*;
 
 import java.awt.Rectangle;
 
-
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -110,7 +104,8 @@ public class BVTFileType {
 
         // Set the text style
         writer.openContextMenu();
-        menuItem("Text Properties...").select();
+//      menuItem("Text Properties...").select();
+        menuItem("Character...").select();
         EffectsPage.select();
         EffectsPage_Color.select("Magenta");
         EffectsPage.ok();
@@ -120,8 +115,8 @@ public class BVTFileType {
         writer.menuItem("File->Save As...").select();
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        if (dialog("33388").exists(3))
-            dialog("33388").ok();
+        if (AlienFormatDlg.exists(3))
+            AlienFormatDlg.ok();
 
 
         // Close it by clicking main menu
@@ -231,8 +226,8 @@ public class BVTFileType {
         String saveTo = fullPath("temp/" + file);
         String text = "Hello Openoffice";
         startcenter.menuItem("File->New->Presentation").select();
-        impress.waitForExistence(10, 2);
-        sleep(2);
+        PresentationWizard.ok();
+        impress.click(0.01, 0.01);
         typeKeys(text);
         sleep(2);
         impress.doubleClick(0.1, 0.5);
@@ -257,7 +252,7 @@ public class BVTFileType {
         typeKeys("<$copy>");
         sleep(1);
         Assert.assertEquals("The typed text is saved!", text,
-                app.getClipboard());
+                app.getClipboard().trim());
     }
 
     // drawing

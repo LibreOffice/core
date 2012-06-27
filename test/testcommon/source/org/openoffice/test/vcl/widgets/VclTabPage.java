@@ -33,6 +33,6 @@ public class VclTabPage extends VclDialog {
      */
     public void select() {
         if (tabControl != null)
-            tabControl.setPage(this.getUID().getId());
+            tabControl.setPage(this.getUID());
     }
 }

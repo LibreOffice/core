@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--************************************************************************
+ *
+ * Licensed Materials - Property of IBM.
+ * (C) Copyright IBM Corporation 2003, 2012.  All Rights Reserved.
+ * U.S. Government Users Restricted Rights:
+ * Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+ *
+ ************************************************************************ -->
+
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="VCL Test Assistant"
+            id="org.openoffice.test.assistant">
+      </category>
+      <view
+            name="VCL Explorer"
+            icon="icons/sample.gif"
+            category="org.openoffice.test.assistant"
+            class="org.openoffice.test.assistant.views.VclExplorer"
+            id="org.openoffice.test.assistant.views.VclExplorer">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.TaskList"
+               relationship="right"
+               id="org.openoffice.test.assistant.views.VclExplorer">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.openoffice.test.assistant.preferences.PreferencePage"
+            id="org.openoffice.test.assistant.preferences.PreferencePage"
+            name="VCL Test Assistant">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.openoffice.test.assistant.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

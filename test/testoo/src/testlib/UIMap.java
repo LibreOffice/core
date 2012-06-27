@@ -157,7 +157,7 @@ public class UIMap {
     public static final VclButton FindDlg_More = button("svx:MoreButton:RID_SVXDLG_SEARCH:BTN_MORE");
     public static final VclWindow chart = window("CHART2_HID_SCH_WIN_DOCUMENT");
     public static final VclDialog Chart_Wizard = dialog("CHART2_HID_SCH_CHART_AUTO_FORMAT");
-    public static final VclDialog File_PrintDlg = dialog(".HelpId:vcl:PrintDialog:Dialog");
+    public static final VclDialog File_PrintDlg = dialog(".HelpID:vcl:PrintDialog:Dialog");
     public static final VclWindow ImpressOutline = window("SD_HID_SDOUTLINEVIEWSHELL");
     public static final VclWindow ImpressSlideSorter = window("SD_HID_SD_WIN_DOCUMENT");
     public static final VclWindow ImpressHandout = window(".uno:HandoutMode");
@@ -316,4 +316,9 @@ public class UIMap {
     public static final VclListBox FormatCellsDlg_NumbersPageCurrencyFormat = listbox("cui:ListBox:RID_SVXPAGE_NUMBERFORMAT:LB_CURRENCY");
     public static final VclTabPage DataPilotFieldOptionFiledSubtotalsPage = tabpage("25762");
     public static final VclControl SC_DataPilotOptionSubtotalFunctionList = control("59029");
+    public static final VclDialog PresentationWizard = dialog("SD_HID_SD_AUTOPILOT_PAGE1");
+    public static final VclDialog FillSeriesDlg = dialog(".uno:FillSeries");
+    public static final VclDialog SortWarningDlg = dialog("sc:ModalDialog:RID_SCDLG_SORT_WARNING");
+    public static final VclButton SortWarningDlg_Extend = button("sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_EXTSORT");
+    public static final VclButton SortWarningDlg_Current = button("sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_CURSORT");
 }

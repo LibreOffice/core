@@ -96,8 +96,8 @@ public class VclTabControl extends VclControl {
      * @param nTabResID
      *            The resource ID of the specified Tab page in Tab Dialog
      */
-    public void setPage(long nTabResID) {
-        invoke(Constant.M_SetPage, new Object[] { nTabResID });
+    public void setPage(SmartId nTabResID) {
+        invoke(Constant.M_SetPage, new Object[] { nTabResID.getSid() == null ? nTabResID.getId() : nTabResID.getSid()});
     }
 
     /**
@@ -106,6 +106,6 @@ public class VclTabControl extends VclControl {
      * @throws Exception
      */
     public void setPage(VclControl widget) {
-        setPage(widget.getUID().getId());
+        setPage(widget.getUID());
     }
 }

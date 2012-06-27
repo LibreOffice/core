@@ -12,15 +12,13 @@
  */
 package testcase;
 
+import static org.junit.Assert.*;
+import static org.openoffice.test.vcl.Tester.*;
 import static testlib.AppUtil.*;
 import static testlib.UIMap.*;
 
 import java.awt.Rectangle;
 import java.io.File;
-
-import org.junit.After;
-import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,6 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.GraphicsUtil;
+import org.openoffice.test.common.SystemUtil;
 
 import testlib.CalcUtil;
 import testlib.Log;
@@ -84,7 +83,7 @@ public class BVTFunction {
         //Create a new text document
         startcenter.menuItem("File->New->Text Document").select();
         sleep(3);
-        writer.menuItem("File->Print").select();
+        writer.menuItem("File->Print...").select();
         assertTrue(File_PrintDlg.exists(5));
         File_PrintDlg.cancel();
     }
@@ -94,6 +93,7 @@ public class BVTFunction {
      *
      */
     @Test
+    @Ignore
     public void testJavaDialog()
     {
 
@@ -135,7 +135,11 @@ public class BVTFunction {
     @Test
     public void testAboutDialog()
     {
-        startcenter.menuItem("Help->About OpenOffice.org").select();
+        if (SystemUtil.isMac()) {
+            app.dispatch(".uno:About");
+        } else {
+            startcenter.menuItem("Help->About OpenOffice.org").select();
+        }
         assertTrue(AboutDialog.exists(5));
         AboutDialog.ok();
     }
@@ -220,6 +224,7 @@ public class BVTFunction {
 
         //Create a new text document
         startcenter.menuItem("File->New->Presentation").select();
+        PresentationWizard.ok();
         sleep(3);
 
         //Insert a picture fully filled with green
@@ -370,9 +375,7 @@ public class BVTFunction {
 
         CalcUtil.selectRange("E1:F5");
         calc.menuItem("Edit->Fill->Series...").select();
-        assertTrue(button("1493549573").isChecked());
-        assertFalse(button("1493549571").isChecked());
-        dialog("26229").ok();
+        FillSeriesDlg.ok();
         sleep(1);
         assertArrayEquals("Fill series..", expected5, CalcUtil.getCellTexts("E1:F5"));
     }
@@ -423,44 +426,48 @@ public class BVTFunction {
         calc.waitForExistence(10, 2);
         CalcUtil.selectRange("A1:A10");
         calc.menuItem("Data->Sort...").select();
-        assertEquals("Column A", listbox("956468740").getSelText());
-        tabpage("58873").ok();
+        SortWarningDlg_Current.click();
+        assertEquals("Column A", SortPage_By1.getSelText());
+        SortPage.ok();
         sleep(1);
         assertArrayEquals("Sorted Data", expected1, CalcUtil.getCellTexts("A1:A10"));
         CalcUtil.selectRange("B1:C10");
         calc.menuItem("Data->Sort...").select();
-        listbox("956468740").select("Column C");
-        button("956465674").check();
-        assertFalse(listbox("956468742").isEnabled());
-        assertFalse(button("956465673").isEnabled());
-        assertFalse(button("956465676").isEnabled());
-        listbox("956468741").select("Column B");
-        assertTrue(listbox("956468742").isEnabled());
-        assertTrue(button("956465673").isEnabled());
-        assertTrue(button("956465676").isEnabled());
-        button("956465675").check();
-        listbox("956468741").select("- undefined -");
-        assertFalse(listbox("956468742").isEnabled());
-        assertFalse(button("956465673").isEnabled());
-        assertFalse(button("956465676").isEnabled());
-        listbox("956468741").select("Column B");
-        tabpage("58873").ok();
+
+        SortPage_By1.select("Column C");
+        SortPage_Descending1.check();
+        assertFalse(SortPage_By3.isEnabled());
+        assertFalse(SortPage_Ascending3.isEnabled());
+        assertFalse(SortPage_Descending3.isEnabled());
+        SortPage_By2.select("Column B");
+        assertTrue(SortPage_By3.isEnabled());
+        assertTrue(SortPage_Ascending3.isEnabled());
+        assertTrue(SortPage_Descending3.isEnabled());
+        SortPage_Descending2.check();
+        SortPage_By2.select("- undefined -");
+        assertFalse(SortPage_By3.isEnabled());
+        assertFalse(SortPage_Ascending3.isEnabled());
+        assertFalse(SortPage_Descending3.isEnabled());
+        SortPage_By2.select("Column B");
+        SortPage.ok();
         sleep(1);
 
         assertArrayEquals("Sorted Data", expected2, CalcUtil.getCellTexts("B1:C10"));
         CalcUtil.selectRange("D1:D7");
         calc.menuItem("Data->Sort...").select();
-        tabpage("58874").select();
-        button("956482569").uncheck();
-        button("956482567").check();
-        listbox("956485122").select("Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
-        tabpage("58874").ok();
+        SortWarningDlg_Current.click();
+        SortOptionsPage.select();
+        SortOptionsPage_RangeContainsColumnLabels.uncheck();
+        SortOptionsPage_CustomSortOrder.check();
+        SortOptionsPage_CustomSortOrderList.select("Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
+        SortOptionsPage.ok();
         sleep(1);
         assertArrayEquals("Sorted Data", expected3, CalcUtil.getCellTexts("D1:D7"));
 
         CalcUtil.selectRange("E1:E10");
         calc.menuItem("Data->Sort...").select();
-        tabpage("58873").ok();
+        SortWarningDlg_Current.click();
+        SortPage.ok();
         sleep(1);
         assertArrayEquals("Sorted Data", expected4, CalcUtil.getCellTexts("E1:E10"));
     }

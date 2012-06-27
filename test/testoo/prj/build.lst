@@ -1,2 +1,2 @@
-atest test :: testgui NULL
+atest test :: testcommon NULL
 atest test nmake - all test_all NULL

@@ -20,6 +20,12 @@ import org.junit.Test;
 import testlib.CalcUtil;
 import testlib.Log;
 
+/**
+ * Before running the testing class, you need specify the AOO location firstly with system property openoffice.home.
+ *
+ * @author test
+ *
+ */
 public class SayHelloToOO {
 
     /**

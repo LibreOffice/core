@@ -30,12 +30,10 @@
         <pathelement location="${classes}" />
         <fileset dir="${lib}" erroronmissingdir="false">
             <include name="**/testcommon.jar" />
-            <include name="**/testgui.jar" />
             <include name="**/junit.jar" />
         </fileset>
         <fileset dir="${solar.jar}" erroronmissingdir="false">
             <include name="**/testcommon.jar" />
-            <include name="**/testgui.jar" />
             <include name="**/junit.jar" />
         </fileset>
         <fileset dir="${junit.home}" erroronmissingdir="false">
@@ -62,9 +60,6 @@
         <available file="testcommon.jar" property="testcommon.jar.exists">
             <filepath refid="classpath" />
         </available>
-        <available file="testgui.jar" property="testgui.jar.exists">
-            <filepath refid="classpath" />
-        </available>
         <available file="junit.jar" property="junit.jar.exists">
             <filepath refid="classpath" />
         </available>
@@ -81,13 +76,7 @@
         </ant>
     </target>
 
-    <target name="prepare.testgui" unless="testgui.jar.exists">
-        <ant dir="../testgui" target="dist" inheritAll="false">
-            <property name="dist" location="${lib}" />
-        </ant>
-    </target>
-
-    <target name="prepare.dependencies" depends="init, check.dependencies, prepare.junit, prepare.testcommon, prepare.testgui" description="Download all dependencies">
+    <target name="prepare.dependencies" depends="init, check.dependencies, prepare.junit, prepare.testcommon" description="Download all dependencies">
     </target>
 
     <target name="compile" depends="init, prepare.dependencies" description="Compile source code">
@@ -117,6 +106,7 @@
         <condition property="find.build.skip">
             <or>
                 <isset property="openoffice.build" />
+                <isset property="openoffice.archive.url" />
                 <isset property="openoffice.archive.dir" />
                 <isset property="openoffice.home" />
             </or>

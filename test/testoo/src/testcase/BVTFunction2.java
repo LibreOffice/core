@@ -12,23 +12,16 @@
  */
 package testcase;
 
-import static testlib.AppUtil.*;
-import static testlib.UIMap.*;
-
-import java.awt.Rectangle;
-import java.io.File;
-
-import org.junit.After;
 import static org.junit.Assert.*;
 import static org.openoffice.test.vcl.Tester.*;
+import static testlib.AppUtil.*;
+import static testlib.UIMap.*;
 
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.openoffice.test.common.FileUtil;
-import org.openoffice.test.common.GraphicsUtil;
 
 import testlib.CalcUtil;
 import testlib.Log;
@@ -148,6 +141,7 @@ public class BVTFunction2 {
 
         // Create a new presentation document
         startcenter.menuItem("File->New->Presentation").select();
+        PresentationWizard.ok();
         sleep(3);
 
         // Insert a chart
@@ -181,7 +175,7 @@ public class BVTFunction2 {
         sleep(3);
 
         // Verify if the table toolbar is active
-        assertTrue(Table_Toolbar.exists(3));
+//      assertTrue(Table_Toolbar.exists(3));
 
         // Check the statusbar to verify if the table is inserted successfully
         assertEquals("Table selected", StatusBar.getItemText(0));
@@ -231,6 +225,7 @@ public class BVTFunction2 {
 
         // Create a new presentation document
         startcenter.menuItem("File->New->Presentation").select();
+        PresentationWizard.ok();
         sleep(3);
 
         // Insert a table
