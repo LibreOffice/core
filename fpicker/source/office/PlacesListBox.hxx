@@ -69,14 +69,18 @@ class Place
 
 typedef boost::shared_ptr< Place > PlacePtr;
 
+class PlacesListBox;
 class PlacesListBox_Impl : public SvHeaderTabListBox
 {
     private:
         HeaderBar*           mpHeaderBar;
+        PlacesListBox*       mpParent;
 
     public:
-        PlacesListBox_Impl( Window* pParent, const rtl::OUString& rTitle );
+        PlacesListBox_Impl( PlacesListBox* pParent, const rtl::OUString& rTitle );
         ~PlacesListBox_Impl( );
+
+        virtual void MouseButtonUp( const MouseEvent& rMEvt );
 };
 
 /** ListBox to handle Places.
@@ -89,6 +93,7 @@ class PlacesListBox : public Control
         PlacesListBox_Impl*  mpImpl;
         sal_Int32            mnNbEditables;
         bool                 mbUpdated;
+        bool                 mbSelectionChanged;
 
     public:
         PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTitle, const ResId& rResId );
@@ -102,6 +107,7 @@ class PlacesListBox : public Control
         const std::vector<PlacePtr>& GetPlaces();
 
         void SetSizePixel( const Size& rNewSize );
+        void updateView( );
 
     private:
 
