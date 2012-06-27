@@ -1270,7 +1270,7 @@ void RtfAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 n
 
 void RtfAttributeOutput::SectionType( sal_uInt8 nBreakCode )
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", nBreakCode = " << nBreakCode);
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", nBreakCode = " << int(nBreakCode));
 
     /*
      * break code:   0 No break, 1 New column
