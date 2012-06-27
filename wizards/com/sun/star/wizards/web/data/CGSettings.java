@@ -24,7 +24,7 @@
 package com.sun.star.wizards.web.data;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.sun.star.beans.PropertyValue;
@@ -63,7 +63,7 @@ public class CGSettings extends ConfigGroup
     public ConfigSet savedSessions = new ConfigSet(CGSessionName.class);
     public CGSession cp_DefaultSession = new CGSession();
     public String cp_LastSavedSession;
-    private Map exportersMap = new Hashtable();
+    private Map exportersMap = new HashMap();
     private XMultiServiceFactory xmsf;
     String[] resources;
     public Formatter formatter;

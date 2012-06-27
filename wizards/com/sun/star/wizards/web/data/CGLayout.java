@@ -18,7 +18,7 @@
 package com.sun.star.wizards.web.data;
 
 import com.sun.star.wizards.ui.UIConsts;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.transform.*;
@@ -37,7 +37,7 @@ public class CGLayout extends ConfigSetItem
     private void createTemplates(XMultiServiceFactory xmsf) throws Exception
     {
 
-        templates = new Hashtable(3);
+        templates = new HashMap(3);
 
         TransformerFactory tf = TransformerFactory.newInstance();
 

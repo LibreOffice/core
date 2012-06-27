@@ -36,7 +36,7 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.ui.event.*;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public class UnoDialog implements EventNames
 {
@@ -55,7 +55,7 @@ public class UnoDialog implements EventNames
     public XInterface xUnoDialog;
     public XPropertySet xPSetDlg;
     public XVclWindowPeer xVclWindowPeer;
-    public Hashtable ControlList;
+    public HashMap ControlList;
     public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
     private PeerConfig m_oPeerConfig;
@@ -71,7 +71,7 @@ public class UnoDialog implements EventNames
         try
         {
             this.xMSF = xMSF;
-            ControlList = new Hashtable();
+            ControlList = new HashMap();
             xDialogModel = (XInterface) xMSF.createInstance("com.sun.star.awt.UnoControlDialogModel");
             XMultiPropertySet xMultiPSetDlg = UnoRuntime.queryInterface(XMultiPropertySet.class, xDialogModel);
             xMultiPSetDlg.setPropertyValues(PropertyNames, PropertyValues);
@@ -95,7 +95,7 @@ public class UnoDialog implements EventNames
         }
     }
 
-    public int getControlKey(Object EventObject, Hashtable ControlList)
+    public int getControlKey(Object EventObject, HashMap ControlList)
     {
         int iKey;
         XControl xContrl = UnoRuntime.queryInterface(XControl.class, EventObject);

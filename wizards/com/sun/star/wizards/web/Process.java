@@ -20,7 +20,7 @@ package com.sun.star.wizards.web;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -100,7 +100,7 @@ public class Process implements WebWizardConst, ProcessErrors
      * This is a cache for exporters, so I do not need to 
      * instanciate the same exporter more than once. 
      */
-    private Map exporters = new Hashtable(3);
+    private Map exporters = new HashMap(3);
     private boolean result;
 
     public Process(

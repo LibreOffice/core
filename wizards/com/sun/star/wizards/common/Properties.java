@@ -33,7 +33,7 @@ import java.util.*;
  * When finished, call the getProperties() method to get an array of the set properties.
  * @author  rp
  */
-public class Properties extends Hashtable
+public class Properties extends HashMap
 {
 
     public static Object getPropertyValue(PropertyValue[] props, String propName)

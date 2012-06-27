@@ -150,7 +150,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * When an Item must be redrawn (because the user checked or uncheced it),
      * the controller is retrieved from this Map, and a redraw is issued on this controller.
      */
-    Map itemsMap = new Hashtable(11);
+    Map itemsMap = new HashMap(11);
     /**
      * A temporary variable used to list all items and map them.
      */
@@ -359,7 +359,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      */
     private void initItemsCache()
     {
-        itemsCache = new Hashtable(11);
+        itemsCache = new HashMap(11);
 
         XMultiServiceFactory xmsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
         // Headings
@@ -1175,7 +1175,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         {
             Object t;
 
-            Map topicItems = new Hashtable(4);
+            Map topicItems = new HashMap(4);
 
             // This is the topics table. say hallo :-)
             try
@@ -1198,7 +1198,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
              * cell by cell, I check in this map to know
              * if a cell contains a <*> or not.
              */
-            Hashtable items = new Hashtable();
+            HashMap items = new HashMap();
 
             XTextRange item;
             Object cell;

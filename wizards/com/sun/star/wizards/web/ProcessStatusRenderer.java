@@ -17,7 +17,7 @@
  */
 package com.sun.star.wizards.web;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.sun.star.wizards.common.IRenderer;
@@ -33,7 +33,7 @@ import com.sun.star.wizards.common.IRenderer;
 public class ProcessStatusRenderer implements IRenderer, WebWizardConst
 {
 
-    Map strings = new Hashtable(12);
+    Map strings = new HashMap(12);
 
     public ProcessStatusRenderer(WebWizardDialogResources res)
     {

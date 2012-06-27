@@ -17,7 +17,7 @@
  */
 package com.sun.star.wizards.table;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
@@ -45,7 +45,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
     FieldFormatter curFieldFormatter;
     PrimaryKeyHandler curPrimaryKeyHandler;
     String sMsgWizardName = PropertyNames.EMPTY_STRING;
-    public Hashtable fielditems;
+    public HashMap fielditems;
     int wizardmode;
     String tablename;
     String serrToManyFields;
@@ -77,7 +77,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
                     218, Boolean.TRUE, "DialogTable", 102, 41, 1, new Short((short) 0), sTitle, 330
                 });
         drawNaviBar();
-        fielditems = new Hashtable();
+        fielditems = new HashMap();
         //TODO if reportResouces cannot be gotten dispose officedocument
         if (getTableResources())
         {

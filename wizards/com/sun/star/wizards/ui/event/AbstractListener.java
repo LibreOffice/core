@@ -24,7 +24,7 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * This class is a base class for listener classes.
@@ -42,7 +42,7 @@ import java.util.Hashtable;
 public class AbstractListener
 {
 
-    private Hashtable mHashtable = new Hashtable();
+    private HashMap mHashtable = new HashMap();
 
     /** Creates a new instance of AbstractListener */
     public AbstractListener()
