@@ -279,8 +279,6 @@ _CpyTabFrm& _CpyTabFrm::operator=( const _CpyTabFrm& rCpyTabFrm )
 SV_DECL_VARARR_SORT( _CpyTabFrms, _CpyTabFrm, 0 )
 SV_IMPL_VARARR_SORT( _CpyTabFrms, _CpyTabFrm )
 
-void lcl_DelCpyTabFrmFmts( _CpyTabFrm& rArr );
-
 struct _CpyPara
 {
     boost::shared_ptr< std::vector< std::vector< sal_uLong > > > pWidths;

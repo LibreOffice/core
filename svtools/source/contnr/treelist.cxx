@@ -1381,18 +1381,6 @@ void SvTreeList::InvalidateEntry( SvListEntry* pEntry )
     Broadcast( LISTACTION_INVALIDATE_ENTRY, pEntry );
 }
 
-void lcl_CheckList( SvTreeEntryList* pList )
-{
-    SvListEntry* pEntry = (SvListEntry*)(pList->First());
-    sal_uLong nPos = 0;
-    while ( pEntry )
-    {
-        DBG_ASSERT(pEntry->GetChildListPos()==nPos,"Wrong ListPos");
-        pEntry = (SvListEntry*)(pList->Next());
-        nPos++;
-    }
-}
-
 SvListEntry* SvTreeList::GetRootLevelParent( SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"GetRootLevelParent:No Entry");

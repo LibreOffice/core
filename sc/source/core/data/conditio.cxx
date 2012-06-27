@@ -1425,65 +1425,6 @@ ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddres
     return aData;
 }
 
-void lcl_Extend( ScRange& rRange, ScDocument* pDoc, bool bLines )
-{
-    SCTAB nTab = rRange.aStart.Tab();
-    OSL_ENSURE(rRange.aEnd.Tab() == nTab, "lcl_Extend - mehrere Tabellen?");
-
-    SCCOL nStartCol = rRange.aStart.Col();
-    SCROW nStartRow = rRange.aStart.Row();
-    SCCOL nEndCol = rRange.aEnd.Col();
-    SCROW nEndRow = rRange.aEnd.Row();
-
-    bool bEx = pDoc->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
-
-    if (bLines)
-    {
-        if (nStartCol > 0)    --nStartCol;
-        if (nStartRow > 0)    --nStartRow;
-        if (nEndCol < MAXCOL) ++nEndCol;
-        if (nEndRow < MAXROW) ++nEndRow;
-    }
-
-    if ( bEx || bLines )
-    {
-        rRange.aStart.Set( nStartCol, nStartRow, nTab );
-        rRange.aEnd.Set( nEndCol, nEndRow, nTab );
-    }
-}
-
-bool lcl_CutRange( ScRange& rRange, const ScRange& rOther )
-{
-    rRange.Justify();
-    ScRange aCmpRange = rOther;
-    aCmpRange.Justify();
-
-    if ( rRange.aStart.Col() <= aCmpRange.aEnd.Col() &&
-         rRange.aEnd.Col() >= aCmpRange.aStart.Col() &&
-         rRange.aStart.Row() <= aCmpRange.aEnd.Row() &&
-         rRange.aEnd.Row() >= aCmpRange.aStart.Row() &&
-         rRange.aStart.Tab() <= aCmpRange.aEnd.Tab() &&
-         rRange.aEnd.Tab() >= aCmpRange.aStart.Tab() )
-    {
-        if ( rRange.aStart.Col() < aCmpRange.aStart.Col() )
-            rRange.aStart.SetCol( aCmpRange.aStart.Col() );
-        if ( rRange.aStart.Row() < aCmpRange.aStart.Row() )
-            rRange.aStart.SetRow( aCmpRange.aStart.Row() );
-        if ( rRange.aStart.Tab() < aCmpRange.aStart.Tab() )
-            rRange.aStart.SetTab( aCmpRange.aStart.Tab() );
-        if ( rRange.aEnd.Col() > aCmpRange.aEnd.Col() )
-            rRange.aEnd.SetCol( aCmpRange.aEnd.Col() );
-        if ( rRange.aEnd.Row() > aCmpRange.aEnd.Row() )
-            rRange.aEnd.SetRow( aCmpRange.aEnd.Row() );
-        if ( rRange.aEnd.Tab() > aCmpRange.aEnd.Tab() )
-            rRange.aEnd.SetTab( aCmpRange.aEnd.Tab() );
-
-        return true;
-    }
-
-    return false;       // ausserhalb
-}
-
 void ScConditionalFormat::DoRepaint( const ScRange* pModified )
 {
     if(pModified)

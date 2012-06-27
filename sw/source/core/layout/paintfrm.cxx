@@ -3858,10 +3858,6 @@ void SwCellFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 |*
 |*************************************************************************/
 
-//Weiter unten definiert
-void lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
-                               const SwRect &rRect, const SwPageFrm *pPage );
-
 struct BorderLinesGuard
 {
     explicit BorderLinesGuard() : m_pBorderLines(g_pBorderLines)
