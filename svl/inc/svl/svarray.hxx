@@ -412,8 +412,9 @@ void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
 SV_IMPL_PTRARR_GEN(nm, AE, SvPtrarr )
 
 typedef void* VoidPtr;
-_SV_DECL_VARARR_GEN( SvPtrarr, VoidPtr, 0, 1, VoidPtr &, )
-USHORT GetPos( const VoidPtr & aE ) const;
+
+_SV_DECL_VARARR_GEN( SvPtrarr, VoidPtr, 0, VoidPtr &, SVL_DLLPUBLIC )
+sal_uInt16 GetPos( const VoidPtr & aE ) const;
 };
 
 // SORTARR - Begin

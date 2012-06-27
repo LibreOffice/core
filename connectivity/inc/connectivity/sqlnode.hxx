@@ -242,10 +242,6 @@ namespace connectivity
                       SQLNodeType eNewNodeType,
                       sal_uInt32 nNewNodeID=0);
 
-        OSQLParseNode(const sal_Unicode* _pValue,
-                      SQLNodeType _eNodeType,
-                      sal_uInt32 _nNodeID = 0);
-
         OSQLParseNode(const ::rtl::OUString& _rValue,
                       SQLNodeType _eNodeType,
                       sal_uInt32 _nNodeID = 0);

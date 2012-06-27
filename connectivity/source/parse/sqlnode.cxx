@@ -1559,19 +1559,6 @@ OSQLParseNode::OSQLParseNode(const ::rtl::OString &_rNewValue,
     OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: created with invalid NodeType");
 }
 //-----------------------------------------------------------------------------
-OSQLParseNode::OSQLParseNode(const sal_Unicode * pNewValue,
-                                 SQLNodeType eNewNodeType,
-                                 sal_uInt32 nNewNodeID)
-        :m_pParent(NULL)
-        ,m_aNodeValue(pNewValue)
-        ,m_eNodeType(eNewNodeType)
-        ,m_nNodeID(nNewNodeID)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::OSQLParseNode" );
-
-    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: created with invalid NodeType");
-}
-//-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const ::rtl::OUString &_rNewValue,
                                  SQLNodeType eNewNodeType,
                                  sal_uInt32 nNewNodeID)
