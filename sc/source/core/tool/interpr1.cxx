@@ -2984,20 +2984,17 @@ void ScInterpreter::ScT()
             }
         }
         break;
+        case svMatrix:
         case svExternalSingleRef:
         case svExternalDoubleRef:
         {
-            ScMatrixRef pMat = GetMatrix();
-            if (!pMat || !pMat->GetElementCount())
-            {
-                SetError( errIllegalParameter);
-                break;
-            }
-
-            if (pMat->IsString(0, 0))
-                PushString(pMat->GetString(0, 0));
+            double fVal;
+            String aStr;
+            ScMatValType nMatValType = GetDoubleOrStringFromMatrix( fVal, aStr);
+            if (ScMatrix::IsValueType( nMatValType))
+                PushString( EMPTY_STRING);
             else
-                PushString(EMPTY_STRING);
+                PushString( aStr);
         }
         break;
         case svDouble :
