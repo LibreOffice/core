@@ -2682,6 +2682,24 @@ void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
     }
 }
 
+// special case: #i9860#
+// first line in follow table without repeated headlines
+static bool lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
+        SwTabFrm const& rTabFrm, SwFrm const& rFrm, SvxBoxItem const& rBoxItem)
+{
+    SwRowFrm const*const pThisRowFrm =
+        dynamic_cast<const SwRowFrm*>(rFrm.GetUpper());
+    return (pThisRowFrm
+        && (pThisRowFrm->GetUpper() == &rTabFrm)
+        && rTabFrm.IsFollow()
+        && !rTabFrm.GetTable()->GetRowsToRepeat()
+        &&  (  !pThisRowFrm->GetPrev()
+            || static_cast<const SwRowFrm*>(pThisRowFrm->GetPrev())
+                    ->IsRowSpanLine())
+        && !rBoxItem.GetTop()
+        && rBoxItem.GetBottom());
+}
+
 void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
 {
     std::vector< const SwFrm* > aTestVec;
@@ -2697,6 +2715,10 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
         aBorderRect.Pos() += rFrm.Frm().Pos();
     }
 
+    bool const bBottomAsTop(lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
+                mrTabFrm, rFrm, rBoxItem));
+
+    // these are positions of the lines
     const SwTwips nLeft   = aBorderRect._Left();
     const SwTwips nRight  = aBorderRect._Right();
     const SwTwips nTop    = aBorderRect._Top();
@@ -2707,8 +2729,9 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     svx::frame::Style aT( rBoxItem.GetTop() );
     svx::frame::Style aB( rBoxItem.GetBottom() );
 
-    const SwTwips nHalfTopWidth = aT.GetWidth() / 2;
     const SwTwips nHalfBottomWidth = aB.GetWidth() / 2;
+    const SwTwips nHalfTopWidth = (bBottomAsTop)
+            ? nHalfBottomWidth : aT.GetWidth() / 2;
 
     aR.MirrorSelf();
     aB.MirrorSelf();
@@ -2724,9 +2747,10 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     SwLineEntry aLeft  ( nLeft,   nTop + nHalfTopWidth,
             nBottom + nHalfBottomWidth, bVert ? aB : ( bR2L ? aR : aL ) );
     SwLineEntry aRight ( nRight,  nTop + nHalfTopWidth,
-            nBottom + nHalfBottomWidth, bVert ? aT : ( bR2L ? aL : aR ) );
+            nBottom + nHalfBottomWidth,
+            bVert ? ((bBottomAsTop) ? aB : aT) : ( bR2L ? aL : aR ) );
     SwLineEntry aTop   ( nTop + nHalfTopWidth,
-            nLeft, nRight,  bVert ? aL : aT );
+            nLeft, nRight,  bVert ? aL : ((bBottomAsTop) ? aB : aT) );
     SwLineEntry aBottom( nBottom + nHalfBottomWidth,
             nLeft, nRight,  bVert ? aR : aB );
 
@@ -2734,22 +2758,6 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     Insert( aRight, false );
     Insert( aTop, true );
     Insert( aBottom, true );
-
-    const SwRowFrm* pThisRowFrm = dynamic_cast<const SwRowFrm*>(rFrm.GetUpper());
-
-    // special case: #i9860#
-    // first line in follow table without repeated headlines
-    if ( pThisRowFrm &&
-         pThisRowFrm->GetUpper() == &mrTabFrm &&
-         mrTabFrm.IsFollow() &&
-        !mrTabFrm.GetTable()->GetRowsToRepeat() &&
-        (!pThisRowFrm->GetPrev() || static_cast<const SwRowFrm*>(pThisRowFrm->GetPrev())->IsRowSpanLine()) &&
-        !rBoxItem.GetTop() &&
-         rBoxItem.GetBottom() )
-    {
-        SwLineEntry aFollowTop( !bVert ? nTop : nRight, !bVert ? nLeft : nTop, !bVert ? nRight : nBottom, aB );
-        Insert( aFollowTop, !bVert );
-    }
 }
 
 void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
