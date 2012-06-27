@@ -33,7 +33,6 @@ $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/dynload.hxx,dynloa
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/future.hxx,future.hxx))
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/futurequeue.hxx,futurequeue.hxx))
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/linkhelper.hxx,linkhelper.hxx))
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/monitor.hxx,monitor.hxx))
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/queue.hxx,queue.hxx))
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/refobj.hxx,refobj.hxx))
 $(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/simplereferenceobject.hxx,simplereferenceobject.hxx))

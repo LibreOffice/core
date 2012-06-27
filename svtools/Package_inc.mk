@@ -60,7 +60,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/editsyntaxhighlighter.
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/ehdl.hxx,svtools/ehdl.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/embedhlp.hxx,svtools/embedhlp.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/embedtransfer.hxx,svtools/embedtransfer.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/expander.hxx,svtools/expander.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/extcolorcfg.hxx,svtools/extcolorcfg.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/extensionlistbox.hxx,svtools/extensionlistbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filectrl.hxx,svtools/filectrl.hxx))
