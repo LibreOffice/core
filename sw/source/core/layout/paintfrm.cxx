@@ -2710,42 +2710,44 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
 
     bool const bBottomAsTop(lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
                 mrTabFrm, rFrm, rBoxItem));
-
-    // these are positions of the lines
-    const SwTwips nLeft   = aBorderRect._Left();
-    const SwTwips nRight  = aBorderRect._Right();
-    const SwTwips nTop    = aBorderRect._Top();
-    const SwTwips nBottom = aBorderRect._Bottom();
+    bool const bVert = mrTabFrm.IsVertical();
+    bool const bR2L  = mrTabFrm.IsRightToLeft();
 
     svx::frame::Style aL( rBoxItem.GetLeft() );
     svx::frame::Style aR( rBoxItem.GetRight() );
     svx::frame::Style aT( rBoxItem.GetTop() );
     svx::frame::Style aB( rBoxItem.GetBottom() );
 
+    aR.MirrorSelf();
+    aB.MirrorSelf();
+
     const SwTwips nHalfBottomWidth = aB.GetWidth() / 2;
     const SwTwips nHalfTopWidth = (bBottomAsTop)
             ? nHalfBottomWidth : aT.GetWidth() / 2;
 
-    aR.MirrorSelf();
-    aB.MirrorSelf();
-
-    bool bVert = mrTabFrm.IsVertical();
-    bool bR2L  = mrTabFrm.IsRightToLeft();
+    // these are positions of the lines
+    const SwTwips nLeft   =
+        aBorderRect._Left()  - ((bVert) ? nHalfBottomWidth : 0);
+    const SwTwips nRight  =
+        aBorderRect._Right() - ((bVert) ? nHalfTopWidth : 0);
+    const SwTwips nTop    =
+        aBorderRect._Top()   + ((bVert) ? 0 : nHalfTopWidth);
+    const SwTwips nBottom =
+        aBorderRect._Bottom()+ ((bVert) ? 0 : nHalfBottomWidth);
 
     aL.SetRefMode( svx::frame::REFMODE_CENTERED );
     aR.SetRefMode( svx::frame::REFMODE_CENTERED );
     aT.SetRefMode( !bVert ? svx::frame::REFMODE_BEGIN : svx::frame::REFMODE_END );
     aB.SetRefMode( !bVert ? svx::frame::REFMODE_BEGIN : svx::frame::REFMODE_END );
 
-    SwLineEntry aLeft  ( nLeft,   nTop + nHalfTopWidth,
-            nBottom + nHalfBottomWidth, bVert ? aB : ( bR2L ? aR : aL ) );
-    SwLineEntry aRight ( nRight,  nTop + nHalfTopWidth,
-            nBottom + nHalfBottomWidth,
-            bVert ? ((bBottomAsTop) ? aB : aT) : ( bR2L ? aL : aR ) );
-    SwLineEntry aTop   ( nTop + nHalfTopWidth,
-            nLeft, nRight,  bVert ? aL : ((bBottomAsTop) ? aB : aT) );
-    SwLineEntry aBottom( nBottom + nHalfBottomWidth,
-            nLeft, nRight,  bVert ? aR : aB );
+    SwLineEntry aLeft  (nLeft,   nTop,  nBottom,
+            (bVert) ? aB                         : ((bR2L) ? aR : aL));
+    SwLineEntry aRight (nRight,  nTop,  nBottom,
+            (bVert) ? ((bBottomAsTop) ? aB : aT) : ((bR2L) ? aL : aR));
+    SwLineEntry aTop   (nTop,    nLeft, nRight,
+            (bVert) ? aL                         : ((bBottomAsTop) ? aB : aT));
+    SwLineEntry aBottom(nBottom, nLeft, nRight,
+            (bVert) ? aR                         : aB);
 
     Insert( aLeft, false );
     Insert( aRight, false );
