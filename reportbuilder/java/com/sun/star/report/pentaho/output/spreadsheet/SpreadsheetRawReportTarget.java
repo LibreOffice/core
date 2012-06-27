@@ -91,15 +91,15 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
      * for creating this class was to be able to record the boundaries for each incoming table while consuming as few
      * objects/memory as possible.
      */
-    private static class ColumnBoundary implements Comparable
+    private static class ColumnBoundary implements Comparable<ColumnBoundary>
     {
 
-        private final Set tableIndices;
+        private final Set<Integer> tableIndices;
         private final long boundary;
 
         private ColumnBoundary(final long boundary)
         {
-            this.tableIndices = new HashSet();
+            this.tableIndices = new HashSet<Integer>();
             this.boundary = boundary;
         }
 
@@ -119,7 +119,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             return tableIndices.contains(index);
         }
 
-        public int compareTo(final Object arg0)
+        public int compareTo(final ColumnBoundary arg0)
         {
             if (arg0.equals(this))
             {
@@ -127,7 +127,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             }
             if (arg0 instanceof ColumnBoundary)
             {
-                if (boundary > ((ColumnBoundary) arg0).boundary)
+                if (boundary > arg0.boundary)
                 {
                     return 1;
                 }
@@ -154,7 +154,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     private static final ColumnBoundary[] EMPTY_COLBOUNDS = new ColumnBoundary[0];
     private boolean elementBoundaryCollectionPass;
     private boolean oleHandled;
-    private final List columnBoundaryList;
+    private final List<ColumnBoundary> columnBoundaryList;
     private long currentRowBoundaryMarker;
     private ColumnBoundary[] sortedBoundaryArray;
     private ColumnBoundary[] boundariesForTableArray;
@@ -163,9 +163,9 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     private int columnSpanCounter;
     private int currentSpan = 0;
     private String unitsOfMeasure;
-    final private List shapes;
-    final private List ole;
-    final private List rowHeights;
+    final private List<AttributeMap> shapes;
+    final private List<AttributeMap> ole;
+    final private List<CSSNumericValue> rowHeights;
 
     public SpreadsheetRawReportTarget(final ReportJob reportJob,
             final ResourceManager resourceManager,
@@ -178,11 +178,11 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             throws ReportProcessingException
     {
         super(reportJob, resourceManager, baseResource, inputRepository, outputRepository, target, imageService, dataSourceFactory);
-        columnBoundaryList = new ArrayList();
+        columnBoundaryList = new ArrayList<ColumnBoundary>();
         elementBoundaryCollectionPass = true;
-        rowHeights = new ArrayList();
-        shapes = new ArrayList();
-        ole = new ArrayList();
+        rowHeights = new ArrayList<CSSNumericValue>();
+        shapes = new ArrayList<AttributeMap>();
+        ole = new ArrayList<AttributeMap>();
         oleHandled = false;
     }
 
@@ -217,8 +217,8 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 final LengthCalculator len = new LengthCalculator();
                 for (int i = 0; i < rowHeights.size(); i++)
                 {
-                    len.add((CSSNumericValue) rowHeights.get(i));
-                    // val += ((CSSNumericValue)rowHeights.get(i)).getValue();
+                    len.add(rowHeights.get(i));
+                    // val += (rowHeights.get(i)).getValue();
                 }
 
                 rowHeights.clear();
@@ -513,7 +513,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             final float val = Float.parseFloat(widthStr) * CELL_WIDTH_FACTOR;
             addColumnWidthToRowBoundaryMarker((long) val);
             ColumnBoundary currentRowBoundary = new ColumnBoundary(getCurrentRowBoundaryMarker());
-            final List columnBoundaryList_ = getColumnBoundaryList();
+            final List<ColumnBoundary> columnBoundaryList_ = getColumnBoundaryList();
             final int idx = columnBoundaryList_.indexOf(currentRowBoundary);
             if (idx == -1)
             {
@@ -521,7 +521,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             }
             else
             {
-                currentRowBoundary = (ColumnBoundary) columnBoundaryList_.get(idx);
+                currentRowBoundary = columnBoundaryList_.get(idx);
             }
             currentRowBoundary.addTableIndex(tableCounter);
         }
@@ -569,11 +569,11 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 
                 for (int i = 0; i < shapes.size(); i++)
                 {
-                    final AttributeMap attrs = (AttributeMap) shapes.get(i);
+                    final AttributeMap attrs = shapes.get(i);
                     final AttributeList attrList = buildAttributeList(attrs);
                     attrList.removeAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME);
                     xmlWriter.writeTag(OfficeNamespaces.DRAWING_NS, OfficeToken.FRAME, attrList, XmlWriterSupport.OPEN);
-                    startChartProcessing((AttributeMap) ole.get(i));
+                    startChartProcessing(ole.get(i));
 
                     xmlWriter.writeCloseTag();
                 }
@@ -854,13 +854,13 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         if (sortedBoundaryArray == null)
         {
             getColumnBoundaryList().add(new ColumnBoundary(0));
-            sortedBoundaryArray = (ColumnBoundary[]) getColumnBoundaryList().toArray(new ColumnBoundary[getColumnBoundaryList().size()]);
+            sortedBoundaryArray = getColumnBoundaryList().toArray(new ColumnBoundary[getColumnBoundaryList().size()]);
             Arrays.sort(sortedBoundaryArray);
         }
         return sortedBoundaryArray;
     }
 
-    private List getColumnBoundaryList()
+    private List<ColumnBoundary> getColumnBoundaryList()
     {
         return columnBoundaryList;
     }
@@ -889,17 +889,17 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     {
         if (boundariesForTableArray == null)
         {
-            final List boundariesForTable = new ArrayList();
-            final List boundaryList = getColumnBoundaryList();
+            final List<ColumnBoundary> boundariesForTable = new ArrayList<ColumnBoundary>();
+            final List<ColumnBoundary> boundaryList = getColumnBoundaryList();
             for (int i = 0; i < boundaryList.size(); i++)
             {
-                final ColumnBoundary b = (ColumnBoundary) boundaryList.get(i);
+                final ColumnBoundary b = boundaryList.get(i);
                 if (b.isContainedByTable(table))
                 {
                     boundariesForTable.add(b);
                 }
             }
-            boundariesForTableArray = (ColumnBoundary[]) boundariesForTable.toArray(new ColumnBoundary[boundariesForTable.size()]);
+            boundariesForTableArray = boundariesForTable.toArray(new ColumnBoundary[boundariesForTable.size()]);
             Arrays.sort(boundariesForTableArray);
         }
         return boundariesForTableArray;

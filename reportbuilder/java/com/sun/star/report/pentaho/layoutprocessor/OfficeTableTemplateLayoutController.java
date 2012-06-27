@@ -75,7 +75,7 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
         super.initialize(section, flowController, parent);
 
         final OfficeReport report = (OfficeReport) node;
-        final ArrayList tables = new ArrayList();
+        final ArrayList<Node> tables = new ArrayList<Node>();
         if (report.getPageHeader() != null)
         {
             addFromSection(tables, (Section) report.getPageHeader());
@@ -96,10 +96,10 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
             addFromSection(tables, (Section) report.getPageFooter());
         }
 
-        this.nodes = (Node[]) tables.toArray(new Node[tables.size()]);
+        this.nodes = tables.toArray(new Node[tables.size()]);
     }
 
-    private void addPBody(final List tables, final Section section)
+    private void addPBody(final List<Node> tables, final Section section)
     {
         if (section != null)
         {
@@ -114,7 +114,7 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
         }
     }
 
-    private void addFromBody(final List tables, final Section section)
+    private void addFromBody(final List<Node> tables, final Section section)
     {
         final Node[] nodeArray = section.getNodeArray();
         for (int i = 0; i < nodeArray.length; i++)
@@ -135,7 +135,7 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
         }
     }
 
-    private void addFromGroup(final List tables, final Section section)
+    private void addFromGroup(final List<Node> tables, final Section section)
     {
         final Node[] nodeArray = section.getNodeArray();
         for (int i = 0; i < nodeArray.length; i++)
@@ -156,7 +156,7 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
         }
     }
 
-    private void addFromSection(final List tables, final Section section)
+    private void addFromSection(final List<Node> tables, final Section section)
     {
         final Node[] nodeArray = section.getNodeArray();
         for (int i = 0; i < nodeArray.length; i++)

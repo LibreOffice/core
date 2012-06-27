@@ -43,13 +43,13 @@ public class PentahoReportEngineMetaData
     public static final String OPENDOCUMENT_CHART = "application/vnd.oasis.opendocument.chart";
     public final static String CONTENT_TYPE = "content-type";
     public static final String DEBUG = "raw/text+xml";
-    private final Set mandatoryParameters;
-    private final Map parameterTypes;
+    private final Set<String> mandatoryParameters;
+    private final Map<String,Class<?>> parameterTypes;
     private final HashNMap enumerationValues;
 
     public PentahoReportEngineMetaData()
     {
-        mandatoryParameters = new HashSet();
+        mandatoryParameters = new HashSet<String>();
         mandatoryParameters.add(ReportEngineParameterNames.CONTENT_TYPE);
         mandatoryParameters.add(ReportEngineParameterNames.INPUT_NAME);
         mandatoryParameters.add(ReportEngineParameterNames.INPUT_REPOSITORY);
@@ -66,7 +66,7 @@ public class PentahoReportEngineMetaData
         mandatoryParameters.add(ReportEngineParameterNames.MAXROWS);
 
 
-        parameterTypes = new HashMap();
+        parameterTypes = new HashMap<String,Class<?>>();
         parameterTypes.put(ReportEngineParameterNames.CONTENT_TYPE, String.class);
         parameterTypes.put(ReportEngineParameterNames.INPUT_NAME, String.class);
         parameterTypes.put(ReportEngineParameterNames.OUTPUT_NAME, String.class);
@@ -99,7 +99,7 @@ public class PentahoReportEngineMetaData
 
     public Class getParameterType(final String parameter)
     {
-        return (Class) parameterTypes.get(parameter);
+        return parameterTypes.get(parameter);
     }
 
     public boolean isEnumeration(final String parameter)

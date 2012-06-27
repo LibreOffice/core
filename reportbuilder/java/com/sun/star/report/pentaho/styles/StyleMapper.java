@@ -42,11 +42,11 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 public class StyleMapper
 {
 
-    private final Map backend;
+    private final Map<StyleMapperKey,StyleMappingRule> backend;
 
     public StyleMapper()
     {
-        this.backend = new HashMap();
+        this.backend = new HashMap<StyleMapperKey,StyleMappingRule>();
     }
 
     public void addMapping(final StyleMappingRule rule)
@@ -60,7 +60,7 @@ public class StyleMapper
             final String attributeName)
     {
         final StyleMapperKey key = new StyleMapperKey(elementNamespace, elementTagName, attributeNamespace, attributeName);
-        final StyleMappingRule rule = (StyleMappingRule) backend.get(key);
+        final StyleMappingRule rule = backend.get(key);
         return rule != null && rule.isListOfValues();
     }
 
@@ -70,7 +70,7 @@ public class StyleMapper
             final String attributeName)
     {
         final StyleMapperKey key = new StyleMapperKey(elementNamespace, elementTagName, attributeNamespace, attributeName);
-        final StyleMappingRule rule = (StyleMappingRule) backend.get(key);
+        final StyleMappingRule rule = backend.get(key);
         if (rule == null)
         {
             return null;

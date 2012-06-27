@@ -182,7 +182,7 @@ public class StylesWriter
     {
         xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS, "font-face-decls", XmlWriterSupport.OPEN);
 
-        final TreeMap fontFaces = new TreeMap();
+        final TreeMap<String,FontFaceElement> fontFaces = new TreeMap<String,FontFaceElement>();
         for (int sci = 0; sci < osc.length; sci++)
         {
             final OfficeStylesCollection collection = osc[sci];
@@ -195,10 +195,10 @@ public class StylesWriter
             }
         }
 
-        final Iterator values = fontFaces.values().iterator();
+        final Iterator<FontFaceElement> values = fontFaces.values().iterator();
         while (values.hasNext())
         {
-            final FontFaceElement element = (FontFaceElement) values.next();
+            final FontFaceElement element = values.next();
             writeElement(element);
         }
 

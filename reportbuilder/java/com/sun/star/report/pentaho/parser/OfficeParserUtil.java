@@ -107,9 +107,9 @@ public class OfficeParserUtil
         return props.getProperty("style-family." + styleFamily);
     }
 
-    public Map getNamespaces()
+    public Map<String,String> getNamespaces()
     {
-        final Map map = new HashMap();
+        final Map<String,String> map = new HashMap<String,String>();
         final Iterator keys = props.findPropertyKeys(NAMESPACES_PREFIX);
         while (keys.hasNext())
         {

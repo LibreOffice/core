@@ -46,7 +46,7 @@ public class GroupReadHandler extends ElementReadHandler
     private RootTableReadHandler detailSection;
     private final OfficeGroup group;
     private final OfficeGroupInstanceSection groupInstanceSection;
-    private final List functionHandlers;
+    private final List<FunctionReadHandler> functionHandlers;
     private final ReportReadHandler rh;
 
     public GroupReadHandler(final ReportReadHandler _rh)
@@ -57,7 +57,7 @@ public class GroupReadHandler extends ElementReadHandler
         groupInstanceSection.setNamespace(JFreeReportInfo.REPORT_NAMESPACE);
         groupInstanceSection.setType("group-instance");
         group.addNode(groupInstanceSection);
-        functionHandlers = new ArrayList();
+        functionHandlers = new ArrayList<FunctionReadHandler>();
     }
 
     /**
@@ -136,8 +136,7 @@ public class GroupReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < functionHandlers.size(); i++)
         {
-            final FunctionReadHandler handler =
-                    (FunctionReadHandler) functionHandlers.get(i);
+            final FunctionReadHandler handler = functionHandlers.get(i);
             groupInstanceSection.addExpression(handler.getExpression());
         }
 

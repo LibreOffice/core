@@ -28,29 +28,29 @@ public class ObjectOleElement extends ReportElement
 {
 
     private String url;
-    private final List masterfields;
-    private final List detailfields;
+    private final List<String> masterfields;
+    private final List<String> detailfields;
     private String classid;
+
+    public ObjectOleElement()
+    {
+        masterfields = new ArrayList<String>();
+        detailfields = new ArrayList<String>();
+    }
 
     public String getClassid()
     {
         return classid;
     }
 
-    public List getDetailfields()
+    public List<String> getDetailfields()
     {
         return detailfields;
     }
 
-    public List getMasterfields()
+    public List<String> getMasterfields()
     {
         return masterfields;
-    }
-
-    public ObjectOleElement()
-    {
-        masterfields = new ArrayList();
-        detailfields = new ArrayList();
     }
 
     public String getUrl()

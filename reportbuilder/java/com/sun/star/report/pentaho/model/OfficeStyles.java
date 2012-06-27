@@ -96,22 +96,22 @@ public class OfficeStyles extends Element
             return result;
         }
     }
-    private final Map pageStyles;
-    private final Map dataStyles;
-    private final Map styles;
-    private final List otherChildren;
+    private final Map<String,PageLayout> pageStyles;
+    private final Map<String,DataStyle> dataStyles;
+    private final Map<StyleKey,OfficeStyle> styles;
+    private final List<Element> otherChildren;
 
     public OfficeStyles()
     {
-        this.styles = new HashMap();
-        this.dataStyles = new HashMap();
-        this.pageStyles = new HashMap();
-        this.otherChildren = new ArrayList();
+        this.styles = new HashMap<StyleKey,OfficeStyle>();
+        this.dataStyles = new HashMap<String,DataStyle>();
+        this.pageStyles = new HashMap<String,PageLayout>();
+        this.otherChildren = new ArrayList<Element>();
     }
 
     public OfficeStyle getStyle(final String family, final String name)
     {
-        return (OfficeStyle) styles.get(new StyleKey(family, name));
+        return styles.get(new StyleKey(family, name));
     }
 
     public void addStyle(final OfficeStyle style)
@@ -139,7 +139,7 @@ public class OfficeStyles extends Element
 
     public PageLayout getPageStyle(final String name)
     {
-        return (PageLayout) pageStyles.get(name);
+        return pageStyles.get(name);
     }
 
     public void addDataStyle(final DataStyle style)
@@ -149,7 +149,7 @@ public class OfficeStyles extends Element
 
     public DataStyle getDataStyle(final String name)
     {
-        return (DataStyle) dataStyles.get(name);
+        return dataStyles.get(name);
     }
 
     public void addOtherNode(final Element node)
@@ -159,22 +159,22 @@ public class OfficeStyles extends Element
 
     public DataStyle[] getAllDataStyles()
     {
-        return (DataStyle[]) dataStyles.values().toArray(new DataStyle[dataStyles.size()]);
+        return dataStyles.values().toArray(new DataStyle[dataStyles.size()]);
     }
 
     public PageLayout[] getAllPageStyles()
     {
-        return (PageLayout[]) pageStyles.values().toArray(new PageLayout[pageStyles.size()]);
+        return pageStyles.values().toArray(new PageLayout[pageStyles.size()]);
     }
 
     public OfficeStyle[] getAllStyles()
     {
-        return (OfficeStyle[]) styles.values().toArray(new OfficeStyle[styles.size()]);
+        return styles.values().toArray(new OfficeStyle[styles.size()]);
     }
 
     public Element[] getOtherStyles()
     {
-        return (Element[]) otherChildren.toArray(new Element[otherChildren.size()]);
+        return otherChildren.toArray(new Element[otherChildren.size()]);
     }
 
     public boolean containsStyle(final String family, final String name)

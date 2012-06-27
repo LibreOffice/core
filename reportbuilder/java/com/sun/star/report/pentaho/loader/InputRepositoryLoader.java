@@ -98,6 +98,7 @@ public class InputRepositoryLoader implements ResourceLoader
      * @throws org.jfree.resourceloader.ResourceKeyCreationException
      *          if the key cannot be derived for any reason.
      */
+    @SuppressWarnings("unchecked")
     public ResourceKey deriveKey(final ResourceKey parent,
             final String path,
             final Map factoryKeys)

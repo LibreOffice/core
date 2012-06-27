@@ -37,14 +37,14 @@ public class DataStyleReadHandler extends ElementReadHandler
 {
 
     private final DataStyle dataStyle;
-    private final List children;
+    private final List<Object> children;
     private final boolean hasCData;
 
     public DataStyleReadHandler(final boolean hasCData)
     {
         this.hasCData = hasCData;
         this.dataStyle = new DataStyle();
-        this.children = new ArrayList();
+        this.children = new ArrayList<Object>();
     }
 
     /**

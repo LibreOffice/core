@@ -43,30 +43,20 @@ public class ReportReadHandler extends ElementReadHandler
     private RootTableReadHandler reportHeader;
     private RootTableReadHandler reportFooter;
     private RootTableReadHandler detail;
-
-    public void setDetail(final RootTableReadHandler detail)
-    {
-        this.detail = detail;
-    }
-
-    public final RootTableReadHandler getDetail()
-    {
-        return detail;
-    }
     private GroupReadHandler groups;
     private final OfficeReport rootSection;
-    private final List functionHandlers;
-    private final List preBodyHandlers;
-    private final List postBodyHandlers;
+    private final List<FunctionReadHandler> functionHandlers;
+    private final List<ElementReadHandler> preBodyHandlers;
+    private final List<ElementReadHandler> postBodyHandlers;
     private boolean pre = true;
 
     public ReportReadHandler()
     {
         rootSection = new OfficeReport();
         rootSection.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "simple-report-structure", Boolean.TRUE);
-        functionHandlers = new ArrayList();
-        preBodyHandlers = new ArrayList();
-        postBodyHandlers = new ArrayList();
+        functionHandlers = new ArrayList<FunctionReadHandler>();
+        preBodyHandlers = new ArrayList<ElementReadHandler>();
+        postBodyHandlers = new ArrayList<ElementReadHandler>();
     }
 
     /**
@@ -85,22 +75,24 @@ public class ReportReadHandler extends ElementReadHandler
         final XmlReadHandler erh;
         if (OfficeNamespaces.CHART_NS.equals(uri))
         {
-            erh = new ChartReadHandler(this);
+            ChartReadHandler crh = new ChartReadHandler(this);
             if (pre)
             {
-                preBodyHandlers.add(erh);
+                preBodyHandlers.add(crh);
             }
             else
             {
-                postBodyHandlers.add(erh);
+                postBodyHandlers.add(crh);
             }
+            erh = crh;
         }
         else if (OfficeNamespaces.OOREPORT_NS.equals(uri))
         {
             if ("function".equals(tagName))
             {
-                erh = new FunctionReadHandler();
-                functionHandlers.add(erh);
+                FunctionReadHandler frh = new FunctionReadHandler();
+                functionHandlers.add(frh);
+                erh = frh;
             }
             else if ("page-header".equals(tagName))
             {
@@ -199,8 +191,7 @@ public class ReportReadHandler extends ElementReadHandler
 
         for (int i = 0; i < functionHandlers.size(); i++)
         {
-            final FunctionReadHandler handler =
-                    (FunctionReadHandler) functionHandlers.get(i);
+            final FunctionReadHandler handler = functionHandlers.get(i);
             rootSection.addExpression(handler.getExpression());
         }
     }
@@ -210,7 +201,7 @@ public class ReportReadHandler extends ElementReadHandler
         return rootSection;
     }
 
-    private final Section createSection(final String name, final List handler)
+    private final Section createSection(final String name, final List<ElementReadHandler> handler)
     {
         if (!handler.isEmpty())
         {
@@ -220,11 +211,22 @@ public class ReportReadHandler extends ElementReadHandler
 
             for (int i = 0; i < handler.size(); i++)
             {
-                final ElementReadHandler erh = (ElementReadHandler) handler.get(i);
+                final ElementReadHandler erh = handler.get(i);
                 section.addNode(erh.getElement());
             }
             return section;
         }
         return null;
     }
+
+    public void setDetail(final RootTableReadHandler detail)
+    {
+        this.detail = detail;
+    }
+
+    public final RootTableReadHandler getDetail()
+    {
+        return detail;
+    }
+
 }

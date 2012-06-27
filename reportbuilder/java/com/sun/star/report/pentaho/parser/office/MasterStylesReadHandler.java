@@ -44,14 +44,14 @@ public class MasterStylesReadHandler extends ElementReadHandler
 {
 
     private final OfficeMasterStyles masterStyles;
-    private final List otherHandlers;
-    private final List masterPageHandlers;
+    private final List<ElementReadHandler> otherHandlers;
+    private final List<MasterPageReadHandler> masterPageHandlers;
 
     public MasterStylesReadHandler(final OfficeMasterStyles masterStyles)
     {
         this.masterStyles = masterStyles;
-        this.masterPageHandlers = new ArrayList();
-        this.otherHandlers = new ArrayList();
+        this.masterPageHandlers = new ArrayList<MasterPageReadHandler>();
+        this.otherHandlers = new ArrayList<ElementReadHandler>();
     }
 
     public OfficeMasterStyles getMasterStyles()
@@ -96,15 +96,13 @@ public class MasterStylesReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < otherHandlers.size(); i++)
         {
-            final ElementReadHandler handler =
-                    (ElementReadHandler) otherHandlers.get(i);
+            final ElementReadHandler handler = otherHandlers.get(i);
             masterStyles.getOtherNodes().addNode(handler.getElement());
         }
 
         for (int i = 0; i < masterPageHandlers.size(); i++)
         {
-            final MasterPageReadHandler handler =
-                    (MasterPageReadHandler) masterPageHandlers.get(i);
+            final MasterPageReadHandler handler = masterPageHandlers.get(i);
             masterStyles.addMasterPage(handler.getMasterPage());
         }
     }

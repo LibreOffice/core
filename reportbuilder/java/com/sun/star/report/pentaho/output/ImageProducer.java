@@ -152,7 +152,7 @@ public class ImageProducer
             return hashValue;
         }
     }
-    private final Map imageCache;
+    private final Map<Object,OfficeImage> imageCache;
     private final InputRepository inputRepository;
     private final OutputRepository outputRepository;
     private final ImageService imageService;
@@ -177,7 +177,7 @@ public class ImageProducer
         this.inputRepository = inputRepository;
         this.outputRepository = outputRepository;
         this.imageService = imageService;
-        this.imageCache = new HashMap();
+        this.imageCache = new HashMap<Object,OfficeImage>();
     }
 
     /**
@@ -262,7 +262,7 @@ public class ImageProducer
     private OfficeImage produceFromByteArray(final byte[] data)
     {
         final ByteDataImageKey imageKey = new ByteDataImageKey(data);
-        final OfficeImage o = (OfficeImage) imageCache.get(imageKey);
+        final OfficeImage o = imageCache.get(imageKey);
         if (o != null)
         {
             return o;
@@ -321,7 +321,7 @@ public class ImageProducer
             // ignore .. but we had to try this ..
         }
 
-        final OfficeImage o = (OfficeImage) imageCache.get(source);
+        final OfficeImage o = imageCache.get(source);
         if (o != null)
         {
             return o;
@@ -399,7 +399,7 @@ public class ImageProducer
         {
             Logger.getLogger(ImageProducer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        final OfficeImage o = (OfficeImage) imageCache.get(uri);
+        final OfficeImage o = imageCache.get(uri);
         if (o != null)
         {
             return o;

@@ -40,12 +40,12 @@ import org.xml.sax.SAXException;
 public class TableRowsReadHandler extends ElementReadHandler
 {
 
-    private final List rows;
+    private final List<TableRowReadHandler> rows;
     private final Section tableRows;
 
     public TableRowsReadHandler()
     {
-        rows = new ArrayList();
+        rows = new ArrayList<TableRowReadHandler>();
         tableRows = new Section();
     }
 
@@ -81,7 +81,7 @@ public class TableRowsReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < rows.size(); i++)
         {
-            final TableRowReadHandler handler = (TableRowReadHandler) rows.get(i);
+            final TableRowReadHandler handler = rows.get(i);
             tableRows.addNode(handler.getElement());
         }
     }

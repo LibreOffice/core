@@ -41,12 +41,12 @@ public class PageLayoutReadHandler extends ElementReadHandler
 {
 
     private final PageLayout pageLayout;
-    private final List children;
+    private final List<ElementReadHandler> children;
 
     public PageLayoutReadHandler()
     {
         this.pageLayout = new PageLayout();
-        this.children = new ArrayList();
+        this.children = new ArrayList<ElementReadHandler>();
     }
 
     /**
@@ -78,7 +78,7 @@ public class PageLayoutReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < children.size(); i++)
         {
-            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
+            final ElementReadHandler handler = children.get(i);
             pageLayout.addNode(handler.getElement());
         }
     }

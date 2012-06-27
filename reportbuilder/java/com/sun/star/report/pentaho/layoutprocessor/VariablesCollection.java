@@ -40,7 +40,7 @@ public class VariablesCollection
 
     private VariablesCollection parent;
     private String namePrefix;
-    private List variables;
+    private List<FormattedTextElement> variables;
 
     public VariablesCollection(final String namePrefix)
     {
@@ -56,7 +56,7 @@ public class VariablesCollection
 
         this.namePrefix = namePrefix;
         this.parent = parent;
-        this.variables = new ArrayList();
+        this.variables = new ArrayList<FormattedTextElement>();
     }
 
     public VariablesCollection getParent()
@@ -78,7 +78,7 @@ public class VariablesCollection
 
     public FormattedTextElement[] getVariables()
     {
-        return (FormattedTextElement[]) variables.toArray(new FormattedTextElement[variables.size()]);
+        return variables.toArray(new FormattedTextElement[variables.size()]);
     }
 
     public int getVariablesCount()

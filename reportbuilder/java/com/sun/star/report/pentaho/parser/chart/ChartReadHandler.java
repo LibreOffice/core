@@ -45,13 +45,13 @@ public class ChartReadHandler extends ElementReadHandler
 {
 
     private final Section element;
-    private final List children;
+    private final List<ElementReadHandler> children;
     private final ReportReadHandler reportHandler;
 
     public ChartReadHandler(ReportReadHandler reportHandler)
     {
         this.reportHandler = reportHandler;
-        children = new ArrayList();
+        children = new ArrayList<ElementReadHandler>();
         element = new Section();
     }
 
@@ -92,9 +92,8 @@ public class ChartReadHandler extends ElementReadHandler
      */
     protected void doneParsing() throws SAXException
     {
-        for (Object aChildren : children)
+        for (ElementReadHandler handler : children)
         {
-            final ElementReadHandler handler = (ElementReadHandler) aChildren;
             element.addNode(handler.getElement());
         }
     }

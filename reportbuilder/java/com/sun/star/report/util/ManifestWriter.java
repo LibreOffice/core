@@ -46,11 +46,11 @@ public class ManifestWriter
 
     public static final String MANIFEST_NS = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
     public static final String TAG_DEF_PREFIX = "com.sun.star.report.pentaho.output.";
-    private final Map entries;
+    private final Map<String,String> entries;
 
     public ManifestWriter()
     {
-        entries = new HashMap();
+        entries = new HashMap<String,String>();
     }
 
     public void addEntry(final String fullPath, final String mimeType)
@@ -98,13 +98,13 @@ public class ManifestWriter
         rootAttributes.addNamespaceDeclaration("manifest", MANIFEST_NS);
         xmlWriter.writeTag(MANIFEST_NS, "manifest", rootAttributes, XmlWriterSupport.OPEN);
 
-        final Iterator iterator = entries.entrySet().iterator();
+        final Iterator<Map.Entry<String,String>> iterator = entries.entrySet().iterator();
         while (iterator.hasNext())
         {
-            final Map.Entry entry = (Map.Entry) iterator.next();
+            final Map.Entry<String,String> entry = iterator.next();
             final AttributeList entryAttrs = new AttributeList();
-            entryAttrs.setAttribute(MANIFEST_NS, "media-type", (String) entry.getValue());
-            entryAttrs.setAttribute(MANIFEST_NS, "full-path", (String) entry.getKey());
+            entryAttrs.setAttribute(MANIFEST_NS, "media-type", entry.getValue());
+            entryAttrs.setAttribute(MANIFEST_NS, "full-path", entry.getKey());
             xmlWriter.writeTag(MANIFEST_NS, "file-entry", entryAttrs, XmlWriterSupport.CLOSE);
         }
 

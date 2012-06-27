@@ -29,7 +29,7 @@ public class DefaultJobProperties implements JobProperties
 {
 
     private final ReportEngineMetaData metaData;
-    private final Map properties;
+    private final Map<String,Object> properties;
 
     public DefaultJobProperties(final ReportEngineMetaData metaData)
     {
@@ -37,7 +37,7 @@ public class DefaultJobProperties implements JobProperties
         {
             throw new NullPointerException();
         }
-        this.properties = new HashMap();
+        this.properties = new HashMap<String,Object>();
         this.metaData = metaData;
     }
 

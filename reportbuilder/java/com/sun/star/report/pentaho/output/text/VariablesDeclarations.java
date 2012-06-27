@@ -36,25 +36,25 @@ public class VariablesDeclarations
 {
 
     private final AttributeNameGenerator nameGenerator;
-    private final Map variables;
+    private final Map<String, HashMap<String,String> > variables;
 
     public VariablesDeclarations()
     {
-        variables = new HashMap();
+        variables = new HashMap<String, HashMap<String,String> >();
         nameGenerator = new AttributeNameGenerator();
     }
 
     public String produceVariable(final String name,
             final String type)
     {
-        HashMap holder = (HashMap) variables.get(name);
+        HashMap<String,String> holder = variables.get(name);
         if (holder == null)
         {
-            holder = new HashMap();
+            holder = new HashMap<String,String>();
             variables.put(name, holder);
         }
 
-        final String mapping = (String) holder.get(type);
+        final String mapping = holder.get(type);
         if (mapping != null)
         {
             return mapping;
@@ -75,21 +75,21 @@ public class VariablesDeclarations
         return result;
     }
 
-    public Map getDefinedMappings()
+    public Map<String,String> getDefinedMappings()
     {
-        final HashMap mappings = new HashMap();
-        final Iterator vars = variables.values().iterator();
+        final HashMap<String,String> mappings = new HashMap<String,String>();
+        final Iterator<HashMap<String,String>> vars = variables.values().iterator();
         while (vars.hasNext())
         {
-            final HashMap types = (HashMap) vars.next();
-            final Iterator varsByType = types.entrySet().iterator();
+            final HashMap<String,String> types = vars.next();
+            final Iterator<Map.Entry<String,String>> varsByType = types.entrySet().iterator();
             while (varsByType.hasNext())
             {
-                final Map.Entry entry = (Map.Entry) varsByType.next();
-                final String type = (String) entry.getKey();
+                final Map.Entry<String,String> entry = varsByType.next();
+                final String type = entry.getKey();
                 if (type != null)
                 {
-                    final String varName = (String) entry.getValue();
+                    final String varName = entry.getValue();
                     mappings.put(varName, type);
                 }
             }

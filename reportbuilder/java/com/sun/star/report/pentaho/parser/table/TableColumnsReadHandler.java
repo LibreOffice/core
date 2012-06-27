@@ -41,12 +41,12 @@ import org.xml.sax.SAXException;
 public class TableColumnsReadHandler extends ElementReadHandler
 {
 
-    private final List columns;
+    private final List<TableColumnReadHandler> columns;
     private final Section tableColumns;
 
     public TableColumnsReadHandler()
     {
-        columns = new ArrayList();
+        columns = new ArrayList<TableColumnReadHandler>();
         tableColumns = new Section();
     }
 
@@ -82,7 +82,7 @@ public class TableColumnsReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < columns.size(); i++)
         {
-            final TableColumnReadHandler handler = (TableColumnReadHandler) columns.get(i);
+            final TableColumnReadHandler handler = columns.get(i);
             tableColumns.addNode(handler.getElement());
         }
     }

@@ -36,19 +36,19 @@ import org.xml.sax.SAXException;
 public class OfficeStylesReadHandler extends ElementReadHandler
 {
 
-    private final List textStyleChildren;
-    private final List dataStyleChildren;
-    private final List otherStyleChildren;
-    private final List pageLayoutChildren;
+    private final List<OfficeStyleReadHandler> textStyleChildren;
+    private final List<DataStyleReadHandler> dataStyleChildren;
+    private final List<SectionReadHandler> otherStyleChildren;
+    private final List<PageLayoutReadHandler> pageLayoutChildren;
     private final OfficeStyles officeStyles;
 
     public OfficeStylesReadHandler(final OfficeStyles officeStyles)
     {
         this.officeStyles = officeStyles;
-        this.pageLayoutChildren = new ArrayList();
-        this.dataStyleChildren = new ArrayList();
-        this.textStyleChildren = new ArrayList();
-        this.otherStyleChildren = new ArrayList();
+        this.pageLayoutChildren = new ArrayList<PageLayoutReadHandler>();
+        this.dataStyleChildren = new ArrayList<DataStyleReadHandler>();
+        this.textStyleChildren = new ArrayList<OfficeStyleReadHandler>();
+        this.otherStyleChildren = new ArrayList<SectionReadHandler>();
     }
 
     /**
@@ -100,29 +100,25 @@ public class OfficeStylesReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < textStyleChildren.size(); i++)
         {
-            final OfficeStyleReadHandler handler =
-                    (OfficeStyleReadHandler) textStyleChildren.get(i);
+            final OfficeStyleReadHandler handler = textStyleChildren.get(i);
             officeStyles.addStyle(handler.getOfficeStyle());
         }
 
         for (int i = 0; i < pageLayoutChildren.size(); i++)
         {
-            final PageLayoutReadHandler handler =
-                    (PageLayoutReadHandler) pageLayoutChildren.get(i);
+            final PageLayoutReadHandler handler = pageLayoutChildren.get(i);
             officeStyles.addPageStyle(handler.getPageLayout());
         }
 
         for (int i = 0; i < dataStyleChildren.size(); i++)
         {
-            final DataStyleReadHandler handler =
-                    (DataStyleReadHandler) dataStyleChildren.get(i);
+            final DataStyleReadHandler handler = dataStyleChildren.get(i);
             officeStyles.addDataStyle(handler.getDataStyle());
         }
 
         for (int i = 0; i < otherStyleChildren.size(); i++)
         {
-            final SectionReadHandler handler =
-                    (SectionReadHandler) otherStyleChildren.get(i);
+            final SectionReadHandler handler = otherStyleChildren.get(i);
             officeStyles.addOtherNode((Element) handler.getNode());
         }
     }

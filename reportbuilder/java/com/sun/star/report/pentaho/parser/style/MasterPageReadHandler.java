@@ -41,12 +41,12 @@ public class MasterPageReadHandler extends ElementReadHandler
 {
 
     private final OfficeMasterPage masterPage;
-    private final List otherHandlers;
+    private final List<ElementReadHandler> otherHandlers;
 
     public MasterPageReadHandler()
     {
         masterPage = new OfficeMasterPage();
-        this.otherHandlers = new ArrayList();
+        this.otherHandlers = new ArrayList<ElementReadHandler>();
     }
 
     public OfficeMasterPage getMasterPage()
@@ -84,8 +84,7 @@ public class MasterPageReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < otherHandlers.size(); i++)
         {
-            final ElementReadHandler handler =
-                    (ElementReadHandler) otherHandlers.get(i);
+            final ElementReadHandler handler = otherHandlers.get(i);
             masterPage.addNode(handler.getElement());
         }
     }

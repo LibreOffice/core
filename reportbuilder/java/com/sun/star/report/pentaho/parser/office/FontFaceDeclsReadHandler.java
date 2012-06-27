@@ -45,12 +45,12 @@ public class FontFaceDeclsReadHandler extends ElementReadHandler
 {
 
     private final FontFaceDeclsSection fontFaceDecls;
-    private final List fontFaceReadHandlers;
+    private final List<FontFaceReadHandler> fontFaceReadHandlers;
 
     public FontFaceDeclsReadHandler(final FontFaceDeclsSection fontFaceDecls)
     {
         this.fontFaceDecls = fontFaceDecls;
-        this.fontFaceReadHandlers = new ArrayList();
+        this.fontFaceReadHandlers = new ArrayList<FontFaceReadHandler>();
     }
 
     public FontFaceDeclsSection getFontFaceDecls()
@@ -96,7 +96,7 @@ public class FontFaceDeclsReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < fontFaceReadHandlers.size(); i++)
         {
-            final FontFaceReadHandler handler = (FontFaceReadHandler) fontFaceReadHandlers.get(i);
+            final FontFaceReadHandler handler = fontFaceReadHandlers.get(i);
             fontFaceDecls.addFontFace((FontFaceElement) handler.getElement());
         }
     }

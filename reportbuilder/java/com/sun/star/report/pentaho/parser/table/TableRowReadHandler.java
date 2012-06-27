@@ -41,12 +41,12 @@ import org.xml.sax.SAXException;
 public class TableRowReadHandler extends ElementReadHandler
 {
 
-    private final List tableCells;
+    private final List<ElementReadHandler> tableCells;
     private final Section tableRow;
 
     public TableRowReadHandler()
     {
-        tableCells = new ArrayList();
+        tableCells = new ArrayList<ElementReadHandler>();
         tableRow = new Section();
     }
 
@@ -63,7 +63,7 @@ public class TableRowReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        final XmlReadHandler rh;
+        final ElementReadHandler rh;
         if (OfficeNamespaces.TABLE_NS.equals(uri))
         {
             if (OfficeToken.TABLE_CELL.equals(tagName))
@@ -99,7 +99,7 @@ public class TableRowReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < tableCells.size(); i++)
         {
-            final ElementReadHandler handler = (ElementReadHandler) tableCells.get(i);
+            final ElementReadHandler handler = tableCells.get(i);
             tableRow.addNode(handler.getElement());
         }
     }

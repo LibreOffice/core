@@ -186,16 +186,16 @@ public class MasterPageFactory
     private static final String DEFAULT_PAGE_NAME = "Default";
     private final OfficeMasterStyles predefinedStyles;
     private final AttributeNameGenerator masterPageNameGenerator;
-    private final Map masterPages;
+    private final Map<MasterPageFactoryKey,OfficeMasterPage> masterPages;
     private final AttributeNameGenerator pageLayoutNameGenerator;
-    private final Map pageLayouts;
+    private final Map<PageLayoutKey,String> pageLayouts;
 
     public MasterPageFactory(final OfficeMasterStyles predefinedStyles)
     {
         this.predefinedStyles = predefinedStyles;
-        this.masterPages = new HashMap();
+        this.masterPages = new HashMap<MasterPageFactoryKey,OfficeMasterPage>();
         this.masterPageNameGenerator = new AttributeNameGenerator();
-        this.pageLayouts = new HashMap();
+        this.pageLayouts = new HashMap<PageLayoutKey,String>();
         this.pageLayoutNameGenerator = new AttributeNameGenerator();
     }
 
@@ -205,7 +205,7 @@ public class MasterPageFactory
     {
         final MasterPageFactoryKey key =
                 new MasterPageFactoryKey(template, pageHeader, pageFooter);
-        return (OfficeMasterPage) masterPages.get(key);
+        return masterPages.get(key);
     }
 
     public boolean containsMasterPage(final String template,
@@ -223,7 +223,7 @@ public class MasterPageFactory
     {
         final MasterPageFactoryKey key =
                 new MasterPageFactoryKey(template, pageHeader, pageFooter);
-        final OfficeMasterPage cached = (OfficeMasterPage) masterPages.get(key);
+        final OfficeMasterPage cached = masterPages.get(key);
         if (cached != null)
         {
             return cached;
@@ -336,7 +336,7 @@ public class MasterPageFactory
 
         final PageLayoutKey key =
                 new PageLayoutKey(pageStyleTemplate, headerHeight, footerHeight);
-        final String pageLayoutName = (String) pageLayouts.get(key);
+        final String pageLayoutName = pageLayouts.get(key);
         if (pageLayoutName != null)
         {
             // there's already a suitable version included.

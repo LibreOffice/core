@@ -31,12 +31,12 @@ public abstract class OneOfConstantsMapper implements StyleMapper
 {
 
     private final StyleKey styleKey;
-    private final Map mappings;
+    private final Map<String, CSSValue> mappings;
 
     protected OneOfConstantsMapper(final StyleKey styleKey)
     {
         this.styleKey = styleKey;
-        this.mappings = new HashMap();
+        this.mappings = new HashMap<String, CSSValue>();
     }
 
     public void addMapping(final String value, final CSSValue target)
@@ -63,6 +63,6 @@ public abstract class OneOfConstantsMapper implements StyleMapper
 
     protected CSSValue lookupMapping(final String attrValue)
     {
-        return (CSSValue) mappings.get(attrValue);
+        return mappings.get(attrValue);
     }
 }

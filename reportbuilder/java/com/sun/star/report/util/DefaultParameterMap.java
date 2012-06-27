@@ -26,11 +26,11 @@ import java.util.Map;
 public class DefaultParameterMap implements ParameterMap
 {
 
-    private final Map backend;
+    private final Map<String,Object> backend;
 
     public DefaultParameterMap()
     {
-        backend = new HashMap();
+        backend = new HashMap<String,Object>();
     }
 
     public void clear()
@@ -80,7 +80,7 @@ public class DefaultParameterMap implements ParameterMap
 
     public String[] keys()
     {
-        return (String[]) this.backend.keySet().toArray(new String[backend.size()]);
+        return this.backend.keySet().toArray(new String[backend.size()]);
     }
 
     /**

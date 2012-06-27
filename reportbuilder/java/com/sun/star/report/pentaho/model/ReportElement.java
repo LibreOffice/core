@@ -36,11 +36,11 @@ import org.jfree.report.structure.Element;
 public abstract class ReportElement extends Element
 {
 
-    private final List formatConditions;
+    private final List<FormatCondition> formatConditions;
 
     protected ReportElement()
     {
-        formatConditions = new ArrayList();
+        formatConditions = new ArrayList<FormatCondition>();
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class ReportElement extends Element
 
     public FormatCondition[] getFormatConditions()
     {
-        return (FormatCondition[]) this.formatConditions.toArray(new FormatCondition[this.formatConditions.size()]);
+        return this.formatConditions.toArray(new FormatCondition[this.formatConditions.size()]);
     }
 
     public int getFormatConditionCount()

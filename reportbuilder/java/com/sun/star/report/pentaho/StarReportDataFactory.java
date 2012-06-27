@@ -53,7 +53,7 @@ public class StarReportDataFactory implements ReportDataFactory, Cloneable
     {
         try
         {
-            final HashMap map = new HashMap();
+            final HashMap<String, Object> map = new HashMap<String, Object>();
             final int count = parameters.getColumnCount();
             for (int i = 0; i < count; i++)
             {

@@ -37,11 +37,11 @@ public class StyleMappingDocumentReadHandler extends AbstractXmlReadHandler
 {
 
     private final StyleMapper styleMapper;
-    private final List mappings;
+    private final List<StyleMappingReadHandler> mappings;
 
     public StyleMappingDocumentReadHandler()
     {
-        this.mappings = new ArrayList();
+        this.mappings = new ArrayList<StyleMappingReadHandler>();
         this.styleMapper = new StyleMapper();
     }
 
@@ -78,8 +78,7 @@ public class StyleMappingDocumentReadHandler extends AbstractXmlReadHandler
     {
         for (int i = 0; i < mappings.size(); i++)
         {
-            final StyleMappingReadHandler handler =
-                    (StyleMappingReadHandler) mappings.get(i);
+            final StyleMappingReadHandler handler = mappings.get(i);
             styleMapper.addMapping(handler.getRule());
         }
     }
@@ -90,7 +89,7 @@ public class StyleMappingDocumentReadHandler extends AbstractXmlReadHandler
      *
      * @return the object.
      */
-    public Object getObject()
+    public StyleMapper getObject()
             throws SAXException
     {
         return styleMapper;

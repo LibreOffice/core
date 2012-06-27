@@ -56,6 +56,8 @@ import org.pentaho.reporting.libraries.formula.parser.TokenMgrError;
 public final class SOFormulaParser extends ComponentBase
         implements com.sun.star.report.meta.XFormulaParser, XServiceInfo
 {
+    /* Need this to get around generics array creation restriction */
+    private static class StringOpcodeMap extends HashMap<Integer,FormulaOpCodeMapEntry> {}
 
     public static final int SEPARATORS = 0;
     public static final int ARRAY_SEPARATORS = 1;
@@ -67,17 +69,12 @@ public final class SOFormulaParser extends ComponentBase
     private static final String __serviceName = "com.sun.star.report.meta.FormulaParser";
     private static final String OPERATORS = "org.pentaho.reporting.libraries.formula.operators.";
     // attributes
-    final private List m_OpCodeMap = new ArrayList();
+    final private List<FormulaOpCodeMapEntry> m_OpCodeMap = new ArrayList<FormulaOpCodeMapEntry>();
     private XFormulaOpCodeMapper formulaOpCodeMapper = null;
-    private final Map parserAllOpCodes = new HashMap();
-    private final Map parserNames = new HashMap();
-    private final Map[] groupOpCodes = new HashMap[5];
-    private final List specialOpCodes = new ArrayList();
-
-    public List getSpecialOpCodes()
-    {
-        return specialOpCodes;
-    }
+    private final Map<Integer,FormulaOpCodeMapEntry> parserAllOpCodes = new HashMap<Integer,FormulaOpCodeMapEntry>();
+    private final Map<String,FormulaOpCodeMapEntry> parserNames = new HashMap<String,FormulaOpCodeMapEntry>();
+    private final StringOpcodeMap[] groupOpCodes = new StringOpcodeMap[5];
+    private final List<FormulaOpCodeMapEntry> specialOpCodes = new ArrayList<FormulaOpCodeMapEntry>();
     private int ownTokenCounter = 1000;
     private final FormulaOpCodeMapEntry opCodePush;
     private final FormulaParser parser;
@@ -134,7 +131,7 @@ public final class SOFormulaParser extends ComponentBase
         {
             ex.printStackTrace();
         }
-        opCodePush = (FormulaOpCodeMapEntry) specialOpCodes.get(FormulaMapGroupSpecialOffset.PUSH);
+        opCodePush = specialOpCodes.get(FormulaMapGroupSpecialOffset.PUSH);
         Thread.currentThread().setContextClassLoader(cl);
         // use the last parameter of the PropertySetMixin constructor
         // for your optional attributes if necessary. See the documentation
@@ -147,7 +144,7 @@ public final class SOFormulaParser extends ComponentBase
     // com.sun.star.sheet.XFormulaParser:
     public com.sun.star.sheet.FormulaToken[] parseFormula(String aFormula, com.sun.star.table.CellAddress aReferencePos)
     {
-        final ArrayList tokens = new ArrayList();
+        final ArrayList<FormulaToken> tokens = new ArrayList<FormulaToken>();
         if (!"=".equals(aFormula))
         {
             String formula;
@@ -159,7 +156,7 @@ public final class SOFormulaParser extends ComponentBase
             {
                 formula = aFormula;
             }
-            final ArrayList images = new ArrayList();
+            final ArrayList<String> images = new ArrayList<String>();
             try
             {
                 int brackets = 0;
@@ -180,12 +177,12 @@ public final class SOFormulaParser extends ComponentBase
                         {
                             --brackets;
                         }
-                        final FormulaOpCodeMapEntry opCode = (FormulaOpCodeMapEntry) parserNames.get(upper);
+                        final FormulaOpCodeMapEntry opCode = parserNames.get(upper);
                         formulaToken = opCode.Token;
                     }
                     else if (token.kind == GeneratedFormulaParserConstants.WHITESPACE)
                     {
-                        final FormulaOpCodeMapEntry opCode = (FormulaOpCodeMapEntry) specialOpCodes.get(FormulaMapGroupSpecialOffset.SPACES);
+                        final FormulaOpCodeMapEntry opCode = specialOpCodes.get(FormulaMapGroupSpecialOffset.SPACES);
                         formulaToken = opCode.Token;
                     }
                     else
@@ -200,7 +197,7 @@ public final class SOFormulaParser extends ComponentBase
                 }
                 if (brackets > 0)
                 {
-                    final FormulaOpCodeMapEntry opCode = (FormulaOpCodeMapEntry) parserNames.get(")");
+                    final FormulaOpCodeMapEntry opCode = parserNames.get(")");
                     while (brackets-- != 0)
                     {
                         formula = formula.concat(")");
@@ -225,7 +222,7 @@ public final class SOFormulaParser extends ComponentBase
                     if (found)
                     {
                         final FormulaToken dest = new FormulaToken();
-                        dest.OpCode = ((FormulaOpCodeMapEntry) specialOpCodes.get(FormulaMapGroupSpecialOffset.BAD)).Token.OpCode;
+                        dest.OpCode = specialOpCodes.get(FormulaMapGroupSpecialOffset.BAD).Token.OpCode;
                         dest.Data = new Any(Type.STRING, images.get(i));
                         tokens.remove(i);
                         tokens.add(i, dest);
@@ -239,7 +236,7 @@ public final class SOFormulaParser extends ComponentBase
             {
             }
         }
-        return (FormulaToken[]) tokens.toArray(new FormulaToken[tokens.size()]);
+        return tokens.toArray(new FormulaToken[tokens.size()]);
     }
 
     public String printFormula(com.sun.star.sheet.FormulaToken[] aTokens, com.sun.star.table.CellAddress aReferencePos)
@@ -254,7 +251,7 @@ public final class SOFormulaParser extends ComponentBase
             }
             else if (parserAllOpCodes.containsKey(formulaToken.OpCode))
             {
-                final FormulaOpCodeMapEntry opCode = (FormulaOpCodeMapEntry) parserAllOpCodes.get(formulaToken.OpCode);
+                final FormulaOpCodeMapEntry opCode = parserAllOpCodes.get(formulaToken.OpCode);
                 if (opCode.Name.length() > 0)
                 {
                     ret.append(opCode.Name);
@@ -307,7 +304,7 @@ public final class SOFormulaParser extends ComponentBase
     // com.sun.star.report.meta.XFormulaParser:
     public com.sun.star.sheet.FormulaOpCodeMapEntry[] getOpCodeMap()
     {
-        return (com.sun.star.sheet.FormulaOpCodeMapEntry[]) m_OpCodeMap.toArray(new FormulaOpCodeMapEntry[m_OpCodeMap.size()]);
+        return m_OpCodeMap.toArray(new FormulaOpCodeMapEntry[m_OpCodeMap.size()]);
     }
 
     public void setOpCodeMap(com.sun.star.sheet.FormulaOpCodeMapEntry[] the_value)
@@ -364,7 +361,7 @@ public final class SOFormulaParser extends ComponentBase
 
     private void addOpCodes(String[] names, FormulaOpCodeMapEntry[] opCodes, int group, boolean add)
     {
-        groupOpCodes[group] = new HashMap();
+        groupOpCodes[group] = new StringOpcodeMap();
         for (int j = 0; j < names.length; j++)
         {
             FormulaOpCodeMapEntry opCode = null;
@@ -392,19 +389,19 @@ public final class SOFormulaParser extends ComponentBase
         }
     }
 
-    public Map getNames()
+    public Map<String,FormulaOpCodeMapEntry> getNames()
     {
         return parserNames;
     }
 
-    public Map getGroup(int group)
+    public Map<Integer,FormulaOpCodeMapEntry> getGroup(int group)
     {
         return groupOpCodes[group];
     }
 
     private String[] getOperators(DefaultFormulaContext defaultContext, final String _kind)
     {
-        final ArrayList ops = new ArrayList();
+        final ArrayList<String> ops = new ArrayList<String>();
         final Configuration configuration = defaultContext.getConfiguration();
         final Iterator iter = configuration.findPropertyKeys(_kind);
         while (iter.hasNext())
@@ -431,7 +428,12 @@ public final class SOFormulaParser extends ComponentBase
             }
             ops.add(token.trim());
         }
-        return (String[]) ops.toArray(new String[ops.size()]);
+        return ops.toArray(new String[ops.size()]);
+    }
+
+    public List<FormulaOpCodeMapEntry> getSpecialOpCodes()
+    {
+        return specialOpCodes;
     }
 }
 

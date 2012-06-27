@@ -49,13 +49,13 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
 {
 
     private Section section;
-    private List children;
+    private List<Object> children;
     private boolean copyType;
 
     public NoCDATATextContentReadHandler(final Section section,
             final boolean copyType)
     {
-        this.children = new ArrayList();
+        this.children = new ArrayList<Object>();
         this.section = section;
         this.copyType = copyType;
     }
@@ -149,7 +149,7 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
         }
     }
 
-    public List getChildren()
+    public List<Object> getChildren()
     {
         return children;
     }

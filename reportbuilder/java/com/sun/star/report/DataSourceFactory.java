@@ -29,6 +29,6 @@ import java.util.Map;
 public interface DataSourceFactory
 {
 
-    public DataSource queryData(String name, Map parameter)
+    public DataSource queryData(String name, Map<String,Object> parameters)
             throws DataSourceException;
 }

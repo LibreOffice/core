@@ -59,7 +59,7 @@ public final class SOFormulaOpCodeMapper extends WeakBase
         {
             throw new IllegalArgumentException();
         }
-        final ArrayList token = new ArrayList();
+        final ArrayList<FormulaToken> token = new ArrayList<FormulaToken>();
         final Map parserNames = parser.getNames();
         for (int i = 0; i < Names.length; i++)
         {
@@ -69,7 +69,7 @@ public final class SOFormulaOpCodeMapper extends WeakBase
             }
 
         }
-        return (com.sun.star.sheet.FormulaToken[]) token.toArray(new FormulaToken[token.size()]);
+        return token.toArray(new FormulaToken[token.size()]);
     }
 
     public com.sun.star.sheet.FormulaOpCodeMapEntry[] getAvailableMappings(int Language, int Groups) throws com.sun.star.lang.IllegalArgumentException
@@ -78,10 +78,10 @@ public final class SOFormulaOpCodeMapper extends WeakBase
         {
             throw new IllegalArgumentException();
         }
-        final ArrayList token = new ArrayList();
+        final ArrayList<FormulaOpCodeMapEntry> token = new ArrayList<FormulaOpCodeMapEntry>();
         if (Groups == FormulaMapGroup.SPECIAL)
         {
-            return (com.sun.star.sheet.FormulaOpCodeMapEntry[]) parser.getSpecialOpCodes().toArray(new FormulaOpCodeMapEntry[parser.getSpecialOpCodes().size()]);
+            return parser.getSpecialOpCodes().toArray(new FormulaOpCodeMapEntry[parser.getSpecialOpCodes().size()]);
         }
         else
         {
@@ -111,7 +111,7 @@ public final class SOFormulaOpCodeMapper extends WeakBase
             }
         }
 
-        return (com.sun.star.sheet.FormulaOpCodeMapEntry[]) token.toArray(new FormulaOpCodeMapEntry[token.size()]);
+        return token.toArray(new FormulaOpCodeMapEntry[token.size()]);
     }
 
     public String getImplementationName()

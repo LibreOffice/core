@@ -39,12 +39,12 @@ import org.jfree.report.structure.Section;
 public class OfficeMasterStyles extends Element
 {
 
-    private final Map masterPages;
+    private final Map<String,OfficeMasterPage> masterPages;
     private final Section otherNodes;
 
     public OfficeMasterStyles()
     {
-        masterPages = new HashMap();
+        masterPages = new HashMap<String,OfficeMasterPage>();
         otherNodes = new Section();
     }
 
@@ -59,12 +59,12 @@ public class OfficeMasterStyles extends Element
 
     public OfficeMasterPage getMasterPage(final String name)
     {
-        return (OfficeMasterPage) masterPages.get(name);
+        return masterPages.get(name);
     }
 
     public OfficeMasterPage[] getAllMasterPages()
     {
-        return (OfficeMasterPage[]) masterPages.values().toArray(new OfficeMasterPage[masterPages.size()]);
+        return masterPages.values().toArray(new OfficeMasterPage[masterPages.size()]);
     }
 
     public Section getOtherNodes()

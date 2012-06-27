@@ -76,7 +76,7 @@ public class StyleUtilities
             throws ReportProcessingException
     {
         copyStyle(styleFamily, styleName, stylesCollection,
-                commonCollection, predefCollection, new HashSet());
+                commonCollection, predefCollection, new HashSet<String>());
     }
 
     /**
@@ -100,7 +100,7 @@ public class StyleUtilities
             final OfficeStylesCollection stylesCollection,
             final OfficeStylesCollection commonCollection,
             final OfficeStylesCollection predefCollection,
-            final Set inheritanceTracker)
+            final Set<String> inheritanceTracker)
             throws ReportProcessingException
     {
         if (inheritanceTracker.contains(styleName))
@@ -159,7 +159,7 @@ public class StyleUtilities
             final OfficeStylesCollection commonCollection,
             final OfficeStylesCollection predefCollection,
             final String styleFamily,
-            final Set inheritanceTracker)
+            final Set<String> inheritanceTracker)
             throws ReportProcessingException
     {
         try
@@ -473,7 +473,7 @@ public class StyleUtilities
         {
             copyStyleInternal(commonStyle, commonStyles,
                     commonCollection, commonCollection, predefCollection,
-                    styleFamily, new HashSet());
+                    styleFamily, new HashSet<String>());
         }
         return autostyle;
     }
@@ -518,7 +518,7 @@ public class StyleUtilities
             final String propertyName)
     {
         return queryStyle(predefCollection, styleFamily,
-                styleName, sectionName, propertyNamespace, propertyName, new HashSet());
+                styleName, sectionName, propertyNamespace, propertyName, new HashSet<String>());
     }
 
     public static OfficeStyle queryStyleByProperties(final OfficeStylesCollection predefCollection,
@@ -573,7 +573,7 @@ public class StyleUtilities
             final String sectionName,
             final String propertyNamespace,
             final String propertyName,
-            final Set seenStyles)
+            final Set<String> seenStyles)
     {
         if (seenStyles.contains(styleName))
         {

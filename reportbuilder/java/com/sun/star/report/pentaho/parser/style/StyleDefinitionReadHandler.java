@@ -40,12 +40,12 @@ public class StyleDefinitionReadHandler extends ElementReadHandler
 {
 
     private final Section rawSection;
-    private final List children;
+    private final List<ElementReadHandler> children;
 
     public StyleDefinitionReadHandler()
     {
         this.rawSection = new Section();
-        this.children = new ArrayList();
+        this.children = new ArrayList<ElementReadHandler>();
     }
 
     /**
@@ -78,7 +78,7 @@ public class StyleDefinitionReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < children.size(); i++)
         {
-            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
+            final ElementReadHandler handler = children.get(i);
             rawSection.addNode(handler.getElement());
         }
     }

@@ -43,12 +43,12 @@ import org.xml.sax.SAXException;
 public class TableReadHandler extends ElementReadHandler
 {
 
-    private final List children;
+    private final List<ElementReadHandler> children;
     private final Section table;
 
     public TableReadHandler()
     {
-        children = new ArrayList();
+        children = new ArrayList<ElementReadHandler>();
         table = new OfficeTableSection();
     }
 
@@ -124,7 +124,7 @@ public class TableReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < children.size(); i++)
         {
-            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
+            final ElementReadHandler handler = children.get(i);
             table.addNode(handler.getElement());
         }
     }

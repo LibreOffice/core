@@ -34,11 +34,11 @@ import org.jfree.report.structure.Element;
 public class FontFaceDeclsSection extends Element
 {
 
-    private final Map fontFaces;
+    private final Map<String,FontFaceElement> fontFaces;
 
     public FontFaceDeclsSection()
     {
-        fontFaces = new HashMap();
+        fontFaces = new HashMap<String,FontFaceElement>();
         setType("font-face-decls");
         setNamespace(OfficeNamespaces.OFFICE_NS);
     }
@@ -50,12 +50,12 @@ public class FontFaceDeclsSection extends Element
 
     public FontFaceElement getFontFace(final String name)
     {
-        return (FontFaceElement) fontFaces.get(name);
+        return fontFaces.get(name);
     }
 
     public FontFaceElement[] getAllFontFaces()
     {
-        return (FontFaceElement[]) fontFaces.values().toArray(new FontFaceElement[fontFaces.size()]);
+        return fontFaces.values().toArray(new FontFaceElement[fontFaces.size()]);
     }
 
     public boolean containsFont(final String fontName)

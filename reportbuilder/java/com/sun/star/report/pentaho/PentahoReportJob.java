@@ -77,7 +77,7 @@ public class PentahoReportJob implements ReportJob
 
     private static final Log LOGGER = LogFactory.getLog(PentahoReportJob.class);
     private boolean finished;
-    private final List listeners;
+    private final List<JobProgressIndicator> listeners;
     private final DataSourceFactory dataSourceFactory;
     private final OutputRepository outputRepository;
     private final JobProperties jobProperties;
@@ -104,7 +104,7 @@ public class PentahoReportJob implements ReportJob
         }
 
         this.definition = definition;
-        this.listeners = new ArrayList();
+        this.listeners = new ArrayList<JobProgressIndicator>();
         this.jobProperties = definition.getProcessingParameters().copy();
 
         this.dataSourceFactory = (DataSourceFactory) jobProperties.getProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY);
@@ -226,7 +226,7 @@ public class PentahoReportJob implements ReportJob
         listeners.remove(indicator);
     }
 
-    private void collectGroupExpressions(final Node[] nodes, final List expressions, final FormulaParser parser, final Expression reportFunctions[])
+    private void collectGroupExpressions(final Node[] nodes, final List<Object[]> expressions, final FormulaParser parser, final Expression reportFunctions[])
     {
         for (int i = 0; i < nodes.length; i++)
         {
@@ -343,7 +343,7 @@ public class PentahoReportJob implements ReportJob
             final Node[] nodes = report.getNodeArray();
 
             final FormulaParser parser = new FormulaParser();
-            final ArrayList expressions = new ArrayList();
+            final ArrayList<Object[]> expressions = new ArrayList<Object[]>();
             final OfficeReport officeReport = (OfficeReport) ((Section) nodes[0]).getNode(0);
             final Section reportBody = (Section) officeReport.getBodySection();
             collectGroupExpressions(reportBody.getNodeArray(), expressions, parser, officeReport.getExpressions());

@@ -629,9 +629,9 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                         if (styleName == null)
                         {
                             final boolean keep = (keepTogetherState == PageContext.KEEP_TOGETHER_GROUP || expectedTableRowCount > 0) && isParentKeepTogether();
-                            final ArrayList propertyNameSpaces = new ArrayList();
-                            final ArrayList propertyNames = new ArrayList();
-                            final ArrayList propertyValues = new ArrayList();
+                            final ArrayList<String> propertyNameSpaces = new ArrayList<String>();
+                            final ArrayList<String> propertyNames = new ArrayList<String>();
+                            final ArrayList<String> propertyValues = new ArrayList<String>();
 
                             propertyNameSpaces.add(OfficeNamespaces.FO_NS);
                             propertyNameSpaces.add(OfficeNamespaces.FO_NS);

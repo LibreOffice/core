@@ -39,12 +39,12 @@ public class OfficeStyleReadHandler extends ElementReadHandler
 {
 
     private final OfficeStyle officeStyle;
-    private final List children;
+    private final List<ElementReadHandler> children;
 
     public OfficeStyleReadHandler()
     {
         this.officeStyle = new OfficeStyle();
-        this.children = new ArrayList();
+        this.children = new ArrayList<ElementReadHandler>();
     }
 
     /**
@@ -79,7 +79,7 @@ public class OfficeStyleReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < children.size(); i++)
         {
-            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
+            final ElementReadHandler handler = children.get(i);
             officeStyle.addNode(handler.getElement());
         }
     }

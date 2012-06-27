@@ -133,9 +133,8 @@ public class SDBCReportDataFactory implements DataSourceFactory
 
     class ParameterDefinition
     {
-
         int parameterCount = 0;
-        private ArrayList parameterIndex = new ArrayList();
+        private ArrayList<Integer> parameterIndex = new ArrayList<Integer>();
     }
     private static final Log LOGGER = LogFactory.getLog(SDBCReportDataFactory.class);
     public static final String COMMAND_TYPE = "command-type";
@@ -159,8 +158,8 @@ public class SDBCReportDataFactory implements DataSourceFactory
     private static final int HANDLE_QUERY = 4;
     private static final int HANDLE_TABLE = 5;
     private static final int HANDLE_SQL = 6;
-    private final Map rowSetProperties = new HashMap();
-    private final Map parameterMap = new HashMap();
+    private final Map<RowSetProperties,XRowSet> rowSetProperties = new HashMap<RowSetProperties,XRowSet>();
+    private final Map<RowSetProperties,ParameterDefinition> parameterMap = new HashMap<RowSetProperties,ParameterDefinition>();
     private boolean rowSetCreated = false;
 
     public SDBCReportDataFactory(final XComponentContext cmpCtx, final XConnection connection)
@@ -169,7 +168,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         m_cmpCtx = cmpCtx;
     }
 
-    public DataSource queryData(final String command, final Map parameters) throws DataSourceException
+    public DataSource queryData(final String command, final Map<String,Object> parameters) throws DataSourceException
     {
         try
         {
@@ -365,13 +364,13 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 {
                     object = ((BigDecimal) object).toString();
                 }
-                final Integer pos = (Integer) paramDef.parameterIndex.get(i);
+                final Integer pos = paramDef.parameterIndex.get(i);
                 para.setObject(pos + 1, object);
             }
         }
     }
 
-    private final Object[] createRowSet(final RowSetProperties rowSetProps, final Map parameters)
+    private final Object[] createRowSet(final RowSetProperties rowSetProps, final Map<String,Object> parameters)
             throws Exception
     {
         final ArrayList detailColumns = (ArrayList) parameters.get(DETAIL_COLUMNS);
@@ -440,7 +439,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             }
             // get old parameter count
             final ArrayList detailColumns = (ArrayList) parameters.get(DETAIL_COLUMNS);
-            final ArrayList handledColumns = new ArrayList();
+            final ArrayList<String> handledColumns = new ArrayList<String>();
             final XParametersSupplier paraSup = (XParametersSupplier) UnoRuntime.queryInterface(XParametersSupplier.class, composer);
             if (paraSup != null)
             {

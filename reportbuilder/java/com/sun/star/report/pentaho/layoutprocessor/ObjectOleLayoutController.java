@@ -83,12 +83,12 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
             ole.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.TYPE_ATTRIBUTE, OfficeToken.OBJECT_OLE);
             ole.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "href", url);
             ole.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "class-id", element.getClassid());
-            final List masterfields = element.getMasterfields();
-            final List values = new ArrayList();
+            final List<String> masterfields = element.getMasterfields();
+            final List<Object> values = new ArrayList<Object>();
             final DataRow view = getFlowController().getMasterRow().getGlobalView();
-            for (final Iterator iter = masterfields.iterator(); iter.hasNext();)
+            for (final Iterator<String> iter = masterfields.iterator(); iter.hasNext();)
             {
-                final String master = (String) iter.next();
+                final String master = iter.next();
                 try
                 {
                     final DataFlags flags = view.getFlags(master);
