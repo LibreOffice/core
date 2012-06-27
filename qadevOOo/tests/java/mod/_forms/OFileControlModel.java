@@ -181,7 +181,7 @@ public class OFileControlModel extends TestCase {
 
         aShape.setControl(aControl);
 
-        DrawTools.getDrawPage(xDrawDoc, 0).add((XShape) aShape);
+        DrawTools.getDrawPage(xDrawDoc, 0).add(aShape);
         oObj = aShape.getControl();
 
         log.println("creating a new environment for drawpage object");

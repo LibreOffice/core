@@ -53,8 +53,7 @@ public class _XShapeDescriptor extends MultiMethodTest {
         String stype = oObj.getShapeType();
         log.println("Current Shape Type is " + stype);
 
-        XServiceInfo SI = (XServiceInfo)
-                        UnoRuntime.queryInterface(XServiceInfo.class, oObj);
+        XServiceInfo SI = UnoRuntime.queryInterface(XServiceInfo.class, oObj);
 
         String[] serviceNames = SI.getSupportedServiceNames();
 

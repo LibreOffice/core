@@ -262,7 +262,7 @@ public class utils {
 
         // get a folder wich is located in the user dir
         try {
-            userPath = (String) getOfficeSettingsValue(msf, "UserConfig");
+            userPath = getOfficeSettingsValue(msf, "UserConfig");
         } catch (Exception e) {
             System.out.println("Couldn't get Office User Path");
             e.printStackTrace();
@@ -605,7 +605,7 @@ public class utils {
     public static String getImplName(Object aObject) {
         String res = "Error getting Implementation name";
         try {
-            XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, aObject);
+            XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class, aObject);
             res = xSI.getImplementationName();
         } catch (Exception e) {
             res = "Error getting Implementation name ( " + e + " )";
@@ -693,7 +693,7 @@ public class utils {
     public static String getOfficeURL(XMultiServiceFactory msf) {
         try {
             Object settings = msf.createInstance("com.sun.star.util.PathSettings");
-            XPropertySet settingProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, settings);
+            XPropertySet settingProps = UnoRuntime.queryInterface(XPropertySet.class, settings);
             String path = (String) settingProps.getPropertyValue("Module");
             return path;
         } catch (Exception e) {
@@ -896,8 +896,8 @@ public class utils {
      */
     public static String expandMacro(XMultiServiceFactory xMSF, String expand) throws java.lang.Exception {
         try {
-            XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xMSF);
-            XComponentContext xContext = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class,
+            XPropertySet xPS = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
+            XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class,
                 xPS.getPropertyValue("DefaultContext"));
             XMacroExpander xME = UnoRuntime.queryInterface(XMacroExpander.class,
                 xContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander"));

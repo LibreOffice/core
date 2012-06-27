@@ -251,7 +251,7 @@ public class _XNumericField extends MultiMethodTest {
         oObj.setDecimalDigits((short)(digits + 1)) ;
 
         short res = oObj.getDecimalDigits() ;
-        result = res == ((short)digits + 1) ;
+        result = res == (digits + 1) ;
 
         tRes.tested("setDecimalDigits()", result) ;
     }

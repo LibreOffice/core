@@ -104,8 +104,7 @@ public class ScDatabaseRangesObj extends TestCase {
         log.println( "Creating a test environment" );
 
         log.println("Getting test object ") ;
-        XPropertySet docProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+        XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
 
         XDatabaseRanges dbRanges = null;
         try {

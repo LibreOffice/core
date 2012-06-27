@@ -89,7 +89,7 @@ public class UnoControlButton extends TestCase {
                                                                "CommandButton",
                                                                "UnoControlButton");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         XControlModel the_Model = aShape.getControl();
 

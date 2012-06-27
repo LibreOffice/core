@@ -138,8 +138,7 @@ public class SwXNumberingRules extends TestCase {
         try {
             oObj = (XInterface) AnyConverter.toObject(
                     new Type(XInterface.class),NumStyleI.getByIndex(0));
-            XPropertySet props = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, oObj);
+            XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, oObj);
             oObj = (XInterface) AnyConverter.toObject(
                 new Type(XInterface.class),props.getPropertyValue("NumberingRules"));
             XIndexAccess nRules = UnoRuntime.queryInterface(XIndexAccess.class, props.getPropertyValue("NumberingRules"));

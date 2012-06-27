@@ -103,8 +103,7 @@ public class ScLabelRangesObj extends TestCase {
 
         try {
             log.println("Getting test object ") ;
-            XPropertySet docProps = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+            XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
             Object ranges = docProps.getPropertyValue("ColumnLabelRanges");
             XLabelRanges lRanges = UnoRuntime.queryInterface(XLabelRanges.class, ranges);
 

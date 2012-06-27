@@ -161,7 +161,7 @@ public class _XChangesNotifier extends MultiMethodTest {
             xBatch.commitChanges();
         }
         catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace((PrintWriter)log);
+            e.printStackTrace(log);
             return false;
         }
         return true;
@@ -178,7 +178,7 @@ public class _XChangesNotifier extends MultiMethodTest {
             xBatch.commitChanges();
         }
         catch(com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace((PrintWriter)log);
+            e.printStackTrace(log);
             return false;
         }
         return true;
@@ -194,7 +194,7 @@ public class _XChangesNotifier extends MultiMethodTest {
                 xProp.setPropertyValue(elementName, element);
             }
             catch(com.sun.star.uno.Exception e) {
-                e.printStackTrace((PrintWriter)log);
+                e.printStackTrace(log);
                 return false;
             }
         }
@@ -203,7 +203,7 @@ public class _XChangesNotifier extends MultiMethodTest {
                 xNameReplace.replaceByName(elementName, element);
             }
             catch(com.sun.star.uno.Exception e) {
-                e.printStackTrace((PrintWriter)log);
+                e.printStackTrace(log);
                 return false;
             }
         }

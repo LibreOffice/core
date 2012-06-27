@@ -107,7 +107,7 @@ public class UnoTreeControl extends TestCase {
             XControlModel xDialogModel = UnoRuntime.queryInterface(XControlModel.class,
             mxMSF.createInstance("com.sun.star.awt.UnoControlDialogModel"));
 
-            XPropertySet xDialogPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xDialogModel);
+            XPropertySet xDialogPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xDialogModel);
             xDialogPropertySet.setPropertyValue( "PositionX",   new Integer(50) );
             xDialogPropertySet.setPropertyValue( "PositionY",   new Integer(50) );
             xDialogPropertySet.setPropertyValue( "Width",       new Integer(256) );
@@ -119,7 +119,7 @@ public class UnoTreeControl extends TestCase {
             XControlModel  xTreeControlModel = UnoRuntime.queryInterface(XControlModel.class,
             xDialogMSF.createInstance("com.sun.star.awt.tree.TreeControlModel"));
 
-            XPropertySet XTreeControlModelSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xTreeControlModel);
+            XPropertySet XTreeControlModelSet = UnoRuntime.queryInterface(XPropertySet.class, xTreeControlModel);
 
             XTreeControlModelSet.setPropertyValue( "SelectionType",com.sun.star.view.SelectionType.NONE);
             XTreeControlModelSet.setPropertyValue( "PositionX",     new Integer(3 ));
@@ -132,8 +132,7 @@ public class UnoTreeControl extends TestCase {
             XTreeControlModelSet.setPropertyValue( "RootDisplayed", new Boolean (true));
             XTreeControlModelSet.setPropertyValue( "Editable",      new Boolean (true ));
 
-            XNameContainer xDialogModelContainer = (XNameContainer)
-            UnoRuntime.queryInterface(XNameContainer.class, xDialogModel);
+            XNameContainer xDialogModelContainer = UnoRuntime.queryInterface(XNameContainer.class, xDialogModel);
 
             xDialogModelContainer.insertByName( sTreeControlName, xTreeControlModel);
 
@@ -181,7 +180,7 @@ public class UnoTreeControl extends TestCase {
         }
 
         tEnv.addObjRelation("Comparer",
-                            new Comparator() {
+                            new Comparator<Object>() {
             public int compare(Object o1, Object o2) {
                 XMutableTreeNode xNode1 = UnoRuntime.queryInterface(
                                         XMutableTreeNode.class, o1);
@@ -195,7 +194,7 @@ public class UnoTreeControl extends TestCase {
                 XMutableTreeNode xNode2 = UnoRuntime.queryInterface(
                                         XMutableTreeNode.class, xNode2a);
 
-                if (((String) xNode1.getDataValue()).equals((String)xNode2.getDataValue())) {
+                if (((String) xNode1.getDataValue()).equals(xNode2.getDataValue())) {
                     return 0;
                 }
 

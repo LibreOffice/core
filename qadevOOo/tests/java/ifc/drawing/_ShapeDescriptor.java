@@ -32,9 +32,8 @@ public class _ShapeDescriptor extends MultiMethodTest {
     public boolean ro = false;
 
     public void _LayerID() {
-        com.sun.star.lang.XServiceInfo xInfo = (com.sun.star.lang.XServiceInfo)
-            UnoRuntime.queryInterface
-                (com.sun.star.lang.XServiceInfo.class, oObj);
+        com.sun.star.lang.XServiceInfo xInfo = UnoRuntime.queryInterface
+            (com.sun.star.lang.XServiceInfo.class, oObj);
         if ( ! xInfo.supportsService("com.sun.star.drawing.ShapeDescriptor")) {
             log.println("Service not available !!!!!!!!!!!!!");
             tRes.tested("Supported", false);

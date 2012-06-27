@@ -36,7 +36,7 @@ public class _XModuleUIConfigurationManagerSupplier extends MultiMethodTest {
 
             // get a config manager for the StartModule
             Object o = oObj.getUIConfigurationManager(configManagerName);
-            XServiceInfo xServiceInfo = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, o);
+            XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, o);
             String impName = xServiceInfo.getImplementationName();
             boolean result = impName.equals(implementationName);
             if (!result) {

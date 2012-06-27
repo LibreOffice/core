@@ -52,7 +52,7 @@ public class _XSimpleMailClientSupplier extends MultiMethodTest {
     */
     public void _querySimpleMailClient() {
         if (Boolean.TRUE.equals
-            ((Boolean)tEnv.getObjRelation("SystemMailExist"))) {
+            (tEnv.getObjRelation("SystemMailExist"))) {
 
             XSimpleMailClient aClient = oObj.querySimpleMailClient();
             tRes.tested("querySimpleMailClient()",aClient != null);

@@ -125,8 +125,7 @@ public class SdXCustomPresentationAccess extends TestCase {
         XInterface oObj = oPS.getCustomPresentations();
 
 
-        XSingleServiceFactory oSingleMSF = (XSingleServiceFactory)
-            UnoRuntime.queryInterface(XSingleServiceFactory.class, oObj);
+        XSingleServiceFactory oSingleMSF = UnoRuntime.queryInterface(XSingleServiceFactory.class, oObj);
 
         XInterface oInstance = null;
         XInterface oSecondInstance = null;
@@ -138,8 +137,7 @@ public class SdXCustomPresentationAccess extends TestCase {
             throw new StatusException("Couldn't create instance", e);
         }
 
-        XNameContainer aContainer = (XNameContainer)
-            UnoRuntime.queryInterface(XNameContainer.class, oObj);
+        XNameContainer aContainer = UnoRuntime.queryInterface(XNameContainer.class, oObj);
 
         if (aContainer.hasByName("FirstPresentation")) {
             try {

@@ -107,8 +107,7 @@ public class DataInputStream extends TestCase {
             throw new StatusException("Couldn't create instance", e);
         }
 
-        XInputStream xPipeInput = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class, oPipe);
+        XInputStream xPipeInput = UnoRuntime.queryInterface(XInputStream.class, oPipe);
         XOutputStream xPipeOutput = UnoRuntime.queryInterface(XOutputStream.class, oPipe);
 
         XInterface oDataOutput = null;

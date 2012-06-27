@@ -131,8 +131,7 @@ public class XMLSettingsExporter extends TestCase {
             //set some settings
             XModel xDrawModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
             XController xController = xDrawModel.getCurrentController();
-            XPropertySet xPropSet = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, xController);
+            XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
             xPropSet.setPropertyValue("IsLayerMode", new Boolean("true"));
 
         } catch (com.sun.star.uno.Exception e) {

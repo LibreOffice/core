@@ -82,13 +82,13 @@ public class ShowTargets
         for ( int i=0; i<targets.size(); ++i )
         {
             // target
-            String target = (String)targets.get(i);
+            String target = targets.get(i);
             // 'tab'
             System.out.print( "  " + target );
             for ( int s = maxTargetLength - target.length(); s>0; --s )
                 System.out.print( " " );
             // description
-            System.out.println( " (" + (String)descs.get(i) + ")" );
+            System.out.println( " (" + descs.get(i) + ")" );
         }
     }
 

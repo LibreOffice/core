@@ -70,8 +70,7 @@ public class FormTools {
         try{
             Object oInt = oDocMSF.createInstance("com.sun.star.drawing.ControlShape");
             Object aCon = oDocMSF.createInstance("com.sun.star.form.component."+kind);
-            XPropertySet model_props = (XPropertySet)
-                    UnoRuntime.queryInterface(XPropertySet.class,aCon);
+            XPropertySet model_props = UnoRuntime.queryInterface(XPropertySet.class,aCon);
             model_props.setPropertyValue("DefaultControl","com.sun.star.form.control."+kind);
             aControl = UnoRuntime.queryInterface( XControlModel.class, aCon );
             oCShape = UnoRuntime.queryInterface( XControlShape.class, oInt );
@@ -105,8 +104,7 @@ public class FormTools {
            try{
          Object oInt = oDocMSF.createInstance("com.sun.star.drawing.ControlShape");
          Object aCon = oDocMSF.createInstance("com.sun.star.form.component."+kind);
-         XPropertySet model_props = (XPropertySet)
-                        UnoRuntime.queryInterface(XPropertySet.class,aCon);
+         XPropertySet model_props = UnoRuntime.queryInterface(XPropertySet.class,aCon);
          model_props.setPropertyValue("DefaultControl","com.sun.star.awt."+defControl);
          aControl = UnoRuntime.queryInterface( XControlModel.class, aCon );
          oCShape = UnoRuntime.queryInterface( XControlShape.class, oInt );
@@ -198,7 +196,7 @@ public class FormTools {
                                                                 String aName ) {
         try {
             XInterface oControl = createControl(aDoc, "Form");
-            XForm oForm = (XForm) UnoRuntime.queryInterface(XForm.class, oControl);
+            XForm oForm = UnoRuntime.queryInterface(XForm.class, oControl);
             Forms.insertByName(aName,oForm);
         } catch ( Exception e ) {
             throw new IllegalArgumentException( "Couldn't insert Form" );
@@ -225,7 +223,7 @@ public class FormTools {
             } catch (com.sun.star.lang.IllegalArgumentException iae) {
                 System.out.println("### Couldn't convert Any");
             }
-            XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
+            XPropertySet formProps = UnoRuntime.queryInterface(XPropertySet.class, the_form);
             formProps.setPropertyValue("DataSourceName","Bibliography");
             formProps.setPropertyValue("Command","biblio");
             formProps.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
@@ -254,7 +252,7 @@ public class FormTools {
 
         XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class),
             FormTools.getIndexedForms(WriterTools.getDrawPage(aDoc)).getByIndex(0));
-        XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
+        XPropertySet formProps = UnoRuntime.queryInterface(XPropertySet.class, the_form);
         formProps.setPropertyValue("DataSourceName",sourceName);
         formProps.setPropertyValue("Command",tableName);
         formProps.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
@@ -267,7 +265,7 @@ public class FormTools {
 
         try {
             XForm the_form = (XForm) FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName(formName);
-            XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
+            XPropertySet formProps = UnoRuntime.queryInterface(XPropertySet.class, the_form);
             formProps.setPropertyValue("DataSourceName","Bibliography");
             formProps.setPropertyValue("Command","biblio");
             formProps.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
@@ -297,7 +295,7 @@ public class FormTools {
 
         XForm the_form = (XForm) AnyConverter.toObject(new Type(XForm.class),
             FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName(formName));
-        XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
+        XPropertySet formProps = UnoRuntime.queryInterface(XPropertySet.class, the_form);
         formProps.setPropertyValue("DataSourceName",sourceName);
         formProps.setPropertyValue("Command",tableName);
         formProps.setPropertyValue("CommandType",new Integer(com.sun.star.sdb.CommandType.TABLE));
@@ -322,7 +320,7 @@ public class FormTools {
         atrans.parseStrict(aURLA);
         aURL = aURLA[0];
 
-        com.sun.star.frame.XDispatch aDisp = (com.sun.star.frame.XDispatch)aDispProv.queryDispatch(aURL, "",
+        com.sun.star.frame.XDispatch aDisp = aDispProv.queryDispatch(aURL, "",
                                 com.sun.star.frame.FrameSearchFlag.SELF |
                                     com.sun.star.frame.FrameSearchFlag.CHILDREN);
 

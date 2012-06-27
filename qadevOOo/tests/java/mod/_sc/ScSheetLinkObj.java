@@ -138,8 +138,7 @@ public class ScSheetLinkObj extends TestCase {
         SL.link(sURL, "Sheet1", "", "", com.sun.star.sheet.SheetLinkMode.VALUE);
 
         // Getting links.
-        XPropertySet docProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+        XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
         Object oLinks = null;
         try {
             oLinks = docProps.getPropertyValue("SheetLinks");
@@ -151,8 +150,7 @@ public class ScSheetLinkObj extends TestCase {
             throw new StatusException("Couldn't get SheetLinks", e);
         }
 
-        XNameAccess links = (XNameAccess)
-            UnoRuntime.queryInterface(XNameAccess.class, oLinks);
+        XNameAccess links = UnoRuntime.queryInterface(XNameAccess.class, oLinks);
 
         String[] names = links.getElementNames();
 

@@ -128,7 +128,7 @@ public class XMLExporter extends TestCase {
             xEx.setSourceDocument(xTextDoc);
 
             XSimpleText aText = xTextDoc.getText();
-            XTextCursor curs = (XTextCursor) aText.createTextCursor();
+            XTextCursor curs = aText.createTextCursor();
                         aText.insertString(curs, TEST_STR, false);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;

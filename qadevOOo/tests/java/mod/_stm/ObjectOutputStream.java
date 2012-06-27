@@ -201,12 +201,10 @@ public class ObjectOutputStream extends TestCase {
 
         XActiveDataSink markIn = UnoRuntime.queryInterface(XActiveDataSink.class, minstream);
         XActiveDataSink inStream = UnoRuntime.queryInterface(XActiveDataSink.class, istream);
-        XInputStream markInStream = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class, minstream);
+        XInputStream markInStream = UnoRuntime.queryInterface(XInputStream.class, minstream);
 
         final XOutputStream PipeOut = UnoRuntime.queryInterface(XOutputStream.class,aPipe);
-        final XInputStream PipeIn = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class,aPipe);
+        final XInputStream PipeIn = UnoRuntime.queryInterface(XInputStream.class,aPipe);
 
         markIn.setInputStream(PipeIn);
         inStream.setInputStream(markInStream);
@@ -221,8 +219,7 @@ public class ObjectOutputStream extends TestCase {
         try {
             Object oPersObj = xMSF.createInstance
                 ("com.sun.star.cmp.PersistObject");
-            xPersObj = (XPersistObject)
-                UnoRuntime.queryInterface(XPersistObject.class, oPersObj);
+            xPersObj = UnoRuntime.queryInterface(XPersistObject.class, oPersObj);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Can't write persist object.", e) ;
@@ -280,7 +277,7 @@ public class ObjectOutputStream extends TestCase {
                     try {
                         Object oInStream = msf.createInstance(
                             "com.sun.star.io.ObjectInputStream");
-                        xInStream = (XInputStream) UnoRuntime.queryInterface
+                        xInStream = UnoRuntime.queryInterface
                             (XInputStream.class, oInStream);
                     } catch(com.sun.star.uno.Exception e) {
                         return null;

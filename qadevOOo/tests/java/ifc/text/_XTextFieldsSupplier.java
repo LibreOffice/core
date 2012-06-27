@@ -93,8 +93,8 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
 
                 if (mbCreateFieldMaster) {
                     Object FieldMaster = _oMSF.createInstance("com.sun.star.text.FieldMaster.User");
-                    XPropertySet PFieldMaster = (XPropertySet) UnoRuntime.queryInterface
-                        (XPropertySet.class,(XInterface) FieldMaster);
+                    XPropertySet PFieldMaster = UnoRuntime.queryInterface
+                        (XPropertySet.class,FieldMaster);
 
                     XDependentTextField xTF = UnoRuntime.queryInterface(XDependentTextField.class,aField);
 
@@ -166,7 +166,7 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
      */
     private void setMethodFalse(String method, Exception e) {
         log.println("Exception while executing '" + method + "'");
-        e.printStackTrace((PrintWriter)log);
+        e.printStackTrace(log);
         tRes.tested(method, false);
     }
 

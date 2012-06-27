@@ -131,7 +131,7 @@ public class XMLExporter extends TestCase {
             xEx.setSourceDocument(xChartDoc);
 
             Object oTitle = xChartDoc.getTitle() ;
-            XPropertySet xTitleProp = (XPropertySet) UnoRuntime.queryInterface
+            XPropertySet xTitleProp = UnoRuntime.queryInterface
                 (XPropertySet.class, oTitle) ;
             xTitleProp.setPropertyValue("String", exportStr) ;
         } catch (com.sun.star.uno.Exception e) {

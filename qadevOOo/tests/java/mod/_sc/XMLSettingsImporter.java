@@ -135,8 +135,7 @@ public class XMLSettingsImporter extends TestCase {
 
             XModel xSheetModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
             XController xController = xSheetModel.getCurrentController();
-            xPropSet = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, xController);
+            xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;

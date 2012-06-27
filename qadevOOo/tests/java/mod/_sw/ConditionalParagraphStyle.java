@@ -92,10 +92,10 @@ public class ConditionalParagraphStyle extends TestCase {
             XStyleFamiliesSupplier oSFS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
             xTextDoc);
             XNameAccess oSF = oSFS.getStyleFamilies();
-            oSFNA = (XNameAccess) UnoRuntime.queryInterface(
+            oSFNA = UnoRuntime.queryInterface(
                         XNameAccess.class,oSF.getByName("ParagraphStyles"));
             XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
-            oStyle = (XStyle) UnoRuntime.queryInterface(
+            oStyle = UnoRuntime.queryInterface(
                         XStyle.class,oSFIA.getByIndex(1));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Error: exception occurred.");
@@ -116,7 +116,7 @@ public class ConditionalParagraphStyle extends TestCase {
             XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
             XInterface oInt = (XInterface)
                 oMSF.createInstance("com.sun.star.style.ConditionalParagraphStyle");
-            oMyStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, oInt);
+            oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
         } catch ( com.sun.star.uno.Exception e ) {
             log.println("Error: exception occurred.");
             e.printStackTrace(log);
@@ -132,8 +132,7 @@ public class ConditionalParagraphStyle extends TestCase {
             log.println("OK");
         }
 
-        XNameContainer oSFNC = (XNameContainer)
-            UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
+        XNameContainer oSFNC = UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 
         try {
             if ( oSFNC.hasByName("My Style") )
@@ -155,8 +154,7 @@ public class ConditionalParagraphStyle extends TestCase {
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
-        XPropertySet xProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oCursor);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, oCursor);
         try {
             xProp.setPropertyValue("ParaStyleName", oMyStyle.getName());
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
@@ -177,8 +175,7 @@ public class ConditionalParagraphStyle extends TestCase {
         tEnv = new TestEnvironment(oMyStyle);
         tEnv.addObjRelation("PoolStyle", oStyle);
 
-        XPropertySet xStyleProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
+        XPropertySet xStyleProp = UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
         short exclude = PropertyAttribute.MAYBEVOID + PropertyAttribute.READONLY;
         String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude);
         tEnv.addObjRelation("PropertyNames", names);

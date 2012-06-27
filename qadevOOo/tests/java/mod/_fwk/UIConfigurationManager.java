@@ -81,8 +81,8 @@ public class UIConfigurationManager extends TestCase {
             String deleteCfg = util.utils.getFullURL(util.utils.getOfficeTemp(xMSF) + "delete.cfg");
             util.utils.copyFile(xMSF, sourceDeleteCfg, deleteCfg);
             XStorage xSubStorage = null;
-            Object o = (XInterface)xMSF.createInstance("com.sun.star.embed.StorageFactory");
-            XSingleServiceFactory xSSF = (XSingleServiceFactory)UnoRuntime.queryInterface(
+            Object o = xMSF.createInstance("com.sun.star.embed.StorageFactory");
+            XSingleServiceFactory xSSF = UnoRuntime.queryInterface(
             XSingleServiceFactory.class, o);
             Object[] props = new Object[2];
             props[0] = deleteCfg;

@@ -20,10 +20,10 @@ package util;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.Iterator;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.document.XExporter;
@@ -369,8 +369,8 @@ public class XMLTools {
     * appropriate message is output.
     */
     public static class XMLTagsChecker extends XMLWellFormChecker {
-        protected Hashtable tags = new Hashtable() ;
-        protected Hashtable chars = new Hashtable() ;
+        protected HashMap<String,String> tags = new HashMap<String,String>() ;
+        protected HashMap<String,String> chars = new HashMap<String,String>() ;
         protected boolean allOK = true ;
 
         public XMLTagsChecker(PrintWriter log) {
@@ -407,7 +407,7 @@ public class XMLTools {
         public void startElement(String name, XAttributeList attrs) {
             super.startElement(name, attrs) ;
             if (tags.containsKey(name)) {
-                String outerTag = (String) tags.get(name);
+                String outerTag = tags.get(name);
                 if (!outerTag.equals("")) {
                     boolean isInTag = false ;
                     for (int i = 0; i < tagStack.size(); i++) {
@@ -430,7 +430,7 @@ public class XMLTools {
             super.characters(ch) ;
 
             if (chars.containsKey(ch)) {
-                String outerTag = (String) chars.get(ch);
+                String outerTag = chars.get(ch);
                 if (!outerTag.equals("")) {
                     boolean isInTag = false ;
                     for (int i = 0; i < tagStack.size(); i++) {
@@ -456,21 +456,21 @@ public class XMLTools {
         public boolean checkTags() {
             allOK &= isWellFormed() ;
 
-            Enumeration<String> badTags = tags.keys() ;
-            Enumeration<String> badChars = chars.keys() ;
+            Iterator<String> badTags = tags.keySet().iterator() ;
+            Iterator<String> badChars = chars.keySet().iterator() ;
 
-            if (badTags.hasMoreElements()) {
+            if (badTags.hasNext()) {
                 allOK = false ;
                 log.println("Required tags were not found in export :") ;
-                while(badTags.hasMoreElements()) {
-                    log.println("   <" + badTags.nextElement() + ">") ;
+                while(badTags.hasNext()) {
+                    log.println("   <" + badTags.next() + ">") ;
                 }
             }
-            if (badChars.hasMoreElements()) {
+            if (badChars.hasNext()) {
                 allOK = false ;
                 log.println("Required characters were not found in export :") ;
-                while(badChars.hasMoreElements()) {
-                    log.println("   <" + badChars.nextElement() + ">") ;
+                while(badChars.hasNext()) {
+                    log.println("   <" + badChars.next() + ">") ;
                 }
             }
             reset();
@@ -772,8 +772,7 @@ public class XMLTools {
 
             XActiveDataSource xADS = UnoRuntime.queryInterface(XActiveDataSource.class,Writer);
             xADS.setOutputStream(xPipeOutput);
-            XDocumentHandler handler = (XDocumentHandler)
-                UnoRuntime.queryInterface(XDocumentHandler.class,Writer);
+            XDocumentHandler handler = UnoRuntime.queryInterface(XDocumentHandler.class,Writer);
 
             Any arg = new Any(new Type(XDocumentHandler.class),handler);
 
@@ -817,7 +816,7 @@ public class XMLTools {
         XInterface oWriter = (XInterface)xMSF.createInstance(
             "com.sun.star.xml.sax.Writer");
         XActiveDataSource xWriterDS = UnoRuntime.queryInterface(XActiveDataSource.class, oWriter);
-        XDocumentHandler xDocHandWriter = (XDocumentHandler) UnoRuntime.queryInterface
+        XDocumentHandler xDocHandWriter = UnoRuntime.queryInterface
             (XDocumentHandler.class, oWriter) ;
 
         if (xFacc.exists(fileURL))
@@ -919,7 +918,7 @@ public class XMLTools {
             "com.sun.star.comp." + docType + ".XML" + importType + "Importer");
         XImporter xImp = UnoRuntime.queryInterface
             (XImporter.class, oImp) ;
-        XDocumentHandler xDocHandImp = (XDocumentHandler) UnoRuntime.queryInterface
+        XDocumentHandler xDocHandImp = UnoRuntime.queryInterface
             (XDocumentHandler.class, oImp) ;
 
         xImp.setTargetDocument(xDoc) ;

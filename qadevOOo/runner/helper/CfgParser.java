@@ -65,7 +65,7 @@ public class CfgParser
 
         if (cfg != null)
         {
-            Enumeration cfgEnum = cfg.keys();
+            Enumeration<Object> cfgEnum = cfg.keys();
             while (cfgEnum.hasMoreElements())
             {
                 String pName = (String) cfgEnum.nextElement();
@@ -81,7 +81,7 @@ public class CfgParser
                 if (pName.equals(PropertyName.TEST_DOCUMENT_PATH))
                 {
 
-                    param.put("DOCPTH", (String) pValue);
+                    param.put("DOCPTH", pValue);
                     System.setProperty("DOCPTH", (String) pValue);
 
                 }
@@ -104,10 +104,10 @@ public class CfgParser
 
             //found something that could be a prefix
             //check all parameters for this
-            Iterator keys = param.keySet().iterator();
+            Iterator<String> keys = param.keySet().iterator();
             while (keys.hasNext())
             {
-                String key = (String) keys.next();
+                String key = keys.next();
                 if (key.startsWith(os))
                 {
                     Object oldValue = param.get(key);

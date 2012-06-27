@@ -129,7 +129,7 @@ public class XMLContentExporter extends TestCase {
 
             // text added to the document
             XSimpleText aText = xTextDoc.getText();
-            XTextCursor curs = (XTextCursor) aText.createTextCursor();
+            XTextCursor curs = aText.createTextCursor();
             aText.insertString(curs, CONTENT, false);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;

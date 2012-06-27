@@ -266,7 +266,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
      */
     public void _getShortCutManager() {
         Object o = oObj.getShortCutManager();
-        XServiceInfo xSI = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class,o);
+        XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class,o);
         String[] serviceNames = xSI.getSupportedServiceNames();
         boolean bSupportedServiceFound = false;
         for (int i=0; i<serviceNames.length; i++) {
@@ -306,8 +306,8 @@ public class _XUIConfigurationManager extends MultiMethodTest {
         XSingleComponentFactory xFactory = UnoRuntime.queryInterface(
                                 XSingleComponentFactory.class, xMenuBarSettings);
         try {
-            XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xMSF);
-            XComponentContext xContext = (XComponentContext)UnoRuntime.queryInterface(
+            XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
+            XComponentContext xContext = UnoRuntime.queryInterface(
                     XComponentContext.class, xProp.getPropertyValue("DefaultContext"));
             prop[3].Value = xFactory.createInstanceWithContext(xContext);
         }

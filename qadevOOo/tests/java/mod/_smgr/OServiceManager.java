@@ -117,9 +117,9 @@ public class OServiceManager extends TestCase {
         }
 
         try {
-            XSet set = (XSet) UnoRuntime.queryInterface
+            XSet set = UnoRuntime.queryInterface
                 (XSet.class, oInterface) ;
-            XSet set1 = (XSet) UnoRuntime.queryInterface
+            XSet set1 = UnoRuntime.queryInterface
                 (XSet.class, srvMan) ;
             XEnumeration oEnum = set1.createEnumeration();
             Object srv = oEnum.nextElement();
@@ -128,7 +128,7 @@ public class OServiceManager extends TestCase {
 
             newElement = oEnum.nextElement();
 
-            XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xProp = UnoRuntime.queryInterface(
                                             XPropertySet.class, oInterface);
             if (xProp != null) {
                 xContext = (XComponentContext) AnyConverter.toObject(

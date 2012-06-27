@@ -204,8 +204,7 @@ public class _XDataPilotDescriptor extends MultiMethodTest {
 
                 fieldsNames[cnt] = name ;
 
-                XPropertySet props = (XPropertySet)
-                    UnoRuntime.queryInterface(XPropertySet.class, field);
+                XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, field);
 
                 try {
                   switch (cnt % 5) {

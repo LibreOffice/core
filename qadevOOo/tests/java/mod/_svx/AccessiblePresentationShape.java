@@ -92,8 +92,7 @@ public class AccessiblePresentationShape extends TestCase {
 
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
-        XPropertySet shapeProps = (XPropertySet)
-                        UnoRuntime.queryInterface(XPropertySet.class, oShape);
+        XPropertySet shapeProps = UnoRuntime.queryInterface(XPropertySet.class, oShape);
 
         try {
             shapeProps.setPropertyValue(

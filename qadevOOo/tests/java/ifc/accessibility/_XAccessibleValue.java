@@ -314,7 +314,7 @@ public class _XAccessibleValue extends MultiMethodTest {
         }
     }
 
-    private Object getObjectValue(double val, Class clazz) {
+    private Object getObjectValue(double val, Class<?> clazz) {
         if (clazz.equals(Integer.class)) {
             return new Integer((int)val);
         }

@@ -146,7 +146,7 @@ public class SwXStyle extends TestCase {
             XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
             XInterface oInt = (XInterface)
                 oMSF.createInstance("com.sun.star.style.CharacterStyle");
-            oMyStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, oInt);
+            oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
         } catch ( com.sun.star.uno.Exception e ) {
             log.println("Error: exception occurred.");
             e.printStackTrace(log);
@@ -158,8 +158,7 @@ public class SwXStyle extends TestCase {
             log.println("FAILED");
         else
             log.println("OK");
-            XNameContainer oSFNC = (XNameContainer)
-            UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
+            XNameContainer oSFNC = UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 
         try {
             if ( oSFNC.hasByName("My Style") )
@@ -181,8 +180,7 @@ public class SwXStyle extends TestCase {
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
-        XPropertySet xProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oCursor);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, oCursor);
 
         try {
             xProp.setPropertyValue("CharStyleName", oMyStyle.getName());
@@ -204,8 +202,7 @@ public class SwXStyle extends TestCase {
         tEnv = new TestEnvironment(oMyStyle);
         tEnv.addObjRelation("PoolStyle", oStyle);
 
-        XPropertySet xStyleProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
+        XPropertySet xStyleProp = UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
         tEnv.addObjRelation("PropertyNames",getPropertyNames(xStyleProp));
 
         return tEnv;

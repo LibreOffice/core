@@ -75,7 +75,7 @@ class PropertySetHelper
     XPropertySet m_xPropertySet;
     public PropertySetHelper(Object _aObj)
         {
-            m_xPropertySet = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, _aObj);
+            m_xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _aObj);
         }
 
     /**
@@ -382,7 +382,7 @@ public class ReportDesignerTest extends ComplexTestCase {
                 assure("can't create instance of com.sun.star.sdb.DatabaseContext", x != null);
                 log.println("createInstance com.sun.star.sdb.DatabaseContext done");
 
-                XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, x);
+                XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, x);
                 showElements(xNameAccess);
                 Object aObj = xNameAccess.getByName(sFileURL);
 //                    log.println("1");
@@ -513,7 +513,7 @@ public class ReportDesignerTest extends ComplexTestCase {
     private String getFormatExtension(Object _xComponent /* int _nType*/ )
          {
              String sExtension;
-             XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, _xComponent );
+             XServiceInfo xServiceInfo = UnoRuntime.queryInterface( XServiceInfo.class, _xComponent );
              if ( xServiceInfo.supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
              {
                  // calc

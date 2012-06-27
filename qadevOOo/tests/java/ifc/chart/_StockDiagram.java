@@ -64,8 +64,7 @@ public class _StockDiagram extends MultiPropertyTest {
 
         oldDiagram = doc.getDiagram();
         doc.setDiagram(stock);
-        oObj = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, doc.getDiagram());
+        oObj = UnoRuntime.queryInterface(XPropertySet.class, doc.getDiagram());
     }
 
     /**

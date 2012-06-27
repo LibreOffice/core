@@ -36,7 +36,7 @@ public class _Shape extends MultiPropertyTest {
         XCell xCell = null;
 
         try {
-            xSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+            xSheet = UnoRuntime.queryInterface(
                              XSpreadsheet.class,
                              xSheetDoc.getSheets().getByName(sheetNames[0]));
             xCell = xSheet.getCellByPosition(0, 0);

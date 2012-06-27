@@ -114,9 +114,8 @@ public class ScTableColumnObj extends TestCase {
 
         XSpreadsheet xSpreadsheet = null;
 
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSheetDoc.getSheets();
-        XNameAccess oNames = (XNameAccess)
-            UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
+        XNameAccess oNames = UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
         try {
             xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
                 new Type(XSpreadsheet.class),
@@ -133,7 +132,7 @@ public class ScTableColumnObj extends TestCase {
         }
 
         XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, xSpreadsheet);
-        XTableColumns oColumns = (XTableColumns) oColumnRowRange.getColumns();
+        XTableColumns oColumns = oColumnRowRange.getColumns();
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oColumns);
         try {
             oObj = (XInterface) AnyConverter.toObject(

@@ -69,7 +69,7 @@ public class WriterTools {
         try {
             XDrawPageSupplier oDPS = UnoRuntime.queryInterface(
                                              XDrawPageSupplier.class, aDoc);
-            oDP = (XDrawPage) oDPS.getDrawPage();
+            oDP = oDPS.getDrawPage();
         } catch (Exception e) {
             throw new IllegalArgumentException("Couldn't get drawpage");
         }
@@ -82,7 +82,7 @@ public class WriterTools {
                                          int vpos, int width, int height,
                                          String pic, String name) {
         try {
-            Object oGObject = (XInterface) xMSF.createInstance(
+            Object oGObject = xMSF.createInstance(
                                       "com.sun.star.text.GraphicObject");
 
             XText the_text = aDoc.getText();
@@ -91,7 +91,7 @@ public class WriterTools {
                                                XTextContent.class, oGObject);
             the_text.insertTextContent(the_cursor, the_content, true);
 
-            XPropertySet oProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet oProps = UnoRuntime.queryInterface(
                                           XPropertySet.class, oGObject);
 
             String fullURL = util.utils.getFullTestURL(pic);

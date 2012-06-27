@@ -97,8 +97,7 @@ public class SwAccessibleFooterView extends TestCase {
             throw new StatusException("Error getting style by name!", e);
         }
 
-        final XPropertySet PropSet = (XPropertySet)
-            UnoRuntime.queryInterface( XPropertySet.class, StdStyle);
+        final XPropertySet PropSet = UnoRuntime.queryInterface( XPropertySet.class, StdStyle);
 
         // changing/getting some properties
         try {

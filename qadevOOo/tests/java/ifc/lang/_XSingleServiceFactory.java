@@ -55,7 +55,7 @@ import com.sun.star.uno.UnoRuntime;
 public class _XSingleServiceFactory extends MultiMethodTest {
 
     public XSingleServiceFactory oObj = null;
-    private Class[] mustSupport = null ;
+    private Class<?>[] mustSupport = null ;
 
     public void before() {
         mustSupport = (Class[]) tEnv.getObjRelation

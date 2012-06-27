@@ -164,8 +164,7 @@ public class ScIndexEnumeration_TableChartsEnumeration extends TestCase {
         // insert a chart
         Rectangle oRect = new Rectangle(500, 3000, 25000, 11000);
 
-        XCellRange oRange = (XCellRange)
-            UnoRuntime.queryInterface(XCellRange.class, oSheet);
+        XCellRange oRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
         XCellRange myRange = oRange.getCellRangeByName("A1:N4");
         XCellRangeAddressable oRangeAddr = UnoRuntime.queryInterface(XCellRangeAddressable.class, myRange);
         CellRangeAddress myAddr = oRangeAddr.getRangeAddress();

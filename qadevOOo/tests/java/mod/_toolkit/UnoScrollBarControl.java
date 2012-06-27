@@ -107,7 +107,7 @@ public class UnoScrollBarControl extends TestCase {
                                                                "ScrollBar",
                                                                "UnoControlScrollBar");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         XControlModel the_Model = aShape.getControl();
 
@@ -115,7 +115,7 @@ public class UnoScrollBarControl extends TestCase {
                                                              4500, 5000, 10000,
                                                              "TextField");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape2);
+        WriterTools.getDrawPage(xTextDoc).add(aShape2);
 
         XControlModel the_Model2 = aShape2.getControl();
 

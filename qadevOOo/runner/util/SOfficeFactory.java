@@ -386,7 +386,7 @@ public class SOfficeFactory {
         Object oInt = oDocMSF.createInstance(
             "com.sun.star.sheet.Spreadsheet");
 
-        XSpreadsheet oSpreadsheet = (XSpreadsheet) UnoRuntime.queryInterface(XSpreadsheet.class, oInt);
+        XSpreadsheet oSpreadsheet = UnoRuntime.queryInterface(XSpreadsheet.class, oInt);
 
         return oSpreadsheet;
     }
@@ -402,7 +402,7 @@ public class SOfficeFactory {
     }
 
     public static String getUniqueName(XInterface oInterface, String prefix) {
-        XNameAccess oNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oInterface);
+        XNameAccess oNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oInterface);
         if (oNameAccess == null) {
             return null;
         }
@@ -473,7 +473,7 @@ public class SOfficeFactory {
         XMultiServiceFactory oDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, oDoc);
 
         try {
-            oInstance = (Object) oDocMSF.createInstance(kind);
+            oInstance = oDocMSF.createInstance(kind);
         } catch (Exception e) {
             // Some exception occures.FAILED
             System.out.println("Couldn't create instance " + kind + ": " + e);
@@ -609,7 +609,7 @@ public class SOfficeFactory {
     // query for XServiceInfo
     public Object queryXServiceInfo(Object oObj) {
         if (oObj != null) {
-            XServiceInfo oInfo = (XServiceInfo) UnoRuntime.queryInterface(
+            XServiceInfo oInfo = UnoRuntime.queryInterface(
                 XServiceInfo.class, oObj);
             System.out.println("!!!! XServiceInfo n.a. !!!! ");
         } else {

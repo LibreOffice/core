@@ -64,8 +64,7 @@ public class _ChartAxisZSupplier extends MultiPropertyTest {
 
         doc.setDiagram(bar);
         log.println("Set it to 3D");
-        oObj = (XPropertySet)
-            UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
+        oObj = UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
         try {
             oObj.setPropertyValue("Dim3D", new Boolean(true));
         } catch(com.sun.star.lang.WrappedTargetException e) {

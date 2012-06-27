@@ -90,8 +90,7 @@ public class ConfigurationRead {
      */
     public String[] getRootNodeNames() {
 
-        XNameAccess xName = (XNameAccess)
-                    UnoRuntime.queryInterface(XNameAccess.class, root);
+        XNameAccess xName = UnoRuntime.queryInterface(XNameAccess.class, root);
         String[]names = xName.getElementNames();
         return names;
     }
@@ -106,7 +105,7 @@ public class ConfigurationRead {
         try {
 
             Object next = root.getByHierarchicalName(name);
-            XNameAccess x = (XNameAccess)UnoRuntime.queryInterface(
+            XNameAccess x = UnoRuntime.queryInterface(
                                                 XNameAccess.class, next);
             names = x.getElementNames();
             for (int i=0; i< names.length; i++) {

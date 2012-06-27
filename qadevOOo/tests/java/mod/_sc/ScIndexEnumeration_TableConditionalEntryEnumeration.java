@@ -77,7 +77,7 @@ public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCas
 
         XInterface oObj = null;
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
@@ -111,8 +111,7 @@ public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCas
         XPropertySet Props = null;
 
         try {
-            Props = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, oSheet);
+            Props = UnoRuntime.queryInterface(XPropertySet.class, oSheet);
             CFormat = Props.getPropertyValue("ConditionalFormat");
             if (utils.isVoid(CFormat)) {
                 log.println("Property 'ConditionalFormat' is void");

@@ -102,8 +102,7 @@ public class ScIndexEnumeration_SheetLinksEnumeration extends TestCase {
             com.sun.star.sheet.SheetLinkMode.VALUE);
 
         // Getting links.
-        XPropertySet docProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+        XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
 
         Object links = null;
         try {
@@ -116,7 +115,7 @@ public class ScIndexEnumeration_SheetLinksEnumeration extends TestCase {
             throw new StatusException("Couldn't get SheetLinks", e);
         }
 
-        oObj = (XInterface)UnoRuntime.queryInterface(XInterface.class, links);
+        oObj = UnoRuntime.queryInterface(XInterface.class, links);
 
         XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);
 

@@ -95,10 +95,10 @@ public class _XObjectInputStream extends MultiMethodTest {
         XPropertySet props1 = null ;
         XPropertySet props2 = null ;
 
-        props1 = (XPropertySet) UnoRuntime.queryInterface
+        props1 = UnoRuntime.queryInterface
             (XPropertySet.class, objRead) ;
 
-        props2 = (XPropertySet) UnoRuntime.queryInterface
+        props2 = UnoRuntime.queryInterface
             (XPropertySet.class, objWrite) ;
 
         if (props1 == null) {

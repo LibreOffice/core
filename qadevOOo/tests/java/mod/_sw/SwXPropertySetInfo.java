@@ -75,8 +75,7 @@ public class SwXPropertySetInfo extends TestCase {
         }
 
         log.println( "    getting the XPropertySetInfo" );
-        XPropertySet xProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xTextDoc);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xTextDoc);
         oObj = xProp.getPropertySetInfo();
         log.println( "    creating a new environment for PropertySetInfo object" );
 

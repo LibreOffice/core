@@ -31,7 +31,7 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
 
 
     /** Creates a new instance of APIDataBaseOutProducer */
-    public FatDataBaseOutProducer(HashMap param) {
+    public FatDataBaseOutProducer(HashMap<String,String> param) {
         super(param);
         String testBase = (String)mSqlInput.get("TestBase");
         int sep = testBase.indexOf('_');

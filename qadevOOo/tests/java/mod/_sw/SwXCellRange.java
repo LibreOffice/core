@@ -111,8 +111,7 @@ public class SwXCellRange extends TestCase {
             }
         }
         try {
-            XCellRange the_Range = (XCellRange)
-                    UnoRuntime.queryInterface(XCellRange.class, the_table);
+            XCellRange the_Range = UnoRuntime.queryInterface(XCellRange.class, the_table);
             oObj = the_Range.getCellRangeByPosition(0, 0, 3, 4);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );

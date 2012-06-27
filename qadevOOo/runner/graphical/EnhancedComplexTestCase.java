@@ -155,7 +155,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                 IniFile aIniFile = new IniFile(_aParam.getInputPath());
                 while (aIniFile.hasMoreElements())
                 {
-                    String sKey = (String)aIniFile.nextElement();
+                    String sKey = aIniFile.nextElement();
                     String sPath = FileHelper.getPath(_aParam.getInputPath());
                     String sEntry = FileHelper.appendPath(sPath, sKey);
                     File aFile = new File(sEntry);
@@ -348,7 +348,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                 IniFile aIniFile = new IniFile(_aParam.getInputPath());
                 while (aIniFile.hasMoreElements())
                 {
-                    String sSection = (String)aIniFile.nextElement();
+                    String sSection = aIniFile.nextElement();
 // TODO: not supported yet.
                     // callEveryPictureInIniFile(aIniFile, sSection, _aParam);
                 }

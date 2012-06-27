@@ -57,7 +57,7 @@ public class _XProxySettings extends MultiMethodTest {
      * Contains a HashMap with correct results of the tested methods. See
      * the class description.
      */
-    Map expectedProxies;
+    Map<String,String> expectedProxies;
 
     /**
      * Checks that the "XProxySettings.proxySettings" object relation is
@@ -68,7 +68,7 @@ public class _XProxySettings extends MultiMethodTest {
      * @see #expectedProxies
      */
     public void before() {
-        expectedProxies = (Map)tEnv.getObjRelation(
+        expectedProxies = (Map<String,String>)tEnv.getObjRelation(
                 "XProxySettings.proxySettings");
 
         if (expectedProxies == null) {
@@ -85,8 +85,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getFtpProxyAddress() {
         String ftpProxyAddress = oObj.getFtpProxyAddress();
-        String expectedFtpProxyAddress = (String)
-                expectedProxies.get("ftpProxyAddress");
+        String expectedFtpProxyAddress = expectedProxies.get("ftpProxyAddress");
 
         log.println("getFtpProxyAddress");
         log.println("getting: "+ftpProxyAddress);
@@ -104,8 +103,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getFtpProxyPort() {
         String ftpProxyPort = oObj.getFtpProxyPort();
-        String expectedFtpProxyPort = (String)
-                expectedProxies.get("ftpProxyPort");
+        String expectedFtpProxyPort = expectedProxies.get("ftpProxyPort");
 
         log.println("getFtpProxyPort");
         log.println("getting: "+ftpProxyPort);
@@ -123,8 +121,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getGopherProxyAddress() {
         String gopherProxyAddress = oObj.getGopherProxyAddress();
-        String expectedGopherProxyAddress = (String)
-                expectedProxies.get("gopherProxyAddress");
+        String expectedGopherProxyAddress = expectedProxies.get("gopherProxyAddress");
 
         tRes.tested("getGopherProxyAddress()",
                 gopherProxyAddress.equals(expectedGopherProxyAddress));
@@ -138,8 +135,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getGopherProxyPort() {
         String gopherProxyPort = oObj.getGopherProxyPort();
-        String expectedGopherProxyPort = (String)
-                expectedProxies.get("gopherProxyPort");
+        String expectedGopherProxyPort = expectedProxies.get("gopherProxyPort");
 
         tRes.tested("getGopherProxyPort()",
                 gopherProxyPort.equals(expectedGopherProxyPort));
@@ -153,8 +149,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getHttpProxyAddress() {
         String httpProxyAddress = oObj.getHttpProxyAddress();
-        String expectedHttpProxyAddress = (String)
-                expectedProxies.get("httpProxyAddress");
+        String expectedHttpProxyAddress = expectedProxies.get("httpProxyAddress");
 
         log.println("getHttpProxyAddress");
         log.println("getting: "+httpProxyAddress);
@@ -172,8 +167,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getHttpProxyPort() {
         String httpProxyPort = oObj.getHttpProxyPort();
-        String expectedHttpProxyPort = (String)
-                expectedProxies.get("httpProxyPort");
+        String expectedHttpProxyPort = expectedProxies.get("httpProxyPort");
 
         log.println("getHttpProxyPort");
         log.println("getting: "+httpProxyPort);
@@ -191,8 +185,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getHttpsProxyAddress() {
         String httpsProxyAddress = oObj.getHttpsProxyAddress();
-        String expectedHttpsProxyAddress = (String)
-                expectedProxies.get("httpsProxyAddress");
+        String expectedHttpsProxyAddress = expectedProxies.get("httpsProxyAddress");
 
         log.println("getHttpsProxyAddress");
         log.println("getting: "+httpsProxyAddress);
@@ -210,8 +203,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getHttpsProxyPort() {
         String httpsProxyPort = oObj.getHttpsProxyPort();
-        String expectedHttpsProxyPort = (String)
-                expectedProxies.get("httpsProxyPort");
+        String expectedHttpsProxyPort = expectedProxies.get("httpsProxyPort");
 
         log.println("getHttpsProxyPort");
         log.println("getting: "+httpsProxyPort);
@@ -229,8 +221,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getProxyBypassAddress() {
         String proxyBypassAddress = oObj.getProxyBypassAddress();
-        String expectedProxyBypassAddress = (String)
-                expectedProxies.get("proxyBypassAddress");
+        String expectedProxyBypassAddress = expectedProxies.get("proxyBypassAddress");
 
         log.println("getProxyBypassAddress");
         log.println("getting: "+proxyBypassAddress);
@@ -248,8 +239,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getSocksProxyAddress() {
         String socksProxyAddress = oObj.getSocksProxyAddress();
-        String expectedSocksProxyAddress = (String)
-                expectedProxies.get("socksProxyAddress");
+        String expectedSocksProxyAddress = expectedProxies.get("socksProxyAddress");
 
         log.println("getSocksProxyAddress");
         log.println("getting: "+socksProxyAddress);
@@ -267,8 +257,7 @@ public class _XProxySettings extends MultiMethodTest {
      */
     public void _getSocksProxyPort() {
         String socksProxyPort = oObj.getSocksProxyPort();
-        String expectedSocksProxyPort = (String)
-                expectedProxies.get("socksProxyPort");
+        String expectedSocksProxyPort = expectedProxies.get("socksProxyPort");
 
         log.println("getSocksProxyPort");
         log.println("getting: "+socksProxyPort);
@@ -287,7 +276,7 @@ public class _XProxySettings extends MultiMethodTest {
     public void _isProxyEnabled() {
         boolean proxyEnabled = oObj.isProxyEnabled();
 
-        String proxyEnabledStr = (String)expectedProxies.get("proxyEnabled");
+        String proxyEnabledStr = expectedProxies.get("proxyEnabled");
         boolean expected = proxyEnabledStr != null
                 && proxyEnabledStr.equalsIgnoreCase("true");
 

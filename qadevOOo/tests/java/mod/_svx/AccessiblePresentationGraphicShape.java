@@ -91,8 +91,7 @@ public class AccessiblePresentationGraphicShape extends TestCase {
 
         DrawTools.getShapes(DrawTools.getDrawPage(xDoc,0)).add(oShape);
 
-        XPropertySet oShapeProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class,oShape);
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oShape);
         try {
             oShapeProps.setPropertyValue(
                 "GraphicURL",util.utils.getFullTestURL("space-metal.jpg"));

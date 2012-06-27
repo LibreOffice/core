@@ -148,7 +148,7 @@ public class SwXTextDocument extends TestCase {
                                                 oTSSuppName);
             log.println(
                     "getting a TextSection with the XTextSectionSupplier()");
-            xTS = (XTextSection) UnoRuntime.queryInterface(XTextSection.class,
+            xTS = UnoRuntime.queryInterface(XTextSection.class,
                                                            oTSSuppIndex.getByIndex(0));
 
             XNamed xTSName = UnoRuntime.queryInterface(XNamed.class,
@@ -162,7 +162,7 @@ public class SwXTextDocument extends TestCase {
                                                                  the_table);
             the_name.setName("SwXTextDocument");
             SOfficeFactory.insertTextContent(xTextDoc,
-                                             (XTextContent) the_table);
+                                             the_table);
 
             log.println("    adding ReferenceMark");
 
@@ -173,7 +173,7 @@ public class SwXTextDocument extends TestCase {
 
             XTextContent oTC = UnoRuntime.queryInterface(
                                        XTextContent.class, aMark);
-            SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
+            SOfficeFactory.insertTextContent(xTextDoc, oTC);
 
             log.println("    adding TextGraphic");
             WriterTools.insertTextGraphic(xTextDoc, oDocMSF, 5200, 4200, 4400,
@@ -186,17 +186,17 @@ public class SwXTextDocument extends TestCase {
                                           "com.sun.star.text.Endnote");
             oTC = UnoRuntime.queryInterface(XTextContent.class,
                                                            aEndNote);
-            SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
+            SOfficeFactory.insertTextContent(xTextDoc, oTC);
 
             log.println("    adding Bookmark");
             SOfficeFactory.insertTextContent(xTextDoc,
-                                             (XTextContent) SOfficeFactory.createBookmark(
+                                             SOfficeFactory.createBookmark(
                                                      xTextDoc));
 
             log.println("    adding DocumentIndex");
             oTC = SOfficeFactory.createIndex(xTextDoc,
                                              "com.sun.star.text.DocumentIndex");
-            SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
+            SOfficeFactory.insertTextContent(xTextDoc, oTC);
 
             log.println("    adding TextFrame");
 
@@ -204,7 +204,7 @@ public class SwXTextDocument extends TestCase {
                                                               500);
             oTC = UnoRuntime.queryInterface(XTextContent.class,
                                                            frame);
-            SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
+            SOfficeFactory.insertTextContent(xTextDoc, oTC);
 
             log.println("creating a second textdocument");
             xSecondTextDoc = WriterTools.createTextDoc(

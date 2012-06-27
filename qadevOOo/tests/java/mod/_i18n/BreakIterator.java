@@ -96,7 +96,7 @@ public class BreakIterator extends TestCase {
 
         XTextDocument xDoc = UnoRuntime.queryInterface
             (XTextDocument.class, xTextDoc);
-        XTextRange xTextRange = (XTextRange)xDoc.getText();
+        XTextRange xTextRange = xDoc.getText();
         tEnv.addObjRelation("UnicodeString", xTextRange.getString());
 
         return tEnv;

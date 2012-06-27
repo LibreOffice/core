@@ -128,8 +128,7 @@ public class XMLSettingsExporter extends TestCase {
             //set some settings
             XModel xSheetModel = UnoRuntime.queryInterface(XModel.class, xSheetDoc);
             XController xController = xSheetModel.getCurrentController();
-            XPropertySet xPropSet = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, xController);
+            XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
             xPropSet.setPropertyValue("ShowGrid", "false");
 
             util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 0, 3, 3, 50, 50);

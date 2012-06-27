@@ -115,14 +115,14 @@ public class ScImportDescriptorBase extends TestCase {
         // create testobject here
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
         if (xSpreadsheets == null) log.println("FAILED"); else log.println("OK");
 
         log.println("getting a sheet");
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
         try {
-            oObj = (XInterface) UnoRuntime.queryInterface(XInterface.class,oIndexAccess.getByIndex(0));
+            oObj = UnoRuntime.queryInterface(XInterface.class,oIndexAccess.getByIndex(0));
         } catch (Exception e) {
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }

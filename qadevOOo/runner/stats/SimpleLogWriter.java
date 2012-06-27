@@ -96,7 +96,7 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
     {
         if (watcher != null)
         {
-            entry.UserDefinedParams.put("Watcher", (share.Watcher) watcher);
+            entry.UserDefinedParams.put("Watcher", watcher);
         }
     }
 }

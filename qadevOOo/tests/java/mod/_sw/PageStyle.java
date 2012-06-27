@@ -85,10 +85,10 @@ public class PageStyle extends TestCase {
             XStyleFamiliesSupplier oSFS = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
             xTextDoc);
             XNameAccess oSF = oSFS.getStyleFamilies();
-            oSFNA = (XNameAccess) UnoRuntime.queryInterface(
+            oSFNA = UnoRuntime.queryInterface(
                         XNameAccess.class,oSF.getByName("PageStyles"));    // get the page style
             XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
-            oStyle = (XStyle) UnoRuntime.queryInterface(
+            oStyle = UnoRuntime.queryInterface(
                         XStyle.class,oSFIA.getByIndex(0));
             log.println("Chosen pool style: "+oStyle.getName());
 
@@ -112,7 +112,7 @@ public class PageStyle extends TestCase {
             XInterface oInt = (XInterface)
                 oMSF.createInstance("com.sun.star.style.PageStyle");
 //                oMSF.createInstanceWithArguments("com.sun.star.style.PageStyle",new Object[]{oStyle});
-            oMyStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, oInt);
+            oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
         } catch ( com.sun.star.uno.Exception e ) {
             log.println("Error: exception occurred.");
             e.printStackTrace(log);
@@ -125,8 +125,7 @@ public class PageStyle extends TestCase {
         else
             log.println("OK");
 
-        XNameContainer oSFNC = (XNameContainer)
-            UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
+        XNameContainer oSFNC = UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 
 
         try {
@@ -149,8 +148,7 @@ public class PageStyle extends TestCase {
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
-        XPropertySet xProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oCursor);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, oCursor);
         Property[] props = xProp.getPropertySetInfo().getProperties();
         for (int i=0; i<props.length; i++)
             System.out.println("# Property: " + props[i].Name + "    val: " + props[i].Type.toString() + "   attr: " + props[i].Attributes);
@@ -176,8 +174,7 @@ public class PageStyle extends TestCase {
         tEnv.addObjRelation("PoolStyle", oStyle);
 
         tEnv.addObjRelation("FollowStyle", "Envelope");
-        XPropertySet xStyleProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
+        XPropertySet xStyleProp = UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
 
         short exclude = PropertyAttribute.MAYBEVOID + PropertyAttribute.READONLY;
         String[] names = utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude);

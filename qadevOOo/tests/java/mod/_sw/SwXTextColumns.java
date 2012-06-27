@@ -125,8 +125,7 @@ public class SwXTextColumns extends TestCase {
         try {
             log.println("Getting property ('TextColumns') value of style "
                 + oStyle.getName());
-            XPropertySet xProps = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class,oStyle);
+            XPropertySet xProps = UnoRuntime.queryInterface(XPropertySet.class,oStyle);
             oObj = (XTextColumns) AnyConverter.toObject(
                 new Type(XTextColumns.class),xProps.getPropertyValue("TextColumns"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {

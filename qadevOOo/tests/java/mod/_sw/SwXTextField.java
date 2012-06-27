@@ -117,12 +117,12 @@ public class SwXTextField extends TestCase {
 
             Object FieldMaster = oDocMSF.createInstance
                 ( "com.sun.star.text.FieldMaster.Database" );
-            XPropertySet PFieldMaster = (XPropertySet) UnoRuntime.queryInterface
-                (XPropertySet.class,(XInterface) FieldMaster);
+            XPropertySet PFieldMaster = UnoRuntime.queryInterface
+                (XPropertySet.class,FieldMaster);
             oObj = (XInterface) oDocMSF.createInstance
                 ( "com.sun.star.text.TextField.Database" );
 
-            instance = (XInterface) oDocMSF.createInstance
+            instance = oDocMSF.createInstance
                 ( "com.sun.star.text.TextField.DateTime" );
 
             XDependentTextField xTF = UnoRuntime.queryInterface(XDependentTextField.class,oObj);

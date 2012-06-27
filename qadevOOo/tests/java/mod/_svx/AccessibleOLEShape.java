@@ -85,8 +85,7 @@ public class AccessibleOLEShape extends TestCase {
 
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
-        XPropertySet shape_props = (XPropertySet)
-                        UnoRuntime.queryInterface(XPropertySet.class,oShape);
+        XPropertySet shape_props = UnoRuntime.queryInterface(XPropertySet.class,oShape);
 
         log.println("Inserting a Chart");
 

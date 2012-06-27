@@ -115,8 +115,7 @@ public class MarkableOutputStream extends TestCase {
         XActiveDataSource xdSmo = UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
 
         final XOutputStream PipeOut = UnoRuntime.queryInterface(XOutputStream.class,aPipe);
-        final XInputStream PipeIn = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class,aPipe);
+        final XInputStream PipeIn = UnoRuntime.queryInterface(XInputStream.class,aPipe);
 
         xdSmo.setOutputStream(PipeOut);
 
@@ -173,7 +172,7 @@ public class MarkableOutputStream extends TestCase {
                     try {
                         Object oInStream = msf.createInstance(
                             "com.sun.star.io.MarkableInputStream");
-                        xInStream = (XInputStream) UnoRuntime.queryInterface
+                        xInStream = UnoRuntime.queryInterface
                             (XInputStream.class, oInStream);
                     } catch(com.sun.star.uno.Exception e) {
                         return null;

@@ -27,7 +27,7 @@ import java.util.HashMap;
  * @author  sg128468
  */
 public abstract class DataBaseOutProducer implements LogWriter {
-    protected HashMap mSqlInput = null;
+    protected HashMap<String,Object> mSqlInput = null;
     protected HashMap<String, String[]> mSqlOutput = null;
     protected String[] mWriteableEntryTypes = null;
     protected SQLExecution mSqlExec;
@@ -37,8 +37,8 @@ public abstract class DataBaseOutProducer implements LogWriter {
     /** Creates a new instance of DataBaseOutProducer
      * @param param The HashMap with test parameters
      */
-    public DataBaseOutProducer(HashMap param) {
-        mSqlInput = new HashMap();
+    public DataBaseOutProducer(HashMap<String,String> param) {
+        mSqlInput = new HashMap<String,Object>();
         mSqlInput.putAll(param);
 
         Object o = param.get("DebugIsActive");
@@ -119,7 +119,7 @@ public abstract class DataBaseOutProducer implements LogWriter {
      */
     protected boolean insertEntry(DescEntry entry, LogWriter log) {
         // copy the swlInput HashMap, so it can be reset easily for the next run
-        HashMap copySqlInput = new HashMap();
+        HashMap<String,Object> copySqlInput = new HashMap<String,Object>();
         copySqlInput.putAll(mSqlInput);
         // put some stuff from entry in the HashMap
         mSqlInput.put("EntryLongName", entry.longName);

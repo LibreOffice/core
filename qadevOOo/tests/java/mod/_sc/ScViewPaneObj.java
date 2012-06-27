@@ -158,7 +158,7 @@ public class ScViewPaneObj extends TestCase {
         try {
             log.println( "getting Drawpages" );
             XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class,xSpreadsheetDoc);
-            XDrawPages oDP = (XDrawPages) oDPS.getDrawPages();
+            XDrawPages oDP = oDPS.getDrawPages();
             oDP.insertNewByIndex(1);
             oDP.insertNewByIndex(2);
             oDrawPage = (XDrawPage) AnyConverter.toObject(

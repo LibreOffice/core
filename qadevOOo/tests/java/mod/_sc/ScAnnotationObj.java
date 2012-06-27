@@ -123,15 +123,14 @@ public class ScAnnotationObj extends TestCase {
         log.println("Getting test object ") ;
 
         XSpreadsheetDocument xArea = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
-        XSpreadsheets oSheets = (XSpreadsheets) xArea.getSheets();
+        XSpreadsheets oSheets = xArea.getSheets();
 
         XIndexAccess XAccess = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         XCell oCell = null;
         try {
             XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),XAccess.getByIndex(cellPos.Sheet));
-            XCellRange oCRange = (XCellRange)
-                UnoRuntime.queryInterface(XCellRange.class, oSheet);
+            XCellRange oCRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
             oCell = oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);

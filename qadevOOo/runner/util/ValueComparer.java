@@ -98,7 +98,7 @@ public class ValueComparer {
         if((op1.getClass().getComponentType() == op2.getClass().getComponentType())
            && (Array.getLength(op1) == Array.getLength(op2)))
         {
-            Class zClass = op1.getClass().getComponentType();
+            Class<?> zClass = op1.getClass().getComponentType();
 
             for(int i = 0; i < Array.getLength(op1); ++ i)
                 result = result & compareObjects(Array.get(op1, i), Array.get(op2, i));
@@ -113,11 +113,11 @@ public class ValueComparer {
         return op1 == op2;
     }
 
-    static boolean compareUntil(Class zClass, Class untilClass, Object op1, Object op2) throws Exception {
+    static boolean compareUntil(Class<?> zClass, Class<?> untilClass, Object op1, Object op2) throws Exception {
         boolean result = true;
 
         // write inherited members first
-        Class superClass = zClass.getSuperclass();
+        Class<?> superClass = zClass.getSuperclass();
         if(superClass != null && superClass != untilClass)
             result = result & compareUntil(superClass, untilClass, op1, op2);
 
@@ -245,7 +245,7 @@ public class ValueComparer {
             compareEnums((Enum)op1, (Enum)op2);
 
         else if(op1.getClass() == String.class && op2.getClass() == String.class) // is it a String ?
-            result = ((String)op1).equals((String)op2);
+            result = ((String)op1).equals(op2);
 
         else // otherwise it must be a struct
             result = compareStructs(op1, op2);

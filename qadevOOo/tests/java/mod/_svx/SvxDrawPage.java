@@ -155,7 +155,7 @@ public class SvxDrawPage extends TestCase {
 
             XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(
                                               XDrawPagesSupplier.class, xDoc);
-            oDP = (XDrawPages) oDPS.getDrawPages();
+            oDP = oDPS.getDrawPages();
             oDP.insertNewByIndex(1);
             oDP.insertNewByIndex(2);
             oObj = (XDrawPage) AnyConverter.toObject(new Type(XDrawPage.class),

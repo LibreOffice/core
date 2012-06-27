@@ -86,7 +86,7 @@ public class UnoControlFormattedField extends TestCase {
                                                                "DatabaseFormattedField",
                                                                "UnoControlFormattedField");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         XControlModel the_Model = aShape.getControl();
 
@@ -94,11 +94,11 @@ public class UnoControlFormattedField extends TestCase {
                                                              4500, 5000, 10000,
                                                              "TextField");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape2);
+        WriterTools.getDrawPage(xTextDoc).add(aShape2);
 
         XControlModel the_Model2 = aShape2.getControl();
 
-        XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet xPS = UnoRuntime.queryInterface(
                                    XPropertySet.class, the_Model);
 
         //Try to query XControlAccess

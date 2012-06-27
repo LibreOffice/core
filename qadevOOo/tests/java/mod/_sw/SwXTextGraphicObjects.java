@@ -125,8 +125,7 @@ public class SwXTextGraphicObjects extends TestCase {
         }
 
         log.println( "adding graphic" );
-        XPropertySet oProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class,oObj);
+        XPropertySet oProps = UnoRuntime.queryInterface(XPropertySet.class,oObj);
         try {
             String wat = util.utils.getFullTestURL("space-metal.jpg");
             oProps.setPropertyValue("GraphicURL",wat);

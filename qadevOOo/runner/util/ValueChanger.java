@@ -965,7 +965,7 @@ public class ValueChanger {
  private static boolean isStructure(Object val) {
     boolean result = true ;
 
-    Class clazz = val.getClass() ;
+    Class<?> clazz = val.getClass() ;
 
     Method[] meth = clazz.getDeclaredMethods() ;
     for (int i = 0; i < meth.length; i++) {

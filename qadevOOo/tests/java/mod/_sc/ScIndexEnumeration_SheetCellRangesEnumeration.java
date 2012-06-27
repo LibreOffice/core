@@ -95,8 +95,7 @@ public class ScIndexEnumeration_SheetCellRangesEnumeration extends TestCase {
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndSheets.getByIndex(0));
-            XNameContainer oRanges = (XNameContainer)
-                UnoRuntime.queryInterface(XNameContainer.class, oObj);
+            XNameContainer oRanges = UnoRuntime.queryInterface(XNameContainer.class, oObj);
 
             oRange = oSheet.getCellRangeByName("C1:D4");
             oRanges.insertByName("Range1", oRange);

@@ -156,8 +156,7 @@ public class ScCellRangesObj extends TestCase {
         try {
             oSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class), oIndSheets.getByIndex(0));
-            XNameContainer oRanges = (XNameContainer)
-                UnoRuntime.queryInterface(XNameContainer.class, oObj);
+            XNameContainer oRanges = UnoRuntime.queryInterface(XNameContainer.class, oObj);
 
             oRange = oSheet.getCellRangeByName("C1:D4");
             oRanges.insertByName("Range1", oRange);
@@ -225,8 +224,7 @@ public class ScCellRangesObj extends TestCase {
             tEnv.addObjRelation("INSTANCE" + n, oRange);
         }
 
-        XPropertySet PropSet = (XPropertySet)
-                    UnoRuntime.queryInterface(XPropertySet.class, oObj);
+        XPropertySet PropSet = UnoRuntime.queryInterface(XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet",PropSet);
         tEnv.addObjRelation("SHEET", oSheet);
         // add expected results for the XCellRangesQuery interface test

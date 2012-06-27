@@ -62,8 +62,7 @@ public class _Chart3DBarProperties extends MultiPropertyTest {
 
         doc.setDiagram(bar);
         log.println("Change Diagram to 3D");
-        oObj = (XPropertySet)
-            UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
+        oObj = UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
         try {
             oObj.setPropertyValue("Dim3D", new Boolean(true));
         } catch(com.sun.star.lang.WrappedTargetException e) {
@@ -95,8 +94,7 @@ public class _Chart3DBarProperties extends MultiPropertyTest {
             ("Relation 'CHARTDOC' not found"));
 
         log.println("Change Diagram to 3D");
-        oObj = (XPropertySet)
-            UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
+        oObj = UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
         try {
             oObj.setPropertyValue("Dim3D", new Boolean(false));
         } catch(com.sun.star.lang.WrappedTargetException e) {

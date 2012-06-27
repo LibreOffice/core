@@ -104,10 +104,10 @@ public class CharacterStyle extends TestCase {
             xTextDoc);
             XNameAccess oSF = oSFS.getStyleFamilies();
             XIndexAccess oSFsIA = UnoRuntime.queryInterface(XIndexAccess.class, oSF);
-            oSFNA = (XNameAccess) UnoRuntime.queryInterface(
+            oSFNA = UnoRuntime.queryInterface(
                             XNameAccess.class,oSFsIA.getByIndex(0));
             XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
-            oStyle = (XStyle) UnoRuntime.queryInterface(
+            oStyle = UnoRuntime.queryInterface(
                             XStyle.class,oSFIA.getByIndex(0));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Error: exception occurred.");
@@ -124,7 +124,7 @@ public class CharacterStyle extends TestCase {
             XMultiServiceFactory oMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
             XInterface oInt = (XInterface)
                 oMSF.createInstance("com.sun.star.style.CharacterStyle");
-            oMyStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, oInt);
+            oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
         } catch ( com.sun.star.uno.Exception e ) {
             log.println("Error: exception occurred.");
             e.printStackTrace(log);
@@ -136,8 +136,7 @@ public class CharacterStyle extends TestCase {
             log.println("FAILED");
         else
             log.println("OK");
-            XNameContainer oSFNC = (XNameContainer)
-            UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
+            XNameContainer oSFNC = UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 
         try {
             if ( oSFNC.hasByName("My Style") )
@@ -159,8 +158,7 @@ public class CharacterStyle extends TestCase {
 
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
-        XPropertySet xProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oCursor);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, oCursor);
 
         try {
             xProp.setPropertyValue("CharStyleName", oMyStyle.getName());
@@ -182,8 +180,7 @@ public class CharacterStyle extends TestCase {
         tEnv = new TestEnvironment(oMyStyle);
         tEnv.addObjRelation("PoolStyle", oStyle);
 
-        XPropertySet xStyleProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
+        XPropertySet xStyleProp = UnoRuntime.queryInterface(XPropertySet.class, oMyStyle);
 
         short exclude = PropertyAttribute.MAYBEVOID + PropertyAttribute.READONLY;
         tEnv.addObjRelation("PropertyNames",utils.getFilteredPropertyNames(xStyleProp, (short)0, exclude));

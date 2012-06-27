@@ -65,10 +65,9 @@ public class ScIndexEnumeration_SpreadsheetsEnumeration extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
 
-        XInterface oObj = (XInterface)
-            UnoRuntime.queryInterface(XInterface.class, xSpreadsheets);
+        XInterface oObj = UnoRuntime.queryInterface(XInterface.class, xSpreadsheets);
 
         log.println("creating a new environment for object");
         XEnumerationAccess ea = UnoRuntime.queryInterface(XEnumerationAccess.class,oObj);

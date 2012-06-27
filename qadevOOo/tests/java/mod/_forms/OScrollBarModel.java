@@ -70,7 +70,7 @@ public class OScrollBarModel extends TestCase {
         XControlShape aShape = FormTools.createControlShape(
                                 xTextDoc,3000,4500,15000,10000,"ScrollBar");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
         oObj = aShape.getControl();
         log.println( "creating a new environment for OScrollBarModel object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

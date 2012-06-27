@@ -77,8 +77,7 @@ public class dbg {
      */
     public static Type[] getInterfaceTypes(XInterface xTarget) {
         Type[] types = null;
-        XTypeProvider xTypeProvider = (XTypeProvider)
-                UnoRuntime.queryInterface( XTypeProvider.class, xTarget);
+        XTypeProvider xTypeProvider = UnoRuntime.queryInterface( XTypeProvider.class, xTarget);
         if( xTypeProvider != null )
             types = xTypeProvider.getTypes();
         return types;
@@ -116,7 +115,7 @@ public class dbg {
      */
     public static void printInterfaceInfo(Type aType) {
         try {
-            Class zClass = aType.getZClass();
+            Class<?> zClass = aType.getZClass();
             Method[] methods = zClass.getDeclaredMethods();
             for (int i=0; i<methods.length; i++) {
                 System.out.println("\t" + methods[i].getReturnType().getName()
@@ -297,8 +296,7 @@ public class dbg {
      * @param aObject A UNO object.
      */
     public static void getSuppServices (Object aObject) {
-        XServiceInfo xSI = (XServiceInfo)
-                UnoRuntime.queryInterface(XServiceInfo.class,aObject);
+        XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class,aObject);
         printArray(xSI.getSupportedServiceNames());
         String str="Therein not Supported Service";
         boolean notSupportedServices = false;
@@ -319,8 +317,7 @@ public class dbg {
      */
     public static String getImplID( XInterface xTarget ) {
     String str = "";
-    XTypeProvider xTypeProvider = (XTypeProvider)
-                UnoRuntime.queryInterface( XTypeProvider.class, xTarget);
+    XTypeProvider xTypeProvider = UnoRuntime.queryInterface( XTypeProvider.class, xTarget);
             if( xTypeProvider != null ) {
         byte[] id = xTypeProvider.getImplementationId();
         str = "ImplementationID: ";

@@ -388,7 +388,7 @@ public class GenericModelTest extends TestCase {
 
         }
 
-        WriterTools.getDrawPage(m_xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(m_xTextDoc).add(aShape);
         oObj = aShape.getControl();
 
         log.println("Implementation name: " + util.utils.getImplName(oObj));
@@ -428,16 +428,16 @@ public class GenericModelTest extends TestCase {
         log.println("adding shape '" + m_LCShape_Type +"' for DataAwareControlModel test");
         aShape = FormTools.createControlShape(m_xTextDoc, 6000, 4500, 15000,
                                               10000, m_LCShape_Type);
-        WriterTools.getDrawPage(m_xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(m_xTextDoc).add(aShape);
 
-        m_XPS = (XPropertySet) UnoRuntime.queryInterface(
+        m_XPS = UnoRuntime.queryInterface(
                                         XPropertySet.class, oObj);
 
         int i = 0;
         NamedValue prop = null;
         try {
             for (i = 0; i < m_propertiesToSet.size(); i++){
-                prop = (NamedValue) m_propertiesToSet.get(i);
+                prop = m_propertiesToSet.get(i);
 
                 log.println("setting property: '"+prop.Name+"' to value '"+prop.Value.toString()+"'");
 
@@ -480,7 +480,7 @@ public class GenericModelTest extends TestCase {
         tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
 
         // adding relation for XFastPropertySet
-        java.util.HashSet exclude = new java.util.HashSet();
+        java.util.HashSet<String> exclude = new java.util.HashSet<String>();
         exclude.add("FormatKey");
         tEnv.addObjRelation("XFastPropertySet.ExcludeProps", exclude);
 

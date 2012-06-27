@@ -178,7 +178,7 @@ public class OSingleSelectQueryComposer extends TestCase {
         try {
             xMSF = (XMultiServiceFactory)Param.getMSF();
 
-              XNameAccess xNameAccess = (XNameAccess)UnoRuntime.queryInterface(
+              XNameAccess xNameAccess = UnoRuntime.queryInterface(
                         XNameAccess.class,
                         xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
             // we use the first datasource
@@ -196,7 +196,7 @@ public class OSingleSelectQueryComposer extends TestCase {
                 log.println("Service 'SingleSelectQueryComposer' not supported");
             }
 
-            oInterface = (XInterface) xConn.createInstance( sServiceNames[0]);
+            oInterface = xConn.createInstance( sServiceNames[0]);
 
             if (oInterface == null) {
                 log.println("Service wasn't created") ;
@@ -206,7 +206,7 @@ public class OSingleSelectQueryComposer extends TestCase {
 
             Object oRowSet = xMSF.createInstance("com.sun.star.sdb.RowSet") ;
 
-            XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface
+            XPropertySet xSetProp = UnoRuntime.queryInterface
                 (XPropertySet.class, oRowSet) ;
 
             xSetProp.setPropertyValue("DataSourceName", "Bibliography") ;

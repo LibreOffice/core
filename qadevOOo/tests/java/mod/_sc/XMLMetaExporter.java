@@ -135,7 +135,7 @@ public class XMLMetaExporter extends TestCase {
             // Obtaining and changing property values
             XDocumentInfoSupplier infoSup = UnoRuntime.queryInterface (XDocumentInfoSupplier.class,
             xSheetDoc) ;
-            XPropertySet docInfo = (XPropertySet) UnoRuntime.queryInterface
+            XPropertySet docInfo = UnoRuntime.queryInterface
                 (XPropertySet.class, infoSup.getDocumentInfo()) ;
             docInfo.setPropertyValue("Title", "TestDocument");
 

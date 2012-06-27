@@ -166,9 +166,8 @@ public class XMLStylesImporter extends TestCase {
                     try {
                         Object objectStyle =
                             StyleFamilies.getByName(impFamilyName);
-                        XNameContainer StyleFamilyName = (XNameContainer)
-                            UnoRuntime.queryInterface
-                            (XNameContainer.class, objectStyle);
+                        XNameContainer StyleFamilyName = UnoRuntime.queryInterface
+                        (XNameContainer.class, objectStyle);
                         boolean hasStyle =
                             StyleFamilyName.hasByName(impStyleName);
                         logF.println("Does style with name '" + impStyleName

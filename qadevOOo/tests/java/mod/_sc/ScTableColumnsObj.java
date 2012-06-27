@@ -107,9 +107,8 @@ public class ScTableColumnsObj extends TestCase {
         log.println("craeting a test environment");
 
         log.println("getting column");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSheetDoc.getSheets();
-        XNameAccess oNames = (XNameAccess)
-            UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
+        XNameAccess oNames = UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
         XSpreadsheet xSpreadsheet = null;
         try {
             xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
@@ -127,7 +126,7 @@ public class ScTableColumnsObj extends TestCase {
         }
 
         XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, xSpreadsheet);
-        XTableColumns oColumns = (XTableColumns) oColumnRowRange.getColumns();
+        XTableColumns oColumns = oColumnRowRange.getColumns();
         oObj = oColumns;
 
         log.println("creating a new environment for object");

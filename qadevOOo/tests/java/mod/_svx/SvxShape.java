@@ -183,8 +183,7 @@ public class SvxShape extends TestCase {
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
         log.println( "adding two style as ObjRelation for ShapeDescriptor" );
-        XPropertySet oShapeProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class,oObj);
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oObj);
         XStyle aStyle = null;
         try {
             aStyle = (XStyle) AnyConverter.toObject(
@@ -195,7 +194,7 @@ public class SvxShape extends TestCase {
         }
         tEnv.addObjRelation("Style1",aStyle);
 
-        oShapeProps = (XPropertySet) UnoRuntime.queryInterface
+        oShapeProps = UnoRuntime.queryInterface
             (XPropertySet.class,oShape);
         try {
             aStyle = (XStyle) AnyConverter.toObject(

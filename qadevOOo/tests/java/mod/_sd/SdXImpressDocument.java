@@ -143,7 +143,7 @@ public class SdXImpressDocument extends TestCase {
             "Rectangle");
 
 
-        XPropertySet xShapeProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, aShape);
+        XPropertySet xShapeProps = UnoRuntime.queryInterface(XPropertySet.class, aShape);
 
         try {
             xShapeProps.setPropertyValue("FillStyle", com.sun.star.drawing.FillStyle.SOLID);

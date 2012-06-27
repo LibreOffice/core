@@ -61,7 +61,7 @@ public class _Settings extends MultiPropertyTest {
         Exception ex = null;
 
         try {
-            Class cPrinterJob = Class.forName("java.awt.print.PrinterJob");
+            Class<?> cPrinterJob = Class.forName("java.awt.print.PrinterJob");
             Method lookupMethod = cPrinterJob.getDeclaredMethod("lookupPrintServices", new Class[0]);
             Object retValue = lookupMethod.invoke(cPrinterJob, new Object[0]);
             oServices = (Object[])retValue;
@@ -146,12 +146,12 @@ public class _Settings extends MultiPropertyTest {
     private String getPrinterNameWithReflection(Object pService) {
         String pName = null;
         try {
-            Class cPrintService = Class.forName("javax.print.PrintService");
+            Class<?> cPrintService = Class.forName("javax.print.PrintService");
             Method getNameMethod = cPrintService.getDeclaredMethod("getName", new Class[0]);
             Object retValue = getNameMethod.invoke(pService, new Object[0]);
             pName = (String)retValue;
         }
-        // ignore all excptions: we already ran into one of these if Java is too old
+        // ignore all exceptions: we already ran into one of these if Java is too old
         catch(java.lang.ClassNotFoundException e) {
         }
         catch(java.lang.NoSuchMethodException e) {

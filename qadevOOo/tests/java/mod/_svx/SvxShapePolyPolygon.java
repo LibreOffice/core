@@ -207,8 +207,8 @@ public class SvxShapePolyPolygon extends TestCase {
 
             Point[][] polygon = new Point[][] {square1, square2};
 
-            ((XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,
-                oShape)).setPropertyValue("PolyPolygon", polygon) ;
+            UnoRuntime.queryInterface(XPropertySet.class,
+                oShape).setPropertyValue("PolyPolygon", polygon) ;
 
             oObj = oShape ;
 
@@ -226,16 +226,14 @@ public class SvxShapePolyPolygon extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         log.println( "adding two styles as ObjRelation for ShapeDescriptor" );
-        XPropertySet oShapeProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class,oObj);
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oObj);
         XStyle aStyle = null;
         try {
             aStyle = (XStyle) AnyConverter.toObject(
                 new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
         } catch (Exception e) {}
         tEnv.addObjRelation("Style1",aStyle);
-        oShapeProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class,oShape);
+        oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oShape);
         try {
             aStyle = (XStyle) AnyConverter.toObject(
                 new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));

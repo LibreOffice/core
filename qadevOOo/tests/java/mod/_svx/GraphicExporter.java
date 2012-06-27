@@ -141,7 +141,7 @@ public class GraphicExporter extends TestCase {
                                  "GraphicObject");
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc, 0)).add(oShape);
 
-        XPropertySet oShapeProps = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(
                                            XPropertySet.class, oShape);
         XComponent xComp = null;
 
@@ -153,7 +153,7 @@ public class GraphicExporter extends TestCase {
                                                            oShape);
 
             XExporter xEx = UnoRuntime.queryInterface(
-                                    XExporter.class, (XInterface) go);
+                                    XExporter.class, go);
             xEx.setSourceDocument(xComp);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);

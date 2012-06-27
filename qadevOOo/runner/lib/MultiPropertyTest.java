@@ -74,7 +74,7 @@ public class MultiPropertyTest extends MultiMethodTest
      */
     protected void before()
     {
-        XServiceInfo xInfo = (XServiceInfo) UnoRuntime.queryInterface(
+        XServiceInfo xInfo = UnoRuntime.queryInterface(
                 XServiceInfo.class, oObj);
 
         optionalService = entry.isOptional;

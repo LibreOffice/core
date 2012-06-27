@@ -156,14 +156,13 @@ public class SdXShape extends TestCase {
         XShape oShape = SOF.createShape
             (xDrawDoc, 3000, 4500, 15000, 1000, "Ellipse");
         oShapes.add((XShape) oObj);
-        oShapes.add((XShape) oShape);
+        oShapes.add(oShape);
 
         log.println( "creating a new environment for XShape object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         log.println( "adding two style as ObjRelation for ShapeDescriptor" );
-        XPropertySet oShapeProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oObj);
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class, oObj);
         XStyle aStyle = null;
         try {
             aStyle = (XStyle) AnyConverter.toObject(
@@ -184,8 +183,7 @@ public class SdXShape extends TestCase {
         }
 
         tEnv.addObjRelation("Style1", aStyle);
-        oShapeProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oShape);
+        oShapeProps = UnoRuntime.queryInterface(XPropertySet.class, oShape);
         try {
             aStyle = (XStyle) AnyConverter.toObject(
                 new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));

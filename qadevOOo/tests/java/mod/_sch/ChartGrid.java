@@ -94,12 +94,12 @@ public class ChartGrid extends TestCase {
 
         // get the Diagram
         log.println( "getting Diagram" );
-        oDiagram = (XDiagram) xChartDoc.getDiagram();
+        oDiagram = xChartDoc.getDiagram();
 
         // get the Grid
         log.println( "getting ChartGrid" );
         XAxisXSupplier oAxisSup = UnoRuntime.queryInterface(XAxisXSupplier.class,oDiagram);
-        oObj = (XPropertySet) oAxisSup.getXMainGrid();
+        oObj = oAxisSup.getXMainGrid();
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

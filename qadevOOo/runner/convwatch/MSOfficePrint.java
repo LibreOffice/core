@@ -249,7 +249,7 @@ public class MSOfficePrint
                 String[] aList = new String[nValues];
                 for (int i=0;i<nValues;i++)
                 {
-                    String aStr = (String) _aStartCommand.get(i);
+                    String aStr = _aStartCommand.get(i);
                     if (aStr == null)
                     {
                         aStr = "";

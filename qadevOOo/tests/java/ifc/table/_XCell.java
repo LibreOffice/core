@@ -83,7 +83,7 @@ public class _XCell extends MultiMethodTest {
         log.println("getFormula()");
         oObj.setFormula("=2+2");
 
-        formula = (String) oObj.getFormula();
+        formula = oObj.getFormula();
 
         result &= formula.endsWith("2+2");
         tRes.tested("getFormula()", result);
@@ -117,7 +117,7 @@ public class _XCell extends MultiMethodTest {
         double value = 0;
         log.println("getValue() ...");
 
-        value = (double) oObj.getValue();
+        value = oObj.getValue();
 
         tRes.tested("getValue()",result);
     } // end getValue()
@@ -133,7 +133,7 @@ public class _XCell extends MultiMethodTest {
 
         oObj.setFormula("=2/6") ;
 
-        formula = (String) oObj.getFormula();
+        formula = oObj.getFormula();
 
         result &= formula.endsWith("2/6");
         tRes.tested ("setFormula()", result) ;
@@ -149,7 +149,7 @@ public class _XCell extends MultiMethodTest {
         log.println("setValue() ...");
 
         oObj.setValue(222.333) ;
-        cellValue = (double) oObj.getValue() ;
+        cellValue = oObj.getValue() ;
 
         result &= (cellValue == 222.333);
         tRes.tested("setValue()", result);

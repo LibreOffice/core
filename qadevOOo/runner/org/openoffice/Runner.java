@@ -131,7 +131,7 @@ public class Runner
         }
 
         Properties aProps = System.getProperties();
-        Enumeration aEnum = aProps.propertyNames();
+        Enumeration<?> aEnum = aProps.propertyNames();
         // Enumeration aEnum = aProps.elements();        // these are only the values
         boolean bEmergencyStop = false;
 
@@ -154,10 +154,10 @@ public class Runner
         bEmergencyStop |= checkPathVariable("sun.boot.class.path", sDelim);
 
         // ----- check all TestParameters -----
-        Iterator aIter = _aParams.keySet().iterator();
+        Iterator<String> aIter = _aParams.keySet().iterator();
         while (aIter.hasNext())
         {
-            String sKey = (String) aIter.next();
+            String sKey = aIter.next();
             if (_aParams.get(sKey) instanceof String)
             {
                 String sValue = (String) _aParams.get(sKey);

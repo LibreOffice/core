@@ -105,8 +105,7 @@ public class SwXMailMerge extends TestCase {
         } catch (Exception e) {
             throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
         }
-        XPropertySet oRowSetProps = (XPropertySet)
-                        UnoRuntime.queryInterface(XPropertySet.class, oRowSet);
+        XPropertySet oRowSetProps = UnoRuntime.queryInterface(XPropertySet.class, oRowSet);
         XRowSet xRowSet = UnoRuntime.queryInterface(XRowSet.class, oRowSet);
         try {
             oRowSetProps.setPropertyValue("DataSourceName",cDataSourceName);
@@ -150,8 +149,7 @@ public class SwXMailMerge extends TestCase {
 
         log.println("fill MailMerge with default connection");
 
-        XPropertySet oObjProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class, oObj);
+        XPropertySet oObjProps = UnoRuntime.queryInterface(XPropertySet.class, oObj);
         try {
             oObjProps.setPropertyValue("ActiveConnection", getLocalXConnection(Param));
             oObjProps.setPropertyValue("DataSourceName", cDataSourceName);
@@ -222,7 +220,7 @@ public class SwXMailMerge extends TestCase {
         vXJobArgs[3] = vXJobArg3;
 
 
-        Job = (XJob) UnoRuntime.queryInterface(XJob.class, oObj);
+        Job = UnoRuntime.queryInterface(XJob.class, oObj);
         try{
             Job.execute(vXJobArg2);
         } catch ( IllegalArgumentException e){
@@ -241,7 +239,7 @@ public class SwXMailMerge extends TestCase {
         } catch (Exception e) {
             throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
         }
-        oRowSetProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRowSet);
+        oRowSetProps = UnoRuntime.queryInterface(XPropertySet.class, oRowSet);
 
         xRowSet = UnoRuntime.queryInterface(XRowSet.class, oRowSet);
 
@@ -269,9 +267,8 @@ public class SwXMailMerge extends TestCase {
         XResultSet oMMXResultSet = null;
         try {
             oMMXResultSet = UnoRuntime.queryInterface(XResultSet.class,
-                   ( (XInterface)
-                    ( (XMultiServiceFactory)
-                    Param.getMSF()).createInstance("com.sun.star.sdb.RowSet")));
+                   ( (XMultiServiceFactory)
+                Param.getMSF()).createInstance("com.sun.star.sdb.RowSet"));
 
         } catch (Exception e) {
             throw new StatusException("Can't create com.sun.star.sdb.RowSet", e);
@@ -332,8 +329,7 @@ public class SwXMailMerge extends TestCase {
             XInterface newSource = (XInterface) xMSF.createInstance
                 ("com.sun.star.sdb.DataSource") ;
 
-            XPropertySet xSrcProp = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, newSource);
+            XPropertySet xSrcProp = UnoRuntime.queryInterface(XPropertySet.class, newSource);
 
             xSrcProp.setPropertyValue("URL", tmpDatabaseUrl) ;
 
@@ -367,8 +363,7 @@ public class SwXMailMerge extends TestCase {
         } catch(Exception e) {
             throw new StatusException("Couldn't create instance of 'com.sun.star.sdb.DatabaseContext'", e);
         }
-        XNameAccess xNADataCont = (XNameAccess)
-            UnoRuntime.queryInterface(XNameAccess.class, oDataCont);
+        XNameAccess xNADataCont = UnoRuntime.queryInterface(XNameAccess.class, oDataCont);
 
         String[] dataNames = xNADataCont.getElementNames();
 

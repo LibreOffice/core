@@ -141,8 +141,7 @@ public class SwXHeadFootText extends TestCase {
             throw new StatusException("Error getting style by name!", e);
         }
 
-        PropSet = (XPropertySet)
-            UnoRuntime.queryInterface( XPropertySet.class, StdStyle);
+        PropSet = UnoRuntime.queryInterface( XPropertySet.class, StdStyle);
 
         // changing/getting some properties
         try {

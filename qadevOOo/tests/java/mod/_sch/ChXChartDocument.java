@@ -127,7 +127,7 @@ public class ChXChartDocument extends TestCase {
         // get the chartdocument
         log.println("getting ChartDocument");
 
-        XInterface oObj = (XChartDocument) xChartDoc;
+        XInterface oObj = xChartDoc;
 
         XController cont1 = xChartDoc.getCurrentController();
         XController cont2 = doc2.getCurrentController();

@@ -109,16 +109,15 @@ public class ScTableRowObj extends TestCase {
         log.println("creating a test environment");
 
         XSpreadsheet xSpreadsheet = null;
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSheetDoc.getSheets();
-        XNameAccess oNames = (XNameAccess)
-            UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
+        XNameAccess oNames = UnoRuntime.queryInterface( XNameAccess.class, xSpreadsheets );
         try {
             xSpreadsheet = (XSpreadsheet) AnyConverter.toObject(
                 new Type(XSpreadsheet.class),
                     oNames.getByName(oNames.getElementNames()[0]));
 
             XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, xSpreadsheet);
-            XTableRows oRows = (XTableRows) oColumnRowRange.getRows();
+            XTableRows oRows = oColumnRowRange.getRows();
             XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oRows);
             oObj = (XInterface) AnyConverter.toObject(
                     new Type(XInterface.class),oIndexAccess.getByIndex(6));

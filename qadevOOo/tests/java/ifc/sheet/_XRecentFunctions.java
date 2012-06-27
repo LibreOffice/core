@@ -133,7 +133,7 @@ public class _XRecentFunctions extends MultiMethodTest {
                 PropertyValue[] propVals = (PropertyValue[])
                     functionList.getByName(names[i]);
                 for (int j = 0; j < propVals.length; j++) {
-                    String propName = (String)propVals[j].Name;
+                    String propName = propVals[j].Name;
                     if (propName.equals("Id")) {
                         IDs[i - startIdx] =
                             ((Integer)propVals[j].Value).intValue();

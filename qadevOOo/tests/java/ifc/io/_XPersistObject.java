@@ -111,19 +111,18 @@ public class _XPersistObject extends MultiMethodTest {
         try {
             Object noPS = tEnv.getObjRelation("noPS");
             if ( noPS == null) {
-                XPropertySet objps = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet objps = UnoRuntime.queryInterface(
                     XPropertySet.class, oObj);
                 XPropertySetInfo objpsi = objps.getPropertySetInfo();
                 Property[] objprops = objpsi.getProperties();
 
                 Object oCopy = ((XMultiServiceFactory)tParam.getMSF()).createInstance(sname);
 
-                XPersistObject persCopy = (XPersistObject)
-                        UnoRuntime.queryInterface(XPersistObject.class, oCopy);
+                XPersistObject persCopy = UnoRuntime.queryInterface(XPersistObject.class, oCopy);
 
                 persCopy.read(iStream);
 
-                XPropertySet copyps = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet copyps = UnoRuntime.queryInterface(
                                                     XPropertySet.class, oCopy);
 
                 XPropertySetInfo copypsi = copyps.getPropertySetInfo();
@@ -158,8 +157,7 @@ public class _XPersistObject extends MultiMethodTest {
                 }
             } else {
                 Object oCopy = ((XMultiServiceFactory)tParam.getMSF()).createInstance(sname);
-                XPersistObject persCopy = (XPersistObject)
-                        UnoRuntime.queryInterface(XPersistObject.class, oCopy);
+                XPersistObject persCopy = UnoRuntime.queryInterface(XPersistObject.class, oCopy);
 
                 persCopy.read(iStream);
 
@@ -219,11 +217,9 @@ public class _XPersistObject extends MultiMethodTest {
             XActiveDataSink xdSmi = UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
             XActiveDataSource xdSmo = UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
 
-            XInputStream miStream = (XInputStream)
-                UnoRuntime.queryInterface(XInputStream.class, mistream);
+            XInputStream miStream = UnoRuntime.queryInterface(XInputStream.class, mistream);
             XOutputStream moStream = UnoRuntime.queryInterface(XOutputStream.class, mostream);
-            XInputStream PipeIn = (XInputStream)
-                UnoRuntime.queryInterface(XInputStream.class, aPipe);
+            XInputStream PipeIn = UnoRuntime.queryInterface(XInputStream.class, aPipe);
             XOutputStream PipeOut = UnoRuntime.queryInterface(XOutputStream.class,aPipe);
 
             xdSi.setInputStream(miStream);

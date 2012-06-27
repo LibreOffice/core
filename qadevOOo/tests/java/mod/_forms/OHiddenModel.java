@@ -153,7 +153,7 @@ public class OHiddenModel extends TestCase {
 
             Object frm = nc.getByName("OHiddenModelForm");
 
-            XNameContainer frmNC = (XNameContainer) UnoRuntime.queryInterface(
+            XNameContainer frmNC = UnoRuntime.queryInterface(
                     XNameContainer.class, frm);
 
             frmNC.insertByName("OHiddenModel", ctrl);

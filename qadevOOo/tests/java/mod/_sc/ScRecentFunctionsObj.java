@@ -111,8 +111,7 @@ public class ScRecentFunctionsObj extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // Other parameters required for interface tests
-        XNameAccess NA = (XNameAccess)
-            UnoRuntime.queryInterface(XNameAccess.class, allFunctions);
+        XNameAccess NA = UnoRuntime.queryInterface(XNameAccess.class, allFunctions);
         tEnv.addObjRelation("FUNCTIONLIST", NA);
 
         return tEnv;

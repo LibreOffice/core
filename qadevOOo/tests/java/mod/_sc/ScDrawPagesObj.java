@@ -109,7 +109,7 @@ public class ScDrawPagesObj extends TestCase {
         // get the drawpage of drawing here
         log.println( "getting Drawpages" );
         XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xSheetDoc);
-        oDP = (XDrawPages) oDPS.getDrawPages();
+        oDP = oDPS.getDrawPages();
         oDP.insertNewByIndex(1);
         oDP.insertNewByIndex(2);
         oObj = oDP;

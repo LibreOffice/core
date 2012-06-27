@@ -85,7 +85,7 @@ public class Toolkit extends TestCase {
                                                             4500, 15000, 10000,
                                                             "CommandButton");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         XControlModel the_Model = aShape.getControl();
 

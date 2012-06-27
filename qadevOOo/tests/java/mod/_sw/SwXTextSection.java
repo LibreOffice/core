@@ -150,7 +150,7 @@ public class SwXTextSection extends TestCase {
         tEnv.addObjRelation("TRO",new Boolean(true));
 
         try {
-            TC = (XTextColumns) UnoRuntime.queryInterface(XTextColumns.class,
+            TC = UnoRuntime.queryInterface(XTextColumns.class,
                     oDocMSF.createInstance("com.sun.star.text.TextColumns"));
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace(log);

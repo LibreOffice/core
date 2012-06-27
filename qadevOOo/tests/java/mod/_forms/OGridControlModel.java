@@ -193,7 +193,7 @@ public class OGridControlModel extends GenericModelTest {
             throw new StatusException("Can't create column instances.", e);
         }
 
-        XNameContainer aContainer = (XNameContainer) UnoRuntime.queryInterface(
+        XNameContainer aContainer = UnoRuntime.queryInterface(
                                             XNameContainer.class, oObj);
 
         try {
@@ -227,7 +227,7 @@ public class OGridControlModel extends GenericModelTest {
 
 
         tEnv.addObjRelation("Comparer",
-                            new Comparator() {
+                            new Comparator<Object>() {
             public int compare(Object o1, Object o2) {
                 XNamed named1 = UnoRuntime.queryInterface(
                                         XNamed.class, o1);
@@ -239,10 +239,6 @@ public class OGridControlModel extends GenericModelTest {
                 }
 
                 return -1;
-            }
-
-            public boolean equals(Object obj) {
-                return compare(this, obj) == 0;
             }
         });
 
@@ -356,7 +352,7 @@ class OGridControlModelold extends TestCase {
             throw new StatusException("Can't create column instances.", e);
         }
 
-        XNameContainer aContainer = (XNameContainer) UnoRuntime.queryInterface(
+        XNameContainer aContainer = UnoRuntime.queryInterface(
                                             XNameContainer.class, oObj);
 
         try {

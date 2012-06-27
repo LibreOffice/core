@@ -91,14 +91,14 @@ public class ObjectInspectorModel extends TestCase {
 
         XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
 
-        XPropertySet xMSFProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xMSF);
+        XPropertySet xMSFProp = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
         XComponentContext xDefaultContext = null;
         try{
             // Get the default context from the office server.
             Object oDefaultContext = xMSFProp.getPropertyValue("DefaultContext");
 
             // Query for the interface XComponentContext.
-            xDefaultContext = (XComponentContext) UnoRuntime.queryInterface(
+            xDefaultContext = UnoRuntime.queryInterface(
                     XComponentContext.class, oDefaultContext);
 
         } catch (UnknownPropertyException e){
@@ -148,7 +148,7 @@ public class ObjectInspectorModel extends TestCase {
 
         XFrame existentInspector = null;
 
-        XFrame xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, StarDesktop);
+        XFrame xFrame = UnoRuntime.queryInterface(XFrame.class, StarDesktop);
 
         existentInspector = xFrame.findFrame( "ObjectInspector", 255 );
 

@@ -83,7 +83,7 @@ public class OQueryDesign extends TestCase {
             // we use the first datasource
             XDataSource xDS = null;
         try {
-            xNameAccess = (XNameAccess) UnoRuntime.queryInterface(
+            xNameAccess = UnoRuntime.queryInterface(
                         XNameAccess.class,
                         xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
         } catch (Exception ex) {
@@ -101,7 +101,7 @@ public class OQueryDesign extends TestCase {
             throw new StatusException( "Could not get XDataSource", ex );
         }
         try {
-            xNameAccess = (XNameAccess) UnoRuntime.queryInterface(
+            xNameAccess = UnoRuntime.queryInterface(
                         XNameAccess.class,
                         xMSF.createInstance("com.sun.star.sdb.DatabaseContext"));
         } catch (Exception ex) {
@@ -149,7 +149,7 @@ public class OQueryDesign extends TestCase {
 
         Object oDataSource = null;
         try{
-            XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBC);
+            XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, oDBC);
             oDataSource = xNA.getByName(sDataSourceName);
         } catch ( com.sun.star.container.NoSuchElementException e){
             throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
@@ -248,7 +248,7 @@ public class OQueryDesign extends TestCase {
 
         Object oDataSource = null;
         try{
-            XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBC);
+            XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, oDBC);
             oDataSource = xNA.getByName(sDataSourceName);
         } catch ( com.sun.star.container.NoSuchElementException e){
             throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;

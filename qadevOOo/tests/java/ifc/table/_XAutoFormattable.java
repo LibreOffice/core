@@ -61,10 +61,10 @@ public class _XAutoFormattable extends MultiMethodTest {
             oObj.autoFormat(name); // applying default format
 
             // getting current background of the cell
-            XCellRange cellRange = (XCellRange) UnoRuntime.queryInterface(
+            XCellRange cellRange = UnoRuntime.queryInterface(
                                            XCellRange.class, oObj);
             XCell oCell = cellRange.getCellByPosition(0, 0);
-            XPropertySet PS = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet PS = UnoRuntime.queryInterface(
                                       XPropertySet.class, oCell);
 
             Integer bkgrnd1;
@@ -77,7 +77,7 @@ public class _XAutoFormattable extends MultiMethodTest {
             // getting formats names.
             XInterface iFormats = (XInterface) oMSF.createInstance(
                                           "com.sun.star.sheet.TableAutoFormats");
-            XNameAccess formats = (XNameAccess) UnoRuntime.queryInterface(
+            XNameAccess formats = UnoRuntime.queryInterface(
                                           XNameAccess.class, iFormats);
             String[] names = formats.getElementNames();
 

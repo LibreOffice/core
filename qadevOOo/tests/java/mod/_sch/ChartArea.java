@@ -100,7 +100,7 @@ public class ChartArea extends TestCase {
 
         // get the Area
         log.println( "getting Area" );
-        XPropertySet oObj = (XPropertySet) xChartDoc.getArea();
+        XPropertySet oObj = xChartDoc.getArea();
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

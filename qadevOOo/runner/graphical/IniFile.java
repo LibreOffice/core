@@ -27,7 +27,7 @@ import java.util.Enumeration;
    Helper class to give a simple API to read/write windows like ini files
 */
 /* public */ // is only need, if we need this class outside package convwatch
-public class IniFile implements Enumeration
+public class IniFile implements Enumeration<String>
 {
 
     /**
@@ -423,10 +423,10 @@ public class IniFile implements Enumeration
                     if (sLine.startsWith("["))
                     {
                         // write an extra empty line before next section.
-                        aWriter.writeByte((int) '\n');
+                        aWriter.writeByte('\n');
                     }
                     aWriter.writeBytes(sLine);
-                    aWriter.writeByte((int) '\n');
+                    aWriter.writeByte('\n');
                 }
                 aWriter.close();
             }
@@ -648,7 +648,7 @@ public class IniFile implements Enumeration
      * Enumeration Interface
      * @return a key without the enveloped '[' ']'
      */
-    public Object nextElement()
+    public String nextElement()
         {
             int nLineWithSection = findNextSection(m_aEnumerationPos);
             if (nLineWithSection != -1)

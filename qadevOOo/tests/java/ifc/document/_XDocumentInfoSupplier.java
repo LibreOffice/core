@@ -32,13 +32,13 @@ public class _XDocumentInfoSupplier extends MultiMethodTest {
     public void _getDocumentInfo() {
         // returns a com.sun.star.document.DocumentInfo
         XDocumentInfo info = oObj.getDocumentInfo();
-        XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, info);
+        XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, info);
         String title = null;
         try {
             title = (String)xPropertySet.getPropertyValue("Title");
         }
         catch(Exception e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+            e.printStackTrace(log);
             title = null;
         }
         log.println("Got document title: " + title);

@@ -104,14 +104,13 @@ public class ScAnnotationTextCursor extends TestCase {
 
             XSpreadsheetDocument xArea = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
 
-            XSpreadsheets oSheets = (XSpreadsheets) xArea.getSheets();
+            XSpreadsheets oSheets = xArea.getSheets();
 
             XIndexAccess XAccess = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
 
             XSpreadsheet oSheet = (XSpreadsheet)XAccess.getByIndex(cellPos.Sheet);
 
-            XCellRange oCRange = (XCellRange)
-                            UnoRuntime.queryInterface(XCellRange.class, oSheet);
+            XCellRange oCRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
 
             XCell oCell = oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
 

@@ -168,8 +168,7 @@ public class SvxGraphicObject extends TestCase {
         oShape = SOF.createShape(xDrawDoc,3000,4500,15000,1000,"Ellipse");
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
-        XPropertySet oShapeProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class,oObj);
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oObj);
         XStyle aStyle = null;
         try {
             aStyle = (XStyle) AnyConverter.toObject(
@@ -180,8 +179,7 @@ public class SvxGraphicObject extends TestCase {
         }
         tEnv.addObjRelation("Style1",aStyle);
 
-        oShapeProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class,oShape);
+        oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oShape);
         try {
             aStyle = (XStyle) AnyConverter.toObject(
                 new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
@@ -193,8 +191,7 @@ public class SvxGraphicObject extends TestCase {
 
 
         // adding graphic as ObjRelation for GraphicObjectShape
-        oShapeProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class,oObj);
+        oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oObj);
         XBitmap aBitmap = null;
         try {
             oShapeProps.setPropertyValue(

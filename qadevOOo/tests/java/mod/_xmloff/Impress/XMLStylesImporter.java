@@ -161,7 +161,7 @@ public class XMLStylesImporter extends TestCase {
             xImpressDoc);
             XNameAccess oStyleFamilies = sup.getStyleFamilies();
             Object family = oStyleFamilies.getByName("graphics") ;
-            styles = (XNameAccess) UnoRuntime.queryInterface
+            styles = UnoRuntime.queryInterface
                 (XNameAccess.class, family) ;
             log.println("Styles before:") ;
             String[] names = styles.getElementNames() ;

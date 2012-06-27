@@ -90,7 +90,7 @@ public class FilterFactory extends TestCase {
         log.println( "creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface
+        XNameAccess xNA = UnoRuntime.queryInterface
             (XNameAccess.class, oObj);
         String[] filterNames = xNA.getElementNames();
 
@@ -101,7 +101,7 @@ public class FilterFactory extends TestCase {
         try{
             instance = (Object[]) xNA.getByName(filterName);
             PropertyValue[] props = (PropertyValue[]) instance;
-            instanceProp = (PropertyValue) getPropertyValue
+            instanceProp = getPropertyValue
                     (((PropertyValue[]) instance), "FilterService"); //instance[9];
         } catch (com.sun.star.container.NoSuchElementException e){
             throw new StatusException(

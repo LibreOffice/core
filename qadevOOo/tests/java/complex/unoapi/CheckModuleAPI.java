@@ -309,10 +309,10 @@ public class CheckModuleAPI extends ComplexTestCase
                 final ArrayList<String> addedModules = cde.getModules();
 
                 final ArrayList<String> moduleNames = new ArrayList<String>();
-                Iterator iterator = addedModules.iterator();
+                Iterator<String> iterator = addedModules.iterator();
                 while (iterator.hasNext())
                 {
-                    String sModuleName = (String) iterator.next();
+                    String sModuleName = iterator.next();
                     // String sFilename = mSRC_ROOT; //  + File.separator + sModuleName;
                     // final File sourceRoot = new File(sFilename);
                     if (doesQaUnoApiFolderExist(mSRC_ROOT, sModuleName))
@@ -421,7 +421,7 @@ public class CheckModuleAPI extends ComplexTestCase
     private String getTranslatedNames(String module)
     {
 
-        final HashMap aModuleHashMap = new HashMap();
+        final HashMap<String,String> aModuleHashMap = new HashMap<String,String>();
 
         aModuleHashMap.put("fwk", "framework");
         aModuleHashMap.put("fwl", "framework");
@@ -434,13 +434,13 @@ public class CheckModuleAPI extends ComplexTestCase
         // it could the that the parameter looks like "fwk,fwl". This results in double "famework,framework".
         // The following loop correct this to only one "framework"
 
-        final Set keys = aModuleHashMap.keySet();
-        final Iterator iterator = keys.iterator();
+        final Set<String> keys = aModuleHashMap.keySet();
+        final Iterator<String> iterator = keys.iterator();
         while (iterator.hasNext())
         {
 
-            final String key = (String) iterator.next();
-            final String value = (String) aModuleHashMap.get(key);
+            final String key = iterator.next();
+            final String value = aModuleHashMap.get(key);
 
             module = module.replaceAll(key, value);
 

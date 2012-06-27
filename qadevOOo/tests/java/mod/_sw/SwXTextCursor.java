@@ -174,7 +174,7 @@ public class SwXTextCursor extends TestCase {
 
         tEnv.addObjRelation("XTEXT", xTextDoc.getText());
 
-        XPropertySet xCursorProp = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet xCursorProp = UnoRuntime.queryInterface(
                                            XPropertySet.class, oObj);
         tEnv.addObjRelation("PropertyNames", getPropertyNames(xCursorProp));
 

@@ -131,7 +131,7 @@ public class ConfigHelper
     {
         try
         {
-            XPropertySet xPath = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xPath = UnoRuntime.queryInterface(
                                     XPropertySet.class,
                                     m_xConfig.getByHierarchicalName(sRelPath));
             return xPath.getPropertyValue(sKey);
@@ -150,7 +150,7 @@ public class ConfigHelper
     {
         try
         {
-            XPropertySet xPath = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet xPath = UnoRuntime.queryInterface(
                                     XPropertySet.class,
                                     m_xConfig.getByHierarchicalName(sRelPath));
             xPath.setPropertyValue(sKey, aValue);
@@ -234,15 +234,13 @@ public class ConfigHelper
         }
 
         if (xChildAccess == null)  {
-            XSingleServiceFactory xChildfactory = (XSingleServiceFactory)
-                UnoRuntime.queryInterface(XSingleServiceFactory.class,xSetCont);
+            XSingleServiceFactory xChildfactory = UnoRuntime.queryInterface(XSingleServiceFactory.class,xSetCont);
 
             Object xNewChild = xChildfactory.createInstance();
 
             xSetCont.insertByName(groupName, xNewChild);
 
-            xChildAccess = (XNameReplace)
-                UnoRuntime.queryInterface(XNameContainer.class,xNewChild);
+            xChildAccess = UnoRuntime.queryInterface(XNameContainer.class,xNewChild);
        }
 
         return xChildAccess;
@@ -266,7 +264,7 @@ public class ConfigHelper
 
         XPropertySet xProp = null;
         try {
-        xProp = (XPropertySet)UnoRuntime.queryInterface(
+        xProp = UnoRuntime.queryInterface(
                                     XPropertySet.class,
                                     xSetCont.getByName(groupName));
         } catch (com.sun.star.container.NoSuchElementException e){
@@ -320,7 +318,7 @@ public class ConfigHelper
 
         try {
             Object xGroup=xGroupAccess.getByName(extGroup);
-            xExtGroupCont = (XNameContainer) UnoRuntime.queryInterface(
+            xExtGroupCont = UnoRuntime.queryInterface(
                             XNameContainer.class,xGroup);
         } catch(com.sun.star.container.NoSuchElementException e) {
              throw new com.sun.star.uno.Exception(
@@ -357,7 +355,7 @@ public class ConfigHelper
              throw new com.sun.star.uno.Exception(
                 "could not get set '" + setName + ": null");
 
-        return (XNameContainer) UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
                                                 XNameContainer.class, oSet);
 
     }

@@ -85,10 +85,10 @@ public class PopupMenuControllerFactory extends TestCase {
 
         log.println("TestObject: " + util.utils.getImplName(xInst));
         tEnv = new TestEnvironment(xInst);
-        XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xMSF);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
         try {
             Object o = xProp.getPropertyValue("DefaultContext");
-            XComponentContext xContext = (XComponentContext)UnoRuntime.queryInterface(XComponentContext.class, o);
+            XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class, o);
             tEnv.addObjRelation("DC", xContext);
         }
         catch(com.sun.star.beans.UnknownPropertyException e) {

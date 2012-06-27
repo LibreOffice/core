@@ -22,6 +22,7 @@ import helper.CfgParser;
 import helper.ClParser;
 
 import java.util.ArrayList;
+import java.util.jar.JarEntry;
 
 import lib.TestParameters;
 import share.LogWriter;
@@ -221,7 +222,7 @@ public class RunnerService implements XJob, XServiceInfo,
             // get Jar file from connection
             java.util.jar.JarFile f = con.getJarFile();
             // Enumerate over all entries
-            java.util.Enumeration aEnum = f.entries();
+            java.util.Enumeration<JarEntry> aEnum = f.entries();
 
             while (aEnum.hasMoreElements()) {
                 String entry = aEnum.nextElement().toString();

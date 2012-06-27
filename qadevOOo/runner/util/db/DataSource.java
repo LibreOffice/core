@@ -47,7 +47,7 @@ public class DataSource
         {
             m_dataSource = UnoRuntime.queryInterface( XDataSource.class,
                 m_orb.createInstance( "com.sun.star.sdb.DataSource" ) );
-            m_properties = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+            m_properties = UnoRuntime.queryInterface( XPropertySet.class,
                 m_dataSource );
 
             Object[] descriptorProperties = new Object[] {

@@ -118,7 +118,7 @@ public class ChartLegend extends TestCase {
 
         // get the Legend
         log.println( "getting Legend" );
-        oObj = (XShape) xChartDoc.getLegend();
+        oObj = xChartDoc.getLegend();
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

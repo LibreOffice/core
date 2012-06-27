@@ -183,10 +183,10 @@ public class _ParagraphProperties extends MultiPropertyTest {
     protected PropertyTester BooleanTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
             if ((oldValue != null) &&
-                    (oldValue.equals(new Boolean((boolean) false)))) {
-                return new Boolean((boolean) true);
+                    (oldValue.equals(new Boolean(false)))) {
+                return new Boolean(true);
             } else {
-                return new Boolean((boolean) false);
+                return new Boolean(false);
             }
         }
     };

@@ -141,8 +141,7 @@ public class XMLStylesExporter extends TestCase {
                     StyleFamilies.getByName(styleFamiliesNames[0]));
             Object SC = SOF.createInstance(
                 xSheetDoc, "com.sun.star.style.CellStyle");
-            XStyle StyleCell = (XStyle)
-                UnoRuntime.queryInterface(XStyle.class,SC);
+            XStyle StyleCell = UnoRuntime.queryInterface(XStyle.class,SC);
             StyleFamilyName.insertByName(newName, StyleCell);
 
             log.println("fill sheet 1 with content...");

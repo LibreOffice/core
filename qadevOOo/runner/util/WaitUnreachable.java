@@ -47,7 +47,7 @@ public final class WaitUnreachable {
      */
     public WaitUnreachable(Object obj) {
         this.obj = obj;
-        queue = new ReferenceQueue();
+        queue = new ReferenceQueue<Object>();
         ref = new PhantomReference<Object>(obj, queue);
     }
 
@@ -113,6 +113,6 @@ public final class WaitUnreachable {
     }
 
     private Object obj;
-    private final ReferenceQueue queue;
+    private final ReferenceQueue<Object> queue;
     private final PhantomReference<Object> ref;
 }

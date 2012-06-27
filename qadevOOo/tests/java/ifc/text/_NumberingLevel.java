@@ -139,8 +139,8 @@ public class _NumberingLevel {
 
             // get rest of properties and check if they are optional
             if (! NumberingLevel.isEmpty()){
-                for (Iterator e = NumberingLevel.keySet().iterator() ; e.hasNext() ;) {
-                    String property = (String) e.next();
+                for (Iterator<String> e = NumberingLevel.keySet().iterator() ; e.hasNext() ;) {
+                    String property = e.next();
 
                     // if some elements are not optional -> failed
                     if ( ! NumberingLevel.get(property).booleanValue() ){

@@ -77,7 +77,7 @@ public class SwXTextTableRow extends TestCase {
 
         try {
          log.println("creating a texttable");
-            oTable = (XTextTable) SOF.createTextTable(xTextDoc,5,5);
+            oTable = SOF.createTextTable(xTextDoc,5,5);
         } catch( Exception e ) {
             e.printStackTrace(log);
         }

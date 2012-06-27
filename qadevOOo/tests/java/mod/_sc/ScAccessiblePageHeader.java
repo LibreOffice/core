@@ -177,8 +177,7 @@ public class ScAccessiblePageHeader extends TestCase {
         }
 
         //get the property-set
-        final XPropertySet PropSet = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
+        final XPropertySet PropSet = UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
 
         XHeaderFooterContent RPHC = null;
         // creation of testobject here

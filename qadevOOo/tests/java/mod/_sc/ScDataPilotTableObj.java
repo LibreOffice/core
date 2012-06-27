@@ -206,8 +206,7 @@ public class ScDataPilotTableObj extends TestCase {
         XPropertySet fieldPropSet = null;
         try {
             Object oDataPilotField = DPDsc.getDataPilotFields().getByIndex(0);
-            fieldPropSet = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, oDataPilotField);
+            fieldPropSet = UnoRuntime.queryInterface(XPropertySet.class, oDataPilotField);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create a test environment", e);
@@ -293,7 +292,7 @@ public class ScDataPilotTableObj extends TestCase {
             for (int i = 0; i < fieldCount; ++i)
             {
                 Object o = xIA.getByIndex(i);
-                XPropertySet fieldPropSet = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet fieldPropSet = UnoRuntime.queryInterface(
                     XPropertySet.class, o);
 
                 if (i == fieldCount - 1)

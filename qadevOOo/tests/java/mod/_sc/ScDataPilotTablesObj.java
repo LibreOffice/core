@@ -117,7 +117,7 @@ public class ScDataPilotTablesObj extends TestCase {
         // create testobject here
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;

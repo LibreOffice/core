@@ -52,7 +52,7 @@ public class _XCompletedExecution extends MultiMethodTest {
                         tEnv.getObjRelation("InteractionHandlerChecker");
         if (checkHandler == null)
             throw new StatusException("Missing object relation 'InteractionHandlerChecker'", new Exception());
-        checkHandler.setLog((PrintWriter)log);
+        checkHandler.setLog(log);
     }
 
 
@@ -61,7 +61,7 @@ public class _XCompletedExecution extends MultiMethodTest {
             oObj.executeWithCompletion(checkHandler);
         }
         catch(com.sun.star.sdbc.SQLException e) {
-            e.printStackTrace((PrintWriter)log);
+            e.printStackTrace(log);
             tRes.tested("executeWithCompletion()", false);
             return;
         }

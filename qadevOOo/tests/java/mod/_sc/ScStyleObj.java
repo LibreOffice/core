@@ -160,9 +160,9 @@ public class ScStyleObj extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create instance", e);
         }
-        XStyle oMyStyle = (XStyle)UnoRuntime.queryInterface(XStyle.class, oInt);
+        XStyle oMyStyle = UnoRuntime.queryInterface(XStyle.class, oInt);
 
-        XNameContainer oStyleFamilyNameContainer = (XNameContainer)UnoRuntime.
+        XNameContainer oStyleFamilyNameContainer = UnoRuntime.
             queryInterface(XNameContainer.class, oStyleFamilyNameAccess);
 
         try {
@@ -208,8 +208,7 @@ public class ScStyleObj extends TestCase {
             throw new StatusException("Couldn't get spreadsheet by index", e);
         }
 
-        XPropertySet xProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, aCell);
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, aCell);
 
         try {
             xProp.setPropertyValue("CellStyle", oMyStyle.getName());
@@ -233,7 +232,7 @@ public class ScStyleObj extends TestCase {
         tEnv.addObjRelation("PoolStyle", oStyle);
 
         tEnv.addObjRelation("PropertyNames", getPropertyNames
-            ((XPropertySet) UnoRuntime.queryInterface
+            (UnoRuntime.queryInterface
             (XPropertySet.class, oMyStyle)));
 
         return tEnv;

@@ -63,7 +63,7 @@ public class _XShape extends MultiMethodTest {
 
         log.println("get the size");
 
-        sOld = (Size) oObj.getSize();
+        sOld = oObj.getSize();
         result = true;
 
         tRes.tested("getSize()", result);
@@ -88,7 +88,7 @@ public class _XShape extends MultiMethodTest {
         }
 
         log.println("get the position");
-        pOld = (Point) oObj.getPosition();
+        pOld = oObj.getPosition();
         result = true;
 
         tRes.tested("getPosition()", result);

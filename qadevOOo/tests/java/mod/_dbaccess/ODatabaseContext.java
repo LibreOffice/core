@@ -107,8 +107,7 @@ public class ODatabaseContext extends TestCase {
             xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance( "com.sun.star.sdb.DataSource" );
 
-            XPropertySet xDSProps = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, oInterface) ;
+            XPropertySet xDSProps = UnoRuntime.queryInterface(XPropertySet.class, oInterface) ;
 
             xDSProps.setPropertyValue("URL", "sdbc:dbase:file:///.") ;
 

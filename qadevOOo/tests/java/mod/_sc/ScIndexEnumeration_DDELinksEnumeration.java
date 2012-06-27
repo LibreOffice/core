@@ -100,7 +100,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
         }
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
@@ -138,8 +138,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
             log.println("Getting test object ") ;
 
             // Getting named ranges.
-            XPropertySet docProps = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+            XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
             oObj = (XInterface)AnyConverter.toObject(
                 new Type(XInterface.class),docProps.getPropertyValue("DDELinks"));
             log.println("Creating object - " +

@@ -76,7 +76,7 @@ public class ScUniqueCellFormatsObj extends TestCase {
                                    XIndexAccess.class, xSheetDoc.getSheets());
 
         try {
-            oSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+            oSheet = UnoRuntime.queryInterface(
                              XSpreadsheet.class, xIA.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
@@ -108,7 +108,7 @@ public class ScUniqueCellFormatsObj extends TestCase {
 
     protected void changeColor(String RangeName, int r, int g, int b) {
         XCellRange xRange = oSheet.getCellRangeByName(RangeName);
-        XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet xPropertySet = UnoRuntime.queryInterface(
                                             XPropertySet.class, xRange);
         Color c = new Color(r, g, b);
         int c2int = 16777216 + c.hashCode();

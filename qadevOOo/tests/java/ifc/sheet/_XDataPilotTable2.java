@@ -217,7 +217,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
                 XSpreadsheet xSheet = null;
                 try
                 {
-                    xSheet = (XSpreadsheet)UnoRuntime.queryInterface(
+                    xSheet = UnoRuntime.queryInterface(
                         XSpreadsheet.class, xIA.getByIndex(addr.Sheet));
                 }
                 catch (com.sun.star.uno.Exception e)
@@ -425,7 +425,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
             try
             {
                 Object field = xFields.getByIndex(i);
-                XPropertySet propSet = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet propSet = UnoRuntime.queryInterface(
                     XPropertySet.class, field);
                 DataPilotFieldOrientation orient =
                     (DataPilotFieldOrientation)propSet.getPropertyValue("Orientation");

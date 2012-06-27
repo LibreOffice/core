@@ -141,13 +141,11 @@ public class XMLStylesExporter extends TestCase {
             (XStyleFamiliesSupplier.class, xImpressDoc) ;
             XNameAccess styleFamilies = styleSup.getStyleFamilies();
             String[] styleFamiliesNames = styleFamilies.getElementNames();
-            XNameContainer StyleFamilyName = (XNameContainer)
-                UnoRuntime.queryInterface(XNameContainer.class,
-                styleFamilies.getByName(styleFamiliesNames[0]));
+            XNameContainer StyleFamilyName = UnoRuntime.queryInterface(XNameContainer.class,
+            styleFamilies.getByName(styleFamiliesNames[0]));
             Object SC = SOF.createInstance
                 (xImpressDoc, "com.sun.star.style.Style");
-            XStyle StylePage = (XStyle)
-                UnoRuntime.queryInterface(XStyle.class,SC);
+            XStyle StylePage = UnoRuntime.queryInterface(XStyle.class,SC);
             StyleFamilyName.insertByName(newName, StylePage);
 
         } catch (com.sun.star.uno.Exception e) {

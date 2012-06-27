@@ -130,9 +130,9 @@ public class ScAccessibleCell extends TestCase {
             xCell = oSheet.getCellByPosition(1, 0) ;
             xCell.setFormula(text);
             XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, oSheet);
-            XTableColumns oColumns = (XTableColumns) oColumnRowRange.getColumns();
+            XTableColumns oColumns = oColumnRowRange.getColumns();
             XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oColumns);
-            XPropertySet column = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet column = UnoRuntime.queryInterface(
                                 XPropertySet.class,oIndexAccess.getByIndex(1));
             column.setPropertyValue("OptimalWidth", new Boolean(true));
         } catch(com.sun.star.lang.WrappedTargetException e) {

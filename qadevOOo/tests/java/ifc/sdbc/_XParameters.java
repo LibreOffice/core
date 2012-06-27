@@ -95,13 +95,13 @@ public class _XParameters extends MultiMethodTest {
     // oObj filled by MultiMethodTest
     public XParameters oObj = null ;
 
-    private List data = null ;
+    private List<Object> data = null ;
 
     /**
     * Gets object relation
     */
     public void before() {
-        data = (List) tEnv.getObjRelation("XParameters.ParamValues") ;
+        data = (List<Object>) tEnv.getObjRelation("XParameters.ParamValues") ;
         if (data == null) {
             log.println("!!! Relation not found !!!") ;
         }
@@ -402,7 +402,7 @@ public class _XParameters extends MultiMethodTest {
             try {
                 Object oStream = ((XMultiServiceFactory)tParam.getMSF()).
                         createInstance("com.sun.star.io.DataInputStream") ;
-                XInputStream xStream = (XInputStream)UnoRuntime.queryInterface
+                XInputStream xStream = UnoRuntime.queryInterface
                     (XInputStream.class, oStream);
 
                 oObj.setBinaryStream(idx, xStream, 2) ;
@@ -432,7 +432,7 @@ public class _XParameters extends MultiMethodTest {
             try {
                 Object oStream = ((XMultiServiceFactory)tParam.getMSF())
                         .createInstance("com.sun.star.io.TextInputStream") ;
-                XInputStream xStream = (XInputStream)UnoRuntime.queryInterface
+                XInputStream xStream = UnoRuntime.queryInterface
                     (XInputStream.class, oStream);
 
                 oObj.setCharacterStream(idx, xStream, 2) ;
@@ -553,8 +553,7 @@ public class _XParameters extends MultiMethodTest {
     * Finds in relation vector index of parameter of the appropriate
     * type.
     */
-    private int findParamOfType(Class clz) {
-
+    private int findParamOfType(Class<?> clz) {
         for (int i = 0; i < data.size(); i++)
             if (clz.isInstance(data.get(i))) return i + 1 ;
         return -1 ;

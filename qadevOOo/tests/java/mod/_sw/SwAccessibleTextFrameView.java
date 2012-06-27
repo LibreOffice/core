@@ -84,7 +84,7 @@ public class SwAccessibleTextFrameView extends TestCase {
         log.println( "creating Frames" );
         try {
             oFrame1 = SOF.createTextFrame(xTextDoc, 500, 500);
-            oPropSet = (XPropertySet)UnoRuntime.queryInterface(
+            oPropSet = UnoRuntime.queryInterface(
                 XPropertySet.class, oFrame1 );
             oPropSet.setPropertyValue("AnchorType",
                 TextContentAnchorType.AS_CHARACTER);

@@ -127,8 +127,7 @@ public class ScSheetLinksObj extends TestCase {
             com.sun.star.sheet.SheetLinkMode.VALUE);
 
         // Getting links.
-        XPropertySet docProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+        XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
 
         Object links = null;
         try {
@@ -141,7 +140,7 @@ public class ScSheetLinksObj extends TestCase {
             throw new StatusException("Couldn't get SheetLinks", e);
         }
 
-        oObj = (XInterface)UnoRuntime.queryInterface(XInterface.class, links);
+        oObj = UnoRuntime.queryInterface(XInterface.class, links);
 
         log.println("Creating object - " +
                                     ((oObj == null) ? "FAILED" : "OK"));

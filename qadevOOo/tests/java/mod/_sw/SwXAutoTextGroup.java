@@ -135,7 +135,7 @@ public class SwXAutoTextGroup extends TestCase {
         }
 
 
-        XNameAccess oContNames = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oContainer);
+        XNameAccess oContNames = UnoRuntime.queryInterface(XNameAccess.class, oContainer);
 
         if (Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE)){
             String contNames[] = oContNames.getElementNames();

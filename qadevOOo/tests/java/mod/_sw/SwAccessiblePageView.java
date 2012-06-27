@@ -125,10 +125,8 @@ public class SwAccessiblePageView extends TestCase {
         }
 
         try {
-            portP = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, port);
-            paraP = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, para);
+            portP = UnoRuntime.queryInterface(XPropertySet.class, port);
+            paraP = UnoRuntime.queryInterface(XPropertySet.class, para);
             paraP.setPropertyValue("BreakType",com.sun.star.style.BreakType.PAGE_AFTER);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Error, exception occurred...");

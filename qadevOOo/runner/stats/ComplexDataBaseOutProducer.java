@@ -30,7 +30,7 @@ import java.util.GregorianCalendar;
 public class ComplexDataBaseOutProducer extends DataBaseOutProducer {
 
     /** Creates a new instance of ComplexDataBaseOutProducer */
-    public ComplexDataBaseOutProducer(HashMap param) {
+    public ComplexDataBaseOutProducer(HashMap<String,String> param) {
         super(param);
         // do we have to write debug output?
         Object o = param.get("DebugIsActive");

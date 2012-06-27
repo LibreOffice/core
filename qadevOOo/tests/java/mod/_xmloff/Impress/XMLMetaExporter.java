@@ -131,7 +131,7 @@ public class XMLMetaExporter extends TestCase {
         //change title name
             XDocumentInfoSupplier infoSup = UnoRuntime.queryInterface
             (XDocumentInfoSupplier.class, xImpressDoc) ;
-            XPropertySet docInfo = (XPropertySet) UnoRuntime.queryInterface
+            XPropertySet docInfo = UnoRuntime.queryInterface
                 (XPropertySet.class, infoSup.getDocumentInfo()) ;
             docInfo.setPropertyValue("Title", NAME);
 

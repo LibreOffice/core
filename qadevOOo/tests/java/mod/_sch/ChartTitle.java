@@ -99,7 +99,7 @@ public class ChartTitle extends TestCase {
 
         // get the Title
         log.println( "getting Title" );
-        XShape oObj = (XShape) xChartDoc.getTitle();
+        XShape oObj = xChartDoc.getTitle();
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

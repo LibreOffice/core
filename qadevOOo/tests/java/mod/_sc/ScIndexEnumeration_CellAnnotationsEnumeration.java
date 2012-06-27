@@ -75,7 +75,7 @@ public class ScIndexEnumeration_CellAnnotationsEnumeration extends TestCase {
         XInterface oObj = null;
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;

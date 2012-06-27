@@ -182,11 +182,11 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
 
         try {
             Object oPageStyles = xNA.getByName("PageStyles");
-            xNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
+            xNA = UnoRuntime.queryInterface(XNameAccess.class,
                                                           oPageStyles);
 
             Object oDefStyle = xNA.getByName("Default");
-            xPropSet = (XPropertySet) UnoRuntime.queryInterface(
+            xPropSet = UnoRuntime.queryInterface(
                                XPropertySet.class, oDefStyle);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);

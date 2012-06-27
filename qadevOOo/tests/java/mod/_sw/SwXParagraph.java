@@ -212,10 +212,8 @@ public class SwXParagraph extends TestCase {
         }
 
         try {
-            portP = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, port);
-            paraP = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, para);
+            portP = UnoRuntime.queryInterface(XPropertySet.class, port);
+            paraP = UnoRuntime.queryInterface(XPropertySet.class, para);
             paraP.setPropertyValue("NumberingStyleName","Numbering 4");
             nRules = paraP.getPropertyValue("NumberingRules");
         } catch ( com.sun.star.lang.WrappedTargetException e ) {

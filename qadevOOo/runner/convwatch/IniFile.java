@@ -308,7 +308,7 @@ class IniFile
                 {
                     String sLine = getItem(i);
                     aWriter.writeBytes(sLine);
-                    aWriter.writeByte((int)'\n');
+                    aWriter.writeByte('\n');
                 }
                 aWriter.close();
             }

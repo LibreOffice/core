@@ -111,7 +111,7 @@ public class SwXTextTable extends TestCase {
             }
         }
 
-        XPropertySet props = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet props = UnoRuntime.queryInterface(
                                      XPropertySet.class, oObj);
 
         try {

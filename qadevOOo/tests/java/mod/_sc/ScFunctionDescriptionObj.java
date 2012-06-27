@@ -79,7 +79,7 @@ public class ScFunctionDescriptionObj extends TestCase {
 
             XInterface FDs = (XInterface)oDocMSF.
                     createInstance("com.sun.star.sheet.FunctionDescriptions");
-            XNameAccess NA = (XNameAccess)UnoRuntime.queryInterface
+            XNameAccess NA = UnoRuntime.queryInterface
                 (XNameAccess.class, FDs);
 
             String names[] = NA.getElementNames();

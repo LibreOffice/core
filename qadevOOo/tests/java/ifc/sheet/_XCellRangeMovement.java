@@ -58,8 +58,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
     */
     public void _copyRange(){
         log.println("Prepare cells before test methods.");
-        XSpreadsheet oSheet = (XSpreadsheet)
-            UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
+        XSpreadsheet oSheet = UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
         try {
             oSheet.getCellByPosition(1,1).setValue(100);
             oSheet.getCellByPosition(1,2).setValue(200);
@@ -106,8 +105,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
     public void _insertCells(){
         boolean result = false;
 
-        XSpreadsheet oSheet = (XSpreadsheet)
-            UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
+        XSpreadsheet oSheet = UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
         XCellRangeAddressable oAddr = UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
         short iSheet = oAddr.getRangeAddress().Sheet;
         try {
@@ -129,7 +127,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
                     "Delete old cells now");
                 XColumnRowRange oColumnRowRange = UnoRuntime.queryInterface(XColumnRowRange.class, oSheet);
 
-                XTableRows oRows = (XTableRows) oColumnRowRange.getRows();
+                XTableRows oRows = oColumnRowRange.getRows();
                 oRows.removeByIndex(21,1);
             }
             CellRangeAddress sSrc = new CellRangeAddress(iSheet, 0, 21, 5, 21);
@@ -157,8 +155,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
     public void _moveRange(){
         boolean result = false;
 
-        XSpreadsheet oSheet = (XSpreadsheet)
-            UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
+        XSpreadsheet oSheet = UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
 
         XCellRangeAddressable oAddr = UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
 
@@ -199,8 +196,7 @@ public class _XCellRangeMovement extends MultiMethodTest {
     public void _removeRange(){
         boolean result = false;
 
-        XSpreadsheet oSheet = (XSpreadsheet)
-            UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
+        XSpreadsheet oSheet = UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
         XCellRangeAddressable oAddr = UnoRuntime.queryInterface (XCellRangeAddressable.class, oObj);
         short iSheet = oAddr.getRangeAddress().Sheet;
         try {

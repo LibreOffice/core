@@ -267,7 +267,7 @@ public class ODatasourceBrowser extends TestCase {
         XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
                                                             4500, 15000, 10000,
                                                             "CommandButton");
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         XControlModel shapeModel = aShape.getControl();
 

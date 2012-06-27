@@ -166,8 +166,7 @@ public class DBTools {
         * class fields.
         */
         public DataSourceInfo(Object dataSource) {
-            XPropertySet xProps = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, dataSource) ;
+            XPropertySet xProps = UnoRuntime.queryInterface(XPropertySet.class, dataSource) ;
 
             try {
                 Name = (String)xProps.getPropertyValue("Name") ;
@@ -244,7 +243,7 @@ public class DBTools {
         {
             Object src = src = xMSF.createInstance("com.sun.star.sdb.DataSource") ;
 
-            XPropertySet props = (XPropertySet) UnoRuntime.queryInterface
+            XPropertySet props = UnoRuntime.queryInterface
                 (XPropertySet.class, src) ;
 
             if (Name != null) props.setPropertyValue("Name", Name) ;
@@ -340,8 +339,7 @@ public class DBTools {
             XInterface newSource = (XInterface) xMSF.createInstance
                 ("com.sun.star.sdb.DataSource") ;
 
-            XPropertySet xSrcProp = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, newSource);
+            XPropertySet xSrcProp = UnoRuntime.queryInterface(XPropertySet.class, newSource);
 
             xSrcProp.setPropertyValue("URL", "sdbc:text:" + dirToUrl(dbDir));
 
@@ -383,8 +381,7 @@ public class DBTools {
             XInterface newSource = (XInterface) xMSF.createInstance
                 ("com.sun.star.sdb.DataSource") ;
 
-            XPropertySet xSrcProp = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, newSource);
+            XPropertySet xSrcProp = UnoRuntime.queryInterface(XPropertySet.class, newSource);
             xSrcProp.setPropertyValue("URL", "sdbc:dbase:" + dirToUrl(dbDir));
 
             dbContext.registerObject(contextName, newSource) ;
@@ -444,14 +441,14 @@ public class DBTools {
 
         String existURL = null ;
 
-        XNameAccess na = (XNameAccess) UnoRuntime.queryInterface
+        XNameAccess na = UnoRuntime.queryInterface
             (XNameAccess.class, dbContext) ;
 
         Object src = null ;
         if (na.hasByName("APITestDatabase")) {
             src = dbContext.getRegisteredObject("APITestDatabase") ;
 
-            XPropertySet srcPs = (XPropertySet) UnoRuntime.queryInterface
+            XPropertySet srcPs = UnoRuntime.queryInterface
                 (XPropertySet.class, src) ;
 
             existURL = (String) srcPs.getPropertyValue("URL") ;

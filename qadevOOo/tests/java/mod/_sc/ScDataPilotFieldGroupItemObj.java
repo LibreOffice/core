@@ -119,7 +119,7 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
 
         log.println ("Getting a sheet");
 
-        XSpreadsheets xSpreadsheets = (XSpreadsheets) xSheetDoc.getSheets ();
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets ();
         XSpreadsheet oSheet = null;
         XSpreadsheet oSheet2 = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface (
@@ -227,19 +227,19 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
         try
         {
             Object oDataPilotField = DPDsc.getDataPilotFields ().getByIndex (0);
-            fieldPropSet = (XPropertySet) UnoRuntime.queryInterface (
+            fieldPropSet = UnoRuntime.queryInterface (
                 XPropertySet.class, oDataPilotField);
             fieldPropSet.setPropertyValue ("Orientation",
                 com.sun.star.sheet.DataPilotFieldOrientation.ROW);
             oDataPilotField = DPDsc.getDataPilotFields ().getByIndex (1);
-            fieldPropSet = (XPropertySet) UnoRuntime.queryInterface (
+            fieldPropSet = UnoRuntime.queryInterface (
                 XPropertySet.class, oDataPilotField);
             fieldPropSet.setPropertyValue ("Function",
                 com.sun.star.sheet.GeneralFunction.SUM);
             fieldPropSet.setPropertyValue ("Orientation",
                 com.sun.star.sheet.DataPilotFieldOrientation.DATA);
             oDataPilotField = DPDsc.getDataPilotFields ().getByIndex (2);
-            fieldPropSet = (XPropertySet) UnoRuntime.queryInterface (
+            fieldPropSet = UnoRuntime.queryInterface (
                 XPropertySet.class, oDataPilotField);
             fieldPropSet.setPropertyValue ("Orientation",
                 com.sun.star.sheet.DataPilotFieldOrientation.COLUMN);
@@ -331,10 +331,10 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
             {
                 datapilotfield = (XInterface) AnyConverter.toObject (
                     new Type (XInterface.class), IA.getByIndex (i));
-                XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface (XPropertySet.class, IA.getByIndex (i));
+                XPropertySet xPropertySet = UnoRuntime.queryInterface (XPropertySet.class, IA.getByIndex (i));
                 if (((Boolean)xPropertySet.getPropertyValue ("IsGroupField")).booleanValue ())
                 {
-                    xPropertySet = (XPropertySet) UnoRuntime.queryInterface (XPropertySet.class, datapilotfield);
+                    xPropertySet = UnoRuntime.queryInterface (XPropertySet.class, datapilotfield);
                     XNamed xNamed = UnoRuntime.queryInterface (XNamed.class, IA.getByIndex (i));
                     System.out.println ("name: "+xNamed.getName ());
                     dpgi = (DataPilotFieldGroupInfo) xPropertySet.getPropertyValue ("GroupInfo");
@@ -342,8 +342,8 @@ public class ScDataPilotFieldGroupItemObj extends TestCase
             }
             groups = dpgi.Groups;
             XIndexAccess groupAccess = UnoRuntime.queryInterface(XIndexAccess.class, groups);
-            XNameAccess groupNames = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, groupAccess.getByIndex(0));
-            oObj = (XInterface) UnoRuntime.queryInterface(XInterface.class, groupNames.getByName("aName"));
+            XNameAccess groupNames = UnoRuntime.queryInterface(XNameAccess.class, groupAccess.getByIndex(0));
+            oObj = UnoRuntime.queryInterface(XInterface.class, groupNames.getByName("aName"));
         }
         catch (Exception e)
         {

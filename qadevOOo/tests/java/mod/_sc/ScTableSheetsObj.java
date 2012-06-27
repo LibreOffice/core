@@ -112,10 +112,9 @@ public class ScTableSheetsObj extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
 
-        XInterface oObj = (XInterface)
-            UnoRuntime.queryInterface(XInterface.class, xSpreadsheets);
+        XInterface oObj = UnoRuntime.queryInterface(XInterface.class, xSpreadsheets);
 
         log.println("creating a new environment for object");
         TestEnvironment tEnv = new TestEnvironment(oObj);

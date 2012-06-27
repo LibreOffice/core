@@ -81,9 +81,8 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
         }
 
-        xProp = (XPropertySet)
-                      UnoRuntime.queryInterface(XPropertySet.class,
-                      tEnv.getObjRelation("xProp"));
+        xProp = UnoRuntime.queryInterface(XPropertySet.class,
+          tEnv.getObjRelation("xProp"));
 
         if (xProp == null) {
             throw new StatusException(Status.failed(

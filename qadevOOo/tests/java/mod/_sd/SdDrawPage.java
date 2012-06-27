@@ -189,7 +189,7 @@ public class SdDrawPage extends TestCase {
         XControlShape aShape = FormTools.createControlShape(
                                 xDrawDoc,3000,4500,15000,10000,"CommandButton");
 
-        oShapes.add((XShape) aShape);
+        oShapes.add(aShape);
 
         ShapeDsc sDsc = new ShapeDsc(5000, 3500, 7500, 10000, "Rectangle");
         log.println( "adding Shape as mod relation to environment" );

@@ -116,8 +116,7 @@ public class SdXPresentation extends TestCase {
         XInterface oInstance = null;
         XInterface oInstance2 = null;
 
-        XSingleServiceFactory oSingleMSF = (XSingleServiceFactory)
-            UnoRuntime.queryInterface(XSingleServiceFactory.class, xCP);
+        XSingleServiceFactory oSingleMSF = UnoRuntime.queryInterface(XSingleServiceFactory.class, xCP);
 
         try{
             oInstance = (XInterface) oSingleMSF.createInstance();

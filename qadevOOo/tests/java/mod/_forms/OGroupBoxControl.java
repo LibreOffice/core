@@ -147,7 +147,7 @@ public class OGroupBoxControl extends TestCase {
                                                             7000, 2000, 2000,
                                                             "GroupBox");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         XControlModel the_Model = aShape.getControl();
 
@@ -155,7 +155,7 @@ public class OGroupBoxControl extends TestCase {
                                                              4500, 5000, 10000,
                                                              "TextField");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape2);
+        WriterTools.getDrawPage(xTextDoc).add(aShape2);
 
         XControlModel the_Model2 = aShape2.getControl();
 

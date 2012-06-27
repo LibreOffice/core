@@ -95,14 +95,14 @@ public class _XRow extends MultiMethodTest {
 
     // oObj filled by MultiMethodTest
     public XRow oObj = null ;
-    private List data = null ;
+    private List<Object> data = null ;
     private boolean notNullRes = true ;
 
     /**
     * Retrieves object relation first.
     */
     public void before() {
-        data = (List) tEnv.getObjRelation("CurrentRowData") ;
+        data = (List<Object>) tEnv.getObjRelation("CurrentRowData") ;
     }
 
     /**
@@ -524,7 +524,7 @@ public class _XRow extends MultiMethodTest {
     * Finds in relation vector index of column of the appropriate
     * type.
     */
-    protected int findColumnOfType(Class clz) {
+    protected int findColumnOfType(Class<?> clz) {
 
         for (int i = 0; i < data.size(); i++)
             if (clz.isInstance(data.get(i))) return i + 1 ;

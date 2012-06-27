@@ -59,10 +59,10 @@ public class _XDocumentAuditing extends MultiMethodTest {
             XSpreadsheets oSheets = xSpreadsheetDocument.getSheets();
             XIndexAccess oIndexSheets = UnoRuntime.queryInterface(
                                                 XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+            XSpreadsheet oSheet = UnoRuntime.queryInterface(
                                       XSpreadsheet.class, oIndexSheets.getByIndex(0));
             xSheet[0] = oSheet;
-            oSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+            oSheet = UnoRuntime.queryInterface(
                                       XSpreadsheet.class, oIndexSheets.getByIndex(1));
             xSheet[1] = oSheet;
         }
@@ -85,7 +85,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
             try {
                 XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, oObj);
                 Object o = oDPS.getDrawPages().getByIndex(1);
-                xDrawPage = (XDrawPage)UnoRuntime.queryInterface(XDrawPage.class, o);
+                xDrawPage = UnoRuntime.queryInterface(XDrawPage.class, o);
             }
             catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             } // ignore exceptions, we'll run into next if statement anyway

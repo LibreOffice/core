@@ -110,10 +110,9 @@ public class ScAnnotationsObj extends TestCase {
         log.println("Getting test object ") ;
 
         XSpreadsheetDocument xSpreadsheetDoc = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xSheetDoc);
-        XSpreadsheets sheets = (XSpreadsheets) xSpreadsheetDoc.getSheets();
+        XSpreadsheets sheets = xSpreadsheetDoc.getSheets();
 
-        XNameAccess oNames = (XNameAccess)
-            UnoRuntime.queryInterface( XNameAccess.class, sheets );
+        XNameAccess oNames = UnoRuntime.queryInterface( XNameAccess.class, sheets );
         XCell oCell = null;
         XSpreadsheet oSheet  = null;
         try {
@@ -121,8 +120,7 @@ public class ScAnnotationsObj extends TestCase {
                     new Type(XSpreadsheet.class),
                         oNames.getByName(oNames.getElementNames()[0]));
             // adding an annotation...
-            XCellRange oCRange = (XCellRange)
-                UnoRuntime.queryInterface(XCellRange.class, oSheet);
+            XCellRange oCRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
             oCell = oCRange.getCellByPosition(10,10);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);

@@ -243,7 +243,7 @@ public class SbaXGridControl extends TestCase {
 
         XControlModel the_Model = aShape.getControl();
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         XLoadable formLoader = FormTools.bindForm(xTextDoc);
 
@@ -285,7 +285,7 @@ public class SbaXGridControl extends TestCase {
             throw new StatusException("Can't create column instances.", e);
         }
 
-        XNameContainer aContainer = (XNameContainer) UnoRuntime.queryInterface(
+        XNameContainer aContainer = UnoRuntime.queryInterface(
                                             XNameContainer.class, the_Model);
 
         try {
@@ -315,7 +315,7 @@ public class SbaXGridControl extends TestCase {
         aShape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
                                               10000, "TextField");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         the_Model = aShape.getControl();
 
@@ -349,13 +349,9 @@ public class SbaXGridControl extends TestCase {
             new Object[] { new Integer(0) }, new Object[] { new Integer(1) }
         });
         tEnv.addObjRelation("Comparer",
-                            new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return ((Integer) o1).compareTo((Integer)o2);
-            }
-
-            public boolean equals(Object obj) {
-                return compare(this, obj) == 0;
+                            new Comparator<Integer>() {
+            public int compare(Integer o1, Integer o2) {
+                return o1.compareTo(o2);
             }
         });
 
@@ -396,7 +392,7 @@ public class SbaXGridControl extends TestCase {
         // adding relation for XUpdateBroadcaster
         final XInterface ctrl = oObj;
         final XLoadable formLoaderF = formLoader;
-        final XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet ps = UnoRuntime.queryInterface(
                                         XPropertySet.class, aControl2);
         tEnv.addObjRelation("XUpdateBroadcaster.Checker",
                             new ifc.form._XUpdateBroadcaster.UpdateChecker() {
@@ -449,7 +445,7 @@ public class SbaXGridControl extends TestCase {
                                   "com.sun.star.drawing.ControlShape");
             Object aCon = oDocMSF.createInstance(
                                   "com.sun.star.form.component.GridControl");
-            XPropertySet model_props = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet model_props = UnoRuntime.queryInterface(
                                                XPropertySet.class, aCon);
             model_props.setPropertyValue("DefaultControl",
                                          "com.sun.star.form.control.InteractionGridControl");

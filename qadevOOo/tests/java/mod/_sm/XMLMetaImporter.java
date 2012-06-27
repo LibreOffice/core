@@ -157,9 +157,8 @@ public class XMLMetaImporter extends TestCase {
                 public boolean checkImport() {
                     try {
                         XDocumentInfo xDocInfo = xDocInfoSup.getDocumentInfo() ;
-                        XPropertySet xDocInfoProp = (XPropertySet)
-                            UnoRuntime.queryInterface
-                            (XPropertySet.class, xDocInfo) ;
+                        XPropertySet xDocInfoProp = UnoRuntime.queryInterface
+                        (XPropertySet.class, xDocInfo) ;
                         boolean result = false ;
                         for (short i = 0; i < xDocInfo.getUserFieldCount(); i++) {
                             String gName = xDocInfo.getUserFieldName(i) ;

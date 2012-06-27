@@ -157,13 +157,12 @@ public class ODatabaseSource extends TestCase {
             throw new StatusException("Service not available", e) ;
         }
 
-        oObj = (XInterface) xDBDoc.getDataSource();
+        oObj = xDBDoc.getDataSource();
         log.println("ImplementationName: " + utils.getImplName(oObj));
 
         // Creating new DBase data source in the TEMP directory
 
-        XPropertySet xSrcProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oObj);
+        XPropertySet xSrcProp = UnoRuntime.queryInterface(XPropertySet.class, oObj);
 
         try{
             xSrcProp.setPropertyValue("URL", tmpDatabaseUrl) ;

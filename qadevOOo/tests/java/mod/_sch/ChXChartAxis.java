@@ -101,12 +101,12 @@ public class ChXChartAxis extends TestCase {
         // create testobject here
         // get the Diagram
         log.println( "getting Diagram" );
-        oDiagram = (XDiagram) xChartDoc.getDiagram();
+        oDiagram = xChartDoc.getDiagram();
 
         // get the Axis
         log.println( "getting ChartAxis" );
         XAxisYSupplier oAxisSup = UnoRuntime.queryInterface(XAxisYSupplier.class,oDiagram);
-        oObj = (XPropertySet) oAxisSup.getYAxis();
+        oObj = oAxisSup.getYAxis();
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

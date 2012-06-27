@@ -194,8 +194,7 @@ public class ScCellObj extends TestCase {
         // XTextFieldsSupplier
         tEnv.addObjRelation("SPREADSHEET", xSheetDoc);
 
-        XPropertySet PropSet = (XPropertySet)
-                    UnoRuntime.queryInterface(XPropertySet.class, oObj);
+        XPropertySet PropSet = UnoRuntime.queryInterface(XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet",PropSet);
 
         return tEnv;

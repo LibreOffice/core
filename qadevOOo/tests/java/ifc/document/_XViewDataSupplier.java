@@ -86,7 +86,7 @@ public class _XViewDataSupplier extends MultiMethodTest {
             }
         }
         catch(Exception e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+            e.printStackTrace(log);
         }
     }
 
@@ -107,7 +107,7 @@ public class _XViewDataSupplier extends MultiMethodTest {
             }
         }
         catch(Exception e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+            e.printStackTrace(log);
         }
         return retValue;
     }

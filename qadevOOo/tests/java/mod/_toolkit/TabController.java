@@ -83,7 +83,7 @@ public class TabController extends TestCase {
                                                                10000,
                                                                "CommandButton",
                                                                "UnoControlButton");
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         XControlModel model = aShape.getControl();
         XControlAccess access = UnoRuntime.queryInterface(

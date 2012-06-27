@@ -49,7 +49,7 @@ public class _XExtendedTransliteration extends MultiMethodTest {
             result &= out == '$';
         }
         catch(com.sun.star.i18n.MultipleCharsOutputException e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+            e.printStackTrace(log);
         }
         tRes.tested("transliterateChar2Char()", result);
     }

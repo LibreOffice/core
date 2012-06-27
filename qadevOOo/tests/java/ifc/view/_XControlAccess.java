@@ -76,7 +76,7 @@ public class _XControlAccess extends MultiMethodTest {
             XDrawPage oDP = null;
             if (isSheet != null) {
                 XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, oDoc);
-                oDP = (XDrawPage) UnoRuntime.queryInterface(XDrawPage.class, oDPS.getDrawPages().getByIndex(0));
+                oDP = UnoRuntime.queryInterface(XDrawPage.class, oDPS.getDrawPages().getByIndex(0));
             } else {
 
 

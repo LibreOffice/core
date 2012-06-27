@@ -130,7 +130,7 @@ public class ScDatabaseRangeObj extends TestCase {
 
         log.println("Getting test object ");
 
-        XPropertySet docProps = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet docProps = UnoRuntime.queryInterface(
                                         XPropertySet.class, xSheetDoc);
 
         XSpreadsheets sheets = xSheetDoc.getSheets();
@@ -172,7 +172,7 @@ public class ScDatabaseRangeObj extends TestCase {
         CellRangeAddress aRange = null;
 
         //dbRanges.addNewByName("dbRange", aRange);
-        XNameAccess dbrNA = (XNameAccess) UnoRuntime.queryInterface(
+        XNameAccess dbrNA = UnoRuntime.queryInterface(
                                     XNameAccess.class, dbRanges);
         XNamed xNamed = null;
 
@@ -218,7 +218,7 @@ public class ScDatabaseRangeObj extends TestCase {
 
         try {
             Object sheet = sheets.getByName(names[0]);
-            xCellRange = (XCellRange) UnoRuntime.queryInterface(
+            xCellRange = UnoRuntime.queryInterface(
                                  XCellRange.class, sheet);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);

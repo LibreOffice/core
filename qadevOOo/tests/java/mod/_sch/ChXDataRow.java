@@ -129,8 +129,8 @@ public class ChXDataRow extends TestCase {
         // get the ChXDataRowPoint_Row
         try {
             log.println( "getting ChXDataRowPoint_Row" );
-            oDiagram = (XDiagram) xChartDoc.getDiagram();
-            oObj = (XPropertySet) oDiagram.getDataRowProperties(1);
+            oDiagram = xChartDoc.getDiagram();
+            oObj = oDiagram.getDataRowProperties(1);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             // Some exception occures.FAILED
             e.printStackTrace( log );

@@ -148,10 +148,8 @@ public class SwXTextPortion extends TestCase {
             throw new StatusException( "Couldn't get TextPortion", e );
         }
 
-        portP = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, oObj);
-        paraP = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, param);
+        portP = UnoRuntime.queryInterface(XPropertySet.class, oObj);
+        paraP = UnoRuntime.queryInterface(XPropertySet.class, param);
 
 
         log.println( "creating a new environment for Paragraph object" );

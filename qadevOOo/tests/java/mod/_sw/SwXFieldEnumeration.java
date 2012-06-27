@@ -107,8 +107,8 @@ public class SwXFieldEnumeration extends TestCase {
         try {
             FieldMaster = oDocMSF.createInstance
                 ( "com.sun.star.text.FieldMaster.Database" );
-            PFieldMaster = (XPropertySet) UnoRuntime.queryInterface
-                (XPropertySet.class,(XInterface) FieldMaster);
+            PFieldMaster = UnoRuntime.queryInterface
+                (XPropertySet.class,FieldMaster);
             oObj = (XInterface)
                 oDocMSF.createInstance("com.sun.star.text.TextField.Database");
             xTF = UnoRuntime.queryInterface(XDependentTextField.class,oObj);

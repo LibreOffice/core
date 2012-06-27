@@ -45,7 +45,7 @@ public class Parameters implements XPropertySet {
     final Parameters defaults;
     Property[] props;
 
-    public Parameters(Map params) {
+    public Parameters(Map<String, Object> params) {
         this (params, null);
     }
 
@@ -57,7 +57,7 @@ public class Parameters implements XPropertySet {
         Set<String> paramSet = new HashSet<String>(parameters.keySet());
 
         if (defaults != null) {
-            Set defSet = defaults.toMap().keySet();
+            Set<String> defSet = defaults.toMap().keySet();
             paramSet.addAll(defSet);
         }
 
@@ -148,14 +148,10 @@ public class Parameters implements XPropertySet {
         };
     }
 
-    public Map toMap() {
-        return new HashMap(parameters) {
-            public Object get(Object obj) {
-                if (obj instanceof String) {
-                    return Parameters.this.get((String) obj);
-                } else {
-                    return null;
-                }
+    public Map<String,Object> toMap() {
+        return new HashMap<String,Object>(parameters) {
+            public String get(String obj) {
+               return Parameters.this.get(obj);
             }
         };
     }

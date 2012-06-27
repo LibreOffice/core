@@ -36,7 +36,7 @@ public class OutProducerFactory {
      * @param Parameters of the test.
      * @return The created out producer.
      */
-    public static LogWriter createOutProducer(HashMap param) {
+    public static LogWriter createOutProducer(HashMap<String,Object> param) {
         LogWriter dbOut = null;
         boolean getDatabase = convertToBool(param.get("DataBaseOut"));
         if (getDatabase) {
@@ -65,7 +65,7 @@ public class OutProducerFactory {
      * @param The test parameters
      * @return The database out producer, or null if it couldn't be created.
      */
-    public static LogWriter createDataBaseOutProducer(HashMap param) {
+    public static LogWriter createDataBaseOutProducer(HashMap<String,Object> param) {
         String dataProducerName = (String)param.get("DataBaseOutProducer");
         if (dataProducerName == null) {
             String testBaseName = (String)param.get("TestBase");
@@ -77,7 +77,7 @@ public class OutProducerFactory {
         LogWriter dbOut = null;
         try {
             dbOut = (LogWriter)dcl.getInstance(dataProducerName,
-                new Class[]{new HashMap().getClass()}, new Object[]{param});
+                new Class[]{HashMap.class}, new Object[]{param});
         }
         catch(IllegalArgumentException e) {
             e.printStackTrace();

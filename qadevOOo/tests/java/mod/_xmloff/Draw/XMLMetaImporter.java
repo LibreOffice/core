@@ -154,7 +154,7 @@ public class XMLMetaImporter extends TestCase {
         //set some meta data
         XDocumentInfoSupplier infoSup = UnoRuntime.queryInterface
         (XDocumentInfoSupplier.class, xDrawDoc);
-        final XPropertySet docInfo = (XPropertySet) UnoRuntime.queryInterface
+        final XPropertySet docInfo = UnoRuntime.queryInterface
                         (XPropertySet.class, infoSup.getDocumentInfo());
         final PrintWriter logF = log ;
 

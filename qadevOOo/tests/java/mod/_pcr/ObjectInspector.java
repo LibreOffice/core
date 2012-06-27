@@ -132,7 +132,7 @@ public class ObjectInspector extends TestCase {
 
             XInterface oFrame = (XInterface) xMSF.createInstance("com.sun.star.frame.Frame");
 
-            XFrame xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, oFrame);
+            XFrame xFrame = UnoRuntime.queryInterface(XFrame.class, oFrame);
 
             xFrame.setName("ObjectInspector");
             xFrame.initialize(xWindow);
@@ -187,7 +187,7 @@ public class ObjectInspector extends TestCase {
 
         XFrame existentInspector = null;
 
-        XFrame xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, StarDesktop);
+        XFrame xFrame = UnoRuntime.queryInterface(XFrame.class, StarDesktop);
 
         existentInspector = xFrame.findFrame( "ObjectInspector", 255 );
 

@@ -175,12 +175,10 @@ public class SwXTextView extends TestCase {
 
         tEnv.addObjRelation("Selections", new Object[] {
             oFrame1, oFrame2, textRanges1, textRanges2});
-        tEnv.addObjRelation("Comparer", new Comparator() {
+        tEnv.addObjRelation("Comparer", new Comparator<Object>() {
             public int compare(Object o1, Object o2) {
-                XServiceInfo serv1 = (XServiceInfo)
-                    UnoRuntime.queryInterface(XServiceInfo.class, o1);
-                XServiceInfo serv2 = (XServiceInfo)
-                    UnoRuntime.queryInterface(XServiceInfo.class, o2);
+                XServiceInfo serv1 = UnoRuntime.queryInterface(XServiceInfo.class, o1);
+                XServiceInfo serv2 = UnoRuntime.queryInterface(XServiceInfo.class, o2);
 
                 String implName1 = serv1.getImplementationName();
                 String implName2 = serv2.getImplementationName();
@@ -206,9 +204,7 @@ public class SwXTextView extends TestCase {
 
                 return -1;
             }
-            public boolean equals(Object obj) {
-                return compare(this, obj) == 0;
-            } });
+          });
 
         XSelectionSupplier xsel = UnoRuntime.queryInterface(XSelectionSupplier.class,xContr);
         try {
@@ -237,7 +233,7 @@ public class SwXTextView extends TestCase {
 
         log.println("adding relation for com.sun.star.view.XFormLayerAccess: XForm");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         try {
 

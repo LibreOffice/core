@@ -93,14 +93,14 @@ public class _XRowUpdate extends MultiMethodTest {
     // oObj filled by MultiMethodTest
     public XRowUpdate oObj = null ;
 
-    private List rowData = null ;
+    private List<Object> rowData = null ;
     private XRow row = null ;
 
     /**
     * Gets relations.
     */
     public void before() {
-        rowData = (List) tEnv.getObjRelation("CurrentRowData") ;
+        rowData = (List<Object>) tEnv.getObjRelation("CurrentRowData") ;
         if (rowData == null) {
             log.println("!!! 'CurrentRowData' relation not found !!!") ;
         }
@@ -538,7 +538,7 @@ public class _XRowUpdate extends MultiMethodTest {
         try {
             Object oStream = ((XMultiServiceFactory)tParam.getMSF()).
                 createInstance("com.sun.star.io.DataInputStream") ;
-            XInputStream newVal = (XInputStream) UnoRuntime.queryInterface
+            XInputStream newVal = UnoRuntime.queryInterface
                 (XInputStream.class, oStream);
 
             oObj.updateBinaryStream(idx, newVal, 0) ;
@@ -575,7 +575,7 @@ public class _XRowUpdate extends MultiMethodTest {
         try {
             Object oStream = ((XMultiServiceFactory)tParam.getMSF()).
                 createInstance("com.sun.star.io.TextInputStream") ;
-            XInputStream newVal = (XInputStream) UnoRuntime.queryInterface
+            XInputStream newVal = UnoRuntime.queryInterface
                 (XInputStream.class, oStream);
 
             oObj.updateCharacterStream(idx, newVal, 0) ;
@@ -667,7 +667,7 @@ public class _XRowUpdate extends MultiMethodTest {
     * Finds in relation vector index of column of the appropriate
     * type.
     */
-    protected int findColumnOfType(Class clz) {
+    protected int findColumnOfType(Class<?> clz) {
 
         for (int i = 0; i < rowData.size(); i++)
             if (clz.isInstance(rowData.get(i))) return i + 1 ;

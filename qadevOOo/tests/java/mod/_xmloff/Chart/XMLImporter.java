@@ -130,7 +130,7 @@ public class XMLImporter extends TestCase {
             oInt = xMSF.createInstance("com.sun.star.comp.Chart.XMLImporter") ;
 
             Object oTitle = xChartDoc.getTitle() ;
-            xTitleProp = (XPropertySet) UnoRuntime.queryInterface
+            xTitleProp = UnoRuntime.queryInterface
                 (XPropertySet.class, oTitle) ;
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;

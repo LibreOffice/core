@@ -134,15 +134,13 @@ public class SvxShapeGroup extends TestCase {
         oShapes.add(Shape2);
 
         log.println( "adding two style as ObjRelation for ShapeDescriptor" );
-        XPropertySet oShapeProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class,Shape1);
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,Shape1);
         XStyle aStyle1 = null;
         try {
             aStyle1 = (XStyle) AnyConverter.toObject(
                 new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
         } catch (Exception e) {}
-        oShapeProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class,Shape2);
+        oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,Shape2);
         XStyle aStyle2 = null;
         try {
             aStyle2 = (XStyle) AnyConverter.toObject(

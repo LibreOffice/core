@@ -235,7 +235,7 @@ public class AccessibleTabControl extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleSelection selection = (XAccessibleSelection) UnoRuntime.queryInterface(
+        final XAccessibleSelection selection = UnoRuntime.queryInterface(
                                                                               XAccessibleSelection.class,
                                                                               oObj);
 

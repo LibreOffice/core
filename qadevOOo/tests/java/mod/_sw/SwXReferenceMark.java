@@ -99,7 +99,7 @@ public class SwXReferenceMark extends TestCase {
         try {
             oObj = (XInterface) oDocMSF.createInstance
                 ("com.sun.star.text.ReferenceMark");
-            instance = (XInterface) oDocMSF.createInstance
+            instance = oDocMSF.createInstance
                 ("com.sun.star.text.ReferenceMark");
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );

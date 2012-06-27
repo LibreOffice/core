@@ -246,7 +246,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
         tEnv.addObjRelation("expectedStateNames", expectedStateNames);
         tEnv.addObjRelation("expectedStates", expectedStates);
 
-        final XAccessibleSelection selection = (XAccessibleSelection) UnoRuntime.queryInterface(
+        final XAccessibleSelection selection = UnoRuntime.queryInterface(
                                                                               XAccessibleSelection.class,
                                                                               oObj);
 

@@ -100,7 +100,7 @@ public class SimpleFileSemaphore /* extends *//* implements */
             try
             {
                 RandomAccessFile aWriter = new RandomAccessFile(_aSemaphore, "rw");
-                aWriter.writeByte((int)1);
+                aWriter.writeByte(1);
                 aWriter.close();
             }
 

@@ -56,7 +56,7 @@ public class _XChartDataArray extends MultiMethodTest {
             msExcludeMessage = (String)o;
         }
         if (!mbExcludeSetRowAndSetColumn) {
-            XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, oObj);
+            XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, oObj);
             if(xProp != null) {
                 try {
                     boolean columnAsLabel = ((Boolean)xProp.getPropertyValue("ChartColumnAsLabel")).booleanValue();

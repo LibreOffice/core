@@ -102,7 +102,7 @@ public class SwXTextFrameText extends TestCase {
 
         try {
             oFrame1 = SOF.createTextFrame(xTextDoc, 500, 500);
-            oPropSet = (XPropertySet)UnoRuntime.queryInterface
+            oPropSet = UnoRuntime.queryInterface
                 (XPropertySet.class, oFrame1 );
             //AnchorTypes: 0 = paragraph, 1 = as char, 2 = page,
             // 3 = frame/paragraph 4= at char
@@ -128,7 +128,7 @@ public class SwXTextFrameText extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         log.println( "adding TextDocument as mod relation to environment" );
-        tEnv.addObjRelation("TEXT", (XText) oObj);
+        tEnv.addObjRelation("TEXT", oObj);
 
         log.println( "adding InstDescriptor object" );
         TableDsc tDsc = new TableDsc( 6, 4 );

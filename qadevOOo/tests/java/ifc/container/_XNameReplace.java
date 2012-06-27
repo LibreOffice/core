@@ -106,7 +106,7 @@ public class _XNameReplace extends MultiMethodTest {
         }
 
         log.println("getting the existant object's name");
-        XNameAccess oNameAccess = (XNameAccess)UnoRuntime.queryInterface(
+        XNameAccess oNameAccess = UnoRuntime.queryInterface(
                                                        XNameAccess.class, oObj);
         oNames = oNameAccess.getElementNames();
         /* Some Objects can't replace the firsr that comes along, i.e.

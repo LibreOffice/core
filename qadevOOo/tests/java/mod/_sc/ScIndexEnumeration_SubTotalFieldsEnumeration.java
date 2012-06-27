@@ -77,7 +77,7 @@ public class ScIndexEnumeration_SubTotalFieldsEnumeration extends TestCase {
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;

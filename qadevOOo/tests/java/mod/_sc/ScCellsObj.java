@@ -101,22 +101,22 @@ public class ScCellsObj extends TestCase {
         Object cellArr[] = new Object[3];
 
         // creation of testobject here
-        XSpreadsheets oSheets = (XSpreadsheets)xSheetDoc.getSheets();
+        XSpreadsheets oSheets = xSheetDoc.getSheets();
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         XCellRange oSheet = null;
         try {
             oSheet = (XCellRange) AnyConverter.toObject(
                     new Type(XCellRange.class),oIndexAccess.getByIndex(0));
 
-            XCell oCell_1 = (XCell)oSheet.getCellByPosition(0, 0);
+            XCell oCell_1 = oSheet.getCellByPosition(0, 0);
             XTextRange oTextRange = UnoRuntime.queryInterface(XTextRange.class, oCell_1);
 
             oTextRange.setString("ScCellsObj test 1");
 
-            XCell oCell_2 = (XCell)oSheet.getCellByPosition(5, 1);
+            XCell oCell_2 = oSheet.getCellByPosition(5, 1);
             oCell_2.setValue(15);
 
-            XCell oCell_3 = (XCell)oSheet.getCellByPosition(3, 9);
+            XCell oCell_3 = oSheet.getCellByPosition(3, 9);
             oTextRange = UnoRuntime.queryInterface(XTextRange.class, oCell_3);
 
             oTextRange.setString("ScCellsObj test 2");

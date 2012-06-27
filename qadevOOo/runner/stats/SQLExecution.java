@@ -125,7 +125,7 @@ public class SQLExecution {
      * @param sqlOutput The results of the command are put in this HashMap.
      * @return True, if no error occurred.
      */
-    public boolean executeSQLCommand(String command, HashMap sqlInput, HashMap<String, String[]> sqlOutput)
+    public boolean executeSQLCommand(String command, HashMap<String,Object> sqlInput, HashMap<String, String[]> sqlOutput)
                                         throws IllegalArgumentException {
         return executeSQLCommand(command, sqlInput, sqlOutput, false);
     }
@@ -139,7 +139,7 @@ public class SQLExecution {
      * sqlInput HashMap.
      * @return True, if no error occurred.
      */
-    public boolean executeSQLCommand(String command, HashMap sqlInput, HashMap<String, String[]> sqlOutput, boolean mergeOutputIntoInput)
+    public boolean executeSQLCommand(String command, HashMap<String,Object> sqlInput, HashMap<String, String[]> sqlOutput, boolean mergeOutputIntoInput)
                                         throws IllegalArgumentException {
         if (sqlOutput == null) {
             sqlOutput = new HashMap<String, String[]>();
@@ -193,11 +193,11 @@ public class SQLExecution {
                             // add the values
                             if (addNewVals && i!=0) {
                                 // all values until now were of type String, not String[], so now new values have to be added.
-                                sqlCommand.add(i, (String)sqlCommand.get(0) + " " + pre + value + post);
+                                sqlCommand.add(i, sqlCommand.get(0) + " " + pre + value + post);
                             }
                             else {
                                 // we already have vals.length commands (or are at the first command), so just add.
-                                sqlCommand.set(i, (String)sqlCommand.get(i) + " " + pre + value + post);
+                                sqlCommand.set(i, sqlCommand.get(i) + " " + pre + value + post);
                             }
                         }
                     }
@@ -205,7 +205,7 @@ public class SQLExecution {
                         // value is a String: no other possibility
                         String value = checkForQuotationMarks((String)sqlInput.get(key));
                         for (int i=0; i<sqlCommand.size(); i++) {
-                            sqlCommand.set(i, (String)sqlCommand.get(i) + " " + pre + value + post);
+                            sqlCommand.set(i, sqlCommand.get(i) + " " + pre + value + post);
                         }
                     }
                 }
@@ -218,7 +218,7 @@ public class SQLExecution {
             else {
                 // token is not a key, just add it
                 for (int i=0; i<sqlCommand.size(); i++)
-                    sqlCommand.set(i, (String)sqlCommand.get(i) + " " + originalKey);
+                    sqlCommand.set(i, sqlCommand.get(i) + " " + originalKey);
                 if (originalKey.equalsIgnoreCase("update") ||
                                     originalKey.equalsIgnoreCase("delete") ||
                                     originalKey.equalsIgnoreCase("insert")) {
@@ -228,7 +228,7 @@ public class SQLExecution {
             }
         }
         for (int i=0;i<sqlCommand.size(); i++) {
-            execute((String)sqlCommand.get(i), sqlOutput, update);
+            execute(sqlCommand.get(i), sqlOutput, update);
             // merge output with input
             if (!update && mergeOutputIntoInput) {
                 Iterator<String> keys = sqlOutput.keySet().iterator();

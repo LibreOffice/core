@@ -57,15 +57,15 @@ public class _XFastPropertySet extends MultiMethodTest {
     public XFastPropertySet oObj = null;
     private List<Integer> handles = new ArrayList<Integer>();
     private int handle = -1;
-    private Set exclude = null ;
+    private Set<String> exclude = null ;
 
     /**
      * Retrieves relation.
      */
      protected void before() {
-        exclude = (Set) tEnv.getObjRelation("XFastPropertySet.ExcludeProps") ;
+        exclude = (Set<String>) tEnv.getObjRelation("XFastPropertySet.ExcludeProps") ;
         if (exclude == null) {
-            exclude = new java.util.HashSet() ;
+            exclude = new java.util.HashSet<String>() ;
         }
      }
 
@@ -77,7 +77,7 @@ public class _XFastPropertySet extends MultiMethodTest {
     * before and no exceptions were thrown. <p>
     */
     public void _setFastPropertyValue() {
-        XPropertySet PS = (XPropertySet)UnoRuntime.queryInterface
+        XPropertySet PS = UnoRuntime.queryInterface
             (XPropertySet.class, oObj);
         XPropertySetInfo propertySetInfo = PS.getPropertySetInfo();
 
@@ -124,7 +124,7 @@ public class _XFastPropertySet extends MultiMethodTest {
     * Has <b> OK </b> status if exceptions were thrown. <p>
     */
     public void _getFastPropertyValue() {
-        XPropertySet PS = (XPropertySet)UnoRuntime.queryInterface
+        XPropertySet PS = UnoRuntime.queryInterface
             (XPropertySet.class, oObj);
         XPropertySetInfo propertySetInfo = PS.getPropertySetInfo();
 

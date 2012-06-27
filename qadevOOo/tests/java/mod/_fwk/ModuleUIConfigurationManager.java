@@ -90,7 +90,7 @@ public class ModuleUIConfigurationManager extends TestCase {
             log.println("Creating instance...");
             xTextDoc = WriterTools.createTextDoc(xMSF);
 
-            Object o = (XInterface)xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
+            Object o = xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
             XModuleUIConfigurationManagerSupplier xMUICMS = UnoRuntime.queryInterface(XModuleUIConfigurationManagerSupplier.class, o);
 
             util.dbg.printInterfaces(xMUICMS);
@@ -99,12 +99,11 @@ public class ModuleUIConfigurationManager extends TestCase {
             log.println("TestObject: " + utils.getImplName(oObj));
             tEnv = new TestEnvironment(oObj);
 
-            XNameAccess xMM = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, xMSF.createInstance("com.sun.star.comp.framework.ModuleManager"));
+            XNameAccess xMM = UnoRuntime.queryInterface(XNameAccess.class, xMSF.createInstance("com.sun.star.comp.framework.ModuleManager"));
             String[] names = xMM.getElementNames();
 
             o = xMSF.createInstance("com.sun.star.embed.StorageFactory");
-            XSingleServiceFactory xStorageService = (XSingleServiceFactory)
-                    UnoRuntime.queryInterface(XSingleServiceFactory.class, o);
+            XSingleServiceFactory xStorageService = UnoRuntime.queryInterface(XSingleServiceFactory.class, o);
             Object[]props = new Object[2];
 
             String aFile = util.utils.getOfficeTempDir(xMSF) + "dummyFile.dat";

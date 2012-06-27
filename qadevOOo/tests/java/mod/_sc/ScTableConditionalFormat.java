@@ -108,7 +108,7 @@ public class ScTableConditionalFormat extends TestCase {
         XInterface oObj = null;
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
@@ -137,8 +137,7 @@ public class ScTableConditionalFormat extends TestCase {
             e.printStackTrace(log);
         }
 
-        XPropertySet Props = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oSheet);
+        XPropertySet Props = UnoRuntime.queryInterface(XPropertySet.class, oSheet);
         try {
             oObj = (XInterface) AnyConverter.toObject(
                     new Type(XInterface.class),

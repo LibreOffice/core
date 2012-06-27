@@ -222,7 +222,7 @@ public class DrawController_DrawView extends TestCase {
 
         tEnv.addObjRelation("Selections", new Object[] {
             oDrawPage, oShapeCol1, oShapeCol2});
-        tEnv.addObjRelation("Comparer", new Comparator() {
+        tEnv.addObjRelation("Comparer", new Comparator<Object>() {
             public int compare(Object o1, Object o2) {
                 XIndexAccess indAc1 = UnoRuntime.queryInterface(XIndexAccess.class, o1);
                 XIndexAccess indAc2 = UnoRuntime.queryInterface(XIndexAccess.class, o2);

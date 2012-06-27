@@ -91,8 +91,7 @@ public class AccessiblePresentationOLEShape extends TestCase {
 
         //DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
-        XPropertySet oShapeProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class,oShape);
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class,oShape);
         try {
             oShapeProps.setPropertyValue("IsEmptyPresentationObject", new Boolean(false));
         } catch (com.sun.star.lang.WrappedTargetException e) {

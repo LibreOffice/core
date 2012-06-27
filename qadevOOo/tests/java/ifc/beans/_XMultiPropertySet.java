@@ -74,7 +74,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
 
     private Object[] values = null;
 
-    private Set exclProps = null;
+    private Set<String> exclProps = null;
 
     /**
     * Initializes some fields.
@@ -82,8 +82,8 @@ public class _XMultiPropertySet extends MultiMethodTest {
     public void before() {
         _log = log;
 
-        exclProps = (Set) tEnv.getObjRelation("XMultiPropertySet.ExcludeProps");
-        if (exclProps == null) exclProps = new HashSet(0);
+        exclProps = (Set<String>) tEnv.getObjRelation("XMultiPropertySet.ExcludeProps");
+        if (exclProps == null) exclProps = new HashSet<String>(0);
     }
 
     /**

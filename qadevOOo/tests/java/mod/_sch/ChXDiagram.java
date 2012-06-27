@@ -298,8 +298,7 @@ public class ChXDiagram extends TestCase {
         // insert a chart
         Rectangle oRect = new Rectangle(500, 3000, 25000, 11000);
 
-        XCellRange oRange = (XCellRange)
-            UnoRuntime.queryInterface(XCellRange.class, oSheet);
+        XCellRange oRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
         XCellRange myRange = oRange.getCellRangeByName("A1:N4");
         XCellRangeAddressable oRangeAddr = UnoRuntime.queryInterface(XCellRangeAddressable.class, myRange);
         CellRangeAddress myAddr = oRangeAddr.getRangeAddress();
@@ -320,9 +319,8 @@ public class ChXDiagram extends TestCase {
         XTableChart oChart = null;
         try {
             oChart = (XTableChart) AnyConverter.toObject(
-                new Type(XTableChart.class),((XNameAccess)
-                    UnoRuntime.queryInterface(
-                        XNameAccess.class, oCharts)).getByName("ChXDiagram"));
+                new Type(XTableChart.class),UnoRuntime.queryInterface(
+                    XNameAccess.class, oCharts).getByName("ChXDiagram"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get TableChart", e);
@@ -337,7 +335,7 @@ public class ChXDiagram extends TestCase {
         XEmbeddedObjectSupplier oEOS = UnoRuntime.queryInterface(XEmbeddedObjectSupplier.class, oChart);
         XInterface oInt = oEOS.getEmbeddedObject();
         xChartDoc = UnoRuntime.queryInterface(XChartDocument.class,oInt);
-        oObj = (XDiagram) xChartDoc.getDiagram();
+        oObj = xChartDoc.getDiagram();
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

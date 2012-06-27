@@ -99,7 +99,7 @@ public class UnoControlContainer extends TestCase {
         // create first XControl
         shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
                                              10000, "TextField");
-        WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
+        WriterTools.getDrawPage(xTextDoc).add(shape);
         model = shape.getControl();
         access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
@@ -115,7 +115,7 @@ public class UnoControlContainer extends TestCase {
         // create second XControl
         shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
                                              10000, "TextField");
-        WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
+        WriterTools.getDrawPage(xTextDoc).add(shape);
         model = shape.getControl();
         access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
@@ -131,7 +131,7 @@ public class UnoControlContainer extends TestCase {
         // create third XControl
         shape = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
                                              10000, "CommandButton");
-        WriterTools.getDrawPage(xTextDoc).add((XShape) shape);
+        WriterTools.getDrawPage(xTextDoc).add(shape);
         model = shape.getControl();
         access = UnoRuntime.queryInterface(
                          XControlAccess.class, xTextDoc.getCurrentController());
@@ -151,7 +151,7 @@ public class UnoControlContainer extends TestCase {
                                                                "CommandButton",
                                                                "UnoControlButton");
 
-        WriterTools.getDrawPage(xTD2).add((XShape) aShape);
+        WriterTools.getDrawPage(xTD2).add(aShape);
 
         XControlModel the_Model = aShape.getControl();
 

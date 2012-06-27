@@ -31,7 +31,7 @@ import com.sun.star.uno.XComponentContext;
  * for example, standard paths, connection strings, etc. The TestParameters
  * also provides XMultiServiceFactory for the test (tests).
  */
-public class TestParameters extends HashMap {
+public class TestParameters extends HashMap<String,Object> {
 
     /**
      * The ConnectionString for Office Connection<br>
@@ -230,13 +230,13 @@ public class TestParameters extends HashMap {
 
 
     /**
-     * Wraper around "put()"
+     * Wrapper around "put()"
      * @param key A key of this table.
      * @param val The value of the key.
      * @return The value of this key.
      * @see java.util.HashMap
      */
-    public Object put(Object key, Object val) {
+    public Object put(String key, Object val) {
         return super.put(key,val);
     }
 
@@ -289,7 +289,7 @@ public class TestParameters extends HashMap {
         Object context = get( "ComponentContext" );
         if ( context == null )
         {
-            XPropertySet factoryProps = (XPropertySet)com.sun.star.uno.UnoRuntime.queryInterface(
+            XPropertySet factoryProps = com.sun.star.uno.UnoRuntime.queryInterface(
                 XPropertySet.class, getMSF() );
             try
             {

@@ -145,7 +145,7 @@ public class _XImplementationLoader extends MultiMethodTest {
             throw new StatusException("Can not activate factory", e) ;
         }
 
-        XServiceInfo xServInf = (XServiceInfo) UnoRuntime.queryInterface
+        XServiceInfo xServInf = UnoRuntime.queryInterface
             (XServiceInfo.class, factory) ;
 
         if (xServInf == null) {

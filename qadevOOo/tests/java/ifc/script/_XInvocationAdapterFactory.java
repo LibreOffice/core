@@ -70,7 +70,7 @@ public class _XInvocationAdapterFactory extends MultiMethodTest {
             Object oInvFac = xMSF.createInstance
                 ("com.sun.star.script.Invocation") ;
 
-            XSingleServiceFactory xInvFac = (XSingleServiceFactory) UnoRuntime.
+            XSingleServiceFactory xInvFac = UnoRuntime.
                 queryInterface(XSingleServiceFactory.class, oInvFac) ;
 
             Object oInv = xInvFac.createInstanceWithArguments(args) ;
@@ -88,7 +88,7 @@ public class _XInvocationAdapterFactory extends MultiMethodTest {
         Object adp = oObj.createAdapter(xInv,
                 new Type(XInputStream.class)) ;
 
-        xInStr = (XInterface) UnoRuntime.queryInterface
+        xInStr = UnoRuntime.queryInterface
                 (XInputStream.class, adp) ;
 
 

@@ -165,8 +165,7 @@ public class XMLSettingsImporter extends TestCase {
         // get property before import
         XModel xImpressModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
         XController xController = xImpressModel.getCurrentController();
-        final XPropertySet xPropSet = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xController);
+        final XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
         try {
             log.println("Property \"IsLayerMode\" before import is " +
                 xPropSet.getPropertyValue("IsLayerMode"));

@@ -187,7 +187,7 @@ public class ScTableSheetObj extends TestCase {
 
         log.println("getting sheets");
 
-        XSpreadsheets xSpreadsheets = (XSpreadsheets) xSheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
 
         log.println("getting a sheet");
 
@@ -227,7 +227,7 @@ public class ScTableSheetObj extends TestCase {
             throw new StatusException("Exception occurred while filling cells", e);
         }
 
-        oObj = (XInterface) UnoRuntime.queryInterface(XInterface.class, oSheet);
+        oObj = UnoRuntime.queryInterface(XInterface.class, oSheet);
 
         log.println("creating a new environment for object");
 
@@ -262,7 +262,7 @@ public class ScTableSheetObj extends TestCase {
         XSpreadsheet sSheet = null;
 
         try {
-            sSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+            sSheet = UnoRuntime.queryInterface(
                              XSpreadsheet.class,
                              xSpreadsheets.getByName("Scenario"));
         } catch (com.sun.star.container.NoSuchElementException e) {
@@ -277,7 +277,7 @@ public class ScTableSheetObj extends TestCase {
                     " 'XArrayFormulaRange'");
         tEnv.addObjRelation("noArray", "ScTableSheetObj");
 
-        XPropertySet PropSet = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet PropSet = UnoRuntime.queryInterface(
                                        XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet", PropSet);
         tEnv.addObjRelation("SHEET", oSheet);
@@ -316,7 +316,7 @@ public class ScTableSheetObj extends TestCase {
                 oSheet.getCellByPosition(15, 16)
             });
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace((PrintWriter) log);
+            e.printStackTrace(log);
             log.println(
                     "Cannot make required object relation 'XSearchable.MAKEENTRYINCELL'.");
         }

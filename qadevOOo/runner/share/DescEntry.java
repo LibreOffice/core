@@ -83,6 +83,6 @@ public class DescEntry {
      * Contains an arbitrary set of parameters
      */
 
-    public java.util.HashMap UserDefinedParams = new java.util.HashMap();
+    public java.util.HashMap<String,Object> UserDefinedParams = new java.util.HashMap<String,Object>();
 
 }

@@ -81,7 +81,7 @@ public class _XDataInputStream extends MultiMethodTest {
         XInterface x = (XInterface)tEnv.getObjRelation("StreamWriter") ;
         oStream = UnoRuntime.queryInterface(
                                                     XDataOutputStream.class, x);
-        List data = (List) tEnv.getObjRelation("StreamData") ;
+        List<Object> data = (List<Object>) tEnv.getObjRelation("StreamData") ;
         if (data == null || oStream == null) {
             throw new StatusException(Status.failed("Object relation not found."));
         }

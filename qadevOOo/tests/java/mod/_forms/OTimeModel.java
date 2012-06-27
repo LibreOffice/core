@@ -164,7 +164,7 @@ public class OTimeModel extends GenericModelTest {
                                                                  PrintWriter log) {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
 
-        HashSet exclude = new HashSet();
+        HashSet<String> exclude = new HashSet<String>();
 
         exclude.add("FormatKey");
 
@@ -206,9 +206,9 @@ public class OTimeModel extends GenericModelTest {
             }
 
             public void commit() throws com.sun.star.sdbc.SQLException {
-                XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
+                XBoundComponent bound = UnoRuntime.queryInterface(
                                                 XBoundComponent.class, ctrl);
-                XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
+                XResultSetUpdate update = UnoRuntime.queryInterface(
                                                   XResultSetUpdate.class,
                                                   formLoaderF);
 

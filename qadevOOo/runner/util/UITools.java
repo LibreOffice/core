@@ -353,8 +353,7 @@ public class UITools {
                     XAccessible xChild = xList.getAccessibleChild(i);
                     XAccessibleContext xChildCont =
                                                   xChild.getAccessibleContext();
-                    XInterface xChildInterface = (XInterface)
-                        UnoRuntime.queryInterface(XInterface.class, xChildCont);
+                    XInterface xChildInterface = UnoRuntime.queryInterface(XInterface.class, xChildCont);
                     Items.add(xChildInterface);
 
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -416,8 +415,7 @@ public class UITools {
                     XAccessible xChild = xList.getAccessibleChild(i);
                     XAccessibleContext xChildCont =
                                                   xChild.getAccessibleContext();
-                    XInterface xChildInterface = (XInterface)
-                        UnoRuntime.queryInterface(XInterface.class, xChildCont);
+                    XInterface xChildInterface = UnoRuntime.queryInterface(XInterface.class, xChildCont);
                     Items.add(getString(xChildInterface));
 
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -468,7 +466,7 @@ public class UITools {
          try{
             XInterface xNumericField =mAT.getAccessibleObjectForRole(
                                   mXRoot, AccessibleRole.TEXT, NumericFieldName);
-            return (String) getString(xNumericField);
+            return getString(xNumericField);
 
          } catch (Exception e) {
           throw new Exception("Could get value from NumericField '"
@@ -563,8 +561,7 @@ public class UITools {
                     XAccessible xChild = xFrame.getAccessibleChild(i);
                     XAccessibleContext xChildCont =
                                                   xChild.getAccessibleContext();
-                    XInterface xChildInterface = (XInterface)
-                        UnoRuntime.queryInterface(XInterface.class, xChildCont);
+                    XInterface xChildInterface = UnoRuntime.queryInterface(XInterface.class, xChildCont);
                     TextFieldText += (getString(xChildInterface));
 
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -639,8 +636,7 @@ public class UITools {
             XAccessibleContext xMessage =mAT.getAccessibleObjectForRole(mXRoot,
                                      AccessibleRole.LABEL);
 
-            XInterface xMessageInterface = (XInterface)
-                UnoRuntime.queryInterface(XInterface.class, xMessage);
+            XInterface xMessageInterface = UnoRuntime.queryInterface(XInterface.class, xMessage);
             cMessage += (getString(xMessageInterface));
 
 

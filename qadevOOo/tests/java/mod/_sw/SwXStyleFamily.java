@@ -142,8 +142,7 @@ public class SwXStyleFamily extends TestCase {
             throw new StatusException("Unexpected exception. ", e);
         }
 
-        XNameContainer oContainer = (XNameContainer)
-            UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
+        XNameContainer oContainer = UnoRuntime.queryInterface(XNameContainer.class, oSFNA);
 
         // insert a Style which can be replaced by name
         try {

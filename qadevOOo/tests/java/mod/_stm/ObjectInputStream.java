@@ -191,7 +191,7 @@ public class ObjectInputStream extends TestCase {
                 ("com.sun.star.io.MarkableInputStream");
             mostream = xMSF.createInstance
                 ("com.sun.star.io.MarkableOutputStream");
-            xConnect = (XInterface)xMSF.createInstance
+            xConnect = xMSF.createInstance
                 ("com.sun.star.io.DataInputStream") ;
 
         } catch( com.sun.star.uno.Exception e ) {
@@ -208,8 +208,7 @@ public class ObjectInputStream extends TestCase {
         XOutputStream moStream = UnoRuntime.queryInterface(XOutputStream.class, mostream);
 
         XOutputStream PipeOut = UnoRuntime.queryInterface(XOutputStream.class, aPipe);
-        XInputStream PipeIn = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class, aPipe);
+        XInputStream PipeIn = UnoRuntime.queryInterface(XInputStream.class, aPipe);
 
         xdSo.setOutputStream(moStream);
         xdSmo.setOutputStream(PipeOut);
@@ -219,8 +218,7 @@ public class ObjectInputStream extends TestCase {
         oStream = UnoRuntime.queryInterface(XObjectOutputStream.class, ostream);
 
         XActiveDataSink xmSi = UnoRuntime.queryInterface(XActiveDataSink.class, mistream);
-        XInputStream xmIstream = (XInputStream)
-            UnoRuntime.queryInterface(XInputStream.class, mistream);
+        XInputStream xmIstream = UnoRuntime.queryInterface(XInputStream.class, mistream);
 
         XActiveDataSink xdSi = UnoRuntime.queryInterface
             (XActiveDataSink.class, istream);
@@ -232,8 +230,7 @@ public class ObjectInputStream extends TestCase {
         try {
             Object oPersObj = xMSF.createInstance
                 ("com.sun.star.cmp.PersistObject");
-            xPersObj = (XPersistObject)
-                UnoRuntime.queryInterface(XPersistObject.class, oPersObj);
+            xPersObj = UnoRuntime.queryInterface(XPersistObject.class, oPersObj);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Can't write persist object.", e);

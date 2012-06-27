@@ -81,7 +81,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
             log.println( "creating a text document" );
             xTextDoc = SOF.createTextDoc(null);
 
-            Object inst = (XInterface)((XMultiServiceFactory)tParam.getMSF()).createInstance
+            Object inst = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.frame.Desktop");
             desktop = UnoRuntime.queryInterface
                 (XDesktop.class, inst);

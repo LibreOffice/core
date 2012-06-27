@@ -70,7 +70,7 @@ public class _XDataOutputStream extends MultiMethodTest {
     */
     public void before() throws RuntimeException {
 
-        List data = (List) tEnv.getObjRelation("StreamData") ;
+        List<Object> data = (List<Object>) tEnv.getObjRelation("StreamData") ;
         if (data == null) {
             throw new RuntimeException("Object relation 'StreamData' not found.");
         }

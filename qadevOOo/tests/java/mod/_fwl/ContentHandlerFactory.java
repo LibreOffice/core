@@ -84,7 +84,7 @@ public class ContentHandlerFactory extends TestCase {
         log.println( "creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface
+        XNameAccess xNA = UnoRuntime.queryInterface
             (XNameAccess.class, oObj);
         tEnv.addObjRelation("XMSF.serviceNames", xNA.getElementNames());
         String[] dummy = xNA.getElementNames();

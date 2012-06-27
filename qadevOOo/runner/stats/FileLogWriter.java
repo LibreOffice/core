@@ -126,7 +126,7 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
     }
 
     public void setWatcher(Object watcher) {
-        entry.UserDefinedParams.put("Watcher", (share.Watcher) watcher);
+        entry.UserDefinedParams.put("Watcher", watcher);
     }
 
 }

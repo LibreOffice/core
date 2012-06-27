@@ -92,7 +92,7 @@ public class _XContainer extends MultiMethodTest {
             oObj = UnoRuntime.queryInterface(XContainer.class, altObj);
         }
 
-        NC = (XNameContainer) UnoRuntime.queryInterface
+        NC = UnoRuntime.queryInterface
             (XNameContainer.class, oObj) ;
 
         Object container = null;

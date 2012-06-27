@@ -55,7 +55,7 @@ public class _XDatabaseParameterBroadcaster extends MultiMethodTest {
     protected void before() {
         listenerChecker = (CheckParameterListener)
                         tEnv.getObjRelation("ParameterListenerChecker");
-        listenerChecker.setLog((PrintWriter)log);
+        listenerChecker.setLog(log);
     }
 
     /**
@@ -78,7 +78,7 @@ public class _XDatabaseParameterBroadcaster extends MultiMethodTest {
         catch(com.sun.star.sdbc.SQLException e) {
             log.println("Exception in XDatabaseParameterBroadcaster test.");
             log.println("This does not let the test fail, but should be inquired.");
-            e.printStackTrace((PrintWriter)log);
+            e.printStackTrace(log);
         }
         // was the listener called?
         oObj.removeParameterListener(listenerChecker);

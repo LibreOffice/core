@@ -94,7 +94,7 @@ public class SwXTextFrame extends TestCase {
         try {
             oFrame1 = SOF.createTextFrame(xTextDoc, 500, 500);
             oFrame2 = SOF.createTextFrame(xTextDoc, 1500, 1500);
-            oPropSet = (XPropertySet) UnoRuntime.queryInterface(
+            oPropSet = UnoRuntime.queryInterface(
                                XPropertySet.class, oFrame1);
 
 

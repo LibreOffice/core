@@ -110,8 +110,7 @@ public class SdPageLinkTargets extends TestCase {
             SOF.createShape(xDrawDoc, 15000, 13500, 5000, 5000, "OLE2");
         oShapes.add(oShape);
 
-        XPropertySet shape_props = (XPropertySet)
-                        UnoRuntime.queryInterface(XPropertySet.class,oShape);
+        XPropertySet shape_props = UnoRuntime.queryInterface(XPropertySet.class,oShape);
 
         log.println("Inserting a Chart");
 

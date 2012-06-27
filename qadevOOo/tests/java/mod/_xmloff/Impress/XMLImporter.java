@@ -155,8 +155,7 @@ public class XMLImporter extends TestCase {
         //get draw pages
         XDrawPagesSupplier drawPagesSupplier = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
         XDrawPages drawPages = drawPagesSupplier.getDrawPages();
-        final XNameAccess xNamePages = (XNameAccess)
-            UnoRuntime.queryInterface(XNameAccess.class, drawPages);
+        final XNameAccess xNamePages = UnoRuntime.queryInterface(XNameAccess.class, drawPages);
 
         tEnv.addObjRelation("XDocumentHandler.ImportChecker",
             new ifc.xml.sax._XDocumentHandler.ImportChecker() {

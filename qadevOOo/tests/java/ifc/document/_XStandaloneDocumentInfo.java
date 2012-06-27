@@ -60,8 +60,7 @@ public class _XStandaloneDocumentInfo extends MultiMethodTest {
     public void _storeIntoURL() {
         try {
             oObj.loadFromURL(url);
-            XPropertySet propSet = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, oObj);
+            XPropertySet propSet = UnoRuntime.queryInterface(XPropertySet.class, oObj);
             oldProp = (String)propSet.getPropertyValue("Author");
             newProp = oldProp + "_";
             propSet.setPropertyValue("Author", newProp);
@@ -98,8 +97,7 @@ public class _XStandaloneDocumentInfo extends MultiMethodTest {
         requiredMethod("storeIntoURL()");
         try {
             oObj.loadFromURL(url);
-            XPropertySet propSet = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, oObj);
+            XPropertySet propSet = UnoRuntime.queryInterface(XPropertySet.class, oObj);
             String resProp = (String)propSet.getPropertyValue("Author");
             log.println("Was: '" + oldProp + "',Set: '" + newProp +
                         "', New: " + resProp + "'");

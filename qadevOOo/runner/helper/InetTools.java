@@ -53,7 +53,7 @@ public class InetTools {
                                    "com.sun.star.configuration.ConfigurationUpdateAccess",
                                    ProvArgs);
 
-            XPropertySet oInetProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet oInetProps = UnoRuntime.queryInterface(
                                               XPropertySet.class, oInet);
 
             String HTTPProxyName = (String)param.get("HTTPProxyName");

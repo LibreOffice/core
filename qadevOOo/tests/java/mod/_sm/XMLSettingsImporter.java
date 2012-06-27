@@ -146,7 +146,7 @@ public class XMLSettingsImporter extends TestCase {
         tEnv.addObjRelation("XDocumentHandler.XMLData", xml) ;
 
         final PrintWriter logF = log ;
-        final XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface
+        final XPropertySet xPS = UnoRuntime.queryInterface
                 (XPropertySet.class, xMathDoc) ;
 
         tEnv.addObjRelation("XDocumentHandler.ImportChecker",

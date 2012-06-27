@@ -82,7 +82,7 @@ public class Frame extends TestCase {
         }
 
         frame = xTextDoc.getCurrentController().getFrame();
-        oObj = (XInterface)UnoRuntime.queryInterface(XInterface.class, frame);
+        oObj = UnoRuntime.queryInterface(XInterface.class, frame);
 
         log.println(util.utils.getImplName(oObj));
 

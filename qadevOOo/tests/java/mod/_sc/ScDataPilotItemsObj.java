@@ -141,7 +141,7 @@ public class ScDataPilotItemsObj extends TestCase {
 
         log.println("Getting a sheet");
 
-        XSpreadsheets xSpreadsheets = (XSpreadsheets) xSheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
         XSpreadsheet oSheet = null;
         XSpreadsheet oSheet2 = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(
@@ -224,7 +224,7 @@ public class ScDataPilotItemsObj extends TestCase {
 
         try {
             Object oDataPilotField = DPDsc.getDataPilotFields().getByIndex(0);
-            fieldPropSet = (XPropertySet) UnoRuntime.queryInterface(
+            fieldPropSet = UnoRuntime.queryInterface(
                                    XPropertySet.class, oDataPilotField);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace();
@@ -326,7 +326,7 @@ public class ScDataPilotItemsObj extends TestCase {
             if (!name.equals("Data")) {
                 fieldsNames[cnt] = name;
 
-                XPropertySet props = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet props = UnoRuntime.queryInterface(
                                              XPropertySet.class, field);
 
                 try {

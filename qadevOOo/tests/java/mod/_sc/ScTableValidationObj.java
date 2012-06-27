@@ -96,7 +96,7 @@ public class ScTableValidationObj extends TestCase {
         XInterface oObj = null;
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
@@ -129,8 +129,7 @@ public class ScTableValidationObj extends TestCase {
         XPropertySet Props = null;
 
         try {
-            Props = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, oSheet);
+            Props = UnoRuntime.queryInterface(XPropertySet.class, oSheet);
             oObj = (XInterface) AnyConverter.toObject(
                 new Type(XInterface.class),Props.getPropertyValue("Validation"));
         } catch (com.sun.star.lang.WrappedTargetException e){

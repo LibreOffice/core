@@ -114,7 +114,7 @@ public class _XSubmit extends MultiMethodTest {
         log.println("Testing submit() ...");
         XControl cntrl = (XControl) tEnv.getObjRelation("XSubmit.Control") ;
 
-        XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface
+        XPropertySet xPS = UnoRuntime.queryInterface
             (XPropertySet.class, oObj) ;
 
         if (xPS != null) {

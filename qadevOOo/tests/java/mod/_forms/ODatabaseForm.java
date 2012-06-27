@@ -426,8 +426,8 @@ public class ODatabaseForm extends TestCase {
                                                                 1500, 1000,
                                                                 1000,
                                                                 "CheckBox");
-            oShapes.add((XShape) shape1);
-            oShapes.add((XShape) shape2);
+            oShapes.add(shape1);
+            oShapes.add(shape2);
             oShapes.add(shape3);
         } catch (Exception e) {
             e.printStackTrace(log);
@@ -466,7 +466,7 @@ public class ODatabaseForm extends TestCase {
                                                                  xTextDoc)))
                                                      .getByName("MyForm"));
 
-            XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xSetProp = UnoRuntime.queryInterface(
                                             XPropertySet.class, oObj);
             connection = (XConnection) AnyConverter.toObject(
                                  new Type(XConnection.class),
@@ -656,7 +656,7 @@ public class ODatabaseForm extends TestCase {
 
         // Adding relation for XDatabaseParameterBroadcaster
         tEnv.addObjRelation("ParameterListenerChecker", new ODatabaseForm.ParameterListenerImpl());
-        XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface
+        XPropertySet xSetProp = UnoRuntime.queryInterface
             (XPropertySet.class, oObj) ;
         try {
             xSetProp.setPropertyValue("DataSourceName", dbSourceName) ;
@@ -815,7 +815,7 @@ public class ODatabaseForm extends TestCase {
             try {
                 for(int i=0; i<count; i++) {
                     log.println("### _XDatabaseParameterBroadcaster.ParameterListenerImpl: Parameter "+i+": "+params.getByIndex(i));
-                    XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
+                    XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
                     log.println("### _XDatabaseParameterBroadcaster.ParameterListenerImpl: Parameter Name: '"+xProp.getPropertyValue("Name") + "' is set to Value '1'");
                     xProp.setPropertyValue("Value", new Integer(1));
                     listenerWasCalled = true;
@@ -874,7 +874,7 @@ public class ODatabaseForm extends TestCase {
                     Object aObject = params.getByIndex(i);
                     Any any = (Any)aObject;
                     log.println("### _XCompletedExecution.InteractionHandlerImpl: Parameter "+i+": "+params.getByIndex(i));
-                    XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
+                    XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
                     log.println("### _XCompletedExecution.InteractionHandlerImpl: Parameter Name: '"+xProp.getPropertyValue("Name") + "' is set to Value '1'");
                     xProp.setPropertyValue("Value", new Integer(1));
                     handlerWasUsed = true;

@@ -90,7 +90,7 @@ public class UnoControlCheckBox extends TestCase {
                                                                "CheckBox",
                                                                "UnoControlCheckBox");
 
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
+        WriterTools.getDrawPage(xTextDoc).add(aShape);
 
         XControlModel the_Model = aShape.getControl();
 

@@ -125,7 +125,7 @@ public class XMLExporter extends TestCase {
             xEx.setSourceDocument(xMathDoc);
 
             // setting a formula in document
-            XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface
+            XPropertySet xPS = UnoRuntime.queryInterface
                 (XPropertySet.class, xMathDoc) ;
             xPS.setPropertyValue("Formula", expFormula) ;
         } catch (com.sun.star.uno.Exception e) {

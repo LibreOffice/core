@@ -85,7 +85,7 @@ public class SmEditAccessible extends TestCase {
 
         // setting a formula in document
         final String expFormula = "sum hat a";
-        final XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface
+        final XPropertySet xPS = UnoRuntime.queryInterface
             (XPropertySet.class, xMathDoc);
         try {
             xPS.setPropertyValue("Formula", expFormula);

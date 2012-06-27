@@ -174,7 +174,7 @@ public class XMLStylesImporter extends TestCase {
             (XStyleFamiliesSupplier.class, xSheetDoc);
             XNameAccess oStyleFamilies = sup.getStyleFamilies();
             Object family = oStyleFamilies.getByName("CellStyles") ;
-            styles = (XNameAccess) UnoRuntime.queryInterface
+            styles = UnoRuntime.queryInterface
                 (XNameAccess.class, family) ;
             log.println("Styles before:") ;
             String[] names = styles.getElementNames() ;

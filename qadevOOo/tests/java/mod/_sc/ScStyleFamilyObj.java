@@ -151,9 +151,8 @@ public class ScStyleFamilyObj extends TestCase {
             SOF.createInstance(xComp,"com.sun.star.style.CellStyle");
 
         // insert a Style which can be replaced by name
-        XNameContainer oContainer = (XNameContainer)
-            UnoRuntime.queryInterface(
-                XNameContainer.class, oStyleFamilyNameAccess);
+        XNameContainer oContainer = UnoRuntime.queryInterface(
+            XNameContainer.class, oStyleFamilyNameAccess);
         try {
             oContainer.insertByName("ScStyleFamilyObj", oInstance);
         } catch (com.sun.star.lang.WrappedTargetException e) {

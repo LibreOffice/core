@@ -140,7 +140,7 @@ public class TableWindowAccessibility extends TestCase {
         info[1].Name = "password";
         info[1].Value = password;
 
-        XPropertySet propSetDBSource = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet propSetDBSource = UnoRuntime.queryInterface(
                                                XPropertySet.class, oDBSource);
 
         try {
@@ -223,7 +223,7 @@ public class TableWindowAccessibility extends TestCase {
 
         XNameAccess defContainer = querySuppl.getQueryDefinitions();
 
-        XPropertySet queryProp = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet queryProp = UnoRuntime.queryInterface(
                                          XPropertySet.class, newQuery);
 
         try {
@@ -250,7 +250,7 @@ public class TableWindowAccessibility extends TestCase {
                                               "Couldn't set property value"));
         }
 
-        XNameContainer queryContainer = (XNameContainer) UnoRuntime.queryInterface(
+        XNameContainer queryContainer = UnoRuntime.queryInterface(
                                                 XNameContainer.class,
                                                 defContainer);
 

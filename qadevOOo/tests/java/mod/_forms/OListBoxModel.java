@@ -205,9 +205,9 @@ public class OListBoxModel extends GenericModelTest {
             }
 
             public void commit() throws SQLException {
-                XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
+                XBoundComponent bound = UnoRuntime.queryInterface(
                                                 XBoundComponent.class, ctrl);
-                XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
+                XResultSetUpdate update = UnoRuntime.queryInterface(
                                                   XResultSetUpdate.class,
                                                   formLoaderF);
 

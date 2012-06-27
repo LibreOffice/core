@@ -126,7 +126,7 @@ public class XMLSettingsExporter extends TestCase {
             xEx.setSourceDocument(xMathDoc);
 
             // setting a formula in document
-            XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface
+            XPropertySet xPS = UnoRuntime.queryInterface
                 (XPropertySet.class, xMathDoc) ;
 
             xPS.setPropertyValue("TopMargin", new Short(expMargin)) ;

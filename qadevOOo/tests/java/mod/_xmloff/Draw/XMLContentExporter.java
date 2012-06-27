@@ -142,12 +142,10 @@ public class XMLContentExporter extends TestCase {
             // can not be exported to XML)
             set.insertNewByIndex(1);
 
-            XDrawPage page1 = (XDrawPage)
-                UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(0));
+            XDrawPage page1 = UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(0));
             XNamed NPage1 = UnoRuntime.queryInterface(XNamed.class,page1);
             NPage1.setName("NewSlide1");
-            XDrawPage page2 = (XDrawPage)
-                UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(1));
+            XDrawPage page2 = UnoRuntime.queryInterface(XDrawPage.class, set.getByIndex(1));
             XNamed NPage2 = UnoRuntime.queryInterface(XNamed.class,page2);
             NPage2.setName("NewSlide2");
             xEx.setSourceDocument(xDrawDoc);

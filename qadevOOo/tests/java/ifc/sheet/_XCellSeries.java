@@ -42,7 +42,7 @@ public class _XCellSeries extends MultiMethodTest {
         if (oSheet == null) {
             log.println("Object relation oSheet is missing");
             log.println("Trying to query the needed Interface");
-            oSheet = (XSpreadsheet) UnoRuntime.queryInterface(
+            oSheet = UnoRuntime.queryInterface(
                              XSpreadsheet.class, tEnv.getTestObject());
 
             if (oSheet == null) {

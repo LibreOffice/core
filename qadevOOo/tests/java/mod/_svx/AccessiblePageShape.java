@@ -99,8 +99,7 @@ public class AccessiblePageShape extends TestCase {
         //  UnoRuntime.queryInterface
         //    (XAccessibleValue.class, at.SearchedContext) ;
         oPage = DrawTools.getDrawPage(xDrawDoc,0);
-        final XPropertySet PageProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oPage);
+        final XPropertySet PageProps = UnoRuntime.queryInterface(XPropertySet.class, oPage);
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {

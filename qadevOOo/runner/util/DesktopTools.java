@@ -181,7 +181,7 @@ public class DesktopTools
      */
     public static String getDocumentType(XComponent xComponent)
     {
-        XServiceInfo sInfo = (XServiceInfo) UnoRuntime.queryInterface(
+        XServiceInfo sInfo = UnoRuntime.queryInterface(
                 XServiceInfo.class, xComponent);
 
         if (sInfo == null)
@@ -413,7 +413,7 @@ public class DesktopTools
             XViewSettingsSupplier oVSSupp = UnoRuntime.queryInterface(XViewSettingsSupplier.class, oCont);
 
             XInterface oViewSettings = oVSSupp.getViewSettings();
-            XPropertySet oViewProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oViewSettings);
+            XPropertySet oViewProp = UnoRuntime.queryInterface(XPropertySet.class, oViewSettings);
             oViewProp.setPropertyValue("ZoomType",
                     new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
 

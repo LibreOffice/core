@@ -142,7 +142,7 @@ public class ScCellRangeObj extends TestCase {
         XSpreadsheets oSpreadsheets = UnoRuntime.queryInterface(
                                                XSpreadsheetDocument.class,
                                                xSheetDoc).getSheets();
-        XNameAccess oNames = (XNameAccess) UnoRuntime.queryInterface(
+        XNameAccess oNames = UnoRuntime.queryInterface(
                                      XNameAccess.class, oSpreadsheets);
 
         XSpreadsheet oSheet = null;
@@ -153,7 +153,7 @@ public class ScCellRangeObj extends TestCase {
                              oNames.getByName(oNames.getElementNames()[0]));
 
             oObj = oSheet.getCellRangeByPosition(0, 0, 3, 4);
-            testRange = (XCellRange) UnoRuntime.queryInterface(
+            testRange = UnoRuntime.queryInterface(
                                 XCellRange.class, oObj);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
@@ -189,7 +189,7 @@ public class ScCellRangeObj extends TestCase {
         tEnv.addObjRelation("XCellRangesQuery.EXPECTEDRESULTS", expectedResults);
         tEnv.addObjRelation("XCellRangesQuery.CREATEENTRIES", Boolean.TRUE);
 
-        XPropertySet PropSet = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet PropSet = UnoRuntime.queryInterface(
                                        XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet", PropSet);
 
@@ -199,7 +199,7 @@ public class ScCellRangeObj extends TestCase {
                         testRange.getCellByPosition(0,0), testRange.getCellByPosition(0,1)});
         }
         catch(com.sun.star.lang.IndexOutOfBoundsException e){
-            e.printStackTrace((PrintWriter)log);
+            e.printStackTrace(log);
             log.println("Cannot make required object relation 'XSearchable.MAKEENTRYINCELL'.");
         }
 

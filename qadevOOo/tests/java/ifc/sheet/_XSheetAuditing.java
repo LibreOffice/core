@@ -58,7 +58,7 @@ public class _XSheetAuditing extends MultiMethodTest {
         xDrawPage = (XDrawPage)tEnv.getObjRelation("XSheetAuditing.DrawPage");
         if (xDrawPage == null) { // get from object
             XDrawPageSupplier oDPS = UnoRuntime.queryInterface(XDrawPageSupplier.class, oObj);
-            xDrawPage = (XDrawPage) oDPS.getDrawPage();
+            xDrawPage = oDPS.getDrawPage();
         }
         if (xDrawPage == null) {
             throw new StatusException(Status.failed("'XSheetAuditing.DrawPage' object relation not found."));
@@ -70,7 +70,7 @@ public class _XSheetAuditing extends MultiMethodTest {
         // get a sheet for changing the cells
         XSpreadsheet xSheet = (XSpreadsheet)tEnv.getObjRelation("XSheetAuditing.Spreadsheet");
         if (xSheet == null) // query on ther object
-            xSheet = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
+            xSheet = UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
         if (xSheet == null)
             throw new StatusException(Status.failed("'XSheetAuditing.Spreadsheet' object relation not found."));
         try {
@@ -136,9 +136,9 @@ public class _XSheetAuditing extends MultiMethodTest {
         xAddress.setValue(2.5);
         try {
             // add a validitation to a cell: only whole numbers are allowed
-            XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xAddress);
+            XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xAddress);
             Object o = xPropertySet.getPropertyValue("Validation");
-            XPropertySet xValidation = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, o);
+            XPropertySet xValidation = UnoRuntime.queryInterface(XPropertySet.class, o);
             xValidation.setPropertyValue("Type", ValidationType.WHOLE);
             xPropertySet.setPropertyValue("Validation", xValidation);
             // test
@@ -154,7 +154,7 @@ public class _XSheetAuditing extends MultiMethodTest {
             result &= hasRightAmountOfShapes(0);
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+            e.printStackTrace(log);
             result = false;
         }
 

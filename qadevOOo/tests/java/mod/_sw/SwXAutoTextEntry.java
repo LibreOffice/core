@@ -136,7 +136,7 @@ public class SwXAutoTextEntry extends TestCase {
             throw new StatusException("Couldn't create AutoTextContainer", e);
         }
 
-        XNameAccess oContNames = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oContainer);
+        XNameAccess oContNames = UnoRuntime.queryInterface(XNameAccess.class, oContainer);
 
         String contNames[] = oContNames.getElementNames();
         for (int i =0; i < contNames.length; i++){
@@ -159,7 +159,7 @@ public class SwXAutoTextEntry extends TestCase {
 
         XText oText = xTextDoc.getText();
         oText.insertString(oText.getStart(), "New AutoText", true);
-        XTextRange oTextRange = (XTextRange) oText;
+        XTextRange oTextRange = oText;
         try {
             if ( oGroup.hasByName("NewEntryName") ) {
                 oGroup.removeByName("NewEntryName");

@@ -55,7 +55,7 @@ public class BasicMacroTools {
             Object DocLibCont = null;
 
             try {
-                XPropertySet xDocProps = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet xDocProps = UnoRuntime.queryInterface(
                                                  XPropertySet.class, xDoc);
                 DocLibCont = xDocProps.getPropertyValue("BasicLibraries");
             } catch (com.sun.star.uno.Exception e) {
@@ -63,7 +63,7 @@ public class BasicMacroTools {
                         "Couldn't get BasicLibraries-Container from document: " + e.toString());
             }
 
-            mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
+            mLCxNA = UnoRuntime.queryInterface(XNameAccess.class,
                                                              DocLibCont);
 
             mLCxLC = UnoRuntime.queryInterface(
@@ -95,7 +95,7 @@ public class BasicMacroTools {
                         "Couldn't create ApplicationScriptLibraryContainer" + e.toString());
             }
 
-            mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
+            mLCxNA = UnoRuntime.queryInterface(XNameAccess.class,
                                                              ASLC);
 
             mLCxLC = UnoRuntime.queryInterface(
@@ -237,10 +237,10 @@ public class BasicMacroTools {
             "com.sun.star.configuration.ConfigurationUpdateAccess",
             ProvArgs);
 
-        XPropertySet oSecureProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oSecure);
+        XPropertySet oSecureProps = UnoRuntime.queryInterface(XPropertySet.class, oSecure);
 
         Object oScripting = oSecureProps.getPropertyValue("Scripting");
-        XPropertySet oScriptingSettings = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oScripting);
+        XPropertySet oScriptingSettings = UnoRuntime.queryInterface(XPropertySet.class, oScripting);
 
         oScriptingSettings.setPropertyValue("SecureURL", new String[]{secureURL});
         oScriptingSettings.setPropertyValue("OfficeBasic", new Integer(2));

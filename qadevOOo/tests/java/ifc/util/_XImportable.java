@@ -165,7 +165,7 @@ public class _XImportable extends MultiMethodTest {
     }
 
     protected boolean checkA1(String expected) {
-        XCellRange range = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, tEnv.getTestObject());
+        XCellRange range = UnoRuntime.queryInterface(XCellRange.class, tEnv.getTestObject());
         boolean res = false;
         try{
             String a1 = range.getCellByPosition(0,0).getFormula();

@@ -76,8 +76,7 @@ public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
         log.println("Getting test object ");
 
         // Getting named ranges.
-        XPropertySet docProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
+        XPropertySet docProps = UnoRuntime.queryInterface(XPropertySet.class, xSheetDoc);
         Object ranges = null;
         try {
             ranges = docProps.getPropertyValue("NamedRanges");

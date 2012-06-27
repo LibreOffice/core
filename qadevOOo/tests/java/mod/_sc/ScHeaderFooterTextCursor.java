@@ -161,8 +161,7 @@ public class ScHeaderFooterTextCursor extends TestCase {
         }
 
         //get the property-set
-        PropSet = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
+        PropSet = UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
 
         XHeaderFooterContent RPHC = null;
         // creation of testobject here

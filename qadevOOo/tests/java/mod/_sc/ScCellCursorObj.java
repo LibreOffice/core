@@ -222,7 +222,7 @@ public class ScCellCursorObj extends TestCase {
             { "", "2", "3", "4" }
         });
 
-        XPropertySet PropSet = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet PropSet = UnoRuntime.queryInterface(
                                        XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet", PropSet);
 

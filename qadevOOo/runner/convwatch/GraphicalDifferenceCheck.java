@@ -306,7 +306,7 @@ public class GraphicalDifferenceCheck
 
 
     private static String getXMLOutputFilterforXComponent(XComponent xComponent, StringBuffer suffix){
-        XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, xComponent);
+        XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class, xComponent);
         if (xSI.supportsService("com.sun.star.text.TextDocument")){
             resetBuffer(suffix, ".sxw");
             return "swriter: StarOffice XML (Writer)";

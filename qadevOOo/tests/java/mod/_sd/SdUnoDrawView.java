@@ -248,7 +248,7 @@ public class SdUnoDrawView extends TestCase {
 
         tEnv.addObjRelation("XComponent.DisposeThis", xDrawDoc);
 
-        tEnv.addObjRelation("Comparer", new Comparator() {
+        tEnv.addObjRelation("Comparer", new Comparator<Object>() {
             public int compare(Object o1, Object o2) {
                 XIndexAccess indAc1 = UnoRuntime.queryInterface(XIndexAccess.class, o1);
                 XIndexAccess indAc2 = UnoRuntime.queryInterface(XIndexAccess.class, o2);
@@ -257,10 +257,7 @@ public class SdUnoDrawView extends TestCase {
                     return 0;
                 }
                 return 1;
-            }
-            public boolean equals(Object obj) {
-                return compare(this, obj) == 0;
-            } });
+            }});
 
 
         return tEnv;

@@ -69,7 +69,7 @@ public class SwAccessibleEndnoteView extends TestCase {
         XMultiServiceFactory msf = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDoc);
         log.println("creating a endnote");
         try {
-            oEndnote = (XInterface) UnoRuntime.queryInterface(XInterface.class,
+            oEndnote = UnoRuntime.queryInterface(XInterface.class,
                     msf.createInstance("com.sun.star.text.Endnote"));
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

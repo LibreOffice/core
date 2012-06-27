@@ -135,7 +135,7 @@ public class ScAnnotationShapeObj extends TestCase {
         XSpreadsheetDocument xArea =
             UnoRuntime.queryInterface(XSpreadsheetDocument.class,
             xSheetDoc);
-        XSpreadsheets oSheets = (XSpreadsheets) xArea.getSheets();
+        XSpreadsheets oSheets = xArea.getSheets();
 
         XIndexAccess XAccess =
             UnoRuntime.queryInterface(XIndexAccess.class,
@@ -148,8 +148,8 @@ public class ScAnnotationShapeObj extends TestCase {
                         XSpreadsheet.class),
                     XAccess.getByIndex(cellPos.Sheet));
             XCellRange oCRange =
-                (XCellRange) UnoRuntime.queryInterface(XCellRange.class,
-                    oSheet);
+                UnoRuntime.queryInterface(XCellRange.class,
+                oSheet);
             oCell =
                 oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
         } catch (com.sun.star.lang.WrappedTargetException e) {

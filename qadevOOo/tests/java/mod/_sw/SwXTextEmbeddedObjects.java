@@ -103,14 +103,13 @@ public class SwXTextEmbeddedObjects extends TestCase {
             Object o = xMultiServiceFactory.createInstance("com.sun.star.text.TextEmbeddedObject" );
             XTextContent xTextContent = UnoRuntime.queryInterface(XTextContent.class, o);
             String sChartClassID = "12dcae26-281f-416f-a234-c3086127382e";
-            XPropertySet xPropertySet = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, xTextContent);
+            XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xTextContent);
             xPropertySet.setPropertyValue( "CLSID", sChartClassID );
 
             oDoc.getText().insertTextContent( xCursor, xTextContent, false );
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+            e.printStackTrace(log);
         }
 
         XTextEmbeddedObjectsSupplier oTEOS = UnoRuntime.queryInterface(XTextEmbeddedObjectsSupplier.class, oDoc);

@@ -117,7 +117,7 @@ public class PathSettings extends TestCase {
         log.println( "creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        Set exclProps = new HashSet();
+        Set<String> exclProps = new HashSet<String>();
         exclProps.add("UIConfig");
         tEnv.addObjRelation("XFastPropertySet.ExcludeProps", exclProps);
         tEnv.addObjRelation("XMultiPropertySet.ExcludeProps", exclProps);
@@ -129,7 +129,7 @@ public class PathSettings extends TestCase {
 
     private void saveAllPropertyValues(XInterface oObj){
 
-        xPS = (XPropertySet) UnoRuntime.queryInterface(
+        xPS = UnoRuntime.queryInterface(
                                                 XPropertySet.class, oObj);
 
         XPropertySetInfo xPSI = xPS.getPropertySetInfo();

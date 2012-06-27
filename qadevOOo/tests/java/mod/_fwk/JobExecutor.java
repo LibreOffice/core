@@ -133,10 +133,10 @@ public class JobExecutor extends TestCase {
                 "com.sun.star.configuration.ConfigurationUpdateAccess", args);
             XHierarchicalNameAccess xHNA = UnoRuntime.queryInterface(XHierarchicalNameAccess.class, oRootCfg);
             obj = xHNA.getByHierarchicalName("Jobs");
-            jobs = (XNameAccess) UnoRuntime.queryInterface
+            jobs = UnoRuntime.queryInterface
                 (XNameAccess.class, obj);
             obj = xHNA.getByHierarchicalName("Events");
-            events = (XNameAccess) UnoRuntime.queryInterface
+            events = UnoRuntime.queryInterface
                 (XNameAccess.class, obj);
         } catch (Exception e) {
             throw new StatusException("Couldn't get configuration", e);
@@ -150,22 +150,18 @@ public class JobExecutor extends TestCase {
         if (!configured) {
             try {
                 log.println("Adding configuration to Jobs  ...");
-                XSingleServiceFactory jobsFac = (XSingleServiceFactory)
-                    UnoRuntime.queryInterface(XSingleServiceFactory.class, jobs);
+                XSingleServiceFactory jobsFac = UnoRuntime.queryInterface(XSingleServiceFactory.class, jobs);
                 Object oNewJob = jobsFac.createInstance();
                 XNameReplace xNewJobNR = UnoRuntime.queryInterface(XNameReplace.class, oNewJob);
                 xNewJobNR.replaceByName("Service", "test.Job");
-                XNameContainer xJobsNC = (XNameContainer)
-                    UnoRuntime.queryInterface(XNameContainer.class, jobs);
+                XNameContainer xJobsNC = UnoRuntime.queryInterface(XNameContainer.class, jobs);
                 xJobsNC.insertByName("TestJob", oNewJob);
 
                 log.println("Adding configuration to Events  ...");
-                XSingleServiceFactory eventsFac = (XSingleServiceFactory)
-                    UnoRuntime.queryInterface(XSingleServiceFactory.class, events);
+                XSingleServiceFactory eventsFac = UnoRuntime.queryInterface(XSingleServiceFactory.class, events);
                 Object oNewEvent = eventsFac.createInstance();
 
-                XNameAccess xNewEventNA = (XNameAccess)
-                    UnoRuntime.queryInterface(XNameAccess.class, oNewEvent);
+                XNameAccess xNewEventNA = UnoRuntime.queryInterface(XNameAccess.class, oNewEvent);
                 Object oJobList = xNewEventNA.getByName("JobList");
                 XSingleServiceFactory jobListFac = (XSingleServiceFactory)
                     AnyConverter.toObject(new Type(XSingleServiceFactory.class),
@@ -179,8 +175,7 @@ public class JobExecutor extends TestCase {
                 jobListNC.insertByName("TestJob",  oNewJobTimeStamps);
 
 
-                XNameContainer xEventsNC = (XNameContainer)
-                    UnoRuntime.queryInterface(XNameContainer.class, events);
+                XNameContainer xEventsNC = UnoRuntime.queryInterface(XNameContainer.class, events);
                 xEventsNC.insertByName("TestEvent", oNewEvent);
 
                 XChangesBatch xCB = UnoRuntime.queryInterface(XChangesBatch.class, oRootCfg);
@@ -212,7 +207,7 @@ public class JobExecutor extends TestCase {
         try {
             oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.comp.framework.JobExecutor");
-            job = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance("test.Job");
+            job = ((XMultiServiceFactory)Param.getMSF()).createInstance("test.Job");
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException(

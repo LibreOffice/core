@@ -33,9 +33,9 @@ import com.sun.star.datatransfer.*;
 public class SysUtils {
 
     public static String getJavaPath() {
-        String cp = (String) System.getProperty("java.class.path");
-        String jh = (String) System.getProperty("java.home");
-        String fs = (String) System.getProperty("file.separator");
+        String cp = System.getProperty("java.class.path");
+        String jh = System.getProperty("java.home");
+        String fs = System.getProperty("file.separator");
         jh = jh + fs + "bin" + fs;
         jh = jh + "java -classpath "+cp;
         return jh;

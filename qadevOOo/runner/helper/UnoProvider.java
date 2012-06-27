@@ -91,7 +91,7 @@ public class UnoProvider implements AppProvider {
         if (xMSF == null) {
             // bootstrap UNO.
             String unorcName = getUnorcName(param);
-            Hashtable env = new Hashtable();
+            Hashtable<String,String> env = new Hashtable<String,String>();
             env.put("SYSBINDIR", getSysBinDir(param));
 
             XComponentContext xContext = null;

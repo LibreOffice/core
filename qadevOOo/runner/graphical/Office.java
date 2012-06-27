@@ -93,7 +93,7 @@ public class Office implements IOffice
 
                     for (int i=0; i<aList.size();i++)
                     {
-                        String sDocumentName = (String)aList.get(i);
+                        String sDocumentName = aList.get(i);
                         m_aOffice.load(sDocumentName);
                         m_aOffice.storeAsPostscript();
 

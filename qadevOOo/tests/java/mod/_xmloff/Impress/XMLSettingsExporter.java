@@ -128,8 +128,7 @@ public class XMLSettingsExporter extends TestCase {
             //set some settings
             XModel xImpressModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
             XController xController = xImpressModel.getCurrentController();
-            XPropertySet xPropSet = (XPropertySet)
-                UnoRuntime.queryInterface(XPropertySet.class, xController);
+            XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xController);
             NewDataValue = ! ((Boolean) xPropSet.getPropertyValue
                 ("IsLayerMode")).booleanValue();
             xPropSet.setPropertyValue("IsLayerMode",

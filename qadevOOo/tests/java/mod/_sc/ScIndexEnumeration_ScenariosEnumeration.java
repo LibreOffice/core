@@ -73,7 +73,7 @@ public class ScIndexEnumeration_ScenariosEnumeration extends TestCase {
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
         XIndexAccess oIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
@@ -102,8 +102,7 @@ public class ScIndexEnumeration_ScenariosEnumeration extends TestCase {
         }
 
         XScenariosSupplier xSupp = UnoRuntime.queryInterface(XScenariosSupplier.class, oSheet);
-        XCellRange oRange = (XCellRange)
-            UnoRuntime.queryInterface(XCellRange.class, oSheet);
+        XCellRange oRange = UnoRuntime.queryInterface(XCellRange.class, oSheet);
         XCellRange myRange = oRange.getCellRangeByName("A1:N4");
         XCellRangeAddressable oRangeAddr = UnoRuntime.queryInterface(XCellRangeAddressable.class, myRange);
         CellRangeAddress myAddr = oRangeAddr.getRangeAddress();

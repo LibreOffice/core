@@ -144,7 +144,7 @@ public class ScTabViewObj extends TestCase {
         XInterface oObj = aModel.getCurrentController();
 
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSpreadsheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();
 
         log.println("getting a sheet");
         XSpreadsheet oSheet = null;
@@ -181,7 +181,7 @@ public class ScTabViewObj extends TestCase {
         XCell cell_2 = null;
         Object cellRange = null;
         try {
-            cellRange = (Object)oSheet.getCellRangeByPosition(0, 0, 3, 3);
+            cellRange = oSheet.getCellRangeByPosition(0, 0, 3, 3);
             cell_1 = oSheet.getCellByPosition(5,5);
             cell_2 = oSheet.getCellByPosition(7,7);
             cell_2.setValue(17.5);
@@ -194,7 +194,7 @@ public class ScTabViewObj extends TestCase {
         Object[] selections = {oSheet, cellRange, cell_1, cell_2};
         tEnv.addObjRelation("Selections", selections);
 
-        tEnv.addObjRelation("Comparer", new Comparator() {
+        tEnv.addObjRelation("Comparer", new Comparator<Object>() {
             public int compare(Object o1, Object o2) {
                 XCellRangeAddressable adr1 = UnoRuntime.queryInterface(XCellRangeAddressable.class, o1);
                 XCellRangeAddressable adr2 = UnoRuntime.queryInterface(XCellRangeAddressable.class, o2);
@@ -202,10 +202,7 @@ public class ScTabViewObj extends TestCase {
                 CellRangeAddress range1 = adr1.getRangeAddress();
                 CellRangeAddress range2 = adr2.getRangeAddress();
                 return ValueComparer.equalValue(range1, range2) ? 0 : 1 ;
-            }
-            public boolean equals(Object obj) {
-                return compare(this, obj) == 0;
-            } });
+            }});
 
             tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
 
@@ -230,7 +227,7 @@ public class ScTabViewObj extends TestCase {
             try {
                 log.println( "getting Drawpages" );
                 XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class,xSpreadsheetDoc);
-                XDrawPages oDP = (XDrawPages) oDPS.getDrawPages();
+                XDrawPages oDP = oDPS.getDrawPages();
                 oDP.insertNewByIndex(1);
                 oDP.insertNewByIndex(2);
                 oDrawPage = (XDrawPage) AnyConverter.toObject(

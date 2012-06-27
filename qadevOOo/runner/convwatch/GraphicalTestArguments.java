@@ -343,7 +343,7 @@ public class GraphicalTestArguments
             }
             if (aObj != null)
             {
-                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aObj);
+                XNameAccess aNameAccess = UnoRuntime.queryInterface(XNameAccess.class, aObj);
                 if (aNameAccess != null)
                 {
 

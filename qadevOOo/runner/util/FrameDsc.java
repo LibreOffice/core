@@ -94,8 +94,7 @@ public class FrameDsc extends InstDescr {
 
         XTextFrame TF = (XTextFrame)UnoRuntime.queryInterface( ifcClass, SrvObj );
 
-        XPropertySet oPropSet = (XPropertySet)
-                        UnoRuntime.queryInterface( XPropertySet.class, SrvObj );
+        XPropertySet oPropSet = UnoRuntime.queryInterface( XPropertySet.class, SrvObj );
 
 
         try {

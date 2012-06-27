@@ -81,7 +81,7 @@ public class ChXChartData extends TestCase {
 
         // get the Data
         log.println( "getting Data" );
-        XChartData oObj = (XChartData) xChartDoc.getData();
+        XChartData oObj = xChartDoc.getData();
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );

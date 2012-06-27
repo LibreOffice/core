@@ -58,8 +58,7 @@ public class _ChartStatistics extends MultiPropertyTest {
         if (doc == null) throw new StatusException(Status.failed
             ("Relation 'CHARTDOC' not found"));
 
-        oObj = (XPropertySet)
-            UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
+        oObj = UnoRuntime.queryInterface( XPropertySet.class, doc.getDiagram() );
     }
 }
 

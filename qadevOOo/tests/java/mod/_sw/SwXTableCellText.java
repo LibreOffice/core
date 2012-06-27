@@ -144,7 +144,7 @@ public class SwXTableCellText extends TestCase {
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         log.println( "adding TextDocument as mod relation to environment" );
-        tEnv.addObjRelation("TEXT", (XText) oObj);
+        tEnv.addObjRelation("TEXT", oObj);
 
         log.println( "    adding InstCreator object" );
         TextSectionDsc tDsc = new TextSectionDsc();
