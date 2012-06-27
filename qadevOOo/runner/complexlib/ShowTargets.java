@@ -18,6 +18,8 @@
 
 package complexlib;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author fs93730
@@ -31,8 +33,8 @@ public class ShowTargets
 
     public static void main( String[] args )
     {
-        java.util.Vector targets = new java.util.Vector();
-        java.util.Vector descs = new java.util.Vector();
+        ArrayList targets = new ArrayList();
+        ArrayList descs = new ArrayList();
 
         targets.add( "run" );
         descs.add( "runs all complex tests in this module" );

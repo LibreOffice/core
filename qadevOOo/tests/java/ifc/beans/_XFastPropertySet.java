@@ -18,9 +18,10 @@
 
 package ifc.beans;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.Vector;
 
 import lib.MultiMethodTest;
 import lib.StatusException;
@@ -54,7 +55,7 @@ import com.sun.star.uno.UnoRuntime;
 public class _XFastPropertySet extends MultiMethodTest {
 
     public XFastPropertySet oObj = null;
-    private Vector handles = new Vector();
+    private List handles = new ArrayList();
     private int handle = -1;
     private Set exclude = null ;
 
@@ -176,7 +177,7 @@ public class _XFastPropertySet extends MultiMethodTest {
 
         Random rnd = new Random();
         int nr = rnd.nextInt(handles.size());
-        handle = ((Integer)handles.elementAt(nr)).intValue();
+        handle = ((Integer)handles.get(nr)).intValue();
     }
 
     private boolean isChangeable(int handle) {

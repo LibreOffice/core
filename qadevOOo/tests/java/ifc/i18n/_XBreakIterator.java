@@ -18,7 +18,7 @@
 
 package ifc.i18n;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import lib.MultiMethodTest;
 import lib.Status;
@@ -170,7 +170,7 @@ public class _XBreakIterator extends MultiMethodTest {
         tRes.tested("previousCharacters()", bRes);
     }
 
-    Vector vBounds = new Vector();
+    ArrayList vBounds = new ArrayList();
 
     /**
     * Saves bounds of all returned words for the future tests. <p>
@@ -205,7 +205,7 @@ public class _XBreakIterator extends MultiMethodTest {
         requiredMethod("nextWord()");
 
         int i = UnicodeString.length() - 1;
-        Vector vPrevBounds = new Vector();
+        ArrayList vPrevBounds = new ArrayList();
         while( i > 0  ) {
             Boundary bounds =
                 oObj.previousWord(UnicodeString, i, locale, wordType);
@@ -343,7 +343,7 @@ public class _XBreakIterator extends MultiMethodTest {
         tRes.tested("isEndWord()", bRes);
     }
 
-    Vector vSentenceStart = new Vector();
+    ArrayList vSentenceStart = new ArrayList();
     /**
      * Tries to find all sentences starting positions passing every character
      * as position parameter and stores them. Then tries to pass invalid
@@ -549,8 +549,8 @@ public class _XBreakIterator extends MultiMethodTest {
         return cType;
     }
 
-    Vector vCharBlockBounds = new Vector();
-    Vector vCharBlockTypes = new Vector();
+    ArrayList vCharBlockBounds = new ArrayList();
+    ArrayList vCharBlockTypes = new ArrayList();
 
     /**
      * Creates array of all char blocks with their boundaries and

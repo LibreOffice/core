@@ -17,15 +17,13 @@
  */
 package base;
 
-import com.sun.star.lang.XMultiServiceFactory;
-
 import helper.APIDescGetter;
 import helper.AppProvider;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
-
+import java.util.ArrayList;
 import java.util.Vector;
 
 import lib.MultiMethodTest;
@@ -33,15 +31,14 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import lib.TestResult;
-
 import share.DescEntry;
 import share.DescGetter;
 import share.LogWriter;
-
 import stats.OutProducerFactory;
 import stats.Summarizer;
-
 import util.DynamicClassLoader;
+
+import com.sun.star.lang.XMultiServiceFactory;
 
 /**
  *
@@ -68,7 +65,7 @@ public class java_fat implements TestBase
             DescGetter dg = new APIDescGetter();
             String job = (String) m_aParams.get("TestJob");
             String ExclusionFile = (String) m_aParams.get("ExclusionList");
-            Vector exclusions = null;
+            ArrayList exclusions = null;
             boolean retValue = true;
             m_isDebug = m_aParams.getBool("DebugIsActive");
             logging = m_aParams.getBool("LoggingIsActive");
@@ -497,9 +494,9 @@ public class java_fat implements TestBase
 //            }
 //        }
 
-    private Vector getExclusionList(String url, boolean debug)
+    private ArrayList getExclusionList(String url, boolean debug)
         {
-            Vector entryList = new Vector();
+            ArrayList entryList = new ArrayList();
             String line = "#";
             BufferedReader exclusion = null;
 

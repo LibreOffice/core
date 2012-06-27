@@ -21,15 +21,12 @@ package helper;
 // __________ Imports __________
 
 // exceptions
-import java.net.MalformedURLException;
-
-// interfaces
-import com.sun.star.util.XURLTransformer;
-
-// others
 import java.io.File;
-import java.util.Vector;
-import java.util.Enumeration;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import com.sun.star.util.XURLTransformer;
 
 
 /**
@@ -243,7 +240,7 @@ public class URLHelper
      *              a filtered list of java File objects of all available files of the start dir
      *              and all accessable sub directories.
      */
-    public static Vector getSystemFilesFromDir(String sStartDir)
+    public static ArrayList getSystemFilesFromDir(String sStartDir)
     {
         File aRoot = new File(sStartDir);
 
@@ -257,7 +254,7 @@ public class URLHelper
         if (lAllFiles == null )
             return null;
 
-        Vector lFilteredFiles = new Vector(lAllFiles.length);
+        ArrayList lFilteredFiles = new ArrayList(lAllFiles.length);
 
         for (int i=0; i<lAllFiles.length; ++i)
         {
@@ -267,12 +264,12 @@ public class URLHelper
             if (lAllFiles[i].isDirectory())
             {
                 // recursion!
-                Vector lSubFiles = URLHelper.getSystemFilesFromDir(lAllFiles[i].getPath());
+                ArrayList lSubFiles = URLHelper.getSystemFilesFromDir(lAllFiles[i].getPath());
                 if (lSubFiles != null)
                 {
-                    Enumeration aSnapshot = lSubFiles.elements();
-                    while (aSnapshot.hasMoreElements())
-                        lFilteredFiles.add(aSnapshot.nextElement());
+                    Iterator aSnapshot = lSubFiles.iterator();
+                    while (aSnapshot.hasNext())
+                        lFilteredFiles.add(aSnapshot.next());
                 }
             }
         }

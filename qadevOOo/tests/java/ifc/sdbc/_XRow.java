@@ -18,7 +18,7 @@
 
 package ifc.sdbc;
 
-import java.util.Vector;
+import java.util.List;
 
 import lib.MultiMethodTest;
 
@@ -95,14 +95,14 @@ public class _XRow extends MultiMethodTest {
 
     // oObj filled by MultiMethodTest
     public XRow oObj = null ;
-    private Vector data = null ;
+    private List data = null ;
     private boolean notNullRes = true ;
 
     /**
     * Retrieves object relation first.
     */
     public void before() {
-        data = (Vector) tEnv.getObjRelation("CurrentRowData") ;
+        data = (List) tEnv.getObjRelation("CurrentRowData") ;
     }
 
     /**

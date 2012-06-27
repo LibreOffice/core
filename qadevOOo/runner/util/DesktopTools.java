@@ -17,11 +17,17 @@
  */
 package util;
 
+import helper.ConfigHelper;
+
+import java.util.ArrayList;
+
+import lib.StatusException;
+
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.WindowDescriptor;
 import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XWindowPeer;
 import com.sun.star.awt.XTopWindow;
+import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XEnumeration;
@@ -34,15 +40,10 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
-
-// access the implementations via names
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XModifiable;
 import com.sun.star.view.XViewSettingsSupplier;
-import helper.ConfigHelper;
-import java.util.Vector;
-import lib.StatusException;
 
 /**
  * contains helper methods for the Desktop
@@ -137,7 +138,7 @@ public class DesktopTools
      */
     public static Object[] getAllOpenDocuments(XMultiServiceFactory xMSF)
     {
-        Vector components = new Vector();
+        ArrayList components = new ArrayList();
         XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
                 XDesktop.class, createDesktop(xMSF));
 

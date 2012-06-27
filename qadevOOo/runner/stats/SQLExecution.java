@@ -22,10 +22,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  *
@@ -148,7 +148,7 @@ public class SQLExecution {
                 return false;
             }
         }
-        Vector sqlCommand = new Vector();
+        ArrayList sqlCommand = new ArrayList();
         sqlCommand.add("");
         boolean update = false;
         // synchronize all "$varname" occurrences in the command string with
@@ -273,7 +273,7 @@ public class SQLExecution {
                 for(int i=1; i<=columnCount; i++) {
                     columnNames[i-1] = sqlRSMeta.getColumnName(i);
                     // initialize output
-                    Vector v = new Vector();
+                    ArrayList v = new ArrayList();
 
                     sqlResult.beforeFirst();
                     while (sqlResult.next()) {

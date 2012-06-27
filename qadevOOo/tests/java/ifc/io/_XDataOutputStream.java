@@ -18,7 +18,7 @@
 
 package ifc.io;
 
-import java.util.Vector;
+import java.util.List;
 
 import lib.MultiMethodTest;
 
@@ -70,7 +70,7 @@ public class _XDataOutputStream extends MultiMethodTest {
     */
     public void before() throws RuntimeException {
 
-        Vector data = (Vector) tEnv.getObjRelation("StreamData") ;
+        List data = (List) tEnv.getObjRelation("StreamData") ;
         if (data == null) {
             throw new RuntimeException("Object relation 'StreamData' not found.");
         }

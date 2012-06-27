@@ -46,7 +46,7 @@ public abstract class DescGetter
     protected DescEntry[] getScenario(String url, String descPath,
             boolean debug)
     {
-        Vector entryList = new Vector();
+        ArrayList entryList = new ArrayList();
         String line = "";
         BufferedReader scenario = null;
         DescEntry[] entries = null;

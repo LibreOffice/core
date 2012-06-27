@@ -17,7 +17,11 @@
  */
 package mod._forms;
 
+import ifc.form._XDatabaseParameterBroadcaster;
+import ifc.sdb._XCompletedExecution;
+
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import lib.Status;
@@ -68,8 +72,6 @@ import com.sun.star.util.DateTime;
 import com.sun.star.util.Time;
 import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
-import ifc.form._XDatabaseParameterBroadcaster;
-import ifc.sdb._XCompletedExecution;
 
 
 /**
@@ -620,7 +622,7 @@ public class ODatabaseForm extends TestCase {
         tEnv.addObjRelation("XColumnLocate.ColumnName", DBTools.TST_STRING_F);
 
         // Adding relation for XParameters ifc test
-        Vector params = new Vector();
+        ArrayList params = new ArrayList();
 
 
         /*****  statement parameter types and their initial
@@ -710,7 +712,7 @@ public class ODatabaseForm extends TestCase {
         // Adding relations for XRow as a Vector with all data
         // of current row of RowSet.
 
-        Vector rowData = new Vector();
+        ArrayList rowData = new ArrayList();
 
         for (int i = 0; i < DBTools.TST_TABLE_VALUES[0].length; i++) {
             rowData.add(DBTools.TST_TABLE_VALUES[0][i]);

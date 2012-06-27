@@ -18,9 +18,8 @@
 
 package mod._fwl;
 
-import com.sun.star.beans.NamedValue;
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import lib.Status;
 import lib.StatusException;
@@ -29,6 +28,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
 
+import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -119,8 +119,8 @@ public class FilterFactory extends TestCase {
 
 
         // XMSF
-        Vector vFTypes = new Vector();
-        Vector vFArgs = new Vector();
+        ArrayList vFTypes = new ArrayList();
+        ArrayList vFArgs = new ArrayList();
         for (int i = 0; i < filterNames.length; i++) {
             PropertyValue[] filterProps = null;
             try {

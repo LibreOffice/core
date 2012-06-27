@@ -18,32 +18,32 @@
 
 package util;
 
-import java.io.PrintWriter ;
-import java.util.Vector ;
-import java.util.Hashtable ;
-import java.util.Enumeration ;
-import java.util.HashSet ;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Vector;
 
-// access the implementations via names
-import com.sun.star.uno.XInterface;
-import com.sun.star.io.XOutputStream;
-import com.sun.star.io.XInputStream;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.document.XExporter;
+import com.sun.star.document.XFilter;
+import com.sun.star.document.XImporter;
 import com.sun.star.io.XActiveDataSource;
-import com.sun.star.ucb.XSimpleFileAccess;
+import com.sun.star.io.XInputStream;
+import com.sun.star.io.XOutputStream;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.xml.sax.XDocumentHandler;
+import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.xml.sax.XLocator;
+import com.sun.star.uno.XInterface;
+import com.sun.star.xml.sax.InputSource;
 import com.sun.star.xml.sax.XAttributeList;
-import com.sun.star.xml.sax.XParser ;
-import com.sun.star.xml.sax.InputSource ;
-import com.sun.star.lang.XComponent;
-import com.sun.star.document.XExporter;
-import com.sun.star.document.XImporter;
-import com.sun.star.document.XFilter;
+import com.sun.star.xml.sax.XDocumentHandler;
+import com.sun.star.xml.sax.XLocator;
+import com.sun.star.xml.sax.XParser;
 
 
 public class XMLTools {
@@ -59,7 +59,7 @@ public class XMLTools {
             public String Value ;
         }
         private Hashtable attrByName = new Hashtable() ;
-        private Vector attributes = new Vector() ;
+        private ArrayList attributes = new ArrayList() ;
         private PrintWriter log = null ;
 
         /**
@@ -255,7 +255,7 @@ public class XMLTools {
     public static class XMLWellFormChecker extends XMLWriter {
         protected boolean docStarted = false ;
         protected boolean docEnded = false ;
-        protected Vector tagStack = new Vector() ;
+        protected ArrayList tagStack = new ArrayList() ;
         protected boolean wellFormed = true ;
         protected boolean noOtherErrors = true ;
         protected PrintWriter log = null ;
@@ -279,7 +279,7 @@ public class XMLTools {
         public void reset() {
             docStarted = false ;
             docEnded = false ;
-            tagStack = new Vector() ;
+            tagStack = new ArrayList() ;
             wellFormed = true ;
             noOtherErrors = true ;
             PrintWriter log = null ;
@@ -320,7 +320,7 @@ public class XMLTools {
                     wellFormed = false ;
                     printError("No tags to close (bad closing tag </" + name + ">)") ;
                 } else {
-                    String startTag = (String) tagStack.elementAt(0) ;
+                    String startTag = (String) tagStack.get(0) ;
                     tagStack.remove(0) ;
                     if (!startTag.equals(name)) {
                         wellFormed = false ;
@@ -355,7 +355,7 @@ public class XMLTools {
             if (printXMLData) return ;
             log.println("   Tag trace :") ;
             for (int i = 0; i < tagStack.size(); i++) {
-                String tag = (String) tagStack.elementAt(i) ;
+                String tag = (String) tagStack.get(i) ;
                 log.println("      <" + tag + ">") ;
             }
         }
@@ -411,7 +411,7 @@ public class XMLTools {
                 if (!outerTag.equals("")) {
                     boolean isInTag = false ;
                     for (int i = 0; i < tagStack.size(); i++) {
-                        if (outerTag.equals((String) tagStack.elementAt(i))) {
+                        if (outerTag.equals((String) tagStack.get(i))) {
                             isInTag = true ;
                             break ;
                         }
@@ -434,7 +434,7 @@ public class XMLTools {
                 if (!outerTag.equals("")) {
                     boolean isInTag = false ;
                     for (int i = 0; i < tagStack.size(); i++) {
-                        if (outerTag.equals((String) tagStack.elementAt(i))) {
+                        if (outerTag.equals((String) tagStack.get(i))) {
                             isInTag = true ;
                             break ;
                         }
@@ -623,10 +623,10 @@ public class XMLTools {
      */
     public static class XMLChecker extends XMLWellFormChecker {
         protected HashSet tagSet = new HashSet() ;
-        protected Vector tags = new Vector() ;
-        protected Vector chars = new Vector() ;
-        protected Vector tagStack = new Vector() ;
-        protected Vector attrStack = new Vector() ;
+        protected ArrayList tags = new ArrayList() ;
+        protected ArrayList chars = new ArrayList() ;
+        protected ArrayList tagStack = new ArrayList() ;
+        protected ArrayList attrStack = new ArrayList() ;
 
         public XMLChecker(PrintWriter log, boolean writeXML) {
             super(log, writeXML) ;
@@ -656,15 +656,15 @@ public class XMLTools {
 
             if (tagSet.contains(name)) {
                 for (int i = 0; i < tags.size(); i++) {
-                    Tag[] tag = (Tag[]) tags.elementAt(i);
+                    Tag[] tag = (Tag[]) tags.get(i);
                     if (tag[0].isMatchTo(name, attr)) {
                         if (tag[1] == null) {
                             tags.remove(i--);
                         } else {
                             boolean isInStack = false ;
                             for (int j = 0; j < tagStack.size(); j++) {
-                                if (tag[1].isMatchTo((String) tagStack.elementAt(j),
-                                    (XAttributeList) attrStack.elementAt(j))) {
+                                if (tag[1].isMatchTo((String) tagStack.get(j),
+                                    (XAttributeList) attrStack.get(j))) {
 
                                     isInStack = true ;
                                     break ;
@@ -688,15 +688,15 @@ public class XMLTools {
         public void characters(String ch) {
             super.characters(ch) ;
             for (int i = 0; i < chars.size(); i++) {
-                Object[] chr = (Object[]) chars.elementAt(i);
+                Object[] chr = (Object[]) chars.get(i);
                 if (((String) chr[0]).equals(ch)) {
                     if (chr[1] == null) {
                         chars.remove(i--);
                     } else {
                         boolean isInStack = false ;
                         for (int j = 0; j < tagStack.size(); j++) {
-                            if (((Tag) chr[1]).isMatchTo((String) tagStack.elementAt(j),
-                                (XAttributeList) attrStack.elementAt(j))) {
+                            if (((Tag) chr[1]).isMatchTo((String) tagStack.get(j),
+                                (XAttributeList) attrStack.get(j))) {
 
                                 isInStack = true ;
                                 break ;
@@ -727,7 +727,7 @@ public class XMLTools {
             if (tags.size()> 0) {
                 log.println("!!! Error: Some tags were not found :") ;
                 for (int i = 0; i < tags.size(); i++) {
-                    Tag[] tag = (Tag[]) tags.elementAt(i) ;
+                    Tag[] tag = (Tag[]) tags.get(i) ;
                     log.println("   Tag " + tag[0] + " was not found");
                     if (tag[1] != null)
                         log.println("      inside tag " + tag[1]) ;
@@ -736,7 +736,7 @@ public class XMLTools {
             if (chars.size() > 0) {
                 log.println("!!! Error: Some character data blocks were not found :") ;
                 for (int i = 0; i < chars.size(); i++) {
-                    Object[] ch = (Object[]) chars.elementAt(i) ;
+                    Object[] ch = (Object[]) chars.get(i) ;
                     log.println("   Character data \"" + ch[0] + "\" was not found ") ;
                     if (ch[1] != null)
                         log.println("      inside tag " + ch[1]) ;

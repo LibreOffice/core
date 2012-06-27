@@ -18,7 +18,7 @@
 
 package ifc.io;
 
-import java.util.Vector;
+import java.util.List;
 
 import lib.MultiMethodTest;
 import lib.Status;
@@ -81,7 +81,7 @@ public class _XDataInputStream extends MultiMethodTest {
         XInterface x = (XInterface)tEnv.getObjRelation("StreamWriter") ;
         oStream = (XDataOutputStream)UnoRuntime.queryInterface(
                                                     XDataOutputStream.class, x);
-        Vector data = (Vector) tEnv.getObjRelation("StreamData") ;
+        List data = (List) tEnv.getObjRelation("StreamData") ;
         if (data == null || oStream == null) {
             throw new StatusException(Status.failed("Object relation not found."));
         }

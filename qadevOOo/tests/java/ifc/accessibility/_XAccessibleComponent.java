@@ -17,6 +17,7 @@
  */
 package ifc.accessibility;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import lib.MultiMethodTest;
@@ -50,7 +51,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
     public XAccessibleComponent oObj = null;
     private Rectangle bounds = null;
-    private Vector KnownBounds = new Vector();
+    private ArrayList KnownBounds = new ArrayList();
 
 
     /**
@@ -534,7 +535,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
             cnt = 50;
         }
 
-        Vector childComp = new Vector();
+        ArrayList childComp = new ArrayList();
 
         for (int i = 0; i < cnt; i++) {
             try {

@@ -17,13 +17,15 @@
  */
 package helper;
 
-import complexlib.ComplexTestCase;
-import util.DynamicClassLoader;
+import java.util.ArrayList;
+
+import share.ComplexTest;
 import share.DescEntry;
 import share.DescGetter;
-import share.ComplexTest;
-import java.util.Vector;
 import share.LogWriter;
+import util.DynamicClassLoader;
+
+import complexlib.ComplexTestCase;
 
 /**
  *
@@ -83,7 +85,7 @@ public class ComplexDescGetter extends DescGetter
             // case3: method1(param1,param2),method2(param1,param2)
             String method = className.substring(index + 2);
             className = className.substring(0, index);
-            Vector methods = new Vector();
+            ArrayList methods = new ArrayList();
 
             String[] split = method.split("(?<=\\)),(?=\\w+)");
 

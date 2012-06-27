@@ -18,27 +18,29 @@
 
 package org.openoffice;
 
+import helper.CfgParser;
+import helper.ClParser;
+
+import java.util.ArrayList;
+
+import lib.TestParameters;
 import share.LogWriter;
 import stats.InternalLogWriter;
-import lib.TestParameters;
 import util.DynamicClassLoader;
 import base.TestBase;
-import helper.ClParser;
-import helper.CfgParser;
-import com.sun.star.beans.XPropertyAccess;
+
+import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.task.XJob;
-import com.sun.star.uno.XInterface;
+import com.sun.star.beans.XPropertyAccess;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.beans.NamedValue;
-
-import java.util.Vector;
+import com.sun.star.task.XJob;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.XInterface;
 
 /**
  * The main class, will call ClParser and CfgParser to <br>
@@ -211,7 +213,7 @@ public class RunnerService implements XJob, XServiceInfo,
            return pVal;
         }
 
-        Vector v = new Vector(600);
+        ArrayList v = new ArrayList(600);
         try {
             // open connection to  Jar
             java.net.JarURLConnection con =

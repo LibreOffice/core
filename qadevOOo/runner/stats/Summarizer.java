@@ -17,7 +17,8 @@
  */
 package stats;
 
-import java.util.Vector;
+import java.util.ArrayList;
+
 import share.DescEntry;
 
 /**
@@ -41,8 +42,8 @@ public class Summarizer
         }
         int count = entry.SubEntryCount;
         int knownIssues = 0;
-        Vector failures = new Vector();
-        Vector states = new Vector();
+        ArrayList failures = new ArrayList();
+        ArrayList states = new ArrayList();
         for (int i = 0; i < count; i++)
         {
             if (entry.SubEntries[i].State == null)
@@ -67,14 +68,14 @@ public class Summarizer
             String state = "PASSED.FAILED";
             for (int j = 0; j < failures.size(); j++)
             {
-                if (states.elementAt(j).equals("not part of the job"))
+                if (states.get(j).equals("not part of the job"))
                 {
                     state = "PASSED(some interfaces/services not tested).OK";
                 }
                 else
                 {
                     errMsg +=
-                            failures.elementAt(j) + " - " + states.elementAt(j) + "\r\n";
+                            failures.get(j) + " - " + states.get(j) + "\r\n";
                 }
             }
             entry.hasErrorMsg = true;

@@ -19,7 +19,7 @@
 package mod._stm;
 
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import lib.StatusException;
 import lib.TestCase;
@@ -105,7 +105,7 @@ public class DataOutputStream extends TestCase {
         xDataSource.setOutputStream(xPipeOutput);
 
         // all data types for writing to an XDataInputStream
-        Vector data = new Vector() ;
+        ArrayList data = new ArrayList() ;
         data.add(new Boolean(true)) ;
         data.add(new Byte((byte)123)) ;
         data.add(new Character((char)1234)) ;

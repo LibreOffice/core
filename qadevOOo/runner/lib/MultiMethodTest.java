@@ -21,14 +21,13 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Vector;
+import java.util.ArrayList;
+
+import share.DescEntry;
+import stats.Summarizer;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-
-import share.DescEntry;
-import lib.TestParameters;
-import stats.Summarizer;
 
 /**
  * The class supports method based interface tests development.
@@ -96,9 +95,9 @@ public class MultiMethodTest
      */
     protected TestResult tRes;
     /**
-     * Contains names of the methods have been alreadycalled
+     * Contains names of the methods have been already called
      */
-    private Vector methCalled = new Vector(10);
+    private ArrayList methCalled = new ArrayList(10);
 
     /**
      * Disposes the test environment, which was corrupted by the test.

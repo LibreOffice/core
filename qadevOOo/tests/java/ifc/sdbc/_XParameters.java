@@ -18,7 +18,7 @@
 
 package ifc.sdbc;
 
-import java.util.Vector;
+import java.util.List;
 
 import lib.MultiMethodTest;
 import lib.Status;
@@ -95,13 +95,13 @@ public class _XParameters extends MultiMethodTest {
     // oObj filled by MultiMethodTest
     public XParameters oObj = null ;
 
-    private Vector data = null ;
+    private List data = null ;
 
     /**
     * Gets object relation
     */
     public void before() {
-        data = (Vector) tEnv.getObjRelation("XParameters.ParamValues") ;
+        data = (List) tEnv.getObjRelation("XParameters.ParamValues") ;
         if (data == null) {
             log.println("!!! Relation not found !!!") ;
         }

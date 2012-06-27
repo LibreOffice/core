@@ -18,7 +18,10 @@
 
 package mod._dbaccess;
 
+import ifc.sdb._XCompletedExecution;
+
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import lib.Status;
@@ -28,15 +31,21 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.DBTools;
 import util.utils;
+import util.db.DataSource;
+import util.db.DataSourceDescriptor;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.ParametersRequest;
+import com.sun.star.sdb.RowChangeEvent;
 import com.sun.star.sdb.XInteractionSupplyParameters;
+import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbc.XParameters;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.sdbc.XRow;
@@ -49,13 +58,6 @@ import com.sun.star.ucb.AuthenticationRequest;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
-import com.sun.star.frame.XModel;
-import com.sun.star.sdb.RowChangeEvent;
-import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbc.XParameters;
-import ifc.sdb._XCompletedExecution;
-import util.db.DataSource;
-import util.db.DataSourceDescriptor;
 
 /**
  * Test for object which is represented by service
@@ -380,7 +382,7 @@ public class ORowSet extends TestCase {
             // Adding relations for XRow as a Vector with all data
             // of current row of RowSet.
 
-            Vector rowData = new Vector();
+            ArrayList rowData = new ArrayList();
 
             for (int i = 0; i < DBTools.TST_TABLE_VALUES[0].length; i++) {
                 rowData.add(DBTools.TST_TABLE_VALUES[0][i]);
@@ -413,7 +415,7 @@ public class ORowSet extends TestCase {
             }
 
             // Adding relation for XParameters ifc test
-            tEnv.addObjRelation( "XParameters.ParamValues", new Vector() );
+            tEnv.addObjRelation( "XParameters.ParamValues", new ArrayList() );
 
             // Adding relation for XRowUpdate
             final XRow row = UnoRuntime.queryInterface( XRow.class, m_rowSet );
