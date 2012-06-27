@@ -143,8 +143,5 @@
 #define CB_HATCHBCKGRD          21
 #define LB_HATCHBCKGRDCOLOR     22
 
-
-// IAccessibility2 implementation 2009 ------
 #define STR_CUI_COLORMODEL  5030
 #define STR_LB_HATCHINGSTYLE 5031
-// ------ IAccessibility2 implementation 2009.

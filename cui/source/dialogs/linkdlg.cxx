@@ -109,12 +109,11 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bH
     // UpdateTimer for DDE-/Grf-links, which are waited for
     aUpdateTimer.SetTimeoutHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateTimer.SetTimeout( 1000 );
-    //IAccessibility2 Implementation 2009-----
+
     // Set the ZOrder, and accessible name to the dialog's title
     aTbLinks.SetZOrder(0, WINDOW_ZORDER_FIRST);
     aTbLinks.SetAccessibleName(this->GetText());
     aTbLinks.SetAccessibleRelationLabeledBy(&aFtFiles);
-    //-----IAccessibility2 Implementation 2009
 
     OpenSource().Hide();
 

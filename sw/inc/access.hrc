@@ -40,7 +40,6 @@
 #define STR_ACCESS_ANNOTATION_BUTTON_NAME       (RC_ACCESS_BEGIN + 20)
 #define STR_ACCESS_ANNOTATION_BUTTON_DESC       (RC_ACCESS_BEGIN + 21)
 
-//IAccessibility2 Implementation 2009-----
 #define STR_ACCESS_PREVIEW_DOC_NAME             (RC_ACCESS_BEGIN + 22)
 #define STR_ACCESS_PREVIEW_DOC_SUFFIX           (RC_ACCESS_BEGIN + 24)
 #define STR_ACCESS_DOC_WORDPROCESSING           (RC_ACCESS_BEGIN + 25)
@@ -50,7 +49,6 @@
 #define STR_ACCESS_SW_CATEGORY                  (RC_ACCESS_BEGIN + 29)
 #define STR_ACCESS_TL_GLOBAL                    (RC_ACCESS_BEGIN + 30)
 #define STR_ACCESS_TL_CONTENT                   (RC_ACCESS_BEGIN + 31)
-//-----IAccessibility2 Implementation 2009
 
 #define ACCESS_ACT_END STR_ACCESS_TL_CONTENT
 

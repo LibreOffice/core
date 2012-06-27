@@ -114,9 +114,7 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        // IAccessibility2 implementation 2009. ------
         QuickHelpText [ en-US ] = "Set Start Date/Time" ;
-        // ------ IAccessibility2 implementation 2009.
     };
     FixedText FT_DATE2
     {
@@ -172,9 +170,7 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        // IAccessibility2 implementation 2009. ------
         QuickHelpText [ en-US ] = "Set End Date/Time" ;
-        // ------ IAccessibility2 implementation 2009.
     };
     CheckBox CB_AUTOR
     {
@@ -253,7 +249,6 @@ TabPage SID_REDLIN_FILTER_PAGE
         Size = MAP_APPFONT ( 178 , 12 ) ;
         TabStop = TRUE ;
     };
-        /*IAccessibility2 Implementation 2009-----*/
     String STR_DATE_COMBOX
     {
         Text [ en-US ] = "Date Condition" ;
@@ -278,7 +273,6 @@ TabPage SID_REDLIN_FILTER_PAGE
     {
         Text [ en-US ] = "Changes" ;
     };
-    /*-----IAccessibility2 Implementation 2009*/
 };
 TabPage SID_REDLIN_VIEW_PAGE
 {

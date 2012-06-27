@@ -1208,9 +1208,7 @@ ModalDialog DLG_ADD_IDX_STYLES
             };
             MaskColor = IMAGE_MASK_COLOR ;
         };
-        //IAccessibility2 Implementation 2009-----
         QuickHelpText [ en-US ] = "Left" ;
-        //-----IAccessibility2 Implementation 2009
     };
     ImageButton PB_RIGHT
     {
@@ -1226,9 +1224,7 @@ ModalDialog DLG_ADD_IDX_STYLES
             };
             MaskColor = IMAGE_MASK_COLOR ;
         };
-        //IAccessibility2 Implementation 2009-----
         QuickHelpText [ en-US ] = "Right" ;
-        //-----IAccessibility2 Implementation 2009
     };
     FixedLine FL_STYLES
     {

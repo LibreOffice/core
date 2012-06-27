@@ -923,13 +923,11 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
         String sIndex = String::CreateFromInt32( aValueTbl[i] + 1 );
         sEntry += sIndex;
         pTextArr[i]->SetText( sEntry );
-//IAccessibility2 Impplementaton 2009-----
+
         //added by menghu for SODC_5143,12/12/2006
         String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH);
         sColumnWidth.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), sIndex );
         pFieldArr[i]->SetAccessibleName( sColumnWidth );
-        //end of SODC_5143
-//-----IAccessibility2 Impplementaton 2009
     }
 
     aDownBtn.Enable(aValueTbl[0] > 0);

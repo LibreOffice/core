@@ -506,7 +506,6 @@ ImageList IMG_NAVI_ENTRYBMP
 };
 
 
-//IAccessibility2 Implementation 2009-----
 String STR_ACCESS_TL_GLOBAL
 {
     Text [ en-US ] = "Global View";
@@ -515,4 +514,3 @@ String STR_ACCESS_TL_CONTENT
 {
     Text [ en-US ] = "Content View";
 };
-//-----IAccessibility2 Implementation 2009
