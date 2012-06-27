@@ -88,7 +88,7 @@ public class ParagraphStyle extends TestCase  {
             oSFNA = UnoRuntime.queryInterface(
                             XNameAccess.class,oSF.getByName("ParagraphStyles"));
             XIndexAccess oSFIA = UnoRuntime.queryInterface(XIndexAccess.class, oSFNA);
-            String[] els = oSFNA.getElementNames();
+            oSFNA.getElementNames();
             oStyle = UnoRuntime.queryInterface(
                            XStyle.class,oSFIA.getByIndex(1));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {

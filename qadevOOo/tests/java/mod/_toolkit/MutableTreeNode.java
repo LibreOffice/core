@@ -43,15 +43,11 @@ public class MutableTreeNode extends TestCase {
     private static XInterface oObj = null;
     private static XMutableTreeDataModel mXTreeDataModel;
     private static XMultiServiceFactory mxMSF;
-    private static PrintWriter log;
-    private static boolean debug = false;
 
     /**
      * Creates StarOffice Writer document.
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        this.log = log;
-        debug = tParam.getBool(PropertyName.DEBUG_IS_ACTIVE);
         mxMSF = (XMultiServiceFactory) tParam.getMSF();
 //        log.println("creating a textdocument");
 //        xTextDoc = WriterTools.createTextDoc(mxMSF);
@@ -120,7 +116,7 @@ public class MutableTreeNode extends TestCase {
 
         if( xNode.getChildCount() == 0 )
         {
-            String sParentPath = (String) xNode.getDataValue();
+            xNode.getDataValue();
 
             String officeUserPath = utils.getOfficeUserPath(mxMSF);
             Object fileacc = null;
@@ -129,7 +125,7 @@ public class MutableTreeNode extends TestCase {
             } catch (com.sun.star.uno.Exception ex) {
                 ex.printStackTrace();
             }
-            XSimpleFileAccess sA = UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
+            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
 
 
             dirlist(officeUserPath, xNode);
@@ -149,7 +145,7 @@ public class MutableTreeNode extends TestCase {
         try {
             xChildNode = mXTreeDataModel.createNode(dir.substring(dir.lastIndexOf("/")+1, dir.length()), sfa.isFolder(dir));
             xChildNode.setDataValue(dir);
-            boolean test = sfa.isFolder(dir);
+            sfa.isFolder(dir);
             if (sfa.isFolder(dir)){
                 xChildNode.setExpandedGraphicURL( "private:graphicrepository/sd/res/triangle_down.png");
                 xChildNode.setCollapsedGraphicURL("private:graphicrepository/sd/res/triangle_right.png");

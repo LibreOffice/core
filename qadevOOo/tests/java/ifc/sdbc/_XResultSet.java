@@ -418,7 +418,7 @@ public class _XResultSet extends MultiMethodTest {
     public void _rowUpdated() {
 
         try {
-            boolean res = oObj.rowUpdated() ;
+            oObj.rowUpdated();
             tRes.tested("rowUpdated()", true) ;
         } catch (SQLException e) {
             log.println("Exception occurred :") ;
@@ -433,7 +433,7 @@ public class _XResultSet extends MultiMethodTest {
     */
     public void _rowInserted() {
         try {
-            boolean res = oObj.rowInserted() ;
+            oObj.rowInserted();
             tRes.tested("rowInserted()", true) ;
         } catch (SQLException e) {
             log.println("Exception occurred :") ;
@@ -448,7 +448,7 @@ public class _XResultSet extends MultiMethodTest {
     */
     public void _rowDeleted() {
         try {
-            boolean res = oObj.rowDeleted() ;
+            oObj.rowDeleted();
             tRes.tested("rowDeleted()", true) ;
         } catch (SQLException e) {
             log.println("Exception occurred :") ;

@@ -58,7 +58,7 @@ public class _MailMerge extends MultiPropertyTest {
         try{
 
             log.println("try to get value from property...");
-            XResultSet oldValue = UnoRuntime.queryInterface(XResultSet.class,oObj.getPropertyValue(propName));
+            UnoRuntime.queryInterface(XResultSet.class,oObj.getPropertyValue(propName));
 
             log.println("try to get value from object relation...");
             XResultSet newValue = UnoRuntime.queryInterface(XResultSet.class,tEnv.getObjRelation("MailMerge.XResultSet"));
@@ -102,7 +102,7 @@ public class _MailMerge extends MultiPropertyTest {
         try{
 
             log.println("try to get value from property...");
-            XConnection oldValue = UnoRuntime.queryInterface(XConnection.class,oObj.getPropertyValue(propName));
+            UnoRuntime.queryInterface(XConnection.class,oObj.getPropertyValue(propName));
 
             log.println("try to get value from object relation...");
             XConnection newValue = UnoRuntime.queryInterface(XConnection.class,tEnv.getObjRelation("MailMerge.XConnection"));

@@ -61,8 +61,6 @@ public class _XTreeControl extends MultiMethodTest {
 
     public XTreeControl oObj = null;
 
-    private XMutableTreeNode mNewNode = null;
-
     private XMutableTreeNode mXNode = null;
 
     XTreeExpansionListener mTreeExpansionListener1 = new TreeExpansionListenerImpl1();

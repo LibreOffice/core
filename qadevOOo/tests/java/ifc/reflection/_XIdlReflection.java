@@ -69,7 +69,6 @@ public class _XIdlReflection extends MultiMethodTest{
     * returned value isn't null and no exceptions were thrown. <p>
     */
     public void _getType() {
-        boolean result = true;
         Object obj = null;
 
         try {
@@ -82,7 +81,6 @@ public class _XIdlReflection extends MultiMethodTest{
         }
 
         if (obj == null) {
-            result = false;
             log.println("Object wasn't created !");
             tRes.tested("getType()", false);
         }

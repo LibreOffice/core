@@ -443,8 +443,7 @@ public class UITools {
          try{
             XInterface xNumericField =mAT.getAccessibleObjectForRole(
                                   mXRoot, AccessibleRole.TEXT, NumericFieldName);
-            //util.dbg.printInterfaces(xNumericField);
-            XAccessibleEditableText oValue = UnoRuntime.queryInterface(
+            UnoRuntime.queryInterface(
              XAccessibleEditableText.class, xNumericField);
 
             setString(xNumericField, cValue);
@@ -480,7 +479,6 @@ public class UITools {
          try{
             int beginIndex = 0;
             int endIndex = 0;
-            boolean startFound = false;
             // find the first numeric character in stringVal
             for(int i = 0; i < stringVal.length(); i++){
                 int numVal = Character.getNumericValue(stringVal.charAt(i));
@@ -702,7 +700,7 @@ public class UITools {
                     utils.getImplName(xAcc));
 
         if (aComp != null) {
-            Point location = aComp.getLocationOnScreen();
+            aComp.getLocationOnScreen();
             String bounds = "(" + aComp.getBounds().X + "," +
                             aComp.getBounds().Y + ")" + " (" +
                             aComp.getBounds().Width + "," +
@@ -734,7 +732,7 @@ public class UITools {
                     utils.getImplName(xAcc));
 
         if (aComp != null) {
-            Point location = aComp.getLocationOnScreen();
+            aComp.getLocationOnScreen();
             String bounds = "(" + aComp.getBounds().X + "," +
                             aComp.getBounds().Y + ")" + " (" +
                             aComp.getBounds().Width + "," +

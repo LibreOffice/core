@@ -698,7 +698,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
         };
 
         ProcessHandler aHandler = new ProcessHandler(sCommandArray);
-        boolean bBackValue = aHandler.executeSynchronously();
+        aHandler.executeSynchronously();
         int nExitCode = aHandler.getExitCode();
         if (nExitCode != 0)
         {
@@ -754,8 +754,8 @@ public class JPEGComparator extends EnhancedComplexTestCase
             _sDiffGfx
         };
         ProcessHandler aHandler = new ProcessHandler(sCommandArray);
-        boolean bBackValue = aHandler.executeSynchronously();
-        int nExitCode = aHandler.getExitCode();
+        aHandler.executeSynchronously();
+        aHandler.getExitCode();
 
         String sBack = aHandler.getOutputText();
         GlobalLogWriter.println("'" + sBack + "'");

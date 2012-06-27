@@ -84,7 +84,7 @@ public class _XLayoutManager extends MultiMethodTest {
 
     public void _getElement() {
         requiredMethod("createElement()");
-        XUIElement xElement = oObj.getElement(sElementName);
+        oObj.getElement(sElementName);
         tRes.tested("getElement()", true);
     }
 
@@ -109,22 +109,22 @@ public class _XLayoutManager extends MultiMethodTest {
     }
 
     public void _hideElement() {
-        boolean hidden = oObj.hideElement(sElementName);
+        oObj.hideElement(sElementName);
         tRes.tested("hideElement()", true);
     }
 
     public void _isElementDocked() {
-        boolean docked = oObj.isElementDocked(sElementName);
+        oObj.isElementDocked(sElementName);
         tRes.tested("isElementDocked()", true);
     }
 
     public void _isElementFloating() {
-        boolean docked = oObj.isElementFloating(sElementName);
+        oObj.isElementFloating(sElementName);
         tRes.tested("isElementFloating()", true);
     }
 
     public void _isElementVisible() {
-        boolean docked = oObj.isElementVisible(sElementName);
+        oObj.isElementVisible(sElementName);
         tRes.tested("isElementVisible()", true);
     }
 
@@ -175,7 +175,7 @@ public class _XLayoutManager extends MultiMethodTest {
 
     public void _showElement() {
         requiredMethod("createElement()");
-        boolean shown = oObj.showElement(sElementName);
+        oObj.showElement(sElementName);
         tRes.tested("showElement()", true);
 
     }

@@ -319,7 +319,6 @@ class OGridControlModelold extends TestCase {
         XPropertySet aControl2 = null;
         XPropertySet aControl3 = null;
         XPropertySet aControl4 = null;
-        XPropertySet aControl5 = null;
         XGridColumnFactory columns = null;
 
 
@@ -327,8 +326,6 @@ class OGridControlModelold extends TestCase {
         // first we write what we are intend to do to log file
         log.println("creating a test environment");
 
-        //get GridControlModel
-        String objName = "Grid";
         XControlShape shape = FormTools.insertControlShape(xDrawDoc, 5000,
                                                            7000, 2000, 2000,
                                                            "GridControl");
@@ -345,7 +342,7 @@ class OGridControlModelold extends TestCase {
             aControl2 = columns.createColumn("DateField");
             aControl3 = columns.createColumn("TextField");
             aControl4 = columns.createColumn("TextField");
-            aControl5 = columns.createColumn("TextField");
+            columns.createColumn("TextField");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             // Some exception occures.FAILED
             log.println("!!! Couldn't create instance : " + e);

@@ -141,9 +141,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                String getStr = oObj.getString(col) ;
-                //result &= ((String)data.get(col - 1)).equals(getStr) ;
-                //notNullRes &= !oObj.wasNull() ;
+                oObj.getString(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -163,9 +161,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                boolean getVal = oObj.getBoolean(col) ;
-                //result &= ((Boolean)data.get(col - 1)).booleanValue() == getVal ;
-                //notNullRes &= !oObj.wasNull() ;
+                oObj.getBoolean(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -185,9 +181,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                byte getVal = oObj.getByte(col) ;
-                //result &= ((Byte)data.get(col - 1)).byteValue() == getVal ;
-                //notNullRes &= !oObj.wasNull() ;
+                oObj.getByte(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -207,9 +201,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                short getVal = oObj.getShort(col) ;
-                //result &= ((Short)data.get(col - 1)).shortValue() == getVal ;
-                //notNullRes &= !oObj.wasNull() ;
+                oObj.getShort(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -229,7 +221,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                int getVal = oObj.getInt(col) ;
+                oObj.getInt(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -249,7 +241,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                long getVal = oObj.getLong(col) ;
+                oObj.getLong(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -269,7 +261,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                float getVal = oObj.getFloat(col) ;
+                oObj.getFloat(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -289,7 +281,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                double getVal = oObj.getDouble(col) ;
+                oObj.getDouble(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -309,7 +301,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                byte[] getVal = oObj.getBytes(col) ;
+                oObj.getBytes(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -329,7 +321,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Date getVal = oObj.getDate(col) ;
+                oObj.getDate(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -349,7 +341,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Time getVal = oObj.getTime(col) ;
+                oObj.getTime(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -369,7 +361,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                DateTime getVal = oObj.getTimestamp(col) ;
+                oObj.getTimestamp(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -389,7 +381,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                XInputStream getVal = oObj.getBinaryStream(col) ;
+                oObj.getBinaryStream(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -409,7 +401,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                XInputStream getVal = oObj.getCharacterStream(col) ;
+                oObj.getCharacterStream(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -429,7 +421,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                Object getVal = oObj.getObject(col, null) ;
+                oObj.getObject(col, null);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -449,7 +441,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                XRef getVal = oObj.getRef(col) ;
+                oObj.getRef(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -469,7 +461,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                XBlob getVal = oObj.getBlob(col) ;
+                oObj.getBlob(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -489,7 +481,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                XClob getVal = oObj.getClob(col) ;
+                oObj.getClob(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -509,7 +501,7 @@ public class _XRow extends MultiMethodTest {
         if (col < 0) log.println("Type not found in relation: not tested");
         else {
             try {
-                XArray getVal = oObj.getArray(col) ;
+                oObj.getArray(col);
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;

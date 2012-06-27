@@ -74,7 +74,6 @@ public class BuildID
                 GlobalLogWriter.get().println("soffice executable not found.");
             }
 
-            int dummy = 0;
             return sBuildID;
         }
 

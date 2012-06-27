@@ -99,13 +99,10 @@ public class _XRowSet extends MultiMethodTest {
     public void _execute() {
         requiredMethod("addRowSetListener()");
         listener.reset();
-        boolean result = true ;
-
         try {
             oObj.execute() ;
         } catch (SQLException e) {
             log.println("Exception occurred :" + e) ;
-            result = false ;
         }
 
         tRes.tested("execute()", listener.rowSetChanged);

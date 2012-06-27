@@ -59,7 +59,6 @@ public class _XUIConfiguration extends MultiMethodTest {
     public void before() {
         xListener = (XUIConfigurationListenerImpl)tEnv.getObjRelation(
                         "XUIConfiguration.XUIConfigurationListenerImpl");
-        XUIConfigurationListener l;
     }
 
     /**

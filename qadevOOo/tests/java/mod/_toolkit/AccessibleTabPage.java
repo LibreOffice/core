@@ -76,7 +76,6 @@ import util.SOfficeFactory;
  * @see ifc.accessibility.XAccessibleExtendedComponent
  */
 public class AccessibleTabPage extends TestCase {
-    private static XDesktop the_Desk;
     private static XTextDocument xTextDoc;
     private static XAccessibleAction accCloseButton = null;
 
@@ -84,7 +83,7 @@ public class AccessibleTabPage extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
+        UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory) Param.getMSF()));
     }
@@ -246,7 +245,7 @@ public class AccessibleTabPage extends TestCase {
         XAccessibleComponent accComp = UnoRuntime.queryInterface(
                                                XAccessibleComponent.class,
                                                oObj);
-        final Point point = accComp.getLocationOnScreen();
+        accComp.getLocationOnScreen();
 
         shortWait();
 

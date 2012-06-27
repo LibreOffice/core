@@ -76,8 +76,6 @@ import util.utils;
  */
 public class AccessibleMenu extends TestCase {
     private static XTextDocument xTextDoc = null;
-    private static XAccessibleAction action = null;
-
     /**
      * Finds accessible component with role <code>MENU</code>
      * walking through the accessible component tree of a document.

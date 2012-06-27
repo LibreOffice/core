@@ -75,7 +75,7 @@ public class _XTabController extends MultiMethodTest {
     */
     public void _getModel() {
         requiredMethod("setModel()");
-        XTabControllerModel setModel = oObj.getModel();
+        oObj.getModel();
         tRes.tested("getModel()", Status.skipped(true));
     }
 
@@ -101,9 +101,8 @@ public class _XTabController extends MultiMethodTest {
     */
     public void _getContainer() {
         requiredMethod( "setContainer()");
-        XControlContainer setContainer = oObj.getContainer();
-        XControlContainer relContainer = (XControlContainer )
-                                            tEnv.getObjRelation("CONTAINER");
+        oObj.getContainer();
+        tEnv.getObjRelation("CONTAINER");
         tRes.tested("getContainer()", Status.skipped(true) );
     }
 
@@ -112,7 +111,7 @@ public class _XTabController extends MultiMethodTest {
     * Has <b> OK </b> status if returned sequence is not null.<p>
     */
     public void _getControls() {
-        XControl[] aControl = oObj.getControls();
+        oObj.getControls();
         tRes.tested("getControls()", Status.skipped(true) );
     }
 

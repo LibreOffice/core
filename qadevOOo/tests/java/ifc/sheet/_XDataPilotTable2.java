@@ -280,7 +280,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
             // out-of-bound condition is undefined.
             try
             {
-                CellRangeAddress rangeOutOfBound = xDPTab2.getOutputRangeByType(-1);
+                xDPTab2.getOutputRangeByType(-1);
                 log.println("exception not raised");
                 break;
             }
@@ -291,7 +291,7 @@ public class _XDataPilotTable2 extends MultiMethodTest
 
             try
             {
-                CellRangeAddress rangeOutOfBound = xDPTab2.getOutputRangeByType(100);
+                xDPTab2.getOutputRangeByType(100);
                 log.println("exception not raised");
                 break;
             }

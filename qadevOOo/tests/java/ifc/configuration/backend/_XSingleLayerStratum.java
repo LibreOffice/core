@@ -39,7 +39,7 @@ public class _XSingleLayerStratum extends MultiMethodTest {
         boolean res = true;
 
         try {
-            XLayer aLayer = oObj.getLayer("", "");
+            oObj.getLayer("", "");
             log.println("Exception expected -- FAILED");
             res = false;
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
@@ -74,7 +74,7 @@ public class _XSingleLayerStratum extends MultiMethodTest {
         boolean res = true;
 
         try {
-            XUpdatableLayer aLayer = oObj.getUpdatableLayer("");
+            oObj.getUpdatableLayer("");
             log.println("Exception expected -- FAILED");
             res = false;
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {

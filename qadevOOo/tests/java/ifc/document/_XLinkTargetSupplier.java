@@ -41,7 +41,7 @@ public class _XLinkTargetSupplier extends MultiMethodTest {
     */
     public void _getLinks() {
         XNameAccess links = oObj.getLinks();
-        String names[] = links.getElementNames();
+        links.getElementNames();
         tRes.tested("getLinks()", links != null);
     }
 

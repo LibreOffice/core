@@ -63,7 +63,6 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
 
             XSpreadsheetDocument xSheetDoc = (XSpreadsheetDocument)tEnv.getObjRelation("SPREADSHEET");
 
-            XInterface oObj = null;
             XText oText = null;
             XTextContent oContent = null;
             XInterface aField = null;
@@ -80,7 +79,7 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
 
                 XSpreadsheets oSheets = xSheetDoc.getSheets() ;
                 XIndexAccess oIndexSheets = UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-                XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                AnyConverter.toObject(
                         new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
                 String[] services = _oMSF.getAvailableServiceNames();
@@ -135,7 +134,7 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
         XEnumeration xEnum = xEnumAccess.createEnumeration();
         while(xEnum != null && xEnum.hasMoreElements()) {
             try {
-                Object o = xEnum.nextElement();
+                xEnum.nextElement();
             }
             catch(com.sun.star.container.NoSuchElementException e) {
                 setMethodFalse("getTextFields()", e);

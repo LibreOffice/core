@@ -302,12 +302,9 @@ public class FileHelper
 
     public static void test_removeFirstDirectorysAndBasenameFrom()
         {
-            String a = removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/a/b/c");
-            // assure("", a.equals("d/e"));
-            String b = removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/a/b/c/");
-            // assure("", b.equals("d/e"));
-            String c = removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/b/c");
-            // assure("", c.equals("a/b/c/d/e"));
+            removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/a/b/c");
+            removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/a/b/c/");
+            removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/b/c");
         }
 
 
@@ -608,8 +605,7 @@ public class FileHelper
 
             // OLD INFO FILE
 
-            // String fs = System.getProperty("file.separator");
-            String ls = System.getProperty("line.separator");
+            System.getProperty("line.separator");
             String sInfoFilename = FileHelper.appendPath(sFileDir, sNameNoSuffix + ".info");
             File aInfoFile = new File(sInfoFilename);
 

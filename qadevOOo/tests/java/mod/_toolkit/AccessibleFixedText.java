@@ -68,8 +68,6 @@ import util.utils;
  * @see ifc.accessibility._XAccessibleText
  */
 public class AccessibleFixedText extends TestCase {
-    private static XTextDocument xTextDoc = null;
-    private static XAccessibleAction action = null;
     private static XWindow xWinDlg = null;
 
     /**

@@ -263,9 +263,6 @@ public class ReportDesignerTest extends ComplexTestCase {
     private static String m_sSourceName;
     private static String m_sDestinationName;
 
-    private static final int WRITER = 1;
-    private static final int CALC = 2;
-
     /**
      * This is the main test Function of current ReportDesignerTest
      */
@@ -466,15 +463,11 @@ public class ReportDesignerTest extends ComplexTestCase {
             log.println("DBConnection: " + sDBConnection);
             DB.init(sDBConnection);
 
-            // String sFixRefSubDirectory = "ReportDesign_qa_complex_" + getFileFormat(_nType);
-            String sFixRefSubDirectory = "ReportDesignFixRef";
-
             String sSourceVersion = m_sSourceVersion;
             // String sSourceVersion = sFixRefSubDirectory;
             String sSourceName = m_sSourceName;
             // String sSourceCreatorType = "fixref";
             String sSourceCreatorType = "";
-            String sDestinationVersion = m_sDestinationVersion;
             // if (sDestinationVersion.length() == 0)
             // {
             //     sDestinationVersion = m_sUPDMinor;

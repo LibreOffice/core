@@ -76,30 +76,24 @@ import com.sun.star.xml.sax.XLocator;
 public class _XDocumentHandler extends MultiMethodTest {
 
     private static class DocumentLocator implements XLocator {
-        public boolean aMethodCalled = false ;
-
         private PrintWriter log = null ;
         public DocumentLocator(PrintWriter log) {
             this.log = log ;
         }
         public int getColumnNumber() {
             log.println("getColumnNumber() method called.") ;
-            aMethodCalled = true ;
             return 10 ;
         }
         public int getLineNumber() {
             log.println("getLineNumber() method called.") ;
-            aMethodCalled = true ;
             return 9 ;
         }
         public String getPublicId() {
             log.println("getPublicId() method called.") ;
-            aMethodCalled = true ;
             return "file://d:/file.txt";
         }
         public String getSystemId() {
             log.println("getSystemId() method called.") ;
-            aMethodCalled = true ;
             return "system";
         }
     }

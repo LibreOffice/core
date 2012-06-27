@@ -172,8 +172,7 @@ public class java_fat implements TestBase
                     continue;
                 }
 
-                final String sObjectName = tCase.getObjectName();
-                // System.out.println(sObjectName + " recreated ");
+                tCase.getObjectName();
 
                 for (int j = 0; j < entry.SubEntryCount; j++)
                 {

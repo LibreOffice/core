@@ -114,10 +114,9 @@ public class _XCell extends MultiMethodTest {
     */
     public void _getValue() {
         boolean result = true;
-        double value = 0;
         log.println("getValue() ...");
 
-        value = oObj.getValue();
+        oObj.getValue();
 
         tRes.tested("getValue()",result);
     } // end getValue()

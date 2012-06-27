@@ -353,7 +353,7 @@ public class MSOfficePostscriptCreator implements IOffice
 
 
                 ProcessHandler aHandler = new ProcessHandler(aList);
-                boolean bBackValue = aHandler.executeSynchronously();
+                aHandler.executeSynchronously();
             }
             catch (IndexOutOfBoundsException e)
             {

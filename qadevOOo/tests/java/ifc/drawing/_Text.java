@@ -44,8 +44,7 @@ public class _Text extends MultiPropertyTest {
             }
             log.println("Trying to cast property 'NumberingRules' "+
                 "to XIndexReplace");
-            XIndexReplace theRules = (XIndexReplace)
-                oObj.getPropertyValue( "NumberingRules" );
+            oObj.getPropertyValue( "NumberingRules" );
             bResult = true;
         } catch( Exception e ) {
             log.println("Error occurred while trying to get property"+

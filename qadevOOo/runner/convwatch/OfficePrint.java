@@ -857,8 +857,6 @@ public class OfficePrint {
                                       String _sPrintFileURL) throws ConvWatchCancelException
         {
             boolean bBack = false;
-            String sPrintFileURL = null;
-
             // check if given file is a picture, then do nothing
             String sDocumentSuffix = FileHelper.getSuffix(_sInputFileURL);
             if (sDocumentSuffix.toLowerCase().endsWith(".png") ||
@@ -1004,7 +1002,6 @@ public class OfficePrint {
                     }
 
                     Object[] aElements = null;
-                    String[] aExtensions;
                     try
                     {
                         aElements = (Object[]) aNameAccess.getByName(_sFilterName);
@@ -1082,7 +1079,6 @@ public class OfficePrint {
                     }
 
                     Object[] aElements = null;
-                    String[] aExtensions;
                     try
                     {
                         aElements = (Object[]) aNameAccess.getByName(_sFilterName);
@@ -1261,13 +1257,6 @@ public class OfficePrint {
             }
 
             String sFilterName = _aGTA.getExportFilterName();
-
-            // check how many Properties should initialize
-            int nPropertyCount = 0;
-            // if (sFilterName != null && sFilterName.length() > 0)
-            // {
-            //     nPropertyCount ++;
-            // }
 
             // initialize PropertyArray
             // PropertyValue [] aStoreProps = new PropertyValue[ nPropertyCount ];

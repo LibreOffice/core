@@ -144,7 +144,7 @@ public class SdUnoOutlineView extends TestCase {
 
         XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
         XDrawPages the_pages = oDPS.getDrawPages();
-        XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class,the_pages);
+        UnoRuntime.queryInterface(XIndexAccess.class,the_pages);
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
 

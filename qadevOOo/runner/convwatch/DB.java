@@ -46,7 +46,6 @@ public class DB extends DBHelper
     private String m_sSourceVersion;
     private String m_sDestinationVersion;
     private String m_sDocumentPool;
-    private String m_sEnvironment;
     private String m_sDocID;
     private String m_sDBDistinct;
 
@@ -154,7 +153,7 @@ public class DB extends DBHelper
     private void fillVariables(String _sInfo)
         {
             fillDBConnection(_sInfo);
-            m_sEnvironment = getEnvironment();
+            getEnvironment();
 
             StringTokenizer aTokenizer = new StringTokenizer(_sInfo,",",false);
             while (aTokenizer.hasMoreTokens())
@@ -257,7 +256,6 @@ public class DB extends DBHelper
     public ArrayList<String> QuerySQL(Connection _aCon, String _sSQL)
         {
             java.sql.Statement oStmt = null;
-            Connection oCon = null;
             ArrayList<String> aResultList = new ArrayList<String>();
             try
             {
@@ -278,9 +276,6 @@ public class DB extends DBHelper
                     StringBuffer aResult = new StringBuffer();
                     try
                     {
-                        Object aObj = null;
-
-
                         aResult.append("sqlresult: ");
                         for (int i=1;i<=nColumnCount;i++)
                         {

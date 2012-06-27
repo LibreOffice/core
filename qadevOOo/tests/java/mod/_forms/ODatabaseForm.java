@@ -871,8 +871,7 @@ public class ODatabaseForm extends TestCase {
             int count = params.getCount();
             try {
                 for(int i=0; i<count; i++) {
-                    Object aObject = params.getByIndex(i);
-                    Any any = (Any)aObject;
+                    params.getByIndex(i);
                     log.println("### _XCompletedExecution.InteractionHandlerImpl: Parameter "+i+": "+params.getByIndex(i));
                     XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, params.getByIndex(i));
                     log.println("### _XCompletedExecution.InteractionHandlerImpl: Parameter Name: '"+xProp.getPropertyValue("Name") + "' is set to Value '1'");

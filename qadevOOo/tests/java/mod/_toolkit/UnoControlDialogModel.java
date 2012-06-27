@@ -151,7 +151,7 @@ public class UnoControlDialogModel extends TestCase {
 
         log.println("creating a new environment for object");
 
-        XMultiServiceFactory oMSF = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
                                             XMultiServiceFactory.class, oObj);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);

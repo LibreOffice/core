@@ -201,7 +201,6 @@ public class DBHelper
         throws ValueNotFoundException
         {
             Statement oStmt = null;
-            Connection oCon = null;
             int nValue = 0;
             try
             {

@@ -190,7 +190,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
 
         XInterface oObj = null;
 
-        XInitialization xInit = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
                                         XInitialization.class,
                                         the_frame2.getController());
 

@@ -63,7 +63,7 @@ public class _XValidatableFormComponent extends MultiMethodTest
 
     public void _getCurrentValue()
     {
-        Object cValue = oObj.getCurrentValue();
+        oObj.getCurrentValue();
         tRes.tested("getCurrentValue()", true);
     }
 
@@ -77,21 +77,17 @@ public class _XValidatableFormComponent extends MultiMethodTest
     {
         requiredMethod("isValid()");
 
-        boolean res = true;
-
         try
         {
             oObj.removeFormComponentValidityListener(listener);
         }
         catch (com.sun.star.lang.NullPointerException e)
         {
-            res = false;
             e.printStackTrace();
         }
 
         listenerCalled = false;
         changeAllProperties();
-        res &= !listenerCalled;
         tRes.tested("removeFormComponentValidityListener()", true);
     }
 
@@ -166,9 +162,6 @@ public class _XValidatableFormComponent extends MultiMethodTest
                 ((property.Attributes & PropertyAttribute.READONLY) == 0);
             boolean isNotNull =
                 ((property.Attributes & PropertyAttribute.MAYBEVOID) == 0);
-            boolean isBound =
-                ((property.Attributes & PropertyAttribute.BOUND) != 0);
-
             //these have values that are interfaces we can't change
             if (
                 name.equals("TextUserDefinedAttributes")

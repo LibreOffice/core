@@ -97,12 +97,11 @@ public class FilterFactory extends TestCase {
         // XNameContainer; XNameReplace
         String filterName = filterNames[0];
         Object[] instance = null;;
-        PropertyValue instanceProp = new PropertyValue();
+        new PropertyValue();
         try{
             instance = (Object[]) xNA.getByName(filterName);
-            PropertyValue[] props = (PropertyValue[]) instance;
-            instanceProp = getPropertyValue
-                    (((PropertyValue[]) instance), "FilterService"); //instance[9];
+            getPropertyValue
+                    (((PropertyValue[]) instance), "FilterService");
         } catch (com.sun.star.container.NoSuchElementException e){
             throw new StatusException(
             Status.failed("Couldn't get elements from object"));

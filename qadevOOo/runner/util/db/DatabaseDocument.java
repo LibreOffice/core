@@ -34,7 +34,6 @@ public class DatabaseDocument
 {
     protected DatabaseDocument( final XMultiServiceFactory _orb, final DataSource _dataSource )
     {
-        m_orb = _orb;
         m_dataSource = _dataSource;
 
         XDocumentDataSource docDataSource = UnoRuntime.queryInterface(
@@ -74,7 +73,6 @@ public class DatabaseDocument
         m_storeDoc.storeAsURL( _url, new PropertyValue[] { } );
     }
 
-    private XMultiServiceFactory    m_orb;
     private DataSource              m_dataSource;
     private XOfficeDatabaseDocument m_databaseDocument;
     private XModel                  m_model;

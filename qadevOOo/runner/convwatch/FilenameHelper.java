@@ -373,11 +373,11 @@ public class FilenameHelper
             System.out.println("URL: " + d.getFileURL());
             System.out.println("Filename: " + d.getFilename());
 
-            OriginalReferenceFilename a = new OriginalReferenceFilename("/dir1/dir2/", "name",".ext");
-            OriginalReferenceFilename a1 = new OriginalReferenceFilename("/dir1/dir2","name.ext","");
-            OriginalReferenceFilename a2 = new OriginalReferenceFilename("/dir1/dir2","/name.ext","");
-            OriginalReferenceFilename a3 = new OriginalReferenceFilename("/dir1/dir2","/name",".ext");
-            OriginalReferenceFilename a4 = new OriginalReferenceFilename("/dir1/dir2","name","ext");
+            new OriginalReferenceFilename("/dir1/dir2/", "name",".ext");
+            new OriginalReferenceFilename("/dir1/dir2","name.ext","");
+            new OriginalReferenceFilename("/dir1/dir2","/name.ext","");
+            new OriginalReferenceFilename("/dir1/dir2","/name",".ext");
+            new OriginalReferenceFilename("/dir1/dir2","name","ext");
 
 
             // OriginalReferenceFilename b = new OriginalReferenceFilename("c:/dir1/dir2/name.ext");

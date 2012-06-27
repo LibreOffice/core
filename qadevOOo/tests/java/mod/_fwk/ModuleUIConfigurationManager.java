@@ -100,7 +100,7 @@ public class ModuleUIConfigurationManager extends TestCase {
             tEnv = new TestEnvironment(oObj);
 
             XNameAccess xMM = UnoRuntime.queryInterface(XNameAccess.class, xMSF.createInstance("com.sun.star.comp.framework.ModuleManager"));
-            String[] names = xMM.getElementNames();
+            xMM.getElementNames();
 
             o = xMSF.createInstance("com.sun.star.embed.StorageFactory");
             XSingleServiceFactory xStorageService = UnoRuntime.queryInterface(XSingleServiceFactory.class, o);

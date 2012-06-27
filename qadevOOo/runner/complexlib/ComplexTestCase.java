@@ -66,8 +66,6 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
         }
         catch (java.lang.NoSuchMethodException e)
         {
-            // simply ignore
-            int dummy = 0;
             m_bBeforeCalled = true;
         }
         catch (java.lang.IllegalAccessException e)

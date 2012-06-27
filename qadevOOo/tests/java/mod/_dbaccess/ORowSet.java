@@ -578,12 +578,10 @@ public class ORowSet extends TestCase {
 
         public void handle(XInteractionRequest xInteractionRequest) {
             log.println("### _XCompletedExecution.InteractionHandlerImpl: handle called.");
-            ParametersRequest req = null;
             boolean abort = false;
 
             Object o = xInteractionRequest.getRequest();
             if (o instanceof ParametersRequest) {
-                req = (ParametersRequest)o;
             }
             else if (o instanceof AuthenticationRequest) {
                 log.println("### The request in XCompletedExecution is of type 'AuthenticationRequest'");

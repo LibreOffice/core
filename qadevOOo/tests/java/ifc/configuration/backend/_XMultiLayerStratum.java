@@ -35,7 +35,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
         boolean res = true;
 
         try {
-            XLayer aLayer = oObj.getLayer("", "");
+            oObj.getLayer("", "");
             log.println("Exception expected -- FAILED");
             res = false;
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
@@ -124,7 +124,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
         boolean res = true;
 
         try {
-            XUpdatableLayer aLayer = oObj.getUpdatableLayer("");
+            oObj.getUpdatableLayer("");
             log.println("Exception expected -- FAILED");
             res = false;
         } catch (com.sun.star.configuration.backend.BackendAccessException e) {
@@ -164,7 +164,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
         boolean res = true;
 
         try {
-            String UpdateLayerID = oObj.getUpdateLayerId(
+            oObj.getUpdateLayerId(
                                            "org.openoffice.Office.TypeDetection",
                                            "illegal");
             log.println("Exception expected -- FAILED");
@@ -210,7 +210,7 @@ public class _XMultiLayerStratum extends MultiMethodTest {
         boolean res = true;
 
         try {
-            String[] LayerIDs = oObj.listLayerIds(
+            oObj.listLayerIds(
                                         "org.openoffice.Office.TypeDetection",
                                         "illegal");
             log.println("Exception expected -- FAILED");

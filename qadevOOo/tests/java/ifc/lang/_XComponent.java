@@ -41,7 +41,6 @@ import com.sun.star.lang.XEventListener;
 public class _XComponent extends MultiMethodTest {
 
     public static XComponent oObj = null;
-    private XNameContainer xContainer = null;
     private XComponent altDispose = null;
 
     boolean listenerDisposed[] = new boolean[2];

@@ -348,9 +348,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                 IniFile aIniFile = new IniFile(_aParam.getInputPath());
                 while (aIniFile.hasMoreElements())
                 {
-                    String sSection = aIniFile.nextElement();
-// TODO: not supported yet.
-                    // callEveryPictureInIniFile(aIniFile, sSection, _aParam);
+                    aIniFile.nextElement();
                 }
             }
             else
@@ -410,12 +408,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
     {
         // TODO: auslagern in eine function, die ein Interface annimmt.
         String sInputPath = _aParam.getInputPath();
-        File aInputPath = new File(sInputPath);
-//        if (!aInputPath.exists())
-//        {
-//            GlobalLogWriter.println("Error, InputPath or File in InputPath doesn't exists. Please check: '" + sInputPath + "'");
-//            assure("Error, InputPath or File in InputPath doesn't exists. Please check: '" + sInputPath + "'", false);
-//        }
+        new File(sInputPath);
 
         // call for a single ini file
         if (sInputPath.toLowerCase().endsWith(".ini") )

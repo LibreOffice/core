@@ -131,8 +131,7 @@ public class ConvWatch
             String sInputFile = FileHelper.getBasename(_sAbsoluteInputFile);
             // System.out.println("InputFile: " + sInputFile);
 
-            String sInputFileNoSuffix = FileHelper.getNameNoSuffix(sInputFile);
-            // System.out.println("BasenameNoSuffix: " + sInputFileNoSuffix);
+            FileHelper.getNameNoSuffix(sInputFile);
 
 
             String sAbsoluteOutputFile = _sOutputPath + fs + sInputFile;
@@ -219,8 +218,7 @@ public class ConvWatch
     // This creates a status for exact on document
     static boolean createINIStatus(StatusHelper[] aList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID, String _sRefBuildID)
         {
-            // Status
-            String fs = System.getProperty("file.separator");
+            System.getProperty("file.separator");
             String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
             String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
 //            String sHTMLFile = _sFilenamePrefix + sNameNoSuffix + ".html";
@@ -290,8 +288,7 @@ public class ConvWatch
 
     static void createINIStatus_DiffDiff(StatusHelper[] aDiffDiffList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile, String _sBuildID)
         {
-            // Status
-            String fs = System.getProperty("file.separator");
+            System.getProperty("file.separator");
             String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
             String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
             String sINIFile = _sFilenamePrefix + sNameNoSuffix + ".ini";
@@ -357,8 +354,7 @@ public class ConvWatch
             _aGTA.setBorderMove(TriState.FALSE);
             StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile);
 
-            // Status
-            boolean bResultIsOk = createINIStatus(aList, "", _sOutputPath, _sAbsoluteInputFile, _aGTA.getBuildID(), _aGTA.getRefBuildID());
+            createINIStatus(aList, "", _sOutputPath, _sAbsoluteInputFile, _aGTA.getBuildID(), _aGTA.getRefBuildID());
 
             StatusHelper[] aDiffDiffList = new StatusHelper[aList.length];
 

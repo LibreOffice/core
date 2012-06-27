@@ -132,11 +132,6 @@ import com.sun.star.uno.XInterface;
  */
 public class OSingleSelectQueryComposer extends TestCase {
 
-    private static int uniqueSuffix = 0 ;
-    private DBTools dbTools     = null ;
-    private static String origDB = null ;
-    private PrintWriter log = null ;
-    private static String tmpDir = null ;
     String tableName = null;
     DBTools.DataSourceInfo srcInf = null;
     boolean isMySQLDB = false;
@@ -172,9 +167,6 @@ public class OSingleSelectQueryComposer extends TestCase {
         XInterface oObj = null;
         Object oInterface = null;
         XMultiServiceFactory xMSF = null ;
-        boolean envCreatedOK = false ;
-
-
         try {
             xMSF = (XMultiServiceFactory)Param.getMSF();
 
@@ -250,8 +242,7 @@ public class OSingleSelectQueryComposer extends TestCase {
             tEnv.addObjRelation("xProp", xCol);
             tEnv.addObjRelation("colName", xCols.getElementNames()[0]);
 
-          envCreatedOK = true ;
-            return tEnv;
+          return tEnv;
 
         } catch(com.sun.star.uno.Exception e) {
             log.println("Can't create object" );

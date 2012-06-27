@@ -151,7 +151,7 @@ public class AccessibleStatusBar extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XExtendedToolkit tk = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
                                             XExtendedToolkit.class, toolkit);
 
         tEnv.addObjRelation("EventProducer",

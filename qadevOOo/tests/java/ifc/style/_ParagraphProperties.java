@@ -410,14 +410,14 @@ public class _ParagraphProperties extends MultiPropertyTest {
             attr.Value = "true";
             uda.insertByName("Cellprop:has-first-alien-attribute", attr);
 
-            String[] els = uda.getElementNames();
+            uda.getElementNames();
             oObj.setPropertyValue("ParaUserDefinedAttributes", uda);
             uda = (XNameContainer) AnyConverter.toObject(
                           new Type(XNameContainer.class),
                           oObj.getPropertyValue("ParaUserDefinedAttributes"));
-            els = uda.getElementNames();
+            uda.getElementNames();
 
-            Object obj = uda.getByName("Cellprop:has-first-alien-attribute");
+            uda.getByName("Cellprop:has-first-alien-attribute");
             res = true;
         } catch (com.sun.star.beans.UnknownPropertyException upe) {
             if (isOptional("ParaUserDefinedAttributes")) {

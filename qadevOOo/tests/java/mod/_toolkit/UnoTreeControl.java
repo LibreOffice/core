@@ -53,22 +53,16 @@ import util.utils;
 
 
 public class UnoTreeControl extends TestCase {
-    private static XTextDocument xTextDoc;
     private static XMutableTreeDataModel mXTreeDataModel;
     private static XMultiServiceFactory mxMSF;
-    private static PrintWriter log;
-    private static boolean debug = false;
 
     protected void initialize(TestParameters Param, PrintWriter log) {
-        this.log = log;
-        debug = Param.getBool(PropertyName.DEBUG_IS_ACTIVE);
-
         SOfficeFactory SOF = SOfficeFactory.getFactory(
             (XMultiServiceFactory) Param.getMSF());
 
         try {
             log.println("creating a textdocument");
-            xTextDoc = SOF.createTextDoc(null);
+             SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace(log);
@@ -210,7 +204,7 @@ public class UnoTreeControl extends TestCase {
 
         if( xNode.getChildCount() == 0 )
         {
-            String sParentPath = (String) xNode.getDataValue();
+            xNode.getDataValue();
 
             String officeUserPath = utils.getOfficeUserPath(mxMSF);
             Object fileacc = null;
@@ -219,7 +213,7 @@ public class UnoTreeControl extends TestCase {
             } catch (com.sun.star.uno.Exception ex) {
                 ex.printStackTrace();
             }
-            XSimpleFileAccess sA = UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
+            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
 
 
             dirlist(officeUserPath, xNode);
@@ -239,7 +233,7 @@ public class UnoTreeControl extends TestCase {
         try {
             xChildNode = mXTreeDataModel.createNode(dir.substring(dir.lastIndexOf("/")+1, dir.length()), sfa.isFolder(dir));
             xChildNode.setDataValue(dir);
-            boolean test = sfa.isFolder(dir);
+            sfa.isFolder(dir);
             if (sfa.isFolder(dir)){
                 xChildNode.setExpandedGraphicURL( "private:graphicrepository/sd/res/triangle_down.png");
                 xChildNode.setCollapsedGraphicURL("private:graphicrepository/sd/res/triangle_right.png");

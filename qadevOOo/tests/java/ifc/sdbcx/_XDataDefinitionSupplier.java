@@ -139,26 +139,19 @@ public class _XDataDefinitionSupplier extends MultiMethodTest {
      * exception was thrown.
      */
     public void _getDataDefinitionByURL() {
-        boolean bRes = false;
-        XTablesSupplier xTS = null;
-
         try {
             log.println("getDataDefinitionByURL('" + url + "')");
-            xTS = oObj.getDataDefinitionByURL(url, info);
-            bRes = xTS != null;
+            oObj.getDataDefinitionByURL(url, info);
         } catch (com.sun.star.sdbc.SQLException e) {
             log.println("Unexpected exception: " + e);
-            bRes = false;
         }
 
         try {
             log.println("getDataDefinitionByURL('" + wrongUrl + "')");
-            xTS = oObj.getDataDefinitionByURL(wrongUrl, info);
+            oObj.getDataDefinitionByURL(wrongUrl, info);
             log.println("Exception was expected");
-            bRes = false;
         } catch (com.sun.star.sdbc.SQLException e) {
             log.println("Expected exception");
-            bRes &= true;
         }
 
         tRes.tested("getDataDefinitionByURL()", true);

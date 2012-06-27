@@ -141,7 +141,6 @@ public class _XImageProducer extends MultiMethodTest {
     public void _startProduction() {
         requiredMethod("addConsumer()") ;
 
-        boolean result = true ;
         oObj.startProduction() ;
 
         try {

@@ -185,24 +185,16 @@ public class ScDataPilotFieldGroupObj extends TestCase
             throw new StatusException ("Couldn't fill some cells", e);
         }
 
-        // change a value of a cell and check the change in the data pilot
-        // (for the XDataPilotTable.refresh() test)
-        Object oChangeCell = null;
-        Object oCheckCell = null;
-        Integer aChangeValue = null;
-
         try
         {
-            // cell of data
-            oChangeCell = oSheet.getCellByPosition (1, 5);
+            oSheet.getCellByPosition (1, 5);
 
             int x = sCellAdress.Column;
             int y = sCellAdress.Row + 3;
 
 
-            // cell of the data pilot output
-            oCheckCell = oSheet.getCellByPosition (x, y);
-            aChangeValue = new Integer (27);
+            oSheet.getCellByPosition (x, y);
+            new Integer (27);
         }
         catch (com.sun.star.lang.IndexOutOfBoundsException e)
         {

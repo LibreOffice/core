@@ -36,13 +36,13 @@ public class _UserDefinedAttributeSupplier extends lib.MultiPropertyTest {
             attr.Type="CDATA";
             attr.Value="true";
             uda.insertByName("Chartprop:has-first-alien-attribute",attr);
-            String[] els = uda.getElementNames();
+            uda.getElementNames();
             oObj.setPropertyValue("UserDefinedAttributes",uda);
             uda = (XNameContainer) AnyConverter.toObject(
                     new Type(XNameContainer.class),
                         oObj.getPropertyValue("UserDefinedAttributes"));
-            els = uda.getElementNames();
-            Object obj = uda.getByName("Chartprop:has-first-alien-attribute");
+            uda.getElementNames();
+            uda.getByName("Chartprop:has-first-alien-attribute");
             res = true;
         } catch (com.sun.star.beans.UnknownPropertyException upe) {
             log.println("Don't know the Property 'UserDefinedAttributes'");

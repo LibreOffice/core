@@ -132,7 +132,6 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
         }
 
 
-    private OfficeProvider m_aProvider = null;
     private XMultiServiceFactory m_xMultiServiceFactory = null;
     private XMultiServiceFactory getMultiServiceFactory()
     {
@@ -165,19 +164,9 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
 //            TimeHelper.waitInSeconds(2, "Give close Office some time.");
 //        }
 
-    private String m_sMailAddress = null;
-    private String m_sParentDistinct = null;
 
     // private String m_sUPDMinor;
     // private String m_sCWS_WORK_STAMP;
-
-    private static String m_sSourceVersion;
-    private static String m_sDestinationVersion;
-    private static String m_sSourceName;
-    private static String m_sDestinationName;
-
-    private static final int WRITER = 1;
-    private static final int CALC = 2;
 
     /**
      * This is the main test Function of current ReportDesignerTest
@@ -322,26 +311,9 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
 // TODO: DB
 //                DB.init(sDBConnection);
 
-                // String sFixRefSubDirectory = "ReportDesign_qa_complex_" + getFileFormat(_nType);
-                String sFixRefSubDirectory = "ReportDesignFixRef";
-
-                String sSourceVersion = m_sSourceVersion;
-                // String sSourceVersion = sFixRefSubDirectory;
-                String sSourceName = m_sSourceName;
-                // String sSourceCreatorType = "fixref";
-                String sSourceCreatorType = "";
-                String sDestinationVersion = m_sDestinationVersion;
-                // if (sDestinationVersion.length() == 0)
-                // {
-                //     sDestinationVersion = m_sUPDMinor;
-                // }
-                String sDestinationName = m_sDestinationName;
-                String sDestinationCreatorType = "";
-                String sDocumentPoolDir = getOutputPath(/*_nType*/);
-                String sDocumentPoolName = getDocumentPoolName(/*_nType*/);
-                String sSpecial = "";
-
-// TODO: DB
+                getOutputPath(/*_nType*/);
+                getDocumentPoolName(/*_nType*/);
+                // TODO: DB
 //                DB.insertinto_documentcompare(sSourceVersion, sSourceName, sSourceCreatorType,
 //                                              m_sDestinationVersion, sDestinationName, sDestinationCreatorType,
 //                                              sDocumentPoolDir, sDocumentPoolName, m_sMailAddress,

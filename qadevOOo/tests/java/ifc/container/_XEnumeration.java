@@ -61,7 +61,7 @@ public class _XEnumeration extends MultiMethodTest {
         int tmpCounter = 0;
         while ( oObj.hasMoreElements() ) {
             try {
-                Object oAny = oObj.nextElement();
+                oObj.nextElement();
                 counter ++;
                 if (counter - tmpCounter > 10000) {
                     log.println(counter+ " Elements");
@@ -108,7 +108,7 @@ public class _XEnumeration extends MultiMethodTest {
         log.println("additional call must throw NoSuchElementException");
 
         try {
-            Object oAny = oObj.nextElement();
+            oObj.nextElement();
             log.println("nextElement: no exception!");
             result = false;
         } catch (WrappedTargetException e) {

@@ -215,7 +215,6 @@ public class _CharacterProperties extends MultiPropertyTest {
         if (oPara == null) {
             testProperty("CharStyleNames", StylesTester) ;
         } else {
-            String[] newNames = {"Standard"};
             changeProp((XPropertySet) oPara,
                (XPropertySet) oPort,"CharStyleNames",new String[] {"Standard"});
         }
@@ -254,7 +253,7 @@ public class _CharacterProperties extends MultiPropertyTest {
             changeProp((XPropertySet) oPara,
                 (XPropertySet) oPort,"RubyAdjust", aShort);
         }
-        Short aShort = new Short((short) 1);
+        new Short((short) 1);
     }
 
     /**
@@ -447,14 +446,14 @@ public class _CharacterProperties extends MultiPropertyTest {
             attr.Value = "true";
             uda.insertByName("Cellprop:has-first-alien-attribute", attr);
 
-            String[] els = uda.getElementNames();
+            uda.getElementNames();
             oObj.setPropertyValue("TextUserDefinedAttributes", uda);
             uda = (XNameContainer) AnyConverter.toObject(
                           new Type(XNameContainer.class),
                           oObj.getPropertyValue("TextUserDefinedAttributes"));
-            els = uda.getElementNames();
+            uda.getElementNames();
 
-            Object obj = uda.getByName("Cellprop:has-first-alien-attribute");
+            uda.getByName("Cellprop:has-first-alien-attribute");
             res = true;
         } catch (com.sun.star.beans.UnknownPropertyException upe) {
             if (isOptional("TextUserDefinedAttributes")) {

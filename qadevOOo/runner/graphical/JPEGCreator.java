@@ -109,7 +109,6 @@ public class JPEGCreator extends EnhancedComplexTestCase
             return;
         }
 
-        int nPages = 0;
         if (_sJPEGSchema.length() > 0)
         {
             // TODO: if there doesn't exists a '%04d' in the schema we will return 9999 which is a little bit wrong here.
@@ -119,8 +118,6 @@ public class JPEGCreator extends EnhancedComplexTestCase
                 if (FileHelper.exists(sJPEGFilename))
                 {
                     convertToNearSameFileWithWidth340(sJPEGFilename);
-                    // m_aFileList.add(sNewJPEGFilename); // as long as the files exist, fill the array
-                    nPages ++;
                 }
                 else
                 {
@@ -196,8 +193,8 @@ private static void convertToWidth340(String _sFrom, String _To)
                     _To
                 };
             ProcessHandler aHandler = new ProcessHandler(sCommandArray);
-            boolean bBackValue = aHandler.executeSynchronously();
-            int nExitCode = aHandler.getExitCode();
+            aHandler.executeSynchronously();
+            aHandler.getExitCode();
 
             String sBack = aHandler.getOutputText();
             if (sBack.length() > 0)

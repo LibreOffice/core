@@ -195,12 +195,12 @@ public class _XAutoTextGroup extends MultiMethodTest {
         boolean result = false;
 
         try {
-            String[] tit = oObj.getTitles() ;
-            String[] names = oObj.getElementNames() ;
+            oObj.getTitles();
+            oObj.getElementNames();
             oObj.insertNewByName(str,"For " + str,oRange);
             oObj.insertNewByName(str + "dup","For " + str,oRange);
-            tit = oObj.getTitles() ;
-            names = oObj.getElementNames() ;
+            oObj.getTitles();
+            oObj.getElementNames();
             result = true;
         } catch (com.sun.star.container.ElementExistException e) {
             log.println("Unexpected exception occurred :") ;

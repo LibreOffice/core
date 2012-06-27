@@ -54,7 +54,7 @@ public class _XPropertyWithState extends MultiMethodTest {
     public void _getDefaultAsProperty() {
         try{
 
-            XInterface defaultState = (XInterface) oObj.getDefaultAsProperty();
+            oObj.getDefaultAsProperty();
 
         } catch (com.sun.star.lang.WrappedTargetException e){
             e.printStackTrace(log);

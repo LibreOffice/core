@@ -122,9 +122,6 @@ public class SwXAutoTextEntry extends TestCase {
         XAutoTextEntry oEntry = null;
         XAutoTextContainer oContainer;
         XInterface oObj = null;
-        int n = 0;
-        int nCount = 0;
-
         log.println( "creating a test environment" );
         try {
             XMultiServiceFactory myMSF = (XMultiServiceFactory)Param.getMSF();

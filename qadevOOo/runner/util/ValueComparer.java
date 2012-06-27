@@ -98,7 +98,7 @@ public class ValueComparer {
         if((op1.getClass().getComponentType() == op2.getClass().getComponentType())
            && (Array.getLength(op1) == Array.getLength(op2)))
         {
-            Class<?> zClass = op1.getClass().getComponentType();
+            op1.getClass().getComponentType();
 
             for(int i = 0; i < Array.getLength(op1); ++ i)
                 result = result & compareObjects(Array.get(op1, i), Array.get(op2, i));

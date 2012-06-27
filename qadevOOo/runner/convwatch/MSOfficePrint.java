@@ -270,7 +270,7 @@ public class MSOfficePrint
 
 
                 ProcessHandler aHandler = new ProcessHandler(aList);
-                boolean bBackValue = aHandler.executeSynchronously();
+                aHandler.executeSynchronously();
             }
             catch (IndexOutOfBoundsException e)
             {

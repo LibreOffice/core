@@ -63,7 +63,6 @@ public class CheckModuleAPI extends ComplexTestCase
     private static String mSRC_ROOT = null;
     private static boolean mIsInitialized = false;
     private final static boolean mContinue = true;
-    private static boolean mDebug = false;
     private static BuildEnvTools bet = null;
 
     /**
@@ -94,9 +93,6 @@ public class CheckModuleAPI extends ComplexTestCase
             }
 
             mSRC_ROOT = bet.getSrcRoot();
-
-            mDebug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
-
         }
     }
 

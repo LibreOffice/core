@@ -32,7 +32,7 @@ public class _XCommandProcessor2 extends MultiMethodTest {
     public void _releaseCommandIdentifier() {
         int id = oObj.createCommandIdentifier();
         oObj.releaseCommandIdentifier(id);
-        int id2 = oObj.createCommandIdentifier();
+        oObj.createCommandIdentifier();
         System.out.println("id: "+id);
         System.out.println("id2: "+id);
         tRes.tested("releaseCommandIdentifier()", true);

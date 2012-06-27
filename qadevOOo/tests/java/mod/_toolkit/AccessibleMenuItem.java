@@ -73,7 +73,6 @@ import util.utils;
  */
 public class AccessibleMenuItem extends TestCase {
     private static XTextDocument xTextDoc = null;
-    private static XAccessibleAction action = null;
     private static XMultiServiceFactory msf = null;
 
     /**

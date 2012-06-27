@@ -64,7 +64,6 @@ import util.utils;
  */
 public class AccessibleMenuSeparator extends TestCase {
     private static XTextDocument xTextDoc = null;
-    private static XAccessibleAction action = null;
     private static XMultiServiceFactory msf = null;
 
     /**

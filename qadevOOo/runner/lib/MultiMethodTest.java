@@ -153,7 +153,7 @@ public class MultiMethodTest
         // For normal test we must not be a "ifc.qadevooo._SelfTest"
         if (! ("ifc.qadevooo._SelfTest").equals(entry.entryName))
         {
-            String ifcName = getInterfaceName();
+            getInterfaceName();
             // System.out.println("checking : " + ifcName);
             System.out.print("checking: [" + entry.longName + "]");
 
@@ -181,8 +181,7 @@ public class MultiMethodTest
             }
             System.out.println(" is iface: [" + testedClassName + "] testcode: [" + entry.entryName + "]");
 
-            // quering the tested interface from the tested object
-            XInterface tCase = tEnv.getTestObject();
+            tEnv.getTestObject();
             Object oObj = UnoRuntime.queryInterface(testedClass, tEnv.getTestObject());
 
             if (oObj == null)

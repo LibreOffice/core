@@ -39,7 +39,7 @@ public class _XStringSubstitution extends MultiMethodTest {
         try {
             log.println("try to get a invalid variable...");
             String toCheck = "$(ThisVariableShouldNoExist)";
-            String eString = oObj.getSubstituteVariableValue(toCheck);
+            oObj.getSubstituteVariableValue(toCheck);
             log.println("$(ThisVariableShouldNoExist) should not exist");
             tRes.tested("getSubstituteVariableValue()",false);
 
@@ -66,7 +66,7 @@ public class _XStringSubstitution extends MultiMethodTest {
         try {
             log.println("try to get a invalid variable...");
             String toCheck = "$(ThisVariableShouldNoExist)";
-            String eString = oObj.substituteVariables(toCheck,true);
+            oObj.substituteVariables(toCheck,true);
             log.println("$(ThisVariableShouldNoExist) should not exist");
             tRes.tested("substituteVariables()",false);
 

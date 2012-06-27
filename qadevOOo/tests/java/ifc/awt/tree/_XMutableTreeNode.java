@@ -45,8 +45,6 @@ public class _XMutableTreeNode extends MultiMethodTest {
 
     public XMutableTreeNode oObj = null;
 
-    private int mCount = 0;
-
     private XMutableTreeNodeCreator nodeCreator = null;
 
     public static interface XMutableTreeNodeCreator{

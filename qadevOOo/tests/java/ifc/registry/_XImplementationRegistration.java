@@ -159,8 +159,6 @@ public class _XImplementationRegistration extends MultiMethodTest {
     * </ul>
     */
     public void _revokeImplementation() throws RuntimeException{
-        boolean result = false ;
-
         requiredMethod("registerImplementation()") ;
 
         executeMethod("getImplementations()") ;
@@ -170,9 +168,7 @@ public class _XImplementationRegistration extends MultiMethodTest {
         RegistryTools.printRegistryInfo(reg, log) ;
 
         try {
-            String[] subKeys = reg.getRootKey().getKeyNames() ;
-
-            result = subKeys == null || subKeys.length == 0 ;
+            reg.getRootKey().getKeyNames();
         } catch (com.sun.star.registry.InvalidRegistryException e) {
             log.println("!!! Exception retrieving keys from registry :") ;
             e.printStackTrace(log);

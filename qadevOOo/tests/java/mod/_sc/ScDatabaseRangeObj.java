@@ -174,13 +174,11 @@ public class ScDatabaseRangeObj extends TestCase {
         //dbRanges.addNewByName("dbRange", aRange);
         XNameAccess dbrNA = UnoRuntime.queryInterface(
                                     XNameAccess.class, dbRanges);
-        XNamed xNamed = null;
-
         try {
             // we need to add it
             dbRanges.addNewByName(dbName,new CellRangeAddress((short)0, 0, 0, 0, 5));
 
-            xNamed = UnoRuntime.queryInterface(XNamed.class,
+            UnoRuntime.queryInterface(XNamed.class,
                                                         dbrNA.getByName(
                                                                 dbName));
 

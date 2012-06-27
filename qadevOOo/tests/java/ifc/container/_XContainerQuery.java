@@ -101,7 +101,7 @@ public class _XContainerQuery extends MultiMethodTest {
 
                 while (subSet.hasMoreElements()) {
                     try{
-                    Object element = subSet.nextElement();
+                    subSet.nextElement();
 
                     } catch (com.sun.star.container.NoSuchElementException e){
                         log.println("Exception occurred ");
@@ -135,7 +135,7 @@ public class _XContainerQuery extends MultiMethodTest {
 
         while (subSet.hasMoreElements()) {
             try{
-            Object element = subSet.nextElement();
+            subSet.nextElement();
 
             } catch (com.sun.star.container.NoSuchElementException e){
                 log.println("Exception occurred ");

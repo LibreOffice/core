@@ -70,9 +70,7 @@ public class UnoProvider implements AppProvider {
      * @return True, if bootstrapping worked.
      */
     public boolean disposeManager(TestParameters param) {
-        XMultiServiceFactory xMSF =
-                    (XMultiServiceFactory)param.remove("ServiceManager");
-        xMSF = null;
+        param.remove("ServiceManager");
         System.gc();
         try {
             Thread.sleep(1000);

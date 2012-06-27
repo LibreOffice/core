@@ -70,8 +70,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
     private XPropertySetInfo propertySetInfo = null;
     private String [] testPropsNames = null;
     private int testPropsAmount = 0;
-    private PrintWriter _log = null;
-
     private Object[] values = null;
 
     private Set<String> exclProps = null;
@@ -80,8 +78,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
     * Initializes some fields.
     */
     public void before() {
-        _log = log;
-
         exclProps = (Set<String>) tEnv.getObjRelation("XMultiPropertySet.ExcludeProps");
         if (exclProps == null) exclProps = new HashSet<String>(0);
     }
@@ -165,7 +161,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
 
         requiredMethod("getPropertyValues()");
 
-        boolean result  = true ;
         // Creating listener
         oObj.addPropertiesChangeListener(testPropsNames, PClistener);
 
@@ -186,7 +181,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
                 propertiesChanged = false;
                 oObj.setPropertyValues(testPropsNames, gValues);
                 waitAMoment() ;
-                result &= propertiesChanged ;
                 log.println(" ... done");
             } catch (com.sun.star.beans.PropertyVetoException e) {
                 log.println("Exception occurred while trying to change "+

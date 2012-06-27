@@ -50,18 +50,6 @@ public class _XDataOutputStream extends MultiMethodTest {
 
     public XDataOutputStream oObj = null;
 
-    // values that are written
-    private boolean writeBoolean;
-    private byte writeByte;
-    private char writeChar;
-    private double writeDouble;
-    private float writeFloat;
-    private long writeHyper;
-    private int writeLong;
-    private short writeShort;
-    private String writeUTF;
-
-
     /**
     * Retrieves object relation <code>'StreamData'</code>
     * and executes methods of interface depending of data in stream.
@@ -81,31 +69,30 @@ public class _XDataOutputStream extends MultiMethodTest {
             dataElem = data.get(i) ;
 
             if (dataElem instanceof Boolean) {
-                writeBoolean = ((Boolean)dataElem).booleanValue();
+                ((Boolean)dataElem).booleanValue();
             } else
             if (dataElem instanceof Byte) {
-                writeByte = ((Byte)dataElem).byteValue();
+                ((Byte)dataElem).byteValue();
             } else
             if (dataElem instanceof Character) {
-                writeChar = ((Character)dataElem).charValue();
+                ((Character)dataElem).charValue();
             } else
             if (dataElem instanceof Short) {
-                writeShort = ((Short)dataElem).shortValue();
+                ((Short)dataElem).shortValue();
             } else
             if (dataElem instanceof Integer) {
-                writeLong = ((Integer)dataElem).intValue();
+                ((Integer)dataElem).intValue();
             } else
             if (dataElem instanceof Long) {
-                writeHyper = ((Long)dataElem).longValue();
+                ((Long)dataElem).longValue();
             } else
             if (dataElem instanceof Float) {
-                writeFloat = ((Float)dataElem).floatValue();
+                ((Float)dataElem).floatValue();
             } else
             if (dataElem instanceof Double) {
-                writeDouble = ((Double)dataElem).doubleValue();
+                ((Double)dataElem).doubleValue();
             } else
             if (dataElem instanceof String) {
-                writeUTF = (String)dataElem;
             }
         }
     }

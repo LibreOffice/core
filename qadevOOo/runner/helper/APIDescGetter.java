@@ -288,7 +288,6 @@ public class APIDescGetter extends DescGetter
                 // int nFirstSemicolon = line.indexOf(";");
                 // int nLastSemicolon = line.lastIndexOf(";");
 
-                String unknown;
                 String ifc_name = ""; //  = line.substring(line.indexOf(";") + 2, line.lastIndexOf(";") - 1);
                 String meth_name = ""; //  = line.substring(line.lastIndexOf(";") + 2, line.length() - 1);
                 StringTokenizer aToken = new StringTokenizer(line, ";");
@@ -299,7 +298,7 @@ public class APIDescGetter extends DescGetter
                 }
                 if (aToken.hasMoreTokens())
                 {
-                    unknown = StringHelper.removeQuoteIfExists(aToken.nextToken());
+                    StringHelper.removeQuoteIfExists(aToken.nextToken());
                 }
                 if (aToken.hasMoreTokens())
                 {
@@ -735,7 +734,7 @@ public class APIDescGetter extends DescGetter
         ArrayList<String> namesList = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(job, ",");
 
-        for (int i = 0; st.hasMoreTokens(); i++)
+        for (; st.hasMoreTokens();)
         {
             String token = st.nextToken();
 
@@ -753,7 +752,7 @@ public class APIDescGetter extends DescGetter
         ArrayList<String> namesList = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(job, ",");
 
-        for (int i = 0; st.hasMoreTokens(); i++)
+        for (; st.hasMoreTokens();)
         {
             namesList.add(st.nextToken());
         }

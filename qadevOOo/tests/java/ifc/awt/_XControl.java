@@ -195,7 +195,7 @@ public class _XControl extends MultiMethodTest {
     * and no exceptions were thrown. <p>
     */
     public void _isTransparent() {
-        boolean isT = oObj.isTransparent();
+        oObj.isTransparent();
         tRes.tested("isTransparent()",true );
     }
 

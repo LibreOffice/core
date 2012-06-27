@@ -282,7 +282,6 @@ public class XMLTools {
             tagStack = new ArrayList<String>() ;
             wellFormed = true ;
             noOtherErrors = true ;
-            PrintWriter log = null ;
             printXMLData = false ;
         }
 

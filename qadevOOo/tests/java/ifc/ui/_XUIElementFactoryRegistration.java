@@ -61,12 +61,10 @@ public class _XUIElementFactoryRegistration extends MultiMethodTest {
     public void _deregisterFactory() {
         executeMethod("getRegisteredFactory()");
         executeMethod("getFactory()");
-        boolean result = true;
         try {
             oObj.deregisterFactory("private:resource/menubar/menubar", "MyOwnMenubar", "");
         }
         catch(com.sun.star.container.NoSuchElementException e) {
-            result = false;
             e.printStackTrace(log);
         }
         tRes.tested("deregisterFactory()", true);

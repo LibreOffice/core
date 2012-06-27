@@ -52,8 +52,6 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
     // oObj filled by MultiMethodTest
     public XSingleSelectQueryComposer oObj = null ;
 
-    private String queryString = "SELECT * FROM \"biblio\"";
-
     private XSingleSelectQueryAnalyzer xQueryAna = null;
 
     private XPropertySet xProp = null;

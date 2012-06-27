@@ -63,7 +63,7 @@ public class Skeleton
             // get multiservicefactory -----------------------------------------
             final XMultiServiceFactory xMsf = getMSF();
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory(xMsf);
+            SOfficeFactory.getFactory(xMsf);
 
             // some Tests need the qadevOOo TestParameters, it is like a Hashmap for Properties.
             param = new TestParameters();

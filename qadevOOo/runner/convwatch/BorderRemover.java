@@ -160,10 +160,7 @@ class BorderRemover
                 Method getWriterMIMETypesMethod = imageIOClass.getDeclaredMethod("getWriterMIMETypes", new Class[]{ });
                 // GlobalLogWriter.get().println("Hello World: get Methode");
 
-                Object aObj = getWriterMIMETypesMethod.invoke(imageIOClass, new Object[]{ });
-                String[] types = (String[])aObj;
-                // GlobalLogWriter.get().println("Hello World: types: " + Arrays.asList(types) );
-
+                getWriterMIMETypesMethod.invoke(imageIOClass, new Object[]{ });
                 Method writeMethod = imageIOClass.getDeclaredMethod("write", new Class[]{ java.awt.image.RenderedImage.class,
                                                                                           java.lang.String.class,
                                                                                           java.io.File.class});

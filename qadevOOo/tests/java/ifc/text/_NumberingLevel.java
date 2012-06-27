@@ -64,7 +64,6 @@ import com.sun.star.beans.PropertyValue;
 */
 public class _NumberingLevel {
 
-    private static TestParameters tParam = null;
     private static HashMap<String, Boolean> NumberingLevel = new HashMap<String,Boolean>();
     private static PropertyValue[] PropertyArray = null;
     private static LogWriter log = null;
@@ -78,7 +77,6 @@ public class _NumberingLevel {
      */
     public _NumberingLevel(LogWriter log, TestParameters tParam, PropertyValue[] propertyValues){
 
-        this.tParam = tParam;
         this.PropertyArray = propertyValues;
 
         this.log = log;

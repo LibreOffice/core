@@ -139,7 +139,7 @@ public class DesktopTools
     public static Object[] getAllOpenDocuments(XMultiServiceFactory xMSF)
     {
         ArrayList<XComponent> components = new ArrayList<XComponent>();
-        XDesktop xDesktop = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
                 XDesktop.class, createDesktop(xMSF));
 
         XEnumeration allComp = getAllComponents(xMSF);
@@ -441,8 +441,7 @@ public class DesktopTools
             ConfigHelper aConfig = new ConfigHelper(xMSF,
                     "org.openoffice.Office.Views", false);
 
-            // Is node "5539" (slot-id for navigator) available? If not, insert it
-            XNameReplace x5539 = aConfig.getOrInsertGroup("Windows", "5539");
+            aConfig.getOrInsertGroup("Windows", "5539");
 
             aConfig.updateGroupProperty(
                     "Windows", "5539", "WindowState", "952,180,244,349;1;0,0,0,0;");

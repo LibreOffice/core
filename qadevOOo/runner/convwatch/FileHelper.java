@@ -271,12 +271,9 @@ public class FileHelper
 
     public static void test_removeFirstDirectorysAndBasenameFrom()
         {
-            String a = removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/a/b/c");
-            // assure("", a.equals("d/e"));
-            String b = removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/a/b/c/");
-            // assure("", b.equals("d/e"));
-            String c = removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/b/c");
-            // assure("", c.equals("a/b/c/d/e"));
+            removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/a/b/c");
+            removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/a/b/c/");
+            removeFirstDirectorysAndBasenameFrom("/a/b/c/d/e/f.g", "/b/c");
         }
 
 

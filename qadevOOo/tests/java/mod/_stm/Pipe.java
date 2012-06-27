@@ -89,7 +89,6 @@ public class Pipe extends TestCase {
 
         tEnv.addObjRelation("XOutputStream.StreamChecker",
             new ifc.io._XOutputStream.StreamChecker() {
-                XInputStream inStream = null;
                 public void resetStreams() {
                 }
 

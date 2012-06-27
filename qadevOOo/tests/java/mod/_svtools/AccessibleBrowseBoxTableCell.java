@@ -159,7 +159,7 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
 
         XInterface oObj = null;
 
-        final XInitialization xInit = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
                 XInitialization.class, the_frame2.getController());
 
         Object[] params = new Object[3];

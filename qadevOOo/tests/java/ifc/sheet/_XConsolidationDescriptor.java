@@ -79,7 +79,6 @@ public class _XConsolidationDescriptor extends MultiMethodTest {
     */
     public void _getSources() {
         CRaddr = oObj.getSources();
-        int wiev = CRaddr.length;
         tRes.tested("getSources()", true);
     }
 

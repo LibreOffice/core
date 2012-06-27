@@ -58,8 +58,6 @@ public class DBTools {
 
     private XMultiServiceFactory xMSF = null ;
     private XNamingService dbContext = null ;
-    private PrintWriter m_log = null;
-
     //JDBC driver
     public final static String TST_JDBC_DRIVER = "org.gjt.mm.mysql.Driver";
 
@@ -268,8 +266,6 @@ public class DBTools {
     public DBTools(XMultiServiceFactory xMSF, PrintWriter _logger )
     {
         this.xMSF = xMSF ;
-        this.m_log = _logger;
-
         try {
             Object cont = xMSF.createInstance("com.sun.star.sdb.DatabaseContext") ;
 

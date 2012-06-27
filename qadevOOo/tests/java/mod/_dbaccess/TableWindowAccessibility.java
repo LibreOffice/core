@@ -97,20 +97,18 @@ public class TableWindowAccessibility extends TestCase {
                                                     PrintWriter log) {
         XInterface oObj = null;
 
-        Object oDBContext = null;
         Object oDBSource = null;
         Object newQuery = null;
-        Object toolkit = null;
         XStorable store = null;
 
         try {
-            oDBContext = ((XMultiServiceFactory) Param.getMSF())
+            ((XMultiServiceFactory) Param.getMSF())
                               .createInstance("com.sun.star.sdb.DatabaseContext");
             oDBSource = ((XMultiServiceFactory) Param.getMSF())
                              .createInstance("com.sun.star.sdb.DataSource");
             newQuery = ((XMultiServiceFactory) Param.getMSF())
                             .createInstance("com.sun.star.sdb.QueryDefinition");
-            toolkit = ((XMultiServiceFactory) Param.getMSF())
+            ((XMultiServiceFactory) Param.getMSF())
                            .createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);

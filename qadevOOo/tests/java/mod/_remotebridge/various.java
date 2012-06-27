@@ -126,8 +126,6 @@ public class various extends TestCase {
         */
         public Exception ex = null ;
         private XAcceptor acc = null ;
-        private XInstanceProvider xInstProv = null ;
-        private XBridgeFactory xBrdgFctr = null;
         /**
         * If method call returns some value it stores in this field.
         */
@@ -140,8 +138,6 @@ public class various extends TestCase {
         public AcceptorThread(XAcceptor acc, XInstanceProvider xInstProv,
                 XBridgeFactory xBrdgFctr) {
             this.acc = acc ;
-            this.xInstProv = xInstProv;
-            this.xBrdgFctr = xBrdgFctr;
         }
 
         /**

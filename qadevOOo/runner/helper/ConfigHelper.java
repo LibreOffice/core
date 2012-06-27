@@ -226,7 +226,7 @@ public class ConfigHelper
         XNameReplace xChildAccess = null;
 
         try {
-            Object xChild=xSetCont.getByName(groupName);
+            xSetCont.getByName(groupName);
             xChildAccess = UnoRuntime.queryInterface(
                             XNameReplace.class,xSetCont);
         } catch(com.sun.star.container.NoSuchElementException e) {

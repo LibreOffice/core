@@ -66,8 +66,7 @@ public class GraphicalDifferenceCheck
             {
                 String fs = System.getProperty("file.separator");
 
-                String sRemovePath = aInputPath.getAbsolutePath();
-                // a whole directory
+                aInputPath.getAbsolutePath();
 
                 Object[] aList = DirectoryHelper.traverse(_sInputPath, FileHelper.getFileFilter(), _aGTA.includeSubDirectories());
                 for (int i=0;i<aList.length;i++)

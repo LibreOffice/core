@@ -34,7 +34,6 @@ import util.utils;
 public class CwsDataExchangeImpl implements CwsDataExchange
 {
 
-    private final String cwsName;
     private final TestParameters param;
     private final LogWriter log;
     private final BuildEnvTools bet;
@@ -42,7 +41,6 @@ public class CwsDataExchangeImpl implements CwsDataExchange
 
     public CwsDataExchangeImpl(String cwsName, TestParameters param, LogWriter log) throws ParameterNotFoundException
     {
-        this.cwsName = cwsName;
         this.param = param;
         this.log = log;
         this.bet = new BuildEnvTools(param, log);

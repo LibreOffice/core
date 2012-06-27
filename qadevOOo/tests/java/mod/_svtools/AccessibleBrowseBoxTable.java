@@ -185,8 +185,6 @@ public class AccessibleBrowseBoxTable extends TestCase {
             XSelectionSupplier.class, xCont);
 
 
-        final Object[] initArgs = params;
-
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();

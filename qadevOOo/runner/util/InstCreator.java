@@ -55,8 +55,6 @@ public class InstCreator implements XInstCreator {
 
     public XInterface createInstance() {
         XInterface xIfc = null;
-        Object xObj = null;
-
         xIfc = iDsc.createInstance( xMSF );
 
         return xIfc;

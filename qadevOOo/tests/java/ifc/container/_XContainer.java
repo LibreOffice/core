@@ -69,7 +69,6 @@ public class _XContainer extends MultiMethodTest {
     private boolean bElementInserted = false;
     private boolean bElementRemoved  = false;
     private boolean bElementReplaced = false;
-    private PrintWriter _log = null;
     private XNameContainer NC = null ;
     private XControlContainer CC = null ;
     private XNamingService NV = null ;
@@ -84,8 +83,6 @@ public class _XContainer extends MultiMethodTest {
     * object doesn't implement <code>XNameContainer</code> interface.
     */
     public void before() throws StatusException {
-        _log = log;
-
         // do this test with a different object
         Object altObj = tEnv.getObjRelation("XContainer.AlternateObject");
         if (altObj != null) {

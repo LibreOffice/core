@@ -63,14 +63,13 @@ import util.SOfficeFactory;
  * @see ifc.accessibility.XAccessibleExtendedComponent
  */
 public class AccessibleToolBox extends TestCase {
-    private static XDesktop the_Desk;
     private static XTextDocument xTextDoc;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
+        UnoRuntime.queryInterface(XDesktop.class,
                 DesktopTools.createDesktop(
                 (XMultiServiceFactory) Param.getMSF()));
     }

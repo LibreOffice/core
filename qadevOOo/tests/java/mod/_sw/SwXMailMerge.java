@@ -74,7 +74,6 @@ public class SwXMailMerge extends TestCase {
 
         XInterface oObj = null;
         XInterface oRowSet = null;
-        Object oConnection = null;
         XJob Job = null;
 
         log.println(" instantiate MailMerge service");
@@ -304,14 +303,12 @@ public class SwXMailMerge extends TestCase {
         log.println("create remote connection");
 
         String databaseName = null ;
-        XDataSource oXDataSource = null;
-        Object oInterface = null;
         XMultiServiceFactory xMSF = null ;
         int uniqueSuffix = Param.getInt("uniqueSuffix");
 
         try {
             xMSF = (XMultiServiceFactory)Param.getMSF();
-            oInterface = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
+            xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
 
             // retrieving temp directory for database
             String tmpDatabaseUrl = utils.getOfficeTempDir((XMultiServiceFactory)Param.getMSF());

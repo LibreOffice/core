@@ -378,7 +378,6 @@ public class ProcessHandler
     {
 
         boolean changedText = true;
-        int count = 0;
         String memText = "";
 
         this.executeAsynchronously();
@@ -396,7 +395,6 @@ public class ProcessHandler
         int hangcheck = 10;
         while (!this.isFinished() && changedText)
         {
-            count++;
             // dbg("runCommand: waiting " + mTimeOut / 1000 + " seconds while command execution is ongoing... " + count);
             // shortWait(mTimeOut);
             // shortWait(2000); // wait 2 seconds.

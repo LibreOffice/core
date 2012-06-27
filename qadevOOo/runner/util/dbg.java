@@ -164,7 +164,7 @@ public class dbg {
                                                         PrintWriter out) {
         try {
             XPropertySetInfo PSI = PS.getPropertySetInfo();
-            Property[] props = PSI.getProperties();
+            PSI.getProperties();
             Property prop = PSI.getPropertyByName(name);
             out.println("Property name is " + prop.Name);
             out.println("Property handle is " + prop.Handle);

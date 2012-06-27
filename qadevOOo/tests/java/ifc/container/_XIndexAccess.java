@@ -81,8 +81,6 @@ public class _XIndexAccess extends MultiMethodTest {
         catch(java.lang.InterruptedException e) {}
 
         boolean result = true;
-        boolean loc_result = true;
-        Object o = null;
         log.println("Testing getByIndex()");
 
         if (count > 0) {
@@ -102,7 +100,7 @@ public class _XIndexAccess extends MultiMethodTest {
             log.println("Testing getByIndex with wrong params.");
             try {
                 log.println("getByIndex(" + count + ")");
-                loc_result = oObj.getByIndex(count) == null;
+                oObj.getByIndex(count);
                 log.println("no exception thrown - FAILED");
                 result = false;
             } catch (IndexOutOfBoundsException e) {

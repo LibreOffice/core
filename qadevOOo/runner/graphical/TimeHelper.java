@@ -43,14 +43,11 @@ public class TimeHelper
     private int m_nMilliSeconds;
     private long m_nRealMilliSeconds;
 
-    private boolean m_bIsStopped = false;
-
     public TimeHelper()
     {}
 
     public void start()
         {
-            m_bIsStopped = false;
             Calendar cal = Calendar.getInstance();
             m_nSeconds = cal.get(Calendar.SECOND);
             m_nMilliSeconds = cal.get(Calendar.MILLISECOND);
@@ -58,7 +55,6 @@ public class TimeHelper
     public void stop()
         {
             Calendar cal = Calendar.getInstance();
-            m_bIsStopped = true;
             int nSeconds = cal.get(Calendar.SECOND);
             m_nSeconds = nSeconds - m_nSeconds;
             if (m_nSeconds < 0)

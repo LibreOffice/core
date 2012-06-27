@@ -79,7 +79,7 @@ public class _XBackend extends MultiMethodTest {
         }
 
         try {
-            XUpdateHandler aHandler = oObj.getUpdateHandler(
+            oObj.getUpdateHandler(
                                               "org.openoffice.Office.TypeDetection",
                                               "illegal");
             log.println("Exception expected -- FAILED");

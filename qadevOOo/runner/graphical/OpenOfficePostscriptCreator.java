@@ -969,7 +969,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                     }
 
                     Object[] aElements = null;
-                    String[] aExtensions;
                     try
                     {
                         aElements = (Object[]) aNameAccess.getByName(_sFilterName);
@@ -1047,7 +1046,6 @@ public class OpenOfficePostscriptCreator implements IOffice
                     }
 
                     Object[] aElements = null;
-                    String[] aExtensions;
                     try
                     {
                         aElements = (Object[]) aNameAccess.getByName(_sFilterName);
@@ -1227,13 +1225,6 @@ public class OpenOfficePostscriptCreator implements IOffice
 
             String sFilterName = _aGTA.getExportFilterName();
 
-            // check how many Properties should initialize
-            int nPropertyCount = 0;
-            // if (sFilterName != null && sFilterName.length() > 0)
-            // {
-            //     nPropertyCount ++;
-            // }
-
             // initialize PropertyArray
             // PropertyValue [] aStoreProps = new PropertyValue[ nPropertyCount ];
             // int nPropertyIndex = 0;
@@ -1400,14 +1391,11 @@ public class OpenOfficePostscriptCreator implements IOffice
         }
     }
 
-    private boolean m_bStoreFile;
     public void disallowStore()
         {
-            m_bStoreFile = false;
         }
     public void allowStore()
         {
-            m_bStoreFile = true;
         }
     public boolean isStoreAllowed()
         {

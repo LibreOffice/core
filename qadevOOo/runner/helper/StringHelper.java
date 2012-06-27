@@ -37,7 +37,6 @@ public class StringHelper
     public static String removeSurroundQuoteIfExists(String _sPath)
         {
             String sNewPath = _sPath;
-            boolean bRemoveQuotes = false;
             if (
                 (_sPath.startsWith("\"") && _sPath.endsWith("\"")) ||
                 (_sPath.startsWith("'") && _sPath.endsWith("'"))

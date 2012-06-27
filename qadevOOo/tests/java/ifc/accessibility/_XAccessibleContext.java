@@ -274,7 +274,7 @@ public class _XAccessibleContext extends MultiMethodTest {
      * Has <b> OK </b> status if the set is not null.
      */
     public void _getAccessibleRelationSet() {
-        XAccessibleRelationSet set = oObj.getAccessibleRelationSet();
+        oObj.getAccessibleRelationSet();
         tRes.tested("getAccessibleRelationSet()", true);
     }
 

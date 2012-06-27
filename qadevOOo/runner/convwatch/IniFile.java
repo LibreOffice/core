@@ -246,7 +246,7 @@ class IniFile
             int nEqual = sLine.indexOf("=");
             if (nEqual >= 0)
             {
-                String sKey =   sLine.substring(0, nEqual).trim();
+                sLine.substring(0, nEqual).trim();
                 String sValue = sLine.substring(nEqual + 1).trim();
                 return sValue;
                     }

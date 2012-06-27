@@ -40,10 +40,9 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
 
     void checkExistance(String _sScriptFile, String _sName)
         {
-            boolean bBackValue = false;
             // Process testshl = Runtime.getRuntime().exec(scriptFile);
             ProcessHandler aHandler = new ProcessHandler(_sScriptFile);
-            bBackValue = aHandler.executeSynchronously();
+            aHandler.executeSynchronously();
             TimeHelper.waitInSeconds(1, "wait after ProcessHandler.executeSynchronously()");
 
             StringBuffer aBuffer = new StringBuffer();

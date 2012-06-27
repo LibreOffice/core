@@ -67,24 +67,16 @@ public class _XCellCursor extends MultiMethodTest {
      */
     public void _gotoNext(){
         boolean bResult = false;
-        int startCol, endCol, startRow, endRow = 0;
-        int startCol2, endCol2, startRow2, endRow2 = 0;
+        int startCol;
+        int startCol2;
 
         XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
         CellRangeAddress oAddr = oRange.getRangeAddress();
-        startRow = oAddr.StartRow;
         startCol = oAddr.StartColumn;
-        endRow = oAddr.EndRow;
-        endCol = oAddr.EndColumn;
-
         oObj.gotoNext();
 
         oAddr = oRange.getRangeAddress();
-        startRow2 = oAddr.StartRow;
         startCol2 = oAddr.StartColumn;
-        endRow2 = oAddr.EndRow;
-        endCol2 = oAddr.EndColumn;
-
         if (!(startCol == startCol2)){
             bResult = true;
         }
@@ -101,23 +93,18 @@ public class _XCellCursor extends MultiMethodTest {
      */
     public void _gotoOffset(){
         boolean bResult = false;
-        int startCol, endCol, startRow, endRow = 0;
-        int startCol2, endCol2, startRow2, endRow2 = 0;
+        int startCol, startRow;
+        int startCol2, startRow2;
 
         XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
         CellRangeAddress oAddr = oRange.getRangeAddress();
         startRow = oAddr.StartRow;
         startCol = oAddr.StartColumn;
-        endRow = oAddr.EndRow;
-        endCol = oAddr.EndColumn;
-
         oObj.gotoOffset(4,4);
 
         oAddr = oRange.getRangeAddress();
         startRow2 = oAddr.StartRow;
         startCol2 = oAddr.StartColumn;
-        endRow2 = oAddr.EndRow;
-        endCol2 = oAddr.EndColumn;
         if (!(startCol == startCol2) || (startRow == startRow2)){
             bResult = true;
         }
@@ -134,24 +121,16 @@ public class _XCellCursor extends MultiMethodTest {
      */
     public void _gotoPrevious(){
         boolean bResult = false;
-        int startCol, endCol, startRow, endRow = 0;
-        int startCol2, endCol2, startRow2, endRow2 = 0;
+        int startCol;
+        int startCol2;
 
         XCellRangeAddressable oRange = UnoRuntime.queryInterface(XCellRangeAddressable.class, oObj);
         CellRangeAddress oAddr = oRange.getRangeAddress();
-        startRow = oAddr.StartRow;
         startCol = oAddr.StartColumn;
-        endRow = oAddr.EndRow;
-        endCol = oAddr.EndColumn;
-
         oObj.gotoPrevious();
 
         oAddr = oRange.getRangeAddress();
-        startRow2 = oAddr.StartRow;
         startCol2 = oAddr.StartColumn;
-        endRow2 = oAddr.EndRow;
-        endCol2 = oAddr.EndColumn;
-
         if (!(startCol == startCol2)){
             bResult = true;
         }

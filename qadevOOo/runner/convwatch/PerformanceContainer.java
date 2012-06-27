@@ -25,8 +25,6 @@ import java.lang.Double;
 
 
 public class PerformanceContainer /* extends *//* implements */ {
-    private long m_nStartTime;
-
     /*
       simple helper functions to start/stop a timer, to know how long a process need in milliseconds
      */
@@ -36,7 +34,6 @@ public class PerformanceContainer /* extends *//* implements */ {
         }
     public void setStartTime(long _nStartTime)
         {
-            m_nStartTime = _nStartTime;
         }
 
     /*

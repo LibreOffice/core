@@ -173,7 +173,7 @@ public abstract class DescGetter
         ArrayList<String> namesList = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(job, ",");
 
-        for (int i = 0; st.hasMoreTokens(); i++)
+        for (; st.hasMoreTokens();)
         {
             String token = st.nextToken();
 

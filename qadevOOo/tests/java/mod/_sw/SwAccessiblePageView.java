@@ -75,8 +75,6 @@ public class SwAccessiblePageView extends TestCase {
         XInterface port = null;
         XInterface para = null;
         XPropertySet paraP = null;
-        XPropertySet portP = null;
-
         XText oText = xTextDoc.getText();
         XTextCursor oCursor = oText.createTextCursor();
 
@@ -125,7 +123,7 @@ public class SwAccessiblePageView extends TestCase {
         }
 
         try {
-            portP = UnoRuntime.queryInterface(XPropertySet.class, port);
+            UnoRuntime.queryInterface(XPropertySet.class, port);
             paraP = UnoRuntime.queryInterface(XPropertySet.class, para);
             paraP.setPropertyValue("BreakType",com.sun.star.style.BreakType.PAGE_AFTER);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {

@@ -87,7 +87,7 @@ public class ContentHandlerFactory extends TestCase {
         XNameAccess xNA = UnoRuntime.queryInterface
             (XNameAccess.class, oObj);
         tEnv.addObjRelation("XMSF.serviceNames", xNA.getElementNames());
-        String[] dummy = xNA.getElementNames();
+        xNA.getElementNames();
 
         // com.sun.star.container.XContainerQuery
         NamedValue[] querySequenze = new NamedValue[1];

@@ -61,7 +61,7 @@ public class PRNCompare
             // System.out.println(_sCommand);
 
             ProcessHandler aHandler = new ProcessHandler(_sCommand);
-            boolean bBackValue = aHandler.executeSynchronously();
+            aHandler.executeSynchronously();
 
             String sText = aHandler.getOutputText();
 
@@ -223,14 +223,12 @@ public class PRNCompare
 
             String sJPGFilename = getJPEGName(_sOutputPath, _sSourceFile, sGS_PageOutput);
             String sOriginalFile = _sSourcePath + fs + _sSourceFile;
-            String sCommand;
             String sGS = "gs";
             if (OSHelper.isWindows())
             {
                 sGS = "gswin32c.exe";
             }
 
-            sCommand = sGS + " -dNOPROMPT -dBATCH -sDEVICE=jpeg -r" + String.valueOf(_nResolutionInDPI) + " -dNOPAUSE -sOutputFile=" + StringHelper.doubleQuoteIfNeed(sJPGFilename) + " " + StringHelper.doubleQuoteIfNeed(sOriginalFile);
             String[] sCommandArray =
                 {
                     sGS,
@@ -252,7 +250,7 @@ public class PRNCompare
             // System.out.println("done");
 
             ProcessHandler aHandler = new ProcessHandler(sCommandArray);
-            boolean bBackValue = aHandler.executeSynchronously();
+            aHandler.executeSynchronously();
 
             // TODO: return a real filename, due to the fact we don't know how much files are created, maybe better to return a list
 
@@ -566,7 +564,7 @@ public class PRNCompare
                 };
 
             ProcessHandler aHandler = new ProcessHandler(sCommandArray);
-            boolean bBackValue = aHandler.executeSynchronously();
+            aHandler.executeSynchronously();
 
             String sBack = aHandler.getOutputText();
             GlobalLogWriter.get().println("'" + sBack + "'");
@@ -610,7 +608,7 @@ public class PRNCompare
                     _sDiffGfx
                 };
             ProcessHandler aHandler = new ProcessHandler(sCommandArray);
-            boolean bBackValue = aHandler.executeSynchronously();
+            aHandler.executeSynchronously();
             String sBack = aHandler.getOutputText();
             GlobalLogWriter.get().println("'" + sBack + "'");
 

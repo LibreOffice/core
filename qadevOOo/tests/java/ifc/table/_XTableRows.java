@@ -62,7 +62,7 @@ public class _XTableRows extends MultiMethodTest {
 
         requiredMethod("removeByIndex()");
 
-        int origCnt = oObj.getCount();
+        oObj.getCount();
         log.println("Inserting row before first row");
         oObj.insertByIndex(0,1);
         result &= checkCell(1,15);

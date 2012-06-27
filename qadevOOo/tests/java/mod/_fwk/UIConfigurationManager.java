@@ -134,7 +134,7 @@ public class UIConfigurationManager extends TestCase {
             try {
                 if (iUniqueCounter == 0) {
                     iUniqueCounter++;
-                    PropertyValue[][]props = xUIManager.getUIElementsInfo(UIElementType.UNKNOWN);
+                    xUIManager.getUIElementsInfo(UIElementType.UNKNOWN);
                     XIndexAccess xMenuBarSettings = xUIManager.getSettings(
                     "private:resource/menubar/menubar", true);
 

@@ -42,8 +42,6 @@ public class _XTablesSupplier extends MultiMethodTest {
     * <code>XNameAccess</code> object, FAILED otherwise.
     */
     public void _getTables() {
-        boolean result = true ;
-
         XNameAccess tabs = oObj.getTables() ;
 
 

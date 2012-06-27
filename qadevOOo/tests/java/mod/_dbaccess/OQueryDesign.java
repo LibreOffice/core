@@ -156,16 +156,13 @@ public class OQueryDesign extends TestCase {
         } catch ( com.sun.star.lang.WrappedTargetException e){
             throw new StatusException("could not get '" + sDataSourceName + "'" , e) ;
         }
-        XDocumentDataSource xDDS = UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
-//        XModel xMod = (XModel) UnoRuntime.queryInterface(XModel.class, xDDS.getDatabaseDocument ());
+        UnoRuntime.queryInterface(XDocumentDataSource.class, oDataSource);
 
 //        Frame = xMod.getCurrentController().getFrame();
 
         xFrame = DesktopTools.getCurrentFrame(xMSF);
 
-         // get an instance of Frame
-        Object oFrame = null;
-        SOfficeFactory SOF = null;
+         SOfficeFactory SOF = null;
 
         SOF = SOfficeFactory.getFactory( xMSF );
         try {

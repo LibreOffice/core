@@ -81,15 +81,12 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
     // The test method itself.
     private String m_sInputPath = "";
     private String m_sReferencePath = "";
-    private boolean m_bIncludeSubdirectories = true;
-
     void initMember()
         {
             // MUST PARAMETER
             // INPUT_PATH ----------
             String sINPATH = (String)param.get( PropertyName.DOC_COMPARATOR_INPUT_PATH );
             boolean bQuit = false;
-            String sError = "";
             if (sINPATH == null || sINPATH.length() == 0)
             {
                 log.println("Please set input path (path to documents) " + PropertyName.DOC_COMPARATOR_INPUT_PATH + "=path.");
@@ -165,7 +162,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             {
                 String fs = System.getProperty("file.separator");
 
-                String sRemovePath = aInputPath.getAbsolutePath();
+                aInputPath.getAbsolutePath();
                 // a whole directory
                 FileFilter aFileFilter = FileHelper.getFileFilter();
 

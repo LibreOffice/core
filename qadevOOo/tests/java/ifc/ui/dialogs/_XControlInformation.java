@@ -96,8 +96,6 @@ public class _XControlInformation extends MultiMethodTest {
     public void _getSupportedControlProperties() {
         requiredMethod("getSupportedControls()") ;
 
-        boolean result = true;
-
         supProperties = new String[supControls.length][];
         for (int i = 0; i < supControls.length; i++) {
             log.println("Getting proeprties for control: " + supControls[i]);
@@ -106,14 +104,11 @@ public class _XControlInformation extends MultiMethodTest {
                     oObj.getSupportedControlProperties(supControls[i]);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 log.println("Unexpected exception:" + e);
-                result = false ;
             }
-            result &= supProperties[i] != null;
         }
 
         try {
-            Object prop = oObj.getSupportedControlProperties("NoSuchControl") ;
-            result &= prop == null;
+            oObj.getSupportedControlProperties("NoSuchControl");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             log.println("Expected exception getting properties " +
                 "for wrong control:" + e);

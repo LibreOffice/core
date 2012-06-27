@@ -313,7 +313,6 @@ public class utils {
 
     public static void setOfficeSettingsValue(XMultiServiceFactory msf, String setting, String value) {
 
-        String settingPath = null;
         try {
             Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
             XPropertySet pthSettings = null;
@@ -661,9 +660,7 @@ public class utils {
                 continue;
             }
             try {
-                // now trying to establish a client-socket
-                // fails if there is no server on any connectable machine
-                Socket sock = new Socket("localhost", port);
+                new Socket("localhost", port);
                 System.out.println(" -> socket: occupied port: " + port);
             } catch (IOException e) {
                 System.out.println(" -> free port");

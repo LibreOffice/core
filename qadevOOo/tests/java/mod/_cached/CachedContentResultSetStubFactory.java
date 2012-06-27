@@ -80,9 +80,6 @@ public class CachedContentResultSetStubFactory extends TestCase {
         XInterface oObj = null;
         Object oInterface = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
-        Object relationContainer = null ;
-
-
         try {
             oInterface = xMSF.createInstance
                 ( "com.sun.star.ucb.CachedContentResultSetStubFactory" );

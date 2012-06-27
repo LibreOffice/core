@@ -162,7 +162,7 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
 
         XInterface oObj = null;
 
-        final XInitialization xInit = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
                 XInitialization.class, the_frame2.getController());
 
         PropertyValue[] params = new PropertyValue[3];

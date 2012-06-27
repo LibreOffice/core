@@ -43,8 +43,6 @@ public class _XTreeDataModel extends MultiMethodTest {
 
     public XTreeDataModel oObj = null;
 
-    private XMutableTreeNode mNewNode = null;
-
     XTreeDataModelListener mListener1 = new myEventListener1();
 
     XTreeDataModelListener mListener2 = new myEventListener2();
@@ -126,7 +124,7 @@ public class _XTreeDataModel extends MultiMethodTest {
     public void _getRoot() {
 
         boolean bOK = true;
-        XTreeNode root = oObj.getRoot();
+        oObj.getRoot();
 
         tRes.tested("getRoot()", bOK);
 

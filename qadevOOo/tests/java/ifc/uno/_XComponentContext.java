@@ -63,8 +63,8 @@ public class _XComponentContext extends MultiMethodTest {
         byValue = UnoRuntime.queryInterface(
                           XMultiComponentFactory.class, value);
 
-        String[] vNames = byValue.getAvailableServiceNames();
-        String[] dNames = directly.getAvailableServiceNames();
+        byValue.getAvailableServiceNames();
+        directly.getAvailableServiceNames();
 
         boolean res = ValueComparer.equalValue(byValue, directly);
         tRes.tested("getValueByName()", res);

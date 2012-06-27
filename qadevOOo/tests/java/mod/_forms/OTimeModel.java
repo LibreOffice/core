@@ -174,7 +174,6 @@ public class OTimeModel extends GenericModelTest {
     }
 
     static class Checker implements UpdateChecker {
-            private short lastItem = (short) 0;
             XLoadable formLoaderF = null;
             XPropertySet ps = null;
             XInterface ctrl = null;

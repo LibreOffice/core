@@ -80,7 +80,6 @@ public final class WaitUnreachable {
         while (queue.poll() == null) {
             System.gc();
             System.runFinalization();
-            byte[] dummy = new byte[1024];
         }
     }
 

@@ -39,7 +39,6 @@ class CountNotWhite extends CountPixel
 
     public void count(int pixel)
         {
-            int alpha = (pixel >> 24) & 0xff;
             int red   = (pixel >> 16) & 0xff;
             int green = (pixel >>  8) & 0xff;
             int blue  = (pixel      ) & 0xff;
@@ -63,7 +62,6 @@ class CountNotBlack extends CountPixel
 
     public void count(int pixel)
         {
-            int alpha = (pixel >> 24) & 0xff;
             int red   = (pixel >> 16) & 0xff;
             int green = (pixel >>  8) & 0xff;
             int blue  = (pixel      ) & 0xff;
@@ -99,11 +97,6 @@ class graphics_stuff
 
     public static void handlesinglepixel(int x, int y, int pixel)
         {
-            int alpha = (pixel >> 24) & 0xff;
-            int red   = (pixel >> 16) & 0xff;
-            int green = (pixel >>  8) & 0xff;
-            int blue  = (pixel      ) & 0xff;
-            // Deal with the pixel as necessary...
         }
 
     public static void countPixel(ImageHelper img, int _x, int _y, int _w, int _h, CountPixel _aPixelCounter)

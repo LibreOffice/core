@@ -609,7 +609,7 @@ public class SOfficeFactory {
     // query for XServiceInfo
     public Object queryXServiceInfo(Object oObj) {
         if (oObj != null) {
-            XServiceInfo oInfo = UnoRuntime.queryInterface(
+            UnoRuntime.queryInterface(
                 XServiceInfo.class, oObj);
             System.out.println("!!!! XServiceInfo n.a. !!!! ");
         } else {
