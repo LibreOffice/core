@@ -81,6 +81,31 @@ public class GestureImageViewTouchListener implements OnTouchListener {
 	private GestureDetector flingDetector;
 	private GestureImageViewListener imageListener;
 
+	class FlingListener extends SimpleOnGestureListener {
+
+		private float velocityX;
+		private float velocityY;
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			this.velocityX = velocityX;
+			this.velocityY = velocityY;
+			if (image.overflowGestureListener != null && !canDragX && !canDragY) {
+				return image.overflowGestureListener.onFling(e1, e2, velocityX, velocityY);
+			}
+
+			return true;
+		}
+
+		public float getVelocityX() {
+			return velocityX;
+		}
+
+		public float getVelocityY() {
+			return velocityY;
+		}
+	}
+
 	public GestureImageViewTouchListener(final GestureImageView image, int displayWidth, int displayHeight) {
 		super();
 

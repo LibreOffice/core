@@ -124,6 +124,7 @@ public class DocumentLoader
     int pageCount;
     XRenderable renderable;
 
+    GestureDetector.OnGestureListener gestureListener;
     GestureDetector gestureDetector;
 
     ViewGroup.LayoutParams matchParent;
@@ -368,7 +369,7 @@ public class DocumentLoader
                 if (result == -1)
                     return;
 
-                ImageView imageView = new ImageView(DocumentLoader.this);
+                GestureImageView imageView = new GestureImageView(DocumentLoader.this, gestureListener);
                 imageView.setImageBitmap(bm);
 
                 imageView.setScaleY(-1);
@@ -541,7 +542,8 @@ public class DocumentLoader
 
         extras = getIntent().getExtras();
 
-        gestureDetector = new GestureDetector(this, new GestureListener());
+        gestureListener = new GestureListener();
+        gestureDetector = new GestureDetector(this, gestureListener);
 
         try {
             long t0 = System.currentTimeMillis();

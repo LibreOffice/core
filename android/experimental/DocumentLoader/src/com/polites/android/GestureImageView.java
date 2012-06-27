@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -88,13 +89,16 @@ public class GestureImageView extends ImageView  {
 	private OnTouchListener customOnTouchListener;
 	private OnClickListener onClickListener;
 
-	public GestureImageView(Context context, AttributeSet attrs, int defStyle) {
-		this(context, attrs);
+	GestureDetector.OnGestureListener overflowGestureListener;
+
+	public GestureImageView(Context context, GestureDetector.OnGestureListener overflowGestureListener, AttributeSet attrs, int defStyle) {
+		this(context, overflowGestureListener, attrs);
 	}
 
-	public GestureImageView(Context context, AttributeSet attrs) {
+	public GestureImageView(Context context, GestureDetector.OnGestureListener overflowGestureListener, AttributeSet attrs) {
 		super(context, attrs);
 
+		this.overflowGestureListener = overflowGestureListener;
 		String scaleType = attrs.getAttributeValue(GLOBAL_NS, "scaleType");
 
 		if(scaleType == null || scaleType.trim().length() == 0) {
@@ -121,8 +125,10 @@ public class GestureImageView extends ImageView  {
 		initImage();
 	}
 
-	public GestureImageView(Context context) {
+	public GestureImageView(Context context, GestureDetector.OnGestureListener overflowGestureListener) {
 		super(context);
+
+		this.overflowGestureListener = overflowGestureListener;
 		setScaleType(ScaleType.CENTER_INSIDE);
 		initImage();
 	}
