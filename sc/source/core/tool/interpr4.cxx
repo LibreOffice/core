@@ -2451,6 +2451,13 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
     else
         rString = nMatVal.GetString();
 
+    if (ScMatrix::IsValueType( nMatValType))
+    {
+        sal_uInt16 nError = nMatVal.GetError();
+        if (nError)
+            SetError( nError);
+    }
+
     return nMatValType;
 }
 
