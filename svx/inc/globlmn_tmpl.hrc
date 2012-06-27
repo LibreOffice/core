@@ -257,6 +257,11 @@
     Command = ".uno:ImageMapDialog" ; \
     Text [ en-US ] = "ImageMap" ; \
 
+#define ITEM_EXTERNAL_EDIT \
+    Identifier = SID_EXTERNAL_EDIT ; \
+    Command = ".uno:ExternalEdit" ; \
+    Text [ en-US ] = "Edit with External Tool..." ; \
+
 #define ITEM_VIEW_ATTR_ZOOM \
     Identifier = SID_ATTR_ZOOM ; \
     Command = ".uno:Zoom" ; \

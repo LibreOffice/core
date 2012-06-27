@@ -22,11 +22,9 @@
  * instead of those above.
  */
 
-#include <extedit.hxx>
-#include <view.hxx>
+#include <svx/extedit.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <wrtsh.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/process.h>
@@ -38,8 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <basesh.hxx>
-#include "romenu.hxx"
+
 #include "com/sun/star/system/XSystemShellExecute.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include <comphelper/processfactory.hxx>
@@ -47,66 +44,98 @@
 #include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
+ExternalToolEdit::ExternalToolEdit()
+{}
 
-void HandleCloseEvent(const String& rURL, SwWrtShell *rSh)
+ExternalToolEdit::~ExternalToolEdit()
+{}
+
+void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
 {
-    //create a new Graphic
     Graphic newGraphic;
 
     //import the temp file image stream into the newGraphic
-    SvStream*  pStream = utl::UcbStreamHelper::CreateStream(rURL, STREAM_READ);
+    SvStream* pStream = utl::UcbStreamHelper::CreateStream(pData->m_aFileName, STREAM_READ);
     if(pStream)
     {
         GraphicConverter::Import(*pStream, newGraphic);
 
         // Now update the Graphic in the shell by re-reading from the newGraphic
         // TODO: Make this action Undoable !
-        rSh->ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &newGraphic);
+        //rSh->ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &newGraphic);
+        pData->Update( newGraphic );
 
         delete(pStream);
     }
 }
 
-IMPL_LINK (ExternalProcessClass_Impl, StartListeningEvent, void*, pEvent)
+IMPL_LINK (ExternalToolEdit, StartListeningEvent, void*, pEvent)
 {
     //Start an event listener implemented via VCL timeout
-    Data *pData = ( Data* )pEvent;
-    String aURL( pData->fileName );
+    ExternalToolEdit* pData = ( ExternalToolEdit* )pEvent;
+    String aURL( pData->m_aFileName );
 
     new FileChangedChecker(
-        pData->fileName,
-        ::boost::bind(&HandleCloseEvent,aURL,pData->rSh));
+        pData->m_aFileName,
+        ::boost::bind(&HandleCloseEvent, pData));
 
     return 0;
 }
 
-void pWorker(void *pThreadData)
+void ExternalToolEdit::threadWorker(void* pThreadData)
 {
-    Data *pData = (Data*)(pThreadData);
-    rtl_uString *aFileName = new rtl_uString();
-    rtl_uString_newFromAscii (
-            &aFileName, rtl::OUStringToOString(
-                pData->fileName, RTL_TEXTENCODING_UTF8).getStr());
+    ExternalToolEdit* pData = (ExternalToolEdit*) pThreadData;
 
     // Make an asynchronous call to listen to the event of temporary image file
     // getting changed
-    Application::PostUserEvent(
-            LINK(NULL, ExternalProcessClass_Impl, StartListeningEvent), pThreadData);
+    Application::PostUserEvent( LINK( NULL, ExternalToolEdit, StartListeningEvent ), pThreadData);
 
     uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
-    xSystemShellExecute->execute( pData->fileName, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+    xSystemShellExecute->execute( pData->m_aFileName, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
 }
 
-void EditWithExternalTool(GraphicObject *pGraphicObject, SwWrtShell *rSh)
+
+void GetPreferedExtension( String &rExt, const Graphic &rGrf )
+{
+    // then propose the "best" filter using the native-info, if applicable
+    const sal_Char* pExt = "png";
+    switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
+    {
+        case GFX_LINK_TYPE_NATIVE_GIF:
+            pExt = "gif";
+            break;
+        case GFX_LINK_TYPE_NATIVE_TIF:
+            pExt = "tif";
+            break;
+        case GFX_LINK_TYPE_NATIVE_WMF:
+            pExt = "wmf";
+            break;
+        case GFX_LINK_TYPE_NATIVE_MET:
+            pExt = "met";
+            break;
+        case GFX_LINK_TYPE_NATIVE_PCT:
+            pExt = "pct";
+            break;
+        case GFX_LINK_TYPE_NATIVE_JPG:
+            pExt = "jpg";
+            break;
+        default:
+            break;
+    }
+    rExt.AssignAscii( pExt );
+}
+
+void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
 {
     //Get the graphic from the GraphicObject
-    const Graphic pGraphic = pGraphicObject->GetGraphic();
+    m_pGraphicObject = pGraphicObject;
+    const Graphic aGraphic = pGraphicObject->GetGraphic();
 
     //get the Preferred File Extension for this graphic
-    String fExt;
-    GetPreferedExtension(fExt, pGraphic);
+    String fExtension;
+    GetPreferedExtension(fExtension, aGraphic);
 
     //Create the temp File
     rtl::OUString tempFileBase, tempFileName;
@@ -114,36 +143,28 @@ void EditWithExternalTool(GraphicObject *pGraphicObject, SwWrtShell *rSh)
     osl::FileBase::createTempFile(0, &pHandle, &tempFileBase);
 
     // Move it to a file name with image extension properly set
-    tempFileName = tempFileBase + rtl::OUString(String('.')) +
-        rtl::OUString(fExt);
+    tempFileName = tempFileBase + rtl::OUString(String('.')) + rtl::OUString(fExtension);
     osl::File::move(tempFileBase, tempFileName);
 
     //Write Graphic to the Temp File
-    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-    sal_uInt16 nFilter(rGF.GetExportFormatNumber(fExt));
-    String aFilter(rGF.GetExportFormatShortName(nFilter));
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    sal_uInt16 nFilter(rGraphicFilter.GetExportFormatNumber(fExtension));
+    String aFilter(rGraphicFilter.GetExportFormatShortName(nFilter));
     String sPath(tempFileName);
 
     // Write the Graphic to the file now
-    XOutBitmap::WriteGraphic(pGraphic, sPath, aFilter,
-            XOUTBMP_USE_NATIVE_IF_POSSIBLE|XOUTBMP_DONT_EXPAND_FILENAME);
+    XOutBitmap::WriteGraphic(aGraphic, sPath, aFilter, XOUTBMP_USE_NATIVE_IF_POSSIBLE|XOUTBMP_DONT_EXPAND_FILENAME);
 
     // There is a possiblity that sPath extnesion might have been changed if the
     // provided extension is not writable
     tempFileName = rtl::OUString(sPath);
 
     //Create a thread
-    rtl_uString *fileName = new rtl_uString();
+    rtl_uString* aFileName = new rtl_uString();
     rtl_uString_newFromAscii(
-            &fileName, rtl::OUStringToOString(tempFileName,
-                RTL_TEXTENCODING_UTF8).getStr());
-
+        &aFileName,
+        rtl::OUStringToOString(tempFileName, RTL_TEXTENCODING_UTF8).getStr());
+    m_aFileName = aFileName;
     // Create the data that is needed by the thread later
-    Data *pThreadData = new Data();
-    pThreadData->pGraphicObject = pGraphicObject;
-    pThreadData->fileName = fileName;
-    pThreadData->rSh = rSh ;
-
-    osl_createThread(pWorker, pThreadData);
-
+    osl_createThread(ExternalToolEdit::threadWorker, this);
 }

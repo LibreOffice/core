@@ -128,11 +128,18 @@ interface GraphSelection
         ExecMethod = Execute;
         StateMethod = GetAttrState;
     ]
-        SID_COLOR_SETTINGS
-        [
-                ExecMethod = Execute;
-                StateMethod = GetAttrState;
-        ]
+
+    SID_COLOR_SETTINGS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
+
+    SID_EXTERNAL_EDIT
+    [
+        ExecMethod = ExecuteExternalEdit;
+        StateMethod = GetExternalEditState;
+    ]
 }
 
  // ===========================================================================
@@ -140,4 +147,3 @@ shell ScGraphicShell : ScDrawShell
 {
     import GraphSelection;
 }
-

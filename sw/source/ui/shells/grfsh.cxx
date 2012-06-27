@@ -70,7 +70,7 @@
 #include <swwait.hxx>
 #include <shells.hrc>
 #include <popup.hrc>
-#include <extedit.hxx>
+#include <svx/extedit.hxx>
 #define SwGrfShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
@@ -78,6 +78,21 @@
 #include "swabstdlg.hxx"
 
 #define TOOLBOX_NAME    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "colorbar" ) )
+
+class SwExternalToolEdit : public ExternalToolEdit
+{
+    SwWrtShell*  m_pShell;
+
+public:
+    SwExternalToolEdit ( SwWrtShell* pShell ) :
+        m_pShell  (pShell)
+    {}
+
+    virtual void Update( Graphic& aGraphic )
+    {
+        m_pShell->ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &aGraphic);
+    }
+};
 
 SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 {
@@ -108,7 +123,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case FN_EXTERNAL_EDIT:
+        case SID_EXTERNAL_EDIT:
         {
             /* When the graphic is selected to be opened via some external tool
              * for advanced editing
@@ -116,7 +131,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
             if(0 != pGraphicObject)
             {
-                EditWithExternalTool(pGraphicObject, &rSh);
+                SwExternalToolEdit* externalToolEdit = new SwExternalToolEdit( &rSh );
+                externalToolEdit->Edit ( pGraphicObject );
             }
         }
         break;
@@ -541,10 +557,10 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = sal_True;
         break;
-        /*
-         * If the Graphic is None type it should be externally editable
-         */
-        case FN_EXTERNAL_EDIT:
+        case SID_EXTERNAL_EDIT:
+            /*
+             * If the Graphic is None type it should be externally editable
+             */
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = sal_True;
         break;

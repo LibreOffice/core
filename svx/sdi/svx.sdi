@@ -5948,6 +5948,30 @@ SfxBoolItem ImageMapExecute SID_IMAP_EXEC
     GroupId = GID_EDIT;
 ]
 
+SfxVoidItem ExternalEdit SID_EXTERNAL_EDIT
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_GRAPHIC;
+]
+
 //--------------------------------------------------------------------------
 SfxBoolItem Init3D SID_3D_INIT
 
@@ -15323,4 +15347,3 @@ SfxVoidItem PrepareMailExport SID_MAIL_PREPAREEXPORT
     ToolBoxConfig = FALSE,
     GroupId = GID_EXPLORER;
 ]
-

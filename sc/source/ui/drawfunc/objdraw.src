@@ -404,7 +404,7 @@ String RID_POPUP_DRAW
     Text [ en-US ] = "Pop-up menu for drawing objects" ;
 };
  //
- //     Popup-Menue fuer (allgemeine) Zeichenobjekte
+ //     Pop-up menu for drawing objects
  //
 Menu RID_POPUP_DRAW
 {
@@ -527,6 +527,7 @@ Menu RID_POPUP_GRAPHIC
         MN_EDITLNK
         MN_DELLNK
         MenuItem { ITEM_OPEN_HYPERLINK };
+        MenuItem { ITEM_EXTERNAL_EDIT };
     };
 };
 
@@ -657,4 +658,3 @@ Menu RID_POPUP_DRAWTEXT
         };
     };
 };
-

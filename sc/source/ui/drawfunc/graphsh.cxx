@@ -39,12 +39,40 @@
 #include "viewdata.hxx"
 #include "drawview.hxx"
 #include "scresid.hxx"
+#include <svx/extedit.hxx>
 
 #define ScGraphicShell
 #include "scslots.hxx"
 
 #define ITEMVALUE(ItemSet,Id,Cast) ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
+class ScExternalToolEdit : public ExternalToolEdit
+{
+    ScDrawView* m_pView;
+    SdrObject*  m_pObj;
+
+public:
+    ScExternalToolEdit ( ScDrawView* pView, SdrObject* pObj ) :
+        m_pView   (pView),
+        m_pObj (pObj)
+    {}
+
+    virtual void Update( Graphic& aGraphic )
+    {
+        SdrPageView* pPageView = m_pView->GetSdrPageView();
+        if( pPageView )
+        {
+            SdrGrafObj* pNewObj = (SdrGrafObj*) m_pObj->Clone();
+            String      aStr( m_pView->GetDescriptionOfMarkedObjects() );
+            aStr.Append( sal_Unicode(' ') );
+            aStr.Append( String( "External Edit" ) );
+            m_pView->BegUndo( aStr );
+            pNewObj->SetGraphicObject( aGraphic );
+            m_pView->ReplaceObjectAtView( m_pObj, *pPageView, pNewObj );
+            m_pView->EndUndo();
+        }
+    }
+};
 
 SFX_IMPL_INTERFACE(ScGraphicShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL) )
 {
@@ -140,4 +168,42 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
     Invalidate();
 }
 
+void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool bEnable = false;
+    printf("ZO!\n");
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
+            bEnable = true;
+    }
+
+    if( !bEnable )
+        rSet.DisableItem( SID_EXTERNAL_EDIT );
+}
+
+void ScGraphicShell::ExecuteExternalEdit( SfxRequest& rReq )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    printf("YO!\n");
+
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+        {
+            GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+            ScExternalToolEdit* aExternalToolEdit = new ScExternalToolEdit( pView, pObj );
+            aExternalToolEdit->Edit( &aGraphicObject );
+        }
+    }
+
+    Invalidate();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

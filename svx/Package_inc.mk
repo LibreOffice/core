@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -553,5 +553,6 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/svxdllapi.h,svx/svxdllapi.h))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/colrctrl.hxx,svx/colrctrl.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/fmdpage.hxx,svx/fmdpage.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sxmtpitm.hxx,svx/sxmtpitm.hxx))
+$(eval $(call gb_Package_add_file,svx_inc,inc/svx/extedit.hxx,svx/extedit.hxx))
 
 # vim: set noet sw=4 ts=4:

@@ -44,6 +44,9 @@ public:
 
     void    ExecuteFilter(SfxRequest& rReq);
     void    GetFilterState(SfxItemSet &rSet);
+
+    void    ExecuteExternalEdit(SfxRequest& rReq);
+    void    GetExternalEditState(SfxItemSet &rSet);
 };
 
 #endif

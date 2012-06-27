@@ -28,23 +28,27 @@
 #include <osl/process.h>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
-#include <wrtsh.hxx>
 #include <vcl/timer.hxx>
+#include "svx/svxdllapi.h"
 
-struct Data
+class SVX_DLLPUBLIC ExternalToolEdit
 {
-    GraphicObject *pGraphicObject;
-    rtl::OUString fileName;
-    SwWrtShell *rSh ;
+public:
+    GraphicObject* m_pGraphicObject;
+    rtl::OUString m_aFileName;
+
+    ExternalToolEdit();
+    virtual ~ExternalToolEdit();
+
+    virtual void Update( Graphic& aGraphic ) = 0;
+    void Edit( GraphicObject *pGraphic );
+
+
+    DECL_LINK( StartListeningEvent, void *pEvent );
+
+    static void threadWorker( void *pThreadData );
+    static void HandleCloseEvent( ExternalToolEdit* pData );
 };
 
-class ExternalProcessClass_Impl
-{
-    public:
-        DECL_LINK( CloseEvent, void *pEvent );
-        DECL_LINK( StartListeningEvent, void *pEvent );
-};
-
-void EditWithExternalTool(GraphicObject *pGraphic, SwWrtShell *rSh);
 
 #endif

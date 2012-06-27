@@ -1290,9 +1290,7 @@ Menu MN_GRF_POPUPMENU
         SEPARATOR;
         MenuItem
         {
-            Identifier = FN_EXTERNAL_EDIT ;
-            HelpID = CMD_FN_EXTERNAL_EDIT ;
-            Text [ en-US ] = "Edit with External Tool...";
+           ITEM_EXTERNAL_EDIT
         };
         SEPARATOR;
         MenuItem
@@ -1462,4 +1460,3 @@ Menu MN_TEXT_POPUPMENU
     BASE_TEXT_POPUPMENU_BEGIN
     BASE_TEXT_POPUPMENU_NOWEB
     BASE_TEXT_POPUPMENU_END
-

@@ -585,7 +585,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/docvw/edtwin \
     sw/source/ui/docvw/edtwin2 \
     sw/source/ui/docvw/edtwin3 \
-    sw/source/ui/docvw/extedit \
     sw/source/ui/docvw/frmsidebarwincontainer \
     sw/source/ui/docvw/romenu \
     sw/source/ui/docvw/srcedtw \

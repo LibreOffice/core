@@ -92,6 +92,7 @@ $(eval $(call gb_Library_use_external,svxcore,icuuc))
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/core/coreservices \
+    svx/source/core/extedit \
     svx/source/customshapes/EnhancedCustomShape2d \
     svx/source/customshapes/EnhancedCustomShapeGeometry \
     svx/source/customshapes/EnhancedCustomShapeTypeNames \
