@@ -17,8 +17,8 @@
  */
 package com.sun.star.wizards.web;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import com.sun.star.awt.PushButtonType;
 import com.sun.star.awt.XButton;
@@ -34,9 +34,10 @@ import com.sun.star.ucb.OpenCommandArgument2;
 import com.sun.star.ucb.OpenMode;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.common.UCB;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
@@ -45,7 +46,6 @@ import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.UnoDataAware;
 import com.sun.star.wizards.web.data.CGPublish;
 import com.sun.star.wizards.web.data.CGSettings;
-import com.sun.star.wizards.common.HelpIds;
 
 /**
  * This is the FTP Dialog. <br/>
@@ -143,7 +143,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
 
     //Resources Object
     private FTPDialogResources resources;
-    private List dataAware = new Vector();
+    private List dataAware = new ArrayList();
     public String username = PropertyNames.EMPTY_STRING;
     public String password = PropertyNames.EMPTY_STRING;
     /**

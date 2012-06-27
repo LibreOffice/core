@@ -61,7 +61,7 @@ public class TitlesComponent extends ControlScroller
     {
         iLabelPosX = iCompPosX + iRelLabelPosXDist;
         ControlRow oControlRow = new ControlRow(i, ypos);
-        ControlGroupVector.addElement(oControlRow);
+        ControlGroupVector.add(oControlRow);
 
     }
 
@@ -75,7 +75,7 @@ public class TitlesComponent extends ControlScroller
     {
         for (int i = 0; i < super.ControlGroupVector.size(); i++)
         {
-            ControlRow curControlRow = (ControlRow) ControlGroupVector.elementAt(i);
+            ControlRow curControlRow = (ControlRow) ControlGroupVector.get(i);
             XTextComponent xTextBox = curControlRow.xTextComponent;
             if ((xTextBox != null) && (_xTextListener != null))
             {

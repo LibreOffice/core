@@ -17,14 +17,12 @@
  */
 package com.sun.star.wizards.db;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.ui.dialogs.XExecutableDialog;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.UnknownPropertyException;
@@ -35,35 +33,39 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.Locale;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
-import com.sun.star.sdbc.DataType;
-import com.sun.star.sdb.XOfficeDatabaseDocument;
+import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.sdb.XCompletedConnection;
 import com.sun.star.sdb.XDocumentDataSource;
-import com.sun.star.sdb.tools.XConnectionTools;
-import com.sun.star.sdbcx.XColumnsSupplier;
-
-import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.util.XCloseable;
-import com.sun.star.util.XNumberFormatsSupplier;
-
-import com.sun.star.task.XInteractionHandler;
 import com.sun.star.sdb.XFormDocumentsSupplier;
+import com.sun.star.sdb.XOfficeDatabaseDocument;
+import com.sun.star.sdb.XQueriesSupplier;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdb.XReportDocumentsSupplier;
+import com.sun.star.sdb.tools.XConnectionTools;
+import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbc.XDatabaseMetaData;
+import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDataSource;
+import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
-import com.sun.star.sdb.XCompletedConnection;
-import com.sun.star.lang.Locale;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.sdb.XQueriesSupplier;
-import com.sun.star.sdbc.XConnection;
+import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XTablesSupplier;
+import com.sun.star.task.XInteractionHandler;
+import com.sun.star.ucb.XSimpleFileAccess;
+import com.sun.star.ui.dialogs.XExecutableDialog;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
@@ -71,13 +73,9 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NamedValueCollection;
 import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.uno.Any;
-import com.sun.star.wizards.common.PropertyNames;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DBMetaData
 {
@@ -89,7 +87,7 @@ public class DBMetaData
     private XPropertySet xDataSourcePropertySet;
     public String[] DataSourceNames;
     public String[] CommandNames;
-    public java.util.Vector CommandObjects = new Vector(1);
+    public java.util.ArrayList CommandObjects = new ArrayList(1);
     public Locale aLocale;
     public int[] CommandTypes;
     public String DataSourceName;
@@ -246,7 +244,7 @@ public class DBMetaData
     public void setTableByName(String _tableName)
     {
         CommandObject oTableObject = new CommandObject(_tableName, com.sun.star.sdb.CommandType.TABLE);
-        this.CommandObjects.addElement(oTableObject);
+        this.CommandObjects.add(oTableObject);
     }
 
     public CommandObject getTableByName(String _tablename)
@@ -264,7 +262,7 @@ public class DBMetaData
         CommandObject oCommand = null;
         for (int i = 0; i < CommandObjects.size(); i++)
         {
-            oCommand = (CommandObject) CommandObjects.elementAt(i);
+            oCommand = (CommandObject) CommandObjects.get(i);
             if ((oCommand.Name.equals(_commandname)) && (oCommand.CommandType == _commandtype))
             {
                 return oCommand;
@@ -273,7 +271,7 @@ public class DBMetaData
         if (oCommand == null)
         {
             oCommand = new CommandObject(_commandname, _commandtype);
-            CommandObjects.addElement(oCommand);
+            CommandObjects.add(oCommand);
         }
         return oCommand;
     }
@@ -281,7 +279,7 @@ public class DBMetaData
     public void setQueryByName(String _QueryName)
     {
         CommandObject oQueryObject = new CommandObject(_QueryName, com.sun.star.sdb.CommandType.QUERY);
-        this.CommandObjects.addElement(oQueryObject);
+        this.CommandObjects.add(oQueryObject);
     }
 
     public class CommandObject
@@ -964,10 +962,10 @@ public class DBMetaData
         try
         {
             XRow xRow = UnoRuntime.queryInterface( XRow.class, _xResultSet );
-            Vector aColVector = new Vector();
+            ArrayList aColVector = new ArrayList();
             while (_xResultSet.next())
             {
-                aColVector.addElement(xRow.getString(_icol));
+                aColVector.add(xRow.getString(_icol));
             }
             sColValues = new String[aColVector.size()];
             aColVector.toArray(sColValues);

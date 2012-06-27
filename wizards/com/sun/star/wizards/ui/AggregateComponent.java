@@ -18,15 +18,22 @@
 package com.sun.star.wizards.ui;
 
 import java.util.ArrayList;
-import java.util.Vector;
-import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.db.*;
+
+import com.sun.star.awt.FontDescriptor;
+import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.awt.XButton;
+import com.sun.star.awt.XListBox;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.EventObject;
-import com.sun.star.beans.*;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
-
-import com.sun.star.awt.*;
+import com.sun.star.wizards.common.HelpIds;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.db.QueryMetaData;
 
 public class AggregateComponent extends ControlScroller
 {
@@ -49,7 +56,7 @@ public class AggregateComponent extends ControlScroller
     final int SOADDROW = 1;
     final int SOREMOVEROW = 2;
     final int CONTROLROWDIST = 18;
-    Vector ControlRowVector;
+    ArrayList ControlRowVector;
     String OPTIONBUTTONDETAILQUERY_ITEM_CHANGED = "toggleComponent";
     String OPTIONBUTTONSUMMARYQUERY_ITEM_CHANGED = "toggleComponent";
     String LISTBOXFUNCTIONS_ACTION_PERFORMED;
@@ -58,7 +65,7 @@ public class AggregateComponent extends ControlScroller
     String LISTBOXFIELDNAMES_ITEM_CHANGED;
     String COMMANDBUTTONPLUS_ACTION_PERFORMED = "addRow";
     String COMMANDBUTTONMINUS_ACTION_PERFORMED = "removeRow";
-    Vector ControlRows;
+    ArrayList ControlRows;
     int curHelpID;
     int lastHelpIndex;
 
@@ -206,7 +213,7 @@ public class AggregateComponent extends ControlScroller
         }
         if (ControlRowVector == null)
         {
-            ControlRowVector = new Vector();
+            ControlRowVector = new ArrayList();
         }
         int locHelpID = curHelpIndex + (i * 2);
         ControlRow oControlRow = new ControlRow(i, ypos, locHelpID);
@@ -215,7 +222,7 @@ public class AggregateComponent extends ControlScroller
 
     protected void setControlGroupVisible(int _index, boolean _bIsVisible)
     {
-        ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(_index);
+        ControlRow oControlRow = (ControlRow) ControlRowVector.get(_index);
         oControlRow.setVisible(_bIsVisible);
         if (_index >= (this.CurDBMetaData.AggregateFieldNames.length))
         {
@@ -229,13 +236,13 @@ public class AggregateComponent extends ControlScroller
         registerControlGroupAtIndex(fieldcount);
         if (fieldcount < super.getBlockIncrementation())
         {
-            ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(fieldcount);
+            ControlRow oControlRow = (ControlRow) ControlRowVector.get(fieldcount);
             oControlRow.setVisible(true);
             oControlRow.settovoid();
         }
         else
         {
-            ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(super.getBlockIncrementation() - 1);
+            ControlRow oControlRow = (ControlRow) ControlRowVector.get(super.getBlockIncrementation() - 1);
             super.setScrollValue(getScrollValue() + 1, (fieldcount + 1));
             oControlRow.settovoid();
         }
@@ -254,7 +261,7 @@ public class AggregateComponent extends ControlScroller
             fieldcount--;
             if ((fieldcount + 1) <= super.getBlockIncrementation())
             {
-                oControlRow = (ControlRow) ControlRowVector.elementAt(fieldcount);
+                oControlRow = (ControlRow) ControlRowVector.get(fieldcount);
                 oControlRow.setVisible(false);
             }
             super.setScrollValue(getScrollValue() - 1, (fieldcount));
@@ -274,7 +281,7 @@ public class AggregateComponent extends ControlScroller
         int fieldcount = super.getCurFieldCount();
         if (fieldcount > 0)
         {
-            curcontrolrow = (ControlRow) ControlRowVector.elementAt(super.getCurFieldCount() - 1);
+            curcontrolrow = (ControlRow) ControlRowVector.get(super.getCurFieldCount() - 1);
             biscomplete = curcontrolrow.isComplete();
         }
         CurUnoDialog.setControlProperty("btnplus", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(biscomplete && (CurDBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)));
@@ -343,7 +350,7 @@ public class AggregateComponent extends ControlScroller
         {
             for (int i = _index; i < ControlRowVector.size(); i++)
             {
-                ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(i);
+                ControlRow oControlRow = (ControlRow) ControlRowVector.get(i);
 //              if (i == _index)
 //                  oControlRow.settovoid();
 //              else            
@@ -438,7 +445,7 @@ public class AggregateComponent extends ControlScroller
         {
             for (int i = 0; i < this.getBlockIncrementation(); i++)
             {
-                curControlRow = (ControlRow) ControlRowVector.elementAt(i);
+                curControlRow = (ControlRow) ControlRowVector.get(i);
                 curControlRow.insertFieldNames();
             }
             for (int i = 0; i <= CurDBMetaData.AggregateFieldNames.length; i++)
@@ -492,7 +499,7 @@ public class AggregateComponent extends ControlScroller
         int maxfieldcount = super.getCurFieldCount();
         if (maxfieldcount > 0)
         {
-            ControlRow curcontrolrow = (ControlRow) this.ControlRowVector.elementAt(maxfieldcount - 1);
+            ControlRow curcontrolrow = (ControlRow) this.ControlRowVector.get(maxfieldcount - 1);
             return curcontrolrow.isComplete();
         }
         else

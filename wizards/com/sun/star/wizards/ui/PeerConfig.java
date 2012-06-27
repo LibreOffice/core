@@ -17,9 +17,12 @@
  */
 package com.sun.star.wizards.ui;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
-import com.sun.star.awt.*;
+import com.sun.star.awt.WindowEvent;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XVclWindowPeer;
+import com.sun.star.awt.XWindowListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
@@ -35,9 +38,9 @@ import com.sun.star.wizards.common.PropertyNames;
 public class PeerConfig implements XWindowListener
 {
 
-    private Vector m_aPeerTasks = new Vector();
-    Vector aControlTasks = new Vector();
-    Vector aImageUrlTasks = new Vector();
+    private ArrayList m_aPeerTasks = new ArrayList();
+    ArrayList aControlTasks = new ArrayList();
+    ArrayList aImageUrlTasks = new ArrayList();
     UnoDialog oUnoDialog = null;
 
     public PeerConfig(UnoDialog _oUnoDialog)
@@ -105,7 +108,7 @@ public class PeerConfig implements XWindowListener
         {
             for (int i = 0; i < this.m_aPeerTasks.size(); i++)
             {
-                PeerTask aPeerTask = (PeerTask) m_aPeerTasks.elementAt(i);
+                PeerTask aPeerTask = (PeerTask) m_aPeerTasks.get(i);
                 XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, aPeerTask.xControl.getPeer());
                 for (int n = 0; n < aPeerTask.propnames.length; n++)
                 {
@@ -114,12 +117,12 @@ public class PeerConfig implements XWindowListener
             }
             for (int i = 0; i < this.aControlTasks.size(); i++)
             {
-                ControlTask aControlTask = (ControlTask) aControlTasks.elementAt(i);
+                ControlTask aControlTask = (ControlTask) aControlTasks.get(i);
                 Helper.setUnoPropertyValue(aControlTask.oModel, aControlTask.propname, aControlTask.propvalue);
             }
             for (int i = 0; i < this.aImageUrlTasks.size(); i++)
             {
-                ImageUrlTask aImageUrlTask = (ImageUrlTask) aImageUrlTasks.elementAt(i);
+                ImageUrlTask aImageUrlTask = (ImageUrlTask) aImageUrlTasks.get(i);
                 String sImageUrl = PropertyNames.EMPTY_STRING;
                 if (AnyConverter.isInt(aImageUrlTask.oResource))
                 {

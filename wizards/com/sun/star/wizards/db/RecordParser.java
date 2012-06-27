@@ -275,7 +275,7 @@ public class RecordParser extends QueryMetaData
         return getColumnValue(CurDBFieldColumn.ColIndex, CurDBFieldColumn.getFieldType());
     }
 
-    public boolean getcurrentRecordData(java.util.Vector DataVector)
+    public boolean getcurrentRecordData(java.util.ArrayList DataVector)
     {
         Object[] RecordValueArray = new Object[RecordFieldColumns.length];
         for (int i = 0; i < RecordFieldColumns.length; i++)
@@ -283,7 +283,7 @@ public class RecordParser extends QueryMetaData
             FieldColumn CurDBFieldColumn = this.RecordFieldColumns[i];
             RecordValueArray[i] = getColumnValue(CurDBFieldColumn.ColIndex, CurDBFieldColumn.getFieldType()); //FinalColIndex
         }
-        DataVector.addElement(RecordValueArray);
+        DataVector.add(RecordValueArray);
         return true;
     }
 

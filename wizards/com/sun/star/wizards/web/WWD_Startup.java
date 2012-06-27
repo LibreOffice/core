@@ -20,6 +20,7 @@ package com.sun.star.wizards.web;
 //import com.sun.star.awt.ItemEvent;
 //import com.sun.star.awt.XItemListener;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
@@ -124,14 +125,14 @@ public abstract class WWD_Startup extends WWD_General
      * which relay on the selected document
      * as DataObject (or Model).
      */
-    protected List docAware = new Vector();
+    protected List docAware = new ArrayList();
     /**
      * The Vector containing DataAware objects
      * which relay on the session's generalInfo
      * Object (CGSession.cp_GeneralInfo) as
      * DataObject (or model).
      */
-    protected List genAware = new Vector();
+    protected List genAware = new ArrayList();
     /**
      * The vector containing DataAware objectscm25npd ..
      * which relay on the session's Design Object
@@ -139,7 +140,7 @@ public abstract class WWD_Startup extends WWD_General
      * (or model).
      *
      */
-    protected List designAware = new Vector();
+    protected List designAware = new ArrayList();
     /**
      * A Vector containig the DataAware objects
      * which relay on Publishing Objects.
@@ -148,7 +149,7 @@ public abstract class WWD_Startup extends WWD_General
      * on a <b>different</b> CGPublish object,
      * So they are handled with more care.
      */
-    protected List pubAware = new Vector(3);
+    protected List pubAware = new ArrayList(3);
     /**
      * The DataAware object which handles
      * the documents-list events.

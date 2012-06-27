@@ -18,8 +18,8 @@
 
 package com.sun.star.wizards.web.status;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * @author rpiterman
@@ -30,7 +30,7 @@ import java.util.Vector;
 public class ErrorLog implements ErrorReporter
 {
 
-    private List errors = new Vector();
+    private List errors = new ArrayList();
 
     public void error(Exception ex, Object obj, String s)
     {

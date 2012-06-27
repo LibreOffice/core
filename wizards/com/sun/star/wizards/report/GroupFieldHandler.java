@@ -17,18 +17,21 @@
  */
 package com.sun.star.wizards.report;
 
+import java.util.ArrayList;
+
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.PropertyNames;
-import com.sun.star.wizards.ui.*;
-import com.sun.star.wizards.db.*;
-
-import java.util.Vector;
+import com.sun.star.wizards.db.CommandMetaData;
+import com.sun.star.wizards.db.QueryMetaData;
+import com.sun.star.wizards.ui.FieldSelection;
+import com.sun.star.wizards.ui.UIConsts;
+import com.sun.star.wizards.ui.WizardDialog;
 
 public class GroupFieldHandler extends FieldSelection
 {
 
     private IReportDocument CurReportDocument;
-    private Vector GroupFieldVector = new Vector();
+    private ArrayList GroupFieldVector = new ArrayList();
     private QueryMetaData CurDBMetaData;
     private WizardDialog oWizardDialog;
     private static final short MAXSELFIELDS = 4;
@@ -73,8 +76,8 @@ public class GroupFieldHandler extends FieldSelection
     {
         try
         {
-            Vector NormalFieldsVector = new Vector();
-            Vector SelFieldsVector = new Vector();
+            ArrayList NormalFieldsVector = new ArrayList();
+            ArrayList SelFieldsVector = new ArrayList();
             String[] sFieldNames = CurDBMetaData.getFieldNames();
             for (int i = 0; i < sFieldNames.length; i++)
             {
@@ -103,14 +106,14 @@ public class GroupFieldHandler extends FieldSelection
     public void removeGroupFieldNames()
     {
         emptyFieldsListBoxes();
-        GroupFieldVector.removeAllElements();
+        GroupFieldVector.clear();
         CurUnoDialog.setControlProperty("lblBlindTextNote_1", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
     }
 
     public void getGroupFieldNames(CommandMetaData CurDBMetaData)
     {
         String[] GroupFieldNames = new String[GroupFieldVector.size()];
-        GroupFieldVector.copyInto(GroupFieldNames);
+        GroupFieldVector.toArray(GroupFieldNames);
         CurDBMetaData.GroupFieldNames = GroupFieldNames;
     }
     // @Override

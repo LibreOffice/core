@@ -18,7 +18,7 @@
  
 package com.sun.star.wizards.agenda; 
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
@@ -37,16 +37,16 @@ import com.sun.star.util.XCloseable;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.NoValidPathException;
-import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.text.ViewHandler;
 import com.sun.star.wizards.ui.PathSelection;
 import com.sun.star.wizards.ui.XPathSelectionListener;
-import com.sun.star.wizards.ui.event.DataAware; 
+import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.RadioDataAware;
 import com.sun.star.wizards.ui.event.UnoDataAware;
 
@@ -131,7 +131,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             agendaTemplate = new AgendaTemplate(xMSF, agenda, resources, this);
             initializeTemplates();
             
-            agendaTemplate.load(agendaTemplates[1][agenda.cp_AgendaType] , new Vector());
+            agendaTemplate.load(agendaTemplates[1][agenda.cp_AgendaType] , new ArrayList());
             
             // build the dialog.
             buildStep1();

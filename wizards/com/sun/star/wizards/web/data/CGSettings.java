@@ -23,9 +23,9 @@
  */
 package com.sun.star.wizards.web.data;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Vector;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.NoSuchElementException;
@@ -35,8 +35,13 @@ import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
-import com.sun.star.wizards.common.*;
+import com.sun.star.wizards.common.ConfigGroup;
+import com.sun.star.wizards.common.ConfigSet;
+import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper.DateUtils;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * @author  rpiterman
@@ -99,7 +104,7 @@ public class CGSettings extends ConfigGroup
     private CGExporter[] createExporters(String mime)
     {
         Object[] exporters = cp_Exporters.items();
-        Vector v = new Vector();
+        ArrayList v = new ArrayList();
         for (int i = 0; i < exporters.length; i++)
         {
             if (((CGExporter) exporters[i]).supports(mime))

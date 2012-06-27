@@ -34,7 +34,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
 
     private Class childClass;
     private Map childrenMap = new HashMap();
-    private List childrenList = new Vector();
+    private List childrenList = new ArrayList();
     public Object root;
     /**
      * After reading the configuration set items,
@@ -404,7 +404,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
          * to a vector, ordered by there index property
          */
         String[] names = Configuration.getChildrenNames(confView);
-        Vector v = new Vector(names.length);
+        ArrayList v = new ArrayList(names.length);
         Object member = null;
         int index = 0;
         for (int i = 0; i < names.length; i++)
@@ -417,7 +417,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
                 {
                     v.add(null);
                 }
-                v.setElementAt(member, index);
+                v.set(index, member);
 
             }
         /**

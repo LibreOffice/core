@@ -17,18 +17,15 @@
  */
 package com.sun.star.wizards.db;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.sdbc.SQLException;
-import com.sun.star.wizards.common.JavaTools;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.awt.XWindow;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ContainerEvent;
 import com.sun.star.container.XContainer;
@@ -37,7 +34,10 @@ import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.KeyType;
 import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XColumnsSupplier;
@@ -47,6 +47,7 @@ import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 
@@ -64,8 +65,8 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private XAppend xKeyAppend;
     private XDrop xKeyDrop;
     private String[] sTableFilters = null;
-    private Vector columncontainer;
-    private Vector keycolumncontainer;
+    private ArrayList columncontainer;
+    private ArrayList keycolumncontainer;
     public XHierarchicalNameAccess xTableHierarchicalNameAccess;
     private CommandName ComposedTableName;
     private XAppend xKeyColAppend;
@@ -83,8 +84,8 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     public TableDescriptor(XMultiServiceFactory xMSF, XWindow _xWindow, String _sColumnAlreadyExistsMessage)
     {
         super(xMSF);
-        columncontainer = new Vector();
-        keycolumncontainer = new Vector();
+        columncontainer = new ArrayList();
+        keycolumncontainer = new ArrayList();
         sColumnAlreadyExistsMessage = _sColumnAlreadyExistsMessage;
         xWindow = _xWindow;
     }
@@ -410,7 +411,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                             oColumnDescriptor.Name = (String) _oValue;
                         }
                         columncontainer.remove(i);
-                        columncontainer.insertElementAt(oColumnDescriptor, i);
+                        columncontainer.add(i, oColumnDescriptor);
                         return true;
                     }
                 }
@@ -449,7 +450,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                         oColumnDescriptor.xColPropertySet = _xColPropertySet;
                         oColumnDescriptor.Name = (String) _xColPropertySet.getPropertyValue(PropertyNames.PROPERTY_NAME);
                         columncontainer.remove(i);
-                        columncontainer.insertElementAt(oColumnDescriptor, i);
+                        columncontainer.add(i, oColumnDescriptor);
                         return true;
                     }
                 }
@@ -711,7 +712,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
 
     public String[] getNonBinaryFieldNames()
     {
-        Vector NonBinaryFieldNameVector = new Vector();
+        ArrayList NonBinaryFieldNameVector = new ArrayList();
         try
         {
             for (int i = 0; i < columncontainer.size(); i++)
@@ -725,7 +726,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                     itype = AnyConverter.toInt(xColPropertySet.getPropertyValue("Type"));
                     if (!isBinaryDataType(itype))
                     {
-                        NonBinaryFieldNameVector.addElement(oColumnDescriptor.Name);
+                        NonBinaryFieldNameVector.add(oColumnDescriptor.Name);
                     }
                 }
                 catch (Exception e)

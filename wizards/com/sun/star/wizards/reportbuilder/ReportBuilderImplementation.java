@@ -274,13 +274,13 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         aNameContainer.insertByHierarchicalName(Name, m_documentDefinition);
     }
 
-    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, Vector GroupFieldVector, ArrayList ReportPath, int iSelCount)
+    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList GroupFieldVector, ArrayList ReportPath, int iSelCount)
     {
         final int GroupCount = GroupFieldVector.size();
         if (GroupCount < MAXIMUM_GROUPCOUNT)
         {
             final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
-            GroupFieldVector.addElement(CurFieldColumn.getFieldName());
+            GroupFieldVector.add(CurFieldColumn.getFieldName());
         }
         return true;
     }
@@ -289,10 +289,10 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
     }
 
-    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, Vector GroupFieldVector)
+    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, ArrayList GroupFieldVector)
     {
         final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
-        GroupFieldVector.removeElement(CurFieldColumn.getFieldName());
+        GroupFieldVector.remove(CurFieldColumn.getFieldName());
     }
 
     private void setPageOrientation(int nOrientation, boolean bDoLayout)

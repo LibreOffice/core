@@ -26,9 +26,8 @@
  ************************************************************************/
 package com.sun.star.wizards.form;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
-import com.sun.star.wizards.text.TextDocument;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.beans.PropertyValue;
@@ -37,19 +36,20 @@ import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.db.*;
-import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.ui.*;
-import com.sun.star.wizards.text.TextStyleHandler;
-import com.sun.star.wizards.text.ViewHandler;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.db.CommandMetaData;
 import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.document.DatabaseControl;
 import com.sun.star.wizards.document.FormHandler;
 import com.sun.star.wizards.document.GridControl;
+import com.sun.star.wizards.text.TextDocument;
+import com.sun.star.wizards.text.TextStyleHandler;
+import com.sun.star.wizards.text.ViewHandler;
 
 public class FormDocument extends TextDocument
 {
-    protected Vector oControlForms = new Vector();
+    protected ArrayList oControlForms = new ArrayList();
     protected CommandMetaData oMainFormDBMetaData;
     protected CommandMetaData oSubFormDBMetaData;
     protected String[][] LinkFieldNames;
@@ -153,7 +153,7 @@ public class FormDocument extends TextDocument
             if (oControlForms.size() == 0)
             {
                 final ControlForm aMainControlForm = new ControlForm(this, SOMAINFORM, aMainFormPoint, getMainFormSize(FormWizard.AS_GRID));
-                oControlForms.addElement(aMainControlForm);
+                oControlForms.add(aMainControlForm);
             }
             else
             {
@@ -168,7 +168,7 @@ public class FormDocument extends TextDocument
             {
                 adjustMainFormSize(_NBorderType);
                 final ControlForm aSubControlForm = new ControlForm(this, SOSUBFORM, getSubFormPoint(), getSubFormSize());
-                oControlForms.addElement(aSubControlForm);
+                oControlForms.add(aSubControlForm);
                 /* ((ControlForm) oControlForms.get(1))*/
                 aSubControlForm.initialize(curUIControlArranger.getSelectedArrangement(1), _NBorderType);
             }

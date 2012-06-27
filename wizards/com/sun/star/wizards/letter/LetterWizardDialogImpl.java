@@ -17,17 +17,10 @@
  */
 package com.sun.star.wizards.letter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Vector;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.wizards.common.Configuration;
-import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.NoValidPathException;
-import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.common.PropertyNames;
+
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XWindow;
@@ -37,22 +30,36 @@ import com.sun.star.container.NoSuchElementException;
 import com.sun.star.document.MacroExecMode;
 import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XDocumentPropertiesSupplier;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.task.XInteractionHandler;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextFrame;
 import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.text.*;
-import com.sun.star.wizards.common.*;
-import com.sun.star.task.XInteractionHandler;
-import com.sun.star.text.XTextFrame;
-import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
-import com.sun.star.wizards.document.*;
-import com.sun.star.wizards.ui.*;
-import com.sun.star.wizards.ui.event.*;
+import com.sun.star.wizards.common.Configuration;
+import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.NoValidPathException;
+import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.document.OfficeDocument;
+import com.sun.star.wizards.text.TextFieldHandler;
+import com.sun.star.wizards.text.TextFrameHandler;
+import com.sun.star.wizards.text.ViewHandler;
+import com.sun.star.wizards.ui.PathSelection;
+import com.sun.star.wizards.ui.XPathSelectionListener;
+import com.sun.star.wizards.ui.event.DataAware;
+import com.sun.star.wizards.ui.event.RadioDataAware;
+import com.sun.star.wizards.ui.event.UnoDataAware;
 
 public class LetterWizardDialogImpl extends LetterWizardDialog
 {
@@ -84,9 +91,9 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     XTextDocument xTextDocument;
     PathSelection myPathSelection;
     CGLetterWizard myConfig;
-    Vector mainDA = new Vector();
-    Vector letterDA = new Vector();
-    Vector businessDA = new Vector();
+    ArrayList mainDA = new ArrayList();
+    ArrayList letterDA = new ArrayList();
+    ArrayList businessDA = new ArrayList();
     String[][] BusinessFiles;
     String[][] OfficialFiles;
     String[][] PrivateFiles;
@@ -1125,7 +1132,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         {
             PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
         };
-        Vector allPaths = new Vector();
+        ArrayList allPaths = new ArrayList();
         String sLetterSubPath = "/wizard/letter/";
 
         try
@@ -1169,7 +1176,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             e.printStackTrace();
         }
 
-	Vector StringsVector = new Vector();
+        ArrayList StringsVector = new ArrayList();
 
         String[] LanguageLabels;
 
@@ -1222,9 +1229,9 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         LanguageLabels = new String[StringsVector.size()];
 
 	for(int i = 0; i<StringsVector.size(); i++) {
-		Norms[i] = ((Strings)StringsVector.elementAt(i)).Norm;
-		NormPaths[i] = ((Strings)StringsVector.elementAt(i)).NormPath;
-		LanguageLabels[i] = ((Strings)StringsVector.elementAt(i)).LanguageLabel;
+    Norms[i] = ((Strings)StringsVector.get(i)).Norm;
+    NormPaths[i] = ((Strings)StringsVector.get(i)).NormPath;
+    LanguageLabels[i] = ((Strings)StringsVector.get(i)).LanguageLabel;
 	}
 
         setControlProperty("lstLetterNorm", PropertyNames.STRING_ITEM_LIST, LanguageLabels);

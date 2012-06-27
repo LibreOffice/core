@@ -17,7 +17,7 @@
  */
 package com.sun.star.wizards.db;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSet;
@@ -62,7 +62,7 @@ public class RelationController extends CommandName
         try
         {
             String[] sTableNames = super.getCommandMetaData().getTableNames();
-            Vector aReferencedTableVector = new Vector();
+            ArrayList aReferencedTableVector = new ArrayList();
             XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getExportedKeys((getCatalogName(this)), getSchemaName(), getTableName());
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             while (xResultSet.next())
@@ -107,8 +107,8 @@ public class RelationController extends CommandName
             XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getImportedKeys(getCatalogName(oLocCommandName), oLocCommandName.getSchemaName(), oLocCommandName.getTableName());
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             boolean bleaveLoop = false;
-            Vector aMasterFieldNamesVector = new Vector();
-            Vector aSlaveFieldNamesVector = new Vector();
+            ArrayList aMasterFieldNamesVector = new ArrayList();
+            ArrayList aSlaveFieldNamesVector = new ArrayList();
             while (xResultSet.next() && !bleaveLoop)
             {
                 String sPrimaryCatalog = null;

@@ -18,14 +18,25 @@
 
 package com.sun.star.wizards.common;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
-import com.sun.star.ucb.*;
+import com.sun.star.ucb.Command;
+import com.sun.star.ucb.GlobalTransferCommandArgument;
+import com.sun.star.ucb.NameClash;
+import com.sun.star.ucb.OpenCommandArgument2;
+import com.sun.star.ucb.OpenMode;
+import com.sun.star.ucb.TransferCommandOperation;
+import com.sun.star.ucb.XCommandProcessor;
+import com.sun.star.ucb.XContentAccess;
+import com.sun.star.ucb.XContentIdentifier;
+import com.sun.star.ucb.XContentIdentifierFactory;
+import com.sun.star.ucb.XContentProvider;
+import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.UnoRuntime;
 
 /**
@@ -163,7 +174,7 @@ public class UCB
 
         XResultSet xResultSet = xSet.getStaticResultSet();
         
-        List files = new Vector();
+        List files = new ArrayList();
 
         if (xResultSet.first())
         {

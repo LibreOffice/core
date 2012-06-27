@@ -496,7 +496,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     protected void insertControlGroup(int _index, int npos)
     {
         ControlRow oControlRow = new ControlRow((AgendaWizardDialog) CurUnoDialog, iCompPosX, npos, _index, tabIndex);
-        ControlGroupVector.addElement(oControlRow);
+        ControlGroupVector.add(oControlRow);
         tabIndex += 4;
     }
 

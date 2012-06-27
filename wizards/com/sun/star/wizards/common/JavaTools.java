@@ -367,7 +367,7 @@ public class JavaTools
         String[] StringArray;
         if (!MainString.equals(PropertyNames.EMPTY_STRING))
         {
-            Vector StringVector = new Vector();
+            ArrayList StringVector = new ArrayList();
             String LocString = null;
             int iIndex;
             do
@@ -375,18 +375,18 @@ public class JavaTools
                 iIndex = MainString.indexOf(Token);
                 if (iIndex < 0)
                 {
-                    StringVector.addElement(MainString);
+                    StringVector.add(MainString);
                 }
                 else
                 {
-                    StringVector.addElement(MainString.substring(0, iIndex));
+                    StringVector.add(MainString.substring(0, iIndex));
                     MainString = MainString.substring(iIndex + 1, MainString.length());
                 }
             }
             while (iIndex >= 0);
             int FieldCount = StringVector.size();
             StringArray = new String[FieldCount];
-            StringVector.copyInto(StringArray);
+            StringVector.toArray(StringArray);
         }
         else
         {
@@ -501,7 +501,7 @@ public class JavaTools
         };
         if ((baselist != null) && (_complist != null))
         {
-            Vector retvector = new Vector();
+            ArrayList retvector = new ArrayList();
 //          String[] orderedcomplist = new String[_complist.length];
 //          System.arraycopy(_complist, 0, orderedcomplist, 0, _complist.length);
             for (int i = 0; i < baselist.length; i++)
@@ -528,7 +528,7 @@ public class JavaTools
         {
             if (baselist.length > 0)
             {
-                Vector retvector = new Vector();
+                ArrayList retvector = new ArrayList();
                 for (int i = 0; i < baselist.length; i++)
                 {
                     String sValue = baselist[i][_compindex];
@@ -718,7 +718,7 @@ public class JavaTools
 
     public static String[] removefromList(String[] _sbaselist, String[] _sdellist)
     {
-        Vector tempbaselist = new Vector();
+        ArrayList tempbaselist = new ArrayList();
         for (int i = 0; i < _sbaselist.length; i++)
         {
             if (FieldInList(_sdellist, _sbaselist[i]) == -1)

@@ -17,21 +17,21 @@
  */
 package com.sun.star.wizards.text;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Vector;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumeration;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.text.XDependentTextField;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.text.XTextRange;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XEnumeration;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -143,7 +143,7 @@ public class TextFieldHandler
         try
         {
             XDependentTextField[] xDependentFields;
-            Vector xDependentVector = new Vector();
+            ArrayList xDependentVector = new ArrayList();
             if (xTextFieldsSupplier.getTextFields().hasElements())
             {
                 XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
@@ -163,7 +163,7 @@ public class TextFieldHandler
                                 String sValue = AnyConverter.toString(oValue);
                                 if (sValue.equals(_aPropertyValue))
                                 {
-                                    xDependentVector.addElement(xDependent);
+                                    xDependentVector.add(xDependent);
                                 }
                             }
                         }
@@ -175,7 +175,7 @@ public class TextFieldHandler
                                 short ishortValue = AnyConverter.toShort(oValue);
                                 if (ishortValue == iShortParam)
                                 {
-                                    xDependentVector.addElement(xDependent);
+                                    xDependentVector.add(xDependent);
                                 }
                             }
                         }

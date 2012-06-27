@@ -154,7 +154,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     /**
      * A temporary variable used to list all items and map them.
      */
-    List _allItems = new Vector();
+    List _allItems = new ArrayList();
     /** 
      * keep a reference on some static items in the document, 
      * so when their content is changed (through the user), we
@@ -943,7 +943,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         /**
          * the items in the table.
          */
-        List items = new Vector(6);
+        List items = new ArrayList(6);
 
         public ItemsTable(Object section_, Object table_)
         {
@@ -1119,21 +1119,21 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         /**
          * A List of Cell Formatters for the first row.
          */
-        List firstRowFormat = new Vector();
+        List firstRowFormat = new ArrayList();
         /**
          * A List of Cell Formatters for the last row.
          * (will contain them in reverse order)
          */
-        List lastRowFormat = new Vector();
+        List lastRowFormat = new ArrayList();
         /**
          * the format of the cell of each topic cell.
          */
-        List topicCellFormats = new Vector();
+        List topicCellFormats = new ArrayList();
         /**
          * for each topic cell there is
          * a member in this vector
          */
-        List topicCells = new Vector();
+        List topicCells = new ArrayList();
         int rowsPerTopic;
         /**
          * fields which hold the number of the 
@@ -1151,7 +1151,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
          * empty strings for topics which were written (though any other
          * object would also do - i check only if it is a null or not...);
          */
-        List writtenTopics = new Vector();
+        List writtenTopics = new ArrayList();
 
         /**
          * Analyze the structure of the Topics table.

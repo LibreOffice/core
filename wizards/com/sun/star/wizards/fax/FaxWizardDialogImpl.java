@@ -17,36 +17,44 @@
  */
 package com.sun.star.wizards.fax;
 
-import java.util.Vector;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.NoValidPathException;
-import com.sun.star.wizards.common.SystemDialog;
+import java.util.ArrayList;
+
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.document.MacroExecMode;
 import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XDocumentPropertiesSupplier;
-import com.sun.star.graphic.XGraphicProvider;
 import com.sun.star.graphic.XGraphic;
+import com.sun.star.graphic.XGraphicProvider;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.task.XInteractionHandler;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.text.*;
-import com.sun.star.wizards.common.*;
-import com.sun.star.task.XInteractionHandler;
-import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
-import com.sun.star.wizards.document.*;
-import com.sun.star.wizards.ui.*;
-import com.sun.star.wizards.ui.event.*;
+import com.sun.star.wizards.common.Configuration;
+import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.document.MacroExecMode;
+import com.sun.star.wizards.common.NoValidPathException;
+import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.document.OfficeDocument;
+import com.sun.star.wizards.text.TextFieldHandler;
+import com.sun.star.wizards.text.ViewHandler;
+import com.sun.star.wizards.ui.PathSelection;
+import com.sun.star.wizards.ui.XPathSelectionListener;
+import com.sun.star.wizards.ui.event.DataAware;
+import com.sun.star.wizards.ui.event.RadioDataAware;
+import com.sun.star.wizards.ui.event.UnoDataAware;
 
 public class FaxWizardDialogImpl extends FaxWizardDialog
 {
@@ -63,8 +71,8 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
     XTextDocument xTextDocument;
     PathSelection myPathSelection;
     CGFaxWizard myConfig;
-    Vector mainDA = new Vector();
-    Vector faxDA = new Vector();
+    ArrayList mainDA = new ArrayList();
+    ArrayList faxDA = new ArrayList();
     String[][] BusinessFiles;
     String[][] PrivateFiles;
     String sTemplatePath;

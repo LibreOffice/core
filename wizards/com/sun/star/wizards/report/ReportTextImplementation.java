@@ -109,7 +109,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     {
         getDoc().oTextSectionHandler.removeAllTextSections();
         getDoc().oTextTableHandler.removeAllTextTables();
-        getDoc().DBColumnsVector = new Vector();
+        getDoc().DBColumnsVector = new ArrayList();
     }
 
     protected ReportTextImplementation( XMultiServiceFactory i_serviceFactory )
@@ -351,7 +351,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             int ColIndex;
             boolean breset;
             Object oTable;
-            Vector DataVector = new Vector();
+            ArrayList DataVector = new ArrayList();
             DBColumn CurDBColumn;
             Object CurGroupValue;
             String CurGroupTableName;
@@ -381,7 +381,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                     xGroupBaseTables[ColIndex] = UnoRuntime.queryInterface( XTextTable.class, oTable );
                     CurGroupValue = getRecordParser().getGroupColumnValue(ColIndex);
                     OldGroupFieldValues[ColIndex] = CurGroupValue;
-                    CurDBColumn = (DBColumn) getDoc().DBColumnsVector.elementAt(ColIndex);
+                    CurDBColumn = (DBColumn) getDoc().DBColumnsVector.get(ColIndex);
                     addLinkedTextSection(xTextCursor, ReportTextDocument.GROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, CurGroupValue); //COPYOF!!!!
                 }
                 if (getRecordParser().getcurrentRecordData(DataVector))
@@ -399,7 +399,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                             {
                                 breset = true;
                                 insertDataToRecordTable(xTextCursor, DataVector, RecordFieldCount);
-                                CurDBColumn = (DBColumn) getDoc().DBColumnsVector.elementAt(ColIndex);
+                                CurDBColumn = (DBColumn) getDoc().DBColumnsVector.get(ColIndex);
                                 addLinkedTextSection(xTextCursor, ReportTextDocument.COPYOFGROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, CurGroupValue);
                                 OldGroupFieldValues[ColIndex] = CurGroupValue;
                                 breset = !(ColIndex == GroupFieldCount - 1);
@@ -420,7 +420,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             {
                 for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++)
                 {
-                    CurDBColumn = (DBColumn) getDoc().DBColumnsVector.elementAt(ColIndex);
+                    CurDBColumn = (DBColumn) getDoc().DBColumnsVector.get(ColIndex);
                     Object oValue = PropertyNames.EMPTY_STRING;
                     addLinkedTextSection(xTextCursor, ReportTextDocument.COPYOFGROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, oValue);
                 }
@@ -450,14 +450,14 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         getDoc().removeLayoutTextTables();
     }
 
-    private void insertDataToRecordTable(XTextCursor xTextCursor, Vector DataVector, int FieldCount)
+    private void insertDataToRecordTable(XTextCursor xTextCursor, ArrayList DataVector, int FieldCount)
     {
         int DataLength = DataVector.size();
         if ((FieldCount > 0) && (DataLength > 0))
         {
             addLinkedTextSection(xTextCursor, ReportTextDocument.COPYOFRECORDSECTION, null, null);
             Object[][] RecordArray = new Object[DataLength][FieldCount];
-            DataVector.copyInto(RecordArray);
+            DataVector.toArray(RecordArray);
             XTextTable xTextTable = getDoc().oTextTableHandler.getlastTextTable();
             if (DataLength > 1)
             {
@@ -465,7 +465,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             }
             OfficeDocument.ArraytoCellRange(RecordArray, xTextTable, 0, 1);
         }
-        DataVector.removeAllElements();
+        DataVector.clear();
     }
 //    public void updateProgressDisplay(int iCounter) 
 //        {
@@ -491,7 +491,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         int iCount = getDoc().DBColumnsVector.size();
         for (int i = 0; i < iCount; i++)
         {
-            CurDBColumn = (DBColumn) getDoc().DBColumnsVector.elementAt(i);
+            CurDBColumn = (DBColumn) getDoc().DBColumnsVector.get(i);
             xNameCellCursor = ReportTextDocument.createTextCursor(CurDBColumn.xNameCell);
             xNameCellCursor.gotoStart(false);
             FieldContent = getDoc().oTextFieldHandler.getUserFieldContent(xNameCellCursor);
@@ -526,7 +526,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         }
     }
 
-    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, Vector GroupFieldVector, ArrayList ReportPath, int iSelCount)
+    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList GroupFieldVector, ArrayList ReportPath, int iSelCount)
     {
         return getDoc().addGroupNametoDocument(GroupNames, CurGroupTitle, GroupFieldVector, ReportPath, iSelCount);
     }
@@ -540,7 +540,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     // {
     //    return getDoc().isGroupField(_FieldName);
     // }
-    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, Vector GroupFieldVector)
+    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, ArrayList GroupFieldVector)
     {
         getDoc().removeGroupName(NewSelGroupNames, CurGroupTitle, GroupFieldVector);
     }

@@ -17,8 +17,8 @@
  */
 package com.sun.star.wizards.ui.event;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * @author rpiterman
@@ -33,7 +33,7 @@ public class Task
     private int failed = 0;
     private int max = 0;
     private String taskName;
-    private List listeners = new Vector();
+    private List listeners = new ArrayList();
     private String subtaskName;
 
     public Task(String taskName_, String subtaskName_, int max_)

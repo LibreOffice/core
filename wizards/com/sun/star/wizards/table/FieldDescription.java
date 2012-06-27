@@ -17,7 +17,7 @@
  */
 package com.sun.star.wizards.table;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
@@ -36,7 +36,7 @@ public class FieldDescription
     private String keyname;
     private XNameAccess xNameAccessTableNode;
     private XPropertySet xPropertySet;
-    private Vector aPropertyValues;
+    private ArrayList aPropertyValues;
 //  PropertyValue[] aPropertyValues;
     private Integer Type;
     private Integer Scale;
@@ -53,7 +53,7 @@ public class FieldDescription
         tablename = _curscenarioselector.getTableName();
         Name = _fieldname;
         keyname = _keyname;
-        aPropertyValues = new Vector();
+        aPropertyValues = new ArrayList();
         xNameAccessTableNode = _curscenarioselector.oCGTable.xNameAccessFieldsNode;
         XNameAccess xNameAccessFieldNode;
         if (_curscenarioselector.bcolumnnameislimited)
@@ -70,10 +70,10 @@ public class FieldDescription
     public FieldDescription(String _fieldname)
     {
         Name = _fieldname;
-        aPropertyValues = new Vector();
+        aPropertyValues = new ArrayList();
         Type = new Integer(com.sun.star.sdbc.DataType.VARCHAR);
-        aPropertyValues.addElement(Properties.createProperty(PropertyNames.PROPERTY_NAME, _fieldname));
-        aPropertyValues.addElement(Properties.createProperty("Type", Type));
+        aPropertyValues.add(Properties.createProperty(PropertyNames.PROPERTY_NAME, _fieldname));
+        aPropertyValues.add(Properties.createProperty("Type", Type));
     }
 
     public void setName(String _newfieldname)
@@ -127,25 +127,25 @@ public class FieldDescription
 //      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");       
             if (propertyexists(PropertyNames.PROPERTY_NAME))
             {
-                aPropertyValues.addElement(Properties.createProperty(PropertyNames.PROPERTY_NAME, Name));
+                aPropertyValues.add(Properties.createProperty(PropertyNames.PROPERTY_NAME, Name));
             }
             if (propertyexists("Type"))
             {
-                aPropertyValues.addElement(Properties.createProperty("Type", xPropertySet.getPropertyValue("Type")));
+                aPropertyValues.add(Properties.createProperty("Type", xPropertySet.getPropertyValue("Type")));
             }
             if (propertyexists("Scale"))
             {
-                aPropertyValues.addElement(Properties.createProperty("Scale", xPropertySet.getPropertyValue("Scale")));
+                aPropertyValues.add(Properties.createProperty("Scale", xPropertySet.getPropertyValue("Scale")));
 //          Scale =         
             }
             if (propertyexists("Precision"))
             {
-                aPropertyValues.addElement(Properties.createProperty("Precision", xPropertySet.getPropertyValue("Precision")));
+                aPropertyValues.add(Properties.createProperty("Precision", xPropertySet.getPropertyValue("Precision")));
 //          Precision = (Integer) xPropertySet.getPropertyValue("Precision");       
             }
             if (propertyexists("DefaultValue"))
             {
-                aPropertyValues.addElement(Properties.createProperty("DefaultValue", xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
+                aPropertyValues.add(Properties.createProperty("DefaultValue", xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
             //Type =  4; // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
             }
         }

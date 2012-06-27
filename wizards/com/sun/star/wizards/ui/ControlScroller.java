@@ -36,7 +36,7 @@ public abstract class ControlScroller
     protected int nscrollvalue = 0;
     protected int ntotfieldcount;
     XScrollBar xScrollBar;
-    protected Vector scrollfields;
+    protected ArrayList scrollfields;
     protected Integer ICompPosX;
     protected int iCompPosX;
     protected Integer ICompPosY;
@@ -54,7 +54,7 @@ public abstract class ControlScroller
     int SORELFIRSTPOSY = 3;
     protected int curHelpIndex;
     String sIncSuffix;
-    protected Vector ControlGroupVector = new Vector();
+    protected ArrayList ControlGroupVector = new ArrayList();
     protected PeerConfig oTitlePeerConfig;
 
     class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
@@ -113,7 +113,7 @@ public abstract class ControlScroller
                 {
                     new Short((short) 0), Boolean.TRUE, new Integer(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)
                 });
-        scrollfields = new Vector();
+        scrollfields = new ArrayList();
         int ypos = iStartPosY + SORELFIRSTPOSY;
         for (int i = 0; i < nblockincrement; i++)
         {
@@ -274,7 +274,7 @@ public abstract class ControlScroller
     {
         for (int n = 0; n < scrollfields.size(); n++)
         {
-            PropertyValue[] curproperties = (PropertyValue[]) scrollfields.elementAt(n);
+            PropertyValue[] curproperties = (PropertyValue[]) scrollfields.get(n);
             for (int m = 0; m < curproperties.length; m++)
             {
                 PropertyValue curproperty = curproperties[m];
@@ -364,8 +364,8 @@ public abstract class ControlScroller
         if (guiRow + nscrollvalue < scrollfields.size())
         {
             return fieldInfo(
-                    ((PropertyValue[]) scrollfields.elementAt(guiRow + nscrollvalue))[column],
-                    ((PropertyValue[]) scrollfields.elementAt(guiRow))[column]);
+                    ((PropertyValue[]) scrollfields.get(guiRow + nscrollvalue))[column],
+                    ((PropertyValue[]) scrollfields.get(guiRow))[column]);
             //System.out.println("getting field info for : " + guiRow + "/" + column  + ":" + pv.Value + "(" + pv.Name + ")" );
         }
         else
@@ -396,21 +396,21 @@ public abstract class ControlScroller
     {
         if (_i == 0)
         {
-            scrollfields.removeAllElements();
+            scrollfields.clear();
         }
         if (_i >= scrollfields.size())
         {
-            scrollfields.addElement(_currowproperties);
+            scrollfields.add(_currowproperties);
         }
         else
         {
-            scrollfields.setElementAt(_currowproperties, _i);
+            scrollfields.set(_i, _currowproperties);
         }
     }
 
     protected PropertyValue[] getControlGroupInfo(int _i)
     {
-        return (PropertyValue[]) scrollfields.elementAt(_i);
+        return (PropertyValue[]) scrollfields.get(_i);
     }
 
     protected void setControlData(String controlname, Object newvalue)
@@ -447,7 +447,7 @@ public abstract class ControlScroller
         {
             for (int i = 0; i < scrollfields.size(); i++)
             {
-                curproperties = (PropertyValue[]) scrollfields.elementAt(i);
+                curproperties = (PropertyValue[]) scrollfields.get(i);
                 retproperties[i] = curproperties;
             }
             return retproperties;
