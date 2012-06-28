@@ -73,7 +73,8 @@ enum
     PROP_DIAGRAM_PERSPECTIVE,
     PROP_DIAGRAM_ROTATION_HORIZONTAL,
     PROP_DIAGRAM_ROTATION_VERTICAL,
-    PROP_DIAGRAM_MISSING_VALUE_TREATMENT
+    PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
+    PROP_DIAGRAM_3DRELATIVEHEIGHT
 };
 
 void lcl_AddPropertiesToVector(
@@ -166,6 +167,11 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+   rOutProperties.push_back(
+   Property( C2U("3DRelativeHeight"),
+                  PROP_DIAGRAM_3DRELATIVEHEIGHT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
 }
 
 struct StaticDiagramDefaults_Initializer
@@ -186,7 +192,8 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
-        ::chart::SceneProperties::AddDefaultsToMap( rOutMap );
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
+         ::chart::SceneProperties::AddDefaultsToMap( rOutMap );
     }
 };
 

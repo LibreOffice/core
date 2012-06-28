@@ -340,6 +340,17 @@ void PieChart::createShapes()
 
     m_aLabelInfoList.clear();
     ::rtl::math::setNan(&m_fMaxOffset);
+    sal_Int32 n3DRelativeHeight = 100;
+    uno::Reference< beans::XPropertySet > xPropertySet( m_xChartTypeModel, uno::UNO_QUERY );
+    if ( (m_nDimension==3) && xPropertySet.is())
+    {
+        try
+        {
+            uno::Any aAny = xPropertySet->getPropertyValue( C2U("3DRelativeHeight") );
+            aAny >>= n3DRelativeHeight;
+        }
+        catch(const uno::Exception& e) {}
+    }
 
 //=============================================================================
     for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); ++aXSlotIter, fSlotX+=1.0 )
@@ -380,7 +391,8 @@ void PieChart::createShapes()
             if( !bIsVisible )
                 continue;
 
-            double fDepth  = this->getTransformedDepth();
+            double fLogicZ = -1.0;//as defined
+            double fDepth  = this->getTransformedDepth() * (n3DRelativeHeight / 100.0);
 
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
             //collect data point information (logic coordinates, style ):
