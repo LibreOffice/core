@@ -42,7 +42,8 @@ namespace
 
 enum
 {
-    PROP_PIECHARTTYPE_USE_RINGS
+    PROP_PIECHARTTYPE_USE_RINGS,
+    PROP_PIECHARTTYPE_3DRELATIVEHEIGHT
 };
 
 static void lcl_AddPropertiesToVector(
@@ -54,6 +55,11 @@ static void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U("3DRelativeHeight"),
+                  PROP_PIECHARTTYPE_3DRELATIVEHEIGHT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
 }
 
 struct StaticPieChartTypeDefaults_Initializer
@@ -68,6 +74,7 @@ private:
     void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
     {
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIECHARTTYPE_USE_RINGS, false );
+        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, 100 );
     }
 };
 

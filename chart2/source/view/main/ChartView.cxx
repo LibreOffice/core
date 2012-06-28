@@ -102,6 +102,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svl/languageoptions.hxx>
 #include <sot/clsids.hxx>
+#include "servicenames_charttypes.hxx"
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -621,6 +622,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     sal_Bool bGroupBarsPerAxis = sal_True;
     sal_Bool bIncludeHiddenCells = sal_True;
     sal_Int32 nStartingAngle = 90;
+    sal_Int32 n3DRelativeHeight = 100;
     try
     {
         uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
@@ -629,6 +631,11 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         xDiaProp->getPropertyValue( "GroupBarsPerAxis" ) >>= bGroupBarsPerAxis;
         xDiaProp->getPropertyValue( "IncludeHiddenCells" ) >>= bIncludeHiddenCells;
         xDiaProp->getPropertyValue( "StartingAngle" ) >>= nStartingAngle;
+
+        if (nDimensionCount == 3)
+        {
+             xDiaProp->getPropertyValue( "3DRelativeHeight" ) >>= n3DRelativeHeight;
+        }
     }
     catch( const uno::Exception & ex )
     {
@@ -663,6 +670,22 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
         {
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
+            if(3 == nDimensionCount && xChartType->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+            {
+                uno::Reference< beans::XPropertySet > xPropertySet( xChartType, uno::UNO_QUERY );
+                if (xPropertySet.is())
+                {
+                    try
+                    {
+                        sal_Int32 n3DRelativeHeightOldValue(100);
+                        uno::Any aAny = xPropertySet->getPropertyValue( C2U("3DRelativeHeight") );
+                        aAny >>= n3DRelativeHeightOldValue;
+                        if (n3DRelativeHeightOldValue != n3DRelativeHeight)
+                            xPropertySet->setPropertyValue( C2U("3DRelativeHeight"), uno::makeAny(n3DRelativeHeight) );
+                    }
+                    catch(const uno::Exception& e){}
+                }
+            }
 
             if(nT==0)
                 m_bChartTypeUsesShiftedCategoryPositionPerDefault = ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( xChartType );

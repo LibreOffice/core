@@ -2454,6 +2454,7 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) con
     }
 
     // properties
+    rPropSet.SetProperty( EXC_CHPROP_3DRELATIVEHEIGHT, (sal_Int32)(maData.mnRelHeight / 2)); // seems to be 200%, cange to 100%
     rPropSet.SetProperty( EXC_CHPROP_ROTATIONVERTICAL, nRotationY );
     rPropSet.SetProperty( EXC_CHPROP_ROTATIONHORIZONTAL, nRotationX );
     rPropSet.SetProperty( EXC_CHPROP_PERSPECTIVE, nPerspective );
