@@ -20,9 +20,7 @@
 #ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
 #define SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace svxform

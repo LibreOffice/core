@@ -25,11 +25,7 @@
  *
 ************************************************************************/
 
-
 #include "ucpext_provider.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <cppuhelper/implementationentry.hxx>
 

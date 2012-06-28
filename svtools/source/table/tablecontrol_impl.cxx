@@ -35,12 +35,10 @@
 #include "tablegeometry.hxx"
 #include "cellvalueconversion.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/flagguard.hxx>
 #include <vcl/scrbar.hxx>

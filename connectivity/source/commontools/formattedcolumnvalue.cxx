@@ -22,14 +22,12 @@
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbconversion.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <i18npool/mslangid.hxx>

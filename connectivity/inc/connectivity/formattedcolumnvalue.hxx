@@ -20,13 +20,11 @@
 #ifndef CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
 #define CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-/** === end UNO includes === **/
 
 #include <boost/noncopyable.hpp>
 

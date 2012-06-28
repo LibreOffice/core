@@ -39,10 +39,8 @@
 #include "ReportController.hxx"
 #include "Condition.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-/** === end UNO includes === **/
 
 #include <toolkit/helper/vclunohelper.hxx>
 

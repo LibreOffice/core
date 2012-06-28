@@ -20,9 +20,7 @@
 #ifndef SVX_SDR_CONTACT_VIEWCONTACTOFUNOCONTROL_HXX
 #define SVX_SDR_CONTACT_VIEWCONTACTOFUNOCONTROL_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Reference.hxx>
-/** === end UNO includes === **/
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/svxdllapi.h>
 

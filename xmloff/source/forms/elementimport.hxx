@@ -27,13 +27,11 @@
 #include "logging.hxx"
 #include "property_description.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/stl_types.hxx>
 

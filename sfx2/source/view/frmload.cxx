@@ -46,7 +46,6 @@
 #include "sfx2/viewsh.hxx"
 #include "sfx2/viewfac.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -55,7 +54,6 @@
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>

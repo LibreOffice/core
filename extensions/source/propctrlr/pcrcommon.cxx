@@ -30,9 +30,7 @@
 #include "modulepcr.hxx"
 #include "propresid.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/MeasureUnit.hpp>
-/** === end UNO includes === **/
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
 

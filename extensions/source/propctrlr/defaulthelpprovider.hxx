@@ -20,11 +20,9 @@
 #ifndef EXTENSIONS_DEFAULTHELPPROVIDER_HXX
 #define EXTENSIONS_DEFAULTHELPPROVIDER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XPropertyControlObserver.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/componentcontext.hxx>

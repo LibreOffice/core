@@ -33,11 +33,9 @@
 #include <basic/sbuno.hxx>
 #include "sbintern.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
-/** === end UNO includes === **/
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/pathoptions.hxx>

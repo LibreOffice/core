@@ -20,10 +20,8 @@
 #ifndef CHART2_CHARTMODELCLONE_HXX
 #define CHART2_CHARTMODELCLONE_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
-/** === end UNO includes === **/
 
 #include <boost/noncopyable.hpp>
 

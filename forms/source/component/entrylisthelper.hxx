@@ -20,12 +20,10 @@
 #ifndef FORMS_ENTRYLISTHELPER_HXX
 #define FORMS_ENTRYLISTHELPER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/form/binding/XListEntryListener.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

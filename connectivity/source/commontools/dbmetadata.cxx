@@ -24,7 +24,6 @@
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -35,7 +34,6 @@
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/namedvaluecollection.hxx>

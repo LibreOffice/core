@@ -33,7 +33,6 @@
 #include "fmprop.hrc"
 #include "svx/fmresids.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -41,7 +40,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>

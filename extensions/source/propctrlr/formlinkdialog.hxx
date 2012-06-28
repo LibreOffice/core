@@ -33,12 +33,10 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 
 #include <memory>
 

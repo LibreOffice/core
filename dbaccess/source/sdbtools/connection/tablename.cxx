@@ -23,11 +23,9 @@
 #include "module_sdbt.hxx"
 #include "sdbtstrings.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/sdb/tools/CompositionType.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>

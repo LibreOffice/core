@@ -29,10 +29,6 @@
 #define COMPHELPER_COMPONENTBASE_HXX
 
 #include "comphelper/comphelperdllapi.h"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <cppuhelper/interfacecontainer.hxx>
 
 //........................................................................

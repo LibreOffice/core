@@ -29,11 +29,9 @@
 #include "ctp_factory.hxx"
 #include "ctp_panel.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-/** === end UNO includes === **/
 
 //......................................................................................................................
 namespace sd { namespace colortoolpanel

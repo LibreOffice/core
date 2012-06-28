@@ -29,9 +29,7 @@
 #ifndef FORMS_PROPERTYBAGHELPER_HXX
 #define FORMS_PROPERTYBAGHELPER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyValue.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/propertybag.hxx>
 #include <comphelper/propagg.hxx>

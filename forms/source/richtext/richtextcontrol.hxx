@@ -23,9 +23,7 @@
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-/** === end UNO includes === **/
 #include <comphelper/uno3.hxx>
 #include <comphelper/implementationreference.hxx>
 #include <cppuhelper/implbase1.hxx>

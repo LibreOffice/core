@@ -31,7 +31,6 @@
 #include "methodguard.hxx"
 #include "loghandler.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/logging/XLogHandler.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
@@ -39,7 +38,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

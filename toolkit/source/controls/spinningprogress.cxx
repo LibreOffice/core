@@ -30,8 +30,6 @@
 #include "toolkit/helper/servicenames.hxx"
 #include "toolkit/helper/unopropertyarrayhelper.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>

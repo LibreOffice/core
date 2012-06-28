@@ -31,7 +31,6 @@
 #include "OAuthenticationContinuation.hxx"
 
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -48,7 +47,6 @@
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
 #include <comphelper/guarding.hxx>

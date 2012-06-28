@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "java/ContextClassLoader.hxx"
 #include "java/lang/Object.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 //........................................................................
 namespace connectivity { namespace jdbc

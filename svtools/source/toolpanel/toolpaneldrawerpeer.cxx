@@ -21,10 +21,8 @@
 #include "toolpaneldrawerpeer.hxx"
 #include "toolpaneldrawer.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>

@@ -28,9 +28,7 @@
 #ifndef TOOLKIT_STYLESETTINGS_HXX
 #define TOOLKIT_STYLESETTINGS_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XStyleSettings.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

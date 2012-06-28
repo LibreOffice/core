@@ -19,13 +19,11 @@
 #ifndef SVX_FMPROPBRW_HXX
 #define SVX_FMPROPBRW_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-/** === end UNO includes === **/
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/ctrlitem.hxx>

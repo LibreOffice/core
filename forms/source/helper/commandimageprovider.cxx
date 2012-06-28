@@ -28,13 +28,11 @@
 
 #include "commandimageprovider.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

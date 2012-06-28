@@ -20,9 +20,7 @@
 #ifndef EXTENSIONS_LOGGERCONFIG_HXX
 #define EXTENSIONS_LOGGERCONFIG_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/logging/XLogger.hpp>
-/** === end UNO includes === **/
 
 namespace comphelper
 {

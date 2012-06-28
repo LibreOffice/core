@@ -19,9 +19,6 @@
 #ifndef INSPECTORHELPWINDOW_HXX
 #define INSPECTORHELPWINDOW_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <vcl/fixed.hxx>
 #include <svtools/svmedit.hxx>
 

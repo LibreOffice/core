@@ -38,7 +38,6 @@
 #include "services.hxx"
 #include "windowstateguard.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
@@ -68,7 +67,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/propagg.hxx>

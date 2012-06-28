@@ -19,10 +19,8 @@
 
 #include "richtextunowrapper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-/** === end UNO includes === **/
 #include <editeng/unofored.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/unoipset.hxx>

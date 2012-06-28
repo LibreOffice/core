@@ -20,14 +20,12 @@
 #include "controllerframe.hxx"
 #include "IController.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/frame/XController2.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>

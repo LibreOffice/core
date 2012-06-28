@@ -20,11 +20,9 @@
 
 #include "storagexmlstream.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>

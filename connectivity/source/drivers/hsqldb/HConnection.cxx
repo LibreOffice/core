@@ -24,7 +24,6 @@
 
 #include <connectivity/dbtools.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
@@ -35,7 +34,6 @@
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/listenernotification.hxx>

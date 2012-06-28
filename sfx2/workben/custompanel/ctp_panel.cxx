@@ -20,7 +20,6 @@
 
 #include "ctp_panel.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
@@ -30,7 +29,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

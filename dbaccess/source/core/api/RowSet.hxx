@@ -23,7 +23,6 @@
 #include "apitools.hxx"
 #include "RowSetBase.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
@@ -41,7 +40,6 @@
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/XRowsChangeBroadcaster.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/compbase12.hxx>
 #include <connectivity/paramwrapper.hxx>

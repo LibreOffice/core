@@ -32,7 +32,6 @@
 
 #include "RptModel.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
@@ -46,7 +45,6 @@
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XGroup.hpp>
 #include <com/sun/star/document/XUndoManager.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>

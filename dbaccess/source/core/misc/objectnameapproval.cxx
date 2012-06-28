@@ -20,12 +20,10 @@
 
 #include "objectnameapproval.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/exc_hlp.hxx>

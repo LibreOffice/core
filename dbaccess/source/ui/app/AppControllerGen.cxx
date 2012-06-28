@@ -29,7 +29,6 @@
 #include "UITools.hxx"
 #include "subcomponentmanager.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
@@ -51,7 +50,6 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbexception.hxx>

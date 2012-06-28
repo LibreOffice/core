@@ -28,9 +28,7 @@
 #ifndef PROPCONTROLOBSERVER_HXX
 #define PROPCONTROLOBSERVER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XPropertyControl.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace pcr

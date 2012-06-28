@@ -20,7 +20,6 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_HANDLERHELPER_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_HANDLERHELPER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -28,7 +27,6 @@
 #include <com/sun/star/inspection/XPropertyControlFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/Optional.hpp>
-/** === end UNO includes === **/
 
 #include <vector>
 

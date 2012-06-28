@@ -43,7 +43,6 @@
 #include "taborder.hxx"
 #include "usercontrol.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -77,7 +76,6 @@
 #include <com/sun/star/resource/MissingResourceException.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
 #include <connectivity/dbconversion.hxx>

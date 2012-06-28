@@ -39,13 +39,11 @@
 #include "svx/fmmodel.hxx"
 #include "svx/dialmgr.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-/** === end UNO includes === **/
 #include "svx/fmtools.hxx"
 
 #include <tools/shl.hxx>

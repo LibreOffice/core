@@ -20,9 +20,7 @@
 
 #include "asyncmodaldialog.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-/** === end UNO includes === **/
 
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>

@@ -27,13 +27,11 @@
  ************************************************************************/
 
 
-/** === begin UNO includes === **/
 #include "com/sun/star/frame/XDispatchProvider.hpp"
 #include "com/sun/star/frame/XSynchronousDispatch.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
-/** === end UNO includes === **/
 
 #include "comphelper/synchronousdispatch.hxx"
 #include "comphelper/processfactory.hxx"

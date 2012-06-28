@@ -34,10 +34,8 @@
 #include "svtools/toolpanel/tablayouter.hxx"
 #include "svtools/toolpanel/drawerlayouter.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

@@ -31,7 +31,6 @@
 #include <svtools/inettbc.hxx>
 #include <svtools/imagemgr.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -39,7 +38,6 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-/** === end UNO includes === **/
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>

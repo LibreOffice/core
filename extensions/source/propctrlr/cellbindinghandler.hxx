@@ -22,9 +22,7 @@
 
 #include "propertyhandler.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-/** === end UNO includes === **/
 #include <rtl/ref.hxx>
 
 #include <memory>

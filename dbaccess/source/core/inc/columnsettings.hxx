@@ -20,9 +20,7 @@
 #ifndef COLUMNSETTINGS_HXX
 #define COLUMNSETTINGS_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 
 namespace dbaccess
 {

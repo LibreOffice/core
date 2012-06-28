@@ -26,7 +26,6 @@
 #include "queryorder.hxx"
 #include "sqlmessage.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -61,7 +60,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>

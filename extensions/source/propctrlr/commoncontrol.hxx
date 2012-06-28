@@ -29,10 +29,8 @@
 #ifndef _EXTENSIONS_PROPCTRLR_COMMONCONTROL_HXX_
 #define _EXTENSIONS_PROPCTRLR_COMMONCONTROL_HXX_
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <tools/link.hxx>

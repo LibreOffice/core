@@ -30,12 +30,10 @@
 #include <comphelper/logging.hxx>
 #include <comphelper/componentcontext.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/logging/LoggerPool.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
 #include <com/sun/star/resource/XResourceBundle.hpp>
 #include <com/sun/star/resource/XResourceBundleLoader.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ustrbuf.hxx>
 

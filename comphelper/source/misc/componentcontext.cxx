@@ -28,11 +28,9 @@
 
 #include <comphelper/componentcontext.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace comphelper

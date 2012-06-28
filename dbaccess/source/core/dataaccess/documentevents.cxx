@@ -20,9 +20,7 @@
 
 #include "documentevents.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyValue.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
 

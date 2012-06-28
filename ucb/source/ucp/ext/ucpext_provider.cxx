@@ -25,12 +25,8 @@
  *
 ************************************************************************/
 
-
 #include "ucpext_provider.hxx"
 #include "ucpext_content.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <osl/diagnose.h>

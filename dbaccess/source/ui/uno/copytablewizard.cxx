@@ -25,7 +25,6 @@
 #include "sqlmessage.hxx"
 #include "WCopyTable.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/application/XCopyTableWizard.hpp>
 #include <com/sun/star/sdb/application/CopyTableContinuation.hpp>
@@ -53,7 +52,6 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/XDriverManager.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/interaction.hxx>

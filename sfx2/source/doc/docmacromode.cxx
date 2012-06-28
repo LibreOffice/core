@@ -31,7 +31,6 @@
 #include "sfx2/signaturestate.hxx"
 #include "sfx2/docfile.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
@@ -39,7 +38,6 @@
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/script/XLibraryQueryExecutable.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>

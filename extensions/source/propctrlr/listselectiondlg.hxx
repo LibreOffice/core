@@ -25,9 +25,7 @@
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace pcr

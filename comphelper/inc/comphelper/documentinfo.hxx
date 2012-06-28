@@ -22,9 +22,7 @@
 
 #include "comphelper/comphelperdllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace comphelper {

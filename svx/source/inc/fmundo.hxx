@@ -34,7 +34,6 @@
 #include "fmscriptingenv.hxx"
 
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -45,7 +44,6 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase3.hxx>
 
 

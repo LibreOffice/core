@@ -20,11 +20,9 @@
 #ifndef TOOLKIT_GRIDEVENTFORWARDER_HXX
 #define TOOLKIT_GRIDEVENTFORWARDER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase2.hxx>
 

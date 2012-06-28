@@ -20,11 +20,9 @@
 #ifndef SD_WORKBENCH_CTP_FACTORY_HXX
 #define SD_WORKBENCH_CTP_FACTORY_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/basemutex.hxx>

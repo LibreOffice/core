@@ -28,9 +28,6 @@
 
 #include "refvaluecomponent.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <tools/diagnose_ex.h>
 
 #include <list>

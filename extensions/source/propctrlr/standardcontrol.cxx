@@ -29,14 +29,12 @@
 #include "standardcontrol.hxx"
 #include "pcrcommon.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
-/** === end UNO includes === **/
 #include <comphelper/string.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/objsh.hxx>

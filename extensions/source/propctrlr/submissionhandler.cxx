@@ -31,13 +31,11 @@
 #include "formstrings.hxx"
 #include "handlerhelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 

@@ -21,8 +21,6 @@
 #include <connectivity/DriversConfig.hxx>
 #include "dsntypes.hxx"
 #include <comphelper/processfactory.hxx>
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <map>
 

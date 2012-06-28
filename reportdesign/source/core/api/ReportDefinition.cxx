@@ -45,7 +45,6 @@
 #include "core_resource.hxx"
 #include "corestrings.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
@@ -82,7 +81,6 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/documentconstants.hxx>

@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "settingsimport.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <sax/tools/converter.hxx>

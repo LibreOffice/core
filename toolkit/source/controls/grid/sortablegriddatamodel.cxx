@@ -29,11 +29,9 @@
 #include "sortablegriddatamodel.hxx"
 #include "toolkit/helper/servicenames.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/anycompare.hxx>
 #include <cppuhelper/typeprovider.hxx>

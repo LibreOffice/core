@@ -22,9 +22,6 @@
 
 #include "toolkit/controls/animatedimages.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //......................................................................................................................
 namespace toolkit
 {

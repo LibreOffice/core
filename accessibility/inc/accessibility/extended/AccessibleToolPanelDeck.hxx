@@ -20,9 +20,6 @@
 #ifndef ACC_ACCESSIBLETOOLPANELDECK_HXX
 #define ACC_ACCESSIBLETOOLPANELDECK_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <cppuhelper/implbase1.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 

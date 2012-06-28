@@ -20,9 +20,7 @@
 #ifndef DBACCESS_MIGRATIONENGINE_HXX
 #define DBACCESS_MIGRATIONENGINE_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 

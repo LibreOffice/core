@@ -30,10 +30,8 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-/** === end UNO includes === **/
 
 #include <cppuhelper/factory.hxx>
 

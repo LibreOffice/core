@@ -28,10 +28,8 @@
 
 #include <unotools/desktopterminationobserver.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
 

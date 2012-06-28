@@ -20,10 +20,8 @@
 
 #include "comphelper/componentbase.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace comphelper

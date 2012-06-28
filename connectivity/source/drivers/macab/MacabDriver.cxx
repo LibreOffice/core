@@ -21,11 +21,9 @@
 #include "MacabDriver.hxx"
 #include "MacabConnection.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-/** === end UNO includes === **/
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include "resource/macab_res.hrc"

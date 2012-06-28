@@ -37,9 +37,7 @@
 #include "parametrizedattributedispatcher.hxx"
 #include "specialdispatchers.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/PosSize.hpp>
-/** === end UNO includes === **/
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>

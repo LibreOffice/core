@@ -25,7 +25,6 @@
 #include "doceventnotifier.hxx"
 #include "documentenumeration.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -37,7 +36,6 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
-/** === end UNO includes === **/
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>

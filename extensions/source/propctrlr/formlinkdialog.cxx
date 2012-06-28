@@ -41,7 +41,6 @@
 #include <connectivity/dbexception.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
@@ -50,7 +49,6 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-/** === end UNO includes === **/
 
 
 //............................................................................

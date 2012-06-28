@@ -23,11 +23,9 @@
 #define EDITOR_LIST_APPEND              (sal_uInt16)-1
 #define EDITOR_LIST_REPLACE_EXISTING    (sal_uInt16)-1
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-/** === end UNO includes === **/
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/listenernotification.hxx>

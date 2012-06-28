@@ -30,8 +30,6 @@
 #include "browserpage.hxx"
 #include "linedescriptor.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 
 //............................................................................

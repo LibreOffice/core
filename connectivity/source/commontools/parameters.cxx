@@ -19,7 +19,6 @@
 
 #include "connectivity/parameters.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/DatabaseParameterEvent.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -28,7 +27,6 @@
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdb/ParametersRequest.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbtools.hxx>
 #include "connectivity/filtermanager.hxx"

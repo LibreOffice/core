@@ -20,10 +20,8 @@
 
 #include "storagetextstream.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/io/XTextOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <tools/diagnose_ex.h>

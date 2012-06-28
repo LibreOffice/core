@@ -20,10 +20,8 @@
 #ifndef DBACCESS_CONTROLLERFRAME_HXX
 #define DBACCESS_CONTROLLERFRAME_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
-/** === end UNO includes === **/
 
 #include <memory>
 

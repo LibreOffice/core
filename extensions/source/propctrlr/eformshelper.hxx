@@ -22,14 +22,12 @@
 
 #include "pcrcommon.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
-/** === end UNO includes === **/
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/listenernotification.hxx>

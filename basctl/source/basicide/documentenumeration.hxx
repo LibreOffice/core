@@ -20,10 +20,8 @@
 #ifndef BASCTL_DOCUMENTENUMERATION_HXX
 #define BASCTL_DOCUMENTENUMERATION_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 

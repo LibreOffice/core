@@ -20,9 +20,6 @@
 #ifndef EXTENSIONS_METHODGUARD_HXX
 #define EXTENSIONS_METHODGUARD_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace logging
 {

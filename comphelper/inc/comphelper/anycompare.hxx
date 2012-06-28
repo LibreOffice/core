@@ -22,10 +22,8 @@
 
 #include "comphelper/comphelperdllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
 

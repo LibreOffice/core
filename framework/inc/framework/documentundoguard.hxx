@@ -22,9 +22,7 @@
 
 #include "framework/fwedllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/XInterface.hpp>
-/** === end UNO includes === **/
 
 #include <boost/scoped_ptr.hpp>
 

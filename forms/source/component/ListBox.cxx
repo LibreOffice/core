@@ -37,7 +37,6 @@
 #include "listenercontainers.hxx"
 #include "componenttools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -47,7 +46,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>

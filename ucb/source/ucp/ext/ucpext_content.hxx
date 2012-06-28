@@ -20,10 +20,8 @@
 #ifndef UCB_UCPEXT_CONTENT_HXX
 #define UCB_UCPEXT_CONTENT_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/contenthelper.hxx>

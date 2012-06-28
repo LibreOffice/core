@@ -28,9 +28,6 @@
 
 #include "fmtextcontrolfeature.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace svx
 {

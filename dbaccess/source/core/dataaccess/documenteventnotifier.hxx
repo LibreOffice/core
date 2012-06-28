@@ -21,10 +21,8 @@
 #ifndef DBACCESS_DOCUMENTEVENTNOTIFIER_HXX
 #define DBACCESS_DOCUMENTEVENTNOTIFIER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ref.hxx>
 

@@ -32,7 +32,6 @@
 #include "svtools/table/tablemodel.hxx"
 #include "svtools/table/tablecontrol.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
@@ -41,7 +40,6 @@
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ref.hxx>

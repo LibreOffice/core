@@ -20,9 +20,6 @@
 #ifndef CONNECTIVITY_SHAREDRESOURCES_HXX
 #define CONNECTIVITY_SHAREDRESOURCES_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <rtl/ustring.hxx>
 #include <list>
 #include "connectivity/dbtoolsdllapi.hxx"

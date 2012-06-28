@@ -20,11 +20,9 @@
 
 #include "java/sql/ConnectionLog.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-/** === end UNO includes === **/
 
 #include <stdio.h>
 

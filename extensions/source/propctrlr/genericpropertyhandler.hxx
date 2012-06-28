@@ -25,11 +25,9 @@
 #include "pcrcommon.hxx"
 #include "pcrcomponentcontext.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ref.hxx>

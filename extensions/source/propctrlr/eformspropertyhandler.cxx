@@ -34,11 +34,9 @@
 #include "eformshelper.hxx"
 #include "handlerhelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 
 #include <functional>

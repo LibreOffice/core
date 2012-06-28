@@ -28,7 +28,6 @@
 #include "dbastrings.hrc"
 #include "module_dba.hxx"
 
-/** === being UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -46,7 +45,6 @@
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-/** === end UNO includes === **/
 
 #include <basic/basmgr.hxx>
 #include <comphelper/enumhelper.hxx>

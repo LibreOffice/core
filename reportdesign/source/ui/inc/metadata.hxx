@@ -21,10 +21,8 @@
 
 #include "ModuleHelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
-/** === end UNO includes === **/
 
 //............................................................................
 namespace rptui

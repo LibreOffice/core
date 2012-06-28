@@ -27,9 +27,6 @@
 #include "rtattributes.hxx"
 #include "textattributelistener.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 class EditView;
 class EditEngine;
 class SfxItemSet;

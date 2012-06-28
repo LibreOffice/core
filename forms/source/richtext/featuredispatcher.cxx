@@ -28,9 +28,6 @@
 
 #include "featuredispatcher.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace frm
 {

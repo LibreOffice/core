@@ -32,7 +32,6 @@
 #include "ucpext_provider.hxx"
 #include "ucpext_resultset.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
@@ -50,7 +49,6 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/deployment/XPackageInformationProvider.hpp>
-/** === end UNO includes === **/
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>

@@ -20,9 +20,6 @@
 #ifndef CONNECTIVITY_LOCALREF_HXX
 #define CONNECTIVITY_LOCALREF_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <jvmaccess/virtualmachine.hxx>
 
 //........................................................................

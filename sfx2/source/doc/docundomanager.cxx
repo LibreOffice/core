@@ -33,9 +33,7 @@
 #include "sfx2/viewsh.hxx"
 #include "sfx2/bindings.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XComponent.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/anytostring.hxx>
 #include <comphelper/flagguard.hxx>

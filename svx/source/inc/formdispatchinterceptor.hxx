@@ -28,10 +28,8 @@
 #ifndef SVX_FORMDISPATCHINTERCEPTOR_HXX
 #define SVX_FORMDISPATCHINTERCEPTOR_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/uno3.hxx>

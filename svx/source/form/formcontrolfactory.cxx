@@ -35,7 +35,6 @@
 #include "svx/dialmgr.hxx"
 #include "svx/svdouno.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
@@ -49,7 +48,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/numbers.hxx>

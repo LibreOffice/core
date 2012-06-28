@@ -20,9 +20,7 @@
 #include "clipboarddispatcher.hxx"
 #include <editeng/editview.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
 

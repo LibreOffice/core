@@ -25,7 +25,6 @@
 #include "subcomponents.hxx"
 #include "dbastrings.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -35,7 +34,6 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>

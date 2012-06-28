@@ -25,10 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "reportformula.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
+#include "reportformula.hxx"
 
 #include <rtl/ustrbuf.hxx>
 

@@ -31,12 +31,10 @@
 
 #include "sfx2/dllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
-/** === end UNO includes === **/
 
 #include <boost/shared_ptr.hpp>
 

@@ -24,7 +24,6 @@
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
-/** === begin UNO includes == **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -41,7 +40,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerApproveListener.hpp>
-/** === end UNO includes === **/
 
 #include "definitioncontainer.hxx"
 #include "apitools.hxx"

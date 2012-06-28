@@ -32,14 +32,12 @@
 #include "ViewShellBase.hxx"
 #include "app.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-/** === end UNO includes === **/
 
 #include <sfx2/frame.hxx>
 #include <vcl/svapp.hxx>

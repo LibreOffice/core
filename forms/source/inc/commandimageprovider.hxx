@@ -28,9 +28,7 @@
 #ifndef COMMANDIMAGEPROVIDER_HXX
 #define COMMANDIMAGEPROVIDER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <vcl/image.hxx>

@@ -20,9 +20,7 @@
 
 #include "storagestream.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/embed/ElementModes.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

@@ -20,10 +20,8 @@
 
 #include "docinteraction.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>

@@ -29,10 +29,8 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PCROMPONENTCONTEXT_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_PCROMPONENTCONTEXT_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace pcr

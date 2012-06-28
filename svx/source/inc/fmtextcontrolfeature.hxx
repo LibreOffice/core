@@ -20,12 +20,10 @@
 #ifndef SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
 #define SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/util/URL.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase1.hxx>
 #include "fmslotinvalidator.hxx"
 

@@ -26,10 +26,8 @@
 #include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/listenernotification.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase3.hxx>
 #include <tools/link.hxx>
 #include <memory>

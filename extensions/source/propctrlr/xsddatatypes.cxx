@@ -29,11 +29,9 @@
 #include "xsddatatypes.hxx"
 #include "formstrings.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/XDataType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 
 //........................................................................

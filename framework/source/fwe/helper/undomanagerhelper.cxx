@@ -28,9 +28,7 @@
 
 #include "framework/undomanagerhelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XComponent.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>

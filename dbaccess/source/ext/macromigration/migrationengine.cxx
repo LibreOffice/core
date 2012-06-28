@@ -29,7 +29,6 @@
 #include "progresscapture.hxx"
 #include "progressmixer.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -57,7 +56,6 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/interaction.hxx>

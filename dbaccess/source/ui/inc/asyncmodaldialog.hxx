@@ -20,9 +20,7 @@
 #ifndef DBACCESS_ASYNCMODALDIALOG_HXX
 #define DBACCESS_ASYNCMODALDIALOG_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace dbaui

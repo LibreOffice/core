@@ -29,8 +29,6 @@
 
 #include "xfm_addcondition.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 #include <cppuhelper/typeprovider.hxx>
 #include "datanavi.hxx"
 #include <vcl/msgbox.hxx>

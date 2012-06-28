@@ -28,11 +28,9 @@
 
 #include <comphelper/officeresourcebundle.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/resource/XResourceBundle.hpp>
 #include <com/sun/star/resource/XResourceBundleLoader.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
-/** === end UNO includes === **/
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>

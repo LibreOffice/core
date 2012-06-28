@@ -20,12 +20,10 @@
 #ifndef SCRIPTDOCUMENT_HXX
 #define SCRIPTDOCUMENT_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-/** === end UNO includes === **/
 
 #include <boost/shared_ptr.hpp>
 #include <vector>

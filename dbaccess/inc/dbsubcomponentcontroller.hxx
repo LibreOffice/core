@@ -22,14 +22,12 @@
 
 #include "genericcontroller.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>

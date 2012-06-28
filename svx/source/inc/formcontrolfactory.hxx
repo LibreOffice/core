@@ -23,13 +23,11 @@
 
 #include "fmdocumentclassification.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-/** === end UNO includes === **/
 
 #include <memory>
 

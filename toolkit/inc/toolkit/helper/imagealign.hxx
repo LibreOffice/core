@@ -20,11 +20,7 @@
 #ifndef TOOLKIT_INC_TOOLKIT_HELPER_IMAGEALIGN_HXX
 #define TOOLKIT_INC_TOOLKIT_HELPER_IMAGEALIGN_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <sal/types.h>
-
 #include <vcl/button.hxx>
 
 //........................................................................

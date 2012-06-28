@@ -20,9 +20,6 @@
 #ifndef CONNECTIVITY_HTOOLS_HXX
 #define CONNECTIVITY_HTOOLS_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <rtl/ustrbuf.hxx>
 
 //........................................................................

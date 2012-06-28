@@ -22,10 +22,8 @@
 
 #include "AppElementType.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XController.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/sharedmutex.hxx>
 #include <cppuhelper/implbase1.hxx>

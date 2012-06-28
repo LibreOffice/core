@@ -38,7 +38,6 @@
 #include <sfx2/ctrlitem.hxx>
 #include <vcl/image.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -47,7 +46,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-/** === end UNO includes === **/
 
 #include <svtools/svtreebx.hxx>
 

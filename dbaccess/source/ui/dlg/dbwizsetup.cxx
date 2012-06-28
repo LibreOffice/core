@@ -49,7 +49,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -75,7 +74,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 
-/** === end UNO includes === **/
 
 #include <svl/filenotation.hxx>
 #include <comphelper/componentcontext.hxx>

@@ -20,12 +20,10 @@
 #ifndef SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
 #define SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-/** === end UNO includes === **/
 #include <comphelper/stl_types.hxx>
 
 #include <set>

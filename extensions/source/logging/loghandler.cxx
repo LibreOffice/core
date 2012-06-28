@@ -20,12 +20,10 @@
 
 #include "loghandler.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/logging/LogLevel.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/logging/PlainTextFormatter.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/componentcontext.hxx>

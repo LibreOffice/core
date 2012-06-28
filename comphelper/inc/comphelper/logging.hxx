@@ -31,11 +31,9 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/logging/XLogHandler.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
-/** === end UNO includes === **/
 
 #include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>

@@ -22,10 +22,8 @@
 
 #include <vcl/image.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
-/** === end UNO includes === **/
 
 #include <tools/string.hxx>
 #include <boost/shared_ptr.hpp>

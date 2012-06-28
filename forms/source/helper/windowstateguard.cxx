@@ -29,10 +29,8 @@
 #include "windowstateguard.hxx"
 #include "frm_strings.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XWindowListener2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase1.hxx>
 #include <tools/diagnose_ex.h>
 

@@ -33,7 +33,6 @@
 
 #include "ReportHelperDefines.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
@@ -46,7 +45,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/uno3.hxx>

@@ -20,9 +20,6 @@
 #include "modulepcr.hxx"
 #include "propresid.hrc"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace pcr
 {

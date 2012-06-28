@@ -25,11 +25,7 @@
  *
 ************************************************************************/
 
-
 #include "ctp_factory.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <cppuhelper/implementationentry.hxx>
 

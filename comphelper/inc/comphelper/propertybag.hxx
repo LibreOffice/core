@@ -23,9 +23,6 @@
 #include "comphelper/comphelperdllapi.h"
 #include <comphelper/propertycontainerhelper.hxx>
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <memory>
 
 //........................................................................

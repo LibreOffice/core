@@ -20,11 +20,9 @@
 
 #include "commanddescriptionprovider.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>

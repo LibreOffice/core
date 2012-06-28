@@ -20,11 +20,9 @@
 #ifndef FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
 #define FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-/** === end UNO includes === **/
 
 #include <set>
 #include <functional>

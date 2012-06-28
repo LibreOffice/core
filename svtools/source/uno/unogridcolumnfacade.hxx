@@ -23,11 +23,9 @@
 #include "svtools/table/tablemodel.hxx"
 #include "svtools/table/tablecontrol.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ref.hxx>

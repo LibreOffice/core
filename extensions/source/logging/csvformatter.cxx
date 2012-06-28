@@ -23,12 +23,10 @@
 #include <stdio.h>
 #include <string>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/logging/XCsvLogFormatter.hpp>
 #include <com/sun/star/logging/XLogFormatter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 

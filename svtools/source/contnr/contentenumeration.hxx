@@ -29,10 +29,8 @@
 #ifndef SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
 #define SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
-/** === end UNO includes === **/
 #include <salhelper/thread.hxx>
 #include <rtl/ref.hxx>
 #include <ucbhelper/content.hxx>

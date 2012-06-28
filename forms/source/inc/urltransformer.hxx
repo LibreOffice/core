@@ -20,11 +20,9 @@
 #ifndef FORMS_SOURCE_INC_URLTRANSFORMER_HXX
 #define FORMS_SOURCE_INC_URLTRANSFORMER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace frm

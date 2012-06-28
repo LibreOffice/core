@@ -31,9 +31,7 @@
 
 #include <tools/diagnose_ex.h>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/WizardTravelType.hpp>
-/** === end UNO includes === **/
 
 #include <vcl/msgbox.hxx>
 

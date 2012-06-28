@@ -29,9 +29,7 @@
 #include "UndoManager.hxx"
 #include "ChartViewHelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 #include <framework/undomanagerhelper.hxx>
 #include <officecfg/Office/Common.hxx>

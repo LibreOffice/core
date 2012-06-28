@@ -20,9 +20,6 @@
 #ifndef SVTOOLS_SOURCE_FILEPICKER_ASYNCFILEPICKER_HXX
 #define SVTOOLS_SOURCE_FILEPICKER_ASYNCFILEPICKER_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <rtl/ref.hxx>

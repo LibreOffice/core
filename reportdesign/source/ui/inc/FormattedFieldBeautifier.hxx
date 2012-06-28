@@ -20,12 +20,10 @@
 #ifndef INCLUDED_FORMATTEDFIELDBEAUTIFIER_HXX
 #define INCLUDED_FORMATTEDFIELDBEAUTIFIER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>
-/** === end UNO includes === **/
 
 #include <vector>
 #include <IReportControllerObserver.hxx>

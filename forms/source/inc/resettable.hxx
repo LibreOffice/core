@@ -20,9 +20,7 @@
 #ifndef FORMS_RESETTABLE_HXX
 #define FORMS_RESETTABLE_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/XResetListener.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/interfacecontainer.hxx>
 

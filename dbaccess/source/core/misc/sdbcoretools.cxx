@@ -21,7 +21,6 @@
 #include "sdbcoretools.hxx"
 #include "dbastrings.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -30,7 +29,6 @@
 #include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>

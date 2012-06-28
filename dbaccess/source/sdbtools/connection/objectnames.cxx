@@ -23,13 +23,11 @@
 #include "module_sdbt.hxx"
 #include "sdbt_resource.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>

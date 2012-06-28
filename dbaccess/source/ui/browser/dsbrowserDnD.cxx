@@ -28,11 +28,9 @@
 #include "UITools.hxx"
 #include "unodatbr.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>

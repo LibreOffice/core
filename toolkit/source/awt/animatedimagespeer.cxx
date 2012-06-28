@@ -29,7 +29,6 @@
 #include "toolkit/awt/animatedimagespeer.hxx"
 #include "toolkit/helper/property.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
@@ -37,7 +36,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>

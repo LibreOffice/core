@@ -33,12 +33,10 @@
 #include "svtools/table/gridtablerenderer.hxx"
 #include "svtools/table/tablecontrol.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
 #include <com/sun/star/awt/grid/XSortableGridData.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/stlunosequence.hxx>
 #include <cppuhelper/weakref.hxx>

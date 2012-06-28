@@ -20,9 +20,7 @@
 #ifndef INCLUDED_BEAUTIFIER_HXX
 #define INCLUDED_BEAUTIFIER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-/** === end UNO includes === **/
 
 namespace rptui
 {

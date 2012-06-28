@@ -39,7 +39,6 @@
 #include "svx/svxids.hrc"
 #include <tools/urlobj.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -52,7 +51,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>

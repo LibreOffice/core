@@ -23,12 +23,10 @@
 #include "commoncontrol.hxx"
 #include "pcrcommon.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/inspection/XStringListControl.hpp>
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-/** === end UNO includes === **/
 #include <vcl/field.hxx>
 #include <vcl/longcurr.hxx>
 #include <svtools/ctrlbox.hxx>

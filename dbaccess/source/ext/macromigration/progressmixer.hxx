@@ -20,9 +20,6 @@
 #ifndef DBACCESS_PROGRESSMIXER_HXX
 #define DBACCESS_PROGRESSMIXER_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <sal/types.h>
 
 #include <memory>

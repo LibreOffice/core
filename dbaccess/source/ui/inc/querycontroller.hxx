@@ -27,14 +27,12 @@
 #include "svx/ParseContext.hxx"
 #include "TableFieldDescription.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XAlterView.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>

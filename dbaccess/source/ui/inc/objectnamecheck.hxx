@@ -20,9 +20,6 @@
 #ifndef DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
 #define DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 namespace rtl { class OUString; }
 namespace dbtools { class SQLExceptionInfo; }
 

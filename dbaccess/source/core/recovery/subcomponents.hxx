@@ -22,9 +22,7 @@
 
 #include "dbaccessdllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ustring.hxx>
 

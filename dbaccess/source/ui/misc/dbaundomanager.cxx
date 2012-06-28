@@ -20,9 +20,7 @@
 
 #include "dbaundomanager.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 #include <svl/undo.hxx>
 #include <vcl/svapp.hxx>

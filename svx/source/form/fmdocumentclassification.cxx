@@ -30,13 +30,11 @@
 #include "fmdocumentclassification.hxx"
 #include "svx/dbtoolsclient.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XModule.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

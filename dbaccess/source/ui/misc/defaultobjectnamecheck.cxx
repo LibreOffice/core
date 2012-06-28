@@ -24,13 +24,11 @@
 
 #include "moduledbu.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbmetadata.hxx>

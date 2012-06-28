@@ -20,9 +20,6 @@
 #ifndef ACC_ACCESSIBLETOOLPANELDECKTABBARITEM_HXX
 #define ACC_ACCESSIBLETOOLPANELDECKTABBARITEM_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 

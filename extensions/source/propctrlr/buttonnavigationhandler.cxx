@@ -31,8 +31,6 @@
 #include "formmetadata.hxx"
 #include "pushbuttonnavigation.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 
 //------------------------------------------------------------------------

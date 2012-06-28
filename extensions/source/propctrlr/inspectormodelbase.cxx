@@ -20,9 +20,7 @@
 #include "inspectormodelbase.hxx"
 #include "pcrcommon.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/propertycontainerhelper.hxx>
 

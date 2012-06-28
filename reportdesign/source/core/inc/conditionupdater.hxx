@@ -22,10 +22,8 @@
 
 #include "conditionalexpression.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/report/XReportControlModel.hpp>
-/** === end UNO includes === **/
 
 #include <boost/noncopyable.hpp>
 

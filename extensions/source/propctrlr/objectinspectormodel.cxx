@@ -21,10 +21,8 @@
 #include "pcrcommon.hxx"
 #include "inspectormodelbase.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase3.hxx>
 

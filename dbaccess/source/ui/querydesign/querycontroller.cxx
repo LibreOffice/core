@@ -40,7 +40,6 @@
 #include "TableFieldDescription.hxx"
 #include "UITools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -64,7 +63,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/extract.hxx>

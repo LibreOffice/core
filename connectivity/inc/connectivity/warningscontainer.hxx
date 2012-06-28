@@ -20,10 +20,8 @@
 #ifndef DBTOOLS_WARNINGSCONTAINER_HXX
 #define DBTOOLS_WARNINGSCONTAINER_HXX
 
-/** ==== begin UNO includes === **/
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-/** ==== end UNO includes === **/
 
 #include "connectivity/dbtoolsdllapi.hxx"
 

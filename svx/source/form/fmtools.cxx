@@ -33,7 +33,6 @@
 #include "svx/dbtoolsclient.hxx"
 #include "svx/fmglob.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
@@ -68,7 +67,6 @@
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-/** === end UNO includes === **/
 
 #include <basic/sbxvar.hxx>
 #include <svl/eitem.hxx>

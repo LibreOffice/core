@@ -39,12 +39,10 @@
 #include "formbrowsertools.hxx"
 #include "propertycomposer.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/types.hxx>

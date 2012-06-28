@@ -20,7 +20,6 @@
 #ifndef FORMS_FORMOPERATIONS_HXX
 #define FORMS_FORMOPERATIONS_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/form/XForm.hpp>
@@ -30,7 +29,6 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 

@@ -20,9 +20,7 @@
 
 #include "documenteventnotifier.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/asyncnotification.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

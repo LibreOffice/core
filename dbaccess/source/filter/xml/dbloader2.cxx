@@ -21,7 +21,6 @@
 #include "flt_reghelper.hxx"
 #include "xmlstrings.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -50,7 +49,6 @@
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/documentconstants.hxx>

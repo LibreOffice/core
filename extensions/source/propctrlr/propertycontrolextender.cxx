@@ -20,9 +20,7 @@
 
 #include "propertycontrolextender.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/KeyFunction.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

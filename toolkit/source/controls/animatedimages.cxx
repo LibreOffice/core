@@ -31,12 +31,10 @@
 #include "toolkit/helper/property.hxx"
 #include "toolkit/helper/unopropertyarrayhelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-/** === end UNO includes === **/
 
 //......................................................................................................................
 namespace toolkit

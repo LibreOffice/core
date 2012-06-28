@@ -39,7 +39,6 @@
 #include "stringlistitem.hxx"
 #include "OAuthenticationContinuation.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -49,7 +48,6 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/guarding.hxx>
 #include <comphelper/interaction.hxx>

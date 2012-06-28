@@ -30,13 +30,11 @@
 
 #include "initguard.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/grid/XSortableMutableGridDataModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/basemutex.hxx>

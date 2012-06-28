@@ -19,9 +19,7 @@
 #ifndef BASCTL_DOCSIGNATURE_HXX
 #define BASCTL_DOCSIGNATURE_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
-/** === end UNO includes === **/
 
 #include <memory>
 

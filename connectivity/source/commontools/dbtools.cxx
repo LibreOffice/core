@@ -23,7 +23,6 @@
 #include "TConnection.hxx"
 #include "connectivity/ParameterCont.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -62,7 +61,6 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>

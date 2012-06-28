@@ -23,9 +23,6 @@
 #include "java/LocalRef.hxx"
 #include "java/lang/Object.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <jvmaccess/virtualmachine.hxx>
 
 //........................................................................

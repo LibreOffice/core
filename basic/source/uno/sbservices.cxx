@@ -28,9 +28,6 @@
 
 #include "sbmodule.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace basic
 {

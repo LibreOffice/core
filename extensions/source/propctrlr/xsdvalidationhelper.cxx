@@ -30,14 +30,12 @@
 #include "xsddatatypes.hxx"
 #include "formstrings.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
-/** === end UNO includes === **/
 #include <unotools/syslocale.hxx>
 #include <tools/diagnose_ex.h>
 

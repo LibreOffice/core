@@ -34,7 +34,6 @@
 #include "property.hrc"
 #include "property.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XComboBox.hpp>
@@ -55,7 +54,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XItemList.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>

@@ -31,13 +31,11 @@
 #include "querycomposer.hxx"
 #include "sdbcoretools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-/** === end UNO includes === **/
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbexception.hxx>

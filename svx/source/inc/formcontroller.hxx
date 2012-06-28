@@ -32,7 +32,6 @@
 #include "formdispatchinterceptor.hxx"
 #include "sqlparserclient.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
@@ -76,7 +75,6 @@
 #include <com/sun/star/util/XModeSelector.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/componentcontext.hxx>

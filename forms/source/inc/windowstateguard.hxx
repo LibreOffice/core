@@ -20,10 +20,8 @@
 #ifndef FORMS_WINDOWSTATEGUARD_HXX
 #define FORMS_WINDOWSTATEGUARD_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
-/** === end UNO includes === **/
 #include <rtl/ref.hxx>
 
 //........................................................................

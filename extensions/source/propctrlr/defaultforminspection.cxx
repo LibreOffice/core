@@ -34,10 +34,8 @@
 #include "propctrlr.hrc"
 #include "formmetadata.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase1.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>

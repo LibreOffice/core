@@ -31,10 +31,8 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace comphelper

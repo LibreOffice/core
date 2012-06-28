@@ -33,13 +33,11 @@
 #include "propeventtranslation.hxx"
 #include "formbrowsertools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
-/** === end UNO includes === **/
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 

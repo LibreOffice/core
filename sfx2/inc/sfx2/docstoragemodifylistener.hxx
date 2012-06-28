@@ -31,9 +31,7 @@
 
 #include "sfx2/dllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XModifyListener.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

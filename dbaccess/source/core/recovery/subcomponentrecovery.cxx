@@ -25,7 +25,6 @@
 #include "subcomponentloader.hxx"
 #include "settingsimport.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -34,7 +33,6 @@
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/dbtools.hxx>

@@ -28,11 +28,9 @@
 
 #include "gridcolumnproptranslator.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-/** === end UNO includes === **/
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
 

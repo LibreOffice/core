@@ -20,14 +20,12 @@
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #define DBACORE_SDBCORETOOLS_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-/** === end UNO includes === **/
 
 namespace comphelper
 {

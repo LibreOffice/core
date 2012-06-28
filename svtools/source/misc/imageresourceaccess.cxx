@@ -29,13 +29,11 @@
 
 #include <svtools/imageresourceaccess.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XStream.hpp>
-/** === end UNO includes === **/
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>

@@ -28,9 +28,7 @@
 #ifndef SVTOOLS_CELLVALUECONVERSION_HXX
 #define SVTOOLS_CELLVALUECONVERSION_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Any.hxx>
-/** === end UNO includes === **/
 
 //......................................................................................................................
 namespace svt

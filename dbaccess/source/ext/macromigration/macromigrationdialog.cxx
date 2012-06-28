@@ -28,7 +28,6 @@
 #include "migrationerror.hxx"
 #include "migrationlog.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -37,7 +36,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>

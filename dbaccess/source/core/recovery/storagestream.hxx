@@ -22,9 +22,7 @@
 
 #include "dbaccessdllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/embed/XStorage.hpp>
-/** === end UNO includes === **/
 
 namespace comphelper
 {

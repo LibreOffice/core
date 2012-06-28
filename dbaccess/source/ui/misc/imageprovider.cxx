@@ -23,13 +23,11 @@
 #include "moduledbu.hxx"
 #include "dbustrings.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

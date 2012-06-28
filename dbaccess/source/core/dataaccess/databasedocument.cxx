@@ -30,7 +30,6 @@
 #include "sdbcoretools.hxx"
 #include "recovery/dbdocrecovery.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -60,7 +59,6 @@
 #include <com/sun/star/awt/XDialogProvider.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 
-/** === end UNO includes === **/
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/enumhelper.hxx>

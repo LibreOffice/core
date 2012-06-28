@@ -18,9 +18,7 @@
  */
 
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/basemutex.hxx>

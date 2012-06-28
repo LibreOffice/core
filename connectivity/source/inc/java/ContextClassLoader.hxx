@@ -22,9 +22,6 @@
 
 #include "java/GlobalRef.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 namespace comphelper
 {
     class ResourceBasedEventLogger;

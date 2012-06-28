@@ -20,14 +20,12 @@
 #ifndef FORMS_SOURCE_XFORMS_DATATYPES_HXX
 #define FORMS_SOURCE_XFORMS_DATATYPES_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xsd/XDataType.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/propertycontainer.hxx>

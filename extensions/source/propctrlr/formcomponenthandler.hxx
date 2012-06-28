@@ -26,13 +26,11 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
-/** === end UNO includes === **/
 #include <tools/fldunit.hxx>
 #include <vcl/waitobj.hxx>
 #include <connectivity/dbtools.hxx>

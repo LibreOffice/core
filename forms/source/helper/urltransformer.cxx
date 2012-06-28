@@ -28,9 +28,7 @@
 
 #include "urltransformer.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/URLTransformer.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <comphelper/componentcontext.hxx>
 

@@ -22,10 +22,8 @@
 
 #include "storagestream.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-/** === end UNO includes === **/
 
 #include <memory>
 

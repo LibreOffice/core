@@ -30,9 +30,6 @@
 
 #include "inspectormodelbase.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <memory>
 
 //........................................................................

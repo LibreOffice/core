@@ -20,9 +20,7 @@
 #ifndef CONNECTIVITY_CONNECTIONLOG_HXX
 #define CONNECTIVITY_CONNECTIONLOG_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/logging/LogLevel.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ustring.hxx>
 

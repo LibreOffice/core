@@ -18,13 +18,11 @@
  */
 #include <connectivity/paramwrapper.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/enumhelper.hxx>

@@ -29,11 +29,9 @@
 #include "formatnormalizer.hxx"
 #include "RptModel.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-/** === end UNO includes === **/
 
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <unotools/syslocale.hxx>

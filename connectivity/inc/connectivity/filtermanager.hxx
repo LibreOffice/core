@@ -19,12 +19,10 @@
 #ifndef CONNECTIVITY_FILTERMANAGER_HXX
 #define CONNECTIVITY_FILTERMANAGER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ustrbuf.hxx>
 

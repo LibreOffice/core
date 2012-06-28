@@ -22,9 +22,7 @@
 
 #include "containerapprove.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XConnection.hpp>
-/** === end UNO includes === **/
 
 namespace dbaccess
 {

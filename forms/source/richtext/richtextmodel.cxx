@@ -33,11 +33,9 @@
 #include "richtextengine.hxx"
 #include "richtextunowrapper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/guarding.hxx>

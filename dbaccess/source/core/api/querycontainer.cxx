@@ -25,12 +25,10 @@
 #include "ContainerListener.hxx"
 #include "veto.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/container/XContainerApproveBroadcaster.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbexception.hxx>
 

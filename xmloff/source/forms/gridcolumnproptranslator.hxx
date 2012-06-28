@@ -20,10 +20,8 @@
 #ifndef XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
 #define XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase2.hxx>
 
 //........................................................................

@@ -20,9 +20,6 @@
 #include "udlg_module.hxx"
 #include "roadmapskeleton.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <comphelper/componentcontext.hxx>
 #include "svtools/genericunodialog.hxx"
 

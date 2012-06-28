@@ -28,7 +28,6 @@
 #ifndef SVX_SOURCE_INC_FMTEXTCONTROLSHELL_HXX
 #define SVX_SOURCE_INC_FMTEXTCONTROLSHELL_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -37,7 +36,6 @@
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-/** === end UNO includes === **/
 #include <comphelper/implementationreference.hxx>
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>

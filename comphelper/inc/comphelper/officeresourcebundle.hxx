@@ -31,9 +31,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/XComponentContext.hpp>
-/** === end UNO includes === **/
 #include <rtl/ustring.hxx>
 
 #include <memory>

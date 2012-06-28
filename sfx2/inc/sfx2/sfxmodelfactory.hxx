@@ -22,10 +22,8 @@
 
 #include "sfx2/dllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace sfx2

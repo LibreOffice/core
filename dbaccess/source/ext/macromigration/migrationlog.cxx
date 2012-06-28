@@ -23,8 +23,6 @@
 #include "migrationerror.hxx"
 #include "migrationlog.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <comphelper/anytostring.hxx>
 #include <tools/string.hxx>

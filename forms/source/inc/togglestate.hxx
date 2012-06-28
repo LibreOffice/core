@@ -20,9 +20,6 @@
 #ifndef FORMS_TOGGLESTATE_HXX
 #define FORMS_TOGGLESTATE_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace frm
 {

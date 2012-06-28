@@ -20,9 +20,7 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Any.hxx>
-/** === end UNO includes === **/
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 

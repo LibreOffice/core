@@ -31,11 +31,9 @@
 #include "pcrcommon.hxx"
 #include "modulepcr.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-/** === end UNO includes === **/
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>

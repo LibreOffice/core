@@ -29,10 +29,8 @@
 #ifndef FORMS_SOURCE_INC_CONTROLFEATUREINTERCEPTION_HXX
 #define FORMS_SOURCE_INC_CONTROLFEATUREINTERCEPTION_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-/** === end UNO includes === **/
 
 #include <memory>
 

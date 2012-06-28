@@ -19,9 +19,7 @@
 
 #include "connectivity/filtermanager.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-/** === end UNO includes === **/
 #include "TConnection.hxx"
 #include <osl/diagnose.h>
 #include "connectivity/dbtools.hxx"

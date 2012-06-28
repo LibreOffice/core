@@ -32,12 +32,10 @@
 #include "cloneable.hxx"
 #include "frm_strings.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/componentcontext.hxx>

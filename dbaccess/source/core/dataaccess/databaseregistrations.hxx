@@ -20,9 +20,7 @@
 #ifndef OOO_DATASOURCEREGISTRATIONS_HXX
 #define OOO_DATASOURCEREGISTRATIONS_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/XAggregation.hpp>
-/** === end UNO includes === **/
 
 namespace comphelper
 {

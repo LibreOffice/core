@@ -33,10 +33,8 @@
 #include "modulepcr.hxx"
 #include "pcrcommon.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
-/** === end UNO includes === **/
 #include <vcl/scrbar.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>

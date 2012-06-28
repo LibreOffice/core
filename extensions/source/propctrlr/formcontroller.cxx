@@ -32,12 +32,10 @@
 #include "defaultforminspection.hxx"
 #include "propctrlr.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XChild.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 

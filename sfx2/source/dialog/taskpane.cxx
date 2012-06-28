@@ -35,7 +35,6 @@
 #include "sfxlocal.hrc"
 #include "helpid.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
@@ -46,7 +45,6 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>

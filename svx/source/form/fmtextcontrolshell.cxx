@@ -41,7 +41,6 @@
 #include "svx/svxids.hrc"
 #include "editeng/udlnitem.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -50,7 +49,6 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>

@@ -21,8 +21,6 @@
 
 #include "propcontroller.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>

@@ -20,9 +20,7 @@
 
 #include "framework/documentundoguard.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>

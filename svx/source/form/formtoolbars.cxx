@@ -28,9 +28,7 @@
 
 #include "formtoolbars.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 
 #include <svx/svxids.hrc>
 

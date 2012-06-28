@@ -20,9 +20,7 @@
 
 #include "connectivity/sqlerror.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/SQLException.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/officeresourcebundle.hxx>
 #include <cppuhelper/exc_hlp.hxx>

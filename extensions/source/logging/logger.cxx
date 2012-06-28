@@ -22,13 +22,11 @@
 #include "logrecord.hxx"
 #include "loggerconfig.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/logging/XLogger.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/logging/XLoggerPool.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

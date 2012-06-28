@@ -22,13 +22,11 @@
 #include "formcontrolfont.hxx"
 #include "InterfaceContainer.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/sdb/XRowSetSupplier.hpp>
 #include <com/sun/star/sdb/XRowSetChangeBroadcaster.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase7.hxx>

@@ -20,13 +20,11 @@
 #ifndef DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
 #define DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-/** === end UNO includes === **/
 
 #include <svtools/genericunodialog.hxx>
 #include "moduledbu.hxx"

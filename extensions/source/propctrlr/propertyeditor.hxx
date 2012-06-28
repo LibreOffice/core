@@ -31,9 +31,7 @@
 
 #include "pcrcommon.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XPropertyControl.hpp>
-/** === end UNO includes === **/
 #include <vcl/tabctrl.hxx>
 #include <comphelper/stl_types.hxx>
 #include <boost/mem_fn.hpp>

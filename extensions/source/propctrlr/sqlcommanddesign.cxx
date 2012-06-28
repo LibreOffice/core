@@ -23,7 +23,6 @@
 #include "modulepcr.hxx"
 #include "unourl.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -39,7 +38,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-/** === end UNO includes === **/
 
 #include <svtools/localresaccess.hxx>
 #include <tools/diagnose_ex.h>

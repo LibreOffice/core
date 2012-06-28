@@ -39,7 +39,6 @@
 #include "pcrcommon.hxx"
 #include "handlerhelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
@@ -47,7 +46,6 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
-/** === end UNO includes === **/
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include <svtools/localresaccess.hxx>

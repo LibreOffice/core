@@ -21,13 +21,11 @@
 
 #include <connectivity/dbtools.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-/** === end UNO includes === **/
 
 #include <unotools/sharedunocomponent.hxx>
 #include <tools/diagnose_ex.h>

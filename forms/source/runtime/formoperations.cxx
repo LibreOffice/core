@@ -33,7 +33,6 @@
 #include "frm_resource.hrc"
 #include "frm_module.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
@@ -53,7 +52,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>

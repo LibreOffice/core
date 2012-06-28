@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "formdispatchinterceptor.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <tools/debug.hxx>
 

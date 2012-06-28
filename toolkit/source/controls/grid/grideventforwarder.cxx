@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "grideventforwarder.hxx"
 #include "gridcontrol.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 //......................................................................................................................
 namespace toolkit

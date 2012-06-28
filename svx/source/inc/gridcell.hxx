@@ -34,7 +34,6 @@
 #include "sqlparserclient.hxx"
 #include "typeconversionclient.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/form/XBoundControl.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -49,7 +48,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/componentcontext.hxx>

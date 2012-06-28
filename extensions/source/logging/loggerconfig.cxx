@@ -29,7 +29,6 @@
 
 #include "loggerconfig.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -41,7 +40,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/logging/XLogHandler.hpp>
 #include <com/sun/star/logging/XLogFormatter.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

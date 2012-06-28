@@ -21,10 +21,8 @@
 #include "ToolPanelUIElement.hxx"
 #include "MethodGuard.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

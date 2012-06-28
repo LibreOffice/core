@@ -26,12 +26,8 @@
  *
  ************************************************************************/
 
-
 #include "sfx2/docstoragemodifylistener.hxx"
 #include <osl/mutex.hxx>
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 //........................................................................
 namespace sfx2

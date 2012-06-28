@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "advancedsettings.hxx"
 #include "advancedsettingsdlg.hxx"
 #include "moduledbu.hxx"
@@ -29,9 +28,6 @@
 #include "dbu_dlg.hrc"
 #include "dbadmin.hrc"
 #include "advancedsettings.hrc"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

@@ -28,11 +28,9 @@
 
 #include "sfx2/sfxmodelfactory.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/implbase2.hxx>

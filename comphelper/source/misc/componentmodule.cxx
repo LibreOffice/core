@@ -28,8 +28,6 @@
 
 #include <comphelper/componentmodule.hxx>
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 

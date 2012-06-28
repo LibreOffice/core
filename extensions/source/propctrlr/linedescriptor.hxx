@@ -20,9 +20,7 @@
 #define _EXTENSIONS_PROPCTRLR_LINEDESCRIPTOR_HXX_
 
 #include <vcl/image.hxx>
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/LineDescriptor.hpp>
-/** === end UNO includes === **/
 
 //............................................................................
 namespace pcr

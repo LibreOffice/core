@@ -22,9 +22,7 @@
 
 #include "connectiondependent.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/tools/XObjectNames.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>

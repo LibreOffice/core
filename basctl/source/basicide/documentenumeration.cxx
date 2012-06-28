@@ -20,13 +20,11 @@
 
 #include "documentenumeration.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

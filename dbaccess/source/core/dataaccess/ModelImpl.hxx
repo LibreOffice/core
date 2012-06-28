@@ -26,7 +26,6 @@
 #include "core_resource.hxx"
 #include "documentevents.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -59,7 +58,6 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>

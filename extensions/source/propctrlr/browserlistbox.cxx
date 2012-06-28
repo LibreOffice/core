@@ -33,11 +33,9 @@
 #include "linedescriptor.hxx"
 #include "inspectorhelpwindow.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/asyncnotification.hxx>

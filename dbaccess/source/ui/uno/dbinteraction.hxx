@@ -25,14 +25,12 @@
 #include "moduledbu.hxx"
 #include "apitools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #include <com/sun/star/sdb/DocumentSaveRequest.hpp>
-/** === end UNO includes === **/
 
 namespace dbtools
 {

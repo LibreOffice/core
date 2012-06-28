@@ -33,13 +33,11 @@
 #include "pcrcommontypes.hxx"
 #include "pcrcommon.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/listenernotification.hxx>
 

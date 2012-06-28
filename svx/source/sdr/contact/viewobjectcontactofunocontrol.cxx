@@ -39,7 +39,6 @@
 #include <svx/sdrpagewindow.hxx>
 #include "svx/sdrpaintwindow.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -54,7 +53,6 @@
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-/** === end UNO includes === **/
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

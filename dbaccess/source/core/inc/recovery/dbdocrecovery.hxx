@@ -22,10 +22,8 @@
 
 #include "dbaccessdllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XController.hpp>
-/** === end UNO includes === **/
 
 #include <vector>
 #include <memory>

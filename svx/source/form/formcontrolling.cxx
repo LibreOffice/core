@@ -34,12 +34,10 @@
 #include "fmprop.hrc"
 #include "svx/fmtools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/anytostring.hxx>

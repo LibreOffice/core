@@ -28,12 +28,10 @@
 
 #include "fpsmartcontent.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/commandenvironment.hxx>

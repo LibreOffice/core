@@ -31,11 +31,9 @@
 #include "formmetadata.hxx"
 #include "cellbindinghelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 
 //------------------------------------------------------------------------

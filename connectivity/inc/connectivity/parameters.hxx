@@ -22,7 +22,6 @@
 #include <map>
 #include <vector>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/form/XDatabaseParameterListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -32,7 +31,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-/** === end UNO includes === **/
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/paramwrapper.hxx"

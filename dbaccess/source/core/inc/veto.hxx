@@ -20,9 +20,7 @@
 #ifndef DBACCESS_VETO_HXX
 #define DBACCESS_VETO_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XVeto.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

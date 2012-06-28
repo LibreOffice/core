@@ -20,7 +20,6 @@
 
 #include "opendoccontrols.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -29,7 +28,6 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
 #include <vcl/graph.hxx>

@@ -23,9 +23,6 @@
 #include "FormComponent.hxx"
 #include "togglestate.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace frm
 {

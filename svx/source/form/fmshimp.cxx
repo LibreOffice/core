@@ -55,7 +55,6 @@
 #include "svx/svxdlg.hxx"
 #include "svx/svxids.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
@@ -86,7 +85,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
 #include <comphelper/evtmethodhelper.hxx>

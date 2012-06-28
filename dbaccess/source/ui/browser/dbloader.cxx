@@ -22,7 +22,6 @@
 #include "dbustrings.hrc"
 #include "UITools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
@@ -38,7 +37,6 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XModule.hpp>
-/** === end UNO includes === **/
 
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <comphelper/namedvaluecollection.hxx>

@@ -34,9 +34,6 @@
 #include "formstrings.hxx"
 #include <vcl/msgbox.hxx>
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace pcr
 {

@@ -20,10 +20,8 @@
 #ifndef DBACCESS_DOCUMENTEVENTEXECUTOR_HXX
 #define DBACCESS_DOCUMENTEVENTEXECUTOR_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

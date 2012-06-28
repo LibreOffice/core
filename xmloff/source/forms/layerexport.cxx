@@ -55,9 +55,7 @@
 #include <xmloff/xmlnumfe.hxx>
 #include "xmloff/xformsexport.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
-/** === end UNO includes === **/
 
 #include <numeric>
 

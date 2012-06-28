@@ -22,12 +22,10 @@
 
 #include "dbaccessdllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

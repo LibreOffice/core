@@ -30,9 +30,7 @@
 
 #include "svtools/wizardmachine.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
-/** === end UNO includes === **/
 
 //......................................................................................................................
 namespace svt { namespace uno

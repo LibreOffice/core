@@ -32,12 +32,10 @@
 #include <comphelper/propagg.hxx>
 #include <comphelper/sequence.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>

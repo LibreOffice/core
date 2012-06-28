@@ -31,9 +31,7 @@
 
 #include "dllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Any.hxx>
-/** === end UNO includes === **/
 
 #include <osl/diagnose.h>
 

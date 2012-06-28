@@ -33,13 +33,11 @@
 #include "comphelper/componentcontext.hxx"
 #include "comphelper/extract.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XEnumerableMap.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/implbase1.hxx>

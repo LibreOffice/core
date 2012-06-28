@@ -33,7 +33,6 @@
 #include "ReportControllerObserver.hxx"
 #include "RptDef.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -53,7 +52,6 @@
 #include <com/sun/star/util/XModeSelector.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/implementationreference.hxx>
 #include <comphelper/proparrhlp.hxx>

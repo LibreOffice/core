@@ -29,11 +29,9 @@
 #ifndef SVX_FMDISPATCH_HXX
 #define SVX_FMDISPATCH_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

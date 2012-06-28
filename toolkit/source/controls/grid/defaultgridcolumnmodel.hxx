@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -25,7 +24,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/util/Color.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>

@@ -20,9 +20,7 @@
 #ifndef CONNECTIVITY_SQLERROR_HXX
 #define CONNECTIVITY_SQLERROR_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/SQLException.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 

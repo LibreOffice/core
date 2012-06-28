@@ -20,9 +20,7 @@
 #ifndef LOGRECORD_HXX
 #define LOGRECORD_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/logging/LogRecord.hpp>
-/** === end UNO includes === **/
 
 #include <osl/interlck.h>
 

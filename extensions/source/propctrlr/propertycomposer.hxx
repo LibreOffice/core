@@ -33,11 +33,9 @@
 #include "composeduiupdate.hxx"
 #include "formbrowsertools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/listenernotification.hxx>

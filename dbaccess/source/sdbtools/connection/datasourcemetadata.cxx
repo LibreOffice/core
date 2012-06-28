@@ -20,9 +20,7 @@
 
 #include "datasourcemetadata.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbmetadata.hxx>
 

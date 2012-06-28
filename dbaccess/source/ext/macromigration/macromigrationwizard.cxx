@@ -22,11 +22,9 @@
 #include "dbmm_global.hrc"
 #include "macromigrationdialog.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <svtools/genericunodialog.hxx>

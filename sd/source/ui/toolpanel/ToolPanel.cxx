@@ -30,9 +30,7 @@
 #include "MethodGuard.hxx"
 #include <taskpane/TaskPaneTreeNode.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 #include <vcl/window.hxx>
 

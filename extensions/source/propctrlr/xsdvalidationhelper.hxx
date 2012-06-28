@@ -23,10 +23,8 @@
 #include "eformshelper.hxx"
 #include "xsddatatypes.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/xsd/XDataType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 #include <rtl/ref.hxx>
 
 //........................................................................

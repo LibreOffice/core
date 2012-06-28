@@ -20,9 +20,6 @@
 #ifndef DBACCESS_RANGEPROGRESSBAR_HXX
 #define DBACCESS_RANGEPROGRESSBAR_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <svtools/prgsbar.hxx>
 
 //........................................................................

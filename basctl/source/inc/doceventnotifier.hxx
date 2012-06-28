@@ -20,9 +20,7 @@
 #ifndef BASCTL_DOCEVENTNOTIFIER_HXX
 #define BASCTL_DOCEVENTNOTIFIER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ref.hxx>
 

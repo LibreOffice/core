@@ -36,7 +36,6 @@
 #include "frm_resource.hrc"
 #include "BaseListBox.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -47,7 +46,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/numbers.hxx>
 #include <comphelper/basicio.hxx>

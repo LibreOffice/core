@@ -28,12 +28,10 @@
 
 #include "fmservs.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/XFormController.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase2.hxx>
 

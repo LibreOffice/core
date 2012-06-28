@@ -26,10 +26,8 @@
 #include "dbustrings.hrc"
 #include "propertystorage.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <svtools/genericunodialog.hxx>

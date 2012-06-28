@@ -29,7 +29,6 @@
 
 #include <toolkit/helper/formpdfexport.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -42,7 +41,6 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/form/FormSubmitMethod.hpp>
-/** === end UNO includes === **/
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/pdfextoutdevdata.hxx>

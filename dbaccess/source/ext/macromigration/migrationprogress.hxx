@@ -20,9 +20,6 @@
 #ifndef DBACCESS_MIGRATIONPROGRESS_HXX
 #define DBACCESS_MIGRATIONPROGRESS_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace dbmm
 {

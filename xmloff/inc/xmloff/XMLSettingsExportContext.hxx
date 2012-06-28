@@ -27,9 +27,7 @@
 #ifndef XML_SETTINGS_EXPORT_CONTEXT_HXX
 #define XML_SETTINGS_EXPORT_CONTEXT_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-/** === end UNO includes === **/
 
 #include "xmloff/xmltoken.hxx"
 

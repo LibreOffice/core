@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ucpext_resultset.hxx"
 #include "ucpext_content.hxx"
 #include "ucpext_datasupplier.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <ucbhelper/resultset.hxx>
 

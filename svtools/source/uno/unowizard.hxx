@@ -22,11 +22,9 @@
 
 #include "svtools/genericunodialog.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/componentcontext.hxx>

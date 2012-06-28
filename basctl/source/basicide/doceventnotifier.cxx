@@ -21,9 +21,7 @@
 #include "doceventnotifier.hxx"
 #include "scriptdocument.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-/** === end UNO includes === **/
 
 #include <vcl/svapp.hxx>
 

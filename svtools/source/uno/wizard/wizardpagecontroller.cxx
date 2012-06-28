@@ -21,10 +21,8 @@
 #include "wizardpagecontroller.hxx"
 #include "wizardshell.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-/** === end UNO includes === **/
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>

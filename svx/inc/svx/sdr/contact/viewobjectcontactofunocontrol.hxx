@@ -31,9 +31,7 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Reference.hxx>
-/** === end UNO includes === **/
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 

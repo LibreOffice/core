@@ -20,9 +20,7 @@
 #ifndef FORMS_SOURCE_INC_LISTENERCONTAINERS_HXX
 #define FORMS_SOURCE_INC_LISTENERCONTAINERS_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/XResetListener.hpp>
-/** === end UNO includes === **/
 #include <comphelper/listenernotification.hxx>
 #include <cppuhelper/weak.hxx>
 

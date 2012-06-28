@@ -30,7 +30,6 @@
 #include "fmcontrollayout.hxx"
 #include "fmprop.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -39,7 +38,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XChild.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
 #include <i18npool/mslangid.hxx>

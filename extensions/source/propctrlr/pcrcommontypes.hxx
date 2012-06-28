@@ -29,9 +29,7 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/Property.hpp>
-/** === end UNO includes === **/
 #include <rtl/ustring.hxx>
 
 #include <boost/unordered_map.hpp>

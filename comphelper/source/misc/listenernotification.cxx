@@ -19,9 +19,7 @@
 
 #include <comphelper/listenernotification.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 //........................................................................
 namespace comphelper

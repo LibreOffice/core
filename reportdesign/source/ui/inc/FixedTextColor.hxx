@@ -20,14 +20,12 @@
 #ifndef INCLUDED_FIXEDTEXTCOLOR_HXX
 #define INCLUDED_FIXEDTEXTCOLOR_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
-/** === end UNO includes === **/
 
 #include <IReportControllerObserver.hxx>
 #include <vector>

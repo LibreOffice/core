@@ -20,9 +20,7 @@
 #ifndef CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
 #define CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XConnection.hpp>
-/** === end UNO includes === **/
 
 #include <memory>
 #include "connectivity/dbtoolsdllapi.hxx"

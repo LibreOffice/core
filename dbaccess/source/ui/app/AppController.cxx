@@ -23,7 +23,6 @@
 #include "advancedsettingsdlg.hxx"
 #include "subcomponentmanager.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -61,7 +60,6 @@
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
-/** === end UNO includes === **/
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <tools/string.hxx>

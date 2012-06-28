@@ -32,13 +32,11 @@
 #include <svx/fmtools.hxx>
 #include "svx/svxdllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/implbase1.hxx>

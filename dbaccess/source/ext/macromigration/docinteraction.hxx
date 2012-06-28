@@ -20,10 +20,8 @@
 #ifndef DBACCESS_DOCERRORHANDLING_HXX
 #define DBACCESS_DOCERRORHANDLING_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-/** === end UNO includes === **/
 
 namespace comphelper {
     class ComponentContext;

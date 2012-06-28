@@ -22,9 +22,7 @@
 
 #include <toolkit/dllapi.h>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XControl.hpp>
-/** === end UNO includes === **/
 
 #include <vcl/pdfwriter.hxx>
 

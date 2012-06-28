@@ -30,7 +30,6 @@
 #include "userinformation.hxx"
 #include "sdbcoretools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -40,7 +39,6 @@
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/mediadescriptor.hxx>

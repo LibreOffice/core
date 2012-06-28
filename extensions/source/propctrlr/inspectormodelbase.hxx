@@ -20,11 +20,9 @@
 #ifndef INSPECTORMODELBASE_HXX
 #define INSPECTORMODELBASE_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/propshlp.hxx>

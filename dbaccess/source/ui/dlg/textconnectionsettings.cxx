@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "textconnectionsettings.hxx"
 #include "TextConnectionHelper.hxx"
 #include "dbu_resource.hrc"
 #include "moduledbu.hxx"
 #include "dsitems.hxx"
 #include "dbustrings.hrc"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <vcl/msgbox.hxx>
 

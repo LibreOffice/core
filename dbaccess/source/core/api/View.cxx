@@ -24,11 +24,9 @@
 #include "connectivity/dbexception.hxx"
 #include "connectivity/dbtools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>

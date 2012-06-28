@@ -23,9 +23,6 @@
 #include "IItemSetHelper.hxx"
 #include "moduledbu.hxx"
 
- /** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <sfx2/tabdlg.hxx>
 
 #include <memory>

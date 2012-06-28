@@ -20,9 +20,7 @@
 #ifndef SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
 #define SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 
 #include "fmdocumentclassification.hxx"
 #include <unotools/confignode.hxx>

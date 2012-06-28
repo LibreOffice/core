@@ -25,9 +25,7 @@
 #include "macromigrationpages.hxx"
 #include "macromigrationdialog.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
-/** === end UNO includes === **/
 
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>

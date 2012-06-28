@@ -54,7 +54,6 @@
 #include "WExtendPages.hxx"
 #include "WNameMatch.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
@@ -99,7 +98,6 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>

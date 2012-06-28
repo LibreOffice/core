@@ -20,9 +20,7 @@
 #ifndef DBACCESS_MIGRATIONERROR_HXX
 #define DBACCESS_MIGRATIONERROR_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Any.hxx>
-/** === end UNO includes === **/
 
 #include <vector>
 

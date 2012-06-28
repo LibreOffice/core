@@ -31,9 +31,7 @@
 
 #include <cppuhelper/interfacecontainer.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XEventListener.hpp>
-/** === end UNO includes === **/
 #include "comphelper/comphelperdllapi.h"
 
 #include <memory>

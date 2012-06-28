@@ -36,7 +36,6 @@
 #include "xmloff/xformsexport.hxx"
 #include "property_meta_data.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -53,7 +52,6 @@
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
-/** === end UNO includes === **/
 
 #include <sax/tools/converter.hxx>
 #include <tools/wintypes.hxx>       // for check states

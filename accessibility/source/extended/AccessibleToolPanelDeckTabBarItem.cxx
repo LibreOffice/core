@@ -28,12 +28,10 @@
 
 #include "accessibility/extended/AccessibleToolPanelDeckTabBarItem.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 #include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/toolpanel/paneltabbar.hxx>

@@ -20,11 +20,9 @@
 #ifndef _CONNECTIVITY_MACAB_DRIVER_HXX_
 #define _CONNECTIVITY_MACAB_DRIVER_HXX_
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/compbase3.hxx>
 #include <osl/module.h>
 

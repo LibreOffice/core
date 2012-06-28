@@ -19,9 +19,6 @@
 
 #include "logrecord.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <osl/time.h>
 #include <osl/thread.h>
 #include <osl/diagnose.h>

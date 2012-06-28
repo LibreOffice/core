@@ -23,10 +23,8 @@
 #include "svx/svxdllapi.h"
 #include "svx/shapeproperty.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-/** === end UNO includes === **/
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>

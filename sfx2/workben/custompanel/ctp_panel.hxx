@@ -20,13 +20,11 @@
 #ifndef SD_WORKBENCH_CTP_PANEL_HXX
 #define SD_WORKBENCH_CTP_PANEL_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/compbase1.hxx>

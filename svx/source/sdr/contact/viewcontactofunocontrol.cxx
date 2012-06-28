@@ -27,9 +27,7 @@
 #include <svx/svdview.hxx>
 #include <svx/sdrpagewindow.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XWindow2.hpp>
-/** === end UNO includes === **/
 
 #include "svx/sdrpaintwindow.hxx"
 #include <tools/diagnose_ex.h>

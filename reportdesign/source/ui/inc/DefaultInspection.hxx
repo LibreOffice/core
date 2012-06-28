@@ -19,12 +19,10 @@
 #ifndef RPT_DEFAULTINSPECTION_HXX
 #define RPT_DEFAULTINSPECTION_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase3.hxx>
 
 #include <memory>

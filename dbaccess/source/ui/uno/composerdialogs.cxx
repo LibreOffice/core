@@ -20,10 +20,8 @@
 
 #include "composerdialogs.hxx"
 
-/** === begin UNO includes === **/
 #include "dbu_reghelper.hxx"
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-/** === end UNO includes === **/
 #include "dbustrings.hrc"
 #include "queryfilter.hxx"
 #include "queryorder.hxx"

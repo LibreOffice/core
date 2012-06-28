@@ -30,9 +30,7 @@
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 
 #define TEXTTYPE_SINGLELINE     0

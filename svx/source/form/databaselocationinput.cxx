@@ -32,9 +32,7 @@
 
 #include "svx/fmresids.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>

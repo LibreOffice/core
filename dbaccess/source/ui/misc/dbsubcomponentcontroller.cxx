@@ -26,7 +26,6 @@
 #include "moduledbu.hxx"
 #include "dbsubcomponentcontroller.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -35,7 +34,6 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>

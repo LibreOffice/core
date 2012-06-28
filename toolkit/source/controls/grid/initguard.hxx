@@ -20,9 +20,7 @@
 #ifndef SVTOOLS_INITGUARD_HXX
 #define SVTOOLS_INITGUARD_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/NotInitializedException.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentguard.hxx>
 

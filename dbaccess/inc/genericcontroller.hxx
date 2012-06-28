@@ -25,7 +25,6 @@
 #include "dbaccessdllapi.h"
 #include "IController.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XController2.hpp>
@@ -45,7 +44,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XUserInputInterception.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/sharedmutex.hxx>

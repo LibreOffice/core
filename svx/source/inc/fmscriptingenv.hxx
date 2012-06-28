@@ -20,9 +20,7 @@
 #ifndef SVX_FMSCRIPTINGENV_HXX
 #define SVX_FMSCRIPTINGENV_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-/** === end UNO includes === **/
 #include <rtl/ref.hxx>
 
 class FmFormModel;

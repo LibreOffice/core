@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "progresscapture.hxx"
 #include "migrationprogress.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

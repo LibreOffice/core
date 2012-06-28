@@ -31,11 +31,9 @@
 
 #include "fmprop.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 
 //........................................................................

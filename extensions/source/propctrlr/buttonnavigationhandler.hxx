@@ -22,9 +22,6 @@
 
 #include "propertyhandler.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace pcr
 {

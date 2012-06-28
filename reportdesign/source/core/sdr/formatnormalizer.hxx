@@ -20,11 +20,9 @@
 #ifndef REPORTDESIGN_FORMATNORMALIZER_HXX
 #define REPORTDESIGN_FORMATNORMALIZER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
-/** === end UNO includes === **/
 
 #include <boost/noncopyable.hpp>
 

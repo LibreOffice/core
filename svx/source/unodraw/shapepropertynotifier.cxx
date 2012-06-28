@@ -28,9 +28,7 @@
 
 #include "svx/shapepropertynotifier.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

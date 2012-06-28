@@ -22,11 +22,7 @@
 
 #include "dllapi.h"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <rtl/ustring.hxx>
-
 #include <boost/shared_ptr.hpp>
 
 #include <map>

@@ -23,9 +23,6 @@
 #include "dsntypes.hxx"
 #include "dsitems.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <boost/shared_ptr.hpp>
 
 //........................................................................

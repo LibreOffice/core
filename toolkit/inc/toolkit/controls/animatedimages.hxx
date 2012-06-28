@@ -23,11 +23,9 @@
 #include "toolkit/controls/unocontrolbase.hxx"
 #include "toolkit/controls/unocontrolmodel.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XAnimation.hpp>
 #include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>

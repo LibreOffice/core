@@ -31,8 +31,6 @@
 #include <comphelper/componentmodule.hxx>
 #include <unotools/unotoolsdllapi.h>
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 #include <tools/resid.hxx>
 
 #include <memory>

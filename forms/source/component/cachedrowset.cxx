@@ -22,12 +22,10 @@
 #include "services.hxx"
 #include "frm_strings.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

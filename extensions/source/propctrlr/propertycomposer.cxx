@@ -28,10 +28,8 @@
 
 #include "propertycomposer.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-/** === end UNO includes === **/
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 

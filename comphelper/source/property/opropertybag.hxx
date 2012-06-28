@@ -20,7 +20,6 @@
 #ifndef COMPHELPER_OPROPERTYBAG_HXX
 #define COMPHELPER_OPROPERTYBAG_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -30,7 +29,6 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XSet.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/propstate.hxx>

@@ -20,9 +20,7 @@
 #ifndef DBACCESS_MACROMIGRATIONDIALOG_HXX
 #define DBACCESS_MACROMIGRATIONDIALOG_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <svtools/roadmapwizard.hxx>

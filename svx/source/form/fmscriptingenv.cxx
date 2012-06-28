@@ -29,7 +29,6 @@
 #include "fmscriptingenv.hxx"
 #include "svx/fmmodel.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -37,7 +36,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase1.hxx>

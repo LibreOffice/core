@@ -44,7 +44,6 @@
 #include "svx/svdpagv.hxx"
 #include "svx/svxids.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/form/XForm.hpp>
@@ -57,7 +56,6 @@
 #include <com/sun/star/form/inspection/DefaultFormComponentInspectorModel.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>

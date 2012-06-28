@@ -20,9 +20,7 @@
 #ifndef OFFAPI_COM_SUN_STAR_XFORMS_DATATYPEREPOSITORY_HXX
 #define OFFAPI_COM_SUN_STAR_XFORMS_DATATYPEREPOSITORY_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 

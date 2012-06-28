@@ -20,9 +20,6 @@
 #ifndef SVX_SHAPEPROPERTY_HXX
 #define SVX_SHAPEPROPERTY_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace svx
 {

@@ -29,14 +29,12 @@
 #include "../unowizard.hxx"
 #include "wizardshell.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/WizardButton.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>

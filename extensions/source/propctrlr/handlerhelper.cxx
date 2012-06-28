@@ -35,7 +35,6 @@
 #include "formmetadata.hxx"
 #include "pcrcomponentcontext.hxx"
 
-/** === begin UNO includes === **/
 #include "com/sun/star/inspection/StringRepresentation.hpp"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -45,7 +44,6 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XStringListControl.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/StringListResource.hxx>

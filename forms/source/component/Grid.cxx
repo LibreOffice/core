@@ -34,12 +34,10 @@
 #include "property.hxx"
 #include "services.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>

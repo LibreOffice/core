@@ -20,11 +20,9 @@
 #ifndef CHART2_UNDOMANAGER_HXX
 #define CHART2_UNDOMANAGER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/container/XChild.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase2.hxx>
 

@@ -23,9 +23,6 @@
 #include "adminpages.hxx"
 #include "dsmeta.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <svtools/dialogcontrolling.hxx>
 
 #include <vcl/lstbox.hxx>

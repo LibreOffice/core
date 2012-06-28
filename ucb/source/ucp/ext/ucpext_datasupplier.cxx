@@ -30,9 +30,7 @@
 #include "ucpext_content.hxx"
 #include "ucpext_provider.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/deployment/XPackageInformationProvider.hpp>
-/** === end UNO includes === **/
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/componentcontext.hxx>

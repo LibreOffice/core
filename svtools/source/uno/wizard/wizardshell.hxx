@@ -20,10 +20,8 @@
 #ifndef SVT_UNO_WIZARD_SHELL
 #define SVT_UNO_WIZARD_SHELL
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
-/** === end UNO includes === **/
 
 #include <svtools/roadmapwizard.hxx>
 

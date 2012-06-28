@@ -20,14 +20,12 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_SQLCOMMANDDESIGN_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_SQLCOMMANDDESIGN_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbtools.hxx>
 #include <tools/link.hxx>

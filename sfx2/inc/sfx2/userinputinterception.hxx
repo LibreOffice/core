@@ -22,9 +22,7 @@
 
 #include "sfx2/dllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XUserInputInterception.hpp>
-/** === end UNO includes === **/
 
 #include <boost/noncopyable.hpp>
 #include <memory>

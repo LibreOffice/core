@@ -29,11 +29,9 @@
 #ifndef LOGHANDLER_HXX
 #define LOGHANDLER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/logging/XLogFormatter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/logging/LogRecord.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

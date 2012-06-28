@@ -20,9 +20,7 @@
 #ifndef PROPERTYSTORAGE_HXX
 #define PROPERTYSTORAGE_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Any.hxx>
-/** === end UNO includes === **/
 
 #include <tools/solar.h>
 

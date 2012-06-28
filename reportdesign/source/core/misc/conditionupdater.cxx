@@ -28,9 +28,7 @@
 #include "conditionupdater.hxx"
 #include "reportformula.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/report/XFormatCondition.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

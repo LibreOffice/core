@@ -23,10 +23,8 @@
 #include "definitioncolumn.hxx"
 #include "sdbcoretools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>

@@ -34,7 +34,6 @@
 #include "property.hrc"
 #include "services.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -47,7 +46,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/guarding.hxx>

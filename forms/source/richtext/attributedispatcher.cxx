@@ -28,8 +28,6 @@
 
 #include "attributedispatcher.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 #include <editeng/editview.hxx>
 
 //........................................................................

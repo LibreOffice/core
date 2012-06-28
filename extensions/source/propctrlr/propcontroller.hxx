@@ -39,7 +39,6 @@
 #include "propertyinfo.hxx"
 #include "pcrcomponentcontext.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -61,7 +60,6 @@
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-/** === end UNO includes === **/
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase7.hxx>

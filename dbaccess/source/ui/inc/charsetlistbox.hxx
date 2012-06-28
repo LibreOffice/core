@@ -22,9 +22,6 @@
 
 #include "charsets.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <vcl/lstbox.hxx>
 
 class SfxItemSet;

@@ -22,10 +22,8 @@
 
 #include "connectivity/sdbcx/VView.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbcx/XAlterView.hpp>
 #include <com/sun/star/sdb/tools/XViewAccess.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>

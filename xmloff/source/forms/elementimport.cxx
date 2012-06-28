@@ -42,7 +42,6 @@
 #include "property_description.hxx"
 #include "property_meta_data.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/Duration.hpp>
@@ -51,7 +50,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-/** === end UNO includes === **/
 
 #include <sax/tools/converter.hxx>
 #include <tools/urlobj.hxx>

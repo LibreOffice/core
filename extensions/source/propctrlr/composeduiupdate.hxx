@@ -31,9 +31,7 @@
 
 #include "propertyhandler.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-/** === end UNO includes === **/
 
 #include <map>
 #include <set>

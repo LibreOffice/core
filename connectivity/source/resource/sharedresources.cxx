@@ -22,10 +22,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/officeresourcebundle.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>

@@ -32,10 +32,8 @@
 #include "framework/iguard.hxx"
 #include "framework/imutex.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-/** === end UNO includes === **/
 
 #include <boost/scoped_ptr.hpp>
 

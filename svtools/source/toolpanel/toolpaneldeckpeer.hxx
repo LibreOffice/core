@@ -22,9 +22,6 @@
 
 #include "svtaccessiblefactory.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <toolkit/awt/vclxwindow.hxx>
 
 //......................................................................................................................

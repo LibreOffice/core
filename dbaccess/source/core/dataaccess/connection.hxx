@@ -25,7 +25,6 @@
 #include "viewcontainer.hxx"
 #include "RefreshListener.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
@@ -38,7 +37,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
-/** === end UNO includes === **/
 
 #if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14)
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14

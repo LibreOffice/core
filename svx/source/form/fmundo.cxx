@@ -40,7 +40,6 @@
 #include "svx/fmmodel.hxx"
 #include "svx/fmpage.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -49,7 +48,6 @@
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
-/** === end UNO includes === **/
 
 #include "svx/fmtools.hxx"
 #include <rtl/logfile.hxx>

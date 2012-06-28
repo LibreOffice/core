@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbaundomanager.hxx"
 #include "singledoccontroller.hxx"
 #include "browserids.hxx"
 #include "dbu_misc.hrc"
 #include "dbustrings.hrc"
 #include "moduledbu.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <svl/undo.hxx>
 #include <osl/diagnose.h>

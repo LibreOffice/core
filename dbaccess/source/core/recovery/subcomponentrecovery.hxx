@@ -22,10 +22,8 @@
 
 #include "subcomponents.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 

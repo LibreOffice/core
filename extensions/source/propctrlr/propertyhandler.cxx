@@ -32,11 +32,9 @@
 #include "handlerhelper.hxx"
 #include "formstrings.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-/** === end UNO includes === **/
 
 #include <tools/debug.hxx>
 #include <unotools/confignode.hxx>

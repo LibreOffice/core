@@ -30,9 +30,7 @@
 #include "defaultgridcolumnmodel.hxx"
 #include "gridcolumn.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/componentguard.hxx>

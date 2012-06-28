@@ -21,14 +21,12 @@
 #define CONNECTIVITY_HSQLDB_CONNECTION_HXX
 
 #include "connectivity/ConnectionWrapper.hxx"
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #ifndef __com_sun_star_sdb_application_XTableUIProvider_hpp__
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #endif
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

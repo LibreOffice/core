@@ -20,8 +20,6 @@
 #ifndef DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
 #define DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <rtl/ustrbuf.hxx>
 

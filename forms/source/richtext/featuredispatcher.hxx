@@ -20,10 +20,8 @@
 #ifndef FORMS_SOURCE_RICHTEXT_FEATUREDISPATCHER_HXX
 #define FORMS_SOURCE_RICHTEXT_FEATUREDISPATCHER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>

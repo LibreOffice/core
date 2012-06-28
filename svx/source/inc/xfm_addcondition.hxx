@@ -20,9 +20,7 @@
 #ifndef SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
 #define SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/xforms/XModel.hpp>
-/** === end UNO includes === **/
 #include <svtools/genericunodialog.hxx>
 #include <comphelper/proparrhlp.hxx>
 

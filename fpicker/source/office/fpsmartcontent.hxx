@@ -31,10 +31,8 @@
 
 #include "fpinteraction.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-/** === end UNO includes === **/
 #include <ucbhelper/content.hxx>
 
 //........................................................................

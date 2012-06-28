@@ -30,7 +30,6 @@
 #include "core_resource.hxx"
 #include "tablecontainer.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -50,7 +49,6 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>

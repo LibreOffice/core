@@ -31,7 +31,6 @@
 #include "WNameMatch.hxx"
 #include "WTypeSelect.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -46,7 +45,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>

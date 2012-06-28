@@ -38,7 +38,6 @@
 #include "RptResId.hrc"
 #include "RptModel.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -46,7 +45,6 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/dbtools.hxx>
 #include <svl/smplhint.hxx>

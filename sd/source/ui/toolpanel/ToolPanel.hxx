@@ -20,9 +20,7 @@
 #ifndef SD_TOOLPANEL_HXX
 #define SD_TOOLPANEL_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/XToolPanel.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>

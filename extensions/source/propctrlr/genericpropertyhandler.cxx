@@ -30,7 +30,6 @@
 #include "formmetadata.hxx"
 #include "handlerhelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
@@ -40,7 +39,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
 

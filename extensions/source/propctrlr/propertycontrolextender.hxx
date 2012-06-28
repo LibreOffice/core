@@ -20,10 +20,8 @@
 #ifndef EXTENSIONS_PROPERTYCONTROLEXTENDER_HXX
 #define EXTENSIONS_PROPERTYCONTROLEXTENDER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/inspection/XPropertyControl.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

@@ -29,10 +29,8 @@
 #ifndef BASICMANAGERREPOSITORY_HXX
 #define BASICMANAGERREPOSITORY_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-/** === end UNO includes === **/
 #include "basicdllapi.h"
 
 class BasicManager;

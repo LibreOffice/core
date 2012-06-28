@@ -23,9 +23,7 @@
 #include "propertyhandler.hxx"
 #include "eformshelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/xforms/XSubmission.hpp>
-/** === end UNO includes === **/
 #include <comphelper/propmultiplex.hxx>
 
 namespace comphelper

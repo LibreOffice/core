@@ -24,9 +24,6 @@
 #include "AppElementType.hxx"
 #include "callbacks.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 class SvTreeListBox;
 class SvLBoxEntry;
 

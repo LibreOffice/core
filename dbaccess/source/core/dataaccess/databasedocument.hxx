@@ -22,7 +22,6 @@
 #include "ModelImpl.hxx"
 #include "documenteventnotifier.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
@@ -50,7 +49,6 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
-/** === end UNO includes === **/
 
 #if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17)
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17

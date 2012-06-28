@@ -22,7 +22,6 @@
 
 #include "ModelImpl.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -36,7 +35,6 @@
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
-/** === end UNO includes === **/
 
 #include <basic/basicmanagerrepository.hxx>
 #include <comphelper/componentcontext.hxx>

@@ -34,13 +34,11 @@
 #include "entrylisthelper.hxx"
 #include "cachedrowset.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
-/** === end UNO includes === **/
 
 #include <connectivity/formattedcolumnvalue.hxx>
 

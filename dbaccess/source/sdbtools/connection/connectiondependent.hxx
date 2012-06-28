@@ -20,10 +20,8 @@
 #ifndef DBACCESS_CONNECTION_DEPENDENT_HXX
 #define DBACCESS_CONNECTION_DEPENDENT_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/weakref.hxx>

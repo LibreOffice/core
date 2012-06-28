@@ -21,7 +21,6 @@
 #include "AppController.hxx"
 #include "dbustrings.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
@@ -31,7 +30,6 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>

@@ -20,9 +20,6 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_NEWDATATYPE_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_NEWDATATYPE_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>

@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "stringlistresource.hxx"
-
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 
 #include <tools/rcid.h>
 

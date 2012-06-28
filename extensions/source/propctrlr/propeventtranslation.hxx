@@ -20,9 +20,7 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPEVENTTRANSLATION_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_PROPEVENTTRANSLATION_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-/** === end UNO includes === **/
 #include <cppuhelper/implbase1.hxx>
 
 //........................................................................

@@ -34,8 +34,6 @@
 #include "frm_strings.hxx"
 #include "property.hrc"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <comphelper/enumhelper.hxx>
 

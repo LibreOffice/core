@@ -17,18 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "connectiontools.hxx"
-
 #include "tablename.hxx"
 #include "objectnames.hxx"
 #include "datasourcemetadata.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <comphelper/namedvaluecollection.hxx>
-
 #include <connectivity/dbtools.hxx>
 #include <connectivity/statementcomposer.hxx>
 

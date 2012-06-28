@@ -22,10 +22,8 @@
 
 #include "toolkit/awt/vclxwindow.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XAnimation.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase3.hxx>
 

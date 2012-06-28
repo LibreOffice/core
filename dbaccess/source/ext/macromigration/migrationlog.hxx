@@ -22,9 +22,6 @@
 
 #include "dbmm_types.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <rtl/ustring.hxx>
 
 #include <memory>

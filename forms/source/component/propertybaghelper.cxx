@@ -21,13 +21,11 @@
 
 #include "property.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/NotRemoveableException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 

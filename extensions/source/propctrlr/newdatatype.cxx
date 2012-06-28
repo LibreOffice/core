@@ -32,9 +32,6 @@
 #include "modulepcr.hxx"
 #include "formresid.hrc"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 //........................................................................
 namespace pcr
 {

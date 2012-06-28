@@ -40,7 +40,6 @@
 #include "svx/fmtools.hxx"
 #include "fmurl.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/FocusChangeReason.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XComboBox.hpp>
@@ -70,7 +69,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>

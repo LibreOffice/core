@@ -20,10 +20,8 @@
 #ifndef DBACCESS_DOCUMENTEVENTS_HXX
 #define DBACCESS_DOCUMENTEVENTS_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

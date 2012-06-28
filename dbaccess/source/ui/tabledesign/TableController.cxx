@@ -35,7 +35,6 @@
 #include "indexdialog.hxx"
 #include "sqlmessage.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -56,7 +55,6 @@
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
 #include <comphelper/streamsection.hxx>

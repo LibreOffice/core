@@ -28,13 +28,11 @@
 
 #include "comphelper/propertybag.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NotRemoveableException.hpp>
-/** === end UNO includes === **/
 
 #include <map>
 

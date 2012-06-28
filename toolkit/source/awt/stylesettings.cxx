@@ -30,9 +30,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>

@@ -30,9 +30,7 @@
 #include "svtools/table/gridtablerenderer.hxx"
 #include "svtools/colorcfg.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/graphic/XGraphic.hpp>
-/** === end UNO includes === **/
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

@@ -38,7 +38,6 @@
 #include "pcrstrings.hxx"
 #include "propertycontrolextender.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
@@ -59,7 +58,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/evtmethodhelper.hxx>

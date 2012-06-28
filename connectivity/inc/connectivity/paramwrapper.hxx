@@ -23,12 +23,10 @@
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <connectivity/FValue.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>

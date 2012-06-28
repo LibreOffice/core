@@ -22,10 +22,8 @@
 
 #include "svtools/svtdllapi.h"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-/** === end UNO includes === **/
 
 class SvStream;
 //........................................................................

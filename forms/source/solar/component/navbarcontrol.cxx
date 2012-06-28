@@ -36,13 +36,11 @@
 #include "commandimageprovider.hxx"
 #include "commanddescriptionprovider.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-/** === end UNO includes === **/
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

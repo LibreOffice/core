@@ -28,11 +28,9 @@
 
 #include "composeduiupdate.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
-/** === end UNO includes === **/
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 

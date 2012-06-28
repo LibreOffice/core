@@ -20,10 +20,8 @@
 #ifndef CONNECTIVITY_STATEMENTCOMPOSER_HXX
 #define CONNECTIVITY_STATEMENTCOMPOSER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-/** === end UNO includes === **/
 
 #include <boost/noncopyable.hpp>
 

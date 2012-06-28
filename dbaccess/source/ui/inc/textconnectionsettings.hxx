@@ -22,9 +22,6 @@
 
 #include "propertystorage.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 

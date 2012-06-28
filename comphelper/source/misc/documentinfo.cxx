@@ -30,13 +30,11 @@
 #include "comphelper/documentinfo.hxx"
 #include "comphelper/namedvaluecollection.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/exc_hlp.hxx>
 

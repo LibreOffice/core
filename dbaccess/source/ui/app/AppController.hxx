@@ -30,13 +30,11 @@
 #include "moduledbu.hxx"
 #include "TableCopyHelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/stl_types.hxx>
 #include <comphelper/namedvaluecollection.hxx>

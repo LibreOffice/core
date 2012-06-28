@@ -22,9 +22,7 @@
 
 #include "dbsubcomponentcontroller.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

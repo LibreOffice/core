@@ -20,9 +20,7 @@
 #ifndef COMPHELPER_COMPONENTGUARD_HXX
 #define COMPHELPER_COMPONENTGUARD_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

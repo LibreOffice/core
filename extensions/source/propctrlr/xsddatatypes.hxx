@@ -20,9 +20,7 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_XSDDATATYPES_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_XSDDATATYPES_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/uno/Reference.hxx>
-/** === end UNO includes === **/
 #include <rtl/ref.hxx>
 
 namespace com { namespace sun { namespace star {

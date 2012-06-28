@@ -20,9 +20,7 @@
 #ifndef DBACCESS_PROGRESSCAPTURE_HXX
 #define DBACCESS_PROGRESSCAPTURE_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/task/XStatusIndicator.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

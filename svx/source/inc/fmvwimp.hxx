@@ -31,7 +31,6 @@
 #include "svx/svdmark.hxx"
 #include "fmdocumentclassification.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -43,7 +42,6 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/stl_types.hxx>
 #include <tools/link.hxx>

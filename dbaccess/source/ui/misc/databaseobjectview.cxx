@@ -22,7 +22,6 @@
 #include "dbustrings.hrc"
 #include "asyncmodaldialog.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -32,7 +31,6 @@
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>

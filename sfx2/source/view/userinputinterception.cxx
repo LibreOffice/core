@@ -29,10 +29,8 @@
 
 #include "sfx2/userinputinterception.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>

@@ -21,9 +21,7 @@
 #include "columnsettings.hxx"
 #include "dbastrings.hrc"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>

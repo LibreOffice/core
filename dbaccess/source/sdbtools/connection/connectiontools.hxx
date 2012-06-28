@@ -24,12 +24,10 @@
 
 #include "connectiondependent.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase3.hxx>
 

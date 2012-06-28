@@ -22,9 +22,7 @@
 
 #include "connectiondependent.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/sdb/tools/XTableName.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 

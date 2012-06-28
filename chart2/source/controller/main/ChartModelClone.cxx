@@ -23,7 +23,6 @@
 #include "ControllerLockGuard.hxx"
 #include "DataSourceHelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -33,7 +32,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/property.hxx>
 #include <tools/diagnose_ex.h>

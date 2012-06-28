@@ -21,14 +21,12 @@
 #include "dbastrings.hrc"
 #include "module_dba.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/XDataAccessDescriptorFactory.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/componentcontext.hxx>

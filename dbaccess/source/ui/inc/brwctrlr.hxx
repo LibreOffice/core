@@ -25,7 +25,6 @@
 #include "brwview.hxx"
 #include "sbagrid.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
@@ -39,7 +38,6 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XModule.hpp>
-/** === end UNO includes === **/
 
 #include <vcl/timer.hxx>
 #include <svtools/transfer.hxx>

@@ -28,9 +28,7 @@
 
 #include "componenttools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/container/XChild.hpp>
-/** === end UNO includes === **/
 
 #include <algorithm>
 #include <iterator>

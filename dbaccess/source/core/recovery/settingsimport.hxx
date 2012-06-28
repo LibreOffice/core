@@ -20,9 +20,7 @@
 #ifndef SETTINGSIMPORT_HXX
 #define SETTINGSIMPORT_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ref.hxx>

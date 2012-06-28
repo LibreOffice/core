@@ -28,9 +28,7 @@
 
 #include <unotools/closeveto.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/util/XCloseable.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>

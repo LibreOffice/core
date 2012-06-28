@@ -29,9 +29,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_BROWSERLINE_HXX_
 #define _EXTENSIONS_PROPCTRLR_BROWSERLINE_HXX_
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XPropertyControl.hpp>
-/** === end UNO includes === **/
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 

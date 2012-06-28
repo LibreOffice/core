@@ -29,7 +29,6 @@
 #ifndef EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
 #define EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -39,7 +38,6 @@
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-/** === end UNO includes === **/
 
 //............................................................................
 namespace pcr

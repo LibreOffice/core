@@ -32,7 +32,6 @@
 #include "handlerhelper.hxx"
 #include "cellbindinghelper.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -46,7 +45,6 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
-/** === end UNO includes === **/
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/componentbase.hxx>

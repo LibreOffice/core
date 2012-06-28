@@ -26,7 +26,6 @@
 #include "SingleSelectQueryComposer.hxx"
 #include "sdbcoretools.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
@@ -42,7 +41,6 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>

@@ -52,7 +52,6 @@
 #include "svx/svdpagv.hxx"
 #include "svx/xmlexchg.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -80,7 +79,6 @@
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-/** === end UNO includes === **/
 
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>

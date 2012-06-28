@@ -23,7 +23,6 @@
 #include "sfx2/sfxuno.hxx"
 #include "sfx2/objsh.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/frame/XController2.hpp>
@@ -35,7 +34,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
