@@ -127,6 +127,7 @@ class XclRoot;
 #define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
 #define EXC_CHPROP_ROTATIONHORIZONTAL       CREATE_OUSTRING( "RotationHorizontal" )
 #define EXC_CHPROP_ROTATIONVERTICAL         CREATE_OUSTRING( "RotationVertical" )
+#define EXC_CHPROP_3DRELATIVEHEIGHT         CREATE_OUSTRING( "3DRelativeHeight" )
 #define EXC_CHPROP_SHOW                     CREATE_OUSTRING( "Show" )
 #define EXC_CHPROP_SHOWCORRELATION          CREATE_OUSTRING( "ShowCorrelationCoefficient" )
 #define EXC_CHPROP_SHOWEQUATION             CREATE_OUSTRING( "ShowEquation" )
