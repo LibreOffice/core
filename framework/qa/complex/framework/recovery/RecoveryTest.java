@@ -67,7 +67,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.PrintWriter;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Random;
 import util.DesktopTools;
 import util.PropertyName;
@@ -108,7 +108,7 @@ public class RecoveryTest extends ComplexTestCase {
      * and the values are com sun.star.awt.Rectangle.
      * @see com.sun.star.awt.Rectangle
      */
-    private Hashtable windowsPosSize = new Hashtable();
+    private HashMap windowsPosSize = new HashMap();
 
     /**
      * A function to tell the framework, which test functions are available.
