@@ -2164,6 +2164,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_LANDSCAPE:
                 lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, RTFValue::Pointer_t(new RTFValue(1)));
                 break;
+        case RTF_FACINGP:
+                m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_evenAndOddHeaders, RTFValue::Pointer_t(new RTFValue(1)));
+                break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
