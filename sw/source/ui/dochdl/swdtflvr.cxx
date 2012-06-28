@@ -2008,8 +2008,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         int nRet = rData.GetGraphic( nFormat, aGrf );
         if( nRet )
         {
-            String sLnkTyp( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "DDE" )));
+            rtl::OUString sLnkTyp("DDE");
             if ( bReReadGrf )
                 rWrtShell.ReRead( aCmd, sLnkTyp, &aGrf );
             else

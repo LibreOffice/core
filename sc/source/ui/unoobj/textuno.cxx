@@ -330,7 +330,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
 
 void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )
 {
-    String aDummy(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "???" )));
+    rtl::OUString aDummy("???");
     rData.aTitle        = aDummy;
     rData.aLongDocName  = aDummy;
     rData.aShortDocName = aDummy;

@@ -223,8 +223,8 @@ public:
 #define ANZ_DEFAULT_STYLES 16
 
 // die Namen der StorageStreams
-#define sMainStream CREATE_CONST_ASC("WordDocument")
-#define sCompObj CREATE_CONST_ASC("\1CompObj")
+#define sMainStream rtl::OUString("WordDocument")
+#define sCompObj rtl::OUString("\1CompObj")
 
 static void WriteDop( WW8Export& rWrt )
 {
@@ -1440,7 +1440,7 @@ sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
     if( !pRedlAuthors )
     {
         pRedlAuthors = new WW8_WrtRedlineAuthor;
-        pRedlAuthors->AddName(CREATE_CONST_ASC("Unknown"));
+        pRedlAuthors->AddName(rtl::OUString("Unknown"));
     }
     return pRedlAuthors->AddName( SW_MOD()->GetRedlineAuthor( nId ) );
 }
@@ -2596,7 +2596,7 @@ void WW8Export::WriteFkpPlcUsw()
              some magic. cmc
             */
             /* Similiarly having msvbasic storage seems to also trigger creating this stream */
-            GetWriter().GetStorage().OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool),
+            GetWriter().GetStorage().OpenSotStorage(rtl::OUString(SL::aObjectPool),
                 STREAM_READWRITE | STREAM_SHARE_DENYALL);
         }
 
@@ -2930,9 +2930,9 @@ void WW8Export::ExportDocument_Impl()
     if( bWrtWW8 )
     {
         pFib->fWhichTblStm = 1;
-        xTableStrm = GetWriter().GetStorage().OpenSotStream(CREATE_CONST_ASC(SL::a1Table),
+        xTableStrm = GetWriter().GetStorage().OpenSotStream(rtl::OUString(SL::a1Table),
             STREAM_STD_WRITE );
-        xDataStrm = GetWriter().GetStorage().OpenSotStream(CREATE_CONST_ASC(SL::aData),
+        xDataStrm = GetWriter().GetStorage().OpenSotStream(rtl::OUString(SL::aData),
             STREAM_STD_WRITE );
 
         xDataStrm->SetBufferSize( 32768 );  // fuer Grafiken
@@ -3109,7 +3109,7 @@ void WW8Export::ExportDocument_Impl()
         {
             xDataStrm.Clear();
             pDataStrm = 0;
-            GetWriter().GetStorage().Remove(CREATE_CONST_ASC(SL::aData));
+            GetWriter().GetStorage().Remove(rtl::OUString(SL::aData));
         }
     }
 }
@@ -3406,7 +3406,7 @@ void WW8Export::RestoreMacroCmds()
     try
     {
         uno::Reference < io::XStream > xSrcStream =
-                xSrcRoot->openStreamElement( CREATE_CONST_ASC(SL::aMSMacroCmds), embed::ElementModes::READ );
+                xSrcRoot->openStreamElement( rtl::OUString(SL::aMSMacroCmds), embed::ElementModes::READ );
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xSrcStream );
 
         if ( pStream && SVSTREAM_OK == pStream->GetError())

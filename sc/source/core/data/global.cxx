@@ -921,8 +921,7 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
 
     if ( nScClickMouseModifier & KEY_MOD1 )     // control-click -> into new window
-        aTarget.SetValue(
-            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("_blank")) );
+        aTarget.SetValue(rtl::OUString("_blank"));
 
     SfxViewFrame* pFrame = NULL;
     String aReferName;

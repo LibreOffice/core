@@ -107,7 +107,7 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
 {
     SetPool( pEditView->GetEditEngine()->GetEmptyItemSet().GetPool() );
     SetUndoManager( &pEditView->GetEditEngine()->GetUndoManager() );
-    SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("EditCell")));
+    SetName(rtl::OUString("EditCell"));
 }
 
 ScEditShell::~ScEditShell()
@@ -1108,7 +1108,7 @@ String ScEditShell::GetSelectionText( sal_Bool bWholeWord )
             ESelection  aSel = pEditView->GetSelection();
             String      aStrCurrentDelimiters = pEngine->GetWordDelimiters();
 
-            pEngine->SetWordDelimiters( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" .,;\"'")) );
+            pEngine->SetWordDelimiters(rtl::OUString(" .,;\"'"));
             aStrSelection = pEngine->GetWord( aSel.nEndPara, aSel.nEndPos );
             pEngine->SetWordDelimiters( aStrCurrentDelimiters );
         }

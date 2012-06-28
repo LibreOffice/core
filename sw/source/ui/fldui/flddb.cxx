@@ -382,8 +382,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         {
             aValueED.SetText(aEmptyStr);
             if (bCond)
-                aConditionED.SetText( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "TRUE" )));
+                aConditionED.SetText(rtl::OUString("TRUE"));
             else
                 aConditionED.SetText(aEmptyStr);
         }
@@ -494,8 +493,7 @@ IMPL_LINK_NOARG(SwFldDBPage, ModifyHdl)
 
 void    SwFldDBPage::FillUserData()
 {
-    String sData( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));
+    String sData(rtl::OUString(USER_DATA_VERSION));
     sData += ';';
     sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
 

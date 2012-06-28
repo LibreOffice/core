@@ -363,8 +363,7 @@ void SwRTFParser::ReadListTable()
                 if( pCurRule && pCurRule->IsContinusNum() )
                     lcl_ExpandNumFmts( *pCurRule );
 
-                String sTmp( String::CreateFromAscii(
-                    RTL_CONSTASCII_STRINGPARAM( RTF_NUMRULE_NAME " 1" )));
+                String sTmp(rtl::OUString(RTF_NUMRULE_NAME " 1"));
                 aEntry.nListDocPos = pDoc->MakeNumRule( sTmp, 0, sal_False, SvxNumberFormat::LABEL_ALIGNMENT );
                 pCurRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
                 // #i91400#
@@ -564,8 +563,7 @@ void SwRTFParser::ReadListOverrideTable()
                                                 aListArr[ n ].nListDocPos ];
                             pOrigRule = pRule;
 
-                            String sTmp( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( RTF_NUMRULE_NAME " 1" )));
+                            String sTmp(rtl::OUString(RTF_NUMRULE_NAME " 1"));
                             aEntry.nListDocPos = pDoc->MakeNumRule( sTmp, pRule );
                             pRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
                             // #i91400#
@@ -814,8 +812,7 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
     {
         // dann muessen wir die mal anlegen
         nNewNumSectDef &= ~nNewFlag;
-        String sTmp( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( RTF_NUMRULE_NAME " 1" )));
+        String sTmp(rtl::OUString(RTF_NUMRULE_NAME " 1"));
         SwListEntry aEntry( nListNo, 0, pDoc->MakeNumRule( sTmp ));
         aEntry.nListNo = nListNo;
         aListArr.push_back( aEntry );

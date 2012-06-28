@@ -53,7 +53,7 @@ ScDrawFormShell::ScDrawFormShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
     SetHelpId(HID_SCSHELL_DRAWFORMSH);
-    SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DrawForm")));
+    SetName(rtl::OUString("DrawForm"));
 }
 
 ScDrawFormShell::~ScDrawFormShell()

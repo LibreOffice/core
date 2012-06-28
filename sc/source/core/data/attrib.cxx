@@ -335,8 +335,8 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
 {
     String aStrYes  ( ScGlobal::GetRscString(STR_YES) );
     String aStrNo   ( ScGlobal::GetRscString(STR_NO) );
-    String aStrSep   = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-    String aStrDelim = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
+    rtl::OUString aStrSep(": ");
+    rtl::OUString aStrDelim( ", ");
 
     switch ( ePres )
     {
@@ -716,7 +716,7 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
 
 String ScPageHFItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScPageHFItem"));
+    return rtl::OUString("ScPageHFItem");
 }
 
 //------------------------------------------------------------------------
@@ -953,7 +953,7 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
     const IntlWrapper* /* pIntl */
 )   const
 {
-    String  aDel = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(": "));
+    rtl::OUString aDel(": ");
     rText.Erase();
 
     switch ( ePres )
@@ -1070,7 +1070,7 @@ ScDoubleItem::ScDoubleItem( const ScDoubleItem& rItem )
 
 String ScDoubleItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScDoubleItem"));
+    return rtl::OUString("ScDoubleItem");
 }
 
 //------------------------------------------------------------------------

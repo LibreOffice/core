@@ -52,7 +52,7 @@ static SfxItemInfo const aMsgItemInfos[] =
 //------------------------------------------------------------------------
 
 ScMessagePool::ScMessagePool()
-    :   SfxItemPool         ( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScMessagePool")),
+    :   SfxItemPool         ( rtl::OUString("ScMessagePool"),
                               MSGPOOL_START, MSGPOOL_END,
                               aMsgItemInfos, NULL ),
     //

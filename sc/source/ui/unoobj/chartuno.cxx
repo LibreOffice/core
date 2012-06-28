@@ -260,7 +260,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 if( sRangeStr.Len() )
                     xReceiver->attachDataProvider( xDataProvider );
                 else
-                    sRangeStr = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "all" ) );
+                    sRangeStr = rtl::OUString("all");
 
                 uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
                 xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );

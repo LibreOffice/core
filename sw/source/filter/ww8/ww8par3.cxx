@@ -1035,7 +1035,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
 SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
 {
     // wird erstmal zur Bildung des Style Namens genommen
-    String sPrefix(CREATE_CONST_ASC("WW8Num"));
+    String sPrefix(rtl::OUString("WW8Num"));
     sPrefix += String::CreateFromInt32(nUniqueList++);
     // #i86652#
     sal_uInt16 nRul =
@@ -1270,7 +1270,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     break;
                 // Nauemsprefix aufbauen: fuer NumRule-Name (eventuell)
                 // und (falls vorhanden) fuer Style-Name (dann auf jeden Fall)
-                String sPrefix(CREATE_CONST_ASC( "WW8NumSt" ));
+                String sPrefix(rtl::OUString("WW8NumSt"));
                 sPrefix += String::CreateFromInt32( nLfo + 1 );
                 // jetzt dem pNumRule seinen RICHTIGEN Wert zuweisen !!!
                 // (bis dahin war hier die Parent NumRule vermerkt )
@@ -2227,7 +2227,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 }
 
 WW8FormulaListBox::WW8FormulaListBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl( CREATE_CONST_ASC(SL::aListBox), rR)
+    : WW8FormulaControl(rtl::OUString(SL::aListBox), rR)
 {
 }
 
@@ -2436,7 +2436,7 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
 }
 
 WW8FormulaCheckBox::WW8FormulaCheckBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl( CREATE_CONST_ASC(SL::aCheckBox), rR)
+    : WW8FormulaControl(rtl::OUString(SL::aCheckBox), rR)
 {
 }
 
@@ -2502,7 +2502,7 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
 }
 
 WW8FormulaEditBox::WW8FormulaEditBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl( CREATE_CONST_ASC(SL::aTextField) ,rR)
+    : WW8FormulaControl(rtl::OUString(SL::aTextField) ,rR)
 {
 }
 

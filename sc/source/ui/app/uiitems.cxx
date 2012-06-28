@@ -86,7 +86,7 @@ ScInputStatusItem::~ScInputStatusItem()
 
 String ScInputStatusItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("InputStatus"));
+    return rtl::OUString("InputStatus");
 }
 
 int ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
@@ -194,7 +194,7 @@ ScSortItem::~ScSortItem()
 
 String ScSortItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("SortItem"));
+    return rtl::OUString("SortItem");
 }
 
 //------------------------------------------------------------------------
@@ -301,7 +301,7 @@ bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
 
 String ScQueryItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("QueryItem"));
+    return rtl::OUString("QueryItem");
 }
 
 //------------------------------------------------------------------------
@@ -365,7 +365,7 @@ ScSubTotalItem::~ScSubTotalItem()
 
 String ScSubTotalItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("SubTotalItem"));
+    return rtl::OUString("SubTotalItem");
 }
 
 //------------------------------------------------------------------------
@@ -426,7 +426,7 @@ ScUserListItem::~ScUserListItem()
 
 String ScUserListItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScUserListItem"));
+    return rtl::OUString("ScUserListItem");
 }
 
 //------------------------------------------------------------------------
@@ -492,7 +492,7 @@ ScConsolidateItem::~ScConsolidateItem()
 
 String ScConsolidateItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScConsolidateItem"));
+    return rtl::OUString("ScConsolidateItem");
 }
 
 //------------------------------------------------------------------------
@@ -553,7 +553,7 @@ ScPivotItem::~ScPivotItem()
 
 String ScPivotItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScPivotItem"));
+    return rtl::OUString("ScPivotItem");
 }
 
 //------------------------------------------------------------------------
@@ -606,7 +606,7 @@ ScSolveItem::~ScSolveItem()
 
 String ScSolveItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScSolveItem"));
+    return rtl::OUString("ScSolveItem");
 }
 
 //------------------------------------------------------------------------
@@ -656,7 +656,7 @@ ScTabOpItem::~ScTabOpItem()
 
 String ScTabOpItem::GetValueText() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScTabOpItem"));
+    return rtl::OUString("ScTabOpItem");
 }
 
 //------------------------------------------------------------------------

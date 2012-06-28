@@ -81,9 +81,6 @@ using namespace com::sun::star::ui::dialogs;
 using ::rtl::OUString;
 
 
-#define INDEX_SECTION_NAME String::CreateFromAscii( \
-                            RTL_CONSTASCII_STRINGPARAM( "IndexSection_" ))
-
 #ifdef SW_PROP_NAME_STR
 #undef SW_PROP_NAME_STR
 #endif
@@ -155,7 +152,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl)
          uno::Reference< container::XNameAccess >  xSections =
                                         xSectionSupplier->getTextSections();
 
-        String sSectionName( INDEX_SECTION_NAME );
+        rtl::OUString sSectionName("IndexSection_");
         for(int i = 0; i < 7; ++i )
         {
             String sTmp( sSectionName ); sTmp += String::CreateFromInt32(i);

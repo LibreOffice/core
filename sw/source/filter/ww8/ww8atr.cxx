@@ -1933,7 +1933,7 @@ void WW8Export::StartCommentOutput(const String& rName)
 
 void WW8Export::EndCommentOutput(const String& rName)
 {
-    String sStr(CREATE_CONST_ASC(" ["));
+    String sStr(rtl::OUString(" ["));
     sStr += rName;
     sStr.APPEND_CONST_ASC("] ");
     OutputField(0, ww::eQUOTE, sStr, WRITEFIELD_CMD_END | WRITEFIELD_END |
@@ -2414,7 +2414,7 @@ void WW8Export::WritePostItBegin( ww::bytes* pOut )
 
 String FieldString(ww::eField eIndex)
 {
-    String sRet(CREATE_CONST_ASC("  "));
+    String sRet(rtl::OUString("  "));
     if (const char *pField = ww::GetEnglishFieldName(eIndex))
         sRet.InsertAscii(pField, 1);
     return sRet;

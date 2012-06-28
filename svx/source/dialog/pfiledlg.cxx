@@ -177,7 +177,7 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
 
     // add the All-Filter
     String aAllFilter( ResId( STR_EXTFILTER_ALL, DIALOG_MGR() ) );
-    maFileDlg.AddFilter( aAllFilter, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
+    maFileDlg.AddFilter(aAllFilter, rtl::OUString("*.*"));
 
     // and activate him
     maFileDlg.SetCurrentFilter( aAllFilter );

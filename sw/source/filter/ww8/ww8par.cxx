@@ -206,7 +206,7 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
         oox::StorageRef vbaStg = root.openSubStorage( CREATE_OUSTRING( "Macros" ), false );
         if ( vbaStg.get() )
         {
-            oox::ole::VbaProject aVbaPrj( mxCtx, mrDocShell.GetModel(), CREATE_CONST_ASC( "Writer") );
+            oox::ole::VbaProject aVbaPrj( mxCtx, mrDocShell.GetModel(), rtl::OUString("Writer") );
             bRet = aVbaPrj.importVbaProject( *vbaStg );
         }
     }
@@ -3611,7 +3611,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     maSectionManager(*this),
     m_aExtraneousParas(rD),
     maInsertedTables(rD),
-    maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
+    maSectionNameGenerator(rD, rtl::OUString("WW")),
     maGrfNameGenerator(bNewDoc,String('G')),
     maParaStyleMapper(rD),
     maCharStyleMapper(rD),
@@ -4125,7 +4125,7 @@ void SwWW8ImplReader::StoreMacroCmds()
         try
         {
             uno::Reference < io::XStream > xStream =
-                    xRoot->openStreamElement( CREATE_CONST_ASC(SL::aMSMacroCmds), embed::ElementModes::READWRITE );
+                    xRoot->openStreamElement( rtl::OUString(SL::aMSMacroCmds), embed::ElementModes::READWRITE );
             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
 
             sal_uInt8 *pBuffer = new sal_uInt8[pWwFib->lcbCmds];
@@ -4774,7 +4774,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
             pTableStream = &rTableStream;
             pTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-            rDataStream = pStg->OpenSotStream(CREATE_CONST_ASC(SL::aData),
+            rDataStream = pStg->OpenSotStream(rtl::OUString(SL::aData),
                 STREAM_STD_READ | STREAM_NOCREATE );
 
             if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
@@ -5653,7 +5653,7 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
     {
         rStorageName = '_';
         rStorageName += rtl::OUString::valueOf(nPictureId);
-        rSrcStorage = rReader.pStg->OpenSotStorage(CREATE_CONST_ASC(
+        rSrcStorage = rReader.pStg->OpenSotStorage(rtl::OUString(
             SL::aObjectPool));
         if (!rReader.mpDocShell)
             bRet=false;

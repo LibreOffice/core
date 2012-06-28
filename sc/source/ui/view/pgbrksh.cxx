@@ -59,7 +59,7 @@ ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :
         pMgr->SetMaxUndoActionCount( 0 );
     }
     SetHelpId( HID_SCSHELL_PAGEBREAK );
-    SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("PageBreak")));
+    SetName(rtl::OUString("PageBreak"));
 }
 
 //------------------------------------------------------------------------

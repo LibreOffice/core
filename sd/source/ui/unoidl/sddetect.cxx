@@ -177,13 +177,13 @@ SdFilterDetect::~SdFilterDetect()
 
     const SfxFilter* pFilter = 0;
     String aFilterName;
-    String aPrefix = String::CreateFromAscii( "private:factory/" );
+    String aPrefix = rtl::OUString("private:factory/");
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
         if( SvtModuleOptions().IsImpress() )
         {
             String aPattern( aPrefix );
-            aPattern += String::CreateFromAscii("simpress");
+            aPattern += rtl::OUString("simpress");
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
         }
@@ -191,7 +191,7 @@ SdFilterDetect::~SdFilterDetect()
         if( !pFilter && SvtModuleOptions().IsDraw() )
         {
             String aPattern( aPrefix );
-            aPattern += String::CreateFromAscii("sdraw");
+            aPattern += rtl::OUString("sdraw");
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
         }
@@ -317,9 +317,9 @@ SdFilterDetect::~SdFilterDetect()
                             //TODO/LATER: using this method impress is always preferred if no flat detecion has been made
                             // this should been discussed!
                             if ( SvtModuleOptions().IsImpress() )
-                                pFilter = SfxFilterMatcher( String::CreateFromAscii("simpress") ).GetFilter4EA( aTypeName );
+                                pFilter = SfxFilterMatcher( rtl::OUString("simpress") ).GetFilter4EA( aTypeName );
                             else if ( SvtModuleOptions().IsDraw() )
-                                pFilter = SfxFilterMatcher( String::CreateFromAscii("sdraw") ).GetFilter4EA( aTypeName );
+                                pFilter = SfxFilterMatcher( rtl::OUString("sdraw") ).GetFilter4EA( aTypeName );
                         }
                     }
                 }
@@ -369,9 +369,8 @@ SdFilterDetect::~SdFilterDetect()
                                         *pStm >> n8;
                                         if ( ( n8 & 0xf0 ) == 0 )       // we are supporting binary cgm format only, so
                                         {                               // this is a small test to exclude cgm text
-                                            const String aName = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "CGM - Computer Graphics Metafile" ) );
-                                            SfxFilterMatcher aMatch( String::CreateFromAscii("simpress") );
-                                            pFilter = aMatch.GetFilter4FilterName( aName );
+                                            SfxFilterMatcher aMatch(rtl::OUString("simpress"));
+                                            pFilter = aMatch.GetFilter4FilterName(rtl::OUString("CGM - Computer Graphics Metafile"));
                                         }
                                     }
                                 }
@@ -394,7 +393,7 @@ SdFilterDetect::~SdFilterDetect()
                                     aFilterConfigItem.WriteInt32( "Resolution" , nBase );
                                 }
 
-                                SfxFilterMatcher aMatch( String::CreateFromAscii("sdraw") );
+                                SfxFilterMatcher aMatch(rtl::OUString("sdraw"));
                                 pFilter = aMatch.GetFilter4FilterName( aName );
                             }
                         }

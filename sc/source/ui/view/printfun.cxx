@@ -1850,8 +1850,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
     ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont( aMarkFont, eColorMode );
     pDev->SetFont( aMarkFont );
-    long nMarkLen = pDev->GetTextWidth(
-            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("GW99999:")));
+    long nMarkLen = pDev->GetTextWidth(rtl::OUString("GW99999:"));
     // ohne Space, weil's eh selten so weit kommt
 
     Size aDataSize = aPageRect.GetSize();

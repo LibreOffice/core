@@ -375,8 +375,8 @@ void ScDocShell::CalcOutputFactor()
         return;
     }
 
-    String aTestString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789" ));
+    rtl::OUString aTestString(
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789");
     long nPrinterWidth = 0;
     long nWindowWidth = 0;
     const ScPatternAttr* pPattern = (const ScPatternAttr*)&aDocument.GetPool()->
@@ -860,8 +860,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         return;             //! nichts zu tun - Fehlermeldung?
                             //  ab hier kein return mehr
 
-    ScProgress aProgress( this,
-                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("...")),
+    ScProgress aProgress( this, rtl::OUString("..."),
                     nNewActionCount );
 
     sal_uLong nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();

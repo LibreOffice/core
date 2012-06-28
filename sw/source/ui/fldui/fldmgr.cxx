@@ -1487,8 +1487,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
                 ((SwPageNumberField*)pCurFld)->SetUserString( sPar2 );
-                sPar2 = String::CreateFromAscii(
-                    RTL_CONSTASCII_STRINGPARAM("-1"));
+                sPar2 = rtl::OUString("-1");
             }
             else
             {

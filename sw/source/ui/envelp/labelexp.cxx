@@ -237,8 +237,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
 
     try
     {
-        String sFldName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                            "com.sun.star.text.FieldMaster.User." )));
+        rtl::OUString sFldName("com.sun.star.text.FieldMaster.User.");
         OUString uCntName( rtl::OUString::createFromAscii( SW_PROP_NAME_STR(UNO_NAME_CONTENT )));
         for( const _SwLabItemMap* p = aArr; p->pName; ++p )
         {

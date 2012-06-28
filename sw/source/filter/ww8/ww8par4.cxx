@@ -87,7 +87,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
     //      0x2c, 0x30 Skalierung x,y in Promille
     //      0x34, 0x38, 0x3c, 0x40 Crop Left, Top, Right, Bot in tw
 
-    SvStorageStreamRef xSrc3 = rSrc1->OpenSotStream( CREATE_CONST_ASC( "\3PIC" ),
+    SvStorageStreamRef xSrc3 = rSrc1->OpenSotStream( rtl::OUString("\3PIC"),
         STREAM_STD_READ | STREAM_NOCREATE);
     SvStorageStream* pS = xSrc3;
     pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -132,7 +132,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
 static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     SvStorageRef& rSrc1)
 {
-    SvStorageStreamRef xSrc2 = rSrc1->OpenSotStream( CREATE_CONST_ASC("\3META"),
+    SvStorageStreamRef xSrc2 = rSrc1->OpenSotStream( rtl::OUString("\3META"),
         STREAM_STD_READ | STREAM_NOCREATE);
     SvStorageStream* pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -188,7 +188,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
 {
     // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
-    SvStorageStreamRef xSrc4 = rSrc1->OpenSotStream( CREATE_CONST_ASC( "\3PICT" ));
+    SvStorageStreamRef xSrc4 = rSrc1->OpenSotStream(rtl::OUString("\3PICT"));
     SvStorageStream* pStp = xSrc4;
     pStp->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     sal_uInt8 aTestA[10];        // Ist der 01Ole-Stream ueberhaupt vorhanden
@@ -355,7 +355,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     // ergibt Name "_4711"
     aSrcStgName += String::CreateFromInt32( nObjLocFc );
 
-    SvStorageRef xSrc0 = pStg->OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool));
+    SvStorageRef xSrc0 = pStg->OpenSotStorage(rtl::OUString(SL::aObjectPool));
     SvStorageRef xSrc1 = xSrc0->OpenSotStorage( aSrcStgName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
 
@@ -432,7 +432,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
             {
-                SvStorageStreamRef xObjInfoSrc = xSrc1->OpenSotStream( CREATE_CONST_ASC( "\3ObjInfo" ),
+                SvStorageStreamRef xObjInfoSrc = xSrc1->OpenSotStream(rtl::OUString("\3ObjInfo"),
                     STREAM_STD_READ | STREAM_NOCREATE );
                 if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                 {

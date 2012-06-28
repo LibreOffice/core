@@ -87,7 +87,7 @@ ScCellShell::ScCellShell(ScViewData* pData) :
     bPastePossible(false)
 {
     SetHelpId(HID_SCSHELL_CELLSH);
-    SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Cell")));
+    SetName(rtl::OUString("Cell"));
 }
 
 ScCellShell::~ScCellShell()
@@ -684,8 +684,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     // In interpreter may happen via rescheduled Basic
                     if ( pDoc->IsInInterpreter() )
-                        rSet.Put( SfxStringItem( nWhich,
-                            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("...")) ) );
+                        rSet.Put( SfxStringItem( nWhich, rtl::OUString("...") ) );
                     else
                     {
                         sal_uInt16 nErrCode = 0;

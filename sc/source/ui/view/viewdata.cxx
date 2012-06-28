@@ -2269,7 +2269,7 @@ void ScViewData::ReadUserData(const String& rData)
     }
 
     String aTabOpt;
-    xub_StrLen nTagLen = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(TAG_TABBARWIDTH)).Len();
+    xub_StrLen nTagLen = RTL_CONSTASCII_LENGTH(TAG_TABBARWIDTH);
 
     // nicht pro Tabelle:
     SCTAB nTabStart = 2;

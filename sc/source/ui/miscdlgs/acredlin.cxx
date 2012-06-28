@@ -1849,7 +1849,7 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
         if ( pInfo->aExtraString.Len() )
         {
             xub_StrLen nPos = pInfo->aExtraString.Search(
-                String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("AcceptChgDat:")));
+                rtl::OUString("AcceptChgDat:"));
 
             // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
             // er nicht vorhanden ist, liegt eine "altere Version vor

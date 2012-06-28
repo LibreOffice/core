@@ -76,11 +76,11 @@ using namespace svx;
 #define ITEMID_TYPE       1
 #define ITEMID_PATH       2
 
-#define POSTFIX_INTERNAL    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_internal" ) )
-#define POSTFIX_USER        String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_user" ) )
-#define POSTFIX_WRITABLE    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_writable" ) )
-#define VAR_ONE             String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "%1" ) )
-#define IODLG_CONFIGNAME    String(DEFINE_CONST_UNICODE("FilePicker_Save"))
+#define POSTFIX_INTERNAL    rtl::OUString("_internal")
+#define POSTFIX_USER        rtl::OUString("_user")
+#define POSTFIX_WRITABLE    rtl::OUString("_writable")
+#define VAR_ONE             rtl::OUString("%1")
+#define IODLG_CONFIGNAME    rtl::OUString("FilePicker_Save")
 
 // struct OptPath_Impl ---------------------------------------------------
 

@@ -745,10 +745,10 @@ namespace sw
             bool bForceJapanese = ( STRING_NOTFOUND != rParams.SearchChar( sJChars.getStr() ) );
             if ( bForceJapanese )
             {
-                rParams.SearchAndReplaceAll( String::CreateFromAscii( "ee" ),
-                                             String::CreateFromAscii( "yyyy" ) );
-                rParams.SearchAndReplaceAll( String::CreateFromAscii( "EE" ),
-                                             String::CreateFromAscii( "YYYY" ) );
+                rParams.SearchAndReplaceAll( rtl::OUString( "ee" ),
+                                             rtl::OUString( "yyyy" ) );
+                rParams.SearchAndReplaceAll( rtl::OUString( "EE" ),
+                                             rtl::OUString( "YYYY" ) );
             }
             if (LANGUAGE_FRENCH != nDocLang)
             {
@@ -764,10 +764,10 @@ namespace sw
 
             // Force to NatNum when finding one of 'oOA'
             String sOldParams( rParams );
-            rParams.SearchAndReplaceAll( String::CreateFromAscii( "o" ),
-                                         String::CreateFromAscii( "m" ) );
-            rParams.SearchAndReplaceAll( String::CreateFromAscii( "O" ),
-                                         String::CreateFromAscii( "M" ) );
+            rParams.SearchAndReplaceAll( rtl::OUString( "o" ),
+                                         rtl::OUString( "m" ) );
+            rParams.SearchAndReplaceAll( rtl::OUString( "O" ),
+                                         rtl::OUString( "M" ) );
             bool bForceNatNum = !sOldParams.Equals( rParams );
             if (LANGUAGE_FRENCH != nDocLang)
             {
@@ -814,7 +814,7 @@ namespace sw
                     if (nChar == '/')
                     {
                         // MM We have to escape '/' in case it's used as a char
-                        rParams.Replace(nI, 1, CREATE_CONST_ASC("\\/"));
+                        rParams.Replace(nI, 1, rtl::OUString("\\/"));
                         nI++;
                         nLen++;
                     }
@@ -944,10 +944,10 @@ namespace sw
                 rLang = LANGUAGE_JAPANESE;
 
             if (bForceNatNum)
-                rParams.Insert(CREATE_CONST_ASC("[NatNum1][$-411]"),0);
+                rParams.Insert(rtl::OUString("[NatNum1][$-411]"),0);
 
             if (bHijri)
-                rParams.Insert(CREATE_CONST_ASC("[~hijri]"), 0);
+                rParams.Insert(rtl::OUString("[~hijri]"), 0);
 
             pFormatter->PutEntry(rParams, nCheckPos, nType, nKey, rLang);
 

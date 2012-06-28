@@ -548,7 +548,7 @@ sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
 
 void ScDrawStringsVars::SetHashText()
 {
-    SetAutoText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+    SetAutoText(rtl::OUString("###"));
 }
 
 void ScDrawStringsVars::RepeatToFill( long colWidth )
@@ -2802,7 +2802,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+            rParam.mpEngine->SetText(rtl::OUString("###"));
             nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
             if (rParam.mbPixelToLogic)
                 nNeededPixel = pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
@@ -3184,7 +3184,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+            rParam.mpEngine->SetText(rtl::OUString("###"));
             nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
             if (rParam.mbPixelToLogic)
                 nNeededPixel = pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
@@ -3554,7 +3554,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+            rParam.mpEngine->SetText(rtl::OUString("###"));
             nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
             if (rParam.mbPixelToLogic)
                 nNeededPixel = pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
@@ -3936,7 +3936,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+            rParam.mpEngine->SetText(rtl::OUString("###"));
             nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
             if (rParam.mbPixelToLogic)
                 nNeededPixel = pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
@@ -4345,7 +4345,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
     {
-        rParam.mpEngine->SetText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+        rParam.mpEngine->SetText(rtl::OUString("###"));
         nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
         if (rParam.mbPixelToLogic)
             nNeededPixel = pRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();

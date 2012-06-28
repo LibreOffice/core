@@ -477,8 +477,7 @@ sal_uInt16 SwFldDokInfPage::GetGroup()
 
 void    SwFldDokInfPage::FillUserData()
 {
-    String sData( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));
+    String sData(rtl::OUString(USER_DATA_VERSION));
     sData += ';';
     SvLBoxEntry* pEntry = aTypeTLB.FirstSelected();
     sal_uInt16 nTypeSel = pEntry ? sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(pEntry->GetUserData())) : USHRT_MAX;

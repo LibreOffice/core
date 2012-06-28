@@ -390,7 +390,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         * Objects was created on the slide master page
         ***********************************************/
         String aName( pPage->GetLayoutName() );
-        String aSep = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ) );
+        String aSep = rtl::OUString(SD_LT_SEPARATOR);
         sal_uInt16 n = aName.Search(aSep);
         n = n + aSep.Len();
         aName.Erase(n);

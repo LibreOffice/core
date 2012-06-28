@@ -2038,7 +2038,7 @@ ScPosWnd::ScPosWnd( Window* pParent ) :
     nTipVisible ( 0 ),
     bFormulaMode( false )
 {
-    Size aSize( GetTextWidth( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("GW99999:GW99999")) ),
+    Size aSize( GetTextWidth( rtl::OUString("GW99999:GW99999") ),
                 GetTextHeight() );
     aSize.Width() += 25;    // ??
     aSize.Height() = CalcWindowSizePixel(11);       // Funktionen: 10 MRU + "andere..."

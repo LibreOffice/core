@@ -349,8 +349,7 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
 {
     Any aRetDlgLibAny;
 
-    SbxVariable* pDlgLibContVar = pBasic->Find
-        (  String::CreateFromAscii("DialogLibraries"), SbxCLASS_OBJECT );
+    SbxVariable* pDlgLibContVar = pBasic->Find(rtl::OUString("DialogLibraries"), SbxCLASS_OBJECT);
     if( pDlgLibContVar && pDlgLibContVar->ISA(SbUnoObject) )
     {
         SbUnoObject* pDlgLibContUnoObj = (SbUnoObject*)(SbxBase*)pDlgLibContVar;

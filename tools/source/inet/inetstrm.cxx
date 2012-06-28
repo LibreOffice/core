@@ -1738,8 +1738,7 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
              */
             if (pMsg->GetContentType().Len() == 0)
             {
-                String aDefaultCT = pMsg->GetDefaultContentType();
-                pMsg->SetContentType (aDefaultCT);
+                pMsg->SetContentType(pMsg->GetDefaultContentType());
             }
 
             if (eEncoding == INETMSG_ENCODING_BINARY)

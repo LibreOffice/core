@@ -106,8 +106,7 @@ static const sal_Unicode aDeliEnd    = ']'; // for the form
 #define POS_TABLE   2
 #define POS_FRAME   3
 
-#define IDX_FILE_EXTENSION String::CreateFromAscii( \
-                            RTL_CONSTASCII_STRINGPARAM( "*.sdi" ))
+#define IDX_FILE_EXTENSION rtl::OUString("*.sdi")
 
 String lcl_CreateAutoMarkFileDlg( const String& rURL,
                                 const String& rFileString, sal_Bool bOpen )
@@ -509,8 +508,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
         if(!pExampleFrame && !bExampleCreated)
         {
             bExampleCreated = sal_True;
-            String sTemplate( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM("internal")) );
+            String sTemplate(rtl::OUString("internal"));
             sTemplate += INET_PATH_TOKEN;
             sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM("idxexample") );
             String sTemplateWithoutExt( sTemplate );
@@ -3347,9 +3345,9 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     const long nSpace = aCtrlParentWin.GetSizePixel().Width();
 #if OSL_DEBUG_LEVEL > 1
     //find all start/end positions and print it
-    String sMessage(String::CreateFromAscii("Space: "));
+    String sMessage(rtl::OUString("Space: "));
     sMessage += String::CreateFromInt32(nSpace);
-    sMessage += String::CreateFromAscii(" | ");
+    sMessage += rtl::OUString(" | ");
 
     for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
@@ -3359,9 +3357,9 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
 
         sMessage += String::CreateFromInt32( nDebugXPos );
-        sMessage += String::CreateFromAscii(" ");
+        sMessage += rtl::OUString(" ");
         sMessage += String::CreateFromInt32(nDebugXPos + nDebugWidth);
-        sMessage += String::CreateFromAscii(" | ");
+        sMessage += rtl::OUString(" | ");
     }
 
 #endif

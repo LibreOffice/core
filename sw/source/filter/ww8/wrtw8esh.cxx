@@ -2827,7 +2827,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
 
     //Open the ObjectPool
     SvStorageRef xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(
-        CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
+        rtl::OUString(SL::aObjectPool), STREAM_READWRITE |
         STREAM_SHARE_DENYALL);
 
     //Create a destination storage for the microsoft control

@@ -2560,8 +2560,8 @@ const String& SdPage::GetName() const
     }
     else if (mePageKind == PK_HANDOUT && mbMaster)
     {
-        aCreatedPageName += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( " (" ));
-        aCreatedPageName += String(SdResId(STR_HANDOUT));
+        aCreatedPageName += rtl::OUString(" (");
+        aCreatedPageName += SdResId(STR_HANDOUT).toString();
         aCreatedPageName += sal_Unicode( ')' );
     }
 

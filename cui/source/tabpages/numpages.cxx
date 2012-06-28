@@ -170,8 +170,7 @@ sal_Bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
 Font& lcl_GetDefaultBulletFont()
 {
     static sal_Bool bInit = 0;
-    static Font aDefBulletFont( UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "StarSymbol" ) ),
+    static Font aDefBulletFont( rtl::OUString("StarSymbol"),
                                 String(), Size( 0, 14 ) );
     if(!bInit)
     {
@@ -1287,7 +1286,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
             aLevelLB.InsertEntry( UniString::CreateFromInt32(i));
         if(pSaveNum->GetLevelCount() > 1)
         {
-            String sEntry( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "1 - " ) ) );
+            String sEntry(rtl::OUString("1 - "));
             sEntry += UniString::CreateFromInt32( pSaveNum->GetLevelCount() );
             aLevelLB.InsertEntry(sEntry);
             aLevelLB.SelectEntry(sEntry);
@@ -2712,7 +2711,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     Point aPos(250,0);
 
     pDebugFixedText->SetPosSizePixel(aPos, aSize);
-    pDebugFixedText->SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Das ist ein Debug-Text" ) ) );
+    pDebugFixedText->SetText(rtl::OUString("Das ist ein Debug-Text"));
 #endif
 
     aStandardPB.SetAccessibleRelationMemberOf(&aPositionFL);
@@ -3045,7 +3044,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
             aLevelLB.InsertEntry(UniString::CreateFromInt32(i));
         if(pSaveNum->GetLevelCount() > 1)
         {
-            String sEntry( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "1 - ") ) );
+            String sEntry(rtl::OUString("1 - "));
             sEntry.Append( UniString::CreateFromInt32( pSaveNum->GetLevelCount() ) );
             aLevelLB.InsertEntry(sEntry);
             aLevelLB.SelectEntry(sEntry);

@@ -972,7 +972,7 @@ String SbxBasicFormater::BasicFormat( double dNumber, String sFormatStrg )
             {
                 if( sNegFormatStrg.Len() == 0 && bPosFormatFound )
                 {
-                    sTempStrg = String::CreateFromAscii("-");
+                    sTempStrg = rtl::OUString("-");
                     sTempStrg += sPosFormatStrg;
                 }
                 else

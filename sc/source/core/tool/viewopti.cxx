@@ -262,7 +262,7 @@ ScTpViewItem::~ScTpViewItem()
 
 String ScTpViewItem::GetValueText() const
 {
-    return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("ScTpViewItem") );
+    return rtl::OUString("ScTpViewItem");
 }
 
 //------------------------------------------------------------------------

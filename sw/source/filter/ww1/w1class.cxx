@@ -937,7 +937,7 @@ long Ww1Bookmarks::Len() const
 const String Ww1Bookmarks::GetName() const
 {
     if( nIsEnd )
-        return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "???" ));
+        return rtl::OUString("???");
     return aNames.GetStr( nPlcIdx[0] );
 }
 

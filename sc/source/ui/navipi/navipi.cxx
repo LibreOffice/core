@@ -659,7 +659,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     //  eListMode wird von aussen gesetzt, Root weiter unten
 
     aLbDocuments.SetDropDownLineCount(9);
-    String aOpen = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
+    rtl::OUString aOpen(" (");
     aStrActive = aOpen;
     aStrActive += String( ScResId( STR_ACTIVE ) );
     aStrActive += ')';                                      // " (aktiv)"

@@ -88,8 +88,7 @@ String lcl_CheckFileName( const String& rNewFilePath,
     {
         String rSG = SwGlossaries::GetExtension();
         //generate generic name
-        utl::TempFile aTemp(
-            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "group" )),
+        utl::TempFile aTemp(rtl::OUString("group"),
             &rSG, &rNewFilePath );
         aTemp.EnableKillingFile();
 
@@ -104,7 +103,7 @@ String lcl_CheckFileName( const String& rNewFilePath,
 ------------------------------------------------------------------------*/
 String  SwGlossaries::GetDefName()
 {
-    return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "standard" ));
+    return rtl::OUString("standard");
 
 }
 
@@ -486,7 +485,7 @@ void SwGlossaries::ShowError()
 
 String SwGlossaries::GetExtension()
 {
-    return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".bau" ));
+    return rtl::OUString(".bau");
 }
 
 void SwGlossaries::RemoveFileFromList( const String& rGroup )

@@ -157,8 +157,7 @@ HTMLReader::HTMLReader()
 
 String HTMLReader::GetTemplateName() const
 {
-    String sTemplate(
-            String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("internal")) );
+    String sTemplate(rtl::OUString("internal"));
     sTemplate += INET_PATH_TOKEN;
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("html") );
     String sTemplateWithoutExt( sTemplate );
@@ -2035,8 +2034,7 @@ void SwHTMLParser::NextToken( int nToken )
 
     if( bInsertUnknown )
     {
-        String aComment(
-            String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("HTML: <")) );
+        String aComment(rtl::OUString("HTML: <"));
         if( (HTML_TOKEN_ONOFF & nToken) != 0 && (1 & nToken) != 0 )
             aComment += '/';
         aComment += sSaveToken;

@@ -2227,7 +2227,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INET_PROT_FILE );
         if ( bHasMemo )
-            aTmpFile.setExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
+            aTmpFile.setExtension(rtl::OUString("dbt"));
         if ( eError != eERR_OK )
         {
             if (!GetError())
@@ -2243,7 +2243,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 SfxStringItem* pNameItem =
                     (SfxStringItem*) rMed.GetItemSet()->GetItem( SID_FILE_NAME );
                 INetURLObject aDbtFile( pNameItem->GetValue(), INET_PROT_FILE );
-                aDbtFile.setExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
+                aDbtFile.setExtension(rtl::OUString("dbt"));
                 if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )
                     bRet = false;
                 if ( bRet && !MoveFile( aTmpFile, aDbtFile ) )
@@ -2510,7 +2510,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     SfxObjectShell( rShell.GetCreateMode() ),
     SfxListener(),
     aDocument       ( SCDOCMODE_DOCUMENT, this ),
-    aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))),
+    aDdeTextFmt(rtl::OUString("TEXT")),
     nPrtToScreenFactor( 1.0 ),
     pImpl           ( new DocShell_Impl ),
     bHeaderOn       ( true ),
@@ -2556,7 +2556,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
 ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     SfxObjectShell( i_nSfxCreationFlags ),
     aDocument       ( SCDOCMODE_DOCUMENT, this ),
-    aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))),
+    aDdeTextFmt(rtl::OUString("TEXT")),
     nPrtToScreenFactor( 1.0 ),
     pImpl           ( new DocShell_Impl ),
     bHeaderOn       ( true ),

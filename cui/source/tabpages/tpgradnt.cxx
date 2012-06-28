@@ -734,7 +734,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
         aFile.Append( pGradientList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sog" ) ) );
+            aFile.SetExtension(rtl::OUString("sog"));
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );

@@ -2467,10 +2467,10 @@ void ScViewFunc::MoveTable(
 
         //  execute without SFX_CALLMODE_RECORD, because already contained in move command
 
-        String aUrl = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("private:factory/"));
+        String aUrl = rtl::OUString("private:factory/");
         aUrl.AppendAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));               // "scalc"
         SfxStringItem aItem( SID_FILE_NAME, aUrl );
-        SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
+        SfxStringItem aTarget( SID_TARGETNAME, rtl::OUString("_blank") );
 
         const SfxPoolItem* pRetItem = GetViewData()->GetDispatcher().Execute(
                     SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aItem, &aTarget, 0L );
@@ -2515,8 +2515,7 @@ void ScViewFunc::MoveTable(
         {
             while (pDestDoc->GetTableCount() > 1)
                 pDestDoc->DeleteTab(0);
-            pDestDoc->RenameTab( 0,
-                        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("______42_____")),
+            pDestDoc->RenameTab( 0, rtl::OUString("______42_____"),
                         false );
         }
 

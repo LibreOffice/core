@@ -770,7 +770,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
         aFile.Append( pHatchingList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soh" ) ) );
+            aFile.SetExtension(rtl::OUString("soh"));
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );

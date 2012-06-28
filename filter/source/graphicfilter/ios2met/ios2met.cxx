@@ -2265,7 +2265,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                         str[ 32 ] = 0;
                         String aStr( (const sal_Char*)str, osl_getThreadTextEncoding() );
                         if ( aStr.CompareIgnoreCaseToAscii( "Helv" ) == COMPARE_EQUAL )
-                            aStr = String::CreateFromAscii( "Helvetica" );
+                            aStr = rtl::OUString("Helvetica");
                         pF->aFont.SetName( aStr );
                         break;
                     }

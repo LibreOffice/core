@@ -1631,7 +1631,7 @@ RTLFUNC(Join)
         if( nParCount == 3 )
             aDelim = rPar.Get(2)->GetString();
         else
-            aDelim = String::CreateFromAscii( " " );
+            aDelim = rtl::OUString(" ");
 
         String aRetStr;
         short nLower, nUpper;
@@ -1671,7 +1671,7 @@ RTLFUNC(Split)
         if( nParCount >= 3 )
             aDelim = rPar.Get(2)->GetString();
         else
-            aDelim = String::CreateFromAscii( " " );
+            aDelim = rtl::OUString(" ");
 
         sal_Int32 nCount = -1;
         if( nParCount == 4 )

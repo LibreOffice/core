@@ -147,7 +147,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     StartListening( *pBindingsP, sal_True );
 
     Point aTopLeft=aCatBox.GetPosPixel();
-    String aString=String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
+    rtl::OUString aString("ww");
     Size aTxtSize( aFiFuncDesc.GetTextWidth(aString), aFiFuncDesc.GetTextHeight() );
     nMinWidth=aTxtSize.Width()+aTopLeft.X()
             +2*aFuncList.GetPosPixel().X();
@@ -334,8 +334,7 @@ void ScFunctionDockWin::SetLeftRightSize()
         aDiffSize.Width()-=aNewSize.Width();
         aDiffSize.Height()-=aNewSize.Height();
 
-        String aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
-
+        rtl::OUString aString("ww");
         Size aTxtSize( aFuncList.GetTextWidth(aString), aFuncList.GetTextHeight() );
 
         Range aYRange(3*aTxtSize.Height()+aFuncList.GetPosPixel().Y(),
@@ -668,7 +667,7 @@ sal_Bool ScFunctionDockWin::Close()
 SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */,
                                 SfxChildAlignment aChildAlign)
 {
-    String aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
+    String aString = rtl::OUString("ww");
     Size aTxtSize( aFiFuncDesc.GetTextWidth(aString), aFiFuncDesc.GetTextHeight() );
     if(!bInit)
     {
@@ -879,7 +878,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                 aArgStr = aFirstArgStr;
                 if ( nArgs != VAR_ARGS )
                 {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
-                    String aArgSep = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+                    rtl::OUString aArgSep("; ");
                     sal_uInt16 nFix = ( nArgs < VAR_ARGS ? nArgs : nArgs - VAR_ARGS + 1 );
                     for ( sal_uInt16 nArg = 1;
                             nArg < nFix && !pDesc->pDefArgFlags[nArg].bOptional; nArg++ )
@@ -1062,7 +1061,7 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
         if ( pInfo->aExtraString.Len() )
         {
             xub_StrLen nPos = pInfo->aExtraString.Search(
-                String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScFuncList:")));
+                rtl::OUString("ScFuncList:"));
 
             // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
             // er nicht vorhanden ist, liegt eine "altere Version vor

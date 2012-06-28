@@ -774,7 +774,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     if( pStyles->pStyRule )         // Bullet-Style bereits vorhanden
         return pStyles->pStyRule;
 
-    const String aBaseName(CREATE_CONST_ASC( "WW8StyleNum" ));
+    const String aBaseName(rtl::OUString("WW8StyleNum"));
     const String aName( rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
     // #i86652#
@@ -850,7 +850,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         // If NumRuleItems were set, either directly or through inheritance, disable them now
         pAktColl->SetFmtAttr( SwNumRuleItem() );
 
-        String aName(CREATE_CONST_ASC( "Outline" ));
+        String aName(rtl::OUString("Outline"));
         SwNumRule aNR( rDoc.GetUniqueNumRuleName( &aName ),
                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
                        OUTLINE_RULE );
@@ -4298,7 +4298,7 @@ void WW8RStyle::ImportOldFormatStyles()
                 if (const sal_Char *pStr = GetEnglishNameFromSti(eSti))
                     sName = String(pStr, RTL_TEXTENCODING_ASCII_US);
                 else
-                    sName = String(CREATE_CONST_ASC("Unknown"));
+                    sName = rtl::OUString("Unknown");
             }
             else               // user style
             {

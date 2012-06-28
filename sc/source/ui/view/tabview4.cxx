@@ -76,9 +76,9 @@ void ScTabView::ShowRefTip()
             SCROW nRows = nEndY+1-nStartY;
 
             String aHelp = ScGlobal::GetRscString( STR_QUICKHELP_REF );
-            aHelp.SearchAndReplace( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("%1")),
+            aHelp.SearchAndReplace( rtl::OUString("%1"),
                                     String::CreateFromInt32(nRows) );
-            aHelp.SearchAndReplace( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("%2")),
+            aHelp.SearchAndReplace( rtl::OUString("%2"),
                                     String::CreateFromInt32(nCols) );
 
             ScSplitPos eWhich = aViewData.GetActivePart();
@@ -272,9 +272,9 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             aHelpStr = ScGlobal::GetRscString( STR_TIP_RESIZEMATRIX );
             SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // Reihenfolge ist richtig
             SCROW nRows = nEndY + 1 - aViewData.GetRefStartY();
-            aHelpStr.SearchAndReplace( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("%1")),
+            aHelpStr.SearchAndReplace( rtl::OUString("%1"),
                                        String::CreateFromInt32(nRows) );
-            aHelpStr.SearchAndReplace( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("%2")),
+            aHelpStr.SearchAndReplace( rtl::OUString("%2"),
                                        String::CreateFromInt32(nCols) );
         }
         else if ( aViewData.GetDelMark( aDelRange ) )

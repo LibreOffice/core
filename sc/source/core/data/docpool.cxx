@@ -193,7 +193,7 @@ static SfxItemInfo const  aItemInfos[] =
 
 ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
 
-    :   SfxItemPool ( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScDocumentPool")),
+    :   SfxItemPool ( rtl::OUString("ScDocumentPool"),
                         ATTR_STARTINDEX, ATTR_ENDINDEX,
                         aItemInfos, NULL, bLoadRefCounts ),
         pSecondary  ( pSecPool )
@@ -298,7 +298,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
         ppPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
     else
         ppPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet,
-            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_STANDARD)) ); //! without name?
+            rtl::OUString(STRING_STANDARD) ); //! without name?
 
     ppPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );
     ppPoolDefaults[ ATTR_ULSPACE         - ATTR_STARTINDEX ] = new SvxULSpaceItem( ATTR_ULSPACE );
@@ -703,7 +703,7 @@ SfxItemPresentation lcl_HFPresentation
     SfxItemIter aIter( rSet );
     pItem = aIter.FirstItem();
     String  aText;
-    String  aDel = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( " + " ));
+    rtl::OUString aDel(" + ");
 
     while( pItem )
     {
@@ -793,7 +793,7 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
     sal_uInt16  nW = rItem.Which();
     String aStrYes  ( ScGlobal::GetRscString(STR_YES) );
     String aStrNo   ( ScGlobal::GetRscString(STR_NO) );
-    String aStrSep = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(": "));
+    rtl::OUString aStrSep(": ");
 
     switch( nW )
     {

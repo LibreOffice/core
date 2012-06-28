@@ -233,7 +233,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
 
     SvStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
-        CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
+        rtl::OUString(SL::aObjectPool), STREAM_READWRITE |
         STREAM_SHARE_DENYALL );
 
     if( xObjStg.Is()  )
@@ -353,7 +353,7 @@ void WW8Export::OutputLinkedOLE( const rtl::OUString& rOleId )
     SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, STREAM_READ );
 
     SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
-        CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
+        rtl::OUString(SL::aObjectPool), STREAM_READWRITE |
         STREAM_SHARE_DENYALL );
 
     if( xObjStg.Is() && xObjSrc.Is() )

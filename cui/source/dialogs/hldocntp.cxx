@@ -354,9 +354,8 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
                     // create items
                     SfxStringItem aName( SID_FILE_NAME, aStrDocName );
-                    SfxStringItem aReferer( SID_REFERER, UniString::CreateFromAscii(
-                                                RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
-                    SfxStringItem aFrame( SID_TARGETNAME, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_blank" ) ) );
+                    SfxStringItem aReferer( SID_REFERER, rtl::OUString("private:user") );
+                    SfxStringItem aFrame( SID_TARGETNAME, rtl::OUString("_blank") );
 
                     String aStrFlags ( sal_Unicode('S') );
                     if ( maRbtEditLater.IsChecked() )

@@ -53,7 +53,7 @@ ScChartShell::ScChartShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
     SetHelpId(HID_SCSHELL_CHARTSH);
-    SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ChartObject")));
+    SetName(rtl::OUString("ChartObject"));
 }
 
 ScChartShell::~ScChartShell()

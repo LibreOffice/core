@@ -387,7 +387,7 @@ void SbxVariable::SetParent( SbxObject* p )
         }
         if ( !bFound )
         {
-            String aMsg = String::CreateFromAscii( "dangling: [" );
+            String aMsg = rtl::OUString("dangling: [");
             aMsg += GetName();
             aMsg.AppendAscii( "].SetParent([" );
             aMsg += p->GetName();

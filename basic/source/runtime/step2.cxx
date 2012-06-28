@@ -89,7 +89,7 @@ SbxVariable* SbiRuntime::FindElement
             PushVar( p );
             StepARGV();
             nOp1 = nOp1 | 0x8000; // indicate params are present
-            aName = String::CreateFromAscii("Evaluate");
+            aName = rtl::OUString("Evaluate");
         }
         if( bLocal )
         {

@@ -148,7 +148,7 @@ void ScPreviewShell::Construct( Window* pParent )
     pVerScroll->Show( false );
     pCorner->Show();
     SetHelpId( HID_SCSHELL_PREVWSH );
-    SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Preview")));
+    SetName(rtl::OUString("Preview"));
 }
 
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
@@ -217,7 +217,7 @@ void ScPreviewShell::InitStartTable(SCTAB nTab)
 
 String ScPreviewShell::GetDescription() const
 {
-    return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" ** Test ** "));
+    return rtl::OUString(" ** Test ** ");
 }
 
 Size ScPreviewShell::GetOptimalSizePixel() const

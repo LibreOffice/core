@@ -511,7 +511,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     const ScAddress::Details aDetails(pDoc->GetAddressConvention());
 
     String aString;
-    String strDelim = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( " --- " ));
+    rtl::OUString strDelim(" --- ");
     aString = strDelim;
     aString += ScGlobal::GetRscString( STR_COLUMN );
     aString += strDelim;

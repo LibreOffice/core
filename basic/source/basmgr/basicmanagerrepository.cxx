@@ -297,14 +297,14 @@ namespace basic
         SvtPathOptions aPathCFG;
         String aAppBasicDir( aPathCFG.GetBasicPath() );
         if ( !aAppBasicDir.Len() )
-            aPathCFG.SetBasicPath( String::CreateFromAscii("$(prog)") );
+            aPathCFG.SetBasicPath(rtl::OUString("$(prog)"));
 
         // soffice.new search only in user dir => first dir
         String aAppFirstBasicDir = aAppBasicDir.GetToken(1);
 
         // Create basic and load it
         // AppBasicDir is now a PATH
-        INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(progurl)") ) );
+        INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable(rtl::OUString("$(progurl)")) );
         aAppBasic.insertName( Application::GetAppName() );
 
         BasicManager* pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );

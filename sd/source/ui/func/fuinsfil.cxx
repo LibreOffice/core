@@ -147,7 +147,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 String  aExt;
                 String  aAllSpec( SdResId( STR_ALL_FILES ) );
 
-                xFilterManager->appendFilter( aAllSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
+                xFilterManager->appendFilter( aAllSpec, rtl::OUString("*.*") );
                 xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
 
                 // Get main filter
@@ -173,7 +173,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
                 // get Powerpoint filter
-                aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".ppt" ) );
+                aExt = rtl::OUString(".ppt");
                 pFilter = aMatch.GetFilter4Extension( aExt );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );

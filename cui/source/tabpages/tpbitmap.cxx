@@ -706,7 +706,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
-    SvxOpenGraphicDialog aDlg( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Import" ) ) );
+    SvxOpenGraphicDialog aDlg(rtl::OUString("Import"));
     aDlg.EnableLink(sal_False);
 
     if( !aDlg.Execute() )
@@ -1014,7 +1014,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
         aFile.Append( pBitmapList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sob" ) ) );
+            aFile.SetExtension(rtl::OUString("sob"));
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );

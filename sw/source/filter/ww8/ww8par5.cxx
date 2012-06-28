@@ -360,7 +360,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         // needed if the filterflags say we will convert bookmarks
         // to SetExpFields! And this the exception!
 
-        String sHex(CREATE_CONST_ASC( "\\x" ));
+        rtl::OUString sHex("\\x");
         bool bSetAsHex;
         bool bAllowCr = SwFltGetFlag(nFieldFlags,
             SwFltControlStack::ALLOW_FLD_CR) ? true : false;
@@ -586,10 +586,10 @@ String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, sal_uInt16 nL
     // #i36594#
     // Fix provided by mloiseleur@openoffice.org.
     // A default date can have already 4 year digits, in some case
-    const xub_StrLen pos = sParams.Search( CREATE_CONST_ASC("YYYY") );
+    const xub_StrLen pos = sParams.Search(rtl::OUString("YYYY"));
     if ( pos == STRING_NOTFOUND )
     {
-        sParams.SearchAndReplace(CREATE_CONST_ASC("YY"), CREATE_CONST_ASC("YYYY"));
+        sParams.SearchAndReplace(rtl::OUString("YY"), rtl::OUString("YYYY"));
     }
     return sParams;
 }
@@ -633,7 +633,7 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
         }
 
         if (bHijri)
-            sParams.Insert(CREATE_CONST_ASC("[~hijri]"), 0);
+            sParams.Insert(rtl::OUString("[~hijri]"), 0);
 
         sal_uInt16 nCheckPos = 0;
         sal_Int16 nType = NUMBERFORMAT_DEFINED;
@@ -765,7 +765,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             String sOleId = '_';
                             sOleId += String::CreateFromInt32( maFieldStack.back().mnObjLocFc );
 
-                            SvStorageRef xSrc0 = pStg->OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool));
+                            SvStorageRef xSrc0 = pStg->OpenSotStorage(rtl::OUString(SL::aObjectPool));
                             SvStorageRef xSrc1 = xSrc0->OpenSotStorage( sOleId, STREAM_READ );
 
                             // Store it now!
@@ -1147,7 +1147,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 // Wenn keins dieser Sonderzeichen enthalten ist, wird 0 zurueckgeliefert.
 void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
 {
-    String sHex( CREATE_CONST_ASC( "\\x" ));
+    rtl::OUString sHex("\\x");
     bool bAllowCr = SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_IN_TEXT )
                 || SwFltGetFlag( nFieldFlags, SwFltControlStack::ALLOW_FLD_CR );
     sal_Unicode cChar;
@@ -1215,7 +1215,7 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
 
 void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const String& rTagText )
 {
-    String aName( CREATE_CONST_ASC( "WwFieldTag" ) );
+    String aName(rtl::OUString("WwFieldTag"));
     if( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_DO_ID ) ) // Nummer?
         aName += String::CreateFromInt32( nId );                    // ausgeben ?
 
@@ -1388,7 +1388,7 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     }
     else
     {
-        sName = CREATE_CONST_ASC("WWSetBkmk");
+        sName = rtl::OUString("WWSetBkmk");
         nNo = pReffingStck->aFieldVarNames.size()+1;
         sName += String::CreateFromInt32(nNo);
         nNo += pPlcxMan->GetBook()->GetIMax();
@@ -1509,7 +1509,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, String& rStr )
 {
     if( !pNumFldType ){     // 1. Mal
-        SwSetExpFieldType aT( &rDoc, CREATE_CONST_ASC("AutoNr"), nsSwGetSetExpType::GSE_SEQ );
+        SwSetExpFieldType aT( &rDoc, rtl::OUString("AutoNr"), nsSwGetSetExpType::GSE_SEQ );
         pNumFldType = rDoc.InsertFldType( aT );
     }
     SwSetExpField aFld( (SwSetExpFieldType*)pNumFldType, aEmptyStr,
@@ -2011,7 +2011,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
     }
     else
     {
-        rDoc.InsertString(*pPaM, CREATE_CONST_ASC("###"));
+        rDoc.InsertString(*pPaM, rtl::OUString("###"));
     }
 
     return FLD_OK;
@@ -3301,7 +3301,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                                         if ( aIt != aPattern.end() )
                                         {
                                             SwFormToken aNumberEntrySeparator( TOKEN_TEXT );
-                                            aNumberEntrySeparator.sText = String::CreateFromAscii(" ");
+                                            aNumberEntrySeparator.sText = rtl::OUString(" ");
                                             aPattern.insert( ++aIt, aNumberEntrySeparator );
                                             pForm->SetPattern( nStyleLevel, aPattern );
                                         }

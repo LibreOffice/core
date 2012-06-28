@@ -443,11 +443,10 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             if( !pStream->GetError() )
             {
                 uno::Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
-                String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
                 OUString aMime( RTL_CONSTASCII_USTRINGPARAM("application/binary") );
                 uno::Any aAny2;
                 aAny2 <<= aMime;
-                xSet->setPropertyValue( aPropName, aAny2 );
+                xSet->setPropertyValue( rtl::OUString("MediaType"), aAny2 );
                 pDoc->WriteLayoutCache( *pStream );
             }
 
@@ -548,11 +547,10 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
         if( !xSet.is() )
             return sal_False;
 
-        String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
         OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
         uno::Any aAny;
         aAny <<= aMime;
-        xSet->setPropertyValue( aPropName, aAny );
+        xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
 
         OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
         if( bPlainStream )
@@ -612,9 +610,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
 
     // get component
     uno::Reference< io::XActiveDataSource > xSaxWriter(
-        rFactory->createInstance(
-            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
-                "com.sun.star.xml.sax.Writer")) ),
+        rFactory->createInstance(rtl::OUString("com.sun.star.xml.sax.Writer")),
         UNO_QUERY );
     OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
     if(!xSaxWriter.is())

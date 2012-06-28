@@ -170,7 +170,7 @@ String SvxHyperlinkMailTp::CreateAbsoluteURL() const
     {
         if ( maEdSubject.GetText() != aEmptyStr )
         {
-            String aQuery = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "subject=" ) );
+            String aQuery = rtl::OUString("subject=");
             aQuery.Append( maEdSubject.GetText() );
             aURL.SetParam(aQuery);
         }

@@ -1093,8 +1093,6 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
 {
     OSL_TRACE("About to run %s, vba compatmode is %d", rtl::OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), mbVBACompat );
     static sal_uInt16 nMaxCallLevel = 0;
-    static String aMSOMacroRuntimeLibName = String::CreateFromAscii( "Launcher" );
-    static String aMSOMacroRuntimeAppSymbol = String::CreateFromAscii( "Application" );
 
     sal_uInt16 nRes = 0;
     sal_Bool bDelInst = sal_Bool( GetSbData()->pInst == NULL );
@@ -1129,7 +1127,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
         // Launcher problem
         // i80726 The Find below will genarate an error in Testtool so we reset it unless there was one before already
         sal_Bool bWasError = SbxBase::GetError() != 0;
-        SbxVariable* pMSOMacroRuntimeLibVar = Find( aMSOMacroRuntimeLibName, SbxCLASS_OBJECT );
+        SbxVariable* pMSOMacroRuntimeLibVar = Find( rtl::OUString("Launcher"), SbxCLASS_OBJECT );
         if ( !bWasError && (SbxBase::GetError() == SbxERR_PROC_UNDEFINED) )
             SbxBase::ResetError();
         if( pMSOMacroRuntimeLibVar )
@@ -1139,7 +1137,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             {
                 sal_uInt16 nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
                 pMSOMacroRuntimeLib->ResetFlag( SBX_GBLSEARCH );
-                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( aMSOMacroRuntimeAppSymbol, SbxCLASS_METHOD );
+                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( rtl::OUString("Application"), SbxCLASS_METHOD );
                 pMSOMacroRuntimeLib->SetFlag( nGblFlag );
                 if( pAppSymbol )
                 {

@@ -446,7 +446,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Kopfzeile:
     // [\TABELLE\ (\DATEI\)][leer][\DATUM\, \ZEIT\]
     //----------------------------------------
-    aStr = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" ()"));
+    aStr = rtl::OUString(" ()");
     pEdEngine->SetText( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
@@ -454,7 +454,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     pHeaderItem->SetLeftArea( *pTxtObj );
     pHeaderItem->SetCenterArea( *pEmptyTxtObj );
     DELETEZ( pTxtObj );
-    aStr = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+    aStr = rtl::OUString(", ");
     pEdEngine->SetText( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD),

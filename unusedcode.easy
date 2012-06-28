@@ -66,6 +66,7 @@ SrchAttrItemList::_ForEach(unsigned short, unsigned short, unsigned char (*)(Sea
 StgCache::Pos2Page(int)
 String::String(rtl::OString const&, unsigned short, unsigned int)
 String::String(unsigned short const*)
+String::String(unsigned short const*, unsigned short)
 SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, unsigned char)
 SvPtrarr::Replace(void* const*, unsigned short, unsigned short)
 SvPtrarr::_ForEach(unsigned short, unsigned short, unsigned char (*)(void* const&, void*), void*)

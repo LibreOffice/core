@@ -89,15 +89,14 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
     bBoldSet = sal_True;
 
     Size aSize = LogicToPixel( Size(
-        GetTextWidth( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("8888")) ),
+        GetTextWidth(rtl::OUString("8888")),
         GetTextHeight() ) );
     aSize.Width()  += 4;    // Platz fuer hervorgehobene Umrandung
     aSize.Height() += 3;
     SetSizePixel( aSize );
 
     nWidth = nSmallWidth = aSize.Width();
-    nBigWidth = LogicToPixel( Size( GetTextWidth(
-        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("8888888")) ), 0 ) ).Width() + 5;
+    nBigWidth = LogicToPixel( Size( GetTextWidth(rtl::OUString("8888888")), 0 ) ).Width() + 5;
 
     SetBackground();    // sonst Probleme auf OS/2 !?!?!
 }

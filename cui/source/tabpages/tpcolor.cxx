@@ -990,7 +990,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
             case CM_RGB:
             {
                 String aStr( aLbColorModel.GetSelectEntry() );
-                String aColorStr( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "~X" ) ) );
+                String aColorStr(rtl::OUString("~X"));
                 xub_StrLen nIdx = 1;
                 aColorStr.SetChar( nIdx, aStr.GetChar( 0 ) );
                 aFtColorModel1.SetText( aColorStr );
@@ -1035,7 +1035,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
             case CM_CMYK:
             {
                 String aStr( aLbColorModel.GetSelectEntry() );
-                String aColorStr( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "~X" ) ) );
+                String aColorStr(rtl::OUString("~X"));
                 xub_StrLen nIdx = 1;
                 aColorStr.SetChar( nIdx, aStr.GetChar( 0 ) );
                 aFtColorModel1.SetText( aColorStr );

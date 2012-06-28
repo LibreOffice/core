@@ -1506,7 +1506,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 
     bReadOnly = pDocSh->IsReadOnly();
 
-    SetName( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("View")) ); // fuer SBX
+    SetName(rtl::OUString("View")); // fuer SBX
     Color aColBlack( COL_BLACK );
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( GetActiveWin() );

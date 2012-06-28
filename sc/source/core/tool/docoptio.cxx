@@ -154,7 +154,7 @@ ScTpCalcItem::~ScTpCalcItem()
 
 String ScTpCalcItem::GetValueText() const
 {
-    return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("ScTpCalcItem") );
+    return rtl::OUString("ScTpCalcItem");
 }
 
 //------------------------------------------------------------------------

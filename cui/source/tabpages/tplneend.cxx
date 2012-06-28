@@ -633,7 +633,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
         aFile.Append( pLineEndList->GetName() );
 
         if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soe" ) ) );
+            aFile.SetExtension(rtl::OUString("soe"));
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );

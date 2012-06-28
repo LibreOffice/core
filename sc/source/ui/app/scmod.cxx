@@ -158,7 +158,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 {
     //  im ctor ist der ResManager (DLL-Daten) noch nicht initialisiert!
 
-    SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("StarCalc")));       // fuer Basic
+    SetName(rtl::OUString("StarCalc"));       // fuer Basic
 
     ResetDragObject();
     SetClipObject( NULL, NULL );
@@ -386,15 +386,13 @@ void ScModule::Execute( SfxRequest& rReq )
     {
         case SID_CHOOSE_DESIGN:
             {
-                String aMacroName =
-                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Template.Samples.ShowStyles"));
+                rtl::OUString aMacroName("Template.Samples.ShowStyles");
                 SfxApplication::CallAppBasic( aMacroName );
             }
             break;
         case SID_EURO_CONVERTER:
             {
-                String aMacroName =
-                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Euro.ConvertRun.Main"));
+                rtl::OUString aMacroName("Euro.ConvertRun.Main");
                 SfxApplication::CallAppBasic( aMacroName );
             }
             break;

@@ -56,6 +56,7 @@
 #include "errobject.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -2375,7 +2376,6 @@ RTLFUNC(IsMissing)
 // Function looks for wildcards, removes them and always returns the pure path
 String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData )
 {
-    static String aAsterisk = String::CreateFromAscii( "*" );
     static sal_Char cDelim1 = (sal_Char)'/';
     static sal_Char cDelim2 = (sal_Char)'\\';
     static sal_Char cWild1 = '*';
@@ -2410,7 +2410,7 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData )
         return aPathStr;
     }
 
-    String aPureFileName;
+    rtl::OUString aPureFileName;
     if( nLastDelim == STRING_NOTFOUND )
     {
         aPureFileName = aFileParam;
@@ -2424,11 +2424,10 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData )
 
     // Try again to get a valid URL/UNC-path with only the path
     String aPathStr = getFullPath( aFileParam );
-    xub_StrLen nPureLen = aPureFileName.Len();
 
     // Is there a pure file name left? Otherwise the path is
     // invalid anyway because it was not accepted by OSL before
-    if( nPureLen && aPureFileName != aAsterisk )
+    if (comphelper::string::equals(aPureFileName, '*'))
     {
         pRTLData->pWildCard = new WildCard( aPureFileName );
     }

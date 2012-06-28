@@ -142,7 +142,7 @@ static SbiSymDef* AddSym
             sal_uInt16 n = 1;
             for( short i = 0; i < pPar->GetSize(); i++ )
             {
-                String aPar = String::CreateFromAscii( "PAR" );
+                String aPar = rtl::OUString("PAR");
                 aPar += ++n;
                 pProc->GetParams().AddSym( aPar );
             }

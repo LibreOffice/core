@@ -587,10 +587,8 @@ void ScViewFunc::PasteFromSystem()
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
         {
-            sal_uLong nBiff8 = SotExchange::RegisterFormatName(
-                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff8")));
-            sal_uLong nBiff5 = SotExchange::RegisterFormatName(
-                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff5")));
+            sal_uLong nBiff8 = SotExchange::RegisterFormatName(rtl::OUString("Biff8"));
+            sal_uLong nBiff5 = SotExchange::RegisterFormatName(rtl::OUString("Biff5"));
 
                 //  als erstes SvDraw-Model, dann Grafik
                 //  (Grafik darf nur bei einzelner Grafik drinstehen)
@@ -705,10 +703,8 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     {
             TransferableDataHelper aDataHelper( rxTransferable );
         {
-            sal_uLong nBiff8 = SotExchange::RegisterFormatName(
-                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff8")));
-            sal_uLong nBiff5 = SotExchange::RegisterFormatName(
-                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff5")));
+            sal_uLong nBiff8 = SotExchange::RegisterFormatName(rtl::OUString("Biff8"));
+            sal_uLong nBiff5 = SotExchange::RegisterFormatName(rtl::OUString("Biff5"));
             sal_uLong nFormatId = 0;
                 //  als erstes SvDraw-Model, dann Grafik
                 //  (Grafik darf nur bei einzelner Grafik drinstehen)

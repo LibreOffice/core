@@ -427,10 +427,8 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
     /////////////////////////////////////////////////
     // Open URL if available
 
-    SfxStringItem aName( SID_FILE_NAME, UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "http://" ) ) );
-    SfxStringItem aRefererItem( SID_REFERER, UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
+    SfxStringItem aName( SID_FILE_NAME, rtl::OUString("http://") );
+    SfxStringItem aRefererItem( SID_REFERER, rtl::OUString("private:user") );
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_True );
     SfxBoolItem aSilent( SID_SILENT, sal_True );
     SfxBoolItem aReadOnly( SID_DOC_READONLY, sal_True );

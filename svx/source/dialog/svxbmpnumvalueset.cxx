@@ -106,8 +106,7 @@ static const sal_Unicode aBulletTypes[] =
 static Font& lcl_GetDefaultBulletFont()
 {
     static sal_Bool bInit = 0;
-    static Font aDefBulletFont( UniString::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "StarSymbol" ) ),
+    static Font aDefBulletFont( rtl::OUString("StarSymbol"),
                                 String(), Size( 0, 14 ) );
     if(!bInit)
     {
