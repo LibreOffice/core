@@ -635,10 +635,14 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
     // merge, if required
     SfxUndoAction* pMergeWithAction = m_pData->pActUndoArray->nCurUndoAction ?
         m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1].pAction : NULL;
-    if ( bTryMerge && ( !pMergeWithAction || !pMergeWithAction->Merge( pAction ) ) )
+    if ( bTryMerge && pMergeWithAction )
     {
-        i_guard.markForDeletion( pAction );
-        return false;
+        bool bMerged = pMergeWithAction->Merge( pAction );
+        if ( bMerged )
+        {
+            i_guard.markForDeletion( pAction );
+            return false;
+        }
     }
 
     // clear redo stack, if requested
