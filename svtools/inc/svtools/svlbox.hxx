@@ -183,24 +183,28 @@ class SVT_DLLPUBLIC SvLBoxEntry : public SvListEntry
 {
     friend class SvLBox;
 
-    SvPtrarr    aItems;
-    void*       pUserData;
-    sal_uInt16      nEntryFlags;
+    std::vector<SvLBoxItem*> aItems;
+    void*            pUserData;
+    sal_uInt16       nEntryFlags;
     SVT_DLLPRIVATE void         DeleteItems_Impl();
 public:
 
                 SvLBoxEntry();
     virtual     ~SvLBoxEntry();
 
-    sal_uInt16      ItemCount() const { return (sal_uInt16)aItems.Count(); }
+    sal_uInt16      ItemCount() const { return (sal_uInt16)aItems.size(); }
     // DARF NUR GERUFEN WERDEN, WENN DER EINTRAG NOCH NICHT IM MODEL
     // EINGEFUEGT IST, DA SONST FUER DAS ITEM KEINE VIEW-ABHAENGIGEN
     // DATEN ALLOZIERT WERDEN!
     void        AddItem( SvLBoxItem* pItem );
     void        ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos );
-    SvLBoxItem* GetItem( sal_uInt16 nPos ) const { return (SvLBoxItem*)aItems.GetObject(nPos ); }
+    SvLBoxItem* GetItem( sal_uInt16 nPos ) const { return aItems[nPos]; }
     SvLBoxItem* GetFirstItem( sal_uInt16 nId );
-    sal_uInt16      GetPos( SvLBoxItem* pItem ) const { return aItems.GetPos( pItem ); }
+    sal_uInt16      GetPos( SvLBoxItem* pItem ) const
+    {
+        std::vector<SvLBoxItem*>::const_iterator it = std::find( aItems.begin(), aItems.end(), pItem );
+        return it == aItems.end() ? USHRT_MAX : it - aItems.begin();
+    }
     void*       GetUserData() const { return pUserData; }
     void        SetUserData( void* pPtr ) { pUserData = pPtr; }
     virtual void Clone( SvListEntry* pSource );

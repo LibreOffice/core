@@ -408,21 +408,21 @@ SvLBoxEntry::~SvLBoxEntry()
 void SvLBoxEntry::DeleteItems_Impl()
 {
     DBG_CHKTHIS(SvLBoxEntry,0);
-    sal_uInt16 nCount = aItems.Count();
+    sal_uInt16 nCount = aItems.size();
     while( nCount )
     {
         nCount--;
-        SvLBoxItem* pItem = (SvLBoxItem*)aItems.GetObject( nCount );
+        SvLBoxItem* pItem = aItems[ nCount ];
         delete pItem;
     }
-    aItems.Remove(0, aItems.Count() );
+    aItems.clear();
 }
 
 
 void SvLBoxEntry::AddItem( SvLBoxItem* pItem )
 {
     DBG_CHKTHIS(SvLBoxEntry,0);
-    aItems.Insert( pItem, aItems.Count() );
+    aItems.push_back( pItem );
 }
 
 void SvLBoxEntry::Clone( SvListEntry* pSource )
@@ -461,15 +461,14 @@ void SvLBoxEntry::ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos )
     SvLBoxItem* pOld = GetItem( nPos );
     if ( pOld )
     {
-        aItems.Remove( nPos );
-        aItems.Insert( pNewItem, nPos );
+        aItems[ nPos ] = pNewItem;
         delete pOld;
     }
 }
 
 SvLBoxItem* SvLBoxEntry::GetFirstItem( sal_uInt16 nId )
 {
-    sal_uInt16 nCount = aItems.Count();
+    sal_uInt16 nCount = aItems.size();
     sal_uInt16 nCur = 0;
     SvLBoxItem* pItem;
     while( nCur < nCount )
