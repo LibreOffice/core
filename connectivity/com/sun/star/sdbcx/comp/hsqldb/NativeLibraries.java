@@ -49,14 +49,14 @@ final class NativeLibraries {
                 if (url != null) {
                     try {
                         System.load(
-                            ((File) File.class.getConstructor(
+                            File.class.getConstructor(
                                 new Class[] {
                                     ClassLoader.getSystemClassLoader().
                                     loadClass("java.net.URI") }).
                              newInstance(
                                  new Object[] {
                                      URL.class.getMethod("toURI", new Class[0]).
-                                     invoke(url, (java.lang.Object[])null) })).
+                                     invoke(url, (java.lang.Object[])null) }).
                             getAbsolutePath());
                     } catch (Throwable t) {
                         throw new UnsatisfiedLinkError(

@@ -36,12 +36,12 @@ public class DBaseSqlTests extends SubTestCase
 
     public void testFunctions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
-        final XRowSet xRowRes = (XRowSet) UnoRuntime.queryInterface(XRowSet.class,
+        final XRowSet xRowRes = UnoRuntime.queryInterface(XRowSet.class,
                 m_xORB.createInstance("com.sun.star.sdb.RowSet"));
 
         getLog().println("starting SQL test");
         // set the properties needed to connect to a database
-        final XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
+        final XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
         xProp.setPropertyValue("DataSourceName", "Bibliography");
         xProp.setPropertyValue("CommandType", Integer.valueOf(com.sun.star.sdb.CommandType.COMMAND));
 
@@ -69,7 +69,7 @@ public class DBaseSqlTests extends SubTestCase
     {
         try
         {
-            final XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
+            final XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
             xProp.setPropertyValue("Command", "SELECT " + sql);
             xRowRes.execute();
         }

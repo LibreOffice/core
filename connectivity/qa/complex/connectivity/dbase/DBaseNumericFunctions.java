@@ -38,12 +38,12 @@ public class DBaseNumericFunctions extends SubTestCase
 
     public void testFunctions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
-        final XRowSet xRowRes = (XRowSet) UnoRuntime.queryInterface(XRowSet.class,
+        final XRowSet xRowRes = UnoRuntime.queryInterface(XRowSet.class,
                 m_xORB.createInstance("com.sun.star.sdb.RowSet"));
 
         getLog().println("starting Numeric function test");
         // set the properties needed to connect to a database
-        final XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
+        final XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
         xProp.setPropertyValue("DataSourceName", "Bibliography");
 
         xProp.setPropertyValue("CommandType", Integer.valueOf(com.sun.star.sdb.CommandType.COMMAND));
@@ -242,13 +242,13 @@ public class DBaseNumericFunctions extends SubTestCase
 
     private XRow execute(final XRowSet xRowRes,final  String sql) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
-        final XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
+        final XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
         xProp.setPropertyValue("Command", "SELECT " + sql + where);
         xRowRes.execute();
-        final XResultSet xRes = (XResultSet) UnoRuntime.queryInterface(XResultSet.class, xRowRes);
+        final XResultSet xRes = UnoRuntime.queryInterface(XResultSet.class, xRowRes);
         assure("No valid row! ", xRes.next());
 
-        return (XRow) UnoRuntime.queryInterface(XRow.class, xRes);
+        return UnoRuntime.queryInterface(XRow.class, xRes);
     }
 
     private void abs(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException

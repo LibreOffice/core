@@ -224,6 +224,7 @@ public class FlatFileAccess extends ComplexTestCase
         }
     }
 
+    @SuppressWarnings("unchecked")
     private <T> void testRowSetResults( String i_command, RowSetValueGetter i_getter,
         T[] i_expectedValues, String i_context, String i_failureDesc )
     {

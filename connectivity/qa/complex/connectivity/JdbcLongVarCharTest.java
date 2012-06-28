@@ -66,18 +66,18 @@ public class JdbcLongVarCharTest extends ComplexTestCase
             // get the remote office component context
             XMultiServiceFactory xServiceManager = (XMultiServiceFactory) param.getMSF();
             Object x = xServiceManager.createInstance("com.sun.star.sdbc.DriverManager");
-            com.sun.star.sdbc.XDriverAccess xDriverAccess = (XDriverAccess) UnoRuntime.queryInterface(XDriverAccess.class, x);
+            com.sun.star.sdbc.XDriverAccess xDriverAccess = UnoRuntime.queryInterface(XDriverAccess.class, x);
             com.sun.star.sdbc.XDriver xDriver = xDriverAccess.getDriverByURL(url);
             xConnection = xDriver.connect(url, prop);
 
             //Object prepStmnt = xConnection.prepareStatement("SELECT * FROM t1 WHERE t1.c1 = ?");
             Object prepStmnt = xConnection.prepareStatement("SELECT * FROM i90114 WHERE i90114.c1 = ?");
-            ((XParameters) UnoRuntime.queryInterface(XParameters.class, prepStmnt)).clearParameters();
-            ((XParameters) UnoRuntime.queryInterface(XParameters.class, prepStmnt)).setInt(1, 1);
+            UnoRuntime.queryInterface(XParameters.class, prepStmnt).clearParameters();
+            UnoRuntime.queryInterface(XParameters.class, prepStmnt).setInt(1, 1);
             XResultSet xResultSet = ((XPreparedStatement) prepStmnt).executeQuery();
-            XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
+            XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
 
-            XResultSetMetaDataSupplier xRsMetaSup = (XResultSetMetaDataSupplier) UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class, xResultSet);
+            XResultSetMetaDataSupplier xRsMetaSup = UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class, xResultSet);
             XResultSetMetaData xRsMetaData = xRsMetaSup.getMetaData();
             int nColumnCount = xRsMetaData.getColumnCount();
 

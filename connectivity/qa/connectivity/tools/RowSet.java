@@ -66,9 +66,9 @@ public class RowSet implements XRowSet, XRow
     // misc
     public int getColumnCount()
     {
-        XColumnsSupplier suppCols = (XColumnsSupplier)UnoRuntime.queryInterface(
+        XColumnsSupplier suppCols = UnoRuntime.queryInterface(
             XColumnsSupplier.class, m_rowSet );
-        XIndexAccess columns = (XIndexAccess)UnoRuntime.queryInterface(
+        XIndexAccess columns = UnoRuntime.queryInterface(
             XIndexAccess.class, suppCols.getColumns() );
         return columns.getCount();
     }

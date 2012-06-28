@@ -47,7 +47,7 @@ public class DatabaseMetaData {
         m_TestCase.assurePublic(_sText,btest);
     }
 
-    protected void testMethod(String sName,Class[] params,Object[] objParams,int nCount){
+    protected void testMethod(String sName,Class<?>[] params,Object[] objParams,int nCount){
         try {
             System.out.println("test method " + sName);
 

@@ -64,14 +64,14 @@ public class HsqlDatabase extends AbstractDatabase
             documentFile.delete();
         m_databaseDocumentFile = URLHelper.getFileURLFromSystemPath(documentFile);
 
-        m_databaseDocument = (XOfficeDatabaseDocument) UnoRuntime.queryInterface(
+        m_databaseDocument = UnoRuntime.queryInterface(
                 XOfficeDatabaseDocument.class, m_orb.createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
         m_dataSource = new DataSource(m_orb, m_databaseDocument.getDataSource());
 
-        final XPropertySet dsProperties = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, m_databaseDocument.getDataSource());
+        final XPropertySet dsProperties = UnoRuntime.queryInterface(XPropertySet.class, m_databaseDocument.getDataSource());
         dsProperties.setPropertyValue("URL", "sdbc:embedded:hsqldb");
 
-        final XStorable storable = (XStorable) UnoRuntime.queryInterface(XStorable.class, m_databaseDocument);
+        final XStorable storable = UnoRuntime.queryInterface(XStorable.class, m_databaseDocument);
         storable.storeAsURL( m_databaseDocumentFile, new PropertyValue[]
             {   new PropertyValue( "PickListEntry", 0, false, PropertyState.DIRECT_VALUE )
             } );
@@ -114,8 +114,8 @@ public class HsqlDatabase extends AbstractDatabase
 
         String primaryKeyList = "";
 
-        final HashMap foreignKeys = new HashMap();
-        final HashMap foreignKeyRefs = new HashMap();
+        final HashMap<String, String> foreignKeys = new HashMap<String, String>();
+        final HashMap<String, String> foreignKeyRefs = new HashMap<String, String>();
 
         final HsqlColumnDescriptor[] columns = _tableDesc.getColumns();
         for (int i = 0; i < columns.length; ++i)
@@ -146,7 +146,7 @@ public class HsqlDatabase extends AbstractDatabase
             {
                 final String foreignTable = columns[i].getForeignTable();
 
-                String foreignKeysForTable = foreignKeys.containsKey(foreignTable) ? (String) foreignKeys.get(foreignTable) : "";
+                String foreignKeysForTable = foreignKeys.containsKey(foreignTable) ? foreignKeys.get(foreignTable) : "";
                 if (foreignKeysForTable.length() > 0)
                 {
                     foreignKeysForTable += ", ";
@@ -154,7 +154,7 @@ public class HsqlDatabase extends AbstractDatabase
                 foreignKeysForTable += "\"" + columns[i].getName() + "\"";
                 foreignKeys.put(foreignTable, foreignKeysForTable);
 
-                final StringBuffer foreignKeyRefsForTable = new StringBuffer(foreignKeyRefs.containsKey(foreignTable) ? (String) foreignKeyRefs.get(foreignTable) : "");
+                final StringBuffer foreignKeyRefsForTable = new StringBuffer(foreignKeyRefs.containsKey(foreignTable) ? foreignKeyRefs.get(foreignTable) : "");
                 if (foreignKeyRefsForTable.length() > 0)
                 {
                     foreignKeyRefsForTable.append(", ");
@@ -171,18 +171,18 @@ public class HsqlDatabase extends AbstractDatabase
             createStatement.append(')');
         }
 
-        final Set foreignKeyTables = foreignKeys.keySet();
-        for (final Iterator foreignKey = foreignKeyTables.iterator();
+        final Set<String> foreignKeyTables = foreignKeys.keySet();
+        for (final Iterator<String> foreignKey = foreignKeyTables.iterator();
                 foreignKey.hasNext();)
         {
-            final String foreignTable = (String) foreignKey.next();
+            final String foreignTable = foreignKey.next();
 
             createStatement.append(", FOREIGN KEY (");
-            createStatement.append((String) foreignKeys.get(foreignTable));
+            createStatement.append(foreignKeys.get(foreignTable));
             createStatement.append(") REFERENCES \"");
             createStatement.append(foreignTable);
             createStatement.append("\"(");
-            createStatement.append((String) foreignKeyRefs.get(foreignTable));
+            createStatement.append(foreignKeyRefs.get(foreignTable));
             createStatement.append(')');
         }
 
