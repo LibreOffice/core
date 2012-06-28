@@ -47,7 +47,7 @@ import static org.junit.Assert.*;
 public class GlobalEventBroadcaster {
     XMultiServiceFactory m_xMSF = null;
     XEventBroadcaster m_xEventBroadcaster = null;
-    ArrayList notifyEvents = new ArrayList();
+    ArrayList<String> notifyEvents = new ArrayList<String>();
     // XTextDocument xTextDoc;
     XSpreadsheetDocument xSheetDoc;
     XEventListener m_xEventListener = new EventListenerImpl();

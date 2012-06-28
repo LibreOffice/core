@@ -215,7 +215,7 @@ public class DocumentMetadataAccess
 
             System.out.println("Checking that new repository is initialized...");
 
-            XURI xBaseURI = (XURI) xDocMDAccess;
+            XURI xBaseURI = xDocMDAccess;
             String baseURI = xBaseURI.getStringValue();
             assertNotNull("new: baseURI", xBaseURI );
             assertTrue("new: baseURI", !xBaseURI.getStringValue().equals(""));
@@ -527,7 +527,7 @@ public class DocumentMetadataAccess
             assertTrue("xRep null", null != xRep);
             assertTrue("baseURI still tdoc?",
                 !baseURI.equals(xDocMDAccess.getStringValue()));
-            Statement[] manifestStmts2 = getManifestStmts((XURI) xDocMDAccess);
+            Statement[] manifestStmts2 = getManifestStmts(xDocMDAccess);
             xStmtsEnum = xRep.getStatements(null, null, null);
             // there is no content or styles file in here, so we have just
             // the package stmt
@@ -540,7 +540,7 @@ public class DocumentMetadataAccess
             assertTrue("xRep null", null != xRep);
             assertTrue("baseURI still tdoc?",
                 !baseURI.equals(xDocMDAccess.getStringValue()));
-            Statement[] manifestStmts3 = getManifestStmts((XURI) xDocMDAccess);
+            Statement[] manifestStmts3 = getManifestStmts(xDocMDAccess);
 
             xStmtsEnum = xRep.getStatements(null, null, null);
             assertTrue("loadMetadataFromMedium (no metadata)",
@@ -549,8 +549,8 @@ public class DocumentMetadataAccess
             xDocMDAccess.loadMetadataFromMedium(args);
             xRep = xRepoSupplier.getRDFRepository();
             assertTrue("xRep null", null != xRep);
-            Statement[] manifestStmts4 = getManifestStmts((XURI) xDocMDAccess);
-            Statement[] metadataStmts4 = getMetadataFileStmts((XURI) xDocMDAccess,
+            Statement[] manifestStmts4 = getManifestStmts(xDocMDAccess);
+            Statement[] metadataStmts4 = getMetadataFileStmts(xDocMDAccess,
                 fooBarPath);
 
             xStmtsEnum = xRep.getStatements(null, null, null);
@@ -586,8 +586,8 @@ public class DocumentMetadataAccess
             XRepository xRep2 = xRS2.getRDFRepository();
             assertTrue("xRep2 null", null != xRep2);
 
-            Statement[] manifestStmts5 = getManifestStmts((XURI) xDMA2);
-            Statement[] metadataStmts5 = getMetadataFileStmts((XURI) xDMA2,
+            Statement[] manifestStmts5 = getManifestStmts(xDMA2);
+            Statement[] metadataStmts5 = getMetadataFileStmts(xDMA2,
                 fooBarPath);
             XURI xFoobar5 = URI.createNS(xContext, xDMA2.getStringValue(),
                 fooBarPath);
@@ -945,7 +945,7 @@ public class DocumentMetadataAccess
 
     static Statement[] toSeq(XEnumeration i_Enum) throws Exception
     {
-        java.util.Collection c = new java.util.ArrayList();
+        java.util.Collection<Statement> c = new java.util.ArrayList<Statement>();
         while (i_Enum.hasMoreElements()) {
             Statement s = (Statement) i_Enum.nextElement();
             c.add(s);
@@ -961,7 +961,7 @@ public class DocumentMetadataAccess
 
     static XNode[][] toSeqs(XEnumeration i_Enum) throws Exception
     {
-        java.util.Collection c = new java.util.ArrayList();
+        java.util.Collection<XNode[]> c = new java.util.ArrayList<XNode[]>();
         while (i_Enum.hasMoreElements()) {
             XNode[] s = (XNode[]) i_Enum.nextElement();
             c.add(s);
@@ -974,12 +974,10 @@ public class DocumentMetadataAccess
         return ret;
     }
 
-    static class BindingComp implements java.util.Comparator
+    static class BindingComp implements java.util.Comparator<XNode[]>
     {
-        public int compare(Object i_Left, Object i_Right)
+        public int compare(XNode[] left, XNode[] right)
         {
-            XNode[] left = (XNode[]) i_Left;
-            XNode[] right = (XNode[]) i_Right;
             if (left.length != right.length)
             {
                 throw new RuntimeException();
@@ -996,13 +994,11 @@ public class DocumentMetadataAccess
         }
     }
 
-    static class StmtComp implements java.util.Comparator
+    static class StmtComp implements java.util.Comparator<Statement>
     {
-        public int compare(Object i_Left, Object i_Right)
+        public int compare(Statement left, Statement right)
         {
             int eq;
-            Statement left = (Statement) i_Left;
-            Statement right = (Statement) i_Right;
             if ((eq = cmp(left.Graph,     right.Graph    )) != 0) return eq;
             if ((eq = cmp(left.Subject,   right.Subject  )) != 0) return eq;
             if ((eq = cmp(left.Predicate, right.Predicate)) != 0) return eq;
@@ -1098,7 +1094,7 @@ public class DocumentMetadataAccess
             String[] i_Vars, XNode[][] i_Bindings) throws Exception
     {
         String[] vars =  i_Result.getBindingNames();
-        XEnumeration iter = (XEnumeration) i_Result;
+        XEnumeration iter = i_Result;
         XNode[][] bindings = toSeqs(iter);
         if (vars.length != i_Vars.length) {
             System.out.println("var lengths differ");

@@ -498,8 +498,8 @@ public class DocumentProperties
             && a.Negative == b.Negative;
     }
 
-    java.util.Collection fromArray(Object[] os) {
-        java.util.Collection ret = new java.util.HashSet();
+    java.util.Collection<Object> fromArray(Object[] os) {
+        java.util.Collection<Object> ret = new java.util.HashSet<Object>();
         for (int i = 0; i < os.length; ++i) {
             ret.add(os[i]);
         }

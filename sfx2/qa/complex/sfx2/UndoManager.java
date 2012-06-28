@@ -1390,15 +1390,16 @@ public class UndoManager
             return new String[] { getCallbackComponentServiceName() };
         }
 
+        @SuppressWarnings("unchecked")
         public void dispose()
         {
             final EventObject event = new EventObject( this );
 
-            final ArrayList eventListenersCopy = (ArrayList)m_eventListeners.clone();
-            final Iterator iter = eventListenersCopy.iterator();
+            final ArrayList<XEventListener> eventListenersCopy = (ArrayList<XEventListener>)m_eventListeners.clone();
+            final Iterator<XEventListener> iter = eventListenersCopy.iterator();
             while ( iter.hasNext() )
             {
-                ((XEventListener)iter.next()).disposing( event );
+                iter.next().disposing( event );
             }
         }
 
@@ -1413,7 +1414,7 @@ public class UndoManager
             m_eventListeners.remove( i_listener );
         }
 
-        private final ArrayList m_eventListeners = new ArrayList();
+        private final ArrayList<XEventListener> m_eventListeners = new ArrayList<XEventListener>();
     };
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -1441,7 +1442,7 @@ public class UndoManager
 
         public Type[] getTypes()
         {
-            final Class interfaces[] = getClass().getInterfaces();
+            final Class<?> interfaces[] = getClass().getInterfaces();
             Type types[] = new Type[ interfaces.length ];
             for ( int i = 0; i < interfaces.length; ++i )
                 types[i] = new Type(interfaces[i]);
