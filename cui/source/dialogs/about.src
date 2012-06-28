@@ -105,17 +105,9 @@ ModalDialog RID_DEFAULTABOUT
     {
         Text[ en-US ] = "http://www.libreoffice.org/about-us/credits/";
     };
-    String ABOUT_STR_LINK_LICENSE
-    {
-        Text[ en-US ] = "http://www.libreoffice.org/download/license/";
-    };
     PushButton ABOUT_BTN_CREDITS
     {
         Text [ en-US ] = "Credits";
-    };
-    PushButton ABOUT_BTN_LICENSE
-    {
-        Text [ en-US ] = "License";
     };
     PushButton ABOUT_BTN_WEBSITE
     {

@@ -35,7 +35,6 @@
 #define ABOUT_STR_BASED_DERIVED     6
 #define ABOUT_STR_LINK_WEBSITE      7
 #define ABOUT_STR_LINK_CREDITS      8
-#define ABOUT_STR_LINK_LICENSE      9
 #define ABOUT_BTN_CREDITS           10
 #define ABOUT_DESCRIPTION_TEXT      11
 #define ABOUT_COPYRIGHT_TEXT        12

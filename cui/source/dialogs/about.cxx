@@ -61,7 +61,6 @@ using namespace ::com::sun::star;
 enum AboutDialogButton
 {
     CREDITS_BUTTON,
-    LICENSE_BUTTON,
     WEBSITE_BUTTON
 };
 
@@ -73,7 +72,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aCopyrightTextShadow ( this,     ResId( ABOUT_COPYRIGHT_TEXT, *rId.GetResMgr() ) ),
     aLogoImage           ( this,     ResId( ABOUT_IMAGE_LOGO, *rId.GetResMgr() ) ),
     aCreditsButton       ( this,     ResId( ABOUT_BTN_CREDITS, *rId.GetResMgr() ) ),
-    aLicenseButton       ( this,     ResId( ABOUT_BTN_LICENSE, *rId.GetResMgr() ) ),
     aWebsiteButton       ( this,     ResId( ABOUT_BTN_WEBSITE, *rId.GetResMgr() ) ),
     aCancelButton        ( this,     ResId( ABOUT_BTN_CANCEL, *rId.GetResMgr() ) ),
     m_aVersionTextStr(ResId(ABOUT_STR_VERSION, *rId.GetResMgr()).toString().trim()),
@@ -83,7 +81,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     m_aBasedDerivedTextStr(ResId(ABOUT_STR_BASED_DERIVED, *rId.GetResMgr())),
     m_aWebsiteLinkStr(ResId( ABOUT_STR_LINK_WEBSITE, *rId.GetResMgr())),
     m_aCreditsLinkStr(ResId( ABOUT_STR_LINK_CREDITS, *rId.GetResMgr())),
-    m_aLicenseLinkStr(ResId( ABOUT_STR_LINK_LICENSE, *rId.GetResMgr())),
     m_sBuildStr(ResId(ABOUT_STR_BUILD, *rId.GetResMgr())),
     m_aDescriptionTextStr(ResId(ABOUT_STR_DESCRIPTION, *rId.GetResMgr()))
 {
@@ -101,12 +98,10 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     // Allow the button to be identifiable once they are clicked
     aCreditsButton.SetData( (void*)CREDITS_BUTTON );
-    aLicenseButton.SetData( (void*)LICENSE_BUTTON );
     aWebsiteButton.SetData( (void*)WEBSITE_BUTTON );
 
     // Connect all handlers
     aCreditsButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
-    aLicenseButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
     aWebsiteButton.SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
 
     aCancelButton.SetClickHdl( LINK( this, AboutDialog, CancelHdl ) );
@@ -125,8 +120,6 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
     AboutDialogButton* pDialogButton = (AboutDialogButton*)pButton->GetData();
     if ( pDialogButton ==  (AboutDialogButton*)CREDITS_BUTTON )
         sURL = m_aCreditsLinkStr;
-    else if ( pDialogButton == (AboutDialogButton*)LICENSE_BUTTON)
-        sURL = m_aLicenseLinkStr;
     else if ( pDialogButton == (AboutDialogButton*)WEBSITE_BUTTON )
         sURL = m_aWebsiteLinkStr;
 
@@ -269,15 +262,12 @@ void AboutDialog::LayoutButtons(sal_Int32 aDialogWidth, sal_Int32 aDialogBorder,
     sal_Int32 aButtonHPadding = 4;
     sal_Int32 aAdjacentButtonSpacing = 15;
     sal_Int32 aCreditsButtonWidth = aCreditsButton.CalcMinimumSize().Width();
-    sal_Int32 aLicenseButtonWidth = aLicenseButton.CalcMinimumSize().Width();
     sal_Int32 aWebsiteButtonWidth = aWebsiteButton.CalcMinimumSize().Width();
     sal_Int32 aCancelButtonWidth = aCancelButton.CalcMinimumSize().Width();
     sal_Int32 aLargestButtonWidth = 70;
 
     if ( aLargestButtonWidth < aCreditsButtonWidth )
         aLargestButtonWidth = aCreditsButtonWidth;
-    if ( aLargestButtonWidth < aLicenseButtonWidth )
-        aLargestButtonWidth = aLicenseButtonWidth;
     if ( aLargestButtonWidth < aWebsiteButtonWidth )
         aLargestButtonWidth = aWebsiteButtonWidth;
     if ( aLargestButtonWidth < aCancelButtonWidth )
@@ -287,7 +277,6 @@ void AboutDialog::LayoutButtons(sal_Int32 aDialogWidth, sal_Int32 aDialogBorder,
     aButtonSize.Height() = aWebsiteButton.CalcMinimumSize().Height() + ( 2 * aButtonVPadding );
 
     aCreditsButton.SetSizePixel( aButtonSize );
-    aLicenseButton.SetSizePixel( aButtonSize );
     aWebsiteButton.SetSizePixel( aButtonSize );
     aCancelButton.SetSizePixel( aButtonSize );
 
@@ -302,9 +291,6 @@ void AboutDialog::LayoutButtons(sal_Int32 aDialogWidth, sal_Int32 aDialogBorder,
     aButtonPos.Y() = aCopyrightPos.Y() + aCopyrightTextHeight + aVersionDescriptionSpacing;
 
     aCreditsButton.SetPosPixel( aButtonPos );
-
-    aButtonPos.X() += aButtonSize.Width() + aAdjacentButtonSpacing;
-    aLicenseButton.SetPosPixel( aButtonPos );
 
     aButtonPos.X() += aButtonSize.Width() + aAdjacentButtonSpacing;
     aWebsiteButton.SetPosPixel( aButtonPos );
