@@ -352,7 +352,7 @@ namespace cmis
                 {
                     boost::shared_ptr< libcmis::AllowableActions > allowableActions = getObject()->getAllowableActions( );
                     sal_Bool bReadOnly = sal_False;
-                    if ( allowableActions->isAllowed( libcmis::ObjectAction::SetContentStream ) )
+                    if ( !allowableActions->isAllowed( libcmis::ObjectAction::SetContentStream ) )
                         bReadOnly = sal_True;
 
                     xRow->appendBoolean( rProp, bReadOnly );
