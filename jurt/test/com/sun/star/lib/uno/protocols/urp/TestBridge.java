@@ -19,7 +19,7 @@ package com.sun.star.lib.uno.protocols.urp;
 
 import java.io.IOException;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 
 import com.sun.star.uno.IBridge;
@@ -30,7 +30,7 @@ import com.sun.star.uno.Type;
 class TestBridge implements IBridge {
     static public final boolean DEBUG = false;
 
-    Hashtable _hashtable = new Hashtable();
+    HashMap _hashtable = new HashMap();
 
     IEnvironment _source ;//= new com.sun.star.lib.uno.environments.java.java_environment(null);
 

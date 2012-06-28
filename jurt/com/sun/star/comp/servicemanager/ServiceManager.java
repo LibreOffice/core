@@ -80,8 +80,8 @@ public class ServiceManager implements XMultiServiceFactory,
     };
 
     ArrayList    eventListener;
-    java.util.Hashtable factoriesByImplNames;
-    java.util.Hashtable factoriesByServiceNames;  // keys:
+    java.util.HashMap factoriesByImplNames;
+    java.util.HashMap factoriesByServiceNames;  // keys:
 
     private com.sun.star.uno.XComponentContext m_xDefaultContext;
 
@@ -90,8 +90,8 @@ public class ServiceManager implements XMultiServiceFactory,
      */
     public ServiceManager() {
         eventListener           = new ArrayList();
-        factoriesByImplNames    = new java.util.Hashtable();
-        factoriesByServiceNames = new java.util.Hashtable();
+        factoriesByImplNames    = new java.util.HashMap();
+        factoriesByServiceNames = new java.util.HashMap();
         m_xDefaultContext = null;
     }
     /**
@@ -99,8 +99,8 @@ public class ServiceManager implements XMultiServiceFactory,
      */
     public ServiceManager( XComponentContext xContext ) {
         eventListener           = new ArrayList();
-        factoriesByImplNames    = new java.util.Hashtable();
-        factoriesByServiceNames = new java.util.Hashtable();
+        factoriesByImplNames    = new java.util.HashMap();
+        factoriesByServiceNames = new java.util.HashMap();
         m_xDefaultContext = xContext;
     }
 
@@ -341,10 +341,10 @@ public class ServiceManager implements XMultiServiceFactory,
         int i = 0;
         String[] availableServiceNames = new String[factoriesByServiceNames.size()];
 
-        java.util.Enumeration keys = factoriesByServiceNames.keys();
+        java.util.Iterator keys = factoriesByServiceNames.keySet().iterator();
 
-        while (keys.hasMoreElements())
-            availableServiceNames[i++] = (String) keys.nextElement();
+        while (keys.hasNext())
+            availableServiceNames[i++] = (String) keys.next();
 
         return availableServiceNames;
     }
@@ -634,7 +634,7 @@ public class ServiceManager implements XMultiServiceFactory,
     public XEnumeration createEnumeration()
             throws com.sun.star.uno.RuntimeException
     {
-        return new ServiceEnumerationImpl( factoriesByImplNames.elements() );
+        return new ServiceEnumerationImpl( factoriesByImplNames.values().iterator() );
     }
 
     /**
