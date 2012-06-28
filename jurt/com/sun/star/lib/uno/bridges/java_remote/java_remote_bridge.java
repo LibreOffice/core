@@ -400,7 +400,7 @@ public class java_remote_bridge
      * Maps an object from destination environment to the source environment.
      * <p>
      * @return     the object in the source environment
-     * @param      object     the object to map
+     * @param      oId        the object to map
      * @param      type       the interface under which is to be mapped
      * @see                   com.sun.star.uno.IBridge#mapInterfaceFrom
      */

@@ -63,7 +63,7 @@ public interface IProtocol {
      * @param function a non-null function (the name of a UNO interface method
      *     or attribute compatible with the given <code>type</code>, or either
      *     <code>"queryInterface"</code> or <code>"release"</code>)
-     * @param threadId a non-null TID
+     * @param tid a non-null TID
      * @param arguments a list of UNO arguments compatible with the given
      *     <code>type</code> and <code>function</code>; may be null to represent
      *     an empty list

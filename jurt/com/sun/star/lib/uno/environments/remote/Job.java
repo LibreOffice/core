@@ -60,11 +60,6 @@ public class Job {
      * Dispatches a <code>queryInterface</code> call
      * <p>
      * @return  the result of the call (should be an <code>Any</code>)
-     * @param message       the parameter for the call
-     * @param resultClass   the result type as an out parameter
-     * @param status        the status as an out parameter
-     * @param o_outs        the out parameters of the call as out parameters
-     * @param o_out_sig     the out signature as an out parameter
      */
     protected Object dispatch_queryInterface(Type type) {
         Class<?> zInterface = type.getTypeDescription().getZClass();

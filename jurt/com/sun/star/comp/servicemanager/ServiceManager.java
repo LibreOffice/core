@@ -216,7 +216,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @param   args    the first argument ( args[0] ) specifices the SimpleRegistry object
      * @see     com.sun.star.lang.XInitialization
      * @see     com.sun.star.lang.RegistryServiceManager
-     * @see     com.sun.star.lang.XSimpleRegistry
+     * @see     com.sun.star.registry.XSimpleRegistry
      */
     public void initialize( Object args[] )
                 throws  com.sun.star.uno.Exception,
@@ -294,7 +294,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * the name is looked up in the the implementation list.
      * <p>
      * @return  the factory of the service / implementation
-     * @param   serviceSpecifier    indicates the service or implementation name
+     * @param   serviceName    indicates the service or implementation name
      * @see     com.sun.star.lang.XMultiServiceFactory
      */
     private Object queryServiceFactory(String serviceName)
@@ -626,10 +626,10 @@ public class ServiceManager implements XMultiServiceFactory,
     }
 
     /**
-     * Provides an enumeration of all registred services.
+     * Provides an enumeration of all registered services.
      * <p>
-     * @return  an enumeration of all avialable services.
-     * @see     com.sun.star.conatiner.XEnumerationAccess
+     * @return  an enumeration of all available services.
+     * @see     com.sun.star.container.XEnumerationAccess
      */
     public XEnumeration createEnumeration()
             throws com.sun.star.uno.RuntimeException

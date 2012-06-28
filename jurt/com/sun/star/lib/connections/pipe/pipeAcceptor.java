@@ -34,9 +34,9 @@ import com.sun.star.registry.XRegistryKey;
  * pipes for communication.  The <code>pipeAcceptor</code> is generally used
  * by the <code>com.sun.star.connection.Acceptor</code> service.</p>
  *
- * @see com.sun.star.connections.XAcceptor
- * @see com.sun.star.connections.XConnection
- * @see com.sun.star.connections.XConnector
+ * @see com.sun.star.connection.XAcceptor
+ * @see com.sun.star.connection.XConnection
+ * @see com.sun.star.connection.XConnector
  * @see com.sun.star.loader.JavaLoader
  *
  * @since UDK 1.0
@@ -101,8 +101,8 @@ public final class pipeAcceptor implements XAcceptor {
      * @param connectionDescription the description of the connection.
      * @return an <code>XConnection</code> to the client.
      *
-     * @see com.sun.star.connections.XConnection
-     * @see com.sun.star.connections.XConnector
+     * @see com.sun.star.connection.XConnection
+     * @see com.sun.star.connection.XConnector
      */
     public XConnection accept(String connectionDescription) throws
         AlreadyAcceptingException, ConnectionSetupException,

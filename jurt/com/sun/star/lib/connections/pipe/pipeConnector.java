@@ -34,9 +34,9 @@ import com.sun.star.registry.XRegistryKey;
  * pipes for communication.  The <code>pipeConnector</code> is generally
  * used by the <code>com.sun.star.connection.Connector</code> service.</p>
  *
- * @see com.sun.star.connections.XAcceptor
- * @see com.sun.star.connections.XConnection
- * @see com.sun.star.connections.XConnector
+ * @see com.sun.star.connection.XAcceptor
+ * @see com.sun.star.connection.XConnection
+ * @see com.sun.star.connection.XConnector
  * @see com.sun.star.loader.JavaLoader
  *
  * @since UDK 1.0
@@ -95,8 +95,8 @@ public final class pipeConnector implements XConnector {
      * @param connectionDescription the description of the connection.
      * @return an <code>XConnection</code> to the server.
      *
-     * @see com.sun.star.connections.XAcceptor
-     * @see com.sun.star.connections.XConnection
+     * @see com.sun.star.connection.XAcceptor
+     * @see com.sun.star.connection.XConnection
      */
     public synchronized XConnection connect(String connectionDescription)
         throws NoConnectException, ConnectionSetupException

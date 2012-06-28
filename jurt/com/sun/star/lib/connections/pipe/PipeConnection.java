@@ -33,9 +33,9 @@ import com.sun.star.lib.util.NativeLibraryLoader;
  * This class is not part of the provided <code>api</code>.
  * <p>
  * @author      Kay Ramme
- * @see         com.sun.star.comp.connections.PipeAcceptor
- * @see         com.sun.star.comp.connections.PipeConnector
- * @see         com.sun.star.connections.XConnection
+ * @see         com.sun.star.lib.connections.pipe.pipeAcceptor
+ * @see         com.sun.star.lib.connections.pipe.pipeConnector
+ * @see         com.sun.star.connection.XConnection
  * @since       UDK1.0
  */
 public class PipeConnection implements XConnection, XConnectionBroadcaster {
@@ -58,7 +58,6 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * Constructs a new <code>PipeConnection</code>.
      * <p>
      * @param  description   the description of the connection
-     * @param  pipe        the pipe of the connection
      */
     public PipeConnection(String description)
         throws IOException
@@ -152,9 +151,9 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * Read the required number of bytes.
      * <p>
      * @return   the number of bytes read
-     * @param    aReadBytes   the outparameter, where the bytes have to be placed
+     * @param    bytes   the outparameter, where the bytes have to be placed
      * @param    nBytesToRead the number of bytes to read
-     * @see       com.sun.star.connections.XConnection#read
+     * @see       com.sun.star.connection.XConnection#read
      */
     public int read(/*OUT*/byte[][] bytes, int nBytesToRead)
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
@@ -172,7 +171,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * Write bytes.
      * <p>
      * @param    aData the bytes to write
-     * @see       com.sun.star.connections.XConnection#write
+     * @see       com.sun.star.connection.XConnection#write
      */
     public void write(byte aData[])
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
@@ -183,7 +182,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     /**
      * Flushes the buffer.
      * <p>
-     * @see       com.sun.star.connections.XConnection#flush
+     * @see       com.sun.star.connection.XConnection#flush
      */
     public void flush()
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
@@ -194,7 +193,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     /**
      * Closes the connection.
      * <p>
-     * @see       com.sun.star.connections.XConnection#close
+     * @see       com.sun.star.connection.XConnection#close
      */
     public void close()
         throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException
@@ -209,7 +208,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
      * Gives a description of the connection.
      * <p>
      * @return  the description
-      * @see       com.sun.star.connections.XConnection#getDescription
+      * @see       com.sun.star.connection.XConnection#getDescription
      */
     public String getDescription() throws com.sun.star.uno.RuntimeException {
         return _aDescription;

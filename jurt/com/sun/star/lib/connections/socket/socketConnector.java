@@ -38,9 +38,9 @@ import java.net.UnknownHostException;
  * sockets for communication.  The <code>socketConnector</code> is generally
  * used by the <code>com.sun.star.connection.Connector</code> service.</p>
  *
- * @see com.sun.star.connections.XAcceptor
- * @see com.sun.star.connections.XConnection
- * @see com.sun.star.connections.XConnector
+ * @see com.sun.star.connection.XAcceptor
+ * @see com.sun.star.connection.XConnection
+ * @see com.sun.star.connection.XConnector
  * @see com.sun.star.loader.JavaLoader
  *
  * @since UDK 1.0
@@ -100,8 +100,8 @@ public final class socketConnector implements XConnector {
      * @param connectionDescription the description of the connection.
      * @return an <code>XConnection</code> to the server.
      *
-     * @see com.sun.star.connections.XAcceptor
-     * @see com.sun.star.connections.XConnection
+     * @see com.sun.star.connection.XAcceptor
+     * @see com.sun.star.connection.XConnection
      */
     public synchronized XConnection connect(String connectionDescription)
         throws NoConnectException, ConnectionSetupException

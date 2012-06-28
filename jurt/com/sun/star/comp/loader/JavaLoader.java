@@ -57,7 +57,6 @@ import com.sun.star.uno.AnyConverter;
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
  * @see         com.sun.star.comp.servicemanager.ServiceManager
- * @see         com.sun.star.lang.ServiceManager
  * @since       UDK1.0
  */
 public class JavaLoader implements XImplementationLoader,
@@ -143,7 +142,6 @@ public class JavaLoader implements XImplementationLoader,
     /**
      * Creates a new instance of the <code>JavaLoader</code> class.
      * <p>
-     * @return  new instance
      */
     public JavaLoader() {}
 
@@ -153,10 +151,8 @@ public class JavaLoader implements XImplementationLoader,
      * loading.
      * To set the <code>MultiServiceFactory</code> you can use the <code>com.sun.star.lang.XInitialization</code> interface, either.
      * <p>
-     * @return  new instance
      * @param   factory     the <code>ServiceManager</code>
-     * @see     com.sun.star.lang.ServiceManager
-     * @see     com.sun.star.lang.ServiceManager
+     * @see     com.sun.star.comp.servicemanager.ServiceManager
      * @see     com.sun.star.lang.XInitialization
      */
     public JavaLoader(XMultiServiceFactory factory) {
@@ -169,7 +165,7 @@ public class JavaLoader implements XImplementationLoader,
      * <p>
      * @param       args - the first parameter (args[0]) specifices the <code>ServiceManager</code>
      * @see         com.sun.star.lang.XInitialization
-     * @see         com.sun.star.lang.ServiceManager
+     * @see         com.sun.star.comp.servicemanager.ServiceManager
      */
     public void initialize( java.lang.Object[] args )
             throws com.sun.star.uno.Exception,
@@ -241,9 +237,9 @@ public class JavaLoader implements XImplementationLoader,
      * @param       implementationName          the implementation (class) name of the component
      * @param       implementationLoaderUrl     the URL of the implementation loader. Not used.
      * @param       locationUrl                 points to an archive (JAR file) which contains a component
-     * @param       xKey
-     * @see         com.sun.star.lang.XImplementationLoader
-     * @see         com.sun.star.com.loader.RegistrationClassFinder
+     * @param       xKey                        registry key
+     * @see         com.sun.star.loader.XImplementationLoader
+     * @see         com.sun.star.comp.loader.RegistrationClassFinder
      */
     public java.lang.Object activate( String implementationName,
                                       String implementationLoaderUrl,

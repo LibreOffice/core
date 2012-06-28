@@ -27,7 +27,7 @@ public final class BridgedObject {
     /**
      * Obtains the bridge associated with a bridged object.
      *
-     * @param object a reference to a (Java representation of a) UNO object;
+     * @param obj a reference to a (Java representation of a) UNO object;
      *     must not be null
      * @return the bridge associated with the given object, if it is indeed
      *     bridged; otherwise, null is returned

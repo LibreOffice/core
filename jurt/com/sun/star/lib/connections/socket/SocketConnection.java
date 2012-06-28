@@ -37,9 +37,9 @@ import com.sun.star.io.XStreamListener;
  * This class is not part of the provided <code>api</code>.
  * <p>
  * @author      Kay Ramme
- * @see         com.sun.star.comp.connections.SocketAcceptor
- * @see         com.sun.star.comp.connections.SocketConnector
- * @see         com.sun.star.connections.XConnection
+ * @see         com.sun.star.lib.connections.socket.socketAcceptor
+ * @see         com.sun.star.lib.connections.socket.socketConnector
+ * @see         com.sun.star.connection.XConnection
  * @since       UDK1.0
  */
 public class SocketConnection implements XConnection, XConnectionBroadcaster {
@@ -118,9 +118,9 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
      * Read the required number of bytes.
      * <p>
      * @return   the number of bytes read
-     * @param    aReadBytes   the outparameter, where the bytes have to be placed
+     * @param    bytes   the outparameter, where the bytes have to be placed
      * @param    nBytesToRead the number of bytes to read
-     * @see       com.sun.star.connections.XConnection#read
+     * @see       com.sun.star.connection.XConnection#read
      */
     public int read(/*OUT*/byte[][] bytes, int nBytesToRead) throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         if(_firstRead) {
@@ -171,7 +171,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
      * Write bytes.
      * <p>
      * @param    aData the bytes to write
-     * @see       com.sun.star.connections.XConnection#write
+     * @see       com.sun.star.connection.XConnection#write
      */
     public void write(byte aData[]) throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         try {
@@ -190,7 +190,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
     /**
      * Flushes the buffer.
      * <p>
-     * @see       com.sun.star.connections.XConnection#flush
+     * @see       com.sun.star.connection.XConnection#flush
      */
     public void flush() throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         try {
@@ -207,7 +207,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
     /**
      * Closes the connection.
      * <p>
-     * @see       com.sun.star.connections.XConnection#close
+     * @see       com.sun.star.connection.XConnection#close
      */
     public void close() throws com.sun.star.io.IOException, com.sun.star.uno.RuntimeException {
         try {
@@ -228,7 +228,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
      * Gives a description of the connection.
      * <p>
      * @return  the description
-     * @see       com.sun.star.connections.XConnection#getDescription
+     * @see       com.sun.star.connection.XConnection#getDescription
      */
     public String getDescription() throws com.sun.star.uno.RuntimeException {
         return _description;

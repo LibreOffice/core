@@ -112,7 +112,6 @@ public class JobQueue {
      * which belongs to the given sync job queue.
      * <p>
      * @param threadId         the thread id
-     * @param sync_jobQueue    the sync queue this async queue belongs to
      * @see                    com.sun.star.lib.uno.environments.remote.ThreadID
      */
     JobQueue(JavaThreadPoolFactory javaThreadPoolFactory, ThreadId threadId) {

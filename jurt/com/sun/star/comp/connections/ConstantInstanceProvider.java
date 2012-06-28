@@ -89,7 +89,7 @@ public class ConstantInstanceProvider implements XInstanceProvider {
      * Constructs a new <code>ConstantInstanceProvider</code>.
      * Uses the provided ServiceManager as the provided instance.
      * <p>
-     * @param    serviceName   the provided service manager
+     * @param    serviceManager   the provided service manager
      */
     public ConstantInstanceProvider(XMultiServiceFactory serviceManager) {
         _serviceManager = serviceManager;

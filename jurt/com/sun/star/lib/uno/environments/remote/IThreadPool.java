@@ -66,7 +66,8 @@ public interface IThreadPool {
      * and a handle returned by attach.
      * The function exists for performance
      * optimization reasons.
-     * @see #attach,#detach
+     * @see #attach()
+     * @see #detach()
      */
     public void detach( Object handle, ThreadId id );
 
@@ -103,7 +104,7 @@ public interface IThreadPool {
      * all threads by throwing a <code>DisposedException</code> with the given
      * <code>Throwable</code> cause.
      * <p>
-     * @param throwing   the cause
+     * @param throwable   the cause
      */
     public void dispose(Throwable throwable);
 
