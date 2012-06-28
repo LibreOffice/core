@@ -52,7 +52,6 @@ private:
     MultiLineEdit       aCopyrightTextShadow;
     FixedImage          aLogoImage;
     PushButton          aCreditsButton;
-    PushButton          aLicenseButton;
     PushButton          aWebsiteButton;
     CancelButton        aCancelButton;
 
@@ -64,7 +63,6 @@ private:
     String m_aBasedDerivedTextStr;
     String m_aWebsiteLinkStr;
     String m_aCreditsLinkStr;
-    String m_aLicenseLinkStr;
     rtl::OUString m_sBuildStr;
     String m_aDescriptionTextStr;
 
