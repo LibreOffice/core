@@ -468,11 +468,11 @@ void SvxFontSubstCheckListBox::SetTabs()
     SvxSimpleTable::SetTabs();
     sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT|SV_LBOXTAB_ADJUST_LEFT|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_ADJUST_NUMERIC|SV_LBOXTAB_FORCE;
 
-    SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(1);
+    SvLBoxTab* pTab = aTabs[1];
     pTab->nFlags &= ~nAdjust;
     pTab->nFlags |= SV_LBOXTAB_PUSHABLE|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_FORCE;
 
-    pTab = (SvLBoxTab*)aTabs.GetObject(2);
+    pTab = aTabs[2];
     pTab->nFlags &= ~nAdjust;
     pTab->nFlags |= SV_LBOXTAB_PUSHABLE|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_FORCE;
 }

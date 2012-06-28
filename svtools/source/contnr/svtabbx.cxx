@@ -543,7 +543,7 @@ long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
         ((SvTabListBox*)this)->SetTabs();
 
     DBG_ASSERT(nTab<nTabCount,"GetTabPos:Invalid Tab");
-    return ((SvLBoxTab*)aTabs.GetObject( nTab ))->GetPos();
+    return aTabs[ nTab ]->GetPos();
 }
 
 // class SvHeaderTabListBoxImpl ------------------------------------------

@@ -808,15 +808,15 @@ void OfaACorrCheckListBox::SetTabs()
     SvxSimpleTable::SetTabs();
     sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT|SV_LBOXTAB_ADJUST_LEFT|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_ADJUST_NUMERIC|SV_LBOXTAB_FORCE;
 
-    if( aTabs.Count() > 1 )
+    if( aTabs.size() > 1 )
     {
-        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(1);
+        SvLBoxTab* pTab = aTabs[1];
         pTab->nFlags &= ~nAdjust;
         pTab->nFlags |= SV_LBOXTAB_PUSHABLE|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_FORCE;
     }
-    if( aTabs.Count() > 2 )
+    if( aTabs.size() > 2 )
     {
-        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(2);
+        SvLBoxTab* pTab = aTabs[2];
         pTab->nFlags &= ~nAdjust;
         pTab->nFlags |= SV_LBOXTAB_PUSHABLE|SV_LBOXTAB_ADJUST_CENTER|SV_LBOXTAB_FORCE;
     }

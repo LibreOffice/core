@@ -1769,10 +1769,10 @@ WatchTreeListBox::~WatchTreeListBox()
 void WatchTreeListBox::SetTabs()
 {
     SvHeaderTabListBox::SetTabs();
-    sal_uInt16 nTabCount_ = aTabs.Count();
+    sal_uInt16 nTabCount_ = aTabs.size();
     for( sal_uInt16 i = 0 ; i < nTabCount_ ; i++ )
     {
-        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(i);
+        SvLBoxTab* pTab = aTabs[i];
         if( i == 2 )
             pTab->nFlags |= SV_LBOXTAB_EDITABLE;
         else

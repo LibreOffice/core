@@ -115,7 +115,7 @@ protected:
     void            EditingRequest( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
                         const Point& rMousePos );
 
-    SvPtrarr            aTabs;
+    std::vector<SvLBoxTab*> aTabs;
 
     // berechnet abhaengig von TreeList-Style & Bitmap-Groessen
     // alle Tabulatoren neu; wird beim Einfuegen/Austauschen von
@@ -124,7 +124,7 @@ protected:
     void            SetTabs_Impl();
     void            AddTab( long nPos,sal_uInt16 nFlags=SV_LBOXTAB_ADJUST_LEFT,
                         void* pUserData = 0 );
-    sal_uInt16          TabCount() const { return aTabs.Count(); }
+    sal_uInt16      TabCount() const { return aTabs.size(); }
     SvLBoxTab*      GetFirstDynamicTab() const;
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;
     SvLBoxTab*      GetFirstTab( sal_uInt16 nFlagMask, sal_uInt16& rTabPos );

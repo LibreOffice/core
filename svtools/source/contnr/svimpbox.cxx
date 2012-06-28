@@ -3285,14 +3285,14 @@ sal_Bool SvImpLBox::SetMostRight( SvLBoxEntry* pEntry )
         nFlags &= ~F_IGNORE_CHANGED_TABS;
     }
 
-    sal_uInt16 nLastTab = pView->aTabs.Count() - 1;
+    sal_uInt16 nLastTab = pView->aTabs.size() - 1;
     sal_uInt16 nLastItem = pEntry->ItemCount() - 1;
-    if( nLastTab != USHRT_MAX && nLastItem != USHRT_MAX )
+    if( !pView->aTabs.empty() && nLastItem != USHRT_MAX )
     {
         if( nLastItem < nLastTab )
             nLastTab = nLastItem;
 
-        SvLBoxTab* pTab = (SvLBoxTab*)pView->aTabs[ nLastTab ];
+        SvLBoxTab* pTab = pView->aTabs[ nLastTab ];
         SvLBoxItem* pItem = pEntry->GetItem( nLastTab );
 
         long nTabPos = pView->GetTabPos( pEntry, pTab );

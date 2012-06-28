@@ -1255,10 +1255,10 @@ void SvTreeListBox::EditItemText( SvLBoxEntry* pEntry, SvLBoxString* pItem,
     aPos.X() = GetTabPos( pEntry, pTab );
     long nOutputWidth = pImp->GetOutputSize().Width();
     Size aSize( nOutputWidth - aPos.X(), aItemSize.Height() );
-    sal_uInt16 nPos = aTabs.GetPos( pTab );
-    if( nPos+1 < aTabs.Count() )
+    sal_uInt16 nPos = std::find( aTabs.begin(), aTabs.end(), pTab ) - aTabs.begin();
+    if( nPos+1 < (sal_uInt16)aTabs.size() )
     {
-        SvLBoxTab* pRightTab = (SvLBoxTab*)aTabs.GetObject( nPos + 1 );
+        SvLBoxTab* pRightTab = aTabs[ nPos + 1 ];
         long nRight = GetTabPos( pEntry, pRightTab );
         if( nRight <= nOutputWidth )
             aSize.Width() = nRight - aPos.X();
@@ -1525,16 +1525,16 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
 
     SvViewDataEntry* pViewDataEntry = GetViewDataEntry( pEntry );
 
-    sal_uInt16 nTabCount = aTabs.Count();
+    sal_uInt16 nTabCount = aTabs.size();
     sal_uInt16 nItemCount = pEntry->ItemCount();
     sal_uInt16 nCurTab = 0;
     sal_uInt16 nCurItem = 0;
 
     while( nCurTab < nTabCount && nCurItem < nItemCount )
     {
-        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject( nCurTab );
+        SvLBoxTab* pTab = aTabs[ nCurTab ];
         sal_uInt16 nNextTab = nCurTab + 1;
-        SvLBoxTab* pNextTab = nNextTab < nTabCount ? (SvLBoxTab*)aTabs.GetObject(nNextTab) : 0;
+        SvLBoxTab* pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
         SvLBoxItem* pItem = nCurItem < nItemCount ? pEntry->GetItem(nCurItem) : 0;
 
         sal_uInt16 nFlags = pTab->nFlags;
@@ -1704,7 +1704,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
         do
         {
             nNextTab++;
-            pNextTab = nNextTab < nTabCount ? (SvLBoxTab*)aTabs.GetObject(nNextTab) : 0;
+            pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
         } while( pNextTab && pNextTab->IsDynamic() );
 
         if( !pNextTab || (GetTabPos( pEntry, pNextTab ) > nDynTabPos) )
@@ -1795,9 +1795,9 @@ Rectangle SvTreeListBox::GetFocusRect( SvLBoxEntry* pEntry, long nLine )
     if( pTab )
         nTabPos = GetTabPos( pEntry, pTab );
     long nNextTabPos;
-    if( pTab && nCurTab < aTabs.Count() - 1 )
+    if( pTab && nCurTab < aTabs.size() - 1 )
     {
-        SvLBoxTab* pNextTab = (SvLBoxTab*)aTabs.GetObject( nCurTab + 1 );
+        SvLBoxTab* pNextTab = aTabs[ nCurTab + 1 ];
         nNextTabPos = GetTabPos( pEntry, pNextTab );
     }
     else
@@ -1835,8 +1835,8 @@ Rectangle SvTreeListBox::GetFocusRect( SvLBoxEntry* pEntry, long nLine )
             sal_uInt16 nLastTab;
             SvLBoxTab* pLastTab = GetLastTab(SV_LBOXTAB_SHOW_SELECTION,nLastTab);
             nLastTab++;
-            if( nLastTab < aTabs.Count() ) // is there another one?
-                pLastTab = (SvLBoxTab*)aTabs.GetObject( nLastTab );
+            if( nLastTab < aTabs.size() ) // is there another one?
+                pLastTab = aTabs[ nLastTab ];
             else
                 pLastTab = 0;  // select whole width
             aSize.Width() = pLastTab ? pLastTab->GetPos() : 0x0fffffff;
@@ -1892,9 +1892,9 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvLBoxEntry* pEntry, long nX,
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvLBoxItem* pItemClicked = 0;
-    sal_uInt16 nTabCount = aTabs.Count();
+    sal_uInt16 nTabCount = aTabs.size();
     sal_uInt16 nItemCount = pEntry->ItemCount();
-    SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(0);
+    SvLBoxTab* pTab = aTabs.front();
     SvLBoxItem* pItem = pEntry->GetItem(0);
     sal_uInt16 nNextItem = 1;
     nX -= GetMapMode().GetOrigin().X();
@@ -1903,7 +1903,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvLBoxEntry* pEntry, long nX,
 
     while( 1 )
     {
-        SvLBoxTab* pNextTab=nNextItem<nTabCount ? (SvLBoxTab*)aTabs.GetObject(nNextItem) : 0;
+        SvLBoxTab* pNextTab=nNextItem<nTabCount ? aTabs[nNextItem] : 0;
         long nStart = GetTabPos( pEntry, pTab );
 
         long nNextTabPos;
@@ -1940,7 +1940,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvLBoxEntry* pEntry, long nX,
         }
         if( nNextItem >= nItemCount || nNextItem >= nTabCount)
             break;
-        pTab = (SvLBoxTab*)aTabs.GetObject( nNextItem );
+        pTab = aTabs[ nNextItem ];
         pItem = pEntry->GetItem( nNextItem );
         nNextItem++;
     }
@@ -1965,10 +1965,10 @@ void SvTreeListBox::AddTab(long nTabPos,sal_uInt16 nFlags,void* pUserData )
     nFocusWidth = -1;
     SvLBoxTab* pTab = new SvLBoxTab( nTabPos, nFlags );
     pTab->SetUserData( pUserData );
-    aTabs.Insert( pTab, aTabs.Count() );
+    aTabs.push_back( pTab );
     if( nTreeFlags & TREEFLAG_USESEL )
     {
-        sal_uInt16 nPos = aTabs.Count() - 1;
+        sal_uInt16 nPos = aTabs.size() - 1;
         if( nPos >= nFirstSelTab && nPos <= nLastSelTab )
             pTab->nFlags |= SV_LBOXTAB_SHOW_SELECTION;
         else
@@ -1984,10 +1984,10 @@ SvLBoxTab* SvTreeListBox::GetFirstDynamicTab( sal_uInt16& rPos ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     sal_uInt16 nCurTab = 0;
-    sal_uInt16 nTabCount = aTabs.Count();
+    sal_uInt16 nTabCount = aTabs.size();
     while( nCurTab < nTabCount )
     {
-        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(nCurTab);
+        SvLBoxTab* pTab = aTabs[nCurTab];
         if( pTab->nFlags & SV_LBOXTAB_DYNAMIC )
         {
             rPos = nCurTab;
@@ -2008,20 +2008,20 @@ SvLBoxTab* SvTreeListBox::GetTab( SvLBoxEntry* pEntry, SvLBoxItem* pItem) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     sal_uInt16 nPos = pEntry->GetPos( pItem );
-    return (SvLBoxTab*)aTabs.GetObject( nPos );
+    return aTabs[ nPos ];
 }
 
 void SvTreeListBox::ClearTabList()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    sal_uInt16 nTabCount = aTabs.Count();
+    sal_uInt16 nTabCount = aTabs.size();
     while( nTabCount )
     {
         nTabCount--;
-        SvLBoxTab* pDelTab = (SvLBoxTab*)aTabs.GetObject( nTabCount );
+        SvLBoxTab* pDelTab = aTabs[ nTabCount ];
         delete pDelTab;
     }
-    aTabs.Remove(0,aTabs.Count());
+    aTabs.clear();
 }
 
 
@@ -2154,10 +2154,10 @@ void SvTreeListBox::RemoveParentKeepChildren( SvLBoxEntry* pParent )
 
 SvLBoxTab* SvTreeListBox::GetFirstTab( sal_uInt16 nFlagMask, sal_uInt16& rPos )
 {
-    sal_uInt16 nTabCount = aTabs.Count();
+    sal_uInt16 nTabCount = aTabs.size();
     for( sal_uInt16 nPos = 0; nPos < nTabCount; nPos++ )
     {
-        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject( nPos );
+        SvLBoxTab* pTab = aTabs[ nPos ];
         if( (pTab->nFlags & nFlagMask) )
         {
             rPos = nPos;
@@ -2170,17 +2170,15 @@ SvLBoxTab* SvTreeListBox::GetFirstTab( sal_uInt16 nFlagMask, sal_uInt16& rPos )
 
 SvLBoxTab* SvTreeListBox::GetLastTab( sal_uInt16 nFlagMask, sal_uInt16& rTabPos )
 {
-    short nTabCount = (short)aTabs.Count();
-    if( nTabCount )
+    sal_uInt16 nPos = (sal_uInt16)aTabs.size();
+    while( nPos )
     {
-        for( short nPos = nTabCount-1; nPos >= 0; nPos-- )
+        --nPos;
+        SvLBoxTab* pTab = aTabs[ nPos ];
+        if( (pTab->nFlags & nFlagMask) )
         {
-            SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject( (sal_uInt16)nPos );
-            if( (pTab->nFlags & nFlagMask) )
-            {
-                rTabPos = (sal_uInt16)nPos;
-                return pTab;
-            }
+            rTabPos = nPos;
+            return pTab;
         }
     }
     rTabPos = 0xffff;
