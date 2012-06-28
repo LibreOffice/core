@@ -537,6 +537,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_MARI_MEADOW           0x066D
 #define LANGUAGE_USER_PAPIAMENTU_CURACAO    0x8479  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
 #define LANGUAGE_USER_PAPIAMENTU_BONAIRE    0x8879  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
+#define LANGUAGE_USER_SYSTEM_CONFIG         0xFFFE  /* not a locale, to be used only in configuration context to obtain system default, primary 0x3fe, sub 0x3f */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
 
