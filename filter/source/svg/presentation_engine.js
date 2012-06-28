@@ -11110,6 +11110,7 @@ function SlideShow()
     this.eDirection = FORWARD;
     this.bIsIdle = true;
     this.bIsEnabled = true;
+    this.bIsSkipping = false;
     this.bNoSlideTransition = false;
 }
 
@@ -11236,12 +11237,26 @@ SlideShow.prototype.nextEffect = function()
 
 SlideShow.prototype.skipCurrentEffect = function()
 {
+    if( this.bIsSkipping )
+        return;
+
+    this.bIsSkipping = true;
     this.aEventMultiplexer.notifySkipEffectEvent();
     this.update();
+    this.bIsSkipping = false;
 };
 
 SlideShow.prototype.skipEffect = function()
 {
+    if( this.bIsSkipping )
+        return true;
+
+    if( this.isRunning() )
+    {
+        this.skipCurrentEffect();
+        return true;
+    }
+
     if( !this.aNextEffectEventArray )
         return false;
 
@@ -11249,11 +11264,13 @@ SlideShow.prototype.skipEffect = function()
     if( this.nCurrentEffect >= this.aNextEffectEventArray.size() )
         return false;
 
+    this.bIsSkipping = true;
     this.eDirection = FORWARD;
     this.aNextEffectEventArray.at( this.nCurrentEffect ).fire();
     this.aEventMultiplexer.notifySkipEffectEvent();
     ++this.nCurrentEffect;
     this.update();
+    this.bIsSkipping = false;
     return true;
 };
 
