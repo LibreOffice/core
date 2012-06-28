@@ -34,7 +34,11 @@
 #define ITEM_MAX_WIDTH 192
 #define ITEM_MAX_HEIGHT 192
 #define ITEM_PADDING 5
+#define ITEM_SPACE 20
 #define THUMBNAIL_MAX_HEIGHT 128
+
+#define INIT_FOLDER_COLS 3
+#define INIT_FOLDER_LINES 2
 
 #define PADDING_TOOLBAR_VIEW    15
 #define PADDING_DLG_BORDER      10
@@ -86,8 +90,16 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString());
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
-    // Calculate toolboxs size and positions
     Size aWinSize = GetOutputSize();
+
+    // Calculate thumbnail view minimum size
+    Size aThumbSize = maView->CalcWindowSizePixel(INIT_FOLDER_COLS,INIT_FOLDER_LINES,
+                                                  ITEM_MAX_WIDTH,ITEM_MAX_HEIGHT,ITEM_SPACE);
+
+    if (aWinSize.getWidth() < aThumbSize.getWidth() + 2*PADDING_DLG_BORDER)
+        aWinSize.setWidth(aThumbSize.getWidth() + 2*PADDING_DLG_BORDER);
+
+    // Calculate toolboxs size and positions
     Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
     Size aActionSize = mpActionBar->CalcMinimumWindowSizePixel();
     Size aTemplateSize = mpTemplateBar->CalcMinimumWindowSizePixel();
@@ -121,7 +133,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
     aViewPos.setY(aActionPos.Y() + aActionSize.getHeight() + PADDING_TOOLBAR_VIEW);
+    aViewPos.setX((aWinSize.getWidth() - aThumbSize.getWidth())/2);     // Center the view
     maView->SetPosPixel(aViewPos);
+
+    if (aWinSize.getHeight() < aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER)
+        aWinSize.setHeight(aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER);
 
     // Set search box position and size
     Size aSearchSize = mpSearchEdit->CalcMinimumSize();
@@ -131,6 +147,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aActionPos.Y()+aActionSize.getHeight()));
 
     maView->SetStyle(WB_TABSTOP | WB_VSCROLL);
+    maView->SetSizePixel(aThumbSize);
+
     maView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
                               ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
                               ITEM_PADDING);
@@ -144,6 +162,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     aButtonSheets.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewSheetsHdl));
     aButtonDraws.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDrawsHdl));
     maButtonSelMode.SetClickHdl(LINK(this,SfxTemplateManagerDlg,OnClickSelectionMode));
+
+    // Set dialog to correct dimensions
+    SetSizePixel(aWinSize);
 
     mpViewBar->Show();
     mpActionBar->Show();
