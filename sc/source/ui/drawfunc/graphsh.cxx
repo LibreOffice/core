@@ -190,7 +190,6 @@ void ScGraphicShell::ExecuteExternalEdit( SfxRequest& )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    printf("YO!\n");
 
     if( rMarkList.GetMarkCount() == 1 )
     {
