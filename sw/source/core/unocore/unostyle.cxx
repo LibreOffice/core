@@ -860,14 +860,14 @@ uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::Runt
     uno::Sequence< OUString > aRet;
     if(pBasePool)
     {
-        SfxStyleSheetIterator aIterator(pBasePool, eFamily, 0xffff);
-        sal_uInt16 nCount = aIterator.Count();
+        SfxStyleSheetIteratorPtr pIterator = pBasePool->CreateIterator(eFamily, 0xffff);
+        sal_uInt16 nCount = pIterator->Count();
         aRet.realloc(nCount);
         OUString* pArray = aRet.getArray();
         String aString;
         for(sal_uInt16 i = 0; i < nCount; i++)
         {
-            SwStyleNameMapper::FillProgName(aIterator[i]->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), sal_True );
+            SwStyleNameMapper::FillProgName((*pIterator)[i]->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), sal_True );
             pArray[i] = OUString ( aString );
         }
     }

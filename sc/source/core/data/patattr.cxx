@@ -1187,17 +1187,15 @@ void ScPatternAttr::UpdateStyleSheet()
 {
     if (pName)
     {
-        pStyle = dynamic_cast< ScStyleSheet* >(pDoc->GetStyleSheetPool()->Find(*pName, SFX_STYLE_FAMILY_PARA));
+        pStyle = (ScStyleSheet*)pDoc->GetStyleSheetPool()->Find(*pName, SFX_STYLE_FAMILY_PARA);
 
         //  wenn Style nicht gefunden, Standard nehmen,
         //  damit keine leere Anzeige im Toolbox-Controller
         //! es wird vorausgesetzt, dass "Standard" immer der erste Eintrag ist!
         if (!pStyle)
         {
-            // #i120077# memory leak
-            SfxStyleSheetIterator aIter(pDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
-
-            pStyle = dynamic_cast< ScStyleSheet* >(aIter.First());
+            SfxStyleSheetIteratorPtr pIter = pDoc->GetStyleSheetPool()->CreateIterator( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
+            pStyle = dynamic_cast< ScStyleSheet* >(pIter->First());
         }
 
         if (pStyle)

@@ -759,16 +759,11 @@ sal_Bool SfxObjectShell::Print
         {
             SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
             SetOrganizerSearchMask(pStylePool);
-
-            // memory leak #i120077#
-            SfxStyleSheetIterator aIter(pStylePool, pStylePool->GetSearchFamily(), pStylePool->GetSearchMask());
-            sal_uInt16 nStyles = aIter.Count();
-            SfxStyleSheetBase *pStyle = aIter.First();
-
+            SfxStyleSheetIteratorPtr pIter = pStylePool->CreateIterator( pStylePool->GetSearchFamily(), pStylePool->GetSearchMask() );
+            sal_uInt16 nStyles = pIter->Count();
+            SfxStyleSheetBase *pStyle = pIter->First();
             if ( !pStyle )
-            {
                 return sal_True;
-            }
 
             // pepare adaptor for old style StartPage/EndPage printing
             boost::shared_ptr< Printer > pPrinter( new Printer( rPrt.GetJobSetup() ) );
@@ -867,7 +862,7 @@ sal_Bool SfxObjectShell::Print
                     pPrinter->DrawText(aOutPos, aTmp);
                     aOutPos.Y() += pPrinter->GetTextHeight();
                 }
-                pStyle = aIter.Next();
+                pStyle = pIter->Next();
             }
             pAdaptor->EndPage();
 

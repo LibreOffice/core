@@ -19,33 +19,27 @@
  *
  *************************************************************/
 
-
-
 #ifndef _SFXSTYLE_HXX
 #define _SFXSTYLE_HXX
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-
 #include <rtl/ref.hxx>
 #include <vector>
 #include <comphelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
 #include <rsc/rscsfx.hxx>
 #include <tools/string.hxx>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/poolitem.hxx>
-
-#ifndef _SFX_STYLE_HRC
 #include <svl/style.hrc>
-#endif
+#include <boost/shared_ptr.hpp>
 
 class SfxItemSet;
 class SfxItemPool;
-
 class SfxStyleSheetBasePool;
 class SvStream;
 
@@ -199,6 +193,7 @@ private:
 friend class SfxStyleSheetBasePool;
 };
 
+typedef ::boost::shared_ptr< SfxStyleSheetIterator > SfxStyleSheetIteratorPtr;
 //=========================================================================
 
 class SfxStyleSheetBasePool_Impl;
@@ -238,6 +233,7 @@ public:
     SfxItemPool&                GetPool();
     const SfxItemPool&          GetPool() const;
 
+    virtual SfxStyleSheetIteratorPtr CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
     virtual sal_uInt16              Count();
     virtual SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
 
