@@ -58,7 +58,17 @@ package org.libreoffice.android.examples;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Matrix;
+import android.graphics.PixelFormat;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,6 +83,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
+
+import junit.framework.Assert;
 
 import com.polites.android.GestureImageView;
 
@@ -252,10 +264,341 @@ public class DocumentLoader
         }
     }
 
+    static int zoomLevel(float scale)
+    {
+        if (scale <= 1)
+            return 0;
+
+        int result = 1;
+        int power = 2;
+
+        while (scale > power) {
+            result++;
+            power *= 2;
+        }
+        return result;
+    }
+
+    static int scaleOfZoom(int zoom)
+    {
+        int result = 1;
+
+        while (zoom > 0) {
+            result *= 2;
+            zoom--;
+        }
+
+        return result;
+    }
+
+    static int setColorAlpha(int color,
+                             double alpha)
+    {
+        return Color.argb((int)(alpha*255), Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    // Each (Gesture)ImageView is showing an object of this subclass of
+    // BitmapDrawable, the root of a quadtree of higher-resolution partial
+    // page bitmaps. Obviously these should be rendered asynchronously on
+    // demand but that code is not here yet. And anyway, rendering partial
+    // pages won't work until I have figured out why offsetting VirtualDevice
+    // has no effect.
+    class QuadTree
+        extends BitmapDrawable
+    {
+        final int pageNumber;
+        final int level;
+        final int location;
+        final int w, h;
+
+        static final int NW = 0;
+        static final int NE = 1;
+        static final int SE = 2;
+        static final int SW = 3;
+
+        QuadTree sub[] = new QuadTree[4];
+
+        QuadTree(Bitmap bm,
+                 int level,
+                 int pageNumber,
+                 int location)
+        {
+            super(bm);
+
+            w = getIntrinsicWidth();
+            h = getIntrinsicHeight();
+
+            this.pageNumber = pageNumber;
+            this.level = level;
+            this.location = location;
+
+            // I spent several days wondering why nothing showed up for the
+            // sub-tiles, desperately tweaking stuff left and right, until I
+            // found out I need to call setBounds()... (For the level 0
+            // drawable the GestureImageView handles calling setBounds(), but
+            // it doesn't hurt to do it here for all levels.)
+            setBounds(0, 0, w, h);
+
+            // Just for testing until properly doing this asynchronously and
+            // with insert()
+            if (level == 0) {
+                // Don't do it anyway for now
+
+                // 1) offsetting of VirtualDevice doesn't seem to work so this
+                // would work for the NW sub-tile only anyway.
+
+                // 2) LO renders Windows-style "Y grows upwards" bitmaps, thus
+                // the imageView.setScaleY(-1) below in
+                // PageLoadTask.onPostExecute(), but that means that the
+                // scaling and translation stuff here in QuadTree needs to be
+                // twiddled for Y coordinates. (Just try: comment out the
+                // createSub(NW) call below. If you also comment out the
+                // setScaleY() call, the sub-tile will show up in the correct
+                // location, otherwise not. Or something like that. It's hard
+                // to try to write up sevral nights of desperate hacking back
+                // and forth... which in the end turned out to be just chasing
+                // the wrong ducks. If that is how the metaphor goes?)
+
+                // So probably should write a native method to reflect the
+                // rendered byte buffer in the Y direction, and call that
+                // after rendering, instead? Or maybe the tweaks needed aren't
+                // that large anyway, and I just am mixing up my memory of the
+                // trouble caused by that with the trouble caused by not
+                // calling setBounds()...
+
+                //createSub(NW);
+                //createSub(NE);
+                //createSub(SE);
+                //createSub(SW);
+            }
+        }
+
+        QuadTree(QuadTree rhs,
+                 Bitmap bm)
+        {
+            this(bm, rhs.level, rhs.pageNumber, rhs.location);
+
+            sub = rhs.sub;
+        }
+
+        QuadTree(Bitmap bm,
+                 int pageNumber)
+        {
+            this(bm, 0, pageNumber, 0);
+        }
+
+        QuadTree(int level,
+                 int pageNumber,
+                 int location)
+        {
+            this.level = level;
+            this.pageNumber = pageNumber;
+            this.location = location;
+            w = -1;
+            h = -1;
+        }
+
+        void createSub(int q)
+        {
+            if (true) {
+                ByteBuffer bb = renderPage(pageNumber, level+1, (location<<2)+q);
+                Bitmap subbm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                subbm.copyPixelsFromBuffer(bb);
+                sub[q] = new QuadTree(subbm, level+1, pageNumber, (location<<2)+q);
+            } else {
+                // Test... just use transparent single colour subtiles
+                Bitmap subbm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                int color = 0;
+                switch (q) {
+                case NW: color = Color.RED; break;
+                case NE: color = Color.GREEN; break;
+                case SE: color = Color.BLUE; break;
+                case SW: color = Color.YELLOW; break;
+                }
+                subbm.eraseColor(setColorAlpha(color, 0.5));
+                sub[q] = new QuadTree(subbm, 1, pageNumber, (location<<2)+q);
+            }
+        }
+
+        int quadrantOf(int x,
+                       int y)
+        {
+            if (x < 0 || y < 0 || x >= w || y >= h)
+                return -1;
+
+            if (x < w/2 && y < h/2)
+                return NW;
+            if (x >= w/2 && y < h/2)
+                return NE;
+            if (x >= w/2  && y >= h/2)
+                return SE;
+            if (x < w/2 && y >= h/2)
+                return SW;
+
+            return -1;
+        }
+
+        int quadrantOf(Point p)
+        {
+            return quadrantOf(p.x, p.y);
+        }
+
+        Point subCoord(Point p)
+        {
+            return subCoord(quadrantOf(p), p);
+        }
+
+        Point subCoord(int q,
+                       Point p)
+        {
+            switch (q) {
+            case NW:
+                return new Point(p.x*2, p.y*2);
+            case NE:
+                return new Point((p.x-w/2)*2, p.y*2);
+            case SE:
+                return new Point((p.x-w/2)*2, (p.y-h/2)*2);
+            case SW:
+                return new Point(p.x*2, (p.y-h/2)*2);
+            }
+            return null;
+        }
+
+        // The insert() stuff has not been tested and is just a draft
+        void insert(Bitmap bm,
+                    int level,
+                    int x,
+                    int y)
+        {
+            insert(bm, level, 1, new Point(x, y));
+        }
+
+        void insert(Bitmap bm,
+                    int level,
+                    int recursionDepth,
+                    Point p)
+        {
+            int q = quadrantOf(p);
+
+            if (q == -1)
+                return;
+
+            if (recursionDepth == level) {
+                if (sub[q] == null)
+                    sub[q] = new QuadTree(bm, level);
+                else
+                    sub[q] = new QuadTree(sub[q], bm);
+            } else {
+                if (sub[q] == null)
+                    sub[q] = new QuadTree(this.level+1, pageNumber, location);
+                sub[q].insert(bm, level, recursionDepth+1, subCoord(q, p));
+            }
+        }
+
+        // Ditto for find()
+
+        QuadTree find(int levelCountdown,
+                      int x,
+                      int y)
+        {
+            return find(levelCountdown, new Point(x, y));
+        }
+
+        QuadTree find(int levelCountdown,
+                      Point p)
+        {
+            final int x = p.x, y = p.y;
+
+            Log.i(TAG, "find(" + levelCountdown + ", (" + p.x + ", " + p.y + "))");
+
+            if (x < 0 || y < 0 || x >= w || y >= h)
+                return null;
+
+            if (levelCountdown == 0) {
+                Log.i(TAG, "Returning this at level " + this.level);
+                return this;
+            }
+
+            int q = quadrantOf(p);
+
+            if (sub[q] != null)
+                return sub[q].find(levelCountdown-1, subCoord(q, p));
+
+            return null;
+        }
+
+        void subDraw(Canvas canvas,
+                     int q)
+        {
+            if (q == -1 || sub[q] == null)
+                return;
+
+            Log.i(TAG, "subDraw 1: q=" + q + ", matrix=" + canvas.getMatrix() + ", clip=" + canvas.getClipBounds());
+
+            canvas.save();
+            canvas.scale(0.5f, 0.5f);
+
+            float[] values = new float[9];
+            canvas.getMatrix().getValues(values);
+
+            Log.i(TAG, "subDraw 2: q=" + q + ", matrix=" + canvas.getMatrix() + ", clip=" + canvas.getClipBounds() + ", translate(" +
+                  (((q == NW || q == SW) ? -w : w) /* * values[Matrix.MSCALE_X]*/) + "," +
+                  (((q == NW || q == NE) ? -h : h) /* * values[Matrix.MSCALE_X]*/) + ")");
+
+            canvas.translate(((q == NW || q == SW) ? -w : 0) /* * values[Matrix.MSCALE_X]*/,
+                             ((q == NW || q == NE) ? -h : 0) /* * values[Matrix.MSCALE_X]*/);
+
+            Log.i(TAG, "subDraw 3: q=" + q + ", matrix=" + canvas.getMatrix() + ", clip=" + canvas.getClipBounds());
+
+            sub[q].draw(canvas);
+
+            canvas.restore();
+        }
+
+        @Override
+            public void draw(Canvas canvas)
+        {
+            float[] values = new float[9];
+            canvas.getMatrix().getValues(values);
+
+            float scale = values[Matrix.MSCALE_X];
+            int zoom = zoomLevel(scale);
+
+            Log.i(TAG, "draw: level=" + level + ", scale=" + scale + ", zoom=" + zoom + ", matrix=" + canvas.getMatrix());
+            Rect bounds = new Rect();
+            if (canvas.getClipBounds(bounds))
+                Log.i(TAG, "  clip=" + bounds + ", bounds=" + getBounds());
+            else
+                Log.i(TAG, "  no clip");
+
+            int l = (int)(w/2 - values[Matrix.MTRANS_X]/scale);
+            int t = (int)(h/2 - values[Matrix.MTRANS_Y]/scale);
+            Log.i(TAG, "Unzoomed rect: " + l + ", " + t + ", " + (int)(l+w/scale) + ", " + (int)(t+h/scale));
+
+            Assert.assertTrue(values[Matrix.MSCALE_X] == values[Matrix.MSCALE_Y]);
+
+            super.draw(canvas);
+
+            if (/*zoom > 0 */ scale >= 1) {
+                subDraw(canvas, quadrantOf(l, t));
+                subDraw(canvas, quadrantOf((int)(l+w/scale)-1, t));
+                subDraw(canvas, quadrantOf((int)(l+w/scale)-1, (int)(t+h/scale)-1));
+                subDraw(canvas, quadrantOf(l, (int)(t+h/scale)-1));
+            }
+        }
+    }
+
     ByteBuffer renderPage(int number)
     {
+        return renderPage(number, 0, 0);
+    }
+
+    ByteBuffer renderPage(final int number,
+                          final int level,
+                          final int location)
+    {
         try {
-            // Use dummySmallDevice with no scale of offset just to find out
+            // Use dummySmallDevice with no scale or offset just to find out
             // the paper size of this page.
 
             PropertyValue renderProps[] = new PropertyValue[3];
@@ -294,8 +637,10 @@ public class DocumentLoader
                 device = toolkit.createScreenCompatibleDeviceUsingBuffer(flipper.getWidth(), flipper.getHeight(), 1, 1, 0, 0, wrapped_bb);
             } else {
 
-                // Scale so that it fits our device which has a resolution of 96/in (see
-                // SvpSalGraphics::GetResolution()). The page size returned from getRenderer() is in 1/mm * 100.
+                // Scale so that it fits our device which has a resolution of
+                // 96/inch (see SvpSalGraphics::GetResolution()). The page
+                // size returned from getRenderer() is in 1/mm * 100. 2540 is
+                // one inch in mm/100.
 
                 int scaleNumerator, scaleDenominator;
 
@@ -308,11 +653,40 @@ public class DocumentLoader
                     scaleNumerator = flipper.getWidth();
                     scaleDenominator = pageWidth / 2540 * 96;
                 }
-                Log.i(TAG, "Scaling with " + scaleNumerator + "/" + scaleDenominator);
+                scaleNumerator *= scaleOfZoom(level);
+
+                int xOffset = 0, yOffset = 0;
+                int hiX = pageWidth, hiY = pageHeight;
+                int lvl = level;
+                int loc = location;
+                while (lvl > 0) {
+                    int q = (loc & 0x03);
+
+                    if (q == QuadTree.NE || q == QuadTree.SE) {
+                        xOffset += (hiX - xOffset)/2;
+                    } else {
+                        hiX -= (hiX - xOffset)/2;
+                    }
+                    if (q == QuadTree.SW || q == QuadTree.SE) {
+                        yOffset += (hiY - yOffset)/2;
+                    } else {
+                        hiY -= (hiY - yOffset)/2;
+                    }
+                    lvl--;
+                    loc >>= 2;
+                }
+
+                // Seems that the offsets passed in (which get passed to
+                // MapMode::SetOrigin() in
+                // VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer()
+                // are ignored... try a random value, no effect ;(
+                xOffset = 12345; xOffset = 789;
+
+                Log.i(TAG, "Rendering page " + number + " level=" + level + " scale=" + scaleNumerator + "/" + scaleDenominator + ", offset=(" + xOffset + ", " + yOffset + ")");
 
                 device = toolkit.createScreenCompatibleDeviceUsingBuffer(flipper.getWidth(), flipper.getHeight(),
                                                                          scaleNumerator, scaleDenominator,
-                                                                         0, 0,
+                                                                         -xOffset, -yOffset,
                                                                          wrapped_bb);
             }
 
@@ -372,7 +746,7 @@ public class DocumentLoader
                     return;
 
                 GestureImageView imageView = new GestureImageView(DocumentLoader.this, gestureListener);
-                imageView.setImageBitmap(bm);
+                imageView.setImageDrawable(new QuadTree(bm, result));
 
                 imageView.setScaleY(-1);
 
