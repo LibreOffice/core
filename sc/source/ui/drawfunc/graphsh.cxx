@@ -186,7 +186,7 @@ void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTERNAL_EDIT );
 }
 
-void ScGraphicShell::ExecuteExternalEdit( SfxRequest& rReq )
+void ScGraphicShell::ExecuteExternalEdit( SfxRequest& )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
