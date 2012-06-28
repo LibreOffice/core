@@ -321,7 +321,7 @@ void LinkManager::UpdateAllLinks(
 {
     // First make a copy of the array in order to update links
     // links in ... no contact between them!
-    SvPtrarr aTmpArr( 255 );
+    std::vector<SvBaseLink*> aTmpArr;
     sal_uInt16 n;
     for( n = 0; n < aLinkTbl.size(); ++n )
     {
@@ -331,12 +331,12 @@ void LinkManager::UpdateAllLinks(
             Remove( n-- );
             continue;
         }
-        aTmpArr.Insert( pLink, aTmpArr.Count() );
+        aTmpArr.push_back( pLink );
     }
 
-    for( n = 0; n < aTmpArr.Count(); ++n )
+    for( n = 0; n < aTmpArr.size(); ++n )
     {
-        SvBaseLink* pLink = (SvBaseLink*)aTmpArr[ n ];
+        SvBaseLink* pLink = aTmpArr[ n ];
 
         // search first in the array after the entry
         sal_uInt16 nFndPos = USHRT_MAX;
