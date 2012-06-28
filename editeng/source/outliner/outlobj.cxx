@@ -26,8 +26,13 @@
  *
  ************************************************************************/
 
-
-#include <outl_pch.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/eerdll.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #define _OUTLINER_CXX
 #include <editeng/outliner.hxx>

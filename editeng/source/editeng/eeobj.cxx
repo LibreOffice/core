@@ -26,15 +26,17 @@
  *
  ************************************************************************/
 
-#include <eeng_pch.hxx>
-
+#include <vcl/wrkwin.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <eeobj.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/itempool.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
+
 using namespace ::com::sun::star;
 
 

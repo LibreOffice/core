@@ -65,7 +65,6 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/editeng/editview \
     editeng/source/editeng/edtspell \
     editeng/source/editeng/eehtml \
-    editeng/source/editeng/eeng_pch \
     editeng/source/editeng/eeobj \
     editeng/source/editeng/eerdll \
     editeng/source/editeng/eertfpar \
@@ -109,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/outliner/outlobj \
     editeng/source/outliner/outlundo \
     editeng/source/outliner/outlvw \
-    editeng/source/outliner/outl_pch \
     editeng/source/outliner/paralist \
     editeng/source/rtf/rtfgrf \
     editeng/source/rtf/rtfitem \
