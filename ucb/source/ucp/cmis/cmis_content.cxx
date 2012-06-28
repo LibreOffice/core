@@ -276,41 +276,56 @@ namespace cmis
 
         for( sal_Int32 n = 0; n < nProps; ++n )
         {
+            const beans::Property& rProp = pProps[ n ];
+
             try
             {
-                const beans::Property& rProp = pProps[ n ];
-
                 if ( rProp.Name == "IsDocument" )
                 {
-                    if ( getObject( ).get( ) )
+                    try
+                    {
                         xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:document" );
-                    else if ( m_pObjectType.get( ) )
-                        xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:document" );
-                    else
-                        xRow->appendVoid( rProp );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        if ( m_pObjectType.get( ) )
+                            xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:document" );
+                        else
+                            xRow->appendVoid( rProp );
+                    }
                 }
                 else if ( rProp.Name == "IsFolder" )
                 {
-                    if ( getObject( ).get( ) )
+                    try
+                    {
                         xRow->appendBoolean( rProp, getObject()->getBaseType( ) == "cmis:folder" );
-                    else if ( m_pObjectType.get( ) )
-                        xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:folder" );
-                    else
-                        xRow->appendVoid( rProp );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        if ( m_pObjectType.get( ) )
+                            xRow->appendBoolean( rProp, m_pObjectType->getBaseType()->getId( ) == "cmis:folder" );
+                        else
+                            xRow->appendVoid( rProp );
+                    }
                 }
                 else if ( rProp.Name == "Title" )
                 {
                     rtl::OUString sTitle;
-                    if ( getObject().get() )
-                        sTitle = STD_TO_OUSTR( getObject()->getName() );
-                    else if ( m_pObjectProps.size() > 0 )
+                    try
                     {
-                        map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
-                        if ( it != m_pObjectProps.end( ) )
+                        sTitle = STD_TO_OUSTR( getObject()->getName() );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        if ( m_pObjectProps.size() > 0 )
                         {
-                            vector< string > values = it->second->getStrings( );
-                            if ( values.size() > 0 )
-                                sTitle = STD_TO_OUSTR( values.front( ) );
+                            map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
+                            if ( it != m_pObjectProps.end( ) )
+                            {
+                                vector< string > values = it->second->getStrings( );
+                                if ( values.size() > 0 )
+                                    sTitle = STD_TO_OUSTR( values.front( ) );
+                            }
                         }
                     }
 
@@ -337,7 +352,7 @@ namespace cmis
                 else if ( rProp.Name == "TitleOnServer" )
                 {
                     string path;
-                    if ( getObject().get( ) )
+                    try
                     {
                         vector< string > paths = getObject( )->getPaths( );
                         if ( paths.size( ) > 0 )
@@ -347,8 +362,10 @@ namespace cmis
 
                         xRow->appendString( rProp, STD_TO_OUSTR( path ) );
                     }
-                    else
+                    catch ( const libcmis::Exception& )
+                    {
                         xRow->appendVoid( rProp );
+                    }
                 }
                 else if ( rProp.Name == "IsReadOnly" )
                 {
@@ -371,11 +388,18 @@ namespace cmis
                 }
                 else if ( rProp.Name == "Size" )
                 {
-                    libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get( ) );
-                    if ( NULL != document )
-                        xRow->appendLong( rProp, document->getContentLength() );
-                    else
+                    try
+                    {
+                        libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get( ) );
+                        if ( NULL != document )
+                            xRow->appendLong( rProp, document->getContentLength() );
+                        else
+                            xRow->appendVoid( rProp );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
                         xRow->appendVoid( rProp );
+                    }
                 }
                 else if ( rProp.Name == "CreatableContentsInfo" )
                 {
@@ -386,11 +410,7 @@ namespace cmis
             }
             catch ( const libcmis::Exception& e )
             {
-                ucbhelper::cancelCommandExecution(
-                                    ucb::IOErrorCode_GENERAL,
-                                    uno::Sequence< uno::Any >( 0 ),
-                                    xEnv,
-                                    rtl::OUString::createFromAscii( e.what() ) );
+                xRow->appendVoid( rProp );
             }
         }
 
