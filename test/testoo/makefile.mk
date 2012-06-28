@@ -1,12 +1,3 @@
-#*************************************************************************
-#
-#  Licensed Materials - Property of IBM.
-#  (C) Copyright IBM Corporation 2003, 2012.  All Rights Reserved.
-#  U.S. Government Users Restricted Rights:
-#  Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-# 
-#*************************************************************************
-
 #**************************************************************
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
@@ -27,6 +18,8 @@
 #  under the License.
 #  
 #**************************************************************
+
+
 
 
 
