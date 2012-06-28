@@ -5,6 +5,3 @@
         5: justify middle
         7: justify high
         9: Thai Distribute
-
-
-        
