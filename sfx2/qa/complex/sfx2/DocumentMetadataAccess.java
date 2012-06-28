@@ -945,7 +945,7 @@ public class DocumentMetadataAccess
 
     static Statement[] toSeq(XEnumeration i_Enum) throws Exception
     {
-        java.util.Collection c = new java.util.Vector();
+        java.util.Collection c = new java.util.ArrayList();
         while (i_Enum.hasMoreElements()) {
             Statement s = (Statement) i_Enum.nextElement();
             c.add(s);
@@ -961,7 +961,7 @@ public class DocumentMetadataAccess
 
     static XNode[][] toSeqs(XEnumeration i_Enum) throws Exception
     {
-        java.util.Collection c = new java.util.Vector();
+        java.util.Collection c = new java.util.ArrayList();
         while (i_Enum.hasMoreElements()) {
             XNode[] s = (XNode[]) i_Enum.nextElement();
             c.add(s);
