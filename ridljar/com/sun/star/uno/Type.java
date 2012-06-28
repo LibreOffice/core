@@ -78,7 +78,7 @@ public class Type {
         TYPE_NAME_ANY
     };
 
-    private static final HashMap __javaClassToTypeClass = new HashMap();
+    private static final HashMap<Class<?>, TypeClass[]> __javaClassToTypeClass = new HashMap<Class<?>, TypeClass[]>();
     static {
         __javaClassToTypeClass.put(
             void.class, new TypeClass[] { TypeClass.VOID, TypeClass.VOID });
@@ -189,7 +189,7 @@ public class Type {
      * @param zClass the Java class of this type.  Must not be
      *     <code>null</code>.
      */
-    public Type(Class zClass) {
+    public Type(Class<?> zClass) {
         init(null, zClass, false, false);
     }
 
@@ -243,7 +243,7 @@ public class Type {
      *
      * @since UDK 3.2.0
      */
-    public Type(Class zClass, boolean alternative) {
+    public Type(Class<?> zClass, boolean alternative) {
         init(null, zClass, alternative, false);
     }
 
@@ -333,7 +333,7 @@ public class Type {
      * @return the type name; may be <code>null</code> in extreme situations
      *     (inconsistent <code>TypeClass</code>, error loading a class)
      */
-    public Class getZClass() {
+    public Class<?> getZClass() {
         synchronized (this) {
             if (_class == null) {
                 _class = determineClass();
@@ -401,8 +401,8 @@ public class Type {
             }
         case TypeClass.EXCEPTION_value:
         case TypeClass.INTERFACE_value:
-            Class c1 = getZClass();
-            Class c2 = type.getZClass();
+            Class<?> c1 = getZClass();
+            Class<?> c2 = type.getZClass();
             return c1 != null && c2 != null && c1.isAssignableFrom(c2);
 
         default:
@@ -428,9 +428,9 @@ public class Type {
     }
 
     private void init(
-        String name, Class zClass, boolean alternative, boolean arguments)
+        String name, Class<?> zClass, boolean alternative, boolean arguments)
     {
-        TypeClass[] tc = (TypeClass[]) __javaClassToTypeClass.get(zClass);
+        TypeClass[] tc = __javaClassToTypeClass.get(zClass);
         if (tc != null) {
             // tc only contains primitive type classes, except for
             // TypeClass.INTERFACE, which stands for XInterface (the alternative
@@ -488,7 +488,7 @@ public class Type {
         }
     }
 
-    private Class determineClass() {
+    private Class<?> determineClass() {
         switch (_typeClass.getValue()) {
         case TypeClass.VOID_value:
             return _typeName.equals(TYPE_NAME_VOID) ? void.class : null;
@@ -580,7 +580,7 @@ public class Type {
                 if (args >= 0) {
                     base = base.substring(0, args);
                 }
-                Class c;
+                Class<?> c;
                 try {
                     c = Class.forName(base);
                 } catch (ClassNotFoundException e) {
@@ -604,7 +604,7 @@ public class Type {
         case TypeClass.EXCEPTION_value:
         case TypeClass.INTERFACE_value:
             {
-                Class c;
+                Class<?> c;
                 try {
                     c = Class.forName(_typeName);
                 } catch (ClassNotFoundException e) {
@@ -616,7 +616,7 @@ public class Type {
         case TypeClass.STRUCT_value:
             {
                 int args = _typeName.indexOf('<');
-                Class c;
+                Class<?> c;
                 try {
                     c = Class.forName(
                         args < 0 ? _typeName : _typeName.substring(0, args));
@@ -638,6 +638,6 @@ public class Type {
     protected TypeClass _typeClass; // TODO should be final
     protected String _typeName; // TODO should be final
 
-    protected Class _class;
+    protected Class<?> _class;
     protected ITypeDescription _iTypeDescription;
 }

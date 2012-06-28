@@ -175,5 +175,5 @@ public interface ITypeDescription {
      * <p>
      * @return   the corresponding java class.
      */
-    Class getZClass();
+    Class<?> getZClass();
 }

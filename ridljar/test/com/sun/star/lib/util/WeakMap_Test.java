@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 
 public final class WeakMap_Test {
     @Test public void test() {
-        WeakMap m = new WeakMap();
+        WeakMap<String,Object> m = new WeakMap<String,Object>();
         assertEquals(0, m.size());
         assertTrue(m.isEmpty());
         assertFalse(m.containsKey("key1"));

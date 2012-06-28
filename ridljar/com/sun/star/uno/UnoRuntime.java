@@ -149,7 +149,7 @@ public class UnoRuntime {
             }
         }
         // Ensure that the object implements the requested interface type:
-        Class c = type.getZClass();
+        Class<?> c = type.getZClass();
         if (c == null || !c.isInstance(object)) {
             object = null;
         }
@@ -367,7 +367,7 @@ public class UnoRuntime {
      * if no context has been set for the current thread
      */
     public static XCurrentContext getCurrentContext() {
-        return (XCurrentContext) currentContext.get();
+        return currentContext.get();
     }
 
     /**
@@ -407,13 +407,13 @@ public class UnoRuntime {
         throws java.lang.Exception
     {
         synchronized (environments) {
-            IEnvironment env = (IEnvironment) WeakMap.getValue(
+            IEnvironment env = WeakMap.getValue(
                 environments.get(name + context));
             if (env == null) {
-                Class c = Class.forName(
+                Class<?> c = Class.forName(
                     "com.sun.star.lib.uno.environments." + name + "." + name
                     + "_environment");
-                Constructor ctor = c.getConstructor(
+                Constructor<?> ctor = c.getConstructor(
                     new Class[] { Object.class });
                 env = (IEnvironment) ctor.newInstance(new Object[] { context });
                 environments.put(name + context, env);
@@ -453,9 +453,9 @@ public class UnoRuntime {
             String name = from.getName() + "_" + to.getName();
             String hashName = from.getName() + from.getContext() + "_"
                 + to.getName() + to.getContext();
-            IBridge bridge = (IBridge) WeakMap.getValue(bridges.get(hashName));
+            IBridge bridge = WeakMap.getValue(bridges.get(hashName));
             if(bridge == null) {
-                Class zClass = null;
+                Class<?> zClass = null;
                 String className =  name + "_bridge";
                 try {
                     zClass = Class.forName(className);
@@ -464,9 +464,9 @@ public class UnoRuntime {
                         + className;
                     zClass = Class.forName(className);
                 }
-                Class[] signature = {
+                Class<?>[] signature = {
                     IEnvironment.class, IEnvironment.class, args.getClass() };
-                Constructor constructor = zClass.getConstructor(signature);
+                Constructor<?> constructor = zClass.getConstructor(signature);
                 Object[] iargs = { from, to, args };
                 bridge = (IBridge) constructor.newInstance(iargs);
                 bridges.put(hashName, bridge);
@@ -521,16 +521,16 @@ public class UnoRuntime {
      * offering a replacement.
      */
     public static IBridge[] getBridges() {
-        ArrayList l = new ArrayList();
+        ArrayList<Object> l = new ArrayList<Object>();
         synchronized (bridges) {
-            for (Iterator i = bridges.values().iterator(); i.hasNext();) {
-                Object o = WeakMap.getValue(i.next());
+            for (Iterator<java.lang.ref.WeakReference<IBridge>> i = bridges.values().iterator(); i.hasNext();) {
+                IBridge o = WeakMap.getValue(i.next());
                 if (o != null) {
                     l.add(o);
                 }
             }
         }
-        return (IBridge[]) l.toArray(new IBridge[l.size()]);
+        return l.toArray(new IBridge[l.size()]);
     }
 
     /**
@@ -596,8 +596,8 @@ public class UnoRuntime {
      */
     static public boolean reset() {
         synchronized (bridges) {
-            for (Iterator i = bridges.values().iterator(); i.hasNext();) {
-                IBridge b = (IBridge) WeakMap.getValue(i.next());
+            for (Iterator<java.lang.ref.WeakReference<IBridge>> i = bridges.values().iterator(); i.hasNext();) {
+                IBridge b = WeakMap.getValue(i.next());
                 if (b != null) {
                     // The following call to dispose was originally made to
                     // com.sun.star.lib.sandbox.Disposable.dispose, which cannot
@@ -681,8 +681,8 @@ public class UnoRuntime {
 
     private static final String oidSuffix = ";java[];" + getUniqueKey();
 
-    private static final ThreadLocal currentContext = new ThreadLocal();
+    private static final ThreadLocal<XCurrentContext> currentContext = new ThreadLocal<XCurrentContext>();
 
-    private static final WeakMap environments = new WeakMap();
-    private static final WeakMap bridges = new WeakMap();
+    private static final WeakMap<String,IEnvironment> environments = new WeakMap<String,IEnvironment>();
+    private static final WeakMap<String,IBridge> bridges = new WeakMap<String,IBridge>();
 }

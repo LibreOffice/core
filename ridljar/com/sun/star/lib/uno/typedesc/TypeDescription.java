@@ -55,7 +55,7 @@ public final class TypeDescription implements ITypeDescription {
         return get(t);
     }
 
-    public static TypeDescription getTypeDescription(Class zClass) {
+    public static TypeDescription getTypeDescription(Class<?> zClass) {
         return getDefinitely(new Type(zClass));
     }
 
@@ -206,7 +206,7 @@ public final class TypeDescription implements ITypeDescription {
     }
 
     // @see ITypeDescription#getZClass
-    public Class getZClass() {
+    public Class<?> getZClass() {
         return zClass;
     }
 
@@ -244,7 +244,7 @@ public final class TypeDescription implements ITypeDescription {
     {
         TypeClass typeClass = type.getTypeClass();
         String typeName = type.getTypeName();
-        Class zClass = type.getZClass();
+        Class<?> zClass = type.getZClass();
         if (zClass == null) {
             throw new ClassNotFoundException("UNO type " + type);
         }
@@ -322,7 +322,7 @@ public final class TypeDescription implements ITypeDescription {
             {
                 // This code exploits the fact that an instantiated polymorphic
                 // struct type may not be the direct base of a struct type:
-                Class superClass = zClass.getSuperclass();
+                Class<?> superClass = zClass.getSuperclass();
                 TypeDescription[] superTypes = superClass != Object.class
                     ? new TypeDescription[] { get(new Type(superClass)) }
                     : null;
@@ -349,7 +349,7 @@ public final class TypeDescription implements ITypeDescription {
         case TypeClass.INTERFACE_value:
             {
                 List superTypes = new List();
-                Class[] interfaces = zClass.getInterfaces();
+                Class<?>[] interfaces = zClass.getInterfaces();
                 for (int i = 0; i < interfaces.length; ++i) {
                     Type t = new Type(interfaces[i]);
                     if (t.getTypeClass() == TypeClass.INTERFACE) {
@@ -374,7 +374,7 @@ public final class TypeDescription implements ITypeDescription {
 
     private TypeDescription(
         TypeClass typeClass, String typeName, String arrayTypeName,
-        Class zClass, TypeDescription[] superTypes,
+        Class<?> zClass, TypeDescription[] superTypes,
         ITypeDescription componentType)
     {
         this.typeClass = typeClass;
@@ -414,16 +414,16 @@ public final class TypeDescription implements ITypeDescription {
                     getDefinitely(Type.VOID), null) };
         } else {
             int methodOffset = 0;
-            ArrayList superList = new ArrayList();
+            ArrayList<MethodDescription> superList = new ArrayList<MethodDescription>();
             for (int i = 0; i < superTypes.length; ++i) {
                 IMethodDescription[] ds = superTypes[i].getMethodDescriptions();
                 for (int j = 0; j < ds.length; ++j) {
                     superList.add(new MethodDescription(ds[j], methodOffset++));
                 }
             }
-            superMethodDescriptions = (IMethodDescription[]) superList.toArray(
+            superMethodDescriptions = superList.toArray(
                 new IMethodDescription[superList.size()]);
-            ArrayList directList = new ArrayList();
+            ArrayList<MethodDescription> directList = new ArrayList<MethodDescription>();
             TypeInfo[] infos = getTypeInfo();
             int infoCount = infos == null ? 0 : infos.length;
             int index = 0;
@@ -465,7 +465,7 @@ public final class TypeDescription implements ITypeDescription {
                             + ": entries not ordererd");
                     }
                     Method method = findMethod(methods, info.getName());
-                    Class[] params = method.getParameterTypes();
+                    Class<?>[] params = method.getParameterTypes();
                     ITypeDescription[] in = new ITypeDescription[params.length];
                     ITypeDescription[] out
                         = new ITypeDescription[params.length];
@@ -499,7 +499,7 @@ public final class TypeDescription implements ITypeDescription {
                             method));
                 }
             }
-            methodDescriptions = (IMethodDescription[]) directList.toArray(
+            methodDescriptions = directList.toArray(
                 new IMethodDescription[directList.size()]);
         }
     }
@@ -512,7 +512,7 @@ public final class TypeDescription implements ITypeDescription {
         if (i < 0) {
             return null;
         }
-        java.util.List args = new java.util.ArrayList();
+        java.util.List<TypeDescription> args = new java.util.ArrayList<TypeDescription>();
         do {
             ++i; // skip '<' or ','
             int j = i;
@@ -555,7 +555,7 @@ public final class TypeDescription implements ITypeDescription {
             throw new IllegalArgumentException(
                 "UNO type name \"" + typeName + "\" is syntactically invalid");
         }
-        return (TypeDescription[]) args.toArray(
+        return args.toArray(
                 new TypeDescription[args.size()]);
     }
 
@@ -626,7 +626,7 @@ public final class TypeDescription implements ITypeDescription {
     }
 
     private static ITypeDescription getTypeDescription(
-        Class zClass, TypeInfo typeInfo)
+        Class<?> zClass, TypeInfo typeInfo)
     {
         return getDefinitely(
             new Type(
@@ -649,11 +649,11 @@ public final class TypeDescription implements ITypeDescription {
         }
 
         public TypeDescription[] toArray() {
-            return (TypeDescription[]) list.toArray(
+            return list.toArray(
                 new TypeDescription[list.size()]);
         }
 
-        private final ArrayList list = new ArrayList();
+        private final ArrayList<TypeDescription> list = new ArrayList<TypeDescription>();
     }
 
     private static final class Cache {
@@ -662,7 +662,7 @@ public final class TypeDescription implements ITypeDescription {
         public TypeDescription get(String typeName) {
             synchronized (map) {
                 cleanUp();
-                Entry e = (Entry) map.get(typeName);
+                Entry e = map.get(typeName);
                 return e == null ? null : (TypeDescription) e.get();
             }
         }
@@ -684,8 +684,8 @@ public final class TypeDescription implements ITypeDescription {
             }
         }
 
-        private static final class Entry extends SoftReference {
-            public Entry(TypeDescription desc, ReferenceQueue queue) {
+        private static final class Entry extends SoftReference<TypeDescription> {
+            public Entry(TypeDescription desc, ReferenceQueue<TypeDescription> queue) {
                 super(desc, queue);
                 typeName = desc.getTypeName();
             }
@@ -693,8 +693,8 @@ public final class TypeDescription implements ITypeDescription {
             public final String typeName;
         }
 
-        private final HashMap map = new HashMap();
-        private final ReferenceQueue queue = new ReferenceQueue();
+        private final HashMap<String, Entry> map = new HashMap<String, Entry>();
+        private final ReferenceQueue<TypeDescription> queue = new ReferenceQueue<TypeDescription>();
     }
 
     private static final Cache cache = new Cache();
@@ -702,7 +702,7 @@ public final class TypeDescription implements ITypeDescription {
     private final TypeClass typeClass;
     private final String typeName;
     private final String arrayTypeName;
-    private final Class zClass;
+    private final Class<?> zClass;
     private final TypeDescription[] superTypes;
     private final ITypeDescription componentType;
     private final boolean hasTypeArguments;

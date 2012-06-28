@@ -57,7 +57,7 @@ public class Any {
      * @param   object      the data of the any.
      * @deprecated as of UDK 2.0
      */
-    public Any(Class zInterface, Object object) {
+    public Any(Class<?> zInterface, Object object) {
         this(new Type(zInterface), object);
     }
 

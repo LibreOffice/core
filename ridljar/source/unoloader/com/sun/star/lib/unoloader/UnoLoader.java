@@ -69,7 +69,7 @@ public final class UnoLoader {
         UnoClassLoader cl;
         try {
             cl = (UnoClassLoader) AccessController.doPrivileged(
-                new PrivilegedExceptionAction() {
+                new PrivilegedExceptionAction<Object>() {
                     public Object run() throws MalformedURLException {
                         return new UnoClassLoader(
                             base, null, UnoLoader.class.getClassLoader());

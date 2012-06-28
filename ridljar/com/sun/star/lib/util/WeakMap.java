@@ -58,7 +58,15 @@ import java.util.Set;
  * <code>WeakReference</code> wrappers are automatically cleared as soon as the
  * values are disposed.</p>
  */
-public final class WeakMap implements Map {
+public final class WeakMap<K,V> {
+
+    /**
+     * Declare the map as WeakReference instead of Entry because it makes the return
+     * type signatures of values() and keySet() cleaner.
+     */
+    private final HashMap<K, WeakReference<V>> map = new HashMap<K, WeakReference<V>>();
+    private final ReferenceQueue<V> queue = new ReferenceQueue<V>();
+
     /**
      * Constructs an empty <code>WeakMap</code>.
      */
@@ -70,7 +78,7 @@ public final class WeakMap implements Map {
      *
      * @param m the map whose mappings are to be placed in this map
      */
-    public WeakMap(Map m) {
+    public WeakMap(Map<K,V> m) {
         putAll(m);
     }
 
@@ -108,7 +116,7 @@ public final class WeakMap implements Map {
      * @return <code>true</code> if this map contains a mapping for the
      * specified key
      */
-    public boolean containsKey(Object key) {
+    public boolean containsKey(K key) {
         return map.containsKey(key);
     }
 
@@ -122,7 +130,7 @@ public final class WeakMap implements Map {
      * @return <code>true</code> if this map maps one or more keys to the
      * specified value
      */
-    public boolean containsValue(Object value) {
+    public boolean containsValue(WeakReference<V> value) {
         return map.containsValue(value);
     }
 
@@ -137,7 +145,7 @@ public final class WeakMap implements Map {
      * @return the value to which this map maps the specified key, or
      * <code>null</code> if the map contains no mapping for this key
      */
-    public Object get(Object key) {
+    public WeakReference<V> get(K key) {
         return map.get(key);
     }
 
@@ -153,9 +161,9 @@ public final class WeakMap implements Map {
      * @return previous value associated with the specified key, or
      * <code>null</code> if there was no mapping for the key
      */
-    public Object put(Object key, Object value) {
+    public WeakReference<V> put(K key, V value) {
         cleanUp();
-        return map.put(key, new Entry(key, value, queue));
+        return map.put(key, new Entry<K,V>(key, value, queue));
     }
 
     /**
@@ -167,7 +175,7 @@ public final class WeakMap implements Map {
      * @return previous value associated with the specified key, or
      * <code>null</code> if there was no mapping for the key
      */
-    public Object remove(Object key) {
+    public WeakReference<V> remove(K key) {
         cleanUp();
         return map.remove(key);
     }
@@ -181,12 +189,12 @@ public final class WeakMap implements Map {
      * must be plain objects, which are then wrapped in instances of
      * <code>WeakReference</code>.
      */
-    public void putAll(Map t) {
+    public void putAll(Map<K,V> m) {
         cleanUp();
-        for (Iterator i = t.entrySet().iterator(); i.hasNext();) {
-            Map.Entry e = (Map.Entry) i.next();
-            Object k = e.getKey();
-            map.put(k, new Entry(k, e.getValue(), queue));
+        for (Iterator<Map.Entry<K,V>> i = m.entrySet().iterator(); i.hasNext();) {
+            Map.Entry<K,V> e = i.next();
+            K k = e.getKey();
+            map.put(k, new Entry<K,V>(k, e.getValue(), queue));
         }
     }
 
@@ -207,7 +215,7 @@ public final class WeakMap implements Map {
      *
      * @return a set view of the keys contained in this map
      */
-    public Set keySet() {
+    public Set<K> keySet() {
         return map.keySet();
     }
 
@@ -218,7 +226,7 @@ public final class WeakMap implements Map {
      *
      * @return a collection view of the values contained in this map
      */
-    public Collection values() {
+    public Collection<WeakReference<V>> values() {
         return map.values();
     }
 
@@ -229,7 +237,7 @@ public final class WeakMap implements Map {
      *
      * @return a collection view of the mappings contained in this map
      */
-    public Set entrySet() {
+    public Set<Map.Entry<K,WeakReference<V>>> entrySet() {
         return map.entrySet();
     }
 
@@ -253,17 +261,20 @@ public final class WeakMap implements Map {
      * @return the referent of the specified <code>WeakReference</code>, or
      * <code>null</code> if <code>ref</code> is <code>null</code>
      */
-    public static Object getValue(Object ref) {
-        return ref == null ? null : ((WeakReference) ref).get();
+    public static <T> T getValue(WeakReference<T> ref) {
+        return ref == null ? null : ref.get();
     }
 
-    // cleanUp must only be called from within modifying methods.  Otherwise,
-    // the implementations of entrySet, keySet and values would break
-    // (specificially, iterating over the collections returned by those
-    // methods), as non-modifying methods might modify the underlying map.
+    /**
+     * cleanUp() must only be called from within modifying methods.  Otherwise,
+     * the implementations of entrySet, keySet and values would break
+     * (Specifically, iterating over the collections returned by those
+     * methods), as non-modifying methods might modify the underlying map.
+     **/
+    @SuppressWarnings("unchecked")
     private void cleanUp() {
         for (;;) {
-            Entry e = (Entry) queue.poll();
+            Entry<K,V> e = (Entry<K,V>) queue.poll();
             if (e == null) {
                 break;
             }
@@ -278,15 +289,12 @@ public final class WeakMap implements Map {
         }
     }
 
-    private static final class Entry extends WeakReference
+    private static final class Entry<K,V> extends WeakReference<V>
         implements DisposeListener
     {
-        public void notifyDispose(DisposeNotifier source) {
-            Entry.this.clear(); // qualification needed for Java 1.3
-            enqueue();
-        }
+        private final K key;
 
-        private Entry(Object key, Object value, ReferenceQueue queue) {
+        private Entry(K key, V value, ReferenceQueue<V> queue) {
             super(value, queue);
             this.key = key;
             if (value instanceof DisposeNotifier) {
@@ -294,9 +302,13 @@ public final class WeakMap implements Map {
             }
         }
 
-        private final Object key;
+        /**
+         * @see DisposeListener#notifyDispose(DisposeNotifier)
+         */
+        public void notifyDispose(DisposeNotifier source) {
+            clear();
+            enqueue();
+        }
     }
 
-    private final HashMap map = new HashMap();
-    private final ReferenceQueue queue = new ReferenceQueue();
 }

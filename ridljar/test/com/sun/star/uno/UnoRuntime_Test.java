@@ -71,10 +71,10 @@ public final class UnoRuntime_Test {
             UnoRuntime.areSame(
                 new Any(
                     new Type("com.sun.star.beans.Optional<unsigned long>"),
-                    new Optional()),
+                    new Optional<Integer>()),
                 new Any(
                     new Type("com.sun.star.beans.Optional<unsigned long>"),
-                    new Optional(false, new Integer(0)))));
+                    new Optional<Integer>(false, new Integer(0)))));
         assertFalse(UnoRuntime.areSame(new Test1(), new Test2()));
         Test2 test2 = new Test2();
         assertTrue(
@@ -83,6 +83,7 @@ public final class UnoRuntime_Test {
                 UnoRuntime.queryInterface(Ifc.class, test2), test2));
     }
 
+    @SuppressWarnings("rawtypes")
     @Test public void test_completeValue() {
         assertEquals(
             new Integer(0), UnoRuntime.completeValue(Type.UNSIGNED_LONG, null));
