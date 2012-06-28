@@ -44,10 +44,8 @@
 #include <rtl/locale.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/introwin.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/filter.hxx>
 
 #define NOT_LOADED  ((long)-1)
 
