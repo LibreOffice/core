@@ -19,29 +19,30 @@
 package complex.api_internal;
 
 // imports
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import helper.OfficeProvider;
 import helper.ProcessHandler;
-import com.sun.star.task.XJob;
-import com.sun.star.beans.XPropertyAccess;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.NamedValue;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
-
-// ---------- junit imports -----------------
 import lib.TestParameters;
-import org.junit.After;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
-// ------------------------------------------
+
+import com.sun.star.beans.NamedValue;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertyAccess;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.task.XJob;
+import com.sun.star.uno.UnoRuntime;
 
 /**
  * This test executes the API tests internally in StarOffice. Prerequiste is
@@ -93,7 +94,7 @@ public class CheckAPI  {
 
         // get the parameters for the internal test
         String paramList = (String)param.get("ParamList");
-        Vector p = new Vector();
+        ArrayList p = new ArrayList();
         StringTokenizer paramTokens = new StringTokenizer(paramList, " ");
         while(paramTokens.hasMoreTokens())
         {
@@ -122,7 +123,7 @@ public class CheckAPI  {
             }
             else  {
                 int index=1;
-                p = new Vector();
+                p = new ArrayList();
                 while ( param.get("job"+index) != null ) {
                     p.add(param.get("job"+index));
                     index++;

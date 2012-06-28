@@ -17,21 +17,20 @@
  */
 package complex.path_substitution;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XStringSubstitution;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
-// ---------- junit imports -----------------
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
-// ------------------------------------------
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XStringSubstitution;
 
 /**
  *
@@ -227,17 +226,17 @@ public class PathSubstitutionTest
     private class VariableContainer
     {
 
-        public Vector varName;
-        public Vector varValue;
-        public Vector substAtBegin;
-        public Vector resubst;
+        public ArrayList varName;
+        public ArrayList varValue;
+        public ArrayList substAtBegin;
+        public ArrayList resubst;
 
         public VariableContainer()
         {
-            varName = new Vector();
-            varValue = new Vector();
-            substAtBegin = new Vector();
-            resubst = new Vector();
+            varName = new ArrayList();
+            varValue = new ArrayList();
+            substAtBegin = new ArrayList();
+            resubst = new ArrayList();
         }
 
         public void add(String var)

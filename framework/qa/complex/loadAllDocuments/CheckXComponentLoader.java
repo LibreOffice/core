@@ -18,6 +18,24 @@
 
  package complex.loadAllDocuments;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import helper.URLHelper;
+
+import java.io.File;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import org.openoffice.test.OfficeFileUrl;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XComponentLoader;
@@ -26,29 +44,9 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.io.XInputStream;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
-import com.sun.star.ucb.XSimpleFileAccess;
-
-
-import helper.URLHelper;
-
-import java.io.File;
-import java.io.InputStreamReader;
-
-import java.util.Enumeration;
-import java.util.Vector;
-
-// ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
-import org.openoffice.test.OfficeFileUrl;
-import static org.junit.Assert.*;
-// ------------------------------------------
 
 //-----------------------------------------------
 /** @short  Check the interface method XComponentLoader.loadComponentFromURL()
@@ -116,7 +114,7 @@ public class CheckXComponentLoader
     private String m_sTestDocPath = null;
 
     /** files of m_sTestDocPath to test. */
-    private static Vector m_lTestFiles = null;
+    private static ArrayList m_lTestFiles = null;
 
     //-------------------------------------------
     // test environment
@@ -189,18 +187,18 @@ public class CheckXComponentLoader
 
         // get all files from the given directory
         // TODO URLHelper should ignore directories!
-        m_lTestFiles = new Vector();
+        m_lTestFiles = new ArrayList();
         final String sTestDocURL = OfficeFileUrl.getAbsolute(new File("testdocuments"));
         m_sTestDocPath = graphical.FileHelper.getSystemPathFromFileURL(sTestDocURL);
         try
         {
             File        aBaseDir        = new File(m_sTestDocPath);
-            Vector      lDirContent     = URLHelper.getSystemFilesFromDir(aBaseDir.getPath());
-            Enumeration lList           = lDirContent.elements();
+            List      lDirContent     = URLHelper.getSystemFilesFromDir(aBaseDir.getPath());
+            Iterator lList           = lDirContent.iterator();
             int         nBasePathLength = m_sTestDocPath.length();
-            while(lList.hasMoreElements())
+            while(lList.hasNext())
             {
-                File aFile = (File)lList.nextElement();
+                File aFile = (File)lList.next();
 
                 // ignore broken links and directories at all
                 if (
@@ -268,10 +266,10 @@ public class CheckXComponentLoader
         lProps[2].Name  = "StatusIndicator";
         lProps[2].Value = xIndicator;
 
-        Enumeration aSnapshot = m_lTestFiles.elements();
-        while (aSnapshot.hasMoreElements())
+        Iterator aSnapshot = m_lTestFiles.iterator();
+        while (aSnapshot.hasNext())
         {
-            File   aSysFile = new File(m_sTestDocPath, (String)aSnapshot.nextElement());
+            File   aSysFile = new File(m_sTestDocPath, (String)aSnapshot.next());
             String sURL     = URLHelper.getFileURLFromSystemPath(aSysFile);
 
             if (/*! (sURL.endsWith(".jpg") ||
@@ -426,11 +424,11 @@ public class CheckXComponentLoader
 
 
         // get a file name as byte array
-        Enumeration aSnapshot = m_lTestFiles.elements();
+        Iterator aSnapshot = m_lTestFiles.iterator();
         byte[] baURL = null;
 
-        while (aSnapshot.hasMoreElements()) {
-            File aFile = new File(m_sTestDocPath, (String)aSnapshot.nextElement());
+        while (aSnapshot.hasNext()) {
+            File aFile = new File(m_sTestDocPath, (String)aSnapshot.next());
             String sFile = URLHelper.getFileURLFromSystemPath(aFile);
 
             // take the first sxw file as stream
@@ -593,10 +591,10 @@ public class CheckXComponentLoader
         lProps[1] = new PropertyValue();
         lProps[1].Name = "InputStream";
 
-        Enumeration aSnapshot = m_lTestFiles.elements();
-        while (aSnapshot.hasMoreElements())
+        Iterator aSnapshot = m_lTestFiles.iterator();
+        while (aSnapshot.hasNext())
         {
-            File   aFile = new File(m_sTestDocPath, (String) aSnapshot.nextElement());
+            File   aFile = new File(m_sTestDocPath, (String) aSnapshot.next());
             String sURL  = URLHelper.getFileURLFromSystemPath(aFile);
 
 //            if (sURL.indexOf("CVS") > -1)
