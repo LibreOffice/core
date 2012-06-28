@@ -203,13 +203,12 @@ public:
 
     sal_uInt16 GetLineCount() const { return mnUserVisLines; }
 
-    void SetItemWidth( long nItemWidth = 0 );
+    long GetItemWidth() const { return mnItemWidth; }
 
-    long GetItemWidth() const { return mnUserItemWidth; }
+    long GetItemHeight() const { return mnItemHeight; }
 
-    void SetItemHeight( long nLineHeight = 0 );
-
-    long GetItemHeight() const { return mnUserItemHeight; }
+    void setItemDimensions (long ItemWidth, long ThumbnailHeight,
+                            long DisplayHeight, int itemPadding);
 
     sal_uInt16 GetFirstLine() const { return mnFirstLine; }
 
@@ -292,6 +291,8 @@ protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
 
+    void calculateColumnsRows ();
+
     void CalculateItemPositions ();
 
     SVT_DLLPRIVATE void         ImplInit();
@@ -325,6 +326,9 @@ protected:
     long mnHeaderHeight;
     long mnItemWidth;
     long mnItemHeight;
+    long mnItemPadding;
+    long mnThumbnailHeight;     // Maximum height of the thumbnail
+    long mnDisplayHeight;       // Height of the data display box (name, etc)
     long mnVisLines;
     long mnLines;
     long mnUserItemWidth;

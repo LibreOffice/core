@@ -31,8 +31,10 @@
 #include "doc.hrc"
 #include "templatedlg.hrc"
 
-#define MAX_COLUMN_COUNT 4
-#define MAX_LINE_COUNT 2
+#define ITEM_MAX_WIDTH 192
+#define ITEM_MAX_HEIGHT 192
+#define ITEM_PADDING 5
+#define THUMBNAIL_MAX_HEIGHT 128
 
 #define PADDING_TOOLBAR_VIEW    15
 #define PADDING_DLG_BORDER      10
@@ -129,8 +131,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aActionPos.Y()+aActionSize.getHeight()));
 
     maView->SetStyle(WB_TABSTOP | WB_VSCROLL);
-    maView->SetColCount(MAX_COLUMN_COUNT);
-    maView->SetLineCount(MAX_LINE_COUNT);
+    maView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
+                              ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
+                              ITEM_PADDING);
 
     maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
     maView->setTemplateStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));

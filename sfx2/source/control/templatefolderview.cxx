@@ -26,6 +26,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
+#define ITEM_MAX_WIDTH 192
+#define ITEM_MAX_HEIGHT 192
+#define ITEM_PADDING 5
+#define THUMBNAIL_MAX_HEIGHT 128
+
 BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
 {
     using namespace ::com::sun::star;
@@ -241,8 +246,9 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
     mpItemView->SetColor(Color(COL_WHITE));
     mpItemView->SetPosPixel(Point(0,0));
     mpItemView->SetSizePixel(GetOutputSizePixel());
-    mpItemView->SetColCount(3);
-    mpItemView->SetLineCount(2);
+    mpItemView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
+                                  ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
+                                  ITEM_PADDING);
 
     mpItemView->setItemStateHdl(LINK(this,TemplateFolderView,TVTemplateStateHdl));
 }
