@@ -77,10 +77,6 @@ static struct SvXMLTokenMapEntry aAttributeMap[] =
     XML_TOKEN_MAP_END
 };
 
-// helper function; see below
-void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
-                                 Reference<XNameContainer>& );
-
 XFormsSubmissionContext::XFormsSubmissionContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,

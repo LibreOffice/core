@@ -939,14 +939,8 @@ void StarBASIC::SetModified( sal_Bool b )
     SbxBase::SetModified( b );
 }
 
-extern void lcl_closeTraceFile();
-
 StarBASIC::~StarBASIC()
 {
-#ifdef DBG_TRACE_BASIC
-    lcl_closeTraceFile();
-#endif
-
     // Needs to be first action as it can trigger events
     disposeComVariablesForBasic( this );
 

@@ -276,25 +276,6 @@ MSCodec_Std97::~MSCodec_Std97 ()
     rtl_cipher_destroy (m_hCipher);
 }
 
-#if 0
-#if DEBUG_MSO_ENCRYPTION_STD97
-static void lcl_PrintKeyData(const sal_uInt8* pKeyData, const char* msg)
-{
-    printf("pKeyData: (%s)\n", msg);
-    for (int j = 0; j < 4; ++j)
-    {
-        for (int i = 0; i < 16; ++i)
-            printf("%2.2x ", pKeyData[j*16+i]);
-        printf("\n");
-    }
-}
-#else
-static void lcl_PrintKeyData(const sal_uInt8* /*pKeyData*/, const char* /*msg*/)
-{
-}
-#endif
-#endif
-
 #if DEBUG_MSO_ENCRYPTION_STD97
 static void lcl_PrintDigest(const sal_uInt8* pDigest, const char* msg)
 {
