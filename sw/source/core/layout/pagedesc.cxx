@@ -26,22 +26,16 @@
  *
  ************************************************************************/
 
-#include <hintids.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/shaditem.hxx>
-#include <editeng/lrspitem.hxx>
 #include "editeng/frmdiritem.hxx"
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
-#include <frmatr.hxx>
 #include <pagefrm.hxx>
 #include <pagedesc.hxx>
-#include <frmfmt.hxx>
-#include <fmtcol.hxx>   // SwTxtFmtColl
-#include <node.hxx>
 #include <swtable.hxx>
 #include <frmtool.hxx>
 #include <doc.hxx>          // for GetAttrPool
