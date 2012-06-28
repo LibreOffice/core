@@ -49,15 +49,15 @@ public class CheckChangeColor {
      */
     @Test public void checkChangeColor() throws Exception {
         // create a supplier to get the Style family collection
-        XStyleFamiliesSupplier xSupplier = ( XStyleFamiliesSupplier ) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, document);
+        XStyleFamiliesSupplier xSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, document);
 
         // get the NameAccess interface from the Style family collection
         XNameAccess xNameAccess = xSupplier.getStyleFamilies();
 
-        XNameContainer xPageStyleCollection = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xNameAccess.getByName( "PageStyles" ));
+        XNameContainer xPageStyleCollection = UnoRuntime.queryInterface(XNameContainer.class, xNameAccess.getByName( "PageStyles" ));
 
         // create a PropertySet to set the properties for the new Pagestyle
-        XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xPageStyleCollection.getByName("Standard") );
+        XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xPageStyleCollection.getByName("Standard") );
 
         assertEquals(
             "BackColor", new Any(Type.LONG, 0xFFFFFFFF),

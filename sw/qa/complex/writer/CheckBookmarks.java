@@ -63,13 +63,13 @@ class BookmarkHashes {
         throws com.sun.star.uno.Exception, java.security.NoSuchAlgorithmException
     {
         StringBuffer buffer = new StringBuffer("");
-        XBookmarksSupplier xBookmarksSupplier = (XBookmarksSupplier)UnoRuntime.queryInterface(
+        XBookmarksSupplier xBookmarksSupplier = UnoRuntime.queryInterface(
             XBookmarksSupplier.class,
             xDoc);
         XNameAccess xBookmarks = xBookmarksSupplier.getBookmarks();
         for(String sBookmarkname : xBookmarks.getElementNames()) {
             Object xBookmark = xBookmarks.getByName(sBookmarkname);
-            XTextContent xBookmarkAsContent = (XTextContent)UnoRuntime.queryInterface(
+            XTextContent xBookmarkAsContent = UnoRuntime.queryInterface(
                 XTextContent.class,
                 xBookmark);
             buffer.append(sBookmarkname);
@@ -152,7 +152,7 @@ public class CheckBookmarks {
         throws com.sun.star.uno.Exception
     {
         XText xText = m_xDoc.getText();
-        XSimpleText xSimpleText = (XSimpleText)UnoRuntime.queryInterface(
+        XSimpleText xSimpleText = UnoRuntime.queryInterface(
             XSimpleText.class,
             xText);
         for(int nPara=0; nPara<10; ++nPara) {
@@ -165,7 +165,7 @@ public class CheckBookmarks {
                 xWordCrsr.setString(" ");
             }
             XTextCursor xParaCrsr = xText.createTextCursor();
-            XTextRange xParaCrsrAsRange = (XTextRange)UnoRuntime.queryInterface(
+            XTextRange xParaCrsrAsRange = UnoRuntime.queryInterface(
                 XTextRange.class,
                 xParaCrsr);
             xText.insertControlCharacter(xParaCrsrAsRange, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false);
@@ -203,7 +203,7 @@ public class CheckBookmarks {
         XTextCursor xCrsr = m_xDoc.getText().createTextCursor();
         for(int i=0; i<30; i++) {
             xCrsr.goRight((short)rnd.nextInt(300), false);
-            XTextRange xCrsrAsRange = (XTextRange)UnoRuntime.queryInterface(
+            XTextRange xCrsrAsRange = UnoRuntime.queryInterface(
                 XTextRange.class,
                 xCrsr);
             xText.insertControlCharacter(xCrsrAsRange, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false);
@@ -213,16 +213,16 @@ public class CheckBookmarks {
     private void insertBookmark(XTextCursor crsr, String name, String content)
         throws com.sun.star.uno.Exception
     {
-        XMultiServiceFactory xDocFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+        XMultiServiceFactory xDocFactory = UnoRuntime.queryInterface(
             XMultiServiceFactory.class,
             m_xDoc);
 
         Object xBookmark = xDocFactory.createInstance("com.sun.star.text.Bookmark");
-        XTextContent xBookmarkAsTextContent = (XTextContent)UnoRuntime.queryInterface(
+        XTextContent xBookmarkAsTextContent = UnoRuntime.queryInterface(
             XTextContent.class,
             xBookmark);
         crsr.setString(content);
-        XNamed xBookmarkAsNamed = (XNamed)UnoRuntime.queryInterface(
+        XNamed xBookmarkAsNamed = UnoRuntime.queryInterface(
             XNamed.class,
             xBookmark);
         xBookmarkAsNamed.setName(name);
@@ -241,7 +241,7 @@ public class CheckBookmarks {
             aStoreProperties[0].Value = true;
             aStoreProperties[1].Name = "FilterName";
             aStoreProperties[1].Value = sFilter;
-            XStorable xStorable = (XStorable)UnoRuntime.queryInterface(
+            XStorable xStorable = UnoRuntime.queryInterface(
                 XStorable.class,
                 m_xDoc);
             xStorable.storeToURL(sFileUrl, aStoreProperties);

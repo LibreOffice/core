@@ -86,8 +86,7 @@ public class LoadSaveTest
             XMultiServiceFactory.class, m_xContext.getServiceManager());
         Object oGEB = m_xMSF.createInstance(
                 "com.sun.star.frame.GlobalEventBroadcaster");
-        m_xGEB = (XDocumentEventBroadcaster)
-            UnoRuntime.queryInterface(XDocumentEventBroadcaster.class, oGEB);
+        m_xGEB = UnoRuntime.queryInterface(XDocumentEventBroadcaster.class, oGEB);
         assertNotNull("could not get global event broadcaster.", m_xGEB);
         m_TmpDir = util.utils.getOfficeTemp/*Dir*/(m_xMSF);
         System.out.println("tempdir: " + m_TmpDir);
@@ -145,7 +144,7 @@ public class LoadSaveTest
 
             System.out.println("Storing document: " + fileName + " ...");
 
-            XStorable xStor = (XStorable) UnoRuntime.queryInterface(
+            XStorable xStor = UnoRuntime.queryInterface(
                         XStorable.class, xDoc);
 
             String targetFile = m_fileURL + m_TargetDir + fileName;

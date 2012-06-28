@@ -105,11 +105,9 @@ public class CheckFields
 
         String file = TestDocument.getUrl("fdo39694.ott");
         XComponent xComp = util.DesktopTools.loadDoc(m_xMSF, file, loadProps);
-        XTextDocument xTextDoc = (XTextDocument)
-            UnoRuntime.queryInterface(XTextDocument.class, xComp);
+        XTextDocument xTextDoc = UnoRuntime.queryInterface(XTextDocument.class, xComp);
 
-        XTextFieldsSupplier xTFS = (XTextFieldsSupplier)
-            UnoRuntime.queryInterface(XTextFieldsSupplier.class, xComp);
+        XTextFieldsSupplier xTFS = UnoRuntime.queryInterface(XTextFieldsSupplier.class, xComp);
         XEnumeration xEnum = xTFS.getTextFields().createEnumeration();
         Set<String> placeholders = new HashSet<String>();
         placeholders.add("<Kadr1>");
@@ -123,12 +121,10 @@ public class CheckFields
         while (xEnum.hasMoreElements())
         {
             Object xField = xEnum.nextElement();
-            XServiceInfo xSI = (XServiceInfo)
-                UnoRuntime.queryInterface(XServiceInfo.class, xField);
+            XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class, xField);
             if (xSI.supportsService("com.sun.star.text.TextField.JumpEdit"))
             {
-                XTextContent xContent = (XTextContent)
-                    UnoRuntime.queryInterface(XTextContent.class, xField);
+                XTextContent xContent = UnoRuntime.queryInterface(XTextContent.class, xField);
                 XTextRange xAnchor = xContent.getAnchor();
                 String readContent = xAnchor.getString();
                 if (!placeholders.remove(readContent))
@@ -139,7 +135,7 @@ public class CheckFields
             }
         }
         assertTrue(placeholders.isEmpty());
-        XCloseable xClos = (XCloseable) UnoRuntime.queryInterface(
+        XCloseable xClos = UnoRuntime.queryInterface(
                     XCloseable.class, xComp);
         if (xClos != null) {
             xClos.close(true);
@@ -149,19 +145,16 @@ public class CheckFields
     @Test
     public void test_fdo42073() throws Exception
     {
-        XMultiServiceFactory xDocFactory = (XMultiServiceFactory)
-            UnoRuntime.queryInterface(XMultiServiceFactory.class, m_xDoc);
+        XMultiServiceFactory xDocFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class, m_xDoc);
         Object xField =
             xDocFactory.createInstance("com.sun.star.text.TextField.Input");
 
         XText xBodyText = m_xDoc.getText();
         XTextCursor xCursor = xBodyText.createTextCursor();
-        XTextField xTextField = (XTextField)
-            UnoRuntime.queryInterface(XTextField.class, xField);
+        XTextField xTextField = UnoRuntime.queryInterface(XTextField.class, xField);
         xBodyText.insertTextContent(xCursor, xTextField, true);
 
-        XPropertySet xPropSet = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, xField);
+        XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xField);
         {
             Object readContent = xPropSet.getPropertyValue("Content");
             assertEquals("", readContent);

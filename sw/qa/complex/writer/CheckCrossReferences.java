@@ -45,12 +45,12 @@ public class CheckCrossReferences {
         if ( xPortionEnum != null ) {
             while ( xPortionEnum.hasMoreElements() ) {
                 com.sun.star.beans.XPropertySet xPortionProps =
-                    (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
-                        com.sun.star.beans.XPropertySet.class , xPortionEnum.nextElement());
+                    UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet.class , xPortionEnum.nextElement());
                 final String sPortionType =
                     xPortionProps.getPropertyValue( "TextPortionType" ).toString();
                 if ( sPortionType.equals( "TextField") ) {
-                    com.sun.star.text.XTextField xField = (com.sun.star.text.XTextField)UnoRuntime.queryInterface(
+                    com.sun.star.text.XTextField xField = UnoRuntime.queryInterface(
                         com.sun.star.text.XTextField.class,
                         xPortionProps.getPropertyValue( "TextField" ) );
                     assertNotNull("Cannot retrieve next field.", xField);
@@ -61,17 +61,17 @@ public class CheckCrossReferences {
 
         while ( xParaEnum.hasMoreElements() ) {
             com.sun.star.container.XEnumerationAccess aPara =
-                (com.sun.star.container.XEnumerationAccess)UnoRuntime.queryInterface(
-                    com.sun.star.container.XEnumerationAccess.class, xParaEnum.nextElement());
+                UnoRuntime.queryInterface(
+                com.sun.star.container.XEnumerationAccess.class, xParaEnum.nextElement());
             xPortionEnum = aPara.createEnumeration();
             while ( xPortionEnum.hasMoreElements() ) {
                 com.sun.star.beans.XPropertySet xPortionProps =
-                    (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
-                        com.sun.star.beans.XPropertySet.class , xPortionEnum.nextElement());
+                    UnoRuntime.queryInterface(
+                    com.sun.star.beans.XPropertySet.class , xPortionEnum.nextElement());
                 final String sPortionType =
                     xPortionProps.getPropertyValue( "TextPortionType" ).toString();
                 if ( sPortionType.equals( "TextField") ) {
-                    com.sun.star.text.XTextField xField = (com.sun.star.text.XTextField)UnoRuntime.queryInterface(
+                    com.sun.star.text.XTextField xField = UnoRuntime.queryInterface(
                         com.sun.star.text.XTextField.class,
                         xPortionProps.getPropertyValue( "TextField" ) );
                     assertNotNull("Cannot retrieve next field.", xField);
@@ -87,8 +87,8 @@ public class CheckCrossReferences {
     public com.sun.star.beans.XPropertySet getFieldProps(
             com.sun.star.text.XTextField xField ) {
         com.sun.star.beans.XPropertySet xProps =
-                (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
-                com.sun.star.beans.XPropertySet.class, xField );
+                UnoRuntime.queryInterface(
+        com.sun.star.beans.XPropertySet.class, xField );
 
         assertNotNull("Cannot retrieve field properties.", xProps);
 
@@ -116,17 +116,17 @@ public class CheckCrossReferences {
         // setup paragraph enumeration
         {
             com.sun.star.container.XEnumerationAccess xParaEnumAccess =
-                    (com.sun.star.container.XEnumerationAccess)UnoRuntime.queryInterface(
-                    com.sun.star.container.XEnumerationAccess.class, document.getText());
+                    UnoRuntime.queryInterface(
+            com.sun.star.container.XEnumerationAccess.class, document.getText());
             xParaEnum = xParaEnumAccess.createEnumeration();
         }
 
         // get field refresher
         {
             com.sun.star.text.XTextFieldsSupplier xFieldSupp =
-                    (com.sun.star.text.XTextFieldsSupplier)UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextFieldsSupplier.class, document);
-            xFldsRefresh = (com.sun.star.util.XRefreshable)UnoRuntime.queryInterface(
+                    UnoRuntime.queryInterface(
+            com.sun.star.text.XTextFieldsSupplier.class, document);
+            xFldsRefresh = UnoRuntime.queryInterface(
                     com.sun.star.util.XRefreshable.class, xFieldSupp.getTextFields());
         }
 
@@ -195,14 +195,14 @@ public class CheckCrossReferences {
         {
             // restart paragraph enumeration
             com.sun.star.container.XEnumerationAccess xParaEnumAccess =
-                    (com.sun.star.container.XEnumerationAccess)UnoRuntime.queryInterface(
-                    com.sun.star.container.XEnumerationAccess.class, document.getText());
+                    UnoRuntime.queryInterface(
+            com.sun.star.container.XEnumerationAccess.class, document.getText());
             xParaEnum = xParaEnumAccess.createEnumeration();
 
             // iterate on the paragraphs to find certain paragraph to insert the bookmark
             com.sun.star.text.XTextRange xParaTextRange = null;
             while ( xParaEnum.hasMoreElements() ) {
-                xParaTextRange = (com.sun.star.text.XTextRange)UnoRuntime.queryInterface(
+                xParaTextRange = UnoRuntime.queryInterface(
                     com.sun.star.text.XTextRange.class, xParaEnum.nextElement());
                 if ( xParaTextRange.getString().equals( "J" ) ) {
                     break;
@@ -216,44 +216,44 @@ public class CheckCrossReferences {
                 xParaTextRange);
 
             // insert bookmark
-            XMultiServiceFactory xFac = (XMultiServiceFactory)UnoRuntime.queryInterface(
+            XMultiServiceFactory xFac = UnoRuntime.queryInterface(
                     XMultiServiceFactory.class, document);
             final String cBookmarkName = "__RefNumPara__47114711";
             com.sun.star.text.XTextContent xBookmark =
-                (com.sun.star.text.XTextContent)UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextContent.class,
-                    xFac.createInstance( "com.sun.star.text.Bookmark" ) );
+                UnoRuntime.queryInterface(
+                com.sun.star.text.XTextContent.class,
+                xFac.createInstance( "com.sun.star.text.Bookmark" ) );
             if ( xBookmark != null ) {
                 com.sun.star.container.XNamed xName =
-                        (com.sun.star.container.XNamed)UnoRuntime.queryInterface(
-                        com.sun.star.container.XNamed.class, xBookmark );
+                        UnoRuntime.queryInterface(
+                com.sun.star.container.XNamed.class, xBookmark );
                 xName.setName( cBookmarkName );
                 xBookmark.attach(xParaTextRange.getStart());
             }
 
             // insert reference field, which references the inserted bookmark
             com.sun.star.text.XTextContent xNewField =
-                (com.sun.star.text.XTextContent)UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextContent.class,
-                    xFac.createInstance( "com.sun.star.text.TextField.GetReference" ) );
+                UnoRuntime.queryInterface(
+                com.sun.star.text.XTextContent.class,
+                xFac.createInstance( "com.sun.star.text.TextField.GetReference" ) );
             if ( xNewField != null ) {
                 com.sun.star.beans.XPropertySet xFieldProps =
-                        (com.sun.star.beans.XPropertySet)UnoRuntime.queryInterface(
-                        com.sun.star.beans.XPropertySet.class, xNewField );
+                        UnoRuntime.queryInterface(
+                com.sun.star.beans.XPropertySet.class, xNewField );
                 xFieldProps.setPropertyValue( "ReferenceFieldPart", new Short(com.sun.star.text.ReferenceFieldPart.TEXT) );
                 xFieldProps.setPropertyValue( "ReferenceFieldSource", new Short(com.sun.star.text.ReferenceFieldSource.BOOKMARK) );
                 xFieldProps.setPropertyValue( "SourceName", cBookmarkName );
                 com.sun.star.text.XTextRange xFieldTextRange =
-                        (com.sun.star.text.XTextRange)UnoRuntime.queryInterface(
-                        com.sun.star.text.XTextRange.class, xParaEnum.nextElement());
+                        UnoRuntime.queryInterface(
+                com.sun.star.text.XTextRange.class, xParaEnum.nextElement());
                 xNewField.attach(xFieldTextRange.getEnd());
                 xFldsRefresh.refresh();
             }
 
             // check inserted reference field
             com.sun.star.text.XTextField xField =
-                    (com.sun.star.text.XTextField)UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextField.class, xNewField );
+                    UnoRuntime.queryInterface(
+            com.sun.star.text.XTextField.class, xNewField );
             assertEquals( "inserted reference field doesn't has correct field result",
                           "J", xField.getPresentation( false ) );
 

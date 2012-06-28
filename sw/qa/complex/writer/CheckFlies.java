@@ -41,15 +41,15 @@ public class CheckFlies {
     @Test public void checkFlies()
         throws com.sun.star.uno.Exception
     {
-        com.sun.star.text.XTextFramesSupplier xTFS = (com.sun.star.text.XTextFramesSupplier)UnoRuntime.queryInterface(
+        com.sun.star.text.XTextFramesSupplier xTFS = UnoRuntime.queryInterface(
             com.sun.star.text.XTextFramesSupplier.class,
             document);
         checkTextFrames(xTFS);
-        com.sun.star.text.XTextGraphicObjectsSupplier xTGOS = (com.sun.star.text.XTextGraphicObjectsSupplier)UnoRuntime.queryInterface(
+        com.sun.star.text.XTextGraphicObjectsSupplier xTGOS = UnoRuntime.queryInterface(
             com.sun.star.text.XTextGraphicObjectsSupplier.class,
             document);
         checkGraphicFrames(xTGOS);
-        com.sun.star.text.XTextEmbeddedObjectsSupplier xTEOS = (com.sun.star.text.XTextEmbeddedObjectsSupplier)UnoRuntime.queryInterface(
+        com.sun.star.text.XTextEmbeddedObjectsSupplier xTEOS = UnoRuntime.queryInterface(
             com.sun.star.text.XTextEmbeddedObjectsSupplier.class,
             document);
         checkEmbeddedFrames(xTEOS);
@@ -86,7 +86,7 @@ public class CheckFlies {
             "Has nonexisting embedded frame",
             xEmbeddedFrames.hasByName("Nonexisting embedded frame"));
 
-        com.sun.star.container.XIndexAccess xEmbeddedFramesIdx = (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
+        com.sun.star.container.XIndexAccess xEmbeddedFramesIdx = UnoRuntime.queryInterface(
             com.sun.star.container.XIndexAccess.class,
             xEmbeddedFrames);
         assertEquals(
@@ -129,7 +129,7 @@ public class CheckFlies {
             "Has nonexisting graphics frame",
             xGraphicFrames.hasByName("Nonexisting graphics frame"));
 
-        com.sun.star.container.XIndexAccess xGraphicFramesIdx = (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
+        com.sun.star.container.XIndexAccess xGraphicFramesIdx = UnoRuntime.queryInterface(
             com.sun.star.container.XIndexAccess.class,
             xGraphicFrames);
         assertEquals(
@@ -173,7 +173,7 @@ public class CheckFlies {
             "Has nonexisting text frame.",
             xTextFrames.hasByName("Nonexisting text frame"));
 
-        com.sun.star.container.XIndexAccess xTextFramesIdx = (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
+        com.sun.star.container.XIndexAccess xTextFramesIdx = UnoRuntime.queryInterface(
             com.sun.star.container.XIndexAccess.class,
             xTextFrames);
         assertEquals(

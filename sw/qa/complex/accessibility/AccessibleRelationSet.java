@@ -61,7 +61,7 @@ public class AccessibleRelationSet {
             try {
                 firstrelation = set.getRelation(0).RelationType;
                 Object oTmp = set.getRelation(0).TargetSet[0];
-                atarget = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
+                atarget = UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
             } catch (IndexOutOfBoundsException e) {
                 fail("Exception when getting relations "+e);
             }
@@ -72,7 +72,7 @@ public class AccessibleRelationSet {
             types[firstrelation]);
 
         XAccessibleText paraTxt2 =
-          (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, para2);
+          UnoRuntime.queryInterface(XAccessibleText.class, para2);
         assertEquals(
             "didn't gain correct target paragraph", atarget.getText(),
             paraTxt2.getText());
@@ -92,13 +92,13 @@ public class AccessibleRelationSet {
                 if ( tmprelation == 1 )
                 {
                   Object oTmp = set.getRelation(0).TargetSet[0];
-                  atargets[0] = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
+                  atargets[0] = UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
                   relationtypes[0] = tmprelation;
                 }
                 else if ( tmprelation == 2 )
                 {
                   Object oTmp = set.getRelation(0).TargetSet[0];
-                  atargets[1] = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
+                  atargets[1] = UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
                   relationtypes[1] = tmprelation;
                 }
                 else
@@ -109,13 +109,13 @@ public class AccessibleRelationSet {
                 if ( tmprelation == 1 )
                 {
                   Object oTmp = set.getRelation(1).TargetSet[0];
-                  atargets[0] = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
+                  atargets[0] = UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
                   relationtypes[0] = tmprelation;
                 }
                 else if ( tmprelation == 2 )
                 {
                   Object oTmp = set.getRelation(1).TargetSet[0];
-                  atargets[1] = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
+                  atargets[1] = UnoRuntime.queryInterface(XAccessibleText.class, oTmp);
                   relationtypes[1] = tmprelation;
                 }
                 else
@@ -132,7 +132,7 @@ public class AccessibleRelationSet {
             types[relationtypes[0]]);
 
         XAccessibleText paraTxt1 =
-          (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, para1);
+          UnoRuntime.queryInterface(XAccessibleText.class, para1);
         assertEquals(
             "didn't gain correct target paragraph", atargets[0].getText(),
             paraTxt1.getText());
@@ -142,7 +142,7 @@ public class AccessibleRelationSet {
             types[relationtypes[1]]);
 
         XAccessibleText paraTxt3 =
-          (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, para3);
+          UnoRuntime.queryInterface(XAccessibleText.class, para3);
         assertEquals(
             "didn't gain correct target paragraph", atargets[1].getText(),
             paraTxt3.getText());
@@ -167,8 +167,7 @@ public class AccessibleRelationSet {
                 oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
         }
 
-        XModel aModel = (XModel)
-        UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 
@@ -187,8 +186,7 @@ public class AccessibleRelationSet {
     }
 
     public XAccessibleRelationSet getAccessibleRelation(XAccessible xAcc) {
-        XAccessibleContext oObj = (XAccessibleContext)
-        UnoRuntime.queryInterface(XAccessibleContext.class, xAcc);
+        XAccessibleContext oObj = UnoRuntime.queryInterface(XAccessibleContext.class, xAcc);
 
         XAccessibleRelationSet set = oObj.getAccessibleRelationSet();
         return set;
