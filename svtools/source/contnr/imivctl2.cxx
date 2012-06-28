@@ -46,10 +46,10 @@ IcnCursor_Impl::~IcnCursor_Impl()
     delete[] pRows;
 }
 
-sal_uInt16 IcnCursor_Impl::GetSortListPos( SvPtrarr* pList, long nValue,
+sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, long nValue,
     int bVertical )
 {
-    sal_uInt16 nCount = (sal_uInt16)pList->Count();
+    sal_uInt16 nCount = rList.size();
     if( !nCount )
         return 0;
 
@@ -57,8 +57,7 @@ sal_uInt16 IcnCursor_Impl::GetSortListPos( SvPtrarr* pList, long nValue,
     long nPrevValue = LONG_MIN;
     while( nCount )
     {
-        const Rectangle& rRect=
-            pView->GetEntryBoundRect((SvxIconChoiceCtrlEntry*)(pList->GetObject(nCurPos)));
+        const Rectangle& rRect = pView->GetEntryBoundRect( rList[nCurPos] );
         long nCurValue;
         if( bVertical )
             nCurValue = rRect.Top();
@@ -70,7 +69,7 @@ sal_uInt16 IcnCursor_Impl::GetSortListPos( SvPtrarr* pList, long nValue,
         nCount--;
         nCurPos++;
     }
-    return pList->Count();
+    return rList.size();
 }
 
 void IcnCursor_Impl::ImplCreate()
@@ -80,8 +79,8 @@ void IcnCursor_Impl::ImplCreate()
 
     SetDeltas();
 
-    pColumns = new SvPtrarr[ nCols ];
-    pRows = new SvPtrarr[ nRows ];
+    pColumns = new IconChoiceMap;
+    pRows = new IconChoiceMap;
 
     size_t nCount = pView->aEntries.size();
     for( size_t nCur = 0; nCur < nCount; nCur++ )
@@ -98,11 +97,13 @@ void IcnCursor_Impl::ImplCreate()
         if( nX >= nCols )
             nX = sal::static_int_cast< short >(nCols - 1);
 
-        sal_uInt16 nIns = GetSortListPos( &pColumns[nX], rRect.Top(), sal_True );
-        pColumns[ nX ].Insert( pEntry, nIns );
+        SvxIconChoiceCtrlEntryPtrVec& rColEntry = (*pColumns)[nX];
+        sal_uInt16 nIns = GetSortListPos( rColEntry, rRect.Top(), sal_True );
+        rColEntry.insert( rColEntry.begin() + nIns, pEntry );
 
-        nIns = GetSortListPos( &pRows[nY], rRect.Left(), sal_False );
-        pRows[ nY ].Insert( pEntry, nIns );
+        SvxIconChoiceCtrlEntryPtrVec& rRowEntry = (*pRows)[nY];
+        nIns = GetSortListPos( rRowEntry, rRect.Left(), sal_False );
+        rRowEntry.insert( rRowEntry.begin() + nIns, pEntry );
 
         pEntry->nX = nX;
         pEntry->nY = nY;
@@ -126,12 +127,15 @@ void IcnCursor_Impl::Clear()
     }
 }
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol,sal_uInt16 nTop,sal_uInt16 nBottom,
-    sal_uInt16, sal_Bool bDown, sal_Bool bSimple  )
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nTop, sal_uInt16 nBottom,
+    sal_uInt16, bool bDown, bool bSimple )
 {
-    DBG_ASSERT(pCurEntry,"SearchCol: No reference entry");
-    SvPtrarr* pList = &(pColumns[ nCol ]);
-    const sal_uInt16 nCount = pList->Count();
+    DBG_ASSERT(pCurEntry, "SearchCol: No reference entry");
+    IconChoiceMap::iterator mapIt = pColumns->find( nCol );
+    if ( mapIt == pColumns->end() )
+        return 0;
+    SvxIconChoiceCtrlEntryPtrVec& rList = mapIt->second;
+    const sal_uInt16 nCount = rList.size();
     if( !nCount )
         return 0;
 
@@ -139,14 +143,13 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol,sal_uInt16 nTo
 
     if( bSimple )
     {
-        sal_uInt16 nListPos = pList->GetPos( pCurEntry );
-        DBG_ASSERT(nListPos!=0xffff,"Entry not in Col-List");
+        SvxIconChoiceCtrlEntryPtrVec::const_iterator it = std::find( rList.begin(), rList.end(), pCurEntry );
+        DBG_ASSERT( it != rList.end(), "Entry not in Col-List" );
         if( bDown )
         {
-            while( nListPos < nCount-1 )
+            while( ++it != rList.end() )
             {
-                nListPos++;
-                SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pList->GetObject( nListPos );
+                SvxIconChoiceCtrlEntry* pEntry = *it;
                 const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
                 if( rRect.Top() > rRefRect.Top() )
                     return pEntry;
@@ -155,16 +158,13 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol,sal_uInt16 nTo
         }
         else
         {
-            while( nListPos )
+            SvxIconChoiceCtrlEntryPtrVec::const_reverse_iterator it2(it);
+            while( ++it2 != rList.rend() )
             {
-                nListPos--;
-                if( nListPos < nCount )
-                {
-                    SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pList->GetObject( nListPos );
-                    const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
-                    if( rRect.Top() < rRefRect.Top() )
-                        return pEntry;
-                }
+                SvxIconChoiceCtrlEntry* pEntry = *it2;
+                const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
+                if( rRect.Top() < rRefRect.Top() )
+                    return pEntry;
             }
             return 0;
         }
@@ -180,7 +180,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol,sal_uInt16 nTo
     SvxIconChoiceCtrlEntry* pResult = 0;
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)(pList->GetObject( nCur ));
+        SvxIconChoiceCtrlEntry* pEntry = rList[ nCur ];
         if( pEntry != pCurEntry )
         {
             sal_uInt16 nY = pEntry->nY;
@@ -201,12 +201,15 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol,sal_uInt16 nTo
     return pResult;
 }
 
-SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow,sal_uInt16 nLeft,sal_uInt16 nRight,
-    sal_uInt16, sal_Bool bRight, sal_Bool bSimple )
+SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nLeft, sal_uInt16 nRight,
+    sal_uInt16, bool bRight, bool bSimple )
 {
     DBG_ASSERT(pCurEntry,"SearchRow: No reference entry");
-    SvPtrarr* pList = &(pRows[ nRow ]);
-    const sal_uInt16 nCount = pList->Count();
+    IconChoiceMap::iterator mapIt = pRows->find( nRow );
+    if ( mapIt == pRows->end() )
+        return 0;
+    SvxIconChoiceCtrlEntryPtrVec& rList = mapIt->second;
+    const sal_uInt16 nCount = rList.size();
     if( !nCount )
         return 0;
 
@@ -214,14 +217,13 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow,sal_uInt16 nLe
 
     if( bSimple )
     {
-        sal_uInt16 nListPos = pList->GetPos( pCurEntry );
-        DBG_ASSERT(nListPos!=0xffff,"Entry not in Row-List");
+        SvxIconChoiceCtrlEntryPtrVec::const_iterator it = std::find( rList.begin(), rList.end(), pCurEntry );
+        DBG_ASSERT( it != rList.end(), "Entry not in Row-List" );
         if( bRight )
         {
-            while( nListPos < nCount-1 )
+            while( ++it != rList.end() )
             {
-                nListPos++;
-                SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pList->GetObject( nListPos );
+                SvxIconChoiceCtrlEntry* pEntry = *it;
                 const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
                 if( rRect.Left() > rRefRect.Left() )
                     return pEntry;
@@ -230,16 +232,13 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow,sal_uInt16 nLe
         }
         else
         {
-            while( nListPos )
+            SvxIconChoiceCtrlEntryPtrVec::const_reverse_iterator it2(it);
+            while( ++it2 != rList.rend() )
             {
-                nListPos--;
-                if( nListPos < nCount )
-                {
-                    SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)pList->GetObject( nListPos );
-                    const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
-                    if( rRect.Left() < rRefRect.Left() )
-                        return pEntry;
-                }
+                SvxIconChoiceCtrlEntry* pEntry = *it;
+                const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
+                if( rRect.Left() < rRefRect.Left() )
+                    return pEntry;
             }
             return 0;
         }
@@ -255,7 +254,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow,sal_uInt16 nLe
     SvxIconChoiceCtrlEntry* pResult = 0;
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pEntry = (SvxIconChoiceCtrlEntry*)(pList->GetObject( nCur ));
+        SvxIconChoiceCtrlEntry* pEntry = rList[ nCur ];
         if( pEntry != pCurEntry )
         {
             sal_uInt16 nX = pEntry->nX;
@@ -488,7 +487,7 @@ void IcnCursor_Impl::SetDeltas()
     }
 }
 
-void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEntry* pRefEntry)
+void IcnCursor_Impl::CreateGridAjustData( IconChoiceMap& rLists, SvxIconChoiceCtrlEntry* pRefEntry)
 {
     if( !pRefEntry )
     {
@@ -497,19 +496,14 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
 
         if( !nGridRows )
             return;
-        for( sal_uInt16 nCurList = 0; nCurList < nGridRows; nCurList++ )
-        {
-            SvPtrarr* pRow = new SvPtrarr;
-            rLists.Insert( (void*)pRow, nCurList );
-        }
         const size_t nCount = pView->aEntries.size();
         for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
             const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
             short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
-            sal_uInt16 nIns = GetSortListPos((SvPtrarr*)rLists[nY],rRect.Left(),sal_False);
-            ((SvPtrarr*)rLists[ nY ])->Insert( pEntry, nIns );
+            sal_uInt16 nIns = GetSortListPos( rLists[nY], rRect.Left(), sal_False );
+            rLists[ nY ].insert( rLists[ nY ].begin() + nIns, pEntry );
         }
     }
     else
@@ -519,8 +513,7 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
         Rectangle rRefRect( pView->CalcBmpRect( pRefEntry ) );
         //const Rectangle& rRefRect = pView->GetEntryBoundRect( pRefEntry );
         short nRefRow = (short)( ((rRefRect.Top()+rRefRect.Bottom())/2) / pView->nGridDY );
-        SvPtrarr* pRow = new SvPtrarr;
-        rLists.Insert( (void*)pRow, 0 );
+        SvxIconChoiceCtrlEntryPtrVec& rRow = rLists[0];
         size_t nCount = pView->aEntries.size();
         for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
@@ -530,23 +523,17 @@ void IcnCursor_Impl::CreateGridAjustData( SvPtrarr& rLists, SvxIconChoiceCtrlEnt
             short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
             if( nY == nRefRow )
             {
-                sal_uInt16 nIns = GetSortListPos( pRow, rRect.Left(), sal_False );
-                pRow->Insert( pEntry, nIns );
+                sal_uInt16 nIns = GetSortListPos( rRow, rRect.Left(), sal_False );
+                rRow.insert( rRow.begin() + nIns, pEntry );
             }
         }
     }
 }
 
 //static
-void IcnCursor_Impl::DestroyGridAdjustData( SvPtrarr& rLists )
+void IcnCursor_Impl::DestroyGridAdjustData( IconChoiceMap& rLists )
 {
-    const sal_uInt16 nCount = rLists.Count();
-    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
-    {
-        SvPtrarr* pArr = (SvPtrarr*)rLists[ nCur ];
-        delete pArr;
-    }
-    rLists.Remove( 0, rLists.Count() );
+    rLists.clear();
 }
 
 IcnGridMap_Impl::IcnGridMap_Impl(SvxIconChoiceCtrl_Impl* pView)

@@ -39,7 +39,6 @@
 #include <limits.h>
 
 #include <svtools/ivctrl.hxx>
-#include <svl/svarray.hxx>
 #include <boost/ptr_container/ptr_map.hpp>
 
 class IcnCursor_Impl;
@@ -159,6 +158,7 @@ public:
 //
 
 typedef boost::ptr_map<sal_uInt16, SvxIconChoiceCtrlColumnInfo> SvxIconChoiceCtrlColumnInfoMap;
+typedef std::vector<SvxIconChoiceCtrlEntry*> SvxIconChoiceCtrlEntryPtrVec;
 
 class SvxIconChoiceCtrl_Impl
 {
@@ -288,7 +288,7 @@ class SvxIconChoiceCtrl_Impl
     Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
     void                ClipAtVirtOutRect( Rectangle& rRect ) const;
-    void                AdjustAtGrid( const SvPtrarr& rRow, SvxIconChoiceCtrlEntry* pStart=0 );
+    void                AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& rRow, SvxIconChoiceCtrlEntry* pStart=0 );
     Point               AdjustAtGrid(
                             const Rectangle& rCenterRect, // balance point of object (typically Bmp-Rect)
                             const Rectangle& rBoundRect
@@ -571,11 +571,13 @@ public:
 
 // ----------------------------------------------------------------------------------------------
 
+typedef std::map<sal_uInt16, SvxIconChoiceCtrlEntryPtrVec> IconChoiceMap;
+
 class IcnCursor_Impl
 {
     SvxIconChoiceCtrl_Impl* pView;
-    SvPtrarr*               pColumns;
-    SvPtrarr*               pRows;
+    IconChoiceMap*          pColumns;
+    IconChoiceMap*          pRows;
     long                    nCols;
     long                    nRows;
     short                   nDeltaWidth;
@@ -585,14 +587,17 @@ class IcnCursor_Impl
     void                    ImplCreate();
     void                    Create() {  if( !pColumns ) ImplCreate(); }
 
-    sal_uInt16              GetSortListPos( SvPtrarr* pList, long nValue, int bVertical);
+    sal_uInt16              GetSortListPos(
+                                SvxIconChoiceCtrlEntryPtrVec& rList,
+                                long nValue,
+                                int bVertical);
     SvxIconChoiceCtrlEntry* SearchCol(
                                 sal_uInt16 nCol,
                                 sal_uInt16 nTop,
                                 sal_uInt16 nBottom,
                                 sal_uInt16 nPref,
-                                sal_Bool bDown,
-                                sal_Bool bSimple
+                                bool bDown,
+                                bool bSimple
                             );
 
     SvxIconChoiceCtrlEntry* SearchRow(
@@ -600,8 +605,8 @@ class IcnCursor_Impl
                                 sal_uInt16 nRight,
                                 sal_uInt16 nLeft,
                                 sal_uInt16 nPref,
-                                sal_Bool bRight,
-                                sal_Bool bSimple
+                                bool bRight,
+                                bool bSimple
                             );
 
 public:
@@ -617,8 +622,8 @@ public:
     // Creates a list of entries for every row (height = nGridDY) sorted by
     // BoundRect.Left(). A list may be empty. The lists become the property of
     // the caller and have to be deleted with DestroyGridAdjustData.
-    void                    CreateGridAjustData( SvPtrarr& pLists, SvxIconChoiceCtrlEntry* pRow=0);
-    static void             DestroyGridAdjustData( SvPtrarr& rLists );
+    void                    CreateGridAjustData( IconChoiceMap& pLists, SvxIconChoiceCtrlEntry* pRow=0);
+    static void             DestroyGridAdjustData( IconChoiceMap& rLists );
 };
 
 // ----------------------------------------------------------------------------------------------

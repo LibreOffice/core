@@ -2983,19 +2983,19 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl)
 // else: align all entries of the row from pStart on (including pStart)
 void SvxIconChoiceCtrl_Impl::AdjustEntryAtGrid( SvxIconChoiceCtrlEntry* pStart )
 {
-    SvPtrarr aLists;
+    IconChoiceMap aLists;
     pImpCursor->CreateGridAjustData( aLists, pStart );
-    const sal_uInt16 nCount = aLists.Count();
+    const sal_uInt16 nCount = aLists.size();
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
-        AdjustAtGrid( *(SvPtrarr*)aLists[ nCur ], pStart );
+        AdjustAtGrid( aLists[ nCur ], pStart );
     IcnCursor_Impl::DestroyGridAdjustData( aLists );
     CheckScrollBars();
 }
 
 // align a row, might expand width, doesn't break the line
-void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvPtrarr& rRow, SvxIconChoiceCtrlEntry* pStart )
+void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& rRow, SvxIconChoiceCtrlEntry* pStart )
 {
-    if( !rRow.Count() )
+    if( rRow.empty() )
         return;
 
     sal_Bool bGo;
@@ -3005,9 +3005,9 @@ void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvPtrarr& rRow, SvxIconChoiceCt
         bGo = sal_False;
 
     long nCurRight = 0;
-    for( sal_uInt16 nCur = 0; nCur < rRow.Count(); nCur++ )
+    for( sal_uInt16 nCur = 0; nCur < rRow.size(); nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pCur = (SvxIconChoiceCtrlEntry*)rRow[ nCur ];
+        SvxIconChoiceCtrlEntry* pCur = rRow[ nCur ];
         if( !bGo && pCur == pStart )
             bGo = sal_True;
 
