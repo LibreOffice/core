@@ -32,10 +32,6 @@ USE_PCH :=
 ENABLE_PCH :=
 PRJINC:=..$/..
 
-.IF "$(GUI)"=="OS2"
-TARGET = deplgui
-.ENDIF
-
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 DLLPRE =
@@ -56,7 +52,7 @@ SLOFILES = \
         $(SLO)$/descedit.obj
 
 .IF "$(GUI)"=="OS2"
-SHL1TARGET = $(TARGET)$(DLLPOSTFIX)
+SHL1TARGET = deplgui$(DLLPOSTFIX)
 .ELSE
 SHL1TARGET = $(TARGET)$(DLLPOSTFIX).uno
 .ENDIF

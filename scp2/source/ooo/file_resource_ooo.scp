@@ -53,13 +53,8 @@ STD_RES_FILE( gid_File_Res_Gal, gal )
 
 STD_RES_FILE( gid_File_Res_Imp, imp )
 
-#ifdef OS2
-STD_RES_FILE( gid_File_Res_Deployment, deploy )
-STD_RES_FILE( gid_File_Res_DeploymentGui, deplgui )
-#else
 STD_RES_FILE( gid_File_Res_Deployment, deployment )
 STD_RES_FILE( gid_File_Res_DeploymentGui, deploymentgui )
-#endif
 
 STD_RES_FILE( gid_File_Res_Ofa, ofa )
 

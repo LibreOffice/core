@@ -29,10 +29,6 @@ ENABLE_EXCEPTIONS = TRUE
 #USE_DEFFILE = TRUE
 NO_BSYMBOLIC = TRUE
 
-.IF "$(GUI)"=="OS2"
-TARGET = deploy
-.ENDIF
-
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
@@ -41,7 +37,7 @@ INCPRE += inc
 DLLPRE =
 
 .IF "$(GUI)"=="OS2"
-SHL1TARGET = $(TARGET)$(DLLPOSTFIX)
+SHL1TARGET = deploy$(DLLPOSTFIX)
 .ELSE
 SHL1TARGET = $(TARGET)$(DLLPOSTFIX).uno
 .ENDIF
