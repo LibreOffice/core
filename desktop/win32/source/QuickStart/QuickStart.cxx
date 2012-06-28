@@ -5,16 +5,13 @@
 #include "StdAfx.h"
 #include "resource.h"
 #include <systools/win32/uwinapi.h>
+#include <systools/win32/qswin32.h>
 #include <stdio.h>
-
-// message used to communicate with soffice
-#define LISTENER_WINDOWCLASS    "SO Listener Class"
-#define KILLTRAY_MESSAGE        "SO KillTray"
 
 bool SofficeRuns()
 {
     // check for soffice by searching the communication window
-    return ( FindWindowEx( NULL, NULL, LISTENER_WINDOWCLASS, NULL ) == NULL ) ? false : true;
+    return ( FindWindowEx( NULL, NULL, QUICKSTART_CLASSNAME, NULL ) == NULL ) ? false : true;
 }
 
 bool launchSoffice( )
@@ -57,11 +54,11 @@ int APIENTRY WinMain(HINSTANCE /*hInstance*/,
     {
         if ( 0 == strcmp( __argv[i], "--killtray" ) )
         {
-            HWND    hwndTray = FindWindow( LISTENER_WINDOWCLASS, NULL );
+            HWND    hwndTray = FindWindow( QUICKSTART_CLASSNAME, NULL );
 
             if ( hwndTray )
             {
-                UINT    uMsgKillTray = RegisterWindowMessage( KILLTRAY_MESSAGE );
+                UINT    uMsgKillTray = RegisterWindowMessage( SHUTDOWN_QUICKSTART_MESSAGE );
                 SendMessage( hwndTray, uMsgKillTray, 0, 0 );
             }
 
