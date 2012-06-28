@@ -229,9 +229,9 @@ public:
 
     bool IsColor() const { return maColor.GetTransparency() == 0; }
 
-    Size            CalcWindowSizePixel( const Size& rItemSize,
-                                         sal_uInt16 nCalcCols = 0,
-                                         sal_uInt16 nCalcLines = 0 );
+    Size CalcWindowSizePixel(sal_uInt16 nCalcCols, sal_uInt16 nCalcLines,
+                             sal_uInt16 nItemWidth, sal_uInt16 nItemHeight,
+                             sal_uInt16 nItemSpace);
 
     long            GetScrollWidth() const;
 

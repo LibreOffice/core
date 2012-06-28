@@ -1255,42 +1255,16 @@ bool ThumbnailView::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     return true;
 }
 
-Size ThumbnailView::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCols,
-                                    sal_uInt16 nDesireLines )
+Size ThumbnailView::CalcWindowSizePixel (sal_uInt16 nCols, sal_uInt16 nLines,
+                                         sal_uInt16 nItemWidth, sal_uInt16 nItemHeight,
+                                         sal_uInt16 nItemSpace)
 {
-    size_t nCalcCols = nDesireCols;
-    size_t nCalcLines = nDesireLines;
+    Size aSize(nItemWidth*nCols, nItemHeight*nLines);
 
-    if ( !nCalcCols )
-    {
-        if ( mnUserCols )
-            nCalcCols = mnUserCols;
-        else
-            nCalcCols = 1;
-    }
+    aSize.Width()  += nItemSpace*(nCols+1);
+    aSize.Height() += nItemSpace*(nLines+1);
 
-    if ( !nCalcLines )
-    {
-        nCalcLines = mnVisLines;
-
-        if ( mnUserVisLines )
-            nCalcLines = mnUserVisLines;
-        else
-        {
-            // Floor( (M+N-1)/N )==Ceiling( M/N )
-            nCalcLines = (mItemList.size()+nCalcCols-1) / nCalcCols;
-            if ( !nCalcLines )
-                nCalcLines = 1;
-        }
-    }
-
-    Size        aSize( rItemSize.Width()*nCalcCols, rItemSize.Height()*nCalcLines );
-
-    if ( mnSpacing )
-    {
-        aSize.Width()  += mnSpacing*(nCalcCols-1);
-        aSize.Height() += mnSpacing*(nCalcLines-1);
-    }
+    aSize.Height() += mnHeaderHeight;
 
     // sum possible ScrollBar width
     aSize.Width() += GetScrollWidth();
