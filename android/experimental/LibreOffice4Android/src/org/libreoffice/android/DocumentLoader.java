@@ -95,7 +95,7 @@ public class DocumentLoader
     extends Activity
 {
     private static final String TAG = "DocumentLoader";
-
+    
     // Size of a small virtual (bitmap) device used to find out page count and
     // page sizes
     private static final int SMALLSIZE = 128;
@@ -152,7 +152,7 @@ public class DocumentLoader
                 flipper.setOutAnimation(outToLeft);
 
                 flipper.showNext();
-
+                
                 ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber + PAGECACHE_PLUSMINUS);
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
@@ -523,7 +523,13 @@ public class DocumentLoader
         View thumbnailView;
         //PageState state = PageState.NONEXISTENT;
         Bitmap bm;
-
+        final float scale;
+        final int widthInPx;
+        final int heightInPx;
+        final int defaultWidthPx = 120;
+        final int defaultHeightPx = 120;
+        final int thumbnailPaddingDp = 10;
+        		
         class ThumbLoadTask
             extends AsyncTask<Integer, Void, Integer>
         {
@@ -535,8 +541,8 @@ public class DocumentLoader
                     return -1;
 
                 //state = PageState.LOADING;
-                ByteBuffer bb = renderPage( number , 120 , 120);
-                bm = Bitmap.createBitmap( 120 , 120 , Bitmap.Config.ARGB_8888);
+                ByteBuffer bb = renderPage( number , widthInPx , heightInPx);
+                bm = Bitmap.createBitmap( widthInPx , heightInPx , Bitmap.Config.ARGB_8888);
                 bm.copyPixelsFromBuffer(bb);
 
                 return number;
@@ -552,7 +558,8 @@ public class DocumentLoader
                 
 				ImageView thumbImage = new ImageView(DocumentLoader.this);//(ImageView)findViewById( R.id.thumbnail );
                 thumbImage.setImageBitmap(bm);
-
+                int paddingPx = (int) (thumbnailPaddingDp* scale + 0.5f);
+                thumbImage.setPadding( paddingPx , 0 , paddingPx , 0 );
                 thumbImage.setScaleY(-1);
 
 				Log.i( TAG, Integer.toString( thumbImage.getWidth() ) );
@@ -570,15 +577,31 @@ public class DocumentLoader
             if (number >= 0)
                 waitView.setText("Page " + (number+1) + ", wait...");
             //state = PageState.NONEXISTENT;
-
             if (number >= 0) {
                 new ThumbLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, number);
             }
         }
 
+        ThumbnailView(int number , int widthInDp , int heightInDp)
+        {
+            super(DocumentLoader.this);
+            scale = getContext().getResources().getDisplayMetrics().density;
+            widthInPx = (int) (widthInDp * scale + 0.5f);
+            heightInPx = (int) (heightInDp* scale + 0.5f);
+			waitView = new TextView( DocumentLoader.this );
+            thumbnailView = inflater.inflate( R.layout.navigation_grid_item , null);
+
+            display(number);
+            
+            
+        }
+        
         ThumbnailView(int number)
         {
             super(DocumentLoader.this);
+            scale = getContext().getResources().getDisplayMetrics().density;
+            widthInPx = defaultWidthPx;
+            heightInPx = defaultHeightPx;
 			waitView = new TextView( DocumentLoader.this );
             thumbnailView = inflater.inflate( R.layout.navigation_grid_item , null);
 
@@ -589,9 +612,21 @@ public class DocumentLoader
     }
 
     class DocumentLoadTask
-        extends AsyncTask<String, Void, Void>
+        extends AsyncTask<String, Void, Integer>
     {
-        protected Void doInBackground(String... params)
+    	protected void onPreExecute (){
+    		TextView waitView = new TextView(DocumentLoader.this);
+            waitView.setTextSize(24);
+            waitView.setGravity(Gravity.CENTER);
+            waitView.setBackgroundColor(Color.WHITE);
+            waitView.setTextColor(Color.BLACK);
+    		waitView.setText("Page " + (1) + ", wait...");
+    		flipper = new ViewFlipper(DocumentLoader.this);
+			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
+            matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            flipper.addView( waitView , 0 , matchParent);
+    	}
+        protected Integer doInBackground(String... params)
         {
             try {
                 String url = params[0];
@@ -645,7 +680,46 @@ public class DocumentLoader
                 e.printStackTrace(System.err);
                 finish();
             }
-            return null;
+            return new Integer( pageCount );
+        }
+    
+        protected void onPostExecute(Integer result){
+        	Log.i(TAG, "onPostExecute: " + result);
+            if (result == -1)
+                return;
+          //flipper = new ViewFlipper(this);
+			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
+            matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+            flipper.removeViewAt( 0 );	
+            
+            //Should check that pages exist ie >=0 && < pageCount
+            flipper.addView(new PageViewer(0), 0, matchParent);
+            for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
+                flipper.addView(new PageViewer(i+1), i+1, matchParent);
+            for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
+                flipper.addView(new PageViewer(-1), PAGECACHE_PLUSMINUS + i+1, matchParent);
+                
+            ll = (LinearLayout)findViewById( R.id.navigator);
+            inflater = (LayoutInflater) getApplicationContext().getSystemService(
+				Context.LAYOUT_INFLATER_SERVICE);
+
+			
+			
+			for( int i = 0; i < result.intValue() ; i++ ){
+				ThumbnailView thumb = new ThumbnailView( i , (int)(120.0f / Math.sqrt(2) ) , 120 );
+				final int pos = i;
+				thumb.setOnClickListener(new OnClickListener() {
+			
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Log.d("nav" , Integer.toString( pos ) );
+						openPageWithPrefetching( pos );
+					}
+				});
+				ll.addView ( thumb );
+			}
         }
     }
 
@@ -771,14 +845,18 @@ public class DocumentLoader
 
             Log.i(TAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");
 
+            setContentView( R.layout.document_viewer );
             // Load the wanted document
             new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
 
-			setContentView( R.layout.document_viewer );
+			/*
             //flipper = new ViewFlipper(this);
 			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
+            // should have document load task publish pageCount before this happens: Shouldn't try to pre-fetch
+            // non-existant pages && need to know how many navigation thumbnails to render.
+            // Should put these on anothe serial executor?
             flipper.addView(new PageViewer(0), 0, matchParent);
             for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
                 flipper.addView(new PageViewer(i+1), i+1, matchParent);
@@ -788,20 +866,11 @@ public class DocumentLoader
             ll = (LinearLayout)findViewById( R.id.navigator);
             inflater = (LayoutInflater) getApplicationContext().getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
-            
-			
-			
-			//ThumbnailView pv = new ThumbnailView(0);
-            /*Bitmap thumbnailBitmap = Bitmap.createBitmap(120, 120, Bitmap.Config.ARGB_8888);
-            thumbnailBitmap.copyPixelsFromBuffer(bb);
-            ImageView pageImage = (ImageView)findViewById( R.id.thumbnail );
-            pageImage.setImageBitmap( thumbnailBitmap );
-			*/
+
 			
 			
 			for( int i = 0; i < 2 ; i++ ){
-				View thumbnailView = inflater.inflate( R.layout.navigation_grid_item , null );
-				ThumbnailView thumb = new ThumbnailView( i );
+				ThumbnailView thumb = new ThumbnailView( i , (int)(120.0f / Math.sqrt(2) ) , 120 );
 				final int pos = i;
 				thumb.setOnClickListener(new OnClickListener() {
 			
@@ -809,11 +878,11 @@ public class DocumentLoader
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						Log.d("nav" , Integer.toString( pos ) );
-						//(PageViewer)flipper.getChildAt( (flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display( ( (PageViewer)flipper.getCurrentView() ).currentPageNumber + PAGECACHE_PLUSMINUS);
+						
 					}
 				});
 				ll.addView ( thumb );
-			}
+			}*/
             
 	    	
         }
@@ -843,6 +912,26 @@ public class DocumentLoader
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+    
+    /* if page is more than 2*+- away then no cache over lap
+     * load page && fill cache
+     * if page is */
+    public void openPageWithPrefetching( int number ){
+    	//as a first draft clear an refill "cache" on load.
+    	//should move views where "cache window" overlaps 
+    	flipper.removeAllViews();
+    	flipper.addView(new PageViewer(number), 0, matchParent);
+        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
+        	if( number + i+1 >= 0 && number + i+1 < pageCount){//pageCount will always be correctly defined when this is called (famous last words)
+        		flipper.addView(new PageViewer( number + i+1), i+1, matchParent);
+        	}
+        }
+        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
+        	if( number + i+1 >= 0 && number + i+1 < pageCount){
+                flipper.addView(new PageViewer( number - (i+1)), PAGECACHE_PLUSMINUS + i+1, matchParent);
+        	}
+        }
+    }
 }
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:
