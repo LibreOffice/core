@@ -43,13 +43,13 @@ public class CrashThread extends Thread {
 
     public void run() {
         try{
-            XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
+            XModel xModel = UnoRuntime.queryInterface(XModel.class, xDoc);
 
             XController xController = xModel.getCurrentController();
-            XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface(
                                                   XDispatchProvider.class,
                                                   xController);
-            XURLTransformer xParser = (XURLTransformer) UnoRuntime.queryInterface(
+            XURLTransformer xParser = UnoRuntime.queryInterface(
                                               XURLTransformer.class,
                                               msf.createInstance(
                                                       "com.sun.star.util.URLTransformer"));

@@ -350,7 +350,7 @@ public class AutoSave
                 if (nRetry > 0)
                 {
                     --nRetry;
-                    long nWait = (long)aRandom.nextInt(30000); // 30 sec.
+                    long nWait = aRandom.nextInt(30000); // 30 sec.
                     try
                     {
                         m_aLog.log(Protocol.TYPE_INFO, "sleep for "+nWait+" ms");
@@ -428,7 +428,7 @@ public class AutoSave
             XInterface xDoc = createBigCalcDoc();
             try
             {
-                long nWait = (long)aRandom.nextInt(120000);
+                long nWait = aRandom.nextInt(120000);
                 m_aLog.log(Protocol.TYPE_INFO, "sleep for "+nWait+" ms");
                 synchronized(this)
                 {

@@ -32,28 +32,12 @@ class KeyIdentifierInfo
     }
 }
 
-class IdentifierHashMap extends HashMap
+class IdentifierHashMap extends HashMap<String,Short>
 {
-    public void put(String sIdentifier, Short nCode)
-    {
-        super.put(sIdentifier, nCode);
-    }
-    public Short get(String sIdentifier)
-    {
-        return (Short)super.get(sIdentifier);
-    }
 }
 
-class CodeHashMap extends HashMap
+class CodeHashMap extends HashMap<Short,String>
 {
-    public void put(Short nCode, String sIdentifier)
-    {
-        super.put(nCode, sIdentifier);
-    }
-    public String get(Short nCode)
-    {
-        return (String)super.get(nCode);
-    }
 }
 
 public class KeyMapping
@@ -154,6 +138,6 @@ public class KeyMapping
 
     public String mapCode2Identifier(short nCode)
     {
-        return (String)aCodeHashMap.get(new Short(nCode));
+        return aCodeHashMap.get(new Short(nCode));
     }
 }

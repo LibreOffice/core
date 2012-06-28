@@ -219,7 +219,7 @@ public class checkdispatchapi
         {
             final PropertyValue args = new PropertyValue();
             args.Name = "ActiveConnection";
-            args.Value = (Object) db.defaultConnection();
+            args.Value = db.defaultConnection();
 
             XFrame xFrame = impl_createNewFrame();
 
@@ -401,7 +401,7 @@ public class checkdispatchapi
                 }
 
                 // check for duplicates (and by the way, if the info item match the requested group)
-                HashMap aCheckMap = new HashMap(c2);
+                HashMap<String, String> aCheckMap = new HashMap<String, String>(c2);
                 for (i2 = 0; i2 < c2; ++i2)
                 {
                     DispatchInformation aInfo = lInfos[i2];

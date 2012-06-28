@@ -108,7 +108,7 @@ public class RecoveryTest extends ComplexTestCase {
      * and the values are com sun.star.awt.Rectangle.
      * @see com.sun.star.awt.Rectangle
      */
-    private HashMap windowsPosSize = new HashMap();
+    private HashMap<String, Rectangle> windowsPosSize = new HashMap<String, Rectangle>();
 
     /**
      * A function to tell the framework, which test functions are available.
@@ -258,17 +258,17 @@ public class RecoveryTest extends ComplexTestCase {
         while (allComp.hasMoreElements()){
             try{
                 // get all components from the desktop
-                XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
+                XComponent xComponent = UnoRuntime.queryInterface(
                                        XComponent.class, allComp.nextElement());
 
-                XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xComponent);
+                XModel xModel = UnoRuntime.queryInterface(XModel.class, xComponent);
 
                 String frameName = xModel.getCurrentController().getFrame().getName();
 
                 // check if this frame was used in creation of test environment
                 if (windowsPosSize.containsKey(frameName)){
 
-                    Rectangle oldRect = (Rectangle) windowsPosSize.get(frameName);
+                    Rectangle oldRect = windowsPosSize.get(frameName);
 
                     XWindow xWindow = xModel.getCurrentController().getFrame().getContainerWindow();
                     Rectangle newRect = xWindow.getPosSize();
@@ -340,7 +340,7 @@ public class RecoveryTest extends ComplexTestCase {
 
             assure("could not get Recovery Window",(oDialog != null));
 
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oDialog);
+            XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, oDialog);
 
             UITools oUITools = new UITools(xMSF, xWindow);
 
@@ -377,7 +377,7 @@ public class RecoveryTest extends ComplexTestCase {
             XDialog oDialog = rt.getActiveDialog(xMSF);
             assure("could not get CrashReporter Dialog", oDialog != null);
 
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oDialog);
+            XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, oDialog);
 
             log.println(oDialog.getTitle());
 
@@ -442,7 +442,7 @@ public class RecoveryTest extends ComplexTestCase {
 
             assure("could not get Recovery Dialog at start of office", (oDialog != null), CONTINUE);
 
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, oDialog);
+            XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, oDialog);
             log.println("got the following dialog: '" +oDialog.getTitle() + "'");
 
             UITools oUITools = new UITools(xMSF, xWindow);
@@ -628,7 +628,7 @@ public class RecoveryTest extends ComplexTestCase {
         log.println("creating Impress document '" + frameName + "'");
         XComponent xImpressDoc = createNewImpressDoc(frameName);
         if (withContent) fillImpressDocWithContent(xImpressDoc);
-        positioningDocument((XModel) UnoRuntime.queryInterface(XModel.class,
+        positioningDocument(UnoRuntime.queryInterface(XModel.class,
                                                                xImpressDoc));
     }
 
@@ -636,7 +636,7 @@ public class RecoveryTest extends ComplexTestCase {
         log.println("creating Draw document '" + frameName + "'");
         XComponent xDrawDoc = createNewDrawDoc(frameName);
         if (withContent) fillDrawDocWithContent(xDrawDoc);
-        positioningDocument((XModel) UnoRuntime.queryInterface(XModel.class,
+        positioningDocument(UnoRuntime.queryInterface(XModel.class,
                                                                  xDrawDoc));
     }
 
@@ -644,7 +644,7 @@ public class RecoveryTest extends ComplexTestCase {
         log.println("creating Calc document '" + frameName + "'");
         XSpreadsheetDocument xSpreadsheetDoc = createNewCalcDoc(frameName);
         if (withContent) fillCalcDocWithContent(xSpreadsheetDoc);
-        positioningDocument((XModel) UnoRuntime.queryInterface(XModel.class,
+        positioningDocument(UnoRuntime.queryInterface(XModel.class,
                                                            xSpreadsheetDoc));
     }
 
@@ -690,7 +690,7 @@ public class RecoveryTest extends ComplexTestCase {
         log.println("creating Math document '" + frameName + "'");
         XComponent xMathDoc = createNewMathDoc(frameName);
         if (withContent) fillMathDocWithContent(xMathDoc);
-        positioningDocument((XModel) UnoRuntime.queryInterface(XModel.class,
+        positioningDocument(UnoRuntime.queryInterface(XModel.class,
                                                                xMathDoc));
     }
 
@@ -708,7 +708,7 @@ public class RecoveryTest extends ComplexTestCase {
     private void fillMathDocWithContent(XComponent xMathDoc){
         // setting a formula in document
         final String expFormula = "sum a cdot b";
-        final XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface
+        final XPropertySet xPS = UnoRuntime.queryInterface
             (XPropertySet.class, xMathDoc);
         try {
             xPS.setPropertyValue("Formula", expFormula);
@@ -742,20 +742,17 @@ public class RecoveryTest extends ComplexTestCase {
     private void fillImpressDocWithContent(XComponent xImpressDoc){
 
         log.println( "get presentation" );
-        XPresentationSupplier oPS = (XPresentationSupplier)
-            UnoRuntime.queryInterface(XPresentationSupplier.class, xImpressDoc);
+        XPresentationSupplier oPS = UnoRuntime.queryInterface(XPresentationSupplier.class, xImpressDoc);
         XInterface oObj = oPS.getPresentation();
 
         log.println( "get custom presentation" );
-        XCustomPresentationSupplier oCPS = (XCustomPresentationSupplier)
-            UnoRuntime.queryInterface(
-                XCustomPresentationSupplier.class, xImpressDoc);
+        XCustomPresentationSupplier oCPS = UnoRuntime.queryInterface(
+            XCustomPresentationSupplier.class, xImpressDoc);
         XNameContainer xCP = oCPS.getCustomPresentations();
 
         XInterface oInstance = null;
 
-        XSingleServiceFactory oSingleMSF = (XSingleServiceFactory)
-            UnoRuntime.queryInterface(XSingleServiceFactory.class, xCP);
+        XSingleServiceFactory oSingleMSF = UnoRuntime.queryInterface(XSingleServiceFactory.class, xCP);
 
         try{
             oInstance = (XInterface) oSingleMSF.createInstance();
@@ -790,11 +787,9 @@ public class RecoveryTest extends ComplexTestCase {
     }
 
     private void fillDrawDocWithContent(XComponent xDrawDoc){
-        XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
-            UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
+        XDrawPagesSupplier oDPS = UnoRuntime.queryInterface(XDrawPagesSupplier.class, xDrawDoc);
         XDrawPages oDPn = oDPS.getDrawPages();
-        XIndexAccess oDPi = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
+        XIndexAccess oDPi = UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
         XDrawPage oDP = null;
         try {
             oDP = (XDrawPage) AnyConverter.toObject(
@@ -812,7 +807,7 @@ public class RecoveryTest extends ComplexTestCase {
 
         //get a Shape
         log.println( "getting Shape" );
-        XShapes oShapes = (XShapes) UnoRuntime.queryInterface
+        XShapes oShapes = UnoRuntime.queryInterface
             (XShapes.class, oDP);
         XInterface oObj = SOF.createShape
             (xDrawDoc, 5000, 3500, 7500, 5000, "Rectangle");
@@ -824,11 +819,10 @@ public class RecoveryTest extends ComplexTestCase {
         XShape oShape = SOF.createShape
             (xDrawDoc, 3000, 4500, 15000, 1000, "Ellipse");
         oShapes.add((XShape) oObj);
-        oShapes.add((XShape) oShape);
+        oShapes.add(oShape);
 
 
-        XPropertySet oShapeProps = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oObj);
+        XPropertySet oShapeProps = UnoRuntime.queryInterface(XPropertySet.class, oObj);
         XStyle aStyle = null;
         try {
             aStyle = (XStyle) AnyConverter.toObject(
@@ -853,7 +847,7 @@ public class RecoveryTest extends ComplexTestCase {
         log.println("creating Writer document '" + frameName + "'");
         XTextDocument xTextDoc = createNewWriterDoc(frameName);
         if (withContent) fillWriterDocWithContent(xTextDoc);
-        positioningDocument((XModel) UnoRuntime.queryInterface(XModel.class,
+        positioningDocument(UnoRuntime.queryInterface(XModel.class,
                                                                  xTextDoc));
     }
 
@@ -922,7 +916,7 @@ public class RecoveryTest extends ComplexTestCase {
 
             XCellRange testRange = oSheet.getCellRangeByName("$A$1:$D$4");
 
-            XSheetCellRange testSheetRange = (XSheetCellRange) UnoRuntime.queryInterface(
+            XSheetCellRange testSheetRange = UnoRuntime.queryInterface(
                                                      XSheetCellRange.class,
                                                      testRange);
             oSheet.getCellByPosition(1, 1).setValue(1);

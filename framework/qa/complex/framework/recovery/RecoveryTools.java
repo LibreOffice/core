@@ -73,7 +73,7 @@ public class RecoveryTools {
      */
     public XDialog getActiveDialog( XMultiServiceFactory xMSF){
         XWindow xWin = getActiveWindow(xMSF);
-        return (XDialog) UnoRuntime.queryInterface(XDialog.class, xWin);
+        return UnoRuntime.queryInterface(XDialog.class, xWin);
     }
 
     public XWindow getActiveWindow( XMultiServiceFactory xMSF){
@@ -84,10 +84,9 @@ public class RecoveryTools {
           return null;
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, xToolKit);
+        XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, xToolKit);
         Object atw = tk.getActiveTopWindow();
-        return (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
+        return UnoRuntime.queryInterface(XWindow.class, atw);
     }
 
     /**
@@ -149,10 +148,10 @@ public class RecoveryTools {
         throws com.sun.star.io.IOException
     {
         try{
-            HashMap recFiles = getRecoveryFiles();
+            HashMap<String, String> recFiles = getRecoveryFiles();
 
-            String recoveryFolder = (String) recFiles.get("recoveryFolder");
-            String recoveryXCU = (String) recFiles.get("recoveryXCU");
+            String recoveryFolder = recFiles.get("recoveryFolder");
+            String recoveryXCU = recFiles.get("recoveryXCU");
 
             log.println("try to remove content of '" + recoveryFolder + "'");
 
@@ -174,7 +173,7 @@ public class RecoveryTools {
         }
     }
 
-    public HashMap getRecoveryFiles()
+    public HashMap<String, String> getRecoveryFiles()
         throws com.sun.star.io.IOException
     {
         try{
@@ -194,7 +193,7 @@ public class RecoveryTools {
 
             String recoveryXCU = utils.getSystemURL(userPath + "/user/registry/data/org/openoffice/Office/Recovery.xcu");
 
-            HashMap recFiles = new HashMap();
+            HashMap<String, String> recFiles = new HashMap<String, String>();
 
             recFiles.put("recoveryFolder", recoveryFolder);
             recFiles.put("recoveryXCU", recoveryXCU);
@@ -213,7 +212,7 @@ public class RecoveryTools {
      */
     public boolean closeOffice(XMultiServiceFactory xMSF) {
         try {
-            XDesktop desk = (XDesktop) UnoRuntime.queryInterface(
+            XDesktop desk = UnoRuntime.queryInterface(
                     XDesktop.class, xMSF.createInstance(
                     "com.sun.star.frame.Desktop"));
             xMSF = null;
@@ -322,7 +321,7 @@ public class RecoveryTools {
     public void copyRecoveryData(boolean backup)
         throws com.sun.star.io.IOException, java.io.IOException
     {
-        HashMap recFiles = null;
+        HashMap<String, String> recFiles = null;
 
         try{
             recFiles = getRecoveryFiles();
@@ -331,8 +330,8 @@ public class RecoveryTools {
         }
 
         try{
-            String recoveryFolder = (String) recFiles.get("recoveryFolder");
-            String recoveryXCU = (String) recFiles.get("recoveryXCU");
+            String recoveryFolder = recFiles.get("recoveryFolder");
+            String recoveryXCU = recFiles.get("recoveryXCU");
 
             File recFolder = new File(recoveryFolder);
             File recFolderBackup = new File(recoveryFolder+".recoveryTest");

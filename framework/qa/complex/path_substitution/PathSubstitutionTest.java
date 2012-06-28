@@ -226,17 +226,17 @@ public class PathSubstitutionTest
     private class VariableContainer
     {
 
-        public ArrayList varName;
-        public ArrayList varValue;
-        public ArrayList substAtBegin;
-        public ArrayList resubst;
+        public ArrayList<String> varName;
+        public ArrayList<String> varValue;
+        public ArrayList<Boolean> substAtBegin;
+        public ArrayList<Boolean> resubst;
 
         public VariableContainer()
         {
-            varName = new ArrayList();
-            varValue = new ArrayList();
-            substAtBegin = new ArrayList();
-            resubst = new ArrayList();
+            varName = new ArrayList<String>();
+            varValue = new ArrayList<String>();
+            substAtBegin = new ArrayList<Boolean>();
+            resubst = new ArrayList<Boolean>();
         }
 
         public void add(String var)
@@ -266,27 +266,27 @@ public class PathSubstitutionTest
 
         public String getVariable(int i)
         {
-            return (String) varName.get(i);
+            return varName.get(i);
         }
 
         public String getValue(int i)
         {
-            return (String) varName.get(i);
+            return varName.get(i);
         }
 
         public String getValue(String var)
         {
-            return (String) varValue.get(varName.indexOf(var));
+            return varValue.get(varName.indexOf(var));
         }
 
         public boolean onlySubstituteAtBegin(int i)
         {
-            return ((Boolean) substAtBegin.get(i)).booleanValue();
+            return substAtBegin.get(i).booleanValue();
         }
 
         public boolean canReSubstitute(int i)
         {
-            return ((Boolean) resubst.get(i)).booleanValue();
+            return resubst.get(i).booleanValue();
         }
     }
 

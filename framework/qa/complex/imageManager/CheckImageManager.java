@@ -66,7 +66,7 @@ public class CheckImageManager  {
         System.out.println(" **** ImageManager from ModuleUIConfigurationManager *** ");
         XUIConfigurationManager xManager = null;
         try {
-            Object o = (XInterface)xMSF.createInstance(
+            Object o = xMSF.createInstance(
                     "com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
             XModuleUIConfigurationManagerSupplier xMUICMS =
                     UnoRuntime.queryInterface(XModuleUIConfigurationManagerSupplier.class, o);

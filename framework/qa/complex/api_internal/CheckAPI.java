@@ -94,7 +94,7 @@ public class CheckAPI  {
 
         // get the parameters for the internal test
         String paramList = (String)param.get("ParamList");
-        ArrayList p = new ArrayList();
+        ArrayList<Object> p = new ArrayList<Object>();
         StringTokenizer paramTokens = new StringTokenizer(paramList, " ");
         while(paramTokens.hasMoreTokens())
         {
@@ -118,12 +118,12 @@ public class CheckAPI  {
             if ( param.get("job1")==null )
             {
                 // get all test jobs from runner service
-                XPropertyAccess xPropAcc = (XPropertyAccess)UnoRuntime.queryInterface(XPropertyAccess.class, oObj);
+                XPropertyAccess xPropAcc = UnoRuntime.queryInterface(XPropertyAccess.class, oObj);
                 props = xPropAcc.getPropertyValues();
             }
             else  {
                 int index=1;
-                p = new ArrayList();
+                p = new ArrayList<Object>();
                 while ( param.get("job"+index) != null ) {
                     p.add(param.get("job"+index));
                     index++;
