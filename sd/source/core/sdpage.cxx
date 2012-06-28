@@ -774,13 +774,19 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
             // handout template
 
             // delete all available handout presentation objects
-            SdrObject* pObj;
+            SdrObject *pObj=NULL;
             while( (pObj = pMasterPage->GetPresObj(PRESOBJ_HANDOUT)) != 0 )
             {
-                if( bUndo )
-                    pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
-
                 pMasterPage->RemoveObject(pObj->GetOrdNum());
+
+                if( bUndo )
+                {
+                    pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+                }
+                else
+                {
+                    SdrObject::Free( pObj );  // memory leak i120050
+                }
             }
 
             std::vector< Rectangle > aAreas;
