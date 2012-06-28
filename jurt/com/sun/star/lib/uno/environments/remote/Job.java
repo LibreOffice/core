@@ -67,7 +67,7 @@ public class Job {
      * @param o_out_sig     the out signature as an out parameter
      */
     protected Object dispatch_queryInterface(Type type) {
-        Class zInterface = type.getTypeDescription().getZClass();
+        Class<?> zInterface = type.getTypeDescription().getZClass();
 
         Object result = null;
 

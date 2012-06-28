@@ -64,7 +64,7 @@ public final class AsynchronousFinalizer {
         void run() throws Throwable;
     }
 
-    private static final LinkedList queue = new LinkedList();
+    private static final LinkedList<Job> queue = new LinkedList<Job>();
 
     static {
         Thread t = new Thread() {
@@ -77,7 +77,7 @@ public final class AsynchronousFinalizer {
                                     queue.wait();
                                 } catch (InterruptedException e) {}
                             }
-                            j = (Job) queue.remove(0);
+                            j = queue.remove(0);
                         }
                         try {
                             j.run();

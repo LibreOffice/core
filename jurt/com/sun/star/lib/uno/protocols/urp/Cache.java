@@ -38,7 +38,7 @@ final class Cache {
     }
 
     public int add(boolean[] found, Object content) {
-        Entry e = (Entry) map.get(content);
+        Entry e = map.get(content);
         found[0] = e != null;
         if (e == null) {
             if (map.size() < maxSize) {
@@ -105,7 +105,7 @@ final class Cache {
     // map contains the same entries; each entry has a unique index in the range
     // 0 to maxSize - 1
     private final int maxSize;
-    private final HashMap map = new HashMap(); // from Object to Entry
+    private final HashMap<Object, Entry> map = new HashMap<Object, Entry>(); // from Object to Entry
     private Entry first = null;
     private Entry last = null;
 }

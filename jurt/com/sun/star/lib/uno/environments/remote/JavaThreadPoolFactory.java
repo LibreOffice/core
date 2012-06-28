@@ -43,7 +43,7 @@ final class JavaThreadPoolFactory {
 
     public JobQueue getJobQueue(ThreadId threadId) {
         synchronized (jobQueues) {
-            return (JobQueue) jobQueues.get(threadId);
+            return jobQueues.get(threadId);
         }
     }
 
@@ -55,8 +55,8 @@ final class JavaThreadPoolFactory {
     public void dispose(Object disposeId, Throwable throwable) {
         JobQueue[] qs;
         synchronized (jobQueues) {
-            Collection c = jobQueues.values();
-            qs = (JobQueue[]) c.toArray(new JobQueue[c.size()]);
+            Collection<JobQueue> c = jobQueues.values();
+            qs = c.toArray(new JobQueue[c.size()]);
         }
         for (int i = 0; i < qs.length; ++i) {
             qs[i].dispose(disposeId, throwable);
@@ -70,7 +70,7 @@ final class JavaThreadPoolFactory {
         } else {
             ThreadId id;
             synchronized (threadIdMap) {
-                id = (ThreadId) threadIdMap.get(t);
+                id = threadIdMap.get(t);
                 if (id == null) {
                     id = ThreadId.createFresh();
                     threadIdMap.put(t, id);
@@ -80,6 +80,6 @@ final class JavaThreadPoolFactory {
         }
     }
 
-    private static final WeakHashMap threadIdMap = new WeakHashMap();
-    private final HashMap jobQueues = new HashMap();
+    private static final WeakHashMap<Thread, ThreadId> threadIdMap = new WeakHashMap<Thread, ThreadId>();
+    private final HashMap<ThreadId, JobQueue> jobQueues = new HashMap<ThreadId, JobQueue>();
 }

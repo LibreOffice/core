@@ -52,7 +52,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
     protected Socket       _socket;
     protected InputStream  _inputStream;
     protected OutputStream _outputStream;
-    protected ArrayList       _listeners;
+    protected ArrayList<XStreamListener>       _listeners;
     protected boolean      _firstRead;
 
     /**
@@ -74,7 +74,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
         _inputStream = new BufferedInputStream(socket.getInputStream());
         _outputStream = new BufferedOutputStream(socket.getOutputStream());
 
-        _listeners = new ArrayList();
+        _listeners = new ArrayList<XStreamListener>();
         _firstRead = true;
     }
 
@@ -90,25 +90,25 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
     }
 
     private void notifyListeners_open() {
-        Iterator elements = _listeners.iterator();
+        Iterator<XStreamListener> elements = _listeners.iterator();
         while(elements.hasNext()) {
-            XStreamListener xStreamListener = (XStreamListener)elements.next();
+            XStreamListener xStreamListener = elements.next();
             xStreamListener.started();
         }
     }
 
     private void notifyListeners_close() {
-        Iterator elements = _listeners.iterator();
+        Iterator<XStreamListener> elements = _listeners.iterator();
         while(elements.hasNext()) {
-            XStreamListener xStreamListener = (XStreamListener)elements.next();
+            XStreamListener xStreamListener = elements.next();
             xStreamListener.closed();
         }
     }
 
     private void notifyListeners_error(com.sun.star.uno.Exception exception) {
-        Iterator elements = _listeners.iterator();
+        Iterator<XStreamListener> elements = _listeners.iterator();
         while(elements.hasNext()) {
-            XStreamListener xStreamListener = (XStreamListener)elements.next();
+            XStreamListener xStreamListener = elements.next();
             xStreamListener.error(exception);
         }
     }

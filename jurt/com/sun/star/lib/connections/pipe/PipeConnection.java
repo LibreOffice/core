@@ -51,7 +51,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
 
     protected String    _aDescription;
     protected long      _nPipeHandle;
-    protected ArrayList    _aListeners;
+    protected ArrayList<XStreamListener>    _aListeners;
     protected boolean   _bFirstRead;
 
     /**
@@ -65,7 +65,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     {
         if (DEBUG) System.err.println("##### " + getClass().getName() + " - instantiated " + description );
 
-        _aListeners = new ArrayList();
+        _aListeners = new ArrayList<XStreamListener>();
         _bFirstRead = true;
 
         // get pipe name from pipe descriptor
@@ -105,25 +105,25 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     }
 
     private void notifyListeners_open() {
-        Iterator elements = _aListeners.iterator();
+        Iterator<XStreamListener> elements = _aListeners.iterator();
         while(elements.hasNext()) {
-            XStreamListener xStreamListener = (XStreamListener)elements.next();
+            XStreamListener xStreamListener = elements.next();
             xStreamListener.started();
         }
     }
 
     private void notifyListeners_close() {
-        Iterator elements = _aListeners.iterator();
+        Iterator<XStreamListener> elements = _aListeners.iterator();
         while(elements.hasNext()) {
-            XStreamListener xStreamListener = (XStreamListener)elements.next();
+            XStreamListener xStreamListener = elements.next();
             xStreamListener.closed();
         }
     }
 
     private void notifyListeners_error(com.sun.star.uno.Exception exception) {
-        Iterator elements = _aListeners.iterator();
+        Iterator<XStreamListener> elements = _aListeners.iterator();
         while(elements.hasNext()) {
-            XStreamListener xStreamListener = (XStreamListener)elements.next();
+            XStreamListener xStreamListener = elements.next();
             xStreamListener.error(exception);
         }
     }

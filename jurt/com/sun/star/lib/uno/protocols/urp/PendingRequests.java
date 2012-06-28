@@ -27,17 +27,17 @@ final class PendingRequests {
     public PendingRequests() {}
 
     public synchronized void push(ThreadId tid, Item item) {
-        Stack s = (Stack) map.get(tid);
+        Stack<Item> s = map.get(tid);
         if (s == null) {
-            s = new Stack();
+            s = new Stack<Item>();
             map.put(tid, s);
         }
         s.push(item);
     }
 
     public synchronized Item pop(ThreadId tid) {
-        Stack s = (Stack) map.get(tid);
-        Item i = (Item) s.pop();
+        Stack<Item> s = map.get(tid);
+        Item i = s.pop();
         if (s.empty()) {
             map.remove(tid);
         }
@@ -58,5 +58,5 @@ final class PendingRequests {
         public final Object[] arguments;
     }
 
-    private final HashMap map = new HashMap(); // from ThreadId to Stack of Item
+    private final HashMap<ThreadId, Stack<Item>> map = new HashMap<ThreadId, Stack<Item>>(); // from ThreadId to Stack of Item
 }

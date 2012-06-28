@@ -52,7 +52,7 @@ final class Implementation {
      */
     public static Object getConnectionService(XMultiServiceFactory factory,
                                               String description,
-                                              Class serviceClass,
+                                              Class<?> serviceClass,
                                               String serviceType)
         throws ConnectionSetupException
     {

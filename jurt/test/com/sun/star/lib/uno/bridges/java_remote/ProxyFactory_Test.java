@@ -65,7 +65,7 @@ public final class ProxyFactory_Test {
     }
 
     private void testExceptions(TestRequestHandler handler, Method method,
-                                Object obj, Object[] args, Class[] exceptions)
+                                Object obj, Object[] args, Class<?>[] exceptions)
         throws Exception
     {
         for (int i = 0; i < exceptions.length; ++i) {
@@ -75,7 +75,7 @@ public final class ProxyFactory_Test {
     }
 
     private void testExceptionType(Method method, Object obj, Object[] args,
-                                   Class exception) throws Exception {
+            Class<?> exception) throws Exception {
         try {
             method.invoke(obj, args);
             assertNull(exception);

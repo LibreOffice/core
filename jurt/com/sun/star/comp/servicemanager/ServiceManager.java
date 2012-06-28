@@ -79,9 +79,9 @@ public class ServiceManager implements XMultiServiceFactory,
             "com.sun.star.lang.ServiceManager"
     };
 
-    ArrayList    eventListener;
-    java.util.HashMap factoriesByImplNames;
-    java.util.HashMap factoriesByServiceNames;  // keys:
+    ArrayList<XEventListener>    eventListener;
+    java.util.HashMap<String, Object> factoriesByImplNames;
+    java.util.HashMap<String, ArrayList<Object>> factoriesByServiceNames;  // keys:
 
     private com.sun.star.uno.XComponentContext m_xDefaultContext;
 
@@ -89,18 +89,18 @@ public class ServiceManager implements XMultiServiceFactory,
      * Creates a new instance of the <code>ServiceManager</code>.
      */
     public ServiceManager() {
-        eventListener           = new ArrayList();
-        factoriesByImplNames    = new java.util.HashMap();
-        factoriesByServiceNames = new java.util.HashMap();
+        eventListener           = new ArrayList<XEventListener>();
+        factoriesByImplNames    = new java.util.HashMap<String, Object>();
+        factoriesByServiceNames = new java.util.HashMap<String, ArrayList<Object>>();
         m_xDefaultContext = null;
     }
     /**
      * Creates a new instance of the <code>ServiceManager</code>.
      */
     public ServiceManager( XComponentContext xContext ) {
-        eventListener           = new ArrayList();
-        factoriesByImplNames    = new java.util.HashMap();
-        factoriesByServiceNames = new java.util.HashMap();
+        eventListener           = new ArrayList<XEventListener>();
+        factoriesByImplNames    = new java.util.HashMap<String, Object>();
+        factoriesByServiceNames = new java.util.HashMap<String, ArrayList<Object>>();
         m_xDefaultContext = xContext;
     }
 
@@ -172,9 +172,9 @@ public class ServiceManager implements XMultiServiceFactory,
 
                 try {
                     // try to get the class of the implementation
-                    Class clazz = Class.forName( newImpls[i] );
+                    Class<?> clazz = Class.forName( newImpls[i] );
 
-                    Class[] methodClassParam = { String.class, XMultiServiceFactory.class, XRegistryKey.class };
+                    Class<?>[] methodClassParam = { String.class, XMultiServiceFactory.class, XRegistryKey.class };
                     java.lang.reflect.Method getFactoryMeth  ;
                     try {
                         getFactoryMeth = clazz.getMethod("__getServiceFactory", methodClassParam);
@@ -305,14 +305,14 @@ public class ServiceManager implements XMultiServiceFactory,
         Object factory = null;
 
         if ( factoriesByServiceNames.containsKey( serviceName ) ) {
-            ArrayList aviableFact = (ArrayList) factoriesByServiceNames.get( serviceName );
+            ArrayList<Object> availableFact = factoriesByServiceNames.get( serviceName );
 
             DEBUG("");
-            DEBUG("aviable factories for " + serviceName +" "+ aviableFact);
+            DEBUG("aviable factories for " + serviceName +" "+ availableFact);
             DEBUG("");
 
-            if ( !aviableFact.isEmpty() )
-                factory = aviableFact.get(aviableFact.size()-1);
+            if ( !availableFact.isEmpty() )
+                factory = availableFact.get(availableFact.size()-1);
 
         } else // not found in list of services - now try the implementations
             factory = factoriesByImplNames.get( serviceName ); // return null if none is aviable
@@ -341,10 +341,10 @@ public class ServiceManager implements XMultiServiceFactory,
         int i = 0;
         String[] availableServiceNames = new String[factoriesByServiceNames.size()];
 
-        java.util.Iterator keys = factoriesByServiceNames.keySet().iterator();
+        java.util.Iterator<String> keys = factoriesByServiceNames.keySet().iterator();
 
         while (keys.hasNext())
-            availableServiceNames[i++] = (String) keys.next();
+            availableServiceNames[i++] = keys.next();
 
         return availableServiceNames;
     }
@@ -444,10 +444,10 @@ public class ServiceManager implements XMultiServiceFactory,
         throws com.sun.star.uno.RuntimeException
     {
         if (eventListener != null) {
-            java.util.Iterator enumer = eventListener.iterator();
+            java.util.Iterator<XEventListener> enumer = eventListener.iterator();
 
             while (enumer.hasNext()) {
-                XEventListener listener = (XEventListener) enumer.next();
+                XEventListener listener = enumer.next();
                 listener.disposing(new com.sun.star.lang.EventObject(this));
             }
             eventListener.clear();
@@ -552,15 +552,15 @@ public class ServiceManager implements XMultiServiceFactory,
 
 
         String[] serviceNames = xServiceInfo.getSupportedServiceNames();
-        ArrayList vec  ;
+        ArrayList<Object> vec  ;
 
         for (int i=0; i<serviceNames.length; i++) {
             if ( !factoriesByServiceNames.containsKey( serviceNames[i] ) ) {
                 DEBUG("> no registered services found under " + serviceNames[i] + ": adding..." );
-                factoriesByServiceNames.put(serviceNames[i], new ArrayList());
+                factoriesByServiceNames.put(serviceNames[i], new ArrayList<Object>());
             }
 
-            vec = (ArrayList) factoriesByServiceNames.get( serviceNames[i] );
+            vec = factoriesByServiceNames.get( serviceNames[i] );
 
             if ( vec.contains( object ) )
                 System.err.println("The implementation " + xServiceInfo.getImplementationName() +
@@ -613,7 +613,7 @@ public class ServiceManager implements XMultiServiceFactory,
 
         for ( int i=0; i<serviceNames.length; i++ ) {
             if ( factoriesByServiceNames.containsKey( serviceNames[i] ) ) {
-                ArrayList vec = (ArrayList) factoriesByServiceNames.get(serviceNames[i]);
+                ArrayList<Object> vec = factoriesByServiceNames.get(serviceNames[i]);
 
                 if ( !vec.remove(object) )
                     System.err.println("The implementation " + xServiceInfo.getImplementationName() +
@@ -675,7 +675,7 @@ public class ServiceManager implements XMultiServiceFactory,
     {
         XEnumeration enumer  ;
 
-        ArrayList serviceList = (ArrayList) factoriesByServiceNames.get(serviceName);
+        ArrayList<Object> serviceList = factoriesByServiceNames.get(serviceName);
 
         if (serviceList != null)
             enumer = new ServiceEnumerationImpl( serviceList.iterator() );
@@ -737,7 +737,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @since       UDK1.0
      */
     class ServiceEnumerationImpl implements XEnumeration {
-        java.util.Iterator enumeration = null;
+        java.util.Iterator<Object> enumeration = null;
 
         /**
          * Constructs a new empty instance.
@@ -751,7 +751,7 @@ public class ServiceManager implements XMultiServiceFactory,
          * @param   enumer  is the enumeration which should been wrapped.
          * @see     com.sun.star.container.XEnumeration
          */
-        public ServiceEnumerationImpl(java.util.Enumeration enumer) {
+        public ServiceEnumerationImpl(java.util.Enumeration<Object> enumer) {
             enumeration = Collections.list(enumer).iterator();
         }
 
@@ -761,7 +761,7 @@ public class ServiceManager implements XMultiServiceFactory,
          * @param   enumer  is the enumeration which should been wrapped.
          * @see     com.sun.star.container.XEnumeration
          */
-        public ServiceEnumerationImpl(java.util.Iterator enumer) {
+        public ServiceEnumerationImpl(java.util.Iterator<Object> enumer) {
             enumeration = enumer;
         }
 

@@ -35,13 +35,13 @@ public final class UrlToFileMapper {
     // java.net.URLEncoder.encode(String, String) and java.net.URI are only
     // available since Java 1.4:
     private static Method urlEncoderEncode;
-    private static Constructor uriConstructor;
-    private static Constructor fileConstructor;
+    private static Constructor<?> uriConstructor;
+    private static Constructor<File> fileConstructor;
     static {
         try {
             urlEncoderEncode = URLEncoder.class.getMethod(
                 "encode", new Class[] { String.class, String.class });
-            Class uriClass = Class.forName("java.net.URI");
+            Class<?> uriClass = Class.forName("java.net.URI");
             uriConstructor = uriClass.getConstructor(
                 new Class[] { String.class });
             fileConstructor = File.class.getConstructor(
@@ -90,7 +90,7 @@ public final class UrlToFileMapper {
                 Object uri = uriConstructor.newInstance(
                     new Object[] { encodedUrl });
                 try {
-                    return (File) fileConstructor.newInstance(
+                    return fileConstructor.newInstance(
                         new Object[] { uri });
                 } catch (InvocationTargetException e) {
                     if (e.getTargetException() instanceof

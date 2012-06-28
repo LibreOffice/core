@@ -263,7 +263,7 @@ public final class java_environment implements IEnvironment {
 
         private static final class Level2Entry extends WeakReference<Object> {
             public Level2Entry(
-                String oid, Type type, Object object, ReferenceQueue queue)
+                String oid, Type type, Object object, ReferenceQueue<Object> queue)
             {
                 super(object, queue);
                 this.oid = oid;
@@ -288,7 +288,7 @@ public final class java_environment implements IEnvironment {
 
         private final HashMap<String, Level1Entry> level1map =
             new HashMap<String, Level1Entry>();
-        private final ReferenceQueue queue = new ReferenceQueue();
+        private final ReferenceQueue<Object> queue = new ReferenceQueue<Object>();
     }
 
     private boolean isProxy(Object object) {

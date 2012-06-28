@@ -20,7 +20,6 @@ package com.sun.star.comp.bridgefactory;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import com.sun.star.bridge.BridgeExistsException;
 import com.sun.star.bridge.XBridge;
@@ -168,7 +167,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
      * @see                           com.sun.star.bridge.XBridgeFactory
      */
     public synchronized XBridge[] getExistingBridges() throws com.sun.star.uno.RuntimeException {
-        ArrayList vector = new ArrayList();
+        ArrayList<XBridge> vector = new ArrayList<XBridge>();
 
         IBridge iBridges[] = UnoRuntime.getBridges();
         for(int i = 0; i < iBridges.length; ++ i) {
@@ -180,7 +179,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
 
         XBridge xBridges[]= new XBridge[vector.size()];
         for(int i = 0; i < vector.size(); ++ i)
-            xBridges[i] = (XBridge)vector.get(i);
+            xBridges[i] = vector.get(i);
 
         return xBridges;
     }

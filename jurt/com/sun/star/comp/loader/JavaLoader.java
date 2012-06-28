@@ -255,7 +255,7 @@ public class JavaLoader implements XImplementationLoader,
         locationUrl = expand_url( locationUrl );
 
         Object returnObject  = null;
-        Class clazz  ;
+        Class<?> clazz  ;
 
         DEBUG("try to get factory for " + implementationName);
 
@@ -299,7 +299,7 @@ public class JavaLoader implements XImplementationLoader,
             throw cae;
         }
 
-        Class[] paramTypes = {String.class, XMultiServiceFactory.class, XRegistryKey.class};
+        Class<?>[] paramTypes = {String.class, XMultiServiceFactory.class, XRegistryKey.class};
         Object[] params = { implementationName, multiServiceFactory, xKey };
 
         // try to get factory from implemetation class
@@ -339,7 +339,7 @@ public class JavaLoader implements XImplementationLoader,
                     throw new CannotActivateFactoryException(
                         "No factory object for " + implementationName );
                 }
-                return (XSingleComponentFactory)ret;
+                return ret;
             }
             else
             {
@@ -350,7 +350,7 @@ public class JavaLoader implements XImplementationLoader,
                 Object oRet = method.invoke(clazz, params);
 
                 if ( (oRet != null) && (oRet instanceof XSingleServiceFactory) ) {
-                    returnObject = (XSingleServiceFactory) oRet;
+                    returnObject = oRet;
                 }
             }
         }
@@ -401,14 +401,14 @@ public class JavaLoader implements XImplementationLoader,
 
         try {
 
-            Class clazz = RegistrationClassFinder.find(locationUrl);
+            Class<?> clazz = RegistrationClassFinder.find(locationUrl);
             if (null == clazz)
             {
                 throw new CannotRegisterImplementationException(
                     "Cannot determine registration class!" );
             }
 
-            Class[] paramTypes = { XRegistryKey.class };
+            Class<?>[] paramTypes = { XRegistryKey.class };
             Object[] params = { regKey };
 
             Method method  = clazz.getMethod("__writeRegistryServiceInfo", paramTypes);

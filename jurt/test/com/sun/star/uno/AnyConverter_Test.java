@@ -614,7 +614,7 @@ public final class AnyConverter_Test {
         String val= AnyConverter.toString(aStr);
         assertEquals(val, aStr);
         val= AnyConverter.toString(anyStr);
-        assertEquals(val, ((String)anyStr.getObject()));
+        assertEquals(val, anyStr.getObject());
 
         // must fail
         try { AnyConverter.toString(aBool); fail();

@@ -354,7 +354,7 @@ public class AnyConverter
      *  @throws com.sun.star.lang.IllegalArgumentException
      *          in case conversion is not possible
      */
-    static public Object toObject(Class clazz, Object object)
+    static public Object toObject(Class<?> clazz, Object object)
         throws com.sun.star.lang.IllegalArgumentException
     {
         return toObject( new Type( clazz ), object );

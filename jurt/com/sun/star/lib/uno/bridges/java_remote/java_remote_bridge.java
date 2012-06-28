@@ -24,12 +24,10 @@ import java.io.OutputStream;
 
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Vector;
 
 import com.sun.star.lib.util.DisposeListener;
 import com.sun.star.lib.util.DisposeNotifier;
@@ -167,7 +165,7 @@ public class java_remote_bridge
     protected MessageDispatcher _messageDispatcher;
     protected int               _life_count = 0;    // determines if this bridge is alife, which is controlled by acquire and release calls
 
-    private final ArrayList _listeners = new ArrayList();
+    private final ArrayList<XEventListener> _listeners = new ArrayList<XEventListener>();
 
     protected IThreadPool       _iThreadPool;
 
@@ -215,15 +213,15 @@ public class java_remote_bridge
         private int count = 1;
     }
 
-    private final HashMap refHolders = new HashMap();
+    private final HashMap<String, LinkedList<RefHolder>> refHolders = new HashMap<String, LinkedList<RefHolder>>();
         // from OID (String) to LinkedList of RefHolder
 
     private boolean hasRefHolder(String oid, Type type) {
         synchronized (refHolders) {
-            LinkedList l = (LinkedList) refHolders.get(oid);
+            LinkedList<RefHolder> l = refHolders.get(oid);
             if (l != null) {
-                for (Iterator i = l.iterator(); i.hasNext();) {
-                    RefHolder rh = (RefHolder) i.next();
+                for (Iterator<RefHolder> i = l.iterator(); i.hasNext();) {
+                    RefHolder rh = i.next();
                     if (type.isSupertypeOf(rh.getType())) {
                         return true;
                     }
@@ -235,14 +233,14 @@ public class java_remote_bridge
 
     final void addRefHolder(Object obj, Type type, String oid) {
         synchronized (refHolders) {
-            LinkedList l = (LinkedList) refHolders.get(oid);
+            LinkedList<RefHolder> l = refHolders.get(oid);
             if (l == null) {
-                l = new LinkedList();
+                l = new LinkedList<RefHolder>();
                 refHolders.put(oid, l);
             }
             boolean found = false;
-            for (Iterator i = l.iterator(); !found && i.hasNext();) {
-                RefHolder rh = (RefHolder) i.next();
+            for (Iterator<RefHolder> i = l.iterator(); !found && i.hasNext();) {
+                RefHolder rh = i.next();
                 if (rh.getType().equals(type)) {
                     found = true;
                     rh.acquire();
@@ -257,10 +255,10 @@ public class java_remote_bridge
 
     final void remRefHolder(Type type, String oid) {
         synchronized (refHolders) {
-            LinkedList l = (LinkedList) refHolders.get(oid);
+            LinkedList<RefHolder> l = refHolders.get(oid);
             if (l != null) {
-                for (Iterator i = l.iterator(); i.hasNext();) {
-                    RefHolder rh = (RefHolder) i.next();
+                for (Iterator<RefHolder> i = l.iterator(); i.hasNext();) {
+                    RefHolder rh = i.next();
                     if (rh.getType().equals(type)) {
                         try {
                             if (rh.release()) {
@@ -281,13 +279,13 @@ public class java_remote_bridge
 
     final void freeHolders() {
         synchronized (refHolders) {
-            for (Iterator i1 = refHolders.entrySet().iterator(); i1.hasNext();)
+            for (Iterator<Map.Entry<String,LinkedList<RefHolder>>> i1 = refHolders.entrySet().iterator(); i1.hasNext();)
             {
-                Map.Entry e = (Map.Entry) i1.next();
-                String oid = (String) e.getKey();
-                LinkedList l = (LinkedList) e.getValue();
-                for (Iterator i2 = l.iterator(); i2.hasNext();) {
-                    RefHolder rh = (RefHolder) i2.next();
+                Map.Entry<String,LinkedList<RefHolder>> e = i1.next();
+                String oid = e.getKey();
+                LinkedList<RefHolder> l = e.getValue();
+                for (Iterator<RefHolder> i2 = l.iterator(); i2.hasNext();) {
+                    RefHolder rh = i2.next();
                     for (boolean done = false; !done;) {
                         done = rh.release();
                         _java_environment.revokeInterface(oid, rh.getType());
@@ -341,9 +339,9 @@ public class java_remote_bridge
     private void notifyListeners() {
         EventObject eventObject = new EventObject(this);
 
-        Iterator elements = _listeners.iterator();
+        Iterator<XEventListener> elements = _listeners.iterator();
         while(elements.hasNext()) {
-            XEventListener xEventListener = (XEventListener)elements.next();
+            XEventListener xEventListener = elements.next();
 
             try {
                 xEventListener.disposing(eventObject);
@@ -485,8 +483,8 @@ public class java_remote_bridge
         }
 
         notifyListeners();
-        for (Iterator i = disposeListeners.iterator(); i.hasNext();) {
-            ((DisposeListener) i.next()).notifyDispose(this);
+        for (Iterator<DisposeListener> i = disposeListeners.iterator(); i.hasNext();) {
+            i.next().notifyDispose(this);
         }
 
         _iProtocol.terminate();
@@ -698,5 +696,5 @@ public class java_remote_bridge
     private final ProxyFactory proxyFactory;
 
     // Access to disposeListeners must be synchronized on <CODE>this</CODE>:
-    private final ArrayList disposeListeners = new ArrayList();
+    private final ArrayList<DisposeListener> disposeListeners = new ArrayList<DisposeListener>();
 }

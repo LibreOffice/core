@@ -49,7 +49,7 @@ public final class WeakReference_Test {
 
         private static final class Adapter implements XAdapter {
             public Adapter(Object obj) {
-                ref = new java.lang.ref.WeakReference(obj);
+                ref = new java.lang.ref.WeakReference<Object>(obj);
             }
 
             public Object queryAdapted() {
@@ -73,16 +73,16 @@ public final class WeakReference_Test {
             }
 
             public void dispose() {
-                ArrayList l;
+                ArrayList<XReference> l;
                 synchronized (this){
                     l = listeners;
                     listeners = null;
                 }
                 if (l != null) {
                     java.lang.RuntimeException ex = null;
-                    for (Iterator i = l.iterator(); i.hasNext();) {
+                    for (Iterator<XReference> i = l.iterator(); i.hasNext();) {
                         try {
-                            ((XReference) i.next()).dispose();
+                            i.next().dispose();
                         } catch (java.lang.RuntimeException e) {
                             ex = e;
                         }
@@ -93,8 +93,8 @@ public final class WeakReference_Test {
                 }
             }
 
-            private final java.lang.ref.WeakReference ref;
-            private ArrayList listeners = new ArrayList();
+            private final java.lang.ref.WeakReference<Object> ref;
+            private ArrayList<XReference> listeners = new ArrayList<XReference>();
         }
 
         private final Adapter adapter = new Adapter(this);

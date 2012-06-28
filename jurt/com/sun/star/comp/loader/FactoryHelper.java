@@ -56,7 +56,7 @@ public class FactoryHelper {
     static protected class Factory
         implements XSingleServiceFactory, XSingleComponentFactory, XServiceInfo,
         XTypeProvider {
-        protected static Class __objectArray;
+        protected static Class<?> __objectArray;
 
         static {
             try {
@@ -72,14 +72,14 @@ public class FactoryHelper {
         protected XMultiServiceFactory _xMultiServiceFactory;
         protected XRegistryKey         _xRegistryKey;
         protected int                  _nCode;
-        protected Constructor          _constructor;
+        protected Constructor<?>       _constructor;
         protected String               _implName;
         protected String               _serviceName;
         // keeps the Id for XTypeProvider
         protected static Object _mutex= new Object();
         private static byte[] _implementationId;
 
-        protected Factory(Class implClass,
+        protected Factory(Class<?> implClass,
                           String serviceName,
                           XMultiServiceFactory xMultiServiceFactory,
                           XRegistryKey xRegistryKey)
@@ -89,9 +89,9 @@ public class FactoryHelper {
             _implName             = implClass.getName();
             _serviceName          = serviceName;
 
-            Constructor constructors[] = implClass.getConstructors();
+            Constructor<?> constructors[] = implClass.getConstructors();
             for(int i = 0; i < constructors.length && _constructor == null; ++i) {
-                Class parameters[] = constructors[i].getParameterTypes();
+                Class<?> parameters[] = constructors[i].getParameterTypes();
 
                 if(parameters.length == 3
                    && parameters[0].equals(XComponentContext.class)
@@ -433,7 +433,7 @@ public class FactoryHelper {
      * @param   regKey        the given registry key
      * @see              com.sun.star.lang.XServiceInfo
      */
-    static public XSingleServiceFactory getServiceFactory(Class implClass,
+    static public XSingleServiceFactory getServiceFactory(Class<?> implClass,
                                                           XMultiServiceFactory multiFactory,
                                                           XRegistryKey regKey)
     {
@@ -471,7 +471,7 @@ public class FactoryHelper {
      * @param   regKey        the given registry key
      * @see              com.sun.star.lang.XServiceInfo
      */
-    static public XSingleServiceFactory getServiceFactory(Class implClass,
+    static public XSingleServiceFactory getServiceFactory(Class<?> implClass,
                                                           String serviceName,
                                                           XMultiServiceFactory multiFactory,
                                                           XRegistryKey regKey)
@@ -484,7 +484,7 @@ public class FactoryHelper {
         @return returns a factory object
         @param   implClass     the implementing class
     */
-    static public Object createComponentFactory( Class implClass, String serviceName )
+    static public Object createComponentFactory( Class<?> implClass, String serviceName )
     {
         return new Factory( implClass, serviceName, null, null );
     }

@@ -28,11 +28,11 @@ import java.util.StringTokenizer;
 import java.util.jar.Attributes;
 
 final class RegistrationClassFinder {
-    public static Class find(String locationUrl)
+    public static Class<?> find(String locationUrl)
         throws ClassNotFoundException, IOException
     {
         synchronized (map) {
-            Class c = (Class) WeakMap.getValue(map.get(locationUrl));
+            Class<?> c = (Class<?>) WeakMap.getValue(map.get(locationUrl));
             if (c != null) {
                 return c;
             }
@@ -52,9 +52,9 @@ final class RegistrationClassFinder {
         } else {
             cl2 = URLClassLoader.newInstance(new URL[] { url }, cl1);
         }
-        Class c = cl2.loadClass(name);
+        Class<?> c = cl2.loadClass(name);
         synchronized (map) {
-            Class c2 = (Class) WeakMap.getValue(map.get(locationUrl));
+            Class<?> c2 = (Class<?>) WeakMap.getValue(map.get(locationUrl));
             if (c2 != null) {
                 return c2;
             }

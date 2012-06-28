@@ -35,7 +35,7 @@ public final class BridgeFactory_Test {
         BridgeFactory bridgeFactory = new BridgeFactory(); // create the needed bridgeFactory
 
         // create a bridge
-        XBridge xBridge = bridgeFactory.createBridge("testbridge", "urp", (XConnection)leftSide, null);
+        XBridge xBridge = bridgeFactory.createBridge("testbridge", "urp", leftSide, null);
 
         // test that we get the same bridge
         assertTrue(
@@ -44,7 +44,7 @@ public final class BridgeFactory_Test {
 
         // test that we can not create another bridge with same name
         try {
-            XBridge dummy = bridgeFactory.createBridge("testbridge", "urp", (XConnection)leftSide, null);
+            XBridge dummy = bridgeFactory.createBridge("testbridge", "urp", leftSide, null);
 
             fail();
         }
@@ -71,7 +71,7 @@ public final class BridgeFactory_Test {
 
 
         // test that we really get a new bridge
-        XBridge xBridge_new = bridgeFactory.createBridge("testbridge", "urp", (XConnection)leftSide, null);
+        XBridge xBridge_new = bridgeFactory.createBridge("testbridge", "urp", leftSide, null);
         assertFalse(UnoRuntime.areSame(xBridge, xBridge_new));
 
         for(int i = 0; i <10000; ++ i) {

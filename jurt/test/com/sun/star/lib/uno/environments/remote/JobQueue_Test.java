@@ -146,9 +146,8 @@ public final class JobQueue_Test {
             jobQueue.putJob(new Job(workAt, __iReceiver,
                                     new Message(
                                         null, true, "oid", __workAt_td,
-                                        ((MethodDescription)
-                                         __workAt_td.getMethodDescription(
-                                             "notifyme")),
+                                        __workAt_td.getMethodDescription(
+                                             "notifyme"),
                                         true, null, false, null, null)),
                             null);
             while (!workAt._notified) {
@@ -171,8 +170,7 @@ public final class JobQueue_Test {
                 new Job(workAt, __iReceiver,
                         new Message(
                             null, true, "oid", __workAt_td,
-                            ((MethodDescription)
-                             __workAt_td.getMethodDescription("notifyme")),
+                            __workAt_td.getMethodDescription("notifyme"),
                             true, null, false, null, null)),
                 null);
             while (!workAt._notified) {
@@ -186,7 +184,7 @@ public final class JobQueue_Test {
                                   JobQueue jobQueue) {
         Message iMessage = new Message(
             null, true, "oid", __workAt_td,
-            (MethodDescription) __workAt_td.getMethodDescription(operation),
+            __workAt_td.getMethodDescription(operation),
             true, null, false, null, null);
         for (int i = 0; i < TestWorkAt.MESSAGES; ++ i) {
             Thread.yield(); // force scheduling

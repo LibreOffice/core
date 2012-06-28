@@ -602,7 +602,7 @@ public final class urp implements IProtocol {
     private void writeQueuedReleases() throws IOException {
         for (int i = releaseQueue.size(); i > 0;) {
             --i;
-            QueuedRelease r = (QueuedRelease) releaseQueue.get(i);
+            QueuedRelease r = releaseQueue.get(i);
             writeRequest(
                 r.internal, r.objectId, r.type, r.method, r.threadId, null,
                 false);
@@ -733,5 +733,5 @@ public final class urp implements IProtocol {
     private String outL1Oid = null;
     private ITypeDescription outL1Type = null;
 
-    private final ArrayList releaseQueue = new ArrayList(); // of QueuedRelease
+    private final ArrayList<QueuedRelease> releaseQueue = new ArrayList<QueuedRelease>(); // of QueuedRelease
 }
