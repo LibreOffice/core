@@ -19,23 +19,18 @@
 package com.sun.star.comp.bridgefactory;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Vector;
-
 
 import com.sun.star.bridge.BridgeExistsException;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
-
 import com.sun.star.comp.loader.FactoryHelper;
-
 import com.sun.star.connection.XConnection;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-
 import com.sun.star.registry.XRegistryKey;
-
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.UnoRuntime;
 
@@ -173,19 +168,19 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
      * @see                           com.sun.star.bridge.XBridgeFactory
      */
     public synchronized XBridge[] getExistingBridges() throws com.sun.star.uno.RuntimeException {
-        Vector vector = new Vector();
+        ArrayList vector = new ArrayList();
 
         IBridge iBridges[] = UnoRuntime.getBridges();
         for(int i = 0; i < iBridges.length; ++ i) {
             XBridge xBridge = UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
 
             if(xBridge != null)
-                vector.addElement(xBridge);
+                vector.add(xBridge);
         }
 
         XBridge xBridges[]= new XBridge[vector.size()];
         for(int i = 0; i < vector.size(); ++ i)
-            xBridges[i] = (XBridge)vector.elementAt(i);
+            xBridges[i] = (XBridge)vector.get(i);
 
         return xBridges;
     }

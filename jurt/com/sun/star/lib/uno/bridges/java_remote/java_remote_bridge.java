@@ -167,7 +167,7 @@ public class java_remote_bridge
     protected MessageDispatcher _messageDispatcher;
     protected int               _life_count = 0;    // determines if this bridge is alife, which is controlled by acquire and release calls
 
-    private final Vector _listeners = new Vector();
+    private final ArrayList _listeners = new ArrayList();
 
     protected IThreadPool       _iThreadPool;
 
@@ -341,9 +341,9 @@ public class java_remote_bridge
     private void notifyListeners() {
         EventObject eventObject = new EventObject(this);
 
-        Enumeration elements = _listeners.elements();
-        while(elements.hasMoreElements()) {
-            XEventListener xEventListener = (XEventListener)elements.nextElement();
+        Iterator elements = _listeners.iterator();
+        while(elements.hasNext()) {
+            XEventListener xEventListener = (XEventListener)elements.next();
 
             try {
                 xEventListener.disposing(eventObject);
@@ -669,11 +669,11 @@ public class java_remote_bridge
 
     // Methods XComponent
     public void addEventListener(XEventListener xEventListener) {
-        _listeners.addElement(xEventListener);
+        _listeners.add(xEventListener);
     }
 
     public void removeEventListener(XEventListener xEventListener) {
-        _listeners.removeElement(xEventListener);
+        _listeners.remove(xEventListener);
     }
 
     // @see NotifyDispose.addDisposeListener

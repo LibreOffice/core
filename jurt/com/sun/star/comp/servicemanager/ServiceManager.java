@@ -18,28 +18,26 @@
 
 package com.sun.star.comp.servicemanager;
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
 
-import com.sun.star.container.XSet;
 import com.sun.star.container.XContentEnumerationAccess;
 import com.sun.star.container.XEnumeration;
-
+import com.sun.star.container.XSet;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.lang.XMultiComponentFactory;
-
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.registry.XSimpleRegistry;
-
-import com.sun.star.loader.XImplementationLoader;
-
-import java.lang.reflect.InvocationTargetException;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 /**
  * The <code>ServiceManager</code> class is an implmentation of the <code>ServiceManager</code>the central class needed for
@@ -81,7 +79,7 @@ public class ServiceManager implements XMultiServiceFactory,
             "com.sun.star.lang.ServiceManager"
     };
 
-    java.util.Vector    eventListener;
+    ArrayList    eventListener;
     java.util.Hashtable factoriesByImplNames;
     java.util.Hashtable factoriesByServiceNames;  // keys:
 
@@ -91,7 +89,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * Creates a new instance of the <code>ServiceManager</code>.
      */
     public ServiceManager() {
-        eventListener           = new java.util.Vector();
+        eventListener           = new ArrayList();
         factoriesByImplNames    = new java.util.Hashtable();
         factoriesByServiceNames = new java.util.Hashtable();
         m_xDefaultContext = null;
@@ -100,7 +98,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * Creates a new instance of the <code>ServiceManager</code>.
      */
     public ServiceManager( XComponentContext xContext ) {
-        eventListener           = new java.util.Vector();
+        eventListener           = new ArrayList();
         factoriesByImplNames    = new java.util.Hashtable();
         factoriesByServiceNames = new java.util.Hashtable();
         m_xDefaultContext = xContext;
@@ -307,14 +305,14 @@ public class ServiceManager implements XMultiServiceFactory,
         Object factory = null;
 
         if ( factoriesByServiceNames.containsKey( serviceName ) ) {
-            java.util.Vector aviableFact = (java.util.Vector) factoriesByServiceNames.get( serviceName );
+            ArrayList aviableFact = (ArrayList) factoriesByServiceNames.get( serviceName );
 
             DEBUG("");
             DEBUG("aviable factories for " + serviceName +" "+ aviableFact);
             DEBUG("");
 
             if ( !aviableFact.isEmpty() )
-                factory = aviableFact.lastElement();
+                factory = aviableFact.get(aviableFact.size()-1);
 
         } else // not found in list of services - now try the implementations
             factory = factoriesByImplNames.get( serviceName ); // return null if none is aviable
@@ -446,13 +444,13 @@ public class ServiceManager implements XMultiServiceFactory,
         throws com.sun.star.uno.RuntimeException
     {
         if (eventListener != null) {
-            java.util.Enumeration enumer = eventListener.elements();
+            java.util.Iterator enumer = eventListener.iterator();
 
-            while (enumer.hasMoreElements()) {
-                XEventListener listener = (XEventListener) enumer.nextElement();
+            while (enumer.hasNext()) {
+                XEventListener listener = (XEventListener) enumer.next();
                 listener.disposing(new com.sun.star.lang.EventObject(this));
             }
-            eventListener.removeAllElements();
+            eventListener.clear();
         }
 
         factoriesByServiceNames.clear();
@@ -477,7 +475,7 @@ public class ServiceManager implements XMultiServiceFactory,
           if ( eventListener.contains(xListener) )
               throw new com.sun.star.uno.RuntimeException("Listener already registred.");
 
-           eventListener.addElement(xListener);
+           eventListener.add(xListener);
     }
 
     /**
@@ -497,7 +495,7 @@ public class ServiceManager implements XMultiServiceFactory,
           if ( !eventListener.contains(xListener) )
               throw new com.sun.star.uno.RuntimeException("Listener is not registered.");
 
-        eventListener.removeElement(xListener);
+        eventListener.remove(xListener);
     }
 
     /**
@@ -554,21 +552,21 @@ public class ServiceManager implements XMultiServiceFactory,
 
 
         String[] serviceNames = xServiceInfo.getSupportedServiceNames();
-        java.util.Vector vec  ;
+        ArrayList vec  ;
 
         for (int i=0; i<serviceNames.length; i++) {
             if ( !factoriesByServiceNames.containsKey( serviceNames[i] ) ) {
                 DEBUG("> no registered services found under " + serviceNames[i] + ": adding..." );
-                factoriesByServiceNames.put(serviceNames[i], new java.util.Vector());
+                factoriesByServiceNames.put(serviceNames[i], new ArrayList());
             }
 
-            vec = (java.util.Vector) factoriesByServiceNames.get( serviceNames[i] );
+            vec = (ArrayList) factoriesByServiceNames.get( serviceNames[i] );
 
             if ( vec.contains( object ) )
                 System.err.println("The implementation " + xServiceInfo.getImplementationName() +
                     " already registered for the service " + serviceNames[i] + " - ignoring!");
             else
-                vec.addElement(object);
+                vec.add(object);
         }
     }
 
@@ -615,9 +613,9 @@ public class ServiceManager implements XMultiServiceFactory,
 
         for ( int i=0; i<serviceNames.length; i++ ) {
             if ( factoriesByServiceNames.containsKey( serviceNames[i] ) ) {
-                java.util.Vector vec = (java.util.Vector) factoriesByServiceNames.get(serviceNames[i]);
+                ArrayList vec = (ArrayList) factoriesByServiceNames.get(serviceNames[i]);
 
-                if ( !vec.removeElement(object) )
+                if ( !vec.remove(object) )
                     System.err.println("The implementation " + xServiceInfo.getImplementationName() +
                         " is not registered for the service " + serviceNames[i] + " - ignoring!");
 
@@ -677,10 +675,10 @@ public class ServiceManager implements XMultiServiceFactory,
     {
         XEnumeration enumer  ;
 
-        java.util.Vector serviceList = (java.util.Vector) factoriesByServiceNames.get(serviceName);
+        ArrayList serviceList = (ArrayList) factoriesByServiceNames.get(serviceName);
 
         if (serviceList != null)
-            enumer = new ServiceEnumerationImpl( serviceList.elements() );
+            enumer = new ServiceEnumerationImpl( serviceList.iterator() );
         else
             enumer = new ServiceEnumerationImpl();
 
@@ -739,7 +737,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * @since       UDK1.0
      */
     class ServiceEnumerationImpl implements XEnumeration {
-        java.util.Enumeration enumeration = null;
+        java.util.Iterator enumeration = null;
 
         /**
          * Constructs a new empty instance.
@@ -754,6 +752,16 @@ public class ServiceManager implements XMultiServiceFactory,
          * @see     com.sun.star.container.XEnumeration
          */
         public ServiceEnumerationImpl(java.util.Enumeration enumer) {
+            enumeration = Collections.list(enumer).iterator();
+        }
+
+        /**
+         * Constructs a new instance with a given enumeration.
+         * <p>
+         * @param   enumer  is the enumeration which should been wrapped.
+         * @see     com.sun.star.container.XEnumeration
+         */
+        public ServiceEnumerationImpl(java.util.Iterator enumer) {
             enumeration = enumer;
         }
 
@@ -766,7 +774,7 @@ public class ServiceManager implements XMultiServiceFactory,
         public boolean hasMoreElements()
                 throws com.sun.star.uno.RuntimeException
         {
-            return enumeration != null && enumeration.hasMoreElements();
+            return enumeration != null && enumeration.hasNext();
 
             }
 
@@ -786,7 +794,7 @@ public class ServiceManager implements XMultiServiceFactory,
                 throw new com.sun.star.container.NoSuchElementException();
 
             try {
-                return enumeration.nextElement();
+                return enumeration.next();
             } catch (java.util.NoSuchElementException e) {
                 com.sun.star.container.NoSuchElementException ex =
                     new com.sun.star.container.NoSuchElementException(

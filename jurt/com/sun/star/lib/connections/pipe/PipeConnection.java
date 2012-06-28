@@ -18,17 +18,14 @@
 package com.sun.star.lib.connections.pipe;
 
 import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.StringTokenizer;
-import java.util.Enumeration;
-import java.util.Vector;
-
-import com.sun.star.lib.util.NativeLibraryLoader;
-
-import com.sun.star.io.XStreamListener;
 
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnectionBroadcaster;
+import com.sun.star.io.XStreamListener;
+import com.sun.star.lib.util.NativeLibraryLoader;
 
 /**
  * The PipeConnection implements the <code>XConnection</code> interface
@@ -54,7 +51,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
 
     protected String    _aDescription;
     protected long      _nPipeHandle;
-    protected Vector    _aListeners;
+    protected ArrayList    _aListeners;
     protected boolean   _bFirstRead;
 
     /**
@@ -68,7 +65,7 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     {
         if (DEBUG) System.err.println("##### " + getClass().getName() + " - instantiated " + description );
 
-        _aListeners = new Vector();
+        _aListeners = new ArrayList();
         _bFirstRead = true;
 
         // get pipe name from pipe descriptor
@@ -100,33 +97,33 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
     }
 
     public void addStreamListener(XStreamListener aListener ) throws com.sun.star.uno.RuntimeException {
-        _aListeners.addElement(aListener);
+        _aListeners.add(aListener);
     }
 
     public void removeStreamListener(XStreamListener aListener ) throws com.sun.star.uno.RuntimeException {
-        _aListeners.removeElement(aListener);
+        _aListeners.remove(aListener);
     }
 
     private void notifyListeners_open() {
-        Enumeration elements = _aListeners.elements();
-        while(elements.hasMoreElements()) {
-            XStreamListener xStreamListener = (XStreamListener)elements.nextElement();
+        Iterator elements = _aListeners.iterator();
+        while(elements.hasNext()) {
+            XStreamListener xStreamListener = (XStreamListener)elements.next();
             xStreamListener.started();
         }
     }
 
     private void notifyListeners_close() {
-        Enumeration elements = _aListeners.elements();
-        while(elements.hasMoreElements()) {
-            XStreamListener xStreamListener = (XStreamListener)elements.nextElement();
+        Iterator elements = _aListeners.iterator();
+        while(elements.hasNext()) {
+            XStreamListener xStreamListener = (XStreamListener)elements.next();
             xStreamListener.closed();
         }
     }
 
     private void notifyListeners_error(com.sun.star.uno.Exception exception) {
-        Enumeration elements = _aListeners.elements();
-        while(elements.hasMoreElements()) {
-            XStreamListener xStreamListener = (XStreamListener)elements.nextElement();
+        Iterator elements = _aListeners.iterator();
+        while(elements.hasNext()) {
+            XStreamListener xStreamListener = (XStreamListener)elements.next();
             xStreamListener.error(exception);
         }
     }
