@@ -37,7 +37,6 @@
 #include <vcl/image.hxx>
 #include <vcl/seleng.hxx>
 
-class SvPtrarr;
 class ResId;
 class Point;
 class SvxIconChoiceCtrl_Impl;
