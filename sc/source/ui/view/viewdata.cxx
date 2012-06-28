@@ -2816,6 +2816,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                         uno::Sequence<beans::PropertyValue> aTabSettings;
                         if (aAny >>= aTabSettings)
                         {
+                            delete pTabData[nTab];
                             pTabData[nTab] = new ScViewDataTable;
                             bool bHasZoom = false;
                             pTabData[nTab]->ReadUserDataSequence(aTabSettings, *this, nTab, bHasZoom);
