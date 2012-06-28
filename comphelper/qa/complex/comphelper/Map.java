@@ -18,7 +18,6 @@
 
 package complex.comphelper;
 
-import com.sun.star.beans.IllegalTypeException;
 import com.sun.star.beans.Pair;
 import com.sun.star.container.ContainerEvent;
 import com.sun.star.container.XContainer;
@@ -75,7 +74,7 @@ public class Map /* extends complexlib.ComplexTestCase */
 //        return "tests the css.container.Map implementation from comphelper/source/misc/map.cxx";
 //    }
 
-    private String impl_getNth( int n )
+    private static String impl_getNth( int n )
     {
         switch ( n % 10 )
         {
@@ -85,7 +84,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         }
     }
 
-    private void impl_putAll( XMap _map, Object[] _keys, Object[] _values ) throws com.sun.star.uno.Exception
+    private static void impl_putAll( XMap _map, Object[] _keys, Object[] _values ) throws com.sun.star.uno.Exception
     {
         for ( int i=0; i<_keys.length; ++i )
         {
@@ -93,7 +92,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         }
     }
 
-    private void impl_ceckContent( XMap _map, Object[] _keys, Object[] _values, String _context ) throws com.sun.star.uno.Exception
+    private static void impl_checkContent( XMap _map, Object[] _keys, Object[] _values, String _context ) throws com.sun.star.uno.Exception
     {
         for ( int i=0; i<_keys.length; ++i )
         {
@@ -107,7 +106,7 @@ public class Map /* extends complexlib.ComplexTestCase */
     }
 
     @SuppressWarnings("unchecked")
-    private void impl_checkMappings( Object[] _keys, Object[] _values, String _context ) throws com.sun.star.uno.Exception
+    private static void impl_checkMappings( Object[] _keys, Object[] _values, String _context ) throws com.sun.star.uno.Exception
     {
         System.out.println( "checking mapping " + _context + "..." );
 
@@ -125,7 +124,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         impl_putAll( map, _keys, _values );
         assertTrue( _context + ": map filled with values is still empty", !map.hasElements() );
         // and verify them
-        impl_ceckContent( map, _keys, _values, _context );
+        impl_checkContent( map, _keys, _values, _context );
 
         // remove all values
         for ( int i=_keys.length-1; i>=0; --i )
@@ -149,7 +148,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         }
         map = com.sun.star.container.EnumerableMap.createImmutable(
             connection.getComponentContext(), keyType, valueType, (Pair< Object, Object >[])initialMappings );
-        impl_ceckContent( map, _keys, _values, _context );
+        impl_checkContent( map, _keys, _values, _context );
 
         // check the thing is actually immutable
         //? assureException( map, "clear", new Object[] {}, NoSupportException.class );
@@ -191,6 +190,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         );
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void testComplexKeyTypes() throws com.sun.star.uno.Exception
     {
         Type intType = new Type( Integer.class );
@@ -228,9 +228,9 @@ public class Map /* extends complexlib.ComplexTestCase */
         );
     }
 
-    private Class impl_getValueClassByPos( int _pos )
+    private static Class<?> impl_getValueClassByPos( int _pos )
     {
-        Class valueClass = null;
+        Class<?> valueClass = null;
         switch ( _pos )
         {
             case 0: valueClass = Boolean.class; break;
@@ -253,7 +253,6 @@ public class Map /* extends complexlib.ComplexTestCase */
         return valueClass;
     }
 
-    @SuppressWarnings("unchecked")
     private Object impl_getSomeValueByTypePos( int _pos )
     {
         Object someValue = null;
@@ -281,7 +280,7 @@ public class Map /* extends complexlib.ComplexTestCase */
 
     private class DummyInterface implements XInterface
     {
-    };
+    }
 
     private class DummySet implements XSet
     {
@@ -291,13 +290,13 @@ public class Map /* extends complexlib.ComplexTestCase */
         public XEnumeration createEnumeration() { throw new UnsupportedOperationException( "Not implemented." ); }
         public Type getElementType()            { throw new UnsupportedOperationException( "Not implemented." ); }
         public boolean hasElements()            { throw new UnsupportedOperationException( "Not implemented." ); }
-    };
+    }
 
     private class DummyContainer implements XContainer
     {
         public void addContainerListener( XContainerListener arg0 ) { throw new UnsupportedOperationException( "Not implemented." ); }
         public void removeContainerListener( XContainerListener arg0 ) { throw new UnsupportedOperationException( "Not implemented." ); }
-    };
+    }
 
     private class DummyIdentifierAccess implements XIdentifierAccess
     {
@@ -305,18 +304,16 @@ public class Map /* extends complexlib.ComplexTestCase */
         public int[] getIdentifiers() { throw new UnsupportedOperationException( "Not implemented." ); }
         public Type getElementType() { throw new UnsupportedOperationException( "Not implemented." ); }
         public boolean hasElements() { throw new UnsupportedOperationException( "Not implemented." ); }
-    };
+    }
 
     private class DummyElementAccess implements XElementAccess
     {
         public Type getElementType() { throw new UnsupportedOperationException( "Not implemented." ); }
         public boolean hasElements() { throw new UnsupportedOperationException( "Not implemented." ); }
-    };
+    }
 
     @Test public void testValueTypes() throws com.sun.star.uno.Exception
     {
-        final Integer key = new Integer(1);
-
         // type compatibility matrix: rows are the value types used to create the map,
         // columns are the value types fed into the map. A value "1" means the respective type
         // should be accepted.
@@ -349,12 +346,12 @@ public class Map /* extends complexlib.ComplexTestCase */
 
         for ( int valueTypePos = 0; valueTypePos != typeCompatibility.length; ++valueTypePos )
         {
-            XMap map = com.sun.star.container.EnumerableMap.create( connection.getComponentContext(),
+            com.sun.star.container.EnumerableMap.create( connection.getComponentContext(),
                 new Type( Integer.class ), new Type( impl_getValueClassByPos( valueTypePos ) ) );
 
             for ( int checkTypePos = 0; checkTypePos != typeCompatibility[valueTypePos].length; ++checkTypePos )
             {
-                Object value = impl_getSomeValueByTypePos( checkTypePos );
+                impl_getSomeValueByTypePos( checkTypePos );
                 if ( typeCompatibility[valueTypePos][checkTypePos] != 0 )
                 {
                     // expected to succeed
@@ -382,7 +379,7 @@ public class Map /* extends complexlib.ComplexTestCase */
     private interface CompareEqual
     {
         public boolean areEqual( Object _lhs, Object _rhs );
-    };
+    }
 
     private class DefaultCompareEqual implements CompareEqual
     {
@@ -390,7 +387,7 @@ public class Map /* extends complexlib.ComplexTestCase */
         {
             return _lhs.equals( _rhs );
         }
-    };
+    }
 
     private class PairCompareEqual implements CompareEqual
     {
@@ -400,16 +397,15 @@ public class Map /* extends complexlib.ComplexTestCase */
             Pair< ?, ? > rhs = (Pair< ?, ? >)_rhs;
             return lhs.First.equals( rhs.First ) && lhs.Second.equals( rhs.Second );
         }
-    };
+    }
 
-    @SuppressWarnings("unchecked")
     private void impl_verifyEnumerationContent( XEnumeration _enum, final Object[] _expectedElements, final String _context )
         throws com.sun.star.uno.Exception
     {
         // since we cannot assume the map to preserve the ordering in which the elements where inserted,
         // we can only verify that all elements exist as expected, plus *no more* elements than expected
         // are provided by the enumeration
-        Set set = new HashSet();
+        Set<Integer> set = new HashSet<Integer>();
         for ( int i=0; i<_expectedElements.length; ++i )
         {
             set.add( i );
@@ -521,7 +517,7 @@ public class Map /* extends complexlib.ComplexTestCase */
     }
 
 
-    private XMultiServiceFactory getMSF()
+    private static XMultiServiceFactory getMSF()
     {
         final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
         return xMSF1;

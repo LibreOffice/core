@@ -42,7 +42,6 @@ class TestHelper
     String m_sTestPrefix;
 
     /** Creates a new instance of TestHelper
-     * @param sTestPrefix
      */
     public TestHelper ( String sTestPrefix ) {
         m_sTestPrefix = sTestPrefix;
@@ -156,7 +155,7 @@ public class SequenceOutputStreamUnitTest /* extends ComplexTestCase*/ {
         return /* true */;
     }
 
-    private XMultiServiceFactory getMSF()
+    private static XMultiServiceFactory getMSF()
     {
         final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
         return xMSF1;
