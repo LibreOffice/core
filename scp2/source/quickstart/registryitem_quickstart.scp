@@ -27,10 +27,11 @@
 
 #include "macros.inc"
 
-RegistryItem gid_Regitem_Software_OpenOffice_Quickstarterinstalled
+RegistryItem gid_Regitem_Software_OpenOffice_RunQuickstartAtFirstStart
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\LibreOffice";
     ModuleID = gid_Module_Optional_Quickstart;
-    Name = "QuickStarterInstalled";
+    Name = "RunQuickstartAtFirstStart";
     Value = "1";
+    ComponentCondition = "QUICKSTART=1";
 End

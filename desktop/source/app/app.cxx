@@ -103,6 +103,18 @@
 #include <sys/wait.h>
 #endif
 
+#ifdef WNT
+#ifdef _MSC_VER
+#pragma warning(push, 1) /* disable warnings within system headers */
+#endif
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+#endif //WNT
+
+
 using rtl::OUString;
 using rtl::OUStringBuffer;
 
@@ -3038,6 +3050,30 @@ void Desktop::CheckFirstRun( )
     m_firstRunTimer.SetTimeout(3000); // 3 sec.
     m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
     m_firstRunTimer.Start();
+
+#ifdef WNT
+    // Check if Quckstarter should be started (on Windows only)
+    TCHAR szValue[8192];
+    DWORD nValueSize = sizeof(szValue);
+    HKEY hKey;
+    if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  "Software\\LibreOffice", &hKey ) )
+    {
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("RunQuickstartAtFirstStart"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sal_Bool bQuickstart( sal_True );
+            sal_Bool bAutostart( sal_True );
+            Sequence< Any > aSeq( 2 );
+            aSeq[0] <<= bQuickstart;
+            aSeq[1] <<= bAutostart;
+
+            Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
+                OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
+            if ( xQuickstart.is() )
+                xQuickstart->initialize( aSeq );
+            RegCloseKey( hKey );
+        }
+    }
+#endif
 
     // --------------------------------------------------------------------
     // reset the config flag

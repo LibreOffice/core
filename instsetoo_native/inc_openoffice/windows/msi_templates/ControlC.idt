@@ -24,6 +24,7 @@ ReadyToInstall	DlgTitle	Show	ProgressType0="Modify"
 ReadyToInstall	DlgTitle2	Show	ProgressType0="Repair"
 ReadyToInstall	DlgTitle3	Show	ProgressType0="install"
 ReadyToInstall	DesktopLink	Hide	NOT DESKTOPLINKEXISTS
+ReadyToInstall	EnableQuickstart	Hide	NOT ( &gm_o_Quickstart=3 OR ( !gm_o_Quickstart=3 AND &gm_o_Quickstart=-1 ) )
 SetupCompleteError	Back	Default	UpdateStarted
 SetupCompleteError	Back	Disable	NOT UpdateStarted
 SetupCompleteError	Back	Enable	UpdateStarted
