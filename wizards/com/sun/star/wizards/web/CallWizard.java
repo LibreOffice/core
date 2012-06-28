@@ -35,9 +35,6 @@ import com.sun.star.wizards.common.Resource;
 /**
  * This class capsulates the class, that implements the minimal component, a factory for
  * creating the service (<CODE>__getServiceFactory</CODE>).
- *
- * @author rpiterman
- * @version $Revision: 1.10.52.1 $
  */
 public class CallWizard
 {

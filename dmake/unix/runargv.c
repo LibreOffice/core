@@ -1,6 +1,4 @@
-/* $RCSfile: runargv.c,v $
--- $Revision: 1.14 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:39:41 $
+/*
 --
 -- SYNOPSIS
 --      Invoke a sub process.

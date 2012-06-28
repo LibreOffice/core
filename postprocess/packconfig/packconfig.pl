@@ -42,13 +42,6 @@ my $do_rebuild = 0;          # is rebuilding zipfile required?
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-my $script_rev;
-my $id_str = ' $Revision: 1.3.24.2 $ ';
-$id_str =~ /Revision:\s+(\S+)\s+\$/
-  ? ($script_rev = $1) : ($script_rev = "-");
-
-#print "$script_name -- version: $script_rev\n";
-
 #### main #####
 
 parse_options();

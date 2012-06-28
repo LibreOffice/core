@@ -1,6 +1,4 @@
-/* $RCSfile: extern.h,v $
--- $Revision: 1.13 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:28:27 $
+/*
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.

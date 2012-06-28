@@ -1,6 +1,4 @@
-/* $RCSfile: config.h,v $
--- $Revision: 1.14 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:40:17 $
+/*
 --
 -- SYNOPSIS
 --      Configurarion include file.

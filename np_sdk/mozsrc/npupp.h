@@ -36,10 +36,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-
 /*
- *  npupp.h $Revision: 1.2 $
- *  function call mecahnics needed by platform specific glue code.
+ *  function call mechanics needed by platform specific glue code.
  */
 
 

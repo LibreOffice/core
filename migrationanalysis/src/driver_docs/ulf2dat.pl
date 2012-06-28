@@ -24,10 +24,6 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.4.108.1 $ ';
-$id_str =~ /Revision:\s+(\S+)\s+\$/
-  ? ($script_rev = $1) : ($script_rev = "-");
-
 #########################
 #                       #
 #   Globale Variablen   #
@@ -41,7 +37,7 @@ use Encode::Alias;
 my ($in_name, $ID, $new_ID);
 my ($help);
 
-print STDERR "$script_name -- Version: $script_rev\n" ;
+print STDERR "$script_name -- Version: 1.4.108.1\n" ;
 
 &get_options;
 

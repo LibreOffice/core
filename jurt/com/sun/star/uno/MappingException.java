@@ -24,7 +24,6 @@ package com.sun.star.uno;
  * The exception is replaced by the com.sun.star.lang.DisposedException.
  * @deprecated since UDK 3.0.2
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2008-04-11 11:28:00 $
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IQueryInterface
  * @see         com.sun.star.uno.IBridge

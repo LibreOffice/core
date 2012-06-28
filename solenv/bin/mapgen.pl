@@ -38,12 +38,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #### script id #####
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
-
-$id_str = ' $Revision: 1.6 $ ';
-$id_str =~ /Revision:\s+(\S+)\s+\$/
-  ? ($script_rev = $1) : ($script_rev = "-");
-
-print "$script_name -- version: $script_rev\n";
+print "$script_name -- version: 1.6\n";
 print "Multi Platform Enabled Edition\n";
 
 #########################

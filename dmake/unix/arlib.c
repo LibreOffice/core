@@ -1,6 +1,4 @@
-/* $RCSfile: arlib.c,v $
--- $Revision: 1.5 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:18:37 $
+/*
 --
 -- SYNOPSIS
 --      Unix archive manipulation code.

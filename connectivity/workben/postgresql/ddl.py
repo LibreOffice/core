@@ -1,11 +1,5 @@
 #*************************************************************************
 #
-#   $RCSfile: ddl.py,v $
-#
-#   $Revision: 1.1.2.5 $
-#
-#   last change: $Author: jbu $ $Date: 2007/01/07 13:50:38 $
-#
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
 #

@@ -1,6 +1,4 @@
-/* $RCSfile: rmprq.c,v $
--- $Revision: 1.5 $
--- last change: $Author: obo $ $Date: 2007-06-12 06:09:05 $
+/*
 --
 -- SYNOPSIS
 --      Remove prerequisites code.

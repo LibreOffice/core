@@ -32,7 +32,7 @@ use File::Basename;
 use Getopt::Long;
 use Time::localtime;
 
-our $version_info = 'gcov helper $Revision: 1.2 $ ';
+our $version_info = 'gcov helper: 1.2 ';
 
 our $help;                    # Help option flag
 our $version;                 # Version option flag

@@ -21,7 +21,6 @@ package com.sun.star.uno;
 /**
  * The Ascii class represents the IDL build in type <code>ascii</code>.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2008-04-11 11:27:21 $
  * @author      Markus Meyer
  * @deprecated do not use
  */

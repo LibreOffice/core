@@ -31,11 +31,7 @@ $nfield   = 0;
 ###### main ######
 
 # Version
-$idStr = ' $Revision: 1.2 $ ';
-$idStr =~ /Revision:\s+(\S+)\s+\$/
-    ? ($langwrapRev = $1) : ($langwrapRev = "-");
-
-print "langwrap -- Version: $langwrapRev\n";
+print "langwrap -- Version: 1.2\n";
 
 # Options
 &check_options();

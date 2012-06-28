@@ -26,7 +26,6 @@ package com.sun.star.uno;
  * You cannot create a object of this class or subclass direct, to
  * avoid enum values with integer values outside the defined range.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2008-04-11 11:11:59 $
  */
 public abstract class Enum {
     private int m_value;

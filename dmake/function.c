@@ -1,6 +1,4 @@
-/* $RCSfile: function.c,v $
--- $Revision: 1.12 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:28:45 $
+/*
 --
 -- SYNOPSIS
 --      GNU style functions for dmake.

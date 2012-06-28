@@ -35,7 +35,6 @@ import com.sun.star.connection.XConnectionBroadcaster;
  * and is uses by the <code>PipeConnector</code> and the <code>PipeAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2008-04-11 11:13:00 $
  * @author      Kay Ramme
  * @see         com.sun.star.comp.connections.PipeAcceptor
  * @see         com.sun.star.comp.connections.PipeConnector

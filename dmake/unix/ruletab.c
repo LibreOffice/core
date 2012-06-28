@@ -1,6 +1,4 @@
-/* $RCSfile: ruletab.c,v $
--- $Revision: 1.9 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:53:13 $
+/*
 --
 -- SYNOPSIS
 --      Default initial configuration of dmake.

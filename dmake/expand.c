@@ -1,6 +1,4 @@
-/* $RCSfile: expand.c,v $
--- $Revision: 1.8 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:38:46 $
+/*
 --
 -- SYNOPSIS
 --      Macro expansion code.

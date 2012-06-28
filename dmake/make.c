@@ -1,6 +1,4 @@
-/* $RCSfile: make.c,v $
--- $Revision: 1.12 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:29:19 $
+/*
 --
 -- SYNOPSIS
 --      Perform the update of all outdated targets.

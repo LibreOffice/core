@@ -21,7 +21,6 @@ package com.sun.star.lib.uno.environments.remote;
 /**
  * This class implements a java thread pool.
  * <p>
- * @version     $Revision: 1.13 $ $ $Date: 2008-04-11 11:20:22 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool

@@ -1,6 +1,4 @@
-/* $RCSfile: stdmacs.h,v $
--- $Revision: 1.5 $
--- last change: $Author: hr $ $Date: 2006-04-20 12:02:29 $
+/*
 --
 -- SYNOPSIS
 --      General use macros.

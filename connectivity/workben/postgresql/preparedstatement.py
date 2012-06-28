@@ -1,11 +1,5 @@
 #*************************************************************************
 #
-#   $RCSfile: preparedstatement.py,v $
-#
-#   $Revision: 1.1.2.9 $
-#
-#   last change: $Author: jbu $ $Date: 2008/07/07 21:37:11 $
-#
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
 #

@@ -1,6 +1,4 @@
-/* $RCSfile: quit.c,v $
--- $Revision: 1.8 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:29:56 $
+/*
 --
 -- SYNOPSIS
 --      End the dmake session.

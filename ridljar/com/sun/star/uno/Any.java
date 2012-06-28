@@ -29,7 +29,6 @@ package com.sun.star.uno;
  * an explicit interface type, so the remote counterpart doesn't need to invoke
  * a queryInterface).
  * <p>
- * @version     $Revision: 1.11 $ $ $Date: 2008-04-11 11:11:43 $
  */
 public class Any {
     /**

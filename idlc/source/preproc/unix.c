@@ -41,8 +41,6 @@
 
 #include "cpp.h"
 
-extern char rcsid[];
-
 int Pflag = 0;                          /* print no line information */
 int Iflag = 0;                          /* print includes */
 int Mflag = 0;                          /* print macor expansion */
@@ -121,7 +119,7 @@ void
                             break;
 
                         case 'v':
-                            fprintf(stderr, "%s %s\n", argv[0], rcsid);
+                            fprintf(stderr, "%s\n", argv[0]);
                             break;
 
                         default:

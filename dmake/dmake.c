@@ -1,6 +1,4 @@
-/* $RCSfile: dmake.c,v $
--- $Revision: 1.13 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:28:04 $
+/*
 --
 -- SYNOPSIS
 --      The main program.

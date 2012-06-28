@@ -1,6 +1,4 @@
-/* $RCSfile: dcache.c,v $
--- $Revision: 1.9 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:52:47 $
+/*
 --
 -- SYNOPSIS
 --      Directory cache management routines.

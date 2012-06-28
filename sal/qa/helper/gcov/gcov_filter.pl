@@ -33,7 +33,7 @@ use File::Basename;
 use Getopt::Long;
 
 # Global constants
-our $version_info = 'gcov helper $Revision: 1.4 $ ';
+our $version_info = 'gcov helper: 1.4 ';
 our $help;                    # Help option flag
 our $version;                 # Version option flag
 our $cwd = `pwd`;             # current working directory

@@ -56,7 +56,6 @@ import com.sun.star.uno.UnoRuntime;
  * <p>
  * This component is only usable for remote bridges.
  * <p>
- * @version     $Revision: 1.11 $ $ $Date: 2008-04-11 11:07:51 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @since       UDK1.0

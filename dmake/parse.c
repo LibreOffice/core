@@ -1,6 +1,4 @@
-/* $RCSfile: parse.c,v $
--- $Revision: 1.8 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:40:45 $
+/*
 --
 -- SYNOPSIS
 --      Parse the input, and perform semantic analysis

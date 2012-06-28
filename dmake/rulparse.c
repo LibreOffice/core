@@ -1,6 +1,4 @@
-/* $RCSfile: rulparse.c,v $
--- $Revision: 1.12 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:41:24 $
+/*
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input

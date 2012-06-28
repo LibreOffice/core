@@ -24,8 +24,6 @@ package com.sun.star.uno;
  * <p>
  * Note: The idl type <code>union<code> is currently not fully
  * integrated into the UNO framework, so don't use it.
- *
- * @version     $Revision: 1.5 $ $ $Date: 2008-04-11 11:15:07 $
  */
 public class Union {
     /**

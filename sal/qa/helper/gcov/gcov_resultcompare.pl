@@ -30,7 +30,7 @@ use strict;
 use File::Basename;
 use Getopt::Long;
 
-our $version_info = 'gcov_resultcompare $Revision: 1.2 $ ';
+our $version_info = 'gcov_resultcompare: 1.2 ';
 
 our $help;                    # Help option flag
 our $version;                 # Version option flag

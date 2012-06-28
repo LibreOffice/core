@@ -1,6 +1,4 @@
-/* $RCSfile: dag.c,v $
--- $Revision: 1.12 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:27:48 $
+/*
 --
 -- SYNOPSIS
 --      Routines to construct the internal dag.

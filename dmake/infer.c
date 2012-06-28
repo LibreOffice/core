@@ -1,6 +1,4 @@
-/* $RCSfile: infer.c,v $
--- $Revision: 1.8 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:39:49 $
+/*
 --
 -- SYNOPSIS
 --      Infer how to make a target.

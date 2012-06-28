@@ -44,8 +44,6 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.10 $ $Date: 2008-07-11 14:50:24 $";
-
 int realargc;
 char* realargv[512];
 
