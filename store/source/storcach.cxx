@@ -29,10 +29,7 @@
 #include "object.hxx"
 #include "storbase.hxx"
 
-#ifndef INCLUDED_STDDEF_H
 #include <stddef.h>
-#define INCLUDED_STDDEF_H
-#endif
 
 using namespace store;
 

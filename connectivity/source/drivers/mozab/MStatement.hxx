@@ -28,10 +28,7 @@
 #include <cppuhelper/compbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include "connectivity/CommonTools.hxx"
-#ifndef INCLUDED_LIST
 #include <list>
-#define INCLUDED_LIST
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/sqliterator.hxx"

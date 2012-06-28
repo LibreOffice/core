@@ -32,10 +32,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "osl/diagnose.h"
 
-#ifndef INCLUDED_NEW
 #include <new>
-#define INCLUDED_NEW
-#endif
 
 using com::sun::star::uno::RuntimeException;
 using sd::SimpleReferenceComponent;

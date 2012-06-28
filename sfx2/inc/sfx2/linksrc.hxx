@@ -36,10 +36,7 @@
 #include <tools/rtti.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#ifndef _SAL_CONFIG_H
 #include <sal/config.h>
-#define _SAL_CONFIG_H
-#endif
 
 namespace com { namespace sun { namespace star { namespace uno
 {

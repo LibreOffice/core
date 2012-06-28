@@ -20,10 +20,7 @@
 #define DBAUI_QUERY_TABLEWINDOWDATA_HXX
 
 #include "TableWindowData.hxx"
-#ifndef INCLUDED_VECTOR
-#define INCLUDED_VECTOR
 #include <vector>
-#endif
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 

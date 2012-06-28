@@ -35,10 +35,7 @@
 #include "elementmark.hxx"
 #include "elementcollector.hxx"
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 class SAXEventKeeperImpl : public cppu::WeakImplHelper6
 <

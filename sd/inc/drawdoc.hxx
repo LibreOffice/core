@@ -43,11 +43,8 @@
 #include <svx/svdundo.hxx>
 
 #include <vector>
-
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
+
 #include "sddllapi.h"
 #include "sdpage.hxx"
 

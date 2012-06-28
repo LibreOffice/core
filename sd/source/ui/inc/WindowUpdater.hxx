@@ -24,10 +24,7 @@
 #include <svl/ctloptions.hxx>
 #include "sddllapi.h"
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 class Window;
 class OutputDevice;

@@ -19,10 +19,8 @@
 #ifndef DBAUI_TABLEFIELDDESC_HXX
 #define DBAUI_TABLEFIELDDESC_HXX
 
-#ifndef INCLUDED_VECTOR
-#define INCLUDED_VECTOR
 #include <vector>
-#endif
+
 #include "QEnumTypes.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

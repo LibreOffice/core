@@ -29,10 +29,8 @@
 #ifndef SC_COMPILER_HXX
 #define SC_COMPILER_HXX
 
-#ifndef INCLUDED_STRING_H
 #include <string.h>
-#define INCLUDED_STRING_H
-#endif
+
 #include <tools/mempool.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
@@ -47,11 +45,7 @@
 #include <formula/FormulaCompiler.hxx>
 
 #include <boost/intrusive_ptr.hpp>
-
-#ifndef INCLUDED_HASH_MAP
 #include <boost/unordered_map.hpp>
-#define INCLUDED_HASH_MAP
-#endif
 
 //-----------------------------------------------
 

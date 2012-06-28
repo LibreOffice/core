@@ -24,10 +24,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
 
 using ucb::cachemap::Object1;
 using ucb::cachemap::ObjectContainer1;

@@ -31,10 +31,7 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef INCLUDED_DEQUE
 #include <deque>
-#define INCLUDED_DEQUE
-#endif
 
 #include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>

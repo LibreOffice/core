@@ -40,10 +40,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 #ifdef UNX
 #define stricmp strcasecmp

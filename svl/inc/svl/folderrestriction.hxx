@@ -23,10 +23,7 @@
 #include "svl/svldllapi.h"
 #include <tools/string.hxx>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 //........................................................................
 namespace svt

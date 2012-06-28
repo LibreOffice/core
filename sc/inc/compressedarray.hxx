@@ -29,15 +29,9 @@
 #ifndef SC_COMPRESSEDARRAY_HXX
 #define SC_COMPRESSEDARRAY_HXX
 
-#ifndef INCLUDED_CSTDDEF
 #include <cstddef>
-#define INCLUDED_CSTDDEF
-#endif
-
-#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
-#define INCLUDED_ALGORITHM
-#endif
+
 #include "scdllapi.h"
 
 const size_t nScCompressedArrayDelta = 4;

@@ -36,10 +36,8 @@
 #include "osl/diagnose.h"
 #include "sal/types.h"
 
-#ifndef INCLUDED_STRING_H
 #include <string.h>
-#define INCLUDED_STRING_H
-#endif
+
 #include <comphelper/stl_types.hxx>
 #include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>

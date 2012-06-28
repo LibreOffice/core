@@ -32,10 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 class ElementMark;
 class ElementCollector;

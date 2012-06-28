@@ -42,11 +42,7 @@
 #include <toxe.hxx>
 #include <calbck.hxx>
 
-#ifndef INCLUDED_VECTOR
 #include <vector> // #i21237#
-#define INCLUDED_VECTOR
-#endif
-
 
 namespace com { namespace sun { namespace star {
     namespace text { class XDocumentIndexMark; }

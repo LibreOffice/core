@@ -31,10 +31,7 @@
 #include <sfx2/module.hxx>
 #include <vcl/vclevent.hxx>
 
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
 
 class SdOptions;
 class BasicIDE;

@@ -28,10 +28,7 @@
 #include "store/types.h"
 #include "object.hxx"
 
-#ifndef INCLUDED_STDIO_H
 #include <stdio.h>
-#define INCLUDED_STDIO_H
-#endif
 
 using namespace store;
 

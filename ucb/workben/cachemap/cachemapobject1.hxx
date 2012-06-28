@@ -26,14 +26,8 @@
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
 
-#ifndef INCLUDED_MAP
 #include <map>
-#define INCLUDED_MAP
-#endif
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
 
 namespace rtl { class OUString; }
 namespace ucb { namespace cachemap { class Object1; } }

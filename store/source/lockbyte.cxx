@@ -30,10 +30,7 @@
 #include "object.hxx"
 #include "storbase.hxx"
 
-#ifndef INCLUDED_STRING_H
 #include <string.h>
-#define INCLUDED_STRING_H
-#endif
 
 using namespace store;
 

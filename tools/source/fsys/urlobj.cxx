@@ -38,14 +38,8 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
-#define INCLUDED_ALGORITHM
-#endif
-#ifndef INCLUDED_LIMITS
 #include <limits>
-#define INCLUDED_LIMITS
-#endif
 
 #include <string.h>
 

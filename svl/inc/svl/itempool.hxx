@@ -31,10 +31,7 @@
 
 #include "svl/svldllapi.h"
 
-#ifndef INCLUDED_LIMITS_H
 #include <limits.h>
-#define INCLUDED_LIMITS_H
-#endif
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <svl/svarray.hxx>

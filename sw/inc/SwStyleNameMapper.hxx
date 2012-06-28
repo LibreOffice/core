@@ -33,10 +33,7 @@
 #include <SwGetPoolIdFromName.hxx>
 #include "swdllapi.h"
 
-#ifndef INCLUDED_HASH_MAP
 #include <boost/unordered_map.hpp>
-#define INCLUDED_HASH_MAP
-#endif
 #include <stringhash.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>

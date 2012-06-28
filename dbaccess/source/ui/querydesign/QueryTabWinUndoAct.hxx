@@ -20,11 +20,7 @@
 #define DBAUI_QUERYTABWINUNDOACT_HXX
 
 #include "QueryDesignUndoAction.hxx"
-#ifndef INCLUDED_VECTOR
-#define INCLUDED_VECTOR
 #include <vector>
-#endif // INCLUDED_VECTOR
-
 #include <algorithm>
 
 namespace dbaui

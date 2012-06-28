@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #ifndef _FILTER_CONFIG_CACHE_HXX_
 #define _FILTER_CONFIG_CACHE_HXX_
 
@@ -36,10 +35,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 class FilterConfigCache
 {

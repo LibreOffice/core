@@ -22,13 +22,9 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 /*
  * type of reference

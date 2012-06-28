@@ -30,10 +30,7 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef INCLUDED_LIST
 #include <list>
-#define INCLUDED_LIST
-#endif
 #include <tools/string.hxx>
 #include <unotools/options.hxx>
 

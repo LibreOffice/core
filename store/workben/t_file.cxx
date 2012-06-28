@@ -24,10 +24,7 @@
 
 #include "lockbyte.hxx"
 
-#ifndef INCLUDED_STDIO_H
 #include <stdio.h>
-#define INCLUDED_STDIO_H
-#endif
 
 #include "osl/file.h"
 #include "osl/process.h"

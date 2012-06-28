@@ -29,10 +29,7 @@
 
 #include <flddropdown.hxx>
 
-#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
-#define INCLUDED_ALGORITHM
-#endif
 #include <svl/poolitem.hxx>
 
 #include <unofldmid.h>

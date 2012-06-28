@@ -26,28 +26,13 @@
  *
  ************************************************************************/
 
-
 #include "osl/process.h"
 
-#ifndef INCLUDED_LIMITS_H
 #include <limits.h>
-#define INCLUDED_LIMITS_H
-#endif
-
-#ifndef INCLUDED_PTHREAD_H
 #include <pthread.h>
-#define INCLUDED_PTHREAD_H
-#endif
-
-#ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
-#define INCLUDED_STDLIB_H
-#endif
-
-#ifndef INCLUDED_STRING_H
 #include <string.h>
-#define INCLUDED_STRING_H
-#endif
+
 #include "osl/diagnose.h"
 #include "osl/file.h"
 #include "osl/module.h"

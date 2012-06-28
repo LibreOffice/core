@@ -35,10 +35,7 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::xml::crypto::XXMLSecurityContext ,

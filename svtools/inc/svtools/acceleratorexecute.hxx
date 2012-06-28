@@ -34,22 +34,14 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include <com/sun/star/frame/XFrame.hpp>
-
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URL.hpp>
-
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <vcl/keycod.hxx>
 #include <vcl/evntpost.hxx>

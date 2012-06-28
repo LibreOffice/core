@@ -20,10 +20,7 @@
 #include "salhelper/simplereferenceobject.hxx"
 #include "osl/diagnose.h"
 
-#ifndef INCLUDED_NEW
 #include <new>
-#define INCLUDED_NEW
-#endif
 
 using salhelper::SimpleReferenceObject;
 

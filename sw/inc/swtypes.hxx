@@ -30,11 +30,7 @@
 #include <tools/solar.h>
 #include <SwGetPoolIdFromName.hxx>
 
-#ifndef INCLUDED_LIMITS_H
 #include <limits.h>     //For LONG_MAX.
-#define INCLUDED_LIMITS_H
-#endif
-
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
 #include <i18npool/lang.h>

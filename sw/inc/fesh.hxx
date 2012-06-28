@@ -41,10 +41,7 @@
 
 #include <svtools/embedhlp.hxx>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 namespace editeng { class SvxBorderLine; }
 

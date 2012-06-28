@@ -29,10 +29,7 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #define _COMPHELPER_SEQUENCE_HXX_
 
-#ifndef INCLUDED_ALGORITHM
 #include <algorithm> // copy algorithm
-#define INCLUDED_ALGORITHM
-#endif
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 #include "comphelper/comphelperdllapi.h"

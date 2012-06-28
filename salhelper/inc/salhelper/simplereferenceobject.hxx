@@ -24,14 +24,8 @@
 #include "sal/types.h"
 #include "salhelperdllapi.h"
 
-#ifndef INCLUDED_CSTDDEF
 #include <cstddef>
-#define INCLUDED_CSTDDEF
-#endif
-#ifndef INCLUDED_NEW
 #include <new>
-#define INCLUDED_NEW
-#endif
 
 namespace salhelper {
 

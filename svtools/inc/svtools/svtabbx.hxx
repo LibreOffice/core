@@ -32,10 +32,7 @@
 #include <svtools/svtreebx.hxx>
 #include <svtools/accessibletableprovider.hxx>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 enum SvTabJustify
 {

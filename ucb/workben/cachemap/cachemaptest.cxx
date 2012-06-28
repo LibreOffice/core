@@ -26,18 +26,9 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
-#ifndef INCLUDED_CSTDLIB
 #include <cstdlib>
-#define INCLUDED_CSTDLIB
-#endif
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
-#ifndef INCLUDED_STDIO_H
 #include <stdio.h> // <iostream> or <cstdio> do not work well on all platforms
-#define INCLUDED_STDIO_H
-#endif
 
 using ucb::cachemap::Object1;
 using ucb::cachemap::Object2;

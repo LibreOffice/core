@@ -154,15 +154,8 @@ struct TEIMEInfos
 
 // -----------------  Wrapper for old Tools List -------------------
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
-
-#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
-#define INCLUDED_ALGORITHM
-#endif
 
 template <class T> class ToolsList : public ::std::vector< T >
 {

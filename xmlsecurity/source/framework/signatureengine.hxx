@@ -35,10 +35,7 @@
 
 #include "securityengine.hxx"
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 class SignatureEngine : public cppu::ImplInheritanceHelper2
 <

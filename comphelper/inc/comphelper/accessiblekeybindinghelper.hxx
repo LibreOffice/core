@@ -24,10 +24,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
+
 #include "comphelper/comphelperdllapi.h"
 
 //..............................................................................

@@ -54,10 +54,7 @@
 
 #include <cppuhelper/implbase4.hxx>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 /*
  * all error information

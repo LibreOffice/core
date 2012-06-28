@@ -38,15 +38,8 @@
 #include <svtools/accessibletableprovider.hxx>
 #include <vector>
 
-#ifndef INCLUDED_LIMITS_H
 #include <limits.h>
-#define INCLUDED_LIMITS_H
-#endif
-
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
 
 class BrowserColumn;
 class BrowserDataWin;

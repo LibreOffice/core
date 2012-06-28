@@ -32,10 +32,8 @@
 #include <uno/lbnames.h>
 #include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#ifndef INCLUDED_STRING_H
+
 #include <string.h>
-#define INCLUDED_STRING_H
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

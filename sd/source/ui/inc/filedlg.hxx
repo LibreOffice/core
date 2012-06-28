@@ -24,10 +24,8 @@
 #include <tools/string.hxx>
 #include <tools/errcode.hxx>
 
-#ifndef INCLUDED_MEMORY
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
+
 #include "sddllapi.h"
 
 class SdFileDialog_Imp;

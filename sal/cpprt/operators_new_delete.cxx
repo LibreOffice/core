@@ -32,20 +32,9 @@
 #define _NTSDK
 #endif /* WNT */
 
-#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
-#define INCLUDED_ALGORITHM
-#endif
-
-#ifndef INCLUDED_NEW
 #include <new>
-#define INCLUDED_NEW
-#endif
-
-#ifndef INCLUDED_STRING_H
 #include <string.h>
-#define INCLUDED_STRING_H
-#endif
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 

@@ -28,10 +28,8 @@
 
 #include <svl/inethist.hxx>
 
-#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
-#define INCLUDED_ALGORITHM
-#endif
+
 #include "rtl/instance.hxx"
 #include "rtl/crc.h"
 #include "rtl/memory.h"
