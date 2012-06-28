@@ -4477,22 +4477,22 @@ AC_SUBST(APR_LIBS)
 dnl ===================================================================
 dnl Check for system apr-util
 dnl ===================================================================
-SYSTEM_APRUTIL=NO
-APRUTIL_CFLAGS=
-APRUTIL_LIBS=
+SYSTEM_APR_UTIL=NO
+APR_UTIL_CFLAGS=
+APR_UTIL_LIBS=
 AC_MSG_CHECKING([which libapr-util to use])
 if test "x$with_system_apr_util" = "xyes" -o -n "$with_system_libs"; then
     AC_MSG_RESULT([system])
-    PKG_CHECK_MODULES([APRUTIL], [apr-util-1 >= 1.0])
-    SYSTEM_APRUTIL=YES
+    PKG_CHECK_MODULES([APR_UTIL], [apr-util-1 >= 1.0])
+    SYSTEM_APR_UTIL=YES
 else
     AC_MSG_RESULT([internal])
-    SYSTEMAPR_UTIL=NO
+    SYSTEM_APR_UTIL=NO
     BUILD_TYPE="$BUILD_TYPE APR_UTIL"
 fi
-AC_SUBST(SYSTEM_APRUTIL)
-AC_SUBST(APRUTIL_CFLAGS)
-AC_SUBST(APRUTIL_LIBS)
+AC_SUBST(SYSTEM_APR_UTIL)
+AC_SUBST(APR_UTIL_CFLAGS)
+AC_SUBST(APR_UTIL_LIBS)
 
 
 dnl ===================================================================
