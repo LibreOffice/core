@@ -1,5 +1,5 @@
---- misc/mythes-1.2.2.orig/th_gen_idx.pl
-+++ misc/build/mythes-1.2.2/th_gen_idx.pl
+--- misc/mythes-1.2.3.orig/th_gen_idx.pl
++++ misc/build/mythes-1.2.3/th_gen_idx.pl
 @@ -1,11 +1,32 @@
 -#!/usr/bin/perl
 -

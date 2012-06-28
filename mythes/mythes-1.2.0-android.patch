@@ -1,5 +1,5 @@
---- misc/mythes-1.2.2/config.sub	2010-02-27 16:52:52.000000000 +0100
-+++ misc/build/mythes-1.2.2/config.sub	2011-09-26 23:39:04.000000000 +0200
+--- misc/mythes-1.2.3/config.sub	2010-02-27 16:52:52.000000000 +0100
++++ misc/build/mythes-1.2.3/config.sub	2011-09-26 23:39:04.000000000 +0200
 @@ -123,7 +123,7 @@
  # Here we must recognize all the valid KERNEL-OS combinations.
  maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`

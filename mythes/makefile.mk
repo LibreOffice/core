@@ -36,8 +36,8 @@ TARGET=mythes
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=mythes-1.2.2
-TARFILE_MD5=e1e255dc43dbcbb34cb19e8a0eba90ae
+TARFILE_NAME=mythes-1.2.3
+TARFILE_MD5=46e92b68e31e858512b680b3b61dc4c1
 
 ADDITIONAL_FILES += makefile.mk
 
