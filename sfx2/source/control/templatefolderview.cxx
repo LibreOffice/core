@@ -29,9 +29,10 @@
 #define ITEM_MAX_WIDTH 192
 #define ITEM_MAX_HEIGHT 192
 #define ITEM_PADDING 5
-#define THUMBNAIL_MAX_HEIGHT 128
+#define THUMBNAIL_MAX_HEIGHT 128 - 2*ITEM_PADDING
+#define THUMBNAIL_MAX_WIDTH ITEM_MAX_WIDTH - 2*ITEM_PADDING
 
-BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
+BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, long width, long height)
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -137,7 +138,10 @@ BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, int width, int height)
         aThumbnail = aReader.Read ();
     }
 
-    aThumbnail.Scale(Size(width,height));
+    int sWidth = std::min(aThumbnail.GetSizePixel().getWidth(),width);
+    int sHeight = std::min(aThumbnail.GetSizePixel().getHeight(),height);
+
+    aThumbnail.Scale(Size(sWidth,sHeight),BMP_SCALE_INTERPOLATE);
 
     // Note that the preview is returned without scaling it to the desired
     // width.  This gives the caller the chance to take advantage of a
@@ -276,10 +280,14 @@ void TemplateFolderView::Populate ()
             pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
 
             /// Preview first 2 thumbnails for folder
-            pItem->maPreview1 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,0),128,128);
+            pItem->maPreview1 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,0),
+                                                   THUMBNAIL_MAX_WIDTH*0.75,
+                                                   THUMBNAIL_MAX_HEIGHT*0.75);
 
             if ( nEntries > 2 )
-                pItem->maPreview2 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,1),128,128);
+                pItem->maPreview2 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,1),
+                                                       THUMBNAIL_MAX_WIDTH*0.75,
+                                                       THUMBNAIL_MAX_HEIGHT*0.75);
 
             for (sal_uInt16 j = 0; j < nEntries; ++j)
             {
@@ -291,7 +299,7 @@ void TemplateFolderView::Populate ()
                 pTemplateItem->maText = mpDocTemplates->GetName(i,j);
                 pTemplateItem->setPath(aURL);
                 pTemplateItem->setFileType(aType);
-                pTemplateItem->maPreview1 = lcl_fetchThumbnail(aURL,128,128);
+                pTemplateItem->maPreview1 = lcl_fetchThumbnail(aURL,THUMBNAIL_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT);
 
                 pItem->maTemplates.push_back(pTemplateItem);
             }
