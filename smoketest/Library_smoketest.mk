@@ -25,7 +25,13 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+# this is a Library that contains a unit test, so it can be packaged
 $(eval $(call gb_Library_Library,smoketest))
+
+# necessary because this is no CppUnitTest but a Library
+$(eval $(call gb_Library_add_defs,smoketest,\
+	-DCPPUNIT_PLUGIN_EXPORT='extern "C" SAL_DLLPUBLIC_EXPORT' \
+))
 
 $(eval $(call gb_Library_use_api,smoketest,\
 	offapi \
