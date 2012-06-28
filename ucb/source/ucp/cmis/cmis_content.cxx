@@ -64,6 +64,7 @@
 #include "cmis_resultset.hxx"
 
 #define OUSTR_TO_STDSTR(s) string( rtl::OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
+#define STD_TO_OUSTR( str ) rtl::OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
 using namespace com::sun::star;
 using namespace std;
@@ -98,8 +99,8 @@ namespace
                 rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
                     = new ucbhelper::SimpleAuthenticationRequest(
                         m_sUrl, m_sBindingUrl, ::rtl::OUString(),
-                        rtl::OUString::createFromAscii( username.c_str( ) ),
-                        rtl::OUString::createFromAscii( password.c_str( ) ),
+                        STD_TO_OUSTR( username ),
+                        STD_TO_OUSTR( password ),
                         ::rtl::OUString(), true, false );
                 xIH->handle( xRequest.get() );
 
@@ -300,7 +301,7 @@ namespace cmis
                 {
                     rtl::OUString sTitle;
                     if ( getObject().get() )
-                        sTitle = rtl::OUString::createFromAscii( getObject()->getName().c_str( ) );
+                        sTitle = STD_TO_OUSTR( getObject()->getName() );
                     else if ( m_pObjectProps.size() > 0 )
                     {
                         map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
@@ -308,7 +309,7 @@ namespace cmis
                         {
                             vector< string > values = it->second->getStrings( );
                             if ( values.size() > 0 )
-                                sTitle = rtl::OUString::createFromAscii( values.front( ).c_str( ) );
+                                sTitle = STD_TO_OUSTR( values.front( ) );
                         }
                     }
 
@@ -343,7 +344,7 @@ namespace cmis
                         else
                             path = getObject()->getName( );
 
-                        xRow->appendString( rProp, rtl::OUString::createFromAscii( path.c_str() ) );
+                        xRow->appendString( rProp, STD_TO_OUSTR( path ) );
                     }
                     else
                         xRow->appendVoid( rProp );
@@ -557,7 +558,7 @@ namespace cmis
                 try
                 {
                     object = m_pSession->getObjectByPath( newPath );
-                    sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
+                    sNewPath = STD_TO_OUSTR( newPath );
                 }
                 catch ( const libcmis::Exception& )
                 {
@@ -594,7 +595,7 @@ namespace cmis
                     if ( bIsFolder )
                     {
                         libcmis::FolderPtr pNew = pFolder->createFolder( m_pObjectProps );
-                        sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
+                        sNewPath = STD_TO_OUSTR( newPath );
                     }
                     else
                     {
@@ -602,7 +603,7 @@ namespace cmis
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
                         libcmis::DocumentPtr pNew = pFolder->createDocument( m_pObjectProps, pOut, string() );
-                        sNewPath = rtl::OUString::createFromAscii( newPath.c_str( ) );
+                        sNewPath = STD_TO_OUSTR( newPath );
                     }
                 }
 
@@ -899,7 +900,7 @@ namespace cmis
         if ( !parentPath.empty() )
         {
             URL aUrl( m_sURL );
-            aUrl.setObjectPath( rtl::OUString::createFromAscii( parentPath.c_str( ) ) );
+            aUrl.setObjectPath( STD_TO_OUSTR( parentPath ) );
             sRet = aUrl.asString( );
         }
 
