@@ -104,7 +104,7 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
 
     /** Sets the attributes for the text between two indices */
     public void setAttributes(int startIndex, int endIndex, javax.swing.text.AttributeSet as) {
-        java.util.Vector propertyValues = new java.util.Vector();
+        java.util.ArrayList propertyValues = new java.util.ArrayList();
 
         // Convert Alignment attribute
         Object attribute = as.getAttribute(StyleConstants.Alignment);

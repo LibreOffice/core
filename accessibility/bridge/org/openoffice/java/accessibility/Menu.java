@@ -24,7 +24,7 @@ import com.sun.star.uno.UnoRuntime;
 
 public class Menu extends AbstractButton
     implements javax.accessibility.Accessible {
-    private java.util.Vector children;
+    private java.util.ArrayList children;
     protected XAccessibleSelection unoAccessibleSelection = null;
 
     protected Menu(XAccessible xAccessible,
@@ -34,7 +34,7 @@ public class Menu extends AbstractButton
         try {
             // Create a vector with the correct initial capacity
             int count = unoAccessibleContext.getAccessibleChildCount();
-            children = new java.util.Vector(count);
+            children = new java.util.ArrayList(count);
 
             // Fill the vector with objects
             for (int i = 0; i < count; i++) {
@@ -52,7 +52,7 @@ public class Menu extends AbstractButton
             }
 
             if (children == null) {
-                children = new java.util.Vector(0);
+                children = new java.util.ArrayList(0);
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
         }
