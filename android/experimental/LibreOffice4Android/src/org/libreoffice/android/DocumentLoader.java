@@ -114,6 +114,7 @@ public class DocumentLoader
     XDevice dummySmallDevice;
     Object doc;
     int pageCount;
+    int currentPage;
     XRenderable renderable;
 
     GestureDetector gestureDetector;
@@ -440,7 +441,7 @@ public class DocumentLoader
     class PageViewer
         extends ViewSwitcher
     {
-        int currentPageNumber = -1;
+        public final int currentPageNumber = -1;
         TextView waitView;
         PageState state = PageState.NONEXISTENT;
         Bitmap bm;
@@ -488,6 +489,7 @@ public class DocumentLoader
             Log.i(TAG, "PageViewer display(" + number + ")");
             if (number >= 0)
                 waitView.setText("Page " + (number+1) + ", wait...");
+            currentPageNumber = number;
             state = PageState.NONEXISTENT;
 
             if (getDisplayedChild() == 1) {
@@ -503,7 +505,8 @@ public class DocumentLoader
         PageViewer(int number)
         {
             super(DocumentLoader.this);
-
+            if( number < 0)
+            	return
             waitView = new TextView(DocumentLoader.this);
             waitView.setTextSize(24);
             waitView.setGravity(Gravity.CENTER);
@@ -625,6 +628,7 @@ public class DocumentLoader
 			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             flipper.addView( waitView , 0 , matchParent);
+            currentPage = 0;
     	}
         protected Integer doInBackground(String... params)
         {
@@ -692,14 +696,16 @@ public class DocumentLoader
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
             flipper.removeViewAt( 0 );	
-            
-            //Should check that pages exist ie >=0 && < pageCount
+            currentPage = 0;
+            openPageWithPrefetching( currentPage );
+            /*
+            //open method? set current page = 0?
             flipper.addView(new PageViewer(0), 0, matchParent);
             for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
                 flipper.addView(new PageViewer(i+1), i+1, matchParent);
             for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
                 flipper.addView(new PageViewer(-1), PAGECACHE_PLUSMINUS + i+1, matchParent);
-                
+              */  
             ll = (LinearLayout)findViewById( R.id.navigator);
             inflater = (LayoutInflater) getApplicationContext().getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
@@ -919,18 +925,38 @@ public class DocumentLoader
     public void openPageWithPrefetching( int number ){
     	//as a first draft clear an refill "cache" on load.
     	//should move views where "cache window" overlaps 
-    	flipper.removeAllViews();
+    	if(currentPage == number || number < 0 || number >= pageCount)
+    		return;
+    	boolean[] hits = new boolean[PAGECACHE_SIZE];
+    	//flipper.removeAllViews();
     	flipper.addView(new PageViewer(number), 0, matchParent);
-        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
-        	if( number + i+1 >= 0 && number + i+1 < pageCount){//pageCount will always be correctly defined when this is called (famous last words)
-        		flipper.addView(new PageViewer( number + i+1), i+1, matchParent);
-        	}
-        }
-        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
-        	if( number + i+1 >= 0 && number + i+1 < pageCount){
-                flipper.addView(new PageViewer( number - (i+1)), PAGECACHE_PLUSMINUS + i+1, matchParent);
-        	}
-        }
+    	//If diff is > 2*+- do this
+    	if( number - currentPage >= PAGECACHE_SIZE ){
+	        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
+	        	if( number + i+1 >= 0 && number + i+1 < pageCount){//pageCount will always be correctly defined when this is called (famous last words)
+	        		flipper.addView(new PageViewer( number + i+1), i+1, matchParent);
+	        	}
+	        }
+	        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
+	        	if( number - i+1 >= 0 && number - i+1 < pageCount){
+	                flipper.addView(new PageViewer( number - (i+1)), PAGECACHE_PLUSMINUS + i+1, matchParent);
+	        	}
+	        }
+    	}else{
+    		for( int i = 0 ; i < flipper.getViewCount() ; i++){
+    			if( flipper.getViewAt( i ).currentPageNumber < number - PAGECACHE_PLUSMINUS &&
+    					flipper.getViewAt( i ).currentPageNumber > number + PAGECACHE_PLUSMINUS ){
+    				continue;
+    			}else{
+    				flipper.removeViewAt( i );
+    			}
+    		}
+    		/*have the reuseable views. Make a mapping array [differnce wrt number ] [ index ] ; */ 
+    	}
+    	currentPage = number;
+    	return;
+        //else
+        //for each page if in new range => spare it 
     }
 }
 
