@@ -397,12 +397,12 @@ class PyMailMessage(unohelper.Base, XMailMessage):
 			print >> dbgout, "PyMailMessage init"
 		self.ctx = ctx
 
-		self.recipients = sTo,
+		self.recipients = (sTo,)
 		self.ccrecipients = ()
 		self.bccrecipients = ()
 		self.aMailAttachments = ()
 		if aMailAttachment != None:
-			self.aMailAttachments = aMailAttachment, 
+			self.aMailAttachments = (aMailAttachment,)
 
 		self.SenderName, self.SenderAddress = parseaddr(sFrom)
 		self.ReplyToAddress = sFrom
@@ -413,15 +413,15 @@ class PyMailMessage(unohelper.Base, XMailMessage):
 	def addRecipient( self, recipient ):
 		if dbg:
 			print >> dbgout, "PyMailMessage.addRecipient", recipient
-		self.recipients = self.recipients, recipient
+		self.recipients = self.recipients + (recipient,)
 	def addCcRecipient( self, ccrecipient ):
 		if dbg:
 			print >> dbgout, "PyMailMessage.addCcRecipient", ccrecipient
-		self.ccrecipients = self.ccrecipients, ccrecipient
+		self.ccrecipients = self.ccrecipients + (ccrecipient,)
 	def addBccRecipient( self, bccrecipient ):
 		if dbg:
 			print >> dbgout, "PyMailMessage.addBccRecipient", bccrecipient
-		self.bccrecipients = self.bccrecipients, bccrecipient
+		self.bccrecipients = self.bccrecipients + (bccrecipient,)
 	def getRecipients( self ):
 		if dbg:
 			print >> dbgout, "PyMailMessage.getRecipients", self.recipients
@@ -437,7 +437,7 @@ class PyMailMessage(unohelper.Base, XMailMessage):
 	def addAttachment( self, aMailAttachment ):
 		if dbg:
 			print >> dbgout, "PyMailMessage.addAttachment"
-		self.aMailAttachments = self.aMailAttachments, aMailAttachment
+		self.aMailAttachments = self.aMailAttachments + (aMailAttachment,)
 	def getAttachments( self ):
 		if dbg:
 			print >> dbgout, "PyMailMessage.getAttachments"
