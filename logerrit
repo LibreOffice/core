@@ -127,13 +127,13 @@ case "$1" in
 				ask_tristate $CODEREVIEW
 				case "$ANSWER" in
 					"y")
-						CODEREVIEWFLAG="--codereview=2"
+						CODEREVIEWFLAG="--code-review=2"
 					;;
 					"n")
-						CODEREVIEWFLAG="--codereview=1"
+						CODEREVIEWFLAG="--code-review=1"
 					;;
 					*)
-						CODEREVIEWFLAG="--codereview=1"
+						CODEREVIEWFLAG="--code-review=1"
 					;;
 				esac
 			;;
@@ -142,15 +142,15 @@ case "$1" in
 				ask_tristate $CODEREVIEW
 				case "$ANSWER" in
 					"y")
-						CODEREVIEWFLAG="--codereview=-1"
+						CODEREVIEWFLAG="--code-review=-1"
 						MESSAGEREQ="$MESSAGEREQ and explain why you have reservations about the code"
 					;;
 					"n")
-						CODEREVIEWFLAG="--codereview=-2"
+						CODEREVIEWFLAG="--code-review=-2"
 						MESSAGEREQ="$MESSAGEREQ and explain why you want to block this"
 					;;
 					*)
-						CODEREVIEWFLAG="--codereview=-1"
+						CODEREVIEWFLAG="--code-review=-1"
 						MESSAGEREQ="$MESSAGEREQ and explain why you have reservations about the code"
 					;;
 				esac
@@ -159,7 +159,7 @@ case "$1" in
 			;;
 		esac
 		read -p "please type a friendly comment$MESSAGEREQ: " MESSAGE
-		echo ssh ${GERRITHOST?} gerrit review -m \"$MESSAGE\" $VERIFIEDFLAG $CODEREVIEWFLAG $CHANGEID
+		echo ssh ${GERRITHOST?} gerrit review -m '\"'$MESSAGE'\"' $VERIFIEDFLAG $CODEREVIEWFLAG $CHANGEID
 	;;
 	checkout)
 		get_SHA_for_change $2
