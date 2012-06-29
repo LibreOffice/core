@@ -6900,7 +6900,7 @@ if test "$enable_epm" = "yes"; then
             AC_MSG_ERROR([dpkg needed for deb creation. Install dpkg.])
         fi
     fi
-    if echo "PKGFORMAT" | $EGREP osx 2>&1 >/dev/null; then
+    if echo "$PKGFORMAT" | $EGREP osx 2>&1 >/dev/null; then
         if test "$_os" = "Darwin"; then
             AC_MSG_CHECKING([for PackageMaker availability])
             if ! test -x /Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker; then
