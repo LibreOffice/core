@@ -591,8 +591,6 @@ void WorkbookGlobals::finalize()
         // #i79826# enable updating automatic row height after loading the document
         aPropSet.setProperty( PROP_IsAdjustHeightEnabled, true );
         getFormulaBuffer().finalizeImport();
-        // hack, setting it true the second time will delete the cache
-        aPropSet.setProperty( PROP_IsAdjustHeightEnabled, true );
         // #i76026# enable Undo after loading the document
         aPropSet.setProperty( PROP_IsUndoEnabled, true );
         // disable editing read-only documents (e.g. from read-only files)
