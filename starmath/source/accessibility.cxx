@@ -58,7 +58,6 @@
 
 
 #include "accessibility.hxx"
-#include <applicat.hxx>
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <view.hxx>
