@@ -144,12 +144,11 @@ public final class PropertySetMixin {
                 "unexpected com.sun.star.container.NoSuchElementException: "
                 + e.getMessage());
         }
-        HashMap map = new HashMap();
-        ArrayList handleNames = new ArrayList();
-        initProperties(ifc, map, handleNames, new HashSet());
+        HashMap<String,PropertyData> map = new HashMap<String,PropertyData>();
+        ArrayList<String> handleNames = new ArrayList<String>();
+        initProperties(ifc, map, handleNames, new HashSet<String>());
         properties = map;
-        handleMap = (String[]) handleNames.toArray(
-            new String[handleNames.size()]);
+        handleMap = handleNames.toArray(new String[handleNames.size()]);
     }
 
     /**
@@ -202,38 +201,39 @@ public final class PropertySetMixin {
        {@link BoundListeners#notifyListeners} has not yet been called); may only
        be null if the attribute that is going to be set is not bound
     */
+    @SuppressWarnings("unchecked")
     public void prepareSet(
         String propertyName, Object oldValue, Object newValue,
         BoundListeners bound)
         throws PropertyVetoException
     {
         // assert properties.get(propertyName) != null;
-        Property p = ((PropertyData) properties.get(propertyName)).property;
-        Vector specificVeto = null;
-        Vector unspecificVeto = null;
+        Property p = properties.get(propertyName).property;
+        ArrayList<XVetoableChangeListener> specificVeto = null;
+        ArrayList<XVetoableChangeListener> unspecificVeto = null;
         synchronized (this) {
             if (disposed) {
                 throw new DisposedException("disposed", object);
             }
             if ((p.Attributes & PropertyAttribute.CONSTRAINED) != 0) {
-                Object o = vetoListeners.get(propertyName);
+                ArrayList<XVetoableChangeListener> o = vetoListeners.get(propertyName);
                 if (o != null) {
-                    specificVeto = (Vector) ((Vector) o).clone();
+                    specificVeto = (ArrayList<XVetoableChangeListener>) o.clone();
                 }
                 o = vetoListeners.get("");
                 if (o != null) {
-                    unspecificVeto = (Vector) ((Vector) o).clone();
+                    unspecificVeto = (ArrayList<XVetoableChangeListener>) o.clone();
                 }
             }
             if ((p.Attributes & PropertyAttribute.BOUND) != 0) {
                 // assert bound != null;
-                Object o = boundListeners.get(propertyName);
+                ArrayList<XPropertyChangeListener> o = boundListeners.get(propertyName);
                 if (o != null) {
-                    bound.specificListeners = (Vector) ((Vector) o).clone();
+                    bound.specificListeners = (ArrayList<XPropertyChangeListener>) o.clone();
                 }
                 o = boundListeners.get("");
                 if (o != null) {
-                    bound.unspecificListeners = (Vector) ((Vector) o).clone();
+                    bound.unspecificListeners = (ArrayList<XPropertyChangeListener>) o.clone();
                 }
             }
         }
@@ -241,18 +241,16 @@ public final class PropertySetMixin {
             PropertyChangeEvent event = new PropertyChangeEvent(
                 object, propertyName, false, p.Handle, oldValue, newValue);
             if (specificVeto != null) {
-                for (Iterator i = specificVeto.iterator(); i.hasNext();) {
+                for (Iterator<XVetoableChangeListener> i = specificVeto.iterator(); i.hasNext();) {
                     try {
-                        ((XVetoableChangeListener) i.next()).vetoableChange(
-                            event);
+                        i.next().vetoableChange(event);
                     } catch (DisposedException e) {}
                 }
             }
             if (unspecificVeto != null) {
-                for (Iterator i = unspecificVeto.iterator(); i.hasNext();) {
+                for (Iterator<XVetoableChangeListener> i = unspecificVeto.iterator(); i.hasNext();) {
                     try {
-                        ((XVetoableChangeListener) i.next()).vetoableChange(
-                            event);
+                        i.next().vetoableChange(event);
                     } catch (DisposedException e) {}
                 }
             }
@@ -298,8 +296,8 @@ public final class PropertySetMixin {
        ignored.</p>
      */
     public void dispose() {
-        HashMap bound;
-        HashMap veto;
+        HashMap<String,ArrayList<XPropertyChangeListener>> bound;
+        HashMap<String,ArrayList<XVetoableChangeListener>> veto;
         synchronized (this) {
             bound = boundListeners;
             boundListeners = null;
@@ -309,18 +307,18 @@ public final class PropertySetMixin {
         }
         EventObject event = new EventObject(object);
         if (bound != null) {
-            for (Iterator i = bound.values().iterator(); i.hasNext();) {
-                for (Iterator j = ((Vector) i.next()).iterator(); j.hasNext();)
+            for (Iterator<ArrayList<XPropertyChangeListener>> i = bound.values().iterator(); i.hasNext();) {
+                for (Iterator<XPropertyChangeListener> j = i.next().iterator(); j.hasNext();)
                 {
-                    ((XPropertyChangeListener) j.next()).disposing(event);
+                    j.next().disposing(event);
                 }
             }
         }
         if (veto != null) {
-            for (Iterator i = veto.values().iterator(); i.hasNext();) {
-                for (Iterator j = ((Vector) i.next()).iterator(); j.hasNext();)
+            for (Iterator<ArrayList<XVetoableChangeListener>> i = veto.values().iterator(); i.hasNext();) {
+                for (Iterator<XVetoableChangeListener> j = i.next().iterator(); j.hasNext();)
                 {
-                    ((XVetoableChangeListener) j.next()).disposing(event);
+                    j.next().disposing(event);
                 }
             }
         }
@@ -370,9 +368,9 @@ public final class PropertySetMixin {
         synchronized (this) {
             disp = disposed;
             if (!disp) {
-                Vector v = (Vector) boundListeners.get(propertyName);
+                ArrayList<XPropertyChangeListener> v = boundListeners.get(propertyName);
                 if (v == null) {
-                    v = new Vector();
+                    v = new ArrayList<XPropertyChangeListener>();
                     boundListeners.put(propertyName, v);
                 }
                 v.add(listener);
@@ -395,7 +393,7 @@ public final class PropertySetMixin {
         checkUnknown(propertyName);
         synchronized (this) {
             if (boundListeners != null) {
-                Vector v = (Vector) boundListeners.get(propertyName);
+                ArrayList<XPropertyChangeListener> v = boundListeners.get(propertyName);
                 if (v != null) {
                     v.remove(listener);
                 }
@@ -420,9 +418,9 @@ public final class PropertySetMixin {
         synchronized (this) {
             disp = disposed;
             if (!disp) {
-                Vector v = (Vector) vetoListeners.get(propertyName);
+                ArrayList<XVetoableChangeListener> v = vetoListeners.get(propertyName);
                 if (v == null) {
-                    v = new Vector();
+                    v = new ArrayList<XVetoableChangeListener>();
                     vetoListeners.put(propertyName, v);
                 }
                 v.add(listener);
@@ -445,7 +443,7 @@ public final class PropertySetMixin {
         checkUnknown(propertyName);
         synchronized (this) {
             if (vetoListeners != null) {
-                Vector v = (Vector) vetoListeners.get(propertyName);
+                ArrayList<XVetoableChangeListener> v =  vetoListeners.get(propertyName);
                 if (v != null) {
                     v.remove(listener);
                 }
@@ -547,26 +545,24 @@ public final class PropertySetMixin {
         */
         public void notifyListeners() {
             if (specificListeners != null) {
-                for (Iterator i = specificListeners.iterator(); i.hasNext();) {
+                for (Iterator<XPropertyChangeListener> i = specificListeners.iterator(); i.hasNext();) {
                     try {
-                        ((XPropertyChangeListener) i.next()).propertyChange(
-                            event);
+                        i.next().propertyChange(event);
                     } catch (DisposedException e) {}
                 }
             }
             if (unspecificListeners != null) {
-                for (Iterator i = unspecificListeners.iterator(); i.hasNext();)
+                for (Iterator<XPropertyChangeListener> i = unspecificListeners.iterator(); i.hasNext();)
                 {
                     try {
-                        ((XPropertyChangeListener) i.next()).propertyChange(
-                            event);
+                        i.next().propertyChange(event);
                     } catch (DisposedException e) {}
                 }
             }
         }
 
-        private Vector specificListeners = null;
-        private Vector unspecificListeners = null;
+        private ArrayList<XPropertyChangeListener> specificListeners = null;
+        private ArrayList<XPropertyChangeListener> unspecificListeners = null;
         private PropertyChangeEvent event = null;
     }
 
@@ -595,7 +591,7 @@ public final class PropertySetMixin {
     }
 
     private void initProperties(
-        XTypeDescription type, HashMap map, ArrayList handleNames, HashSet seen)
+        XTypeDescription type, HashMap<String,PropertyData> map, ArrayList<String> handleNames, HashSet<String> seen)
     {
         XInterfaceTypeDescription2 ifc = UnoRuntime.queryInterface(
             XInterfaceTypeDescription2.class, resolveTypedefs(type));
@@ -1039,19 +1035,19 @@ public final class PropertySetMixin {
 
     private final class Info extends WeakBase implements XPropertySetInfo
     {
-        public Info(Map properties) {
+        public Info(Map<String,PropertyData> properties) {
             this.properties = properties;
         }
 
         public Property[] getProperties() {
-            ArrayList al = new ArrayList(properties.size());
-            for (Iterator i = properties.values().iterator(); i.hasNext();) {
-                PropertyData p = (PropertyData) i.next();
+            ArrayList<Property> al = new ArrayList<Property>(properties.size());
+            for (Iterator<PropertyData> i = properties.values().iterator(); i.hasNext();) {
+                PropertyData p = i.next();
                 if (p.present) {
                     al.add(p.property);
                 }
             }
-            return (Property[]) al.toArray(new Property[al.size()]);
+            return al.toArray(new Property[al.size()]);
         }
 
         public Property getPropertyByName(String name)
@@ -1065,7 +1061,7 @@ public final class PropertySetMixin {
             return p != null && p.present;
         }
 
-        private final Map properties; // from String to Property
+        private final Map<String,PropertyData> properties;
     }
 
     private final XComponentContext context;
@@ -1073,12 +1069,14 @@ public final class PropertySetMixin {
     private final Type type;
     private final String[] absentOptional;
     private final XIdlClass idlClass;
-    private final Map properties; // from String to Property
+    private final Map<String,PropertyData> properties; // from String to Property
     private final String[] handleMap;
 
-    private HashMap boundListeners = new HashMap();
+    private HashMap<String,ArrayList<XPropertyChangeListener>> boundListeners
+                  = new HashMap<String,ArrayList<XPropertyChangeListener>>();
         // from String to Vector of XPropertyChangeListener
-    private HashMap vetoListeners = new HashMap();
+    private HashMap<String,ArrayList<XVetoableChangeListener>> vetoListeners
+                  = new HashMap<String,ArrayList<XVetoableChangeListener>>();
         // from String to Vector of XVetoableChangeListener
     private boolean disposed = false;
 }

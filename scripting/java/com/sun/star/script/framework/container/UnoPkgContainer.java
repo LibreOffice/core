@@ -40,7 +40,7 @@ import com.sun.star.deployment.ExtensionRemovedException;
 public class UnoPkgContainer extends ParcelContainer
 {
 
-    private Map registeredPackages = new HashMap();
+    private Map<String,ParcelContainer> registeredPackages = new HashMap<String,ParcelContainer>();
     protected String extensionDb;
     protected String extensionRepository;
 
@@ -64,7 +64,7 @@ public class UnoPkgContainer extends ParcelContainer
         LogUtils.DEBUG("** getRegisterPackage ctx = " + containerUrl  );
         LogUtils.DEBUG("** getRegisterPackage  for uri " + url );
         LogUtils.DEBUG("** getRegisterPackage  for langugage " + language );
-        ParcelContainer result = (ParcelContainer)registeredPackages.get( url );
+        ParcelContainer result = registeredPackages.get( url );
         LogUtils.DEBUG("getRegisterPackage result is  " + result );
         return result;
     }
@@ -110,8 +110,7 @@ public class UnoPkgContainer extends ParcelContainer
                     if ( db.removePackage( language, url ) )
                     {
                         writeUnoPackageDB( db );
-                        ParcelContainer container =
-                            ( ParcelContainer ) registeredPackages.get( url );
+                        ParcelContainer container = registeredPackages.get( url );
                         if ( !container.hasElements() )
                         {
                            // When all libraries within a package bundle

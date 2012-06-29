@@ -19,7 +19,7 @@
 package com.sun.star.lib.uno.helper;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * Object representation and parsing of Uno Urls,
@@ -66,13 +66,13 @@ public class UnoUrl {
     static private class UnoUrlPart {
 
         private String partTypeName;
-        private HashMap partParameters;
+        private HashMap<String,String> partParameters;
         private String uninterpretedParameterString;
 
         public UnoUrlPart(
             String uninterpretedParameterString,
             String partTypeName,
-            HashMap partParameters) {
+            HashMap<String,String> partParameters) {
             this.uninterpretedParameterString = uninterpretedParameterString;
             this.partTypeName = partTypeName;
             this.partParameters = partParameters;
@@ -82,7 +82,7 @@ public class UnoUrl {
             return partTypeName;
         }
 
-        public HashMap getPartParameters() {
+        public HashMap<String,String> getPartParameters() {
             return partParameters;
         }
 
@@ -146,7 +146,7 @@ public class UnoUrl {
      *
      * @return a HashMap with key/value pairs for protocol parameters.
      */
-    public HashMap getProtocolParameters() {
+    public HashMap<String,String> getProtocolParameters() {
         return protocol.getPartParameters();
     }
 
@@ -157,7 +157,7 @@ public class UnoUrl {
      *
      * @return a HashMap with key/value pairs for connection parameters.
      */
-    public HashMap getConnectionParameters() {
+    public HashMap<String,String> getConnectionParameters() {
         return connection.getPartParameters();
     }
 
@@ -220,7 +220,7 @@ public class UnoUrl {
 
     private static String decodeUTF8(String s)
         throws com.sun.star.lang.IllegalArgumentException {
-        Vector v = new Vector();
+        ArrayList<Integer> v = new ArrayList<Integer>();
 
         for (int i = 0; i < s.length(); i++) {
             int ch = s.charAt(i);
@@ -231,13 +231,13 @@ public class UnoUrl {
                 ch = (hb << 4) | lb;
             }
 
-            v.addElement(new Integer(ch));
+            v.add(new Integer(ch));
         }
 
         int size = v.size();
         byte[] bytes = new byte[size];
         for (int i = 0; i < size; i++) {
-            Integer anInt = (Integer) v.elementAt(i);
+            Integer anInt = v.get(i);
             bytes[i] = (byte) (anInt.intValue() & 0xFF);
         }
 
@@ -249,9 +249,9 @@ public class UnoUrl {
         }
     }
 
-    private static HashMap buildParamHashMap(String paramString)
+    private static HashMap<String,String> buildParamHashMap(String paramString)
         throws com.sun.star.lang.IllegalArgumentException {
-        HashMap params = new HashMap();
+        HashMap<String,String> params = new HashMap<String,String>();
 
         int pos = 0;
 
@@ -313,7 +313,7 @@ public class UnoUrl {
                     + "' may only consist of alpha numeric ASCII characters.");
         }
 
-        HashMap params = buildParamHashMap(theParamPart);
+        HashMap<String,String> params = buildParamHashMap(theParamPart);
 
         return new UnoUrlPart(theParamPart, partName, params);
     }

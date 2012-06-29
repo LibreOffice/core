@@ -302,6 +302,6 @@ public final class Protocol_Test {
         }
 
         private final IProtocol protocol;
-        private final LinkedList queue = new LinkedList();
+        private final LinkedList<Object> queue = new LinkedList<Object>();
     }
 }

@@ -22,7 +22,7 @@ import java.net.URL;
 
 import java.io.ByteArrayInputStream;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import java.io.InputStream;
@@ -250,7 +250,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     try
     {
         String classpath = (String)getLanguageProperties().get("classpath");
-        Vector paths = null;
+        ArrayList paths = null;
 
         if ( classpath == null )
         {
@@ -267,7 +267,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         // replace \ with /
         parcelPath = parcelPath.replace( '\\', '/' );
 
-        Vector classPathVec =  new Vector();
+        ArrayList<URL> classPathVec =  new ArrayList<URL>();
         StringTokenizer stk = new StringTokenizer(classpath, ":");
         while (  stk.hasMoreElements() )
         {
@@ -289,7 +289,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
             }
         }
 
-        return  (URL[])classPathVec.toArray( new URL[0]);
+        return  classPathVec.toArray( new URL[classPathVec.size()]);
     }
     catch ( Exception e )
     {

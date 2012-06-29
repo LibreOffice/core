@@ -240,7 +240,7 @@ class ScriptImpl implements XScript
                 throw e2;
             }
 
-            ArrayList invocationArgList = new ArrayList();
+            ArrayList<Object> invocationArgList = new ArrayList<Object>();
             Object[] invocationArgs = null;
 
             LogUtils.DEBUG( "Parameter Mapping..." );

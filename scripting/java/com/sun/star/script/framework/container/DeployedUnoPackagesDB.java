@@ -70,7 +70,7 @@ public class DeployedUnoPackagesDB {
 
     public String[] getDeployedPackages( String language )
     {
-        ArrayList packageUrls = new ArrayList(4);
+        ArrayList<String> packageUrls = new ArrayList<String>(4);
         Element main = document.getDocumentElement();
         Element root = null;
         Element item;
@@ -108,7 +108,7 @@ public class DeployedUnoPackagesDB {
         }
         if ( !packageUrls.isEmpty() )
         {
-            return (String[])packageUrls.toArray( new String[0] );
+            return packageUrls.toArray( new String[packageUrls.size()] );
         }
         return new String[0];
     }

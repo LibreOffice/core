@@ -22,7 +22,7 @@ import java.awt.Container;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XComponent;
@@ -64,7 +64,7 @@ public class LocalOfficeConnection
     private String              mProtocol;
     private String              mInitialObject;
 
-    private List                mComponents     = new Vector();
+    private List<XEventListener> mComponents = new ArrayList<XEventListener>();
 
     private static long m_nBridgeCounter = 0;
     //-------------------------------------------------------------------------
@@ -243,10 +243,10 @@ public class LocalOfficeConnection
      */
     public void dispose()
     {
-        Iterator itr = mComponents.iterator();
+        Iterator<XEventListener> itr = mComponents.iterator();
         while (itr.hasNext() == true) {
             // ignore runtime exceptions in dispose
-            try { ((XEventListener)itr.next()).disposing(null); }
+            try { itr.next().disposing(null); }
             catch ( RuntimeException aExc ) {}
         }
         mComponents.clear();

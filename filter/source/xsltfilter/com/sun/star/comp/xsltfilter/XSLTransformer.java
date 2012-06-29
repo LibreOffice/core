@@ -35,11 +35,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 // Imported TraX classes
 import javax.xml.parsers.SAXParserFactory;
@@ -110,9 +112,9 @@ public class XSLTransformer
     private String pubtype = new String();
     private String systype = new String();    // processing thread
     private Thread t;    // listeners
-    private Vector listeners = new Vector();    //
+    private ArrayList<XStreamListener> listeners = new ArrayList<XStreamListener>();    //
     private XMultiServiceFactory svcfactory;    // cache for transformations by stylesheet
-    private static Hashtable xsltReferences = new Hashtable();
+    private static Map<String,WeakReference<Transformation>> xsltReferences = new HashMap<String,WeakReference<Transformation>>();
     // struct for cached stylesheets
     private static class Transformation {
 
@@ -209,7 +211,7 @@ public class XSLTransformer
 
     public void removeListener(XStreamListener aListener) {
         if (aListener != null) {
-            listeners.removeElement(aListener);
+            listeners.remove(aListener);
         }
 
     }
@@ -238,8 +240,8 @@ public class XSLTransformer
                     // TransformerFactory calls below:
                     setContextClassLoader(this.getClass().getClassLoader());
 
-                    for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
-                        XStreamListener l = (XStreamListener) e.nextElement();
+                    for (Iterator<XStreamListener> e = listeners.iterator(); e.hasNext();) {
+                        XStreamListener l = e.next();
                         l.started();
                     }
 
@@ -282,11 +284,11 @@ public class XSLTransformer
                     }
 
                     synchronized (xsltReferences) {
-                        java.lang.ref.WeakReference ref = null;
+                        WeakReference<Transformation> ref = null;
                         // try to get the xsltTemplate reference from the cache
-                        if ((ref = (java.lang.ref.WeakReference) xsltReferences.get(stylesheeturl)) == null ||
-                                (transformation = ((Transformation) ref.get())) == null ||
-                                ((Transformation) ref.get()).lastmod < lastmod) {
+                        if ((ref = xsltReferences.get(stylesheeturl)) == null ||
+                                (transformation = ref.get()) == null ||
+                                ref.get().lastmod < lastmod) {
                             // we cannot find a valid reference for this stylesheet
                             // or the stylsheet was updated
                             if (ref != null) {
@@ -304,7 +306,7 @@ public class XSLTransformer
                             transformation = new Transformation();
                             transformation.lastmod = lastmod;
                             transformation.cachedXSLT = xsltTemplate;
-                            ref = new java.lang.ref.WeakReference(transformation);
+                            ref = new WeakReference<Transformation>(transformation);
                             xsltReferences.put(stylesheeturl, ref);
                         }
                     }
@@ -344,9 +346,9 @@ public class XSLTransformer
 
                 } catch (java.lang.Throwable ex) {
                     // notify any listeners about close
-                    for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
+                    for (Iterator<XStreamListener> e = listeners.iterator(); e.hasNext();) {
 
-                        XStreamListener l = (XStreamListener) e.nextElement();
+                        XStreamListener l = e.next();
                         l.error(new com.sun.star.uno.Exception(ex.getClass().getName() + ": " + ex.getMessage()));
                     }
                     if (statsp != null) {
@@ -409,8 +411,8 @@ public class XSLTransformer
                     os = null;
                     // notify any listeners about close
                     if (listeners != null) {
-                        for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
-                            XStreamListener l = (XStreamListener) e.nextElement();
+                        for (Iterator<XStreamListener> e = listeners.iterator(); e.hasNext();) {
+                            XStreamListener l = e.next();
                             l.closed();
                         }
                     }
@@ -432,8 +434,8 @@ public class XSLTransformer
             debug("terminate called");
             if (t.isAlive()) {
                 t.interrupt();
-                for (Enumeration e = listeners.elements(); e.hasMoreElements();) {
-                    XStreamListener l = (XStreamListener) e.nextElement();
+                for (Iterator<XStreamListener> e = listeners.iterator(); e.hasNext();) {
+                    XStreamListener l = e.next();
                     l.terminated();
                 }
             }

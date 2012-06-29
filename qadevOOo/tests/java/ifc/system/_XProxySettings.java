@@ -67,6 +67,7 @@ public class _XProxySettings extends MultiMethodTest {
      *
      * @see #expectedProxies
      */
+    @SuppressWarnings("unchecked")
     public void before() {
         expectedProxies = (Map<String,String>)tEnv.getObjRelation(
                 "XProxySettings.proxySettings");

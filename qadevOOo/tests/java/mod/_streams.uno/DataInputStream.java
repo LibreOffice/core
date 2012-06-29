@@ -27,7 +27,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.ArrayList;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -128,7 +128,7 @@ public class DataInputStream extends TestCase {
         xDataSink.setInputStream(xPipeInput) ;
 
         // all data types for writing to an XDataInputStream
-        Vector data = new Vector() ;
+        ArrayList<Object> data = new ArrayList<Object>() ;
         data.add(new Boolean(true)) ;
         data.add(new Byte((byte)123)) ;
         data.add(new Character((char)1234)) ;

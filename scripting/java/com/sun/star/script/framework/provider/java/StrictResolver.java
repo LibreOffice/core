@@ -110,7 +110,7 @@ public class StrictResolver implements Resolver
      * @exception  ClassNotFoundException
      * @exception  NoSuchMethodException
      */
-    private Method resolveArguments( ScriptDescriptor sd, Class c )
+    private Method resolveArguments( ScriptDescriptor sd, Class<?> c )
     throws ClassNotFoundException, NoSuchMethodException
     {
         return c.getMethod( sd.getMethodName(), sd.getArgumentTypes() );

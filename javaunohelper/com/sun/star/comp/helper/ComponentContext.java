@@ -27,9 +27,10 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.EventObject;
 
-import java.util.Hashtable;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 
 //==================================================================================================
@@ -57,13 +58,13 @@ public class ComponentContext implements XComponentContext, XComponent
     private static final String SMGR_NAME = "/singletons/com.sun.star.lang.theServiceManager";
     private static final String TDMGR_NAME = "/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 
-    private Hashtable m_table;
+    private Map<String,Object> m_table;
     private XComponentContext m_xDelegate;
 
     private XMultiComponentFactory m_xSMgr;
     private boolean m_bDisposeSMgr;
 
-    private Vector m_eventListener;
+    private ArrayList<XEventListener> m_eventListener;
 
     /** Ctor to create a component context passing a hashtable for values and a delegator
         reference. Entries of the passed hashtable are either direct values or
@@ -74,9 +75,9 @@ public class ComponentContext implements XComponentContext, XComponent
         @param xDelegate
                if values are not found, request is delegated to this object
     */
-    public ComponentContext( Hashtable table, XComponentContext xDelegate )
+    public ComponentContext( Map<String,Object> table, XComponentContext xDelegate )
     {
-        m_eventListener = new Vector();
+        m_eventListener = new ArrayList<XEventListener>();
         m_table = table;
         m_xDelegate = xDelegate;
         m_xSMgr = null;
@@ -219,20 +220,20 @@ public class ComponentContext implements XComponentContext, XComponent
 
         // fire events
         EventObject evt = new EventObject( this );
-        Enumeration eventListener = m_eventListener.elements();
-        while (eventListener.hasMoreElements())
+        Iterator<XEventListener> eventListener = m_eventListener.iterator();
+        while (eventListener.hasNext())
         {
-            XEventListener listener = (XEventListener)eventListener.nextElement();
+            XEventListener listener = eventListener.next();
             listener.disposing( evt );
         }
-        m_eventListener.removeAllElements();
+        m_eventListener.clear();
 
         XComponent tdmgr = null;
         // dispose values, then service manager, then typdescription manager
-        Enumeration keys = m_table.keys();
-        while (keys.hasMoreElements())
+        Iterator<String> keys = m_table.keySet().iterator();
+        while (keys.hasNext())
         {
-            String name = (String)keys.nextElement();
+            String name = keys.next();
             if (! name.equals( SMGR_NAME ))
             {
                 Object o = m_table.get( name );
@@ -286,7 +287,7 @@ public class ComponentContext implements XComponentContext, XComponent
           if (m_eventListener.contains( xListener ))
               throw new com.sun.star.uno.RuntimeException( "Listener already registred." );
 
-           m_eventListener.addElement( xListener );
+           m_eventListener.add( xListener );
     }
     //______________________________________________________________________________________________
     public void removeEventListener( XEventListener xListener )
@@ -296,6 +297,6 @@ public class ComponentContext implements XComponentContext, XComponent
           if (! m_eventListener.contains( xListener ))
               throw new com.sun.star.uno.RuntimeException( "Listener is not registered." );
 
-        m_eventListener.removeElement( xListener );
+        m_eventListener.remove( xListener );
     }
 }

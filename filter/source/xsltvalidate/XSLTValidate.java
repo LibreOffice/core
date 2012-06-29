@@ -25,8 +25,8 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.Type;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.Iterator;
+import java.util.ArrayList;
 import com.sun.star.xml.XImportFilter;
 import com.sun.star.xml.XExportFilter;
 
@@ -50,7 +50,7 @@ import com.sun.star.lib.uno.adapter.*;
 public class XSLTValidate {
 
     private static XMultiServiceFactory xMSF;
-    private static Vector parseErrors =new Vector();
+    private static ArrayList<String> parseErrors = new ArrayList<String>();
 
     /** This inner class provides the component as a concrete implementation
      * of the service description. It implements the needed interfaces.
@@ -124,7 +124,7 @@ public class XSLTValidate {
 
      public void convert (com.sun.star.io.XInputStream xml) throws com.sun.star.uno.RuntimeException {
          XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);
-         parseErrors =new Vector();
+         parseErrors = new ArrayList<String>();
            //String defaultTimeOut = System.getProperty("sun.net.client.defaultConnectTimeout");
            System.getProperties().setProperty("sun.net.client.defaultConnectTimeout", "10000");
          try{
@@ -136,8 +136,8 @@ public class XSLTValidate {
              dBuilder.parse(xis);
              if (parseErrors.size()>0){
                  String errString ="";
-                 for (Enumeration e = parseErrors.elements() ; e.hasMoreElements() ;) {
-                    errString+=e.nextElement();
+                 for (Iterator<String> e = parseErrors.iterator() ; e.hasNext() ;) {
+                    errString += e.next();
                     //System.out.println(e.nextElement());
                  }
                  throw new com.sun.star.uno.RuntimeException(errString);

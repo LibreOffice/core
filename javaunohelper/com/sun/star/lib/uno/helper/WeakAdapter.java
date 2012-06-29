@@ -34,17 +34,17 @@ public class WeakAdapter implements XAdapter
 {
     private final boolean DEBUG= false;
     // references the XWeak implementation
-    private WeakReference m_weakRef;
+    private WeakReference<Object> m_weakRef;
     // contains XReference objects registered by addReference
-    private List m_xreferenceList;
+    private List<XReference> m_xreferenceList;
 
     /**
      *@param component the object that is to be held weak
      */
     public WeakAdapter(Object component)
     {
-        m_weakRef= new WeakReference(component);
-        m_xreferenceList= Collections.synchronizedList( new LinkedList());
+        m_weakRef= new WeakReference<Object>(component);
+        m_xreferenceList= Collections.synchronizedList( new LinkedList<XReference>());
     }
 
     /** Called by the XWeak implementation (WeakBase) when it is being finalized.
@@ -59,10 +59,10 @@ public class WeakAdapter implements XAdapter
     void referentDying()
     {
         //synchronized call
-        Object[] references= m_xreferenceList.toArray();
+        XReference[] references= m_xreferenceList.toArray(new XReference[m_xreferenceList.size()]);
         for (int i= references.length; i > 0; i--)
         {
-            ((XReference) references[i-1]).dispose();
+            references[i-1].dispose();
         }
     }
 

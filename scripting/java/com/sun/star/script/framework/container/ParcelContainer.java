@@ -50,11 +50,11 @@ public class ParcelContainer implements XNameAccess
 {
     protected String language;
     protected String containerUrl;
-    protected Collection parcels = new ArrayList(10);
+    protected Collection<Parcel> parcels = new ArrayList<Parcel>(10);
     static protected XSimpleFileAccess m_xSFA;
     protected XComponentContext m_xCtx;
     private ParcelContainer parent = null;
-    private Collection childContainers = new ArrayList(10);;
+    private Collection<ParcelContainer> childContainers = new ArrayList<ParcelContainer>(10);
     private boolean isPkgContainer = false;
 
     /**
@@ -102,7 +102,7 @@ public class ParcelContainer implements XNameAccess
         {
             return new ParcelContainer[0];
         }
-        return (ParcelContainer[]) childContainers.toArray( new ParcelContainer[0] );
+        return childContainers.toArray( new ParcelContainer[childContainers.size()] );
 
     }
     /**
@@ -141,10 +141,10 @@ public class ParcelContainer implements XNameAccess
     public ParcelContainer getChildContainer( String key )
     {
         ParcelContainer result = null;
-        Iterator iter = childContainers.iterator();
+        Iterator<ParcelContainer> iter = childContainers.iterator();
         while ( iter.hasNext() )
         {
-            ParcelContainer c = (ParcelContainer) iter.next();
+            ParcelContainer c = iter.next();
             String location = ScriptMetaData.getLocationPlaceHolder(
                 c.containerUrl, c.getName());
 
@@ -171,10 +171,10 @@ public class ParcelContainer implements XNameAccess
     public ParcelContainer getChildContainerForURL( String containerUrl )
     {
         ParcelContainer result = null;
-        Iterator iter = childContainers.iterator();
+        Iterator<ParcelContainer> iter = childContainers.iterator();
         while ( iter.hasNext() )
         {
-            ParcelContainer c = (ParcelContainer) iter.next();
+            ParcelContainer c = iter.next();
             if ( containerUrl.equals( c.containerUrl ) )
             {
                 result = c;
@@ -327,10 +327,10 @@ public class ParcelContainer implements XNameAccess
         {
             if ( hasElements() )
             {
-                Iterator iter = parcels.iterator();
+                Iterator<Parcel> iter = parcels.iterator();
                 while ( iter.hasNext() )
                 {
-                    Parcel parcelToCheck = (Parcel)iter.next();
+                    Parcel parcelToCheck = iter.next();
 
                     if ( parcelToCheck.getName().equals( aName ) )
                     {
@@ -354,7 +354,7 @@ public class ParcelContainer implements XNameAccess
     {
         if ( hasElements() )
         {
-            Parcel[] theParcels = (Parcel[])parcels.toArray( new Parcel[0] );
+            Parcel[] theParcels = parcels.toArray( new Parcel[parcels.size()] );
             String[] names = new String[ theParcels.length ];
             for ( int count = 0; count < names.length; count++ )
             {
@@ -404,7 +404,7 @@ public class ParcelContainer implements XNameAccess
             {
                 LogUtils.DEBUG( getParcelContainerDir() + " is a folder " );
                 String[] children = m_xSFA.getFolderContents( getParcelContainerDir(), true );
-                parcels  = new ArrayList(children.length);
+                parcels  = new ArrayList<Parcel>(children.length);
                 for ( int  i = 0; i < children.length; i++)
                 {
                     LogUtils.DEBUG("Processing " + children[ i ] );

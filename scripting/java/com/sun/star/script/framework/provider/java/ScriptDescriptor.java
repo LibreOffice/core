@@ -18,7 +18,8 @@
 
 package com.sun.star.script.framework.provider.java;
 
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 /**
@@ -33,8 +34,8 @@ public class ScriptDescriptor
     private String m_name;
     private String m_methodName;
     private String m_className;
-    private Vector m_classpath;
-    private Vector m_argumentTypes = new Vector( 11 );
+    private List<String> m_classpath;
+    private ArrayList<Class<?>> m_argumentTypes = new ArrayList<Class<?>>( 11 );
 
 
     /**
@@ -110,7 +111,7 @@ public class ScriptDescriptor
      *
      * @param  classpath  The new classpath value
      */
-    public void setClasspath( Vector classpath )
+    public void setClasspath( List<String> classpath )
     {
         this.m_classpath = classpath;
     }
@@ -121,7 +122,7 @@ public class ScriptDescriptor
      *
      * @return    The classpath value
      */
-    public Vector getClasspath()
+    public List<String> getClasspath()
     {
         return m_classpath;
     }
@@ -133,9 +134,9 @@ public class ScriptDescriptor
      *
      * @param  clazz  The feature to be added to the ArgumentType attribute
      */
-    public synchronized void addArgumentType( Class clazz )
+    public synchronized void addArgumentType( Class<?> clazz )
     {
-        m_argumentTypes.addElement( clazz );
+        m_argumentTypes.add( clazz );
     }
 
 
@@ -162,11 +163,11 @@ public class ScriptDescriptor
      *
      * @return    The argumentTypes value
      */
-    public synchronized Class[]
+    public synchronized Class<?>[]
     getArgumentTypes()
     {
         if ( m_argumentTypes.size() > 0 )
-            return ( Class[] ) m_argumentTypes.toArray( new Class[ 0 ] );
+            return m_argumentTypes.toArray( new Class[ m_argumentTypes.size() ] );
         else
             return null;
     }

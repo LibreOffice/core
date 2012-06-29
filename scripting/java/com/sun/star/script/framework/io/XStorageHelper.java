@@ -56,7 +56,7 @@ public class XStorageHelper implements XEventListener
     XStream xStream;
     XInputStream xIs = null;
     XOutputStream xOs = null;
-    static Map modelMap = new HashMap();
+    static Map<String,XModel> modelMap = new HashMap<String,XModel>();
     XModel xModel = null;
     private static XStorageHelper listener = new XStorageHelper();
 
@@ -262,7 +262,7 @@ public class XStorageHelper implements XEventListener
     public XModel getModelForURL( String url )
     {
        //TODO does not cater for untitled documents
-       return (XModel)modelMap.get( url );
+       return modelMap.get( url );
     }
 
 }

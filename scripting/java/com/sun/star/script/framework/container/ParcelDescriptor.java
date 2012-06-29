@@ -46,7 +46,7 @@ public class ParcelDescriptor {
         PARCEL_DESCRIPTOR_NAME = "parcel-descriptor.xml";
 
     // Collection of all ParcelDescriptor created for files
-    private static final Map PARCEL_DESCRIPTOR_MAP = new HashMap(5);
+    private static final Map<File,ParcelDescriptor> PARCEL_DESCRIPTOR_MAP = new HashMap<File,ParcelDescriptor>(5);
 
     // This is the default contents of a parcel descriptor to be used when
     // creating empty descriptors
@@ -58,7 +58,7 @@ public class ParcelDescriptor {
     private File file = null;
     private Document document = null;
     private String language = null;
-    private Map languagedepprops = new Hashtable(3);
+    private Map<String,String> languagedepprops = new Hashtable<String,String>(3);
 
     public static synchronized void removeParcelDescriptor(File parent) {
         File path = new File(parent, PARCEL_DESCRIPTOR_NAME);
@@ -67,7 +67,7 @@ public class ParcelDescriptor {
 
     public static synchronized void renameParcelDescriptor(File oldFile, File newFile) {
         File oldPath = new File(oldFile, PARCEL_DESCRIPTOR_NAME);
-        ParcelDescriptor pd = (ParcelDescriptor)PARCEL_DESCRIPTOR_MAP.get(oldPath);
+        ParcelDescriptor pd = PARCEL_DESCRIPTOR_MAP.get(oldPath);
         if(pd != null) {
             PARCEL_DESCRIPTOR_MAP.remove(oldPath);
             File newPath = new File(newFile, PARCEL_DESCRIPTOR_NAME);
@@ -82,7 +82,7 @@ public class ParcelDescriptor {
         getParcelDescriptor(File parent) {
 
         File path = new File(parent, PARCEL_DESCRIPTOR_NAME);
-        ParcelDescriptor pd = (ParcelDescriptor)PARCEL_DESCRIPTOR_MAP.get(path);
+        ParcelDescriptor pd = PARCEL_DESCRIPTOR_MAP.get(path);
 
         if (pd == null && path.exists()) {
             try {
@@ -214,7 +214,7 @@ public class ParcelDescriptor {
     }
 
     public ScriptEntry[] getScriptEntries() {
-        ArrayList scripts = new ArrayList();
+        ArrayList<ScriptEntry> scripts = new ArrayList<ScriptEntry>();
         NodeList scriptNodes;
         int len;
 
@@ -225,7 +225,7 @@ public class ParcelDescriptor {
 
         for (int i = 0; i < len; i++) {
             String language, languagename, logicalname, description = "";
-            Map langProps = new HashMap();
+            Map<String,String> langProps = new HashMap<String,String>();
             NodeList nl;
             Element tmp;
 
@@ -285,7 +285,7 @@ public class ParcelDescriptor {
             ScriptEntry entry = new ScriptEntry(language, languagename, logicalname, "",langProps, description);
             scripts.add(entry);
         }
-        return (ScriptEntry[])scripts.toArray(new ScriptEntry[0]);
+        return scripts.toArray(new ScriptEntry[scripts.size()]);
     }
 
     public void setScriptEntries(ScriptEntry[] scripts) {
@@ -301,7 +301,7 @@ public class ParcelDescriptor {
     }
 
     public String getLanguageProperty(String name) {
-        return (String)languagedepprops.get(name);
+        return languagedepprops.get(name);
     }
 
     public void setLanguageProperty(String name, String value) {
@@ -424,12 +424,12 @@ public class ParcelDescriptor {
             String key;
             item = document.createElement("languagedepprops");
 
-            Iterator iter = languagedepprops.keySet().iterator();
+            Iterator<String> iter = languagedepprops.keySet().iterator();
             while (iter.hasNext()) {
                 tempitem = document.createElement("prop");
                 key = (String)iter.next();
                 tempitem.setAttribute("name", key);
-                tempitem.setAttribute("value", (String)languagedepprops.get(key));
+                tempitem.setAttribute("value", languagedepprops.get(key));
                 item.appendChild(tempitem);
             }
             root.appendChild(item);

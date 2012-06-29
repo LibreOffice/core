@@ -41,7 +41,7 @@ public class UCBStreamHandler extends URLStreamHandler {
     private XComponentContext m_xContext = null;
     private XMultiComponentFactory m_xMultiComponentFactory = null;
     private XSimpleFileAccess m_xSimpleFileAccess = null;
-    private HashMap m_jarStreamMap = new HashMap(12);
+    private HashMap<String,InputStream> m_jarStreamMap = new HashMap<String,InputStream>(12);
     public static String m_ucbscheme;
 
     public UCBStreamHandler( XComponentContext ctxt, String scheme, XSimpleFileAccess xSFA )
@@ -149,7 +149,7 @@ public class UCBStreamHandler extends URLStreamHandler {
 
         try {
             if (path.endsWith(".jar")) {
-                is = (InputStream)m_jarStreamMap.get(path);
+                is = m_jarStreamMap.get(path);
 
                 if (is == null) {
                     is = getFileStreamFromUCB(path);

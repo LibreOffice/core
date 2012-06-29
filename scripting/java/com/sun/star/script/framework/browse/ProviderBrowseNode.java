@@ -47,7 +47,7 @@ public class ProviderBrowseNode extends PropertySet
     implements XBrowseNode, XInvocation
 {
     protected ScriptProvider provider;
-    protected Collection browsenodes;
+    protected Collection<XBrowseNode> browsenodes;
     protected String name;
     protected ParcelContainer container;
     protected Parcel parcel;
@@ -105,7 +105,7 @@ public class ProviderBrowseNode extends PropertySet
             // needs initialisation?
             LogUtils.DEBUG("** ProviderBrowseNode.getChildNodes(), container is " + container );
             String[] parcels = container.getElementNames();
-            browsenodes = new ArrayList( parcels.length );
+            browsenodes = new ArrayList<XBrowseNode>( parcels.length );
             for ( int index = 0; index < parcels.length; index++ )
             {
                 try
@@ -133,7 +133,7 @@ public class ProviderBrowseNode extends PropertySet
             LogUtils.DEBUG("*** No container available");
             return new XBrowseNode[0];
         }
-        return ( XBrowseNode[] )browsenodes.toArray( new XBrowseNode[0] );
+        return browsenodes.toArray( new XBrowseNode[browsenodes.size()] );
     }
 
     public boolean hasChildNodes() {
@@ -231,7 +231,7 @@ public class ProviderBrowseNode extends PropertySet
                         LogUtils.DEBUG("created parcel node ");
                         if ( browsenodes == null )
                         {
-                            browsenodes = new ArrayList( 5 );
+                            browsenodes = new ArrayList<XBrowseNode>( 5 );
                         }
 
                         browsenodes.add(parcel);

@@ -118,7 +118,7 @@ public class Factory
     //==============================================================================================
     private String m_impl_name;
     private String [] m_supported_services;
-    private Class m_impl_class;
+    private Class<?> m_impl_class;
     private java.lang.reflect.Method m_method;
     private java.lang.reflect.Constructor m_ctor;
 

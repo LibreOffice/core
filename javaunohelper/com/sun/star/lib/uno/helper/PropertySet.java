@@ -76,9 +76,9 @@ import com.sun.star.lang.DisposedException;
 public class PropertySet extends ComponentBase implements XPropertySet, XFastPropertySet,
 XMultiPropertySet
 {
-    private HashMap _nameToPropertyMap;
-    private HashMap _handleToPropertyMap;
-    private HashMap _propertyToIdMap;
+    private HashMap<String,Property> _nameToPropertyMap;
+    private HashMap<Integer,Property> _handleToPropertyMap;
+    private HashMap<Property,Object> _propertyToIdMap;
     private Property[] arProperties;
 
     private int lastHandle= 1;
@@ -205,7 +205,7 @@ XMultiPropertySet
      */
     protected Property getProperty(String propertyName)
     {
-        return (Property) _nameToPropertyMap.get(propertyName);
+        return _nameToPropertyMap.get(propertyName);
     }
 
     /** Returns the Property object with a handle (Property.Handle) as specified by the argument
@@ -217,7 +217,7 @@ XMultiPropertySet
      */
     protected Property getPropertyByHandle(int nHandle)
     {
-        return (Property) _handleToPropertyMap.get(new Integer(nHandle));
+        return _handleToPropertyMap.get(new Integer(nHandle));
     }
 
     /** Returns an array of all Property objects or an array of length null if there
@@ -230,8 +230,8 @@ XMultiPropertySet
     {
         if (arProperties == null)
         {
-            Collection values= _nameToPropertyMap.values();
-                arProperties= (Property[]) values.toArray(new Property[_nameToPropertyMap.size()]);
+            Collection<Property> values= _nameToPropertyMap.values();
+            arProperties= values.toArray(new Property[_nameToPropertyMap.size()]);
         }
         return arProperties;
     }
@@ -290,9 +290,9 @@ XMultiPropertySet
      */
     protected void initMappings()
     {
-       _nameToPropertyMap= new HashMap();
-       _handleToPropertyMap= new HashMap();
-       _propertyToIdMap= new HashMap();
+       _nameToPropertyMap= new HashMap<String,Property>();
+       _handleToPropertyMap= new HashMap<Integer,Property>();
+       _propertyToIdMap= new HashMap<Property,Object>();
     }
 
     /** Makes sure that listeners which are kept in aBoundLC (XPropertyChangeListener) and aVetoableLC

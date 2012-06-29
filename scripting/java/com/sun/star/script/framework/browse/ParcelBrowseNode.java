@@ -55,7 +55,7 @@ public class ParcelBrowseNode extends PropertySet
 {
     private ScriptProvider provider;
     //private RootBrowseNode parent;
-    private Collection browsenodes;
+    private Collection<XBrowseNode> browsenodes;
     private String name;
     private ParcelContainer container;
     private Parcel parcel;
@@ -134,7 +134,7 @@ public class ParcelBrowseNode extends PropertySet
             if ( hasChildNodes() )
             {
                 String[] names = parcel.getElementNames();
-                browsenodes = new ArrayList( names.length );
+                browsenodes = new ArrayList<XBrowseNode>( names.length );
 
                 for ( int index = 0; index < names.length; index++ )
                 {
@@ -153,7 +153,7 @@ public class ParcelBrowseNode extends PropertySet
             LogUtils.DEBUG( LogUtils.getTrace( e ) );
             return new XBrowseNode[0];
         }
-        return (XBrowseNode[])browsenodes.toArray(new XBrowseNode[0]);
+        return browsenodes.toArray(new XBrowseNode[browsenodes.size()]);
     }
 
     public boolean hasChildNodes() {
@@ -245,7 +245,7 @@ public class ParcelBrowseNode extends PropertySet
                     if(browsenodes==null)
                     {
                             LogUtils.DEBUG("browsenodes null!!");
-                            browsenodes = new ArrayList(4);
+                            browsenodes = new ArrayList<XBrowseNode>(4);
                     }
                     browsenodes.add(sbn);
 
@@ -319,7 +319,7 @@ public class ParcelBrowseNode extends PropertySet
                 {
                     getChildNodes();
                 }
-                ScriptBrowseNode[] childNodes = (ScriptBrowseNode[])browsenodes.toArray(new ScriptBrowseNode[0]);
+                ScriptBrowseNode[] childNodes = browsenodes.toArray(new ScriptBrowseNode[browsenodes.size()]);
 
                 for ( int index = 0; index < childNodes.length; index++ )
                 {

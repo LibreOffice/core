@@ -60,6 +60,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 
+@SuppressWarnings("unchecked")
 public class TestComponent {
     static public final boolean DEBUG = false;
 

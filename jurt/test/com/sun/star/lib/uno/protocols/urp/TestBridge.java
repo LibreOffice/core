@@ -30,7 +30,7 @@ import com.sun.star.uno.Type;
 class TestBridge implements IBridge {
     static public final boolean DEBUG = false;
 
-    HashMap _hashtable = new HashMap();
+    final HashMap<String,Object> _hashtable = new HashMap<String,Object>();
 
     IEnvironment _source ;//= new com.sun.star.lib.uno.environments.java.java_environment(null);
 

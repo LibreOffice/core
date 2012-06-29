@@ -21,9 +21,9 @@ import com.sun.star.uno.XWeak;
 import com.sun.star.uno.XAdapter;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 
 /** This class can be used as the base class for UNO components. It implements the capability
@@ -38,8 +38,8 @@ public class WeakBase implements XWeak, XTypeProvider
     // They have to be notified when this object dies
     private WeakAdapter m_adapter;
 
-    protected static Map _mapImplementationIds= new Hashtable();
-    protected static Map _mapTypes= new Hashtable();
+    protected static Map<Class<?>,byte[]> _mapImplementationIds = new HashMap<Class<?>,byte[]>();
+    protected static Map<Class<?>,Type[]> _mapTypes = new HashMap<Class<?>,Type[]>();
 
     /** Method of XWeak. The returned XAdapter implementation can be used to keap
      * a weak reference to this object.
@@ -69,10 +69,10 @@ public class WeakBase implements XWeak, XTypeProvider
      */
     public Type[] getTypes()
     {
-        Type[] arTypes= (Type[]) _mapTypes.get( getClass());
+        Type[] arTypes= _mapTypes.get( getClass());
         if (arTypes == null)
         {
-            Vector vec= new Vector();
+            ArrayList<Type> vec= new ArrayList<Type>();
             Class currentClass= getClass();
             do
             {
@@ -87,9 +87,7 @@ public class WeakBase implements XWeak, XTypeProvider
                 currentClass= currentClass.getSuperclass();
             } while (currentClass != null);
 
-            Type types[]= new Type[vec.size()];
-            for( int i= 0; i < types.length; i++)
-                types[i]= (Type) vec.elementAt(i);
+            Type types[]= vec.toArray(new Type[vec.size()]);
             _mapTypes.put(getClass(), types);
             arTypes= types;
         }
@@ -107,7 +105,7 @@ public class WeakBase implements XWeak, XTypeProvider
         byte[] id= null;
         synchronized (_mapImplementationIds)
         {
-            id= (byte[]) _mapImplementationIds.get(getClass());
+            id= _mapImplementationIds.get(getClass());
 
             if (id == null)
             {

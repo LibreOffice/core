@@ -90,7 +90,7 @@ public class XMLParserFactory {
         }
 
         public void write(Document doc, OutputStream out) throws IOException {
-            Class clazz = doc.getClass();
+            Class<?> clazz = doc.getClass();
             String name = clazz.getName();
 
             // depending on the class of the Document object use introspection
@@ -111,8 +111,8 @@ public class XMLParserFactory {
                     // try xerces serialize package using introspection
                     ClassLoader cl = this.getClass().getClassLoader();
 
-                    Class serializerClass = null;
-                    Class formatterClass = null;
+                    Class<?> serializerClass = null;
+                    Class<?> formatterClass = null;
 
                     try {
                         serializerClass = Class.forName(
