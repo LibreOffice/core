@@ -967,7 +967,6 @@ void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuc
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySetInfo(  ) throw (uno::RuntimeException)
 {
-    OSL_FAIL( "###unexpected!" );
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
