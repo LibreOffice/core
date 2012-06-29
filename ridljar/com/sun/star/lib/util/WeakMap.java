@@ -57,8 +57,12 @@ import java.util.Set;
  * <code>DisposeNotifier</code> interface.  For those that do, the associated
  * <code>WeakReference</code> wrappers are automatically cleared as soon as the
  * values are disposed.</p>
+ *
+ * Note that this class does not actually implement the Map interface properly,
+ * the type of the return value of the entrySet and values methods is wrong,
+ * but the "implements Map" is retained for backward compatibility.
  */
-public final class WeakMap<K,V> {
+public final class WeakMap<K,V> implements Map {
 
     /**
      * Declare the map as WeakReference instead of Entry because it makes the return
@@ -116,7 +120,7 @@ public final class WeakMap<K,V> {
      * @return <code>true</code> if this map contains a mapping for the
      * specified key
      */
-    public boolean containsKey(K key) {
+    public boolean containsKey(/*K*/ Object key) {
         return map.containsKey(key);
     }
 
@@ -130,7 +134,7 @@ public final class WeakMap<K,V> {
      * @return <code>true</code> if this map maps one or more keys to the
      * specified value
      */
-    public boolean containsValue(WeakReference<V> value) {
+    public boolean containsValue(Object /*WeakReference<V>*/ value) {
         return map.containsValue(value);
     }
 
@@ -145,7 +149,7 @@ public final class WeakMap<K,V> {
      * @return the value to which this map maps the specified key, or
      * <code>null</code> if the map contains no mapping for this key
      */
-    public WeakReference<V> get(K key) {
+    public WeakReference<V> get(/*K*/ Object key) {
         return map.get(key);
     }
 
@@ -161,9 +165,9 @@ public final class WeakMap<K,V> {
      * @return previous value associated with the specified key, or
      * <code>null</code> if there was no mapping for the key
      */
-    public WeakReference<V> put(K key, V value) {
+    public Object /*WeakReference<V>*/ put(/*K*/ Object key, /*V*/ Object value) {
         cleanUp();
-        return map.put(key, new Entry<K,V>(key, value, queue));
+        return map.put((K) key, new Entry<K,V>((K) key, (V) value, queue));
     }
 
     /**
@@ -175,7 +179,7 @@ public final class WeakMap<K,V> {
      * @return previous value associated with the specified key, or
      * <code>null</code> if there was no mapping for the key
      */
-    public WeakReference<V> remove(K key) {
+    public Object /*WeakReference<V>*/ remove(/*K*/ Object key) {
         cleanUp();
         return map.remove(key);
     }
@@ -189,7 +193,7 @@ public final class WeakMap<K,V> {
      * must be plain objects, which are then wrapped in instances of
      * <code>WeakReference</code>.
      */
-    public void putAll(Map<K,V> m) {
+    public void putAll(Map/*<K,V>*/ m) {
         cleanUp();
         for (Iterator<Map.Entry<K,V>> i = m.entrySet().iterator(); i.hasNext();) {
             Map.Entry<K,V> e = i.next();
@@ -237,7 +241,7 @@ public final class WeakMap<K,V> {
      *
      * @return a collection view of the mappings contained in this map
      */
-    public Set<Map.Entry<K,WeakReference<V>>> entrySet() {
+    public Set/*<Map.Entry<K,WeakReference<V>>>*/ entrySet() {
         return map.entrySet();
     }
 
@@ -261,8 +265,8 @@ public final class WeakMap<K,V> {
      * @return the referent of the specified <code>WeakReference</code>, or
      * <code>null</code> if <code>ref</code> is <code>null</code>
      */
-    public static <T> T getValue(WeakReference<T> ref) {
-        return ref == null ? null : ref.get();
+    public static <T> T getValue(Object /*WeakReference<T>*/ ref) {
+        return ref == null ? null : ((WeakReference<T>) ref).get();
     }
 
     /**
