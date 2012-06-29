@@ -76,7 +76,18 @@ class TubeContacts : public ModelessDialog
             pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
             pDocFunc = pSender;
         }
-        pSender->InitTeleManager( false );
+        // This is a hack to work around:
+        //  `error registering client handler: Name
+        //  'org.freedesktop.Telepathy.Client.LibreOffice' already in use by another process`
+        // This happens when there is already slave instance running,
+        // so we try to init TeleManager as master.
+        bool bIsMaster = false;
+        if (!pSender->InitTeleManager( bIsMaster ))
+        {
+            fprintf( stderr, "Trying to initialize TeleManager as master..\n" );
+            bIsMaster = true;
+            pSender->InitTeleManager( bIsMaster );
+        }
     }
 
     void StartBuddySession()
