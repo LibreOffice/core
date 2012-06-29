@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <ide_pch.hxx>
-
-
 #include <basidesh.hrc>
 #include <basidesh.hxx>
 #include <basobj.hxx>
@@ -37,8 +33,9 @@
 #include "dlgresid.hrc"
 #include <editeng/unolingu.hxx>
 
+#include <sfx2/dinfdlg.hxx>
+#include <sfx2/dispatch.hxx>
 #include <svtools/langtab.hxx>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

@@ -17,17 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ide_pch.hxx>
-
 #include <basidesh.hxx>
 #include <baside3.hxx>
 #include <basobj.hxx>
 #include <iderdll.hxx>
 #include "dlged.hxx"
-
 #include <localizationmgr.hxx>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <sfx2/dispatch.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

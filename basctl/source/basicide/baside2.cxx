@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <ide_pch.hxx>
-
 #include "baside2.hxx"
 #include "brkdlg.hxx"
 #include "iderdll.hxx"
@@ -28,14 +25,23 @@
 
 #include "baside2.hrc"
 
+#include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>
+#include <basic/sbmeth.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/dinfdlg.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/request.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/srchitem.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/xtextedt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/msgbox.hxx>

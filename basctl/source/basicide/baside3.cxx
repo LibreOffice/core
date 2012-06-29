@@ -25,8 +25,6 @@
 #define _SDR_NODRAGMETHODS
 #define _SDR_NOXOUTDEV
 
-#include "ide_pch.hxx"
-
 #include "basidesh.hrc"
 #include "helpid.hrc"
 
@@ -43,6 +41,7 @@
 #include "localizationmgr.hxx"
 #include "propbrw.hxx"
 
+#include <basic/basmgr.hxx>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
@@ -51,6 +50,11 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/dinfdlg.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/whiter.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>

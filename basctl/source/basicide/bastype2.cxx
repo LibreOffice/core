@@ -22,8 +22,6 @@
 
 #include "vcl/bitmap.hxx"
 
-#include <ide_pch.hxx>
-
 #include "basidesh.hxx"
 #include "iderdll.hxx"
 #include "iderdll2.hxx"
@@ -42,6 +40,8 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <sfx2/dispatch.hxx>
+
 #include <map>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>

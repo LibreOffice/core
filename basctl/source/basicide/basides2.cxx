@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "docsignature.hxx"
 
 #define SI_NOCONTROL
 #define SI_NOSBXCONTROLS
 
-#include <ide_pch.hxx>
 #include <basic/sbx.hxx>
 #include "basicrenderable.hxx"
 
@@ -39,6 +37,8 @@
 #include <svtools/textview.hxx>
 #include <svtools/xtextedt.hxx>
 #include <tools/diagnose_ex.h>
+#include <sfx2/childwin.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>

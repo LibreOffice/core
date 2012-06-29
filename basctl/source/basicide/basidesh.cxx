@@ -27,20 +27,27 @@
 #define SI_NOCONTROL
 #define SI_NOSBXCONTROLS
 
-// if without PCH's:
-#include <ide_pch.hxx>
-
 #define _SOLAR__PRIVATE 1
 #include <tools/diagnose_ex.h>
+#include <basic/basmgr.hxx>
 #include <basidesh.hrc>
 #include <baside2.hxx>
 #include <basdoc.hxx>
 #include <basicbox.hxx>
+#include <editeng/sizeitem.hxx>
 #include <objdlg.hxx>
 #include <tbxctl.hxx>
 #include <iderdll2.hxx>
 #include <basidectrlr.hxx>
 #include <localizationmgr.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/dinfdlg.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/minfitem.hxx>
+#include <sfx2/objface.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/srchitem.hxx>
 
 #define BasicIDEShell
 #define SFX_TYPEMAP

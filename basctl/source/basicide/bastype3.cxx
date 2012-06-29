@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ide_pch.hxx>
-
 #define _SI_NOSBXCONTROLS
 
+#include <basic/basmgr.hxx>
+#include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
 #include <bastype2.hxx>
 #include <basobj.hxx>
@@ -31,6 +31,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <deque>
+#include <sfx2/docfac.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

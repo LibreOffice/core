@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <ide_pch.hxx>
-
 #include "basobj.hxx"
 #include "iderdll.hxx"
 #include "iderdll2.hxx"
@@ -35,6 +32,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
+#include <basic/sbmeth.hxx>
 #include <basic/sbx.hxx>
 #include <framework/documentundoguard.hxx>
 #include <tools/diagnose_ex.h>

@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <memory>
 #include <vcl/msgbox.hxx>
-#include <ide_pch.hxx>
-
 
 #include <macrodlg.hxx>
 #include <macrodlg.hrc>
@@ -36,11 +33,17 @@
 #include <iderid.hxx>
 
 #include <moduldlg.hxx>
+#include <basic/basmgr.hxx>
+#include <basic/sbmeth.hxx>
+#include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
 
 #include <bastypes.hxx>
 #include <sbxitem.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/minfitem.hxx>
+#include <sfx2/request.hxx>
 
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>

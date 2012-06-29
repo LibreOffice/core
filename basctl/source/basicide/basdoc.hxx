@@ -21,7 +21,8 @@
 #define _BASDOC_HXX
 
 #include <iderid.hxx>
-
+#include <sfx2/docfac.hxx>
+#include <sfx2/objsh.hxx>
 #include <svx/ifaceids.hxx>
 
 class SfxPrinter;

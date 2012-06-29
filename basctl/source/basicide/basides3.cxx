@@ -22,8 +22,6 @@
 #define SI_NOSBXCONTROLS
 
 #include <basidesh.hrc>
-#include <ide_pch.hxx>
-
 
 #define _SOLAR__PRIVATE 1
 
@@ -37,6 +35,9 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <xmlscript/xmldlg_imexp.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/request.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace comphelper;

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <ide_pch.hxx>
 #include <vcl/msgbox.hxx>
 #include <sot/storinfo.hxx>
 
@@ -36,6 +34,10 @@
 #include <basdoc.hxx>
 #include <ucbhelper/content.hxx>
 #include "rtl/uri.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/dinfdlg.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 
