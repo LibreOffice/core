@@ -34,7 +34,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::util::MeasureUnit;
+using namespace ::com::sun::star::util;
 using sax::Converter;
 
 
@@ -260,54 +260,54 @@ void doTestDouble(char const*const pis, double const rd,
 
 void ConverterTest::testDouble()
 {
-    doTestDouble("42", 42.0, TWIP, TWIP);
-    doTestDouble("42", 42.0, POINT, POINT);
-    doTestDouble("42", 42.0, MM_100TH, MM_100TH);
-    doTestDouble("42", 42.0, MM_10TH, MM_10TH);
-    doTestDouble("42", 42.0, MM, MM); // identity don't seem to add unit?
-    doTestDouble("42", 42.0, CM, CM);
-    doTestDouble("42", 42.0, INCH, INCH);
-    doTestDouble("2pt", 40.0, POINT, TWIP);
-    doTestDouble("20pc", 1, TWIP, POINT);
-    doTestDouble("4", 2.26771653543307, MM_100TH, TWIP);
-    doTestDouble("4", 22.6771653543307, MM_10TH, TWIP);
-    doTestDouble("4mm", 226.771653543307, MM, TWIP);
-    doTestDouble("4cm", 2267.71653543307, CM, TWIP);
-    doTestDouble("4in", 5760.0, INCH, TWIP);
-    doTestDouble("1440pc", 1.0, TWIP, INCH);
-    doTestDouble("567pc", 1.000125, TWIP, CM);
-    doTestDouble("56.7pc", 1.000125, TWIP, MM);
-    doTestDouble("5.67pc", 1.000125, TWIP, MM_10TH);
-    doTestDouble("0.567pc", 1.000125, TWIP, MM_100TH);
-    doTestDouble("42pt", 1.4816666666666, POINT, CM);
-    doTestDouble("42pt", 14.816666666666, POINT, MM);
-    doTestDouble("42pt", 148.16666666666, POINT, MM_10TH);
-    doTestDouble("42pt", 1481.6666666666, POINT, MM_100TH);
-    doTestDouble("72pt", 1.0, POINT, INCH);
-    doTestDouble("3.5in", 8.89, INCH, CM);
-    doTestDouble("3.5in", 88.9, INCH, MM);
-    doTestDouble("3.5in", 889.0, INCH, MM_10TH);
-    doTestDouble("3.5in", 8890.0, INCH, MM_100TH);
-    doTestDouble("2in", 144, INCH, POINT);
-    doTestDouble("5.08cm", 2.0, CM, INCH);
-    doTestDouble("3.5cm", 3500.0, CM, MM_100TH);
-    doTestDouble("3.5cm", 350.0, CM, MM_10TH);
-    doTestDouble("3.5cm", 35.0, CM, MM);
-    doTestDouble("10cm", 283.464566929134, CM, POINT);
-    doTestDouble("0.5cm", 283.464566929134, CM, TWIP);
-    doTestDouble("10mm", 28.3464566929134, MM, POINT);
-    doTestDouble("0.5mm", 28.3464566929134, MM, TWIP);
-    doTestDouble("10", 2.83464566929134, MM_10TH, POINT);
-    doTestDouble("0.5", 2.83464566929134, MM_10TH, TWIP);
-    doTestDouble("10", 0.283464566929134, MM_100TH, POINT);
-    doTestDouble("0.5", 0.283464566929134, MM_100TH, TWIP);
-    doTestDouble("10mm", 1.0, MM, CM);
-    doTestDouble("10mm", 100.0, MM, MM_10TH);
-    doTestDouble("20mm", 2000.0, MM, MM_100TH);
-    doTestDouble("300", 30.0, MM_10TH, MM);
-    doTestDouble("400", 4.0, MM_100TH, MM);
-    doTestDouble("600", 6000.0, MM_10TH, MM_100TH);
-    doTestDouble("700", 70.0, MM_100TH, MM_10TH);
+    doTestDouble("42", 42.0, MeasureUnit::TWIP, MeasureUnit::TWIP);
+    doTestDouble("42", 42.0, MeasureUnit::POINT, MeasureUnit::POINT);
+    doTestDouble("42", 42.0, MeasureUnit::MM_100TH, MeasureUnit::MM_100TH);
+    doTestDouble("42", 42.0, MeasureUnit::MM_10TH, MeasureUnit::MM_10TH);
+    doTestDouble("42", 42.0, MeasureUnit::MM, MeasureUnit::MM); // identity don't seem to add unit?
+    doTestDouble("42", 42.0, MeasureUnit::CM, MeasureUnit::CM);
+    doTestDouble("42", 42.0, MeasureUnit::INCH, MeasureUnit::INCH);
+    doTestDouble("2pt", 40.0, MeasureUnit::POINT, MeasureUnit::TWIP);
+    doTestDouble("20pc", 1, MeasureUnit::TWIP, MeasureUnit::POINT);
+    doTestDouble("4", 2.26771653543307, MeasureUnit::MM_100TH, MeasureUnit::TWIP);
+    doTestDouble("4", 22.6771653543307, MeasureUnit::MM_10TH, MeasureUnit::TWIP);
+    doTestDouble("4mm", 226.771653543307, MeasureUnit::MM, MeasureUnit::TWIP);
+    doTestDouble("4cm", 2267.71653543307, MeasureUnit::CM, MeasureUnit::TWIP);
+    doTestDouble("4in", 5760.0, MeasureUnit::INCH, MeasureUnit::TWIP);
+    doTestDouble("1440pc", 1.0, MeasureUnit::TWIP, MeasureUnit::INCH);
+    doTestDouble("567pc", 1.000125, MeasureUnit::TWIP, MeasureUnit::CM);
+    doTestDouble("56.7pc", 1.000125, MeasureUnit::TWIP, MeasureUnit::MM);
+    doTestDouble("5.67pc", 1.000125, MeasureUnit::TWIP, MeasureUnit::MM_10TH);
+    doTestDouble("0.567pc", 1.000125, MeasureUnit::TWIP, MeasureUnit::MM_100TH);
+    doTestDouble("42pt", 1.4816666666666, MeasureUnit::POINT, MeasureUnit::CM);
+    doTestDouble("42pt", 14.816666666666, MeasureUnit::POINT, MeasureUnit::MM);
+    doTestDouble("42pt", 148.16666666666, MeasureUnit::POINT, MeasureUnit::MM_10TH);
+    doTestDouble("42pt", 1481.6666666666, MeasureUnit::POINT, MeasureUnit::MM_100TH);
+    doTestDouble("72pt", 1.0, MeasureUnit::POINT, MeasureUnit::INCH);
+    doTestDouble("3.5in", 8.89, MeasureUnit::INCH, MeasureUnit::CM);
+    doTestDouble("3.5in", 88.9, MeasureUnit::INCH, MeasureUnit::MM);
+    doTestDouble("3.5in", 889.0, MeasureUnit::INCH, MeasureUnit::MM_10TH);
+    doTestDouble("3.5in", 8890.0, MeasureUnit::INCH, MeasureUnit::MM_100TH);
+    doTestDouble("2in", 144, MeasureUnit::INCH, MeasureUnit::POINT);
+    doTestDouble("5.08cm", 2.0, MeasureUnit::CM, MeasureUnit::INCH);
+    doTestDouble("3.5cm", 3500.0, MeasureUnit::CM, MeasureUnit::MM_100TH);
+    doTestDouble("3.5cm", 350.0, MeasureUnit::CM, MeasureUnit::MM_10TH);
+    doTestDouble("3.5cm", 35.0, MeasureUnit::CM, MeasureUnit::MM);
+    doTestDouble("10cm", 283.464566929134, MeasureUnit::CM, MeasureUnit::POINT);
+    doTestDouble("0.5cm", 283.464566929134, MeasureUnit::CM, MeasureUnit::TWIP);
+    doTestDouble("10mm", 28.3464566929134, MeasureUnit::MM, MeasureUnit::POINT);
+    doTestDouble("0.5mm", 28.3464566929134, MeasureUnit::MM, MeasureUnit::TWIP);
+    doTestDouble("10", 2.83464566929134, MeasureUnit::MM_10TH, MeasureUnit::POINT);
+    doTestDouble("0.5", 2.83464566929134, MeasureUnit::MM_10TH, MeasureUnit::TWIP);
+    doTestDouble("10", 0.283464566929134, MeasureUnit::MM_100TH, MeasureUnit::POINT);
+    doTestDouble("0.5", 0.283464566929134, MeasureUnit::MM_100TH, MeasureUnit::TWIP);
+    doTestDouble("10mm", 1.0, MeasureUnit::MM, MeasureUnit::CM);
+    doTestDouble("10mm", 100.0, MeasureUnit::MM, MeasureUnit::MM_10TH);
+    doTestDouble("20mm", 2000.0, MeasureUnit::MM, MeasureUnit::MM_100TH);
+    doTestDouble("300", 30.0, MeasureUnit::MM_10TH, MeasureUnit::MM);
+    doTestDouble("400", 4.0, MeasureUnit::MM_100TH, MeasureUnit::MM);
+    doTestDouble("600", 6000.0, MeasureUnit::MM_10TH, MeasureUnit::MM_100TH);
+    doTestDouble("700", 70.0, MeasureUnit::MM_100TH, MeasureUnit::MM_10TH);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
