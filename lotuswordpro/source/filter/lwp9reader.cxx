@@ -53,9 +53,7 @@
  *
  *
  ************************************************************************/
-#ifndef _LWP9READER_HXX
 #include "lwp9reader.hxx"
-#endif
 #include "lwpglobalmgr.hxx"
 #include "lwpunoheader.hxx"
 #include "lwparrowstyles.hxx"

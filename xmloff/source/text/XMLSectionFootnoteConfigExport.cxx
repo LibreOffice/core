@@ -40,10 +40,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnume.hxx>
 #include <tools/debug.hxx>
-
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <rtl/ustrbuf.hxx>
 
 #include <vector>

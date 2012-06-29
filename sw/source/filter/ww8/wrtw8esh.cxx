@@ -53,12 +53,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <editeng/editeng.hxx>
-#ifndef _SVX_FLDITEM_HXX
-//miserable hack to get around #98519#
-
 #include <editeng/flditem.hxx>
-#endif
-
 #include <comphelper/seqstream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svx/fmglob.hxx>

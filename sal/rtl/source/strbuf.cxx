@@ -27,17 +27,8 @@
  ************************************************************************/
 
 #include <osl/interlck.h>
-
-#ifndef _RTL_STRING_HXX_
 #include <rtl/strbuf.hxx>
-#endif
 #include <rtl/memory.h>
-
-/*
-#include <rtl/alloc.h>
-*/
-
-
 
 /*************************************************************************
  *  rtl_stringbuffer_newFromStr_WithLength

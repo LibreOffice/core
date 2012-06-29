@@ -26,13 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-
-#ifndef _PPTATOM_HXX_
 #include "pptatom.hxx"
-#endif
 
 using namespace ppt;
 

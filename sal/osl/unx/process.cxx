@@ -56,10 +56,7 @@
 #endif
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
-
-#ifndef _OSL_CONDITN_H_
 #include <osl/conditn.h>
-#endif
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <osl/signal.h>

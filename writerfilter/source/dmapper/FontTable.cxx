@@ -18,10 +18,8 @@
  */
 
 #include <FontTable.hxx>
-#ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
-#endif
 #include <vector>
 #include <stdio.h>
 #include <rtl/tencinfo.h>

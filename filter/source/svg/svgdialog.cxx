@@ -34,15 +34,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 
-#ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
 #include <com/sun/star/view/XRenderable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
 
 #define SVG_DIALOG_SERVICE_NAME         "com.sun.star.comp.Draw.SVGFilterDialog"
 #define SVG_DIALOG_IMPLEMENTATION_NAME  SVG_DIALOG_SERVICE_NAME

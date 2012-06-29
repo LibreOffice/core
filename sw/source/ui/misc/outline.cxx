@@ -37,11 +37,7 @@
 #include <editeng/brshitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <SwStyleNameMapper.hxx>
-
-#ifndef _NUM_HXX //autogen
-#define USE_NUMTABPAGES
 #include <num.hxx>
-#endif
 #include <view.hxx>
 #include <docsh.hxx>
 #include <uitool.hxx>
@@ -68,9 +64,7 @@
 #include <IDocumentOutlineNodes.hxx>
 #include <app.hrc>
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 
 using namespace ::com::sun::star;
 

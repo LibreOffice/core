@@ -66,9 +66,7 @@
 #include "lwplayout.hxx"
 #include "lwppagelayout.hxx"
 #include "xfilter/xfstylemanager.hxx"
-#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
-#endif
 
 LwpDocument::LwpDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm), m_pOwnedFoundry(NULL), m_pLnOpts(NULL)

@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-
-#ifndef INCLUDED_RECENTLY_USED_FILE
 #include "recently_used_file.hxx"
-#endif
 #include <rtl/ustring.hxx>
 #include <osl/process.h>
 #include <osl/security.hxx>

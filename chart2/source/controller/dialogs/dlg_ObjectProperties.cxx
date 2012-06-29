@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef _ZFORLIST_HXX
 #include <svl/zforlist.hxx>
-#endif
-
 #include "dlg_ObjectProperties.hxx"
 #include "ResourceIds.hrc"
 #include "Strings.hrc"

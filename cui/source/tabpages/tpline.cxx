@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef _SVX_SIZEITEM_HXX //autogen
 #include <editeng/sizeitem.hxx>
-#endif
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>

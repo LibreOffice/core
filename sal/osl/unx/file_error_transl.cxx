@@ -17,19 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
- #ifndef _ERRNO_H
- #include <errno.h>
- #endif
-
- #ifndef _FILE_ERROR_TRANSL_H_
- #include "file_error_transl.h"
- #endif
-
- #ifndef _OSL_DIAGNOSE_H_
- #include <osl/diagnose.h>
- #endif
-
+#include <errno.h>
+#include "file_error_transl.h"
+#include <osl/diagnose.h>
 
 /********************************************
  * oslTranslateFileError

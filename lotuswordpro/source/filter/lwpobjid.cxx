@@ -62,11 +62,7 @@
  Jan 2005           Created
  ************************************************************************/
 
-
-#ifndef _LWPOBJECTID_HXX
 #include "lwpobjid.hxx"
-#endif
-
 #include "lwpfilehdr.hxx"
 #include "lwpobjfactory.hxx"
 #include "lwpglobalmgr.hxx"

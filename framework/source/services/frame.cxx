@@ -92,9 +92,7 @@
 #include <unotools/moduleoptions.hxx>
 
 #ifdef ENABLE_ASSERTIONS
-    #ifndef _RTL_STRBUF_HXX_
     #include <rtl/strbuf.hxx>
-    #endif
 #endif
 
 #include <vcl/menu.hxx>

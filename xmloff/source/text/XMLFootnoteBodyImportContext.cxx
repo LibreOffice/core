@@ -19,9 +19,7 @@
 
 #include "XMLFootnoteBodyImportContext.hxx"
 
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>

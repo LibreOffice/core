@@ -22,10 +22,7 @@
 #include "res_Titles.hrc"
 #include "ResId.hxx"
 #include "TitleDialogData.hxx"
-
- #ifndef _SVT_CONTROLDIMS_HRC_
- #include <svtools/controldims.hrc>
- #endif
+#include <svtools/controldims.hrc>
 
 //.............................................................................
 namespace chart

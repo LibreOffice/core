@@ -74,9 +74,7 @@
 #include "lwppagehint.hxx"
 #include "lwpdivinfo.hxx"
 #include "lwpgrfobj.hxx"
-#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
-#endif
 
 LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)

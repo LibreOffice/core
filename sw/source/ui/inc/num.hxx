@@ -161,6 +161,6 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
                     SwWrtShell &);
         ~SwSvxNumBulletTabDialog();
 };
-#endif // _NUM_CXX
+#endif // _NUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

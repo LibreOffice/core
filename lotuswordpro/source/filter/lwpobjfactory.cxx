@@ -63,11 +63,7 @@
  ************************************************************************/
 
 #include "lwpobjfactory.hxx"
-
-#ifndef _LWPDEFS_HXX
 #include "lwpdefs.hxx"
-#endif
-
 #include "lwpdoc.hxx"
 #include "lwptemp.hxx"
 #include "lwpstory.hxx"

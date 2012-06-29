@@ -56,9 +56,7 @@
 #include <docary.hxx>            //SwCharFmts
 #include <charfmt.hxx>           //SwCharFmt
 #include <fchrfmt.hxx>           //SwFmtCharFmt
-#ifndef _UNOTOOLS_STREAMWRAP_HXX
 #include <unotools/streamwrap.hxx>
-#endif
 #include <numrule.hxx>
 
 using namespace com::sun::star;

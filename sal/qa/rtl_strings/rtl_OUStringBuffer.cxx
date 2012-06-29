@@ -26,45 +26,16 @@
  *
  ************************************************************************/
 
-
-#ifndef _SAL_TYPES_H_
-    #include <sal/types.h>
-#endif
-
+#include <sal/types.h>
 #include <testshl/tresstatewrapper.hxx>
-
-#ifndef _RTL_STRING_HXX_
-    #include <rtl/string.hxx>
-#endif
-
-#ifndef _RTL_USTRING_H_
-    #include <rtl/ustring.h>
-#endif
-
-#ifndef _RTL_USTRING_HXX_
-    #include <rtl/ustring.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_H_
-        #include <rtl/ustrbuf.h>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX
-        #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _OSL_THREAD_H_
-    #include <osl/thread.h>
-#endif
-
-#ifndef _RTL_STRING_CONST_H_
-    #include <rtl_String_Const.h>
-#endif
-
-#ifndef _RTL_STRING_UTILS_HXX_
-    #include <rtl_String_Utils.hxx>
-#endif
-
+#include <rtl/string.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.h>
+#include <rtl/ustrbuf.hxx>
+#include <osl/thread.h>
+#include <rtl_String_Const.h>
+#include <rtl_String_Utils.hxx>
 #include "stdio.h"
 
 using ::rtl::OUString;

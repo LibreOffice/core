@@ -27,10 +27,7 @@
  ************************************************************************/
 
 #include <hintids.hxx>
-
-#ifndef _ZFORLIST_HXX
 #include <svl/zforlist.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>

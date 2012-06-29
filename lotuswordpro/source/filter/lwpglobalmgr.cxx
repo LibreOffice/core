@@ -54,9 +54,7 @@
  *
  ************************************************************************/
 #include "lwpglobalmgr.hxx"
-#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
-#endif
 std::map< sal_uInt32,LwpGlobalMgr* > LwpGlobalMgr::m_ThreadMap;
 LwpGlobalMgr::LwpGlobalMgr(LwpSvStream* pSvStream)
 {

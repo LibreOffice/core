@@ -30,10 +30,7 @@
 
 #include "svdibrow.hxx"
 
-#ifndef _STDLIB_H
 #include <stdlib.h>
-#define _STDLIB_H
-#endif
 
 #include "svx/svditext.hxx"
 #include <editeng/flditem.hxx>

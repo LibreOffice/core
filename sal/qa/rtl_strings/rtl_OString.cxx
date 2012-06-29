@@ -27,24 +27,11 @@
  ************************************************************************/
 
 #include <string.h>
-
-#ifndef _SAL_TYPES_H_
-    #include <sal/types.h>
-#endif
-
+#include <sal/types.h>
 #include <testshl/tresstatewrapper.hxx>
-
-#ifndef _RTL_STRING_HXX_
-    #include <rtl/string.hxx>
-#endif
-
-#ifndef _RTL_STRING_CONST_H_
-    #include <rtl_String_Const.h>
-#endif
-
-#ifndef _RTL_STRING_UTILS_HXX_
-    #include <rtl_String_Utils.hxx>
-#endif
+#include <rtl/string.hxx>
+#include <rtl_String_Const.h>
+#include <rtl_String_Utils.hxx>
 #include <rtl/ustring.h>
 
 using ::rtl::OString;

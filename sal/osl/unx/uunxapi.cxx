@@ -26,26 +26,11 @@
  *
  ************************************************************************/
 
-
- #ifndef _OSL_UUNXAPI_H_
  #include "uunxapi.h"
- #endif
-
- #ifndef __OSL_SYSTEM_H__
  #include "system.h"
- #endif
-
- #ifndef _LIMITS_H
  #include <limits.h>
- #endif
-
- #ifndef _RTL_USTRING_HXX_
  #include <rtl/ustring.hxx>
- #endif
-
- #ifndef _OSL_THREAD_H_
  #include <osl/thread.h>
- #endif
 
  #ifdef ANDROID
  #include <osl/detail/android-bootstrap.h>

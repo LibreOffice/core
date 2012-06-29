@@ -32,9 +32,7 @@
 #include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18npool/lang.h>
-#ifndef _ZFORMAT_HXX //autogen
 #include <svl/zformat.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/numinf.hxx>

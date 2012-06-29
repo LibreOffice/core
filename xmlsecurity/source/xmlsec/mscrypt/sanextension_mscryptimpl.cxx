@@ -35,10 +35,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/sequence.hxx>
 
-
-#ifndef _SANEXTENSION_MSCRYPTIMPL_HXX_
 #include "sanextension_mscryptimpl.hxx"
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;

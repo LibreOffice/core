@@ -32,18 +32,10 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #if OSL_DEBUG_LEVEL > 0
-    #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
     #include <unotools/ucbstreamhelper.hxx>
-    #endif
-    #ifndef _SV_MSGBOX_HXX
     #include <vcl/msgbox.hxx>
-    #endif
-    #ifndef _FILEDLGHELPER_HXX
     #include <sfx2/filedlghelper.hxx>
-    #endif
-    #ifndef _URLOBJ_HXX
     #include <tools/urlobj.hxx>
-    #endif
     #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #endif
 #include <editeng/scripttypeitem.hxx>

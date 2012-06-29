@@ -28,9 +28,7 @@
 
 #include "XMLSectionFootnoteConfigImport.hxx"
 
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/style/NumberingType.hpp>

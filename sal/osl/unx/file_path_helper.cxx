@@ -31,25 +31,12 @@
      Includes
   ******************************************/
 
- #ifndef _OSL_FILE_PATH_HELPER_H_
  #include "file_path_helper.h"
- #endif
-
- #ifndef _OSL_FILE_PATH_HELPER_HXX_
  #include "file_path_helper.hxx"
- #endif
-
- #ifndef _OSL_UUNXAPI_HXX_
  #include "uunxapi.hxx"
- #endif
 
- #ifndef _OSL_DIAGNOSE_H_
  #include <osl/diagnose.h>
- #endif
-
- #ifndef _RTL_USTRING_HXX_
  #include <rtl/ustring.hxx>
- #endif
 
  /*******************************************
      Constants

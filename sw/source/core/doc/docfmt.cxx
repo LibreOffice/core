@@ -36,9 +36,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <svl/whiter.hxx>
-#ifndef _ZFORLIST_HXX //autogen
 #include <svl/zforlist.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <unotools/misccfg.hxx>
 #include <com/sun/star/i18n/WordType.hpp>

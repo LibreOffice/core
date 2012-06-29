@@ -36,13 +36,8 @@
 
     Example:
 
-        #ifndef __YOUR_SERVICE_1_HXX_
         #include <service1.hxx>
-        #endif
-
-        #ifndef __YOUR_SERVICE_2_HXX_
         #include <service2.hxx>
-        #endif
 
         COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else

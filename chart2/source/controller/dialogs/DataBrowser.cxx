@@ -26,11 +26,8 @@
  *
  ************************************************************************/
 
-
 // header for class SvNumberformat
-#ifndef _ZFORMAT_HXX
 #include <svl/zformat.hxx>
-#endif
 // header for SvNumberFormatter
 #include <svl/zforlist.hxx>
 

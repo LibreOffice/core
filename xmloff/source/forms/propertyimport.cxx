@@ -47,9 +47,7 @@
 #include <rtl/strbuf.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
-    #ifndef _OSL_THREAD_H_
     #include <osl/thread.h>
-    #endif
 #endif
 
 //.........................................................................

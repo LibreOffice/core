@@ -21,12 +21,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
-#define USE_NUMTABPAGES
-#define _NUM_CXX
 #include <hintids.hxx>
-
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/imgmgr.hxx>

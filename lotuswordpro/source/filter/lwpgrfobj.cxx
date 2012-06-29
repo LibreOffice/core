@@ -82,9 +82,7 @@
 //For chart
 #include "string.h"
 
-#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
-#endif
 
 #define EF_NONE 0x0000
 #define EF_FTP 0x0001

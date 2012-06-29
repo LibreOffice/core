@@ -40,10 +40,7 @@
 #include <secitem.h>
 #include <secport.h>
 
-
-#ifndef _SANEXTENSION_NSSIMPL_HXX_
 #include "sanextension_nssimpl.hxx"
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;

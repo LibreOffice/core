@@ -48,9 +48,7 @@
 #include <vcl/msgbox.hxx>
 
 // header for class SvNumberformat
-#ifndef _ZFORMAT_HXX
 #include <svl/zformat.hxx>
-#endif
 
 #include <svtools/controldims.hrc>
 

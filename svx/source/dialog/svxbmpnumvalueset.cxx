@@ -45,10 +45,7 @@
 #include <vcl/msgbox.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>
-#ifndef _XTABLE_HXX //autogen
-
 #include <svx/xtable.hxx>
-#endif
 #include <svx/drawitem.hxx>
 #include <svx/numvset.hxx>
 #include <svx/htmlmode.hxx>

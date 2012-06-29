@@ -20,9 +20,7 @@
 #include <algorithm>
 #include <iterator>
 
-#ifndef INCLUDED_DOCTOK_EXCEPTIONS
 #include <resourcemodel/exceptions.hxx>
-#endif
 #include <WW8PieceTableImpl.hxx>
 #include <WW8Clx.hxx>
 

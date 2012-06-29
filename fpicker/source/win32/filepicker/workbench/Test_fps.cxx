@@ -39,10 +39,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________________
 #include <cppuhelper/servicefactory.hxx>
-
-#ifndef _RTL_USTRING_
 #include <rtl/ustring.hxx>
-#endif
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
