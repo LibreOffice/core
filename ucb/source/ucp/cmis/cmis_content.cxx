@@ -405,6 +405,21 @@ namespace cmis
                 {
                     xRow->appendObject( rProp, uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
                 }
+                else if ( rProp.Name == "MediaType" )
+                {
+                    try
+                    {
+                        libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject().get( ) );
+                        if ( NULL != document )
+                            xRow->appendString( rProp, STD_TO_OUSTR( document->getContentType() ) );
+                        else
+                            xRow->appendVoid( rProp );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        xRow->appendVoid( rProp );
+                    }
+                }
                 else
                     SAL_INFO( "cmisucp", "Looking for unsupported property " << rProp.Name );
             }
@@ -601,10 +616,11 @@ namespace cmis
                     libcmis::Document* document = dynamic_cast< libcmis::Document* >( object.get( ) );
                     if ( NULL != document )
                     {
+                        string sMime = document->getContentType( );
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
-                        document->setContentStream( pOut, string( ), bReplaceExisting );
+                        document->setContentStream( pOut, sMime, bReplaceExisting );
                     }
                 }
                 else
@@ -837,6 +853,9 @@ namespace cmis
             beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreatableContentsInfo" ) ),
                 -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+                -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND ),
         };
 
         const int nProps = SAL_N_ELEMENTS(aGenericProperties);
