@@ -302,6 +302,7 @@ bool ScDocFuncSend::InitTeleManager( bool bIsMaster )
         return true;
     }
     fprintf( stderr, "Could not connect.\n" );
+    pManager->unref();
     return false;
 }
 
