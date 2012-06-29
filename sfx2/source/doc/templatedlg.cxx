@@ -68,6 +68,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       aButtonPresents(this,SfxResId(BTN_SELECT_PRESENTATIONS)),
       aButtonSheets(this,SfxResId(BTN_SELECT_SHEETS)),
       aButtonDraws(this,SfxResId(BTN_SELECT_DRAWS)),
+      maButtonClose(this,SfxResId(BTN_TEMPLATE_CLOSE)),
       maButtonSelMode(this,SfxResId(BTN_SELECTION_MODE)),
       mpSearchEdit(new Edit(this,WB_HIDE | WB_BORDER)),
       mpViewBar( new ToolBox(this, SfxResId(TBX_ACTION_VIEW))),
@@ -166,11 +167,22 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maView->setTemplateStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
     maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
 
+    // Set OK button position
+    Point aBtnPos;
+    Size aBtnSize = maButtonClose.GetSizePixel();
+    aBtnPos.setX(aWinSize.getWidth() - PADDING_DLG_BORDER - aBtnSize.getWidth());
+    aBtnPos.setY(aViewPos.getY()+aThumbSize.getHeight() + PADDING_TOOLBAR_VIEW);
+    maButtonClose.SetPosPixel(aBtnPos);
+
+    if (aWinSize.getHeight() != aBtnPos.getY() + aBtnSize.getHeight() + PADDING_DLG_BORDER )
+        aWinSize.setHeight(aBtnPos.getY() + aBtnSize.getHeight() + PADDING_DLG_BORDER);
+
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
     aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));
     aButtonPresents.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewPresentsHdl));
     aButtonSheets.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewSheetsHdl));
     aButtonDraws.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDrawsHdl));
+    maButtonClose.SetClickHdl(LINK(this,SfxTemplateManagerDlg,CloseHdl));
     maButtonSelMode.SetClickHdl(LINK(this,SfxTemplateManagerDlg,OnClickSelectionMode));
 
     // Set dialog to correct dimensions
@@ -231,6 +243,12 @@ void SfxTemplateManagerDlg::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (!maView->GetActiveClipRegion().IsInside(rMEvt.GetPosPixel()) && maView->isOverlayVisible())
         maView->showOverlay(false);
+}
+
+IMPL_LINK_NOARG (SfxTemplateManagerDlg, CloseHdl)
+{
+    Close();
+    return 0;
 }
 
 IMPL_LINK (SfxTemplateManagerDlg, OnClickSelectionMode, ImageButton*, pButton)
