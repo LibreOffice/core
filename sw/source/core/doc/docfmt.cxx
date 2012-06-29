@@ -2041,7 +2041,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
 void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                             sal_Bool bCopyPoolIds )
 {
-    sal_Bool bNotifyLayout = sal_False;
+    bool bNotifyLayout = false;
     SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
 
     rDstDesc.SetLandscape( rSrcDesc.GetLandscape() );
@@ -2049,7 +2049,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     if( rDstDesc.ReadUseOn() != rSrcDesc.ReadUseOn() )
     {
         rDstDesc.WriteUseOn( rSrcDesc.ReadUseOn() );
-        bNotifyLayout = sal_True;
+        bNotifyLayout = true;
     }
 
     if( bCopyPoolIds )
@@ -2072,7 +2072,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
             CopyPageDesc( *rSrcDesc.GetFollow(), *pFollow );
         }
         rDstDesc.SetFollow( pFollow );
-        bNotifyLayout = sal_True;
+        bNotifyLayout = true;
     }
 
     // the header and footer attributes are copied seperately
