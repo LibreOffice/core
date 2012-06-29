@@ -154,7 +154,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpSearchEdit->SetSizePixel(aSearchSize);
     mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aActionPos.Y()+aActionSize.getHeight()));
 
-    maView->SetStyle(WB_TABSTOP | WB_VSCROLL);
+    maView->SetStyle(WB_TABSTOP);
     maView->SetColor(GetBackground().GetColor());
     maView->SetSizePixel(aThumbSize);
     maView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
