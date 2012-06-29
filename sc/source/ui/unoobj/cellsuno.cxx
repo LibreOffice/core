@@ -7435,31 +7435,40 @@ void SAL_CALL ScTableSheetObj::copyRange( const table::CellAddress& aDestination
 void ScTableSheetObj::PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges )
 {
     //  Umbrueche und Undo
-
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
-    {
-        ScDocument* pDoc = pDocSh->GetDocument();
-        sal_Bool bUndo(pDoc->IsUndoEnabled());
-        SCTAB nTab = GetTab_Impl();
+    ScDocument* pDoc = pDocSh ? pDocSh->GetDocument() : 0;
 
-        ScPrintRangeSaver* pNewRanges = pDoc->CreatePrintRangeSaver();
-        if (bUndo)
+    if(pDocSh && pDoc)
+    {
+        const bool bUndo(pDoc->IsUndoEnabled());
+        const SCTAB nTab(GetTab_Impl());
+
+        if(bUndo)
         {
             pDocSh->GetUndoManager()->AddUndoAction(
-                        new ScUndoPrintRange( pDocSh, nTab, pOldRanges, pNewRanges ) );
+                new ScUndoPrintRange(
+                    pDocSh,
+                    nTab,
+                    pOldRanges,
+                    pDoc->CreatePrintRangeSaver())); // create new ranges
+
+            // #i120105# ownership of old ranges has changed, mark as consumed
+            pOldRanges = 0;
         }
 
-        ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab ).UpdatePages();
-
+        ScPrintFunc(pDocSh, pDocSh->GetPrinter(), nTab).UpdatePages();
         SfxBindings* pBindings = pDocSh->GetViewBindings();
-        if (pBindings)
-            pBindings->Invalidate( SID_DELETE_PRINTAREA );
+
+        if(pBindings)
+        {
+            pBindings->Invalidate(SID_DELETE_PRINTAREA);
+        }
 
         pDocSh->SetDocumentModified();
     }
-    else
-        delete pOldRanges;
+
+    // #i120105# pOldRanges not used, need to cleanup
+    delete pOldRanges;
 }
 
 uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
