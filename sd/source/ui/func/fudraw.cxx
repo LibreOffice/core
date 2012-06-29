@@ -49,7 +49,6 @@
 #include <sfx2/viewfrm.hxx>
 
 #include "anminfo.hxx"
-#include "anmdef.hxx"
 #include "imapinfo.hxx"
 #include "app.hrc"
 #include "glob.hrc"

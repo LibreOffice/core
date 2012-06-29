@@ -57,7 +57,6 @@
 #include "app.hxx"
 #include "DrawDocShell.hxx"
 #include "stlpool.hxx"
-#include "anmdef.hxx"
 #include "anminfo.hxx"
 #include "fudraw.hxx"
 #include "ViewShell.hxx"

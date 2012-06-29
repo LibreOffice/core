@@ -24,7 +24,6 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include "pres.hxx"
-#include "anmdef.hxx"
 #include <svx/svdobj.hxx>
 #include <tools/color.hxx>
 #include <sddllapi.h>

@@ -39,7 +39,6 @@
 #include "anminfo.hxx"
 #include "animobjs.hxx"
 #include "animobjs.hrc"
-#include "anmdef.hxx"
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"

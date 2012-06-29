@@ -38,7 +38,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 #include "sdtreelb.hxx"
-#include "anmdef.hxx"
 
 #include <vector>
 
