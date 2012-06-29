@@ -65,9 +65,9 @@ class TubeContacts : public ModelessDialog
 
     void Listen()
     {
-        ScDocShell *pScDocShell = reinterpret_cast<ScDocShell*> (SfxObjectShell::Current());
+        ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
         ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
-        ScDocFuncSend *pSender = reinterpret_cast<ScDocFuncSend*> (pDocFunc);
+        ScDocFuncSend *pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
         if (!pSender)
         {
             delete pDocFunc;
@@ -83,7 +83,7 @@ class TubeContacts : public ModelessDialog
     {
         AccountContact *pAC = NULL;
         if (maList.FirstSelected())
-            pAC = reinterpret_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
+            pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
         if (pAC)
         {
             TpAccount* pAccount = pAC->mpAccount;
