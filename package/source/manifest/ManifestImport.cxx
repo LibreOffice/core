@@ -30,7 +30,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -38,19 +37,36 @@ using namespace com::sun::star;
 using namespace rtl;
 using namespace std;
 
+// helper for ignoring multiple settings of the same property
+#define setProperty(e,v) do{ if(!maValues[e].hasValue()) maValues[e] <<= v;} while(0)
+
+static const char* getMnfstPropName( int nManifestPropId )
+{
+    const char* pName;
+    switch( nManifestPropId )
+    {
+        case PKG_MNFST_MEDIATYPE:   pName = "MediaType"; break;
+        case PKG_MNFST_VERSION:     pName = "Version"; break;
+        case PKG_MNFST_FULLPATH:    pName = "FullPath"; break;
+        case PKG_MNFST_INIVECTOR:   pName = "InitialisationVector"; break;
+        case PKG_MNFST_SALT:        pName = "Salt"; break;
+        case PKG_MNFST_ITERATION:   pName = "IterationCount"; break;
+        case PKG_MNFST_UCOMPSIZE:   pName = "Size"; break;
+        case PKG_MNFST_DIGEST:      pName = "Digest"; break;
+        case PKG_MNFST_ENCALG:      pName = "EncryptionAlgorithm"; break;
+        case PKG_MNFST_STARTALG:    pName = "StartKeyAlgorithm"; break;
+        case PKG_MNFST_DIGESTALG:   pName = "DigestAlgorithm"; break;
+        case PKG_MNFST_DERKEYSIZE:  pName = "DerivedKeySize"; break;
+        default: pName = NULL;
+    }
+    return pName;
+}
+
 // ---------------------------------------------------
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
-: nNumProperty ( 0 )
-, bIgnoreEncryptData    ( sal_False )
+: rManVector ( rNewManVector )
 , nDerivedKeySize( 0 )
-, rManVector ( rNewManVector )
-
-, sFileEntryElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) )
-, sManifestElement      ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) )
-, sEncryptionDataElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) )
-, sAlgorithmElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) )
-, sStartKeyAlgElement   ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_START_KEY_GENERATION ) )
-, sKeyDerivationElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_KEY_DERIVATION ) )
+, bIgnoreEncryptData( false )
 
 , sCdataAttribute               ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) )
 , sMediaTypeAttribute           ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) )
@@ -58,46 +74,14 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sFullPathAttribute            ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) )
 , sSizeAttribute                ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) )
 , sSaltAttribute                ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) )
-, sInitialisationVectorAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) )
+, sInitialisationVectorAttribute(RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) )
 , sIterationCountAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) )
-, sKeySizeAttribute             ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) )
+, sKeySizeAttribute            ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) )
 , sAlgorithmNameAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) )
-, sStartKeyAlgNameAttribute     ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_START_KEY_GENERATION_NAME ) )
+, sStartKeyAlgNameAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_START_KEY_GENERATION_NAME ) )
 , sKeyDerivationNameAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) )
 , sChecksumAttribute            ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM ) )
 , sChecksumTypeAttribute        ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) )
-
-, sFullPathProperty             ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) )
-, sMediaTypeProperty            ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) )
-, sVersionProperty              ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) )
-, sIterationCountProperty       ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) )
-, sDerivedKeySizeProperty       ( RTL_CONSTASCII_USTRINGPARAM ( "DerivedKeySize" ) )
-, sSaltProperty                 ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) )
-, sInitialisationVectorProperty ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) )
-, sSizeProperty                 ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) )
-, sDigestProperty               ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) )
-, sEncryptionAlgProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "EncryptionAlgorithm" ) )
-, sStartKeyAlgProperty          ( RTL_CONSTASCII_USTRINGPARAM ( "StartKeyAlgorithm" ) )
-, sDigestAlgProperty            ( RTL_CONSTASCII_USTRINGPARAM ( "DigestAlgorithm" ) )
-
-, sWhiteSpace                   ( RTL_CONSTASCII_USTRINGPARAM ( " " ) )
-
-, sSHA256_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_URL ) )
-, sSHA1_Name                    ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_NAME ) )
-, sSHA1_URL                     ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_URL ) )
-
-, sSHA256_1k_URL                ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_1K_URL ) )
-, sSHA1_1k_Name                 ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_1K_NAME ) )
-, sSHA1_1k_URL                  ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_1K_URL ) )
-
-, sBlowfish_Name                ( RTL_CONSTASCII_USTRINGPARAM ( BLOWFISH_NAME ) )
-, sBlowfish_URL                 ( RTL_CONSTASCII_USTRINGPARAM ( BLOWFISH_URL ) )
-, sAES128_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( AES128_URL ) )
-, sAES192_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( AES192_URL ) )
-, sAES256_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( AES256_URL ) )
-
-, sPBKDF2_Name                  ( RTL_CONSTASCII_USTRINGPARAM ( PBKDF2_NAME ) )
-, sPBKDF2_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( PBKDF2_URL ) )
 {
     aStack.reserve( 10 );
 }
@@ -126,138 +110,115 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
     StringHashMap aConvertedAttribs;
     ::rtl::OUString aConvertedName = PushNameAndNamespaces( aName, xAttribs, aConvertedAttribs );
 
-    if ( aConvertedName == sFileEntryElement )
+    if ( aConvertedName.equalsAscii( ELEMENT_FILE_ENTRY ) )
     {
-        aSequence.realloc ( PKG_SIZE_ENCR_MNFST );
+        setProperty( PKG_MNFST_FULLPATH, aConvertedAttribs[sFullPathAttribute]);
+        setProperty( PKG_MNFST_MEDIATYPE, aConvertedAttribs[sMediaTypeAttribute]);
 
-        // Put full-path property first for MBA
-        aSequence[nNumProperty].Name = sFullPathProperty;
-        aSequence[nNumProperty++].Value <<= aConvertedAttribs[sFullPathAttribute];
-        aSequence[nNumProperty].Name = sMediaTypeProperty;
-        aSequence[nNumProperty++].Value <<= aConvertedAttribs[sMediaTypeAttribute];
-
-        OUString sVersion = aConvertedAttribs[sVersionAttribute];
+        const OUString& sVersion = aConvertedAttribs[sVersionAttribute];
         if ( sVersion.getLength() )
-        {
-            aSequence[nNumProperty].Name = sVersionProperty;
-            aSequence[nNumProperty++].Value <<= sVersion;
-        }
+            setProperty( PKG_MNFST_VERSION, sVersion );
 
-        OUString sSize = aConvertedAttribs[sSizeAttribute];
+        const OUString& sSize = aConvertedAttribs[sSizeAttribute];
         if ( sSize.getLength() )
-        {
-            sal_Int32 nSize;
-            nSize = sSize.toInt32();
-            aSequence[nNumProperty].Name = sSizeProperty;
-            aSequence[nNumProperty++].Value <<= nSize;
-        }
+            setProperty( PKG_MNFST_UCOMPSIZE, sSize.toInt32() );
     }
     else if ( aStack.size() > 1 )
     {
         ManifestStack::reverse_iterator aIter = aStack.rbegin();
         aIter++;
 
-        if ( aIter->m_aConvertedName.equals( sFileEntryElement ) )
+        if ( aIter->m_aConvertedName.equalsAscii( ELEMENT_FILE_ENTRY ) )
         {
-            if ( aConvertedName.equals( sEncryptionDataElement ) )
+            if ( aConvertedName.equalsAscii( ELEMENT_ENCRYPTION_DATA ) )
             {
                 // If this element exists, then this stream is encrypted and we need
                 // to import the initialisation vector, salt and iteration count used
                 nDerivedKeySize = 0;
-                OUString aString = aConvertedAttribs[sChecksumTypeAttribute];
                 if ( !bIgnoreEncryptData )
                 {
-                    if ( aString.equals( sSHA1_1k_Name ) || aString.equals( sSHA1_1k_URL ) )
-                    {
-                        aSequence[nNumProperty].Name = sDigestAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA1_1K;
-                    }
-                    else if ( aString.equals( sSHA256_1k_URL ) )
-                    {
-                        aSequence[nNumProperty].Name = sDigestAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA256_1K;
-                    }
+                    long nDigestId = 0;
+                    const OUString& rChecksumType = aConvertedAttribs[sChecksumTypeAttribute];
+                    if( rChecksumType.equalsAscii( SHA1_1K_NAME )
+                    ||  rChecksumType.equalsAscii( SHA1_1K_URL ) )
+                        nDigestId = xml::crypto::DigestID::SHA1_1K;
+                    else if ( rChecksumType.equalsAscii( SHA256_1K_URL ) )
+                        nDigestId = xml::crypto::DigestID::SHA256_1K;
                     else
-                        bIgnoreEncryptData = sal_True;
+                        bIgnoreEncryptData = true;
 
                     if ( !bIgnoreEncryptData )
                     {
-                        aString = aConvertedAttribs[sChecksumAttribute];
+                        setProperty( PKG_MNFST_DIGESTALG, nDigestId );
+                        const OUString& sChecksumData = aConvertedAttribs[sChecksumAttribute];
                         uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64( aDecodeBuffer, aString );
-                        aSequence[nNumProperty].Name = sDigestProperty;
-                        aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                        Base64Codec::decodeBase64( aDecodeBuffer, sChecksumData );
+                        setProperty( PKG_MNFST_DIGEST, aDecodeBuffer );
                     }
                 }
             }
         }
-        else if ( aIter->m_aConvertedName.equals( sEncryptionDataElement ) )
+        else if ( aIter->m_aConvertedName.equalsAscii( ELEMENT_ALGORITHM ) )
         {
-            if ( aConvertedName == sAlgorithmElement )
+            if ( aConvertedName.equalsAscii( ELEMENT_ALGORITHM ) )
             {
                 if ( !bIgnoreEncryptData )
                 {
-                    OUString aString = aConvertedAttribs[sAlgorithmNameAttribute];
-                    if ( aString.equals( sBlowfish_Name ) || aString.equals( sBlowfish_URL ) )
+                    long nCypherId = 0;
+                    const OUString& rAlgoName = aConvertedAttribs[sAlgorithmNameAttribute];
+                    if ( rAlgoName.equalsAscii( BLOWFISH_NAME )
+                    ||   rAlgoName.equalsAscii( BLOWFISH_URL ) )
+                         nCypherId = xml::crypto::CipherID::BLOWFISH_CFB_8;
+                    else if( rAlgoName.equalsAscii( AES256_URL ) )
                     {
-                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
-                    }
-                    else if ( aString.equals( sAES256_URL ) )
-                    {
-                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+                         nCypherId = xml::crypto::CipherID::AES_CBC_W3C_PADDING;
                         OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 32, "Unexpected derived key length!" );
                         nDerivedKeySize = 32;
                     }
-                    else if ( aString.equals( sAES192_URL ) )
+                    else if( rAlgoName.equalsAscii( AES192_URL ) )
                     {
-                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+                         nCypherId = xml::crypto::CipherID::AES_CBC_W3C_PADDING;
                         OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 24, "Unexpected derived key length!" );
                         nDerivedKeySize = 24;
                     }
-                    else if ( aString.equals( sAES128_URL ) )
+                    else if( rAlgoName.equalsAscii( AES128_URL ) )
                     {
-                        aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+                         nCypherId = xml::crypto::CipherID::AES_CBC_W3C_PADDING;
                         OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 16, "Unexpected derived key length!" );
                         nDerivedKeySize = 16;
                     }
                     else
-                        bIgnoreEncryptData = sal_True;
+                        bIgnoreEncryptData = true;
 
                     if ( !bIgnoreEncryptData )
                     {
-                        aString = aConvertedAttribs[sInitialisationVectorAttribute];
+                         setProperty( PKG_MNFST_ENCALG, nCypherId );
+                        const OUString& sInitVector = aConvertedAttribs[sInitialisationVectorAttribute];
                         uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
-                        aSequence[nNumProperty].Name = sInitialisationVectorProperty;
-                        aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                        Base64Codec::decodeBase64 ( aDecodeBuffer, sInitVector );
+                         setProperty( PKG_MNFST_INIVECTOR, aDecodeBuffer );
                     }
                 }
             }
-            else if ( aConvertedName == sKeyDerivationElement )
+            else if ( aConvertedName.equalsAscii( ELEMENT_KEY_DERIVATION ) )
             {
                 if ( !bIgnoreEncryptData )
                 {
-                    OUString aString = aConvertedAttribs[sKeyDerivationNameAttribute];
-                    if ( aString.equals( sPBKDF2_Name ) || aString.equals( sPBKDF2_URL ) )
+                    const OUString& rKeyDerivString = aConvertedAttribs[sKeyDerivationNameAttribute];
+                    if ( rKeyDerivString.equalsAscii( PBKDF2_NAME ) || rKeyDerivString.equalsAscii( PBKDF2_URL ) )
                     {
-                        aString = aConvertedAttribs[sSaltAttribute];
+                        const OUString& rSaltString = aConvertedAttribs[sSaltAttribute];
                         uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
-                        aSequence[nNumProperty].Name = sSaltProperty;
-                        aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                        Base64Codec::decodeBase64 ( aDecodeBuffer, rSaltString );
+                         setProperty( PKG_MNFST_SALT, aDecodeBuffer );
 
-                        aString = aConvertedAttribs[sIterationCountAttribute];
-                        aSequence[nNumProperty].Name = sIterationCountProperty;
-                        aSequence[nNumProperty++].Value <<= aString.toInt32();
+                        const OUString& rIterationCount = aConvertedAttribs[sIterationCountAttribute];
+                        setProperty( PKG_MNFST_ITERATION, rIterationCount.toInt32() );
 
-                        aString = aConvertedAttribs[sKeySizeAttribute];
-                        if ( aString.getLength() )
+                        const OUString& rKeySize = aConvertedAttribs[sKeySizeAttribute];
+                        if ( rKeySize.getLength() )
                         {
-                            sal_Int32 nKey = aString.toInt32();
+                            const sal_Int32 nKey = rKeySize.toInt32();
                             OSL_ENSURE( !nDerivedKeySize || nKey == nDerivedKeySize , "Provided derived key length differs from the expected one!" );
                             nDerivedKeySize = nKey;
                         }
@@ -266,28 +227,21 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                         else if ( nDerivedKeySize != 16 )
                             OSL_ENSURE( sal_False, "Default derived key length differs from the expected one!" );
 
-                        aSequence[nNumProperty].Name = sDerivedKeySizeProperty;
-                        aSequence[nNumProperty++].Value <<= nDerivedKeySize;
+                        setProperty( PKG_MNFST_DERKEYSIZE, nDerivedKeySize );
                     }
                     else
-                        bIgnoreEncryptData = sal_True;
+                        bIgnoreEncryptData = true;
                 }
             }
-            else if ( aConvertedName == sStartKeyAlgElement )
+            else if ( aConvertedName.equalsAscii( ELEMENT_START_KEY_GENERATION ) )
             {
-                OUString aString = aConvertedAttribs[sStartKeyAlgNameAttribute];
-                if ( aString.equals( sSHA256_URL ) )
-                {
-                    aSequence[nNumProperty].Name = sStartKeyAlgProperty;
-                    aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA256;
-                }
-                else if ( aString.equals( sSHA1_Name ) || aString.equals( sSHA1_URL ) )
-                {
-                    aSequence[nNumProperty].Name = sStartKeyAlgProperty;
-                    aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA1;
-                }
+                const OUString& rSKeyAlg = aConvertedAttribs[sStartKeyAlgNameAttribute];
+                if ( rSKeyAlg.equalsAscii( SHA256_URL ) )
+                    setProperty( PKG_MNFST_STARTALG, xml::crypto::DigestID::SHA256 );
+                else if ( rSKeyAlg.equalsAscii( SHA1_NAME ) || rSKeyAlg.equalsAscii( SHA1_URL ) )
+                    setProperty( PKG_MNFST_STARTALG, xml::crypto::DigestID::SHA1 );
                 else
-                    bIgnoreEncryptData = sal_True;
+                    bIgnoreEncryptData = true;
             }
         }
     }
@@ -297,19 +251,40 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
 void SAL_CALL ManifestImport::endElement( const OUString& aName )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    ::rtl::OUString aConvertedName = ConvertName( aName );
-    if ( !aStack.empty() && aStack.rbegin()->m_aConvertedName.equals( aConvertedName ) )
-    {
-        if ( aConvertedName.equals( sFileEntryElement ) )
-        {
-            aSequence.realloc ( nNumProperty );
-            bIgnoreEncryptData = sal_False;
-            rManVector.push_back ( aSequence );
-            nNumProperty = 0;
-        }
+    if( aStack.empty() )
+        return;
 
-        aStack.pop_back();
+    const OUString aConvertedName = ConvertName( aName );
+    if( !aConvertedName.equalsAscii( ELEMENT_FILE_ENTRY ) )
+        return;
+    if( !aStack.rbegin()->m_aConvertedName.equals( aConvertedName ) )
+        return;
+
+    aStack.pop_back();
+
+    // create the property sequence
+    // Put full-path property first for MBA
+    // TODO: get rid of fullpath-first requirement
+    const bool bHasFullPath = maValues[PKG_MNFST_FULLPATH].hasValue();
+    OSL_ENSURE( bHasFullPath, "Full path missing in manifest" );
+
+    int nNumProperty = bHasFullPath ? 1 : 0;
+    PropertyValue aProperties[ PKG_SIZE_ENCR_MNFST ];
+    for( int i = 0; i < PKG_SIZE_ENCR_MNFST; ++i)
+    {
+        if(! maValues[i].hasValue() )
+            continue;
+
+        const int nDest = (i == PKG_MNFST_FULLPATH) ? 0 : nNumProperty++;
+        PropertyValue& rProp = aProperties[ nDest ];
+        rProp.Name = OUString::createFromAscii( getMnfstPropName(i));
+        rProp.Value = maValues[i];
+        maValues[i].clear();
     }
+
+    // add the property sequence to the vector of manifests
+    rManVector.push_back ( PropertyValues( aProperties, nNumProperty ) );
+    bIgnoreEncryptData = false;
 }
 
 // ---------------------------------------------------
@@ -382,6 +357,7 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
     return aConvertedName;
 }
 
+
 // ---------------------------------------------------
 ::rtl::OUString ManifestImport::ConvertNameWithNamespace( const ::rtl::OUString& aName, const StringHashMap& aNamespaces )
 {
@@ -399,8 +375,8 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
 
     StringHashMap::const_iterator aIter = aNamespaces.find( aNsAlias );
     if ( aIter != aNamespaces.end()
-      && ( aIter->second.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_NAMESPACE ) ) )
-        || aIter->second.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_OASIS_NAMESPACE ) ) ) ) )
+      && ( aIter->second.equalsAscii( MANIFEST_NAMESPACE )
+        || aIter->second.equalsAscii( MANIFEST_OASIS_NAMESPACE ) ) )
     {
         // no check for manifest.xml consistency currently since the old versions have supported inconsistent documents as well
         aResult = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_NSPREFIX ) );

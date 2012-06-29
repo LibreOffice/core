@@ -28,8 +28,10 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XDUCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
+#include "PackageConstants.hxx"
 #include <vector>
 
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <HashMaps.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -58,19 +60,12 @@ typedef ::std::vector< ManifestScopeEntry > ManifestStack;
 class ManifestImport : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
 {
 protected:
-    com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aSequence;
-    sal_Int16       nNumProperty;
-    ManifestStack aStack;
-    sal_Bool bIgnoreEncryptData;
-    sal_Int32 nDerivedKeySize;
-    ::std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
+    ::com::sun::star::uno::Any maValues[ PKG_SIZE_ENCR_MNFST ];
 
-    const ::rtl::OUString sFileEntryElement;
-    const ::rtl::OUString sManifestElement;
-    const ::rtl::OUString sEncryptionDataElement;
-    const ::rtl::OUString sAlgorithmElement;
-    const ::rtl::OUString sStartKeyAlgElement;
-    const ::rtl::OUString sKeyDerivationElement;
+    ::std::vector < ::com::sun::star::beans::PropertyValues > & rManVector;
+    ManifestStack aStack;
+    sal_Int32 nDerivedKeySize;
+    bool bIgnoreEncryptData;
 
     const ::rtl::OUString sCdataAttribute;
     const ::rtl::OUString sMediaTypeAttribute;
@@ -86,39 +81,6 @@ protected:
     const ::rtl::OUString sKeyDerivationNameAttribute;
     const ::rtl::OUString sChecksumAttribute;
     const ::rtl::OUString sChecksumTypeAttribute;
-
-    const ::rtl::OUString sFullPathProperty;
-    const ::rtl::OUString sMediaTypeProperty;
-    const ::rtl::OUString sVersionProperty;
-    const ::rtl::OUString sIterationCountProperty;
-    const ::rtl::OUString sDerivedKeySizeProperty;
-    const ::rtl::OUString sSaltProperty;
-    const ::rtl::OUString sInitialisationVectorProperty;
-    const ::rtl::OUString sSizeProperty;
-    const ::rtl::OUString sDigestProperty;
-    const ::rtl::OUString sEncryptionAlgProperty;
-    const ::rtl::OUString sStartKeyAlgProperty;
-    const ::rtl::OUString sDigestAlgProperty;
-
-    const ::rtl::OUString sWhiteSpace;
-
-    const ::rtl::OUString sSHA256_URL;
-    const ::rtl::OUString sSHA1_Name;
-    const ::rtl::OUString sSHA1_URL;
-
-    const ::rtl::OUString sSHA256_1k_URL;
-    const ::rtl::OUString sSHA1_1k_Name;
-    const ::rtl::OUString sSHA1_1k_URL;
-
-    const ::rtl::OUString sBlowfish_Name;
-    const ::rtl::OUString sBlowfish_URL;
-    const ::rtl::OUString sAES128_URL;
-    const ::rtl::OUString sAES192_URL;
-    const ::rtl::OUString sAES256_URL;
-
-    const ::rtl::OUString sPBKDF2_Name;
-    const ::rtl::OUString sPBKDF2_URL;
-
 
     ::rtl::OUString PushNameAndNamespaces( const ::rtl::OUString& aName,
                                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs,
