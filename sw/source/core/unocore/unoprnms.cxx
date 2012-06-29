@@ -789,6 +789,8 @@ const SwPropNameTab aPropNameTab = {
 
 /* 0749 PARA_CONTEXT_MARGIN */           {MAP_CHAR_LEN("ParaContextMargin")},
 /* 0750 PARAGRAPH_STYLE_NAME */           {MAP_CHAR_LEN("ParagraphStyleName")},
+/* 0751 HEADER_IS_SHARED_FIRST */             {MAP_CHAR_LEN("HeaderIsSharedFirst")},
+/* 0752 FOOTER_IS_SHARED_FIRST */             {MAP_CHAR_LEN("FooterIsSharedFirst")},
 
 // new items in this array must match enum SwPropNameIds
 };

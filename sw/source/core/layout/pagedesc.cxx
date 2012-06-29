@@ -55,11 +55,12 @@ SwPageDesc::SwPageDesc( const String& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     aDescName( rName ),
     aMaster( pDc->GetAttrPool(), rName, pFmt ),
     aLeft( pDc->GetAttrPool(), rName, pFmt ),
+    aFirst( pDc->GetAttrPool(), rName, pFmt ),
     aDepend( this, 0 ),
     pFollow( this ),
     nRegHeight( 0 ),
     nRegAscent( 0 ),
-    eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE) ),
+    eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_HEADERSHAREFIRST | nsUseOnPage::PD_FOOTERSHAREFIRST ) ),
     bLandscape( sal_False ),
     aFtnInfo()
 {
@@ -71,6 +72,7 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy ) :
     aNumType( rCpy.GetNumType() ),
     aMaster( rCpy.GetMaster() ),
     aLeft( rCpy.GetLeft() ),
+    aFirst( rCpy.GetFirst() ),
     aDepend( this, (SwModify*)rCpy.aDepend.GetRegisteredIn() ),
     pFollow( rCpy.pFollow ),
     nRegHeight( rCpy.GetRegHeight() ),
@@ -87,6 +89,7 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
     aNumType = rSrc.aNumType;
     aMaster = rSrc.aMaster;
     aLeft = rSrc.aLeft;
+    aFirst = rSrc.aFirst;
 
     if (rSrc.pFollow == &rSrc)
         pFollow = this;
@@ -336,6 +339,32 @@ sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
             bRet = sal_True;
     }
     return bRet;
+}
+
+sal_Bool SwPageDesc::IsHeaderSharedFirst() const
+{
+    return eUse & nsUseOnPage::PD_HEADERSHAREFIRST ? sal_True : sal_False;
+}
+
+void SwPageDesc::ChgHeaderShareFirst( sal_Bool bNew )
+{
+    if ( bNew )
+        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_HEADERSHAREFIRST);
+    else
+        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOHEADERSHAREFIRST);
+}
+
+sal_Bool SwPageDesc::IsFooterSharedFirst() const
+{
+    return eUse & nsUseOnPage::PD_FOOTERSHAREFIRST ? sal_True : sal_False;
+}
+
+void SwPageDesc::ChgFooterShareFirst( sal_Bool bNew )
+{
+    if ( bNew )
+        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_FOOTERSHAREFIRST);
+    else
+        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOFOOTERSHAREFIRST);
 }
 
 /*************************************************************************

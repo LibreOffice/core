@@ -145,6 +145,9 @@ sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
         case FN_UNO_FOOTER_SHARE_CONTENT:
         case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
         break;
+        case FN_UNO_FOOTER_SHARE_FIRST_CONTENT:
+        case FN_UNO_HEADER_SHARE_FIRST_CONTENT:   nRes = SID_ATTR_PAGE_SHARED_FIRST;
+        break;
         case FN_UNO_FOOTER_HEIGHT:
         case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
         break;
@@ -2999,6 +3002,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case FN_UNO_HEADER_BODY_DISTANCE:
                 case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_HEADER_SHARE_CONTENT:
+                case FN_UNO_HEADER_SHARE_FIRST_CONTENT:
                 case FN_UNO_HEADER_HEIGHT:
                 case FN_UNO_HEADER_EAT_SPACING:
 
@@ -3010,6 +3014,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case FN_UNO_FOOTER_BODY_DISTANCE:
                 case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_FOOTER_SHARE_CONTENT:
+                case FN_UNO_FOOTER_SHARE_FIRST_CONTENT:
                 case FN_UNO_FOOTER_HEIGHT:
                 case FN_UNO_FOOTER_EAT_SPACING:
                 {
@@ -3049,6 +3054,10 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                         case FN_UNO_FOOTER_SHARE_CONTENT:       bFooter = sal_True;
                         // kein break;
                         case FN_UNO_HEADER_SHARE_CONTENT:       nRes = SID_ATTR_PAGE_SHARED;
+                        break;
+                        case FN_UNO_FOOTER_SHARE_FIRST_CONTENT: bFooter = sal_True;
+                        // no break;
+                        case FN_UNO_HEADER_SHARE_FIRST_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                         break;
                         case FN_UNO_FOOTER_HEIGHT:              bFooter = sal_True;
                         // kein break;
@@ -3106,12 +3115,14 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                                 SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
                                 SID_ATTR_PAGE_DYNAMIC, SID_ATTR_PAGE_DYNAMIC,
                                 SID_ATTR_PAGE_SHARED, SID_ATTR_PAGE_SHARED,
+                                SID_ATTR_PAGE_SHARED_FIRST, SID_ATTR_PAGE_SHARED_FIRST,
                                 0 );
                             aTempSet.Put(SfxBoolItem(nRes, sal_True));
                             aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(MM50, MM50)));
                             aTempSet.Put(SvxLRSpaceItem(RES_LR_SPACE));
                             aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
                             aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, sal_True));
+                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED_FIRST, sal_True));
                             aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, sal_True));
 
                             SvxSetItem aNewSetItem( bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
@@ -3254,6 +3265,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 case FN_UNO_HEADER_BODY_DISTANCE:
                 case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_HEADER_SHARE_CONTENT:
+                case FN_UNO_HEADER_SHARE_FIRST_CONTENT:
                 case FN_UNO_HEADER_HEIGHT:
                 case FN_UNO_HEADER_EAT_SPACING:
 
@@ -3265,6 +3277,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 case FN_UNO_FOOTER_BODY_DISTANCE:
                 case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_FOOTER_SHARE_CONTENT:
+                case FN_UNO_FOOTER_SHARE_FIRST_CONTENT:
                 case FN_UNO_FOOTER_HEIGHT:
                 case FN_UNO_FOOTER_EAT_SPACING:
                 {
@@ -3316,6 +3329,10 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                             case FN_UNO_FOOTER_SHARE_CONTENT:   bFooter = sal_True;
                             // kein break;
                             case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
+                            break;
+                            case FN_UNO_FOOTER_SHARE_FIRST_CONTENT: bFooter = sal_True;
+                            // no break;
+                            case FN_UNO_HEADER_SHARE_FIRST_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                             break;
                             case FN_UNO_FOOTER_HEIGHT:          bFooter = sal_True;
                             // kein break;

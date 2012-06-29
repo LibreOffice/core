@@ -133,6 +133,10 @@ namespace nsUseOnPage
     const UseOnPage PD_FOOTERSHARE    = 0x0080;
     const UseOnPage PD_NOHEADERSHARE  = 0x00BF; // For internal use only.
     const UseOnPage PD_NOFOOTERSHARE  = 0x007F; // For internal use only.
+    const UseOnPage PD_HEADERSHAREFIRST = 0x0100;
+    const UseOnPage PD_NOHEADERSHAREFIRST = 0xFEFF;
+    const UseOnPage PD_FOOTERSHAREFIRST = 0x0200;
+    const UseOnPage PD_NOFOOTERSHAREFIRST = 0xFDFF;
 }
 
 class SW_DLLPUBLIC SwPageDesc : public SwModify
@@ -144,6 +148,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     SvxNumberType   aNumType;
     SwFrmFmt    aMaster;
     SwFrmFmt    aLeft;
+    SwFrmFmt    aFirst;
     SwDepend    aDepend;    // Because of grid alignment (Registerhaltigkeit).
     SwPageDesc *pFollow;
     sal_uInt16  nRegHeight; // Sentence spacing and fontascent of style.
@@ -183,6 +188,10 @@ public:
     inline sal_Bool IsFooterShared() const;
     inline void ChgHeaderShare( sal_Bool bNew );
     inline void ChgFooterShare( sal_Bool bNew );
+    sal_Bool IsHeaderSharedFirst() const;
+    void ChgHeaderShareFirst( sal_Bool bNew );
+    sal_Bool IsFooterSharedFirst() const;
+    void ChgFooterShareFirst( sal_Bool bNew );
 
     inline void      SetUseOn( UseOnPage eNew );
     inline UseOnPage GetUseOn() const;
@@ -192,8 +201,10 @@ public:
 
           SwFrmFmt &GetMaster() { return aMaster; }
           SwFrmFmt &GetLeft()   { return aLeft; }
+          SwFrmFmt &GetFirst()   { return aFirst; }
     const SwFrmFmt &GetMaster() const { return aMaster; }
     const SwFrmFmt &GetLeft()   const { return aLeft; }
+    const SwFrmFmt &GetFirst()   const { return aFirst; }
 
     // Reset all attrs of the format but keep the ones a pagedesc
     // cannot live without.

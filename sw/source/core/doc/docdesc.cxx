@@ -294,6 +294,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         }
     }
     pDesc->ChgHeaderShare( rChged.IsHeaderShared() );
+    pDesc->ChgHeaderShareFirst( rChged.IsHeaderSharedFirst() );
 
     // Synch Footer.
     const SwFmtFooter &rFoot = rChged.GetMaster().GetFooter();
@@ -354,6 +355,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         }
     }
     pDesc->ChgFooterShare( rChged.IsFooterShared() );
+    pDesc->ChgFooterShareFirst( rChged.IsFooterSharedFirst() );
 
     if ( pDesc->GetName() != rChged.GetName() )
         pDesc->SetName( rChged.GetName() );
