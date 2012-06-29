@@ -387,8 +387,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/toolpanel/TaskPaneFocusManager \
     sd/source/ui/toolpanel/TaskPaneShellManager \
     sd/source/ui/toolpanel/TaskPaneTreeNode \
-    sd/source/ui/toolpanel/TestMenu \
-    sd/source/ui/toolpanel/TestPanel \
     sd/source/ui/toolpanel/TitleBar \
     sd/source/ui/toolpanel/TitledControl \
     sd/source/ui/toolpanel/ToolPanel \
