@@ -27,8 +27,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.EventObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.ArrayList;
 
@@ -58,7 +57,7 @@ public class ComponentContext implements XComponentContext, XComponent
     private static final String SMGR_NAME = "/singletons/com.sun.star.lang.theServiceManager";
     private static final String TDMGR_NAME = "/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 
-    private Map<String,Object> m_table;
+    private Hashtable<String,Object> m_table;
     private XComponentContext m_xDelegate;
 
     private XMultiComponentFactory m_xSMgr;
@@ -75,7 +74,7 @@ public class ComponentContext implements XComponentContext, XComponent
         @param xDelegate
                if values are not found, request is delegated to this object
     */
-    public ComponentContext( Map<String,Object> table, XComponentContext xDelegate )
+    public ComponentContext( Hashtable<String,Object> table, XComponentContext xDelegate )
     {
         m_eventListener = new ArrayList<XEventListener>();
         m_table = table;

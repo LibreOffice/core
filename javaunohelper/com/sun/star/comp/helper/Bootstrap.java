@@ -37,8 +37,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Random;
 
 /** Bootstrap offers functionality to obtain a context or simply
@@ -94,7 +93,7 @@ public class Bootstrap {
         context entries (type class ComponentContextEntry).
         @return a new context.
     */
-    static public XComponentContext createInitialComponentContext( Map<String,Object> context_entries )
+    static public XComponentContext createInitialComponentContext( Hashtable<String, Object> context_entries )
         throws Exception
     {
         XImplementationLoader xImpLoader = UnoRuntime.queryInterface(
@@ -117,7 +116,7 @@ public class Bootstrap {
 
         // initial component context
         if (context_entries == null)
-            context_entries = new HashMap<String,Object>( 1 );
+            context_entries = new Hashtable<String,Object>( 1 );
         // add smgr
         context_entries.put(
             "/singletons/com.sun.star.lang.theServiceManager",
@@ -172,7 +171,7 @@ public class Bootstrap {
         @see "cppuhelper/defaultBootstrap_InitialComponentContext()"
     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext(
-        String ini_file, Map<String,String> bootstrap_parameters )
+        String ini_file, Hashtable<String,String> bootstrap_parameters )
         throws Exception
     {
         // jni convenience: easier to iterate over array than calling Hashtable
