@@ -26,16 +26,11 @@
  *
  ************************************************************************/
 
-
-#define _LCKBITEM_CXX
 #include <svl/lckbitem.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/cachestr.hxx>
-
-// STATIC DATA -----------------------------------------------------------
-
 
 // -----------------------------------------------------------------------
 

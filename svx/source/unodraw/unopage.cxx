@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SVX_USE_UNOGLOBALS_
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>

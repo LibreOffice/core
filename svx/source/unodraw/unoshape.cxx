@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SVX_USE_UNOGLOBALS_
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

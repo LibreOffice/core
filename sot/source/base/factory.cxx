@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define _SOT_FACTORY_CXX
-#define SOT_STRING_LIST
-
 #include <sot/factory.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>

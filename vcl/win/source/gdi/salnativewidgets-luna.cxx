@@ -40,8 +40,6 @@
 // Drawing in non-client area (general DWM-related info):
 //   http://msdn.microsoft.com/en-us/library/windows/desktop/bb688195%28v=vs.85%29.aspx
 
-#define _SV_SALNATIVEWIDGETS_CXX
-
 #include "rtl/ustring.h"
 
 #include "osl/module.h"

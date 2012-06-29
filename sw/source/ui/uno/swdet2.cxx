@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SWLIB_CXX
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>

@@ -40,8 +40,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svtools/unitconv.hxx>
-
-#define _SVX_CHARDLG_CXX
 #include <svl/languageoptions.hxx>
 
 #include "chardlg.hrc"

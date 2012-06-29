@@ -65,9 +65,7 @@
 #include <svtools/transfer.hxx>
 #include <svl/stritem.hxx>
 
-#define _EDITSH_CXX
 #include "editsh.hxx"
-
 #include "scresid.hxx"
 #include "global.hxx"
 #include "sc.hrc"

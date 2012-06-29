@@ -73,7 +73,6 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
-#define _SVX_USE_UNOGLOBALS_
 #include <svx/unoprov.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svx/unomid.hxx>

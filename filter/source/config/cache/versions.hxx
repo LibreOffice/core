@@ -22,7 +22,6 @@
 
 //_______________________________________________
 
-//#define _FILTER_CONFIG_Q_               // final Q code base
 #define _FILTER_CONFIG_MIGRATION_Q_     // usefull for migration time, to support some old functionality temp. :-)
 
 #endif // _FILTER_CONFIG_VERSIONS_HXX_

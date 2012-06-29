@@ -28,12 +28,7 @@
 
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-
-#define _ANIMATION          //animation freischalten
-
-#define _SV_BITMAPEX
 #include <svx/xoutbmp.hxx>
-
 #include <time.h>
 #include <svl/eitem.hxx>
 #include <svx/svdograf.hxx>

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _BASIC_TEXTPORTIONS
-
 #include "helpid.hrc"
 #include "baside2.hrc"
 

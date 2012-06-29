@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SV_SALDATA_CXX
-
 #include <shell/kde_headers.h>
 
 #include <unistd.h>

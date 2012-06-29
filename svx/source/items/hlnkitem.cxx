@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#define _SVX_HLNKITEM_CXX
-
 #include <svx/svxids.hrc>
 #include <tools/stream.hxx>
 #include <svl/memberid.hrc>

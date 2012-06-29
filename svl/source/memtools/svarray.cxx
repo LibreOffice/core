@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-#define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_STRINGSSORTDTOR
-
 #include <svl/svstdarr.hxx>
 #include <tools/debug.hxx>
 

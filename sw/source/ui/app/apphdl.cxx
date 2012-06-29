@@ -123,8 +123,6 @@ using namespace ::com::sun::star;
 #define ViewSettings
 #define WebViewSettings
 #define PrintSettings
-#define _ExecAddress ExecOther
-#define _StateAddress StateOther
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include <cfgid.h>

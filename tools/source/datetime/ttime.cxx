@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _TOOLS_TIME_CXX
-
 #if defined( WNT )
 #include <windows.h>
 #elif defined UNX

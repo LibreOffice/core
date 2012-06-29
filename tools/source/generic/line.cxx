@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _LINE_CXX
 #include <tools/link.hxx>
 #include <tools/line.hxx>
 #include <tools/debug.hxx>

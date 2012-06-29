@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SVX_USE_UNOGLOBALS_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>

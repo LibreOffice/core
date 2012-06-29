@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _INSDLG_CXX
-
-// include ---------------------------------------------------------------
-
 #include <svtools/insdlg.hxx>
 #include <svtools/sores.hxx>
 #include <svtools/svtresid.hxx>

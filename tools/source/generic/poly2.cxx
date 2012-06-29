@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SV_POLY2_CXX
-
 #define POLY_CLIP_INT   0
 #define POLY_CLIP_UNION 1
 #define POLY_CLIP_DIFF  2

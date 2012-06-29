@@ -54,17 +54,13 @@
 #include <sfx2/viewfrm.hxx>
 #include <unotools/fontoptions.hxx>
 #include <vcl/mnemonic.hxx>
-
 #include <vcl/svapp.hxx>
 #include <svl/smplhint.hxx>
-
-#define _SVX_TBCONTRL_CXX
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
-
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
 #include "helpid.hrc"

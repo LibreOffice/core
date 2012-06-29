@@ -52,10 +52,7 @@
 #include <shells.hrc>
 
 #include <vector>
-#ifndef _REDLNDLG_HXX
-#define _REDLNACCEPTDLG
 #include <redlndlg.hxx>
-#endif
 #include "swmodalredlineacceptdlg.hxx"
 
 #include <unomid.h>

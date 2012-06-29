@@ -32,9 +32,6 @@
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
-
-#define _SVX_SVXFONT_CXX
-
 #include <editeng/svxfont.hxx>
 #include <editeng/escpitem.hxx>
 

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SV_FIELCTRL_CXX
 #include <svtools/svtresid.hxx>
 #include <svtools/filectrl.hxx>
 #include <filectrl.hrc>

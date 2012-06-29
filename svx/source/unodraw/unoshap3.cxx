@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SVX_USE_UNOGLOBALS_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>

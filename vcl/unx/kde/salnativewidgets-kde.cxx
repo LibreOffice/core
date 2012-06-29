@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SV_SALNATIVEWIDGETS_KDE_CXX
-
 #include <shell/kde_headers.h>
 
 #include "UnxFilePicker.hxx"

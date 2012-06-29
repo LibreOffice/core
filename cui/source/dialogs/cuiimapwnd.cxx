@@ -30,7 +30,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
 #include <sfx2/sfxsids.hrc>
-#define _ANIMATION
 #include "macroass.hxx"
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>

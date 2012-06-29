@@ -20,8 +20,6 @@
 #ifndef CPV_PRECOMP_H
 #define CPV_PRECOMP_H
 
-#define _NO_BOOL_TYPE_
-
 typedef short       Bool;
 #define True        1
 #define False       0

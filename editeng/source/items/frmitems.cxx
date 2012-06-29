@@ -64,9 +64,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svtools/filter.hxx>
-
-#define _SVX_FRMITEMS_CXX
-
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <editeng/pbinitem.hxx>

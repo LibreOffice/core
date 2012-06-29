@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#define _RTL_CIPHER_C_
-
 #include <sal/types.h>
 #include <rtl/alloc.h>
 #include <rtl/memory.h>

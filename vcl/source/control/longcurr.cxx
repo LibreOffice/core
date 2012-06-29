@@ -26,10 +26,8 @@
  *
  ************************************************************************/
 
-
 #include <comphelper/string.hxx>
 #include <sot/object.hxx>
-#define _TOOLS_BIGINT
 #include <sot/factory.hxx>
 #include <tools/debug.hxx>
 #include <tools/bigint.hxx>

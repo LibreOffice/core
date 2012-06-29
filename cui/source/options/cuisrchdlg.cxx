@@ -32,7 +32,6 @@
 #include <svl/cjkoptions.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
-#define _CUI_SRCHDLG_CXX
 #include "cuisrchdlg.hxx"
 
 #include <cuires.hrc>

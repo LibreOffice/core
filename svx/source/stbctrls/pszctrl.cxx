@@ -39,7 +39,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/intitem.hxx>
-#define _SVX_PSZCTRL_CXX
 
 #include "svx/pszctrl.hxx"
 

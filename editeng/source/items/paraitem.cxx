@@ -38,13 +38,9 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 #include <tools/rtti.hxx>
-
-#define _SVX_PARAITEM_CXX
 #include <svl/itempool.hxx>
-
 #include <svl/memberid.hrc>
 #include <editeng/editrids.hrc>
-
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/orphitem.hxx>

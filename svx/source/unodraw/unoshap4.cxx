@@ -31,8 +31,6 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-#define _SVX_USE_UNOGLOBALS_
-
 #include <vcl/virdev.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>

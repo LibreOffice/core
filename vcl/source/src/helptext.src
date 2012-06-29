@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _SV_HELPTEXT_SRC
-
 #include <svids.hrc>
 
 String SV_HELPTEXT_CLOSE

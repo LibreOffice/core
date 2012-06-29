@@ -26,11 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <sal/macros.h>
-
-#define _SVX_USE_UNOGLOBALS_
-
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>

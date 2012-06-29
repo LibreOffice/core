@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SV_POLY_CXX
 #include <osl/endian.h>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>

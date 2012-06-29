@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#define _RTL_RANDOM_C_
-
 #include <sal/types.h>
 #include <osl/thread.h>
 #include <osl/time.h>

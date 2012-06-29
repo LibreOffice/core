@@ -29,9 +29,6 @@
 #include <comphelper/string.hxx>
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
-
-#define _SVX_PASSWD_CXX
-
 #include "svx/passwd.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>

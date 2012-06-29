@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SVX_USE_UNOGLOBALS_
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>

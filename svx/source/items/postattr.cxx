@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#define _SVX_POSTATTR_CXX
 #include "svx/postattr.hxx"
 #include <editeng/itemtype.hxx>
 #include <svx/svxitems.hrc>

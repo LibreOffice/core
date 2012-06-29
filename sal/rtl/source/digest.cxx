@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#define _RTL_DIGEST_C_
-
 #include <sal/types.h>
 #include <sal/macros.h>
 #include <osl/endian.h>

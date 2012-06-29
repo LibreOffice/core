@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _ANIMATION
 #include <unotools/streamwrap.hxx>
 
 #include <sfx2/lnkbase.hxx>

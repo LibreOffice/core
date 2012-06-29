@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define _TOOLS_RC_CXX
-
 #include <string.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>

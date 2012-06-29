@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#define _DATETIMEITEM_CXX
 #include <svl/dateitem.hxx>
 #include <svl/svl.hrc>
 

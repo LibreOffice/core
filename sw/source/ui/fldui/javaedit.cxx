@@ -31,14 +31,8 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-// include ---------------------------------------------------------------
-
-
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-
-#define _JAVAEDIT_CXX
 #include <hintids.hxx>
-
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/urihelper.hxx>

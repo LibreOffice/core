@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SV_SALNATIVEWIDGETS_KDE_CXX
-
 #define Region QtXRegion
 
 #include <QStyle>

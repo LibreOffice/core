@@ -28,7 +28,6 @@
 
 #include <stdio.h>
 
-#define _CUI_CHARMAP_CXX_
 #include <tools/shl.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>

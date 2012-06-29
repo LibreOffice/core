@@ -39,10 +39,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
-#ifndef _REDLNDLG_HXX
-#define _REDLNACCEPTDLG
 #include <redlndlg.hxx>
-#endif
 #include <swwait.hxx>
 #include <uitool.hxx>
 

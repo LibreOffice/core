@@ -32,9 +32,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-#define _CHANGEDB_CXX
-
 #include <svtools/stdctrl.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

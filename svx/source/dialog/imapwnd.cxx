@@ -30,7 +30,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
 #include <sfx2/sfxsids.hrc>     // SID_ATTR_MACROITEM
-#define _ANIMATION
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>

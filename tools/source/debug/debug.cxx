@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _TOOLS_DEBUG_CXX
-
 #if defined (UNX) || defined (GCC)
 #include <unistd.h>
 #else

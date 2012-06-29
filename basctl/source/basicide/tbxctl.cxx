@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _BASIDE_POPUPWINDOWTBX
-
 #include <svl/solar.hrc>
 #include <svx/svxids.hrc>
 
