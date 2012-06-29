@@ -29,7 +29,7 @@ using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
 TemplateView::TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates)
-    : ThumbnailView(pParent),
+    : ThumbnailView(pParent,WB_VSCROLL),
       maCloseImg(SfxResId(IMG_TEMPLATE_VIEW_CLOSE)),
       mnRegionId(0),
       mpDocTemplates(pTemplates)

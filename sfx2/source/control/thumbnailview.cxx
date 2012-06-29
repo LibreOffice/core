@@ -296,6 +296,8 @@ void ThumbnailView::CalculateItemPositions ()
     long y = nStartY;
 
     // draw items
+    size_t nFirstItem = mnFirstLine * mnCols;
+    size_t nLastItem = nFirstItem + (mnVisLines * mnCols);
     size_t nTotalItems = mnFirstLine*mnCols + mnVisLines*mnCols;
 
     maItemListRect.Left() = x;
@@ -314,7 +316,7 @@ void ThumbnailView::CalculateItemPositions ()
     {
         ThumbnailViewItem *const pItem = mItemList[i];
 
-        if (maFilterFunc(pItem) && nCurCount < nTotalItems)
+        if ((i >= nFirstItem) && (i < nLastItem) && maFilterFunc(pItem) && nCurCount < nTotalItems)
         {
             if( !pItem->isVisible() && ImplHasAccessibleListeners() )
             {
@@ -498,57 +500,7 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
     {
         mnFirstLine = nNewFirstLine;
 
-        // Recalculate item positions
-        Size aWinSize = GetOutputSizePixel();
-        size_t nItemCount = mItemList.size();
-
-        // calculate offsets
-        long nStartX = 0;
-        long nStartY = 0;
-
-        // calculate items
-        long x = nStartX;
-        long y = nStartY;
-
-        // draw items
-        sal_uLong nFirstItem = mnFirstLine * mnCols;
-        sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
-
-        // If want also draw parts of items in the last line,
-        // then we add one more line if parts of these line are
-        // visible
-        if ( y+(mnVisLines*(mnItemHeight+mnSpacing)) < aWinSize.Height() )
-            nLastItem += mnCols;
-
-        for ( size_t i = 0; i < nItemCount; i++ )
-        {
-            ThumbnailViewItem *const pItem = mItemList[i];
-
-            if ( (i >= nFirstItem) && (i < nLastItem) )
-            {
-                if (!mItemList[i]->isVisible())
-                    maItemStateHdl.Call(mItemList[i]);
-
-                pItem->show(true);
-                pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-                pItem->calculateItemsPosition(mpItemAttrs->nMaxTextLenght);
-
-                if ( !((i+1) % mnCols) )
-                {
-                    x = nStartX;
-                    y += mnItemHeight+mnSpacing;
-                }
-                else
-                    x += mnItemWidth+mnSpacing;
-            }
-            else
-            {
-                if (mItemList[i]->isVisible())
-                    maItemStateHdl.Call(mItemList[i]);
-
-                pItem->show(false);
-            }
-        }
+        CalculateItemPositions();
 
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
