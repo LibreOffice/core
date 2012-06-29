@@ -35,6 +35,7 @@
 #define ITEM_MAX_HEIGHT 192
 #define ITEM_PADDING 5
 #define ITEM_SPACE 20
+#define ITEM_MAX_TEXT_LENGTH 20
 #define THUMBNAIL_MAX_HEIGHT 128
 
 #define INIT_FOLDER_COLS 3
@@ -149,6 +150,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maView->SetStyle(WB_TABSTOP | WB_VSCROLL);
     maView->SetColor(GetBackground().GetColor());
     maView->SetSizePixel(aThumbSize);
+    maView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
 
     maView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
                               ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,

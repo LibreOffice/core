@@ -172,6 +172,7 @@ void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
     mpItemAttrs->aFillColor = maColor.getBColor();
     mpItemAttrs->aHighlightColor = rStyleSettings.GetHighlightColor().getBColor();
     mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize,GetFont(),false,true);
+    mpItemAttrs->nMaxTextLenght = -1;
 }
 
 void ThumbnailView::ImplInitScrollBar()
@@ -328,7 +329,7 @@ void ThumbnailView::CalculateItemPositions ()
 
             pItem->show(true);
             pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-            pItem->calculateItemsPosition();
+            pItem->calculateItemsPosition(mpItemAttrs->nMaxTextLenght);
 
             if ( !((nCurCount+1) % mnCols) )
             {
@@ -530,7 +531,7 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
 
                 pItem->show(true);
                 pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-                pItem->calculateItemsPosition();
+                pItem->calculateItemsPosition(mpItemAttrs->nMaxTextLenght);
 
                 if ( !((i+1) % mnCols) )
                 {
@@ -1083,6 +1084,11 @@ void ThumbnailView::SetLineCount( sal_uInt16 nNewLines )
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
+}
+
+void ThumbnailView::setItemMaxTextLength(sal_uInt32 nLength)
+{
+    mpItemAttrs->nMaxTextLenght = nLength;
 }
 
 void ThumbnailView::setItemDimensions(long itemWidth, long thumbnailHeight, long displayHeight, int itemPadding)

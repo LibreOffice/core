@@ -23,7 +23,7 @@ struct TemplateFolderViewItem : public ThumbnailViewItem
 
     virtual ~TemplateFolderViewItem ();
 
-    virtual void calculateItemsPosition ();
+    virtual void calculateItemsPosition (sal_uInt32 nMaxTextLenght);
 
     const Point& getPrev2Pos () const { return maPrev2Pos; }
 

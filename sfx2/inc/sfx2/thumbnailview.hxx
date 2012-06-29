@@ -207,6 +207,8 @@ public:
 
     long GetItemHeight() const { return mnItemHeight; }
 
+    void setItemMaxTextLength (sal_uInt32 nLength);
+
     void setItemDimensions (long ItemWidth, long ThumbnailHeight,
                             long DisplayHeight, int itemPadding);
 

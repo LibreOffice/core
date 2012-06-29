@@ -51,6 +51,7 @@ namespace drawinglayer {
 
 struct ThumbnailItemAttributes
 {
+    sal_uInt32 nMaxTextLenght;
     basegfx::BColor aFillColor;
     basegfx::BColor aHighlightColor;
     basegfx::B2DVector aFontSize;
@@ -91,7 +92,7 @@ struct ThumbnailViewItem
 
     const Rectangle& getDrawArea () const { return maDrawArea; }
 
-    virtual void calculateItemsPosition ();
+    virtual void calculateItemsPosition (sal_uInt32 nMaxTextLenght);
 
     const Point& getTextPos () const { return maTextPos; }
 

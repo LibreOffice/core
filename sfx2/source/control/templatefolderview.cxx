@@ -277,6 +277,12 @@ void TemplateFolderView::Populate ()
     {
         rtl::OUString aRegionName(mpDocTemplates->GetFullRegionName(i));
 
+        if (aRegionName.getLength() > mpItemAttrs->nMaxTextLenght)
+        {
+            aRegionName = aRegionName.copy(0,mpItemAttrs->nMaxTextLenght-3);
+            aRegionName += "...";
+        }
+
         sal_uInt16 nEntries = mpDocTemplates->GetCount(i);
 
         if (nEntries)
@@ -298,12 +304,19 @@ void TemplateFolderView::Populate ()
 
             for (sal_uInt16 j = 0; j < nEntries; ++j)
             {
+                rtl::OUString aName = mpDocTemplates->GetName(i,j);
                 rtl::OUString aURL = mpDocTemplates->GetPath(i,j);
                 rtl::OUString aType = SvFileInformationManager::GetDescription(INetURLObject(aURL));
 
+                if (aName.getLength() > mpItemAttrs->nMaxTextLenght)
+                {
+                    aName = aName.copy(0,mpItemAttrs->nMaxTextLenght-3);
+                    aName += "...";
+                }
+
                 TemplateViewItem *pTemplateItem = new TemplateViewItem(*mpItemView,mpItemView);
                 pTemplateItem->mnId = j+1;
-                pTemplateItem->maText = mpDocTemplates->GetName(i,j);
+                pTemplateItem->maText = aName;
                 pTemplateItem->setPath(aURL);
                 pTemplateItem->setFileType(aType);
                 pTemplateItem->maPreview1 = lcl_fetchThumbnail(aURL,THUMBNAIL_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT);

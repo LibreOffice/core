@@ -36,9 +36,9 @@ TemplateFolderViewItem::~TemplateFolderViewItem ()
         delete maTemplates[i];
 }
 
-void TemplateFolderViewItem::calculateItemsPosition ()
+void TemplateFolderViewItem::calculateItemsPosition (sal_uInt32 nMaxTextLenght)
 {
-    ThumbnailViewItem::calculateItemsPosition();
+    ThumbnailViewItem::calculateItemsPosition(nMaxTextLenght);
 }
 
 void TemplateFolderViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
