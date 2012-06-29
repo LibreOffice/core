@@ -59,6 +59,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -441,7 +442,7 @@ public class DocumentLoader
     class PageViewer
         extends ViewSwitcher
     {
-        public final int currentPageNumber = -1;
+        public int currentPageNumber = -1;
         TextView waitView;
         PageState state = PageState.NONEXISTENT;
         Bitmap bm;
@@ -502,11 +503,15 @@ public class DocumentLoader
             }
         }
 
+        int getPage(){
+        	return this.currentPageNumber;
+        }
+        
         PageViewer(int number)
         {
             super(DocumentLoader.this);
             if( number < 0)
-            	return
+            	return;
             waitView = new TextView(DocumentLoader.this);
             waitView.setTextSize(24);
             waitView.setGravity(Gravity.CENTER);
@@ -615,22 +620,37 @@ public class DocumentLoader
     }
 
     class DocumentLoadTask
-        extends AsyncTask<String, Void, Integer>
+        extends AsyncTask<String, Integer, Integer>
     {
+    	ProgressBar progressView; 
+
     	protected void onPreExecute (){
+            matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    		
+            LinearLayout waitLayout = new LinearLayout( DocumentLoader.this );
+            waitLayout.setLayoutParams( matchParent );
+            waitLayout.setOrientation( LinearLayout.VERTICAL );
+            
     		TextView waitView = new TextView(DocumentLoader.this);
             waitView.setTextSize(24);
             waitView.setGravity(Gravity.CENTER);
             waitView.setBackgroundColor(Color.WHITE);
             waitView.setTextColor(Color.BLACK);
     		waitView.setText("Page " + (1) + ", wait...");
+    		
+    		progressView = new ProgressBar( DocumentLoader.this );
+    		
+    		waitLayout.addView( waitView );
+    		waitLayout.addView( progressView );
+    		
     		flipper = new ViewFlipper(DocumentLoader.this);
 			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
-            matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            flipper.addView( waitView , 0 , matchParent);
+            //flipper.addView( waitView , 0 , matchParent);
+			flipper.addView( waitLayout , 0 , matchParent);
             currentPage = 0;
     	}
-        protected Integer doInBackground(String... params)
+        
+    	protected Integer doInBackground(String... params)
         {
             try {
                 String url = params[0];
@@ -649,6 +669,7 @@ public class DocumentLoader
 
                 long t0 = System.currentTimeMillis();
                 doc = componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+                publishProgress( new Integer( 33 ));
                 long t1 = System.currentTimeMillis();
                 Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms");
 
@@ -686,7 +707,11 @@ public class DocumentLoader
             }
             return new Integer( pageCount );
         }
-    
+
+        protected void onProgressUpdate(Integer progress){
+        	progressView.setProgress( progress.intValue() );
+        }
+        
         protected void onPostExecute(Integer result){
         	Log.i(TAG, "onPostExecute: " + result);
             if (result == -1)
@@ -925,38 +950,21 @@ public class DocumentLoader
     public void openPageWithPrefetching( int number ){
     	//as a first draft clear an refill "cache" on load.
     	//should move views where "cache window" overlaps 
-    	if(currentPage == number || number < 0 || number >= pageCount)
-    		return;
-    	boolean[] hits = new boolean[PAGECACHE_SIZE];
-    	//flipper.removeAllViews();
+    	
+    	flipper.removeAllViews();
     	flipper.addView(new PageViewer(number), 0, matchParent);
-    	//If diff is > 2*+- do this
-    	if( number - currentPage >= PAGECACHE_SIZE ){
-	        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
-	        	if( number + i+1 >= 0 && number + i+1 < pageCount){//pageCount will always be correctly defined when this is called (famous last words)
-	        		flipper.addView(new PageViewer( number + i+1), i+1, matchParent);
-	        	}
-	        }
-	        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
-	        	if( number - i+1 >= 0 && number - i+1 < pageCount){
-	                flipper.addView(new PageViewer( number - (i+1)), PAGECACHE_PLUSMINUS + i+1, matchParent);
-	        	}
-	        }
-    	}else{
-    		for( int i = 0 ; i < flipper.getViewCount() ; i++){
-    			if( flipper.getViewAt( i ).currentPageNumber < number - PAGECACHE_PLUSMINUS &&
-    					flipper.getViewAt( i ).currentPageNumber > number + PAGECACHE_PLUSMINUS ){
-    				continue;
-    			}else{
-    				flipper.removeViewAt( i );
-    			}
-    		}
-    		/*have the reuseable views. Make a mapping array [differnce wrt number ] [ index ] ; */ 
-    	}
-    	currentPage = number;
-    	return;
-        //else
-        //for each page if in new range => spare it 
+    	
+        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
+        	if( number + i+1 >= 0 && number + i+1 < pageCount){//pageCount will always be correctly defined when this is called (famous last words)
+        		flipper.addView(new PageViewer( number + i+1), i+1, matchParent);
+        	}
+        }
+        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
+        	if( number - i+1 >= 0 && number - i+1 < pageCount){
+                flipper.addView(new PageViewer( number - (i+1)), PAGECACHE_PLUSMINUS + i+1, matchParent);
+        	}
+        }
+	
     }
 }
 
