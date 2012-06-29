@@ -70,7 +70,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        Log.d(tag, "onCreate");
+        Log.d(tag, "onCreate - tweaked - meeks !");
         //Set the "home" - top level - directory.
         homeDirectory  = new File(Environment.getExternalStorageDirectory(),"LibreOffice");
         homeDirectory.mkdirs();
