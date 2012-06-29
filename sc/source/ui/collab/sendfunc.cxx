@@ -282,11 +282,6 @@ ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncRec
     fprintf( stderr, "Sender created !\n" );
 }
 
-void ScDocFuncSend::SetCollaboration( TeleManager *pManager )
-{
-    mpManager = pManager;
-}
-
 bool ScDocFuncSend::InitTeleManager( bool bIsMaster )
 {
     if (mpManager)
