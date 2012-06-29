@@ -38,10 +38,10 @@ TARGET=languagetool
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=JLanguageTool-1.4.0
-TARFILE_MD5=b99fb620b1324b4ce79ee6998b507146
-TARFILE_ROOTDIR=JLanguageTool-1.4.0
-PATCH_FILES=JLanguageTool-1.4.0.patch JLanguageTool-1.4.0-no-hc.patch
+TARFILE_NAME=JLanguageTool-1.7.0
+TARFILE_MD5=b63e6340a02ff1cacfeadb2c42286161
+TARFILE_ROOTDIR=JLanguageTool-1.7.0
+PATCH_FILES=JLanguageTool-1.7.0.patch JLanguageTool-1.4.0-no-hc.patch
 REMOVE_FILES=openoffice/images/dialogh.png
 
 .IF "$(JAVACISGCJ)"=="yes"

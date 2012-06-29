@@ -1,0 +1,159 @@
+diff -Naur misc/build/JLanguageTool-1.7.0/build.properties misc/build/JLanguageTool-1.7.0_patched/build.properties
+--- misc/build/JLanguageTool-1.7.0/build.properties	2012-06-25 08:22:35.000000000 +0200
++++ misc/build/JLanguageTool-1.7.0_patched/build.properties	2012-06-25 09:24:21.253494500 +0200
+@@ -67,10 +67,10 @@
+ ext.log4j.lib = ${ext.dir}/build/cobertura/log4j-1.2.9.jar
+ ext.jakarta-oro.lib = ${ext.dir}/build/cobertura/jakarta-oro-2.0.8.jar
+ 
+-ext.ooo.juh.lib = ${ext.ooo.dir}/juh.jar
+-ext.ooo.unoil.lib = ${ext.ooo.dir}/unoil.jar
+-ext.ooo.ridl.lib = ${ext.ooo.dir}/ridl.jar
+-ext.ooo.jurt.lib = ${ext.ooo.dir}/jurt.jar
++ext.ooo.juh.lib = ${solver.ooo.dir}/juh.jar
++ext.ooo.unoil.lib = ${solver.ooo.dir}/unoil.jar
++ext.ooo.ridl.lib = ${solver.ooo.dir}/ridl.jar
++ext.ooo.jurt.lib = ${solver.ooo.dir}/jurt.jar
+ 
+ converter.name = RuleConverter
+ build.meta-inf = ${build.dir}/META-INF
+diff -Naur misc/build/JLanguageTool-1.7.0/build.xml misc/build/JLanguageTool-1.7.0_patched/build.xml
+--- misc/build/JLanguageTool-1.7.0/build.xml	2012-06-25 08:22:35.000000000 +0200
++++ misc/build/JLanguageTool-1.7.0_patched/build.xml	2012-06-25 09:27:39.077442000 +0200
+@@ -29,7 +29,9 @@
+ 		<pathelement location="${ext.CJFtransform.lib}" />
+ 		<pathelement location="${ext.commons-validator.lib}" />
+ 		<!-- -->
+-		<pathelement location="${ext.ooo.juh.lib}" />
++		<pathelement location="${ext.junit.lib}"/>
++		<!-- -->
++ 		<pathelement location="${ext.ooo.juh.lib}" />
+ 		<pathelement location="${ext.ooo.unoil.lib}" />
+ 		<pathelement location="${ext.ooo.ridl.lib}" />
+ 		<pathelement location="${ext.ooo.jurt.lib}" />
+@@ -442,11 +444,11 @@
+ <!-- ================================================================== -->
+ 
+ <target name="dist" depends="ooo-internal" description="Builds one ZIP for both OpenOffice.org and stand-alone use">
+-<zip compress="yes" destfile="${dist.dir}/LanguageTool-${version}.oxt" basedir="${dist.dir}" includes="**" excludes="deploy.sh,undeploy.sh,turn.sh,printlocales.jar" />
++<zip compress="yes" destfile="${dist.dir}/LanguageTool.oxt" basedir="${dist.dir}" includes="**" excludes="deploy.sh,undeploy.sh,turn.sh,printlocales.jar" />
+ </target>
+ 
+ <target name="fast" depends="ooo-internal" description="like dist, but without ZIP compression (for development only)">
+-<zip compress="no" destfile="${dist.dir}/LanguageTool-${version}.oxt" basedir="${dist.dir}" includes="**" excludes="deploy.sh,undeploy.sh,turn.sh,printlocales.jar" />
++<zip compress="no" destfile="${dist.dir}/LanguageTool.oxt" basedir="${dist.dir}" includes="**" excludes="deploy.sh,undeploy.sh,turn.sh,printlocales.jar" />
+ </target>
+ 
+ <target name="common" depends="clean,init,build,ooo-build">
+@@ -651,7 +653,6 @@
+ 	<copy file="${resource.dir}/ast/asturian.dict" todir="${dist.dir}/resource/ast" />
+ 	<copy file="${resource.dir}/ast/asturian.info" todir="${dist.dir}/resource/ast" />
+ 
+-	<copy file="${resource.dir}/xx/dummy.dict" tofile="${dist.dir}/resource/cs/czech.dict" />
+ 	<copy todir="${dist.dir}/rules">
+ 		<fileset dir="src/rules" excludes="CVS" />
+ 	</copy>
+@@ -678,7 +678,7 @@
+ 
+ <filter filtersFile="ooolocales.properties" />
+ <copy filtering="true" encoding="${encoding}" todir="${dist.dir}/">
+-	<fileset dir="openoffice/" includes="description.xml,*.xcu,Options.xdl,META-INF/**" />
++	<fileset dir="openoffice/" includes="components.rdb,description.xml,*.xcu,Options.xdl,META-INF/**" />
+ </copy>
+ <copy todir="${dist.dir}/">
+ 	<fileset dir="openoffice/" includes="images/**,help/**" />
+diff -Naur misc/build/JLanguageTool-1.7.0/openoffice/components.rdb misc/build/JLanguageTool-1.7.0_patched/openoffice/components.rdb
+--- misc/build/JLanguageTool-1.7.0/openoffice/components.rdb	1970-01-01 01:00:00.000000000 +0100
++++ misc/build/JLanguageTool-1.7.0_patched/openoffice/components.rdb	2012-06-25 10:26:23.183633100 +0200
+@@ -0,0 +1,9 @@
++<?xml version="1.0"?>
++<components xmlns="http://openoffice.org/2010/uno-components">
++    <component loader="com.sun.star.loader.Java2" uri="./LanguageTool.uno.jar">
++        <implementation name="org.languagetool.openoffice.Main">
++            <service name="com.sun.star.linguistic2.Proofreader"/>
++            <service name="org.languagetool.openoffice.Main"/>
++        </implementation>
++    </component>
++</components>
+diff -Naur misc/build/JLanguageTool-1.7.0/openoffice/META-INF/manifest.xml misc/build/JLanguageTool-1.7.0_patched/openoffice/META-INF/manifest.xml
+--- misc/build/JLanguageTool-1.7.0/openoffice/META-INF/manifest.xml	2012-06-25 08:22:34.000000000 +0200
++++ misc/build/JLanguageTool-1.7.0_patched/openoffice/META-INF/manifest.xml	2012-06-25 09:39:56.751738000 +0200
+@@ -2,8 +2,8 @@
+ <manifest:manifest>
+ 	<manifest:file-entry manifest:full-path="Addons.xcu"
+ 		manifest:media-type="application/vnd.sun.star.configuration-data" />
+-	<manifest:file-entry manifest:full-path="LanguageTool.uno.jar"
+-		manifest:media-type="application/vnd.sun.star.uno-component;type=Java" />
++	<manifest:file-entry manifest:full-path="components.rdb"
++		manifest:media-type="application/vnd.sun.star.uno-components" />
+ 	<manifest:file-entry
+ 		manifest:media-type="application/vnd.sun.star.configuration-data"
+ 		manifest:full-path="Linguistic.xcu" />
+diff -Naur misc/build/JLanguageTool-1.7.0/openoffice/description.xml misc/build/JLanguageTool-1.7.0_patched/openoffice/description.xml
+--- misc/build/JLanguageTool-1.7.0/openoffice/description.xml	2012-06-25 08:22:35.000000000 +0200
++++ misc/build/JLanguageTool-1.7.0_patched/openoffice/description.xml	2012-06-25 10:29:48.520591800 +0200
+@@ -21,7 +21,7 @@
+ 		<name lang="zh">LanguageTool. 开源的语言检查工具</name>
+ 		<name lang="br">LanguageTool. Reizher reizhskrivadurel frank.</name>
+ 	</display-name>
+-	<version value="@version@" />
++	<version value="1.7.1" />
+ 	<release-notes>
+ 		<src xlink:href="CHANGES.txt" lang="en" />
+ 	</release-notes>
+diff -Naur misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/gui/Configuration.java misc/build/JLanguageTool-1.7.0_patched/src/java/org/languagetool/gui/Configuration.java
+--- misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/gui/Configuration.java	2012-06-25 08:21:31.000000000 +0200
++++ misc/build/JLanguageTool-1.7.0_patched/src/java/org/languagetool/gui/Configuration.java	2012-06-25 09:31:40.737466400 +0200
+@@ -23,6 +23,7 @@
+ import java.io.FileNotFoundException;
+ import java.io.FileOutputStream;
+ import java.io.IOException;
++import java.lang.ClassLoader;
+ import java.util.*;
+ 
+ import org.languagetool.Language;
+@@ -142,7 +143,18 @@
+       
+       final String motherTongueStr = (String) props.get(MOTHER_TONGUE_CONFIG_KEY);
+       if (motherTongueStr != null) {
+-        motherTongue = Language.getLanguageForShortName(motherTongueStr);
++        // FIXME: hack to disable the functionality for JRE 1.5
++        // javax.xml.bind.JAXBException is part of JRE 1.6
++        boolean isJRE15 = false;
++        try {
++          ClassLoader cl = ClassLoader.getSystemClassLoader();
++          cl.loadClass("javax.xml.bind.JAXBException");
++        } catch (ClassNotFoundException e) {
++          isJRE15 = true;
++        }
++        if (!isJRE15) {
++         motherTongue = Language.getLanguageForShortName(motherTongueStr);
++        }
+       }
+       
+       final String autoDetectStr = (String) props.get(AUTO_DETECT_CONFIG_KEY);
+diff -Naur misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/openoffice/Main.java misc/build/JLanguageTool-1.7.0_patched/src/java/org/languagetool/openoffice/Main.java
+--- misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/openoffice/Main.java	2012-06-25 08:21:28.000000000 +0200
++++ misc/build/JLanguageTool-1.7.0_patched/src/java/org/languagetool/openoffice/Main.java	2012-06-25 09:36:03.778528700 +0200
+@@ -24,6 +24,7 @@
+  * @author Marcin Miłkowski
+  */
+ import java.io.File;
++import java.lang.ClassLoader;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.Comparator;
+@@ -494,6 +495,14 @@
+    */
+   @Override
+   public final Locale[] getLocales() {
++    // FIXME: hack to disable the functionality for JRE 1.5
++    // javax.xml.bind.JAXBException is part of JRE 1.6
++    try {
++        ClassLoader cl = ClassLoader.getSystemClassLoader(); 
++        cl.loadClass("javax.xml.bind.JAXBException");
++    } catch (ClassNotFoundException e) {
++        return new Locale[0];
++    }
+     try {
+       int dims = 0;
+       for (final Language element : Language.LANGUAGES) {
