@@ -366,8 +366,8 @@ void ThumbnailView::CalculateItemPositions ()
     // arrange ScrollBar, set values and show it
     if ( mpScrBar )
     {
-        Point   aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, 0 );
-        Size    aSize( nScrBarWidth-SCRBAR_OFFSET, aWinSize.Height() );
+        Point aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, mnHeaderHeight );
+        Size aSize( nScrBarWidth-SCRBAR_OFFSET, aWinSize.Height() - mnHeaderHeight );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
         mpScrBar->SetRangeMax( mnLines );
@@ -377,6 +377,7 @@ void ThumbnailView::CalculateItemPositions ()
         if ( nPageSize < 1 )
             nPageSize = 1;
         mpScrBar->SetPageSize( nPageSize );
+        mpScrBar->Show();
     }
 
     // delete ScrollBar
@@ -808,7 +809,7 @@ void ThumbnailView::Paint( const Rectangle &aRect)
     }
 
     if ( mpScrBar && mpScrBar->IsVisible() )
-        mpScrBar->Invalidate();
+        mpScrBar->Paint(aRect);
 }
 
 void ThumbnailView::GetFocus()
