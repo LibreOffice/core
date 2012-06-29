@@ -101,14 +101,14 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class test
 
-class ZeroMemory : public CppUnit::TestFixture
+class TestZeroMemory : public CppUnit::TestFixture
 {
     // for zero functions
     char       *m_pZeroMemory;
     sal_uInt32  m_nSizeOfZeroMemory;
 
 public:
-    ZeroMemory()
+    TestZeroMemory()
         : m_pZeroMemory(NULL)
         , m_nSizeOfZeroMemory( 50 * 1024 * 1024 )
     {
@@ -138,14 +138,14 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 3) == true);
     }
 
-    CPPUNIT_TEST_SUITE(ZeroMemory);
+    CPPUNIT_TEST_SUITE(TestZeroMemory);
     CPPUNIT_TEST(rtl_allocateZeroMemory_001);
     CPPUNIT_TEST_SUITE_END();
 };
 
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::Memory);
-CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::ZeroMemory);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::TestZeroMemory);
 } // namespace rtl_alloc
 
 
