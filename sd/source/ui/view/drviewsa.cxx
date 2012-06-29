@@ -748,9 +748,9 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         // Allways show the slide/page number.
         OUString aOUString = SD_RESSTR(STR_SD_PAGE);
         aOUString += " ";
-        aOUString += OUString::valueOf( maTabControl.GetCurPageId() );
+        aOUString += OUString::valueOf( sal_Int32(maTabControl.GetCurPageId()) );
         aOUString += " / " ;
-        aOUString += OUString::valueOf( GetDoc()->GetSdPageCount( mePageKind ) );
+        aOUString += OUString::valueOf( sal_Int32(GetDoc()->GetSdPageCount(mePageKind)) );
 
         // If in layer mode additionally show the layer that contains all
         // selected shapes of the page.  If the shapes are distributed on
