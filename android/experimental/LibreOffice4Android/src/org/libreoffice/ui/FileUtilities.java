@@ -47,6 +47,9 @@ public class FileUtilities {
         mExtnMap.put(".docx", DOC);
         mExtnMap.put(".html", DOC);
         mExtnMap.put(".txt",  DOC);
+        mExtnMap.put(".wpd",  DOC);
+        mExtnMap.put(".wps",  DOC);
+        mExtnMap.put(".lwp",  DOC);
 
         mExtnMap.put(".ods",  CALC);
         mExtnMap.put(".sxc",  CALC);
@@ -58,7 +61,9 @@ public class FileUtilities {
         mExtnMap.put(".ppt",  IMPRESS);
         mExtnMap.put(".pptx", IMPRESS);
 
+        mExtnMap.put(".svg",  DRAWING);
         mExtnMap.put(".vsd",  DRAWING);
+        mExtnMap.put(".wpg",  DRAWING);
 	// FIXME: we need to expand this ...
     }
 
