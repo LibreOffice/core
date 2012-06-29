@@ -1,0 +1,20 @@
+--- misc/mythes-1.2.3/mythes.cxx	2012-06-29 13:16:55.812939142 +0100
++++ misc/build/mythes-1.2.3/mythes.cxx	2012-06-29 13:17:21.159198507 +0100
+@@ -48,7 +48,7 @@
+     len = readLine(pifile,wrd,MAX_WD_LEN);
+     int idxsz = atoi(wrd); 
+    
+-    if (idxsz <= 0 || idxsz > std::numeric_limits<ssize_t>::max() / sizeof(sizeof(char*))) {
++    if (idxsz <= 0 || idxsz > std::numeric_limits<int>::max() / sizeof(sizeof(char*))) {
+        fprintf(stderr,"Error - bad index %d\n", idxsz);
+        fclose(pifile);
+        return 0;
+@@ -176,7 +176,7 @@
+          return 0;
+     }          
+     int nmeanings = atoi(buf+np+1);
+-    if (nmeanings < 0 || nmeanings > std::numeric_limits<ssize_t>::max() / sizeof(mentry))
++    if (nmeanings < 0 || nmeanings > std::numeric_limits<int>::max() / sizeof(mentry))
+         nmeanings = 0;
+     *pme = (mentry*)(nmeanings ? malloc(nmeanings * sizeof(mentry)) : NULL);
+     if (!(*pme)) {
