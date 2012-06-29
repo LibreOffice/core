@@ -29,8 +29,12 @@
 #define ITEM_MAX_WIDTH 192
 #define ITEM_MAX_HEIGHT 192
 #define ITEM_PADDING 5
+#define ITEM_SPACE 20
 #define THUMBNAIL_MAX_HEIGHT 128 - 2*ITEM_PADDING
 #define THUMBNAIL_MAX_WIDTH ITEM_MAX_WIDTH - 2*ITEM_PADDING
+
+#define INIT_VIEW_COLS 3
+#define INIT_VIEW_LINES 1
 
 BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, long width, long height)
 {
@@ -247,9 +251,12 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
       mpDocTemplates(new SfxDocumentTemplates),
       mpItemView(new TemplateView(this,mpDocTemplates))
 {
+    Size aViewSize = mpItemView->CalcWindowSizePixel(INIT_VIEW_COLS,INIT_VIEW_LINES,
+                                                     ITEM_MAX_WIDTH,ITEM_MAX_HEIGHT,ITEM_SPACE);
+
     mpItemView->SetColor(Color(COL_WHITE));
     mpItemView->SetPosPixel(Point(0,0));
-    mpItemView->SetSizePixel(GetOutputSizePixel());
+    mpItemView->SetSizePixel(aViewSize);
     mpItemView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
                                   ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
                                   ITEM_PADDING);
