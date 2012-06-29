@@ -158,8 +158,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"                  );
-        }
 
         //m_aProtocol.log("\treads "+nRead+" bytes\n\tOK\n}\n");
 
@@ -198,8 +196,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"                  );
-        }
 
         //m_aProtocol.log("\treads "+nRead+" bytes\n\tOK\n}\n");
 
@@ -236,8 +232,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"                  );
-        }
 
         //m_aProtocol.log("\tOK\n}\n");
     }
@@ -267,8 +261,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException     exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"     ); throw exRuntime;
         }
-        catch (com.sun.star.uno.Exception            exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"            );
-        }
 
         //m_aProtocol.log("\treturns "+nAvailable+" bytes\n\tOK\n}\n");
         return nAvailable;
@@ -297,8 +289,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         catch (com.sun.star.io.IOException           exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"          ); throw exIO;
         }
         catch (com.sun.star.uno.RuntimeException     exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"     ); throw exRuntime;
-        }
-        catch (com.sun.star.uno.Exception            exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"            );
         }
 
         //m_aProtocol.log("\tOK\n}\n");
@@ -336,8 +326,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"                  );
-        }
 
         //m_aProtocol.log("\tOK\n}\n");
     }
@@ -369,8 +357,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"                  );
-        }
         //m_aProtocol.log("\tOK\n}\n");
     }
 
@@ -400,8 +386,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         catch (com.sun.star.io.IOException                 exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"                ); throw exIO;
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"           ); throw exRuntime;
-        }
-        catch (com.sun.star.uno.Exception                  exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"                  );
         }
 
         //m_aProtocol.log("\tOK\n}\n");
@@ -443,8 +427,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException          exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"         ); throw exRuntime;
         }
-        catch (com.sun.star.uno.Exception                 exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"                );
-        }
 
         //m_aProtocol.log("\tOK\n}\n");
     }
@@ -477,8 +459,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         catch (com.sun.star.io.IOException       exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"     ); throw exIO;
         }
         catch (com.sun.star.uno.RuntimeException exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"); throw exRuntime;
-        }
-        catch (com.sun.star.uno.Exception        exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"       );
         }
 
         //m_aProtocol.log("\treturns pos="+nPos+"\n\tOK\n}\n");
@@ -513,8 +493,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         catch (com.sun.star.io.IOException       exIO     ) { //m_aProtocol.log("\tgot IOException\n\tfailed\n}\n"     ); throw exIO;
         }
         catch (com.sun.star.uno.RuntimeException exRuntime) { //m_aProtocol.log("\tgot RuntimeException\n\tfailed\n}\n"); throw exRuntime;
-        }
-        catch (com.sun.star.uno.Exception        exUno    ) { //m_aProtocol.log("\tgot Exception\n\tfailed\n}\n"       );
         }
 
         //m_aProtocol.log("\treturns len="+nLen+"\n\tOK\n}\n");

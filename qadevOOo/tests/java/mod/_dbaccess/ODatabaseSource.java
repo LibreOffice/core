@@ -194,12 +194,7 @@ public class ODatabaseSource extends TestCase {
             log.println("Could not store datasource 'aFile'" );
             e.printStackTrace ();
             throw new StatusException("Could not save ", e) ;
-        } catch (Exception e){
-            log.println("Could not store datasource 'aFile'" );
-            e.printStackTrace ();
-            throw new StatusException("Could not save ", e) ;
         }
-
 
         try{
             xDBContextNameServ.registerObject(databaseName, oObj) ;

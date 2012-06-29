@@ -885,9 +885,6 @@ public class RecoveryTest extends ComplexTestCase {
         } catch ( com.sun.star.lang.IllegalArgumentException e ){
             log.println("Exception occurred while filling text document with content.");
             failed("Couldn't create test environment");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occurred while filling text document with content.");
-            failed("Couldn't create test environment");
         }
     }
 
@@ -933,9 +930,6 @@ public class RecoveryTest extends ComplexTestCase {
             log.println("Exception occurred while filling calc document with content.");
             failed("Couldn't create test environment");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occurred while filling calc document with content.");
-            failed("Couldn't create test environment");
-        } catch (com.sun.star.uno.Exception e) {
             log.println("Exception occurred while filling calc document with content.");
             failed("Couldn't create test environment");
         }

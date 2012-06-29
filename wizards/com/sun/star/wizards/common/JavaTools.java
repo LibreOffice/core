@@ -452,10 +452,6 @@ public class JavaTools
         {
             e.printStackTrace(System.out);
         }
-        catch (IOException e)
-        {
-            e.printStackTrace(System.out);
-        }
         return sPath;
     }
 

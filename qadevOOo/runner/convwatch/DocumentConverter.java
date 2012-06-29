@@ -248,10 +248,6 @@ public class DocumentConverter extends EnhancedComplexTestCase
                 {
                     assure(e.getMessage(), false);
                 }
-                catch(ConvWatchException e)
-                {
-                    assure(e.getMessage(), false);
-                }
             }
 
             if (aGTA.restartOffice())

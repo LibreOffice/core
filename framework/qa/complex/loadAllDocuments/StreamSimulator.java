@@ -143,8 +143,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) {
-        }
 
 
         return nRead;
@@ -174,8 +172,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         catch (com.sun.star.io.IOException                 exIO     ) {
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) {
-        }
-        catch (com.sun.star.uno.Exception                  exUno    ) {
         }
 
         return nRead;
@@ -207,9 +203,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) {
-        }
-
     }
 
     public int available() throws com.sun.star.io.NotConnectedException,
@@ -232,8 +225,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         catch (com.sun.star.io.IOException           exIO     ) {
         }
         catch (com.sun.star.uno.RuntimeException     exRuntime) {
-        }
-        catch (com.sun.star.uno.Exception            exUno    ) {
         }
 
         return nAvailable;
@@ -261,9 +252,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException     exRuntime) {
         }
-        catch (com.sun.star.uno.Exception            exUno    ) {
-        }
-
     }
 
     /**
@@ -296,8 +284,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) {
-        }
 
     }
 
@@ -326,8 +312,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) {
-        }
     }
 
     //_________________________________
@@ -355,9 +339,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException           exRuntime) {
         }
-        catch (com.sun.star.uno.Exception                  exUno    ) {
-        }
-
     }
 
     /**
@@ -391,9 +372,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch (com.sun.star.uno.RuntimeException          exRuntime) {
         }
-        catch (com.sun.star.uno.Exception                 exUno    ) {
-        }
-
     }
 
     public long getPosition() throws com.sun.star.io.IOException
@@ -418,8 +396,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         catch (com.sun.star.io.IOException       exIO     ) {
         }
         catch (com.sun.star.uno.RuntimeException exRuntime) {
-        }
-        catch (com.sun.star.uno.Exception        exUno    ) {
         }
 
         return nPos;
@@ -449,8 +425,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         catch (com.sun.star.io.IOException       exIO     ) {
         }
         catch (com.sun.star.uno.RuntimeException exRuntime) {
-        }
-        catch (com.sun.star.uno.Exception        exUno    ) {
         }
 
         return nLen;

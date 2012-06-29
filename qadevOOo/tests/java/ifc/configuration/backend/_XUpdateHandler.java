@@ -115,8 +115,6 @@ public class _XUpdateHandler extends MultiMethodTest {
             log.println("Unexpected Exception " + e);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Unexpected Exception " + e);
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Unexpected Exception " + e);
         }
     }
 
