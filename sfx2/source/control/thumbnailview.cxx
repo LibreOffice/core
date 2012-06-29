@@ -61,8 +61,7 @@ ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableT
 }
 
 ThumbnailView::ThumbnailView (Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
-    : Control( pParent, rResId ),
-    maColor( pParent->GetBackground().GetColor() )
+    : Control( pParent, rResId )
 {
     ImplInit();
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
