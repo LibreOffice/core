@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 //........................................................................
 namespace dbaui
@@ -82,6 +83,9 @@ DBG_NAME(DirectSQLDialog)
         ,m_pSQLHistory(new LargeEntryListBox(this, ModuleRes(LB_HISTORY)))
         ,m_aStatusFrame         (this, ModuleRes(FL_STATUS))
         ,m_aStatus              (this, ModuleRes(ME_STATUS))
+        ,m_pShowOutput(new CheckBox(this, ModuleRes(CB_SHOWOUTPUT)))
+        ,m_aOutputFrame         (this, ModuleRes(FL_OUTPUT))
+        ,m_aOutput              (this, ModuleRes(ME_OUTPUT))
         ,m_aButtonSeparator     (this, ModuleRes(FL_BUTTONS))
         ,m_aHelp                (this, ModuleRes(PB_HELP))
         ,m_aClose               (this, ModuleRes(PB_CLOSE))
@@ -214,15 +218,51 @@ DBG_NAME(DirectSQLDialog)
         ::osl::MutexGuard aGuard(m_aMutex);
 
         String sStatus;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         try
         {
             // create a statement
             Reference< XStatement > xStatement = m_xConnection->createStatement();
             OSL_ENSURE(xStatement.is(), "DirectSQLDialog::implExecuteStatement: no statement returned by the connection!");
 
-            // execute it
+            // clear the output box
+            m_aOutput.SetText(String::CreateFromAscii(""));
             if (xStatement.is())
-                xStatement->execute(_rStatement);
+            {
+                if (::rtl::OUString(_rStatement).toAsciiUpperCase().compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT")),6)==0 && m_pShowOutput->IsChecked())
+                {
+                    // execute it as a query
+                    xResultSet = xStatement->executeQuery(_rStatement);
+                    // get a handle for the rows
+                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow > xRow( xResultSet, ::com::sun::star::uno::UNO_QUERY );
+                    // work through each of the rows
+                    while (xResultSet->next())
+                    {
+                        // initialise the output line for each row
+                        String out = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+                        // work along the columns until that are none left
+                        int i = 1;
+                        try
+                        {
+                            for (;;)
+                            {
+                                // be dumb, treat everything as a string
+                                out += xRow->getString(i) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                                i++;
+                            }
+                        }
+                        // trap for when we fall off the end of the row
+                        catch (const SQLException& e)
+                        {
+                        }
+                        // report the output
+                        addOutputText(::rtl::OUString(out));
+                    }
+                } else {
+                    // execute it
+                    xStatement->execute(_rStatement);
+                }
+            }
 
             // successfull
             sStatus = String(ModuleRes(STR_COMMAND_EXECUTED_SUCCESSFULLY));
@@ -256,6 +296,17 @@ DBG_NAME(DirectSQLDialog)
         m_aStatus.SetText(sCompleteMessage);
 
         m_aStatus.SetSelection(Selection(sCompleteMessage.Len(), sCompleteMessage.Len()));
+    }
+
+    //--------------------------------------------------------------------
+    void DirectSQLDialog::addOutputText(const String& _rMessage)
+    {
+        String sAppendMessage = _rMessage;
+        sAppendMessage += String::CreateFromAscii("\n");
+
+        String sCompleteMessage = m_aOutput.GetText();
+        sCompleteMessage += sAppendMessage;
+        m_aOutput.SetText(sCompleteMessage);
     }
 
     //--------------------------------------------------------------------

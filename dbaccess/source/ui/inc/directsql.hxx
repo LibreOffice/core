@@ -33,6 +33,8 @@
 #include "moduledbu.hxx"
 #include <osl/mutex.hxx>
 
+#include <svtools/editbrowsebox.hxx>
+
 //........................................................................
 namespace dbaui
 {
@@ -57,6 +59,9 @@ namespace dbaui
         ListBox*        m_pSQLHistory;
         FixedLine       m_aStatusFrame;
         MultiLineEdit   m_aStatus;
+        CheckBox*       m_pShowOutput;
+        FixedLine       m_aOutputFrame;
+        MultiLineEdit   m_aOutput;
         FixedLine       m_aButtonSeparator;
         HelpButton      m_aHelp;
         PushButton      m_aClose;
@@ -105,6 +110,9 @@ namespace dbaui
 
         /// adds a status text to the status list
         void addStatusText(const String& _rMessage);
+
+        /// adds a status text to the output list
+        void addOutputText(const String& _rMessage);
 
 #ifdef DBG_UTIL
         const sal_Char* impl_CheckInvariants() const;

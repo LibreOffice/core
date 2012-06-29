@@ -30,5 +30,8 @@
 #define FL_BUTTONS       9
 #define PB_HELP         10
 #define PB_CLOSE        11
+#define CB_SHOWOUTPUT   12
+#define FL_OUTPUT       13
+#define ME_OUTPUT       14
 
 #endif // _DBACCESS_UI_DIRECTSQL_HRC_
