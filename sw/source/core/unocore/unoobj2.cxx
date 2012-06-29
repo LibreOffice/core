@@ -1885,20 +1885,18 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
     {
         if (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode)
         {
-            SwPosFlyFrms aFlyFrms;
             //get all frames that are bound at paragraph or at character
-            rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor());
-            for(sal_uInt16 i = 0; i < aFlyFrms.Count(); i++)
+            SwPosFlyFrms aFlyFrms(rPaM.GetDoc()->GetAllFlyFmts(m_pImpl->GetCursor()));
+
+            for(SwPosFlyFrms::const_iterator aIter(aFlyFrms.begin()); aIter != aFlyFrms.end(); aIter++)
             {
-                SwPosFlyFrm* pPosFly = aFlyFrms[i];
-                SwFrmFmt *const pFrmFmt =
-                    const_cast<SwFrmFmt*>(&pPosFly->GetFmt());
+                SwFrmFmt *const pFrmFmt = const_cast<SwFrmFmt*>(&((*aIter)->GetFmt()));
+
                 // create SwDepend for frame and insert into array
-                SwDepend *const pNewDepend =
-                    new SwDepend(m_pImpl.get(), pFrmFmt);
-                m_pImpl->m_Frames.push_back(
-                        ::boost::shared_ptr<SwDepend>(pNewDepend) );
+                SwDepend *const pNewDepend = new SwDepend(m_pImpl.get(), pFrmFmt);
+                m_pImpl->m_Frames.push_back(::boost::shared_ptr<SwDepend>(pNewDepend));
             }
+
             //created from any text range
             if (m_pImpl->GetCursor()->HasMark())
             {
@@ -1914,6 +1912,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
                         *m_pImpl->GetCursor()->GetMark());
             }
         }
+
         lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(), m_pImpl->m_Frames);
     }
 }

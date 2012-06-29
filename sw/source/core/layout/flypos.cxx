@@ -37,7 +37,15 @@
 #include "ndindex.hxx"
 #include "switerator.hxx"
 
-SV_IMPL_OP_PTRARR_SORT( SwPosFlyFrms, SwPosFlyFrmPtr )
+bool SwPosFlyFrmCmp::operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const
+{
+    if(rA->GetNdIndex() == rB->GetNdIndex())
+    {
+        return rA->GetOrdNum() < rB->GetOrdNum();
+    }
+
+    return rA->GetNdIndex() < rB->GetNdIndex();
+}
 
 SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
                             sal_uInt16 nArrPos )
@@ -89,20 +97,4 @@ SwPosFlyFrm::~SwPosFlyFrm()
     }
 }
 
-sal_Bool SwPosFlyFrm::operator==( const SwPosFlyFrm& )
-{
-    return sal_False;   // FlyFrames koennen auf der gleichen Position stehen
-}
-
-sal_Bool SwPosFlyFrm::operator<( const SwPosFlyFrm& rPosFly )
-{
-    if( pNdIdx->GetIndex() == rPosFly.pNdIdx->GetIndex() )
-    {
-        // dann entscheidet die Ordnungsnummer!
-        return nOrdNum < rPosFly.nOrdNum;
-    }
-    return pNdIdx->GetIndex() < rPosFly.pNdIdx->GetIndex();
-}
-
-
-
+// eof

@@ -23,9 +23,9 @@
 #ifndef _FLYPOS_HXX
 #define _FLYPOS_HXX
 
-
-#include <svl/svarray.hxx>
 #include <swdllapi.h>
+#include <boost/shared_ptr.hpp>
+#include <set>
 
 class SwFrmFmt;
 class SwNodeIndex;
@@ -34,23 +34,24 @@ class SwNodeIndex;
 class SW_DLLPUBLIC SwPosFlyFrm
 {
     const SwFrmFmt* pFrmFmt;    // das FlyFrmFmt
-//  SwPosition* pPos;           // Position in den ContentNode
     SwNodeIndex* pNdIdx;        // es reicht ein Index auf den Node
     sal_uInt32 nOrdNum;
 public:
     SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, sal_uInt16 nArrPos );
     virtual ~SwPosFlyFrm(); // virtual fuer die Writer (DLL !!)
 
-    // operatoren fuer das Sort-Array
-    sal_Bool operator==( const SwPosFlyFrm& );
-    sal_Bool operator<( const SwPosFlyFrm& );
-
     const SwFrmFmt& GetFmt() const { return *pFrmFmt; }
     const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
     sal_uInt32 GetOrdNum() const { return nOrdNum; }
 };
 
-typedef SwPosFlyFrm* SwPosFlyFrmPtr;
-SV_DECL_PTRARR_SORT_VISIBILITY( SwPosFlyFrms, SwPosFlyFrmPtr, 0, 40, SW_DLLPUBLIC )
+// define needed classes to safely handle an array of allocated SwPosFlyFrm(s).
+// SwPosFlyFrms can be handled by value (as return value), only refcounts to
+// contained SwPosFlyFrm* will be copied. When releasing the last SwPosFlyFrmPtr
+// instance the allocated instance will be freed. The array is sorted by
+// GetNdIndex by using a ::std::set container.
+typedef ::boost::shared_ptr< SwPosFlyFrm > SwPosFlyFrmPtr;
+struct SwPosFlyFrmCmp { bool operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const; };
+typedef ::std::set< SwPosFlyFrmPtr, SwPosFlyFrmCmp > SwPosFlyFrms;
 
 #endif // _FLYPOS_HXX

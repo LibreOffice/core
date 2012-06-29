@@ -140,17 +140,24 @@ namespace
     sw::Frames SwPosFlyFrmsToFrames(const SwPosFlyFrms &rFlys)
     {
         sw::Frames aRet;
-        sal_uInt16 nEnd = rFlys.Count();
-        for (sal_uInt16 nI = 0; nI < nEnd; ++nI)
+
+        for(SwPosFlyFrms::const_iterator aPos(rFlys.begin()); aPos != rFlys.end(); aPos++)
         {
-            const SwFrmFmt &rEntry = rFlys[nI]->GetFmt();
+            const SwFrmFmt &rEntry = (*aPos)->GetFmt();
+
             if (const SwPosition* pAnchor = rEntry.GetAnchor().GetCntntAnchor())
+            {
                 aRet.push_back(sw::Frame(rEntry, *pAnchor));
+            }
             else
             {
-                SwPosition aPos(rFlys[nI]->GetNdIndex());
+                SwPosition aPos((*aPos)->GetNdIndex());
+
                 if (SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode())
+                {
                     aPos.nContent.Assign(pTxtNd, 0);
+                }
+
                 aRet.push_back(sw::Frame(rEntry, aPos));
             }
         }
@@ -567,11 +574,8 @@ namespace sw
            */
         Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM /*, bool bAll*/)
         {
-            SwPosFlyFrms aFlys;
-            rDoc.GetAllFlyFmts(aFlys, pPaM, true);
+            SwPosFlyFrms aFlys(rDoc.GetAllFlyFmts(pPaM, true));
             sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
-            for (sal_uInt16 i = aFlys.Count(); i > 0;)
-                delete aFlys[--i];
             return aRet;
         }
 

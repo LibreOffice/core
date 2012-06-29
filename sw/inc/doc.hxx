@@ -89,6 +89,7 @@ class SwList;
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <flypos.hxx>
 
 class SvxForbiddenCharactersTable;
 class SwExtTextInput;
@@ -153,7 +154,6 @@ class SwNodes;
 class SwNumRule;
 class SwNumRuleTbl;
 class SwPageDesc;
-class SwPosFlyFrms;
 class SwPagePreViewPrtData;
 class SwRedline;
 class SwRedlineTbl;
@@ -1056,8 +1056,7 @@ public:
     // FlyFrames von der ::com::sun::star::awt::Selection vollstaendig umschlossen sein
     // ( Start < Pos < End ) !!!
     // (wird fuer die Writer benoetigt)
-    void GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts, const SwPaM* = 0,
-                        sal_Bool bDrawAlso = sal_False ) const;
+    SwPosFlyFrms GetAllFlyFmts( const SwPaM* = 0, sal_Bool bDrawAlso = sal_False ) const;
 
     // wegen swrtf.cxx und define private public, jetzt hier
     SwFlyFrmFmt  *MakeFlyFrmFmt (const String &rFmtName, SwFrmFmt *pDerivedFrom);
