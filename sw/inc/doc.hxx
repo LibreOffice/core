@@ -53,6 +53,7 @@ class SwList;
 #include <swatrset.hxx>
 #include <toxe.hxx>             // enums
 #include <flyenum.hxx>
+#include <flypos.hxx>
 #include <itabenum.hxx>
 #include <swdbdata.hxx>
 #include <chcmprse.hxx>
@@ -143,7 +144,6 @@ class SwNodes;
 class SwNumRule;
 class SwNumRuleTbl;
 class SwPageDesc;
-class SwPosFlyFrms;
 class SwPagePreViewPrtData;
 class SwRedline;
 class SwRedlineTbl;
@@ -1048,7 +1048,7 @@ public:
      have to be surrounded completely by ::com::sun::star::awt::Selection.
      ( Start < Pos < End ) !!!
      (Required for Writers.) */
-    void GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts, const SwPaM* = 0,
+    SwPosFlyFrms GetAllFlyFmts( const SwPaM* = 0,
                         bool bDrawAlso = false,
                         bool bAsCharAlso = false ) const;
 

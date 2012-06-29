@@ -19,8 +19,8 @@
 #ifndef _FLYPOS_HXX
 #define _FLYPOS_HXX
 
-
 #include <swdllapi.h>
+#include <boost/shared_ptr.hpp>
 #include <set>
 
 class SwFrmFmt;
@@ -37,16 +37,19 @@ public:
     SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, sal_uInt16 nArrPos );
     virtual ~SwPosFlyFrm(); ///< Virtual for Writer (DLL !!)
 
-    /// Operators for sort array.
-    sal_Bool operator==( const SwPosFlyFrm& );
-    sal_Bool operator<( const SwPosFlyFrm& );
-
     const SwFrmFmt& GetFmt() const { return *pFrmFmt; }
     const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
     sal_uInt32 GetOrdNum() const { return nOrdNum; }
 };
 
-class SwPosFlyFrms : public std::multiset<SwPosFlyFrm*> {};
+// define needed classes to safely handle an array of allocated SwPosFlyFrm(s).
+// SwPosFlyFrms can be handled by value (as return value), only refcounts to
+// contained SwPosFlyFrm* will be copied. When releasing the last SwPosFlyFrmPtr
+// instance the allocated instance will be freed. The array is sorted by
+// GetNdIndex by using a ::std::set container.
+typedef ::boost::shared_ptr< SwPosFlyFrm > SwPosFlyFrmPtr;
+struct SwPosFlyFrmCmp { bool operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const; };
+typedef ::std::set< SwPosFlyFrmPtr, SwPosFlyFrmCmp > SwPosFlyFrms;
 
 #endif // _FLYPOS_HXX
 

@@ -31,6 +31,17 @@
 #include "ndindex.hxx"
 #include "switerator.hxx"
 
+bool SwPosFlyFrmCmp::operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const
+{
+    if(rA->GetNdIndex() == rB->GetNdIndex())
+    {
+        // In this case, the order number decides!
+        return rA->GetOrdNum() < rB->GetOrdNum();
+    }
+
+    return rA->GetNdIndex() < rB->GetNdIndex();
+}
+
 SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
                             sal_uInt16 nArrPos )
     : pFrmFmt( pFmt ), pNdIdx( (SwNodeIndex*) &rIdx )
@@ -80,22 +91,5 @@ SwPosFlyFrm::~SwPosFlyFrm()
         delete pNdIdx;
     }
 }
-
-sal_Bool SwPosFlyFrm::operator==( const SwPosFlyFrm& )
-{
-    return sal_False;   // FlyFrames can sit at the same position
-}
-
-sal_Bool SwPosFlyFrm::operator<( const SwPosFlyFrm& rPosFly )
-{
-    if( pNdIdx->GetIndex() == rPosFly.pNdIdx->GetIndex() )
-    {
-        // In this case, the order number decides!
-        return nOrdNum < rPosFly.nOrdNum;
-    }
-    return pNdIdx->GetIndex() < rPosFly.pNdIdx->GetIndex();
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

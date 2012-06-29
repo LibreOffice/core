@@ -1002,11 +1002,10 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
     return bOk;
 }
 
-void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
-                           const SwPaM* pCmpRange, bool bDrawAlso,
+SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
                            bool bAsCharAlso ) const
 {
-    SwPosFlyFrm *pFPos = 0;
+    SwPosFlyFrms aRetval;
     SwFrmFmt *pFly;
 
     // collect all anchored somehow to paragraphs
@@ -1028,8 +1027,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                 if( pCmpRange &&
                     !lcl_TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
                         continue;       // not a valid FlyFrame
-                pFPos = new SwPosFlyFrm( pAPos->nNode, pFly, rPosFlyFmts.size() );
-                rPosFlyFmts.insert( pFPos );
+                aRetval.insert(SwPosFlyFrmPtr(new SwPosFlyFrm(pAPos->nNode, pFly, aRetval.size())));
             }
         }
     }
@@ -1037,9 +1035,10 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
     // If we don't have a layout we can't get page anchored FlyFrames.
     // Also, page anchored FlyFrames are only returned if no range is specified.
     if( !GetCurrentViewShell() || pCmpRange )   //swmod 071108//swmod 071225
-        return;
+    {
+        return aRetval;
+    }
 
-    pFPos = 0;
     SwPageFrm *pPage = (SwPageFrm*)GetCurrentLayout()->GetLower();  //swmod 080218
     while( pPage )
     {
@@ -1077,18 +1076,15 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                     if ( pCntntFrm )
                     {
                         SwNodeIndex aIdx( *pCntntFrm->GetNode() );
-                        pFPos = new SwPosFlyFrm( aIdx, pFly, rPosFlyFmts.size() );
+                        aRetval.insert(SwPosFlyFrmPtr(new SwPosFlyFrm(aIdx, pFly, aRetval.size())));
                     }
-                }
-                if ( pFPos )
-                {
-                    rPosFlyFmts.insert( pFPos );
-                    pFPos = 0;
                 }
             }
         }
         pPage = (SwPageFrm*)pPage->GetNext();
     }
+
+    return aRetval;
 }
 
 /* #i6447# changed behaviour if lcl_CpyAttr:
