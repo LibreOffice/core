@@ -195,10 +195,13 @@ void ThumbnailView::ImplInitScrollBar()
 
 void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
 {
-    Rectangle aRect = pItem->getDrawArea();
+    if (pItem->isVisible())
+    {
+        Rectangle aRect = pItem->getDrawArea();
 
-    if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
-        pItem->Paint(mpProcessor,mpItemAttrs);
+        if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
+            pItem->Paint(mpProcessor,mpItemAttrs);
+    }
 }
 
 void ThumbnailView::OnSelectionMode (bool bMode)
