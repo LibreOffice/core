@@ -361,6 +361,11 @@ void TemplateFolderView::showOverlay (bool bVisible)
     }
 }
 
+void TemplateFolderView::setOverlayDblClickHdl(const Link &rLink)
+{
+    mpItemView->setDblClickHdl(rLink);
+}
+
 void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
 {
     meFilterOption = eApp;

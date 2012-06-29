@@ -158,6 +158,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
     maView->setTemplateStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
+    maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
 
     aButtonAll.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewAllHdl));
     aButtonDocs.SetClickHdl(LINK(this,SfxTemplateManagerDlg,ViewDocsHdl));
@@ -386,6 +387,25 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
         break;
     default:
         break;
+    }
+
+    return 0;
+}
+
+IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
+{
+    uno::Sequence< PropertyValue > aArgs(1);
+    aArgs[0].Name = "AsTemplate";
+    aArgs[0].Value <<= sal_True;
+
+    TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
+
+    try
+    {
+        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),rtl::OUString("_blank"), 0, aArgs );
+    }
+    catch( const uno::Exception& )
+    {
     }
 
     return 0;

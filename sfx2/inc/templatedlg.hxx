@@ -57,6 +57,8 @@ private:
 
     DECL_LINK(MenuSelectHdl, Menu*);
 
+    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
+
     void OnTemplateImport ();
     void OnTemplateSearch ();
     void OnTemplateEdit ();

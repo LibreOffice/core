@@ -34,9 +34,13 @@ public:
 
     void InsertItems (const std::vector<TemplateViewItem*> &rTemplates);
 
+    void setDblClickHdl (const Link &rLink) { maDblClickHdl = rLink; }
+
 protected:
 
     virtual void MouseButtonDown (const MouseEvent &rMEvt);
+
+    virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
 
 private:
 
@@ -44,6 +48,7 @@ private:
     sal_uInt16 mnRegionId;
     rtl::OUString maFolderName;
     SfxDocumentTemplates *mpDocTemplates;
+    Link maDblClickHdl;
 };
 
 #endif // TEMPLATEVIEW_HXX

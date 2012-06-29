@@ -152,6 +152,11 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
     ThumbnailView::MouseButtonDown(rMEvt);
 }
 
+void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
+{
+    maDblClickHdl.Call(pItem);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 

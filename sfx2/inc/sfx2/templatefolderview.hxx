@@ -41,6 +41,8 @@ public:
 
     void showOverlay (bool bVisible);
 
+    void setOverlayDblClickHdl (const Link &rLink);
+
     void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
     void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
