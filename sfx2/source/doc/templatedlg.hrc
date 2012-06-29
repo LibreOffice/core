@@ -43,4 +43,9 @@
 
 #define STR_ACTION_SORT_NAME        264
 
+#define MNI_MOVE_NEW                265
+#define MNI_MOVE_FOLDER_BASE        266
+
+#define STR_MOVE_NEW                267
+
 #define IMG_ONLINE_REPOSITORY       100

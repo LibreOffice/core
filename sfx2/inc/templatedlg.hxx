@@ -56,6 +56,7 @@ private:
     DECL_LINK(TVTemplateStateHdl, const ThumbnailViewItem*);
 
     DECL_LINK(MenuSelectHdl, Menu*);
+    DECL_LINK(MoveMenuSelectHdl, Menu*);
 
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
 
@@ -82,6 +83,7 @@ private:
     TemplateFolderView *maView;
     PopupMenu *mpCreateMenu;
     PopupMenu *mpActionMenu;
+    PopupMenu *mpMoveMenu;
 
     int mnSelectionCount;
     std::set<const ThumbnailViewItem*> maSelTemplates;

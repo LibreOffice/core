@@ -91,6 +91,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString());
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
+    mpMoveMenu = new PopupMenu;
+    mpMoveMenu->InsertItem(MNI_MOVE_NEW,SfxResId(STR_MOVE_NEW).toString());
+    mpMoveMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MoveMenuSelectHdl));
+
     Size aWinSize = GetOutputSize();
 
     // Calculate thumbnail view minimum size
@@ -123,6 +127,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     // Set toolbox button bits
     mpViewBar->SetItemBits(TBI_TEMPLATE_CREATE, TIB_DROPDOWNONLY);
     mpActionBar->SetItemBits(TBI_TEMPLATE_ACTION, TIB_DROPDOWNONLY);
+    mpTemplateBar->SetItemBits(TBI_TEMPLATE_MOVE,TIB_DROPDOWNONLY);
 
     // Set toolbox handlers
     mpViewBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXViewHdl));
@@ -130,6 +135,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpActionBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXActionHdl));
     mpActionBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
     mpTemplateBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXTemplateHdl));
+    mpTemplateBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
 
     // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
@@ -188,6 +194,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete maView;
     delete mpCreateMenu;
     delete mpActionMenu;
+    delete mpMoveMenu;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
@@ -309,6 +316,16 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
         pBox->EndSelection();
         pBox->Invalidate();
         break;
+    case TBI_TEMPLATE_MOVE:
+        pBox->SetItemDown( nCurItemId, true );
+
+        mpMoveMenu->Execute(pBox,pBox->GetItemRect(TBI_TEMPLATE_MOVE),
+                            POPUPMENU_EXECUTE_DOWN);
+
+        pBox->SetItemDown( nCurItemId, false );
+        pBox->EndSelection();
+        pBox->Invalidate();
+        break;
     default:
         break;
     }
@@ -387,6 +404,20 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
         break;
     default:
         break;
+    }
+
+    return 0;
+}
+
+IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+
+    if (nMenuId == MNI_MOVE_NEW)
+    {
+    }
+    else
+    {
     }
 
     return 0;
