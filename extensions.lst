@@ -47,20 +47,8 @@
 [ language=en.* || language=de || language=it ]
     b7ce02d25eb302e5b23572cdccaea461 http://numbertext.org/tmp/dict-en.oxt
     
-# English (Canada, en_CA) dictionary
-[ language=en.* ]
-    e545415a4c813075c67ea58ea99802e5 http://sourceforge.net/projects/aoo-extensions/files/1263/1/en_CA_2_0_0.oxt/download "en_CA_2_0_0.oxt"
-
-# English (Australia, en_AU) dictionary
-[ language=en.* ]
-    68bfee769199749288c5e1aaf200a1ca http://sourceforge.net/projects/aoo-extensions/files/1232/7/dict-en-au-2008-12-15.oxt/download "dict-en-au-2008-12-15.oxt"
-
-# English (New Zealand, en_NZ) dictionary
-[ language=en.* ]
-    87123666ecce441b075c0170fa58690c http://sourceforge.net/projects/aoo-extensions/files/1665/1/dict-en-nz-2008-12-03.oxt/download "dict-en-nz-2008-12-03.oxt"
-
 # English (USA, en_US) dictionary
-[ language=en.* || language==nl || language==ru ]
+[ language==nl || language==ru ]
     e2eab80772ab1aa09716954219351a80 http://sourceforge.net/projects/aoo-extensions/files/1470/1/en_US.oxt/download "en_US.oxt"
 
 # German dictionary.
