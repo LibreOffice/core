@@ -35,7 +35,6 @@
 
 struct StyleRequestData;
 class SdrTextObj;
-class OutlinerParaObject;
 class FontList;
 class OutlinerView;
 

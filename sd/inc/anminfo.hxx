@@ -29,13 +29,8 @@
 #include <tools/color.hxx>
 #include <sddllapi.h>
 
-class Polygon;
-class Point;
-class SvStream;
-class SdrObjSurrogate;
 class SdrObject;
 class SdrPathObj;
-class SdDrawDocument;
 
 class SdAnimationInfo : public SdrObjUserData
 {

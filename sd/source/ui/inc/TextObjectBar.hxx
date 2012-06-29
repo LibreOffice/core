@@ -31,7 +31,6 @@ namespace sd {
 
 class View;
 class ViewShell;
-class Window;
 
 class TextObjectBar
     : public SfxShell

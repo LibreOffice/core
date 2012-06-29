@@ -40,16 +40,12 @@
 #include <boost/noncopyable.hpp>
 
 class Dialog;
-class SdPage;
 class SdrObject;
 class SdrTextObj;
 class SdDrawDocument;
-class SfxStyleSheetPool;
-class SdrObjListIter;
 
 namespace sd {
 
-class DrawViewShell;
 class View;
 class ViewShell;
 class Window;

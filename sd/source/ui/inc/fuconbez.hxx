@@ -36,8 +36,6 @@ class SdDrawDocument;
 
 namespace sd {
 
-class DrawView;
-class DrawViewShell;
 class Window;
 
 

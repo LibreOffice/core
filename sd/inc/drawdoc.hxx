@@ -54,14 +54,6 @@ namespace com
     {
         namespace star
         {
-            namespace embed
-            {
-                class XStorage;
-            }
-            namespace io
-            {
-                class XStream;
-            }
             namespace presentation
             {
                 class XPresentation2;
@@ -79,7 +71,6 @@ namespace sd
 
 class Timer;
 class SfxObjectShell;
-class SdDrawDocShell;
 class SdPage;
 class SdAnimationInfo;
 class SdIMapInfo;
@@ -87,9 +78,7 @@ class IMapObject;
 class SdStyleSheetPool;
 class SfxMedium;
 class SvxSearchItem;
-class SdrOle2Obj;
 class EditStatus;
-class Graphic;
 class Point;
 class Window;
 class SdTransferable;

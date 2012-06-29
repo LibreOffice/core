@@ -46,7 +46,6 @@ class SfxModule;
 
 namespace sd {
 class DrawDocShell;
-class PaneManagerEvent;
 class ViewShellBase;
 }
 

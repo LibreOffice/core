@@ -27,8 +27,6 @@ namespace sd {
 
 class DrawDocShell;
 class DrawViewShell;
-class FuSlideShow;
-class SlideShow;
 
 #define SDDRAWVIEW_MAGIC  0x456789BA
 

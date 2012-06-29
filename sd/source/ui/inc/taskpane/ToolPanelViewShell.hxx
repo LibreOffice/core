@@ -39,13 +39,8 @@ namespace com { namespace sun { namespace star { namespace ui {
 } } } }
 
 namespace sd {
-class PaneDockingWindow;
-
 namespace toolpanel {
 class TaskPaneShellManager;
-class TitleToolBox;
-class TitleBar;
-class TitledControl;
 class ToolPanelViewShell_Impl;
 /** The tool panel is a view shell for some very specific reasons:
     - It fits better into the concept of panes being docking windows whose

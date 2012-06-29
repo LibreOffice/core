@@ -219,7 +219,6 @@ class AbstractSdPresLayoutDlg_Impl : public AbstractSdPresLayoutDlg
 };
 
 // add for SdActionDlg
-class SfxSingleTabDialog;
 class AbstractSfxDialog_Impl : public SfxAbstractDialog
 {
     DECL_ABSTDLG_BASE(AbstractSfxDialog_Impl,SfxModalDialog)

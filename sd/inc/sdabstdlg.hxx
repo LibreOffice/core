@@ -51,12 +51,7 @@ namespace sd {
     class DrawView;
 }
 
-class SfxTabPage;
-class SfxViewFrame;
-class SfxBindings;
-class ResId;
 class String;
-class SfxItemPool;
 class SfxObjectShell;
 class SfxObjectShellLock;
 class SvxFieldData;

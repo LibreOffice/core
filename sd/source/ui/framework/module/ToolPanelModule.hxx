@@ -26,8 +26,6 @@
 
 namespace sd { namespace framework {
 
-class ReadOnlyModeObserver;
-
 /** This module is responsible for showing the task pane.
 */
 class ToolPanelModule

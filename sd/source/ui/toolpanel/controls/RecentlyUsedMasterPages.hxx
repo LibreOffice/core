@@ -30,8 +30,6 @@
 #include "MasterPageContainer.hxx"
 #include <com/sun/star/uno/XInterface.hpp>
 
-class SdPage;
-
 namespace sd {
 class MasterPageObserverEvent;
 }

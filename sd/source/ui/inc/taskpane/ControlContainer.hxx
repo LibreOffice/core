@@ -25,8 +25,6 @@
 #include <vector>
 #include <memory>
 
-class Window;
-
 namespace sd { namespace toolpanel {
 
 class TreeNode;

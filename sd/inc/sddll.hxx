@@ -32,12 +32,6 @@
 #include <sfx2/module.hxx>
 #include <sfx2/sfxdefs.hxx>
 
-class SvFactory;
-class SotFactory;
-class SfxMedium;
-class SfxFilter;
-
-
 /*************************************************************************
 |*
 |* This class is a wrapper for a Load-On-Demand-DLL. One instance

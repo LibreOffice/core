@@ -56,7 +56,6 @@
 // - Forwards -
 // ------------
 
-class SfxConfigItem;
 class SdOptions;
 
 namespace sd {

@@ -57,6 +57,7 @@ class FormShellManager;
 class ToolBarManager;
 class ViewShell;
 class ViewShellManager;
+class ViewTabBar;
 
 /** SfxViewShell descendant that the stacked Draw/Impress shells are
     based on.

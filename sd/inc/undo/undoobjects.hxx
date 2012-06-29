@@ -30,8 +30,6 @@ class SdPage;
 
 namespace sd
 {
-    class UndoManager;
-
 ///////////////////////////////////////////////////////////////////////
 
 class UndoRemovePresObjectImpl

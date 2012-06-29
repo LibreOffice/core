@@ -31,10 +31,6 @@
 
 #include <sfx2/styledlg.hxx>
 
-class XColorList;
-class XGradientList;
-class XHatchList;
-class XBitmapList;
 class SfxStyleSheetBase;
 class SdrModel;
 

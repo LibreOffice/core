@@ -25,8 +25,6 @@
 #include <tools/errinf.hxx>
 #include "sdfilter.hxx"
 
-class Graphic;
-
 // ---------------
 // - SdCGMFilter -
 // ---------------

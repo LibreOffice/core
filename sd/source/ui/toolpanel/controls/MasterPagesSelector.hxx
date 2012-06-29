@@ -44,12 +44,8 @@
 class MouseEvent;
 class SdDrawDocument;
 class SdPage;
-class SfxModule;
 
 namespace sd {
-class DrawViewShell;
-class TemplateEntry;
-class TemplateDir;
 class ViewShellBase;
 }
 

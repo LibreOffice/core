@@ -41,8 +41,6 @@
 
 class SdPage;
 class DrawDocShell;
-class SdAnimationWin;
-class SdRuler;
 class TabBar;
 class SdrObject;
 class SdrPageView;
@@ -57,7 +55,6 @@ namespace sd {
 class DrawView;
 class LayerTabBar;
 class Ruler;
-class SdUnoDrawView;
 class AnnotationManager;
 class ViewOverlayManager;
 

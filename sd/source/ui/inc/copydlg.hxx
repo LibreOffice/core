@@ -36,8 +36,6 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>
 
-class XColorList;
-
 namespace sd {
 
 class View;

@@ -34,10 +34,6 @@
 #include "dlgpage.hrc"
 
 class SfxObjectShell;
-class XColorList;
-class XGradientList;
-class XHatchList;
-class XBitmapList;
 
 typedef sal_uInt16 ChangeType;
 

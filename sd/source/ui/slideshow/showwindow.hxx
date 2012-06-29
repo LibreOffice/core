@@ -46,8 +46,6 @@
 namespace sd {
 
 class SlideshowImpl;
-class PreviewWindow;
-class ViewShell;
 
 // -----------
 // - Defines -

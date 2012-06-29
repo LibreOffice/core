@@ -34,17 +34,12 @@
 #include <memory>
 
 class SdOptions;
-class BasicIDE;
 class SvxSearchItem;
-class SdAppLinkHdl;
-class SvxErrorHandler;
 class EditFieldInfo;
-class SvFactory;
 class SdTransferable;
 class SvNumberFormatter;
 class SfxErrorHandler;
 class OutputDevice;
-class SdPage;
 class SdDrawDocument;
 class SfxFrame;
 

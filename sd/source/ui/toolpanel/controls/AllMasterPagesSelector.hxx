@@ -24,6 +24,10 @@
 
 #include <memory>
 
+namespace sd {
+class TemplateEntry;
+}
+
 namespace sd { namespace toolpanel { namespace controls {
 
 

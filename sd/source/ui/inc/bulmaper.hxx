@@ -32,8 +32,6 @@
 #include <sddllapi.h>
 
 class SfxItemSet;
-class SvxBulletItem;
-class SvxNumberFormat;
 class SvxNumRule;
 
 class SD_DLLPUBLIC SdBulletMapper

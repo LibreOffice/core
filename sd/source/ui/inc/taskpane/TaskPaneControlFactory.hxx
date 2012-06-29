@@ -24,10 +24,6 @@
 
 #include <memory>
 
-namespace sd {
-class ViewShellBase;
-}
-
 namespace sd { namespace toolpanel {
 class TreeNode;
 } }

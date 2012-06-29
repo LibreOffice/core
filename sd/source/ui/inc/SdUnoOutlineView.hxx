@@ -25,8 +25,6 @@
 #include <com/sun/star/lang/EventObject.hpp>
 
 
-class SdPage;
-
 namespace css = ::com::sun::star;
 
 namespace sd {

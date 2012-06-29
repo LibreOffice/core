@@ -43,11 +43,8 @@
 class OutlinerView;
 class Outliner;
 class ScrollBar;
-class Edit;
 class MultiLineEdit;
-class PopupMenu;
 class SvxLanguageItem;
-class OutlinerParaObject;
 class SdDrawDocument;
 
 namespace sd {

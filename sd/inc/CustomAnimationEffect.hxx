@@ -55,7 +55,6 @@ namespace sd {
 enum EValue { VALUE_FROM, VALUE_TO, VALUE_BY, VALUE_FIRST, VALUE_LAST };
 
 class CustomAnimationEffect;
-class AnimationTrigger;
 
 class CustomAnimationPreset;
 typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;

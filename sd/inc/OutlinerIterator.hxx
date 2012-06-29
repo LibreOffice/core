@@ -33,7 +33,6 @@ namespace sd {
 
 class ViewShell;
 class Outliner;
-class View;
 
 namespace outliner {
 

@@ -40,11 +40,8 @@
 #include "fupoor.hxx"
 
 class SfxStyleSheetBasePool;
-class SfxStatusBarManager;
-class SdStyleSheetPool;
 class FontList;
 class SdDrawDocument;
-class SvxItemFactory;
 class SdPage;
 class SfxPrinter;
 struct SpellCallbackInfo;
@@ -54,7 +51,6 @@ class SfxUndoManager;
 namespace sd {
 
 class FrameView;
-class View;
 class ViewShell;
 
 // ------------------

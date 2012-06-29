@@ -46,7 +46,6 @@ class SdrOle2Obj;
 class SdrGrafObj;
 class SdrMediaObj;
 class OutputDevice;
-class VirtualDevice;
 class ImageMap;
 class Point;
 class Graphic;

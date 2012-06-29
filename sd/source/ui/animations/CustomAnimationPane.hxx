@@ -47,7 +47,6 @@ class FixedText;
 class ListBox;
 class ComboBox;
 class CheckBox;
-class SdDrawDocument;
 
 namespace com { namespace sun { namespace star { namespace animations {
     class XAnimationNode;

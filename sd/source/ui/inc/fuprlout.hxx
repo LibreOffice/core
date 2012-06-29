@@ -24,7 +24,6 @@
 
 class SdDrawDocument;
 class SfxRequest;
-class SfxStyleSheetBasePool;
 
 namespace sd {
 

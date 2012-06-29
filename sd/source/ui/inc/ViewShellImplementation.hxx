@@ -42,8 +42,6 @@ class SvxIMapDlg;
 
 namespace sd {
 
-class DrawController;
-
 /** This class contains (will contain) the implementation of methods that
     have not be accessible from the outside.
 */

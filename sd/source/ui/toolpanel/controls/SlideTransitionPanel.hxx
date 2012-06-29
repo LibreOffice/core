@@ -21,10 +21,6 @@
 
 #include "taskpane/SubToolPanel.hxx"
 
-namespace sd {
-class ViewShellBase;
-}
-
 namespace sd { namespace toolpanel {
 class ControlFactory;
 class TreeNode;

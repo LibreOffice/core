@@ -52,9 +52,6 @@ class SdrOle2Obj;       // fuer die, die Teile von SVDRAW rausdefiniert haben
 class ScrollBarBox;
 class SdDrawDocument;
 class ScrollBar;
-class FmFormShell;
-class SdOptionsPrintItem;
-class MultiSelection;
 
 extern const String aEmptyStr;
 
@@ -67,17 +64,11 @@ namespace css = ::com::sun::star;
 
 namespace sd {
 
-class Client;
 class DrawDocShell;
-class DrawSubController;
 class FrameView;
-class FuPoor;
-class FuSearch;
-class SlideShow;
 class LayerTabBar;
 class View;
 class ViewShellBase;
-class ViewTabBar;
 class Window;
 class WindowUpdater;
 class ZoomList;

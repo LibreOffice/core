@@ -37,12 +37,6 @@
 #include "prlayout.hxx" // fuer enum PresentationObjects
 
 
-class XColorList;
-class XGradientList;
-class XHatchList;
-class XBitmapList;
-class XDashList;
-class XLineEndList;
 class SfxObjectShell;
 class SfxStyleSheetBase;
 class SfxStyleSheetBasePool;

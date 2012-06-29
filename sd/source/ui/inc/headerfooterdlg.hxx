@@ -36,7 +36,6 @@
 #include "headerfooterdlg.hrc"
 #include "sdpage.hxx"
 
-class SfxObjectShell;
 class SdUndoGroup;
 
 namespace sd

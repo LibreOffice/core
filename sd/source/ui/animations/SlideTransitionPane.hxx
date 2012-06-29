@@ -44,7 +44,6 @@
 #include <map>
 
 class SdDrawDocument;
-class SdPage;
 
 namespace sd
 {

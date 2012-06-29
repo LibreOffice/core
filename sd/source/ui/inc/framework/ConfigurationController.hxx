@@ -56,11 +56,6 @@ namespace sd { class ViewShellBase; }
 
 namespace sd { namespace framework {
 
-class ChangeRequestQueueProcessor;
-class ConfigurationControllerBroadcaster;
-class ConfigurationUpdater;
-class ConfigurationUpdaterLock;
-
 /** The configuration controller is responsible for maintaining the current
     configuration.
 

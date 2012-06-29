@@ -34,12 +34,6 @@
 #include <boost/shared_ptr.hpp>
 
 class SdPage;
-class SdDrawDocument;
-class SfxObjectShellLock;
-
-namespace sd {
-class DrawDocShell;
-}
 
 namespace sd { namespace toolpanel { namespace controls {
 

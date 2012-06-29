@@ -31,7 +31,6 @@
 #include <editeng/editdata.hxx>
 #include <editeng/unoipset.hxx>
 
-class SdrObject;
 class SvxItemPropertySet;
 class SdUnoSearchReplaceDescriptor;
 

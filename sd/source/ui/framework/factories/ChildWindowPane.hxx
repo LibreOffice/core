@@ -40,8 +40,6 @@ typedef ::cppu::ImplInheritanceHelper1 <
 } // end of anonymous namespace.
 
 
-class SfxViewFrame;
-
 namespace sd { class ViewShellBase; }
 
 namespace sd { namespace framework {

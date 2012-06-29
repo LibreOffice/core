@@ -35,7 +35,6 @@ namespace sd {
 class DrawDocShell;
 }
 class SdDrawDocument;
-class SfxProgress;
 namespace osl { class Module; }
 
 class SdFilter

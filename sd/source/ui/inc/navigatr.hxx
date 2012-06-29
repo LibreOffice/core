@@ -59,7 +59,6 @@
 namespace sd {
 class DrawDocShell;
 class NavigatorChildWindow;
-class View;
 }
 class Menu;
 class SdNavigatorControllerItem;

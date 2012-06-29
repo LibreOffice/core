@@ -26,10 +26,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <tools/link.hxx>
 
-namespace sd {
-class ObjectBarManager;
-}
-
 namespace sd { namespace toolpanel {
 
 class ControlContainer;
