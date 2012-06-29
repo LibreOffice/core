@@ -30,7 +30,7 @@
 
 class TeleManager;
 namespace tubes {
-    void createContacts( const TeleManager &rContacts );
+    void createContacts( const TeleManager *pManager );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

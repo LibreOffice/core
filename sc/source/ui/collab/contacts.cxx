@@ -89,12 +89,10 @@ class TubeContacts : public ModelessDialog
             TpAccount* pAccount = pAC->mpAccount;
             TpContact* pContact = pAC->mpContact;
             fprintf( stderr, "picked %s\n", tp_contact_get_identifier( pContact ) );
-            // TeleManager has to exist already, false will be ignored:
-            TeleManager *pManager = TeleManager::get( false );
+            TeleManager *pManager = TeleManager::get();
             if (!pManager->startBuddySession( pAccount, pContact ))
                 fprintf( stderr, "could not start session with %s\n",
                         tp_contact_get_identifier( pContact ) );
-            pManager->unref();
         }
     }
 
@@ -132,9 +130,11 @@ public:
                                        RTL_TEXTENCODING_UTF8 );
     }
 
-    void Populate( const TeleManager &rManager )
+    void Populate( const TeleManager *pManager )
     {
-        ContactList *pContacts = rManager.getContactList();
+        if (!pManager)
+            return ;
+        ContactList *pContacts = pManager->getContactList();
         if ( pContacts )
         {
             fprintf( stderr, "contacts !\n" );
@@ -193,11 +193,11 @@ IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
 #endif
 
 namespace tubes {
-void createContacts( const TeleManager &rManager )
+void createContacts( const TeleManager *pManager )
 {
 #ifdef CONTACTS_DLG
     TubeContacts *pContacts = new TubeContacts();
-    pContacts->Populate( rManager );
+    pContacts->Populate( pManager );
 #endif
 }
 }

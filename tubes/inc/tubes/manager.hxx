@@ -82,6 +82,7 @@ public:
     TeleManager( bool bAcceptIncoming = true, bool bCreateOwnGMainLoop = false );
     ~TeleManager();
 
+    static TeleManager     *get() { return pSingleton; }
     static TeleManager     *get( bool bAcceptIncoming );
     void                    unref();
 
