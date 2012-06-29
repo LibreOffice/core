@@ -737,8 +737,8 @@ SbiStdObject::SbiStdObject( const String& r, StarBASIC* pb ) : SbxObject( r )
     }
 
     // #i92642: Remove default properties
-    Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_DONTCARE );
-    Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Parent") ), SbxCLASS_DONTCARE );
+    Remove( rtl::OUString("Name"), SbxCLASS_DONTCARE );
+    Remove( rtl::OUString("Parent"), SbxCLASS_DONTCARE );
 
     SetParent( pb );
 

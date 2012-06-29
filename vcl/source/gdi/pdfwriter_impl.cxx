@@ -7796,7 +7796,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
     // multiline text
     if ( nStyle & TEXT_DRAW_MULTILINE )
     {
-        XubString               aLastLine;
+        rtl::OUString           aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
         xub_StrLen              i;
@@ -7821,12 +7821,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
                     aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // replace line feed by space
-                    xub_StrLen nLastLineLen = aLastLine.Len();
-                    for ( i = 0; i < nLastLineLen; i++ )
-                    {
-                        if ( aLastLine.GetChar( i ) == _LF )
-                            aLastLine.SetChar( i, ' ' );
-                    }
+                    aLastLine = aLastLine.replace(_LF, ' ');
                     aLastLine = m_pReferenceDevice->GetEllipsisString( aLastLine, nWidth, nStyle );
                     nStyle &= ~(TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM);
                     nStyle |= TEXT_DRAW_TOP;
@@ -7858,7 +7853,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
 
 
             // output last line left adjusted since it was shortened
-            if ( aLastLine.Len() )
+            if (!aLastLine.isEmpty())
                 drawText( aPos, aLastLine, 0, STRING_LEN, bTextLines );
         }
     }

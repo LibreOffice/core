@@ -2349,8 +2349,8 @@ SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
     static Reference< XIntrospection > xIntrospection;
 
     // beat out again the default properties of Sbx
-    Remove( XubString(  RTL_CONSTASCII_USTRINGPARAM("Name")), SbxCLASS_DONTCARE );
-    Remove( XubString(  RTL_CONSTASCII_USTRINGPARAM("Parent")), SbxCLASS_DONTCARE );
+    Remove( rtl::OUString("Name"), SbxCLASS_DONTCARE );
+    Remove( rtl::OUString("Parent"), SbxCLASS_DONTCARE );
 
     // check the type of the ojekts
     TypeClass eType = aUnoObj_.getValueType().getTypeClass();

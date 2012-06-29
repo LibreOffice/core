@@ -217,7 +217,7 @@ void Window::ImplInitAppFontData( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
     long nTextHeight = pWindow->GetTextHeight();
-    long nTextWidth = pWindow->GetTextWidth( XubString( "aemnnxEM"  ) );
+    long nTextWidth = pWindow->GetTextWidth(rtl::OUString("aemnnxEM"));
     long nSymHeight = nTextHeight*4;
     // Make the basis wider if the font is too narrow
     // such that the dialog looks symmetrical and does not become too narrow.

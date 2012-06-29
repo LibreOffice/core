@@ -1266,7 +1266,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
         sSymbol = comphelper::string::stripStart(sSymbol, ' ');
         sSymbol = comphelper::string::stripEnd(sSymbol, ' ');
 
-        XubString sTemp = String::CreateFromAscii("[$");
+        XubString sTemp = rtl::OUString("[$");
         sTemp += sSymbol;
         sTemp.AppendAscii("] ");
         sTemp += sNewFormat;

@@ -91,7 +91,7 @@ public:
 void ColorListBox::ImplInit()
 {
     pColorList = new ImpColorList();
-    aImageSize.Width()  = GetTextWidth( XubString( RTL_CONSTASCII_USTRINGPARAM( "xxx" ) ) );
+    aImageSize.Width()  = GetTextWidth( rtl::OUString("xxx") );
     aImageSize.Height() = GetTextHeight();
     aImageSize.Height() -= 2;
 
@@ -688,7 +688,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
 
 void LineListBox::ImplInit()
 {
-    aTxtSize.Width()  = GetTextWidth( XubString( RTL_CONSTASCII_USTRINGPARAM( " " )  ) );
+    aTxtSize.Width()  = GetTextWidth( rtl::OUString( " " ) );
     aTxtSize.Height() = GetTextHeight();
     pLineList   = new ImpLineList();
     eUnit       = FUNIT_POINT;
@@ -904,7 +904,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
                     GetColorLine2( GetEntryCount( ) ),
                     GetColorDist( GetEntryCount( ) ),
                     pData->GetStyle(), aBmp );
-            ListBox::InsertEntry( XubString( RTL_CONSTASCII_USTRINGPARAM( " " )  ), aBmp, LISTBOX_APPEND );
+            ListBox::InsertEntry( rtl::OUString( " " ), aBmp, LISTBOX_APPEND );
             if ( n == nTypePos )
                 SelectEntryPos( GetEntryCount() - 1 );
         }

@@ -1033,7 +1033,7 @@ void Main()
 {
     TestWindow aWindow;
     aWindow.Execute();
-    aWindow.SetText( XubString( "VCL - canvasbitmaptest"  ) );
+    aWindow.SetText( rtl::OUString( "VCL - canvasbitmaptest"  ) );
 
     Application::Execute();
 }

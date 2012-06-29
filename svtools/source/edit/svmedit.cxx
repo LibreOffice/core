@@ -1409,7 +1409,7 @@ void MultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSi
         }
     }
 
-    XubString aText = GetText();
+    rtl::OUString aText = GetText();
     Size aTextSz( pDev->GetTextWidth( aText ), pDev->GetTextHeight() );
     sal_uLong nLines = (sal_uLong) (aSize.Height() / aTextSz.Height());
     if ( !nLines )

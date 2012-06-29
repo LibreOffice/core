@@ -262,7 +262,7 @@ void MessBox::ImplPosControls()
 
 
     // Message-Text um Tabs bereinigen
-    XubString   aTabStr( RTL_CONSTASCII_USTRINGPARAM( "    " ) );
+    rtl::OUString   aTabStr("    ");
     sal_uInt16      nIndex = 0;
     while ( nIndex != STRING_NOTFOUND )
         nIndex = aMessText.SearchAndReplace( '\t', aTabStr, nIndex );

@@ -190,7 +190,7 @@ void MyApp::Main()
 
 
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
-    aMainWin.SetText( XubString( "Drag And Drop - Workbench"  ) );
+    aMainWin.SetText( rtl::OUString( "Drag And Drop - Workbench"  ) );
     aMainWin.Show();
 
     // test the clipboard code

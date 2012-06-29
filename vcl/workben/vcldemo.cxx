@@ -87,7 +87,7 @@ public:
 void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
-    aMainWin.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "VCLDemo - VCL Workbench" ) ) );
+    aMainWin.SetText( rtl::OUString( "VCLDemo - VCL Workbench" ) );
     aMainWin.Show();
 
     /*

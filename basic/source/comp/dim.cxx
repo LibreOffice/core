@@ -669,8 +669,8 @@ void SbiParser::DefType( sal_Bool bPrivate )
         }
     }
 
-    pType->Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_DONTCARE );
-    pType->Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Parent") ), SbxCLASS_DONTCARE );
+    pType->Remove( rtl::OUString("Name"), SbxCLASS_DONTCARE );
+    pType->Remove( rtl::OUString("Parent"), SbxCLASS_DONTCARE );
 
     rTypeArray->Insert (pType,rTypeArray->Count());
 }
@@ -805,8 +805,8 @@ void SbiParser::DefEnum( sal_Bool bPrivate )
         }
     }
 
-    pEnum->Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_DONTCARE );
-    pEnum->Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Parent") ), SbxCLASS_DONTCARE );
+    pEnum->Remove( rtl::OUString("Name"), SbxCLASS_DONTCARE );
+    pEnum->Remove( rtl::OUString("Parent"), SbxCLASS_DONTCARE );
 
     rEnumArray->Insert( pEnum, rEnumArray->Count() );
 }

@@ -168,7 +168,7 @@ void FileControl::Resize()
     }
     else
     {
-        XubString aSmallText( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+        rtl::OUString aSmallText( "..." );
         maButton.SetText( aSmallText );
         nButtonTextWidth = maButton.GetTextWidth( aSmallText );
     }

@@ -162,7 +162,7 @@ public:
 void Main()
 {
     MyWin aMainWin( NULL, WB_STDWORK );
-    aMainWin.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "SvpClient" ) ) );
+    aMainWin.SetText( rtl::OUString( "SvpClient" ) );
     aMainWin.Show();
 
     Application::Execute();

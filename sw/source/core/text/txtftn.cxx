@@ -1517,7 +1517,7 @@ sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
     if( bFull )
     {
         // zweiter Versuch, wir kuerzen den String:
-        aExpand = XubString( "...", RTL_TEXTENCODING_MS_1252 );
+        aExpand = rtl::OUString("...");
         bFull = SwFldPortion::Format( rInf );
         SetLen( 0 );
         if( bFull  )

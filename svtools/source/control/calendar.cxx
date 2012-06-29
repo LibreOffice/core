@@ -351,7 +351,7 @@ void Calendar::ImplFormat()
         if ( (aOutSize.Width() <= 1) || (aOutSize.Height() <= 1) )
             return;
 
-        XubString a99Text( XubString( RTL_CONSTASCII_USTRINGPARAM( "99" ) ) );
+        rtl::OUString a99Text("99");
 
         Font aOldFont = GetFont();
 
@@ -2168,7 +2168,7 @@ void Calendar::EndSelection()
 Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
                                     long nCalcLines ) const
 {
-    XubString   a99Text( XubString( RTL_CONSTASCII_USTRINGPARAM( "99" ) ) );
+    rtl::OUString a99Text("99");
     Font        aOldFont = GetFont();
 
     // Wochenanzeige beruecksichtigen

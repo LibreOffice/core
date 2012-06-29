@@ -1001,7 +1001,7 @@ void Outliner::PaintBullet( sal_uInt16 nPara, const Point& rStartPos,
                 if(bStrippingPortions)
                 {
                     const Font aSvxFont(pOutDev->GetFont());
-                    sal_Int32* pBuf = new sal_Int32[ pPara->GetText().Len() ];
+                    sal_Int32* pBuf = new sal_Int32[ pPara->GetText().getLength() ];
                     pOutDev->GetTextArray( pPara->GetText(), pBuf );
 
                     if(bSymbol)
@@ -1011,7 +1011,7 @@ void Outliner::PaintBullet( sal_uInt16 nPara, const Point& rStartPos,
                         aTextPos.Y() -= aMetric.GetDescent();
                     }
 
-                    DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().Len(), pBuf,
+                    DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), pBuf,
                         aSvxFont, nPara, 0xFFFF, 0xFF, 0, 0, false, false, true, 0, Color(), Color());
 
                     delete[] pBuf;
@@ -1952,7 +1952,7 @@ void Outliner::ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_
             aBulletText += pFmt->GetSuffix();
         }
 
-        if( aBulletText != pPara->GetText() )
+        if (!pPara->GetText().equals(aBulletText))
             pPara->SetText( aBulletText );
 
         pPara->nFlags &= (~PARAFLAG_SETBULLETTEXT);

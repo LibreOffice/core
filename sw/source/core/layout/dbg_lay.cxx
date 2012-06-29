@@ -301,7 +301,7 @@ void SwProtocol::Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct,
 void SwProtocol::Init()
 {
     nRecord = 0;
-    XubString aName( "dbg_lay.go", RTL_TEXTENCODING_MS_1252 );
+    rtl::OUString aName("dbg_lay.go");
     SvFileStream aStream( aName, STREAM_READ );
     if( aStream.IsOpen() )
     {
@@ -334,7 +334,7 @@ SwImplProtocol::SwImplProtocol()
 
 sal_Bool SwImplProtocol::NewStream()
 {
-    XubString aName( "dbg_lay.out", RTL_TEXTENCODING_MS_1252 );
+    rtl::OUString aName("dbg_lay.out");
     nLineCount = 0;
     pStream = new SvFileStream( aName, STREAM_WRITE | STREAM_TRUNC );
     if( pStream->GetError() )
@@ -466,7 +466,7 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
  * --------------------------------------------------*/
 void SwImplProtocol::FileInit()
 {
-    XubString aName( "dbg_lay.ini", RTL_TEXTENCODING_MS_1252 );
+    rtl::OUString aName("dbg_lay.ini");
     SvFileStream aStream( aName, STREAM_READ );
     if( aStream.IsOpen() )
     {
