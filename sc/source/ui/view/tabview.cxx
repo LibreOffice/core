@@ -34,65 +34,9 @@
 // Die u.a. Aenderungen nehmen vorgeschlagene Konstante vorweg
 ///////////////////////////////////////////////////////////////////////////
 
-// Dieses define entfernt die VCControls aus SI.HXX
-
-#define _SI_HXX                 // VCControls
-
 ////////////////////// Umsetzen der Standard-Defines //////////////////////
 
 #define _SVDPAGE_HXX        // SdrPage
-
-#ifdef _SDR_NOSURROGATEOBJ
-    #undef _SDR_NOSURROGATEOBJ
-    #define _SVDSURO_HXX
-#endif
-
-#ifdef _SDR_NOPAGEOBJ
-    #undef _SDR_NOPAGEOBJ
-    #define _SVDOPAGE_HXX
-#endif
-
-#ifdef _SDR_NOVIRTOBJ
-    #undef _SDR_NOVIRTOBJ
-    #define _SVDOVIRT_HXX
-#endif
-
-#ifdef _SDR_NOGROUPOBJ
-    #undef _SDR_NOGROUPOBJ
-    #define _SVDOGRP_HXX
-#endif
-
-#ifdef _SDR_NOTEXTOBJ
-    #undef _SDR_NOTEXTOBJ
-    #define _SVDOTEXT_HXX
-#endif
-
-#ifdef _SDR_NOPATHOBJ
-    #undef _SDR_NOPATHOBJ
-    #define _SVDOPATH_HXX
-#endif
-
-#ifdef _SDR_NOEDGEOBJ
-    #undef _SDR_NOEDGEOBJ
-    #define _SVDOEDGE_HXX
-#endif
-
-#ifdef _SDR_NORECTOBJ
-    #undef _SDR_NORECTOBJ
-    #define _SVDORECT_HXX
-#else
-    #undef _SDVOTEXT_OBJ
-#endif
-
-#ifdef _SDR_NOCAPTIONOBJ
-    #undef _SDR_NOCAPTIONOBJ
-    #define _SVDCAPT_HXX
-#endif
-
-#ifdef _SDR_NOCIRCLEOBJ
-    #undef _SDR_NOCIRCLEOBJ
-    #define _SVDOCIRC_HXX
-#endif
 
 #ifdef _SDR_NOGRAFOBJ
     #undef _SDR_NOGRAFOBJ

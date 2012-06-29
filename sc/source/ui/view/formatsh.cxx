@@ -30,23 +30,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-//------------------------------------------------------------------
-
-//svdraw.hxx
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM
-#define _SI_NOSBXCONTROLS
-#define _VCONT_HXX
-#define _SI_NOOTHERFORMS
-#define _VCTRLS_HXX
-#define _SI_NOCONTROL
-#define _SETBRW_HXX
-#define _VCBRW_HXX
-#define _SI_NOSBXCONTROLS
-
-//------------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 

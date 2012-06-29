@@ -28,22 +28,6 @@
 
 #include <iostream>
 
-//------------------------------------------------------------------
-
-//svdraw.hxx
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM
-#define _SI_NOSBXCONTROLS
-#define _VCONT_HXX
-#define _SI_NOOTHERFORMS
-#define _VCTRLS_HXX
-#define _SI_NOCONTROL
-#define _SETBRW_HXX
-#define _VCBRW_HXX
-#define _SI_NOSBXCONTROLS
-
-//------------------------------------------------------------------
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 

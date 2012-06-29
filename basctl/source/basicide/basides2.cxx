@@ -19,9 +19,6 @@
 
 #include "docsignature.hxx"
 
-#define SI_NOCONTROL
-#define SI_NOSBXCONTROLS
-
 #include <basic/sbx.hxx>
 #include "basicrenderable.hxx"
 

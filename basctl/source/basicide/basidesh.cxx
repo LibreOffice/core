@@ -19,13 +19,6 @@
 
 // CLOOKS:
 #define _SPIN_HXX
-#define _PRVWIN_HXX
-#define _DIALOGS_HXX
-#define _SVRTF_HXX
-#define _ISETBRW_HXX
-#define _VCTRLS_HXX
-#define SI_NOCONTROL
-#define SI_NOSBXCONTROLS
 
 #define _SOLAR__PRIVATE 1
 #include <tools/diagnose_ex.h>

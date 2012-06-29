@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM
-#define _SDR_NOOBJECTS
-#define _SDR_NOVIEWMARKER
-#define _SDR_NODRAGMETHODS
-#define _SDR_NOXOUTDEV
-
 #include "basidesh.hrc"
 #include "helpid.hrc"
 

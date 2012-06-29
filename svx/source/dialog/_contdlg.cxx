@@ -38,16 +38,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM
-#define _SDR_NOOBJECTS
-#define _SDR_NOVIEWMARKER
-#define _SDR_NODRAGMETHODS
-#define _SDR_NOUNDO
-#define _SDR_NOXOUTDEV
-#define _XOUTBMP_STATICS_ONLY
-
 #include <svx/dialmgr.hxx>
 #include "svx/xoutbmp.hxx"
 #include <svx/dialogs.hrc>

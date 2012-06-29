@@ -21,16 +21,11 @@
 
 
 // SV
-#define _COLDLG_HXX
 #define _CONFIG_HXX
 #define _CURSOR_HXX
-#define _FONTDLG_HXX
-#define _PRVWIN_HXX
-#define _VIRTDEV_HXX
 
 // SVTOOLS
 #define _CTRLBOX_HXX
-#define _EXTATTR_HXX
 #define _CTRLTOOL_HXX
 #define _CTRLBOX_HXX
 #define _STDMENU_HXX
@@ -39,11 +34,8 @@
 #define _SCRWIN_HXX
 
 // SFX
-#define _SFXAPPWIN_HXX
 #define _SFX_RESMGR_HXX
 #define _SFX_PRNMON_HXX
-#define _INTRO_HXX
-#define _SFXMSGDESCR_HXX
 #define _SFXMSGPOOL_HXX
 #define _SFXMNUMGR_HXX
 
@@ -56,13 +48,6 @@
 #define _SFXDOCTDLG_HXX
 #define _SFX_TEMPLDLG_HXX
 #define _SFXNEW_HXX
-
-// SFXDOC
-#define _SFX_IPFRM_HXX
-#define _SFX_INTERNO_HXX
-
-// SVCONTNR
-#define _SVICNVW_HXX
 
 #define _SBSTDOBJ1_HXX
 #define _SBXMSTRM_HXX

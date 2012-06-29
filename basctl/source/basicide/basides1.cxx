@@ -19,12 +19,6 @@
 
 #define _SOLAR__PRIVATE 1
 
-#define SI_NOCONTROL
-#define SI_NOSBXCONTROLS
-#define SI_NOITEMS
-#define SI_NODRW
-#define _VCTRLS_HXX
-
 #include "basidesh.hrc"
 #include "helpid.hrc"
 

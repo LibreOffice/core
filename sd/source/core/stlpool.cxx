@@ -60,9 +60,6 @@
 #include <editeng/adjitem.hxx>
 #include <svl/itempool.hxx>
 
-#define _SDR_POSITIVE
-#define _SDR_ITEMS
-
 #include "stlpool.hxx"
 #include "sdresid.hxx"
 #include "stlsheet.hxx"

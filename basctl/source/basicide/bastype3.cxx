@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _SI_NOSBXCONTROLS
-
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>

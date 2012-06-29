@@ -24,7 +24,6 @@
 #include <memory>
 #include "tools/solar.h"
 
-#define _SVICNVW_HXX
 #include <svtools/svtreebx.hxx>
 #include <svl/lstner.hxx>
 #include <basic/sbstar.hxx>
