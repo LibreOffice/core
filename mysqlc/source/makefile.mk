@@ -164,11 +164,11 @@ SHL1STDLIBS= \
         $(SALHELPERLIB)             \
         $(CPPUHELPERLIB)
 
-SHL1USE_EXPORTS = name
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1RPATH=OXT
 DEF1NAME=	$(SHL1TARGET)
+DEF1EXPORTFILE=	exports.dxp
 
 # create Extension -----------------------------
 
