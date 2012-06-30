@@ -47,7 +47,7 @@
 #include <basic/sbstar.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/xlineit0.hxx>
-
+#include <svx/graphichelper.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoattr.hxx>
@@ -936,11 +936,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
-                SdrGrafObj *pGrafObj = dynamic_cast< SdrGrafObj* >( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
-                if(pGrafObj )
+                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+                if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape( pGrafObj->getUnoShape(), com::sun::star::uno::UNO_QUERY );
-                    SdGRFFilter::SaveGraphic( xShape );
+                    GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+                    {
+                        GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), String("") );
+                    }
                 }
             }
             Cancel();

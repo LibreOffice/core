@@ -173,7 +173,6 @@ void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     bool bEnable = false;
-    printf("ZO!\n");
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();

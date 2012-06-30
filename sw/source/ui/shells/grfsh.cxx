@@ -71,6 +71,7 @@
 #include <shells.hrc>
 #include <popup.hrc>
 #include <svx/extedit.hxx>
+#include <svx/graphichelper.hxx>
 #define SwGrfShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
@@ -119,7 +120,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             {
                 String sGrfNm, sFilterNm;
                 rSh.GetGrfNms( &sGrfNm, &sFilterNm );
-                ExportGraphic( *pGraphic, sGrfNm );
+                GraphicHelper::ExportGraphic( *pGraphic, sGrfNm );
             }
         }
         break;

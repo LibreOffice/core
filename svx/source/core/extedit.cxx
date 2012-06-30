@@ -23,6 +23,7 @@
  */
 
 #include <svx/extedit.hxx>
+#include <svx/graphichelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <osl/file.hxx>
@@ -96,37 +97,6 @@ void ExternalToolEdit::threadWorker(void* pThreadData)
     xSystemShellExecute->execute( pData->m_aFileName, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
 }
 
-
-void GetPreferedExtension( String &rExt, const Graphic &rGrf )
-{
-    // then propose the "best" filter using the native-info, if applicable
-    const sal_Char* pExt = "png";
-    switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
-    {
-        case GFX_LINK_TYPE_NATIVE_GIF:
-            pExt = "gif";
-            break;
-        case GFX_LINK_TYPE_NATIVE_TIF:
-            pExt = "tif";
-            break;
-        case GFX_LINK_TYPE_NATIVE_WMF:
-            pExt = "wmf";
-            break;
-        case GFX_LINK_TYPE_NATIVE_MET:
-            pExt = "met";
-            break;
-        case GFX_LINK_TYPE_NATIVE_PCT:
-            pExt = "pct";
-            break;
-        case GFX_LINK_TYPE_NATIVE_JPG:
-            pExt = "jpg";
-            break;
-        default:
-            break;
-    }
-    rExt.AssignAscii( pExt );
-}
-
 void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
 {
     //Get the graphic from the GraphicObject
@@ -135,7 +105,7 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
 
     //get the Preferred File Extension for this graphic
     String fExtension;
-    GetPreferedExtension(fExtension, aGraphic);
+    GraphicHelper::GetPreferedExtension(fExtension, aGraphic);
 
     //Create the temp File
     rtl::OUString tempFileBase, tempFileName;

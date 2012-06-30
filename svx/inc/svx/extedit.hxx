@@ -29,7 +29,7 @@
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
 #include <vcl/timer.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SVX_DLLPUBLIC ExternalToolEdit
 {

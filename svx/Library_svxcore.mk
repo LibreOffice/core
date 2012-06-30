@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -93,6 +93,7 @@ $(eval $(call gb_Library_use_external,svxcore,icuuc))
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/core/coreservices \
     svx/source/core/extedit \
+    svx/source/core/graphichelper \
     svx/source/customshapes/EnhancedCustomShape2d \
     svx/source/customshapes/EnhancedCustomShapeGeometry \
     svx/source/customshapes/EnhancedCustomShapeTypeNames \
