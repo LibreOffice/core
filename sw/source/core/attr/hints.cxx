@@ -26,12 +26,12 @@
  *
  ************************************************************************/
 
-#include <hints.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/scripttypeitem.hxx>
 #include <hintids.hxx>
-#include <swtypes.hxx>
+#include <hints.hxx>
 #include <ndtxt.hxx>
+#include <swtypes.hxx>
 
 SwFmtChg::SwFmtChg( SwFmt* pFmt )
     : SwMsgPoolItem( RES_FMT_CHG ), pChangedFmt( pFmt )

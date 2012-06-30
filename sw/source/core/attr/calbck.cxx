@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#include <hintids.hxx>          // contains RES_.. IDs
 #include <frame.hxx>
+#include <hintids.hxx>          // contains RES_.. IDs
 #include <hints.hxx>
 #include <swcache.hxx>          // mba: get rid of that dependency
 #include <swfntcch.hxx>         // mba: get rid of that dependency

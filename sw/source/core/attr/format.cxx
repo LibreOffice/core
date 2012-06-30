@@ -26,15 +26,15 @@
  *
  ************************************************************************/
 
-#include <hintids.hxx>
+#include <doc.hxx>
+#include <fmtcolfunc.hxx>
 #include <frame.hxx>
 #include <format.hxx>
+#include <hintids.hxx>
 #include <hints.hxx>
-#include <doc.hxx>
 #include <paratr.hxx>
-#include <swcache.hxx>
-#include <fmtcolfunc.hxx>
 #include <rtl/strbuf.hxx>
+#include <swcache.hxx>
 
 TYPEINIT1( SwFmt, SwClient );
 

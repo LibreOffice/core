@@ -26,24 +26,24 @@
  *
  ************************************************************************/
 
-#include <hintids.hxx>
-#include <svl/whiter.hxx>
+#include <cellatr.hxx>
+#include <charfmt.hxx>
+#include <cmdid.h>
+#include <doc.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/bolnitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <svx/xtable.hxx>
 #include <fmtpdsc.hxx>
-#include <pagedesc.hxx>
-#include <charfmt.hxx>
-#include <doc.hxx>
-#include <node.hxx>
-#include <paratr.hxx>
-#include <cellatr.hxx>
-#include <cmdid.h>
+#include <hintids.hxx>
 #include <istyleaccess.hxx>
-#include <numrule.hxx>
 #include <list.hxx>
+#include <node.hxx>
+#include <numrule.hxx>
+#include <pagedesc.hxx>
+#include <paratr.hxx>
+#include <svl/whiter.hxx>
+#include <svx/xtable.hxx>
 
 // ----------
 // SwAttrPool

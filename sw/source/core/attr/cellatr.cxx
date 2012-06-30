@@ -26,18 +26,18 @@
  *
  ************************************************************************/
 
-#include <float.h>
-#include <rtl/math.hxx>
-#include <hintids.hxx>
-#include <cellatr.hxx>
 #include <calc.hxx>
-#include <format.hxx>
+#include <cellatr.hxx>
 #include <doc.hxx>
-#include <swtable.hxx>
-#include <node.hxx>
+#include <float.h>
+#include <format.hxx>
+#include <hintids.hxx>
 #include <hints.hxx>
+#include <node.hxx>
 #include <rolbck.hxx>
+#include <rtl/math.hxx>
 #include <switerator.hxx>
+#include <swtable.hxx>
 
 // -----------------
 // SwTblBoxNumFormat
