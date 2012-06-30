@@ -214,6 +214,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
         const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
         rtl::OUString aStyleName = pEntry->GetStyle();
         maLbStyle.SelectEntry(aStyleName);
+        StyleSelectHdl(NULL);
         ScConditionMode eMode = pEntry->GetOperation();
         maLbType.SelectEntryPos(1);
         maEdVal1.SetText(pEntry->GetExpression(maPos, 0));
