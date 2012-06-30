@@ -107,6 +107,21 @@ class TubeContacts : public ModelessDialog
         }
     }
 
+    void StartGroupSession()
+    {
+        AccountContact *pAC = NULL;
+        if (maList.FirstSelected())
+            pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
+        if (pAC)
+        {
+            TpAccount* pAccount = pAC->mpAccount;
+            fprintf( stderr, "picked %s\n", tp_account_get_display_name( pAccount ) );
+            TeleManager *pManager = TeleManager::get();
+            if (!pManager->startGroupSession( pAccount, rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") ))
+                fprintf( stderr, "could not start group session\n" );
+        }
+    }
+
 public:
     TubeContacts() :
         ModelessDialog( NULL, ScResId( RID_SCDLG_CONTACTS ) ),
@@ -188,7 +203,11 @@ public:
 
 IMPL_LINK_NOARG( TubeContacts, BtnConnectHdl )
 {
+#if 0
     StartBuddySession();
+#else
+    StartGroupSession();
+#endif
     Close();
     return 0;
 }

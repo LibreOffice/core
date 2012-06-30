@@ -101,8 +101,10 @@ public:
      */
     ContactList*            getContactList() const;
 
-#if 0
     /** Start a group session in a MUC.
+
+        @param pAccount
+            The account to use. This must be a valid Jabber account.
 
         @param rConferenceRoom
             The MUC to be created/joined, e.g. "LibreOffice". If empty, the
@@ -113,9 +115,9 @@ public:
             empty, only the conference's UUID is used and rConferenceRoom is
             ignored, hopefully resulting in a local DBus tube.
      */
-    bool                    startGroupSession( const rtl::OUString& rConferenceRoom,
+    bool                    startGroupSession( TpAccount *pAccount,
+                                               const rtl::OUString& rConferenceRoom,
                                                const rtl::OUString& rConferenceServer );
-#endif
 
     /** Start a session with a buddy.
 

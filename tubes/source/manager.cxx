@@ -442,8 +442,6 @@ bool TeleManager::connect()
 
     /* TODO: setup filters for LibreOfficeCalc, LibreOfficeWriter, ... */
 
-/* FIXME: once we can handle MUCs, this is additional to buddy channels! */
-#if 0
     // Setup client handler for MUC channels with our service.
     tp_base_client_take_handler_filter( pImpl->mpClient,
             tp_asv_new(
@@ -451,7 +449,6 @@ bool TeleManager::connect()
                 TP_PROP_CHANNEL_TARGET_HANDLE_TYPE, G_TYPE_UINT, TP_HANDLE_TYPE_ROOM,
                 TP_PROP_CHANNEL_TYPE_DBUS_TUBE_SERVICE_NAME, G_TYPE_STRING, getFullServiceName().getStr(),
                 NULL));
-#endif
 
     if (!tp_base_client_register( pImpl->mpClient, &pError))
     {
@@ -497,18 +494,16 @@ bool TeleManager::connect()
 }
 
 
-#if 0
 /* TODO: factor out common code with startBuddySession() */
-bool TeleManager::startGroupSession( const rtl::OUString& rUConferenceRoom, const rtl::OUString& rUConferenceServer )
+bool TeleManager::startGroupSession( TpAccount *pAccount,
+                                     const rtl::OUString& rUConferenceRoom,
+                                     const rtl::OUString& rUConferenceServer )
 {
     INFO_LOGGER( "TeleManager::startGroupSession");
 
-    if (!getMyAccount())
-        return false;
-
     OString aSessionId( TeleManager::createUuid());
 
-    TeleConferencePtr pConference( new TeleConference( this, NULL, aSessionId));
+    TeleConferencePtr pConference( new TeleConference( this, NULL, NULL, aSessionId));
     maConferences.push_back( pConference);
 
     /* TODO: associate the document with this session and conference */
@@ -528,10 +523,9 @@ bool TeleManager::startGroupSession( const rtl::OUString& rUConferenceRoom, cons
         /* FIXME: else? bail out? we have only a session ID without server then */
     }
     OString aTarget( aBuf.makeStringAndClear());
-    pConference->setTarget( aTarget);
 
     SAL_INFO( "tubes", "TeleManager::startGroupSession: creating channel request from "
-            << maAccountID.getStr() << " to " << aTarget.getStr());
+            << tp_account_get_path_suffix( pAccount ) << " to " << aTarget.getStr() );
 
     // MUC request
     GHashTable* pRequest = tp_asv_new(
@@ -542,11 +536,13 @@ bool TeleManager::startGroupSession( const rtl::OUString& rUConferenceRoom, cons
             NULL);
 
     TpAccountChannelRequest * pChannelRequest = tp_account_channel_request_new(
-            mpAccount, pRequest, TP_USER_ACTION_TIME_NOT_USER_ACTION);
-    g_hash_table_unref( pRequest);
+            pAccount, pRequest, TP_USER_ACTION_TIME_NOT_USER_ACTION);
     SAL_WARN_IF( !pChannelRequest, "tubes", "TeleManager::startGroupSession: no channel");
     if (!pChannelRequest)
+    {
+        g_hash_table_unref( pRequest);
         return false;
+    }
 
     setChannelReadyHandlerInvoked( false);
 
@@ -555,9 +551,11 @@ bool TeleManager::startGroupSession( const rtl::OUString& rUConferenceRoom, cons
 
     iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
 
+    g_object_unref( pChannelRequest);
+    g_hash_table_unref( pRequest);
+
     return pConference->getChannel() != NULL && pConference->isTubeOpen();
 }
-#endif
 
 
 void TeleManager::ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
