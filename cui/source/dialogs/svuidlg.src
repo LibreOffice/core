@@ -733,9 +733,3 @@ String MD_INSERT_OBJECT_IFRAME
 {
     Text [ en-US ] = "Select File for Floating Frame" ;
 };
-
-String STR_EDIT_APPLET
-{
-    Text [ en-US ] = "Edit Applet" ;
-};
-

@@ -18,27 +18,10 @@
  */
 
 //  Strings
-#define STR_INS_OBJECT                          32000
-#define STR_INS_OBJECT_ICON                     32001
-#define STR_INS_FILE                            32002
-#define STR_INS_FILE_ICON                       32003
-#define STR_INS_FILE_LINK                       32004
-#define STR_INS_FILE_ICON_LINK                  32005
-#define STR_PASTE                               32012
-#define STR_ERROR_DDE                           32013
 #define STR_ERROR_OBJNOCREATE                   32014
 #define STR_ERROR_OBJNOCREATE_FROM_FILE         32015
-#define STR_VERB_OPEN                           32016
-#define STR_PLUGIN_CANT_SHOW                    32017
 #define STR_ERROR_OBJNOCREATE_PLUGIN            32018
-#define STR_INS_PLUGIN                          32019
-#define STR_CONVERT_TO                          32010
-#define STR_ACTIVATE_AS                         32021
-#define STR_QUERYUPDATELINKS                    32022
-#define STR_INS_APPLET                          32023
-#define STR_VERB_PROPS                          32025
 #define STR_FURTHER_OBJECT                      32026
-#define STR_EDIT_APPLET                         32029
 #define STR_UNKNOWN_SOURCE                      32027
 
 #define BMP_PLUGIN                      32000

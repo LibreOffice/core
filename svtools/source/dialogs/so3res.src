@@ -176,65 +176,9 @@ Resource RID_SO_ERRCTX
         Text [ en-US ] = "$(ERR) activating object" ;
     };
 };
-String STR_INS_OBJECT
-{
-    Text [ en-US ] = "Inserts a new %1-Object into your document." ;
-};
-String STR_INS_OBJECT_ICON
-{
-    Text [ en-US ] = "Inserts a new %1-Object into your document as a symbol." ;
-};
-String STR_INS_FILE
-{
-    Text [ en-US ] = "Inserts the contents of the file into your document to enable later editing in the original application." ;
-};
-String STR_INS_PLUGIN
-{
-    Text [ en-US ] = "Inserts a plug-in object into your document with a reference to the plug-in data. When the object is activated, the plug-in is automatically executed." ;
-};
 String STR_INS_APPLET
 {
     Text [ en-US ] = "Inserts an applet object into your document. When the object is activated, the applet is automatically executed." ;
-};
-String STR_INS_FILE_ICON
-{
-    Text [ en-US ] = "Inserts the contents of the file as an icon into your document." ;
-};
-String STR_INS_FILE_LINK
-{
-    Text [ en-US ] = "Inserts the contents of the file into your document and creates a link to the source file. Changes made to the source file will be reflected in your document." ;
-};
-String STR_INS_FILE_ICON_LINK
-{
-    Text [ en-US ] = "Inserts an icon into your document representing the file. Changes made to the source file will be reflected in your document." ;
-};
-String STR_PASTE
-{
-    Text [ en-US ] = "Pastes the contents of the clipboard as %1 in your document." ;
-};
-String STR_CONVERT_TO
-{
-    Text [ en-US ] = "Converts the selected %1object to the object type %2." ;
-};
-String STR_ACTIVATE_AS
-{
-    Text [ en-US ] = "All objects of type %1 are activated as %2, but not converted" ;
-};
-String STR_VERB_OPEN
-{
-    Text [ en-US ] = "~Open" ;
-};
-String STR_VERB_PROPS
-{
-    Text [ en-US ] = "~Properties" ;
-};
-String STR_PLUGIN_CANT_SHOW
-{
-    Text [ en-US ] = "Plug-in % cannot be displayed." ;
-};
-String STR_ERROR_DDE
-{
-    Text [ en-US ] = "DDE link to % for % area % are not available." ;
 };
 String STR_ERROR_OBJNOCREATE
 {
@@ -248,17 +192,9 @@ String STR_ERROR_OBJNOCREATE_PLUGIN
 {
     Text [ en-US ] = "Plug-in from document % could not be inserted." ;
 };
-String STR_QUERYUPDATELINKS
-{
-    Text [ en-US ] = "Update all links?" ;
-};
 String STR_FURTHER_OBJECT
 {
     Text [ en-US ] = "Further objects" ;
-};
-String STR_EDIT_APPLET
-{
-    Text [ en-US ] = "Edit Applet" ;
 };
 
 Bitmap BMP_PLUGIN
