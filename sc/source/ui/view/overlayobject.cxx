@@ -30,7 +30,6 @@
 #include "overlayobject.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/lineinfo.hxx"
-#include "vcl/salbtype.hxx"
 #include "vcl/window.hxx"
 #include "tools/fract.hxx"
 #include "basegfx/range/b2drange.hxx"

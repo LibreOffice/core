@@ -30,7 +30,6 @@
 #include <vcl/outdev.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/window.hxx>
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>

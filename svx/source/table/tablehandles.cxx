@@ -31,7 +31,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/hatch.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

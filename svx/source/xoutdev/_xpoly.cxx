@@ -30,6 +30,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
+#include <tools/helpers.hxx>
 
 #include <svx/xpoly.hxx>
 #include "xpolyimp.hxx"
@@ -37,7 +38,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <vcl/salbtype.hxx>     // FRound
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 

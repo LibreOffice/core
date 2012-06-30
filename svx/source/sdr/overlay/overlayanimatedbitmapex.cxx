@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

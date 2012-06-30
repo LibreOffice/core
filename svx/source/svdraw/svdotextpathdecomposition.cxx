@@ -32,7 +32,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <vcl/salbtype.hxx>
 #include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

@@ -65,7 +65,7 @@
 #include <svx/svdetc.hxx>
 #include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <tools/helpers.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/xlinjoit.hxx>

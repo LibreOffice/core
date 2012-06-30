@@ -27,8 +27,9 @@
  ************************************************************************/
 
 #include <tools/debug.hxx>
-#include <vcl/salbtype.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/regband.hxx>
+#include <osl/diagnose.hxx>
 
 #include <algorithm>
 

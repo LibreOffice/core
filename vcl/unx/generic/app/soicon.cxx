@@ -32,7 +32,6 @@
 #include <unx/salbmp.h>
 #include <unx/soicon.hxx>
 
-#include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/graph.hxx>

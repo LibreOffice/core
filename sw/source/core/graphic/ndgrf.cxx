@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <hintids.hxx>
-#include <vcl/salbtype.hxx>             // FRound
+#include <tools/helpers.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/undo.hxx>
 #include <svl/fstathelper.hxx>

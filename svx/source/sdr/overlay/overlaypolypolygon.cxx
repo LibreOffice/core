@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
