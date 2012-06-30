@@ -13,6 +13,7 @@
 #include <sfx2/thumbnailview.hxx>
 #include <vcl/image.hxx>
 
+class Edit;
 class SfxDocumentTemplates;
 class TemplateViewItem;
 
@@ -28,6 +29,8 @@ public:
 
     sal_uInt16 getRegionId () const { return mnRegionId; }
 
+    const rtl::OUString& getRegionName () const { return maFolderName; }
+
     virtual void Paint (const Rectangle &rRect);
 
     void InsertItem (const TemplateViewItem *pItem);
@@ -36,11 +39,17 @@ public:
 
     void setDblClickHdl (const Link &rLink) { maDblClickHdl = rLink; }
 
+    void setChangeNameHdl (const Link &rLink) { maChangeNameHdl = rLink; }
+
 protected:
+
+    virtual void Resize ();
 
     virtual void MouseButtonDown (const MouseEvent &rMEvt);
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
+
+    DECL_LINK (ChangeNameHdl, void*);
 
 private:
 
@@ -49,6 +58,9 @@ private:
     rtl::OUString maFolderName;
     SfxDocumentTemplates *mpDocTemplates;
     Link maDblClickHdl;
+    Link maChangeNameHdl;
+
+    Edit *mpEditName;
 };
 
 #endif // TEMPLATEVIEW_HXX

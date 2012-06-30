@@ -11,6 +11,7 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
@@ -20,8 +21,12 @@
 #include <sfx2/doctempl.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templateviewitem.hxx>
+#include <vcl/edit.hxx>
 
 #include "templateview.hrc"
+
+#define EDIT_WIDTH 180
+#define EDIT_HEIGHT 20
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -32,9 +37,12 @@ TemplateView::TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates)
     : ThumbnailView(pParent,WB_VSCROLL),
       maCloseImg(SfxResId(IMG_TEMPLATE_VIEW_CLOSE)),
       mnRegionId(0),
-      mpDocTemplates(pTemplates)
+      mpDocTemplates(pTemplates),
+      mpEditName(new Edit(this, WB_BORDER | WB_HIDE))
 {
     mnHeaderHeight = 30;
+
+    mpEditName->SetSizePixel(Size(EDIT_WIDTH,EDIT_HEIGHT));
 }
 
 TemplateView::~TemplateView ()
@@ -45,6 +53,7 @@ void TemplateView::setRegionId (const sal_uInt16 nRegionId)
 {
     mnRegionId = nRegionId;
     maFolderName = mpDocTemplates->GetRegionName(nRegionId);
+    mpEditName->SetText(rtl::OUString());
 }
 
 void TemplateView::Paint (const Rectangle &rRect)
@@ -129,10 +138,46 @@ void TemplateView::InsertItems (const std::vector<TemplateViewItem*> &rTemplates
     Invalidate();
 }
 
+void TemplateView::Resize()
+{
+    // Set editbox size and position
+    Size aEditSize = mpEditName->GetSizePixel();
+    Size aWinSize = GetOutputSize();
+
+    Point aPos;
+    aPos.X() = (aWinSize.getWidth() - aEditSize.getWidth())/2;
+    aPos.Y() = (mnHeaderHeight - aEditSize.getHeight())/2;
+
+    mpEditName->SetPosPixel(aPos);
+
+    ThumbnailView::Resize();
+}
+
 void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
 {
     if (rMEvt.IsLeft())
     {
+        // Check if we are editing title
+        if (mpEditName->IsVisible())
+        {
+            mpEditName->Show(false);
+
+            // Update name if its not empty
+            rtl::OUString aTmp = mpEditName->GetText();
+
+            if (!aTmp.isEmpty())
+            {
+                PostUserEvent(LINK(this,TemplateView,ChangeNameHdl));
+            }
+            else
+            {
+                mpEditName->SetText(rtl::OUString());
+                Invalidate();
+            }
+
+            return;
+        }
+
         Size aWinSize = GetOutputSizePixel();
         Size aImageSize = maCloseImg.GetSizePixel();
 
@@ -147,6 +192,20 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
             Show(false);
             Clear();
         }
+        else
+        {
+            drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+
+            float fTextWidth = aTextDev.getTextWidth(maFolderName,0,maFolderName.getLength());
+
+            aPos.X() = (aWinSize.getWidth() - fTextWidth)/2;
+            aPos.Y() = (mnHeaderHeight - aTextDev.getTextHeight())/2;
+
+            Rectangle aTitleRect(aPos,Size(fTextWidth,aTextDev.getTextHeight()));
+
+            if (aTitleRect.IsInside(rMEvt.GetPosPixel()))
+                mpEditName->Show();
+        }
     }
 
     ThumbnailView::MouseButtonDown(rMEvt);
@@ -155,6 +214,20 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
 void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
 {
     maDblClickHdl.Call(pItem);
+}
+
+IMPL_LINK_NOARG(TemplateView, ChangeNameHdl)
+{
+    rtl::OUString aTmp = maFolderName;
+    maFolderName = mpEditName->GetText();
+
+    if (!maChangeNameHdl.Call(this))
+        maFolderName = aTmp;
+
+    mpEditName->SetText(rtl::OUString());
+
+    Invalidate();
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -262,6 +262,7 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
                                   ITEM_PADDING);
 
     mpItemView->setItemStateHdl(LINK(this,TemplateFolderView,TVTemplateStateHdl));
+    mpItemView->setChangeNameHdl(LINK(this,TemplateFolderView,ChangeNameHdl));
 }
 
 TemplateFolderView::~TemplateFolderView()
@@ -479,6 +480,26 @@ IMPL_LINK(TemplateFolderView, TVTemplateStateHdl, const ThumbnailViewItem*, pIte
     return 0;
 }
 
+IMPL_LINK(TemplateFolderView, ChangeNameHdl, TemplateView*, pView)
+{
+    sal_uInt16 nRegionId = pView->getRegionId();
+    sal_uInt16 nItemId = nRegionId + 1;
+
+    if (!mpDocTemplates->SetName(pView->getRegionName(),nRegionId,USHRT_MAX))
+        return false;
+
+    for (size_t i = 0; i < mItemList.size(); ++i)
+    {
+        if (mItemList[i]->mnId == nItemId)
+        {
+            mItemList[i]->maText = pView->getRegionName();
+            mItemList[i]->calculateItemsPosition(mpItemAttrs->nMaxTextLenght);
+            Invalidate();
+            break;
+        }
+    }
+
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
-
