@@ -88,7 +88,8 @@ PATCH_FILES = \
     patches/nss-linux3.patch \
     patches/clang_add_nsCaseInsensitiveStringComparator_default_constructor.patch \
     patches/clang_missing_this_pointers.patch \
-    patches/seamonkey-1.1.14.source-macosx10.6and7.patch
+    patches/seamonkey-1.1.14.source-macosx10.6and7.patch \
+    patches/ssl-linux-no_as_needed_linker_option.patch
 
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
@@ -149,6 +150,14 @@ MOZILLA_CONFIGURE_FLAGS += \
 .IF "$(OS)"=="MACOSX"
 # help the linker to resolve @loader_path to the solver (needed at least for 10.4 / XCode 2.5)
 LDFLAGS+=$(foreach,name,$(echo nspr4 nss3 nssutil3 plc4 plds4) -Wl,-dylib_file,@loader_path/lib$(name).dylib:$(OUTDIR)/lib/lib$(name).dylib)
+.ENDIF
+.ENDIF
+
+# how can we do it only on Debian/Ubuntu?
+.IF "$(OS)"=="LINUX"
+.IF "$(COM)"=="GCC"
+LDFLAG_NO_AS_NEEDED=-Wl,--no-as-needed
+.EXPORT : LDFLAG_NO_AS_NEEDED
 .ENDIF
 .ENDIF
 
