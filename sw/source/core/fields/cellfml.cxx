@@ -311,7 +311,7 @@ SwTableFormula::~SwTableFormula()
 {
 }
 
-void SwTableFormula::_MakeFormel( const SwTable& rTbl, String& rNewStr,
+void SwTableFormula::_MakeFormula( const SwTable& rTbl, String& rNewStr,
                     String& rFirstBox, String* pLastBox, void* pPara ) const
 {
     SwTblCalcPara* pCalcPara = (SwTblCalcPara*)pPara;
@@ -651,7 +651,7 @@ String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
 
                     // beim Bauen der Formel ist der TabellenName unerwuenscht
                     //JP 22.02.99: der CAST muss fuer den Linux-Compiler sein
-                    if( fnFormel != (FnScanFormel)&SwTableFormula::_MakeFormel )
+                    if( fnFormel != (FnScanFormel)&SwTableFormula::_MakeFormula )
                         aStr += sTblNm;
                     nStt = nTrenner;
 
