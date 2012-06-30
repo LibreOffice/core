@@ -146,7 +146,7 @@ function getDefaultKeyCodeDictionary()
 
     // slide mode
     keyCodeDict[SLIDE_MODE][LEFT_KEY]
-        = function() { return dispatchEffects(-1); };
+        = function() { return aSlideShow.rewindEffect(); };
     keyCodeDict[SLIDE_MODE][RIGHT_KEY]
         = function() { return dispatchEffects(1); };
     keyCodeDict[SLIDE_MODE][UP_KEY]
@@ -1433,7 +1433,7 @@ var NAVDBG = new DebugPrinter();
 NAVDBG.off();
 
 var ANIMDBG = new DebugPrinter();
-ANIMDBG.on();
+ANIMDBG.off();
 
 var aRegisterEventDebugPrinter = new DebugPrinter();
 aRegisterEventDebugPrinter.off();
@@ -3126,6 +3126,9 @@ function bind( aObject, aMethod )
 
 function bind2( aFunction )
 {
+    if( !aFunction  )
+        log( 'bind2: passed function is not valid.' );
+
     var aBoundArgList = arguments;
 
     var aResultFunction = null;
@@ -5272,6 +5275,7 @@ BaseNode.prototype.getParentNode = function()
 
 BaseNode.prototype.init = function()
 {
+    this.DBG( this.callInfo( 'init' ) );
     if( ! this.checkValidNode() )
         return false;
     if( this.aActivationEvent )
@@ -5652,7 +5656,6 @@ function AnimationBaseNode( aAnimElem, aParentNode, aNodeContext )
     this.bIsContainer = false;
     this.aTargetElement = null;
     this.aAnimatedElement = null;
-    this.nAnimatedElementOriginalState = 0;
     this.aActivity = null;
 
     this.nMinFrameCount = undefined;
@@ -5740,7 +5743,7 @@ AnimationBaseNode.prototype.activate_st = function()
 {
     if( this.aActivity )
     {
-        this.nAnimatedElementOriginalState = this.getAnimatedElement().getCurrentState();
+        this.saveStateOfAnimatedElement();
         this.aActivity.setTargets( this.getAnimatedElement() );
         this.getContext().aActivityQueue.addActivity( this.aActivity );
     }
@@ -5813,12 +5816,13 @@ AnimationBaseNode.prototype.hasPendingAnimation = function()
 
 AnimationBaseNode.prototype.saveStateOfAnimatedElement = function()
 {
-    this.getAnimatedElement().saveState();
+    this.getAnimatedElement().saveState( this.getId() );
 };
 
 AnimationBaseNode.prototype.removeEffect = function()
 {
-    this.getAnimatedElement().setTo( this.nAnimatedElementOriginalState );
+    log( 'AnimationBaseNode.removeEffect invoked' );
+    this.getAnimatedElement().setTo( this.getId() );
 };
 
 AnimationBaseNode.prototype.getTargetElement = function()
@@ -6268,7 +6272,15 @@ BaseContainerNode.prototype.repeat = function()
 
 BaseContainerNode.prototype.removeEffect = function()
 {
-    this.forEachChildNode( mem_fn( 'removeEffect' ), FROZEN_NODE | ENDED_NODE );
+    var nChildrenCount = this.aChildrenArray.length;
+    if( nChildrenCount == 0 )
+        return;
+    for( var i = nChildrenCount - 1; i >= 0; --i )
+    {
+        if( ( this.aChildrenArray[i].getState() & FROZEN_NODE | ENDED_NODE ) == 0 )
+            continue;
+        this.aChildrenArray[i].removeEffect();
+    }
 };
 
 BaseContainerNode.prototype.saveStateOfAnimatedElement = function()
@@ -6383,7 +6395,10 @@ function SequentialTimeContainer( aAnimElem, aParentNode, aNodeContext )
     SequentialTimeContainer.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
 
     this.sClassName = 'SequentialTimeContainer';
+    this.bIsRewinding = false;
     this.aCurrentSkipEvent = null;
+    this.aRewindCurrentEffectEvent = null;
+    this.aRewindLastEffectEvent = null;
 }
 extend( SequentialTimeContainer, BaseContainerNode );
 
@@ -6412,6 +6427,10 @@ SequentialTimeContainer.prototype.activate_st = function()
 
 SequentialTimeContainer.prototype.notifyDeactivating = function( aNotifier )
 {
+    // If we are rewinding we have not to resolve the next child.
+    if( this.bIsRewinding )
+        return;
+
     if( this.notifyDeactivatedChild( aNotifier ) )
         return;
 
@@ -6438,6 +6457,7 @@ SequentialTimeContainer.prototype.skipEffect = function( aChildNode )
 {
     if( this.isChildNode( aChildNode ) )
     {
+        this.getContext().aActivityQueue.endAll();
         this.getContext().aTimerEventQueue.forceEmpty();
         var aEvent = makeEvent( bind2( aChildNode.deactivate, aChildNode ) );
         this.getContext().aTimerEventQueue.addEvent( aEvent );
@@ -6448,9 +6468,54 @@ SequentialTimeContainer.prototype.skipEffect = function( aChildNode )
     }
 };
 
-SequentialTimeContainer.prototype.rewindEffect = function( aChildNode )
+SequentialTimeContainer.prototype.rewindCurrentEffect = function( aChildNode )
 {
-    // not implemented
+    if( this.isChildNode( aChildNode ) )
+    {
+        assert( !this.bIsRewinding, 'SequentialTimeContainer.rewindCurrentEffect: is already rewinding.' );
+
+        this.bIsRewinding = true;
+        this.getContext().aTimerEventQueue.forceEmpty();
+        this.getContext().aActivityQueue.clear();
+
+        aChildNode.end();
+        aChildNode.removeEffect();
+        aChildNode.init();
+        this.resolveChild( aChildNode );
+        this.bIsRewinding = false;
+    }
+    else
+    {
+        log( 'SequentialTimeContainer.rewindCurrentEffect: unknown child: ' + aChildNode.getId() );
+    }
+};
+
+SequentialTimeContainer.prototype.rewindLastEffect = function( aChildNode )
+{
+    if( this.isChildNode( aChildNode ) )
+    {
+        assert( !this.bIsRewinding, 'SequentialTimeContainer.rewindLastEffect: is already rewinding.' );
+
+        this.bIsRewinding = true;
+        this.getContext().aTimerEventQueue.forceEmpty();
+        this.getContext().aActivityQueue.clear();
+
+        aChildNode.end();
+        aChildNode.removeEffect();
+        --this.nFinishedChildren;
+        var aPreviousChildNode = this.aChildrenArray[ this.nFinishedChildren ];
+        aPreviousChildNode.removeEffect();
+        aPreviousChildNode.init();
+        // We need to re-initialize it too, because it is in state ENDED now,
+        // and cannot be resolved again later.
+        aChildNode.init();
+        this.resolveChild( aPreviousChildNode );
+        this.bIsRewinding = false;
+    }
+    else
+    {
+        log( 'SequentialTimeContainer.rewindLastEffect: unknown child: ' + aChildNode.getId() );
+    }
 };
 
 SequentialTimeContainer.prototype.resolveChild = function( aChildNode )
@@ -6459,13 +6524,23 @@ SequentialTimeContainer.prototype.resolveChild = function( aChildNode )
 
     if( bResolved && this.isMainSequenceRootNode() )
     {
-        aChildNode.saveStateOfAnimatedElement();
-
         if( this.aCurrentSkipEvent )
             this.aCurrentSkipEvent.dispose();
 
-        this.aCurrentSkipEvent = makeEvent( bind2( this.skipEffect, this, aChildNode ) );
+        this.aCurrentSkipEvent = makeEvent( bind2( SequentialTimeContainer.prototype.skipEffect, this, aChildNode ) );
         this.aContext.aEventMultiplexer.registerSkipEffectEvent( this.aCurrentSkipEvent );
+
+        if( this.aRewindCurrentEffectEvent )
+            this.aRewindCurrentEffectEvent.dispose();
+
+        this.aRewindCurrentEffectEvent = makeEvent( bind2( SequentialTimeContainer.prototype.rewindCurrentEffect, this, aChildNode ) );
+        this.aContext.aEventMultiplexer.registerRewindEffectEvent( this.aRewindCurrentEffectEvent );
+
+        if( this.aRewindLastEffectEvent )
+            this.aRewindLastEffectEvent.dispose();
+
+        this.aRewindLastEffectEvent = makeEvent( bind2( SequentialTimeContainer.prototype.rewindLastEffect, this, aChildNode ) );
+        this.aContext.aEventMultiplexer.registerRewindLastEffectEvent( this.aRewindLastEffectEvent );
     }
     return bResolved;
 };
@@ -8356,7 +8431,7 @@ function AnimatedElement( aElement )
     this.aClipPathContent = null;
 
     this.aPreviousElement = null;
-    this.aStateArray = new Array();
+    this.aStateSet = new Object();
 
     this.eAdditiveMode = ADDITIVE_MODE_REPLACE;
     this.bIsUpdated = true;
@@ -8366,7 +8441,6 @@ function AnimatedElement( aElement )
     this.aICTM = document.documentElement.createSVGMatrix();
 
     this.initElement();
-    //this.aElementArray[0] = this.aActiveElement.cloneNode( true );
 }
 
 AnimatedElement.prototype.initElement = function()
@@ -8377,7 +8451,6 @@ AnimatedElement.prototype.initElement = function()
     this.nScaleFactorY = 1.0;
     this.setCTM();
 
-    this.nCurrentState = -1;
     // add a transform attribute of type matrix
     this.aActiveElement.setAttribute( 'transform', makeMatrixString( 1, 0, 0, 1, 0, 0 ) );
 };
@@ -8437,11 +8510,6 @@ AnimatedElement.prototype.cleanClipPath = function()
 AnimatedElement.prototype.getId = function()
 {
     return this.aActiveElement.getAttribute( 'id' );
-};
-
-AnimatedElement.prototype.getCurrentState = function()
-{
-    return this.nCurrentState;
 };
 
 AnimatedElement.prototype.isUpdated = function()
@@ -8519,46 +8587,34 @@ AnimatedElement.prototype.notifyNextEffectStart = function( nEffectIndex )
 //    ++this.nCurrentState;
 };
 
-AnimatedElement.prototype.saveState = function()
+AnimatedElement.prototype.saveState = function( nAnimationNodeId )
 {
-    ++this.nCurrentState;
-    if( !this.aStateArray[ this.nCurrentState ] )
+    if( !this.aStateSet[ nAnimationNodeId ] )
     {
-        this.aStateArray[ this.nCurrentState ] = new Object();
-        var aState = this.aStateArray[ this.nCurrentState ];
-        aState.aElement = this.aActiveElement.cloneNode( true );
-        aState.nCenterX = this.nCenterX;
-        aState.nCenterY = this.nCenterY;
-        aState.nScaleFactorX = this.nScaleFactorX;
-        aState.nScaleFactorY = this.nScaleFactorY;
+        this.aStateSet[ nAnimationNodeId ] = new Object();
     }
+    var aState = this.aStateSet[ nAnimationNodeId ];
+    aState.aElement = this.aActiveElement.cloneNode( true );
+    aState.nCenterX = this.nCenterX;
+    aState.nCenterY = this.nCenterY;
+    aState.nScaleFactorX = this.nScaleFactorX;
+    aState.nScaleFactorY = this.nScaleFactorY;
+
 };
 
-AnimatedElement.prototype.setToFirst = function()
+AnimatedElement.prototype.setTo = function( nAnimationNodeId )
 {
-    this.setTo( 0 );
-};
-
-AnimatedElement.prototype.setToLast = function()
-{
-    this.setTo( this.aStateArray.length - 1 );
-};
-
-AnimatedElement.prototype.setTo = function( nNewState )
-{
-    if( !this.aStateArray[ nNewState ] )
+    if( !this.aStateSet[ nAnimationNodeId ] )
     {
         log( 'AnimatedElement(' + this.getId() + ').setTo: state '
-                 + nNewState + ' is not valid' );
+                 +nAnimationNodeId  + ' is not valid' );
         return false;
     }
 
-    var aState = this.aStateArray[ nNewState ];
+    var aState = this.aStateSet[ nAnimationNodeId ];
     var bRet = this.setToElement( aState.aElement );
     if( bRet )
     {
-        this.nCurrentState = nNewState;
-
         this.nCenterX = aState.nCenterX;
         this.nCenterY = aState.nCenterY;
         this.nScaleFactorX = aState.nScaleFactorX;
@@ -9600,6 +9656,8 @@ function EventMultiplexer( aTimerEventQueue )
     this.aTimerEventQueue = aTimerEventQueue;
     this.aEventMap = new Object();
     this.aSkipEffectEvent = null;
+    this.aRewindEffectEvent = null;
+    this.aRewindLastEffectEvent = null;
 }
 
 
@@ -9646,6 +9704,34 @@ EventMultiplexer.prototype.notifySkipEffectEvent = function()
     {
         this.aTimerEventQueue.addEvent( this.aSkipEffectEvent );
         this.aSkipEffectEvent = null;
+    }
+};
+
+EventMultiplexer.prototype.registerRewindEffectEvent = function( aEvent )
+{
+    this.aRewindEffectEvent = aEvent;
+};
+
+EventMultiplexer.prototype.notifyRewindEffectEvent = function()
+{
+    if( this.aRewindEffectEvent )
+    {
+        this.aTimerEventQueue.addEvent( this.aRewindEffectEvent );
+        this.aRewindEffectEvent = null;
+    }
+};
+
+EventMultiplexer.prototype.registerRewindLastEffectEvent = function( aEvent )
+{
+    this.aRewindLastEffectEvent = aEvent;
+};
+
+EventMultiplexer.prototype.notifyRewindLastEffectEvent = function()
+{
+    if( this.aRewindLastEffectEvent )
+    {
+        this.aTimerEventQueue.addEvent( this.aRewindLastEffectEvent );
+        this.aRewindLastEffectEvent = null;
     }
 };
 
@@ -11111,6 +11197,7 @@ function SlideShow()
     this.bIsIdle = true;
     this.bIsEnabled = true;
     this.bIsSkipping = false;
+    this.bIsRewinding = false;
     this.bNoSlideTransition = false;
 }
 
@@ -11237,7 +11324,7 @@ SlideShow.prototype.nextEffect = function()
 
 SlideShow.prototype.skipCurrentEffect = function()
 {
-    if( this.bIsSkipping )
+    if( this.bIsSkipping || this.bIsRewinding )
         return;
 
     this.bIsSkipping = true;
@@ -11246,9 +11333,28 @@ SlideShow.prototype.skipCurrentEffect = function()
     this.bIsSkipping = false;
 };
 
+SlideShow.prototype.rewindEffect = function()
+{
+    if( this.bIsSkipping || this.bIsRewinding )
+        return true;
+
+    this.bIsRewinding = true;
+    if( this.isRunning() )
+    {
+        this.aEventMultiplexer.notifyRewindEffectEvent();
+    }
+    else
+    {
+        this.aEventMultiplexer.notifyRewindLastEffectEvent();
+    }
+    --this.nCurrentEffect;
+    this.update();
+    this.bIsRewinding = false;
+};
+
 SlideShow.prototype.skipEffect = function()
 {
-    if( this.bIsSkipping )
+    if( this.bIsSkipping || this.bIsRewinding )
         return true;
 
     if( this.isRunning() )
@@ -11274,15 +11380,15 @@ SlideShow.prototype.skipEffect = function()
     return true;
 };
 
-SlideShow.prototype.previousEffect = function()
-{
-    if( this.nCurrentEffect <= 0 )
-        return false;
-    this.eDirection = BACKWARD;
-    this.aNextEffectEventArray.at( this.nCurrentEffect ).fire();
-    --this.nCurrentEffect;
-    return true;
-};
+//SlideShow.prototype.previousEffect = function()
+//{
+//    if( this.nCurrentEffect <= 0 )
+//        return false;
+//    this.eDirection = BACKWARD;
+//    this.aNextEffectEventArray.at( this.nCurrentEffect ).fire();
+//    --this.nCurrentEffect;
+//    return true;
+//};
 
 SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
 {
@@ -11516,12 +11622,12 @@ NextEffectEventArray.prototype.appendEvent = function( aEvent )
     {
         if( this.aEventArray[i].getId() == aEvent.getId() )
         {
-            aNextEffectEventArrayDebugPrinter.print( 'NextEffectEventArray.appendEvent: event already present' );
+            aNextEffectEventArrayDebugPrinter.print( 'NextEffectEventArray.appendEvent: event(' + aEvent.getId() + ') already present' );
             return false;
         }
     }
     this.aEventArray.push( aEvent );
-    aNextEffectEventArrayDebugPrinter.print( 'NextEffectEventArray.appendEvent: event appended' );
+    aNextEffectEventArrayDebugPrinter.print( 'NextEffectEventArray.appendEvent: event(' + aEvent.getId() + ') appended' );
     return true;
 };
 
@@ -11542,7 +11648,7 @@ function TimerEventQueue( aTimer )
 
 TimerEventQueue.prototype.addEvent = function( aEvent )
 {
-    this.DBG( 'TimerEventQueue.addEvent invoked' );
+    this.DBG( 'TimerEventQueue.addEvent event(' + aEvent.getId() + ') appended.' );
     if( !aEvent )
     {
         log( 'TimerEventQueue.addEvent: null event' );
@@ -11745,6 +11851,21 @@ ActivityQueue.prototype.clear = function()
     nSize = this.aCurrentActivityReinsertSet.length;
     for( i = 0; i < nSize; ++i )
         this.aCurrentActivityReinsertSet[i].dequeued();
+    this.aCurrentActivityReinsertSet = new Array();
+};
+
+ActivityQueue.prototype.endAll = function()
+{
+    aActivityQueueDebugPrinter.print( 'ActivityQueue.endAll invoked' );
+    var nSize = this.aCurrentActivityWaitingSet.length;
+    var i;
+    for( i = 0; i < nSize; ++i )
+        this.aCurrentActivityWaitingSet[i].end();
+    this.aCurrentActivityWaitingSet = new Array();
+
+    nSize = this.aCurrentActivityReinsertSet.length;
+    for( i = 0; i < nSize; ++i )
+        this.aCurrentActivityReinsertSet[i].end();
     this.aCurrentActivityReinsertSet = new Array();
 };
 
