@@ -61,7 +61,7 @@ void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
 
     // erzeuge aus den BoxNamen die Pointer
     BoxNmToPtr( rCalcPara.pTbl );
-    String sFml( MakeFormel( rCalcPara ));
+    String sFml( MakeFormula( rCalcPara ));
     SetValue( rCalcPara.rCalc.Calculate( sFml ).GetDouble() );
     ChgValid( !rCalcPara.IsStackOverFlow() );       // ist der Wert wieder gueltig?
 }

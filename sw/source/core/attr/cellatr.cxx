@@ -195,7 +195,7 @@ void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
     {
         // create pointers from box names
         BoxNmToPtr( rCalcPara.pTbl );
-        String sFml( MakeFormel( rCalcPara ));
+        String sFml( MakeFormula( rCalcPara ));
         if( !rCalcPara.rCalc.IsCalcError() )
             rValue = rCalcPara.rCalc.Calculate( sFml ).GetDouble();
         else

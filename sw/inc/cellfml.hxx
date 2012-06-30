@@ -78,7 +78,7 @@ typedef void (SwTableFormula:: *FnScanFormel)( const SwTable&, String&,
                         void* pPara = 0 ) const;
     void BoxNmsToRelNm( const SwTable&, String&, String&, String* = 0,
                         void* pPara = 0 ) const;
-    void _MakeFormel( const SwTable&, String&, String&, String* = 0,
+    void _MakeFormula( const SwTable&, String&, String&, String* = 0,
                         void* pPara = 0 ) const;
     void _GetFmlBoxes( const SwTable&, String&, String&, String* = 0,
                         void* pPara = 0 ) const;
@@ -109,9 +109,9 @@ protected:
 
     SwTableFormula( const String& rFormel );
 
-    String MakeFormel( SwTblCalcPara& rCalcPara ) const
+    String MakeFormula( SwTblCalcPara& rCalcPara ) const
     {
-        return ScanString( &SwTableFormula::_MakeFormel,
+        return ScanString( &SwTableFormula::_MakeFormula,
                             *rCalcPara.pTbl, &rCalcPara );
     }
 
