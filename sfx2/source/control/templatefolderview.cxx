@@ -255,7 +255,6 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
                                                      ITEM_MAX_WIDTH,ITEM_MAX_HEIGHT,ITEM_SPACE);
 
     mpItemView->SetColor(Color(COL_WHITE));
-    mpItemView->SetPosPixel(Point(0,0));
     mpItemView->SetSizePixel(aViewSize);
     mpItemView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
                                   ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
@@ -444,6 +443,17 @@ void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUS
 
         pItem->maTemplates.push_back(pTemplate);
     }
+}
+
+void TemplateFolderView::Resize()
+{
+    Size aWinSize = GetOutputSize();
+    Size aViewSize = mpItemView->GetSizePixel();
+
+    Point aPos;
+    aPos.setX((aWinSize.getWidth() - aViewSize.getWidth())/2);
+
+    mpItemView->SetPosPixel(aPos);
 }
 
 void TemplateFolderView::OnSelectionMode (bool bMode)

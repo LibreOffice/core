@@ -56,6 +56,8 @@ public:
 
 private:
 
+    virtual void Resize ();
+
     virtual void OnSelectionMode (bool bMode);
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);
