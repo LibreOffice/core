@@ -27,72 +27,56 @@
  ************************************************************************/
 
 #include <hints.hxx>
-
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/scripttypeitem.hxx>
 #include <hintids.hxx>
 #include <swtypes.hxx>
 #include <ndtxt.hxx>
 
-SwFmtChg::SwFmtChg( SwFmt *pFmt )
-    : SwMsgPoolItem( RES_FMT_CHG ),
-    pChangedFmt( pFmt )
-{}
-
-
+SwFmtChg::SwFmtChg( SwFmt* pFmt )
+    : SwMsgPoolItem( RES_FMT_CHG ), pChangedFmt( pFmt )
+{
+}
 
 SwInsTxt::SwInsTxt( xub_StrLen nP, xub_StrLen nL )
-    : SwMsgPoolItem( RES_INS_TXT ),
-    nPos( nP ),
-    nLen( nL )
-{}
-
-
+    : SwMsgPoolItem( RES_INS_TXT ), nPos( nP ), nLen( nL )
+{
+}
 
 SwDelChr::SwDelChr( xub_StrLen nP )
-    : SwMsgPoolItem( RES_DEL_CHR ),
-    nPos( nP )
-{}
-
-
+    : SwMsgPoolItem( RES_DEL_CHR ), nPos( nP )
+{
+}
 
 SwDelTxt::SwDelTxt( xub_StrLen nS, xub_StrLen nL )
-    : SwMsgPoolItem( RES_DEL_TXT ),
-    nStart( nS ),
-    nLen( nL )
-{}
-
-
+    : SwMsgPoolItem( RES_DEL_TXT ), nStart( nS ), nLen( nL )
+{
+}
 
 SwUpdateAttr::SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, sal_uInt16 nW )
-    : SwMsgPoolItem( RES_UPDATE_ATTR ),
-    nStart( nS ),
-    nEnd( nE ),
-    nWhichAttr( nW )
-{}
+    : SwMsgPoolItem( RES_UPDATE_ATTR ), nStart( nS ), nEnd( nE ), nWhichAttr( nW )
+{
+}
 
 
-// SwRefMarkFldUpdate wird verschickt, wenn sich die ReferenzMarkierungen
-// Updaten sollen. Um Seiten-/KapitelNummer feststellen zu koennen, muss
-// der akt. Frame befragt werden. Dafuer wird das akt. OutputDevice benoetigt.
+/** Is sent if reference marks should be updated.
 
-
+    To get the page/chapter number, the frame has to be asked. For that we need
+    the current OutputDevice.
+*/
 SwRefMarkFldUpdate::SwRefMarkFldUpdate( const OutputDevice* pOutput )
     : SwMsgPoolItem( RES_REFMARKFLD_UPDATE ),
     pOut( pOutput )
 {
-    OSL_ENSURE( pOut, "es muss ein OutputDevice-Pointer gesetzt werden!" );
+    OSL_ENSURE( pOut, "No OutputDevice pointer" );
 }
 
-
 SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDcPos )
-    : SwMsgPoolItem( RES_DOCPOS_UPDATE ),
-    nDocPos(nDcPos)
-{}
+    : SwMsgPoolItem( RES_DOCPOS_UPDATE ), nDocPos(nDcPos)
+{
+}
 
-
-
-// SwTableFmlUpdate wird verschickt, wenn sich die Tabelle neu berechnen soll
+/** Is sent if a table should be recalculated */
 SwTableFmlUpdate::SwTableFmlUpdate( const SwTable* pNewTbl )
     : SwMsgPoolItem( RES_TABLEFML_UPDATE ),
     pTbl( pNewTbl ), pHistory( 0 ), nSplitLine( USHRT_MAX ),
@@ -100,23 +84,21 @@ SwTableFmlUpdate::SwTableFmlUpdate( const SwTable* pNewTbl )
 {
     DATA.pDelTbl = 0;
     bModified = bBehindSplitLine = sal_False;
-    OSL_ENSURE( pTbl, "es muss ein Table-Pointer gesetzt werden!" );
+    OSL_ENSURE( pTbl, "No Table pointer" );
 }
 
-
 SwAutoFmtGetDocNode::SwAutoFmtGetDocNode( const SwNodes* pNds )
-    : SwMsgPoolItem( RES_AUTOFMT_DOCNODE ),
-    pCntntNode( 0 ), pNodes( pNds )
-{}
-
+    : SwMsgPoolItem( RES_AUTOFMT_DOCNODE ), pCntntNode( 0 ), pNodes( pNds )
+{
+}
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
     bDelSet( sal_False ),
     pChgSet( &rSet ),
     pTheChgdSet( &rTheSet )
-{}
-
+{
+}
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSetChg& rChgSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
@@ -126,37 +108,31 @@ SwAttrSetChg::SwAttrSetChg( const SwAttrSetChg& rChgSet )
     pChgSet = new SwAttrSet( *rChgSet.pChgSet );
 }
 
-
 SwAttrSetChg::~SwAttrSetChg()
 {
     if( bDelSet )
         delete pChgSet;
 }
 
-
 #ifdef DBG_UTIL
-
 void SwAttrSetChg::ClearItem( sal_uInt16 nWhch )
 {
     OSL_ENSURE( bDelSet, "der Set darf nicht veraendert werden!" );
     pChgSet->ClearItem( nWhch );
 }
-
 #endif
-
 
 SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
     : SfxPoolItem( nWhch )
-{}
+{
+}
 
-
-// "Overhead" vom SfxPoolItem
+// "Overhead" of SfxPoolItem
 int SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 {
     OSL_FAIL( "SwMsgPoolItem kennt kein ==" );
     return 0;
 }
-
 
 SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 {
@@ -164,13 +140,12 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
     return 0;
 }
 
-/******************************************************************************
- * hole aus der Default-Attribut Tabelle ueber den Which-Wert
- * das entsprechende default Attribut.
- * Ist keines vorhanden, returnt ein 0-Pointer !!!
- * Used to be inlined (hintids.hxx) in PRODUCT.
- ******************************************************************************/
 #if OSL_DEBUG_LEVEL > 0
+/** Get the default attribute from corresponding default attribute table.
+
+    @param[in] nWhich Position in table
+    @return Attribute if found, null pointer otherwise
+*/
 const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
     OSL_ASSERT( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );
@@ -180,25 +155,23 @@ const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
     return pHt;
 }
 #else
+/** Get the default attribute from corresponding default attribute table.
+
+    @param[in] nWhich Position in table
+*/
 const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
     return aAttrTab[ nWhich - POOLATTR_BEGIN ];
 }
 #endif
 
-
-
 SwCondCollCondChg::SwCondCollCondChg( SwFmt *pFmt )
     : SwMsgPoolItem( RES_CONDCOLL_CONDCHG ), pChangedFmt( pFmt )
 {
 }
 
-
 SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
-    SwMsgPoolItem( RES_VIRTPAGENUM_INFO ),
-    pPage( 0 ),
-    pOrigPage( pPg ),
-    pFrm( 0 )
+    SwMsgPoolItem( RES_VIRTPAGENUM_INFO ), pPage( 0 ), pOrigPage( pPg ), pFrm( 0 )
 {
 }
 
@@ -219,8 +192,6 @@ void SwFindNearestNode::CheckNode( const SwNode& rNd )
             pFnd = &rNd;
     }
 }
-
-
 
 sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
 {
@@ -261,6 +232,7 @@ sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
     case  RES_CHRATR_CTL_WEIGHT:
         pM = aWeightMap;
         break;
+
     case RES_CHRATR_POSTURE:
     case RES_CHRATR_CJK_POSTURE:
     case RES_CHRATR_CTL_POSTURE:
@@ -280,9 +252,12 @@ sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
                 nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
             switch( nScript)
             {
-            case ScriptType::COMPLEX:   ++pM;  // no break;
-            case ScriptType::ASIAN:     ++pM;  // no break;
-            default:                    nRet = *pM;
+            case ScriptType::COMPLEX:
+                ++pM;  // no break;
+            case ScriptType::ASIAN:
+                ++pM;  // no break;
+            default:
+                nRet = *pM;
             }
         }
     }

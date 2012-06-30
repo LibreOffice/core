@@ -26,10 +26,9 @@
  *
  ************************************************************************/
 
-
 #include <float.h>
 #include <rtl/math.hxx>
-#include <hintids.hxx>          // fuer RES_..
+#include <hintids.hxx>
 #include <cellatr.hxx>
 #include <calc.hxx>
 #include <format.hxx>
@@ -40,37 +39,30 @@
 #include <rolbck.hxx>
 #include <switerator.hxx>
 
-
-/*************************************************************************
-|*
-*************************************************************************/
-
+// -----------------
+// SwTblBoxNumFormat
+// -----------------
 
 SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, sal_Bool bFlag )
     : SfxUInt32Item( RES_BOXATR_FORMAT, nFormat ), bAuto( bFlag )
 {
 }
 
-
 int SwTblBoxNumFormat::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return GetValue() == ((SwTblBoxNumFormat&)rAttr).GetValue() &&
-            bAuto == ((SwTblBoxNumFormat&)rAttr).bAuto;
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "no matching attributes" );
+    return GetValue() == ( (SwTblBoxNumFormat&) rAttr ).GetValue() &&
+           bAuto == ( (SwTblBoxNumFormat&) rAttr ).bAuto;
 }
-
 
 SfxPoolItem* SwTblBoxNumFormat::Clone( SfxItemPool* ) const
 {
     return new SwTblBoxNumFormat( GetValue(), bAuto );
 }
 
-
-/*************************************************************************
-|*
-*************************************************************************/
-
-
+// -----------------
+// SwTblBoxFormula
+// -----------------
 
 SwTblBoxFormula::SwTblBoxFormula( const String& rFormula )
     : SfxPoolItem( RES_BOXATR_FORMULA ),
@@ -79,29 +71,28 @@ SwTblBoxFormula::SwTblBoxFormula( const String& rFormula )
 {
 }
 
-
 int SwTblBoxFormula::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return GetFormula() == ((SwTblBoxFormula&)rAttr).GetFormula() &&
-            pDefinedIn == ((SwTblBoxFormula&)rAttr).pDefinedIn;
+    return GetFormula() == ( (SwTblBoxFormula&) rAttr ).GetFormula() &&
+           pDefinedIn == ( (SwTblBoxFormula&) rAttr ).pDefinedIn;
 }
-
 
 SfxPoolItem* SwTblBoxFormula::Clone( SfxItemPool* ) const
 {
-// auf externe Darstellung umschalten!!
+    // switch to external rendering
     SwTblBoxFormula* pNew = new SwTblBoxFormula( GetFormula() );
     pNew->SwTableFormula::operator=( *this );
     return pNew;
 }
 
+/** Get node type of the node containing this formula
 
+    E.g. TextFeld -> TextNode, or
+     BoxAttribute -> BoxStartNode
 
-    // suche den Node, in dem die Formel steht:
-    //  TextFeld    -> TextNode,
-    //  BoxAttribut -> BoxStartNode
-    // !!! MUSS VON JEDER ABLEITUNG UEBERLADEN WERDEN !!!
+    Caution: Has to be overloaded when inheriting.
+*/
 const SwNode* SwTblBoxFormula::GetNodeOfFormula() const
 {
     const SwNode* pRet = 0;
@@ -114,7 +105,6 @@ const SwNode* SwTblBoxFormula::GetNodeOfFormula() const
     return pRet;
 }
 
-
 SwTableBox* SwTblBoxFormula::GetTableBox()
 {
     SwTableBox* pBox = 0;
@@ -122,7 +112,6 @@ SwTableBox* SwTblBoxFormula::GetTableBox()
         pBox = SwIterator<SwTableBox,SwModify>::FirstElement( *pDefinedIn );
     return pBox;
 }
-
 
 void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
 {
@@ -132,14 +121,14 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
     SwTableFmlUpdate* pUpdtFld;
     if( !pItem || RES_TABLEFML_UPDATE != pItem->Which() )
     {
-        // setze bei allen das Value-Flag zurueck
+        // reset value flag
         ChgValid( sal_False );
         return ;
     }
 
     pUpdtFld = (SwTableFmlUpdate*)pItem;
 
-    // bestimme die Tabelle, in der das Attribut steht
+    // detect table that contains this attribute
     const SwTableNode* pTblNd;
     const SwNode* pNd = GetNodeOfFormula();
     if( pNd && &pNd->GetNodes() == &pNd->GetDoc()->GetNodes() &&
@@ -148,27 +137,21 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         switch( pUpdtFld->eFlags )
         {
         case TBL_CALC:
-            // setze das Value-Flag zurueck
-            // JP 17.06.96: interne Darstellung auf alle Formeln
-            //              (Referenzen auf andere Tabellen!!!)
-                ChgValid( sal_False );
+            // reset value flag
+            ChgValid( sal_False );
             break;
         case TBL_BOXNAME:
-            // ist es die gesuchte Tabelle ??
             if( &pTblNd->GetTable() == pUpdtFld->pTbl )
-                // zur externen Darstellung
+                // use external rendering
                 PtrToBoxNm( pUpdtFld->pTbl );
             break;
         case TBL_BOXPTR:
-            // zur internen Darstellung
-            // JP 17.06.96: interne Darstellung auf alle Formeln
-            //              (Referenzen auf andere Tabellen!!!)
+            // internal rendering
             BoxNmToPtr( &pTblNd->GetTable() );
             break;
         case TBL_RELBOXNAME:
-            // ist es die gesuchte Tabelle ??
             if( &pTblNd->GetTable() == pUpdtFld->pTbl )
-                // zur relativen Darstellung
+                // relative rendering
                 ToRelBoxNm( pUpdtFld->pTbl );
             break;
 
@@ -182,18 +165,18 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
             }
             else
                 pUpdtFld->bBehindSplitLine = sal_False;
-            // kein break
+            // no break
         case TBL_MERGETBL:
             if( pUpdtFld->pHistory )
             {
-                // fuer die History brauche ich aber die unveraenderte Formel
+                // for a history record the unchanged formula is needed
                 SwTblBoxFormula aCopy( *this );
                 pUpdtFld->bModified = sal_False;
                 ToSplitMergeBoxNm( *pUpdtFld );
 
                 if( pUpdtFld->bModified )
                 {
-                    // und dann in der externen Darstellung
+                    // external rendering
                     aCopy.PtrToBoxNm( &pTblNd->GetTable() );
                     pUpdtFld->pHistory->Add( &aCopy, &aCopy,
                                 pNd->FindTableBoxStartNode()->GetIndex() );
@@ -206,56 +189,48 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
     }
 }
 
-
 void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
 {
-    if( !rCalcPara.rCalc.IsCalcError() )        // ist schon Fehler gesetzt ?
+    if( !rCalcPara.rCalc.IsCalcError() )
     {
-        // erzeuge aus den BoxNamen die Pointer
+        // create pointers from box names
         BoxNmToPtr( rCalcPara.pTbl );
         String sFml( MakeFormel( rCalcPara ));
         if( !rCalcPara.rCalc.IsCalcError() )
             rValue = rCalcPara.rCalc.Calculate( sFml ).GetDouble();
         else
             rValue = DBL_MAX;
-        ChgValid( !rCalcPara.IsStackOverFlow() );       // der Wert ist wieder gueltig
+        ChgValid( !rCalcPara.IsStackOverFlow() ); // value is now valid again
     }
 }
 
-/*************************************************************************
-|*
-*************************************************************************/
-
+// -------------
+// SwTblBoxValue
+// -------------
 
 SwTblBoxValue::SwTblBoxValue()
     : SfxPoolItem( RES_BOXATR_VALUE ), nValue( 0 )
 {
 }
 
-
 SwTblBoxValue::SwTblBoxValue( const double nVal )
     : SfxPoolItem( RES_BOXATR_VALUE ), nValue( nVal )
 {
 }
 
-
 int SwTblBoxValue::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE(SfxPoolItem::operator==(rAttr), "SwTblBoxValue: item not equal");
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "SwTblBoxValue: item not equal" );
     SwTblBoxValue const& rOther( static_cast<SwTblBoxValue const&>(rAttr) );
     // items with NaN should be equal to enable pooling
-    return ::rtl::math::isNan(nValue)
-        ?   ::rtl::math::isNan(rOther.nValue)
-        :   (nValue == rOther.nValue);
+    return ::rtl::math::isNan( nValue )
+        ?   ::rtl::math::isNan( rOther.nValue )
+        :   ( nValue == rOther.nValue );
 }
-
 
 SfxPoolItem* SwTblBoxValue::Clone( SfxItemPool* ) const
 {
     return new SwTblBoxValue( nValue );
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

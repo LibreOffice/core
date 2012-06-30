@@ -38,13 +38,16 @@
 #include <charfmt.hxx>
 #include <doc.hxx>
 #include <node.hxx>
-#include <paratr.hxx>       // fuer SetModifyAtAttr
-#include <cellatr.hxx>      // fuer SetModifyAtAttr
+#include <paratr.hxx>
+#include <cellatr.hxx>
 #include <cmdid.h>
 #include <istyleaccess.hxx>
 #include <numrule.hxx>
 #include <list.hxx>
 
+// ----------
+// SwAttrPool
+// ----------
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
     : SfxItemPool( rtl::OUString("SWG"),
@@ -65,17 +68,19 @@ SwAttrPool::~SwAttrPool()
 {
 }
 
+// ---------
+// SwAttrSet
+// ---------
+
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
     : SfxItemSet( rPool, nWh1, nWh2 ), pOldSet( 0 ), pNewSet( 0 )
 {
 }
 
-
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, const sal_uInt16* nWhichPairTable )
     : SfxItemSet( rPool, nWhichPairTable ), pOldSet( 0 ), pNewSet( 0 )
 {
 }
-
 
 SwAttrSet::SwAttrSet( const SwAttrSet& rSet )
     : SfxItemSet( rSet ), pOldSet( 0 ), pNewSet( 0 )
@@ -115,7 +120,7 @@ SfxItemSet* SwAttrSet::Clone( sal_Bool bItems, SfxItemPool *pToPool ) const
 }
 
 int SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
-                    SwAttrSet* pOld, SwAttrSet* pNew )
+                       SwAttrSet* pOld, SwAttrSet* pNew )
 {
     pNewSet = pNew;
     pOldSet = pOld;
@@ -126,7 +131,7 @@ int SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
 
 
 int SwAttrSet::Put_BC( const SfxItemSet& rSet,
-                    SwAttrSet* pOld, SwAttrSet* pNew )
+                       SwAttrSet* pOld, SwAttrSet* pNew )
 {
     pNewSet = pNew;
     pOldSet = pOld;
@@ -135,10 +140,8 @@ int SwAttrSet::Put_BC( const SfxItemSet& rSet,
     return nRet;
 }
 
-
-
 sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,
-                        SwAttrSet* pOld, SwAttrSet* pNew )
+                                    SwAttrSet* pOld, SwAttrSet* pNew )
 {
     pNewSet = pNew;
     pOldSet = pOld;
@@ -147,11 +150,10 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,
     return nRet;
 }
 
-
 sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
-                        SwAttrSet* pOld, SwAttrSet* pNew )
+                                    SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    OSL_ENSURE( nWhich1 <= nWhich2, "kein gueltiger Bereich" );
+    OSL_ENSURE( nWhich1 <= nWhich2, "no valid range" );
     pNewSet = pNew;
     pOldSet = pOld;
     sal_uInt16 nRet = 0;
@@ -161,10 +163,8 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
     return nRet;
 }
 
-
-
 int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
-                            SwAttrSet* pOld, SwAttrSet* pNew )
+                             SwAttrSet* pOld, SwAttrSet* pNew )
 {
     pNewSet = pNew;
     pOldSet = pOld;
@@ -173,26 +173,23 @@ int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
     return pNew ? pNew->Count() : ( pOld ? pOld->Count() : 0 );
 }
 
-// Notification-Callback
-void  SwAttrSet::Changed( const SfxPoolItem& rOld,
-                                const SfxPoolItem& rNew )
+/// Notification callback
+void  SwAttrSet::Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew )
 {
     if( pOldSet )
         pOldSet->PutChgd( rOld );
-
     if( pNewSet )
         pNewSet->PutChgd( rNew );
 }
 
+/** special treatment for some attributes
 
-// ----------------------------------------------------------------
-// Sonderbehandlung fuer einige Attribute
-// Setze den Modify-Pointer (alten pDefinedIn) bei folgenden Attributen:
-//  - SwFmtDropCaps
-//  - SwFmtPageDesc
-// (Wird beim Einfuegen in Formate/Nodes gerufen)
-// ----------------------------------------------------------------
+    Set the Modify pointer (old pDefinedIn) for the following attributes:
+     - SwFmtDropCaps
+     - SwFmtPageDesc
 
+    (Is called at inserts into formats/nodes)
+*/
 bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
 {
     bool bSet = false;
@@ -208,8 +205,8 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
     if( SFX_ITEM_SET == GetItemState( RES_PARATR_DROP, sal_False, &pItem ) &&
         ((SwFmtDrop*)pItem)->GetDefinedIn() != pModify )
     {
-        // CharFormat gesetzt und dann noch in unterschiedlichen
-        // Attribut Pools, dann muss das CharFormat kopiert werden!
+        // If CharFormat is set and it is set in different attribute pools then
+        // the CharFormat has to be copied.
         SwCharFmt* pCharFmt;
         if( 0 != ( pCharFmt = ((SwFmtDrop*)pItem)->GetCharFmt() )
             && GetPool() != pCharFmt->GetAttrSet().GetPool() )
@@ -233,7 +230,7 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
 
 void SwAttrSet::CopyToModify( SwModify& rMod ) const
 {
-    // kopiere die Attribute ggfs. ueber Dokumentgrenzen
+    // copy attributes across multiple documents if needed
     SwCntntNode* pCNd = PTR_CAST( SwCntntNode, &rMod );
     SwFmt* pFmt = PTR_CAST( SwFmt, &rMod );
 
@@ -248,9 +245,9 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             const SwDoc *pSrcDoc = GetDoc();
             SwDoc *pDstDoc = pCNd ? pCNd->GetDoc() : pFmt->GetDoc();
 
-            // muss die NumRule kopiert werden?
-            if( pSrcDoc != pDstDoc && SFX_ITEM_SET == GetItemState(
-                                    RES_PARATR_NUMRULE, sal_False, &pItem ) )
+            // Does the NumRule has to be copied?
+            if( pSrcDoc != pDstDoc &&
+                SFX_ITEM_SET == GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) )
             {
                 const String& rNm = ((SwNumRuleItem*)pItem)->GetValue();
                 if( rNm.Len() )
@@ -259,8 +256,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                     if( pDestRule )
                         pDestRule->SetInvalidRule( sal_True );
                     else
-                        pDstDoc->MakeNumRule( rNm,
-                                            pSrcDoc->FindNumRulePtr( rNm ) );
+                        pDstDoc->MakeNumRule( rNm, pSrcDoc->FindNumRulePtr( rNm ) );
                 }
             }
 
@@ -313,8 +309,6 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 }
             }
 
-            // Seitenvorlagenwechsel mit kopieren Gegenueber dem alten
-            // Verhalten, sie zu entfernen
             const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SFX_ITEM_SET == GetItemState(
                                             RES_PAGEDESC, sal_False, &pItem ) &&
@@ -326,9 +320,8 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                                                     pPgDesc->GetName() );
                 if( !pDstPgDesc )
                 {
-                    // dann kopieren, ansonsten den benutzen
-                    pDstPgDesc = &pDstDoc->GetPageDesc( pDstDoc->MakePageDesc(
-                                                    pPgDesc->GetName() ));
+                    pDstPgDesc = &pDstDoc->GetPageDesc(
+                                   pDstDoc->MakePageDesc( pPgDesc->GetName() ));
                     pDstDoc->CopyPageDesc( *pPgDesc, *pDstPgDesc );
                 }
                 SwFmtPageDesc aDesc( pDstPgDesc );
@@ -345,7 +338,9 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                     pCNd->SetAttr( aTmpSet );
                 }
                 else
+                {
                     pFmt->SetFmtAttr( aTmpSet );
+                }
             }
             else if( pCNd )
             {
@@ -362,7 +357,9 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 }
             }
             else
+            {
                 pFmt->SetFmtAttr( *this );
+            }
 
             // #i92811#
             delete pNewListIdItem;
@@ -375,7 +372,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 #endif
 }
 
-// check if ID is InRange of AttrSet-Ids
+/// check if ID is in range of attribute set IDs
 sal_Bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId )
 {
     while( *pRange )

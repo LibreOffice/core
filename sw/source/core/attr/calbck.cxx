@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <hintids.hxx>          // contains RES_.. IDs
 #include <frame.hxx>
 #include <hints.hxx>
@@ -35,29 +34,31 @@
 
 static SwClientIter* pClientIters = 0;
 
-TYPEINIT0(SwClient);
+TYPEINIT0( SwClient );
 
-/*************************************************************************/
-SwClient::SwClient(SwModify *pToRegisterIn)
-    : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 ), mbIsAllowedToBeRemovedInModifyCall(false)
+// ----------
+// SwClient
+// ----------
+
+SwClient::SwClient( SwModify* pToRegisterIn )
+    : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 ), mbIsAllowedToBeRemovedInModifyCall( false )
 {
     if(pToRegisterIn)
         // connect to SwModify
         pToRegisterIn->Add(this);
 }
 
-/*************************************************************************/
-void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem * )
+void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
 {
     // this method only handles notification about dying SwModify objects
     if( (!pOld || pOld->Which() != RES_OBJECTDYING) )
         return;
 
-    const SwPtrMsgPoolItem *pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);
+    const SwPtrMsgPoolItem* pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);
     if(pDead && pDead->pObject == pRegisteredIn)
     {
         // I've got a notification from the object I know
-        SwModify *pAbove = const_cast<SwModify*>(pRegisteredIn->GetRegisteredIn());
+        SwModify* pAbove = const_cast<SwModify*>(pRegisteredIn->GetRegisteredIn());
         if(pAbove)
         {
             // if the dying object itself was listening at an SwModify, I take over
@@ -65,39 +66,37 @@ void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem * )
             pAbove->Add(this);
             return;
         }
-
         // destroy connection
         pRegisteredIn->Remove(this);
     }
 }
 
-void SwClient::Modify( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue )
+void SwClient::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
     CheckRegistration( pOldValue, pNewValue );
 }
 
 void SwClient::SwClientNotify( const SwModify&, const SfxHint& )
 {
-
 }
 
-//*************************************************************************
 SwClient::~SwClient()
 {
-    OSL_ENSURE( !pRegisteredIn || pRegisteredIn->GetDepends(),"SwModify still known, but Client already disconnected!" );
+    OSL_ENSURE( !pRegisteredIn || pRegisteredIn->GetDepends(), "SwModify still known, but Client already disconnected!" );
     if( pRegisteredIn && pRegisteredIn->GetDepends() )
         // still connected
         pRegisteredIn->Remove( this );
 }
 
-
 sal_Bool SwClient::GetInfo( SfxPoolItem& ) const
 {
-    return sal_True;        // und weiter
+    return sal_True;
 }
 
+// ----------
+// SwModify
+// ----------
 
-/*************************************************************************/
 SwModify::SwModify()
     : SwClient(0), pRoot(0)
 {
@@ -108,8 +107,8 @@ SwModify::SwModify()
     bInSwFntCache = sal_False;
 }
 
-SwModify::SwModify( SwModify *pToRegisterIn )
-    : SwClient(pToRegisterIn), pRoot( 0 )
+SwModify::SwModify( SwModify* pToRegisterIn )
+    : SwClient( pToRegisterIn ), pRoot( 0 )
 {
     bModifyLocked = sal_False;
     bLockClientList = sal_False;
@@ -118,7 +117,6 @@ SwModify::SwModify( SwModify *pToRegisterIn )
     bInSwFntCache = sal_False;
 }
 
-/*************************************************************************/
 SwModify::~SwModify()
 {
     OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
@@ -134,8 +132,9 @@ SwModify::~SwModify()
         // there are depending objects
         if( IsInDocDTOR() )
         {
-            // if document gets destroyed anyway, just tell clients to forget me
-            // so that they don't try to get removed from my list later when they also get destroyed
+            // If the document gets destroyed anyway, just tell clients to
+            // forget me so that they don't try to get removed from my list
+            // later when they also get destroyed
             SwClientIter aIter( *this );
             SwClient* p = aIter.GoStart();
             while ( p )
@@ -153,42 +152,42 @@ SwModify::~SwModify()
             // remove all clients that have not done themselves
             // mba: possibly a hotfix for forgotten base class calls?!
             while( pRoot )
-                pRoot->CheckRegistration(&aDyObject, &aDyObject);
+                pRoot->CheckRegistration( &aDyObject, &aDyObject );
         }
     }
 }
 
-/*************************************************************************/
-void SwModify::Modify( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue )
+void SwModify::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
     NotifyClients( pOldValue, pNewValue );
 }
 
-void SwModify::NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue )
+void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
-    if (IsInCache() || IsInSwFntCache())
+    if ( IsInCache() || IsInSwFntCache() )
     {
         const sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
                                         pNewValue ? pNewValue->Which() : 0;
         CheckCaching( nWhich );
     }
 
-      if (!pRoot || IsModifyLocked())
+    if ( !pRoot || IsModifyLocked() )
         return;
 
     LockModify();
 
     // mba: WTF?!
     if( !pOldValue )
+    {
         bLockClientList = sal_True;
+    }
     else
     {
-        // following Modifies shouldn't call an ASSERT
         switch( pOldValue->Which() )
         {
         case RES_OBJECTDYING:
         case RES_REMOVE_UNO_OBJECT:
-            bLockClientList = ((SwPtrMsgPoolItem *)pOldValue)->pObject != this;
+            bLockClientList = ((SwPtrMsgPoolItem*)pOldValue)->pObject != this;
             break;
 
         case RES_FOOTNOTE_DELETED:
@@ -197,6 +196,7 @@ void SwModify::NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *p
         case RES_FIELD_DELETED:
             bLockClientList = sal_False;
             break;
+
         default:
             bLockClientList = sal_True;
         }
@@ -209,7 +209,7 @@ void SwModify::NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *p
 
 sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 {
-    sal_Bool bRet = sal_True;       // bedeutet weiter zum naechsten
+    sal_Bool bRet = sal_True;       // means: continue with next
 
     if( pRoot )
     {
@@ -217,16 +217,17 @@ sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 
         SwClient* pLast = aIter.GoStart();
         if( pLast )
-            while( 0 != ( bRet = pLast->GetInfo( rInfo )) &&
-                    0 != ( pLast = aIter++ ) )
+        {
+            while( 0 != ( bRet = pLast->GetInfo( rInfo ) ) &&
+                   0 != ( pLast = aIter++ ) )
                 ;
+        }
     }
 
     return bRet;
 }
 
-/*************************************************************************/
-void SwModify::Add(SwClient *pDepend)
+void SwModify::Add( SwClient* pDepend )
 {
     OSL_ENSURE( !bLockClientList, "Client inserted while in Modify" );
 
@@ -266,9 +267,7 @@ void SwModify::Add(SwClient *pDepend)
     }
 }
 
-/*************************************************************************/
-
-SwClient* SwModify::Remove(SwClient * pDepend)
+SwClient* SwModify::Remove( SwClient* pDepend )
 {
     if ( bInDocDTOR )
         return 0;
@@ -294,8 +293,11 @@ SwClient* SwModify::Remove(SwClient * pDepend)
         while( pTmp )
         {
             if( pTmp->pAct == pDepend || pTmp->pDelNext == pDepend )
-                // if object being removed is the current or next object in an iterator, advance this iterator
+            {
+                // if object being removed is the current or next object in an
+                // iterator, advance this iterator
                 pTmp->pDelNext = pR;
+            }
             pTmp = pTmp->pNxtIter;
         }
 
@@ -304,7 +306,7 @@ SwClient* SwModify::Remove(SwClient * pDepend)
     }
     else
     {
-        OSL_FAIL( "SwModify::Remove(): pDepend nicht gefunden" );
+        OSL_FAIL( "SwModify::Remove(): could not find pDepend" );
     }
 
     // disconnect client from me
@@ -314,12 +316,13 @@ SwClient* SwModify::Remove(SwClient * pDepend)
 
 void SwModify::CheckCaching( const sal_uInt16 nWhich )
 {
-    if (isCHRATR(nWhich))
+    if( isCHRATR( nWhich ) )
     {
         SetInSwFntCache( sal_False );
     }
     else
-        switch ( nWhich )
+    {
+        switch( nWhich )
         {
         case RES_OBJECTDYING:
         case RES_FMT_CHG:
@@ -333,31 +336,32 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
         case RES_FRM_SIZE:
         case RES_KEEP:
         case RES_BREAK:
-            if ( IsInCache() )
+            if( IsInCache() )
             {
                 SwFrm::GetCache().Delete( this );
                 SetInCache( sal_False );
             }
             break;
         }
+    }
 }
 
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
 {
     SwClientIter aIter(*this);
-    SwClient * pClient = aIter.GoStart();
-    while (pClient)
+    SwClient* pClient = aIter.GoStart();
+    while( pClient )
     {
         pClient->SwClientNotify( *this, rHint );
         pClient = aIter++;
     }
 }
 
-void SwModify::ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType )
+void SwModify::ModifyBroadcast( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue, TypeId nType )
 {
-    SwClientIter aIter(*this);
-    SwClient * pClient = aIter.First( nType );
-    while (pClient)
+    SwClientIter aIter( *this );
+    SwClient* pClient = aIter.First( nType );
+    while( pClient )
     {
         pClient->Modify( pOldValue, pNewValue );
         pClient = aIter.Next();
@@ -368,21 +372,17 @@ void SwModify::ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem 
 // SwDepend
 // ----------
 
-/*************************************************************************/
-
-SwDepend::SwDepend(SwClient *pTellHim, SwModify *pDepend)
-    : SwClient(pDepend)
+SwDepend::SwDepend( SwClient* pTellHim, SwModify* pDepend )
+    : SwClient( pDepend )
 {
     pToTell  = pTellHim;
 }
 
-/*************************************************************************/
-
-void SwDepend::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue )
+void SwDepend::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
-    if(pNewValue && pNewValue->Which() == RES_OBJECTDYING)
+    if( pNewValue && pNewValue->Which() == RES_OBJECTDYING )
         CheckRegistration(pOldValue,pNewValue);
-    else if(pToTell)
+    else if( pToTell )
         pToTell->ModifyNotification(pOldValue, pNewValue);
 }
 
@@ -397,7 +397,9 @@ sal_Bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
     return pToTell ? pToTell->GetInfo( rInfo ) : sal_True;
 }
 
-/********************************************************************/
+// ------------
+// SwClientIter
+// ------------
 
 SwClientIter::SwClientIter( const SwModify& rModify )
     : rRoot( rModify )
@@ -433,14 +435,13 @@ SwClientIter::~SwClientIter()
             while( pTmp->pNxtIter != this )
                 if( 0 == ( pTmp = pTmp->pNxtIter ) )
                 {
-                    OSL_ENSURE( this, "wo ist mein Pointer" );
+                    OSL_ENSURE( this, "Lost my pointer" );
                     return ;
                 }
             pTmp->pNxtIter = pNxtIter;
         }
     }
 }
-
 
 SwClient* SwClientIter::operator++(int)
 {
@@ -458,8 +459,10 @@ SwClient* SwClientIter::GoStart()
 {
     pAct = const_cast<SwClient*>(rRoot.GetDepends());
     if( pAct )
+    {
         while( pAct->pLeft )
             pAct = pAct->pLeft;
+    }
     pDelNext = pAct;
     return pAct;
 }
@@ -470,8 +473,10 @@ SwClient* SwClientIter::GoEnd()
     if( !pAct )
         pAct = const_cast<SwClient*>(rRoot.GetDepends());
     if( pAct )
+    {
         while( pAct->pRight )
             pAct = pAct->pRight;
+    }
     pDelNext = pAct;
     return pAct;
 }
@@ -492,7 +497,24 @@ SwClient* SwClientIter::First( TypeId nType )
             }
             else
                 pAct = pDelNext;
+        } while( pAct );
+    return pAct;
+}
 
+SwClient* SwClientIter::Last( TypeId nType )
+{
+    aSrchId = nType;
+    GoEnd();
+    if( pAct )
+        do {
+            if( pAct->IsA( aSrchId ) )
+                break;
+
+            if( pDelNext == pAct )
+                pAct = pAct->pLeft;
+            else
+                pAct = pDelNext->pLeft;
+            pDelNext = pAct;
         } while( pAct );
     return pAct;
 }
@@ -514,25 +536,6 @@ SwClient* SwClientIter::Next()
     return pAct;
 }
 
-SwClient* SwClientIter::Last( TypeId nType )
-{
-    aSrchId = nType;
-    GoEnd();
-    if( pAct )
-        do {
-            if( pAct->IsA( aSrchId ) )
-                break;
-
-            if( pDelNext == pAct )
-                pAct = pAct->pLeft;
-            else
-                pAct = pDelNext->pLeft;
-            pDelNext = pAct;
-
-        } while( pAct );
-    return pAct;
-}
-
 SwClient* SwClientIter::Previous()
 {
     do {
@@ -547,6 +550,5 @@ SwClient* SwClientIter::Previous()
     } while( pAct );
     return pAct;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
