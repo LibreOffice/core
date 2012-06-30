@@ -48,7 +48,6 @@ enum
     NAME_LINE_OFF_Y = 2,
     NAME_LINE_HEIGHT = 2,
     NAME_OFFSET = 2,
-    SCRBAR_OFFSET = 1,
     SCROLL_OFFSET = 4
 };
 
@@ -94,6 +93,7 @@ void ThumbnailView::ImplInit()
     mnUserItemWidth     = 0;
     mnUserItemHeight    = 0;
     mnFirstLine         = 0;
+    mnScrBarOffset = 1;
     mnSelItemId         = 0;
     mnHighItemId        = 0;
     mnCols              = 0;
@@ -250,7 +250,7 @@ void ThumbnailView::CalculateItemPositions ()
     // calculate ScrollBar width
     long nScrBarWidth = 0;
     if ( mpScrBar )
-        nScrBarWidth = mpScrBar->GetSizePixel().Width()+SCRBAR_OFFSET;
+        nScrBarWidth = mpScrBar->GetSizePixel().Width()+mnScrBarOffset;
 
     // calculate maximum number of visible columns
     mnCols = (sal_uInt16)((aWinSize.Width()-nScrBarWidth) / (mnItemWidth));
@@ -366,8 +366,8 @@ void ThumbnailView::CalculateItemPositions ()
     // arrange ScrollBar, set values and show it
     if ( mpScrBar )
     {
-        Point aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, mnHeaderHeight );
-        Size aSize( nScrBarWidth-SCRBAR_OFFSET, aWinSize.Height() - mnHeaderHeight );
+        Point aPos( aWinSize.Width() - nScrBarWidth - mnScrBarOffset, mnHeaderHeight );
+        Size aSize( nScrBarWidth - mnScrBarOffset, aWinSize.Height() - mnHeaderHeight );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
         mpScrBar->SetRangeMax( mnLines );
@@ -1238,7 +1238,7 @@ long ThumbnailView::GetScrollWidth() const
     if ( GetStyle() & WB_VSCROLL )
     {
         ((ThumbnailView*)this)->ImplInitScrollBar();
-        return mpScrBar->GetSizePixel().Width()+SCRBAR_OFFSET;
+        return mpScrBar->GetSizePixel().Width()+mnScrBarOffset;
     }
     else
         return 0;

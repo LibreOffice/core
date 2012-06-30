@@ -335,6 +335,7 @@ protected:
     long mnLines;
     long mnUserItemWidth;
     long mnUserItemHeight;
+    sal_uInt16 mnScrBarOffset;
     sal_uInt16 mnSelItemId;
     sal_uInt16 mnHighItemId;
     sal_uInt16 mnCols;
