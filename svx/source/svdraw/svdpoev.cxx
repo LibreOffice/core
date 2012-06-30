@@ -38,7 +38,7 @@
 #include <svx/svdtrans.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <tools/helpers.hxx>
 
 #include <svx/polypolygoneditor.hxx>
 

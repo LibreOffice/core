@@ -51,7 +51,7 @@
 #include "View.hxx"
 #include "sdabstdlg.hxx"
 #include "sdresid.hxx"
-#include <vcl/salbtype.hxx>     // FRound
+#include <tools/helpers.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace ::com::sun::star;

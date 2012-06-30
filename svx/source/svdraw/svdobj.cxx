@@ -35,6 +35,7 @@
 #include <tools/line.hxx>
 #include <tools/bigint.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/helpers.hxx>
 #include <vector>
 #include <svx/svdobj.hxx>
 #include <svx/xpoly.hxx>
@@ -87,7 +88,6 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/svdpool.hxx>
 #include <editeng/editeng.hxx>
-#include <vcl/salbtype.hxx>     // FRound
 #include <svl/whiter.hxx>
 
 #include <svx/fmmodel.hxx>

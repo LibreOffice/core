@@ -26,7 +26,7 @@
 #include <tools/debug.hxx>
 #include <vcl/salgtype.hxx>
 #include <tools/color.hxx>
-#include <tools/gen.hxx>
+#include <tools/helpers.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 

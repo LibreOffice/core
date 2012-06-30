@@ -195,7 +195,7 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
 #ifdef CLIPPER_TEST
 #include <svx/svdopath.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <tools/helpers.hxx>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

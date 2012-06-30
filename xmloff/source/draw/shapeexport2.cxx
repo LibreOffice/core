@@ -50,12 +50,12 @@
 #include <xmloff/shapeexport.hxx>
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
+#include <tools/helpers.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "XMLImageMapExport.hxx"
 #include "xexptran.hxx"
-#include <tools/gen.hxx>        // FRound
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 

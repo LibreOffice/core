@@ -31,6 +31,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <tools/helpers.hxx>
 
 #include <ucbhelper/content.hxx>
 
@@ -40,7 +41,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
 

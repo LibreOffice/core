@@ -37,6 +37,7 @@
 
 #include <tools/rcid.h>
 #include <tools/vcompat.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/itempool.hxx>
 #include <svx/fmmodel.hxx>
@@ -45,7 +46,6 @@
 #include "gallery.hrc"
 #include "svx/galmisc.hxx"
 #include "galobj.hxx"
-#include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
 
 #include "gallerydrawmodel.hxx"

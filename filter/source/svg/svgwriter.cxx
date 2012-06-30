@@ -32,6 +32,7 @@
 #include "svgwriter.hxx"
 
 #include <vcl/unohelp.hxx>
+#include <tools/helpers.hxx>
 
 #include <sax/tools/converter.hxx>
 

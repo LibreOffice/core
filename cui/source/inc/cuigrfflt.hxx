@@ -35,7 +35,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>
-#include <vcl/salbtype.hxx>
+#include <tools/helpers.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/graphctl.hxx>
 #include <svx/dlgctrl.hxx>

@@ -29,7 +29,6 @@
 
 #include "bundles.hxx"
 
-#include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
 
 Bundle& Bundle::operator=( Bundle& rSource )

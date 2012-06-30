@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <vcl/salbtype.hxx>
 #include <gcach_ftyp.hxx>
 
 #include <vcl/svapp.hxx>

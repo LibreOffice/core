@@ -31,10 +31,10 @@
 #include <string.h>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/cvtsvm.hxx>
 #include <rtl/strbuf.hxx>
 

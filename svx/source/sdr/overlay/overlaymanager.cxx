@@ -30,7 +30,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <tools/gen.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>

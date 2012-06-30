@@ -60,9 +60,9 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/salbtype.hxx>
 
 #include <tools/stream.hxx>
+#include <tools/helpers.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>

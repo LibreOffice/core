@@ -51,7 +51,7 @@
 #include <editeng/adjitem.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/xftouit.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <tools/helpers.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>

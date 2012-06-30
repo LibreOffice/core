@@ -75,7 +75,7 @@
 #include "drawview.hxx"
 #include "zoomlist.hxx"
 #include <osl/mutex.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <tools/helpers.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sd {

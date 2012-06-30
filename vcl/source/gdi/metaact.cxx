@@ -31,8 +31,8 @@
 #include <string.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/rendergraphicrasterizer.hxx>

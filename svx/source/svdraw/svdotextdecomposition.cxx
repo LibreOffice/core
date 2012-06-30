@@ -35,7 +35,7 @@
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <editeng/editstat.hxx>
-#include <vcl/salbtype.hxx>
+#include <tools/helpers.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

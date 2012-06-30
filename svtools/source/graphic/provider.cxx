@@ -40,7 +40,6 @@
 #include <svtools/filter.hxx>
 #include <svtools/wmf.hxx>
 #include <svl/solar.hrc>
-#include <vcl/salbtype.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>

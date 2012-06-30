@@ -28,6 +28,7 @@
 
 
 #include <tools/bigint.hxx>
+#include <tools/helpers.hxx>
 #include <svx/svdopath.hxx>
 #include <math.h>
 #include <svx/xpool.hxx>
@@ -54,7 +55,6 @@
 #include <svx/svdogrp.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <svx/xlntrit.hxx>
-#include <vcl/salbtype.hxx>     // FRound
 #include <svx/sdr/contact/viewcontactofsdrpathobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include "svdconv.hxx"

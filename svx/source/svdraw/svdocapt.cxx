@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <tools/bigint.hxx>
+#include <tools/helpers.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svl/style.hxx>
 #include <svx/svdocapt.hxx>
@@ -49,7 +50,6 @@
 #include <svx/xfltrit.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdr/properties/captionproperties.hxx>
-#include <vcl/salbtype.hxx>     // FRound
 #include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

@@ -34,7 +34,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>

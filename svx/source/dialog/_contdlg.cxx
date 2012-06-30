@@ -29,7 +29,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sot/factory.hxx>
 #include <tools/shl.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <tools/helpers.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>

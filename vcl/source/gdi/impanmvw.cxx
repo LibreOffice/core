@@ -21,7 +21,7 @@
 #include "impanmvw.hxx"
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
-#include <vcl/salbtype.hxx>
+#include <tools/helpers.hxx>
 
 // ----------------
 // - ImplAnimView -

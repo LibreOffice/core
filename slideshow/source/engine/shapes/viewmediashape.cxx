@@ -39,7 +39,6 @@
 
 #include <vcl/window.hxx>
 #include <vcl/syschild.hxx>
-#include <vcl/salbtype.hxx>
 
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
