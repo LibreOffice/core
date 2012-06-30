@@ -176,10 +176,6 @@ Resource RID_SO_ERRCTX
         Text [ en-US ] = "$(ERR) activating object" ;
     };
 };
-String STR_INS_APPLET
-{
-    Text [ en-US ] = "Inserts an applet object into your document. When the object is activated, the applet is automatically executed." ;
-};
 String STR_ERROR_OBJNOCREATE
 {
     Text [ en-US ] = "Object % could not be inserted." ;
