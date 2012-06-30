@@ -457,6 +457,8 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
     {
     }
 
+    Close();
+
     return 0;
 }
 
