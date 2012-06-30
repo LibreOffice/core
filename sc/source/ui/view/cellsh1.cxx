@@ -2045,6 +2045,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScDocument* pDoc = pData->GetDocument();
 
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
+                if(aRangeList.empty())
+                {
+                    ScRange* pRange = new ScRange(aPos);
+                    aRangeList.push_back(pRange);
+                }
+
                 AbstractScCondFormatDlg* pDlg = NULL;
                 const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
                 if(pCondFormat)
