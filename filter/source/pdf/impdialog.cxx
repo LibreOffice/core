@@ -32,6 +32,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 #include "sfx2/passwd.hxx"
+#include "svtools/miscopt.hxx"
 
 #include "comphelper/storagehelper.hxx"
 
@@ -260,6 +261,11 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     AddTabPage( RID_PDF_TAB_VPREFER, ImpPDFTabViewerPage::Create, 0 );
     AddTabPage( RID_PDF_TAB_OPNFTR, ImpPDFTabOpnFtrPage::Create, 0 );
 
+//remove tabpage if experimentalmode is not set
+    SvtMiscOptions aMiscOptions;
+    if (!aMiscOptions.IsExperimentalMode())
+        RemoveTabPage( RID_PDF_TAB_SIGNING );
+
 //last queued is the first to be displayed (or so it seems..)
     AddTabPage( RID_PDF_TAB_GENER, ImpPDFTabGeneralPage::Create, 0 );
 
@@ -294,7 +300,11 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     RemoveTabPage( RID_PDF_TAB_OPNFTR );
     RemoveTabPage( RID_PDF_TAB_LINKS );
     RemoveTabPage( RID_PDF_TAB_SECURITY );
-    RemoveTabPage( RID_PDF_TAB_SIGNING );
+
+//remove tabpage if experimentalmode is set
+    SvtMiscOptions aMiscOptions;
+    if (aMiscOptions.IsExperimentalMode())
+        RemoveTabPage( RID_PDF_TAB_SIGNING );
 }
 
 // -----------------------------------------------------------------------------
