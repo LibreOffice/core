@@ -32,14 +32,14 @@ CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(uno_Environment ** ppEnv,
     rtl::OString  a_envName("UNO_ENV_SUBST:");
     a_envName += rtl::OUStringToOString(envDcp, RTL_TEXTENCODING_ASCII_US);
     char * c_value = getenv(a_envName.getStr());
-    if (c_value && rtl_str_getLength(c_value))
+    if (c_value && *c_value)
     {
         rtl::OString a_envDcp(a_envName.copy(a_envName.indexOf(':') + 1));
 
         OSL_TRACE("UNO_ENV_SUBST \"%s\" -> \"%s\"", a_envDcp.getStr(), c_value);
         rtl::OUString value(c_value, rtl_str_getLength(c_value), RTL_TEXTENCODING_ASCII_US);
 
-         envDcp = value;
+        envDcp = value;
     }
 
     uno_direct_getEnvironment(ppEnv, envDcp.pData, pContext);
