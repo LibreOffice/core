@@ -74,16 +74,14 @@ bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) co
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
-    switch ( nMemberId )
+    if( nMemberId == MID_WRAP_INFLUENCE )
     {
-        case MID_WRAP_INFLUENCE:
-            {
-                rVal <<= GetWrapInfluenceOnObjPos();
-            }
-            break;
-        default:
-            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
-            bRet = false;
+        rVal <<= GetWrapInfluenceOnObjPos();
+    }
+    else
+    {
+        OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+        bRet = false;
     }
     return bRet;
 }
@@ -91,31 +89,28 @@ bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) co
 bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    bool bRet = true;
+    bool bRet = false;
 
-    switch ( nMemberId )
+    if( nMemberId == MID_WRAP_INFLUENCE )
     {
-        case MID_WRAP_INFLUENCE:
-            {
-                sal_Int16 nNewWrapInfluence = 0;
-                rVal >>= nNewWrapInfluence;
-                // #i35017# - constant names have changed and <ITERATIVE> has been added
-                if ( nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
-                     nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
-                     nNewWrapInfluence == text::WrapInfluenceOnPosition::ITERATIVE )
-                {
-                    SetWrapInfluenceOnObjPos( nNewWrapInfluence );
-                }
-                else
-                {
-                    OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
-                    bRet = false;
-                }
-            }
-            break;
-        default:
-            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - unknown MemberId" );
-            bRet = false;
+        sal_Int16 nNewWrapInfluence = 0;
+        rVal >>= nNewWrapInfluence;
+        // #i35017# - constant names have changed and <ITERATIVE> has been added
+        if ( nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
+             nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
+             nNewWrapInfluence == text::WrapInfluenceOnPosition::ITERATIVE )
+        {
+            SetWrapInfluenceOnObjPos( nNewWrapInfluence );
+            bRet = true;
+        }
+        else
+        {
+            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
+        }
+    }
+    else
+    {
+        OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - unknown MemberId" );
     }
     return bRet;
 }
