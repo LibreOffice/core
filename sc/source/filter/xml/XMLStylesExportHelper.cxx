@@ -350,7 +350,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
 
 void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
 {
-    if (aValidationVec.size())
+    if (!aValidationVec.empty())
     {
         SvXMLElementExport aElemVs(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATIONS, true, true);
         ScMyValidationVec::iterator aItr(aValidationVec.begin());

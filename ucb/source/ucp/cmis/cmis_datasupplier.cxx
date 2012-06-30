@@ -94,7 +94,7 @@ namespace cmis
         {
             string sObjectPath;
             vector< string > paths = maResults[nIndex]->pObject->getPaths( );
-            if ( paths.size( ) > 0 )
+            if ( !paths.empty( ) )
                 sObjectPath = paths.front( );
             // TODO Handle the unfiled objects with their id... but can they manage to come here?
 

@@ -298,7 +298,7 @@ public:
     inline sal_Bool IsULSpaceChanged() const { return bULSpaceChanged; }
     inline void GetULSpace( sal_uInt16& rUpper, sal_uInt16& rLower ) const;
 
-    sal_Bool HasAttrs() const { return aAttrs.size() != 0; }
+    sal_Bool HasAttrs() const { return !aAttrs.empty(); }
     const _HTMLAttrs& GetAttrs() const { return aAttrs; }
     _HTMLAttrs& GetAttrs() { return aAttrs; }
 

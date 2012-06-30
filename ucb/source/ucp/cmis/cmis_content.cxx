@@ -317,13 +317,13 @@ namespace cmis
                     }
                     catch ( const libcmis::Exception& )
                     {
-                        if ( m_pObjectProps.size() > 0 )
+                        if ( !m_pObjectProps.empty() )
                         {
                             map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
                             if ( it != m_pObjectProps.end( ) )
                             {
                                 vector< string > values = it->second->getStrings( );
-                                if ( values.size() > 0 )
+                                if ( !values.empty() )
                                     sTitle = STD_TO_OUSTR( values.front( ) );
                             }
                         }
@@ -355,7 +355,7 @@ namespace cmis
                     try
                     {
                         vector< string > paths = getObject( )->getPaths( );
-                        if ( paths.size( ) > 0 )
+                        if ( !paths.empty( ) )
                             path = paths.front( );
                         else
                             path = getObject()->getName( );
@@ -921,7 +921,7 @@ namespace cmis
             if ( NULL != document )
             {
                 vector< boost::shared_ptr< libcmis::Folder > > parents = document->getParents( );
-                if ( parents.size( ) > 0 )
+                if ( !parents.empty( ) )
                     parentPath = parents.front( )->getPath( );
             }
             else

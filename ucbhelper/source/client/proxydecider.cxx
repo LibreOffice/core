@@ -483,7 +483,7 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
         return m_aEmptyProxy;
     }
 
-    if ( !rHost.isEmpty() && m_aNoProxyList.size() )
+    if ( !rHost.isEmpty() && !m_aNoProxyList.empty() )
     {
         //////////////////////////////////////////////////////////////////
         // First, try direct hostname match - #110515#

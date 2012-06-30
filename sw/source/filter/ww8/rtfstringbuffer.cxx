@@ -91,7 +91,7 @@ rtl::OString RtfStringBuffer::makeStringAndClear()
 
 rtl::OStringBuffer& RtfStringBuffer::getLastBuffer()
 {
-    if (!m_aValues.size() || m_aValues.back().isGraphic())
+    if (m_aValues.empty() || m_aValues.back().isGraphic())
         m_aValues.push_back(RtfStringBufferValue());
     return m_aValues.back().m_aBuffer;
 }

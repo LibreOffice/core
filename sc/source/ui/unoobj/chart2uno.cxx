@@ -2030,7 +2030,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
             }
         }
 
-        if( bDifferentIndexes && aSequenceMappingVector.size() )
+        if( bDifferentIndexes && !aSequenceMappingVector.empty() )
         {
             aResult.push_back(
                 beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SequenceMapping")), -1,

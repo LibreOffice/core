@@ -1715,7 +1715,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
     } // for
 
-    if ( !bTransient && aProppatchValues.size() )
+    if ( !bTransient && !aProppatchValues.empty() )
     {
         try
         {

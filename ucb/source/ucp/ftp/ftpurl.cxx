@@ -215,7 +215,7 @@ void FTPURL::parse(const rtl::OUString& url)
         *p1 = 0;
 
         if(buffer[0]) {
-            if( strcmp(buffer,"..") == 0 && m_aPathSegmentVec.size() && m_aPathSegmentVec.back() != ".." )
+            if( strcmp(buffer,"..") == 0 && !m_aPathSegmentVec.empty() && m_aPathSegmentVec.back() != ".." )
                 m_aPathSegmentVec.pop_back();
             else if(strcmp(buffer,".") == 0)
                 ; // Ignore

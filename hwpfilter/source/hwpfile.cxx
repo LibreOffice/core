@@ -255,7 +255,7 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
          }
         if (spNode->nch && spNode->reuse_shape)
         {
-            if (aplist.size()){
+            if (!aplist.empty()){
                      spNode->pshape = aplist.back()->pshape;
                 }
                 else{
@@ -267,7 +267,7 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
           if( spNode->nch )
                 AddParaShape( &spNode->pshape );
 
-        if (aplist.size())
+        if (!aplist.empty())
             aplist.back()->SetNext(spNode);
         aplist.push_back(spNode);
         spNode = new HWPPara;
@@ -441,7 +441,7 @@ void HWPFile::AddBox(FBox * box)
 {
 // LATER if we don't use box->next(),
 // AddBox() and GetBoxHead() are useless;
-    if (blist.size())
+    if (!blist.empty())
     {
         box->prev = blist.back();
         box->prev->next = box;

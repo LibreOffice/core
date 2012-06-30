@@ -316,7 +316,7 @@ void PDFIProcessor::processGlyphLine()
     ParagraphElement* pPara= NULL ;
     FrameElement* pFrame= NULL ;
 
-    if(m_GlyphsList.size()>0)
+    if(!m_GlyphsList.empty())
     {
         pFrame = m_pElFactory->createFrameElement( m_GlyphsList[0].getCurElement(), getGCId( getTransformGlyphContext( m_GlyphsList[0])) );
         pFrame->ZOrder = m_nNextZOrder++;
