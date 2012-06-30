@@ -127,10 +127,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbConvertOOoTargets( sal_False ),
     mbExportBmkToPDFDestination( sal_False ),
 
-    mbSignPDF( sal_False ),
-    msSignLocation ( ' ' ),
-    msSignContact( ' ' ),
-    msSignReason( ' ' )
+    mbSignPDF( sal_False )
 
 {
     FreeResource();
@@ -462,15 +459,15 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     }
 
     aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureLocation" ) );
-    aRet[ nLength - nElementAdded ].Value <<= OUString( msSignLocation );
+    aRet[ nLength - nElementAdded ].Value <<= msSignLocation;
     nElementAdded--;
 
     aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureReason" ) );
-    aRet[ nLength - nElementAdded ].Value <<= OUString( msSignReason );
+    aRet[ nLength - nElementAdded ].Value <<= msSignReason;
     nElementAdded--;
 
     aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureContactInfo" ) );
-    aRet[ nLength - nElementAdded ].Value <<= OUString( msSignContact );
+    aRet[ nLength - nElementAdded ].Value <<= msSignContact;
     nElementAdded--;
 
     return aRet;

@@ -629,6 +629,11 @@ The following structure describes the permissions used in PDF security
         PDFWriter::PDFEncryptionProperties  Encryption;
         PDFWriter::PDFDocInfo           DocumentInfo;
 
+        bool                            SignPDF;
+        rtl::OUString                   SignLocation;
+        rtl::OUString                   SignReason;
+        rtl::OUString                   SignContact;
+
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
         sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
                                                         // 0 here specifies a default handling
@@ -660,6 +665,7 @@ The following structure describes the permissions used in PDF security
                 InitialPage( 1 ),
                 OpenBookmarkLevels( -1 ),
                 Encryption(),
+                SignPDF( false ),
                 DPIx( 0 ),
                 DPIy( 0 ),
                 ColorMode( PDFWriter::DrawColor )

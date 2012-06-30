@@ -117,6 +117,12 @@ private:
     sal_Bool                mbExportBmkToDest;
     sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
+
+    sal_Bool                mbSignPDF;
+    OUString                msSignLocation;
+    OUString                msSignContact;
+    OUString                msSignReason;
+
     void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
 public:
 

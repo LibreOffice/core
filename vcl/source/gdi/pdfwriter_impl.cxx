@@ -138,6 +138,11 @@ void doTestCode()
     aContext.DocumentInfo.Title = OUString( "PDF export test document"  );
     aContext.DocumentInfo.Producer = OUString( "VCL"  );
 
+    aContext.SignPDF        = true;
+    aContext.SignLocation   = OUString( "Burdur" );
+    aContext.SignReason     = OUString( "Some valid reason to sign" );
+    aContext.SignContact    = OUString( "signer@example.com" );
+
     com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > xEnc;
     PDFWriter aWriter( aContext, xEnc );
     aWriter.NewPage( 595, 842 );
@@ -523,11 +528,6 @@ void doTestCode()
     aWriter.CreateOutlineItem( nPage2OL, OUString( "Dest 1"  ), nFirstDest );
 
     aWriter.EndStructureElement(); // close document
-
-    // sign the document
-    PDFWriter::SignatureWidget aSignature;
-    aSignature.Name = OUString("Signature1");
-    aWriter.CreateControl( aSignature, 0);
 
     aWriter.Emit();
 }
@@ -6099,13 +6099,13 @@ bool PDFWriterImpl::emitSignature()
     OStringBuffer aContentFiller( MAX_SIGNATURE_CONTENT_LENGTH );
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
     aLine.append( aContentFiller.makeStringAndClear() );
-    aLine.append( ">\n/Type/Sig/SubFilter/adbe.pkcs7.sha1/Location()"
-                  "/Name ");
+    aLine.append( ">\n/Type/Sig/SubFilter/adbe.pkcs7.sha1");
 
     if( m_aContext.DocumentInfo.Author.Len() )
+    {
+        aLine.append( "/Name" );
         appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Author, m_nSignatureObject, aLine );
-    else
-        aLine.append("()");
+    }
 
     aLine.append( " /M ");
     appendLiteralStringEncrypt( m_aCreationDateString, m_nSignatureObject, aLine );
@@ -6124,8 +6124,28 @@ bool PDFWriterImpl::emitSignature()
     OStringBuffer aByteRangeFiller( 100  );
     comphelper::string::padToLength(aByteRangeFiller, 100, ' ');
     aLine.append( aByteRangeFiller.makeStringAndClear() );
-    aLine.append("  /Filter/Adobe.PPKMS/Reason()>>"
-                 "\nendobj\n\n" );
+    aLine.append("  /Filter/Adobe.PPKMS");
+
+    //emit reason, location and contactinfo
+    if ( !m_aContext.SignReason.isEmpty() )
+    {
+        aLine.append("/Reason");
+        appendUnicodeTextStringEncrypt( m_aContext.SignReason, m_nSignatureObject, aLine );
+    }
+
+    if ( !m_aContext.SignLocation.isEmpty() )
+    {
+        aLine.append("/Location");
+        appendUnicodeTextStringEncrypt( m_aContext.SignLocation, m_nSignatureObject, aLine );
+    }
+
+    if ( !m_aContext.SignContact.isEmpty() )
+    {
+        aLine.append("/ContactInfo");
+        appendUnicodeTextStringEncrypt( m_aContext.SignContact, m_nSignatureObject, aLine );
+    }
+
+    aLine.append(" >>\nendobj\n\n" );
 
     if (!writeBuffer( aLine.getStr(), aLine.getLength() ))
         return false;
@@ -6945,6 +6965,14 @@ bool PDFWriterImpl::emit()
     // resort structure tree and annotations if necessary
     // needed for widget tab order
     sortWidgets();
+
+    if( m_aContext.SignPDF )
+    {
+        // sign the document
+        PDFWriter::SignatureWidget aSignature;
+        aSignature.Name = OUString("Signature1");
+        createControl( aSignature, 0 );
+    }
 
     // emit additional streams
     CHECK_RETURN( emitAdditionalStreams() );

@@ -151,9 +151,9 @@ protected:
     sal_Bool                    mbExportBmkToPDFDestination;
 
     sal_Bool                    mbSignPDF;
-    String                      msSignLocation;
-    String                      msSignContact;
-    String                      msSignReason;
+    ::rtl::OUString             msSignLocation;
+    ::rtl::OUString             msSignContact;
+    ::rtl::OUString             msSignReason;
 
     ::rtl::OUString             maWatermarkText;
 
