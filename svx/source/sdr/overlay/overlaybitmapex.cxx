@@ -28,7 +28,6 @@
 
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/overlay/overlaytools.hxx>

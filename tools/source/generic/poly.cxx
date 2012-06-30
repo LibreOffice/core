@@ -29,6 +29,7 @@
 #include <osl/endian.h>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
+#include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <poly.h>

@@ -32,6 +32,7 @@
 #include <tools/vcompat.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/region.hxx>
 #include <vcl/regband.hxx>
 

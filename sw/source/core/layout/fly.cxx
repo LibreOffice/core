@@ -31,6 +31,7 @@
 #include <svtools/imap.hxx>
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
+#include <tools/helpers.hxx>
 #include <svx/contdlg.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
@@ -85,7 +86,6 @@
 #include "ndindex.hxx"   // GetGrfArea
 #include "sectfrm.hxx"
 #include <vcl/svapp.hxx>
-#include <vcl/salbtype.hxx>     // FRound
 #include "switerator.hxx"
 
 using namespace ::com::sun::star;

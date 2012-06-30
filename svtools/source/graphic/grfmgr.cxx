@@ -32,6 +32,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/helpers.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/tempfile.hxx>
@@ -39,7 +40,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/salbtype.hxx>
 #include <svtools/grfmgr.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>

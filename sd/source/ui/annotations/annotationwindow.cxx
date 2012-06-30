@@ -75,8 +75,8 @@
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/salbtype.hxx> // FRound
 #include <vcl/cursor.hxx>
+#include <tools/helpers.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>

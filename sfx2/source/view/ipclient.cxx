@@ -48,7 +48,6 @@
 #include "workwin.hxx"
 #include "guisaveas.hxx"
 #include <cppuhelper/implbase5.hxx>
-#include <vcl/salbtype.hxx>
 #include <svtools/ehdl.hxx>
 
 #include <vcl/timer.hxx>

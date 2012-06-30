@@ -28,7 +28,6 @@
 
 #include <svx/sdr/overlay/overlaytriangle.hxx>
 #include <tools/poly.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

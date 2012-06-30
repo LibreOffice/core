@@ -77,7 +77,6 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <unx/salgdi.h>
 #include <unx/salframe.h>
 #include <vcl/keycodes.hxx>
-#include <vcl/salbtype.hxx>
 #include <unx/salbmp.h>
 #include <osl/mutex.h>
 #include <unx/salobj.h>

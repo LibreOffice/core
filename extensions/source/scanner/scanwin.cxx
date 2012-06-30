@@ -42,12 +42,12 @@
 #include <postwin.h>
 #include <math.h>
 #include <tools/stream.hxx>
+#include <tools/helpers.hxx>
 #include <osl/mutex.hxx>
 #include <osl/module.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/salbtype.hxx>
 #include "scanner.hxx"
 
 #if defined MSC

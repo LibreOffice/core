@@ -29,7 +29,7 @@
 
 #include "emfwr.hxx"
 #include <rtl/strbuf.hxx>
-#include <vcl/salbtype.hxx>
+#include <tools/helpers.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>

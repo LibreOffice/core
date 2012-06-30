@@ -34,7 +34,7 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
-#include <tools/gen.hxx>
+#include <tools/helpers.hxx>
 
 #include <sax/tools/converter.hxx>
 

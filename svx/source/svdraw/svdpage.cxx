@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <tools/helpers.hxx>
 
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
@@ -59,7 +60,6 @@
 #include <svx/fmdpage.hxx>
 
 #include <sfx2/objsh.hxx>
-#include <vcl/salbtype.hxx>     // FRound
 #include <svx/sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

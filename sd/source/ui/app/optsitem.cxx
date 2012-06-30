@@ -29,7 +29,7 @@
 #include <svx/svdmodel.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
-#include <vcl/salbtype.hxx>
+#include <tools/helpers.hxx>
 #include <unotools/syslocale.hxx>
 
 #include "app.hxx"

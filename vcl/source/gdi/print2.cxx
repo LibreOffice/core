@@ -41,7 +41,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bmpacc.hxx>

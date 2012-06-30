@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <vcl/salbtype.hxx>
 #include <vcl/rendergraphicrasterizer.hxx>
 #include "wmfwr.hxx"
 #include <unotools/fontcvt.hxx>
@@ -35,6 +34,7 @@
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <tools/bigint.hxx>
+#include <tools/helpers.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/endian.h>
 #include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType

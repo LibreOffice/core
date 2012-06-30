@@ -33,7 +33,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <tools/gen.hxx>
+#include <tools/helpers.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>

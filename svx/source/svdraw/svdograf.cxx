@@ -30,7 +30,7 @@
 
 #include <sfx2/lnkbase.hxx>
 #include <math.h>
-#include <vcl/salbtype.hxx>
+#include <tools/helpers.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/storagehelper.hxx>

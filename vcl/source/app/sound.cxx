@@ -18,13 +18,8 @@
  */
 
 
-#include <tools/urlobj.hxx>
-
-#include <unotools/localfilehelper.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/sound.hxx>
 
 #include <salframe.hxx>

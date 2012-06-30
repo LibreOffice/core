@@ -29,6 +29,7 @@
 
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/helpers.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -37,7 +38,6 @@
 
 #include <rtl/math.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metaact.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

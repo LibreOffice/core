@@ -28,7 +28,6 @@
 
 #include <svx/sdr/overlay/overlayline.hxx>
 #include <tools/gen.hxx>
-#include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

@@ -32,6 +32,7 @@
 
 #include <tools/errinf.hxx>
 #include <tools/stream.hxx>
+#include <tools/helpers.hxx>
 #include <svl/itemiter.hxx>
 #include <svtools/rtftoken.h>
 #include <svtools/miscopt.hxx>
@@ -111,7 +112,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <vcl/salbtype.hxx>     // FRound
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
