@@ -141,9 +141,9 @@ namespace
     {
         sw::Frames aRet;
 
-        for(SwPosFlyFrms::const_iterator aPos(rFlys.begin()); aPos != rFlys.end(); aPos++)
+        for(SwPosFlyFrms::const_iterator aIter(rFlys.begin()); aIter != rFlys.end(); aIter++)
         {
-            const SwFrmFmt &rEntry = (*aPos)->GetFmt();
+            const SwFrmFmt &rEntry = (*aIter)->GetFmt();
 
             if (const SwPosition* pAnchor = rEntry.GetAnchor().GetCntntAnchor())
             {
@@ -151,7 +151,7 @@ namespace
             }
             else
             {
-                SwPosition aPos((*aPos)->GetNdIndex());
+                SwPosition aPos((*aIter)->GetNdIndex());
 
                 if (SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode())
                 {
