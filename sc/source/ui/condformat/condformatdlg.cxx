@@ -1027,7 +1027,7 @@ void ScCondFormatList::RecalcAll()
         mpScrollBar->Hide();
     }
 
-    Point aPoint(0,0);
+    Point aPoint(0,-1*mpScrollBar->GetThumbPos());
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         itr->SetPosPixel(aPoint);
