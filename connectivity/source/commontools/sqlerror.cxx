@@ -309,12 +309,6 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SQLError::getSQLState( const ErrorCondition _eCondition ) const
-    {
-        return m_pImpl->getSQLState( _eCondition );
-    }
-
-    //--------------------------------------------------------------------
     ErrorCode SQLError::getErrorCode( const ErrorCondition _eCondition )
     {
         return SQLError_Impl::getErrorCode( _eCondition );

@@ -64,6 +64,7 @@ SrchAttrItemList::Replace(SearchAttrItem const&, unsigned short)
 SrchAttrItemList::Replace(SearchAttrItem const*, unsigned short, unsigned short)
 SrchAttrItemList::_ForEach(unsigned short, unsigned short, unsigned char (*)(SearchAttrItem const&, void*), void*)
 StgCache::Pos2Page(int)
+String::CreateFromAscii(char const*, unsigned short)
 String::String(rtl::OString const&, unsigned short, unsigned int)
 String::String(unsigned short const*)
 String::String(unsigned short const*, unsigned short)
@@ -320,7 +321,6 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<co
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::OKeyValue::OKeyValue()
-connectivity::SQLError::getSQLState(int) const
 connectivity::file::OStatement_Base::reset()
 connectivity::mozab::MQueryHelper::next()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)

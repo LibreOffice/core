@@ -126,19 +126,9 @@ namespace connectivity
                             const ParamValue& _rParamValue3 = ParamValue()
                         ) const;
 
-        /** returns the SQLState associated with a given error condition
-
-            @see getErrorMessage
-            @see getErrorCode
-            @see ::com::sun::star::sdb::ErrorCondition
-            @see ::com::sun::star::sdbc::SQLException::SQLState
-        */
-        ::rtl::OUString getSQLState( const ErrorCondition _eCondition ) const;
-
         /** returns the error code associated with a given error condition
 
             @see getErrorMessage
-            @see getSQLState
             @see ::com::sun::star::sdb::ErrorCondition
             @see ::com::sun::star::sdbc::SQLException::ErrorCode
         */
@@ -187,7 +177,6 @@ namespace connectivity
 
             @see getErrorMessage
             @see getErrorCode
-            @see getSQLState
         */
         void            raiseException(
                             const ErrorCondition _eCondition,
@@ -226,7 +215,6 @@ namespace connectivity
 
             @see getErrorMessage
             @see getErrorCode
-            @see getSQLState
         */
         void            raiseException(
                             const ErrorCondition _eCondition,
@@ -270,7 +258,6 @@ namespace connectivity
 
             @see getErrorMessage
             @see getErrorCode
-            @see getSQLState
         */
         void            raiseTypedException(
                             const ErrorCondition _eCondition,
@@ -308,7 +295,6 @@ namespace connectivity
 
             @see getErrorMessage
             @see getErrorCode
-            @see getSQLState
         */
         ::com::sun::star::sdbc::SQLException
                         getSQLException(

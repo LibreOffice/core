@@ -35,6 +35,10 @@ typedef uno::Sequence<beans::PropertyValues> PropertyValueSeq_t;
 void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger,
      PropertyValueSeq_t & rPropValSeq);
 
+typedef uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
+void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger,
+        PropertyValueSeqSeq_t & rPropValSeqSeq);
+}
 }
 #endif // OSL_DEBUG_LEVEL > 1
 
