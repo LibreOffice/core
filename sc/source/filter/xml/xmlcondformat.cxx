@@ -363,7 +363,7 @@ void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::
         const sal_Unicode* pStr = rValue.getStr();
         const sal_Unicode* pStart = pStr + 11;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
-        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ',');
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
         eMode = SC_COND_DIRECT;
     }
     else
