@@ -41,19 +41,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-// Breitenangaben der Fussnotenlinien, mit TabPage abstimmen
-static const sal_uInt16 nFtnLines[] = {
-    0,
-    10,
-    50,
-    80,
-    100,
-    150
-};
-
-#define FTN_LINE_STYLE_COUNT 5
-
-
 SwPageFtnInfoItem::SwPageFtnInfoItem( const sal_uInt16 nId, SwPageFtnInfo& rInfo) :
     SfxPoolItem( nId ),
     aFtnInfo(rInfo)
