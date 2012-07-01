@@ -109,11 +109,6 @@ typedef sal_uInt32      ControlType;
 // A separator line
 #define CTRL_FIXEDLINE          80
 
-// A rectangular border, like a
-// Tab Pane, but without the
-// possible gap for a tab
-#define CTRL_FIXEDBORDER        90
-
 // A toolbar control with buttons and a grip
 #define CTRL_TOOLBAR            100
 

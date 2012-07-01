@@ -302,7 +302,6 @@ sal_Bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
         case CTRL_TAB_PANE:
         case CTRL_TAB_BODY:
         case CTRL_TAB_ITEM:
-        case CTRL_FIXEDBORDER:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Tab");
             break;
@@ -827,21 +826,6 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( nType == CTRL_FIXEDBORDER )
-    {
-        /*
-        iPart = BP_GROUPBOX;
-        if( !(nState & CTRL_STATE_ENABLED) )
-            iState = GBS_DISABLED;
-        else
-            iState = GBS_NORMAL;
-            */
-        // The fixed border is only used around the tools->options tabpage where
-        // TABP_PANE fits best
-        iPart = TABP_PANE;
-        return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
-    }
-
     if( nType == CTRL_TAB_BODY )
     {
         iPart = TABP_BODY;
@@ -1184,7 +1168,6 @@ sal_Bool WinSalGraphics::drawNativeControl( ControlType nType,
         case CTRL_TAB_PANE:
         case CTRL_TAB_BODY:
         case CTRL_TAB_ITEM:
-        case CTRL_FIXEDBORDER:
             hTheme = getThemeHandle( mhWnd, L"Tab");
             break;
         case CTRL_TOOLBAR:

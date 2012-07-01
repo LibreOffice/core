@@ -1215,7 +1215,6 @@ sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
     ( (nType == CTRL_SCROLLBAR)   && (nPart == HAS_THREE_BUTTONS) ) || // TODO small optimization is possible here: return this only if the style really has 3 buttons
     // CTRL_GROUPBOX not supported
     // CTRL_FIXEDLINE not supported
-    // CTRL_FIXEDBORDER not supported
     ( (nType == CTRL_TOOLBAR)     && (nPart == PART_ENTIRE_CONTROL ||
                                       nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT ||
                                       nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT ||

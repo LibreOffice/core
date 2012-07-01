@@ -132,8 +132,6 @@ sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart
 
     if (type == CTRL_FIXEDLINE) return true;
 
-    if (type == CTRL_FIXEDBORDER) return true;
-
     if (type == CTRL_TOOLTIP) return true;
 
     if (type == CTRL_RADIOBUTTON) return true;
@@ -557,11 +555,6 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
         int fw = getFrameWidth();
         clipRegion = new QRegion( QRegion( widgetRect ).subtracted( widgetRect.adjusted( fw, fw, -fw, -fw )));
-    }
-    else if (type == CTRL_FIXEDBORDER)
-    {
-        lcl_drawFrame( QStyle::PE_FrameWindow, m_image,
-                       vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == CTRL_WINDOW_BACKGROUND)
     {

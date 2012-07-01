@@ -592,7 +592,6 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
         case CTRL_TAB_ITEM:
         case CTRL_TAB_PANE:
         case CTRL_TAB_BODY:
-        case CTRL_FIXEDBORDER:
             if(nPart==PART_ENTIRE_CONTROL || nPart==PART_TABS_DRAW_RTL)
                 return true;
             break;
@@ -870,7 +869,7 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     {
         returnVal = NWPaintGTKComboBox( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
-    else if ( (nType==CTRL_TAB_ITEM) || (nType==CTRL_TAB_PANE) || (nType==CTRL_TAB_BODY) || (nType==CTRL_FIXEDBORDER) )
+    else if ( (nType==CTRL_TAB_ITEM) || (nType==CTRL_TAB_PANE) || (nType==CTRL_TAB_BODY) )
     {
         if ( nType == CTRL_TAB_BODY )
             returnVal = sal_True;
@@ -2593,7 +2592,6 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
         case CTRL_TAB_BODY:
             break;
 
-        case CTRL_FIXEDBORDER:
         case CTRL_TAB_PANE:
             gtk_paint_box_gap( gWidgetData[m_nXScreen].gNotebookWidget->style, pixmap, GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
                 (char *)"notebook", 0, 0, pixmapRect.GetWidth(), pixmapRect.GetHeight(), GTK_POS_TOP, 0, 0 );
@@ -2632,10 +2630,6 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
         default:
             break;
     }
-
-    // Crux seems to think it can make the pane without a left edge
-    if ( nType == CTRL_FIXEDBORDER )
-        pixmapRect.Move( 1, 0 );
 
     // cache data
     if( nType == CTRL_TAB_ITEM )

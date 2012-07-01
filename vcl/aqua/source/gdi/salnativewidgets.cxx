@@ -314,7 +314,6 @@ sal_Bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPa
         case CTRL_TAB_ITEM:
         case CTRL_TAB_PANE:
         case CTRL_TAB_BODY:  // see vcl/source/window/tabpage.cxx
-        case CTRL_FIXEDBORDER:
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == PART_TABS_DRAW_RTL ||
                 nPart == HAS_BACKGROUND_TEXTURE )
@@ -517,7 +516,6 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_FIXEDBORDER:
     case CTRL_TOOLBAR:
         {
             HIThemeMenuItemDrawInfo aMenuItemDrawInfo;
