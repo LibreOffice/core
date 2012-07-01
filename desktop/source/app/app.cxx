@@ -1544,7 +1544,6 @@ int Desktop::Main()
 
         // create title string
         ::com::sun::star::lang::Locale aLocale;
-        String aMgrName = String::CreateFromAscii( "ofa" );
         ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( "ofa", aLocale );
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
