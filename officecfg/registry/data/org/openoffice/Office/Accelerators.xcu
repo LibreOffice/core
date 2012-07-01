@@ -87,10 +87,11 @@
    </node>
    <node oor:name="F_MOD1_MOD2" oor:op="replace">
     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+     <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
      <value xml:lang="de">.uno:SearchDialog</value>
     </prop>
    </node>
-   <node oor:name="H_MOD1" oor:op="replace">
+   <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
      <value xml:lang="en-US">.uno:SearchDialog</value>
     </prop>
@@ -245,7 +246,7 @@
       <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
      </prop>
     </node>
-    <node oor:name="H_MOD1" oor:op="replace">
+    <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno.SearchDialog</value>
      </prop>
@@ -626,6 +627,7 @@
     </node>
     <node oor:name="F_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
       <value xml:lang="de">.uno:SearchDialog</value>
      </prop>
     </node>
@@ -1183,6 +1185,7 @@
     </node>
     <node oor:name="F_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
       <value xml:lang="de">.uno:SearchDialog</value>
      </prop>
     </node>
@@ -1207,7 +1210,7 @@
       <value xml:lang="en-US">.uno:FormatUngroup</value>
      </prop>
     </node>
-    <node oor:name="H_MOD1" oor:op="replace">
+    <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:SuperScript</value>
      </prop>
@@ -1684,6 +1687,7 @@
     </node>
     <node oor:name="F_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
       <value xml:lang="de">.uno:SearchDialog</value>
      </prop>
     </node>
@@ -1719,7 +1723,7 @@
       <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
      </prop>
     </node>
-    <node oor:name="H_MOD1" oor:op="replace">
+    <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:SuperScript</value>
      </prop>
@@ -2182,6 +2186,7 @@
     </node>
     <node oor:name="F_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
       <value xml:lang="de">.uno:SearchDialog</value>
      </prop>
     </node>
@@ -2206,7 +2211,7 @@
       <value xml:lang="en-US">.uno:FormatUngroup</value>
      </prop>
     </node>
-    <node oor:name="H_MOD1" oor:op="replace">
+    <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:SuperScript</value>
      </prop>
@@ -2750,6 +2755,7 @@
     </node>
     <node oor:name="F_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
       <value xml:lang="de">.uno:SearchDialog</value>
      </prop>
     </node>
@@ -2785,7 +2791,7 @@
       <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
      </prop>
     </node>
-    <node oor:name="H_MOD1" oor:op="replace">
+    <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:SuperScript</value>
      </prop>
@@ -3385,6 +3391,7 @@
     </node>
     <node oor:name="F_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
       <value xml:lang="de">.uno:SearchDialog</value>
      </prop>
     </node>
@@ -3425,7 +3432,7 @@
       <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
      </prop>
     </node>
-    <node oor:name="H_MOD1" oor:op="replace">
+    <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:SuperScript</value>
      </prop>
@@ -4026,6 +4033,7 @@
     </node>
     <node oor:name="F_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
       <value xml:lang="de">.uno:SearchDialog</value>
      </prop>
     </node>
@@ -4055,7 +4063,7 @@
       <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
      </prop>
     </node>
-    <node oor:name="H_MOD1" oor:op="replace">
+    <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:SuperScript</value>
      </prop>
@@ -4655,6 +4663,7 @@
     </node>
     <node oor:name="F_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
       <value xml:lang="de">.uno:SearchDialog</value>
      </prop>
     </node>
@@ -4690,7 +4699,7 @@
       <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
      </prop>
     </node>
-    <node oor:name="H_MOD1" oor:op="replace">
+    <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:SuperScript</value>
      </prop>
@@ -5290,6 +5299,7 @@
     </node>
     <node oor:name="F_MOD1_MOD2" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US" install:module="macosx">.uno:SearchDialog</value>
       <value xml:lang="de">.uno:SearchDialog</value>
      </prop>
     </node>
@@ -5325,7 +5335,7 @@
       <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
      </prop>
     </node>
-    <node oor:name="H_MOD1" oor:op="replace">
+    <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="de">.uno:SuperScript</value>
      </prop>
