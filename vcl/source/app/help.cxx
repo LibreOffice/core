@@ -283,8 +283,7 @@ void Help::HideTip( sal_uLong nId )
     HelpTextWindow* pHelpWin = (HelpTextWindow*)nId;
     Window* pFrameWindow = pHelpWin->ImplGetFrameWindow();
     pHelpWin->Hide();
-    // Update ausloesen, damit ein Paint sofort ausgeloest wird, da
-    // wir den Hintergrund nicht sichern
+    // trigger update, so that a Paint is instantly triggered since we do not save the background
     pFrameWindow->ImplUpdateAll();
     delete pHelpWin;
     ImplGetSVData()->maHelpData.mnLastHelpHideTime = Time::GetSystemTicks();
@@ -374,7 +373,7 @@ void HelpTextWindow::SetHelpText( const String& rHelpText )
         Point       aTmpPoint;
         sal_uInt16      nCharsInLine = 35 + ((maHelpText.Len()/100)*5);
         XubString   aXXX;
-        aXXX.Fill( nCharsInLine, 'x' );   // Durchschnittliche Breite, damit nicht jedes Fenster anders.
+        aXXX.Fill( nCharsInLine, 'x' );   // average width to have all windows consistent
         long nWidth = GetTextWidth( aXXX );
         Size aTmpSize( nWidth, 0x7FFFFFFF );
         Rectangle aTry1( aTmpPoint, aTmpSize );
@@ -384,10 +383,10 @@ void HelpTextWindow::SetHelpText( const String& rHelpText )
             nDrawFlags |= TEXT_DRAW_MNEMONIC;
         Rectangle aTextRect = GetTextRect( aTry1, maHelpText, nDrawFlags );
 
-        // Spaeter mal eine geeignete Breite ermitteln...
+        // get a better width later...
         maTextRect = aTextRect;
 
-        // Sicherheitsabstand...
+        // safety distance...
         maTextRect.SetPos( Point( HELPTEXTMARGIN_BALLOON, HELPTEXTMARGIN_BALLOON ) );
     }
 
@@ -461,7 +460,7 @@ void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
     sal_uLong nTimeout = 0;
     if ( nDelayMode != HELPDELAY_NONE )
     {
-        // Im ExtendedHelp-Fall die Hilfe schneller anzeigen
+        // In case of ExtendedHelp display help sooner
         if ( ImplGetSVData()->maHelpData.mbExtHelpMode )
             nTimeout = 15;
         else
@@ -519,8 +518,8 @@ Size HelpTextWindow::CalcOutSize() const
 
 void HelpTextWindow::RequestHelp( const HelpEvent& /*rHEvt*/ )
 {
-    // Nur damit nicht von Window::RequestHelp() ein
-    // ShowQuickHelp/ShowBalloonHelp am HelpTextWindow aufgerufen wird.
+    // Just to assure that Window::RequestHelp() is not called by
+    // ShowQuickHelp/ShowBalloonHelp in the HelpTextWindow.
 }
 
 // -----------------------------------------------------------------------

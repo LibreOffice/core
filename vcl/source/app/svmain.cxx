@@ -97,7 +97,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 {
     static bool bIn = false;
 
-    // Wenn wir nocheinmal abstuerzen, verabschieden wir uns gleich
+    // if we crash again, bail out immediatly
     if ( !bIn )
     {
         sal_uInt16 nVCLException = 0;
@@ -130,8 +130,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 
             SolarMutexGuard aLock;
 
-            // Timer nicht mehr anhalten, da ansonsten die UAE-Box
-            // auch nicht mehr gepaintet wird
+            // do not stop timer because otherwise the UAE-Box will not be painted as well
             ImplSVData* pSVData = ImplGetSVData();
             if ( pSVData->mpApp )
             {
@@ -168,7 +167,7 @@ int ImplSVMain()
 
     if( bInit )
     {
-        // Application-Main rufen
+        // call application main
         pSVData->maAppData.mbInAppMain = sal_True;
         nReturn = pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = sal_False;
@@ -298,8 +297,7 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
         // soffice/sfx implementation creates the global service manager
         pSVData->mpApp->Init();
 
-    // Den AppFileName gleich holen und absolut machen, bevor das
-    // WorkingDirectory sich aendert...
+    // Fetch AppFileName and make it absolute before the workdir changes...
     rtl::OUString aExeFileName;
     osl_getExecutableFile( &aExeFileName.pData );
 
@@ -313,10 +311,10 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
     pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache( sal_False );
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
-    // Exception-Handler setzen
+    // Set exception handler
     pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, NULL);
 
-    // Debug-Daten initialisieren
+    // initialise debug data
     DBGGUI_INIT();
 
     return sal_True;

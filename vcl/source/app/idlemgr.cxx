@@ -92,7 +92,7 @@ sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
         mpIdleList->push_back( pIdleData );
     }
 
-    // Wenn Timer noch nicht gestartet ist, dann starten
+    // if Timer was not started already then start it now
     if ( !maTimer.IsActive() )
         maTimer.Start();
 

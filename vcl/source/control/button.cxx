@@ -1273,7 +1273,7 @@ void PushButton::Tracking( const TrackingEvent& rTEvt )
 
             ImplDrawPushButton();
 
-            // Bei Abbruch kein Click-Handler rufen
+            // do not call Click handler if aborted
             if ( !rTEvt.IsTrackingCanceled() )
             {
                 if ( ! ( ( GetStyle() & WB_REPEAT ) &&
@@ -1760,7 +1760,7 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 void OKButton::Click()
 {
     SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for OKButton");
-    // Ist kein Link gesetzt, dann schliesse Parent
+    // close parent if no link set
     if ( !GetClickHdl() )
     {
         Window* pParent = GetParent();
@@ -1770,7 +1770,7 @@ void OKButton::Click()
             {
                 if ( ((Dialog*)pParent)->IsInExecute() )
                     ((Dialog*)pParent)->EndDialog( sal_True );
-                // gegen rekursive Aufrufe schuetzen
+                // prevent recursive calls
                 else if ( !((Dialog*)pParent)->IsInClose() )
                 {
                     if ( pParent->GetStyle() & WB_CLOSEABLE )
@@ -1827,7 +1827,7 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
 void CancelButton::Click()
 {
     SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for CancelButton");
-    // Ist kein Link gesetzt, dann schliesse Parent
+    // close parent if link not set
     if ( !GetClickHdl() )
     {
         Window* pParent = GetParent();
@@ -1837,7 +1837,7 @@ void CancelButton::Click()
             {
                 if ( ((Dialog*)pParent)->IsInExecute() )
                     ((Dialog*)pParent)->EndDialog( sal_False );
-                // gegen rekursive Aufrufe schuetzen
+                // prevent recursive calls
                 else if ( !((Dialog*)pParent)->IsInClose() )
                 {
                     if ( pParent->GetStyle() & WB_CLOSEABLE )
@@ -1894,7 +1894,7 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
 void HelpButton::Click()
 {
     SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for HelpButton");
-    // Ist kein Link gesetzt, loese Hilfe aus
+    // trigger help if no link set
     if ( !GetClickHdl() )
     {
         Window* pFocusWin = Application::GetFocusWindow();
@@ -2066,7 +2066,7 @@ if ( bNativeOK == sal_False )
         aImageSize.Width()  = CalcZoom( aImageSize.Width() );
         aImageSize.Height() = CalcZoom( aImageSize.Height() );
 
-        // Border und Selektionsstatus ausgeben
+        // display border and selection status
         aImageRect = aDecoView.DrawFrame( aImageRect, nButtonStyle );
         if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) || !bEnabled )
             SetFillColor( rStyleSettings.GetFaceColor() );
@@ -2075,7 +2075,7 @@ if ( bNativeOK == sal_False )
         SetLineColor();
         DrawRect( aImageRect );
 
-        // Image ausgeben
+        // display image
         nButtonStyle = 0;
         if ( !bEnabled )
             nButtonStyle |= IMAGE_DRAW_DISABLE;
@@ -2138,7 +2138,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     pDev->Push( PUSH_CLIPREGION );
     pDev->IntersectClipRegion( Rectangle( rPos, rSize ) );
 
-    // kein Image-RadioButton
+    // no image radio button
     if ( !maImage )
     {
         if ( ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) ) ||
@@ -2206,8 +2206,8 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 
             ImplSetFocusRect( rStateRect );
 
-/*  und oben -1, da CalcSize() auch Focus-Rechteck nicht mit einrechnet,
-da im Writer ansonsten die Images noch weiter oben haengen
+/*  and above -1 because CalcSize() does not include focus-rectangle since images would be even
+    positioned higher in writer
             rFocusRect          = rStateRect;
             rFocusRect.Left()--;
             rFocusRect.Top()--;
@@ -2224,7 +2224,7 @@ da im Writer ansonsten die Images noch weiter oben haengen
         long        nTextHeight = pDev->GetTextHeight();
         long        nTextWidth  = pDev->GetCtrlTextWidth( aText );
 
-        // Positionen und Groessen berechnen
+        // calculate position and sizes
         if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
         {
             Size aTmpSize( (aImageSize.Width()+8), (aImageSize.Height()+8) );
@@ -2239,7 +2239,7 @@ da im Writer ansonsten die Images noch weiter oben haengen
             aImageRect.Right()  = aImageRect.Left()+aTmpSize.Width();
             aImageRect.Bottom() = aImageRect.Top()+aTmpSize.Height();
 
-            // Text ausgeben
+            // display text
             Point aTxtPos = rPos;
             if ( bTopImage )
             {
@@ -2324,7 +2324,7 @@ void RadioButton::ImplUncheckAllOther()
 {
     mpWindowImpl->mnStyle |= WB_TABSTOP;
 
-    // Gruppe mit RadioButtons durchgehen und die gecheckten Buttons
+    // iterate over radio button group and checked buttons
     Window* pWindow;
     WinBits nStyle;
     if ( !(GetStyle() & WB_GROUP) )
@@ -2345,8 +2345,7 @@ void RadioButton::ImplUncheckAllOther()
                         return;
                     pWindow->ImplRemoveDel( &aDelData );
                 }
-                // Um falsch gesetzt WB_TABSTOPS immer zu entfernen, nicht
-                // innerhalb der if-Abfrage
+                // not inside if clause to always remove wrongly set WB_TABSTOPS
                 pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
             }
 
@@ -2376,8 +2375,8 @@ void RadioButton::ImplUncheckAllOther()
                     return;
                 pWindow->ImplRemoveDel( &aDelData );
             }
-            // Um falsch gesetzt WB_TABSTOPS immer zu entfernen, nicht
-            // innerhalb der if-Abfrage
+
+            // not inside if clause to always remove wrongly set WB_TABSTOPS
             pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
         }
 
@@ -2484,7 +2483,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
 
             ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
 
-            // Bei Abbruch kein Click-Handler rufen
+            // do not call click handler if aborted
             if ( !rTEvt.IsTrackingCanceled() )
                 ImplCallClick();
             else
@@ -3399,7 +3398,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
 
             ImplGetButtonState() &= ~BUTTON_DRAW_PRESSED;
 
-            // Bei Abbruch kein Click-Handler rufen
+            // do not call click handler if aborted
             if ( !rTEvt.IsTrackingCanceled() )
                 ImplCheck();
             else

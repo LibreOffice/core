@@ -1002,8 +1002,7 @@ void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, 
 
 void Edit::ImplSetText( const XubString& rText, const Selection* pNewSelection )
 {
-    // Der Text wird dadurch geloescht das der alte Text komplett 'selektiert'
-    // wird, dann InsertText, damit flackerfrei.
+    // we delete text by "selecting" the old text completely then calling InsertText; this is flicker free
     if ( ( rText.Len() <= mnMaxTextLen ) && ( (rText != maText) || (pNewSelection && (*pNewSelection != maSelection)) ) )
     {
         ImplClearLayoutData();
@@ -1192,7 +1191,7 @@ void Edit::ImplShowCursor( sal_Bool bOnlyIfVisible )
         nCursorWidth = GetTextWidth( aText, (xub_StrLen)maSelection.Max(), 1 );
     long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraOffset();
 
-    // Cursor muss im sichtbaren Bereich landen:
+    // cursor should land in visible area
     const Size aOutSize = GetOutputSizePixel();
     if ( (nCursorPosX < 0) || (nCursorPosX >= aOutSize.Width()) )
     {
@@ -1271,8 +1270,7 @@ void Edit::ImplAlign()
     }
     else if( mnAlign == EDIT_ALIGN_CENTER )
     {
-        // Mit Abfrage schoener, wenn gescrollt, dann aber nicht zentriert im gescrollten Zustand...
-//      if ( nTextWidth < nOutWidth )
+            // would be nicer with check while scrolling but then it's not centred in scrolled state
             mnXOffset = (nOutWidth - nTextWidth) / 2;
     }
 }
@@ -1465,7 +1463,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
             StartTracking( STARTTRACK_SCROLLREPEAT );
     }
 
-    mbInMBDown = sal_True;  // Dann im GetFocus nicht alles selektieren
+    mbInMBDown = sal_True;  // then do not select all in GetFocus
     GrabFocus();
     mbInMBDown = sal_False;
 }
@@ -1574,7 +1572,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             }
             break;
 
-            default: // wird dann evtl. unten bearbeitet.
+            default:
                 eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -1590,7 +1588,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
         {
             if ( pImplFncGetSpecialChars )
             {
-                Selection aSaveSel = GetSelection();    // Falls jemand in Get/LoseFocus die Selektion verbiegt, z.B. URL-Zeile...
+                Selection aSaveSel = GetSelection(); // if someone changes the selection in Get/LoseFocus, e.g. URL bar
                 XubString aChars = pImplFncGetSpecialChars( this, GetFont() );
                 SetSelection( aSaveSel );
                 if ( aChars.Len() )
@@ -1823,7 +1821,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             {
                 if ( IsCharInput( rKEvt ) )
                 {
-                    bDone = sal_True;   // Auch bei ReadOnly die Zeichen schlucken.
+                    bDone = sal_True;   // read characters also when in ReadOnly
                     if ( !mbReadOnly )
                     {
                         ImplInsertText(rtl::OUString(rKEvt.GetCharCode()), 0, sal_True);
@@ -1954,7 +1952,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_u
     {
         Rectangle aClip( aPos, aSize );
         if ( nTextHeight > aSize.Height() )
-            aClip.Bottom() += nTextHeight-aSize.Height()+1;  // Damit HP-Drucker nicht 'weg-optimieren'
+            aClip.Bottom() += nTextHeight-aSize.Height()+1;  // prevent HP printers from 'optimizing'
         pDev->IntersectClipRegion( aClip );
     }
 
@@ -2139,11 +2137,11 @@ void Edit::Command( const CommandEvent& rCEvt )
         }
 
         mbActivePopup = sal_True;
-        Selection aSaveSel = GetSelection();    // Falls jemand in Get/LoseFocus die Selektion verbiegt, z.B. URL-Zeile...
+        Selection aSaveSel = GetSelection(); // if someone changes selection in Get/LoseFocus, e.g. URL bar
         Point aPos = rCEvt.GetMousePosPixel();
         if ( !rCEvt.IsMouseEvent() )
         {
-            // !!! Irgendwann einmal Menu zentriert in der Selektion anzeigen !!!
+            // Show menu enventually centered in selection
             Size aSize = GetOutputSizePixel();
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
@@ -2237,8 +2235,8 @@ void Edit::Command( const CommandEvent& rCEvt )
         sal_Bool bInsertMode = !mpIMEInfos->bWasCursorOverwrite;
         delete mpIMEInfos;
         mpIMEInfos = NULL;
-        // Font wieder ohne Attribute einstellen, wird jetzt im Repaint nicht
-        // mehr neu initialisiert
+
+        // set font without attributes, because it will not be re-initialised in Repaint anymore
         ImplInitSettings( sal_True, sal_False, sal_False );
 
         SetInsertMode( bInsertMode );
@@ -2335,7 +2333,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            mnXOffset = 0;  // Falls vorher GrabFocus, als Groesse noch falsch.
+            mnXOffset = 0;  // if GrabFocus before while size was still wrong
             ImplAlign();
             if ( !mpSubEdit )
                 ImplShowCursor( sal_False );
@@ -2347,7 +2345,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            // Es aendert sich nur die Textfarbe...
+            // change text color only
             ImplInvalidateOrRepaint( 0, 0xFFFF );
         }
     }
@@ -2615,8 +2613,8 @@ void Edit::SetMaxTextLen( xub_StrLen nMaxLen )
 
 void Edit::SetSelection( const Selection& rSelection )
 {
-    // Wenn von aussen z.B. im MouseButtonDown die Selektion geaendert wird,
-    // soll nicht gleich ein Tracking() zuschlagen und die Selektion aendern.
+    // If the selection was changed from outside, e.g. by MouseButtonDown, don't call Tracking()
+    // directly afterwards which would change the selection again
     if ( IsTracking() )
         EndTracking();
     else if ( mpSubEdit && mpSubEdit->IsTracking() )
@@ -2765,10 +2763,10 @@ void Edit::Undo()
 void Edit::SetText( const XubString& rStr )
 {
     if ( mpSubEdit )
-        mpSubEdit->SetText( rStr );     // Nicht direkt ImplSetText, falls SetText ueberladen
+        mpSubEdit->SetText( rStr );     // not directly ImplSetText if SetText overloaded
     else
     {
-        Selection aNewSel( 0, 0 );  // Damit nicht gescrollt wird
+        Selection aNewSel( 0, 0 );  // prevent scrolling
         ImplSetText( rStr, &aNewSel );
     }
 }
@@ -2880,8 +2878,8 @@ Size Edit::GetOptimalSize(WindowSizeType eType) const
 
 Size Edit::CalcSize( xub_StrLen nChars ) const
 {
-    // Breite fuer n Zeichen, unabhaengig vom Inhalt.
-    // Funktioniert nur bei FixedFont richtig, sonst Mittelwert.
+    // width for N characters, independent from content.
+    // works only correct for fixed fonts, average otherwise
     Size aSz( GetTextWidth( XubString( 'x' ) ), GetTextHeight() );
     aSz.Width() *= nChars;
     aSz = CalcWindowSize( aSz );

@@ -1608,7 +1608,7 @@ long SolarMessageBoxExecutor::doIt()
 {
     long nResult = RET_NO;
 
-    // Tracking beenden und Mouse freigeben, damit die Boxen nicht haengen
+    // Stop tracking and release mouse, to assure boxes do not hang
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpTrackWin )
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
@@ -1789,7 +1789,7 @@ void DbgGUIStart()
     if ( pData )
     {
         DbgDialog* pDialog = new DbgDialog;
-        // Fuer den Debug-Dialog schalten wir Dialogtests aus
+        // we switch off dialog tests for the debug dialog
         sal_uLong nOldFlags = pData->nTestFlags;
         pData->nTestFlags &= ~DBG_TEST_DIALOG;
         if ( !pDialog->Execute() )

@@ -107,14 +107,14 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     xub_StrLen  nDecPos;
     xub_StrLen  i;
 
-    // Reaktion auf leeren String
+    // react on empty string
     if ( !rStr.Len() )
         return sal_False;
 
-    // Fuehrende und nachfolgende Leerzeichen entfernen
+    // remove leading and trailing spaces
     aStr = string::strip(aStr, ' ');
 
-    // Position des Dezimalpunktes suchen
+    // find position of decimal point
     nDecPos = aStr.Search( rLocaleDataWrappper.getNumDecimalSep() );
     if ( nDecPos != STRING_NOTFOUND )
     {
@@ -124,7 +124,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     else
         aStr1 = aStr;
 
-    // Negativ ?
+    // negative?
     if ( bCurrency )
     {
         if ( (aStr.GetChar( 0 ) == '(') && (aStr.GetChar( aStr.Len()-1 ) == ')') )
@@ -167,7 +167,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
             bNegative = sal_True;
     }
 
-    // Alle unerwuenschten Zeichen rauswerfen
+    // remove all unwanted charaters
     for ( i=0; i < aStr1.Len(); )
     {
         if ( (aStr1.GetChar( i ) >= '0') && (aStr1.GetChar( i ) <= '9') )
@@ -191,7 +191,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     if ( bNegative )
         aStr1.Insert( '-', 0 );
 
-    // Nachkommateil zurechtstutzen und dabei runden
+    // prune and round fraction
     sal_Bool bRound = sal_False;
     if ( aStr2.Len() > nDecDigits )
     {
@@ -205,7 +205,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     aStr  = aStr1;
     aStr += aStr2;
 
-    // Bereichsueberpruefung
+    // check range
     double nValue = rtl::OUString(aStr).toDouble();
     if ( bRound )
     {
@@ -742,19 +742,15 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
 {
     if ( GetField() )
     {
-        // !!! TH-18.2.99: Wenn wir Zeit haben sollte mal geklaert werden,
-        // !!! warum nicht bei ImplSetUserValue() geprueft wird, ob
-        // !!! sich der Wert aendert. Denn auch hier muesste dieses
-        // !!! gemacht werden, da ansonsten der Modify-Aufruf
-        // !!! nicht gemacht werden duerfte. Jedenfalls sollten die
-        // !!! Wege von ImplNewFieldValue, ImplSetUserValue und
-        // !!! ImplSetText ueberprueft und klarer gestalltet (mit Kommentar)
-        // !!! werden, damit wir mal wissen, was dort ablaeuft!!!
+        // !!! We should check why we do not validate in ImplSetUserValue() if the value was
+        // changed. This should be done there as well since otherwise the call to Modify would not
+        // be allowed. Anyway, the paths from ImplNewFieldValue, ImplSetUserValue, and ImplSetText
+        // should be checked and clearly traced (with comment) in order to find out what happens.
 
         Selection aSelection = GetField()->GetSelection();
         aSelection.Justify();
         XubString aText = GetField()->GetText();
-        // Wenn bis ans Ende selektiert war, soll das auch so bleiben...
+        // leave it as is if selected until end
         if ( (xub_StrLen)aSelection.Max() == aText.Len() )
         {
             if ( !aSelection.Len() )
@@ -766,7 +762,7 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
         ImplSetUserValue( nNewValue, &aSelection );
         mnLastValue = nOldLastValue;
 
-        // Modify am Edit wird nur bei KeyInput gesetzt...
+        // Modify during Edit is only set during KeyInput
         if ( GetField()->GetText() != aText )
         {
             GetField()->SetModifyFlag();
@@ -1029,8 +1025,7 @@ void NumericBox::InsertValue( sal_Int64 nValue, sal_uInt16 nPos )
 static sal_Bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                        sal_Bool, sal_Bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
-    // Es gibt hier kein sinnvolles StrictFormat, also alle
-    // Zeichen erlauben
+    // no meaningfull strict format; therefore allow all characters
     return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rWrapper );
 }
 
@@ -1038,7 +1033,7 @@ static sal_Bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
 static rtl::OUString ImplMetricGetUnitText(const rtl::OUString& rStr)
 {
-    // Einheitentext holen
+    // fetch unit text
     rtl::OUStringBuffer aStr;
     for (sal_Int32 i = rStr.getLength()-1; i >= 0; --i)
     {
@@ -1506,7 +1501,7 @@ XubString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
 
 void MetricFormatter::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
-    // Umrechnen auf eingestellte Einheiten
+    // convert to previously configured units
     nNewValue = MetricField::ConvertValue( nNewValue, mnBaseValue, GetDecimalDigits(), eInUnit, meUnit );
     NumericFormatter::SetUserValue( nNewValue );
 }
@@ -1529,7 +1524,7 @@ sal_Int64 MetricFormatter::GetValue( FieldUnit eOutUnit ) const
     else if ( nTempValue < mnMin )
         nTempValue = (double)mnMin;
 
-    // Umrechnen auf gewuenschte Einheiten
+    // convert to requested units
     return MetricField::ConvertValue( (sal_Int64)nTempValue, mnBaseValue, GetDecimalDigits(), meUnit, eOutUnit );
 }
 
@@ -1553,7 +1548,7 @@ sal_Int64 MetricFormatter::GetValue() const
 
 void MetricFormatter::SetMin( sal_Int64 nNewMin, FieldUnit eInUnit )
 {
-    // Umrechnen auf gewuenschte Einheiten
+    // convert to requested units
     NumericFormatter::SetMin( MetricField::ConvertValue( nNewMin, mnBaseValue, GetDecimalDigits(),
                                                          eInUnit, meUnit ) );
 }
@@ -1562,7 +1557,7 @@ void MetricFormatter::SetMin( sal_Int64 nNewMin, FieldUnit eInUnit )
 
 sal_Int64 MetricFormatter::GetMin( FieldUnit eOutUnit ) const
 {
-    // Umrechnen auf gewuenschte Einheiten
+    // convert to requested units
     return MetricField::ConvertValue( NumericFormatter::GetMin(), mnBaseValue,
                                       GetDecimalDigits(), meUnit, eOutUnit );
 }
@@ -1571,7 +1566,7 @@ sal_Int64 MetricFormatter::GetMin( FieldUnit eOutUnit ) const
 
 void MetricFormatter::SetMax( sal_Int64 nNewMax, FieldUnit eInUnit )
 {
-    // Umrechnen auf gewuenschte Einheiten
+    // convert to requested units
     NumericFormatter::SetMax( MetricField::ConvertValue( nNewMax, mnBaseValue, GetDecimalDigits(),
                                                          eInUnit, meUnit ) );
 }
@@ -1580,7 +1575,7 @@ void MetricFormatter::SetMax( sal_Int64 nNewMax, FieldUnit eInUnit )
 
 sal_Int64 MetricFormatter::GetMax( FieldUnit eOutUnit ) const
 {
-    // Umrechnen auf gewuenschte Einheiten
+    // convert to requested units
     return MetricField::ConvertValue( NumericFormatter::GetMax(), mnBaseValue,
                                       GetDecimalDigits(), meUnit, eOutUnit );
 }
@@ -1597,7 +1592,7 @@ void MetricFormatter::SetBaseValue( sal_Int64 nNewBase, FieldUnit eInUnit )
 
 sal_Int64 MetricFormatter::GetBaseValue( FieldUnit eOutUnit ) const
 {
-    // Umrechnen auf gewuenschte Einheiten
+    // convert to requested units
     return MetricField::ConvertValue( mnBaseValue, mnBaseValue, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
@@ -1637,7 +1632,7 @@ void MetricFormatter::Reformat()
 
 sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
 {
-    // Umrechnen auf gewuenschte Einheiten
+    // convert to requested units
     return MetricField::ConvertValue( mnCorrectedValue, mnBaseValue, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
@@ -1732,7 +1727,7 @@ sal_Int64 MetricField::GetFirst( FieldUnit eOutUnit ) const
 
 void MetricField::SetLast( sal_Int64 nNewLast, FieldUnit eInUnit )
 {
-    // Umrechnen
+    // convert
     nNewLast = MetricField::ConvertValue( nNewLast, mnBaseValue, GetDecimalDigits(),
                                           eInUnit, meUnit );
     mnLast = nNewLast;
@@ -1742,7 +1737,7 @@ void MetricField::SetLast( sal_Int64 nNewLast, FieldUnit eInUnit )
 
 sal_Int64 MetricField::GetLast( FieldUnit eOutUnit ) const
 {
-    // Umrechnen
+    // conver
     return MetricField::ConvertValue( mnLast, mnBaseValue, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
@@ -1957,7 +1952,7 @@ void MetricBox::CustomConvert()
 
 void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_uInt16 nPos )
 {
-    // Umrechnen auf eingestellte Einheiten
+    // convert to previously configured units
     nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
                                         eInUnit, meUnit );
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
@@ -1971,7 +1966,7 @@ sal_Int64 MetricBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
     ImplMetricGetValue( ComboBox::GetEntry( nPos ), nValue, mnBaseValue,
                         GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit );
 
-    // Umrechnen auf eingestellte Einheiten
+    // convert to previously configured units
     sal_Int64 nRetValue = MetricField::ConvertValue( (sal_Int64)nValue, mnBaseValue, GetDecimalDigits(),
                                                      meUnit, eOutUnit );
 
@@ -1982,7 +1977,7 @@ sal_Int64 MetricBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
 
 sal_uInt16 MetricBox::GetValuePos( sal_Int64 nValue, FieldUnit eInUnit ) const
 {
-    // Umrechnen auf eingestellte Einheiten
+    // convert to previously configured units
     nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
                                         eInUnit, meUnit );
     return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
@@ -2009,8 +2004,7 @@ sal_Int64 MetricBox::GetValue() const
 static sal_Bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                          sal_Bool, sal_Bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
-    // Es gibt hier kein sinnvolles StrictFormat, also alle
-    // Zeichen erlauben
+    // no strict format set; therefore allow all characters
     return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rWrapper );
 }
 
@@ -2019,7 +2013,7 @@ static sal_Bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 inline sal_Bool ImplCurrencyGetValue( const XubString& rStr, double& rValue,
                                   sal_uInt16 nDecDigits, const LocaleDataWrapper& rWrapper )
 {
-    // Zahlenwert holen
+    // fetch number
     return ImplNumericGetValue( rStr, rValue, nDecDigits, rWrapper, sal_True );
 }
 

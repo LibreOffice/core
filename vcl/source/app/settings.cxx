@@ -123,7 +123,7 @@ MouseSettings::MouseSettings( const MouseSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MouseSettings: RefCount overflow" );
 
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
+    // copy shared instance data and increment reference counter
     mpData = rSet.mpData;
     mpData->mnRefCount++;
 }
@@ -132,7 +132,7 @@ MouseSettings::MouseSettings( const MouseSettings& rSet )
 
 MouseSettings::~MouseSettings()
 {
-    // Daten loeschen, wenn letzte Referenz
+    // delete data if last reference
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -145,10 +145,10 @@ const MouseSettings& MouseSettings::operator =( const MouseSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MouseSettings: RefCount overflow" );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
+    // increment reference counter first, to be able to assign oneself
     rSet.mpData->mnRefCount++;
 
-    // Daten loeschen, wenn letzte Referenz
+    // delete data if last reference
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -163,7 +163,7 @@ const MouseSettings& MouseSettings::operator =( const MouseSettings& rSet )
 
 void MouseSettings::CopyData()
 {
-    // Falls noch andere Referenzen bestehen, dann kopieren
+    // copy if another references exist
     if ( mpData->mnRefCount != 1 )
     {
         mpData->mnRefCount--;
@@ -445,7 +445,7 @@ StyleSettings::StyleSettings( const StyleSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "StyleSettings: RefCount overflow" );
 
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
+    // copy shared instance data and increment reference counter
     mpData = rSet.mpData;
     mpData->mnRefCount++;
 }
@@ -454,7 +454,7 @@ StyleSettings::StyleSettings( const StyleSettings& rSet )
 
 StyleSettings::~StyleSettings()
 {
-    // Daten loeschen, wenn letzte Referenz
+    // if last reference then delete data
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -714,10 +714,10 @@ const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "StyleSettings: RefCount overflow" );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
+    // increase reference counter first, to be able to assign oneself
     rSet.mpData->mnRefCount++;
 
-    // Daten loeschen, wenn letzte Referenz
+    // if last reference then delete data
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -732,7 +732,7 @@ const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
 
 void StyleSettings::CopyData()
 {
-    // Falls noch andere Referenzen bestehen, dann kopieren
+    // copy if other references exist
     if ( mpData->mnRefCount != 1 )
     {
         mpData->mnRefCount--;
@@ -886,7 +886,7 @@ MiscSettings::MiscSettings( const MiscSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MiscSettings: RefCount overflow" );
 
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
+    // copy shared instance data and increment reference counter
     mpData = rSet.mpData;
     mpData->mnRefCount++;
 }
@@ -895,7 +895,7 @@ MiscSettings::MiscSettings( const MiscSettings& rSet )
 
 MiscSettings::~MiscSettings()
 {
-    // Daten loeschen, wenn letzte Referenz
+    // if last reference then delete data
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -908,10 +908,10 @@ const MiscSettings& MiscSettings::operator =( const MiscSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "MiscSettings: RefCount overflow" );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
+    //  increase reference counter first, to be able to assign oneself
     rSet.mpData->mnRefCount++;
 
-    // Daten loeschen, wenn letzte Referenz
+    // if last reference then delete data
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -926,7 +926,7 @@ const MiscSettings& MiscSettings::operator =( const MiscSettings& rSet )
 
 void MiscSettings::CopyData()
 {
-    // Falls noch andere Referenzen bestehen, dann kopieren
+    // copy if other references exist
     if ( mpData->mnRefCount != 1 )
     {
         mpData->mnRefCount--;
@@ -1126,7 +1126,7 @@ HelpSettings::HelpSettings( const HelpSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "HelpSettings: RefCount overflow" );
 
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
+    // copy shared instance data and increment reference counter
     mpData = rSet.mpData;
     mpData->mnRefCount++;
 }
@@ -1135,7 +1135,7 @@ HelpSettings::HelpSettings( const HelpSettings& rSet )
 
 HelpSettings::~HelpSettings()
 {
-    // Daten loeschen, wenn letzte Referenz
+    // if last reference then delete data
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -1148,10 +1148,10 @@ const HelpSettings& HelpSettings::operator =( const HelpSettings& rSet )
 {
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "HelpSettings: RefCount overflow" );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
+    // increase reference counter first, to be able to assign oneself
     rSet.mpData->mnRefCount++;
 
-    // Daten loeschen, wenn letzte Referenz
+    // delete data if last reference
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -1166,7 +1166,7 @@ const HelpSettings& HelpSettings::operator =( const HelpSettings& rSet )
 
 void HelpSettings::CopyData()
 {
-    // Falls noch andere Referenzen bestehen, dann kopieren
+    // copy of other references exist
     if ( mpData->mnRefCount != 1 )
     {
         mpData->mnRefCount--;
@@ -1256,7 +1256,7 @@ AllSettings::AllSettings( const AllSettings& rSet )
     DBG_CTOR( AllSettings, NULL );
     DBG_ASSERT( rSet.mpData->mnRefCount < 0xFFFFFFFE, "Settings: RefCount overflow" );
 
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
+    // copy shared instance data and increse reference counter
     mpData = rSet.mpData;
     mpData->mnRefCount++;
 }
@@ -1267,7 +1267,7 @@ AllSettings::~AllSettings()
 {
     DBG_DTOR( AllSettings, NULL );
 
-    // Daten loeschen, wenn letzte Referenz
+    // if last reference then delete data
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -1282,10 +1282,10 @@ const AllSettings& AllSettings::operator =( const AllSettings& rSet )
     DBG_CHKTHIS( AllSettings, NULL );
     DBG_CHKOBJ( &rSet, AllSettings, NULL );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
+    // increase reference counter first, to be able to assign oneself
     rSet.mpData->mnRefCount++;
 
-    // Daten loeschen, wenn letzte Referenz
+    // if last reference then delete data
     if ( mpData->mnRefCount == 1 )
         delete mpData;
     else
@@ -1302,7 +1302,7 @@ void AllSettings::CopyData()
 {
     DBG_CHKTHIS( AllSettings, NULL );
 
-    // Falls noch andere Referenzen bestehen, dann kopieren
+    // copy if other references exist
     if ( mpData->mnRefCount != 1 )
     {
         mpData->mnRefCount--;

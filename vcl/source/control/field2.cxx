@@ -265,19 +265,17 @@ static XubString ImplPatternReformat( const XubString& rStr,
         cLiteral = rLiteralMask.GetChar(i);
         cMask = rEditMask[i];
 
-        // Aktuelle Position ein Literal
+        // current position is a literal
         if ( cMask == EDITMASK_LITERAL )
         {
-            // Wenn es das Literal-Zeichen ist, uebernehmen, ansonsten
-            // ignorieren, da es das naechste gueltige Zeichen vom String
-            // sein kann
+            // if it is a literal copy otherwise ignore because it might be the next valid
+            // character of the string
             if ( ImplKommaPointCharEqual( cChar, cLiteral ) )
                 nStrIndex++;
             else
             {
-                // Ansonsten testen wir, ob es ein ungueltiges Zeichen ist.
-                // Dies ist dann der Fall, wenn es nicht in das Muster
-                // des naechsten nicht Literal-Zeichens passt
+                // Otherwise we check if it is a invalid character. This is the case if it does not
+                // fit in the pattern of the next non-literal character.
                 n = i+1;
                 while ( n < rEditMask.getLength() )
                 {
@@ -294,25 +292,23 @@ static XubString ImplPatternReformat( const XubString& rStr,
         }
         else
         {
-            // Gueltiges Zeichen an der Stelle
+            // valid character at this position
             cTempChar = ImplPatternChar( cChar, cMask );
             if ( cTempChar )
             {
-                // dann Zeichen uebernehmen
+                // use this character
                 aOutStr.SetChar( i, cTempChar );
                 nStrIndex++;
             }
             else
             {
-                // Wenn es das Literalzeichen ist, uebernehmen
+                // copy if it is a literal character
                 if ( cLiteral == cChar )
                     nStrIndex++;
                 else
                 {
-                    // Wenn das ungueltige Zeichen das naechste Literalzeichen
-                    // sein kann, dann springen wir bis dahin vor, ansonten
-                    // das Zeichen ignorieren
-                    // Nur machen, wenn leere Literale erlaubt sind
+                    // If the invalid character might be the next literal character then we jump
+                    // ahead to it, otherwise we ignore it. Do only if empty literals are allowed.
                     if ( nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS )
                     {
                         n = i;
@@ -349,11 +345,10 @@ static void ImplPatternMaxPos( const XubString rStr, const rtl::OString& rEditMa
                                sal_uInt16 nCursorPos, sal_uInt16& rPos )
 {
 
-    // Letzte Position darf nicht groesser als der enthaltene String sein
+    // last position must not be longer than the contained string
     xub_StrLen nMaxPos = rStr.Len();
 
-    // Wenn keine leeren Literale erlaubt sind, auch Leerzeichen
-    // am Ende ignorieren
+    // if non empty literals are allowed ignore blanks at the end as well
     if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) )
     {
         while ( nMaxPos )
@@ -364,8 +359,7 @@ static void ImplPatternMaxPos( const XubString rStr, const rtl::OString& rEditMa
             nMaxPos--;
         }
 
-        // Wenn wir vor einem Literal stehen, dann solange weitersuchen,
-        // bis erste Stelle nach Literal
+        // if we are in front of a literal, continue search until first character after the literal
         xub_StrLen nTempPos = nMaxPos;
         while ( nTempPos < rEditMask.getLength() )
         {
@@ -380,7 +374,8 @@ static void ImplPatternMaxPos( const XubString rStr, const rtl::OString& rEditMa
 
     if ( rPos > nMaxPos )
         rPos = nMaxPos;
-    // Zeichen sollte nicht nach links wandern
+
+    // charactr should not move left
     if ( rPos < nCursorPos )
         rPos = nCursorPos;
 }
@@ -394,7 +389,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 {
     XubString aText = pEdit->GetText();
 
-    // Leerzeichen am Anfang entfernen
+    // remove leading blanks
     if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) )
     {
         xub_StrLen i = 0;
@@ -407,7 +402,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 
             i++;
         }
-        // Alle Literalzeichen beibehalten
+        // keep all literal characters
         while ( i && (rEditMask[i] == EDITMASK_LITERAL) )
             i--;
         aText.Erase( 0, i );
@@ -416,8 +411,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
     XubString aNewText = ImplPatternReformat( aText, rEditMask, rLiteralMask, nFormatFlags );
     if ( aNewText != aText )
     {
-        // Selection so anpassen, das diese wenn sie vorher am Ende
-        // stand, immer noch am Ende steht
+        // adjust selection such that it remains at the end if it was there before
         Selection aSel = pEdit->GetSelection();
         sal_uLong nMaxSel = Max( aSel.Min(), aSel.Max() );
         if ( nMaxSel >= aText.Len() )
@@ -442,7 +436,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 
 static xub_StrLen ImplPatternLeftPos(const rtl::OString& rEditMask, xub_StrLen nCursorPos)
 {
-    // Vorheriges Zeichen suchen, was kein Literal ist
+    // search non-literal predecessor
     xub_StrLen nNewPos = nCursorPos;
     xub_StrLen nTempPos = nNewPos;
     while ( nTempPos )
@@ -463,7 +457,7 @@ static xub_StrLen ImplPatternRightPos( const XubString& rStr, const rtl::OString
                                        sal_uInt16 nFormatFlags, sal_Bool bSameMask,
                                        xub_StrLen nCursorPos )
 {
-    // Naechstes Zeichen suchen, was kein Literal ist
+    // search non-literal successor
     xub_StrLen nNewPos = nCursorPos;
     xub_StrLen nTempPos = nNewPos;
     while ( nTempPos < rEditMask.getLength() )
@@ -513,9 +507,8 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( nKeyCode == KEY_RIGHT )
         {
-            // Hier nehmen wir Selectionsanfang als minimum, da falls durch
-            // Focus alles selektiert ist, ist eine kleine Position schon
-            // erlaubt.
+            // Use the start of selection as minimum; even a small position is allowed in case that
+            // all was selected by the focus
             Selection aSel( aOldSel );
             aSel.Justify();
             nCursorPos = (xub_StrLen)aSel.Min();
@@ -529,12 +522,13 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( nKeyCode == KEY_HOME )
         {
-            // Home ist Position des ersten nicht literalen Zeichens
+            // Home is the position of the first non-literal character
             nNewPos = 0;
             while ( (nNewPos < rEditMask.getLength()) &&
                     (rEditMask[nNewPos] == EDITMASK_LITERAL) )
                 nNewPos++;
-            // Home sollte nicht nach rechts wandern
+
+            // Home should not move to the right
             if ( nCursorPos < nNewPos )
                 nNewPos = nCursorPos;
             Selection aSel( nNewPos );
@@ -545,14 +539,13 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( nKeyCode == KEY_END )
         {
-            // End ist die Position des letzten nicht literalen Zeichens
+            // End is position of last non-literal character
             nNewPos = rEditMask.getLength();
             while ( nNewPos &&
                     (rEditMask[nNewPos-1] == EDITMASK_LITERAL) )
                 nNewPos--;
-            // Hier nehmen wir Selectionsanfang als minimum, da falls durch
-            // Focus alles selektiert ist, ist eine kleine Position schon
-            // erlaubt.
+            // Use the start of selection as minimum; even a small position is allowed in case that
+            // all was selected by the focus
             Selection aSel( aOldSel );
             aSel.Justify();
             nCursorPos = (xub_StrLen)aSel.Min();
@@ -574,7 +567,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             aSel.Justify();
             nNewPos = (xub_StrLen)aSel.Min();
 
-            // Wenn Selection, dann diese Loeschen
+             // if selection then delete it
             if ( aSel.Len() )
             {
                 if ( bSameMask )
@@ -627,9 +620,8 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( nKeyCode == KEY_INSERT )
         {
-            // InsertModus kann man beim PatternField nur einstellen,
-            // wenn Maske an jeder Eingabeposition die gleiche
-            // ist
+            // you can only set InsertModus for a PatternField if the
+            // mask is equal at all input positions
             if ( !bSameMask )
             {
                 Sound::Beep();
@@ -652,23 +644,20 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             cChar = cPattChar;
         else
         {
-            // Wenn kein gueltiges Zeichen, dann testen wir, ob der
-            // Anwender zum naechsten Literal springen wollte. Dies machen
-            // wir nur, wenn er hinter einem Zeichen steht, damit
-            // eingebene Literale die automatisch uebersprungenen wurden
-            // nicht dazu fuehren, das der Anwender dann da steht, wo
-            // er nicht stehen wollte.
+            // If no valid character, check if the user wanted to jump to next literal. We do this
+            // only if we're after a character, so that literals that were skipped automatically
+            // do not influence the position anymore.
             if ( nNewPos &&
                  (rEditMask[nNewPos-1] != EDITMASK_LITERAL) &&
                  !aSel.Len() )
             {
-                // Naechstes Zeichen suchen, was kein Literal ist
+                // search for next character not being a literal
                 nTempPos = nNewPos;
                 while ( nTempPos < rEditMask.getLength() )
                 {
                     if ( rEditMask[nTempPos] == EDITMASK_LITERAL )
                     {
-                        // Gilt nur, wenn ein Literalzeichen vorhanden
+                        // only valid if no literal present
                         if ( (rEditMask[nTempPos+1] != EDITMASK_LITERAL ) &&
                              ImplKommaPointCharEqual( cChar, rLiteralMask.GetChar(nTempPos) ) )
                         {
@@ -697,8 +686,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         sal_Bool        bError = sal_False;
         if ( bSameMask && pEdit->IsInsertMode() )
         {
-            // Text um Spacezeichen und Literale am Ende kuerzen, bis zur
-            // aktuellen Position
+            // crop spaces and literals at the end until current position
             xub_StrLen n = aStr.Len();
             while ( n && (n > nNewPos) )
             {
@@ -715,7 +703,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
             if ( aStr.Len() < rEditMask.getLength() )
             {
-                // String evtl. noch bis Cursor-Position erweitern
+                // possibly extend string until cursor position
                 if ( aStr.Len() < nNewPos )
                     aStr += rLiteralMask.Copy( aStr.Len(), nNewPos-aStr.Len() );
                 if ( nNewPos < aStr.Len() )
@@ -731,7 +719,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         {
             if ( aSel.Len() )
             {
-                // Selection loeschen
+                // delete selection
                 XubString aRep = rLiteralMask.Copy( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
                 aStr.Replace( (xub_StrLen)aSel.Min(), aRep.Len(), aRep );
             }
@@ -777,10 +765,8 @@ void PatternFormatter::ImplSetMask(const rtl::OString& rEditMask,
             maLiteralMask.Expand(m_aEditMask.getLength(), ' ');
     }
 
-    // StrictModus erlaubt nur Input-Mode, wenn als Maske nur
-    // gleiche Zeichen zugelassen werden und als Vorgabe nur
-    // Spacezeichen vorgegeben werden, die durch die Maske
-    // nicht zugelassen sind
+    // Strict mode allows only the input mode if only equal characters are allowed as mask and if
+    // only spaces are specified which are not allowed by the mask
     xub_StrLen  i = 0;
     sal_Char    c = 0;
     while ( i < rEditMask.getLength() )
@@ -1270,7 +1256,7 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
         sal_uInt16 nTwoDigitYearStart = utl::MiscCfg().GetYear2000();
         sal_uInt16 nYear = rDate.GetYear();
 
-        // Wenn Jahr nicht im 2stelligen Grenzbereich liegt,
+        // If year is not in double digit range
         if ( (nYear < nTwoDigitYearStart) || (nYear >= nTwoDigitYearStart+100) )
             bShowCentury = sal_True;
     }
@@ -1421,7 +1407,7 @@ sal_Bool DateFormatter::ImplAllowMalformedInput() const
 
 void DateField::ImplDateSpinArea( sal_Bool bUp )
 {
-    // Wenn alles selektiert ist, Tage hochzaehlen
+    // increment days if all is selected
     if ( GetField() )
     {
         Date aDate( GetDate() );
@@ -1442,7 +1428,7 @@ void DateField::ImplDateSpinArea( sal_Bool bUp )
             }
             else
             {
-                // Area suchen
+                // search area
                 xub_StrLen nPos = 0;
                 String aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), eFormat );
                 for ( xub_StrLen i = 1; i <= 3; i++ )
@@ -1767,7 +1753,8 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
         Selection aSelection = GetField()->GetSelection();
         aSelection.Justify();
         XubString aText = GetField()->GetText();
-        // Wenn bis ans Ende selektiert war, soll das auch so bleiben...
+
+        // If selected until the end then keep it that way
         if ( (xub_StrLen)aSelection.Max() == aText.Len() )
         {
             if ( !aSelection.Len() )
@@ -1779,7 +1766,7 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
         ImplSetUserDate( rDate, &aSelection );
         maLastDate = aOldLastDate;
 
-        // Modify am Edit wird nur bei KeyInput gesetzt...
+        // Modify at Edit is only set at KeyInput
         if ( GetField()->GetText() != aText )
         {
             GetField()->SetModifyFlag();
@@ -1805,10 +1792,8 @@ Date DateFormatter::GetDate() const
         }
         else
         {
-            // !!! TH-18.2.99: Wenn wir Zeit haben sollte einmal
-            // !!! geklaert werden, warum dieses beim Datum gegenueber
-            // !!! allen anderen Feldern anders behandelt wird.
-            // !!! Siehe dazu Bug: 52304
+            // !!! We should find out why dates are treated differently than other fields (see
+            // also bug: 52384)
 
             if ( !ImplAllowMalformedInput() )
             {
@@ -1999,10 +1984,8 @@ long DateField::Notify( NotifyEvent& rNEvt )
     {
         if ( MustBeReformatted() )
         {
-            // !!! TH-18.2.99: Wenn wir Zeit haben sollte einmal
-            // !!! geklaert werden, warum dieses beim Datum gegenueber
-            // !!! allen anderen Feldern anders behandelt wird.
-            // !!! Siehe dazu Bug: 52304
+            // !!! We should find out why dates are treated differently than other fields (see
+            // also bug: 52384)
 
             sal_Bool bTextLen = GetText().Len() != 0;
             if ( bTextLen || !IsEmptyFieldValueEnabled() )
@@ -2262,14 +2245,14 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
     if ( !rStr.Len() )
         return sal_False;
 
-    // Nach Separatoren suchen
+    // Search for separators
     if (!rLocaleDataWrapper.getTimeSep().isEmpty())
     {
         rtl::OUStringBuffer aSepStr(",.;:/");
         if ( !bDuration )
             aSepStr.append('-');
 
-        // Die obigen Zeichen durch das Separatorzeichen ersetzen
+        // Replace characters above by the separator character
         for (sal_Int32 i = 0; i < aSepStr.getLength(); ++i)
         {
             if (string::equals(rLocaleDataWrapper.getTimeSep(), aSepStr[i]))
@@ -2367,7 +2350,7 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
 
         if ( n100Sec )
         {
-            xub_StrLen nLen = 1; // mindestens eine Ziffer, weil sonst n100Sec==0
+            xub_StrLen nLen = 1; // at least one digit, otherwise n100Sec==0
 
             while ( aStr.GetChar(nLen) >= '0' && aStr.GetChar(nLen) <= '9' )
                 nLen++;
@@ -2379,7 +2362,7 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
                     n100Sec = n100Sec / 10;
                     nLen--;
                 }
-                // Rundung bei negativen Zahlen???
+                // round if negative?
                 n100Sec = (n100Sec + 5) / 10;
             }
             else
@@ -2734,7 +2717,8 @@ void TimeFormatter::ImplNewFieldValue( const Time& rTime )
         Selection aSelection = GetField()->GetSelection();
         aSelection.Justify();
         XubString aText = GetField()->GetText();
-        // Wenn bis ans Ende selektiert war, soll das auch so bleiben...
+
+        // If selected until the end then keep it that way
         if ( (xub_StrLen)aSelection.Max() == aText.Len() )
         {
             if ( !aSelection.Len() )
@@ -2746,7 +2730,7 @@ void TimeFormatter::ImplNewFieldValue( const Time& rTime )
         ImplSetUserTime( rTime, &aSelection );
         maLastTime = aOldLastTime;
 
-        // Modify am Edit wird nur bei KeyInput gesetzt...
+        // Modify at Edit is only set at KeyInput
         if ( GetField()->GetText() != aText )
         {
             GetField()->SetModifyFlag();

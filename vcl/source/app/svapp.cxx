@@ -340,8 +340,7 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 {
     switch ( nError & EXC_MAJORTYPE )
     {
-        // Bei System machen wir nichts und lassen dem System den
-        // vortritt
+        // System has precedence (so do nothing)
         case EXC_SYSTEM:
             return 0;
 
@@ -564,10 +563,10 @@ extern int nImplSysDialog;
 sal_Bool Application::IsUICaptured()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    // Wenn Mouse gecaptured, oder im TrackingModus oder im Auswahlmodus
-    // eines FloatingWindows (wie Menus, Aufklapp-ToolBoxen) soll kein
-    // weiteres Fenster aufgezogen werden
-    // D&D aktive !!!
+
+    // If mouse was captured, or if in tracking- or in select-mode of a floatingwindow (e.g. menus
+    // or pulldown toolboxes) another window should be created
+    // D&D active !!!
     if ( pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
          pSVData->maWinData.mpFirstFloat || nImplSysDialog )
         return sal_True;
@@ -652,7 +651,7 @@ void Application::SetSettings( const AllSettings& rSettings )
 
             // Update all windows
             Window* pFirstFrame = pSVData->maWinData.mpFirstFrame;
-            // Daten, die neu berechnet werden muessen, zuruecksetzen
+            // Reset data that needs to be re-calculated
             long nOldDPIX = 0;
             long nOldDPIY = 0;
             if ( pFirstFrame )
@@ -664,11 +663,10 @@ void Application::SetSettings( const AllSettings& rSettings )
             Window* pFrame = pFirstFrame;
             while ( pFrame )
             {
-                // AppFont-Cache-Daten zuruecksetzen
+                // restore AppFont cache data
                 pFrame->mpWindowImpl->mpFrameData->meMapUnit = MAP_PIXEL;
 
-                // UpdateSettings am ClientWindow aufrufen, damit
-                // die Daten nicht doppelt geupdatet werden
+                // call UpdateSettings from ClientWindow in order to prevent updating data twice
                 Window* pClientWin = pFrame;
                 while ( pClientWin->ImplGetClientWindow() )
                     pClientWin = pClientWin->ImplGetClientWindow();
@@ -677,8 +675,7 @@ void Application::SetSettings( const AllSettings& rSettings )
                 Window* pTempWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
                 while ( pTempWin )
                 {
-                    // UpdateSettings am ClientWindow aufrufen, damit
-                    // die Daten nicht doppelt geupdatet werden
+                    // call UpdateSettings from ClientWindow in order to prevent updating data twice
                     pClientWin = pTempWin;
                     while ( pClientWin->ImplGetClientWindow() )
                         pClientWin = pClientWin->ImplGetClientWindow();
@@ -689,9 +686,8 @@ void Application::SetSettings( const AllSettings& rSettings )
                 pFrame = pFrame->mpWindowImpl->mpFrameData->mpNextFrame;
             }
 
-            // Wenn sich die DPI-Aufloesung fuer Screen-Ausgaben
-            // geaendert hat, setzen wir auch bei allen
-            // Screen-Kompatiblen VirDev's die neue Aufloesung
+            // if DPI resolution for screen output was changed set the new resolution for all
+            // screen compatible VirDev´s
             pFirstFrame = pSVData->maWinData.mpFirstFrame;
             if ( pFirstFrame )
             {
@@ -1043,7 +1039,7 @@ sal_Bool Application::InsertIdleHdl( const Link& rLink, sal_uInt16 nPrio )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Falls er noch nicht existiert, dann anlegen
+    // create if not existing
     if ( !pSVData->maAppData.mpIdleMgr )
         pSVData->maAppData.mpIdleMgr = new ImplIdleMgr;
 
@@ -1180,7 +1176,7 @@ void Application::SetAppName( const XubString& rUniqueName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Falls er noch nicht existiert, dann anlegen
+    // create if not existing
     if ( !pSVData->maAppData.mpAppName )
         pSVData->maAppData.mpAppName = new XubString( rUniqueName );
     else
@@ -1204,7 +1200,7 @@ void Application::SetDisplayName( const UniString& rName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Falls er noch nicht existiert, dann anlegen
+    // create if not existing
     if ( !pSVData->maAppData.mpDisplayName )
         pSVData->maAppData.mpDisplayName = new UniString( rName );
     else

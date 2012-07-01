@@ -51,8 +51,8 @@ struct ImplTimerData
     Timer*          mpSVTimer;      // Pointer to SV Timer instance
     sal_uLong           mnUpdateTime;   // Last Update Time
     sal_uLong           mnTimerUpdate;  // TimerCallbackProcs on stack
-    sal_Bool            mbDelete;       // Wurde Timer waehren Update() geloescht
-    sal_Bool            mbInTimeout;    // Befinden wir uns im Timeout-Handler
+    sal_Bool            mbDelete;       // Was timer deleted during Update()?
+    sal_Bool            mbInTimeout;    // Are we in a timeout handler?
 };
 
 // =======================================================================
@@ -115,23 +115,22 @@ void Timer::ImplTimerCallbackProc()
     pSVData->mnTimerUpdate++;
     pSVData->mbNotAllTimerCalled = sal_True;
 
-    // Suche Timer raus, wo der Timeout-Handler gerufen werden muss
+    // find timer where the timer handler needs to be called
     pTimerData = pSVData->mpFirstTimerData;
     while ( pTimerData )
     {
-        // Wenn Timer noch nicht neu ist und noch nicht geloescht wurde
-        // und er sich nicht im Timeout-Handler befindet,
-        // dann den Handler rufen, wenn die Zeit abgelaufen ist
+        // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
+        // call the handler as soon as the time is up.
         if ( (pTimerData->mnTimerUpdate < pSVData->mnTimerUpdate) &&
              !pTimerData->mbDelete && !pTimerData->mbInTimeout )
         {
-            // Zeit abgelaufen
+            // time has expired
             if ( (pTimerData->mnUpdateTime+pTimerData->mpSVTimer->mnTimeout) <= nTime )
             {
-                // Neue Updatezeit setzen
+                // set new update time
                 pTimerData->mnUpdateTime = nTime;
 
-                // kein AutoTimer, dann anhalten
+                // if no AutoTimer than stop
                 if ( !pTimerData->mpSVTimer->mbAuto )
                 {
                     pTimerData->mpSVTimer->mbActive = sal_False;
@@ -148,19 +147,19 @@ void Timer::ImplTimerCallbackProc()
         pTimerData = pTimerData->mpNext;
     }
 
-    // Neue Zeit ermitteln
+    // determine new time
     sal_uLong nNewTime = Time::GetSystemTicks();
     pPrevTimerData = NULL;
     pTimerData = pSVData->mpFirstTimerData;
     while ( pTimerData )
     {
-        // Befindet sich Timer noch im Timeout-Handler, dann ignorieren
+        // ignore if timer is still in timeout handler
         if ( pTimerData->mbInTimeout )
         {
             pPrevTimerData = pTimerData;
             pTimerData = pTimerData->mpNext;
         }
-        // Wurde Timer zwischenzeitlich zerstoert ?
+        // Was timer destroyed in the meantime?
         else if ( pTimerData->mbDelete )
         {
             if ( pPrevTimerData )
@@ -176,7 +175,7 @@ void Timer::ImplTimerCallbackProc()
         else
         {
             pTimerData->mnTimerUpdate = 0;
-            // kleinste Zeitspanne ermitteln
+            // determine smallest time slot
             if ( pTimerData->mnUpdateTime == nTime )
             {
                 nDeltaTime = pTimerData->mpSVTimer->mnTimeout;
@@ -200,7 +199,7 @@ void Timer::ImplTimerCallbackProc()
         }
     }
 
-    // Wenn keine Timer mehr existieren, dann Clock loeschen
+    // delete clock if no more timers available
     if ( !pSVData->mpFirstTimerData )
     {
         pSVData->mpSalTimer->Stop();
@@ -261,7 +260,7 @@ void Timer::SetTimeout( sal_uLong nNewTimeout )
 {
     mnTimeout = nNewTimeout;
 
-    // Wenn Timer aktiv, dann Clock erneuern
+    // if timer is active then renew clock
     if ( mbActive )
     {
         ImplSVData* pSVData = ImplGetSVData();
@@ -297,7 +296,7 @@ void Timer::Start()
         mpTimerData->mbDelete       = sal_False;
         mpTimerData->mbInTimeout    = sal_False;
 
-        // !!!!! Wegen SFX hinten einordnen !!!!!
+        // insert last due to SFX!
         ImplTimerData* pPrev = NULL;
         ImplTimerData* pData = pSVData->mpFirstTimerData;
         while ( pData )
