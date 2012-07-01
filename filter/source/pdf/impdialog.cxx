@@ -33,6 +33,7 @@
 #include "vcl/msgbox.hxx"
 #include "sfx2/passwd.hxx"
 #include "svtools/miscopt.hxx"
+//#include "xmlsecurity/certificatechooser.hxx"
 
 #include "comphelper/storagehelper.hxx"
 
@@ -1697,6 +1698,19 @@ ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
 IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignSelectCert )
 {
     // Certificate selection dialog will pop up
+    /*
+    Reference< dcss::xml::crypto::XSecurityEnvironment > xSecEnv;
+    Reference< XComponentContext > mxCtx;
+
+    XMLSignatureHelper aSignatureHelper( mxCtx );
+    if ( aSignatureHelper.Init() )
+        xSecEnv = aSignatureHelper.GetSecurityEnvironment();
+
+    SignatureInformations maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
+    CertificateChooser aChooser( this, mxCtx, xSecEnv, maCurrentSignatureInformations );
+    aChooser.Execute();
+    */
+
     return 0;
 }
 
