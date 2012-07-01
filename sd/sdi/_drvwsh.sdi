@@ -70,7 +70,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_SAVEGRAPHIC
+    SID_SAVE_GRAPHIC
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;

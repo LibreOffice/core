@@ -113,7 +113,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             GetView().ExecuteScan( rReq );
             break;
         }
-        case FN_SAVE_GRAPHIC:
+        case SID_SAVE_GRAPHIC:
         {
             const Graphic *pGraphic;
             if(0 != (pGraphic = rSh.GetGraphic()))
@@ -554,14 +554,11 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             if( bParentCntProt || !bIsGrfCntnt )
                 bDisable = sal_True;
             break;
-        case FN_SAVE_GRAPHIC:
+        case SID_SAVE_GRAPHIC:
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = sal_True;
         break;
         case SID_EXTERNAL_EDIT:
-            /*
-             * If the Graphic is None type it should be externally editable
-             */
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = sal_True;
         break;

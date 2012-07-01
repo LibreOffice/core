@@ -118,7 +118,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BEHIND_OBJ ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REVERSE_ORDER ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ORIGINAL_SIZE ) ||
-             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SAVEGRAPHIC ) ||
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SAVE_GRAPHIC ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_TEXTATTR_DLG ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -139,7 +139,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
             if ( !( pObj->ISA( SdrGrafObj ) ) )
             {
-                rSet.DisableItem(SID_SAVEGRAPHIC);
+                rSet.DisableItem(SID_SAVE_GRAPHIC);
             }
 
             // Wenn es sich um kein Gruppenobjekt oder 3D-Objekt handelt

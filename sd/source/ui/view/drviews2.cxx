@@ -931,7 +931,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-        case SID_SAVEGRAPHIC:
+        case SID_SAVE_GRAPHIC:
         {
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )

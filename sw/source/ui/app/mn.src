@@ -1280,18 +1280,10 @@ Menu MN_GRF_POPUPMENU
             HelpId = CMD_FN_FORMAT_GRAFIC_DLG ;
             Text [ en-US ] = "~Picture..." ;
         };
-        MenuItem
-        {
-            Identifier = FN_SAVE_GRAPHIC;
-            HelpId = CMD_FN_SAVE_GRAPHIC;
-            Text [ en-US ] = "Save Graphics..." ;
-        };
         MN_FRM_CAPTION_ITEM
         SEPARATOR;
-        MenuItem
-        {
-           ITEM_EXTERNAL_EDIT
-        };
+        MenuItem { ITEM_SAVE_GRAPHIC };
+        MenuItem { ITEM_EXTERNAL_EDIT };
         SEPARATOR;
         MenuItem
         {

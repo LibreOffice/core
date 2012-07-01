@@ -52,7 +52,7 @@ interface BaseTextGraphic
     ]
 
 
-    FN_SAVE_GRAPHIC // status(final|play)
+    SID_SAVE_GRAPHIC
     [
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;

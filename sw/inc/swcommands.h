@@ -47,7 +47,6 @@
 #define CMD_FN_EDIT_FOOTNOTE                        ".uno:EditFootnote"
 #define CMD_FN_FORMAT_FRAME_DLG                     ".uno:FrameDialog"
 #define CMD_FN_FORMAT_GRAFIC_DLG                    ".uno:GraphicDialog"
-#define CMD_FN_SAVE_GRAPHIC                         ".uno:SaveGraphic"
 #define CMD_FN_NUM_BULLET_UP                        ".uno:IncrementLevel"
 #define CMD_FN_EDIT_IDX_ENTRY_DLG                   ".uno:IndexEntryDialog"
 #define CMD_FN_INSERT_FLD_AUTHOR                    ".uno:InsertAuthorField"

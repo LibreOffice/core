@@ -846,14 +846,6 @@
         Text [ en-US ] = "~Original Size" ; \
     };
 
-#define MN_SAVEGRAPHIC\
-    MenuItem\
-    {\
-        Identifier = SID_SAVEGRAPHIC ; \
-        HelpId = CMD_SID_SAVEGRAPHIC ; \
-        Text [ en-US ] = "Save as Picture..." ; \
-    };
-
 #define MN_CROP\
     MenuItem\
     {\
@@ -1197,4 +1189,3 @@
         HelpId = CMD_SID_STYLE_EDIT ; \
         Text [ en-US ] = "Edit Style..." ; \
     };
-

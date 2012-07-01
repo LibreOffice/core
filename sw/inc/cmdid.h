@@ -668,8 +668,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_FORMAT_APPLY_DEFAULT             (FN_FORMAT2 + 157)
 #define FN_FORMAT_APPLY_TEXTBODY            (FN_FORMAT2 + 158)
 #define FN_REMOVE_DIRECT_CHAR_FORMATS       (FN_FORMAT2 + 159)
-
-#define FN_SAVE_GRAPHIC                     (FN_FORMAT2 + 160)
+//free (160)
 
 /*--------------------------------------------------------------------
     Region: Extras

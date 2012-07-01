@@ -89,7 +89,6 @@
 #define CMD_SID_NOTESMODE                           ".uno:NotesMode"
 #define CMD_SID_POSITION                            ".uno:ObjectPosition"
 #define CMD_SID_ORIGINAL_SIZE                       ".uno:OriginalSize"
-#define CMD_SID_SAVEGRAPHIC                         ".uno:SaveGraphic"
 #define CMD_SID_OUTLINEMODE                         ".uno:OutlineMode"
 #define CMD_SID_OUTLINE_TEXT_AUTOFIT                ".uno.OutlineTextAutofit"
 #define CMD_SID_PAGESETUP                           ".uno:PageSetup"
