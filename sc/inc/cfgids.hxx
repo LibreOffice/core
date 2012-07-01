@@ -19,15 +19,7 @@
 #ifndef _CFGID_HXX
 #define _CFGID_HXX
 
-#define SCCFG_DOC               SFX_ITEMTYPE_SC_BEGIN
-#define SCCFG_VIEW              (SFX_ITEMTYPE_SC_BEGIN + 1)
-#define SCCFG_APP               (SFX_ITEMTYPE_SC_BEGIN + 2)
-#define SCCFG_SPELLCHECK        (SFX_ITEMTYPE_SC_BEGIN + 3)
-#define SCCFG_PRINT             (SFX_ITEMTYPE_SC_BEGIN + 4)
 #define SCCFG_STATUSBAR         (SFX_ITEMTYPE_SC_BEGIN + 5)
-#define SCCFG_INPUT             (SFX_ITEMTYPE_SC_BEGIN + 8)
-#define SCCFG_NAVIPI            (SFX_ITEMTYPE_SC_BEGIN + 9)
-
 
 #endif
 

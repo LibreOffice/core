@@ -76,9 +76,6 @@ const SCTAB    SCTAB_MAX    = ::std::numeric_limits<SCTAB>::max();
 const SCCOLROW SCCOLROW_MAX = ::std::numeric_limits<SCCOLROW>::max();
 const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 
-// A define to handle critical sections we hopefully don't need very often.
-#define SC_ROWLIMIT_MORE_THAN_32K 1     /* set to 1 if we throw the switch */
-
 // The maximum values. Defines are needed for preprocessor checks, for example
 // in bcaslot.cxx, otherwise type safe constants are preferred.
 #define MAXROWCOUNT_DEFINE 1048576

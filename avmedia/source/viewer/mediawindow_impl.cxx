@@ -43,15 +43,6 @@
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#define AVMEDIA_TOOLBOXITEM_PREV    0x0001
-#define AVMEDIA_TOOLBOXITEM_PLAY    0x0002
-#define AVMEDIA_TOOLBOXITEM_PAUSE   0x0004
-#define AVMEDIA_TOOLBOXITEM_STOP    0x0008
-#define AVMEDIA_TOOLBOXITEM_NEXT    0x0010
-#define AVMEDIA_TOOLBOXITEM_MUTE    0x0100
-
-#define AVMEDIA_FFW_PLAYRATE        4
-
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace priv {

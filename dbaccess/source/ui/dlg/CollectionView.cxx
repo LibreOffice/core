@@ -46,7 +46,6 @@
 #include <osl/thread.h>
 #include <connectivity/dbexception.hxx>
 
-#define FILEDIALOG_DEF_IMAGEBORDER  10
 //.........................................................................
 namespace dbaui
 {

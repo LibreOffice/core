@@ -164,13 +164,6 @@ void SvxHyperlinkNewDocTp::FillDlgFields ( String& /*aStrURL*/ )
 {
 }
 
-#define INTERNETSHORTCUT_ID_TAG       "InternetShortcut"
-#define INTERNETSHORTCUT_TITLE_TAG    "Title"
-#define INTERNETSHORTCUT_TARGET_TAG   "Target"
-#define INTERNETSHORTCUT_FOLDER_TAG   "Folder"
-#define INTERNETSHORTCUT_URL_TAG      "URL"
-#define INTERNETSHORTCUT_ICONID_TAG   "IconIndex"
-
 void SvxHyperlinkNewDocTp::FillDocumentList ()
 {
     EnterWait();

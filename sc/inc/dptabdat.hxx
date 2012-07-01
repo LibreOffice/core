@@ -48,8 +48,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 }}}}
 
 
-#define SC_DAPI_DATE_HIERARCHIES    3
-
 #define SC_DAPI_HIERARCHY_FLAT      0
 #define SC_DAPI_HIERARCHY_QUARTER   1
 #define SC_DAPI_HIERARCHY_WEEK      2

@@ -102,10 +102,6 @@ static const sal_Char sImplWordChars[] = "-'";
 
 void EncryptBlockName_Imp( String& rName );
 
-// FileVersions Number for the Substitution-/Exception list separately
-#define WORDLIST_VERSION_358    1
-#define EXEPTLIST_VERSION_358   0
-
 _SV_IMPL_SORTAR_ALG( SvxAutocorrWordList, SvxAutocorrWordPtr )
 TYPEINIT0(SvxAutoCorrect)
 

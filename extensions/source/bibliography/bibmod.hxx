@@ -25,12 +25,6 @@ class ResMgr;
 class BibDataManager;
 class BibConfig;
 
-#define BIBLIOGRAPHY_INI_GROUP      "Bibliography"
-#define BIBLIOGRAPHY_INI_CUR_NAME   "BibliographyCurrent"
-#define BIBLIOGRAPHY_INI_DB_ENTRY   "Bibliography"
-#define BIBLIOGRAPHY_INI_MAPPING    "BibliographyFields"
-#define BIBLIOGRAPHY_TYPE_NAMES     "BibliographyTypeNames"
-
 class BibModul
 {
     private:

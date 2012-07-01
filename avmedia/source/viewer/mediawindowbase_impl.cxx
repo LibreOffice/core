@@ -38,8 +38,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/media/XManager.hpp>
 
-#define MEDIA_TIMER_TIMEOUT 100
-
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace priv {

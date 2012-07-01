@@ -143,7 +143,6 @@ const SCSIZE MAXSUBTOTAL        = 3;
 
                                     /* standard row height: text + margin - STD_ROWHEIGHT_DIFF */
 #define STD_ROWHEIGHT_DIFF  23
-#define STD_FONT_HEIGHT     200     /* equates 10 points */
 
 ///     use ScGlobal::nStdRowHeight instead of STD_ROW_HEIGHT !
 

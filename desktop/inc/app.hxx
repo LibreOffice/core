@@ -46,10 +46,6 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-#define DESKTOP_SAVETASKS_MOD 0x1
-#define DESKTOP_SAVETASKS_UNMOD 0x2
-#define DESKTOP_SAVETASKS_ALL 0x3
-
 namespace desktop
 {
 

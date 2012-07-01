@@ -81,10 +81,6 @@
 #define EE_STAT_WRONGWORDCHANGED    0x00000080
 // #define EE_STAT_MODIFIED         0x00000100
 
-// Only for Update:
-#define EE_CNTRL_AUTOCENTER     EE_CNTRL_AUTOPAGESIZE
-#define EE_STAT_GROWY           EE_STAT_TEXTHEIGHTCHANGED
-
 /*
     EE_STAT_CRSRLEFTPARA at the time cursor movement and the enter.
 */

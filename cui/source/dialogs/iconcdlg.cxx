@@ -432,8 +432,6 @@ void IconChoiceDialog::ShowPage( sal_uInt16 nId )
 
 #define ICONCTRL_WIDTH_PIXEL       110
 #define ICONCTRL_HEIGHT_PIXEL       75
-#define MINSIZE_BUTTON_WIDTH        70
-#define MINSIZE_BUTTON_HEIGHT       22
 
 void IconChoiceDialog::Resize()
 {

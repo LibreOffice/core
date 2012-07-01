@@ -87,13 +87,6 @@
 
 #define DET_ARROW_OFFSET    1000
 
-//  Abstand zur naechsten Zelle beim Loeschen (bShrink), damit der Anker
-//  immer an der richtigen Zelle angezeigt wird
-//  und noch etwas mehr, damit das Objekt auch sichtbar in der Zelle liegt
-#define SHRINK_DIST     25
-
-#define SHRINK_DIST_TWIPS   15
-
 using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------

@@ -34,7 +34,6 @@
 #define DATA_FIELD_BTN_GAP   2     // must be an even number
 #define ROW_FIELD_BTN_GAP    2     // must be an even number
 #define FIELD_BTN_HEIGHT    23
-#define SELECT_FIELD_BTN_SPACE   2
 #define FIELD_AREA_GAP       3   // gap between row/column/data/page areas
 #define TEXT_INFO_GAP        5 // gap between the row/data areas and the text notice below.
 

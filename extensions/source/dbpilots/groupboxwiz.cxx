@@ -34,8 +34,6 @@
 #include "optiongrouplayouter.hxx"
 #include "dbpilots.hrc"
 
-
-//#define GBW_STATE_DATASELECTION       0
 #define GBW_STATE_OPTIONLIST        0
 #define GBW_STATE_DEFAULTOPTION     1
 #define GBW_STATE_OPTIONVALUES      2

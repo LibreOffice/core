@@ -92,10 +92,6 @@ EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 
 #define EDITUNDO_USER               200
 
-
-#define EE_COMPATIBLEMODE_PARAGRAPHSPACING_SUMMATION            0x0001
-#define EE_COMPATIBLEMODE_PARAGRAPHSPACING_BEFOREFIRSTPARAGRAPH 0x0002
-
 class EditView;
 class EditEngine;
 class ImpEditView;
@@ -262,13 +258,6 @@ struct ImportInfo
     ImportInfo( ImportState eState, SvParser* pPrsrs, const ESelection& rSel );
     ~ImportInfo();
 };
-
-#define EE_SEARCH_WORDONLY      0x0001
-#define EE_SEARCH_EXACT         0x0002
-#define EE_SEARCH_BACKWARD      0x0004
-#define EE_SEARCH_INSELECTION   0x0008
-#define EE_SEARCH_REGEXPR       0x0010
-#define EE_SEARCH_PATTERN       0x0020
 
 struct ParagraphInfos
 {

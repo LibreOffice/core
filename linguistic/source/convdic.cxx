@@ -81,8 +81,6 @@ using namespace linguistic;
 using ::rtl::OUString;
 
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
-#define SN_HCD_CONV_DICTIONARY  "com.sun.star.linguistic2.HangulHanjaConversionDictionary"
-
 
 void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 {

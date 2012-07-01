@@ -106,8 +106,6 @@ using ::std::vector;
 #define SC_DBPROP_EXTENSION         "Extension"
 #define SC_DBPROP_CHARSET           "CharSet"
 
-#define SC_ROWCOUNT_ERROR       (-1)
-
 namespace
 {
     sal_uLong lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager>& _rDrvMgr,uno::Reference<sdbc::XConnection>& _rConnection,String& _rTabName,const String& rFullFileName,rtl_TextEncoding eCharSet)

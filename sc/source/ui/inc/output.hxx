@@ -60,12 +60,6 @@ class SdrPaintWindow;
 
 // ---------------------------------------------------------------------------
 
-#define SC_OBJECTS_NONE         0
-#define SC_OBJECTS_DRAWING      1
-#define SC_OBJECTS_OLE          2
-#define SC_OBJECTS_CHARTS       4
-#define SC_OBJECTS_ALL          ( SC_OBJECTS_DRAWING | SC_OBJECTS_OLE | SC_OBJECTS_CHARTS )
-
 enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
 class ScFieldEditEngine;

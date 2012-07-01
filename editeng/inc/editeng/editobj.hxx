@@ -45,9 +45,6 @@ class SfxItemPool;
 class SfxStyleSheetPool;
 class SvxFieldItem;
 
-#define EDTOBJ_SETTINGS_ULITEMSUMMATION     0x00000001
-#define EDTOBJ_SETTINGS_ULITEMFIRSTPARA     0x00000002
-
 namespace editeng {
 
 class FieldUpdater;

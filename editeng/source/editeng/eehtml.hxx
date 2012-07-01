@@ -36,8 +36,6 @@
 
 class EditEngine;
 
-#define MAX_NUMBERLEVEL         10
-
 struct AnchorInfo
 {
     String  aHRef;
