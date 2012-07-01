@@ -499,7 +499,13 @@ bool ThumbnailView::ImplHasAccessibleListeners()
 
 IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
 {
-    sal_uInt16 nNewFirstLine = (sal_uInt16)pScrollBar->GetThumbPos();
+    sal_uInt16 nNewFirstLine = mnFirstLine;
+
+    if (pScrollBar->GetDelta() > 0)
+        nNewFirstLine += 1;
+    else
+        nNewFirstLine -= 1;
+
     if ( nNewFirstLine != mnFirstLine )
     {
         mnFirstLine = nNewFirstLine;
