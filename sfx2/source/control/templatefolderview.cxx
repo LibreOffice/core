@@ -334,6 +334,17 @@ void TemplateFolderView::Populate ()
         Invalidate();
 }
 
+std::vector<rtl::OUString> TemplateFolderView::getFolderNames()
+{
+    size_t n = mItemList.size();
+    std::vector<rtl::OUString> ret(n);
+
+    for (size_t i = 0; i < n; ++i)
+        ret[i] = mItemList[i]->maText;
+
+    return ret;
+}
+
 bool TemplateFolderView::isOverlayVisible () const
 {
     return mpItemView->IsVisible();
@@ -421,6 +432,82 @@ bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
     }
 
     return true;
+}
+
+bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rItems, const sal_uInt16 nTargetItem)
+{
+    bool ret = true;
+    bool refresh = false;
+
+    sal_uInt16 nSrcRegionId = mpItemView->getRegionId();
+    sal_uInt16 nSrcRegionItemId = nSrcRegionId + 1;
+
+    TemplateFolderViewItem *pTarget = NULL;
+    TemplateFolderViewItem *pSrc = NULL;
+
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        if (mItemList[i]->mnId == nTargetItem)
+            pTarget = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+        else if (mItemList[i]->mnId == nSrcRegionItemId)
+            pSrc = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+    }
+
+    if (pTarget && pSrc)
+    {
+        std::set<const ThumbnailViewItem*>::iterator aSelIter;
+        for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter )
+        {
+            sal_uInt16 nTargetRegion = pTarget->mnId-1;
+            sal_uInt16 nTargetIdx = pTarget->maTemplates.back()->mnId; // Last Assigned in filesystem is mnId-1
+
+            if (!mpDocTemplates->Move(nTargetRegion,nTargetIdx,mpItemView->getRegionId(),(*aSelIter)->mnId-1))
+            {
+                ret = false;
+                continue;
+            }
+
+            // move template to destination
+            const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
+
+            TemplateViewItem *pTemplateItem = new TemplateViewItem(*mpItemView,mpItemView);
+            pTemplateItem->mnId = nTargetIdx + 1;
+            pTemplateItem->maText = pViewItem->maText;
+            pTemplateItem->setPath(pViewItem->getPath());
+            pTemplateItem->setFileType(pViewItem->getFileType());
+            pTemplateItem->maPreview1 = pViewItem->maPreview1;
+
+            pTarget->maTemplates.push_back(pTemplateItem);
+
+            // remove template for overlay and from cached data
+
+            std::vector<TemplateViewItem*>::iterator pIter;
+            for (pIter = pSrc->maTemplates.begin(); pIter != pSrc->maTemplates.end(); ++pIter)
+            {
+                if ((*pIter)->mnId == pViewItem->mnId)
+                {
+                    delete *pIter;
+
+                    pSrc->maTemplates.erase(pIter);
+
+                    mpItemView->RemoveItem(pViewItem->mnId);
+                    break;
+                }
+            }
+
+            refresh = true;
+        }
+    }
+    else
+        ret = false;
+
+    if (refresh)
+    {
+        Invalidate();
+        mpItemView->Invalidate();
+    }
+
+    return ret;
 }
 
 void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath)

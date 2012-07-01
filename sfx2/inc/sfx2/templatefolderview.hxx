@@ -10,6 +10,8 @@
 #ifndef TEMPLATEFOLDERVIEW_HXX
 #define TEMPLATEFOLDERVIEW_HXX
 
+#include <set>
+
 #include <sfx2/thumbnailview.hxx>
 
 class SfxDocumentTemplates;
@@ -36,6 +38,8 @@ public:
     // Fill view with template folders thumbnails
     void Populate ();
 
+    std::vector<rtl::OUString> getFolderNames ();
+
     // Check if the overlay is visible or not.
     bool isOverlayVisible () const;
 
@@ -51,6 +55,8 @@ public:
     void setTemplateStateHdl (const Link &aLink) { maTemplateStateHdl = aLink; }
 
     bool removeTemplate (const sal_uInt16 nItemId);
+
+    bool moveTemplates (std::set<const ThumbnailViewItem*> &rItems, const sal_uInt16 nTargetItem);
 
     void copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath);
 

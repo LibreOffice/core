@@ -465,6 +465,9 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
     }
     else
     {
+        if (!maView->moveTemplates(maSelTemplates,maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE)))
+        {
+        }
     }
 
     return 0;
