@@ -240,6 +240,7 @@ public:
 
     ScDocument*     GetDocument()   { return &aDocument; }
     ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
+    void            SetDocFunc( ScDocFunc *pDF ) { pDocFunc = pDF; }
 
     SfxPrinter*     GetPrinter( sal_Bool bCreateIfNotExist = sal_True );
     sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL );

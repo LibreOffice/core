@@ -74,7 +74,7 @@ class TubeContacts : public ModelessDialog
             boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *pScDocShell ) );
             boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
             pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
-            pDocFunc = pSender;
+            pScDocShell->SetDocFunc( pSender );
         }
         // This is a hack to work around:
         //  `error registering client handler: Name
