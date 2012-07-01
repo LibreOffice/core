@@ -86,7 +86,6 @@ private:
     TemplateFolderView *maView;
     PopupMenu *mpCreateMenu;
     PopupMenu *mpActionMenu;
-    PopupMenu *mpMoveMenu;
 
     int mnSelectionCount;
     std::set<const ThumbnailViewItem*> maSelTemplates;

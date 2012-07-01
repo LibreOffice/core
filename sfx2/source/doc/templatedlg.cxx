@@ -92,10 +92,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString());
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
-    mpMoveMenu = new PopupMenu;
-    mpMoveMenu->InsertItem(MNI_MOVE_NEW,SfxResId(STR_MOVE_NEW).toString());
-    mpMoveMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MoveMenuSelectHdl));
-
     Size aWinSize = GetOutputSize();
 
     // Calculate thumbnail view minimum size
@@ -206,7 +202,6 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete maView;
     delete mpCreateMenu;
     delete mpActionMenu;
-    delete mpMoveMenu;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
@@ -335,15 +330,38 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
         pBox->Invalidate();
         break;
     case TBI_TEMPLATE_MOVE:
+    {
         pBox->SetItemDown( nCurItemId, true );
 
-        mpMoveMenu->Execute(pBox,pBox->GetItemRect(TBI_TEMPLATE_MOVE),
+        std::vector<rtl::OUString> aNames = maView->getFolderNames();
+
+        PopupMenu *pMoveMenu = new PopupMenu;
+        pMoveMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MoveMenuSelectHdl));
+
+        pMoveMenu->InsertItem(MNI_MOVE_NEW,SfxResId(STR_MOVE_NEW).toString());
+
+        if (!aNames.empty())
+        {
+            pMoveMenu->InsertSeparator();
+
+            for (size_t i = 0, n = aNames.size(); i < n; ++i)
+                pMoveMenu->InsertItem(MNI_MOVE_FOLDER_BASE+i,aNames[i]);
+        }
+
+        pMoveMenu->InsertSeparator();
+
+        pMoveMenu->InsertItem(MNI_MOVE_DELETE,SfxResId(STR_MOVE_DELETE).toString());
+
+        pMoveMenu->Execute(pBox,pBox->GetItemRect(TBI_TEMPLATE_MOVE),
                             POPUPMENU_EXECUTE_DOWN);
+
+        delete pMoveMenu;
 
         pBox->SetItemDown( nCurItemId, false );
         pBox->EndSelection();
         pBox->Invalidate();
         break;
+    }
     default:
         break;
     }
@@ -432,6 +450,9 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
 
     if (nMenuId == MNI_MOVE_NEW)
+    {
+    }
+    else if (nMenuId == MNI_MOVE_DELETE)
     {
     }
     else

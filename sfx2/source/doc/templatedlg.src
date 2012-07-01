@@ -40,6 +40,11 @@ String STR_MOVE_NEW
     Text [ en-US ] = "New folder";
 };
 
+String STR_MOVE_DELETE
+{
+    Text [ en-US ] = "No folder";
+};
+
 ModalDialog DLG_TEMPLATE_MANAGER
 {
     HelpId = CMD_SID_TEMPLATE_MANAGER;
