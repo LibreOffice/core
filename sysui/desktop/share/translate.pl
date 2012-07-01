@@ -29,15 +29,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #*************************************************************************
 
-
-#*********************************************************************
-#
-# main
-#
-
 my ($prefix, $ext, $key);
-$productname = "LibreOffice";
-$workdir = ".";
+my $productname = "LibreOffice";
+my $workdir = ".";
 
 while ($_ = $ARGV[0], /^-/) {
     shift;
@@ -65,10 +59,12 @@ while ($_ = $ARGV[0], /^-/) {
 }
 
 # hack for unity section
-$outkey = $key;
+my $outkey = $key;
 if ( $outkey eq "UnityQuicklist" ) {
     $outkey = "Name";
 }
+
+my %templates;
 
 # open input file
 unless (open(SOURCE, $ARGV[0])) {
@@ -76,52 +72,23 @@ unless (open(SOURCE, $ARGV[0])) {
     return;
 }
 
+# currently read template
+my $template;
 
-# For every section in the specified ulf file there should exist
-# a template file in $workdir ..
+# read ulf file
 while (<SOURCE>) {
-    $line = $_;
+    my $line = $_;
 
     if ( "[" eq substr($line, 0, 1) ) {
-        # Pass the tail of the template to the output file
-        while (<TEMPLATE>) {
-            print OUTFILE;
-        }
-
-        close(TEMPLATE);
-
-        if (close(OUTFILE)) {
-            system "mv -f $outfile.tmp $outfile\n";
-        }
-
-        $_ = substr($line, 1, index($line,"]")-1);
-        $outfile = "$workdir/$prefix$_.$ext";
-
-        # open the template file - ignore sections for which no
-        # templates exist
-        unless(open(TEMPLATE, $outfile)) {
-            print STDERR "Warning: No template found for item $_: $outfile: $!\n";
-            next;
-        }
-
-        # open output file
-        unless (open(OUTFILE, "> $outfile.tmp")) {
-            print STDERR "Can't create output file $outfile.tmp: $!\n";
-            exit -1;
-        }
-
-        # Pass the head of the template to the output file
-KEY:    while (<TEMPLATE>) {
-            $keyline = $_;
-            last KEY if (/$key/);
-            print OUTFILE;
-        }
-        $keyline=~s/^$key/$outkey/;
-        print OUTFILE $keyline;
-
+        $template = substr($line, 1, index($line,"]")-1);
+        my %entry;
+        # For every section in the specified ulf file there should exist
+        # a template file in $workdir ..
+        $entry{'outfile'} = "$workdir/$prefix$template.$ext";
+        $templates{$template} = \%entry;
     } else {
         # split locale = "value" into 2 strings
-        ($locale, $value) = split(' = ', $line);
+        my ($locale, $value) = split(' = ', $line);
 
         if ( $locale ne $line ) {
             # replace en-US with en
@@ -135,23 +102,55 @@ KEY:    while (<TEMPLATE>) {
 
             $locale=~s/-/_/;
 
-            if (not $value eq '') {
-            if ($ext eq "desktop") {
-                print OUTFILE "$outkey\[$locale\]=$value\n";
-            } else {
-                print OUTFILE  "\t\[$locale\]$outkey=$value\n";
-            }
-            }
+            $templates{$template}->{'locale'} = $locale;
+            $templates{$template}->{'value'} = $value;
         }
     }
 }
 
-while (<TEMPLATE>) {
-    print OUTFILE;
-}
+close(SOURCE);
 
-if (close(OUTFILE)) {
-    system "mv -f $outfile.tmp $outfile\n";
-}
+# process templates
+foreach $template (keys %templates) {
+    my $outfile = $templates{$template}->{'outfile'};
+    print "processing template $template in $outfile\n";
 
-close(TEMPLATE);
+    # open the template file - ignore sections for which no
+    # templates exist
+    unless(open(TEMPLATE, $outfile)) {
+        print STDERR "Warning: No template found for item $_: $outfile: $!\n";
+        next;
+    }
+
+    # open output file
+    unless (open(OUTFILE, "> $outfile.tmp")) {
+        print STDERR "Can't create output file $outfile.tmp: $!\n";
+        exit -1;
+    }
+
+    # emit the template to the output file
+    while (<TEMPLATE>) {
+        my $keyline = $_;
+        $keyline =~ s/^$key/$outkey/;
+        print OUTFILE $keyline;
+        if (/$key/) {
+            my $locale = $templates{$template}->{'locale'};
+            my $value = $templates{$template}->{'value'};
+            print "locale is $locale\n";
+            print "value is $value\n";
+            if ($value) {
+                if ($ext eq "desktop") {
+                    print OUTFILE "$outkey\[$locale\]=$value\n";
+                } else {
+                    print OUTFILE "\t\[$locale\]$outkey=$value\n";
+                }
+            }
+        }
+    }
+
+    close(TEMPLATE);
+
+    if (close(OUTFILE)) {
+        system "mv -f $outfile.tmp $outfile\n";
+    }
+}
