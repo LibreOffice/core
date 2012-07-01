@@ -714,23 +714,22 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
 
-                // switch on undo for the next operations
-                mpDrawView->BegUndo(
-                    String(
-                    SdResId (nSId==SID_CONVERT_TO_METAFILE ? STR_UNDO_CONVERT_TO_METAFILE : STR_UNDO_CONVERT_TO_BITMAP)));
-
                 // create SdrGrafObj from metafile/bitmap
                 Graphic aGraphic;
                 switch (nSId)
                 {
                     case SID_CONVERT_TO_METAFILE:
                     {
+                        // switch on undo for the next operations
+                        mpDrawView->BegUndo( String( SdResId( STR_UNDO_CONVERT_TO_METAFILE )));
                         GDIMetaFile aMetaFile(mpDrawView->GetAllMarkedMetaFile ());
                         aGraphic = Graphic(aMetaFile);
                     }
                     break;
                     case SID_CONVERT_TO_BITMAP:
                     {
+                        // switch on undo for the next operations
+                        mpDrawView->BegUndo( String( SdResId( STR_UNDO_CONVERT_TO_BITMAP )));
                         Bitmap aBitmap (mpDrawView->GetAllMarkedBitmap ());
                         aGraphic = Graphic(aBitmap);
                     }

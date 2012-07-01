@@ -555,13 +555,10 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 bDisable = sal_True;
             break;
         case SID_SAVE_GRAPHIC:
-            if( rSh.GetGraphicType() == GRAPHIC_NONE )
-                bDisable = sal_True;
-        break;
         case SID_EXTERNAL_EDIT:
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = sal_True;
-        break;
+            break;
         case SID_COLOR_SETTINGS:
         {
             if ( bParentCntProt || !bIsGrfCntnt )
