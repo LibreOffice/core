@@ -190,6 +190,15 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
     return true;
 }
 
+
+struct AsyncDesktopTerminationData
+{
+    Reference< XDesktop > mxDesktop;
+    AsyncDesktopTerminationData( const Reference< XDesktop > &xDesktop )
+    : mxDesktop( xDesktop ) {}
+};
+
+
 class IdleUnloader : Timer
 {
     ::osl::Module *m_pModule;
@@ -584,16 +593,28 @@ void ShutdownIcon::terminateDesktop()
     if ( xSupplier.is() )
     {
         Reference< XIndexAccess > xTasks ( xSupplier->getFrames(), UNO_QUERY );
-        if( xTasks.is() )
+        if( xTasks.is() && xTasks->getCount() < 1 )
         {
-            if( xTasks->getCount() < 1 )
-                xDesktop->terminate();
+            AsyncDesktopTerminationData * pData = new AsyncDesktopTerminationData( xDesktop );
+            if ( !Application::PostUserEvent( STATIC_LINK( 0, ShutdownIcon, AsyncDesktopTermination ), pData ) )
+                delete pData;
         }
     }
 
     // remove the instance pointer
     ShutdownIcon::pShutdownIcon = 0;
 }
+
+
+IMPL_STATIC_LINK_NOINSTANCE( ShutdownIcon, AsyncDesktopTermination, AsyncDesktopTerminationData*, pData )
+{
+    if ( pData && pData->mxDesktop.is() )
+        pData->mxDesktop->terminate();
+    delete pData;
+    return 0;
+}
+
+
 
 // ---------------------------------------------------------------------------
 

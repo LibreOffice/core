@@ -44,7 +44,9 @@
 #include <sfx2/sfxuno.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <sfx2/dllapi.h>
+#include <tools/link.hxx>
 
+struct AsyncDesktopTerminationData;
 class ResMgr;
 namespace sfx2
 {
@@ -101,6 +103,8 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         ShutdownIcon( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > aSMgr );
 
         virtual ~ShutdownIcon();
+
+        DECL_STATIC_LINK( ShutdownIcon, AsyncDesktopTermination, AsyncDesktopTerminationData* );
 
         SFX_DECL_XSERVICEINFO
 

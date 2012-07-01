@@ -87,8 +87,8 @@ static void systray_disable_cb()
 
 static void exit_quickstarter_cb( GtkWidget * )
 {
-    ShutdownIcon::getInstance()->terminateDesktop();
     plugin_shutdown_sys_tray();
+    ShutdownIcon::getInstance()->terminateDesktop();
 }
 
 static void menu_deactivate_cb( GtkWidget *pMenu )
