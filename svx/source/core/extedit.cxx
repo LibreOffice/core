@@ -62,8 +62,6 @@ void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
         GraphicConverter::Import(*pStream, newGraphic);
 
         // Now update the Graphic in the shell by re-reading from the newGraphic
-        // TODO: Make this action Undoable !
-        //rSh->ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &newGraphic);
         pData->Update( newGraphic );
 
         delete(pStream);
