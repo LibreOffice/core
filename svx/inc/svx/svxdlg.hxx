@@ -68,8 +68,6 @@ typedef ::std::vector< String* > TargetList;
 
 namespace svx{ class SpellDialogChildWindow;}
 
-#define EMPTY_FRAME_REF com::sun::star::uno::Reference < com::sun::star::frame::XFrame >()
-
 class AbstractSvxDistributeDialog :public VclAbstractDialog  //add for SvxDistributeDialog
 {
 public:

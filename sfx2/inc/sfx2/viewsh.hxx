@@ -131,9 +131,6 @@ public: \
 #define SFX_VIEW_REGISTRATION(DocClass) \
             DocClass::Factory().RegisterViewFactory( Factory() )
 
-#define SFX_REGISTER_VIEW(ViewShellClass) \
-            Factory().RegisterViewFactory( ViewShellClass::Factory() )
-
 class SfxInPlaceClient;
 typedef ::std::vector< SfxInPlaceClient* > SfxInPlaceClientList;
 

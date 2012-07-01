@@ -67,7 +67,6 @@ using namespace ::com::sun::star::lang  ;
 
 #define ROOTNODE_ADDONMENU                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Addons" ))
 #define PATHDELIMITER                                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"             ))
-#define TOOLBARITEMS                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ToolBarItems"      ))
 #define SEPARATOR_URL_STR                               "private:separator"
 #define SEPARATOR_URL_LEN                               17
 #define SEPARATOR_URL                                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATOR_URL_STR ))
@@ -99,7 +98,6 @@ using namespace ::com::sun::star::lang  ;
 #define PROPERTYNAME_MERGEMENU_MERGEFALLBACK            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
 #define PROPERTYNAME_MERGEMENU_MERGECONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
 #define PROPERTYNAME_MERGEMENU_MENUITEMS                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MenuItems" ))
-#define MERGEMENU_MERGEPOINT_SEPARATOR                  '\\'
 
 #define PROPERTYNAME_MERGETOOLBAR_TOOLBAR               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeToolBar" ))
 #define PROPERTYNAME_MERGETOOLBAR_MERGEPOINT            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))

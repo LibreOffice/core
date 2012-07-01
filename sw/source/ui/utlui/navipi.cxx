@@ -80,8 +80,6 @@
 #define NAVI_VERSION1   1
 #define NAVI_VERSION2   2 // bIsGlobalActive
 
-#define NAVI_CONFIG_VERSION NAVI_VERSION2
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 

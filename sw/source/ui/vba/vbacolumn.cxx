@@ -35,8 +35,6 @@
 #include "wordvbahelper.hxx"
 #include "vbatablehelper.hxx"
 
-#define RELATIVE_TABLE_WIDTH 10000
-
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 

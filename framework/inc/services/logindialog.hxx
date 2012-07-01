@@ -109,7 +109,6 @@ namespace framework{
 #endif
 
 #define UNCPATHSEPERATOR                        sal_Unicode(0x002F)
-#define MAX_SERVERHISTORY                       10
 
 //  Use follow keys in follow order.
 //  [Global]
@@ -131,55 +130,6 @@ namespace framework{
 #define SECTION_GLOBAL                          "Global"
 #define SECTION_DEFAULTPORTS                    "DefaultPorts"
 #define SECTION_SERVERHISTORY                   "ServerHistory"
-
-#define SECTION_USERNAME                        SECTION_GLOBAL
-#define SECTION_ACTIVESERVER                    SECTION_GLOBAL
-#define SECTION_CONNECTIONTYPE                  SECTION_GLOBAL
-#define SECTION_LANGUAGE                        SECTION_GLOBAL
-#define SECTION_SECURITYPROXY                   SECTION_GLOBAL
-#define SECTION_DIALOG                          SECTION_GLOBAL
-#define SECTION_HTTP                            SECTION_DEFAULTPORTS
-#define SECTION_HTTPS                           SECTION_DEFAULTPORTS
-#define SECTION_SERVER_X                        SECTION_SERVERHISTORY
-
-#define KEY_USERNAME                            "UserName"
-#define KEY_ACTIVESERVER                        "ActiveServer"
-#define KEY_CONNECTIONTYPE                      "ConnectionType"
-#define KEY_LANGUAGE                            "Language"
-#define KEY_SERVER_X                            "Server_"
-#define KEY_SECURITYPROXY                       "SecurityProxy"
-#define KEY_USESECURITYPROXY                    "UseProxy"
-#define KEY_DIALOG                              "dialog"
-#define KEY_HTTP                                "http"
-#define KEY_HTTPS                               "https"
-
-#define PROPERTYNAME_CONNECTIONTYPE             DECLARE_ASCII("ConnectionType"                  )
-#define PROPERTYNAME_LANGUAGE                   DECLARE_ASCII("Language"                        )
-#define PROPERTYNAME_PARENTWINDOW               DECLARE_ASCII("ParentWindow"                    )
-#define PROPERTYNAME_PASSWORD                   DECLARE_ASCII("Password"                        )
-#define PROPERTYNAME_SECURITYPROXY              DECLARE_ASCII("SecurityProxy"                   )
-#define PROPERTYNAME_SERVER                     DECLARE_ASCII("Server"                          )
-#define PROPERTYNAME_SERVERHISTORY              DECLARE_ASCII("ServerHistory"                   )
-#define PROPERTYNAME_USERNAME                   DECLARE_ASCII("UserName"                        )
-#define PROPERTYNAME_USEPROXY                   DECLARE_ASCII("UseProxy"                        )
-#define PROPERTYNAME_DIALOG                     DECLARE_ASCII("Dialog"                          )
-#define PROPERTYNAME_HTTP                       DECLARE_ASCII("http"                            )
-#define PROPERTYNAME_HTTPS                      DECLARE_ASCII("https"                           )
-
-#define PROPERTYHANDLE_CONNECTIONTYPE           1
-#define PROPERTYHANDLE_LANGUAGE                 2
-#define PROPERTYHANDLE_PARENTWINDOW             3
-#define PROPERTYHANDLE_PASSWORD                 4
-#define PROPERTYHANDLE_SERVER                   5
-#define PROPERTYHANDLE_SERVERHISTORY            6
-#define PROPERTYHANDLE_USERNAME                 7
-#define PROPERTYHANDLE_SECURITYPROXY            8
-#define PROPERTYHANDLE_USEPROXY                 9
-#define PROPERTYHANDLE_DIALOG                   10
-#define PROPERTYHANDLE_HTTP                     11
-#define PROPERTYHANDLE_HTTPS                    12
-
-#define PROPERTYCOUNT                           12
 
 //_________________________________________________________________________________________________________________
 //  exported definitions

@@ -39,7 +39,6 @@
 
 struct SwPosition;
 class IntlWrapper;
-#define IVER_FMTANCHOR_LONGIDX ((sal_uInt16)1)
 
 // FlyAnchors
 class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem

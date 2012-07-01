@@ -28,8 +28,6 @@ namespace sd {
 class DrawDocShell;
 class DrawViewShell;
 
-#define SDDRAWVIEW_MAGIC  0x456789BA
-
 /*************************************************************************
 |*
 |* Ableitung von ::sd::View; enthaelt auch einen Zeiger auf das Dokument

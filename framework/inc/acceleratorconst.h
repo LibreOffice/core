@@ -40,13 +40,6 @@ namespace framework{
 #define XMLNS_ACCEL                     DECLARE_ASCII("accel")
 #define XMLNS_XLINK                     DECLARE_ASCII("xlink")
 
-#define ATTRIBUTE_URL                   DECLARE_ASCII("href" )
-#define ATTRIBUTE_KEYCODE               DECLARE_ASCII("code" )
-#define ATTRIBUTE_MOD_SHIFT             DECLARE_ASCII("shift")
-#define ATTRIBUTE_MOD_MOD1              DECLARE_ASCII("mod1" )
-#define ATTRIBUTE_MOD_MOD2              DECLARE_ASCII("mod2" )
-#define ATTRIBUTE_MOD_MOD3              DECLARE_ASCII("mod3" )
-
 // same items with a name space alias
 #define AL_ELEMENT_ACCELERATORLIST      DECLARE_ASCII("accel:acceleratorlist")
 #define AL_ELEMENT_ITEM                 DECLARE_ASCII("accel:item"           )

@@ -163,18 +163,6 @@
 #define  FLAGVAL_STARTPRESENTATION 0x20000000 // 268435456
 #define  FLAGVAL_ALL               0xffffffff // 4294967295
 
-/** @short  uno service names of our document services
-            provided by our application modules.
- */
-#define  DOCUMENTSERVICE_WRITER         _FILTER_CONFIG_FROM_ASCII_("com.sun.star.text.TextDocument"                )
-#define  DOCUMENTSERVICE_WRITER_WEB     _FILTER_CONFIG_FROM_ASCII_("com.sun.star.text.WebDocument"                 )
-#define  DOCUMENTSERVICE_WRITER_GLOBAL  _FILTER_CONFIG_FROM_ASCII_("com.sun.star.text.GlobalDocument"              )
-#define  DOCUMENTSERVICE_CALC           _FILTER_CONFIG_FROM_ASCII_("com.sun.star.sheet.SpreadsheetDocument"        )
-#define  DOCUMENTSERVICE_DRAW           _FILTER_CONFIG_FROM_ASCII_("com.sun.star.drawing.DrawingDocument"          )
-#define  DOCUMENTSERVICE_IMPRESS        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.presentation.PresentationDocument")
-#define  DOCUMENTSERVICE_CHART          _FILTER_CONFIG_FROM_ASCII_("com.sun.star.chart2.ChartDocument"              )
-#define  DOCUMENTSERVICE_MATH           _FILTER_CONFIG_FROM_ASCII_("com.sun.star.formula.FormulaProperties"        )
-
 /** @short  some uno service names.
  */
 #define  SERVICE_CONFIGURATIONUPDATEACCESS  _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationUpdateAccess" )

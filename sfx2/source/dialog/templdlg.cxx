@@ -96,13 +96,6 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 // filter box has maximum 12 entries visible
 #define MAX_FILTER_ENTRIES          12
 
-// Special constant to save hierarchical mode
-// We've to use this hack since this is not the
-// index in the filter listbox that is saved but the
-// index in the filters list and hierarchical is not
-// in it
-#define HIERARCHICAL_FILTER_INDEX   0xfffe  // 0xffff is reserved
-
 //=========================================================================
 
 TYPEINIT0(SfxCommonTemplateDialog_Impl);

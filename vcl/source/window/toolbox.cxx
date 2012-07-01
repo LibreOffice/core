@@ -69,8 +69,6 @@ DBG_NAMEEX( Window )
 
 #define SMALLBUTTON_OFF_NORMAL_X    3
 #define SMALLBUTTON_OFF_NORMAL_Y    3
-#define SMALLBUTTON_OFF_PRESSED_X   5
-#define SMALLBUTTON_OFF_PRESSED_Y   5
 
 // -----------------------------------------------------------------------
 
@@ -79,8 +77,6 @@ DBG_NAMEEX( Window )
 #define TB_LINESPACING          3
 #define TB_SPIN_SIZE            14
 #define TB_SPIN_OFFSET          2
-#define TB_NEXT_SIZE            22
-#define TB_NEXT_OFFSET          2
 #define TB_BORDER_OFFSET1       4
 #define TB_BORDER_OFFSET2       2
 #define TB_CUSTOMIZE_OFFSET     2

@@ -61,8 +61,6 @@
 #define PUB_THUMBNAIL_WIDTH  256
 #define PUB_THUMBNAIL_HEIGHT 192
 
-#define HtmlButtonThemaStr = "private://gallery/hidden/HtmlExportButtons";
-
 class SfxProgress;
 class SdrOutliner;
 class SdPage;

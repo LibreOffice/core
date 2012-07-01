@@ -77,7 +77,6 @@
 // -----------------------------------------------------------------------------
 
 #define BMP_COL_TRANS                   Color( 252, 3, 251 )
-#define BMP_COLOR_MONOCHROME_THRESHOLD  128
 
 // ---------
 // - Enums -

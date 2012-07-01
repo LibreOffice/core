@@ -677,21 +677,6 @@ Class::createServiceFactory( const com::sun::star::uno::Reference<          \
                 Class::getSupportedServiceNames_Static() ) );               \
 }
 
-#define SINGLE_SERVICE_FACTORY_IMPL( Class )                                \
-com::sun::star::uno::Reference<                                             \
-                        com::sun::star::lang::XSingleServiceFactory >       \
-Class::createServiceFactory( const com::sun::star::uno::Reference<          \
-            com::sun::star::lang::XMultiServiceFactory >& rxServiceMgr )    \
-{                                                                           \
-    return com::sun::star::uno::Reference<                                  \
-        com::sun::star::lang::XSingleServiceFactory >(                      \
-            cppu::createSingleFactory(                                      \
-                rxServiceMgr,                                               \
-                Class::getImplementationName_Static(),                      \
-                Class##_CreateInstance,                                     \
-                Class::getSupportedServiceNames_Static() ) );               \
-}
-
 // Service without service factory.
 
 // Own implementation of getSupportedServiceNames_Static().

@@ -38,11 +38,6 @@
 // the implementation names
 #define FOLDER_PICKER_IMPL_NAME  "com.sun.star.ui.dialogs.Win32FolderPicker"
 
-// the registry key names
-// a key under which this service will be registered, Format: -> "/ImplName/UNO/SERVICES/ServiceName"
-//                        <     Implementation-Name    ></UNO/SERVICES/><    Service-Name           >
-#define FOLDER_PICKER_REGKEY_NAME  "/com.sun.star.ui.dialogs.Win32FolderPicker/UNO/SERVICES/com.sun.star.ui.dialogs.SystemFolderPicker"
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

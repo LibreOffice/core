@@ -56,7 +56,6 @@ using namespace ::com::sun::star;
 #define VERSION_53A     ((sal_uInt16)596)
 #define ACT_NUM_VERSION VERSION_53A
 
-#define NUMRULE_FILENAME "numrule.cfg"
 #define CHAPTER_FILENAME "chapter.cfg"
 
 

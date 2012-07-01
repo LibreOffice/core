@@ -59,8 +59,6 @@ namespace ppt
 #define PPT_TRANSITION_TYPE_WHEEL           26
 #define PPT_TRANSITION_TYPE_CIRCLE          27
 
-
-
 // atoms
 #define DFF_msofbtAnimEvent                         0xf125
 #define DFF_msofbtAnimNode                          0xf127
@@ -116,16 +114,11 @@ namespace ppt
 #define DFF_ANIM_VOLUME                     22
 #define DFF_ANIM_PROPERTY_ID_COUNT          DFF_ANIM_VOLUME
 
-
-
 // property types
 #define DFF_ANIM_PROP_TYPE_BYTE             0
 #define DFF_ANIM_PROP_TYPE_INT32            1
 #define DFF_ANIM_PROP_TYPE_FLOAT            2
 #define DFF_ANIM_PROP_TYPE_UNISTRING        3
-
-#define DFF_ANIM_PATH_EDIT_MODE_FIXED       0
-#define DFF_ANIM_PATH_EDIT_MODE_RELATIVE    1
 
 #define DFF_ANIM_PRESS_CLASS_USER_DEFINED   0
 #define DFF_ANIM_PRESS_CLASS_ENTRANCE       1
@@ -141,8 +134,6 @@ namespace ppt
 #define DFF_ANIM_NODE_TYPE_MAIN_SEQUENCE    4
 #define DFF_ANIM_NODE_TYPE_INTERACTIVE_SEQ  5
 #define DFF_ANIM_NODE_TYPE_TIMING_ROOT      9
-
-#define DFF_ANIM_PROPERTY_AFTEREFFECT       20
 
 /* constants for fill entry in AnimationNode */
 const sal_Int32 mso_Anim_GroupType_PAR      = 0;

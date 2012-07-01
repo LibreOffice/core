@@ -41,15 +41,8 @@ namespace com { namespace sun { namespace star { namespace util {
 
 //============================================================================
 // Special tokens:
-#define INET_PASS_TOKEN '@'
-#define INET_DELIM_TOKEN ':'
-#define INET_DELIM_IMAPID ';'
-#define INET_ENC_DELIM_TOKEN '|'
-#define INET_DELIM_HOST_TOKEN '.'
 #define INET_PATH_TOKEN '/'
-#define INET_DOSPATH_TOKEN '\\'
 #define INET_MARK_TOKEN '#'
-#define INET_PARAM_TOKEN '?'
 #define INET_HEX_ESCAPE '%'
 
 //============================================================================
@@ -58,29 +51,8 @@ namespace com { namespace sun { namespace star { namespace util {
 #define INET_HTTP_SCHEME "http://"
 #define INET_HTTPS_SCHEME "https://"
 #define INET_FILE_SCHEME "file://"
-#define INET_GOPHER_SCHEME "gopher://"
 #define INET_MAILTO_SCHEME "mailto:"
-#define INET_CID_SCHEME "cid:"
 #define INET_NEWS_SCHEME "news:"
-#define INET_POP3_SCHEME "pop3://"
-#define INET_LDAP_SCHEME "ldap://"
-#define INET_PRIVATE_SCHEME "private:"
-#define INET_BUGDOC_SCHEME "bugdoc:"
-#define INET_SLOT_SCHEME "slot:"
-#define INET_MACRO_SCHEME "macro:"
-#define INET_JAVASCRIPT_SCHEME "javascript:"
-#define INET_IMAP_SCHEME "imap://"
-#define INET_DOWNPASS_SCHEME ".."
-#define INET_DATA_SCHEME "data:"
-#define INET_OUT_SCHEME "out://"
-#define INET_FIF_SCHEME "fif://"
-#define INET_CEPT_SCHEME "cept://"
-#define INET_VIM_SCHEME "vim://"
-#define INET_UNO_SCHEME ".uno:"
-#define INET_COMPONENT_SCHEME ".component:"
-#define INET_DB_SCHEME "db:"
-#define INET_BUGID_SCHEME "bugid:"
-#define INET_TELNET_SCHEME "telnet://"
 #define INET_HID_SCHEME "hid:"
 
 #define URL_PREFIX_PRIV_SOFFICE "private:"

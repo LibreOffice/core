@@ -80,29 +80,9 @@ namespace framework{
 #define PACKAGENAME_TYPEDETECTION_ADDITIONAL        DECLARE_ASCII("Office.TypeDetectionAdditional"                  )
 #define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// separator for configuration paths
 #define PROPERTY_SEPERATOR                          sal_Unicode(',')                                                    /// separator for own formated property strings of types and filters
-#define LIST_SEPERATOR                              sal_Unicode(';')                                                    /// separator for own formated lists as part of our own formated type- or filter-string
-#define LOCALE_FALLBACK                             DECLARE_ASCII("en-US"                                           )   /// fallback, if configuration can't give us current set locale ...
 #define DEFAULT_FILTERCACHE_VERSION                 6                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
 
 #define DEFAULT_FILTERCACHE_MODE                    CONFIG_MODE_DELAYED_UPDATE | CONFIG_MODE_ALL_LOCALES                                          /// ConfigItems could run in different modes: supported values are ... { CONFIG_MODE_IMMEDIATE_UPDATE, CONFIG_MODE_DELAYED_UPDATE, CONFIG_MODE_ALL_LOCALES }
-
-#define CFG_ENCODING_OPEN                           DECLARE_ASCII("[\'"                                             )   /// used to start encoding of set names
-#define CFG_ENCODING_CLOSE                          DECLARE_ASCII("\']"                                             )   /// used to finish encoding of set names
-#define PRODUCTNAME_VARIABLE                        DECLARE_ASCII("%productname%")
-#define PRODUCTNAME_VARLENGTH                       13
-#define PRODUCTNAME_FALLBACK                        DECLARE_ASCII("StarOffice"                                      )   /// fallback, if configuration can't give us current set product name ...
-#define FORMATVERSION_VARIABLE                      DECLARE_ASCII("%formatversion%"                                 )
-#define FORMATVERSION_VARLENGTH                     15
-#define FORMATVERSION_FALLBACK                      DECLARE_ASCII("6.0/7"                                           )
-
-//*****************************************************************************************************************
-// We know some default values ...
-//*****************************************************************************************************************
-#define NAME_DEFAULTDETECTOR                        DECLARE_ASCII("com.sun.star.comp.office.FilterDetect"           )
-#define NAME_GENERICLOADER                          DECLARE_ASCII("com.sun.star.comp.office.FrameLoader"            )
-#define UINAME_GENERICLOADER                        DECLARE_ASCII("com.sun.star.comp.office.FrameLoader"            )
-#define TYPELIST_DEFAULTDETECTOR                    DECLARE_ASCII("*"                                               )
-#define TYPELIST_GENERICLOADER                      DECLARE_ASCII("*"                                               )
 
 //*****************************************************************************************************************
 // This are all supported set-names of our filter configuration.
@@ -155,22 +135,12 @@ namespace framework{
 #define PROPERTY_PREFERRED                          DECLARE_ASCII("Preferred"                                       )
 #define PROPERTY_INSTALLED                          DECLARE_ASCII("Installed"                                       )
 #define PROPERTY_UINAME                             DECLARE_ASCII("UIName"                                          )
-#define PROPERTY_UINAMES                            DECLARE_ASCII("UINames"                                         )
 #define PROPERTY_MEDIATYPE                          DECLARE_ASCII("MediaType"                                       )
-#define PROPERTY_CLIPBOARDFORMAT                    DECLARE_ASCII("ClipboardFormat"                                 )
-#define PROPERTY_URLPATTERN                         DECLARE_ASCII("URLPattern"                                      )
-#define PROPERTY_EXTENSIONS                         DECLARE_ASCII("Extensions"                                      )
-#define PROPERTY_DOCUMENTICONID                     DECLARE_ASCII("DocumentIconID"                                  )
 #define PROPERTY_TYPE                               DECLARE_ASCII("Type"                                            )
-#define PROPERTY_DOCUMENTSERVICE                    DECLARE_ASCII("DocumentService"                                 )
-#define PROPERTY_FILTERSERVICE                      DECLARE_ASCII("FilterService"                                   )
 #define PROPERTY_FLAGS                              DECLARE_ASCII("Flags"                                           )
 #define PROPERTY_USERDATA                           DECLARE_ASCII("UserData"                                        )
-#define PROPERTY_FILEFORMATVERSION                  DECLARE_ASCII("FileFormatVersion"                               )
-#define PROPERTY_TEMPLATENAME                       DECLARE_ASCII("TemplateName"                                    )
 #define PROPERTY_TYPES                              DECLARE_ASCII("Types"                                           )
 #define PROPERTY_ORDER                              DECLARE_ASCII("Order"                                           )
-#define PROPERTY_UICOMPONENT                        DECLARE_ASCII("UIComponent"                                     )
 
 //_________________________________________________________________________________________________________________
 //  exported definitions

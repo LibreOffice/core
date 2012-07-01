@@ -41,11 +41,6 @@ namespace ftp
 
 //=========================================================================
 
-// UNO service name for the content.
-#define FTP_CONTENT_SERVICE_NAME "com.sun.star.ucb.FTPContent"
-
-//=========================================================================
-
     class FTPContentProvider;
 
 //=========================================================================

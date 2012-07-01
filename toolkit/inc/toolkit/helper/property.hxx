@@ -83,10 +83,10 @@ namespace rtl {
 #define BASEPROPERTY_TIME                            33 // sal_Int32
 #define BASEPROPERTY_TIMEMIN                         34 // sal_Int32
 #define BASEPROPERTY_TIMEMAX                         35 // sal_Int32
-#define BASEPROPERTY_VALUE_INT32                     36 // sal_Int32
-#define BASEPROPERTY_VALUEMIN_INT32                  37 // sal_Int32
-#define BASEPROPERTY_VALUEMAX_INT32                  38 // sal_Int32
-#define BASEPROPERTY_VALUESTEP_INT32                 39 // sal_Int32
+//      BASEPROPERTY_VALUE_INT32                     36 // sal_Int32
+//      BASEPROPERTY_VALUEMIN_INT32                  37 // sal_Int32
+//      BASEPROPERTY_VALUEMAX_INT32                  38 // sal_Int32
+//      BASEPROPERTY_VALUESTEP_INT32                 39 // sal_Int32
 #define BASEPROPERTY_EDITMASK                        40 // ::rtl::OUString
 #define BASEPROPERTY_LITERALMASK                     41 // ::rtl::OUString
 #define BASEPROPERTY_IMAGEURL                        42 // ::rtl::OUString
@@ -107,7 +107,7 @@ namespace rtl {
 #define BASEPROPERTY_DEFAULTBUTTON                   57 // sal_Bool
 #define BASEPROPERTY_HELPURL                         58 // ::rtl::OUString
 #define BASEPROPERTY_AUTOTOGGLE                      59 // sal_Bool
-//#define BASEPROPERTY_FOCUSSELECTIONHIDE            60 // sal_Bool
+//      BASEPROPERTY_FOCUSSELECTIONHIDE            60 // sal_Bool
 #define BASEPROPERTY_FORMATKEY                       61 // sal_Bool
 #define BASEPROPERTY_FORMATSSUPPLIER                 62 // ::com::sun::star::util::XNumberFormatsSupplier
 #define BASEPROPERTY_EFFECTIVE_VALUE                 63 // Any (double or string)
@@ -236,10 +236,6 @@ namespace rtl {
 #define PROPERTY_ALIGN_LEFT                     0
 #define PROPERTY_ALIGN_CENTER                   1
 #define PROPERTY_ALIGN_RIGHT                    2
-
-#define PROPERTY_STATE_OFF                      0
-#define PROPERTY_STATE_ON                       1
-#define PROPERTY_STATE_DONTCARE                 2
 
 TOOLKIT_DLLPUBLIC sal_uInt16        GetPropertyId( const ::rtl::OUString& rPropertyName );
 const ::com::sun::star::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );

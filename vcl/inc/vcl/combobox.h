@@ -26,8 +26,6 @@
 #define COMBOBOX_ENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
 #define COMBOBOX_ERROR              ((sal_uInt16)0xFFFF)
 
-#define COMBOBOX_USERDRAW_SELECTED  ((sal_uInt16)0x0001)
-
 #endif  // _SV_COMBOBOX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

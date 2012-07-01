@@ -89,10 +89,6 @@ typedef void (*DbgTestSolarMutexProc)();
 // user (runtime) defined output channels
 #define DBG_OUT_USER_CHANNEL_0    100
 
-#define DBGGUI_RESTORE              0
-#define DBGGUI_MINIMIZE             1
-#define DBGGUI_MAXIMIZE             2
-
 struct DbgData
 {
     sal_uIntPtr       nTestFlags;

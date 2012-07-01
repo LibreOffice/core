@@ -45,7 +45,6 @@
 #define SPIN_BUTTON_WIDTH           13
 #define SPIN_UPPER_BUTTON_HEIGHT    11
 #define SPIN_LOWER_BUTTON_HEIGHT    10
-#define SPIN_TWO_BUTTONS_HEIGHT     21
 
 // progress bar
 #define INTRO_PROGRESS_HEIGHT 9

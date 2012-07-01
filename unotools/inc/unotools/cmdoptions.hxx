@@ -40,7 +40,6 @@
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
-#define CMDOPTIONS_PROPERTYNAME_URL                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ))
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation

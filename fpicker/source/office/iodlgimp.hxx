@@ -45,8 +45,6 @@ class SvtFileDialog;
 
 #define FILEDIALOG_DEF_EXTSEP       ';'
 #define FILEDIALOG_DEF_WILDCARD     '*'
-#define FILEDIALOG_DEF_IMAGEBORDER  10
-#define FILEDIALOG_DEF_TIMEOUT      250
 
 //*****************************************************************************
 // SvtFileDialogFilter_Impl

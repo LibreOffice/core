@@ -159,7 +159,6 @@ extern SgfFontLst* pSgfFonts;
 
 //==============================================================================
 
-#define  DefaultCharWidth 4800
 #define  GradDiv             2
 #define  CharTopToBase     100 /* wegen Apostrophe und Umlaute mehr als 75% */
 #define  CharTopToBtm      120 /* Zeilenhoehe ist groesser als Schriftgrad  */

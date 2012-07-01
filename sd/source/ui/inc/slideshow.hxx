@@ -64,9 +64,6 @@ class WorkWindow;
 
 // TODO: Remove
 #define PAGE_NO_END         65535
-#define PAGE_NO_SOFTEND     (PAGE_NO_END - 1)
-#define PAGE_NO_PAUSE       (PAGE_NO_SOFTEND - 1)
-#define PAGE_NO_FIRSTDEF    PAGE_NO_PAUSE // immer mit anpassen
 
 /* Definition of SlideShow class */
 

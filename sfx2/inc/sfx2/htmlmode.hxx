@@ -19,7 +19,6 @@
 #ifndef _SFX_HTMLMODE_HXX_
 #define _SFX_HTMLMODE_HXX_
 
-
 #define HTMLMODE_ON                 0x0001
 #define HTMLMODE_PARA_DISTANCE      0x0004
 #define HTMLMODE_FRM_COLUMNS        0x0010
@@ -30,25 +29,6 @@
 #define HTMLMODE_RESERVED1          0x4000
 #define HTMLMODE_RESERVED0          0x8000
 
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

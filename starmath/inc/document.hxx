@@ -55,18 +55,6 @@ class SfxPrinter;
 class Printer;
 class SmCursor;
 
-#define HINT_DATACHANGED    1004
-
-#define SM30BIDENT   ((sal_uLong)0x534D3033L)
-#define SM30IDENT    ((sal_uLong)0x30334d53L)
-#define SM304AIDENT  ((sal_uLong)0x34303330L)
-#define SM30VERSION  ((sal_uLong)0x00010000L)
-#define SM50VERSION  ((ULONG)0x00010001L)   //Difference to SM30VERSION is
-                                            //the new border in the format.
-
-#define FRMIDENT    ((sal_uLong)0x03031963L)
-#define FRMVERSION  ((sal_uLong)0x00010001L)
-
 #define STAROFFICE_XML  "StarOffice XML (Math)"
 #define MATHML_XML      "MathML XML (Math)"
 

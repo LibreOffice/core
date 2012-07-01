@@ -53,7 +53,6 @@ using com::sun::star::system::XSystemShellExecute;
 
 #define SYSSHEXEC_SERVICE_NAME  "com.sun.star.system.SystemShellExecute"
 #define SYSSHEXEC_IMPL_NAME     "com.sun.star.system.SystemShellExecute"
-#define SYSSHEXEC_REGKEY_NAME   "/com.sun.star.system.SystemShellExecute/UNO/SERVICES/com.sun.star.system.SystemShellExecute"
 
 //-----------------------------------------------------------------------
 

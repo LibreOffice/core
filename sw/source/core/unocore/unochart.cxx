@@ -61,11 +61,6 @@
 #define SN_DATA_SEQUENCE            "com.sun.star.chart2.data.DataSequence"
 #define SN_LABELED_DATA_SEQUENCE    "com.sun.star.chart2.data.LabeledDataSequence"
 
-#define DIRECTION_DONT_KNOW     -1
-#define DIRECTION_HAS_ERROR     -2
-#define DIRECTION_COLS           0
-#define DIRECTION_ROWS           1
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 

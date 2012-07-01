@@ -310,9 +310,7 @@
 #define accelerator	96
 #define Accelerator	96
 #define ACCELERATOR 96
-#define acceleratoritem	97
 #define AcceleratorItem	97
-#define ACCELERATORITEM 97
 
 #define SfxStyleFamilies 98
 #define SfxStyleFamilyItem 99

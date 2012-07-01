@@ -41,8 +41,6 @@ class OutputDevice;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 enum SdrHelpLineKind {SDRHELPLINE_POINT,SDRHELPLINE_VERTICAL,SDRHELPLINE_HORIZONTAL};
-#define SDRHELPLINE_MIN SDRHELPLINE_POINT
-#define SDRHELPLINE_MAX SDRHELPLINE_HORIZONTAL
 
 #define SDRHELPLINE_POINT_PIXELSIZE 15 /* Tatsaechliche Groesse= PIXELSIZE*2+1 */
 

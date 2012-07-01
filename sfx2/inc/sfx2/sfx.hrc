@@ -43,13 +43,8 @@
 //      EVENT_APP_END               29999
 
 #define EVENT_OBJ_START             30000
-#define EVENT_OBJ0_START            (EVENT_OBJ_START+0x0000)
-#define EVENT_OBJ2_START            (EVENT_OBJ_START+0x0100)
-#define EVENT_OBJ1_START            (EVENT_OBJ_START+0x0200)
-#define EVENT_OBJ3_START            (EVENT_OBJ_START+0x0300)
-#define EVENT_OBJ4_START            (EVENT_OBJ_START+0x0400)
 
-#define EVENT_SVX_START             EVENT_OBJ4_START
+#define EVENT_SVX_START             (EVENT_OBJ_START+0x0400)
 
 // Warning: the following are simultaneously SID_ON_ ...
 #define SFX_EVENT_CLOSEAPP          (EVENT_SFX_START + 1)
@@ -111,10 +106,6 @@
 //      RID_SFX_HELPCOMPONENT_START         (RID_SFX_START + 7000)
 
 //--------------------------------------------------------------------
-
-
-#define SFX_MSG_ENABLEDBMP              1
-#define SFX_MSG_DISABLEDBMP             2
 
 #define SFX_OBJECTBAR_APPLICATION       0
 #define SFX_OBJECTBAR_OBJECT            1

@@ -97,7 +97,6 @@ struct SfxStatBar_Impl
 #define CHILD_NOT_HIDDEN   2    // not disabled through HideChildWindow
 #define CHILD_FITS_IN      4    // not too large for output size of the parent
 #define CHILD_VISIBLE       (CHILD_NOT_HIDDEN | CHILD_ACTIVE | CHILD_FITS_IN)
-#define CHILD_ISVISIBLE     (CHILD_NOT_HIDDEN | CHILD_ACTIVE)
 
 struct SfxChild_Impl
 {

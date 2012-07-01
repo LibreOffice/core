@@ -64,13 +64,11 @@
 #define ATTRIBUTE_ID                "http://openoffice.org/2001/menu^id"
 #define ATTRIBUTE_LABEL             "http://openoffice.org/2001/menu^label"
 #define ATTRIBUTE_HELPID            "http://openoffice.org/2001/menu^helpid"
-#define ATTRIBUTE_LINEBREAK         "http://openoffice.org/2001/menu^linebreak"
 #define ATTRIBUTE_STYLE         "http://openoffice.org/2001/menu^style"
 
 #define ATTRIBUTE_NS_ID             "menu:id"
 #define ATTRIBUTE_NS_LABEL          "menu:label"
 #define ATTRIBUTE_NS_HELPID         "menu:helpid"
-#define ATTRIBUTE_NS_LINEBREAK      "menu:linebreak"
 #define ATTRIBUTE_NS_STYLE          "menu:style"
 
 #define ATTRIBUTE_XMLNS_MENU        "xmlns:menu"

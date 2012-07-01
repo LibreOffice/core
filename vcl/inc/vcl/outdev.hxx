@@ -199,8 +199,6 @@ struct KerningPair
 #define IMAGE_DRAW_DEACTIVE             ((sal_uInt16)0x0004)
 #define IMAGE_DRAW_COLORTRANSFORM       ((sal_uInt16)0x0008)
 #define IMAGE_DRAW_SEMITRANSPARENT      ((sal_uInt16)0x0010)
-#define IMAGE_DRAW_3DLOOK               0
-#define IMAGE_DRAW_BTNLOOK              0
 
 // WaveLine
 #define WAVE_FLAT                       1

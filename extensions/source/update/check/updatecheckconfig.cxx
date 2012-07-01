@@ -72,7 +72,6 @@ namespace uno = com::sun::star::uno ;
 #define DOWNLOAD_PAUSED         "DownloadPaused"
 #define DOWNLOAD_DESTINATION    "DownloadDestination"
 #define RELEASE_NOTE            "ReleaseNote"
-#define EXTENSION_PREFIX        "Extension_"
 
 #define PROPERTY_VERSION        UNISTRING("Version")
 

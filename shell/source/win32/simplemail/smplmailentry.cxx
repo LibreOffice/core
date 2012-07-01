@@ -53,7 +53,6 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 
 #define COMP_SERVICE_NAME  "com.sun.star.system.SimpleSystemMail"
 #define COMP_IMPL_NAME     "com.sun.star.system.SimpleSystemMail"
-#define COMP_REGKEY_NAME   "/com.sun.star.system.SimpleSystemMail/UNO/SERVICES/com.sun.star.system.SimpleSystemMail"
 
 //-----------------------------------------------------------------------
 

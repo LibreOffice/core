@@ -354,14 +354,7 @@ private:
 #define DRAGFULL_OPTION_SPLIT       ((sal_uLong)0x00000020)
 #define DRAGFULL_OPTION_SCROLL      ((sal_uLong)0x00000040)
 
-#define LOGO_DISPLAYTIME_NOLOGO     ((sal_uLong)0)
 #define LOGO_DISPLAYTIME_STARTTIME  ((sal_uLong)0xFFFFFFFF)
-
-#define ANIMATION_OPTION_MINIMIZE   ((sal_uLong)0x00000001)
-#define ANIMATION_OPTION_POPUP      ((sal_uLong)0x00000002)
-#define ANIMATION_OPTION_DIALOG     ((sal_uLong)0x00000004)
-#define ANIMATION_OPTION_TREE       ((sal_uLong)0x00000008)
-#define ANIMATION_OPTION_SCROLL     ((sal_uLong)0x00000010)
 
 #define SELECTION_OPTION_WORD       ((sal_uLong)0x00000001)
 #define SELECTION_OPTION_FOCUS      ((sal_uLong)0x00000002)
@@ -914,9 +907,6 @@ private:
 // ----------------
 // - HelpSettings -
 // ----------------
-
-#define HELP_OPTION_QUICK           ((sal_uLong)0x00000001)
-#define HELP_OPTION_ACTIVE          ((sal_uLong)0x00000002)
 
 class VCL_DLLPUBLIC HelpSettings
 {

@@ -66,14 +66,6 @@
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <scriptinfo.hxx>
 
-#if defined(WNT)
-#define FNT_LEADING_HACK
-#endif
-
-#if defined(WNT)
-#define FNT_ATM_HACK
-#endif
-
 #ifdef DBG_UTIL
 // global Variable
 SvStatistics g_SvStat;

@@ -134,11 +134,6 @@
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_IMPRESSPACKED "application/vnd.sun.xml.impress-packed"
 
 //============================================================================
-/** Definitions for frequently used media type parameter names.
- */
-#define INET_CONTENT_TYPE_PARAMETER_CHARSET "charset"
-
-//============================================================================
 /** Definitions for matching parts of URIs.
  */
 #define INETTYPE_URL_PROT_COMPONENT ".component"
@@ -168,7 +163,6 @@
 
 #define INETTYPE_URL_SCHED_CMB "cmbview"
 #define INETTYPE_URL_SCHED_FORM "formular"
-#define INETTYPE_URL_SCHED_EVENT "type=event"
 #define INETTYPE_URL_SCHED_TASK "type=task"
 
 //============================================================================

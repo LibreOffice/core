@@ -67,13 +67,6 @@
 #define FT_FILE_TEXT \
     Text [ en-US ] = "~File name" ;\
 
-
-#define GB_HIDE_TEXT \
-    Text [ en-US ] = "Hide";\
-
-#define GB_OPTIONS_TEXT \
-    Text [ en-US ] = "Options" ;\
-
 #define FL_PROTECT_TEXT \
     Text [ en-US ] = "Write protection";\
 

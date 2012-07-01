@@ -88,7 +88,6 @@ const SCTAB SCTAB_GLOBAL                    = SCTAB_MAX;        /// A Calc sheet
 #define EXC_STORAGE_OLE_LINKED              CREATE_STRING( "LNK" )
 #define EXC_STORAGE_OLE_EMBEDDED            CREATE_STRING( "MBD" )
 #define EXC_STORAGE_VBA_PROJECT             CREATE_STRING( "_VBA_PROJECT_CUR" )
-#define EXC_STORAGE_VBA                     CREATE_STRING( "VBA" )
 
 #define EXC_STREAM_BOOK                     CREATE_STRING( "Book" )
 #define EXC_STREAM_WORKBOOK                 CREATE_STRING( "Workbook" )

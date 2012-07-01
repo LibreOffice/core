@@ -1424,7 +1424,6 @@ SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects()
 {
 }
 
-#define PASSWORD_STD_TIMEOUT 1000
 OUString SwXTextSections::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextSections");

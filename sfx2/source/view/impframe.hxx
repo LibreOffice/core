@@ -34,13 +34,6 @@ class SfxObjectShell;
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>
 
-#ifndef FRAME_SEARCH_PARENT
-#define FRAME_SEARCH_PARENT     0x00000001
-#define FRAME_SEARCH_SELF       0x00000002
-#define FRAME_SEARCH_CHILDREN   0x00000004
-#define FRAME_SEARCH_CREATE     0x00000008
-#endif
-
 class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase
 {
 public:

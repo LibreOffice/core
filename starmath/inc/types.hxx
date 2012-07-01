@@ -38,13 +38,6 @@ enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
 
 /////////////////////////////////////////////////////////////////
 
-#define FONT_ARIAL          "Arial"
-#define FONT_SYMBOL         "Symbol"
-#define FONT_MS_PMINCHO     "MS PMincho"
-#define FONT_MS_PGOTHIC     "MS PGothic"
-#define FONT_SUN_BATANG     "SunBatang"
-
-
 inline sal_Bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar  &&  cChar <= 0xF8FF; }
 
 // Greek char range as seen in svx/.../charmap.cxx RID_SUBSETSTR_BASIC_GREEK

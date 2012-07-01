@@ -41,12 +41,10 @@
 #define RULER_OFF           3
 #define RULER_TEXTOFF       5
 #define RULER_RESIZE_OFF    4
-#define RULER_LINE_WIDTH    7
 #define RULER_MIN_SIZE      3
 
 #define RULER_TICK1_WIDTH   1
 #define RULER_TICK2_WIDTH   3
-#define RULER_TICK3_WIDTH   5
 
 #define RULER_VAR_SIZE      8
 

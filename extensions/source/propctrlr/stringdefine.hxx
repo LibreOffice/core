@@ -38,11 +38,6 @@ namespace pcr
     using comphelper::string::ConstAsciiString;
 
     //============================================================
-
-#define CONST_ASCII_LENGTH(c)   \
-    (const sal_Char*)c, c.length()
-
-    //============================================================
     //= concrete strings
     //============================================================
     #ifndef PCR_IMPLEMENT_STRINGS

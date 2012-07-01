@@ -34,10 +34,4 @@
 // the implementation names
 #define FILE_PICKER_IMPL_NAME    "com.sun.star.ui.dialogs.KDE4FilePicker"
 
-// the registry key names
-// a key under which this service will be registered,
-// Format: -> "/ImplName/UNO/SERVICES/ServiceName"
-//  <Implementation-Name></UNO/SERVICES/><Service-Name>
-#define FILE_PICKER_REGKEY_NAME  "/com.sun.star.ui.dialogs.KDE4FilePickerImpl/UNO/SERVICES/com.sun.star.ui.dialogs.KDE4FilePicker"
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

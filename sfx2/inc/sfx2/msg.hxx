@@ -234,11 +234,6 @@ SFX_DECL_TYPE(18); // for SvxSearchItem
                  0, 0, DisableFlags, UnoName \
                }
 
-#define SFX_SLOTMAP_NONE(ShellClass) \
-            static SfxFormalArgument a##ShellClass##Args_Impl[1]; \
-            static SfxSlot a##ShellClass##Slots_Impl[] = \
-            { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
-
 #define SFX_ARGUMENT( ArgSlotId, ArgName, ArgTypeId ) \
             { (const SfxType*) &a##ArgTypeId##_Impl, ArgName, ArgSlotId }
 

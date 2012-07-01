@@ -62,7 +62,6 @@
 #define UNISTRING(s) rtl::OUString(s)
 
 #define MSG_ERR_NO_WEBBROWSER_FOUND  (RID_SFX_APP_START + 7)
-#define DEFAULT_MENUBAR_HEIGHT 24
 
 #define PROPERTY_TITLE          RTL_CONSTASCII_STRINGPARAM("BubbleHeading")
 #define PROPERTY_TEXT           RTL_CONSTASCII_STRINGPARAM("BubbleText")
@@ -804,7 +803,6 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
 #define BUBBLE_BORDER          10
 #define TEXT_MAX_WIDTH        300
 #define TEXT_MAX_HEIGHT       200
-#define INITIAL_SHOW_TIME   10000
 
 //------------------------------------------------------------------------------
 BubbleWindow::BubbleWindow( Window* pParent, const XubString& rTitle,

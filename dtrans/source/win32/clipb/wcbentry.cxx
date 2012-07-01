@@ -35,11 +35,6 @@
 // the implementation names
 #define WINCLIPBOARD_IMPL_NAME  "com.sun.star.datatransfer.clipboard.ClipboardW32"
 
-// the registry key names
-// a key under which this service will be registered, Format: -> "/ImplName/UNO/SERVICES/ServiceName"
-//                        <     Implementation-Name    ></UNO/SERVICES/><    Service-Name           >
-#define WINCLIPBOARD_REGKEY_NAME  "/com.sun.star.datatransfer.clipboard.ClipboardW32/UNO/SERVICES/com.sun.star.datatransfer.clipboard.SystemClipboard"
-
 //-----------------------------------------------------------------------------------------------------------
 // namespace directives
 //-----------------------------------------------------------------------------------------------------------

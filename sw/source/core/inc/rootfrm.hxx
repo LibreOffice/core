@@ -46,12 +46,6 @@ class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
 
-#define HACK_TABLEMODE_INIT         0
-#define HACK_TABLEMODE_LOCKLINES    1
-#define HACK_TABLEMODE_PAINTLINES   2
-#define HACK_TABLEMODE_UNLOCKLINES  3
-#define HACK_TABLEMODE_EXIT         4
-
 #define INV_SIZE    1
 #define INV_PRTAREA 2
 #define INV_POS     4

@@ -51,7 +51,6 @@ using com::sun::star::system::XSystemShellExecute;
 
 #define SHELLEXEC_SERVICE_NAME  "com.sun.star.system.SystemShellExecute"
 #define SHELLEXEC_IMPL_NAME     "com.sun.star.comp.system.SystemShellExecute"
-#define SHELLEXEC_REGKEY_NAME   "/com.sun.star.comp.system.SystemShellExecute/UNO/SERVICES/com.sun.star.system.SystemShellExecute"
 
 //-----------------------------------------------------------------------
 

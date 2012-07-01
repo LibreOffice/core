@@ -74,15 +74,6 @@ Color SwViewOption::aHeaderFooterMarkColor(COL_BLUE);
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
 sal_uInt16 SwViewOption::nPixelTwips = 0;   // one pixel on the screen
 
-
-#define LINEBREAK_SIZE 12, 8
-#define TAB_SIZE 12, 6
-
-#define MIN_BLANKWIDTH       40
-#define MIN_BLANKHEIGHT      40
-#define MIN_TABWIDTH        120
-#define MIN_TABHEIGHT       200
-
 static const char aPostItStr[] = "  ";
 
 sal_Bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const

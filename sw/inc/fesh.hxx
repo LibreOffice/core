@@ -86,8 +86,6 @@ namespace svx
 #define FRMTYPE_COLSECT         (sal_uInt16)  8192
 #define FRMTYPE_COLSECTOUTTAB   (sal_uInt16) 16384
 
-#define FRMTYPE_ANYCOLSECT ( FRMTYPE_COLSECT | FRMTYPE_COLSECTOUTTAB )
-
 //! values can be combined via logival or
 #define GOTOOBJ_DRAW_CONTROL    (sal_uInt16)  1
 #define GOTOOBJ_DRAW_SIMPLE     (sal_uInt16)  2

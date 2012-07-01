@@ -89,9 +89,6 @@ namespace sw { namespace sidebarwindows {
 #define POSTIT_META_HEIGHT  (sal_Int32)     30
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
-#define POSTIT_SHADOW_BRIGHT    Color(180,180,180)
-#define POSTIT_SHADOW_DARK      Color(83,83,83)
-
 #define EMPTYSTRING             rtl::OUString()
 
 /************** SwSidebarWin************************************/

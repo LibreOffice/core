@@ -44,9 +44,6 @@ class SwEndNoteInfo;
 // Pagedescriptor
 // Client of SwPageDesc that is "described" by the attribute.
 
-#define IVER_FMTPAGEDESC_NOAUTO ((sal_uInt16)0x0001)
-#define IVER_FMTPAGEDESC_LONGPAGE   ((sal_uInt16)0x0002)
-
 class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
 {
     // This "Doc"-function is made friend in order to be able

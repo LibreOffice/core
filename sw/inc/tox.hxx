@@ -59,9 +59,6 @@ class SwTOXMarks : public std::vector<SwTOXMark*> {};
      Description:  Entry of content index, alphabetical index or user defined index
  --------------------------------------------------------------------*/
 
-#define IVER_TOXMARK_STRPOOL ((sal_uInt16)1)
-#define IVER_TOXMARK_NEWTOX ((sal_uInt16)2)
-
 class SW_DLLPUBLIC SwTOXMark
     : public SfxPoolItem
     , public SwModify

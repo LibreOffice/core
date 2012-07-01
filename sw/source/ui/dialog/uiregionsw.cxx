@@ -78,9 +78,6 @@
 
 using namespace ::com::sun::star;
 
-
-#define FILE_NAME_LENGTH 17
-
 static void   lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox );
 
 void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames, const SwSectionFmt* pNewFmt )

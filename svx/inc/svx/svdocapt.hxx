@@ -42,8 +42,6 @@ namespace sdr { namespace properties {
     class CaptionProperties;
 }}
 
-#define SDRSETITEM_CAPTION_ATTR     SDRSETITEM_ATTR_COUNT
-
 //************************************************************
 //   Hilfsklasse SdrCaptObjGeoData
 //************************************************************

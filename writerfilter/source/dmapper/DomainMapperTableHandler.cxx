@@ -37,7 +37,6 @@ using namespace ::com::sun::star;
 using namespace ::std;
 
 #define DEF_BORDER_DIST 190  //0,19cm
-#define DEFAULT_CELL_MARGIN 108 //default cell margin, not documented
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
 static void  lcl_printProperties( PropertyMapPtr pProps )

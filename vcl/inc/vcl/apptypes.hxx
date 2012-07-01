@@ -64,19 +64,6 @@ public:
 #define VCL_INPUT_MOUSEANDKEYBOARD      (VCL_INPUT_MOUSE | VCL_INPUT_KEYBOARD)
 #define VCL_INPUT_ANY                   (VCL_INPUT_MOUSEANDKEYBOARD | VCL_INPUT_PAINT | VCL_INPUT_TIMER | VCL_INPUT_OTHER | VCL_INPUT_APPEVENT)
 
-#define DISPATCH_OPEN               0x0001
-#define DISPATCH_PRINT              0x0002
-#define DISPATCH_SERVER             0x0004
-
-// --------------
-// - UserActive -
-// --------------
-
-#define USERACTIVE_MOUSEDRAG            ((sal_uInt16)0x0001)
-#define USERACTIVE_INPUT                ((sal_uInt16)0x0002)
-#define USERACTIVE_MODALDIALOG          ((sal_uInt16)0x0004)
-#define USERACTIVE_ALL                  ((sal_uInt16)0xFFFF)
-
 #endif // _VCL_APPTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

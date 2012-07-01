@@ -36,11 +36,6 @@
 // the implementation names
 #define MIMECONTENTTYPEFACTORY_IMPL_NAME  "com.sun.star.datatransfer.MimeCntTypeFactory"
 
-// the registry key names
-// a key under which this service will be registered, Format: -> "/ImplName/UNO/SERVICES/ServiceName"
-//                        <     Implementation-Name    ></UNO/SERVICES/><    Service-Name           >
-#define MIMECONTENTTYPEFACTORY_REGKEY_NAME  "/com.sun.star.datatransfer.MimeCntTypeFactory/UNO/SERVICES/com.sun.star.datatransfer.MimeContentTypeFactory"
-
 //-----------------------------------------------------------------------------------------------------------
 // namespace directives
 //-----------------------------------------------------------------------------------------------------------

@@ -25,14 +25,6 @@
 #include "curledit.hxx"
 #include <sfx2/filedlghelper.hxx>
 
-
-#define FILL_STRING_ITEM(editcontrol, itemset, itemid, modifiedflag)    \
-    if (editcontrol.GetText() != editcontrol.GetSavedValue())           \
-    {                                                                   \
-        itemset.Put(SfxStringItem(itemid, editcontrol.GetText()));      \
-        modifiedflag = sal_True;                                        \
-    }
-
 //.........................................................................
 namespace dbaui
 {

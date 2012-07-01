@@ -33,11 +33,9 @@
 
 #define DNDSOURCE_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDragSource"
 #define DNDSOURCE_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"
-#define DNDSOURCE_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDragSource_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDragSource"
 
 #define DNDTARGET_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDropTarget"
 #define DNDTARGET_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
-#define DNDTARGET_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDropTarget"
 
 // This maps key states as occur as parameter, e.g. in IDropTarget::DragEnter,
 // IDropSource::QueryContinueDrag, to actions as are declared in

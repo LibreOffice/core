@@ -36,17 +36,6 @@ class ResId;
 
 #include <basegfx/color/bcolor.hxx>
 
-// --------------------
-// - ColorCount-Types -
-// --------------------
-
-#define COLCOUNT_MONOCHROM          ((sal_uIntPtr)2)
-#define COLCOUNT_16                 ((sal_uIntPtr)16)
-#define COLCOUNT_256                ((sal_uIntPtr)256)
-#define COLCOUNT_HICOLOR1           (((sal_uIntPtr)0x00007FFF)+1)
-#define COLCOUNT_HICOLOR2           (((sal_uIntPtr)0x0000FFFF)+1)
-#define COLCOUNT_TRUECOLOR          (((sal_uIntPtr)0x00FFFFFF)+1)
-
 // ---------------
 // - Color-Types -
 // ---------------

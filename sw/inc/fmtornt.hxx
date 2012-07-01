@@ -40,8 +40,6 @@
 
 class IntlWrapper;
 
-#define IVER_VERTORIENT_REL ((sal_uInt16)0x0001)
-
 class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
 {
     SwTwips         nYPos;  // Contains *always* the current RelPos.
@@ -76,10 +74,6 @@ public:
     void    SetPos( SwTwips nNew ) { nYPos = nNew; }
 };
 
-//  SwFmtHoriOrient; how and towards what does the FlyFrm orient itself horizontally?
-
-#define IVER_HORIORIENT_TOGGLE ((sal_uInt16)0x0001)
-#define IVER_HORIORIENT_REL ((sal_uInt16)0x0002)
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
 {

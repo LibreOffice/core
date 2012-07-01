@@ -59,14 +59,6 @@ class SwOutlineNodes;
 class SwTxtFmtColl;
 class SwNodeRange;
 
-#define DBG_OUT_HERE printf("%s(%d):", __FILE__, __LINE__)
-#define DBG_OUT_HERE_FN printf("%s(%d) %s:", __FILE__, __LINE__, __FUNCTION__)
-#define DBG_OUT_HERE_LN printf("%s(%d)\n", __FILE__, __LINE__)
-#define DBG_OUT_HERE_FN_LN printf("%s(%d) %s\n", __FILE__, __LINE__, __FUNCTION__)
-#define DBG_OUT(x) printf("%s\n", dbg_out(x))
-#define DBG_OUT_LN(x) printf("%s(%d): %s\n", __FILE__, __LINE__, dbg_out(x))
-#define DBG_OUT_FN_LN(x) printf("%s: %s\n", __FUNCTION__, dbg_out(x))
-
 extern bool bDbgOutStdErr;
 extern bool bDbgOutPrintAttrSet;
 
