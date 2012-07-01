@@ -454,6 +454,14 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
     }
     else if (nMenuId == MNI_MOVE_DELETE)
     {
+        std::set<const ThumbnailViewItem*>::const_iterator pIter;
+        for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
+        {
+            if (maView->removeTemplate((*pIter)->mnId))
+                maSelTemplates.erase(pIter++);
+            else
+                ++pIter;
+        }
     }
     else
     {
