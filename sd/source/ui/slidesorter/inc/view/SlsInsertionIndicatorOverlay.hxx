@@ -40,15 +40,10 @@
 #include <vector>
 
 class OutputDevice;
-class SdPage;
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
-
-namespace sd { namespace slidesorter { namespace model {
-class PageEnumeration;
-} } }
 
 namespace sd { namespace slidesorter { namespace controller {
 class Transferable;
@@ -57,7 +52,6 @@ class Transferable;
 namespace sd { namespace slidesorter { namespace view {
 
 class FramePainter;
-class LayeredDevice;
 
 /** The insertion indicator is painted as a vertical or horizonal bar
     in the space between slides.

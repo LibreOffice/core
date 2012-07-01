@@ -39,28 +39,15 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 
-class SfxObjectFactory;
-class SfxFilterMatcher;
-class LoadEnvironment_Impl;
-class SfxMedium;
-
 namespace com
 {
     namespace sun
     {
         namespace star
         {
-            namespace uno
-            {
-                class Any;
-            }
             namespace lang
             {
                 class XMultiServiceFactory;
-            }
-            namespace frame
-            {
-                class XFrame;
             }
             namespace beans
             {

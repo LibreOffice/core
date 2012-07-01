@@ -52,7 +52,6 @@ class Theme;
 } } }
 
 namespace sd { namespace slidesorter { namespace controller {
-class Listener;
 class SlideSorterController;
 class SlotManager;
 class Properties;

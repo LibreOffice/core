@@ -36,7 +36,6 @@
 namespace sd { namespace slidesorter { namespace cache {
 
 class BitmapCache;
-class BitmapCompressor;
 
 /** This is an interface class whose implementations are created via the
     Create() factory method.

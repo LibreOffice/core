@@ -42,8 +42,6 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <vector>
 
-class Window;
-
 namespace sd { namespace slidesorter { namespace view {
 
 /** A simple wrapper around an OutputDevice that provides support for

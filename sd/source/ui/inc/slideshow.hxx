@@ -56,10 +56,7 @@ namespace com { namespace sun { namespace star {
 
 class SdDrawDocument;
 class KeyEvent;
-class HelpEvent;
-class MouseEvent;
 class Size;
-class CommandEvent;
 class Rectangle;
 class Window;
 class SfxRequest;
@@ -81,8 +78,6 @@ class ShowWindow;
 class Window;
 class View;
 class ViewShell;
-struct PresentationSettings;
-class EffectSequenceHelper;
 class ViewShellBase;
 struct PresentationSettingsEx;
 class FrameView;

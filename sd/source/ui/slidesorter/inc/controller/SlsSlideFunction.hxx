@@ -22,17 +22,12 @@
 
 #include "fupoor.hxx"
 
-class SdDrawDocument;
-
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
 
 
 namespace sd { namespace slidesorter { namespace controller {
-
-class SlideSorterController;
-
 
 /** Base class for functions of the slide sorter.
 */

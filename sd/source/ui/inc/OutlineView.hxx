@@ -35,7 +35,6 @@
 
 class SdPage;
 class SdrPage;
-class EditStatus;
 class Paragraph;
 class SdrTextObj;
 class Outliner;

@@ -36,14 +36,9 @@
 #include <vcl/bitmap.hxx>
 
 
-namespace sd { namespace slidesorter { namespace view {
-class PageObjectViewObjectContact;
-} } }
-
 namespace sd { namespace slidesorter { namespace cache {
 
 class GenericPageCache;
-class RequestData;
 
 /** The page cache is responsible for the creation and storage of preview
     bitmaps of pages that are shown by the slide sorter.

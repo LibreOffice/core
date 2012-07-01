@@ -27,7 +27,6 @@
 
 class FmFormShell;
 class SfxShell;
-class SfxUndoManager;
 
 namespace sd {
 

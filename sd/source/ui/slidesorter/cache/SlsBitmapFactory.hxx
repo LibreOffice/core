@@ -26,10 +26,6 @@
 class SdPage;
 class Size;
 
-namespace sd { namespace slidesorter { namespace view {
-class SlideSorterView;
-} } }
-
 namespace sd { namespace slidesorter { namespace cache {
 
 /** This factory class creates preview bitmaps for page objects.  It is

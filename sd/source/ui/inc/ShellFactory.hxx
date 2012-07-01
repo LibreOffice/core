@@ -28,7 +28,6 @@ class Window;
 namespace sd {
 
 class FrameView;
-class ViewShell;
 
 typedef sal_Int32 ShellId;
 // This shell id is a reserved value and does not specify any valid shell.

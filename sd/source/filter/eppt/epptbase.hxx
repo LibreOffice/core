@@ -70,9 +70,7 @@
 
 #define EPP_LAYOUT_SIZE 25
 
-class Polygon;
 class PptEscherEx;
-class XStatusIndicatorRef;
 
 struct PHLayout
 {

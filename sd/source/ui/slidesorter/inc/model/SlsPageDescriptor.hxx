@@ -45,8 +45,6 @@ class SdrPage;
 
 namespace sd { namespace slidesorter { namespace model {
 
-class SlideRenderer;
-
 namespace css = ::com::sun::star;
 
 /** Each PageDescriptor object represents the preview of one draw page,

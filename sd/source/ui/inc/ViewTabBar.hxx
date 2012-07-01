@@ -36,13 +36,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
-namespace sd { namespace tools {
-    class EventMultiplexerEvent;
-} }
-
 namespace sd {
     class ViewShellBase;
-    class PaneManagerEvent;
 }
 
 namespace {

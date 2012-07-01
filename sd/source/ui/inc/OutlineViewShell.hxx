@@ -30,8 +30,6 @@ class TransferableClipboardListener;
 
 namespace sd {
 
-class SdUnoOutlineView;
-
 /** Show a textual overview of the text contents of all slides.
 */
 class OutlineViewShell

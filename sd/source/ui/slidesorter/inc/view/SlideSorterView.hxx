@@ -50,7 +50,6 @@
 class Point;
 
 namespace sd { namespace slidesorter { namespace controller {
-class SlideSorterController;
 class Properties;
 } } }
 

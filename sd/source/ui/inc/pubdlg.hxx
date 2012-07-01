@@ -46,8 +46,6 @@
 
 enum HtmlPublishMode { PUBLISH_HTML, PUBLISH_FRAMES, PUBLISH_WEBCAST, PUBLISH_KIOSK };
 
-class SfxItemSet;
-
 class FixedText;
 class RadioButton;
 class ListBox;

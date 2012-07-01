@@ -33,8 +33,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 class SdXImpressDocument;
-class SdView;
-class SdDrawViewShell;
 class SdCustomShow;
 
 class SdXCustomPresentation :   public ::cppu::WeakImplHelper5< ::com::sun::star::container::XIndexContainer,

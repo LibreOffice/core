@@ -41,8 +41,6 @@ namespace sd { namespace tools { class EventMultiplexerEvent; } }
 
 namespace sd {
 
-class PaneManagerEvent;
-class ViewShell;
 class ViewShellBase;
 
 /** This simple class is responsible for putting the form shell above or

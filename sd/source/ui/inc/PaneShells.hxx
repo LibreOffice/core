@@ -25,8 +25,6 @@
 #include <sfx2/shell.hxx>
 #include "glob.hxx"
 
-class CommandEvent;
-
 namespace sd {
 
 

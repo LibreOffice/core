@@ -60,7 +60,6 @@
 
 class SdDrawDocument;
 class SdPage;
-class SdXCustomPresentations;
 
 namespace sd {
 class DrawDocShell;

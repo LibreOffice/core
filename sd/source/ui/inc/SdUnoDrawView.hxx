@@ -26,7 +26,6 @@
 #include <cppuhelper/basemutex.hxx>
 
 class SdXImpressDocument;
-class SdPage;
 
 namespace css = ::com::sun::star;
 

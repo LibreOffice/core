@@ -72,10 +72,6 @@ class SdrPage;
 class SdDrawDocument;
 class ButtonSet;
 
-namespace sd {
-class View;
-}
-
 class HtmlErrorContext : public ErrorContext
 {
 private:

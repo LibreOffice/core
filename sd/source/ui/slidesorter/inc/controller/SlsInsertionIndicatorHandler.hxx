@@ -34,9 +34,6 @@
 #include "view/SlsLayouter.hxx"
 
 namespace sd { namespace slidesorter { class SlideSorter; } }
-namespace sd { namespace slidesorter { namespace model {
-class PageEnumeration;
-} } }
 namespace sd { namespace slidesorter { namespace view {
 class InsertAnimator;
 class InsertionIndicatorOverlay;

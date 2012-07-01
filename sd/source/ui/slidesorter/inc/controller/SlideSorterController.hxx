@@ -46,7 +46,6 @@ class SlideSorter;
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
-class HighlightObject;
 } } }
 
 namespace sd { namespace slidesorter { namespace model {
@@ -67,7 +66,6 @@ class PageSelector;
 class ScrollBarManager;
 class SelectionFunction;
 class SelectionManager;
-class SelectionObserver;
 class SlotManager;
 class VisibleAreaManager;
 

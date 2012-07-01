@@ -55,10 +55,6 @@ namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
 
-namespace sd { namespace slidesorter { namespace model {
-class PageDescriptor;
-} } }
-
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;

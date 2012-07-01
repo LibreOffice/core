@@ -27,17 +27,7 @@
 #include <vector>
 
 class Size;
-class SdDrawDocument;
 class SdrPage;
-
-namespace sd { namespace slidesorter { namespace view {
-class SlideSorterView;
-class PageObjectViewObjectContact;
-} } }
-
-namespace sd { namespace slidesorter { namespace model {
-class SlideSorterModel;
-} } }
 
 namespace sd { namespace slidesorter { namespace cache {
 

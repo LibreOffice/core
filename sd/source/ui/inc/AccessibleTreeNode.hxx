@@ -60,8 +60,6 @@ class AccessibleStateSetHelper;
 namespace accessibility {
 
 
-class AccessibleSlideSorterObject;
-
 typedef ::cppu::PartialWeakComponentImplHelper5<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,

@@ -34,7 +34,6 @@
 #include <list>
 
 class DffRecordHeader;
-class SdPage;
 class SvStream;
 class ImplSdPPTImport;
 

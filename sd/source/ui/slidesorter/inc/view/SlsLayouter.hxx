@@ -39,8 +39,6 @@
 #include <utility>
 
 
-class MapMode;
-class OutputDevice;
 class Size;
 
 namespace sd { namespace slidesorter { namespace view {

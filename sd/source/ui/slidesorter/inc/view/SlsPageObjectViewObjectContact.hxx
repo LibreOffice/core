@@ -45,8 +45,6 @@ class Properties;
 
 namespace sd { namespace slidesorter { namespace view {
 
-class SlideSorterView;
-
 /** This object-view-contact of page objects maintains a preview bitmap for
     the page to speed up redraws of the same.  It does so by colaborating
     with a cache of bitmaps (see ../cache).

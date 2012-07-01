@@ -35,8 +35,6 @@
 #include <vcl/mapmod.hxx>
 
 class Font;
-class OutputDevice;
-class VclWindowEvent;
 
 namespace sd { namespace slidesorter { namespace view {
 

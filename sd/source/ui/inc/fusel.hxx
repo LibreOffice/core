@@ -26,7 +26,6 @@
 
 class SdrHdl;
 class SdrObject;
-class Sound;
 
 
 namespace sd {

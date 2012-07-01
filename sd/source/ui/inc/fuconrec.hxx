@@ -34,7 +34,6 @@
 class KeyEvent;
 class SdDrawDocument;
 class SdrObject;
-class SdxRequest;
 class SfxItemSet;
 
 namespace sd {

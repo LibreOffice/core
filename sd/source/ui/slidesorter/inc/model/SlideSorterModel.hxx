@@ -43,13 +43,7 @@ namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
 
-namespace sd { namespace slidesorter { namespace controller {
-class PageObjectFactory;
-} } }
-
 namespace sd { namespace slidesorter { namespace model {
-
-class DocumentPageContainer;
 
 inline sal_Int32 FromCoreIndex (const sal_uInt16 nCoreIndex) { return (nCoreIndex-1)/2; }
 inline sal_uInt16 ToCoreIndex (const sal_Int32 nIndex) { return nIndex*2+1; }

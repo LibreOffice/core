@@ -35,12 +35,6 @@
 class SdrModel;
 class SfxObjectShell;
 class SdrView;
-class XColorList;
-class XGradientList;
-class XBitmapList;
-class XDashList;
-class XHatchList;
-class XLineEndList;
 
 
 /*************************************************************************

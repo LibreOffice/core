@@ -39,8 +39,8 @@
 #include "unosrch.hxx"
 
 class SdPage;
-class SvxShape;
 class SdrObject;
+class SdXImpressDocument;
 struct SfxItemPropertySimpleEntry;
 
 /***********************************************************************

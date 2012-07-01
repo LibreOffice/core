@@ -30,7 +30,6 @@ class SdrPage;
 
 namespace sd { namespace slidesorter { namespace cache {
 
-class BitmapReplacement;
 class CacheCompactor;
 class BitmapCompressor;
 

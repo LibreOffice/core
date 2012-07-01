@@ -37,10 +37,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
-class SdWindow;
-class SdDrawDocument;
-class Sound;
-
 namespace sd { namespace slidesorter {
 class SlideSorter;
 } }
@@ -48,7 +44,6 @@ class SlideSorter;
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
-class DragAndDropContext;
 
 
 class SelectionFunction

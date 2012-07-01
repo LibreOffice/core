@@ -50,9 +50,6 @@
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 
-class SfxViewShell;
-class SdXImpressDocument;
-
 namespace css = ::com::sun::star;
 
 namespace sd {
@@ -78,7 +75,6 @@ public:
 class DrawSubController;
 class ViewShellBase;
 class ViewShell;
-class View;
 
 
 /** The DrawController is the UNO controller for Impress and Draw.  It

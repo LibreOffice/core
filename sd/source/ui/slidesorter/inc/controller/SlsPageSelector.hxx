@@ -47,10 +47,6 @@ namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
 } } }
 
-namespace sd { namespace slidesorter { namespace view {
-class SlideSorterView;
-} } }
-
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
