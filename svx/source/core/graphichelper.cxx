@@ -33,6 +33,8 @@
 #include <sfx2/docfile.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -85,10 +87,8 @@ String GraphicHelper::ExportGraphic( const Graphic &rGraphic, const String &rGrf
 
     // fish out the graphic's name
     String aName = rGrfName;
-    printf("Name: %s\n", aName.GetBuffer());
 
-    //aDlgHelper.SetTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
-    aDlgHelper.SetTitle( String("Title") );
+    aDlgHelper.SetTitle( SVX_RESSTR(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
     aDlgHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
     INetURLObject aURL;
     aURL.SetSmartURL( aName );

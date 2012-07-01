@@ -397,7 +397,7 @@
 #define STR_TASKPANEL_LAYOUT_MENU_TITLE                 (RID_APP_START+713)
 #define STR_GRAPHICS_STYLE_FAMILY                       (RID_APP_START+715)
 
-#define STR_TITLE_SAVE_AS_PICTURE                       (RID_APP_START+716)
+// free
 #define STR_CELL_STYLE_FAMILY                           (RID_APP_START+717)
 
 #define STR_NAVIGATOR_SHOW_NAMED_SHAPES                 (RID_APP_START+718)
@@ -410,14 +410,14 @@
 #define STR_INSERT_PICTURE                              (RID_APP_START+724)
 #define STR_INSERT_MOVIE                                (RID_APP_START+725)
 
-#define STRING_DRAG_AND_DROP_PAGES			(RID_APP_START+726)
-#define STRING_DRAG_AND_DROP_SLIDES			(RID_APP_START+727)
-#define STRING_START_SLIDESHOW				(RID_APP_START+728)
-#define STRING_HIDE_SLIDE				(RID_APP_START+729)
-#define STRING_SHOW_SLIDE				(RID_APP_START+730)
-#define STRING_DUPLICATE_SLIDE				(RID_APP_START+731)
+#define STRING_DRAG_AND_DROP_PAGES          (RID_APP_START+726)
+#define STRING_DRAG_AND_DROP_SLIDES         (RID_APP_START+727)
+#define STRING_START_SLIDESHOW              (RID_APP_START+728)
+#define STRING_HIDE_SLIDE               (RID_APP_START+729)
+#define STRING_SHOW_SLIDE               (RID_APP_START+730)
+#define STRING_DUPLICATE_SLIDE              (RID_APP_START+731)
 
-#define STR_ACC_DIALOG_DESC             		(RID_APP_START+732)
+#define STR_ACC_DIALOG_DESC                     (RID_APP_START+732)
 
 /******************************************************************************
 * The ids in glob.hrc start at RID_APP_START+750!

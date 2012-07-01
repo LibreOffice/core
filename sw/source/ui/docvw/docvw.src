@@ -199,10 +199,6 @@ Menu MN_READONLY_POPUP
         };
     };
 };
-String STR_EXPORT_GRAFIK_TITLE
-{
-    Text [ en-US ] = "Graphics Export" ;
-};
 String STR_CHAIN_OK
 {
     Text [ en-US ] = "Click the left mouse button to link the frames." ;

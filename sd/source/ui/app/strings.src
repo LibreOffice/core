@@ -1069,10 +1069,6 @@ String STR_TITLE_RENAMESLIDE
 {
     Text [ en-US ] = "Rename Slide";
 };
-String STR_TITLE_SAVE_AS_PICTURE
-{
-    Text [ en-US ] = "Save as Picture";
-};
 String STR_DESC_RENAMESLIDE
 {
     Text [ en-US ] = "Name";

@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -56,6 +56,7 @@ $(eval $(call gb_SrsTarget_set_include,svx/res,\
 
 $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/accessibility/accessibility.src \
+    svx/source/core/graphichelper.src \
     svx/source/dialog/bmpmask.src \
     svx/source/dialog/contdlg.src \
     svx/source/dialog/ctredlin.src \
