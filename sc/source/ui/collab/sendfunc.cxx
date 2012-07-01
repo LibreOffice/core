@@ -73,10 +73,16 @@ bool isCollabMode( bool& rbMaster )
 }
 
 // FIXME: really ScDocFunc should be an abstract base
-ScDocFuncRecv::ScDocFuncRecv( boost::shared_ptr<ScDocFuncDirect>& pChain )
+ScDocFuncRecv::ScDocFuncRecv( ScDocFuncDirect *pChain )
     : mpChain( pChain )
 {
     fprintf( stderr, "Receiver created !\n" );
+}
+
+ScDocFuncRecv::~ScDocFuncRecv()
+{
+    fprintf( stderr, "Receiver destroyed !\n" );
+    delete mpChain;
 }
 
 void ScDocFuncRecv::RecvMessage( const rtl::OString &rString )
@@ -274,12 +280,18 @@ void ScDocFuncSend::SendFile( const rtl::OUString &rURL )
 
 // FIXME: really ScDocFunc should be an abstract base, so
 // we don't need the rDocSh hack/pointer
-ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncRecv> pDirect )
+ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pDirect )
         : ScDocFunc( rDocSh ),
         mpDirect( pDirect ),
         mpManager( NULL )
 {
     fprintf( stderr, "Sender created !\n" );
+}
+
+ScDocFuncSend::~ScDocFuncSend()
+{
+    fprintf( stderr, "Sender destroyed !\n" );
+    delete mpDirect;
 }
 
 bool ScDocFuncSend::InitTeleManager( bool bIsMaster )
@@ -291,9 +303,9 @@ bool ScDocFuncSend::InitTeleManager( bool bIsMaster )
     }
     TeleManager *pManager = TeleManager::get( !bIsMaster );
     pManager->sigPacketReceived.connect( boost::bind(
-            &ScDocFuncRecv::packetReceived, mpDirect.get(), _1, _2 ));
+            &ScDocFuncRecv::packetReceived, mpDirect, _1, _2 ));
     pManager->sigFileReceived.connect( boost::bind(
-            &ScDocFuncRecv::fileReceived, mpDirect.get(), _1 ));
+            &ScDocFuncRecv::fileReceived, mpDirect, _1 ));
 
     if (pManager->connect())
     {
@@ -438,9 +450,9 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
     }
     else if (isCollabMode( bIsMaster ))
     {
-        boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *this ) );
-        boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
-        ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
+        ScDocFuncDirect *pDirect = new ScDocFuncDirect( *this );
+        ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
+        ScDocFuncSend *pSender = new ScDocFuncSend( *this, pReceiver );
         pSender->InitTeleManager( bIsMaster );
         return pSender;
     }

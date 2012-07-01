@@ -70,9 +70,8 @@ class TubeContacts : public ModelessDialog
         ScDocFuncSend *pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
         if (!pSender)
         {
-            delete pDocFunc;
-            boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *pScDocShell ) );
-            boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
+            ScDocFuncDirect *pDirect = dynamic_cast<ScDocFuncDirect*> (pDocFunc);
+            ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
             pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
             pScDocShell->SetDocFunc( pSender );
         }

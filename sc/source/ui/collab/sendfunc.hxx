@@ -207,15 +207,15 @@ public:
 
 class ScDocFuncRecv
 {
-    boost::shared_ptr<ScDocFuncDirect> mpChain;
+    ScDocFuncDirect *mpChain;
 
 protected:
     ScDocFuncRecv() {}
 
 public:
     // FIXME: really ScDocFunc should be an abstract base
-    ScDocFuncRecv( boost::shared_ptr<ScDocFuncDirect>& pChain );
-    virtual ~ScDocFuncRecv() {}
+    ScDocFuncRecv( ScDocFuncDirect *pChain );
+    virtual ~ScDocFuncRecv();
 
     void packetReceived( TeleConference*, TelePacket &rPacket );
 
@@ -225,8 +225,8 @@ public:
 
 class ScDocFuncSend : public ScDocFunc
 {
-    boost::shared_ptr<ScDocFuncRecv>    mpDirect;
-    TeleManager                         *mpManager;
+    ScDocFuncRecv       *mpDirect;
+    TeleManager         *mpManager;
 
     void SendMessage( ScChangeOpWriter &rOp );
     void SendFile( const rtl::OUString &rURL );
@@ -234,8 +234,8 @@ class ScDocFuncSend : public ScDocFunc
 public:
     // FIXME: really ScDocFunc should be an abstract base, so
     // we don't need the rDocSh hack/pointer
-    ScDocFuncSend( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncRecv> pDirect );
-    virtual ~ScDocFuncSend() {}
+    ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pDirect );
+    virtual ~ScDocFuncSend();
 
     bool                InitTeleManager( bool bIsMaster );
 
