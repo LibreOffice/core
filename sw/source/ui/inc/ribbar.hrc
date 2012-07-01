@@ -30,7 +30,6 @@
 #define CB_FORMAT           (RC_RIBBAR_BEGIN +1)
 #define CB_SIZE             (RC_RIBBAR_BEGIN +3)
 #define PB_FORMULA_OK       (RC_RIBBAR_BEGIN +4)
-#define PB_FORMULA_CANCEL   (RC_RIBBAR_BEGIN +5)
 #define RID_TBX_FORMULA     (RC_RIBBAR_BEGIN +6)
 #define FT_POS              (RC_RIBBAR_BEGIN +7)
 #define STR_TBL_FORMULA                  (RC_RIBBAR_BEGIN +9)

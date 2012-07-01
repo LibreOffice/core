@@ -81,47 +81,27 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define HELP_OFFSET                 1100
 #define CMD_STR_OFFSET              2200
-#define CMD_STR_OFFSET_MULTILANG    3300
 #define CMDID_END                   5500
 
 /*--------------------------------------------------------------------
     Region: File
  --------------------------------------------------------------------*/
 #define FN_CLOSE_FILE           (FN_FILE + 1 )    /* Close */
-#define FN_LAUNCH_REGISTRY      (FN_FILE + 2 )    /* Registry */
 
 #define FN_NEW_GLOBAL_DOC       (FN_FILE + 4 )    /* Create Global Document */
 #define FN_NEW_FILE             (FN_FILE + 5 )    /* New */
-#define FN_NEW_FILE_DLG         (FN_FILE + 6 )    /* New dialog */
 #define FN_OPEN_FILE            (FN_FILE + 7 )    /* Open */
 #define FN_EDIT_FILE            (FN_FILE + 8 )    /* Open or ToTop */
 
 #define FN_INETFILE             (FN_FILE + 9 )    /* Internet File-Dialog */
 
 #define FN_PRINT_FILE           (FN_FILE + 10)    /* Print */
-#define FN_PRINT_FILE_OPTIONS   (FN_FILE + 11)    /* Print file options */
-#define FN_SAVE_FILE_AS         (FN_FILE + 12)    /* Save as */
 #define FN_SAVE_FILE            (FN_FILE + 13)    /* Save */
-#define FN_SETUP_PRINTER        (FN_FILE + 14)    /* Printer setup */
-#define FN_SETUP_PRINTER_DLG    (FN_FILE + 15)    /* Printer setup dialog */
-#define FN_SHOW_PREVIEW         (FN_FILE + 16)    /* Print preview */
 #define FN_EXIT                 (FN_FILE + 17)    /* Close Writer */
-#define FN_PRINT_CFG_DLG        (FN_FILE + 18)    /* Print configuration dialog */
 
-#define FN_SAVE_ALL             (FN_FILE + 23)    /* Save all files */
-#define FN_NEW_FILE_DEFAULT     (FN_FILE + 24)    /* New file with default template */
-#define FN_PRINT_FILE_DEFAULT   (FN_FILE + 25)    /* Print with default settings */
-#define FN_LAUNCH_EQ_EDITOR     (FN_FILE + 26)    /* Equation editor */
-#define FN_CHANGE_PRINTER       (FN_FILE + 27)    /* Select printer */
-#define FN_FAX_END              (FN_FILE + 29)    /* Ready to fax, Id for PostMessage */
-
-#define FN_SELECT_DATABASE      (FN_FILE + 30)    /* Database selection */
-#define FN_DOC_INFO_DLG         (FN_FILE + 31)    /* Document information dialog */
 #define FN_DOC_MGR_DLG          (FN_FILE + 32)    /* Document-Manager */
 
 #define FN_GET_DOCSTAT          (FN_FILE + 33)    /* Get document statistics */
-
-#define FN_SAVE_SELECTION       (FN_FILE + 35)    /* Save selection */
 
 #define FN_OUTLINE_TO_IMPRESS   (FN_FILE + 36)  /* Send outline to impress */
 #define FN_OUTLINE_TO_CLIPBOARD (FN_FILE + 37)  /* Send outline to clipboard */
@@ -138,15 +118,11 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_COPY                 (FN_EDIT + 2 )    /* Copy */
 #define FN_CUT                  (FN_EDIT + 3 )    /* Cut */
 #define FN_EDIT_FIELD           (FN_EDIT + 4 )    /* Edit field */
-#define FN_EDIT_FIELD_DLG       (FN_EDIT + 5 )    /* Edit field dialog */
-#define FN_EDIT_FILE_INFO       (FN_EDIT + 6 )    /* Document information */
-#define FN_EDIT_FILE_INFO_DLG   (FN_EDIT + 7 )    /* Document information Dialog */
 #define FN_EDIT_LINK            (FN_EDIT + 8 )    /* Edit link */
 #define FN_EDIT_LINK_DLG        (FN_EDIT + 9 )    /* Edit link dialog */
 #define FN_GOTO                 (FN_EDIT + 11)    /* Go to */
 
 #define FN_PASTE                (FN_EDIT + 13)    /* Paste */
-#define FN_PASTESPECIAL_DLG     (FN_EDIT + 15)    /* Paste special dialog */
 #define FN_NUMBER_BULLETS       (FN_EDIT + 21)    /* Bullets */
 #define FN_REPEAT               (FN_EDIT + 22)    /* Repeat last */
 #define FN_EDIT_IDX_ENTRY_DLG   (FN_EDIT + 23)    /* Edit Index-Entry */
@@ -181,12 +157,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_GOTO_PREV_INPUTFLD   (FN_EDIT + 48)  /* go to previous inputfield    */
 
 #define FN_REPEAT_SEARCH        (FN_EDIT + 50)  /* Search again */
-#define FN_REPEAT_REPLACE       (FN_EDIT + 51)  /* Repeat replace */
-#define FN_UPDATE_GRAFIC        (FN_EDIT + 53)  /* Change graphic */
-#define FN_SETTAB_ATCURPOS      (FN_EDIT + 54)  /* Set Tab at the current position */
-#define FN_SET_LR_IND_ATCURPOS  (FN_EDIT + 55)  /* EZE and LR set */
-#define FN_FRMCNT_TO_BODY       (FN_EDIT + 56)  /* Frame content to text */
-#define FN_UPDATE_TOXBASE       (FN_EDIT + 57)  /* Next TOC list refresh */
 
 #define FN_REPAGINATE           (FN_EDIT + 61)  /* Force repagination */
 #define FN_EDIT_FOOTNOTE        (FN_EDIT + 62)  /* Edit footnote */
@@ -199,7 +169,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_PREV_BOOKMARK        (FN_EDIT + 69)  /*  */
 
 /*Navigator ToolBoxes*/
-#define FN_SELECT_BOOKMARK           (FN_EDIT + 70)  /**/
 #define FN_ITEM_DOWN                 (FN_EDIT + 71)  /**/
 #define FN_ITEM_LEFT                 (FN_EDIT + 72)  /**/
 #define FN_ITEM_RIGHT                (FN_EDIT + 73)  /**/
@@ -207,14 +176,10 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_DOWN                      (FN_EDIT + 75)  /**/
 
 #define FN_SELECT_FOOTER             (FN_EDIT + 77)  /**/
-#define FN_SELECT_FRAME              (FN_EDIT + 78)  /**/
 #define FN_SELECT_HEADER             (FN_EDIT + 79)  /**/
 #define FN_PAGENUMBER                (FN_EDIT + 80)  /**/
-#define FN_SELECT_AUTO_BOOKMARK      (FN_EDIT + 81)  /**/
 #define FN_SELECT_FOOTNOTE           (FN_EDIT + 82)  /**/
 #define FN_SELECT_SET_AUTO_BOOKMARK  (FN_EDIT + 83)  /**/
-#define FN_SELECT_TABLE              (FN_EDIT + 84)  /**/
-#define FN_SELECT_INDEX              (FN_EDIT + 85)  /**/
 #define FN_UP                        (FN_EDIT + 86)  /**/
 
 #define FN_SELECT_PARA               (FN_EDIT + 97) /* select paragraph*/
@@ -249,7 +214,6 @@ included in c-context files, so c++ style stuff will cause problems.
  --------------------------------------------------------------------*/
 
 #define FN_REFRESH_VIEW         (FN_VIEW + 1)   /* Refresh/Redraw */
-#define FN_SHOW_OUTLINE_VIEW    (FN_VIEW + 2)   /* Show outline */
 
 #define FN_DRAW_WRAP_DLG        (FN_VIEW + 3)   /* Draw Umlauf-Dlg */
 
@@ -261,11 +225,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_VLINEAL              (FN_VIEW + 16)  /* Vertical Liner */
 #define FN_VSCROLLBAR           (FN_VIEW + 17)  /* Vertical Scrollbar */
 #define FN_HSCROLLBAR           (FN_VIEW + 18)  /* Horizontal Scrollbar */
-#define FN_TOOLBOX_TOGGLE       (FN_VIEW + 19)  /* Toggle toolbox */
-#define FN_VIEWOPTIONS_ON       (FN_VIEW + 20)  /* Viewoptions group on */
-#define FN_VIEWOPTIONS_OFF      (FN_VIEW + 21)  /* Viewoptions group off */
-#define FN_CONTROLS_ON          (FN_VIEW + 22)  /* Controls group on */
-#define FN_CONTROLS_OFF         (FN_VIEW + 23)  /* Controls group off */
 
 #define FN_VIEW_META_CHARS      (FN_VIEW + 24)  /* View meta chars */
 #define FN_VIEW_MARKS           (FN_VIEW + 25)  /* View marks */
@@ -273,8 +232,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_VIEW_TABLEGRID       (FN_VIEW + 27)  /* View tablegrid */
 
 #define FN_SET_PAGE             (FN_VIEW + 29)  /* Set page template to paragraph */
-
-#define FN_TOOLBOX_SWITCH       (FN_VIEW + 30)  /* Shell switch to text */
 
 // more Navigator
 #define FN_CONTENT_LB           (FN_VIEW + 32)  /**/
@@ -315,7 +272,6 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_INSERT_BREAK_DLG     (FN_INSERT + 4 )  /* Break */
 #define FN_INSERT_COLUMN_BREAK  (FN_INSERT + 5 )  /* Column break */
-#define FN_INSERT_DATE_TIME     (FN_INSERT + 6 )  /* Date / Time */
 #define FN_INSERT_FIELD         (FN_INSERT + 8 )  /* Textbefehl */
 #define FN_CHANGE_DBFIELD       (FN_INSERT + 9 )  /* Change the database field */
 
@@ -327,18 +283,10 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_INSERT_HYPERLINK     (FN_INSERT + 14)  /* Character dialogue / hyperlink page */
 
-#define FN_INSERT_INDEX         (FN_INSERT + 16)  /* Index entry */
-#define FN_INSERT_INDEX_DLG     (FN_INSERT + 17)    /* Index entry */
 #define FN_INSERT_LINEBREAK     (FN_INSERT + 18)    /* Newline */
 #define FN_INSERT_FIELD_DATA_ONLY (FN_INSERT + 19)  /* Field dialog for mail merge*/
-#define FN_INSERT_OBJECT        (FN_INSERT + 21)    /* Object */
 #define FN_INSERT_OBJECT_DLG    (FN_INSERT + 22)    /* Object */
 #define FN_INSERT_PAGEBREAK     (FN_INSERT + 23)    /* Page break*/
-#define FN_INSERT_PAGENO        (FN_INSERT + 24)    /* Page Number */
-#define FN_INSERT_PARAGRAPH     (FN_INSERT + 25)    /* Paragraph */
-#define FN_INSERT_RECORD        (FN_INSERT + 26)    /* Insert record */
-#define FN_MERGE_RECORD         (FN_INSERT + 27)    /* Merge record */
-#define FN_INSERT_SYMBOL        (FN_INSERT + 28)    /* Special characters */
 #define FN_POSTIT               (FN_INSERT + 29)    /* Insert/edit PostIt */
 #define FN_INSERT_TABLE         (FN_INSERT + 30)    /* Insert Table */
 #define FN_INSERT_STRING        (FN_INSERT+31)
@@ -349,32 +297,18 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_INSERT_IDX_ENTRY_DLG (FN_INSERT + 35)    /* insert index entry */
 #define FN_INSERT_FRAME_INTERACT_NOCOL (FN_INSERT + 36) /*insert interactive non column frame*/
 
-#define FN_TOOL_GROUP           (FN_INSERT + 47)    /* Group objects */
-#define FN_TOOL_UNGROUP         (FN_INSERT + 48)    /* Remove Grouping */
-
 #define FN_TOOL_ANCHOR          (FN_INSERT + 49)    /* Draw Anchor for object */
 #define FN_TOOL_ANCHOR_PAGE     (FN_INSERT + 50)    /* anchor Draw object to page */
 #define FN_TOOL_ANCHOR_PARAGRAPH (FN_INSERT + 51)   /* anchor Draw object to paragraph */
 #define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* change hierarchy */
 
 #define FN_MAILMERGE_WIZARD     (FN_INSERT + 64)    /* mail merge wizard */
-#define FN_QRY_OPEN_TABLE       (FN_INSERT + 65)    /* open database (Basic) */
 #define FN_TOOL_ANCHOR_FRAME    (FN_INSERT + 66)    /* anchor Draw-Object to frame*/
 #define FN_QRY_MERGE            (FN_INSERT + 67)    /* insert record (serial letter) */
 #define FN_MAILMERGE_CHILDWINDOW (FN_INSERT + 68)   /* back-to-mail-merge-wizard child window*/
 #define FN_INSERT_SMA           (FN_INSERT + 69)    /* insert StarMath  */
 
-#define FN_QRY_GET_COLUMN_NAME  (FN_INSERT + 70)    /* number of columns (Basic) */
-#define FN_QRY_GET_COLUMN_TYPE  (FN_INSERT + 71)    /* retrieve type of database field (Basic) */
-#define FN_QRY_GET_COLUMN_TEXT  (FN_INSERT + 72)    /* content of current record (Basic) */
-#define FN_QRY_DEL_DEFINED_DB   (FN_INSERT + 75)    /* delete database definition */
-
 #define FN_DRAWTEXT_ATTR_DLG    (FN_INSERT + 76)    /* position DrawText */
-
-#define FN_QRY_APPEND_RECORD    (FN_INSERT + 77)    /* append new record */
-#define FN_QRY_UPDATE_RECORD    (FN_INSERT + 78)    /* change record row */
-#define FN_QRY_DELETE_RECORD    (FN_INSERT + 79)    /* delete record */
-#define FN_QRY_GET_PHYS_RECORD_ID (FN_INSERT + 80)  /* get physical (absolute) record number (Basic) */
 
 #define FN_TOOL_ANCHOR_CHAR     (FN_INSERT + 84)    /* anchor Draw object to charater */
 
@@ -399,10 +333,6 @@ included in c-context files, so c++ style stuff will cause problems.
     Region: Paste (Part 2)
  --------------------------------------------------------------------*/
 
-#define FN_QRY_GET_ALL_DBNAME   (FN_INSERT2 + 1)    /* retrieve all configured database names */
-#define FN_QRY_GET_DBNAME_COUNT (FN_INSERT2 + 2)    /* retrieve number of all configured database names */
-#define FN_QRY_GET_TABLE_NAME   (FN_INSERT2 + 3)    /* retrieve table name of a database */
-#define FN_QRY_GET_TABLE_COUNT  (FN_INSERT2 + 4)    /* retrieve number of tables of a database */
 #define FN_MAILMERGE_SENDMAIL_CHILDWINDOW (FN_INSERT2 + 5)  /* child window provided by mailmerge */
 
 #define FN_SBA_BRW_UPDATE       (FN_INSERT2 + 7)    /* insert records into fields */
@@ -435,26 +365,15 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SET_SUB_SCRIPT       (FN_FORMAT + 12) /* subscript */
 
 #define FN_SET_CASEMAP          (FN_FORMAT + 14) /* CaseMap */
-#define FN_SET_LANGUAGE         (FN_FORMAT + 15) /* language */
 #define FN_SET_KERNING          (FN_FORMAT + 16) /* Kerning */
 
-#define FN_INDENT_TO_TABSTOP    (FN_FORMAT + 17) /* indent to tabstop */
 #define FN_FLIP_HORZ_GRAFIC     (FN_FORMAT + 25) /* mirror horizontally */
 #define FN_FLIP_VERT_GRAFIC     (FN_FORMAT + 26) /* mirror vertically */
-#define FN_SET_LINE_SPACE       (FN_FORMAT + 27) /* parametrized line distance */
 #define FN_SET_ADJUST           (FN_FORMAT + 28) /* parametrized alignemnt */
-#define FN_SET_LRMARGIN         (FN_FORMAT + 29) /* left/right margin */
-#define FN_SET_ULMARGIN         (FN_FORMAT + 30) /* upper/lower margin */
-#define FN_UNINDENT_TO_TABSTOP  (FN_FORMAT + 31) /* indent to previous tabstop */
 
-#define FN_SET_HYPHEN_ZONE      (FN_FORMAT + 32) /* hyphenation */
-#define FN_SET_KEEP_TOGETHER    (FN_FORMAT + 34) /* no hyphenation */
-#define FN_SET_KEEP_WITH_NEXT   (FN_FORMAT + 35) /* keep together with following */
 #define FN_SET_WIDOW            (FN_FORMAT + 36) /* Widows */
 #define FN_SET_ORPHAN           (FN_FORMAT + 37) /* Orphans */
 
-#define FN_REGISTER_COLLECTION  (FN_FORMAT + 43)  /* Referenzvorlage an der Seite */
-#define FN_REGISTER_MODE        (FN_FORMAT + 44)  /* Register mode on/off */
 #define FN_NUM_FORMAT_TABLE_DLG     (FN_FORMAT + 45)  /* number format in table */
 #define FN_FORMAT_BORDER_DLG        (FN_FORMAT + 48)  /* */
 #define FN_FORMAT_PAGE_COLUMN_DLG   (FN_FORMAT + 49)  /* columns per page */
@@ -463,24 +382,12 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_FORMAT_PAGE_DLG          (FN_FORMAT + 52)  /* page */
 #define FN_FORMAT_COLUMN            (FN_FORMAT + 53)  /* columns */
 #define FN_FORMAT_DROPCAPS          (FN_FORMAT + 54)  /* initials */
-#define FN_FORMAT_FRAME             (FN_FORMAT + 55)  /* frame */
 #define FN_FORMAT_FRAME_DLG         (FN_FORMAT + 56)  /* frame */
-#define FN_FORMAT_GRAFIC            (FN_FORMAT + 57)  /* graphic */
 #define FN_FORMAT_GRAFIC_DLG        (FN_FORMAT + 58)  /* graphic */
-#define FN_FORMAT_TABLE             (FN_FORMAT + 59)  /* table */
 #define FN_FORMAT_TABLE_DLG         (FN_FORMAT + 60)  /* table */
-#define FN_FORMAT_OLE_DLG           (FN_FORMAT + 61)  /* edit OLE */
 
-#define FN_NEW_STYLE_BY_EXAMPLE     (FN_FORMAT + 62)  /* create style by example */
 #define FN_UPDATE_STYLE_BY_EXAMPLE  (FN_FORMAT + 63)  /* update style */
-#define FN_STYLE_SHEET_FRAME_DLG    (FN_FORMAT + 64)  /* frame style */
-#define FN_STYLE_SHEET_DOC_DLG      (FN_FORMAT + 65)  /* document style */
-#define FN_STYLE_SHEET_GRAFIK_DLG   (FN_FORMAT + 66)  /* document style */
-#define FN_FORMAT_FOOTNOTE          (FN_FORMAT + 67)  /* footnotes */
 #define FN_FORMAT_FOOTNOTE_DLG      (FN_FORMAT + 68)  /* footnote dialog */
-
-#define FN_FRAME_TO_TOP             (FN_FORMAT + 70)
-#define FN_FRAME_TO_BOTTOM          (FN_FORMAT + 71)
 
 #define FN_FRAME_NOWRAP             (FN_FORMAT + 72)
 #define FN_FRAME_WRAP               (FN_FORMAT + 73)
@@ -494,7 +401,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_FRAME_ALIGN_VERT_CENTER  (FN_FORMAT + 80)
 
 #define FN_SET_FRM_POSITION         (FN_FORMAT + 82)/* frame position -- " -- */
-#define FN_SET_FRM_OPTIONS          (FN_FORMAT + 86)/* frame position -- " -- */
 
 #define FN_SET_PAGE_STYLE           (FN_FORMAT + 93)  /* apply page style */
 
@@ -510,14 +416,10 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_TABLE_MERGE_CELLS        (FN_FORMAT + 106)  /* */
 #define FN_TABLE_SET_ROW_HEIGHT     (FN_FORMAT + 107)  /* */
 #define FN_TABLE_SET_COL_WIDTH      (FN_FORMAT + 108)  /* */
-#define FN_TABLE_SET_ULSPACE        (FN_FORMAT + 109)  /* table: set upper / lower offset */
 #define FN_OPTIMIZE_TABLE           (FN_FORMAT + 110)  /* ToolBoxItem for optimizing tables */
-#define FN_TABLE_SET_SHADOW         (FN_FORMAT + 111)  /* */
-#define FN_TABLE_GOTO_CELL          (FN_FORMAT + 112)  /* */
 #define FN_TABLE_SELECT_ROW         (FN_FORMAT + 113)  /* */
 #define FN_TABLE_SELECT_COL         (FN_FORMAT + 114)  /* */
 #define FN_TABLE_SELECT_ALL         (FN_FORMAT + 115)  /* */
-#define FN_TABLE_SET_READ_ONLY      (FN_FORMAT + 116)  /* protect table */
 #define FN_TABLE_SET_READ_ONLY_CELLS (FN_FORMAT + 117)  /* protect table cells */
 #define FN_TABLE_UNSET_READ_ONLY_CELLS  (FN_FORMAT + 119)  /* undo table cell protection */
 #define FN_TABLE_HEADLINE_REPEAT    (FN_FORMAT + 120)   /* also used in SwXTextTable*/
@@ -526,11 +428,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_FRAME_UP                 (FN_FORMAT + 122)  /* frame by one level up */
 #define FN_FRAME_DOWN               (FN_FORMAT + 123)  /* frame by one level down */
 
-#define FN_TABLE_INSERT_CHART       (FN_FORMAT + 124)
-
-#define FN_SET_FRM_LRSPACE          (FN_FORMAT + 125)  /* frame page offset */
-#define FN_SET_FRM_ULSPACE          (FN_FORMAT + 126)  /* frame head-/foot offset */
-#define FN_TABLE_SET_LRSPACE        (FN_FORMAT + 127)  /* Tabelle: linker / rechter Abstand einstellen */
 #define FN_TABLE_OPTIMAL_HEIGHT     (FN_FORMAT + 128)  /* optimal cell height */
 #define FN_TABLE_DELETE_TABLE       (FN_FORMAT + 129)  /* remove current table*/
 #define FN_TABLE_SELECT_CELL        (FN_FORMAT + 130)  /* selects the current table cell */
@@ -541,10 +438,8 @@ included in c-context files, so c++ style stuff will cause problems.
 /*--------------------------------------------------------------------
     Region: Page Template
  --------------------------------------------------------------------*/
-#define FN_NEW_PAGE_STYLE           (FN_FORMAT + 129) /* create page style */
 #define FN_PAGE_STYLE_SET_LR_MARGIN (FN_FORMAT + 130) /* left / right margin */
 #define FN_PAGE_STYLE_SET_UL_MARGIN (FN_FORMAT + 131) /* upper / lower margin */
-#define FN_PAGE_STYLE_SET_PAGE      (FN_FORMAT + 134) /* */
 #define FN_PAGE_STYLE_SET_PAPER_SIZE (FN_FORMAT + 135) /* */
 #define FN_PAGE_STYLE_SET_PAPER_BIN (FN_FORMAT + 136) /* paper tray */
 #define FN_PAGE_STYLE_SET_NUMBER_FORMAT (FN_FORMAT + 137) /* */
@@ -564,20 +459,11 @@ included in c-context files, so c++ style stuff will cause problems.
     Region: Ribbon
  --------------------------------------------------------------------*/
 
-#define FN_SET_BACKGROUND_COLOR     (FN_FORMAT + 150)  /* */
-
-#define FN_SET_BORDER_POS           (FN_FORMAT + 152)  /* */
-#define FN_SET_BORDER_LINES         (FN_FORMAT + 153)  /* */
-#define FN_SET_BORDER_COLOR         (FN_FORMAT + 154)  /* */
-
 #define FN_FORMULA_CALC             (FN_FORMAT + 156)  /* select formula */
 #define FN_FORMULA_CANCEL           (FN_FORMAT + 157)  /* don't apply formula */
 #define FN_FORMULA_APPLY            (FN_FORMAT + 158)  /* apply formula */
 
 #define FN_TABLE_UNSET_READ_ONLY    (FN_FORMAT + 159)  /* undo cell protection for table */
-
-#define FN_FORMULA_POSITION         (FN_FORMAT + 160)  /* position display*/
-#define FN_FORMULA_EDIT             (FN_FORMAT + 161)  /* edit-field */
 
 #define FN_FRAME_WRAP_IDEAL         (FN_FORMAT + 163)  /* frame ideal wrapping */
 #define FN_FRAME_WRAPTHRU_TRANSP    (FN_FORMAT + 164)  /* frame transparent wrapping */
@@ -589,8 +475,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_FRAME_ALIGN_VERT_CHAR_TOP    (FN_FORMAT + 168)  /* */
 #define FN_FRAME_ALIGN_VERT_CHAR_BOTTOM (FN_FORMAT + 169)  /* */
 #define FN_FRAME_ALIGN_VERT_CHAR_CENTER (FN_FORMAT + 170)  /* */
-
-#define FN_TABLE_SET_DEF_BORDER         (FN_FORMAT + 171)  /* set predefined border */
 
 #define FN_FRAME_WRAP_LEFT              (FN_FORMAT + 172)  /* */
 #define FN_FRAME_WRAP_RIGHT             (FN_FORMAT + 173)  /* */
@@ -614,14 +498,12 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_TABLE_BOX_TEXTORIENTATION (FN_FORMAT + 192)  /* text orientation of table cells */
 
 #define FN_TABLE_AUTOSUM            (FN_FORMAT + 195)  /* */
-#define FN_SET_CONTROL_HANDLER      (FN_FORMAT + 199)  /* set macro */
 
 #define FN_IS_IMAGE                  (FN_FORMAT2 + 6)   /* numbering: with graphic? */
 
 #define FN_GOTO_NEXT_REGION          (FN_FORMAT2 + 9)   /* */
 #define FN_GOTO_PREV_REGION          (FN_FORMAT2 + 10)  /* */
 
-#define FN_GET_SBXCONTROL            (FN_FORMAT2 + 11)  /* */
 #define FN_ABSTRACT_NEWDOC           (FN_FORMAT2 + 12)  /* abstract in new document */
 #define FN_ABSTRACT_STARIMPRESS      (FN_FORMAT2 + 13)  /* abstract to StarImpress */
 
@@ -677,23 +559,14 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* */
 #define FN_HYPHENATE_OPT_DLG        (FN_EXTRA + 5 )   /* */
 #define FN_ADD_UNKNOWN              (FN_EXTRA + 6 )   /* learn words */
-#define FN_DICTIONARY_DLG           (FN_EXTRA + 8 )   /* dictionaries */
 #define FN_NUMBERING                (FN_EXTRA + 9 )   /* numbering/bullets*/
-#define FN_NUMBERING_DLG            (FN_EXTRA + 10)   /* numbering/bullets */
-#define FN_NUMBERING_OUTLINE        (FN_EXTRA + 11)   /* */
 #define FN_NUMBERING_OUTLINE_DLG    (FN_EXTRA + 12)   /* */
 #define FN_SORTING_DLG              (FN_EXTRA + 14)   /* */
 #define FN_CALCULATE                (FN_EXTRA + 15)   /* */
-#define FN_GENERATE_TOC_DLG         (FN_EXTRA + 16)   /* table of contents */
-#define FN_GENERATE_INDEX_DLG       (FN_EXTRA + 17)   /* index */
-#define FN_GENERATE_DIR_DLG         (FN_EXTRA + 18)   /* */
 #define FN_GLOSSARY_DLG             (FN_EXTRA + 20)   /* text building blocks */
-#define FN_MACRO_CHOOSER            (FN_EXTRA + 21)   /* record macro */
 
 #define FN_PLAY_MACRO               (FN_EXTRA + 23)   /* run macro */
-#define FN_LAUNCH_BASIC             (FN_EXTRA + 25)   /* run macro */
 #define FN_EXPAND_GLOSSARY          (FN_EXTRA + 28)   /* expand text building blocks */
-#define FN_CONFIG_TOOLBOX           (FN_EXTRA + 29)   /* configure toolbox*/
 #define FN_CONFIG_MENU              (FN_EXTRA + 30)   /* configure menu */
 #define FN_CONFIG_KEY               (FN_EXTRA + 31)   /* configure keyboard */
 #define FN_CHANGE_PAGENUM           (FN_EXTRA + 34)   /* change page numbers*/
@@ -711,13 +584,6 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_NAVIGATION_PI_GOTO_PAGE  (FN_EXTRA + 59 )  /* goto page from navigation-PI */
 
-#define FN_LETTER_WIZZARD           (FN_EXTRA + 60 )
-#define FN_FAX_WIZZARD              (FN_EXTRA + 61 )
-#define FN_MEMO_WIZZARD             (FN_EXTRA + 62 )
-#define FN_AGENDA_WIZZARD           (FN_EXTRA + 63 )
-
-#define FN_SET_BASIC_METRIC         (FN_EXTRA + 80) /* set default metric Basic */
-
 #define FN_RESERVED_9               (FN_EXTRA + 86)   /* place holder */
 #define FN_RESERVED_8               (FN_EXTRA + 87)   /* place holder */
 #define FN_RESERVED_7               (FN_EXTRA + 88)   /* place holder */
@@ -728,15 +594,11 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_RESERVED_2               (FN_EXTRA + 93)   /* place holder */
 #define FN_RESERVED_1               (FN_EXTRA + 94)   /* place holder */
 
-#define FN_COLLECTION_GROUP_CNT     (FN_EXTRA + 96)
-#define FN_COLLECTION_GROUP_IDX     (FN_EXTRA + 97)
 #define FN_COLL_TYPE                (FN_EXTRA + 98)   /* type for GlobalDoc-Collection*/
 #define FN_COLL_ADD                 (FN_EXTRA + 99)
 
 #define FN_COLL_TITLE               (FN_EXTRA2 + 1)  /*  area name or index title */
 #define FN_SHADOWCURSOR             (FN_EXTRA2 + 4)  /* enable/disable Shadow Cursor */
-
-#define FN_VIEW_IN_FRAME            (FN_EXTRA2 + 8)  /* the view is in a FrameDoc */
 
 #define FN_UNO_PARA_STYLE           (FN_EXTRA2 + 9)  // starting here are UNI-Ids for the PropertyMap listed
 #define FN_UNO_PAGE_STYLE           (FN_EXTRA2 + 10)
@@ -757,7 +619,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_UNO_ENDNOTE              (FN_EXTRA2 + 25)
 #define FN_UNO_RANGE_COL_LABEL      (FN_EXTRA2 + 26)
 #define FN_UNO_RANGE_ROW_LABEL      (FN_EXTRA2 + 27)
-#define FN_UNO_TABLE_COLUMS         (FN_EXTRA2 + 28)
 #define FN_UNO_TABLE_BORDER         (FN_EXTRA2 + 29)
 #define FN_UNO_TABLE_COLUMN_SEPARATORS      (FN_EXTRA2 + 30)
 #define FN_UNO_TABLE_COLUMN_RELATIVE_SUM    (FN_EXTRA2 + 31)
@@ -884,8 +745,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_END_OF_PREV_PAGE         (FN_SELECTION + 12) /* ??? */
 #define FN_START_OF_PAGE            (FN_SELECTION + 13) /* StartOfPage */
 #define FN_END_OF_PAGE              (FN_SELECTION + 14) /* EndOfPage */
-#define FN_START_OF_WINDOW          (FN_SELECTION + 15) /* StartOfWindow */
-#define FN_END_OF_WINDOW            (FN_SELECTION + 16) /* EndOfWindow */
 #define FN_START_OF_COLUMN          (FN_SELECTION + 17) /* StartOfColumn */
 #define FN_END_OF_COLUMN            (FN_SELECTION + 18) /* EndOfColumn */
 #define FN_START_OF_PARA            (FN_SELECTION + 19) /* StartOfPara */
@@ -905,7 +764,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_DELETE_PARA              (FN_SELECTION + 33) /* DeleteToEndOfPara */
 #define FN_DELETE_BACK_PARA         (FN_SELECTION + 34) /* DeleteToStartOfPara */
 #define FN_DELETE_WHOLE_LINE        (FN_SELECTION + 35) /* DeleteLine ??? */
-#define FN_SET_INS_MODE             (FN_SELECTION + 36) /* Insertmode / Overwrite */
 #define FN_PAGEUP                   (FN_SELECTION + 37) /* PageUpWithCursor */
 #define FN_PAGEDOWN                 (FN_SELECTION + 38) /* PageDownWithCursor */
 #define FN_SET_ADD_MODE             (FN_SELECTION + 39) /* Selektionsmodus */
@@ -965,22 +823,11 @@ included in c-context files, so c++ style stuff will cause problems.
  --------------------------------------------------------------------*/
 
 #define FN_IS_MODIFIED              (FN_QUERY +16)      /* Was the document modified? */
-#define FN_RESET_MODIFIED           (FN_QUERY +17)      /* Reset modified flag */
-
-#define FN_GET_DOC_INFO             (FN_QUERY +22)      /* Wert Dokumentinfo erfragen */
-#define FN_GET_ERRNO                (FN_QUERY +26)      /* Get error number */
-#define FN_GET_DOCMAN_PATH          (FN_QUERY +27)      /* Get path to a group in Docmgr */
 
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribut */
-#define FN_EXECUTE_DRAG             (FN_QUERY +30)      /* Start drag and drop */
 
 #define FN_GET_PRINT_AREA           (FN_QUERY +32)      /* Get attribute for printable area of page */
 
-#define FN_GET_PARAGRAPH            (FN_QUERY +48)      /* Get Paragraph-Object from the text shell to the view */
-
-#define FN_DB_FORM_LETTER               (FN_QUERY2 + 0)     /* form letter */
-#define FN_DB_INSERT_CONTENT            (FN_QUERY2 + 1)     /* merge data into fields*/
-#define FN_DB_INSERT_COLUMNS            (FN_QUERY2 + 2)     /* insert data into text/table/as fields*/
 #define FN_DB_CONNECTION_ANY            (FN_QUERY2 + 3)
 #define FN_DB_COLUMN_ANY                (FN_QUERY2 + 4)
 #define FN_DB_DATA_SOURCE_ANY           (FN_QUERY2 + 5)
@@ -1018,22 +865,9 @@ included in c-context files, so c++ style stuff will cause problems.
     Region: Parameter
  --------------------------------------------------------------------*/
 
-#define FN_PARAM_TABLE_COLS         (FN_PARAM)
 #define FN_PARAM_TABLE_ROWS         (FN_PARAM+1)
 #define FN_PARAM_MOVE_COUNT         (FN_PARAM+2)
 #define FN_PARAM_MOVE_SELECTION     (FN_PARAM+3)
-
-#define FN_PARAM_SEARCH_WORDONLY    (FN_PARAM+5)
-#define FN_PARAM_SEARCH_EXACT       (FN_PARAM+6)
-#define FN_PARAM_SEARCH_REGEXP      (FN_PARAM+7)
-#define FN_PARAM_SEARCH_BACKWARDS   (FN_PARAM+8)
-#define FN_PARAM_SEARCH_FINDALL     (FN_PARAM+9)
-#define FN_PARAM_SEARCH_SELECTION   (FN_PARAM+10)
-#define FN_PARAM_SEARCH_TEXT        (FN_PARAM+11)
-#define FN_PARAM_SEARCH_TEXTREPLACE (FN_PARAM+12)
-
-#define FN_PARAM_PARADLGLIMITS      (FN_PARAM+15)
-#define FN_PARAM_FRMMODE            (FN_PARAM+16)
 
 #define FN_PARAM_ADDPRINTER         (FN_PARAM+18)
 #define FN_PARAM_GRID               (FN_PARAM+19)
@@ -1050,29 +884,14 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_PARAM_REGION_EDIT_IN_READONLY (FN_PARAM+28)
 
 #define FN_PARAM_INSERT_AFTER           (FN_PARAM+29)
-#define FN_PARAM_INDEX_NAME             (FN_PARAM+31)
-#define FN_PARAM_INDEX_OPTIONS          (FN_PARAM+32)
-#define FN_PARAM_INDEX_FORMAT           (FN_PARAM+33)
-#define FN_PARAM_INDEX_LEVEL            (FN_PARAM+34)
-#define FN_PARAM_INDEX_TEMPLATE         (FN_PARAM+35)
-#define FN_PARAM_INDEX_ALTSTR           (FN_PARAM+36)
-#define FN_PARAM_INDEX_PRIMKEY          (FN_PARAM+37)
-#define FN_PARAM_INDEX_SECKEY           (FN_PARAM+38)
 #define FN_PARAM_WIDTH                  (FN_PARAM+39)
-#define FN_PARAM_LOCATION               (FN_PARAM+40)
 #define FN_PARAM_DIR                    (FN_PARAM+41)
 #define FN_PARAM_COUNT                  (FN_PARAM+42)
 #define FN_PARAM_COLOR                  (FN_PARAM+43)
 
 #define FN_PARAM_TABLE_NAME             (FN_PARAM+44)
-#define FN_PARAM_TABLE_WIDTH            (FN_PARAM+45)
-#define FN_PARAM_TABLE_ULSPACE          (FN_PARAM+46)
-#define FN_PARAM_TABLE_LRSPACE          (FN_PARAM+47)
-#define FN_PARAM_TABLE_SHADOW           (FN_PARAM+48)
-#define FN_PARAM_TABLE_ALIGN            (FN_PARAM+49)
 #define FN_PARAM_TABLE_HEADLINE         (FN_PARAM+50)
 #define FN_PARAM_TABLE_SPACE            (FN_PARAM+51)
-#define FN_PARAM_TABLE_COLUMNS          (FN_PARAM+52)
 
 #define FN_PARAM_GRF_CONNECT            (FN_PARAM+53)
 #define FN_PARAM_FIELD_TYPE             (FN_PARAM+54)
@@ -1083,9 +902,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_PARAM_URL                    (FN_PARAM+69)
 #define FN_PARAM_GRF_REALSIZE           (FN_PARAM+70)
 #define FN_PARAM_GRF_DIALOG             (FN_PARAM+71)
-#define FN_PARAM_GRF_CLIENTMAP          (FN_PARAM+74) /* ClientMap */
-#define FN_PARAM_GRF_SERVERMAP          (FN_PARAM+75) /* ServerMap */
-#define FN_PARAM_GRF_TARGETFRAME        (FN_PARAM+76) /* TargetFrame */
 #define FN_INET_FIELD_MACRO             (FN_PARAM+77) /* Id for URL-Field-Macros*/
 
 #define FN_PARAM_PRINTER                (FN_PARAM+78) /* Printer */
@@ -1097,16 +913,12 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_PARAM_SELECTION              (FN_PARAM2+2) /* selected word for format/character/hyperlink */
 
 #define FN_PARAM_ACT_NUMBER             (FN_PARAM2+3) /* PointerItem die aktuelle NumRule */
-#define FN_PARAM_CHILD_LEVELS           (FN_PARAM2+4) /* are child levels used? */
 
 #define FN_PARAM_NUM_PRESET             (FN_PARAM2+5) /* predefined numbering */
 
-#define FN_PARAM_HEIGHT                 (FN_PARAM2+6) /* Param for height */
 #define FN_PARAM_DIST                   (FN_PARAM2+7) /* and width, for metric transformation */
 
 #define FN_PARAM_SHADOWCURSOR           (FN_PARAM2+8) /* for ShadowCursor options */
-
-#define FN_PARAM_ACT_NUMLEVEL           (FN_PARAM2+9) /* BYTE-Item with current NumLevel */
 
 #define FN_PARAM_10                     (FN_PARAM2+11)
 
@@ -1131,30 +943,13 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_PARAM_PAM                    (FN_PARAM2+27) /* Point and Mark */
 
 /*--------------------------------------------------------------------
-    Bereich: Druckoptionen
- --------------------------------------------------------------------*/
-
-#define FN_PRNOPT_GRAPHIC           (FN_PRNOPT + 1)
-#define FN_PRNOPT_TABLE             (FN_PRNOPT + 2)
-#define FN_PRNOPT_LEFT_PAGE         (FN_PRNOPT + 3)
-#define FN_PRNOPT_RIGHT_PAGE        (FN_PRNOPT + 4)
-#define FN_PRNOPT_REVERSE           (FN_PRNOPT + 5)
-#define FN_PRNOPT_PAPER_FROM_SETUP  (FN_PRNOPT + 6)
-#define FN_PRNOPT_POSTITS           (FN_PRNOPT + 8)
-
-#define FN_PRNOPT_BEGIN  FN_PRNOPT_GRAPHIC
-#define FN_PRNOPT_END    FN_PRNOPT_POSTITS
-
-/*--------------------------------------------------------------------
     Description: Status: not more than 19!
  --------------------------------------------------------------------*/
 
 #define FN_STAT_PAGE                (FN_STAT + 1)
 #define FN_STAT_TEMPLATE            (FN_STAT + 2)
 #define FN_STAT_ZOOM                (FN_STAT + 3)
-#define FN_STAT_INSOVER             (FN_STAT + 4)
 #define FN_STAT_SELMODE             (FN_STAT + 5)
-#define FN_STAT_CONTEXT             (FN_STAT + 7)
 #define FN_STAT_BOOKMARK            (FN_STAT + 8)  /* For Popup Bookmarks*/
 #define FN_STAT_WORDCOUNT           (FN_STAT + 9)
 
@@ -1181,13 +976,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_HORI_ORIENT                  (FN_FRAME + 5)
 #define FN_SET_FRM_NAME                 (FN_FRAME + 6)
 #define FN_KEEP_ASPECT_RATIO            (FN_FRAME + 7)
-#define FN_GRF_KEEP_ZOOM                (FN_FRAME + 8)
-
-#define FN_IID_COL1                     (FN_FRAME + 13)
-#define FN_IID_COL2                     (FN_FRAME + 14)
-#define FN_IID_COL3                     (FN_FRAME + 15)
-#define FN_IID_COLLEFT                  (FN_FRAME + 16)
-#define FN_IID_COLRIGHT                 (FN_FRAME + 17)
 
 #define FN_SET_FRM_ALT_NAME             (FN_FRAME + 18)
 #define FN_UNO_TITLE                    (FN_FRAME + 19)

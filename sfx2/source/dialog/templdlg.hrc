@@ -31,9 +31,6 @@
 #define BTN_NEW 10
 #define LB_FILTER 4
 
-#define ID_NEW_STYLE_BY_EXAMPLE 20
-#define ID_UPDATE_STYLE_BY_EXAMPLE 21
-
 #define BT_OK 1
 #define BT_CANCEL 2
 #define BT_ORG 3

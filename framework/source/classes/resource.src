@@ -130,7 +130,6 @@ String STR_STATUSBAR_LOGOTEXT
 // ***********************************************************************
 #define LICENSE_DIALOG_WIDTH  260
 #define LICENSE_RIGHT_BORDER  7
-#define LICENSE_BOTTOM_BORDER  0
 #define LICENSE_ROW_1 (7)
 #define LICENSE_COL_1 (7)
 

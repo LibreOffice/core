@@ -385,9 +385,6 @@ TabPage PAGE_ODBC
 };
 
 //.........................................................................
-#define MYSQL_YDIST 53
-#define MYSQL_FL_Y  8
-#define MYSQL_DRIVERCLASS_Y 8
 
 TabPage PAGE_MYSQL_ODBC
 {

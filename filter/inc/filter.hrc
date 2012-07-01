@@ -30,16 +30,6 @@
 #define RID_XSLT_DIALOG_START       (RID_FILTER_START +  20)
 //      RID_XSLT_DIALOG_END         (RID_FILTER_START +  69)
 
-#define DLG_EXPORT_EPCT                 (RID_GOODIES_START+ 0)
-#define DLG_EXPORT_GIF                  (RID_GOODIES_START+ 1)
-#define DLG_EXPORT_EMET                 (RID_GOODIES_START+ 2)
-#define DLG_EXPORT_JPG                  (RID_GOODIES_START+ 3)
-#define DLG_EXPORT_EPNG                 (RID_GOODIES_START+ 5)
-#define DLG_EXPORT_EPS                  (RID_GOODIES_START+ 8)
-#define DLG_EXPORT_EPBM                 (RID_GOODIES_START+ 9)
-#define DLG_EXPORT_EPGM                 (RID_GOODIES_START+ 10)
-#define DLG_EXPORT_EPPM                 (RID_GOODIES_START+ 11)
-
 // warning, next range is RID_FILTER_START + 100 !
 
 #define HID_FILTER_PDF_OPTIONS      "HID_FILTER_PDF_OPTIONS"

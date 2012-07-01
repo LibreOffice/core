@@ -21,7 +21,6 @@
 
 #include "xmlfiltercommon.hrc"
 
-#define CTRL_SOURCE_VIEW            1
 #define PB_VALIDATE                 2
 
 #endif

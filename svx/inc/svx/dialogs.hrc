@@ -410,18 +410,6 @@
 #define RID_SVX_3D_UNDO_BREAK_LATHE         (RID_SVX_START + 498)
 #define RID_SVX_3D_UNDO_ATTRIBUTES          (RID_SVX_START + 499)
 
-#define RID_STR_FULLNUMS_START              (RID_SVX_START + 500)//?
-#define RID_STR_FULLNUMS_1                  (RID_STR_FULLNUMS_START )//?
-#define RID_STR_FULLNUMS_2                  (RID_STR_FULLNUMS_START + 1)//?
-#define RID_STR_FULLNUMS_3                  (RID_STR_FULLNUMS_START + 2)//?
-#define RID_STR_FULLNUMS_4                  (RID_STR_FULLNUMS_START + 3)//?
-#define RID_STR_FULLNUMS_5                  (RID_STR_FULLNUMS_START + 4)//?
-#define RID_STR_FULLNUMS_6                  (RID_STR_FULLNUMS_START + 5)//?
-#define RID_STR_FULLNUMS_7                  (RID_STR_FULLNUMS_START + 6)//?
-#define RID_STR_FULLNUMS_8                  (RID_STR_FULLNUMS_START + 7)//?
-#define RID_STR_FULLNUMS_7_HTML             (RID_SVX_START + 510)//?
-
-
 // ResIds for graphics drawmode
 #define RID_SVXSTR_GRAFMODE_STANDARD        (RID_SVX_START + 520)
 #define RID_SVXSTR_GRAFMODE_GREYS           (RID_SVX_START + 521)

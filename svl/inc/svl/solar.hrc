@@ -74,8 +74,7 @@
 #define RID_OFA_START               (RID_LIB_START+6900)
 //      RID_OFA_END                 (RID_LIB_START+7399)
 
-#define RID_GOODIES_START           (RID_LIB_START+7400)
-//      RID_GOODIES_END             (RID_LIB_START+7449)
+// free: RID_LIB_START+7400 to +7449
 
 #define RID_SVL_START               (RID_LIB_START+7450)
 //      RID_SVL_END                 (RID_LIB_START+7899)

@@ -102,7 +102,6 @@
 #define FT_HELPFORMAT               15
 #define LB_HELPFORMAT               16
 #define CB_EXPERIMENTAL             18
-#define FT_MACRORECORDER            19
 #define CB_MACRORECORDER            20
 
 #define FL_TWOFIGURE                40

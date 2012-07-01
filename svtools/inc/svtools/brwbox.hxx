@@ -91,7 +91,6 @@ typedef sal_uLong BrowserMode;
 #define BROWSER_NO_VSCROLL           0x8000
 
 #define BROWSER_HIGHLIGHT_NONE       0x0100 // == BROWSER_HIDESELECT
-#define BROWSER_HIGHLIGHT_TOGGLE 0x00000000 // old default => NULL, don't use!
 
 #define BROWSER_HEADERBAR_NEW    0x00040000
 #define BROWSER_AUTOSIZE_LASTCOL 0x00080000
@@ -109,13 +108,10 @@ typedef sal_uLong BrowserMode;
 
 typedef int BrowserColumnMode;
 #define BROWSER_COLUMN_TITLEABBREVATION   1
-#define BROWSER_COLUMN_STANDARD             BROWSER_COLUMN_TITLEABBREVATION
 
 #define BROWSER_NONE                      0
 #define BROWSER_SELECT                  720
-#define BROWSER_EXPANDSELECTION         721
 #define BROWSER_ENHANCESELECTION        722
-#define BROWSER_SELECTALL               723
 #define BROWSER_SELECTDOWN              724
 #define BROWSER_SELECTUP                725
 #define BROWSER_CURSORDOWN              731
@@ -124,8 +120,6 @@ typedef int BrowserColumnMode;
 #define BROWSER_CURSORRIGHT             734
 #define BROWSER_CURSORPAGEDOWN          735
 #define BROWSER_CURSORPAGEUP            736
-#define BROWSER_CURSORPAGERIGHT         735
-#define BROWSER_CURSORPAGELEFT          736
 #define BROWSER_CURSORENDOFFILE         741
 #define BROWSER_CURSORTOPOFFILE         742
 #define BROWSER_CURSORENDOFSCREEN       743

@@ -26,7 +26,7 @@
 #define FT_EXPLORERFILE_CURRENTPATH         10
 #define BTN_EXPLORERFILE_NEWFOLDER          11
 #define BTN_EXPLORERFILE_UP                 12
-#define BTN_EXPLORERFILE_STANDARD           13
+//      BTN_EXPLORERFILE_STANDARD           13
 #define BTN_EXPLORERFILE_OPEN               14
 #define BTN_EXPLORERFILE_CANCEL             15
 #define BTN_EXPLORERFILE_HELP               16
