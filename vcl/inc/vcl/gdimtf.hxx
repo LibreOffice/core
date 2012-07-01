@@ -231,13 +231,13 @@ public:
     sal_uLong       GetChecksum() const;
     sal_uLong       GetSizeBytes() const;
 
-    // Methoden zum Lesen und Schreiben des neuen Formats;
-    // die Read-Methode kann auch das alte Format lesen
+    // Methods for reading and writing the new formats;
+    // the Read method also reads the old format
     SvStream&       Read( SvStream& rIStm );
     SvStream&       Write( SvStream& rOStm, GDIMetaFileWriteFlags = GDIMETAFILE_WRITE_DEFAULT );
 
-    // Stream-Operatoren schreiben das alte Format (noch)
-    // und lesen sowohl das alte wie auch das neue Format
+    // Stream-operators write (still) the old format
+    // and read both the old and the new format
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 

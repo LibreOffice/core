@@ -101,9 +101,11 @@ typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
 // - ApplicationEvent -
 // --------------------
 
-// Erstmal wieder eingebaut, damit AppEvents auf dem MAC funktionieren
+// Build in again, in order to make AppEvents work on MACs
+
+// ATTENTION: ENUM duplicate in daemon.cxx under Unix!
+
 #ifdef UNX
-// enum Doppelt in daemon.cxx unter unix Achtung !!!
 enum Service { SERVICE_OLE, SERVICE_APPEVENT, SERVICE_IPC };
 #endif
 

@@ -87,7 +87,7 @@ typedef enum  {
 extern "C" srv_vendor_t sal_GetServerVendor( Display *p_display );
 
 // -=-= SalRGB -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// MSB/Bigendian Sicht (SalColor == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
+// MSB/Bigendian view (SalColor == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
 
 enum SalRGB { RGB,  RBG,
               GBR,  GRB,

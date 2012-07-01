@@ -123,15 +123,15 @@ public:
     COLORREF                maStockBrushColorAry[MAX_STOCKBRUSH];
     HPEN                    mhStockPenAry[MAX_STOCKPEN];
     HBRUSH                  mhStockBrushAry[MAX_STOCKBRUSH];
-    sal_uInt16                  mnStockPenCount;        // count of static pens
-    sal_uInt16                  mnStockBrushCount;      // count of static brushes
-    WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent, welcher vom SalObj-Hook verarbeitet werden soll
+    sal_uInt16              mnStockPenCount;        // count of static pens
+    sal_uInt16              mnStockBrushCount;      // count of static brushes
+    WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent that should be processed by SalObj-Hook
     BYTE                    mnCacheDCInUse;         // count of CacheDC in use
-    sal_Bool                    mbObjClassInit;         // is SALOBJECTCLASS initialised
-    sal_Bool                    mbInPalChange;          // is in WM_QUERYNEWPALETTE
+    sal_Bool                mbObjClassInit;         // is SALOBJECTCLASS initialised
+    sal_Bool                mbInPalChange;          // is in WM_QUERYNEWPALETTE
     DWORD                   mnAppThreadId;          // Id from Applikation-Thread
-    BOOL                mbScrSvrEnabled;        // ScreenSaver enabled
-    int                     mnSageStatus;           // status of Sage-DLL (DISABLE_AGENT == nicht vorhanden)
+    BOOL                    mbScrSvrEnabled;        // ScreenSaver enabled
+    int                     mnSageStatus;           // status of Sage-DLL (DISABLE_AGENT == does not exist)
     SysAgt_Enable_PROC      mpSageEnableProc;       // funktion to deactivate the system agent
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
@@ -292,7 +292,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_USEREVENT           (WM_USER+130)
 // wParam == 0; lParam == MousePosition relativ to upper left of screen
 #define SAL_MSG_MOUSELEAVE          (WM_USER+131)
-// NULL-Message, soll nicht verarbeitet werden
+// NULL-Message, should not be processed
 #define SAL_MSG_DUMMY               (WM_USER+132)
 // wParam == 0; lParam == 0
 #define SAL_MSG_POSTFOCUS           (WM_USER+133)

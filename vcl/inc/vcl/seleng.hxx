@@ -58,15 +58,15 @@ public:
     virtual void    CreateAnchor() = 0;  // Anker-Pos := Cursor-Pos
     virtual void    DestroyAnchor() = 0;
 
-    // Cursor neu setzen, dabei die beim Anker beginnende
-    // Selektion der neuen Cursor-Position anpassen. sal_True == Ok
+    // move cursor, at the same time match cursor position to the selection
+    // starting at anchor. sal_True == Ok
     virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel,
-                                      sal_Bool bDontSelectAtCursor = sal_False ) = 0;
+                                          sal_Bool bDontSelectAtCursor = sal_False ) = 0;
 
     virtual sal_Bool    IsSelectionAtPoint( const Point& rPointPixel ) = 0;
-    virtual void    DeselectAtPoint( const Point& rPointPixel ) = 0;
-    // Anker loeschen & alles deselektieren
-    virtual void    DeselectAll() = 0;
+    virtual void        DeselectAtPoint( const Point& rPointPixel ) = 0;
+    // delete anchor & deselect all
+    virtual void        DeselectAll() = 0;
 };
 
 // -------------------
@@ -88,11 +88,11 @@ private:
     FunctionSet*        pFunctionSet;
     Window*             pWin;
     Rectangle           aArea;
-    Timer               aWTimer; // erzeugt kuenstliche Mouse-Moves
+    Timer               aWTimer; // generate fake mouse moves
     MouseEvent          aLastMove;
     SelectionMode       eSelMode;
     sal_uLong               nUpdateInterval;
-    // Stufigkeit fuer Mausbewegungen waehrend einer Selektion
+    // sensitivity of mouse moves during a selection
     sal_uInt16              nMouseSensitivity;
     sal_uInt16              nLockedMods;
     sal_uInt16              nFlags;
@@ -107,16 +107,16 @@ public:
                                          sal_uLong nAutoRepeatInterval = SELENG_AUTOREPEAT_INTERVAL );
                         ~SelectionEngine();
 
-    // sal_True: Event wurde von Selection-Engine verarbeitet.
+    // sal_True: Event was processed by Selection Engine
     sal_Bool                SelMouseButtonDown( const MouseEvent& rMEvt );
     sal_Bool                SelMouseButtonUp( const MouseEvent& rMEvt );
     sal_Bool                SelMouseMove( const MouseEvent& rMEvt );
 
-    // Tastatur
+    // Keyboard
     void                CursorPosChanging( sal_Bool bShift, sal_Bool bMod1 );
 
-    // wird benoetigt, um bei ausserhalb des Bereichs stehender
-    // Maus ueber einen Timer Move-Events zu erzeugen
+    // is needed to generate a Move event via a Timer
+    // when the mouse is outside the area
     void                SetVisibleArea( const Rectangle rNewArea )
                             { aArea = rNewArea; }
     const Rectangle&    GetVisibleArea() const { return aArea; }

@@ -205,48 +205,48 @@ public:
 class ImplListBoxWindow : public Control, public ::vcl::ISearchableStringList
 {
 private:
-    ImplEntryList*  mpEntryList;     // EntryListe
+    ImplEntryList*  mpEntryList;     // EntryList
     Rectangle       maFocusRect;
 
     Size            maUserItemSize;
 
-    long            mnMaxTxtHeight;  // Maximale Hoehe eines Text-Items
-    long            mnMaxTxtWidth;   // Maximale Breite eines Text-Items
-                                     // Entry ohne Image
-    long            mnMaxImgTxtWidth;// Maximale Breite eines Text-Items
-                                     // Entry UND Image
-    long            mnMaxImgWidth;   // Maximale Breite eines Image-Items
-    long            mnMaxImgHeight;  // Maximale Hoehe eines Image-Items
-    long            mnMaxWidth;      // Maximale Breite eines Eintrags
-    long            mnMaxHeight;     // Maximale Hoehe eines Eintrags
+    long            mnMaxTxtHeight;  // Maximum height of a text item
+    long            mnMaxTxtWidth;   // Maximum width of a text item
+                                     // Entry without Image
+    long            mnMaxImgTxtWidth;// Maximum width of a text item
+                                     // Entry AND Image
+    long            mnMaxImgWidth;   // Maximum width of an image item
+    long            mnMaxImgHeight;  // Maximum height of an image item
+    long            mnMaxWidth;      // Maximum width of an entry
+    long            mnMaxHeight;     // Maximum heigth of an entry
 
     sal_uInt16          mnCurrentPos;    // Position (Focus)
-    sal_uInt16          mnTrackingSaveSelection; // Selektion vor Tracking();
+    sal_uInt16          mnTrackingSaveSelection; // Selection before Tracking();
 
     sal_uInt16          mnSeparatorPos; // Separator
 
     sal_uInt16          mnUserDrawEntry;
 
-    sal_uInt16          mnTop;           // Ausgabe ab Zeile
-    long            mnLeft;          // Ausgabe ab Spalte
-    long            mnBorder;        // Abstand Rahmen - Text
-    long            mnTextHeight;    // Texthoehe
+    sal_uInt16      mnTop;           // output from line on
+    long            mnLeft;          // output from column on
+    long            mnBorder;        // distance border - text
+    long            mnTextHeight;    // text height
     ProminentEntry  meProminentType; // where is the "prominent" entry
 
     sal_uInt16          mnSelectModifier;   // Modifiers
 
     sal_Bool            mbHasFocusRect:         1,
-                    mbSort:                 1,  // ListBox sortiert
+                    mbSort:                 1,  // ListBox sorted
                     mbTrack:                1,  // Tracking
                     mbMulti:                1,  // MultiListBox
                     mbStackMode:            1,  // StackSelection
-                    mbSimpleMode:           1,  // SimpleMode fuer MultiListBox
-                    mbImgsDiffSz:           1,  // Images haben verschiedene Groessen
+                    mbSimpleMode:           1,  // SimpleMode for MultiListBox
+                    mbImgsDiffSz:           1,  // Images have different sizes
                     mbTravelSelect:         1,  // TravelSelect
-                    mbTrackingSelect:       1,  // Selektiert bei MouseMove
-                    mbSelectionChanged:     1,  // Select() nicht zu oft rufen...
-                    mbMouseMoveSelect:      1,  // Selektieren bei MouseMove
-                    mbGrabFocus:            1,  // Focus bei MBDown grabben
+                    mbTrackingSelect:       1,  // Selected at a MouseMove
+                    mbSelectionChanged:     1,  // Do not call Select() too often ...
+                    mbMouseMoveSelect:      1,  // Select at MouseMove
+                    mbGrabFocus:            1,  // Grab focus at MBDown
                     mbUserDrawEnabled:      1,  // UserDraw possible
                     mbInUserDraw:           1,  // In UserDraw
                     mbReadOnly:             1,  // ReadOnly
@@ -568,7 +568,7 @@ class ImplWin : public Control
 {
 private:
 
-    sal_uInt16          mnItemPos;  // wegen UserDraw muss ich wissen, welches Item ich darstelle.
+    sal_uInt16      mnItemPos;  // because of UserDraw I have to know which item I draw
     XubString       maString;
     Image           maImage;
 
@@ -578,7 +578,7 @@ private:
     Link            maMBDownHdl;
     Link            maUserDrawHdl;
 
-    sal_Bool            mbUserDrawEnabled   : 1,
+    sal_Bool        mbUserDrawEnabled   : 1,
                     mbInUserDraw        : 1;
 
 

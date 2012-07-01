@@ -146,22 +146,22 @@ private:
     VclEventListeners   maEventListeners;
     VclEventListeners   maChildEventListeners;
 
-    XubString           aTitleText;         // PopupMenu-Text
+    XubString           aTitleText;         // PopupMenu text
 
-    sal_uLong               nEventId;
-    sal_uInt16              mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
-    sal_uInt16              nMenuFlags;
-    sal_uInt16              nDefaultItem;       // Id vom Default-Item
-    sal_uInt16              nSelectedId;
+    sal_uLong           nEventId;
+    sal_uInt16          mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
+    sal_uInt16          nMenuFlags;
+    sal_uInt16          nDefaultItem;       // Id of default item
+    sal_uInt16          nSelectedId;
 
-    // Fuer Ausgabe:
-    sal_uInt16              nImgOrChkPos;
-    sal_uInt16              nTextPos;
+    // for output:
+    sal_uInt16          nImgOrChkPos;
+    sal_uInt16          nTextPos;
 
-    sal_Bool                bIsMenuBar  : 1,        // Handelt es sich um den MenuBar
-                        bCanceled   : 1,        // Waehrend eines Callbacks abgebrochen
+    sal_Bool            bIsMenuBar  : 1,        // Is this a menubar?
+                        bCanceled   : 1,        // Terminated during a callback
                         bInCallback : 1,        // In Activate/Deactivate
-                        bKilled     : 1;        // Gekillt...
+                        bKilled     : 1;        // Killed...
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
     mutable vcl::MenuLayoutData* mpLayoutData;

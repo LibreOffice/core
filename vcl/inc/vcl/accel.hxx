@@ -54,12 +54,12 @@ private:
     Link            maDeactivateHdl;
     Link            maSelectHdl;
 
-    // Werden vom AcceleratorManager gesetzt
+    // Will be set by AcceleratorManager
     KeyCode         maCurKeyCode;
-    sal_uInt16          mnCurId;
-    sal_uInt16          mnCurRepeat;
-    sal_Bool            mbIsCancel;
-    sal_Bool*           mpDel;
+    sal_uInt16      mnCurId;
+    sal_uInt16      mnCurRepeat;
+    sal_Bool        mbIsCancel;
+    sal_Bool*       mpDel;
 
     SAL_DLLPRIVATE  void        ImplInit();
     SAL_DLLPRIVATE  void        ImplCopyData( ImplAccelData& rAccelData );

@@ -314,29 +314,29 @@ public: // TODO: hide members behind accessor methods
     // font metrics that are usually derived from the measurements
     long                mnUnderlineSize;            // Lineheight of Underline
     long                mnUnderlineOffset;          // Offset from Underline to Baseline
-    long                mnBUnderlineSize;           // Hoehe von fetter Unterstreichung
-    long                mnBUnderlineOffset;         // Offset von fetter Unterstreichung zur Baseline
-    long                mnDUnderlineSize;           // Hoehe von doppelter Unterstreichung
-    long                mnDUnderlineOffset1;        // Offset von doppelter Unterstreichung zur Baseline
-    long                mnDUnderlineOffset2;        // Offset von doppelter Unterstreichung zur Baseline
-    long                mnWUnderlineSize;           // Hoehe von WaveLine-Unterstreichung
-    long                mnWUnderlineOffset;         // Offset von WaveLine-Unterstreichung zur Baseline, jedoch zentriert zur WaveLine
-    long                mnAboveUnderlineSize;       // Hoehe von einfacher Unterstreichung (for Vertical Right)
-    long                mnAboveUnderlineOffset;     // Offset von einfacher Unterstreichung zur Baseline (for Vertical Right)
-    long                mnAboveBUnderlineSize;      // Hoehe von fetter Unterstreichung (for Vertical Right)
-    long                mnAboveBUnderlineOffset;    // Offset von fetter Unterstreichung zur Baseline (for Vertical Right)
-    long                mnAboveDUnderlineSize;      // Hoehe von doppelter Unterstreichung (for Vertical Right)
-    long                mnAboveDUnderlineOffset1;   // Offset von doppelter Unterstreichung zur Baseline (for Vertical Right)
-    long                mnAboveDUnderlineOffset2;   // Offset von doppelter Unterstreichung zur Baseline (for Vertical Right)
-    long                mnAboveWUnderlineSize;      // Hoehe von WaveLine-Unterstreichung (for Vertical Right)
-    long                mnAboveWUnderlineOffset;    // Offset von WaveLine-Unterstreichung zur Baseline, jedoch zentriert zur WaveLine (for Vertical Right)
-    long                mnStrikeoutSize;            // Hoehe von einfacher Durchstreichung
-    long                mnStrikeoutOffset;          // Offset von einfacher Durchstreichung zur Baseline
-    long                mnBStrikeoutSize;           // Hoehe von fetter Durchstreichung
-    long                mnBStrikeoutOffset;         // Offset von fetter Durchstreichung zur Baseline
-    long                mnDStrikeoutSize;           // Hoehe von doppelter Durchstreichung
-    long                mnDStrikeoutOffset1;        // Offset von doppelter Durchstreichung zur Baseline
-    long                mnDStrikeoutOffset2;        // Offset von doppelter Durchstreichung zur Baseline
+    long                mnBUnderlineSize;           // Height of bold underline
+    long                mnBUnderlineOffset;         // Offset from bold underline to baseline
+    long                mnDUnderlineSize;           // Height of double underline
+    long                mnDUnderlineOffset1;        // Offset from double underline to baseline
+    long                mnDUnderlineOffset2;        // Offset from double underline to baseline
+    long                mnWUnderlineSize;           // Height of WaveLine underline
+    long                mnWUnderlineOffset;         // Offset from WaveLine underline to baseline, but centrered to WaveLine
+    long                mnAboveUnderlineSize;       // Height of single underline (for Vertical Right)
+    long                mnAboveUnderlineOffset;     // Offset from single underline to baseline (for Vertical Right)
+    long                mnAboveBUnderlineSize;      // Height of bold underline (for Vertical Right)
+    long                mnAboveBUnderlineOffset;    // Offset from bold underline to baseline (for Vertical Right)
+    long                mnAboveDUnderlineSize;      // Height of double underline (for Vertical Right)
+    long                mnAboveDUnderlineOffset1;   // Offset from double underline to baseline (for Vertical Right)
+    long                mnAboveDUnderlineOffset2;   // Offset from double underline to baseline (for Vertical Right)
+    long                mnAboveWUnderlineSize;      // Height of WaveLine-strike-out (for Vertical Right)
+    long                mnAboveWUnderlineOffset;    // Offset from WaveLine-strike-out to baseline, but centrered to to WaveLine (for Vertical Right)
+    long                mnStrikeoutSize;            // Height of single strike-out
+    long                mnStrikeoutOffset;          // Offset from single strike-out to baseline
+    long                mnBStrikeoutSize;           // Height of bold strike-out
+    long                mnBStrikeoutOffset;         // Offset of bold strike-out to baseline
+    long                mnDStrikeoutSize;           // Height of double strike-out
+    long                mnDStrikeoutOffset1;        // Offset of double strike-out to baseline
+    long                mnDStrikeoutOffset2;        // Offset of double strike-out to baseline
 };
 
 // -----------------

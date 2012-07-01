@@ -44,8 +44,8 @@ class FontSelectPattern;
 // - SalExtInput -
 // ---------------
 
-// Muessen mit den Defines in cmdevt.hxx uebereinstimmen, da diese
-// nicht konvertiert werden
+// Have to match DEFINEs in cmdevt.hxx, as these will not be converted
+
 #define SAL_EXTTEXTINPUT_ATTR_GRAYWAVELINE          ((sal_uInt16)0x0100)
 #define SAL_EXTTEXTINPUT_ATTR_UNDERLINE             ((sal_uInt16)0x0200)
 #define SAL_EXTTEXTINPUT_ATTR_BOLDUNDERLINE         ((sal_uInt16)0x0400)
@@ -115,26 +115,26 @@ class FontSelectPattern;
 // MAC: Ctrl+Button is MOUSE_RIGHT
 struct SalMouseEvent
 {
-    sal_uLong           mnTime;         // Time in ms, when event is created
+    sal_uLong       mnTime;         // Time in ms, when event is created
     long            mnX;            // X-Position (Pixel, TopLeft-Output)
     long            mnY;            // Y-Position (Pixel, TopLeft-Output)
-    sal_uInt16          mnButton;       // 0-MouseMove/MouseLeave, MOUSE_LEFT, MOUSE_RIGHT, MOUSE_MIDDLE
-    sal_uInt16          mnCode;         // SV-ModifierCode (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)
+    sal_uInt16      mnButton;       // 0-MouseMove/MouseLeave, MOUSE_LEFT, MOUSE_RIGHT, MOUSE_MIDDLE
+    sal_uInt16      mnCode;         // SV-Modifiercode (KEY_SHIFT|KEY_MOD1|KEY_MOD2|MOUSE_LEFT|MOUSE_MIDDLE|MOUSE_RIGHT)
 };
 
 // KEYINPUT and KEYUP
 struct SalKeyEvent
 {
-    sal_uLong           mnTime;         // Time in ms, when event is created
-    sal_uInt16          mnCode;         // SV-KeyCode (KEY_xxx | KEY_SHIFT | KEY_MOD1 | KEY_MOD2)
-    sal_uInt16          mnCharCode;     // SV-CharCode
-    sal_uInt16          mnRepeat;       // Repeat-Count (KeyInputs-1)
+    sal_uLong       mnTime;         // Time in ms, when event is created
+    sal_uInt16      mnCode;         // SV-KeyCode (KEY_xxx | KEY_SHIFT | KEY_MOD1 | KEY_MOD2)
+    sal_uInt16      mnCharCode;     // SV-CharCode
+    sal_uInt16      mnRepeat;       // Repeat-Count (KeyInputs-1)
 };
 
 // MENUEVENT
 struct SalMenuEvent
 {
-    sal_uInt16          mnId;           // Menu item ID
+    sal_uInt16      mnId;           // Menu item ID
     void*           mpMenu;         // pointer to VCL menu (class Menu)
 
     SalMenuEvent() : mnId( 0 ), mpMenu( NULL ) {}
@@ -145,9 +145,9 @@ struct SalMenuEvent
 // KEYMODCHANGE
 struct SalKeyModEvent
 {
-    sal_uLong           mnTime;         // Time in ms, when event is created
-    sal_uInt16          mnCode;         // SV-ModifierCode (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)
-    sal_uInt16          mnModKeyCode;   // extended Modifier (MODKEY_LEFT, MODKEY_RIGHT, MODKEY_PRESS, MODKEY_RELEASE)
+    sal_uLong       mnTime;         // Time in ms, when event is created
+    sal_uInt16      mnCode;         // SV-Modifiercode (KEY_SHIFT|KEY_MOD1|KEY_MOD2)
+    sal_uInt16      mnModKeyCode;   // extended Modifier (MODKEY_LEFT,MODKEY_RIGHT,MODKEY_PRESS,MODKEY_RELEASE)
 };
 
 // PAINT
@@ -173,15 +173,15 @@ struct SalPaintEvent
 #define SAL_WHEELMOUSE_EVENT_PAGESCROLL     ((sal_uLong)0xFFFFFFFF)
 struct SalWheelMouseEvent
 {
-    sal_uLong           mnTime;         // Time in ms, when event is created
+    sal_uLong       mnTime;         // Time in ms, when event is created
     long            mnX;            // X-Position (Pixel, TopLeft-Output)
     long            mnY;            // Y-Position (Pixel, TopLeft-Output)
-    long            mnDelta;        // Anzahl Drehungen
-    long            mnNotchDelta;   // Anzahl feste Drehungen
-    sal_uLong           mnScrollLines;  // Aktuelle Anzahl zu scrollende Zeilen
-    sal_uInt16          mnCode;         // SV-ModifierCode (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)
-    sal_Bool            mbHorz;         // Horizontal
-    sal_Bool            mbDeltaIsPixel; // delta value is a pixel value (on mac)
+    long            mnDelta;        // Number of rotations
+    long            mnNotchDelta;   // Number of fixed rotations
+    sal_uLong       mnScrollLines;  // Actual number of lines to scroll
+    sal_uInt16      mnCode;         // SV-Modifiercode (KEY_SHIFT|KEY_MOD1|KEY_MOD2|MOUSE_LEFT|MOUSE_MIDDLE|MOUSE_RIGHT)
+    sal_Bool        mbHorz;         // Horizontal
+    sal_Bool        mbDeltaIsPixel; // delta value is a pixel value (on mac)
 
     SalWheelMouseEvent()
     : mnTime( 0 ), mnX( 0 ), mnY( 0 ), mnDelta( 0 ), mnNotchDelta( 0 ), mnScrollLines( 0 ), mnCode( 0 ), mbHorz( sal_False ), mbDeltaIsPixel( sal_False )
@@ -201,12 +201,12 @@ struct SalMouseActivateEvent
 struct SalExtTextInputEvent
 {
     sal_uLong           mnTime;         // Time in ms, when event is created
-    UniString       maText;         // Text
+    UniString           maText;         // Text
     const sal_uInt16*   mpTextAttr;     // Text-Attribute
     sal_uLong           mnCursorPos;    // Cursor-Position
-    sal_uLong           mnDeltaStart;   // Start-Position der letzten Aenderung
-    sal_uInt8            mnCursorFlags;  // SAL_EXTTEXTINPUT_CURSOR_xxx
-    sal_Bool            mbOnlyCursor;   // sal_True: Nur Cursor-Position wurde geaendert
+    sal_uLong           mnDeltaStart;   // Start-Position of last change
+    sal_uInt8           mnCursorFlags;  // SAL_EXTTEXTINPUT_CURSOR_xxx
+    sal_Bool            mbOnlyCursor;   // sal_True: Only Cursor-Position has been changed
 };
 
 #endif // __cplusplus
@@ -227,7 +227,7 @@ struct SalExtTextInputPosEvent
 // INPUTCONTEXTCHANGE
 struct SalInputContextChangeEvent
 {
-    LanguageType    meLanguage;     // Neue Sprache
+    LanguageType    meLanguage;     // new language
 };
 
 #endif // __cplusplus
@@ -238,8 +238,8 @@ struct SalInputContextChangeEvent
 struct SalSurroundingTextRequestEvent
 {
     UniString       maText;         // Text
-    sal_uLong           mnStart;        // The beggining index of selected range
-    sal_uLong           mnEnd;          // The end index of selected range
+    sal_uLong       mnStart;        // The beginning index of selected range
+    sal_uLong       mnEnd;          // The end index of selected range
 };
 
 #endif // __cplusplus
@@ -249,8 +249,8 @@ struct SalSurroundingTextRequestEvent
 // SURROUNDINGTEXTSELECTIONCHANGE
 struct SalSurroundingTextSelectionChangeEvent
 {
-    sal_uLong           mnStart;        // The beggining index of selected range
-    sal_uLong           mnEnd;          // The end index of selected range
+    sal_uLong       mnStart;        // The beginning index of selected range
+    sal_uLong       mnEnd;          // The end index of selected range
 };
 
 #endif // __cplusplus
@@ -303,7 +303,7 @@ typedef long (*SALOBJECTPROC)( void* pInst, SalObject* pObject,
 
 struct SalFrameState
 {
-    sal_uLong           mnMask;
+    sal_uLong       mnMask;
     long            mnX;
     long            mnY;
     long            mnWidth;
@@ -312,15 +312,14 @@ struct SalFrameState
     long            mnMaximizedY;
     long            mnMaximizedWidth;
     long            mnMaximizedHeight;
-    sal_uLong           mnState;
+    sal_uLong       mnState;
 };
 
 // -------------------
 // - SalInputContext -
 // -------------------
 
-// Muessen mit den Defines in inputctx.hxx uebereinstimmen, da diese
-// nicht konvertiert werden
+// Have to match DEFINEs in inputctx.hxx, as these are not converted
 #define SAL_INPUTCONTEXT_TEXT               ((sal_uLong)0x00000001)
 #define SAL_INPUTCONTEXT_EXTTEXTINPUT       ((sal_uLong)0x00000002)
 #define SAL_INPUTCONTEXT_EXTTEXTINPUT_ON    ((sal_uLong)0x00000004)

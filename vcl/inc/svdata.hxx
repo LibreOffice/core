@@ -149,21 +149,21 @@ struct ImplSVAppData
     ImplHotKey*             mpFirstHotKey;      // HotKey-Verwaltung
     ImplEventHook*          mpFirstEventHook;   // Event-Hooks
     VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
-    sal_uLong                   mnLastInputTime;                // GetLastInputTime()
-    sal_uInt16                  mnDispatchLevel;                // DispatchLevel
-    sal_uInt16                  mnModalMode;                    // ModalMode Count
-    sal_uInt16                  mnModalDialog;                  // ModalDialog Count
-    sal_uInt16                  mnAccessCount;                  // AccessHdl Count
-    sal_uInt16                  mnSysWinMode;                   // Modus, wann SystemWindows erzeugt werden sollen
-    sal_uInt16                  mnLayout;                       // --- RTL-Flags --- currently not used, only for testing
+    sal_uLong               mnLastInputTime;                // GetLastInputTime()
+    sal_uInt16              mnDispatchLevel;                // DispatchLevel
+    sal_uInt16              mnModalMode;                    // ModalMode Count
+    sal_uInt16              mnModalDialog;                  // ModalDialog Count
+    sal_uInt16              mnAccessCount;                  // AccessHdl Count
+    sal_uInt16              mnSysWinMode;                   // Mode, when SystemWindows should be created
+    sal_uInt16              mnLayout;                       // --- RTL-Flags --- currently not used, only for testing
     short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
-    sal_Bool                    mbInAppMain;                    // is Application::Main() on stack
-    sal_Bool                    mbInAppExecute;                 // is Application::Execute() on stack
-    sal_Bool                    mbAppQuit;                      // is Application::Quit() called
-    sal_Bool                    mbSettingsInit;                 // sal_True: Settings are initialized
-    sal_Bool                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
+    sal_Bool                mbInAppMain;                    // is Application::Main() on stack
+    sal_Bool                mbInAppExecute;                 // is Application::Execute() on stack
+    sal_Bool                mbAppQuit;                      // is Application::Quit() called
+    sal_Bool                mbSettingsInit;                 // sal_True: Settings are initialized
+    sal_Bool                mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
-    Application::DialogCancelMode meDialogCancel;               // sal_True: Alle Dialog::Execute()-Aufrufe werden mit return sal_False sofort beendet
+    Application::DialogCancelMode meDialogCancel;           // sal_True: All Dialog::Execute() calls will be terminated immediately with return sal_False
     long                    mnDefaultLayoutBorder;          // default value in pixel for layout distances used
                                                             // in window arrangers
 
@@ -202,7 +202,7 @@ struct ImplSVGDIData
     long                    mnRealAppFontX;     // AppFont X-Numenator for 40/tel Width
     long                    mnAppFontX;         // AppFont X-Numenator for 40/tel Width + DialogScaleX
     long                    mnAppFontY;         // AppFont Y-Numenator for 80/tel Height
-    sal_Bool                    mbFontSubChanged;   // sal_True: FontSubstitution wurde zwischen Begin/End geaendert
+    sal_Bool                    mbFontSubChanged;   // sal_True: FontSubstitution was changed between Begin/End
     utl::DefaultFontConfiguration* mpDefaultFontConfiguration;
     utl::FontSubstConfiguration* mpFontSubstConfiguration;
     bool                    mbNativeFontConfig; // true: do not override UI font
@@ -225,17 +225,17 @@ struct ImplSVWinData
     Window*                 mpLastDeacWin;      // Window, that need a deactivate (FloatingWindow-Handling)
     DbgWindow*              mpDbgWin;           // debug window
     FloatingWindow*         mpFirstFloat;       // First FloatingWindow in PopupMode
-    Dialog*                 mpLastExecuteDlg;   // Erster Dialog, der sich in Execute befindet
+    Dialog*                 mpLastExecuteDlg;   // First Dialog that is in Execute
     Window*                 mpExtTextInputWin;  // Window, which is in ExtTextInput
     Window*                 mpTrackWin;         // window, that is in tracking mode
     AutoTimer*              mpTrackTimer;       // tracking timer
     ImageList*              mpMsgBoxImgList;    // ImageList for MessageBox
     Window*                 mpAutoScrollWin;    // window, that is in AutoScrollMode mode
-    sal_uInt16                  mnTrackFlags;       // tracking flags
-    sal_uInt16                  mnAutoScrollFlags;  // auto scroll flags
-    sal_Bool                    mbNoDeactivate;     // sal_True: keine Deactivate durchfuehren
-    sal_Bool                    mbNoSaveFocus;      // sal_True: menus must not save/restore focus
-    sal_Bool                    mbNoSaveBackground; // sal_True: save background is unnecessary or even less performant
+    sal_uInt16              mnTrackFlags;       // tracking flags
+    sal_uInt16              mnAutoScrollFlags;  // auto scroll flags
+    sal_Bool                mbNoDeactivate;     // sal_True: do not execute Deactivate
+    sal_Bool                mbNoSaveFocus;      // sal_True: menus must not save/restore focus
+    sal_Bool                mbNoSaveBackground; // sal_True: save background is unnecessary or even less performant
 };
 
 

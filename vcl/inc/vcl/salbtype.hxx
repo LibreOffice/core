@@ -103,11 +103,9 @@ class VCL_DLLPUBLIC BitmapColor
 {
 private:
 
-// !!! Achtung:
-// !!! da auf die Member dieser Klasse via memcpy
-// !!! zugegriffen wird, darf diese Klasse weder
-// !!! in der Groesse noch der Reihenfolge der
-// !!! Member veraendert werden (KA 02.09.97)
+// ATTENTION:
+//   Because the members of this class are accessed via memcpy,
+//   you MUST NOT CHANGE the order of the members or the size of this class!
     sal_uInt8               mcBlueOrIndex;
     sal_uInt8               mcGreen;
     sal_uInt8               mcRed;
@@ -731,13 +729,13 @@ inline long ColorMask::ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_u
     long    nRet;
     sal_uLong   nLen = 0UL;
 
-    // bei welchen Bits faengt die Maske an
+    // from which bit starts the mask?
     for( nShift = 31L; ( nShift >= 0L ) && !( nMask & ( 1 << (sal_uLong) nShift ) ); nShift-- )
     {}
 
     nRet = nShift;
 
-    // XXX Anzahl der gesetzten Bits ermitteln => nach rechts bis Null laufen
+    // XXX determine number of bits set => walk right until null
     while( ( nShift >= 0L ) && ( nMask & ( 1 << (sal_uLong) nShift ) ) )
     {
         nShift--;

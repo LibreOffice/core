@@ -40,9 +40,9 @@ class HelpTextWindow : public FloatingWindow
 {
 private:
     Point               maPos;
-    Rectangle           maHelpArea; // Wenn naechste Hilfe fuers gleiche Rectangle, gleicher Text, dann Fenster stehen lassen
+    Rectangle           maHelpArea; // If next Help for the same rectangle w/ same text, then keep window
 
-    Rectangle           maTextRect; // Bei umgebrochenen Text in QuickHelp
+    Rectangle           maTextRect; // For wrapped text in QuickHelp
 
     String              maHelpText;
     String              maStatusText;
