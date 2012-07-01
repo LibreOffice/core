@@ -123,10 +123,6 @@ public:
     inline void SetPropFont( const sal_uInt8 nNew ) { nPropFont = nNew; }
 
     inline SwAttrHandler& GetAttrHandler() { return aAttrHandler; }
-
-#ifdef DBG_UTIL
-    void Dump( SvStream &rOS ) const;
-#endif
 };
 
 #endif

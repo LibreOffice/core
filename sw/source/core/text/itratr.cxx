@@ -344,18 +344,6 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
     return nNext;
 }
 
-#ifdef DBG_UTIL
-/*************************************************************************
- *                      SwAttrIter::Dump()
- *************************************************************************/
-
-void SwAttrIter::Dump( SvStream &/*rOS*/ ) const
-{
-// Noch nicht an den neuen Attributiterator angepasst ...
-}
-
-#endif
-
 class SwMinMaxArgs
 {
 public:
