@@ -341,7 +341,6 @@ inline TrackingEvent::TrackingEvent( const MouseEvent& rMEvt,
 #define EVENT_INPUTDISABLE      11
 #define EVENT_EXECUTEDIALOG     100
 #define EVENT_ENDEXECUTEDIALOG  101
-#define EVENT_USER              10000
 
 class VCL_DLLPUBLIC NotifyEvent
 {

@@ -83,8 +83,6 @@ namespace {
     static bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
 }
 
-#define MAX_TXTPORLEN 300
-
 inline void ClearFly( SwTxtFormatInfo &rInf )
 {
     delete rInf.GetFly();

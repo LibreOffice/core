@@ -581,8 +581,6 @@ int SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 // -----------------------------------------------------------------------
 
-#define IS_DONT_CARE(a) ((a).GetState() == svx::FRAMESTATE_DONTCARE )
-
 sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );

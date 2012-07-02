@@ -34,18 +34,6 @@
 #  define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 #endif
 
-#define OU2A(rtlOUString) \
-    ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
-    RTL_TEXTENCODING_ASCII_US).getStr()
-
-#define OU2UTF8(rtlOUString) \
-    ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
-    RTL_TEXTENCODING_UTF8).getStr()
-
-#define OU2ISO_1(rtlOUString) \
-    ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
-    RTL_TEXTENCODING_ISO_8859_1).getStr()
-
 #define OU2ENC(rtlOUString, rtlEncoding) \
     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
     rtlEncoding, RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr()

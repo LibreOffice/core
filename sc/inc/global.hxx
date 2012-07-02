@@ -115,8 +115,6 @@ const SCSIZE MAXSUBTOTAL        = 3;
 #define POINTS_PER_INCH     TEX_POINTS_PER_INCH
 #endif
 #define PIXEL_PER_POINT     (PIXEL_PER_INCH / POINTS_PER_INCH)
-#define INCH_PER_CM         (1.0 / CM_PER_INCH)
-#define POINTS_PER_CM       (POINTS_PER_INCH / CM_PER_INCH)
 #define TWIPS_PER_POINT     20.0
 #define TWIPS_PER_INCH      (TWIPS_PER_POINT * POINTS_PER_INCH)
 #define TWIPS_PER_CM        (TWIPS_PER_INCH / CM_PER_INCH)
@@ -160,14 +158,6 @@ namespace sc
 #define OLE_STD_CELLS_Y     5
 
 #define SC_SIZE_OPTIMUM     0xFFFF
-
-                                    // update flags
-#define UF_SCROLL_LEFT      1
-#define UF_SCROLL_RIGHT     2
-#define UF_SCROLL_UP        4
-#define UF_SCROLL_DOWN      8
-#define UF_ROW              16
-#define UF_VIEW             32
 
                                     // repaint flags (for messages)
 #define PAINT_GRID          1
@@ -220,8 +210,6 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 #define PASTE_SUB           2
 #define PASTE_MUL           3
 #define PASTE_DIV           4
-
-#define PASTE_NONEMPTY      5
 
                                         // bits for HasAttr
 #define HASATTR_LINES           1
@@ -281,11 +269,6 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
                                     // is bit set in set?
 #define IS_SET(bit,set)(((set)&(bit))==(bit))
-
-#define SEL_ALL         -1  // input line: select all
-#define RES_CANCEL      0   // results of function AutoPilot pages
-#define RES_BACKWARD    1
-#define RES_END         2
 
 enum CellType
     {

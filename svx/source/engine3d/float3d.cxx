@@ -57,9 +57,7 @@
 
 #include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
-
 #include <svx/gallery.hxx>
-#define GALLERY_THEME "3D"
 #include <svl/whiter.hxx>
 
 #include <svx/float3d.hxx>

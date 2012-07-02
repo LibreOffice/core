@@ -196,21 +196,6 @@ SFX_DECL_TYPE(18); // for SvxSearchItem
                  0, 0, 0, 0, 0, 0, 0 \
                }
 
-#define SFX_SLOT_ATTR( id, GroupId, Dummy, ExecMethodPtr, StateMethodPtr, Flags, ItemClass ) \
-               { id, GroupId, id, Flags, \
-                 USHRT_MAX, 0, \
-                 ExecMethodPtr, \
-                 StateMethodPtr, \
-                 (const SfxType*) &a##ItemClass##_Impl, \
-                 0, 0, 0, 0, 0, 0, 0 \
-               }
-
-#define SFX_SLOT_ENUM( SlaveId, GroupId, MasterId, Value, Flags ) \
-               { SlaveId, GroupId, id, Flags,    \
-                 MasterId,  Value, 0, 0, \
-                 (const SfxType*) &aSfxBoolItem_Impl, \
-                 0, 0, 0, 0, 0, 0, 0 \
-               }
 #define SFX_NEW_SLOT_ARG( aShellClass, id, hid, GroupId, pLinked, pNext, ExecMethodPtr, StateMethodPtr, Flags, DisableFlags, ItemClass, nArg0, nArgs, Name, Prop, UnoName ) \
                { id, GroupId, hid, Flags | Prop, \
                  USHRT_MAX, 0, \

@@ -53,7 +53,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #define PIVOT_DATA_FIELD        (MAXCOLCOUNT)
-#define PIVOT_FUNC_REF          (MAXCOLCOUNT)
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>

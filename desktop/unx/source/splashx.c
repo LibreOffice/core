@@ -99,9 +99,6 @@ struct splash
 #define PROGRESS_YOFFSET 18
 #define PROGRESS_BARSPACE 2
 
-#define BMP_HEADER_LEN 14
-#define WIN_INFO_LEN 40
-
 #define UINT8( x )      ( (unsigned int)( ( (uint8_t *)( x ) )[0] ) )
 
 #define UINT16( x ) (   ( (unsigned int)( ( (uint8_t *)( x ) )[0] ) ) + \
@@ -113,13 +110,6 @@ struct splash
                       ( ( (unsigned int)( ( (uint8_t *)( x ) )[3] ) ) << 24 ) )
 
 #define MAX( x, y ) ( ( (x) > (y) )? (x): (y) )
-
-#define LOAD_FAILURE( msg ) \
-    { \
-        fprintf( stderr, "%s: " msg, filename ); \
-        close( fd ); \
-        return 0; \
-    }
 
 /* libpng-1.2.41 */
 #ifndef PNG_TRANSFORM_GRAY_TO_RGB

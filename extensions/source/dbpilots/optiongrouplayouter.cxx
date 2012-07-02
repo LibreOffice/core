@@ -45,7 +45,6 @@ namespace dbp
 //.........................................................................
 
 #define BUTTON_HEIGHT       300
-#define TOP_HEIGHT          300
 #define HEIGHT              450
 #define OFFSET              300
 #define MIN_WIDTH           600

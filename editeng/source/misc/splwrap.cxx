@@ -90,9 +90,6 @@ void SvxPrepareAutoCorrect( String &rOldText, String &rNewText )
 #define SVX_LANG_MISSING            2
 #define SVX_LANG_MISSING_DO_WARN    3
 
-#define SVX_FLAGS_NEW
-
-
 struct lt_LanguageType
 {
     bool operator()( LanguageType n1, LanguageType n2 ) const

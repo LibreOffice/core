@@ -7950,7 +7950,6 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
     }
 }
 
-#define WCONV( x ) m_pReferenceDevice->ImplDevicePixelToLogicWidth( x )
 #define HCONV( x ) m_pReferenceDevice->ImplDevicePixelToLogicHeight( x )
 
 void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove )

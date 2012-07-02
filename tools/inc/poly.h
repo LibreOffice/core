@@ -31,8 +31,6 @@
 
 #include <tools/gen.hxx>
 
-#define MAX_64KPOINTS       ((((sal_uInt16)0xFFFF)-32)/sizeof(Point))
-
 // -------------------
 // - ImplPolygonData -
 // -------------------

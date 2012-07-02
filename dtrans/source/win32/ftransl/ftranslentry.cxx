@@ -37,11 +37,6 @@
 // the implementation names
 #define IMPL_NAME  "com.sun.star.datatransfer.DataFormatTranslator"
 
-// the registry key names
-// a key under which this service will be registered, Format: -> "/ImplName/UNO/SERVICES/ServiceName"
-//                        <     Implementation-Name    ></UNO/SERVICES/><    Service-Name           >
-#define REGKEY_NAME  "/com.sun.star.datatransfer.DataFormatTranslator/UNO/SERVICES/com.sun.star.datatransfer.DataFormatTranslator"
-
 //-----------------------------------------------------------------------------------------------------------
 // namespace directives
 //-----------------------------------------------------------------------------------------------------------

@@ -174,8 +174,6 @@
 /* (Re)Allocate N items of type T using malloc, or fail.  */
 #define TALLOC(n, t) ((t *) malloc ((n) * sizeof (t)))
 #define RETALLOC(addr, n, t) ((addr) = (t *) realloc (addr, (n) * sizeof (t)))
-#define RETALLOC_IF(addr, n, t) \
-  if (addr) RETALLOC((addr), (n), t); else (addr) = TALLOC ((n), t)
 #define REGEX_TALLOC(n, t) ((t *) REGEX_ALLOCATE ((n) * sizeof (t)))
 
 #define BYTEWIDTH 16    /* In bits (assuming sizeof(sal_Unicode)*8) */

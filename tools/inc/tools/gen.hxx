@@ -268,7 +268,6 @@ inline Size::Size( long nWidth, long nHeight ) :
 // - Range -
 // ---------
 
-#define RANGE_MIN   LONG_MIN
 #define RANGE_MAX   LONG_MAX
 
 class Range : public Pair

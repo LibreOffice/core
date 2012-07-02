@@ -550,8 +550,6 @@ ScNavigatorSettings::ScNavigatorSettings() :
 
 SFX_IMPL_CHILDWINDOWCONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR )
 
-#define IS_MODE(bit)(((nFlags)&(bit))==(bit))
-
 ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
                                     Window*          pParent,
                                     sal_uInt16           nId,

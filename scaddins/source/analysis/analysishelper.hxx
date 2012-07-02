@@ -43,7 +43,6 @@ class ScaAnyConverter;
 
 
 #define PI          3.1415926535897932
-#define PI_2        (PI/2.0)
 #define EOL         ( ( const sal_Char* ) 1 )
 #define EOE         ( ( const sal_Char* ) 2 )
 

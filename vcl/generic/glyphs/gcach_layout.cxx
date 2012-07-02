@@ -159,8 +159,6 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
 
 #ifdef ENABLE_ICU_LAYOUT
 
-#define bool_t signed char
-
 // disable warnings in icu layout headers
 #if defined __SUNPRO_CC
 #pragma disable_warn

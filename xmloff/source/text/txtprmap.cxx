@@ -71,14 +71,10 @@ using namespace ::xmloff::token;
 // section properties
 #define MS_E( a, p, l, t, c ) \
     _M_E( a, p, l, (t|XML_TYPE_PROP_SECTION), c )
-#define MS_ED( a, p, l, t, c ) \
-    _M_ED( a, p, l, (t|XML_TYPE_PROP_SECTION), c )
 
 // ruby properties
 #define MR_E( a, p, l, t, c ) \
     _M_E( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
-#define MR_ED( a, p, l, t, c ) \
-    _M_ED( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
 
 #define M_END() \
     { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }

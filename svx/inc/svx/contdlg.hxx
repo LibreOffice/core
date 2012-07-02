@@ -101,16 +101,6 @@ public:
                                             const sal_uIntPtr nFlags = 0L );
 };
 
-/*************************************************************************
-|*
-|* Defines
-|*
-\************************************************************************/
-
-#define SVXCONTOURDLG() ( (SvxContourDlg*) ( SfxViewFrame::Current()->GetChildWindow(   \
-                          SvxContourDlgChildWindow::GetChildWindowId() )->  \
-                          GetWindow() ) )
-
 #endif // _REDUCED_CONTDLG_HXX_
 #endif // _CONTDLG_HXX_
 

@@ -101,11 +101,6 @@ using namespace ::sfx2;
 static const sal_Unicode aDeliStart = '['; // for the form
 static const sal_Unicode aDeliEnd    = ']'; // for the form
 
-#define POS_GRF     0
-#define POS_OLE     1
-#define POS_TABLE   2
-#define POS_FRAME   3
-
 #define IDX_FILE_EXTENSION rtl::OUString("*.sdi")
 
 String lcl_CreateAutoMarkFileDlg( const String& rURL,

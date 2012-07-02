@@ -71,8 +71,6 @@
 #include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 
-#define RET_DELETE  100
-
 namespace sd {
 
 /*************************************************************************

@@ -137,9 +137,6 @@ const char *pButtonNames[NUM_BUTTONS] =
 #define BTN_MORE    10
 #define BTN_LESS    11
 
-// Fuer Detectfilter
-#define CALC_OPTIONS        "9,34,SYSTEM"
-
 // *********************************************************************
 // Hilfsklasse fuer das simple erzeugen von Dateien lokal/remote
 // *********************************************************************

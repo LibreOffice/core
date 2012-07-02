@@ -47,7 +47,6 @@
 
 
 #define XMLNS_MENU                  "http://openoffice.org/2001/menu"
-#define XMLNS_PREFIX                "menu:"
 
 #define ELEMENT_MENUBAR             "http://openoffice.org/2001/menu^menubar"
 #define ELEMENT_MENU                "http://openoffice.org/2001/menu^menu"

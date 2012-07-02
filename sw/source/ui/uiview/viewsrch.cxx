@@ -73,10 +73,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::i18n;
 
-#define SRCH_ATTR_OFF   0
-#define SRCH_ATTR_ON    1
-#define SRCH_ATTR_SET   2
-
 /*--------------------------------------------------------------------
     Beschreibung:   Search Parameter
  --------------------------------------------------------------------*/

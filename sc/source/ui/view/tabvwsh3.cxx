@@ -79,12 +79,6 @@
 
 using ::std::auto_ptr;
 
-#define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
-#define GET_STRING(nid) ((const SfxStringItem&)pReqArgs->Get(nid)).GetValue()
-#define GET_UINT16(nid) ((const SfxUInt16Item&)pReqArgs->Get(nid)).GetValue()
-#define GET_BOOL(nid)   ((const SfxBoolItem&)pReqArgs->Get(nid)).GetValue()
-#define RECALC_PAGE(pDocSh) ScPrintFunc( pDocSh, GetPrinter(), nCurTab ).UpdatePages()
-
 //------------------------------------------------------------------
 
 /** Try to parse the given range using Calc-style syntax first, then

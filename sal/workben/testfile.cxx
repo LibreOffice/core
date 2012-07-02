@@ -51,8 +51,6 @@
 using namespace osl;
 using namespace rtl;
 
-#define MAXIMPATH   256
-
 rtl::OUString   root;
 
 rtl::OUString   dir1;

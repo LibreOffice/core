@@ -70,8 +70,6 @@
 #define PROPERTY_CLICK_HDL      RTL_CONSTASCII_STRINGPARAM("MenuClickHDL")
 #define PROPERTY_SHOW_MENUICON  RTL_CONSTASCII_STRINGPARAM("MenuIconVisible")
 
-#define START_TIMER 1
-
 using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------------

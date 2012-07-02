@@ -25,13 +25,6 @@
 class Rectangle;
 class OutputDevice;
 
-// -----------------------------------------------------------------------
-
-#define SPIN_DELAY      280
-#define SPIN_SPEED      60
-
-// -----------------------------------------------------------------------
-
 void ImplDrawSpinButton( OutputDevice* pOutDev,
                          const Rectangle& rUpperRect,
                          const Rectangle& rLowerRect,

@@ -194,8 +194,6 @@ public:
 
 #define VBA_LEFT "PositionX"
 #define VBA_TOP "PositionY"
-#define VBA_HEIGHT "Height"
-#define VBA_WIDTH "Width"
 class VBAHELPER_DLLPUBLIC UserFormGeometryHelper : public AbstractGeometryAttributes
 {
 public:

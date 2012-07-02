@@ -50,8 +50,6 @@
 #ifndef S_IFBLK
 #define S_IFBLK         0x6000
 #endif
-#define setdrive(n,a)   _chdrive(n)
-#define GETDRIVE(n)     (n = _getdrive())
 
 #define dirent          _WIN32_FIND_DATAA
 #define d_name          cFileName
@@ -68,8 +66,6 @@ typedef struct
 #define DEFSTYLE        FSYS_STYLE_NTFS
 #define MKDIR( p )      mkdir( p )
 #define CMP_LOWER(s)    ( s.toAsciiLowerCase() )
-
-#define START_DRV 'a'
 
 inline sal_Bool DRIVE_EXISTS(char c)
 {

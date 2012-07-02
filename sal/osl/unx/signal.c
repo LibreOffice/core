@@ -85,8 +85,6 @@
 #    define ACT_ABORT   ACT_SYSTEM
 #endif
 
-#define MAX_PATH_LEN    2048
-
 #if defined(HAVE_MEMCHECK_H)
 #include <memcheck.h>
 #endif

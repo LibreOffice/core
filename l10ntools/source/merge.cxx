@@ -136,11 +136,6 @@ sal_Bool MergeData::operator==( ResData *pData )
 // class MergeDataFile
 //
 
-#define FFORMAT_UNKNOWN 0x0000
-#define FFORMAT_NEW     0x0001
-#define FFORMAT_OLD     0x0002
-
-
 MergeDataFile::MergeDataFile(
     const rtl::OString &rFileName,
     const rtl::OString &rFile,

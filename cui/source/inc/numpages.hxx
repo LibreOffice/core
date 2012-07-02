@@ -141,7 +141,6 @@ class SvxBulletPickTabPage : public SfxTabPage
 /*--------------------------------------------------
     TabPage for complete numeration
 --------------------------------------------------*/
-#define NUMTYPE_MEMBER 4   // number of elements of the FormatString per level
 #define NUM_VALUSET_COUNT 16
 class SvxNumPickTabPage : public SfxTabPage
 {

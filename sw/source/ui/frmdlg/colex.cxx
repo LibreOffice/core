@@ -459,8 +459,6 @@ SwPageGridExample::~SwPageGridExample()
     delete pGridItem;
 }
 
-#define MAX_ROWS    10
-#define MAX_LINES   15
 void SwPageGridExample::DrawPage( const Point& rOrg,
                            const sal_Bool bSecond,
                            const sal_Bool bEnabled )

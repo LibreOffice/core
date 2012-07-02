@@ -490,17 +490,6 @@ struct Sc10ChartSheetData
     sal_Char    Reserved[64];
 };
 
-#define AGPie2D     1           // Pie Chart 2D
-#define AGPie3D     2           // Pie Chart 3D
-#define AGBar2D     3           // Bar Chart 2D
-#define AGBar3D     4           // Bar Chart 3D
-#define AGGantt     5           // Gantt Diagramm
-#define AGLine      6           // Line Chart
-#define AGLogLine   7           // Logarythmic-Coordinate Chart
-#define AGArea      8           // Area Chart
-#define AGHLC       11          // High-Low-Close Chart
-#define AGPolar     10          // Polar-Coordinate Chart
-
 typedef sal_Char Sc10ChartText[30];
 
 struct Sc10ChartTypeData

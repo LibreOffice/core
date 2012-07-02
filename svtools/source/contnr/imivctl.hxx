@@ -74,9 +74,6 @@ class IcnGridMap_Impl;
 // for the bounding rectangle
 #define LROFFS_BOUND                2
 #define TBOFFS_BOUND                2
-// distance focus rectangle to icon
-#define LROFFS_ICON                 2
-#define TBOFFS_ICON                 2
 // distance icon to text
 #define HOR_DIST_BMP_STRING         3
 #define VER_DIST_BMP_STRING         3

@@ -70,13 +70,11 @@ namespace comphelper
 #define XEVENTBROADCASTER           ::com::sun::star::document::XEventBroadcaster
 #define XDOCEVENTLISTENER           ::com::sun::star::document::XEventListener
 #define XEVENTSSUPPLIER             ::com::sun::star::document::XEventsSupplier
-#define XJOBEXECUTOR                ::com::sun::star::task::XJobExecutor
 #define EVENTOBJECT                 ::com::sun::star::lang::EventObject
 #define ILLEGALARGUMENTEXCEPTION    ::com::sun::star::lang::IllegalArgumentException
 #define WRAPPEDTARGETEXCEPTION      ::com::sun::star::lang::WrappedTargetException
 #define ANY                         ::com::sun::star::uno::Any
 #define REFERENCE                   ::com::sun::star::uno::Reference
-#define WEAKREFERENCE               ::com::sun::star::uno::WeakReference
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
 #define SEQUENCE                    ::com::sun::star::uno::Sequence
 #define UNOTYPE                     ::com::sun::star::uno::Type

@@ -63,7 +63,6 @@
 #define NMSP_UNO                com::sun::star::uno
 #define NMSP_LANG               com::sun::star::lang
 #define NMSP_SAX                com::sun::star::xml::sax
-#define NMSP_SVG                com::sun::star::svg
 #define NMSP_REGISTRY           com::sun::star::registry
 
 

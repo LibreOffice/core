@@ -79,8 +79,6 @@
 
 using namespace com::sun::star;
 
-#define DEFTEXTSIZE  12
-
 extern void ClrContourCache( const SdrObject *pObj ); // TxtFly.Cxx
 
 

@@ -22,10 +22,6 @@
 
 #include <tools/solar.h>
 
-#define E3D_STREAMING
-
-const double PrecisionLimit = 1.0e-14;
-
 const sal_uInt32 E3dInventor = sal_uInt32('E')*0x00000001+
                            sal_uInt32('3')*0x00000100+
                            sal_uInt32('D')*0x00010000+

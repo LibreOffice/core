@@ -76,8 +76,6 @@ static char g_szStackFile[L_tmpnam] = "";
 static char g_szDescriptionFile[2048] = "";
 static char g_szReportFile[2048] = "";
 
-#define PSTACK_CMD          "pstack %d"
-
 #ifdef LINUX
 #define PMAP_CMD            "cat /proc/%d/maps"
 #else

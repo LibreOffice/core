@@ -36,7 +36,6 @@
 #define THROWDEF_RTE_IAE    throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IllegalArgumentException)
 #define THROW_IAE           throw ::com::sun::star::lang::IllegalArgumentException()
 #define THROWDEF_RTE_IAE_NCE    throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IllegalArgumentException,::com::sun::star::sheet::NoConvergenceException)
-#define THROW_NCE           throw ::com::sun::star::sheet::NoConvergenceException()
 
 #define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
 #define CHK_FINITE(d)       if( !::rtl::math::isFinite( d ) ) THROW_IAE

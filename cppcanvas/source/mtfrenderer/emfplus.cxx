@@ -875,8 +875,6 @@ namespace cppcanvas
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
 #define SET_FILL_COLOR(x) \
     rState.fillColor = COLOR(x);
-#define SET_LINE_COLOR(x) \
-    rState.lineColor = COLOR(x);
 #define SET_TEXT_COLOR(x) \
     rState.textColor = COLOR(x);
 

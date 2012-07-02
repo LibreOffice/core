@@ -34,13 +34,6 @@ namespace connectivity
 
 namespace dbaui
 {
-    //==================================================================
-#define SIZ_NONE        0
-#define SIZ_TOP         1
-#define SIZ_BOTTOM      2
-#define SIZ_LEFT        4
-#define SIZ_RIGHT       8
-
 #define BROW_FIELD_ROW          0
 #define BROW_COLUMNALIAS_ROW    1
 #define BROW_TABLE_ROW          2

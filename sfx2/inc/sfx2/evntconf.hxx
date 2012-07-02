@@ -48,8 +48,6 @@
 class SfxObjectShell;
 class SvxMacroTableDtor;
 
-#define SFX_NO_EVENT USHRT_MAX
-
 struct SFX2_DLLPUBLIC SfxEventName
 {
     sal_uInt16  mnId;

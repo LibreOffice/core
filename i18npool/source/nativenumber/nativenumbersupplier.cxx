@@ -521,7 +521,6 @@ static sal_Int16 natnum2[] = {
 static sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
 
 #define isLang(lang) rLocale.Language.equalsAsciiL(lang, 2)
-#define isCtry(ctry) rLocale.Country.equalsAsciiL(ctry, 2)
 
 static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
 {

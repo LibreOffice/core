@@ -39,7 +39,6 @@
 #define DEFSTYLE        FSYS_STYLE_BSD
 
 #define CMP_LOWER(s)    (s)
-#define TEMPNAME()      tmpnam(0)
 #define LOWER(aString)  (aString.Lower())
 
 #include <time.h>

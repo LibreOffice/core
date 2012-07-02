@@ -60,10 +60,6 @@
 #define ACT_NEXT_SECT       8
 #define ACT_PREV_SECT       9
 
-#define SNAP_LOWER       0x00000001
-#define SNAP_FLYFRAMES   0x00000002
-#define SNAP_TABLECONT   0x00000004
-
 #ifdef DBG_UTIL
 
 #include "swtypes.hxx"

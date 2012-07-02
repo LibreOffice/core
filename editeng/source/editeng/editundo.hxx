@@ -33,12 +33,6 @@
 #include <editeng/editund2.hxx>
 #include <editeng/editdata.hxx>
 
-#define UNDO_NOACTION           0
-#define UNDO_NEWUNDO            1
-#define UNDO_UNDOSDELETED       2
-#define UNDO_EMPTYGROUPDELETED  3
-#define UNDO_INVALIDEND         4
-
 class EditEngine;
 class EditView;
 

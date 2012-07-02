@@ -33,8 +33,6 @@
 #define US(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ))
 #define I32S(x) rtl::OString::valueOf( (sal_Int32) x ).getStr()
 #define I64S(x) rtl::OString::valueOf( (sal_Int64) x ).getStr()
-#define H32S(x) rtl::OString::valueOf( (sal_Int32) x, 16 ).getStr()
-#define H64S(x) rtl::OString::valueOf( (sal_Int64) x, 16 ).getStr()
 #define IS(x) rtl::OString::valueOf( x ).getStr()
 #define USS(x) rtl::OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 

@@ -62,9 +62,6 @@ no_str(const char * str) { return str != 0 ? *str == '\0' : true; }
 
 }   // namespace csv
 
-#define NON_COPYABLE(xy) \
-    private: xy(const xy &); xy & operator=(const xy &)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

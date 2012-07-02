@@ -78,8 +78,8 @@
 #define NULL_PEN                8
 #define OEM_FIXED_FONT          10
 //      ANSI_FIXED_FONT         11
-#define ANSI_VAR_FONT           12
-#define SYSTEM_FONT             13
+//      ANSI_VAR_FONT           12
+//      SYSTEM_FONT             13
 //      DEVICE_DEFAULT_FONT     14
 //      DEFAULT_PALETTE         15
 #define SYSTEM_FIXED_FONT       16

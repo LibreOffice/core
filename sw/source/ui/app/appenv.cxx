@@ -80,8 +80,6 @@
 
 #define ENV_NEWDOC      RET_OK
 #define ENV_INSERT      RET_USER
-#define ENV_CANCEL      SHRT_MAX
-
 
 // Function used for labels and envelopes in applab.cxx and appenv.cxx
 String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )

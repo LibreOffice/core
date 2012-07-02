@@ -68,9 +68,6 @@ class ScFlatBoolRowSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;
 
-#define COLUMN_DELTA    4
-
-
 struct ScNeededSizeOptions
 {
     const ScPatternAttr*    pPattern;

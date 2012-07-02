@@ -55,7 +55,6 @@ class TaskPaneList;
 #define ICON_DATABASE_DOCUMENT          12
 #define ICON_MATH_DOCUMENT              13
 #define ICON_MACROLIBRARY               1
-#define ICON_PLAYER                     100
 #define ICON_SETUP                      500
 
 // -------------------

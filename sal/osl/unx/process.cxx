@@ -75,10 +75,6 @@
 #define MAX_ARGS        255
 #define MAX_ENVS        255
 
-#if defined(MACOSX) || defined(IOS) || defined(IORESOURCE_TRANSFER_BSD) || defined(AIX)
-#define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
-#endif
-
 /******************************************************************************
  *
  *                  Data Type Definition

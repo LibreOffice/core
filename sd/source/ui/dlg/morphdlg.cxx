@@ -47,12 +47,6 @@
 
 namespace sd {
 
-#define FADE_STEP   "FadeSteps"
-#define FADE_ATTRIB "FadeAttributes"
-#define FADE_ORIENT "FadeOrientation"
-#define FADE_TRUE   "true"
-#define FADE_FALSE  "false"
-
 MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 ) :
             ModalDialog     ( pParent, SdResId( DLG_MORPH ) ),
             aGrpPreset      ( this, SdResId( GRP_PRESET ) ),

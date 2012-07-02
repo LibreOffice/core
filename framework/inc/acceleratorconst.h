@@ -37,7 +37,6 @@ namespace framework{
 
 #define ATTRIBUTE_TYPE_CDATA            DECLARE_ASCII("CDATA")
 
-#define XMLNS_ACCEL                     DECLARE_ASCII("accel")
 #define XMLNS_XLINK                     DECLARE_ASCII("xlink")
 
 // same items with a name space alias

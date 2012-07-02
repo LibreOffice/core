@@ -140,7 +140,6 @@ extern SgfFontLst* pSgfFonts;
 #define  EscReset  '\x1f' /* Flag loeschen                                             */
 #define  EscDeflt  '\x11' /* Flag auf default setzen                                */
 #define  EscToggl  '\x1d' /* Flag Toggeln                                              */
-#define  EscRelat  '%'
 #define  EscNoFlg  0
 #define  EscNoVal  -2147483647 /* -MaxLongInt */
 //==============================================================================
@@ -151,7 +150,6 @@ extern SgfFontLst* pSgfFonts;
 
 #define  ChrXPosArrSize (MaxLineChars+1+1)           /* 2k - Beginnt mit 0 im gegensatz zu StarDraw */
 #define  CharLineSize   (MaxLineChars+1+1)
-#define  EscStr         (UCHAR[MaxEscLen+1]);
 
 #define  MinChar 32
 #define  MaxChar 255

@@ -119,7 +119,6 @@
 #define XCOMPONENT              ::com::sun::star::lang::XComponent
 #define XMODEL                  ::com::sun::star::frame::XModel
 #define XMODEL2                 ::com::sun::star::frame::XModel2
-#define XMODIFIABLE             ::com::sun::star::util::XModifiable
 #define XMODIFIABLE2            ::com::sun::star::util::XModifiable2
 #define XMODIFYBROADCASTER      ::com::sun::star::util::XModifyBroadcaster
 #define XMODIFYLISTENER         ::com::sun::star::util::XModifyListener
@@ -161,7 +160,6 @@
 #define MUTEX                   ::osl::Mutex
 #define UNOTYPE                 ::com::sun::star::uno::Type
 #define XVIEWDATASUPPLIER       ::com::sun::star::document::XViewDataSupplier
-#define XINDEXACCESS            ::com::sun::star::container::XIndexAccess
 #define XTRANSFERABLE           ::com::sun::star::datatransfer::XTransferable
 #define DATAFLAVOR              ::com::sun::star::datatransfer::DataFlavor
 

@@ -32,8 +32,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
-#define USE_SVXFONT
-
 #include <svtools/ctrltool.hxx>
 
 #include <editeng/svxfont.hxx>

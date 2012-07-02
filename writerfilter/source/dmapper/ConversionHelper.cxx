@@ -46,8 +46,6 @@ const sal_Int16  API_LINE_DASHED   = 2;
 #define LINE_WIDTH_1            36
 #define LINE_WIDTH_2            89
 #define LINE_WIDTH_3            142
-#define LINE_WIDTH_4            177
-#define LINE_WIDTH_5            18
 
 #define DOUBLE_LINE0_OUT    LINE_WIDTH_0
 #define DOUBLE_LINE0_IN     LINE_WIDTH_0

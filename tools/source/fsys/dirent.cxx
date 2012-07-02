@@ -1664,10 +1664,6 @@ const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
     return *pRes;
 }
 
-#define MAX_EXT_MAX       250
-#define MAX_LEN_MAX       255
-#define INVALID_CHARS_DEF   "\\/\"':|^<>?*"
-
 /*************************************************************************
 |*
 |*    DirEntry::CreatePath()

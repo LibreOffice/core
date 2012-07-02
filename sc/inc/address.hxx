@@ -120,7 +120,6 @@ const SCROW SCROWS64K = 65536;
 // === old stuff defines =====================================================
 
 #define MAXROW_30   8191
-#define MAXROW_40   31999
 
 #ifdef SC_LIMIT_ROWS
 #undef MAXROWCOUNT_DEFINE
@@ -135,7 +134,6 @@ const SCROW W16MAXROW = W16MAXROWCOUNT - 1;
 #define VALIDROW(nRow)                  (ValidRow(nRow))
 #define VALIDTAB(nTab)                  (ValidTab(nTab))
 #define VALIDCOLROW(nCol,nRow)          (ValidColRow(nCol,nRow))
-#define VALIDCOLROWTAB(nCol,nRow,nTab)  (ValidColRowTab(nCol,nRow,nTab))
 
 // === old stuff defines end =================================================
 

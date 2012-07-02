@@ -39,8 +39,6 @@
 
 class Config;
 
-#define PSPRINT_PPDDIR "driver"
-
 namespace padmin
 {
 class DelMultiListBox : public MultiListBox

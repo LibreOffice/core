@@ -710,8 +710,6 @@ namespace
 }
 
 
-#define MIN_LINE_SIZE 32
-
 void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const * /*bptr*/, unsigned char const * /*eptr*/)
 {
   sysmips(FLUSH_CACHE,0,0,0);

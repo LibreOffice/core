@@ -33,9 +33,6 @@ namespace formula
 #define STRUCT_FOLDER 2
 #define STRUCT_ERROR  3
 
-#define STRUCT_ERR_C1 1
-#define STRUCT_ERR_C2 2
-
 enum FormulaDlgMode { FORMULA_FORMDLG_FORMULA, FORMULA_FORMDLG_ARGS, FORMULA_FORMDLG_EDIT };
 
 //============================================================================

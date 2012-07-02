@@ -37,9 +37,6 @@
 
 DBG_NAME( EditUndo )
 
-#define MAX_UNDOS   100     // From this quantity it may be deleted ....
-#define MIN_UNDOS   50      // so much has to be left ...
-
 #define NO_UNDO         0xFFFF
 #define GROUP_NOTFOUND  0xFFFF
 

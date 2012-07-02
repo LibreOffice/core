@@ -83,8 +83,6 @@ class SvtFileDialogFilter_Impl;
 #define SFX_EXTRA_SELECTION         0x00000080L
 #define SFX_EXTRA_IMAGE_TEMPLATE    0x00000100L
 
-#define RET_MANAGER             100
-
 #define FILEDIALOG_FILTER_ALL   "*.*"
 
 //*****************************************************************************

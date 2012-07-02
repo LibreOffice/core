@@ -40,7 +40,6 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svdouno.hxx>
-#define XOR_CREATE_PEN          PEN_SOLID
 #include <svx/svdopath.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>

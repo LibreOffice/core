@@ -66,8 +66,6 @@
 #include <cassert>
 using ::std::advance;
 
-#define DEFAULT_SCALE   75
-
 static const sal_uInt16 nDefStyles = 3; // Special treatment for the first 3 levels
 static const sal_uInt16 nDefBulletIndent = 800;
 static const sal_uInt16 nDefBulletWidth = 700;

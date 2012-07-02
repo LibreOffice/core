@@ -69,7 +69,6 @@ class LocaleDataWrapper;
 #define SN_LINGU_SERVCICE_MANAGER   "com.sun.star.linguistic2.LinguServiceManager"
 #define SN_LINGU_PROPERTIES         "com.sun.star.linguistic2.LinguProperties"
 #define SN_DICTIONARY_LIST          "com.sun.star.linguistic2.DictionaryList"
-#define SN_OTHER_LINGU              "com.sun.star.linguistic2.OtherLingu"
 #define SN_DESKTOP                  "com.sun.star.frame.Desktop"
 
 

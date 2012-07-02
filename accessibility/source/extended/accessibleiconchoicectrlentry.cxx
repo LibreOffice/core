@@ -46,8 +46,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 
 #define ACCESSIBLE_ACTION_COUNT     1
-#define AID_EXPAND                  0
-#define AID_COLLAPSE                1
 
 namespace
 {

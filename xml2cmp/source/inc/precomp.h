@@ -34,7 +34,6 @@ typedef long        intt;
 
 
 #define REF( x )  (&(x))
-#define MREF( x )  (&(pThis->x))
 #define THIS_       pThis
 
 

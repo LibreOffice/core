@@ -33,8 +33,6 @@
 #include "cntfrm.hxx"
 #include "ndtxt.hxx"
 
-#define STRSIZE(x) (sizeof(x)-1)
-
 class SwCharRange;
 class SwTxtNode;
 class SwTxtFormatter;
@@ -55,12 +53,6 @@ class SwPortionHandler;
 class SwScriptInfo;
 class SwViewOption;
 class SwWrongList;
-
-#define GRID_ON         0
-#define GRID_HEIGHT     1
-#define RUBY_HEIGHT     2
-#define RUBY_TOP        3
-#define GRID_CELLS      4
 
 /// Represents the visualization of a paragraph.
 class SwTxtFrm: public SwCntntFrm

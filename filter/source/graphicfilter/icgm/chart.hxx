@@ -35,7 +35,7 @@
 #define PIECHART        21      /* Standard pie chart file. */
 #define ORGCHART        26      /* Standard org chart file. */
 #define TTLCHART        31      /* Title chart file.        */
-#define BULCHART        32      /* Bullet chart file.       */
+//      BULCHART        32      /* Bullet chart file.       */
 #define TABCHART        33      /* Table chart file.        */
 #define DRWCHART        41      /* Chart with drawings only.*/
 #define MLTCHART        42      /* Multiple chart file.     */
@@ -44,16 +44,16 @@
 #define SYMFILE         47      /* Symbol file.             */
 /* the following were added although SPC doesn't have a #define */
 /* for them...                                                  */
-#define AUTOTTLCHT      95      /* Autobuild TTL CHT        */
-#define AUTOBULCHT      96      /* Autobuild BUL CHT        */
-#define AUTOTABCHT      97      /* Autobuild TAB CHT        */
+//      AUTOTTLCHT      95      /* Autobuild TTL CHT        */
+//      AUTOBULCHT      96      /* Autobuild BUL CHT        */
+//      AUTOTABCHT      97      /* Autobuild TAB CHT        */
 
 /* FNC 10/11/93: for the chart stream, ALLCHART was added.  */
 /* It is used specifically by PPT in its Template to let    */
 /* us know that the template applies to all charts, not to  */
 /* one specific chart type.                                 */
 #define ALLCHART       127      /* Applies to all chart types */
-#define ALLCHART_TPL   255      /* Applies to all chart types */
+//      ALLCHART_TPL   255      /* Applies to all chart types */
 
 #define IOC_CHTTITLE        1       /* Title for any chart.                  */
 #define IOC_CHTFOOTNOTE     2       /* ::com::sun::star::text::Footnote for any chart.               */

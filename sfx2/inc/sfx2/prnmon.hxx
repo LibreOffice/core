@@ -41,10 +41,6 @@ struct SfxPrintProgress_Impl;
 
 // ------------------------------------------------------------------------
 
-#define PAGE_MAX    9999    // max. Number of pages to be printed
-
-// ------------------------------------------------------------------------
-
 struct SfxPrintOptDlg_Impl;
 class SfxPrintOptionsDialog : public ModalDialog
 {

@@ -57,11 +57,6 @@ const sal_Char pBuffer_Char[]   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS
 const sal_Char pBuffer_Number[] = "1234567890";
 const sal_Char pBuffer_Blank[]  = "";
 
-#define TRUNC_LEN               10;
-#define ENLARG_LEN              100;
-
-
-
 //------------------------------------------------------------------------
 // OS dependent/independent definitions/includes
 // we use FILE_PREFIX for URL prefix,

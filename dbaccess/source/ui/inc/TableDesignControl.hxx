@@ -25,7 +25,6 @@
 #include "IClipBoardTest.hxx"
 #include "TypeInfo.hxx"
 
-#define TABPAGESIZE 70
 namespace dbaui
 {
     class OTableDesignView;

@@ -186,8 +186,6 @@ inline void ParaRange::Adjust()
     }
 }
 
-#define OL_ROOTPARENT (Paragraph*)NULL
-
 class EDITENG_DLLPUBLIC OutlinerView
 {
     friend class Outliner;

@@ -97,8 +97,6 @@ using namespace ::ucb;
 
 #define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
 #define C2S(cChar) String::CreateFromAscii(cChar)
-#define MAP_TOKEN ';'
-#define PAIR_TOKEN ':'
 
 Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
 {

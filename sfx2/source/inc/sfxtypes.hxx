@@ -148,13 +148,6 @@ struct StringList_Impl : private Resource
 
 };
 
-#define SFX_DEL_PTRARR(pArr)                                    \
-            {                                                   \
-                for ( sal_uInt16 n = (pArr)->Count(); n--; )        \
-                    delete (pArr)->GetObject(n);                \
-                DELETEX(pArr);                                  \
-            }
-
 class SfxBoolResetter
 {
     sal_Bool&               _rVar;

@@ -186,16 +186,6 @@ private:
     SVX_DLLPRIVATE void SetAccessibleNames (void);
 };
 
-/*************************************************************************
-|*
-|* Defines
-|*
-\************************************************************************/
-
-#define SVXBMPMASK() ( (SvxBmpMask*) ( SfxViewFrame::Current()->GetChildWindow(     \
-                     SvxBmpMaskChildWindow::GetChildWindowId() )->  \
-                     GetWindow() ) )
-
 #endif // _BMPMASK_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

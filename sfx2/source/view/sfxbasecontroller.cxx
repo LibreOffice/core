@@ -98,9 +98,6 @@
 #define EVENTOBJECT                             ::com::sun::star::lang::EventObject
 #define OTYPECOLLECTION                         ::cppu::OTypeCollection
 #define OIMPLEMENTATIONID                       ::cppu::OImplementationId
-#define MUTEXGUARD                              ::osl::MutexGuard
-#define UNOQUERY                                ::com::sun::star::uno::UNO_QUERY
-#define MAPPING                                 ::com::sun::star::uno::Mapping
 #define XCOMPONENT                              ::com::sun::star::lang::XComponent
 #define XINTERFACE                              ::com::sun::star::uno::XInterface
 #define XKEYHANDLER                             ::com::sun::star::awt::XKeyHandler

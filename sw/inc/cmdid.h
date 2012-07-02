@@ -50,14 +50,11 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_INSERT               (SID_SW_START +  300)
 #define FN_FORMAT               (SID_SW_START +  400)
 #define FN_EXTRA                (SID_SW_START +  600)
-#define FN_WINDOW               (SID_SW_START +  700)
-#define FN_HELP                 (SID_SW_START +  800)
 #define FN_SELECTION            (SID_SW_START +  900)
 #define FN_QUERY                (SID_SW_START + 1000)
 #define FN_ENVELP               (SID_SW_START + 1050)
 #define FN_PARAM                (SID_SW_START + 1100)
 #define FN_STAT                 (SID_SW_START + 1180)
-#define FN_PRNOPT               (SID_SW_START + 1200)
 #define FN_PGPREVIEW            (SID_SW_START + 1250)
 #define FN_FRAME                (SID_SW_START + 1300)
 #define FN_INSERT2              (SID_SW_START + 1400)
@@ -79,52 +76,24 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_UNO_RANGE_BEGIN      FN_FORMAT2
 #define FN_UNO_RANGE_END        (FN_PARAM2 + 199)
 
-#define HELP_OFFSET                 1100
-#define CMD_STR_OFFSET              2200
-#define CMDID_END                   5500
-
 /*--------------------------------------------------------------------
     Region: File
  --------------------------------------------------------------------*/
-#define FN_CLOSE_FILE           (FN_FILE + 1 )    /* Close */
-
 #define FN_NEW_GLOBAL_DOC       (FN_FILE + 4 )    /* Create Global Document */
-#define FN_NEW_FILE             (FN_FILE + 5 )    /* New */
 #define FN_OPEN_FILE            (FN_FILE + 7 )    /* Open */
-#define FN_EDIT_FILE            (FN_FILE + 8 )    /* Open or ToTop */
-
-#define FN_INETFILE             (FN_FILE + 9 )    /* Internet File-Dialog */
-
-#define FN_PRINT_FILE           (FN_FILE + 10)    /* Print */
-#define FN_SAVE_FILE            (FN_FILE + 13)    /* Save */
-#define FN_EXIT                 (FN_FILE + 17)    /* Close Writer */
-
-#define FN_DOC_MGR_DLG          (FN_FILE + 32)    /* Document-Manager */
-
-#define FN_GET_DOCSTAT          (FN_FILE + 33)    /* Get document statistics */
 
 #define FN_OUTLINE_TO_IMPRESS   (FN_FILE + 36)  /* Send outline to impress */
 #define FN_OUTLINE_TO_CLIPBOARD (FN_FILE + 37)  /* Send outline to clipboard */
 
 #define FN_NEW_HTML_DOC         (FN_FILE + 40 ) /* Create HTML document */
 
-#define FN_APP_START            (FN_FILE + 98)  /* Macro for App.Start */
-#define FN_APP_END              (FN_FILE + 99)  /* Macro for App.End */
-
 /*--------------------------------------------------------------------
     Region: Edit
  --------------------------------------------------------------------*/
-#define FN_CLEAR                (FN_EDIT + 1 )    /* Clear */
-#define FN_COPY                 (FN_EDIT + 2 )    /* Copy */
-#define FN_CUT                  (FN_EDIT + 3 )    /* Cut */
 #define FN_EDIT_FIELD           (FN_EDIT + 4 )    /* Edit field */
-#define FN_EDIT_LINK            (FN_EDIT + 8 )    /* Edit link */
 #define FN_EDIT_LINK_DLG        (FN_EDIT + 9 )    /* Edit link dialog */
-#define FN_GOTO                 (FN_EDIT + 11)    /* Go to */
 
-#define FN_PASTE                (FN_EDIT + 13)    /* Paste */
 #define FN_NUMBER_BULLETS       (FN_EDIT + 21)    /* Bullets */
-#define FN_REPEAT               (FN_EDIT + 22)    /* Repeat last */
 #define FN_EDIT_IDX_ENTRY_DLG   (FN_EDIT + 23)    /* Edit Index-Entry */
 #define FN_UPDATE_FIELDS        (FN_EDIT + 26)    /* Update fields */
 #define FN_EXECUTE_MACROFIELD   (FN_EDIT + 27)    /* Execute macrofield */
@@ -234,7 +203,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SET_PAGE             (FN_VIEW + 29)  /* Set page template to paragraph */
 
 // more Navigator
-#define FN_CONTENT_LB           (FN_VIEW + 32)  /**/
 #define FN_SHOW_CONTENT_BOX     (FN_VIEW + 33)  /**/
 #define FN_SHOW_ROOT            (FN_VIEW + 34)  /**/
 #define FN_DROP_REGION          (FN_VIEW + 35)  /**/
@@ -290,7 +258,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_POSTIT               (FN_INSERT + 29)    /* Insert/edit PostIt */
 #define FN_INSERT_TABLE         (FN_INSERT + 30)    /* Insert Table */
 #define FN_INSERT_STRING        (FN_INSERT+31)
-#define FN_INSERT_COLS          (FN_INSERT + 32)    /* Insert Columns */
 #define FN_INSERT_FRAME_INTERACT (FN_INSERT + 33)   /* Insert interactive frame */
 #define FN_INSERT_FRAME         (FN_INSERT + 34)    /* Insert Frame */
 
@@ -364,21 +331,13 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SET_SUPER_SCRIPT     (FN_FORMAT + 11) /* superscript */
 #define FN_SET_SUB_SCRIPT       (FN_FORMAT + 12) /* subscript */
 
-#define FN_SET_CASEMAP          (FN_FORMAT + 14) /* CaseMap */
-#define FN_SET_KERNING          (FN_FORMAT + 16) /* Kerning */
-
 #define FN_FLIP_HORZ_GRAFIC     (FN_FORMAT + 25) /* mirror horizontally */
 #define FN_FLIP_VERT_GRAFIC     (FN_FORMAT + 26) /* mirror vertically */
-#define FN_SET_ADJUST           (FN_FORMAT + 28) /* parametrized alignemnt */
-
-#define FN_SET_WIDOW            (FN_FORMAT + 36) /* Widows */
-#define FN_SET_ORPHAN           (FN_FORMAT + 37) /* Orphans */
 
 #define FN_NUM_FORMAT_TABLE_DLG     (FN_FORMAT + 45)  /* number format in table */
 #define FN_FORMAT_BORDER_DLG        (FN_FORMAT + 48)  /* */
 #define FN_FORMAT_PAGE_COLUMN_DLG   (FN_FORMAT + 49)  /* columns per page */
 #define FN_FORMAT_BACKGROUND_DLG    (FN_FORMAT + 50)  /* background */
-#define FN_FORMAT_PAGE              (FN_FORMAT + 51)  /* page */
 #define FN_FORMAT_PAGE_DLG          (FN_FORMAT + 52)  /* page */
 #define FN_FORMAT_COLUMN            (FN_FORMAT + 53)  /* columns */
 #define FN_FORMAT_DROPCAPS          (FN_FORMAT + 54)  /* initials */
@@ -499,8 +458,6 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_TABLE_AUTOSUM            (FN_FORMAT + 195)  /* */
 
-#define FN_IS_IMAGE                  (FN_FORMAT2 + 6)   /* numbering: with graphic? */
-
 #define FN_GOTO_NEXT_REGION          (FN_FORMAT2 + 9)   /* */
 #define FN_GOTO_PREV_REGION          (FN_FORMAT2 + 10)  /* */
 
@@ -559,20 +516,13 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* */
 #define FN_HYPHENATE_OPT_DLG        (FN_EXTRA + 5 )   /* */
 #define FN_ADD_UNKNOWN              (FN_EXTRA + 6 )   /* learn words */
-#define FN_NUMBERING                (FN_EXTRA + 9 )   /* numbering/bullets*/
 #define FN_NUMBERING_OUTLINE_DLG    (FN_EXTRA + 12)   /* */
 #define FN_SORTING_DLG              (FN_EXTRA + 14)   /* */
 #define FN_CALCULATE                (FN_EXTRA + 15)   /* */
 #define FN_GLOSSARY_DLG             (FN_EXTRA + 20)   /* text building blocks */
 
-#define FN_PLAY_MACRO               (FN_EXTRA + 23)   /* run macro */
 #define FN_EXPAND_GLOSSARY          (FN_EXTRA + 28)   /* expand text building blocks */
-#define FN_CONFIG_MENU              (FN_EXTRA + 30)   /* configure menu */
-#define FN_CONFIG_KEY               (FN_EXTRA + 31)   /* configure keyboard */
 #define FN_CHANGE_PAGENUM           (FN_EXTRA + 34)   /* change page numbers*/
-
-#define FN_MACRO_POPUP              (FN_EXTRA + 37)   /* all macro functions*/
-#define FN_BULLET                   (FN_EXTRA + 38)   /* bullet list */
 
 //  Region: Glossary
 
@@ -583,16 +533,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_REMOVE_CUR_TOX           (FN_EXTRA + 55)  /* remove the current TOX*/
 
 #define FN_NAVIGATION_PI_GOTO_PAGE  (FN_EXTRA + 59 )  /* goto page from navigation-PI */
-
-#define FN_RESERVED_9               (FN_EXTRA + 86)   /* place holder */
-#define FN_RESERVED_8               (FN_EXTRA + 87)   /* place holder */
-#define FN_RESERVED_7               (FN_EXTRA + 88)   /* place holder */
-#define FN_RESERVED_6               (FN_EXTRA + 89)   /* place holder */
-#define FN_RESERVED_5               (FN_EXTRA + 90)   /* place holder */
-#define FN_RESERVED_4               (FN_EXTRA + 91)   /* place holder */
-#define FN_RESERVED_3               (FN_EXTRA + 92)   /* place holder */
-#define FN_RESERVED_2               (FN_EXTRA + 93)   /* place holder */
-#define FN_RESERVED_1               (FN_EXTRA + 94)   /* place holder */
 
 #define FN_COLL_TYPE                (FN_EXTRA + 98)   /* type for GlobalDoc-Collection*/
 #define FN_COLL_ADD                 (FN_EXTRA + 99)
@@ -824,8 +764,6 @@ included in c-context files, so c++ style stuff will cause problems.
     QUERY-Block
  --------------------------------------------------------------------*/
 
-#define FN_IS_MODIFIED              (FN_QUERY +16)      /* Was the document modified? */
-
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribut */
 
 #define FN_GET_PRINT_AREA           (FN_QUERY +32)      /* Get attribute for printable area of page */
@@ -844,7 +782,6 @@ included in c-context files, so c++ style stuff will cause problems.
  --------------------------------------------------------------------*/
 
 #define FN_ENVELOP                  (FN_ENVELP    )
-
 
 #define FN_DELETE_NOTE_AUTHOR       (FN_NOTES+1)
 #define FN_DELETE_ALL_NOTES         (FN_NOTES+2)
@@ -872,7 +809,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_PARAM_MOVE_SELECTION     (FN_PARAM+3)
 
 #define FN_PARAM_ADDPRINTER         (FN_PARAM+18)
-#define FN_PARAM_GRID               (FN_PARAM+19)
 #define FN_PARAM_DOCDISP            (FN_PARAM+20)
 #define FN_PARAM_ELEM               (FN_PARAM+21)
 #define FN_PARAM_SWTEST             (FN_PARAM+22)
@@ -886,10 +822,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_PARAM_REGION_EDIT_IN_READONLY (FN_PARAM+28)
 
 #define FN_PARAM_INSERT_AFTER           (FN_PARAM+29)
-#define FN_PARAM_WIDTH                  (FN_PARAM+39)
-#define FN_PARAM_DIR                    (FN_PARAM+41)
-#define FN_PARAM_COUNT                  (FN_PARAM+42)
-#define FN_PARAM_COLOR                  (FN_PARAM+43)
 
 #define FN_PARAM_TABLE_NAME             (FN_PARAM+44)
 #define FN_PARAM_TABLE_HEADLINE         (FN_PARAM+50)
@@ -900,8 +832,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_PARAM_FIELD_SUBTYPE          (FN_PARAM+56)
 #define FN_PARAM_FIELD_FORMAT           (FN_PARAM+57)
 
-#define FN_PARAM_EVENT                  (FN_PARAM+68)
-#define FN_PARAM_URL                    (FN_PARAM+69)
 #define FN_PARAM_GRF_REALSIZE           (FN_PARAM+70)
 #define FN_PARAM_GRF_DIALOG             (FN_PARAM+71)
 #define FN_INET_FIELD_MACRO             (FN_PARAM+77) /* Id for URL-Field-Macros*/
@@ -918,11 +848,7 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_PARAM_NUM_PRESET             (FN_PARAM2+5) /* predefined numbering */
 
-#define FN_PARAM_DIST                   (FN_PARAM2+7) /* and width, for metric transformation */
-
 #define FN_PARAM_SHADOWCURSOR           (FN_PARAM2+8) /* for ShadowCursor options */
-
-#define FN_PARAM_10                     (FN_PARAM2+11)
 
 #define FN_TEXT_RANGE                   (FN_PARAM2+12) /* TextRange Property*/
 
@@ -1012,10 +938,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define         MID_11          0xf8
 #define         MID_12          0xf9
 #define         MID_13          0xfa
-
-#ifndef SID_SW_DOCMAN_PATH
-#define SID_SW_DOCMAN_PATH                              (SID_OFASLOTS_START +   6)
-#endif
 
 // defines for Event-assignments per Macro
 #define MAC_EVENT_MOUSEOVER         0x01            //

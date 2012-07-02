@@ -54,10 +54,6 @@ namespace svx
 struct OptPath_Impl;
 class SvxPathTabPage;
 
-// define ----------------------------------------------------------------
-
-#define SfxPathTabPage SvxPathTabPage
-
 // class SvxPathTabPage --------------------------------------------------
 
 class SvxPathTabPage : public SfxTabPage

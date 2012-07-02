@@ -44,16 +44,6 @@ struct OldSingleRefBools
     sal_uInt8    bOldFlag3D; // two sal_Bool flags (see further down)
 };
 
-#define SR_ABSOLUTE 0       // Absolute value
-#define SR_RELABS   1       // Relative value as absolute value (until release 3.1)
-#define SR_RELATIVE 2       // Relative value as delta value (after release 3.1)
-#define SR_DELETED  3       // Deleted col/row/tab
-
-#define SRF_3D      0x01    // 3D reference, was the sal_Bool (before build 304a)
-#define SRF_RELNAME 0x02    // Reference derived from RangeName with relative values
-#define SRF_BITS    0x03    // Mask of possible bits
-
-
 struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) into the sheet
 {
     SCsCOL  nCol;       // Absolute values

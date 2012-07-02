@@ -49,7 +49,6 @@
 #define NMSP_LANG       com::sun::star::lang
 #define NMSP_IO         com::sun::star::io
 #define NMSP_SAX        com::sun::star::xml::sax
-#define NMSP_PRES       com::sun::star::presentation
 #define NMSP_REGISTRY   com::sun::star::registry
 #define NMSP_DOCUMENT   com::sun::star::document
 
@@ -58,7 +57,6 @@
 #define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj >
 #define ANY                     NMSP_UNO::Any
 #define B2UCONST( _def_pChar )  (NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
-#define PPT_DTD_STRING          B2UCONST( "<!DOCTYPE office:document-styles PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"office.dtd\">"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

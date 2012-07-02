@@ -26,10 +26,6 @@
 
 //------------------------------------------------------------------
 
-#define DIA_SLOW    0
-#define DIA_MEDIUM  1
-#define DIA_FAST    2
-
 #define SD_IF_SDAPP                     SFX_INTERFACE_SD_START + 0
 #define SD_IF_SDDRAWDOCSHELL            SFX_INTERFACE_SD_START + 1
 #define SD_IF_SDVIEWSHELL               SFX_INTERFACE_SD_START + 2

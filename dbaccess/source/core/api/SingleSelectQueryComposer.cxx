@@ -88,7 +88,6 @@ namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 #define STR_AND         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AND "))
 #define STR_OR          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" OR "))
 #define STR_LIKE        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" LIKE "))
-#define STR_EQUAL       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "))
 #define L_BRACKET       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("))
 #define R_BRACKET       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"))
 #define COMMA           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","))

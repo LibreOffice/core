@@ -54,7 +54,6 @@ class BigInt;
 typedef ::std::vector< DirEntry* > DirEntryList;
 typedef ::std::vector< FileStat* > FileStatList;
 
-#define FSYS_BUFSIZE                1024
 #define FSYS_SHORTNAME_DELIMITER    '@'
 
 // FSysAccess
@@ -134,8 +133,6 @@ typedef int FSysAction;
 
 // Fuer RFS
 #define RFS_IDENTIFIER  "-rfs-"
-#define RFS_LOWER       "-rfs-"
-#define RFS_UPPER       "-RFS-"
 
 typedef sal_uIntPtr FSysError;
 

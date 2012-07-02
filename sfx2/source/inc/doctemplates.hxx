@@ -49,7 +49,6 @@
 #define XLOCALIZABLE                ::com::sun::star::lang::XLocalizable
 #define XMODEL                      ::com::sun::star::frame::XModel
 #define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
-#define XNAMEACCESS                 ::com::sun::star::container::XNameAccess
 #define XSERVICEINFO                ::com::sun::star::lang::XServiceInfo
 #define XSTORABLE                   ::com::sun::star::frame::XStorable
 

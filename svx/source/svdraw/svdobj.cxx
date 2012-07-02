@@ -1798,7 +1798,6 @@ void SdrObject::BurnInStyleSheetAttributes()
     GetProperties().ForceStyleToHardAttributes();
 }
 
-#define Imp2ndKennung (0x434F4D43)
 SdrObjUserData* SdrObject::ImpGetMacroUserData() const
 {
     SdrObjUserData* pData=NULL;

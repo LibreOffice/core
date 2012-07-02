@@ -52,12 +52,6 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::rtl::OUString;
 
-// Enable our own join detection for Intersection and Union
-// should be more efficient than using ScRangeList::Join ( because
-// we already are testing the same things )
-
-#define OWN_JOIN 1
-
 // #TODO is this defined somewhere else?
 #if ( defined UNX )
 #define FILE_PATH_SEPERATOR "/"

@@ -79,8 +79,6 @@ void Main();
 #define BUTTONHEIGHT    22
 #define BUTTONSPACE     20
 
-#define LISTBOXHEIGHT   120
-
 // -----------------------------------------------------------------------
 
     SAL_IMPLEMENT_MAIN()

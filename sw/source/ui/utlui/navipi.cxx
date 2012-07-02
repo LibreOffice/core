@@ -68,18 +68,6 @@
 
 #define PAGE_CHANGE_TIMEOUT 1000 //Timeout fuer Seitenwechsel
 
-#define JUMP_TYPE_TBL 0
-#define JUMP_TYPE_FRM 1
-#define JUMP_TYPE_GRF 2
-#define JUMP_TYPE_REG 3
-#define JUMP_TYPE_BKM 4
-
-// Version fuer Konfiguration
-
-#define NAVI_VERSION0   0
-#define NAVI_VERSION1   1
-#define NAVI_VERSION2   2 // bIsGlobalActive
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 

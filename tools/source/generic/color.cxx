@@ -267,12 +267,6 @@ SvStream& Color::Write( SvStream& rOStm, sal_Bool bNewFormat )
 // -----------------------------------------------------------------------
 
 #define COL_NAME_USER       ((sal_uInt16)0x8000)
-#define COL_RED_1B          ((sal_uInt16)0x0001)
-#define COL_RED_2B          ((sal_uInt16)0x0002)
-#define COL_GREEN_1B        ((sal_uInt16)0x0010)
-#define COL_GREEN_2B        ((sal_uInt16)0x0020)
-#define COL_BLUE_1B         ((sal_uInt16)0x0100)
-#define COL_BLUE_2B         ((sal_uInt16)0x0200)
 
 // -----------------------------------------------------------------------
 
