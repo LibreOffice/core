@@ -350,21 +350,6 @@ Color Sgv2SvFarbe(sal_uInt8 nFrb1, sal_uInt8 nFrb2, sal_uInt8 nInts)
 
 void SetLine(ObjLineType& rLine, OutputDevice& rOut)
 {
-/* !!!
-    PenStyle aStyle=PEN_SOLID;
-    switch(rLine.LMuster & 0x07) {
-        case 0: aStyle=PEN_NULL;    break;
-        case 1: aStyle=PEN_SOLID;   break;
-        case 2: aStyle=PEN_DOT;     break;    // . . . . . . . . . . . . . .
-        case 3: aStyle=PEN_DASH;    break;    // __ __ __ __ __ __ __ __ __
-        case 4: aStyle=PEN_DASH;    break;    // ___ ___ ___ ___ ___ ___ ___
-        case 5: aStyle=PEN_DASHDOT; break;    // __ . __ . __ . __ . __ . __
-        case 6: aStyle=PEN_DASHDOT; break;    // __ _ __ _ __ _ __ _ __ _ __
-        case 7: aStyle=PEN_DASHDOT; break;    // ___ _ _ ___ _ _ ___ _ _ ___
-    }
-    Pen aPen(Sgv2SvFarbe(rLine.LFarbe,rLine.LBFarbe,rLine.LIntens),rLine.LDicke,aStyle);
-    SetPen(aPen,rOut);
-*/
     if( 0 == ( rLine.LMuster & 0x07 ) )
         rOut.SetLineColor();
     else

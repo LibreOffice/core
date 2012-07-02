@@ -385,7 +385,6 @@ void SwPageDesc::ChgFooterShareFirst( sal_Bool bNew )
 
 SwPageFtnInfo::SwPageFtnInfo() :
     nMaxHeight( 0 ),
-//  aPen( PEN_SOLID ),
     nLineWidth(10),
     eLineStyle( editeng::SOLID ),
     aWidth( 25, 100 ),
@@ -395,7 +394,6 @@ SwPageFtnInfo::SwPageFtnInfo() :
     eAdj = FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) ?
            FTNADJ_RIGHT :
            FTNADJ_LEFT;
-//  aPen.SetWidth( 10 );
 }
 
 
