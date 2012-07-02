@@ -320,10 +320,41 @@ namespace vcl_sal {
         { SunXK_Cut,   "Cortar" },
     };
 
+    static const struct KeysymNameReplacement aImplReplacements_Estonian[] =
+    {
+        { XK_Page_Up, "PgUp" },
+        { XK_Page_Down, "PgDown" },
+        { XK_End, "End" },
+        { XK_Home, "Home" },
+        { XK_Insert, "Ins" },
+        { XK_Delete, "Del" },
+        { XK_Escape, "Esc" },
+        { XK_Right, "Nool paremale" },
+        { XK_Left, "Nool vasakule" },
+        { XK_Up, "Nool üles" },
+        { XK_Down, "Nool alla" },
+        { XK_BackSpace, "Tagasilüke" },
+        { XK_Return, "Enter" },
+        { XK_slash, "Kaldkriips" },
+        { XK_space, "Tühik" },
+        { XK_asterisk, "Tärn" },
+        { SunXK_Stop,  "Peata" },
+        { SunXK_Again, "Korda" },
+        { SunXK_Props, "Omadused" },
+        { SunXK_Undo,  "Võta tagasi" },
+        { SunXK_Front, "Esiplaanile" },
+        { SunXK_Copy,  "Kopeeri" },
+        { SunXK_Open,  "Ava" },
+        { SunXK_Paste, "Aseta" },
+        { SunXK_Find,  "Otsi" },
+        { SunXK_Cut,   "Lõika" },
+    };
+
     static const struct KeyboardReplacements aKeyboards[] =
     {
         { "de", aImplReplacements_German, SAL_N_ELEMENTS(aImplReplacements_German) },
         { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
+        { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
         { "fr", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
         { "it", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
         { "nl", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },
