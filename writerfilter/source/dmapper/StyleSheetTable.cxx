@@ -801,9 +801,9 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
-                        if( sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Contents Heading" ) ) ||
-                            sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "User Index Heading" ) ) ||
-                            sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Index Heading" ) ))
+                        if( sConvertedStyleName == "Contents Heading" ||
+                            sConvertedStyleName == "User Index Heading" ||
+                            sConvertedStyleName == "Index Heading" )
                         {
                             //left margin is set to NULL by default
                             uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
@@ -811,15 +811,15 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         }
                         else if ( sConvertedStyleName == "Text body" )
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_BOTTOM_MARGIN ));
-                        else if( sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 1" ) ) ||
-                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 2" ) ) ||
-                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 3" ) ) ||
-                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 4" ) ) ||
-                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 5" ) ) ||
-                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 6" ) ) ||
-                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 7" ) ) ||
-                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 8" ) ) ||
-                                sConvertedStyleName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Heading 9" ) ) )
+                        else if( sConvertedStyleName == "Heading 1" ||
+                                sConvertedStyleName == "Heading 2" ||
+                                sConvertedStyleName == "Heading 3" ||
+                                sConvertedStyleName == "Heading 4" ||
+                                sConvertedStyleName == "Heading 5" ||
+                                sConvertedStyleName == "Heading 6" ||
+                                sConvertedStyleName == "Heading 7" ||
+                                sConvertedStyleName == "Heading 8" ||
+                                sConvertedStyleName == "Heading 9" )
                         {
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT ));
                             xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_ASIAN ));

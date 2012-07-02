@@ -90,7 +90,7 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
         if (xFormsSupplier.is())
         {
             uno::Reference<container::XNameContainer> xFormsNamedContainer(xFormsSupplier->getForms());
-            static ::rtl::OUString sDOCXForm(RTL_CONSTASCII_USTRINGPARAM("DOCX-Standard"));
+            static ::rtl::OUString sDOCXForm("DOCX-Standard");
 
             ::rtl::OUString sFormName(sDOCXForm);
             sal_uInt16 nUnique = 0;
@@ -102,18 +102,13 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
                 sFormName += ::rtl::OUString::valueOf(nUnique);
             }
 
-            uno::Reference<uno::XInterface>
-                xForm(getServiceFactory()->createInstance
-                      (::rtl::OUString
-                       (RTL_CONSTASCII_USTRINGPARAM
-                        ("com.sun.star.form.component.Form"))));
+            uno::Reference<uno::XInterface> xForm(getServiceFactory()->createInstance("com.sun.star.form.component.Form"));
             if (xForm.is())
             {
                 uno::Reference<beans::XPropertySet>
                     xFormProperties(xForm, uno::UNO_QUERY);
                 uno::Any aAny(sFormName);
-                static ::rtl::OUString sName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")));
-                xFormProperties->setPropertyValue(sName, aAny);
+                xFormProperties->setPropertyValue("Name", aAny);
             }
 
             rForm = uno::Reference<form::XForm>(xForm, uno::UNO_QUERY);
@@ -158,9 +153,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
     if (! xServiceFactory.is())
         return false;
 
-    uno::Reference<uno::XInterface> xInterface =
-        xServiceFactory->createInstance
-        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.CheckBox")));
+    uno::Reference<uno::XInterface> xInterface = xServiceFactory->createInstance("com.sun.star.form.component.CheckBox");
 
     if (!xInterface.is())
         return false;
@@ -179,9 +172,8 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
 
         try
         {
-            static ::rtl::OUString sCharHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
             float fCheckBoxHeight = 0.0;
-            xTextRangeProps->getPropertyValue(sCharHeight) >>= fCheckBoxHeight;
+            xTextRangeProps->getPropertyValue("CharHeight") >>= fCheckBoxHeight;
             nCheckBoxHeight = static_cast<sal_uInt32>(floor(fCheckBoxHeight * 35.3));
         }
         catch (beans::UnknownPropertyException &)
@@ -197,20 +189,20 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
     {
         aAny <<= m_pFFData->getStatusText();
 
-        xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpText")), aAny);
+        xPropSet->setPropertyValue("HelpText", aAny);
     }
 
     aAny <<= m_pFFData->getCheckboxChecked();
-    xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultState")), aAny);
+    xPropSet->setPropertyValue("DefaultState", aAny);
 
     if (!m_pFFData->getHelpText().isEmpty())
     {
         aAny <<= m_pFFData->getHelpText();
-        xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpF1Text")), aAny);
+        xPropSet->setPropertyValue("HelpF1Text", aAny);
     }
 
     aAny <<= rControlName;
-    xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aAny);
+    xPropSet->setPropertyValue("Name", aAny);
 
     return true;
 }
@@ -225,7 +217,7 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
 
         if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
         {
-            xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
+            xFormField->setFieldType(ODF_FORMTEXT);
             if (  !m_pFFData->getName().isEmpty() )
             {
                 xNamed->setName( m_pFFData->getName() );
@@ -233,34 +225,34 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
         }
         else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
         {
-            xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX)));
+            xFormField->setFieldType(ODF_FORMCHECKBOX);
             uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
             uno::Any aAny;
             aAny <<= m_pFFData->getCheckboxChecked();
             if ( xPropSet.is() )
-                xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Checked")), aAny);
+                xPropSet->setPropertyValue("Checked", aAny);
             rtl::OUString sName;
         }
         else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
         {
-            xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
+            xFormField->setFieldType(ODF_FORMDROPDOWN);
             uno::Sequence< rtl::OUString > sItems;
             sItems.realloc( m_pFFData->getDropDownEntries().size() );
             ::std::copy( m_pFFData->getDropDownEntries().begin(), m_pFFData->getDropDownEntries().end(), ::comphelper::stl_begin(sItems));
             if ( sItems.getLength() )
             {
-                if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)) ) )
-                    xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)), uno::makeAny( sItems ) );
+                if ( xNameCont->hasByName(ODF_FORMDROPDOWN_LISTENTRY) )
+                    xNameCont->replaceByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny( sItems ) );
                 else
-                    xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)), uno::makeAny( sItems ) );
+                    xNameCont->insertByName(ODF_FORMDROPDOWN_LISTENTRY, uno::makeAny( sItems ) );
 
                 sal_Int32 nResult = m_pFFData->getDropDownResult().toInt32();
                 if ( nResult )
                 {
-                    if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)) ) )
-                        xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)), uno::makeAny( nResult ) );
+                    if ( xNameCont->hasByName(ODF_FORMDROPDOWN_RESULT) )
+                        xNameCont->replaceByName(ODF_FORMDROPDOWN_RESULT, uno::makeAny( nResult ) );
                     else
-                        xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)), uno::makeAny( nResult ) );
+                        xNameCont->insertByName(ODF_FORMDROPDOWN_RESULT, uno::makeAny( nResult ) );
                 }
             }
         }
@@ -280,7 +272,7 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
     if (! xFormComps.is())
         return false;
 
-    static ::rtl::OUString sControl(RTL_CONSTASCII_USTRINGPARAM("Control"));
+    static ::rtl::OUString sControl("Control");
 
     sal_Int32 nControl = 0;
     bool bDone = false;
@@ -318,9 +310,7 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
     if (! m_pImpl->getServiceFactory().is())
         return false;
 
-    uno::Reference<uno::XInterface> xInterface =
-        m_pImpl->getServiceFactory()->createInstance
-        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")));
+    uno::Reference<uno::XInterface> xInterface = m_pImpl->getServiceFactory()->createInstance("com.sun.star.drawing.ControlShape");
 
     if (! xInterface.is())
         return false;
@@ -337,18 +327,15 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
     sal_uInt16 nTmp = text::TextContentAnchorType_AS_CHARACTER;
     aAny <<= nTmp;
 
-    static const ::rtl::OUString sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"));
-    xShapeProps->setPropertyValue(sAnchorType, aAny);
+    xShapeProps->setPropertyValue("AnchorType", aAny);
 
-    static const ::rtl::OUString sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient"));
     nTmp = text::VertOrientation::CENTER;
     aAny <<= nTmp;
-    xShapeProps->setPropertyValue(sVertOrient, aAny);
+    xShapeProps->setPropertyValue("VertOrient", aAny);
 
     aAny <<= xTextRange;
 
-    static const ::rtl::OUString sTextRange(RTL_CONSTASCII_USTRINGPARAM("TextRange"));
-    xShapeProps->setPropertyValue(sTextRange, aAny);
+    xShapeProps->setPropertyValue("TextRange", aAny);
 
     uno::Reference<drawing::XControlShape> xControlShape(xShape, uno::UNO_QUERY);
     uno::Reference<awt::XControlModel> xControlModel(m_pImpl->rFormComponent, uno::UNO_QUERY);

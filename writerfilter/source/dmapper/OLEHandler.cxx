@@ -190,12 +190,11 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
     {
         uno::Reference < lang::XMultiServiceFactory > xFactory(xTextDocument, uno::UNO_QUERY_THROW);
         uno::Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver(
-            xFactory->createInstance(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver" ))), uno::UNO_QUERY_THROW );
+            xFactory->createInstance("com.sun.star.document.ImportEmbeddedObjectResolver"), uno::UNO_QUERY_THROW );
         //hack to work with the ImportEmbeddedObjectResolver
         static sal_Int32 nObjectCount = 100;
         uno::Reference< container::XNameAccess > xNA( xEmbeddedResolver, uno::UNO_QUERY_THROW );
-        ::rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("Obj" ));
+        ::rtl::OUString aURL("Obj");
         aURL += ::rtl::OUString::valueOf( nObjectCount++ );
         uno::Reference < io::XOutputStream > xOLEStream;
         if( (xNA->getByName( aURL ) >>= xOLEStream) && xOLEStream.is() )
@@ -214,7 +213,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                 }
             }
 
-            static const ::rtl::OUString sProtocol = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.EmbeddedObject:" ));
+            static const ::rtl::OUString sProtocol("vnd.sun.star.EmbeddedObject:");
             ::rtl::OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );
             sRet = aPersistName.copy( sProtocol.getLength() );
 

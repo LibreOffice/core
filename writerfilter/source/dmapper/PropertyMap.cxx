@@ -367,7 +367,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
                 uno::Sequence< ::rtl::OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFirstPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
                 m_aFirstPageStyle = uno::Reference< beans::XPropertySet > (
-                        xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.PageStyle") )),
+                        xTextFactory->createInstance("com.sun.star.style.PageStyle"),
                         uno::UNO_QUERY);
                 if (xPageStyles.is())
                     xPageStyles->insertByName( m_sFirstPageStyleName, uno::makeAny(m_aFirstPageStyle) );
@@ -385,7 +385,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
                 uno::Sequence< ::rtl::OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFollowPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
                 m_aFollowPageStyle = uno::Reference< beans::XPropertySet > (
-                        xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.PageStyle") )),
+                        xTextFactory->createInstance("com.sun.star.style.PageStyle"),
                         uno::UNO_QUERY);
                 xPageStyles->insertByName( m_sFollowPageStyleName, uno::makeAny(m_aFollowPageStyle) );
             }

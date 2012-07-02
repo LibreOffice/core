@@ -144,29 +144,29 @@ void PositionHandler::setPositionOffset(const ::rtl::OUString & sText, bool vert
 
 void PositionHandler::setAlignH(const ::rtl::OUString & sText)
 {
-    if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "left" )))
+    if( sText == "left")
         savedAlignH = text::HoriOrientation::LEFT;
-    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "right" )))
+    else if( sText == "right" )
         savedAlignH = text::HoriOrientation::RIGHT;
-    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "center" )))
+    else if( sText == "center" )
         savedAlignH = text::HoriOrientation::CENTER;
-    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "inside" )))
+    else if( sText == "inside" )
         savedAlignH = text::HoriOrientation::INSIDE;
-    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "outside" )))
+    else if( sText == "outside" )
         savedAlignH = text::HoriOrientation::OUTSIDE;
 }
 
 void PositionHandler::setAlignV(const ::rtl::OUString & sText)
 {
-    if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "top" )))
+    if( sText == "top" )
         savedAlignV = text::VertOrientation::TOP;
-    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bottom" )))
+    else if( sText == "bottom" )
         savedAlignV = text::VertOrientation::BOTTOM;
-    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "center" )))
+    else if( sText == "center" )
         savedAlignV = text::VertOrientation::CENTER;
-    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "inside" )))
+    else if( sText == "inside" )
         savedAlignV = text::VertOrientation::NONE;
-    else if( sText == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "outside" )))
+    else if( sText == "outside" )
         savedAlignV = text::VertOrientation::NONE;
 }
 
