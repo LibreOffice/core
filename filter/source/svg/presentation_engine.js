@@ -5745,7 +5745,14 @@ AnimationBaseNode.prototype.activate_st = function()
     {
         this.saveStateOfAnimatedElement();
         this.aActivity.setTargets( this.getAnimatedElement() );
-        this.getContext().aActivityQueue.addActivity( this.aActivity );
+        if( this.getContext().bIsSkipping  )
+        {
+            this.aActivity.end();
+        }
+        else
+        {
+            this.getContext().aActivityQueue.addActivity( this.aActivity );
+        }
     }
     else
     {
@@ -5821,8 +5828,7 @@ AnimationBaseNode.prototype.saveStateOfAnimatedElement = function()
 
 AnimationBaseNode.prototype.removeEffect = function()
 {
-    log( 'AnimationBaseNode.removeEffect invoked' );
-    this.getAnimatedElement().setTo( this.getId() );
+    this.getAnimatedElement().restoreState( this.getId() );
 };
 
 AnimationBaseNode.prototype.getTargetElement = function()
@@ -6175,7 +6181,7 @@ BaseContainerNode.prototype.deactivate_st = function( eDestState )
         // end all children that are not ENDED:
         this.forEachChildNode( mem_fn( 'end' ), ~ENDED_NODE );
         if( this.getFillMode() == FILL_MODE_REMOVE )
-            this.forEachChildNode( mem_fn( 'removeEffect' ), ENDED_NODE );
+            this.removeEffect();
     }
 };
 
@@ -6277,8 +6283,14 @@ BaseContainerNode.prototype.removeEffect = function()
         return;
     for( var i = nChildrenCount - 1; i >= 0; --i )
     {
-        if( ( this.aChildrenArray[i].getState() & FROZEN_NODE | ENDED_NODE ) == 0 )
+        if( ( this.aChildrenArray[i].getState() & ( FROZEN_NODE | ENDED_NODE ) ) == 0 )
+        {
+            log( 'BaseContainerNode.removeEffect: child(id:'
+                 + this.aChildrenArray[i].getId() + ') is neither frozen nor ended;'
+                 + ' state: '
+                 + aTransitionModeOutMap[ this.aChildrenArray[i].getState() ] );
             continue;
+        }
         this.aChildrenArray[i].removeEffect();
     }
 };
@@ -6458,7 +6470,9 @@ SequentialTimeContainer.prototype.skipEffect = function( aChildNode )
     if( this.isChildNode( aChildNode ) )
     {
         this.getContext().aActivityQueue.endAll();
+        this.getContext().bIsSkipping = true;
         this.getContext().aTimerEventQueue.forceEmpty();
+        this.getContext().bIsSkipping = false;
         var aEvent = makeEvent( bind2( aChildNode.deactivate, aChildNode ) );
         this.getContext().aTimerEventQueue.addEvent( aEvent );
     }
@@ -8589,6 +8603,7 @@ AnimatedElement.prototype.notifyNextEffectStart = function( nEffectIndex )
 
 AnimatedElement.prototype.saveState = function( nAnimationNodeId )
 {
+    ANIMDBG.print( 'AnimatedElement(' + this.getId() + ').saveState(' + nAnimationNodeId +')' );
     if( !this.aStateSet[ nAnimationNodeId ] )
     {
         this.aStateSet[ nAnimationNodeId ] = new Object();
@@ -8602,14 +8617,16 @@ AnimatedElement.prototype.saveState = function( nAnimationNodeId )
 
 };
 
-AnimatedElement.prototype.setTo = function( nAnimationNodeId )
+AnimatedElement.prototype.restoreState = function( nAnimationNodeId )
 {
     if( !this.aStateSet[ nAnimationNodeId ] )
     {
-        log( 'AnimatedElement(' + this.getId() + ').setTo: state '
+        log( 'AnimatedElement(' + this.getId() + ').restoreState: state '
                  +nAnimationNodeId  + ' is not valid' );
         return false;
     }
+
+    ANIMDBG.print( 'AnimatedElement(' + this.getId() + ').restoreState(' + nAnimationNodeId +')' );
 
     var aState = this.aStateSet[ nAnimationNodeId ];
     var bRet = this.setToElement( aState.aElement );
@@ -11196,8 +11213,8 @@ function SlideShow()
     this.eDirection = FORWARD;
     this.bIsIdle = true;
     this.bIsEnabled = true;
-    this.bIsSkipping = false;
     this.bIsRewinding = false;
+    this.bIsSkipping = false;
     this.bNoSlideTransition = false;
 }
 
@@ -11548,6 +11565,7 @@ function SlideShowContext( aTimerEventQueue, aEventMultiplexer, aNextEffectEvent
     this.aEventMultiplexer = aEventMultiplexer;
     this.aNextEffectEventArray = aNextEffectEventArray;
     this.aActivityQueue = aActivityQueue;
+    this.bIsSkipping = false;
 }
 
 
