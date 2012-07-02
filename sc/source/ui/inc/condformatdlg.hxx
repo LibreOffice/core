@@ -115,6 +115,8 @@ private:
 
     ScDocument* mpDoc;
     ScAddress maPos;
+    sal_Int32 mnIndex;
+    rtl::OUString maStrCondition;
 
     DECL_LINK( TypeListHdl, void*);
     DECL_LINK( ColFormatTypeHdl, void*);
@@ -134,6 +136,7 @@ public:
     void Deselect();
 
     bool IsSelected() const;
+    void SetIndex(sal_Int32 nIndex);
 
     ScFormatEntry* GetEntry() const;
 };

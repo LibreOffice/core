@@ -80,7 +80,10 @@ Control RID_COND_ENTRY
     {
         Pos = MAP_APPFONT( 2, 2 );
         Size = MAP_APPFONT( 30, 10 );
-        Text [ en-US ] = "Condition";
+    };
+    String STR_CONDITION
+    {
+        Text [ en-US ] = "Condition ";
     };
 
     FixedText FT_CONDITION

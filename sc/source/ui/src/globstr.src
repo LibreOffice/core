@@ -1865,7 +1865,7 @@ Resource RID_GLOBSTR
     };
     String STR_COND_CONDITION
     {
-        Text [ en-US ] = "Condition";
+        Text [ en-US ] = "Cell value is";
     };
     String STR_COND_COLORSCALE
     {
