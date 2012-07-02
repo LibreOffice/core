@@ -30,7 +30,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::drawing;
-    using namespace ::com::sun::star::xml;
+    using namespace ::com::sun::star;
 
     //=====================================================================
     //= OFormLayerXMLExport
@@ -84,7 +84,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     SvXMLImportContext* OFormLayerXMLImport::createContext(const sal_uInt16 _nPrefix, const rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttribs)
+        const Reference< xml::sax::XAttributeList >& _rxAttribs)
     {
         return m_pImpl->createContext(_nPrefix, _rLocalName, _rxAttribs);
     }

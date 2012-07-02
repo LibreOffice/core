@@ -35,72 +35,72 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry const pXML_UnderlineType_Enum[] =
 {
-    { XML_NONE,                         FontUnderline::NONE },
-    { XML_SINGLE,               FontUnderline::SINGLE },
-    { XML_DOUBLE,                       FontUnderline::DOUBLE },
-    { XML_SINGLE,               FontUnderline::DOTTED },
-    { XML_SINGLE,               FontUnderline::DASH },
-    { XML_SINGLE,               FontUnderline::LONGDASH },
-    { XML_SINGLE,               FontUnderline::DASHDOT },
-    { XML_SINGLE,               FontUnderline::DASHDOTDOT },
-    { XML_SINGLE,               FontUnderline::WAVE },
-    { XML_SINGLE,               FontUnderline::BOLD },
-    { XML_SINGLE,               FontUnderline::BOLDDOTTED },
-    { XML_SINGLE,               FontUnderline::BOLDDASH },
-    { XML_SINGLE,               FontUnderline::BOLDLONGDASH },
-    { XML_SINGLE,               FontUnderline::BOLDDASHDOT },
-    { XML_SINGLE,           FontUnderline::BOLDDASHDOTDOT },
-    { XML_SINGLE,               FontUnderline::BOLDWAVE },
-    { XML_DOUBLE,                       FontUnderline::DOUBLEWAVE },
-    { XML_SINGLE,               FontUnderline::SMALLWAVE },
+    { XML_NONE,                         awt::FontUnderline::NONE },
+    { XML_SINGLE,               awt::FontUnderline::SINGLE },
+    { XML_DOUBLE,                       awt::FontUnderline::DOUBLE },
+    { XML_SINGLE,               awt::FontUnderline::DOTTED },
+    { XML_SINGLE,               awt::FontUnderline::DASH },
+    { XML_SINGLE,               awt::FontUnderline::LONGDASH },
+    { XML_SINGLE,               awt::FontUnderline::DASHDOT },
+    { XML_SINGLE,               awt::FontUnderline::DASHDOTDOT },
+    { XML_SINGLE,               awt::FontUnderline::WAVE },
+    { XML_SINGLE,               awt::FontUnderline::BOLD },
+    { XML_SINGLE,               awt::FontUnderline::BOLDDOTTED },
+    { XML_SINGLE,               awt::FontUnderline::BOLDDASH },
+    { XML_SINGLE,               awt::FontUnderline::BOLDLONGDASH },
+    { XML_SINGLE,               awt::FontUnderline::BOLDDASHDOT },
+    { XML_SINGLE,           awt::FontUnderline::BOLDDASHDOTDOT },
+    { XML_SINGLE,               awt::FontUnderline::BOLDWAVE },
+    { XML_DOUBLE,                       awt::FontUnderline::DOUBLEWAVE },
+    { XML_SINGLE,               awt::FontUnderline::SMALLWAVE },
     { XML_TOKEN_INVALID,                0 }
 };
 
 SvXMLEnumMapEntry const pXML_UnderlineStyle_Enum[] =
 {
-    { XML_NONE,                         FontUnderline::NONE },
-    { XML_SOLID,                        FontUnderline::SINGLE },
-    { XML_SOLID,                        FontUnderline::DOUBLE },
-    { XML_DOTTED,               FontUnderline::DOTTED },
-    { XML_DASH,             FontUnderline::DASH },
-    { XML_LONG_DASH,            FontUnderline::LONGDASH },
-    { XML_DOT_DASH,         FontUnderline::DASHDOT },
-    { XML_DOT_DOT_DASH,     FontUnderline::DASHDOTDOT },
-    { XML_WAVE,             FontUnderline::WAVE },
-    { XML_SOLID,                        FontUnderline::BOLD },
-    { XML_DOTTED,               FontUnderline::BOLDDOTTED },
-    { XML_DASH,             FontUnderline::BOLDDASH },
-    { XML_LONG_DASH,            FontUnderline::BOLDLONGDASH },
-    { XML_DOT_DASH,         FontUnderline::BOLDDASHDOT },
-    { XML_DOT_DOT_DASH,         FontUnderline::BOLDDASHDOTDOT },
-    { XML_WAVE,             FontUnderline::BOLDWAVE },
-    { XML_WAVE,                 FontUnderline::DOUBLEWAVE },
-    { XML_SMALL_WAVE,           FontUnderline::SMALLWAVE },
+    { XML_NONE,                         awt::FontUnderline::NONE },
+    { XML_SOLID,                        awt::FontUnderline::SINGLE },
+    { XML_SOLID,                        awt::FontUnderline::DOUBLE },
+    { XML_DOTTED,               awt::FontUnderline::DOTTED },
+    { XML_DASH,             awt::FontUnderline::DASH },
+    { XML_LONG_DASH,            awt::FontUnderline::LONGDASH },
+    { XML_DOT_DASH,         awt::FontUnderline::DASHDOT },
+    { XML_DOT_DOT_DASH,     awt::FontUnderline::DASHDOTDOT },
+    { XML_WAVE,             awt::FontUnderline::WAVE },
+    { XML_SOLID,                        awt::FontUnderline::BOLD },
+    { XML_DOTTED,               awt::FontUnderline::BOLDDOTTED },
+    { XML_DASH,             awt::FontUnderline::BOLDDASH },
+    { XML_LONG_DASH,            awt::FontUnderline::BOLDLONGDASH },
+    { XML_DOT_DASH,         awt::FontUnderline::BOLDDASHDOT },
+    { XML_DOT_DOT_DASH,         awt::FontUnderline::BOLDDASHDOTDOT },
+    { XML_WAVE,             awt::FontUnderline::BOLDWAVE },
+    { XML_WAVE,                 awt::FontUnderline::DOUBLEWAVE },
+    { XML_SMALL_WAVE,           awt::FontUnderline::SMALLWAVE },
     { XML_TOKEN_INVALID,                0 }
 };
 
 SvXMLEnumMapEntry const pXML_UnderlineWidth_Enum[] =
 {
-    { XML_AUTO,                         FontUnderline::NONE },
-    { XML_AUTO,                         FontUnderline::SINGLE },
-    { XML_AUTO,                         FontUnderline::DOUBLE },
-    { XML_AUTO,                         FontUnderline::DOTTED },
-    { XML_AUTO,                         FontUnderline::DASH },
-    { XML_AUTO,                         FontUnderline::LONGDASH },
-    { XML_AUTO,                         FontUnderline::DASHDOT },
-    { XML_AUTO,                         FontUnderline::DASHDOTDOT },
-    { XML_AUTO,                         FontUnderline::WAVE },
-    { XML_BOLD,             FontUnderline::BOLD },
-    { XML_BOLD,             FontUnderline::BOLDDOTTED },
-    { XML_BOLD,             FontUnderline::BOLDDASH },
-    { XML_BOLD,             FontUnderline::BOLDLONGDASH },
-    { XML_BOLD,             FontUnderline::BOLDDASHDOT },
-    { XML_BOLD,                 FontUnderline::BOLDDASHDOTDOT },
-    { XML_BOLD,             FontUnderline::BOLDWAVE },
-    { XML_AUTO,                         FontUnderline::DOUBLEWAVE },
-    { XML_THIN,                         FontUnderline::NONE },
-    { XML_MEDIUM,                       FontUnderline::NONE },
-    { XML_THICK,                        FontUnderline::BOLD},
+    { XML_AUTO,                         awt::FontUnderline::NONE },
+    { XML_AUTO,                         awt::FontUnderline::SINGLE },
+    { XML_AUTO,                         awt::FontUnderline::DOUBLE },
+    { XML_AUTO,                         awt::FontUnderline::DOTTED },
+    { XML_AUTO,                         awt::FontUnderline::DASH },
+    { XML_AUTO,                         awt::FontUnderline::LONGDASH },
+    { XML_AUTO,                         awt::FontUnderline::DASHDOT },
+    { XML_AUTO,                         awt::FontUnderline::DASHDOTDOT },
+    { XML_AUTO,                         awt::FontUnderline::WAVE },
+    { XML_BOLD,             awt::FontUnderline::BOLD },
+    { XML_BOLD,             awt::FontUnderline::BOLDDOTTED },
+    { XML_BOLD,             awt::FontUnderline::BOLDDASH },
+    { XML_BOLD,             awt::FontUnderline::BOLDLONGDASH },
+    { XML_BOLD,             awt::FontUnderline::BOLDDASHDOT },
+    { XML_BOLD,                 awt::FontUnderline::BOLDDASHDOTDOT },
+    { XML_BOLD,             awt::FontUnderline::BOLDWAVE },
+    { XML_AUTO,                         awt::FontUnderline::DOUBLEWAVE },
+    { XML_THIN,                         awt::FontUnderline::NONE },
+    { XML_MEDIUM,                       awt::FontUnderline::NONE },
+    { XML_THICK,                        awt::FontUnderline::BOLD},
     { XML_TOKEN_INVALID,                0 }
 };
 
@@ -126,26 +126,26 @@ sal_Bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
         sal_Int16 eUnderline = sal_Int16();
-        if( (rValue >>= eUnderline) && FontUnderline::NONE!=eUnderline )
+        if( (rValue >>= eUnderline) && awt::FontUnderline::NONE!=eUnderline )
         {
             switch( eNewUnderline )
             {
-            case FontUnderline::NONE:
-            case FontUnderline::SINGLE:
+            case awt::FontUnderline::NONE:
+            case awt::FontUnderline::SINGLE:
                 // keep existing line style
                 eNewUnderline = eUnderline;
                 break;
-            case FontUnderline::DOUBLE:
+            case awt::FontUnderline::DOUBLE:
                 // A double line style has priority over a bold line style,
                 // but not over the line style itself.
                 switch( eUnderline )
                 {
-                case FontUnderline::SINGLE:
-                case FontUnderline::BOLD:
+                case awt::FontUnderline::SINGLE:
+                case awt::FontUnderline::BOLD:
                     break;
-                case FontUnderline::WAVE:
-                case FontUnderline::BOLDWAVE:
-                    eNewUnderline = FontUnderline::DOUBLEWAVE;
+                case awt::FontUnderline::WAVE:
+                case awt::FontUnderline::BOLDWAVE:
+                    eNewUnderline = awt::FontUnderline::DOUBLEWAVE;
                     break;
                 default:
                     // If a double line style is not supported for the existing
@@ -177,8 +177,8 @@ sal_Bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::
     OUStringBuffer aOut;
 
     if( (rValue >>= nValue) &&
-        (FontUnderline::DOUBLE == nValue ||
-         FontUnderline::DOUBLEWAVE == nValue) )
+        (awt::FontUnderline::DOUBLE == nValue ||
+         awt::FontUnderline::DOUBLEWAVE == nValue) )
     {
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, (sal_uInt16)nValue, pXML_UnderlineType_Enum );
@@ -209,40 +209,40 @@ sal_Bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno:
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
         sal_Int16 eUnderline = sal_Int16();
-        if( (rValue >>= eUnderline) && FontUnderline::NONE!=eUnderline )
+        if( (rValue >>= eUnderline) && awt::FontUnderline::NONE!=eUnderline )
         {
             switch( eNewUnderline )
             {
-            case FontUnderline::NONE:
-            case FontUnderline::SINGLE:
+            case awt::FontUnderline::NONE:
+            case awt::FontUnderline::SINGLE:
                 // keep double or bold line style
                 eNewUnderline = eUnderline;
-            case FontUnderline::DOTTED:
+            case awt::FontUnderline::DOTTED:
                 // The line style has priority over a double type.
-                if( FontUnderline::BOLD == eUnderline )
-                    eNewUnderline = FontUnderline::BOLDDOTTED;
+                if( awt::FontUnderline::BOLD == eUnderline )
+                    eNewUnderline = awt::FontUnderline::BOLDDOTTED;
                 break;
-            case FontUnderline::DASH:
-                if( FontUnderline::BOLD == eUnderline )
-                    eNewUnderline = FontUnderline::BOLDDASH;
+            case awt::FontUnderline::DASH:
+                if( awt::FontUnderline::BOLD == eUnderline )
+                    eNewUnderline = awt::FontUnderline::BOLDDASH;
                 break;
-            case FontUnderline::LONGDASH:
-                if( FontUnderline::BOLD == eUnderline )
-                    eNewUnderline = FontUnderline::BOLDLONGDASH;
+            case awt::FontUnderline::LONGDASH:
+                if( awt::FontUnderline::BOLD == eUnderline )
+                    eNewUnderline = awt::FontUnderline::BOLDLONGDASH;
                 break;
-            case FontUnderline::DASHDOT:
-                if( FontUnderline::BOLD == eUnderline )
-                    eNewUnderline = FontUnderline::BOLDDASHDOT;
+            case awt::FontUnderline::DASHDOT:
+                if( awt::FontUnderline::BOLD == eUnderline )
+                    eNewUnderline = awt::FontUnderline::BOLDDASHDOT;
                 break;
-            case FontUnderline::DASHDOTDOT:
-                if( FontUnderline::BOLD == eUnderline )
-                    eNewUnderline = FontUnderline::BOLDDASHDOTDOT;
+            case awt::FontUnderline::DASHDOTDOT:
+                if( awt::FontUnderline::BOLD == eUnderline )
+                    eNewUnderline = awt::FontUnderline::BOLDDASHDOTDOT;
                 break;
-            case FontUnderline::WAVE:
-                if( FontUnderline::BOLD == eUnderline )
-                    eNewUnderline = FontUnderline::BOLDWAVE;
+            case awt::FontUnderline::WAVE:
+                if( awt::FontUnderline::BOLD == eUnderline )
+                    eNewUnderline = awt::FontUnderline::BOLDWAVE;
                 break;
-            case FontUnderline::SMALLWAVE:
+            case awt::FontUnderline::SMALLWAVE:
                 // SMALLWAVE is not used
             default:
                 OSL_ENSURE( bRet, "unexpected line style value" );
@@ -297,38 +297,38 @@ sal_Bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno:
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
         sal_Int16 eUnderline = sal_Int16();
-        if( (rValue >>= eUnderline) && FontUnderline::NONE!=eUnderline )
+        if( (rValue >>= eUnderline) && awt::FontUnderline::NONE!=eUnderline )
         {
             switch( eNewUnderline )
             {
-            case FontUnderline::NONE:
+            case awt::FontUnderline::NONE:
                 // keep existing line style
                 eNewUnderline = eUnderline;
                 break;
-            case FontUnderline::BOLD:
+            case awt::FontUnderline::BOLD:
                 // A double line style has priority over a bold line style,
                 // but not over the line style itself.
                 switch( eUnderline )
                 {
-                case FontUnderline::SINGLE:
+                case awt::FontUnderline::SINGLE:
                     break;
-                case FontUnderline::DOTTED:
-                    eNewUnderline = FontUnderline::BOLDDOTTED;
+                case awt::FontUnderline::DOTTED:
+                    eNewUnderline = awt::FontUnderline::BOLDDOTTED;
                     break;
-                case FontUnderline::DASH:
-                    eNewUnderline = FontUnderline::BOLDDASH;
+                case awt::FontUnderline::DASH:
+                    eNewUnderline = awt::FontUnderline::BOLDDASH;
                     break;
-                case FontUnderline::LONGDASH:
-                    eNewUnderline = FontUnderline::BOLDLONGDASH;
+                case awt::FontUnderline::LONGDASH:
+                    eNewUnderline = awt::FontUnderline::BOLDLONGDASH;
                     break;
-                case FontUnderline::DASHDOT:
-                    eNewUnderline = FontUnderline::BOLDDASHDOT;
+                case awt::FontUnderline::DASHDOT:
+                    eNewUnderline = awt::FontUnderline::BOLDDASHDOT;
                     break;
-                case FontUnderline::DASHDOTDOT:
-                    eNewUnderline = FontUnderline::BOLDDASHDOTDOT;
+                case awt::FontUnderline::DASHDOTDOT:
+                    eNewUnderline = awt::FontUnderline::BOLDDASHDOTDOT;
                     break;
-                case FontUnderline::WAVE:
-                    eNewUnderline = FontUnderline::BOLDWAVE;
+                case awt::FontUnderline::WAVE:
+                    eNewUnderline = awt::FontUnderline::BOLDWAVE;
                     break;
                 default:
                     // a doube line style overwrites a bold one
@@ -358,7 +358,7 @@ sal_Bool XMLUnderlineWidthPropHdl::exportXML( OUString& rStrExpValue, const uno:
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
-    if( (rValue >>= nValue) && (FontUnderline::NONE != nValue) )
+    if( (rValue >>= nValue) && (awt::FontUnderline::NONE != nValue) )
     {
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, (sal_uInt16)nValue, pXML_UnderlineWidth_Enum );

@@ -204,8 +204,8 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
 {
     OUString sFamilyName;
     OUString sStyleName;
-    sal_Int16 nFamily = FontFamily::DONTKNOW;
-    sal_Int16 nPitch = FontPitch::DONTKNOW;
+    sal_Int16 nFamily = awt::FontFamily::DONTKNOW;
+    sal_Int16 nPitch = awt::FontPitch::DONTKNOW;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
     OUString sTmp;
@@ -608,7 +608,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         {
             sal_Int16 nUnderline = 0;
             pUnderlineState->maValue >>= nUnderline;
-            bClear = FontUnderline::NONE == nUnderline;
+            bClear = awt::FontUnderline::NONE == nUnderline;
         }
         if( bClear )
         {

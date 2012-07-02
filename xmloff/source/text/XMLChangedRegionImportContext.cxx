@@ -36,7 +36,7 @@ using namespace ::xmloff::token;
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::text::XTextCursor;
-using ::com::sun::star::util::DateTime;
+using namespace ::com::sun::star;
 using ::com::sun::star::xml::sax::XAttributeList;
 
 
@@ -156,7 +156,7 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     const OUString& rComment,
     const OUString& rDate)
 {
-    DateTime aDateTime;
+    util::DateTime aDateTime;
     if (::sax::Converter::convertDateTime(aDateTime, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(

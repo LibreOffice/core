@@ -48,8 +48,7 @@ using com::sun::star::uno::Exception;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::util::Date;
-using com::sun::star::util::DateTime;
+using namespace com::sun::star;
 using com::sun::star::util::Duration;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::beans::XPropertySet;
@@ -188,7 +187,7 @@ Any xforms_date( const OUString& rValue )
     sal_Int32 nPos2 = rValue.indexOf( sal_Unicode('-'), nPos1 + 1 );
     if( nPos1 > 0  &&  nPos2 > 0 )
     {
-        Date aDate;
+        util::Date aDate;
         aDate.Year = static_cast<sal_uInt16>(
                      rValue.copy( 0, nPos1 ).toInt32() );
         aDate.Month = static_cast<sal_uInt16>(
@@ -202,7 +201,7 @@ Any xforms_date( const OUString& rValue )
 
 Any xforms_dateTime( const OUString& rValue )
 {
-    DateTime aDateTime;
+    util::DateTime aDateTime;
     bool const bSuccess = ::sax::Converter::convertDateTime(aDateTime, rValue);
     return bSuccess ? makeAny( aDateTime ) : Any();
 }

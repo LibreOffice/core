@@ -67,7 +67,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::xml;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
@@ -505,7 +505,7 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createOfficeFormsContext(
 
 //---------------------------------------------------------------------
 SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const rtl::OUString& _rLocalName,
-    const Reference< sax::XAttributeList >&)
+    const Reference< xml::sax::XAttributeList >&)
 {
     SvXMLImportContext* pContext = NULL;
     if ( 0 == _rLocalName.compareToAscii( "form" ) )

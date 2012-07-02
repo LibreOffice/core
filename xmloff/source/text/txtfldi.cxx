@@ -3813,7 +3813,7 @@ void XMLAnnotationImportContext::PrepareField(
     OUString sInitials( aInitialsBuffer.makeStringAndClear() );
     xPropertySet->setPropertyValue(sPropertyInitials, makeAny(sInitials));
 
-    DateTime aDateTime;
+    util::DateTime aDateTime;
     if (::sax::Converter::convertDateTime(aDateTime,
                                             aDateBuffer.makeStringAndClear()))
     {

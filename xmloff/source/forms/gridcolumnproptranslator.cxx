@@ -34,6 +34,7 @@ namespace xmloff
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::style;
@@ -74,12 +75,12 @@ namespace xmloff
             // note that order matters:
             // valueAlignToParaAdjust and valueParaAdjustToAlign search this map from the _beginning_
             // and use the first matching entry
-            { ParagraphAdjust_LEFT,             TextAlign::LEFT     },
-            { ParagraphAdjust_CENTER,           TextAlign::CENTER   },
-            { ParagraphAdjust_RIGHT,            TextAlign::RIGHT    },
-            { ParagraphAdjust_BLOCK,            TextAlign::RIGHT    },
-            { ParagraphAdjust_STRETCH,          TextAlign::LEFT     },
-            { ParagraphAdjust_MAKE_FIXED_SIZE,  TextAlign::LEFT     },
+            { ParagraphAdjust_LEFT,             awt::TextAlign::LEFT     },
+            { ParagraphAdjust_CENTER,           awt::TextAlign::CENTER   },
+            { ParagraphAdjust_RIGHT,            awt::TextAlign::RIGHT    },
+            { ParagraphAdjust_BLOCK,            awt::TextAlign::RIGHT    },
+            { ParagraphAdjust_STRETCH,          awt::TextAlign::LEFT     },
+            { ParagraphAdjust_MAKE_FIXED_SIZE,  awt::TextAlign::LEFT     },
             { ParagraphAdjust_MAKE_FIXED_SIZE,  -1 }
         };
 

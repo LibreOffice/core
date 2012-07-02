@@ -34,43 +34,43 @@ using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry pXML_CrossedoutType_Enum[] =
 {
-    { XML_NONE,                 FontStrikeout::NONE },
-    { XML_SINGLE,   FontStrikeout::SINGLE },
-    { XML_DOUBLE,               FontStrikeout::DOUBLE },
-    { XML_SINGLE,    FontStrikeout::BOLD },
-    { XML_SINGLE,    FontStrikeout::SLASH },
-    { XML_SINGLE,    FontStrikeout::X },
+    { XML_NONE,                 awt::FontStrikeout::NONE },
+    { XML_SINGLE,   awt::FontStrikeout::SINGLE },
+    { XML_DOUBLE,               awt::FontStrikeout::DOUBLE },
+    { XML_SINGLE,    awt::FontStrikeout::BOLD },
+    { XML_SINGLE,    awt::FontStrikeout::SLASH },
+    { XML_SINGLE,    awt::FontStrikeout::X },
     { XML_TOKEN_INVALID,                0 }
 };
 
 SvXMLEnumMapEntry pXML_CrossedoutStyle_Enum[] =
 {
-    { XML_NONE,                         FontStrikeout::NONE },
-    { XML_SOLID,                        FontStrikeout::SINGLE },
-    { XML_SOLID,                        FontStrikeout::DOUBLE },
-    { XML_SOLID,                        FontStrikeout::BOLD },
-    { XML_SOLID,                        FontStrikeout::SLASH },
-    { XML_SOLID,                        FontStrikeout::X },
-    { XML_DOTTED,               FontStrikeout::SINGLE },
-    { XML_DASH,             FontStrikeout::SINGLE },
-    { XML_LONG_DASH,            FontStrikeout::SINGLE },
-    { XML_DOT_DASH,         FontStrikeout::SINGLE },
-    { XML_DOT_DOT_DASH,     FontStrikeout::SINGLE },
-    { XML_WAVE,             FontStrikeout::SINGLE },
+    { XML_NONE,                         awt::FontStrikeout::NONE },
+    { XML_SOLID,                        awt::FontStrikeout::SINGLE },
+    { XML_SOLID,                        awt::FontStrikeout::DOUBLE },
+    { XML_SOLID,                        awt::FontStrikeout::BOLD },
+    { XML_SOLID,                        awt::FontStrikeout::SLASH },
+    { XML_SOLID,                        awt::FontStrikeout::X },
+    { XML_DOTTED,               awt::FontStrikeout::SINGLE },
+    { XML_DASH,             awt::FontStrikeout::SINGLE },
+    { XML_LONG_DASH,            awt::FontStrikeout::SINGLE },
+    { XML_DOT_DASH,         awt::FontStrikeout::SINGLE },
+    { XML_DOT_DOT_DASH,     awt::FontStrikeout::SINGLE },
+    { XML_WAVE,             awt::FontStrikeout::SINGLE },
     { XML_TOKEN_INVALID,                0 }
 };
 
 SvXMLEnumMapEntry pXML_CrossedoutWidth_Enum[] =
 {
-    { XML_AUTO,                 FontStrikeout::NONE },
-    { XML_AUTO,                 FontStrikeout::SINGLE },
-    { XML_AUTO,                 FontStrikeout::DOUBLE },
-    { XML_BOLD,     FontStrikeout::BOLD },
-    { XML_AUTO,                 FontStrikeout::SLASH },
-    { XML_AUTO,                 FontStrikeout::X },
-    { XML_THIN,                 FontStrikeout::NONE },
-    { XML_MEDIUM,               FontStrikeout::NONE },
-    { XML_THICK,                FontStrikeout::NONE },
+    { XML_AUTO,                 awt::FontStrikeout::NONE },
+    { XML_AUTO,                 awt::FontStrikeout::SINGLE },
+    { XML_AUTO,                 awt::FontStrikeout::DOUBLE },
+    { XML_BOLD,     awt::FontStrikeout::BOLD },
+    { XML_AUTO,                 awt::FontStrikeout::SLASH },
+    { XML_AUTO,                 awt::FontStrikeout::X },
+    { XML_THIN,                 awt::FontStrikeout::NONE },
+    { XML_MEDIUM,               awt::FontStrikeout::NONE },
+    { XML_THICK,                awt::FontStrikeout::NONE },
     { XML_TOKEN_INVALID,                0 }
 };
 
@@ -94,23 +94,23 @@ sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno:
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
         sal_Int16 eStrikeout = sal_Int16();
-        if( (rValue >>= eStrikeout) && FontStrikeout::NONE!=eStrikeout )
+        if( (rValue >>= eStrikeout) && awt::FontStrikeout::NONE!=eStrikeout )
         {
             switch( eNewStrikeout )
             {
-            case FontStrikeout::NONE:
-            case FontStrikeout::SINGLE:
+            case awt::FontStrikeout::NONE:
+            case awt::FontStrikeout::SINGLE:
                 // keep existing line style
                 eNewStrikeout = eStrikeout;
                 break;
-            case FontStrikeout::DOUBLE:
+            case awt::FontStrikeout::DOUBLE:
                 // A double line style has priority over a solid or a bold
                 // line style,
                 // but not about any other line style
                 switch( eStrikeout )
                 {
-                case FontStrikeout::SINGLE:
-                case FontStrikeout::BOLD:
+                case awt::FontStrikeout::SINGLE:
+                case awt::FontStrikeout::BOLD:
                     break;
                 default:
                     // If a double line style is not supported for the existing
@@ -141,7 +141,7 @@ sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno:
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
-    if( (rValue >>= nValue) && FontStrikeout::DOUBLE==nValue )
+    if( (rValue >>= nValue) && awt::FontStrikeout::DOUBLE==nValue )
     {
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, (sal_uInt16)nValue, pXML_CrossedoutType_Enum );
@@ -172,7 +172,7 @@ sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
         sal_Int16 eStrikeout = sal_Int16();
-        if( (rValue >>= eStrikeout) && FontStrikeout::NONE!=eStrikeout )
+        if( (rValue >>= eStrikeout) && awt::FontStrikeout::NONE!=eStrikeout )
         {
             // one NONE a SINGLE are possible new values. For both, the
             // existing value is kept.
@@ -223,18 +223,18 @@ sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno
         // multi property: style and width might be set already.
         // If the old value is NONE, the new is used unchanged.
         sal_Int16 eStrikeout = sal_Int16();
-        if( (rValue >>= eStrikeout) && FontStrikeout::NONE!=eStrikeout )
+        if( (rValue >>= eStrikeout) && awt::FontStrikeout::NONE!=eStrikeout )
         {
             switch( eNewStrikeout )
             {
-            case FontStrikeout::NONE:
+            case awt::FontStrikeout::NONE:
                 // keep existing line style
                 eNewStrikeout = eStrikeout;
                 break;
-            case FontStrikeout::BOLD:
+            case awt::FontStrikeout::BOLD:
                 switch( eStrikeout )
                 {
-                case FontStrikeout::SINGLE:
+                case awt::FontStrikeout::SINGLE:
                     break;
                 default:
                     // If a double line style is not supported for the existing
@@ -264,7 +264,7 @@ sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
-    if( (rValue >>= nValue) && (FontStrikeout::BOLD == nValue) )
+    if( (rValue >>= nValue) && (awt::FontStrikeout::BOLD == nValue) )
     {
         bRet = SvXMLUnitConverter::convertEnum(
             aOut, (sal_uInt16)nValue, pXML_CrossedoutWidth_Enum );
@@ -292,8 +292,8 @@ sal_Bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno:
     if( !rStrImpValue.isEmpty() )
     {
         sal_Int16 eStrikeout = ('/' == rStrImpValue[0]
-                                        ? FontStrikeout::SLASH
-                                        : FontStrikeout::X);
+                                        ? awt::FontStrikeout::SLASH
+                                        : awt::FontStrikeout::X);
         rValue <<= (sal_Int16)eStrikeout;
         bRet = sal_True;
     }
@@ -307,10 +307,10 @@ sal_Bool XMLCrossedOutTextPropHdl::exportXML( OUString& rStrExpValue, const uno:
     sal_Int16 nValue = sal_Int16();
 
     if( (rValue >>= nValue) &&
-        (FontStrikeout::SLASH == nValue || FontStrikeout::X == nValue) )
+        (awt::FontStrikeout::SLASH == nValue || awt::FontStrikeout::X == nValue) )
     {
         rStrExpValue = OUString::valueOf(
-            static_cast< sal_Unicode>( FontStrikeout::SLASH == nValue ? '/'
+            static_cast< sal_Unicode>( awt::FontStrikeout::SLASH == nValue ? '/'
                                                                       : 'X' ) );
         bRet = sal_True;
     }

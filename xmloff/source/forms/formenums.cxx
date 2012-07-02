@@ -44,6 +44,7 @@ namespace xmloff
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::awt;
+    using namespace ::com::sun::star;
     using namespace ::xmloff::token;
 
     const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
@@ -187,9 +188,9 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aTextAlignMap[] =
                     {
-                        { XML_START,        TextAlign::LEFT },
-                        { XML_CENTER,       TextAlign::CENTER },
-                        { XML_END,          TextAlign::RIGHT },
+                        { XML_START,        awt::TextAlign::LEFT },
+                        { XML_CENTER,       awt::TextAlign::CENTER },
+                        { XML_END,          awt::TextAlign::RIGHT },
                         { XML_JUSTIFY,      (sal_uInt16)-1 },
                         { XML_JUSTIFIED,    (sal_uInt16)-1 },
                         { XML_TOKEN_INVALID, 0 }

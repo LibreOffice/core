@@ -2768,7 +2768,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 
                 {
                     // date time
-                    DateTime aDate( xAnnotation->getDateTime() );
+                    com::sun::star::util::DateTime aDate( xAnnotation->getDateTime() );
                     ::sax::Converter::convertDateTime(sStringBuffer, aDate, true);
                     SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC, XML_DATE, sal_True, sal_False );
                     Characters(sStringBuffer.makeStringAndClear());

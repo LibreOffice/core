@@ -128,8 +128,8 @@ XMLFontStyleContext_Impl::XMLFontStyleContext_Impl( SvXMLImport& rImport,
     OUString sEmpty;
     aFamilyName <<= sEmpty;
     aStyleName <<= sEmpty;
-    aFamily <<= (sal_Int16)FontFamily::DONTKNOW;
-    aPitch <<= (sal_Int16)FontPitch::DONTKNOW;
+    aFamily <<= (sal_Int16)awt::FontFamily::DONTKNOW;
+    aPitch <<= (sal_Int16)awt::FontPitch::DONTKNOW;
     aEnc <<= (sal_Int16)rStyles.GetDfltCharset();
 }
 

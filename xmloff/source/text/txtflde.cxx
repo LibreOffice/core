@@ -264,9 +264,9 @@ inline sal_Int16 GetInt16Property(const OUString&,
                                         const Reference<XPropertySet> &);
 inline sal_Int8 GetInt8Property(const OUString&,
                                       const Reference<XPropertySet> &);
-inline DateTime const GetDateTimeProperty( const OUString& sPropName,
+inline util::DateTime const GetDateTimeProperty( const OUString& sPropName,
                                            const Reference<XPropertySet> & xPropSet);
-inline Date const GetDateProperty( const OUString& sPropName,
+inline util::Date const GetDateProperty( const OUString& sPropName,
                                    const Reference<XPropertySet> & xPropSet);
 inline Sequence<OUString> const GetStringSequenceProperty(
                                    const OUString& sPropName,
@@ -1747,7 +1747,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         }
 
         // date time
-        DateTime aDate( GetDateTimeProperty(sPropertyDateTimeValue, rPropSet) );
+        util::DateTime aDate( GetDateTimeProperty(sPropertyDateTimeValue, rPropSet) );
         {
             OUStringBuffer aBuffer;
             ::sax::Converter::convertDateTime(aBuffer, aDate, true);
@@ -2639,13 +2639,13 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
 
 /// export a date or time
 void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
-                                         const DateTime& rTime,
+                                         const util::DateTime& rTime,
                                          sal_Bool bIsDate,
                                          sal_uInt16 nPrefix)
 {
     OUStringBuffer aBuffer;
 
-    DateTime aDateTime(rTime);
+    util::DateTime aDateTime(rTime);
 
     // truncate dates
     if(bIsDate)
@@ -3578,22 +3578,22 @@ inline sal_Int8 GetInt8Property(
     return nInt;
 }
 
-inline DateTime const GetDateTimeProperty(
+inline util::DateTime const GetDateTimeProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
     Any aAny = xPropSet->getPropertyValue(sPropName);
-    DateTime aTime;
+    util::DateTime aTime;
     aAny >>= aTime;
     return aTime;
 }
 
-inline Date const GetDateProperty(
+inline util::Date const GetDateProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
     Any aAny = xPropSet->getPropertyValue(sPropName);
-    Date aDate;
+    util::Date aDate;
     aAny >>= aDate;
     return aDate;
 }

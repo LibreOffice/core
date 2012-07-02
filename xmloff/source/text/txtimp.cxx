@@ -74,7 +74,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
-using ::com::sun::star::util::DateTime;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star;
 using ::comphelper::UStringLess;
@@ -2772,7 +2772,7 @@ void XMLTextImportHelper::RedlineAdd( const OUString& /*rType*/,
                                       const OUString& /*rId*/,
                                       const OUString& /*rAuthor*/,
                                       const OUString& /*rComment*/,
-                                      const DateTime& /*rDateTime*/,
+                                      const util::DateTime& /*rDateTime*/,
                                       sal_Bool /*bMergeLastPara*/)
 {
     // dummy implementation: do nothing

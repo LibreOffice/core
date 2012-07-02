@@ -81,8 +81,7 @@ using com::sun::star::beans::PropertyValue;
 using com::sun::star::xsd::XDataType;
 using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xforms::XFormsSupplier;
-using com::sun::star::util::Date;
-using com::sun::star::util::DateTime;
+using namespace com::sun::star;
 using com::sun::star::util::Duration;
 
 void exportXForms( SvXMLExport& rExport )
@@ -137,14 +136,14 @@ OUString xforms_whitespace( const Any& );
 template<typename T, void (*FUNC)( OUStringBuffer&, T )> OUString xforms_convert( const Any& );
 template<typename T, void (*FUNC)( OUStringBuffer&, const T& )> OUString xforms_convertRef( const Any& );
 
-void xforms_formatDate( OUStringBuffer& aBuffer, const Date& aDate );
+void xforms_formatDate( OUStringBuffer& aBuffer, const util::Date& aDate );
 void xforms_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Time& aTime );
-void xforms_formatDateTime( OUStringBuffer& aBuffer, const DateTime& aDateTime );
+void xforms_formatDateTime( OUStringBuffer& aBuffer, const util::DateTime& aDateTime );
 
 convert_t xforms_int32    = &xforms_convert<sal_Int32,&::sax::Converter::convertNumber>;
 convert_t xforms_double   = &xforms_convert<double,&::sax::Converter::convertDouble>;
-convert_t xforms_dateTime = &xforms_convertRef<DateTime,&xforms_formatDateTime>;
-convert_t xforms_date     = &xforms_convertRef<Date,&xforms_formatDate>;
+convert_t xforms_dateTime = &xforms_convertRef<util::DateTime,&xforms_formatDateTime>;
+convert_t xforms_date     = &xforms_convertRef<util::Date,&xforms_formatDate>;
 convert_t xforms_time     = &xforms_convertRef<com::sun::star::util::Time,&xforms_formatTime>;
 
 // other functions
@@ -676,7 +675,7 @@ OUString xforms_bool( const Any& rAny )
     return OUString();
 }
 
-void xforms_formatDate( OUStringBuffer& aBuffer, const Date& rDate )
+void xforms_formatDate( OUStringBuffer& aBuffer, const util::Date& rDate )
 {
     aBuffer.append( static_cast<sal_Int32>( rDate.Year ) );
     aBuffer.append( sal_Unicode('-') );
@@ -695,7 +694,7 @@ void xforms_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Tim
     ::sax::Converter::convertDuration( aBuffer, aDuration );
 }
 
-void xforms_formatDateTime( OUStringBuffer& aBuffer, const DateTime& aDateTime )
+void xforms_formatDateTime( OUStringBuffer& aBuffer, const util::DateTime& aDateTime )
 {
     ::sax::Converter::convertDateTime( aBuffer, aDateTime );
 }
