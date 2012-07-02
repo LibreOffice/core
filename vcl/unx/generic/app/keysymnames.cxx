@@ -222,7 +222,7 @@ namespace vcl_sal {
         { XK_Page_Up, "PageUp" },
         { XK_Page_Down, "PageDown" },
         { XK_Escape, "Esc" },
-        { XK_Right, "Hyre" },
+        { XK_Right, "Høyre" },
         { XK_Left, "Venstre" },
         { XK_Up, "Opp" },
         { XK_Down, "Ned" },
