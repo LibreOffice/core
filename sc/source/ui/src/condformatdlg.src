@@ -32,40 +32,40 @@ ModalDialog RID_SCDLG_CONDFORMAT
 {
     OutputSize = TRUE;
     Hide = TRUE;
-    Size = MAP_APPFONT ( 200, 200 );
+    Size = MAP_APPFONT ( 300, 300 );
     Text [ en-US ] = "Conditional Formatting for";
     Moveable = TRUE;
     Closeable = TRUE;
     OkButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 160, 180 );
-        Size = MAP_APPFONT ( 30, 14 );
+        Pos = MAP_APPFONT ( 190, 280 );
+        Size = MAP_APPFONT ( 50, 14 );
         TabStop = TRUE;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 120, 180 );
-        Size = MAP_APPFONT ( 30, 14 );
+        Pos = MAP_APPFONT ( 245, 280 );
+        Size = MAP_APPFONT ( 50, 14 );
         TabStop = TRUE;
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT( 5, 155 );
-        Size = MAP_APPFONT( 40, 14 );
+        Pos = MAP_APPFONT( 5, 255 );
+        Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Add";
         TabStop = TRUE;
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT( 50, 155 );
-        Size = MAP_APPFONT( 40, 14 );
+        Pos = MAP_APPFONT( 60, 255 );
+        Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Remove";
         TabStop = TRUE;
     };
     Control CTRL_LIST
     {
         Pos = MAP_APPFONT( 5, 20 );
-        Size = MAP_APPFONT( 190, 120 );
+        Size = MAP_APPFONT( 290, 220 );
         Border = TRUE;
     };
 };
@@ -73,13 +73,13 @@ ModalDialog RID_SCDLG_CONDFORMAT
 Control RID_COND_ENTRY
 {
     Pos = MAP_APPFONT( 0, 0 );
-    Size = MAP_APPFONT( 190, 40 );
+    Size = MAP_APPFONT( 290, 40 );
     Border = TRUE;
 
     FixedText FT_COND_NR
     {
         Pos = MAP_APPFONT( 2, 2 );
-        Size = MAP_APPFONT( 30, 10 );
+        Size = MAP_APPFONT( 50, 10 );
     };
     String STR_CONDITION
     {
@@ -88,14 +88,14 @@ Control RID_COND_ENTRY
 
     FixedText FT_CONDITION
     {
-        Pos = MAP_APPFONT( 40, 2 );
-        Size = MAP_APPFONT( 90, 10 );
+        Pos = MAP_APPFONT( 60, 2 );
+        Size = MAP_APPFONT( 120, 10 );
     };
 
     ListBox LB_TYPE
     {
         Pos = MAP_APPFONT( 5, 15 );
-        Size = MAP_APPFONT( 40, 40 );
+        Size = MAP_APPFONT( 60, 40 );
         Border = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -107,8 +107,8 @@ Control RID_COND_ENTRY
     };
     ListBox LB_CELLIS_TYPE
     {
-        Pos = MAP_APPFONT( 50, 15 );
-        Size = MAP_APPFONT( 30, 40 );
+        Pos = MAP_APPFONT( 70, 15 );
+        Size = MAP_APPFONT( 50, 40 );
         Border = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -133,20 +133,20 @@ Control RID_COND_ENTRY
     };
     Edit ED_VAL1
     {
-        Pos = MAP_APPFONT( 90, 15 );
-        Size = MAP_APPFONT( 70, 12 );
+        Pos = MAP_APPFONT( 125, 15 );
+        Size = MAP_APPFONT( 170, 12 );
         Border = TRUE;
     };
     Edit ED_VAL2
     {
-        Pos = MAP_APPFONT( 130, 15 );
-        Size = MAP_APPFONT( 30, 12 );
+        Pos = MAP_APPFONT( 215, 15 );
+        Size = MAP_APPFONT( 80, 12 );
         Border = TRUE;
     };
     ListBox LB_STYLE
     {
         Pos = MAP_APPFONT( 50, 32 );
-        Size = MAP_APPFONT( 30, 40 );
+        Size = MAP_APPFONT( 50, 80 );
         Border = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -157,7 +157,7 @@ Control RID_COND_ENTRY
     ListBox LB_COLOR_FORMAT
     {
         Pos = MAP_APPFONT( 50, 15 );
-        Size = MAP_APPFONT( 60, 40);
+        Size = MAP_APPFONT( 60, 60);
         Border = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -167,24 +167,10 @@ Control RID_COND_ENTRY
             "Data Bar";
         };
     };
-    ListBox LB_COL_SCALE2
-    {
-        Pos = MAP_APPFONT( 120, 15 );
-        Size = MAP_APPFONT( 60, 40 );
-        Border = TRUE;
-        DropDown = TRUE;
-    };
-    ListBox LB_COL_SCALE3
-    {
-        Pos = MAP_APPFONT( 120, 15 );
-        Size = MAP_APPFONT( 60, 40 );
-        Border = TRUE;
-        DropDown = TRUE;
-    };
     ListBox LB_TYPE_COL_SCALE
     {
         Pos = MAP_APPFONT( 5, 32 );
-        Size = MAP_APPFONT( 40, 40 );
+        Size = MAP_APPFONT( 50, 60 );
         Border = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -200,20 +186,20 @@ Control RID_COND_ENTRY
     Edit ED_COL_SCALE
     {
         Pos = MAP_APPFONT( 5, 48 );
-        Size = MAP_APPFONT( 40, 12 );
+        Size = MAP_APPFONT( 50, 12 );
         Border = TRUE;
     };
     Window WD_PREVIEW
     {
-        Pos = MAP_APPFONT( 90, 32 );
-        Size = MAP_APPFONT( 40, 14 );
+        Pos = MAP_APPFONT( 150, 32 );
+        Size = MAP_APPFONT( 60, 14 );
         Text [ en-US ] = "Example";
         Border = TRUE;
     };
     ListBox LB_COL
     {
         Pos = MAP_APPFONT( 5, 62 );
-        Size = MAP_APPFONT( 40, 40 );
+        Size = MAP_APPFONT( 60, 40 );
         Border = TRUE;
         DropDown = TRUE;
         DDExtraWidth = TRUE;
