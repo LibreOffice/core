@@ -95,7 +95,7 @@ namespace cmis
         rtl::OUString sUrl;
         rtl::OUString sEncodedBinding = rtl::Uri::encode(
                 m_sBindingUrl + "#" + m_sRepositoryId,
-                rtl_UriCharClassUricNoSlash,
+                rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
         sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;

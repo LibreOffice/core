@@ -283,7 +283,7 @@ INetURLObject CmisDetailsContainer::getUrl( )
     {
         rtl::OUString sEncodedBinding = rtl::Uri::encode(
                 sBindingUrl + "#" + sRepo,
-                rtl_UriCharClassUricNoSlash,
+                rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
         sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
