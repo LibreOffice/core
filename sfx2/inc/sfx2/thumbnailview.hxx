@@ -256,8 +256,6 @@ protected:
 
     virtual void Tracking( const TrackingEvent& rMEvt );
 
-    virtual void KeyInput( const KeyEvent& rKEvt );
-
     virtual void Command( const CommandEvent& rCEvt );
 
     virtual void Paint( const Rectangle& rRect );
