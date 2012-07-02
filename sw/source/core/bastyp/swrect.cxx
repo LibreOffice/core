@@ -26,14 +26,14 @@
  *
  ************************************************************************/
 
+#include "swrect.hxx"
 
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>
 #endif
-#include <stdlib.h>
-#include "swrect.hxx"
-#include <math.h>
 
+#include <math.h>
+#include <stdlib.h>
 
 SwRect::SwRect( const Rectangle &rRect ) :
     m_Point( rRect.Left(), rRect.Top() )

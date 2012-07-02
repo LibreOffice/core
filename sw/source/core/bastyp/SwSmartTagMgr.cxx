@@ -28,11 +28,10 @@
 
 #include "SwSmartTagMgr.hxx"
 
-#include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
-#include <swmodule.hxx>
-
 #include <docsh.hxx>
+#include <osl/mutex.hxx>
+#include <swmodule.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

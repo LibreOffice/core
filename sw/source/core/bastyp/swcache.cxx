@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#include <swcache.hxx>
 #include <rtl/strbuf.hxx>
+#include <swcache.hxx>
 
 #ifdef DBG_UTIL
 void SwCache::Check()
