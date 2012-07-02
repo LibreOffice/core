@@ -80,6 +80,7 @@ static sal_uInt16 pRanges[] =
     SID_ATTR_PAGE_ON,        SID_ATTR_PAGE_ON,
     SID_ATTR_PAGE_DYNAMIC,   SID_ATTR_PAGE_DYNAMIC,
     SID_ATTR_PAGE_SHARED,    SID_ATTR_PAGE_SHARED,
+    SID_ATTR_PAGE_SHARED_FIRST,    SID_ATTR_PAGE_SHARED_FIRST,
     SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING,
     0
 };
@@ -237,6 +238,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
     const sal_uInt16        nWDynamic   = GetWhich( SID_ATTR_PAGE_DYNAMIC );
     const sal_uInt16        nWDynSpacing = GetWhich( SID_ATTR_HDFT_DYNAMIC_SPACING );
     const sal_uInt16        nWShared    = GetWhich( SID_ATTR_PAGE_SHARED );
+    const sal_uInt16        nWSharedFirst = GetWhich( SID_ATTR_PAGE_SHARED_FIRST );
     const sal_uInt16        nWBrush     = GetWhich( SID_ATTR_BRUSH );
     const sal_uInt16        nWBox       = GetWhich( SID_ATTR_BORDER_OUTER );
     const sal_uInt16        nWBoxInfo   = GetWhich( SID_ATTR_BORDER_INNER );
@@ -247,6 +249,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
                                         nWOn,       nWOn,
                                         nWDynamic,  nWDynamic,
                                         nWShared,   nWShared,
+                                        nWSharedFirst,   nWSharedFirst,
                                         nWBrush,    nWBrush,
                                         nWBoxInfo,  nWBoxInfo,
                                         nWBox,      nWBox,
@@ -264,6 +267,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
     aSet.Put( SfxBoolItem( nWOn,      aTurnOnBox.IsChecked() ) );
     aSet.Put( SfxBoolItem( nWDynamic, aHeightDynBtn.IsChecked() ) );
     aSet.Put( SfxBoolItem( nWShared,  aCntSharedBox.IsChecked() ) );
+    aSet.Put( SfxBoolItem( nWSharedFirst, sal_True) );
     if(aDynSpacingCB.IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
     {
         SfxBoolItem* pBoolItem = (SfxBoolItem*)pPool->GetDefaultItem(nWDynSpacing).Clone();
