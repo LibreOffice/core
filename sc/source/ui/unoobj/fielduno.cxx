@@ -1316,7 +1316,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScEditFieldObj::getPropertySetI
                                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef = pPropSet->getPropertySetInfo();
+    uno::Reference<beans::XPropertySetInfo> aRef = pPropSet->getPropertySetInfo();
     return aRef;
 }
 
