@@ -899,7 +899,7 @@ public class XMLTools {
      * @param xDoc Target document to be imported.
      * @param docType Type of document (for example 'Calc', 'Writer', 'Draw')
      * The type must start with <b>capital</b> letter.
-     * @param exportType The type of export specifies if the whole
+     * @param importType The type of export specifies if the whole
      * document will be exported or one of its parts (Meta info, Styles, etc.).
      * The following types supported (it hardly depends of XML data in file) :
      *  "" (empty string) - for the whole document ;

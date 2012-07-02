@@ -64,11 +64,11 @@ import com.sun.star.uno.XInterface;
  * @see com.sun.star.accessibility.XAccessibleComponent
  * @see com.sun.star.accessibility.XAccessibleTable
  * @see com.sun.star.accessibility.XAccessibleContext
- * @see ifc.n.star.accessibility._XAccessibleSelection
- * @see ifc.n.star.accessibility._XAccessibleEventBroadcaster
- * @see ifc.n.star.accessibility._XAccessibleComponent
- * @see ifc.n.star.accessibility._XAccessibleTable
- * @see ifc.n.star.accessibility._XAccessibleContext
+ * @see ifc.accessibility._XAccessibleSelection
+ * @see ifc.accessibility._XAccessibleEventBroadcaster
+ * @see ifc.accessibility._XAccessibleComponent
+ * @see ifc.accessibility._XAccessibleTable
+ * @see ifc.accessibility._XAccessibleContext
  */
 public class ScAccessibleCell extends TestCase {
 

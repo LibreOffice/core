@@ -34,7 +34,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param ActuatingPropertyName the id of the actuating property.
      * @param NewValue the new value of the property
      * @param OldValue the old value of the property
@@ -55,7 +55,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param xEventListener the listener to notify about changes
      */
     public void addEventListener(com.sun.star.lang.XEventListener xEventListener) {
@@ -70,7 +70,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param PropertyName The name of the property whose value is to be converted.
      * @param PropertyValue The to-be-converted property value.
      * @param ControlValueType The target type of the conversion. This type is determined by the control which is used to display the property, which in turn is determined by the handler itself in describePropertyLine .
@@ -88,7 +88,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param PropertyName The name of the conversion's target property.
      * @param ControlValue The to-be-converted control value. This value has been obtained from an XPropertyControl , using its Value attribute.
      * @throws com.sun.star.beans.UnknownPropertyException ::com::sun::star::beans::UnknownPropertyException if the given property is not supported by the property handler
@@ -99,12 +99,11 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param PropertyName the name of the property whose user interface is to be described
      * @param  out_Descriptor the descriptor of the property line, to be filled by the XPropertyHandler implementation
      * @param ControlFactory a factory for creating XPropertyControl instances. Must not be NULL .
      * @throws com.sun.star.beans.UnknownPropertyException ::com::sun::star::beans::UnknownPropertyException if the given property is not supported by this handler
-     *
      * @throws com.sun.star.lang.NullPointerException ::com::sun::star::lang::NullPointerException if ControlFactory is NULL .
      */
     public LineDescriptor describePropertyLine(
@@ -116,13 +115,13 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      */
     public void dispose() {
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @return null
      */
     public String[] getActuatingProperties() {
@@ -130,7 +129,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param PropertyName the name of the property whose state is to be retrieved
      * @throws com.sun.star.beans.UnknownPropertyException ::com::sun::star::beans::UnknownPropertyException if the given property is not supported by the property handler
      * @return null
@@ -141,7 +140,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param PropertyName the name of the property whose value is to be retrieved
      * @throws com.sun.star.beans.UnknownPropertyException ::com::sun::star::beans::UnknownPropertyException if the given property is not supported by the property handler
      * @return null
@@ -151,7 +150,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @return null
      */
     public String[] getSupersededProperties() {
@@ -167,7 +166,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param Component the component to inspect. Must not be NULL
      * @throws com.sun.star.lang.NullPointerException com::sun::star::lang::NullPointerException if the component is NULL
      */
@@ -175,7 +174,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param PropertyName the name of the property whose composability is to be determined
      * @throws com.sun.star.beans.UnknownPropertyException ::com::sun::star::beans::UnknownPropertyException if the given property is not supported by the property handler
      *
@@ -187,7 +186,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param PropertyName The name of the property whose browse button has been clicked
      * @param Primary true if and only if the primary button has been clicked, false otherwise
      * @param out_Data If the method returns InteractiveSelectionResult::ObtainedValue , then _rData contains the value which has been interactively obtained from the user, and which still needs to be set at the inspected component.
@@ -215,14 +214,14 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param xPropertyChangeListener the listener to be revoke
      */
     public void removePropertyChangeListener(com.sun.star.beans.XPropertyChangeListener xPropertyChangeListener) {
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param PropertyName the name of the property whose value is to be set
      * @param Value the property value to set
      * @throws com.sun.star.beans.UnknownPropertyException ::com::sun::star::beans::UnknownPropertyException if the given property is not supported by the property handler
@@ -231,7 +230,7 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      * @param Suspend Whether the handler is to be suspended true or reactivated ( false ). The latter happens if a handler was successfully suspended, but an external instance vetoed the whole suspension process.
      * @return false
      */
@@ -240,9 +239,8 @@ public class PropertyHandlerImpl implements XPropertyHandler{
     }
 
     /**
-     * This method currently do nothig
+     * This method currently does nothing
      */
-
     public void describePropertyLine(String string, LineDescriptor[] lineDescriptor, XPropertyControlFactory xPropertyControlFactory) throws UnknownPropertyException, com.sun.star.lang.NullPointerException {
     }
 

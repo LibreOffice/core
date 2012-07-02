@@ -42,7 +42,7 @@ import com.sun.star.uno.UnoRuntime;
  *   </li>
  *   <li>"XCellRangesQuery.EXPECTEDRESULTS": the expected results for the test
  *       methods as a String array.<br>
- *       @see mod._sc.ScCellCurserObj or
+ *       @see mod._sc.ScCellCursorObj or
  *       @see mod._sc.ScCellObj for an example how this should look like.
  *   </li>
  * </ul>

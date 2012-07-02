@@ -56,8 +56,8 @@ import com.sun.star.uno.XInterface;
  * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
  * @see com.sun.star.accessibility.XAccessibleSelection
  * @see ifc.accessibility._XAccessibleComponent
- * @see ifc.accessibility.XAccessibleEventBroadcaster
- * @see ifc.accessibility.XAccessibleSelection
+ * @see ifc.accessibility._XAccessibleEventBroadcaster
+ * @see ifc.accessibility._XAccessibleSelection
  * @see ifc.accessibility._XAccessibleContext
  */
 public class ScAccessibleDocument extends TestCase {

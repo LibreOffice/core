@@ -254,7 +254,7 @@ public class SQLExecution {
      * @param command The command.
      * @param update If true, it is a update/alter command instead of an select
      *          command
-     * @return A HashMap with the result.
+     * @param output A HashMap with the result.
      */
     private void execute(String command, HashMap<String, String[]> output, boolean update) {
         if (m_bDebug)

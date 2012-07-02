@@ -65,7 +65,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
     *  <li><code>XPropertySet xProp</code></li>
     *  <li><code>String colName</code></li>
     * </ul> <p>
-     * @see om.sun.star.sdb.XSingleSelectQueryAnalyzer
+     * @see com.sun.star.sdb.XSingleSelectQueryAnalyzer
      * @see com.sun.star.beans.XPropertySet
      */
     protected void before() /* throws Exception*/ {

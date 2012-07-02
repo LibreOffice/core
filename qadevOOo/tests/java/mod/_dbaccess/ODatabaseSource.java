@@ -58,14 +58,14 @@ import com.sun.star.task.XInteractionHandler;
 *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
 * </ul>
 *
-* @see com.sun.star.sdb.XQueryDefinitionSupplier
+* @see com.sun.star.sdb.XQueryDefinitionsSupplier
 * @see com.sun.star.sdb.XFormDocumentsSupplier
 * @see com.sun.star.beans.XPropertySet
 * @see com.sun.star.sdb.DataSource
 * @see com.sun.star.sdb.XCompletedConnection
 * @see com.sun.star.util.XFlushable
 * @see com.sun.star.sdb.XReportDocumentsSupplier
-* @see ifc.sdb._XQueryDefinitionSupplier
+* @see ifc.sdb._XQueryDefinitionsSupplier
 * @see ifc.sdb._XFormDocumentsSupplier
 * @see ifc.beans._XPropertySet
 * @see ifc.sdb._DataSource

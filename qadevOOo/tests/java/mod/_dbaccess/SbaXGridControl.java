@@ -201,16 +201,16 @@ public class SbaXGridControl extends TestCase {
     *     Object relations created :
     * <ul>
     *  <li> <code>'GRAPHICS'</code> for
-    *      {@link ifc.awt_XView} test : <code>XGraphics</code>
+    *      {@link ifc.awt._XView} test : <code>XGraphics</code>
     *   object different that belong to the object tested.</li>
     *  <li> <code>'CONTEXT'</code> for
     *      {@link ifc.awt._XControl} </li>
     *  <li> <code>'WINPEER'</code> for
-    *      {@link ifc.awt._XCOntrol} </li>
+    *      {@link ifc.awt._XControl} </li>
     *  <li> <code>'TOOLKIT'</code> for
-    *      {@link ifc.awt._XCOntrol} </li>
+    *      {@link ifc.awt._XControl} </li>
     *  <li> <code>'MODEL'</code> for
-    *      {@link ifc.awt._XCOntrol} </li>
+    *      {@link ifc.awt._XControl} </li>
     *  <li> <code>'XWindow.AnotherWindow'</code> for
     *      {@link ifc.awt._XWindow} for switching focus.</li>
     *  <li> <code>'XDispatch.URL'</code> for

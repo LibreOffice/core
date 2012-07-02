@@ -39,7 +39,7 @@ import com.sun.star.uno.XInterface;
 *  <li> <code>com::sun::star::sdbc::XDriverManager</code></li>
 * </ul>
 * @see com.sun.star.sdbc.XDriverManager
-* @see ifc.sdbc.XDriverManager
+* @see ifc.sdbc._XDriverManager
 */
 public class OConnectionPool extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {

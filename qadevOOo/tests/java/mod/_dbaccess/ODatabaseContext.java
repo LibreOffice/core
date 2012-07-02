@@ -53,10 +53,10 @@ import util.utils;
 * @see com.sun.star.container.XElementAccess
 * @see com.sun.star.uno.XNamingService
 * @see com.sun.star.sdb.DatabaseContext
-* @see ifc.container.XNameAccess
-* @see ifc.container.XEnumerationAccess
-* @see ifc.container.XElementAccess
-* @see ifc.uno.XNamingService
+* @see ifc.container._XNameAccess
+* @see ifc.container._XEnumerationAccess
+* @see ifc.container._XElementAccess
+* @see ifc.uno._XNamingService
 */
 public class ODatabaseContext extends TestCase {
 
@@ -73,7 +73,7 @@ public class ODatabaseContext extends TestCase {
     *     Needed object relations :
     * <ul>
     * <li> <code>'XNamingService.RegisterObject'</code> for
-    *      {@link ifc.namingservice.XNamingService} as an
+    *      {@link ifc.uno._XNamingService} as an
     *      instance of <code>com.sun.star.sdb.DataSource</code>
     *      service. </li>
     * </ul>

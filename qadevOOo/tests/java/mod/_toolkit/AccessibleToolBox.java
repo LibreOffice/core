@@ -60,7 +60,7 @@ import util.SOfficeFactory;
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleContext
  * @see ifc.accessibility._XAccessibleComponent
- * @see ifc.accessibility.XAccessibleExtendedComponent
+ * @see ifc.accessibility._XAccessibleExtendedComponent
  */
 public class AccessibleToolBox extends TestCase {
     private static XTextDocument xTextDoc;

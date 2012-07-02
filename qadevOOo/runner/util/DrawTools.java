@@ -139,9 +139,7 @@ public class DrawTools {
      * @param x the x-position of the shape
      * @param y the y-position of the shape
      * @param kind the kind of the shape ('Ellipse', 'Line' or 'Rectangle')
-     * @return the created XShape
     */
-
     public void addShape(  XComponent oDoc, int height, int width, int x,
                                                          int y, String kind ) {
 

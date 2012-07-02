@@ -397,9 +397,8 @@ public class DBTools {
     /**
     * Performs connection to DataSource specified.
     * @param dbSource <code>com.sun.star.sdb.DataSource</code> service
-    * specified data source which must be already registered in the
-    * <code>DatabaseContext</code> service.
-    * @param dbSource Data source to be connected to.
+    *     specified data source which must be already registered in the
+    *     <code>DatabaseContext</code> service.
     * @return Connection to the data source.
     */
     public XConnection connectToSource(Object dbSource)

@@ -42,7 +42,7 @@ import com.sun.star.uno.XInterface;
 public class Invocation extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates service <code>com.sun.star.script.Invocation</code>.
     *     Object relations created :
     * <ul>

@@ -65,8 +65,8 @@ import com.sun.star.util.XURLTransformer;
  *
  * @see com.sun.star.accessibility.XAccessibleComponent
  * @see com.sun.star.accessibility.XAccessibleContext
- * @see ifc.n.star.accessibility._XAccessibleComponent
- * @see ifc.n.star.accessibility._XAccessibleContext
+ * @see ifc.accessibility._XAccessibleComponent
+ * @see ifc.accessibility._XAccessibleContext
  */
 public class ScAccessiblePageHeaderArea extends TestCase {
 

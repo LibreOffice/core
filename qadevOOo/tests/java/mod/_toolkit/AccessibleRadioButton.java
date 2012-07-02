@@ -79,9 +79,9 @@ import util.SOfficeFactory;
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleContext
  * @see ifc.accessibility._XAccessibleComponent
- * @see ifc.accessibility.XAccessibleExtendedComponent
- * @see ifc.accessibility.XAccessibleValue
- * @see ifc.accessibility.XAccessibleText
+ * @see ifc.accessibility._XAccessibleExtendedComponent
+ * @see ifc.accessibility._XAccessibleValue
+ * @see ifc.accessibility._XAccessibleText
  */
 public class AccessibleRadioButton extends TestCase {
     private static XTextDocument xTextDoc;

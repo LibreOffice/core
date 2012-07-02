@@ -154,13 +154,13 @@ public class OEditControl extends TestCase {
      *      {@link ifc.awt._XWindow} : the controller of another
      *      component. </li>
      *  <li> <code>'Win1'</code> for
-     *      {@link ifc.form.XChangeBroadcaster} : the window (controller)
+     *      {@link ifc.form._XChangeBroadcaster} : the window (controller)
      *      of the tested component. </li>
      *  <li> <code>'Win2'</code> for
-     *      {@link ifc.form.XChangeBroadcaster} : the window (controller)
+     *      {@link ifc.form._XChangeBroadcaster} : the window (controller)
      *      of another component. </li>
      *  <li> <code>'CONTROL'</code> for
-     *      {@link ifc.form.XChangeBroadcaster} : the controller
+     *      {@link ifc.form._XChangeBroadcaster} : the controller
      *      of another component. </li>
      * </ul>
      */

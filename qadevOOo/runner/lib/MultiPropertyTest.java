@@ -503,9 +503,9 @@ public class MultiPropertyTest extends MultiMethodTest
          * specified as parameters.
          *
          * @param val1 Not <code>null</code> value for the property
-         * tested.
-         * @param val1 Not <code>null</code> value for the property
-         * tested which differs from the first value.
+         *     tested.
+         * @param val2 Not <code>null</code> value for the property
+         *     tested which differs from the first value.
          */
         public PropertyValueSwitcher(Object val1, Object val2)
         {

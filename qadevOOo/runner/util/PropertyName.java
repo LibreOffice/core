@@ -129,7 +129,7 @@ public interface PropertyName {
     /**
      * parameter name: "NoCwsAttach"<p>
      * If this parameter is set to "true" , a status of CWS-UnoAPI-Tests was not attached to EIS<p>
-     * @see tests.complex.unoapi.CheckModuleAPI
+     * @see complex.unoapi.CheckModuleAPI
      */
     final public static String NO_CWS_ATTACH = "NoCwsAttach";
     /**

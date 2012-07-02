@@ -45,7 +45,7 @@ import util.utils;
 * <ul> <p>
 * Test is <b> NOT </b> multithread compilant. <p>
 * After test completion object environment has to be recreated.
-* @see com.sun.star.###
+* @see com.sun.star
 */
 public class _XImplementationRegistration extends MultiMethodTest {
 

@@ -41,7 +41,7 @@ import com.sun.star.uno.XInterface;
  *  <li> <code>com::sun::star::lang::XMultiServiceFactory</code></li>
  * </ul> <p>
  *
- * @see com::sun::star::util::XStringSubstitution
+ * @see com.sun.star.util.XStringSubstitution
  * @see ifc.util._XStringSubstitution
  */
 public class SubstituteVariables extends TestCase {

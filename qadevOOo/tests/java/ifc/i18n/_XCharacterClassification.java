@@ -296,7 +296,7 @@ public class _XCharacterClassification extends MultiMethodTest {
     * is equal to a number where element is located in array. Also method has
     * <b> OK </b> status for symbol with code 55296, because it doesn't work
     * since it hasn't the right neighborhood.<p>
-    * @see http://ppewww.ph.gla.ac.uk/~flavell/unicode/unidata.html
+    * @see "http://ppewww.ph.gla.ac.uk/~flavell/unicode/unidata.html"
     */
     public void _getScript() {
         boolean res = true;
