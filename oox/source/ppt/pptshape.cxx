@@ -119,7 +119,7 @@ oox::drawingml::TextListStylePtr PPTShape::getSubTypeTextListStyle( const SlideP
 
 void PPTShape::addShape(
         oox::core::XmlFilterBase& rFilterBase,
-        const SlidePersist& rSlidePersist,
+        SlidePersist& rSlidePersist,
         const oox::drawingml::Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         basegfx::B2DHomMatrix& aTransformation,
@@ -261,6 +261,31 @@ void PPTShape::addShape(
 
             OSL_TRACE("shape service: %s", rtl::OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
 
+            if( mnSubType && getSubTypeIndex().has() && meShapeLocation == Layout ) {
+                oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getShapes()->getChildren(), true );
+                if (!pPlaceholder.get())
+                    pPlaceholder = PPTShape::findPlaceholder( mnSubType, rSlidePersist.getShapes()->getChildren(), true );
+
+                if (pPlaceholder.get()) {
+                    if( maSize.Width == 0 || maSize.Height == 0 ) {
+                        awt::Size aSize = maSize;
+                        if( maSize.Width == 0 )
+                            aSize.Width = pPlaceholder->getSize().Width;
+                        if( maSize.Height == 0 )
+                            aSize.Height = pPlaceholder->getSize().Height;
+                        setSize( aSize );
+                        if ( maPosition.X == 0 || maPosition.Y == 0 ) {
+                            awt::Point aPosition = maPosition;
+                            if( maPosition.X == 0 )
+                                aPosition.X = pPlaceholder->getPosition().X;
+                            if( maPosition.Y == 0 )
+                                aPosition.Y = pPlaceholder->getPosition().Y;
+                            setPosition( aPosition );
+                        }
+                    }
+                }
+            }
+
             // use placeholder index if possible
             if( mnSubType && getSubTypeIndex().has() && rSlidePersist.getMasterPersist().get() ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
@@ -383,19 +408,21 @@ void PPTShape::applyShapeReference( const oox::drawingml::Shape& rReferencedShap
     Shape::applyShapeReference( rReferencedShape, bUseText );
 }
 
-oox::drawingml::ShapePtr PPTShape::findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
+oox::drawingml::ShapePtr PPTShape::findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
 {
     oox::drawingml::ShapePtr aShapePtr;
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
     while( aRevIter != rShapes.rend() )
     {
-        if ( (*aRevIter)->getSubType() == nMasterPlaceholder )
+        if ( (*aRevIter)->getSubType() == nMasterPlaceholder &&
+             ( !bMasterOnly ||
+               ( dynamic_cast< PPTShape* >( (*aRevIter).get() ) && dynamic_cast< PPTShape* >( (*aRevIter).get() )->getShapeLocation() == Master ) ) )
         {
             aShapePtr = *aRevIter;
             break;
         }
         std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
-        aShapePtr = findPlaceholder( nMasterPlaceholder, rChildren );
+        aShapePtr = findPlaceholder( nMasterPlaceholder, rChildren, bMasterOnly );
         if ( aShapePtr.get() )
             break;
         ++aRevIter;
@@ -403,20 +430,22 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( const sal_Int32 nMasterPlace
     return aShapePtr;
 }
 
-oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes )
+oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
 {
     oox::drawingml::ShapePtr aShapePtr;
 
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
     while( aRevIter != rShapes.rend() )
     {
-        if ( (*aRevIter)->getSubTypeIndex().has() && (*aRevIter)->getSubTypeIndex().get() == nIdx )
+        if ( (*aRevIter)->getSubTypeIndex().has() && (*aRevIter)->getSubTypeIndex().get() == nIdx &&
+             ( !bMasterOnly ||
+               ( dynamic_cast< PPTShape* >( (*aRevIter).get() ) && dynamic_cast< PPTShape* >( (*aRevIter).get() )->getShapeLocation() == Master ) ) )
         {
             aShapePtr = *aRevIter;
             break;
         }
         std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
-        aShapePtr = findPlaceholderByIndex( nIdx, rChildren );
+        aShapePtr = findPlaceholderByIndex( nIdx, rChildren, bMasterOnly );
         if ( aShapePtr.get() )
             break;
         ++aRevIter;
