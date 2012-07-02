@@ -277,7 +277,7 @@ namespace drawinglayer
                 impInterpretPropertyValues(rExtendedParameters);
             }
 
-            ImpViewInformation2D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
+            explicit ImpViewInformation2D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
             :   mnRefCount(0),
                 maObjectTransformation(),
                 maViewTransformation(),

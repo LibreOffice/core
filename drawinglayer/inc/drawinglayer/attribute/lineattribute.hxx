@@ -57,7 +57,7 @@ namespace drawinglayer
 
         public:
             /// constructors/assignmentoperator/destructor
-            LineAttribute(
+            explicit LineAttribute(
                 const basegfx::BColor& rColor,
                 double fWidth = 0.0,
                 basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLINEJOIN_ROUND);

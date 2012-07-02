@@ -54,7 +54,7 @@ namespace drawinglayer
 
         public:
             /// constructors/assignmentoperator/destructor
-            StrokeAttribute(
+            explicit StrokeAttribute(
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen = 0.0);
             StrokeAttribute();

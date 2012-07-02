@@ -54,7 +54,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            TextHierarchyLinePrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyLinePrimitive2D(const Primitive2DSequence& rChildren);
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -77,7 +77,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            TextHierarchyBulletPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyBulletPrimitive2D(const Primitive2DSequence& rChildren);
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -100,7 +100,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            TextHierarchyParagraphPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyParagraphPrimitive2D(const Primitive2DSequence& rChildren);
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -123,7 +123,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            TextHierarchyBlockPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyBlockPrimitive2D(const Primitive2DSequence& rChildren);
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -206,7 +206,7 @@ namespace drawinglayer
         private:
         public:
             /// constructor
-            TextHierarchyEditPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit TextHierarchyEditPrimitive2D(const Primitive2DSequence& rChildren);
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()

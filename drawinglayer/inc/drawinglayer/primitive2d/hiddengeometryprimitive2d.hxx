@@ -52,7 +52,7 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC HiddenGeometryPrimitive2D : public GroupPrimitive2D
         {
         public:
-            HiddenGeometryPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit HiddenGeometryPrimitive2D(const Primitive2DSequence& rChildren);
 
             // despite returning an empty decomposition since it's no visualisation data,
             // range calculation is intended to use hidden geometry, so

@@ -54,7 +54,7 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC HiddenGeometryPrimitive3D : public GroupPrimitive3D
         {
         public:
-            HiddenGeometryPrimitive3D(const Primitive3DSequence& rChildren);
+            explicit HiddenGeometryPrimitive3D(const Primitive3DSequence& rChildren);
 
             // despite returning an empty decomposition since it's no visualisation data,
             // range calculation is intended to use hidden geometry, so

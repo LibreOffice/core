@@ -74,7 +74,7 @@ namespace drawinglayer
                 maPolyPolygon.transform(aTransform);
             }
 
-            Slice3D(
+            explicit Slice3D(
                 const basegfx::B3DPolyPolygon& rPolyPolygon,
                 SliceType3D aSliceType = SLICETYPE3D_REGULAR)
             :   maPolyPolygon(rPolyPolygon),

@@ -363,7 +363,7 @@ namespace drawinglayer
                 impInterpretPropertyValues(rExtendedParameters);
             }
 
-            ImpViewInformation3D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
+            explicit ImpViewInformation3D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
             :   mnRefCount(0),
                 maObjectTransformation(),
                 maOrientation(),

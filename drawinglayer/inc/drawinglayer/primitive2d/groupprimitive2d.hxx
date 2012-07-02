@@ -80,7 +80,7 @@ namespace drawinglayer
 
         public:
             /// constructor
-            GroupPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit GroupPrimitive2D(const Primitive2DSequence& rChildren);
 
             /// data read access
             const Primitive2DSequence& getChildren() const { return maChildren; }

@@ -67,7 +67,7 @@ namespace drawinglayer
 
         public:
             /// constructor
-            BackgroundColorPrimitive2D(
+            explicit BackgroundColorPrimitive2D(
                 const basegfx::BColor& rBColor);
 
             /// data read access

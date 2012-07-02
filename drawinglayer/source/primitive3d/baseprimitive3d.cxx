@@ -58,7 +58,7 @@ namespace drawinglayer
         Primitive3DSequence SAL_CALL BasePrimitive3D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
         {
             const geometry::ViewInformation3D aViewInformation(rViewParameters);
-            return get3DDecomposition(rViewParameters);
+            return get3DDecomposition(aViewInformation);
         }
 
         com::sun::star::geometry::RealRectangle3D SAL_CALL BasePrimitive3D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )

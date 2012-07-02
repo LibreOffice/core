@@ -66,7 +66,7 @@ namespace drawinglayer
 
         public:
             /// constructor
-            GroupPrimitive3D(const Primitive3DSequence& rChildren);
+            explicit GroupPrimitive3D(const Primitive3DSequence& rChildren);
 
             /// data read access
             Primitive3DSequence getChildren() const { return maChildren; }

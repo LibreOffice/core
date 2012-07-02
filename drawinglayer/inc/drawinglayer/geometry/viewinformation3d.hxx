@@ -120,7 +120,7 @@ namespace drawinglayer
                 other parameters. This constructor is feeded completely with a sequence of PropertyValues
                 which will be parsed to be able to offer the most used ones in a convenient way.
             */
-            ViewInformation3D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
+            explicit ViewInformation3D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
 
             /// default (empty) constructor
             ViewInformation3D();

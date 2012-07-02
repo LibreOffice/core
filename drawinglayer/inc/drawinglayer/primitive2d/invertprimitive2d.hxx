@@ -53,7 +53,7 @@ namespace drawinglayer
         {
         public:
             /// constructor
-            InvertPrimitive2D(const Primitive2DSequence& rChildren);
+            explicit InvertPrimitive2D(const Primitive2DSequence& rChildren);
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()

@@ -91,7 +91,7 @@ namespace drawinglayer
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
-            TextAsPolygonExtractor2D(const geometry::ViewInformation2D& rViewInformation);
+            explicit TextAsPolygonExtractor2D(const geometry::ViewInformation2D& rViewInformation);
             virtual ~TextAsPolygonExtractor2D();
 
             // data read access

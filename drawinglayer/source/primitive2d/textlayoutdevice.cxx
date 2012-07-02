@@ -68,7 +68,7 @@ namespace
         sal_uInt32                          mnUseCount;
 
     public:
-        ImpTimedRefDev(scoped_timed_RefDev& rOwnerofMe);
+        explicit ImpTimedRefDev(scoped_timed_RefDev& rOwnerofMe);
         ~ImpTimedRefDev();
         virtual void Timeout();
 

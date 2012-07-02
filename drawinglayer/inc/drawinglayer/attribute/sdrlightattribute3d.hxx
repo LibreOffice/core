@@ -64,7 +64,7 @@ namespace drawinglayer
                 const basegfx::BColor& rColor,
                 const basegfx::B3DVector& rDirection,
                 bool bSpecular);
-            Sdr3DLightAttribute(const basegfx::BColor& rColor);
+            explicit Sdr3DLightAttribute(const basegfx::BColor& rColor);
             Sdr3DLightAttribute(const Sdr3DLightAttribute& rCandidate);
             ~Sdr3DLightAttribute();
 

@@ -56,7 +56,7 @@ namespace drawinglayer
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
-            ContourExtractor2D(const geometry::ViewInformation2D& rViewInformation);
+            explicit ContourExtractor2D(const geometry::ViewInformation2D& rViewInformation);
             virtual ~ContourExtractor2D();
 
             const std::vector< basegfx::B2DPolyPolygon >& getExtractedContour() const { return maExtractedContour; }

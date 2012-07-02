@@ -68,7 +68,7 @@ namespace drawinglayer
             {
             }
 
-            ImpSdrLineAttribute(const basegfx::BColor& rColor)
+            explicit ImpSdrLineAttribute(const basegfx::BColor& rColor)
             :   mnRefCount(0),
                 meJoin(basegfx::B2DLINEJOIN_NONE),
                 mfWidth(0.0),

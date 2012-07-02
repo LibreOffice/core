@@ -63,7 +63,7 @@ namespace drawinglayer
 
         public:
             /// constructor
-            DiscreteShadow(const BitmapEx& rBitmapEx);
+            explicit DiscreteShadow(const BitmapEx& rBitmapEx);
 
             /// data read access
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
