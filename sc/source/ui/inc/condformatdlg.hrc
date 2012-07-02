@@ -53,5 +53,6 @@
 #define WD_PREVIEW 26
 #define LB_COL 27
 #define BTN_OPTIONS 30
+#define STR_CONDITION 31
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

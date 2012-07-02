@@ -9,6 +9,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include "condformathelper.hxx"
+#include "globstr.hrc"
 
 namespace {
 
@@ -48,13 +49,13 @@ rtl::OUString getExpression(sal_Int32 nIndex)
         case 5:
             return rtl::OUString("!=");
         case 6:
-            return ScGlobaLL:GetRscString(STR_COND_BETWEEN);
+            return ScGlobal::GetRscString(STR_COND_BETWEEN);
         case 7:
-            return ScGlobaLL:GetRscString(STR_COND_NOTBETWEEN);
+            return ScGlobal::GetRscString(STR_COND_NOTBETWEEN);
         case 8:
-            return ScGlobaLL:GetRscString(STR_COND_DUPLICATE);
+            return ScGlobal::GetRscString(STR_COND_DUPLICATE);
         case 9:
-            return ScGlobaLL:GetRscString(STR_COND_UNIQUE);
+            return ScGlobal::GetRscString(STR_COND_UNIQUE);
     }
     return rtl::OUString();
 }

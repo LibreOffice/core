@@ -143,7 +143,9 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maEdDataBarMin( this, ScResId( ED_COL_SCALE ) ),
     maEdDataBarMax( this, ScResId( ED_COL_SCALE ) ),
     maBtOptions( this, ScResId( BTN_OPTIONS ) ),
-    mpDoc(pDoc)
+    mpDoc(pDoc),
+    mnIndex(0),
+    maStrCondition(ScResId( STR_CONDITION ).toString())
 {
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     FreeResource();
@@ -420,6 +422,14 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
             maLbType.Show();
             break;
     }
+}
+
+void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
+{
+    mnIndex = nIndex;
+    rtl::OUStringBuffer aBuffer(maStrCondition);
+    aBuffer.append(rtl::OUString::valueOf(nIndex));
+    maFtCondNr.SetText(aBuffer.makeStringAndClear());
 }
 
 void ScCondFrmtEntry::HideCondElements()
@@ -937,9 +947,12 @@ ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
 void ScCondFormatList::RecalcAll()
 {
     sal_Int32 nTotalHeight = 0;
+    sal_Int32 nIndex = 1;
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         nTotalHeight += itr->GetSizePixel().Height();
+        itr->SetIndex( nIndex );
+        ++nIndex;
     }
 
     Size aCtrlSize = GetOutputSize();
