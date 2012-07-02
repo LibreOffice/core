@@ -89,17 +89,8 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
             doctok::WW8Document::Pointer_t pDocument(doctok::WW8DocumentFactory::createDocument(pDocStream));
 
-#if 0
-        TimeValue t1; osl_getSystemTime(&t1);
-#endif
-
         Stream::Pointer_t pStream = createStreamHandler();
         pDocument->resolve(*pStream);
-
-#if 0
-        TimeValue t2; osl_getSystemTime(&t2);
-        printf("time=%is\n", t2.Seconds-t1.Seconds);
-#endif
 
         ::ucbhelper::ContentBroker::deinitialize();
     }

@@ -138,14 +138,6 @@ string WW8StreamImpl::getSubStreamNames() const
             if (n > 0)
                 sResult += ", ";
 
-#if 0
-            rtl::OString aOStr;
-            aOUStr.convertToString(&aOStr, RTL_TEXTENCODING_ASCII_US,
-                                    OUSTRING_TO_OSTRING_CVTFLAGS);
-
-
-            sResult += aOStr.getStr();
-#endif
             char sBuffer[256];
             for (sal_uInt32 j = 0;
                  j < sal::static_int_cast<sal_uInt32>(aOUStr.getLength()); ++j)

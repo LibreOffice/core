@@ -34,17 +34,6 @@ sal_uInt32 WW8BinTableImpl::getPageNumber(const Fc & rFc) const
 
     if (mPageMap.find(rFc) == mPageMap.end())
     {
-#if 0
-        sal_uInt32 n = getEntryCount();
-
-        while (rFc < getFc(n))
-        {
-            --n;
-        }
-
-        nResult = getPageNumber(n);
-        mPageMap[rFc] = nResult;
-#else
         sal_uInt32 left = 0;
         sal_uInt32 right = getEntryCount();
 
@@ -63,7 +52,6 @@ sal_uInt32 WW8BinTableImpl::getPageNumber(const Fc & rFc) const
 
         nResult = getPageNumber(left);
         mPageMap[rFc] = nResult;
-#endif
 
     }
     else

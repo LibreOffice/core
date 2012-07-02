@@ -107,24 +107,6 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
         ooxml::OOXMLDocument::Pointer_t pDocument
             (ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
 
-#if 0
-        uno::Reference<text::XTextDocument> xDocument
-            (xFactory->createInstanceWithContext
-             (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                              ("com.sun.star.text.TextDocument")),
-              xContext), uno::UNO_QUERY_THROW );
-        uno::Reference<frame::XModel> xModel
-            (xDocument, uno::UNO_QUERY_THROW);
-
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier
-            (xDocument, uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XShapes> xShapes
-            (xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW);
-
-        pDocument->setModel(xModel);
-        pDocument->setShapes(xShapes);
-#endif
-
         Stream::Pointer_t pStream = createStreamHandler();
         pDocument->resolve(*pStream);
 

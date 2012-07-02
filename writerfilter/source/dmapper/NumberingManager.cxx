@@ -134,11 +134,6 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
         case NS_rtf::LN_FCONVERTED:
             m_nFPrevSpace = nValue;
         break;
-#if 0
-        case NS_rtf::LN_FWORD6:
-            m_nFWord6 = nValue;
-        break;
-#endif
         case NS_rtf::LN_IXCHFOLLOW:
         case NS_ooxml::LN_CT_Lvl_suff:
             m_nXChFollow = nValue;
@@ -721,9 +716,6 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         case NS_rtf::LN_FNORESTART:
         case NS_rtf::LN_FIDENTSAV:
         case NS_rtf::LN_FCONVERTED:
-#if 0
-        case NS_rtf::LN_FWORD6:
-#endif
         case NS_rtf::LN_IXCHFOLLOW:
             if ( pCurrentLvl.get( ) )
                 pCurrentLvl->SetValue( nName, sal_Int32( nIntValue ) );
@@ -884,9 +876,6 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             case NS_rtf::LN_FNORESTART:
             case NS_rtf::LN_FIDENTSAV:
             case NS_rtf::LN_FCONVERTED:
-#if 0
-            case NS_rtf::LN_FWORD6:
-#endif
             case NS_rtf::LN_IXCHFOLLOW:
                 if (m_pCurrentDefinition->GetCurrentLevel().get())
                     m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );

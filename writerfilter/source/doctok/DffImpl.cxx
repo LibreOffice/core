@@ -373,37 +373,6 @@ DffBSE::get_blip()
     return pResult;
 }
 
-#if 0
-WW8BinaryObjReference::Pointer_t DffBSE::get_binary()
-{
-    WW8BinaryObjReference::Pointer_t pResult;
-
-    if (getCount() > 0x45)
-        pResult = WW8BinaryObjReference::Pointer_t
-            (new WW8BinaryObjReference(this, 0x45,
-                                       getCount() - 0x45));
-    else
-    {
-        WW8FBSE aFBSE(this, 0x8);
-
-        sal_Int32 nOffset = sal::static_int_cast<sal_Int32>(aFBSE.get_foDelay());
-        if (nOffset > 0 && getDocument() != NULL)
-        {
-            WW8StructBase aStructBase(*getDocument()->getDocStream(),
-                                      nOffset, 0x8);
-
-            sal_uInt32 nCount = aStructBase.getU32(0x4) - 0x11;
-
-            pResult = WW8BinaryObjReference::Pointer_t
-                (new WW8BinaryObjReference(*getDocument()->getDocStream(),
-                                           aFBSE.get_foDelay() + 0x19, nCount));
-        }
-    }
-
-    return pResult;
-}
-#endif
-
 // WW8FOPTE
 void WW8FOPTE::resolveNoAuto(Properties & rHandler)
 {

@@ -23,30 +23,6 @@
 namespace writerfilter {
 namespace doctok
 {
-#if 0
-sal_uInt32 WW8FKPImpl::getIndex(const Fc & rFc) const
-{
-    sal_uInt32 nLeft = 0;
-    sal_uInt32 nRight = getEntryCount();
-
-    while (nRight - nLeft > 1)
-    {
-        sal_uInt32 nMiddle = (nLeft + nRight) / 2;
-        Fc aFcMiddle = getFc(nMiddle);
-
-        if (! (rFc < aFcMiddle))
-        {
-            nLeft = nMiddle;
-        }
-        else
-        {
-            nRight = nMiddle;
-        }
-    }
-
-    return nLeft;
-}
-#else
 sal_uInt32 WW8FKPImpl::getIndex(const Fc & rFc) const
 {
     sal_uInt32 nResult = getEntryCount();
@@ -56,7 +32,6 @@ sal_uInt32 WW8FKPImpl::getIndex(const Fc & rFc) const
 
     return nResult;
 }
-#endif
 
 
 writerfilter::Reference<Properties>::Pointer_t WW8CHPFKPImpl::getProperties(const Fc & rFc) const
@@ -77,12 +52,6 @@ writerfilter::Reference<Properties>::Pointer_t WW8CHPFKPImpl::getProperties(cons
                 (new WW8PropertySetImpl(*this, nOffset + 1, nCbChpx));
         }
     }
-#if 0
-    else
-    {
-        clog << "outsider!!!" << endl;
-    }
-#endif
 
     return pResult;
 }
@@ -139,12 +108,6 @@ WW8PAPFKPImpl::getProperties(const Fc & rFc) const
                                             true));
             }
         }
-#if 0
-        else
-        {
-            clog << "outsider!!!" << endl;
-        }
-#endif
     }
 
     return pResult;

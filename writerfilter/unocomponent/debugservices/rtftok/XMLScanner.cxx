@@ -258,22 +258,6 @@ sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArgum
             uno::Reference <lang::XSingleServiceFactory> xStorageFactory(
                 xServiceFactory->createInstance (rtl::OUString("com.sun.star.embed.StorageFactory")), uno::UNO_QUERY_THROW);
 
-#if 0
-            rtl::OUString outFileUrl;
-            {
-            rtl_uString *dir1=NULL;
-            osl_getProcessWorkingDir(&dir1);
-            osl_getAbsoluteFileURL(dir1, aArguments[1].pData, &outFileUrl.pData);
-            rtl_uString_release(dir1);
-            }
-
-            uno::Sequence< uno::Any > aArgs( 2 );
-            aArgs[0] <<= outFileUrl;
-            aArgs[1] <<= embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
-            uno::Reference<embed::XStorage> xStorage(xStorageFactory->createInstanceWithArguments(aArgs), uno::UNO_QUERY_THROW);
-            uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
-            xPropSet->setPropertyValue(rtl::OUString("MediaType"), uno::makeAny(rtl::OUString("application/vnd.oasis.opendocument.text")));
-#endif
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
             uno::Reference< task::XStatusIndicator > xStatusIndicator;
 
