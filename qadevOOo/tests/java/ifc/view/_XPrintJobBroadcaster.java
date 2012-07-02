@@ -83,7 +83,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
 
         /**
          * Constructor
-         * @param An object that can be cast to an XPrintable.
+         * @param printable An object that can be cast to an XPrintable.
          */
         public MyPrintJobListener(Object printable, String printFileName) {
             this.printFileName = printFileName;

@@ -163,7 +163,7 @@ public class _XRangeSelection extends MultiMethodTest {
 
     /**
      * Determine the current top window center and return this as a point.
-     * @ return a point representing the sheet center.
+     * @return a point representing the sheet center.
      */
     protected Point getSheetCenter() {
         log.println("Trying to get AccessibleSpreadsheet");

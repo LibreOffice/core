@@ -113,7 +113,6 @@ public class ScModelObj extends TestCase {
     *      {@link ifc.frame._XModel}( the current controller of the second
     *      spreadsheet)</li>
     * </ul>
-    * @see
     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {

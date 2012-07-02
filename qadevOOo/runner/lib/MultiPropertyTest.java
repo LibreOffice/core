@@ -253,11 +253,11 @@ public class MultiPropertyTest extends MultiMethodTest
         /**
          * The method checks result of setting a new value to the
          * property based o the following arguments:
-         *   @propName - the property to test
-         *   @oldValue - the old value of the property, before changing it.
-         *   @newValue - the new value the property has been set with
-         *   @resValue - the value of the property after having changed it
-         *   @exception - if not null - the exception thrown by
+         * @param propName - the property to test
+         * @param oldValue - the old value of the property, before changing it.
+         * @param newValue - the new value the property has been set with
+         * @param resValue - the value of the property after having changed it
+         * @param exception - if not null - the exception thrown by
          *                 XPropertySet.setPropertyValue, else indicates
          *                 normal method completion.
          *

@@ -230,7 +230,6 @@ public class _XConsolidationDescriptor extends MultiMethodTest {
 
     /**
     * Constructs new cell range addresses using old cell range addresses.
-    * @param CRaddr old cell range addresses
     * @return new cell range addresses
     */
     public CellRangeAddress[] newCRaddr() {

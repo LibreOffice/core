@@ -55,7 +55,7 @@ public class UIConfigurationManager extends TestCase {
      * <li>get the manager from the supplier</li>
      * </ul>
      * @param tParam The test parameters.
-     * @param The log writer.
+     * @param log The log writer.
      * @return The test environment.
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {

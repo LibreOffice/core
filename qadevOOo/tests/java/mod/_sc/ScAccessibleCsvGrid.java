@@ -50,7 +50,7 @@ public class ScAccessibleCsvGrid extends TestCase {
      * method to provide the implementation and related objects. The method is
      * called from <code>getTestEnvironment()</code>.
      *
-     * @param tParam test parameters
+     * @param Param test parameters
      * @param log writer to log information while testing
      *
      * @see TestEnvironment
@@ -109,8 +109,7 @@ public class ScAccessibleCsvGrid extends TestCase {
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes calc document.
-    * @param tParam test parameters
-    * @param tEnv the environment to cleanup
+    * @param Param test parameters
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
@@ -127,7 +126,7 @@ public class ScAccessibleCsvGrid extends TestCase {
      * implementation does nothing. Subclasses can override to initialize
      * objects shared among all <code>TestEnvironment</code>s.
      *
-     * @param tParam test parameters
+     * @param Param test parameters
      * @param log writer to log information while testing
      *
      * @see #initializeTestCase()

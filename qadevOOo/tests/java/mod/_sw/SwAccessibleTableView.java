@@ -59,7 +59,7 @@ public class SwAccessibleTableView extends TestCase {
     * Creates a text table and inserts it into the document.
     * Then obtains accessible object for the table.
     *
-    * @param tParam test parameters
+    * @param Param test parameters
     * @param log writer to log information while testing
     *
     * @see TestEnvironment
@@ -137,8 +137,7 @@ public class SwAccessibleTableView extends TestCase {
     /**
     * Called while disposing a <code>TestEnvironment</code>.
     * Disposes text document.
-    * @param tParam test parameters
-    * @param tEnv the environment to cleanup
+    * @param Param test parameters
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
@@ -150,7 +149,7 @@ public class SwAccessibleTableView extends TestCase {
      * Called while the <code>TestCase</code> initialization.
      * Creates a text document.
      *
-     * @param tParam test parameters
+     * @param Param test parameters
      * @param log writer to log information while testing
      *
      * @see #initializeTestCase()

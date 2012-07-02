@@ -390,7 +390,7 @@ public class _XSimpleRegistry extends MultiMethodTest {
     /**
     * Method calls <code>close()</code> of the interface
     * <code>com.sun.star.registry.XRegistryKey</code>. <p>
-    * @param interface <code>com.sun.star.registry.XRegistryKey</code>
+    * @param reg <code>com.sun.star.registry.XRegistryKey</code>
     */
     public void closeReg(XSimpleRegistry reg) {
         if (nr == null) {

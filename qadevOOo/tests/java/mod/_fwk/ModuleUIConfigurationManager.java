@@ -56,7 +56,7 @@ public class ModuleUIConfigurationManager extends TestCase {
     /**
      * Cleanup: close the created document
      * @param tParam The test parameters.
-     * @param The log writer.
+     * @param log The log writer.
      * @return The test environment.
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {

@@ -120,7 +120,7 @@ public class ConfigurationRead {
 
     /**
      * Get contents of a node by its hierarchical name.
-     * @param The hierarchical name of the node.
+     * @param name The hierarchical name of the node.
      * @return The contents as an object
      */
     public Object getByHierarchicalName(String name) throws NoSuchElementException {

@@ -433,7 +433,7 @@ public class utils {
 
     /**
      * converts a fileURL to a system URL
-     * @param a file URL
+     * @param fileURL a file URL
      * @return a system URL
      */
     public static String getSystemURL(String fileURL) {
@@ -484,7 +484,7 @@ public class utils {
     /**
      * This method deletes via office the given file URL. It checks the existance
      * of <CODE>fileURL</CODE>. If exists it will be deletet.
-     * @param msf the multiservice factory
+     * @param xMsf the multiservice factory
      * @param fileURL the file to delete
      * @return true if the file could be deletet or the file does not exist
      */
@@ -509,9 +509,9 @@ public class utils {
 
     /**
      * This method copies via office a given file to a new one
-     * @param msf the multi service factory
-     * @param oldF the source file
-     * @param newF the destination file
+     * @param xMsf the multi service factory
+     * @param source the source file
+     * @param destinaion the destination file
      * @return true at success
      */
     public static boolean copyFile(XMultiServiceFactory xMsf, String source, String destinaion) {
@@ -956,7 +956,7 @@ public class utils {
     /**
      * dispatches given <CODE>URL</CODE> to the <CODE>XController</CODE>
      * @param xMSF the <CODE>XMultiServiceFactory</CODE>
-     * @param xComp the <CODE>XController</CODE> to query for a XDispatchProvider
+     * @param xCont the <CODE>XController</CODE> to query for a XDispatchProvider
      * @param URL the <CODE>URL</CODE> to dispatch
      * @throws java.lang.Exception throws <CODE>java.lang.Exception</CODE> on any error
      */

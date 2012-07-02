@@ -91,8 +91,7 @@ public class SdXImpressDocument extends TestCase {
     /**
      * Called while disposing a <code>TestEnvironment</code>.
      * Disposes Impress document.
-     * @param tParam test parameters
-     * @param tEnv the environment to cleanup
+     * @param Param test parameters
      * @param log writer to log information while testing
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {

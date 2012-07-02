@@ -141,7 +141,7 @@ public class _XNumberFormatCode extends MultiMethodTest {
 
     /**
     * Method returns locale for a given language and country.
-    * @param localeIndex index of needed locale.
+    * @param k index of needed locale.
     * @return Locale by the index from arrays defined above
     */
     public Locale getLocale(int k) {
