@@ -239,7 +239,7 @@ public class DBTools {
         */
         public Object getDataSourceService() throws Exception
         {
-            Object src = src = xMSF.createInstance("com.sun.star.sdb.DataSource") ;
+            Object src = xMSF.createInstance("com.sun.star.sdb.DataSource") ;
 
             XPropertySet props = UnoRuntime.queryInterface
                 (XPropertySet.class, src) ;

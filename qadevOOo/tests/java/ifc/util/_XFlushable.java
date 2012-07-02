@@ -49,7 +49,6 @@ public class _XFlushable extends MultiMethodTest {
             called = true ;
         }
         public void disposing(com.sun.star.lang.EventObject e) {}
-        public void reset() { called = false; }
         public boolean wasFlushed() { return called; }
     }
 

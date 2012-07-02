@@ -92,26 +92,6 @@ public class ShowTargets
         }
     }
 
-    /** determines if the test denoted by a given Class is an interactive test
-     */
-    static private boolean isInteractiveTest( Class<?> testClass )
-    {
-        java.lang.reflect.Method interactiveTestMethod = null;
-        try { interactiveTestMethod = testClass.getMethod( "isInteractiveTest", new Class[]{} ); }
-        catch( Exception e ) { }
-
-        if ( interactiveTestMethod != null )
-        {
-            try
-            {
-                Boolean result = (Boolean)interactiveTestMethod.invoke( null, new Object[]{} );
-                return result.booleanValue();
-            }
-            catch( Exception e ) { }
-        }
-        return false;
-    }
-
     static private String getShortTestDescription( Class<?> _testClass )
     {
         java.lang.reflect.Method getShortDescriptionMethod = null;

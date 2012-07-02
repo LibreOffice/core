@@ -99,9 +99,6 @@ public class GraphicalTestArguments
 
     boolean m_bCreateDefaultReference = false;
 
-    // CONSTRUCTOR
-    private GraphicalTestArguments(){}
-
     public GraphicalTestArguments(TestParameters param)
         {
             m_aCurrentParams = param;

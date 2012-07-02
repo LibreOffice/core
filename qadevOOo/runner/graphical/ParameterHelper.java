@@ -81,9 +81,6 @@ public class ParameterHelper
 
     // private GlobalLogWriter m_aLog;
 
-    // CONSTRUCTOR
-    private ParameterHelper(){}
-
     public ParameterHelper(TestParameters param)
         {
             m_aCurrentParams = param;

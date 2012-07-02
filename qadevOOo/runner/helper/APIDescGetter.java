@@ -463,10 +463,6 @@ public class APIDescGetter extends DescGetter
         return methDesc;
     }
 
-    private static void createIfcName(String ifc_name, ArrayList<String> meth_names, DescEntry ifcDesc)
-    {
-    }
-
     /**
      * This method ensures that XComponent will be the last in the list of interfaces
      */

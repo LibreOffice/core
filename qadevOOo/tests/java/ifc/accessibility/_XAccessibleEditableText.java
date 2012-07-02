@@ -258,7 +258,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
                 log.print("deleteText(" + (length-1) + "," + (length) + "): ");
                 locRes = oObj.deleteText(length - 1, length);
                 log.println(locRes);
-                String expStr = expStr = text.substring(0, length - 1);
+                String expStr = text.substring(0, length - 1);
                 curText = oObj.getText();
                 log.println("Current text: '" + curText + "'");
                 res &= curText.equals(expStr);
