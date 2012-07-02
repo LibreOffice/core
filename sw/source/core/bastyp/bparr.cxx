@@ -26,9 +26,10 @@
  *
  ************************************************************************/
 
-#include <string.h>
-#include <limits.h>
 #include "bparr.hxx"
+
+#include <limits.h>
+#include <string.h>
 
 /** Resize block management by this constant.
     As a result there are approx. 20 * MAXENTRY == 20000 entries available */

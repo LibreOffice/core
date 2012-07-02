@@ -26,9 +26,9 @@
  *
  ************************************************************************/
 
-#include "swtypes.hxx"
 #include "swrect.hxx"
 #include "swregion.hxx"
+#include "swtypes.hxx"
 
 SV_IMPL_VARARR( SwRects, SwRect );
 

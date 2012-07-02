@@ -26,38 +26,39 @@
  *
  ************************************************************************/
 
-#include <cctype>
 #if defined(MACOSX)
 #include <stdlib.h>
 #endif
-#include <cstdlib>
-#include <climits>
+
+#include <calc.hxx>
+#include <cctype>
 #include <cfloat>
+#include <climits>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <cstdlib>
+#include <dbfld.hxx>
+#include <dbmgr.hxx>
+#include <docfld.hxx>
+#include <docstat.hxx>
+#include <doc.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <expfld.hxx>
 #include <hintids.hxx>
 #include <osl/diagnose.hxx>
 #include <rtl/math.hxx>
-#include <editeng/langitem.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/charclass.hxx>
-#include <editeng/unolingu.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <unotools/useroptions.hxx>
+#include <shellres.hxx>
 #include <svl/zforlist.hxx>
 #include <swmodule.hxx>
-#include <doc.hxx>
-#include <viewsh.hxx>
-#include <docstat.hxx>
-#include <calc.hxx>
-#include <shellres.hxx>
-#include <dbfld.hxx>
-#include <expfld.hxx>
-#include <usrfld.hxx>
-#include <dbmgr.hxx>
-#include <docfld.hxx>
 #include <swtypes.hxx>
+#include <unotools/charclass.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/useroptions.hxx>
+#include <usrfld.hxx>
+#include <viewsh.hxx>
 
 using namespace ::com::sun::star;
 

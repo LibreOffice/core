@@ -28,9 +28,11 @@
 #ifndef _SHELLRES_HXX
 #define _SHELLRES_HXX
 
-#include <tools/string.hxx>
-#include <vcl/bitmap.hxx>
 #include <svl/svstdarr.hxx>
+#include <swdllapi.h>
+#include <tools/string.hxx>
+#include <tools/rc.hxx>
+#include <vcl/bitmap.hxx>
 
 struct SW_DLLPUBLIC ShellResource : public Resource
 {

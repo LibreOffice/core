@@ -26,12 +26,12 @@
  *
  ************************************************************************/
 
+#include "index.hxx"
+
 #include <assert.h>
 #include <stdlib.h>
 #include <tools/solar.h>
 #include <tools/string.hxx>
-
-#include "index.hxx"
 
 TYPEINIT0(SwIndexReg);
 

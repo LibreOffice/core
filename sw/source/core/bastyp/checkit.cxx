@@ -26,9 +26,9 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
 #include <checkit.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

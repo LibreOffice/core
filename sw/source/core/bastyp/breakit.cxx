@@ -27,15 +27,15 @@
  ************************************************************************/
 
 #include "breakit.hxx"
-#include <unicode/uchar.h>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "swtypes.hxx"
+
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <unotools/localedatawrapper.hxx>
-
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <editeng/unolingu.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include "swtypes.hxx"
+#include <unicode/uchar.h>
+#include <unotools/localedatawrapper.hxx>
 
 using namespace com::sun::star;
 
