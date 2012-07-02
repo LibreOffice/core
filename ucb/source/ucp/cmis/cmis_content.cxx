@@ -244,6 +244,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
+            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -691,6 +692,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
+            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -758,6 +760,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
+            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -800,6 +803,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
+            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -1059,6 +1063,7 @@ namespace cmis
             }
             catch ( const libcmis::Exception& e )
             {
+                SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_GENERAL,
                                     uno::Sequence< uno::Any >( 0 ),
