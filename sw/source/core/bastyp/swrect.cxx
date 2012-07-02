@@ -129,11 +129,11 @@ sal_Bool SwRect::IsInside( const Point& rPoint ) const
 // mouse moving of table borders
 sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 {
-    sal_Bool InTolerance = (((Left()   - nTolerance) <= rPoint.X()) &&
-                            ((Top()    - nTolerance) <= rPoint.Y()) &&
-                            ((Right()  + nTolerance) >= rPoint.X()) &&
-                            ((Bottom() + nTolerance) >= rPoint.Y()));
-    return IsInside(rPoint) || InTolerance;
+    bool bIsNearby = (((Left()   - nTolerance) <= rPoint.X()) &&
+                      ((Top()    - nTolerance) <= rPoint.Y()) &&
+                      ((Right()  + nTolerance) >= rPoint.X()) &&
+                      ((Bottom() + nTolerance) >= rPoint.Y()));
+    return IsInside(rPoint) || bIsNearby;
 }
 
 
