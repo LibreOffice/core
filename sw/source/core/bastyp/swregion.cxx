@@ -26,17 +26,11 @@
  *
  ************************************************************************/
 
-
 #include "swtypes.hxx"
 #include "swrect.hxx"
 #include "swregion.hxx"
 
-
 SV_IMPL_VARARR( SwRects, SwRect );
-
-/*************************************************************************
-|*  SwRegionRects::SwRegionRects()
-|*************************************************************************/
 
 SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
     SwRects( (sal_uInt8)nInit ),
@@ -45,16 +39,10 @@ SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
     Insert( aOrigin, 0 );
 }
 
-/*************************************************************************
- *                      inline InsertRect()
- *
- * InsertRect() wird nur von operator-=() gerufen.
- * Wenn bDel == sal_True ist, dann wird das Rect an der Position nPos mit
- * rRect ueberschrieben, ansonsten wird rRect hinten angehaengt.
- *************************************************************************/
-
-inline void SwRegionRects::InsertRect( const SwRect &rRect, const sal_uInt16 nPos,
-                                       sal_Bool &rDel )
+// If <rDel> is sal_True then this Rect will be overwritten by <rRect> at
+// position <nPos>. Otherwise <rRect> is attached at the end.
+inline void SwRegionRects::InsertRect( const SwRect &rRect,
+                                       const sal_uInt16 nPos, sal_Bool &rDel )
 {
     if( rDel )
     {
@@ -63,21 +51,17 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect, const sal_uInt16 nPo
         rDel = sal_False;
     }
     else
+    {
         Insert( rRect, Count() );
+    }
 }
 
-/*************************************************************************
-|*
-|*  SwRegionRects::operator-=()
-|*
-|*  Beschreibung        Alle Ueberschneidungen der Rechtecke, die sich
-|*      gerade im Array befinden, mit dem uebergebenen Rechteck werden
-|*      entfernt.
-|*      Dazu muessen die vorhandenen Rechtecke entweder aufgeteilt oder
-|*      geloescht werden.
-|*
-|*************************************************************************/
+/** Delete all overlaps of the Rects in array with the given <rRect>
 
+    To do so, all existing rectangles have to be either split or deleted.
+
+    @param rRect rectangle with the area that should be deleted
+*/
 void SwRegionRects::operator-=( const SwRect &rRect )
 {
     sal_uInt16 nMax = Count();
@@ -89,14 +73,12 @@ void SwRegionRects::operator-=( const SwRect &rRect )
             SwRect aInter( aTmp );
             aInter._Intersection( rRect );
 
-            // Das erste Rect, das wir inserten wollen, nimmt die
-            // Stelle von i ein. So ersparen wir uns das Delete().
+            // The first Rect that should be inserted takes position of i.
+            // This avoids one Delete() call.
             sal_Bool bDel = sal_True;
 
-            //Jetzt aufteilen das Teil: Es sollen diejenigen Rechtecke
-            //zurueckbleiben, die im alten aber nicht im neuen liegen.
-            //Sprich alle Rechtecke die im alten aber nicht in der Intersection
-            //liegen.
+            // now split; only those rectangles should be left over that are in
+            // the "old" but not in the "new" area; hence, not in intersection.
             long nTmp;
             if ( 0 < (nTmp = aInter.Top() - aTmp.Top()) )
             {
@@ -127,37 +109,29 @@ void SwRegionRects::operator-=( const SwRect &rRect )
             if( bDel )
             {
                 Remove( i );
-                --i;              //Damit wir keinen uebergehen.
-                --nMax;           //Damit wir keinen zuviel verarbeiten.
+                --i;     // so that we don't forget any
+                --nMax;  // so that we don't check too much
             }
         }
     }
-
 }
 
-/*************************************************************************
- *                      SwRegionRects::Invert()
- *
- * Bezugspunkt ist aOrigin, das Original-SRectangle.
- * Aus Loechern werden Flaechen, aus Flaechen werden Loecher.
- * Ein Hinweis: Wenn keine Rects abgezogen wurden, so ist das enthaltene
- * Rechteck identisch mit aOrigin. Nach Invert() besteht die Region aus
- * einem Null-SRectangle.
- *************************************************************************/
+/** invert current rectangle
 
+    Change the shape, such that holes with be areas and areas are holes now.
+
+    Note: If no rects were removed, then the shape is identical to the original
+          shape. As a result, it will be a NULL-SRectangle after inverting.
+*/
 void SwRegionRects::Invert()
 {
-    // Nicht besonders elegant und schnell, aber wirkungsvoll:
-    // Wir legen eine weitere Region an und ziehen alle Flaechen ab,
-    // die in uns noch uebrig geblieben sind. Danach werden alle
-    // Werte uebertragen.
+    // not very elegant and fast, but efficient:
+    // Create a new region and remove all areas that are left over. Afterwards
+    // copy all values.
 
-    // Um unuetze Speicheranforderungen zu vermeiden versuchen wir die
-    // iniale Groesse moeglichst brauchbar anzulegen:
-    // Anzahl der Rechtecke in der Region * 2 + 2
-    // plus zwei um den Sonderfall eines einzelnen Loches (macht vier
-    // Rechtecke im inversen Fall) abzudecken.
-
+    // To avoid unnecessary memory requirements, create a "useful" initial size:
+    // Number of rectangles in this area * 2 + 2 for the special case of a
+    // single hole (so four Rects in the inverse case).
     SwRegionRects aInvRegion( aOrigin, Count()*2+2 );
     const SwRect *pDat = GetData();
     for( sal_uInt16 i = 0; i < Count(); ++pDat, ++i )
@@ -169,7 +143,7 @@ void SwRegionRects::Invert()
         nDel = Count() - aInvRegion.Count();
         nCpy = aInvRegion.Count();
     }
-    // alle vorhandenen ueberschreiben
+    // overwrite all existing
     memcpy( pData, aInvRegion.GetData(), nCpy * sizeof( SwRect ));
 
     if( nCpy < aInvRegion.Count() )
@@ -177,27 +151,21 @@ void SwRegionRects::Invert()
     else if( nDel )
         Remove( nCpy, nDel );
 }
-/*************************************************************************
-|*
-|*  SwRegionRects::Compress()
-|*
-|*  Beschreibung        Zusammenfassen von benachbarten Rechtecken.
-|*
-|*************************************************************************/
+
 inline SwTwips CalcArea( const SwRect &rRect )
 {
     return rRect.Width() * rRect.Height();
 }
 
-
+// combine all adjacent rectangles
 void SwRegionRects::Compress( sal_Bool bFuzzy )
 {
     for ( int i = 0; i < Count(); ++i )
     {
         for ( int j = i+1; j < Count(); ++j )
         {
-            //Wenn zwei Rechtecke ineinanderliegen, so ist eins davon
-            //uberfluessig.
+            // If one rectangle contains a second completely than the latter
+            // does not need to be stored and can be deleted
             if ( (*(pData + i)).IsInside( *(pData + j) ) )
             {
                 Remove( static_cast<sal_uInt16>(j), 1 );
@@ -212,17 +180,17 @@ void SwRegionRects::Compress( sal_Bool bFuzzy )
             }
             else
             {
-                //Wenn zwei Rechtecke dieselbe Flaeche haben wie deren
-                //Union abzueglich deren Intersection, so ist eines
-                //davon ueberfluessig.
-                //Um moeglichst viel zusammenzufassen und in der Folge
-                //moeglichst wenig einzelne Paints zu haben darf die Flaeche
-                //der Union ruhig ein bischen groesser sein
-                //( 9622 * 141.5 = 1361513 ~= ein virtel Zentimeter ueber die
-                //                            Breite einer DINA4 Seite)
+                // If two rectangles have the same area of their union minus the
+                // intersection then one of them can be deleted.
+                // For combining as much as possible (and for having less single
+                // paints), the area of the union can be a little bit larger:
+                // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
+                // than the width of a A4 page
                 const long nFuzzy = bFuzzy ? 1361513 : 0;
-                SwRect aUnion( *(pData + i) );aUnion.Union( *(pData + j) );
-                SwRect aInter( *(pData + i) );aInter.Intersection( *(pData + j));
+                SwRect aUnion( *(pData + i) );
+                aUnion.Union( *(pData + j) );
+                SwRect aInter( *(pData + i) );
+                aInter.Intersection( *(pData + j));
                 if ( (::CalcArea( *(pData + i) ) +
                       ::CalcArea( *(pData + j) ) + nFuzzy) >=
                      (::CalcArea( aUnion ) - CalcArea( aInter )) )

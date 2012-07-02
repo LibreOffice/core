@@ -28,15 +28,12 @@
 
 #include "ring.hxx"
 
-
-/*************************************************************************
-|*    Ring::Ring()
-*************************************************************************/
-
 Ring::Ring( Ring *pObj )
 {
     if( !pObj )
+    {
         pNext = this, pPrev = this;
+    }
     else
     {
         pNext = pObj;
@@ -46,27 +43,19 @@ Ring::Ring( Ring *pObj )
     }
 }
 
-/*************************************************************************
-|*    Ring::~Ring()
-*************************************************************************/
-
 Ring::~Ring()
 {
     pNext->pPrev = pPrev;
     pPrev->pNext = pNext;
 }
 
-/*************************************************************************
-|*    Ring::MoveTo
-*************************************************************************/
-
 void Ring::MoveTo(Ring *pDestRing)
 {
-    // loeschen aus dem alten
+    // delete from "old"
     pNext->pPrev = pPrev;
     pPrev->pNext = pNext;
 
-    // im neuen einfuegen
+    // insert into "new"
     if( pDestRing )
     {
         pNext = pDestRing;
@@ -75,13 +64,15 @@ void Ring::MoveTo(Ring *pDestRing)
         pPrev->pNext = this;
     }
     else
+    {
         pNext = pPrev = this;
+    }
 
 }
 
 void Ring::MoveRingTo(Ring *pDestRing)
 {
-    // den gesamten Ring in den DestRing einfuegen
+    // insert the whole ring into DestRing
     Ring* pMyPrev = pPrev;
     Ring* pDestPrev = pDestRing->pPrev;
 
@@ -102,6 +93,5 @@ sal_uInt32 Ring::numberOf() const
     }
     return nRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

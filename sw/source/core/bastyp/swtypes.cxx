@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "swtypes.hxx"
 #include "tools/string.hxx"
 #include <vcl/svapp.hxx>
@@ -56,8 +55,8 @@
 
 using namespace com::sun::star;
 
-String aEmptyStr;               // Konstante Strings
-String aDotStr('.');            // Konstante Strings
+String aEmptyStr;    // constant string
+String aDotStr('.'); // constant string
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwAttrSet )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwStartNode )
@@ -88,11 +87,10 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTableLineFmt )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableBoxFmt )
 IMPL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos )
 
-
 Size GetGraphicSizeTwip( const Graphic& rGraphic, OutputDevice* pOutDev )
 {
     const MapMode aMapTwip( MAP_TWIP );
-     Size aSize( rGraphic.GetPrefSize() );
+    Size aSize( rGraphic.GetPrefSize() );
     if( MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit() )
     {
         if( !pOutDev )
@@ -100,34 +98,32 @@ Size GetGraphicSizeTwip( const Graphic& rGraphic, OutputDevice* pOutDev )
         aSize = pOutDev->PixelToLogic( aSize, aMapTwip );
     }
     else
+    {
         aSize = OutputDevice::LogicToLogic( aSize,
-                                        rGraphic.GetPrefMapMode(), aMapTwip );
+                                            rGraphic.GetPrefMapMode(),
+                                            aMapTwip );
+    }
     return aSize;
 }
-
 
 uno::Reference< linguistic2::XSpellChecker1 >  GetSpellChecker()
 {
     return LinguMgr::GetSpellChecker();
 }
 
-
 uno::Reference< linguistic2::XHyphenator >  GetHyphenator()
 {
     return LinguMgr::GetHyphenator();
 }
-
 
 uno::Reference< linguistic2::XThesaurus >  GetThesaurus()
 {
     return LinguMgr::GetThesaurus();
 }
 
-
 uno::Reference< beans::XPropertySet >  GetLinguPropertySet()
 {
     return LinguMgr::GetLinguPropertySet();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

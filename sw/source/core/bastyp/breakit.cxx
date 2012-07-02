@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "breakit.hxx"
 #include <unicode/uchar.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -40,10 +39,9 @@
 
 using namespace com::sun::star;
 
-SwBreakIt * pBreakIt = 0;
+SwBreakIt* pBreakIt = 0;
 
-void SwBreakIt::_Create(
-    const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
+void SwBreakIt::_Create( const uno::Reference<lang::XMultiServiceFactory> & rxMSF )
 {
     delete pBreakIt, pBreakIt = new SwBreakIt( rxMSF );
 }
@@ -58,13 +56,12 @@ SwBreakIt * SwBreakIt::Get()
     return pBreakIt;
 }
 
-SwBreakIt::SwBreakIt(
-    const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
+SwBreakIt::SwBreakIt( const uno::Reference<lang::XMultiServiceFactory> & rxMSF )
     : m_xMSF( rxMSF ),
       m_pLocale( NULL ),
       m_pForbidden( NULL ),
       aLast( LANGUAGE_DONTKNOW ),
-      aForbiddenLang( LANGUAGE_DONTKNOW)
+      aForbiddenLang( LANGUAGE_DONTKNOW )
 {
     OSL_ENSURE( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
 }
@@ -78,7 +75,9 @@ SwBreakIt::~SwBreakIt()
 void SwBreakIt::createBreakIterator() const
 {
     if ( m_xMSF.is() && !xBreak.is() )
-        xBreak.set(m_xMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))),uno::UNO_QUERY);
+        xBreak.set(m_xMSF->createInstance(::rtl::OUString(
+                     RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))),
+                   uno::UNO_QUERY);
 }
 
 void SwBreakIt::_GetLocale( const LanguageType aLang )
@@ -120,14 +119,19 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const rtl::OUString& rTxt, sal_Int32 
                     break;
             }
         }
-        if( i18n::ScriptType::WEAK == nScript && nPos &&
-            0 < (nChgPos = xBreak->beginOfScript( rTxt, nPos, nScript )) )
+        if( i18n::ScriptType::WEAK == nScript &&
+            nPos &&
+            0 < ( nChgPos = xBreak->beginOfScript( rTxt, nPos, nScript ) ) )
+        {
             nScript = xBreak->getScriptType( rTxt, nChgPos-1 );
+        }
 
-        if( i18n::ScriptType::WEAK == nScript && rTxt.getLength() >
-            ( nChgPos = xBreak->endOfScript( rTxt, nPos, nScript ) ) &&
+        if( i18n::ScriptType::WEAK == nScript &&
+            rTxt.getLength() > ( nChgPos = xBreak->endOfScript( rTxt, nPos, nScript ) ) &&
             0 <= nChgPos )
+        {
             nScript = xBreak->getScriptType( rTxt, nChgPos );
+        }
     }
     if( i18n::ScriptType::WEAK == nScript )
         nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
@@ -137,12 +141,14 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const rtl::OUString& rTxt, sal_Int32 
 sal_uInt16 SwBreakIt::GetAllScriptsOfText( const rtl::OUString& rTxt ) const
 {
     const sal_uInt16 coAllScripts = ( SCRIPTTYPE_LATIN |
-                                  SCRIPTTYPE_ASIAN |
-                                  SCRIPTTYPE_COMPLEX );
+                                      SCRIPTTYPE_ASIAN |
+                                      SCRIPTTYPE_COMPLEX );
     createBreakIterator();
     sal_uInt16 nRet = 0, nScript;
     if( !xBreak.is() )
+    {
         nRet = coAllScripts;
+    }
     else if( !rTxt.isEmpty() )
     {
         for( sal_Int32 n = 0, nEnd = rTxt.getLength(); n < nEnd;
@@ -165,17 +171,20 @@ sal_uInt16 SwBreakIt::GetAllScriptsOfText( const rtl::OUString& rTxt ) const
     return nRet;
 }
 
-sal_Int32 SwBreakIt::getGraphemeCount(const rtl::OUString& rText, sal_Int32 nStart, sal_Int32 nEnd) const
+sal_Int32 SwBreakIt::getGraphemeCount(const rtl::OUString& rText,
+                                      sal_Int32 nStart, sal_Int32 nEnd) const
 {
     sal_Int32 nGraphemeCount = 0;
 
     sal_Int32 nCurPos = nStart;
     while (nCurPos < nEnd)
     {
-        //fdo#49208 cheat and assume that nothing can combine with a space
-        //to form a single grapheme
+        // fdo#49208 cheat and assume that nothing can combine with a space
+        // to form a single grapheme
         if (rText[nCurPos] == ' ')
+        {
             ++nCurPos;
+        }
         else
         {
             sal_Int32 nCount2 = 1;

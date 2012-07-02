@@ -141,17 +141,17 @@ using namespace ::com::sun::star;
 extern void _FrmFinit();
 extern void ClearFEShellTabCols();
 
-/*************************************************************************
-|*  einige Bereiche fuer die Set in Collections / Nodes
-|*************************************************************************/
-    // AttrSet-Range fuer die 2 Break-Attribute
+// some ranges for sets in collections/ nodes
+
+// AttrSet range for the 2 break attributes
 sal_uInt16 aBreakSetRange[] = {
     RES_PAGEDESC, RES_BREAK,
-    0 };
+    0
+};
 
-    // AttrSet-Range fuer die TxtFmtColl
-    // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
-    // included in the paragraph style's itemset.
+// AttrSet range for TxtFmtColl
+// list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
+// included in the paragraph style's itemset.
 sal_uInt16 aTxtFmtCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -160,7 +160,7 @@ sal_uInt16 aTxtFmtCollSetRange[] = {
     0
 };
 
-    // AttrSet-Range fuer die GrfFmtColl
+// AttrSet range for GrfFmtColl
 sal_uInt16 aGrfFmtCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
@@ -168,7 +168,7 @@ sal_uInt16 aGrfFmtCollSetRange[] = {
     0
 };
 
-    // AttrSet-Range fuer die TextNode
+// AttrSet range for TextNode
 sal_uInt16 aTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -178,7 +178,7 @@ sal_uInt16 aTxtNodeSetRange[] = {
     0
 };
 
-    // AttrSet-Range fuer die NoTxtNode
+// AttrSet range for NoTxtNode
 sal_uInt16 aNoTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
@@ -224,21 +224,21 @@ sal_uInt16 aTableBoxSetRange[] = {
     0
 };
 
-// AttrSet-Range fuer die SwFrmFmt
+// AttrSet range for SwFrmFmt
 sal_uInt16 aFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
-// AttrSet-Range fuer die SwCharFmt
+// AttrSet range for SwCharFmt
 sal_uInt16 aCharFmtSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
-// AttrSet-Range fuer die character autostyles
+// AttrSet range for character autostyles
 sal_uInt16 aCharAutoFmtSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
@@ -246,17 +246,14 @@ sal_uInt16 aCharAutoFmtSetRange[] = {
     0
 };
 
-// AttrSet-Range fuer die SwPageDescFmt
+// AttrSet range for SwPageDescFmt
 sal_uInt16 aPgFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
-/******************************************************************************
- * lege eine Tabelle fuer einen Zugriff auf die
- * Default-Format-Attribute an
- ******************************************************************************/
+// create table for accessing default format attributes
 SwDfltAttrTab aAttrTab;
 
 SfxItemInfo aSlotTab[] =
@@ -299,7 +296,7 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },        // RES_CHRATR_RELIEF
     { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },        // RES_CHRATR_HIDDEN
     { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },      // RES_CHRATR_OVERLINE
-    { 0, SFX_ITEM_POOLABLE },							// RES_CHRATR_RSID
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_RSID
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
 
     { 0, 0 },                                           // RES_TXTATR_REFMARK
@@ -330,7 +327,6 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_PARA_HYPHENZONE, SFX_ITEM_POOLABLE },    // RES_PARATR_HYPHENZONE
     { FN_FORMAT_DROPCAPS, 0 },                          // RES_PARATR_DROP
     { SID_ATTR_PARA_REGISTER, SFX_ITEM_POOLABLE },      // RES_PARATR_REGISTER
-    // RES_PARATR_NUMRULE is now poolable
     { SID_ATTR_PARA_NUMRULE, SFX_ITEM_POOLABLE },       // RES_PARATR_NUMRULE
     { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // RES_PARATR_SCRIPTSPACE
     { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
@@ -340,8 +336,8 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_PARA_SNAPTOGRID, SFX_ITEM_POOLABLE },    // RES_PARATR_SNAPTOGRID
     { SID_ATTR_BORDER_CONNECT, SFX_ITEM_POOLABLE },     // RES_PARATR_CONNECT_BORDER
 
-    { SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEM_POOLABLE }, // RES_PARATR_OUTLINELEVEL //#outline level,zhaojianwei
-    { 0, SFX_ITEM_POOLABLE },							// RES_PARATR_RSID
+    { SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEM_POOLABLE }, // RES_PARATR_OUTLINELEVEL //#outline level
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_RSID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_LEVEL
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISRESTART
@@ -384,14 +380,14 @@ SfxItemInfo aSlotTab[] =
 
     { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },     // RES_FRAMEDIR
 
-    { SID_ATTR_HDFT_DYNAMIC_SPACING, SFX_ITEM_POOLABLE }, // RES_HEADER_FOOTER_EAT_SPACING
-    { FN_TABLE_ROW_SPLIT, SFX_ITEM_POOLABLE },            // RES_ROW_SPLIT
+    { SID_ATTR_HDFT_DYNAMIC_SPACING, SFX_ITEM_POOLABLE },// RES_HEADER_FOOTER_EAT_SPACING
+    { FN_TABLE_ROW_SPLIT, SFX_ITEM_POOLABLE },          // RES_ROW_SPLIT
     // #i18732# - use slot-id define in svx
-    { SID_SW_FOLLOW_TEXT_FLOW, SFX_ITEM_POOLABLE },         // RES_FOLLOW_TEXT_FLOW
-    // collapsing borders #i29550#
-    { SID_SW_COLLAPSING_BORDERS, SFX_ITEM_POOLABLE },       // RES_COLLAPSING_BORDERS
+    { SID_SW_FOLLOW_TEXT_FLOW, SFX_ITEM_POOLABLE },     // RES_FOLLOW_TEXT_FLOW
+    // #i29550#
+    { SID_SW_COLLAPSING_BORDERS, SFX_ITEM_POOLABLE },   // RES_COLLAPSING_BORDERS
     // #i28701#
-    { SID_SW_WRAP_INFLUENCE_ON_OBJPOS, SFX_ITEM_POOLABLE }, // RES_WRAP_INFLUENCE_ON_OBJPOS
+    { SID_SW_WRAP_INFLUENCE_ON_OBJPOS, SFX_ITEM_POOLABLE },// RES_WRAP_INFLUENCE_ON_OBJPOS
     { 0, 0 },                                           // RES_AUTO_STYLE
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_STYLE_NAME
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_CONDITIONAL_STYLE_NAME
@@ -430,8 +426,8 @@ sal_uInt16* SwAttrPool::pVersionMap4 = 0;
 sal_uInt16* SwAttrPool::pVersionMap5 = 0;
 sal_uInt16* SwAttrPool::pVersionMap6 = 0;
 
-const sal_Char* pMarkToTable        = "table";
-const sal_Char* pMarkToFrame        = "frame";
+const sal_Char* pMarkToTable    = "table";
+const sal_Char* pMarkToFrame    = "frame";
 const sal_Char* pMarkToRegion   = "region";
 const sal_Char* pMarkToText     = "text";
 const sal_Char* pMarkToOutline  = "outline";
@@ -445,23 +441,21 @@ SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
 
-CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
+CollatorWrapper* pCollator = 0,
+                *pCaseCollator = 0;
 
-/******************************************************************************
- *  void _InitCore()
- ******************************************************************************/
 salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper()
 {
     static salhelper::SingletonRef<SwCalendarWrapper> aCalendarWrapper;
     return &aCalendarWrapper;
 }
+
 void _InitCore()
 {
     SfxPoolItem* pItem;
 
-    // erstmal alle Attribut-Pointer auf 0 setzen
-    memset( aAttrTab, 0, (POOLATTR_END - POOLATTR_BEGIN) *
-                            sizeof( SfxPoolItem* ) );
+    // first initialize all attribute pointers with 0
+    memset( aAttrTab, 0, (POOLATTR_END - POOLATTR_BEGIN) * sizeof( SfxPoolItem* ) );
 
     aAttrTab[ RES_CHRATR_CASEMAP- POOLATTR_BEGIN ] =        new SvxCaseMapItem( SVX_CASEMAP_NOT_MAPPED, RES_CHRATR_CASEMAP);
     aAttrTab[ RES_CHRATR_CHARSETCOLOR- POOLATTR_BEGIN ] =   new SvxCharSetColorItem(RES_CHRATR_CHARSETCOLOR);
@@ -503,144 +497,139 @@ void _InitCore()
 
     aAttrTab[ RES_CHRATR_ROTATE - POOLATTR_BEGIN ] =        new SvxCharRotateItem( 0, sal_False, RES_CHRATR_ROTATE );
     aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, RES_CHRATR_EMPHASIS_MARK );
-    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SvxTwoLinesItem( sal_False, 0, 0, RES_CHRATR_TWO_LINES );
-    aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] = new SvxCharScaleWidthItem( 100, RES_CHRATR_SCALEW );
-    aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] = new SvxCharReliefItem( RELIEF_NONE, RES_CHRATR_RELIEF );
-    aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] = new SvxCharHiddenItem( sal_False, RES_CHRATR_HIDDEN );
-    aAttrTab[ RES_CHRATR_OVERLINE- POOLATTR_BEGIN ] = new SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE );
+    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] =     new SvxTwoLinesItem( sal_False, 0, 0, RES_CHRATR_TWO_LINES );
+    aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] =        new SvxCharScaleWidthItem( 100, RES_CHRATR_SCALEW );
+    aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] =        new SvxCharReliefItem( RELIEF_NONE, RES_CHRATR_RELIEF );
+    aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] =        new SvxCharHiddenItem( sal_False, RES_CHRATR_HIDDEN );
+    aAttrTab[ RES_CHRATR_OVERLINE- POOLATTR_BEGIN ] =       new SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE );
 
 // CharakterAttr - Dummies
-    aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY1 );
+    aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY1 );
 
-// CharakterAttr - Dummies
-
-    aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] = new SwFmtAutoFmt;
-    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] = new SwFmtINetFmt( aEmptyStr, aEmptyStr );
-    aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] = new SwFmtRefMark( aEmptyStr );
-    aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] = new SwTOXMark;
-    aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] = new SwFmtCharFmt( 0 );
-    aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] = new SwFmtRuby( aEmptyStr );
+    aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] =        new SwFmtAutoFmt;
+    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] =       new SwFmtINetFmt( aEmptyStr, aEmptyStr );
+    aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] =       new SwFmtRefMark( aEmptyStr );
+    aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] =       new SwTOXMark;
+    aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] =        new SwFmtCharFmt( 0 );
+    aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] =      new SwFmtRuby( aEmptyStr );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
-    aAttrTab[ RES_TXTATR_META - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_META);
+    aAttrTab[ RES_TXTATR_META - POOLATTR_BEGIN ] =      SwFmtMeta::CreatePoolDefault(RES_TXTATR_META);
     aAttrTab[ RES_TXTATR_METAFIELD - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_METAFIELD);
 
-    aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] = new SwFmtFld;
-    aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] = new SwFmtFlyCnt( 0 );
-    aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] = new SwFmtFtn;
+    aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] =          new SwFmtFld;
+    aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] =        new SwFmtFlyCnt( 0 );
+    aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] =           new SwFmtFtn;
 
 // TextAttr - Dummies
-    aAttrTab[ RES_TXTATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY4 );
-    aAttrTab[ RES_TXTATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY3 );
-    aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY1 );
-    aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY2 );
-    aAttrTab[ RES_TXTATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY5 );
-// TextAttr - Dummies
+    aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY1 );
+    aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY2 );
+    aAttrTab[ RES_TXTATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY3 );
+    aAttrTab[ RES_TXTATR_DUMMY4 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY4 );
+    aAttrTab[ RES_TXTATR_DUMMY5 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY5 );
 
-    aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] = new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
-    aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] = new SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST );
-    aAttrTab[ RES_PARATR_SPLIT- POOLATTR_BEGIN ] = new SvxFmtSplitItem( sal_True, RES_PARATR_SPLIT );
-    aAttrTab[ RES_PARATR_WIDOWS- POOLATTR_BEGIN ] = new SvxWidowsItem( 0, RES_PARATR_WIDOWS );
-    aAttrTab[ RES_PARATR_ORPHANS- POOLATTR_BEGIN ] = new SvxOrphansItem( 0, RES_PARATR_ORPHANS );
-    aAttrTab[ RES_PARATR_TABSTOP- POOLATTR_BEGIN ] = new SvxTabStopItem( 1, SVX_TAB_DEFDIST, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
+    aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] =    new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
+    aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] =         new SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST );
+    aAttrTab[ RES_PARATR_SPLIT- POOLATTR_BEGIN ] =          new SvxFmtSplitItem( sal_True, RES_PARATR_SPLIT );
+    aAttrTab[ RES_PARATR_WIDOWS- POOLATTR_BEGIN ] =         new SvxWidowsItem( 0, RES_PARATR_WIDOWS );
+    aAttrTab[ RES_PARATR_ORPHANS- POOLATTR_BEGIN ] =        new SvxOrphansItem( 0, RES_PARATR_ORPHANS );
+    aAttrTab[ RES_PARATR_TABSTOP- POOLATTR_BEGIN ] =        new SvxTabStopItem( 1, SVX_TAB_DEFDIST, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
 
     pItem = new SvxHyphenZoneItem( sal_False, RES_PARATR_HYPHENZONE );
-    ((SvxHyphenZoneItem*)pItem)->GetMaxHyphens() = 0; // Default z.Z. auf 0
-    aAttrTab[ RES_PARATR_HYPHENZONE- POOLATTR_BEGIN ] = pItem;
+    ((SvxHyphenZoneItem*)pItem)->GetMaxHyphens() = 0; // Default: 0
+    aAttrTab[ RES_PARATR_HYPHENZONE- POOLATTR_BEGIN ] =     pItem;
 
-    aAttrTab[ RES_PARATR_DROP- POOLATTR_BEGIN ] = new SwFmtDrop;
-    aAttrTab[ RES_PARATR_REGISTER - POOLATTR_BEGIN ] = new SwRegisterItem( sal_False );
-    aAttrTab[ RES_PARATR_NUMRULE - POOLATTR_BEGIN ] = new SwNumRuleItem( aEmptyStr );
+    aAttrTab[ RES_PARATR_DROP- POOLATTR_BEGIN ] =           new SwFmtDrop;
+    aAttrTab[ RES_PARATR_REGISTER - POOLATTR_BEGIN ] =      new SwRegisterItem( sal_False );
+    aAttrTab[ RES_PARATR_NUMRULE - POOLATTR_BEGIN ] =       new SwNumRuleItem( aEmptyStr );
 
-    aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =           new SvxScriptSpaceItem( sal_True, RES_PARATR_SCRIPTSPACE );
-    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] =    new SvxHangingPunctuationItem( sal_True, RES_PARATR_HANGINGPUNCTUATION );
-    aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] =       new SvxForbiddenRuleItem( sal_True, RES_PARATR_FORBIDDEN_RULES );
-    aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =             new SvxParaVertAlignItem( 0, RES_PARATR_VERTALIGN );
-    aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] =            new SvxParaGridItem( sal_True, RES_PARATR_SNAPTOGRID );
+    aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =   new SvxScriptSpaceItem( sal_True, RES_PARATR_SCRIPTSPACE );
+    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] = new SvxHangingPunctuationItem( sal_True, RES_PARATR_HANGINGPUNCTUATION );
+    aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] = new SvxForbiddenRuleItem( sal_True, RES_PARATR_FORBIDDEN_RULES );
+    aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =     new SvxParaVertAlignItem( 0, RES_PARATR_VERTALIGN );
+    aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] =    new SvxParaGridItem( sal_True, RES_PARATR_SNAPTOGRID );
     aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
 
-    aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] = new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );//#outline level,zhaojianwei
-    aAttrTab[ RES_PARATR_RSID - POOLATTR_BEGIN ] = new SvxRsidItem( 0, RES_PARATR_RSID );
+    aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] =  new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );
+    aAttrTab[ RES_PARATR_RSID - POOLATTR_BEGIN ] =          new SvxRsidItem( 0, RES_PARATR_RSID );
 
-    aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] = new SfxStringItem( RES_PARATR_LIST_ID, aEmptyStr );
-    aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );
+    aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] =       new SfxStringItem( RES_PARATR_LIST_ID, aEmptyStr );
+    aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] =    new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );
     aAttrTab[ RES_PARATR_LIST_ISRESTART - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISRESTART, sal_False );
     aAttrTab[ RES_PARATR_LIST_RESTARTVALUE - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 );
     aAttrTab[ RES_PARATR_LIST_ISCOUNTED - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, sal_True );
 
-    aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] = new SwFmtFillOrder;
-    aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] = new SwFmtFrmSize;
-    aAttrTab[ RES_PAPER_BIN- POOLATTR_BEGIN ] = new SvxPaperBinItem( RES_PAPER_BIN );
-    aAttrTab[ RES_LR_SPACE- POOLATTR_BEGIN ] = new SvxLRSpaceItem( RES_LR_SPACE );
-    aAttrTab[ RES_UL_SPACE- POOLATTR_BEGIN ] = new SvxULSpaceItem( RES_UL_SPACE );
-    aAttrTab[ RES_PAGEDESC- POOLATTR_BEGIN ] = new SwFmtPageDesc;
-    aAttrTab[ RES_BREAK- POOLATTR_BEGIN ] = new SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK);
-    aAttrTab[ RES_CNTNT- POOLATTR_BEGIN ] = new SwFmtCntnt;
-    aAttrTab[ RES_HEADER- POOLATTR_BEGIN ] = new SwFmtHeader;
-    aAttrTab[ RES_FOOTER- POOLATTR_BEGIN ] = new SwFmtFooter;
-    aAttrTab[ RES_PRINT- POOLATTR_BEGIN ] = new SvxPrintItem( RES_PRINT );
-    aAttrTab[ RES_OPAQUE- POOLATTR_BEGIN ] = new SvxOpaqueItem( RES_OPAQUE );
-    aAttrTab[ RES_PROTECT- POOLATTR_BEGIN ] = new SvxProtectItem( RES_PROTECT );
-    aAttrTab[ RES_SURROUND- POOLATTR_BEGIN ] = new SwFmtSurround;
-    aAttrTab[ RES_VERT_ORIENT- POOLATTR_BEGIN ] = new SwFmtVertOrient;
-    aAttrTab[ RES_HORI_ORIENT- POOLATTR_BEGIN ] = new SwFmtHoriOrient;
-    aAttrTab[ RES_ANCHOR- POOLATTR_BEGIN ] = new SwFmtAnchor;
-    aAttrTab[ RES_BACKGROUND- POOLATTR_BEGIN ] = new SvxBrushItem( RES_BACKGROUND );
-    aAttrTab[ RES_BOX- POOLATTR_BEGIN ] = new SvxBoxItem( RES_BOX );
-    aAttrTab[ RES_SHADOW- POOLATTR_BEGIN ] = new SvxShadowItem( RES_SHADOW );
-    aAttrTab[ RES_FRMMACRO- POOLATTR_BEGIN ] = new SvxMacroItem( RES_FRMMACRO );
-    aAttrTab[ RES_COL- POOLATTR_BEGIN ] = new SwFmtCol;
-    aAttrTab[ RES_KEEP - POOLATTR_BEGIN ] = new SvxFmtKeepItem( sal_False, RES_KEEP );
-    aAttrTab[ RES_URL - POOLATTR_BEGIN ] = new SwFmtURL();
-    aAttrTab[ RES_EDIT_IN_READONLY - POOLATTR_BEGIN ] = new SwFmtEditInReadonly;
-    aAttrTab[ RES_LAYOUT_SPLIT - POOLATTR_BEGIN ] = new SwFmtLayoutSplit;
-    aAttrTab[ RES_CHAIN - POOLATTR_BEGIN ] = new SwFmtChain;
-    aAttrTab[ RES_TEXTGRID - POOLATTR_BEGIN ] = new SwTextGridItem;
+    aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] =            new SwFmtFillOrder;
+    aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] =              new SwFmtFrmSize;
+    aAttrTab[ RES_PAPER_BIN- POOLATTR_BEGIN ] =             new SvxPaperBinItem( RES_PAPER_BIN );
+    aAttrTab[ RES_LR_SPACE- POOLATTR_BEGIN ] =              new SvxLRSpaceItem( RES_LR_SPACE );
+    aAttrTab[ RES_UL_SPACE- POOLATTR_BEGIN ] =              new SvxULSpaceItem( RES_UL_SPACE );
+    aAttrTab[ RES_PAGEDESC- POOLATTR_BEGIN ] =              new SwFmtPageDesc;
+    aAttrTab[ RES_BREAK- POOLATTR_BEGIN ] =                 new SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK);
+    aAttrTab[ RES_CNTNT- POOLATTR_BEGIN ] =                 new SwFmtCntnt;
+    aAttrTab[ RES_HEADER- POOLATTR_BEGIN ] =                new SwFmtHeader;
+    aAttrTab[ RES_FOOTER- POOLATTR_BEGIN ] =                new SwFmtFooter;
+    aAttrTab[ RES_PRINT- POOLATTR_BEGIN ] =                 new SvxPrintItem( RES_PRINT );
+    aAttrTab[ RES_OPAQUE- POOLATTR_BEGIN ] =                new SvxOpaqueItem( RES_OPAQUE );
+    aAttrTab[ RES_PROTECT- POOLATTR_BEGIN ] =               new SvxProtectItem( RES_PROTECT );
+    aAttrTab[ RES_SURROUND- POOLATTR_BEGIN ] =              new SwFmtSurround;
+    aAttrTab[ RES_VERT_ORIENT- POOLATTR_BEGIN ] =           new SwFmtVertOrient;
+    aAttrTab[ RES_HORI_ORIENT- POOLATTR_BEGIN ] =           new SwFmtHoriOrient;
+    aAttrTab[ RES_ANCHOR- POOLATTR_BEGIN ] =                new SwFmtAnchor;
+    aAttrTab[ RES_BACKGROUND- POOLATTR_BEGIN ] =            new SvxBrushItem( RES_BACKGROUND );
+    aAttrTab[ RES_BOX- POOLATTR_BEGIN ] =                   new SvxBoxItem( RES_BOX );
+    aAttrTab[ RES_SHADOW- POOLATTR_BEGIN ] =                new SvxShadowItem( RES_SHADOW );
+    aAttrTab[ RES_FRMMACRO- POOLATTR_BEGIN ] =              new SvxMacroItem( RES_FRMMACRO );
+    aAttrTab[ RES_COL- POOLATTR_BEGIN ] =                   new SwFmtCol;
+    aAttrTab[ RES_KEEP - POOLATTR_BEGIN ] =                 new SvxFmtKeepItem( sal_False, RES_KEEP );
+    aAttrTab[ RES_URL - POOLATTR_BEGIN ] =                  new SwFmtURL();
+    aAttrTab[ RES_EDIT_IN_READONLY - POOLATTR_BEGIN ] =     new SwFmtEditInReadonly;
+    aAttrTab[ RES_LAYOUT_SPLIT - POOLATTR_BEGIN ] =         new SwFmtLayoutSplit;
+    aAttrTab[ RES_CHAIN - POOLATTR_BEGIN ] =                new SwFmtChain;
+    aAttrTab[ RES_TEXTGRID - POOLATTR_BEGIN ] =             new SwTextGridItem;
     aAttrTab[ RES_HEADER_FOOTER_EAT_SPACING - POOLATTR_BEGIN ] = new SwHeaderAndFooterEatSpacingItem;
-    aAttrTab[ RES_LINENUMBER - POOLATTR_BEGIN ] = new SwFmtLineNumber;
-    aAttrTab[ RES_FTN_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtFtnAtTxtEnd;
-    aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtEndAtTxtEnd;
-    aAttrTab[ RES_COLUMNBALANCE - POOLATTR_BEGIN ] = new SwFmtNoBalancedColumns;
-    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
-    aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] = new SwFmtRowSplit;
+    aAttrTab[ RES_LINENUMBER - POOLATTR_BEGIN ] =           new SwFmtLineNumber;
+    aAttrTab[ RES_FTN_AT_TXTEND - POOLATTR_BEGIN ] =        new SwFmtFtnAtTxtEnd;
+    aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] =        new SwFmtEndAtTxtEnd;
+    aAttrTab[ RES_COLUMNBALANCE - POOLATTR_BEGIN ] =        new SwFmtNoBalancedColumns;
+    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] =             new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
+    aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] =            new SwFmtRowSplit;
 
     // #i18732#
-    aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] = new SwFmtFollowTextFlow( sal_True );
+    aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] =     new SwFmtFollowTextFlow( sal_True );
     // collapsing borders #i29550#
-    aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] = new SfxBoolItem( RES_COLLAPSING_BORDERS, sal_False );
+    aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] =   new SfxBoolItem( RES_COLLAPSING_BORDERS, sal_False );
     // #i28701#
     // #i35017# - constant name has changed
     aAttrTab[ RES_WRAP_INFLUENCE_ON_OBJPOS - POOLATTR_BEGIN ] =
             new SwFmtWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
-// FrmAttr-Dummies
-    aAttrTab[ RES_AUTO_STYLE - POOLATTR_BEGIN ] = new SwFmtAutoFmt( RES_AUTO_STYLE );
-    aAttrTab[ RES_FRMATR_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_STYLE_NAME, aEmptyStr );
+
+    aAttrTab[ RES_AUTO_STYLE - POOLATTR_BEGIN ] =           new SwFmtAutoFmt( RES_AUTO_STYLE );
+    aAttrTab[ RES_FRMATR_STYLE_NAME - POOLATTR_BEGIN ] =    new SfxStringItem( RES_FRMATR_STYLE_NAME, aEmptyStr );
     aAttrTab[ RES_FRMATR_CONDITIONAL_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_CONDITIONAL_STYLE_NAME, aEmptyStr );
-// FrmAttr-Dummies
 
-    aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] = new SwMirrorGrf;
-    aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] = new SwCropGrf;
-    aAttrTab[ RES_GRFATR_ROTATION - POOLATTR_BEGIN ] = new SwRotationGrf;
-    aAttrTab[ RES_GRFATR_LUMINANCE - POOLATTR_BEGIN ] = new SwLuminanceGrf;
-    aAttrTab[ RES_GRFATR_CONTRAST - POOLATTR_BEGIN ] = new SwContrastGrf;
-    aAttrTab[ RES_GRFATR_CHANNELR - POOLATTR_BEGIN ] = new SwChannelRGrf;
-    aAttrTab[ RES_GRFATR_CHANNELG - POOLATTR_BEGIN ] = new SwChannelGGrf;
-    aAttrTab[ RES_GRFATR_CHANNELB - POOLATTR_BEGIN ] = new SwChannelBGrf;
-    aAttrTab[ RES_GRFATR_GAMMA - POOLATTR_BEGIN ] = new SwGammaGrf;
-    aAttrTab[ RES_GRFATR_INVERT - POOLATTR_BEGIN ] = new SwInvertGrf;
-    aAttrTab[ RES_GRFATR_TRANSPARENCY - POOLATTR_BEGIN ] = new SwTransparencyGrf;
-    aAttrTab[ RES_GRFATR_DRAWMODE - POOLATTR_BEGIN ] = new SwDrawModeGrf;
+    aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] =      new SwMirrorGrf;
+    aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] =        new SwCropGrf;
+    aAttrTab[ RES_GRFATR_ROTATION - POOLATTR_BEGIN ] =      new SwRotationGrf;
+    aAttrTab[ RES_GRFATR_LUMINANCE - POOLATTR_BEGIN ] =     new SwLuminanceGrf;
+    aAttrTab[ RES_GRFATR_CONTRAST - POOLATTR_BEGIN ] =      new SwContrastGrf;
+    aAttrTab[ RES_GRFATR_CHANNELR - POOLATTR_BEGIN ] =      new SwChannelRGrf;
+    aAttrTab[ RES_GRFATR_CHANNELG - POOLATTR_BEGIN ] =      new SwChannelGGrf;
+    aAttrTab[ RES_GRFATR_CHANNELB - POOLATTR_BEGIN ] =      new SwChannelBGrf;
+    aAttrTab[ RES_GRFATR_GAMMA - POOLATTR_BEGIN ] =         new SwGammaGrf;
+    aAttrTab[ RES_GRFATR_INVERT - POOLATTR_BEGIN ] =        new SwInvertGrf;
+    aAttrTab[ RES_GRFATR_TRANSPARENCY - POOLATTR_BEGIN ] =  new SwTransparencyGrf;
+    aAttrTab[ RES_GRFATR_DRAWMODE - POOLATTR_BEGIN ] =      new SwDrawModeGrf;
 
 // GraphicAttr - Dummies
-    aAttrTab[ RES_GRFATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_GRFATR_DUMMY1 );
-    aAttrTab[ RES_GRFATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_GRFATR_DUMMY2 );
-    aAttrTab[ RES_GRFATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_GRFATR_DUMMY3 );
-    aAttrTab[ RES_GRFATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_GRFATR_DUMMY4 );
-    aAttrTab[ RES_GRFATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_GRFATR_DUMMY5 );
-// GraphicAttr - Dummies
+    aAttrTab[ RES_GRFATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY1 );
+    aAttrTab[ RES_GRFATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY2 );
+    aAttrTab[ RES_GRFATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY3 );
+    aAttrTab[ RES_GRFATR_DUMMY4 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY4 );
+    aAttrTab[ RES_GRFATR_DUMMY5 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_GRFATR_DUMMY5 );
 
-    aAttrTab[ RES_BOXATR_FORMAT- POOLATTR_BEGIN ] = new SwTblBoxNumFormat;
-    aAttrTab[ RES_BOXATR_FORMULA- POOLATTR_BEGIN ] = new SwTblBoxFormula( aEmptyStr );
-    aAttrTab[ RES_BOXATR_VALUE- POOLATTR_BEGIN ] = new SwTblBoxValue;
+    aAttrTab[ RES_BOXATR_FORMAT- POOLATTR_BEGIN ] =         new SwTblBoxNumFormat;
+    aAttrTab[ RES_BOXATR_FORMULA- POOLATTR_BEGIN ] =        new SwTblBoxFormula( aEmptyStr );
+    aAttrTab[ RES_BOXATR_VALUE- POOLATTR_BEGIN ] =          new SwTblBoxValue;
 
     aAttrTab[ RES_UNKNOWNATR_CONTAINER- POOLATTR_BEGIN ] =
                 new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER );
@@ -650,12 +639,12 @@ void _InitCore()
                        *(SvxFontItem*)aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ],
                        *(SvxFontItem*)aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ] );
 
-    // 1. Version - neue Attribute:
+    // 1. version - new attributes:
     //      - RES_CHRATR_BLINK
     //      - RES_CHRATR_NOHYPHEN
     //      - RES_CHRATR_NOLINEBREAK
     //      - RES_PARATR_REGISTER
-    //      + 2 Dummies fuer die einzelnen "Bereiche"
+    //      + 2 dummies for the "ranges"
     SwAttrPool::pVersionMap1 = new sal_uInt16[ 60 ];
     sal_uInt16 i;
     for( i = 1; i <= 17; i++ )
@@ -669,17 +658,17 @@ void _InitCore()
     for ( i = 59; i <= 60; ++i )
         SwAttrPool::pVersionMap1[ i-1 ] = i + 12;
 
-    // 2. Version - neue Attribute:
-    //      10 Dummies fuer den Frame "Bereich"
+    // 2. version - new attributes:
+    //      10 dummies for the frame "range"
     SwAttrPool::pVersionMap2 = new sal_uInt16[ 75 ];
     for( i = 1; i <= 70; i++ )
         SwAttrPool::pVersionMap2[ i-1 ] = i;
     for ( i = 71; i <= 75; ++i )
         SwAttrPool::pVersionMap2[ i-1 ] = i + 10;
 
-    // 3. Version - neue Attribute:
-    //      neue Attribute und Dummies fuer die CJK-Version
-    //      und neue Grafik-Attribute
+    // 3. version:
+    //      new attributes and dummies for the CJK version and
+    //      new graphics attributes
     SwAttrPool::pVersionMap3 = new sal_uInt16[ 86 ];
     for( i = 1; i <= 21; i++ )
         SwAttrPool::pVersionMap3[ i-1 ] = i;
@@ -690,13 +679,15 @@ void _InitCore()
     for ( i = 83; i <= 86; ++i )
         SwAttrPool::pVersionMap3[ i-1 ] = i + 35;
 
-    // 4. Version - neue Paragraph Attribute fuer die CJK-Version
+    // 4. version:
+    //      new paragraph attributes for CJK version
     SwAttrPool::pVersionMap4 = new sal_uInt16[ 121 ];
     for( i = 1; i <= 65; i++ )
         SwAttrPool::pVersionMap4[ i-1 ] = i;
     for ( i = 66; i <= 121; ++i )
         SwAttrPool::pVersionMap4[ i-1 ] = i + 9;
 
+    // 5. version
     // #i18732# - setup new version map due to extension of
     // the frame attributes (RES_FRMATR_*) for binary filters.
     SwAttrPool::pVersionMap5 = new sal_uInt16[ 130 ];
@@ -705,16 +696,15 @@ void _InitCore()
     for ( i = 110; i <= 130; ++i )
         SwAttrPool::pVersionMap5[ i-1 ] = i + 6;
 
-    // 6. Version - new character attribute for overlining plus 2 dummies
+    // 6. version:
+    //      new character attribute for overlining plus 2 dummies
     SwAttrPool::pVersionMap6 = new sal_uInt16[ 136 ];
     for( i = 1; i <= 37; i++ )
         SwAttrPool::pVersionMap6[ i-1 ] = i;
     for ( i = 38; i <= 136; ++i )
         SwAttrPool::pVersionMap6[ i-1 ] = i + 3;
 
-    uno::Reference<
-            lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
 
     SwBreakIt::_Create( xMSF );
     pCheckIt = NULL;
@@ -732,12 +722,6 @@ void _InitCore()
                                             rAFlags.nAutoCmpltWordLen );
 }
 
-/******************************************************************************
- *  void _FinitCore()
- ******************************************************************************/
-
-
-
 void _FinitCore()
 {
     _FrmFinit();
@@ -749,7 +733,7 @@ void _FinitCore()
     delete pCollator;
     delete pCaseCollator;
 
-    // das default TableAutoFormat zerstoeren
+    // destroy default TableAutoFormat
     delete SwTableAutoFmt::pDfltBoxAutoFmt;
 
     delete SwSelPaintRects::pMapMode;
@@ -803,7 +787,7 @@ void _FinitCore()
     delete SwStyleNameMapper::pNumRuleProgMap;
 
 
-    // loesche alle default-Attribute
+    // delete all default attributes
     SfxPoolItem* pHt;
     for( sal_uInt16 n = 0; n < POOLATTR_END - POOLATTR_BEGIN; n++ )
         if( 0 != ( pHt = aAttrTab[n] ))
@@ -854,9 +838,7 @@ CollatorWrapper& GetAppCollator()
     {
         const lang::Locale& rLcl = pBreakIt->GetLocale(
                                             (LanguageType)GetAppLanguage() );
-        uno::Reference<
-            lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
 
         pCollator = new CollatorWrapper( xMSF );
         pCollator->loadDefaultCollator( rLcl, SW_COLLATOR_IGNORES );
@@ -869,9 +851,7 @@ CollatorWrapper& GetAppCaseCollator()
     {
         const lang::Locale& rLcl = pBreakIt->GetLocale(
                                             (LanguageType)GetAppLanguage() );
-        uno::Reference<
-            lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
 
         pCaseCollator = new CollatorWrapper( xMSF );
         pCaseCollator->loadDefaultCollator( rLcl, 0 );
@@ -888,8 +868,7 @@ namespace
     public:
         TransWrp()
         {
-            uno::Reference< lang::XMultiServiceFactory > xMSF =
-                ::comphelper::getProcessServiceFactory();
+            uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
 
             xTransWrp.reset(new ::utl::TransliterationWrapper( xMSF,
                     i18n::TransliterationModules_IGNORE_CASE |

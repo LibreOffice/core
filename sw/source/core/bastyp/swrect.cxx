@@ -34,13 +34,6 @@
 #include "swrect.hxx"
 #include <math.h>
 
-/*************************************************************************
-|*
-|*  SwRect::SwRect()
-|*
-|*************************************************************************/
-
-
 
 SwRect::SwRect( const Rectangle &rRect ) :
     m_Point( rRect.Left(), rRect.Top() )
@@ -51,24 +44,11 @@ SwRect::SwRect( const Rectangle &rRect ) :
                             rRect.Bottom() - rRect.Top() + 1);
 }
 
-/*************************************************************************
-|*
-|*  SwRect::Center()
-|*
-|*************************************************************************/
 Point SwRect::Center() const
 {
     return Point( Left() + Width()  / 2,
                   Top()  + Height() / 2 );
 }
-
-/*************************************************************************
-|*
-|*  SwRect::Union()
-|*
-|*************************************************************************/
-
-
 
 SwRect& SwRect::Union( const SwRect& rRect )
 {
@@ -84,21 +64,13 @@ SwRect& SwRect::Union( const SwRect& rRect )
         Bottom( n );
     return *this;
 }
-/*************************************************************************
-|*
-|*  SwRect::Intersection(), _Intersection()
-|*
-|*************************************************************************/
-
-
 
 SwRect& SwRect::Intersection( const SwRect& rRect )
 {
-    //Hat das Teil ueberhaupt Gemeinsamkeiten mit mir?
+    // any similarity between me and given element?
     if ( IsOver( rRect ) )
     {
-        //Bestimmung der kleineren  rechten sowie unteren und
-        //           der groesseren linken  sowie oberen Kante.
+        // get smaller right and lower, and greater left and upper edge
         if ( Left() < rRect.Left() )
             Left( rRect.Left() );
         if ( Top() < rRect.Top() )
@@ -111,18 +83,15 @@ SwRect& SwRect::Intersection( const SwRect& rRect )
             Bottom( n );
     }
     else
-        //Def.: Bei einer leeren Intersection wird nur die SSize genullt.
+        // Def.: if intersection is empty, set only SSize to 0
         SSize(0, 0);
 
     return *this;
 }
 
-
-
 SwRect& SwRect::_Intersection( const SwRect& rRect )
 {
-    //Bestimmung der kleineren  rechten sowie unteren und
-    //           der groesseren linken  sowie oberen Kante.
+    // get smaller right and lower, and greater left and upper edge
     if ( Left() < rRect.Left() )
         Left( rRect.Left() );
     if ( Top() < rRect.Top() )
@@ -136,13 +105,6 @@ SwRect& SwRect::_Intersection( const SwRect& rRect )
 
     return *this;
 }
-/*************************************************************************
-|*
-|*  SwRect::IsInside()
-|*
-|*************************************************************************/
-
-
 
 sal_Bool SwRect::IsInside( const SwRect& rRect ) const
 {
@@ -156,18 +118,15 @@ sal_Bool SwRect::IsInside( const SwRect& rRect ) const
            (Top()  <= nrBottom)     && (nrBottom    <= nBottom);
 }
 
-
-
 sal_Bool SwRect::IsInside( const Point& rPoint ) const
 {
-    return    (Left()  <= rPoint.X())
-           && (Top()   <= rPoint.Y())
-           && (Right() >= rPoint.X())
-           && (Bottom()>= rPoint.Y());
+    return (Left()  <= rPoint.X()) &&
+           (Top()   <= rPoint.Y()) &&
+           (Right() >= rPoint.X()) &&
+           (Bottom()>= rPoint.Y());
 }
-/* ---------------------------------------------------------------------------
-    mouse moving of table borders
- ---------------------------------------------------------------------------*/
+
+// mouse moving of table borders
 sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 {
     return    IsInside(rPoint) ||
@@ -177,13 +136,6 @@ sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
            && ((Bottom()  + nTolerance)>= rPoint.Y()));
 }
 
-/*************************************************************************
-|*
-|*  SwRect::IsOver()
-|*
-|*************************************************************************/
-
-
 
 sal_Bool SwRect::IsOver( const SwRect& rRect ) const
 {
@@ -192,14 +144,6 @@ sal_Bool SwRect::IsOver( const SwRect& rRect ) const
            && (Right() >= rRect.Left())
            && (Bottom()>= rRect.Top()) ? sal_True : sal_False;
 }
-
-/*************************************************************************
-|*
-|*  SwRect::Justify()
-|*
-|*************************************************************************/
-
-
 
 void SwRect::Justify()
 {
@@ -215,9 +159,7 @@ void SwRect::Justify()
     }
 }
 
-
 // Similiar to the inline methods, but we need the function pointers
-
 void SwRect::_Width( const long nNew ) { m_Size.setWidth(nNew); }
 void SwRect::_Height( const long nNew ) { m_Size.setHeight(nNew); }
 void SwRect::_Left( const long nLeft ){ m_Size.Width() += m_Point.getX() - nLeft; m_Point.setX(nLeft); }
@@ -240,17 +182,21 @@ void SwRect::SubTop( const long nSub ){ m_Size.Height() += nSub; m_Point.Y() -= 
 void SwRect::AddBottom( const long nAdd ){ m_Size.Height() += nAdd; }
 void SwRect::SetPosX( const long nNew ){ m_Point.setX(nNew); }
 void SwRect::SetPosY( const long nNew ){ m_Point.setY(nNew); }
+
 const Size  SwRect::_Size() const { return SSize(); }
 const Size  SwRect::SwappedSize() const { return Size( m_Size.getHeight(), m_Size.getWidth() ); }
+
 const Point SwRect::TopLeft() const { return Pos(); }
 const Point SwRect::TopRight() const { return Point( m_Point.getX() + m_Size.getWidth(), m_Point.getY() ); }
 const Point SwRect::BottomLeft() const { return Point( m_Point.getX(), m_Point.getY() + m_Size.getHeight() ); }
 const Point SwRect::BottomRight() const
     { return Point( m_Point.getX() + m_Size.getWidth(), m_Point.getY() + m_Size.getHeight() ); }
+
 long SwRect::GetLeftDistance( long nLimit ) const { return m_Point.getX() - nLimit; }
 long SwRect::GetBottomDistance( long nLim ) const { return nLim - m_Point.getY() - m_Size.getHeight();}
 long SwRect::GetTopDistance( long nLimit ) const { return m_Point.getY() - nLimit; }
 long SwRect::GetRightDistance( long nLim ) const { return nLim - m_Point.getX() - m_Size.getWidth(); }
+
 sal_Bool SwRect::OverStepLeft( long nLimit ) const
     { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
 sal_Bool SwRect::OverStepBottom( long nLimit ) const
@@ -259,6 +205,7 @@ sal_Bool SwRect::OverStepTop( long nLimit ) const
     { return nLimit > m_Point.getY() && m_Point.getY() + m_Size.getHeight() > nLimit; }
 sal_Bool SwRect::OverStepRight( long nLimit ) const
     { return nLimit > m_Point.getX() && m_Point.getX() + m_Size.getWidth() > nLimit; }
+
 void SwRect::SetLeftAndWidth( long nLeft, long nNew )
 {
     m_Point.setX(nLeft);
@@ -287,9 +234,6 @@ void SwRect::SetLowerLeftCorner(  const Point& rNew )
     { m_Point = Point(rNew.nA, rNew.nB - m_Size.getHeight()); }
 
 #ifdef DBG_UTIL
-/*************************************************************************
- *                  operator<<( ostream&, SwRect&)
- *************************************************************************/
 SvStream &operator<<( SvStream &rStream, const SwRect &rRect )
 {
     rStream << '[' << static_cast<sal_Int32>(rRect.Top())
@@ -300,6 +244,5 @@ SvStream &operator<<( SvStream &rStream, const SwRect &rRect )
     return rStream;
 }
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,11 +26,10 @@
  *
  ************************************************************************/
 
-
 #include <osl/diagnose.h>
 #include "tabcol.hxx"
 
-#include <limits.h> //for LONG_MAX
+#include <limits.h>
 
 SwTabCols::SwTabCols( sal_uInt16 nSize ) :
     nLeftMin( 0 ),
@@ -59,10 +58,10 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
         (void) aEntry1;
         (void) aEntry2;
         OSL_ENSURE( aEntry1.nPos == aEntry2.nPos &&
-                aEntry1.nMin == aEntry2.nMin &&
-                aEntry1.nMax == aEntry2.nMax &&
-                aEntry1.bHidden == aEntry2.bHidden,
-                "CopyContructor of SwTabColsEntries did not succeed!" );
+                    aEntry1.nMin == aEntry2.nMin &&
+                    aEntry1.nMax == aEntry2.nMax &&
+                    aEntry1.bHidden == aEntry2.bHidden,
+                    "CopyContructor of SwTabColsEntries did not succeed!" );
     }
 #endif
 }
@@ -97,14 +96,15 @@ sal_Bool SwTabCols::operator==( const SwTabCols& rCmp ) const
     {
         SwTabColsEntry aEntry1 = aData[i];
         SwTabColsEntry aEntry2 = rCmp.GetData()[i];
-        if ( aEntry1.nPos != aEntry2.nPos || aEntry1.bHidden != aEntry2.bHidden  )
+        if ( aEntry1.nPos != aEntry2.nPos || aEntry1.bHidden != aEntry2.bHidden )
             return sal_False;
     }
 
     return sal_True;
 }
 
-void SwTabCols::Insert( long nValue, long nMin, long nMax, sal_Bool bValue, sal_uInt16 nPos )
+void SwTabCols::Insert( long nValue, long nMin, long nMax,
+                        sal_Bool bValue, sal_uInt16 nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;

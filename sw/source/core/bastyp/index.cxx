@@ -26,17 +26,18 @@
  *
  ************************************************************************/
 
-
 #include <assert.h>
-#include <stdlib.h>             // fuer qsort
+#include <stdlib.h>
 #include <tools/solar.h>
 #include <tools/string.hxx>
 
 #include "index.hxx"
 
+TYPEINIT0(SwIndexReg);
 
-TYPEINIT0(SwIndexReg);  // rtti
-
+// -------
+// SwIndex
+// -------
 
 SwIndex::SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx)
     : m_nIndex( nIdx )
@@ -187,9 +188,6 @@ void SwIndex::Remove()
     }
 }
 
-/*************************************************************************
-|*    SwIndex & SwIndex::operator=( const SwIndex & aSwIndex )
-*************************************************************************/
 SwIndex& SwIndex::operator=( const SwIndex& rIdx )
 {
     bool bEqual;
@@ -208,9 +206,6 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
     return *this;
 }
 
-/*************************************************************************
-|*    SwIndex &SwIndex::Assign
-*************************************************************************/
 SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
 {
     if (pArr != m_pIndexReg) // unregister!
@@ -221,11 +216,15 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
         Init(nIdx);
     }
     else if (m_nIndex != nIdx)
+    {
         ChgValue( *this, nIdx );
+    }
     return *this;
 }
 
-// SwIndexReg ///////////////////////////////////////////////////////
+// ----------
+// SwIndexReg
+// ----------
 
 SwIndexReg::SwIndexReg()
     : m_pFirst( 0 ), m_pLast( 0 )
@@ -281,9 +280,10 @@ void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
 
 #ifdef DBG_UTIL
 
-/*************************************************************************
-|*    SwIndex::operator++()
-*************************************************************************/
+// -------
+// SwIndex
+// -------
+
 xub_StrLen SwIndex::operator++(int)
 {
     OSL_ASSERT( m_nIndex < INVALID_INDEX );
@@ -301,9 +301,6 @@ xub_StrLen SwIndex::operator++()
     return m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex::operator--()
-*************************************************************************/
 xub_StrLen SwIndex::operator--(int)
 {
     OSL_ASSERT( m_nIndex );
@@ -319,45 +316,30 @@ xub_StrLen SwIndex::operator--()
     return ChgValue( *this, m_nIndex-1 ).m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex::operator+=( xub_StrLen )
-*************************************************************************/
 xub_StrLen SwIndex::operator+=( xub_StrLen const nVal )
 {
     OSL_ASSERT( m_nIndex < INVALID_INDEX - nVal );
     return ChgValue( *this, m_nIndex + nVal ).m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex::operator-=( xub_StrLen )
-*************************************************************************/
 xub_StrLen SwIndex::operator-=( xub_StrLen const nVal )
 {
     OSL_ASSERT( m_nIndex >= nVal );
     return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex::operator+=( const SwIndex & )
-*************************************************************************/
 xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
 {
     OSL_ASSERT( m_nIndex < INVALID_INDEX - rIndex.m_nIndex );
     return ChgValue( *this, m_nIndex + rIndex.m_nIndex ).m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex::operator-=( const SwIndex & )
-*************************************************************************/
 xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 {
     OSL_ASSERT( m_nIndex >= rIndex.m_nIndex );
     return ChgValue( *this, m_nIndex - rIndex.m_nIndex ).m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex::operator<( const SwIndex & )
-*************************************************************************/
 bool SwIndex::operator< ( const SwIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
@@ -365,9 +347,6 @@ bool SwIndex::operator< ( const SwIndex & rIndex ) const
     return m_nIndex < rIndex.m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex::operator<=( const SwIndex & )
-*************************************************************************/
 bool SwIndex::operator<=( const SwIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
@@ -375,9 +354,6 @@ bool SwIndex::operator<=( const SwIndex & rIndex ) const
     return m_nIndex <= rIndex.m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex::operator>( const SwIndex & )
-*************************************************************************/
 bool SwIndex::operator> ( const SwIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
@@ -385,9 +361,6 @@ bool SwIndex::operator> ( const SwIndex & rIndex ) const
     return m_nIndex > rIndex.m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex::operator>=( const SwIndex & )
-*************************************************************************/
 bool SwIndex::operator>=( const SwIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
@@ -395,9 +368,6 @@ bool SwIndex::operator>=( const SwIndex & rIndex ) const
     return m_nIndex >= rIndex.m_nIndex;
 }
 
-/*************************************************************************
-|*    SwIndex & SwIndex::operator=( xub_StrLen )
-*************************************************************************/
 SwIndex& SwIndex::operator= ( xub_StrLen const nVal )
 {
     if (m_nIndex != nVal)
@@ -406,7 +376,7 @@ SwIndex& SwIndex::operator= ( xub_StrLen const nVal )
     return *this;
 }
 
-#endif // ifdef DBG_UTIL
+#endif
 
 void SwIndexReg::MoveTo( SwIndexReg& rArr )
 {
