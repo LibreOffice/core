@@ -29,10 +29,7 @@ $(eval $(call gb_Executable_Executable,svg2odf))
 
 $(eval $(call gb_Executable_set_targettype_gui,svg2odf,YES))
 
-$(eval $(call gb_Executable_use_api,svg2odf,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Executable_use_sdk_api,svg2odf))
 
 $(eval $(call gb_Executable_set_include,svg2odf,\
     $$(INCLUDE) \

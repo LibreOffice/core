@@ -31,10 +31,7 @@ $(eval $(call gb_Executable_add_defs,lngconvex,\
 	-D_NTSDK \
 ))
 
-$(eval $(call gb_Executable_use_api,lngconvex,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Executable_use_sdk_api,lngconvex))
 
 $(eval $(call gb_Executable_use_libraries,lngconvex,\
 	comphelper \

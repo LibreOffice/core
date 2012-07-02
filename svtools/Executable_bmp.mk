@@ -35,10 +35,7 @@ $(eval $(call gb_Executable_set_include,bmp,\
     -I$(SRCDIR)/svtools/source/inc \
 ))
 
-$(eval $(call gb_Executable_use_api,bmp,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Executable_use_sdk_api,bmp))
 
 $(eval $(call gb_Executable_use_libraries,bmp,\
     sal \

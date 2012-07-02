@@ -33,10 +33,7 @@ $(eval $(call gb_Executable_set_include,svidl,\
 	-I$(SRCDIR)/idl/inc \
 ))
 
-$(eval $(call gb_Executable_use_api,svidl,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Executable_use_sdk_api,svidl))
 
 $(eval $(call gb_Executable_use_libraries,svidl,\
 	tl \

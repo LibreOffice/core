@@ -39,10 +39,7 @@ $(eval $(call gb_Executable_set_include,pluginapp.bin,\
 	-I$(SRCDIR)/extensions/source/plugin/inc \
 ))
 
-$(eval $(call gb_Executable_use_api,pluginapp.bin,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Executable_use_sdk_api,pluginapp.bin))
 
 $(eval $(call gb_Executable_add_exception_objects,pluginapp.bin,\
 	extensions/source/plugin/unx/npwrap \

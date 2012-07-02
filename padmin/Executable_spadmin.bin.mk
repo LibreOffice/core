@@ -36,10 +36,7 @@ $(eval $(call gb_Executable_use_static_libraries,spadmin.bin,\
     vclmain \
 ))
 
-$(eval $(call gb_Executable_use_api,spadmin.bin,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Executable_use_sdk_api,spadmin.bin))
 
 $(eval $(call gb_Executable_use_libraries,spadmin.bin,\
     spa \

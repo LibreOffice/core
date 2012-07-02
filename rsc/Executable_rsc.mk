@@ -33,10 +33,7 @@ $(eval $(call gb_Executable_set_include,rsc,\
 	-I$(SRCDIR)/rsc/inc \
 ))
 
-$(eval $(call gb_Executable_use_api,rsc,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Executable_use_sdk_api,rsc))
 
 $(eval $(call gb_Executable_add_defs,rsc,\
 	-DSOLAR \
