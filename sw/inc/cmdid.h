@@ -438,8 +438,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_FRAME_WRAP_LEFT              (FN_FORMAT + 172)  /* */
 #define FN_FRAME_WRAP_RIGHT             (FN_FORMAT + 173)  /* */
 
-#define FN_TABLE_SET_ROW_AUTOHEIGHT (FN_FORMAT + 174)  /* table: set minimal automatic row height */
-
 #define FN_WRAP_ANCHOR_ONLY         (FN_FORMAT + 181)  /* wrap only for first paragraph */
 
 #define FN_TABLE_BALANCE_CELLS      (FN_FORMAT + 182)  /* evenly distribute columns */
@@ -804,7 +802,6 @@ included in c-context files, so c++ style stuff will cause problems.
     Region: Parameter
  --------------------------------------------------------------------*/
 
-#define FN_PARAM_TABLE_ROWS         (FN_PARAM+1)
 #define FN_PARAM_MOVE_COUNT         (FN_PARAM+2)
 #define FN_PARAM_MOVE_SELECTION     (FN_PARAM+3)
 
