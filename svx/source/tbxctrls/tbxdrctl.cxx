@@ -34,7 +34,6 @@
 #include "svx/tbxctl.hxx"
 #include "svx/tbxdraw.hxx"
 #include "svx/tbxcolor.hxx"
-#include "tbxdraw.hrc"
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxAllEnumItem);

@@ -33,7 +33,6 @@
 
 #include "svx/tbxalign.hxx"
 #include "svx/tbxdraw.hxx"
-#include "tbxdraw.hrc"
 #include <tools/shl.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <vcl/svapp.hxx>
