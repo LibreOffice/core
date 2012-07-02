@@ -49,7 +49,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     if( m_xSrcDoc.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.RtfExport" ))), uno::UNO_QUERY_THROW);
+        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance("com.sun.star.comp.Writer.RtfExport"), uno::UNO_QUERY_THROW);
         if (!xIfc.is())
             return sal_False;
         uno::Reference< document::XExporter > xExprtr(xIfc, uno::UNO_QUERY_THROW);
@@ -151,15 +151,15 @@ uno::Sequence< OUString > RtfFilter::getSupportedServiceNames(  ) throw (uno::Ru
 
 OUString RtfFilter_getImplementationName () throw (uno::RuntimeException)
 {
-   return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.RtfFilter" ) );
+   return OUString ( "com.sun.star.comp.Writer.RtfFilter" );
 }
 
 uno::Sequence< OUString > RtfFilter_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
    uno::Sequence < OUString > aRet(2);
    OUString* pArray = aRet.getArray();
-   pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
-   pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
+   pArray[0] =  SERVICE_NAME1;
+   pArray[1] =  SERVICE_NAME2;
    return aRet;
 }
 #undef SERVICE_NAME1

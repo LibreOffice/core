@@ -57,7 +57,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
     bool bWord = false;
     sal_Int32 nPropertyCount = rDescriptor.getLength();
     const beans::PropertyValue* pValues = rDescriptor.getConstArray();
-    rtl::OUString sURL;
+    OUString sURL;
     uno::Reference < io::XStream > xStream;
     uno::Reference < io::XInputStream > xInputStream;
     for( sal_Int32 nProperty = 0; nProperty < nPropertyCount; ++nProperty )
@@ -71,8 +71,8 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
         else if ( pValues[nProperty].Name == "InputStream" )
             pValues[nProperty].Value >>= xInputStream;
     }
-    bool bBinary = sTypeName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_97" )) ||
-                   sTypeName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_97_Vorlage" ));
+    bool bBinary = sTypeName == "writer_MS_Word_97" ||
+                   sTypeName == "writer_MS_Word_97_Vorlage";
 
     try
     {
@@ -84,12 +84,8 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
             {
                 SotStorageRef xStg = new SotStorage( pStream, sal_False );
 
-                bool bTable2 = xStg->IsContained( rtl::OUString("1Table"));
-                SotStorageStreamRef xRef =
-
-                    xStg->OpenSotStream(rtl::OUString("WordDocument"),
-
-                            STREAM_STD_READ | STREAM_NOCREATE );
+                bool bTable2 = xStg->IsContained(OUString("1Table"));
+                SotStorageStreamRef xRef = xStg->OpenSotStream(OUString("WordDocument"), STREAM_STD_READ | STREAM_NOCREATE );
 
                 if(bTable2 && xStg.Is())
                 {
@@ -111,16 +107,15 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
                                             sURL, embed::ElementModes::READ );
             if( xDocStorage.is() )
             {
-                uno::Sequence< ::rtl::OUString > aNames = xDocStorage->getElementNames();
-                const ::rtl::OUString* pNames = aNames.getConstArray();
+                uno::Sequence< OUString > aNames = xDocStorage->getElementNames();
+                const OUString* pNames = aNames.getConstArray();
                 for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
                 {
                     if ( pNames[nName] == "word" )
                     {
                         bWord = true;
                         if( sTypeName.isEmpty() )
-                            sTypeName = ::rtl::OUString(
-                                    RTL_CONSTASCII_STRINGPARAM( "writer_MS_Word_2007" ), RTL_TEXTENCODING_ASCII_US);
+                            sTypeName = "writer_MS_Word_2007";
                         break;
                     }
                 }
@@ -132,7 +127,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
         OSL_FAIL("exception while opening storage");
     }
     if( !bWord )
-        sTypeName = ::rtl::OUString();
+        sTypeName = OUString();
    return sTypeName;
 }
 

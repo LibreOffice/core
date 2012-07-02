@@ -50,7 +50,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     if( m_xSrcDoc.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.DocxExport" ))), uno::UNO_QUERY_THROW);
+        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance("com.sun.star.comp.Writer.DocxExport"), uno::UNO_QUERY_THROW);
         if (!xIfc.is())
             return sal_False;
         uno::Reference< document::XExporter > xExprtr(xIfc, uno::UNO_QUERY_THROW);
@@ -122,7 +122,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( m_xContext, pVBAProjectStream->getDocumentStream(), false ) );
         if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
         {
-            ::oox::ole::VbaProject aVbaProject( m_xContext, xModel, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Writer" ) ) );
+            ::oox::ole::VbaProject aVbaProject( m_xContext, xModel, "Writer" );
             uno::Reference< frame::XFrame > xFrame = aMediaDesc.getUnpackedValueOrDefault(  MediaDescriptor::PROP_FRAME(), uno::Reference< frame::XFrame > () );
 
             // if no XFrame try fallback to what we can glean from the Model
@@ -170,10 +170,9 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
 
    // Set some compatibility options that are valid for all the formats
    uno::Reference< lang::XMultiServiceFactory > xFactory( xDoc, uno::UNO_QUERY );
-   uno::Reference< beans::XPropertySet > xSettings( xFactory->createInstance(
-               rtl::OUString::createFromAscii( "com.sun.star.document.Settings" ) ), uno::UNO_QUERY );
+   uno::Reference< beans::XPropertySet > xSettings( xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
 
-   xSettings->setPropertyValue( rtl::OUString::createFromAscii( "UnbreakableNumberings" ), uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue( "UnbreakableNumberings", uno::makeAny( sal_True ) );
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
@@ -206,7 +205,7 @@ void WriterFilter::initialize( const uno::Sequence< uno::Any >& aArguments ) thr
 
 OUString WriterFilter_getImplementationName () throw (uno::RuntimeException)
 {
-   return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WriterFilter" ) );
+   return OUString ( "com.sun.star.comp.Writer.WriterFilter" );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
@@ -223,8 +222,8 @@ uno::Sequence< OUString > WriterFilter_getSupportedServiceNames(  ) throw (uno::
 {
    uno::Sequence < OUString > aRet(2);
    OUString* pArray = aRet.getArray();
-   pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
-   pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
+   pArray[0] =  SERVICE_NAME1;
+   pArray[1] =  SERVICE_NAME2;
    return aRet;
 }
 #undef SERVICE_NAME1
