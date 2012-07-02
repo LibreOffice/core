@@ -222,11 +222,11 @@ namespace xmloff
                 {
                     static SvXMLEnumMapEntry aFontEmphasisMap[] =
                     {
-                        { XML_NONE,     FontEmphasisMark::NONE },
-                        { XML_DOT,      FontEmphasisMark::DOT },
-                        { XML_CIRCLE,   FontEmphasisMark::CIRCLE },
-                        { XML_DISC,     FontEmphasisMark::DISC },
-                        { XML_ACCENT,   FontEmphasisMark::ACCENT },
+                        { XML_NONE,     awt::FontEmphasisMark::NONE },
+                        { XML_DOT,      awt::FontEmphasisMark::DOT },
+                        { XML_CIRCLE,   awt::FontEmphasisMark::CIRCLE },
+                        { XML_DISC,     awt::FontEmphasisMark::DISC },
+                        { XML_ACCENT,   awt::FontEmphasisMark::ACCENT },
                         { XML_TOKEN_INVALID, 0 }
                     };
                     rReturn = aFontEmphasisMap;

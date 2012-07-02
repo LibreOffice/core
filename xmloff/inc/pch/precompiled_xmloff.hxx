@@ -52,6 +52,7 @@
 #ifndef PRECOMPILED_XMLOFF_HXX
 #define PRECOMPILED_XMLOFF_HXX
 
+#if 1
 //---MARKER---
 #include "sal/config.h"
 #include "sal/types.h"
@@ -493,7 +494,7 @@
 #include "xmloff/dllapi.h"
 //---MARKER---
 
-#if 0
+#if 1
 
 #include "basegfx/basegfxdllapi.h"
 #include "basegfx/matrix/b2dhommatrix.hxx"
@@ -576,9 +577,9 @@
 #include "com/sun/star/uno/Type.hxx"
 #include "comphelper/comphelperdllapi.h"
 #include "comphelper/componentcontext.hxx"
-#include "comphelper/configuration.hxx"
+//#include "comphelper/configuration.hxx"
 #include "comphelper/documentconstants.hxx"
-#include "comphelper/extract.hxx"
+//#include "comphelper/extract.hxx"
 #include "comphelper/genericpropertyset.hxx"
 #include "comphelper/InlineContainer.hxx"
 #include "comphelper/mediadescriptor.hxx"
@@ -587,7 +588,7 @@
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequence.hxx"
 #include "comphelper/sequenceashashmap.hxx"
-#include "comphelper/sequenceasvector.hxx"
+//#include "comphelper/sequenceasvector.hxx"
 #include "comphelper/servicehelper.hxx"
 #include "comphelper/stl_types.hxx"
 #include "comphelper/stlunosequence.hxx"
@@ -848,7 +849,7 @@
 #include "offapi/com/sun/star/frame/XStorable.hpp"
 #include "offapi/com/sun/star/geometry/RealPoint2D.hpp"
 #include "offapi/com/sun/star/geometry/RealSize2D.hpp"
-#include "offapi/com/sun/star/graphic/GraphicProvider.hpp"
+//#include "offapi/com/sun/star/graphic/GraphicProvider.hpp"
 #include "offapi/com/sun/star/graphic/XGraphic.hpp"
 #include "offapi/com/sun/star/graphic/XGraphicProvider.hpp"
 #include "offapi/com/sun/star/i18n/Boundary.hpp"
@@ -913,7 +914,7 @@
 #include "offapi/com/sun/star/rdf/QueryException.hpp"
 #include "offapi/com/sun/star/rdf/RepositoryException.hpp"
 #include "offapi/com/sun/star/rdf/Statement.hpp"
-#include "offapi/com/sun/star/rdf/URI.hpp"
+//#include "offapi/com/sun/star/rdf/URI.hpp"
 #include "offapi/com/sun/star/rdf/URIs.hpp"
 #include "offapi/com/sun/star/rdf/XBlankNode.hpp"
 #include "offapi/com/sun/star/rdf/XDocumentMetadataAccess.hpp"
@@ -996,7 +997,7 @@
 #include "offapi/com/sun/star/text/BibliographyDataType.hpp"
 #include "offapi/com/sun/star/text/ChapterFormat.hpp"
 #include "offapi/com/sun/star/text/ControlCharacter.hpp"
-#include "offapi/com/sun/star/text/DefaultNumberingProvider.hpp"
+//#include "offapi/com/sun/star/text/DefaultNumberingProvider.hpp"
 #include "offapi/com/sun/star/text/FilenameDisplayFormat.hpp"
 #include "offapi/com/sun/star/text/FontEmphasis.hpp"
 #include "offapi/com/sun/star/text/FontRelief.hpp"
@@ -1066,7 +1067,7 @@
 #include "offapi/com/sun/star/util/Duration.hpp"
 #include "offapi/com/sun/star/util/MeasureUnit.hpp"
 #include "offapi/com/sun/star/util/NumberFormat.hpp"
-#include "offapi/com/sun/star/util/PathSubstitution.hpp"
+//#include "offapi/com/sun/star/util/PathSubstitution.hpp"
 #include "offapi/com/sun/star/util/RevisionTag.hpp"
 #include "offapi/com/sun/star/util/Time.hpp"
 #include "offapi/com/sun/star/util/XCloneable.hpp"
@@ -1115,7 +1116,7 @@
 #include "offapi/com/sun/star/xsd/DataTypeClass.hpp"
 #include "offapi/com/sun/star/xsd/WhiteSpaceTreatment.hpp"
 #include "offapi/com/sun/star/xsd/XDataType.hpp"
-#include "officecfg/Office/Common.hxx"
+//#include "officecfg/Office/Common.hxx"
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
 #include "osl/mutex.hxx"
@@ -1143,7 +1144,7 @@
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
 #include "sax/saxdllapi.h"
-#include "sax/tools/converter.hxx"
+//#include "sax/tools/converter.hxx"
 #include "sot/clsids.hxx"
 #include "svl/cntnrsrt.hxx"
 #include "svl/itemset.hxx"
@@ -1251,7 +1252,7 @@
 #include "udkapi/com/sun/star/uno/TypeClass.hpp"
 #include "udkapi/com/sun/star/uno/XComponentContext.hpp"
 #include "udkapi/com/sun/star/uno/XInterface.hpp"
-#include "udkapi/com/sun/star/uri/UriReferenceFactory.hpp"
+//#include "udkapi/com/sun/star/uri/UriReferenceFactory.hpp"
 #include "udkapi/com/sun/star/uri/XUriReference.hpp"
 #include "udkapi/com/sun/star/uri/XUriReferenceFactory.hpp"
 #include "uno/lbnames.h"
@@ -1272,6 +1273,8 @@
 #include "unotools/syslocale.hxx"
 #include "unotools/transliterationwrapper.hxx"
 #include "unotools/unotoolsdllapi.h"
+
+#endif
 
 #endif
 

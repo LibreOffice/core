@@ -151,9 +151,9 @@ namespace xmloff
         if (_rValue >>= nFontEmphasis)
         {
             // the type
-            sal_Int16 nType = nFontEmphasis & ~(FontEmphasisMark::ABOVE | FontEmphasisMark::BELOW);
+            sal_Int16 nType = nFontEmphasis & ~(awt::FontEmphasisMark::ABOVE | awt::FontEmphasisMark::BELOW);
             // the position of the mark
-            sal_Bool bBelow = 0 != (nFontEmphasis & FontEmphasisMark::BELOW);
+            sal_Bool bBelow = 0 != (nFontEmphasis & awt::FontEmphasisMark::BELOW);
 
             // convert
             bSuccess = SvXMLUnitConverter::convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE);
@@ -173,7 +173,7 @@ namespace xmloff
     sal_Bool OControlTextEmphasisHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Bool bSuccess = sal_True;
-        sal_uInt16 nEmphasis = FontEmphasisMark::NONE;
+        sal_uInt16 nEmphasis = awt::FontEmphasisMark::NONE;
 
         sal_Bool bBelow = sal_False;
         sal_Bool bHasPos = sal_False, bHasType = sal_False;
@@ -211,7 +211,7 @@ namespace xmloff
 
         if (bSuccess)
         {
-            nEmphasis |= bBelow ? FontEmphasisMark::BELOW : FontEmphasisMark::ABOVE;
+            nEmphasis |= bBelow ? awt::FontEmphasisMark::BELOW : awt::FontEmphasisMark::ABOVE;
             _rValue <<= (sal_Int16)nEmphasis;
         }
 
