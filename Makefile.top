@@ -354,7 +354,7 @@ ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 #
 fetch: src.downloaded
 
-src.downloaded : Makefile.top ooo.lst download
+src.downloaded : Makefile.top download ooo.lst bin/repo-list
 ifeq ($(DO_FETCH_TARBALLS),YES)
 	@./download $(SRCDIR)/ooo.lst && touch $@
 else
