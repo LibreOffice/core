@@ -554,9 +554,9 @@ writerfilter::Reference &lt; BinaryObj &gt; ::Pointer_t createSprmBinary
         <xsl:with-param name="id" select="$optname"/>
       </xsl:call-template>
       <xsl:text>:
-      result = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+      result = "</xsl:text>
       <xsl:value-of select="$optname"/>
-      <xsl:text>"));
+      <xsl:text>";
       break;</xsl:text>
 </xsl:template>
 

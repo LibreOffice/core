@@ -527,9 +527,9 @@ CreateElementMapPointer </xsl:text>
     <xsl:call-template name="idtoqname">
       <xsl:with-param name="id" select="@tokenid"/>
     </xsl:call-template>
-    <xsl:text>, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+    <xsl:text>, "</xsl:text>
     <xsl:value-of select="@value"/>
-    <xsl:text>")));</xsl:text>
+    <xsl:text>");</xsl:text>
         </xsl:when>
         <xsl:when test="@action='mark'">
           <xsl:text>
@@ -537,9 +537,9 @@ CreateElementMapPointer </xsl:text>
     <xsl:call-template name="idtoqname">
       <xsl:with-param name="id" select="@sendtokenid"/>
     </xsl:call-template>
-    <xsl:text>, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+    <xsl:text>, "</xsl:text>
     <xsl:value-of select="@value"/>
-    <xsl:text>")));</xsl:text>
+    <xsl:text>");</xsl:text>
         </xsl:when>
         <xsl:when test="@action='tokenproperty'">
           <xsl:text>
