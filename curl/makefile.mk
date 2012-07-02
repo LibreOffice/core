@@ -48,9 +48,9 @@ PATCH_FILES=\
     curl-aix.patch
 
 .IF "$(GUI)"=="WNT"
-    PATCH_FILES+=curl-7.19.7_win.patch
+    PATCH_FILES+=curl-7.26.0_win.patch
     .IF "$(COM)"=="GCC"
-        PATCH_FILES+=curl-7.19.7_mingw.patch
+        PATCH_FILES+=curl-7.26.0_mingw.patch
     .ENDIF
 .ENDIF
 

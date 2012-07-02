@@ -1,0 +1,34 @@
+--- misc/curl-7.26.0/Makefile.msvc.names	2011-03-19 09:17:12.000000000 -0600
++++ misc/build/curl-7.26.0/Makefile.msvc.names	2012-07-02 07:20:39.323448800 -0600
+@@ -43,7 +43,7 @@
+ !ENDIF
+ 
+ !IF !DEFINED(LIB_NAME_STA_DBG) || "$(LIB_NAME_STA_DBG)" == ""
+-LIB_NAME_STA_DBG = $(LIB_NAME_STA_REL)d
++LIB_NAME_STA_DBG = $(LIB_NAME_STA_REL)
+ !ENDIF
+ 
+ !IF !DEFINED(LIB_NAME_DYN_REL) || "$(LIB_NAME_DYN_REL)" == ""
+@@ -51,7 +51,7 @@
+ !ENDIF
+ 
+ !IF !DEFINED(LIB_NAME_DYN_DBG) || "$(LIB_NAME_DYN_DBG)" == ""
+-LIB_NAME_DYN_DBG = $(LIB_NAME_DYN_REL)d
++LIB_NAME_DYN_DBG = $(LIB_NAME_DYN_REL)
+ !ENDIF
+ 
+ # --------------------------------------------
+@@ -59,11 +59,11 @@
+ # --------------------------------------------
+ 
+ !IF !DEFINED(LIB_NAME_IMP_REL) || "$(LIB_NAME_IMP_REL)" == ""
+-LIB_NAME_IMP_REL = $(LIB_NAME_DYN_REL)_imp
++LIB_NAME_IMP_REL = $(LIB_NAME_DYN_REL)
+ !ENDIF
+ 
+ !IF !DEFINED(LIB_NAME_IMP_DBG) || "$(LIB_NAME_IMP_DBG)" == ""
+-LIB_NAME_IMP_DBG = $(LIB_NAME_DYN_DBG)_imp
++LIB_NAME_IMP_DBG = $(LIB_NAME_DYN_DBG)
+ !ENDIF
+ 
+ # --------------------------------------
