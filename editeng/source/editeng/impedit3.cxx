@@ -896,18 +896,19 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
             {
                 // Throw away a Portion, if necessary correct the one before,
                 // if the Hyph portion has swallowed a character ...
+                sal_uInt16 nTmpLen = pPortion->GetLen();
                 pParaPortion->GetTextPortions().Remove( nTmpPortion );
-                if ( nTmpPortion && pPortion->GetLen() )
+                if (nTmpPortion && nTmpLen)
                 {
                     nTmpPortion--;
                     TextPortion* pPrev = pParaPortion->GetTextPortions()[nTmpPortion];
                     DBG_ASSERT( pPrev->GetKind() == PORTIONKIND_TEXT, "Portion?!" );
                     nTmpWidth -= pPrev->GetSize().Width();
                     nTmpPos = nTmpPos - pPrev->GetLen();
-                    pPrev->SetLen( pPrev->GetLen() + pPortion->GetLen() );
+                    pPrev->SetLen(pPrev->GetLen() + nTmpLen);
                     pPrev->GetSize().Width() = (-1);
                 }
-                delete pPortion;
+
                 DBG_ASSERT( nTmpPortion < pParaPortion->GetTextPortions().Count(), "No more Portions left!" );
                 pPortion = pParaPortion->GetTextPortions()[nTmpPortion];
             }
