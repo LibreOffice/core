@@ -1590,52 +1590,52 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 
                 strcat(ret_val,ext);
 
-                        if ( FSYS_KIND_FILE == eKind )
+                if ( FSYS_KIND_FILE == eKind )
+                {
+                    SvFileStream aStream( String( ret_val, osl_getThreadTextEncoding()),
+                                            STREAM_WRITE|STREAM_SHARE_DENYALL );
+                    if ( aStream.IsOpen() )
+                    {
+                        aStream.Seek( STREAM_SEEK_TO_END );
+                        if ( 0 == aStream.Tell() )
                         {
-                                SvFileStream aStream( String( ret_val, osl_getThreadTextEncoding()),
-                                                        STREAM_WRITE|STREAM_SHARE_DENYALL );
-                                if ( aStream.IsOpen() )
-                                {
-                                        aStream.Seek( STREAM_SEEK_TO_END );
-                                        if ( 0 == aStream.Tell() )
-                                        {
-                                                aRet = DirEntry( String( ret_val, osl_getThreadTextEncoding()));
-                                                break;
-                                        }
-                                        aStream.Close();
-                                }
+                                aRet = DirEntry( String( ret_val, osl_getThreadTextEncoding()));
+                                break;
                         }
-                        else
+                        aStream.Close();
+                    }
+                }
+                else
+                {
+                    // Redirect
+                    String aRetVal(ret_val, osl_getThreadTextEncoding());
+                    String aRedirected (aRetVal);
+                    if ( FSYS_KIND_DIR == eKind )
+                    {
+                        if (0 == _mkdir(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr()))
                         {
-                                // Redirect
-                String aRetVal(ret_val, osl_getThreadTextEncoding());
-                                String aRedirected (aRetVal);
-                                if ( FSYS_KIND_DIR == eKind )
-                                {
-                                                if (0 == _mkdir(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr()))
-                                        {
-                                                aRet = DirEntry( aRetVal );
-                                                break;
-                                        }
-                                }
-                                else
-                                {
+                            aRet = DirEntry( aRetVal );
+                            break;
+                        }
+                    }
+                    else
+                    {
 #if defined(UNX)
-                                        if (access(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr(), F_OK))
-                                        {
-                                                aRet = DirEntry( aRetVal );
-                                                break;
-                                        }
-#else
-                                        struct stat aStat;
-                                        if (stat(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr(), &aStat))
-                                        {
-                                            aRet = DirEntry( aRetVal );
-                                            break;
-                                        }
-#endif
-                                }
+                        if (access(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr(), F_OK))
+                        {
+                                aRet = DirEntry( aRetVal );
+                                break;
                         }
+#else
+                        struct stat aStat;
+                        if (stat(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr(), &aStat))
+                        {
+                            aRet = DirEntry( aRetVal );
+                            break;
+                        }
+#endif
+                    }
+                }
             }
 
             delete[] ret_val;
@@ -1655,9 +1655,9 @@ const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-        //TPF: maybe to be implemented (FastFSys)
+    //TPF: maybe to be implemented (FastFSys)
 
-        const DirEntry *pRes = this;
+    const DirEntry *pRes = this;
     while ( pRes && nParentLevel-- )
         pRes = pRes->pParent;
 
