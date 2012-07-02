@@ -245,9 +245,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
 IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
-    SmModule *pp = SM_MOD();
-    if (pp->GetConfig()->IsAutoRedraw())
-        Flush();
+    UpdateStatus();
     aModifyTimer.Stop();
     return 0;
 }
@@ -877,13 +875,23 @@ sal_Bool SmEditWindow::IsSelected() const
     return pEditView ? pEditView->HasSelection() : sal_False;
 }
 
+
+void SmEditWindow::UpdateStatus( bool bSetDocModified )
+{
+    SmModule *pMod = SM_MOD();
+    if (pMod && pMod->GetConfig()->IsAutoRedraw())
+        Flush();
+    if ( bSetDocModified )
+        GetDoc()->SetModified( sal_True );
+}
+
 void SmEditWindow::Cut()
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
     {
         pEditView->Cut();
-        GetDoc()->SetModified( sal_True );
+        UpdateStatus( sal_True );
     }
 }
 
@@ -900,7 +908,7 @@ void SmEditWindow::Paste()
     if (pEditView)
     {
         pEditView->Paste();
-        GetDoc()->SetModified( sal_True );
+        UpdateStatus( sal_True );
     }
 }
 
@@ -910,7 +918,7 @@ void SmEditWindow::Delete()
     if (pEditView)
     {
         pEditView->DeleteSelected();
-        GetDoc()->SetModified( sal_True );
+        UpdateStatus( sal_True );
     }
 }
 
