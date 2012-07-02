@@ -44,6 +44,9 @@ TARGET=cmis
 TARFILE_NAME=libcmis-0.2.3
 TARFILE_MD5=0d2dcdfbf28d6208751b33057f5361f0
 
+# Pushed upstream in both master and libcmis-0.2 branches
+PATCH_FILES+=libcmis-0.2.3.patch
+
 .IF "$(OS)$(COM)" == "WNTMSC"
 PATCH_FILES+=boost-win.patch
 .ENDIF
