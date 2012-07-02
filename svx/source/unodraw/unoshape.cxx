@@ -92,6 +92,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/tools/unotools.hxx>
 #include "shapeimpl.hxx"
+#include <sal/log.hxx>
 
 #include <vector>
 

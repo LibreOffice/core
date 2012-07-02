@@ -28,6 +28,7 @@
 
 #include <libxml/xmlwriter.h>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -43,6 +44,7 @@ public:
     }
 
     // EnhancedCustomShapeExtrusion.idl
+    void dumpEnhancedCustomShapeExtrusionService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
     void dumpExtrusionAsAttribute(sal_Bool bExtrusion);
     void dumpBrightnessAsAttribute(double aBrightness);
 

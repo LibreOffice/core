@@ -28,11 +28,29 @@
 
 #include <drawinglayer/EnhancedShapeDumper.hxx>
 #include <rtl/strbuf.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+using namespace com::sun::star;
 
 // ------------------------------------------------------
 // ---------- EnhancedCustomShapeExtrusion.idl ----------
 // ------------------------------------------------------
 
+void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference< beans::XPropertySet > xPropSet)
+{
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Extrusion");
+        sal_Bool bExtrusion;
+        if(anotherAny >>= bExtrusion)
+            dumpExtrusionAsAttribute(bExtrusion);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Brightness");
+        double aBrightness;
+        if(anotherAny >>= aBrightness)
+            dumpBrightnessAsAttribute(aBrightness);
+    }
+}
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
     if(bExtrusion)

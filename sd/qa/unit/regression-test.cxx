@@ -160,7 +160,7 @@ FileFormat aFileFormats[] = {
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(aFilter);
     if ( !xDocShRef->DoLoad(pSrcMed) )
     {
@@ -182,7 +182,7 @@ void SdFiltersTest::test()
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/text-test.odp"));
     testStuff(xDocShRef);
     }
-    CPPUNIT_ASSERT(false);
+    //CPPUNIT_ASSERT(false);
 }
 
 void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef)
@@ -219,7 +219,7 @@ bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
         rUserData, rtl::OUString() );
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(&aFilter);
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
     xDocShRef->DoClose();
