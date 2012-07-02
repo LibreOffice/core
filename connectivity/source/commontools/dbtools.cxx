@@ -1786,7 +1786,6 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     Reference<XParametersSupplier>  xParameters = Reference<XParametersSupplier> (_xComposer, UNO_QUERY);
 
     Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
-    Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
     ::std::vector<bool, std::allocator<bool> > aNewParameterSet( _aParametersSet );
     if ( nParamCount || ::std::count(aNewParameterSet.begin(),aNewParameterSet.end(),true) != nParamCount )
