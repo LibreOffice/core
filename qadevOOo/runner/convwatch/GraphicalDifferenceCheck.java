@@ -107,8 +107,6 @@ public class GraphicalDifferenceCheck
      *
      * @param _sInputFile       the original document
      * @param _sReferencePath   the directory where the document will print as file or export as pdf.
-     *
-     * @throws  ConvWatchException if the are problems, see containing message
      */
     public static boolean isReferenceExists(String _sInputFile, String _sReferencePath, GraphicalTestArguments _aGTA)
         {

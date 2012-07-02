@@ -56,16 +56,16 @@ import lib.TestParameters;
 public class CachedDynamicResultSetStubFactory extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.ucb.CachedDynamicResultSetStubFactory</code>. <p>
     *     Object relations created :
     * <ul>
     *  <li> <code>'DynamicResultSet'</code> for
-    *      {@link ifc.XCachedDynamicResultSetStubFactory} : the destination
+    *      {@link ifc.ucb._XCachedDynamicResultSetStubFactory} : the destination
     *   interface requires as its parameter an instance of
     *   <code>DynamicResultSet</code> service. It is created
-    *   using <code>UniversalContentBroker</code> and queriing it for
+    *   using <code>UniversalContentBroker</code> and querying it for
     *   <code>PackageContent</code> which represents JAR file mentioned
     *   above. Then the dynamic list of file contents (entries) is retrieved.
     *  </li>

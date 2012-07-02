@@ -49,11 +49,11 @@ import com.sun.star.uno.XInterface;
 * @see com.sun.star.ui.XFolderPicker
 * @see com.sun.star.lang.XTypeProvider
 * @see com.sun.star.ui.FolderPicker
-* @see ifc.ui._XExecutableDialog
+* @see ifc.ui.dialogs._XExecutableDialog
 * @see ifc.lang._XComponent
 * @see ifc.lang._XServiceInfo
 * @see ifc.ui._XFolderPickerNotifier
-* @see ifc.ui._XFolderPicker
+* @see ifc.ui.dialogs._XFolderPicker
 * @see ifc.lang._XTypeProvider
 */
 public class FolderPicker extends TestCase {

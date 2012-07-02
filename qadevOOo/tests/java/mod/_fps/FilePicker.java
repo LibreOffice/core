@@ -55,15 +55,15 @@ import com.sun.star.uno.XInterface;
 * @see com.sun.star.lang.XComponent
 * @see com.sun.star.ui.XFilePickerNotifier
 * @see com.sun.star.ui.XFilePicker
-* @see ifc.ui._XFilePicker
+* @see ifc.ui.dialogs._XFilePicker
 * @see ifc.lang._XInitialization
 * @see ifc.lang._XServiceInfo
 * @see ifc.lang._XTypeProvider
-* @see ifc.ui._XExecutableDialog
-* @see ifc.ui._XFilePickerControlAccess
-* @see ifc.ui._XFilterManager
+* @see ifc.ui.dialogs._XExecutableDialog
+* @see ifc.ui.dialogs._XFilePickerControlAccess
+* @see ifc.ui.dialogs._XFilterManager
 * @see ifc.lang._XComponent
-* @see ifc.ui._XFilePickerNotifier
+* @see ifc.ui.dialogs._XFilePickerNotifier
 */
 public class FilePicker extends TestCase {
 
@@ -77,10 +77,10 @@ public class FilePicker extends TestCase {
     *      {@link ifc.lang._XInitialization} : argument
     *    for creating dialog from teamplate. </li>
     *  <li> <code>'XFilePickerControlAccess.ControlID'</code> for
-    *      {@link ifc.ui._XFilePickerControlAccess} : here
+    *      {@link ifc.ui.dialogs._XFilePickerControlAccess} : here
     *    it is identifier of check box.</li>
     *  <li> <code>'XFilePickerControlAccess.ControlValue'</code> for
-    *      {@link ifc.ui._XFilePickerControlAccess} :
+    *      {@link ifc.ui.dialogs._XFilePickerControlAccess} :
     *      The value for control to set (since the initial value
     *      of the control is empty) .</li>
     * </ul>

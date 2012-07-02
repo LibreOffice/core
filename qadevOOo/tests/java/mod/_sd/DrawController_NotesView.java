@@ -137,7 +137,7 @@ public class DrawController_NotesView extends TestCase {
     *      {@link ifc.frame._XController}(the current controller of the second
     *      created document) </li>
     *  <li> <code>'DrawPage'</code> for
-    *      {@link ifc.drawing.DrawingDocumentDrawView}(the draw page which will
+    *      {@link ifc.drawing._DrawingDocumentDrawView}(the draw page which will
     *      be new current page) </li>
     * </ul>
     * @see com.sun.star.frame.XModel

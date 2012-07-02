@@ -60,7 +60,7 @@ import com.sun.star.beans.PropertyValue;
 *
 * @see com.sun.star.text.NumberingLevel
 * @see com.sun.star.test.ParagraphProperties
-* @see ifc.text._ParagraphProperties
+* @see ifc.style._ParagraphProperties
 */
 public class _NumberingLevel {
 

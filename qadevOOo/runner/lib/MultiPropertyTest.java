@@ -54,7 +54,7 @@ import com.sun.star.uno.Type;
  *
  * @see MultiMethodTest
  * @see #testProperty(String)
- * @see #testProperty(String, Propertytester)
+ * @see #testProperty(String, PropertyTester)
  * @see #getNewValue
  * @see #compare
  * @see #toString(Object)

@@ -889,7 +889,7 @@ public class utils {
      * @param expand the string to expand
      * @throws java.lang.Exception was thrown on any exception
      * @return return the expanded string
-     * @see com.sun.star.util.theMacroExpander
+     * @see com.sun.star.util.XMacroExpander
      */
     public static String expandMacro(XMultiServiceFactory xMSF, String expand) throws java.lang.Exception {
         try {

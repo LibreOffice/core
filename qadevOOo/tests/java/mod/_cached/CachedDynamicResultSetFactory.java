@@ -57,13 +57,13 @@ import lib.TestParameters;
 public class CachedDynamicResultSetFactory extends TestCase {
 
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
+    * Creating a TestEnvironment for the interfaces to be tested.
     * Creates an instance of the service
     * <code>com.sun.star.ucb.CachedDynamicResultSetFactory</code>. <p>
     *     Object relations created :
     * <ul>
     *  <li> <code>'CachedDynamicResultSetStub'</code> for
-    *      {@link ifc.XCachedDynamicResultSetFactory} : the destination
+    *      {@link ifc.ucb._XCachedDynamicResultSetFactory} : the destination
     *   interface requires as its parameter an instance of
     *   <code>CachedDynamicResultSetStub</code> service. It is created
     *   using <code>UniversalContentBroker</code> and queriing it for
