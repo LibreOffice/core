@@ -3,7 +3,7 @@
 #ifndef _VCL_AQUA_CORETEXT_SALCORETEXTFONTUTILS_HXX
 #define _VCL_AQUA_CORETEXT_SALCORETEXTFONTUTILS_HXX
 
-class ImplCoreTextFontData;
+class CoreTextPhysicalFontFace;
 class ImplDevFontList;
 
 #include <boost/unordered_map.hpp>
@@ -13,11 +13,11 @@ class ImplDevFontList;
 #include "outfont.hxx"
 #include "impfont.hxx"
 
-class ImplCoreTextFontData : public PhysicalFontFace
+class CoreTextPhysicalFontFace : public PhysicalFontFace
 {
 public:
-    ImplCoreTextFontData(const ImplDevFontAttributes&, CTFontRef font);
-    virtual ~ImplCoreTextFontData();
+    CoreTextPhysicalFontFace(const ImplDevFontAttributes&, CTFontRef font);
+    virtual ~CoreTextPhysicalFontFace();
     virtual PhysicalFontFace* Clone() const;
     virtual ImplFontEntry* CreateFontInstance( FontSelectPattern& ) const;
     virtual sal_IntPtr GetFontId() const { return (sal_IntPtr)m_CTFontRef;};
@@ -53,10 +53,10 @@ public:
     ~SystemFontList();
 
     void AnnounceFonts( ImplDevFontList& ) const;
-    ImplCoreTextFontData* GetFontDataFromRef( CTFontRef ) const;
+    CoreTextPhysicalFontFace* GetFontDataFromRef( CTFontRef ) const;
 
 private:
-    typedef boost::unordered_map<CTFontRef,ImplCoreTextFontData*> CoreTextFontContainer;
+    typedef boost::unordered_map<CTFontRef,CoreTextPhysicalFontFace*> CoreTextFontContainer;
     CoreTextFontContainer m_aFontContainer;
 
     void InitGlyphFallbacks();
