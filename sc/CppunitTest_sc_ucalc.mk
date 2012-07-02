@@ -45,7 +45,7 @@ $(call gb_CxxObject_get_target,sc/qa/unit/ucalc): \
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 
-$(eval $(call gb_CppunitTest_add_linked_libs,sc_ucalc,\
+$(eval $(call gb_CppunitTest_use_libraries,sc_ucalc,\
 	tubes \
 ))
 

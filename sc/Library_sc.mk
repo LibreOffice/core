@@ -44,11 +44,11 @@ $(eval $(call gb_Library_use_sdk_api,sc))
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 
-$(eval $(call gb_Library_add_linked_libs,sc,\
+$(eval $(call gb_Library_use_libraries,sc,\
 	tubes \
 ))
 
-$(eval $(call gb_Library_add_cxxflags,sc,\
+$(eval $(call gb_Library_add_defs,sc,\
 	-DENABLE_TELEPATHY \
 ))
 

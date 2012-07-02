@@ -36,7 +36,7 @@ $(eval $(call gb_Library_add_defs,tubes,\
 	-DTUBES_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,tubes,\
+$(eval $(call gb_Library_use_libraries,tubes,\
 	$(gb_STDLIBS) \
 	sal \
 	salhelper \
