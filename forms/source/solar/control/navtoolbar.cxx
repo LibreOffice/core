@@ -66,9 +66,9 @@ namespace frm
 
         static String getLabelString( sal_uInt16 _nResId )
         {
-            String sLabel = String::CreateFromAscii( " " );
+            String sLabel = rtl::OUString( " " );
             sLabel += String( FRM_RES_STRING( _nResId ) );
-            sLabel += String::CreateFromAscii( " " );
+            sLabel += rtl::OUString( " " );
             return sLabel;
         }
 
@@ -643,11 +643,11 @@ namespace frm
             break;
 
         case FormFeature::MoveAbsolute:
-            sItemText = String::CreateFromAscii( "12345678" );
+            sItemText = rtl::OUString( "12345678" );
             break;
 
         case FormFeature::TotalRecords:
-            sItemText = String::CreateFromAscii( "123456" );
+            sItemText = rtl::OUString( "123456" );
             break;
         }
 

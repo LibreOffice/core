@@ -124,8 +124,8 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     aCheckLB.SvxSimpleTable::SetTabs( aStaticTabs, MAP_PIXEL );
 
     String sHeader(sHeader1);
-    String sTab(String::CreateFromAscii("\t"));
-    String sTabSpace(String::CreateFromAscii("\t "));
+    rtl::OUString sTab("\t");
+    rtl::OUString sTabSpace("\t ");
     sHeader += sTab;
     sHeader += sHeader2;
     sHeader += sTabSpace;

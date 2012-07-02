@@ -177,7 +177,7 @@ static const SfxFilter* lcl_DetectExcelXML( SvStream& rStream, SfxFilterMatcher&
         rtl::OString aFileString(reinterpret_cast<const sal_Char*>(aBuffer), nBytesRead);
 
         if (aFileString.indexOf(aTryStr) >= 0)
-            pFound = rMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterExcelXML) );
+            pFound = rMatcher.GetFilter4FilterName( rtl::OUString(pFilterExcelXML) );
     }
 
     return pFound;
@@ -323,18 +323,18 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aPrefix = String::CreateFromAscii( "private:factory/" );
+    String aPrefix = rtl::OUString( "private:factory/" );
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
         String aPattern( aPrefix );
-        aPattern += String::CreateFromAscii("scalc");
+        aPattern += rtl::OUString("scalc");
         if ( aURL.Match( aPattern ) >= aPattern.Len() )
             pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
     }
     else
     {
         // container for Calc filters
-        SfxFilterMatcher aMatcher( String::CreateFromAscii("scalc") );
+        SfxFilterMatcher aMatcher( rtl::OUString("scalc") );
         if ( aPreselectedFilterName.Len() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
         else if( aTypeName.Len() )
@@ -435,7 +435,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                     }
 
                        if ( aTypeName.Len() )
-                           pFilter = SfxFilterMatcher( String::CreateFromAscii("scalc") ).GetFilter4EA( aTypeName );
+                           pFilter = SfxFilterMatcher( rtl::OUString("scalc") ).GetFilter4EA( aTypeName );
 
                 }
             }
@@ -482,7 +482,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                     // we can simulate it by preserving the preselected filter if the type matches
                                     // example: Excel filters for Writer
                                     aOldName = pPreselectedFilter->GetFilterName();
-                                    bIsCalcFilter = pPreselectedFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
+                                    bIsCalcFilter = pPreselectedFilter->GetServiceName() == "com.sun.star.sheet.SpreadsheetDocument";
                                 }
 
                                 if ( aOldName.EqualsAscii(pFilterEx97Temp) || !bIsCalcFilter )
@@ -498,7 +498,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 else
                                 {
                                     //  else use Excel 97 filter
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterExcel97) );
+                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterExcel97) );
                                 }
                             }
                             else if ( bExcel5Stream )
@@ -511,7 +511,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                     // we can simulate it by preserving the preselected filter if the type matches
                                     // example: Excel filters for Writer
                                     aOldName = pPreselectedFilter->GetFilterName();
-                                    bIsCalcFilter = pPreselectedFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
+                                    bIsCalcFilter = pPreselectedFilter->GetServiceName() == "com.sun.star.sheet.SpreadsheetDocument";
                                 }
 
                                 if ( aOldName.EqualsAscii(pFilterExcel95) || aOldName.EqualsAscii(pFilterEx95Temp) ||
@@ -522,12 +522,12 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 else if ( aOldName.EqualsAscii(pFilterEx97Temp) )
                                 {
                                     // auto detection has found template -> return Excel5 template
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterEx5Temp) );
+                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterEx5Temp) );
                                 }
                                 else
                                 {
                                     //  sonst wird als Excel 5-Datei erkannt
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterExcel5) );
+                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterExcel5) );
                                 }
                             }
                         }
@@ -721,7 +721,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                     }
                                     else
                                     {   // gefundenen Filter einstellen
-                                        pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterName[ nFilter ]) );
+                                        pFilter = aMatcher.GetFilter4FilterName( rtl::OUString::createFromAscii(pFilterName[ nFilter ]) );
                                     }
                                     bSync = false;              // leave inner loop
                                     nFilter = nFilterCount;     // leave outer loop
@@ -754,7 +754,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             if ( aHeader.copy(0, 5).equalsL("{\\rtf", 5) )
                             {
                                 // test for RTF
-                                pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterRtf) );
+                                pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterRtf) );
                             }
                             else if ( bIsXLS && (bMaybeText && !bMaybeHtml) )
                             {
@@ -763,7 +763,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 // The configured detection for Excel 2003 XML is still in XMLFilterDetect.
                                 pFilter = lcl_DetectExcelXML( rStr, aMatcher );
                                 if (!pFilter)
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
+                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterAscii) );
                                 bFakeXLS = true;
                             }
                             else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
@@ -787,7 +787,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 }
                                 else
                                 {
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
+                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterHtmlWeb) );
                                     if ( bIsXLS )
                                         bFakeXLS = true;
                                 }

@@ -63,8 +63,6 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-#define A2S(x)          String::CreateFromAscii( x )
-
 // class LookUpComboBox_Impl --------------------------------------------------
 
 LookUpComboBox_Impl::LookUpComboBox_Impl(
@@ -208,7 +206,7 @@ SvLBoxEntry * ThesaurusAlternativesCtrl_Impl::AddEntry( sal_Int32 nVal, const St
     if (bIsHeader && nVal >= 0)
     {
         aText = String::CreateFromInt32( nVal );
-        aText += A2S( ". " );
+        aText += rtl::OUString(". ");
     }
     pEntry->AddItem( new SvLBoxString( pEntry, 0, String() ) ); // add empty column
     aText += rText;

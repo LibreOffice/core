@@ -425,7 +425,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         XBitmapEntry* pEntry = new XBitmapEntry( pBitmapItem->GetBitmapValue(), aTmpStr );
                         XBitmapListRef xBitmapList =
                             XPropertyList::CreatePropertyList(XBITMAP_LIST,
-                            String::CreateFromAscii("TmpList"))->AsBitmapList();
+                            rtl::OUString("TmpList"))->AsBitmapList();
                         xBitmapList->Insert( pEntry );
                         xBitmapList->SetDirty( sal_False );
                         pFillAttrLB->Fill( xBitmapList );

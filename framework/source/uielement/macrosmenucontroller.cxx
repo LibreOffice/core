@@ -95,7 +95,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
         return;
 
     // insert basic
-    String aCommand = String::CreateFromAscii( ".uno:MacroDialog" );
+    rtl::OUString aCommand(".uno:MacroDialog");
     String aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
@@ -174,10 +174,10 @@ String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
 
 void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId )
 {
-    const String aCmdBase = String::CreateFromAscii( ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=" );
-    const String ellipsis = String::CreateFromAscii( "..." );
-    const ::rtl::OUString providerKey("com.sun.star.script.provider.ScriptProviderFor");
-    const ::rtl::OUString languageProviderName("com.sun.star.script.provider.LanguageScriptProvider");
+    const rtl::OUString aCmdBase(".uno:ScriptOrganizer?ScriptOrganizer.Language:string=");
+    const rtl::OUString ellipsis( "..." );
+    const rtl::OUString providerKey("com.sun.star.script.provider.ScriptProviderFor");
+    const rtl::OUString languageProviderName("com.sun.star.script.provider.LanguageScriptProvider");
     sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
@@ -200,7 +200,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
                     ::rtl::OUString serviceName = serviceNames[ index ];
                     String aCommand =  aCmdBase;
                     String aDisplayName = String( serviceName.copy( providerKey.getLength() ) );
-                    if( aDisplayName.Equals( String::CreateFromAscii( "Java" ) ) || aDisplayName.Equals( String::CreateFromAscii( "Basic" ) ) )
+                    if( aDisplayName.Equals( rtl::OUString("Java") ) || aDisplayName.Equals( rtl::OUString("Basic") ) )
                     {
                         // no entries for Java & Basic added elsewhere
                         break;

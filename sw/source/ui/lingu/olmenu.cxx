@@ -525,8 +525,7 @@ SwSpellPopup::SwSpellPopup(
         aKeyboardLang = aLanguageTable.GetString( nLang );
 
     // get the language that is in use
-    const String aMultipleLanguages = String::CreateFromAscii("*");
-    String aCurrentLang = aMultipleLanguages;
+    String aCurrentLang = rtl::OUString("*");
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
         aCurrentLang = aLanguageTable.GetString( nLang );
@@ -679,8 +678,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
         aKeyboardLang = aLanguageTable.GetString( nLang );
 
     // get the language that is in use
-    const String aMultipleLanguages = String::CreateFromAscii("*");
-    String aCurrentLang = aMultipleLanguages;
+    String aCurrentLang = rtl::OUString("*");
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
         aCurrentLang = aLanguageTable.GetString( nLang );

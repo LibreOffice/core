@@ -3286,7 +3286,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     String sSuffix('|');
     if(sToCompare == sTables)
     {
-        sSuffix += UniString::CreateFromAscii(pMarkToTable);
+        sSuffix += rtl::OUString::createFromAscii(pMarkToTable);
 
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextTables(), sToCompare, sSuffix );
@@ -3295,7 +3295,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sFrames)
     {
-        sSuffix += UniString::CreateFromAscii(pMarkToFrame);
+        sSuffix += rtl::OUString::createFromAscii(pMarkToFrame);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextFrames(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3303,7 +3303,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sSections)
     {
-        sSuffix += UniString::CreateFromAscii(pMarkToRegion);
+        sSuffix += rtl::OUString::createFromAscii(pMarkToRegion);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextSections(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3311,7 +3311,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sGraphics)
     {
-        sSuffix += UniString::CreateFromAscii(pMarkToGraphic);
+        sSuffix += rtl::OUString::createFromAscii(pMarkToGraphic);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getGraphicObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3319,7 +3319,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sOLEs)
     {
-        sSuffix += UniString::CreateFromAscii(pMarkToOLE);
+        sSuffix += rtl::OUString::createFromAscii(pMarkToOLE);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getEmbeddedObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3327,7 +3327,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sOutlines)
     {
-        sSuffix += UniString::CreateFromAscii(pMarkToOutline);
+        sSuffix += rtl::OUString::createFromAscii(pMarkToOutline);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         *pxDoc, sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3499,7 +3499,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
         String sSuffix('|');
-        sSuffix += UniString::CreateFromAscii(pMarkToOutline);
+        sSuffix += rtl::OUString::createFromAscii(pMarkToOutline);
         const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
         for (sal_uInt16 i = 0; i < nOutlineCount; ++i)
         {

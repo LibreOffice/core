@@ -568,7 +568,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
         String sPath( SvtPathOptions().SubstituteVariable(
-                    String::CreateFromAscii("$(userurl)/database") ));
+                    rtl::OUString("$(userurl)/database") ));
         aDlgHelper.SetDisplayDirectory( sPath );
         uno::Reference< XFilterManager > xFltMgr(xFP, uno::UNO_QUERY);
         ::rtl::OUString sCSV(C2U("*.csv"));
@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         {
             m_sURL = xFP->getFiles().getConstArray()[0];
             INetURLObject aResult( m_sURL );
-            aResult.setExtension(String::CreateFromAscii("csv"));
+            aResult.setExtension(rtl::OUString("csv"));
             m_sURL = aResult.GetMainURL(INetURLObject::NO_DECODE);
         }
     }

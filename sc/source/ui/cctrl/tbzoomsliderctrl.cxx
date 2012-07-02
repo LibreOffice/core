@@ -323,7 +323,7 @@ void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
     aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScalingFactor" ));
     aArgs[0].Value = a;
 
-    SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:ScalingFactor"), aArgs );
+    SfxToolBoxControl::Dispatch( m_xDispatchProvider, rtl::OUString(".uno:ScalingFactor"), aArgs );
 
     mpImpl->mbOmitPaint = false;
 }
@@ -363,7 +363,7 @@ void ScZoomSliderWnd::MouseMove( const MouseEvent& rMEvt )
             aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScalingFactor" ));
             aArgs[0].Value = a;
 
-            SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:ScalingFactor"), aArgs );
+            SfxToolBoxControl::Dispatch( m_xDispatchProvider, rtl::OUString(".uno:ScalingFactor"), aArgs );
 
             mpImpl->mbOmitPaint = false;
         }

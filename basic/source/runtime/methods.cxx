@@ -446,7 +446,7 @@ RTLFUNC(CurDir)
     }
     char* pBuffer = new char[ _MAX_PATH ];
     if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != 0 )
-        rPar.Get(0)->PutString( String::CreateFromAscii( pBuffer ) );
+        rPar.Get(0)->PutString( rtl::OUString::createFromAscii( pBuffer ) );
     else
         StarBASIC::Error( SbERR_NO_DEVICE );
     delete [] pBuffer;
@@ -465,7 +465,7 @@ RTLFUNC(CurDir)
           }
         if( getcwd( pMem, nSize-1 ) != NULL )
           {
-            rPar.Get(0)->PutString( String::CreateFromAscii(pMem) );
+            rPar.Get(0)->PutString( rtl::OUString::createFromAscii(pMem) );
             delete [] pMem;
             return;
           }
@@ -877,7 +877,7 @@ RTLFUNC(Hex)
             snprintf( aBuffer, sizeof(aBuffer), "%X", pArg->GetInteger() );
         else
             snprintf( aBuffer, sizeof(aBuffer), "%lX", static_cast<long unsigned int>(pArg->GetLong()) );
-        rPar.Get(0)->PutString( String::CreateFromAscii( aBuffer ) );
+        rPar.Get(0)->PutString( rtl::OUString::createFromAscii( aBuffer ) );
     }
 }
 
@@ -1300,7 +1300,7 @@ RTLFUNC(Oct)
             snprintf( aBuffer, sizeof(aBuffer), "%o", pArg->GetInteger() );
         else
             snprintf( aBuffer, sizeof(aBuffer), "%lo", static_cast<long unsigned int>(pArg->GetLong()) );
-        rPar.Get(0)->PutString( String::CreateFromAscii( aBuffer ) );
+        rPar.Get(0)->PutString( rtl::OUString::createFromAscii( aBuffer ) );
     }
 }
 
@@ -1767,7 +1767,7 @@ RTLFUNC(CDateToIso)
             implGetDateYear( aDate ),
             implGetDateMonth( aDate ),
             implGetDateDay( aDate ) );
-        String aRetStr = String::CreateFromAscii( Buffer );
+        String aRetStr = rtl::OUString::createFromAscii( Buffer );
         rPar.Get(0)->PutString( aRetStr );
     }
     else
@@ -2107,7 +2107,7 @@ RTLFUNC(Time)
             char buf[ 20 ];
             snprintf( buf, sizeof(buf), "%02d:%02d:%02d",
                 aTime.GetHour(), aTime.GetMin(), aTime.GetSec() );
-            aRes = String::CreateFromAscii( buf );
+            aRes = rtl::OUString::createFromAscii( buf );
         }
         else
         {

@@ -820,7 +820,7 @@ void SbiParser::Option()
 
 void addStringConst( SbiSymPool& rPool, const char* pSym, const String& rStr )
 {
-    SbiConstDef* pConst = new SbiConstDef( String::CreateFromAscii( pSym ) );
+    SbiConstDef* pConst = new SbiConstDef( rtl::OUString::createFromAscii( pSym ) );
     pConst->SetType( SbxSTRING );
     pConst->Set( rStr );
     rPool.Add( pConst );
@@ -828,7 +828,7 @@ void addStringConst( SbiSymPool& rPool, const char* pSym, const String& rStr )
 
 inline void addStringConst( SbiSymPool& rPool, const char* pSym, const char* pStr )
 {
-    addStringConst( rPool, pSym, String::CreateFromAscii( pStr ) );
+    addStringConst( rPool, pSym, rtl::OUString::createFromAscii( pStr ) );
 }
 
 void SbiParser::AddConstants( void )
@@ -848,7 +848,7 @@ void SbiParser::AddConstants( void )
     addStringConst( aPublics, "vbVerticalTab", "\x0B" );
 
     // Force length 1 and make char 0 afterwards
-    String aNullCharStr( String::CreateFromAscii( " " ) );
+    String aNullCharStr( rtl::OUString(" ") );
     aNullCharStr.SetChar( 0, 0 );
     addStringConst( aPublics, "vbNullChar", aNullCharStr );
 }

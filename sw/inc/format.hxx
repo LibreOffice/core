@@ -329,8 +329,7 @@ inline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
 inline void SwFmt::SetName( const sal_Char* pNewName,
                              sal_Bool bBroadcast )
 {
-    String aTmp( String::CreateFromAscii( pNewName ) );
-    SetName( aTmp, bBroadcast );
+    SetName(rtl::OUString::createFromAscii(pNewName), bBroadcast);
 }
 
 inline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent,

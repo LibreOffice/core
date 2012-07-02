@@ -2649,7 +2649,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModul
             genModuleName = sModuleName;
         else
         {
-             genModuleName = String::CreateFromAscii( "Sheet1" );
+             genModuleName = rtl::OUString( "Sheet1" );
              nNum = 1;
         }
         while( xLib->hasByName( genModuleName ) )

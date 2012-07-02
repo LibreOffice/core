@@ -233,7 +233,7 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
 {
     m_pImpl->acquire();
     SetPool( &SFX_APP()->GetPool() );
-    SetName( String::CreateFromAscii( "Form" ) );
+    SetName( rtl::OUString("Form") );
 
     SetView(m_pFormView);
 }

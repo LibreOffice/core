@@ -511,9 +511,9 @@ void ODbaseTable::construct()
         // nyi: Ugly for Unix and Mac!
 
             if ( m_aHeader.db_typ == FoxProMemo || VisualFoxPro == m_aHeader.db_typ || VisualFoxProAuto == m_aHeader.db_typ ) // foxpro uses another extension
-                aURL.SetExtension(String::CreateFromAscii("fpt"));
+                aURL.SetExtension(rtl::OUString("fpt"));
             else
-                aURL.SetExtension(String::CreateFromAscii("dbt"));
+                aURL.SetExtension(rtl::OUString("dbt"));
 
             // If the memo file isn't found, the data will be displayed anyhow.
             // However, updates can't be done
@@ -677,7 +677,7 @@ void ODbaseTable::refreshIndexes()
         INetURLObject aURL;
         aURL.SetURL(getEntry(m_pConnection,m_Name));
 
-        aURL.setExtension(String::CreateFromAscii("inf"));
+        aURL.setExtension(rtl::OUString("inf"));
         Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
         aInfFile.SetGroup(dBASE_III_GROUP);
         sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
@@ -1090,7 +1090,7 @@ sal_Bool ODbaseTable::CreateImpl()
     if (bMemoFile)
     {
         String aExt = aURL.getExtension();
-        aURL.setExtension(String::CreateFromAscii("dbt"));                      // extension for memo file
+        aURL.setExtension(rtl::OUString("dbt"));                      // extension for memo file
         Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
 
         sal_Bool bMemoAlreadyExists = sal_False;
@@ -1435,7 +1435,7 @@ sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMem
     {
         if (_bHasMemoFields)
         {  // delete the memo fields
-            aURL.setExtension(String::CreateFromAscii("dbt"));
+            aURL.setExtension(rtl::OUString("dbt"));
             bDropped = ::utl::UCBContentHelper::Kill(aURL.GetMainURL(INetURLObject::NO_DECODE));
         }
 
@@ -1455,7 +1455,7 @@ sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMem
                 {
                 }
             }
-            aURL.setExtension(String::CreateFromAscii("inf"));
+            aURL.setExtension(rtl::OUString("inf"));
 
             // as the inf file does not necessarily exist, we aren't allowed to use UCBContentHelper::Kill
             try
@@ -2348,7 +2348,7 @@ void SAL_CALL ODbaseTable::renameImpl( const ::rtl::OUString& newName ) throw(::
     renameFile(m_pConnection,m_Name,newName,m_pConnection->getExtension());
     if ( HasMemoFields() )
     {  // delete the memo fields
-        String sExt = String::CreateFromAscii("dbt");
+        rtl::OUString sExt("dbt");
         renameFile(m_pConnection,m_Name,newName,sExt);
     }
 }

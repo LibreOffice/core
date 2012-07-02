@@ -135,7 +135,7 @@ BasicIDEDLL::BasicIDEDLL()
     SfxModule* pMod = BASIC_MOD();
 
     SfxObjectFactory& rFactory = BasicDocShell::Factory();
-    rFactory.SetDocumentServiceName( String::CreateFromAscii( "com.sun.star.script.BasicIDE" ) );
+    rFactory.SetDocumentServiceName( rtl::OUString("com.sun.star.script.BasicIDE") );
 
     BasicDocShell::RegisterInterface( pMod );
     BasicIDEShell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );

@@ -401,7 +401,7 @@ namespace pcr
             rpButton = new PushButton( m_pTheParent, WB_NOPOINTERFOCUS );
             rpButton->SetGetFocusHdl( LINK( this, OBrowserLine, OnButtonFocus ) );
             rpButton->SetClickHdl( LINK( this, OBrowserLine, OnButtonClicked ) );
-            rpButton->SetText( String::CreateFromAscii( "..." ) );
+            rpButton->SetText(rtl::OUString("..."));
         }
 
         rpButton->Show();

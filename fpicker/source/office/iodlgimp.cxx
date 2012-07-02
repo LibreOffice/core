@@ -356,7 +356,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* 
 {
     String sName = _pFilterDesc->GetName();
     if ( _pFilterDesc->isGroupSeparator() )
-        sName = String::CreateFromAscii( "------------------------------------------" );
+        sName = rtl::OUString( "------------------------------------------" );
     else
         sName = _pFilterDesc->GetName();
 

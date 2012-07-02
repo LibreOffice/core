@@ -548,7 +548,7 @@ namespace pcr
             { SID_ATTR_CHAR_FONTLIST,           0 }
         };
 
-        _rpPool = new SfxItemPool(String::CreateFromAscii("PCRControlFontItemPool"), CFID_FIRST_ITEM_ID, CFID_LAST_ITEM_ID,
+        _rpPool = new SfxItemPool(rtl::OUString("PCRControlFontItemPool"), CFID_FIRST_ITEM_ID, CFID_LAST_ITEM_ID,
             aItemInfos, _rppDefaults);
         _rpPool->FreezeIdRanges();
 

@@ -1104,7 +1104,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl)
     Application::SetDefDialogParent( this );
     delete m_pDocInserter;
     m_pDocInserter =
-        new ::sfx2::DocumentInserter( String::CreateFromAscii("swriter") );
+        new ::sfx2::DocumentInserter( rtl::OUString("swriter") );
     m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
     return 0;
 }
@@ -1854,7 +1854,7 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl)
     Application::SetDefDialogParent( this );
     delete m_pDocInserter;
     m_pDocInserter = new ::sfx2::DocumentInserter(
-            String::CreateFromAscii("swriter") );
+            rtl::OUString("swriter") );
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
     return 0;
 }

@@ -64,7 +64,7 @@ namespace SwMailMergeHelper
 String  CallSaveAsDialog(String& rFilter)
 {
     ErrCode nRet;
-    String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
+    String sFactory(rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
     ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 0,
                 sFactory );

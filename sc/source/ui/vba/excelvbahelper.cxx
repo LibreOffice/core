@@ -408,7 +408,7 @@ void CompileODFFormulaToExcel( ScDocument* pDoc, const String& rOldFormula, Stri
         if ( pToken->GetOpCode() == ocSep )
         {
             // Excel formula separator is ",".
-            rFormula = String::CreateFromAscii(",");
+            rFormula = rtl::OUString(",");
         }
         rNewFormula += rFormula;
     }

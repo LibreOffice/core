@@ -164,8 +164,10 @@ void FilterMatch::createWildCardFilterList(const String& _rFilterList,::std::vec
         while ( nIndex != STRING_NOTFOUND );
     }
     else
+    {
         // no filter is given -> match all
-        _rFilters.push_back( WildCard( String::CreateFromAscii( "*" ) ) );
+        _rFilters.push_back( WildCard(rtl::OUString("*")) );
+    }
 }
 // class ViewTabListBox_Impl ---------------------------------------------
 
@@ -460,7 +462,7 @@ void NameTranslationList::Init()
 NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
     maTransFile( rBaseURL ),
     maHashedURL( rBaseURL ),
-    maTransFileName( String::CreateFromAscii( ".nametranslation.table" ) )
+    maTransFileName( rtl::OUString(".nametranslation.table") )
 {
     maTransFile.insertName( maTransFileName );
     Init();
@@ -1793,7 +1795,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,mxCmdEnv ( xEnv )
 
 {
-    maAllFilter = String::CreateFromAscii( "*.*" );
+    maAllFilter = rtl::OUString("*.*");
     mpView = new ViewTabListBox_Impl( mpAntiImpl, this, nFlags );
     mpView->EnableCellFocus();
 }

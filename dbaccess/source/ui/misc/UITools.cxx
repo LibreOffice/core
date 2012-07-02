@@ -926,7 +926,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
         new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
     };
 
-    SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
+    SfxItemPool* pPool = new SfxItemPool(rtl::OUString("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
     pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
@@ -1007,8 +1007,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
 //------------------------------------------------------------------------------
 const SfxFilter* getStandardDatabaseFilter()
 {
-    static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
-    const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+    const SfxFilter* pFilter = SfxFilter::GetFilterByName(rtl::OUString("StarOffice XML (Base)"));
     OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
     return pFilter;
 }
@@ -1401,7 +1400,7 @@ sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText
 {
     SolarMutexGuard aGuard;
     String aMsg = String(ModuleRes(_nText));
-    aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(_sName));
+    aMsg.SearchAndReplace(rtl::OUString("%1"),String(_sName));
     OSQLMessageBox aAsk(_pParent,String(ModuleRes(_nTitle )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
     if ( _bAll )
     {

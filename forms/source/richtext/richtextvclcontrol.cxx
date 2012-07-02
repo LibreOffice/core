@@ -252,8 +252,8 @@ namespace frm
                     for ( size_t i = 0; i < SAL_N_ELEMENTS( aExportFormats ); ++i )
                     {
                         aFP.AddFilter(
-                            String::CreateFromAscii( aExportFormats[i].pDescription ),
-                            String::CreateFromAscii( aExportFormats[i].pExtension ) );
+                            rtl::OUString::createFromAscii( aExportFormats[i].pDescription ),
+                            rtl::OUString::createFromAscii( aExportFormats[i].pExtension ) );
                     }
                     ErrCode nResult = aFP.Execute();
                     if ( nResult == 0 )

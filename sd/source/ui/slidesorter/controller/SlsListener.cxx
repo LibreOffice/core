@@ -233,7 +233,7 @@ void Listener::ConnectToController (void)
         {
             try
             {
-                xSet->addPropertyChangeListener(String::CreateFromAscii("CurrentPage"), this);
+                xSet->addPropertyChangeListener(rtl::OUString("CurrentPage"), this);
             }
             catch (beans::UnknownPropertyException&)
             {
@@ -241,7 +241,7 @@ void Listener::ConnectToController (void)
             }
             try
             {
-                xSet->addPropertyChangeListener(String::CreateFromAscii("IsMasterPageMode"), this);
+                xSet->addPropertyChangeListener(rtl::OUString("IsMasterPageMode"), this);
             }
             catch (beans::UnknownPropertyException&)
             {
@@ -277,10 +277,10 @@ void Listener::DisconnectFromController (void)
             if (xSet.is())
             {
                 xSet->removePropertyChangeListener (
-                    String::CreateFromAscii("CurrentPage"),
+                    rtl::OUString("CurrentPage"),
                     this);
                 xSet->removePropertyChangeListener (
-                    String::CreateFromAscii("IsMasterPageMode"),
+                    rtl::OUString("IsMasterPageMode"),
                     this);
             }
 

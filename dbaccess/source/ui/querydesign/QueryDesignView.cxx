@@ -941,9 +941,9 @@ namespace
                         aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
                         aWorkStr += ::dbtools::quoteName(aQuote, aColumnName);
                     }
-                    aWorkStr += ::rtl::OUString(' ');
-                    aWorkStr += String::CreateFromAscii( ";ASC;DESC" ).GetToken( (sal_uInt16)eOrder );
-                    aWorkStr += ::rtl::OUString(',');
+                    aWorkStr += rtl::OUString(' ');
+                    aWorkStr += rtl::OUString( ";ASC;DESC" ).getToken( (sal_uInt16)eOrder, ';' );
+                    aWorkStr += rtl::OUString(',');
                 }
             }
 

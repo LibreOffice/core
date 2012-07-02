@@ -403,7 +403,7 @@ void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
 {
     //convert the strings used for UI to numbers used for the configuration
     String sBlock(rBlock);
-    sBlock.SearchAndReplaceAllAscii("\n", String::CreateFromAscii("\\n"));
+    sBlock.SearchAndReplaceAllAscii("\n", rtl::OUString("\\n"));
     for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
         String sHeader = rHeaders.GetString( i );

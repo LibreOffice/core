@@ -1232,7 +1232,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
                 if( rHTMLWrt.GetOrigFileName() )
                     rGrfName = *rHTMLWrt.GetOrigFileName();
                 sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf,  rGrfName,
-                        String::CreateFromAscii("JPG"),
+                        rtl::OUString("JPG"),
                         (XOUTBMP_USE_GIF_IF_SENSIBLE |
                          XOUTBMP_USE_NATIVE_IF_POSSIBLE));
                 if( !nErr )
@@ -1569,7 +1569,7 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aGrfNm = *rHTMLWrt.GetOrigFileName();
     if( aGrf.GetType() == GRAPHIC_NONE ||
         XOutBitmap::WriteGraphic( aGrf, aGrfNm,
-                                  String::CreateFromAscii( "JPG" ),
+                                  rtl::OUString("JPG"),
                                   (XOUTBMP_USE_GIF_IF_POSSIBLE|
                                    XOUTBMP_USE_NATIVE_IF_POSSIBLE) ) != 0 )
     {
@@ -1628,7 +1628,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                         MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
 
         sal_uInt16 nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGrfNm,
-                String::CreateFromAscii("JPG"), nFlags, &aMM100Size );
+                rtl::OUString("JPG"), nFlags, &aMM100Size );
         if( nErr )              // fehlerhaft, da ist nichts auszugeben
         {
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;

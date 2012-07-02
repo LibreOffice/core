@@ -506,7 +506,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             pOpt->SetOnlineSpell(bSet);
             {
                 uno::Any aVal( &bSet, ::getCppuBooleanType() );
-                String aPropName( C2S(UPN_IS_SPELL_AUTO) );
+                rtl::OUString aPropName(UPN_IS_SPELL_AUTO);
 
                 SvtLinguConfig  aCfg;
                 aCfg.SetProperty( aPropName, aVal );

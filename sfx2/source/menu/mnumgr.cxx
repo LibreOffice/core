@@ -248,7 +248,7 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
         if ( pSlot && pSlot->pUnoName )
         {
             aCommand = DEFINE_CONST_UNICODE(".uno:");
-            aCommand += String::CreateFromAscii( pSlot->GetUnoName() );
+            aCommand += rtl::OUString::createFromAscii( pSlot->GetUnoName() );
         }
     }
 

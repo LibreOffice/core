@@ -93,9 +93,9 @@ static sal_uInt16 aWndFunc(
     String aErr(SvtResId(STR_ERR_HDLMESS).toString());
     String aAction(rAction);
     if ( aAction.Len() )
-        aAction += String::CreateFromAscii( ":\n" );
-    aErr.SearchAndReplace(String::CreateFromAscii( "$(ACTION)" ), aAction);
-    aErr.SearchAndReplace(String::CreateFromAscii( "$(ERROR)" ), rErr);
+        aAction += rtl::OUString(":\n");
+    aErr.SearchAndReplace(rtl::OUString("$(ACTION)"), aAction);
+    aErr.SearchAndReplace(rtl::OUString("$(ERROR)"), rErr);
 
     MessBox* pBox;
     switch ( nFlags & 0xf000 )
@@ -194,7 +194,7 @@ sal_Bool SfxErrorHandler::CreateString(
         {
             for (xub_StrLen i = 0; i < rStr.Len();)
             {
-                i = rStr.SearchAndReplace(String::CreateFromAscii( "$(ARG1)" ),
+                i = rStr.SearchAndReplace(rtl::OUString("$(ARG1)"),
                                           pMsgInfo->GetMessageArg(), i);
                 if (i == STRING_NOTFOUND)
                     break;
@@ -209,7 +209,7 @@ sal_Bool SfxErrorHandler::CreateString(
         if(pStringInfo)
             for (xub_StrLen i = 0; i < rStr.Len();)
             {
-                i = rStr.SearchAndReplace(String::CreateFromAscii( "$(ARG1)" ),
+                i = rStr.SearchAndReplace(rtl::OUString("$(ARG1)"),
                                           pStringInfo->GetErrorString(), i);
                 if (i == STRING_NOTFOUND)
                     break;
@@ -222,8 +222,8 @@ sal_Bool SfxErrorHandler::CreateString(
             if (pTwoStringInfo)
                 for (sal_uInt16 i = 0; i < rStr.Len();)
                 {
-                    sal_uInt16 nArg1Pos = rStr.Search(String::CreateFromAscii( "$(ARG1)" ), i);
-                    sal_uInt16 nArg2Pos = rStr.Search(String::CreateFromAscii( "$(ARG2)" ), i);
+                    sal_uInt16 nArg1Pos = rStr.Search(rtl::OUString("$(ARG1)"), i);
+                    sal_uInt16 nArg2Pos = rStr.Search(rtl::OUString("$(ARG2)"), i);
                     if (nArg1Pos < nArg2Pos)
                     {
                         rStr.Replace(nArg1Pos, 7, pTwoStringInfo->GetArg1());
@@ -383,8 +383,7 @@ sal_Bool SfxErrorHandler::GetErrorString(
             sal_uInt16 nResFlags = aErrorString.GetFlags();
             if ( nResFlags )
                 nFlags = nResFlags;
-            rStr.SearchAndReplace(
-                String::CreateFromAscii("$(ERROR)"), aErrorString.GetString());
+            rStr.SearchAndReplace(rtl::OUString("$(ERROR)"), aErrorString.GetString());
             bRet = sal_True;
         }
         else
@@ -397,8 +396,8 @@ sal_Bool SfxErrorHandler::GetErrorString(
         GetClassString(lErrId & ERRCODE_CLASS_MASK,
                        aErrStr);
         if(aErrStr.Len())
-            aErrStr+=String::CreateFromAscii( ".\n" );
-        rStr.SearchAndReplace(String::CreateFromAscii( "$(CLASS)" ),aErrStr);
+            aErrStr += rtl::OUString(".\n");
+        rStr.SearchAndReplace(rtl::OUString("$(CLASS)"),aErrStr);
     }
 
     return bRet;
@@ -453,7 +452,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
         if ( aTestEr )
         {
             rStr = ( (ResString)aTestEr ).GetString();
-            rStr.SearchAndReplace( String::CreateFromAscii( "$(ARG1)" ), aArg1 );
+            rStr.SearchAndReplace(rtl::OUString("$(ARG1)"), aArg1 );
             bRet = true;
         }
         else
@@ -467,7 +466,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
             sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
             ResId aSfxResId( RID_ERRCTX, *pMgr );
             ErrorResource_Impl aEr( aSfxResId, nId );
-            rStr.SearchAndReplace( String::CreateFromAscii( "$(ERR)" ), ( (ResString)aEr ).GetString() );
+            rStr.SearchAndReplace( rtl::OUString("$(ERR)"), ( (ResString)aEr ).GetString() );
         }
     }
 

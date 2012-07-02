@@ -559,14 +559,14 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetTxt().GetChar(rInf.GetIdx()))
     {
         rInf.DrawBackBrush( *this );
-        const XubString aTxt = XubString::CreateFromAscii(CH_TXT_ATR_SUBST_FIELDEND);
-        rInf.DrawText( aTxt, *this, 0, aTxt.Len(), false );
+        const rtl::OUString aTxt(CH_TXT_ATR_SUBST_FIELDEND);
+        rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
     }
     else if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDSTART==rInf.GetTxt().GetChar(rInf.GetIdx()))
     {
         rInf.DrawBackBrush( *this );
-        const XubString aTxt = XubString::CreateFromAscii(CH_TXT_ATR_SUBST_FIELDSTART);
-        rInf.DrawText( aTxt, *this, 0, aTxt.Len(), false );
+        const rtl::OUString aTxt(CH_TXT_ATR_SUBST_FIELDSTART);
+        rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
     }
     else if( GetLen() )
     {

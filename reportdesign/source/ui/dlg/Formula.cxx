@@ -95,7 +95,7 @@ FormulaDialog::~FormulaDialog()
 {
     if ( m_pAddField )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( HID_RPT_FIELD_SEL_WIN ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, rtl::OUString( HID_RPT_FIELD_SEL_WIN ) );
         aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
 
         boost::scoped_ptr<Window> aTemp2(m_pAddField);
@@ -207,7 +207,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     {
         m_pAddField = new OAddFieldWindow(this,m_xRowSet);
         m_pAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( HID_RPT_FIELD_SEL_WIN ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, rtl::OUString( HID_RPT_FIELD_SEL_WIN ) );
         if ( aDlgOpt.Exists() )
         {
             m_pAddField->SetWindowState(::rtl::OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));

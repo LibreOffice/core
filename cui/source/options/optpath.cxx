@@ -142,7 +142,7 @@ static String getCfgName_Impl( sal_uInt16 _nHandle )
         if ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle == _nHandle )
         {
             // config name found
-            sCfgName = String::CreateFromAscii( Hdl2CfgMap_Impl[ nIndex ].m_pCfgName );
+            sCfgName = rtl::OUString::createFromAscii( Hdl2CfgMap_Impl[ nIndex ].m_pCfgName );
             break;
         }
         ++nIndex;

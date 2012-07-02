@@ -464,9 +464,9 @@ DBG_NAME(OTextConnectionHelper)
     {
         String sExtension;
         if (m_aRBAccessTextFiles.IsChecked())
-            sExtension = String::CreateFromAscii("txt");
+            sExtension = rtl::OUString("txt");
         else if (m_aRBAccessCSVFiles.IsChecked())
-            sExtension = String::CreateFromAscii("csv");
+            sExtension = rtl::OUString("csv");
         else
         {
             sExtension = m_aETOwnExtension.GetText();

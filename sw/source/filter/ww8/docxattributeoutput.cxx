@@ -766,7 +766,7 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
 
         // Replace tabs by </instrText><tab/><instrText>
         if ( i < ( nNbToken - 1 ) )
-            RunText( String::CreateFromAscii( "\t" ) );
+            RunText( rtl::OUString( "\t" ) );
     }
 
     m_pSerializer->endElementNS( XML_w, XML_r );

@@ -1289,7 +1289,7 @@ long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 
 void SwFldVarPage::FillUserData()
 {
-    String sData(String::CreateFromAscii(USER_DATA_VERSION));
+    String sData(rtl::OUString(USER_DATA_VERSION));
     sData += ';';
     sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )

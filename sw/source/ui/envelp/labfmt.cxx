@@ -647,8 +647,8 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
     {
         String sTmp(aQueryMB.GetMessText());
         String sQuery(sTmp);
-        sQuery.SearchAndReplace(C2S("%1"), sMake);
-        sQuery.SearchAndReplace(C2S("%2"), sType);
+        sQuery.SearchAndReplace(rtl::OUString("%1"), sMake);
+        sQuery.SearchAndReplace(rtl::OUString("%2"), sType);
         aQueryMB.SetMessText(sQuery);
 
         short eRet = aQueryMB.Execute();

@@ -88,7 +88,6 @@ const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::SIZ
 
 static const char   IMAGE_FOLDER[]        = "images";
 static const char   BITMAPS_FOLDER[]      = "Bitmaps";
-static const char   IMAGE_EXTENSION[]     = ".png";
 
 static const char   ModuleImageList[]     = "private:resource/images/moduleimages";
 
@@ -227,7 +226,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
         }
 
         // We have to map commands which uses special characters like '/',':','?','\','<'.'>','|'
-        String aExt = String::CreateFromAscii( IMAGE_EXTENSION );
+        String aExt = rtl::OUString(".png");
         m_aImageCommandNameVector.resize(aCmdImageSeq.getLength() );
         m_aImageNameVector.resize( aCmdImageSeq.getLength() );
 
@@ -592,8 +591,8 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
                 pList->pImageItemList->push_back( pItem );
             }
 
-            pList->aURL = String::CreateFromAscii("Bitmaps/");
-            pList->aURL += String::CreateFromAscii( BITMAP_FILE_NAMES[nImageType] );
+            pList->aURL = rtl::OUString("Bitmaps/");
+            pList->aURL += rtl::OUString::createFromAscii(BITMAP_FILE_NAMES[nImageType]);
 
             uno::Reference< XTransactedObject > xTransaction;
             uno::Reference< XOutputStream >     xOutputStream;

@@ -72,7 +72,7 @@ SbError SbiDdeControl::GetLastErr( DdeConnection* pConv )
 
 IMPL_LINK_INLINE( SbiDdeControl,Data , DdeData*, pData,
 {
-    aData = String::CreateFromAscii( (char*)(const void*)*pData );
+    aData = rtl::OUString::createFromAscii( (const char*)(const void*)*pData );
     return 1;
 }
 )

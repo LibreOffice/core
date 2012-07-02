@@ -797,7 +797,7 @@ void AssignmentPersistentData::Commit()
             if (!m_xORB.is())
                 return;
 
-            const String sContextServiceName = String::CreateFromAscii("com.sun.star.sdb.DatabaseContext");
+            const rtl::OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
             try
             {
                 m_xDatabaseContext = Reference< XNameAccess >(m_xORB->createInstance(sContextServiceName), UNO_QUERY);
@@ -846,7 +846,7 @@ void AssignmentPersistentData::Commit()
         m_aDatasource.SaveValue();
 
         // create an interaction handler (may be needed for connecting)
-        const String sInteractionHandlerServiceName = String::CreateFromAscii("com.sun.star.task.InteractionHandler");
+        const rtl::OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
         Reference< XInteractionHandler > xHandler;
         try
         {
@@ -1223,7 +1223,7 @@ void AssignmentPersistentData::Commit()
         aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")), 0, makeAny(VCLUnoHelper::GetInterface(this)), PropertyState_DIRECT_VALUE);
 
         // create the dialog object
-        const String sDialogServiceName = String::CreateFromAscii("com.sun.star.ui.dialogs.AddressBookSourcePilot");
+        const rtl::OUString sDialogServiceName("com.sun.star.ui.dialogs.AddressBookSourcePilot");
         Reference< XExecutableDialog > xAdminDialog;
         try
         {

@@ -72,7 +72,7 @@ Image PagePreviewProvider::operator () (
         aPreview = rRenderer.RenderPage(
             pPage,
             nWidth,
-            String::CreateFromAscii(""),
+            rtl::OUString(),
             false);
     }
 

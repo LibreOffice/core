@@ -1196,7 +1196,7 @@ void SwRedlineAcceptDlg::Initialize(const String& rExtraData)
 {
     if (rExtraData.Len())
     {
-        sal_uInt16 nPos = rExtraData.Search(C2S("AcceptChgDat:"));
+        sal_uInt16 nPos = rExtraData.Search(rtl::OUString("AcceptChgDat:"));
 
         // try to read the alignment string "ALIGN:(...)"; if none existing,
         // it's an old version

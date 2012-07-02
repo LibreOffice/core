@@ -1981,7 +1981,7 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const String& rFileName, const Strin
     }
     else
     {
-        String sFactory = String::CreateFromAscii( pDocSh->GetFactory().GetShortName() );
+        rtl::OUString sFactory = rtl::OUString::createFromAscii( pDocSh->GetFactory().GetShortName() );
         pViewImpl->StartDocumentInserter( sFactory, LINK( this, SwView, DialogClosedHdl ) );
         return -1;
     }

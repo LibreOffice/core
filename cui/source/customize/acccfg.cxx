@@ -1455,7 +1455,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     // change te description of the radio button, which switch to the module
     // dependend accelerator configuration
     String sButtonText = aModuleButton.GetText();
-    sButtonText.SearchAndReplace(String::CreateFromAscii("$(MODULE)"), m_sModuleUIName);
+    sButtonText.SearchAndReplace(rtl::OUString("$(MODULE)"), m_sModuleUIName);
     aModuleButton.SetText(sButtonText);
 
     if (m_xModule.is())
@@ -1540,7 +1540,7 @@ String SfxAcceleratorConfigPage::GetLabel4Command(const String& sCommand)
     }
     else
     {
-        String aRet( String::CreateFromAscii("Symbols: ") );
+        String aRet(rtl::OUString("Symbols: "));
         xub_StrLen nPos = sCommand.SearchAscii(".uno:InsertSymbol?Symbols:string=");
         if ( nPos == 0 )
         {

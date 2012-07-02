@@ -132,7 +132,7 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( const String& rNm, sal_uInt16 nPoolId )
         return 1 | HTML_DLCOLL_DT;
     }
 
-    String sDTDD( String::CreateFromAscii(OOO_STRING_SVTOOLS_HTML_dt) );
+    String sDTDD( rtl::OUString(OOO_STRING_SVTOOLS_HTML_dt) );
     sDTDD += ' ';
     if( COMPARE_EQUAL == sDTDD.CompareTo( rNm, sDTDD.Len() ) )
         // DefinitionList - term

@@ -330,7 +330,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     if( !bApi && ULONG_MAX != nFound)
                     {
                         String aText( SW_RES( STR_NB_REPLACED ) );
-                        const xub_StrLen nPos = aText.Search( String::CreateFromAscii("XX") );
+                        const xub_StrLen nPos = aText.Search( rtl::OUString("XX") );
                         aText.Erase( nPos, 2 );
                         aText.Insert( String::CreateFromInt32( nFound ), nPos );
                         Window* pParentWindow = GetParentWindow( pSrchDlg );

@@ -394,11 +394,11 @@ String ScAsciiOptions::WriteToString() const
     aOutStr += ',';
 
     // Import quoted field as text.
-    aOutStr += String::CreateFromAscii(bQuotedFieldAsText ? "true" : "false");
+    aOutStr += bQuotedFieldAsText ? rtl::OUString("true") : rtl::OUString("false");
     aOutStr += ',';
 
     // Detect special nubmers.
-    aOutStr += String::CreateFromAscii(bDetectSpecialNumber ? "true" : "false");
+    aOutStr += bDetectSpecialNumber ? rtl::OUString("true") : rtl::OUString("false");
 
     // 9th token is used for "Save as shown" in export options
     // 10th token is used for "Save cell formulas" in export options

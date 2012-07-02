@@ -325,7 +325,7 @@ namespace pcr
         :ONumericControl( pParent, nWinStyle )
     {
         getTypedControlWindow()->SetUnit( FUNIT_CUSTOM );
-        getTypedControlWindow()->SetCustomUnitText( String::CreateFromAscii( " ms" ) );
+        getTypedControlWindow()->SetCustomUnitText(rtl::OUString(" ms"));
         getTypedControlWindow()->SetCustomConvertHdl( LINK( this, OTimeDurationControl, OnCustomConvert ) );
     }
 

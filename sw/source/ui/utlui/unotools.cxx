@@ -108,7 +108,7 @@ void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
     if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
     {
         String sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
-        sInfo += C2S(cFrameControl);
+        sInfo += rtl::OUString(cFrameControl);
         InfoBox(pParent, sInfo).Execute();
         SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_False;
     }
@@ -144,10 +144,10 @@ void    SwOneExampleFrame::CreateControl()
             uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
             uno::Any aURL;
             // create new doc
-            String sTempURL = C2S(cFactory);
+            rtl::OUString sTempURL(cFactory);
             if(sArgumentURL.Len())
                 sTempURL = sArgumentURL;
-            aURL <<= OUString(sTempURL);
+            aURL <<= sTempURL;
 
             uno::Sequence<beans::PropertyValue> aSeq(3);
             beans::PropertyValue* pValues = aSeq.getArray();
@@ -412,7 +412,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         {
             String sTemp;
             sTemp = String::CreateFromInt32(nZoomValues[i]);
-            sTemp += String::CreateFromAscii(" %");
+            sTemp += rtl::OUString(" %");
             aSubPop1.InsertItem( ITEM_ZOOM + i + 1, sTemp);
             if(nZoom == nZoomValues[i])
                 aSubPop1.CheckItem(ITEM_ZOOM + i + 1);

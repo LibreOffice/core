@@ -683,7 +683,7 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
                         ((float)aOrigSize.Width()/TWIP_TO_INCH)+0.5));
              int ay = int(floor((float)aOrigPixelSize.Height() /
                         ((float)aOrigSize.Height()/TWIP_TO_INCH)+0.5));
-             sTemp += UniString::CreateFromAscii(" ");
+             sTemp += rtl::OUString(" ");
              sTemp += CUI_RESSTR( STR_PPI );
              String sPPI = UniString::CreateFromInt32(ax);
              if (abs(ax - ay) > 1) {

@@ -260,7 +260,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              SfxItemSet *& rpSet,
                              const String* pPath = NULL,
                              sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
-                             const String& rStandardDir = String::CreateFromAscii( "" ),
+                             const String& rStandardDir = rtl::OUString(),
                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >());
 
 

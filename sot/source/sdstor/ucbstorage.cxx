@@ -1669,7 +1669,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     if ( m_bIsRoot )
     {
         // create the special package URL for the package content
-        String aTemp = String::CreateFromAscii("vnd.sun.star.pkg://");
+        String aTemp = rtl::OUString("vnd.sun.star.pkg://");
         aTemp += String(INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL ));
         m_aURL = aTemp;
 
@@ -1714,7 +1714,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, sal_B
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
     // accessed readonly
     // the root storage opens the package; create the special package URL for the package content
-    String aTemp = String::CreateFromAscii("vnd.sun.star.pkg://");
+    String aTemp = rtl::OUString("vnd.sun.star.pkg://");
     aTemp += String(INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL ));
     m_aURL = aTemp;
 
@@ -2271,10 +2271,10 @@ sal_Int16 UCBStorage_Impl::Commit()
                         if ( pElement->m_xStream->m_bIsOLEStorage )
                         {
                             // OLE storage should be stored encrytped, if the storage uses encryption
-                            pElement->m_xStream->m_aContentType = String::CreateFromAscii("application/vnd.sun.star.oleobject");
+                            pElement->m_xStream->m_aContentType = rtl::OUString("application/vnd.sun.star.oleobject");
                             Any aValue;
                             aValue <<= (sal_Bool) sal_True;
-                            pElement->m_xStream->m_pContent->setPropertyValue(String::CreateFromAscii("Encrypted"), aValue );
+                            pElement->m_xStream->m_pContent->setPropertyValue(rtl::OUString("Encrypted"), aValue );
                         }
 
                         pContent = pElement->GetContent();
@@ -2353,7 +2353,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // write a manifest file
                         // first create a subfolder "META-inf"
                         Content aNewSubFolder;
-                        sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, String::CreateFromAscii("META-INF"), aNewSubFolder );
+                        sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, rtl::OUString("META-INF"), aNewSubFolder );
                         if ( bRet )
                         {
                             // create a stream to write the manifest file - use a temp file
@@ -3279,7 +3279,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
     // assemble a new folder name in the destination folder
     INetURLObject aObj( rName );
     String aTmpName = aObj.GetName();
-    String aTitle = String::CreateFromAscii( "content." );
+    String aTitle = rtl::OUString( "content." );
     aTitle += aTmpName;
 
     // create a folder and store its URL
@@ -3319,7 +3319,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
         String aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
 
         // store it as key/value pair
-        String aLink = String::CreateFromAscii("ContentURL=");
+        String aLink = rtl::OUString("ContentURL=");
         aLink += aURL;
         write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(*pStream, aLink, RTL_TEXTENCODING_UTF8);
         pStream->Flush();

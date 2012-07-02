@@ -62,7 +62,7 @@ TYPEINIT1(SwBezierShell,SwBaseShell)
 SwBezierShell::SwBezierShell(SwView &_rView):
     SwBaseShell( _rView )
 {
-    SetName(C2S("Bezier"));
+    SetName(rtl::OUString("Bezier"));
     SetHelpId(SW_BEZIERSHELL);
 
     SwWrtShell *pSh = &GetShell();

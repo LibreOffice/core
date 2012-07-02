@@ -101,12 +101,12 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_,
 const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
 {
     /* bei den StorageFiltern noch den SubStorageNamen setzen */
-    const String& rUserData = rFltr.GetUserData();
-    if( rUserData.EqualsAscii(FILTER_XML) ||
-        rUserData.EqualsAscii(FILTER_XMLV) ||
-        rUserData.EqualsAscii(FILTER_XMLVW) )
+    const rtl::OUString& rUserData = rFltr.GetUserData();
+    if (rUserData == FILTER_XML ||
+        rUserData == FILTER_XMLV ||
+        rUserData == FILTER_XMLVW)
         return rtl::OUString("content.xml");
-    if( rUserData.EqualsAscii(sWW6) || rUserData.EqualsAscii(FILTER_WW8) )
+    if (rUserData == sWW6 || rUserData == FILTER_WW8)
         return rtl::OUString("WordDocument");
     return rtl::OUString();
 }
@@ -126,7 +126,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
             const SfxFilter* pFilter = aIter.First();
             while ( pFilter )
             {
-                if( pFilter->GetUserData() == rFmtNm )
+                if( pFilter->GetUserData().equals(rFmtNm) )
                     return pFilter;
                 pFilter = aIter.Next();
             }
@@ -159,11 +159,8 @@ sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
 {
     sal_uLong nStgFmtId = rStg.GetFormat();
     /*#i8409# We cannot trust the clipboard id anymore :-(*/
-    if( rFilter.GetUserData().EqualsAscii(FILTER_WW8) ||
-            rFilter.GetUserData().EqualsAscii(sWW6) )
-    {
+    if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         nStgFmtId = 0;
-    }
 
     sal_Bool bRet = SVSTREAM_OK == rStg.GetError() &&
         ( !nStgFmtId || rFilter.GetFormat() == nStgFmtId ) &&
@@ -172,12 +169,11 @@ sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
     {
         /* Bug 53445 - es gibt Excel Docs ohne ClipBoardId! */
         /* Bug 62703 - und auch WinWord Docs ohne ClipBoardId! */
-        if( rFilter.GetUserData().EqualsAscii(FILTER_WW8) ||
-                rFilter.GetUserData().EqualsAscii(sWW6) )
+        if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         {
             bRet = !((rStg.IsContained( rtl::OUString("0Table")) ||
                         rStg.IsContained( rtl::OUString("1Table"))) ^
-                    rFilter.GetUserData().EqualsAscii(FILTER_WW8));
+                    (rFilter.GetUserData() == FILTER_WW8));
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
                 SotStorageStreamRef xRef =
@@ -234,16 +230,16 @@ sal_Bool SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
     const SfxFilter* pFltr = aIter.First();
     while ( pFltr )
     {
-        if( pFltr->GetUserData() == rFmtName )
+        if( pFltr->GetUserData().equals(rFmtName) )
         {
-            const String& rUserData = pFltr->GetUserData();
-            if( 'C' == *rUserData.GetBuffer() )
+            const rtl::OUString& rUserData = pFltr->GetUserData();
+            if( 'C' == rUserData[0] )
             {
                 if ( xStor.is() )
                     bRet = IsValidStgFilter( xStor, *pFltr );
                 else if ( xStg.Is() )
                     bRet = xStg.Is() && IsValidStgFilter( *xStg, *pFltr );
-                bRet = bRet && (pFltr->GetUserData() == rFmtName);
+                bRet = bRet && (pFltr->GetUserData().equals(rFmtName));
             }
             else if( !xStg.Is() && !xStor.is() )
             {
@@ -322,7 +318,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
             {
                 while ( pFilter )
                 {
-                    if( 'C' == *pFilter->GetUserData().GetBuffer() && IsValidStgFilter( xStor, *pFilter ) )
+                    if( 'C' == pFilter->GetUserData()[0] && IsValidStgFilter( xStor, *pFilter ) )
                     {
                         if ( pFilter->IsOwnTemplateFormat() && !bLookForTemplate )
                             // found template filter; maybe there's a "normal" one also
@@ -349,7 +345,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
             {
                 while ( pFilter )
                 {
-                    if( 'C' == *pFilter->GetUserData().GetBuffer() && IsValidStgFilter( *xStg, *pFilter ) )
+                    if( 'C' == pFilter->GetUserData()[0] && IsValidStgFilter( *xStg, *pFilter ) )
                     {
                         if ( pFilter->IsOwnTemplateFormat() && !bLookForTemplate )
                             // found template filter; maybe there's a "normal" one also
@@ -400,7 +396,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         {
             String sEmptyUserData;
             pNm = aFilterDetect[n].IsReader(aBuffer, nBytesRead, rFileName, sEmptyUserData);
-            pFilterTmp = pNm ? SwIoSystem::GetFilterOfFormat(String::CreateFromAscii(pNm), pFCntnr) : 0;
+            pFilterTmp = pNm ? SwIoSystem::GetFilterOfFormat(rtl::OUString::createFromAscii(pNm), pFCntnr) : 0;
             if (pNm && pFilterTmp)
             {
                 return pFilterTmp;
@@ -565,7 +561,7 @@ const SfxFilter* SwIoSystem::GetTextFilter( const sal_Char* pBuf, sal_uLong nLen
 {
     bool bAuto = IsDetectableText(pBuf, nLen);
     const sal_Char* pNm = bAuto ? FILTER_TEXT : FILTER_TEXT_DLG;
-    return SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(pNm), 0 );
+    return SwIoSystem::GetFilterOfFormat( rtl::OUString::createFromAscii(pNm), 0 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

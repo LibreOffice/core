@@ -478,7 +478,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     m_aRecordOf.SetSizePixel(Size(nTextWidth,nH));
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
-    nTextWidth = m_aRecordCount.GetTextWidth( String::CreateFromAscii("0000000 (00000) *") );
+    nTextWidth = m_aRecordCount.GetTextWidth( rtl::OUString("0000000 (00000) *") );
     m_aRecordCount.SetPosPixel(Point(nX,nY) );
     m_aRecordCount.SetSizePixel(Size(nTextWidth,nH));
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
@@ -702,7 +702,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
                 else
                     aText = String::CreateFromInt32(pParent->GetRowCount());
                 if(!pParent->m_bRecordCountFinal)
-                    aText += String::CreateFromAscii(" *");
+                    aText += rtl::OUString(" *");
             }
             else
                 aText = String();

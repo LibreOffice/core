@@ -199,7 +199,7 @@ SwMediaShell::SwMediaShell(SwView &_rView) :
     SwBaseShell(_rView)
 
 {
-    SetName(String::CreateFromAscii("Media Playback"));
+    SetName(rtl::OUString("Media Playback"));
     SetHelpId(SW_MEDIASHELL);
 }
 

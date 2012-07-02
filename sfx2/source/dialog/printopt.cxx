@@ -254,7 +254,7 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
 
 void SfxCommonPrintOptionsTabPage::ImplSetAccessibleNames()
 {
-    static const String cSeparator = String::CreateFromAscii( " - " );
+    const rtl::OUString cSeparator(" - ");
 
     String sReduceText = aReduceGB.GetDisplayText();
     sReduceText += cSeparator;

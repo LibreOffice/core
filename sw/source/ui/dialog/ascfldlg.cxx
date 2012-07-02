@@ -86,10 +86,10 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
 
     SwAsciiOptions aOpt;
     {
-        const String& rFindNm = String::CreateFromAscii(
+        const rtl::OUString sFindNm = rtl::OUString::createFromAscii(
                                     pStream ? sDialogImpExtraData
                                               : sDialogExpExtraData);
-        sal_uInt16 nEnd, nStt = GetExtraData().Search( rFindNm );
+        sal_uInt16 nEnd, nStt = GetExtraData().Search( sFindNm );
         if( STRING_NOTFOUND != nStt )
         {
             nStt += nDialogExtraDataLen;
@@ -319,10 +319,10 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.WriteUserData( sData );
     if( sData.Len() )
     {
-        const String& rFindNm = String::CreateFromAscii(
+        const rtl::OUString sFindNm = rtl::OUString::createFromAscii(
                                     aFontLB.IsVisible() ? sDialogImpExtraData
                                               : sDialogExpExtraData);
-        sal_uInt16 nEnd, nStt = GetExtraData().Search( rFindNm );
+        sal_uInt16 nEnd, nStt = GetExtraData().Search( sFindNm );
         if( STRING_NOTFOUND != nStt )
         {
             // called twice, so remove "old" settings
@@ -332,7 +332,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
                 GetExtraData().Erase( nStt, nEnd - nStt + 1 );
         }
         String sTmp(GetExtraData());
-        sTmp += rFindNm;
+        sTmp += sFindNm;
         sTmp += sData;
         sTmp += cDialogExtraDataClose;
         GetExtraData() = sTmp;

@@ -1088,7 +1088,7 @@ SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
         pFT = GetDoc().InsertFldType(aS);
     }
     SwSetExpField aFld( (SwSetExpFieldType*)pFT,
-                        String::CreateFromAscii( pErr ));
+                        rtl::OUString::createFromAscii( pErr ));
     //, VVF_INVISIBLE
     GetDoc().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     return *this;

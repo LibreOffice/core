@@ -558,7 +558,7 @@ namespace pcr
                     {
                         // find a nice name for it
                         String sBaseName( PcrRes( RID_STR_BINDING_UI_NAME ) );
-                        sBaseName += String::CreateFromAscii( " " );
+                        sBaseName += rtl::OUString(" ");
                         String sNewName;
                         sal_Int32 nNumber = 1;
                         do

@@ -493,9 +493,9 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         if (!aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("document")))
         {
             if ( aLibrary.isEmpty() || (pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() )) )
-                aLibrary = String::CreateFromAscii("document");
+                aLibrary = rtl::OUString("document");
             else
-                aLibrary = String::CreateFromAscii("application");
+                aLibrary = rtl::OUString("application");
         }
 
         o_normalizedDescriptor.put( PROP_SCRIPT, aScript );

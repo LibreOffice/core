@@ -85,14 +85,14 @@ using namespace ::com::sun::star::uno;
 
 String lcl_GetExtensionForDocType(sal_uLong nDocType)
 {
-    String sExtension;
+    rtl::OUString sExtension;
     switch( nDocType )
     {
-        case MM_DOCTYPE_OOO : sExtension = String::CreateFromAscii( "odt" ); break;
-        case MM_DOCTYPE_PDF : sExtension = String::CreateFromAscii( "pdf" ); break;
-        case MM_DOCTYPE_WORD: sExtension = String::CreateFromAscii( "doc" ); break;
-        case MM_DOCTYPE_HTML: sExtension = String::CreateFromAscii( "html" ); break;
-        case MM_DOCTYPE_TEXT: sExtension = String::CreateFromAscii( "txt" ); break;
+        case MM_DOCTYPE_OOO : sExtension = rtl::OUString( "odt" ); break;
+        case MM_DOCTYPE_PDF : sExtension = rtl::OUString( "pdf" ); break;
+        case MM_DOCTYPE_WORD: sExtension = rtl::OUString( "doc" ); break;
+        case MM_DOCTYPE_HTML: sExtension = rtl::OUString( "html" ); break;
+        case MM_DOCTYPE_TEXT: sExtension = rtl::OUString( "txt" ); break;
     }
     return sExtension;
 }
@@ -730,7 +730,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                String::CreateFromAscii( FILTER_XML ),
+                rtl::OUString( FILTER_XML ),
                 SwDocShell::Factory().GetFilterContainer() );
 
         uno::Sequence< beans::PropertyValue > aValues(1);
@@ -1054,7 +1054,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             //Make sure we don't pick e.g. the flat xml filter
             //for this format
             pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                String::CreateFromAscii( FILTER_XML ),
+                rtl::OUString( FILTER_XML ),
                 SwDocShell::Factory().GetFilterContainer() );
         }
         break;
@@ -1072,10 +1072,9 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             SfxFilterMatcher aMatcher( pFilterContainer->GetName() );
             SfxFilterMatcherIter aIter( aMatcher );
             const SfxFilter* pFilter = aIter.First();
-            String sFilterUserData( String::CreateFromAscii( FILTER_WW8 ));
             while ( pFilter )
             {
-                if( pFilter->GetUserData() == sFilterUserData   && pFilter->CanExport() )
+                if( pFilter->GetUserData() == FILTER_WW8 && pFilter->CanExport() )
                 {
                     pSfxFlt = pFilter;
                     break;
@@ -1159,7 +1158,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         INetURLObject(), utl::TempFile::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
     const SfxFilter *pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
-            String::CreateFromAscii( FILTER_XML ),
+            rtl::OUString( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
 
     uno::Sequence< beans::PropertyValue > aValues(1);

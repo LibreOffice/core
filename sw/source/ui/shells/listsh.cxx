@@ -280,7 +280,7 @@ void SwListShell::GetState(SfxItemSet &rSet)
 SwListShell::SwListShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
-    SetName(String::CreateFromAscii("List"));
+    SetName(rtl::OUString("List"));
     SetHelpId(SW_LISTSHELL);
 }
 

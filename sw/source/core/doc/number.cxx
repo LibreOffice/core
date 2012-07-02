@@ -804,7 +804,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
             }
             else if ( aRefNumStr.Len() > 0 )
             {
-                aRefNumStr.Insert( String::CreateFromAscii(" "), 0 );
+                aRefNumStr.Insert( rtl::OUString(" "), 0 );
                 bOldHadPrefix = true;
             }
 
@@ -1174,7 +1174,7 @@ namespace numfunc
     SwDefBulletConfig::SwDefBulletConfig()
         : ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/Numbering/DefaultBulletList")) ),
           // default bullet font is now OpenSymbol
-          msFontname( String::CreateFromAscii("OpenSymbol") ),
+          msFontname( rtl::OUString("OpenSymbol") ),
           mbUserDefinedFontname( false ),
           meFontWeight( WEIGHT_DONTKNOW ),
           meFontItalic( ITALIC_NONE ),
@@ -1195,7 +1195,7 @@ namespace numfunc
 
     void SwDefBulletConfig::SetToDefault()
     {
-        msFontname = String::CreateFromAscii("OpenSymbol");
+        msFontname = rtl::OUString("OpenSymbol");
         mbUserDefinedFontname = false;
         meFontWeight = WEIGHT_DONTKNOW;
         meFontItalic = ITALIC_NONE;

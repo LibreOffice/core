@@ -523,7 +523,7 @@ IMPL_LINK_NOARG(SvxCharMapData, CharHighlightHdl)
         snprintf( aBuf, sizeof(aBuf), "U+%04X", static_cast<unsigned>(cChar) );
         if( cChar < 0x0100 )
             snprintf( aBuf+6, sizeof(aBuf)-6, " (%u)", static_cast<unsigned>(cChar) );
-        aText = String::CreateFromAscii( aBuf );
+        aText = rtl::OUString::createFromAscii(aBuf);
     }
     aCharCodeText.SetText( aText );
 

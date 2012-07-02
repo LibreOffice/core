@@ -93,7 +93,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
     {
         // Since no locale nor opcode matching is needed, simply return
         // the first item on the list.
-        rName = String::CreateFromAscii( itr->second.front().mpName );
+        rName = rtl::OUString::createFromAscii( itr->second.front().mpName );
         return;
     }
 
@@ -113,7 +113,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
                 if ( eLevel == LOCALE_MATCH_ALL )
                 {
                     // Name with matching opcode and locale found.
-                    rName = String::CreateFromAscii( itrList->mpName );
+                    rName = rtl::OUString::createFromAscii( itrList->mpName );
                     return;
                 }
                 else if ( eLevel > eLocaleMatchLevel )
@@ -134,7 +134,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
             if ( itrList->meOpCode == eOpCode )
             {
                 // Name with a matching opcode preferred.
-                rName = String::CreateFromAscii( itrList->mpName );
+                rName = rtl::OUString::createFromAscii( itrList->mpName );
                 return;
             }
         }
@@ -144,7 +144,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
             if ( eLevel == LOCALE_MATCH_ALL )
             {
                 // Name with matching locale preferred.
-                rName = String::CreateFromAscii( itrList->mpName );
+                rName = rtl::OUString::createFromAscii( itrList->mpName );
                 return;
             }
             else if ( eLevel > eLocaleMatchLevel )
@@ -157,7 +157,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
     }
 
     // No preferred strings found.  Return the best matching name.
-    rName = String::CreateFromAscii(aBestMatchName);
+    rName = rtl::OUString::createFromAscii(aBestMatchName);
 }
 
 void ScCellKeywordTranslator::transKeyword(String& rName, const Locale* pLocale, OpCode eOpCode)

@@ -354,7 +354,7 @@ SbMethod* MacroChooser::CreateMacro()
     String aLibName( aDesc.GetLibName() );
 
     if ( !aLibName.Len() )
-        aLibName = String::CreateFromAscii( "Standard" );
+        aLibName = rtl::OUString("Standard");
 
     aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 
@@ -522,8 +522,6 @@ IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox )
 
 IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 {
-    static String aSpaceStr = String::CreateFromAscii(" ");
-
     // Is also called if deselected!
     // Two function calls in every SelectHdl because
     // there's no separate DeselectHDL.
@@ -537,7 +535,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
     if ( pModule )
     {
         String aStr = aMacrosInTxtBaseStr;
-        aStr += aSpaceStr;
+        aStr += rtl::OUString(" ");
         aStr += pModule->GetName();
 
         aMacrosInTxt.SetText( aStr );

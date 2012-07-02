@@ -2494,7 +2494,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
         String aFilterName;
         const SfxFilter *pFilter = NULL;
         if ( pFilterItem )
-            pFilter = SfxFilterMatcher( String::CreateFromAscii( GetFactory().GetShortName()) ).GetFilter4FilterName( aFilterName );
+            pFilter = SfxFilterMatcher( rtl::OUString::createFromAscii( GetFactory().GetShortName()) ).GetFilter4FilterName( aFilterName );
 
         SfxMedium *pMed = new SfxMedium(
             pSalvageItem->GetValue(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC, pFilter );

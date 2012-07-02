@@ -776,7 +776,6 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
 void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::CheckAndAddMenuExtension" );
-    static const char REFERENCECOMMAND_BEFORE[]         = ".uno:About";
 
     // retrieve menu extension item
     MenuExtensionItem aMenuItem( GetMenuExtension() );
@@ -787,7 +786,7 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
         sal_uInt16 nNewItemId( 0 );
         sal_uInt16 nInsertPos( MENU_APPEND );
         sal_uInt16 nBeforePos( MENU_APPEND );
-        String     aCommandBefore( String::CreateFromAscii ( REFERENCECOMMAND_BEFORE ));
+        String aCommandBefore( rtl::OUString(".uno:About"));
         for ( sal_uInt16 n = 0; n < pMenu->GetItemCount(); n++ )
         {
             sal_uInt16 nItemId = pMenu->GetItemId( n );
@@ -1932,7 +1931,6 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
 void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::GetPopupController" );
-    String aPopupScheme = String::CreateFromAscii( "vnd.sun.star.popup:" );
 
     SolarMutexGuard aSolarMutexGuard;
 

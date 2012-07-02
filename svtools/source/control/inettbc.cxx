@@ -321,7 +321,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
     // for pure home paths ( ~username ) the '.' at the end of rMatch
     // means that it poits to root catalog
     // this is done only for file contents since home paths parsing is usefull only for them
-    if ( bPureHomePath && rMatch.Equals( String::CreateFromAscii( "file:///." ) ) )
+    if ( bPureHomePath && rMatch.Equals( rtl::OUString("file:///.") ) )
     {
         // a home that refers to /
 
@@ -1212,7 +1212,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
             if( !aHomeLocation )
                 aHomeLocation = "";
 
-            aParseTilde = String::CreateFromAscii( aHomeLocation );
+            aParseTilde = rtl::OUString::createFromAscii(aHomeLocation);
 
             // in case the whole path is just "~" then there should
             // be no trailing slash at the end
@@ -1223,25 +1223,25 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
         {
             // covers "~username" and "~username/..." cases
             xub_StrLen nNameEnd = aText.Search( '/' );
-            String aUserName = aText.Copy( 1, ( nNameEnd != STRING_NOTFOUND ) ? nNameEnd : ( aText.Len() - 1 ) );
+            rtl::OUString aUserName = aText.Copy( 1, ( nNameEnd != STRING_NOTFOUND ) ? nNameEnd : ( aText.Len() - 1 ) );
 
             struct passwd* pPasswd = NULL;
 #ifdef SOLARIS
             Sequence< sal_Int8 > sBuf( 1024 );
             struct passwd aTmp;
-            sal_Int32 nRes = getpwnam_r( OUStringToOString( OUString( aUserName ), RTL_TEXTENCODING_ASCII_US ).getStr(),
+            sal_Int32 nRes = getpwnam_r( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr(),
                                   &aTmp,
                                   (char*)sBuf.getArray(),
                                   1024,
                                   &pPasswd );
             if( !nRes && pPasswd )
-                aParseTilde = String::CreateFromAscii( pPasswd->pw_dir );
+                aParseTilde = rtl::OUString::createFromAscii(pPasswd->pw_dir);
             else
                 return sal_False; // no such user
 #else
-            pPasswd = getpwnam( OUStringToOString( OUString( aUserName ), RTL_TEXTENCODING_ASCII_US ).getStr() );
+            pPasswd = getpwnam( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr() );
             if( pPasswd )
-                aParseTilde = String::CreateFromAscii( pPasswd->pw_dir );
+                aParseTilde = rtl::OUString::createFromAscii(pPasswd->pw_dir);
             else
                 return sal_False; // no such user
 #endif
@@ -1257,7 +1257,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
             if( !aParseTilde.Len() || aParseTilde.EqualsAscii( "/" ) )
             {
                 // "/" path should be converted to "/."
-                aParseTilde = String::CreateFromAscii( "/." );
+                aParseTilde = rtl::OUString("/.");
             }
             else
             {

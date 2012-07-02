@@ -965,7 +965,7 @@ void SbaGridControl::SetBrowserAttrs()
             );
         if (!xDialog.is())
         {
-            ShowServiceNotAvailableError(this, String::CreateFromAscii("com.sun.star.form.ControlFontDialog"), sal_True);
+            ShowServiceNotAvailableError(this, rtl::OUString("com.sun.star.form.ControlFontDialog"), sal_True);
             return;
         }
 

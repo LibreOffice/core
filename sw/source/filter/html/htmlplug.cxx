@@ -1275,7 +1275,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             aGrfNm = *pTempFileName;
 
         sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGrf, aGrfNm,
-                                    String::CreateFromAscii("JPG"),
+                                    rtl::OUString("JPG"),
                                     (XOUTBMP_USE_GIF_IF_POSSIBLE |
                                      XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
         if( nErr )              // fehlerhaft, da ist nichts auszugeben

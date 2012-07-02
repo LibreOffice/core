@@ -198,15 +198,13 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
         PopupMenu* pHelpMenu = pMergeMenuBar->GetPopupMenu( SID_HELPMENU );
         if ( !pHelpMenu )
         {
-            sal_uInt16 nId = FindMenuId( pMergeMenuBar, String::CreateFromAscii( ".uno:HelpMenu" ));
+            sal_uInt16 nId = FindMenuId(pMergeMenuBar, rtl::OUString(".uno:HelpMenu"));
             if ( nId != USHRT_MAX )
                 pHelpMenu = pMergeMenuBar->GetPopupMenu( nId );
         }
 
         if ( pHelpMenu )
         {
-            static const char REFERENCECOMMAND_BEFORE[] = ".uno:About";
-
             // Add-Ons help menu items should be inserted after the "registration" menu item
             sal_uInt16 nItemCount       = pHelpMenu->GetItemCount();
             sal_uInt16 nInsSepAfterPos  = MENU_APPEND;
@@ -214,7 +212,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
             AddonsOptions aOptions;
 
             // try to detect the about menu item with the command URL
-            sal_uInt16 nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_BEFORE ));
+            sal_uInt16 nId = FindMenuId(pHelpMenu, rtl::OUString(".uno:About"));
             sal_uInt16 nInsPos = pHelpMenu->GetItemPos( nId );
 
             Sequence< Sequence< PropertyValue > > aAddonSubMenu;

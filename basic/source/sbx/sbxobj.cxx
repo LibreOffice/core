@@ -51,8 +51,8 @@ SbxObject::SbxObject( const XubString& rClass )
     {
         pNameProp = GetSbxRes( STRING_NAMEPROP );
         pParentProp = GetSbxRes( STRING_PARENTPROP );
-        nNameHash = MakeHashCode( String::CreateFromAscii( pNameProp ) );
-        nParentHash = MakeHashCode( String::CreateFromAscii( pParentProp ) );
+        nNameHash = MakeHashCode( rtl::OUString::createFromAscii( pNameProp ) );
+        nParentHash = MakeHashCode( rtl::OUString::createFromAscii( pParentProp ) );
     }
     SbxObject::Clear();
     SbxObject::SetName( rClass );
@@ -129,9 +129,9 @@ void SbxObject::Clear()
     pProps     = new SbxArray;
     pObjs      = new SbxArray( SbxOBJECT );
     SbxVariable* p;
-    p = Make( String::CreateFromAscii( pNameProp ), SbxCLASS_PROPERTY, SbxSTRING );
+    p = Make( rtl::OUString::createFromAscii( pNameProp ), SbxCLASS_PROPERTY, SbxSTRING );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pParentProp ), SbxCLASS_PROPERTY, SbxOBJECT );
+    p = Make( rtl::OUString::createFromAscii( pParentProp ), SbxCLASS_PROPERTY, SbxOBJECT );
     p->ResetFlag( SBX_WRITE );
     p->SetFlag( SBX_DONTSTORE );
     pDfltProp  = NULL;

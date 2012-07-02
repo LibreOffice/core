@@ -227,7 +227,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
     {
         case CONTENT_TYPE_OUTLINE   :
         {
-            sTypeToken = C2S(pMarkToOutline);
+            sTypeToken = rtl::OUString::createFromAscii(pMarkToOutline);
             sal_uInt16 nOutlineCount = nMemberCount =
                 static_cast<sal_uInt16>(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount());
             if(nOutlineLevel < MAXLEVEL)
@@ -243,7 +243,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         break;
 
         case CONTENT_TYPE_TABLE     :
-            sTypeToken = C2S(pMarkToTable);
+            sTypeToken = rtl::OUString::createFromAscii(pMarkToTable);
             nMemberCount = pWrtShell->GetTblFrmFmtCount(sal_True);
             bEdit = sal_True;
         break;
@@ -253,16 +253,16 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         case CONTENT_TYPE_OLE       :
         {
             FlyCntType eType = FLYCNTTYPE_FRM;
-            sTypeToken = C2S(pMarkToFrame);
+            sTypeToken = rtl::OUString::createFromAscii(pMarkToFrame);
             if(nContentType == CONTENT_TYPE_OLE)
             {
                 eType = FLYCNTTYPE_OLE;
-                sTypeToken = C2S(pMarkToOLE);
+                sTypeToken = rtl::OUString::createFromAscii(pMarkToOLE);
             }
             else if(nContentType == CONTENT_TYPE_GRAPHIC)
             {
                 eType = FLYCNTTYPE_GRF;
-                sTypeToken = C2S(pMarkToGraphic);
+                sTypeToken = rtl::OUString::createFromAscii(pMarkToGraphic);
             }
             nMemberCount = pWrtShell->GetFlyCount(eType);
             bEdit = sal_True;
@@ -330,7 +330,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 }
             }
             nMemberCount = pMember->Count();
-            sTypeToken = C2S(pMarkToRegion);
+            sTypeToken = rtl::OUString::createFromAscii(pMarkToRegion);
             bEdit = sal_True;
             bDelete = sal_False;
             if(pOldMember)
@@ -804,7 +804,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
 SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         SvTreeListBox( pParent, rResId ),
 
-        sSpace(C2S("                    ")),
+        sSpace(rtl::OUString("                    ")),
 
         sRemoveIdx(SW_RES(ST_REMOVE_INDEX)),
         sUpdateIdx(SW_RES(ST_UPDATE)),
@@ -1013,9 +1013,9 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     if(pHiddenShell)
     {
         String sHiddenEntry = pHiddenShell->GetView().GetDocShell()->GetTitle();
-        sHiddenEntry += C2S(" ( ");
+        sHiddenEntry += rtl::OUString(" ( ");
         sHiddenEntry += aContextStrings[ ST_HIDDEN - ST_CONTEXT_FIRST];
-        sHiddenEntry += C2S(" )");
+        sHiddenEntry += rtl::OUString(" )");
         pSubPop3->InsertItem(nId, sHiddenEntry);
     }
 
@@ -2523,7 +2523,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                 if(((SwContent*)pUserData)->IsInvisible())
                 {
                     if(sEntry.Len())
-                        sEntry += C2S(", ");
+                        sEntry += rtl::OUString(", ");
                     sEntry += sInvisible;
                     bRet = sal_True;
                 }
@@ -2959,11 +2959,11 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         String sForbiddenChars;
         if(CONTENT_TYPE_BOOKMARK == nType)
         {
-            sForbiddenChars = C2S("/\\@:*?\";,.#");
+            sForbiddenChars = rtl::OUString("/\\@:*?\";,.#");
         }
         else if(CONTENT_TYPE_TABLE == nType)
         {
-            sForbiddenChars = C2S(" .<>");
+            sForbiddenChars = rtl::OUString(" .<>");
         }
         pDlg->SetForbiddenChars(sForbiddenChars);
         pDlg->Execute();

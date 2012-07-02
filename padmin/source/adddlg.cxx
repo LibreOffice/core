@@ -206,7 +206,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 if( aDriver.EqualsIgnoreCaseAscii( "SGENPRT" ) )
                 {
                     String aText( PaResId( RID_ERR_REMOVESGENPRT ) );
-                    aText.SearchAndReplace( String::CreateFromAscii( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    aText.SearchAndReplace( rtl::OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
                     aErrorBox.SetText( m_aRemStr );
                     aErrorBox.Execute();
@@ -219,7 +219,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 if( aDefInfo.m_aDriverName == aPPD )
                 {
                     String aText( PaResId( RID_ERR_REMOVEDEFAULTDRIVER ) );
-                    aText.SearchAndReplace( String::CreateFromAscii( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    aText.SearchAndReplace( rtl::OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
                     aErrorBox.SetText( m_aRemStr );
                     aErrorBox.Execute();
@@ -239,7 +239,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 if( it != aPrinters.end() )
                 {
                     String aText( PaResId( RID_QUERY_DRIVERUSED ) );
-                    aText.SearchAndReplace( String::CreateFromAscii( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    aText.SearchAndReplace( rtl::OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     QueryBox aBox( this, WB_YES_NO | WB_DEF_NO, aText );
                     aBox.SetText( m_aRemStr );
                     if( aBox.Execute() == RET_NO )
@@ -248,7 +248,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 else
                 {
                     String aText( PaResId( RID_QUERY_REMOVEDRIVER ) );
-                    aText.SearchAndReplace( String::CreateFromAscii( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    aText.SearchAndReplace( rtl::OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     QueryBox aBox( this, WB_YES_NO | WB_DEF_NO, aText );
                     aBox.SetText( m_aRemStr );
                     if( aBox.Execute() == RET_NO )
@@ -290,8 +290,8 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                             if (unlink(aSysPath.getStr()))
                             {
                                 String aText( PaResId( RID_ERR_REMOVEDRIVERFAILED ) );
-                                aText.SearchAndReplace( String::CreateFromAscii( "%s1" ), m_aDriverBox.GetSelectEntry( i ) );
-                                aText.SearchAndReplace( String::CreateFromAscii( "%s2" ), aFile );
+                                aText.SearchAndReplace( rtl::OUString( "%s1" ), m_aDriverBox.GetSelectEntry( i ) );
+                                aText.SearchAndReplace( rtl::OUString( "%s2" ), aFile );
                                 ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
                                 aErrorBox.SetText( m_aRemStr );
                                 aErrorBox.Execute();

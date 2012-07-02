@@ -455,7 +455,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             }
             for(sal_uInt16 i = 1; i < nEndLevel; i++)
             {
-                String sPropName(C2S("ParaStyleLevel"));
+                String sPropName(rtl::OUString("ParaStyleLevel"));
                 sPropName += String::CreateFromInt32( i );
                 lcl_SetProp(xInfo,
                     xIdxProps,

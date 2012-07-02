@@ -187,7 +187,7 @@ ScTpFormulaItem::~ScTpFormulaItem()
 
 String ScTpFormulaItem::GetValueText() const
 {
-    return String::CreateFromAscii( "ScTpFormulaItem" );
+    return rtl::OUString("ScTpFormulaItem");
 }
 
 int ScTpFormulaItem::operator==( const SfxPoolItem& rItem ) const

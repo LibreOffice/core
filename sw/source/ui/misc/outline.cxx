@@ -177,7 +177,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
                     SwWrtShell &rSh) :
                                     // the UserString is set correctly afterwards
         SfxTabDialog(pParent, SW_RES(DLG_TAB_OUTLINE), pSwItemSet, sal_False, &aEmptyStr),
-        aNullStr(C2S("____")),
+        aNullStr(rtl::OUString("____")),
         aFormMenu(SW_RES(MN_FORM)),
         rWrtSh(rSh),
         pChapterNumRules(SW_MOD()->GetChapterNumRules()),

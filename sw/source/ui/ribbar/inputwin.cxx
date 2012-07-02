@@ -336,7 +336,7 @@ static const char * const aStrArr[] = {
     sal_uInt16 nId = pMenu->GetCurItemId();
     if ( nId <= MN_CALC_ROUND )
     {
-        String aTmp( String::CreateFromAscii(aStrArr[nId - 1]) );
+        String aTmp( rtl::OUString::createFromAscii(aStrArr[nId - 1]) );
         aTmp += ' ';
         aEdit.ReplaceSelected( aTmp );
     }

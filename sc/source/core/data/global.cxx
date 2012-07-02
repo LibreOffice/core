@@ -729,7 +729,7 @@ String ScGlobal::GetCharsetString( CharSet eVal )
         default:
             return String::CreateFromInt32( eVal );
     }
-    return String::CreateFromAscii(pChar);
+    return rtl::OUString::createFromAscii(pChar);
 }
 
 //------------------------------------------------------------------------

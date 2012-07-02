@@ -130,7 +130,7 @@ sal_uInt32 OFilterItemExchange::getFormatId()
     static sal_uInt32 s_nFormat = (sal_uInt32)-1;
     if ((sal_uInt32)-1 == s_nFormat)
     {
-        s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"form.FilterControlExchange\""));
+        s_nFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"form.FilterControlExchange\""));
         DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OFilterExchangeHelper::getFormatId: bad exchange id!");
     }
     return s_nFormat;

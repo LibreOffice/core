@@ -153,7 +153,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
         if(!pLevel)
         {
             // add an blank template so that SODC won't add default style to this level
-            pToc->AddTemplate(Int32ToOUString(i),  String::CreateFromAscii(""), pTemplate);
+            pToc->AddTemplate(Int32ToOUString(i),  rtl::OUString(), pTemplate);
             continue;
         }
 

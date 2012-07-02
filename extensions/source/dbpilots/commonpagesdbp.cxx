@@ -205,8 +205,7 @@ namespace dbp
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
         aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
-        static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+        const SfxFilter* pFilter = SfxFilter::GetFilterByName(rtl::OUString("StarOffice XML (Base)"));
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         if ( pFilter )
         {

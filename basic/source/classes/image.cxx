@@ -474,7 +474,7 @@ String SbiImage::GetString( short nId ) const
             if( nLen == 1 )
             {
                 // Force length 1 and make char 0 afterwards
-                String aNullCharStr( String::CreateFromAscii( " " ) );
+                String aNullCharStr( rtl::OUString(" ") );
                 aNullCharStr.SetChar( 0, 0 );
                 return aNullCharStr;
             }

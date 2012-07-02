@@ -138,7 +138,7 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     Init();
 
     rSh.NoEdit(sal_True);
-    SetName(String::CreateFromAscii("ObjectText"));
+    SetName(rtl::OUString("ObjectText"));
     SetHelpId(SW_DRWTXTSHELL);
 }
 

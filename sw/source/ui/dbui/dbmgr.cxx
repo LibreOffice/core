@@ -893,8 +893,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             // if a save_to filter is set then use it - otherwise use the default
             if( bEMail && !rMergeDescriptor.bSendAsAttachment )
             {
-                String sExtension( String::CreateFromAscii(
-                        rMergeDescriptor.bSendAsHTML ? "html" : "txt" ));
+                rtl::OUString sExtension = rMergeDescriptor.bSendAsHTML ? rtl::OUString("html") : rtl::OUString("txt");
                 pStoreToFilter = pFilterContainer->GetFilter4Extension(sExtension, SFX_FILTER_EXPORT);
             }
             else if( rMergeDescriptor.sSaveToFilter.Len())
@@ -1564,7 +1563,7 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
             Any aCol = xCols->getByName(rColNm);
             uno::Reference<XPropertySet> xCol;
             aCol >>= xCol;
-            Any aType = xCol->getPropertyValue(C2S("Type"));
+            Any aType = xCol->getPropertyValue(rtl::OUString("Type"));
             aType >>= nRet;
         }
         if(bDispose)
@@ -2364,7 +2363,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
 
                 Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
                 Reference<XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
-                String sOutputExt = String::CreateFromAscii(".odb");
+                String sOutputExt = rtl::OUString(".odb");
                 String sTmpName;
                 {
                     utl::TempFile aTempFile(sNewName , &sOutputExt, &sHomePath);
@@ -2446,7 +2445,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             //copy rSh to aTempFile
             ::rtl::OUString sTempURL;
             const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                        String::CreateFromAscii( FILTER_XML ),
+                        rtl::OUString(FILTER_XML),
                         SwDocShell::Factory().GetFilterContainer() );
             try
             {

@@ -422,7 +422,7 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
     aPBPageDown.SetStyle( aStyle );
 
     String aText = aInfo2FT.GetText();
-    aText.SearchAndReplaceAll( UniString::CreateFromAscii("%PAGEDOWN"), aPBPageDown.GetText() );
+    aText.SearchAndReplaceAll( rtl::OUString("%PAGEDOWN"), aPBPageDown.GetText() );
     aInfo2FT.SetText( aText );
 
     aPBDecline.SetText( aStrNotAccept );

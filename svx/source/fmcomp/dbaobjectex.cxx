@@ -71,12 +71,12 @@ namespace svx
         static sal_uInt32 s_nFormFormat = (sal_uInt32)-1;
         if ( _bExtractForm && (sal_uInt32)-1 == s_nFormFormat )
         {
-            s_nFormFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"dbaccess.FormComponentDescriptorTransfer\"" ));
+            s_nFormFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"dbaccess.FormComponentDescriptorTransfer\"" ));
             OSL_ENSURE((sal_uInt32)-1 != s_nFormFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
         }
         else if ( !_bExtractForm && (sal_uInt32)-1 == s_nReportFormat)
         {
-            s_nReportFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"dbaccess.ReportComponentDescriptorTransfer\""));
+            s_nReportFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"dbaccess.ReportComponentDescriptorTransfer\""));
             OSL_ENSURE((sal_uInt32)-1 != s_nReportFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
         }
         return _bExtractForm ? s_nFormFormat : s_nReportFormat;

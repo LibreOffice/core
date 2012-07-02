@@ -744,7 +744,7 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
 
     OSL_ENSURE(pRet != pStart->pName, "TXT: That was an unknown language!");
 
-    return String::CreateFromAscii(pRet);
+    return rtl::OUString::createFromAscii(pRet);
 }
 
 // for the automatic conversion (mail/news/...)

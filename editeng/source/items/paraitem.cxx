@@ -607,7 +607,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
         }
     }
 
-    rText.SearchAndReplace( String::CreateFromAscii( "%1" ), String::CreateFromInt32( GetValue() ) );
+    rText.SearchAndReplace( rtl::OUString("%1"), String::CreateFromInt32( GetValue() ) );
     return ePres;
 }
 
@@ -679,7 +679,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
         }
     }
 
-    rText.SearchAndReplace( String::CreateFromAscii( "%1" ), String::CreateFromInt32( GetValue() ) );
+    rText.SearchAndReplace( rtl::OUString("%1"), String::CreateFromInt32( GetValue() ) );
     return ePres;
 }
 

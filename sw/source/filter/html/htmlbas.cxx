@@ -291,8 +291,7 @@ void SwHTMLWriter::OutBasic()
             const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
             OSL_ENSURE( pModule, "Wo ist das Modul?" );
 
-            String sLang(
-                    String::CreateFromAscii( SVX_MACRO_LANGUAGE_STARBASIC ) );
+            rtl::OUString sLang(SVX_MACRO_LANGUAGE_STARBASIC);
             ScriptType eType = STARBASIC;
 
             if( 0==i && 0==j )

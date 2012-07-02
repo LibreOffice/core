@@ -132,7 +132,7 @@ namespace
 
         if ( _pPortNumber )
         {
-            sNewUrl += String::CreateFromAscii(":");
+            sNewUrl += rtl::OUString::createFromAscii(":");
             sNewUrl += String::CreateFromInt32(_pPortNumber->GetValue());
         }
 
@@ -524,7 +524,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
 
                 if ( sDatabaseName.Len() )
                 {
-                    sNewUrl += String::CreateFromAscii("/");
+                    sNewUrl += rtl::OUString::createFromAscii("/");
                     sNewUrl += sDatabaseName;
                 }
             }
@@ -543,7 +543,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                         sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
                     if ( sDatabaseName.Len() )
                     {
-                        sNewUrl += String::CreateFromAscii(":");
+                        sNewUrl += rtl::OUString::createFromAscii(":");
                         sNewUrl += sDatabaseName;
                     }
                 }

@@ -100,15 +100,15 @@ CreateMonitor::CreateMonitor( Window *pParent )
     m_aCounting         (this, SW_RES( FT_COUNTING )),
     m_aCancelButton     (this, SW_RES( PB_CANCELPRNMON  )),
     m_sCountingPattern(),
-    m_sVariable_Total( String::CreateFromAscii("%Y") ),
-    m_sVariable_Position( String::CreateFromAscii("%X") ),
+    m_sVariable_Total( rtl::OUString("%Y") ),
+    m_sVariable_Position( rtl::OUString("%X") ),
     m_nTotalCount(0),
     m_nCurrentPosition(0)
 {
     FreeResource();
 
     m_sCountingPattern = m_aCounting.GetText();
-    m_aCounting.SetText(String::CreateFromAscii("..."));
+    m_aCounting.SetText(rtl::OUString("..."));
 }
 
 void CreateMonitor::UpdateCountingText()

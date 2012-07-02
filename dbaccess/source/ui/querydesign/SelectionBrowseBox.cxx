@@ -50,8 +50,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::accessibility;
 
-const String g_strOne = String::CreateFromAscii("1");
-const String g_strZero = String::CreateFromAscii("0");
+#define g_strOne rtl::OUString("1")
+#define g_strZero rtl::OUString("0")
 
 #define DEFAULT_QUERY_COLS  20
 #define DEFAULT_SIZE        GetTextWidth(g_strZero) * 30
@@ -1122,9 +1122,9 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 case DataType::CLOB:
                                     if(aText.GetChar(0) != '\'' || aText.GetChar(aText.Len() -1) != '\'')
                                     {
-                                        aText.SearchAndReplaceAll(String::CreateFromAscii("'"),String::CreateFromAscii("''"));
-                                        String aTmp(String::CreateFromAscii("'"));
-                                        (aTmp += aText) += String::CreateFromAscii("'");
+                                        aText.SearchAndReplaceAll(rtl::OUString("'"), rtl::OUString("''"));
+                                        String aTmp(rtl::OUString("'"));
+                                        (aTmp += aText) += rtl::OUString("'");
                                         aText = aTmp;
                                     }
                                     break;

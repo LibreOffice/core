@@ -2362,7 +2362,7 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
     if( !pTab )
         return sal_False;
 
-    rFml = String::CreateFromAscii( sCalc_Sum );
+    rFml = rtl::OUString::createFromAscii( sCalc_Sum );
 
     SwCellFrms aCells;
     if( ::GetAutoSumSel( *this, aCells ))

@@ -209,7 +209,7 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
         return;
 
     String aDelimiters = ScEditUtil::ModifyDelimiters(
-                            String::CreateFromAscii( pMinDelimiters ) );
+                            rtl::OUString::createFromAscii( pMinDelimiters ) );
 
     xub_StrLen nColon = aDelimiters.Search(':');
     if ( nColon != STRING_NOTFOUND )

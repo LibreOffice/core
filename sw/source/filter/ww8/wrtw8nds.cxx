@@ -119,17 +119,17 @@ static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
     if ( !pFieldmark) {
         return String();
     } else if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT ) {
-        return String::CreateFromAscii(" FORMTEXT ");
+        return rtl::OUString(" FORMTEXT ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ) {
-        return String::CreateFromAscii(" FORMDROPDOWN ");
+        return rtl::OUString(" FORMDROPDOWN ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX ) {
-        return String::CreateFromAscii(" FORMCHECKBOX ");
+        return rtl::OUString(" FORMCHECKBOX ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_TOC ) {
-        return String::CreateFromAscii(" TOC ");
+        return rtl::OUString(" TOC ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK ) {
-        return String::CreateFromAscii(" HYPERLINK ");
+        return rtl::OUString(" HYPERLINK ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF ) {
-        return String::CreateFromAscii(" PAGEREF ");
+        return rtl::OUString(" PAGEREF ");
     } else {
         return pFieldmark->GetFieldname();
     }

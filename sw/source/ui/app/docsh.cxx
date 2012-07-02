@@ -212,7 +212,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         pRead->SetTemplateName( pFlt->GetDefaultTemplate() );
 
     if( pRead == ReadAscii && 0 != rMedium.GetInStream() &&
-        pFlt->GetUserData().EqualsAscii( FILTER_TEXT_DLG ) )
+        pFlt->GetUserData() == FILTER_TEXT_DLG )
     {
         SwAsciiOptions aOpt;
         const SfxItemSet* pSet;
@@ -411,10 +411,10 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // Task 75666 - is the Document imported by our Microsoft-Filters?
         const SfxFilter* pOldFilter = GetMedium()->GetFilter();
         if( pOldFilter &&
-            ( pOldFilter->GetUserData().EqualsAscii( FILTER_WW8 ) ||
-              pOldFilter->GetUserData().EqualsAscii( "CWW6" ) ||
-              pOldFilter->GetUserData().EqualsAscii( "WW6" ) ||
-              pOldFilter->GetUserData().EqualsAscii( "WW1" ) ))
+            ( pOldFilter->GetUserData() == FILTER_WW8 ||
+              pOldFilter->GetUserData() == "CWW6" ||
+              pOldFilter->GetUserData() == "WW6" ||
+              pOldFilter->GetUserData() == "WW1" ) )
         {
             // when saving it in our own fileformat, then remove the template
             // name from the docinfo.
@@ -558,7 +558,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
     if( pDoc->ContainsMSVBasic() )
     {
-        sal_Bool bSave = pFlt->GetUserData().EqualsAscii( "CWW8" )
+        sal_Bool bSave = pFlt->GetUserData() == "CWW8"
              && SvtFilterOptions::Get().IsLoadWordBasicStorage();
 
         if ( bSave )
@@ -567,7 +567,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
             OSL_ENSURE( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
-                nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, String::CreateFromAscii("Macros") );
+                nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, rtl::OUString("Macros") );
                 xStg->Commit();
                 pDoc->SetContainsMSVBasic( sal_True );
             }
@@ -578,7 +578,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     if( pWrtShell )
         pWrtShell->EndAllTblBoxEdit();
 
-    if( pFlt->GetUserData().EqualsAscii( "HTML") )
+    if( pFlt->GetUserData() == "HTML" )
     {
 #ifndef DISABLE_SCRIPTING
         SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
@@ -621,10 +621,9 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     if( xWriter->IsStgWriter() &&
-        ( /*xWriter->IsSw3Writer() ||*/
-          pFlt->GetUserData().EqualsAscii( FILTER_XML ) ||
-           pFlt->GetUserData().EqualsAscii( FILTER_XMLV ) ||
-           pFlt->GetUserData().EqualsAscii( FILTER_XMLVW ) ) )
+        ( pFlt->GetUserData() == FILTER_XML ||
+          pFlt->GetUserData() == FILTER_XMLV ||
+          pFlt->GetUserData() == FILTER_XMLVW ) )
     {
         // determine the own Type
         sal_uInt8 nMyType = 0;
@@ -689,7 +688,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         return bRet;
     }
 
-    if( pFlt->GetUserData().EqualsAscii( FILTER_TEXT_DLG ) &&
+    if( pFlt->GetUserData() == FILTER_TEXT_DLG &&
         ( pWrtShell || !::lcl_GetSourceView( this ) ))
     {
         SwAsciiOptions aOpt;

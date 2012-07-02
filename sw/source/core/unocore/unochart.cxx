@@ -2184,12 +2184,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                             String aNew;
                             if (bUseCol)
                             {
-                                aRplc = String::CreateFromAscii( "%COLUMNLETTER" );
+                                aRplc = rtl::OUString("%COLUMNLETTER");
                                 aNew = rtl::OUString(aCellName.GetBuffer(), pBuf - aCellName.GetBuffer());
                             }
                             else
                             {
-                                aRplc = String::CreateFromAscii( "%ROWNUMBER" );
+                                aRplc = rtl::OUString("%ROWNUMBER");
                                 aNew = rtl::OUString(pBuf, (aCellName.GetBuffer() + nLen) - pBuf);
                             }
                             xub_StrLen nPos = aTxt.Search( aRplc );

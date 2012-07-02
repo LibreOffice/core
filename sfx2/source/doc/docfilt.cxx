@@ -170,7 +170,7 @@ String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
         }
     }
 
-    return pType ? String::CreateFromAscii(pType) : String();
+    return pType ? rtl::OUString::createFromAscii(pType) : rtl::OUString();
 }
 
 String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xStorage, sal_Bool bTemplate,
@@ -238,7 +238,7 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
     String aRet;
     if ( pType )
     {
-        aRet = String::CreateFromAscii(pType);
+        aRet = rtl::OUString::createFromAscii(pType);
         if ( pFilterName )
             *pFilterName = aMatcher.GetFilter4EA( aRet )->GetName();
     }

@@ -1164,7 +1164,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                                                 aDesc.aDescription = pOldArgDesc->aDescription;
                                             }
                                             else
-                                                aDesc.aName = aDesc.aDescription = String::CreateFromAscii( "###" );
+                                                aDesc.aName = aDesc.aDescription = rtl::OUString("###");
 
                                             sal_Bool bOptional =
                                                 ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||

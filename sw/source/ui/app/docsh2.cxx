@@ -798,7 +798,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
                         SfxObjectFactory &rFact = GetFactory();
-                        SfxFilterMatcher aMatcher( String::CreateFromAscii(rFact.GetShortName()) );
+                        SfxFilterMatcher aMatcher( rtl::OUString::createFromAscii(rFact.GetShortName()) );
                         SfxFilterMatcherIter aIter( aMatcher );
                         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         const SfxFilter* pFlt = aIter.First();
@@ -807,8 +807,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             // --> OD #i117339#
 //                            if( pFlt && pFlt->IsAllowedAsTemplate() )
                             if( pFlt && pFlt->IsAllowedAsTemplate() &&
-                                ( pFlt->GetUserData().EqualsAscii("CXML") ||
-                                  pFlt->GetUserData().EqualsAscii("CXMLV") ) )
+                                ( pFlt->GetUserData() == "CXML" ||
+                                  pFlt->GetUserData() == "CXMLV" ) )
                             {
                                 const String sWild = pFlt->GetWildcard().getGlob();
                                 xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
@@ -818,7 +818,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         sal_Bool bWeb = 0 != dynamic_cast< SwWebDocShell *>( this );
                         const SfxFilter *pOwnFlt =
                                 SwDocShell::Factory().GetFilterContainer()->
-                                GetFilter4FilterName(String::CreateFromAscii("writer8"));
+                                GetFilter4FilterName(rtl::OUString("writer8"));
 
                         // make sure the default file format is also available
                         if(bWeb)
@@ -886,7 +886,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     // 3 - file saved in non-HTML -> QueryBox to save as HTML
                     const SfxFilter* pHtmlFlt =
                                     SwIoSystem::GetFilterOfFormat(
-                                        String::CreateFromAscii("HTML"),
+                                        rtl::OUString("HTML"),
                                         SwWebDocShell::Factory().GetFilterContainer() );
                     sal_Bool bLocalHasName = HasName();
                     if(bLocalHasName)
@@ -1225,7 +1225,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         // for HTML there is only one filter!!
                         pFlt = SwIoSystem::GetFilterOfFormat(
-                                String::CreateFromAscii("HTML"),
+                                rtl::OUString("HTML"),
                                 SwWebDocShell::Factory().GetFilterContainer() );
                         nStrId = STR_LOAD_HTML_DOC;
                     }
@@ -1233,7 +1233,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         // for Global-documents we now only offer the current one.
                         pFlt = SwGlobalDocShell::Factory().GetFilterContainer()->
-                                    GetFilter4Extension( String::CreateFromAscii("odm")  );
+                                    GetFilter4Extension( rtl::OUString("odm")  );
                         nStrId = STR_LOAD_GLOBAL_DOC;
                     }
 
@@ -1709,7 +1709,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
     String sURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
     // Set filter:
-    String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
+    String sFactory(rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
     SfxFilterMatcher aMatcher( sFactory );
 
     // search for filter in WebDocShell, too
@@ -1718,7 +1718,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
     aMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
     if(!pFlt)
     {
-        String sWebFactory(String::CreateFromAscii(SwWebDocShell::Factory().GetShortName()));
+        String sWebFactory(rtl::OUString::createFromAscii(SwWebDocShell::Factory().GetShortName()));
         SfxFilterMatcher aWebMatcher( sWebFactory );
         aWebMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
     }

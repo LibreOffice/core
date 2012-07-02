@@ -242,7 +242,7 @@ namespace svt
         TabPage* pCurrentPage = GetPage(getCurrentState());
         if ( pCurrentPage && pCurrentPage->GetText().Len() )
         {
-            sCompleteTitle += String::CreateFromAscii(" - ");
+            sCompleteTitle += rtl::OUString(" - ");
             sCompleteTitle += pCurrentPage->GetText();
         }
 

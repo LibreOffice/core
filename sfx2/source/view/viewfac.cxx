@@ -54,7 +54,7 @@ String SfxViewFactory::GetAPIViewName() const
         return m_sViewName;
 
     if ( GetOrdinal() == 0 )
-        return String::CreateFromAscii( "Default" );
+        return rtl::OUString( "Default" );
 
     return GetLegacyViewName();
 }
@@ -66,7 +66,7 @@ SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
     fnCreate(fnC),
     fnInit(fnI),
     nOrd(nOrdinal),
-    m_sViewName( String::CreateFromAscii( asciiViewName ) )
+    m_sViewName( rtl::OUString::createFromAscii( asciiViewName ) )
 {
     DBG_CTOR(SfxViewFactory, 0);
 }

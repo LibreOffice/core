@@ -383,7 +383,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     for(sal_uInt16 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
 
-    aAddressFldLB.SelectEntry(C2S("EMAIL"));
+    aAddressFldLB.SelectEntry(rtl::OUString("EMAIL"));
 
     String sPath(pModOpt->GetMailingPath());
     if(!sPath.Len())
@@ -399,7 +399,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     if (!bColumn )
     {
-        aColumnLB.SelectEntry(C2S("NAME"));
+        aColumnLB.SelectEntry(rtl::OUString("NAME"));
     }
     else
         aColumnLB.SelectEntry(pModOpt->GetNameFromColumn());

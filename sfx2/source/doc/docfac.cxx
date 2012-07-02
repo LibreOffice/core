@@ -116,9 +116,9 @@ SfxObjectFactory::SfxObjectFactory
        nFlags( nFlagsP )
 {
     DBG_CTOR(SfxObjectFactory, 0);
-    pImpl->pFilterContainer = new SfxFilterContainer( String::CreateFromAscii( pName ) );
+    pImpl->pFilterContainer = new SfxFilterContainer( rtl::OUString::createFromAscii( pName ) );
 
-    String aShortName( String::CreateFromAscii( pShortName ) );
+    String aShortName( rtl::OUString::createFromAscii( pShortName ) );
     aShortName.ToLowerAscii();
     pImpl->aClassName = rName;
     if ( aShortName.EqualsAscii( "swriter" ) )
@@ -347,7 +347,7 @@ String SfxObjectFactory::GetStandardTemplate( const String& rServiceName )
 const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 {
     sal_uInt16 nVersion=0;
-    SfxFilterMatcher aMatcher ( String::CreateFromAscii( pShortName ) );
+    SfxFilterMatcher aMatcher ( rtl::OUString::createFromAscii( pShortName ) );
     SfxFilterMatcherIter aIter( aMatcher );
     const SfxFilter *pFilter = 0;
     const SfxFilter *pTemp = aIter.First();

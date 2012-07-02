@@ -2238,7 +2238,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
         {
             // set module name in checkbox text
             String sText( aOnStartupText );
-            sText.SearchAndReplace( String::CreateFromAscii( "%MODULENAME" ), sModuleName );
+            sText.SearchAndReplace( rtl::OUString("%MODULENAME"), sModuleName );
             aOnStartupCB.SetText( sText );
             // and show it
             aOnStartupCB.Show();

@@ -584,7 +584,7 @@ long DbgWindow::PreNotify( NotifyEvent& rNEvt )
             if ( rCommand.GetCommand() == COMMAND_CONTEXTMENU )
             {
                 PopupMenu aMenu;
-                aMenu.InsertItem( 1, String::CreateFromAscii( "copy to clipboard" ) );
+                aMenu.InsertItem( 1, rtl::OUString("copy to clipboard") );
 
                 Point aPos;
                 if ( rCommand.IsMouseEvent() )

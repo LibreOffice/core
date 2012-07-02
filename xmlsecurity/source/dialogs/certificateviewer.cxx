@@ -180,9 +180,9 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     utl::typeConvert( xCert->getNotValidBefore(), aDateTimeStart );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTimeEnd );
     String sText = maValidDateFI.GetText();
-    sText.SearchAndReplace( String::CreateFromAscii( "%SDATE%" ),
+    sText.SearchAndReplace( rtl::OUString( "%SDATE%" ),
                             GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() ) );
-    sText.SearchAndReplace( String::CreateFromAscii( "%EDATE%" ),
+    sText.SearchAndReplace( rtl::OUString( "%EDATE%" ),
                             GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() ) );
     maValidDateFI.SetText( sText );
 
@@ -276,7 +276,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     String                  aLBEntry;
     String                  aDetails;
     // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
-    aLBEntry = String::CreateFromAscii( "V" );
+    aLBEntry = rtl::OUString( "V" );
     aLBEntry += String::CreateFromInt32( xCert->getVersion() + 1 );
     InsertElement( String( XMLSEC_RES( STR_VERSION ) ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
@@ -293,12 +293,12 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     DateTime aDateTime( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
-    aLBEntry += String::CreateFromAscii( " " );
+    aLBEntry += rtl::OUString( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( String( XMLSEC_RES( STR_VALIDFROM ) ), aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
-    aLBEntry += String::CreateFromAscii( " " );
+    aLBEntry += rtl::OUString( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( String( XMLSEC_RES( STR_VALIDTO ) ), aLBEntry, aLBEntry );
 

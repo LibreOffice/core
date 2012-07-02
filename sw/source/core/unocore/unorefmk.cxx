@@ -1013,7 +1013,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-            C2S("SwXMeta::attach(): already attached"),
+            rtl::OUString("SwXMeta::attach(): already attached"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1021,7 +1021,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!xRangeTunnel.is())
     {
         throw lang::IllegalArgumentException(
-            C2S("SwXMeta::attach(): argument is no XUnoTunnel"),
+            rtl::OUString("SwXMeta::attach(): argument is no XUnoTunnel"),
                 static_cast< ::cppu::OWeakObject* >(this), 0);
     }
     SwXTextRange *const pRange(
@@ -1031,7 +1031,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(
-            C2S("SwXMeta::attach(): argument not supported type"),
+            rtl::OUString("SwXMeta::attach(): argument not supported type"),
                 static_cast< ::cppu::OWeakObject* >(this), 0);
     }
 
@@ -1040,7 +1040,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!pDoc)
     {
         throw lang::IllegalArgumentException(
-            C2S("SwXMeta::attach(): argument has no SwDoc"),
+            rtl::OUString("SwXMeta::attach(): argument has no SwDoc"),
                 static_cast< ::cppu::OWeakObject* >(this), 0);
     }
 
@@ -1068,14 +1068,14 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!bSuccess)
     {
         throw lang::IllegalArgumentException(
-            C2S("SwXMeta::attach(): cannot create meta: range invalid?"),
+            rtl::OUString("SwXMeta::attach(): cannot create meta: range invalid?"),
                 static_cast< ::cppu::OWeakObject* >(this), 1);
     }
     if (!pTxtAttr)
     {
         OSL_FAIL("meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
-            C2S("SwXMeta::attach(): cannot create meta"),
+            rtl::OUString("SwXMeta::attach(): cannot create meta"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1107,7 +1107,7 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
     if (m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-                C2S("SwXMeta::getAnchor(): not inserted"),
+                rtl::OUString("SwXMeta::getAnchor(): not inserted"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1119,7 +1119,7 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
     if (!bSuccess)
     {
         throw lang::DisposedException(
-                C2S("SwXMeta::getAnchor(): not attached"),
+                rtl::OUString("SwXMeta::getAnchor(): not attached"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1243,7 +1243,7 @@ void SAL_CALL
 SwXMeta::setParent(uno::Reference< uno::XInterface > const& /*xParent*/)
     throw (uno::RuntimeException, lang::NoSupportException)
 {
-    throw lang::NoSupportException(C2S("setting parent not supported"), *this);
+    throw lang::NoSupportException(rtl::OUString("setting parent not supported"), *this);
 }
 
 // XElementAccess
@@ -1274,7 +1274,7 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
     if (m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-                C2S("createEnumeration(): not inserted"),
+                rtl::OUString("createEnumeration(): not inserted"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 

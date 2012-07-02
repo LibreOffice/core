@@ -218,8 +218,8 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
     const SfxFilter* pFilter = aMatcher.GetFilter4FilterName(sDefaultFilter);
 
     if (
-        (pFilter) &&
-        (pFilter->GetServiceName().CompareIgnoreCaseToAscii( sServiceName ) != COMPARE_EQUAL)
+        pFilter &&
+        !pFilter->GetServiceName().equalsIgnoreAsciiCase(sServiceName)
        )
     {
         pFilter = 0;
@@ -235,7 +235,7 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
         for ( size_t i = 0, n = pFilterArr->size(); i < n; ++i )
         {
             const SfxFilter* pCheckFilter = pFilterArr->at( i );
-            if ( pCheckFilter->GetServiceName().CompareIgnoreCaseToAscii( sServiceName ) == COMPARE_EQUAL )
+            if ( pCheckFilter->GetServiceName().equalsIgnoreAsciiCase(sServiceName) )
             {
                 pFilter = pCheckFilter;
                 break;
@@ -336,7 +336,7 @@ void SfxFilterMatcher_Impl::Update()
         for ( size_t i = 0, n = pFilterArr->size(); i < n; ++i )
         {
             SfxFilter* pFilter = pFilterArr->at( i );
-            if ( pFilter->GetServiceName() == String(aName) )
+            if ( pFilter->GetServiceName() == aName )
                 pList->push_back( pFilter );
         }
     }
@@ -638,7 +638,7 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
                 if ( !m_rImpl.aName.isEmpty() )
                 {
                     // if this is not the global FilterMatcher: check if filter matches the document type
-                    if ( pFilter->GetServiceName() != String(m_rImpl.aName) )
+                    if ( pFilter->GetServiceName() != m_rImpl.aName )
                     {
                         // preferred filter belongs to another document type; now we must search the filter
                         m_rImpl.InitForIterating();

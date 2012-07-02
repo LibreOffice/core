@@ -105,7 +105,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 
     if( pCharSet )
     {
-        String aContentType = String::CreateFromAscii( sHTML_MIME_text_html );
+        String aContentType = rtl::OUString(sHTML_MIME_text_html);
         aContentType.AppendAscii( pCharSet );
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_content_type, aContentType, sal_True,
                  eDestEnc, pNonConvertableChars );

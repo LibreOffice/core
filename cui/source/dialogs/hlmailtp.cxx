@@ -250,10 +250,8 @@ void SvxHyperlinkMailTp::RemoveImproperProtocol(const String& aProperScheme)
 String SvxHyperlinkMailTp::GetSchemeFromButtons() const
 {
     if( maRbtNews.IsChecked() )
-    {
-        return String::CreateFromAscii( INET_NEWS_SCHEME );
-    }
-    return String::CreateFromAscii( INET_MAILTO_SCHEME );
+        return rtl::OUString(INET_NEWS_SCHEME);
+    return rtl::OUString(INET_MAILTO_SCHEME);
 }
 
 INetProtocol SvxHyperlinkMailTp::GetSmartProtocolFromButtons() const

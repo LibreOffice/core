@@ -156,7 +156,7 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
     String sDBName;
     if( (!rItem.bSynchron || !(nCol|nRow)) && (sDBName = InsertLabEnvText( rSh, rFldMgr, rItem.aWriting )).Len() && !bLast )
     {
-        sDBName.SetToken( 3, DB_DELIM, String::CreateFromAscii("True"));
+        sDBName.SetToken( 3, DB_DELIM, rtl::OUString("True"));
         SwInsertFld_Data aData(TYP_DBNEXTSETFLD, 0, sDBName, aEmptyStr, 0, &rSh );
         rFldMgr.InsertFld( aData );
     }
@@ -367,7 +367,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                                     pSh->SetMark();     // set only the mark
 
                                 SwSectionData aSect(CONTENT_SECTION,
-                                    String::CreateFromAscii(MASTER_LABEL));
+                                    rtl::OUString(MASTER_LABEL));
                                 pSh->InsertSection(aSect);
                             }
                         }
@@ -377,7 +377,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                                     pSh->GetUniqueSectionName());
                             String sLinkName(sfx2::cTokenSeperator);
                             sLinkName += sfx2::cTokenSeperator;
-                            sLinkName += String::CreateFromAscii(MASTER_LABEL);
+                            sLinkName += rtl::OUString(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName);
                             aSect.SetProtectFlag(true);
                             pSh->Insert(aDotStr);   // Dummytext to allocate the Section

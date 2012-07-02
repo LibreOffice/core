@@ -105,7 +105,7 @@ ScTpDefaultsItem::~ScTpDefaultsItem()
 
 String ScTpDefaultsItem::GetValueText() const
 {
-    return String::CreateFromAscii( "ScTpDefaultsItem" );
+    return rtl::OUString("ScTpDefaultsItem");
 }
 
 int ScTpDefaultsItem::operator==( const SfxPoolItem& rItem ) const

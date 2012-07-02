@@ -41,7 +41,7 @@ using namespace com::sun::star::beans;
 using ::rtl::OUString;
 
 
-static const char* aRootName = "Office.Math";
+static const char aRootName[] = "Office.Math";
 
 #define SYMBOL_LIST         "SymbolList"
 #define FONT_FORMAT_LIST    "FontFormatList"
@@ -409,7 +409,7 @@ const rtl::OUString SmFontFormatList::GetNewFontFormatId() const
 /////////////////////////////////////////////////////////////////
 
 SmMathConfig::SmMathConfig() :
-    ConfigItem( String::CreateFromAscii( aRootName ))
+    ConfigItem(rtl::OUString(aRootName))
 {
     pFormat         = 0;
     pOther          = 0;

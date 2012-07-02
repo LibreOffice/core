@@ -113,7 +113,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     }
 
     pOutlineRule->SetRuleType( OUTLINE_RULE );
-    pOutlineRule->SetName( String::CreateFromAscii(
+    pOutlineRule->SetName( rtl::OUString::createFromAscii(
                                         SwNumRule::GetOutlineRuleName() ),
                            *this);
 
@@ -2605,7 +2605,7 @@ namespace listfunc
     const String CreateUniqueListId( const SwDoc& rDoc )
     {
         // #i92478#
-        String aNewListId = String::CreateFromAscii( "list" );
+        String aNewListId = rtl::OUString("list");
         sal_Int64 n = Time( Time::SYSTEM ).GetTime();
         n += Date( Date::SYSTEM ).GetDate();
         n += rand();

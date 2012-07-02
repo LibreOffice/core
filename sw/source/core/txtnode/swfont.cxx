@@ -806,10 +806,10 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     {
         xub_StrLen nOldIdx(rInf.GetIdx());
         xub_StrLen nOldLen(rInf.GetLen());
-        String aNewText=String::CreateFromAscii(CH_TXT_ATR_SUBST_FIELDSTART);
+        rtl::OUString aNewText(CH_TXT_ATR_SUBST_FIELDSTART);
         rInf.SetText( aNewText );
         rInf.SetIdx( 0 );
-        rInf.SetLen( aNewText.Len() );
+        rInf.SetLen( aNewText.getLength() );
         aTxtSize = pLastFont->GetTextSize( rInf );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
@@ -818,10 +818,10 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     {
         xub_StrLen nOldIdx(rInf.GetIdx());
         xub_StrLen nOldLen(rInf.GetLen());
-        String aNewText=String::CreateFromAscii(CH_TXT_ATR_SUBST_FIELDEND);
+        rtl::OUString aNewText(CH_TXT_ATR_SUBST_FIELDEND);
         rInf.SetText( aNewText );
         rInf.SetIdx( 0 );
-        rInf.SetLen( aNewText.Len() );
+        rInf.SetLen( aNewText.getLength() );
         aTxtSize = pLastFont->GetTextSize( rInf );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );

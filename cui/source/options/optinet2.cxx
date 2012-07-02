@@ -1457,7 +1457,7 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
         rtl::OUString sUrl;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sPath, sUrl);
         aHelper.SetDisplayDirectory(sUrl);
-        aHelper.AddFilter( m_sDefaultFilterName, String::CreateFromAscii("*"));
+        aHelper.AddFilter( m_sDefaultFilterName, rtl::OUString("*"));
 
         if ( ERRCODE_NONE == aHelper.Execute() )
         {

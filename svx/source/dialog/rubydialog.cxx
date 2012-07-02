@@ -857,7 +857,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
         break;
         case RubyAdjust_INDENT_BLOCK:
         {
-            long nCharWidth = GetTextWidth(String::CreateFromAscii("X"));
+            long nCharWidth = GetTextWidth(rtl::OUString("X"));
             if(nOutTextWidth < (nRightEnd - nLeftStart - nCharWidth))
             {
                 nCharWidth /= 2;

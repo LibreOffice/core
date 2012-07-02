@@ -110,7 +110,7 @@ public:
     String  GetCharacterStyle() const;
 };
 
-String SwCaptionDialog::our_aSepTextSave = String::CreateFromAscii(": "); // Caption separator text
+String SwCaptionDialog::our_aSepTextSave = rtl::OUString(": "); // Caption separator text
 
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
 
@@ -507,7 +507,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
                                         RES_SETEXPFLD, aFldTypeName );
 
     sal_Unicode nLvl = MAXLEVEL;
-    String sDelim( String::CreateFromAscii( ": " ) );
+    rtl::OUString sDelim(": ");
     if( pFldType )
     {
         sDelim = pFldType->GetDelimiter();
@@ -515,7 +515,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
     }
 
     aLbLevel.SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
-    aEdDelim.SetText( sDelim );
+    aEdDelim.SetText(sDelim);
 
     ::FillCharStyleListBox( aLbCharStyle, rView.GetDocShell(), sal_True, sal_True );
     aLbCharStyle.SelectEntryPos( 0 );

@@ -350,7 +350,7 @@ void MacroWarning::SetStorage( const cssu::Reference < css::embed::XStorage >& r
     if( mxStore.is() && nCnt > 0 )
     {
         mpInfos = &rInfos;
-        String      aCN_Id( String::CreateFromAscii( "CN" ) );
+        rtl::OUString aCN_Id("CN");
         String      s;
         s = GetContentPart( rInfos[ 0 ].Signer->getSubjectName(), aCN_Id );
 
@@ -370,7 +370,7 @@ void MacroWarning::SetCertificate( const cssu::Reference< css::security::XCertif
     mxCert = _rxCert;
     if( mxCert.is() )
     {
-        String  aCN_Id( String::CreateFromAscii( "CN" ) );
+        rtl::OUString aCN_Id("CN");
         String  s;
         s = GetContentPart( mxCert->getSubjectName(), aCN_Id );
         maSignsFI.SetText( s );

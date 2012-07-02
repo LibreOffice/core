@@ -590,7 +590,7 @@ void ImplDdeItem::AdviseLoop( sal_Bool bOpen )
             // A connection is re-established
             if( OBJECT_DDE_EXTERN == pLink->GetObjType() )
             {
-                pLink->GetObj()->AddDataAdvise( pLink, String::CreateFromAscii( "text/plain;charset=utf-16" ),  ADVISEMODE_NODATA );
+                pLink->GetObj()->AddDataAdvise( pLink, rtl::OUString("text/plain;charset=utf-16"),  ADVISEMODE_NODATA );
                 pLink->GetObj()->AddConnectAdvise( pLink );
             }
         }

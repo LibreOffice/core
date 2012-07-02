@@ -1000,8 +1000,8 @@ void FmSearchEngine::SearchNextImpl()
         {   // da natuerlich in allen anderen Faellen auch * und ? im Suchstring erlaubt sind, aber nicht als WildCards zaehlen
             // sollen, muss ich normieren
             UniString aTmp(strSearchExpression);
-            static const UniString s_sStar = UniString::CreateFromAscii("\\*");
-            static const UniString s_sQuotation = UniString::CreateFromAscii("\\?");
+            const rtl::OUString s_sStar("\\*");
+            const rtl::OUString s_sQuotation("\\?");
             aTmp.SearchAndReplaceAll('*', s_sStar);
             aTmp.SearchAndReplaceAll('?', s_sQuotation);
             strSearchExpression = aTmp;

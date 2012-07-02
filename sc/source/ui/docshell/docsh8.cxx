@@ -130,7 +130,7 @@ namespace
 
         // get connection
 
-        String aConnUrl = String::CreateFromAscii("sdbc:dbase:");
+        String aConnUrl = rtl::OUString("sdbc:dbase:");
         aConnUrl += aPath;
 
         svxform::ODataAccessCharsetHelper aHelper;

@@ -226,7 +226,7 @@ DBG_NAME(DirectSQLDialog)
             OSL_ENSURE(xStatement.is(), "DirectSQLDialog::implExecuteStatement: no statement returned by the connection!");
 
             // clear the output box
-            m_aOutput.SetText(String::CreateFromAscii(""));
+            m_aOutput.SetText(rtl::OUString());
             if (xStatement.is())
             {
                 if (::rtl::OUString(_rStatement).toAsciiUpperCase().compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT")),6)==0 && m_pShowOutput->IsChecked())
@@ -287,9 +287,9 @@ DBG_NAME(DirectSQLDialog)
     void DirectSQLDialog::addStatusText(const String& _rMessage)
     {
         String sAppendMessage = String::CreateFromInt32(m_nStatusCount++);
-        sAppendMessage += String::CreateFromAscii(": ");
+        sAppendMessage += rtl::OUString(": ");
         sAppendMessage += _rMessage;
-        sAppendMessage += String::CreateFromAscii("\n\n");
+        sAppendMessage += rtl::OUString("\n\n");
 
         String sCompleteMessage = m_aStatus.GetText();
         sCompleteMessage += sAppendMessage;
@@ -302,7 +302,7 @@ DBG_NAME(DirectSQLDialog)
     void DirectSQLDialog::addOutputText(const String& _rMessage)
     {
         String sAppendMessage = _rMessage;
-        sAppendMessage += String::CreateFromAscii("\n");
+        sAppendMessage += rtl::OUString("\n");
 
         String sCompleteMessage = m_aOutput.GetText();
         sCompleteMessage += sAppendMessage;

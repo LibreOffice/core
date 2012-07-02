@@ -141,7 +141,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& 
     maCommand( rCmd ),
     mxFrame( rFrame )
 {
-    Size aSize( GetTextWidth( String::CreateFromAscii("-100 %") ), GetTextHeight() );
+    Size aSize( GetTextWidth( rtl::OUString("-100 %") ), GetTextHeight() );
 
     aSize.Width() += 20, aSize.Height() += 6;
     SetSizePixel( aSize );
@@ -161,7 +161,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& 
         const long nMinVal = ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) )) ? 0 : -100;
 
         SetUnit( FUNIT_CUSTOM );
-        SetCustomUnitText( String::CreateFromAscii(" %") );
+        SetCustomUnitText( rtl::OUString(" %") );
         SetDecimalDigits( 0 );
 
         SetMin( nMinVal );

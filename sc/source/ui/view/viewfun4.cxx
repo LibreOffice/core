@@ -626,7 +626,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool
             SfxStringItem aFileNameItem( SID_FILE_NAME, aStrURL );
             SfxStringItem aFilterItem( SID_FILTER_NAME, pFlt->GetName() );
             // #i69524# add target, as in SfxApplication when the Open dialog is used
-            SfxStringItem aTargetItem( SID_TARGETNAME, String::CreateFromAscii("_default") );
+            SfxStringItem aTargetItem( SID_TARGETNAME, rtl::OUString("_default") );
 
             // Asynchron oeffnen, kann naemlich auch aus D&D heraus passieren
             // und das bekommt dem MAC nicht so gut ...

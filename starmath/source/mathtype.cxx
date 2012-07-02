@@ -566,7 +566,7 @@ void MathType::TypeFaceToString(String &rTxt,sal_uInt8 nFace)
 int MathType::Parse(SotStorage *pStor)
 {
     SvStorageStreamRef xSrc = pStor->OpenSotStream(
-        String::CreateFromAscii("Equation Native"),
+        rtl::OUString("Equation Native"),
         STREAM_STD_READ | STREAM_NOCREATE);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
         return 0;

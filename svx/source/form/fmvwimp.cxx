@@ -1090,7 +1090,7 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
 
         if ( !xWizard.is() )
         {
-            ShowServiceNotAvailableError( NULL, String::CreateFromAscii( pWizardAsciiName ), sal_True );
+            ShowServiceNotAvailableError( NULL, rtl::OUString::createFromAscii(pWizardAsciiName), sal_True );
         }
         else
         {

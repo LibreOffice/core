@@ -107,9 +107,9 @@ void SwFldPage::Init()
             {
                 SwDoc* pDoc = pSh->GetDoc();
                 pSh->InsertFldType( SwSetExpFieldType( pDoc,
-                                    String::CreateFromAscii("HTML_ON"), 1));
+                                    rtl::OUString("HTML_ON"), 1));
                 pSh->InsertFldType( SwSetExpFieldType(pDoc,
-                                    String::CreateFromAscii("HTML_OFF"), 1));
+                                    rtl::OUString("HTML_OFF"), 1));
             }
         }
     }

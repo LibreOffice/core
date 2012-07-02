@@ -266,7 +266,7 @@ public:
 
     static INetContentType GetContentType(UniString const & rTypeName);
 
-    static UniString GetContentType(INetContentType eTypeID);
+    static rtl::OUString GetContentType(INetContentType eTypeID);
 
     static UniString GetPresentation(INetContentType eTypeID,
                                      const ::com::sun::star::lang::Locale& aLocale);

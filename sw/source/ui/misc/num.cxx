@@ -152,7 +152,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     // insert levels
     for(sal_uInt16 i = 1; i <= MAXLEVEL; i++)
         aLevelLB.InsertEntry(String::CreateFromInt32(i));
-    String sEntry(String::CreateFromAscii("1 - "));
+    String sEntry(rtl::OUString("1 - "));
     sEntry += String::CreateFromInt32(MAXLEVEL);
     aLevelLB.InsertEntry(sEntry);
     aLevelLB.SelectEntry(sEntry);

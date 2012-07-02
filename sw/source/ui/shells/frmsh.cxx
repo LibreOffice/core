@@ -880,7 +880,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 SwFrameShell::SwFrameShell(SwView &_rView) :
     SwBaseShell( _rView )
 {
-    SetName(String::CreateFromAscii("Frame"));
+    SetName(rtl::OUString("Frame"));
     SetHelpId(SW_FRAMESHELL);
 
     /* #96392# Use this to announce it is the frame shell who creates the

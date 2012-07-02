@@ -166,8 +166,7 @@ SwSpellDialogChildWindow::SwSpellDialogChildWindow (
                     _pParent, nId, pBindings, pInfo),
                     m_pSpellState(new SpellState)
 {
-
-    String aPropName( String::CreateFromAscii(UPN_IS_GRAMMAR_INTERACTIVE ) );
+    rtl::OUString aPropName(UPN_IS_GRAMMAR_INTERACTIVE);
     SvtLinguConfig().GetProperty( aPropName ) >>= m_bIsGrammarCheckingOn;
 }
 
@@ -503,7 +502,7 @@ void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
     uno::Any aVal;
     aVal <<= bOn;
     m_bIsGrammarCheckingOn = bOn;
-    String aPropName( C2S(UPN_IS_GRAMMAR_INTERACTIVE ) );
+    rtl::OUString aPropName(UPN_IS_GRAMMAR_INTERACTIVE);
     SvtLinguConfig().SetProperty( aPropName, aVal );
     // set current spell position to the start of the current sentence to
     // continue with this sentence after grammar checking state has been changed

@@ -640,7 +640,7 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
             pTok = rInStm.GetToken_Next();
             if( pTok->IsString() )
             {
-                DirEntry aFullName( String::CreateFromAscii( pTok->GetString().getStr() ) );
+                DirEntry aFullName(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
                 if( aFullName.Find( rPath ) )
                 {
                     this->AddDepFile(aFullName.GetFull());

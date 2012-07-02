@@ -111,7 +111,7 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
         else
             aPrefix = String( aName, 0, 2 );
 
-            String aNumStr( String::CreateFromAscii( rLang.maLangDir )) ;
+            String aNumStr(rtl::OUString::createFromAscii(rLang.maLangDir));
 
             if( aNumStr.Len() == 1 )
                 aNumStr.Insert( '0', 0 );

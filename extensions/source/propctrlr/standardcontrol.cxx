@@ -725,7 +725,7 @@ namespace pcr
                 getTypedControlWindow()->SelectEntry( aRgbCol );
                 if ( !getTypedControlWindow()->IsEntrySelected( aRgbCol ) )
                 {   // the given color is not part of the list -> insert a new entry with the hex code of the color
-                    String aStr = String::CreateFromAscii("0x");
+                    String aStr = rtl::OUString("0x");
                     aStr += MakeHexStr(nColor,8);
                     getTypedControlWindow()->InsertEntry( aRgbCol, aStr );
                     getTypedControlWindow()->SelectEntry( aRgbCol );

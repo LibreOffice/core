@@ -2476,17 +2476,17 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
     lcl_SetPosSize(aTest9CBox  ,    Point(116, 53), Size(74 , 10));
     lcl_SetPosSize(aTest10CBox  ,   Point(116, 66), Size(74 , 10));
 
-    aTestFL.SetText(rtl::OUString::createFromAscii("Settings only for testpurposes"));
-    aTest1CBox .SetText( C2S("unused"));
-    aTest2CBox .SetText( C2S("dynamic"));
-    aTest3CBox .SetText( C2S("No calm"               ));
-    aTest4CBox .SetText( C2S("WYSIWYG debug"         ));
-    aTest5CBox .SetText( C2S("No idle format"        ));
-    aTest6CBox .SetText( C2S("No screen adj"         ));
-    aTest7CBox .SetText( C2S("win format"            ));
-    aTest8CBox .SetText( C2S("No Scroll"             ));
-    aTest9CBox .SetText( C2S("DrawingLayerNotLoading"));
-    aTest10CBox.SetText( C2S("AutoFormat by Input"   ));
+    aTestFL.SetText(rtl::OUString("Settings only for testpurposes"));
+    aTest1CBox.SetText(rtl::OUString("unused"));
+    aTest2CBox.SetText(rtl::OUString("dynamic"));
+    aTest3CBox.SetText(rtl::OUString("No calm"));
+    aTest4CBox.SetText(rtl::OUString("WYSIWYG debug"));
+    aTest5CBox.SetText(rtl::OUString("No idle format"));
+    aTest6CBox.SetText(rtl::OUString("No screen adj"));
+    aTest7CBox.SetText(rtl::OUString("win format"));
+    aTest8CBox.SetText(rtl::OUString("No Scroll"));
+    aTest9CBox.SetText(rtl::OUString("DrawingLayerNotLoading"));
+    aTest10CBox.SetText(rtl::OUString("AutoFormat by Input"));
     aTestFL.Show();
     aTest1CBox .Show();
     aTest2CBox .Show();

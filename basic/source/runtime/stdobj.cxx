@@ -731,7 +731,7 @@ SbiStdObject::SbiStdObject( const String& r, StarBASIC* pb ) : SbxObject( r )
     if( !p->nHash )
       while( p->nArgs != -1 )
     {
-        String aName_ = String::CreateFromAscii( p->pName );
+        String aName_ = rtl::OUString::createFromAscii( p->pName );
         p->nHash = SbxVariable::MakeHashCode( aName_ );
         p += ( p->nArgs & _ARGSMASK ) + 1;
     }
@@ -807,7 +807,7 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
             short nType   = ( p->nArgs & _TYPEMASK );
             if( p->nArgs & _CONST )
                 nAccess |= SBX_CONST;
-            String aName_ = String::CreateFromAscii( p->pName );
+            String aName_ = rtl::OUString::createFromAscii( p->pName );
             SbxClassType eCT = SbxCLASS_OBJECT;
             if( nType & _PROPERTY )
                 eCT = SbxCLASS_PROPERTY;
@@ -878,7 +878,7 @@ SbxInfo* SbiStdObject::GetInfo( short nIdx )
     for( short i = 0; i < nPar; i++ )
     {
         p++;
-        String aName_ = String::CreateFromAscii( p->pName );
+        String aName_ = rtl::OUString::createFromAscii( p->pName );
         sal_uInt16 nFlags_ = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
             nFlags_ |= SBX_OPTIONAL;

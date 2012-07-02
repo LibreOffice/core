@@ -529,11 +529,11 @@ String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rM
     if ( aModuleName.Len() == 0 )
         aModuleName = getDefaultModule_Impl();
 
-    aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
+    aHelpURL = rtl::OUString("vnd.sun.star.help://");
     aHelpURL += aModuleName;
 
     if ( !aCommandURL.Len() )
-        aHelpURL += String::CreateFromAscii("/start");
+        aHelpURL += rtl::OUString("/start");
     else
     {
         aHelpURL += '/';

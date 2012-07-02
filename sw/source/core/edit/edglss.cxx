@@ -296,8 +296,7 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 #if defined(UNX)
                 rBuf += '\012';
 #else
-                rBuf += String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "\015\012" ));
+                rBuf += rtl::OUString("\015\012");
 #endif
         }
     }
@@ -310,7 +309,7 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
         WriterRef xWrt;
-        SwReaderWriter::GetWriter( String::CreateFromAscii( FILTER_TEXT ), String(), xWrt );
+        SwReaderWriter::GetWriter( rtl::OUString(FILTER_TEXT), String(), xWrt );
         if( xWrt.Is() )
         {
                 // Selektierte Bereiche in ein ASCII Dokument schreiben

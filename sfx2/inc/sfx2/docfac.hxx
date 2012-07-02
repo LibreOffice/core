@@ -83,7 +83,7 @@ public:
     SfxObjectShellFlags GetFlags() { return nFlags; }
     const char*     GetShortName() const { return pShortName; }
     String          GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
-    String          GetFactoryName() const { return String::CreateFromAscii( pShortName ); }
+    String          GetFactoryName() const { return rtl::OUString::createFromAscii(pShortName); }
     String          GetModuleName() const;
     SfxFilterContainer *GetFilterContainer( sal_Bool bForceLoad = sal_True) const;
 

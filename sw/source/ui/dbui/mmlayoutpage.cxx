@@ -120,7 +120,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
 
 
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-            String::CreateFromAscii( FILTER_XML ),
+            rtl::OUString( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
     //save the current document into a temporary file
     {
@@ -151,9 +151,9 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aLeftMF.SetValue(m_aLeftMF.Normalize(DEFAULT_LEFT_DISTANCE), FUNIT_TWIP);
     m_aTopMF.SetValue(m_aTopMF.Normalize(DEFAULT_TOP_DISTANCE), FUNIT_TWIP);
 
-    m_aZoomLB.InsertEntry(String::CreateFromAscii("50 %"), 1);
-    m_aZoomLB.InsertEntry(String::CreateFromAscii("75 %"), 2);
-    m_aZoomLB.InsertEntry(String::CreateFromAscii("100 %"), 3);
+    m_aZoomLB.InsertEntry(rtl::OUString("50 %"), 1);
+    m_aZoomLB.InsertEntry(rtl::OUString("75 %"), 2);
+    m_aZoomLB.InsertEntry(rtl::OUString("100 %"), 3);
     m_aZoomLB.SelectEntryPos(0); //page size
     m_aZoomLB.SetSelectHdl(LINK(this, SwMailMergeLayoutPage, ZoomHdl_Impl));
 

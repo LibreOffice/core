@@ -79,7 +79,7 @@ void AppendDateTime_Impl( const util::DateTime rDT,
     DateTime aDT( DateTime::EMPTY );
     CONVERT_DATETIME( rDT, aDT );
     String aDateStr = rWrapper.getDate( aDT );
-    aDateStr += String::CreateFromAscii( ", " );
+    aDateStr += rtl::OUString(", ");
     aDateStr += rWrapper.getTime( aDT );
     rRow += aDateStr;
 }

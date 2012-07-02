@@ -586,7 +586,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
         ::comphelper::getProcessServiceFactory(),
         SvtSysLocale().GetLocaleData().getLocale());
 
-    String sPlus(String::CreateFromAscii(" + "));
+    rtl::OUString sPlus(" + ");
     if ( SFX_STYLE_FAMILY_PAGE == nFamily )
     {
         if( !pSet )
@@ -1875,13 +1875,11 @@ sal_Bool  SwDocStyleSheet::IsUsed() const
 
 sal_uLong  SwDocStyleSheet::GetHelpId( String& rFile )
 {
-static String sTemplateHelpFile = String::CreateFromAscii("swrhlppi.hlp");
-
     sal_uInt16 nId = 0;
     sal_uInt16 nPoolId = 0;
     unsigned char nFileId = UCHAR_MAX;
 
-    rFile = sTemplateHelpFile;
+    rFile = rtl::OUString("swrhlppi.hlp");
 
     const SwFmt* pTmpFmt = 0;
     switch( nFamily )

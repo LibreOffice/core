@@ -104,7 +104,7 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
 
         if ( aType.Len() )
         {
-            aText += String::CreateFromAscii( " (" );
+            aText += rtl::OUString( " (" );
             aText += aType;
             aText += ')';
             pPluginNames[nIndex] = aText;

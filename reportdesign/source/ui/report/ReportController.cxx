@@ -2420,7 +2420,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         SID_ATTR_METRIC,SID_ATTR_METRIC,
         0
     };
-    SfxItemPool* pPool( new SfxItemPool(String::CreateFromAscii("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults) );
+    SfxItemPool* pPool( new SfxItemPool(rtl::OUString("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults) );
     pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
@@ -3293,13 +3293,13 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
 
     String sFunction = String(ModuleRes(STR_RPT_PN_PAGE));
     ::rtl::OUString sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
-    sFunction.SearchAndReplace(String::CreateFromAscii("#PAGENUMBER#"),sPageNumber);
+    sFunction.SearchAndReplace(rtl::OUString("#PAGENUMBER#"),sPageNumber);
 
     if ( bStateOfPage )
     {
         ::rtl::OUString sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
         sFunction += String(ModuleRes(STR_RPT_PN_PAGE_OF));
-        sFunction.SearchAndReplace(String::CreateFromAscii("#PAGECOUNT#"),sPageCount);
+        sFunction.SearchAndReplace(rtl::OUString("#PAGECOUNT#"),sPageCount);
     }
 
     sal_Bool bInPageHeader = aMap.getUnpackedValueOrDefault(PROPERTY_PAGEHEADERON,sal_True);
@@ -4230,7 +4230,7 @@ void OReportController::openZoomDialog()
             SID_ATTR_ZOOM,SID_ATTR_ZOOM,
             0
         };
-        SfxItemPool* pPool( new SfxItemPool(String::CreateFromAscii("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
+        SfxItemPool* pPool( new SfxItemPool(rtl::OUString("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
         pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
         pPool->FreezeIdRanges();                        // the same
         try

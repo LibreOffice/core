@@ -200,7 +200,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     unsigned const nRadix = 36;
     unsigned long const nMax = (nRadix*nRadix*nRadix*nRadix*nRadix*nRadix);
     String aName( rName );
-    aName += String::CreateFromAscii( "lu" );
+    aName += rtl::OUString( "lu" );
 
     rName.Erase();
     static unsigned long u = Time::GetSystemTicks() % nMax;
@@ -209,7 +209,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
         u %= nMax;
         String aTmp( aName );
         aTmp += rtl::OUString::valueOf(static_cast<sal_Int64>(u), nRadix);
-        aTmp += String::CreateFromAscii( ".tmp" );
+        aTmp += rtl::OUString( ".tmp" );
 
         if ( bDir )
         {
@@ -285,7 +285,7 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
         if ( pExtension )
             aTmp += *pExtension;
         else
-            aTmp += String::CreateFromAscii( ".tmp" );
+            aTmp += rtl::OUString( ".tmp" );
         if ( bDirectory )
         {
             FileBase::RC err = Directory::create( aTmp );

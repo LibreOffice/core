@@ -136,8 +136,8 @@ void ScCompiler::fillFromAddInMap( NonConstOpCodeMapPtr xMap,FormulaGrammar::Gra
         char const * const * ppSymbol =
             reinterpret_cast< char const * const * >(
                     reinterpret_cast< char const * >(pMap) + nSymbolOffset);
-        xMap->putExternal( String::CreateFromAscii( *ppSymbol),
-                String::CreateFromAscii( pMap->pOriginal));
+        xMap->putExternal( rtl::OUString::createFromAscii( *ppSymbol),
+                rtl::OUString::createFromAscii( pMap->pOriginal));
     }
 }
 
@@ -713,7 +713,7 @@ struct Convention_A1 : public ScCompiler::Convention
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names because of Xcl :-/
-        static const String aAddAllowed(String::CreateFromAscii("?#"));
+        static const String aAddAllowed(rtl::OUString("?#"));
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }
@@ -902,7 +902,7 @@ struct ConventionOOO_A1 : public Convention_A1
                 else
                     aFile = INetURLObject::decode(*p, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
             }
-            aFile.SearchAndReplaceAllAscii("'", String::CreateFromAscii("''"));
+            aFile.SearchAndReplaceAllAscii("'", rtl::OUString("''"));
 
             rBuffer.append(sal_Unicode('\''));
             rBuffer.append(aFile);
@@ -1372,7 +1372,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names
-        static const String aAddAllowed = String::CreateFromAscii("?!");
+        const rtl::OUString aAddAllowed("?!");
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }
@@ -1577,7 +1577,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
             KParseTokens::ASC_UNDERSCORE ;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names
-        static const String aAddAllowed = String::CreateFromAscii( "?-[]!" );
+        const rtl::OUString aAddAllowed("?-[]!");
 
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
@@ -1750,8 +1750,8 @@ void ScCompiler::CheckTabQuotes( String& rString,
         case FormulaGrammar::CONV_XL_OOX :
             if( bNeedsQuote )
             {
-                static const String one_quote = static_cast<sal_Unicode>( '\'' );
-                static const String two_quote = String::CreateFromAscii( "''" );
+                const rtl::OUString one_quote(static_cast<sal_Unicode>('\''));
+                const rtl::OUString two_quote("''");
                 // escape embedded quotes
                 rString.SearchAndReplaceAll( one_quote, two_quote );
             }

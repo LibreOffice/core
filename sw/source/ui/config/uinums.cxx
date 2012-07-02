@@ -170,7 +170,7 @@ int SwBaseNumRules::Load(SvStream &rStream)
 }
 
 SwChapterNumRules::SwChapterNumRules() :
-    SwBaseNumRules(C2S(CHAPTER_FILENAME))
+    SwBaseNumRules(rtl::OUString(CHAPTER_FILENAME))
 {
 }
 

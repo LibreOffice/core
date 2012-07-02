@@ -156,7 +156,7 @@ ODesignView::~ODesignView()
     }
     if ( m_pAddField )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( UID_RPT_RPT_APP_VIEW ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, rtl::OUString( UID_RPT_RPT_APP_VIEW ) );
         aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -555,7 +555,7 @@ void ODesignView::toggleAddField()
         uno::Reference < beans::XPropertySet > xSet(rReportController.getRowSet(),uno::UNO_QUERY);
         m_pAddField = new OAddFieldWindow(this,xSet);
         m_pAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
-        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( UID_RPT_RPT_APP_VIEW ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, rtl::OUString( UID_RPT_RPT_APP_VIEW ) );
         if ( aDlgOpt.Exists() )
             m_pAddField->SetWindowState(::rtl::OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pAddField->Update();

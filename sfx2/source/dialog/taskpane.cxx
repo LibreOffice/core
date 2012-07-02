@@ -1245,9 +1245,9 @@ namespace sfx2
         pMenu->InsertSeparator();
 
     #if OSL_DEBUG_LEVEL > 0
-        pMenu->InsertItem( MID_LAYOUT_TABS, String::CreateFromAscii( "Tab-Layout (exp.)" ), MIB_CHECKABLE );
+        pMenu->InsertItem( MID_LAYOUT_TABS, rtl::OUString("Tab-Layout (exp.)"), MIB_CHECKABLE );
         pMenu->CheckItem( MID_LAYOUT_TABS, impl_getLayout() != LAYOUT_DRAWERS );
-        pMenu->InsertItem( MID_LAYOUT_DRAWERS, String::CreateFromAscii( "Drawer-Layout" ), MIB_CHECKABLE );
+        pMenu->InsertItem( MID_LAYOUT_DRAWERS, rtl::OUString("Drawer-Layout"), MIB_CHECKABLE );
         pMenu->CheckItem( MID_LAYOUT_DRAWERS, impl_getLayout() == LAYOUT_DRAWERS );
 
         pMenu->InsertSeparator();

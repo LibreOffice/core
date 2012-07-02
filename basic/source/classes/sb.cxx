@@ -1915,10 +1915,10 @@ BasicCollection::BasicCollection( const XubString& rClass )
 {
     if( !nCountHash )
     {
-        nCountHash  = MakeHashCode( String::CreateFromAscii( pCountStr ) );
-        nAddHash    = MakeHashCode( String::CreateFromAscii( pAddStr ) );
-        nItemHash   = MakeHashCode( String::CreateFromAscii( pItemStr ) );
-        nRemoveHash = MakeHashCode( String::CreateFromAscii( pRemoveStr ) );
+        nCountHash  = MakeHashCode( rtl::OUString::createFromAscii( pCountStr ) );
+        nAddHash    = MakeHashCode( rtl::OUString::createFromAscii( pAddStr ) );
+        nItemHash   = MakeHashCode( rtl::OUString::createFromAscii( pItemStr ) );
+        nRemoveHash = MakeHashCode( rtl::OUString::createFromAscii( pRemoveStr ) );
     }
     Initialize();
 
@@ -1940,14 +1940,14 @@ void BasicCollection::Initialize()
     SetFlag( SBX_FIXED );
     ResetFlag( SBX_WRITE );
     SbxVariable* p;
-    p = Make( String::CreateFromAscii( pCountStr ), SbxCLASS_PROPERTY, SbxINTEGER );
+    p = Make( rtl::OUString::createFromAscii( pCountStr ), SbxCLASS_PROPERTY, SbxINTEGER );
     p->ResetFlag( SBX_WRITE );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pAddStr ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( rtl::OUString::createFromAscii( pAddStr ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pItemStr ), SbxCLASS_METHOD, SbxVARIANT );
+    p = Make( rtl::OUString::createFromAscii( pItemStr ), SbxCLASS_METHOD, SbxVARIANT );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pRemoveStr ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( rtl::OUString::createFromAscii( pRemoveStr ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     if ( !xAddInfo.Is() )
     {

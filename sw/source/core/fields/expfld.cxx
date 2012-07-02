@@ -506,7 +506,7 @@ SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, sal_uInt1
     : SwValueFieldType( pDc, RES_SETEXPFLD ),
     sName( rName ),
     pOutlChgNd( 0 ),
-    sDelim( String::CreateFromAscii( "." ) ),
+    sDelim( rtl::OUString(".") ),
     nType(nTyp), nLevel( UCHAR_MAX ),
     bDeleted( sal_False )
 {
@@ -684,10 +684,9 @@ bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             String sTmp;
             if( ::GetString( rAny, sTmp ).Len() )
-//              SetDelimiter( sTmp.GetChar( 0 ));
                 SetDelimiter( sTmp );
             else
-                SetDelimiter(String::CreateFromAscii( " "));
+                SetDelimiter(rtl::OUString(" "));
         }
         break;
     case FIELD_PROP_SHORT1:

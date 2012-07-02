@@ -535,7 +535,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         String aRange( rRange );
         if( aRange.SearchAscii("$") == 0 )
             aRange = aRange.Copy(1);
-        aRange.SearchAndReplaceAllAscii(".$", String::CreateFromAscii("!$") );
+        aRange.SearchAndReplaceAllAscii(".$", rtl::OUString("!$") );
         aResult = aRange;
     }
 

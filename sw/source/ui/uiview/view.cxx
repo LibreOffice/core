@@ -778,7 +778,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     _CreateScrollbar( sal_False );
 
     pViewImpl = new SwView_Impl(this);
-    SetName(C2S("View"));
+    SetName(rtl::OUString("View"));
     SetWindow( pEditWin );
 
     aTimer.SetTimeout( 120 );

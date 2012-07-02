@@ -504,7 +504,7 @@ sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
         const sal_Char *pStr = SwHTMLWriter::GetNumFormat( eFmt );
         if( pStr )
         {
-            pParts[0] = String::CreateFromAscii( pStr );
+            pParts[0] = rtl::OUString::createFromAscii( pStr );
             nParts = 1;
         }
     }
@@ -537,12 +537,12 @@ void lcl_html_outFootEndNoteInfo( Writer& rWrt, String *pParts,
     {
         xub_StrLen nPos = 0;
         String aTmp( pParts[i] );
-        String aRep( String::CreateFromAscii("\\\\") );
+        rtl::OUString aRep("\\\\");
         while( STRING_NOTFOUND != (nPos = aTmp.SearchAndReplaceAscii( "\\",
                                                      aRep, nPos ) ) )
             nPos += 2;
         nPos = 0;
-        aRep.AssignAscii( "\\;" );
+        aRep = rtl::OUString("\\;");
         while( STRING_NOTFOUND != (nPos = aTmp.SearchAndReplaceAscii( ";",
                                                      aRep, nPos ) ) )
             nPos += 2;

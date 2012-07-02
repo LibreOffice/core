@@ -308,11 +308,11 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            String aContentType = String::CreateFromAscii( "text/html; charset=" );
+            String aContentType = rtl::OUString( "text/html; charset=" );
             aContentType.AppendAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
-            xValues->Append( SvKeyValue( String::CreateFromAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
+            xValues->Append( SvKeyValue( rtl::OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
             pAttributes = xValues;
         }
     }
@@ -2956,11 +2956,11 @@ sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            String aContentType = String::CreateFromAscii( "text/html; charset=" );
+            String aContentType = rtl::OUString( "text/html; charset=" );
             aContentType.AppendAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
-            xValues->Append( SvKeyValue( String::CreateFromAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
+            xValues->Append( SvKeyValue( rtl::OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
             pAttributes = xValues;
         }
     }

@@ -173,13 +173,13 @@ SwFilterDetect::~SwFilterDetect()
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aPrefix = String::CreateFromAscii( "private:factory/" );
+    String aPrefix = rtl::OUString("private:factory/");
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
         if( SvtModuleOptions().IsWriter() )
         {
             String aPattern( aPrefix );
-            aPattern += String::CreateFromAscii("swriter");
+            aPattern += rtl::OUString("swriter");
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
                 return aTypeName;
         }
@@ -235,9 +235,9 @@ SwFilterDetect::~SwFilterDetect()
                     {
                         const SfxFilter* pPreFilter = aPreselectedFilterName.Len() ?
                                 SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
-                                SfxFilterMatcher(String::CreateFromAscii("swriter")).GetFilter4EA( aTypeName ) : 0;
+                                SfxFilterMatcher(rtl::OUString("swriter")).GetFilter4EA( aTypeName ) : 0;
                         if (!pPreFilter)
-                            pPreFilter = SfxFilterMatcher(String::CreateFromAscii("sweb")).GetFilter4EA( aTypeName );
+                            pPreFilter = SfxFilterMatcher(rtl::OUString("sweb")).GetFilter4EA( aTypeName );
                         String aFilterName;
                         if ( pPreFilter )
                         {
@@ -318,9 +318,9 @@ SwFilterDetect::~SwFilterDetect()
                     else
                         pFilter = SfxFilterMatcher().GetFilter4EA( aTypeName );
 
-                    sal_Bool bTestWriter = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.TextDocument") ||
-                        pFilter->GetServiceName().EqualsAscii("com.sun.star.text.WebDocument");
-                    sal_Bool bTestGlobal = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.GlobalDocument");
+                    sal_Bool bTestWriter = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.TextDocument" ||
+                        pFilter->GetServiceName() == "com.sun.star.text.WebDocument";
+                    sal_Bool bTestGlobal = !pFilter || pFilter->GetServiceName() == "com.sun.star.text.GlobalDocument";
 
                     const SfxFilter* pOrigFilter = NULL;
                     if ( !bTestWriter && !bTestGlobal && pFilter )

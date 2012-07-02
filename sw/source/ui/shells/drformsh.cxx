@@ -261,7 +261,7 @@ SwDrawFormShell::SwDrawFormShell(SwView &_rView) :
 {
     SetHelpId(SW_DRAWFORMSHELL);
     GetShell().NoEdit(sal_True);
-    SetName(String::CreateFromAscii("DrawForm"));
+    SetName(rtl::OUString("DrawForm"));
 }
 
 SwDrawFormShell::~SwDrawFormShell()

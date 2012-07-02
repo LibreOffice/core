@@ -279,8 +279,8 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
         if( pMedium->IsStorage() || ( pMedium->GetInStream() && SotStorage::IsStorageFile( pMedium->GetInStream() ) ) )
         {
-            if ( pFilter->GetServiceName().EqualsAscii( "com.sun.star.presentation.PresentationDocument" ) ||
-                 pFilter->GetServiceName().EqualsAscii( "com.sun.star.drawing.DrawingDocument" ) )
+            if ( pFilter->GetServiceName() == "com.sun.star.presentation.PresentationDocument" ||
+                 pFilter->GetServiceName() == "com.sun.star.drawing.DrawingDocument" )
             {
                 // Draw, Impress or PowerPoint document
                 // the ownership of the Medium is transferred

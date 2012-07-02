@@ -82,7 +82,7 @@ String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
             "index out opd range" );
 
     if (FNT_MATH == nIdent)
-        return String::CreateFromAscii( FNTNAME_MATH );
+        return rtl::OUString(FNTNAME_MATH);
     else
     {
         const sal_uInt16 *pTable;

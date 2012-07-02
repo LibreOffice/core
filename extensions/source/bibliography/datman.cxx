@@ -96,7 +96,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::ucb;
 
 #define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
-#define C2S(cChar) String::CreateFromAscii(cChar)
 
 Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
 {
@@ -198,7 +197,7 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
             catch (const Exception& e)
             {
 #ifdef DBG_UTIL
-                String sMsg(String::CreateFromAscii("::getColumns : catched an exception ("));
+                String sMsg(rtl::OUString("::getColumns : catched an exception ("));
                 sMsg += String(e.Message);
                 sMsg.AppendAscii(") ...");
                 OSL_FAIL(rtl::OUStringToOString(sMsg, RTL_TEXTENCODING_ASCII_US ).getStr());
@@ -420,7 +419,7 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
 
     aOKBT.SetClickHdl(LINK(this, MappingDialog_Impl, OkHdl));
     String sTitle = GetText();
-    sTitle.SearchAndReplace(C2S("%1"), pDatMan->getActiveDataTable(), 0);
+    sTitle.SearchAndReplace(rtl::OUString("%1"), pDatMan->getActiveDataTable(), 0);
     SetText(sTitle);
 
     aListBoxes[0] = &aIdentifierLB;
@@ -1520,7 +1519,7 @@ void BibDataManager::SetMeAsUidListener()
         Sequence< ::rtl::OUString > aFields(xFields->getElementNames());
         const ::rtl::OUString* pFields = aFields.getConstArray();
         sal_Int32 nCount=aFields.getLength();
-        String StrUID(C2S(STR_UID));
+        rtl::OUString StrUID(STR_UID);
         ::rtl::OUString theFieldName;
         for( sal_Int32 i=0; i<nCount; i++ )
         {
@@ -1564,7 +1563,7 @@ void BibDataManager::RemoveMeAsUidListener()
         Sequence< ::rtl::OUString > aFields(xFields->getElementNames());
         const ::rtl::OUString* pFields = aFields.getConstArray();
         sal_Int32 nCount=aFields.getLength();
-        String StrUID(C2S(STR_UID));
+        rtl::OUString StrUID(STR_UID);
         ::rtl::OUString theFieldName;
         for( sal_Int32 i=0; i<nCount; i++ )
         {

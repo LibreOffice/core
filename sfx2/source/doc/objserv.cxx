@@ -312,7 +312,7 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
             SFX_ITEMSET_ARG( aParams, pContentTypeItem, SfxStringItem, SID_CONTENTTYPE, sal_False );
             if ( pContentTypeItem )
             {
-                const SfxFilter* pFilter = SfxFilterMatcher( String::CreateFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SFX_FILTER_EXPORT );
+                const SfxFilter* pFilter = SfxFilterMatcher( rtl::OUString::createFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SFX_FILTER_EXPORT );
                 if ( pFilter )
                     aFilterName = pFilter->GetName();
             }
@@ -430,7 +430,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 else
                 {
                     aURL = DEFINE_CONST_UNICODE( "private:factory/" );
-                    aURL += String::CreateFromAscii( GetFactory().GetShortName() );
+                    aURL += rtl::OUString::createFromAscii( GetFactory().GetShortName() );
 
                     aTitle = GetTitle();
                 }

@@ -460,7 +460,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
         aLbLevel.InsertEntry(String::CreateFromInt32(i + 1));
 
     sal_Unicode nLvl = MAXLEVEL;
-    String  sDelim( String::CreateFromAscii( ": " ) );
+    rtl::OUString sDelim(": ");
 
     if (pSh)
     {

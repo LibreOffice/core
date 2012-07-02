@@ -242,7 +242,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
                     sValue = pFmt->GetFormatstring();
             else if( nFormatType == NUMBERFORMAT_TEXT )
             {
-                String sTxt(C2S("\"ABC\""));
+                String sTxt(rtl::OUString("\"ABC\""));
                 pFormatter->GetOutputString( sTxt, nFormat, sValue, &pCol);
             }
 
@@ -317,7 +317,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 
     if (nType == NUMBERFORMAT_TEXT)
     {
-        String sTxt(C2S("\"ABC\""));
+        String sTxt(rtl::OUString("\"ABC\""));
         pFormatter->GetOutputString(sTxt, nDefFmt, sValue, &pCol);
     }
     else

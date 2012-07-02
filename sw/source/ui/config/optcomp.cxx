@@ -185,21 +185,18 @@ SwCompatibilityOptPage::~SwCompatibilityOptPage()
 
 void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
 {
-    static const String sOpenOfficeName = String::CreateFromAscii("OpenOffice.org");
-    static const String sAsianName = String::CreateFromAscii("StarSuite");
-
-    String sFormatName( utl::ConfigManager::getProductName() );
-    String sFormatVersion;
-    bool bOpenOffice = ( sOpenOfficeName == sFormatName );
+    rtl::OUString sFormatName(utl::ConfigManager::getProductName());
+    rtl::OUString sFormatVersion;
+    bool bOpenOffice = ( sFormatName == "OpenOffice.org" );
     if ( bOpenOffice )
-        sFormatVersion = String::CreateFromAscii("1.1");
+        sFormatVersion = rtl::OUString("1.1");
     else
-        sFormatVersion = String::CreateFromAscii("6.0/7");
-    if ( !bOpenOffice && ( sAsianName != sFormatName ) )
-        sFormatName = String::CreateFromAscii("StarOffice");
+        sFormatVersion = rtl::OUString("6.0/7");
+    if ( !bOpenOffice && ( sFormatName != "StarSuite" ) )
+        sFormatName = rtl::OUString("StarOffice");
 
-    rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATNAME"), sFormatName );
-    rEntry.SearchAndReplace( String::CreateFromAscii("%FORMATVERSION"), sFormatVersion );
+    rEntry.SearchAndReplace( rtl::OUString("%FORMATNAME"), sFormatName );
+    rEntry.SearchAndReplace( rtl::OUString("%FORMATVERSION"), sFormatVersion );
 }
 
 sal_uLong convertBools2Ulong_Impl
@@ -281,7 +278,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         m_aDefaultPB.Disable();
     }
     String sText = m_aMainFL.GetText();
-    sText.SearchAndReplace( String::CreateFromAscii("%DOCNAME"), sDocTitle );
+    sText.SearchAndReplace( rtl::OUString("%DOCNAME"), sDocTitle );
     m_aMainFL.SetText( sText );
 
     // loading file formats

@@ -244,7 +244,7 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     else
     {
         // fallback
-        String aProgURL = SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(PROGURL)") );
+        String aProgURL = SvtPathOptions().SubstituteVariable( rtl::OUString("$(PROGURL)") );
         INetURLObject aObj( aProgURL );
         DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
         aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );

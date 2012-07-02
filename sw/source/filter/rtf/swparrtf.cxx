@@ -1180,17 +1180,17 @@ void SwRTFParser::ReadShpTxt(String& s)
                 break;
             case '{':
                 level++;
-                s.Append(String::CreateFromAscii("{"));
+                s.Append(rtl::OUString("{"));
                 break;
             case '}':
                 level--;
-                s.Append(String::CreateFromAscii("}"));
+                s.Append(rtl::OUString("}"));
                 break;
             default:
                 s.Append(aToken);
                 if (bTokenHasValue)
                     s.Append(rtl::OUString::valueOf(static_cast<sal_Int64>(nTokenValue)));
-                s.Append(String::CreateFromAscii(" "));
+                s.Append(rtl::OUString(" "));
                 break;
         }
     }
@@ -1488,7 +1488,7 @@ void SwRTFParser::ReadShapeObject()
                 RTL_TEXTENCODING_ASCII_US));
               SvMemoryStream aStream(const_cast<sal_Char*>(bs.getStr()),
                 bs.getLength(), STREAM_READ);
-              rOutliner.Read(aStream, String::CreateFromAscii(""), EE_FORMAT_RTF);
+              rOutliner.Read(aStream, rtl::OUString(), EE_FORMAT_RTF);
               OutlinerParaObject* pParaObject=rOutliner.CreateParaObject();
               pStroke->NbcSetOutlinerParaObject(pParaObject);
               rOutliner.Clear();

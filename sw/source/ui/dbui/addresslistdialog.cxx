@@ -421,7 +421,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 
             uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
             uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
-            String sExt = String::CreateFromAscii(".odb");
+            String sExt = rtl::OUString(".odb");
             String sTmpName;
             {
                 String sHomePath(SvtPathOptions().GetWorkPath());

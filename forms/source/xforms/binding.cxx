@@ -1028,7 +1028,7 @@ void Binding::_checkBindingID()
         {
             // no binding ID? then make one up!
             OUString sIDPrefix = getResource( RID_STR_XFORMS_BINDING_UI_NAME );
-            sIDPrefix += String::CreateFromAscii( " " );
+            sIDPrefix += rtl::OUString(" ");
             sal_Int32 nNumber = 0;
             OUString sName;
             do

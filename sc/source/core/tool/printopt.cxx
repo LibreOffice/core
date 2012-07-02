@@ -103,7 +103,7 @@ ScTpPrintItem::~ScTpPrintItem()
 
 String ScTpPrintItem::GetValueText() const
 {
-    return String::CreateFromAscii( "ScTpPrintItem" );
+    return rtl::OUString("ScTpPrintItem");
 }
 
 int ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const

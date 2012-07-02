@@ -2225,7 +2225,7 @@ namespace svxform
         if ( sInstName.isEmpty() )
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
-            String sTemp = String::CreateFromAscii( "untitled" );
+            String sTemp = rtl::OUString("untitled");
             sTemp += String::CreateFromInt32( nPageId );
             sInstName = sTemp;
         }

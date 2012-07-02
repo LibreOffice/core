@@ -217,8 +217,8 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
     }
     else if ( maBookmarkFile != aBookmarkName && aBookmarkName.Len() )
     {
-        sal_Bool bCreateGraphicShell = pFilter->GetServiceName().EqualsAscii( "com.sun.star.drawing.DrawingDocument" );
-        sal_Bool bCreateImpressShell = pFilter->GetServiceName().EqualsAscii( "com.sun.star.presentation.PresentationDocument" );
+        sal_Bool bCreateGraphicShell = pFilter->GetServiceName() == "com.sun.star.drawing.DrawingDocument";
+        sal_Bool bCreateImpressShell = pFilter->GetServiceName() == "com.sun.star.presentation.PresentationDocument";
         if ( bCreateGraphicShell || bCreateImpressShell )
         {
             CloseBookmarkDoc();

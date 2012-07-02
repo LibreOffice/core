@@ -156,7 +156,7 @@ XubString Button::GetStandardText( StandardButtonType eButton )
         // ok / cancel so add this only for Unix
 #ifdef UNX
         if( nResId == SV_BUTTONTEXT_OK || nResId == SV_BUTTONTEXT_CANCEL )
-            aText.Insert( String::CreateFromAscii("~"), 0 );
+            aText.Insert( rtl::OUString("~"), 0 );
 #endif
     }
     else

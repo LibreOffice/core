@@ -117,7 +117,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     if (strcmp( pDicType, "DICT" ) == 0)
     {
         aFormatName     = A2OU("DICT_SPELL");
-        aDicExtension   = String::CreateFromAscii( ".dic" );
+        aDicExtension   = rtl::OUString( ".dic" );
 #ifdef SYSTEM_DICTS
         aSystemDir      = A2OU( DICT_SYSTEM_DIR );
         aSystemSuffix       = aDicExtension;
@@ -126,7 +126,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     else if (strcmp( pDicType, "HYPH" ) == 0)
     {
         aFormatName     = A2OU("DICT_HYPH");
-        aDicExtension   = String::CreateFromAscii( ".dic" );
+        aDicExtension   = rtl::OUString( ".dic" );
 #ifdef SYSTEM_DICTS
         aSystemDir      = A2OU( HYPH_SYSTEM_DIR );
         aSystemPrefix       = A2OU( "hyph_" );
@@ -136,7 +136,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     else if (strcmp( pDicType, "THES" ) == 0)
     {
         aFormatName     = A2OU("DICT_THES");
-        aDicExtension   = String::CreateFromAscii( ".dat" );
+        aDicExtension   = rtl::OUString( ".dat" );
 #ifdef SYSTEM_DICTS
         aSystemDir      = A2OU( THES_SYSTEM_DIR );
         aSystemPrefix       = A2OU( "th_" );

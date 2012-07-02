@@ -60,7 +60,7 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
 
 NoSpaceEdit::NoSpaceEdit( Window* pParent, const ResId& rResId)
     : Edit(pParent, rResId),
-    sForbiddenChars(String::CreateFromAscii(" "))
+    sForbiddenChars(rtl::OUString(" "))
 {
 }
 

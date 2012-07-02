@@ -1265,7 +1265,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     const SfxFilter* pSfxFlt = 0;
     if( !pMed->GetError() )
     {
-        String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
+        String sFactory(rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
         SfxFilterMatcher aMatcher( sFactory );
 
         // kein Filter, dann suche ihn. Ansonsten teste, ob der angegebene
@@ -1538,15 +1538,6 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
         SvMemoryStream aStrm( (void*)aSeq.getConstArray(), aSeq.getLength(),
                                 STREAM_READ );
         aStrm.Seek( 0 );
-
-#if OSL_DEBUG_LEVEL > 1
-        {
-            SvFileStream aDeb( String::CreateFromAscii(
-                    "file:///d|/temp/update.txt" ), STREAM_WRITE );
-            aDeb << aStrm;
-        }
-        aStrm.Seek( 0 );
-#endif
 
         // TODO/MBA: it's impossible to set a BaseURL here!
         SwReader aTmpReader( aStrm, aEmptyStr, pDoc->GetDocShell()->GetMedium()->GetBaseURL(), *pPam );

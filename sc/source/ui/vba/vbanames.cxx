@@ -184,9 +184,9 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         ScAddress aPos( static_cast< SCCOL >( aAddr.StartColumn ) , static_cast< SCROW >( aAddr.StartRow ) , static_cast< SCTAB >(aAddr.Sheet ) );
         uno::Any xAny2 ;
         String sRangeAdd = xRange->Address( xAny2, xAny2 , xAny2 , xAny2, xAny2 );
-        aContent += String::CreateFromAscii("$");
+        aContent += rtl::OUString("$");
         aContent += UniString(xRange->getWorksheet()->getName());
-        aContent += String::CreateFromAscii(".");
+        aContent += rtl::OUString(".");
         aContent += sRangeAdd;
         aPosition = table::CellAddress( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
     }

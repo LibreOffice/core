@@ -1141,7 +1141,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
             if(pTempFileName)
                 rEmbGrfNm = *pTempFileName;
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, rEmbGrfNm,
-                    String::CreateFromAscii( "JPG" ),
+                    rtl::OUString("JPG"),
                     XOUTBMP_USE_NATIVE_IF_POSSIBLE );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {

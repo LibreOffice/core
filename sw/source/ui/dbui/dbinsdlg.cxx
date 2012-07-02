@@ -294,7 +294,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             Any aCol = xCols->getByName(pColNames[n]);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
-            Any aType = xCol->getPropertyValue(C2S("Type"));
+            Any aType = xCol->getPropertyValue(rtl::OUString("Type"));
             sal_Int32 eDataType = 0;
             aType >>= eDataType;
             switch(eDataType)
@@ -832,7 +832,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
 
             if( bEnableFmt )
             {
-                (( sTxt += C2S(" (" )) += String(aSrch.sColumn) ) += (sal_Unicode)')';
+                (( sTxt += rtl::OUString(" (" )) += String(aSrch.sColumn) ) += (sal_Unicode)')';
             }
 
             sal_Bool bIsDBFmt = aDBColumns[ nFndPos ]->bIsDBFmt;
@@ -1260,7 +1260,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             aDBFormatData.aLocale = SvxCreateLocale( rSh.GetCurLang() );
             SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
                                         GetFldType( 0, RES_DBNEXTSETFLD ),
-                                        C2S("1"), aEmptyStr, aDBData );
+                                        rtl::OUString("1"), aEmptyStr, aDBData );
 
 
             sal_Bool bSetCrsr = sal_True;
@@ -1639,7 +1639,7 @@ void SwInsertDBColAutoPilot::Commit()
     SetSetProperties(rtl::OUString(), aValues);
 
     sNewNode += C2U("/ColumnSet");
-    String sDelim( String::CreateFromAscii( "/__" ));
+    rtl::OUString sDelim("/__");
 
     LanguageType ePrevLang = (LanguageType)-1;
     rtl::OUString sPrevLang;

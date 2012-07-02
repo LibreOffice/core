@@ -435,8 +435,8 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String
         DBG_ASSERT( !xDoc.Is(), "Sorry, not implemented!" );
         delete pSet;
         SfxStringItem aName( SID_FILE_NAME, rFileName );
-        SfxStringItem aReferer( SID_REFERER, String::CreateFromAscii("private:user") );
-        SfxStringItem aFlags( SID_OPTIONS, String::CreateFromAscii("T") );
+        SfxStringItem aReferer( SID_REFERER, rtl::OUString("private:user") );
+        SfxStringItem aFlags( SID_OPTIONS, rtl::OUString("T") );
         SfxBoolItem aHidden( SID_HIDDEN, sal_True );
         const SfxPoolItem *pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
         const SfxObjectItem *pObj = PTR_CAST( SfxObjectItem, pRet );
@@ -537,11 +537,11 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 
 
     SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
-    String aFact = String::CreateFromAscii("private:factory/");
+    String aFact = rtl::OUString("private:factory/");
     aFact += aFactName;
     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
     aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
-    aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_default" ) ) );
+    aReq.AppendItem( SfxStringItem( SID_TARGETNAME, rtl::OUString( "_default" ) ) );
 
     // TODO/LATER: Should the other arguments be transfered as well?
     SFX_REQUEST_ARG( rReq, pDefaultPathItem, SfxStringItem, SID_DEFAULTFILEPATH, sal_False);
@@ -769,8 +769,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         rReq.SetArgs( *(SfxAllItemSet*)pSet );
         if (aFilter.Len() >0 )
             rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
-        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
-        rReq.AppendItem( SfxStringItem( SID_REFERER, String::CreateFromAscii(SFX_REFERER_USER) ) );
+        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, rtl::OUString("_default") ) );
+        rReq.AppendItem( SfxStringItem( SID_REFERER, rtl::OUString(SFX_REFERER_USER) ) );
         delete pSet;
 
         if(!pURLList.empty())
@@ -965,7 +965,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 {
                     // don't dispatch mailto hyperlink to desktop dispatcher
                     rReq.RemoveItem( SID_TARGETNAME );
-                    rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_self") ) );
+                    rReq.AppendItem( SfxStringItem( SID_TARGETNAME, rtl::OUString("_self") ) );
                 }
                 else if ( aINetProtocol == INET_PROT_FTP ||
                      aINetProtocol == INET_PROT_HTTP ||
@@ -1043,7 +1043,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                             catch ( ::com::sun::star::system::SystemShellExecuteException& )
                             {
                                 rReq.RemoveItem( SID_TARGETNAME );
-                                rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
+                                rReq.AppendItem( SfxStringItem( SID_TARGETNAME, rtl::OUString("_default") ) );
                                 bLoadInternal = sal_True;
                             }
                         }
@@ -1062,7 +1062,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             {
                 // hyperlink document must be loaded into a new frame
                 rReq.RemoveItem( SID_TARGETNAME );
-                rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
+                rReq.AppendItem( SfxStringItem( SID_TARGETNAME, rtl::OUString("_default") ) );
             }
         }
     }
@@ -1137,12 +1137,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         SFX_REQUEST_ARG( rReq, pNewViewItem, SfxBoolItem, SID_OPEN_NEW_VIEW, sal_False );
         if ( pNewViewItem && pNewViewItem->GetValue() )
-            aTarget = String::CreateFromAscii("_blank" );
+            aTarget = rtl::OUString("_blank" );
     }
 
     if ( bHidden )
     {
-        aTarget = String::CreateFromAscii("_blank");
+        aTarget = rtl::OUString("_blank");
         DBG_ASSERT( rReq.IsSynchronCall() || pLinkItem, "Hidden load process must be done synchronously!" );
     }
 

@@ -330,8 +330,8 @@ void DicList::SearchForDictionaries(
     const rtl::OUString *pDirCnt = aDirCnt.getConstArray();
     sal_Int32 nEntries = aDirCnt.getLength();
 
-    String aDCN( String::CreateFromAscii( "dcn" ) );
-    String aDCP( String::CreateFromAscii( "dcp" ) );
+    rtl::OUString aDCN("dcn");
+    rtl::OUString aDCP("dcp");
     for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
         String  aURL( pDirCnt[i] );
@@ -345,9 +345,9 @@ void DicList::SearchForDictionaries(
             String aExt(aURL.Copy(nPos + 1));
             aExt.ToLowerAscii();
 
-            if(aExt == aDCN)       // negativ
+            if (aDCN.equals(aExt))       // negativ
                 bNeg = sal_True;
-            else if(aExt == aDCP)  // positiv
+            else if (aDCP.equals(aExt))  // positiv
                 bNeg = sal_False;
             else
                 continue;          // andere Files
@@ -889,14 +889,14 @@ static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bo
 {
     if (rFileURL.Len() == 0)
         return sal_False;
-    String aDIC( GetDicExtension() );
+    rtl::OUString aDIC("dic");
     String aExt;
     xub_StrLen nPos = rFileURL.SearchBackward( '.' );
     if (STRING_NOTFOUND != nPos)
         aExt = rFileURL.Copy( nPos + 1 );
     aExt.ToLowerAscii();
 
-    if(aExt != aDIC)
+    if (!aDIC.equals(aExt))
         return sal_False;
 
     // get stream to be used

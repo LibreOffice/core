@@ -346,10 +346,8 @@ void SvxHyperlinkInternetTp::RemoveImproperProtocol(const String& aProperScheme)
 String SvxHyperlinkInternetTp::GetSchemeFromButtons() const
 {
     if( maRbtLinktypFTP.IsChecked() )
-    {
-        return String::CreateFromAscii( INET_FTP_SCHEME );
-    }
-    return String::CreateFromAscii( INET_HTTP_SCHEME );
+        return rtl::OUString(INET_FTP_SCHEME);
+    return rtl::OUString(INET_HTTP_SCHEME);
 }
 
 INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const

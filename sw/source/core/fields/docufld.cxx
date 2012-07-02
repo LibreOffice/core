@@ -1128,12 +1128,12 @@ String SwDocInfoField::Expand() const
                     {
                         String sText(aDuration.Negative ? '-' : '+');
                         sText += ViewShell::GetShellRes()->sDurationFormat;
-                        sText.SearchAndReplace(String::CreateFromAscii( "%1"), String::CreateFromInt32( aDuration.Years ) );
-                        sText.SearchAndReplace(String::CreateFromAscii( "%2"), String::CreateFromInt32( aDuration.Months ) );
-                        sText.SearchAndReplace(String::CreateFromAscii( "%3"), String::CreateFromInt32( aDuration.Days   ) );
-                        sText.SearchAndReplace(String::CreateFromAscii( "%4"), String::CreateFromInt32( aDuration.Hours  ) );
-                        sText.SearchAndReplace(String::CreateFromAscii( "%5"), String::CreateFromInt32( aDuration.Minutes) );
-                        sText.SearchAndReplace(String::CreateFromAscii( "%6"), String::CreateFromInt32( aDuration.Seconds) );
+                        sText.SearchAndReplace(rtl::OUString("%1"), String::CreateFromInt32( aDuration.Years ) );
+                        sText.SearchAndReplace(rtl::OUString("%2"), String::CreateFromInt32( aDuration.Months ) );
+                        sText.SearchAndReplace(rtl::OUString("%3"), String::CreateFromInt32( aDuration.Days   ) );
+                        sText.SearchAndReplace(rtl::OUString("%4"), String::CreateFromInt32( aDuration.Hours  ) );
+                        sText.SearchAndReplace(rtl::OUString("%5"), String::CreateFromInt32( aDuration.Minutes) );
+                        sText.SearchAndReplace(rtl::OUString("%6"), String::CreateFromInt32( aDuration.Seconds) );
                         sVal = sText;
                     }
                     else

@@ -1283,7 +1283,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             sal_uInt16 nSubCount = pType->nAttribs;
             if ( !nSubCount )
             {
-                pValue[nActProp].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
+                pValue[nActProp].Name = rtl::OUString::createFromAscii(pSlot->pUnoName) ;
                 if ( !pItem->QueryValue( pValue[nActProp].Value ) )
                 {
                     rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
@@ -1302,9 +1302,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         nSubId |= CONVERT_TWIPS;
 
                     DBG_ASSERT(( pType->aAttrib[n-1].nAID ) <= 127, "Member ID out of range" );
-                    String aName( String::CreateFromAscii( pSlot->pUnoName ) ) ;
+                    String aName( rtl::OUString::createFromAscii( pSlot->pUnoName ) ) ;
                     aName += '.';
-                    aName += String( String::CreateFromAscii( pType->aAttrib[n-1].pName ) ) ;
+                    aName += rtl::OUString::createFromAscii( pType->aAttrib[n-1].pName ) ;
                     pValue[nActProp].Name = aName;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
@@ -1336,7 +1336,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 sal_uInt16 nSubCount = rArg.pType->nAttribs;
                 if ( !nSubCount )
                 {
-                    pValue[nActProp].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
+                    pValue[nActProp].Name = rtl::OUString::createFromAscii( rArg.pName ) ;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value ) )
                     {
                         rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
@@ -1355,9 +1355,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                             nSubId |= CONVERT_TWIPS;
 
                         DBG_ASSERT((rArg.pType->aAttrib[n-1].nAID) <= 127, "Member ID out of range" );
-                        String aName( String::CreateFromAscii( rArg.pName ) ) ;
+                        String aName( rtl::OUString::createFromAscii( rArg.pName ) ) ;
                         aName += '.';
-                        aName += String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
+                        aName += rtl::OUString::createFromAscii( rArg.pType->aAttrib[n-1].pName ) ;
                         pValue[nActProp].Name = aName;
                         if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                         {

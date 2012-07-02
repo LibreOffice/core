@@ -347,7 +347,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
     for ( sal_uInt16 i = 0; i < aHelpFormatLB.GetEntryCount(); i++ )
     {
-        String* pData = new String( String::CreateFromAscii( aHelpFormatNames[i] ) );
+        String* pData = new String( rtl::OUString::createFromAscii( aHelpFormatNames[i] ) );
         aHelpFormatLB.SetEntryData( i, pData );
     }
 }
@@ -1287,7 +1287,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     const String aStr( pLanguageTable->GetString( LANGUAGE_SYSTEM ) );
 
     String aUILang(aStr);
-    aUILang += String::CreateFromAscii(" - ");
+    aUILang += rtl::OUString(" - ");
     aUILang += pLanguageTable->GetString( Application::GetSettings().GetUILanguage(), true );
 
     aUserInterfaceLB.InsertEntry(aUILang);
@@ -1361,7 +1361,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
     // insert SYSTEM entry
     String aDefaultCurr(aStr);
-    aDefaultCurr += String::CreateFromAscii(" - ");
+    aDefaultCurr += rtl::OUString(" - ");
     aDefaultCurr += rCurr.GetBankSymbol();
     aCurrencyLB.InsertEntry( aDefaultCurr );
     // all currencies

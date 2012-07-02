@@ -4331,10 +4331,10 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
         aBasicImporter.import( mpDocShell->GetMedium()->GetInputStream() );
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
-        SvStorageStreamRef refMainStream = rRoot->OpenSotStream( String::CreateFromAscii( "WordDocument" ));
+        SvStorageStreamRef refMainStream = rRoot->OpenSotStream( rtl::OUString( "WordDocument" ));
         refMainStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
         WW8Fib aWwFib( *refMainStream, 8 );
-        SvStorageStreamRef xTableStream = rRoot->OpenSotStream(String::CreateFromAscii( aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
+        SvStorageStreamRef xTableStream = rRoot->OpenSotStream(rtl::OUString::createFromAscii( aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
@@ -4767,7 +4767,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
                 break;
             }
 
-            rTableStream = pStg->OpenSotStream( String::CreateFromAscii(
+            rTableStream = pStg->OpenSotStream( rtl::OUString::createFromAscii(
                 pWwFib->fWhichTblStm ? SL::a1Table : SL::a0Table),
                 STREAM_STD_READ);
 
@@ -5463,7 +5463,7 @@ sal_uLong WW8Reader::OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuff
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE( pStg, "wo ist mein Storage?" );
-    rRef = pStg->OpenSotStream( String::CreateFromAscii( "WordDocument" ), STREAM_READ | STREAM_SHARE_DENYALL);
+    rRef = pStg->OpenSotStream( rtl::OUString("WordDocument"), STREAM_READ | STREAM_SHARE_DENYALL);
 
     if( rRef.Is() )
     {

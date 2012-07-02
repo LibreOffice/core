@@ -254,14 +254,14 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( std::vector<String>& rLst )
         {
 #ifdef WNT
             //fuer Windows Sonderbehandlung, da MS hier ein paar Zeichen im Dialogfont vergessen hat
-            p.SearchAndReplace(C2S("%1"), C2S(",,"));
-            p.SearchAndReplace(C2S("%2"), C2S("''"));
+            p.SearchAndReplace(rtl::OUString("%1"), rtl::OUString(",,"));
+            p.SearchAndReplace(rtl::OUString("%2"), rtl::OUString("''"));
 #else
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLclD = aSysLocale.GetLocaleData();
             //unter richtigen Betriebssystemen funktioniert es auch so
-            p.SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStart());
-            p.SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEnd());
+            p.SearchAndReplace(rtl::OUString("%1"), rLclD.getDoubleQuotationMarkStart());
+            p.SearchAndReplace(rtl::OUString("%2"), rLclD.getDoubleQuotationMarkEnd());
 #endif
         }
         rLst.insert(rLst.begin() + n, p);

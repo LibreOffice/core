@@ -986,7 +986,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
 {
     RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Spell" );
 
-    String  aNode( String::CreateFromAscii( "ServiceManager/SpellCheckerList" ) );
+    rtl::OUString aNode("ServiceManager/SpellCheckerList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
     OUString *pNames = aNames.getArray();
     sal_Int32 nLen = aNames.getLength();
@@ -1025,7 +1025,7 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
 {
     RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Grammar" );
 
-    String  aNode( String::CreateFromAscii( "ServiceManager/GrammarCheckerList" ) );
+    rtl::OUString aNode("ServiceManager/GrammarCheckerList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
     OUString *pNames = aNames.getArray();
     sal_Int32 nLen = aNames.getLength();
@@ -1068,7 +1068,7 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
 {
     RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Hyph" );
 
-    String  aNode( String::CreateFromAscii( "ServiceManager/HyphenatorList" ) );
+    rtl::OUString aNode("ServiceManager/HyphenatorList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
     OUString *pNames = aNames.getArray();
     sal_Int32 nLen = aNames.getLength();
@@ -1111,7 +1111,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
 {
     RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Thes" );
 
-    String  aNode( String::CreateFromAscii( "ServiceManager/ThesaurusList" ) );
+    rtl::OUString aNode("ServiceManager/ThesaurusList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
     OUString *pNames = aNames.getArray();
     sal_Int32 nLen = aNames.getLength();

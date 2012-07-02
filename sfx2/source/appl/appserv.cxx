@@ -288,8 +288,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         return;
                 }
 
-                String aName = String::CreateFromAscii("vnd.sun.star.cmd:logout");
-                SfxStringItem aNameItem( SID_FILE_NAME, aName );
+                SfxStringItem aNameItem( SID_FILE_NAME, rtl::OUString("vnd.sun.star.cmd:logout") );
                 SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private/user" ) );
                 pAppData_Impl->pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
                 return;
@@ -464,7 +463,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start( String::CreateFromAscii(".uno:HelpIndex"), NULL ); // show start page
+                pHelp->Start( rtl::OUString(".uno:HelpIndex"), NULL ); // show start page
                 bDone = true;
             }
             break;
@@ -1374,9 +1373,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_COMP_BIBLIOGRAPHY:
         {
-            SfxStringItem aURL(SID_FILE_NAME, String::CreateFromAscii(".component:Bibliography/View1"));
-            SfxStringItem aRef(SID_REFERER, String::CreateFromAscii("private:user"));
-            SfxStringItem aTarget(SID_TARGETNAME, String::CreateFromAscii("_blank"));
+            SfxStringItem aURL(SID_FILE_NAME, rtl::OUString(".component:Bibliography/View1"));
+            SfxStringItem aRef(SID_REFERER, rtl::OUString("private:user"));
+            SfxStringItem aTarget(SID_TARGETNAME, rtl::OUString("_blank"));
             SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
         }
         break;

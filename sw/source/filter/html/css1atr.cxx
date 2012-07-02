@@ -302,7 +302,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         // In STYLE-Optionen den String codieren
         Strm() << sOut.makeStringAndClear().getStr();
         if( pVal )
-            HTMLOutFuncs::Out_String( Strm(), String::CreateFromAscii(pVal),
+            HTMLOutFuncs::Out_String( Strm(), rtl::OUString::createFromAscii(pVal),
                                       eDestEnc, &aNonConvertableCharacters );
         else if( pSVal )
             HTMLOutFuncs::Out_String( Strm(), *pSVal, eDestEnc, &aNonConvertableCharacters );
@@ -3401,7 +3401,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
             if( pTempFileName )
                 sGrfNm = *pTempFileName;
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, sGrfNm,
-                        String::CreateFromAscii("JPG"),
+                        rtl::OUString("JPG"),
                         XOUTBMP_USE_NATIVE_IF_POSSIBLE );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {

@@ -242,7 +242,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
 
     m_aTypeControl.Show();
     m_aTypeControl.Init();
-    m_etAuto.SetText(String::CreateFromAscii("10"));
+    m_etAuto.SetText(rtl::OUString("10"));
     m_etAuto.SetDecimalDigits(0);
     m_pbAuto.SetClickHdl(LINK(this,OWizTypeSelect,ButtonClickHdl));
     m_lbColumnNames.EnableMultiSelection(sal_True);

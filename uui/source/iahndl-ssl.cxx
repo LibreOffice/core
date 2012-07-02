@@ -70,7 +70,7 @@ getContentPart( const String& _rRawString )
     int i = 0;
     while ( aIDs[i] )
     {
-        String sPartId = String::CreateFromAscii( aIDs[i++] );
+        String sPartId = rtl::OUString::createFromAscii( aIDs[i++] );
         xub_StrLen nContStart = _rRawString.Search( sPartId );
         if ( nContStart != STRING_NOTFOUND )
         {

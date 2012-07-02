@@ -187,12 +187,12 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
 {
     // program name
-    pList->push_back( new String( String::CreateFromAscii(*argv) ) );
+    pList->push_back( new String(rtl::OUString::createFromAscii(*argv) ) );
     for( int i = 1; i < argc; i++ )
     {
         if( '@' == **(argv +i) )
         { // when @, then response file
-            SvFileStream aStm( String::CreateFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
+            SvFileStream aStm( rtl::OUString::createFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
             if( aStm.GetError() != SVSTREAM_OK )
                 return sal_False;
 
@@ -214,7 +214,7 @@ static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
             }
         }
         else if( argv[ i ] )
-            pList->push_back( new String( String::CreateFromAscii( argv[ i ] ) ) );
+            pList->push_back( new String( rtl::OUString::createFromAscii( argv[ i ] ) ) );
     }
     return sal_True;
 }
@@ -369,7 +369,7 @@ SvCommand::SvCommand( int argc, char ** argv )
     {
         if( aPath.Len() )
             aPath += DirEntry::GetSearchDelimiter();
-        aPath += String::CreateFromAscii( aInc.getStr() );
+        aPath += rtl::OStringToOUString(aInc, RTL_TEXTENCODING_ASCII_US);
     }
 }
 

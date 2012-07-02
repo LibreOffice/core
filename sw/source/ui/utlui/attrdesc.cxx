@@ -75,7 +75,7 @@ void SwAttrSet::GetPresentation(
         SfxMapUnit ePresMetric,
         String &rText ) const
 {
-static sal_Char const sKomma[] = ", ";
+    static sal_Char const sKomma[] = ", ";
 
     rText.Erase();
     String aStr;
@@ -90,7 +90,7 @@ static sal_Char const sKomma[] = ", ";
                                                  ePresMetric, aStr,
                                                  &rInt );
             if( rText.Len() && aStr.Len() )
-                rText += String::CreateFromAscii(sKomma);
+                rText += rtl::OUString(sKomma);
             rText += aStr;
             if( aIter.IsAtEnd() )
                 break;

@@ -101,13 +101,13 @@ typedef WeakImplHelper1< XStarBasicAccess > StarBasicAccessHelper;
 // Version 2
 //  + sal_Bool      bReference
 
-static const char* szStdLibName = "Standard";
+static const char szStdLibName[] = "Standard";
 static const char szBasicStorage[] = "StarBASIC";
-static const char* szOldManagerStream = "BasicManager";
+static const char szOldManagerStream[] = "BasicManager";
 static const char szManagerStream[] = "BasicManager2";
-static const char* szImbedded = "LIBIMBEDDED";
-static const char* szCryptingKey = "CryptedBasic";
-static const char* szScriptLanguage = "StarBasic";
+static const char szImbedded[] = "LIBIMBEDDED";
+static const char szCryptingKey[] = "CryptedBasic";
+static const char szScriptLanguage[] = "StarBasic";
 
 TYPEINIT1( BasicManager, SfxBroadcaster );
 DBG_NAME( BasicManager );
@@ -555,8 +555,8 @@ BasicLibInfo::BasicLibInfo()
     bDoLoad             = sal_False;
     bFoundInPath        = sal_False;
     mxScriptCont        = NULL;
-    aStorageName        = String::CreateFromAscii(szImbedded);
-    aRelStorageName     = String::CreateFromAscii(szImbedded);
+    aStorageName        = rtl::OUString(szImbedded);
+    aRelStorageName     = rtl::OUString(szImbedded);
 }
 
 BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
@@ -632,8 +632,8 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
                 pStdLibInfo = CreateLibInfo();
             pStdLibInfo->SetLib( pStdLib );
             StarBASICRef xStdLib = pStdLibInfo->GetLib();
-            xStdLib->SetName( String::CreateFromAscii(szStdLibName) );
-            pStdLibInfo->SetLibName( String::CreateFromAscii(szStdLibName) );
+            xStdLib->SetName( rtl::OUString(szStdLibName) );
+            pStdLibInfo->SetLibName( rtl::OUString(szStdLibName) );
             xStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
             xStdLib->SetModified( sal_False );
         }
@@ -682,7 +682,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
     else
     {
         ImpCreateStdLib( pParentFromStdLib );
-        if ( rStorage.IsStream( String::CreateFromAscii(szOldManagerStream) ) )
+        if ( rStorage.IsStream( rtl::OUString(szOldManagerStream) ) )
             LoadOldBasicManager( rStorage );
     }
 }
@@ -816,8 +816,8 @@ BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath, sal_Bool bDocMgr
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     pStdLibInfo->SetLib( pSLib );
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
-    xStdLib->SetName( String::CreateFromAscii(szStdLibName));
-    pStdLibInfo->SetLibName( String::CreateFromAscii(szStdLibName) );
+    xStdLib->SetName(rtl::OUString(szStdLibName));
+    pStdLibInfo->SetLibName( rtl::OUString(szStdLibName) );
     pSLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
 
     // Save is only necessary if basic has changed
@@ -835,8 +835,8 @@ void BasicManager::ImpMgrNotLoaded( const String& rStorageName )
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     pStdLibInfo->SetLib( new StarBASIC( NULL, mbDocMgr ) );
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
-    xStdLib->SetName( String::CreateFromAscii(szStdLibName) );
-    pStdLibInfo->SetLibName( String::CreateFromAscii(szStdLibName) );
+    xStdLib->SetName( rtl::OUString(szStdLibName) );
+    pStdLibInfo->SetLibName( rtl::OUString(szStdLibName) );
     xStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
     xStdLib->SetModified( sal_False );
 }
@@ -847,8 +847,8 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     StarBASIC* pStdLib = new StarBASIC( pParentFromStdLib, mbDocMgr );
     pStdLibInfo->SetLib( pStdLib );
-    pStdLib->SetName( String::CreateFromAscii(szStdLibName) );
-    pStdLibInfo->SetLibName( String::CreateFromAscii(szStdLibName) );
+    pStdLib->SetName( rtl::OUString(szStdLibName) );
+    pStdLibInfo->SetLibName( rtl::OUString(szStdLibName) );
     pStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
 }
 
@@ -944,7 +944,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 
 
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
-        ( String::CreateFromAscii(szOldManagerStream), eStreamReadMode );
+        ( rtl::OUString(szOldManagerStream), eStreamReadMode );
 
     String aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
@@ -1287,7 +1287,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const String& rLibName, s
         else
         {
             pLibInfo->GetLib()->SetModified( sal_True ); // Must be saved after Add!
-            pLibInfo->SetStorageName( String::CreateFromAscii(szImbedded) ); // Save in BasicManager-Storage
+            pLibInfo->SetStorageName( rtl::OUString(szImbedded) ); // Save in BasicManager-Storage
         }
     }
     else

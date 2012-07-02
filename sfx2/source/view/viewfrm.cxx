@@ -366,7 +366,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SfxAllItemSet aSet( pApp->GetPool() );
                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::NO_DECODE) ) );
                 aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
+                aSet.Put( SfxStringItem( SID_TARGETNAME, rtl::OUString("_blank") ) );
                 SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER, sal_False );
                 if ( pReferer )
                     aSet.Put( *pReferer );
@@ -767,7 +767,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
-                            aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
+                            aSet.Put( SfxStringItem( SID_TARGETNAME, rtl::OUString("_blank") ) );
                             if ( pSavedOptions )
                                 aSet.Put( *pSavedOptions );
                             if ( pSavedReferer )

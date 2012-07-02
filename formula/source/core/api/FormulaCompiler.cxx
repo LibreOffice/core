@@ -183,12 +183,12 @@ bool OpCodeList::getOpCodeString( String& rStr, sal_uInt16 nOp )
         {
             if (meSepType == COMMA_BASE)
             {
-                rStr = String::CreateFromAscii(",");
+                rStr = rtl::OUString(",");
                 return true;
             }
             else if (meSepType == SEMICOLON_BASE)
             {
-                rStr = String::CreateFromAscii(";");
+                rStr = rtl::OUString(";");
                 return true;
             }
         }
@@ -197,12 +197,12 @@ bool OpCodeList::getOpCodeString( String& rStr, sal_uInt16 nOp )
         {
             if (meSepType == COMMA_BASE)
             {
-                rStr = String::CreateFromAscii(",");
+                rStr = rtl::OUString(",");
                 return true;
             }
             else if (meSepType == SEMICOLON_BASE)
             {
-                rStr = String::CreateFromAscii(";");
+                rStr = rtl::OUString(";");
                 return true;
             }
         }
@@ -211,12 +211,12 @@ bool OpCodeList::getOpCodeString( String& rStr, sal_uInt16 nOp )
         {
             if (meSepType == COMMA_BASE)
             {
-                rStr = String::CreateFromAscii(";");
+                rStr = rtl::OUString(";");
                 return true;
             }
             else if (meSepType == SEMICOLON_BASE)
             {
-                rStr = String::CreateFromAscii("|");
+                rStr = rtl::OUString("|");
                 return true;
             }
         }

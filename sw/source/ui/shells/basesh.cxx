@@ -1936,7 +1936,7 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
     SwWrtShell& rWrtSh = rView.GetWrtShell();
 
     SetPool(&rWrtSh.GetAttrPool());
-    SetName(C2S("Base"));
+    SetName(rtl::OUString("Base"));
     rWrtSh.SetGrfArrivedLnk( LINK( this, SwBaseShell, GraphicArrivedHdl));
 }
 

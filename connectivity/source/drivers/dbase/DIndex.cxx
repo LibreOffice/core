@@ -376,7 +376,7 @@ void ODbaseIndex::createINFEntry()
 {
     // synchronize inf-file
     String sEntry = m_Name;
-    sEntry += String::CreateFromAscii(".ndx");
+    sEntry += rtl::OUString(".ndx");
 
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
     sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
@@ -435,7 +435,7 @@ sal_Bool ODbaseIndex::DropImpl()
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     rtl::OString aKeyName;
     String sEntry = m_Name;
-    sEntry += String::CreateFromAscii(".ndx");
+    sEntry += rtl::OUString(".ndx");
 
     // delete entries from the inf file
     for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)

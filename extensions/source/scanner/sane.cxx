@@ -1003,7 +1003,7 @@ String Sane::GetOptionUnitName( int n )
     SANE_Unit nUnit = mppOptions[n]->unit;
     size_t nUnitAsSize = (size_t)nUnit;
     if( nUnitAsSize > SAL_N_ELEMENTS( ppUnits ) )
-        aText = String::CreateFromAscii( "[unknown units]" );
+        aText = rtl::OUString("[unknown units]");
     else
         aText = String( ppUnits[ nUnit ], osl_getThreadTextEncoding() );
     return aText;

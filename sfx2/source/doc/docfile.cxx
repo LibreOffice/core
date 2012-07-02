@@ -1889,7 +1889,7 @@ void SfxMedium::Transfer_Impl()
                 aAny <<= pSegmentSize->GetValue();
 
                 uno::Reference < beans::XPropertySet > xSet( pImp->xStorage, uno::UNO_QUERY );
-                xSet->setPropertyValue( String::CreateFromAscii("SegmentSize"), aAny );
+                xSet->setPropertyValue( rtl::OUString("SegmentSize"), aAny );
 
                 // copy the temporary storage into the disk spanned package
                 GetStorage()->copyToStorage( xStor );

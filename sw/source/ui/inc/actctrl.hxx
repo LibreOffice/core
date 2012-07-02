@@ -75,7 +75,7 @@ class TableNameEdit : public NoSpaceEdit
 public:
     TableNameEdit(Window* pWin, const ResId& rResId) :
                             NoSpaceEdit(pWin, rResId)
-                                {SetForbiddenChars(String::CreateFromAscii(" .<>"));}
+                                {SetForbiddenChars(rtl::OUString(" .<>"));}
 };
 
 /* --------------------------------------------------

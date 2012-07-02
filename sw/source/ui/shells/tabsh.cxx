@@ -1356,7 +1356,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
 SwTableShell::SwTableShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
-    SetName(String::CreateFromAscii("Table"));
+    SetName(rtl::OUString("Table"));
     SetHelpId(SW_TABSHELL);
 }
 

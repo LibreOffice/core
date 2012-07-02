@@ -437,7 +437,7 @@ SvxMetricField::SvxMetricField(
     aCurTxt( String() ),
     mxFrame( rFrame )
 {
-    Size aSize = Size(GetTextWidth( String::CreateFromAscii("99,99mm") ),GetTextHeight());
+    Size aSize = Size(GetTextWidth( rtl::OUString("99,99mm") ),GetTextHeight());
     aSize.Width() += 20;
     aSize.Height() += 6;
     SetSizePixel( aSize );

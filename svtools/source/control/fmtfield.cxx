@@ -1288,7 +1288,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
         sTemp = comphelper::string::stripStart(sTemp, ' ');
         sTemp = comphelper::string::stripEnd(sTemp, ' ');
 
-        sNewFormat += String::CreateFromAscii(" [$");
+        sNewFormat += rtl::OUString(" [$");
         sNewFormat += sTemp;
         sNewFormat += ']';
     }

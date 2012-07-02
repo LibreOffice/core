@@ -185,7 +185,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             if ( pFilter )
                 sExt = ::comphelper::string::stripStart(pFilter->GetDefaultExtension(), '*');
             else
-                sExt = String::CreateFromAscii(".rpt");
+                sExt = rtl::OUString(".rpt");
 
             uno::Reference< embed::XStorage > xTemp = OStorageHelper::GetTemporaryStorage(/*sFileTemp,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,*/uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY));
             utl::DisposableComponent aTemp(xTemp);

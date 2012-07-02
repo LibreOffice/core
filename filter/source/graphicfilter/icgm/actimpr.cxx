@@ -386,7 +386,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
     if ( pFontEntry )
     {
         nFontType = pFontEntry->nFontType;
-        aFontDescriptor.Name = String::CreateFromAscii( (char*)pFontEntry->pFontName );
+        aFontDescriptor.Name = rtl::OUString::createFromAscii( (const char*)pFontEntry->pFontName );
     }
     aFontDescriptor.Height = ( sal_Int16 )( ( mpCGM->pElement->nCharacterHeight * (double)1.50 ) );
     if ( nFontType & 1 )
@@ -880,7 +880,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         uno::Any aFirstQuery( maXShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0) ));
         if( aFirstQuery >>= xText )
         {
-            String aStr( String::CreateFromAscii( pString ) );
+            String aStr( rtl::OUString::createFromAscii( pString ) );
 
             uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
             {
@@ -945,7 +945,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
             uno::Any aFirstQuery(  aShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0)) );
             if( aFirstQuery >>= xText )
             {
-                String aStr( String::CreateFromAscii( pString ) );
+                String aStr( rtl::OUString::createFromAscii( pString ) );
 
                 uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
                 if ( aXTextCursor.is() )

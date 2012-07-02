@@ -324,15 +324,15 @@ namespace
             aName += pMethod->GetName();
 
             // language
-            String aLanguage = String::CreateFromAscii("Basic");
+            rtl::OUString aLanguage("Basic");
 
             // location
-            String aLocation;
+            rtl::OUString aLocation;
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
             if ( aDocument.isDocument() )
             {
                 // document basic
-                aLocation = String::CreateFromAscii("document");
+                aLocation = rtl::OUString("document");
 
                 if ( rxLimitToDocument.is() )
                 {
@@ -366,17 +366,17 @@ namespace
             else
             {
                 // application basic
-                aLocation = String::CreateFromAscii("application");
+                aLocation = rtl::OUString("application");
             }
 
             // script URL
             if ( !bError )
             {
-                aScriptURL = String::CreateFromAscii("vnd.sun.star.script:");
+                aScriptURL = rtl::OUString("vnd.sun.star.script:");
                 aScriptURL += aName;
-                aScriptURL += String::CreateFromAscii("?language=");
+                aScriptURL += rtl::OUString("?language=");
                 aScriptURL += aLanguage;
-                aScriptURL += String::CreateFromAscii("&location=");
+                aScriptURL += rtl::OUString("&location=");
                 aScriptURL += aLocation;
             }
 

@@ -113,7 +113,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     // ER 13.07.00  why not radix 36 [0-9A-Z] ?!?
     const unsigned nRadix = 26;
     String aName( rName );
-    aName += String::CreateFromAscii( "sv" );
+    aName += rtl::OUString("sv");
 
     rName.Erase();
     static unsigned long u = Time::GetSystemTicks();

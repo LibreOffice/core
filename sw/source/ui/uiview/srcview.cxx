@@ -163,7 +163,7 @@ void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt16 nCurP
     {
         aFont.SetWeight( WEIGHT_NORMAL );
         rOutDev.SetFont( aFont );
-        String aPageStr( C2S(" [") );
+        String aPageStr( rtl::OUString(" [") );
         aPageStr += String( SW_RES( STR_PAGE ) );
         aPageStr += ' ';
         aPageStr += String::CreateFromInt32( nCurPage );
@@ -255,7 +255,7 @@ void SwSrcView::SaveContentTo(SfxMedium& rMed)
 void SwSrcView::Init()
 {
     SetHelpId(SW_SRC_VIEWSHELL);
-    SetName(C2S("Source"));
+    SetName(rtl::OUString("Source"));
     SetWindow( &aEditWin );
     SwDocShell* pDocShell = GetDocShell();
     // wird das Doc noch geladen, dann muss die DocShell das Load
@@ -304,7 +304,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             // search for an html filter for export
             SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
             const SfxFilter* pFilter =
-                pFilterCont->GetFilter4Extension( C2S("html"), SFX_FILTER_EXPORT );
+                pFilterCont->GetFilter4Extension( rtl::OUString("html"), SFX_FILTER_EXPORT );
             if ( pFilter )
             {
                 // filter found -> use its uiname and wildcard
@@ -316,8 +316,8 @@ void SwSrcView::Execute(SfxRequest& rReq)
             else
             {
                 // filter not found
-                String sHtml(C2S("HTML"));
-                xFltMgr->appendFilter( sHtml, C2S("*.html;*.htm") );
+                rtl::OUString sHtml("HTML");
+                xFltMgr->appendFilter( sHtml, rtl::OUString("*.html;*.htm") );
                 xFltMgr->setCurrentFilter( sHtml ) ;
             }
 
@@ -446,7 +446,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                 String aPos( SW_RES(STR_SRCVIEW_ROW) );
                 TextSelection aSel = pTextView->GetSelection();
                 aPos += String::CreateFromInt32( aSel.GetEnd().GetPara()+1 );
-                aPos +=C2S(" : ");
+                aPos += rtl::OUString(" : ");
                 aPos += String(SW_RES(STR_SRCVIEW_COL));
                 aPos += String::CreateFromInt32( aSel.GetEnd().GetIndex()+1 );
                 SfxStringItem aItem( nWhich, aPos );
@@ -776,7 +776,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     SfxMedium* pMedium = pDocShell->GetMedium();
 
     const SfxFilter* pFilter = pMedium->GetFilter();
-    sal_Bool bHtml = pFilter && pFilter->GetUserData().EqualsAscii("HTML");
+    sal_Bool bHtml = pFilter && pFilter->GetUserData() == "HTML";
     sal_Bool bDocModified = pDocShell->IsModified();
     if(bHtml && !bDocModified && pDocShell->HasName())
     {

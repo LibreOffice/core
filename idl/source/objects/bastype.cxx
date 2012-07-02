@@ -374,7 +374,7 @@ sal_Bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
             if( pTok->IsString() )
             {
                 pTok = rInStm.GetToken_Next();
-                bOk = MakeId( String::CreateFromAscii( pTok->GetString().getStr() ) );
+                bOk = MakeId(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
             }
             if( bOk && bBraket )
                 bOk = rInStm.Read( ')' );

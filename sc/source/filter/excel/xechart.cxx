@@ -1237,7 +1237,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget,
         if (pSubTitle)
         {
             // append subtitle as the 2nd line of the title.
-            String aSubTitle = String::CreateFromAscii("\n");
+            String aSubTitle = rtl::OUString("\n");
             aSubTitle.Append(*pSubTitle);
             mxSrcLink->AppendString(aSubTitle);
         }

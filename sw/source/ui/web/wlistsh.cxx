@@ -53,7 +53,7 @@ TYPEINIT1(SwWebListShell,SwListShell)
 SwWebListShell::SwWebListShell(SwView &_rView) :
     SwListShell(_rView)
 {
-    SetName(String::CreateFromAscii("List"));
+    SetName(rtl::OUString("List"));
     SetHelpId(SW_LISTSHELL);
 }
 

@@ -69,7 +69,6 @@ using ::rtl::OUString;
 
 #define MAX_HEADER_LENGTH 16
 
-static const sal_Char*      pDicExt     = "dic";
 static const sal_Char*      pVerStr2    = "WBSWG2";
 static const sal_Char*      pVerStr5    = "WBSWG5";
 static const sal_Char*      pVerStr6    = "WBSWG6";
@@ -195,14 +194,6 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
 
     return nDicVersion;
 }
-
-
-
-const String GetDicExtension()
-{
-    return String::CreateFromAscii( pDicExt );
-}
-
 
 DictionaryNeo::DictionaryNeo() :
     aDicEvtListeners( GetLinguMutex() ),

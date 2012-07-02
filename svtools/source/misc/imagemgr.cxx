@@ -218,7 +218,7 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
             if ( aPath.EqualsAscii( Fac2ExtMap_Impl[ nIndex ]._pFactory ) )
             {
                 // extension found
-                aExtension = String::CreateFromAscii( Fac2ExtMap_Impl[ nIndex ]._pExtension );
+                aExtension = rtl::OUString::createFromAscii(Fac2ExtMap_Impl[ nIndex ]._pExtension);
                 // and return it
                 return aExtension;
             }

@@ -1307,9 +1307,9 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                         nMinTrail = 2;
             if (xProp.is())
             {
-                xProp->getPropertyValue( String::CreateFromAscii(
+                xProp->getPropertyValue( rtl::OUString(
                         UPN_HYPH_MIN_LEADING) ) >>= nMinLead;
-                xProp->getPropertyValue( String::CreateFromAscii(
+                xProp->getPropertyValue( rtl::OUString(
                         UPN_HYPH_MIN_TRAILING) ) >>= nMinTrail;
             }
             aHyphen.GetMinLead()  = (sal_uInt8)nMinLead;
@@ -1340,7 +1340,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                         sal_Bool bVal = sal_False;
                         if (xProp.is())
                         {
-                            xProp->getPropertyValue( String::CreateFromAscii( UPN_IS_SPELL_AUTO) ) >>= bVal;
+                            xProp->getPropertyValue( rtl::OUString( UPN_IS_SPELL_AUTO) ) >>= bVal;
                         }
 
                         pRet->Put(SfxBoolItem(SID_AUTOSPELL_CHECK, bVal));
@@ -1489,10 +1489,10 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
         if (xProp.is())
         {
             xProp->setPropertyValue(
-                    String::CreateFromAscii(UPN_HYPH_MIN_LEADING),
+                    rtl::OUString(UPN_HYPH_MIN_LEADING),
                     makeAny((sal_Int16) pHyphenItem->GetMinLead()) );
             xProp->setPropertyValue(
-                    String::CreateFromAscii(UPN_HYPH_MIN_TRAILING),
+                    rtl::OUString(UPN_HYPH_MIN_TRAILING),
                     makeAny((sal_Int16) pHyphenItem->GetMinTrail()) );
         }
         bSaveSpellCheck = sal_True;
@@ -1528,7 +1528,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
             if (xProp.is())
             {
                 xProp->setPropertyValue(
-                        String::CreateFromAscii(UPN_IS_SPELL_AUTO),
+                        rtl::OUString(UPN_IS_SPELL_AUTO),
                         makeAny(bOnlineSpelling) );
             }
         }
@@ -1702,7 +1702,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                         AddTabPage( nPageId, rTextArray.GetString(i), nGroup );
                 }
 #ifdef DBG_UTIL
-                AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup );
+                AddTabPage( RID_SW_TP_OPTTEST_PAGE, rtl::OUString("Interner Test"), nGroup );
 #endif
             }
 
@@ -1718,7 +1718,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                         AddTabPage( nPageId, rHTMLArray.GetString(i), nGroup );
                 }
 #ifdef DBG_UTIL
-                AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup );
+                AddTabPage( RID_SW_TP_OPTTEST_PAGE, rtl::OUString("Interner Test"), nGroup );
 #endif
             }
         }

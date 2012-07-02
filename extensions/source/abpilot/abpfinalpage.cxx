@@ -47,8 +47,7 @@ namespace abp
 
     const SfxFilter* lcl_getBaseFilter()
     {
-        static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+        const SfxFilter* pFilter = SfxFilter::GetFilterByName(rtl::OUString("StarOffice XML (Base)"));
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         return pFilter;
     }

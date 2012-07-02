@@ -254,7 +254,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
         // debug code - write the stream to debug file /tmp/emf-stream.emf
         EMFP_DEBUG(int pos = pWMF->Tell();
         pWMF->Seek(0);
-        SvFileStream file( UniString::CreateFromAscii( "/tmp/emf-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
+        SvFileStream file( rtl::OUString( "/tmp/emf-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
 
         *pWMF >> file;
         file.Flush();

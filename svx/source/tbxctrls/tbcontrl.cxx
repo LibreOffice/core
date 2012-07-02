@@ -384,7 +384,7 @@ void SvxStyleBox_Impl::Select()
                 bClear = true;
                 //not only apply default style but also call 'ClearFormatting'
                 Sequence< PropertyValue > aEmptyVals;
-                SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:ResetAttributes"),
+                SfxToolBoxControl::Dispatch( m_xDispatchProvider, rtl::OUString(".uno:ResetAttributes"),
                     aEmptyVals);
             }
             else if( aSelEntry == aMoreKey && GetSelectEntryPos() == ( GetEntryCount() - 1 ) )
@@ -425,7 +425,7 @@ void SvxStyleBox_Impl::Select()
             if( bCreateNew )
             {
                 aArgs[0].Name   = OUString("Param");
-                SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:StyleNewByExample"), aArgs);
+                SfxToolBoxControl::Dispatch( m_xDispatchProvider, rtl::OUString(".uno:StyleNewByExample"), aArgs);
             }
             else
             {
@@ -1046,8 +1046,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
 
 {
     BindListener();
-    String sCommand(String::CreateFromAscii( ".uno:BorderReducedMode" ));
-    AddStatusListener( sCommand );
+    AddStatusListener(rtl::OUString(".uno:BorderReducedMode"));
     aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
     /*

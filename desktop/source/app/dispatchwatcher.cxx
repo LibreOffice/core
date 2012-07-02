@@ -108,8 +108,12 @@ static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
     }
 
     if( pSfxFilter )
-        aFilter = ( nFlags == SFX_FILTER_EXPORT ) ? pSfxFilter->GetFilterName() :
-                                                    pSfxFilter->GetServiceName();
+    {
+        if (nFlags == SFX_FILTER_EXPORT)
+            aFilter = pSfxFilter->GetFilterName();
+        else
+            aFilter = pSfxFilter->GetServiceName();
+    }
 
     delete pMedium;
     return aFilter;

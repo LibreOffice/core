@@ -460,13 +460,13 @@ String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 #if OSL_DEBUG_LEVEL > 0
     {
         sal_Int32 nCol, nRow2;
-        lcl_GetCellPosition( String::CreateFromAscii("z1"), nCol, nRow2);
+        lcl_GetCellPosition( rtl::OUString("z1"), nCol, nRow2);
         OSL_ENSURE( nCol == 51, "lcl_GetCellPosition failed" );
-        lcl_GetCellPosition( String::CreateFromAscii("AA1"), nCol, nRow2);
+        lcl_GetCellPosition( rtl::OUString("AA1"), nCol, nRow2);
         OSL_ENSURE( nCol == 52, "lcl_GetCellPosition failed" );
-        lcl_GetCellPosition( String::CreateFromAscii("AB1"), nCol, nRow2);
+        lcl_GetCellPosition( rtl::OUString("AB1"), nCol, nRow2);
         OSL_ENSURE( nCol == 53, "lcl_GetCellPosition failed" );
-        lcl_GetCellPosition( String::CreateFromAscii("BB1"), nCol, nRow2);
+        lcl_GetCellPosition( rtl::OUString("BB1"), nCol, nRow2);
         OSL_ENSURE( nCol == 105, "lcl_GetCellPosition failed" );
     }
 #endif

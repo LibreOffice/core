@@ -998,7 +998,7 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
 {
     //! Remove everything behind name!
     String aFact( rFact );
-    String aPrefix = String::CreateFromAscii( "private:factory/" );
+    String aPrefix = rtl::OUString("private:factory/");
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
         aFact.Erase( 0, aPrefix.Len() );
     sal_uInt16 nPos = aFact.Search( '?' );

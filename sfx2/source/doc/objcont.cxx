@@ -941,7 +941,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
                         String sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString() );
-                        sMessage.SearchAndReplace( String::CreateFromAscii("$(ARG1)"), aTemplName );
+                        sMessage.SearchAndReplace( rtl::OUString("$(ARG1)"), aTemplName );
                         sfx2::QueryTemplateBox aBox( GetDialogParent(), sMessage );
                         if ( RET_YES == aBox.Execute() )
                             bLoad = sal_True;

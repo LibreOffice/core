@@ -1874,7 +1874,7 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
         {
             sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0,
-                ::String::CreateFromAscii("simpress") );
+                rtl::OUString("simpress") );
 
             if ( aFileDlg.Execute() == ERRCODE_NONE )
                 aFileToOpen = aFileDlg.GetPath();

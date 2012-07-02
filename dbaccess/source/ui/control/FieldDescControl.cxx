@@ -972,11 +972,11 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pNumType = new OPropListBoxCtrl( this, STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE, WB_DROPDOWN );
         pNumType->SetDropDownLineCount(5);
 
-        pNumType->InsertEntry( String::CreateFromAscii("Byte") );
-        pNumType->InsertEntry( String::CreateFromAscii("SmallInt") );
-        pNumType->InsertEntry( String::CreateFromAscii("Integer") );
-        pNumType->InsertEntry( String::CreateFromAscii("Single") );
-        pNumType->InsertEntry( String::CreateFromAscii("Double") );
+        pNumType->InsertEntry( rtl::OUString("Byte") );
+        pNumType->InsertEntry( rtl::OUString("SmallInt") );
+        pNumType->InsertEntry( rtl::OUString("Integer") );
+        pNumType->InsertEntry( rtl::OUString("Single") );
+        pNumType->InsertEntry( rtl::OUString("Double") );
         pNumType->SelectEntryPos(2);
         InitializeControl(pNumType,HID_TAB_ENT_NUMTYP,true);
         break;

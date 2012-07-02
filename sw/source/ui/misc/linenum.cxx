@@ -108,14 +108,14 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
 
 {
     String sIntervalName = aDivIntervalFT.GetAccessibleName();
-    sIntervalName += String::CreateFromAscii("(");
+    sIntervalName += rtl::OUString("(");
     sIntervalName += aDivRowsFT.GetAccessibleName();
-    sIntervalName += String::CreateFromAscii(")");
+    sIntervalName += rtl::OUString(")");
     aDivIntervalNF.SetAccessibleName(sIntervalName);
     sIntervalName = aNumIntervalFT.GetAccessibleName();
-    sIntervalName += String::CreateFromAscii("(");
+    sIntervalName += rtl::OUString("(");
     sIntervalName += aNumRowsFT.GetAccessibleName();
-    sIntervalName += String::CreateFromAscii(")");
+    sIntervalName += rtl::OUString(")");
     aNumIntervalNF.SetAccessibleName(sIntervalName);
 
     FreeResource();

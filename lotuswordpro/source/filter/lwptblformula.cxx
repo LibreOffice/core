@@ -128,9 +128,9 @@ sal_Bool LwpFormulaInfo::ReadText()
     m_pObjStrm->QuickRead( pBuf.get(), nStrLen );
     *(pBuf.get()+nStrLen)='\0';
     String aText;
-    aText += String::CreateFromAscii("\"");
+    aText += rtl::OUString("\"");
     aText.Append(String(pBuf.get(),nStrLen,osl_getThreadTextEncoding()));
-    aText += String::CreateFromAscii("\"");
+    aText += rtl::OUString("\"");
 
     m_aStack.push_back(new LwpFormulaText(aText));
     return sal_True;
@@ -699,64 +699,64 @@ String LwpFormulaTools::GetName(sal_uInt16 nTokenType)
     switch(nTokenType)
     {
     case TK_SUM:
-        aName = String::CreateFromAscii("SUM");
+        aName = rtl::OUString("SUM");
         break;
     case TK_IF:
-        aName = String::CreateFromAscii("IF");//Not supported by SODC
+        aName = rtl::OUString("IF");//Not supported by SODC
         break;
     case TK_COUNT:
-        aName = String::CreateFromAscii("COUNT");//Not supported by SODC
+        aName = rtl::OUString("COUNT");//Not supported by SODC
         break;
     case TK_MINIMUM:
-        aName = String::CreateFromAscii("MIN");
+        aName = rtl::OUString("MIN");
         break;
     case TK_MAXIMUM:
-        aName = String::CreateFromAscii("MAX");
+        aName = rtl::OUString("MAX");
         break;
     case TK_AVERAGE:
-        aName = String::CreateFromAscii("MEAN");
+        aName = rtl::OUString("MEAN");
         break;
     case TK_ADD:
-        aName = String::CreateFromAscii("+");
+        aName = rtl::OUString("+");
         break;
     case TK_SUBTRACT:
-        aName = String::CreateFromAscii("-");
+        aName = rtl::OUString("-");
         break;
     case TK_MULTIPLY:
-        aName = String::CreateFromAscii("*");
+        aName = rtl::OUString("*");
         break;
     case TK_DIVIDE:
-        aName = String::CreateFromAscii("/");
+        aName = rtl::OUString("/");
         break;
     case TK_UNARY_MINUS:
-        aName = String::CreateFromAscii("-");
+        aName = rtl::OUString("-");
         break;
     case TK_LESS:
-        aName = String::CreateFromAscii("L");
+        aName = rtl::OUString("L");
         break;
     case TK_LESS_OR_EQUAL:
-        aName = String::CreateFromAscii("LEQ");
+        aName = rtl::OUString("LEQ");
         break;
     case TK_GREATER:
-        aName = String::CreateFromAscii("G");
+        aName = rtl::OUString("G");
         break;
     case TK_GREATER_OR_EQUAL:
-        aName = String::CreateFromAscii("GEQ");
+        aName = rtl::OUString("GEQ");
         break;
     case TK_EQUAL:
-        aName = String::CreateFromAscii("EQ");
+        aName = rtl::OUString("EQ");
         break;
     case TK_NOT_EQUAL:
-        aName = String::CreateFromAscii("NEQ");
+        aName = rtl::OUString("NEQ");
         break;
     case TK_NOT:
-        aName = String::CreateFromAscii("NOT");
+        aName = rtl::OUString("NOT");
         break;
     case TK_AND:
-        aName = String::CreateFromAscii("AND");
+        aName = rtl::OUString("AND");
         break;
     case TK_OR:
-        aName = String::CreateFromAscii("OR");
+        aName = rtl::OUString("OR");
         break;
     default:
         assert(false);

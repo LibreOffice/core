@@ -47,7 +47,7 @@
 #include "bookmark.hrc"
 #include "misc.hrc"
 
-const String BookmarkCombo::aForbiddenChars = String::CreateFromAscii("/\\@:*?\";,.#");
+const String BookmarkCombo::aForbiddenChars = rtl::OUString("/\\@:*?\";,.#");
 
 IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 {

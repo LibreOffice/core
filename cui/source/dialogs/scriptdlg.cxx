@@ -535,7 +535,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString languag
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
     String winTitle( GetText() );
-    winTitle.SearchAndReplace( String::CreateFromAscii( "%MACROLANG" ), m_sLanguage );
+    winTitle.SearchAndReplace( rtl::OUString( "%MACROLANG" ), m_sLanguage );
     SetText( winTitle );
 
     aScriptsBox.SetSelectHdl( LINK( this, SvxScriptOrgDialog, ScriptSelectHdl ) );
@@ -614,8 +614,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             return;
         }
 
-        ::rtl::OUString sName;
-        sName = String::CreateFromAscii("Editable")  ;
+        ::rtl::OUString sName("Editable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -626,7 +625,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             aEditButton.Disable();
         }
 
-        sName = String::CreateFromAscii("Deletable")  ;
+        sName = rtl::OUString("Deletable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -637,7 +636,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             aDelButton.Disable();
         }
 
-        sName = String::CreateFromAscii("Creatable")  ;
+        sName = rtl::OUString("Creatable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -648,7 +647,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
             aCreateButton.Disable();
         }
 
-        sName = String::CreateFromAscii("Renamable")  ;
+        sName = rtl::OUString("Renamable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
@@ -765,7 +764,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         mspNode.set( mspUserData->GetNode() , UNO_QUERY );
                         pParent = aScriptsBox.GetParent( pParent );
                     }
-                    xProp->getPropertyValue( String::CreateFromAscii("URI" ) ) >>= tmpString;
+                    xProp->getPropertyValue( rtl::OUString("URI" ) ) >>= tmpString;
                     const String scriptURL( tmpString );
 
                     if ( mspNode.is() )
@@ -1211,10 +1210,10 @@ sal_Bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& 
 String SvxScriptOrgDialog::getListOfChildren( Reference< browse::XBrowseNode > node, int depth )
 {
     String result;
-    result.Append( String::CreateFromAscii( "\n" ) );
+    result.Append( rtl::OUString( "\n" ) );
     for( int i=0;i<=depth;i++ )
     {
-        result.Append( String::CreateFromAscii( "\t" ) );
+        result.Append( rtl::OUString( "\t" ) );
     }
     result.Append( String( node->getName() ) );
 

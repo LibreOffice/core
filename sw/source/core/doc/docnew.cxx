@@ -393,7 +393,7 @@ SwDoc::SwDoc()
     _InitFieldTypes();
 
     // Create a default OutlineNumRule (for Filters)
-    pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
+    pOutlineRule = new SwNumRule( rtl::OUString::createFromAscii( SwNumRule::GetOutlineRuleName() ),
                                   // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
                                   OUTLINE_RULE );
@@ -825,7 +825,7 @@ void SwDoc::ClearDoc()
     InitTOXTypes();
 
     // create a dummy pagedesc for the layout
-    sal_uInt16 nDummyPgDsc = MakePageDesc( String::CreateFromAscii( "?DUMMY?" ));
+    sal_uInt16 nDummyPgDsc = MakePageDesc(rtl::OUString("?DUMMY?"));
     SwPageDesc* pDummyPgDsc = aPageDescs[ nDummyPgDsc ];
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
@@ -853,7 +853,7 @@ void SwDoc::ClearDoc()
         delete pNumRule;
     pNumRuleTbl->clear();
     // creation of new outline numbering rule
-    pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
+    pOutlineRule = new SwNumRule( rtl::OUString::createFromAscii( SwNumRule::GetOutlineRuleName() ),
                                   // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
                                   OUTLINE_RULE );

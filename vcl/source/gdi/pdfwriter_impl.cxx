@@ -2261,8 +2261,8 @@ inline const ImplPdfBuiltinFontData* GetPdfFontData( const PhysicalFontFace* pFo
 static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
 {
     ImplDevFontAttributes aDFA;
-    aDFA.maName         = String::CreateFromAscii( rBuiltin.m_pName );
-    aDFA.maStyleName    = String::CreateFromAscii( rBuiltin.m_pStyleName );
+    aDFA.maName         = rtl::OUString::createFromAscii( rBuiltin.m_pName );
+    aDFA.maStyleName    = rtl::OUString::createFromAscii( rBuiltin.m_pStyleName );
     aDFA.meFamily       = rBuiltin.m_eFamily;
     aDFA.mbSymbolFlag   = (rBuiltin.m_eCharSet != RTL_TEXTENCODING_MS_1252 );
     aDFA.mePitch        = rBuiltin.m_ePitch;
@@ -8260,7 +8260,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
     //to tweak this
 
-    String aStrikeoutChar = String::CreateFromAscii( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
+    rtl::OUString aStrikeoutChar( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
     String aStrikeout = aStrikeoutChar;
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
         aStrikeout.Append( aStrikeout );

@@ -50,10 +50,10 @@ SbxCollection::SbxCollection( const XubString& rClass )
         pAdd    = GetSbxRes( STRING_ADDMETH );
         pItem   = GetSbxRes( STRING_ITEMMETH );
         pRemove = GetSbxRes( STRING_REMOVEMETH );
-        nCountHash  = MakeHashCode( String::CreateFromAscii( pCount ) );
-        nAddHash    = MakeHashCode( String::CreateFromAscii( pAdd ) );
-        nItemHash   = MakeHashCode( String::CreateFromAscii( pItem ) );
-        nRemoveHash = MakeHashCode( String::CreateFromAscii( pRemove ) );
+        nCountHash  = MakeHashCode( rtl::OUString::createFromAscii( pCount ) );
+        nAddHash    = MakeHashCode( rtl::OUString::createFromAscii( pAdd ) );
+        nItemHash   = MakeHashCode( rtl::OUString::createFromAscii( pItem ) );
+        nRemoveHash = MakeHashCode( rtl::OUString::createFromAscii( pRemove ) );
     }
     Initialize();
     // For Access on itself
@@ -86,14 +86,14 @@ void SbxCollection::Initialize()
     SetFlag( SBX_FIXED );
     ResetFlag( SBX_WRITE );
     SbxVariable* p;
-    p = Make( String::CreateFromAscii( pCount ), SbxCLASS_PROPERTY, SbxINTEGER );
+    p = Make( rtl::OUString::createFromAscii( pCount ), SbxCLASS_PROPERTY, SbxINTEGER );
     p->ResetFlag( SBX_WRITE );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pAdd ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( rtl::OUString::createFromAscii( pAdd ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pItem ), SbxCLASS_METHOD, SbxOBJECT );
+    p = Make( rtl::OUString::createFromAscii( pItem ), SbxCLASS_METHOD, SbxOBJECT );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( String::CreateFromAscii( pRemove ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( rtl::OUString::createFromAscii( pRemove ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
 }
 

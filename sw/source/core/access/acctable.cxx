@@ -1633,14 +1633,14 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2
 
     OUStringBuffer aBuffer( rName.Len() + 15 + 6 );
     aBuffer.append( OUString(rName) );
-    aBuffer.append( String::CreateFromAscii("-ColumnHeaders-") );
+    aBuffer.append( rtl::OUString("-ColumnHeaders-") );
     aBuffer.append( static_cast<sal_Int32>( pTabFrm->GetPhyPageNum() ) );
 
     SetName( aBuffer.makeStringAndClear() );
 
     OUStringBuffer aBuffer2( rName.Len() + 14 );
     aBuffer2.append( OUString(rName) );
-    aBuffer2.append( String::CreateFromAscii("-ColumnHeaders") );
+    aBuffer2.append( rtl::OUString("-ColumnHeaders") );
     OUString sArg1( aBuffer2.makeStringAndClear() );
     OUString sArg2( GetFormattedPageNumber() );
 

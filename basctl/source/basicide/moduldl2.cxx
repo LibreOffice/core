@@ -1532,7 +1532,7 @@ void LibPage::SetCurLib()
                     ImpInsertLibEntry( aLibName, i );
             }
 
-            SvLBoxEntry* pEntry_ = aLibBox.FindEntry( String::CreateFromAscii( "Standard" ) );
+            SvLBoxEntry* pEntry_ = aLibBox.FindEntry( rtl::OUString("Standard") );
             if ( !pEntry_ )
                 pEntry_ = aLibBox.GetEntry( 0 );
             aLibBox.SetCurEntry( pEntry_ );

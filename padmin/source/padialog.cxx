@@ -435,7 +435,7 @@ void SpaPrinterController::printPage( int ) const
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(aResIds); i++ )
     {
         if( aResIds[i].pDirect )
-            aToken = String::CreateFromAscii( aResIds[i].pDirect );
+            aToken = rtl::OUString::createFromAscii(aResIds[i].pDirect);
         else
             aToken = String( PaResId( aResIds[i].nResId ) );
         nMaxWidth = ( nWidth = pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;

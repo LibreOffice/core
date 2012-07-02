@@ -346,7 +346,7 @@ namespace svt
             }
         }
         else if ( bWasComplete )
-            m_pImpl->InCompleteHyperLabel = InsertHyperLabel( m_pImpl->getItemCount(), ::String::CreateFromAscii( "..." ), RMINCOMPLETE );
+            m_pImpl->InCompleteHyperLabel = InsertHyperLabel( m_pImpl->getItemCount(), rtl::OUString("..."), RMINCOMPLETE );
     }
 
     //---------------------------------------------------------------------
@@ -371,7 +371,7 @@ namespace svt
         {
             RoadmapItem* pOldItem = GetPreviousHyperLabel( m_pImpl->getItemCount() );
             m_pImpl->InCompleteHyperLabel->SetPosition( pOldItem );
-            m_pImpl->InCompleteHyperLabel->Update( m_pImpl->getItemCount(), ::String::CreateFromAscii("...") );
+            m_pImpl->InCompleteHyperLabel->Update( m_pImpl->getItemCount(), rtl::OUString("...") );
         }
     }
 

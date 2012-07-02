@@ -71,7 +71,7 @@ namespace svx
 
         FreeResource();
 
-        String sTemp = String::CreateFromAscii("*.odb");
+        rtl::OUString sTemp("*.odb");
         m_aURL.SetFilter(sTemp);
 
         m_aName.SetModifyHdl( LINK(this, ODocumentLinkDialog, OnTextModified) );
@@ -171,8 +171,7 @@ namespace svx
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
-        static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+        const SfxFilter* pFilter = SfxFilter::GetFilterByName(rtl::OUString("StarOffice XML (Base)"));
         if ( pFilter )
         {
             aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());

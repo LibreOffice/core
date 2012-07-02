@@ -297,7 +297,7 @@ void RTSPaperPage::update()
 
     // input slots
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String::CreateFromAscii( "InputSlot" ) )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( rtl::OUString("InputSlot") )) )
     {
         m_pParent->insertAllPPDValues( m_aSlotBox, m_pParent->m_aJobData.m_pParser, pKey );
     }

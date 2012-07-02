@@ -7086,7 +7086,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
     const char* pName = GetInternalServerName_Impl( aStgNm );
     String sStarName;
     if ( pName )
-        sStarName = String::CreateFromAscii( pName );
+        sStarName = rtl::OUString::createFromAscii( pName );
     else if ( nConvertFlags )
     {
         static struct _ObjImpType
@@ -7138,7 +7138,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
 
                 if ( aStgNm == aTypeName )
                 {
-                    sStarName = String::CreateFromAscii( pArr->pFactoryNm );
+                    sStarName = rtl::OUString::createFromAscii( pArr->pFactoryNm );
                     break;
                 }
             }

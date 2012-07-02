@@ -341,7 +341,7 @@ void SfxRequest_Impl::Record
 */
 
 {
-    String aCommand = String::CreateFromAscii(".uno:");
+    String aCommand = rtl::OUString(".uno:");
     aCommand.AppendAscii( pSlot->GetUnoName() );
     ::rtl::OUString aCmd( aCommand );
     if(xRecorder.is())

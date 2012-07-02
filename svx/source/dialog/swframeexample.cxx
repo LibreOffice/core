@@ -41,8 +41,6 @@ using namespace ::com::sun::star::text;
 
 #define FLYINFLY_BORDER 3
 #define DEMOTEXT        "Ij"
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
-
 
 SvxSwFrameExample::SvxSwFrameExample( Window *pParent, const ResId& rResID ) :
 
@@ -172,7 +170,7 @@ void SvxSwFrameExample::InitAllRects_Impl()
         {
             aFont.SetSize(Size(0, aParaPrtArea.GetHeight() - 2));
             SetFont(aFont);
-            aParaPrtArea.SetSize(Size(GetTextWidth(C2S(DEMOTEXT)), GetTextHeight()));
+            aParaPrtArea.SetSize(Size(GetTextWidth(rtl::OUString(DEMOTEXT)), GetTextHeight()));
         }
         else
         {
@@ -218,7 +216,7 @@ void SvxSwFrameExample::InitAllRects_Impl()
     }
     else
     {
-        sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(C2S(DEMOTEXT));
+        sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(rtl::OUString(DEMOTEXT));
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
         aDrawObj.SetSize(Size(Max(5L, (long)nFreeWidth / 3L), Max(5L, aFrmSize.Height() * 3L)));
@@ -680,7 +678,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
     }
     else
     {
-        DrawText(aParaPrtArea, C2S(DEMOTEXT));
+        DrawText(aParaPrtArea, rtl::OUString(DEMOTEXT));
         DrawRect_Impl(aDrawObj, m_aBlankCol, m_aBlankFrameCol );
     }
 

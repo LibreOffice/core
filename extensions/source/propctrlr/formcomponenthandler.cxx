@@ -2893,7 +2893,7 @@ namespace pcr
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0,
-                ::String::CreateFromAscii("sdatabase"));
+                rtl::OUString("sdatabase"));
 
         ::rtl::OUString sDataSource;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );
@@ -2903,8 +2903,7 @@ namespace pcr
             // is considered to be potentially expensive
             aFileDlg.SetDisplayDirectory( sDataSource );
 
-        const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+        const SfxFilter* pFilter = SfxFilter::GetFilterByName(rtl::OUString("StarOffice XML (Base)"));
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         if ( pFilter )
         {

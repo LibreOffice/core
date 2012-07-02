@@ -222,7 +222,7 @@ DBG_NAME(OParameterDialog)
                         LocalResourceAccess aDummy(DLG_PARAMETERS, RSC_MODALDIALOG);
                         sMessage = String(ModuleRes(STR_COULD_NOT_CONVERT_PARAM));
                     }
-                    sMessage.SearchAndReplaceAll(String::CreateFromAscii("$name$"), sName);
+                    sMessage.SearchAndReplaceAll(rtl::OUString("$name$"), sName);
                     ErrorBox(NULL, WB_OK, sMessage).Execute();
                     m_aParam.GrabFocus();
                     return 1L;

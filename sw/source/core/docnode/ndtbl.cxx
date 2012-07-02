@@ -4196,9 +4196,8 @@ void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
                 aRegH.RegisterInModify( pTxtNode , *pTxtNode );
                 if ( pUndo )
                     pUndo->AddNode( *pTxtNode , sal_False );
-                String aStyle = String::CreateFromAscii("");
                 SfxStringItem * pNewItem = (SfxStringItem*)pFmtItem->Clone();
-                pNewItem->SetValue( aStyle );
+                pNewItem->SetValue(rtl::OUString());
                 rSet.Put( *pNewItem );
                 pTxtNode->SetAttr( rSet );
                 delete pNewItem;

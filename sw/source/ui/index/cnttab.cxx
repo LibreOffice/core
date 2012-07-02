@@ -310,7 +310,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
                 }
                 else
                 {
-                    pDescArr[nArrayIndex]->SetAuthBrackets(C2S("[]"));
+                    pDescArr[nArrayIndex]->SetAuthBrackets(rtl::OUString("[]"));
                 }
             }
         }
@@ -458,7 +458,7 @@ SwTOXDescription&   SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
             }
             else
             {
-                pDescArr[nIndex]->SetAuthBrackets(C2S("[]"));
+                pDescArr[nIndex]->SetAuthBrackets(rtl::OUString("[]"));
             }
         }
         else if(TOX_INDEX == eType.eType)
@@ -2358,7 +2358,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
         String sToInsert(aAuthFieldsLB.GetSelectEntry());
         SwFormToken aInsert(TOKEN_AUTHORITY);
         aInsert.nAuthorityField = (sal_uInt16)(sal_uIntPtr)aAuthFieldsLB.GetEntryData(nSelPos);
-        aTokenWIN.InsertAtSelection(String::CreateFromAscii(
+        aTokenWIN.InsertAtSelection(rtl::OUString::createFromAscii(
                                             SwForm::aFormAuth), aInsert);
         aAuthFieldsLB.RemoveEntry(sToInsert);
         aAuthFieldsLB.SelectEntryPos( nSelPos ? nSelPos - 1 : 0);
@@ -2914,8 +2914,8 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 default:; //prevent warning
                 }
 
-                InsertItem( pTmp ? String::CreateFromAscii(pTmp)
-                                 : aEmptyStr, aToken );
+                InsertItem( pTmp ? rtl::OUString::createFromAscii(pTmp)
+                                 : rtl::OUString(), aToken );
                 bLastWasText = sal_False;
             }
 

@@ -259,8 +259,8 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow 
     SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
 
     aStbStatus.InsertItem( 1, 130, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
-    aStbStatus.InsertItem( 2, 10 + GetTextWidth( String::CreateFromAscii( " 9999,99 cm / 9999,99 cm " ) ), SIB_CENTER | SIB_IN );
-    aStbStatus.InsertItem( 3, 10 + GetTextWidth( String::CreateFromAscii( " 9999,99 cm x 9999,99 cm " ) ), SIB_CENTER | SIB_IN );
+    aStbStatus.InsertItem( 2, 10 + GetTextWidth( rtl::OUString(" 9999,99 cm / 9999,99 cm ") ), SIB_CENTER | SIB_IN );
+    aStbStatus.InsertItem( 3, 10 + GetTextWidth( rtl::OUString(" 9999,99 cm x 9999,99 cm ") ), SIB_CENTER | SIB_IN );
     aStbStatus.InsertItem( 4, 20, SIB_CENTER | SIB_IN );
 
     Resize();
@@ -572,7 +572,7 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
-    aStr.Append( String::CreateFromAscii( " / " ) );
+    aStr.Append( rtl::OUString(" / ") );
     aStr.Append( GetUnitString( rMousePos.Y(), eFieldUnit, cSep ) );
 
     aStbStatus.SetItemText( 2, aStr );
@@ -589,7 +589,7 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep()[0];
 
     aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
-    aStr.Append( String::CreateFromAscii( " x " ) );
+    aStr.Append( rtl::OUString(" x ") );
     aStr.Append( GetUnitString( rSize.Height(), eFieldUnit, cSep ) );
 
     aStbStatus.SetItemText( 3, aStr );

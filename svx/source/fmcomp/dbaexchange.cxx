@@ -167,7 +167,7 @@ namespace svx
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
-            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"dbaccess.ColumnDescriptorTransfer\""));
+            s_nFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"dbaccess.ColumnDescriptorTransfer\""));
             OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OColumnTransferable::getDescriptorFormatId: bad exchange id!");
         }
         return s_nFormat;
@@ -651,7 +651,7 @@ namespace svx
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
-            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"dbaccess.MultipleColumnDescriptorTransfer\""));
+            s_nFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"dbaccess.MultipleColumnDescriptorTransfer\""));
             OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OColumnTransferable::getDescriptorFormatId: bad exchange id!");
         }
         return s_nFormat;

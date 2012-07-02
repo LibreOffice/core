@@ -51,16 +51,16 @@ class SFX2_DLLPUBLIC SfxFilter
 friend class SfxFilterContainer;
 
     WildCard        aWildCard;
-    sal_uIntPtr         lFormat;
+    sal_uIntPtr     lFormat;
     String          aTypeName;
-    String          aUserData;
+    rtl::OUString   aUserData;
     SfxFilterFlags  nFormatType;
-    sal_uInt16          nDocIcon;
-    String          aServiceName;
-    ::rtl::OUString aMimeType;
+    sal_uInt16      nDocIcon;
+    rtl::OUString   aServiceName;
+    rtl::OUString   aMimeType;
     String          aFilterName;
     String          aPattern;
-    sal_uIntPtr           nVersion;
+    sal_uIntPtr     nVersion;
     String          aUIName;
     String          aDefaultTemplate;
 
@@ -93,7 +93,7 @@ public:
     const String&   GetTypeName() const { return aTypeName; }
     const String&   GetUIName() const { return aUIName; }
     sal_uInt16          GetDocIconId() const { return nDocIcon; }
-    const String&   GetUserData() const { return aUserData; }
+    const rtl::OUString& GetUserData() const { return aUserData; }
     const String&   GetDefaultTemplate() const { return aDefaultTemplate; }
     void            SetDefaultTemplate( const String& rStr ) { aDefaultTemplate = rStr; }
     sal_Bool            UsesStorage() const { return GetFormat() != 0; }
@@ -104,7 +104,7 @@ public:
     sal_uIntPtr           GetVersion() const { return nVersion; }
     String          GetSuffixes() const;
     String          GetDefaultExtension() const;
-    const String&   GetServiceName() const { return aServiceName; }
+    const rtl::OUString& GetServiceName() const { return aServiceName; }
 
     static const SfxFilter* GetDefaultFilter( const String& rName );
     static const SfxFilter* GetFilterByName( const String& rName );

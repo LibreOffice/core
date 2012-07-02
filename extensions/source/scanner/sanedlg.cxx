@@ -289,7 +289,7 @@ void SaneDlg::InitFields()
                 else // SANE_UNIT_PIXEL
                 {
                     pField->SetValue( (int)fValue, FUNIT_CUSTOM );
-                    pField->SetCustomUnitText( String::CreateFromAscii( "Pixel" ) );
+                    pField->SetCustomUnitText(rtl::OUString("Pixel"));
                 }
                 switch( i ) {
                     case 0: maTopLeft.X() = (int)fValue;break;

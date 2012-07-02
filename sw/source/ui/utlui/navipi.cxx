@@ -1091,7 +1091,7 @@ void SwNavigationPI::UpdateListBox()
         if ( !pDoc->IsHelpDocument() )
         {
             String sEntry = pDoc->GetTitle();
-            sEntry += C2S(" (");
+            sEntry += rtl::OUString(" (");
             if (pView == pActView)
             {
                 nAct = nCount;
@@ -1117,7 +1117,7 @@ void SwNavigationPI::UpdateListBox()
     {
         String sEntry = aContentTree.GetHiddenWrtShell()->GetView().
                                         GetDocShell()->GetTitle();
-        sEntry += C2S(" (");
+        sEntry += rtl::OUString(" (");
         sEntry += aStatusArr[ST_HIDDEN - ST_STATUS_FIRST];
         sEntry += ')';
         aDocListBox.InsertEntry(sEntry);
@@ -1234,8 +1234,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     DELETEZ( pxObjectShell);
                 }
                 SfxStringItem aFileItem(SID_FILE_NAME, sFileName );
-                String sOptions = C2S("HRC");
-                SfxStringItem aOptionsItem( SID_OPTIONS, sOptions );
+                SfxStringItem aOptionsItem( SID_OPTIONS, rtl::OUString("HRC") );
                 SfxLinkItem aLink( SID_DONELINK,
                                     LINK( this, SwNavigationPI, DoneLink ) );
                 GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(

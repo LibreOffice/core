@@ -580,7 +580,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     m_rConfigItem(rConfig),
     m_eType(eType)
 {
-    m_aFieldCB.SetForbiddenChars( String::CreateFromAscii("<>"));
+    m_aFieldCB.SetForbiddenChars( rtl::OUString("<>"));
     m_aDragED.SetStyle(m_aDragED.GetStyle() |WB_NOHIDESELECTION);
     if( eType >= GREETING_FEMALE )
     {
@@ -600,7 +600,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         ResStringArray aPunctArr(SW_RES(RA_PUNCTUATION));
         for(i = 0; i < aPunctArr.Count(); ++i)
             m_aPunctuations.push_back(aPunctArr.GetString(i));
-        m_aDragED.SetText(String::CreateFromAscii("            "));
+        m_aDragED.SetText(rtl::OUString("            "));
         SetText( String( SW_RES( eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE)));
         m_aAddressElementsFT.SetText(String(SW_RES(ST_SALUTATIONELEMENTS)));
         m_aInsertFieldIB.SetQuickHelpText(String(SW_RES(ST_INSERTSALUTATIONFIELD)));
@@ -620,7 +620,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         aPreviewSize.Height() += nDiff;
         m_aPreviewWIN.SetSizePixel(aPreviewSize);
         m_aPreviewWIN.SetPosPixel(m_aFieldCB.GetPosPixel());
-        m_aDragED.SetText(String::CreateFromAscii("\n\n\n\n\n"));
+        m_aDragED.SetText(rtl::OUString("\n\n\n\n\n"));
     }
     FreeResource();
     const ResStringArray& rHeaders = m_rConfigItem.GetDefaultAddressHeaders();
@@ -1041,7 +1041,7 @@ SwAssignFieldsControl::SwAssignFieldsControl(
     {
         const XubString& rHeader = rHeaders.GetString( i );
         FixedInfo* pNewText = new FixedInfo(&m_aWindow, ResId( FT_FIELDS, *rResId.GetResMgr()));
-        String sLabel(String::CreateFromAscii("<>"));
+        String sLabel(rtl::OUString("<>"));
         sLabel.Insert(rHeader, 1);
         pNewText->SetText(sLabel);
         ListBox* pNewLB = new ListBox(&m_aWindow, ResId(LB_FIELDS, *rResId.GetResMgr()));
@@ -1474,7 +1474,7 @@ void AddressMultiLineEdit::SetText( const String& rStr )
         if(nLastLen)
         {
             TextPaM aPaM(nParaCount ? nParaCount - 1 : 0, nLastLen);
-            pTextEngine->ReplaceText( TextSelection( aPaM ), String::CreateFromAscii("\n \n "));
+            pTextEngine->ReplaceText( TextSelection( aPaM ), rtl::OUString("\n \n "));
         }
     }
 }

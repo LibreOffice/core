@@ -130,7 +130,7 @@ SfxItemPresentation  SvxGridItem::GetPresentation
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = String::CreateFromAscii("SvxGridItem");
+            rText = rtl::OUString("SvxGridItem");
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;

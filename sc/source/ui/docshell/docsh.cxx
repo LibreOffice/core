@@ -2455,37 +2455,37 @@ void ScDocShell::PrepareReload()
 
 String ScDocShell::GetOwnFilterName()
 {
-    return String::CreateFromAscii(pFilterSc50);
+    return rtl::OUString(pFilterSc50);
 }
 
 String ScDocShell::GetHtmlFilterName()
 {
-    return String::CreateFromAscii(pFilterHtml);
+    return rtl::OUString(pFilterHtml);
 }
 
 String ScDocShell::GetWebQueryFilterName()
 {
-    return String::CreateFromAscii(pFilterHtmlWebQ);
+    return rtl::OUString(pFilterHtmlWebQ);
 }
 
 String ScDocShell::GetAsciiFilterName()
 {
-    return String::CreateFromAscii(pFilterAscii);
+    return rtl::OUString(pFilterAscii);
 }
 
 String ScDocShell::GetLotusFilterName()
 {
-    return String::CreateFromAscii(pFilterLotus);
+    return rtl::OUString(pFilterLotus);
 }
 
 String ScDocShell::GetDBaseFilterName()
 {
-    return String::CreateFromAscii(pFilterDBase);
+    return rtl::OUString(pFilterDBase);
 }
 
 String ScDocShell::GetDifFilterName()
 {
-    return String::CreateFromAscii(pFilterDif);
+    return rtl::OUString(pFilterDif);
 }
 
 sal_Bool ScDocShell::HasAutomaticTableName( const String& rFilter )

@@ -759,7 +759,7 @@ void SvTreeListBox::RequestingChildren( SvLBoxEntry* pParent )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( !pParent->HasChildren() )
-        InsertEntry( String::CreateFromAscii("<dummy>"), pParent, sal_False, LIST_APPEND );
+        InsertEntry( rtl::OUString("<dummy>"), pParent, sal_False, LIST_APPEND );
 }
 
 void SvTreeListBox::GetFocus()

@@ -1780,7 +1780,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
 
 void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    lcl_DumpRow( String::CreateFromAscii("ScDPResultMember"), GetName(), NULL, pDoc, rPos );
+    lcl_DumpRow( rtl::OUString("ScDPResultMember"), GetName(), NULL, pDoc, rPos );
     SCROW nStartRow = rPos.Row();
 
     if (pDataRoot)
@@ -2619,7 +2619,7 @@ void ScDPDataMember::UpdateRunningTotals( const ScDPResultMember* pRefMember,
 
 void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    lcl_DumpRow( String::CreateFromAscii("ScDPDataMember"), GetName(), &aAggregate, pDoc, rPos );
+    lcl_DumpRow( rtl::OUString("ScDPDataMember"), GetName(), &aAggregate, pDoc, rPos );
     SCROW nStartRow = rPos.Row();
 
     const ScDPDataDimension* pDataChild = GetChildDimension();
@@ -3427,8 +3427,8 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember( const ScDPRelativePo
 
 void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    String aDimName = bIsDataLayout ? String::CreateFromAscii("(data layout)") : GetName();
-    lcl_DumpRow( String::CreateFromAscii("ScDPResultDimension"), aDimName, NULL, pDoc, rPos );
+    rtl::OUString aDimName = bIsDataLayout ? rtl::OUString("(data layout)") : rtl::OUString(GetName());
+    lcl_DumpRow( rtl::OUString("ScDPResultDimension"), aDimName, NULL, pDoc, rPos );
 
     SCROW nStartRow = rPos.Row();
 
@@ -3787,8 +3787,8 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
 
 void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    String aDimName = String::CreateFromAscii( bIsDataLayout ? "(data layout)" : "(unknown)" );
-    lcl_DumpRow( String::CreateFromAscii("ScDPDataDimension"), aDimName, NULL, pDoc, rPos );
+    rtl::OUString aDimName = bIsDataLayout ? rtl::OUString("(data layout)") : rtl::OUString("(unknown)");
+    lcl_DumpRow( rtl::OUString("ScDPDataDimension"), aDimName, NULL, pDoc, rPos );
 
     SCROW nStartRow = rPos.Row();
 

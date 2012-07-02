@@ -967,7 +967,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nS
         rString = comphelper::string::remove(rString, 0x1);
         rString = comphelper::string::remove(rString, 0x5);
         rString = comphelper::string::remove(rString, 0x8);
-        rString.SearchAndReplaceAllAscii("\007\007", String::CreateFromAscii("\007\012"));
+        rString.SearchAndReplaceAllAscii("\007\007", rtl::OUString("\007\012"));
         rString.SearchAndReplaceAll(0x7, ' ');
 
     }

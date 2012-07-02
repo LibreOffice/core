@@ -558,7 +558,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 if ( pMailRecipient )
                 {
                     String aRecipient( pMailRecipient->GetValue() );
-                    String aMailToStr( String::CreateFromAscii( "mailto:" ));
+                    String aMailToStr(rtl::OUString("mailto:"));
 
                     if ( aRecipient.Search( aMailToStr ) == 0 )
                         aRecipient = aRecipient.Erase( 0, aMailToStr.Len() );

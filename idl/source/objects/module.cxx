@@ -141,7 +141,7 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     if( aSlotIdFile.ReadSvIdl( SvHash_SlotIdFile(), rInStm ) )
     {
         sal_uInt32 nTokPos = rInStm.Tell();
-        if( !rBase.ReadIdFile( String::CreateFromAscii( aSlotIdFile.getString().getStr() ) ) )
+        if( !rBase.ReadIdFile( rtl::OStringToOUString(aSlotIdFile.getString(), RTL_TEXTENCODING_ASCII_US)) )
         {
             rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot read file: "));
             aStr.append(aSlotIdFile.getString());
@@ -231,7 +231,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvToken * pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
         {
-            DirEntry aFullName( String::CreateFromAscii( pTok->GetString().getStr() ) );
+            DirEntry aFullName( rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US) );
             rBase.StartNewFile( aFullName.GetFull() );
             if( aFullName.Find( rBase.GetPath() ) )
             {
@@ -334,14 +334,14 @@ sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm 
     {
         pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
-             bOk = aBeginName.MakeId( String::CreateFromAscii( pTok->GetString().getStr() ) );
+             bOk = aBeginName.MakeId(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
     }
     rInStm.ReadDelemiter();
     if( bOk )
     {
         pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
-             bOk = aEndName.MakeId( String::CreateFromAscii( pTok->GetString().getStr() ) );
+             bOk = aEndName.MakeId(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
     }
     rInStm.ReadDelemiter();
     if( bOk )

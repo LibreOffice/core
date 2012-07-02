@@ -616,15 +616,14 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 
             SvtPathOptions aPathOpt;
             xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
-            String sWW8( C2S( FILTER_WW8 ) );
 
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-            SfxFilterMatcher aMatcher( String::CreateFromAscii(SwDocShell::Factory().GetShortName()) );
+            SfxFilterMatcher aMatcher( rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
             SfxFilterMatcherIter aIter( aMatcher );
             const SfxFilter* pFilter = aIter.First();
             while ( pFilter )
             {
-                if( pFilter->GetUserData() == sWW8 )
+                if( pFilter->GetUserData() == FILTER_WW8 )
                 {
                     xFltMgr->appendFilter( pFilter->GetUIName(),
                                 pFilter->GetWildcard().getGlob() );

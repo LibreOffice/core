@@ -169,12 +169,12 @@ SmFilterDetect::~SmFilterDetect()
     bWasReadOnly = pItem && pItem->GetValue();
 
     String aFilterName;
-    String aPrefix = String::CreateFromAscii( "private:factory/" );
+    String aPrefix = rtl::OUString( "private:factory/" );
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
         const SfxFilter* pFilter = 0;
         String aPattern( aPrefix );
-        aPattern += String::CreateFromAscii("smath");
+        aPattern += rtl::OUString("smath");
         if ( aURL.Match( aPattern ) >= aPattern.Len() )
         {
             pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
@@ -233,7 +233,7 @@ SmFilterDetect::~SmFilterDetect()
                     {
                         const SfxFilter* pFilter = aPreselectedFilterName.Len() ?
                                 SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
-                                SfxFilterMatcher(String::CreateFromAscii("smath")).GetFilter4EA( aTypeName ) : 0;
+                                SfxFilterMatcher(rtl::OUString("smath")).GetFilter4EA( aTypeName ) : 0;
                         String aTmpFilterName;
                         if ( pFilter )
                             aTmpFilterName = pFilter->GetName();
@@ -286,7 +286,7 @@ SmFilterDetect::~SmFilterDetect()
                        if ( aTypeName.Len() )
                     {
                            const SfxFilter* pFilter =
-                                    SfxFilterMatcher( String::CreateFromAscii("smath") ).GetFilter4EA( aTypeName );
+                                    SfxFilterMatcher( rtl::OUString("smath") ).GetFilter4EA( aTypeName );
                         if ( pFilter )
                             aFilterName = pFilter->GetName();
                     }
@@ -332,7 +332,7 @@ SmFilterDetect::~SmFilterDetect()
 
                     if ( aTypeName.Len() )
                     {
-                        const SfxFilter* pFilt = SfxFilterMatcher( String::CreateFromAscii("smath") ).GetFilter4EA( aTypeName );
+                        const SfxFilter* pFilt = SfxFilterMatcher( rtl::OUString("smath") ).GetFilter4EA( aTypeName );
                         if ( pFilt )
                             aFilterName = pFilt->GetName();
                     }

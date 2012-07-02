@@ -94,7 +94,7 @@ public:
 
     static INetContentType GetContentType(UniString const & rTypeName);
 
-    static UniString GetContentType(INetContentType eTypeID);
+    static rtl::OUString GetContentType(INetContentType eTypeID);
 
     static UniString GetPresentation(INetContentType eTypeID);
 
@@ -593,15 +593,14 @@ INetContentType Registration::GetContentType(UniString const & rTypeName)
 
 //============================================================================
 // static
-UniString Registration::GetContentType(INetContentType eTypeID)
+rtl::OUString Registration::GetContentType(INetContentType eTypeID)
 {
     Registration &rRegistration = theRegistration::get();
 
     TypeIDMap::iterator pEntry = rRegistration.m_aTypeIDMap.find( eTypeID );
     if( pEntry != rRegistration.m_aTypeIDMap.end() )
         return pEntry->second->m_aTypeName;
-    else
-        return  UniString();
+    return rtl::OUString();
 }
 
 //============================================================================
@@ -735,7 +734,7 @@ INetContentType INetContentTypes::GetContentType(UniString const & rTypeName)
 
 //============================================================================
 //static
-UniString INetContentTypes::GetContentType(INetContentType eTypeID)
+rtl::OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 {
     static sal_Char const * aMap[CONTENT_TYPE_LAST + 1];
     static bool bInitialized = false;
@@ -750,10 +749,10 @@ UniString INetContentTypes::GetContentType(INetContentType eTypeID)
         bInitialized = true;
     }
 
-    UniString aTypeName = eTypeID <= CONTENT_TYPE_LAST ?
-                              UniString::CreateFromAscii(aMap[eTypeID]) :
+    rtl::OUString aTypeName = eTypeID <= CONTENT_TYPE_LAST ?
+                              rtl::OUString::createFromAscii(aMap[eTypeID]) :
                               Registration::GetContentType(eTypeID);
-    if (aTypeName.Len() == 0)
+    if (aTypeName.isEmpty())
     {
         OSL_FAIL("INetContentTypes::GetContentType(): Bad ID");
         return rtl::OUString(CONTENT_TYPE_STR_APP_OCTSTREAM);
