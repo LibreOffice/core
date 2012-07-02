@@ -32,6 +32,7 @@
 #include "sectfrm.hxx"
 #include "tabfrm.hxx"
 #include "txtfrm.hxx"
+#include "hffrm.hxx"
 #include "porlin.hxx"
 #include "porlay.hxx"
 #include "portxt.hxx"
@@ -366,6 +367,12 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
         SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
         SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%lu", pTxtNode->GetIndex() );
+    }
+    if (IsHeaderFrm())
+    {
+        SwHeaderFrm *pHeaderFrm = (SwHeaderFrm*)this;
+        rtl::OUString aFmtName = pHeaderFrm->GetFmt()->GetName();
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(rtl::OUStringToOString(aFmtName, RTL_TEXTENCODING_UTF8).getStr()));
     }
 }
 

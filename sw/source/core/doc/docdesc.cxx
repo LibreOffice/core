@@ -217,7 +217,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
             }
             else if( (*aRCnt.GetCntntIdx()) == (*aCnt.GetCntntIdx()) )
             {
-                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Header",
+                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), (bLeft ? "Left header" : "First header"),
                                                 GetDfltFrmFmt() );
                 ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
                 // The section which the right header attribute is pointing
@@ -272,7 +272,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
             }
             else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
             {
-                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Footer",
+                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), (bLeft ? "Left footer" : "First footer"),
                                                 GetDfltFrmFmt() );
                 ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
                 // The section to which the right footer attribute is pointing
