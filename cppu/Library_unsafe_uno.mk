@@ -27,10 +27,7 @@
 
 $(eval $(call gb_Library_Library,unsafe_uno))
 
-$(eval $(call gb_Library_use_api,unsafe_uno,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,unsafe_uno))
 
 $(eval $(call gb_Library_use_libraries,unsafe_uno,\
 	purpenvhelper \

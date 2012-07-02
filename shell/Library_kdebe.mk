@@ -35,10 +35,7 @@ $(eval $(call gb_Library_add_libs,kdebe1,\
 	-lkio \
 ))
 
-$(eval $(call gb_Library_use_api,kdebe1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,kdebe1))
 
 $(eval $(call gb_Library_use_externals,kdebe1,\
 	kde \

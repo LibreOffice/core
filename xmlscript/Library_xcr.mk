@@ -13,10 +13,7 @@ $(eval $(call gb_Library_use_package,xcr,xmlscript_inc))
 
 $(eval $(call gb_Library_set_componentfile,xcr,xmlscript/util/xcr))
 
-$(eval $(call gb_Library_use_api,xcr,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,xcr))
 
 $(eval $(call gb_Library_use_libraries,xcr,\
     comphelper \

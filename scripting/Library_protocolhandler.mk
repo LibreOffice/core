@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,protocolhandler,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
-$(eval $(call gb_Library_use_api,protocolhandler,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,protocolhandler))
 
 $(eval $(call gb_Library_use_libraries,protocolhandler,\
 	cppu \

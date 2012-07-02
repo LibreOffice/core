@@ -33,10 +33,7 @@ $(eval $(call gb_Library_add_defs,postgresql-sdbc,\
 	-DPQ_SDBC_MICRO=2 \
 ))
 
-$(eval $(call gb_Library_use_api,postgresql-sdbc,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,postgresql-sdbc))
 
 $(eval $(call gb_Library_use_libraries,postgresql-sdbc,\
 	cppu \

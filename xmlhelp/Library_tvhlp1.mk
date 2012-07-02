@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,tvhlp1))
 
 $(eval $(call gb_Library_set_componentfile,tvhlp1,xmlhelp/source/treeview/tvhlp1))
 
-$(eval $(call gb_Library_use_api,tvhlp1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,tvhlp1))
 
 $(eval $(call gb_Library_use_externals,tvhlp1,\
 	expat_utf8 \

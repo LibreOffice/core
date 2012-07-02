@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,cairocanvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_use_api,cairocanvas,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,cairocanvas))
 
 ifeq ($(OS),MACOSX)
 

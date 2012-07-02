@@ -20,10 +20,7 @@ $(eval $(call gb_Library_Library,filterconfig))
 
 $(eval $(call gb_Library_set_componentfile,filterconfig,filter/source/config/cache/filterconfig1))
 
-$(eval $(call gb_Library_use_api,filterconfig,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,filterconfig))
 
 $(eval $(call gb_Library_set_include,filterconfig,\
 	$$(INCLUDE) \

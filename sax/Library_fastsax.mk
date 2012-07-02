@@ -11,10 +11,7 @@ $(eval $(call gb_Library_Library,fastsax))
 
 $(eval $(call gb_Library_set_componentfile,fastsax,sax/source/fastparser/fastsax))
 
-$(eval $(call gb_Library_use_api,fastsax,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,fastsax))
 
 $(eval $(call gb_Library_use_externals,fastsax,\
         expat_utf8 \

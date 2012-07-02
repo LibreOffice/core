@@ -47,10 +47,7 @@ $(eval $(call gb_Library_add_defs,slideshow,\
 ))
 endif
 
-$(eval $(call gb_Library_use_api,slideshow,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,slideshow))
 
 $(eval $(call gb_Library_use_libraries,slideshow,\
     avmedia \

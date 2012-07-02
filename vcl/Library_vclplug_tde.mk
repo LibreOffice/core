@@ -42,10 +42,7 @@ $(eval $(call gb_Library_add_defs,vclplug_tde,\
     -DVCLPLUG_TDE_IMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_api,vclplug_tde,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,vclplug_tde))
 
 $(eval $(call gb_Library_add_libs,vclplug_tde,\
     $$(TDE_LIBS) \

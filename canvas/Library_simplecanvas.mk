@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,simplecanvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_use_api,simplecanvas,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,simplecanvas))
 
 $(eval $(call gb_Library_use_libraries,simplecanvas,\
 	basegfx \

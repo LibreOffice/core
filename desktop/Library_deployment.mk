@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,deployment,\
     -I$(SRCDIR)/desktop/source/deployment/registry/inc \
 ))
 
-$(eval $(call gb_Library_use_api,deployment,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,deployment))
 
 $(eval $(call gb_Library_use_libraries,deployment,\
     comphelper \

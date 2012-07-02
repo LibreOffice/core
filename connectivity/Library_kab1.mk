@@ -31,10 +31,7 @@ $(eval $(call gb_Library_use_externals,kab1,kde))
 
 $(eval $(call gb_Library_set_componentfile,kab1,connectivity/source/drivers/kab/kab1))
 
-$(eval $(call gb_Library_use_api,kab1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,kab1))
 
 $(eval $(call gb_Library_set_include,kab1,\
 	-I$(SRCDIR)/connectivity/source/inc \

@@ -71,10 +71,7 @@ $(eval $(call gb_Library_set_defs,sd,\
 ))
 endif
 
-$(eval $(call gb_Library_use_api,sd,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,sd))
 
 $(eval $(call gb_Library_use_libraries,sd,\
     avmedia \

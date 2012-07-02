@@ -33,10 +33,7 @@ $(eval $(call gb_Library_set_include,deploymentmisc,\
     -I$(SRCDIR)/desktop/source/deployment/inc \
 ))
 
-$(eval $(call gb_Library_use_api,deploymentmisc,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,deploymentmisc))
 
 $(eval $(call gb_Library_add_defs,deploymentmisc,\
     -DDESKTOP_DEPLOYMENTMISC_DLLIMPLEMENTATION \

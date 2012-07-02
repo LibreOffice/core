@@ -27,10 +27,7 @@
 
 $(eval $(call gb_Library_Library,log_uno))
 
-$(eval $(call gb_Library_use_api,log_uno,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,log_uno))
 
 $(eval $(call gb_Library_use_libraries,log_uno,\
 	cppu \

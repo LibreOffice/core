@@ -41,10 +41,7 @@ $(eval $(call gb_Library_set_include,sw,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,sw,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,sw))
 
 $(eval $(call gb_Library_add_defs,sw,\
     -DSW_DLLIMPLEMENTATION \

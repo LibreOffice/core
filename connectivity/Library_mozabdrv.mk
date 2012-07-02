@@ -33,10 +33,7 @@ $(eval $(call gb_Library_set_include,mozabdrv,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,mozabdrv,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,mozabdrv))
 
 $(eval $(call gb_Library_use_libraries,mozabdrv,\
 	comphelper \

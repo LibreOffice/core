@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,flat))
 
 $(eval $(call gb_Library_set_componentfile,flat,connectivity/source/drivers/flat/flat))
 
-$(eval $(call gb_Library_use_api,flat,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,flat))
 
 $(eval $(call gb_Library_set_include,flat,\
 	$$(INCLUDE) \

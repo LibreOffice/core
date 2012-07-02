@@ -31,10 +31,7 @@ $(eval $(call gb_Library_set_include,scui,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,scui,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,scui))
 
 $(eval $(call gb_Library_use_libraries,scui,\
 	comphelper \

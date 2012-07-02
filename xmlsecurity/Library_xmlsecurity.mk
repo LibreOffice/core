@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,xmlsecurity,\
 	-I$(SRCDIR)/xmlsecurity/inc \
 ))
 
-$(eval $(call gb_Library_use_api,xmlsecurity,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,xmlsecurity))
 
 $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	comphelper \

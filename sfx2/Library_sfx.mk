@@ -37,10 +37,7 @@ $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
 
-$(eval $(call gb_Library_use_api,sfx,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,sfx))
 
 $(eval $(call gb_Library_set_include,sfx,\
     -I$(SRCDIR)/sfx2/inc \

@@ -12,10 +12,7 @@ $(eval $(call gb_Library_Library,expwrap))
 $(eval $(call gb_Library_set_componentfile,expwrap,sax/source/expatwrap/expwrap))
 
 
-$(eval $(call gb_Library_use_api,expwrap,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,expwrap))
 
 $(eval $(call gb_Library_use_externals,expwrap,\
     expat_utf16 \

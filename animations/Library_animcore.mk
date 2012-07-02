@@ -32,10 +32,7 @@ $(eval $(call gb_Library_use_package,animcore,animations_inc))
 
 $(eval $(call gb_Library_set_componentfile,animcore,animations/source/animcore/animcore))
 
-$(eval $(call gb_Library_use_api,animcore,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,animcore))
 
 $(eval $(call gb_Library_use_libraries,animcore,\
     cppu \

@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,emboleobj,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,emboleobj,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,emboleobj))
 
 $(eval $(call gb_Library_use_libraries,emboleobj,\
 	comphelper \

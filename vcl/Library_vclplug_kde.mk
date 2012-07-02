@@ -41,10 +41,7 @@ $(eval $(call gb_Library_add_defs,vclplug_kde,\
     -DVCLPLUG_KDE_IMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_api,vclplug_kde,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,vclplug_kde))
 
 $(eval $(call gb_Library_use_libraries,vclplug_kde,\
     vclplug_gen \

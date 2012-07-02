@@ -37,10 +37,7 @@ $(eval $(call gb_Library_set_include,file,\
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
-$(eval $(call gb_Library_use_api,file,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,file))
 
 $(eval $(call gb_Library_use_libraries,file,\
 	cppu \

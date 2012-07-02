@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,PresenterScreen))
 
 $(eval $(call gb_Library_set_componentfile,PresenterScreen,sdext/source/presenter/presenter))
 
-$(eval $(call gb_Library_use_api,PresenterScreen,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,PresenterScreen))
 
 $(eval $(call gb_Library_add_defs,PresenterScreen,\
     -DPRESENTER_IMPL_IDENTIFIER=\"com.sun.PresenterScreen-$(sdext_PLATFORM)\" \

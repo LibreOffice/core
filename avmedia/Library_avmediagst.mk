@@ -36,10 +36,7 @@ $(eval $(call gb_Library_set_include,avmediagst,\
 	$(shell pkg-config --cflags gstreamer-0.10, gstreamer-plugins-base-0.10) \
 ))
 
-$(eval $(call gb_Library_use_api,avmediagst,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,avmediagst))
 
 ifeq ($(GUI),WNT)
 $(eval $(call gb_Library_add_defs,avmediagst,\

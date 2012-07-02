@@ -33,10 +33,7 @@ $(eval $(call gb_Library_add_defs,test,\
     -DOOO_DLLIMPLEMENTATION_TEST \
 ))
 
-$(eval $(call gb_Library_use_api,test,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,test))
 
 $(eval $(call gb_Library_use_externals,test,\
 	libxml2 \

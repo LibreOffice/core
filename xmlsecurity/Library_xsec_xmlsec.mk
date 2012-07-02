@@ -40,10 +40,7 @@ $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	-I$(SRCDIR)/xmlsecurity/source/xmlsec \
 ))
 
-$(eval $(call gb_Library_use_api,xsec_xmlsec,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,xsec_xmlsec))
 
 $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_NO_XSLT \

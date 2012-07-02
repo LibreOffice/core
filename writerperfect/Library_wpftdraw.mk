@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,wpftdraw,\
     -I$(SRCDIR)/writerperfect/source \
 ))
 
-$(eval $(call gb_Library_use_api,wpftdraw,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,wpftdraw))
 
 $(eval $(call gb_Library_use_libraries,wpftdraw,\
 	comphelper \

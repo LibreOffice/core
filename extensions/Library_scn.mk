@@ -30,10 +30,7 @@ $(eval $(call gb_Library_Library,scn))
 
 $(eval $(call gb_Library_set_componentfile,scn,extensions/source/scanner/scn))
 
-$(eval $(call gb_Library_use_api,scn,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,scn))
 
 $(eval $(call gb_Library_use_libraries,scn,\
 	svt \

@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,xof,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,xof,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,xof))
 
 $(eval $(call gb_Library_use_libraries,xof,\
     comphelper \

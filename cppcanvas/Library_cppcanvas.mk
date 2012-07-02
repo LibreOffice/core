@@ -36,10 +36,7 @@ $(eval $(call gb_Library_set_include,cppcanvas,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,cppcanvas,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,cppcanvas))
 $(eval $(call gb_Library_add_defs,cppcanvas,\
 	-DCPPCANVAS_DLLIMPLEMENTATION \
 ))

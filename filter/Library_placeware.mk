@@ -20,10 +20,7 @@ $(eval $(call gb_Library_Library,placeware))
 
 $(eval $(call gb_Library_set_componentfile,placeware,filter/source/placeware/placeware))
 
-$(eval $(call gb_Library_use_api,placeware,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,placeware))
 
 $(eval $(call gb_Library_set_include,placeware,\
 	$$(INCLUDE) \

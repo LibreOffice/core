@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,MacOSXSpell,\
 	-I$(SRCDIR)/lingucomponent/source/lingutil \
 ))
 
-$(eval $(call gb_Library_use_api,MacOSXSpell,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,MacOSXSpell))
 
 $(eval $(call gb_Library_use_libraries,MacOSXSpell,\
 	$(gb_STDLIBS) \

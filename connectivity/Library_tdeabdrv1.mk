@@ -27,10 +27,7 @@
 
 $(eval $(call gb_Library_Library,tdeabdrv1))
 
-$(eval $(call gb_Library_use_api,tdeabdrv1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,tdeabdrv1))
 
 $(eval $(call gb_Library_add_libs,tdeabdrv1,\
 	-lkabc \

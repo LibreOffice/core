@@ -30,10 +30,7 @@ $(eval $(call gb_Library_Library,solver))
 
 $(eval $(call gb_Library_set_componentfile,solver,sccomp/source/solver/solver))
 
-$(eval $(call gb_Library_use_api,solver,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,solver))
 
 $(eval $(call gb_Library_use_libraries,solver,\
 	comphelper \

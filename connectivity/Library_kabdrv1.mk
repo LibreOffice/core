@@ -31,10 +31,7 @@ $(eval $(call gb_Library_use_packages,kabdrv1,\
 	shell_inc \
 ))
 
-$(eval $(call gb_Library_use_api,kabdrv1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,kabdrv1))
 
 $(eval $(call gb_Library_use_externals,kabdrv1,\
 	kde \

@@ -30,10 +30,7 @@ $(eval $(call gb_Library_Library,binaryurp))
 
 $(eval $(call gb_Library_set_componentfile,binaryurp,binaryurp/source/binaryurp))
 
-$(eval $(call gb_Library_use_api,binaryurp,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,binaryurp))
 
 $(eval $(call gb_Library_use_libraries,binaryurp,\
 	cppu \

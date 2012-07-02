@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,mcnttype,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,mcnttype,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,mcnttype))
 
 $(eval $(call gb_Library_use_libraries,mcnttype,\
 	cppu \

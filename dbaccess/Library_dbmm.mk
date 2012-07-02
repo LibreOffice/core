@@ -36,10 +36,7 @@ $(eval $(call gb_Library_set_include,dbmm,\
 	-I$(SRCDIR)/dbaccess/inc \
 ))
 
-$(eval $(call gb_Library_use_api,dbmm,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,dbmm))
 
 $(eval $(call gb_Library_use_libraries,dbmm,\
     comphelper \

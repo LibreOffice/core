@@ -18,10 +18,7 @@
 
 $(eval $(call gb_Library_Library,epp))
 
-$(eval $(call gb_Library_use_api,epp,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,epp))
 
 $(eval $(call gb_Library_set_include,epp,\
 	$$(INCLUDE) \

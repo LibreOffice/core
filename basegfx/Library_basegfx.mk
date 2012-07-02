@@ -14,10 +14,7 @@ $(eval $(call gb_Library_use_packages,basegfx,\
     o3tl_inc \
 ))
 
-$(eval $(call gb_Library_use_api,basegfx,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,basegfx))
 
 $(eval $(call gb_Library_use_libraries,basegfx,\
     cppu \

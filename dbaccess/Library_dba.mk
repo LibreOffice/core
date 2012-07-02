@@ -42,10 +42,7 @@ $(eval $(call gb_Library_add_defs,dba,\
     -DOOO_DLLIMPLEMENTATION_DBA \
 ))
 
-$(eval $(call gb_Library_use_api,dba,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,dba))
 
 $(eval $(call gb_Library_use_libraries,dba,\
     comphelper \

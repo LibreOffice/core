@@ -36,10 +36,7 @@ $(eval $(call gb_Library_set_include,fwk,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,fwk,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,fwk))
 
 $(eval $(call gb_Library_use_libraries,fwk,\
     comphelper \

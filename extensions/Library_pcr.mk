@@ -30,10 +30,7 @@ $(eval $(call gb_Library_Library,pcr))
 
 $(eval $(call gb_Library_set_componentfile,pcr,extensions/source/propctrlr/pcr))
 
-$(eval $(call gb_Library_use_api,pcr,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,pcr))
 
 $(eval $(call gb_Library_set_include,pcr,\
 	-I$(SRCDIR)/extensions/inc \

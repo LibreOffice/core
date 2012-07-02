@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,ado,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,ado,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,ado))
 
 ifeq ($(COM),GCC)
 $(eval $(call gb_Library_add_cxxflags,ado,\

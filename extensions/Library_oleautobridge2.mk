@@ -34,10 +34,7 @@ $(eval $(call gb_Library_add_defs,oleautobridge2,\
 	 -DOWNGUID \
 ))
 
-$(eval $(call gb_Library_use_api,oleautobridge2,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,oleautobridge2))
 
 $(eval $(call gb_Library_set_include,oleautobridge2,\
 	-I$(SRCDIR)/extensions/source/ole \

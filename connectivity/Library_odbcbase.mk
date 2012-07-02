@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,odbcbase))
 
 $(eval $(call gb_Library_set_warnings_not_errors,odbcbase))
 
-$(eval $(call gb_Library_use_api,odbcbase,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,odbcbase))
 
 $(eval $(call gb_Library_set_include,odbcbase,\
 	$$(INCLUDE) \

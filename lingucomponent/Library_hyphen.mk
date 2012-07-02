@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,hyphen,\
 	-I$(SRCDIR)/lingucomponent/source/lingutil \
 ))
 
-$(eval $(call gb_Library_use_api,hyphen,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,hyphen))
 
 $(eval $(call gb_Library_use_libraries,hyphen,\
 	$(gb_STDLIBS) \

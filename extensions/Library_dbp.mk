@@ -42,10 +42,7 @@ $(eval $(call gb_Library_add_defs,dbp,\
 	-DCOMPMOD_NAMESPACE=dbp \
 ))
 
-$(eval $(call gb_Library_use_api,dbp,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,dbp))
 
 $(eval $(call gb_Library_add_exception_objects,dbp,\
 	extensions/source/dbpilots/commonpagesdbp \

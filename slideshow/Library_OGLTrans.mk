@@ -43,10 +43,7 @@ $(eval $(call gb_Library_add_defs,OGLTrans,\
 ))
 endif
 
-$(eval $(call gb_Library_use_api,OGLTrans,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,OGLTrans))
 
 $(eval $(call gb_Library_use_libraries,OGLTrans,\
     canvastools \

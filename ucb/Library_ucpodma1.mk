@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,ucpodma1))
 
 $(eval $(call gb_Library_set_componentfile,ucpodma1,ucb/source/ucp/odma/ucpodma1))
 
-$(eval $(call gb_Library_use_api,ucpodma1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,ucpodma1))
 
 $(eval $(call gb_Library_use_libraries,ucpodma1,\
 	cppu \

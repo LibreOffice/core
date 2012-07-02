@@ -32,10 +32,7 @@ $(eval $(call gb_Library_set_include,svgfilter,\
     -I$(SRCDIR)/filter/inc \
 ))
 
-$(eval $(call gb_Library_use_api,svgfilter,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,svgfilter))
 
 $(eval $(call gb_Library_use_libraries,svgfilter,\
 	svxcore \

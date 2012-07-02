@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,mysql))
 
 $(eval $(call gb_Library_set_componentfile,mysql,connectivity/source/drivers/mysql/mysql))
 
-$(eval $(call gb_Library_use_api,mysql,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,mysql))
 
 $(eval $(call gb_Library_set_include,mysql,\
 	$$(INCLUDE) \

@@ -40,10 +40,7 @@ $(eval $(call gb_Library_add_defs,sc,\
 	-DSC_INFO_OSVERSION=\"$(OS)\" \
 ))
 
-$(eval $(call gb_Library_use_api,sc,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,sc))
 
 $(eval $(call gb_Library_use_libraries,sc,\
 	avmedia \

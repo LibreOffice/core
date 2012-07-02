@@ -37,10 +37,7 @@ $(eval $(call gb_Library_use_packages,svxcore,\
     svx_sdi \
 ))
 
-$(eval $(call gb_Library_use_api,svxcore,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,svxcore))
 
 $(eval $(call gb_Library_set_include,svxcore,\
     -I$(SRCDIR)/svx/inc \

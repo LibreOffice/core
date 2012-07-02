@@ -38,10 +38,7 @@ $(eval $(call gb_Library_add_defs,fwe,\
     -DFWE_DLLIMPLEMENTATION\
 ))
 
-$(eval $(call gb_Library_use_api,fwe,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,fwe))
 
 $(eval $(call gb_Library_use_libraries,fwe,\
     comphelper \

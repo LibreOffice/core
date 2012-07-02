@@ -31,10 +31,7 @@ $(eval $(call gb_Library_set_include,migrationoo2,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,migrationoo2,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,migrationoo2))
 
 $(eval $(call gb_Library_use_libraries,migrationoo2,\
     cppu \

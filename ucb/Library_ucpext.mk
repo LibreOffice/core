@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,ucpext))
 
 $(eval $(call gb_Library_set_componentfile,ucpext,ucb/source/ucp/ext/ucpext))
 
-$(eval $(call gb_Library_use_api,ucpext,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,ucpext))
 
 $(eval $(call gb_Library_use_libraries,ucpext,\
 	comphelper \

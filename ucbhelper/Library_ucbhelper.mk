@@ -11,10 +11,7 @@ $(eval $(call gb_Library_Library,ucbhelper))
 
 $(eval $(call gb_Library_use_package,ucbhelper,ucbhelper_inc))
 
-$(eval $(call gb_Library_use_api,ucbhelper,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,ucbhelper))
 
 $(eval $(call gb_Library_use_libraries,ucbhelper,\
     cppu \

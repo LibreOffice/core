@@ -33,10 +33,7 @@ $(eval $(call gb_Library_add_defs,unotest,\
 	-DOOO_DLLIMPLEMENTATION_UNOTEST \
 ))
 
-$(eval $(call gb_Library_use_api,unotest,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,unotest))
 
 $(eval $(call gb_Library_use_libraries,unotest,\
 	comphelper \

@@ -41,10 +41,7 @@ $(eval $(call gb_Library_set_include,pl,\
 	-I$(SRCDIR)/extensions/source/plugin/inc \
 ))
 
-$(eval $(call gb_Library_use_api,pl,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,pl))
 
 ifeq ($(SOLAR_JAVA),TRUE)
 $(eval $(call gb_Library_add_defs,pl,\

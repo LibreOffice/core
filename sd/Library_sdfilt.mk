@@ -42,10 +42,7 @@ $(eval $(call gb_Library_add_defs,sdfilt,\
 ))
 endif
 
-$(eval $(call gb_Library_use_api,sdfilt,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,sdfilt))
 
 $(eval $(call gb_Library_use_libraries,sdfilt,\
     comphelper \

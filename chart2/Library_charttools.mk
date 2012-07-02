@@ -36,10 +36,7 @@ $(eval $(call gb_Library_add_defs,charttools,\
     -DOOO_DLLIMPLEMENTATION_CHARTTOOLS \
 ))
 
-$(eval $(call gb_Library_use_api,charttools,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,charttools))
 
 $(eval $(call gb_Library_use_libraries,charttools,\
     basegfx \

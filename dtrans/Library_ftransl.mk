@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,ftransl,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,ftransl,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,ftransl))
 
 $(eval $(call gb_Library_use_libraries,ftransl,\
 	advapi32 \

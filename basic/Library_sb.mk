@@ -38,11 +38,8 @@ $(eval $(call gb_Library_set_include,sb,\
 	-I$(SRCDIR)/basic/source/inc \
 ))
 
-$(eval $(call gb_Library_use_api,sb,\
-	udkapi \
-	offapi \
-	oovbaapi \
-))
+$(eval $(call gb_Library_use_sdk_api,sb))
+$(eval $(call gb_Library_use_api,sb,oovbaapi))
 
 $(eval $(call gb_Library_add_defs,sb,\
 	-DBASIC_DLLIMPLEMENTATION \

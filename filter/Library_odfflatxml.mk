@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,odfflatxml))
 
 $(eval $(call gb_Library_set_componentfile,odfflatxml,filter/source/odfflatxml/odfflatxml))
 
-$(eval $(call gb_Library_use_api,odfflatxml,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,odfflatxml))
 
 $(eval $(call gb_Library_set_include,odfflatxml,\
 	$$(INCLUDE) \

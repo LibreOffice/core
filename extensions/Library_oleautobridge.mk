@@ -31,10 +31,7 @@ $(eval $(call gb_Library_Library,oleautobridge))
 
 $(eval $(call gb_Library_set_componentfile,oleautobridge,extensions/source/ole/oleautobridge))
 
-$(eval $(call gb_Library_use_api,oleautobridge,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,oleautobridge))
 
 $(eval $(call gb_Library_set_include,oleautobridge,\
 	$(foreach inc,$(ATL_INCLUDE),-I$(inc)) \

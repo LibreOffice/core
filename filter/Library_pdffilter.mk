@@ -20,10 +20,7 @@ $(eval $(call gb_Library_Library,pdffilter))
 
 $(eval $(call gb_Library_set_componentfile,pdffilter,filter/source/pdf/pdffilter))
 
-$(eval $(call gb_Library_use_api,pdffilter,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,pdffilter))
 
 $(eval $(call gb_Library_set_include,pdffilter,\
 	-I$(SRCDIR)/filter/inc \

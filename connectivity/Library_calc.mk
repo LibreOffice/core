@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,calc))
 
 $(eval $(call gb_Library_set_componentfile,calc,connectivity/source/drivers/calc/calc))
 
-$(eval $(call gb_Library_use_api,calc,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,calc))
 
 $(eval $(call gb_Library_set_include,calc,\
 	$$(INCLUDE) \

@@ -27,10 +27,7 @@
 
 $(eval $(call gb_Library_Library,kde4be1))
 
-$(eval $(call gb_Library_use_api,kde4be1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,kde4be1))
 
 $(eval $(call gb_Library_use_externals,kde4be1,\
 	kde4 \

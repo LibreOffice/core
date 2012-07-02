@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,sysdtrans,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,sysdtrans,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,sysdtrans))
 
 $(eval $(call gb_Library_add_defs,sysdtrans,\
 	-D_UNICODE \

@@ -39,10 +39,7 @@ $(eval $(call gb_Library_add_defs,editeng,\
     -DEDITENG_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_api,editeng,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,editeng))
 
 $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/accessibility/AccessibleComponentBase \

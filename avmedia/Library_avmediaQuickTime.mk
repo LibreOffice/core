@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,avmediaQuickTime,\
 	-I$(SRCDIR)/avmedia/source/inc \
 ))
 
-$(eval $(call gb_Library_use_api,avmediaQuickTime,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,avmediaQuickTime));
 
 $(eval $(call gb_Library_use_libraries,avmediaQuickTime,\
 	comphelper \

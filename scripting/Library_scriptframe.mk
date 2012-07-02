@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,scriptframe,\
 	-I$(SRCDIR)/scripting/source/inc \
 ))
 
-$(eval $(call gb_Library_use_api,scriptframe,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,scriptframe))
 
 $(eval $(call gb_Library_use_libraries,scriptframe,\
 	comphelper \

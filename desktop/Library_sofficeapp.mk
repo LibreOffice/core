@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
     -I$(SRCDIR)/desktop/source/deployment/inc \
 ))
 
-$(eval $(call gb_Library_use_api,sofficeapp,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,sofficeapp))
 
 $(eval $(call gb_Library_add_defs,sofficeapp,\
     -DDESKTOP_DLLIMPLEMENTATION \

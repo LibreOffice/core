@@ -32,10 +32,7 @@ $(eval $(call gb_Library_set_include,spl,\
     -I$(SRCDIR)/desktop/inc \
 ))
 
-$(eval $(call gb_Library_use_api,spl,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,spl))
 
 $(eval $(call gb_Library_use_libraries,spl,\
     comphelper \

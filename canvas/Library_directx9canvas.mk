@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,directx9canvas,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_use_api,directx9canvas,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,directx9canvas))
 
 # clear NOMINMAX because GdiplusTypes.h uses those macros :(
 $(eval $(call gb_Library_add_defs,directx9canvas,\

@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,xsec_fw,\
 	-I$(SRCDIR)/xmlsecurity/inc \
 ))
 
-$(eval $(call gb_Library_use_api,xsec_fw,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,xsec_fw))
 
 $(eval $(call gb_Library_use_libraries,xsec_fw,\
 	cppu \

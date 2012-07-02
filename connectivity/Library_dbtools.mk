@@ -47,10 +47,7 @@ $(eval $(call gb_Library_set_include,dbtools,\
 	-I$(dir $(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison)) \
 ))
 
-$(eval $(call gb_Library_use_api,dbtools,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,dbtools))
 
 $(eval $(call gb_Library_use_libraries,dbtools,\
 	cppu \

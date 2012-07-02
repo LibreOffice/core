@@ -13,10 +13,7 @@ $(eval $(call gb_Library_set_include,libotouch,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,libotouch,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,libotouch))
 
 $(eval $(call gb_Library_use_internal_comprehensive_api,libotouch,\
 	touch \

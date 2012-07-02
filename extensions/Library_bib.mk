@@ -37,10 +37,7 @@ $(eval $(call gb_Library_set_include,bib,\
 	-I$(SRCDIR)/extensions/inc \
 ))
 
-$(eval $(call gb_Library_use_api,bib,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,bib))
 
 $(eval $(call gb_Library_add_exception_objects,bib,\
 	extensions/source/bibliography/bibbeam \

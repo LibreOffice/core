@@ -11,10 +11,7 @@ $(eval $(call gb_Library_Library,basebmp))
 
 $(eval $(call gb_Library_use_package,basebmp,basebmp_inc))
 
-$(eval $(call gb_Library_use_api,basebmp,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,basebmp))
 
 $(eval $(call gb_Library_use_libraries,basebmp,\
     basegfx \

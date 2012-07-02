@@ -32,10 +32,7 @@ $(eval $(call gb_Library_Library,ldapbe2))
 
 $(eval $(call gb_Library_set_componentfile,ldapbe2,extensions/source/config/ldap/ldapbe2))
 
-$(eval $(call gb_Library_use_api,ldapbe2,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,ldapbe2))
 
 ifeq ($(LDAPSDKINCLUDES),)
 ifneq ($(WITH_OPENLDAP),YES)

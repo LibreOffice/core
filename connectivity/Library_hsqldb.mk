@@ -36,10 +36,7 @@ $(eval $(call gb_Library_use_externals,hsqldb,\
 	hsqldb \
 ))
 
-$(eval $(call gb_Library_use_api,hsqldb,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,hsqldb))
 
 $(eval $(call gb_Library_use_libraries,hsqldb,\
 	comphelper \

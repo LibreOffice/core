@@ -33,10 +33,7 @@ $(eval $(call gb_Library_add_defs,gconfbe1,\
 ))
 endif
 
-$(eval $(call gb_Library_use_api,gconfbe1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,gconfbe1))
 
 $(eval $(call gb_Library_use_externals,gconfbe1,\
 	gconf \

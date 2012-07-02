@@ -65,10 +65,7 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
 ))
 
-$(eval $(call gb_Library_use_api,vcl,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,vcl))
 
 $(eval $(call gb_Library_use_libraries,vcl,\
     tl \

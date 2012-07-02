@@ -40,10 +40,7 @@ $(eval $(call gb_Library_set_include,so_activex_x64,\
 	$(foreach i,$(ATL_INCLUDE), -I$(i)) \
 ))
 
-$(eval $(call gb_Library_use_api,so_activex_x64,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,so_activex_x64))
 
 $(eval $(call gb_Library_add_nativeres,so_activex_x64,activex_res))
 

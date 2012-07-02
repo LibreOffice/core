@@ -30,10 +30,7 @@ $(eval $(call gb_Library_Library,i18nregexp))
 
 $(eval $(call gb_Library_use_package,i18nregexp,regexp_inc))
 
-$(eval $(call gb_Library_use_api,i18nregexp,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,i18nregexp))
 
 $(eval $(call gb_Library_add_defs,i18nregexp,\
 	-DREGEXP_DLLIMPLEMENTATION \

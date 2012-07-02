@@ -47,9 +47,6 @@ $(eval $(call gb_Library_add_exception_objects,xmlreader,\
 	xmlreader/source/xmlreader \
 ))
 
-$(eval $(call gb_Library_use_api,xmlreader,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,xmlreader))
 
 # vim: set noet sw=4 ts=4:

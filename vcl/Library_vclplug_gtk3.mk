@@ -47,10 +47,7 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk3,\
     -DLIBO_VERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
-$(eval $(call gb_Library_use_api,vclplug_gtk3,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,vclplug_gtk3))
 
 $(eval $(call gb_Library_add_libs,vclplug_gtk3,\
     $$(GTK3_LIBS) \

@@ -20,10 +20,7 @@ $(eval $(call gb_Library_Library,xsltfilter))
 
 $(eval $(call gb_Library_set_componentfile,xsltfilter,filter/source/xsltfilter/xsltfilter))
 
-$(eval $(call gb_Library_use_api,xsltfilter,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,xsltfilter))
 
 $(eval $(call gb_Library_set_include,xsltfilter,\
 	$$(INCLUDE) \

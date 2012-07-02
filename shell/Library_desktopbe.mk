@@ -27,10 +27,7 @@
 
 $(eval $(call gb_Library_Library,desktopbe1))
 
-$(eval $(call gb_Library_use_api,desktopbe1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,desktopbe1))
 
 $(eval $(call gb_Library_use_libraries,desktopbe1,\
 	cppu \

@@ -33,10 +33,7 @@ $(eval $(call gb_Library_set_include,chartcontroller,\
     -I$(SRCDIR)/chart2/source/inc \
 ))
 
-$(eval $(call gb_Library_use_api,chartcontroller,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,chartcontroller))
 
 # TODO: is this still necessary?
 # (from chart2/source/controller/dialogs/makefile.mk)

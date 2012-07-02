@@ -20,10 +20,7 @@ $(eval $(call gb_Library_Library,flash))
 
 $(eval $(call gb_Library_set_componentfile,flash,filter/source/flash/flash))
 
-$(eval $(call gb_Library_use_api,flash,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,flash))
 
 $(eval $(call gb_Library_set_include,flash,\
 	$$(INCLUDE) \

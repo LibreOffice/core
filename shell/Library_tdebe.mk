@@ -31,10 +31,7 @@ $(eval $(call gb_Library_use_packages,tdebe1,\
 	shell_inc \
 ))
 
-$(eval $(call gb_Library_use_api,tdebe1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,tdebe1))
 
 $(eval $(call gb_Library_use_externals,tdebe1,\
 	tde \

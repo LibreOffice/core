@@ -13,10 +13,7 @@ $(eval $(call gb_Library_use_package,sax,\
     sax_inc \
 ))
 
-$(eval $(call gb_Library_use_api,sax,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,sax))
 
 $(eval $(call gb_Library_use_libraries,sax,\
     comphelper \

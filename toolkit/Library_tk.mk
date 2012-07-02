@@ -42,10 +42,7 @@ $(eval $(call gb_Library_add_defs,tk,\
     -DTOOLKIT_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_api,tk,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,tk))
 
 $(eval $(call gb_Library_use_libraries,tk,\
     comphelper \

@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,textconversiondlgs,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,textconversiondlgs,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,textconversiondlgs))
 
 $(eval $(call gb_Library_use_libraries,textconversiondlgs,\
     comphelper \

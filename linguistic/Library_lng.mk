@@ -37,10 +37,7 @@ $(eval $(call gb_Library_set_include,lng,\
 	-I$(SRCDIR)/linguistic/inc \
 ))
 
-$(eval $(call gb_Library_use_api,lng,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,lng))
 
 $(eval $(call gb_Library_add_defs,lng,\
 	-DLNG_DLLIMPLEMENTATION \

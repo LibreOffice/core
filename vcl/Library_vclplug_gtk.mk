@@ -40,10 +40,7 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DLIBO_VERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
-$(eval $(call gb_Library_use_api,vclplug_gtk,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,vclplug_gtk))
 
 $(eval $(call gb_Library_use_libraries,vclplug_gtk,\
     vclplug_gen \

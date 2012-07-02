@@ -33,10 +33,7 @@ $(eval $(call gb_Library_set_include,acc,\
     -I$(SRCDIR)/accessibility/source/inc \
 ))
 
-$(eval $(call gb_Library_use_api,acc,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,acc))
 
 $(eval $(call gb_Library_use_libraries,acc,\
     comphelper \

@@ -39,10 +39,7 @@ $(eval $(call gb_Library_add_defs,desktop_detector,\
     -DDESKTOP_DETECTOR_IMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_api,desktop_detector,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,desktop_detector))
 
 $(eval $(call gb_Library_use_libraries,desktop_detector,\
     vcl \

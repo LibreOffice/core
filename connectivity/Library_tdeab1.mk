@@ -33,10 +33,7 @@ $(eval $(call gb_Library_use_externals,tdeab1,\
 
 $(eval $(call gb_Library_set_componentfile,tdeab1,connectivity/source/drivers/kab/tdeab1))
 
-$(eval $(call gb_Library_use_api,tdeab1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,tdeab1))
 
 $(eval $(call gb_Library_use_libraries,tdeab1,\
 	comphelper \

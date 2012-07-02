@@ -35,10 +35,7 @@ $(eval $(call gb_Library_set_include,canvastools,\
 	-I$(SRCDIR)/canvas/inc \
 ))
 
-$(eval $(call gb_Library_use_api,canvastools,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,canvastools))
 
 $(eval $(call gb_Library_add_defs,canvastools,\
 	-DCANVASTOOLS_DLLIMPLEMENTATION \

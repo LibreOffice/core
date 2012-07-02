@@ -32,10 +32,7 @@ $(eval $(call gb_Library_Library,textfd))
 
 $(eval $(call gb_Library_set_componentfile,textfd,filter/source/textfilterdetect/textfd))
 
-$(eval $(call gb_Library_use_api,textfd,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,textfd))
 
 $(eval $(call gb_Library_set_include,textfd,\
 	$$(INCLUDE) \

@@ -37,10 +37,7 @@ $(eval $(call gb_Library_set_include,writerfilter,\
     -I$(SRCDIR)/writerfilter/source \
 ))
 
-$(eval $(call gb_Library_use_api,writerfilter,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,writerfilter))
 
 $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
 

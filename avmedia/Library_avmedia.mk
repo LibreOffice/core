@@ -38,10 +38,7 @@ $(eval $(call gb_Library_set_include,avmedia,\
 	-I$(SRCDIR)/avmedia/source/inc \
 ))
 
-$(eval $(call gb_Library_use_api,avmedia,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,avmedia,))
 
 $(eval $(call gb_Library_add_defs,avmedia,\
 	-DAVMEDIA_DLLIMPLEMENTATION \

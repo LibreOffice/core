@@ -33,10 +33,7 @@ $(eval $(call gb_Library_add_defs,smoketest,\
 	-DCPPUNIT_PLUGIN_EXPORT='extern "C" SAL_DLLPUBLIC_EXPORT' \
 ))
 
-$(eval $(call gb_Library_use_api,smoketest,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,smoketest))
 
 $(eval $(call gb_Library_use_libraries,smoketest,\
 	cppu \

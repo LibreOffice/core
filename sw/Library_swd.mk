@@ -38,10 +38,7 @@ $(eval $(call gb_Library_set_include,swd,\
     -I$(SRCDIR)/sw/source/ui/inc \
 ))
 
-$(eval $(call gb_Library_use_api,swd,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,swd))
 
 $(eval $(call gb_Library_add_defs,swd,\
 	-DSWD_DLLIMPLEMENTATION \

@@ -37,10 +37,7 @@ $(eval $(call gb_Library_set_include,swui,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,swui,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,swui))
 
 ifeq ($(SYSTEM_LIBXML),YES)
 $(eval $(call gb_Library_add_cxxflags,swui,\

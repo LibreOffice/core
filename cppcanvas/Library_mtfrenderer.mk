@@ -40,10 +40,7 @@ $(eval $(call gb_Library_use_libraries,mtfrenderer,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_use_api,mtfrenderer,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,mtfrenderer))
 
 $(eval $(call gb_Library_add_exception_objects,mtfrenderer,\
 	cppcanvas/source/uno/uno_mtfrenderer \

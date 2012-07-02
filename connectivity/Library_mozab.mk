@@ -34,10 +34,7 @@ $(eval $(call gb_Library_set_include,mozab2,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,mozab2,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,mozab2))
 
 $(eval $(call gb_Library_use_libraries,mozab2,\
 	cppu \

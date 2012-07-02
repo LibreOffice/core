@@ -54,10 +54,7 @@ $(eval $(call gb_Library_add_defs,oox,\
     -DOOX_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_api,oox,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,oox))
 
 $(eval $(call gb_Library_use_libraries,oox,\
     basegfx \

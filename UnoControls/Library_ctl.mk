@@ -33,10 +33,7 @@ $(eval $(call gb_Library_set_include,ctl,\
     -I$(SRCDIR)/UnoControls/source/inc \
 ))
 
-$(eval $(call gb_Library_use_api,ctl,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,ctl))
 
 $(eval $(call gb_Library_use_libraries,ctl,\
     comphelper \

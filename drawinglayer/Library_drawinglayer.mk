@@ -37,10 +37,7 @@ $(eval $(call gb_Library_add_defs,drawinglayer,\
 	-DDRAWINGLAYER_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_api,drawinglayer,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,drawinglayer))
 
 $(eval $(call gb_Library_use_libraries,drawinglayer,\
     avmedia \

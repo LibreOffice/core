@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,dbase))
 
 $(eval $(call gb_Library_set_componentfile,dbase,connectivity/source/drivers/dbase/dbase))
 
-$(eval $(call gb_Library_use_api,dbase,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,dbase))
 
 $(eval $(call gb_Library_set_include,dbase,\
 	$$(INCLUDE) \

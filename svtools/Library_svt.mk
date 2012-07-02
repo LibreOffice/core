@@ -32,10 +32,7 @@ $(eval $(call gb_Library_use_package,svt,svtools_inc))
 
 $(eval $(call gb_Library_set_componentfile,svt,svtools/util/svt))
 
-$(eval $(call gb_Library_use_api,svt,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,svt))
 
 $(eval $(call gb_Library_set_include,svt,\
     $$(INCLUDE) \

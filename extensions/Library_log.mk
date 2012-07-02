@@ -32,10 +32,7 @@ $(eval $(call gb_Library_Library,log))
 
 $(eval $(call gb_Library_set_componentfile,log,extensions/source/logging/log))
 
-$(eval $(call gb_Library_use_api,log,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,log))
 
 $(eval $(call gb_Library_add_exception_objects,log,\
 	extensions/source/logging/consolehandler \

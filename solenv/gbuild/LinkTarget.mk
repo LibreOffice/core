@@ -642,6 +642,15 @@ $(foreach api,$(2),$(call gb_LinkTarget__use_api,$(1),$(api)))
 
 endef
 
+define gb_LinkTarget_use_udk_api
+$(call gb_LinkTarget__use_api,$(1),udkapi)
+endef
+
+define gb_LinkTarget_use_sdk_api
+$(call gb_LinkTarget__use_api,$(1),udkapi)
+$(call gb_LinkTarget__use_api,$(1),offapi)
+endef
+
 define gb_LinkTarget__use_internal_api_one
 $(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
 	$(call gb_UnoApiHeadersTarget_get_$(3)target,$(2))

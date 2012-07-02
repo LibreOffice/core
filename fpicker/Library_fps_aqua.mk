@@ -33,10 +33,7 @@ $(eval $(call gb_Library_use_packages,fps_aqua,\
 	vcl_inc \
 ))
 
-$(eval $(call gb_Library_use_api,fps_aqua,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,fps_aqua))
 
 $(eval $(call gb_Library_add_libs,fps_aqua,\
     -framework Cocoa \

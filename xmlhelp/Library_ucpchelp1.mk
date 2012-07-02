@@ -53,10 +53,7 @@ $(eval $(call gb_Library_set_include,ucpchelp1,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,ucpchelp1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,ucpchelp1))
 
 $(eval $(call gb_Library_use_externals,ucpchelp1,\
 	berkeleydb \

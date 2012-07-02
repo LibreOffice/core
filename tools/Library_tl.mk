@@ -41,10 +41,7 @@ $(eval $(call gb_Library_add_defs,tl,\
     -DTOOLS_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_api,tl,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,tl))
 
 $(eval $(call gb_Library_use_libraries,tl,\
     basegfx \

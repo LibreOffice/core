@@ -32,10 +32,7 @@ $(eval $(call gb_Library_add_defs,spa,\
     -DSPA_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_api,spa,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,spa))
 
 $(eval $(call gb_Library_use_libraries,spa,\
     svt \

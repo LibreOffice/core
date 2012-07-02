@@ -37,10 +37,7 @@ $(eval $(call gb_Library_set_include,passwordcontainer,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,passwordcontainer,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,passwordcontainer))
 
 $(eval $(call gb_Library_use_libraries,passwordcontainer,\
     cppu \

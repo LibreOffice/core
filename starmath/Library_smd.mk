@@ -29,10 +29,7 @@ $(eval $(call gb_Library_set_include,smd,\
         $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,smd,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,smd))
 
 $(eval $(call gb_Library_use_libraries,smd,\
         cppu \

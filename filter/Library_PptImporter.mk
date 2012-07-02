@@ -18,10 +18,7 @@
 
 $(eval $(call gb_Library_Library,PptImporter))
 
-$(eval $(call gb_Library_use_api,PptImporter,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,PptImporter))
 
 $(eval $(call gb_Library_set_include,PptImporter,\
 	$$(INCLUDE) \

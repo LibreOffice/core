@@ -48,10 +48,7 @@ $(eval $(call gb_Executable_set_defs,demoshow,\
 ))
 endif
 
-$(eval $(call gb_Library_use_api,demoshow,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,demoshow))
 
 $(eval $(call gb_Executable_use_libraries,demoshow,\
     basegfx \

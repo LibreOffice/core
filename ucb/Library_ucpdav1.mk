@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,ucpdav1))
 
 $(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav/ucpdav1))
 
-$(eval $(call gb_Library_use_api,ucpdav1,\
-	offapi \
-	udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,ucpdav1))
 
 $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	comphelper \

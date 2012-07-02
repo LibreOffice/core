@@ -20,10 +20,7 @@ $(eval $(call gb_Library_Library,xmlfa))
 
 $(eval $(call gb_Library_set_componentfile,xmlfa,filter/source/xmlfilteradaptor/xmlfa))
 
-$(eval $(call gb_Library_use_api,xmlfa,\
-	udkapi \
-	offapi \
-))
+$(eval $(call gb_Library_use_sdk_api,xmlfa))
 
 $(eval $(call gb_Library_set_include,xmlfa,\
 	$$(INCLUDE) \

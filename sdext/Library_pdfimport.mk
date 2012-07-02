@@ -29,10 +29,7 @@ $(eval $(call gb_Library_Library,pdfimport))
 
 $(eval $(call gb_Library_set_componentfile,pdfimport,sdext/source/pdfimport/pdfimport))
 
-$(eval $(call gb_Library_use_api,pdfimport,\
-    offapi \
-    udkapi \
-))
+$(eval $(call gb_Library_use_sdk_api,pdfimport))
 
 $(eval $(call gb_Library_set_include,pdfimport,\
     -I$(SRCDIR)/sdext/source/pdfimport/inc \
