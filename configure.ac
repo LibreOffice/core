@@ -4476,20 +4476,19 @@ AC_SUBST(HYPH_SYSTEM_DIR)
 AC_SUBST(THES_SYSTEM_DIR)
 
 dnl ===================================================================
-dnl ENABLE_PCH i now a no-op
-dnl ===================================================================
 AC_MSG_CHECKING([whether to enable pch feature])
 if test -n "$enable_pch" && test "$enable_pch" != "no"; then
     if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
-dnl There is no PCH support in GCC versions prior to this
-    elif test "$GCC" = "yes"; then
+    # GCC PCH support is reportedly a hack that's not very reliable,
+    # so support only Clang.
+    elif test "$GCC" = "yes" -a "$COM_GCC_IS_CLANG" = "TRUE"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
     else
         ENABLE_PCH=""
-        AC_MSG_WARN([Precompiled header not yet supported for your platform/compiler])
+        AC_MSG_ERROR([Precompiled header not yet supported for your platform/compiler])
     fi
 else
     ENABLE_PCH=""
