@@ -338,18 +338,15 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
         PopupMenu *pMoveMenu = new PopupMenu;
         pMoveMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MoveMenuSelectHdl));
 
-        pMoveMenu->InsertItem(MNI_MOVE_NEW,SfxResId(STR_MOVE_NEW).toString());
-
         if (!aNames.empty())
         {
-            pMoveMenu->InsertSeparator();
-
             for (size_t i = 0, n = aNames.size(); i < n; ++i)
                 pMoveMenu->InsertItem(MNI_MOVE_FOLDER_BASE+i,aNames[i]);
         }
 
         pMoveMenu->InsertSeparator();
 
+        pMoveMenu->InsertItem(MNI_MOVE_NEW,SfxResId(STR_MOVE_NEW).toString());
         pMoveMenu->InsertItem(MNI_MOVE_DELETE,SfxResId(STR_MOVE_DELETE).toString());
 
         pMoveMenu->Execute(pBox,pBox->GetItemRect(TBI_TEMPLATE_MOVE),
