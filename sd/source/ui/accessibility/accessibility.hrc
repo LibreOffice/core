@@ -19,9 +19,7 @@
 #ifndef _SD_ACCESSIBILITY_HRC
 #define _SD_ACCESSIBILITY_HRC
 
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#endif
 
 #define SID_SD_A11Y_START               (SID_SD_START+600)
 

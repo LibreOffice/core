@@ -19,11 +19,7 @@
 #ifndef FORMULA_FORRESID_HRC
 #define FORMULA_FORRESID_HRC
 
-// include     -----------------------------------------------------------
-
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 #define RID_DIALOG_START                RID_FORMULA_START
 #define RID_PAGE_START                  RID_FORMULA_START

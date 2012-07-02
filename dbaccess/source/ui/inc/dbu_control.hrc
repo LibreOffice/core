@@ -18,9 +18,7 @@
 #ifndef _DBU_CONTROL_HRC_
 #define _DBU_CONTROL_HRC_
 
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
 
 #define STR_TABLE_PRIV_NAME                 RID_STR_CONTROL_START
 #define STR_TABLE_PRIV_INSERT               RID_STR_CONTROL_START +  1

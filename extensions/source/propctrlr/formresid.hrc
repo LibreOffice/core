@@ -19,9 +19,7 @@
 #ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #define _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
-#endif
 
 // -----------------------------------------------------------------------
 // - Strings

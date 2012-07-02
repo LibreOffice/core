@@ -18,9 +18,7 @@
 #ifndef _DBU_TBL_HRC_
 #define _DBU_TBL_HRC_
 
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
 
 #define STR_HELP_AUTOINCREMENT_VALUE        RID_STR_TBL_START
 #define STR_TABLEDESIGN_UNDO_PRIMKEY        RID_STR_TBL_START + 1

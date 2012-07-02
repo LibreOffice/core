@@ -18,10 +18,7 @@
 #ifndef _DBU_APP_HRC_
 #define _DBU_APP_HRC_
 
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
-
 
 #define RID_STR_NEW_FORM                    RID_STR_APP_START
 #define RID_STR_NEW_FORM_AUTO               RID_STR_APP_START + 1

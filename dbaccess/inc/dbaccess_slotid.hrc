@@ -19,9 +19,7 @@
 #ifndef _DBACCESS_SLOTID_HRC_
 #define _DBACCESS_SLOTID_HRC_
 
-#ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
-#endif
 
 #define SID_INDEXDESIGN                 ( SID_DBACCESS_START +   0 )
 #define SID_DOCUMENT_DATA_SOURCE        ( SID_DBACCESS_START +   1 )

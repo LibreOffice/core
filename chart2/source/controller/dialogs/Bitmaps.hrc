@@ -18,9 +18,7 @@
 #ifndef CHART_BITMAPS_HRC
 #define CHART_BITMAPS_HRC
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }

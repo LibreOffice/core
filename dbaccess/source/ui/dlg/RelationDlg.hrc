@@ -18,9 +18,7 @@
 #ifndef DBAUI_RELATIONDIALOG_HRC
 #define DBAUI_RELATIONDIALOG_HRC
 
-#ifndef DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HRC
 #include "RelationControl.hrc"
-#endif
 
 #define FL_CASC_DEL                     3
 #define FL_CASC_UPD                     4

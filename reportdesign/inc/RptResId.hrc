@@ -19,11 +19,7 @@
 #ifndef _RPTUI_DLGRESID_HRC
 #define _RPTUI_DLGRESID_HRC
 
-// include     -----------------------------------------------------------
-
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 #define RID_DIALOG_START                RID_RPT_START
 #define RID_PAGE_START                  RID_RPT_START

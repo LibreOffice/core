@@ -18,9 +18,7 @@
 #ifndef SVX_HANGUL_HANJA_DLG_HRC
 #define SVX_HANGUL_HANJA_DLG_HRC
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 // PushButton
 #define PB_FIND         1

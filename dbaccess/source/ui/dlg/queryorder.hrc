@@ -18,10 +18,7 @@
 #ifndef DBAUI_QUERYORDER_HRC
 #define DBAUI_QUERYORDER_HRC
 
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-
 
 #define FT_ORDERFIELD   1
 #define FT_ORDERDIR     3

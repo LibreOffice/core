@@ -19,9 +19,7 @@
 #ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #define REPORTDESIGN_CORE_RESOURCE_HRC_
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 //------------------------------------------------------------------------------
 #define RID_CORE_STRINGS_START                  RID_RPT_START

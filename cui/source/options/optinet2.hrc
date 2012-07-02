@@ -19,10 +19,7 @@
 #define _SVX_OPTINET_HRC
 
 #include <sfx2/tabpage.hrc>
-
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 // Proxy ------------------------------------------------------------------
 #define GB_SETTINGS                 1

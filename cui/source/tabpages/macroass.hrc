@@ -19,9 +19,7 @@
 #ifndef _MACROASS_HRC
 #define _MACROASS_HRC
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 #define     LB_EVENT                2
 #define     PB_ASSIGN               3

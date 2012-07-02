@@ -19,9 +19,7 @@
 #ifndef _SDATTR_HRC
 #define _SDATTR_HRC
 
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#endif
 
 // Anfang Page-Attribute
 #define ATTR_PAGE_START         SID_SD_START + 1234

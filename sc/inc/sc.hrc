@@ -28,13 +28,8 @@
 #ifndef SC_SC_HRC
 #define SC_SC_HRC
 
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>      // ->#include <solar.hrc>
-#endif
-
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>  // ->Svx-IDs
-#endif
 
 #include "sfx2/sfxcommands.h"
 #include "svx/svxcommands.h"

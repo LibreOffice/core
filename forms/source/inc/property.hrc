@@ -27,13 +27,8 @@
 #ifndef _FRM_PROPERTY_HRC_
 #define _FRM_PROPERTY_HRC_
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-
-#ifndef FRM_STRINGS_HXX
 #include "frm_strings.hxx"
-#endif
 
 //.........................................................................
 namespace frm

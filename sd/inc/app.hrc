@@ -19,9 +19,7 @@
 #ifndef _SD_APP_HRC_
 #define _SD_APP_HRC_
 
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#endif
 
 // HelpIDs fuer Vorlagen
 #define HID_STANDARD_STYLESHEET_NAME        (HID_SD_START + 70)

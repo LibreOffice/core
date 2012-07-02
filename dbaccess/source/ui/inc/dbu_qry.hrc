@@ -18,10 +18,7 @@
 #ifndef _DBU_QRY_HRC_
 #define _DBU_QRY_HRC_
 
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
-
 
 #define STR_QUERY_UNDO_MOVETABWIN           RID_STR_QRY_START + 2
 #define STR_QUERY_UNDO_SIZETABWIN           RID_STR_QRY_START + 3

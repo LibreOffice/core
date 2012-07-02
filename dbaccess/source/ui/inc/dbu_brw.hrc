@@ -18,9 +18,7 @@
 #ifndef _DBU_BRW_HRC_
 #define _DBU_BRW_HRC_
 
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
 
     // FREE                                 RID_STR_BRW_START +  0
 #define RID_STR_DATABROWSER_FILTERED        RID_STR_BRW_START +  1

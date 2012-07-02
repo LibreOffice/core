@@ -18,10 +18,7 @@
 #ifndef _DBU_REL_HRC_
 #define _DBU_REL_HRC_
 
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
-
 
 #define STR_QUERY_REL_EDIT_RELATION         RID_STR_REL_START
 #define STR_RELATIONDESIGN                  RID_STR_REL_START + 1

@@ -18,9 +18,7 @@
 #ifndef DBAUI_QUERYFILTER_HRC
 #define DBAUI_QUERYFILTER_HRC
 
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
 
 #define FT_WHEREFIELD   1
 #define FT_WHERECOMP    2

@@ -19,18 +19,9 @@
 #ifndef _DBAUI_AUTOCONTROLS_HRC_
 #define _DBAUI_AUTOCONTROLS_HRC_
 
-
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
 
 
 #define CHECKBOX_HEIGHT     8

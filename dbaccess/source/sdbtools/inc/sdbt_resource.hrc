@@ -19,9 +19,7 @@
 #ifndef DBACCESS_SDBT_RESOURCE_HRC
 #define DBACCESS_SDBT_RESOURCE_HRC
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 //------------------------------------------------------------------------------
 #define RID_SDBT_STRINGS_START                  RID_DBACCESS_START

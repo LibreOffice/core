@@ -19,9 +19,7 @@
 #ifndef _BASIDESH_HRC
 #define _BASIDESH_HRC
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 // Width of Object Catalog pane in pixels
 #define OBJCAT_PANE_WIDTH 240

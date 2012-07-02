@@ -19,9 +19,7 @@
 #ifndef CONNECTIVITY_RESOURCE_COMMON_HRC
 #define CONNECTIVITY_RESOURCE_COMMON_HRC
 
-#ifndef CONNECTIVITY_SHARED_RES_HRC
 #include "resource/conn_shared_res.hrc"
-#endif
 
 // ============================================================================
 // = common strings

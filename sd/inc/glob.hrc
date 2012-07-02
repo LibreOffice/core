@@ -15,9 +15,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_HRC
+
+#ifndef _SDGLOB_HRC
+#define _SDGLOB_HRC
+
 #include <sfx2/sfx.hrc>
-#endif
 
 #define RID_GLOB_START                          RID_APP_START+750
 
@@ -139,3 +141,5 @@
 #define STR_SLIDE_TRANSITION_PANE               RID_GLOB_START+228
 
 #define RID_SLIDESORTER_ICONS                   RID_GLOB_START+227
+
+#endif // _SDGLOB_HRC

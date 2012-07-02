@@ -18,9 +18,7 @@
 #ifndef _DBU_MISC_HRC_
 #define _DBU_MISC_HRC_
 
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
 
 // free
 // free

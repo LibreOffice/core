@@ -19,13 +19,8 @@
 #ifndef _SFX_HRC
 #define _SFX_HRC
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
-
-#ifndef _MEMBERID_HRC
 #include <svl/memberid.hrc>
-#endif
 
 #define RID_GROUPS_OFFSET           32000
 #define RID_GROUPS_SFXOFFSET        32700
@@ -277,9 +272,7 @@
 
 // Slot-Ids -------------------------------------------------------------
 
-#ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
-#endif
 
 #define HID_INTERFACE_SFXMAILVIEW               13
 #define HID_INTERFACE_SFXEXPLVIEWSH             17

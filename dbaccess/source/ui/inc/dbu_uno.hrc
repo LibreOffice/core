@@ -18,9 +18,7 @@
 #ifndef _DBU_UNO_HRC_
 #define _DBU_UNO_HRC_
 
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
 
 #define STR_REMEMBERPASSWORD_PERSISTENT         ( RID_STR_UNO_START +  0 )
 #define STR_CTW_NO_VIEWS_SUPPORT                ( RID_STR_UNO_START +  1 )

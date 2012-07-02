@@ -19,14 +19,10 @@
 #ifndef _FRM_RESOURCE_HRC_
 #define _FRM_RESOURCE_HRC_
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 //------------------------------------------------------------------------------
 #define RID_FRM_STRINGS_START       RID_FORMLAYER_START
-
-
 
 //------------------------------------------------------------------------------
 //- String-IDs

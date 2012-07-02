@@ -18,9 +18,7 @@
 #ifndef CHART_MENURESIDS_HRC
 #define CHART_MENURESIDS_HRC
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 //-----------------------------------------------------------------------------
 // context menus

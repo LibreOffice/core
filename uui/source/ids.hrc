@@ -19,12 +19,8 @@
 #ifndef UUI_IDS_HRC
 #define UUI_IDS_HRC
 
-#ifndef _SOLAR_HRC
 #include "svl/solar.hrc"
-#endif
-#ifndef _ERRCODE_HXX
 #include "tools/errcode.hxx"
-#endif
 
 #define RID_KEEP_PASSWORD                               (RID_UUI_START +  0)
 #define RID_SAVE_PASSWORD                               (RID_UUI_START +  1)

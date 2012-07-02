@@ -19,9 +19,7 @@
 #ifndef DBAUI_QUERYDLG_HRC
 #define DBAUI_QUERYDLG_HRC
 
-#ifndef DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HRC
 #include "RelationControl.hrc"
-#endif
 
 #define FL_JOIN                 1
 #define FT_LISTBOXTITLE         2
