@@ -31,9 +31,7 @@
 #define     LB_MACROS               7
     // FREE
 #define     FT_LABEL4LB_MACROS      9
-#define     STR_JAVASCRIPT          10
 #define     STR_MACROS              11
-#define     ED_JAVASCRIPT           12
 #define     STR_EVENT               13
 #define     STR_ASSMACRO            14
 

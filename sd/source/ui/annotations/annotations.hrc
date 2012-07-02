@@ -47,6 +47,4 @@
 
 #define FT_AUTHOR   1
 
-#define CT_TEXT     5
-
 #endif // _SD_ANNOTATIONPANE_HRC

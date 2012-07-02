@@ -55,7 +55,6 @@
 #define XTICK_2 (XTICK_1+60)
 #define XTICK_3 (XTICK_2+60)
 #define XTICK_4 (XTICK_3+60)
-#define XTICK_5 (XTICK_4+6)
 #define TICKWIDTH 59
 
 TabPage TP_AXIS_POSITIONS

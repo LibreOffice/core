@@ -30,7 +30,6 @@
 #define IMG_DATABASE                    (IMAGELIST_START + 53)
 #define IMG_IMPRESSTEMPLATE             (IMAGELIST_START + 54)
 #define IMG_GIF                         (IMAGELIST_START + 61)
-#define IMG_HELP                        (IMAGELIST_START + 62)
 #define IMG_HTML                        (IMAGELIST_START + 63)
 #define IMG_JPG                         (IMAGELIST_START + 64)
 #define IMG_MATH                        (IMAGELIST_START + 68)

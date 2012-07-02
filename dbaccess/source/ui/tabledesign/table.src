@@ -39,7 +39,6 @@
 #define MN_EDIT     20
 #define MN_VIEW     21
 #define MN_EXTRA    22
-#define MN_INDEX    23
 #define MN_WIN      30
 #define MN_HELP     31
 

@@ -19,7 +19,6 @@
 #define FT_2            7
 #define FT_3            8
 #define FT_4            9
-#define FT_5            10
 
 #define FT_COLL         20
 #define LB_COLL         21

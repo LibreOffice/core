@@ -33,7 +33,6 @@
 #define RBT_STANDARD 4
 #define RBT_WINDOW 5
 #define RBT_AUTO 6
-#define FT_PAUSE 1
 #define TMF_PAUSE 1
 #define CBX_AUTOLOGO 1
 

@@ -22,7 +22,6 @@
 #include "rcid.hrc"
 #include "globals.hrc"
 
-#define DLG_BORDER              (RC_FRMDLG_BEGIN +  3)
 #define DLG_COLUMN              (RC_FRMDLG_BEGIN +  4)
 
 #define DLG_CAPTION             (RC_FRMDLG_BEGIN + 11)
@@ -42,7 +41,6 @@
 
 #define MN_BACKGROUND           (BMP_END + 4)
 
-#define STR_BACKGROUND          (BMP_END + 6)
 #define MN_FOOTNOTE             (BMP_END + 7)
 
 #define STR_FRMDLG_BEGIN        (MN_FOOTNOTE + 1)

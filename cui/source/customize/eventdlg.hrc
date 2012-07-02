@@ -25,6 +25,3 @@
 
 #define TXT_SAVEIN      10
 #define LB_SAVEIN           11
-
-#define ID_APP      21
-#define ID_DOC      22

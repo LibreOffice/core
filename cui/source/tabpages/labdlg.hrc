@@ -52,5 +52,3 @@
 #define BMP_CAPTTYPE_2          2
 #define BMP_CAPTTYPE_3          3
 #define BMP_CAPTTYPE_4          4
-
-#define SHOW_NONE               4

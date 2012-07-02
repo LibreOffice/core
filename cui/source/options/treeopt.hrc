@@ -28,7 +28,6 @@
 #define FL_SEPARATOR            19
 
 #define FT_HINT                 21
-#define CB_DISABLE              22
 #define ST_LOAD_ERROR           24
 
 // metrics
@@ -48,7 +47,6 @@
 #define COL_6                   (COL_7-RSC_CD_PUSHBUTTON_WIDTH)
 #define COL_5                   (COL_6-RSC_SP_CTRL_GROUP_X)
 #define COL_4                   (COL_5-RSC_CD_PUSHBUTTON_WIDTH)
-#define COL_3_1                 (COL_3+RSC_SP_TBPG_INNERBORDER_LEFT)
 
 #define ROW_1                   (RSC_SP_DLG_INNERBORDER_TOP)
 #define ROW_2                   (ROW_1+HEIGHT_PAGEFRAME)

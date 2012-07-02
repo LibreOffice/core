@@ -456,7 +456,6 @@
 #define SID_ATTR_LONG_LRSPACE                           ( SID_SVX_START + 285 )
 #define SID_FRAME_TO_TOP                                ( SID_SVX_START + 286 )
 #define SID_FRAME_TO_BOTTOM                             ( SID_SVX_START + 287 )
-#define SID_POSTIT                                      ( SID_SVX_START + 288 )
 #define SID_SEARCH_SEARCHSET                            ( SID_SVX_START + 292 )
 #define SID_SEARCH_REPLACESET                           ( SID_SVX_START + 293 )
 #define SID_SET_SUPER_SCRIPT                            ( SID_SVX_START + 294 )
@@ -534,7 +533,6 @@
 #define SID_ATTR_3D_INTERN                              ( SID_SVX_START + 422 )
 #define SID_PSZ_FUNCTION                                ( SID_SVX_START + 423 )
 #define SID_OFASLOTS_START                              ( SID_SVX_START + 425 )
-#define SID_AUTOPILOT                                       SID_SD_AUTOPILOT
 
 #define SID_TABLE_INSERT_COL_DLG                        ( SID_SVX_START + 426 )
 #define SID_TABLE_INSERT_ROW_DLG                        ( SID_SVX_START + 427 )

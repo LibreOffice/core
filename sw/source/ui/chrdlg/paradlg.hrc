@@ -16,9 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #define TAB_CONTROL 55
-#define DIST_FRM 8
-#define TOP_DIST 10
-#define BOTTOM_DIST 12
 #define HYPHEN_BOX_AFTER 44
 #define HYPHEN_BOX_BEFORE 22
 #define OK_BTN 50

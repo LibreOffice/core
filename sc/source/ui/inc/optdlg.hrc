@@ -18,7 +18,6 @@
 
 #include "sc.hrc"
 
-
 #define TP_GENERAL          1
 #define TP_SAVE             2
 #define TP_PATH             3
@@ -27,10 +26,8 @@
 #define TP_USERLISTS        7
 #define TP_PRINT            8
 #define TP_GRID             10
-#define TP_CONTENT          11
 #define TP_LAYOUT           12
 #define TP_INPUT            13
-#define TP_CHANGES          14
 #define TP_FORMULA          15
 
 // TP_CALC:

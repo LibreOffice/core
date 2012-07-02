@@ -37,7 +37,6 @@
 #define LB_LEVEL      17
 #define FT_SEPARATOR  18
 #define ED_SEPARATOR  19
-#define CB_COPY_ATTR  20
 #define BTN_AUTOCAPTION 23
 #define TXT_SEP         24
 #define EDT_SEP         25

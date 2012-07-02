@@ -30,8 +30,6 @@
 #define STR_PAGE_FOOTNOTE                       (RC_FMTUI_BEGIN + 7)
 #define STR_PAGE_TEXTGRID                       (RC_FMTUI_BEGIN + 8)
 
-#define MN_TEXT                     (RC_FMTUI_BEGIN + 20)
-
 #define ST_CUSTOMIZE                1
 
 // Do not change relations to base 2!!!

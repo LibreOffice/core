@@ -35,11 +35,7 @@
 #define BUTTON_WIDTH        13
 #define BUTTON_HEIGHT       13
 #define VT_BUTTON_WIDTH     18
-#define GROUP_Y             (BORDER + BUTTON_HEIGHT + 3)
-#define GROUP_HEIGHT        95
 #define GROUP_WIDTH         (WIDTH - 2 * BORDER)
-#define GROUP_PREV_X        60
-#define GROUP_PREV_Y        (GROUP_Y + GROUP_HEIGHT + 1)
 #define IMG_BUTTON_HEIGHT   15
 #define IMG_BUTTON_NEXT     (IMG_BUTTON_HEIGHT + 2)
 #define IMG_BUTTON_SIZE     MAP_APPFONT( BUTTON_WIDTH, IMG_BUTTON_HEIGHT )

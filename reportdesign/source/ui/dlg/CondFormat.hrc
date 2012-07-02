@@ -48,7 +48,6 @@
 #define PB_HELP                     11
 #define FL_SEPARATOR1               12
 #define ED_CONDITION_RHS            13
-#define CT_CONDITION                14
 #define SB_ALL_CONDITIONS           18
 #define WND_COND_PLAYGROUND         19
 #define BTN_MOVE_UP                 20

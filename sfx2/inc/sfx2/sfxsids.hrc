@@ -212,7 +212,6 @@
 #define SID_OFFICE_CUSTOMERNUMBER               (SID_SFX_START + 1608)
 #define SID_OFFICE_CHECK_PLZ                (SID_SFX_START + 1610)
 #define SID_CURRENT_URL                     (SID_SFX_START + 1613)
-#define SID_GROUPVIEW                       (SID_SFX_START + 1621)
 
 #define SID_TIPWINDOW                           (SID_SFX_START + 1632)
 #define SID_CHARSET                         (SID_SFX_START + 1633)

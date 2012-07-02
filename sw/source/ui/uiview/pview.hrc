@@ -35,21 +35,13 @@
 //Dialog Druckoptionen
 #define FT_ROWS         2
 #define NF_ROWS         3
-#define NF_COLS         5
 #define FL_DISTANCE     7
 #define FL_ORIENTATION  8
 
 #define WIN_PREVIEW     11
 
-
 #define FT_LMARGIN      12
-#define MF_LMARGIN      13
 #define FT_RMARGIN      14
-#define MF_RMARGIN      15
-#define MF_TMARGIN      17
-#define MF_BMARGIN      19
-#define MF_HMARGIN      21
-#define MF_VMARGIN      23
 #define PB_STANDARD     24
 
 #define RB_LANDSCAPE    24

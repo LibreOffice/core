@@ -20,8 +20,6 @@
 
 #define FT_CONTROLS     1
 
-#define LB_CONTROLS     1
-
 #define PB_MOVE_UP      1
 #define PB_MOVE_DOWN    2
 #define PB_AUTO_ORDER   3

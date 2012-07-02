@@ -29,7 +29,6 @@
 #define RID_KEEP_PASSWORD                               (RID_UUI_START +  0)
 #define RID_SAVE_PASSWORD                               (RID_UUI_START +  1)
 #define DLG_UUI_LOGIN                                   (RID_UUI_START +  2)
-#define DLG_COOKIES                                     (RID_UUI_START +  3)
 #define DLG_FILTER_SELECT                               (RID_UUI_START + 10)
 // RID_UUI_START + 11 moved to ERRCODE_UUI_WRONGMEDIUM
 #define DLG_UUI_MASTERPASSWORD                          (RID_UUI_START + 12)

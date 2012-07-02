@@ -63,7 +63,6 @@
 
 // DIALOGS -----------------------------------------------------------
 
-#define DLG_LISTBOX                 (RC_GLOBALS_BEGIN + 1)
 #define DLG_THESAURUS               (RC_GLOBALS_BEGIN + 2)
 #define DLG_SPECIAL                 (RC_GLOBALS_BEGIN + 3)
 
@@ -144,7 +143,6 @@
 #define TP_FRM_URL                  (RC_GLOBALS_BEGIN +  42)
 #define TP_CHAR_URL                 (RC_GLOBALS_BEGIN +  43)
 
-#define TP_LAYOUT_OPT               (RC_GLOBALS_BEGIN +  44)
 #define TP_CONTENT_OPT              (RC_GLOBALS_BEGIN +  45)
 #define TP_STD_FONT                 (RC_GLOBALS_BEGIN +  47)
 #define TP_CONDCOLL                 (RC_GLOBALS_BEGIN +  48)

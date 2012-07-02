@@ -618,13 +618,6 @@ String RID_STR_GETLINE
 #define MN_HELP 31
 #define MN_TEMPLATES 11
 
-#define MN_PLEDIT       20
-#define MN_PLVIEW       21
-#define MN_PLEXTRA      22
-#define MN_PLWIN        30
-#define MN_PLHELP       31
-#define MN_PLTEMPLATES  11
-
 /*
 
 The application menu bar resource has become obsolete. You can now find the menu bar definition at:

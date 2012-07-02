@@ -28,6 +28,5 @@
 #define MN_SUB_TEMPLATES 95
 #define MN_SUB_POSITION 96
 #define MN_SUB_MASTERPAGE 97
-#define MN_SUB_SEND 98
 
 #endif

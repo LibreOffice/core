@@ -15,9 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define SIZE_FT        5
-#define COLOR_LB       12
-#define CAPS_RB        21
 
 #define FL_URL          50
 #define FT_URL          51
@@ -35,4 +32,3 @@
 #define ED_TEXT         64
 #define FT_NAME         65
 #define ED_NAME         66
-

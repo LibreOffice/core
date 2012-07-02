@@ -29,7 +29,6 @@
 
 #include "rcid.hrc"
 
-#define DLG_POSTIT          (RC_FLDDLG_BEGIN + 4)
 #define DLG_FLD_INPUT       (RC_FLDDLG_BEGIN + 5)
 #define DLG_CHANGE_DB       (RC_FLDDLG_BEGIN + 9)
 #define DLG_JAVAEDIT        (RC_FLDDLG_BEGIN + 10)

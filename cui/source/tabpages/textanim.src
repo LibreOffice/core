@@ -54,10 +54,6 @@
 /* step delay */                         RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
 /* delay time */                         RSC_CD_TEXTBOX_HEIGHT)
 
-
-// left space for real controls
-#define MA_LEFT_SPACE                   (RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT)
-
 // tabpage total size
 #define MA_TOTAL_WIDTH          260
 #define MA_TOTAL_HEIGHT         RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + MA_PROPERTIESGROUP_HEIGHT + RSC_SP_TBPG_INNERBORDER_BOTTOM

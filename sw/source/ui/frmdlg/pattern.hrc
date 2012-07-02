@@ -16,10 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define COLOR_LBL               3
-#define COLOR_LBOX              4
-
 #define OK_BTN                  11
 #define CANCEL_BTN              12
-#define RESET_BTN               13
 

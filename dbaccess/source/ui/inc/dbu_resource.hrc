@@ -88,8 +88,6 @@
 #define DLG_COLWIDTH                    RID_DIALOG_START +  9
 #define DLG_ATTR                        RID_DIALOG_START + 10
 #define DLG_SAVE_AS                     RID_DIALOG_START + 11
-#define DLG_ERROR                       RID_DIALOG_START + 12
-#define DLG_TEXT                        RID_DIALOG_START + 13
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
 #define DLG_QRY_JOIN                    RID_DIALOG_START + 15
 #define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
@@ -101,7 +99,6 @@
 #define DLG_DIRECTSQL                   RID_DIALOG_START + 22
 #define DLG_PASSWORD                    RID_DIALOG_START + 23
 #define DLG_DOMAINPASSWORD              RID_DIALOG_START + 24
-#define DLG_RENAME                      RID_DIALOG_START + 25
 #define DLG_DATABASE_ADVANCED           RID_DIALOG_START + 26
 #define DLG_COLLECTION_VIEW             RID_DIALOG_START + 27
 #define DLG_DATABASE_TYPE_CHANGE        RID_DIALOG_START + 28
@@ -134,9 +131,6 @@
     // FREE
 #define PAGE_ORACLE_JDBC                RID_PAGE_START + 27
 #define PAGE_TABLESUBSCRIPTION          RID_PAGE_START + 28
-    // FREE
-#define PAGE_MOZILLA                    RID_PAGE_START + 32
-
 
 #define PAGE_DBWIZARD_DBASE                     RID_PAGE_START + 41
 #define PAGE_DBWIZARD_TEXT                      RID_PAGE_START + 42

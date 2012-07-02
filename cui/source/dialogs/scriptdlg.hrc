@@ -45,7 +45,6 @@
 #define ED_LIBNAME                      14
 #define PB_OK                           15
 #define PB_CANCEL                       16
-#define DLG_NEWLIB                      17
 #define STR_FT_RENAME                   18
 #define STR_RENAME                      19
 

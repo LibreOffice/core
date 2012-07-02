@@ -29,7 +29,6 @@
 #include "present.hrc"
 
 #define DISTANCE    23
-#define DISTANCE2   ((DISTANCE) + 81)
 
 ModalDialog DLG_START_PRESENTATION
 {

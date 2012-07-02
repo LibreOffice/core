@@ -61,7 +61,6 @@
 #define BT_EDIT         55
 #define BT_NEW          56
 #define BT_DELETE       57
-#define BT_DEFAULT      58
 #define CB_CHAR_HIDDEN  61
 // Print-Extra-Page
 #define CB_PGRF            61
@@ -148,7 +147,6 @@
 
 #define FT_MOVE                     128
 #define FT_COMMENT                  133
-#define FT_UNKNOWN                  137
 #define FL_TABLE_SEPARATOR          139
 #define CB_PROSPECT_RTL        140
 

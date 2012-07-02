@@ -25,11 +25,7 @@
 
 #include "rcid.hrc"
 
-#define  DLG_FORMEDT            (RC_INDEX_BEGIN + 0)
-#define  DLG_IDX                (RC_INDEX_BEGIN + 1)
-#define  DLG_USRIDX             (RC_INDEX_BEGIN + 2)
 #define  DLG_INSIDXMARK         (RC_INDEX_BEGIN + 3)
-#define  DLG_CNTTABLE           (RC_INDEX_BEGIN + 4)
 #define  DLG_MULTMRK            (RC_INDEX_BEGIN + 5)
 
 #define  STR_TITLE              (RC_INDEX_BEGIN + 6)

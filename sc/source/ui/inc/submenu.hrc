@@ -17,7 +17,6 @@
  */
 
 //  IDs fuer Untermenues
-#define SUBMENU_NAME        8
 #define SUBMENU_OBJARRANGE  23
 #define SUBMENU_ANCHOR      24
 #define SUBMENU_OBJMIRROR   33

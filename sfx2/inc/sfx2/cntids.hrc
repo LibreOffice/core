@@ -45,7 +45,6 @@
 #define SID_CHAOS_END                   9799
 
 #define SID_DISTRIBUTION                (SID_CHAOS_START + 26)
-#define SID_UPDATE                      (SID_CHAOS_START + 86)
 #define SID_INSERT                      (SID_CHAOS_START + 90)
 #define SID_VIEW_FLD_PIC                (SID_CHAOS_START + 185)
 

@@ -59,7 +59,6 @@
 #define RC_ENVELP                   (RC_BASE + 2750)
 #define RC_STATLIN_STR              (RC_BASE + 2850)
 #define RC_COMMON_CORE              (RC_BASE + 2950)
-#define RC_WIZARD                   (RC_BASE + 3050)
 #define RC_POPUPS                   (RC_BASE + 3150)
 #define RC_SHELLS                   (RC_BASE + 3250)
 #define RC_CFGITEMS                 (RC_BASE + 3350)

@@ -32,7 +32,6 @@
 #define HEIGHT_EDIT         12
 
 #define LINE_1_Y            6
-#define LINE_2_Y            LINE_1_Y + HEIGHT_EDIT + 4
 #define OFFSET_Y            6
 
 ModalDialog DLG_DOCUMENTLINK

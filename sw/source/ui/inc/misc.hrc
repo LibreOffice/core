@@ -21,11 +21,8 @@
 
 #include "rcid.hrc"
 
-
-
 #define STR_GLOSSARY_BIB_DLG        (RC_MISC_BEGIN + 5)
 
-#define DLG_ZOOM                    (RC_MISC_BEGIN + 10)
 #define DLG_GLOSSARY                (RC_MISC_BEGIN + 11)
 #define DLG_INS_FOOTNOTE            (RC_MISC_BEGIN + 12)
 #define DLG_DOC_FOOTNOTE            (RC_MISC_BEGIN + 13)
@@ -33,9 +30,7 @@
 #define DLG_INSERT_BOOKMARK         (RC_MISC_BEGIN + 17)
 #define DLG_NUM_NAMES               (RC_MISC_BEGIN + 18)
 #define DLG_SORTING                 (RC_MISC_BEGIN + 19)
-#define DLG_CHARMAP                 (RC_MISC_BEGIN + 20)
 #define DLG_RENAME_GLOS             (RC_MISC_BEGIN + 25)
-#define DLG_PRCNT_SET               (RC_MISC_BEGIN + 27)
 #define DLG_INSERT_RULER            (RC_MISC_BEGIN + 28)
 #define DLG_REDLINE_ACCEPT          (RC_MISC_BEGIN + 29)
 
@@ -55,17 +50,6 @@
 #define STR_CHANGE_START            (RC_MISC_BEGIN + 44)
 #define STR_CHANGE_END              (RC_MISC_BEGIN + 45)
 #define STR_SAVE_GLOSSARY           (RC_MISC_BEGIN + 46)
-
-#define STR_FULLNUMS_START          (RC_MISC_BEGIN + 47)
-#define STR_FULLNUMS_1              (STR_FULLNUMS_START )
-#define STR_FULLNUMS_2              (STR_FULLNUMS_START + 1)
-#define STR_FULLNUMS_3              (STR_FULLNUMS_START + 2)
-#define STR_FULLNUMS_4              (STR_FULLNUMS_START + 3)
-#define STR_FULLNUMS_5              (STR_FULLNUMS_START + 4)
-#define STR_FULLNUMS_6              (STR_FULLNUMS_START + 5)
-#define STR_FULLNUMS_7              (STR_FULLNUMS_START + 6)
-#define STR_FULLNUMS_8              (STR_FULLNUMS_START + 7)
-
 
 #define MN_REDLINE_POPUP            (RC_MISC_BEGIN + 61)
 #define STR_REMOVE_WARNING          (RC_MISC_BEGIN + 62)

@@ -95,9 +95,6 @@
 #define PAGE5_TITEL         81
 #define PAGE5_TEXTONLY      82
 #define PAGE5_BUTTONS       83
-#define PAGE5_TITEL_2       84
-#define PAGE5_NOBACK        85
-#define PAGE5_BACKS         86
 
 //////////////////////////////
 
@@ -110,7 +107,6 @@
 #define PAGE6_VLINK         107
 #define PAGE6_ALINK         108
 #define PAGE6_DOCCOLORS     109
-#define PAGE6_USECOLOR      110
 #define PAGE6_PREVIEW       111
 
 //////////////////////////////

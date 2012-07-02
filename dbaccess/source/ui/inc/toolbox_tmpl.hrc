@@ -18,9 +18,6 @@
 #ifndef DBAUI_TOOLBOX_HXX
 #define DBAUI_TOOLBOX_HXX
 
-#define CUR_ITEM ToolBoxItem
-#define CUR_SEPARATOR CUR_ITEM {Type = TOOLBOXITEM_SEPARATOR;}
-
 #define MID_SBA_QRY_REFRESH \
     Identifier = ID_BROWSER_REFRESH ; \
     Text [ en-US ] = "Refresh"; \

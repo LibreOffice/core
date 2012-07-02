@@ -49,7 +49,6 @@
 #define ROWB_2                  ( ROWB_1 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
 #define ROWB_3                  ( ROWB_2 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
 
-#define WHOLE_HEIGHT            185
 #define OFFS_TEXTBOX_FIXEDTEXT(base)    (base+(RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
 #define DIFF(v1,v2)             (v2-v1)
 #define SUM(v1,v2)              (v2+v1)

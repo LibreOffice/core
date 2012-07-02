@@ -43,7 +43,6 @@
 #define ET_WHEREVALUE3  3
 
 #define STR_NOENTRY     1
-#define STR_DEFAULT     3
 #define STR_COMPARE_OPERATORS 4
 
 #define BT_OK           1

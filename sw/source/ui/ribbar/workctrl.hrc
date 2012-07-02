@@ -19,7 +19,6 @@
 #define _WORKCTRL_HRC
 #include "ribbar.hrc"
 
-#define TBX_INSERT          1
 #define IL_VALUES           5
 #define IMG_BTN             6
 #define ST_QUICK            7
