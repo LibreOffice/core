@@ -94,6 +94,7 @@ TARFILE_ROOTDIR=mozilla
 PATCH_FILES = \
     seamonkey-source-$(MOZILLA_VERSION).patch \
     patches/gcc46.patch \
+    patches/gcc47.patch \
     patches/dtoa.patch \
     patches/respect_disable_pango.patch \
     patches/arm_build_fix.patch \
