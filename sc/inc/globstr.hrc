@@ -591,7 +591,16 @@
 #define STR_PIVOT_GROUP             467
 #define STR_HEADER_COND             468
 
-#define STR_COUNT                   469
+#define STR_COND_CONDITION          469
+#define STR_COND_COLORSCALE         470
+#define STR_COND_DATABAR            471
+#define STR_COND_FORMULA            472
+#define STR_COND_BETWEEN            473
+#define STR_COND_NOTBETWEEN         474
+#define STR_COND_UNIQUE             475
+#define STR_COND_DUPLICATE          476
+
+#define STR_COUNT                   477
 
 
 #endif

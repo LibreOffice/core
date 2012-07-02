@@ -1861,7 +1861,35 @@ Resource RID_GLOBSTR
     };
     String STR_HEADER_COND
     {
-        Text [ en_US ] = "First Condition";
+        Text [ en-US ] = "First Condition";
+    };
+    String STR_COND_CONDITION
+    {
+        Text [ en-US ] = "Condition";
+    };
+    String STR_COND_COLORSCALE
+    {
+        Text [ en-US ] = "ColorScale";
+    };
+    String STR_COND_DATABAR
+    {
+        Text [ en-US ] = "DataBar";
+    };
+    String STR_COND_BETWEEN
+    {
+        Text [ en-US ] = "between";
+    };
+    String STR_COND_NOTBETWEEN
+    {
+        Text [ en-US ] = "not between";
+    };
+    String STR_COND_UNIQUE
+    {
+        Text [ en-US ] = "unique";
+    };
+    String STR_COND_DUPLICATE
+    {
+        Text [ en-US ] = "duplicate";
     };
 };
 
