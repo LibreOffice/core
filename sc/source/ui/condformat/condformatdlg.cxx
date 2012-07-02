@@ -387,57 +387,6 @@ void ScCondFrmtEntry::Init()
     mpDataBarData->maPositiveColor = COL_LIGHTBLUE;
 }
 
-namespace {
-
-rtl::OUString getTextForType(ScCondFormatEntryType eType)
-{
-    switch(eType)
-    {
-        case CONDITION:
-            return rtl::OUString("Cell value");
-        case COLORSCALE:
-            return rtl::OUString("Color scale");
-        case DATABAR:
-            return rtl::OUString("Data Bar");
-        case FORMULA:
-            return rtl::OUString("Formula is");
-        default:
-            break;
-    }
-
-    return rtl::OUString("");
-}
-
-rtl::OUString getExpression(sal_Int32 nIndex)
-{
-    switch(nIndex)
-    {
-        case 0:
-            return rtl::OUString("=");
-        case 1:
-            return rtl::OUString("<");
-        case 2:
-            return rtl::OUString(">");
-        case 3:
-            return rtl::OUString("<=");
-        case 4:
-            return rtl::OUString(">=");
-        case 5:
-            return rtl::OUString("!=");
-        case 6:
-            return rtl::OUString("between");
-        case 7:
-            return rtl::OUString("not between");
-        case 8:
-            return rtl::OUString("duplicate");
-        case 9:
-            return rtl::OUString("unique");
-    }
-    return rtl::OUString();
-}
-
-}
-
 long ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
@@ -454,11 +403,8 @@ void ScCondFrmtEntry::SwitchToType( ScCondFormatEntryType eType )
         case COLLAPSED:
             {
                 maLbType.Hide();
-                rtl::OUStringBuffer maCondText(getTextForType(meType));
-                maCondText.append(rtl::OUString(" "));
-                if(meType == CONDITION)
-                    maCondText.append(getExpression(maLbCondType.GetSelectEntryPos()));
-                maFtCondition.SetText(maCondText.makeStringAndClear());
+                rtl::OUString maCondText = ScCondFormatHelper::GetExpression(meType, maLbCondType.GetSelectEntryPos());
+                maFtCondition.SetText(maCondText);
                 maFtCondition.Show();
                 maLbType.Hide();
                 HideCondElements();

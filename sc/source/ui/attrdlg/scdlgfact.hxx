@@ -68,6 +68,7 @@ class ScSortWarningDlg;
 class ScTextImportOptionsDlg;
 class ScDataBarSettingsDlg;
 class ScCondFormatDlg;
+class ScCondFormatManagerDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
@@ -144,6 +145,13 @@ class AbstractScCondFormatDlg_Impl : public AbstractScCondFormatDlg
     DECL_ABSTDLG_BASE(AbstractScCondFormatDlg_Impl, ScCondFormatDlg)
 
     virtual ScConditionalFormat* GetConditionalFormat();
+};
+
+class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDlg
+{
+    DECL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl, ScCondFormatManagerDlg)
+
+    virtual ScConditionalFormatList* GetConditionalFormatList();
 };
 
 class AbstractScDataBarSettingsDlg_Impl : public AbstractScDataBarSettingsDlg
@@ -431,6 +439,9 @@ public:
 
     virtual AbstractScCondFormatDlg* CreateScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat,
                                                                 const ScRangeList& rRange, const ScAddress& rPos, int nId ); //add for ScDataBarSettingsDlg
+
+    virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
+                                                                const ScRangeList& rList, const ScAddress& rPos, int nId );
 
     virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent, ScDocument* pDoc, int nId ); //add for ScDataBarSettingsDlg
 

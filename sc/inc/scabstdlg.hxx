@@ -58,6 +58,7 @@ struct ScDPFuncData;
 struct ScDPNumGroupInfo;
 class ScTabViewShell;
 class ScConditionalFormat;
+class ScConditionalFormatList;
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -90,6 +91,12 @@ class AbstractScCondFormatDlg : public VclAbstractDialog
 {
 public:
     virtual ScConditionalFormat* GetConditionalFormat() = 0;
+};
+
+class AbstractScCondFormatManagerDlg : public VclAbstractDialog
+{
+public:
+    virtual ScConditionalFormatList* GetConditionalFormatList() = 0;
 };
 
 class AbstractScDataBarSettingsDlg : public VclAbstractDialog
@@ -361,6 +368,9 @@ public:
 
     virtual AbstractScCondFormatDlg* CreateScCondFormatDlg (Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat,
                                                                 const ScRangeList& rList, const ScAddress& rPos, int nId ) = 0; //add for ScCondFormatDlg
+
+    virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
+                                                                const ScRangeList& rList, const ScAddress& rPos, int nId ) = 0;
 
     virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent, ScDocument* pDoc, int nId ) = 0; //add for ScDataBarSettingsDlg
 

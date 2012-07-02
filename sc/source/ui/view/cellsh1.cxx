@@ -2077,7 +2077,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     pDlg = pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aPos, RID_SCDLG_CONDFORMAT );
                 }
-                OSL_ENSURE(pDlg, "Dialog create fail!");
+
                 if(pDlg->Execute() == RET_OK)
                 {
                     ScConditionalFormat* pFormat = pDlg->GetConditionalFormat();
@@ -2085,6 +2085,33 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if(pCondFormat)
                         nOldIndex = pCondFormat->GetKey();
                     pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat( nOldIndex, pFormat, pData->GetTabNo(), pFormat->GetRange() );
+                }
+                delete pDlg;
+            }
+            break;
+
+        case SID_OPENDLG_CONDFRMT_MANAGER:
+            {
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+
+                ScRangeList aRangeList;
+                ScViewData* pData = GetViewData();
+                pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
+                ScDocument* pDoc = pData->GetDocument();
+
+                ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
+                if(aRangeList.empty())
+                {
+                    ScRange* pRange = new ScRange(aPos);
+                    aRangeList.push_back(pRange);
+                }
+
+                ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
+                AbstractScCondFormatManagerDlg* pDlg = pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aRangeList, aPos, RID_SCDLG_COND_FORMAT_MANAGER);
+                if(pDlg->Execute() == RET_OK)
+                {
+                    pDoc->SetCondFormList(pDlg->GetConditionalFormatList(), aPos.Tab());
                 }
                 delete pDlg;
             }

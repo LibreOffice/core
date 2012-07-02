@@ -65,6 +65,8 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/cctrl/editfield \
     sc/source/ui/condformat/colorformat \
     sc/source/ui/condformat/condformatdlg \
+    sc/source/ui/condformat/condformathelper \
+    sc/source/ui/condformat/condformatmgr \
     sc/source/ui/dbgui/dapidata \
     sc/source/ui/dbgui/dapitype \
     sc/source/ui/dbgui/dpgroupdlg \

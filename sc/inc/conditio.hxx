@@ -314,7 +314,7 @@ public:
 //  List of areas and formats:
 //
 
-class ScConditionalFormatList
+class SC_DLLPUBLIC ScConditionalFormatList
 {
 private:
     boost::ptr_set<ScConditionalFormat> maConditionalFormats;

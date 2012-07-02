@@ -260,10 +260,12 @@
             <menu:menuitem menu:id=".uno:DesignerDialog"/>
             <menu:menuitem menu:id=".uno:AutoFormat"/>
             <menu:menu menu:id=".uno:ConditionalFormatMenu">
-	          <menu:menupopup>
-	            <menu:menuitem menu:id=".uno:ConditionalFormatDialog"/>
-	          </menu:menupopup>
-	        </menu:menu>
+              <menu:menupopup>
+                <menu:menuitem menu:id=".uno:ConditionalFormatDialog"/>
+                <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:ConditionalFormatManagerDialog"/>
+              </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:AnchorMenu">
                 <menu:menupopup>
