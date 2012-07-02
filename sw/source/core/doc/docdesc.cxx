@@ -184,6 +184,116 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
     rDest.SetPoolHlpFileId( rSource.GetPoolHlpFileId() );
 }
 
+void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc *pDesc, bool bLeft)
+{
+    SwFrmFmt& rDescFrmFmt = (bLeft ? pDesc->GetLeft() : pDesc->GetFirst());
+    if ( (bLeft ? rChged.IsHeaderShared() : rChged.IsHeaderSharedFirst() ) || !rHead.IsActive() )
+    {
+        // Left or first shares the header with the Master.
+        rDescFrmFmt.SetFmtAttr( pDesc->GetMaster().GetHeader() );
+    }
+    else if ( rHead.IsActive() )
+    {   // Left or first gets its own header if the Format doesn't alrady have one.
+        // If it already has one and it points to the same Section as the
+        // Right one, it needs to get an own Header.
+        // The content is evidently copied.
+        const SwFmtHeader &rFmtHead = rDescFrmFmt.GetHeader();
+        if ( !rFmtHead.IsActive() )
+        {
+            SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
+            rDescFrmFmt.SetFmtAttr( aHead );
+            // take over additional attributes (margins, borders ...)
+            ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), sal_False);
+        }
+        else
+        {
+            const SwFrmFmt *pRight = rHead.GetHeaderFmt();
+            const SwFmtCntnt &aRCnt = pRight->GetCntnt();
+            const SwFmtCntnt &aCnt = rFmtHead.GetHeaderFmt()->GetCntnt();
+            if( !aCnt.GetCntntIdx() )
+            {
+                const SwFrmFmt& rChgedFrmFmt = (bLeft ? rChged.GetLeft() : rChged.GetFirst());
+                rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetHeader() );
+            }
+            else if( (*aRCnt.GetCntntIdx()) == (*aCnt.GetCntntIdx()) )
+            {
+                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Header",
+                                                GetDfltFrmFmt() );
+                ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
+                // The section which the right header attribute is pointing
+                // is copied, and the Index to the StartNode is set to
+                // the left or first header attribute.
+                SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
+                SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwHeaderStartNode );
+                SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
+                            *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
+                aTmp = *pSttNd->EndOfSectionNode();
+                GetNodes()._Copy( aRange, aTmp, sal_False );
+
+                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
+                rDescFrmFmt.SetFmtAttr( SwFmtHeader( pFmt ) );
+            }
+            else
+                ::lcl_DescSetAttr( *pRight,
+                               *(SwFrmFmt*)rFmtHead.GetHeaderFmt(), sal_False );
+
+        }
+    }
+}
+
+void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc *pDesc, bool bLeft)
+{
+    SwFrmFmt& rDescFrmFmt = (bLeft ? pDesc->GetLeft() : pDesc->GetFirst());
+    if ( (bLeft ? rChged.IsFooterShared() : rChged.IsFooterSharedFirst() ) || !rFoot.IsActive() )
+        // Left or first shares the Header with the Master.
+        rDescFrmFmt.SetFmtAttr( pDesc->GetMaster().GetFooter() );
+    else if ( rFoot.IsActive() )
+    {   // Left or first gets its own Footer if the Format does not already have one.
+        // If the Format already has a Footer and it points to the same section as the Right one,
+        // it needs to get an own one.
+        // The content is evidently copied.
+        const SwFmtFooter &rFmtFoot = rDescFrmFmt.GetFooter();
+        if ( !rFmtFoot.IsActive() )
+        {
+            SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
+            rDescFrmFmt.SetFmtAttr( aFoot );
+            // Take over additional attributes (margins, borders ...).
+            ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), sal_False);
+        }
+        else
+        {
+            const SwFrmFmt *pRight = rFoot.GetFooterFmt();
+            const SwFmtCntnt &aRCnt = pRight->GetCntnt();
+            const SwFmtCntnt &aLCnt = rFmtFoot.GetFooterFmt()->GetCntnt();
+            if( !aLCnt.GetCntntIdx() )
+            {
+                const SwFrmFmt& rChgedFrmFmt = (bLeft ? rChged.GetLeft() : rChged.GetFirst());
+                rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetFooter() );
+            }
+            else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
+            {
+                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Footer",
+                                                GetDfltFrmFmt() );
+                ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
+                // The section to which the right footer attribute is pointing
+                // is copied, and the Index to the StartNode is set to
+                // the left footer attribute.
+                SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
+                SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwFooterStartNode );
+                SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
+                            *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
+                aTmp = *pSttNd->EndOfSectionNode();
+                GetNodes()._Copy( aRange, aTmp, sal_False );
+
+                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
+                rDescFrmFmt.SetFmtAttr( SwFmtFooter( pFmt ) );
+            }
+            else
+                ::lcl_DescSetAttr( *pRight,
+                               *(SwFrmFmt*)rFmtFoot.GetFooterFmt(), sal_False );
+        }
+    }
+}
 
 void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 {
@@ -245,104 +355,8 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
               rChged.IsHeaderSharedFirst() != pDesc->IsHeaderSharedFirst() );
     }
     pDesc->GetMaster().SetFmtAttr( rHead );
-    if ( rChged.IsHeaderShared() || !rHead.IsActive() )
-    {
-        // Left shares the header with the Master.
-        pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetHeader() );
-    }
-    else if ( rHead.IsActive() )
-    {   // Left gets its own header if the Format doesn't alrady have one.
-        // If it already has one and it points to the same Section as the
-        // Right one, it needs to get an own Header.
-        // The content is evidently copied.
-        const SwFmtHeader &rLeftHead = pDesc->GetLeft().GetHeader();
-        if ( !rLeftHead.IsActive() )
-        {
-            SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
-            pDesc->GetLeft().SetFmtAttr( aHead );
-            // take over additional attributes (margins, borders ...)
-            ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), sal_False);
-        }
-        else
-        {
-            const SwFrmFmt *pRight = rHead.GetHeaderFmt();
-            const SwFmtCntnt &aRCnt = pRight->GetCntnt();
-            const SwFmtCntnt &aLCnt = rLeftHead.GetHeaderFmt()->GetCntnt();
-            if( !aLCnt.GetCntntIdx() )
-                pDesc->GetLeft().SetFmtAttr( rChged.GetLeft().GetHeader() );
-            else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
-            {
-                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Header",
-                                                GetDfltFrmFmt() );
-                ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
-                // The section which the right header attribute is pointing
-                // is copied, and the Index to the StartNode is set to
-                // the left header attribute.
-                SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwHeaderStartNode );
-                SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
-                            *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
-                aTmp = *pSttNd->EndOfSectionNode();
-                GetNodes()._Copy( aRange, aTmp, sal_False );
-
-                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
-                pDesc->GetLeft().SetFmtAttr( SwFmtHeader( pFmt ) );
-            }
-            else
-                ::lcl_DescSetAttr( *pRight,
-                               *(SwFrmFmt*)rLeftHead.GetHeaderFmt(), sal_False );
-
-        }
-    }
-    if ( rChged.IsHeaderSharedFirst() || !rHead.IsActive() )
-    {
-        // First shares the header with the Master.
-        pDesc->GetFirst().SetFmtAttr( pDesc->GetMaster().GetHeader() );
-    }
-    else if ( rHead.IsActive() )
-    {   // First gets its own header if the Format doesn't alrady have one.
-        // If it already has one and it points to the same Section as the
-        // Right one, it needs to get an own Header.
-        // The content is evidently copied.
-        const SwFmtHeader &rFirstHead = pDesc->GetFirst().GetHeader();
-        if ( !rFirstHead.IsActive() )
-        {
-            SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
-            pDesc->GetFirst().SetFmtAttr( aHead );
-            // take over additional attributes (margins, borders ...)
-            ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), sal_False);
-        }
-        else
-        {
-            const SwFrmFmt *pRight = rHead.GetHeaderFmt();
-            const SwFmtCntnt &aRCnt = pRight->GetCntnt();
-            const SwFmtCntnt &aLCnt = rFirstHead.GetHeaderFmt()->GetCntnt();
-            if( !aLCnt.GetCntntIdx() )
-                pDesc->GetFirst().SetFmtAttr( rChged.GetFirst().GetHeader() );
-            else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
-            {
-                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Header",
-                                                GetDfltFrmFmt() );
-                ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
-                // The section which the right header attribute is pointing
-                // is copied, and the Index to the StartNode is set to
-                // the left header attribute.
-                SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwHeaderStartNode );
-                SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
-                            *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
-                aTmp = *pSttNd->EndOfSectionNode();
-                GetNodes()._Copy( aRange, aTmp, sal_False );
-
-                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
-                pDesc->GetFirst().SetFmtAttr( SwFmtHeader( pFmt ) );
-            }
-            else
-                ::lcl_DescSetAttr( *pRight,
-                               *(SwFrmFmt*)rFirstHead.GetHeaderFmt(), sal_False );
-
-        }
-    }
+    CopyMasterHeader(rChged, rHead, pDesc, true); // Copy left header
+    CopyMasterHeader(rChged, rHead, pDesc, false); // Copy first header
     pDesc->ChgHeaderShare( rChged.IsHeaderShared() );
     pDesc->ChgHeaderShareFirst( rChged.IsHeaderSharedFirst() );
 
@@ -359,98 +373,8 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
               rChged.IsFooterSharedFirst() != pDesc->IsFooterSharedFirst() );
     }
     pDesc->GetMaster().SetFmtAttr( rFoot );
-    if ( rChged.IsFooterShared() || !rFoot.IsActive() )
-        // Left shares the Header with the Master.
-        pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetFooter() );
-    else if ( rFoot.IsActive() )
-    {   // Left gets its own Footer if the Format does not already have one.
-        // If the Format already has a Footer and it points to the same section as the Right one,
-        // it needs to get an own one.
-        // The content is evidently copied.
-        const SwFmtFooter &rLeftFoot = pDesc->GetLeft().GetFooter();
-        if ( !rLeftFoot.IsActive() )
-        {
-            SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
-            pDesc->GetLeft().SetFmtAttr( aFoot );
-            // Take over additional attributes (margins, borders ...).
-            ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), sal_False);
-        }
-        else
-        {
-            const SwFrmFmt *pRight = rFoot.GetFooterFmt();
-            const SwFmtCntnt &aRCnt = pRight->GetCntnt();
-            const SwFmtCntnt &aLCnt = rLeftFoot.GetFooterFmt()->GetCntnt();
-            if( !aLCnt.GetCntntIdx() )
-                pDesc->GetLeft().SetFmtAttr( rChged.GetLeft().GetFooter() );
-            else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
-            {
-                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Footer",
-                                                GetDfltFrmFmt() );
-                ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
-                // The section to which the right footer attribute is pointing
-                // is copied, and the Index to the StartNode is set to
-                // the left footer attribute.
-                SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwFooterStartNode );
-                SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
-                            *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
-                aTmp = *pSttNd->EndOfSectionNode();
-                GetNodes()._Copy( aRange, aTmp, sal_False );
-
-                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
-                pDesc->GetLeft().SetFmtAttr( SwFmtFooter( pFmt ) );
-            }
-            else
-                ::lcl_DescSetAttr( *pRight,
-                               *(SwFrmFmt*)rLeftFoot.GetFooterFmt(), sal_False );
-        }
-    }
-    if ( rChged.IsFooterSharedFirst() || !rFoot.IsActive() )
-        // First shares the Header with the Master.
-        pDesc->GetFirst().SetFmtAttr( pDesc->GetMaster().GetFooter() );
-    else if ( rFoot.IsActive() )
-    {   // First gets its own Footer if the Format does not already have one.
-        // If the Format already has a Footer and it points to the same section as the Right one,
-        // it needs to get an own one.
-        // The content is evidently copied.
-        const SwFmtFooter &rFirstFoot = pDesc->GetFirst().GetFooter();
-        if ( !rFirstFoot.IsActive() )
-        {
-            SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
-            pDesc->GetFirst().SetFmtAttr( aFoot );
-            // Take over additional attributes (margins, borders ...).
-            ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), sal_False);
-        }
-        else
-        {
-            const SwFrmFmt *pRight = rFoot.GetFooterFmt();
-            const SwFmtCntnt &aRCnt = pRight->GetCntnt();
-            const SwFmtCntnt &aLCnt = rFirstFoot.GetFooterFmt()->GetCntnt();
-            if( !aLCnt.GetCntntIdx() )
-                pDesc->GetFirst().SetFmtAttr( rChged.GetFirst().GetFooter() );
-            else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
-            {
-                SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Footer",
-                                                GetDfltFrmFmt() );
-                ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
-                // The section to which the right footer attribute is pointing
-                // is copied, and the Index to the StartNode is set to
-                // the first footer attribute.
-                SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwFooterStartNode );
-                SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
-                            *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
-                aTmp = *pSttNd->EndOfSectionNode();
-                GetNodes()._Copy( aRange, aTmp, sal_False );
-
-                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
-                pDesc->GetFirst().SetFmtAttr( SwFmtFooter( pFmt ) );
-            }
-            else
-                ::lcl_DescSetAttr( *pRight,
-                               *(SwFrmFmt*)rFirstFoot.GetFooterFmt(), sal_False );
-        }
-    }
+    CopyMasterFooter(rChged, rFoot, pDesc, true); // Copy left footer
+    CopyMasterFooter(rChged, rFoot, pDesc, false); // Copy first footer
     pDesc->ChgFooterShare( rChged.IsFooterShared() );
     pDesc->ChgFooterShareFirst( rChged.IsFooterSharedFirst() );
 

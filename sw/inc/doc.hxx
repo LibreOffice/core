@@ -2082,6 +2082,10 @@ public:
 private:
     /// method to set new graphics pool defaults, must only be called by SetDrawDefaults!
     void UpdateDrawDefaults();
+    /// Copies master header to left / first one, if necessary - used by ChgPageDesc().
+    void CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc *pDesc, bool bLeft);
+    /// Copies master footer to left / first one, if necessary - used by ChgPageDesc().
+    void CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc *pDesc, bool bLeft);
 };
 
 // This method is called in Dtor of SwDoc and deletes cache of ContourObjects.
