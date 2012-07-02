@@ -1405,7 +1405,7 @@ String RID_UNDOFORMATNAME
 {
     Text = "Format" ;
 };
-String GID_FORMEL
+String GID_MATH
 {
     Text = "StarMath" ;
 };

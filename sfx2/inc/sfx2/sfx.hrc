@@ -213,12 +213,6 @@
 #define GID_CONTROLS                        (RID_GROUPS_SFXOFFSET+25)
 #define GID_NAVIGATION                      (RID_GROUPS_SFXOFFSET+26)
 
-// compatibility-#defines
-#define GID_FORMEL                          GID_MATH
-#define GID_OPT                             GID_OPTIONS
-#define GID_DOC                             GID_DOCUMENT
-#define GID_APP                             GID_APPLICATION
-
 // =========================================================================
 
 #define RID_OPTIONS_START           (SID_LIB_START +    2000)
