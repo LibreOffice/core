@@ -85,6 +85,7 @@ class SmEditWindow : public Window, public DropTargetHelper
     void        SetScrollBarRanges();
     void        InitScrollBars();
     void        InvalidateSlots();
+    void        UpdateStatus( bool bSetDocModified = false );
 
 public:
     SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin );

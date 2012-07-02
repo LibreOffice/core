@@ -243,9 +243,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
 IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
-    SmModule *pp = SM_MOD();
-    if (pp->GetConfig()->IsAutoRedraw())
-        Flush();
+    UpdateStatus();
     aModifyTimer.Stop();
     return 0;
 }
@@ -637,7 +635,7 @@ void SmEditWindow::GetFocus()
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
         ::accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
         if (pHelper)
-            pHelper->SetFocus( sal_True );
+            pHelper->SetFocus(true);
     }
 
     if (!pEditView)
@@ -665,7 +663,7 @@ void SmEditWindow::LoseFocus()
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
         ::accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
         if (pHelper)
-            pHelper->SetFocus( sal_False );
+            pHelper->SetFocus(false);
     }
 }
 
@@ -871,13 +869,23 @@ bool SmEditWindow::IsSelected() const
     return pEditView ? pEditView->HasSelection() : false;
 }
 
+
+void SmEditWindow::UpdateStatus( bool bSetDocModified )
+{
+    SmModule *pMod = SM_MOD();
+    if (pMod && pMod->GetConfig()->IsAutoRedraw())
+        Flush();
+    if ( bSetDocModified )
+        GetDoc()->SetModified(true);
+}
+
 void SmEditWindow::Cut()
 {
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
         pEditView->Cut();
-        GetDoc()->SetModified( true );
+        UpdateStatus(true);
     }
 }
 
@@ -894,7 +902,7 @@ void SmEditWindow::Paste()
     if (pEditView)
     {
         pEditView->Paste();
-        GetDoc()->SetModified( true );
+        UpdateStatus(true);
     }
 }
 
@@ -904,7 +912,7 @@ void SmEditWindow::Delete()
     if (pEditView)
     {
         pEditView->DeleteSelected();
-        GetDoc()->SetModified( true );
+        UpdateStatus(true);
     }
 }
 
