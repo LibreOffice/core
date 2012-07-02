@@ -81,6 +81,7 @@
 #include "tpdefaults.hxx"
 #include "colorformat.hxx"
 #include "condformatdlg.hxx"
+#include "condformatmgr.hxx"
 
 // ause
 #include "editutil.hxx"
@@ -90,6 +91,7 @@ IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScCondFormatDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataBarSettingsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl);
@@ -460,7 +462,10 @@ ScConditionalFormat* AbstractScCondFormatDlg_Impl::GetConditionalFormat()
     return pDlg->GetConditionalFormat();
 }
 
-
+ScConditionalFormatList* AbstractScCondFormatManagerDlg_Impl::GetConditionalFormatList()
+{
+    return pDlg->GetConditionalFormatList();
+}
 
 
 long AbstractScMetricInputDlg_Impl::GetInputValue( FieldUnit eUnit ) const
@@ -790,6 +795,24 @@ AbstractScCondFormatDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatDlg(Win
     }
     if(pDlg)
         return new AbstractScCondFormatDlg_Impl( pDlg );
+
+    return NULL;
+}
+
+AbstractScCondFormatManagerDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
+                                                                const ScRangeList& rList, const ScAddress& rPos, int nId )
+{
+    ScCondFormatManagerDlg* pDlg = NULL;
+    switch( nId )
+    {
+        case RID_SCDLG_COND_FORMAT_MANAGER:
+            pDlg = new ScCondFormatManagerDlg( pParent, pDoc, pFormatList, rList, rPos );
+            break;
+        default:
+            break;
+    }
+    if(pDlg)
+        return new AbstractScCondFormatManagerDlg_Impl( pDlg );
 
     return NULL;
 }

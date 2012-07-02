@@ -1,0 +1,206 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * Copyright (C) 2012 Markus Mohrhard <markus.mohrhard@googlemail.com> (initial developer)
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "condformatmgr.hxx"
+#include "condformatmgr.hrc"
+#include "scresid.hxx"
+#include "globstr.hrc"
+#include "condformatdlg.hxx"
+#include "vcl/msgbox.hxx"
+
+#define ITEMID_RANGE 1
+#define ITEMID_CONDITION 2
+
+
+ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList, const ScAddress& rPos):
+    SvTabListBox(pParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP),
+    maHeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
+    mpDoc(pDoc),
+    mpFormatList(pFormatList),
+    mrPos(rPos)
+{
+    Size aBoxSize( pParent->GetOutputSizePixel() );
+
+    maHeaderBar.SetPosSizePixel( Point(0, 0), Size( aBoxSize.Width(), 16 ) );
+
+    String aConditionStr(ScGlobal::GetRscString(STR_HEADER_COND));
+    String aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE));
+
+    long nTabSize = aBoxSize.Width()/2;
+    maHeaderBar.InsertItem( ITEMID_RANGE, aRangeStr, nTabSize, HIB_LEFT| HIB_VCENTER );
+    maHeaderBar.InsertItem( ITEMID_CONDITION, aConditionStr, nTabSize, HIB_LEFT| HIB_VCENTER );
+
+    static long nTabs[] = {2, 0, nTabSize };
+    Size aHeadSize( maHeaderBar.GetSizePixel() );
+
+    //pParent->SetFocusControl( this );
+    SetPosSizePixel( Point( 0, aHeadSize.Height() ), Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
+    SetTabs( &nTabs[0], MAP_PIXEL );
+
+    //maHeaderBar.SetEndDragHdl( LINK( this, ScRangeManagerTable, HeaderEndDragHdl ) );
+
+    Init();
+    Show();
+    maHeaderBar.Show();
+    SetSelectionMode(MULTIPLE_SELECTION);
+}
+
+String ScCondFormatManagerWindow::createEntryString(const ScConditionalFormat& rFormat)
+{
+    ScRangeList aRange = rFormat.GetRange();
+    String aStr;
+    aRange.Format(aStr, SCA_VALID, mpDoc, mpDoc->GetAddressConvention());
+    aStr += '\t';
+    aStr += ScCondFormatHelper::GetExpression(rFormat, mrPos);
+    return aStr;
+}
+
+void ScCondFormatManagerWindow::Init()
+{
+    SetUpdateMode(false);
+
+    for(ScConditionalFormatList::iterator itr = mpFormatList->begin(); itr != mpFormatList->end(); ++itr)
+    {
+        SvLBoxEntry* pEntry = InsertEntryToColumn( createEntryString(*itr), LIST_APPEND, 0xffff );
+        maMapLBoxEntryToCondIndex.insert(std::pair<SvLBoxEntry*,sal_Int32>(pEntry,itr->GetKey()));
+    }
+    SetUpdateMode(true);
+}
+
+void ScCondFormatManagerWindow::DeleteSelection()
+{
+    if(GetSelectionCount())
+    {
+        for(SvLBoxEntry* pEntry = FirstSelected(); pEntry != NULL; pEntry = NextSelected(pEntry))
+        {
+            sal_Int32 nIndex = maMapLBoxEntryToCondIndex.find(pEntry)->second;
+            mpFormatList->erase(nIndex);
+        }
+        RemoveSelection();
+    }
+}
+
+ScConditionalFormat* ScCondFormatManagerWindow::GetSelection()
+{
+    SvLBoxEntry* pEntry = FirstSelected();
+    if(!pEntry)
+        return NULL;
+
+    sal_Int32 nIndex = maMapLBoxEntryToCondIndex.find(pEntry)->second;
+    return mpFormatList->GetFormat(nIndex);
+}
+
+void ScCondFormatManagerWindow::Update()
+{
+    Clear();
+    maMapLBoxEntryToCondIndex.clear();
+    Init();
+}
+
+ScCondFormatManagerCtrl::ScCondFormatManagerCtrl(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList, const ScAddress& rPos):
+    Control(pParent, ScResId(CTRL_TABLE)),
+    maWdManager(this, pDoc, pFormatList, rPos)
+{
+}
+
+ScConditionalFormat* ScCondFormatManagerCtrl::GetSelection()
+{
+    return maWdManager.GetSelection();
+}
+
+void ScCondFormatManagerCtrl::DeleteSelection()
+{
+    maWdManager.DeleteSelection();
+}
+
+void ScCondFormatManagerCtrl::Update()
+{
+    maWdManager.Update();
+}
+
+ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScRangeList& rList, const ScAddress& rPos):
+    ModalDialog(pParent, ScResId(RID_SCDLG_COND_FORMAT_MANAGER)),
+    maBtnAdd(this, ScResId(BTN_ADD)),
+    maBtnRemove(this, ScResId(BTN_REMOVE)),
+    maBtnEdit(this, ScResId(BTN_EDIT)),
+    maBtnOk(this, ScResId(BTN_OK)),
+    maBtnCancel(this, ScResId(BTN_CANCEL)),
+    maFlLine(this, ScResId(FL_LINE)),
+    mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : NULL),
+    maCtrlManager(this, pDoc, mpFormatList, rPos),
+    mpDoc(pDoc),
+    mrRangeList(rList),
+    maPos(rPos)
+{
+    FreeResource();
+
+    maBtnRemove.SetClickHdl(LINK(this, ScCondFormatManagerDlg, RemoveBtnHdl));
+    maBtnEdit.SetClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
+    maBtnAdd.Hide();
+}
+
+ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
+{
+    delete mpFormatList;
+}
+
+ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
+{
+    ScConditionalFormatList* pList = mpFormatList;
+    mpFormatList = NULL;
+    return pList;
+}
+
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl)
+{
+    maCtrlManager.DeleteSelection();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
+{
+    ScConditionalFormat* pFormat = maCtrlManager.GetSelection();
+
+    if(!pFormat)
+        return 0;
+
+    ScCondFormatDlg* pDlg = new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(), maPos);
+    if(pDlg->Execute() == RET_OK)
+    {
+        sal_Int32 nKey = pFormat->GetKey();
+        mpFormatList->erase(nKey);
+        ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
+        pNewFormat->SetKey(nKey);
+        mpFormatList->InsertNew(pNewFormat);
+        maCtrlManager.Update();
+    }
+
+    return 0;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

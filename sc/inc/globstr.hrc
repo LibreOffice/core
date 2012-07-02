@@ -589,8 +589,9 @@
 #define STR_UNSAVED_EXT_REF         465
 #define STR_CLOSE_WITH_UNSAVED_REFS 466
 #define STR_PIVOT_GROUP             467
+#define STR_HEADER_COND             468
 
-#define STR_COUNT                   468
+#define STR_COUNT                   469
 
 
 #endif

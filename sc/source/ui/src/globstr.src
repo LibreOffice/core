@@ -1859,5 +1859,9 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "This Document is referenced by another document and not yet saved. Closing it without saving will result in data loss.";
     };
+    String STR_HEADER_COND
+    {
+        Text [ en_US ] = "First Condition";
+    };
 };
 

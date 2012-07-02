@@ -36,6 +36,7 @@
 #include <svtools/ctrlbox.hxx>
 
 #include "rangelst.hxx"
+#include "condformathelper.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -45,15 +46,6 @@ class ScConditionalFormat;
 class ScFormatEntry;
 class ScConditionalFormat;
 struct ScDataBarFormatData;
-
-enum ScCondFormatEntryType
-{
-    CONDITION,
-    COLORSCALE,
-    DATABAR,
-    FORMULA,
-    COLLAPSED
-};
 
 class ScCondFrmtEntry : public Control
 {
