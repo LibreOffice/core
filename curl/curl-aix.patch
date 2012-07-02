@@ -1,15 +1,7 @@
---- misc/curl-7.19.7/config.guess	2010-09-15 14:29:17.000000000 -0500
-+++ misc/build/curl-7.19.7/config.guess	2010-09-15 14:32:41.000000000 -0500
-@@ -548,7 +548,7 @@
- 		echo rs6000-ibm-aix3.2
- 	fi
- 	exit ;;
--    *:AIX:*:[456])
-+    *:AIX:*:[4567])
- 	IBM_CPU_ID=`/usr/sbin/lsdev -C -c processor -S available | sed 1q | awk '{ print $1 }'`
- 	if /usr/sbin/lsattr -El ${IBM_CPU_ID} | grep ' POWER' >/dev/null 2>&1; then
- 		IBM_ARCH=rs6000
-@@ -560,6 +560,9 @@
+diff -ur curl-7.26.0/config.guess misc/build/curl-7.26.0/config.guess
+--- curl-7.26.0/config.guess	2012-07-02 13:46:52.428053096 +0200
++++ misc/build/curl-7.26.0/config.guess	2012-07-02 13:48:13.644057499 +0200
+@@ -565,6 +565,9 @@
  	else
  		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
  	fi

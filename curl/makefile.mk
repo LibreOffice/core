@@ -41,10 +41,10 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=curl-7.19.7
-TARFILE_MD5=ecb2e37e45c9933e2a963cabe03670ab
+TARFILE_NAME=curl-7.26.0
+TARFILE_MD5=3fa4d5236f2a36ca5c3af6715e837691
 PATCH_FILES=\
-    curl-7.19.7.patch \
+    curl-7.26.0.patch \
     curl-aix.patch
 
 .IF "$(GUI)"=="WNT"
@@ -87,7 +87,10 @@ CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
-CONFIGURE_FLAGS+= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 CPPFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
+CONFIGURE_FLAGS+= --with-nss --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 CPPFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
+.IF "$(debug)" != ""
+CONFIGURE_FLAGS+=--enable-debug
+.ENDIF
 
 .IF "$(OS)" == "MACOSX"
 CONFIGURE_FLAGS += \
@@ -125,7 +128,10 @@ curl_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(curl_CC)" CPPFLAGS="$(INCLUDE)" OBJDUMP="objdump" LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="$(curl_LIBS)"
+CONFIGURE_FLAGS= --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(curl_CC)" CPPFLAGS="$(INCLUDE)" OBJDUMP="objdump" LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="$(curl_LIBS)"
+.IF "$(debug)" != ""
+CONFIGURE_FLAGS+=--enable-debug
+.ENDIF
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=make
 OUT2BIN=$(BUILD_DIR)$/.libs$/libcurl*.dll
@@ -163,7 +169,7 @@ OUT2INC= \
     include$/curl$/multi.h  		\
     include$/curl$/curl.h  			\
     include$/curl$/curlver.h  		\
-    include$/curl$/types.h  		\
+    include$/curl$/typecheck-gcc.h	\
     include$/curl$/stdcheaders.h  	\
     include$/curl$/mprintf.h	    \
     include$/curl$/curlbuild.h		\

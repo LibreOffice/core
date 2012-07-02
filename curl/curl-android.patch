@@ -1,6 +1,7 @@
---- misc/curl-7.19.7/ltmain.sh
-+++ misc/build/curl-7.19.7/ltmain.sh
-@@ -3228,6 +3228,12 @@
+diff -ur curl-7.26.0/ltmain.sh misc/build/curl-7.26.0/ltmain.sh
+--- curl-7.26.0/ltmain.sh	2012-07-02 14:05:04.256112279 +0200
++++ misc/build/curl-7.26.0/ltmain.sh	2012-07-02 14:07:23.775119842 +0200
+@@ -7307,6 +7307,12 @@
  	  func_warning "\`-release' is ignored for convenience libraries"
        else
  
