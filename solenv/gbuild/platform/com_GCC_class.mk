@@ -105,6 +105,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	    $(gb_cxx_dep_generation_options) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
+		$(PCHFLAGS) \
 	    $(gb_cxx_dep_copy) \
 		)
 endef
@@ -135,6 +136,42 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c -x c++-header $(2) \
 		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
+
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+# PrecompiledHeader class
+
+gb_PrecompiledHeader_get_enableflags = -include-pch $(call gb_PrecompiledHeader_get_target,$(1))
+
+define gb_PrecompiledHeader__command
+$(call gb_Output_announce,$(2),$(true),PCH,1)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
+	$(gb_CXX) \
+		-x c++-header \
+		$(4) $(5) \
+		$(gb_COMPILERDEPFLAGS) \
+		$(6) \
+		-c $(patsubst %.cxx,%.hxx,$(3)) \
+		-o$(1)) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(1),$(3))
+endef
+
+# NoexPrecompiledHeader class
+
+gb_NoexPrecompiledHeader_get_enableflags = -include-pch $(call gb_PrecompiledHeader_get_target,$(1))
+
+define gb_NoexPrecompiledHeader__command
+$(call gb_Output_announce,$(2),$(true),PCH,1)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
+	$(gb_CXX) \
+		-x c++-header \
+		$(4) $(5) \
+		$(gb_COMPILERDEPFLAGS) \
+		$(6) \
+		-c $(patsubst %.cxx,%.hxx,$(3)) \
+		-o$(1)) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(1),$(3))
+endef
+endif
 
 # YaccTarget class
 
