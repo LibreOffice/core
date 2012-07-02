@@ -72,6 +72,7 @@ private:
     libcmis::Session*      m_pSession;
     libcmis::ObjectPtr     m_pObject;
     rtl::OUString          m_sObjectPath;
+    rtl::OUString          m_sObjectId;
     rtl::OUString          m_sURL;
     rtl::OUString          m_sBindingUrl;
 

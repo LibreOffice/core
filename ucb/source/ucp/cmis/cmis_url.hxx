@@ -42,6 +42,7 @@ namespace cmis
             rtl::OUString m_sBindingUrl;
             rtl::OUString m_sRepositoryId;
             rtl::OUString m_sPath;
+            rtl::OUString m_sId;
             rtl::OUString m_sUser;
             rtl::OUString m_sPass;
 
@@ -50,6 +51,7 @@ namespace cmis
 
             std::map< int, std::string > getSessionParams( );
             rtl::OUString& getObjectPath( );
+            rtl::OUString& getObjectId( );
             rtl::OUString& getBindingUrl( );
             rtl::OUString& getRepositoryId( );
             void setObjectPath( rtl::OUString sPath );

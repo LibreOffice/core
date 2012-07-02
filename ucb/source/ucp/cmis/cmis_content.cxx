@@ -162,6 +162,7 @@ namespace cmis
         // Split the URL into bits
         m_sURL = m_xIdentifier->getContentIdentifier( );
         cmis::URL url( m_sURL );
+        SAL_INFO( "cmisucp", "Content::Content() " << m_sURL );
 
         // Look for a cached session, key is binding url + repo id
         rtl::OUString sSessionId = url.getBindingUrl( ) + url.getRepositoryId( );
@@ -174,6 +175,7 @@ namespace cmis
         }
 
         m_sObjectPath = url.getObjectPath( );
+        m_sObjectId = url.getObjectId( );
         m_sBindingUrl = url.getBindingUrl( );
     }
 
@@ -189,6 +191,7 @@ namespace cmis
         // Split the URL into bits
         m_sURL = m_xIdentifier->getContentIdentifier( );
         cmis::URL url( m_sURL );
+        SAL_INFO( "cmisucp", "Content::Content() " << m_sURL );
 
         // Look for a cached session, key is binding url + repo id
         rtl::OUString sSessionId = url.getBindingUrl( ) + url.getRepositoryId( );
@@ -201,6 +204,7 @@ namespace cmis
         }
 
         m_sObjectPath = url.getObjectPath( );
+        m_sObjectId = url.getObjectId( );
         m_sBindingUrl = url.getBindingUrl( );
 
         // Get the object type
@@ -218,10 +222,13 @@ namespace cmis
         {
             if ( !m_sObjectPath.isEmpty( ) )
                 m_pObject = m_pSession->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
+            else if (!m_sObjectId.isEmpty( ) )
+                m_pObject = m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
             else
             {
                 m_pObject = m_pSession->getRootFolder( );
                 m_sObjectPath = "/";
+                m_sObjectId = rtl::OUString( );
             }
         }
 
@@ -440,6 +447,8 @@ namespace cmis
         {
             if ( !m_sObjectPath.isEmpty( ) )
                 m_pSession->getObjectByPath( OUSTR_TO_STDSTR( m_sObjectPath ) );
+            else if ( !m_sObjectId.isEmpty( ) )
+                m_pSession->getObject( OUSTR_TO_STDSTR( m_sObjectId ) );
             // No need to handle the root folder case... how can it not exists?
         }
         catch ( const libcmis::Exception& )
