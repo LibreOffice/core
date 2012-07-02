@@ -30,12 +30,6 @@
 #include <rtl/strbuf.hxx>
 
 #ifdef DBG_UTIL
-#define INCREMENT( nVar )   ++nVar
-#else
-#define INCREMENT( nVar )
-#endif
-
-#ifdef DBG_UTIL
 void SwCache::Check()
 {
     if ( !pRealFirst )
@@ -70,11 +64,12 @@ void SwCache::Check()
         size() == nCurMax && nCurMax != aFreePositions.size() + nCnt, "sw",
         "Lost FreePositions." );
 }
-#endif
 
-#ifdef DBG_UTIL
+#define INCREMENT( nVar )   ++nVar
 #define CHECK Check();
+
 #else
+#define INCREMENT( nVar )
 #define CHECK
 #endif
 

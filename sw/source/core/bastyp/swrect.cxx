@@ -129,20 +129,20 @@ sal_Bool SwRect::IsInside( const Point& rPoint ) const
 // mouse moving of table borders
 sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 {
-    return    IsInside(rPoint) ||
-        (((Left() - nTolerance)  <= rPoint.X())
-           && ((Top()  - nTolerance)  <= rPoint.Y())
-           && ((Right() + nTolerance) >= rPoint.X())
-           && ((Bottom()  + nTolerance)>= rPoint.Y()));
+    sal_Bool InTolerance = (((Left()   - nTolerance) <= rPoint.X()) &&
+                            ((Top()    - nTolerance) <= rPoint.Y()) &&
+                            ((Right()  + nTolerance) >= rPoint.X()) &&
+                            ((Bottom() + nTolerance) >= rPoint.Y()));
+    return IsInside(rPoint) || InTolerance;
 }
 
 
 sal_Bool SwRect::IsOver( const SwRect& rRect ) const
 {
-    return    (Top()   <= rRect.Bottom())
-           && (Left()  <= rRect.Right())
-           && (Right() >= rRect.Left())
-           && (Bottom()>= rRect.Top()) ? sal_True : sal_False;
+    return (Top()   <= rRect.Bottom()) &&
+           (Left()  <= rRect.Right())  &&
+           (Right() >= rRect.Left())   &&
+           (Bottom()>= rRect.Top());
 }
 
 void SwRect::Justify()

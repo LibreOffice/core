@@ -330,8 +330,8 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
     if( pos != p->nElem )
     {
         int nCount = p->nElem - sal_uInt16(pos);
-        ElementPtr *pFrom = p->pData + p->nElem,
-                            *pTo = pFrom + 1;
+        ElementPtr *pFrom = p->pData + p->nElem;
+        ElementPtr *pTo   = pFrom + 1;
         while( nCount-- )
             ++( *--pTo = *--pFrom )->nOffset;
     }
@@ -368,8 +368,8 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
         // move elements if needed
         if( ( pos + nel ) < sal_uLong(p->nElem) )
         {
-            ElementPtr *pTo = p->pData + pos,
-                                *pFrom = pTo + nel;
+            ElementPtr *pTo = p->pData + pos;
+            ElementPtr *pFrom = pTo + nel;
             int nCount = p->nElem - nel - sal_uInt16(pos);
             while( nCount-- )
             {

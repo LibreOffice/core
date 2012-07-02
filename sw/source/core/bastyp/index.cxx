@@ -278,6 +278,22 @@ void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
     }
 }
 
+void SwIndexReg::MoveTo( SwIndexReg& rArr )
+{
+    if (this != &rArr && m_pFirst)
+    {
+        SwIndex * pIdx = const_cast<SwIndex*>(m_pFirst);
+        SwIndex * pNext;
+        while( pIdx )
+        {
+            pNext = pIdx->m_pNext;
+            pIdx->Assign( &rArr, pIdx->GetIndex() );
+            pIdx = pNext;
+        }
+        m_pFirst = 0, m_pLast = 0;
+    }
+}
+
 #ifdef DBG_UTIL
 
 // -------
@@ -377,21 +393,5 @@ SwIndex& SwIndex::operator= ( xub_StrLen const nVal )
 }
 
 #endif
-
-void SwIndexReg::MoveTo( SwIndexReg& rArr )
-{
-    if (this != &rArr && m_pFirst)
-    {
-        SwIndex * pIdx = const_cast<SwIndex*>(m_pFirst);
-        SwIndex * pNext;
-        while( pIdx )
-        {
-            pNext = pIdx->m_pNext;
-            pIdx->Assign( &rArr, pIdx->GetIndex() );
-            pIdx = pNext;
-        }
-        m_pFirst = 0, m_pLast = 0;
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
