@@ -54,6 +54,8 @@ private:
     const ScAddress& mrPos;
     std::map<SvLBoxEntry*, sal_Int32> maMapLBoxEntryToCondIndex;
 
+    DECL_LINK( HeaderEndDragHdl, void* );
+
 public:
     ScCondFormatManagerWindow( Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList, const ScAddress& rPos );
 

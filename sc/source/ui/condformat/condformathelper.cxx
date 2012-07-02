@@ -17,13 +17,13 @@ rtl::OUString getTextForType(ScCondFormatEntryType eType)
     switch(eType)
     {
         case CONDITION:
-            return rtl::OUString("Cell value");
+            return ScGlobal::GetRscString(STR_COND_CONDITION);
         case COLORSCALE:
-            return rtl::OUString("Color scale");
+            return ScGlobal::GetRscString(STR_COND_COLORSCALE);
         case DATABAR:
-            return rtl::OUString("Data Bar");
+            return ScGlobal::GetRscString(STR_COND_DATABAR);
         case FORMULA:
-            return rtl::OUString("Formula is");
+            return ScGlobal::GetRscString(STR_COND_FORMULA);
         default:
             break;
     }
@@ -48,13 +48,13 @@ rtl::OUString getExpression(sal_Int32 nIndex)
         case 5:
             return rtl::OUString("!=");
         case 6:
-            return rtl::OUString("between");
+            return ScGlobaLL:GetRscString(STR_COND_BETWEEN);
         case 7:
-            return rtl::OUString("not between");
+            return ScGlobaLL:GetRscString(STR_COND_NOTBETWEEN);
         case 8:
-            return rtl::OUString("duplicate");
+            return ScGlobaLL:GetRscString(STR_COND_DUPLICATE);
         case 9:
-            return rtl::OUString("unique");
+            return ScGlobaLL:GetRscString(STR_COND_UNIQUE);
     }
     return rtl::OUString();
 }

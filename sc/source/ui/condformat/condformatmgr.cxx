@@ -62,7 +62,8 @@ ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument
     SetPosSizePixel( Point( 0, aHeadSize.Height() ), Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
     SetTabs( &nTabs[0], MAP_PIXEL );
 
-    //maHeaderBar.SetEndDragHdl( LINK( this, ScRangeManagerTable, HeaderEndDragHdl ) );
+    maHeaderBar.SetEndDragHdl( LINK(this, ScCondFormatManagerWindow, HeaderEndDragHdl ) );
+    HeaderEndDragHdl(NULL);
 
     Init();
     Show();
@@ -120,6 +121,25 @@ void ScCondFormatManagerWindow::Update()
     Clear();
     maMapLBoxEntryToCondIndex.clear();
     Init();
+}
+
+IMPL_LINK_NOARG(ScCondFormatManagerWindow, HeaderEndDragHdl)
+{
+    long aTableSize = maHeaderBar.GetSizePixel().Width();
+    long aItemRangeSize = maHeaderBar.GetItemSize(ITEMID_RANGE);
+
+    //calculate column size based on user input and minimum size
+    long aItemCondSize = aTableSize - aItemRangeSize;
+
+    Size aSz;
+    aSz.Width() = aItemRangeSize;
+    SetTab( ITEMID_RANGE, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    maHeaderBar.SetItemSize(ITEMID_RANGE, aItemRangeSize);
+    aSz.Width() += aItemCondSize;
+    SetTab( ITEMID_CONDITION, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    maHeaderBar.SetItemSize(ITEMID_CONDITION, aItemCondSize);
+
+    return 0;
 }
 
 ScCondFormatManagerCtrl::ScCondFormatManagerCtrl(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList, const ScAddress& rPos):
@@ -199,6 +219,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
         mpFormatList->InsertNew(pNewFormat);
         maCtrlManager.Update();
     }
+    delete pDlg;
 
     return 0;
 }
