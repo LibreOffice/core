@@ -2100,11 +2100,19 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         CopyHeader( rSrcDesc.GetLeft(), rDstDesc.GetLeft() );
     else
         rDstDesc.GetLeft().SetFmtAttr( rDstDesc.GetMaster().GetHeader() );
+    if( !rDstDesc.IsHeaderSharedFirst() )
+        CopyHeader( rSrcDesc.GetFirst(), rDstDesc.GetFirst() );
+    else
+        rDstDesc.GetFirst().SetFmtAttr( rDstDesc.GetMaster().GetHeader() );
 
     if( !rDstDesc.IsFooterShared() )
         CopyFooter( rSrcDesc.GetLeft(), rDstDesc.GetLeft() );
     else
         rDstDesc.GetLeft().SetFmtAttr( rDstDesc.GetMaster().GetFooter() );
+    if( !rDstDesc.IsFooterSharedFirst() )
+        CopyFooter( rSrcDesc.GetFirst(), rDstDesc.GetFirst() );
+    else
+        rDstDesc.GetFirst().SetFmtAttr( rDstDesc.GetMaster().GetFooter() );
 
     if( bNotifyLayout && pTmpRoot )
     {

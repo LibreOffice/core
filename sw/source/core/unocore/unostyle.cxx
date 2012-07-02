@@ -3145,9 +3145,11 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case  FN_UNO_HEADER       :
                 case  FN_UNO_HEADER_LEFT  :
                 case  FN_UNO_HEADER_RIGHT :
+                case  FN_UNO_HEADER_FIRST :
                 case  FN_UNO_FOOTER       :
                 case  FN_UNO_FOOTER_LEFT  :
                 case  FN_UNO_FOOTER_RIGHT :
+                case  FN_UNO_FOOTER_FIRST :
                     throw lang::IllegalArgumentException();
                 //break;
                 default:
@@ -3254,6 +3256,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
             sal_uInt16 nRes = 0;
             bool bHeader = false;
             sal_Bool bLeft = sal_False;
+            bool bFirst = false;
             switch(pEntry->nWID)
             {
                 case FN_UNO_HEADER_ON:
@@ -3362,6 +3365,8 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                     goto Header;
                 case  FN_UNO_HEADER_LEFT  :
                     bLeft = sal_True; goto Header;
+                case  FN_UNO_HEADER_FIRST  :
+                    bFirst = true; goto Header;
                 case  FN_UNO_HEADER_RIGHT :
                     goto Header;
 Header:
@@ -3371,6 +3376,8 @@ Header:
                     goto Footer;
                 case  FN_UNO_FOOTER_LEFT  :
                     bLeft = sal_True; goto Footer;
+                case  FN_UNO_FOOTER_FIRST  :
+                    bFirst = sal_True; goto Footer;
                 case  FN_UNO_FOOTER_RIGHT :
 Footer:
                     nRes = RES_FOOTER;
@@ -3380,6 +3387,8 @@ MakeObject:
                     const SwFrmFmt* pFrmFmt = 0;
                     sal_Bool bShare = (bHeader && rDesc.IsHeaderShared())||
                                     (!bHeader && rDesc.IsFooterShared());
+                    bool bShareFirst = (bHeader && rDesc.IsHeaderSharedFirst())||
+                                    (!bHeader && rDesc.IsFooterSharedFirst());
                     // TextLeft returns the left content if there is one,
                     // Text and TextRight return the master content.
                     // TextRight does the same as Text and is for
@@ -3387,6 +3396,10 @@ MakeObject:
                     if( bLeft && !bShare )
                     {
                         pFrmFmt = &rDesc.GetLeft();
+                    }
+                    else if (bFirst && !bShareFirst)
+                    {
+                        pFrmFmt = &rDesc.GetFirst();
                     }
                     else
                     {

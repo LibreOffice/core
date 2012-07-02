@@ -246,6 +246,14 @@ void SwPageDesc::RegisterChange()
                 ((SwPageFrm*)pLast)->PrepareRegisterChg();
         }
     }
+    {
+        SwIterator<SwFrm,SwFmt> aIter( GetFirst() );
+        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        {
+            if( pLast->IsPageFrm() )
+                ((SwPageFrm*)pLast)->PrepareRegisterChg();
+        }
+    }
 }
 
 /*************************************************************************
