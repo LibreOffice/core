@@ -171,16 +171,13 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
 : bSubDocument(false), mfcPicLoc(0), mbPicIsData(false), mpStream(rpStream),
 mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 {
-    mpDocStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                               ("WordDocument")));
+    mpDocStream = getSubStream("WordDocument");
 
-    mpSummaryInformationStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                              ("\5SummaryInformation")));
+    mpSummaryInformationStream = getSubStream("\5SummaryInformation");
 
     try
     {
-        mpDataStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                    ("Data")));
+        mpDataStream = getSubStream("Data");
     }
     catch (const ExceptionNotFound &)
     {
@@ -188,8 +185,7 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 
     try
     {
-        mpCompObjStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                       ("\1CompObj")));
+        mpCompObjStream = getSubStream("\1CompObj");
     }
     catch (const ExceptionNotFound &)
     {
@@ -205,14 +201,12 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     switch (mpFib->get_fWhichTblStm())
     {
     case 0:
-        mpTableStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                     ("0Table")));
+        mpTableStream = getSubStream("0Table");
 
         break;
 
     case 1:
-        mpTableStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                     ("1Table")));
+        mpTableStream = getSubStream("1Table");
 
         break;
 

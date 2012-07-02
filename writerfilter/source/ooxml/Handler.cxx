@@ -294,10 +294,10 @@ OOXMLHyperlinkHandler::OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext)
 
 OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler()
 {
-    ::rtl::OUString sReturn(RTL_CONSTASCII_USTRINGPARAM(" HYPERLINK \""));
+    ::rtl::OUString sReturn(" HYPERLINK \"");
 
     sReturn += mURL;
-    sReturn += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+    sReturn += "\"";
     sReturn += mFieldCode;
 
     mpFastContext->text(sReturn);
@@ -308,23 +308,23 @@ void OOXMLHyperlinkHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_Hyperlink_tgtFrame:
-        mFieldCode += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \\t \""));
+        mFieldCode += " \\t \"";
         mFieldCode += val.getString();
-        mFieldCode += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+        mFieldCode += "\"";
         break;
     case NS_ooxml::LN_CT_Hyperlink_tooltip:
-        mFieldCode += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \\o \""));
+        mFieldCode += " \\o \"";
         mFieldCode += val.getString();
-        mFieldCode += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+        mFieldCode += "\"";
         break;
     case NS_ooxml::LN_CT_Hyperlink_docLocation:
         break;
     case NS_ooxml::LN_CT_Hyperlink_history:
         break;
     case NS_ooxml::LN_CT_Hyperlink_anchor:
-        mFieldCode += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \\l \""));
+        mFieldCode += " \\l \"";
         mFieldCode += val.getString();
-        mFieldCode += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+        mFieldCode += "\"";
         break;
     case NS_ooxml::LN_CT_Hyperlink_r_id:
         mURL = mpFastContext->getTargetForId(val.getString());

@@ -51,8 +51,7 @@ WW8StreamImpl::WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
 
     xOLESimpleStorage = uno::Reference<container::XNameContainer>
         (xFactory->createInstanceWithArgumentsAndContext
-         (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-          ("com.sun.star.embed.OLESimpleStorage")),
+         ("com.sun.star.embed.OLESimpleStorage",
           aArgs, mrComponentContext ),
          uno::UNO_QUERY );
 

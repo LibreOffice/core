@@ -31,12 +31,6 @@ namespace ooxml
 {
 using namespace ::std;
 
-static ::rtl::OUString strue(RTL_CONSTASCII_USTRINGPARAM("true"));
-static ::rtl::OUString sTrue(RTL_CONSTASCII_USTRINGPARAM("True"));
-static ::rtl::OUString s1(RTL_CONSTASCII_USTRINGPARAM("1"));
-static ::rtl::OUString sOn(RTL_CONSTASCII_USTRINGPARAM("On"));
-static ::rtl::OUString son(RTL_CONSTASCII_USTRINGPARAM("on"));
-
 OOXMLProperty::~OOXMLProperty()
 {
 }
@@ -278,14 +272,11 @@ OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 OOXMLBooleanValue::OOXMLBooleanValue(const rtl::OUString & rValue)
 : mbValue(false)
 {
-    if (strue.compareTo(rValue) == 0
-        || sTrue.compareTo(rValue) == 0
-        || s1.compareTo(rValue) == 0
-        || son.compareTo(rValue) == 0
-        || sOn.compareTo(rValue) == 0)
-        mbValue = true;
-     else
-        mbValue = false;
+    mbValue = (rValue == "true"
+        || rValue == "True"
+        || rValue == "1"
+        || rValue == "on"
+        || rValue == "On");
 }
 
 OOXMLBooleanValue::~OOXMLBooleanValue()

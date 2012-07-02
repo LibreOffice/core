@@ -1916,9 +1916,7 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
             mrShapeContext.set
                 (rServiceManager->
                   createInstanceWithContext
-                  (::rtl::OUString
-                   (RTL_CONSTASCII_USTRINGPARAM
-                    ("com.sun.star.xml.sax.FastShapeContextHandler")), xContext),
+                  ("com.sun.star.xml.sax.FastShapeContextHandler", xContext),
                   uno::UNO_QUERY);
             getDocument()->setShapeContext( mrShapeContext );
         }
