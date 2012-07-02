@@ -137,29 +137,6 @@ namespace
 #endif
 
 //-----------------------------------------------------------------------------------------
-#define VISTAFILEDIALOG_CHECKED_COMCALL(PARAM_CODE, PARAM_LOGMESSAGE, PARAM_ERRORMESSAGE)                                   \
-    {                                                                                                                       \
-        HRESULT aResult;                                                                                                    \
-        VISTAFILEDIALOG_CHECKED_COMCALL_WITH_RETURN(aResult, PARAM_CODE, PARAM_LOGMESSAGE, PARAM_ERRORMESSAGE)              \
-    }
-
-//-----------------------------------------------------------------------------------------
-#define VISTAFILEDIALOG_CHECKED_COMCALL_WITH_RETURN(RETURN_HR, PARAM_CODE, PARAM_LOGMESSAGE, PARAM_ERRORMESSAGE)            \
-    {                                                                                                                       \
-        LOG_FILE(PARAM_LOGMESSAGE)                                                                                          \
-        RETURN_HR = PARAM_CODE;                                                                                             \
-        if ( FAILED(RETURN_HR) )                                                                                            \
-        {                                                                                                                   \
-            LOG_FILE_1_PARAM("will throw exception for checked COM call:\n%s", PARAM_ERRORMESSAGE)                          \
-            throw css::uno::RuntimeException(                                                                               \
-                ::rtl::OUString::createFromAscii(PARAM_ERRORMESSAGE),                                                       \
-                css::uno::Reference< css::ui::dialogs::XFilePicker >());                                                    \
-        }                                                                                                                   \
-    }
-
-
-
-//-----------------------------------------------------------------------------------------
 VistaFilePicker::VistaFilePicker(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : TVistaFilePickerBase  (m_aMutex                 )
     , m_xSMGR               (xSMGR                    )

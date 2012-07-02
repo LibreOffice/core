@@ -35,7 +35,6 @@
  // RID_SVXPAGE_AREA ------------------------------------------------------
 #define TRANS_GRAD_OFFSET_X             6
 #define TRANS_GRAD_OFFSET_Y             64
-#define TRANS_GRAD_FIELD_SEPARATION     24
 
 TabPage RID_SVXPAGE_TRANSPARENCE
 {

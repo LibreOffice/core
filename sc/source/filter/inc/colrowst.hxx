@@ -32,8 +32,6 @@
 #include "xiroot.hxx"
 #include <mdds/flat_segment_tree.hpp>
 
-#define XLS_USE_NEW_ROW_CONT 1
-
 // ============================================================================
 
 class XclImpColRowSettings : protected XclImpRoot

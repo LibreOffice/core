@@ -121,7 +121,6 @@ using namespace ::com::sun::star;
 //
 #define SwModule
 #define ViewSettings
-#define WebViewSettings
 #define PrintSettings
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"

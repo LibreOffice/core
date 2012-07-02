@@ -42,8 +42,6 @@
 #include "Window.hxx"
 #include "sdpage.hxx"
 
-#define UNIFY_FOCUS_AND_CURRENT_PAGE
-
 namespace sd { namespace slidesorter { namespace controller {
 
 FocusManager::FocusManager (SlideSorter& rSlideSorter)

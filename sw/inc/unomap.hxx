@@ -173,13 +173,11 @@
 #define WID_USE_P_P                             1014
 #define WID_USE_DASH                            1015
 #define WID_USE_UPPER_CASE                      1016
-#define WID_INDEX_AUTO_MARK_FILE_U_R_L          1017
 #define WID_LABEL_CATEGORY                      1018
 #define WID_LABEL_DISPLAY_TYPE                  1019
 #define WID_USE_LEVEL_FROM_SOURCE               1020
 #define WID_LEVEL_FORMAT                        1021
 #define WID_LEVEL_PARAGRAPH_STYLES              1022
-#define WID_RECALC_TAB_STOPS                    1023
 #define WID_MAIN_ENTRY_CHARACTER_STYLE_NAME     1025
 #define WID_CREATE_FROM_TABLES                  1026
 #define WID_CREATE_FROM_TEXT_FRAMES             1027

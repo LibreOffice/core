@@ -126,7 +126,6 @@
 #define PAGE_LDAP                       RID_PAGE_START + 15
 #define TAB_PAGE_USERADMIN              RID_PAGE_START + 16
 #define PAGE_MYSQL_ODBC                 RID_PAGE_START + 17
-#define TAB_PAGE_TABLEPRIVILEGES        RID_PAGE_START + 18
 #define PAGE_USERDRIVER                 RID_PAGE_START + 19
 #define PAGE_MYSQL_JDBC                 RID_PAGE_START + 20
 #define PAGE_GENERATED_VALUES           RID_PAGE_START + 22

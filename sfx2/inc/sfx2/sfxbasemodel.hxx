@@ -136,7 +136,6 @@
 #define NOSUCHELEMENTEXCEPTION  ::com::sun::star::container::NoSuchElementException
 #define ELEMENTEXISTEXCEPTION   ::com::sun::star::container::ElementExistException
 #define XNAMEREPLACE            ::com::sun::star::container::XNameReplace
-#define XINDEXCONTAINER         ::com::sun::star::container::XIndexContainer
 #define DOCEVENTOBJECT          ::com::sun::star::document::EventObject
 #define XDOCEVENTLISTENER       ::com::sun::star::document::XEventListener
 #define XDOCUMENTINFO           ::com::sun::star::document::XDocumentInfo

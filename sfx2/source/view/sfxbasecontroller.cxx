@@ -93,7 +93,6 @@
 
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
-#define XFRAMEACTIONLISTENER                    ::com::sun::star::frame::XFrameActionListener
 #define XCLOSELISTENER                          ::com::sun::star::util::XCloseListener
 #define FRAMEACTIONEVENT                        ::com::sun::star::frame::FrameActionEvent
 #define EVENTOBJECT                             ::com::sun::star::lang::EventObject
@@ -102,11 +101,9 @@
 #define MUTEXGUARD                              ::osl::MutexGuard
 #define UNOQUERY                                ::com::sun::star::uno::UNO_QUERY
 #define MAPPING                                 ::com::sun::star::uno::Mapping
-#define XSTATUSINDICATORSUPPLIER                ::com::sun::star::task::XStatusIndicatorSupplier
 #define XCOMPONENT                              ::com::sun::star::lang::XComponent
 #define XINTERFACE                              ::com::sun::star::uno::XInterface
 #define XKEYHANDLER                             ::com::sun::star::awt::XKeyHandler
-#define XMOUSECLICKHANDLER                      ::com::sun::star::awt::XMouseClickHandler
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 

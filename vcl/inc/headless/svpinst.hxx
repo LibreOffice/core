@@ -45,7 +45,6 @@
 
 #define VIRTUAL_DESKTOP_WIDTH 1024
 #define VIRTUAL_DESKTOP_HEIGHT 768
-#define VIRTUAL_DESKTOP_DEPTH 24
 
 // ---------------
 // - SalTimer -

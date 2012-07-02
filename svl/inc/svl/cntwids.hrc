@@ -19,9 +19,6 @@
 #ifndef _CNTWIDS_HRC
 #define _CNTWIDS_HRC
 
-#define TF_NEW_TABPAGES
-#define CNT_COOL_ABO
-
 //=========================================================================
 // ARGS, MSG, ALL, FOLDER, BOXALL, BOXEXT
 //=========================================================================

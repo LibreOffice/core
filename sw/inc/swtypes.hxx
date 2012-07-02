@@ -87,8 +87,6 @@ const SwTwips lMinBorder = 1134;
 #define DOCUMENTBORDER  284L
 #define GAPBETWEENPAGES 284L
 
-#define UNDO_ACTION_COUNT 20
-
 // Constant strings.
 SW_DLLPUBLIC extern UniString aEmptyStr;    // ""
 SW_DLLPUBLIC extern UniString aDotStr;      // '.'
