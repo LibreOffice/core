@@ -2812,7 +2812,8 @@ void ImpEditEngine::SetAutoCompleteText( const String& rStr, sal_Bool bClearTipW
 #endif // !SVX_LIGHT
 }
 
-
+namespace editeng // #i120045# namespace to avoid XCode template-misoptimization
+{
 struct TransliterationChgData
 {
     sal_uInt16                      nStart;
@@ -2821,6 +2822,8 @@ struct TransliterationChgData
     String                      aNewText;
     uno::Sequence< sal_Int32 >  aOffsets;
 };
+}
+using editeng::TransliterationChgData;
 
 
 EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode )
