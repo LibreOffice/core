@@ -166,7 +166,7 @@ static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
 // ============================================================================
 
 ScDPFunctionListBox::ScDPFunctionListBox( Window* pParent, const ResId& rResId ) :
-    ListBox( pParent, rResId )
+    MultiListBox( pParent, rResId )
 {
     FillFunctionNames();
 }
@@ -190,7 +190,7 @@ sal_uInt16 ScDPFunctionListBox::GetSelection() const
 
 void ScDPFunctionListBox::FillFunctionNames()
 {
-    OSL_ENSURE( !GetEntryCount(), "ScDPFunctionListBox::FillFunctionNames - do not add texts to resource" );
+    OSL_ENSURE( !GetEntryCount(), "ScDPMultiFuncListBox::FillFunctionNames - do not add texts to resource" );
     Clear();
     ResStringArray aArr( ScResId( SCSTR_DPFUNCLISTBOX ) );
     for( sal_uInt16 nIndex = 0, nCount = sal::static_int_cast<sal_uInt16>(aArr.Count()); nIndex < nCount; ++nIndex )
@@ -224,6 +224,7 @@ ScDPFunctionDlg::ScDPFunctionDlg(
 {
     FreeResource();
     Init( rLabelData, rFuncData );
+    maLbFunc.EnableMultiSelection(false);
 }
 
 sal_uInt16 ScDPFunctionDlg::GetFuncMask() const

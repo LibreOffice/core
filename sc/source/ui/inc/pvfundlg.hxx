@@ -53,7 +53,7 @@ class ScDPObject;
 
 // ============================================================================
 
-class ScDPFunctionListBox : public ListBox
+class ScDPFunctionListBox : public MultiListBox
 {
 public:
     explicit            ScDPFunctionListBox( Window* pParent, const ResId& rResId );
