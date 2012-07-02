@@ -49,6 +49,8 @@
 #include <boost/scoped_array.hpp>
 #include <boost/type.hpp>
 
+#ifndef PRECOMPILED_XMLOFF_HXX
+#define PRECOMPILED_XMLOFF_HXX
 
 //---MARKER---
 #include "sal/config.h"
@@ -1274,5 +1276,7 @@
 #endif
 
 #endif
+
+#endif // PRECOMPILED_XMLOFF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
