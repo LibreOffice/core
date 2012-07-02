@@ -31,17 +31,6 @@
 
 #include <toolkit/hf_docentry.hxx>
 
-namespace ary
-{
-namespace idl
-{
-    class Module;
-}
-}
-
-
-
-
 /** This class is an implementation of ary::inf::DocuText_Display
     and will be used by that interface.
 */

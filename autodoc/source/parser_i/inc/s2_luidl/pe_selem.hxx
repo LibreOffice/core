@@ -31,18 +31,12 @@
 #include <ary/idl/i_gate.hxx>
 
 
-namespace udm {
-class Agent_Struct;
-}   // namespace udm
-
-
 namespace csi
 {
 namespace uidl
 {
 
 class PE_Type;
-class StructElement;
 class Struct;
 
 class PE_StructElement : public UnoIDL_PE,

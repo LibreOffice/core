@@ -50,7 +50,6 @@ namespace idl
     class Function;
     class Property;
     class StructElement;
-    class Variable;
 
     class NameLookup;
 

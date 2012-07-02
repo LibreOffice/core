@@ -41,7 +41,6 @@ class TokMetaType;
 class TokStereotype;
 class TokParameterHandling;
 class TokAssignment;
-class Tok_Documentation;
 
 
 class TokenInterpreter

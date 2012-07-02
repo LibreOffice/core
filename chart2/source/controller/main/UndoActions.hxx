@@ -38,13 +38,6 @@
 
 class SdrUndoAction;
 
-namespace com { namespace sun { namespace star {
-namespace chart2 {
-    class XInternalDataProvider;
-}
-}}}
-
-
 namespace chart
 {
 class ChartModelClone;

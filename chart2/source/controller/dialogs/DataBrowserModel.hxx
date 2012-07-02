@@ -37,9 +37,6 @@
 namespace com { namespace sun { namespace star { namespace chart2 {
     class XDataSeries;
     class XChartType;
-    namespace data {
-        class XLabeledDataSequence;
-    }
 }}}}
 
 namespace chart

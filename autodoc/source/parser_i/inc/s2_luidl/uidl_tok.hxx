@@ -27,8 +27,6 @@
     // PARAMETERS
 
 
-class ParserInfo;
-
 namespace csi
 {
 namespace uidl

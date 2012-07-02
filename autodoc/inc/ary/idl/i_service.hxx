@@ -33,10 +33,6 @@
 
 namespace ary
 {
-namespace info
-{
-    class CodeInformation;
-}
 namespace idl
 {
 namespace ifc_service

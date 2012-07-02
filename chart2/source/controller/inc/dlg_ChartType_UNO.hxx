@@ -32,7 +32,6 @@ namespace chart
 {
 //.............................................................................
 typedef ::svt::OGenericUnoDialog ChartTypeUnoDlg_BASE;
-class ChartType;
 class ChartTypeUnoDlg : public ChartTypeUnoDlg_BASE
                         ,public ::comphelper::OPropertyArrayUsageHelper< ChartTypeUnoDlg >
 {

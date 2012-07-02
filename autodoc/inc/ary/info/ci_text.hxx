@@ -43,7 +43,6 @@ namespace info
 {
 
 class DocuToken;
-class DocuDisplay;
 
 
 class DocuText

@@ -27,8 +27,6 @@
     // COMPONENTS
     // PARAMETERS
 
-class HF_NaviSubRow;
-
 
 class HF_IdlSingleton : public HtmlFactory_Idl
 {

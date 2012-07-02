@@ -32,7 +32,6 @@
 
 class HF_NaviSubRow;
 class HF_SubTitleTable;
-class HF_IdlBaseNode;
 
 class HF_IdlInterface : public HtmlFactory_Idl
 {

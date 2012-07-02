@@ -36,12 +36,6 @@
 #include <functional>
 #include <utility>
 
-namespace com { namespace sun { namespace star {
-namespace chart2
-{
-    class XChartDocument;
-}}}}
-
 namespace chart
 {
 namespace ModifyListenerHelper

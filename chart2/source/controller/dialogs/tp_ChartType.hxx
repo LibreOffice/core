@@ -42,9 +42,6 @@ namespace chart
 //.............................................................................
 
 //-----------------------------------------------------------------------------
-/**
-*/
-class ChartTypeResourceGroup;
 class AxisTypeResourceGroup;
 class Dim3DLookResourceGroup;
 class StackingResourceGroup;

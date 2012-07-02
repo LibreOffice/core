@@ -34,9 +34,6 @@ namespace chart
 //.............................................................................
 
 //-----------------------------------------------------------------------------
-/**
-*/
-class ShapeFactory;
 class TickFactory;
 
 class VAxisOrGridBase : public PlotterBase

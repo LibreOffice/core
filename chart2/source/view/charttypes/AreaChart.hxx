@@ -27,7 +27,6 @@
 namespace chart
 {
 //.............................................................................
-class AreaPositionHelper;
 
 class AreaChart : public VSeriesPlotter
 {

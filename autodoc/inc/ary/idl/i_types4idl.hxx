@@ -30,12 +30,8 @@ namespace ary
 {
 namespace idl
 {
-    class Module;
     class CodeEntity;
     class Type;
-    class Gate;
-    class CePilot;
-    class TypePilot;
 
 
 typedef TypedId<CodeEntity>         Ce_id;

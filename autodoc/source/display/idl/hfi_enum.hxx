@@ -28,6 +28,8 @@
     // COMPONENTS
     // PARAMETERS
 
+class HF_NaviSubRow;
+
 
 class HF_IdlEnum : public HtmlFactory_Idl
 {

@@ -36,7 +36,6 @@ class ParserInfo;
 
 namespace ary
 {
-    class QualifiedName;
     class Repository;
 
 namespace doc

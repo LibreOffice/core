@@ -30,11 +30,6 @@
     // PARAMETERS
 
 
-namespace udm {
-class Agent_Struct;
-}   // namespace udm
-
-
 namespace csi
 {
 namespace uidl

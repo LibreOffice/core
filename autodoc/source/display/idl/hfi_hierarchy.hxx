@@ -27,6 +27,13 @@
 #include <ary/idl/i_comrela.hxx>
 #include <ary/idl/i_types4idl.hxx>
 
+namespace ary
+{
+namespace idl
+{
+    class Gate;
+}
+}
 
 namespace csi
 {
@@ -37,7 +44,6 @@ namespace xml
 }
 
 
-class HF_IdlInterface;
 class HtmlEnvironment_Idl;
 
 

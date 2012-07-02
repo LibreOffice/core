@@ -36,7 +36,6 @@ namespace idl
     class Ce_Storage;
     class TypeAdmin;
     class Type_Storage;
-    class Module;
     class ExplicitType;
     class Function;
     class Interface;

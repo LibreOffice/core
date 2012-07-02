@@ -41,10 +41,6 @@ namespace idl
     class TypePilot;
 }
 }
-namespace output
-{
-    class Position;
-}
 
 
 

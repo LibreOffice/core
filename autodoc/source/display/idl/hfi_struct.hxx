@@ -28,6 +28,8 @@
     // COMPONENTS
     // PARAMETERS
 
+class HF_NaviSubRow;
+
 /** Is used to display ->ary::idl::Exception s as well as ->ary::idl::Struct s.
 */
 class HF_IdlStruct : public HtmlFactory_Idl

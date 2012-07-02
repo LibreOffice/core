@@ -37,11 +37,6 @@
     // COMPONENTS
     // PARAMETERS
 
-namespace ary
-{
-     class Repository;
-}
-
 namespace autodoc
 {
     class FileCollector_Ifc;

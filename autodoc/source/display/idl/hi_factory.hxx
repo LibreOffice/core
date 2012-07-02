@@ -33,10 +33,6 @@
 
 namespace ary
 {
-namespace idl
-{
-    class Module;
-}
 namespace doc
 {
     class OldIdlDocu;
@@ -45,8 +41,6 @@ namespace doc
 
 
 class HtmlEnvironment_Idl;
-class LinkHelper;
-class HF_NaviSubRow;
 class HF_TitleTable;
 class HF_SubTitleTable;
 

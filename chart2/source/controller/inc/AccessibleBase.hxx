@@ -51,8 +51,6 @@
 
 #include "MutexContainer.hxx"
 
-class SfxItemSet;
-class SdrObject;
 class SdrView;
 
 namespace accessibility

@@ -45,10 +45,6 @@
 #include "MutexContainer.hxx"
 #include "OPropertySet.hxx"
 
-namespace com { namespace sun { namespace star { namespace style {
-    class XStyle;
-}}}}
-
 namespace chart
 {
 

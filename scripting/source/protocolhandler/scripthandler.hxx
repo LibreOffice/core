@@ -47,7 +47,6 @@ namespace com { namespace sun { namespace star {
     }
     namespace frame {
         class XFrame;
-        class XModel;
         class XDispatch;
         class XNotifyingDispatch;
         class XDispatchResultListener;

@@ -35,22 +35,10 @@
 
 namespace csi
 {
-namespace prl
-{
-    class TNamespace;
-}
-}
-
-
-
-namespace csi
-{
 namespace uidl
 {
 
 
-class Struct;
-class StructElement;
 class PE_StructElement;
 class PE_Type;
 

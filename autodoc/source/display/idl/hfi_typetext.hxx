@@ -28,6 +28,13 @@
     // COMPONENTS
     // PARAMETERS
 
+namespace ary
+{
+namespace idl
+{
+    class Module;
+}
+}
 
 class HF_IdlTypeText : public HtmlFactory_Idl
 {

@@ -27,8 +27,6 @@
 
 #include <vector>
 
-class SdrModel;
-
 namespace chart
 {
 namespace wrapper

@@ -40,9 +40,6 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 
-class SfxItemSet;
-class SdrObject;
-
 namespace chart
 {
 

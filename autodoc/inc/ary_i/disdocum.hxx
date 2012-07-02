@@ -37,7 +37,6 @@ class DT_MupType;
 class DT_MupMember;
 class DT_MupConst;
 class DT_Style;
-class DT_EOL;
 class DT_StdAtTag;
 class DT_SeeAlsoAtTag;
 class DT_ParameterAtTag;

@@ -39,13 +39,9 @@
 
 namespace ary
 {
-    class QualifiedName;
-    class Repository;
-
 namespace idl
 {
     class Gate;
-    class Module;
 }   // namespace idl
 }   // namespace ary
 
@@ -54,10 +50,6 @@ namespace csi
 {
 namespace uidl
 {
-
-
-class Struct;
-class Token;
 
 
 /** is an implementation class for UnoIDL_PE s

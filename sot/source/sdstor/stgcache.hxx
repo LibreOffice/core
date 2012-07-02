@@ -27,7 +27,6 @@
 
 class UCBStorageStream;
 
-class StgIo;
 class StgPage;
 class StgDirEntry;
 class StorageBase;

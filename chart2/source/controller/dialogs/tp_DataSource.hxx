@@ -50,11 +50,6 @@
 #include "RangeSelectionButton.hxx"
 #include "RangeEdit.hxx"
 
-namespace com { namespace sun { namespace star {
-    namespace chart2 {
-        class XChartType;
-}}}}
-
 namespace chart
 {
 

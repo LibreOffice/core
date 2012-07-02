@@ -29,17 +29,10 @@
     // PARAMETERS
 
 
-namespace udm {
-class Agent_Struct;
-}   // namespace udm
-
-
 namespace csi
 {
 namespace uidl
 {
-
-class ConstantsGroup;
 
 class PE_Type;
 class PE_Value;

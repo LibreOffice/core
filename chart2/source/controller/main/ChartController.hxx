@@ -139,7 +139,6 @@ public:
 class ChartWindow;
 class DrawModelWrapper;
 class DrawViewWrapper;
-class ViewElementListProvider;
 class ReferenceSizeProvider;
 
 class ChartController   : public ::cppu::WeakImplHelper12 <

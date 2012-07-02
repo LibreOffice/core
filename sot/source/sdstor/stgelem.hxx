@@ -103,8 +103,6 @@ enum StgEntryTime {                     // time codes:
     STG_ACCESSED  = 1                   // last access
 };
 
-class StgStream;
-
 #define STGENTRY_SIZE 128
 
 //StructuredStorageDirectoryEntry

@@ -265,7 +265,6 @@ typedef ::cppu::ImplInheritanceHelper1<
         ::com::sun::star::resource::XStringResourcePersistence > StringResourcePersistenceImpl_BASE;
 
 class BinaryOutput;
-class BinaryInput;
 
 class StringResourcePersistenceImpl : public StringResourcePersistenceImpl_BASE
 {

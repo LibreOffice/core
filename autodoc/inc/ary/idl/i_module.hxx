@@ -39,7 +39,6 @@ namespace ifc_module
 {
     struct attr;
 }
-    class Gate;
 
 
 /** Represents an IDL module.

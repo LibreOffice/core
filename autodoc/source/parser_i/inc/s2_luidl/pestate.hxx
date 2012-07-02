@@ -38,7 +38,6 @@ namespace uidl
 class TokIdentifier;
 class TokBuiltInType;
 class TokPunctuation;
-class Tok_Documentation;
 
 class ParseEnvState : public    TokenInterpreter,
                       virtual protected TokenProcessing_Types
