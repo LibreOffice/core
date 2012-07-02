@@ -6,7 +6,7 @@
 #include "aqua/salgdicommon.hxx"
 
 class FontSelectPattern;
-class ImplCoreTextFontData;
+class CoreTextPhysicalFontFace;
 
 class CoreTextStyleInfo
 {
@@ -33,7 +33,7 @@ private:
     CTParagraphStyleRef m_CTParagraphStyle;
     CTFontRef m_CTFont;
     CGColorRef m_color;
-    const ImplCoreTextFontData* m_font_data;
+    const CoreTextPhysicalFontFace* m_font_face;
 
 };
 

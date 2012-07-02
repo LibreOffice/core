@@ -48,7 +48,7 @@ protected:
     RGBAColor maLineColor; //< pen color RGBA
     RGBAColor maFillColor; //< brush color RGBA
 
-    ImplCoreTextFontData* m_pCoreTextFontData; //< Device Font settings
+    CoreTextPhysicalFontFace* m_font_face; //< Device Font settings
 
     bool mbNonAntialiasedText; //< allows text to be rendered without antialiasing
 

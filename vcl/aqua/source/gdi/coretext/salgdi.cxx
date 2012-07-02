@@ -23,7 +23,7 @@ AquaSalGraphics::AquaSalGraphics()
     , mxClipPath( NULL )
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
-    , m_pCoreTextFontData( NULL )
+    , m_font_face( NULL )
     , mbNonAntialiasedText( false )
     , mbPrinter( false )
     , mbVirDev( false )
@@ -145,28 +145,28 @@ sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 
 bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    if( !m_pCoreTextFontData )
+    if( !m_font_face )
     {
         return false;
     }
-    return m_pCoreTextFontData->GetImplFontCapabilities(rFontCapabilities);
+    return m_font_face->GetImplFontCapabilities(rFontCapabilities);
 }
 
 const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 {
-    if( !m_pCoreTextFontData )
+    if( !m_font_face )
     {
         return ImplFontCharMap::GetDefaultMap();
     }
-    return m_pCoreTextFontData->GetImplFontCharMap();
+    return m_font_face->GetImplFontCharMap();
 }
 
-bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
+bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,
                      std::vector<unsigned char>& rBuffer, bool* pJustCFF )
 {
-    const ImplCoreTextFontData* font_data = static_cast<const ImplCoreTextFontData*>(pFontData);
+    const CoreTextPhysicalFontFace* font_face = static_cast<const CoreTextPhysicalFontFace*>(pFontFace);
 
-    return font_data->GetRawFontData(rBuffer, pJustCFF);
+    return font_face->GetRawFontData(rBuffer, pJustCFF);
 }
 
 SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
