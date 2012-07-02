@@ -191,8 +191,6 @@ $(eval $(foreach method,\
 	add_api \
 	use_api \
 	use_sdk_api \
-	use_sdk_api \
-	use_udk_api \
 	use_udk_api \
 	add_internal_api \
 	use_internal_api \
