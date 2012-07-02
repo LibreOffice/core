@@ -96,7 +96,13 @@ namespace cmis
             vector< string > paths = maResults[nIndex]->pObject->getPaths( );
             if ( !paths.empty( ) )
                 sObjectPath = paths.front( );
-            // TODO Handle the unfiled objects with their id... but can they manage to come here?
+            else
+            {
+                // Handle the unfiled objects with their id...
+                // They manage to sneak here if we don't have the permission to get the object
+                // parents (and then the path)
+                sObjectPath += "#" + maResults[nIndex]->pObject->getId( );
+            }
 
             // Get the URL from the Path
             URL aUrl( mxContent->getIdentifier( )->getContentIdentifier( ) );

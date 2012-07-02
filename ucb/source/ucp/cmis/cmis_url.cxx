@@ -57,6 +57,10 @@ namespace cmis
 
         // Store the path to the object
         m_sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+        m_sId = aUrl.GetMark( );
+
+        if ( !m_sId.isEmpty( ) )
+            m_sPath = rtl::OUString( );
     }
 
     map< int, string > URL::getSessionParams( )
@@ -75,6 +79,11 @@ namespace cmis
         return m_sPath;
     }
 
+    rtl::OUString& URL::getObjectId( )
+    {
+        return m_sId;
+    }
+
     rtl::OUString& URL::getBindingUrl( )
     {
         return m_sBindingUrl;
@@ -88,6 +97,7 @@ namespace cmis
     void URL::setObjectPath( rtl::OUString sPath )
     {
         m_sPath = sPath;
+        m_sId = rtl::OUString( );
     }
 
     rtl::OUString URL::asString( )
@@ -100,9 +110,16 @@ namespace cmis
                 RTL_TEXTENCODING_UTF8 );
         sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
 
-        if ( m_sPath[0] != '/' )
-            sUrl += "/";
-        sUrl += m_sPath;
+        if ( !m_sPath.isEmpty( ) )
+        {
+            if ( m_sPath[0] != '/' )
+                sUrl += "/";
+            sUrl += m_sPath;
+        }
+        else if ( !m_sId.isEmpty( ) )
+        {
+            sUrl += "#" + m_sId;
+        }
 
         return sUrl;
     }
