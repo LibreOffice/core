@@ -1814,7 +1814,7 @@ void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
 }
 
 /*
- *  Switch on/off header of footer of a page style - if an empty name is
+ *  Switch on/off header or footer of a page style - if an empty name is
  *  given all styles are changed
  */
 void SwWrtShell::ChangeHeaderOrFooter(
