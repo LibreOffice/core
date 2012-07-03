@@ -51,17 +51,15 @@ public class FormulaHelper {
      * Sets the workbook cache so that global data such as
      * <code>DefinedNames</code>, <code>Boundsheets</code> can be read
      *
-     * @param wb Wrokbook object containing all the global data
+     * @param wb Workbook object containing all the global data
      */
     public void setWorkbook(Workbook wb) {
-
         encoder.setWorkbook(wb);
         decoder.setWorkbook(wb);
-        parser.setWorkbook(wb);
     }
 
     /**
-     * Convertes a string representation of a calc formula into an array of PocketXL bytes
+     * Converts a string representation of a calc formula into an array of PocketXL bytes
      * @param   formula The Formula String (e.g. 1+SUM(A1,B1))
      *
      * @throws  UnsupportedFunctionException    Thrown if a function in the formula is nto supported by Pocket Excel

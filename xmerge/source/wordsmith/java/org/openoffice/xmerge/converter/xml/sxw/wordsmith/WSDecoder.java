@@ -290,7 +290,7 @@ final class WSDecoder implements DOCConstants {
         }
 
         // read the number of records - unsigned 2 bytes
-        header.textRecordCount = dis.readShort() & 0x0000ffff;
+        dis.readShort();
 
         // read the record size - unsigned 2 bytes
         header.textRecordSize = dis.readShort() & 0x0000ffff;
@@ -326,9 +326,6 @@ final class WSDecoder implements DOCConstants {
 
         /** length of text section */
         int textLen = 0;
-
-        /** number of text records */
-        int textRecordCount = 0;
 
         /**
          *  size of a text record.  This is normally the same as

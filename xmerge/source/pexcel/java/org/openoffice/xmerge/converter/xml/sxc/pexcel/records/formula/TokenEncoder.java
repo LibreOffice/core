@@ -40,7 +40,6 @@ import org.openoffice.xmerge.util.EndianConverter;
  */
 public class TokenEncoder {
 
-    private FunctionLookup fl;
     private String parseString;
     private int index;
     private Workbook wb;
@@ -49,9 +48,7 @@ public class TokenEncoder {
      * Default Constructor
      */
     public TokenEncoder() {
-
         parseString = new String();
-        fl = new FunctionLookup();
     }
 
       /**
@@ -212,16 +209,6 @@ public class TokenEncoder {
             return(Character.isDigit(c));
     }
 
-     /**
-      * Identify letters or numbers
-     *
-     * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
-      */
-    private boolean isAlphaNum(char c) {
-        return(isAlpha(c) || isDigit(c));
-    }
-
     /**
      * Parses a column reference and returns it's integer equivalent. (eg.
      * A=0, D=3, BA=27)
@@ -261,7 +248,6 @@ public class TokenEncoder {
     private int row() {
         char ch = parseString.charAt(index);
         String rowStr = new String();
-        int row = 0;
         boolean status = true;
 
         do {

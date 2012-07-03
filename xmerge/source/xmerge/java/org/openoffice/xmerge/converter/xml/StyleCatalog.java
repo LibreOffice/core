@@ -117,7 +117,6 @@ public class StyleCatalog {
 
                     for (int j = 0; j < families.length; j++) {
                         if (families[j].equals(familyName)) {
-                            Class<?> styleClass = classes[j];
                             callConstructor(classes[j], child);
                             found = true;
                         }
@@ -318,41 +317,6 @@ public class StyleCatalog {
             }
         }
 
-    }
-
-
-    /**
-     *  Check whether a given node represents a <code>Style</code>
-     *  that should be added to the catalog, and if so, return the
-     *  class type for it.  If <code>Style</code> should not be added,
-     *  or if node is not a <code>Style</code>, return null.
-     *
-     *  @param  node          The <code>Node</code> to be checked.
-     *  @param  families      An array of <code>Style</code> families.
-     *  @param  classes       An array of class types corresponding to the
-     *                        families array.
-     *  @param  defaultClass  The default class.
-     *
-     *  @return  The class that is appropriate for this node.
-     */
-    private Class<?> getClass(Node node, String[] families, Class<?>[] classes,
-    Class<?> defaultClass) {
-        NamedNodeMap attributes = node.getAttributes();
-        if (attributes != null) {
-            int len = attributes.getLength();
-            for (int i = 0; i < len; i++) {
-                Node attr = attributes.item(i);
-                if (attr.getNodeName().equals("style:family")) {
-                    String familyName = attr.getNodeValue();
-                    for (int j = 0; j < families.length; j++) {
-                        if (families[j].equals(familyName))
-                            return classes[j];
-                    }
-                    return defaultClass;
-                }
-            }
-        }
-        return null;
     }
 
 

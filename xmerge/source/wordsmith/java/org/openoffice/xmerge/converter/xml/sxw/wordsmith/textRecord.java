@@ -81,8 +81,6 @@ class textRecord {
     byte[] getBytes() {
         DataOutputStream os = null;  // Used for storing the data
         ByteArrayOutputStream bs = null;  // Used for storing the data
-        byte ftBytes[] = null;
-        byte ctBytes[] = null;
 
         try {
             bs = new ByteArrayOutputStream();

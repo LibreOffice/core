@@ -38,11 +38,6 @@ public final class CharacterBaseParagraphMerge
                    implements NodeMergeAlgorithm {
 
 
-    private class cacheCharArray {
-        public  cacheCharArray(int cacheSize) {
-        }
-    }
-
 
     /**
      *  Merge two paragraph <code>Node</code> by using Longest Common
@@ -79,9 +74,7 @@ public final class CharacterBaseParagraphMerge
                                  Difference[] diffs) {
 
         List<TextNodeEntry> orgNodeList = orgParser.getNodeList();
-        List<TextNodeEntry> modNodeList = modParser.getNodeList();
         int diffCount = 0;
-        int modNodeListCnt = 0;
         int numNode = orgNodeList.size();
 
         for (int i = 0; i < numNode; i++) {

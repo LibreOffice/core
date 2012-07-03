@@ -82,10 +82,6 @@ public class FormulaCompiler {
         return pt.getTokenID() == TokenConstants.TARGSEP;
     }
 
-    private boolean isBinaryOperator(Token pt) {
-        return false;
-    }
-
     /**
      * Re-order into Infix format
      * @param   tokens  The tokens in RPN form

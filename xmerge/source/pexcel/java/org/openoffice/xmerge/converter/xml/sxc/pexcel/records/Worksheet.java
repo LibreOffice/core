@@ -38,7 +38,6 @@ import org.openoffice.xmerge.util.Debug;
  */
 public class Worksheet {
 
-    private String name;
     private Workbook wb;
     private ArrayList<Row> rows         = new ArrayList<Row>();
     private ArrayList<ColInfo> colInfo      = new ArrayList<ColInfo>();
@@ -133,7 +132,7 @@ public class Worksheet {
 
                 case PocketExcelConstants.BOOLERR_CELL:
                     Debug.log(Debug.TRACE,"BOOLERR: Cell Value, Boolean or Error (05h)");
-                    BoolErrCell bec = new BoolErrCell(is);
+                    new BoolErrCell(is);
                     break;
 
                 case PocketExcelConstants.FORMULA_CELL:
@@ -144,7 +143,7 @@ public class Worksheet {
 
                  case PocketExcelConstants.FORMULA_STRING:
                     Debug.log(Debug.TRACE,"String Value of a Formula (07h)");
-                    StringValue sv = new StringValue(is);
+                    new StringValue(is);
                     break;
 
                 case PocketExcelConstants.ROW_DESCRIPTION:
@@ -170,7 +169,7 @@ public class Worksheet {
 
                 case PocketExcelConstants.NUMBER_FORMAT:
                     Debug.log(Debug.TRACE,"FORMAT: Number Format (1Eh)");
-                    NumberFormat nf = new NumberFormat(is);
+                    new NumberFormat(is);
                     break;
 
                 case PocketExcelConstants.DEFAULT_ROW_HEIGHT:

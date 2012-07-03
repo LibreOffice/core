@@ -218,19 +218,6 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
         wb.addSettings(s);
     }
 
-    /**
-     *  This method sets the format of a cell to <i>string</i>.
-     *
-     *  @param  format  The cell format-may already contain display info,
-     *                  such as alignment or font type.
-     *
-     *  @return  The updated format of the cell.
-     */
-    private long setFormatString(long format) {
-
-        return 0;
-    }
-
 
     /**
      *  Set a cell's formatting options via a separately create

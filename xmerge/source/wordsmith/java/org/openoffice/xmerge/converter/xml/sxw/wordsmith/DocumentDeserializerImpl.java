@@ -126,7 +126,6 @@ implements DOCConstants, OfficeConstants, DocumentDeserializer {
      *  @param  parentDoc  The parent <code>Document</code>.
      */
     private void readStyleCatalog(Document parentDoc) {
-        Element rootNode = null;
         try {
             java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
             parentDoc.write(bos);

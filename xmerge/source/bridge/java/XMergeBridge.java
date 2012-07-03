@@ -71,12 +71,10 @@ public class XMergeBridge {
 
 
     private static XMultiServiceFactory xMSF;
-    private static XDocumentHandler exportDocHandler=null;
     private static XInputStream xInStream =null;
     private static XOutputStream xOutStream=null;
     private static String  udJarPath=null;
     private static XOutputStream xos = null;
-    private static XOutputStreamToOutputStreamAdapter adaptedStream=null;
     private static String offMime=null;
     private static String sdMime=null;
     private static String sFileName=null;
@@ -150,11 +148,7 @@ public class XMergeBridge {
 
         sFileName="";
         sURL="";
-        String sDirectory = null;
-        String udConvertClass=msUserData[0];
         udJarPath=msUserData[1];
-        String udImport =msUserData[2];
-        String udExport =msUserData[3];
         offMime =msUserData[4];
         sdMime = msUserData[5];
         com.sun.star.io.XInputStream xis=null;
@@ -231,12 +225,7 @@ public class XMergeBridge {
 
         sFileName=null;
         sURL=null;
-        String sDirectory = null;
-        String title=null;
-        String udConvertClass=msUserData[0];
         udJarPath=msUserData[1];
-        String udImport =msUserData[2];
-        String udExport =msUserData[3];
         offMime =msUserData[4];
         sdMime = msUserData[5];
 
@@ -256,10 +245,6 @@ public class XMergeBridge {
 
             if (pValue[i].Name.compareTo("URL")==0){
             sURL=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
-            }
-
-            if (pValue[i].Name.compareTo("Title")==0){
-            title=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
             }
         }
         catch(com.sun.star.lang.IllegalArgumentException AnyExec){
@@ -434,7 +419,6 @@ public class XMergeBridge {
          String jarName = pluginUrl;
          String name= getFileName(FileName);
 
-         ConverterInfo converterInfo = null;
          Iterator<ConverterInfo> ciEnum= null;
 
          XInputStreamToInputStreamAdapter xis =new XInputStreamToInputStreamAdapter(xml);
@@ -479,7 +463,6 @@ public class XMergeBridge {
 
                  if (docEnum.hasNext()){
                      Document docOut      = (Document)docEnum.next();
-                     String fileName      = docOut.getFileName();
                      docOut.write(newxos);
 
                      newxos.flush();
@@ -502,7 +485,6 @@ public class XMergeBridge {
 
                      FileOutputStream fos = new FileOutputStream(newFile);
                      docOut      = (Document)docEnum.next();
-                     fileName      = docOut.getFileName();
                      docOut.write(fos);
                      fos.flush();
                      fos.close();

@@ -63,7 +63,6 @@ public final class DocumentDeserializerImpl
     implements  DocumentDeserializer,URIResolver {
 
     /**  A <code>ConvertData</code> object assigned to this object. */
-    private InputStream is = null;
     private ConvertData cd = null;
     private PluginFactoryImpl pluginFactory = null;
 
@@ -101,7 +100,6 @@ public final class DocumentDeserializerImpl
     Iterator<Object> enumerate = cd.getDocumentEnumeration();
     org.w3c.dom.Document domDoc=null;
     DOMDocument docOut=null;
-    GenericOfficeDocument doc = null;
     ByteArrayOutputStream baos =null;
     GenericOfficeDocument sxwDoc = new GenericOfficeDocument("output");
     while (enumerate.hasNext()) {

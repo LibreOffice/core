@@ -33,8 +33,6 @@ import org.openoffice.xmerge.util.Resources;
  */
 public final class RowIterator extends NodeIterator {
 
-    private Resources res = Resources.getInstance();
-
     // TODO: should compare the ConverterCapabilities supported feature only!
     // otherwise even though one with a chart, one without, will still be
     // considered to be not equivalent.

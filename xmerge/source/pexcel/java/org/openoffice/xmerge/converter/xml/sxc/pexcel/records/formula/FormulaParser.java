@@ -42,7 +42,6 @@ public class FormulaParser {
     private int index = 1;
     private TokenFactory tokenFactory;
     private ArrayList<Token> tokenVector;
-    private Workbook wb;
 
      /**
       * Default constructor
@@ -52,14 +51,6 @@ public class FormulaParser {
         Debug.log(Debug.TRACE,"Creating a Formula Parser");
         tokenFactory = new TokenFactory();
         tokenVector = new ArrayList<Token>();
-    }
-
-    /**
-     *
-     */
-    public void setWorkbook(Workbook wb) {
-
-        this.wb = wb;
     }
 
     /**
@@ -126,22 +117,6 @@ public class FormulaParser {
      }
 
     /**
-     * Identify <, >, <=, >=, =, <>
-     *
-     * @param  op The <code>String</code> which is to be identified
-     * @return A boolean returning the result of the comparison
-     */
-    private boolean isLogicalOp(String op) {
-        return  ((op.compareTo(">") == 0) ||
-                 (op.compareTo("<") == 0) ||
-                 (op.compareTo(">=") == 0) ||
-                 (op.compareTo("<=") == 0) ||
-                 (op.compareTo("=") == 0) ||
-                 (op.compareTo("<>") == 0));
-    }
-
-
-    /**
      * Identify characters that MAY be logical operator characters
      *
      * @param  c The character which is to be identified
@@ -189,16 +164,6 @@ public class FormulaParser {
       */
      private boolean isPercent(char c) {
          return (c == '%');
-     }
-
-     /**
-      * Identify letters or numbers
-     *
-     * @param  c The character which is to be identified
-     * @return A boolean returning the result of the comparison
-      */
-     private boolean isAlphaNum(char c) {
-         return(isAlpha(c) || isDigit(c));
      }
 
     /**

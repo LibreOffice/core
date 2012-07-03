@@ -60,10 +60,6 @@ public class DOMDocument
     private String fileName = null;
     private String fileExt = null;
 
-    /** Resources object. */
-    private Resources res = null;
-
-
     /**
      *  Default constructor.
      *
@@ -98,7 +94,6 @@ public class DOMDocument
      */
     public DOMDocument(String name, String ext,boolean namespaceAware, boolean validating) {
 
-        res = Resources.getInstance();
         factory.setValidating(validating);
         factory.setNamespaceAware(namespaceAware);
         this.fileExt = ext;

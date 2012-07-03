@@ -73,24 +73,6 @@ public class CharArrayLCSAlgorithm {
         return diffArray;
     }
 
-
-    /**
-     *  Debug function Used to print out the nicely formatted
-     *  difference table.
-     *
-     *  @param  diffTable  The difference table to display.
-     */
-    private void printDiffTable(int[][] diffTable) {
-
-        for (int i = 0; i < diffTable.length; i++) {
-            for (int j = 0; j < diffTable[i].length; j++) {
-                System.out.print(" " + diffTable[i][j] +  " ");
-            }
-            System.out.println();
-        }
-    }
-
-
     /**
      *  Create the difference table.
      *  The difference table is used internal to keep track what

@@ -73,9 +73,6 @@ public class IteratorRowCompare implements DiffAlgorithm {
      */
     public Difference[] computeDiffs(Iterator orgSeq, Iterator modSeq) {
 
-        int orgSeqlen = orgSeq.elementCount();
-        int modSeqlen = modSeq.elementCount();
-
         ArrayList<Difference> diffVector = new ArrayList<Difference>();
 
         // i and j are counters to keep track the current position in the

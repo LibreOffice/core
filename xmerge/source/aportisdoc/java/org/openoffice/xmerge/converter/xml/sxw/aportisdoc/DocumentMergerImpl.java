@@ -79,8 +79,6 @@ public class DocumentMergerImpl implements DocumentMerger {
         NodeMergeAlgorithm charMerge = new CharacterBaseParagraphMerge();
         DocumentMerge docMerge = new DocumentMerge(cc_, charMerge);
 
-        Iterator result = null;
-
         docMerge.applyDifference(i1, i2, diffTable);
     }
 }

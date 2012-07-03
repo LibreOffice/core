@@ -83,9 +83,6 @@ public abstract class OfficeDocument
     private String documentName = null;
     private String fileName = null;
 
-    /** Resources object. */
-    private Resources res = null;
-
     /**
      *  <code>OfficeZip</code> object to store zip contents from
      *  read <code>InputStream</code>.  Note that this member
@@ -119,8 +116,6 @@ public abstract class OfficeDocument
      *  @param  validating      Value for <code>validating</code> flag.
      */
     public OfficeDocument(String name, boolean namespaceAware, boolean validating) {
-
-        res = Resources.getInstance();
         factory.setValidating(validating);
         factory.setNamespaceAware(namespaceAware);
         this.documentName = trimDocumentName(name);
@@ -747,7 +742,7 @@ public abstract class OfficeDocument
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder= builderFactory.newDocumentBuilder();
         DOMImplementation domImpl = builder.getDOMImplementation();
-        DocumentType docType =domImpl.createDocumentType("office:document","-//OpenOffice.org//DTD OfficeDocument 1.0//EN",null);
+        domImpl.createDocumentType("office:document","-//OpenOffice.org//DTD OfficeDocument 1.0//EN",null);
         org.w3c.dom.Document newDoc = domImpl.createDocument("http://openoffice.org/2000/office","office:document",null);
 
 

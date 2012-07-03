@@ -83,10 +83,7 @@ public final class DocumentDeserializerImpl
      */
     public Document deserialize() throws IOException, ConvertException {
 
-        int numberOfPDBs = cd.getNumDocuments();
         Document doc = null;
-        int i=0;
-        ConvertData cdOut;
         Iterator<Object> e = cd.getDocumentEnumeration();
         while (e.hasNext()) {
             PalmDocument palmDoc = (PalmDocument) e.next();

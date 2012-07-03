@@ -49,7 +49,6 @@ public class PocketWordDocument implements Document, PocketWordConstants {
     private DocumentDescriptor descriptor;
     private ArrayList<Paragraph> paragraphs;
 
-    private ParaStyle   pStyle;
     private Paragraph   currentPara;
 
     /*
@@ -114,7 +113,6 @@ public class PocketWordDocument implements Document, PocketWordConstants {
         }
 
         byte[] font = new byte[80];
-        int numfonts = 0;
         do {
             docData.read(font);
 
@@ -308,7 +306,6 @@ public class PocketWordDocument implements Document, PocketWordConstants {
 
         paragraphs.add(para);
 
-        pStyle = style;
         currentPara = para;
 
         if (listElement) {

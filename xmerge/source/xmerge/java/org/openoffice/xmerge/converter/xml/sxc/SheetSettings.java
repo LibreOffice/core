@@ -45,8 +45,6 @@ public class SheetSettings implements OfficeConstants {
     private int     splitPointX = 0;
     private int     splitPointY = 0;
     private int     posLeft     = 0;
-    private int     posRight    = 0;
-    private int     posBottom   = 0;
     private int     posTop      = 0;
     private int     paneNumber  = 2;
 

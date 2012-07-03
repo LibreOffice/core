@@ -39,14 +39,6 @@ public final class ObjectArrayIterator implements Iterator {
 
 
     /**
-     *  Private default constructor.
-     */
-    private ObjectArrayIterator() {
-        // do not allow user new a ObjectArrayIterator without argument
-    }
-
-
-    /**
      *  Standard constructor.
      *
      *  @param  objArray  The <code>Object</code> array.

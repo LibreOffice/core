@@ -47,7 +47,6 @@ public class TokenDecoder {
     private TokenFactory tf;
     private FunctionLookup fl;
     private OperatorLookup operatorLookup;
-    private OperandLookup operandLookup;
     private Workbook wb;
 
     /**
@@ -59,7 +58,6 @@ public class TokenDecoder {
         tf = new TokenFactory();
         fl = new FunctionLookup();
         operatorLookup = new OperatorLookup();
-        operandLookup = new OperandLookup();
     }
 
       /**
@@ -86,7 +84,6 @@ public class TokenDecoder {
 
         ByteArrayInputStream bis = new ByteArrayInputStream(formula);
         int b = 0 ;
-        Token t;
 
         while ((b = bis.read())!=-1)
         {

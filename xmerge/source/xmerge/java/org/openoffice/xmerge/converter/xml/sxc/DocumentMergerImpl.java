@@ -113,8 +113,6 @@ public class DocumentMergerImpl implements DocumentMerger {
                 NodeMergeAlgorithm rowMerger = new PositionBaseRowMerge(cc_);
                 MergeAlgorithm merger = new SheetMerge(cc_, rowMerger);
 
-                Iterator result = null;
-
                 merger.applyDifference(i1, i2, diffResult);
             }
         }

@@ -226,14 +226,6 @@ public class ConverterInfo {
 
 
     /**
-     *  Create a default constructor so we can use isValidOfficeType
-     *  without having to actually have a valid ConverterInfo.
-     */
-    private ConverterInfo() {
-    }
-
-
-    /**
      *  Returns an instance of the DocumentDeserializerFactory interface.
      *
      *  @return  instance of the DocumentDeserializer for this ConverterInfo.

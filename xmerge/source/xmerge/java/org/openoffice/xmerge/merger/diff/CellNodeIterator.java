@@ -42,8 +42,6 @@ import org.openoffice.xmerge.util.Resources;
  */
 public final class CellNodeIterator extends NodeIterator  {
 
-    private Resources res = Resources.getInstance();
-
     // can be expanded to an array in the future, not necessary right now
     private static final String SUPPORTED_TAG1 = OfficeConstants.TAG_TABLE_CELL;
 

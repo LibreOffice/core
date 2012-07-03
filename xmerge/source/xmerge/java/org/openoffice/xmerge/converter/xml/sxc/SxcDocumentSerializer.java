@@ -53,15 +53,6 @@ import org.w3c.dom.NodeList;
 public abstract class SxcDocumentSerializer implements OfficeConstants,
     DocumentSerializer {
 
-    /**  The cell foreground <code>Color</code>. */
-    private Color foreground = Color.black;
-
-    /**  The cell background <code>Color</code>. */
-    private Color background = Color.white;
-
-    /**  The cell format. */
-    private long format = 0;
-
     /**  <code>Format</code> object describing the cell. */
     private Format fmt = null;
 
@@ -84,9 +75,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      *  measured in number of characters.
      */
     private ArrayList<ColumnRowInfo> ColumnRowList;
-
-    /**  Width, in characters, of the current cell display data. */
-    private int displayWidth = 0;
 
     /**
      *  A <code>SpreadsheetEncoder</code> object for encoding to
@@ -269,8 +257,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
     protected void traverseNamedExpressions(Node node) throws IOException {
 
         Debug.log(Debug.TRACE, "<NAMED:EXPRESSIONS>");
-
-        NamedNodeMap att = node.getAttributes();
 
         if (node.hasChildNodes()) {
 
@@ -638,9 +624,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         if (tableValueTypeNode != null) {
 
-            // Make sure we initialize to 0 the width of the current cell
-            displayWidth = 0;
-
             String cellType =
                 tableValueTypeNode.getNodeValue();
 
@@ -758,9 +741,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 addCell("");
             }
         }
-
-        // Clear out format for current cell after it is written
-        format = 0;
 
         // Increase the column counter by the number of times the
         // last cell was repeated.
@@ -950,21 +930,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         }
 
         return decimals;
-    }
-
-    /*
-     * Utility method to retrieve a Node attribute.
-     */
-    private String getAttribute (Node node, String attribute) {
-        NamedNodeMap attrNodes = node.getAttributes();
-
-        if (attrNodes != null) {
-            Node attr = attrNodes.getNamedItem(attribute);
-            if (attr != null) {
-                return attr.getNodeValue();
-            }
-        }
-        return null;
     }
 
 }

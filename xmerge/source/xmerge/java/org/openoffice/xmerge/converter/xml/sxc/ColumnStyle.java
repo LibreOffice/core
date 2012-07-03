@@ -259,24 +259,4 @@ public class ColumnStyle extends Style implements Cloneable {
         }
     }
 
-    private static String[] ignored = {
-        "fo:break-before", "fo:keep-with-next"
-    };
-
-    /*
-     * This code checks whether an attribute is one that we
-     * intentionally ignore.
-     *
-     *  @param  attribute  The attribute to check.
-     *
-     *  @return  true if <code>attribute</code> can be ignored,
-     *           otherwise false.
-     */
-    private boolean isIgnored(String attribute) {
-        for (int i = 0; i < ignored.length; i++) {
-            if (ignored[i].equals(attribute))
-                return true;
-        }
-        return false;
-    }
 }

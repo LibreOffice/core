@@ -184,8 +184,6 @@ class Paragraph implements PocketWordConstants {
         boolean inSequence = false;
         boolean sawText = false;
 
-        String s = new String();  // For debugging
-
         // Start from the very beginning
         for (int i = 0; i < totalLength; i++) {
             // Will encounter at least two codes first
@@ -399,7 +397,6 @@ class Paragraph implements PocketWordConstants {
 
             sb.append((char)data[i]);
             sawText = true;
-            s = sb.toString();
         }
     }
 

@@ -101,8 +101,6 @@ public class DocumentMerge implements MergeAlgorithm {
 
             int operation = currentDiff.getOperation();
 
-            Object currentElement;
-
             switch (operation) {
 
             case Difference.DELETE:
@@ -132,11 +130,9 @@ public class DocumentMerge implements MergeAlgorithm {
                     // empty
                 }
 
-                currentElement = orgSeq.currentElement();
-
                 for (;
                      orgSeqCounter < currentDiff.getOrgPosition();
-                     orgSeqCounter++, currentElement = orgSeq.next()) {
+                     orgSeqCounter++, orgSeq.next()) {
                     // empty
                 }
 
@@ -159,11 +155,9 @@ public class DocumentMerge implements MergeAlgorithm {
                     // empty
                 }
 
-                currentElement = orgSeq.currentElement();
-
                 for (;
                      orgSeqCounter < currentDiff.getOrgPosition();
-                     orgSeqCounter++, currentElement = orgSeq.next()) {
+                     orgSeqCounter++, orgSeq.next()) {
                     // empty
                 }
 

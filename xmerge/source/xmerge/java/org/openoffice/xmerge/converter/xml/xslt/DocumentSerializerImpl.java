@@ -180,7 +180,6 @@ public final class DocumentSerializerImpl
         System.out.println("\n Error with Xslt\n");
     }
 
-    String ext = pluginFactory.getDeviceFileExtension();
         DOMDocument resultDomDoc=(DOMDocument)pluginFactory.createDeviceDocument(docName,new ByteArrayInputStream(baos.toByteArray()));
     cd.addDocument (resultDomDoc);
     return cd;
