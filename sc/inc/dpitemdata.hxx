@@ -89,6 +89,7 @@ public:
     ~ScDPItemData();
 
     Type GetType() const;
+    void SetEmpty();
     void SetString(const rtl::OUString& rS);
     void SetString(const rtl::OUString* pS);
     void SetValue(double fVal);
