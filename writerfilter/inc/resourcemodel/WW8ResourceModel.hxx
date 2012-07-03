@@ -138,6 +138,7 @@ public:
     */
     virtual void sprm(Sprm & sprm) = 0;
 
+    virtual ~Properties(){}
 };
 
 /**
@@ -154,6 +155,8 @@ public:
        @param ref     reference to properties of the entry
      */
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+
+    virtual ~Table() {}
 };
 
 /**
@@ -171,6 +174,8 @@ public:
      */
     virtual void data(const sal_uInt8* buf, size_t len,
                       writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+
+    virtual ~BinaryObj(){}
 };
 
 /**
@@ -271,6 +276,8 @@ public:
        @param info     the information
      */
     virtual void info(const string & info) = 0;
+
+    virtual ~Stream() {}
 };
 
 /**
@@ -322,6 +329,8 @@ public:
        Returns string representation of this value.
      */
     virtual string toString() const = 0;
+
+    virtual ~Value() {}
 };
 
 /**
@@ -373,6 +382,8 @@ public:
        Returns string repesentation of sprm.
      */
     virtual string toString() const = 0;
+
+    virtual ~Sprm() {}
 };
 
 /**
