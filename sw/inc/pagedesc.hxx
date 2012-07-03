@@ -127,8 +127,9 @@ namespace nsUseOnPage
     const UseOnPage PD_NONE           = 0x0000; // For internal use only.
     const UseOnPage PD_LEFT           = 0x0001;
     const UseOnPage PD_RIGHT          = 0x0002;
-    const UseOnPage PD_ALL            = 0x0003;
-    const UseOnPage PD_MIRROR         = 0x0007;
+    const UseOnPage PD_FIRST          = 0x0004;
+    const UseOnPage PD_ALL            = 0x0007;
+    const UseOnPage PD_MIRROR         = 0x000F;
     const UseOnPage PD_HEADERSHARE    = 0x0040;
     const UseOnPage PD_FOOTERSHARE    = 0x0080;
     const UseOnPage PD_NOHEADERSHARE  = 0x00BF; // For internal use only.
@@ -217,6 +218,8 @@ public:
     inline const SwFrmFmt *GetRightFmt() const;
     inline SwFrmFmt *GetLeftFmt();
     inline const SwFrmFmt *GetLeftFmt() const;
+    inline SwFrmFmt *GetFirstFmt();
+    inline const SwFrmFmt *GetFirstFmt() const;
 
     sal_uInt16 GetRegHeight() const { return nRegHeight; }
     sal_uInt16 GetRegAscent() const { return nRegAscent; }
@@ -325,6 +328,14 @@ inline SwFrmFmt *SwPageDesc::GetLeftFmt()
 inline const SwFrmFmt *SwPageDesc::GetLeftFmt() const
 {
     return nsUseOnPage::PD_LEFT & eUse ? &aLeft : 0;
+}
+inline SwFrmFmt *SwPageDesc::GetFirstFmt()
+{
+    return nsUseOnPage::PD_FIRST & eUse ? &aFirst : 0;
+}
+inline const SwFrmFmt *SwPageDesc::GetFirstFmt() const
+{
+    return nsUseOnPage::PD_FIRST & eUse ? &aFirst : 0;
 }
 
 class SwPageDescExt
