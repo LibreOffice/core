@@ -463,7 +463,7 @@ static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLi
     if(pBorderLine->GetWidth() > rBorderLine.GetWidth())
         rBorderLine.SetWidth(pBorderLine->GetWidth());
 
-    rBorderLine.SetSvxBorderStyle(pBorderLine->GetSvxBorderStyle());
+    rBorderLine.SetBorderLineStyle(pBorderLine->GetBorderLineStyle());
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
 
@@ -541,7 +541,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if(aBorderLine.GetOutWidth() == 0)
             {
-                aBorderLine.SetSvxBorderStyle( ::editeng::SOLID );
+                aBorderLine.SetBorderLineStyle(table::BorderLineStyle::SOLID);
                 aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
             }
 

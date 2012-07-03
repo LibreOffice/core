@@ -1412,51 +1412,51 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     const char* pVal = "none";
     if ( !pBorderLine->isEmpty( ) )
     {
-        switch (pBorderLine->GetSvxBorderStyle())
+        switch (pBorderLine->GetBorderLineStyle())
         {
-            case ::editeng::SOLID:
+            case table::BorderLineStyle::SOLID:
                 pVal = ( sal_Char* )"single";
                 break;
-            case ::editeng::DOTTED:
+            case table::BorderLineStyle::DOTTED:
                 pVal = ( sal_Char* )"dotted";
                 break;
-            case ::editeng::DASHED:
+            case table::BorderLineStyle::DASHED:
                 pVal = ( sal_Char* )"dashed";
                 break;
-            case ::editeng::DOUBLE:
+            case table::BorderLineStyle::DOUBLE:
                 pVal = ( sal_Char* )"double";
                 break;
-            case ::editeng::THINTHICK_SMALLGAP:
+            case table::BorderLineStyle::THINTHICK_SMALLGAP:
                 pVal = ( sal_Char* )"thinThickSmallGap";
                 break;
-            case ::editeng::THINTHICK_MEDIUMGAP:
+            case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
                 pVal = ( sal_Char* )"thinThickMediumGap";
                 break;
-            case ::editeng::THINTHICK_LARGEGAP:
+            case table::BorderLineStyle::THINTHICK_LARGEGAP:
                 pVal = ( sal_Char* )"thinThickLargeGap";
                 break;
-            case ::editeng::THICKTHIN_SMALLGAP:
+            case table::BorderLineStyle::THICKTHIN_SMALLGAP:
                 pVal = ( sal_Char* )"thickThinSmallGap";
                 break;
-            case ::editeng::THICKTHIN_MEDIUMGAP:
+            case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
                 pVal = ( sal_Char* )"thickThinMediumGap";
                 break;
-            case ::editeng::THICKTHIN_LARGEGAP:
+            case table::BorderLineStyle::THICKTHIN_LARGEGAP:
                 pVal = ( sal_Char* )"thickThinLargeGap";
                 break;
-            case ::editeng::EMBOSSED:
+            case table::BorderLineStyle::EMBOSSED:
                 pVal = ( sal_Char* )"threeDEmboss";
                 break;
-            case ::editeng::ENGRAVED:
+            case table::BorderLineStyle::ENGRAVED:
                 pVal = ( sal_Char* )"threeDEngrave";
                 break;
-            case ::editeng::OUTSET:
+            case table::BorderLineStyle::OUTSET:
                 pVal = ( sal_Char* )"outset";
                 break;
-            case ::editeng::INSET:
+            case table::BorderLineStyle::INSET:
                 pVal = ( sal_Char* )"inset";
                 break;
-            case ::editeng::NO_STYLE:
+            case table::BorderLineStyle::NONE:
             default:
                 break;
         }

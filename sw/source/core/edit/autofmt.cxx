@@ -592,28 +592,28 @@ sal_Bool SwAutoFormat::DoUnderline()
         editeng::SvxBorderLine aLine;
         switch( eState )
         {
-        case 1:         // einfach, 0,05 pt
-            aLine.SetSvxBorderStyle( editeng::SOLID );
+        case 1:         // single, 0,05 pt
+            aLine.SetBorderLineStyle(table::BorderLineStyle::SOLID);
             aLine.SetWidth( DEF_LINE_WIDTH_0 );
             break;
-        case 2:         // einfach, 1,0 pt
-            aLine.SetSvxBorderStyle( editeng::SOLID );
+        case 2:         // single, 1,0 pt
+            aLine.SetBorderLineStyle(table::BorderLineStyle::SOLID);
             aLine.SetWidth( DEF_LINE_WIDTH_1 );
             break;
-        case 3:         // doppelt, 1,1 pt
-            aLine.SetSvxBorderStyle( editeng::DOUBLE );
+        case 3:         // double, 1,1 pt
+            aLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
             aLine.SetWidth( DEF_LINE_WIDTH_0 );
             break;
-        case 4:         // doppelt, 4,5 pt
-            aLine.SetSvxBorderStyle( editeng::THICKTHIN_SMALLGAP );
+        case 4:         // double, 4,5 pt
+            aLine.SetBorderLineStyle(table::BorderLineStyle::THICKTHIN_SMALLGAP);
             aLine.SetWidth( DEF_LINE_WIDTH_1  );
             break;
-        case 5:         // doppelt, 6,0 pt
-            aLine.SetSvxBorderStyle( editeng::THINTHICK_SMALLGAP );
+        case 5:         // double, 6,0 pt
+            aLine.SetBorderLineStyle(table::BorderLineStyle::THINTHICK_SMALLGAP);
             aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
-        case 6:         // doppelt, 9,0 pt
-            aLine.SetSvxBorderStyle( editeng::DOUBLE );
+        case 6:         // double, 9,0 pt
+            aLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
             aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
         }

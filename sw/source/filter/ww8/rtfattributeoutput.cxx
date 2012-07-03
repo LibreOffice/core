@@ -124,9 +124,9 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
     {
         aRet.append(pStr);
         // single line
-        switch (pLine->GetSvxBorderStyle())
+        switch (pLine->GetBorderLineStyle())
         {
-            case ::editeng::SOLID:
+            case table::BorderLineStyle::SOLID:
                 {
                     if( DEF_LINE_WIDTH_0 == pLine->GetWidth() )
                         aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
@@ -134,46 +134,46 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
                         aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS);
                 }
                 break;
-            case ::editeng::DOTTED:
+            case table::BorderLineStyle::DOTTED:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDOT);
                 break;
-            case ::editeng::DASHED:
+            case table::BorderLineStyle::DASHED:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
                 break;
-            case ::editeng::DOUBLE:
+            case table::BorderLineStyle::DOUBLE:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDB);
                 break;
-            case ::editeng::THINTHICK_SMALLGAP:
+            case table::BorderLineStyle::THINTHICK_SMALLGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHSG);
                 break;
-            case ::editeng::THINTHICK_MEDIUMGAP:
+            case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHMG);
                 break;
-            case ::editeng::THINTHICK_LARGEGAP:
+            case table::BorderLineStyle::THINTHICK_LARGEGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHLG);
                 break;
-            case ::editeng::THICKTHIN_SMALLGAP:
+            case table::BorderLineStyle::THICKTHIN_SMALLGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNSG);
                 break;
-            case ::editeng::THICKTHIN_MEDIUMGAP:
+            case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNMG);
                 break;
-            case ::editeng::THICKTHIN_LARGEGAP:
+            case table::BorderLineStyle::THICKTHIN_LARGEGAP:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNLG);
                 break;
-            case ::editeng::EMBOSSED:
+            case table::BorderLineStyle::EMBOSSED:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDREMBOSS);
                 break;
-            case ::editeng::ENGRAVED:
+            case table::BorderLineStyle::ENGRAVED:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRENGRAVE);
                 break;
-            case ::editeng::OUTSET:
+            case table::BorderLineStyle::OUTSET:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDROUTSET);
                 break;
-            case ::editeng::INSET:
+            case table::BorderLineStyle::INSET:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRINSET);
                 break;
-            case ::editeng::NO_STYLE:
+            case table::BorderLineStyle::NONE:
             default:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRNONE);
                 break;

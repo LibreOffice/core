@@ -365,15 +365,15 @@ void SvXMLExportItemMapper::handleElementItem(
 bool lcl_isOdfDoubleLine( const SvxBorderLine* pLine )
 {
     bool bIsOdfDouble = false;
-    switch (pLine->GetSvxBorderStyle())
+    switch (pLine->GetBorderLineStyle())
     {
-        case ::editeng::DOUBLE:
-        case ::editeng::THINTHICK_SMALLGAP:
-        case ::editeng::THINTHICK_MEDIUMGAP:
-        case ::editeng::THINTHICK_LARGEGAP:
-        case ::editeng::THICKTHIN_SMALLGAP:
-        case ::editeng::THICKTHIN_MEDIUMGAP:
-        case ::editeng::THICKTHIN_LARGEGAP:
+        case table::BorderLineStyle::DOUBLE:
+        case table::BorderLineStyle::THINTHICK_SMALLGAP:
+        case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+        case table::BorderLineStyle::THINTHICK_LARGEGAP:
+        case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+        case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+        case table::BorderLineStyle::THICKTHIN_LARGEGAP:
             bIsOdfDouble = true;
             break;
         default:
@@ -743,36 +743,36 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
                         enum XMLTokenEnum eStyle = XML_SOLID;
                         bool bNoBorder = false;
-                        switch (pLine->GetSvxBorderStyle())
+                        switch (pLine->GetBorderLineStyle())
                         {
-                            case ::editeng::SOLID:
+                            case table::BorderLineStyle::SOLID:
                                 eStyle = XML_SOLID;
                                 break;
-                            case ::editeng::DOTTED:
+                            case table::BorderLineStyle::DOTTED:
                                 eStyle = XML_DOTTED;
                                 break;
-                            case ::editeng::DASHED:
+                            case table::BorderLineStyle::DASHED:
                                 eStyle = XML_DASHED;
                                 break;
-                            case ::editeng::DOUBLE:
-                            case ::editeng::THINTHICK_SMALLGAP:
-                            case ::editeng::THINTHICK_MEDIUMGAP:
-                            case ::editeng::THINTHICK_LARGEGAP:
-                            case ::editeng::THICKTHIN_SMALLGAP:
-                            case ::editeng::THICKTHIN_MEDIUMGAP:
-                            case ::editeng::THICKTHIN_LARGEGAP:
+                            case table::BorderLineStyle::DOUBLE:
+                            case table::BorderLineStyle::THINTHICK_SMALLGAP:
+                            case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+                            case table::BorderLineStyle::THINTHICK_LARGEGAP:
+                            case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+                            case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+                            case table::BorderLineStyle::THICKTHIN_LARGEGAP:
                                 eStyle = XML_DOUBLE;
                                 break;
-                            case ::editeng::EMBOSSED:
+                            case table::BorderLineStyle::EMBOSSED:
                                 eStyle = XML_RIDGE;
                                 break;
-                            case ::editeng::ENGRAVED:
+                            case table::BorderLineStyle::ENGRAVED:
                                 eStyle = XML_GROOVE;
                                 break;
-                            case ::editeng::INSET:
+                            case table::BorderLineStyle::INSET:
                                 eStyle = XML_INSET;
                                 break;
-                            case ::editeng::OUTSET:
+                            case table::BorderLineStyle::OUTSET:
                                 eStyle = XML_OUTSET;
                                 break;
                             default:

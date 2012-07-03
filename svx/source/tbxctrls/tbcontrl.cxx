@@ -1153,7 +1153,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
     sal_uInt16              nModifier = aFrameSet.GetModifier();
     sal_uInt8               nValidFlags = 0;
 
-    theDefLine.GuessLinesWidths(theDefLine.GetSvxBorderStyle(),
+    theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(),
             DEF_LINE_WIDTH_0);
     switch ( nSel )
     {
@@ -1344,6 +1344,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     m_aLineStyleLb.SetSourceUnit( FUNIT_TWIP );
     m_aLineStyleLb.SetNone( SVX_RESSTR(STR_NONE) );
 
+    using namespace table::BorderLineStyle;
     m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
     m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
     m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
@@ -1394,7 +1395,7 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
     if ( m_aLineStyleLb.GetSelectEntryPos( ) > 0 )
     {
         SvxBorderLine aTmp;
-        aTmp.SetSvxBorderStyle( nStyle );
+        aTmp.SetBorderLineStyle( nStyle );
         aTmp.SetWidth( 20 ); // TODO Make it depend on a width field
         aLineItem.SetLine( &aTmp );
     }

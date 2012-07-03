@@ -44,6 +44,10 @@
 #include "root.hxx"
 #include "scitems.hxx"
 
+
+using namespace ::com::sun::star;
+
+
 LotAttrCache::ENTRY::ENTRY (ScPatternAttr* p)
     : pPattAttr(p)
 {
@@ -168,12 +172,12 @@ void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLin
     switch ( nLine )
     {
         default:
-        case 0: aBL.SetSvxBorderStyle( ::editeng::NO_STYLE ); break;
+        case 0: aBL.SetBorderLineStyle(table::BorderLineStyle::NONE); break;
         case 1: aBL.SetWidth( DEF_LINE_WIDTH_1 ); break;
         case 2: aBL.SetWidth( DEF_LINE_WIDTH_2 ); break;
         case 3:
         {
-            aBL.SetSvxBorderStyle( ::editeng::DOUBLE );
+            aBL.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
             aBL.SetWidth( DEF_LINE_WIDTH_1 );
         }
         break;

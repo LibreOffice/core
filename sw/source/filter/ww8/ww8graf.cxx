@@ -1505,7 +1505,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     if( !rLineThick )
         return nOutsideThick;
 
-    ::editeng::SvxBorderStyle nIdx = ::editeng::NO_STYLE;
+    ::editeng::SvxBorderStyle nIdx = table::BorderLineStyle::NONE;
 
     sal_Int32 nLineThick=rLineThick;
     nOutsideThick = SwMSDffManager::GetEscherLineMatch(eLineStyle,
@@ -1526,21 +1526,21 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     {
     // zuerst die Einzel-Linien
     case mso_lineSimple:
-        nIdx = ::editeng::SOLID;
+        nIdx = table::BorderLineStyle::SOLID;
     break;
     // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
     case mso_lineDouble:
-        nIdx = ::editeng::DOUBLE;
+        nIdx = table::BorderLineStyle::DOUBLE;
     break;
     case mso_lineThickThin:
-        nIdx = ::editeng::THICKTHIN_SMALLGAP;
+        nIdx = table::BorderLineStyle::THICKTHIN_SMALLGAP;
     break;
     case mso_lineThinThick:
-        nIdx = ::editeng::THINTHICK_SMALLGAP;
+        nIdx = table::BorderLineStyle::THINTHICK_SMALLGAP;
     break;
     // We have no triple border, use double instead.
     case mso_lineTriple:
-        nIdx = ::editeng::DOUBLE;
+        nIdx = table::BorderLineStyle::DOUBLE;
     break;
     // no line style is set
     case (MSO_LineStyle)USHRT_MAX:
@@ -1554,23 +1554,23 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     switch( eDashing )
     {
         case mso_lineDashGEL:
-            nIdx = ::editeng::DASHED;
+            nIdx = table::BorderLineStyle::DASHED;
             break;
         case mso_lineDotGEL:
-            nIdx = ::editeng::DOTTED;
+            nIdx = table::BorderLineStyle::DOTTED;
             break;
         default:
             break;
     }
 
-    if (::editeng::NO_STYLE != nIdx)
+    if (table::BorderLineStyle::NONE != nIdx)
     {
         SvxBorderLine aLine;
         aLine.SetColor( rLineColor );
 
         aLine.SetWidth( nLineThick ); // No conversion here, nLineThick is already in twips
-        aLine.SetSvxBorderStyle(nIdx);
-        if (editeng::DOUBLE == nIdx)
+        aLine.SetBorderLineStyle(nIdx);
+        if (table::BorderLineStyle::DOUBLE == nIdx)
         {  // fdo#43249: divide width by 3 for outer line, gap, inner line
            aLine.ScaleMetrics(1, 3);
         }

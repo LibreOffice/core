@@ -93,6 +93,7 @@
 #define BRACELEFT   '{'
 #define BRACERIGHT  '}'
 
+using namespace ::com::sun::star;
 using namespace editeng;
 
 // Some helper functions
@@ -1468,49 +1469,49 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
             }
 
         case RTF_BRDRDOT:       // dotted border
-            aBrd.SetSvxBorderStyle( DOTTED );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::DOTTED);
             break;
         case RTF_BRDRDASH:      // dashed border
-            aBrd.SetSvxBorderStyle( DASHED );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::DASHED);
             break;
         case RTF_BRDRHAIR:      // hairline border
             {
-                aBrd.SetSvxBorderStyle( SOLID );
+                aBrd.SetBorderLineStyle( table::BorderLineStyle::SOLID);
                 aBrd.SetWidth( DEF_LINE_WIDTH_0 );
             }
             break;
         case RTF_BRDRDB:        // Double border
-            aBrd.SetSvxBorderStyle( DOUBLE );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
             break;
         case RTF_BRDRINSET:     // inset border
-            aBrd.SetSvxBorderStyle( INSET );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::INSET);
             break;
         case RTF_BRDROUTSET:    // outset border
-            aBrd.SetSvxBorderStyle( OUTSET );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::OUTSET);
             break;
         case RTF_BRDRTNTHSG:    // ThinThick Small gap
-            aBrd.SetSvxBorderStyle( THINTHICK_SMALLGAP );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::THINTHICK_SMALLGAP);
             break;
         case RTF_BRDRTNTHMG:    // ThinThick Medium gap
-            aBrd.SetSvxBorderStyle( THINTHICK_MEDIUMGAP );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::THINTHICK_MEDIUMGAP);
             break;
         case RTF_BRDRTNTHLG:    // ThinThick Large gap
-            aBrd.SetSvxBorderStyle( THINTHICK_LARGEGAP );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::THINTHICK_LARGEGAP);
             break;
         case RTF_BRDRTHTNSG:    // ThickThin Small gap
-            aBrd.SetSvxBorderStyle( THICKTHIN_SMALLGAP );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::THICKTHIN_SMALLGAP);
             break;
         case RTF_BRDRTHTNMG:    // ThickThin Medium gap
-            aBrd.SetSvxBorderStyle( THICKTHIN_MEDIUMGAP );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::THICKTHIN_MEDIUMGAP);
             break;
         case RTF_BRDRTHTNLG:    // ThickThin Large gap
-            aBrd.SetSvxBorderStyle( THICKTHIN_LARGEGAP );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::THICKTHIN_LARGEGAP);
             break;
         case RTF_BRDREMBOSS:    // Embossed border
-            aBrd.SetSvxBorderStyle( EMBOSSED );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::EMBOSSED);
             break;
         case RTF_BRDRENGRAVE:   // Engraved border
-            aBrd.SetSvxBorderStyle( ENGRAVED );
+            aBrd.SetBorderLineStyle(table::BorderLineStyle::ENGRAVED);
             break;
 
         case RTF_BRDRS:         // single thickness border

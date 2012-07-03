@@ -507,7 +507,8 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(!pTop);
     CPPUNIT_ASSERT(!pBottom);
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetSvxBorderStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
+            table::BorderLineStyle::SOLID);
 
     pDoc->GetBorderLines( 2, 1, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(!pLeft);
@@ -515,7 +516,8 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(!pBottom);
 
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetSvxBorderStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
+            table::BorderLineStyle::SOLID);
     CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),20L);
 
     pDoc->GetBorderLines( 2, 8, 0, &pLeft, &pTop, &pRight, &pBottom );
@@ -524,7 +526,8 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(pTop);
     CPPUNIT_ASSERT(pBottom);
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetSvxBorderStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
+            table::BorderLineStyle::SOLID);
     CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),5L);
     CPPUNIT_ASSERT(pRight->GetColor() == Color(COL_BLUE));
 
@@ -546,17 +549,20 @@ void ScFiltersTest::testBorderXLS()
 
     pDoc->GetBorderLines( 2, 3, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetSvxBorderStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
+            table::BorderLineStyle::SOLID);
     CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),6L);
 
     pDoc->GetBorderLines( 3, 5, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetSvxBorderStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
+            table::BorderLineStyle::SOLID);
     CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),18L);
 
     pDoc->GetBorderLines( 5, 7, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetSvxBorderStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
+            table::BorderLineStyle::SOLID);
     CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),24L);
 }
 

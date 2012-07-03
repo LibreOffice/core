@@ -51,6 +51,9 @@
 #include <poolfmt.hxx>
 #include <switerator.hxx>
 
+
+using namespace ::com::sun::star;
+
 /*************************************************************************
 |*
 |*  SwPageDesc::SwPageDesc()
@@ -359,7 +362,7 @@ SwPageFtnInfo::SwPageFtnInfo() :
     nMaxHeight( 0 ),
 //  aPen( PEN_SOLID ),
     nLineWidth(10),
-    eLineStyle( editeng::SOLID ),
+    eLineStyle( table::BorderLineStyle::SOLID ),
     aWidth( 25, 100 ),
     nTopDist( 57 ),         //1mm
     nBottomDist( 57 )

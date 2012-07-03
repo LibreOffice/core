@@ -4073,9 +4073,9 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             {
                 // All the border types values are available on
                 // http://msdn.microsoft.com/en-us/library/dd908142%28v=office.12%29.aspx
-                switch (rLine.GetSvxBorderStyle())
+                switch (rLine.GetBorderLineStyle())
                 {
-                    case ::editeng::SOLID:
+                    case table::BorderLineStyle::SOLID:
                         {
                             if ( rLine.GetWidth( ) == DEF_LINE_WIDTH_0 )
                                 brcType = 5;
@@ -4083,43 +4083,43 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
                                 brcType = 1;
                         }
                         break;
-                    case ::editeng::DOTTED:
+                    case table::BorderLineStyle::DOTTED:
                         brcType = 6;
                         break;
-                    case ::editeng::DASHED:
+                    case table::BorderLineStyle::DASHED:
                         brcType = 7;
                         break;
-                    case ::editeng::DOUBLE:
+                    case table::BorderLineStyle::DOUBLE:
                         brcType = 3;
                         break;
-                    case ::editeng::THINTHICK_SMALLGAP:
+                    case table::BorderLineStyle::THINTHICK_SMALLGAP:
                         brcType = 11;
                         break;
-                    case ::editeng::THINTHICK_MEDIUMGAP:
+                    case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
                         brcType = 14;
                         break;
-                    case ::editeng::THINTHICK_LARGEGAP:
+                    case table::BorderLineStyle::THINTHICK_LARGEGAP:
                         brcType = 17;
                         break;
-                    case ::editeng::THICKTHIN_SMALLGAP:
+                    case table::BorderLineStyle::THICKTHIN_SMALLGAP:
                         brcType = 12;
                         break;
-                    case ::editeng::THICKTHIN_MEDIUMGAP:
+                    case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
                         brcType = 15;
                         break;
-                    case ::editeng::THICKTHIN_LARGEGAP:
+                    case table::BorderLineStyle::THICKTHIN_LARGEGAP:
                         brcType = 18;
                         break;
-                    case ::editeng::EMBOSSED:
+                    case table::BorderLineStyle::EMBOSSED:
                         brcType = 24;
                         break;
-                    case ::editeng::ENGRAVED:
+                    case table::BorderLineStyle::ENGRAVED:
                         brcType = 25;
                         break;
-                    case ::editeng::OUTSET:
+                    case table::BorderLineStyle::OUTSET:
                         brcType = 26;
                         break;
-                    case ::editeng::INSET:
+                    case table::BorderLineStyle::INSET:
                         brcType = 27;
                         break;
                     default:
@@ -4145,9 +4145,10 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             nWidth = ( nWidth + 7 ) / 15;
             if( nWidth > 5 )
                 nWidth = 5;
-            if ( ::editeng::DOTTED == rLine.GetSvxBorderStyle() )
+            ::editeng::SvxBorderStyle const eStyle(rLine.GetBorderLineStyle());
+            if (table::BorderLineStyle::DOTTED == eStyle)
                 nWidth = 6;
-            else if ( ::editeng::DASHED == rLine.GetSvxBorderStyle() )
+            else if (table::BorderLineStyle::DASHED == eStyle)
                 nWidth = 7;
         }
 

@@ -56,6 +56,8 @@
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/clippedborderlineprimitive2d.hxx>
 
+
+using namespace ::com::sun::star;
 using namespace editeng;
 
 namespace svx {
@@ -1185,7 +1187,7 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
     sal_uInt16 nDist = rBorder.GetDistance();
     sal_uInt16 nSecn = rBorder.GetInWidth();
 
-    mnType = rBorder.GetSvxBorderStyle();
+    mnType = rBorder.GetBorderLineStyle();
     if( !nSecn )    // no or single frame border
     {
         Set( SCALEVALUE( nPrim ), 0, 0 );
@@ -1232,7 +1234,7 @@ void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWid
     else
     {
         Clear();
-        mnType = SOLID;
+        mnType = table::BorderLineStyle::SOLID;
     }
 }
 

@@ -94,6 +94,7 @@
 using namespace ::editeng;
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::table::BorderLineStyle;
 
 
 // Conversion for UNO
@@ -145,7 +146,7 @@ namespace
                << l.GetDistance();
 
         if (version >= BORDER_LINE_WITH_STYLE_VERSION)
-               stream << static_cast<sal_uInt16>(l.GetSvxBorderStyle());
+               stream << static_cast<sal_uInt16>(l.GetBorderLineStyle());
 
         return stream;
     }
@@ -153,7 +154,8 @@ namespace
     /// Creates a border line from a stream.
     SvxBorderLine CreateBorderLine(SvStream &stream, sal_uInt16 version)
     {
-        sal_uInt16 nOutline, nInline, nDistance, nStyle = NO_STYLE;
+        sal_uInt16 nOutline, nInline, nDistance;
+        sal_uInt16 nStyle = NONE;
         Color aColor;
         stream >> aColor >> nOutline >> nInline >> nDistance;
 
@@ -161,7 +163,7 @@ namespace
             stream >> nStyle;
 
         SvxBorderLine border(&aColor);
-        border.GuessLinesWidths(static_cast<SvxBorderStyle>(nStyle), nOutline, nInline, nDistance);
+        border.GuessLinesWidths(nStyle, nOutline, nInline, nDistance);
         return border;
     }
 
@@ -1696,7 +1698,7 @@ table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, sal_Boo
         aLine.InnerLineWidth = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetInWidth() ): pLine->GetInWidth() );
         aLine.OuterLineWidth = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetOutWidth()): pLine->GetOutWidth() );
         aLine.LineDistance   = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetDistance()): pLine->GetDistance() );
-        aLine.LineStyle      = pLine->GetSvxBorderStyle();
+        aLine.LineStyle      = pLine->GetBorderLineStyle();
         aLine.LineWidth      = sal_uInt32( bConvert ? TWIP_TO_MM100( pLine->GetWidth( ) ) : pLine->GetWidth( ) );
     }
     else
@@ -1784,14 +1786,14 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_B
     rSvxLine.SetColor(   Color(rLine.Color));
     if ( bGuessWidth )
     {
-        rSvxLine.GuessLinesWidths( rSvxLine.GetSvxBorderStyle(),
+        rSvxLine.GuessLinesWidths( rSvxLine.GetBorderLineStyle(),
                 sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ),
                 sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
                 sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
     }
     else
     {
-        if (DOUBLE == rSvxLine.GetSvxBorderStyle())
+        if (DOUBLE == rSvxLine.GetBorderLineStyle())
         {   // fdo#46112: divide width by 3 for outer line, gap, inner line
            rSvxLine.ScaleMetrics(1, 3);
         }
@@ -1812,54 +1814,12 @@ sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rL
 sal_Bool
 SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
-    SvxBorderStyle nStyle = NO_STYLE;
-    switch ( rLine.LineStyle )
-    {
-        default:
-        case table::BorderLineStyle::SOLID:
-            nStyle = SOLID;
-            break;
-        case table::BorderLineStyle::DOTTED:
-            nStyle = DOTTED;
-            break;
-        case table::BorderLineStyle::DASHED:
-            nStyle = DASHED;
-            break;
-        case table::BorderLineStyle::DOUBLE:
-            nStyle = DOUBLE;
-            break;
-        case table::BorderLineStyle::THINTHICK_SMALLGAP:
-            nStyle = THINTHICK_SMALLGAP;
-            break;
-        case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
-            nStyle = THINTHICK_MEDIUMGAP;
-            break;
-        case table::BorderLineStyle::THINTHICK_LARGEGAP:
-            nStyle = THINTHICK_LARGEGAP;
-            break;
-        case table::BorderLineStyle::THICKTHIN_SMALLGAP:
-            nStyle = THICKTHIN_SMALLGAP;
-            break;
-        case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
-            nStyle = THICKTHIN_MEDIUMGAP;
-            break;
-        case table::BorderLineStyle::THICKTHIN_LARGEGAP:
-            nStyle = THICKTHIN_LARGEGAP;
-            break;
-        case table::BorderLineStyle::EMBOSSED:
-            nStyle = EMBOSSED;
-            break;
-        case table::BorderLineStyle::ENGRAVED:
-            nStyle = ENGRAVED;
-            break;
-        case table::BorderLineStyle::OUTSET:
-            nStyle = OUTSET;
-            break;
-        case table::BorderLineStyle::INSET:
-            nStyle = INSET;
-            break;
-    }
-    rSvxLine.SetSvxBorderStyle( nStyle );
+    SvxBorderStyle const nStyle =
+        (rLine.LineStyle < 0 || INSET < rLine.LineStyle)
+        ? SOLID     // default
+        : rLine.LineStyle;
+
+    rSvxLine.SetBorderLineStyle( nStyle );
 
     sal_Bool bGuessWidth = sal_True;
     if ( rLine.LineWidth )
@@ -1989,18 +1949,17 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 drawing::LineStyle eDrawingStyle;
                 rVal >>= eDrawingStyle;
-                editeng::SvxBorderStyle eBorderStyle = editeng::NO_STYLE;
+                editeng::SvxBorderStyle eBorderStyle = NONE;
                 switch ( eDrawingStyle )
                 {
                     default:
                     case drawing::LineStyle_NONE:
-                        eBorderStyle = editeng::NO_STYLE;
                         break;
                     case drawing::LineStyle_SOLID:
-                        eBorderStyle = editeng::SOLID;
+                        eBorderStyle = SOLID;
                         break;
                     case drawing::LineStyle_DASH:
-                        eBorderStyle = editeng::DASHED;
+                        eBorderStyle = DASHED;
                         break;
                 }
 
@@ -2010,7 +1969,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 {
                     editeng::SvxBorderLine* pLine = const_cast< editeng::SvxBorderLine* >( GetLine( aBorders[n] ) );
                     if( pLine )
-                        pLine->SetSvxBorderStyle( eBorderStyle );
+                        pLine->SetBorderLineStyle( eBorderStyle );
                 }
                 return sal_True;
             }
@@ -2731,7 +2690,7 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
         Color aColor;
         rStrm >> aColor >> nOutline >> nInline >> nDistance;
         SvxBorderLine aBorder( &aColor );
-        aBorder.GuessLinesWidths( NO_STYLE, nOutline, nInline, nDistance );
+        aBorder.GuessLinesWidths(NONE, nOutline, nInline, nDistance);
 
         switch( cLine )
         {
@@ -3276,7 +3235,7 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
         {
             case MID_FG_COLOR:      pLine->SetColor( Color(nVal) ); break;
             case MID_LINE_STYLE:
-                pLine->SetSvxBorderStyle(static_cast<SvxBorderStyle>(nVal));
+                pLine->SetBorderLineStyle(static_cast<SvxBorderStyle>(nVal));
             break;
             default:
                 OSL_FAIL( "Wrong MemberId" );
@@ -3361,7 +3320,7 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     if( nOutline )
     {
         SvxBorderLine aLine( &aColor );
-        aLine.GuessLinesWidths( NO_STYLE, nOutline, nInline, nDistance );
+        aLine.GuessLinesWidths(NONE, nOutline, nInline, nDistance);
         _pLine->SetLine( &aLine );
     }
     return _pLine;

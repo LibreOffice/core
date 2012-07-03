@@ -108,6 +108,9 @@
 
 #include "scabstdlg.hxx"
 
+
+using namespace ::com::sun::star;
+
 namespace {
 
 SvxCellHorJustify lclConvertSlotToHAlign( sal_uInt16 nSlot )
@@ -1511,8 +1514,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 
                         if ( pDefLine )
                         {
-                            pDefLine->SetSvxBorderStyle(
-                                    pLine->GetSvxBorderStyle());
+                            pDefLine->SetBorderLineStyle(
+                                    pLine->GetBorderLineStyle());
                             pDefLine->SetWidth( pLine->GetWidth( ) );
                             pTabViewShell->SetSelectionFrameLines( pDefLine, false );
                         }
@@ -1526,7 +1529,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     else
                     {
                         Color           aColorBlack( COL_BLACK );
-                        ::editeng::SvxBorderLine   aDefLine( &aColorBlack, 20, ::editeng::SOLID );
+                        ::editeng::SvxBorderLine aDefLine( &aColorBlack, 20,
+                                table::BorderLineStyle::SOLID );
                         pTabViewShell->SetDefaultFrameLine( &aDefLine );
                         pTabViewShell->SetSelectionFrameLines( NULL, false );
                     }
@@ -1548,7 +1552,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     }
                     else
                     {
-                        ::editeng::SvxBorderLine   aDefLine( &rColor, 20, ::editeng::SOLID );
+                        ::editeng::SvxBorderLine aDefLine( &rColor, 20,
+                                table::BorderLineStyle::SOLID );
                         pTabViewShell->SetDefaultFrameLine( &aDefLine );
                         pTabViewShell->SetSelectionFrameLines( &aDefLine, false );
                     }
