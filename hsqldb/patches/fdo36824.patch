@@ -1,0 +1,11 @@
+--- misc/hsqldb/src/org/hsqldb/Expression.java	2012-07-03 19:49:00.000000000 +0200
++++ misc/build/hsqldb/src/org/hsqldb/Expression.java	2012-07-03 19:39:00.000000000 +0200
+@@ -1552,7 +1552,7 @@
+             return columnQuoted;
+         }
+ 
+-        return false;
++        return true;
+     }
+ 
+     /**
