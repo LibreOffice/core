@@ -386,7 +386,7 @@ connect_pipe( rtl_uString *pPipePath )
     fcntl( fd, F_SETFD, FD_CLOEXEC );
 
     addr.sun_family = AF_UNIX;
-    strncpy( addr.sun_path, rtl_string_getStr( pPipeStr ), sizeof( addr.sun_path ) );
+    strncpy( addr.sun_path, rtl_string_getStr( pPipeStr ), sizeof( addr.sun_path ) - 1 );
     rtl_string_release( pPipeStr );
 
 /* cut / paste from osl's pipe.c */
