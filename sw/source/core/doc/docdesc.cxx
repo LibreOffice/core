@@ -419,6 +419,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     // Take over the page attributes.
     ::lcl_DescSetAttr( rChged.GetMaster(), pDesc->GetMaster() );
     ::lcl_DescSetAttr( rChged.GetLeft(), pDesc->GetLeft() );
+    ::lcl_DescSetAttr( rChged.GetFirst(), pDesc->GetFirst() );
 
     // If the FootnoteInfo changes, the pages are triggered.
     if( !(pDesc->GetFtnInfo() == rChged.GetFtnInfo()) )
@@ -430,6 +431,9 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         }
         {
             pDesc->GetLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
+        }
+        {
+            pDesc->GetFirst().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
         }
     }
     SetModified();
@@ -573,6 +577,7 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
 
         pNew->GetMaster().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
         pNew->GetLeft().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
+        pNew->GetFirst().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
     }
     aPageDescs.push_back( pNew );
 
