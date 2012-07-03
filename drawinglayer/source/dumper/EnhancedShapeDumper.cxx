@@ -110,6 +110,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= aSecondLightDirection)
             dumpSecondLightDirectionAsElement(aSecondLightDirection);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Metal");
+        sal_Bool bMetal;
+        if(anotherAny >>= bMetal)
+            dumpMetalAsAttribute(bMetal);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("ShadeMode");
+        drawing::ShadeMode eShadeMode;
+        if(anotherAny >>= eShadeMode)
+            dumpShadeModeAsAttribute(eShadeMode);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -222,6 +234,35 @@ void EnhancedShapeDumper::dumpSecondLightDirectionAsElement(drawing::Direction3D
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "SecondLightDirection" ));
     dumpDirection3D(aSecondLightDirection);
     xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpMetalAsAttribute(sal_Bool bMetal)
+{
+    if(bMetal)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("metal"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("metal"), "%s", "false");
+}
+
+void EnhancedShapeDumper::dumpShadeModeAsAttribute(drawing::ShadeMode eShadeMode)
+{
+    switch(eShadeMode)
+    {
+        case drawing::ShadeMode_FLAT:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "FLAT");
+            break;
+        case drawing::ShadeMode_PHONG:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "PHONG");
+            break;
+        case drawing::ShadeMode_SMOOTH:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "SMOOTH");
+            break;
+        case drawing::ShadeMode_DRAFT:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "DRAFT");
+            break;
+        default:
+            break;
+    }
 }
 
 

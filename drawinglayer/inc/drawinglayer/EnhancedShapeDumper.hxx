@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -63,6 +64,8 @@ public:
     void dumpSecondLightLevelAsAttribute(double aSecondLightLevel);
     void dumpFirstLightDirectionAsElement(com::sun::star::drawing::Direction3D aFirstLightDirection);
     void dumpSecondLightDirectionAsElement(com::sun::star::drawing::Direction3D aSecondLightDirection);
+    void dumpMetalAsAttribute(sal_Bool bMetal);
+    void dumpShadeModeAsAttribute(com::sun::star::drawing::ShadeMode eShadeMode);
 
 private:
     xmlTextWriterPtr xmlWriter;
