@@ -1559,15 +1559,6 @@ sub get_options {
         print_error("\"--html_path\" switch is used only with \"--html\"") if ($html_path);
         print_error("\"--dontgraboutput\" switch is used only with \"--html\"") if ($dont_grab_output);
     }
-    else
-    {
-        # Desperate HACK to get readable output from buildbot when built is terminated by buildbot
-        # due to timeout.
-        if (defined $ENV{"BUILD_TYPE"} && ($ENV{"BUILD_TYPE"} =~ /\bSWEXT\b/))
-        {
-            $html = 0;
-        }
-    }
     if ((scalar keys %exclude_branches) && !$build_all_parents) {
         print_error("\"--exclude_branch_from\" is not applicable for one module builds!!");
     };

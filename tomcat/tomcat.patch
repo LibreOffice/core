@@ -1,29 +1,19 @@
 --- misc/apache-tomcat-5.5.35-src/servletapi/build.xml	Thu Jun 19 16:03:59 2008
 +++ misc/build/apache-tomcat-5.5.35-src/servletapi/build.xml	Thu Jun 19 15:56:18 2008
-@@ -1,1 +1,31 @@
+@@ -1,1 +1,21 @@
 -dummy
-+<project name="jsr152 and jsr154 in Apache OpenOffice" default="debuild" basedir=".">
++<project name="jsr154 in Apache OpenOffice" default="debuild" basedir=".">
 +
 +  <target name="debuild"
-+   description="Build jsr154 and jsr152 for Apache OpenOffice (Default)">
++   description="Build jsr154 for Apache OpenOffice (Default)">
 +    <echo message="Building Servlet 2.4 API"/>
 +    <ant antfile="jsr154/build.xml"
-+         target="dist"
-+         inheritAll="false"
-+    />
-+    <echo message="Building JSP 2.0 API"/>
-+    <ant antfile="jsr152/build.xml"
-+         target="dist"
++         target="jar"
 +         inheritAll="false"
 +    />
 +  </target>
 +
 +  <target name="clean" description="Clean">
-+    <echo message="Cleaning JSP 2.0 API"/>
-+    <ant antfile="jsr152/build.xml"
-+         target="clean"
-+         inheritAll="false"
-+    />
 +    <echo message="Cleaning Servlet 2.4 API"/>
 +    <ant antfile="jsr154/build.xml"
 +         target="clean"
