@@ -53,6 +53,8 @@ public:
     void dumpBrightnessAsAttribute(double aBrightness);
     void dumpDepthAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepth);
     void dumpDiffusionAsAttribute(double aDiffusion);
+    void dumpNumberOfLineSegmentsAsAttribute(sal_Int32 aNumberOfLineSegments);
+    void dumpLightFaceAsAttribute(sal_Bool bLightFace);
 
 private:
     xmlTextWriterPtr xmlWriter;

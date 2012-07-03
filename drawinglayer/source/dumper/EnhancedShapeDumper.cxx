@@ -62,6 +62,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= aDiffusion)
             dumpDiffusionAsAttribute(aDiffusion);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("NumberOfLineSegments");
+        sal_Int32 aNumberOfLineSegments;
+        if(anotherAny >>= aNumberOfLineSegments)
+            dumpNumberOfLineSegmentsAsAttribute(aNumberOfLineSegments);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("LightFace");
+        sal_Bool bLightFace;
+        if(anotherAny >>= bLightFace)
+            dumpLightFaceAsAttribute(bLightFace);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -115,3 +127,18 @@ void EnhancedShapeDumper::dumpDiffusionAsAttribute(double aDiffusion)
 {
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("diffusion"), "%f", aDiffusion);
 }
+
+void EnhancedShapeDumper::dumpNumberOfLineSegmentsAsAttribute(sal_Int32 aNumberOfLineSegments)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("numberOfLineSegments"), "%" SAL_PRIdINT32, aNumberOfLineSegments);
+}
+
+void EnhancedShapeDumper::dumpLightFaceAsAttribute(sal_Bool bLightFace)
+{
+    if(bLightFace)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "false");
+}
+
+
