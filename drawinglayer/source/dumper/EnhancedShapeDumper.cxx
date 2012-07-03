@@ -158,6 +158,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= eProjectionMode)
             dumpProjectionModeAsAttribute(eProjectionMode);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("ViewPoint");
+        drawing::Position3D aViewPoint;
+        if(anotherAny >>= aViewPoint)
+            dumpViewPointAsElement(aViewPoint);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Origin");
+        drawing::EnhancedCustomShapeParameterPair aOrigin;
+        if(anotherAny >>= aOrigin)
+            dumpOriginAsElement(aOrigin);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -345,6 +357,22 @@ void EnhancedShapeDumper::dumpProjectionModeAsAttribute(drawing::ProjectionMode 
         default:
             break;
     }
+}
+
+void EnhancedShapeDumper::dumpViewPointAsElement(drawing::Position3D aViewPoint)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ViewPoint" ));
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("positionX"), "%f", aViewPoint.PositionX);
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("positionY"), "%f", aViewPoint.PositionY);
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("positionZ"), "%f", aViewPoint.PositionZ);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpOriginAsElement(drawing::EnhancedCustomShapeParameterPair aOrigin)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Origin" ));
+    dumpEnhancedCustomShapeParameterPair(aOrigin);
+    xmlTextWriterEndElement( xmlWriter );
 }
 
 

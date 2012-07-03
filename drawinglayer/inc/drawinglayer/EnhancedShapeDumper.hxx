@@ -33,6 +33,7 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/Position3D.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -73,6 +74,8 @@ public:
     void dumpSkewAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkew);
     void dumpSpecularityAsAttribute(double aSpecularity);
     void dumpProjectionModeAsAttribute(com::sun::star::drawing::ProjectionMode eProjectionMode);
+    void dumpViewPointAsElement(com::sun::star::drawing::Position3D aViewPoint);
+    void dumpOriginAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aOrigin);
 
 private:
     xmlTextWriterPtr xmlWriter;
