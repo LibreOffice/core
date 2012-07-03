@@ -164,7 +164,6 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;
     SfxItemPool &rPool = GetPool();
-    String asal_TrueStr('1');
 
     const sal_uInt16 *pRanges = rSet.GetRanges();
     SvtSaveOptions aSaveOptions;
@@ -819,10 +818,10 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
         DBG_ASSERT(pItem->ISA(SfxAllEnumItem), "AllEnumItem expected");
         const SfxAllEnumItem* pEnumItem = (const SfxAllEnumItem *)pItem;
         sal_uInt32 nCount = pEnumItem->GetValueCount();
-        String aNoChangeStr( ' ' );
+        rtl::OUString aNoChangeStr( ' ' );
         for( sal_uInt32 nPath=0; nPath<nCount; ++nPath )
         {
-            String sValue = pEnumItem->GetValueTextByPos((sal_uInt16)nPath);
+            rtl::OUString sValue = pEnumItem->GetValueTextByPos((sal_uInt16)nPath);
             if ( sValue != aNoChangeStr )
             {
                 switch( nPath )
