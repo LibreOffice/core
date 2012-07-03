@@ -309,7 +309,7 @@ void SwHTMLWriter::CollectFlyFrms()
     ASSERT( HTML_CFG_MAX+1 == MAX_BROWSERS,
             "number of browser configurations has changed" );
 
-    sal_uInt8 nSz = (sal_uInt8)Min( pDoc->GetSpzFrmFmts()->Count(), sal_uInt16(255) );
+    // sal_uInt8 nSz = (sal_uInt8)Min( pDoc->GetSpzFrmFmts()->Count(), sal_uInt16(255) );
     SwPosFlyFrms aFlyPos(pDoc->GetAllFlyFmts(bWriteAll ? 0 : pCurPam, sal_True));
 
     for(SwPosFlyFrms::const_iterator aIter(aFlyPos.begin()); aIter != aFlyPos.end(); aIter++)
