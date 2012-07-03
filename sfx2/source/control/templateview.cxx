@@ -36,6 +36,7 @@ using namespace drawinglayer::primitive2d;
 TemplateView::TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates)
     : ThumbnailView(pParent,WB_VSCROLL),
       maCloseImg(SfxResId(IMG_TEMPLATE_VIEW_CLOSE)),
+      mbRenderTitle(true),
       mnRegionId(0),
       mpDocTemplates(pTemplates),
       mpEditName(new Edit(this, WB_BORDER | WB_HIDE))
@@ -60,27 +61,36 @@ void TemplateView::Paint (const Rectangle &rRect)
 {
     ThumbnailView::Paint(rRect);
 
-    Primitive2DSequence aSeq(2);
+    int nCount = 0;
+    int nMaxCount = 1;
+
+    if (mbRenderTitle)
+        ++nMaxCount;
+
+    Primitive2DSequence aSeq(nMaxCount);
     TextLayouterDevice aTextDev;
 
     // Draw centered region name
     Point aPos;
     Size aWinSize = GetOutputSizePixel();
 
-    aPos.X() = (aWinSize.getWidth() - aTextDev.getTextWidth(maFolderName,0,maFolderName.getLength()))/2;
-    aPos.Y() = aTextDev.getTextHeight() + (mnHeaderHeight - aTextDev.getTextHeight())/2;
+    if (mbRenderTitle)
+    {
+        aPos.X() = (aWinSize.getWidth() - aTextDev.getTextWidth(maFolderName,0,maFolderName.getLength()))/2;
+        aPos.Y() = aTextDev.getTextHeight() + (mnHeaderHeight - aTextDev.getTextHeight())/2;
 
-    basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
-                mpItemAttrs->aFontSize.getX(), mpItemAttrs->aFontSize.getY(),
-                double( aPos.X() ), double( aPos.Y() ) ) );
+        basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
+                    mpItemAttrs->aFontSize.getX(), mpItemAttrs->aFontSize.getY(),
+                    double( aPos.X() ), double( aPos.Y() ) ) );
 
-    aSeq[0] = Primitive2DReference(
-                new TextSimplePortionPrimitive2D(aTextMatrix,
-                                                 maFolderName,0,maFolderName.getLength(),
-                                                 std::vector< double >( ),
-                                                 mpItemAttrs->aFontAttr,
-                                                 com::sun::star::lang::Locale(),
-                                                 Color(COL_BLACK).getBColor() ) );
+        aSeq[nCount++] = Primitive2DReference(
+                    new TextSimplePortionPrimitive2D(aTextMatrix,
+                                                     maFolderName,0,maFolderName.getLength(),
+                                                     std::vector< double >( ),
+                                                     mpItemAttrs->aFontAttr,
+                                                     com::sun::star::lang::Locale(),
+                                                     Color(COL_BLACK).getBColor() ) );
+    }
 
     // Draw close icon
     Size aImageSize = maCloseImg.GetSizePixel();
@@ -88,7 +98,7 @@ void TemplateView::Paint (const Rectangle &rRect)
     aPos.Y() = (mnHeaderHeight - aImageSize.Height())/2;
     aPos.X() = aWinSize.Width() - aImageSize.Width() - aPos.Y();
 
-    aSeq[1] = Primitive2DReference( new FillBitmapPrimitive2D(
+    aSeq[nCount] = Primitive2DReference( new FillBitmapPrimitive2D(
                                         createTranslateB2DHomMatrix(aPos.X(),aPos.Y()),
                                         FillBitmapAttribute(maCloseImg.GetBitmapEx(),
                                                             B2DPoint(0,0),
@@ -161,6 +171,7 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
         if (mpEditName->IsVisible())
         {
             mpEditName->Show(false);
+            mbRenderTitle = true;
 
             // Update name if its not empty
             rtl::OUString aTmp = mpEditName->GetText();
@@ -203,7 +214,12 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
             Rectangle aTitleRect(aPos,Size(fTextWidth,aTextDev.getTextHeight()));
 
             if (aTitleRect.IsInside(rMEvt.GetPosPixel()))
+            {
+                mbRenderTitle = false;
+
+                Invalidate();
                 mpEditName->Show();
+            }
         }
     }
 

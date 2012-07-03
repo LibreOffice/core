@@ -56,6 +56,7 @@ protected:
 private:
 
     Image maCloseImg;
+    bool mbRenderTitle;
     sal_uInt16 mnRegionId;
     rtl::OUString maFolderName;
     SfxDocumentTemplates *mpDocTemplates;
