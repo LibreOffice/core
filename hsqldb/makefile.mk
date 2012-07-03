@@ -58,7 +58,8 @@ CONVERTFILES=build$/build.xml \
 PATCH_FILES=patches$/i96823.patch \
             patches$/i97032.patch \
             patches$/i103528.patch \
-            patches$/i104901.patch
+            patches$/i104901.patch \
+            patches$/fdo36824.patch
 
 .IF "$(JAVANUMVER:s/.//)" >= "000100060000"
 PATCH_FILES+= \
