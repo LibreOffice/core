@@ -431,7 +431,8 @@ char* NSP_getProductName()
            (NULL == (pEnd = strchr( pStart, '\r' ))))
             continue;
         *pEnd = 0;
-        strcpy(productName, pStart);
+        if (static_cast<size_t>(pEnd - pStart) <= sizeof(productName))
+            strcpy(productName, pStart);
     }
     fclose(fp);
     if ((*productName == 0) ||
