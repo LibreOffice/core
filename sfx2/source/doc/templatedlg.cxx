@@ -122,6 +122,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
 
     // Set toolbox button bits
+    mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,false);
     mpViewBar->SetItemBits(TBI_TEMPLATE_CREATE, TIB_DROPDOWNONLY);
     mpActionBar->SetItemBits(TBI_TEMPLATE_ACTION, TIB_DROPDOWNONLY);
     mpTemplateBar->SetItemBits(TBI_TEMPLATE_MOVE,TIB_DROPDOWNONLY);
@@ -370,11 +371,17 @@ IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pIt
 {
     if (pItem->isSelected())
     {
+        if (maSelFolders.empty())
+            mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,true);
+
         maSelFolders.insert(pItem);
     }
     else
     {
         maSelFolders.erase(pItem);
+
+        if (maSelFolders.empty())
+            mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,false);
     }
 
     return 0;
