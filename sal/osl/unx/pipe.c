@@ -279,7 +279,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     OSL_TRACE("osl_createPipe : Pipe Name '%s'",name);
 
     addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, name, sizeof(addr.sun_path));
+    strncpy(addr.sun_path, name, sizeof(addr.sun_path) - 1);
 #if defined(FREEBSD)
     len = SUN_LEN(&addr);
 #else
@@ -321,7 +321,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             chmod(name,S_IRWXU | S_IRWXG |S_IRWXO);
 
 
-        strncpy(pPipe->m_Name, name, sizeof(pPipe->m_Name));
+        strncpy(pPipe->m_Name, name, sizeof(pPipe->m_Name) - 1);
 
         if ( listen(pPipe->m_Socket, 5) < 0 )
         {
@@ -409,7 +409,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         OSL_TRACE("osl_destroyPipe : Pipe Name '%s'",pPipe->m_Name);
 
         addr.sun_family = AF_UNIX;
-        strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path));
+        strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path) - 1);
         len = sizeof(addr);
 
         nRet = connect( fd, (struct sockaddr *)&addr, len);
