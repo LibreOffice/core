@@ -98,6 +98,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= aSecondLightLevel)
             dumpSecondLightLevelAsAttribute(aSecondLightLevel);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("FirstLightDirection");
+        drawing::Direction3D aFirstLightDirection;
+        if(anotherAny >>= aFirstLightDirection)
+            dumpFirstLightDirectionAsElement(aFirstLightDirection);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("SecondLightDirection");
+        drawing::Direction3D aSecondLightDirection;
+        if(anotherAny >>= aSecondLightDirection)
+            dumpSecondLightDirectionAsElement(aSecondLightDirection);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -196,6 +208,20 @@ void EnhancedShapeDumper::dumpDirection3D(drawing::Direction3D aDirection3D)
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionX"), "%f", aDirection3D.DirectionX);
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionY"), "%f", aDirection3D.DirectionY);
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionZ"), "%f", aDirection3D.DirectionZ);
+}
+
+void EnhancedShapeDumper::dumpFirstLightDirectionAsElement(drawing::Direction3D aFirstLightDirection)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FirstLightDirection" ));
+    dumpDirection3D(aFirstLightDirection);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpSecondLightDirectionAsElement(drawing::Direction3D aSecondLightDirection)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "SecondLightDirection" ));
+    dumpDirection3D(aSecondLightDirection);
+    xmlTextWriterEndElement( xmlWriter );
 }
 
 

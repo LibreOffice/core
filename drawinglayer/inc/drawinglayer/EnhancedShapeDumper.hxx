@@ -61,6 +61,8 @@ public:
     void dumpSecondLightHarshAsAttribute(sal_Bool bSecondLightHarsh);
     void dumpFirstLightLevelAsAttribute(double aFirstLightLevel);
     void dumpSecondLightLevelAsAttribute(double aSecondLightLevel);
+    void dumpFirstLightDirectionAsElement(com::sun::star::drawing::Direction3D aFirstLightDirection);
+    void dumpSecondLightDirectionAsElement(com::sun::star::drawing::Direction3D aSecondLightDirection);
 
 private:
     xmlTextWriterPtr xmlWriter;
