@@ -101,14 +101,12 @@ DBG_NAME( Menu )
 #ifdef OS2
 
 #include "svsys.h"
+#include "os2/salmenu.h"
 
 // return sal_True if hilite should be executed: left mouse button down
 // or xwp mouse hook enabled
 static sal_Bool ImplHilite( const MouseEvent& rMEvt )
 {
-#if 1 // until hilite code reworked
-    return sal_True;
-#else
     static sal_Bool init = sal_False;
     static HOOKCONFIG hc;
 
@@ -126,7 +124,6 @@ static sal_Bool ImplHilite( const MouseEvent& rMEvt )
         return sal_True;
     // return xwp flag
     return hc.fSlidingMenus;
-#endif
 }
 
 #endif

@@ -27,6 +27,47 @@
 #include <vcl/bitmap.hxx>
 #include <salmenu.hxx>
 
+#define INIAPP_XWPHOOK              "XWorkplace:Hook"
+#define INIKEY_HOOK_CONFIG          "Config"
+
+typedef struct _HOOKCONFIG
+{
+    PM_BOOL         __fSlidingFocus;
+    ULONG           __ulSlidingFocusDelay;
+    PM_BOOL         __fSlidingBring2Top;
+    PM_BOOL         __fSlidingIgnoreDesktop;
+    PM_BOOL         __fSlidingIgnoreSeamless;
+    HOBJECT         ahobjDummy[4];
+    PM_BYTE         bMonitorDrives[30];
+    PM_BOOL         fChordWinList;
+    PM_BOOL         fSysMenuMB2TitleBar;
+    PM_BOOL         fMB3Scroll;
+    PM_BOOL         fMB3ScrollReverse;
+    USHORT          usScrollMode;
+    USHORT          usMB3ScrollMin;
+    SHORT           sAmplification;
+    PM_BOOL         __fAutoHideMouse;
+    ULONG           __ulAutoHideDelay;
+    PM_BOOL         __fGlobalHotkeys;
+    PM_BOOL         fRemoved1, fRemoved2;
+    PM_BOOL         fSlidingMenus;
+    ULONG           ulSubmenuDelay;
+    PM_BOOL         fMenuImmediateHilite;
+    PM_BOOL         fMB3Click2MB1DblClk;
+    HOBJECT         ahobjHotCornerObjects[8];
+    PM_BOOL         fConditionalCascadeSensitive;
+    PM_BOOL         fRemoved3;
+    ULONG           ulCornerSensitivity;
+    PM_BOOL         fMB3AutoScroll;
+    PM_BOOL         fMB3Push2Bottom;
+    ULONG           __ulAutoHideFlags;
+    PM_BOOL         __fAutoMoveMouse;
+    ULONG           __ulAutoMoveFlags;
+    ULONG           __ulAutoMoveDelay;
+    ULONG           __ulMouseMappingsCount;
+} HOOKCONFIG, *PHOOKCONFIG;
+#pragma pack()
+
 class Os2SalMenu : public SalMenu
 {
 public:
