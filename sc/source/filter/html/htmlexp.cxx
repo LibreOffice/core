@@ -92,7 +92,9 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <rtl/strbuf.hxx>
 
+
 using ::editeng::SvxBorderLine;
+using namespace ::com::sun::star;
 
 //========================================================================
 
@@ -520,36 +522,36 @@ rtl::OString ScHTMLExport::BorderToStyle(const char* pBorderName,
             std::max(int(nWidth / TWIPS_PER_PIXEL), 1) : 0;
         aOut.append(static_cast<sal_Int32>(nPxWidth)).
             append(RTL_CONSTASCII_STRINGPARAM("px "));
-        switch (pLine->GetSvxBorderStyle())
+        switch (pLine->GetBorderLineStyle())
         {
-            case ::editeng::SOLID:
+            case table::BorderLineStyle::SOLID:
                 aOut.append(RTL_CONSTASCII_STRINGPARAM("solid"));
                 break;
-            case ::editeng::DOTTED:
+            case table::BorderLineStyle::DOTTED:
                 aOut.append(RTL_CONSTASCII_STRINGPARAM("dotted"));
                 break;
-            case ::editeng::DASHED:
+            case table::BorderLineStyle::DASHED:
                 aOut.append(RTL_CONSTASCII_STRINGPARAM("dashed"));
                 break;
-            case ::editeng::DOUBLE:
-            case ::editeng::THINTHICK_SMALLGAP:
-            case ::editeng::THINTHICK_MEDIUMGAP:
-            case ::editeng::THINTHICK_LARGEGAP:
-            case ::editeng::THICKTHIN_SMALLGAP:
-            case ::editeng::THICKTHIN_MEDIUMGAP:
-            case ::editeng::THICKTHIN_LARGEGAP:
+            case table::BorderLineStyle::DOUBLE:
+            case table::BorderLineStyle::THINTHICK_SMALLGAP:
+            case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+            case table::BorderLineStyle::THINTHICK_LARGEGAP:
+            case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+            case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+            case table::BorderLineStyle::THICKTHIN_LARGEGAP:
                 aOut.append(RTL_CONSTASCII_STRINGPARAM("double"));
                 break;
-            case ::editeng::EMBOSSED:
+            case table::BorderLineStyle::EMBOSSED:
                 aOut.append(RTL_CONSTASCII_STRINGPARAM("ridge"));
                 break;
-            case ::editeng::ENGRAVED:
+            case table::BorderLineStyle::ENGRAVED:
                 aOut.append(RTL_CONSTASCII_STRINGPARAM("groove"));
                 break;
-            case ::editeng::OUTSET:
+            case table::BorderLineStyle::OUTSET:
                 aOut.append(RTL_CONSTASCII_STRINGPARAM("outset"));
                 break;
-            case ::editeng::INSET:
+            case table::BorderLineStyle::INSET:
                 aOut.append(RTL_CONSTASCII_STRINGPARAM("inset"));
                 break;
             default:

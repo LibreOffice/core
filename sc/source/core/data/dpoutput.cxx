@@ -326,7 +326,7 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     sal_uInt16 nWidth )
 {
-    ::editeng::SvxBorderLine aLine( NULL, nWidth, ::editeng::SOLID );
+    ::editeng::SvxBorderLine aLine(0, nWidth, table::BorderLineStyle::SOLID);
     SvxBoxItem aBox( ATTR_BORDER );
     aBox.SetLine(&aLine, BOX_LINE_LEFT);
     aBox.SetLine(&aLine, BOX_LINE_TOP);

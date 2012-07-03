@@ -58,6 +58,9 @@
 #include <misc.hrc>
 #include <pgfnote.hrc>
 
+
+using namespace ::com::sun::star;
+
 static sal_uInt16 aPageRg[] = {
     FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
     0
@@ -220,9 +223,15 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     aLineTypeBox.SetSourceUnit( FUNIT_TWIP );
 
     aLineTypeBox.SetNone( String( SW_RES( STR_NONE ) ) );
-    aLineTypeBox.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::SOLID ), ::editeng::SOLID );
-    aLineTypeBox.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::DOTTED ), ::editeng::DOTTED );
-    aLineTypeBox.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::DASHED ), ::editeng::DASHED );
+    aLineTypeBox.InsertEntry(
+        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::SOLID),
+        table::BorderLineStyle::SOLID );
+    aLineTypeBox.InsertEntry(
+        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DOTTED),
+        table::BorderLineStyle::DOTTED );
+    aLineTypeBox.InsertEntry(
+        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DASHED),
+        table::BorderLineStyle::DASHED );
     aLineTypeBox.SetWidth( pFtnInfo->GetLineWidth( ) );
     aLineTypeBox.SelectEntry( pFtnInfo->GetLineStyle() );
 

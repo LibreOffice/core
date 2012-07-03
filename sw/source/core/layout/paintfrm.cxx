@@ -732,7 +732,8 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             aIns.Bottom( pLA->Bottom() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            this->push_back( SwLineRect( aIns, rL1.GetColor(), SOLID,
+                            this->push_back( SwLineRect( aIns, rL1.GetColor(),
+                                        table::BorderLineStyle::SOLID,
                                         rL1.GetTab(), SUBCOL_TAB ) );
                             if ( isFull() )
                             {
@@ -772,7 +773,8 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             aIns.Right( pLA->Right() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            this->push_back( SwLineRect( aIns, rL1.GetColor(), SOLID,
+                            this->push_back( SwLineRect( aIns, rL1.GetColor(),
+                                        table::BorderLineStyle::SOLID,
                                         rL1.GetTab(), SUBCOL_TAB ) );
                             if ( isFull() )
                             {
@@ -801,7 +803,10 @@ inline void SwSubsRects::Ins( const SwRect &rRect, const sal_uInt8 nSCol )
 {
     // Lines that are shorted than the largest line width won't be inserted
     if ( rRect.Height() > DEF_LINE_WIDTH_4 || rRect.Width() > DEF_LINE_WIDTH_4 )
-        this->push_back( SwLineRect( rRect, 0, SOLID, 0, nSCol ) );
+    {
+        this->push_back(
+            SwLineRect(rRect, 0, table::BorderLineStyle::SOLID, 0, nSCol));
+    }
 }
 
 void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
@@ -4628,7 +4633,7 @@ lcl_MakeBorderLine(SwRect const& rRect,
             nExtentRightStart, nExtentRightEnd,
             aLeftColor.getBColor(), aRightColor.getBColor(),
             rBorder.GetColorGap().getBColor(), rBorder.HasGapColor(),
-            rBorder.GetSvxBorderStyle() );
+            rBorder.GetBorderLineStyle() );
     g_pBorderLines->AddBorderLine(xLine);
 }
 
@@ -6388,7 +6393,8 @@ void lcl_RefreshLine( const SwLayoutFrm *pLay,
             SwRect aRect( aP1, aP2 );
             // OD 18.11.2002 #99672# - use parameter <_pSubsLines> instead of
             // global variable <pSubsLines>.
-            _pSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
+            _pSubsLines->AddLineRect( aRect, 0, table::BorderLineStyle::SOLID,
+                    0, nSubColor );
         }
         aP1 = aP2;
         aP1.*pDirPt += 1;
@@ -6692,13 +6698,15 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
             if ( aOriginal.Left() == aOut.Left() )
             {
                 const SwRect aRect( aOut.Pos(), aLB );
-                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0,
+                        table::BorderLineStyle::SOLID, 0, nSubColor );
             }
             // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
             if ( aOriginal.Right() == nRight )
             {
                 const SwRect aRect( aRT, aRB );
-                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0,
+                        table::BorderLineStyle::SOLID, 0, nSubColor );
             }
         }
         // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
@@ -6708,12 +6716,14 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
             {
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
                 const SwRect aRect( aOut.Pos(), aRT );
-                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0,
+                        table::BorderLineStyle::SOLID, 0, nSubColor );
             }
             if ( aOriginal.Bottom() == nBottom )
             {
                 const SwRect aRect( aLB, aRB );
-                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0,
+                        table::BorderLineStyle::SOLID, 0, nSubColor );
             }
         }
     }

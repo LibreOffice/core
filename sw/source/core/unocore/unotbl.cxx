@@ -137,7 +137,7 @@ sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLi
 {
     rSvxLine.SetColor(Color(rLine.Color));
 
-    rSvxLine.GuessLinesWidths( editeng::NO_STYLE,
+    rSvxLine.GuessLinesWidths( table::BorderLineStyle::NONE,
                                 MM100_TO_TWIP( rLine.OuterLineWidth ),
                                 MM100_TO_TWIP( rLine.InnerLineWidth ),
                                 MM100_TO_TWIP( rLine.LineDistance ) );

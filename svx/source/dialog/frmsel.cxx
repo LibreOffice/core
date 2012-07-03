@@ -39,6 +39,7 @@
 
 #include <tools/rcid.h>
 
+using namespace ::com::sun::star;
 using namespace ::editeng;
 
 namespace svx {
@@ -160,7 +161,7 @@ void FrameBorder::SetState( FrameBorderState eState )
         break;
         case FRAMESTATE_DONTCARE:
             maCoreStyle = SvxBorderLine();
-            maUIStyle = frame::Style(3, 0, 0, SOLID); //OBJ_FRAMESTYLE_DONTCARE
+            maUIStyle = frame::Style(3, 0, 0, table::BorderLineStyle::SOLID); //OBJ_FRAMESTYLE_DONTCARE
         break;
     }
 }
@@ -881,14 +882,14 @@ bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderStyle& rnStyle ) co
     {
         bFound =
             (rStyle.GetWidth() == (*aIt)->GetCoreStyle().GetWidth()) &&
-            (rStyle.GetSvxBorderStyle() ==
-                (*aIt)->GetCoreStyle().GetSvxBorderStyle());
+            (rStyle.GetBorderLineStyle() ==
+                (*aIt)->GetCoreStyle().GetBorderLineStyle());
     }
 
     if( bFound )
     {
         rnWidth = rStyle.GetWidth();
-        rnStyle = rStyle.GetSvxBorderStyle();
+        rnStyle = rStyle.GetBorderLineStyle();
     }
     return bFound;
 }
@@ -951,7 +952,7 @@ void FrameSelector::SelectAllVisibleBorders( bool bSelect )
 
 void FrameSelector::SetStyleToSelection( long nWidth, SvxBorderStyle nStyle )
 {
-    mxImpl->maCurrStyle.SetSvxBorderStyle( nStyle );
+    mxImpl->maCurrStyle.SetBorderLineStyle( nStyle );
     mxImpl->maCurrStyle.SetWidth( nWidth );
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
         mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );

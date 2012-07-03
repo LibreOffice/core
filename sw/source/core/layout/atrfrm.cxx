@@ -853,8 +853,9 @@ SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
 }
 
 SwFmtCol::SwFmtCol()
-    : SfxPoolItem( RES_COL ),
-    eLineStyle( editeng::NO_STYLE ),
+    : SfxPoolItem( RES_COL )
+    , eLineStyle( table::BorderLineStyle::NONE)
+    ,
     nLineWidth(0),
     nLineHeight( 100 ),
     eAdj( COLADJ_NONE ),
@@ -1109,10 +1110,10 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 switch ( pSwColums->GetSepLineStyle() )
                 {
                     default:
-                    case 0: eLineStyle = editeng::NO_STYLE; break;
-                    case 1: eLineStyle = editeng::SOLID; break;
-                    case 2: eLineStyle = editeng::DOTTED; break;
-                    case 3: eLineStyle = editeng::DASHED; break;
+                    case 0: eLineStyle = table::BorderLineStyle::NONE; break;
+                    case 1: eLineStyle = table::BorderLineStyle::SOLID; break;
+                    case 2: eLineStyle = table::BorderLineStyle::DOTTED; break;
+                    case 3: eLineStyle = table::BorderLineStyle::DASHED; break;
                 }
                 if(!pSwColums->GetSepLineIsOn())
                     eAdj = COLADJ_NONE;

@@ -32,6 +32,9 @@
 #include <editeng/borderline.hxx>
 #include <editeng/itemtype.hxx>
 
+
+using namespace ::com::sun::star::table::BorderLineStyle;
+
 // class SvxBorderLine  --------------------------------------------------
 
 namespace {
@@ -125,7 +128,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
     switch ( nStyle )
     {
         // No line: no width
-        case NO_STYLE:
+        case NONE:
             aImpl = BorderWidthImpl( 0, 0.0 );
             break;
 
@@ -241,7 +244,8 @@ void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
 
 void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist )
 {
-    if ( nStyle == NO_STYLE ) {
+    if (NONE == nStyle)
+    {
         nStyle = SOLID;
         if ( nOut > 0 && nIn > 0 )
             nStyle = DOUBLE;
@@ -262,7 +266,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
 
         size_t const len = SAL_N_ELEMENTS(aDoubleStyles);
         long nWidth = 0;
-        SvxBorderStyle nTestStyle(NO_STYLE);
+        SvxBorderStyle nTestStyle(NONE);
         for (size_t i = 0; i < len && nWidth == 0; ++i)
         {
             nTestStyle = aDoubleStyles[i];
@@ -274,13 +278,13 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
         if ( nWidth > 0 )
         {
             nStyle = nTestStyle;
-            SetSvxBorderStyle(nStyle);
+            SetBorderLineStyle(nStyle);
             m_nWidth = nWidth;
         }
         else
         {
             // fdo#38542: not a known double, default to something custom...
-            SetSvxBorderStyle(nStyle);
+            SetBorderLineStyle(nStyle);
             m_nWidth = nOut + nIn + nDist;
             if (nOut + nIn + nDist)
             {
@@ -294,7 +298,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
     }
     else
     {
-        SetSvxBorderStyle(nStyle);
+        SetBorderLineStyle(nStyle);
         if (nOut == 0 && nIn > 0)
         {
             // If only inner width is given swap inner and outer widths for
@@ -344,14 +348,14 @@ sal_Bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
              ( m_nWidth == rCmp.m_nWidth )           &&
              ( m_bMirrorWidths  == rCmp.m_bMirrorWidths )  &&
              ( m_aWidthImpl  == rCmp.m_aWidthImpl )  &&
-             ( m_nStyle == rCmp.GetSvxBorderStyle()) &&
+             ( m_nStyle == rCmp.GetBorderLineStyle()) &&
              ( m_bUseLeftTop == rCmp.m_bUseLeftTop ) &&
              ( m_pColorOutFn == rCmp.m_pColorOutFn ) &&
              ( m_pColorInFn == rCmp.m_pColorInFn )   &&
              ( m_pColorGapFn == rCmp.m_pColorGapFn ) );
 }
 
-void SvxBorderLine::SetSvxBorderStyle( SvxBorderStyle nNew )
+void SvxBorderLine::SetBorderLineStyle( SvxBorderStyle nNew )
 {
     m_nStyle = nNew;
     m_aWidthImpl = getWidthImpl( m_nStyle );

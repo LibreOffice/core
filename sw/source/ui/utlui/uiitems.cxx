@@ -128,10 +128,10 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
             switch ( aFtnInfo.GetLineStyle( ) )
             {
                 default:
-                case ::editeng::NO_STYLE: rVal <<= sal_Int8( 0 ); break;
-                case ::editeng::SOLID: rVal <<= sal_Int8( 1 ); break;
-                case ::editeng::DOTTED: rVal <<= sal_Int8( 2 ); break;
-                case ::editeng::DASHED: rVal <<= sal_Int8( 3 ); break;
+                case table::BorderLineStyle::NONE : rVal <<= sal_Int8(0); break;
+                case table::BorderLineStyle::SOLID: rVal <<= sal_Int8(1); break;
+                case table::BorderLineStyle::DOTTED: rVal <<= sal_Int8(2); break;
+                case table::BorderLineStyle::DASHED: rVal <<= sal_Int8(3); break;
             }
             break;
         }
@@ -199,14 +199,14 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
         }
         case MID_FTN_LINE_STYLE:
         {
-            ::editeng::SvxBorderStyle eStyle = ::editeng::NO_STYLE;
+            ::editeng::SvxBorderStyle eStyle = table::BorderLineStyle::NONE;
             sal_Int8 nSet = 0;
             rVal >>= nSet;
             switch ( nSet )
             {
-                case 1: eStyle = ::editeng::SOLID; break;
-                case 2: eStyle = ::editeng::DOTTED; break;
-                case 3: eStyle = ::editeng::DASHED; break;
+                case 1: eStyle = table::BorderLineStyle::SOLID; break;
+                case 2: eStyle = table::BorderLineStyle::DOTTED; break;
+                case 3: eStyle = table::BorderLineStyle::DASHED; break;
                 default: break;
             }
             aFtnInfo.SetLineStyle( eStyle );

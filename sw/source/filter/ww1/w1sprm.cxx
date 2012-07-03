@@ -206,7 +206,7 @@ STOP1(Ww1SingleSprmPPageBreakBefore, RES_BREAK)
 SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc)
 {
     sal_uInt16 nCode;
-    ::editeng::SvxBorderStyle eStyle = ::editeng::SOLID;
+    ::editeng::SvxBorderStyle eStyle = table::BorderLineStyle::SOLID;
     if(pBrc->dxpLine2WidthGet() == 0)
     {
         switch(pBrc->dxpLine1WidthGet())
@@ -220,21 +220,21 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
         case 5: nCode = DEF_LINE_WIDTH_4; break;
         case 6:
                 nCode = DEF_LINE_WIDTH_5;
-                eStyle = ::editeng::DOTTED;
+                eStyle = table::BorderLineStyle::DOTTED;
                 break;
         case 7:
                 nCode = DEF_LINE_WIDTH_5;
-                eStyle = ::editeng::DASHED;
+                eStyle = table::BorderLineStyle::DASHED;
                 break;
         }
         pLine->SetWidth( nCode );
-        pLine->SetSvxBorderStyle( eStyle );
+        pLine->SetBorderLineStyle( eStyle );
     }
     else
     {
         if ( pBrc->dxpLine1WidthGet() == 1 && pBrc->dxpLine2WidthGet() == 1 )
         {
-            pLine->SetSvxBorderStyle( ::editeng::DOUBLE );
+            pLine->SetBorderLineStyle( table::BorderLineStyle::DOUBLE );
             pLine->SetWidth( DEF_LINE_WIDTH_0 );
         }
         else

@@ -63,6 +63,7 @@
 
 using ::rtl::OString;
 using ::rtl::OUString;
+using namespace ::com::sun::star;
 using namespace oox;
 
 // PALETTE record - color information =========================================
@@ -1571,18 +1572,18 @@ void lclGetBorderLine(
         else if( nOuterWidth >= EXC_BORDER_MEDIUM )
         {
             rnXclLine = EXC_LINE_MEDIUM;
-            if (pLine->GetSvxBorderStyle( ) == ::editeng::DASHED)
+            if (pLine->GetBorderLineStyle( ) == table::BorderLineStyle::DASHED)
                 rnXclLine = EXC_LINE_MEDIUMDASHED;
         }
         else if( nOuterWidth >= EXC_BORDER_THIN )
         {
             rnXclLine = EXC_LINE_THIN;
-            switch (pLine->GetSvxBorderStyle())
+            switch (pLine->GetBorderLineStyle())
             {
-                case ::editeng::DASHED:
+                case table::BorderLineStyle::DASHED:
                     rnXclLine = EXC_LINE_DASHED;
                     break;
-                case ::editeng::DOTTED:
+                case table::BorderLineStyle::DOTTED:
                     rnXclLine = EXC_LINE_DOTTED;
                     break;
                 default:

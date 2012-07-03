@@ -1027,6 +1027,8 @@ Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 
 void SvxBorderTabPage::FillLineListBox_Impl()
 {
+    using namespace ::com::sun::star::table::BorderLineStyle;
+
     aLbLineStyle.SetSourceUnit( FUNIT_TWIP );
 
     aLbLineStyle.SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );

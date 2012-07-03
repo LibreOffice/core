@@ -29,6 +29,8 @@
 #ifndef SVX_BORDERLINE_HXX
 #define SVX_BORDERLINE_HXX
 
+#include <com/sun/star/table/BorderLineStyle.hpp>
+
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
@@ -47,24 +49,8 @@
 
 namespace editeng {
 
-    enum SvxBorderStyle
-    {
-        SOLID,
-        DOTTED,
-        DASHED,
-        DOUBLE,
-        THINTHICK_SMALLGAP,
-        THINTHICK_MEDIUMGAP,
-        THINTHICK_LARGEGAP,
-        THICKTHIN_SMALLGAP,
-        THICKTHIN_MEDIUMGAP,
-        THICKTHIN_LARGEGAP,
-        EMBOSSED,
-        ENGRAVED,
-        OUTSET,
-        INSET,
-        NO_STYLE = -1
-    };
+    // values from ::com::sun::star::table::BorderLineStyle
+    typedef sal_Int16 SvxBorderStyle;
 
     class EDITENG_DLLPUBLIC SvxBorderLine
     {
@@ -89,7 +75,8 @@ namespace editeng {
 
     public:
         SvxBorderLine( const Color *pCol = 0,
-                long nWidth = 0, SvxBorderStyle nStyle = SOLID,
+                long nWidth = 0, SvxBorderStyle nStyle =
+                    ::com::sun::star::table::BorderLineStyle::SOLID,
                 bool bUseLeftTop = false,
                 Color (*pColorOutFn)( Color ) = &darkColor,
                 Color (*pColorInFn)( Color ) = &darkColor,
@@ -139,14 +126,14 @@ namespace editeng {
         sal_uInt16      GetInWidth() const;
         sal_uInt16      GetDistance() const;
 
-        SvxBorderStyle  GetSvxBorderStyle() const { return m_nStyle; }
+        SvxBorderStyle  GetBorderLineStyle() const { return m_nStyle; }
 
         void            SetColor( const Color &rColor ) { aColor = rColor; }
         void            SetColorOutFn( Color (*pColorOutFn)( Color ) ) { m_pColorOutFn = pColorOutFn; }
         void            SetColorInFn( Color (*pColorInFn)( Color ) ) { m_pColorInFn = pColorInFn; }
         void            SetColorGapFn( Color (*pColorGapFn)( Color ) ) { m_pColorGapFn = pColorGapFn; }
         void            SetUseLeftTop( bool bUseLeftTop ) { m_bUseLeftTop = bUseLeftTop; }
-        void            SetSvxBorderStyle( SvxBorderStyle nNew );
+        void            SetBorderLineStyle( SvxBorderStyle nNew );
         void            ScaleMetrics( long nMult, long nDiv );
 
         sal_Bool            operator==( const SvxBorderLine &rCmp ) const;
@@ -157,7 +144,11 @@ namespace editeng {
 
         bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
 
-        bool isEmpty() const { return m_aWidthImpl.IsEmpty( ) || m_nStyle == NO_STYLE || m_nWidth == 0; }
+        bool isEmpty() const {
+            return m_aWidthImpl.IsEmpty()
+                || m_nStyle == ::com::sun::star::table::BorderLineStyle::NONE
+                || m_nWidth == 0;
+        }
         bool isDouble() const { return m_aWidthImpl.IsDouble(); }
         sal_uInt16 GetScaledWidth() const { return GetOutWidth() + GetInWidth() + GetDistance(); }
 

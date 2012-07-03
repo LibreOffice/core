@@ -570,7 +570,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
     if ((dest))                                        \
     {                                                  \
         SvxBorderLine* pCast = (SvxBorderLine*)(dest); \
-        pCast->SetSvxBorderStyle( (src)->GetSvxBorderStyle() ); \
+        pCast->SetBorderLineStyle( (src)->GetBorderLineStyle() ); \
         pCast->SetWidth( (src)->GetWidth( ) );         \
     }
 

@@ -74,6 +74,9 @@
 
 #include "access.hrc"
 
+
+using namespace ::com::sun::star;
+
 #define FRAME_FORMAT_WIDTH 1000
 
 /*--------------------------------------------------------------------
@@ -529,9 +532,15 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     // Fill the line styles listbox
     aLineTypeDLB.SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
-    aLineTypeDLB.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::SOLID ), ::editeng::SOLID );
-    aLineTypeDLB.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::DOTTED ), ::editeng::DOTTED );
-    aLineTypeDLB.InsertEntry( ::editeng::SvxBorderLine::getWidthImpl( ::editeng::DASHED ), ::editeng::DASHED );
+    aLineTypeDLB.InsertEntry(
+        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::SOLID),
+        table::BorderLineStyle::SOLID );
+    aLineTypeDLB.InsertEntry(
+        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DOTTED),
+        table::BorderLineStyle::DOTTED );
+    aLineTypeDLB.InsertEntry(
+        ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DASHED),
+        table::BorderLineStyle::DASHED );
 
     long nLineWidth = static_cast<long>(MetricField::ConvertDoubleValue(
             aLineWidthEdit.GetValue( ),

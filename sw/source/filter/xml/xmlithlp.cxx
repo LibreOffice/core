@@ -154,10 +154,10 @@ sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
 
 void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
 {
-    ::editeng::SvxBorderStyle eStyle = ::editeng::NO_STYLE;
+    ::editeng::SvxBorderStyle eStyle = table::BorderLineStyle::NONE;
     if ( nStyle != API_LINE_NONE )
         eStyle = ::editeng::SvxBorderStyle( nStyle );
-    rLine.SetSvxBorderStyle(eStyle);
+    rLine.SetBorderLineStyle(eStyle);
 }
 
 sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
@@ -207,7 +207,7 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
            {
                if (bDouble)
                {
-                   rpLine->SetSvxBorderStyle( ::editeng::DOUBLE );
+                   rpLine->SetBorderLineStyle( table::BorderLineStyle::DOUBLE );
                }
                rpLine->SetWidth( aBorderWidths[nNamedWidth] );
            }
@@ -244,7 +244,8 @@ void lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     if( nWidth > 0 )
         rpLine->SetWidth( nWidth );
     else
-        rpLine->GuessLinesWidths( ::editeng::DOUBLE, nOutWidth, nInWidth, nDistance );
+        rpLine->GuessLinesWidths(table::BorderLineStyle::DOUBLE,
+                nOutWidth, nInWidth, nDistance);
 }
 
 const struct SvXMLEnumMapEntry psXML_BrushRepeat[] =

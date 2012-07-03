@@ -116,7 +116,10 @@ class SVX_DLLPUBLIC Style
 {
 public:
     /** Constructs an invisible frame style. */
-    inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnType( editeng::SOLID ) { Clear(); }
+    inline explicit     Style()
+        : meRefMode( REFMODE_CENTERED )
+        , mnType( ::com::sun::star::table::BorderLineStyle::SOLID )
+    { Clear(); }
     /** Constructs a frame style with passed line widths. */
     inline explicit     Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
                             meRefMode( REFMODE_CENTERED ), mnType( nType )

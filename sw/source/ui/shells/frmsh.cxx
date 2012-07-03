@@ -942,7 +942,8 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 
                     if(aBorderLine.GetOutWidth() == 0)
                     {
-                        aBorderLine.SetSvxBorderStyle( ::editeng::SOLID );
+                        aBorderLine.SetBorderLineStyle(
+                                table::BorderLineStyle::SOLID);
                         aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
                     }
                     //Distance nur setzen, wenn der Request vom Controller kommt
@@ -1076,7 +1077,7 @@ void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBo
     if(pBorderLine->GetWidth() > rBorderLine.GetWidth())
         rBorderLine.SetWidth(pBorderLine->GetWidth());
 
-    rBorderLine.SetSvxBorderStyle(pBorderLine->GetSvxBorderStyle());
+    rBorderLine.SetBorderLineStyle(pBorderLine->GetBorderLineStyle());
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
 

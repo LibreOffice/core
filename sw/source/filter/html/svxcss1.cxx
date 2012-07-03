@@ -63,6 +63,9 @@
 
 #include <memory>
 
+
+using namespace ::com::sun::star;
+
 // die Funktionen zum Parsen einer CSS1-Property sind von folgendem Typ:
 typedef void (*FnParseCSS1Prop)( const CSS1Expression *pExpr,
                                  SfxItemSet& rItemSet,
@@ -321,31 +324,31 @@ void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) 
     switch ( eStyle )
     {
         case CSS1_BS_SINGLE:
-            aBorderLine.SetSvxBorderStyle( ::editeng::SOLID );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::SOLID);
             break;
         case CSS1_BS_DOUBLE:
-            aBorderLine.SetSvxBorderStyle( ::editeng::DOUBLE );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
             break;
         case CSS1_BS_DOTTED:
-            aBorderLine.SetSvxBorderStyle( ::editeng::DOTTED );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::DOTTED);
             break;
         case CSS1_BS_DASHED:
-            aBorderLine.SetSvxBorderStyle( ::editeng::DASHED );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::DASHED);
             break;
         case CSS1_BS_GROOVE:
-            aBorderLine.SetSvxBorderStyle( ::editeng::ENGRAVED );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::ENGRAVED);
             break;
         case CSS1_BS_RIDGE:
-            aBorderLine.SetSvxBorderStyle( ::editeng::EMBOSSED );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::EMBOSSED);
             break;
         case CSS1_BS_INSET:
-            aBorderLine.SetSvxBorderStyle( ::editeng::INSET );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::INSET);
             break;
         case CSS1_BS_OUTSET:
-            aBorderLine.SetSvxBorderStyle( ::editeng::OUTSET );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::OUTSET);
             break;
         default:
-            aBorderLine.SetSvxBorderStyle( ::editeng::NO_STYLE );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::NONE);
             break;
     }
 

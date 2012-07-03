@@ -5242,7 +5242,7 @@ void SwHTMLParser::InsertHorzRule()
             SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
             if ( !bNoShade )
             {
-                aBorderLine.SetSvxBorderStyle( ::editeng::DOUBLE );
+                aBorderLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
             }
             aBorderLine.SetWidth( nPHeight );
         }
@@ -5252,7 +5252,7 @@ void SwHTMLParser::InsertHorzRule()
         }
         else
         {
-            aBorderLine.SetSvxBorderStyle( ::editeng::DOUBLE );
+            aBorderLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
             aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
         }
 

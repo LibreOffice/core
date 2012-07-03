@@ -1656,32 +1656,35 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
 
     // Border types
-    switch (nKeyword)
     {
-        // brdrhair and brdrs are the same, brdrw will make a difference
-        case RTF_BRDRHAIR: nParam = editeng::SOLID; break;
-        case RTF_BRDRS: nParam = editeng::SOLID; break;
-        case RTF_BRDRDOT: nParam = editeng::DOTTED; break;
-        case RTF_BRDRDASH: nParam = editeng::DASHED; break;
-        case RTF_BRDRDB: nParam = editeng::DOUBLE; break;
-        case RTF_BRDRTNTHSG: nParam = editeng::THINTHICK_SMALLGAP; break;
-        case RTF_BRDRTNTHMG: nParam = editeng::THINTHICK_MEDIUMGAP; break;
-        case RTF_BRDRTNTHLG: nParam = editeng::THINTHICK_LARGEGAP; break;
-        case RTF_BRDRTHTNSG: nParam = editeng::THICKTHIN_SMALLGAP; break;
-        case RTF_BRDRTHTNMG: nParam = editeng::THICKTHIN_MEDIUMGAP; break;
-        case RTF_BRDRTHTNLG: nParam = editeng::THICKTHIN_LARGEGAP; break;
-        case RTF_BRDREMBOSS: nParam = editeng::EMBOSSED; break;
-        case RTF_BRDRENGRAVE: nParam = editeng::ENGRAVED; break;
-        case RTF_BRDROUTSET: nParam = editeng::OUTSET; break;
-        case RTF_BRDRINSET: nParam = editeng::INSET; break;
-        case RTF_BRDRNONE: nParam = editeng::NO_STYLE; break;
-        default: break;
-    }
-    if (nParam >= 0)
-    {
-        RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        lcl_putBorderProperty(m_aStates, NS_rtf::LN_BRCTYPE, pValue);
-        return 0;
+        using namespace ::com::sun::star::table::BorderLineStyle;
+        switch (nKeyword)
+        {
+            // brdrhair and brdrs are the same, brdrw will make a difference
+            case RTF_BRDRHAIR: nParam = SOLID; break;
+            case RTF_BRDRS: nParam = SOLID; break;
+            case RTF_BRDRDOT: nParam = DOTTED; break;
+            case RTF_BRDRDASH: nParam = DASHED; break;
+            case RTF_BRDRDB: nParam = DOUBLE; break;
+            case RTF_BRDRTNTHSG: nParam = THINTHICK_SMALLGAP; break;
+            case RTF_BRDRTNTHMG: nParam = THINTHICK_MEDIUMGAP; break;
+            case RTF_BRDRTNTHLG: nParam = THINTHICK_LARGEGAP; break;
+            case RTF_BRDRTHTNSG: nParam = THICKTHIN_SMALLGAP; break;
+            case RTF_BRDRTHTNMG: nParam = THICKTHIN_MEDIUMGAP; break;
+            case RTF_BRDRTHTNLG: nParam = THICKTHIN_LARGEGAP; break;
+            case RTF_BRDREMBOSS: nParam = EMBOSSED; break;
+            case RTF_BRDRENGRAVE: nParam = ENGRAVED; break;
+            case RTF_BRDROUTSET: nParam = OUTSET; break;
+            case RTF_BRDRINSET: nParam = INSET; break;
+            case RTF_BRDRNONE: nParam = NONE; break;
+            default: break;
+        }
+        if (nParam >= 0 && nParam != NONE)
+        {
+            RTFValue::Pointer_t pValue(new RTFValue(nParam));
+            lcl_putBorderProperty(m_aStates, NS_rtf::LN_BRCTYPE, pValue);
+            return 0;
+        }
     }
 
     // Section breaks
