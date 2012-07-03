@@ -68,6 +68,8 @@ public:
     void dumpShadeModeAsAttribute(com::sun::star::drawing::ShadeMode eShadeMode);
     void dumpRotateAngleAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngle);
     void dumpRotationCenterAsElement(com::sun::star::drawing::Direction3D aRotationCenter);
+    void dumpShininessAsAttribute(double aShininess);
+    void dumpSkewAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkew);
 
 private:
     xmlTextWriterPtr xmlWriter;

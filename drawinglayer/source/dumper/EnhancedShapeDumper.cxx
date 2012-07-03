@@ -134,6 +134,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= aRotationCenter)
             dumpRotationCenterAsElement(aRotationCenter);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Shininess");
+        double aShininess;
+        if(anotherAny >>= aShininess)
+            dumpShininessAsAttribute(aShininess);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Skew");
+        drawing::EnhancedCustomShapeParameterPair aSkew;
+        if(anotherAny >>= aSkew)
+            dumpSkewAsElement(aSkew);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -288,6 +300,18 @@ void EnhancedShapeDumper::dumpRotationCenterAsElement(drawing::Direction3D aRota
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RotationCenter" ));
     dumpDirection3D(aRotationCenter);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpShininessAsAttribute(double aShininess)
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shininess"), "%f", aShininess);
+}
+
+void EnhancedShapeDumper::dumpSkewAsElement(drawing::EnhancedCustomShapeParameterPair aSkew)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Skew" ));
+    dumpEnhancedCustomShapeParameterPair(aSkew);
     xmlTextWriterEndElement( xmlWriter );
 }
 
