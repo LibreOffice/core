@@ -40,7 +40,6 @@
 #include <string>
 #include <strsafe.h>
 
-//----------------------------------------------------------
 static const CHAR* g_Extensions[] =
 {
     ".doc",     // Microsoft Word Text [0]
@@ -81,7 +80,6 @@ static const int VISIO_END = 25;
 //    ".ppam",    // Office PowerPoint 2007 macro-enabled XML add-in
 //    ".ppsm",    // Office PowerPoint 2007 macro-enabled XML show
 
-//----------------------------------------------------------
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
 {
@@ -98,7 +96,6 @@ static inline void OutputDebugStringFormat( LPCSTR, ... )
 }
 #endif
 
-//----------------------------------------------------------
 static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
 {
     BOOL    bRet = false;
@@ -169,7 +166,6 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
     return bRet;
 }
 
-//----------------------------------------------------------
 static LONG DeleteSubKeyTree( HKEY RootKey, LPCSTR lpKey )
 {
     HKEY hKey;
@@ -216,62 +212,6 @@ static LONG DeleteSubKeyTree( HKEY RootKey, LPCSTR lpKey )
     return rc;
 }
 
-// Unused
-#if 0
-
-//----------------------------------------------------------
-static BOOL RemoveExtensionInRegistry( LPCSTR lpSubKey )
-{
-    CHAR    szBuffer[4096];
-    DWORD   nSize = sizeof( szBuffer );
-    HKEY    hKey = NULL;
-    HKEY    hSubKey = NULL;
-    LONG    lResult = RegOpenKeyExA( HKEY_LOCAL_MACHINE, "SOFTWARE\\Classes", 0, KEY_QUERY_VALUE, &hKey );
-
-    if ( ERROR_SUCCESS == lResult )
-    {
-        lResult = RegOpenKeyExA( hKey, lpSubKey, 0, KEY_QUERY_VALUE, &hSubKey );
-
-        if ( ERROR_SUCCESS == lResult )
-        {
-            DWORD nSubKeys = 1;
-            szBuffer[0] = '\0';
-
-            // we get the value of the default key fist and while we are on querying,
-            // we ask for the subkey count, too
-            lResult = RegQueryValueExA( hSubKey, "", NULL, NULL, (LPBYTE)szBuffer, &nSize );
-            if ( ERROR_SUCCESS == lResult )
-                RegQueryInfoKeyA( hSubKey, 0, 0, 0, &nSubKeys, 0, 0, 0, 0, 0, 0, 0 );
-            RegCloseKey( hSubKey );
-
-            // we will remove all key with an default value starting with ooostub but
-            // we have to be careful about MSO keys
-            if ( strncmp( szBuffer, "opendocument.", 13 ) == 0 )
-            {
-                if ( nSubKeys == 0 )
-                {
-                    DeleteSubKeyTree( hKey, lpSubKey );
-                }
-                else
-                {
-                    lResult = RegOpenKeyExA( hKey, lpSubKey, 0, KEY_SET_VALUE, &hSubKey );
-                    if ( ERROR_SUCCESS == lResult )
-                        RegDeleteValueA( hSubKey, "" );
-                    else
-                        OutputDebugStringFormat( "Could not open key %s for deleting: RegOpenKeyEx returned %ld.\n", lpSubKey, lResult );
-                }
-            }
-        }
-
-        RegCloseKey( hKey );
-    }
-
-    return ( ERROR_SUCCESS == lResult );
-}
-
-#endif
-
-//----------------------------------------------------------
 bool GetMsiProp( MSIHANDLE handle, LPCSTR name, /*out*/std::string& value )
 {
     DWORD sz = 0;
@@ -289,7 +229,6 @@ bool GetMsiProp( MSIHANDLE handle, LPCSTR name, /*out*/std::string& value )
     return false;
 }
 
-//----------------------------------------------------------
 bool IsSetMsiProp( MSIHANDLE handle, LPCSTR name )
 {
     std::string val;
@@ -297,7 +236,6 @@ bool IsSetMsiProp( MSIHANDLE handle, LPCSTR name )
     return (val == "1");
 }
 
-//----------------------------------------------------------
 static void registerForExtension( MSIHANDLE handle, const int nIndex, bool bRegister )
 {
     CHAR sPropName[256];
@@ -314,7 +252,6 @@ static void registerForExtension( MSIHANDLE handle, const int nIndex, bool bRegi
     }
 }
 
-//----------------------------------------------------------
 static void saveOldRegistration( LPCSTR lpSubKey )
 {
     BOOL    bRet = false;
@@ -360,7 +297,6 @@ static void saveOldRegistration( LPCSTR lpSubKey )
     }
 }
 
-//----------------------------------------------------------
 static void registerForExtensions( MSIHANDLE handle, BOOL bRegisterAll )
 { // Check all file extensions
     int nIndex = 0;
@@ -375,7 +311,6 @@ static void registerForExtensions( MSIHANDLE handle, BOOL bRegisterAll )
     }
 }
 
-//----------------------------------------------------------
 static bool checkSomeExtensionInRegistry( const int nStart, const int nEnd )
 { // Check all file extensions
     int nIndex = nStart;
@@ -393,7 +328,6 @@ static bool checkSomeExtensionInRegistry( const int nStart, const int nEnd )
     return bFound;
 }
 
-//----------------------------------------------------------
 static void registerSomeExtensions( MSIHANDLE handle, const int nStart, const int nEnd, bool bRegister )
 { // Check all file extensions
     int nIndex = nStart;
@@ -404,9 +338,6 @@ static void registerSomeExtensions( MSIHANDLE handle, const int nStart, const in
     }
 }
 
-//----------------------------------------------------------
-//----------------------------------------------------------
-//----------------------------------------------------------
 extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
 {
     OutputDebugStringFormat( "LookForRegisteredExtensions: " );
@@ -508,7 +439,6 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
     return ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------
 extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
 {
     OutputDebugStringFormat( "RegisterSomeExtensions: " );
@@ -563,11 +493,6 @@ extern "C" UINT __stdcall RegisterSomeExtensions( MSIHANDLE handle )
     return ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------
-//
-// This is the (slightly misleadinly named) entry point for the
-// custom action called Regallmsdocdll.
-//
 extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
 {
     if ( IsSetMsiProp( handle, "FILETYPEDIALOGUSED" ) )
@@ -606,30 +531,6 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
     return ERROR_SUCCESS;
 }
 
-#if 0
-
-//----------------------------------------------------------
-//
-// This entry is not called for any custom action.
-//
-extern "C" UINT __stdcall DeleteRegisteredExtensions( MSIHANDLE /*handle*/ )
-{
-    OutputDebugStringFormat( "DeleteRegisteredExtensions\n" );
-
-    // remove all file extensions
-    int nIndex = 0;
-    while ( g_Extensions[nIndex] != 0 )
-    {
-        RemoveExtensionInRegistry( g_Extensions[nIndex] );
-        ++nIndex;
-    }
-
-    return ERROR_SUCCESS;
-}
-
-#endif
-
-//----------------------------------------------------------
 static void restoreOldRegistration( LPCSTR lpSubKey )
 {
     BOOL    bRet = false;
@@ -681,11 +582,6 @@ static void restoreOldRegistration( LPCSTR lpSubKey )
     }
 }
 
-//----------------------------------------------------------
-//
-// This function is not in OO.o. We call this from the
-// Restoreregallmsdocdll custom action.
-//
 extern "C" UINT __stdcall RestoreRegAllMSDoc( MSIHANDLE /*handle*/ )
 {
     OutputDebugStringFormat( "RestoreRegAllMSDoc\n" );
