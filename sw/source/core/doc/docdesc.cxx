@@ -78,7 +78,8 @@ using namespace com::sun::star;
 
 static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
                                 SwFrmFmt &rFmt1,
-                                SwFrmFmt &rFmt2 )
+                                SwFrmFmt &rFmt2,
+                                SwFrmFmt &rFmt3 )
 {
     // --> #i41075# Printer on demand
     // This function does not require a printer anymore.
@@ -130,6 +131,10 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     rFmt2.SetFmtAttr( aFrmSize );
     rFmt2.SetFmtAttr( aLR );
     rFmt2.SetFmtAttr( aUL );
+
+    rFmt3.SetFmtAttr( aFrmSize );
+    rFmt3.SetFmtAttr( aLR );
+    rFmt3.SetFmtAttr( aUL );
 }
 
 /*************************************************************************
@@ -560,7 +565,7 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     {
         pNew = new SwPageDesc( rName, GetDfltFrmFmt(), this );
         // Set the default page format.
-        lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft() );
+        lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(), pNew->GetFirst() );
 
         SvxFrameDirection aFrameDirection = bRegardLanguage ?
             GetDefaultFrameDirection(GetAppLanguage())
@@ -868,7 +873,7 @@ void SwDoc::CheckDefaultPageFmt()
                               LONG_MAX == rLeftSize.GetHeight();
 
         if ( bSetSize )
-            lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(), rDesc.GetLeft() );
+            lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(), rDesc.GetLeft(), rDesc.GetFirst() );
     }
 }
 
