@@ -6281,6 +6281,7 @@ BaseContainerNode.prototype.removeEffect = function()
     var nChildrenCount = this.aChildrenArray.length;
     if( nChildrenCount == 0 )
         return;
+    // We remove effect in reverse order.
     for( var i = nChildrenCount - 1; i >= 0; --i )
     {
         if( ( this.aChildrenArray[i].getState() & ( FROZEN_NODE | ENDED_NODE ) ) == 0 )
@@ -6465,11 +6466,24 @@ SequentialTimeContainer.prototype.notifyDeactivating = function( aNotifier )
     }
 };
 
+/** skipEffect
+ *  Skip the current playing shape effect.
+ *  Requires: the current node is the main sequence root node.
+ *
+ *  @param aChildNode
+ *      An animation node representing the root node of the shape effect being
+ *      played.
+ */
 SequentialTimeContainer.prototype.skipEffect = function( aChildNode )
 {
     if( this.isChildNode( aChildNode ) )
     {
+        // First off we end all queued activities.
         this.getContext().aActivityQueue.endAll();
+        // We signal that we are going to skip all subsequent animations by
+        // setting the bIsSkipping flag to 'true', then all queued events are
+        // fired immediately. In such a way the correct order of the various
+        // events that belong to the animation time-line is preserved.
         this.getContext().bIsSkipping = true;
         this.getContext().aTimerEventQueue.forceEmpty();
         this.getContext().bIsSkipping = false;
@@ -6478,63 +6492,122 @@ SequentialTimeContainer.prototype.skipEffect = function( aChildNode )
     }
     else
     {
-        log( 'SequentialTimeContainer.skipEffect: unknown child: ' + aChildNode.getId() );
+        log( 'SequentialTimeContainer.skipEffect: unknown child: '
+                 + aChildNode.getId() );
     }
 };
 
+/** rewindCurrentEffect
+ *  Rewind a playing shape effect.
+ *  Requires: the current node is the main sequence root node.
+ *
+ *  @param aChildNode
+ *      An animation node representing the root node of the shape effect being
+ *      played
+ */
 SequentialTimeContainer.prototype.rewindCurrentEffect = function( aChildNode )
 {
     if( this.isChildNode( aChildNode ) )
     {
-        assert( !this.bIsRewinding, 'SequentialTimeContainer.rewindCurrentEffect: is already rewinding.' );
+        assert( !this.bIsRewinding,
+                'SequentialTimeContainer.rewindCurrentEffect: is already rewinding.' );
 
+        // We signal we are rewinding so the notifyDeactivating method returns
+        // immediately without increment the finished children counter and
+        // resolve the next child.
         this.bIsRewinding = true;
+        // First off we end all queued activities.
         this.getContext().aActivityQueue.endAll();
+        // We signal that we are going to skip all subsequent animations by
+        // setting the bIsSkipping flag to 'true', then all queued events are
+        // fired immediately. In such a way the correct order of the various
+        // events that belong to the animation time-line is preserved.
         this.getContext().bIsSkipping = true;
         this.getContext().aTimerEventQueue.forceEmpty();
         this.getContext().bIsSkipping = false;
+        // We end all new activities appended to the activity queue by
+        // the fired events.
         this.getContext().aActivityQueue.endAll();
 
+        // Now we perform a final 'end' and restore the animated shape to
+        // the state it was before the current effect was applied.
         aChildNode.end();
         aChildNode.removeEffect();
+        // Finally we place the child node to the 'unresolved' state and
+        // resolve it again.
         aChildNode.init();
         this.resolveChild( aChildNode );
         this.bIsRewinding = false;
     }
     else
     {
-        log( 'SequentialTimeContainer.rewindCurrentEffect: unknown child: ' + aChildNode.getId() );
+        log( 'SequentialTimeContainer.rewindCurrentEffect: unknown child: '
+                 + aChildNode.getId() );
     }
 };
 
+/** rewindLastEffect
+ *  Rewind the last ended effect.
+ *  Requires: the current node is the main sequence root node.
+ *
+ *  @param aChildNode
+ *      An animation node representing the root node of the next shape effect
+ *      to be played.
+ */
 SequentialTimeContainer.prototype.rewindLastEffect = function( aChildNode )
 {
     if( this.isChildNode( aChildNode ) )
     {
-        assert( !this.bIsRewinding, 'SequentialTimeContainer.rewindLastEffect: is already rewinding.' );
+        assert( !this.bIsRewinding,
+                'SequentialTimeContainer.rewindLastEffect: is already rewinding.' );
 
+        // We signal we are rewinding so the notifyDeactivating method returns
+        // immediately without increment the finished children counter and
+        // resolve the next child.
         this.bIsRewinding = true;
+        // We end the current effect and remove any change it applies on the
+        // animated shape.
         this.getContext().aTimerEventQueue.forceEmpty();
         this.getContext().aActivityQueue.clear();
-
         aChildNode.end();
         aChildNode.removeEffect();
+
+        // As we rewind the previous effect we need to decrease the finished
+        // children counter.
         --this.nFinishedChildren;
         var aPreviousChildNode = this.aChildrenArray[ this.nFinishedChildren ];
+        // No need to invoke the end method for the previous child as it is
+        // already in the ENDED state.
+
         aPreviousChildNode.removeEffect();
+        // We place the child node to the 'unresolved' state.
         aPreviousChildNode.init();
-        // We need to re-initialize it too, because it is in state ENDED now,
-        // and cannot be resolved again later.
+        // We need to re-initialize the old current child too, because it is
+        // in ENDED state now, On the contrary it cannot be resolved again later.
         aChildNode.init();
         this.resolveChild( aPreviousChildNode );
         this.bIsRewinding = false;
     }
     else
     {
-        log( 'SequentialTimeContainer.rewindLastEffect: unknown child: ' + aChildNode.getId() );
+        log( 'SequentialTimeContainer.rewindLastEffect: unknown child: '
+                 + aChildNode.getId() );
     }
 };
 
+/** resolveChild
+ *  Resolve the passed child.
+ *  In case this node is a main sequence root node events for skipping and
+ *  rewinding the effect related to the passed child node are created and
+ *  registered.
+ *
+ *  @param aChildNode
+ *      An animation node representing the root node of the next shape effect
+ *      to be played.
+ *  @return
+ *      It returns true if the passed child has been resolved successfully,
+ *      false otherwise.
+ */
 SequentialTimeContainer.prototype.resolveChild = function( aChildNode )
 {
     var bResolved = aChildNode.resolve();
@@ -6551,7 +6624,7 @@ SequentialTimeContainer.prototype.resolveChild = function( aChildNode )
             this.aRewindCurrentEffectEvent.dispose();
 
         this.aRewindCurrentEffectEvent = makeEvent( bind2( SequentialTimeContainer.prototype.rewindCurrentEffect, this, aChildNode ) );
-        this.aContext.aEventMultiplexer.registerRewindEffectEvent( this.aRewindCurrentEffectEvent );
+        this.aContext.aEventMultiplexer.registerRewindCurrentEffectEvent( this.aRewindCurrentEffectEvent );
 
         if( this.aRewindLastEffectEvent )
             this.aRewindLastEffectEvent.dispose();
@@ -8529,11 +8602,6 @@ AnimatedElement.prototype.getId = function()
     return this.aActiveElement.getAttribute( 'id' );
 };
 
-AnimatedElement.prototype.isUpdated = function()
-{
-    return this.bIsUpdated;
-};
-
 AnimatedElement.prototype.getAdditiveMode = function()
 {
     return this.eAdditiveMode;
@@ -8571,8 +8639,7 @@ AnimatedElement.prototype.notifySlideStart = function()
 
 AnimatedElement.prototype.notifyAnimationStart = function()
 {
-    this.DBG( '.notifyAnimationStart invoked' );
-    this.bIsUpdated = false;
+    // empty body
 };
 
 AnimatedElement.prototype.notifyAnimationEnd = function()
@@ -8582,28 +8649,16 @@ AnimatedElement.prototype.notifyAnimationEnd = function()
 
 AnimatedElement.prototype.notifyNextEffectStart = function( nEffectIndex )
 {
-//    assert( this.nCurrentState === nEffectIndex,
-//            'AnimatedElement(' + this.getId() + ').notifyNextEffectStart: assertion (current state == effect index) failed' );
-//
-//    if( this.isUpdated() )
-//    {
-//        if( !this.aElementArray[ nEffectIndex ] )
-//        {
-//            this.aElementArray[ nEffectIndex ] =  this.aElementArray[ this.nCurrentState ];
-//            this.DBG( '.notifyNextEffectStart(' + nEffectIndex + '): new state set to previous one ' );
-//        }
-//    }
-//    else
-//    {
-//        if( !this.aElementArray[ nEffectIndex ] )
-//        {
-//            this.aElementArray[ nEffectIndex ] = this.aActiveElement.cloneNode( true );
-//            this.DBG( '.notifyNextEffectStart(' + nEffectIndex + '): cloned active state ' );
-//        }
-//    }
-//    ++this.nCurrentState;
+    // empty body
 };
 
+/** saveState
+ *  Save the state of the managed animated element and append it to aStateSet
+ *  using the passed animation node id as key.
+ *
+ *  @param nAnimationNodeId
+ *      A non negative integer representing the unique id of an animation node.
+ */
 AnimatedElement.prototype.saveState = function( nAnimationNodeId )
 {
     ANIMDBG.print( 'AnimatedElement(' + this.getId() + ').saveState(' + nAnimationNodeId +')' );
@@ -8620,6 +8675,16 @@ AnimatedElement.prototype.saveState = function( nAnimationNodeId )
 
 };
 
+/** restoreState
+ *  Restore the state of the managed animated element to the state with key
+ *  the passed animation node id.
+ *
+ *  @param nAnimationNodeId
+ *      A non negative integer representing the unique id of an animation node.
+ *
+ *  @return
+ *      True if the restoring operation is successful, false otherwise.
+ */
 AnimatedElement.prototype.restoreState = function( nAnimationNodeId )
 {
     if( !this.aStateSet[ nAnimationNodeId ] )
@@ -9676,7 +9741,7 @@ function EventMultiplexer( aTimerEventQueue )
     this.aTimerEventQueue = aTimerEventQueue;
     this.aEventMap = new Object();
     this.aSkipEffectEvent = null;
-    this.aRewindEffectEvent = null;
+    this.aRewindCurrentEffectEvent = null;
     this.aRewindLastEffectEvent = null;
 }
 
@@ -9727,17 +9792,17 @@ EventMultiplexer.prototype.notifySkipEffectEvent = function()
     }
 };
 
-EventMultiplexer.prototype.registerRewindEffectEvent = function( aEvent )
+EventMultiplexer.prototype.registerRewindCurrentEffectEvent = function( aEvent )
 {
-    this.aRewindEffectEvent = aEvent;
+    this.aRewindCurrentEffectEvent = aEvent;
 };
 
-EventMultiplexer.prototype.notifyRewindEffectEvent = function()
+EventMultiplexer.prototype.notifyRewindCurrentEffectEvent = function()
 {
-    if( this.aRewindEffectEvent )
+    if( this.aRewindCurrentEffectEvent )
     {
-        this.aTimerEventQueue.addEvent( this.aRewindEffectEvent );
-        this.aRewindEffectEvent = null;
+        this.aTimerEventQueue.addEvent( this.aRewindCurrentEffectEvent );
+        this.aRewindCurrentEffectEvent = null;
     }
 };
 
@@ -11342,6 +11407,10 @@ SlideShow.prototype.nextEffect = function()
     return true;
 };
 
+/** skipCurrentEffect
+ *  Skip the current playing effect.
+ *
+ */
 SlideShow.prototype.skipCurrentEffect = function()
 {
     if( this.bIsSkipping || this.bIsRewinding )
@@ -11353,6 +11422,10 @@ SlideShow.prototype.skipCurrentEffect = function()
     this.bIsSkipping = false;
 };
 
+/** rewindEffect
+ *  Rewind the current playing effect or the last played one.
+ *
+ */
 SlideShow.prototype.rewindEffect = function()
 {
     if( this.bIsSkipping || this.bIsRewinding )
@@ -11361,17 +11434,22 @@ SlideShow.prototype.rewindEffect = function()
     this.bIsRewinding = true;
     if( this.isRunning() )
     {
-        this.aEventMultiplexer.notifyRewindEffectEvent();
+        this.aEventMultiplexer.notifyRewindCurrentEffectEvent();
     }
     else
     {
         this.aEventMultiplexer.notifyRewindLastEffectEvent();
     }
-    --this.nCurrentEffect;
+    if( this.nCurrentEffect > 0 )
+        --this.nCurrentEffect;
     this.update();
     this.bIsRewinding = false;
 };
 
+/** skipEffect
+ *  Skip the next effect to be played.
+ *
+ */
 SlideShow.prototype.skipEffect = function()
 {
     if( this.bIsSkipping || this.bIsRewinding )
@@ -11399,16 +11477,6 @@ SlideShow.prototype.skipEffect = function()
     this.bIsSkipping = false;
     return true;
 };
-
-//SlideShow.prototype.previousEffect = function()
-//{
-//    if( this.nCurrentEffect <= 0 )
-//        return false;
-//    this.eDirection = BACKWARD;
-//    this.aNextEffectEventArray.at( this.nCurrentEffect ).fire();
-//    --this.nCurrentEffect;
-//    return true;
-//};
 
 SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
 {
