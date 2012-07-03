@@ -121,7 +121,7 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
             {   // We will replace registration for our own types, too
                 bRet = true;
             }
-            else if ( strncmp( szBuffer, "lostub.", 8 ) == 0 )
+            else if ( strncmp( szBuffer, "lostub.", 7 ) == 0 )
             {   // We will replace registration for ooostub, too
                 bRet = true;
             }
