@@ -231,9 +231,12 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                 }
                                 if ( pWin && ( pWin != pCurWin ) )
                                 {
-                                    ++it;
+                                    if ( it != aIDEWindowTable.end() )
+                                        ++it;
                                     if ( it != aIDEWindowTable.end() )
                                         pWin = it->second;
+                                    else
+                                        pWin = 0;
                                 }
                                 else
                                     pWin = 0;
