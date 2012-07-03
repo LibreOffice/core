@@ -53,6 +53,7 @@
 #include "comphelper/configurationhelper.hxx"
 
 #include <svtools/addresstemplate.hxx>
+#include <svtools/miscopt.hxx>
 #include <svl/visitem.hxx>
 #include <unotools/intlwrapper.hxx>
 
@@ -776,6 +777,17 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                                          isShowing()));
                     else
                         rSet.DisableItem(SID_SHOW_IME_STATUS_WINDOW);
+                    break;
+
+                case SID_TEMPLATE_MANAGER:
+                    {
+                        SvtMiscOptions aMiscOptions;
+                        if ( !aMiscOptions.IsExperimentalMode() )
+                        {
+                           rSet.DisableItem( nWhich );
+                           rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                        }
+                    }
                     break;
 
                 default:
