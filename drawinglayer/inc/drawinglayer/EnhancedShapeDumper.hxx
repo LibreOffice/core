@@ -55,6 +55,8 @@ public:
     void dumpDiffusionAsAttribute(double aDiffusion);
     void dumpNumberOfLineSegmentsAsAttribute(sal_Int32 aNumberOfLineSegments);
     void dumpLightFaceAsAttribute(sal_Bool bLightFace);
+    void dumpFirstLightHarshAsAttribute(sal_Bool bFirstLightHarsh);
+    void dumpSecondLightHarshAsAttribute(sal_Bool bSecondLightHarsh);
 
 private:
     xmlTextWriterPtr xmlWriter;

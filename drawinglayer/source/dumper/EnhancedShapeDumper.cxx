@@ -74,6 +74,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= bLightFace)
             dumpLightFaceAsAttribute(bLightFace);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("FirstLightHarsh");
+        sal_Bool bFirstLightHarsh;
+        if(anotherAny >>= bFirstLightHarsh)
+            dumpFirstLightHarshAsAttribute(bFirstLightHarsh);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("SecondLightHarsh");
+        sal_Bool bSecondLightHarsh;
+        if(anotherAny >>= bSecondLightHarsh)
+            dumpSecondLightHarshAsAttribute(bSecondLightHarsh);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -139,6 +151,22 @@ void EnhancedShapeDumper::dumpLightFaceAsAttribute(sal_Bool bLightFace)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "true");
     else
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "false");
+}
+
+void EnhancedShapeDumper::dumpFirstLightHarshAsAttribute(sal_Bool bFirstLightHarsh)
+{
+    if(bFirstLightHarsh)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightHarsh"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightHarsh"), "%s", "false");
+}
+
+void EnhancedShapeDumper::dumpSecondLightHarshAsAttribute(sal_Bool bSecondLightHarsh)
+{
+    if(bSecondLightHarsh)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightHarsh"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightHarsh"), "%s", "false");
 }
 
 
