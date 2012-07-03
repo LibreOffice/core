@@ -146,6 +146,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= aSkew)
             dumpSkewAsElement(aSkew);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Specularity");
+        double aSpecularity;
+        if(anotherAny >>= aSpecularity)
+            dumpSpecularityAsAttribute(aSpecularity);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("ProjectionMode");
+        drawing::ProjectionMode eProjectionMode;
+        if(anotherAny >>= eProjectionMode)
+            dumpProjectionModeAsAttribute(eProjectionMode);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -313,6 +325,26 @@ void EnhancedShapeDumper::dumpSkewAsElement(drawing::EnhancedCustomShapeParamete
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Skew" ));
     dumpEnhancedCustomShapeParameterPair(aSkew);
     xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpSpecularityAsAttribute(double aSpecularity)
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("specularity"), "%f", aSpecularity);
+}
+
+void EnhancedShapeDumper::dumpProjectionModeAsAttribute(drawing::ProjectionMode eProjectionMode)
+{
+    switch(eProjectionMode)
+    {
+        case drawing::ProjectionMode_PARALLEL:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("projectionMode"), "%s", "PARALLEL");
+            break;
+        case drawing::ProjectionMode_PERSPECTIVE:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("projectionMode"), "%s", "PERSPECTIVE");
+            break;
+        default:
+            break;
+    }
 }
 
 
