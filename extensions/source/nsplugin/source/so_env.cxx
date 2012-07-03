@@ -256,7 +256,7 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
 
     /* .. now in $HOME */
 #endif // LINUX
-    sprintf(lnkFileName, "%s/.mozilla/plugins/libnpsoplugin%s", getenv("HOME"), SAL_DLLEXTENSION);
+    snprintf(lnkFileName, NPP_PATH_MAX - 1, "%s/.mozilla/plugins/libnpsoplugin%s", getenv("HOME"), SAL_DLLEXTENSION);
 #ifdef LINUX
     ssize_t len = readlink(lnkFileName, realFileName, NPP_PATH_MAX-1);
     if (-1 == len)
