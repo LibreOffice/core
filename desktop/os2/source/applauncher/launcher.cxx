@@ -64,13 +64,11 @@ int main( int argc, char* argv[])
      sprintf( szLibpath, "\"%s%s\\URE\\BIN\";\"%s%s\\BASIS\\PROGRAM\";%%BeginLIBPATH%%;",
           szDrive, szDir, szDrive, szDir);
     DosSetExtLIBPATH( (PCSZ)szLibpath, BEGIN_LIBPATH);
+
     // make sure we load DLL from our path only, so multiple instances/versions
     // can be loaded.
-#if 0
-    // YD this feature is not compatible with innowin b20,
-    // java cannot load with this flag enabled
     DosSetExtLIBPATH( (PCSZ)"T", LIBPATHSTRICT);
-#endif
+
 #if OSL_DEBUG_LEVEL > 0
     rc = DosQueryExtLIBPATH( (PSZ)szLibpath, BEGIN_LIBPATH);
     fprintf( stderr, "2 BeginLibPath: %s\n", szLibpath);
