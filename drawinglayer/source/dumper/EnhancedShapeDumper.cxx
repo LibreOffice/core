@@ -122,6 +122,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= eShadeMode)
             dumpShadeModeAsAttribute(eShadeMode);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RotateAngle");
+        drawing::EnhancedCustomShapeParameterPair aRotateAngle;
+        if(anotherAny >>= aRotateAngle)
+            dumpRotateAngleAsElement(aRotateAngle);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RotationCenter");
+        drawing::Direction3D aRotationCenter;
+        if(anotherAny >>= aRotationCenter)
+            dumpRotationCenterAsElement(aRotationCenter);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -263,6 +275,20 @@ void EnhancedShapeDumper::dumpShadeModeAsAttribute(drawing::ShadeMode eShadeMode
         default:
             break;
     }
+}
+
+void EnhancedShapeDumper::dumpRotateAngleAsElement(drawing::EnhancedCustomShapeParameterPair aRotateAngle)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RotateAngle" ));
+    dumpEnhancedCustomShapeParameterPair(aRotateAngle);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpRotationCenterAsElement(drawing::Direction3D aRotationCenter)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RotationCenter" ));
+    dumpDirection3D(aRotationCenter);
+    xmlTextWriterEndElement( xmlWriter );
 }
 
 

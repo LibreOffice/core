@@ -66,6 +66,8 @@ public:
     void dumpSecondLightDirectionAsElement(com::sun::star::drawing::Direction3D aSecondLightDirection);
     void dumpMetalAsAttribute(sal_Bool bMetal);
     void dumpShadeModeAsAttribute(com::sun::star::drawing::ShadeMode eShadeMode);
+    void dumpRotateAngleAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngle);
+    void dumpRotationCenterAsElement(com::sun::star::drawing::Direction3D aRotationCenter);
 
 private:
     xmlTextWriterPtr xmlWriter;
