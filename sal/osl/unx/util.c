@@ -130,6 +130,9 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
     struct ifreq ifr;
     int so = socket(AF_INET, SOCK_DGRAM, 0);
 
+    if (strlen(ifname) >= sizeof(ifr.ifr_name))
+        return 0;
+
     strcpy(ifr.ifr_name, ifname);
 
     /*
