@@ -538,6 +538,7 @@ void ScFiltersTest::testMatrixODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("matrix."));
     ScDocShellRef xDocSh = loadDoc( aFileNameBase, 0);
+    xDocSh->DoHardRecalc(true);
 
     ScDocument* pDoc = xDocSh->GetDocument();
 
@@ -552,6 +553,7 @@ void ScFiltersTest::testMatrixXLS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("matrix."));
     ScDocShellRef xDocSh = loadDoc( aFileNameBase, 1);
+    xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -644,6 +646,7 @@ void ScFiltersTest::testBugFixesODS()
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[0].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+    xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.ods", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -679,6 +682,7 @@ void ScFiltersTest::testBugFixesXLS()
     rtl::OUString aFilterType(aFileFormats[1].pTypeName, strlen(aFileFormats[1].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[1].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[1].nFormatType);
+    xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -696,6 +700,7 @@ void ScFiltersTest::testBugFixesXLSX()
     rtl::OUString aFilterType(aFileFormats[2].pTypeName, strlen(aFileFormats[2].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[2].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[2].nFormatType);
+    xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xlsx", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -959,6 +964,7 @@ void ScFiltersTest::testSharedFormulaXLSX()
     rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[XLSX].nFormatType);
+    xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load shared-formula.xlsx", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -997,7 +1003,7 @@ void ScFiltersTest::testCellValueXLSX()
     createCSVPath( aFileNameBase, aCSVPath );
     testFile( aCSVPath, pDoc, 0 );
 
-	xDocSh->DoClose();
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testPassword_Impl(const rtl::OUString& aFileNameBase)
