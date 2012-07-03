@@ -189,8 +189,7 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
 
         if (aImgRect.IsInside(rMEvt.GetPosPixel()))
         {
-            Show(false);
-            Clear();
+            maCloseHdl.Call(this);
         }
         else
         {

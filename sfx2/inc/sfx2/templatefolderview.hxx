@@ -72,6 +72,8 @@ private:
 
     DECL_LINK(ChangeNameHdl, TemplateView*);
 
+    DECL_LINK(OverlayCloseHdl, void*);
+
 private:
 
     bool mbFilteredResults;     // Flag keep track if overlay has been filtered so folders can get filtered too afterwards

@@ -41,6 +41,8 @@ public:
 
     void setChangeNameHdl (const Link &rLink) { maChangeNameHdl = rLink; }
 
+    void setCloseHdl (const Link &rLink) { maCloseHdl = rLink; }
+
 protected:
 
     virtual void Resize ();
@@ -59,6 +61,7 @@ private:
     SfxDocumentTemplates *mpDocTemplates;
     Link maDblClickHdl;
     Link maChangeNameHdl;
+    Link maCloseHdl;
 
     Edit *mpEditName;
 };

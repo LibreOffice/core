@@ -262,6 +262,7 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
 
     mpItemView->setItemStateHdl(LINK(this,TemplateFolderView,TVTemplateStateHdl));
     mpItemView->setChangeNameHdl(LINK(this,TemplateFolderView,ChangeNameHdl));
+    mpItemView->setCloseHdl(LINK(this,TemplateFolderView,OverlayCloseHdl));
 }
 
 TemplateFolderView::~TemplateFolderView()
@@ -352,6 +353,7 @@ bool TemplateFolderView::isOverlayVisible () const
 
 void TemplateFolderView::showOverlay (bool bVisible)
 {
+    mbActive = !bVisible;
     mpItemView->Show(bVisible);
 
     // Clear items is the overlay is closed.
@@ -568,6 +570,7 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
     if (meFilterOption != FILTER_APP_NONE)
         mpItemView->filterItems(ViewFilter_Application(mpDocTemplates,meFilterOption));
 
+    mbActive = false;
     mpItemView->Show();
 }
 
@@ -597,6 +600,12 @@ IMPL_LINK(TemplateFolderView, ChangeNameHdl, TemplateView*, pView)
     }
 
     return true;
+}
+
+IMPL_LINK_NOARG(TemplateFolderView, OverlayCloseHdl)
+{
+    showOverlay(false);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

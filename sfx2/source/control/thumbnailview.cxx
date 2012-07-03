@@ -104,6 +104,7 @@ void ThumbnailView::ImplInit()
     mbScroll            = false;
     mbHasVisibleItems   = false;
     mbSelectionMode = false;
+    mbActive = true;
     maFilterFunc = ViewFilterAll();
 
     // Create the processor and process the primitives
@@ -195,7 +196,7 @@ void ThumbnailView::ImplInitScrollBar()
 
 void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
 {
-    if (pItem->isVisible())
+    if (mbActive && pItem->isVisible())
     {
         Rectangle aRect = pItem->getDrawArea();
 
@@ -600,7 +601,7 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
 {
     ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
 
-    if (pItem)
+    if (pItem && mbActive)
     {
         if (mnHighItemId != pItem->mnId && pItem->isVisible())
         {
