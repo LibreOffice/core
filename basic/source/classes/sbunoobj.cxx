@@ -102,6 +102,7 @@ using namespace cppu;
 TYPEINIT1(SbUnoMethod,SbxMethod)
 TYPEINIT1(SbUnoProperty,SbxProperty)
 TYPEINIT1(SbUnoObject,SbxObject)
+TYPEINIT1(SbUnoStructRefObject,SbxObject)
 TYPEINIT1(SbUnoClass,SbxObject)
 TYPEINIT1(SbUnoService,SbxObject)
 TYPEINIT1(SbUnoServiceCtor,SbxMethod)
@@ -1335,6 +1336,10 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                 {
                     aRetVal = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
                 }
+                else if( pObj && pObj->ISA(SbUnoStructRefObject) )
+                {
+                    aRetVal = ((SbUnoStructRefObject*)(SbxBase*)pObj)->getUnoAny();
+                }
                 else
                 {
                     // zero object -> zero XInterface
@@ -1726,8 +1731,11 @@ rtl::OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Ref
     if( pObj )
     {
         SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
+        SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,pObj);
         if( pUnoObj )
             aName = getDbgObjectNameImpl( pUnoObj );
+        else if ( pUnoStructObj )
+            aName = pUnoStructObj->GetClassName();
     }
     return aName;
 }
@@ -2124,6 +2132,21 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 {
                     try
                     {
+                        if ( pProp->isUnoStruct() && maStructInfo.get()  )
+                        {
+                            StructRefInfo aMemberStruct = maStructInfo->getStructMember( pProp->GetName() );
+                            if ( aMemberStruct.isEmpty() )
+                            {
+                                 StarBASIC::Error( SbERR_PROPERTY_NOT_FOUND );
+                            }
+                            else
+                            {
+                                SbUnoStructRefObject* pSbUnoObject = new SbUnoStructRefObject( pProp->GetName(), aMemberStruct );
+                                SbxObjectRef xWrapper = (SbxObject*)pSbUnoObject;
+                                pVar->PutObject( xWrapper );
+                                return;
+                            }
+                        }
                         // get the value
                         Reference< XPropertySet > xPropSet( mxUnoAccess->queryAdapter( ::getCppuType( (const Reference< XPropertySet > *)0 ) ), UNO_QUERY );
                         Any aRetAny = xPropSet->getPropertyValue( pProp->GetName() );
@@ -2409,6 +2432,10 @@ SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
             aClassName_ = aUnoObj_.getValueType().getTypeName();
             bSetClassName = sal_True;
         }
+        typelib_TypeDescription * pDeclTD = 0;
+        typelib_typedescription_getByName( &pDeclTD, maTmpUnoObj.getValueTypeName().pData );
+        StructRefInfo aThisStruct( maTmpUnoObj, pDeclTD, 0 );
+        maStructInfo.reset( new SbUnoStructRefObject( GetName(), aThisStruct ) );
     }
     else if( eType == TypeClass_INTERFACE )
     {
@@ -2619,13 +2646,15 @@ SbUnoProperty::SbUnoProperty
     SbxDataType eRealSbxType,
     const Property& aUnoProp_,
     sal_Int32 nId_,
-    bool bInvocation
+    bool bInvocation,
+    bool bUnoStruct
 )
     : SbxProperty( aName_, eSbxType )
     , aUnoProp( aUnoProp_ )
     , nId( nId_ )
     , mbInvocation( bInvocation )
     , mRealType( eRealSbxType )
+    , mbUnoStruct( bUnoStruct )
 {
     // as needed establish an dummy array so that SbiRuntime::CheckArray() works
     static SbxArrayRef xDummyArray = new SbxArray( SbxVARIANT );
@@ -2674,7 +2703,8 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
 
                 SbxDataType eRealSbxType = ( ( rProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( rProp.Type.getTypeClass() ) : eSbxType );
                 // create the property and superimpose it
-                SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, 0, false );
+                SbUnoProperty* pProp = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, 0, false, ( rProp.Type.getTypeClass() ==  com::sun::star::uno::TypeClass_STRUCT  ) );
+                SbxVariableRef xVarRef = pProp;
                 QuickInsert( (SbxVariable*)xVarRef );
                 pRes = xVarRef;
             }
@@ -2743,7 +2773,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                 if( mxInvocation->hasProperty( aUName ) )
                 {
                     // create a property and superimpose it
-                    SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, SbxVARIANT, aDummyProp, 0, true );
+                    SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, SbxVARIANT, aDummyProp, 0, true, false );
                     QuickInsert( (SbxVariable*)xVarRef );
                     pRes = xVarRef;
                 }
@@ -2802,15 +2832,15 @@ void SbUnoObject::implCreateDbgProperties( void )
     Property aProp;
 
     // Id == -1: display the implemented interfaces corresponding the ClassProvider
-    SbxVariableRef xVarRef = new SbUnoProperty( ::rtl::OUString(ID_DBG_SUPPORTEDINTERFACES), SbxSTRING, SbxSTRING, aProp, -1, false );
+    SbxVariableRef xVarRef = new SbUnoProperty( ::rtl::OUString(ID_DBG_SUPPORTEDINTERFACES), SbxSTRING, SbxSTRING, aProp, -1, false, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -2: output the properties
-    xVarRef = new SbUnoProperty( ::rtl::OUString(ID_DBG_PROPERTIES), SbxSTRING, SbxSTRING, aProp, -2, false );
+    xVarRef = new SbUnoProperty( ::rtl::OUString(ID_DBG_PROPERTIES), SbxSTRING, SbxSTRING, aProp, -2, false, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -3: output the Methods
-    xVarRef = new SbUnoProperty( ::rtl::OUString(ID_DBG_METHODS), SbxSTRING, SbxSTRING, aProp, -3, false );
+    xVarRef = new SbUnoProperty( ::rtl::OUString(ID_DBG_METHODS), SbxSTRING, SbxSTRING, aProp, -3, false, false );
     QuickInsert( (SbxVariable*)xVarRef );
 }
 
@@ -2853,7 +2883,7 @@ void SbUnoObject::implCreateAll( void )
 
         SbxDataType eRealSbxType = ( ( rProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( rProp.Type.getTypeClass() ) : eSbxType );
         // Create property and superimpose it
-        SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, i, false );
+        SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, i, false, ( rProp.Type.getTypeClass() == com::sun::star::uno::TypeClass_STRUCT   ) );
         QuickInsert( (SbxVariable*)xVarRef );
     }
 
@@ -2915,7 +2945,6 @@ SbUnoObject* Impl_CreateUnoStruct( const ::rtl::OUString& aClassName )
     // create an instance
     Any aNewAny;
     xClass->createObject( aNewAny );
-
     // make a SbUnoObject out of it
     SbUnoObject* pUnoObj = new SbUnoObject( aClassName, aNewAny );
     return pUnoObj;
@@ -2949,8 +2978,11 @@ void createAllObjectProperties( SbxObject* pObj )
         return;
 
     SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
+    SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,pObj);
     if( pUnoObj )
         pUnoObj->createAllProperties();
+    else if ( pUnoStructObj )
+        pUnoStructObj->createAllProperties();
     else
         pObj->GetAll( SbxCLASS_DONTCARE );
 }
@@ -4768,6 +4800,343 @@ bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal )
         }
     }
     return bSuccess;
+}
+
+Any StructRefInfo::getValue()
+{
+    Any aRet;
+    uno_any_destruct(
+        &aRet, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
+    uno_any_construct(
+        &aRet, getInst(), mpTD,
+                reinterpret_cast< uno_AcquireFunc >(cpp_acquire) );
+    return aRet;
+}
+
+void StructRefInfo::setValue( const Any& rValue )
+{
+    uno_type_assignData( getInst(),
+        mpTD->pWeakRef,
+       (void*)rValue.getValue(),
+       rValue.getValueTypeRef(),
+       reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
+       reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
+       reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
+}
+
+rtl::OUString StructRefInfo::getTypeName() const
+{
+    rtl::OUString sTypeName;
+    if ( mpTD )
+        sTypeName = mpTD->pTypeName;
+    return sTypeName;
+}
+
+void* StructRefInfo::getInst()
+{
+    return ((char*)maAny.getValue() + mnPos );
+}
+
+TypeClass StructRefInfo::getTypeClass() const
+{
+    TypeClass t = TypeClass_VOID;
+    if ( mpTD )
+        t =  (TypeClass)mpTD->eTypeClass;
+    return t;
+}
+
+SbUnoStructRefObject::SbUnoStructRefObject( const ::rtl::OUString& aName_, const StructRefInfo& rMemberInfo ) :  SbxObject( aName_ ), maMemberInfo( rMemberInfo ), mbMemberCacheInit( false )
+{
+   SetClassName( rtl::OUString( maMemberInfo.getTypeName() ) );
+}
+
+SbUnoStructRefObject::~SbUnoStructRefObject()
+{
+    for ( StructFieldInfo::iterator it = maFields.begin(), it_end = maFields.end(); it != it_end; ++it )
+        delete it->second;
+}
+
+void SbUnoStructRefObject::initMemberCache()
+{
+    if ( mbMemberCacheInit )
+        return;
+    sal_Int32 nAll = 0;
+    typelib_TypeDescription * pTD = maMemberInfo.getTD();
+    typelib_CompoundTypeDescription * pCompTypeDescr = (typelib_CompoundTypeDescription *)pTD;
+    for ( ; pCompTypeDescr; pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
+        nAll += pCompTypeDescr->nMembers;
+    for ( pCompTypeDescr = (typelib_CompoundTypeDescription *)pTD; pCompTypeDescr;
+        pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
+    {
+        typelib_TypeDescriptionReference ** ppTypeRefs = pCompTypeDescr->ppTypeRefs;
+        rtl_uString ** ppNames                         = pCompTypeDescr->ppMemberNames;
+        sal_Int32 * pMemberOffsets                     = pCompTypeDescr->pMemberOffsets;
+        for ( sal_Int32 nPos = pCompTypeDescr->nMembers; nPos--; )
+        {
+            typelib_TypeDescription * pMemberTD = 0;
+            TYPELIB_DANGER_GET( &pMemberTD, ppTypeRefs[nPos] );
+            OSL_ENSURE( pMemberTD, "### cannot get field in struct!" );
+            if (pMemberTD)
+            {
+                rtl::OUString aName( ppNames[nPos] );
+                TYPELIB_DANGER_RELEASE( pMemberTD );
+                maFields[ aName ] = new StructRefInfo( maMemberInfo.getRootAnyRef(), pMemberTD, maMemberInfo.getPos() + pMemberOffsets[nPos] );
+            }
+        }
+    }
+    mbMemberCacheInit = true;
+}
+
+SbxVariable* SbUnoStructRefObject::Find( const String& rName, SbxClassType t )
+{
+    SbxVariable* pRes = SbxObject::Find( rName, t );
+    if ( !pRes )
+    {
+        if ( !mbMemberCacheInit )
+            initMemberCache();
+        StructFieldInfo::iterator it = maFields.find( String( rName ).ToUpperAscii() );
+        if ( it != maFields.end() )
+        {
+            SbxDataType eSbxType;
+            eSbxType = unoToSbxType( it->second->getTypeClass() );
+            SbxDataType eRealSbxType = eSbxType;
+            Property aProp;
+            aProp.Name = rName;
+            aProp.Type = com::sun::star::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
+            SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() == com::sun::star::uno::TypeClass_STRUCT) );
+            SbxVariableRef xVarRef = pProp;
+            QuickInsert( (SbxVariable*)xVarRef );
+            pRes = xVarRef;
+        }
+    }
+
+    if( !pRes )
+    {
+        if( rName.EqualsIgnoreCaseAscii( ID_DBG_SUPPORTEDINTERFACES ) ||
+            rName.EqualsIgnoreCaseAscii( ID_DBG_PROPERTIES ) ||
+            rName.EqualsIgnoreCaseAscii( ID_DBG_METHODS ) )
+        {
+            // Create
+            implCreateDbgProperties();
+
+            // Now they have to be found regular
+            pRes = SbxObject::Find( rName, SbxCLASS_DONTCARE );
+        }
+    }
+
+    return pRes;
+}
+
+// help method to create the dbg_-Properties
+void SbUnoStructRefObject::implCreateDbgProperties( void )
+{
+    Property aProp;
+
+    // Id == -1: display the implemented interfaces corresponding the ClassProvider
+    SbxVariableRef xVarRef = new SbUnoProperty( ::rtl::OUString(ID_DBG_SUPPORTEDINTERFACES), SbxSTRING, SbxSTRING, aProp, -1, false, false );
+    QuickInsert( (SbxVariable*)xVarRef );
+
+    // Id == -2: output the properties
+    xVarRef = new SbUnoProperty( ::rtl::OUString(ID_DBG_PROPERTIES), SbxSTRING, SbxSTRING, aProp, -2, false, false );
+    QuickInsert( (SbxVariable*)xVarRef );
+
+    // Id == -3: output the Methods
+    xVarRef = new SbUnoProperty( ::rtl::OUString(ID_DBG_METHODS), SbxSTRING, SbxSTRING, aProp, -3, false, false );
+    QuickInsert( (SbxVariable*)xVarRef );
+}
+
+void SbUnoStructRefObject::implCreateAll()
+{
+     // throw away all existing methods and properties
+    pMethods   = new SbxArray;
+    pProps     = new SbxArray;
+
+    if (!mbMemberCacheInit)
+        initMemberCache();
+
+    for ( StructFieldInfo::iterator it = maFields.begin(), it_end = maFields.end(); it != it_end; ++it )
+    {
+        const rtl::OUString& rName = it->first;
+        SbxDataType eSbxType;
+        eSbxType = unoToSbxType( it->second->getTypeClass() );
+        SbxDataType eRealSbxType = eSbxType;
+        Property aProp;
+        aProp.Name = rName;
+        aProp.Type = com::sun::star::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
+        SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() == com::sun::star::uno::TypeClass_STRUCT) );
+        SbxVariableRef xVarRef = pProp;
+        QuickInsert( (SbxVariable*)xVarRef );
+    }
+
+    // Create Dbg_-Properties
+    implCreateDbgProperties();
+}
+
+ // output the value
+Any SbUnoStructRefObject::getUnoAny( void )
+{
+    return maMemberInfo.getValue();
+}
+
+::rtl::OUString SbUnoStructRefObject::Impl_DumpProperties()
+{
+    ::rtl::OUStringBuffer aRet;
+    aRet.appendAscii("Properties of object ");
+    aRet.append( getDbgObjectName() );
+
+    sal_uInt16 nPropCount = pProps->Count();
+    sal_uInt16 nPropsPerLine = 1 + nPropCount / 30;
+    for( sal_uInt16 i = 0; i < nPropCount; i++ )
+    {
+        SbxVariable* pVar = pProps->Get( i );
+        if( pVar )
+        {
+            ::rtl::OUStringBuffer aPropStr;
+            if( (i % nPropsPerLine) == 0 )
+                aPropStr.appendAscii( "\n" );
+
+            // output the type and name
+            // Is it in Uno a sequence?
+            SbxDataType eType = pVar->GetFullType();
+
+            sal_Bool bMaybeVoid = sal_False;
+            rtl::OUString aName( pVar->GetName() );
+            StructFieldInfo::iterator it = maFields.find( aName );
+
+            if ( it != maFields.end() )
+            {
+                const StructRefInfo& rPropInfo = *it->second;
+
+                if( eType == SbxOBJECT )
+                {
+                    if( rPropInfo.getTypeClass() == TypeClass_SEQUENCE )
+                        eType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
+                }
+            }
+            aPropStr.append( Dbg_SbxDataType2String( eType ) );
+            if( bMaybeVoid )
+                aPropStr.appendAscii( "/void" );
+            aPropStr.appendAscii( " " );
+            aPropStr.append( pVar->GetName() );
+
+            if( i == nPropCount - 1 )
+                aPropStr.appendAscii( "\n" );
+            else
+                aPropStr.appendAscii( "; " );
+
+            aRet.append( aPropStr.makeStringAndClear() );
+        }
+    }
+    return aRet.makeStringAndClear();
+}
+
+void SbUnoStructRefObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                           const SfxHint& rHint, const TypeId& rHintType )
+{
+    if ( !mbMemberCacheInit )
+        initMemberCache();
+    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    if( pHint )
+    {
+        SbxVariable* pVar = pHint->GetVar();
+        SbUnoProperty* pProp = PTR_CAST(SbUnoProperty,pVar);
+        if( pProp )
+        {
+             StructFieldInfo::iterator it =  maFields.find(  pProp->GetName() );
+            // handle get/set of members of struct
+            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            {
+                // Test-Properties
+                sal_Int32 nId = pProp->nId;
+                if( nId < 0 )
+                {
+                    // Id == -1: Display implemented interfaces according the ClassProvider
+                    if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
+                    {
+                        ::rtl::OUStringBuffer aRet;
+                        aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM(ID_DBG_SUPPORTEDINTERFACES) );
+                        aRet.appendAscii( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
+
+                        pVar->PutString( aRet.makeStringAndClear() );
+                    }
+                    // Id == -2: output properties
+                    else if( nId == -2 )        // Property ID_DBG_PROPERTIES
+                    {
+                        // by now all properties must be established
+                        implCreateAll();
+                        ::rtl::OUString aRetStr = Impl_DumpProperties();
+                        pVar->PutString( aRetStr );
+                    }
+                    // Id == -3: output the methods
+                    else if( nId == -3 )        // Property ID_DBG_METHODS
+                    {
+                        // by now all properties must be established
+                        implCreateAll();
+                        ::rtl::OUStringBuffer aRet;
+                        aRet.appendAscii("Methods of object ");
+                        aRet.append( getDbgObjectName() );
+                        aRet.appendAscii( "\nNo methods found\n" );
+                        pVar->PutString( aRet.makeStringAndClear() );
+                    }
+                    return;
+                }
+
+                if ( it != maFields.end() )
+                {
+                    Any aRetAny = it->second->getValue();
+                    unoToSbxValue( pVar, aRetAny );
+                }
+                else
+                    StarBASIC::Error( SbERR_PROPERTY_NOT_FOUND );
+            }
+            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            {
+                if ( it != maFields.end() )
+                {
+                    // take over the value from Uno to Sbx
+                    Any aAnyValue = sbxToUnoValue( pVar, pProp->aUnoProp.Type, &pProp->aUnoProp );
+                    it->second->setValue( aAnyValue );
+                }
+                else
+                    StarBASIC::Error( SbERR_PROPERTY_NOT_FOUND );
+            }
+        }
+        else
+           SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+    }
+}
+
+StructRefInfo SbUnoStructRefObject::getStructMember( const rtl::OUString& rMemberName )
+{
+    if (!mbMemberCacheInit)
+        initMemberCache();
+    StructFieldInfo::iterator it = maFields.find( rMemberName );
+
+    typelib_TypeDescription * pFoundTD = NULL;
+    sal_Int32 nFoundPos = -1;
+
+    if ( it != maFields.end() )
+    {
+        pFoundTD = it->second->getTD();
+        nFoundPos = it->second->getPos();
+    }
+    StructRefInfo aRet( maMemberInfo.getRootAnyRef(), pFoundTD, nFoundPos );
+    return aRet;
+}
+
+rtl::OUString SbUnoStructRefObject::getDbgObjectName()
+{
+    ::rtl::OUString aName = GetClassName();
+    if( aName.isEmpty() )
+        aName += ::rtl::OUString("Unknown");
+
+    ::rtl::OUStringBuffer aRet;
+    if( aName.getLength() > 20 )
+        aRet.appendAscii( "\n" );
+    aRet.appendAscii( "\"" );
+    aRet.append( aName );
+    aRet.appendAscii( "\":" );
+    return aRet.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

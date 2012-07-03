@@ -332,37 +332,59 @@ void SbiRuntime::StepGET()
 }
 
 // #67607 copy Uno-Structs
-inline void checkUnoStructCopy( SbxVariableRef& refVal, SbxVariableRef& refVar )
+inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRef& refVar )
 {
     SbxDataType eVarType = refVar->GetType();
+
+    if ( !( !bVBA|| ( bVBA && refVar->GetType() != SbxEMPTY ) ) )
+        return false;
+
     if( eVarType != SbxOBJECT )
-        return;
+        return false;
 
     SbxObjectRef xValObj = (SbxObject*)refVal->GetObject();
     if( !xValObj.Is() || xValObj->ISA(SbUnoAnyObject) )
-        return;
+        return false;
 
     // #115826: Exclude ProcedureProperties to avoid call to Property Get procedure
     if( refVar->ISA(SbProcedureProperty) )
-        return;
+        return false;
 
     SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
     SbxDataType eValType = refVal->GetType();
-    if( eValType == SbxOBJECT && xVarObj == xValObj )
+    if( eValType == SbxOBJECT )
     {
         SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)xVarObj);
-        if( pUnoObj )
+        SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xVarObj);
+
+        SbUnoObject* pUnoVal =  PTR_CAST(SbUnoObject,(SbxObject*)xValObj);
+        SbUnoStructRefObject* pUnoStructVal = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xValObj);
+
+        if ( ( !pUnoObj && !pUnoStructObj ) || ( !pUnoVal && !pUnoStructVal ) )
+            return false;
+        Any aAny = pUnoVal ? pUnoVal->getUnoAny() : pUnoStructVal->getUnoAny();
+
+        if (  aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
         {
-            Any aAny = pUnoObj->getUnoAny();
-            if( aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
+            String sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
+            String sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
+
+            if ( pUnoObj )
             {
-                SbUnoObject* pNewUnoObj = new SbUnoObject( pUnoObj->GetName(), aAny );
+                SbUnoObject* pNewUnoObj = new SbUnoObject( sName, aAny );
                 // #70324: adopt ClassName
-                pNewUnoObj->SetClassName( pUnoObj->GetClassName() );
+                pNewUnoObj->SetClassName( sClassName );
                 refVar->PutObject( pNewUnoObj );
+                return true;
+            }
+            else
+            {
+                StructRefInfo aInfo = pUnoStructObj->getStructInfo();
+                aInfo.setValue( aAny );
             }
         }
     }
+    return false;
 }
 
 
@@ -403,11 +425,9 @@ void SbiRuntime::StepPUT()
         }
     }
 
-    *refVar = *refVal;
-    // lhs is a property who's value is currently null
-    if ( !bVBAEnabled || ( bVBAEnabled && refVar->GetType() != SbxEMPTY ) )
-    // #67607 Uno-Structs kopieren
-        checkUnoStructCopy( refVal, refVar );
+    if ( !checkUnoStructCopy( bVBAEnabled, refVal, refVar ) )
+        *refVar = *refVal;
+
     if( bFlagsChanged )
         refVar->SetFlags( n );
 }
@@ -587,12 +607,15 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 refVal->SetComListener( xComListener, &rBasic );        // Hold reference
             }
 
-            *refVar = *refVal;
         }
-        else
-        {
+
+        // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
+        // in this case if there is a default prop involved the value of the
+        // default property may infact be void so the type will also be SbxEMPTY
+        // in this case we do not want to call checkUnoStructCopy 'cause that will
+        // cause an error also
+        if ( !checkUnoStructCopy( bHandleDefaultProp, refVal, refVar ) )
             *refVar = *refVal;
-        }
 
         if ( bDimAsNew )
         {
@@ -656,14 +679,6 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         }
 
 
-        // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
-        // in this case if there is a default prop involved the value of the
-        // default property may infact be void so the type will also be SbxEMPTY
-        // in this case we do not want to call checkUnoStructCopy 'cause that will
-        // cause an error also
-        if ( !bHandleDefaultProp || ( bHandleDefaultProp && ( refVar->GetType() != SbxEMPTY ) ) )
-        // #67607 copy Uno-Structs
-            checkUnoStructCopy( refVal, refVar );
         if( bFlagsChanged )
             refVar->SetFlags( n );
     }

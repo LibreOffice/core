@@ -44,6 +44,69 @@
 #include <rtl/ustring.hxx>
 #include <boost/unordered_map.hpp>
 #include <vector>
+#include <map>
+#include <boost/shared_ptr.hpp>
+
+class StructRefInfo
+{
+    StructRefInfo();
+    com::sun::star::uno::Any& maAny;
+    typelib_TypeDescription* mpTD;
+    sal_Int32 mnPos;
+public:
+    StructRefInfo( com::sun::star::uno::Any& aAny, typelib_TypeDescription* pTD, sal_Int32 nPos ) : maAny( aAny ), mpTD( pTD ), mnPos( nPos ) {}
+
+    sal_Int32 getPos() const { return mnPos; }
+    typelib_TypeDescription* getTD() const { return mpTD; }
+    rtl::OUString getTypeName() const;
+    com::sun::star::uno::Any& getRootAnyRef() { return maAny; };
+
+    com::sun::star::uno::TypeClass getTypeClass() const;
+
+    void* getInst();
+    bool isEmpty() { return (mnPos == -1); }
+
+    ::com::sun::star::uno::Any getValue();
+    void setValue( const ::com::sun::star::uno::Any& );
+};
+
+class SbUnoStructRefObject: public SbxObject
+{
+    struct caseLessComp
+    {
+        bool operator() (const ::rtl::OUString& rProp, const ::rtl::OUString& rOtherProp ) const
+        {
+            return rProp.toAsciiUpperCase().compareTo( rOtherProp.toAsciiUpperCase() ) < 0;
+        }
+    };
+    typedef ::std::map< rtl::OUString, StructRefInfo*, caseLessComp > StructFieldInfo;
+    StructFieldInfo maFields;
+    StructRefInfo maMemberInfo;
+    bool mbMemberCacheInit;
+    void implCreateAll();
+    void implCreateDbgProperties();
+    void initMemberCache();
+    rtl::OUString Impl_DumpProperties();
+    rtl::OUString getDbgObjectName();
+public:
+    TYPEINFO();
+    StructRefInfo getStructMember( const rtl::OUString& rMember );
+    StructRefInfo getStructInfo() { return maMemberInfo; }
+    SbUnoStructRefObject( const ::rtl::OUString& aName_, const StructRefInfo& rMemberInfo );
+    ~SbUnoStructRefObject();
+
+    // Find overloaded to support e. g. NameAccess
+    virtual SbxVariable* Find( const String&, SbxClassType );
+
+    // Force creation of all properties for debugging
+    void createAllProperties( void  )
+        { implCreateAll(); }
+
+    // give out value
+    ::com::sun::star::uno::Any getUnoAny();
+    void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
+};
+SV_DECL_IMPL_REF(SbUnoStructRefObject);
 
 class SbUnoObject: public SbxObject
 {
@@ -55,7 +118,7 @@ class SbUnoObject: public SbxObject
     sal_Bool bNeedIntrospection;
     sal_Bool bNativeCOMObject;
     ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
-
+    ::boost::shared_ptr< SbUnoStructRefObject > maStructInfo;
     // help method to establish the dbg_-properties
     void implCreateDbgProperties( void );
 
@@ -90,7 +153,6 @@ public:
         { return bNativeCOMObject; }
 };
 SV_DECL_IMPL_REF(SbUnoObject);
-
 
 // #67781 delete return values of the uno-methods
 void clearUnoMethods( void );
@@ -130,9 +192,11 @@ public:
 };
 
 
+
 class SbUnoProperty : public SbxProperty
 {
     friend class SbUnoObject;
+    friend class SbUnoStructRefObject;
 
     ::com::sun::star::beans::Property aUnoProp;
     sal_Int32 nId;
@@ -140,11 +204,16 @@ class SbUnoProperty : public SbxProperty
     bool mbInvocation;      // Property is based on invocation
     SbxDataType mRealType;
     virtual ~SbUnoProperty();
+    bool mbUnoStruct;
+    SbUnoProperty( const SbUnoProperty&);
+    SbUnoProperty& operator = ( const SbUnoProperty&);
 public:
+
     TYPEINFO();
     SbUnoProperty( const rtl::OUString& aName_, SbxDataType eSbxType, SbxDataType eRealSbxType,
-        const ::com::sun::star::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation );
+        const ::com::sun::star::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation, bool bUnoStruct );
 
+    bool isUnoStruct() { return mbUnoStruct; }
     bool isInvocationBased( void )
         { return mbInvocation; }
     SbxDataType getRealType() { return mRealType; }
