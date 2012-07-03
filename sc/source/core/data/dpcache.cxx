@@ -161,6 +161,8 @@ void initFromCell(
     {
         rData.SetString(rCache.InternString(aDocStr));
     }
+    else
+        rData.SetEmpty();
 }
 
 void getItemValue(
