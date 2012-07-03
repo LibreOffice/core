@@ -426,7 +426,7 @@ static hchar s_hh2ks(hchar hh)
         }
         return (idx << 8) | (i + 160);
     }
-    if ((idx == 0x1F && (hh & 0xff) >= 0xC0) || (hh == 0x1F00))
+    if (((hh & 0xff) >= 0xC0) || (hh == 0x1F00))
         return 0;
     if (idx < 0x34 || idx >= 0x38)
         return 0x2020;
