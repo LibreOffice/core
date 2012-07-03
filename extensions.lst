@@ -53,7 +53,7 @@
 
 # German dictionary.
 [ language=de || language=de_DE || language=nl || language=ru ]
-    eb3d3397b8034c7fce6e0d78daf914ca http://sourceforge.net/projects/aoo-extensions/files/1075/10/dict-de_DE-frami_2011-06-03.oxt/download "dict-de_DE-frami_2011-06-03.oxt"
+    1051096689e5e3838b9340cde8c3ce37 http://sourceforge.net/projects/aoo-extensions/files/1075/12/dict-de_DE-frami_2012-06-17.oxt/download "dict-de_DE-frami_2012-06-17.oxt"
 
 # Dutch dictionary.
 [ language=nl ]
@@ -93,11 +93,11 @@
 
 # German (Austria) dictionary.
 [ language=de || language=de_AT || language=de_DE ]
-    76654bcb6ba11bb265111ef1fe3c6007 http://sourceforge.net/projects/aoo-extensions/files/1697/7/dict-de_AT-frami_2011-06-03.oxt/download "dict-de_AT-frami_2011-06-03.oxt"
+  149fd9465b7cac8aca393f2c57e9d562 http://sourceforge.net/projects/aoo-extensions/files/1697/9/dict-de_AT-frami_2012-06-17.oxt/download "dict-de_AT-frami_2012-06-17.oxt"
 
 # German (Switzerland) dictionary.
 [ language=de || language=de_CH || language=de_DE ]
-    7c9f63dcd9de3e4ec6ddbde160a0d793 http://sourceforge.net/projects/aoo-extensions/files/1699/7/dict-de_CH-frami_2011-06-03.oxt/download "dict-de_CH-frami_2011-06-03.oxt"
+    e9ddd3ae2a3213a7bd8b5e49198b6b6b http://sourceforge.net/projects/aoo-extensions/files/1699/9/dict-de_CH-frami_2012-06-17.oxt/download "dict-de_CH-frami_2012-06-17.oxt"
 
 # Khmer dictionary.
 [ language=km ]
