@@ -76,6 +76,7 @@ public:
     void dumpProjectionModeAsAttribute(com::sun::star::drawing::ProjectionMode eProjectionMode);
     void dumpViewPointAsElement(com::sun::star::drawing::Position3D aViewPoint);
     void dumpOriginAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aOrigin);
+    void dumpExtrusionColorAsAttribute(sal_Bool bExtrusionColor);
 
 private:
     xmlTextWriterPtr xmlWriter;

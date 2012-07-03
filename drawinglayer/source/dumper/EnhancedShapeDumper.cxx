@@ -170,6 +170,12 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= aOrigin)
             dumpOriginAsElement(aOrigin);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("ExtrusionColor");
+        sal_Bool bExtrusionColor;
+        if(anotherAny >>= bExtrusionColor)
+            dumpExtrusionColorAsAttribute(bExtrusionColor);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -375,4 +381,11 @@ void EnhancedShapeDumper::dumpOriginAsElement(drawing::EnhancedCustomShapeParame
     xmlTextWriterEndElement( xmlWriter );
 }
 
+void EnhancedShapeDumper::dumpExtrusionColorAsAttribute(sal_Bool bExtrusionColor)
+{
+    if(bExtrusionColor)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionColor"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionColor"), "%s", "false");
+}
 
