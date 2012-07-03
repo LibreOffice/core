@@ -25,6 +25,7 @@ $(eval $(call gb_Module_Module,sc))
 
 $(eval $(call gb_Module_add_targets,sc,\
 	AllLangResTarget_sc \
+	CustomTarget_uiconfig \
 	Library_sc \
 	Library_scd \
 	Library_scfilt \
