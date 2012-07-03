@@ -57,6 +57,8 @@ public:
     void dumpLightFaceAsAttribute(sal_Bool bLightFace);
     void dumpFirstLightHarshAsAttribute(sal_Bool bFirstLightHarsh);
     void dumpSecondLightHarshAsAttribute(sal_Bool bSecondLightHarsh);
+    void dumpFirstLightLevelAsAttribute(double aFirstLightLevel);
+    void dumpSecondLightLevelAsAttribute(double aSecondLightLevel);
 
 private:
     xmlTextWriterPtr xmlWriter;

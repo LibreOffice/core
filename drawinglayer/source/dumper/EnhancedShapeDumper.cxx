@@ -86,6 +86,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= bSecondLightHarsh)
             dumpSecondLightHarshAsAttribute(bSecondLightHarsh);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("FirstLightLevel");
+        double aFirstLightLevel;
+        if(anotherAny >>= aFirstLightLevel)
+            dumpFirstLightLevelAsAttribute(aFirstLightLevel);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("SecondLightLevel");
+        double aSecondLightLevel;
+        if(anotherAny >>= aSecondLightLevel)
+            dumpSecondLightLevelAsAttribute(aSecondLightLevel);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -167,6 +179,16 @@ void EnhancedShapeDumper::dumpSecondLightHarshAsAttribute(sal_Bool bSecondLightH
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightHarsh"), "%s", "true");
     else
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightHarsh"), "%s", "false");
+}
+
+void EnhancedShapeDumper::dumpFirstLightLevelAsAttribute(double aFirstLightLevel)
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightLevel"), "%f", aFirstLightLevel);
+}
+
+void EnhancedShapeDumper::dumpSecondLightLevelAsAttribute(double aSecondLightLevel)
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightLevel"), "%f", aSecondLightLevel);
 }
 
 
