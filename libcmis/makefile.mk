@@ -46,6 +46,8 @@ TARFILE_MD5=0d2dcdfbf28d6208751b33057f5361f0
 
 # Pushed upstream in both master and libcmis-0.2 branches
 PATCH_FILES+=libcmis-0.2.3.patch
+# Pushed upstream to master branch, but not to libcmis-0.2
+PATCH_FILES+=libcmis-0.2.3-allowable-actions.patch
 
 .IF "$(OS)$(COM)" == "WNTMSC"
 PATCH_FILES+=boost-win.patch

@@ -1,0 +1,284 @@
+diff -ur libcmis-0.2.3/src/libcmis/allowable-actions.cxx misc/build/libcmis-0.2.3/src/libcmis/allowable-actions.cxx
+--- libcmis-0.2.3/src/libcmis/allowable-actions.cxx	2012-07-03 16:47:28.063183460 +0200
++++ misc/build/libcmis-0.2.3/src/libcmis/allowable-actions.cxx	2012-07-03 16:48:24.178187938 +0200
+@@ -28,14 +28,122 @@
+ 
+ #include "allowable-actions.hxx"
+ #include "object.hxx"
++#include "xml-utils.hxx"
+ 
+ using namespace std;
+ 
+ namespace libcmis
+ {
+-    AllowableActions::AllowableActions( ) :
++    ObjectAction::ObjectAction( xmlNodePtr node ) :
++        m_type( ObjectAction::DeleteObject ),
++        m_enabled( false ),
++        m_valid( false )
++    {
++        try
++        {
++            m_type = parseType( string( ( char* ) node->name ) );
++            m_valid = true;
++        }
++        catch ( const Exception& e )
++        {
++            m_valid = false;
++        }
++
++        // Invalid xsd:bool will be mean false... not sure what the spec says
++        try
++        {
++            xmlChar* content = xmlNodeGetContent( node );
++            m_enabled = parseBool( string( ( char* )content ) );
++            xmlFree( content );
++        }
++        catch ( const Exception& e )
++        {
++            m_enabled = false;
++        }
++    }
++
++    ObjectAction::Type ObjectAction::parseType( string type ) throw ( Exception )
++    {
++        Type value = DeleteObject;
++        if ( type == "canDeleteObject" )
++            value = DeleteObject;
++        else if ( type == "canUpdateProperties" )
++            value = UpdateProperties;
++        else if ( type == "canGetFolderTree" )
++            value = GetFolderTree;
++        else if ( type == "canGetProperties" )
++            value = GetProperties;
++        else if ( type == "canGetObjectRelationships" )
++            value = GetObjectRelationships;
++        else if ( type == "canGetObjectParents" )
++            value = GetObjectParents;
++        else if ( type == "canGetFolderParent" )
++            value = GetFolderParent;
++        else if ( type == "canGetDescendants" )
++            value = GetDescendants;
++        else if ( type == "canMoveObject" )
++            value = MoveObject;
++        else if ( type == "canDeleteContentStream" )
++            value = DeleteContentStream;
++        else if ( type == "canCheckOut" )
++            value = CheckOut;
++        else if ( type == "canCancelCheckOut" )
++            value = CancelCheckOut;
++        else if ( type == "canCheckIn" )
++            value = CheckIn;
++        else if ( type == "canSetContentStream" )
++            value = SetContentStream;
++        else if ( type == "canGetAllVersions" )
++            value = GetAllVersions;
++        else if ( type == "canAddObjectToFolder" )
++            value = AddObjectToFolder;
++        else if ( type == "canRemoveObjectFromFolder" )
++            value = RemoveObjectFromFolder;
++        else if ( type == "canGetContentStream" )
++            value = GetContentStream;
++        else if ( type == "canApplyPolicy" )
++            value = ApplyPolicy;
++        else if ( type == "canGetAppliedPolicies" )
++            value = GetAppliedPolicies;
++        else if ( type == "canRemovePolicy" )
++            value = RemovePolicy;
++        else if ( type == "canGetChildren" )
++            value = GetChildren;
++        else if ( type == "canCreateDocument" )
++            value = CreateDocument;
++        else if ( type == "canCreateFolder" )
++            value = CreateFolder;
++        else if ( type == "canCreateRelationship" )
++            value = CreateRelationship;
++        else if ( type == "canDeleteTree" )
++            value = DeleteTree;
++        else if ( type == "canGetRenditions" )
++            value = GetRenditions;
++        else if ( type == "canGetACL" )
++            value = GetACL;
++        else if ( type == "canApplyACL" )
++            value = ApplyACL;
++        else
++            throw Exception( "Invalid AllowableAction type: " + type );
++        
++        return value;
++    }
++
++    AllowableActions::AllowableActions( xmlNodePtr node ) :
+         m_states( )
+     {
++        for ( xmlNodePtr child = node->children; child; child = child->next )
++        {
++            // Check for non text children... "\n" is also a node ;)
++            if ( !xmlNodeIsText( child ) )
++            {
++                ObjectAction action( child );
++                if ( action.isValid( ) )
++                    m_states.insert( pair< libcmis::ObjectAction::Type, bool >(
++                                action.getType( ),
++                                action.isEnabled() ) );
++            }
++        }
+     }
+ 
+     AllowableActions::AllowableActions( const AllowableActions& copy ) :
+diff -ur libcmis-0.2.3/src/libcmis/allowable-actions.hxx misc/build/libcmis-0.2.3/src/libcmis/allowable-actions.hxx
+--- libcmis-0.2.3/src/libcmis/allowable-actions.hxx	2012-07-03 16:47:28.018183456 +0200
++++ misc/build/libcmis-0.2.3/src/libcmis/allowable-actions.hxx	2012-07-03 16:48:24.178187938 +0200
+@@ -29,6 +29,11 @@
+ #define _ALLOWABLE_ACTIONS_HXX_
+ 
+ #include <map>
++#include <string>
++
++#include <libxml/tree.h>
++
++#include "exception.hxx"
+ 
+ namespace libcmis
+ {
+@@ -37,8 +42,6 @@
+     class ObjectAction
+     {
+         public:
+-            virtual ~ObjectAction( ){ }
+-
+             enum Type
+             {
+                 DeleteObject,
+@@ -71,6 +74,25 @@
+                 GetACL,
+                 ApplyACL
+             };
++
++        private:
++            Type m_type;
++            bool m_enabled;
++            bool m_valid;
++
++        public:
++            ObjectAction( xmlNodePtr node );
++            virtual ~ObjectAction( ){ }
++
++            Type getType( ) { return m_type; }
++            bool isEnabled( ) { return m_enabled; }
++            bool isValid( ) { return m_valid; }
++
++            /** Parses the permission name into one of the enum values or throws
++                an exception for invalid input strings.
++              */
++            static Type parseType( std::string type ) throw ( Exception );
++
+     };
+ 
+     /** Class providing access to the allowed actions on an object.
+@@ -81,7 +103,7 @@
+             std::map< ObjectAction::Type, bool > m_states;
+ 
+         public:
+-            AllowableActions( );
++            AllowableActions( xmlNodePtr node );
+             AllowableActions( const AllowableActions& copy );
+             virtual ~AllowableActions( );
+ 
+Only in libcmis-0.2.3/src/libcmis: atom-allowable-actions.cxx
+Only in libcmis-0.2.3/src/libcmis: atom-allowable-actions.hxx
+diff -ur libcmis-0.2.3/src/libcmis/atom-document.hxx misc/build/libcmis-0.2.3/src/libcmis/atom-document.hxx
+--- libcmis-0.2.3/src/libcmis/atom-document.hxx	2012-07-03 16:47:28.094183463 +0200
++++ misc/build/libcmis-0.2.3/src/libcmis/atom-document.hxx	2012-07-03 16:48:24.178187938 +0200
+@@ -35,6 +35,7 @@
+ 
+ #include "document.hxx"
+ #include "exception.hxx"
++#include "folder.hxx"
+ #include "atom-object.hxx"
+ 
+ class AtomDocument : public libcmis::Document, public AtomObject
+diff -ur libcmis-0.2.3/src/libcmis/atom-object.cxx misc/build/libcmis-0.2.3/src/libcmis/atom-object.cxx
+--- libcmis-0.2.3/src/libcmis/atom-object.cxx	2012-07-03 16:47:28.095183463 +0200
++++ misc/build/libcmis-0.2.3/src/libcmis/atom-object.cxx	2012-07-03 16:48:24.179187937 +0200
+@@ -435,12 +435,14 @@
+         // Get the infos URL as we may not have it
+         m_infosUrl = getLink( "self", "application/atom+xml;type=entry" )->getHref( );
+ 
+-        // Get the URL to the allowableActions
+-        AtomLink* allowableActionsLink = getLink( "http://docs.oasis-open.org/ns/cmis/link/200908/allowableactions", "application/cmisallowableactions+xml" );
+-        if ( NULL != allowableActionsLink )
++        // Get the allowableActions
++        xpathObj = xmlXPathEvalExpression( BAD_CAST( "//cmis:allowableActions" ), xpathCtx );
++        if ( xpathObj && xpathObj->nodesetval && xpathObj->nodesetval->nodeNr > 0 )
+         {
+-            m_allowableActions.reset( new AtomAllowableActions( m_session, allowableActionsLink->getHref( ) ) );
++            xmlNodePtr node = xpathObj->nodesetval->nodeTab[0];
++            m_allowableActions.reset( new libcmis::AllowableActions( node ) );
+         }
++        xmlXPathFreeObject( xpathObj );
+ 
+         // First get the type id as it will give us the property definitions
+         string typeIdReq( "//cmis:propertyId[@propertyDefinitionId='cmis:objectTypeId']/cmis:value/text()" );
+diff -ur libcmis-0.2.3/src/libcmis/atom-object.hxx misc/build/libcmis-0.2.3/src/libcmis/atom-object.hxx
+--- libcmis-0.2.3/src/libcmis/atom-object.hxx	2012-07-03 16:47:28.043183458 +0200
++++ misc/build/libcmis-0.2.3/src/libcmis/atom-object.hxx	2012-07-03 16:48:24.179187937 +0200
+@@ -30,7 +30,7 @@
+ 
+ #include <libxml/tree.h>
+ 
+-#include "atom-allowable-actions.hxx"
++#include "allowable-actions.hxx"
+ #include "object.hxx"
+ 
+ class AtomPubSession;
+@@ -64,7 +64,7 @@
+         libcmis::ObjectTypePtr m_typeDescription;
+ 
+         std::map< std::string, libcmis::PropertyPtr > m_properties;
+-        boost::shared_ptr< AtomAllowableActions > m_allowableActions;
++        boost::shared_ptr< libcmis::AllowableActions > m_allowableActions;
+ 
+         std::vector< AtomLink > m_links;
+ 
+diff -ur libcmis-0.2.3/src/libcmis/atom-session.cxx misc/build/libcmis-0.2.3/src/libcmis/atom-session.cxx
+--- libcmis-0.2.3/src/libcmis/atom-session.cxx	2012-07-03 16:47:27.989183454 +0200
++++ misc/build/libcmis-0.2.3/src/libcmis/atom-session.cxx	2012-07-03 16:48:24.179187937 +0200
+@@ -311,6 +311,7 @@
+     string pattern = getWorkspace().getUriTemplate( atom::UriTemplate::ObjectById );
+     map< string, string > vars;
+     vars[URI_TEMPLATE_VAR_ID] = id;
++    vars[string( "includeAllowableActions" )] = string( "true" );
+     string url = createUrl( pattern, vars );
+ 
+     try
+@@ -340,6 +341,7 @@
+     string pattern = getWorkspace().getUriTemplate( atom::UriTemplate::ObjectByPath );
+     map< string, string > vars;
+     vars[URI_TEMPLATE_VAR_PATH] = path;
++    vars[string( "includeAllowableActions" )] = string( "true" );
+     string url = createUrl( pattern, vars );
+ 
+     try
+diff -ur libcmis-0.2.3/src/libcmis/Makefile.am misc/build/libcmis-0.2.3/src/libcmis/Makefile.am
+--- libcmis-0.2.3/src/libcmis/Makefile.am	2012-07-03 16:47:28.021183457 +0200
++++ misc/build/libcmis-0.2.3/src/libcmis/Makefile.am	2012-07-03 16:48:24.177187939 +0200
+@@ -32,8 +32,6 @@
+ 	atom-utils.cxx \
+ 	atom-workspace.hxx \
+ 	atom-workspace.cxx \
+-	atom-allowable-actions.hxx \
+-	atom-allowable-actions.cxx \
+ 	allowable-actions.cxx \
+ 	property.cxx \
+ 	property-type.cxx \
+diff -ur libcmis-0.2.3/src/libcmis/makefile.mk misc/build/libcmis-0.2.3/src/libcmis/makefile.mk
+--- libcmis-0.2.3/src/libcmis/makefile.mk	2012-07-03 16:47:28.052183459 +0200
++++ misc/build/libcmis-0.2.3/src/libcmis/makefile.mk	2012-07-03 16:48:24.179187937 +0200
+@@ -25,7 +25,6 @@
+ 
+ SLOFILES= \
+     $(SLO)$/allowable-actions.obj \
+-	$(SLO)$/atom-allowable-actions.obj \
+ 	$(SLO)$/atom-document.obj \
+ 	$(SLO)$/atom-folder.obj \
+ 	$(SLO)$/atom-object-type.obj \
