@@ -191,7 +191,7 @@ namespace connectivity { namespace hsqldb
                 if ( !m_bReadOnly )
                 {
                     Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
-                    xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CHECKPOINT" ) ) );
+                    xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CHECKPOINT DEFRAG" ) ) );
                 }
             }
 
