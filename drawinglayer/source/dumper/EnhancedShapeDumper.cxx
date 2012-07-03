@@ -201,7 +201,8 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameterPair(drawing::Enhanced
             xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
                 rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
         }
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aParameterPair.First.Type);
+        sal_Int32 aType = aParameterPair.First.Type;
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);
         xmlTextWriterEndElement( xmlWriter );
     }
     {
@@ -213,7 +214,8 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameterPair(drawing::Enhanced
             xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
                 rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
         }
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aParameterPair.Second.Type);
+        sal_Int32 aType = aParameterPair.First.Type;
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);
         xmlTextWriterEndElement( xmlWriter );
     }
 }
