@@ -581,6 +581,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 void SfxTemplateManagerDlg::OnTemplateSearch ()
 {
     Point aPos = maView->GetPosPixel();
+    Point aClosePos = maButtonClose.GetPosPixel();
     bool bVisible = mpSearchEdit->IsVisible();
     Size aWinSize = GetSizePixel();
     long nEditHeight = mpSearchEdit->GetSizePixel().getHeight();
@@ -589,17 +590,20 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     {
         aWinSize.setHeight(aWinSize.getHeight() - nEditHeight );
         aPos.setY(aPos.getY() - nEditHeight );
+        aClosePos.setY(aClosePos.getY() - nEditHeight );
         mpActionBar->SetItemState(TBI_TEMPLATE_SEARCH,STATE_NOCHECK);
     }
     else
     {
         aWinSize.setHeight(aWinSize.getHeight() + nEditHeight );
         aPos.setY(aPos.getY() + nEditHeight );
+        aClosePos.setY(aClosePos.getY() + nEditHeight );
         mpActionBar->SetItemState(TBI_TEMPLATE_SEARCH,STATE_CHECK);
     }
 
     SetSizePixel(aWinSize);
     maView->SetPosPixel(aPos);
+    maButtonClose.SetPosPixel(aClosePos);
     mpSearchEdit->Show(!bVisible);
 }
 
