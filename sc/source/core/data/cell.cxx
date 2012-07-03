@@ -1444,7 +1444,9 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // #i11719# no UPN and no error and no token code but result string present
         // => interpretation of this cell during name-compilation and unknown names
         // => can't exchange underlying code array in CompileTokenArray() /
-        // Compile() because interpreter's token iterator would crash.
+        // Compile() because interpreter's token iterator would crash or pCode
+        // would be deleted twice if this cell was interpreted during
+        // compilation.
         // This should only be a temporary condition and, since we set an
         // error, if ran into it again we'd bump into the dirty-clearing
         // condition further down.
@@ -1453,12 +1455,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             pCode->SetCodeError( errNoCode );
             // This is worth an assertion; if encountered in daily work
             // documents we might need another solution. Or just confirm correctness.
-            OSL_FAIL( "ScFormulaCell::Interpret: no UPN, no error, no token, but string -> Try compiling it." );
-            // Force Compilation
-            rtl::OUString aFormula = aResult.GetHybridFormula();
-            aResult.SetHybridFormula( rtl::OUString() );
-            Compile( aFormula );
-            InterpretTail( eTailParam );
+            OSL_FAIL( "ScFormulaCell::Interpret: no UPN, no error, no token, but hybrid formula string" );
             return;
         }
         CompileTokenArray();
