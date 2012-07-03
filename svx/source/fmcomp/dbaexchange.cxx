@@ -435,15 +435,13 @@ namespace svx
             return;
         }
 
-        String sObjectKind = (CommandType::TABLE == nObjectType) ? String('1') : String('0');
-
         // check if the SQL-statement is modified
         ::rtl::OUString sCompleteStatement;
         try
         {
             _rxLivingForm->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sCompleteStatement;
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
             OSL_FAIL("ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes (part two) !");
             return;
