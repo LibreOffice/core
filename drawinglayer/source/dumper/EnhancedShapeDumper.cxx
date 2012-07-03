@@ -64,3 +64,31 @@ void EnhancedShapeDumper::dumpBrightnessAsAttribute(double aBrightness)
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("brightness"), "%f", aBrightness);
 }
 
+void EnhancedShapeDumper::dumpEnhancedCustomShapeParameterPair(drawing::EnhancedCustomShapeParameterPair aParameterPair)
+{
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "First" ));
+        uno::Any aAny = aParameterPair.First.Value;
+        rtl::OUString sValue;
+        if(aAny >>= sValue)
+        {
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+                rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+        }
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aParameterPair.First.Type);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Second" ));
+        uno::Any aAny = aParameterPair.Second.Value;
+        rtl::OUString sValue;
+        if(aAny >>= sValue)
+        {
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+                rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+        }
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aParameterPair.Second.Type);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+}
+

@@ -29,6 +29,7 @@
 #include <libxml/xmlwriter.h>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -42,6 +43,9 @@ public:
     {
 
     }
+
+    // auxiliary functions
+    void dumpEnhancedCustomShapeParameterPair(com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair);
 
     // EnhancedCustomShapeExtrusion.idl
     void dumpEnhancedCustomShapeExtrusionService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
