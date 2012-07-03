@@ -50,6 +50,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
         if(anotherAny >>= aBrightness)
             dumpBrightnessAsAttribute(aBrightness);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Depth");
+        drawing::EnhancedCustomShapeParameterPair aDepth;
+        if(anotherAny >>= aDepth)
+            dumpDepthAsElement(aDepth);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Diffusion");
+        double aDiffusion;
+        if(anotherAny >>= aDiffusion)
+            dumpDiffusionAsAttribute(aDiffusion);
+    }
 }
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(sal_Bool bExtrusion)
 {
@@ -92,3 +104,14 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameterPair(drawing::Enhanced
     }
 }
 
+void EnhancedShapeDumper::dumpDepthAsElement(drawing::EnhancedCustomShapeParameterPair aDepth)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Depth" ));
+    dumpEnhancedCustomShapeParameterPair(aDepth);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpDiffusionAsAttribute(double aDiffusion)
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("diffusion"), "%f", aDiffusion);
+}

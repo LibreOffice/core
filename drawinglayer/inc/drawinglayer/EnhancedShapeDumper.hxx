@@ -51,6 +51,8 @@ public:
     void dumpEnhancedCustomShapeExtrusionService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
     void dumpExtrusionAsAttribute(sal_Bool bExtrusion);
     void dumpBrightnessAsAttribute(double aBrightness);
+    void dumpDepthAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepth);
+    void dumpDiffusionAsAttribute(double aDiffusion);
 
 private:
     xmlTextWriterPtr xmlWriter;
