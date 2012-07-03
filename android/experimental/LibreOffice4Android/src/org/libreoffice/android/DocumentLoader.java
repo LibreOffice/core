@@ -44,6 +44,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
@@ -624,29 +625,22 @@ public class DocumentLoader
     {
     	ProgressBar progressView; 
 
-    	protected void onPreExecute (){
+        protected void onPreExecute (){//TODO have another go at putting in a progress bar (shouldn't waste time on it now)
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    		
-            LinearLayout waitLayout = new LinearLayout( DocumentLoader.this );
-            waitLayout.setLayoutParams( matchParent );
-            waitLayout.setOrientation( LinearLayout.VERTICAL );
-            
+
     		TextView waitView = new TextView(DocumentLoader.this);
             waitView.setTextSize(24);
             waitView.setGravity(Gravity.CENTER);
             waitView.setBackgroundColor(Color.WHITE);
             waitView.setTextColor(Color.BLACK);
     		waitView.setText("Page " + (1) + ", wait...");
-    		
-    		progressView = new ProgressBar( DocumentLoader.this );
-    		
-    		waitLayout.addView( waitView );
-    		waitLayout.addView( progressView );
-    		
-    		flipper = new ViewFlipper(DocumentLoader.this);
-			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
-            //flipper.addView( waitView , 0 , matchParent);
-			flipper.addView( waitLayout , 0 , matchParent);
+
+            progressView = new ProgressBar( DocumentLoader.this, null, android.R.attr.progressBarStyleHorizontal);
+            progressView.setProgress( 10 );
+
+            flipper = new ViewFlipper(DocumentLoader.this);
+            flipper = (ViewFlipper)findViewById( R.id.page_flipper );
+            flipper.addView( waitView , 0 , matchParent);
             currentPage = 0;
     	}
         
