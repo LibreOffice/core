@@ -757,6 +757,8 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
                 pFCell->SetHybridString( *pOUText );
             else
                 bDoIncrement = false;
+            if(rXMLImport.GetDocument()->IsImportingLiboGenDoc())
+                pFCell->ResetDirty();
         }
     }
     else
@@ -788,7 +790,12 @@ void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rCurrentPos 
     {
         ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rCurrentPos );
         if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-            static_cast<ScFormulaCell*>(pCell)->SetHybridDouble( fValue );
+        {
+            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+            pFCell->SetHybridDouble( fValue );
+            if(rXMLImport.GetDocument()->IsImportingLiboGenDoc())
+                pFCell->ResetDirty();
+        }
     }
     else
     {
@@ -1013,10 +1020,13 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
             pNewCell = new ScFormulaCell( pDoc, rCellPos, pCode, eGrammar, MM_NONE );
             delete pCode;
 
+            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pNewCell);
             if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
-                static_cast<ScFormulaCell*>(pNewCell)->SetHybridString( *pOUTextValue );
+                pFCell->SetHybridString( *pOUTextValue );
             else
-                static_cast<ScFormulaCell*>(pNewCell)->SetHybridDouble( fValue );
+                pFCell->SetHybridDouble( fValue );
+            if(pDoc->IsImportingLiboGenDoc())
+                pFCell->ResetDirty();
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {
@@ -1036,7 +1046,6 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
             else
                 pNewCell = ScBaseCell::CreateTextCell( aText, pDoc );
         }
-
         pDoc->PutCell( rCellPos, pNewCell );
     }
 }

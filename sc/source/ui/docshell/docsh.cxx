@@ -424,7 +424,7 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
 
     aDocument.SetXMLFromWrapper( false );
     AfterXMLLoading(bRet);
-
+    aDocument.SetImportingLiboGenDoc(false);
     //! row heights...
 
     return bRet;

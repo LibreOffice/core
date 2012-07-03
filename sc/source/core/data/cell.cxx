@@ -1827,7 +1827,8 @@ void ScFormulaCell::SetDirty()
 
 void ScFormulaCell::SetDirtyVar()
 {
-    bDirty = true;
+    if(!pDocument->IsImportingLiboGenDoc())
+        bDirty = true;
     // mark the sheet of this cell to be calculated
     //#FIXME do we need to revert this remnant of old fake vba events? pDocument->AddCalculateTable( aPos.Tab() );
 }

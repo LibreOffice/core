@@ -366,6 +366,7 @@ private:
     bool                bInsertingFromOtherDoc;
     bool                bLoadingMedium;
     bool                bImportingXML;      // special handling of formula text
+    bool                bImportingLiboGenDoc; //to avoid recalculating formula results of libo generated docs
     bool                bXMLFromWrapper;    // distinguish ScXMLImportWrapper from external component
     bool                bCalcingAfterLoad;              // in CalcAfterLoad TRUE
     // don't construct/destruct listeners temporarily
@@ -1559,6 +1560,8 @@ public:
     void            SetLoadingMedium( bool bVal );
     void            SetImportingXML( bool bVal );
     bool            IsImportingXML() const { return bImportingXML; }
+    void            SetImportingLiboGenDoc( bool bVal ) { bImportingLiboGenDoc = bVal; };
+    bool            IsImportingLiboGenDoc() const { return bImportingLiboGenDoc; }
     void            SetXMLFromWrapper( bool bVal );
     bool            IsXMLFromWrapper() const { return bXMLFromWrapper; }
     void            SetCalcingAfterLoad( bool bVal ) { bCalcingAfterLoad = bVal; }
