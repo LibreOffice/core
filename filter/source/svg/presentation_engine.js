@@ -6489,8 +6489,11 @@ SequentialTimeContainer.prototype.rewindCurrentEffect = function( aChildNode )
         assert( !this.bIsRewinding, 'SequentialTimeContainer.rewindCurrentEffect: is already rewinding.' );
 
         this.bIsRewinding = true;
+        this.getContext().aActivityQueue.endAll();
+        this.getContext().bIsSkipping = true;
         this.getContext().aTimerEventQueue.forceEmpty();
-        this.getContext().aActivityQueue.clear();
+        this.getContext().bIsSkipping = false;
+        this.getContext().aActivityQueue.endAll();
 
         aChildNode.end();
         aChildNode.removeEffect();
