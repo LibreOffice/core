@@ -45,7 +45,7 @@ using namespace ::osl;
 //
 // This ObjectID must match the one created in WarpIN scripts!!
 //
-#define QUICKSTART_OBJID    "OO2_QUICKSTART"
+#define QUICKSTART_OBJID    "AOO_QUICKSTART"
 
 bool ShutdownIcon::IsQuickstarterInstalled()
 {
