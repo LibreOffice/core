@@ -191,4 +191,11 @@ void EnhancedShapeDumper::dumpSecondLightLevelAsAttribute(double aSecondLightLev
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightLevel"), "%f", aSecondLightLevel);
 }
 
+void EnhancedShapeDumper::dumpDirection3D(drawing::Direction3D aDirection3D)
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionX"), "%f", aDirection3D.DirectionX);
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionY"), "%f", aDirection3D.DirectionY);
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionZ"), "%f", aDirection3D.DirectionZ);
+}
+
 

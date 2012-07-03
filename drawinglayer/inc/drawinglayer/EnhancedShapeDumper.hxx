@@ -30,6 +30,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/Direction3D.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -46,6 +47,7 @@ public:
 
     // auxiliary functions
     void dumpEnhancedCustomShapeParameterPair(com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair);
+    void dumpDirection3D(com::sun::star::drawing::Direction3D aDirection3D);
 
     // EnhancedCustomShapeExtrusion.idl
     void dumpEnhancedCustomShapeExtrusionService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
