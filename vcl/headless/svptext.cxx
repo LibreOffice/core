@@ -38,6 +38,7 @@
 #include <impfont.hxx>
 #include <rtl/instance.hxx>
 
+#include "generic/geninst.h"
 #include "generic/genpspgraphics.h"
 #include "generic/glyphcache.hxx"
 #include "headless/svpgdi.hxx"
@@ -354,6 +355,11 @@ void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
 
     // announce glyphcache fonts
     rGC.AnnounceFonts( pDevFontList );
+
+    // register platform specific font substitutions if available
+    SalGenericInstance::RegisterFontSubstitutors( pDevFontList );
+
+    ImplGetSVData()->maGDIData.mbNativeFontConfig = true;
 }
 
 // ---------------------------------------------------------------------------
