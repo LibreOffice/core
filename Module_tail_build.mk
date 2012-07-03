@@ -111,6 +111,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     sw \
     swext \
     test \
+    testtools \
     toolkit \
 	tools \
 	touch \
