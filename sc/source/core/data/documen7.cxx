@@ -212,7 +212,7 @@ void ScDocument::StartListeningCell( const ScAddress& rAddress,
 {
     OSL_ENSURE(pListener, "StartListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
-    if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->StartListening( rAddress, pListener );
 }
 
@@ -221,7 +221,7 @@ void ScDocument::EndListeningCell( const ScAddress& rAddress,
 {
     OSL_ENSURE(pListener, "EndListeningCell: pListener Null");
     SCTAB nTab = rAddress.Tab();
-    if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->EndListening( rAddress, pListener );
 }
 
