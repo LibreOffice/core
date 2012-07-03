@@ -419,15 +419,19 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
     {
     case MNI_CREATE_TEXT:
         lcl_createTemplate(mxDesktop,FILTER_APP_WRITER);
+        Close( );
         break;
     case MNI_CREATE_SHEET:
         lcl_createTemplate(mxDesktop,FILTER_APP_CALC);
+        Close( );
         break;
     case MNI_CREATE_PRESENT:
         lcl_createTemplate(mxDesktop,FILTER_APP_IMPRESS);
+        Close( );
         break;
     case MNI_CREATE_DRAW:
         lcl_createTemplate(mxDesktop,FILTER_APP_DRAW);
+        Close( );
         break;
     case MNI_ACTION_SORT_NAME:
         if (maView->isOverlayVisible())
@@ -662,7 +666,7 @@ void lcl_createTemplate(uno::Reference< com::sun::star::frame::XComponentLoader 
     if (!aURL.isEmpty())
     {
         uno::Sequence<PropertyValue> aArgs;
-        xDesktop->loadComponentFromURL(aURL,rtl::OUString("_blank"), 0, aArgs );
+        xDesktop->loadComponentFromURL(aURL,rtl::OUString("_default"), 0, aArgs );
     }
 }
 
