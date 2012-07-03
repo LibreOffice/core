@@ -47,7 +47,7 @@ namespace basegfx
     public:
         BasicBox() {}
 
-        BasicBox( sal_Int32 nValue ) :
+        explicit BasicBox( sal_Int32 nValue ) :
             Base( nValue )
         {
         }

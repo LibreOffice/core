@@ -449,7 +449,7 @@ namespace basegfx
             }
 
         public:
-            TrapezoidSubdivider(
+            explicit TrapezoidSubdivider(
                 const B2DPolyPolygon& rSourcePolyPolygon)
             :   mnInitialEdgeEntryCount(0),
                 maTrDeEdgeEntries(),

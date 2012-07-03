@@ -388,7 +388,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                xComponentContext ),
     mrCursorManager( rCursorManager ),
     maAnimations( maContext,
-                  getSlideSizeImpl() ),
+                  basegfx::B2DSize( getSlideSizeImpl() ) ),
     maPolygons(rPolyPolygonVector),
     maUserPaintColor(aUserPaintColor),
     mdUserPaintStrokeWidth(dUserPaintStrokeWidth),
@@ -659,7 +659,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
 
     SlideBitmapSharedPtr&     rBitmap( aIter->second.at( meAnimationState ));
     const ::basegfx::B2ISize& rSlideSize(
-        getSlideSizePixel( getSlideSize(),
+        getSlideSizePixel( ::basegfx::B2DSize( getSlideSize() ),
                            rView ));
 
     // is the bitmap valid (actually existent, and of correct
@@ -1092,7 +1092,7 @@ bool SlideImpl::applyInitialShapeAttributes(
                     extractValue( bVisible,
                                   rShapeProps[j].Value,
                                   pShape,
-                                  getSlideSize() ))
+                                  ::basegfx::B2DSize( getSlideSize() ) ))
                 {
                     pAttrShape->setVisibility( bVisible );
                 }

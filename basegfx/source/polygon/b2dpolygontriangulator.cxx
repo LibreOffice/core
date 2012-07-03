@@ -138,7 +138,7 @@ namespace basegfx
             void createTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC);
 
         public:
-            Triangulator(const B2DPolyPolygon& rCandidate);
+            explicit Triangulator(const B2DPolyPolygon& rCandidate);
             ~Triangulator();
 
             const B2DPolygon getResult() const { return maResult; }

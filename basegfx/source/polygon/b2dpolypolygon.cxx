@@ -50,7 +50,7 @@ public:
     {
     }
 
-    ImplB2DPolyPolygon(const basegfx::B2DPolygon& rToBeCopied) :
+    explicit ImplB2DPolyPolygon(const basegfx::B2DPolygon& rToBeCopied) :
         maPolygons(1,rToBeCopied)
     {
     }

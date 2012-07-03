@@ -466,7 +466,7 @@ namespace basegfx
             }
 
         public:
-            solver(const B2DPolygon& rOriginal)
+            explicit solver(const B2DPolygon& rOriginal)
             :   maOriginal(B2DPolyPolygon(rOriginal)),
                 mbIsCurve(false),
                 mbChanged(false)
@@ -501,7 +501,7 @@ namespace basegfx
                 }
             }
 
-            solver(const B2DPolyPolygon& rOriginal)
+            explicit solver(const B2DPolyPolygon& rOriginal)
             :   maOriginal(rOriginal),
                 mbIsCurve(false),
                 mbChanged(false)

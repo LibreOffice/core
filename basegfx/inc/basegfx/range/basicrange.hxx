@@ -52,7 +52,7 @@ namespace basegfx
         {
         }
 
-        BasicRange( T nValue ) :
+        explicit BasicRange( T nValue ) :
             mnMinimum(nValue),
             mnMaximum(nValue)
         {

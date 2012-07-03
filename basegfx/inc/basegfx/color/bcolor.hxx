@@ -81,7 +81,7 @@ namespace basegfx
             @param fLuminosity
             The parameter is used to initialize the red, green and blue intensities of the color
         */
-        BColor(double fLuminosity)
+        explicit BColor(double fLuminosity)
         :   B3DTuple(fLuminosity, fLuminosity, fLuminosity)
         {}
 

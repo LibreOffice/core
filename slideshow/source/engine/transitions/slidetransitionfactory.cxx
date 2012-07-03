@@ -369,7 +369,7 @@ void ClippedSlideChange::performIn(
     // of the view transformation (e.g. rotation) from the transition.
     rSprite->setClipPixel(
         maClippingFunctor( t,
-                           getEnteringSlideSizePixel(rViewEntry.mpView) ) );
+                           ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) ) );
 }
 
 void ClippedSlideChange::performOut(
@@ -464,7 +464,7 @@ void FadingSlideChange::performOut(
             // clear page to given fade color. 'Leaving' slide is
             // painted atop of that, but slowly fading out.
             fillPage( rDestinationCanvas,
-                      getEnteringSlideSizePixel( rViewEntry.mpView ),
+                      ::basegfx::B2DSize( getEnteringSlideSizePixel( rViewEntry.mpView ) ),
                       *maFadeColor );
         }
 
@@ -550,7 +550,7 @@ void CutSlideChange::performOut(
         // clear page to given fade color. 'Leaving' slide is
         // painted atop of that
         fillPage( rDestinationCanvas,
-                  getEnteringSlideSizePixel( rViewEntry.mpView ),
+                  ::basegfx::B2DSize( getEnteringSlideSizePixel( rViewEntry.mpView ) ),
                   maFadeColor );
     }
 

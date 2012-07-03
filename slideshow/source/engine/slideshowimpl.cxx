@@ -886,7 +886,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                 0.0,
                 0.0,
                 ShapeSharedPtr(),
-                rEnteringSlide->getSlideSize() ),
+                basegfx::B2DSize( rEnteringSlide->getSlideSize() ) ),
             pTransition,
             true ));
 }
@@ -1132,7 +1132,7 @@ void SlideShowImpl::displaySlide(
         {
             basegfx::B2DSize oldSlideSize;
             if( mpPreviousSlide )
-                oldSlideSize = mpPreviousSlide->getSlideSize();
+                oldSlideSize = basegfx::B2DSize( mpPreviousSlide->getSlideSize() );
 
             basegfx::B2DSize const slideSize( mpCurrentSlide->getSlideSize() );
 

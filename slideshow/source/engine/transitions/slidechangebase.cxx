@@ -107,7 +107,7 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
 
         // create empty, black-filled bitmap
         const basegfx::B2ISize slideSizePixel(
-            getSlideSizePixel( mpEnteringSlide->getSlideSize(),
+            getSlideSizePixel( basegfx::B2DSize( mpEnteringSlide->getSlideSize() ),
                                rView ));
 
         cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
@@ -151,7 +151,7 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
 
 ::basegfx::B2ISize SlideChangeBase::getEnteringSlideSizePixel( const UnoViewSharedPtr& pView ) const
 {
-    return getSlideSizePixel( mpEnteringSlide->getSlideSize(),
+    return getSlideSizePixel( basegfx::B2DSize( mpEnteringSlide->getSlideSize() ),
                               pView );
 }
 
@@ -496,7 +496,7 @@ void SlideChangeBase::addSprites( ViewEntry& rEntry )
             getLeavingBitmap( rEntry )->getSize() );
 
         rEntry.mpOutSprite = createSprite( rEntry.mpView,
-                                           leavingSlideSizePixel,
+                                           basegfx::B2DSize( leavingSlideSizePixel ),
                                            100 );
     }
 
@@ -504,11 +504,11 @@ void SlideChangeBase::addSprites( ViewEntry& rEntry )
     {
         // create entering sprite:
         const basegfx::B2ISize enteringSlideSizePixel(
-            getSlideSizePixel( mpEnteringSlide->getSlideSize(),
+            getSlideSizePixel( basegfx::B2DSize( mpEnteringSlide->getSlideSize() ),
                                rEntry.mpView ));
 
         rEntry.mpInSprite = createSprite( rEntry.mpView,
-                                          enteringSlideSizePixel,
+                                          basegfx::B2DSize( enteringSlideSizePixel ),
                                           101 );
     }
 }

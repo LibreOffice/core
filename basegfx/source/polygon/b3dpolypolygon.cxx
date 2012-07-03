@@ -49,7 +49,7 @@ public:
     {
     }
 
-    ImplB3DPolyPolygon(const ::basegfx::B3DPolygon& rToBeCopied) :
+    explicit ImplB3DPolyPolygon(const ::basegfx::B3DPolygon& rToBeCopied) :
         maPolygons(1,rToBeCopied)
     {
     }

@@ -86,7 +86,7 @@ namespace basegfx
             @param rVec
             The 2D Vector which will be copied.
         */
-        B2DVector(const ::basegfx::B2IVector& rVec)
+        explicit B2DVector(const ::basegfx::B2IVector& rVec)
         :   B2DTuple(rVec)
         {}
 

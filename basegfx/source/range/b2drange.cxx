@@ -30,8 +30,8 @@ namespace basegfx
     {
         if( !rRange.isEmpty() )
         {
-            maRangeX = rRange.getMinX();
-            maRangeY = rRange.getMinY();
+            maRangeX = MyBasicRange(rRange.getMinX());
+            maRangeY = MyBasicRange(rRange.getMinY());
 
             maRangeX.expand(rRange.getMaxX());
             maRangeY.expand(rRange.getMaxY());

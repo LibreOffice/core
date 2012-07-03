@@ -52,7 +52,7 @@ namespace basegfx
         sal_uInt32                      mnEdgeCount;
 
     public:
-        B2DCubicBezierHelper(const B2DCubicBezier& rBase, sal_uInt32 nDivisions = 9);
+        explicit B2DCubicBezierHelper(const B2DCubicBezier& rBase, sal_uInt32 nDivisions = 9);
 
         double getLength() const { if(!maLengthArray.empty()) return maLengthArray[maLengthArray.size() - 1]; else return 0.0; }
         double distanceToRelative(double fDistance) const;
