@@ -129,9 +129,50 @@ ModalDialog DLG_TEMPLATE_MANAGER
     {
         ImageBitmap = Bitmap
         {
-            File = "signet.png";
+            File = "ln053.png";
         };
     };
+
+    Image IMG_CREATE_TEXT
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "create_text.png";
+        };
+    };
+
+    Image IMG_CREATE_SHEET
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "create_sheet.png";
+        };
+    };
+
+    Image IMG_CREATE_PRESENT
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "create_present.png";
+        };
+    };
+
+    Image IMG_CREATE_DRAW
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "create_draw.png";
+        };
+    };
+
+    Image IMG_ACTION_SORT
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "sortascending.png";
+        };
+    };
+
 
     ToolBox TBX_ACTION_VIEW
     {
@@ -145,12 +186,22 @@ ModalDialog DLG_TEMPLATE_MANAGER
             {
                 Identifier = TBI_TEMPLATE_CREATE;
                 Text [ en-US ] = "Create a template" ;
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "create_text.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_IMPORT ;
                 Text [ en-US ] = "Import a template" ;
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "import.png" ; };
+                };
             };
         };
     };
@@ -167,12 +218,22 @@ ModalDialog DLG_TEMPLATE_MANAGER
             {
                 Identifier = TBI_TEMPLATE_SEARCH;
                 Text [en-US] = "Search";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "search.png" ; };
+                };
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_ACTION;
                 Text [en-US] = "Action Menu";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "exec_action.png" ; };
+                };
             };
         };
     };

@@ -82,14 +82,14 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     // Create popup menus
     mpCreateMenu = new PopupMenu;
-    mpCreateMenu->InsertItem(MNI_CREATE_TEXT,SfxResId(STR_CREATE_TEXT).toString());
-    mpCreateMenu->InsertItem(MNI_CREATE_SHEET,SfxResId(STR_CREATE_SHEET).toString());
-    mpCreateMenu->InsertItem(MNI_CREATE_PRESENT,SfxResId(STR_CREATE_PRESENT).toString());
-    mpCreateMenu->InsertItem(MNI_CREATE_DRAW,SfxResId(STR_CREATE_DRAW).toString());
+    mpCreateMenu->InsertItem(MNI_CREATE_TEXT,SfxResId(STR_CREATE_TEXT).toString(),SfxResId(IMG_CREATE_TEXT));
+    mpCreateMenu->InsertItem(MNI_CREATE_SHEET,SfxResId(STR_CREATE_SHEET).toString(),SfxResId(IMG_CREATE_SHEET));
+    mpCreateMenu->InsertItem(MNI_CREATE_PRESENT,SfxResId(STR_CREATE_PRESENT).toString(),SfxResId(IMG_CREATE_PRESENT));
+    mpCreateMenu->InsertItem(MNI_CREATE_DRAW,SfxResId(STR_CREATE_DRAW).toString(),SfxResId(IMG_CREATE_DRAW));
     mpCreateMenu->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, MenuSelectHdl));
 
     mpActionMenu = new PopupMenu;
-    mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString());
+    mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString(),SfxResId(IMG_ACTION_SORT));
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
     Size aWinSize = GetOutputSize();
