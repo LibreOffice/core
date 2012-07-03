@@ -368,10 +368,10 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
         SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%lu", pTxtNode->GetIndex() );
     }
-    if (IsHeaderFrm())
+    if (IsHeaderFrm() || IsFooterFrm())
     {
-        SwHeaderFrm *pHeaderFrm = (SwHeaderFrm*)this;
-        rtl::OUString aFmtName = pHeaderFrm->GetFmt()->GetName();
+        SwHeadFootFrm *pHeadFootFrm = (SwHeadFootFrm*)this;
+        rtl::OUString aFmtName = pHeadFootFrm->GetFmt()->GetName();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(rtl::OUStringToOString(aFmtName, RTL_TEXTENCODING_UTF8).getStr()));
     }
 }

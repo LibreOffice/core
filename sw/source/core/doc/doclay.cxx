@@ -149,7 +149,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     case RND_STD_FOOTERR:
         {
             pFmt = new SwFrmFmt( GetAttrPool(),
-                                 (bHeader ? "Header" : "Footer"),
+                                 (bHeader ? "Right header" : "Right footer"),
                                  GetDfltFrmFmt() );
 
             SwNodeIndex aTmpIdx( GetNodes().GetEndOfAutotext() );
