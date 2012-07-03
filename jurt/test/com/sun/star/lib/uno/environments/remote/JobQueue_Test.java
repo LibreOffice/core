@@ -197,7 +197,6 @@ public final class JobQueue_Test {
         public final ThreadId _threadId = JavaThreadPoolFactory.getThreadId();
         public final Object _disposeId = new Object();
         public JobQueue _jobQueue = null;
-        public String _message;
 
         public TestThread(int waitTime) {
             this.waitTime = waitTime;
@@ -219,7 +218,6 @@ public final class JobQueue_Test {
                 }
                 _jobQueue.enter(_disposeId);
             } catch (Throwable e) {
-                _message = e.getMessage();
             }
             synchronized (lock) {
                 state = STATE_DONE;

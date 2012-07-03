@@ -338,8 +338,6 @@ public class ThreadPool_Test {
 
     private static final class TestThread extends Thread {
         ThreadId _threadId;
-        Object _disposeId = new Object();
-        String _message;
         IThreadPool _iThreadPool;
 
         TestThread() {
@@ -368,7 +366,6 @@ public class ThreadPool_Test {
                 _iThreadPool.enter();
             }
             catch(Throwable throwable) {
-                _message = throwable.getMessage();
             }
 
             _iThreadPool.detach();

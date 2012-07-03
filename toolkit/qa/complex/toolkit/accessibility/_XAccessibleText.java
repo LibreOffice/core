@@ -69,9 +69,6 @@ public class _XAccessibleText {
 
     // private LogWriter log;
 
-    private static final String className =
-        "com.sun.star.accessibility.XAccessibleText" ;
-
     public XAccessibleText oObj = null;
     private XMultiServiceFactory xMSF;
 

@@ -209,7 +209,6 @@ public class java_remote_bridge
         }
 
         private final Type type;
-        private final Object object;
         private int count = 1;
     }
 

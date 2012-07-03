@@ -52,9 +52,6 @@ public class _XAccessibleContext {
 
     // private LogWriter log;
 
-    private static final String className =
-        "com.sun.star.accessibility.XAccessibleContext" ;
-
     public XAccessibleContext oObj = null;
 
     private int childCount = 0;

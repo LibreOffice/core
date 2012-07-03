@@ -72,7 +72,6 @@ public class UrlResolver {
             }
             else { // new style
                 int index = dcp.indexOf(':');
-                String url = dcp.substring(0, index).trim();
                 dcp = dcp.substring(index + 1).trim();
 
                 index = dcp.indexOf(';');

@@ -53,9 +53,6 @@ public class _XAccessibleComponent {
 
     private Rectangle bounds = null ;
 
-    private static final String className =
-        "com.sun.star.accessibility.XAccessibleComponent";
-
     /**
      * Constructor
      * @param object
