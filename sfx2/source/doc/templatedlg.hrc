@@ -51,6 +51,7 @@
 
 #define STR_MOVE_NEW                268
 #define STR_MOVE_DELETE             270
+#define STR_INPUT_NEW               271
 
 #define IMG_ONLINE_REPOSITORY       100
 #define IMG_CREATE_TEXT             300

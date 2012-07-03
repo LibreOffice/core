@@ -9,6 +9,8 @@
 
 #include "templatedlg.hxx"
 
+#include "inputdlg.hxx"
+
 #include <comphelper/processfactory.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -459,6 +461,9 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
 
     if (nMenuId == MNI_MOVE_NEW)
     {
+        InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+
+        int ret = dlg.Execute();
     }
     else if (nMenuId == MNI_MOVE_DELETE)
     {

@@ -164,6 +164,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/filedlghelper \
     sfx2/source/dialog/filtergrouping \
     sfx2/source/dialog/itemconnect \
+    sfx2/source/dialog/inputdlg \
     sfx2/source/dialog/mailmodel \
     sfx2/source/dialog/mgetempl \
     sfx2/source/dialog/navigat \
