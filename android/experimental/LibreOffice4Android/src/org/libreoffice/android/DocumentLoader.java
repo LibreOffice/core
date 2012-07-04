@@ -28,6 +28,7 @@
 // "3" into a parameter below.
 
 package org.libreoffice.android;
+
 import org.libreoffice.R;
 
 import android.app.Activity;
@@ -87,6 +88,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.view.XRenderable;
 
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -591,6 +593,10 @@ public class DocumentLoader
             }
         }
 
+        Bitmap getBitmap(){
+            return bm;
+        }
+
         ThumbnailView(int number , int widthInDp , int heightInDp)
         {
             super(DocumentLoader.this);
@@ -914,6 +920,32 @@ public class DocumentLoader
         catch (Exception e) {
             e.printStackTrace(System.err);
             finish();
+        }
+    }
+
+    protected void onDestroy(){
+        super.onDestroy();
+        //Save the thumbnail of the first page as the grid image.
+        // Could easily make a new (larger) thumb but recycling
+        // should be faster & more efficient, better for the environment ;-)
+        //ll = (LinearLayout)findViewById( R.id.navigator);
+        Bitmap bmp = ( (ThumbnailView)ll.getChildAt( 0 ) ).getBitmap();
+        File file = new File(extras.getString("input"));
+        Log.i(TAG ,"onDestroy " + extras.getString("input"));
+        File dir = file.getParentFile();
+        String[] nameComponents = file.getName().split("[.]");
+        for(String str : nameComponents){
+            Log.i(TAG,"onDestroy " + str);
+        }
+        File thumbnailFile = new File( dir , "." + file.getName().split("[.]")[0] + ".png");
+        try {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+            thumbnailFile.createNewFile();
+            FileOutputStream fo = new FileOutputStream( thumbnailFile );
+            fo.write(bytes.toByteArray());
+        } catch (IOException e) {
+            // TODO: handle exception
         }
     }
 

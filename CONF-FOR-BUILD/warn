@@ -1,0 +1,2 @@
+Building with a SDK > 10.4 is experimental
+Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build
