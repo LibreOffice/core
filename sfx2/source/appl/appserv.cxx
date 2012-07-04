@@ -338,15 +338,20 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE )
                 {
                     // show Support page with new URL
-                    String sHelpURL = SfxHelp::CreateHelpURL( String::CreateFromAscii(".uno:HelpSupport"), String() );
-                    String sParams = sHelpURL.Copy( sHelpURL.Search( '?' ) );
-                    sHelpURL = String::CreateFromAscii("vnd.sun.star.help://shared/text/shared/05/00000001.xhp");
-                    sHelpURL += sParams;
-                    sHelpURL += String::CreateFromAscii("&UseDB=no");
-                    pHelp->Start( sHelpURL, NULL );
+                    // Create a dummy Help URL to get the Language and System
+                    // but don't use a real command, otherwise we may get an anchor
+                    rtl::OUString sEmpty;
+                    rtl::OUString sTmp( SfxHelp::CreateHelpURL( sEmpty, sEmpty ) );
+
+                    rtl::OUStringBuffer aBuff;
+                    aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.help://shared/text/shared/05/00000001.xhp" ) );
+                    aBuff.append( sTmp.copy( sTmp.indexOf( sal_Unicode( '?' ) ) ) );
+                    aBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( "&UseDB=no" ) );
+
+                    pHelp->Start( aBuff.makeStringAndClear(), NULL );
                 }
                 else
-                    pHelp->Start( String::CreateFromAscii(".uno:HelpIndex"), NULL ); // show start page
+                    pHelp->Start( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:HelpIndex")), NULL ); // show start page
                 bDone = sal_True;
             }
             break;
