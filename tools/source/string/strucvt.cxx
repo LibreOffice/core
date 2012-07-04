@@ -28,18 +28,6 @@
 
 // =======================================================================
 
-UniString::UniString( const rtl::OString& rByteStr, rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_CTOR( UniString, DbgCheckUniString );
-
-    mpData = NULL;
-    rtl_string2UString( (rtl_uString **)(&mpData),
-                        rByteStr.getStr(), rByteStr.getLength(),
-                        eTextEncoding, nCvtFlags );
-}
-
-// -----------------------------------------------------------------------
-
 UniString::UniString( const char* pByteStr,
                       rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {

@@ -156,6 +156,12 @@ private:
     //a rtl::OString
     TOOLS_DLLPRIVATE UniString(const rtl::OString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
         sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS);
+
+    //no longer implemented
+    TOOLS_DLLPRIVATE UniString( const rtl::OString& rByteStr,
+                                   rtl_TextEncoding eTextEncoding,
+                                   sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
+
 public:
                         UniString();
                         UniString( const ResId& rResId );
@@ -166,9 +172,6 @@ public:
                         UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
                         UniString( sal_Unicode c );
                         UniString(char c); // ...but allow "UniString('a')"
-                        UniString( const rtl::OString& rByteStr,
-                                   rtl_TextEncoding eTextEncoding,
-                                   sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
                         UniString( const sal_Char* pByteStr,
                                    rtl_TextEncoding eTextEncoding,
                                    sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );

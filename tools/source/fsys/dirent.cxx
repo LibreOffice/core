@@ -281,7 +281,7 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
     // die einzelnen Namen auf einen Stack packen
-    String       aPfad( rPfad, osl_getThreadTextEncoding() );
+    String aPfad(rtl::OStringToOUString(rPfad, osl_getThreadTextEncoding()));
     DirEntryStack   aStack;
 
     do
@@ -1789,8 +1789,8 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         // MoveTo nun atomar
         SetLastError(0);
 
-        DirEntry aFromDevice(String(bFrom, osl_getThreadTextEncoding()));
-        DirEntry aToDevice(String(bTo,osl_getThreadTextEncoding()));
+        DirEntry aFromDevice(rtl::OStringToOUString(bFrom, osl_getThreadTextEncoding()));
+        DirEntry aToDevice(rtl::OStringToOUString(bTo,osl_getThreadTextEncoding()));
         aFromDevice.ToAbs();
         aToDevice.ToAbs();
         aFromDevice=aFromDevice.GetDevice();
@@ -1811,11 +1811,11 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
             //nein, also inter-device-move mit copy/delete
             FSysError nCopyError = CopyTo(rNewName, FSYS_ACTION_COPYFILE);
 
-            DirEntry aKill(String(bTo, osl_getThreadTextEncoding()));
-            FileStat aKillStat(String(bTo, osl_getThreadTextEncoding()));
+            DirEntry aKill(rtl::OStringToOUString(bTo, osl_getThreadTextEncoding()));
+            FileStat aKillStat(String(rtl::OStringToOUString(bTo, osl_getThreadTextEncoding())));
             if ( aKillStat.IsKind(FSYS_KIND_DIR ) )
             {
-                aKill += String(aName, osl_getThreadTextEncoding());
+                aKill += String(rtl::OStringToOUString(aName, osl_getThreadTextEncoding()));
             }
 
             if (nCopyError==FSYS_ERR_OK)
