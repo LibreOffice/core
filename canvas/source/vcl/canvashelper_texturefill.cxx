@@ -683,6 +683,7 @@ namespace vclcanvas
         {
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
+            const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
             PolyPolygon aPolyPoly( tools::mapPolyPolygon(
                                        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon),
                                        viewState, renderState ) );
@@ -710,7 +711,6 @@ namespace vclcanvas
                     }
                     else
                     {
-                        const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
                         std::vector< ::Color > aColors(rValues.maColors.getLength());
                         std::transform(&rValues.maColors[0],
                                        &rValues.maColors[0]+rValues.maColors.getLength(),

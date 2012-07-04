@@ -245,6 +245,13 @@ namespace vclcanvas
                                                         aSrcRect,
                                                         rTransform );
 
+            const bool bModulateColors( eModulationMode == MODULATE_WITH_DEVICECOLOR &&
+                                        rDeviceColor.getLength() > 2 );
+            const double nRedModulation( bModulateColors ? rDeviceColor[0] : 1.0 );
+            const double nGreenModulation( bModulateColors ? rDeviceColor[1] : 1.0 );
+            const double nBlueModulation( bModulateColors ? rDeviceColor[2] : 1.0 );
+            const double nAlphaModulation( bModulateColors && rDeviceColor.getLength() > 3 ?
+                                           rDeviceColor[3] : 1.0 );
 
             Bitmap aSrcBitmap( rBitmap.GetBitmap() );
             Bitmap aSrcAlpha;
@@ -329,13 +336,6 @@ namespace vclcanvas
                     ::basegfx::B2DHomMatrix aTransform( aLocalTransform );
                     aTransform.invert();
 
-                    const bool bModulateColors( eModulationMode == MODULATE_WITH_DEVICECOLOR &&
-                                        rDeviceColor.getLength() > 2 );
-                    const double nRedModulation( bModulateColors ? rDeviceColor[0] : 1.0 );
-                    const double nGreenModulation( bModulateColors ? rDeviceColor[1] : 1.0 );
-                    const double nBlueModulation( bModulateColors ? rDeviceColor[2] : 1.0 );
-                    const double nAlphaModulation( bModulateColors && rDeviceColor.getLength() > 3 ?
-                                                   rDeviceColor[3] : 1.0 );
                     // for the time being, always read as ARGB
                     for( int y=0; y<aDestBmpSize.Height(); ++y )
                     {
