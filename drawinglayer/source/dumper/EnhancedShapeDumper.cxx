@@ -194,28 +194,12 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameterPair(drawing::Enhanced
 {
     {
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "First" ));
-        uno::Any aAny = aParameterPair.First.Value;
-        rtl::OUString sValue;
-        if(aAny >>= sValue)
-        {
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
-                rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
-        }
-        sal_Int32 aType = aParameterPair.First.Type;
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);
+        dumpEnhancedCustomShapeParameter(aParameterPair.First);
         xmlTextWriterEndElement( xmlWriter );
     }
     {
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Second" ));
-        uno::Any aAny = aParameterPair.Second.Value;
-        rtl::OUString sValue;
-        if(aAny >>= sValue)
-        {
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
-                rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
-        }
-        sal_Int32 aType = aParameterPair.First.Type;
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);
+        dumpEnhancedCustomShapeParameter(aParameterPair.Second);
         xmlTextWriterEndElement( xmlWriter );
     }
 }
