@@ -232,13 +232,24 @@
 
     <target name="report.test" unless="report.test.skip" description="Upload the testing result to report repository.">
         <exec executable="hostname" outputproperty="host.name" />
-        <property name="report.to" value="${openoffice.build}/${host.name}" />
+        <property name="report.to" value="${openoffice.build}_${host.name}" />
+        <!--
         <echo>Sending report to ${report.repos.server}/${report.repos.dir}/${report.to}</echo>
         <ftp server="${report.repos.server}" remotedir="${report.repos.dir}/${report.to}" userid="${report.repos.user}" password="${report.repos.password}" action="mkdir" />
         <ftp server="${report.repos.server}" remotedir="${report.repos.dir}/${report.to}" userid="${report.repos.user}" password="${report.repos.password}" depends="yes">
             <fileset dir="${test.output}">
             </fileset>
         </ftp>
+        -->
+        <echo>Uploading report to ${report.repos}/${report.to}</echo>
+        <tempfile property="report.to.temp" suffix=".output" destDir="${testspace}" deleteonexit="true"/>
+        <copy todir="${report.to.temp}/${report.to}">
+            <fileset dir="${test.output}" />
+        </copy>
+
+        <scp todir="${report.repos}">
+            <fileset dir="${report.to.temp}"/>
+        </scp>
     </target>
 
     <target name="detect.build" depends="find.build" description="Check if new build is available. If no new build is available, the target will be failed.">

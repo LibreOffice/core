@@ -29,11 +29,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import testcase.BVTFileType;
 import testcase.BVTFunction;
-import testcase.BVTFunction2;
 import testcase.SmokeTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({SmokeTest.class, BVTFileType.class, BVTFunction.class, BVTFunction2.class })
+@SuiteClasses({SmokeTest.class, BVTFileType.class, BVTFunction.class})
 public class BVT {
 
 }

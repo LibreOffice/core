@@ -31,8 +31,6 @@ import java.awt.datatransfer.Transferable;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -143,6 +141,21 @@ public class SystemUtil {
         throw new RuntimeException("System Clipboard is not ready");
     }
 
+    /**
+     * Execute a script and waiting it for finishing
+     * @param content
+     * @return
+     */
+    public static int execScript(String content) {
+        return execScript(content, false);
+    }
+
+    /**
+     * Execute a script. bat on Windows, bash on Linux
+     * @param content
+     * @param spawn
+     * @return
+     */
     public static int execScript(String content, boolean spawn) {
         File file = null;
         try {
@@ -199,39 +212,10 @@ public class SystemUtil {
         }
     }
 
-    public static class StreamPump extends Thread {
-        StringBuffer stringBuffer = null;
-        InputStream inputStream = null;
-
-        public StreamPump(StringBuffer stringBuffer, InputStream inputStream) {
-            this.stringBuffer = stringBuffer;
-            this.inputStream = inputStream;
-        }
-
-        public void run() {
-            InputStreamReader reader = null;
-            try {
-                reader = new InputStreamReader(inputStream);
-                char[] buf = new char[1024];
-                int count = 0;
-                while ((count = reader.read(buf)) != -1) {
-                    // If we need collect the output
-                    if (stringBuffer != null)
-                        stringBuffer.append(buf, 0, count);
-                }
-            } catch (IOException e) {
-                // ignore.
-            } finally {
-                if (reader != null)
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        // ignore
-                    }
-            }
-        }
-    }
-
+    /**
+     * Make the current thread sleep some seconds.
+     * @param second
+     */
     public static void sleep(double second) {
         try {
             Thread.sleep((long) (second * 1000));

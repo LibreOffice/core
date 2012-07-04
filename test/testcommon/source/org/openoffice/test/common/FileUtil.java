@@ -124,6 +124,15 @@ public class FileUtil {
      * @return
      */
     public static Properties loadProperties(String file) {
+        return loadProperties(new File(file));
+    }
+
+    /**
+     * Load a properties file to Properties class
+     * @param file the properties file
+     * @return
+     */
+    public static Properties loadProperties(File file) {
         Properties properties = new Properties();
         FileInputStream fis = null;
         try {

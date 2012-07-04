@@ -113,7 +113,7 @@ public class UIMap {
         return new VclDockingWin(idList.getId(id));
     }
 
-    public static final VclApp app = new VclApp();
+    public static final VclApp app = new VclApp(null);
     public static final VclWindow writer = window("SW_HID_EDIT_WIN");
     public static final VclWindow startcenter = window("FWK_HID_BACKINGWINDOW");
     public static final VclWindow calc = window("SC_HID_SC_WIN_GRIDWIN");

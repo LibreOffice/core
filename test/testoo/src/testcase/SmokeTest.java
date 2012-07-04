@@ -24,9 +24,9 @@
 package testcase;
 
 import static org.junit.Assert.*;
+import static org.openoffice.test.common.FileUtil.*;
 import static testlib.AppUtil.*;
 import static testlib.UIMap.*;
-import static org.openoffice.test.common.FileUtil.*;
 
 import java.io.File;
 
@@ -35,7 +35,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import testlib.AppUtil;
 import testlib.Log;
 
 public class SmokeTest {
@@ -46,13 +45,13 @@ public class SmokeTest {
     File smoketestOutput;
     @Before
     public void setUp() throws Exception {
-        initApp();
-        smoketestOutput = new File(AppUtil.getUserInstallationDir(), "user/temp");
+        initApp(true);
+        smoketestOutput = new File(app.getUserInstallation(), "user/temp");
         deleteFile(smoketestOutput);
     }
 
     @Test
-    public void test() {
+    public void testMacro() {
         testFile("TestExtension.oxt");
         String file = testFile("smoketestdoc.sxw");
         // Open sample file smoketestdoc.sxw

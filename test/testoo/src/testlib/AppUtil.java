@@ -24,9 +24,7 @@
 package testlib;
 import static testlib.UIMap.*;
 
-
 import java.io.File;
-import java.net.MalformedURLException;
 
 import org.openoffice.test.common.Condition;
 import org.openoffice.test.common.FileUtil;
@@ -35,8 +33,6 @@ import org.openoffice.test.vcl.Tester;
 import org.openoffice.test.vcl.widgets.VclWindow;
 
 public class AppUtil extends Tester {
-    static String user_installation = Testspace.getPath("oouser"); // Use automation special user data
-    static String user_installation_url = null;
     static {
         Testspace.getFile("temp").mkdirs();
         // TODO move these shortcut into a file
@@ -60,62 +56,58 @@ public class AppUtil extends Tester {
         } else if (SystemUtil.isLinux()) {
 
         }
-        patch();
+//      patch();
     }
 
-    private static boolean isFirstInitApp = true;
-
-    public static void initApp() {
-
-        // kill all soffice processes to avoid testing the wrong instance
-        if (isFirstInitApp) {
-            isFirstInitApp = false;
+    /**
+     * This method is used to start OpenOffice and make it ready for testing.
+     *
+     * @param cleanUserInstallation if use a totally clean user installation data
+     * @param userInstallation Specify user installation directory. If it's null, the default will be used.
+     */
+    public static void initApp(boolean cleanUserInstallation, String userInstallation) {
+        File newUserInstallation = userInstallation == null ? app.getDefaultUserInstallation() : new File(fullPath(userInstallation));
+        if (!newUserInstallation.equals(app.getUserInstallation())) {
+            // user installation changed...
             app.kill();
-            sleep(2);
+            app.setUserInstallation(userInstallation == null ? null : newUserInstallation);
         }
 
-        // Start soffice if necessary
-        if (!app.exists()) {
-            int code = app.start("\"-env:UserInstallation=" + user_installation_url + "\"");
-            if (code != 0) {
-                throw new Error("OpenOffice can't be started! Testing aborted!");
-            }
-            sleep(3); // this sleep is important.
-            app.waitForExistence(30, 5);
-        }
+        patch(cleanUserInstallation);
 
-        boolean tryAgain = false;
-        try {
-            app.reset();
-            if (!startcenter.exists()) {
-                if (SystemUtil.isMac()) {
-                    SystemUtil.execScript("osascript -e 'tell app \"OpenOffice.org\" to activate'", false);
-                    typeKeys("<command n>");
-                    if (!startcenter.exists())
-                        tryAgain = true;
-
-                } else {
-                    tryAgain = true;
+        //try to reset application
+        for (int i = 0; i < 3; i++) {
+            try {
+                if (app.exists()) {
+                    app.reset();
+                    openStartcenter();
+                    if (startcenter.exists(2))
+                        return;
                 }
-            }
-        } catch (Exception e) {
-            tryAgain = true;
-        }
+            } catch (Exception e){
 
-        // Give the second chance
-        if (tryAgain) {
-            app.kill();
-            sleep(2);
-            int code = app.start("\"-env:UserInstallation=" + user_installation_url + "\"");
-            if (code != 0) {
-                throw new Error("OpenOffice can't be started! Testing aborted!");
             }
+
+            app.kill();
+            if (app.start() != 0)
+                throw new Error("OpenOffice can't be started! Testing aborted!");
             sleep(3); // this sleep is important.
             app.waitForExistence(30, 5);
-            app.reset();
         }
+    }
 
-        openStartcenter();
+    /**
+     * @see initApp(boolean cleanUserInstallation, String userInstallation)
+     */
+    public static void initApp(boolean cleanUserInstallation) {
+        initApp(cleanUserInstallation, System.getProperty("openoffice.userinstallation"));
+    }
+
+    /**
+     * @see initApp(boolean cleanUserInstallation, String userInstallation)
+     */
+    public static void initApp() {
+        initApp(false);
     }
 
     public static void openStartcenter() {
@@ -199,50 +191,29 @@ public class AppUtil extends Tester {
         sleep(1);
     }
 
-    public static File getUserInstallationDir() {
-        return new File(user_installation);
-    }
     /**
      * In order to automatically test OO, some settings/files need to be modified
      */
-    public static void patch() {
-        File profileDir = new File(user_installation);
-        try {
-            user_installation_url = profileDir.toURL().toString();
-        } catch (MalformedURLException e) {
-            //ignore never to occur
-        }
-        user_installation_url = user_installation_url.replace("file:/", "file:///");
-        if (profileDir.exists())
+    public static void patch(boolean force) {
+        File userInstallationDir = app.getUserInstallation();
+        File patchMark = new File(userInstallationDir, "automationenabled");
+        if (!force && patchMark.exists())
             return;
 
-        app.kill(); // make sure no any soffice process exists
-        sleep(2);
-        app.start("\"-env:UserInstallation=" + user_installation_url + "\"");
+        // remove user installation dir
+        app.kill();
+        sleep(1);
+        FileUtil.deleteFile(userInstallationDir);
+        app.start();
         sleep(10);
         app.kill();
-        sleep(2);
-        FileUtil.copyFile(new File("patch/Common.xcu"), new File(user_installation, "user/registry/data/org/openoffice/Office/Common.xcu"));
-        FileUtil.copyFile(new File("patch/Setup.xcu"), new File(user_installation, "user/registry/data/org/openoffice/Setup.xcu"));
-        FileUtil.copyFile(new File("patch/registrymodifications.xml"), new File(user_installation, "user/registrymodifications.xcu"));
+        sleep(1);
 
+        FileUtil.copyFile(new File("patch/Common.xcu"), new File(userInstallationDir, "user/registry/data/org/openoffice/Office/Common.xcu"));
+        FileUtil.copyFile(new File("patch/Setup.xcu"), new File(userInstallationDir, "user/registry/data/org/openoffice/Setup.xcu"));
+        FileUtil.copyFile(new File("patch/registrymodifications.xml"), new File(userInstallationDir, "user/registrymodifications.xcu"));
+        FileUtil.writeStringToFile(patchMark.getAbsolutePath(), "patched for automation");
     }
-
-//  private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{([^\\}]+)\\} | \\$([^/]+)");
-//
-//  public static String resolveEnv(String text) {
-//      Matcher matcher = VARIABLE_PATTERN.matcher(text);
-//      StringBuffer result = new StringBuffer();
-//      while (matcher.find()) {
-//          String str = System.getenv(matcher.group(1));
-//          if (str == null)
-//              str = matcher.group();
-//          matcher.appendReplacement(result, str.replace("\\", "\\\\")
-//                  .replace("$", "\\$"));
-//      }
-//      matcher.appendTail(result);
-//      return result.toString();
-//  }
 
     public static void handleBlocker(final VclWindow... windows) {
         new Condition() {
@@ -286,9 +257,5 @@ public class AppUtil extends Tester {
             }
 
         }.waitForTrue("Time out wait window to be active.",  120, 2);
-    }
-
-    public static void main(String[] args) {
-//      initApp();
     }
 }
