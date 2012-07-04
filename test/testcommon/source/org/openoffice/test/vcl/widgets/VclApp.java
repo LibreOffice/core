@@ -63,8 +63,10 @@ public class VclApp {
         if (appHome == null) {
             if (SystemUtil.isWindows()) {
                 appHome = "C:/Program Files/OpenOffice.org 3/program";
+                if (!new File(appHome).exists())
+                    appHome = "C:/Program Files (x86)/OpenOffice.org 3/program";
             } else if (SystemUtil.isMac()) {
-                appHome = "/Applications/OpenOffice.org/Contents/MacOS";
+                appHome = "/Applications/OpenOffice.org.app/Contents/MacOS";
             } else {
                 appHome = "/opt/openoffice.org3/program";
             }
