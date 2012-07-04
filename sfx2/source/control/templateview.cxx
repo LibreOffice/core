@@ -25,7 +25,6 @@
 
 #include "templateview.hrc"
 
-#define EDIT_WIDTH 180
 #define EDIT_HEIGHT 20
 
 using namespace basegfx;
@@ -42,8 +41,6 @@ TemplateView::TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates)
       mpEditName(new Edit(this, WB_BORDER | WB_HIDE))
 {
     mnHeaderHeight = 30;
-
-    mpEditName->SetSizePixel(Size(EDIT_WIDTH,EDIT_HEIGHT));
 }
 
 TemplateView::~TemplateView ()
@@ -134,14 +131,15 @@ void TemplateView::InsertItems (const std::vector<TemplateViewItem*> &rTemplates
 void TemplateView::Resize()
 {
     // Set editbox size and position
-    Size aEditSize = mpEditName->GetSizePixel();
     Size aWinSize = GetOutputSize();
+
+    Size aEditSize(aWinSize.getWidth()/2,EDIT_HEIGHT);
 
     Point aPos;
     aPos.X() = (aWinSize.getWidth() - aEditSize.getWidth())/2;
     aPos.Y() = (mnHeaderHeight - aEditSize.getHeight())/2;
 
-    mpEditName->SetPosPixel(aPos);
+    mpEditName->SetPosSizePixel(aPos,aEditSize);
 
     ThumbnailView::Resize();
 }
