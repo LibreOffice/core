@@ -662,6 +662,24 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< b
         if(anotherAny >>= aPosition)
             dumpPositionAsElement(aPosition);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Polar");
+        drawing::EnhancedCustomShapeParameterPair aPolar;
+        if(anotherAny >>= aPolar)
+            dumpPolarAsElement(aPolar);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RefX");
+        sal_Int32 aRefX;
+        if(anotherAny >>= aRefX)
+            dumpRefXAsAttribute(aRefX);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RefY");
+        sal_Int32 aRefY;
+        if(anotherAny >>= aRefY)
+            dumpRefYAsAttribute(aRefY);
+    }
 }
 
 void EnhancedShapeDumper::dumpSwitchedAsAttribute(sal_Bool bSwitched)
@@ -677,6 +695,23 @@ void EnhancedShapeDumper::dumpPositionAsElement(drawing::EnhancedCustomShapePara
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Position" ));
     dumpEnhancedCustomShapeParameterPair(aPosition);
     xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpPolarAsElement(drawing::EnhancedCustomShapeParameterPair aPolar)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Polar" ));
+    dumpEnhancedCustomShapeParameterPair(aPolar);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpRefXAsAttribute(sal_Int32 aRefX)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refX"), "%" SAL_PRIdINT32, aRefX);
+}
+
+void EnhancedShapeDumper::dumpRefYAsAttribute(sal_Int32 aRefY)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refY"), "%" SAL_PRIdINT32, aRefY);
 }
 
 
