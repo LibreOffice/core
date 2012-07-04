@@ -1190,11 +1190,9 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTa
 endef
 
 define gb_LinkTarget__set_precompiled_header_impl
-$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_target,$(3)))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
 $(call gb_PrecompiledHeader_get_target,$(3)) : $(2).cxx
 
-$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_NoexPrecompiledHeader_get_target,$(3)))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_NoexPrecompiledHeader_get_clean_target,$(3))
 $(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(2).cxx
 
