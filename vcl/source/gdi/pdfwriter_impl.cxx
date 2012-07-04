@@ -3748,7 +3748,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 aUnicodes.clear();
                 for( std::vector< EmbedCode >::iterator str_it = enc_it->m_aEncVector.begin(); str_it != enc_it->m_aEncVector.end(); ++str_it )
                 {
-                    String aStr( str_it->m_aUnicode );
+                    rtl::OUString aStr( str_it->m_aUnicode );
                     aEncWidths[nEncoded] = pRef->GetTextWidth( aStr );
                     nEncodedCodes[nEncoded] = str_it->m_aUnicode;
                     nEncoding[nEncoded] = sal::static_int_cast<sal_uInt8>(nEncoded);
@@ -8260,7 +8260,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
     //to tweak this
 
-    rtl::OUString aStrikeoutChar( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
+    rtl::OUString aStrikeoutChar = eStrikeout == STRIKEOUT_SLASH ? rtl::OUString("/") : rtl::OUString("X");
     String aStrikeout = aStrikeoutChar;
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
         aStrikeout.Append( aStrikeout );
