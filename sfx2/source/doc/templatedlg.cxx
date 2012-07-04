@@ -491,6 +491,18 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
         InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
 
         int ret = dlg.Execute();
+
+        if (ret)
+        {
+            rtl::OUString aName = dlg.getEntryText();
+
+            if (!aName.isEmpty())
+            {
+                if (!maView->createRegion(aName,maSelTemplates))
+                {
+                }
+            }
+        }
     }
     else if (nMenuId == MNI_MOVE_DELETE)
     {

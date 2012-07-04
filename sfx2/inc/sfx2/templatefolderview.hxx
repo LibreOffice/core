@@ -57,6 +57,8 @@ public:
 
     void setTemplateStateHdl (const Link &aLink) { maTemplateStateHdl = aLink; }
 
+    bool createRegion (const rtl::OUString &rName, const std::set<const ThumbnailViewItem*> &rItems);
+
     bool removeTemplate (const sal_uInt16 nItemId);
 
     bool moveTemplates (std::set<const ThumbnailViewItem*> &rItems, const sal_uInt16 nTargetItem);

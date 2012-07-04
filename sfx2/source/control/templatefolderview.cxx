@@ -425,6 +425,11 @@ void TemplateFolderView::sortOverlayItems(const boost::function<bool (const Thum
     mpItemView->sortItems(func);
 }
 
+bool TemplateFolderView::createRegion(const rtl::OUString &rName, const std::set<const ThumbnailViewItem*> &rItems)
+{
+    return true;
+}
+
 bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
 {
     sal_uInt16 nRegionId = mpItemView->getRegionId();
