@@ -137,8 +137,8 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
                                     aEmptyStr );
 
         // insert given text
-        String aStr( cMark );
-        pOV->InsertText( cMark, sal_True);
+        rtl::OUString aStr( cMark );
+        pOV->InsertText( aStr, sal_True);
 
         ESelection aSel = pOV->GetSelection();
         aSel.nStartPara = aSel.nEndPara;
