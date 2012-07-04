@@ -853,6 +853,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< bea
         if(anotherAny >>= aGluePoints)
             dumpGluePointsAsElement(aGluePoints);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("GluePointLeavingDirections");
+        uno::Sequence< double > aGluePointLeavingDirections;
+        if(anotherAny >>= aGluePointLeavingDirections)
+            dumpGluePointLeavingDirectionsAsElement(aGluePointLeavingDirections);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("GluePointType");
+        sal_Int32 aGluePointType;
+        if(anotherAny >>= aGluePointType)
+            dumpGluePointTypeAsAttribute(aGluePointType);
+    }
 }
 
 void EnhancedShapeDumper::dumpCoordinatesAsElement(uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates)
@@ -926,6 +938,22 @@ void EnhancedShapeDumper::dumpGluePointsAsElement(uno::Sequence< drawing::Enhanc
         xmlTextWriterEndElement( xmlWriter );
     }
     xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpGluePointLeavingDirectionsAsElement(uno::Sequence< double > aGluePointLeavingDirections)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePointLeavingDirections" ));
+    sal_Int32 nLength = aGluePointLeavingDirections.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("value"), "%f", aGluePointLeavingDirections[i]);
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("gluePointType"), "%" SAL_PRIdINT32, aGluePointType);
 }
 
 

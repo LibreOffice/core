@@ -128,6 +128,8 @@ public:
     void dumpStretchYAsAttribute(sal_Int32 aStretchY);
     void dumpTextFramesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames);
     void dumpGluePointsAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints);
+    void dumpGluePointLeavingDirectionsAsElement(com::sun::star::uno::Sequence< double > aGluePointLeavingDirections);
+    void dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType);
 
 private:
     xmlTextWriterPtr xmlWriter;
