@@ -676,6 +676,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< b
         if(anotherAny >>= aRefR)
             dumpRefRAsAttribute(aRefR);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RangeXMinimum");
+        drawing::EnhancedCustomShapeParameter aRangeXMinimum;
+        if(anotherAny >>= aRangeXMinimum)
+            dumpRangeXMinimumAsElement(aRangeXMinimum);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RangeXMaximum");
+        drawing::EnhancedCustomShapeParameter aRangeXMaximum;
+        if(anotherAny >>= aRangeXMaximum)
+            dumpRangeXMaximumAsElement(aRangeXMaximum);
+    }
 }
 
 void EnhancedShapeDumper::dumpSwitchedAsAttribute(sal_Bool bSwitched)
@@ -731,6 +743,20 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(drawing::EnhancedCust
     }
     sal_Int32 aType = aParameter.Type;
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);
+}
+
+void EnhancedShapeDumper::dumpRangeXMinimumAsElement(drawing::EnhancedCustomShapeParameter aRangeXMinimum)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeXMinimum" ));
+    dumpEnhancedCustomShapeParameter(aRangeXMinimum);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpRangeXMaximumAsElement(drawing::EnhancedCustomShapeParameter aRangeXMaximum)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeXMaximum" ));
+    dumpEnhancedCustomShapeParameter(aRangeXMaximum);
+    xmlTextWriterEndElement( xmlWriter );
 }
 
 
