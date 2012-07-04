@@ -2046,7 +2046,7 @@ void PSWriter::ImplWriteString( const rtl::OString& rString, VirtualDevice& rVDe
             {
                 if ( i > 0 )
                     nx = pDXArry[ i - 1 ];
-                ImplWriteDouble( ( bStretch ) ? nx : rVDev.GetTextWidth( rString[i] ) );
+                ImplWriteDouble( ( bStretch ) ? nx : rVDev.GetTextWidth( rtl::OUString(rString[i]) ) );
                 ImplWriteDouble( nx );
                 ImplWriteLine( "(", PS_NONE );
                 ImplWriteCharacter( rString[i] );

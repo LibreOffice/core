@@ -428,7 +428,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
                 case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
             }
-            pOLV->InsertText( String(cIns));
+            pOLV->InsertText( rtl::OUString(cIns));
             rReq.Done();
         }
         break;

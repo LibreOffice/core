@@ -435,7 +435,7 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     long nTabs[] = { 3, 10, 216, 266 };
     maLbConflicts.SetTabs( nTabs );
 
-    String aTab( sal_Unicode( '\t' ) );
+    rtl::OUString aTab('\t');
     String aHeader( maStrTitleConflict );
     aHeader += aTab;
     aHeader += maStrTitleAuthor;

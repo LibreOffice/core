@@ -744,7 +744,7 @@ sal_Bool SwScanner::NextWord()
                 if ( nWordType != i18n::WordType::WORD_COUNT )
                 {
                     rCC.setLocale( pBreakIt->GetLocale( aCurrLang ) );
-                    if ( rCC.isLetterNumeric( aText[nBegin] ) )
+                    if ( rCC.isLetterNumeric(rtl::OUString(aText[nBegin])) )
                         break;
                 }
                 else

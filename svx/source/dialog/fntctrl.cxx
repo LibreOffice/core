@@ -763,12 +763,12 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             long nTextWidth = 0;
             if(pImpl->cStartBracket)
             {
-                String sBracket(pImpl->cStartBracket);
+                rtl::OUString sBracket(pImpl->cStartBracket);
                 nStartBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
             }
             if(pImpl->cEndBracket)
             {
-                String sBracket(pImpl->cEndBracket);
+                rtl::OUString sBracket(pImpl->cEndBracket);
                 nEndBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
             }
             nTextWidth = pImpl->CalcTextSize( this, pPrinter, aSmallFont ).Width();
@@ -785,7 +785,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 
             if(pImpl->cStartBracket)
             {
-                String sBracket(pImpl->cStartBracket);
+                rtl::OUString sBracket(pImpl->cStartBracket);
                 rFont.DrawPrev( this, pPrinter, Point( _nX, nY - nOffset - 4), sBracket );
                 _nX += nStartBracketWidth;
             }
@@ -799,7 +799,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             if(pImpl->cEndBracket)
             {
                 Point aTmpPoint( _nX + 1, nY - nOffset - 4);
-                String sBracket(pImpl->cEndBracket);
+                rtl::OUString sBracket(pImpl->cEndBracket);
                 rFont.DrawPrev( this, pPrinter, aTmpPoint, sBracket );
             }
             pImpl->aCJKFont.SetSize( aOldSize );

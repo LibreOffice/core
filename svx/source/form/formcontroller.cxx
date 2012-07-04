@@ -3794,7 +3794,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
                 continue;
 
             String sMessage( SVX_RES( RID_ERR_FIELDREQUIRED ) );
-            sMessage.SearchAndReplace( '#', rColInfo.sName );
+            sMessage.SearchAndReplace( rtl::OUString('#'), rColInfo.sName );
 
             // the control to focus
             Reference< XControl > xControl( rColInfo.xFirstControlWithInputRequired );
@@ -4057,7 +4057,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
     if ( nLength > 1 )
     {
         sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORDS );
-        sTitle.SearchAndReplace( '#', String::CreateFromInt32( nLength ) );
+        sTitle.SearchAndReplace( rtl::OUString('#'), rtl::OUString::valueOf(nLength) );
     }
     else
         sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORD );

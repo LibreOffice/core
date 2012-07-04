@@ -1774,35 +1774,30 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 
 STRING Complex::GetString() const THROWDEF_RTE_IAE
 {
-    static const String aI( 'i' );
-    static const String aJ( 'j' );
-    static const String aPlus( '+' );
-    static const String aMinus( '-' );
-
     CHK_FINITE(r);
     CHK_FINITE(i);
-    STRING aRet;
+    rtl::OUStringBuffer aRet;
 
     bool bHasImag = i != 0.0;
     bool bHasReal = !bHasImag || (r != 0.0);
 
     if( bHasReal )
-        aRet = ::GetString( r );
+        aRet.append(::GetString( r ));
     if( bHasImag )
     {
         if( i == 1.0 )
         {
             if( bHasReal )
-                aRet += aPlus;
+                aRet.append('+');
         }
         else if( i == -1.0 )
-            aRet += aMinus;
+            aRet.append('-');
         else
-            aRet += ::GetString( i, bHasReal );
-        aRet += (c != 'j') ? aI : aJ;
+            aRet.append(::GetString( i, bHasReal ));
+        aRet.append((c != 'j') ? 'i' : 'j');
     }
 
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
 

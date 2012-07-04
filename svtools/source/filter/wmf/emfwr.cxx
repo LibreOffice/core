@@ -816,7 +816,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
 
         if( nLen > 1 )
         {
-            nNormWidth = pDX[ nLen - 2 ] + maVDev.GetTextWidth( rText.GetChar( nLen - 1 ) );
+            nNormWidth = pDX[ nLen - 2 ] + maVDev.GetTextWidth( rtl::OUString(rText.GetChar( nLen - 1 )) );
 
             if( nWidth && nNormWidth && ( nWidth != nNormWidth ) )
             {

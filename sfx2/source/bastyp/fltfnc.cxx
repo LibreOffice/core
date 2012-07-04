@@ -833,7 +833,7 @@ IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, String*, pString )
     const SfxFilter* pFilter = pThis->GetFilter4Extension( *pString, SFX_FILTER_IMPORT );
     if (pFilter && !pFilter->GetWildcard().Matches( String() ) &&
         !pFilter->GetWildcard().Matches(DEFINE_CONST_UNICODE("*.*")) &&
-        !pFilter->GetWildcard().Matches('*')
+        !pFilter->GetWildcard().Matches(rtl::OUString('*'))
        )
     {
         return sal_True;

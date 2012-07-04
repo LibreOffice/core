@@ -451,7 +451,7 @@ SwTOXDescription&   SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
                                             rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
             if(pFType)
             {
-                String sBrackets(pFType->GetPrefix());
+                String sBrackets = rtl::OUString(pFType->GetPrefix());
                 sBrackets += pFType->GetSuffix();
                 pDescArr[nIndex]->SetAuthBrackets(sBrackets);
                 pDescArr[nIndex]->SetAuthSequence(pFType->IsSequence());
@@ -1810,7 +1810,7 @@ void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         {
             sal_uInt16 nLevel = static_cast< sal_uInt16 >(GetModel()->GetAbsPos(pEntry));
             String sEntry = pParent->GetLevelHelp(++nLevel);
-            if('*' == sEntry)
+            if (comphelper::string::equals(sEntry, '*'))
                 sEntry = GetEntryText(pEntry);
             if(sEntry.Len())
             {
@@ -1974,10 +1974,10 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aSortDocPosRB.Check();
 
     aFillCharCB.SetMaxTextLen(1);
-    aFillCharCB.InsertEntry(' ');
-    aFillCharCB.InsertEntry('.');
-    aFillCharCB.InsertEntry('-');
-    aFillCharCB.InsertEntry('_');
+    aFillCharCB.InsertEntry(rtl::OUString(' '));
+    aFillCharCB.InsertEntry(rtl::OUString('.'));
+    aFillCharCB.InsertEntry(rtl::OUString('-'));
+    aFillCharCB.InsertEntry(rtl::OUString('_'));
 
     aButtonPositions[0] = aEntryNoPB.GetPosPixel();
     aButtonPositions[1] = aEntryPB.GetPosPixel();
@@ -2590,7 +2590,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     {
         aTabPosMF.SetValue(aTabPosMF.Normalize(pToken->nTabStopPosition), FUNIT_TWIP);
         aAutoRightCB.Check(SVX_TAB_ADJUST_END == pToken->eTabAlign);
-        aFillCharCB.SetText(pToken->cTabFillChar);
+        aFillCharCB.SetText(rtl::OUString(pToken->cTabFillChar));
         aTabPosFT.Enable(!aAutoRightCB.IsChecked());
         aTabPosMF.Enable(!aAutoRightCB.IsChecked());
     }
@@ -4068,7 +4068,6 @@ void    SwEntryBrowseBox::InitController(
 void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 {
     AutoMarkEntry* pToInsert = 0;
-    const String sZero('0');
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
     while( !rInStr.GetError() && !rInStr.IsEof() )
     {
@@ -4095,10 +4094,10 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
                 pToInsert->sSecKey      = sLine.GetToken(0, ';', nSttPos );
 
                 String sStr = sLine.GetToken(0, ';', nSttPos );
-                pToInsert->bCase = sStr.Len() && sStr != sZero;
+                pToInsert->bCase = sStr.Len() && !comphelper::string::equals(sStr, '0');
 
                 sStr = sLine.GetToken(0, ';', nSttPos );
-                pToInsert->bWord = sStr.Len() && sStr != sZero;
+                pToInsert->bWord = sStr.Len() && !comphelper::string::equals(sStr, '0');
 
                 aEntryArr.push_back( pToInsert );
                 pToInsert = 0;
@@ -4136,7 +4135,7 @@ void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         AutoMarkEntry* pEntry = &aEntryArr[i];
         if(pEntry->sComment.Len())
         {
-            String sWrite('#');
+            String sWrite = rtl::OUString('#');
             sWrite += pEntry->sComment;
             rOutStr.WriteByteStringLine( sWrite, eTEnc );
         }

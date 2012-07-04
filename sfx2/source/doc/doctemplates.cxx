@@ -404,14 +404,14 @@ void SfxDocTplService_Impl::init_Impl()
 
     // convert locale to string
     OUString aLang = maLocale.Language;
-    aLang += String( '-' );
+    aLang += OUString( '-' );
     aLang += maLocale.Country;
 
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary
 
     maRootURL = OUString( TEMPLATE_ROOT_URL  );
-    maRootURL += String( '/' );
+    maRootURL += OUString( '/' );
     maRootURL += aLang;
 
     ::rtl::OUString aTemplVersPropName( TEMPLATE_VERSION  );

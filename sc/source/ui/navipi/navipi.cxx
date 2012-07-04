@@ -169,7 +169,7 @@ void ColumnEdit::Down()
 void ColumnEdit::First()
 {
     nCol = 1;
-    SetText( 'A' );
+    SetText(rtl::OUString('A'));
 }
 
 //------------------------------------------------------------------------

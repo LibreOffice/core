@@ -517,7 +517,7 @@ void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
     sal_Bool bCallParent = sal_True;
     if(rEvt.GetCharCode())
     {
-        String sKey = rEvt.GetCharCode();
+        rtl::OUString sKey(rEvt.GetCharCode());
         if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
             bCallParent = sal_False;
     }
@@ -1452,7 +1452,7 @@ void AddressMultiLineEdit::SetText( const String& rStr )
         if(sPara.Len() && sPara.GetChar(sPara.Len() - 1) != ' ')
         {
             TextPaM aPaM(nPara, sPara.Len());
-            pTextEngine->ReplaceText(TextSelection( aPaM ), String(' '));
+            pTextEngine->ReplaceText(TextSelection( aPaM ), rtl::OUString(' '));
         }
         while(true)
         {
@@ -1596,7 +1596,7 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
         {
 
             TextPaM aTemp(nPara - 1, pTextEngine->GetTextLen( nPara - 1 ));
-            pTextEngine->ReplaceText( aTemp, String('\n'));
+            pTextEngine->ReplaceText( aTemp, rtl::OUString('\n'));
         }
         InsertNewEntryAtPosition( sCurrentItem, nPara, nIndex );
 

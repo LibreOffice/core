@@ -3909,7 +3909,7 @@ double getDefaultCharWidth( ScDocShell* pDocShell )
     ::Font aDefFont;
     pAttr->GetFont( aDefFont, SC_AUTOCOL_BLACK, pRefDevice );
     pRefDevice->SetFont( aDefFont );
-    long nCharWidth = pRefDevice->GetTextWidth( String( '0' ) );        // 1/100th mm
+    long nCharWidth = pRefDevice->GetTextWidth( rtl::OUString('0') );        // 1/100th mm
     return lcl_hmmToPoints( nCharWidth );
 }
 

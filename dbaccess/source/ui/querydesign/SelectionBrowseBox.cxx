@@ -2329,7 +2329,7 @@ String OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 nCo
             sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
             if (nIdx == sal_uInt16(-1))
                 nIdx = 0;
-            return String(nIdx);
+            return rtl::OUString(nIdx);
         }
         default:
             return GetCellText(nCellIndex, nColId);

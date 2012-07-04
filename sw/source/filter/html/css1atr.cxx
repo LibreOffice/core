@@ -1799,7 +1799,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     else if( pTemplate )
         pRefPageDesc = pTemplate->GetPageDescFromPool( nRefPoolId, false );
 
-    String aSelector( '@' );
+    String aSelector = rtl::OUString('@');
     aSelector.AppendAscii( sCSS1_page );
 
     if( bPseudo )

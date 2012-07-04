@@ -1060,7 +1060,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
 
     if (nTabs > 0)
     {
-        long TabPos = rDevice.GetTextWidth('n') * 8;
+        long TabPos = rDevice.GetTextWidth(rtl::OUString('n')) * 8;
 
         aSize.Width() = 0;
 
@@ -1152,7 +1152,7 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 
     if (nTabs > 0)
     {
-        long TabPos = rDevice.GetTextWidth('n') * 8;
+        long TabPos = rDevice.GetTextWidth(rtl::OUString('n')) * 8;
 
         for (sal_uInt16 i = 0; i < nTabs; i++)
         {

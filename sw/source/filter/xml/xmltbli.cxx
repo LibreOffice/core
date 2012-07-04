@@ -1156,7 +1156,7 @@ String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
 
     if (sPrefixStr.Len() == 0)
     {
-        sPrefixStr = String('_');
+        sPrefixStr = rtl::OUString('_');
     }
 
     // increase count until we find a name that is not yet taken

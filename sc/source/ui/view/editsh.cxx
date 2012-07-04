@@ -155,7 +155,7 @@ void lcl_RemoveAttribs( EditView& rEditView )
 
 void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Unicode cChar )
 {
-    String aString( cChar );
+    rtl::OUString aString( cChar );
     if( pTableView )
         pTableView->InsertText( aString );
     if( pTopView )

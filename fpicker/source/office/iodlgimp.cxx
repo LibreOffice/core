@@ -316,10 +316,11 @@ void SvtExpFileDlg_Impl::SetStandardDir( const String& _rDir )
 namespace {
     String lcl_DecoratedFilter( const String& _rOriginalFilter )
     {
-        String aDecoratedFilter = '<';
-        aDecoratedFilter += _rOriginalFilter;
-        aDecoratedFilter += '>';
-        return aDecoratedFilter;
+        rtl::OUStringBuffer aDecoratedFilter;
+        aDecoratedFilter.append('<');
+        aDecoratedFilter.append(_rOriginalFilter);
+        aDecoratedFilter.append('>');
+        return aDecoratedFilter.makeStringAndClear();
     }
 }
 #endif

@@ -343,9 +343,9 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_SHOWDELETEDROWS, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_ALLOWLONGTABLENAMES, sal_False);
     *pCounter++ = new SfxStringItem(DSID_JDBCDRIVERCLASS, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_FIELDDELIMITER, ',');
-    *pCounter++ = new SfxStringItem(DSID_TEXTDELIMITER, '"');
-    *pCounter++ = new SfxStringItem(DSID_DECIMALDELIMITER, '.');
+    *pCounter++ = new SfxStringItem(DSID_FIELDDELIMITER, rtl::OUString(','));
+    *pCounter++ = new SfxStringItem(DSID_TEXTDELIMITER, rtl::OUString('"'));
+    *pCounter++ = new SfxStringItem(DSID_DECIMALDELIMITER, rtl::OUString('.'));
     *pCounter++ = new SfxStringItem(DSID_THOUSANDSDELIMITER, rtl::OUString());
     *pCounter++ = new SfxStringItem(DSID_TEXTFILEEXTENSION, rtl::OUString("txt"));
     *pCounter++ = new SfxBoolItem(DSID_TEXTFILEHEADER, sal_True);

@@ -92,7 +92,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
         && ' ' != rInf.GetChar( rInf.GetIdx() - 1 )
         && ( !rInf.GetLast() || !rInf.GetLast()->IsBreakPortion() ) )
     {
-        SetBlankWidth( rInf.GetTxtSize( ' ' ).Width() );
+        SetBlankWidth( rInf.GetTxtSize(rtl::OUString(' ')).Width() );
         SetLen( 1 );
     }
 

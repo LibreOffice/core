@@ -2790,7 +2790,7 @@ bool ScCompiler::IsReference( const String& rName )
     if ( ch1 == cDecSep )
         return false;
     // Who was that imbecile introducing '.' as the sheet name separator!?!
-    if ( CharClass::isAsciiNumeric( ch1 ) )
+    if ( CharClass::isAsciiNumeric( rtl::OUString(ch1) ) )
     {
         // Numerical sheet name is valid.
         // But English 1.E2 or 1.E+2 is value 100, 1.E-2 is 0.01
@@ -3492,7 +3492,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     String aOld( aRef[j] );
                     String aStr2;
                     const sal_Unicode* p = aRef[j].GetBuffer();
-                    while ( *p && CharClass::isAsciiNumeric( *p ) )
+                    while ( *p && CharClass::isAsciiNumeric( rtl::OUString(*p) ) )
                         aStr2 += *p++;
                     aRef[j] = rtl::OUString( p );
                     aRef[j] += aStr2;
@@ -3604,7 +3604,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     }
     else
     {
-        String aTmpStr( cSymbol[0] );
+        rtl::OUString aTmpStr( cSymbol[0] );
         bMayBeFuncName = ScGlobal::pCharClass->isLetter( aTmpStr, 0 );
         bAsciiNonAlnum = false;
     }

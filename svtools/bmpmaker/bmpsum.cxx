@@ -102,13 +102,13 @@ sal_Bool BmpSum::GetCommandOption( const ::std::vector< String >& rArgs, const S
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
-        String  aTestStr( '-' );
+        rtl::OUString  aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
             aTestStr += rSwitch;
 
-            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
+            if( aTestStr.equalsIgnoreAsciiCase( rArgs[ i ] ) )
             {
                 bRet = sal_True;
 
@@ -119,7 +119,7 @@ sal_Bool BmpSum::GetCommandOption( const ::std::vector< String >& rArgs, const S
             }
 
             if( 0 == n )
-                aTestStr = '/';
+                aTestStr = rtl::OUString('/');
         }
     }
 
@@ -162,10 +162,10 @@ int BmpSum::Start( const ::std::vector< String >& rArgs )
     {
         String  aInFileList, aOutFileList, aOutPath;
 
-        if( GetCommandOption( rArgs, 'i', aInFileList ) &&
-            GetCommandOption( rArgs, 'o', aOutFileList ) )
+        if( GetCommandOption( rArgs, rtl::OUString('i'), aInFileList ) &&
+            GetCommandOption( rArgs, rtl::OUString('o'), aOutFileList ) )
         {
-            GetCommandOption( rArgs, 'p', aOutPath );
+            GetCommandOption( rArgs, rtl::OUString('p'), aOutPath );
             ProcessFileList( aInFileList, aOutFileList, aOutPath );
         }
         else

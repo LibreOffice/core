@@ -3056,7 +3056,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
     else
     {
         String aId;
-        String aAnchor = String('#');
+        String aAnchor = rtl::OUString('#');
         if ( comphelper::string::getTokenCount(aEntry, '#') == 2 )
         {
             aId = aEntry.GetToken( 0, '#' );

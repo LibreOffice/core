@@ -177,12 +177,12 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
         if ( !bEdit )
         {
-            String aNewFormula = '=';
+            rtl::OUString aNewFormula('=');
             if ( aFormula.Len() > 0 && aFormula.GetChar(0) == '=' )
-                aNewFormula=aFormula;
+                aNewFormula = aFormula;
 
             pScMod->InputReplaceSelection( aNewFormula );
-            pScMod->InputSetSelection( 1, aNewFormula.Len()+1 );
+            pScMod->InputSetSelection( 1, aNewFormula.getLength()+1 );
             xub_StrLen PrivStart, PrivEnd;
             pScMod->InputGetSelection( PrivStart, PrivEnd);
             SetMeText(pScMod->InputGetFormulaStr(),PrivStart, PrivEnd,bMatrix,false,false);
@@ -342,10 +342,11 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
         if ( pCell->GetCode()->GetCodeLen() <= 1 )
         {   // ==1: einzelner ist als Parameter immer Bereich
             // ==0: es waere vielleicht einer, wenn..
-            String aBraced( '(' );
-            aBraced += rStrExp;
-            aBraced += ')';
-            pFCell.reset( new ScFormulaCell( pDoc, aCursorPos, aBraced ) );
+            rtl::OUStringBuffer aBraced;
+            aBraced.append('(');
+            aBraced.append(rStrExp);
+            aBraced.append(')');
+            pFCell.reset( new ScFormulaCell( pDoc, aCursorPos, aBraced.makeStringAndClear() ) );
         }
         else
             bColRowName = false;

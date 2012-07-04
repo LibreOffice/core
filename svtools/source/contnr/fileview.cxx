@@ -672,7 +672,7 @@ OUString CreateExactSizeText( sal_Int64 nSize )
     long nMega = 1024 * 1024;
     long nGiga = nMega * 1024;
 
-    String aUnitStr = ' ';
+    rtl::OUString aUnitStr(' ');
 
     if ( nSize < 10000 )
     {
@@ -1117,12 +1117,12 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
     sal_uInt32  aLastPos = mnSearchIndex;
     sal_Bool    bFound = sal_False;
 
-    maQuickSearchText += OUString( String( rChar ) ).toAsciiLowerCase();
+    maQuickSearchText += OUString(rChar).toAsciiLowerCase();
 
     bFound = mpParent->SearchNextEntry( mnSearchIndex, maQuickSearchText, sal_False );
 
     if ( !bFound && ( aLastText.getLength() == 1 ) &&
-         ( aLastText == OUString( String( rChar ) ) ) )
+         ( aLastText == OUString(rChar) ) )
     {
         mnSearchIndex = aLastPos + 1;
         maQuickSearchText = aLastText;

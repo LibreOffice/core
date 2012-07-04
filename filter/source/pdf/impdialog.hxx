@@ -141,7 +141,7 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 
     sal_Bool                    mbIsRangeChecked;
-    String                      msPageRange;
+    rtl::OUString               msPageRange;
     sal_Bool                    mbSelectionIsChecked;
 
     sal_Bool                    mbExportRelativeFsysLinks;

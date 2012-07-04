@@ -945,11 +945,11 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nS
         InsertAttrsAsDrawingAttrs(nStartCp, nEndCp, eType);
 
         //Annotations typically begin with a (useless) 0x5
-    if ((eType == MAN_AND) && mpDrawEditEngine->GetTextLen())
-    {
-        ESelection aFirstChar(0, 0, 0, 1);
-            if (mpDrawEditEngine->GetText( aFirstChar ) == String(sal_Unicode(0x5)))
-            mpDrawEditEngine->QuickDelete(aFirstChar);
+        if ((eType == MAN_AND) && mpDrawEditEngine->GetTextLen())
+        {
+            ESelection aFirstChar(0, 0, 0, 1);
+            if (comphelper::string::equals(mpDrawEditEngine->GetText( aFirstChar ), 0x5))
+                mpDrawEditEngine->QuickDelete(aFirstChar);
         }
 
         EditTextObject* pTemporaryText = mpDrawEditEngine->CreateTextObject();

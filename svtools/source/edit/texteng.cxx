@@ -766,7 +766,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 
         if ( IsUndoEnabled() && !IsInUndo() )
         {
-            TextUndoInsertChars* pNewUndo = new TextUndoInsertChars( this, aPaM, c );
+            TextUndoInsertChars* pNewUndo = new TextUndoInsertChars( this, aPaM, rtl::OUString(c) );
             sal_Bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? sal_True : sal_False;
             InsertUndo( pNewUndo, bTryMerge );
         }

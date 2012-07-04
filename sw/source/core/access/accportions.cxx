@@ -158,7 +158,7 @@ void SwAccessiblePortionData::Special(
         case POR_POSTITS:
         case POR_FLYCNT:
         case POR_GRFNUM:
-            sDisplay = String(sal_Unicode(0xfffc));
+            sDisplay = rtl::OUString(sal_Unicode(0xfffc));
 
             break;
         case POR_NUMBER:

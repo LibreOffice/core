@@ -1025,7 +1025,7 @@ void SmParser::Align()
         if (CONVERT_40_TO_50 == GetConversion())
             // encapsulate expression to be aligned in group braces
             // (here group-open brace)
-        {   Insert('{', GetTokenIndex());
+        {   Insert(rtl::OUString('{'), GetTokenIndex());
             bNeedGroupClose = true;
 
             // get first valid align statement in sequence
@@ -1061,7 +1061,7 @@ void SmParser::Align()
     Expression();
 
     if (bNeedGroupClose)
-        Insert('}', GetTokenIndex());
+        Insert(rtl::OUString('}'), GetTokenIndex());
 
     if (pSNode)
     {
@@ -1551,7 +1551,7 @@ void SmParser::Term()
                 else    // encapsulate old 4.0 style parsing in braces
                 {
                     // insert opening brace
-                    Insert('{', GetTokenIndex());
+                    Insert(rtl::OUString('{'), GetTokenIndex());
 
                     //
                     // parse in 4.0 style
@@ -1568,7 +1568,7 @@ void SmParser::Term()
                     }
 
                     // insert closing brace
-                    Insert('}', GetTokenIndex());
+                    Insert(rtl::OUString('}'), GetTokenIndex());
 
                     SmStructureNode *pSNode = new SmExpressionNode(pFunc->GetToken());
                     pSNode->SetSubNodes(pFunc, lcl_popOrZero(m_aNodeStack));

@@ -136,7 +136,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
 sal_Bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
 {
     if( !bIsAppend && bIsWordDelim ==
-        !GetAppCharClass().isLetterNumeric( String( cIns )) )
+        !GetAppCharClass().isLetterNumeric( rtl::OUString( cIns )) )
     {
         nLen++;
         nCntnt++;

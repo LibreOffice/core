@@ -73,7 +73,7 @@ void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
     sal_Bool bCallParent = sal_True;
     if(rEvt.GetCharCode())
     {
-        String sKey = rEvt.GetCharCode();
+        rtl::OUString sKey(rEvt.GetCharCode());
         if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
             bCallParent = sal_False;
     }

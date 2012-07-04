@@ -2336,7 +2336,7 @@ void ScInterpreter::ScCell()
                 // font color doesn't matter here
                 pDok->GetDefPattern()->GetFont( aDefFont, SC_AUTOCOL_BLACK, pPrinter );
                 pPrinter->SetFont( aDefFont );
-                long nZeroWidth = pPrinter->GetTextWidth( String( '0' ) );
+                long nZeroWidth = pPrinter->GetTextWidth( rtl::OUString( '0' ) );
                 pPrinter->SetFont( aOldFont );
                 pPrinter->SetMapMode( aOldMode );
                 int nZeroCount = (int)(pDok->GetColWidth( aCellPos.Col(), aCellPos.Tab() ) / nZeroWidth);
@@ -3007,11 +3007,10 @@ void ScInterpreter::ScPropper()
         const sal_Unicode* pUpr = aUpr.GetBuffer();
         const sal_Unicode* pLwr = aLwr.GetBuffer();
         *pStr = *pUpr;
-        String aTmpStr( 'x' );
         xub_StrLen nPos = 1;
         while( nPos < nLen )
         {
-            aTmpStr.SetChar( 0, pStr[nPos-1] );
+            rtl::OUString aTmpStr( pStr[nPos-1] );
             if ( !ScGlobal::pCharClass->isLetter( aTmpStr, 0 ) )
                 pStr[nPos] = pUpr[nPos];
             else

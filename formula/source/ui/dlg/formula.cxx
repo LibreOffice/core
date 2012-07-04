@@ -937,7 +937,7 @@ void FormulaDlg_Impl::ClearAllParas()
 }
 String FormulaDlg_Impl::RepairFormula(const String& aFormula)
 {
-    String aResult('=');
+    rtl::OUString aResult('=');
     try
     {
         UpdateTokenArray(aFormula);

@@ -470,7 +470,7 @@ DBG_NAME(OTextConnectionHelper)
         else
         {
             sExtension = m_aETOwnExtension.GetText();
-            if ( sExtension.GetToken(0,'.').Equals('*') )
+            if ( comphelper::string::equals(sExtension.GetToken(0,'.'), '*') )
                 sExtension.Erase(0,2);
         }
         return sExtension;
@@ -487,11 +487,11 @@ DBG_NAME(OTextConnectionHelper)
             return rBox.GetText().Copy(0);
 
         if ( !( &m_aTextSeparator == &rBox && nPos == (rBox.GetEntryCount()-1) ) )
-            return String(
+            return rtl::OUString(
                 static_cast< sal_Unicode >(
                     rList.GetToken(((nPos*2)+1), nTok ).ToInt32()));
         // somewhat strange ... translates for instance an "32" into " "
-        return String();
+        return rtl::OUString();
     }
 
     //------------------------------------------------------------------------
@@ -503,11 +503,11 @@ DBG_NAME(OTextConnectionHelper)
 
         for( i=0 ; i<nCnt ; i+=2 )
         {
-            String  sTVal(
+            rtl::OUString  sTVal(
                 static_cast< sal_Unicode >(
                     rList.GetToken( (i+1), nTok ).ToInt32()));
 
-            if( sTVal == rVal )
+            if( sTVal.equals(rVal) )
             {
                 rBox.SetText( rList.GetToken( i, nTok ) );
                 break;

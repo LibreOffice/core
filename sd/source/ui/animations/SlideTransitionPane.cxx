@@ -955,7 +955,7 @@ void SlideTransitionPane::openSoundFileDialog()
             else
             {
                 String aStrWarning(SdResId(STR_WARNING_NOSOUNDFILE));
-                String aStr( sal_Unicode( '%' ));
+                rtl::OUString aStr('%');
                 aStrWarning.SearchAndReplace( aStr , aFile );
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
                 aWarningBox.SetModalInputMode (sal_True);

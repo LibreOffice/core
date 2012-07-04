@@ -2934,7 +2934,7 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
         {
             for(sal_uInt16 nCh = 0; nCh < nEnd - rPos; ++nCh)
             {
-                rDoc.InsertString( *pPaM, cSymbol );
+                rDoc.InsertString( *pPaM, rtl::OUString(cSymbol) );
             }
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
         }
@@ -3075,13 +3075,13 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             bRet = HandlePageBreakChar();
             break;
         case 0x1e:   // Non-breaking hyphen
-            rDoc.InsertString( *pPaM, CHAR_HARDHYPHEN );
+            rDoc.InsertString( *pPaM, rtl::OUString(CHAR_HARDHYPHEN) );
             break;
         case 0x1f:   // Non-required hyphens
-            rDoc.InsertString( *pPaM, CHAR_SOFTHYPHEN );
+            rDoc.InsertString( *pPaM, rtl::OUString(CHAR_SOFTHYPHEN) );
             break;
         case 0xa0:   // Non-breaking spaces
-            rDoc.InsertString( *pPaM, CHAR_HARDBLANK  );
+            rDoc.InsertString( *pPaM, rtl::OUString(CHAR_HARDBLANK)  );
             break;
         case 0x1:
             /*
@@ -3567,7 +3567,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     m_aExtraneousParas(rD),
     maInsertedTables(rD),
     maSectionNameGenerator(rD, rtl::OUString("WW")),
-    maGrfNameGenerator(bNewDoc,String('G')),
+    maGrfNameGenerator(bNewDoc, rtl::OUString('G')),
     maParaStyleMapper(rD),
     maCharStyleMapper(rD),
     maTxtNodesHavingFirstLineOfstSet(), // #i103711#

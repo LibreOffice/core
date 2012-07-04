@@ -219,7 +219,7 @@ DBG_NAME(IndexFieldsControl)
             sal_Int32 nWidthAsc = GetTextWidth(m_sAscendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
             sal_Int32 nWidthDesc = GetTextWidth(m_sDescendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
             // maximum plus some additional space
-            return (nWidthAsc > nWidthDesc ? nWidthAsc : nWidthDesc) + GetTextWidth('0') * 2;
+            return (nWidthAsc > nWidthDesc ? nWidthAsc : nWidthDesc) + GetTextWidth(rtl::OUString('0')) * 2;
         }
         return EditBrowseBox::GetTotalCellWidth(_nRow, _nColId);
     }
@@ -249,7 +249,7 @@ DBG_NAME(IndexFieldsControl)
             nOther = GetTextWidth(m_sDescendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
             nSortOrderColumnWidth = nSortOrderColumnWidth > nOther ? nSortOrderColumnWidth : nOther;
             // (plus some additional space)
-            nSortOrderColumnWidth += GetTextWidth('0') * 2;
+            nSortOrderColumnWidth += GetTextWidth(rtl::OUString('0')) * 2;
             InsertDataColumn(COLUMN_ID_ORDER, sColumnName, nSortOrderColumnWidth, HIB_STDSTYLE, 1);
 
             m_pSortingCell = new ListBoxControl(&GetDataWindow());

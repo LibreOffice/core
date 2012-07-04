@@ -2227,7 +2227,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if( rStyles.Len() )
                         {
                             xub_StrLen nPos = 0;
-                            String sLvl( ',' );
+                            String sLvl = rtl::OUString(',');
                             sLvl += String::CreateFromInt32( n + 1 );
                             do {
                                 String sStyle( rStyles.GetToken( 0,
@@ -2685,7 +2685,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                 case DI_CUSTOM:
                     eFld = ww::eDOCPROPERTY;
                     {
-                        static String sQuotes('\"');
+                        rtl::OUString sQuotes('\"');
                         const SwDocInfoField * pDocInfoField =
                         dynamic_cast<const SwDocInfoField *> (pFld);
 

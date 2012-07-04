@@ -178,9 +178,8 @@ public:
         @return  true = property contains true; false = property contains false or error occurred. */
     bool                GetBoolProperty( const ::rtl::OUString& rPropName ) const;
 
-    /** Gets the specified Boolean property from the property set.
-        @return  true, if the passed Boolean variable could be filled with the property value. */
-    bool                GetStringProperty( String& rValue, const ::rtl::OUString& rPropName ) const;
+    /** Gets the specified Boolean property from the property set. */
+    rtl::OUString       GetStringProperty( const ::rtl::OUString& rPropName ) const;
 
     /** Gets the specified color property from the property set.
         @return  true, if the passed color variable could be filled with the property value. */

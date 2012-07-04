@@ -1264,7 +1264,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         String aToken( aString.GetToken( 0, '\n', nStringIx ) );
                         if( nToken > 0 )
                         {
-                            mxString1->Append( '\0' );
+                            mxString1->Append(rtl::OUString(static_cast<sal_Unicode>('\0')));
                             sFormulaBuf.append( (sal_Unicode) ',' );
                         }
                         mxString1->Append( aToken );

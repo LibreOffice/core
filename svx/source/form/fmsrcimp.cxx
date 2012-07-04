@@ -1002,8 +1002,8 @@ void FmSearchEngine::SearchNextImpl()
             UniString aTmp(strSearchExpression);
             const rtl::OUString s_sStar("\\*");
             const rtl::OUString s_sQuotation("\\?");
-            aTmp.SearchAndReplaceAll('*', s_sStar);
-            aTmp.SearchAndReplaceAll('?', s_sQuotation);
+            aTmp.SearchAndReplaceAll(rtl::OUString('*'), s_sStar);
+            aTmp.SearchAndReplaceAll(rtl::OUString('?'), s_sQuotation);
             strSearchExpression = aTmp;
 
             switch (m_nPosition)

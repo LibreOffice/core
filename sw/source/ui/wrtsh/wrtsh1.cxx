@@ -941,7 +941,7 @@ void SwWrtShell::InsertLineBreak()
         if( pACorr )
             AutoCorrect( *pACorr, cIns );
         else
-            SwWrtShell::Insert( String( cIns ) );
+            SwWrtShell::Insert( rtl::OUString( cIns ) );
     }
 }
 /*------------------------------------------------------------------------

@@ -366,7 +366,7 @@ void OFieldExpressionControl::lateInit()
         aFont.SetWeight( WEIGHT_LIGHT );
         SetFont(aFont);
 
-        InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth('0') * 4)/*, sal_True */);
+        InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(rtl::OUString('0')) * 4)/*, sal_True */);
         InsertDataColumn( FIELD_EXPRESSION, String(ModuleRes(STR_RPT_EXPRESSION)), 100);
 
         m_pComboCell = new ComboBoxControl( &GetDataWindow() );

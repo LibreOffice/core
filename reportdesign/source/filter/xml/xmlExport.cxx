@@ -300,7 +300,7 @@ ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt1
     m_xParaPropMapper = new OSpecialHanldeXMLExportPropertyMapper( xPropMapper);
 
     ::rtl::OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
-    ::rtl::OUString aPrefix( String( 'P' ) );
+    ::rtl::OUString aPrefix( 'P');
     GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
                               m_xParaPropMapper, aPrefix );
 

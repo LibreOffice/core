@@ -277,7 +277,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
         String sText(rtl::OUString("ABC"));
         Point aMove(1, GetTextHeight());
         sal_Unicode cArrow = 0x2193;
-        long nAWidth = GetTextWidth(String(sText.GetChar(0)));
+        long nAWidth = GetTextWidth(rtl::OUString(sText.GetChar(0)));
         switch(pImpl->nFrameDirection)
         {
             case FRMDIR_HORI_LEFT_TOP:
@@ -307,7 +307,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
         sText.Append(cArrow);
         for(sal_uInt16 i = 0; i < sText.Len(); i++)
         {
-            String sDraw(sText.GetChar(i));
+            rtl::OUString sDraw(sText.GetChar(i));
             long nHDiff = 0;
             long nCharWidth = GetTextWidth(sDraw);
             sal_Bool bHorizontal = 0 == aMove.Y();

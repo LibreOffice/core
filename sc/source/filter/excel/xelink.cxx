@@ -1333,14 +1333,14 @@ void XclExpExternSheetBase::WriteExtNameBuffer( XclExpStream& rStrm )
 XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, sal_Unicode cCode ) :
     XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
 {
-    Init( String( cCode ) );
+    Init( rtl::OUString(cCode) );
 }
 
 XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, const String& rTabName ) :
     XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
 {
     // reference to own sheet: \03<sheetname>
-    Init( String( EXC_EXTSH_TABNAME ).Append( rTabName ) );
+    Init(rtl::OUString(EXC_EXTSH_TABNAME) + rTabName);
 }
 
 void XclExpExternSheet::Save( XclExpStream& rStrm )

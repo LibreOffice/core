@@ -97,7 +97,7 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     lPWidthWidth  = GetTextWidth(aPWidthStr);
     lPHeightWidth = GetTextWidth(aPHeightStr);
     lXHeight = GetTextHeight();
-    lXWidth  = GetTextWidth('X');
+    lXWidth  = GetTextWidth(rtl::OUString('X'));
 
     // Scale factor
     float fx = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;

@@ -1400,7 +1400,7 @@ Size ListBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
     // Breite
     if ( nColumns )
-        aSz.Width() = nColumns * GetTextWidth( XubString( 'X' ) );
+        aSz.Width() = nColumns * GetTextWidth( rtl::OUString('X') );
     else
         aSz.Width() = aMinSz.Width();
 

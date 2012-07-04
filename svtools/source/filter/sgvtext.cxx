@@ -693,7 +693,7 @@ sal_uInt16 GetCharWidth(OutputDevice& rOut, UCHAR c)
 
     if (c==' ')
     {
-        ChrWidth=(sal_uInt16)rOut.GetTextWidth( String('A') );
+        ChrWidth=(sal_uInt16)rOut.GetTextWidth( rtl::OUString('A') );
         if (rOut.GetFont().GetPitch()!=PITCH_FIXED) {
             ChrWidth=MulDiv(ChrWidth,DefaultSpace,100);
         }

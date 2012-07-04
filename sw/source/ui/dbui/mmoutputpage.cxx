@@ -807,7 +807,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             pTargetView->GetWrtShell().EndAction();
             //then save it
             String sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
-            String sCounter('_');
+            String sCounter = rtl::OUString('_');
             sCounter += String::CreateFromInt32(nDoc);
             sOutPath.Insert(sCounter, sOutPath.Len() - sExtension.Len() - 1);
 

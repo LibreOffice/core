@@ -662,7 +662,7 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
 
         // It's a word if the first character is an alpha-numeric character.
         bRet = GetAppCharClass().isLetterNumeric(
-            rText.getStr()[ rBound.startPos ] );
+            rtl::OUString(rText[rBound.startPos]) );
     }
     else
     {

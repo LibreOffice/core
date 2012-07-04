@@ -1914,7 +1914,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
     if (!bMark && !rMark.GetAlternativeText().Len())
     {
-        rMark.SetAlternativeText( String(' ') );
+        rMark.SetAlternativeText( rtl::OUString(' ') );
     }
 
     const bool bForceExpandHints( (!bMark && pTextCursor)

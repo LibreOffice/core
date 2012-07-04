@@ -556,7 +556,7 @@ void ScDrawStringsVars::RepeatToFill( long colWidth )
     if ( nPos ==  STRING_NOTFOUND || nPos >= aString.Len() )
         return;
 
-    long charWidth = pOutput->pFmtDevice->GetTextWidth(String(nChar));
+    long charWidth = pOutput->pFmtDevice->GetTextWidth(rtl::OUString(nChar));
     if (bPixelToLogic)
         colWidth = pOutput->pRefDevice->PixelToLogic(Size(colWidth,0)).Width();
     // Are there restrictions on the cell type we should filter out here ?
@@ -716,7 +716,7 @@ long ScDrawStringsVars::GetMaxDigitWidth()
     for (sal_Char i = 0; i < 10; ++i)
     {
         sal_Char cDigit = cZero + i;
-        long n = pOutput->pFmtDevice->GetTextWidth(String(cDigit));
+        long n = pOutput->pFmtDevice->GetTextWidth(rtl::OUString(cDigit));
         nMaxDigitWidth = ::std::max(nMaxDigitWidth, n);
     }
     return nMaxDigitWidth;
@@ -727,7 +727,7 @@ long ScDrawStringsVars::GetSignWidth()
     if (nSignWidth > 0)
         return nSignWidth;
 
-    nSignWidth = pOutput->pFmtDevice->GetTextWidth(String('-'));
+    nSignWidth = pOutput->pFmtDevice->GetTextWidth(rtl::OUString('-'));
     return nSignWidth;
 }
 
@@ -746,7 +746,7 @@ long ScDrawStringsVars::GetExpWidth()
     if (nExpWidth > 0)
         return nExpWidth;
 
-    nExpWidth = pOutput->pFmtDevice->GetTextWidth(String('E'));
+    nExpWidth = pOutput->pFmtDevice->GetTextWidth(rtl::OUString('E'));
     return nExpWidth;
 }
 

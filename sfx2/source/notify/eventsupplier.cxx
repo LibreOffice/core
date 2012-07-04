@@ -472,9 +472,9 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         {
             aScript = rtl::OUString( MACRO_PRFIX  );
             if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarDesktop")) && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) )
-                aScript += String('.');
+                aScript += rtl::OUString('.');
 
-            aScript += String('/');
+            aScript += rtl::OUString('/');
             aScript += aMacroName;
             aScript += rtl::OUString( MACRO_POSTFIX  );
         }

@@ -40,6 +40,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/request.hxx>
@@ -597,11 +598,11 @@ sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     pOpt->bChgEnumNum = bCheck;
     bModified |= aBulletFont != pOpt->aBulletFont;
     pOpt->aBulletFont = aBulletFont;
-    bModified |= String(pOpt->cBullet) != sBulletChar;
+    bModified |= !comphelper::string::equals(sBulletChar, pOpt->cBullet);
     pOpt->cBullet = sBulletChar.GetChar(0);
 
     bModified |= aByInputBulletFont != pOpt->aByInputBulletFont;
-    bModified |= String(pOpt->cByInputBullet) != sByInputBulletChar;
+    bModified |= !comphelper::string::equals(sByInputBulletChar, pOpt->cByInputBullet);
     pOpt->aByInputBulletFont = aByInputBulletFont;
     pOpt->cByInputBullet = sByInputBulletChar.GetChar(0);
 

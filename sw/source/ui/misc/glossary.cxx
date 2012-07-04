@@ -109,7 +109,7 @@ String lcl_GetValidShortCut( const String& rName )
     while( rName.GetChar( nStart-1 ) == ' ' && nStart < nSz )
         nStart++;
 
-    String aBuf( rName.GetChar( nStart-1 ));
+    String aBuf = rtl::OUString(rName.GetChar(nStart-1));
 
     for( ; nStart < nSz; ++nStart )
     {

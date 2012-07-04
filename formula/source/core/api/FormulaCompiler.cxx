@@ -670,9 +670,9 @@ void FormulaCompiler::InitSymbolsEnglishXL() const
     // TODO: For now, just replace the separators to the Excel English
     // variants. Later, if we want to properly map Excel functions with Calc
     // functions, we'll need to do a little more work here.
-    mxSymbolsEnglishXL->putOpCode(sal_Unicode(','), ocSep);
-    mxSymbolsEnglishXL->putOpCode(sal_Unicode(','), ocArrayColSep);
-    mxSymbolsEnglishXL->putOpCode(sal_Unicode(';'), ocArrayRowSep);
+    mxSymbolsEnglishXL->putOpCode(rtl::OUString(','), ocSep);
+    mxSymbolsEnglishXL->putOpCode(rtl::OUString(','), ocArrayColSep);
+    mxSymbolsEnglishXL->putOpCode(rtl::OUString(';'), ocArrayRowSep);
 }
 
 // -----------------------------------------------------------------------------
@@ -1766,7 +1766,7 @@ void FormulaCompiler::AppendString( rtl::OUStringBuffer& rBuffer, const String &
     else
     {
         String aStr( rStr );
-        aStr.SearchAndReplaceAll( '"', String( RTL_CONSTASCII_USTRINGPARAM( "\"\"")));
+        aStr.SearchAndReplaceAll( rtl::OUString('"'), rtl::OUString("\"\"") );
         rBuffer.append(aStr);
     }
     rBuffer.append(sal_Unicode('"'));

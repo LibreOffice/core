@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
 #include <tools/poly.hxx>
@@ -148,7 +149,7 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
                 {
                     if( bBlank )
                     {
-                        String aTemp( aTxt.GetChar( i ) );
+                        rtl::OUString aTemp(aTxt.GetChar(i));
                         aTemp = aCharClass.uppercase( aTemp );
                         aTxt.Replace( i, 1, aTemp );
                     }
@@ -281,7 +282,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
             sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
             if ( ( nCharacterType & ::com::sun::star::i18n::KCharacterType::UPPER ) )
                 break;
-            if ( CH_BLANK == aCharString )
+            if ( comphelper::string::equals(aCharString, CH_BLANK) )
                 break;
             if( ++nPos < nTxtLen )
                 aCharString = rTxt.GetChar( nPos + nIdx );
@@ -306,7 +307,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
             nOldPos = nPos;
         }
         // Now the blanks are<processed
-        while( nPos < nTxtLen && CH_BLANK == aCharString && ++nPos < nTxtLen )
+        while( nPos < nTxtLen && comphelper::string::equals(aCharString, CH_BLANK) && ++nPos < nTxtLen )
             aCharString = rTxt.GetChar( nPos + nIdx );
 
         if( nOldPos != nPos )

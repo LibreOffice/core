@@ -101,13 +101,13 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, 
     Font aFont( aOldFont );
     aFont.SetWeight( WEIGHT_BOLD );
 
-    String sTxt( ' ' );
+    rtl::OUString sTxt( ' ' );
     if ( mbIsDouble )
-        sTxt += (String)rtl::math::doubleToUString( mfDoubleValue,
+        sTxt += rtl::math::doubleToUString( mfDoubleValue,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
             ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
     else
-        sTxt += String::CreateFromInt32( mnIntValue );
+        sTxt += rtl::OUString::valueOf(mnIntValue);
     rDev.SetFont( aFont );
     rDev.DrawText( aNewPos, sTxt );
 

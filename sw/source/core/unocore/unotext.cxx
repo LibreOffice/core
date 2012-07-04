@@ -472,7 +472,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     if (cIns)
     {
-        m_pImpl->m_pDoc->InsertString( aTmp, cIns, nInsertFlags );
+        m_pImpl->m_pDoc->InsertString( aTmp, rtl::OUString(cIns), nInsertFlags );
     }
 
     if (bAbsorb)

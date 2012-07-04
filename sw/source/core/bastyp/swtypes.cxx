@@ -56,8 +56,8 @@
 
 using namespace com::sun::star;
 
-String aEmptyStr;    // constant string
-String aDotStr('.'); // constant string
+UniString aEmptyStr;    // constant string
+rtl::OUString aDotStr('.'); // constant string
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwAttrSet )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwStartNode )

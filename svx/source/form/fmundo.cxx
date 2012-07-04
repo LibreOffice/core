@@ -1058,7 +1058,7 @@ rtl::OUString FmUndoPropertyAction::GetComment() const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::GetComment" );
     String aStr(static_STR_UNDO_PROPERTY);
 
-    aStr.SearchAndReplace( '#', aPropertyName );
+    aStr.SearchAndReplace( rtl::OUString('#'), aPropertyName );
     return aStr;
 }
 

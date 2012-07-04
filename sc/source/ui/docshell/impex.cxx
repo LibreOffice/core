@@ -741,11 +741,11 @@ void lcl_UnescapeSylk( String & rString, SylkVersion eVersion )
     // Older versions quoted the string and doubled embedded quotes, but not
     // the semicolons, which was plain wrong.
     if (eVersion >= SYLK_OOO32)
-        rString.SearchAndReplaceAll( rtl::OUString(DOUBLE_SEMICOLON), ';' );
+        rString.SearchAndReplaceAll( rtl::OUString(DOUBLE_SEMICOLON), rtl::OUString(';') );
     else
-        rString.SearchAndReplaceAll( rtl::OUString(DOUBLE_DOUBLEQUOTE), '"' );
+        rString.SearchAndReplaceAll( rtl::OUString(DOUBLE_DOUBLEQUOTE), rtl::OUString('"') );
 
-    rString.SearchAndReplaceAll( rtl::OUString(SYLK_LF), _LF );
+    rString.SearchAndReplaceAll( rtl::OUString(SYLK_LF), rtl::OUString(_LF) );
 }
 
 static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
@@ -1682,7 +1682,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     }
                 }
                 if( nCol < nEndCol )
-                    lcl_WriteSimpleString( rStrm, String(cSep) );
+                    lcl_WriteSimpleString( rStrm, rtl::OUString(cSep) );
             }
                 WriteUnicodeOrByteEndl( rStrm );
             if( rStrm.GetError() != SVSTREAM_OK )
@@ -2009,7 +2009,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_EDIT:
                 hasstring:
                     pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCellStr );
-                    aCellStr.SearchAndReplaceAll( _LF, rtl::OUString(SYLK_LF) );
+                    aCellStr.SearchAndReplaceAll( rtl::OUString(_LF), rtl::OUString(SYLK_LF) );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
                     aBufStr += String::CreateFromInt32( c );
@@ -2093,7 +2093,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
             }
         }
     }
-    lcl_WriteSimpleString( rStrm, String( 'E' ) );
+    lcl_WriteSimpleString( rStrm, rtl::OUString( 'E' ) );
     WriteUnicodeOrByteEndl( rStrm );
     return rStrm.GetError() == SVSTREAM_OK;
 }

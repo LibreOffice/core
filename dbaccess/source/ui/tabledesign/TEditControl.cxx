@@ -1267,7 +1267,7 @@ String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 sal_uInt32 OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    return GetTextWidth(GetCellText(nRow, nColId)) + 2 * GetTextWidth('0');
+    return GetTextWidth(GetCellText(nRow, nColId)) + 2 * GetTextWidth(rtl::OUString('0'));
 }
 
 //------------------------------------------------------------------------------

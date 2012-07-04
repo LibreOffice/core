@@ -208,8 +208,8 @@ sal_Bool OCopyTable::LeavePage()
             &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
             String aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
-            aInfoString += String(' ');
-            aInfoString += String(m_pParent->m_aKeyName);
+            aInfoString += rtl::OUString(' ');
+            aInfoString += m_pParent->m_aKeyName;
             m_pParent->showError(aInfoString);
             return sal_False;
         }

@@ -83,7 +83,7 @@ KbdListBox::PreNotify( NotifyEvent& rNEvt )
                 UniString aEntry = GetEntry ( (i + nCurrentPos) % nEntries );
                 aEntry = comphelper::string::stripStart(aEntry, ' ');
                 aEntry.ToUpperAscii();
-                UniString aCompare( cCharCode );
+                UniString aCompare = rtl::OUString(cCharCode);
                 aCompare.ToUpperAscii();
 
                 if ( aEntry.CompareTo( aCompare, 1 ) == COMPARE_EQUAL )

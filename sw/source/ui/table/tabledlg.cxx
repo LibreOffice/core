@@ -32,6 +32,7 @@
 #endif
 
 #include <hintids.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -919,7 +920,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     }
     for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
     {
-        String sEntry('~');
+        String sEntry = rtl::OUString('~');
         String sIndex = String::CreateFromInt32( aValueTbl[i] + 1 );
         sEntry += sIndex;
         pTextArr[i]->SetText( sEntry );
@@ -1446,7 +1447,7 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
         sal_uInt16 nPgNum = static_cast< sal_uInt16 >(aPageNoNF.GetValue());
         if ( !pDesc || !pDesc->GetPageDesc() ||
             ( pDesc->GetPageDesc() && ((pDesc->GetPageDesc()->GetName() != sPage) ||
-                    aPageNoNF.GetSavedValue() != (String)nPgNum)))
+                    !comphelper::string::equals(aPageNoNF.GetSavedValue(), nPgNum))))
         {
             SwFmtPageDesc aFmt( pShell->FindPageDescByName( sPage, sal_True ) );
             aFmt.SetNumOffset(bState ? nPgNum : 0);

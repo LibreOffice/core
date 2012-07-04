@@ -1439,11 +1439,11 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_NONBREAKSPACE:
-        pDoc->InsertString( *pPam, CHAR_HARDBLANK );
+        pDoc->InsertString( *pPam, rtl::OUString(CHAR_HARDBLANK) );
         break;
 
     case HTML_SOFTHYPH:
-        pDoc->InsertString( *pPam, CHAR_SOFTHYPHEN );
+        pDoc->InsertString( *pPam, rtl::OUString(CHAR_SOFTHYPHEN) );
         break;
 
     case HTML_LINEFEEDCHAR:
@@ -1965,9 +1965,9 @@ void SwHTMLParser::NextToken( int nToken )
             }
             else
             {
-                String aComment( '<' );
-                (aComment += aToken) += '>';
-                InsertComment( aComment );
+                rtl::OUStringBuffer aComment;
+                aComment.append('<').append(aToken).append('>');
+                InsertComment( aComment.makeStringAndClear() );
             }
         }
         break;
@@ -4934,7 +4934,7 @@ void SwHTMLParser::InsertSpacer()
             else
             {
                 NewAttr( &aAttrTab.pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ) );
-                String aTmp( ' ' );
+                rtl::OUString aTmp( ' ' );
                 pDoc->InsertString( *pPam, aTmp );
                 EndAttr( aAttrTab.pKerning );
             }
@@ -5138,7 +5138,7 @@ void SwHTMLParser::InsertLineBreak()
     {
         // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
         // ein Zeilenumbruch eingef?gt
-        String sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
+        rtl::OUString sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
         pDoc->InsertString( *pPam, sTmp );
     }
     else if( pPam->GetPoint()->nContent.GetIndex() )

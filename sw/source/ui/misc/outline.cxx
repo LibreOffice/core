@@ -888,7 +888,7 @@ sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     aFont.SetSize(rSize);
     aFont.SetTransparent(sal_True);
     pVDev->SetFont( aFont );
-    String aText(rFmt.GetBulletChar());
+    rtl::OUString aText(rFmt.GetBulletChar());
     pVDev->DrawText( Point(nXStart, nYStart), aText );
     sal_uInt16 nRet = (sal_uInt16)pVDev->GetTextWidth(aText);
 
@@ -1042,7 +1042,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                      rFmt.GetLabelFollowedBy() == SvxNumberFormat::SPACE )
                 {
                     pVDev->SetFont(aStdFont);
-                    String aText(' ');
+                    rtl::OUString aText(' ');
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = nBulletWidth + (sal_uInt16)pVDev->GetTextWidth(aText);
                 }

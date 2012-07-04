@@ -459,7 +459,7 @@ namespace svxform
                         {
                             XubString aStr(SVX_RES(RID_STR_FORM));
                             XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-                            aUndoStr.SearchAndReplace('#', aStr);
+                            aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
 
                             pFormModel->BegUndo(aUndoStr);
                             // der Slot war nur verfuegbar, wenn es genau einen selektierten Eintrag gibt und dieser die Root
@@ -472,7 +472,7 @@ namespace svxform
                         {
                             XubString aStr(SVX_RES(RID_STR_CONTROL));
                             XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-                            aUndoStr.SearchAndReplace('#', aStr);
+                            aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
 
                             pFormModel->BegUndo(aUndoStr);
                             // dieser Slot war guletig bei (genau) einem selektierten Formular
@@ -1004,7 +1004,7 @@ namespace svxform
             {
                 XubString aStr(SVX_RES(RID_STR_CONTROL));
                 XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-                aUndoStr.SearchAndReplace('#', aStr);
+                aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
                 pFormModel->BegUndo(aUndoStr);
             }
 

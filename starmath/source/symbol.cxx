@@ -262,7 +262,7 @@ void SmSymbolManager::Load()
     SmLocalizedSymbolData   aLocalizedData;
     const String aGreekSymbolSetName( aLocalizedData.GetUiSymbolSetName( OUString::createFromAscii( "Greek" ) ));
     const SymbolPtrVec_t    aGreekSymbols( GetSymbolSet( aGreekSymbolSetName ) );
-    String aSymbolSetName( (sal_Unicode) 'i' );
+    String aSymbolSetName = rtl::OUString('i');
     aSymbolSetName += aGreekSymbolSetName;
     size_t nSymbols = aGreekSymbols.size();
     for (size_t i = 0;  i < nSymbols;  ++i)
@@ -272,7 +272,7 @@ void SmSymbolManager::Load()
         Font aFont( rSym.GetFace() );
         OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
         aFont.SetItalic( ITALIC_NORMAL );
-        String aSymbolName( (sal_Unicode)'i' );
+        String aSymbolName = rtl::OUString('i');
         aSymbolName += rSym.GetName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
                 aSymbolSetName, true /*bIsPredefined*/ );
@@ -289,7 +289,7 @@ void SmSymbolManager::Save()
 
         // prepare to skip symbols from iGreek on saving
         SmLocalizedSymbolData   aLocalizedData;
-        String aSymbolSetName( (sal_Unicode) 'i' );
+        String aSymbolSetName = rtl::OUString('i');
         aSymbolSetName += aLocalizedData.GetUiSymbolSetName( OUString::createFromAscii( "Greek" ));
 
         SymbolPtrVec_t aTmp( GetSymbols() );

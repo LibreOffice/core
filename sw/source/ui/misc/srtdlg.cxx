@@ -250,7 +250,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aDelimTabRB.Check(cDeli == '\t');
     if(!aDelimTabRB.IsChecked())
     {
-        aDelimEdt.SetText(cDeli);
+        aDelimEdt.SetText(rtl::OUString(cDeli));
         aDelimFreeRB.Check(sal_True);
         DelimHdl(&aDelimFreeRB);
     }
@@ -416,7 +416,7 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
         {
             SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, sal_False );
             if ( pItem )
-                aDelimEdt.SetText( sal_Unicode ( pItem->GetValue() ) );
+                aDelimEdt.SetText( rtl::OUString(pItem->GetValue()) );
         }
 
         delete pMap;

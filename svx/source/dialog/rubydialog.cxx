@@ -873,9 +873,9 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
             long nSpace = ((nRightEnd - nLeftStart) - GetTextWidth(sOutputText)) / (nCount - 1);
             for(xub_StrLen i = 0; i < nCount; i++)
             {
-                sal_Unicode cChar = sOutputText.GetChar(i);
-                DrawText( Point( nLeftStart , nYOutput),  cChar);
-                long nCharWidth = GetTextWidth(cChar);
+                rtl::OUString sChar(sOutputText.GetChar(i));
+                DrawText( Point( nLeftStart , nYOutput),  sChar);
+                long nCharWidth = GetTextWidth(sChar);
                 nLeftStart += nCharWidth + nSpace;
             }
             break;

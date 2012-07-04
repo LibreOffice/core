@@ -118,7 +118,7 @@ void ScCsvGrid::UpdateLayoutData()
 {
     DisableRepaint();
     SetFont( maMonoFont );
-    Execute( CSVCMD_SETCHARWIDTH, GetTextWidth( String( 'X' ) ) );
+    Execute( CSVCMD_SETCHARWIDTH, GetTextWidth( rtl::OUString( 'X' ) ) );
     Execute( CSVCMD_SETLINEHEIGHT, GetTextHeight() + 1 );
     SetFont( maHeaderFont );
     Execute( CSVCMD_SETHDRHEIGHT, GetTextHeight() + 1 );
@@ -132,7 +132,7 @@ void ScCsvGrid::UpdateOffsetX()
     sal_Int32 nDigits = 2;
     while( nLastLine /= 10 ) ++nDigits;
     nDigits = Max( nDigits, sal_Int32( 3 ) );
-    Execute( CSVCMD_SETHDRWIDTH, GetTextWidth( String( '0' ) ) * nDigits );
+    Execute( CSVCMD_SETHDRWIDTH, GetTextWidth( rtl::OUString( '0' ) ) * nDigits );
 }
 
 void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )

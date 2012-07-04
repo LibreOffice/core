@@ -168,7 +168,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
             case 3:
                 aOtherBtn.Check();
                 if(uOther)
-                    aOtherEd.SetText(uOther);
+                    aOtherEd.SetText(rtl::OUString(uOther));
             break;
         }
 

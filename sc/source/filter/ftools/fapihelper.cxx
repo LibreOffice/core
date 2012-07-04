@@ -205,12 +205,11 @@ bool ScfPropertySet::GetBoolProperty( const ::rtl::OUString& rPropName ) const
     return GetAnyProperty( aAny, rPropName ) && ScUnoHelpFunctions::GetBoolFromAny( aAny );
 }
 
-bool ScfPropertySet::GetStringProperty( String& rValue, const OUString& rPropName ) const
+OUString ScfPropertySet::GetStringProperty( const OUString& rPropName ) const
 {
     OUString aOUString;
-    bool bRet = GetProperty( aOUString, rPropName );
-    rValue = aOUString;
-    return bRet;
+    GetProperty( aOUString, rPropName );
+    return aOUString;
 }
 
 bool ScfPropertySet::GetColorProperty( Color& rColor, const ::rtl::OUString& rPropName ) const

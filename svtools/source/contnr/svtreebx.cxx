@@ -872,7 +872,7 @@ short SvTreeListBox::GetHeightOffset(const Font& /* rFont */, Size& aSizeLogic )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     short nOffset = 0;
-    aSizeLogic = Size(GetTextWidth('X'), GetTextHeight());
+    aSizeLogic = Size(GetTextWidth(rtl::OUString('X')), GetTextHeight());
     if( GetEntryHeight() > aSizeLogic.Height() )
         nOffset = ( GetEntryHeight() - (short)aSizeLogic.Height()) / 2;
     return nOffset;

@@ -392,7 +392,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
             }
             else
             {
-                pTxtNd->InsertText( sal_Unicode(' '), aPos.nContent,
+                pTxtNd->InsertText( rtl::OUString(' '), aPos.nContent,
                         IDocumentContentOperations::INS_NOHINTEXPAND );
             }
         }

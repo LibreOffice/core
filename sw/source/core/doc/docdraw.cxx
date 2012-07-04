@@ -922,7 +922,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         else
         {
             OSL_FAIL("unknown field command");
-            pInfo->SetRepresentation( String( '?' ) );
+            pInfo->SetRepresentation( rtl::OUString( '?' ) );
         }
     }
 

@@ -93,13 +93,13 @@ sal_Bool BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const S
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
-        String  aTestStr( '-' );
+        rtl::OUString  aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
             aTestStr += rSwitch;
 
-            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
+            if( aTestStr.equalsIgnoreAsciiCase( rArgs[ i ] ) )
             {
                 bRet = sal_True;
 
@@ -110,7 +110,7 @@ sal_Bool BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const S
             }
 
             if( 0 == n )
-                aTestStr = '/';
+                aTestStr = rtl::OUString('/');
         }
     }
 
@@ -125,13 +125,13 @@ sal_Bool BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const 
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ); i++ )
     {
-        String  aTestStr( '-' );
+        rtl::OUString  aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
             aTestStr += rSwitch;
 
-            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
+            if( aTestStr.equalsIgnoreAsciiCase( rArgs[ i ] ) )
             {
                 if( i < ( nCount - 1 ) )
                     rParams.push_back( rArgs[ i + 1 ] );
@@ -142,7 +142,7 @@ sal_Bool BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const 
             }
 
             if( 0 == n )
-                aTestStr = '/';
+                aTestStr = rtl::OUString('/');
         }
     }
 
@@ -196,8 +196,8 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
 
         memcpy( aLangInfo.maLangDir, aLangDir.getStr(), aLangDir.getLength() + 1 );
 
-        GetCommandOption( rArgs, 'f', aOutputFileName );
-        GetCommandOptions( rArgs, 'i', aInDirVector );
+        GetCommandOption( rArgs, rtl::OUString('f'), aOutputFileName );
+        GetCommandOptions( rArgs, rtl::OUString('i'), aInDirVector );
 
         Create( aSrsName, aInDirVector, aOutName, aLangInfo );
     }

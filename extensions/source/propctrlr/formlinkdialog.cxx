@@ -437,8 +437,8 @@ namespace pcr
             String sErrorMessage;
             {
                 ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
-                sErrorMessage = String( PcrRes( STR_ERROR_RETRIEVING_COLUMNS) );
-                sErrorMessage.SearchAndReplace('#',sCommand);
+                sErrorMessage = PcrRes(STR_ERROR_RETRIEVING_COLUMNS).toString();
+                sErrorMessage.SearchAndReplace(rtl::OUString('#'), sCommand);
             }
 
             SQLContext aContext;

@@ -1155,13 +1155,13 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
         XML_STYLE_FAMILY_TEXT_PARAGRAPH,
         GetXMLToken( XML_PARAGRAPH ),
         mxExpPropMapper.get(),
-        String( 'P' ));
+        rtl::OUString( 'P' ));
     // register text family also for shapes
     mrAutoStylePool.AddFamily(
         XML_STYLE_FAMILY_TEXT_TEXT,
         GetXMLToken( XML_TEXT ),
         mxExpPropMapper.get(),
-        String( 'T' ));
+        rtl::OUString( 'T' ));
 }
 
 SchXMLExportHelper_Impl::~SchXMLExportHelper_Impl()

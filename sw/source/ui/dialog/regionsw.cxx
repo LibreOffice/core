@@ -165,7 +165,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
         if(aFile.Len() || aSub.Len())
         {
-            String sLinkFileName(sfx2::cTokenSeperator);
+            String sLinkFileName = rtl::OUString(sfx2::cTokenSeperator);
             sLinkFileName += sfx2::cTokenSeperator;
             sLinkFileName.SetToken(0, sfx2::cTokenSeperator,aFile);
 

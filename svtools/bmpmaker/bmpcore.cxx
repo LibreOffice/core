@@ -311,11 +311,11 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
             else
                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Could not generate  " ) ).Append( aOutFile.GetFull() ), EXIT_COMMONERROR );
 
-            Message( ' ' );
+            Message( rtl::OUString(' ') );
         }
     }
     else
-        Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: SOLARSRC environment variable not set!" ) ), EXIT_MISSING_SOLARSRC_ENV );
+        Message( rtl::OUString("ERROR: SOLARSRC environment variable not set!"), EXIT_MISSING_SOLARSRC_ENV );
 
     pSRS->Seek( nOldPos );
     delete pCollectStm;

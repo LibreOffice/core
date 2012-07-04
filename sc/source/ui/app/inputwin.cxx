@@ -519,7 +519,7 @@ void ScInputWindow::Select()
             if ( pScMod->IsEditMode() )         // nicht, wenn z.B. geschuetzt
             {
                 aTextWindow.StartEditEngine();
-                aTextWindow.SetTextString( '=' );
+                aTextWindow.SetTextString(rtl::OUString('='));
 
                 EditView* pView = aTextWindow.GetEditView();
                 if (pView)

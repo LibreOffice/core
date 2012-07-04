@@ -88,12 +88,12 @@ namespace
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
         if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
         {
-            io_pDoc->InsertString(aStartPaM, aStartMark);
+            io_pDoc->InsertString(aStartPaM, rtl::OUString(aStartMark));
             rStart.nContent--;
         }
         if ( aEndMark && ( ch_end != aEndMark ) )
         {
-            io_pDoc->InsertString(aEndPaM, aEndMark);
+            io_pDoc->InsertString(aEndPaM, rtl::OUString(aEndMark));
             rEnd.nContent++;
         }
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);

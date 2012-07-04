@@ -591,7 +591,7 @@ String lcl_GetCharStr( sal_Int32 nNo )
 
 String lcl_GetNumStr( sal_Int32 nNo, SvxNumType eType )
 {
-    String aTmpStr( '0' );
+    String aTmpStr(rtl::OUString('0'));
     if( nNo )
     {
         switch( eType )

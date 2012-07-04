@@ -358,7 +358,7 @@ void XclImpHyperlink::ConvertToValidTabName(String& rUrl)
         // the 1st character must be '#'.
         return;
 
-    String aNewUrl(sal_Unicode('#')), aTabName;
+    String aNewUrl(rtl::OUString('#')), aTabName;
 
     bool bInQuote = false;
     bool bQuoteTabName = false;

@@ -673,7 +673,7 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
             aStr = comphelper::string::remove(aStr, CH_TXTATR_BREAKWORD);
             aStr = comphelper::string::remove(aStr, CH_TXTATR_INWORD);
             xub_StrLen nStart = 0;
-            String sX( 'x' );
+            rtl::OUString sX( 'x' );
             if( pPam->Start()->nContent > 0 )
             {
                 aStr.Insert( sX, 0 );

@@ -684,7 +684,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
             case CHAR_HARDBLANK:
             case CHAR_HARDHYPHEN:
             {
-                XubString sTmp( cChar );
+                rtl::OUString sTmp( cChar );
                 SwDrawTextInfo aDrawInf( const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
                     *pOut, 0, sTmp, 0, 1, 0, sal_False );//swmod 080311
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
@@ -934,7 +934,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
         else if ( cChar == CH_TAB )
         {
             // tab receives width of one space
-            XubString sTmp( CH_BLANK );
+            rtl::OUString sTmp( CH_BLANK );
             SwDrawTextInfo aDrawInf( pSh, *pOut, 0, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
             nIdx++;
@@ -943,7 +943,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
             ++nIdx;
         else if ( cChar == CHAR_HARDBLANK || cChar == CHAR_HARDHYPHEN )
         {
-            XubString sTmp( cChar );
+            rtl::OUString sTmp( cChar );
             SwDrawTextInfo aDrawInf( pSh, *pOut, 0, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
             nIdx++;

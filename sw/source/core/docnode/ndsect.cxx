@@ -690,7 +690,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // Der LinkFileName koennte auch nur aus Separatoren bestehen
-    String sCompareString = sfx2::cTokenSeperator;
+    String sCompareString = rtl::OUString(sfx2::cTokenSeperator);
     sCompareString += sfx2::cTokenSeperator;
     const bool bUpdate =
            (!pSection->IsLinkType() && rNewData.IsLinkType())

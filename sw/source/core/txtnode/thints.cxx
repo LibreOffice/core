@@ -1262,7 +1262,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                                             (const SfxPoolItem**)&pAnchor );
 
                     SwIndex aIdx( this, *pAttr->GetStart() );
-                    const sal_Unicode c = GetCharOfTxtAttr(*pAttr);
+                    const rtl::OUString c(GetCharOfTxtAttr(*pAttr));
                     InsertText( c, aIdx, nInsertFlags );
                     nInsMode |= nsSetAttrMode::SETATTR_NOTXTATRCHR;
 
@@ -1379,7 +1379,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     // entstehen koennen und das Attribut im _SortArr_ am
                     // Dokument nicht eingetrage wird.
                     SwIndex aNdIdx( this, *pAttr->GetStart() );
-                    const sal_Unicode c = GetCharOfTxtAttr(*pAttr);
+                    const rtl::OUString c(GetCharOfTxtAttr(*pAttr));
                     InsertText( c, aNdIdx, nInsertFlags );
                     nInsMode |= nsSetAttrMode::SETATTR_NOTXTATRCHR;
                 }
@@ -1439,7 +1439,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
         if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode) )
         {
             SwIndex aIdx( this, *pAttr->GetStart() );
-            InsertText( GetCharOfTxtAttr(*pAttr), aIdx, nInsertFlags );
+            InsertText( rtl::OUString(GetCharOfTxtAttr(*pAttr)), aIdx, nInsertFlags );
 
             // adjust end of hint to account for inserted CH_TXTATR
             xub_StrLen * const pEnd(pAttr->GetEnd());

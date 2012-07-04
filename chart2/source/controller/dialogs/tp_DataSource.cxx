@@ -345,8 +345,8 @@ DataSourceTabPage::DataSourceTabPage(
     // set button text
     sal_Unicode cBlackUpPointingTriangle( 0x25b2 );
     sal_Unicode cBlackDownPointingTriangle( 0x25bc );
-    m_aBTN_UP.SetText( String( cBlackUpPointingTriangle ));
-    m_aBTN_DOWN.SetText( String( cBlackDownPointingTriangle ));
+    m_aBTN_UP.SetText( rtl::OUString( cBlackUpPointingTriangle ));
+    m_aBTN_DOWN.SetText( rtl::OUString( cBlackDownPointingTriangle ));
 
     // init controls
     m_aLB_ROLE.SetTabs( lcl_pRoleListBoxTabs, MAP_APPFONT );

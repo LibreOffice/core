@@ -326,8 +326,8 @@ String SvxHyphenWordDialog_Impl::EraseUnusableHyphens_Impl(
         // 1) remove all not usable hyphenation positions from the end of the string
         nPos = nIdx == STRING_NOTFOUND ? 0 : nIdx + 1;
         nPos1 = nPos;   //save for later use in 2) below
-        const String aTmp( sal_Unicode( HYPH_POS_CHAR ) );
-        const String aEmpty;
+        const rtl::OUString aTmp( sal_Unicode( HYPH_POS_CHAR ) );
+        const rtl::OUString aEmpty;
         while (nPos != STRING_NOTFOUND)
             nPos = aTxt.SearchAndReplace( aTmp, aEmpty, nPos + 1 );
 

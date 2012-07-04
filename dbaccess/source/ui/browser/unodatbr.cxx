@@ -1857,7 +1857,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= aName;
                     String sObject(aName);
 
-                    sTitle.SearchAndReplace('#',sObject);
+                    sTitle.SearchAndReplace(rtl::OUString('#'), sObject);
                     aReturn.sTitle = sTitle;
                     aReturn.bEnabled = sal_True;
                 }

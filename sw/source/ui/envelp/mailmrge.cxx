@@ -693,7 +693,7 @@ bool SwMailMergeDlg::ExecQryShell()
             URIHelper::SmartRel2Abs(
                 aAbs, aPathED.GetText(), URIHelper::GetMaybeFileHdl()));
         pModOpt->SetMailingPath(sPath);
-        String sDelim(INET_PATH_TOKEN);
+        String sDelim = rtl::OUString(INET_PATH_TOKEN);
 
         if (sPath.Len() >= sDelim.Len() &&
             sPath.Copy(sPath.Len()-sDelim.Len()).CompareTo(sDelim) != COMPARE_EQUAL)

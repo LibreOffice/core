@@ -81,7 +81,7 @@ void SwEditShell::Insert( sal_Unicode c, sal_Bool bOnlyCurrCrsr )
     StartAllAction();
     FOREACHPAM_START(this)
 
-        const bool bSuccess = GetDoc()->InsertString(*PCURCRSR, c);
+        const bool bSuccess = GetDoc()->InsertString(*PCURCRSR, rtl::OUString(c));
         OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
         (void) bSuccess;
 

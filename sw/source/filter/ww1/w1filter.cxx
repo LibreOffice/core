@@ -844,7 +844,7 @@ oncemore:
             aStr.Erase(0, 1);
             if( !aFName.Len() )
                 break;
-            aFName.SearchAndReplaceAscii( "\\\\", String( '\\' ));
+            aFName.SearchAndReplaceAscii( "\\\\", rtl::OUString('\\') );
 
             aFName = URIHelper::SmartRel2Abs(
                 INetURLObject(rOut.GetBaseURL()), aFName );

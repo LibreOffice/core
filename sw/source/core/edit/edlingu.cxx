@@ -661,7 +661,7 @@ void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
         DelSoftHyph( *pCrsr );
         pSttPos->nContent += nHyphPos;
         SwPaM aRg( *pSttPos );
-        pDoc->InsertString( aRg, CHAR_SOFTHYPHEN );
+        pDoc->InsertString( aRg, rtl::OUString(CHAR_SOFTHYPHEN) );
         // Durch das Einfuegen des SoftHyphs ist ein Zeichen hinzugekommen
 //JP 18.07.95: warum, ist doch ein SwIndex, dieser wird doch mitverschoben !!
 //        pSttPos->nContent++;

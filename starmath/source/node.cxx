@@ -2671,7 +2671,7 @@ SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
 {
     xub_Unicode cChar = GetToken().cMathChar;
     if ((xub_Unicode) '\0' != cChar)
-        SetText( cChar );
+        SetText(rtl::OUString(cChar));
 }
 
 void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, sal_uLong nWidth)
@@ -3087,7 +3087,7 @@ void SmBlankNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
           nSpace = nNum * nDist;
 
     // ein SmRect mit Baseline und allem drum und dran besorgen
-    SmRect::operator = (SmRect(aTmpDev, &rFormat, XubString(xub_Unicode(' ')),
+    SmRect::operator = (SmRect(aTmpDev, &rFormat, rtl::OUString(' '),
                                GetFont().GetBorderWidth()));
 
     // und dieses auf die gewuenschte Breite bringen

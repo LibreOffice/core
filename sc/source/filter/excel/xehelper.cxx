@@ -564,7 +564,7 @@ void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoo
 void XclExpStringHelper::AppendChar( XclExpString& rXclString, const XclExpRoot& rRoot, sal_Unicode cChar )
 {
     if( rRoot.GetBiff() == EXC_BIFF8 )
-        rXclString.Append( cChar );
+        rXclString.Append( rtl::OUString(cChar) );
     else
         rXclString.AppendByte( cChar, rRoot.GetTextEncoding() );
 }
@@ -863,7 +863,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 else
                 {
                     String aPortionText( mrEE.GetText( aSel ) );
-                    aPortionText.SearchAndReplaceAll( String( '&' ), String( RTL_CONSTASCII_USTRINGPARAM( "&&" ) ) );
+                    aPortionText.SearchAndReplaceAll( rtl::OUString('&'), rtl::OUString("&&") );
                     // #i17440# space between font height and numbers in text
                     if( bFontHtChanged && aParaText.Len() && aPortionText.Len() )
                     {

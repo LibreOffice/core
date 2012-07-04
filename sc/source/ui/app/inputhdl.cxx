@@ -1325,11 +1325,12 @@ String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress 
             if ( pCell->GetCode()->GetCodeLen() <= 1 )
             {   // ==1: einzelner ist als Parameter immer Bereich
                 // ==0: es waere vielleicht einer, wenn..
-                String aBraced( '(' );
-                aBraced += rFormula;
-                aBraced += ')';
+                rtl::OUStringBuffer aBraced;
+                aBraced.append('(');
+                aBraced.append(rFormula);
+                aBraced.append(')');
                 delete pCell;
-                pCell = new ScFormulaCell( pDoc, rPos, aBraced );
+                pCell = new ScFormulaCell( pDoc, rPos, aBraced.makeStringAndClear() );
             }
             else
                 bColRowName = false;
@@ -2901,9 +2902,9 @@ void ScInputHandler::AddRefEntry()
 
     RemoveSelection();
     if (pTableView)
-        pTableView->InsertText( cSep, false );
+        pTableView->InsertText( rtl::OUString(cSep), false );
     if (pTopView)
-        pTopView->InsertText( cSep, false );
+        pTopView->InsertText( rtl::OUString(cSep), false );
 
     DataChanged();
 }
@@ -3773,7 +3774,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
             {
                 xub_StrLen nLen = rDestEngine.GetTextLen( (sal_uInt16)0 );
                 ESelection aSel( 0,nLen, 1,0 );
-                rDestEngine.QuickInsertText( ' ', aSel );       // Umbruch durch Space ersetzen
+                rDestEngine.QuickInsertText( rtl::OUString(' '), aSel );       // Umbruch durch Space ersetzen
                 --nParCnt;
             }
 

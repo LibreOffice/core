@@ -447,7 +447,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
         {
             XubString aStr(SVX_RES(RID_STR_FORM));
             XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-            aUndoStr.SearchAndReplace('#', aStr);
+            aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
             pModel->BegUndo(aUndoStr);
         }
 
@@ -531,7 +531,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             {
                 XubString aStr(SVX_RES(RID_STR_FORM));
                 XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-                aUndoStr.SearchAndReplace('#', aStr);
+                aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
                 pModel->BegUndo(aUndoStr);
             }
 

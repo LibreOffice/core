@@ -1276,7 +1276,7 @@ void SwAutoFormat::DelMoreLinesBlanks( sal_Bool bWithLineBreaks )
                 DeleteSel( *pNxt );
                 if( !bHasBlnks )
                 {
-                    pDoc->InsertString( *pNxt, sal_Unicode(' ') );
+                    pDoc->InsertString( *pNxt, rtl::OUString(' ') );
                 }
             }
 
@@ -1335,7 +1335,7 @@ void SwAutoFormat::BuildIndent()
                         IsSentenceAtEnd( *pNxtNd );
                 if( DeleteAktNxtPara( pNxtNd->GetTxt() ))
                 {
-                    pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+                    pDoc->InsertString( aDelPam, rtl::OUString(' ') );
                 }
                 if( bBreak )
                     break;
@@ -1376,7 +1376,7 @@ void SwAutoFormat::BuildTextIndent()
                     IsSentenceAtEnd( *pNxtNd );
             if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
             {
-                pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+                pDoc->InsertString( aDelPam, rtl::OUString(' ') );
             }
             if( bBreak )
                 break;
@@ -1412,7 +1412,7 @@ void SwAutoFormat::BuildText()
                     IsSentenceAtEnd( *pNxtNd );
             if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
             {
-                pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+                pDoc->InsertString( aDelPam, rtl::OUString(' ') );
             }
             if( bBreak )
                 break;
@@ -1681,7 +1681,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
         if( !aFlags.bSetNumRule )
         {
-            String sChgStr( '\t' );
+            String sChgStr = rtl::OUString('\t');
             if( bChgBullet )
                 sChgStr.Insert( aFlags.cBullet, 0 );
             pDoc->InsertString( aDelPam, sChgStr );
@@ -1725,7 +1725,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 IsSentenceAtEnd( *pNxtNd );
         if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
         {
-            pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+            pDoc->InsertString( aDelPam, rtl::OUString(' ') );
         }
         if( bBreak )
             break;
@@ -1795,7 +1795,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             DeleteSel( aDelPam );
             if( bInsTab )
             {
-                pDoc->InsertString( aDelPam, sal_Unicode('\t') );
+                pDoc->InsertString( aDelPam, rtl::OUString('\t') );
             }
         }
     }
@@ -1815,7 +1815,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
                     IsSentenceAtEnd( *pNxtNd );
             if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
             {
-                pDoc->InsertString( aDelPam, sal_Unicode(' ') );
+                pDoc->InsertString( aDelPam, rtl::OUString(' ') );
             }
             if( bBreak )
                 break;
@@ -1946,7 +1946,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                 aDelPam.DeleteMark();
                 if( bSetHardBlank )
                 {
-                    pDoc->InsertString( aDelPam, CHAR_HARDBLANK );
+                    pDoc->InsertString( aDelPam, rtl::OUString(CHAR_HARDBLANK) );
                     ++nPos;
                 }
             }
@@ -2001,7 +2001,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                         if( bSetHardBlank )
                         {
                             aDelPam.GetPoint()->nContent = nPos;
-                            pDoc->InsertString( aDelPam, CHAR_HARDBLANK );
+                            pDoc->InsertString( aDelPam, rtl::OUString(CHAR_HARDBLANK) );
                             aDelPam.GetPoint()->nContent = ++nPos;
                         }
                     }

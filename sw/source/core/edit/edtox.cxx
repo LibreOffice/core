@@ -30,7 +30,7 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-
+#include <comphelper/string.hxx>
 #include <svl/fstathelper.hxx>
 
 #include <svtools/txtcmp.hxx>
@@ -340,7 +340,7 @@ void SwEditShell::ApplyAutoMark()
         //2.
         SfxMedium aMedium( sAutoMarkURL, STREAM_STD_READ );
         SvStream& rStrm = *aMedium.GetInStream();
-        const String sZero('0');
+        const sal_Unicode cZero('0');
         Push();
         rtl_TextEncoding eChrSet = ::osl_getThreadTextEncoding();
 
@@ -402,8 +402,8 @@ void SwEditShell::ApplyAutoMark()
                     String sWordOnly    = sLine.GetToken(0, ';', nTokenPos);
 
                     //3.
-                    bCaseSensitive  = sCase.Len() && sCase != sZero;
-                    bWordOnly       = sWordOnly.Len() && sWordOnly != sZero;
+                    bCaseSensitive  = sCase.Len() && !comphelper::string::equals(sCase, cZero);
+                    bWordOnly       = sWordOnly.Len() && !comphelper::string::equals(sWordOnly, cZero);
                     //
                     if (!bCaseSensitive)
                     {

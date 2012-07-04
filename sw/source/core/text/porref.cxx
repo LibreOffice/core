@@ -70,7 +70,7 @@ KSHORT SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
             !rInf.GetOpt().IsReadonly() && !rInf.GetOpt().IsPagePreview() )
     {
         if( !nViewWidth )
-            pThis->nViewWidth = rInf.GetTxtSize( ' ' ).Width();
+            pThis->nViewWidth = rInf.GetTxtSize(rtl::OUString(' ')).Width();
     }
     else
         pThis->nViewWidth = 0;

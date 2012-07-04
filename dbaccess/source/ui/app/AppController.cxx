@@ -2205,9 +2205,9 @@ void OApplicationController::renameEntry()
                         }
                         catch(const ElementExistException& e)
                         {
-                            static ::rtl::OUString sStatus = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
+                            rtl::OUString sStatus("S1000");
                             String sMsg = String( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
-                            sMsg.SearchAndReplace('#',e.Message);
+                            sMsg.SearchAndReplace(rtl::OUString('#'), e.Message);
                             showError(SQLExceptionInfo(SQLException(sMsg, e.Context, sStatus, 0, Any())));
                         }
                         catch(const Exception& )

@@ -836,7 +836,7 @@ String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
         // in die Externe Darstellung umwandeln.
         SwTableBox* pBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(sTmp.ToInt64()));
         if( !rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
-            return '?';
+            return rtl::OUString('?');
         sTmp = pBox->GetName();
     }
 

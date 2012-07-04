@@ -334,7 +334,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_
 
                 if (aURL.Len() && (aURL.GetChar(0) == 35))
                 {
-                    XubString aHashSlide('#');
+                    XubString aHashSlide = rtl::OUString('#');
                     aHashSlide += SD_RESSTR(STR_PAGE);
 
                     if (aURL.CompareTo(aHashSlide, aHashSlide.Len()) == COMPARE_EQUAL)

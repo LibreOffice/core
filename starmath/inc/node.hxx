@@ -563,7 +563,7 @@ protected:
     {
         xub_Unicode cChar = GetToken().cMathChar;
         if ((xub_Unicode) '\0' != cChar)
-            SetText( cChar );
+            SetText(rtl::OUString(cChar));
     }
 
 public:
@@ -640,7 +640,7 @@ public:
     SmErrorNode(SmParseError /*eError*/, const SmToken &rNodeToken)
     :   SmMathSymbolNode(NERROR, rNodeToken)
     {
-        SetText((xub_Unicode) MS_ERROR);
+        SetText(rtl::OUString(MS_ERROR));
     }
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);

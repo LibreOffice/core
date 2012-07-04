@@ -1927,7 +1927,7 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
                 SetDecimalDigits( 0 );
                 SetMin( nRelMin );
                 SetMax( nRelMax );
-                SetCustomUnitText( '%' );
+                SetCustomUnitText(rtl::OUString('%'));
                 SetUnit( FUNIT_CUSTOM );
 
                 Clear();

@@ -225,7 +225,7 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
         aFont.SetCharSet( rFontData.GetFontEncoding() );
         aFont.SetWeight( rFontData.GetScWeight() );
         pPrinter->SetFont( aFont );
-        mrData.mnCharWidth = pPrinter->GetTextWidth( String( '0' ) );
+        mrData.mnCharWidth = pPrinter->GetTextWidth( rtl::OUString('0') );
     }
     if( mrData.mnCharWidth <= 0 )
     {

@@ -1217,7 +1217,7 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
             else
             {
                 nSubType--;
-                String sSeparator(aSeparatorED.GetText().GetChar(0));
+                String sSeparator = rtl::OUString(aSeparatorED.GetText().GetChar(0));
                 cSeparator = sSeparator.Len() ? sSeparator.GetChar(0) : ' ';
             }
             break;

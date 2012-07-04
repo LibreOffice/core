@@ -564,7 +564,7 @@ void SvxTPView::Resize()
 
 void SvxTPView::InsertWriterHeader()
 {
-    String aStrTab(sal_Unicode('\t'));
+    rtl::OUString aStrTab('\t');
     String aString(aTitle1);
     aString+=aStrTab;
     aString+=aTitle3;
@@ -578,7 +578,7 @@ void SvxTPView::InsertWriterHeader()
 
 void SvxTPView::InsertCalcHeader()
 {
-    String aStrTab(sal_Unicode('\t'));
+    rtl::OUString aStrTab('\t');
     String aString(aTitle1);
     aString+=aStrTab;
     aString+=aTitle2;

@@ -163,7 +163,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_INSERT_SOFT_HYPHEN:
         if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( sal_True, 0 ) &&
             CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( sal_True, -1 ))
-            rSh.Insert( String( CHAR_SOFTHYPHEN ) );
+            rSh.Insert( rtl::OUString( CHAR_SOFTHYPHEN ) );
         break;
 
     case FN_INSERT_HARDHYPHEN:
@@ -180,7 +180,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                                 ChgToEnEmDash | SetINetAttr | Autocorrect ))
                 rSh.AutoCorrect( *pACorr, cIns );
             else
-                rSh.Insert( String( cIns ) );
+                rSh.Insert( rtl::OUString( cIns ) );
         }
         break;
     case SID_INSERT_RLM :
@@ -196,7 +196,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
             case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
         }
-        rSh.Insert( String( cIns ) );
+        rSh.Insert( rtl::OUString( cIns ) );
     }
     break;
     case FN_INSERT_BREAK:

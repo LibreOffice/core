@@ -1271,7 +1271,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
             if (nLevel != 0x7f && cSeparator == 0)
                 cSeparator = '.';
 
-            pTyp->SetDelimiter(cSeparator);
+            pTyp->SetDelimiter(rtl::OUString(cSeparator));
             SwSetExpField* pExpFld = new SwSetExpField(pTyp, rData.sPar2, nFormatId);
             bExp = sal_True;
             pFld = pExpFld;

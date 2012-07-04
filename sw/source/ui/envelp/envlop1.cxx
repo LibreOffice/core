@@ -263,16 +263,17 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
 
 IMPL_LINK_NOARG(SwEnvPage, FieldHdl)
 {
-    String aStr ( '<' );
-    aStr += aDatabaseLB.GetSelectEntry();
-    aStr += '.';
-    aStr += aTableLB.GetSelectEntry();
-    aStr += '.';
-    aStr += aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? '0' : '1';
-    aStr += '.';
-    aStr += aDBFieldLB.GetSelectEntry();
-    aStr += '>';
-    aAddrEdit.ReplaceSelected(aStr);
+    rtl::OUStringBuffer aStr;
+    aStr.append('<');
+    aStr.append(aDatabaseLB.GetSelectEntry());
+    aStr.append('.');
+    aStr.append(aTableLB.GetSelectEntry());
+    aStr.append('.');
+    aStr.append(aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? '0' : '1');
+    aStr.append('.');
+    aStr.append(aDBFieldLB.GetSelectEntry());
+    aStr.append('>');
+    aAddrEdit.ReplaceSelected(aStr.makeStringAndClear());
     Selection aSel = aAddrEdit.GetSelection();
     aAddrEdit.GrabFocus();
     aAddrEdit.SetSelection(aSel);

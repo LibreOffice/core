@@ -447,7 +447,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     if( mbIsRangeChecked )
     {
         aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
-        aRet[ nLength - nElementAdded ].Value <<= OUString( msPageRange );
+        aRet[ nLength - nElementAdded ].Value <<= msPageRange;
         nElementAdded--;
     }
     else if( mbSelectionIsChecked )
@@ -689,7 +689,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     if( maRbRange.IsChecked() )
     {
         paParent->mbIsRangeChecked = sal_True;
-        paParent->msPageRange = String( maEdPages.GetText() ); //FIXME all right on other languages ?
+        paParent->msPageRange = maEdPages.GetText(); //FIXME all right on other languages ?
     }
     else if( maRbSelection.IsChecked() )
     {

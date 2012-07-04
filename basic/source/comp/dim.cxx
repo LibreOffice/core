@@ -138,7 +138,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, sal_Bool bAsNewAlreadyParsed )
                     // #52709 DIM AS NEW for Uno with full-qualified name
                     if( Peek() == DOT )
                     {
-                        String aDotStr( '.' );
+                        rtl::OUString aDotStr( '.' );
                         while( Peek() == DOT )
                         {
                             aCompleteName += aDotStr;

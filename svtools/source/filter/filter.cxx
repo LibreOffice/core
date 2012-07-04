@@ -895,7 +895,7 @@ static String ImpCreateFullFilterPath( const String& rPath, const String& rFilte
     ::rtl::OUString aPathURL;
 
     ::osl::FileBase::getFileURLFromSystemPath( rPath, aPathURL );
-    aPathURL += String( '/' );
+    aPathURL += rtl::OUString( '/' );
 
     ::rtl::OUString aSystemPath;
     ::osl::FileBase::getSystemPathFromFileURL( aPathURL, aSystemPath );

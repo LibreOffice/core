@@ -71,8 +71,9 @@ void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
 SwTblField::SwTblField( SwTblFieldType* pInitType, const String& rFormel,
                         sal_uInt16 nType, sal_uLong nFmt )
     : SwValueField( pInitType, nFmt ), SwTableFormula( rFormel ),
-    sExpand( '0' ), nSubType(nType)
+    nSubType(nType)
 {
+    sExpand = rtl::OUString('0');
 }
 
 

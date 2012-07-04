@@ -133,14 +133,15 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     };
 
     m_aJavaList.SvxSimpleTable::SetTabs( aStaticTabs );
-    String sHeader( '\t' );
-    sHeader += String( CUI_RES( STR_HEADER_VENDOR ) );
-    sHeader += '\t';
-    sHeader += String( CUI_RES( STR_HEADER_VERSION ) );
-    sHeader += '\t';
-    sHeader += String( CUI_RES( STR_HEADER_FEATURES ) );
-    sHeader += '\t';
-    m_aJavaList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
+    rtl::OUStringBuffer sHeader;
+    sHeader.append('\t');
+    sHeader.append(CUI_RESSTR(STR_HEADER_VENDOR));
+    sHeader.append('\t');
+    sHeader.append(CUI_RESSTR(STR_HEADER_VERSION));
+    sHeader.append('\t');
+    sHeader.append(CUI_RESSTR(STR_HEADER_FEATURES));
+    sHeader.append('\t');
+    m_aJavaList.InsertHeaderEntry( sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT );
 
     m_aJavaList.SetHelpId( HID_OPTIONS_JAVA_LIST );
 
@@ -476,14 +477,15 @@ void SvxJavaOptionsPage::LoadJREs()
 
 void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 {
-    String sEntry( '\t' );
-    sEntry += String( ::rtl::OUString( _pInfo->sVendor ) );
-    sEntry += '\t';
-    sEntry += String( ::rtl::OUString( _pInfo->sVersion ) );
-    sEntry += '\t';
+    rtl::OUStringBuffer sEntry;
+    sEntry.append('\t');
+    sEntry.append(_pInfo->sVendor);
+    sEntry.append('\t');
+    sEntry.append(_pInfo->sVersion);
+    sEntry.append('\t');
     if ( ( _pInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE ) == JFW_FEATURE_ACCESSBRIDGE )
-        sEntry += m_sAccessibilityText;
-    SvLBoxEntry* pEntry = m_aJavaList.InsertEntry( sEntry );
+        sEntry.append(m_sAccessibilityText);
+    SvLBoxEntry* pEntry = m_aJavaList.InsertEntry(sEntry.makeStringAndClear());
     INetURLObject aLocObj( ::rtl::OUString( _pInfo->sLocation ) );
     String* pLocation = new String( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
     pEntry->SetUserData( pLocation );

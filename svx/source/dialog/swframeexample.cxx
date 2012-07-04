@@ -176,7 +176,7 @@ void SvxSwFrameExample::InitAllRects_Impl()
         {
             aFont.SetSize(Size(0, aParaPrtArea.GetHeight() / 2));
             SetFont(aFont);
-            aAutoCharFrame.SetSize(Size(GetTextWidth('A'), GetTextHeight()));
+            aAutoCharFrame.SetSize(Size(GetTextWidth(rtl::OUString('A')), GetTextHeight()));
             aAutoCharFrame.SetPos(Point(aParaPrtArea.Left() + (aParaPrtArea.GetWidth() - aAutoCharFrame.GetWidth()) / 2,
                 aParaPrtArea.Top() + (aParaPrtArea.GetHeight() - aAutoCharFrame.GetHeight()) / 2));
         }
@@ -674,7 +674,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
             aPara.Bottom() -= nDiff;
         }
         if (nAnchor == TextContentAnchorType_AT_CHARACTER && bIgnoreWrap)
-            DrawText(aAutoCharFrame, 'A');
+            DrawText(aAutoCharFrame, rtl::OUString('A'));
     }
     else
     {

@@ -2321,7 +2321,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             else if(!rSh.HasReadonlySel())
             {
                 sal_Bool bIsNormalChar = GetAppCharClass().isLetterNumeric(
-                                                            String( aCh ), 0 );
+                                                            rtl::OUString( aCh ), 0 );
                 if( bAppendSpace && bIsNormalChar &&
                     (aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
                 {

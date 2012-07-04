@@ -904,7 +904,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         {
             eUnit   = FUNIT_CUSTOM;
             nDigits = 0;
-            pMF->SetCustomUnitText( '%' );
+            pMF->SetCustomUnitText(rtl::OUString('%'));
         }
         else
         {
@@ -1519,7 +1519,7 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
     const SmSym *pSym = GetSymbol();
     if (pSym)
     {
-        String  aText ('%');
+        String aText = rtl::OUString('%');
         aText += pSym->GetName();
         aText += (sal_Unicode)' ';
 

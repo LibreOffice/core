@@ -281,7 +281,7 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "unicode", rCellStr );
 
         if( rCellStr[ 0 ] == nSpace && rCellStr.getLength() == 1 )
-            aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( sal_Unicode( ' ' ) ), 0 ) );
+            aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( rtl::OUString(' ') ), 0 ) );
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", ::rtl::OUString::valueOf( aBoundRect.GetWidth() ) );
 

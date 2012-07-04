@@ -85,7 +85,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
     pTxtNd->SetIgnoreDontExpand( sal_True );
 
-    pTxtNd->InsertText( cIns, rPos.nContent,
+    pTxtNd->InsertText( rtl::OUString(cIns), rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
     aInsStr.Insert( cIns );
 
@@ -125,7 +125,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
 
     // ask the char that should be inserted
     if (( CH_TXTATR_BREAKWORD == cIns || CH_TXTATR_INWORD == cIns ) ||
-        rCC.isLetterNumeric( String( cIns ), 0 ) !=
+        rCC.isLetterNumeric( rtl::OUString( cIns ), 0 ) !=
         rCC.isLetterNumeric( aInsStr, aInsStr.Len()-1 ) )
         return sal_False;
 
@@ -163,7 +163,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     sal_Bool bOldExpFlg = pDelTxtNd->IsIgnoreDontExpand();
     pDelTxtNd->SetIgnoreDontExpand( sal_True );
 
-    pDelTxtNd->InsertText( cIns, rPos.nContent,
+    pDelTxtNd->InsertText( rtl::OUString(cIns), rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
     aInsStr.Insert( cIns );
 
@@ -208,7 +208,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( aDelStr.Len() )
     {
-        String aTmpStr( '1' );
+        String aTmpStr = rtl::OUString('1');
         sal_Unicode* pTmpStr = aTmpStr.GetBufferAccess();
 
         sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
@@ -255,10 +255,10 @@ void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
 
     {
         ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        rDoc.Overwrite(*pAktPam, aInsStr.GetChar(0));
+        rDoc.Overwrite(*pAktPam, rtl::OUString(aInsStr.GetChar(0)));
     }
     for( xub_StrLen n = 1; n < aInsStr.Len(); ++n )
-        rDoc.Overwrite( *pAktPam, aInsStr.GetChar( n ) );
+        rDoc.Overwrite( *pAktPam, rtl::OUString(aInsStr.GetChar(n)) );
 }
 
 void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -288,7 +288,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     for( xub_StrLen n = 0; n < aInsStr.Len(); n++  )
     {
         // do it individually, to keep the attributes!
-        pTxtNd->InsertText( aInsStr.GetChar( n ), rIdx,
+        pTxtNd->InsertText( rtl::OUString(aInsStr.GetChar(n)), rIdx,
                 IDocumentContentOperations::INS_EMPTYEXPAND );
         if( n < aDelStr.Len() )
         {

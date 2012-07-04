@@ -239,7 +239,7 @@ void BrowseBox::SetFont( const Font& rNewFont )
 
 sal_uLong BrowseBox::GetDefaultColumnWidth( const String& _rText ) const
 {
-    return GetDataWindow().GetTextWidth( _rText ) + GetDataWindow().GetTextWidth( '0' ) * 4;
+    return GetDataWindow().GetTextWidth( _rText ) + GetDataWindow().GetTextWidth(rtl::OUString('0')) * 4;
 }
 
 //-------------------------------------------------------------------

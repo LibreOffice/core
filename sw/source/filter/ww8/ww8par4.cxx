@@ -351,7 +351,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     long nX=0, nY=0;                // nX, nY is graphic size
     bool bOleOk = true;
 
-    String aSrcStgName = '_';
+    String aSrcStgName = rtl::OUString('_');
     // ergibt Name "_4711"
     aSrcStgName += String::CreateFromInt32( nObjLocFc );
 

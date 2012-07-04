@@ -48,6 +48,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/numbers.hxx>
+#include <comphelper/string.hxx>
 #include "UITools.hxx"
 #include <memory>
 #include "dbu_control.hrc"
@@ -263,33 +264,26 @@ OFieldDescControl::~OFieldDescControl()
 //------------------------------------------------------------------------------
 String OFieldDescControl::BoolStringPersistent(const String& rUIString) const
 {
-    static String aZero('0');
-    static String aOne('1');
-
     if (rUIString == aNo)
-        return aZero;
+        return rtl::OUString('0');
     if (rUIString == aYes)
-        return aOne;
-    return String();
+        return rtl::OUString('1');
+    return rtl::OUString();
 }
 
 //------------------------------------------------------------------------------
 String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
 {
-    static String aZero('0');
-    static String aOne('1');
-    static String aNone(ModuleRes(STR_VALUE_NONE));
-
     // Older versions may store a language dependend string as a default
     if (rPersistentString.Equals(aYes) || rPersistentString.Equals(aNo))
         return rPersistentString;
 
-    if (rPersistentString == aZero)
+    if (comphelper::string::equals(rPersistentString, '0'))
         return aNo;
-    if (rPersistentString == aOne)
+    if (comphelper::string::equals(rPersistentString, '1'))
         return aYes;
 
-    return aNone;
+    return ModuleRes(STR_VALUE_NONE).toString();
 }
 
 //------------------------------------------------------------------------------

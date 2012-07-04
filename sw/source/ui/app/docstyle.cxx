@@ -316,7 +316,7 @@ sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
 {
     if(!rLst.empty())
     {
-        String sSrch( ' ' );
+        String sSrch = rtl::OUString(' ');
         switch( eFam )
         {
         case SFX_STYLE_FAMILY_CHAR:  sSrch = cCHAR;     break;
@@ -361,7 +361,7 @@ sal_Bool FindPhyStyle( SwDoc& rDoc, const String& rName, SfxStyleFamily eFam )
 
 void SwPoolFmtList::Append( char cChar, const String& rStr )
 {
-    String aStr(cChar);
+    String aStr = rtl::OUString(cChar);
     aStr += rStr;
     for(std::vector<String>::const_iterator i = begin(); i != end(); ++i)
         if(*i == aStr)

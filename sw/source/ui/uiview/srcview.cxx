@@ -705,7 +705,7 @@ sal_Int32 SwSrcView::PrintSource(
 
     // nLinepPage stimmt nicht, wenn Zeilen umgebrochen werden muessen...
     sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height() / nLineHeight);
-    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width()  / pOutDev->GetTextWidth( 'X' ));
+    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width()  / pOutDev->GetTextWidth(rtl::OUString('X')));
     sal_uInt16 nParas = static_cast< sal_uInt16 >( pTextEngine->GetParagraphCount() );
 
     sal_uInt16 nPages = (sal_uInt16) (nParas / nLinespPage + 1 );

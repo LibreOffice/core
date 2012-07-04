@@ -2448,10 +2448,11 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                 // possibly allow texts??
                 break;
 
-            String sTmp( '<' );
-            sTmp += pCFrm->GetTabBox()->GetName();
-            sTmp += '>';
-            rFml.Insert( sTmp, nInsPos );
+            rtl::OUStringBuffer sTmp;
+            sTmp.append('<');
+            sTmp.append(pCFrm->GetTabBox()->GetName());
+            sTmp.append('>');
+            rFml.Insert( sTmp.makeStringAndClear(), nInsPos );
         }
         if( nW )
         {

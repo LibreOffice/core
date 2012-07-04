@@ -1074,7 +1074,7 @@ String SwFltShell::QuoteStr( const String& rIn )
 SwFltShell& SwFltShell::operator << ( const sal_Unicode c )
 {
     OSL_ENSURE( eSubMode != Style, "char insert while in style-mode");
-    GetDoc().InsertString( *pPaM, c );
+    GetDoc().InsertString( *pPaM, rtl::OUString(c) );
     return *this;
 }
 

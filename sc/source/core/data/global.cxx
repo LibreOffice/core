@@ -822,7 +822,7 @@ void ScGlobal::AddQuotes( String& rString, sal_Unicode cQuote, bool bEscapeEmbed
         pQ[0] = pQ[1] = cQuote;
         pQ[2] = 0;
         rtl::OUString aQuotes( pQ );
-        rString.SearchAndReplaceAll( cQuote, aQuotes);
+        rString.SearchAndReplaceAll( rtl::OUString(cQuote), aQuotes);
     }
     rString.Insert( cQuote, 0 ).Append( cQuote );
 }
@@ -838,7 +838,7 @@ void ScGlobal::EraseQuotes( String& rString, sal_Unicode cQuote, bool bUnescapeE
             pQ[0] = pQ[1] = cQuote;
             pQ[2] = 0;
             rtl::OUString aQuotes( pQ );
-            rString.SearchAndReplaceAll( aQuotes, cQuote);
+            rString.SearchAndReplaceAll( aQuotes, rtl::OUString(cQuote));
         }
     }
 }

@@ -135,12 +135,13 @@ ScMergeAttr::~ScMergeAttr()
 
 String ScMergeAttr::GetValueText() const
 {
-    String aString( '(' );
-    aString += String::CreateFromInt32( nColMerge );
-    aString += ',';
-    aString += String::CreateFromInt32( nRowMerge );
-    aString += ')';
-    return aString;
+    rtl::OUStringBuffer aString;
+    aString.append('(');
+    aString.append(static_cast<sal_Int32>(nColMerge));
+    aString.append(',');
+    aString.append(static_cast<sal_Int32>(nRowMerge));
+    aString.append(')');
+    return aString.makeStringAndClear();
 }
 
 //------------------------------------------------------------------------

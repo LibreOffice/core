@@ -3283,7 +3283,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     if(!pxDoc)
         throw RuntimeException();
     String sToCompare(rName);
-    String sSuffix('|');
+    String sSuffix = rtl::OUString('|');
     if(sToCompare == sTables)
     {
         sSuffix += rtl::OUString::createFromAscii(pMarkToTable);
@@ -3498,7 +3498,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
         sal_uInt16 nOutlineCount = rOutlineNodes.Count();
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
-        String sSuffix('|');
+        String sSuffix = rtl::OUString('|');
         sSuffix += rtl::OUString::createFromAscii(pMarkToOutline);
         const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
         for (sal_uInt16 i = 0; i < nOutlineCount; ++i)

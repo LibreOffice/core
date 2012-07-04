@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
             sal_uLong nPos = aRadioLB.GetEntryPos( sInsPath, 1 );
             if ( 0xffffffff == nPos ) //See svtools/source/contnr/svtabbx.cxx SvTabListBox::GetEntryPos
             {
-                String sNewEntry( '\t' );
+                rtl::OUString sNewEntry( '\t' );
                 sNewEntry += sInsPath;
                 SvLBoxEntry* pEntry = aRadioLB.InsertEntry( sNewEntry );
                 String* pData = new String( aURL );
@@ -293,7 +293,7 @@ void SvxMultiPathDialog::SetPath( const String& rPath )
 
         if ( pImpl->bIsRadioButtonMode )
         {
-            String sEntry( '\t' );
+            rtl::OUString sEntry( '\t' );
             sEntry += (bIsSystemPath ? sSystemPath : sPath);
             SvLBoxEntry* pEntry = aRadioLB.InsertEntry( sEntry );
             String* pURL = new String( sPath );

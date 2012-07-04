@@ -306,11 +306,12 @@ SfxSplitWindow::~SfxSplitWindow()
 void SfxSplitWindow::SaveConfig_Impl()
 {
     // Save configuration
-    String aWinData('V');
-    aWinData += String::CreateFromInt32( VERSION );
-    aWinData += ',';
-    aWinData += String::CreateFromInt32( pEmptyWin->nState );
-    aWinData += ',';
+    rtl::OUStringBuffer aWinData;
+    aWinData.append('V');
+    aWinData.append(static_cast<sal_Int32>(VERSION));
+    aWinData.append(',');
+    aWinData.append(static_cast<sal_Int32>(pEmptyWin->nState));
+    aWinData.append(',');
 
     sal_uInt16 nCount = 0;
     sal_uInt16 n;
@@ -321,7 +322,7 @@ void SfxSplitWindow::SaveConfig_Impl()
             nCount++;
     }
 
-    aWinData += String::CreateFromInt32( nCount );
+    aWinData.append(static_cast<sal_Int32>(nCount));
 
     for ( n=0; n<pDockArr->size(); n++ )
     {
@@ -329,15 +330,15 @@ void SfxSplitWindow::SaveConfig_Impl()
         if ( !pDock->bHide && !pDock->pWin )
             continue;
         if ( pDock->bNewLine )
-            aWinData += DEFINE_CONST_UNICODE(",0");
-        aWinData += ',';
-        aWinData += String::CreateFromInt32( pDock->nType);
+            aWinData.append(",0");
+        aWinData.append(',');
+        aWinData.append(static_cast<sal_Int32>(pDock->nType));
     }
 
     String aWindowId = rtl::OUString("SplitWindow");
     aWindowId += String::CreateFromInt32( (sal_Int32) GetAlign() );
     SvtViewOptions aWinOpt( E_WINDOW, aWindowId );
-    aWinOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aWinData ) ) );
+    aWinOpt.SetUserItem( USERITEM_NAME, makeAny( aWinData.makeStringAndClear() ) );
 }
 
 //-------------------------------------------------------------------------

@@ -350,10 +350,10 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     SfxStringItem aReferer( SID_REFERER, rtl::OUString("private:user") );
                     SfxStringItem aFrame( SID_TARGETNAME, rtl::OUString("_blank") );
 
-                    String aStrFlags ( sal_Unicode('S') );
+                    rtl::OUString aStrFlags('S');
                     if ( maRbtEditLater.IsChecked() )
                     {
-                        aStrFlags += sal_Unicode('H');
+                        aStrFlags += rtl::OUString('H');
                     }
                     SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
 

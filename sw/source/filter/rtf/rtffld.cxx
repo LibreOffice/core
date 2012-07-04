@@ -581,10 +581,10 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     case 0:
                         if( !bCharIns )
                         {
-                            sal_Unicode nChar = (sal_Unicode)sParam.ToInt32();
-                            if( nChar )
+                            sal_Unicode cChar = (sal_Unicode)sParam.ToInt32();
+                            if( cChar )
                             {
-                                pDoc->InsertString( *pPam, nChar );
+                                pDoc->InsertString( *pPam, rtl::OUString(cChar) );
                                 bCharIns = sal_True;
                             }
                         }

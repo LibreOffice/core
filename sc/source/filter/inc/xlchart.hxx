@@ -889,7 +889,7 @@ struct XclChObjectLink
 
 struct XclChFrLabelProps
 {
-    String              maSeparator;        /// Separator between label values.
+    rtl::OUString       maSeparator;        /// Separator between label values.
     sal_uInt16          mnFlags;            /// Flags indicating which values to be displayed.
 
     explicit            XclChFrLabelProps();

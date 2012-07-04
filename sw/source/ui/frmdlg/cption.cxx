@@ -537,14 +537,14 @@ void SwSequenceOptionDialog::Apply()
     sal_Bool bUpdate = sal_True;
     if( pFldType )
     {
-        pFldType->SetDelimiter( cDelim );
+        pFldType->SetDelimiter( rtl::OUString(cDelim) );
         pFldType->SetOutlineLvl( nLvl );
     }
     else if( aFldTypeName.Len() && nLvl < MAXLEVEL )
     {
         // then we have to insert that
         SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, nsSwGetSetExpType::GSE_SEQ );
-        aFldType.SetDelimiter( cDelim );
+        aFldType.SetDelimiter( rtl::OUString(cDelim) );
         aFldType.SetOutlineLvl( nLvl );
         rSh.InsertFldType( aFldType );
     }
@@ -582,7 +582,8 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
         if(nTmpCode != KEY_BACKSPACE && nTmpCode != KEY_RETURN
                 && nTmpCode != KEY_TAB && nTmpCode != KEY_ESCAPE)
         {
-            String sKey( pEvent->GetCharCode() ), sName( GetText() );
+            rtl::OUString sKey( pEvent->GetCharCode() );
+            String sName( GetText() );
             Selection aSel( GetSelection() );
             aSel.Justify();
             if( aSel.Len() )

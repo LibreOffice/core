@@ -401,7 +401,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
                     static_cast<SwNumberPortion*>(rInf.GetLast())->GetFont();
             pSave.reset( new SwFontSave( rInf, const_cast<SwFont*>(pNumberPortionFont) ) );
         }
-        XubString aTmp( ' ' );
+        rtl::OUString aTmp( ' ' );
         SwTxtSizeInfo aInf( rInf, aTmp );
         nMinimumTabWidth = aInf.GetTxtSize().Width();
     }
@@ -619,7 +619,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( rInf.GetFont()->IsPaintBlank() )
     {
         // Tabs mit Fuellung
-        XubString aTxt( ' ' );
+        UniString aTxt = rtl::OUString(' ');
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
         // robust:
         if( nCharWidth )
@@ -634,7 +634,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     if( IsFilled() )
     {
         // Tabs mit Fuellung
-        XubString aTxt( cFill );
+        UniString aTxt = rtl::OUString(cFill);
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
         OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
         // robust:

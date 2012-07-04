@@ -819,7 +819,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     }
 
     // check if char fits into rectangle
-    const XubString aTmp( cChar );
+    const rtl::OUString aTmp( cChar );
     aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
     while ( aFontSize.Width() > nMaxWidth )
     {

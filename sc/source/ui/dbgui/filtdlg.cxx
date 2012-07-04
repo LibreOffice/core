@@ -1119,7 +1119,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
 
         if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
         {
-            pLbCond->SelectEntry( '=' );
+            pLbCond->SelectEntry(rtl::OUString('='));
             pLbCond->Disable();
         }
         else

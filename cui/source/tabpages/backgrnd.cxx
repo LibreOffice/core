@@ -701,7 +701,7 @@ void SvxBackgroundTabPage::FillUserData()
 */
 
 {
-    SetUserData( String( aBtnPreview.IsChecked() ? sal_Unicode('1') : sal_Unicode('0') ) );
+    SetUserData( aBtnPreview.IsChecked() ? rtl::OUString('1') : rtl::OUString('0') );
 }
 
 //------------------------------------------------------------------------

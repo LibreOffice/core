@@ -716,7 +716,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
             {
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsShift() &&
                         !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() &&
-                        ImplCheckTextLen( 'x' ) )
+                        ImplCheckTextLen( rtl::OUString('x') ) )
                 {
                     aCurSel = mpImpl->mpTextEngine->ImpInsertText( aCurSel, '\t', !IsInsertMode() );
                     bModified = sal_True;
@@ -730,7 +730,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                 // Shift-RETURN darf nicht geschluckt werden, weil dann keine
                 // mehrzeilige Eingabe in Dialogen/Property-Editor moeglich.
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsMod1() &&
-                        !rKeyEvent.GetKeyCode().IsMod2() && ImplCheckTextLen( 'x' ) )
+                        !rKeyEvent.GetKeyCode().IsMod2() && ImplCheckTextLen( rtl::OUString('x') ) )
                 {
                     mpImpl->mpTextEngine->UndoActionStart();
                     aCurSel = mpImpl->mpTextEngine->ImpInsertParaBreak( aCurSel );
@@ -765,7 +765,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                 if ( TextEngine::IsSimpleCharInput( rKeyEvent ) )
                 {
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
-                    if ( !mpImpl->mbReadOnly && ImplCheckTextLen( nCharCode ) )    // sonst trotzdem das Zeichen schlucken...
+                    if ( !mpImpl->mbReadOnly && ImplCheckTextLen( rtl::OUString(nCharCode) ) )    // sonst trotzdem das Zeichen schlucken...
                     {
                         aCurSel = mpImpl->mpTextEngine->ImpInsertText( nCharCode, aCurSel, !IsInsertMode(), sal_True );
                         bModified = sal_True;

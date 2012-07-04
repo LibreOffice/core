@@ -45,11 +45,12 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 #include <editeng/editids.hrc>
 #include <sot/storage.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/escpitem.hxx>
@@ -433,9 +434,9 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
             if(xSpellAlt.is())
             {
                 sal_Unicode cSave = rTxt.GetChar( nSttPos );
-                String sChar( cSave );
+                rtl::OUString sChar( cSave );
                 sChar = rCC.lowercase( sChar );
-                if( sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
+                if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
                 {
                     if( SaveWordWrdSttLst & nFlags )
                         rDoc.SaveCpltSttWord( CptlSttWrd, nSttPos, sWord, cSave );
@@ -552,17 +553,17 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
                     ;
 
                 // found: " --[<AnySttChars>][A-z0-9]
-                if( rCC.isLetterNumeric( cCh ) )
+                if( rCC.isLetterNumeric( rtl::OUString(cCh) ) )
                 {
                     for( n = nSttPos-1; n && lcl_IsInAsciiArr(
                             sImplEndSkipChars,(cCh = rTxt.GetChar( --n ))); )
                         ;
 
                     // found: "[A-z0-9][<AnyEndChars>] --[<AnySttChars>][A-z0-9]
-                    if( rCC.isLetterNumeric( cCh ))
+                    if( rCC.isLetterNumeric( rtl::OUString(cCh) ))
                     {
                         rDoc.Delete( nSttPos, nSttPos + 2 );
-                        rDoc.Insert( nSttPos, bAlwaysUseEmDash ? cEmDash : cEnDash );
+                        rDoc.Insert( nSttPos, bAlwaysUseEmDash ? rtl::OUString(cEmDash) : rtl::OUString(cEnDash) );
                         bRet = sal_True;
                     }
                 }
@@ -587,17 +588,17 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
                     ;
 
                 // found: " - [<AnySttChars>][A-z0-9]
-                if( rCC.isLetterNumeric( cCh ) )
+                if( rCC.isLetterNumeric( rtl::OUString(cCh) ) )
                 {
                     cCh = ' ';
                     for( n = nTmpPos-1; n && lcl_IsInAsciiArr(
                             sImplEndSkipChars,(cCh = rTxt.GetChar( --n ))); )
                             ;
                     // found: "[A-z0-9][<AnyEndChars>] - [<AnySttChars>][A-z0-9]
-                    if( rCC.isLetterNumeric( cCh ))
+                    if( rCC.isLetterNumeric( rtl::OUString(cCh) ))
                     {
                         rDoc.Delete( nTmpPos, nTmpPos + nLen );
-                        rDoc.Insert( nTmpPos, bAlwaysUseEmDash ? cEmDash : cEnDash );
+                        rDoc.Insert( nTmpPos, bAlwaysUseEmDash ? rtl::OUString(cEmDash) : rtl::OUString(cEnDash) );
                         bRet = sal_True;
                     }
                 }
@@ -621,7 +622,7 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
         {
             nSttPos = nSttPos + nFndPos;
             rDoc.Delete( nSttPos, nSttPos + 2 );
-            rDoc.Insert( nSttPos, (bEnDash ? cEnDash : cEmDash) );
+            rDoc.Insert( nSttPos, (bEnDash ? rtl::OUString(cEnDash) : rtl::OUString(cEmDash)) );
             bRet = sal_True;
         }
     }
@@ -690,7 +691,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
 
                     // Add the non-breaking space at the end pos
                     if ( bHasSpace )
-                        rDoc.Insert( nPos, CHAR_HARDBLANK );
+                        rDoc.Insert( nPos, rtl::OUString(CHAR_HARDBLANK) );
                     bRunNext = true;
                     bRet = true;
                 }
@@ -881,9 +882,9 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         if( !pPrevPara )
         {
             // valid separator -> replace
-            String sChar( *pWordStt );
+            rtl::OUString sChar( *pWordStt );
             sChar = rCC.uppercase( sChar );
-            return  sChar != *pWordStt &&
+            return  !comphelper::string::equals(sChar, *pWordStt) &&
                     rDoc.ReplaceRange( xub_StrLen( pWordStt - pStart ), 1, sChar );
         }
 
@@ -1056,9 +1057,9 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     // Ok, then replace
     sal_Unicode cSave = *pWordStt;
     nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.GetBuffer() );
-    String sChar( cSave );
+    rtl::OUString sChar( cSave );
     sChar = rCC.uppercase( sChar );
-    sal_Bool bRet = sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
+    sal_Bool bRet = sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
     // Parahaps someone wants to have the word
     if( bRet && SaveWordCplSttLst & nFlags )
@@ -1096,7 +1097,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt
 
         if ( IsUpperLetter(rCC.getCharacterType(rTxt, i)) )
             // Another uppercase letter.  Convert it.
-            aConverted.Append( rCC.lowercase(String(rTxt.GetChar(i))) );
+            aConverted.Append(rCC.lowercase(rtl::OUString(rTxt.GetChar(i))));
         else
             // This is not an alphabetic letter.  Leave it as-is.
             aConverted.Append(rTxt.GetChar(i));
@@ -1147,13 +1148,13 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     LanguageType eLang = rDoc.GetLanguage( nInsPos, sal_False );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
-    String sChg( cInsChar );
+    rtl::OUString sChg( cInsChar );
     if( bIns )
         rDoc.Insert( nInsPos, sChg );
     else
         rDoc.Replace( nInsPos, sChg );
 
-    sChg = cRet;
+    sChg = rtl::OUString(cRet);
 
     if( '\"' == cInsChar )
     {
@@ -1167,7 +1168,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
         case LANGUAGE_FRENCH_SWISS:
         case LANGUAGE_FRENCH_LUXEMBOURG:
             {
-                String s( static_cast< sal_Unicode >(0xA0) );
+                rtl::OUString s( static_cast< sal_Unicode >(0xA0) );
                     // UNICODE code for no break space
                 if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
                 {
@@ -1188,7 +1189,7 @@ String SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     LanguageType eLang = rDoc.GetLanguage( nInsPos, sal_False );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
-    String sRet( cRet );
+    String sRet = rtl::OUString(cRet);
 
     if( '\"' == cInsChar )
     {
@@ -1250,9 +1251,9 @@ sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             }
 
             if( bInsert )
-                rDoc.Insert( nInsPos, cChar );
+                rDoc.Insert( nInsPos, rtl::OUString(cChar) );
             else
-                rDoc.Replace( nInsPos, cChar );
+                rDoc.Replace( nInsPos, rtl::OUString(cChar) );
 
             // Hardspaces autocorrection
             if ( IsAutoCorrFlag( AddNonBrkSpace ) )
@@ -1846,7 +1847,7 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
 
 static sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sWord)
 {
-    String sAbk( '~' );
+    String sAbk(rtl::OUString('~'));
     sal_uInt16 nPos;
     pList->Seek_Entry( &sAbk, &nPos );
     if( nPos < pList->Count() )

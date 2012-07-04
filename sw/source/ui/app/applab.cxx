@@ -375,10 +375,11 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                         {
                             SwSectionData aSect(FILE_LINK_SECTION,
                                     pSh->GetUniqueSectionName());
-                            String sLinkName(sfx2::cTokenSeperator);
-                            sLinkName += sfx2::cTokenSeperator;
-                            sLinkName += rtl::OUString(MASTER_LABEL);
-                            aSect.SetLinkFileName(sLinkName);
+                            rtl::OUStringBuffer sLinkName;
+                            sLinkName.append(sfx2::cTokenSeperator);
+                            sLinkName.append(sfx2::cTokenSeperator);
+                            sLinkName.append(MASTER_LABEL);
+                            aSect.SetLinkFileName(sLinkName.makeStringAndClear());
                             aSect.SetProtectFlag(true);
                             pSh->Insert(aDotStr);   // Dummytext to allocate the Section
                             pSh->SttDoc();

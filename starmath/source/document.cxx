@@ -1246,7 +1246,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                 sal_Unicode cMod = ' ';
                 if (IsModified())
                     cMod = '*';
-                rSet.Put(SfxStringItem(SID_MODIFYSTATUS, String(cMod)));
+                rSet.Put(SfxStringItem(SID_MODIFYSTATUS, rtl::OUString(cMod)));
             }
             break;
 

@@ -265,7 +265,7 @@ void MessBox::ImplPosControls()
     rtl::OUString   aTabStr("    ");
     sal_uInt16      nIndex = 0;
     while ( nIndex != STRING_NOTFOUND )
-        nIndex = aMessText.SearchAndReplace( '\t', aTabStr, nIndex );
+        nIndex = aMessText.SearchAndReplace( rtl::OUString('\t'), aTabStr, nIndex );
 
     // Wenn Fenster zu schmall, machen wir Dialog auch breiter
     if ( mpWindowImpl->mbFrame )

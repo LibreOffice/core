@@ -467,7 +467,7 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
 
     // let the virtual device convert the character to polygons
     PolyPolygon aPolyPoly;
-    pVDev->GetTextOutline( aPolyPoly, nChar );
+    pVDev->GetTextOutline( aPolyPoly, rtl::OUString(nChar) );
 
     maGlyphOffsets.push_back( _uInt16( maGlyphData.getOffset() ) );
 

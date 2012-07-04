@@ -1152,9 +1152,9 @@ void XclExpChFrLabelProps::Convert( const ScfPropertySet& rPropSet, bool bShowSe
     ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWBUBBLE,  bShowBubble );
 
     // label value separator
-    rPropSet.GetStringProperty( maData.maSeparator, EXC_CHPROP_LABELSEPARATOR );
-    if( maData.maSeparator.Len() == 0 )
-        maData.maSeparator = String( sal_Unicode( ' ' ) );
+    maData.maSeparator = rPropSet.GetStringProperty( EXC_CHPROP_LABELSEPARATOR );
+    if( maData.maSeparator.isEmpty() )
+        maData.maSeparator = rtl::OUString(' ');
 }
 
 void XclExpChFrLabelProps::WriteBody( XclExpStream& rStrm )

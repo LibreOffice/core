@@ -3565,7 +3565,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             {
                 pPam->GetPoint()->nContent--;
                 nPos--;
-                aFtnNote.SetNumStr( pTxtNd->GetTxt().GetChar( nPos ) );
+                aFtnNote.SetNumStr(rtl::OUString(pTxtNd->GetTxt().GetChar(nPos)));
                 ((String&)pTxtNd->GetTxt()).SetChar( nPos, CH_TXTATR_INWORD );
                 bDelFirstChar = sal_True;
             }

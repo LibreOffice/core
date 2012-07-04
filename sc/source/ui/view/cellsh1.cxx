@@ -332,7 +332,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
                     const   SfxPoolItem* pItem;
-                    String  aFlags = 'A';
+                    String  aFlags = rtl::OUString('A');
 
                     if( pReqArgs->HasItem( SID_DELETE, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
@@ -446,7 +446,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
                     const   SfxPoolItem* pItem;
-                    String  aFlags = 'A';
+                    String  aFlags = rtl::OUString('A');
 
                     if( pReqArgs->HasItem( FID_FILL_TAB, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
@@ -1047,7 +1047,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                     {
-                        String aCol = bColumns ? 'C' : 'R';
+                        rtl::OUString aCol = bColumns ? rtl::OUString('C') : rtl::OUString('R');
                         rReq.AppendItem( SfxStringItem( SID_OUTLINE_MAKE, aCol ) );
                         rReq.Done();
                     }
@@ -1113,7 +1113,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                     {
-                        String aCol = bColumns ? 'C' : 'R';
+                        rtl::OUString aCol = bColumns ? rtl::OUString('C') : rtl::OUString('R');
                         rReq.AppendItem( SfxStringItem( SID_OUTLINE_REMOVE, aCol ) );
                         rReq.Done();
                     }
@@ -1210,7 +1210,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                     {
                         const   SfxPoolItem* pItem;
-                        String  aFlags = 'A';
+                        String  aFlags = rtl::OUString('A');
 
                         if( pReqArgs->HasItem( FID_INS_CELL_CONTENTS, &pItem ) )
                             aFlags = ((const SfxStringItem*)pItem)->GetValue();

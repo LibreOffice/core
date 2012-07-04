@@ -1128,7 +1128,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         &&  pThis->_pImp->_pCbAutoExtension                 // auto extension is enabled in general
         &&  pThis->_pImp->_pCbAutoExtension->IsChecked()    // auto extension is really to be used
         &&  pThis->GetDefaultExt().Len()                    // there is a default extension
-        &&  pThis->GetDefaultExt() != '*'                   // the default extension is not "all"
+        &&  !comphelper::string::equals(pThis->GetDefaultExt(), '*') // the default extension is not "all"
         && !(   FILEDLG_MODE_SAVE == pThis->_pImp->_eMode       // we're saving a file
             &&  pThis->_pFileView->GetSelectionCount()          // there is a selected file in the file view -> it will later on
             )                                                   //    (in SvtFileDialog::GetPathList) be taken as file to save to
@@ -2568,7 +2568,7 @@ sal_Bool SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilt
 
         if ( nPathTokenPos == STRING_NOTFOUND )
         {
-            String aDelim(
+            rtl::OUString aDelim(
 #if defined(WNT)
                     '\\'
 #else

@@ -74,7 +74,7 @@ void OTableRowView::Init()
     SetFont(aFont);
 
     // HandleColumn, fuer maximal fuenf Ziffern einrichten
-    InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth('0') * 4)/*, sal_True */);
+    InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(rtl::OUString('0')) * 4)/*, sal_True */);
 
     BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
                         BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_AUTOSIZE_LASTCOL;

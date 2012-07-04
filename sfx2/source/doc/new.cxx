@@ -532,9 +532,9 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     String &rExtra = pAntiImplP->GetExtraData();
     sal_Int32 nTokCount = comphelper::string::getTokenCount(rExtra, '|');
     if( nTokCount > 0 && nFlags )
-        MORE_BTN(SetState( rExtra.GetToken( 0, '|' ) == 'Y' ));
+        MORE_BTN(SetState(comphelper::string::equals(rExtra.GetToken( 0, '|'), 'Y')));
     if( nTokCount > 1 && nFlags )
-        aPreviewBtn.Check( rExtra.GetToken( 1 ,'|' ) == 'Y' );
+        aPreviewBtn.Check(comphelper::string::equals(rExtra.GetToken( 1 ,'|'), 'Y'));
 
     aTemplateLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
     aTemplateLb.SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));

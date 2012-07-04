@@ -982,9 +982,9 @@ bool ImpSvNumberInputScan::MayBeIso8601()
         {
             sal_Int32 n;
             if (nAnzNums >= 3 && nNums[2] < nAnzStrings &&
-                    sStrArray[nNums[0]+1] == '-' &&                         // separator year-month
+                    comphelper::string::equals(sStrArray[nNums[0]+1], '-') && // separator year-month
                     (n = sStrArray[nNums[1]].ToInt32()) >= 1 && n <= 12 &&  // month
-                    sStrArray[nNums[1]+1] == '-' &&                         // separator month-day
+                    comphelper::string::equals(sStrArray[nNums[1]+1], '-') && // separator month-day
                     (n = sStrArray[nNums[2]].ToInt32()) >= 1 && n <= 31)    // day
                 // Year (nNums[0]) value not checked, may be anything, but
                 // length (number of digits) is checked.
@@ -1012,7 +1012,7 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateFormat eDateFormat )
                 break;
             }
 
-            if (pFormatter->GetDateSep() != '-')
+            if (!comphelper::string::equals(pFormatter->GetDateSep(), '-'))
             {
                 nCanForceToIso8601 = 2; // date separator does not interfere
                 break;

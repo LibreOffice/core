@@ -1810,10 +1810,12 @@ ErrCode BasicManager::ExecuteMacro( String const& i_fullyQualifiedName, String c
     }
 
     // add quoted arguments and do the call
-    String sCall( '[' );
-    sCall += pMethod->GetName();
-    sCall += sQuotedArgs;
-    sCall += ']';
+    rtl::OUString sCall = rtl::OUStringBuffer().
+        append('[').
+        append(pMethod->GetName()).
+        append(sQuotedArgs).
+        append(']').
+        makeStringAndClear();
 
     SbxVariable* pRet = pMethod->GetParent()->Execute( sCall );
     if ( pRet && ( pRet != pMethod ) )

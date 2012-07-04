@@ -859,7 +859,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if( SfxRequest::HasMacroRecorder(pViewFrame) )
                 {
                     SfxRequest aReq( pViewFrame, nSlot);
-                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, String(cDelim) ));
+                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, rtl::OUString(cDelim) ));
                     if(bToTable)
                     {
                         if(pTAFmt)

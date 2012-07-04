@@ -909,7 +909,7 @@ void SwColumnPage::UpdateCols()
 
 void SwColumnPage::SetLabels( sal_uInt16 nVis )
 {
-    String sLbl( '~' );
+    rtl::OUString sLbl( '~' );
 
     String sLbl2( String::CreateFromInt32( nVis + 1 ));
     String tmp1(sLbl2);

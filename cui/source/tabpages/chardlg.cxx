@@ -3576,7 +3576,7 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, sal_Bool bStart )
 
         if ( !bFound )
         {
-            nEntryPos = pBox->InsertEntry( String( cBracket ) );
+            nEntryPos = pBox->InsertEntry( rtl::OUString(cBracket) );
             pBox->SelectEntryPos( nEntryPos );
         }
     }

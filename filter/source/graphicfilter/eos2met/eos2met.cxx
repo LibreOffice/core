@@ -1926,7 +1926,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                                 aPt2 = aPolyDummy.GetPoint( 0 );
                             }
                         }
-                        METChrStr( aPt2, String( aStr.GetChar( i ) ) );
+                        METChrStr( aPt2, rtl::OUString( aStr.GetChar( i ) ) );
                     }
                 }
                 else
@@ -1980,7 +1980,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                             aPt2 = aPolyDummy.GetPoint( 0 );
                         }
                     }
-                    METChrStr( aPt2, String( aStr.GetChar( i ) ) );
+                    METChrStr( aPt2, rtl::OUString( aStr.GetChar( i ) ) );
                 }
 
                 delete[] pDXAry;

@@ -797,7 +797,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
             // start behind the characters (to fix the attributes!)
             if( nStart < pNode->GetTxt().Len() )
                 rIdx++;
-            pNode->InsertText( c, rIdx, INS_EMPTYEXPAND );
+            pNode->InsertText( rtl::OUString(c), rIdx, INS_EMPTYEXPAND );
             if( nStart+1 < rIdx.GetIndex() )
             {
                 rIdx = nStart;

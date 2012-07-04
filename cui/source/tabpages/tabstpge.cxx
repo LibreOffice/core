@@ -463,7 +463,7 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
         pTypeBtn = &aDezTab;
         aDezChar.Enable();
         aDezCharLabel.Enable();
-        aDezChar.SetText( String( (sal_Unicode)aAktTab.GetDecimal() ) );
+        aDezChar.SetText( rtl::OUString( (sal_Unicode)aAktTab.GetDecimal() ) );
     }
     else if ( aAktTab.GetAdjustment() == SVX_TAB_ADJUST_CENTER )
         pTypeBtn = &aCenterTab;
@@ -486,7 +486,7 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     {
         pFillBtn = &aFillSpecial;
         aFillChar.Enable();
-        aFillChar.SetText( String( (sal_Unicode)aAktTab.GetFill() ) );
+        aFillChar.SetText( rtl::OUString( (sal_Unicode)aAktTab.GetFill() ) );
     }
     pFillBtn->Check();
 }
@@ -628,7 +628,7 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
         eAdj = SVX_TAB_ADJUST_DECIMAL;
         aDezChar.Enable();
         aDezCharLabel.Enable();
-        aDezChar.SetText( String( (sal_Unicode)aAktTab.GetDecimal() ) );
+        aDezChar.SetText( rtl::OUString( (sal_Unicode)aAktTab.GetDecimal() ) );
     }
 
     aAktTab.GetAdjustment() = eAdj;

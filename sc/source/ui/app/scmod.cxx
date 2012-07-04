@@ -2198,7 +2198,7 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
         else
         {
             OSL_FAIL("unbekannter Feldbefehl");
-            pInfo->SetRepresentation(String('?'));
+            pInfo->SetRepresentation(rtl::OUString('?'));
         }
     }
 

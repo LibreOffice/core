@@ -2880,7 +2880,7 @@ Size Edit::CalcSize( xub_StrLen nChars ) const
 {
     // width for N characters, independent from content.
     // works only correct for fixed fonts, average otherwise
-    Size aSz( GetTextWidth( XubString( 'x' ) ), GetTextHeight() );
+    Size aSz( GetTextWidth( rtl::OUString('x') ), GetTextHeight() );
     aSz.Width() *= nChars;
     aSz = CalcWindowSize( aSz );
     return aSz;
@@ -2892,7 +2892,7 @@ xub_StrLen Edit::GetMaxVisChars() const
 {
     const Window* pW = mpSubEdit ? mpSubEdit : this;
     long nOutWidth = pW->GetOutputSizePixel().Width();
-    long nCharWidth = GetTextWidth( XubString( 'x' ) );
+    long nCharWidth = GetTextWidth( rtl::OUString('x') );
     return nCharWidth ? (xub_StrLen)(nOutWidth/nCharWidth) : 0;
 }
 

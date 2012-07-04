@@ -596,7 +596,7 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 
         if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
         {
-            pLb->SelectEntry( '=' );
+            pLb->SelectEntry(rtl::OUString('='));
             pLb->Disable();
         }
         else

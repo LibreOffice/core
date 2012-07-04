@@ -1988,10 +1988,11 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
     {   // we need at least _some_ format
         rSeq.realloc(1);
         rSeq[0] = ::com::sun::star::i18n::NumberFormatCode();
-        String aTmp( '0' );
-        aTmp += GetNumDecimalSep();
-        aTmp.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "############" ) );
-        rSeq[0].Code = aTmp;
+        rSeq[0].Code = rtl::OUStringBuffer().
+            append('0').
+            append(GetNumDecimalSep()).
+            appendAscii(RTL_CONSTASCII_STRINGPARAM("############")).
+            makeStringAndClear();
     }
     return 0;
 }
@@ -3624,6 +3625,11 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr,
             const NfCurrencyEntry& rCurr, bool bBank ) const
 {
+    rtl::OUString aRed = rtl::OUStringBuffer().
+        append('[').
+        append(pFormatScanner->GetRedString()).
+        append(']').makeStringAndClear();
+
     sal_uInt16 nDefault = 0;
     if ( bBank )
     {
@@ -3640,10 +3646,6 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         ::rtl::OUStringBuffer format2(aPositiveBank);
         format2.append(';');
 
-        String aRed( '[' );
-        aRed += pFormatScanner->GetRedString();
-        aRed += ']';
-
         format2.append(aRed);
 
         format2.append(aNegativeBank);
@@ -3657,10 +3659,6 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         // duplicates if no decimals in currency.
         String aPositive, aNegative, aPositiveNoDec, aNegativeNoDec,
             aPositiveDashed, aNegativeDashed;
-
-        String aRed( '[' );
-        aRed += pFormatScanner->GetRedString();
-        aRed += ']';
 
         rCurr.BuildPositiveFormatString( aPositive, false, *xLocaleData, 1 );
         rCurr.BuildNegativeFormatString( aNegative, false, *xLocaleData, 1 );

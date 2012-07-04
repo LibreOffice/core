@@ -1126,7 +1126,7 @@ String SwDocInfoField::Expand() const
                     }
                     else if( aAny >>= aDuration )
                     {
-                        String sText(aDuration.Negative ? '-' : '+');
+                        String sText = aDuration.Negative ? rtl::OUString('-') : rtl::OUString('+');
                         sText += ViewShell::GetShellRes()->sDurationFormat;
                         sText.SearchAndReplace(rtl::OUString("%1"), String::CreateFromInt32( aDuration.Years ) );
                         sText.SearchAndReplace(rtl::OUString("%2"), String::CreateFromInt32( aDuration.Months ) );
@@ -2425,9 +2425,8 @@ SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
 
 String SwJumpEditField::Expand() const
 {
-    String sTmp( '<' );
-    sTmp += sTxt;
-    return sTmp += '>';
+    return rtl::OUStringBuffer().append('<').
+        append(sTxt).append('>').makeStringAndClear();
 }
 
 SwField* SwJumpEditField::Copy() const

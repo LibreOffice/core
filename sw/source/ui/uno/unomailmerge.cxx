@@ -738,7 +738,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aURLObj.SetSmartURL( aCurOutputURL );
         String aPath = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 
-        String aDelim( INET_PATH_TOKEN );
+        String aDelim = rtl::OUString(INET_PATH_TOKEN);
         if (aPath.Len() >= aDelim.Len() &&
             aPath.Copy( aPath.Len()-aDelim.Len() ).CompareTo( aDelim ) != COMPARE_EQUAL)
             aPath += aDelim;

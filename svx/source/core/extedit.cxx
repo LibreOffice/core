@@ -111,7 +111,7 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
     osl::FileBase::createTempFile(0, &pHandle, &tempFileBase);
 
     // Move it to a file name with image extension properly set
-    tempFileName = tempFileBase + rtl::OUString(String('.')) + rtl::OUString(fExtension);
+    tempFileName = tempFileBase + rtl::OUString('.') + rtl::OUString(fExtension);
     osl::File::move(tempFileBase, tempFileName);
 
     //Write Graphic to the Temp File

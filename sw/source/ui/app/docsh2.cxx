@@ -1066,7 +1066,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 EnableSetModified( sal_False );
                 WriterRef xWrt;
                 // mba: looks as if relative URLs don't make sense here
-                ::GetRTFWriter( 'O', String(), xWrt );
+                ::GetRTFWriter( rtl::OUString('O'), rtl::OUString(), xWrt );
                 SvMemoryStream *pStrm = new SvMemoryStream();
                 pStrm->SetBufferSize( 16348 );
                 SwWriter aWrt( *pStrm, *GetDoc() );

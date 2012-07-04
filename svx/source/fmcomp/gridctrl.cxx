@@ -407,7 +407,7 @@ DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
 
     m_aRecordText.SetText(XubString(SVX_RES(RID_STR_REC_TEXT)));
     m_aRecordOf.SetText(XubString(SVX_RES(RID_STR_REC_FROM_TEXT)));
-    m_aRecordCount.SetText('?');
+    m_aRecordCount.SetText(rtl::OUString('?'));
 
     m_nDefaultWidth = ArrangeControls();
 

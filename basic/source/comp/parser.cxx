@@ -722,7 +722,7 @@ void SbiParser::Implements()
     Next();
     if( Peek() == DOT )
     {
-        String aDotStr( '.' );
+        rtl::OUString aDotStr( '.' );
         while( Peek() == DOT )
         {
             aImplementedIface += aDotStr;

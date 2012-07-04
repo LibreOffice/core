@@ -421,7 +421,7 @@ void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHeaders)
     //convert the numbers used for the configuration to strings used for UI to numbers
     //doesn't use ReplaceAll to prevent expansion of numbers inside of the headers
     String sBlock(rBlock);
-    sBlock.SearchAndReplaceAllAscii("\\n", '\n');
+    sBlock.SearchAndReplaceAllAscii("\\n", rtl::OUString('\n'));
     SwAddressIterator aGreetingIter(sBlock);
     sBlock.Erase();
     while(aGreetingIter.HasMore())

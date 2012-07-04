@@ -249,7 +249,7 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
     if( EVENT_KEYINPUT == rNEvt.GetType() &&
          rNEvt.GetKeyEvent()->GetCharCode() )
     {
-        String sKey( rNEvt.GetKeyEvent()->GetCharCode() );
+        rtl::OUString sKey( rNEvt.GetKeyEvent()->GetCharCode() );
         if(STRING_NOTFOUND != aForbiddenChars.Search(sKey))
             nHandled = 1;
     }

@@ -1553,7 +1553,7 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         if( pDXArry )
         {
             sal_uInt32 nLen = rText.Len();
-            nTextWidth = pVDev->GetTextWidth( rText.GetChar( (sal_uInt16)( nLen - 1 ) ) );
+            nTextWidth = pVDev->GetTextWidth( rtl::OUString(rText.GetChar( (sal_uInt16)( nLen - 1 ) )) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
         }

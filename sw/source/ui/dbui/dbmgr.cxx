@@ -575,10 +575,9 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 else
                 {
                     // column not found -> show error
-                    String sInsert = '?';
-                    sInsert += sColumn;
-                    sInsert += '?';
-                    pSh->Insert(sInsert);
+                    rtl::OUStringBuffer sInsert;
+                    sInsert.append('?').append(sColumn).append('?');
+                    pSh->Insert(sInsert.makeStringAndClear());
                 }
                 sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
             }

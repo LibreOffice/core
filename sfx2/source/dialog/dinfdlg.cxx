@@ -113,7 +113,7 @@ static const char DOCUMENT_SIGNATURE_MENU_CMD[] = "Signature";
 String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes = sal_True, sal_Bool bSmartExtraBytes = sal_False );
 String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartExtraBytes )
 {
-    String aUnitStr = ' ';
+    String aUnitStr = rtl::OUString(' ');
     aUnitStr += SfxResId(STR_BYTES).toString();
     sal_uIntPtr nSize1 = nSize;
     sal_uIntPtr nSize2 = nSize1;
@@ -889,7 +889,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     aPrintValFt.SetText( aEmpty );
     const Time aTime( 0 );
     aTimeLogValFt.SetText( aLocaleWrapper.getDuration( aTime ) );
-    aDocNoValFt.SetText( '1' );
+    aDocNoValFt.SetText(rtl::OUString('1'));
     bHandleDelete = sal_True;
     return 0;
 }
@@ -1717,7 +1717,7 @@ void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
 void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration )
 {
     m_aDuration = rDuration;
-    String sText(rDuration.Negative ? '-' : '+');
+    String sText(rDuration.Negative ? rtl::OUString('-') : rtl::OUString('+'));
     sText += m_pLine->m_sDurationFormat;
     sText.SearchAndReplace(rtl::OUString("%1"), String::CreateFromInt32( rDuration.Years ) );
     sText.SearchAndReplace(rtl::OUString("%2"), String::CreateFromInt32( rDuration.Months ) );

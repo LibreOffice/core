@@ -1161,8 +1161,8 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 //  ISO8859-1/MS_1252 encoding, comma, double quotes
 
                 aOptions.SetCharSet( RTL_TEXTENCODING_MS_1252 );
-                aOptions.SetFieldSeps( (sal_Unicode) ',' );
-                aOptions.SetTextSep( (sal_Unicode) '"' );
+                aOptions.SetFieldSeps( rtl::OUString(',') );
+                aOptions.SetTextSep( '"' );
             }
 
             FltError eError = eERR_OK;

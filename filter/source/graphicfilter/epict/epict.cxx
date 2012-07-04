@@ -1357,7 +1357,7 @@ void PictWriter::WriteTextArray(Point & rPoint, const String& rString, const sal
                 if ( i > 0 )
                     aPt.X() += pDXAry[ i - 1 ];
 
-                WriteOpcode_Text( aPt, String( c ), bDelta );
+                WriteOpcode_Text( aPt, rtl::OUString( c ), bDelta );
                 bDelta = sal_True;
             }
         }

@@ -432,8 +432,8 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
 {
     rName = rOrg;
-    rName.SearchAndReplaceAllAscii( "\\\\", String( '\\' ));
-    rName.SearchAndReplaceAllAscii( "%20", String( ' ' ));
+    rName.SearchAndReplaceAllAscii( "\\\\", rtl::OUString( '\\' ));
+    rName.SearchAndReplaceAllAscii( "%20", rtl::OUString( ' ' ));
 
     // ggfs. anhaengende Anfuehrungszeichen entfernen
     if( rName.Len() &&  '"' == rName.GetChar( rName.Len()-1 ))
@@ -762,7 +762,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         if ( maFieldStack.back().mnObjLocFc > 0 )
                         {
                             // Store the OLE object as an internal link
-                            String sOleId = '_';
+                            String sOleId = rtl::OUString('_');
                             sOleId += String::CreateFromInt32( maFieldStack.back().mnObjLocFc );
 
                             SvStorageRef xSrc0 = pStg->OpenSotStorage(rtl::OUString(SL::aObjectPool));
@@ -2002,7 +2002,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
             NewAttr(aSz);
         }
 
-        rDoc.InsertString(*pPaM, cChar);
+        rDoc.InsertString(*pPaM, rtl::OUString(cChar));
 
         if (nSize > 0)
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_FONTSIZE);
@@ -2265,7 +2265,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
                 aVText += aReadParam.GetResult();
                 if (bNewVText)
                 {
-                    bBracket = aVText.EqualsIgnoreCaseAscii('[', 1, 0)
+                    bBracket = aVText.EqualsIgnoreCaseAscii(rtl::OUString('['), 1, 0)
                         ? true : false;
                     bNewVText = false;
                 }
@@ -2542,7 +2542,7 @@ void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
 {
     String sCombinedCharacters;
     if ((-2 == rReadParam.SkipToNextToken()) &&
-            rReadParam.GetResult().EqualsIgnoreCaseAscii('(', 1, 0))
+            rReadParam.GetResult().EqualsIgnoreCaseAscii(rtl::OUString('('), 1, 0))
     {
         for (int i=0;i<2;i++)
         {
@@ -2552,8 +2552,8 @@ void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
                 if (-2 != rReadParam.SkipToNextToken())
                     break;
                 String sF = rReadParam.GetResult();
-                if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii('p', 1, 0))
-                || (('d' == cChar) && sF.EqualsIgnoreCaseAscii('o', 1, 0)))
+                if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii(rtl::OUString('p'), 1, 0))
+                || (('d' == cChar) && sF.EqualsIgnoreCaseAscii(rtl::OUString('o'), 1, 0)))
                 {
                     if (-2 == rReadParam.SkipToNextToken())
                     {
@@ -2623,7 +2623,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
                 if ('u' == nRet)
                 {
                     if (-2 == rReadParam.SkipToNextToken() &&
-                      (rReadParam.GetResult().EqualsIgnoreCaseAscii('p', 1, 0)))
+                      (rReadParam.GetResult().EqualsIgnoreCaseAscii(rtl::OUString('p'), 1, 0)))
                     {
                         if (-2 == rReadParam.SkipToNextToken())
                         {

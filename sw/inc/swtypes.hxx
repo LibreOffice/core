@@ -27,6 +27,7 @@
  ************************************************************************/
 #ifndef _SWTYPES_HXX
 #define _SWTYPES_HXX
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <SwGetPoolIdFromName.hxx>
 
@@ -89,7 +90,7 @@ const SwTwips lMinBorder = 1134;
 
 // Constant strings.
 SW_DLLPUBLIC extern UniString aEmptyStr;    // ""
-SW_DLLPUBLIC extern UniString aDotStr;      // '.'
+SW_DLLPUBLIC extern rtl::OUString aDotStr;      // '.'
 
 // For inserting of captions (what and where to insert).
 // It's here because it is not big enough to justify its own hxx

@@ -190,7 +190,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
             aStr  = pFieldSepTab->GetDelimiter( nCode );
 
             if ( !aStr.Len() )
-                aEdFieldSep.SetText( String((sal_Unicode)nCode) );
+                aEdFieldSep.SetText( rtl::OUString((sal_Unicode)nCode) );
             else
                 aEdFieldSep.SetText( aStr );
 
@@ -198,7 +198,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
             aStr  = pTextSepTab->GetDelimiter( nCode );
 
             if ( !aStr.Len() )
-                aEdTextSep.SetText( String((sal_Unicode)nCode) );
+                aEdTextSep.SetText( rtl::OUString((sal_Unicode)nCode) );
             else
                 aEdTextSep.SetText( aStr );
         }

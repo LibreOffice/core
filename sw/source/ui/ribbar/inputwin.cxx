@@ -232,7 +232,7 @@ void SwInputWindow::ShowWin()
 
         // Formel soll immer mit einem "=" beginnen, hier
         // also setzen
-        String sEdit( '=' );
+        String sEdit = rtl::OUString('=');
         if( pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
             sEdit += pMgr->GetCurFldPar2();
@@ -476,7 +476,7 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 
 void SwInputWindow::SetFormula( const String& rFormula, sal_Bool bDelFlag )
 {
-    String sEdit( '=' );
+    String sEdit = rtl::OUString('=');
     if( rFormula.Len() )
     {
         if( '=' == rFormula.GetChar( 0 ) )
@@ -567,9 +567,9 @@ void InputEdit::UpdateRange(const String& rBoxes,
     const sal_uInt16 nLen = aActText.Len();
     if( !nLen )
     {
-        String aStr(cOpen);
-        aStr += aBoxes;
-        aStr += cClose;
+        String aStr = rtl::OUStringBuffer().
+            append(cOpen).append(aBoxes).append(cClose).
+            makeStringAndClear();
         SetText(aStr);
         sal_uInt16 nPos = aStr.Search( cClose );
         OSL_ENSURE(nPos < aStr.Len(), "delimiter not found");
@@ -619,12 +619,12 @@ void InputEdit::UpdateRange(const String& rBoxes,
         }
         else
         {
-            String aTmp( (char)cOpen );
-            aTmp += aBoxes;
-            aTmp += (char)cClose;
+            rtl::OUString aTmp = rtl::OUStringBuffer().
+                append(cOpen).append(aBoxes).append(cClose).
+                makeStringAndClear();
             nPos = (sal_uInt16)aSelection.Min();
             aActText.Insert( aTmp, nPos );
-            nPos = nPos + aTmp.Len();
+            nPos = nPos + aTmp.getLength();
         }
         if( GetText() != aActText )
         {

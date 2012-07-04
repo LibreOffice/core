@@ -2672,12 +2672,12 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
 
         if ( IsUndoEnabled() && !IsInUndo() )
         {
-            EditUndoInsertChars* pNewUndo = new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), c);
+            EditUndoInsertChars* pNewUndo = new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), rtl::OUString(c));
             sal_Bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? sal_True : sal_False;
             InsertUndo( pNewUndo, bTryMerge );
         }
 
-        aEditDoc.InsertText( (const EditPaM&)aPaM, c );
+        aEditDoc.InsertText( (const EditPaM&)aPaM, rtl::OUString(c) );
         ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
         OSL_ENSURE( pPortion, "Blind Portion in InsertText" );
         pPortion->MarkInvalid( aPaM.GetIndex(), 1 );
@@ -2954,7 +2954,7 @@ EditPaM ImpEditEngine::InsertParaBreak( EditSelection aCurSel )
             if ( aPrevParaText.GetChar(n) == '\t' )
                 aPaM = ImpInsertFeature( aPaM, SfxVoidItem( EE_FEATURE_TAB ) );
             else
-                aPaM = ImpInsertText( aPaM, aPrevParaText.GetChar(n) );
+                aPaM = ImpInsertText( aPaM, rtl::OUString(aPrevParaText.GetChar(n)) );
             n++;
         }
 

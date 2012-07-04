@@ -90,13 +90,13 @@ sal_Bool G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const S
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
-        String  aTestStr( '-' );
+        rtl::OUString  aTestStr( '-' );
 
         for( int n = 0; ( n < 2 ) && !bRet; n++ )
         {
             aTestStr += rSwitch;
 
-            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
+            if( aTestStr.equalsIgnoreAsciiCase( rArgs[ i ] ) )
             {
                 bRet = sal_True;
 
@@ -107,7 +107,7 @@ sal_Bool G2GApp::GetCommandOption( const ::std::vector< String >& rArgs, const S
             }
 
             if( 0 == n )
-                aTestStr = '/';
+                aTestStr = rtl::OUString('/');
         }
     }
 
@@ -157,9 +157,9 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
 
         aInFile = rArgs[ nCurCmd++ ];
         aOutFile = rArgs[ nCurCmd++ ];
-        GetCommandOption( rArgs, String( RTL_CONSTASCII_USTRINGPARAM( "format" ) ), aFilterStr );
-        GetCommandOption( rArgs, String( RTL_CONSTASCII_USTRINGPARAM( "filterpath" ) ), aFilterPath );
-        GetCommandOption( rArgs, '#', aTransColStr );
+        GetCommandOption( rArgs, rtl::OUString("format"), aFilterStr );
+        GetCommandOption( rArgs, rtl::OUString("filterpath"), aFilterPath );
+        GetCommandOption( rArgs, rtl::OUString('#'), aTransColStr );
 
         aFilter.SetFilterPath( aFilterPath );
 

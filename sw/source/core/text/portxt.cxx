@@ -521,7 +521,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
         if( nHoleLen == GetLen() )
             nBlankSize = Width();
         else
-            nBlankSize = nHoleLen * rInf.GetTxtSize( ' ' ).Width();
+            nBlankSize = nHoleLen * rInf.GetTxtSize(rtl::OUString(' ')).Width();
         Width( Width() - nBlankSize );
         rInf.X( rInf.X() - nBlankSize );
         SetLen( GetLen() - nHoleLen );
@@ -728,7 +728,7 @@ void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
     // #i16816# tagged pdf support
     if( rInf.GetVsh() && rInf.GetVsh()->GetViewOptions()->IsPDFExport() )
     {
-        const XubString aTxt( ' ' );
+        const rtl::OUString aTxt( ' ' );
         rInf.DrawText( aTxt, *this, 0, 1, false );
     }
 }

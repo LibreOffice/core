@@ -409,7 +409,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             uno::Sequence<PropertyValue> aInfo(4);
             PropertyValue* pInfo = aInfo.getArray();
             pInfo[0].Name = C2U("FieldDelimiter");
-            pInfo[0].Value <<= OUString(String('\t'));
+            pInfo[0].Value <<= OUString('\t');
             pInfo[1].Name = C2U("StringDelimiter");
             pInfo[1].Value <<= OUString('"');
             pInfo[2].Name = C2U("Extension");

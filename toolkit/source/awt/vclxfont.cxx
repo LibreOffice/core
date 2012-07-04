@@ -126,7 +126,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
         pOutDev->SetFont( maFont );
 
         nRet = sal::static_int_cast< sal_Int16 >(
-            pOutDev->GetTextWidth( String(c) ));
+            pOutDev->GetTextWidth( rtl::OUString(c) ));
 
         pOutDev->SetFont( aOldFont );
     }
@@ -150,7 +150,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
         {
             aSeq.getArray()[n] = sal::static_int_cast< sal_Int16 >(
                 pOutDev->GetTextWidth(
-                    String(static_cast< sal_Unicode >(nFirst+n)) ));
+                    rtl::OUString(static_cast< sal_Unicode >(nFirst+n)) ));
         }
 
         pOutDev->SetFont( aOldFont );

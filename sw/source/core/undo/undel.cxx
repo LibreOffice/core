@@ -467,7 +467,7 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     sal_Unicode cDelChar = pDelTxtNd->GetTxt().GetChar( pStt->nContent.GetIndex() );
     CharClass& rCC = GetAppCharClass();
     if( ( CH_TXTATR_BREAKWORD == cDelChar || CH_TXTATR_INWORD == cDelChar ) ||
-        rCC.isLetterNumeric( String( cDelChar ), 0 ) !=
+        rCC.isLetterNumeric( rtl::OUString( cDelChar ), 0 ) !=
         rCC.isLetterNumeric( *pSttStr, nUChrPos ) )
         return sal_False;
 

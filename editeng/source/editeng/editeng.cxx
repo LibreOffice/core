@@ -2724,7 +2724,7 @@ Rectangle EditEngine::GetBulletArea( sal_uInt16 )
 XubString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_uInt16, sal_uInt16, Color*&, Color*& )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return ' ';
+    return rtl::OUString(' ');
 }
 
 void EditEngine::FieldClicked( const SvxFieldItem&, sal_uInt16, sal_uInt16 )

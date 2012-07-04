@@ -606,7 +606,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                 {
                     SwSetExpFieldType aType(m_pDoc, sTypeName);
                     if(sParam1.Len())
-                        aType.SetDelimiter( sParam1.GetChar(0));
+                        aType.SetDelimiter(rtl::OUString(sParam1.GetChar(0)));
                     if(nParam1 > -1 && nParam1 < MAXLEVEL)
                         aType.SetOutlineLvl(nParam1);
                     pType2 = m_pDoc->InsertFldType(aType);

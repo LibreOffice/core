@@ -1960,11 +1960,11 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
     else
     {
         // direct API call on a specified object
-        String aCall( '[' );
-        aCall += String(INetURLObject::decode(aMacro.Copy(6), INET_HEX_ESCAPE,
-        INetURLObject::DECODE_WITH_CHARSET));
-        aCall += ']';
-        pAppMgr->GetLib(0)->Execute( aCall );
+        rtl::OUStringBuffer aCall;
+        aCall.append('[').append(INetURLObject::decode(aMacro.Copy(6), INET_HEX_ESCAPE,
+            INetURLObject::DECODE_WITH_CHARSET));
+        aCall.append(']');
+        pAppMgr->GetLib(0)->Execute(aCall.makeStringAndClear());
         nErr = SbxBase::GetError();
     }
 

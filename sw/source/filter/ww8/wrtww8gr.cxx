@@ -253,7 +253,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             bool bIsNotDuplicate = aRes.second; //.second is false when element already existed
             nPictureId = aRes.first->second;
             Set_UInt32(pDataAdr, nPictureId);
-            String sStorageName( '_' );
+            String sStorageName = rtl::OUString('_');
             sStorageName += String::CreateFromInt32( nPictureId );
             SvStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );

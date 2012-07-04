@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -1435,7 +1436,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     break;
                 case NF_SYMBOLTYPE_DEL:
-                    if ( pElemStr && *pElemStr == XubString('@') )
+                    if ( pElemStr && comphelper::string::equals(*pElemStr, '@') )
                     {
                         WriteTextContentElement_Impl();
                         bAnyContent = sal_True;

@@ -564,7 +564,7 @@ void SwSrcEditWindow::InitScrollBars()
     pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
     pHScrollbar->SetVisibleSize( aOutSz.Width() );
     pHScrollbar->SetPageSize( aOutSz.Width() * 8 / 10 );
-    pHScrollbar->SetLineSize( pOutWin->GetTextWidth( 'x' ) );
+    pHScrollbar->SetLineSize( pOutWin->GetTextWidth(rtl::OUString('x')) );
     pHScrollbar->SetThumbPos( pTextView->GetStartDocPos().X() );
 
 }

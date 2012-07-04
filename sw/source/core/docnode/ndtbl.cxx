@@ -1513,7 +1513,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
             {
                 // Inserting the seperator
                 SwIndex aCntIdx( pDelPara->pLastNd, pDelPara->pLastNd->GetTxt().Len());
-                pDelPara->pLastNd->InsertText( pDelPara->cCh, aCntIdx,
+                pDelPara->pLastNd->InsertText( rtl::OUString(pDelPara->cCh), aCntIdx,
                     IDocumentContentOperations::INS_EMPTYEXPAND );
                 if( pDelPara->pUndo )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),

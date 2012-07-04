@@ -596,7 +596,7 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
     rtl::OUString aValue = pEdit->GetText();
 
     if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
-        pEdit->SetText( '0' );
+        pEdit->SetText( rtl::OUString('0') );
     return 0;
 }
 
