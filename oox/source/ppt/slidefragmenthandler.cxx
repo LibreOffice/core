@@ -45,6 +45,7 @@
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/drawingml/clrschemecontext.hxx"
+#include "oox/ppt/pptimport.hxx"
 
 
 using rtl::OUString;
@@ -93,6 +94,40 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
         return this;
     }
     case PPT_TOKEN( notes ):            // CT_NotesSlide
+    {
+        // Import notesMaster
+        PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
+        OUString aNotesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "notesMaster" ) );
+        printf("notesMaster: %s\n", ::rtl::OUStringToOString(aNotesFragmentPath, RTL_TEXTENCODING_UTF8).getStr() );
+
+        std::vector< SlidePersistPtr >& rMasterPages( rFilter.getMasterPages() );
+        std::vector< SlidePersistPtr >::iterator aIter( rMasterPages.begin() );
+        while( aIter != rMasterPages.end() )
+        {
+            if( (*aIter)->getPath() == aNotesFragmentPath )
+            {
+                if( !mpSlidePersistPtr->getMasterPersist() )
+                    mpSlidePersistPtr->setMasterPersist( *aIter );
+                break;
+            }
+            ++aIter;
+        }
+        if( aIter == rMasterPages.end() && !mpSlidePersistPtr->getMasterPersist() )
+        {
+            TextListStylePtr pTextListStyle(new TextListStyle);
+            SlidePersistPtr pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, sal_True, sal_True, mpSlidePersistPtr->getPage(),
+                                ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpSlidePersistPtr->getNotesTextStyle() ) );
+            //pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
+            pMasterPersistPtr->setPath( aNotesFragmentPath );
+            rFilter.getMasterPages().push_back( pMasterPersistPtr );
+            FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aNotesFragmentPath, pMasterPersistPtr, Master ) );
+            rFilter.importFragment( xMasterFragmentHandler );
+            //pMasterPersistPtr->createBackground( rFilter );
+            //pMasterPersistPtr->createXShapes( rFilter );
+            mpSlidePersistPtr->setMasterPersist( pMasterPersistPtr );
+        }
+        return this;
+    }
     case PPT_TOKEN( notesMaster ):      // CT_NotesMaster
         return this;
     case PPT_TOKEN( cSld ):             // CT_CommonSlideData

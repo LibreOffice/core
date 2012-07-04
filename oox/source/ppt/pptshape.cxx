@@ -264,6 +264,10 @@ void PPTShape::addShape(
             // use placeholder index if possible
             if( mnSubType && getSubTypeIndex().has() && rSlidePersist.getMasterPersist().get() ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
+                // TODO: Check if this is required for non-notes slides as well...
+                if( rSlidePersist.isNotesPage() && pPlaceholder.get() && pPlaceholder->getSubType() != getSubType() )
+                    pPlaceholder.reset();
+
                 if( pPlaceholder.get()) {
                     OSL_TRACE("found placeholder with index: %d and type: %s", getSubTypeIndex().get(), lclDebugSubType( mnSubType ));
                 }
