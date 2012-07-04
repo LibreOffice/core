@@ -157,12 +157,12 @@ endef
 
 # NoexPrecompiledHeader class
 
-gb_NoexPrecompiledHeader_get_enableflags = -include-pch $(call gb_PrecompiledHeader_get_target,$(1))
+gb_NoexPrecompiledHeader_get_enableflags = -include-pch $(call gb_NoexPrecompiledHeader_get_target,$(1))
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
 	$(gb_CXX) \
 		-x c++-header \
 		$(4) $(5) \
