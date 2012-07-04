@@ -3741,7 +3741,7 @@ void SvxIconChoiceCtrl_Impl::SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCt
 
 const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16 nIndex ) const
 {
-    if( !pColumns || nIndex >= pColumns->size() )
+    if (!pColumns)
         return 0;
     SvxIconChoiceCtrlColumnInfoMap::const_iterator it = pColumns->find( nIndex );
     if( it == pColumns->end() )
