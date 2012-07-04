@@ -35,6 +35,8 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 
+#include <com/sun/star/awt/Rectangle.hpp>
+
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
 
@@ -81,6 +83,8 @@ public:
     // EnhancedCustomShapeGeometry.idl
     void dumpEnhancedCustomShapeGeometryService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
     void dumpTypeAsAttribute(rtl::OUString sType);
+    void dumpViewBoxAsElement(com::sun::star::awt::Rectangle aViewBox);
+    void dumpMirroredXAsAttribute(sal_Bool bMirroredX);
 
 private:
     xmlTextWriterPtr xmlWriter;

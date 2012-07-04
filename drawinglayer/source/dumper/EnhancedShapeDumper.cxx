@@ -403,9 +403,41 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
         if(anotherAny >>= sType)
             dumpTypeAsAttribute(sType);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("ViewBox");
+        awt::Rectangle aViewBox;
+        if(anotherAny >>= aViewBox)
+            dumpViewBoxAsElement(aViewBox);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("MirroredX");
+        sal_Bool bMirroredX;
+        if(anotherAny >>= bMirroredX)
+            dumpMirroredXAsAttribute(bMirroredX);
+    }
 }
 void EnhancedShapeDumper::dumpTypeAsAttribute(rtl::OUString sType)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
             rtl::OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());
     }
+
+void EnhancedShapeDumper::dumpViewBoxAsElement(awt::Rectangle aViewBox)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ViewBox" ));
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("x"), "%" SAL_PRIdINT32, aViewBox.X);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("y"), "%" SAL_PRIdINT32, aViewBox.Y);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aViewBox.Width);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aViewBox.Height);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+
+void EnhancedShapeDumper::dumpMirroredXAsAttribute(sal_Bool bMirroredX)
+    {
+        if(bMirroredX)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "false");
+    }
+
+
