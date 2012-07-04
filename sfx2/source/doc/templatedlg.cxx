@@ -170,6 +170,13 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maView->setTemplateStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
     maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
 
+    mpSearchView->SetSizePixel(aThumbSize);
+    mpSearchView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
+
+    mpSearchView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
+                                    ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
+                                    ITEM_PADDING);
+
     // Set OK button position
     Point aBtnPos;
     Size aBtnSize = maButtonClose.GetSizePixel();
@@ -626,6 +633,7 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
 
     SetSizePixel(aWinSize);
     maView->SetPosPixel(aPos);
+    mpSearchView->SetPosPixel(aPos);
     maButtonClose.SetPosPixel(aClosePos);
 
     // Hide search view
