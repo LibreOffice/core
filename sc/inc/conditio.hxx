@@ -344,10 +344,10 @@ public:
     typedef ConditionalFormatContainer::iterator iterator;
     typedef ConditionalFormatContainer::const_iterator const_iterator;
 
-    SC_DLLPUBLIC iterator begin();
-    SC_DLLPUBLIC const_iterator begin() const;
-    SC_DLLPUBLIC iterator end();
-    SC_DLLPUBLIC const_iterator end() const;
+    iterator begin();
+    const_iterator begin() const;
+    iterator end();
+    const_iterator end() const;
 
     size_t size() const;
 
