@@ -134,13 +134,13 @@ Control RID_COND_ENTRY
     Edit ED_VAL1
     {
         Pos = MAP_APPFONT( 125, 15 );
-        Size = MAP_APPFONT( 170, 12 );
+        Size = MAP_APPFONT( 160, 12 );
         Border = TRUE;
     };
     Edit ED_VAL2
     {
-        Pos = MAP_APPFONT( 215, 15 );
-        Size = MAP_APPFONT( 80, 12 );
+        Pos = MAP_APPFONT( 210, 15 );
+        Size = MAP_APPFONT( 75, 12 );
         Border = TRUE;
     };
     ListBox LB_STYLE
@@ -156,7 +156,7 @@ Control RID_COND_ENTRY
     };
     ListBox LB_COLOR_FORMAT
     {
-        Pos = MAP_APPFONT( 50, 15 );
+        Pos = MAP_APPFONT( 70, 15 );
         Size = MAP_APPFONT( 60, 60);
         Border = TRUE;
         DropDown = TRUE;
@@ -170,7 +170,7 @@ Control RID_COND_ENTRY
     ListBox LB_TYPE_COL_SCALE
     {
         Pos = MAP_APPFONT( 5, 32 );
-        Size = MAP_APPFONT( 50, 60 );
+        Size = MAP_APPFONT( 60, 60 );
         Border = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -186,7 +186,7 @@ Control RID_COND_ENTRY
     Edit ED_COL_SCALE
     {
         Pos = MAP_APPFONT( 5, 48 );
-        Size = MAP_APPFONT( 50, 12 );
+        Size = MAP_APPFONT( 60, 12 );
         Border = TRUE;
     };
     Window WD_PREVIEW

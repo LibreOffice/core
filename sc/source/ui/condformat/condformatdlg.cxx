@@ -320,7 +320,7 @@ void ScCondFrmtEntry::Init()
     Point aPointCol = maLbColMiddle.GetPosPixel();
     Point aPointEdDataBar = maEdDataBarMin.GetPosPixel();
     Point aPointLbDataBar = maLbDataBarMaxType.GetPosPixel();
-    const long nMovePos = 150;
+    const long nMovePos = 250;
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
     aPointCol.X() += nMovePos;
@@ -453,6 +453,7 @@ void ScCondFrmtEntry::SetCondType()
     HideColorScaleElements();
     HideDataBarElements();
     SwitchToType(CONDITION);
+    ConditionTypeSelectHdl(NULL);
 }
 
 void ScCondFrmtEntry::HideColorScaleElements()
@@ -565,7 +566,11 @@ void ScCondFrmtEntry::SetFormulaType()
     maEdVal2.Hide();
     maLbCondType.Hide();
     maLbStyle.Show();
+    maFtCondition.Show();
     maWdPreview.Show();
+    maFtStyle.Show();
+    Size aSize(440, 30);
+    maEdVal1.SetSizePixel(aSize);
 }
 
 void ScCondFrmtEntry::Select()
@@ -895,7 +900,7 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, ConditionTypeSelectHdl )
     else
     {
         maEdVal2.Hide();
-        Size aSize(193, 30);
+        Size aSize(440, 30);
         maEdVal1.SetSizePixel(aSize);
     }
     return 0;
