@@ -811,3 +811,11 @@ void EnhancedShapeDumper::dumpRadiusRangeMaximumAsElement(drawing::EnhancedCusto
     xmlTextWriterEndElement( xmlWriter );
 }
 
+// ------------------------------------------------------
+// ---------- EnhancedCustomShapePath.idl ---------------
+// ------------------------------------------------------
+
+void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< beans::XPropertySet > xPropSet)
+{
+
+}

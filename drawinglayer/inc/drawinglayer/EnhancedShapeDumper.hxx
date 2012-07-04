@@ -117,6 +117,9 @@ public:
     void dumpRadiusRangeMinimumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum);
     void dumpRadiusRangeMaximumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum);
 
+    // EnhancedCustomShapePath.idl
+    void dumpEnhancedCustomShapePathService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
+
 private:
     xmlTextWriterPtr xmlWriter;
 };
