@@ -817,5 +817,47 @@ void EnhancedShapeDumper::dumpRadiusRangeMaximumAsElement(drawing::EnhancedCusto
 
 void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< beans::XPropertySet > xPropSet)
 {
-
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Coordinates");
+        uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+        if(anotherAny >>= aCoordinates)
+            dumpCoordinatesAsElement(aCoordinates);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Segments");
+        uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments;
+        if(anotherAny >>= aSegments)
+            dumpSegmentsAsElement(aSegments);
+    }
 }
+
+void EnhancedShapeDumper::dumpCoordinatesAsElement(uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Coordinates" ));
+    sal_Int32 nLength = aCoordinates.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeParameterPair" ));
+        dumpEnhancedCustomShapeParameterPair(aCoordinates[i]);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpSegmentsAsElement(uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Segments" ));
+    sal_Int32 nLength = aSegments.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeSegment" ));
+        sal_Int32 aCommand = aSegments[i].Command;
+        sal_Int32 aCount = aSegments[i].Count;
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("command"), "%" SAL_PRIdINT32, aCommand);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("count"), "%" SAL_PRIdINT32, aCount);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+
