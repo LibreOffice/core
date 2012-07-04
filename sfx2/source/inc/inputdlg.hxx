@@ -22,6 +22,8 @@ public:
 
     InputDialog (const rtl::OUString &labelText, Window *pParent = NULL);
 
+    virtual ~InputDialog();
+
     rtl::OUString getEntryText () const;
 
 private:

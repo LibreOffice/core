@@ -63,6 +63,7 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/dialog/dinfdlg.src \
     sfx2/source/dialog/dinfedt.src \
     sfx2/source/dialog/filedlghelper.src \
+    sfx2/source/dialog/inputdlg.src \
     sfx2/source/dialog/mailwindow.src \
     sfx2/source/dialog/mgetempl.src \
     sfx2/source/dialog/newstyle.src \

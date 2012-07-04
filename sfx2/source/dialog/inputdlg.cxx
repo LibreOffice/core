@@ -9,43 +9,60 @@
 
 #include "inputdlg.hxx"
 
+#include "inputdlg.hrc"
+
+#include <sfx2/sfxresid.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 
-#define LABEL_TEXT_SPACE 10
-#define DIALOG_BORDER 10
-#define MAX_FOLDER_NAME_LENGTH 20
+#define LABEL_TEXT_SPACE 5
 
 InputDialog::InputDialog (const rtl::OUString &rLabelText, Window *pParent)
-    : ModalDialog(pParent),
-      mpEntry(new Edit(this)),
-      mpLabel(new FixedText(this))
+    : ModalDialog(pParent,SfxResId(DLG_INPUT_BOX)),
+      mpEntry(new Edit(this,SfxResId(EDT_INPUT_FIELD))),
+      mpLabel(new FixedText(this,SfxResId(LABEL_INPUT_TEXT))),
+      mpOK(new PushButton(this,SfxResId(BTN_INPUT_OK))),
+      mpCancel(new PushButton(this,SfxResId(BTN_INPUT_CANCEL)))
 {
     SetStyle(GetStyle() | WB_CENTER | WB_VCENTER);
 
-    Point aPos(DIALOG_BORDER,DIALOG_BORDER);
+    mpLabel->SetText(rLabelText);
 
-    Size aTextSize = mpLabel->CalcMinimumTextSize(mpLabel,100);
-    Size aEntrySize = mpEntry->CalcSize(MAX_FOLDER_NAME_LENGTH);
+    // Fit label size to text and reposition edit box
+    Size aLabelSize = mpLabel->CalcMinimumSize();
+    Size aEditSize = mpEntry->GetSizePixel();
+    Size aBtnSize = mpOK->GetSizePixel();
 
-    aTextSize.setWidth(aEntrySize.getHeight());
+    Point aLabelPos = mpLabel->GetPosPixel();
+    Point aEditPos = mpEntry->GetPosPixel();
 
-    mpLabel->SetPosPixel(Point(DIALOG_BORDER,DIALOG_BORDER));
-    mpLabel->SetSizePixel(aTextSize);
-    mpLabel->SetText(String("Enter name"));
+    aEditPos.setX(aLabelPos.getX() + aLabelSize.getWidth() + LABEL_TEXT_SPACE);
 
-    aPos.setX(DIALOG_BORDER + aTextSize.getWidth() + LABEL_TEXT_SPACE + DIALOG_BORDER);
+    mpLabel->SetPosSizePixel(aLabelPos,aLabelSize);
+    mpEntry->SetPosSizePixel(aEditPos,aEditSize);
 
-    mpEntry->SetPosPixel(aPos);
-    mpEntry->SetSizePixel(aEntrySize);
+    // Resize window if needed
+    Size aWinSize = GetOutputSize();
+    aWinSize.setWidth(aEditPos.getX() + aEditSize.getWidth() + LABEL_TEXT_SPACE);
+    SetSizePixel(aWinSize);
 
-    // Set windows correct size
-    SetSizePixel(Size(aTextSize.getWidth() + aEntrySize.getWidth() + 2*DIALOG_BORDER,
-                      aTextSize.getHeight()+2*DIALOG_BORDER));
+    // Align buttons
+    Point aBtnPos = mpCancel->GetPosPixel();
 
-    mpEntry->Show();
-    mpLabel->Show();
+    aBtnPos.setX(aWinSize.getWidth() - aBtnSize.getWidth() - LABEL_TEXT_SPACE);
+    mpCancel->SetPosPixel(aBtnPos);
+
+    aBtnPos.setX(aBtnPos.getX() - aBtnSize.getWidth() - LABEL_TEXT_SPACE);
+    mpOK->SetPosPixel(aBtnPos);
+}
+
+InputDialog::~InputDialog()
+{
+    delete mpEntry;
+    delete mpLabel;
+    delete mpOK;
+    delete mpCancel;
 }
 
 rtl::OUString InputDialog::getEntryText () const
