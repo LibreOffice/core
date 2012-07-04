@@ -231,6 +231,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpViewBar;
     delete mpActionBar;
     delete mpTemplateBar;
+    delete mpSearchView;
     delete maView;
     delete mpCreateMenu;
     delete mpActionMenu;
