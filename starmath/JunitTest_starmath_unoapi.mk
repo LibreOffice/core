@@ -43,10 +43,6 @@ $(eval $(call gb_JunitTest_use_jars,starmath_unoapi,\
     $(OUTDIR)/bin/jurt.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_sourcefiles,starmath_unoapi,\
-	starmath/qa/unoapi/Test \
-))
-
 $(eval $(call gb_JunitTest_add_classes,starmath_unoapi,\
     org.openoffice.test.UnoApiTest \
 ))
