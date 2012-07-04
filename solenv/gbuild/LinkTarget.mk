@@ -876,6 +876,10 @@ $(call gb_CxxObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CxxObject_get_dep_target,$(2))
+# It is not known by this time (or at least I don't know how to find out) which
+# PCH variant will be used, so depend on both.
+$(call gb_CxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(1))
+$(call gb_CxxObject_get_target,$(2)) : $(call gb_NoexPrecompiledHeader_get_timestamp,$(1))
 endif
 
 endef
@@ -1207,6 +1211,8 @@ ifeq ($(gb_FULLDEPS),$(true))
 -include \
 	$(call gb_PrecompiledHeader_get_dep_target,$(3)) \
 	$(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
+$(call gb_PrecompiledHeader_get_timestamp,$(1)) : $(call gb_PrecompiledHeader_get_target,$(3))
+$(call gb_NoexPrecompiledHeader_get_timestamp,$(1)) : $(call gb_NoexPrecompiledHeader_get_target,$(3))
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(DEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1))

@@ -63,6 +63,7 @@ $(call gb_PrecompiledHeader_get_clean_target,%) :
 		rm -f $(call gb_PrecompiledHeader_get_target,$*) \
 			$(call gb_PrecompiledHeader_get_target,$*).obj \
 			$(call gb_PrecompiledHeader_get_target,$*).pdb \
+			$(call gb_PrecompiledHeader_get_timestamp,$*) \
 			$(call gb_PrecompiledHeader_get_dep_target,$*))
 
 
@@ -72,7 +73,14 @@ $(call gb_NoexPrecompiledHeader_get_clean_target,%) :
 		rm -f $(call gb_NoexPrecompiledHeader_get_target,$*) \
 			$(call gb_NoexPrecompiledHeader_get_target,$*).obj \
 			$(call gb_NoexPrecompiledHeader_get_target,$*).pdb \
+			$(call gb_NoexPrecompiledHeader_get_timestamp,$*) \
 			$(call gb_NoexPrecompiledHeader_get_dep_target,$*))
 endif
+
+$(call gb_PrecompiledHeader_get_timestamp,%) :
+	mkdir -p $(dir $@) && touch $@
+
+$(call gb_NoexPrecompiledHeader_get_timestamp,%) :
+	mkdir -p $(dir $@) && touch $@
 
 # vim: set noet sw=4:
