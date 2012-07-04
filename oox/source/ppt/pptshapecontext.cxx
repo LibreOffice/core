@@ -65,14 +65,17 @@ PPTShapeContext::PPTShapeContext( ContextHandler& rParent, const SlidePersistPtr
 oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, const OptValue< sal_Int32 >& oSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes )
 {
     oox::drawingml::ShapePtr aShapePtr;
-    oox::drawingml::ShapePtr aTmpShapePtr;
+    oox::drawingml::ShapePtr aChoiceShapePtr1;
+    oox::drawingml::ShapePtr aChoiceShapePtr2;
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
     while( aRevIter != rShapes.rend() )
     {
         if ( (*aRevIter)->getSubType() == nMasterPlaceholder )
         {
-            if( !oSubTypeIndex.has() && aTmpShapePtr == NULL )
-                aTmpShapePtr = *aRevIter;
+            if( !oSubTypeIndex.has() && aChoiceShapePtr1 == NULL )
+                aChoiceShapePtr1 = *aRevIter;
+            else if( aChoiceShapePtr2 == NULL )
+                aChoiceShapePtr2 = *aRevIter;
             if( (*aRevIter)->getSubTypeIndex() == oSubTypeIndex )
             {
                 aShapePtr = *aRevIter;
@@ -86,7 +89,7 @@ oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, co
         ++aRevIter;
     }
     if( aShapePtr == NULL )
-        return aTmpShapePtr;
+        return aChoiceShapePtr1 ? aChoiceShapePtr1 : aChoiceShapePtr2;
     return aShapePtr;
 }
 
@@ -185,9 +188,13 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                                   if ( pMasterPersist.get() ) {
                                       if( pPPTShapePtr->getSubTypeIndex().has() )
                                           pPlaceholder = PPTShape::findPlaceholderByIndex( pPPTShapePtr->getSubTypeIndex().get(), pMasterPersist->getShapes()->getChildren() );
-                                      if ( !pPlaceholder.get() )
+                                      // TODO: Check if this is required for non-notes pages as well...
+                                      if ( !pPlaceholder.get() || ( pMasterPersist->isNotesPage() && pPlaceholder->getSubType() != nFirstPlaceholder &&
+                                                                                                     pPlaceholder->getSubType() != nSecondPlaceholder ) )
+                                      {
                                           pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
                                                                           pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
+                                      }
                                   }
                               }
                               if ( pPlaceholder.get() )
