@@ -700,6 +700,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< b
         if(anotherAny >>= aRangeYMaximum)
             dumpRangeYMaximumAsElement(aRangeYMaximum);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RadiusRangeMinimum");
+        drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
+        if(anotherAny >>= aRadiusRangeMinimum)
+            dumpRadiusRangeMinimumAsElement(aRadiusRangeMinimum);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RadiusRangeMaximum");
+        drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
+        if(anotherAny >>= aRadiusRangeMaximum)
+            dumpRadiusRangeMaximumAsElement(aRadiusRangeMaximum);
+    }
 }
 
 void EnhancedShapeDumper::dumpSwitchedAsAttribute(sal_Bool bSwitched)
@@ -782,6 +794,20 @@ void EnhancedShapeDumper::dumpRangeYMaximumAsElement(drawing::EnhancedCustomShap
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeYMaximum" ));
     dumpEnhancedCustomShapeParameter(aRangeYMaximum);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpRadiusRangeMinimumAsElement(drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RadiusRangeMinimum" ));
+    dumpEnhancedCustomShapeParameter(aRadiusRangeMinimum);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpRadiusRangeMaximumAsElement(drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RadiusRangeMaximum" ));
+    dumpEnhancedCustomShapeParameter(aRadiusRangeMaximum);
     xmlTextWriterEndElement( xmlWriter );
 }
 

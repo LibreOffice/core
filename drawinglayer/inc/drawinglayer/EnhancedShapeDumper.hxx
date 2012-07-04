@@ -114,6 +114,8 @@ public:
     void dumpRangeXMaximumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
     void dumpRangeYMinimumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMinimum);
     void dumpRangeYMaximumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
+    void dumpRadiusRangeMinimumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum);
+    void dumpRadiusRangeMaximumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum);
 
 private:
     xmlTextWriterPtr xmlWriter;
