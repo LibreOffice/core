@@ -30,8 +30,6 @@
 
 #include <rtfdocumentimpl.hxx>
 
-class SvStream;
-
 namespace writerfilter {
     namespace rtftok {
         /// Skips a destination after a not parsed control word if it was prefixed with \*

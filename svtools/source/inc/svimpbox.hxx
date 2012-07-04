@@ -40,11 +40,9 @@
 
 class SvTreeListBox;
 class Point;
-class DropEvent;
 class SvLBoxTreeList;
 class SvImpLBox;
 class SvLBoxEntry;
-class SvLBoxItem;
 class SvLBoxTab;
 class TabBar;
 namespace comphelper

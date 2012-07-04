@@ -36,7 +36,6 @@ namespace basegfx
     class B2DPoint;
     class B2DRange;
     class B2DHomMatrix;
-    class B2IPoint;
     class B2IRange;
     class B2DPolyPolygon;
 };
@@ -49,8 +48,6 @@ namespace com { namespace sun { namespace star { namespace geometry
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
-    class  XCanvas;
-    class  XGraphicDevice;
     class  XBitmap;
     class  XPolyPolygon2D;
     class  XCanvasFont;

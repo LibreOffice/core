@@ -31,8 +31,6 @@
 #include <map>
 #include <resourcemodel/WW8ResourceModel.hxx>
 
-class SvStream;
-
 namespace writerfilter {
     namespace rtftok {
         /// Sends tables (e.g. font table) to the domain mapper.

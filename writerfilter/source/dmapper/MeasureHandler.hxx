@@ -26,7 +26,6 @@
 namespace writerfilter {
 namespace dmapper
 {
-class PropertyMap;
 /** Handler for sprms that contain a measure and a unit
     - Left indent of tables
     - Preferred width of tables

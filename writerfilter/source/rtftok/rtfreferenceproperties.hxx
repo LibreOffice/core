@@ -30,8 +30,6 @@
 
 #include <rtfsprm.hxx>
 
-class SvStream;
-
 namespace writerfilter {
     namespace rtftok {
         /// Sends RTFSprm instances to DomainMapper.

@@ -35,7 +35,6 @@
 
 class SvTokenStream;
 class SvMetaObject;
-class SvAttributeList;
 class SvIdlDataBase;
 
 typedef SvMetaObject * (*CreateMetaObjectType)();

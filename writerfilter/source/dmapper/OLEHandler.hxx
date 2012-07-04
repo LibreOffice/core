@@ -28,9 +28,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 
 namespace com{ namespace sun{ namespace star{
-    namespace embed{
-        class XEmbeddedObject;
-    }
     namespace graphic{
         class XGraphic;
     }
@@ -39,9 +36,6 @@ namespace com{ namespace sun{ namespace star{
     }
     namespace text{
         class XTextDocument;
-    }
-    namespace uno{
-        class XComponentContext;
     }
 }}}
 namespace writerfilter {

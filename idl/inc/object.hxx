@@ -77,7 +77,6 @@ public:
 SV_DECL_IMPL_REF(SvClassElement)
 SV_DECL_IMPL_PERSIST_LIST(SvClassElement,SvClassElement *)
 
-class SvMetaModule;
 SV_DECL_PERSIST_LIST(SvMetaClass,SvMetaClass *)
 class SvMetaClass : public SvMetaType
 {

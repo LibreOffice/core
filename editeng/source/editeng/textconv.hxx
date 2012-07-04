@@ -26,8 +26,6 @@
 #include <editeng/hangulhanja.hxx>
 
 class EditView;
-class ImpEditEngine;
-class ContentNode;
 
 class TextConvWrapper : public editeng::HangulHanjaConversion
 {

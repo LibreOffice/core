@@ -42,8 +42,6 @@
 
 namespace dxcanvas
 {
-    class SpriteCanvas;
-
     typedef ::boost::shared_ptr< Gdiplus::Font >        FontSharedPtr;
     typedef ::boost::shared_ptr< Gdiplus::FontFamily >  FontFamilySharedPtr;
 

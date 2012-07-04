@@ -34,8 +34,6 @@
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <comphelper/uno3.hxx>
 
-class BasicManager;
-
 namespace basic
 {
 

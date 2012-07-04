@@ -37,7 +37,6 @@
 namespace cairocanvas
 {
     class SpriteCanvas;
-    class SpriteCanvasHelper;
 
     class SpriteDeviceHelper : public DeviceHelper
     {

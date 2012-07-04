@@ -36,8 +36,6 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class SfxStyleSheetPool;
-
 class XEditAttribute
 {
 private:

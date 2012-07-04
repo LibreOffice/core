@@ -27,8 +27,6 @@
 namespace writerfilter {
 namespace dmapper
 {
-class PropertyMap;
-
 struct _Column
 {
     sal_Int32 nWidth;

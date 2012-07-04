@@ -49,7 +49,6 @@ class SvxCharScaleWidthItem;
 class SvxColorItem;
 class SvxAutoKernItem;
 class SvxKerningItem;
-class SvxCharSetColorItem;
 class SvxWordLineModeItem;
 class SvxFieldItem;
 class SvxLanguageItem;

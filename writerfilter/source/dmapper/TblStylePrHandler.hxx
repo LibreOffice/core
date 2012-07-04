@@ -31,7 +31,6 @@ namespace writerfilter {
 namespace dmapper {
 
 class DomainMapper;
-class PropertyMap;
 
 enum TblStyleType
 {

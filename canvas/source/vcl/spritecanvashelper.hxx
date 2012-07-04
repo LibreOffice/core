@@ -34,7 +34,6 @@
 
 namespace vclcanvas
 {
-    class RedrawManager;
     class SpriteCanvas;
 
     class SpriteCanvasHelper : public CanvasHelper

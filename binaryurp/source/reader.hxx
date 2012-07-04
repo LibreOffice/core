@@ -32,7 +32,6 @@
 #include "readerstate.hxx"
 
 namespace binaryurp {
-    class BinaryAny;
     class Bridge;
     class Unmarshal;
 }

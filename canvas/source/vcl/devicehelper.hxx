@@ -37,8 +37,6 @@
 
 namespace vclcanvas
 {
-    class Canvas;
-
     class DeviceHelper : private ::boost::noncopyable
     {
     public:

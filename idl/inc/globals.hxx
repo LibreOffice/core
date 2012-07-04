@@ -26,7 +26,6 @@
 #undef _Export
 #endif
 
-class SvIdlWorkingBase;
 class SvClassManager;
 struct SvGlobalHashNames
 {

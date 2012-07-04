@@ -33,9 +33,6 @@
 #include <stdio.h>
 
 class EditEngine;
-class ParaPortion;
-class EditUndoList;
-class TextPortionList;
 class SfxItemSet;
 class SfxItemPool;
 class SfxPoolItem;

@@ -124,7 +124,6 @@ struct SbiGosubStack {              // GOSUB-Stack:
 #define Sb_ATTR_ARCHIVE     0x0020
 
 
-class Dir;
 class WildCard;
 
 class SbiRTLData

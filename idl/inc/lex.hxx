@@ -41,7 +41,6 @@ enum SVTOKEN_ENUM { SVTOKEN_EMPTY,      SVTOKEN_COMMENT,
                     SVTOKEN_CHAR,       SVTOKEN_RTTIBASE,
                     SVTOKEN_EOF,        SVTOKEN_HASHID };
 
-class BigInt;
 class SvToken
 {
 friend class SvTokenStream;

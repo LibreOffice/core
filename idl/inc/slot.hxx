@@ -32,7 +32,6 @@
 #include <types.hxx>
 #include <command.hxx>
 
-class SvMetaSlotMemberList;
 class SvMetaSlot : public SvMetaAttribute
 {
     SvMetaTypeRef   aSlotType;

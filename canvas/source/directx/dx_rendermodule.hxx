@@ -30,7 +30,6 @@ class Window;
 namespace basegfx
 {
     class B2IRange;
-    class B2DVector;
 }
 
 namespace dxcanvas

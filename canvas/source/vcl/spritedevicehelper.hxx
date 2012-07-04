@@ -38,9 +38,6 @@
 
 namespace vclcanvas
 {
-    class SpriteCanvas;
-    class SpriteCanvasHelper;
-
     class SpriteDeviceHelper : public DeviceHelper
     {
     public:

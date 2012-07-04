@@ -41,7 +41,6 @@ class ListBox;
 class Button;
 
 class PathDialog;
-class FileDialog;
 class ImpPathDialog;
 
 struct ImpFilterItem

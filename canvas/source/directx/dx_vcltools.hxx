@@ -26,11 +26,6 @@
 #include <boost/shared_ptr.hpp>
 
 
-namespace com { namespace sun { namespace star { namespace lang
-{
-    class XUnoTunnel;
-} } } }
-
 namespace Gdiplus { class Graphics; }
 
 namespace dxcanvas

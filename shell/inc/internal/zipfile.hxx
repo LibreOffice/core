@@ -44,7 +44,6 @@
 #include <memory>
 
 class StreamInterface;
-class ZipFilePrivate;
 
 /** A simple zip content provider based on the zlib
 */

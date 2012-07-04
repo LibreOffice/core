@@ -34,14 +34,8 @@
 
 /* Definition of DeviceHelper class */
 
-struct SystemEnvData;
-class Window;
-
 namespace cairocanvas
 {
-    class Canvas;
-    class CanvasHelper;
-
     class DeviceHelper : private ::boost::noncopyable
     {
     public:

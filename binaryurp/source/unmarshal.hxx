@@ -39,7 +39,6 @@ namespace com { namespace sun { namespace star { namespace uno {
     class TypeDescription;
 } } } }
 namespace rtl {
-    class ByteSequecne;
     class OUString;
 }
 

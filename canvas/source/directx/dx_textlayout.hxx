@@ -38,8 +38,6 @@
 
 
 /* Definition of TextLayout class */
-class DXBitmapSharedPtr;
-
 namespace dxcanvas
 {
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XTextLayout,

@@ -32,7 +32,6 @@
 namespace nullcanvas
 {
     class SpriteCanvas;
-    class SpriteCanvasHelper;
 
     class DeviceHelper : private ::boost::noncopyable
     {

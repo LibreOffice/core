@@ -45,14 +45,6 @@ namespace basegfx
     {
         class B2DHomMatrix;
     }
-    namespace vector
-    {
-        class B2DVector;
-    }
-    namespace point
-    {
-        class B2DPoint;
-    }
 }
 
 namespace com { namespace sun { namespace star { namespace awt
@@ -78,9 +70,7 @@ namespace com { namespace sun { namespace star { namespace rendering
 {
     struct RenderState;
     struct ViewState;
-    class  XCanvas;
     class  XBitmap;
-    class  XPolyPolygon2D;
 } } } }
 
 

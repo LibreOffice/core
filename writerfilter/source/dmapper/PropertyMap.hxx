@@ -36,7 +36,6 @@ namespace com{namespace sun{namespace star{
     struct PropertyValue;
     }
     namespace container{
-        class XNameAccess;
         class XNameContainer;
     }
     namespace lang{

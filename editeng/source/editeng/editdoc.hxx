@@ -46,7 +46,6 @@
 
 class ImpEditEngine;
 class SvxTabStop;
-class SvtCTLOptions;
 
 DBG_NAMEEX( EE_TextPortion )
 

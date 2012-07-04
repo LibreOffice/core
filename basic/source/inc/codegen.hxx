@@ -29,7 +29,6 @@
 #ifndef _CODEGEN_HXX
 #define _CODEGEN_HXX
 
-class SbiImage;
 class SbiParser;
 class SbModule;
 #include "opcodes.hxx"

@@ -36,7 +36,6 @@
 namespace dxcanvas
 {
     class SpriteCanvas;
-    class SpriteCanvasHelper;
 
     class SpriteDeviceHelper : public DeviceHelper
     {
