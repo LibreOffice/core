@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -87,6 +88,7 @@ public:
     void dumpMirroredXAsAttribute(sal_Bool bMirroredX);
     void dumpMirroredYAsAttribute(sal_Bool bMirroredY);
     void dumpTextRotateAngleAsAttribute(double aTextRotateAngle);
+    void dumpAdjustmentValuesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues);
 
 private:
     xmlTextWriterPtr xmlWriter;

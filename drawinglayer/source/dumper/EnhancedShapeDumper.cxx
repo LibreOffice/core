@@ -427,6 +427,12 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
         if(anotherAny >>= aTextRotateAngle)
             dumpTextRotateAngleAsAttribute(aTextRotateAngle);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("AdjustmentValues");
+        uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
+        if(anotherAny >>= aAdjustmentValues)
+            dumpAdjustmentValuesAsElement(aAdjustmentValues);
+    }
 }
 void EnhancedShapeDumper::dumpTypeAsAttribute(rtl::OUString sType)
     {
@@ -465,4 +471,36 @@ void EnhancedShapeDumper::dumpTextRotateAngleAsAttribute(double aTextRotateAngle
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textRotateAngle"), "%f", aTextRotateAngle);
     }
 
+void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "AdjustmentValues" ));
+        sal_Int32 nLength = aAdjustmentValues.getLength();
+        for (sal_Int32 i = 0; i < nLength; ++i)
+        {
+            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeAdjustmentValue" ));
+            uno::Any aAny = aAdjustmentValues[i].Value;
+            rtl::OUString sValue;
+            if(aAny >>= sValue)
+            {
+                xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+                    rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+            }
+            switch(aAdjustmentValues[i].State)
+            {
+                case beans::PropertyState_DIRECT_VALUE:
+                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
+                    break;
+                case beans::PropertyState_DEFAULT_VALUE:
+                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
+                    break;
+                case beans::PropertyState_AMBIGUOUS_VALUE:
+                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
+                    break;
+                default:
+                    break;
+            }
+            xmlTextWriterEndElement( xmlWriter );
+        }
+        xmlTextWriterEndElement( xmlWriter );
+    }
 
