@@ -941,7 +941,7 @@ SvNumberformat::SvNumberformat(String& rString,
                         if (pSc->GetNatNumModifier() && !NumFor[nIndex].GetNatNum().IsSet())
                         {
                             rtl::OUString aNat( "[NatNum");
-                            aNat += rtl::OUString::valueOf( pSc->GetNatNumModifier());
+                            aNat += rtl::OUString::valueOf( sal_Int32(pSc->GetNatNumModifier()));
                             aNat += "]";
                             sStr.Insert( aNat, 0);
                             NumFor[nIndex].SetNatNumNum( pSc->GetNatNumModifier(), false );
