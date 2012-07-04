@@ -47,6 +47,8 @@ void TemplateSearchView::AppendItem(sal_uInt16 nItemId, sal_uInt16 nRegionId, sa
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
 
     mItemList.push_back(pItem);
+
+    CalculateItemPositions();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -64,6 +64,24 @@ public:
     }
 };
 
+class SearchView_Keyword
+{
+public:
+
+    SearchView_Keyword (const rtl::OUString &rKeyword)
+        : maKeyword(rKeyword)
+    {}
+
+    bool operator() (const ThumbnailViewItem *pItem)
+    {
+        return pItem->maText.indexOf(maKeyword) != -1;
+    }
+
+private:
+
+    rtl::OUString maKeyword;
+};
+
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModalDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
       aButtonAll(this,SfxResId(BTN_SELECT_ALL)),
@@ -523,11 +541,40 @@ IMPL_LINK (SfxTemplateManagerDlg, SearchUpdateHdl, Edit*, pEdit)
     // if the search view is hidden, hide the folder view and display search one
     if (!mpSearchView->IsVisible())
     {
+        mpSearchView->Clear();
         mpSearchView->Show();
         maView->Hide();
     }
 
-    mpSearchView->Clear();
+    rtl::OUString aKeyword = mpSearchEdit->GetText();
+
+    if (!aKeyword.isEmpty())
+    {
+        mpSearchView->Clear();
+
+        std::vector<std::pair<sal_uInt16,std::vector<ThumbnailViewItem*> > > aItems =
+                maView->getFilteredItems(SearchView_Keyword(aKeyword));
+
+        size_t nCounter = 0;
+        for (size_t i = 0; i < aItems.size(); ++i)
+        {
+            sal_uInt16 nRegionId = aItems[i].first;
+            std::vector<ThumbnailViewItem*> &rRegionItems = aItems[i].second;
+
+            for (size_t j = 0; j < rRegionItems.size(); ++j)
+            {
+                TemplateViewItem *pItem = static_cast<TemplateViewItem*>(rRegionItems[j]);
+
+                mpSearchView->AppendItem(++nCounter,nRegionId,
+                                         pItem->mnId-1,
+                                         pItem->maText,
+                                         pItem->getPath(),
+                                         pItem->maPreview1);
+            }
+        }
+
+        mpSearchView->Invalidate();
+    }
 
     return 0;
 }

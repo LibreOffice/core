@@ -394,6 +394,31 @@ void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
     }
 }
 
+std::vector<std::pair<sal_uInt16,std::vector<ThumbnailViewItem*> > >
+TemplateFolderView::getFilteredItems(const boost::function<bool (const ThumbnailViewItem*) > &rFunc) const
+{
+    std::vector<ThumbnailViewItem*> aRegionItems;
+    std::vector<std::pair<sal_uInt16,std::vector<ThumbnailViewItem*> > > aItems;
+
+    for (size_t i = 0; i < mItemList.size(); ++i)
+    {
+        TemplateFolderViewItem *pFolderItem = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+
+        sal_uInt16 nRegionId = pFolderItem->mnId-1;
+
+        for (size_t j = 0; j < pFolderItem->maTemplates.size(); ++j)
+        {
+            if (rFunc(pFolderItem->maTemplates[j]))
+                aRegionItems.push_back(pFolderItem->maTemplates[j]);
+        }
+
+        aItems.push_back(std::make_pair(nRegionId,aRegionItems));
+        aRegionItems.clear();
+    }
+
+    return aItems;
+}
+
 void TemplateFolderView::sortOverlayItems(const boost::function<bool (const ThumbnailViewItem*,
                                                                       const ThumbnailViewItem*) > &func)
 {

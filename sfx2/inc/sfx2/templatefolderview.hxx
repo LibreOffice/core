@@ -49,6 +49,9 @@ public:
 
     void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
+    std::vector<std::pair<sal_uInt16,std::vector<ThumbnailViewItem*> > >
+        getFilteredItems (const boost::function<bool (const ThumbnailViewItem*) > &rFunc) const;
+
     void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
                                                        const ThumbnailViewItem*) > &func);
 
