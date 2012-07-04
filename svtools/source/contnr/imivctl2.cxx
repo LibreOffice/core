@@ -31,8 +31,6 @@
 IcnCursor_Impl::IcnCursor_Impl( SvxIconChoiceCtrl_Impl* pOwner )
 {
     pView       = pOwner;
-    pColumns    = 0;
-    pRows       = 0;
     pCurEntry   = 0;
     nDeltaWidth = 0;
     nDeltaHeight= 0;
@@ -42,8 +40,6 @@ IcnCursor_Impl::IcnCursor_Impl( SvxIconChoiceCtrl_Impl* pOwner )
 
 IcnCursor_Impl::~IcnCursor_Impl()
 {
-    delete[] pColumns;
-    delete[] pRows;
 }
 
 sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, long nValue,
@@ -79,8 +75,8 @@ void IcnCursor_Impl::ImplCreate()
 
     SetDeltas();
 
-    pColumns = new IconChoiceMap;
-    pRows = new IconChoiceMap;
+    pColumns.reset(new IconChoiceMap);
+    pRows.reset(new IconChoiceMap);
 
     size_t nCount = pView->aEntries.size();
     for( size_t nCur = 0; nCur < nCount; nCur++ )
@@ -117,10 +113,8 @@ void IcnCursor_Impl::Clear()
 {
     if( pColumns )
     {
-        delete[] pColumns;
-        delete[] pRows;
-        pColumns = 0;
-        pRows = 0;
+        pColumns.reset();
+        pRows.reset();
         pCurEntry = 0;
         nDeltaWidth = 0;
         nDeltaHeight = 0;
@@ -159,12 +153,13 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
         else
         {
             SvxIconChoiceCtrlEntryPtrVec::const_reverse_iterator it2(it);
-            while( ++it2 != rList.rend() )
+            while (it2 != rList.rend())
             {
                 SvxIconChoiceCtrlEntry* pEntry = *it2;
                 const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
                 if( rRect.Top() < rRefRect.Top() )
                     return pEntry;
+                ++it2;
             }
             return 0;
         }
@@ -233,12 +228,13 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
         else
         {
             SvxIconChoiceCtrlEntryPtrVec::const_reverse_iterator it2(it);
-            while( ++it2 != rList.rend() )
+            while (it2 != rList.rend())
             {
-                SvxIconChoiceCtrlEntry* pEntry = *it;
+                SvxIconChoiceCtrlEntry* pEntry = *it2;
                 const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
                 if( rRect.Left() < rRefRect.Left() )
                     return pEntry;
+                ++it2;
             }
             return 0;
         }

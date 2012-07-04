@@ -2985,9 +2985,11 @@ void SvxIconChoiceCtrl_Impl::AdjustEntryAtGrid( SvxIconChoiceCtrlEntry* pStart )
 {
     IconChoiceMap aLists;
     pImpCursor->CreateGridAjustData( aLists, pStart );
-    const sal_uInt16 nCount = aLists.size();
-    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
-        AdjustAtGrid( aLists[ nCur ], pStart );
+    for (IconChoiceMap::const_iterator iter = aLists.begin();
+            iter != aLists.end(); ++iter)
+    {
+        AdjustAtGrid(iter->second, pStart);
+    }
     IcnCursor_Impl::DestroyGridAdjustData( aLists );
     CheckScrollBars();
 }
