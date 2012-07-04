@@ -150,13 +150,13 @@ function getDefaultKeyCodeDictionary()
     keyCodeDict[SLIDE_MODE][RIGHT_KEY]
         = function() { return dispatchEffects(1); };
     keyCodeDict[SLIDE_MODE][UP_KEY]
-        = function() { return skipEffects(-1); };
+        = function() { return aSlideShow.rewindEffect(); };
     keyCodeDict[SLIDE_MODE][DOWN_KEY]
         = function() { return skipEffects(1); };
     keyCodeDict[SLIDE_MODE][PAGE_UP_KEY]
-        = function() { return switchSlide( -1, true ); };
+        = function() { return aSlideShow.rewindAllEffects(); };
     keyCodeDict[SLIDE_MODE][PAGE_DOWN_KEY]
-        = function() { return switchSlide( 1, true ); };
+        = function() { return skipAllEffects(); };
     keyCodeDict[SLIDE_MODE][HOME_KEY]
         = function() { return aSlideShow.displaySlide( 0, true ); };
     keyCodeDict[SLIDE_MODE][END_KEY]
@@ -1433,7 +1433,7 @@ var NAVDBG = new DebugPrinter();
 NAVDBG.off();
 
 var ANIMDBG = new DebugPrinter();
-ANIMDBG.off();
+ANIMDBG.on();
 
 var aRegisterEventDebugPrinter = new DebugPrinter();
 aRegisterEventDebugPrinter.off();
@@ -2985,6 +2985,15 @@ function dispatchEffects(dir)
     }
 }
 
+function skipAllEffects()
+{
+    var bRet = aSlideShow.skipAllEffects();
+    if( !bRet )
+    {
+        switchSlide( 1, true );
+    }
+}
+
 function skipEffects(dir)
 {
     if( dir == 1 )
@@ -2993,12 +3002,12 @@ function skipEffects(dir)
 
         if( !bRet )
         {
-            switchSlide( 1, false );
+            switchSlide( 1, true );
         }
     }
     else
     {
-        switchSlide( dir, false );
+        switchSlide( dir, true );
     }
 }
 
@@ -10725,7 +10734,7 @@ function FromToByActivityTemplate( BaseType ) // template parameter
         this.nIteration = 0;
         this.bCumulative = bAccumulate;
 
-        this.initAnimatedElement();
+        //this.initAnimatedElement();
 
     }
     extend( FromToByActivity, BaseType );
@@ -10931,7 +10940,7 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
         this.bCumulative = bAccumulate;
         this.aLastValue = this.aValueList[ this.aValueList.length - 1 ];
 
-        this.initAnimatedElement();
+        //this.initAnimatedElement();
     }
     extend( ValueListActivity, BaseType );
 
@@ -10943,7 +10952,7 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
             ANIMDBG.print( 'createValueListActivity: value[' + i + '] = ' + this.aValueList[i] );
         }
 
-        this.initAnimatedElement();
+        //this.initAnimatedElement();
     };
 
     ValueListActivity.prototype.initAnimatedElement = function()
@@ -11283,6 +11292,7 @@ function SlideShow()
     this.bIsEnabled = true;
     this.bIsRewinding = false;
     this.bIsSkipping = false;
+    this.bIsSkippingAll = false;
     this.bNoSlideTransition = false;
 }
 
@@ -11422,30 +11432,6 @@ SlideShow.prototype.skipCurrentEffect = function()
     this.bIsSkipping = false;
 };
 
-/** rewindEffect
- *  Rewind the current playing effect or the last played one.
- *
- */
-SlideShow.prototype.rewindEffect = function()
-{
-    if( this.bIsSkipping || this.bIsRewinding )
-        return true;
-
-    this.bIsRewinding = true;
-    if( this.isRunning() )
-    {
-        this.aEventMultiplexer.notifyRewindCurrentEffectEvent();
-    }
-    else
-    {
-        this.aEventMultiplexer.notifyRewindLastEffectEvent();
-    }
-    if( this.nCurrentEffect > 0 )
-        --this.nCurrentEffect;
-    this.update();
-    this.bIsRewinding = false;
-};
-
 /** skipEffect
  *  Skip the next effect to be played.
  *
@@ -11476,6 +11462,105 @@ SlideShow.prototype.skipEffect = function()
     this.update();
     this.bIsSkipping = false;
     return true;
+};
+
+/** skipAllEffects
+ *  Skip all left effects on the current slide.
+ *
+ *  @return {Boolean}
+ *      True if it already skipping or when it has ended skipping,
+ *      false if the next slide needs to be displayed.
+ */
+SlideShow.prototype.skipAllEffects = function()
+{
+    if( this.bIsSkippingAll )
+        return true;
+
+    this.bIsSkippingAll = true;
+    if( this.isRunning() )
+    {
+        this.skipCurrentEffect();
+    }
+    else if( !this.aNextEffectEventArray
+               || ( this.nCurrentEffect >= this.aNextEffectEventArray.size() ) )
+    {
+        this.bIsSkippingAll = false;
+        return false;
+    }
+
+    // Pay attention here: a new next effect event is appended to
+    // aNextEffectEventArray only after the related animation node has been
+    // resolved, that is only after the animation node related to the previous
+    // effect has notified to be deactivated to the main sequence time container.
+    // So you should avoid any optimization here because the size of
+    // aNextEffectEventArray will going on increasing after every skip action.
+    while( this.nCurrentEffect < this.aNextEffectEventArray.size() )
+    {
+        this.skipEffect();
+    }
+    this.bIsSkippingAll = false;
+    return true;
+};
+
+/** rewindEffect
+ *  Rewind the current playing effect or the last played one.
+ *
+ */
+SlideShow.prototype.rewindEffect = function()
+{
+    if( this.bIsSkipping || this.bIsRewinding )
+        return;
+
+    if( this.nCurrentEffect == 0 )
+    {
+        this.rewindToPreviousSlide();
+        return;
+    }
+
+    this.bIsRewinding = true;
+    if( this.isRunning() )
+    {
+        this.aEventMultiplexer.notifyRewindCurrentEffectEvent();
+    }
+    else
+    {
+        this.aEventMultiplexer.notifyRewindLastEffectEvent();
+    }
+    if( this.nCurrentEffect > 0 )
+        --this.nCurrentEffect;
+    this.update();
+    this.bIsRewinding = false;
+};
+
+/** rewindToPreviousSlide
+ *  Displays the previous slide with all effects played.
+ *
+ */
+SlideShow.prototype.rewindToPreviousSlide = function()
+{
+    if( this.isRunning() )
+        return;
+    var nNewSlide = nCurSlide - 1;
+    this.displaySlide( nNewSlide, true );
+    this.skipAllEffects();
+};
+
+/** rewindAllEffects
+ *  Rewind all effects already played on the current slide.
+ *
+ */
+SlideShow.prototype.rewindAllEffects = function()
+{
+    if( this.nCurrentEffect == 0 )
+    {
+        this.rewindToPreviousSlide();
+        return;
+    }
+
+     while( this.nCurrentEffect > 0 )
+     {
+         this.rewindEffect();
+     }
 };
 
 SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
