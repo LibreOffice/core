@@ -636,6 +636,7 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     }
 
     mpSearchEdit->Show(!bVisible);
+    mpSearchEdit->SetText(rtl::OUString());
 }
 
 void SfxTemplateManagerDlg::OnTemplateEdit ()
