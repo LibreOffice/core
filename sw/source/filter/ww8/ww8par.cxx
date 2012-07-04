@@ -27,58 +27,40 @@
  ************************************************************************/
 
 
-#include <boost/unordered_set.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 
 #include <i18npool/mslangid.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/solar.h>
-#include <rtl/tencinfo.h>
 #include <rtl/random.h>
 
-#include <sot/storage.hxx>
 #include <sfx2/docinf.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
-#include <svtools/sfxecode.hxx>
 
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/string.hxx>
-#include <hintids.hxx>
 
 #include <editeng/tstpitem.hxx>
-#include <editeng/cscoitem.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdpage.hxx>
-#include <editeng/paperinf.hxx>
-#include <editeng/lrspitem.hxx> // SvxLRSpaceItem
 #include <editeng/ulspitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <filter/msfilter/svxmsbas.hxx>
-#include <filter/msfilter/util.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
-#include <filter/msfilter/msdffimp.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svxerr.hxx>
 #include <filter/msfilter/mscodec.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/xflclit.hxx>
 
 #include <unotools/fltrcfg.hxx>
 #include <fmtfld.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
-#include <IMark.hxx>
 #include <reffld.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
@@ -87,12 +69,9 @@
 #include <ftninfo.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
-#include <pam.hxx>              // fuer SwPam
-#include <doc.hxx>
 #include <ndtxt.hxx>            // class SwTxtNode
 #include <pagedesc.hxx>         // class SwPageDesc
 #include <paratr.hxx>
-#include <fmtclds.hxx>
 #include <fmtclbl.hxx>
 #include <section.hxx>
 #include <docsh.hxx>
@@ -103,7 +82,6 @@
 #include <mdiexp.hxx>           // Progress
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #include <swerror.h>            // ERR_WW8_...
-#include <unodraw.hxx>
 #include <swtable.hxx>          // class SwTableLines, ...
 // #i18732#
 #include <fmtfollowtextflow.hxx>
@@ -111,30 +89,18 @@
 #include <charfmt.hxx>
 
 
-#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <comphelper/extract.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <fltini.hxx>
 
-#include <algorithm>
-#include <functional>
-#include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 
 
 #include "ww8par2.hxx"          // class WW8RStyle, class WW8AnchorPara
 
-#include <frmatr.hxx>
-
-#include <math.h>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <svl/itemiter.hxx>  //SfxItemIter
 
-#include <stdio.h>
 #include <comphelper/processfactory.hxx>
 #include <basic/basmgr.hxx>
 
@@ -149,7 +115,6 @@
 #include <dbgoutsw.hxx>
 #endif
 #include <unotools/localfilehelper.hxx>
-#include <comphelper/configurationhelper.hxx>
 
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"
@@ -159,24 +124,14 @@ using namespace sw::util;
 using namespace sw::types;
 using namespace nsHdFtFlags;
 
-#include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <filter/msfilter/msvbahelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
-#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
-#include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/componentcontext.hxx>
 
 
