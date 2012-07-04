@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAADH////Y\u003d",
+        "filename": "svtools/source/config/colorcfg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2012-07-04T12:53:59Z",
+      "side": 0,
+      "message": "This looks fine to me",
+      "revId": "13b6a02ed34e469faa2530537b1595e7f06459d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH////U\u003d",
+        "filename": "svtools/source/config/colorcfg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2012-07-04T12:53:59Z",
+      "side": 0,
+      "message": "This needs some work - I find a few more occasions of FONTCOLOR in svx/source/*, apparently used in UI code - I suggest to convert that over to explicit Application::GetSettings().GetStyleSettings().GetWindowTextColor() there?",
+      "revId": "13b6a02ed34e469faa2530537b1595e7f06459d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
