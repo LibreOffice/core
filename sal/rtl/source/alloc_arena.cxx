@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _BSD_SOURCE /* sys/mman.h: MAP_ANON */
+#define _BSD_SOURCE 1 /* sys/mman.h: MAP_ANON */
 #include "alloc_arena.hxx"
 
 #include "alloc_impl.hxx"
