@@ -136,6 +136,10 @@ public:
     void dumpTextPathAllowedAsAttribute(sal_Bool bTextPathAllowed);
     void dumpSubViewSizeAsElement(com::sun::star::uno::Sequence< com::sun::star::awt::Size > aSubViewSize);
 
+    // EnhancedCustomShapePath.idl
+    void dumpEnhancedCustomShapeTextPathService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
+    void dumpTextPathAsAttribute(sal_Bool bTextPath);
+
 private:
     xmlTextWriterPtr xmlWriter;
 };

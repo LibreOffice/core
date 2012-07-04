@@ -1833,6 +1833,11 @@ namespace {
             EnhancedShapeDumper enhancedDumper(xmlWriter);
             enhancedDumper.dumpEnhancedCustomShapePathService(xPropSet);
         }
+        if(xServiceInfo->supportsService("com.sun.star.drawing.EnhancedCustomShapeTextPath"))
+        {
+            EnhancedShapeDumper enhancedDumper(xmlWriter);
+            enhancedDumper.dumpEnhancedCustomShapeTextPathService(xPropSet);
+        }
         }   // end of the 'try' block
         catch (com::sun::star::beans::UnknownPropertyException &e)
         {

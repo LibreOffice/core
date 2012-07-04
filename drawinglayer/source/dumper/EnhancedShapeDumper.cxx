@@ -1017,3 +1017,26 @@ void EnhancedShapeDumper::dumpSubViewSizeAsElement(uno::Sequence< awt::Size > aS
     }
     xmlTextWriterEndElement( xmlWriter );
 }
+
+// ----------------------------------------------------------
+// ---------- EnhancedCustomShapeTextPath.idl ---------------
+// ----------------------------------------------------------
+
+void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(uno::Reference< beans::XPropertySet > xPropSet)
+{
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("TextPath");
+        sal_Bool bTextPath;
+        if(anotherAny >>= bTextPath)
+            dumpTextPathAsAttribute(bTextPath);
+    }
+}
+
+void EnhancedShapeDumper::dumpTextPathAsAttribute(sal_Bool bTextPath)
+{
+    if(bTextPath)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPath"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPath"), "%s", "false");
+}
+
