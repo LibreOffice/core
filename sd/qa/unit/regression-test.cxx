@@ -178,11 +178,12 @@ void SdFiltersTest::test()
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/shapes-test.odp"));
     testStuff(xDocShRef);
     }
+    /*
     {
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/text-test.odp"));
     testStuff(xDocShRef);
-    }
-    //CPPUNIT_ASSERT(false);
+    }*/
+    CPPUNIT_ASSERT(false);
 }
 
 void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef)
