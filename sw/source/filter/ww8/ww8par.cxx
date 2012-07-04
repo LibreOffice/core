@@ -57,6 +57,7 @@
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtcnct.hxx>
+#include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
 #include <ftninfo.hxx>
 #include <fmtftn.hxx>
@@ -1892,9 +1893,17 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
 
     SwFlyFrmFmt *pFrame = rDoc.MakeFlySection(FLY_AT_PARA, pPaM->GetPoint());
 
-    pFrame->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, nPageWidth, MINLAY));
+    SwFmtAnchor aAnch( pFrame->GetAnchor() );
+    aAnch.SetType( FLY_AT_PARA );
+    pFrame->SetFmtAttr( aAnch );
+    SwFmtFrmSize aSz(ATT_MIN_SIZE, nPageWidth, MINLAY);
+    SwFrmSize eFrmSize = ATT_MIN_SIZE;
+    if( eFrmSize != aSz.GetWidthSizeType() )
+        aSz.SetWidthSizeType( eFrmSize );
+    pFrame->SetFmtAttr(aSz);
     pFrame->SetFmtAttr(SwFmtSurround(SURROUND_THROUGHT));
-    pFrame->SetFmtAttr(SwFmtHoriOrient(0, text::HoriOrientation::RIGHT)); //iFOO
+    pFrame->SetFmtAttr(SwFmtHoriOrient(0, text::HoriOrientation::LEFT)); //iFOO
+
     // #i43427# - send frame for header/footer into background.
     pFrame->SetFmtAttr( SvxOpaqueItem( RES_OPAQUE, false ) );
     SdrObject* pFrmObj = CreateContactObject( pFrame );
