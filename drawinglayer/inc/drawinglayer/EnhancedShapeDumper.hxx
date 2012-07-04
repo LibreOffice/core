@@ -89,8 +89,8 @@ public:
     void dumpEnhancedCustomShapeGeometryService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
     void dumpTypeAsAttribute(rtl::OUString sType);
     void dumpViewBoxAsElement(com::sun::star::awt::Rectangle aViewBox);
-    void dumpMirroredXAsAttribute(sal_Bool bMirroredX);
-    void dumpMirroredYAsAttribute(sal_Bool bMirroredY);
+    void dumpMirroredXAsAttribute(sal_Bool bMirroredX); // also used in EnhancedCustomShapeHandle
+    void dumpMirroredYAsAttribute(sal_Bool bMirroredY); // also used in EnhancedCustomShapeHandle
     void dumpTextRotateAngleAsAttribute(double aTextRotateAngle);
     void dumpAdjustmentValuesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues);
     void dumpExtrusionAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aExtrusion);
@@ -98,6 +98,9 @@ public:
     void dumpTextPathAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aTextPath);
     void dumpEquationsAsElement(com::sun::star::uno::Sequence< rtl::OUString > aEquations);
     void dumpHandlesAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues > aHandles);
+
+    // EnhancedCustomShapeHandle.idl
+    void dumpEnhancedCustomShapeHandleService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
 
 private:
     xmlTextWriterPtr xmlWriter;

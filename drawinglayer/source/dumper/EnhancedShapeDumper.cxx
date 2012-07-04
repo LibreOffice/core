@@ -632,3 +632,11 @@ void EnhancedShapeDumper::dumpHandlesAsElement(uno::Sequence< beans::PropertyVal
     xmlTextWriterEndElement( xmlWriter );
 }
 
+// ------------------------------------------------------
+// ---------- EnhancedCustomShapeHandle.idl -----------
+// ------------------------------------------------------
+
+void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< beans::XPropertySet > xPropSet)
+{
+
+}
