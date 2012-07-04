@@ -277,9 +277,7 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
         if( aWordLst.Insert( pNew, nInsPos ) )
         {
             bRet = sal_True;
-            if( aLRULst.size() < nMaxCount )
-                aLRULst.push_front( pNew );
-            else
+            if (aLRULst.size() >= nMaxCount)
             {
                 // the last one needs to be removed
                 // so that there is space for the first one
@@ -288,6 +286,7 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
                 aWordLst.Remove( pDel );
                 delete pDel;
             }
+            aLRULst.push_front(pNew);
         }
         else
         {
