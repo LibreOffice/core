@@ -483,6 +483,7 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
             const int nTransparency( setupOutDevState( viewState, renderState, FILL_COLOR ) );
+            const int nTransPercent( (nTransparency * 100 + 128) / 255 );  // normal rounding, no truncation here
             ::basegfx::B2DPolyPolygon aB2DPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
@@ -496,8 +497,7 @@ namespace vclcanvas
             }
             else
             {
-                const sal_uInt16 nTransPercent( (nTransparency * 100 + 128) / 255 );  // normal rounding, no truncation here
-                mpOutDev->getOutDev().DrawTransparent( aPolyPoly, nTransPercent );
+                mpOutDev->getOutDev().DrawTransparent( aPolyPoly, (sal_uInt16)nTransPercent );
             }
 
             if( mp2ndOutDev )
