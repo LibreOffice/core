@@ -27,21 +27,14 @@
  ************************************************************************/
 
 
-#include <hintids.hxx>
-#include <vcl/virdev.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/paperinf.hxx>
 #include "editeng/frmdiritem.hxx"
-#include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
-#include <fmtpdsc.hxx>
 #include <ftninfo.hxx>
 #include <fesh.hxx>
 #include <ndole.hxx>
@@ -49,26 +42,19 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
-#include <pagefrm.hxx>  //For DelPageDesc
 #include <rootfrm.hxx>  //For DelPageDesc
-#include <ndtxt.hxx>
 #include <frmtool.hxx>
-#include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <docsh.hxx>
-#include <ndindex.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
 #include <fntcache.hxx>
-#include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <fldbas.hxx>
 #include <swwait.hxx>
 #include <GetMetricVal.hxx>
-#include <unotools/syslocale.hxx>
 #include <statstr.hrc>
-#include <switerator.hxx>
 #include <hints.hxx>
 #include <SwUndoPageDesc.hxx>
 #include <pagedeschint.hxx>
