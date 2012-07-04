@@ -387,7 +387,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
 
         if( aName.Len() )
         {
-            Font aFont( nFamily, Size( nWidth, nHeight ) );
+            Font aFont( static_cast<FontFamily>(nFamily), Size( nWidth, nHeight ) );
             aFont.SetName( aName );
             aFont.SetCharSet( (CharSet)nCharSet );
             aFont.SetPitch( (FontPitch)nPitch );
