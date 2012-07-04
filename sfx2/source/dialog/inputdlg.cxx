@@ -55,6 +55,9 @@ InputDialog::InputDialog (const rtl::OUString &rLabelText, Window *pParent)
 
     aBtnPos.setX(aBtnPos.getX() - aBtnSize.getWidth() - LABEL_TEXT_SPACE);
     mpOK->SetPosPixel(aBtnPos);
+
+    mpOK->SetClickHdl(LINK(this,InputDialog,ClickHdl));
+    mpCancel->SetClickHdl(LINK(this,InputDialog,ClickHdl));
 }
 
 InputDialog::~InputDialog()
@@ -68,6 +71,12 @@ InputDialog::~InputDialog()
 rtl::OUString InputDialog::getEntryText () const
 {
     return mpEntry->GetText();
+}
+
+IMPL_LINK(InputDialog,ClickHdl,PushButton*, pButton)
+{
+    EndDialog(pButton == mpOK ? true : false);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

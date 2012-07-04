@@ -28,6 +28,10 @@ public:
 
 private:
 
+    DECL_LINK(ClickHdl, PushButton*);
+
+private:
+
     Edit *mpEntry;
     FixedText *mpLabel;
     PushButton *mpOK;
