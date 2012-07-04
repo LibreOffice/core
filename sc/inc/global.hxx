@@ -35,6 +35,7 @@
 #include <osl/endian.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include "scdllapi.h"
+#include <rtl/ustring.hxx>
 
 #include <boost/unordered_map.hpp>
 #include <vector>
@@ -243,6 +244,7 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
 
 #define EMPTY_STRING ScGlobal::GetEmptyString()
+#define EMPTY_OUSTRING ScGlobal::GetEmptyOUString()
 
                                         //  layer id's for drawing
 #define SC_LAYER_FRONT      0
@@ -513,6 +515,7 @@ class ScGlobal
     static String**         ppRscString;
     static String*          pStrScDoc;
     static String*          pEmptyString;
+    static ::rtl::OUString* pEmptyOUString;
     static String*          pStrClipDocName;
     static SvxBrushItem*    pEmptyBrushItem;
     static SvxBrushItem*    pButtonBrushItem;
@@ -602,6 +605,7 @@ public:
     static SvxBrushItem*    GetEmbeddedBrushItem()  { return pEmbeddedBrushItem; }
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
     SC_DLLPUBLIC    static const String&    GetEmptyString();
+    SC_DLLPUBLIC    static const ::rtl::OUString&    GetEmptyOUString();
     static const String&    GetScDocString();
 
     /** Returns the specified image list with outline symbols. */

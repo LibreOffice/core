@@ -52,7 +52,7 @@ using ::mdds::matrix_element_t;
 
 namespace {
 
-typedef ::mdds::mixed_type_matrix<String, sal_uInt8> MatrixImplType;
+typedef ::mdds::mixed_type_matrix< ::rtl::OUString, sal_uInt8> MatrixImplType;
 
 struct ElemEqual : public unary_function<double, bool>
 {
@@ -194,8 +194,8 @@ public:
     void SetErrorAtInterpreter( sal_uInt16 nError ) const;
     void PutDouble(double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex);
-    void PutString(const String& rStr, SCSIZE nC, SCSIZE nR);
-    void PutString(const String& rStr, SCSIZE nIndex);
+    void PutString(const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR);
+    void PutString(const ::rtl::OUString& rStr, SCSIZE nIndex);
 
     void PutEmpty(SCSIZE nC, SCSIZE nR);
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
@@ -204,9 +204,9 @@ public:
     sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const;
     double GetDouble(SCSIZE nC, SCSIZE nR) const;
     double GetDouble( SCSIZE nIndex) const;
-    const String& GetString(SCSIZE nC, SCSIZE nR) const;
-    const String& GetString( SCSIZE nIndex) const;
-    String GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
+    const ::rtl::OUString& GetString(SCSIZE nC, SCSIZE nR) const;
+    const ::rtl::OUString& GetString( SCSIZE nIndex) const;
+    ::rtl::OUString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
     ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const;
     bool IsString( SCSIZE nIndex ) const;
     bool IsString( SCSIZE nC, SCSIZE nR ) const;
@@ -351,17 +351,17 @@ void ScMatrixImpl::PutDouble( double fVal, SCSIZE nIndex)
     PutDouble(fVal, nC, nR);
 }
 
-void ScMatrixImpl::PutString(const String& rStr, SCSIZE nC, SCSIZE nR)
+void ScMatrixImpl::PutString(const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR)
 {
     if (ValidColRow( nC, nR))
-        maMat.set_string(nR, nC, new String(rStr));
+        maMat.set_string(nR, nC, new ::rtl::OUString(rStr));
     else
     {
         OSL_FAIL("ScMatrixImpl::PutString: dimension error");
     }
 }
 
-void ScMatrixImpl::PutString(const String& rStr, SCSIZE nIndex)
+void ScMatrixImpl::PutString(const ::rtl::OUString& rStr, SCSIZE nIndex)
 {
     SCSIZE nC, nR;
     CalcPosition(nIndex, nC, nR);
@@ -450,7 +450,7 @@ double ScMatrixImpl::GetDouble( SCSIZE nIndex) const
     return GetDouble(nC, nR);
 }
 
-const String& ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
+const ::rtl::OUString& ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
     {
@@ -459,7 +459,7 @@ const String& ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
             case ::mdds::element_string:
                 return *maMat.get_string(nR, nC);
             case ::mdds::element_empty:
-                return ScGlobal::GetEmptyString();
+                return EMPTY_OUSTRING;
             default:
                 SetErrorAtInterpreter( GetError(nC, nR));
                 OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
@@ -469,22 +469,22 @@ const String& ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
     {
         OSL_FAIL("ScMatrixImpl::GetString: dimension error");
     }
-    return ScGlobal::GetEmptyString();
+    return EMPTY_OUSTRING;
 }
 
-const String& ScMatrixImpl::GetString( SCSIZE nIndex) const
+const ::rtl::OUString& ScMatrixImpl::GetString( SCSIZE nIndex) const
 {
     SCSIZE nC, nR;
     CalcPosition(nIndex, nC, nR);
     return GetString(nC, nR);
 }
 
-String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
+::rtl::OUString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
 {
     if (!ValidColRowOrReplicated( nC, nR ))
     {
         OSL_FAIL("ScMatrixImpl::GetString: dimension error");
-        return String();
+        return ::rtl::OUString();
     }
 
     if (IsString( nC, nR))
@@ -493,7 +493,7 @@ String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE
         {   // result of empty FALSE jump path
             sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
                     ScGlobal::eLnge);
-            String aStr;
+            ::rtl::OUString aStr;
             Color* pColor = NULL;
             rFormatter.GetOutputString( 0.0, nKey, aStr, &pColor);
             return aStr;
@@ -511,7 +511,7 @@ String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE
     double fVal= GetDouble( nC, nR);
     sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_NUMBER,
             ScGlobal::eLnge);
-    String aStr;
+    ::rtl::OUString aStr;
     rFormatter.GetInputLineString( fVal, nKey, aStr);
     return aStr;
 }
@@ -1010,12 +1010,12 @@ void ScMatrix::PutDouble( double fVal, SCSIZE nIndex)
     pImpl->PutDouble(fVal, nIndex);
 }
 
-void ScMatrix::PutString(const String& rStr, SCSIZE nC, SCSIZE nR)
+void ScMatrix::PutString(const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR)
 {
     pImpl->PutString(rStr, nC, nR);
 }
 
-void ScMatrix::PutString(const String& rStr, SCSIZE nIndex)
+void ScMatrix::PutString(const ::rtl::OUString& rStr, SCSIZE nIndex)
 {
     pImpl->PutString(rStr, nIndex);
 }
@@ -1055,17 +1055,17 @@ double ScMatrix::GetDouble( SCSIZE nIndex) const
     return pImpl->GetDouble(nIndex);
 }
 
-const String& ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
+const ::rtl::OUString& ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
 {
     return pImpl->GetString(nC, nR);
 }
 
-const String& ScMatrix::GetString( SCSIZE nIndex) const
+const ::rtl::OUString& ScMatrix::GetString( SCSIZE nIndex) const
 {
     return pImpl->GetString(nIndex);
 }
 
-String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
+::rtl::OUString ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
 {
     return pImpl->GetString(rFormatter, nC, nR);
 }
