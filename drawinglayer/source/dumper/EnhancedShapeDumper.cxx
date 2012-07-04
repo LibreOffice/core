@@ -415,6 +415,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
         if(anotherAny >>= bMirroredX)
             dumpMirroredXAsAttribute(bMirroredX);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("MirroredY");
+        sal_Bool bMirroredY;
+        if(anotherAny >>= bMirroredY)
+            dumpMirroredYAsAttribute(bMirroredY);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("TextRotateAngle");
+        double aTextRotateAngle;
+        if(anotherAny >>= aTextRotateAngle)
+            dumpTextRotateAngleAsAttribute(aTextRotateAngle);
+    }
 }
 void EnhancedShapeDumper::dumpTypeAsAttribute(rtl::OUString sType)
     {
@@ -438,6 +450,19 @@ void EnhancedShapeDumper::dumpMirroredXAsAttribute(sal_Bool bMirroredX)
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "true");
         else
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "false");
+    }
+
+void EnhancedShapeDumper::dumpMirroredYAsAttribute(sal_Bool bMirroredY)
+    {
+        if(bMirroredY)
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "true");
+        else
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "false");
+    }
+
+void EnhancedShapeDumper::dumpTextRotateAngleAsAttribute(double aTextRotateAngle)
+    {
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textRotateAngle"), "%f", aTextRotateAngle);
     }
 
 

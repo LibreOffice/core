@@ -85,6 +85,8 @@ public:
     void dumpTypeAsAttribute(rtl::OUString sType);
     void dumpViewBoxAsElement(com::sun::star::awt::Rectangle aViewBox);
     void dumpMirroredXAsAttribute(sal_Bool bMirroredX);
+    void dumpMirroredYAsAttribute(sal_Bool bMirroredY);
+    void dumpTextRotateAngleAsAttribute(double aTextRotateAngle);
 
 private:
     xmlTextWriterPtr xmlWriter;
