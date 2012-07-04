@@ -21,11 +21,17 @@
 # instead of those above.
 
 ifeq ($(gb_FULLDEPS),$(true))
-gb_cxx_dep_generation_options=-MMD -MT $(1) -MP -MF $(4)_
-gb_cxx_dep_copy=&& mv $(4)_ $(4)
+define gb_cxx_dep_generation_options
+-MMD -MT $(1) -MP -MF $(2)_
+endef
+define gb_cxx_dep_copy
+&& mv $(1)_ $(1)
+endef
 else
-gb_cxx_dep_generation_options=
-gb_cxx_dep_copy=
+define gb_cxx_dep_generation_options
+endef
+define gb_cxx_dep_copy
+endef
 endif
 
 # AsmObject class
@@ -62,10 +68,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		$(gb_cxx_dep_generation_options) \
+		$(call gb_cxx_dep_generation_options,$(1),$(4)) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
-	    $(gb_cxx_dep_copy) \
+		$(call gb_cxx_dep_copy,$(4)) \
 		)
 endef
 
@@ -102,11 +108,11 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
-	    $(gb_cxx_dep_generation_options) \
+		$(call gb_cxx_dep_generation_options,$(1),$(4)) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
 		$(PCHFLAGS) \
-	    $(gb_cxx_dep_copy) \
+		$(call gb_cxx_dep_copy,$(4)) \
 		)
 endef
 
@@ -151,8 +157,11 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(4) $(5) \
 		$(gb_COMPILERDEPFLAGS) \
 		$(6) \
+		$(call gb_cxx_dep_generation_options,$(1),$(call gb_PrecompiledHeader_get_dep_target,$(2))) \
 		-c $(patsubst %.cxx,%.hxx,$(3)) \
-		-o$(1)) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(1),$(3))
+		-o$(1) \
+		$(call gb_cxx_dep_copy,$(call gb_PrecompiledHeader_get_dep_target,$(2))) \
+		)
 endef
 
 # NoexPrecompiledHeader class
@@ -168,8 +177,11 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(4) $(5) \
 		$(gb_COMPILERDEPFLAGS) \
 		$(6) \
+		$(call gb_cxx_dep_generation_options,$(1),$(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) \
 		-c $(patsubst %.cxx,%.hxx,$(3)) \
-		-o$(1)) $(call gb_create_deps,$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(1),$(3))
+		-o$(1) \
+		$(call gb_cxx_dep_copy,$(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) \
+		)
 endef
 endif
 
