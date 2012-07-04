@@ -555,9 +555,10 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     if ( !pDesc )
         pDesc = &pDoc->GetPageDesc( 0 );
     const sal_Bool bOdd = !nPgNum || 0 != ( nPgNum % 2 );
+    bool bFirst = !nPgNum || 1 == nPgNum;
 
     // Create a page and put it in the layout
-    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, sal_False, sal_False, 0 );
+    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, sal_False, sal_False, 0 );
 
     // Find the first page in the Bodytext section.
     SwLayoutFrm *pLay = pPage->FindBodyCont();

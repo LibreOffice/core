@@ -2695,12 +2695,16 @@ sal_uLong SqRt( BigInt nX )
 /*************************************************************************/
 
 SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
-                          sal_Bool bOdd, sal_Bool bInsertEmpty, sal_Bool bFtn,
+                          sal_Bool bOdd, bool bFirst, sal_Bool bInsertEmpty, sal_Bool bFtn,
                           SwFrm *pSibling )
 {
     SwPageFrm *pRet;
     SwDoc *pDoc = ((SwLayoutFrm*)pUpper)->GetFmt()->GetDoc();
-    SwFrmFmt *pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
+    SwFrmFmt *pFmt = 0;
+    if (bFirst)
+        pFmt = rDesc.GetFirstFmt();
+    else
+        pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
     //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben
     //eine Leerseite einfuegen.
     if ( !pFmt )
