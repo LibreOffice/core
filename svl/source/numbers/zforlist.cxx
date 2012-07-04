@@ -1954,7 +1954,7 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
                 || nTabOff == NF_CURRENCY_1000DEC2_CCC))
     {   // currency entries with decimals might not exist, e.g. Italian Lira
         rtl::OUString aMsg( "SvNumberFormatter::ImpGetFormatCodeIndex: not found: " );
-        aMsg += rtl::OUString::valueOf( nTabOff );
+        aMsg += rtl::OUString::valueOf( sal_Int32( nTabOff ) );
         LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo(aMsg));
     }
     if ( nLen )
