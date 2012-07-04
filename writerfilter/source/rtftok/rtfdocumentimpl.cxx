@@ -35,7 +35,6 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <editeng/borderline.hxx>
 #include <rtl/tencinfo.h>
 #include <svtools/wmf.hxx>
 #include <svl/lngmisc.hxx>
@@ -1692,29 +1691,29 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 
     // Border types
     {
-        using namespace ::com::sun::star::table::BorderLineStyle;
         switch (nKeyword)
         {
             // brdrhair and brdrs are the same, brdrw will make a difference
-            case RTF_BRDRHAIR: nParam = SOLID; break;
-            case RTF_BRDRS: nParam = SOLID; break;
-            case RTF_BRDRDOT: nParam = DOTTED; break;
-            case RTF_BRDRDASH: nParam = DASHED; break;
-            case RTF_BRDRDB: nParam = DOUBLE; break;
-            case RTF_BRDRTNTHSG: nParam = THINTHICK_SMALLGAP; break;
-            case RTF_BRDRTNTHMG: nParam = THINTHICK_MEDIUMGAP; break;
-            case RTF_BRDRTNTHLG: nParam = THINTHICK_LARGEGAP; break;
-            case RTF_BRDRTHTNSG: nParam = THICKTHIN_SMALLGAP; break;
-            case RTF_BRDRTHTNMG: nParam = THICKTHIN_MEDIUMGAP; break;
-            case RTF_BRDRTHTNLG: nParam = THICKTHIN_LARGEGAP; break;
-            case RTF_BRDREMBOSS: nParam = EMBOSSED; break;
-            case RTF_BRDRENGRAVE: nParam = ENGRAVED; break;
-            case RTF_BRDROUTSET: nParam = OUTSET; break;
-            case RTF_BRDRINSET: nParam = INSET; break;
-            case RTF_BRDRNONE: nParam = NONE; break;
+            // map to values in ooxml/model.xml resource ST_Border
+            case RTF_BRDRHAIR: nParam = 5; break;
+            case RTF_BRDRS: nParam = 1; break;
+            case RTF_BRDRDOT: nParam = 6; break;
+            case RTF_BRDRDASH: nParam = 7; break;
+            case RTF_BRDRDB: nParam = 3; break;
+            case RTF_BRDRTNTHSG: nParam = 11; break;
+            case RTF_BRDRTNTHMG: nParam = 14; break;
+            case RTF_BRDRTNTHLG: nParam = 17; break;
+            case RTF_BRDRTHTNSG: nParam = 12; break;
+            case RTF_BRDRTHTNMG: nParam = 15; break;
+            case RTF_BRDRTHTNLG: nParam = 18; break;
+            case RTF_BRDREMBOSS: nParam = 24; break;
+            case RTF_BRDRENGRAVE: nParam = 25; break;
+            case RTF_BRDROUTSET: nParam = 18; break;
+            case RTF_BRDRINSET: nParam = 17; break;
+            case RTF_BRDRNONE: nParam = 0; break;
             default: break;
         }
-        if (nParam >= 0 && nParam != NONE)
+        if (nParam >= 0)
         {
             RTFValue::Pointer_t pValue(new RTFValue(nParam));
             lcl_putBorderProperty(m_aStates, NS_rtf::LN_BRCTYPE, pValue);
