@@ -132,8 +132,8 @@ namespace nsUseOnPage
     const UseOnPage PD_MIRROR         = 0x000F;
     const UseOnPage PD_HEADERSHARE    = 0x0040;
     const UseOnPage PD_FOOTERSHARE    = 0x0080;
-    const UseOnPage PD_NOHEADERSHARE  = 0x00BF; // For internal use only.
-    const UseOnPage PD_NOFOOTERSHARE  = 0x007F; // For internal use only.
+    const UseOnPage PD_NOHEADERSHARE  = 0xFFBF; // For internal use only.
+    const UseOnPage PD_NOFOOTERSHARE  = 0xFF7F; // For internal use only.
     const UseOnPage PD_HEADERSHAREFIRST = 0x0100;
     const UseOnPage PD_NOHEADERSHAREFIRST = 0xFEFF;
     const UseOnPage PD_FOOTERSHAREFIRST = 0x0200;
