@@ -26,8 +26,8 @@
 
 
 /** a component that supports this service lets you export pages, shapes, or
-    groups of shapes from a DrawingDocument to a file in one of the file formats
-    supported by the component.
+    groups of shapes from a <type>DrawingDocument</type> to a file in one of the
+    file formats supported by the component.
 */
 published service GraphicExportFilter : XGraphicExportFilter;
 

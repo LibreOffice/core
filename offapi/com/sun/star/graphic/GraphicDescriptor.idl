@@ -53,7 +53,7 @@ published service GraphicDescriptor
         case the original mime type is not available anymore</p>
 
         <p> Currently, the following mime types are supported for
-        loaded graphics:<\p>
+        loaded graphics:</p>
         <ul>
             <li>image/bmp</li>
             <li>image/gif</li>

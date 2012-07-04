@@ -32,44 +32,52 @@
 */
 published interface XGraphicExportFilter
 {
-    /** calling <method scope=scope="com::sun::star::document">XFilter::filter
-        </method> starts the export of the graphic file. The following properties
-        from the        <type scope="com::sun::star::document">MediaDescriptor
-        </type> are supported:<p>
+    /** calling <method scope="com::sun::star::document">XFilter::filter</method>
+        starts the export of the graphic file.
 
-        <member scope="com::sun::star::document">MediaDescriptor::MediaType
-        </member><b>
+        <p>The following properties from the
+        <type scope="com::sun::star::document">MediaDescriptor</type> are
+        supported:</p>
 
-        Depending on the export filters supported by this component this is
-        the mime type of the target graphic file. Possible values are<b>
-        image/x-MS-bmp<b>
-        application/dxf<b>
-        application/postscript<b>
-        image/gif<b>
-        image/jpeg<b>
-        image/png<b>
-        image/x-pict<b>
-        image/x-pcx<b>
-        image/x-portable-bitmap<b>
-        image/x-portable-graymap<b>
-        image/x-portable-pixmap<b>
-        image/x-cmu-raster<b>
-        image/targa<b>
-        image/tiff<b>
-        image/x-xbitmap<b>
-        image/x-xpixmap<b>
-        image/svg+xml<p>
-        Ask the interface <type scope="com::sun::star::document">XMimeTypeInfo
-        </type> for all values supported by the component.
-
-        <member scope="com::sun::star::document">MediaDescriptor::URL</member><b>
-        This is the target url of the file that will be created during export.
+        <ul>
+            <li>
+                <member scope="com::sun::star::document">MediaDescriptor::MediaType</member>
+                <p>Depending on the export filters supported by this component,
+                this is the mime type of the target graphic file.</p>
+                <p>Possible values are:</p>
+                <ul>
+                    <li>image/x-MS-bmp</li>
+                    <li>application/dxf</li>
+                    <li>application/postscript</li>
+                    <li>image/gif</li>
+                    <li>image/jpeg</li>
+                    <li>image/png</li>
+                    <li>image/x-pict</li>
+                    <li>image/x-pcx</li>
+                    <li>image/x-portable-bitmap</li>
+                    <li>image/x-portable-graymap</li>
+                    <li>image/x-portable-pixmap</li>
+                    <li>image/x-cmu-raster</li>
+                    <li>image/targa</li>
+                    <li>image/tiff</li>
+                    <li>image/x-xbitmap</li>
+                    <li>image/x-xpixmap</li>
+                    <li>image/svg+xml</li>
+                </ul>
+                <p>Ask the interface <type scope="com::sun::star::document">XMimeTypeInfo</type>
+                for all values supported by the component.</p>
+            </li>
+            <li>
+                <member scope="com::sun::star::document">MediaDescriptor::URL</member>
+                <p>This is the target url of the file that will be created during export.</p>
+            </li>
+        </ul>
     */
     interface ::com::sun::star::document::XFilter;
 
     /** sets the source component for this export filter.
-        This could either be a <type>DrawPage</type>, a <type>Shape</type>
-        or a <type>Shapes</type>.
+        <p>This could either be a <type>DrawPage</type>, a <type>Shape</type>
+        or a <type>Shapes</type>.</p>
      */
     interface ::com::sun::star::document::XExporter;
 
