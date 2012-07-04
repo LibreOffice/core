@@ -70,7 +70,6 @@ private:
     void OnTemplateSearch ();
     void OnTemplateEdit ();
     void OnTemplateProperties ();
-    void OnTemplateMove ();
     void OnTemplateDelete ();
 
 private:

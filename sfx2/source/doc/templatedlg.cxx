@@ -323,9 +323,6 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
     case TBI_TEMPLATE_PROPERTIES:
         OnTemplateProperties();
         break;
-    case TBI_TEMPLATE_MOVE:
-        OnTemplateMove();
-        break;
     case TBI_TEMPLATE_DELETE:
         OnTemplateDelete();
         break;
@@ -720,10 +717,6 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
 }
 
 void SfxTemplateManagerDlg::OnTemplateProperties ()
-{
-}
-
-void SfxTemplateManagerDlg::OnTemplateMove ()
 {
 }
 
