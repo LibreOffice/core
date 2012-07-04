@@ -1601,7 +1601,7 @@ void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
             if ( GetMatrixFlag() != MM_NONE && !aFormula.isEmpty() )
             {
                 if ( aFormula[ aFormula.getLength()-1 ] == '}' )
-                    aFormula = aFormula.copy( aFormula.getLength()-1 , 1 );
+                    aFormula = aFormula.copy( 0, aFormula.getLength()-1 );
                 if ( aFormula[0] == '{' )
                     aFormula = aFormula.copy( 1 );
             }
