@@ -101,6 +101,8 @@ public:
 
     // EnhancedCustomShapeHandle.idl
     void dumpEnhancedCustomShapeHandleService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
+    void dumpSwitchedAsAttribute(sal_Bool bSwitched);
+    void dumpPositionAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition);
 
 private:
     xmlTextWriterPtr xmlWriter;

@@ -650,4 +650,33 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< b
         if(anotherAny >>= bMirroredY)
             dumpMirroredYAsAttribute(bMirroredY);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Switched");
+        sal_Bool bSwitched;
+        if(anotherAny >>= bSwitched)
+            dumpSwitchedAsAttribute(bSwitched);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Position");
+        drawing::EnhancedCustomShapeParameterPair aPosition;
+        if(anotherAny >>= aPosition)
+            dumpPositionAsElement(aPosition);
+    }
 }
+
+void EnhancedShapeDumper::dumpSwitchedAsAttribute(sal_Bool bSwitched)
+{
+    if(bSwitched)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("switched"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("switched"), "%s", "false");
+}
+
+void EnhancedShapeDumper::dumpPositionAsElement(drawing::EnhancedCustomShapeParameterPair aPosition)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Position" ));
+    dumpEnhancedCustomShapeParameterPair(aPosition);
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+
