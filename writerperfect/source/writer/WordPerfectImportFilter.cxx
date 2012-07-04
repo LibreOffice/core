@@ -54,10 +54,9 @@
 #include "stream/WPXSvStream.h"
 #include "WordPerfectImportFilter.hxx"
 
-using namespace ::com::sun::star;
-
-using rtl::OString;
-using rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::ucbhelper::Content;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
@@ -65,6 +64,7 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
+using com::sun::star::uno::XComponentContext;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::document::XFilter;
 using com::sun::star::document::XExtendedFilterDetection;
@@ -77,7 +77,7 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
-void callHandler(uno::Reference < XDocumentHandler > xDocHandler);
+void callHandler(Reference < XDocumentHandler > xDocHandler);
 
 
 static bool handleEmbeddedWPGObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
@@ -116,7 +116,7 @@ throw (RuntimeException)
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
     OUString sURL;
-    uno::Reference < XInputStream > xInputStream;
+    Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name == "InputStream" )
@@ -162,7 +162,7 @@ throw (RuntimeException)
     Reference < XDocumentHandler > xInternalHandler( comphelper::ComponentContext( mxContext ).createComponent( sXMLImportService ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
-    uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
+    Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
     // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
@@ -190,7 +190,7 @@ throw (RuntimeException)
 }
 
 // XImporter
-void SAL_CALL WordPerfectImportFilter::setTargetDocument( const uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
+void SAL_CALL WordPerfectImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::getTargetDocument: Got here!\n"));
@@ -198,8 +198,8 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL WordPerfectImportFilter::detect( uno::Sequence< PropertyValue >& Descriptor )
-throw( uno::RuntimeException )
+OUString SAL_CALL WordPerfectImportFilter::detect( Sequence< PropertyValue >& Descriptor )
+throw( RuntimeException )
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::detect: Got here!\n"));
 
@@ -209,7 +209,7 @@ throw( uno::RuntimeException )
     sal_Int32 location = nLength;
     OUString sURL;
     const PropertyValue *pValue = Descriptor.getConstArray();
-    uno::Reference < XInputStream > xInputStream;
+    Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name == "TypeName" )
@@ -220,13 +220,13 @@ throw( uno::RuntimeException )
             pValue[i].Value >>= sURL;
     }
 
-    uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
+        Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
     if (!xInputStream.is())
     {
         try
         {
-            ::ucbhelper::Content aContent(sURL, xEnv);
-            xInputStream = aContent.openStream();
+            Content aContent(sURL, xEnv);
+                    xInputStream = aContent.openStream();
         }
         catch ( ... )
         {
@@ -308,7 +308,7 @@ throw (RuntimeException)
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
-uno::Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( const uno::Reference< uno::XComponentContext > & rContext)
+Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
     return (cppu::OWeakObject *) new WordPerfectImportFilter( rContext );
@@ -332,7 +332,7 @@ throw (RuntimeException)
 }
 
 
-WordPerfectImportFilterDialog::WordPerfectImportFilterDialog( const uno::Reference< uno::XComponentContext > & rContext) :
+WordPerfectImportFilterDialog::WordPerfectImportFilterDialog( const Reference< XComponentContext > & rContext) :
     mxContext( rContext ) {}
 
 WordPerfectImportFilterDialog::~WordPerfectImportFilterDialog()
@@ -340,12 +340,12 @@ WordPerfectImportFilterDialog::~WordPerfectImportFilterDialog()
 }
 
 void SAL_CALL WordPerfectImportFilterDialog::setTitle( const ::rtl::OUString & )
-throw (uno::RuntimeException)
+throw (RuntimeException)
 {
 }
 
 sal_Int16 SAL_CALL WordPerfectImportFilterDialog::execute()
-throw (uno::RuntimeException)
+throw (RuntimeException)
 {
     WPXSvInputStream input( mxInputStream );
 
@@ -375,10 +375,10 @@ throw (uno::RuntimeException)
     return com::sun::star::ui::dialogs::ExecutableDialogResults::OK;
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValues() throw(uno::RuntimeException)
+Sequence<PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValues() throw(RuntimeException)
 {
-    uno::Sequence<beans::PropertyValue> aRet(1);
-    beans::PropertyValue *pArray = aRet.getArray();
+    Sequence<PropertyValue> aRet(1);
+    PropertyValue *pArray = aRet.getArray();
 
     pArray[0].Name = rtl::OUString( "Password" );
     pArray[0].Value <<= msPassword;
@@ -386,15 +386,15 @@ uno::Sequence<beans::PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getP
     return aRet;
 }
 
-void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const uno::Sequence<beans::PropertyValue>& aProps)
-throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-      lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const Sequence<PropertyValue>& aProps)
+throw(com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::PropertyVetoException,
+      com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::WrappedTargetException, RuntimeException)
 {
-    const beans::PropertyValue *pPropArray = aProps.getConstArray();
+    const PropertyValue *pPropArray = aProps.getConstArray();
     long nPropCount = aProps.getLength();
     for (long i = 0; i < nPropCount; i++)
     {
-        const beans::PropertyValue &rProp = pPropArray[i];
+        const PropertyValue &rProp = pPropArray[i];
         ::rtl::OUString aPropName = rProp.Name;
 
         if ( aPropName == ::rtl::OUString("Password") )
@@ -447,7 +447,7 @@ throw (RuntimeException)
 }
 #undef SERVICE_NAME
 
-uno::Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance( const uno::Reference< uno::XComponentContext > & rContext)
+Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
 {
     return (cppu::OWeakObject *) new WordPerfectImportFilterDialog( rContext );
