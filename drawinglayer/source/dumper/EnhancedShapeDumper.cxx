@@ -504,3 +504,35 @@ void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(uno::Sequence< drawing::
         xmlTextWriterEndElement( xmlWriter );
     }
 
+void EnhancedShapeDumper::dumpPropertyValueAsElement(beans::PropertyValue aPropertyValue)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
+
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+            rtl::OUStringToOString(aPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr());
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, aPropertyValue.Handle);
+
+        uno::Any aAny = aPropertyValue.Value;
+        rtl::OUString sValue;
+        if(aAny >>= sValue)
+        {
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+                rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+        }
+        switch(aPropertyValue.State)
+        {
+            case beans::PropertyState_DIRECT_VALUE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
+                break;
+            case beans::PropertyState_DEFAULT_VALUE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
+                break;
+            case beans::PropertyState_AMBIGUOUS_VALUE:
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
+                break;
+            default:
+                break;
+        }
+        xmlTextWriterEndElement( xmlWriter );
+    }
+

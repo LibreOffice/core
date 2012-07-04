@@ -37,6 +37,7 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -54,6 +55,7 @@ public:
     // auxiliary functions
     void dumpEnhancedCustomShapeParameterPair(com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair);
     void dumpDirection3D(com::sun::star::drawing::Direction3D aDirection3D);
+    void dumpPropertyValueAsElement(com::sun::star::beans::PropertyValue aPropertyValue);
 
     // EnhancedCustomShapeExtrusion.idl
     void dumpEnhancedCustomShapeExtrusionService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
